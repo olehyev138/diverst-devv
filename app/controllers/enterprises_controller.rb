@@ -1,0 +1,2 @@
+class EnterprisesController < ApplicationController
+end
