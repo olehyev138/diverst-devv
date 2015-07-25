@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   devise_for :admins
-  devise_for :employees
+  devise_for :employees, :controllers => { :invitations => 'employees/invitations' }
 
   resources :enterprises
   resources :employees

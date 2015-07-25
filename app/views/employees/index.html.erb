@@ -1,5 +1,43 @@
-<ul>
-  <% @employees.each do |employee| %>
-    <li><%= "#{employee.first_name} #{employee.last_name}" %></li>
-  <% end %>
-</ul>
+<h1>Employees</h1>
+
+<h2>Newly invited</h2>
+
+<table>
+  <thead>
+    <th>First name</th>
+    <th>Last name</th>
+    <th>Email</th>
+    <th>Options</th>
+  </thead>
+  <tbody>
+    <% @employees.invitation_not_accepted.each do |employee| %>
+      <tr>
+        <td><%= employee.first_name || "-" %></td>
+        <td><%= employee.last_name || "-" %></td>
+        <td><%= employee.email %></td>
+        <td><%= link_to "Revoke", employee_path(employee), method: :delete %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h2>Accepted</h2>
+
+<table>
+  <thead>
+    <th>First name</th>
+    <th>Last name</th>
+    <th>Email</th>
+    <th>Options</th>
+  </thead>
+  <tbody>
+    <% @employees.invitation_accepted.each do |employee| %>
+      <tr>
+        <td><%= employee.first_name %></td>
+        <td><%= employee.last_name %></td>
+        <td><%= employee.email %></td>
+        <td><%= link_to "Details", employee_path(employee) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

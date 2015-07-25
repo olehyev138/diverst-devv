@@ -1,5 +1,6 @@
 class EmployeesController < ApplicationController
   before_action :authenticate_admin!
+  before_action :set_employee, only: [:edit, :update, :destroy, :show]
 
   def index
     @employees = current_admin.enterprise.employees
@@ -16,6 +17,11 @@ class EmployeesController < ApplicationController
     else
       render :edit
     end
+  end
+
+  def destroy
+    @employee.destroy
+    redirect_to :back
   end
 
   protected

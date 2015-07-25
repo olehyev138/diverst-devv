@@ -5,4 +5,8 @@ class Employee < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   belongs_to :enterprise
+
+  def name
+    "#{self.first_name} #{self.last_name}"
+  end
 end
