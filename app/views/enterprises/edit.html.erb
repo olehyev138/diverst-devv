@@ -1,0 +1,16 @@
+<h1>Custom vCard fields</h1>
+<%= simple_form_for @enterprise do |f| %>
+  <div id="fields">
+    <%= f.simple_fields_for :fields do |field| %>
+      <%= render 'field_fields', f: field %>
+    <% end %>
+    <div class="link">
+      <%= link_to_add_association "Add text field", f, :fields, wrap_object: Proc.new { TextField.new } %>
+      <%= link_to_add_association "Add select field", f, :fields, wrap_object: Proc.new { SelectField.new } %>
+    </div>
+  </div>
+
+  <br><br>
+
+  <%= f.button :submit %>
+<% end %>

@@ -1,0 +1,2 @@
+class SelectField < OptionsField
+end
