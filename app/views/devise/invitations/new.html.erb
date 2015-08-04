@@ -4,9 +4,21 @@
   <%= devise_error_messages! %>
 
   <% resource.class.invite_key_fields.each do |field| -%>
-    <%= f.input :first_name %>
-    <%= f.input :last_name %>
     <%= f.input :email %>
+
+    <% current_admin.enterprise.fields.each do |cf| %>
+      <% if cf.is_a? TextField %>
+        <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake %>
+      <% elsif cf.is_a? SelectField %>
+        <label><%= cf.title %></label>
+        <select>
+          <% cf.field_options.each do |fo| %>
+            <option value="<%= fo.id %>"><%= fo.title %></option>
+          <% end %>
+        </select>
+      <% end %>
+    <% end %>
+
     <p><%= f.submit t("devise.invitations.new.submit_button") %></p>
   <% end -%>
 <% end %>

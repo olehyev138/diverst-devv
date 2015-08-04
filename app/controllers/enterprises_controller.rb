@@ -25,6 +25,6 @@ class EnterprisesController < ApplicationController
   end
 
   def enterprise_params
-    params.require(:enterprise).permit(fields_attributes: [:id, :title, :_destroy, :type, field_options_attributes: [:id, :title, :_destroy]])
+    params.require(:enterprise).permit(fields_attributes: [:id, :title, :_destroy, :gamification_value, :show_on_vcard, :type, field_options_attributes: [:id, :title, :_destroy]])
   end
 end
