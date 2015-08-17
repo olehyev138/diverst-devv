@@ -17,14 +17,17 @@
   <strong><%= current_employee.email %></strong>
 <% end %>
 
-<h2>Navigation</h2>
-<nav>
-  <ul>
-    <li><%= link_to "Employee management", employees_path %></li>
-    <li><%= link_to "Enterprise settings", edit_enterprise_path(current_admin.enterprise) %></li>
-    <li><%= link_to "Logout", destroy_admin_session_path %></li>
-  </ul>
-</nav>
+<header>
+  <nav>
+    <ul>
+      <li><%= link_to "Employee management", employees_path %></li>
+      <li><%= link_to "Enterprise settings", edit_enterprise_path(current_admin.enterprise) %></li>
+      <li><%= link_to "Logout", destroy_admin_session_path, method: :delete %></li>
+      <% if employee_signed_in? %><li><%= link_to "Logout employee", destroy_employee_session_path, method: :delete %></li><% end %>
+      <% unless employee_signed_in? %><li><%= link_to "Login as employee with SSO", new_employee_session_path %></li><% end %>
+    </ul>
+  </nav>
+</header>
 
 <%= yield %>
 

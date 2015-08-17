@@ -28,7 +28,7 @@ gem 'devise_invitable'
 gem 'simple_form'
 gem 'rails_12factor', group: :production
 gem "cocoon"
-gem 'devise_saml_authenticatable'
+gem 'devise_saml_authenticatable', :path => '/Users/francis/Documents/Sites/devise_saml_authenticatable'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
