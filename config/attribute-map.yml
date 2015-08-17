@@ -1,0 +1,3 @@
+"urn:mace:dir:attribute-def:givenName": "first_name"
+"urn:mace:dir:attribute-def:sn": "last_name"
+"urn:mace:dir:attribute-def:mail": "email"
