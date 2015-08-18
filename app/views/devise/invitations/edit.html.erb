@@ -4,20 +4,22 @@
   <%= devise_error_messages! %>
   <%= f.hidden_field :invitation_token %>
 
-  <% resource.enterprise.fields.select(&:show_on_vcard).sort_by(&:gamification_value).each do |field| %>
-    <% if field.is_a? TextField %>
-      <%= f.input field.title.downcase.to_sym, label: field.title, as: :fake %>
-    <% elsif field.is_a? SelectField %>
-      <label><%= field.title %></label>
-      <select>
-        <% field.field_options.each do |fo| %>
-          <option value="<%= fo.id %>"><%= fo.title %></option>
-        <% end %>
-      </select>
+  <% resource.class.invite_key_fields.each do |field| -%>
+    <%= f.input :email %>
+
+    <% resource.enterprise.fields.select(&:show_on_vcard).sort_by(&:gamification_value).each do |cf| %>
+      <% if cf.is_a? TextField %>
+        <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "custom-field[#{cf.id}]", value: resource.info[cf.id] } %>
+      <% elsif cf.is_a? SelectField %>
+        <label><%= cf.title %></label>
+        <select name="custom-field[<%= cf.id %>]">
+          <% cf.field_options.each do |fo| %>
+            <option value="<%= fo.id %>" <%= "selected=selected" if resource.info[cf.id].to_i == fo.id %>><%= fo.title %></option>
+          <% end %>
+        </select>
+      <% end %>
     <% end %>
-  <% end %>
-
-
+  <% end -%>
 
   <br>
 

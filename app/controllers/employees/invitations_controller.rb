@@ -1,4 +1,10 @@
 class Employees::InvitationsController < Devise::InvitationsController
+
+  def edit
+    super
+    puts "MEEEEEOOOOWW #{self.resource.info}"
+  end
+
   private
 
   def invite_resource
