@@ -9,11 +9,11 @@
 
     <% resource.enterprise.fields.select(&:show_on_vcard).sort_by(&:gamification_value).each do |cf| %>
       <% if cf.is_a? TextField %>
-        <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "custom-field[#{cf.id}]", value: resource.info[cf.id] } %>
+        <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "custom-fields[#{cf.id}]", value: resource.info[cf.id] } %>
       <% elsif cf.is_a? SelectField %>
         <label><%= cf.title %></label>
-        <select name="custom-field[<%= cf.id %>]">
-          <% cf.field_options.each do |fo| %>
+        <select name="custom-fields[<%= cf.id %>]">
+          <% cf.options.each do |fo| %>
             <option value="<%= fo.id %>" <%= "selected=selected" if resource.info[cf.id].to_i == fo.id %>><%= fo.title %></option>
           <% end %>
         </select>

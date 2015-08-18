@@ -8,11 +8,11 @@
 
     <% current_admin.enterprise.fields.each do |cf| %>
       <% if cf.is_a? TextField %>
-        <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "custom-field[#{cf.id}]" } %>
+        <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "custom-fields[#{cf.id}]" } %>
       <% elsif cf.is_a? SelectField %>
         <label><%= cf.title %></label>
-        <select name="custom-field[<%= cf.id %>]">
-          <% cf.field_options.each do |fo| %>
+        <select name="custom-fields[<%= cf.id %>]">
+          <% cf.options.each do |fo| %>
             <option value="<%= fo.id %>"><%= fo.title %></option>
           <% end %>
         </select>

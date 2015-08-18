@@ -17,7 +17,7 @@
         <td><%= employee.first_name || "-" %></td>
         <td><%= employee.last_name || "-" %></td>
         <td><%= employee.email %></td>
-        <td><%= link_to "Revoke", employee_path(employee), method: :delete %></td>
+        <td><%= link_to "Details", employee_path(employee) %> -<%= link_to "Revoke", employee_path(employee), method: :delete %></td>
       </tr>
     <% end %>
   </tbody>
@@ -37,7 +37,8 @@
       <tr>
         <td><%= employee.first_name %></td>
         <td><%= employee.last_name %></td>
-        <td><%= link_to "Details", employee_path(employee) %></td>
+        <td><%= employee.email %></td>
+        <td><%= link_to "Details", employee_path(employee) %> - <%= link_to "Delete", employee_path(employee), method: :delete %></td>
       </tr>
     <% end %>
   </tbody>

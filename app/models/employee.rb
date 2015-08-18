@@ -20,4 +20,10 @@ class Employee < ActiveRecord::Base
   def info=(new_info)
     self.data = JSON.generate new_info
   end
+
+  def info_for_field(field)
+    puts field.title
+    puts self.info[field.id]
+    field.pretty_value self.info[field.id]
+  end
 end

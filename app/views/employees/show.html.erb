@@ -1,15 +1,11 @@
 <h1>Employee details</h1>
-<h2><%= @employee.name %></h2>
-
-<label><strong>First name</strong></label>
-<p><%= @employee.first_name %></p>
-
-<label><strong>Last name</strong></label>
-<p><%= @employee.last_name %></p>
 
 <label><strong>Email</strong></label>
 <p><%= @employee.email %></p>
 
-<br>
+<h2>Custom fields</h2>
 
-<label><em>Other vcard info + enterprise defined fields will go here...</em></label>
+<% @employee.enterprise.fields.each do |field| %>
+  <label><strong><%= field.title %></strong></label>
+  <p><%= @employee.info_for_field(field) %></p>
+<% end %>

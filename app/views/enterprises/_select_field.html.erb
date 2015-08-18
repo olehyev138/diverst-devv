@@ -2,11 +2,11 @@
 
 <%= f.input :title %>
 
-<div id="field_options">
-  <%= f.simple_fields_for :field_options do |option| %>
-    <%= render 'field_option_fields', f: option %>
+<div id="options">
+  <%= f.simple_fields_for :options do |option| %>
+    <%= render 'option_fields', f: option %>
   <% end %>
   <div class="link">
-    <%= link_to_add_association "Add option", f, :field_options %>
+    <%= link_to_add_association "Add option", f, :options %>
   </div>
 </div>
