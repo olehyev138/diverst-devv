@@ -4,6 +4,7 @@ class Employees::InvitationsController < Devise::InvitationsController
   def invite_resource
     resource_class.invite!(invite_params, current_inviter) do |invitable|
       invitable.enterprise = current_inviter.enterprise
+      invitable.info = invitable.info.merge(params['custom-field']) if params['custom-field']
     end
   end
 

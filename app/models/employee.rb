@@ -1,7 +1,7 @@
 class Employee < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :invitable, :saml_authenticatable, :registerable,
+  devise :invitable, :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
   belongs_to :enterprise
@@ -10,9 +10,14 @@ class Employee < ActiveRecord::Base
     "#{self.first_name} #{self.last_name}"
   end
 
-  protected
+  def info
+    JSON.parse(self.data)
+  rescue
+    {}
+  end
 
-  def password_required?
-    false
+  def info=(new_info)
+    self.data = JSON.generate new_info
+    puts "MEOW MEOW MEOW MEOW MEOW MEOW #{self.data}"
   end
 end

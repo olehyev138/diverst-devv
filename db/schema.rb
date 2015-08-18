@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150804042334) do
+ActiveRecord::Schema.define(version: 20150818185619) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -40,14 +40,14 @@ ActiveRecord::Schema.define(version: 20150804042334) do
     t.string   "last_name",              limit: 255
     t.integer  "gender",                 limit: 4
     t.integer  "enterprise_id",          limit: 4
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
-    t.string   "email",                  limit: 255, default: "", null: false
-    t.string   "encrypted_password",     limit: 255, default: ""
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
+    t.string   "email",                  limit: 255,   default: "", null: false
+    t.string   "encrypted_password",     limit: 255,   default: ""
     t.string   "reset_password_token",   limit: 255
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          limit: 4,   default: 0,  null: false
+    t.integer  "sign_in_count",          limit: 4,     default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip",     limit: 255
@@ -59,7 +59,8 @@ ActiveRecord::Schema.define(version: 20150804042334) do
     t.integer  "invitation_limit",       limit: 4
     t.integer  "invited_by_id",          limit: 4
     t.string   "invited_by_type",        limit: 255
-    t.integer  "invitations_count",      limit: 4,   default: 0
+    t.integer  "invitations_count",      limit: 4,     default: 0
+    t.text     "data",                   limit: 65535
   end
 
   add_index "employees", ["email"], name: "index_employees_on_email", unique: true, using: :btree
