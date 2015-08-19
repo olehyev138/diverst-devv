@@ -1,0 +1,11 @@
+<h1>Edit employee</h1>
+
+<%= simple_form_for @employee do |f| %>
+  <%= f.input :email %>
+
+  <% current_admin.enterprise.fields.each do |cf| %>
+    <%= render "shared/custom_field", cf: cf, f: f, resource: @employee %>
+  <% end %>
+
+  <p><%= f.submit "Save" %></p>
+<% end %>

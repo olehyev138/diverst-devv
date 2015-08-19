@@ -24,4 +24,8 @@ class Employee < ActiveRecord::Base
   def info_for_field(field)
     field.pretty_value self.info[field.id]
   end
+
+  def merge_info(custom_fields)
+    self.info = self.info.merge(custom_fields) if custom_fields
+  end
 end

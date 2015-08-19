@@ -1,5 +1,4 @@
 class Employees::InvitationsController < Devise::InvitationsController
-
   def edit
     super
     invitable.info = invitable.info.merge(params['custom-fields']) if params['custom-fields']
@@ -11,14 +10,14 @@ class Employees::InvitationsController < Devise::InvitationsController
   def invite_resource
     resource_class.invite!(invite_params, current_inviter) do |invitable|
       invitable.enterprise = current_inviter.enterprise
-      invitable.info = invitable.info.merge(params['custom-fields']) if params['custom-fields']
+      invitable.merge_info(params['custom-fields'])
     end
   end
 
   # This prepares the resource for the vCard
   def accept_resource
     resource = resource_class.accept_invitation!(update_resource_params)
-    resource.info = resource.info.merge(params['custom-fields']) if params['custom-fields']
+    resource.merge_info(params['custom-fields'])
     resource
   end
 

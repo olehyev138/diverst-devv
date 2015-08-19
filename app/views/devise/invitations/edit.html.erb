@@ -10,7 +10,7 @@
     <br>
 
     <% resource.enterprise.fields.select(&:show_on_vcard).sort_by(&:gamification_value).each do |cf| %>
-      <%= render "shared/custom_field", cf: cf, f: f %>
+      <%= render "shared/custom_field", cf: cf, f: f, resource: resource %>
     <% end %>
   <% end -%>
 

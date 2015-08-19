@@ -7,7 +7,7 @@
     <%= f.input :email %>
 
     <% current_admin.enterprise.fields.each do |cf| %>
-      <%= render "shared/custom_field", cf: cf, f: f %>
+      <%= render "shared/custom_field", cf: cf, f: f, resource: resource %>
     <% end %>
 
     <p><%= f.submit t("devise.invitations.new.submit_button") %></p>

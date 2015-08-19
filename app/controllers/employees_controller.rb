@@ -12,8 +12,10 @@ class EmployeesController < ApplicationController
   end
 
   def update
-    if @employee.update(employee_params)
-      redirect_to @employee.characters[0]
+    @employee.assign_attributes(employee_params)
+    @employee.merge_info(params['custom-fields'])
+    if @employee.save
+      redirect_to @employee
     else
       render :edit
     end
@@ -30,7 +32,7 @@ class EmployeesController < ApplicationController
     @employee = Employee.find(params[:id])
   end
 
-  def set_employee_params
-    params.require(:set_employee).permit(:jouPrenom, :jouNom, :email)
+  def employee_params
+    params.require(:employee).permit(:email)
   end
 end
