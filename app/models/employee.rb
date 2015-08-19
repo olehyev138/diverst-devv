@@ -11,8 +11,8 @@ class Employee < ActiveRecord::Base
   end
 
   def info
-    string_keys_hash = JSON.parse(self.data)
-    Hash[string_keys_hash.map{ |k, v| [k.to_i, v] }]
+    string_keys_info = JSON.parse(self.data)
+    data_hash = Hash[string_keys_info.map{ |k, v| [k.to_i, v] }]
   rescue
     {}
   end
@@ -22,8 +22,6 @@ class Employee < ActiveRecord::Base
   end
 
   def info_for_field(field)
-    puts field.title
-    puts self.info[field.id]
     field.pretty_value self.info[field.id]
   end
 end

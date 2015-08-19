@@ -7,6 +7,7 @@
     <div class="link">
       <%= link_to_add_association "Add text field", f, :fields, wrap_object: Proc.new { TextField.new } %>
       <%= link_to_add_association "Add select field", f, :fields, wrap_object: Proc.new { SelectField.new } %>
+      <%= link_to_add_association "Add checkbox field", f, :fields, wrap_object: Proc.new { CheckboxField.new } %>
     </div>
   </div>
 

@@ -1,10 +1,10 @@
 <div class="nested-fields">
   <%= render 'text_field', f: f if f.object.type == 'TextField' %>
   <%= render 'select_field', f: f if f.object.type == 'SelectField' %>
+  <%= render 'checkbox_field', f: f if f.object.type == 'CheckboxField' %>
 
   <%= f.input :gamification_value %>
   <%= f.input :show_on_vcard %>
-
   <%= f.hidden_field :type %>
 
   <%= link_to_remove_association "remove", f %>
