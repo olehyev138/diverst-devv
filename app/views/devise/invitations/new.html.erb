@@ -7,16 +7,7 @@
     <%= f.input :email %>
 
     <% current_admin.enterprise.fields.each do |cf| %>
-      <% if cf.is_a? TextField %>
-        <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "custom-fields[#{cf.id}]" } %>
-      <% elsif cf.is_a? SelectField %>
-        <label><%= cf.title %></label>
-        <select name="custom-fields[<%= cf.id %>]">
-          <% cf.options.each do |fo| %>
-            <option value="<%= fo.id %>"><%= fo.title %></option>
-          <% end %>
-        </select>
-      <% end %>
+      <%= render "shared/custom_field", cf: cf, f: f %>
     <% end %>
 
     <p><%= f.submit t("devise.invitations.new.submit_button") %></p>
