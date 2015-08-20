@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150818231205) do
+ActiveRecord::Schema.define(version: 20150819170209) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -75,9 +75,14 @@ ActiveRecord::Schema.define(version: 20150818231205) do
   add_index "employees", ["reset_password_token"], name: "index_employees_on_reset_password_token", unique: true, using: :btree
 
   create_table "enterprises", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.string   "name",               limit: 255
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.string   "idp_entity_id",      limit: 255
+    t.string   "idp_sso_target_url", limit: 255
+    t.string   "idp_slo_target_url", limit: 255
+    t.text     "idp_cert",           limit: 65535
+    t.boolean  "has_enabled_saml",   limit: 1
   end
 
   create_table "field_options", force: :cascade do |t|
