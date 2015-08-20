@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150819170209) do
+ActiveRecord::Schema.define(version: 20150820162446) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -66,6 +66,7 @@ ActiveRecord::Schema.define(version: 20150819170209) do
     t.string   "invited_by_type",        limit: 255
     t.integer  "invitations_count",      limit: 4,     default: 0
     t.text     "data",                   limit: 65535
+    t.string   "auth_source",            limit: 255
   end
 
   add_index "employees", ["email"], name: "index_employees_on_email", unique: true, using: :btree
@@ -100,6 +101,12 @@ ActiveRecord::Schema.define(version: 20150819170209) do
     t.datetime "updated_at",                     null: false
     t.integer  "gamification_value", limit: 4
     t.boolean  "show_on_vcard",      limit: 1
+    t.string   "saml_attribute",     limit: 255
+  end
+
+  create_table "saml_associations", force: :cascade do |t|
+    t.string  "saml_attribute", limit: 255
+    t.integer "field_id",       limit: 4
   end
 
 end

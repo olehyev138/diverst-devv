@@ -6,18 +6,20 @@
 
 <table>
   <thead>
-    <th>First name</th>
-    <th>Last name</th>
     <th>Email</th>
+    <% current_admin.enterprise.fields.each do |field| %>
+      <th><%= field.title %></th>
+    <% end %>
     <th>Options</th>
   </thead>
   <tbody>
     <% @employees.invitation_not_accepted.each do |employee| %>
       <tr>
-        <td><%= employee.first_name || "-" %></td>
-        <td><%= employee.last_name || "-" %></td>
         <td><%= employee.email %></td>
-        <td><%= link_to "Details", employee_path(employee) %> -<%= link_to "Revoke", employee_path(employee), method: :delete %></td>
+        <% current_admin.enterprise.fields.each do |field| %>
+          <th><%= employee.info_for_field(field) %></th>
+        <% end %>
+        <td><%= link_to "Details", employee_path(employee) %> - <%= link_to "Revoke", employee_path(employee), method: :delete %></td>
       </tr>
     <% end %>
   </tbody>
@@ -27,18 +29,20 @@
 
 <table>
   <thead>
-    <th>First name</th>
-    <th>Last name</th>
     <th>Email</th>
+    <% current_admin.enterprise.fields.each do |field| %>
+      <th><%= field.title %></th>
+    <% end %>
     <th>Options</th>
   </thead>
   <tbody>
-    <% @employees.invitation_accepted.each do |employee| %>
+    <% (@employees.invitation_not_accepted + @employees.where(auth_source: "saml")).each do |employee| %>
       <tr>
-        <td><%= employee.first_name %></td>
-        <td><%= employee.last_name %></td>
         <td><%= employee.email %></td>
-        <td><%= link_to "Details", employee_path(employee) %> - <%= link_to "Delete", employee_path(employee), method: :delete %></td>
+        <% current_admin.enterprise.fields.each do |field| %>
+          <td><%= employee.info_for_field(field) %></td>
+        <% end %>
+        <td><%= link_to "Details", employee_path(employee) %> - <%= link_to "Revoke", employee_path(employee), method: :delete %></td>
       </tr>
     <% end %>
   </tbody>

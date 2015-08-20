@@ -28,7 +28,7 @@ gem 'devise_invitable'
 gem 'simple_form'
 gem 'rails_12factor', group: :production
 gem "cocoon"
-gem 'ruby-saml'
+gem 'ruby-saml', '~> 1.0.0'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

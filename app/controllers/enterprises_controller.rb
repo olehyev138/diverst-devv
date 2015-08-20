@@ -25,6 +25,6 @@ class EnterprisesController < ApplicationController
   end
 
   def enterprise_params
-    params.require(:enterprise).permit(:has_enabled_saml, :idp_entity_id, :idp_sso_target_url, :idp_slo_target_url, :idp_cert, fields_attributes: [:id, :title, :_destroy, :gamification_value, :show_on_vcard, :type, options_attributes: [:id, :title, :_destroy]])
+    params.require(:enterprise).permit(:has_enabled_saml, :idp_entity_id, :idp_sso_target_url, :idp_slo_target_url, :idp_cert, fields_attributes: [:id, :title, :_destroy, :gamification_value, :show_on_vcard, :saml_attribute, :type, options_attributes: [:id, :title, :_destroy]])
   end
 end
