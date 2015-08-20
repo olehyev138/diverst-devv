@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150820162446) do
+ActiveRecord::Schema.define(version: 20150820200133) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -102,6 +102,9 @@ ActiveRecord::Schema.define(version: 20150820162446) do
     t.integer  "gamification_value", limit: 4
     t.boolean  "show_on_vcard",      limit: 1
     t.string   "saml_attribute",     limit: 255
+    t.boolean  "match_exclude",      limit: 1
+    t.boolean  "match_polarity",     limit: 1
+    t.float    "match_weight",       limit: 24
   end
 
   create_table "saml_associations", force: :cascade do |t|

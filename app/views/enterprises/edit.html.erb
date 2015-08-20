@@ -27,3 +27,15 @@
 
   <%= f.submit "Save SSO settings" %>
 <% end %>
+
+<h1>Algo settings</h1>
+
+<%= simple_form_for @enterprise do |f| %>
+  <%= f.simple_fields_for :fields do |field| %>
+    <strong><%= field.object.title %></strong>
+    <%= field.input :match_exclude %>
+    <%= field.input :match_weight %>
+    <%= field.input :match_polarity %>
+    <br>
+  <% end %>
+<% end %>
