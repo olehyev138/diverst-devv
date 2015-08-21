@@ -39,9 +39,6 @@ class Employee < ActiveRecord::Base
       saml_employee_info[field.id] = attrs[field.saml_attribute] unless field.saml_attribute.blank?
     end
 
-    pp(saml_employee_info)
-    pp(self.info)
-
     self.info = self.info.merge(saml_employee_info)
 
     self.save!

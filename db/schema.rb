@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150820200133) do
+ActiveRecord::Schema.define(version: 20150820210008) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -34,11 +34,6 @@ ActiveRecord::Schema.define(version: 20150820200133) do
 
   add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
   add_index "admins", ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true, using: :btree
-
-  create_table "checkbox_fields", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
 
   create_table "employees", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -87,10 +82,10 @@ ActiveRecord::Schema.define(version: 20150820200133) do
   end
 
   create_table "field_options", force: :cascade do |t|
-    t.string   "title",            limit: 255
-    t.integer  "options_field_id", limit: 4
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.string   "title",      limit: 255
+    t.integer  "field_id",   limit: 4
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   create_table "fields", force: :cascade do |t|
