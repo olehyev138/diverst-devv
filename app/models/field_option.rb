@@ -6,10 +6,8 @@ class FieldOption < ActiveRecord::Base
     enterprise = self.field.enterprise
     nb_employees_chose = 0
     enterprise.employees.each do |employee|
-      if employee.info[self.field.id].to_i == self.id
-        nb_employees_chose += 1
-      end
+      nb_employees_chose += 1 if employee.info[self.field.id].to_i == self.id
     end
-    nb_employees_chose / enterprise.employees.count
+    nb_employees_chose.to_f / enterprise.employees.count
   end
 end
