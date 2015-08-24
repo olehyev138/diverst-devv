@@ -2,7 +2,7 @@ class Field < ActiveRecord::Base
   belongs_to :enterprise
   has_one :saml_association
 
-  def deserialize_value(value)
+  def string_value(value)
     value
   end
 

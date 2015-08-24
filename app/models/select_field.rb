@@ -2,7 +2,7 @@ class SelectField < Field
   has_many :options, class_name: "FieldOption", foreign_key: "field_id", dependent: :destroy
   accepts_nested_attributes_for :options, :reject_if => :all_blank, :allow_destroy => true
 
-  def deserialize_value(value)
+  def string_value(value)
     return "-" if value.nil?
     self.options.find{ |option| option.id == value.to_i }.title
   end

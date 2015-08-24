@@ -1,17 +1,17 @@
 <% if cf.is_a? TextField %>
-  <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "custom-fields[#{cf.id}]", value: resource.info[cf.id] } %>
+  <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "custom-fields[#{cf.id}]", value: resource.info[cf] } %>
 <% elsif cf.is_a? SelectField %>
   <label><%= cf.title %></label>
   <select name="custom-fields[<%= cf.id %>]">
     <% cf.options.each do |fo| %>
-      <option value="<%= fo.id %>" <%= "selected=selected" if resource.info[cf.id].to_i == fo.id %>><%= fo.title %></option>
+      <option value="<%= fo.id %>" <%= "selected=selected" if resource.info[cf].to_i == fo.id %>><%= fo.title %></option>
     <% end %>
   </select>
 <% elsif cf.is_a? CheckboxField %>
   <div class="field">
     <label><%= cf.title %></label>
     <% cf.options.each do |fo| %>
-      <%= check_box_tag "custom-fields[#{cf.id}][]", fo.id, resource.info[cf.id] && resource.info[cf.id].map(&:to_i).include?(fo.id) %>
+      <%= check_box_tag "custom-fields[#{cf.id}][]", fo.id, resource.info[cf] && resource.info[cf].map(&:to_i).include?(fo.id) %>
       <%= fo.title %>
     <% end %>
   </div>

@@ -6,7 +6,7 @@ class CheckboxField < Field
     Array(value)
   end
 
-  def deserialize_value(value)
+  def string_value(value)
     return "" if !value
     self.options.select{ |option| value.map(&:to_i).include? option.id }.map{ |option| option.title }.join(', ')
   end

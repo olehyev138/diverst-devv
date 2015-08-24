@@ -17,15 +17,15 @@
       <tr>
         <td><%= employee.email %></td>
         <% current_admin.enterprise.fields.each do |field| %>
-          <td><%= employee.info[field] %></td>
+          <td><%= employee.string_for_field(field) %></td>
         <% end %>
-        <td><%= link_to "Details", employee_path(employee) %> - <%= link_to "Revoke", employee_path(employee), method: :delete %></td>
+        <td><%= link_to "Details", employee_path(employee) %> - <%= link_to "Revoke invitation", employee_path(employee), method: :delete %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<h2>Active</h2>
+<h2>Manually added</h2>
 
 <table>
   <thead>
@@ -40,9 +40,9 @@
       <tr>
         <td><%= employee.email %></td>
         <% current_admin.enterprise.fields.each do |field| %>
-          <td><%= employee.info[field] %></td>
+          <td><%= employee.string_for_field(field) %></td>
         <% end %>
-        <td><%= link_to "Details", employee_path(employee) %> - <%= link_to "Revoke", employee_path(employee), method: :delete %></td>
+        <td><%= link_to "Details", employee_path(employee) %> - <%= link_to "Delete", employee_path(employee), method: :delete %></td>
       </tr>
     <% end %>
   </tbody>
@@ -63,9 +63,9 @@
       <tr>
         <td><%= employee.email %></td>
         <% current_admin.enterprise.fields.each do |field| %>
-          <td><%= employee.info[field] %></td>
+          <td><%= employee.string_for_field(field) %></td>
         <% end %>
-        <td><%= link_to "Details", employee_path(employee) %> - <%= link_to "Revoke", employee_path(employee), method: :delete %></td>
+        <td><%= link_to "Details", employee_path(employee) %> - <%= link_to "Delete", employee_path(employee), method: :delete %></td>
       </tr>
     <% end %>
   </tbody>

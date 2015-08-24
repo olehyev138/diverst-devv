@@ -9,5 +9,5 @@
 
 <% @employee.enterprise.fields.each do |field| %>
   <label><strong><%= field.title %></strong></label>
-  <p><%= @employee.info_for_field(field) %></p>
+  <p><%= @employee.string_for_field(field) %></p>
 <% end %>

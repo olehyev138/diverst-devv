@@ -15,6 +15,8 @@ class EmployeesController < ApplicationController
     @employee.assign_attributes(employee_params)
     @employee.merge_info(params['custom-fields'])
 
+    pp params['custom-fields']
+
     if @employee.save
       redirect_to @employee
     else
@@ -30,7 +32,7 @@ class EmployeesController < ApplicationController
   protected
 
   def set_employee
-    @employee = Employee.find(params[:id])
+    @employee = current_admin.enterprise.employees.find(params[:id])
   end
 
   def employee_params

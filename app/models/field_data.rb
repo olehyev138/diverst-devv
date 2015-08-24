@@ -5,11 +5,9 @@ module FieldData
 
   def [](field)
     begin
-      value = self.fetch(field.id)
+      self.fetch(field.id)
     rescue
-      value = self.fetch(field.id.to_s)
+      nil
     end
-
-    field.deserialize_value(value)
   end
 end
