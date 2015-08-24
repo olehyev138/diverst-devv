@@ -11,12 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150820210008) do
+ActiveRecord::Schema.define(version: 20150729174431) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
     t.string   "last_name",              limit: 255
-    t.integer  "gender",                 limit: 4
     t.integer  "enterprise_id",          limit: 4
     t.datetime "created_at",                                      null: false
     t.datetime "updated_at",                                      null: false
@@ -36,9 +35,8 @@ ActiveRecord::Schema.define(version: 20150820210008) do
   add_index "admins", ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true, using: :btree
 
   create_table "employees", force: :cascade do |t|
-    t.string   "first_name",             limit: 255
-    t.string   "last_name",              limit: 255
-    t.integer  "gender",                 limit: 4
+    t.text     "data",                   limit: 65535
+    t.string   "auth_source",            limit: 255
     t.integer  "enterprise_id",          limit: 4
     t.datetime "created_at",                                        null: false
     t.datetime "updated_at",                                        null: false
@@ -60,8 +58,6 @@ ActiveRecord::Schema.define(version: 20150820210008) do
     t.integer  "invited_by_id",          limit: 4
     t.string   "invited_by_type",        limit: 255
     t.integer  "invitations_count",      limit: 4,     default: 0
-    t.text     "data",                   limit: 65535
-    t.string   "auth_source",            limit: 255
   end
 
   add_index "employees", ["email"], name: "index_employees_on_email", unique: true, using: :btree
@@ -72,13 +68,13 @@ ActiveRecord::Schema.define(version: 20150820210008) do
 
   create_table "enterprises", force: :cascade do |t|
     t.string   "name",               limit: 255
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
     t.string   "idp_entity_id",      limit: 255
     t.string   "idp_sso_target_url", limit: 255
     t.string   "idp_slo_target_url", limit: 255
     t.text     "idp_cert",           limit: 65535
     t.boolean  "has_enabled_saml",   limit: 1
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
   end
 
   create_table "field_options", force: :cascade do |t|
@@ -91,20 +87,15 @@ ActiveRecord::Schema.define(version: 20150820210008) do
   create_table "fields", force: :cascade do |t|
     t.string   "type",               limit: 255
     t.string   "title",              limit: 255
-    t.integer  "enterprise_id",      limit: 4
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
     t.integer  "gamification_value", limit: 4
     t.boolean  "show_on_vcard",      limit: 1
     t.string   "saml_attribute",     limit: 255
     t.boolean  "match_exclude",      limit: 1
     t.boolean  "match_polarity",     limit: 1
     t.float    "match_weight",       limit: 24
-  end
-
-  create_table "saml_associations", force: :cascade do |t|
-    t.string  "saml_attribute", limit: 255
-    t.integer "field_id",       limit: 4
+    t.integer  "enterprise_id",      limit: 4
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
   end
 
 end

@@ -6,24 +6,13 @@ class Employee < ActiveRecord::Base
 
   belongs_to :enterprise
 
+  before_validation :transfer_info_to_data
+  after_initialize :set_info
+
+  attr_accessor :info
+
   def name
     "#{self.first_name} #{self.last_name}"
-  end
-
-  def info
-    string_keys_info = JSON.parse(self.data)
-    data_hash = Hash[string_keys_info.map{ |k, v| [k.to_i, v] }]
-  rescue
-    {}
-  end
-
-  def info=(new_info)
-    self.data = JSON.generate new_info
-  end
-
-  def info_for_field(field)
-    return "-" if !self.info[field.id]
-    field.pretty_value self.info[field.id]
   end
 
   def merge_info(custom_fields)
@@ -36,7 +25,7 @@ class Employee < ActiveRecord::Base
     saml_employee_info = {}
 
     enterprise.fields.each do |field|
-      saml_employee_info[field.id] = attrs[field.saml_attribute] unless field.saml_attribute.blank?
+      saml_employee_info[field] = attrs[field.saml_attribute] unless field.saml_attribute.blank?
     end
 
     self.info = self.info.merge(saml_employee_info)
@@ -52,5 +41,16 @@ class Employee < ActiveRecord::Base
 
   def password_required?
     self.auth_source != "saml"
+  end
+
+  def set_info
+    self.data = "{}" if self.data.nil?
+    json_hash = JSON.parse(self.data)
+    self.info = Hash[json_hash.map{|k,v|[ k.to_i, v ]}] # Convert the hash keys to integers since they're strings after JSON parsing
+    self.info.extend(FieldData)
+  end
+
+  def transfer_info_to_data
+    self.data = JSON.generate self.info
   end
 end

@@ -17,7 +17,7 @@
       <tr>
         <td><%= employee.email %></td>
         <% current_admin.enterprise.fields.each do |field| %>
-          <th><%= employee.info_for_field(field) %></th>
+          <td><%= employee.info[field] %></td>
         <% end %>
         <td><%= link_to "Details", employee_path(employee) %> - <%= link_to "Revoke", employee_path(employee), method: :delete %></td>
       </tr>
@@ -36,11 +36,34 @@
     <th>Options</th>
   </thead>
   <tbody>
-    <% (@employees.invitation_not_accepted + @employees.where(auth_source: "saml")).each do |employee| %>
+    <% @employees.invitation_accepted.each do |employee| %>
       <tr>
         <td><%= employee.email %></td>
         <% current_admin.enterprise.fields.each do |field| %>
-          <td><%= employee.info_for_field(field) %></td>
+          <td><%= employee.info[field] %></td>
+        <% end %>
+        <td><%= link_to "Details", employee_path(employee) %> - <%= link_to "Revoke", employee_path(employee), method: :delete %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h2>SAML</h2>
+
+<table>
+  <thead>
+    <th>Email</th>
+    <% current_admin.enterprise.fields.each do |field| %>
+      <th><%= field.title %></th>
+    <% end %>
+    <th>Options</th>
+  </thead>
+  <tbody>
+    <% @employees.where(auth_source: "saml").each do |employee| %>
+      <tr>
+        <td><%= employee.email %></td>
+        <% current_admin.enterprise.fields.each do |field| %>
+          <td><%= employee.info[field] %></td>
         <% end %>
         <td><%= link_to "Details", employee_path(employee) %> - <%= link_to "Revoke", employee_path(employee), method: :delete %></td>
       </tr>
