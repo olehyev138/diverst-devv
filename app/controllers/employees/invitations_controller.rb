@@ -16,8 +16,7 @@ class Employees::InvitationsController < Devise::InvitationsController
     resource = resource_class.accept_invitation!(update_resource_params)
     resource.merge_info(params['custom-fields'])
 
-    pp params['custom-fields']
-
+    resource.save
     resource
   end
 
