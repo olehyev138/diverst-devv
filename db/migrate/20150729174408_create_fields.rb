@@ -3,7 +3,7 @@ class CreateFields < ActiveRecord::Migration
     create_table :fields do |t|
       t.string :type
       t.string :title
-      t.integer :gamification_value
+      t.integer :gamification_value, default: 1
       t.boolean :show_on_vcard
       t.string :saml_attribute
 
