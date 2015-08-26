@@ -90,6 +90,8 @@ ActiveRecord::Schema.define(version: 20150729174431) do
     t.integer  "gamification_value", limit: 4
     t.boolean  "show_on_vcard",      limit: 1
     t.string   "saml_attribute",     limit: 255
+    t.integer  "min",                limit: 4
+    t.integer  "max",                limit: 4
     t.boolean  "match_exclude",      limit: 1
     t.boolean  "match_polarity",     limit: 1
     t.float    "match_weight",       limit: 24

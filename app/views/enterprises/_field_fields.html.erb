@@ -2,6 +2,7 @@
   <%= render 'text_field', f: f if f.object.type == 'TextField' %>
   <%= render 'select_field', f: f if f.object.type == 'SelectField' %>
   <%= render 'checkbox_field', f: f if f.object.type == 'CheckboxField' %>
+  <%= render 'numeric_field', f: f if f.object.type == 'NumericField' %>
 
   <%= f.input :gamification_value %>
   <%= f.input :show_on_vcard %>
