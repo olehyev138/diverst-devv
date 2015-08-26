@@ -1,5 +1,7 @@
 <% if cf.is_a? TextField %>
   <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "custom-fields[#{cf.id}]", value: resource.info[cf] } %>
+<% elsif cf.is_a? NumericField %>
+  <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "custom-fields[#{cf.id}]", value: resource.info[cf], type: "number", min: cf.min, max: cf.max } %>
 <% elsif cf.is_a? SelectField %>
   <label><%= cf.title %></label>
   <select name="custom-fields[<%= cf.id %>]">
