@@ -30,19 +30,8 @@ A5bYGY36o0HQqna1jAGDM8l3t7uwbpsMwf5O/CVPgcXBqUxJSX2J0g==
   has_enabled_saml: true
 )
 
-age_field = TextField.create(
-  title: "Age",
-  saml_attribute: "",
-  gamification_value: 5,
-  show_on_vcard: true,
-  match_exclude: false,
-  match_polarity: true,
-  match_weight: 0.1,
-  enterprise: enterprise
-)
-
-name_field = TextField.create(
-  title: "Nom",
+first_name_field = TextField.create(
+  title: "First name",
   saml_attribute: "",
   gamification_value: 10,
   show_on_vcard: true,
@@ -52,7 +41,47 @@ name_field = TextField.create(
   enterprise: enterprise
 )
 
-beliefs_field = CheckboxField.create(
+last_name_field = TextField.create(
+  title: "Last name",
+  saml_attribute: "",
+  gamification_value: 10,
+  show_on_vcard: true,
+  match_exclude: true,
+  match_polarity: true,
+  match_weight: 0.1,
+  enterprise: enterprise
+)
+
+gender_field = SelectField.create(
+  title: "Gender",
+  saml_attribute: "",
+  gamification_value: 10,
+  show_on_vcard: true,
+  match_exclude: true,
+  match_polarity: true,
+  match_weight: 0.2,
+  enterprise: enterprise,
+  options_attributes: [{
+    title: "Male"
+  }, {
+    title: "Female"
+  }]
+)
+
+age_field = NumericField.create(
+  title: "Age",
+  saml_attribute: "",
+  gamification_value: 5,
+  show_on_vcard: true,
+  match_exclude: false,
+  match_polarity: true,
+  match_weight: 0.1,
+  min: 18,
+  max: 100,
+  enterprise: enterprise
+)
+
+disabilities_field = CheckboxField.create(
   title: "Disabilities",
   saml_attribute: "",
   gamification_value: 10,
@@ -63,7 +92,7 @@ beliefs_field = CheckboxField.create(
   enterprise: enterprise
 )
 
-beliefs_field.options.create([{
+disabilities_field.options.create([{
   title: "Deaf"
 }, {
   title: "Blind"
@@ -73,6 +102,8 @@ beliefs_field.options.create([{
   title: "Wheelchair"
 }])
 
+
+
 admin = Admin.create(
   enterprise: enterprise,
   first_name: "Francis",
@@ -81,14 +112,3 @@ admin = Admin.create(
   password: "password",
   password_confirmation: "password"
 )
-
-employee = Employee.new(
-  email: "andre@test.com",
-  auth_source: "saml",
-  enterprise: enterprise
-)
-
-employee.info[age_field] = 40
-employee.info[name_field] = "Andre Laurin"
-employee.info[beliefs_field] = beliefs_field.options.first.id
-employee.save!
