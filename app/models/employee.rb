@@ -20,7 +20,13 @@ class Employee < ActiveRecord::Base
     return if !custom_fields
 
     self.enterprise.fields.each do |field|
-      self.info[field] = custom_fields[field.id.to_s]
+      new_value = custom_fields[field.id.to_s]
+
+      if new_value.nil?
+        self.info[field] = nil
+      else
+        self.info[field] = custom_fields[field.id.to_s]
+      end
     end
   end
 
