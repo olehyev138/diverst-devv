@@ -6,14 +6,14 @@
   <label><%= cf.title %></label>
   <select name="custom-fields[<%= cf.id %>]">
     <% cf.options.each do |fo| %>
-      <option value="<%= fo.id %>" <%= "selected=selected" if resource.info[cf].to_i == fo.id %>><%= fo.title %></option>
+      <option value="<%= fo.title %>" <%= "selected=selected" if resource.info[cf] == fo.title %>><%= fo.title %></option>
     <% end %>
   </select>
 <% elsif cf.is_a? CheckboxField %>
   <div class="field">
     <label><%= cf.title %></label>
     <% cf.options.each do |fo| %>
-      <%= check_box_tag "custom-fields[#{cf.id}][]", fo.id, resource.info[cf] && resource.info[cf].map(&:to_i).include?(fo.id) %>
+      <%= check_box_tag "custom-fields[#{cf.id}][]", fo.title, resource.info[cf] && resource.info[cf].include?(fo.title) %>
       <%= fo.title %>
     <% end %>
   </div>
