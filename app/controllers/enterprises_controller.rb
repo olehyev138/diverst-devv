@@ -1,6 +1,6 @@
 class EnterprisesController < ApplicationController
   before_action :authenticate_admin!
-  before_action :set_enterprise, except: [:index, :new, :create]
+  before_action :set_enterprise, only: [:edit, :update, :delete]
 
   def index
     @enterprises = Enterprise.all
@@ -25,6 +25,6 @@ class EnterprisesController < ApplicationController
   end
 
   def enterprise_params
-    params.require(:enterprise).permit(:has_enabled_saml, :idp_entity_id, :idp_sso_target_url, :idp_slo_target_url, :idp_cert, fields_attributes: [:id, :title, :_destroy, :gamification_value, :show_on_vcard, :saml_attribute, :type, :match_exclude, :match_weight, :match_polarity, :min, :max, options_attributes: [:id, :title, :_destroy]])
+    params.require(:enterprise).permit(:has_enabled_saml, :idp_entity_id, :idp_sso_target_url, :idp_slo_target_url, :idp_cert, fields_attributes: [:id, :title, :_destroy, :gamification_value, :show_on_vcard, :saml_attribute, :type, :match_exclude, :match_weight, :match_polarity, :min, :max, :options_text])
   end
 end

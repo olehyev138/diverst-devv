@@ -24,4 +24,9 @@ class Enterprise < ActiveRecord::Base
 
     settings
   end
+
+  def match_fields
+    matchable_field_types = ["NumericField", "SelectField", "CheckboxField"]
+    self.fields.where(type: matchable_field_types, match_exclude: false)
+  end
 end

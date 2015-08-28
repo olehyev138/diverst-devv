@@ -1,6 +1,5 @@
 class CheckboxField < Field
-  has_many :options, class_name: "FieldOption", foreign_key: "field_id", dependent: :destroy
-  accepts_nested_attributes_for :options, :reject_if => :all_blank, :allow_destroy => true
+  include Optionnable
 
   def serialize_value(value)
     Array(value)
@@ -8,6 +7,12 @@ class CheckboxField < Field
 
   def string_value(value)
     return "-" if !value
-    self.options.select{ |option| value.map(&:to_i).include? option.id }.map{ |option| option.title }.join(', ')
+    value.join(', ')
+  end
+
+  def match_score_between(e1, e2)
+    puts "MEOW"
+    pp e1.info[self]
+    0.5
   end
 end
