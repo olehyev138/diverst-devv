@@ -1,10 +1,18 @@
 class SelectField < Field
-  has_many :options, class_name: "FieldOption", foreign_key: "field_id", dependent: :destroy
-  accepts_nested_attributes_for :options, :reject_if => :all_blank, :allow_destroy => true
+  include Optionnable
 
   def string_value(value)
     return "-" if value.nil?
-    self.options.find{ |option| option.id == value.to_i }.title
+    value
+  end
+
+  # 0 to 1. 1 being everybody in the business has chosen this option, 0 being nobody chose it
+  def popularity_for_value(value)
+    nb_employees_chose = 0
+    self.enterprise.employees.each do |employee|
+      nb_employees_chose += 1 if employee.info[self] == value
+    end
+    nb_employees_chose.to_f / self.enterprise.employees.count
   end
 
   # Get a match score based on two things:
@@ -17,15 +25,24 @@ class SelectField < Field
     # Returns nil if we don't have all the employee info necessary to get a score
     return nil unless e1_value && e2_value
 
-    e1_option = FieldOption.find(e1_value)
-    e2_option = FieldOption.find(e2_value)
+    e1_popularity = self.popularity_for_value(e1_value)
+    e2_popularity = self.popularity_for_value(e2_value)
 
-    e1_popularity = e1_option.popularity
-    e2_popularity = e2_option.popularity
+    if e1_value == e2_value
+      popularity_total = e1_popularity
+    else
+      popularity_total = e1_popularity + e2_popularity
+    end
 
+    # Size score
+    if e1_value == e2_value
+      size_score = 1 - e1_popularity
+    else
+      size_score = 1 - e1_popularity + e2_popularity
+    end
+
+    # Contrast score
     popularity_total = e1_popularity + e2_popularity
-
-    size_score = 1 - e1_popularity + e2_popularity
     contrast_score = (e1_popularity - e2_popularity).abs / popularity_total
 
     total_score = (size_score + contrast_score).to_f / 2
