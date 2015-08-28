@@ -1,0 +1,64 @@
+<%= simple_form_for @match, url: test_matches_path do |f| %>
+  <h1>Employee 1</h1>
+  <%= f.simple_fields_for :employee1 do |e1| %>
+    <% current_admin.enterprise.match_fields.each do |cf| %>
+      <% if cf.is_a? TextField %>
+        <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "match[employee1_attributes[custom-fields[#{cf.id}]]]", value: @match.employee1.info[cf] } %>
+      <% elsif cf.is_a? NumericField %>
+        <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "match[employee1_attributes[custom-fields[#{cf.id}]]]", value: @match.employee1.info[cf], type: "number", min: cf.min, max: cf.max } %>
+      <% elsif cf.is_a? SelectField %>
+        <label><%= cf.title %></label>
+        <select name="match[employee1_attributes[custom-fields[<%= cf.id %>]]]">
+          <% cf.options.each do |fo| %>
+            <option value="<%= fo.title %>" <%= "selected=selected" if @match.employee1.info[cf] == fo.title %>><%= fo.title %></option>
+          <% end %>
+        </select>
+      <% elsif cf.is_a? CheckboxField %>
+        <div class="field">
+          <label><%= cf.title %></label>
+          <% cf.options.each do |fo| %>
+            <%= check_box_tag "match[employee1_attributes[custom-fields[#{cf.id}]]][]", fo.title, @match.employee1.info[cf] && @match.employee1.info[cf].include?(fo.title) %>
+            <%= fo.title %>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <h1>Employee 2</h1>
+
+  <%= f.simple_fields_for :employee2 do |e2| %>
+    <% current_admin.enterprise.match_fields.each do |cf| %>
+      <% if cf.is_a? TextField %>
+        <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "match[employee2_attributes[custom-fields[#{cf.id}]]]", value: @match.employee2.info[cf] } %>
+      <% elsif cf.is_a? NumericField %>
+        <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "match[employee2_attributes[custom-fields[#{cf.id}]]]", value: @match.employee2.info[cf], type: "number", min: cf.min, max: cf.max } %>
+      <% elsif cf.is_a? SelectField %>
+        <label><%= cf.title %></label>
+        <select name="match[employee2_attributes[custom-fields[<%= cf.id %>]]]">
+          <% cf.options.each do |fo| %>
+            <option value="<%= fo.title %>" <%= "selected=selected" if @match.employee2.info[cf] == fo.title %>><%= fo.title %></option>
+          <% end %>
+        </select>
+      <% elsif cf.is_a? CheckboxField %>
+        <div class="field">
+          <label><%= cf.title %></label>
+          <% cf.options.each do |fo| %>
+            <%= check_box_tag "match[employee2_attributes[custom-fields[#{cf.id}]]][]", fo.title, @match.employee2.info[cf] && @match.employee2.info[cf].include?(fo.title) %>
+            <%= fo.title %>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= f.submit "Go" %>
+<% end %>
+
+<br><br><br>
+
+<% if params.include?(:match) %>
+  <div>
+    <strong>Match score:</strong> <%= @match.score %>
+  </div>
+<% end %>

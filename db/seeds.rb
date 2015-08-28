@@ -57,7 +57,7 @@ gender_field = SelectField.create(
   saml_attribute: "",
   gamification_value: 10,
   show_on_vcard: true,
-  match_exclude: true,
+  match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
   enterprise: enterprise,
@@ -86,7 +86,7 @@ disabilities_field = CheckboxField.create(
   saml_attribute: "",
   gamification_value: 10,
   show_on_vcard: true,
-  match_exclude: true,
+  match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
   enterprise: enterprise

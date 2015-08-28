@@ -17,5 +17,12 @@ Rails.application.routes.draw do
 
   resources :admins
 
+  resources :matches do
+    collection do
+      get :test
+      post :test, action: :score
+    end
+  end
+
   root to: "employees#index"
 end

@@ -15,8 +15,6 @@ class EmployeesController < ApplicationController
     @employee.assign_attributes(employee_params)
     @employee.merge_info(params['custom-fields'])
 
-    pp params['custom-fields']
-
     if @employee.save
       redirect_to @employee
     else

@@ -52,6 +52,19 @@ class Employee < ActiveRecord::Base
     field.string_value self.info[field]
   end
 
+  def match_score_with(other_employee)
+    weight_total = 0
+    total_score = 0
+
+    self.enterprise.match_fields.each do |field|
+      field_score = field.match_score_between(self, other_employee)
+      weight_total += field.match_weight
+      total_score += field.match_weight * field_score
+    end
+
+    total_score /= weight_total
+  end
+
   protected
 
   def set_info
