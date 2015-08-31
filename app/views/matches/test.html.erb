@@ -59,6 +59,10 @@
 
 <% if params.include?(:match) %>
   <div>
-    <strong>Match score:</strong> <%= @match.score %>
+    <strong>Match score:</strong> <%= @match.score %><br>
+    <h3>Scores per field</h3>
+    <% @match.employee1.enterprise.match_fields.each do |field| %>
+      <strong><%= field.title %>:</strong> <%= field.match_score_between(@match.employee1, @match.employee2) %> x <em><%= field.match_weight %></em> <br>
+    <% end %>
   </div>
 <% end %>
