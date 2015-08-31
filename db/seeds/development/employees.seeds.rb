@@ -6,7 +6,25 @@ first_name_field = TextField.where(title: "First name").first
 last_name_field = TextField.where(title: "Last name").first
 gender_field = SelectField.where(title: "Gender").first
 age_field = NumericField.where(title: "Age").first
-disabilities_field = CheckboxField.where(title: "Disabilities").first
+disabilities_field = SelectField.where(title: "Disabilities?").first
+title_field = TextField.where(title: "Current title").first
+
+other_fields = [
+  nationality_field = SelectField.where(title: "Nationality").first,
+  belief_field = SelectField.where(title: "Belief").first,
+  languages_field = CheckboxField.where(title: "Spoken languages").first,
+  ethnicity_field = SelectField.where(title: "Ethnicity").first,
+  kids_field = SelectField.where(title: "Status").first,
+  orientation_field = SelectField.where(title: "LGBT?").first,
+  hobbies_field = SelectField.where(title: "Hobbies").first,
+  education_field = SelectField.where(title: "Education level").first,
+  certifications_field = CheckboxField.where(title: "Certifications").first,
+  experience_field = NumericField.where(title: "Experience in your field (in years)").first,
+  countries_worked_field = SelectField.where(title: "Countries worked in").first,
+  military_field = SelectField.where(title: "Veteran?").first,
+  military_field = SelectField.where(title: "Office location").first,
+  seniority_field = NumericField.where(title: "Seniority (in years)").first
+]
 
 nb_employees.times do |i|
   first_name = Faker::Name.first_name
@@ -28,14 +46,15 @@ nb_employees.times do |i|
   employee.info[age_field] = Faker::Number.between(18, 65)
   employee.info[first_name_field] = first_name
   employee.info[last_name_field] = last_name
+  employee.info[title_field] = Faker::Name.title
 
   # Have a chance to pick a random disability
-  if rand(100) < 5
+  if rand(100) < 2
     offset = rand(disabilities_field.options.count)
     employee.info[disabilities_field] = disabilities_field.options.offset(offset).first.title
 
     # Chance to pick another random disability
-    if rand(100) < 5
+    if rand(100) < 2
       offset = rand(disabilities_field.options.count)
       employee.info[disabilities_field] << disabilities_field.options.offset(offset).first.title
     end
@@ -46,6 +65,26 @@ nb_employees.times do |i|
     employee.info[gender_field] = "Male"
   else
     employee.info[gender_field] = "Female"
+  end
+
+  # Pick random stuff for the rest of the fields
+  other_fields.each do |field|
+    if field.is_a? NumericField
+      employee.info[field] = rand(field.min..field.max)
+    elsif field.is_a? SelectField
+      offset = rand(field.options.count)
+      employee.info[field] = field.options.offset(offset).first.title
+    elsif field.is_a? CheckboxField
+      if rand(100) < 60
+        offset = rand(field.options.count)
+        employee.info[field] = [field.options.offset(offset).first.title]
+
+        if rand(100) < 30
+          offset = rand(field.options.count)
+          employee.info[field] << field.options.offset(offset).first.title
+        end
+      end
+    end
   end
 
   if employee.save

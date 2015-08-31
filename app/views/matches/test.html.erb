@@ -7,14 +7,16 @@
       <% elsif cf.is_a? NumericField %>
         <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "match[employee1_attributes[custom-fields[#{cf.id}]]]", value: @match.employee1.info[cf], type: "number", min: cf.min, max: cf.max } %>
       <% elsif cf.is_a? SelectField %>
-        <label><%= cf.title %></label>
-        <select name="match[employee1_attributes[custom-fields[<%= cf.id %>]]]">
-          <% cf.options.each do |fo| %>
-            <option value="<%= fo.title %>" <%= "selected=selected" if @match.employee1.info[cf] == fo.title %>><%= fo.title %></option>
-          <% end %>
-        </select>
+        <div class="input select">
+          <label><%= cf.title %></label>
+          <select name="match[employee1_attributes[custom-fields[<%= cf.id %>]]]">
+            <% cf.options.each do |fo| %>
+              <option value="<%= fo.title %>" <%= "selected=selected" if @match.employee1.info[cf] == fo.title %>><%= fo.title %></option>
+            <% end %>
+          </select>
+        </div>
       <% elsif cf.is_a? CheckboxField %>
-        <div class="field">
+        <div class="input checkbox">
           <label><%= cf.title %></label>
           <% cf.options.each do |fo| %>
             <%= check_box_tag "match[employee1_attributes[custom-fields[#{cf.id}]]][]", fo.title, @match.employee1.info[cf] && @match.employee1.info[cf].include?(fo.title) %>
@@ -34,14 +36,16 @@
       <% elsif cf.is_a? NumericField %>
         <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "match[employee2_attributes[custom-fields[#{cf.id}]]]", value: @match.employee2.info[cf], type: "number", min: cf.min, max: cf.max } %>
       <% elsif cf.is_a? SelectField %>
-        <label><%= cf.title %></label>
-        <select name="match[employee2_attributes[custom-fields[<%= cf.id %>]]]">
-          <% cf.options.each do |fo| %>
-            <option value="<%= fo.title %>" <%= "selected=selected" if @match.employee2.info[cf] == fo.title %>><%= fo.title %></option>
-          <% end %>
-        </select>
+        <div class="input select">
+          <label><%= cf.title %></label>
+          <select name="match[employee2_attributes[custom-fields[<%= cf.id %>]]]">
+            <% cf.options.each do |fo| %>
+              <option value="<%= fo.title %>" <%= "selected=selected" if @match.employee2.info[cf] == fo.title %>><%= fo.title %></option>
+            <% end %>
+          </select>
+        </div>
       <% elsif cf.is_a? CheckboxField %>
-        <div class="field">
+        <div class="input checkbox">
           <label><%= cf.title %></label>
           <% cf.options.each do |fo| %>
             <%= check_box_tag "match[employee2_attributes[custom-fields[#{cf.id}]]][]", fo.title, @match.employee2.info[cf] && @match.employee2.info[cf].include?(fo.title) %>

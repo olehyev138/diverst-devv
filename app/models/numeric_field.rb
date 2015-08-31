@@ -20,6 +20,10 @@ class NumericField < Field
       employee.info[self]
     end
 
+    values.compact!
+
+    return nil if values.empty?
+
     max_delta = values.max - values.min
 
     delta = (e1_value - e2_value).abs

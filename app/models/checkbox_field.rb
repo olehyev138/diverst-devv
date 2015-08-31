@@ -30,7 +30,7 @@ class CheckboxField < Field
     values = employee.info[self]
 
     # If the user didn't select any option, the popularity will be set to the popularity of choosing no option
-    if values.nil?
+    if values.nil? || values.empty?
       avg_popularity = self.popularity_for_no_option
     else
       # Get an array of all the checked options' popularities

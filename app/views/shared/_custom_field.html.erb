@@ -4,13 +4,15 @@
   <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "custom-fields[#{cf.id}]", value: resource.info[cf], type: "number", min: cf.min, max: cf.max } %>
 <% elsif cf.is_a? SelectField %>
   <label><%= cf.title %></label>
-  <select name="custom-fields[<%= cf.id %>]">
-    <% cf.options.each do |fo| %>
-      <option value="<%= fo.title %>" <%= "selected=selected" if resource.info[cf] == fo.title %>><%= fo.title %></option>
-    <% end %>
-  </select>
+  <div class="input select">
+    <select name="custom-fields[<%= cf.id %>]">
+      <% cf.options.each do |fo| %>
+        <option value="<%= fo.title %>" <%= "selected=selected" if resource.info[cf] == fo.title %>><%= fo.title %></option>
+      <% end %>
+    </select>
+  </div>
 <% elsif cf.is_a? CheckboxField %>
-  <div class="field">
+  <div class="input checkbox">
     <label><%= cf.title %></label>
     <% cf.options.each do |fo| %>
       <%= check_box_tag "custom-fields[#{cf.id}][]", fo.title, resource.info[cf] && resource.info[cf].include?(fo.title) %>

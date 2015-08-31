@@ -58,8 +58,11 @@ class Employee < ActiveRecord::Base
 
     self.enterprise.match_fields.each do |field|
       field_score = field.match_score_between(self, other_employee)
-      weight_total += field.match_weight
-      total_score += field.match_weight * field_score
+
+      unless field_score.nil? || field_score.nan?
+        weight_total += field.match_weight
+        total_score += field.match_weight * field_score
+      end
     end
 
     total_score /= weight_total
