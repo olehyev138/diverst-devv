@@ -316,7 +316,7 @@ seniority_field = NumericField.create(
   match_polarity: true,
   match_weight: 0.2,
   min: 0,
-  max: 100,
+  max: 40,
   enterprise: enterprise
 )
 

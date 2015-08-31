@@ -24,10 +24,12 @@ class NumericField < Field
 
     return nil if values.empty?
 
-    max_delta = values.max - values.min
+    values.reject! { |value| (value - values.mean).abs >= values.standard_deviation*2 } # Reject abberrant values
+
+    high_delta = values.max - values.min
 
     delta = (e1_value - e2_value).abs
 
-    delta.to_f / max_delta
+    delta.to_f / high_delta
   end
 end
