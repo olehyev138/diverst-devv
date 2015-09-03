@@ -33,7 +33,7 @@ gem 'sidekiq'
 gem "devise-async"
 gem 'sinatra', :require => nil # Required for sidekiq's dashboard
 gem 'newrelic_rpm'
-
+gem "seedbank"
 gem 'rails-patch-json-encode'
 gem 'oj'
 
@@ -48,6 +48,5 @@ group :development, :test do
   gem 'spring'
 
   gem 'faker'
-  gem "seedbank"
 end
 
