@@ -42,6 +42,8 @@ GEM
       debug_inspector (>= 0.0.1)
     builder (3.2.2)
     byebug (6.0.1)
+    celluloid (0.16.0)
+      timers (~> 4.0.0)
     cocoon (1.2.6)
     coffee-rails (4.1.0)
       coffee-script (>= 2.2.0)
@@ -50,6 +52,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.9.1.1)
+    connection_pool (2.2.0)
     debug_inspector (0.0.2)
     devise (3.5.2)
       bcrypt (~> 3.0)
@@ -58,6 +61,8 @@ GEM
       responders
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
+    devise-async (0.10.1)
+      devise (~> 3.2)
     devise_invitable (1.5.2)
       actionmailer (>= 3.2.6, < 5)
       devise (>= 3.2.0)
@@ -69,6 +74,7 @@ GEM
       thor (~> 0.14)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
+    hitimes (1.2.2)
     i18n (0.7.0)
     jquery-rails (4.0.4)
       rails-dom-testing (~> 1.0)
@@ -84,12 +90,17 @@ GEM
     mime-types (2.6.1)
     mini_portile (0.6.2)
     minitest (5.8.0)
+    multi_json (1.11.2)
     mysql2 (0.3.19)
+    newrelic_rpm (3.12.0.288)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
+    oj (2.12.12)
     orm_adapter (0.5.0)
     puma (2.13.4)
     rack (1.6.4)
+    rack-protection (1.5.3)
+      rack
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.2.1)
@@ -111,6 +122,8 @@ GEM
       rails-deprecated_sanitizer (>= 1.0.1)
     rails-html-sanitizer (1.0.2)
       loofah (~> 2.0)
+    rails-patch-json-encode (0.1.1)
+      multi_json (~> 1.0, >= 1.9.3)
     rails_12factor (0.0.3)
       rails_serve_static_assets
       rails_stdout_logging
@@ -123,6 +136,9 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (10.4.2)
     rdoc (4.2.0)
+    redis (3.2.1)
+    redis-namespace (1.5.2)
+      redis (~> 3.0, >= 3.0.4)
     responders (2.1.0)
       railties (>= 4.2.0, < 5)
     ruby-saml (1.0.0)
@@ -139,9 +155,19 @@ GEM
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
     seedbank (0.3.0)
+    sidekiq (3.3.4)
+      celluloid (>= 0.16.0)
+      connection_pool (>= 2.1.1)
+      json
+      redis (>= 3.0.6)
+      redis-namespace (>= 1.3.1)
     simple_form (3.1.0)
       actionpack (~> 4.0)
       activemodel (~> 4.0)
+    sinatra (1.4.6)
+      rack (~> 1.4)
+      rack-protection (~> 1.4)
+      tilt (>= 1.3, < 3)
     spring (1.3.6)
     sprockets (3.3.2)
       rack (~> 1.0)
@@ -153,6 +179,8 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (1.4.1)
+    timers (4.0.1)
+      hitimes
     turbolinks (2.5.3)
       coffee-rails
     tzinfo (1.2.2)
@@ -177,19 +205,25 @@ DEPENDENCIES
   byebug
   cocoon
   devise
+  devise-async
   devise_invitable
   faker
   figaro
   jquery-rails
   mysql2
+  newrelic_rpm
+  oj
   puma
   rails (= 4.2.1)
+  rails-patch-json-encode
   rails_12factor
   ruby-saml (~> 1.0.0)
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   seedbank
+  sidekiq
   simple_form
+  sinatra
   spring
   turbolinks
   uglifier (>= 1.3.0)

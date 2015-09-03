@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
+
   devise_for :admins
   devise_for :employees, :controllers => { :invitations => 'employees/invitations' }
 

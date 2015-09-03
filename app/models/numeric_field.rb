@@ -9,27 +9,35 @@ class NumericField < Field
   end
 
   def match_score_between(e1, e2)
-    return nil unless e1.enterprise == e2.enterprise
+    score = 0
+    Benchmark.bm do |x|
+      x.report do
+        return nil unless e1.enterprise == e2.enterprise
 
-    e1_value = e1.info[self]
-    e2_value = e2.info[self]
+        e1_value = e1.info[self]
+        e2_value = e2.info[self]
 
-    return nil unless e1_value && e2_value
+        return nil unless e1_value && e2_value
 
-    values = e1.enterprise.employees.all.map do |employee|
-      employee.info[self]
+        values = e1.enterprise.employees.all.map do |employee|
+          employee.info[self]
+        end
+
+        values.compact!
+
+        return nil if values.empty?
+
+        values.reject! { |value| (value - values.mean).abs >= values.standard_deviation*2 } # Reject abberrant values
+
+        high_delta = values.max - values.min
+
+        delta = (e1_value - e2_value).abs
+
+        score = delta.to_f / high_delta
+      end
     end
 
-    values.compact!
-
-    return nil if values.empty?
-
-    values.reject! { |value| (value - values.mean).abs >= values.standard_deviation*2 } # Reject abberrant values
-
-    high_delta = values.max - values.min
-
-    delta = (e1_value - e2_value).abs
-
-    delta.to_f / high_delta
+    puts "NUMERIC BENCCCCHMAAARRRRRRKKKKK"
+    score
   end
 end

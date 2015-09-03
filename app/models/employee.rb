@@ -2,7 +2,7 @@ class Employee < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :invitable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, :rememberable, :trackable, :validatable, :async
 
   belongs_to :enterprise
 
@@ -56,16 +56,34 @@ class Employee < ActiveRecord::Base
     weight_total = 0
     total_score = 0
 
-    self.enterprise.match_fields.each do |field|
-      field_score = field.match_score_between(self, other_employee)
+    Benchmark.bm do |x|
 
-      unless field_score.nil? || field_score.nan?
-        weight_total += field.match_weight
-        total_score += field.match_weight * field_score
+      x.report do
+        self.enterprise.match_fields.each do |field|
+          field_score = field.match_score_between(self, other_employee)
+
+          unless field_score.nil? || field_score.nan?
+            weight_total += field.match_weight
+            total_score += field.match_weight * field_score
+          end
+        end
       end
+
     end
 
+    puts "TOTAL SCORE CALCULATION BENCHERONI"
+
     total_score /= weight_total
+  end
+
+  def matches
+    Match.has_employee(self)
+  end
+
+  def update_match_scores
+    self.enterprise.employees.where.not(id: self.id).each do |other_employee|
+      CalculateMatchScoreJob.perform_later(self, other_employee)
+    end
   end
 
   protected

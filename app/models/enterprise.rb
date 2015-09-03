@@ -29,4 +29,8 @@ class Enterprise < ActiveRecord::Base
     matchable_field_types = ["NumericField", "SelectField", "CheckboxField"]
     self.fields.where(type: matchable_field_types, match_exclude: false)
   end
+
+  def update_matches
+    self..employees.each(&:update_match_scores)
+  end
 end

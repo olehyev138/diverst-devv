@@ -29,6 +29,13 @@ gem 'simple_form'
 gem 'rails_12factor', group: :production
 gem "cocoon"
 gem 'ruby-saml', '~> 1.0.0'
+gem 'sidekiq'
+gem "devise-async"
+gem 'sinatra', :require => nil # Required for sidekiq's dashboard
+gem 'newrelic_rpm'
+
+gem 'rails-patch-json-encode'
+gem 'oj'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

@@ -12,18 +12,18 @@ class CheckboxField < Field
 
   def popularity_for_no_option
     nb_employees_chose = 0
-    self.enterprise.employees.each do |employee|
+    self.enterprise.employees.select([:id, :data]).each do |employee|
       nb_employees_chose += 1 if employee.info[self].nil?
     end
-    nb_employees_chose.to_f / self.enterprise.employees.count
+    nb_employees_chose.to_f / self.enterprise.employees.size
   end
 
   def popularity_for_value(value)
     nb_employees_chose = 0
-    self.enterprise.employees.each do |employee|
+    self.enterprise.employees.select([:id, :data]).each do |employee|
       nb_employees_chose += 1 if employee.info[self] && employee.info[self].include?(value)
     end
-    nb_employees_chose.to_f / self.enterprise.employees.count
+    nb_employees_chose.to_f / self.enterprise.employees.size
   end
 
   def employee_popularity(employee)
@@ -44,13 +44,20 @@ class CheckboxField < Field
   end
 
   def match_score_between(e1, e2)
-    e1_popularity = self.employee_popularity(e1)
-    e2_popularity = self.employee_popularity(e2)
+    total_score = 0
+    Benchmark.bm do |x|
+      x.report do
+        e1_popularity = self.employee_popularity(e1)
+        e2_popularity = self.employee_popularity(e2)
 
-    # Returns nil if we don't have all the employee info necessary to get a score
-    return nil unless e1_popularity && e2_popularity
+        # Returns nil if we don't have all the employee info necessary to get a score
+        return nil unless e1_popularity && e2_popularity
 
-    # The total score is the absolute difference between both averages
-    total_score = (e1_popularity - e2_popularity).abs
+        # The total score is the absolute difference between both averages
+        total_score = (e1_popularity - e2_popularity).abs
+      end
+    end
+    puts "CHECKBOX BENCCCCHMAAARRRRRRKKKKK"
+    total_score
   end
 end

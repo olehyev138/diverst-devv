@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150828183903) do
+ActiveRecord::Schema.define(version: 20150901191331) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -77,20 +77,13 @@ ActiveRecord::Schema.define(version: 20150828183903) do
     t.datetime "updated_at",                       null: false
   end
 
-  create_table "field_options", force: :cascade do |t|
-    t.string   "title",      limit: 255
-    t.integer  "field_id",   limit: 4
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-  end
-
   create_table "fields", force: :cascade do |t|
     t.string   "type",               limit: 255
     t.string   "title",              limit: 255
     t.integer  "gamification_value", limit: 4,     default: 1
     t.boolean  "show_on_vcard",      limit: 1
     t.string   "saml_attribute",     limit: 255
-    t.text     "options",            limit: 65535
+    t.text     "options_text",       limit: 65535
     t.integer  "min",                limit: 4
     t.integer  "max",                limit: 4
     t.boolean  "match_exclude",      limit: 1
@@ -102,10 +95,20 @@ ActiveRecord::Schema.define(version: 20150828183903) do
   end
 
   create_table "matches", force: :cascade do |t|
-    t.integer  "employee1_id", limit: 4
-    t.integer  "employee2_id", limit: 4
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.integer  "user1_id",            limit: 4
+    t.integer  "user2_id",            limit: 4
+    t.integer  "score",               limit: 4
+    t.date     "score_calculated_at"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.integer  "author_id",    limit: 4
+    t.integer  "recipient_id", limit: 4
+    t.text     "content",      limit: 65535
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
 end

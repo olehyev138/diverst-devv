@@ -50,13 +50,13 @@ nb_employees.times do |i|
 
   # Have a chance to pick a random disability
   if rand(100) < 2
-    offset = rand(disabilities_field.options.count)
-    employee.info[disabilities_field] = disabilities_field.options.offset(offset).first.title
+    index = rand(disabilities_field.options.count)
+    employee.info[disabilities_field] = disabilities_field.options[index]
 
     # Chance to pick another random disability
     if rand(100) < 2
-      offset = rand(disabilities_field.options.count)
-      employee.info[disabilities_field] << disabilities_field.options.offset(offset).first.title
+      index = rand(disabilities_field.options.count)
+      employee.info[disabilities_field] << disabilities_field.options[index]
     end
   end
 
@@ -72,16 +72,16 @@ nb_employees.times do |i|
     if field.is_a? NumericField
       employee.info[field] = rand(field.min..field.max)
     elsif field.is_a? SelectField
-      offset = rand(field.options.count)
-      employee.info[field] = field.options.offset(offset).first.title
+      index = rand(field.options.count)
+      employee.info[field] = field.options[index]
     elsif field.is_a? CheckboxField
       if rand(100) < 60
-        offset = rand(field.options.count)
-        employee.info[field] = [field.options.offset(offset).first.title]
+        index = rand(field.options.count)
+        employee.info[field] = [field.options[index]]
 
         if rand(100) < 30
           offset = rand(field.options.count)
-          employee.info[field] << field.options.offset(offset).first.title
+          employee.info[field] << field.options[index]
         end
       end
     end

@@ -6,7 +6,7 @@ class CreateFields < ActiveRecord::Migration
       t.integer :gamification_value, default: 1
       t.boolean :show_on_vcard
       t.string :saml_attribute
-      t.text :options
+      t.text :options_text
 
       t.integer :min
       t.integer :max
