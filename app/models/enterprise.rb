@@ -1,7 +1,7 @@
 class Enterprise < ActiveRecord::Base
-  has_many :admins
-  has_many :employees
-  has_many :fields
+  has_many :admins, inverse_of: :enterprise
+  has_many :employees, inverse_of: :enterprise
+  has_many :fields, inverse_of: :enterprise
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
 
@@ -31,6 +31,6 @@ class Enterprise < ActiveRecord::Base
   end
 
   def update_matches
-    self..employees.each(&:update_match_scores)
+    self.employees.each(&:update_match_scores)
   end
 end

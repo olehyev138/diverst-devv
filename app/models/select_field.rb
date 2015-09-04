@@ -7,25 +7,29 @@ class SelectField < Field
   end
 
   # 0 to 1. 1 being everybody in the business has chosen this option, 0 being nobody chose it
-  def popularity_for_value(value)
+  def popularity_for_value(value, employees)
+    puts "------------ POPULARITY START"
+
     nb_employees_chose = 0
+
     Benchmark.bm do |x|
       x.report do
-        self.enterprise.employees.select([:id, :data]).each do |employee|
+        employees.each do |employee|
           nb_employees_chose += 1 if employee.info[self] == value
         end
       end
     end
 
-    puts "POPULARITAY BEENCCCHHH"
+    puts "------------ POPULARITY END"
 
-    nb_employees_chose.to_f / self.enterprise.employees.count
+    nb_employees_chose.to_f / employees.size
   end
 
   # Get a match score based on two things:
   #   - Community size contrast (a small cluster with a large cluster will be worth more than 2 small clusters)
   #   - Community size (small clusters are worth more)
-  def match_score_between(e1, e2)
+  def match_score_between(e1, e2, employees)
+    puts "------------------------ SELECT START"
     total_score = 0
     Benchmark.bm do |x|
       x.report do
@@ -35,8 +39,8 @@ class SelectField < Field
         # Returns nil if we don't have all the employee info necessary to get a score
         return nil unless e1_value && e2_value
 
-        e1_popularity = self.popularity_for_value(e1_value)
-        e2_popularity = self.popularity_for_value(e2_value)
+        e1_popularity = self.popularity_for_value(e1_value, employees)
+        e2_popularity = self.popularity_for_value(e2_value, employees)
 
         if e1_value == e2_value
           popularity_total = e1_popularity
@@ -58,7 +62,8 @@ class SelectField < Field
         total_score = (size_score + contrast_score).to_f / 2
       end
     end
-    puts "SELECT BENCCCCHMAAARRRRRRKKKKK"
+    puts "------------------------ SELECT END: #{self.title}"
+
     total_score
   end
 end

@@ -10,32 +10,32 @@ class CheckboxField < Field
     value.join(', ')
   end
 
-  def popularity_for_no_option
+  def popularity_for_no_option(employees)
     nb_employees_chose = 0
-    self.enterprise.employees.select([:id, :data]).each do |employee|
+    employees.each do |employee|
       nb_employees_chose += 1 if employee.info[self].nil?
     end
-    nb_employees_chose.to_f / self.enterprise.employees.size
+    nb_employees_chose.to_f / employees.size
   end
 
-  def popularity_for_value(value)
+  def popularity_for_value(value, employees)
     nb_employees_chose = 0
-    self.enterprise.employees.select([:id, :data]).each do |employee|
+    employees.each do |employee|
       nb_employees_chose += 1 if employee.info[self] && employee.info[self].include?(value)
     end
-    nb_employees_chose.to_f / self.enterprise.employees.size
+    nb_employees_chose.to_f / employees.size
   end
 
-  def employee_popularity(employee)
+  def employee_popularity(employee, employees)
     values = employee.info[self]
 
     # If the user didn't select any option, the popularity will be set to the popularity of choosing no option
     if values.nil? || values.empty?
-      avg_popularity = self.popularity_for_no_option
+      avg_popularity = self.popularity_for_no_option(employees)
     else
       # Get an array of all the checked options' popularities
       popularities = values.map do |value|
-        self.popularity_for_value(value)
+        self.popularity_for_value(value, employees)
       end
 
       # Get the average popularity
@@ -43,12 +43,12 @@ class CheckboxField < Field
     end
   end
 
-  def match_score_between(e1, e2)
+  def match_score_between(e1, e2, employees)
     total_score = 0
     Benchmark.bm do |x|
       x.report do
-        e1_popularity = self.employee_popularity(e1)
-        e2_popularity = self.employee_popularity(e2)
+        e1_popularity = self.employee_popularity(e1, employees)
+        e2_popularity = self.employee_popularity(e2, employees)
 
         # Returns nil if we don't have all the employee info necessary to get a score
         return nil unless e1_popularity && e2_popularity

@@ -7,7 +7,7 @@
   <div class="input select">
     <select name="custom-fields[<%= cf.id %>]">
       <% cf.options.each do |fo| %>
-        <option value="<%= fo.title %>" <%= "selected=selected" if resource.info[cf] == fo.title %>><%= fo.title %></option>
+        <option value="<%= fo.title %>" <%= "selected=selected" if resource.info[cf] == fo %>><%= fo %></option>
       <% end %>
     </select>
   </div>
@@ -15,8 +15,8 @@
   <div class="input checkbox">
     <label><%= cf.title %></label>
     <% cf.options.each do |fo| %>
-      <%= check_box_tag "custom-fields[#{cf.id}][]", fo.title, resource.info[cf] && resource.info[cf].include?(fo.title) %>
-      <%= fo.title %>
+      <%= check_box_tag "custom-fields[#{cf.id}][]", fo, resource.info[cf] && resource.info[cf].include?(fo) %>
+      <%= fo %>
     <% end %>
   </div>
 <% end %>

@@ -1,6 +1,5 @@
 class Field < ActiveRecord::Base
-  belongs_to :enterprise
-  has_one :saml_association
+  belongs_to :enterprise, inverse_of: :fields
 
   def string_value(value)
     value

@@ -97,10 +97,12 @@ ActiveRecord::Schema.define(version: 20150901191331) do
   create_table "matches", force: :cascade do |t|
     t.integer  "user1_id",            limit: 4
     t.integer  "user2_id",            limit: 4
-    t.integer  "score",               limit: 4
-    t.date     "score_calculated_at"
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.integer  "user1_status",        limit: 4,  default: 0
+    t.integer  "user2_status",        limit: 4,  default: 0
+    t.float    "score",               limit: 24
+    t.time     "score_calculated_at"
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
   end
 
   create_table "messages", force: :cascade do |t|

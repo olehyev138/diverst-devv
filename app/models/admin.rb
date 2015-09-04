@@ -6,5 +6,5 @@ class Admin < ActiveRecord::Base
 
   include DeviseInvitable::Inviter
 
-  belongs_to :enterprise
+  belongs_to :enterprise, inverse_of: :admins
 end

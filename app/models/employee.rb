@@ -4,7 +4,7 @@ class Employee < ActiveRecord::Base
   devise :database_authenticatable, :invitable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :async
 
-  belongs_to :enterprise
+  belongs_to :enterprise, inverse_of: :employees
 
   before_validation :transfer_info_to_data
   before_validation :generate_password_if_saml
@@ -59,8 +59,9 @@ class Employee < ActiveRecord::Base
     Benchmark.bm do |x|
 
       x.report do
+        employees = self.enterprise.employees.select([:id, :data]).all
         self.enterprise.match_fields.each do |field|
-          field_score = field.match_score_between(self, other_employee)
+          field_score = field.match_score_between(self, other_employee, employees)
 
           unless field_score.nil? || field_score.nan?
             weight_total += field.match_weight
@@ -73,11 +74,17 @@ class Employee < ActiveRecord::Base
 
     puts "TOTAL SCORE CALCULATION BENCHERONI"
 
-    total_score /= weight_total
+    puts "TSCORE: #{total_score / weight_total}"
+    total_score / weight_total
   end
 
   def matches
     Match.has_employee(self)
+  end
+
+  # Get the n top unswiped matches for the user
+  def top_matches(n)
+    self.matches.order(score: :desc).limit(n)
   end
 
   def update_match_scores
