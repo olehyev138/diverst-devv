@@ -1,5 +1,5 @@
 class MatchesController < ApplicationController
-  before_action :authenticate_admin!
+  before_action :authenticate_employee!
 
   def test
     @match = Match.new
@@ -15,5 +15,9 @@ class MatchesController < ApplicationController
     @match.user2.merge_info params[:match][:user2_attributes]["custom-fields"].to_hash
 
     render "test"
+  end
+
+  def index
+    Match.active_for(current_employee)
   end
 end

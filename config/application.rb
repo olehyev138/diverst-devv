@@ -26,6 +26,8 @@ module Diverst
     # Load core extensions
     Dir[File.join(Rails.root, "lib", "core_ext", "*.rb")].each { |l| require l }
 
+    require File.join(Rails.root, "lib", "exceptions.rb")
+
     config.active_job.queue_adapter = :sidekiq
   end
 end

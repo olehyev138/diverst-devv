@@ -23,6 +23,16 @@ class Match < ActiveRecord::Base
     self.score_calculated_at = Time.zone.now
   end
 
+  def set_status(employee:, status:)
+    if employee.id == self.user1_id
+      self.user1_status = status
+    elsif employee.id == self.user2_id
+      self.user1_status = status
+    else
+      raise Exception.new("Employee not part of match")
+    end
+  end
+
   # Returns the other employee or nil if the passed employee isn't in this match
   def other(employee)
     return user2 if user1 == employee
