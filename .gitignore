@@ -20,3 +20,6 @@
 /config/application.yml
 
 *.DS_Store
+
+# Ignore redis dump
+dump.rdb
