@@ -33,10 +33,10 @@ class Match < ActiveRecord::Base
     end
   end
 
-  # Returns the other employee or nil if the passed employee isn't in this match
+  # Returns the other employee
   def other(employee)
     return user2 if user1 == employee
     return user1 if user2 == employee
-    nil
+    raise Exception.new("Employee not part of match")
   end
 end
