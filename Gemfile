@@ -38,6 +38,7 @@ gem 'rails-patch-json-encode'
 gem 'oj'
 gem 'faker'
 gem 'active_model_serializers'
+gem 'devise_token_auth', github: 'lynndylanhurley/devise_token_auth'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -48,5 +49,7 @@ group :development, :test do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+
+  gem 'active_record_query_trace'
 end
 

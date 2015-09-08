@@ -1,8 +1,8 @@
 class Employee < ActiveRecord::Base
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :invitable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable, :async
+  # Include default devise modules.
+  devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
+
+  include DeviseTokenAuth::Concerns::User
 
   belongs_to :enterprise, inverse_of: :employees
 
@@ -82,9 +82,13 @@ class Employee < ActiveRecord::Base
     Match.has_employee(self)
   end
 
+  def active_matches
+    Match.active_for(self)
+  end
+
   # Get the n top unswiped matches for the user
-  def top_matches(n)
-    self.matches.order(score: :desc).limit(n)
+  def top_matches(n = 10)
+    self.active_matches.order(score: :desc).limit(n)
   end
 
   def update_match_scores

@@ -2,8 +2,6 @@ nb_employees = 200
 
 enterprise = Enterprise.first
 domain_name = enterprise.name.parameterize + ".com"
-first_name_field = TextField.where(title: "First name").first
-last_name_field = TextField.where(title: "Last name").first
 gender_field = SelectField.where(title: "Gender").first
 age_field = NumericField.where(title: "Age").first
 disabilities_field = SelectField.where(title: "Disabilities?").first
@@ -31,6 +29,8 @@ nb_employees.times do |i|
   last_name = Faker::Name.last_name
 
   employee = Employee.create(
+    first_name: first_name,
+    last_name: last_name,
     email: Faker::Internet.user_name("#{first_name} #{last_name}", %w(. _ -)) + "@#{domain_name}",
     auth_source: "manual",
     enterprise: enterprise,
@@ -44,8 +44,6 @@ nb_employees.times do |i|
   )
 
   employee.info[age_field] = Faker::Number.between(18, 65)
-  employee.info[first_name_field] = first_name
-  employee.info[last_name_field] = last_name
   employee.info[title_field] = Faker::Name.title
 
   # Have a chance to pick a random disability

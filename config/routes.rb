@@ -5,6 +5,10 @@ Rails.application.routes.draw do
   devise_for :admins
   devise_for :employees, :controllers => { :invitations => 'employees/invitations' }
 
+  namespace :employees, defaults: { format: :json } do
+    mount_devise_token_auth_for 'Employee', at: 'auth'
+  end
+
   resources :employees
 
   resources :enterprises do
@@ -20,10 +24,16 @@ Rails.application.routes.draw do
 
   resources :admins
 
-  resources :matches do
-    collection do
-      get :test
-      post :test, action: :score
+  devise_scope :employee do
+    resources :matches do
+      collection do
+        get :test
+        post :test, action: :score
+      end
+
+      member do
+        put 'swipe'
+      end
     end
   end
 

@@ -1,5 +1,7 @@
 class MatchesController < ApplicationController
   before_action :authenticate_employee!
+  before_action :set_match, only: [:swipe, :show]
+  serialization_scope :current_employee
 
   def test
     @match = Match.new
@@ -18,6 +20,27 @@ class MatchesController < ApplicationController
   end
 
   def index
-    Match.active_for(current_employee)
+    render json: current_employee.top_matches(10)
+  end
+
+  def swipe
+    swipe_params
+    render nothing: true, status: 400 if swipe_params[:choice] != Match.status[:accepted] && swipe_params[:choice] != Match.status[:denied]
+    @match.set_status(employee: current_employee, status: swipe_params[:choice])
+    if @match.save
+      render nothing: true, status: 200
+    else
+      render @match.errors
+    end
+  end
+
+  protected
+
+  def swipe_params
+    params.require(:swipe).permit(:choice)
+  end
+
+  def set_match
+    @match = current_employee.matches.where(id: params[:id]).first
   end
 end
