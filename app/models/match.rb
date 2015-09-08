@@ -15,8 +15,10 @@ class Match < ActiveRecord::Base
   scope :between, ->(employee1, employee2) { has_employee(employee1).has_employee(employee2) }
   # An active match is a match that should still be shown in the swipes screen. It hasn't been rejected by anybody and hasn't been swiped yet
   scope :active_for, ->(employee) { where('user1_id = ? AND user1_status = ? AND user2_status <> ? OR user2_id = ? AND user2_status = ? AND user1_status <> ?', employee.id, status[:unswiped], status[:rejected], employee.id, status[:unswiped], status[:rejected]) }
+  scope :accepted, -> { where('user2_status = ? AND user1_status = ?', @@status[:accepted], @@status[:accepted]) }
 
   before_create :update_score
+  after_save :handle_accepted
 
   def update_score
     self.score = self.user1.match_score_with(self.user2)
@@ -27,7 +29,7 @@ class Match < ActiveRecord::Base
     if employee.id == self.user1_id
       self.user1_status = status
     elsif employee.id == self.user2_id
-      self.user1_status = status
+      self.user2_status = status
     else
       raise Exception.new("Employee not part of match")
     end
@@ -42,5 +44,14 @@ class Match < ActiveRecord::Base
 
   def self.status
     @@status
+  end
+
+  protected
+
+  def handle_accepted
+    # Check if we have a match!
+    if self.user1_status == @@status[:accepted] && self.user2_status == @@status[:accepted]
+      HandleAcceptedMatchJob.perform_later self
+    end
   end
 end
