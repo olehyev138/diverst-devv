@@ -7,6 +7,7 @@ class Employee < ActiveRecord::Base
   include DeviseTokenAuth::Concerns::User
 
   belongs_to :enterprise, inverse_of: :employees
+  has_many :devices
 
   before_validation :transfer_info_to_data
   before_validation :generate_password_if_saml
