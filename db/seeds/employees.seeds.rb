@@ -78,7 +78,7 @@ nb_employees.times do |i|
         employee.info[field] = [field.options[index]]
 
         if rand(100) < 30
-          offset = rand(field.options.count)
+          index = rand(field.options.count)
           employee.info[field] << field.options[index]
         end
       end

@@ -39,6 +39,7 @@ gem 'oj'
 gem 'faker'
 gem 'active_model_serializers'
 gem 'devise_token_auth', github: 'lynndylanhurley/devise_token_auth'
+gem 'firebase_token_generator'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -52,4 +53,3 @@ group :development, :test do
 
   gem 'active_record_query_trace'
 end
-

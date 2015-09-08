@@ -24,7 +24,6 @@ class MatchesController < ApplicationController
   end
 
   def swipe
-    swipe_params
     render nothing: true, status: 400 if swipe_params[:choice] != Match.status[:accepted] && swipe_params[:choice] != Match.status[:denied]
     @match.set_status(employee: current_employee, status: swipe_params[:choice])
     if @match.save

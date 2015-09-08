@@ -1,4 +1,6 @@
 class Employee < ActiveRecord::Base
+  @@fb_token_generator = Firebase::FirebaseTokenGenerator.new(ENV["FIREBASE_SECRET"])
+
   # Include default devise modules.
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
 
@@ -9,6 +11,7 @@ class Employee < ActiveRecord::Base
   before_validation :transfer_info_to_data
   before_validation :generate_password_if_saml
   after_initialize :set_info
+  after_create :assign_firebase_token
 
   attr_accessor :info
 
@@ -104,6 +107,13 @@ class Employee < ActiveRecord::Base
     json_hash = JSON.parse(self.data)
     self.info = Hash[json_hash.map{|k,v|[ k.to_i, v ]}] # Convert the hash keys to integers since they're strings after JSON parsing
     self.info.extend(FieldData)
+  end
+
+  def assign_firebase_token
+    payload = { uid: self.id.to_s }
+    options = { expires: 1.year.from_now }
+    self.firebase_token = @@fb_token_generator.create_token(payload)
+    self.save
   end
 
   # Generate a random password if the user is using SAML
