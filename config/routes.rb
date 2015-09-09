@@ -36,6 +36,8 @@ Rails.application.routes.draw do
         put 'swipe'
       end
     end
+
+    resources :conversations
   end
 
   root to: "employees#index"

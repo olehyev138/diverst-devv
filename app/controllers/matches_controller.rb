@@ -1,6 +1,6 @@
 class MatchesController < ApplicationController
   before_action :authenticate_employee!
-  before_action :set_match, only: [:swipe, :show, :destroy]
+  before_action :set_match, only: [:swipe]
   serialization_scope :current_employee
 
   def test
@@ -20,7 +20,7 @@ class MatchesController < ApplicationController
   end
 
   def index
-    render json: current_employee.top_matches(10)
+    render json: current_employee.top_matches(10).unarchived
   end
 
   def swipe
@@ -37,16 +37,6 @@ class MatchesController < ApplicationController
     # Check if we have a match!
     if @match.both_accepted?
       HandleAcceptedMatchJob.perform_later @match
-    end
-  end
-
-  def destroy
-    return head :bad_request unless @match.both_accepted?
-
-    if @match.update_attributes(archived: true)
-      head :no_content
-    else
-      head :internal_server_error
     end
   end
 
