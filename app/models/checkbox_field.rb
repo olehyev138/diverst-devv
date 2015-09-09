@@ -60,4 +60,13 @@ class CheckboxField < Field
     puts "CHECKBOX BENCCCCHMAAARRRRRRKKKKK"
     total_score
   end
+
+  def validates_rule_for_employee?(rule:, employee:)
+    case rule.operator
+    when GroupRule.operators[:contains]
+      (employee.info[rule.field] & rule.values).size > 0
+    when GroupRule.operators[:does_not_contain]
+      (employee.info[rule.field] & rule.values).size == 0
+    end
+  end
 end

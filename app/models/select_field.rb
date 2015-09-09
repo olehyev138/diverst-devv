@@ -66,4 +66,13 @@ class SelectField < Field
 
     total_score
   end
+
+  def validates_rule_for_employee?(rule:, employee:)
+    case rule.operator
+    when GroupRule.operators[:equals]
+      rule.values[0].include? employee.info[rule.field]
+    when GroupRule.operators[:is_not]
+      !rule.values[0].include? employee.info[rule.field]
+    end
+  end
 end
