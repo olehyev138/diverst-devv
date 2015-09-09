@@ -41,6 +41,7 @@ gem 'active_model_serializers'
 gem 'devise_token_auth', github: 'lynndylanhurley/devise_token_auth'
 gem 'firebase_token_generator'
 gem 'firebase'
+gem 'houston'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

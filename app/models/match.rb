@@ -11,6 +11,7 @@ class Match < ActiveRecord::Base
   accepts_nested_attributes_for :user1, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :user2, reject_if: :all_blank, allow_destroy: true
 
+  scope :not_archived, -> { where(archived: false) }
   scope :has_employee, ->(employee) { where('user1_id = ? OR user2_id = ?', employee.id, employee.id) }
   scope :between, ->(employee1, employee2) { has_employee(employee1).has_employee(employee2) }
   # An active match is a match that should still be shown in the swipes screen. It hasn't been rejected by anybody and hasn't been swiped yet
@@ -33,6 +34,18 @@ class Match < ActiveRecord::Base
     else
       raise Exception.new("Employee not part of match")
     end
+
+    self.save
+  end
+
+  def status_for(employee)
+    if employee.id == self.user1_id
+      self.user1_status
+    elsif employee.id == self.user2_id
+      self.user2_status
+    else
+      raise Exception.new("Employee not part of match")
+    end
   end
 
   # Returns the other employee
@@ -42,6 +55,10 @@ class Match < ActiveRecord::Base
     raise Exception.new("Employee not part of match")
   end
 
+  def both_accepted?
+    user1_status == @@status[:accepted] && user2_status == @@status[:accepted]
+  end
+
   def self.status
     @@status
   end
@@ -49,9 +66,6 @@ class Match < ActiveRecord::Base
   protected
 
   def handle_accepted
-    # Check if we have a match!
-    if self.user1_status == @@status[:accepted] && self.user2_status == @@status[:accepted]
-      HandleAcceptedMatchJob.perform_later self
-    end
+
   end
 end

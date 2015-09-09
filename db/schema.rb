@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150908202508) do
+ActiveRecord::Schema.define(version: 20150909154935) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -115,8 +115,10 @@ ActiveRecord::Schema.define(version: 20150908202508) do
     t.integer  "user2_status",        limit: 4,  default: 0
     t.float    "score",               limit: 24
     t.time     "score_calculated_at"
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
+    t.time     "both_accepted_at"
+    t.boolean  "archived",            limit: 1,  default: false
   end
 
   create_table "messages", force: :cascade do |t|
