@@ -20,7 +20,7 @@ class MatchesController < ApplicationController
   end
 
   def index
-    render json: current_employee.top_matches(10).unarchived
+    render json: current_employee.top_matches(10).not_archived
   end
 
   def swipe
