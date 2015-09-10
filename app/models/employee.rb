@@ -102,17 +102,16 @@ class Employee < ActiveRecord::Base
   end
 
   def is_part_of_group?(group)
-    self.enterprise.fields.all.each do |field|
-      part_of_group = true
-      group.rules.each do |rule|
-        unless field.validates_rule_for_employee(rule: rule, employee: self)
-          part_of_group = false
-          break;
-        end
+    part_of_group = true
 
-        break unless part_of_group
+    group.rules.each do |rule|
+      unless rule.followed_by?(self)
+        part_of_group = false
+        break;
       end
     end
+
+    part_of_group
   end
 
   protected

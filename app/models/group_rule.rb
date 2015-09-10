@@ -19,4 +19,8 @@ class GroupRule < ActiveRecord::Base
   def values
     JSON.parse read_attribute(:values)
   end
+
+  def followed_by?(employee)
+    self.field.validates_rule_for_employee?(rule: self, employee: employee)
+  end
 end
