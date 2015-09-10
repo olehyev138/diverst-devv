@@ -8,6 +8,7 @@ class Employee < ActiveRecord::Base
 
   belongs_to :enterprise, inverse_of: :employees
   has_many :devices
+  has_and_belongs_to_many :groups
 
   before_validation :transfer_info_to_data
   before_validation :generate_password_if_saml

@@ -19,7 +19,6 @@ class Match < ActiveRecord::Base
   scope :accepted, -> { where('user2_status = ? AND user1_status = ?', @@status[:accepted], @@status[:accepted]) }
 
   before_create :update_score
-  after_save :handle_accepted
 
   def update_score
     self.score = self.user1.match_score_with(self.user2)
@@ -61,11 +60,5 @@ class Match < ActiveRecord::Base
 
   def self.status
     @@status
-  end
-
-  protected
-
-  def handle_accepted
-
   end
 end

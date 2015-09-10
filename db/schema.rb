@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150909203142) do
+ActiveRecord::Schema.define(version: 20150910155459) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -79,6 +79,11 @@ ActiveRecord::Schema.define(version: 20150909203142) do
   add_index "employees", ["invitations_count"], name: "index_employees_on_invitations_count", using: :btree
   add_index "employees", ["invited_by_id"], name: "index_employees_on_invited_by_id", using: :btree
   add_index "employees", ["reset_password_token"], name: "index_employees_on_reset_password_token", unique: true, using: :btree
+
+  create_table "employees_groups", force: :cascade do |t|
+    t.integer "employee_id", limit: 4
+    t.integer "group_id",    limit: 4
+  end
 
   create_table "enterprises", force: :cascade do |t|
     t.string   "name",               limit: 255
