@@ -7,7 +7,7 @@
   <div class="input select">
     <select name="custom-fields[<%= cf.id %>]">
       <% cf.options.each do |fo| %>
-        <option value="<%= fo.title %>" <%= "selected=selected" if resource.info[cf] == fo %>><%= fo %></option>
+        <option value="<%= fo %>" <%= "selected=selected" if resource.info[cf] == fo %>><%= fo %></option>
       <% end %>
     </select>
   </div>

@@ -1,4 +1,5 @@
 class MatchesController < ApplicationController
+  include DeviseTokenAuth::Concerns::SetUserByToken
   before_action :authenticate_employee!
   before_action :set_match, only: [:swipe]
   serialization_scope :current_employee

@@ -1,4 +1,5 @@
 class ConversationsController < ApplicationController
+  include DeviseTokenAuth::Concerns::SetUserByToken
   before_action :authenticate_employee!
   before_action :set_conversation, only: [:destroy]
   serialization_scope :current_employee

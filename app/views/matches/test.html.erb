@@ -11,7 +11,7 @@
           <label><%= cf.title %></label>
           <select name="match[user1_attributes[custom-fields[<%= cf.id %>]]]">
             <% cf.options.each do |fo| %>
-              <option value="<%= fo.title %>" <%= "selected=selected" if @match.user1.info[cf] == fo.title %>><%= fo.title %></option>
+              <option value="<%= fo %>" <%= "selected=selected" if @match.user1.info[cf] == fo %>><%= fo %></option>
             <% end %>
           </select>
         </div>
@@ -19,8 +19,8 @@
         <div class="input checkbox">
           <label><%= cf.title %></label>
           <% cf.options.each do |fo| %>
-            <%= check_box_tag "match[user1_attributes[custom-fields[#{cf.id}]]][]", fo.title, @match.user1.info[cf] && @match.user1.info[cf].include?(fo.title) %>
-            <%= fo.title %>
+            <%= check_box_tag "match[user1_attributes[custom-fields[#{cf.id}]]][]", fo, @match.user1.info[cf] && @match.user1.info[cf].include?(fo) %>
+            <%= fo %>
           <% end %>
         </div>
       <% end %>
@@ -40,7 +40,7 @@
           <label><%= cf.title %></label>
           <select name="match[user2_attributes[custom-fields[<%= cf.id %>]]]">
             <% cf.options.each do |fo| %>
-              <option value="<%= fo.title %>" <%= "selected=selected" if @match.user2.info[cf] == fo.title %>><%= fo.title %></option>
+              <option value="<%= fo %>" <%= "selected=selected" if @match.user2.info[cf] == fo %>><%= fo %></option>
             <% end %>
           </select>
         </div>
@@ -48,8 +48,8 @@
         <div class="input checkbox">
           <label><%= cf.title %></label>
           <% cf.options.each do |fo| %>
-            <%= check_box_tag "match[user2_attributes[custom-fields[#{cf.id}]]][]", fo.title, @match.user2.info[cf] && @match.user2.info[cf].include?(fo.title) %>
-            <%= fo.title %>
+            <%= check_box_tag "match[user2_attributes[custom-fields[#{cf.id}]]][]", fo, @match.user2.info[cf] && @match.user2.info[cf].include?(fo) %>
+            <%= fo %>
           <% end %>
         </div>
       <% end %>
