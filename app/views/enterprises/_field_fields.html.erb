@@ -3,6 +3,7 @@
   <%= render 'select_field', f: f if f.object.type == 'SelectField' %>
   <%= render 'checkbox_field', f: f if f.object.type == 'CheckboxField' %>
   <%= render 'numeric_field', f: f if f.object.type == 'NumericField' %>
+  <%= render 'date_field', f: f if f.object.type == 'DateField' %>
 
   <%= f.input :gamification_value %>
   <%= f.input :show_on_vcard %>
