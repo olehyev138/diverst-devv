@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150910155459) do
+ActiveRecord::Schema.define(version: 20150914174200) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -109,8 +109,9 @@ ActiveRecord::Schema.define(version: 20150910155459) do
     t.boolean  "match_polarity",     limit: 1
     t.float    "match_weight",       limit: 24
     t.integer  "enterprise_id",      limit: 4
-    t.datetime "created_at",                                   null: false
-    t.datetime "updated_at",                                   null: false
+    t.datetime "created_at",                                       null: false
+    t.datetime "updated_at",                                       null: false
+    t.boolean  "alternative_layout", limit: 1,     default: false
   end
 
   create_table "group_rules", force: :cascade do |t|

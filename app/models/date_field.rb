@@ -30,17 +30,12 @@ class DateField < Field
         end
 
         values.compact!
-
         values.reject! { |value| (value - values.mean).abs >= values.standard_deviation*2 } # Reject abberrant values
-
         return score = nil if values.empty?
 
         high_delta = values.max - values.min
-
         return score = 0 if high_delta == 0 # Lets not divide by zero shall we
-
         delta = (e1_value - e2_value).abs
-
         score = delta.to_f / high_delta
       end
     end

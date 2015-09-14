@@ -1,5 +1,12 @@
 <% if cf.is_a? TextField %>
-  <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "custom-fields[#{cf.id}]", value: resource.info[cf] } %>
+  <% unless cf.alternative_layout %>
+    <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "custom-fields[#{cf.id}]", value: resource.info[cf] } %>
+  <% else %>
+    <div class="input text">
+      <label class="label"><%= cf.title %></label>
+      <textarea name="custom-fields[<%= cf.id %>]" cols="30" rows="10"><%= resource.info[cf] %></textarea>
+    </div>
+  <% end %>
 <% elsif cf.is_a? NumericField %>
   <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "custom-fields[#{cf.id}]", value: resource.info[cf], type: "number", min: cf.min, max: cf.max } %>
 <% elsif cf.is_a? DateField %>

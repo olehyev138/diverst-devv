@@ -5,7 +5,7 @@ ruby '2.2.2'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.1'
 
-gem 'mysql2'
+gem 'mysql2', '~> 0.3.18'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
@@ -25,7 +25,7 @@ gem 'puma'
 gem "figaro"
 gem 'devise'
 gem 'devise_invitable'
-gem 'simple_form'
+gem 'simple_form', github: 'plataformatec/simple_form'
 gem 'rails_12factor', group: :production
 gem "cocoon"
 gem 'ruby-saml', '~> 1.0.0'
