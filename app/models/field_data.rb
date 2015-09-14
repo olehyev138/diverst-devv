@@ -5,8 +5,8 @@ module FieldData
 
   def [](field)
     begin
-      self.fetch(field.id)
-    rescue
+      field.deserialize_value self.fetch(field.id)
+    rescue # Since Hash#fetch will raise an exception if the key doesn't exist, we capture it to return nil
       nil
     end
   end

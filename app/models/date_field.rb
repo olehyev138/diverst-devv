@@ -4,30 +4,40 @@ class DateField < Field
     value.to_s :slashes
   end
 
+  def process_field_value(value)
+    Time.strptime("10/15/2013", "%m/%d/%Y")
+  end
+
+  def deserialize_value(value)
+    Time.at(value)
+  end
+
   def serialize_value(value)
-    value.to_i
+    value.strftime("%s").to_i
   end
 
   def match_score_between(e1, e2, employees)
     score = 0
     Benchmark.bm do |x|
       x.report do
-        e1_value = e1.info[self]
-        e2_value = e2.info[self]
+        e1_value = e1.info[self].strftime("%s").to_i
+        e2_value = e2.info[self].strftime("%s").to_i
 
-        return nil unless e1_value && e2_value
+        return score = nil unless e1_value && e2_value
 
         values = employees.map do |employee|
-          employee.info[self]
+          employee.info[self].to_i
         end
 
         values.compact!
 
-        return nil if values.empty?
-
         values.reject! { |value| (value - values.mean).abs >= values.standard_deviation*2 } # Reject abberrant values
 
+        return score = nil if values.empty?
+
         high_delta = values.max - values.min
+
+        return score = 0 if high_delta == 0 # Lets not divide by zero shall we
 
         delta = (e1_value - e2_value).abs
 
@@ -35,7 +45,7 @@ class DateField < Field
       end
     end
 
-    puts "NUMERIC BENCCCCHMAAARRRRRRKKKKK"
+    puts "DATE BENCCCCHMAAARRRRRRKKKKK"
     score
   end
 

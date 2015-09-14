@@ -65,16 +65,14 @@ gender_field = SelectField.create(
 Female"
 )
 
-age_field = NumericField.create(
-  title: "Age",
+birth_field = DateField.create(
+  title: "Date of birth",
   saml_attribute: "",
   gamification_value: 5,
   show_on_vcard: true,
   match_exclude: false,
   match_polarity: true,
-  match_weight: 0.1,
-  min: 18,
-  max: 100,
+  match_weight: 0.2,
   enterprise: enterprise
 )
 

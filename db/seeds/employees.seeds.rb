@@ -3,7 +3,7 @@ nb_employees = 200
 enterprise = Enterprise.first
 domain_name = enterprise.name.parameterize + ".com"
 gender_field = SelectField.where(title: "Gender").first
-age_field = NumericField.where(title: "Age").first
+birth_field = DateField.where(title: "Date of birth").first
 disabilities_field = SelectField.where(title: "Disabilities?").first
 title_field = TextField.where(title: "Current title").first
 
