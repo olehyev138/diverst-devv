@@ -8,8 +8,9 @@ class GroupRule < ActiveRecord::Base
     greater_than: 2,
     lesser_than: 3,
     is_not: 4,
-    contains: 5,
-    does_not_contain: 6
+    contains_any_of: 5,
+    contains_all_of: 6,
+    does_not_contain: 7
   }.freeze
 
   after_save :update_group_members
