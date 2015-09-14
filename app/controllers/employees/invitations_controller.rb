@@ -1,4 +1,6 @@
 class Employees::InvitationsController < Devise::InvitationsController
+  layout 'application'
+
   private
 
   # Before the vCard is sent out(right after invitation)
@@ -23,7 +25,6 @@ class Employees::InvitationsController < Devise::InvitationsController
   def configure_permitted_parameters
     # Only add some parameters
     devise_parameter_sanitizer.for(:invite).concat [:first_name, :last_name, :email]
-    pp devise_parameter_sanitizer.for(:accept_invitation)
     devise_parameter_sanitizer.for(:accept_invitation).concat [:first_name, :last_name, :email]
   end
 end

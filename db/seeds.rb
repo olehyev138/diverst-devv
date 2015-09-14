@@ -811,7 +811,7 @@ experience_field = NumericField.create(
   enterprise: enterprise
 )
 
-countries_worked_field = SelectField.create(
+countries_worked_field = CheckboxField.create(
   title: "Countries worked in",
   saml_attribute: "",
   gamification_value: 10,

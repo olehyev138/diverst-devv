@@ -23,3 +23,6 @@
 
 # Ignore redis dump
 dump.rdb
+
+# Ignore bower components
+vendor/assets/bower_components

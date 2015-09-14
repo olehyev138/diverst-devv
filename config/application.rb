@@ -26,6 +26,8 @@ module Diverst
     # Load core extensions
     Dir[File.join(Rails.root, "lib", "core_ext", "*.rb")].each { |l| require l }
 
+    config.assets.paths << Rails.root.join('vendor', 'assets', 'bower_components')
+
     config.active_job.queue_adapter = :sidekiq
   end
 end
