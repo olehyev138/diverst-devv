@@ -7,4 +7,5 @@ class Admin < ActiveRecord::Base
   include DeviseInvitable::Inviter
 
   belongs_to :enterprise, inverse_of: :admins
+  has_many :topics, inverse_of: :admin
 end

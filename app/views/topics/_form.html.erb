@@ -1,0 +1,6 @@
+<%= simple_form_for @topic do |f| %>
+  <%= f.input :statement %>
+  <%= f.input :expiration, default: Time.zone.now + 1.month %>
+
+  <%= f.submit "Create topic" %>
+<% end %>

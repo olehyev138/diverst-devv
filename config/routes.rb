@@ -24,7 +24,7 @@ Rails.application.routes.draw do
   end
 
   resources :groups
-
+  resources :topics
   resources :admins
 
   devise_scope :employee do
