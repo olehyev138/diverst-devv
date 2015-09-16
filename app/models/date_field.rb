@@ -13,7 +13,7 @@ class DateField < Field
   end
 
   def serialize_value(value)
-    return nil if value.empty?
+    return nil if value.nil? || value.empty?
     value.strftime("%s").to_i
   end
 

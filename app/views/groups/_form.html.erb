@@ -1,0 +1,106 @@
+<%= simple_form_for @group do |f| %>
+  <%= f.input :name %>
+
+  <div id="rules">
+    <%= f.simple_fields_for :rules do |field| %>
+      <%= render 'rule_fields', f: field %>
+    <% end %>
+    <div class="link">
+      <%= link_to_add_association "Add a criterion", f, :rules %>
+    </div>
+  </div>
+
+  <%= f.submit "Create ERG" %>
+<% end %>
+
+<script>
+  var operators = [{
+    id: 0,
+    name: "equals",
+    isMultiSelect: false
+  }, {
+    id: 1,
+    name: "greater than",
+    isMultiSelect: false
+  }, {
+    id: 2,
+    name: "lesser than",
+    isMultiSelect: false
+  }, {
+    id: 3,
+    name: "is not",
+    isMultiSelect: false
+  }, {
+    id: 4,
+    name: "contains any of",
+    isMultiSelect: true
+  }, {
+    id: 5,
+    name: "contains all of",
+    isMultiSelect: true
+  }, {
+    id: 6,
+    name: "does not contain",
+    isMultiSelect: true
+  }];
+
+  // Make each rule form adapt as the user selects different options
+  $('#rules').on('cocoon:after-insert', function(e, insertedItem) {
+    var $fieldSelect = insertedItem.find('.field');
+    var $operatorSelect = insertedItem.find('.operator');
+    var $singleValueField = insertedItem.find('.values');
+    var $multiValueField = insertedItem.find('.multi-select');
+
+    // When the field is changed, populate the operators select field with the appropriate operations for the selected field
+    $fieldSelect.change(function() {
+      $multiValueField.css('display', 'none');
+      $singleValueField.css('display', 'none');
+
+      var fieldOperators = $(this).find(":selected").data('operators');
+      $operatorSelect.find('option').remove();
+
+      $operatorSelect[0].add(new Option("", ""));
+
+      operators.forEach(function(operator) {
+        if (fieldOperators.indexOf(operator.id) > -1) {
+          $operatorSelect[0].add(new Option(operator.name, operator.id));
+        }
+      });
+
+      $operatorSelect.css('display', 'inline-block');
+    });
+
+    // When the operator is changed, create the appropriate value field
+    $operatorSelect.change(function() {
+      $multiValueField.css('display', 'none').prop('disabled', true);
+      $singleValueField.css('display', 'none').prop('disabled', true);
+
+      var selectedOperator = operators.filter(function(operator) {
+        return operator.id === parseInt($operatorSelect.val());
+      })[0];
+
+      var options = $fieldSelect.find(":selected").data('options');
+
+      if (options.length) {
+        options.forEach(function(option) {
+          $multiValueField[0].add(new Option(option, option));
+        });
+
+        if (selectedOperator.isMultiSelect) {
+          $multiValueField.prop('multiple', 'multiple');
+        }
+        else {
+          $multiValueField.prop('multiple', '');
+        }
+
+        $multiValueField.prop('disabled', false);
+        $multiValueField.css('display', 'inline-block');
+        $multiValueField.select2();
+      }
+      else {
+        $singleValueField.prop('disabled', false);
+        $singleValueField.css('display', 'inline-block');
+      }
+    });
+  });
+</script>

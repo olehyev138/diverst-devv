@@ -1,0 +1,9 @@
+<h1><%= @group.name %></h1>
+
+<h2>Rules</h2>
+
+<ul>
+  <% @group.rules.each do |rule| %>
+    <li><%= rule.field.title %> <%= GroupRule.operator_text(rule.operator) %> <%= JSON.parse(rule.values).join(', ') %></li>
+  <% end %>
+</ul>

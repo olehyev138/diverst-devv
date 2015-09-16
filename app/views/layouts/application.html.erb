@@ -11,8 +11,6 @@
 <p class="notice"><%= notice %></p>
 <p class="alert"><%= alert %></p>
 
-<%= employee_signed_in? %>
-
 <% if employee_signed_in? %>
   <strong><%= current_employee.email %></strong>
 <% end %>
