@@ -1,5 +1,5 @@
 class MatchesController < ApplicationController
-  #include DeviseTokenAuth::Concerns::SetUserByToken
+  include DeviseTokenAuth::Concerns::SetUserByToken
   before_action :authenticate_employee!, except: [:test, :score]
   before_action :authenticate_admin!, only: [:test, :score]
   before_action :set_match, only: [:swipe]
