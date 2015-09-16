@@ -64,11 +64,11 @@ class CheckboxField < Field
   def validates_rule_for_employee?(rule:, employee:)
     case rule.operator
     when GroupRule.operators[:contains_any_of]
-      (employee.info[rule.field] & rule.values).size > 0
+      (employee.info[rule.field] & rule.values_array).size > 0
     when GroupRule.operators[:contains_all_of]
-      (employee.info[rule.field] & rule.values).size == rule.values.size
+      (employee.info[rule.field] & rule.values_array).size == rule.values_array.size
     when GroupRule.operators[:does_not_contain]
-      (employee.info[rule.field] & rule.values).size == 0
+      (employee.info[rule.field] & rule.values_array).size == 0
     end
   end
 end

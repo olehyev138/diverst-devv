@@ -3,6 +3,7 @@ class GroupRule < ActiveRecord::Base
   belongs_to :field
 
   before_save :remove_empty_values
+  after_save :update_group_members
 
   @@operators = {
     equals: 0,
@@ -13,8 +14,6 @@ class GroupRule < ActiveRecord::Base
     contains_all_of: 5,
     does_not_contain: 6
   }.freeze
-
-  after_save :update_group_members
 
   def self.operators
     @@operators
@@ -38,9 +37,9 @@ class GroupRule < ActiveRecord::Base
     when TextField
       return [operators[:equals], operators[:is_not]]
     when DateField
-      return [operators[:greather_than], operators[:lesser_than], operators[:equals], operators[:is_not]]
+      return [operators[:greater_than], operators[:lesser_than], operators[:equals], operators[:is_not]]
     when NumericField
-      return [operators[:greather_than], operators[:lesser_than], operators[:equals], operators[:is_not]]
+      return [operators[:greater_than], operators[:lesser_than], operators[:equals], operators[:is_not]]
     when SelectField
       return [operators[:contains_any_of], operators[:is_not]]
     when CheckboxField

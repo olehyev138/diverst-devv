@@ -7,3 +7,11 @@
     <li><%= rule.field.title %> <%= GroupRule.operator_text(rule.operator) %> <%= JSON.parse(rule.values).join(', ') %></li>
   <% end %>
 </ul>
+
+<h2>Members</h2>
+
+<ul>
+  <% @group.members.each do |member| %>
+    <li><%= link_to member.name, member %></li>
+  <% end %>
+</ul>

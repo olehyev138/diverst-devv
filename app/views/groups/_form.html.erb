@@ -51,6 +51,8 @@
     var $singleValueField = insertedItem.find('.values');
     var $multiValueField = insertedItem.find('.multi-select');
 
+    $singleValueField.attr('name', $singleValueField.attr('name') + '[]');
+
     // When the field is changed, populate the operators select field with the appropriate operations for the selected field
     $fieldSelect.change(function() {
       $multiValueField.css('display', 'none');
