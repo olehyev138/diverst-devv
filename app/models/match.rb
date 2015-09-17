@@ -7,6 +7,8 @@ class Match < ActiveRecord::Base
 
   belongs_to :user1, class_name: "Employee"
   belongs_to :user2, class_name: "Employee"
+  belongs_to :topic
+  before_create :associate_topic
 
   accepts_nested_attributes_for :user1, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :user2, reject_if: :all_blank, allow_destroy: true
@@ -60,5 +62,12 @@ class Match < ActiveRecord::Base
 
   def self.status
     @@status
+  end
+
+  # Picks a random topic that hasn't been answered by neither of the match's users
+  def associate_topic!
+    unanswered_topics = Topic.unanswered_for_both(user1, user2)
+    offset = rand(unanswered_topics.count)
+    self.topic = unanswered_topics.offset(offset).first
   end
 end
