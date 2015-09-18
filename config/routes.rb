@@ -36,6 +36,8 @@ Rails.application.routes.draw do
 
       member do
         put 'swipe'
+        put 'opt_in'
+        put 'leave'
       end
     end
 

@@ -4,7 +4,7 @@ class Match < ActiveRecord::Base
     accepted: 1, # The person has swiped right and is ready to move on to a conversation
     rejected: 2, # The person has swiped left and doesn't want to try talking to the other
     saved: 3, # After talking for a while, the person decided to opt-in and save the person to his/her contacts
-    left: 4 # After talking for a while, theperson decided to drop the conversation
+    left: 4 # After talking for a while, the person decided to drop the conversation
   }.freeze
 
   belongs_to :user1, class_name: "Employee"
@@ -21,6 +21,7 @@ class Match < ActiveRecord::Base
   # An active match is a match that should still be shown in the swipes screen. It hasn't been rejected by anybody and hasn't been swiped yet
   scope :active_for, ->(employee) { where('user1_id = ? AND user1_status = ? AND user2_status <> ? OR user2_id = ? AND user2_status = ? AND user1_status <> ?', employee.id, status[:unswiped], status[:rejected], employee.id, status[:unswiped], status[:rejected]) }
   scope :accepted, -> { where('user2_status = ? AND user1_status = ?', @@status[:accepted], @@status[:accepted]) }
+  scope :saved, -> { where('user2_status = ? AND user1_status = ?', @@status[:saved], @@status[:saved]) }
 
   before_create :update_score
 
@@ -37,8 +38,16 @@ class Match < ActiveRecord::Base
     else
       raise Exception.new("Employee not part of match")
     end
+  end
 
-    self.save
+  def set_rating(employee:, rating:)
+    if employee.id == self.user1_id
+      self.user1_rating = rating
+    elsif employee.id == self.user2_id
+      self.user2_rating = rating
+    else
+      raise Exception.new("Employee not part of match")
+    end
   end
 
   def status_for(employee)

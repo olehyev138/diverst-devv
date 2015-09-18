@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150917215856) do
+ActiveRecord::Schema.define(version: 20150918211702) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -142,6 +142,8 @@ ActiveRecord::Schema.define(version: 20150917215856) do
     t.time     "both_accepted_at"
     t.boolean  "archived",            limit: 1,  default: false
     t.integer  "topic_id",            limit: 4
+    t.integer  "user1_rating",        limit: 4
+    t.integer  "user2_rating",        limit: 4
   end
 
   create_table "messages", force: :cascade do |t|
