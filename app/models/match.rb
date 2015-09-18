@@ -1,8 +1,10 @@
 class Match < ActiveRecord::Base
   @@status = {
     unswiped: 0,
-    accepted: 1,
-    rejected: 2
+    accepted: 1, # The person has swiped right and is ready to move on to a conversation
+    rejected: 2, # The person has swiped left and doesn't want to try talking to the other
+    saved: 3, # After talking for a while, the person decided to opt-in and save the person to his/her contacts
+    left: 4 # After talking for a while, theperson decided to drop the conversation
   }.freeze
 
   belongs_to :user1, class_name: "Employee"

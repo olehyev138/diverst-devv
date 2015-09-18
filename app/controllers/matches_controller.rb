@@ -30,6 +30,7 @@ class MatchesController < ApplicationController
     return render json: {message: "Already swiped."}, status: 400 if @match.status_for(current_employee) != Match.status[:unswiped]
 
     @match.set_status(employee: current_employee, status: swipe_params[:choice])
+
     if @match.save
       render nothing: true, status: 200
     else

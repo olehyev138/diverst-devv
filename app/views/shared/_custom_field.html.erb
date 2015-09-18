@@ -34,7 +34,7 @@
       <label><%= cf.title %></label>
       <select name="custom-fields[<%= cf.id %>][]" class="select2" multiple="multiple">
         <% cf.options.each do |option| %>
-          <option value="<%= option %>"<%= " selected=selected" if resource.info[cf].include? option %>><%= option %></option>
+          <option value="<%= option %>"<%= " selected=selected" if resource.info[cf] && resource.info[cf].include?(option) %>><%= option %></option>
         <% end %>
       </select>
     </div>
