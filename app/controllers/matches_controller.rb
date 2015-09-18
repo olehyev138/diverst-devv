@@ -26,8 +26,8 @@ class MatchesController < ApplicationController
   end
 
   def swipe
-    render "Invalid swipe choice.", status: 400 if swipe_params[:choice] != Match.status[:accepted] && swipe_params[:choice] != Match.status[:rejected] # Only allow accepted or rejected statuses
-    render "Already swiped.", status: 400 if @match.status_for(current_employee) != Match.status[:unswiped]
+    return render json: {message: "Invalid swipe choice."}, status: 400 if swipe_params[:choice] != Match.status[:accepted] && swipe_params[:choice] != Match.status[:rejected] # Only allow accepted or rejected statuses
+    return render json: {message: "Already swiped."}, status: 400 if @match.status_for(current_employee) != Match.status[:unswiped]
 
     @match.set_status(employee: current_employee, status: swipe_params[:choice])
     if @match.save
