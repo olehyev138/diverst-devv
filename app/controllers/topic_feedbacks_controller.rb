@@ -1,5 +1,6 @@
 class TopicFeedbacksController < ApplicationController
-  before_action :authenticate_employee!
+  before_action :authenticate_employee!, except: [:destroy]
+  before_action :authenticate_admin!, only: [:destroy]
   before_action :set_topic
   before_action :set_feedback, only: [:update, :destroy, :show]
   layout "employees"
@@ -21,7 +22,7 @@ class TopicFeedbacksController < ApplicationController
 
   def destroy
     @feedback.destroy
-    redirect_to action: :index
+    redirect_to :back
   end
 
   protected

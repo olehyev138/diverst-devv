@@ -36,6 +36,7 @@ Rails.application.routes.draw do
       end
     end
   end
+
   resources :admins
 
   devise_scope :employee do

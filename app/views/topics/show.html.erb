@@ -1,0 +1,13 @@
+<h1><%= @topic.statement %></h1>
+
+<strong>Expires on <%= @topic.expiration.to_s :slashes %></strong>
+
+<h2>Feedback</h2>
+
+<% @topic.feedbacks.order(created_at: :desc).each do |feedback| %>
+  <div style="margin-bottom: 10px;">
+    <%= feedback.content %><br>
+    <strong>Submitted by <%= feedback.employee.first_name %> <%= feedback.employee.last_name %> on <%= feedback.created_at.to_s :slashes %> at <%= feedback.created_at.to_s :time %></strong><br>
+    <%= link_to "Delete", topic_topic_feedback_path(@topic, feedback), method: :delete %>
+  </div>
+<% end %>

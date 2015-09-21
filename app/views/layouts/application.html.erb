@@ -12,7 +12,7 @@
 <p class="alert"><%= alert %></p>
 
 <% if employee_signed_in? %>
-  <strong><%= current_employee.email %></strong>
+  <em>Logged in as employee <strong><%= current_employee.email %></strong></em>
 <% end %>
 
 <header>
