@@ -8,4 +8,8 @@ class ApplicationController < ActionController::Base
   def authenticate_inviter!
     authenticate_admin!(:force => true)
   end
+
+  def not_found!
+    raise ActionController::RoutingError.new('Not Found')
+  end
 end

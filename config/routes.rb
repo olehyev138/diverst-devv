@@ -36,12 +36,15 @@ Rails.application.routes.draw do
 
       member do
         put 'swipe'
+      end
+    end
+
+    resources :conversations do
+      member do
         put 'opt_in'
         put 'leave'
       end
     end
-
-    resources :conversations
   end
 
   root to: "employees#index"

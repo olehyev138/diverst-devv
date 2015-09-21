@@ -90,7 +90,7 @@ class Employee < ActiveRecord::Base
   end
 
   def active_matches
-    Match.active_for(self)
+    Match.active_for(self).not_archived
   end
 
   # Get the n top unswiped matches for the user
