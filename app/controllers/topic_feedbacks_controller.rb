@@ -25,6 +25,14 @@ class TopicFeedbacksController < ApplicationController
     redirect_to :back
   end
 
+  def update
+    if @feedback.update(admin_feedback_params)
+      head :ok
+    else
+      head :internal_server_error
+    end
+  end
+
   protected
 
   def set_topic
@@ -40,6 +48,15 @@ class TopicFeedbacksController < ApplicationController
     .require(:topic_feedback)
     .permit(
       :content
+    )
+  end
+
+  def admin_feedback_params
+    params
+    .require(:topic_feedback)
+    .permit(
+      :content,
+      :featured
     )
   end
 end
