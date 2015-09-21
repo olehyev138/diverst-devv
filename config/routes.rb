@@ -29,7 +29,13 @@ Rails.application.routes.draw do
   end
 
   resources :groups
-  resources :topics
+  resources :topics do
+    resources :topic_feedbacks, path: "feedbacks" do
+      collection do
+        get 'thank_you'
+      end
+    end
+  end
   resources :admins
 
   devise_scope :employee do
