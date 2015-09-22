@@ -71,3 +71,47 @@ Leave a conversation (either right after a trial or after having opted in). If i
   "rating": 1
 }
 ```
+
+## Devices
+
+We track multiple devices per user to handle push notifications. The idea would be to add the device to the user's list of devices the first time he uses it and delete it when the user logs out (?).
+
+### GET /devices
+
+Get the list of the user's devices.
+
+### POST /devices
+
+Create a new device for the authenticated user. The accepted values for platform (I don't actually check) will be `apple`, `android` and `web`.
+
+**Request parameters**
+```json
+{
+  "device": {
+    "token": "dsakjhdsakjhdaslksfgh ksdfh lkdsajkdfas",
+    "platform": "apple"
+  }
+}
+```
+
+### POST /devices
+
+Create a new device for the authenticated user. The accepted values for platform (I don't actually check) will be `apple`, `android` and `web`.
+
+**Request parameters**
+```json
+{
+  "device": {
+    "token": "dsakjhdsakjhdaslksfgh ksdfh lkdsajkdfas",
+    "platform": "apple"
+  }
+}
+```
+
+### DELETE /devices/:id
+
+Deletes the specified device
+
+### POST /devices/:id/test_notif
+
+Sends a test notification to the specified device. This is just to see if the push setup works.
