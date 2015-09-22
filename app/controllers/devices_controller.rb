@@ -12,7 +12,7 @@ class DevicesController < ApplicationController
   end
 
   def create
-    @device = current_employee.devices.new(dvice_params)
+    @device = current_employee.devices.new(device_params)
 
     if @device.save
       render json: @device
