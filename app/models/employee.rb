@@ -117,6 +117,12 @@ class Employee < ActiveRecord::Base
     part_of_group
   end
 
+  def notify_devices(message)
+    self.devices.each do |device|
+      device.notify(message)
+    end
+  end
+
   protected
 
   def set_info

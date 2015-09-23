@@ -3,7 +3,7 @@ class TopicFeedbacksController < ApplicationController
   before_action :authenticate_admin!, only: [:destroy]
   before_action :set_topic
   before_action :set_feedback, only: [:update, :destroy, :show]
-  layout "employees"
+  layout "employee_chrome"
 
   def new
     @feedback = @topic.feedbacks.new
