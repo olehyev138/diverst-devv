@@ -85,6 +85,17 @@ class Match < ActiveRecord::Base
     @@status
   end
 
+  def notify_users
+    return unless conversation_state?
+    [user1, user2].each do |user|
+      user.notify("You have been matched with #{other(user).first_name}. Start a conversation now!", {})
+    end
+  end
+
+  def conversation_state?
+    (user1_status == @@status[:accepted] || user1_status == @@status[:saved]) && (user2_status == @@status[:accepted] || user2_status == @@status[:saved])
+  end
+
   # Picks a random topic that hasn't been answered by neither of the match's users
   def associate_topic!
     unanswered_topics = Topic.unanswered_for_both(user1, user2)

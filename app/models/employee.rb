@@ -117,9 +117,10 @@ class Employee < ActiveRecord::Base
     part_of_group
   end
 
-  def notify_devices(message)
+  # Sends a push notification to all of the user's devices
+  def notify(message, data)
     self.devices.each do |device|
-      device.notify(message)
+      device.notify(message, data)
     end
   end
 

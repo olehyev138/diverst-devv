@@ -13,7 +13,6 @@ class SendAppleNotificationJob < ActiveJob::Base
     # Notifications can also change the badge count, have a custom sound, have a category identifier, indicate available Newsstand content, or pass along arbitrary data.
     notification.badge = 57
     notification.sound = "sosumi.aiff"
-    notification.category = "INVITE_CATEGORY"
     notification.custom_data = data
 
     # And... sent! That's all it takes.

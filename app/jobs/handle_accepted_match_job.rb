@@ -10,5 +10,8 @@ class HandleAcceptedMatchJob < ActiveJob::Base
     base_uri = 'https://diverst.firebaseio.com'
     firebase = Firebase::Client.new(base_uri)
     response = firebase.set("conversations/#{match.id}", { id: match.id, users: [match.user1.id, match.user2.id] })
+
+    # Notify the users of the match
+    match.notify_users
   end
 end
