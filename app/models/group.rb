@@ -7,6 +7,12 @@ class Group < ActiveRecord::Base
   accepts_nested_attributes_for :rules, reject_if: :all_blank, allow_destroy: true
 
   def update_cached_members
-    CacheGroupMembersJob.perform_async self
+    CacheGroupMembersJob.perform_later self
+  end
+
+  def self.update_all_members
+    Group.all.each do |group|
+      CacheGroupMembersJob.perform_later group
+    end
   end
 end
