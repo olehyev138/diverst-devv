@@ -108,9 +108,9 @@ Create a new device for the authenticated user. The accepted values for platform
 }
 ```
 
-### DELETE /devices/:id
+### DELETE /devices/:token
 
-Deletes the specified device
+Deletes a device by its push token (not its id).
 
 ### POST /devices/:id/test_notif
 
