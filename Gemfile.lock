@@ -30,7 +30,7 @@ GEM
       rails-html-sanitizer (~> 1.0, >= 1.0.1)
     active_model_serializers (0.9.3)
       activemodel (>= 3.2)
-    active_record_query_trace (1.4)
+    active_record_query_trace (1.5)
     activejob (4.2.1)
       activesupport (= 4.2.1)
       globalid (>= 0.3.0)
@@ -95,6 +95,9 @@ GEM
       nenv
       rspec-logsplit (>= 0.1.2)
       timers (>= 4.1.1)
+    clockwork (1.2.0)
+      activesupport
+      tzinfo
     cocoon (1.2.6)
     coffee-rails (4.1.0)
       coffee-script (>= 2.2.0)
@@ -135,12 +138,12 @@ GEM
       json
     globalid (0.3.6)
       activesupport (>= 4.1.0)
-    highline (1.7.6)
+    highline (1.7.7)
     hitimes (1.2.3)
     houston (2.2.3)
       commander (~> 4.1)
       json
-    httparty (0.13.6)
+    httparty (0.13.7)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
     httpclient (2.6.0.1)
@@ -158,7 +161,7 @@ GEM
       mime-types (>= 1.16, < 3)
     mime-types (2.6.2)
     mini_portile (0.6.2)
-    minitest (5.8.0)
+    minitest (5.8.1)
     multi_json (1.11.2)
     multi_xml (0.5.5)
     mysql2 (0.3.20)
@@ -278,6 +281,7 @@ DEPENDENCIES
   active_record_query_trace
   bower-rails (~> 0.10.0)
   byebug
+  clockwork
   cocoon
   devise
   devise-async

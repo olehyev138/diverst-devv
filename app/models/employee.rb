@@ -145,6 +145,7 @@ class Employee < ActiveRecord::Base
     self.password = self.password_confirmation = SecureRandom.urlsafe_base64 if self.auth_source == "saml" && self.new_record?
   end
 
+  # Called before validation to presist the (maybe) edited info object in the DB
   def transfer_info_to_data
     self.data = JSON.generate self.info
   end

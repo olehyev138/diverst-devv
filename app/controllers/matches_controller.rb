@@ -36,6 +36,8 @@ class MatchesController < ApplicationController
     # Check if we have a match!
     if @match.both_accepted?
       HandleAcceptedMatchJob.perform_later @match
+      @match.both_accepted_at = Time.zone.now
+      @match.save
     end
   end
 

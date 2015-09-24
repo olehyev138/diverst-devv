@@ -1,0 +1,2 @@
+HandleMatchExpiryJob:
+  every: 30s

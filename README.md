@@ -96,7 +96,7 @@ Create a new device for the authenticated user. The accepted values for platform
 
 ### POST /devices
 
-Create a new device for the authenticated user. The accepted values for platform (I don't actually check) will be `apple`, `android` and `web`.
+Create a new device for the authenticated user. The accepted values for platform (I don't actually check) will be `apple`, `android` and `web`. The API will ignore your request if you try to add a device with a token that has already been registered with this user.
 
 **Request parameters**
 ```json

@@ -18,10 +18,22 @@ class Match < ActiveRecord::Base
   scope :not_archived, -> { where(archived: false) }
   scope :has_employee, ->(employee) { where('user1_id = ? OR user2_id = ?', employee.id, employee.id) }
   scope :between, ->(employee1, employee2) { has_employee(employee1).has_employee(employee2) }
-  # An active match is a match that should still be shown in the swipes screen. It hasn't been rejected by anybody and hasn't been swiped yet
-  scope :active_for, ->(employee) { where('user1_id = ? AND user1_status = ? AND user2_status <> ? OR user2_id = ? AND user2_status = ? AND user1_status <> ?', employee.id, status[:unswiped], status[:rejected], employee.id, status[:unswiped], status[:rejected]) }
-  scope :accepted, -> { where('user2_status IN (?) AND user1_status IN (?)', @@status[:accepted], @@status[:accepted]) }
+  scope :active_for, ->(employee) { where('user1_id = ? AND user1_status = ? AND user2_status <> ? OR user2_id = ? AND user2_status = ? AND user1_status <> ?', employee.id, status[:unswiped], status[:rejected], employee.id, status[:unswiped], status[:rejected]) } # An active match is a match that should still be shown in the swipes screen. It hasn't been rejected by anybody and hasn't been swiped yet
+  scope :accepted, -> { where('user2_status = ? AND user1_status = ?', @@status[:accepted], @@status[:accepted]) }
   scope :conversations, -> { where('user2_status = ? AND user1_status = ?', @@status[:saved], @@status[:saved]) }
+  scope :soon_expired, -> { # Matches that have been created between 1 week and 2 weeks ago
+    accepted
+    .not_archived
+    .where.not(both_accepted_at: nil)
+    .where('both_accepted_at < ?', 1.week.ago)
+    .where('both_accepted_at > ?', 2.weeks.ago)
+  }
+  scope :expired, -> { # Matches that have been created more than 2 weeks ago
+    accepted
+    .not_archived
+    .where.not(both_accepted_at: nil)
+    .where('both_accepted_at < ?', 2.weeks.ago)
+  }
 
   before_create :update_score
 
@@ -85,10 +97,28 @@ class Match < ActiveRecord::Base
     @@status
   end
 
-  def notify_users
-    return unless conversation_state?
+  def each_user
     [user1, user2].each do |user|
-      user.notify("You have been matched with #{other(user).first_name}. Start a conversation now!", {})
+      yield user
+    end
+  end
+
+  def both_accepted_notification
+    return unless conversation_state?
+    each_user do |user|
+      user.notify("You have been matched with #{other(user).first_name}. Start a conversation now!", { type: "new_match", id: self.id })
+    end
+  end
+
+  def expires_soon_notification
+    each_user do |user|
+      user.notify("Your conversation with #{other(user).first_name} will soon expire. Would you like to save him/her?", { type: "match_expires_soon", id: self.id })
+    end
+  end
+
+  def left_notification
+    each_user do |user|
+      user.notify("Bummer! #{other(user).first_name} has left the conversation. Meet new people in you organisation here!", { type: "match_left", id: self.id })
     end
   end
 
