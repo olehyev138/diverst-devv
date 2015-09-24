@@ -126,6 +126,14 @@ class Match < ActiveRecord::Base
     (user1_status == @@status[:accepted] || user1_status == @@status[:saved]) && (user2_status == @@status[:accepted] || user2_status == @@status[:saved])
   end
 
+  def expires_soon?
+    conversation_state? &&
+    !archived &&
+    !both_accepted_at.nil? &&
+    both_accepted_at < 1.week.ago &&
+    both_accepted_at > 2.weeks.ago
+  end
+
   # Picks a random topic that hasn't been answered by neither of the match's users
   def associate_topic!
     unanswered_topics = Topic.unanswered_for_both(user1, user2)

@@ -1,8 +1,7 @@
-class MatchSerializer < ActiveModel::Serializer
-  attributes :id,
-    :user
+class MatchSerializer < ConversationSerializer
+  attributes :expires_soon
 
-  def user
-    EmployeeSerializer.new object.other(scope)
+  def expires_soon
+    expires_soon?
   end
 end
