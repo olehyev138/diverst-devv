@@ -20,7 +20,7 @@ class Match < ActiveRecord::Base
   scope :between, ->(employee1, employee2) { has_employee(employee1).has_employee(employee2) }
   scope :active_for, ->(employee) { where('user1_id = ? AND user1_status = ? AND user2_status <> ? OR user2_id = ? AND user2_status = ? AND user1_status <> ?', employee.id, status[:unswiped], status[:rejected], employee.id, status[:unswiped], status[:rejected]) } # An active match is a match that should still be shown in the swipes screen. It hasn't been rejected by anybody and hasn't been swiped yet
   scope :accepted, -> { where('user2_status = ? AND user1_status = ?', @@status[:accepted], @@status[:accepted]) }
-  scope :conversations, -> { where('user2_status = ? AND user1_status = ?', @@status[:saved], @@status[:saved]) }
+  scope :conversations, -> { where('(user2_status = ? OR user2_status = ?) AND (user1_status = ? OR user1_status = ?)', @@status[:saved], @@status[:accepted], @@status[:saved], @@status[:accepted]) }
   scope :soon_expired, -> { # Matches that have been created between 1 week and 2 weeks ago
     accepted
     .not_archived
@@ -132,6 +132,10 @@ class Match < ActiveRecord::Base
     !both_accepted_at.nil? &&
     both_accepted_at < 1.week.ago &&
     both_accepted_at > 2.weeks.ago
+  end
+
+  def saved?
+    (user1_status == @@status[:saved] && user2_status == @@status[:saved])
   end
 
   # Picks a random topic that hasn't been answered by neither of the match's users
