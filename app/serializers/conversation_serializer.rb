@@ -1,6 +1,7 @@
 class ConversationSerializer < ActiveModel::Serializer
   attributes :id,
     :saved,
+    :expires_soon,
     :user
 
   def user
@@ -9,5 +10,9 @@ class ConversationSerializer < ActiveModel::Serializer
 
   def saved
     object.saved?
+  end
+
+  def expires_soon
+    object.expires_soon?
   end
 end

@@ -44,7 +44,7 @@ Swipes a match. Accepted is 1 and rejected is 2.
 
 ### GET /conversations
 
-Returns the list of active conversations (matches that have been accepted by both users and turned into Firebase conversations).
+Returns the list of active conversations (matches that have been accepted by both users and turned into Firebase conversations). The `saved` attribute defines if the conversation has been opted in by both people or not yet.
 
 ### DELETE /conversations/:id
 
