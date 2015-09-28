@@ -2,7 +2,7 @@ class MatchesController < ApplicationController
   include DeviseTokenAuth::Concerns::SetUserByToken
   before_action :authenticate_employee!, except: [:test, :score]
   before_action :authenticate_admin!, only: [:test, :score]
-  before_action :set_match, only: [:swipe, :test, :score]
+  before_action :set_match, only: [:swipe, :test, :score, :show]
   serialization_scope :current_employee
 
   def test
@@ -43,6 +43,10 @@ class MatchesController < ApplicationController
 
   def index
     render json: current_employee.top_matches(10)
+  end
+
+  def show
+    render json: @match
   end
 
   protected

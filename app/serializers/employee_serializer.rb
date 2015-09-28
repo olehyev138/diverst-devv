@@ -2,9 +2,9 @@ class EmployeeSerializer < ActiveModel::Serializer
   attributes :id,
     :first_name,
     :last_name,
-    :info
+    :fields
 
-  def info
+  def fields
     fields = object.enterprise.fields.select([:id, :title])
     fields_hash = []
     fields.each do |field|
