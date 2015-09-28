@@ -4,19 +4,16 @@ class EmployeeSerializer < ActiveModel::Serializer
     :last_name,
     :info
 
-  # We create a hash with the fields' titles as keys and their value as value
   def info
     fields = object.enterprise.fields.select([:id, :title])
-    brown = object.info.map do |k, v|
-      field = fields.select{|field| field.id == k}[0]
-      if field.nil? # If a field has been deleted from the database but is in the user's info hash, return nil. It will be exculded when we call compact! later.
-        nil
-      else
-        [field.title, v]
-      end
+    fields_hash = []
+    fields.each do |field|
+      fields_hash << {
+        title: field.title,
+        value: object.info[field]
+      }
     end
 
-    brown.compact! # LOL
-    Hash[brown] # LOOOOL
+    fields_hash
   end
 end

@@ -10,6 +10,7 @@ class Match < ActiveRecord::Base
   belongs_to :user1, class_name: "Employee"
   belongs_to :user2, class_name: "Employee"
   belongs_to :topic
+
   before_create :associate_topic
 
   accepts_nested_attributes_for :user1, reject_if: :all_blank, allow_destroy: true
