@@ -5,12 +5,12 @@ class EmployeeSerializer < ActiveModel::Serializer
     :fields
 
   def fields
-    fields = object.enterprise.fields.select([:id, :title])
+    fields = object.enterprise.fields
     fields_hash = []
     fields.each do |field|
       fields_hash << {
         title: field.title,
-        value: object.info[field]
+        value: field.string_value(object.info[field])
       }
     end
 
