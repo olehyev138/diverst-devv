@@ -1,0 +1,87 @@
+// Icons
+
+@mixin icon($filename, $width: 24px, $height: 24px) {
+  background-image: image-url('icons/#{$filename}.svg');
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: $width;
+  height: $height;
+}
+
+.icon {
+  display: inline-block;
+  vertical-align: middle;
+  width: $spacing-medium;
+  height: $spacing-medium;
+}
+
+.icon--large {
+  width: $spacing-large;
+  height: $spacing-large;
+}
+
+.icon--rotate {
+  @include transform(rotate(180deg));
+}
+
+
+// Misc icons
+
+.icon--chevron-down {
+  @include icon(chevron-down);
+}
+
+.icon--chevron-down-purple {
+  @include icon(chevron-down-purple);
+}
+
+.icon--reorder {
+  @include icon(reorder, 16px, 16px);
+  cursor: move;
+}
+
+.icon--remove {
+  @include icon(remove, 16px, 16px);
+}
+
+.icon--star-purple {
+  @include icon(star-purple);
+}
+
+
+// Upvote
+
+.icon--upvote {
+  @include icon(upvote, 10px, 6px);
+
+  .counter--active & {
+    @include icon(upvote-active, 10px, 6px);
+  }
+}
+
+
+// Product icons
+
+.icon--handshake {
+  @include icon(handshake);
+}
+
+.icon--coffee-talk {
+  @include icon(coffee-talk);
+}
+
+.icon--market-scope {
+  @include icon(market-scope);
+}
+
+.icon--harmonize {
+  @include icon(harmonize);
+}
+
+.icon--strategy-talk {
+  @include icon(strategy-talk);
+}
+
+.icon--unify {
+  @include icon(unify);
+}

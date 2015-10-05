@@ -1,0 +1,26 @@
+// Flex row
+
+.flex-row {
+  margin: 0 -#{$spacing-small};
+  @include display(flex);
+
+  &--middle {
+    @include align-items(center);
+  }
+
+  &--baseline {
+    @include align-items(baseline);
+  }
+
+  & + & {
+    margin-top: $spacing-medium;
+  }
+}
+
+.flex-row__cell {
+  padding: 0 $spacing-small;
+
+  &--grow {
+    @include flex(1);
+  }
+}

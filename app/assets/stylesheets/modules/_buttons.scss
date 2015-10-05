@@ -1,0 +1,65 @@
+// Button mixin
+
+@mixin button($color) {
+  width: 100%;
+  padding: 16px 20px;
+  background-color: $color;
+
+  &:hover {
+    background-color: mix($color, #000, 95%);
+  }
+
+  &:active {
+    background-color: mix($color, #000, 90%);
+  }
+
+  &:focus {
+    box-shadow: inset 0px 0px 0px 2px rgba(#000, 0.2);
+  }
+
+  @include mq(small) {
+    width: auto;
+  }
+}
+
+// General styles
+
+.btn {
+  display: inline-block;
+  color: $diverst-white;
+  text-align: center;
+  border-radius: $border-radius;
+  outline: 0;
+  @include caps-bold;
+  @include transition(background-color $time $curve, color $time $curve);
+
+  &[disabled] {
+    cursor: default;
+    pointer-events: none;
+    opacity: 0.4;
+    @include user-select(none);
+  }
+}
+
+// Variants
+
+.btn--primary {
+  @include button($diverst-purple);
+}
+
+.btn--secondary {
+  @include button($diverst-black);
+}
+
+.btn--tertiary {
+  @include button($diverst-grey-light);
+}
+
+.btn--large {
+  font-size: 14px;
+  padding: 24px 28px;
+}
+
+.btn--full {
+  width: 100%;
+}

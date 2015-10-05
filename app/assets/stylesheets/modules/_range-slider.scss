@@ -1,0 +1,28 @@
+// Range slider
+
+.range-slider {
+  position: relative;
+}
+
+.range-slider__line {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background-color: $diverst-grey-lightest;
+  box-shadow: inset 120px 0px 0px 0px $diverst-purple; // Match value with left on handle
+}
+
+.range-slider__handle {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 120px; // Value will change in JS
+  background-color: #fff;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0px 0px 0px 1px rgba($diverst-black, .10), 0px 1px 2px 0px rgba($diverst-black, .15);
+  @include transform(translateY(-50%));
+  @include transition(box-shadow $time $curve);
+}

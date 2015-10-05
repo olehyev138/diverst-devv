@@ -1,0 +1,24 @@
+// Counter
+
+.counter {
+  padding: 6px $spacing-small 2px;
+  border-radius: $border-radius;
+  border: 1px solid $diverst-border;
+  color: $diverst-grey-light;
+  cursor: pointer;
+  @include font-size($small-font-size);
+  @include user-select(none);
+
+  &--active {
+    color: $diverst-purple;
+  }
+}
+
+.counter__arrow {
+  display: block;
+  margin: 0 auto;
+}
+
+.counter__number {
+  @include font-medium;
+}

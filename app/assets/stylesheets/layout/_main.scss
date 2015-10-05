@@ -1,0 +1,46 @@
+.content {
+  position: absolute;
+  top: 110px;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  @include z-index(content);
+
+  @include mq(medium) {
+    top: 130px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    .dashboard & {
+      left: $nav-width;
+    }
+  }
+}
+
+.content__inner {
+  padding: $spacing-medium;
+  height: 2000px; // Temporary
+  width: 100%;
+  margin: 0 auto;
+  max-width: 1460px;
+
+  @include mq(medium) {
+    padding: $spacing-large;
+  }
+
+  @include mq(large) {
+    padding: $spacing-x-large;
+  }
+}
+
+.content__section {
+  margin-bottoM: $spacing-medium;
+
+  @include mq(medium) {
+    margin-bottom: $spacing-large;
+  }
+
+  @include mq(large) {
+    margin-bottom: $spacing-x-large;
+  }
+}

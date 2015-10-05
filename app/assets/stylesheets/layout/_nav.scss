@@ -1,0 +1,69 @@
+.nav {
+  display: none; // Hide nav on mobile
+  position: absolute;
+  width: $nav-width;
+  top: 75px;
+  left: 0;
+  bottom: 0;
+  background-color: $diverst-black;
+  @include z-index(nav);
+
+  @include mq(medium) {
+    display: block;
+  }
+}
+
+.nav__list {
+  padding: 0;
+}
+
+.nav__list--primary {
+  margin-top: $spacing-medium;
+}
+
+.nav__list--secondary {
+  position: absolute;
+  right: 0;
+  bottom: $spacing-medium;
+  left: 0;
+}
+
+.nav__item {
+  display: block;
+  list-style: none;
+}
+
+.nav__link {
+  position: relative;
+  padding: 12px $spacing-large;
+  color: $diverst-grey-light;
+  box-shadow: inset 0 0 0 0 $diverst-purple;
+  @include transition(color $time $curve, box-shadow $time $curve);
+  @include caps-bold;
+  @include display(flex);
+  @include align-items(center);
+
+  &:hover,
+  &:focus,
+  &--is-selected {
+    color: $diverst-white;
+  }
+
+  &--is-selected {
+    box-shadow: inset 3px 0 0 0 $diverst-purple;
+  }
+}
+
+.nav__icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 12px;
+  opacity: 0.5;
+  @include transition(opacity $time $curve);
+
+  .nav__link:hover &,
+  .nav__link:focus &,
+  .nav__link--is-selected & {
+    opacity: 1;
+  }
+}

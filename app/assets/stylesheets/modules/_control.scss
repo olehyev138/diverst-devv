@@ -1,0 +1,129 @@
+// Control
+
+.control {
+  display: block;
+  cursor: pointer;
+  text-align: left; // Force checkbox to always be left-aligned
+  margin-bottom: $spacing-large;
+  @include user-select(none);
+
+  .table-view & {
+    margin: 0; // Remove margin when within table view
+  }
+
+  &:last-child {
+    margin: 0;
+  }
+}
+
+.control__input {
+  @include visually-hidden;
+}
+
+.control__indicator {
+  position: relative;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  border: 1px solid $diverst-border;
+  background-color: $diverst-white;
+  @include transition(background-color $time $curve, border-color $time $curve);
+
+  .control__input:checked + & {
+    background-color: $diverst-purple;
+    border-color: $diverst-purple;
+  }
+
+  .control__input:focus & {
+    border-color: $diverst-purple;
+  }
+
+  &:after {
+    content: "";
+    position: absolute;
+    display: block;
+    top: 50%;
+    left: 50%;
+    @include transition(transform $time $curve);
+
+    .control__input:checked + & {
+      @include transform(none);
+    }
+  }
+}
+
+.control__label {
+  margin-left: $spacing-small;
+
+  &--left {
+    margin-left: 0;
+    margin-right: $spacing-small;
+    float: left;
+  }
+}
+
+
+// Checkbox
+
+.control__indicator--checkbox {
+	border-radius: $border-radius /2;
+
+	&:after {
+		margin-left: -$spacing-small;
+		margin-top: -$spacing-small;
+		@include icon(checkmark-white, 16px, 16px);
+		@include transform(scale(0.3));
+	}
+}
+
+
+// Radio
+
+.control__indicator--radio {
+  border-radius: 50%;
+
+  &:after {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: $diverst-white;
+    margin-left: -(6px * 0.5);
+    margin-top: -(6px * 0.5);
+    @include transform(scale(0.3));
+  }
+}
+
+
+// Toggle
+
+.control__indicator--toggle {
+  position: relative;
+  width: 46px;
+  height: 28px;
+  border-radius: 40px;
+  border: 0;
+  background-color: $diverst-border;
+
+  .control__input:checked + & {
+    background-color: $diverst-purple;
+    border-color: $diverst-purple;
+  }
+
+  &:after {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background-color: $diverst-white;
+    @include transition(transform $time $curve);
+
+    .control__input:checked + & {
+      @include transform(translate3d(18px, 0, 0));
+    }
+  }
+}

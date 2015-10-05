@@ -1,0 +1,23 @@
+// Progress
+
+.progress-bar {
+  position: relative;
+  width: 100%;
+  height: $spacing-small;
+  margin-bottom: $spacing-large;
+  overflow: hidden;
+  background: $diverst-border;
+  border-radius: $border-radius;
+}
+
+.progress-bar__fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 20%;
+  max-width: 100%;
+  background-color: $diverst-purple;
+  border-radius: $border-radius;
+  @include transition(width $time $curve);
+}

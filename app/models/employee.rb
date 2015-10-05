@@ -124,6 +124,13 @@ class Employee < ActiveRecord::Base
     end
   end
 
+  def assign_firebase_token
+    payload = { uid: self.id.to_s }
+    options = { expires: 1.year.from_now }
+    self.firebase_token = @@fb_token_generator.create_token(payload)
+    self.save
+  end
+
   protected
 
   def set_info
@@ -131,13 +138,6 @@ class Employee < ActiveRecord::Base
     json_hash = JSON.parse(self.data)
     self.info = Hash[json_hash.map{|k,v|[ k.to_i, v ]}] # Convert the hash keys to integers since they're strings after JSON parsing
     self.info.extend(FieldData)
-  end
-
-  def assign_firebase_token
-    payload = { uid: self.id.to_s }
-    options = { expires: 1.year.from_now }
-    self.firebase_token = @@fb_token_generator.create_token(payload)
-    self.save
   end
 
   # Generate a random password if the user is using SAML

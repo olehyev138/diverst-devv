@@ -1,0 +1,19 @@
+// Table
+
+table {
+  width: 100%;
+}
+
+td {
+  padding: $spacing-large $spacing-medium;
+
+  .table--has-border & {
+    border-bottom: 1px solid $diverst-border;
+  }
+}
+
+th {
+  padding: $spacing-medium;
+  text-align: left;
+  @include caps-bold;
+}

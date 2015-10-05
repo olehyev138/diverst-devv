@@ -1,0 +1,121 @@
+// Input reset
+
+input, select, textarea {
+  color: inherit;
+  font: inherit;
+  line-height: normal;
+  background-color: $diverst-white;
+  outline: 0;
+  border: 0;
+  border-radius: 0;
+  -webkit-font-smoothing: subpixel-antialiased; // Safari transform bug
+  @include appearance(none);
+}
+
+select {
+  -moz-appearance: none;
+  text-indent: 0.01px;
+  text-overflow: '';
+}
+
+
+// Field
+
+.field {
+  font-size: 14px;
+  display: inline-block;
+  width: 100%;
+  margin-bottom: $spacing-medium;
+
+  &:last-child {
+    margin: 0;
+  }
+
+  .form--inline & {
+    width: auto;
+    margin-right: $spacing-small;
+    margin-bottom: 0;
+  }
+}
+
+.field--half {
+  width: 50%;
+}
+
+.field--quarter {
+  width: 25%;
+}
+
+
+// FIeld input wrapper
+
+.field__input-wrapper {
+  position: relative;
+}
+
+// Field input
+
+.field__input {
+  width: 100%;
+  padding: 0.85em;
+  outline: 0;
+  border: 1px solid $diverst-border;
+  color: $diverst-black;
+  border-radius: $border-radius;
+  @include transition(all $time $curve);
+
+  &--large {
+    font-size: 110%;
+  }
+
+  &--ghost {
+    border: 0;
+    margin: -0.85em;
+  }
+
+  &:focus:not(.field__input--ghost) {
+    border-color: $diverst-purple;
+    box-shadow: 0 0 0 1px $diverst-purple;
+  }
+
+  &:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px $diverst-white inset;
+  }
+
+  @include placeholder {
+    color: rgba($diverst-grey-light, 0.5);
+  }
+}
+
+
+// Field add ons
+
+.field__input--left-add-on {
+  padding-left: 40px;
+}
+
+.field__input--right-add-on {
+  padding-right: 40px;
+}
+
+.field__add-on {
+  pointer-events: none;
+  @include v-center(absolute);
+
+  &--left {
+    left: 12px;
+  }
+
+  &--right {
+    right: 12px;
+  }
+}
+
+
+// Field Label
+
+.field__label {
+  display: block;
+  margin-bottom: $spacing-small;
+  @extend small;
+}

@@ -6,28 +6,94 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
-<body>
+<body class="dashboard">
 
-<p class="notice"><%= notice %></p>
-<p class="alert"><%= alert %></p>
+  <header class="primary-header">
+    <a href="#"><img class="primary-header__logo logo" src="<%= image_path "diverst-logo.svg" %>"></a>
+  </header>
 
-<% if employee_signed_in? %>
-  <em>Logged in as employee <strong><%= current_employee.email %></strong></em>
-<% end %>
-
-<header>
-  <nav>
-    <ul>
-      <li><%= link_to "Employee management", employees_path %></li>
-      <li><%= link_to "Enterprise settings", edit_enterprise_path(current_admin.enterprise) %></li>
-      <li><%= link_to "Logout", destroy_admin_session_path, method: :delete %></li>
-      <% if employee_signed_in? %><li><%= link_to "Logout employee", destroy_employee_session_path, method: :delete %></li><% end %>
-      <% unless employee_signed_in? %><li><%= link_to "Login as employee with SSO", sso_enterprise_saml_index_path(current_admin.enterprise) %></li><% end %>
+  <nav class="nav">
+    <ul class="nav__list nav__list--primary">
+      <li class="nav__item">
+        <a class="nav__link" href="#">
+          <span class="nav__icon icon icon--handshake"></span>
+          <span class="nav__text">Handshake</span>
+        </a>
+      </li>
+      <li class="nav__item">
+        <a class="nav__link nav__link--active" href="#">
+          <span class="nav__icon icon icon--coffee-talk"></span>
+          <span class="nav__text">Coffee Talk</span>
+        </a>
+      </li>
+      <li class="nav__item">
+        <a class="nav__link" href="#">
+          <span class="nav__icon icon icon--unify"></span>
+          <span class="nav__text">Unify</span>
+        </a>
+      </li>
+      <li class="nav__item">
+        <a class="nav__link" href="#">
+          <span class="nav__icon icon icon--harmonize"></span>
+          <span class="nav__text">Harmonize</span>
+        </a>
+      </li>
+      <li class="nav__item">
+        <a class="nav__link" href="#">
+          <span class="nav__icon icon icon--market-scope"></span>
+          <span class="nav__text">Market Scope</span>
+        </a>
+      </li>
+      <li class="nav__item">
+        <a class="nav__link" href="#">
+          <span class="nav__icon icon icon--strategy-talk"></span>
+          <span class="nav__text">Strategy Talk</span>
+        </a>
+      </li>
+    </ul>
+    <ul class="nav__list nav__list--secondary">
+      <li class="nav__item">
+        <a class="nav__link nav__link--active" href="#">
+          <span class="nav__text">Global Settings</span>
+        </a>
+      </li>
+      <li class="nav__item">
+        <a class="nav__link" href="#">
+          <span class="nav__text">Logout</span>
+        </a>
+      </li>
     </ul>
   </nav>
-</header>
 
-<%= yield %>
+  <header class="secondary-header">
+    <a href="#" class="secondary-header__tab">Metrics</a>
+    <a href="#" class="secondary-header__tab">Campaigns</a>
+    <a href="#" class="secondary-header__tab">Settings</a>
+    <a href="#" class="secondary-header__tab">Algorithm</a>
+  </header>
+
+  <div class="content">
+    <div class="content__inner">
+      <p class="notice"><%= notice %></p>
+      <p class="alert"><%= alert %></p>
+
+      <% if employee_signed_in? %>
+        <em>Logged in as employee <strong><%= current_employee.email %></strong></em>
+      <% end %>
+
+      <nav>
+        <ul>
+          <li><%= link_to "Employee management", employees_path %></li>
+          <li><%= link_to "Enterprise settings", edit_enterprise_path(current_admin.enterprise) %></li>
+          <li><%= link_to "Logout", destroy_admin_session_path, method: :delete %></li>
+          <% if employee_signed_in? %><li><%= link_to "Logout employee", destroy_employee_session_path, method: :delete %></li><% end %>
+          <% unless employee_signed_in? %><li><%= link_to "Login as employee with SSO", sso_enterprise_saml_index_path(current_admin.enterprise) %></li><% end %>
+        </ul>
+      </nav>
+
+      <%= yield %>
+    </div>
+  </div>
 
 </body>
 </html>

@@ -1,0 +1,48 @@
+// Card
+
+.card {
+  position: relative;
+  margin-bottom: $spacing-large;
+  border-radius: $border-radius;
+  background-color: $diverst-white;
+  @include drop-shadow;
+  @include transition(box-shadow $time $curve);
+}
+
+
+// Secondary
+
+.card--secondary {
+  background-color: mix($diverst-white, $diverst-background, 50%);
+}
+
+
+// Card section
+
+.card__section {
+  padding: $spacing-medium;
+
+  @include mq(medium) {
+    padding: $spacing-large;
+  }
+
+  & + &:not(.card__section--border) {
+    padding-top: 0;
+  }
+}
+
+.card__section--border {
+  border-bottom: 1px solid $diverst-border;
+
+  &:last-child {
+    border: 0;
+  }
+}
+
+
+// Scroll
+
+.card__section--scroll {
+  height: 320px;
+  overflow-y: scroll;
+}

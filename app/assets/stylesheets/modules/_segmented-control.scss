@@ -1,0 +1,43 @@
+// Segmented control
+
+.segmented-control {
+  display: inline-block;
+  vertical-align: middle;
+  @include clearfix;
+}
+
+.segmented-control__item {
+  @extend small;
+  display: block;
+  float: left;
+  padding: 0.25em 0.75em;
+  background-color: $diverst-white;
+  color: rgba($diverst-grey-light, 0.5);
+  border: 1px solid $diverst-border;
+
+  &--is-selected {
+    color: $diverst-white;
+    background-color: $diverst-purple;
+    border-color: $diverst-purple;
+  }
+
+  &:first-of-type {
+    border-right: 0;
+    border-radius: $border-radius 0 0 $border-radius;
+  }
+
+  &:last-of-type {
+    border-left: 0;
+    border-radius: 0 $border-radius $border-radius 0;
+  }
+}
+
+.segmented-control__label {
+  margin-left: $spacing-small;
+
+  &--left {
+    margin-left: 0;
+    margin-right: $spacing-small;
+    float: left;
+  }
+}

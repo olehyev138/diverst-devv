@@ -1,0 +1,24 @@
+// Slide in up
+
+@include keyframes(slide-in-up) {
+  0% {
+    @include transform(translate3d(0, 96px, 0));
+  }
+
+  100% {
+    @include transform(none);
+  }
+}
+
+
+// Slide in down
+
+@include keyframes(slide-in-down) {
+  0% {
+    @include transform(none);
+  }
+
+  100% {
+    @include transform(translate3d(0, 96px, 0));
+  }
+}

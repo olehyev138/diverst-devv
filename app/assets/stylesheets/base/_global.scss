@@ -1,0 +1,32 @@
+// Global
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background-color: $diverst-background;
+  color: $diverst-grey;
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+  color: $diverst-purple;
+  outline: 0;
+}
+
+.logo {
+  height: 28px;
+
+  @include mq(medium) {
+    height: 36px;
+  }
+}
