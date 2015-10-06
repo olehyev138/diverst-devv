@@ -1,0 +1,17 @@
+<h1><%= @segment.name %></h1>
+
+<h2>Rules</h2>
+
+<ul>
+  <% @segment.rules.each do |rule| %>
+    <li><%= rule.field.title %> <%= SegmentRule.operator_text(rule.operator) %> <%= JSON.parse(rule.values).join(', ') %></li>
+  <% end %>
+</ul>
+
+<h2>Members</h2>
+
+<ul>
+  <% @segment.members.each do |member| %>
+    <li><%= link_to member.name, member %></li>
+  <% end %>
+</ul>

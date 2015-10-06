@@ -47,13 +47,13 @@ class DateField < Field
 
   def validates_rule_for_employee?(rule:, employee:)
     case rule.operator
-    when GroupRule.operators[:equals]
+    when SegmentRule.operators[:equals]
       employee.info[rule.field] == rule.values_array[0].to_i
-    when GroupRule.operators[:greater_than]
+    when SegmentRule.operators[:greater_than]
       employee.info[rule.field] > rule.values_array[0].to_i
-    when GroupRule.operators[:lesser_than]
+    when SegmentRule.operators[:lesser_than]
       employee.info[rule.field] < rule.values_array[0].to_i
-    when GroupRule.operators[:is_not]
+    when SegmentRule.operators[:is_not]
       employee.info[rule.field] != rule.values_array[0].to_i
     end
   end

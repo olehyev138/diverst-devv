@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class GroupTest < ActiveSupport::TestCase
+class CacheSegmentMembersJobTest < ActiveJob::TestCase
   # test "the truth" do
   #   assert true
   # end

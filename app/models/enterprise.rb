@@ -3,7 +3,7 @@ class Enterprise < ActiveRecord::Base
   has_many :employees, inverse_of: :enterprise
   has_many :fields, inverse_of: :enterprise
   has_many :topics, inverse_of: :enterprise
-  has_many :groups
+  has_many :segments
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150923205208) do
+ActiveRecord::Schema.define(version: 20151006002014) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -80,9 +80,9 @@ ActiveRecord::Schema.define(version: 20150923205208) do
   add_index "employees", ["invited_by_id"], name: "index_employees_on_invited_by_id", using: :btree
   add_index "employees", ["reset_password_token"], name: "index_employees_on_reset_password_token", unique: true, using: :btree
 
-  create_table "employees_groups", force: :cascade do |t|
+  create_table "employees_segments", force: :cascade do |t|
     t.integer "employee_id", limit: 4
-    t.integer "group_id",    limit: 4
+    t.integer "segment_id",  limit: 4
   end
 
   create_table "enterprises", force: :cascade do |t|
@@ -114,22 +114,6 @@ ActiveRecord::Schema.define(version: 20150923205208) do
     t.boolean  "alternative_layout", limit: 1,     default: false
   end
 
-  create_table "group_rules", force: :cascade do |t|
-    t.integer  "group_id",   limit: 4
-    t.integer  "field_id",   limit: 4
-    t.integer  "operator",   limit: 4
-    t.string   "values",     limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-  end
-
-  create_table "groups", force: :cascade do |t|
-    t.integer  "enterprise_id", limit: 4
-    t.string   "name",          limit: 255
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-  end
-
   create_table "matches", force: :cascade do |t|
     t.integer  "user1_id",            limit: 4
     t.integer  "user2_id",            limit: 4
@@ -152,6 +136,32 @@ ActiveRecord::Schema.define(version: 20150923205208) do
     t.text     "content",      limit: 65535
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
+  end
+
+  create_table "polls", force: :cascade do |t|
+    t.string   "title",          limit: 255
+    t.text     "description",    limit: 65535
+    t.time     "start"
+    t.time     "end"
+    t.integer  "nb_invitations", limit: 4
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
+
+  create_table "segment_rules", force: :cascade do |t|
+    t.integer  "segment_id", limit: 4
+    t.integer  "field_id",   limit: 4
+    t.integer  "operator",   limit: 4
+    t.string   "values",     limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  create_table "segments", force: :cascade do |t|
+    t.integer  "enterprise_id", limit: 4
+    t.string   "name",          limit: 255
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
   create_table "topic_feedbacks", force: :cascade do |t|

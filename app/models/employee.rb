@@ -9,7 +9,7 @@ class Employee < ActiveRecord::Base
 
   belongs_to :enterprise, inverse_of: :employees
   has_many :devices
-  has_and_belongs_to_many :groups
+  has_and_belongs_to_many :segments
   has_many :topic_feedbacks
 
   before_validation :transfer_info_to_data
@@ -104,17 +104,17 @@ class Employee < ActiveRecord::Base
     end
   end
 
-  def is_part_of_group?(group)
-    part_of_group = true
+  def is_part_of_segment?(segment)
+    part_of_segment = true
 
-    group.rules.each do |rule|
+    segment.rules.each do |rule|
       unless rule.followed_by?(self)
-        part_of_group = false
+        part_of_segment = false
         break;
       end
     end
 
-    part_of_group
+    part_of_segment
   end
 
   # Sends a push notification to all of the user's devices

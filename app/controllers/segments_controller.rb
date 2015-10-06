@@ -1,20 +1,20 @@
-class GroupsController < ApplicationController
+class SegmentsController < ApplicationController
   before_action :authenticate_admin!
-  before_action :set_group, only: [:edit, :update, :destroy, :show]
+  before_action :set_segment, only: [:edit, :update, :destroy, :show]
   skip_before_action :verify_authenticity_token, only: [:create]
 
   def index
-    @groups = current_admin.enterprise.groups
+    @segments = current_admin.enterprise.segments
   end
 
   def new
-    @group = current_admin.enterprise.groups.new
+    @segment = current_admin.enterprise.segments.new
   end
 
   def create
-    @group = current_admin.enterprise.groups.new(group_params)
+    @segment = current_admin.enterprise.segments.new(segment_params)
 
-    if @group.save
+    if @segment.save
       redirect_to action: :index
     else
       render :edit
@@ -22,27 +22,27 @@ class GroupsController < ApplicationController
   end
 
   def update
-    if @group.update(group_params)
-      redirect_to @group
+    if @segment.update(segment_params)
+      redirect_to @segment
     else
       render :edit
     end
   end
 
   def destroy
-    @group.destroy
+    @segment.destroy
     redirect_to action: :index
   end
 
   protected
 
-  def set_group
-    @group = current_admin.enterprise.groups.find(params[:id])
+  def set_segment
+    @segment = current_admin.enterprise.segments.find(params[:id])
   end
 
-  def group_params
+  def segment_params
     params
-    .require(:group)
+    .require(:segment)
     .permit(
       :name,
       rules_attributes: [

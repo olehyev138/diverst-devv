@@ -1,9 +1,9 @@
-class GroupRule < ActiveRecord::Base
-  belongs_to :group
+class SegmentRule < ActiveRecord::Base
+  belongs_to :segment
   belongs_to :field
 
   before_save :remove_empty_values
-  after_save :update_group_members
+  after_save :update_segment_members
 
   @@operators = {
     equals: 0,
@@ -49,8 +49,8 @@ class GroupRule < ActiveRecord::Base
 
   protected
 
-  def update_group_members
-    group.update_cached_members
+  def update_segment_members
+    segment.update_cached_members
   end
 
   def remove_empty_values

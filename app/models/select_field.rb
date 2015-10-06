@@ -69,9 +69,9 @@ class SelectField < Field
 
   def validates_rule_for_employee?(rule:, employee:)
     case rule.operator
-    when GroupRule.operators[:contains_any_of]
+    when SegmentRule.operators[:contains_any_of]
      rule.values_array.include?(employee.info[rule.field])
-    when GroupRule.operators[:is_not]
+    when SegmentRule.operators[:is_not]
       !rule.values_array.include?(employee.info[rule.field])
     end
   end

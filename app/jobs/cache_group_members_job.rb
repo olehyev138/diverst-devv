@@ -1,18 +1,18 @@
-# Calculates the members of a group and cache them in the group's "members" association
+# Calculates the members of a segment and cache them in the segment's "members" association
 
-class CacheGroupMembersJob < ActiveJob::Base
+class CacheSegmentMembersJob < ActiveJob::Base
   queue_as :default
 
-  def perform(group)
-    fields = group.enterprise.fields
-    employees = group.enterprise.employees.all
+  def perform(segment)
+    fields = segment.enterprise.fields
+    employees = segment.enterprise.employees.all
 
     new_members = employees.select do |employee|
-      employee.is_part_of_group?(group)
+      employee.is_part_of_segment?(segment)
     end
 
-    group.members = new_members
+    segment.members = new_members
 
-    group.save
+    segment.save
   end
 end

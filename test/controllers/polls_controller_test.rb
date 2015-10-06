@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CacheGroupMembersJobJobTest < ActiveJob::TestCase
+class PollsControllerTest < ActionController::TestCase
   # test "the truth" do
   #   assert true
   # end

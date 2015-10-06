@@ -1,0 +1,9 @@
+<h1>ERGs</h1>
+
+<%= link_to "+ New ERG", new_segment_path %>
+
+<ul>
+  <% @segments.each do |segment| %>
+    <li><%= segment.name %> - <%= link_to "Show", segment_path(segment) %> - <%= link_to "Edit", edit_segment_path(segment) %> - <%= link_to "Delete", segment_path(segment), method: :delete %></li>
+  <% end %>
+</ul>

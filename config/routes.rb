@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :polls
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
 
@@ -28,7 +29,8 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :groups
+  resources :segments
+
   resources :topics do
     resources :topic_feedbacks, path: "feedbacks" do
       collection do
