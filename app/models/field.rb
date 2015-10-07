@@ -1,5 +1,6 @@
 class Field < ActiveRecord::Base
   belongs_to :enterprise, inverse_of: :fields
+  belongs_to :poll, inverse_of: :fields
 
   # The typical field value flow would look like this:
   #   FORM (input string)

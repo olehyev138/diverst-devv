@@ -1,0 +1,11 @@
+<h1><%= @poll.title %></h1>
+
+<p><%= @poll.description %></p>
+
+<h2>Fields</h2>
+
+<ul>
+  <% @poll.fields.each do |field| %>
+    <li><%= field.title %> (<%= field.type %>)</li>
+  <% end %>
+</ul>

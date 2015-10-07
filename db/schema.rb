@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151006191826) do
+ActiveRecord::Schema.define(version: 20151007150051) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -117,6 +117,12 @@ ActiveRecord::Schema.define(version: 20151006191826) do
     t.datetime "created_at",                                       null: false
     t.datetime "updated_at",                                       null: false
     t.boolean  "alternative_layout", limit: 1,     default: false
+    t.integer  "poll_id",            limit: 4
+  end
+
+  create_table "fields_polls", force: :cascade do |t|
+    t.integer "field_id", limit: 4
+    t.integer "poll_id",  limit: 4
   end
 
   create_table "groups", force: :cascade do |t|
@@ -125,6 +131,11 @@ ActiveRecord::Schema.define(version: 20151006191826) do
     t.text     "description",   limit: 65535
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
+  end
+
+  create_table "groups_polls", force: :cascade do |t|
+    t.integer "group_id", limit: 4
+    t.integer "poll_id",  limit: 4
   end
 
   create_table "matches", force: :cascade do |t|
@@ -151,14 +162,28 @@ ActiveRecord::Schema.define(version: 20151006191826) do
     t.datetime "updated_at",                 null: false
   end
 
+  create_table "poll_responses", force: :cascade do |t|
+    t.integer  "poll_id",     limit: 4
+    t.integer  "employee_id", limit: 4
+    t.text     "data",        limit: 65535
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
   create_table "polls", force: :cascade do |t|
     t.string   "title",          limit: 255
     t.text     "description",    limit: 65535
     t.time     "start"
     t.time     "end"
     t.integer  "nb_invitations", limit: 4
+    t.integer  "enterprise_id",  limit: 4
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
+  end
+
+  create_table "polls_segments", force: :cascade do |t|
+    t.integer "poll_id",    limit: 4
+    t.integer "segment_id", limit: 4
   end
 
   create_table "segment_rules", force: :cascade do |t|

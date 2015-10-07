@@ -6,6 +6,7 @@ class CreatePolls < ActiveRecord::Migration
       t.time :start
       t.time :end
       t.integer :nb_invitations
+      t.belongs_to :enterprise
 
       t.timestamps null: false
     end

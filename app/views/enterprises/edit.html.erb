@@ -1,17 +1,6 @@
 <h1>Employee fields</h1>
 <%= simple_form_for @enterprise do |f| %>
-  <div id="fields">
-    <%= f.simple_fields_for :fields do |field| %>
-      <%= render 'field_fields', f: field %>
-    <% end %>
-    <div class="link">
-      <%= link_to_add_association "Add text field", f, :fields, wrap_object: Proc.new { TextField.new } %>
-      <%= link_to_add_association "Add select field", f, :fields, wrap_object: Proc.new { SelectField.new } %>
-      <%= link_to_add_association "Add checkbox field", f, :fields, wrap_object: Proc.new { CheckboxField.new } %>
-      <%= link_to_add_association "Add numeric field", f, :fields, wrap_object: Proc.new { NumericField.new } %>
-      <%= link_to_add_association "Add date field", f, :fields, wrap_object: Proc.new { DateField.new } %>
-    </div>
-  </div>
+  <%= render "shared/fields/creation/custom_fields", f: f %>
 
   <br><br>
 

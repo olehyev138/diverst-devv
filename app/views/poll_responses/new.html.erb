@@ -1,0 +1,11 @@
+<h1>Poll response</h1>
+<p><%= @poll.description %></p>
+
+
+<%= simple_form_for [@poll, @response] do |f| %>
+  <% @poll.fields.each do |cf| %>
+    <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: Employee.first %>
+  <% end %>
+
+  <%= f.button :submit %>
+<% end %>

@@ -1,0 +1,15 @@
+<%= simple_form_for @poll do |f| %>
+  <%= f.input :title %>
+  <%= f.input :description %>
+  <%= f.association :groups, input_html: { class: "select2" } %>
+  <%= f.association :segments, input_html: { class: "select2" } %>
+
+  <h2>Fields</h2>
+  <%= render "shared/fields/creation/custom_fields", f: f %>
+
+  <%= f.button :submit %>
+<% end %>
+
+<script>
+  $('.select2').select2();
+</script>

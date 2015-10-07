@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  resources :groups
-  resources :polls
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
 
@@ -26,6 +24,16 @@ Rails.application.routes.draw do
         post :acs
         get :metadata
         get :logout
+      end
+    end
+  end
+
+  resources :groups
+
+  resources :polls do
+    resources :poll_responses, path: "responses" do
+      member do
+        get 'thank_you'
       end
     end
   end

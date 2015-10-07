@@ -1,0 +1,9 @@
+<h1>Polls</h1>
+
+<%= link_to "+ New Poll", new_poll_path %>
+
+<ul>
+  <% @polls.each do |poll| %>
+    <li><%= poll.title %> (<%= pluralize poll.fields.count, "question" %>) - <%= link_to "Show", poll_path(poll) %> - <%= link_to "Edit", edit_poll_path(poll) %> - <%= link_to "Delete", poll_path(poll), method: :delete %></li>
+  <% end %>
+</ul>

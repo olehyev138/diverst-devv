@@ -11,6 +11,7 @@ class Employee < ActiveRecord::Base
   has_many :devices
   has_and_belongs_to_many :segments
   has_many :topic_feedbacks
+  has_many :poll_responses
 
   before_validation :transfer_info_to_data
   before_validation :generate_password_if_saml

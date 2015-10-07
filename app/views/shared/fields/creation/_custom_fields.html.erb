@@ -1,0 +1,12 @@
+<div id="fields">
+  <%= f.simple_fields_for :fields do |field| %>
+    <%= render 'shared/fields/creation/field_fields', f: field %>
+  <% end %>
+  <div class="link">
+    <%= link_to_add_association "Add text field", f, :fields, wrap_object: Proc.new { TextField.new }, partial: "shared/fields/creation/field_fields" %>
+    <%= link_to_add_association "Add select field", f, :fields, wrap_object: Proc.new { SelectField.new }, partial: "shared/fields/creation/field_fields" %>
+    <%= link_to_add_association "Add checkbox field", f, :fields, wrap_object: Proc.new { CheckboxField.new }, partial: "shared/fields/creation/field_fields" %>
+    <%= link_to_add_association "Add numeric field", f, :fields, wrap_object: Proc.new { NumericField.new }, partial: "shared/fields/creation/field_fields" %>
+    <%= link_to_add_association "Add date field", f, :fields, wrap_object: Proc.new { DateField.new }, partial: "shared/fields/creation/field_fields" %>
+  </div>
+</div>

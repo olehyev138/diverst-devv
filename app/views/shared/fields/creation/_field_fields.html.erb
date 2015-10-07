@@ -1,0 +1,15 @@
+<div class="nested-fields">
+  <%= render 'shared/fields/creation/text_field', f: f if f.object.type == 'TextField' %>
+  <%= render 'shared/fields/creation/select_field', f: f if f.object.type == 'SelectField' %>
+  <%= render 'shared/fields/creation/checkbox_field', f: f if f.object.type == 'CheckboxField' %>
+  <%= render 'shared/fields/creation/numeric_field', f: f if f.object.type == 'NumericField' %>
+  <%= render 'shared/fields/creation/date_field', f: f if f.object.type == 'DateField' %>
+
+  <%= f.input :gamification_value %>
+  <%= f.input :show_on_vcard %>
+  <%= f.input :saml_attribute %>
+  <%= f.hidden_field :type %>
+
+  <%= link_to_remove_association "remove", f %>
+  <br><br>
+</div>
