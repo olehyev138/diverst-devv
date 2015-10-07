@@ -3,6 +3,9 @@
 @import
 "bourbon";
 
+@import
+"select2.css";
+
 
 // Partials
 
@@ -50,7 +53,3 @@
 "layout/_header",
 "layout/_main",
 "layout/_nav";
-
-.operator, .values, .multi-select {
-  display: none;
-}

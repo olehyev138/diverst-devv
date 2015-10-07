@@ -1,7 +1,7 @@
-class CreateGroupRules < ActiveRecord::Migration
+class CreatSegmentRules < ActiveRecord::Migration
   def change
-    create_table :group_rules do |t|
-      t.belongs_to :group
+    create_table :segment_rules do |t|
+      t.belongs_to :segment
 
       t.belongs_to :field
       t.integer :operator

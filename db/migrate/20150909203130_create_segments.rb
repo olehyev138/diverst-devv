@@ -1,6 +1,6 @@
-class CreateGroups < ActiveRecord::Migration
+class CreateSegments < ActiveRecord::Migration
   def change
-    create_table :groups do |t|
+    create_table :segments do |t|
       t.belongs_to :enterprise
       t.string :name
 
