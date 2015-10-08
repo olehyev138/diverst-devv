@@ -6,6 +6,7 @@ class Employee < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable, :async
 
   include DeviseTokenAuth::Concerns::User
+  include ContainsFields
 
   belongs_to :enterprise, inverse_of: :employees
   has_many :devices
@@ -13,29 +14,11 @@ class Employee < ActiveRecord::Base
   has_many :topic_feedbacks
   has_many :poll_responses
 
-  before_validation :transfer_info_to_data
   before_validation :generate_password_if_saml
-  after_initialize :set_info
   after_create :assign_firebase_token
-
-  attr_accessor :info
 
   def name
     "#{self.first_name} #{self.last_name}"
-  end
-
-  def merge_info(custom_fields)
-    return if !custom_fields
-
-    self.enterprise.fields.each do |field|
-      new_value = custom_fields[field.id.to_s]
-
-      if new_value.nil?
-        self.info[field] = nil
-      else
-        self.info[field] = custom_fields[field.id.to_s]
-      end
-    end
   end
 
   def set_info_from_saml(nameid, attrs, enterprise)

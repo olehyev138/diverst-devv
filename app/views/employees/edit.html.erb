@@ -3,8 +3,8 @@
 <%= simple_form_for @employee do |f| %>
   <%= f.input :email %>
 
-  <% current_admin.enterprise.fields.each do |cf| %>
-    <%= render "shared/custom_field", cf: cf, f: f, resource: @employee %>
+  <% @employee.enterprise.fields.each do |cf| %>
+    <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: @employee %>
   <% end %>
 
   <p><%= f.submit "Save" %></p>

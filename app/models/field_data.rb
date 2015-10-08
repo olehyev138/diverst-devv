@@ -10,4 +10,12 @@ module FieldData
       nil
     end
   end
+
+  def merge(fields:, form_data:)
+    return if !form_data
+
+    fields.each do |field|
+      self[field] = form_data[field.id.to_s]
+    end
+  end
 end

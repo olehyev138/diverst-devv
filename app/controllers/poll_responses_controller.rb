@@ -19,7 +19,7 @@ class PollResponsesController < ApplicationController
     # TODO: merge_params here!
 
     if @response.save
-      redirect_to action: :thank_you
+      redirect_to action: :thank_you, poll_id: @poll.id, id: @response.id
     else
       render :edit
     end
@@ -36,6 +36,9 @@ class PollResponsesController < ApplicationController
   def destroy
     @response.destroy
     redirect_to action: :index
+  end
+
+  def thank_you
   end
 
   protected

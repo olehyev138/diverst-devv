@@ -13,7 +13,7 @@ class EmployeesController < ApplicationController
 
   def update
     @employee.assign_attributes(employee_params)
-    @employee.merge_info(params['custom-fields'])
+    @employee.info.merge(fields: @employee.enterprise.fields, form_data: params['custom-fields'])
 
     if @employee.save
       redirect_to @employee
