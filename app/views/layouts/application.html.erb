@@ -85,6 +85,7 @@
         <ul>
           <li><%= link_to "Employee management", employees_path %></li>
           <li><%= link_to "Enterprise settings", edit_enterprise_path(current_admin.enterprise) %></li>
+          <li><%= link_to "Polls", polls_path %></li>
           <li><%= link_to "Logout", destroy_admin_session_path, method: :delete %></li>
           <% if employee_signed_in? %><li><%= link_to "Logout employee", destroy_employee_session_path, method: :delete %></li><% end %>
           <% unless employee_signed_in? %><li><%= link_to "Login as employee with SSO", sso_enterprise_saml_index_path(current_admin.enterprise) %></li><% end %>
