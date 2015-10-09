@@ -2,6 +2,7 @@
   "name": "dsl-generated dependencies",
   "dependencies": {
     "jquery": "latest",
-    "select2": "latest"
+    "select2": "latest",
+    "highcharts": "latest"
   }
 }

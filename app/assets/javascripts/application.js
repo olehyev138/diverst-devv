@@ -15,6 +15,7 @@
 //= require turbolinks
 //= require cocoon
 //= require select2
+//= require highcharts
 //= require_tree .
 
 $(document).on('page:change', function() {

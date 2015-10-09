@@ -14,9 +14,9 @@ class PollResponsesController < ApplicationController
   end
 
   def create
-    @response = @poll.responses.new()
-
-    # TODO: merge_params here!
+    @response = @poll.responses.new
+    @response.info.merge(fields: @response.poll.fields, form_data: params["custom-fields"])
+    @response.employee = current_employee
 
     if @response.save
       redirect_to action: :thank_you, poll_id: @poll.id, id: @response.id

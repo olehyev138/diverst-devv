@@ -51,4 +51,19 @@ class NumericField < Field
       employee.info[rule.field] != rule.values_array[0].to_i
     end
   end
+
+  def stats_in(entries)
+    values = entries.map do |entry|
+      entry.info[self]
+    end
+
+    values.compact!
+
+    {
+      min: values.min,
+      max: values.max,
+      mean: values.mean,
+      median: values.median
+    }
+  end
 end

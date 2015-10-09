@@ -36,6 +36,12 @@ Rails.application.routes.draw do
         get 'thank_you'
       end
     end
+
+    resources :poll_fields, path: "fields" do
+      member do
+        get 'answer_popularities'
+      end
+    end
   end
 
   resources :segments

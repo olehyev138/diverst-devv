@@ -117,20 +117,8 @@ class Employee < ActiveRecord::Base
 
   protected
 
-  def set_info
-    self.data = "{}" if self.data.nil?
-    json_hash = JSON.parse(self.data)
-    self.info = Hash[json_hash.map{|k,v|[ k.to_i, v ]}] # Convert the hash keys to integers since they're strings after JSON parsing
-    self.info.extend(FieldData)
-  end
-
   # Generate a random password if the user is using SAML
   def generate_password_if_saml
     self.password = self.password_confirmation = SecureRandom.urlsafe_base64 if self.auth_source == "saml" && self.new_record?
-  end
-
-  # Called before validation to presist the (maybe) edited info object in the DB
-  def transfer_info_to_data
-    self.data = JSON.generate self.info
   end
 end

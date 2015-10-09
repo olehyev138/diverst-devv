@@ -6,6 +6,35 @@ module Optionnable
     attr_accessor :options
   end
 
+  def answer_popularities(entries: entries)
+    answer_counts = {}
+
+    options.each do |option|
+      answer_counts[option] = 0
+    end
+
+    entries.each do |entry|
+      value = entry.info[self]
+
+      if answer_counts[value]
+        answer_counts[value] += 1
+      else
+        answer_counts[value] = 0
+      end
+    end
+
+    # Export a beter formatted version
+    answer_counts_formatted = []
+    answer_counts.each do |answer, count|
+      answer_counts_formatted << {
+        answer: answer,
+        count: count
+      }
+    end
+
+    answer_counts_formatted
+  end
+
   protected
 
   def set_options_array
