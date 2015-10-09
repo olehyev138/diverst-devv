@@ -34,7 +34,7 @@ class ConversationsController < ApplicationController
   end
 
   def leave
-    return render json: {message: "Rating must be from 1 to 5"}, status: 400 unless !params[:rating] || params[:rating].between?(1,5)
+    return render json: {message: "Rating must be from 1 to 5"}, status: 400 if params[:rating] && !params[:rating].between?(1,5)
     return render json: {message: "Rating is already set"}, status: 400 if params[:rating] && !@match.rating_for(current_employee).nil?
 
     @match.set_status(employee: current_employee, status: Match.status[:left])

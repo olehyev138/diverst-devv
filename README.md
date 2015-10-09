@@ -48,13 +48,31 @@ The conversation list and its associated CRUD operations are managed by the API,
 
 Returns the list of active conversations (matches that have been accepted by both users and initialised into Firebase conversations). The `saved` attribute defines if the conversation has been opted in by both people or not yet.
 
-### DELETE /conversations/:id
-
-Archives a conversation and notifies the other user that he's been ditched.
-
 ### PUT /conversations/:id/opt_in
 
 Opts in to a conversation (makes it permanent). Users have to opt in or out of conversations or else they get deleted after x days. It's like a trial to see if you connect well with the other person. You also rate your interaction with the other from 1 to 5.
+
+**Request parameters**
+```json
+{
+  "rating": 5
+}
+```
+
+### PUT /conversations/:id/leave
+
+Leave a conversation during a trial. You need to rate the user you were trying out even though you're opting out.
+
+### DELETE /conversations/:id
+
+Leave a conversation that is already saved (both have opted in). It will notify the other user that he's been ditched.
+
+**Request parameters**
+```json
+{
+  "rating": 1
+}
+```
 
 ### Firebase
 
@@ -80,24 +98,6 @@ Here is an example of a conversation object in Firebase that shows the desired s
 ```
 
 To store the send date/time of a message, use Firebase's [server timestamps](https://www.firebase.com/docs/ios/guide/offline-capabilities.html#section-latency).
-
-**Request parameters**
-```json
-{
-  "rating": 5
-}
-```
-
-### PUT /conversations/:id/leave
-
-Leave a conversation (either right after a trial or after having opted in). If it's right after the trial, you leave a rating too, but if you're just leaving the conversation, don't pass any parameter.
-
-**Request parameters**
-```json
-{
-  "rating": 1
-}
-```
 
 ## Devices
 
