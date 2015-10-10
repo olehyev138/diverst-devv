@@ -6,7 +6,7 @@ module Optionnable
     attr_accessor :options
   end
 
-  def answer_popularities(entries: entries)
+  def answer_popularities(entries:)
     answer_counts = {}
 
     options.each do |option|
@@ -23,7 +23,7 @@ module Optionnable
       end
     end
 
-    # Export a beter formatted version
+    # Export a better formatted version
     answer_counts_formatted = []
     answer_counts.each do |answer, count|
       answer_counts_formatted << {
