@@ -6,6 +6,10 @@ module Optionnable
     attr_accessor :options
   end
 
+  def serialize_value(value)
+    Array(value)
+  end
+
   def answer_popularities(entries:)
     answer_counts = {}
 
@@ -14,12 +18,14 @@ module Optionnable
     end
 
     entries.each do |entry|
-      value = entry.info[self]
+      values = entry.info[self]
 
-      if answer_counts[value]
-        answer_counts[value] += 1
-      else
-        answer_counts[value] = 0
+      values.each do |value|
+        if answer_counts[value]
+          answer_counts[value] += 1
+        else
+          answer_counts[value] = 0
+        end
       end
     end
 

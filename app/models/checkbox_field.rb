@@ -1,13 +1,9 @@
 class CheckboxField < Field
   include Optionnable
 
-  def serialize_value(value)
-    Array(value)
-  end
-
-  def string_value(value)
-    return "-" if !value
-    value.join(', ')
+  def string_value(values)
+    return "-" if !values
+    values.join(', ')
   end
 
   def popularity_for_no_option(employees)
