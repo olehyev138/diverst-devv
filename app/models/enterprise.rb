@@ -35,6 +35,6 @@ class Enterprise < ActiveRecord::Base
   end
 
   def update_matches
-    self.employees.each(&:update_match_scores)
+    GenerateEnterpriseMatchesJob.perform_later self
   end
 end
