@@ -43,8 +43,8 @@ nb_employees.times do |i|
     password_confirmation: password
   )
 
-  employee.info[age_field] = Faker::Number.between(18, 65)
   employee.info[title_field] = Faker::Name.title
+  employee.info[birth_field] = Faker::Date.between(60.years.ago, 18.years.ago)
 
   # Have a chance to pick a random disability
   if rand(100) < 2
