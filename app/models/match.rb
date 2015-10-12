@@ -140,7 +140,7 @@ class Match < ActiveRecord::Base
   end
 
   # Picks a random topic that hasn't been answered by neither of the match's users
-  def associate_topic!
+  def associate_topic
     unanswered_topics = Topic.unanswered_for_both(user1, user2)
     offset = rand(unanswered_topics.count)
     self.topic = unanswered_topics.offset(offset).first

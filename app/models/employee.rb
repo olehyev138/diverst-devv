@@ -95,7 +95,7 @@ class Employee < ActiveRecord::Base
     segment.rules.each do |rule|
       unless rule.followed_by?(self)
         part_of_segment = false
-        break;
+        break
       end
     end
 

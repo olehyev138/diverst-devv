@@ -120,11 +120,6 @@ ActiveRecord::Schema.define(version: 20151007150051) do
     t.integer  "poll_id",            limit: 4
   end
 
-  create_table "fields_polls", force: :cascade do |t|
-    t.integer "field_id", limit: 4
-    t.integer "poll_id",  limit: 4
-  end
-
   create_table "groups", force: :cascade do |t|
     t.integer  "enterprise_id", limit: 4
     t.string   "name",          limit: 255

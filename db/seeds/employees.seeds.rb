@@ -92,3 +92,15 @@ nb_employees.times do |i|
     pp(employee.errors.messages)
   end
 end
+
+e1 = Employee.first
+e2 = Employee.second
+
+e1.update(email: "frank@diverst.com", password: "password", password_confirmation: "password")
+e2.update(email: "andre@diverst.com", password: "password", password_confirmation: "password")
+
+e1.info[gender_field] = "Female"
+e2.info[gender_field] = "Female"
+
+e1.save
+e2.save

@@ -1,7 +1,7 @@
 10.times do |i|
   g = Enterprise.first.groups.new(
     name: Faker::Commerce.color.capitalize,
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    description: Faker::Lorem.sentence
   )
 
   Employee.all.each do |employee|
@@ -15,3 +15,6 @@
     pp(g.errors.messages)
   end
 end
+
+Enterprise.first.groups.first.members << Enterprise.first.employees.first
+Enterprise.first.groups.first.members << Enterprise.first.employees.second

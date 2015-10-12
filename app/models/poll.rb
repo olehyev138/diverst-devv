@@ -24,8 +24,6 @@ class Poll < ActiveRecord::Base
     employees.where(id => employee.id).count > 0
   end
 
-  protected
-
   def send_invitation_emails
     self.employees.each do |employee|
       PollMailer.delay.invitation(self, employee)
