@@ -5,7 +5,7 @@ class ConversationsController < ApplicationController
   serialization_scope :current_employee
 
   def index
-    render json: current_employee.matches.not_archived.accepted, each_serializer: ConversationSerializer
+    render json: current_employee.matches.conversations.not_archived, each_serializer: ConversationSerializer
   end
 
   def destroy
