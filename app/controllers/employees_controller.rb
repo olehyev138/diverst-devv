@@ -2,6 +2,8 @@ class EmployeesController < ApplicationController
   before_action :authenticate_admin!
   before_action :set_employee, only: [:edit, :update, :destroy, :show]
 
+  layout "global_settings"
+
   def index
     @employees = current_admin.enterprise.employees
 

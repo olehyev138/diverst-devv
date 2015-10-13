@@ -2,6 +2,8 @@ class TopicsController < ApplicationController
   before_action :authenticate_admin!
   before_action :set_topic, only: [:edit, :update, :destroy, :show]
 
+  layout "handshake"
+
   def index
     @topics = current_admin.enterprise.topics
   end

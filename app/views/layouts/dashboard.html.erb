@@ -15,10 +15,10 @@
   <nav class="nav">
     <ul class="nav__list nav__list--primary">
       <li class="nav__item">
-        <a class="nav__link" href="#">
+        <%= active_link_to topics_path, class: "nav__link", class_active: "nav__link--is-selected" do %>
           <span class="nav__icon icon icon--handshake"></span>
           <span class="nav__text">Handshake</span>
-        </a>
+        <% end %>
       </li>
       <li class="nav__item">
         <a class="nav__link nav__link--active" href="#">
@@ -33,43 +33,28 @@
         </a>
       </li>
       <li class="nav__item">
-        <a class="nav__link" href="#">
-          <span class="nav__icon icon icon--harmonize"></span>
-          <span class="nav__text">Harmonize</span>
-        </a>
-      </li>
-      <li class="nav__item">
-        <a class="nav__link" href="#">
+        <%= active_link_to polls_path, class: "nav__link", class_active: "nav__link--is-selected" do %>
           <span class="nav__icon icon icon--market-scope"></span>
           <span class="nav__text">Market Scope</span>
-        </a>
-      </li>
-      <li class="nav__item">
-        <a class="nav__link" href="#">
-          <span class="nav__icon icon icon--strategy-talk"></span>
-          <span class="nav__text">Strategy Talk</span>
-        </a>
+        <% end %>
       </li>
     </ul>
     <ul class="nav__list nav__list--secondary">
       <li class="nav__item">
-        <a class="nav__link nav__link--active" href="#">
+        <%= active_link_to groups_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['groups', 'segments', 'enterprises', 'admins', 'employees'], []] do %>
           <span class="nav__text">Global Settings</span>
-        </a>
+        <% end %>
       </li>
       <li class="nav__item">
-        <a class="nav__link" href="#">
+        <%= link_to destroy_admin_session_path, method: :delete, class: "nav__link" do %>
           <span class="nav__text">Logout</span>
-        </a>
+        <% end %>
       </li>
     </ul>
   </nav>
 
   <header class="secondary-header">
-    <a href="#" class="secondary-header__tab">Metrics</a>
-    <a href="#" class="secondary-header__tab">Campaigns</a>
-    <a href="#" class="secondary-header__tab">Settings</a>
-    <a href="#" class="secondary-header__tab">Algorithm</a>
+    <%= yield :secondary_nav %>
   </header>
 
   <div class="content">
@@ -79,18 +64,9 @@
 
       <% if employee_signed_in? %>
         <em>Logged in as employee <strong><%= current_employee.email %></strong></em>
+      <% else %>
+        <em><%= link_to "Login as employee with SSO", sso_enterprise_saml_index_path(current_admin.enterprise) %></em><br><br>
       <% end %>
-
-      <nav>
-        <ul>
-          <li><%= link_to "Employee management", employees_path %></li>
-          <li><%= link_to "Enterprise settings", edit_enterprise_path(current_admin.enterprise) %></li>
-          <li><%= link_to "Polls", polls_path %></li>
-          <li><%= link_to "Logout", destroy_admin_session_path, method: :delete %></li>
-          <% if employee_signed_in? %><li><%= link_to "Logout employee", destroy_employee_session_path, method: :delete %></li><% end %>
-          <% unless employee_signed_in? %><li><%= link_to "Login as employee with SSO", sso_enterprise_saml_index_path(current_admin.enterprise) %></li><% end %>
-        </ul>
-      </nav>
 
       <%= yield %>
     </div>

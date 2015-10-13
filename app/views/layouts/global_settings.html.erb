@@ -1,0 +1,10 @@
+<% content_for :secondary_nav do %>
+  <%= active_link_to "ERGs", groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to "Segments", segments_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to "Auth", edit_auth_enterprise_path(current_admin.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to "Employees", employees_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to "Admins", admins_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to "Fields", edit_fields_enterprise_path(current_admin.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+<% end %>
+
+<%= render template: "layouts/dashboard" %>

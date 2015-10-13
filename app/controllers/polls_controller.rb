@@ -2,6 +2,8 @@ class PollsController < ApplicationController
   before_action :authenticate_admin!
   before_action :set_poll, only: [:edit, :update, :destroy, :show]
 
+  layout "market_scope"
+
   def index
     @polls = current_admin.enterprise.polls
   end

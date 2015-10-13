@@ -26,6 +26,12 @@ Rails.application.routes.draw do
         get :logout
       end
     end
+
+    member do
+      get 'edit_auth'
+      get 'edit_fields'
+      get 'edit_algo'
+    end
   end
 
   resources :groups

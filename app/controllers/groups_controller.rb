@@ -3,6 +3,8 @@ class GroupsController < ApplicationController
   before_action :set_group, only: [:edit, :update, :destroy, :show]
   skip_before_action :verify_authenticity_token, only: [:create]
 
+  layout "global_settings"
+
   def index
     @groups = current_admin.enterprise.groups
   end

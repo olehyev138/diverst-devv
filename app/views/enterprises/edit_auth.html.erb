@@ -1,0 +1,9 @@
+<%= simple_form_for @enterprise do |f| %>
+  <%= f.input :has_enabled_saml, label: "Enable SAML?" %>
+  <%= f.input :idp_entity_id, label: "IdP Metadata URL" %>
+  <%= f.input :idp_sso_target_url, label: "Login URL" %>
+  <%= f.input :idp_slo_target_url, label: "Logout URL" %>
+  <%= f.input :idp_cert, label: "Certificate" %>
+
+  <%= f.submit "Save SSO settings" %>
+<% end %>

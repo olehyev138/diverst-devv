@@ -1,6 +1,8 @@
 class EnterprisesController < ApplicationController
   before_action :authenticate_admin!
-  before_action :set_enterprise, only: [:edit, :update, :delete]
+  before_action :set_enterprise, only: [:edit, :edit_auth, :edit_fields, :edit_algo, :update, :delete]
+
+  layout :resolve_layout
 
   def index
     @enterprises = Enterprise.all
@@ -19,6 +21,15 @@ class EnterprisesController < ApplicationController
   end
 
   protected
+
+  def resolve_layout
+    case action_name
+    when "edit_algo"
+      "handshake"
+    else
+      "global_settings"
+    end
+  end
 
   def set_enterprise
     @enterprise = Enterprise.find(params[:id])

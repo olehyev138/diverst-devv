@@ -3,6 +3,8 @@ class SegmentsController < ApplicationController
   before_action :set_segment, only: [:edit, :update, :destroy, :show]
   skip_before_action :verify_authenticity_token, only: [:create]
 
+  layout "global_settings"
+
   def index
     @segments = current_admin.enterprise.segments
   end
