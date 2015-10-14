@@ -7,7 +7,7 @@ class Employees::InvitationsController < Devise::InvitationsController
   def invite_resource
     resource_class.invite!(invite_params, current_inviter) do |invitable|
       invitable.enterprise = current_inviter.enterprise
-      invitable.merge_info(params['custom-fields'])
+      invitable.info.merge(fields: invitable.enterprise.fields, form_data: params['custom-fields'])
       invitable.auth_source = "manual"
       invitable.save!
     end
@@ -16,7 +16,7 @@ class Employees::InvitationsController < Devise::InvitationsController
   # After the vCard is filled out and submitted
   def accept_resource
     resource = resource_class.accept_invitation!(update_resource_params)
-    resource.merge_info(params['custom-fields'])
+    resource.info.merge(fields: resource.enterprise.fields, form_data: params['custom-fields'])
 
     resource.save
     resource

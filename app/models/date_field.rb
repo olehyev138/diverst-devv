@@ -5,7 +5,7 @@ class DateField < Field
   end
 
   def process_field_value(value)
-    Time.strptime("10/15/2013", "%m/%d/%Y")
+    Time.strptime(value, "%m/%d/%Y")
   end
 
   def deserialize_value(value)

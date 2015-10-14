@@ -5,14 +5,19 @@
   <%= f.hidden_field :invitation_token %>
 
   <% resource.class.invite_key_fields.each do |field| -%>
-    <%= f.input :email %>
 
-    <br>
-
-    <% resource.enterprise.fields.select(&:show_on_vcard).sort_by(&:gamification_value).each do |cf| %>
-      <%= render "shared/custom_field", cf: cf, f: f, resource: resource %>
-    <% end %>
   <% end -%>
+
+  <div class="field">
+    <label>Ben oui choose dont tes ERGs mon homme</label>
+    <% resource.enterprise.groups.each do |group| %>
+      <label class="control">
+        <%= check_box_tag "groups[#{group.id}][]", group.id, false, class: "control__input" %>
+        <span class="control__indicator control__indicator--checkbox"></span>
+        <span class="control__label"><%= group.name %></span>
+      </label>
+    <% end %>
+  </div>
 
   <br>
 

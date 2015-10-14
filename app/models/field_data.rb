@@ -15,7 +15,7 @@ module FieldData
     return if !form_data
 
     fields.each do |field|
-      self[field] = form_data[field.id.to_s]
+      self[field] = field.process_field_value form_data[field.id.to_s]
     end
   end
 end
