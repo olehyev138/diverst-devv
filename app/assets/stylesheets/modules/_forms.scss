@@ -114,7 +114,8 @@ select {
 
 // Field Label
 
-.field__label {
+.field__label,
+.field label {
   display: block;
   margin-bottom: $spacing-small;
   @extend small;
