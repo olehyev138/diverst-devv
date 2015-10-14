@@ -1,9 +1,21 @@
-<h1>Topics</h1>
+<div class="content__header">
+  <h1>Topics</h1>
+  <%= link_to "Add a topic", new_topic_path, class: "btn btn--primary" %>
+</div>
 
-<%= link_to "+Add a topic", new_topic_path %>
-
-<ul>
-  <% @topics.each do |topic| %>
-    <li><%= topic.statement %> - <%= link_to "Details", topic_path(topic) %> - <%= link_to "Edit", edit_topic_path(topic) %> - <%= link_to "Delete", topic_path(topic), method: :delete %></li>
-  <% end %>
-</ul>
+<div class="content__main">
+  <div class="card">
+    <% @topics.each do |topic| %>
+      <div class="card__section card__section--border">
+        <div class="flex-row">
+          <div class="flex-row__cell flex-row__cell--grow"><%= topic.statement %></div>
+          <div class="flex-row__cell">
+            <%= link_to "Details", topic_path(topic), class: "accent" %>
+            <%= link_to "Edit", edit_topic_path(topic), class: "muted" %>
+            <%= link_to "Delete", topic_path(topic), method: :delete, class: "error" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

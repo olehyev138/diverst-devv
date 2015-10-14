@@ -1,9 +1,21 @@
-<h1>Groups</h1>
+<div class="content__header">
+  <h1>Groups</h1>
+  <%= link_to "New Group", new_group_path, class: "btn btn--primary" %>
+</div>
 
-<%= link_to "+ New Group", new_group_path %>
-
-<ul>
-  <% @groups.each do |group| %>
-    <li><%= group.name %> (<%= pluralize group.members.count, "member" %>) - <%= link_to "Show", group_path(group) %> - <%= link_to "Edit", edit_group_path(group) %> - <%= link_to "Delete", group_path(group), method: :delete %></li>
-  <% end %>
-</ul>
+<div class="content__main">
+  <div class="card">
+    <% @groups.each do |group| %>
+      <div class="card__section card__section--border">
+        <div class="flex-row">
+          <div class="flex-row__cell flex-row__cell--grow"><%= group.name %> (<%= pluralize group.members.count, "member" %>)</div>
+          <div class="flex-row__cell">
+            <%= link_to "Details", group_path(group), class: "accent" %>
+            <%= link_to "Edit", edit_group_path(group), class: "muted" %>
+            <%= link_to "Delete", group_path(group), method: :delete, class: "error" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

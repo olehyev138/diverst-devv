@@ -1,9 +1,21 @@
-<h1>Segments</h1>
+<div class="content__header">
+  <h1>Segments</h1>
+  <%= link_to "+ New Segment", new_segment_path, class: "btn btn--primary" %>
+</div>
 
-<%= link_to "+ New Segment", new_segment_path %>
-
-<ul>
-  <% @segments.each do |segment| %>
-    <li><%= segment.name %> - <%= link_to "Show", segment_path(segment) %> - <%= link_to "Edit", edit_segment_path(segment) %> - <%= link_to "Delete", segment_path(segment), method: :delete %></li>
-  <% end %>
-</ul>
+<div class="content__main">
+  <div class="card">
+    <% @segments.each do |segment| %>
+      <div class="card__section card__section--border">
+        <div class="flex-row">
+          <div class="flex-row__cell flex-row__cell--grow"><%= segment.name %></div>
+          <div class="flex-row__cell">
+            <%= link_to "Details", segment_path(segment), class: "accent" %>
+            <%= link_to "Edit", edit_segment_path(segment), class: "muted" %>
+            <%= link_to "Delete", segment_path(segment), method: :delete, class: "error" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
