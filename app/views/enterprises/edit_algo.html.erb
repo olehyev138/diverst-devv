@@ -1,11 +1,21 @@
-<%= simple_form_for @enterprise do |f| %>
-  <%= f.simple_fields_for :fields do |field| %>
-    <strong><%= field.object.title %></strong>
-    <%= field.input :match_exclude %>
-    <%= field.input :match_weight %>
-    <%= field.input :match_polarity %>
-    <br>
-  <% end %>
+<div class="content__header">
+  <h1>Algorithm</h1>
+</div>
 
-  <%= f.submit "Save algo settings" %>
-<% end %>
+<div class="content__main">
+  <div class="card">
+    <%= simple_form_for @enterprise do |f| %>
+      <%= f.simple_fields_for :fields do |field| %>
+        <div class="card__section card__section--border">
+          <div class="flex-row flex-row--baseline">
+            <div class="flex-row__cell"><strong><%= field.object.title %></strong></div>
+            <div class="flex-row__cell"><%= field.input :match_exclude %></div>
+            <div class="flex-row__cell"><%= field.input :match_polarity %></div>
+            <div class="flex-row__cell flex-row__cell--grow"><%= field.input :match_weight %></div>
+          </div>
+        </div>
+      <% end %>
+      <%= f.submit "Save algo settings", class: "btn btn--primary" %>
+    <% end %>
+  </div>
+</div>

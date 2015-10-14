@@ -21,7 +21,6 @@
 
 .content__inner {
   padding: $spacing-medium;
-  height: 2000px; // Temporary
   width: 100%;
   margin: 0 auto;
   max-width: 1460px;
@@ -36,7 +35,7 @@
 }
 
 .content__header {
-  margin: $spacing-large 0;
+  margin-bottom: $spacing-large;
   @include display(flex);
   @include align-items(center);
   @include clearfix;

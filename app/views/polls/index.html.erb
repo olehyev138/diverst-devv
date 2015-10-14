@@ -1,9 +1,21 @@
-<h1>Polls</h1>
+<div class="content__header">
+  <h1>Polls</h1>
+  <%= link_to "New Poll", new_poll_path, class: "btn btn--primary" %>
+</div>
 
-<%= link_to "+ New Poll", new_poll_path %>
-
-<ul>
-  <% @polls.each do |poll| %>
-    <li><%= poll.title %> (<%= pluralize poll.fields.count, "question" %>) - <%= link_to "Show", poll_path(poll) %> - <%= link_to "Edit", edit_poll_path(poll) %> - <%= link_to "Delete", poll_path(poll), method: :delete %></li>
-  <% end %>
-</ul>
+<div class="content__main">
+  <div class="card">
+    <% @polls.each do |poll| %>
+      <div class="card__section card__section--border">
+        <div class="flex-row">
+          <div class="flex-row__cell flex-row__cell--grow"><%= poll.title %> (<%= pluralize poll.fields.count, "question" %>)</div>
+          <div class="flex-row__cell">
+            <%= link_to "Details", poll_path(poll), class: "accent" %>
+            <%= link_to "Edit", edit_poll_path(poll), class: "muted" %>
+            <%= link_to "Delete", poll_path(poll), method: :delete, class: "error" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
