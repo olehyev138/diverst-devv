@@ -45,7 +45,7 @@ SimpleForm.setup do |config|
       ba.optional :readonly
 
       ## Input
-      ba.use :input
+      ba.use :input, class: "field__input field__input--large"
     end
 
     ## full_messages_for
@@ -55,6 +55,19 @@ SimpleForm.setup do |config|
     # b.use :full_error, wrap_with: { tag: :span, class: :error }
   end
 
+  config.wrappers :boolean, class: :field, hint_class: :field_with_hint, error_class: :field_with_errors do |b|
+    b.use :html5
+
+    b.use :hint,  wrap_with: { tag: :span, class: :hint }
+    b.use :error, wrap_with: { tag: :span, class: :error }
+
+    b.wrapper tag: 'label', class: 'control' do |ba|
+      ba.use :input, class: "control__input"
+      ba.wrapper tag: 'span', class: 'control__indicator control__indicator--toggle' do end
+      ba.use :label, class: "control__label"
+    end
+  end
+
   # The default wrapper to be used by the FormBuilder.
   config.default_wrapper = :default
 
@@ -62,7 +75,7 @@ SimpleForm.setup do |config|
   # Defaults to :nested for bootstrap config.
   #   inline: input + label
   #   nested: label > input
-  config.boolean_style = :nested
+  config.boolean_style = :inline
 
   # Default class for buttons
   config.button_class = 'btn btn--primary'
@@ -134,7 +147,7 @@ SimpleForm.setup do |config|
 
   # Custom wrappers for input types. This should be a hash containing an input
   # type as key and the wrapper that will be used for all inputs with specified type.
-  # config.wrapper_mappings = { boolean: :boolean }
+  config.wrapper_mappings = { boolean: :boolean }
 
   # Namespaces where SimpleForm should look for custom input classes that
   # override default inputs.
@@ -156,7 +169,7 @@ SimpleForm.setup do |config|
   # config.cache_discovery = !Rails.env.development?
 
   # Default class for inputs
-  config.input_class = "field__input field__input--large"
+  config.input_class = ""
 
   # Define the default class of the input wrapper of the boolean input.
   config.boolean_label_class = 'checkbox'
