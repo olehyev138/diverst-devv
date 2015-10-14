@@ -8,9 +8,8 @@
     <% @groups.each do |group| %>
       <div class="card__section card__section--border">
         <div class="flex-row">
-          <div class="flex-row__cell flex-row__cell--grow"><%= group.name %> (<%= pluralize group.members.count, "member" %>)</div>
+          <div class="flex-row__cell flex-row__cell--grow"><%= link_to "#{group.name} (#{pluralize group.members.count, "member"})", group_path(group), class: "accent" %></div>
           <div class="flex-row__cell">
-            <%= link_to "Details", group_path(group), class: "accent" %>
             <%= link_to "Edit", edit_group_path(group), class: "muted" %>
             <%= link_to "Delete", group_path(group), method: :delete, class: "error" %>
           </div>

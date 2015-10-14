@@ -8,9 +8,8 @@
     <% @segments.each do |segment| %>
       <div class="card__section card__section--border">
         <div class="flex-row">
-          <div class="flex-row__cell flex-row__cell--grow"><%= segment.name %></div>
+          <div class="flex-row__cell flex-row__cell--grow"><%= link_to segment.name, segment_path(segment), class: "accent" %></div>
           <div class="flex-row__cell">
-            <%= link_to "Details", segment_path(segment), class: "accent" %>
             <%= link_to "Edit", edit_segment_path(segment), class: "muted" %>
             <%= link_to "Delete", segment_path(segment), method: :delete, class: "error" %>
           </div>
