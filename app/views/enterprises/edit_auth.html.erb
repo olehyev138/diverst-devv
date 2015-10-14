@@ -1,9 +1,19 @@
-<%= simple_form_for @enterprise do |f| %>
-  <%= f.input :has_enabled_saml, label: "Enable SAML?" %>
-  <%= f.input :idp_entity_id, label: "IdP Metadata URL" %>
-  <%= f.input :idp_sso_target_url, label: "Login URL" %>
-  <%= f.input :idp_slo_target_url, label: "Logout URL" %>
-  <%= f.input :idp_cert, label: "Certificate" %>
+<div class="content__header">
+  <h1>Auth</h1>
+</div>
 
-  <%= f.submit "Save SSO settings" %>
-<% end %>
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <%= simple_form_for @enterprise do |f| %>
+        <%= f.input :has_enabled_saml, label: "Enable SAML?", placeholder: "https://example.com/saml/metadata/123456" %>
+        <%= f.input :idp_entity_id, label: "IdP Metadata URL" %>
+        <%= f.input :idp_sso_target_url, label: "Login URL" %>
+        <%= f.input :idp_slo_target_url, label: "Logout URL" %>
+        <%= f.input :idp_cert, label: "Certificate" %>
+
+        <%= f.submit "Save SSO settings" %>
+      <% end %>
+    </div>
+  </div>
+</div>
