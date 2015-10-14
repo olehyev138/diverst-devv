@@ -15,6 +15,7 @@
         <%= check_box_tag "groups[#{group.id}][]", group.id, false, class: "control__input" %>
         <span class="control__indicator control__indicator--checkbox"></span>
         <span class="control__label"><%= group.name %></span>
+        <p><%= group.description %></p>
       </label>
     <% end %>
   </div>

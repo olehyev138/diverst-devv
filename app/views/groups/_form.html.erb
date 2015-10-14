@@ -1,10 +1,17 @@
-<%= simple_form_for @group do |f| %>
-  <%= f.input :name %>
-  <%= f.input :description %>
-  <%= f.association :members, input_html: { class: "select2" } %>
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <%= simple_form_for @group do |f| %>
+        <%= f.input :name %>
+        <%= f.input :description %>
+        <%= f.input :logo, as: :file %>
+        <%= f.association :members, input_html: { class: "select2" } %>
 
-  <%= f.button :submit %>
-<% end %>
+        <%= f.button :submit %>
+      <% end %>
+    </div>
+  </div>
+</div>
 
 <script>
   $('.select2').select2();

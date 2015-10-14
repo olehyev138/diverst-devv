@@ -47,6 +47,7 @@ gem 'gcm'
 gem 'clockwork'
 gem 'bourbon'
 gem 'active_link_to'
+gem "paperclip", "~> 4.3"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

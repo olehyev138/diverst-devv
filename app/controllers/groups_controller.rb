@@ -48,6 +48,7 @@ class GroupsController < ApplicationController
     .permit(
       :name,
       :description,
+      :logo,
       member_ids: []
     )
   end
