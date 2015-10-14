@@ -45,7 +45,7 @@ SimpleForm.setup do |config|
       ba.optional :readonly
 
       ## Input
-      ba.use :input, class: "field__input field__input--large"
+      ba.use :input, class: "field__input"
     end
 
     ## full_messages_for
@@ -66,6 +66,23 @@ SimpleForm.setup do |config|
       ba.wrapper tag: 'span', class: 'control__indicator control__indicator--toggle' do end
       ba.use :label, class: "control__label"
     end
+  end
+
+  config.wrappers :select, class: :field, hint_class: :field_with_hint, error_class: :field_with_errors do |b|
+    b.wrapper :tag => 'span', :class => 'field__add-on field__add-on--right' do |ba|
+      ba.wrapper tag: 'span', class: 'icon icon--chevron-down' do end
+    end
+
+    b.use :html5
+
+    b.use :label
+
+    b.wrapper :tag => 'div', :class => 'field__input-wrapper' do |ba|
+      ba.use :input, class: "field__input field__input--right-add-on"
+    end
+
+    b.use :hint,  wrap_with: { tag: :span, class: :hint }
+    b.use :error, wrap_with: { tag: :span, class: :error }
   end
 
   # The default wrapper to be used by the FormBuilder.
@@ -147,7 +164,10 @@ SimpleForm.setup do |config|
 
   # Custom wrappers for input types. This should be a hash containing an input
   # type as key and the wrapper that will be used for all inputs with specified type.
-  config.wrapper_mappings = { boolean: :boolean }
+  config.wrapper_mappings = {
+    boolean: :boolean,
+    select: :select
+  }
 
   # Namespaces where SimpleForm should look for custom input classes that
   # override default inputs.

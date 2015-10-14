@@ -1,9 +1,9 @@
 class Employees::InvitationsController < Devise::InvitationsController
-  layout 'application'
+  layout "global_settings"
 
   private
 
-  # Before the vCard is sent out(right after invitation)
+  # Before the vCard is sent out (right after invitation)
   def invite_resource
     resource_class.invite!(invite_params, current_inviter) do |invitable|
       invitable.enterprise = current_inviter.enterprise

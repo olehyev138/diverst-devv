@@ -59,14 +59,8 @@
 
   <div class="content">
     <div class="content__inner">
-      <p class="notice"><%= notice %></p>
-      <p class="alert"><%= alert %></p>
-
-      <% if employee_signed_in? %>
-        <em>Logged in as employee <strong><%= current_employee.email %></strong></em>
-      <% else %>
-        <em><%= link_to "Login as employee with SSO", sso_enterprise_saml_index_path(current_admin.enterprise) %></em><br><br>
-      <% end %>
+      <% if notice.present? %><p class="notice"><%= notice %></p><% end %>
+      <% if alert.present? %><p class="alert"><%= alert %></p><% end %>
 
       <%= yield %>
     </div>

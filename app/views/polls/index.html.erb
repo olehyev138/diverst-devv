@@ -8,9 +8,8 @@
     <% @polls.each do |poll| %>
       <div class="card__section card__section--border">
         <div class="flex-row">
-          <div class="flex-row__cell flex-row__cell--grow"><%= poll.title %> (<%= pluralize poll.fields.count, "question" %>)</div>
+          <div class="flex-row__cell flex-row__cell--grow"><%= link_to "#{poll.title}", poll_path(poll), class: "accent" %> - <%= pluralize poll.fields.count, "question" %></div>
           <div class="flex-row__cell">
-            <%= link_to "Details", poll_path(poll), class: "accent" %>
             <%= link_to "Edit", edit_poll_path(poll), class: "muted" %>
             <%= link_to "Delete", poll_path(poll), method: :delete, class: "error" %>
           </div>

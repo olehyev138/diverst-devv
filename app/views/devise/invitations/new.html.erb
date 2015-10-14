@@ -1,18 +1,26 @@
-<h2>Add an employee</h2>
+<div class="content__header">
+  <h1>Add an employee</h1>
+</div>
 
-<%= simple_form_for resource, :as => resource_name, :url => invitation_path(resource_name), :html => {:method => :post} do |f| %>
-  <%= devise_error_messages! %>
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <%= simple_form_for resource, :as => resource_name, :url => invitation_path(resource_name), :html => {:method => :post} do |f| %>
+        <%= devise_error_messages! %>
 
-  <% resource.class.invite_key_fields.each do |field| -%>
-    <%= f.input :email %>
+        <% resource.class.invite_key_fields.each do |field| -%>
+          <%= f.input :email %>
 
-    <% current_admin.enterprise.fields.each do |cf| %>
-      <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: resource %>
-    <% end %>
+          <% current_admin.enterprise.fields.each do |cf| %>
+            <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: resource %>
+          <% end %>
 
-    <p><%= f.submit t("devise.invitations.new.submit_button") %></p>
-  <% end -%>
-<% end %>
+          <p><%= f.button :submit, t("devise.invitations.new.submit_button") %></p>
+        <% end -%>
+      <% end %>
+    </div>
+  </div>
+</div>
 
 <script>
   $('.select2').select2();
