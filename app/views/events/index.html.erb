@@ -1,0 +1,19 @@
+<h1>Events</h1>
+
+<h2>Upcoming</h2>
+<ul>
+  <% @upcoming_events.each do |event| %>
+    <li><%= event.title %> - <%= link_to "Cancel", group_event_path(@group, event), method: :delete %></li>
+  <% end %>
+</ul>
+
+
+<h2>Past</h2>
+<ul>
+  <% @past_events.each do |event| %>
+    <li><%= event.title %></li>
+  <% end %>
+</ul>
+
+
+<%= link_to "+Create new", new_group_event_path %>

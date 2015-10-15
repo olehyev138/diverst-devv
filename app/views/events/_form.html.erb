@@ -1,14 +1,21 @@
 <div class="content__main">
   <div class="card">
     <div class="card__section">
-      <%= simple_form_for @group do |f| %>
-        <%= f.input :name %>
+      <%= simple_form_for [@group, @event] do |f| %>
+        <%= f.input :title %>
         <%= f.input :description %>
-        <%= f.input :logo, as: :file %>
-        <%= f.association :members, input_html: { class: "select2" } %>
+        <%= f.input :start %>
+        <%= f.input :end %>
+        <%= f.input :location %>
+        <%= f.association :segments, input_html: { class: "select2" } %>
+        <%= f.input :max_attendees %>
 
         <%= f.button :submit %>
       <% end %>
     </div>
   </div>
 </div>
+
+<script>
+  $('.select2').select2();
+</script>

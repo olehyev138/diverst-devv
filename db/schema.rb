@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151015174114) do
+ActiveRecord::Schema.define(version: 20151015202523) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -80,11 +80,6 @@ ActiveRecord::Schema.define(version: 20151015174114) do
   add_index "employees", ["invited_by_id"], name: "index_employees_on_invited_by_id", using: :btree
   add_index "employees", ["reset_password_token"], name: "index_employees_on_reset_password_token", unique: true, using: :btree
 
-  create_table "employees_events", force: :cascade do |t|
-    t.integer "employees_id", limit: 4
-    t.integer "events_id",    limit: 4
-  end
-
   create_table "employees_groups", force: :cascade do |t|
     t.integer "employee_id", limit: 4
     t.integer "group_id",    limit: 4
@@ -116,6 +111,11 @@ ActiveRecord::Schema.define(version: 20151015174114) do
     t.integer  "group_id",      limit: 4
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
+  end
+
+  create_table "events_segments", force: :cascade do |t|
+    t.integer "event_id",   limit: 4
+    t.integer "segment_id", limit: 4
   end
 
   create_table "fields", force: :cascade do |t|

@@ -5,8 +5,20 @@
 <p><%= @group.description %></p>
 
 <div class="content__main">
+  <h2>Latest members</h2>
   <div class="card">
-    <% @group.members.each do |member| %>
+    <% @group.members.limit(5).each do |member| %>
+      <div class="card__section card__section--border">
+        <div class="flex-row">
+          <div class="flex-row__cell"><%= link_to member.name, member %></div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <h2>Events</h2>
+  <div class="card">
+    <% @group.members.limit(5).each do |member| %>
       <div class="card__section card__section--border">
         <div class="flex-row">
           <div class="flex-row__cell"><%= link_to member.name, member %></div>
