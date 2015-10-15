@@ -1,0 +1,9 @@
+<h1>Messages</h1>
+
+<ul>
+  <% @messages.each do |message| %>
+    <li><%= message.subject %></li>
+  <% end %>
+</ul>
+
+<%= link_to "+Create new", new_group_group_message_path %>

@@ -36,6 +36,7 @@ Rails.application.routes.draw do
 
   resources :groups do
     resources :group_members, path: "members"
+    resources :group_messages, path: "messages"
     resources :events
   end
 

@@ -4,6 +4,7 @@ class Segment < ActiveRecord::Base
   has_and_belongs_to_many :members, class_name: "Employee"
   has_and_belongs_to_many :polls
   has_and_belongs_to_many :events
+  has_and_belongs_to_many :group_messages
 
   after_create :update_cached_members
 
