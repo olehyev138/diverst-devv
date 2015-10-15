@@ -39,7 +39,8 @@ img {
   }
 
   .site-wrap--form & {
-    margin-bottom: $spacing-x-large;
+    display: block;
+    margin: 0 auto $spacing-x-large;
   }
 }
 
@@ -50,10 +51,6 @@ img {
 
   &--small {
     max-width: 400px;
-  }
-
-  &--center {
-    text-align: center;
   }
 
   &--form {

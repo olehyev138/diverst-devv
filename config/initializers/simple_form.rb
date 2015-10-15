@@ -75,7 +75,7 @@ SimpleForm.setup do |config|
 
     b.use :html5
 
-    b.use :label
+    b.use :label, class: :field__label
 
     b.wrapper :tag => 'div', :class => 'field__input-wrapper' do |ba|
       ba.use :input, class: "field__input field__input--right-add-on"

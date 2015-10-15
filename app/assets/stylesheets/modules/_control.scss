@@ -4,7 +4,7 @@
   display: block;
   cursor: pointer;
   text-align: left; // Force checkbox to always be left-aligned
-  margin-bottom: $spacing-large;
+  margin-bottom: $spacing-medium;
   @include user-select(none);
 
   .table-view & {

@@ -22,6 +22,10 @@ textarea {
   min-height: 100px;
 }
 
+input[type="password"] {
+  letter-spacing: .1em; // Better looking password placeholder
+}
+
 
 // Field
 
@@ -120,7 +124,7 @@ textarea {
 
 .field__label {
   display: block;
-  margin-bottom: $spacing-small;
+  margin-bottom: $spacing-small/1.5;
   @extend small;
 }
 
