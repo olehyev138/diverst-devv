@@ -3,6 +3,7 @@ class Segment < ActiveRecord::Base
   has_many :rules, class_name: "SegmentRule"
   has_and_belongs_to_many :members, class_name: "Employee"
   has_and_belongs_to_many :polls
+  has_and_belongs_to_many :events
 
   after_create :update_cached_members
 

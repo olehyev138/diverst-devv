@@ -17,3 +17,9 @@
 //= require select2
 //= require highcharts
 //= require_tree .
+
+var Utility = (function() {
+
+
+
+})();

@@ -3,7 +3,7 @@ class GroupsController < ApplicationController
   before_action :set_group, only: [:edit, :update, :destroy, :show]
   skip_before_action :verify_authenticity_token, only: [:create]
 
-  layout "global_settings"
+  layout :resolve_layout
 
   def index
     @groups = current_admin.enterprise.groups
@@ -37,6 +37,15 @@ class GroupsController < ApplicationController
   end
 
   protected
+
+  def resolve_layout
+    case action_name
+    when "show"
+      "erg"
+    else
+      "global_settings"
+    end
+  end
 
   def set_group
     @group = current_admin.enterprise.groups.find(params[:id])

@@ -14,6 +14,7 @@ class Employee < ActiveRecord::Base
   has_and_belongs_to_many :groups
   has_many :topic_feedbacks
   has_many :poll_responses
+  has_and_belongs_to_many :events
 
   before_validation :generate_password_if_saml
   after_create :assign_firebase_token

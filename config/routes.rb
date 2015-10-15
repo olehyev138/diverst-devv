@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :events
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
 
@@ -34,7 +35,9 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :groups
+  resources :groups do
+    resources :group_members, path: "members"
+  end
 
   resources :polls do
     resources :poll_responses, path: "responses" do
