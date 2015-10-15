@@ -3,11 +3,10 @@
 .avatar {
   width: 48px;
   height: 48px;
-  border-radius: 50%;
-  vertical-align: middle;
+  border-radius: $border-radius;
 }
 
 .avatar--small {
-  width: 30px;
-  height: 30px;
+  width: $spacing-x-large;
+  height: $spacing-x-large;
 }
