@@ -1,0 +1,14 @@
+// Select2
+
+.select2-selection__choice {
+  background-color: $diverst-purple !important;
+  border: none !important;
+  color: $diverst-white !important;
+  border-radius: 2px !important;
+}
+
+.select2-selection__choice__remove {
+  color: $diverst-white !important;
+  vertical-align: 1px !important;
+  margin-right: $spacing-small/2 !important;
+}

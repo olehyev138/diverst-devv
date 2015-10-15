@@ -7,9 +7,9 @@
   <div class="card">
     <% @groups.each do |group| %>
       <div class="card__section card__section--border">
-        <div class="flex-row">
+        <div class="flex-row flex-row--middle">
           <div class="flex-row__cell">
-            <%= image_tag group.logo.url(:thumb), style: "width: 45px; height: 45px;" %>
+            <%= image_tag group.logo.url(:thumb), class: "avatar" %>
           </div>
           <div class="flex-row__cell flex-row__cell--grow"><%= link_to "#{group.name}", group_path(group), class: "accent" %> - <%= pluralize group.members.count, "member" %></div>
           <div class="flex-row__cell">
