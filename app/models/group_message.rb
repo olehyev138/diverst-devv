@@ -5,12 +5,16 @@ class GroupMessage < ActiveRecord::Base
   after_create :send_emails
 
   def employees
-    Employee
-    .joins(:groups, :segments)
-    .where(
-      "groups.id" => self.group.id,
-      "segments.id" => self.segments.ids
-    )
+    if segments.empty?
+      self.group.members
+    else
+      Employee
+      .joins(:groups, :segments)
+      .where(
+        "groups.id" => self.group.id,
+        "segments.id" => self.segments.ids
+      )
+    end
   end
 
   def send_emails
