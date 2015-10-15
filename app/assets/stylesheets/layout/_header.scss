@@ -36,9 +36,7 @@
   right: 0;
   padding: 0 $spacing-medium;
   background-color: $diverst-white;
-  white-space: nowrap;
-  overflow-y: hidden;
-  overflow-x: scroll;
+  overflow: hidden;
   text-align: center;
   @include z-index(secondary-header);
   @include drop-shadow;
