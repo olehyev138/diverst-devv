@@ -58,7 +58,9 @@ class GroupsController < ApplicationController
       :name,
       :description,
       :logo,
-      member_ids: []
+      :send_invitations,
+      member_ids: [],
+      invitation_segment_ids: []
     )
   end
 end
