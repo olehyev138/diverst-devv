@@ -4,6 +4,10 @@
 
 <p><%= @group.description %></p>
 
+<ul>
+  <li><%= link_to "Events", group_events_path(@group) %></li>
+</ul>
+
 <div class="content__main">
   <h2>Latest members</h2>
   <div class="card">

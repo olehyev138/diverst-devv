@@ -14,7 +14,7 @@ class Poll < ActiveRecord::Base
     Employee
     .joins(:groups, :segments)
     .where(
-      "groups.id" => self.group.id,
+      "groups.id" => self.groups.ids,
       "segments.id" => self.segments.ids
     )
   end

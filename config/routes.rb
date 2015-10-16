@@ -35,9 +35,16 @@ Rails.application.routes.draw do
   end
 
   resources :groups do
-    resources :group_members, path: "members"
-    resources :group_messages, path: "messages"
-    resources :events
+    scope module: :groups do
+      resources :group_members, path: "members"
+      resources :group_messages, path: "messages"
+      resources :events
+      resources :news_links
+    end
+  end
+
+  scope :news_links do
+    get 'url_info', to: "news_links#url_info"
   end
 
   resources :polls do

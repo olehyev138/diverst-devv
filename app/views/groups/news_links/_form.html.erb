@@ -1,0 +1,38 @@
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <%= simple_form_for [@group, @news_link] do |f| %>
+        <%= f.input :url, label: "URL" %>
+        <%= f.input :title %>
+        <%= f.input :description %>
+
+        <%= f.button :submit %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  var $url = $('#news_link_url'),
+      $title = $('#news_link_title'),
+      $description = $('#news_link_description'),
+      timeoutHandle,
+      hasTouchedTitleOrDescription = false;
+
+  var autoFillInfo = function() {
+    if (!hasTouchedTitleOrDescription) {
+      $.get('/news_links/url_info?url=' + $url.val(), function(data) {
+        $title.val(data.title);
+        $description.val(data.description);
+      });
+    }
+  };
+
+  $($title, $description).focus(function() {
+    hasTouchedTitleOrDescription = true;
+  });
+
+  $url.keyup(function() {
+    timeoutHandle = setTimeout(autoFillInfo, 200);
+  });
+</script>

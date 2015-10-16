@@ -1,4 +1,4 @@
-class GroupMessagesController < ApplicationController
+class Groups::GroupMessagesController < ApplicationController
   before_action :authenticate_admin!
   before_action :set_group
   before_action :set_message, only: [:show]

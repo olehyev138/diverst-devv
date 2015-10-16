@@ -1,4 +1,4 @@
-class GroupMembersController < ApplicationController
+class Groups::GroupMembersController < ApplicationController
   before_action :authenticate_admin!
   before_action :set_group
   before_action :set_member, only: [:edit, :update, :destroy]

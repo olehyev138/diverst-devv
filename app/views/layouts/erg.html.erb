@@ -7,9 +7,28 @@
   <%= csrf_meta_tags %>
 </head>
 <body class="erg">
-  <% if notice.present? %><p class="notice"><%= notice %></p><% end %>
-  <% if alert.present? %><p class="alert"><%= alert %></p><% end %>
 
-  <%= yield %>
+  <header class="primary-header">
+    <%= link_to "< Back to dashboard", groups_path, style: "color: white;" %>
+    <h1><%= @group.name %></h1>
+  </header>
+
+  <header class="secondary-header">
+    <%= active_link_to "Home", group_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
+    <%= active_link_to "Members", group_group_members_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+    <%= active_link_to "Messages", group_group_messages_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+    <%= active_link_to "Events", group_events_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+    <%= active_link_to "News", group_news_links_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+    <%= active_link_to "Settings", '#', class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  </header>
+
+  <div class="content">
+    <div class="content__inner">
+      <% if notice.present? %><p class="notice"><%= notice %></p><% end %>
+      <% if alert.present? %><p class="alert"><%= alert %></p><% end %>
+
+      <%= yield %>
+    </div>
+  </div>
 </body>
 </html>
