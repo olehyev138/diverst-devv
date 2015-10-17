@@ -1,5 +1,6 @@
 class GroupsController < ApplicationController
-  before_action :authenticate_admin!
+  before_action :authenticate_admin!, except: [:join]
+  before_action :authenticate_employee!, only: [:join]
   before_action :set_group, only: [:edit, :update, :destroy, :show]
   skip_before_action :verify_authenticity_token, only: [:create]
 
@@ -29,6 +30,11 @@ class GroupsController < ApplicationController
     else
       render :edit
     end
+  end
+
+  def join
+    @group.members << current_employee
+    @group.save
   end
 
   def destroy

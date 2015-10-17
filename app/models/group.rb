@@ -22,6 +22,8 @@ class Group < ActiveRecord::Base
         "segments.id" => self.invitation_segments.ids
       )
     end
+
+    query
   end
 
   protected

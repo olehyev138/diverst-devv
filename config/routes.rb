@@ -41,6 +41,10 @@ Rails.application.routes.draw do
       resources :events
       resources :news_links
     end
+
+    member do
+      get 'join'
+    end
   end
 
   scope :news_links do

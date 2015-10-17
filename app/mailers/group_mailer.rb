@@ -6,9 +6,7 @@ class GroupMailer < ApplicationMailer
   end
 
   def invitation(group)
-    @name = group.name
-    @description = group.description
-    @logo = group.logo
+    @group = group
     mail(to: group.employees_to_invite.first.email, bcc: group.employees_to_invite.pluck(:email), subject: "You've been invited to join a new ERG")
   end
 end
