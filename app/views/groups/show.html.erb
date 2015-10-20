@@ -9,25 +9,33 @@
 </ul>
 
 <div class="content__main">
-  <h2>Latest members</h2>
-  <div class="card">
-    <% @group.members.limit(5).each do |member| %>
-      <div class="card__section card__section--border">
-        <div class="flex-row">
-          <div class="flex-row__cell"><%= link_to member.name, member %></div>
+
+  <div class="row">
+    <div class="col sm-12 md-6">
+      <div class="card">
+        <div class="card__section">
+          <h4>Newest Members</h4>
+          <ol>
+            <% @group.members.limit(5).each do |member| %>
+              <li><%= link_to member.name, member %></li>
+            <% end %>
+          </ol>
         </div>
       </div>
-    <% end %>
+    </div>
+
+    <div class="col sm-12 md-6">
+      <div class="card">
+        <div class="card__section">
+          <h4>Latest Events</h4>
+          <ol>
+            <% @group.members.limit(5).each do |member| %>
+              <li><%= link_to member.name, member %></li>
+            <% end %>
+          </ol>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <h2>Events</h2>
-  <div class="card">
-    <% @group.members.limit(5).each do |member| %>
-      <div class="card__section card__section--border">
-        <div class="flex-row">
-          <div class="flex-row__cell"><%= link_to member.name, member %></div>
-        </div>
-      </div>
-    <% end %>
-  </div>
 </div>
