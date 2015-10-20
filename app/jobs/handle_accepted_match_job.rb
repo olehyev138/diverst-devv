@@ -12,6 +12,6 @@ class HandleAcceptedMatchJob < ActiveJob::Base
     response = firebase.set("conversations/#{match.id}", { id: match.id, users: [match.user1.id, match.user2.id] })
 
     # Notify the users of the match
-    match.notify_users
+    match.both_accepted_notification
   end
 end
