@@ -1,1 +1,29 @@
-<%= yield %>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Diverst</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body class="employee">
+
+  <header class="primary-header">
+    <a href="#"><img class="primary-header__logo logo" src="<%= image_path "diverst-logo.svg" %>"></a>
+  </header>
+
+  <header class="secondary-header">
+    <%= yield :secondary_nav %>
+  </header>
+
+  <div class="content">
+    <div class="content__inner">
+      <% if notice.present? %><p class="notice"><%= notice %></p><% end %>
+      <% if alert.present? %><p class="alert"><%= alert %></p><% end %>
+
+      <%= yield %>
+    </div>
+  </div>
+
+</body>
+</html>

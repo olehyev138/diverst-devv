@@ -1,5 +1,6 @@
 class Employees::InvitationsController < Devise::InvitationsController
   layout "global_settings"
+  layout "guest", only: [:edit]
 
   private
 

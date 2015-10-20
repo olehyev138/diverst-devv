@@ -6,9 +6,12 @@ class DateField < Field
 
   def process_field_value(value)
     Time.strptime(value, "%m/%d/%Y")
+  rescue
+    nil
   end
 
   def deserialize_value(value)
+    return nil if value.nil?
     Time.at(value)
   end
 

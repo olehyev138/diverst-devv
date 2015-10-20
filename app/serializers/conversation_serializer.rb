@@ -2,7 +2,8 @@ class ConversationSerializer < ActiveModel::Serializer
   attributes :id,
     :saved,
     :expires_soon,
-    :user
+    :user,
+    :expiration_date
 
   def user
     EmployeeSerializer.new object.other(scope)

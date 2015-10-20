@@ -7,6 +7,8 @@ class Match < ActiveRecord::Base
     left: 4 # After talking for a while, the person decided to drop the conversation
   }.freeze
 
+  @@expiration_time = 2.weeks
+
   belongs_to :user1, class_name: "Employee"
   belongs_to :user2, class_name: "Employee"
   belongs_to :topic
@@ -27,13 +29,13 @@ class Match < ActiveRecord::Base
     .not_archived
     .where.not(both_accepted_at: nil)
     .where('both_accepted_at < ?', 1.week.ago)
-    .where('both_accepted_at > ?', 2.weeks.ago)
+    .where('both_accepted_at > ?', @@expiration_time.ago)
   }
   scope :expired, -> { # Matches that have been created more than 2 weeks ago
     accepted
     .not_archived
     .where.not(both_accepted_at: nil)
-    .where('both_accepted_at < ?', 2.weeks.ago)
+    .where('both_accepted_at < ?', @@expiration_time.ago)
   }
 
   before_create :update_score
@@ -98,6 +100,10 @@ class Match < ActiveRecord::Base
     @@status
   end
 
+  def self.expiration_time
+    @@expiration_time
+  end
+
   def each_user
     [user1, user2].each do |user|
       yield user
@@ -132,8 +138,12 @@ class Match < ActiveRecord::Base
     !archived &&
     !both_accepted_at.nil? &&
     both_accepted_at < 1.week.ago &&
-    both_accepted_at > 2.weeks.ago &&
+    both_accepted_at > @@expiration_time.ago &&
     status_for(employee) != @@status[:saved]
+  end
+
+  def expiration_date
+    both_accepted_at + @@expiration_time
   end
 
   def saved?

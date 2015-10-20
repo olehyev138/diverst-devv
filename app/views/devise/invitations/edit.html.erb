@@ -1,29 +1,35 @@
-<h2>vCard</h2>
+<h2>Joining Diverst</h2>
 
-<%= simple_form_for resource, :as => resource_name, :url => invitation_path(resource_name), :html => { :method => :put } do |f| %>
-  <%= devise_error_messages! %>
-  <%= f.hidden_field :invitation_token %>
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <%= simple_form_for resource, :as => resource_name, :url => invitation_path(resource_name), :html => { :method => :put } do |f| %>
+        <%= devise_error_messages! %>
+        <%= f.hidden_field :invitation_token %>
 
-  <% resource.class.invite_key_fields.each do |field| -%>
+        <% resource.class.invite_key_fields.each do |field| -%>
 
-  <% end -%>
+        <% end -%>
 
-  <div class="field">
-    <label>Ben oui choose dont tes ERGs mon homme</label>
-    <% resource.enterprise.groups.each do |group| %>
-      <label class="control">
-        <%= check_box_tag "groups[#{group.id}][]", group.id, false, class: "control__input" %>
-        <span class="control__indicator control__indicator--checkbox"></span>
-        <span class="control__label"><%= group.name %></span>
-        <p><%= group.description %></p>
-      </label>
-    <% end %>
+        <div class="field">
+          <label>Ben oui choose dont tes ERGs mon homme</label>
+          <% resource.enterprise.groups.each do |group| %>
+            <label class="control">
+              <%= check_box_tag "groups[#{group.id}][]", group.id, false, class: "control__input" %>
+              <span class="control__indicator control__indicator--checkbox"></span>
+              <span class="control__label"><%= group.name %></span>
+              <p><%= group.description %></p>
+            </label>
+          <% end %>
+        </div>
+
+        <br>
+
+        <%= f.input :password %>
+        <%= f.input :password_confirmation %>
+
+        <%= f.button :submit, "Create my account" %>
+      <% end %>
+    </div>
   </div>
-
-  <br>
-
-  <%= f.input :password %>
-  <%= f.input :password_confirmation %>
-
-  <%= f.button :submit, "Create my account" %>
-<% end %>
+</div>
