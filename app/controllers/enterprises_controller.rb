@@ -13,10 +13,14 @@ class EnterprisesController < ApplicationController
   end
 
   def update
+    referer = env['HTTP_REFERER']
+    routes = env['action_dispatch.routes']
+    info = routes.recognize_path(referer, method: :get)
+
     if @enterprise.update_attributes(enterprise_params)
-      redirect_to action: "edit"
+      redirect_to :back
     else
-      render :edit
+      render info[:action]
     end
   end
 

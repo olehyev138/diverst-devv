@@ -3,19 +3,44 @@
 </div>
 
 <div class="content__main">
-  <div class="card">
-    <%= simple_form_for @enterprise do |f| %>
-      <%= f.simple_fields_for :fields do |field| %>
+  <%= simple_form_for @enterprise do |f| %>
+    <div class="card">
+      <%= f.simple_fields_for :fields, @enterprise.match_fields do |field| %>
         <div class="card__section card__section--border">
           <div class="flex-row flex-row--baseline">
+            <div class="flex-row__cell"><%= field.input :match_exclude, label: false %></div>
             <div class="flex-row__cell"><strong><%= field.object.title %></strong></div>
-            <div class="flex-row__cell"><%= field.input :match_exclude %></div>
-            <div class="flex-row__cell"><%= field.input :match_polarity %></div>
-            <div class="flex-row__cell flex-row__cell--grow"><%= field.input :match_weight %></div>
+            <div class="flex-row__cell">
+              <div class="segmented-control">
+                <a href="#" class="segmented-control__item<%= " segmented-control__item--is-selected" if field.object.match_polarity %>">Different</a>
+                <a href="#" class="segmented-control__item<%= " segmented-control__item--is-selected" unless field.object.match_polarity %>">Same</a>
+                <%= field.input_field :match_polarity, as: :hidden %>
+              </div>
+            </div>
+            <div class="flex-row__cell flex-row__cell--grow">
+              <%= field.input_field :match_weight, as: :range, max: 1, step: 0.01 %>
+            </div>
           </div>
         </div>
       <% end %>
-      <%= f.submit "Save algo settings", class: "btn btn--primary" %>
-    <% end %>
-  </div>
+    </div>
+
+    <%= f.submit "Save algo settings", class: "btn btn--primary" %>
+  <% end %>
 </div>
+
+<script>
+  $('input[type="range"]').rangeslider({
+    polyfill: false,
+    rangeClass: 'range-slider',
+    fillClass: 'range-slider__line',
+    handleClass: 'range-slider__handle',
+  });
+
+  // Update inputs on segmented control change
+  $('.segmented-control__item').click(function() {
+    $(this).parent().find('.segmented-control__item').removeClass('segmented-control__item--is-selected');
+    $(this).addClass('segmented-control__item--is-selected');
+    $(this).parent().find('input').val($(this).data('value'));
+  });
+</script>

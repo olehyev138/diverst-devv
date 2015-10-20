@@ -30,28 +30,6 @@ A5bYGY36o0HQqna1jAGDM8l3t7uwbpsMwf5O/CVPgcXBqUxJSX2J0g==
   has_enabled_saml: true
 )
 
-first_name_field = TextField.create(
-  title: "First name",
-  saml_attribute: "",
-  gamification_value: 10,
-  show_on_vcard: true,
-  match_exclude: true,
-  match_polarity: true,
-  match_weight: 0.1,
-  enterprise: enterprise
-)
-
-last_name_field = TextField.create(
-  title: "Last name",
-  saml_attribute: "",
-  gamification_value: 10,
-  show_on_vcard: true,
-  match_exclude: true,
-  match_polarity: true,
-  match_weight: 0.1,
-  enterprise: enterprise
-)
-
 gender_field = SelectField.create(
   title: "Gender",
   saml_attribute: "",
