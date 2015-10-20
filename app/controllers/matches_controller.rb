@@ -28,16 +28,14 @@ class MatchesController < ApplicationController
     @match.set_status(employee: current_employee, status: swipe_params[:choice])
 
     if @match.save
+      # Check if we have a match!
+      if @match.both_accepted?
+        HandleAcceptedMatchJob.perform_later @match
+      end
+
       render nothing: true, status: 200
     else
       render @match.errors
-    end
-
-    # Check if we have a match!
-    if @match.both_accepted?
-      HandleAcceptedMatchJob.perform_later @match
-      @match.both_accepted_at = Time.zone.now
-      @match.save
     end
   end
 

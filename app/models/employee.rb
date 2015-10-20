@@ -27,11 +27,7 @@ class Employee < ActiveRecord::Base
 
     saml_employee_info = {}
 
-    enterprise.fields.each do |field|
-      saml_employee_info[field] = attrs[field.saml_attribute] unless field.saml_attribute.blank?
-    end
-
-    self.info = self.info.merge(saml_employee_info)
+    self.info = self.info.merge(fields: self.enterprise.fields, form_data: saml_employee_info)
 
     self.save!
     enterprise.employees << self

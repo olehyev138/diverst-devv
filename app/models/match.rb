@@ -8,12 +8,14 @@ class Match < ActiveRecord::Base
   }.freeze
 
   @@expiration_time = 2.weeks
+  @@expires_soon_time = @@expiration_time / 2
 
   belongs_to :user1, class_name: "Employee"
   belongs_to :user2, class_name: "Employee"
   belongs_to :topic
 
   before_create :associate_topic
+  before_validation :set_accept_date
 
   accepts_nested_attributes_for :user1, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :user2, reject_if: :all_blank, allow_destroy: true
@@ -28,7 +30,7 @@ class Match < ActiveRecord::Base
     accepted
     .not_archived
     .where.not(both_accepted_at: nil)
-    .where('both_accepted_at < ?', 1.week.ago)
+    .where('both_accepted_at < ?', @@expires_soon_time.ago)
     .where('both_accepted_at > ?', @@expiration_time.ago)
   }
   scope :expired, -> { # Matches that have been created more than 2 weeks ago
@@ -137,7 +139,7 @@ class Match < ActiveRecord::Base
     conversation_state? &&
     !archived &&
     !both_accepted_at.nil? &&
-    both_accepted_at < 1.week.ago &&
+    both_accepted_at < @@expires_soon_time.ago &&
     both_accepted_at > @@expiration_time.ago &&
     status_for(employee) != @@status[:saved]
   end
@@ -148,6 +150,10 @@ class Match < ActiveRecord::Base
 
   def saved?
     (user1_status == @@status[:saved] && user2_status == @@status[:saved])
+  end
+
+  def set_accept_date
+    both_accepted_at = Time.zone.now if both_accepted? && both_accepted_at.nil?
   end
 
   # Picks a random topic that hasn't been answered by neither of the match's users
