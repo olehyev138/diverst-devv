@@ -84,16 +84,16 @@ Here is an example of a conversation object in Firebase that shows the desired s
 
 ```json
 {
-  messages: [{
-    content: "Allo papa",
-    date: 1234567890,
-    sender: 5
+  "messages": [{
+    "content": "Allo papa",
+    "date": 1234567890,
+    "sender": 5
   }, {
-    content: "ben oui",
-    date: 1234567890,
-    sender: 12
+    "content": "ben oui",
+    "date": 1234567890,
+    "sender": 12
   }],
-  users: [5, 12]
+  "users": [5, 12]
 }
 ```
 

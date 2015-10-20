@@ -13,6 +13,6 @@ class ConversationSerializer < ActiveModel::Serializer
   end
 
   def expires_soon
-    object.expires_soon?
+    object.expires_soon_for?(employee: scope)
   end
 end

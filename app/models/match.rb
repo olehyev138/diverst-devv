@@ -127,12 +127,13 @@ class Match < ActiveRecord::Base
     (user1_status == @@status[:accepted] || user1_status == @@status[:saved]) && (user2_status == @@status[:accepted] || user2_status == @@status[:saved])
   end
 
-  def expires_soon?
+  def expires_soon_for?(employee:)
     conversation_state? &&
     !archived &&
     !both_accepted_at.nil? &&
     both_accepted_at < 1.week.ago &&
-    both_accepted_at > 2.weeks.ago
+    both_accepted_at > 2.weeks.ago &&
+    status_for(employee) != @@status[:saved]
   end
 
   def saved?
