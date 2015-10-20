@@ -1,7 +1,19 @@
-<ul>
-  <% @members.each do |member| %>
-    <li><%= member.name %> - <%= link_to "remove", group_group_member_path(@group, member), method: :delete %></li>
-  <% end %>
-</ul>
+<div class="content__header">
+  <h1>Members</h1>
+</div>
 
-<%= paginate @members %>
+<div class="content__main">
+  <div class="card">
+    <% @members.each do |member| %>
+      <div class="card__section card__section--border">
+        <div class="flex-row flex-row--middle">
+          <div class="flex-row__cell flex-row__cell--grow"><%= member.name %></div>
+          <div class="flex-row__cell"><%= link_to "remove", group_group_member_path(@group, member), method: :delete %></div>
+        </div>
+      </div>
+    <% end %>
+    <div class="card__section card__section--border">
+      <%= paginate @members %>
+    </div>
+  </div>
+</div>

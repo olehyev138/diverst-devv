@@ -1,0 +1,13 @@
+// Pagination
+
+.pagination {
+  text-align: center;
+
+  > span a,
+  .current {
+    display: inline-block;
+    padding: $spacing-small/2 $spacing-small;
+    border-radius: $border-radius/2;
+    border: 1px solid $diverst-border;
+  }
+}
