@@ -5,7 +5,7 @@
 <div class="content__main">
   <%= simple_form_for @enterprise do |f| %>
     <div class="card">
-      <%= f.simple_fields_for :fields, @enterprise.match_fields do |field| %>
+      <%= f.simple_fields_for :fields, @enterprise.match_fields(include_disabled: true) do |field| %>
         <div class="card__section card__section--border">
           <div class="flex-row flex-row--baseline">
             <div class="flex-row__cell"><%= field.input :match_exclude, label: false %></div>

@@ -29,9 +29,10 @@ class Enterprise < ActiveRecord::Base
     settings
   end
 
-  def match_fields
+  def match_fields(include_disabled: false)
     matchable_field_types = ["NumericField", "SelectField", "CheckboxField"]
-    self.fields.where(type: matchable_field_types, match_exclude: false)
+    fields = self.fields.where(type: matchable_field_types)
+    fields.where(match_exclude: false) unless include_disabled
   end
 
   def update_matches
