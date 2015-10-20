@@ -15,10 +15,11 @@
       <div class="card">
         <div class="card__section">
           <h4>Newest Members</h4>
+          <%= link_to "View all", group_group_members_path(@group), class: "card__link" %>
           <ol>
-            <% @group.members.limit(5).each do |member| %>
-              <li><%= link_to member.name, member %></li>
-            <% end %>
+          <% @group.members.limit(5).each do |member| %>
+            <li><%= link_to member.name, member %></li>
+          <% end %>
           </ol>
         </div>
       </div>
@@ -28,10 +29,11 @@
       <div class="card">
         <div class="card__section">
           <h4>Latest Events</h4>
+          <%= link_to "View all", group_events_path(@group), class: "card__link" %>
           <ol>
-            <% @group.members.limit(5).each do |member| %>
-              <li><%= link_to member.name, member %></li>
-            <% end %>
+          <% @group.events.limit(5).each do |event| %>
+            <li><%= link_to event.name, event %></li>
+          <% end %>
           </ol>
         </div>
       </div>
