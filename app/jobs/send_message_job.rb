@@ -1,5 +1,5 @@
 class SendMessageJob < ActiveJob::Base
-  queue_as :critical
+  queue_as :default
 
   def perform(message)
 

@@ -1,5 +1,5 @@
 class CalculateMatchScoreJob < ActiveJob::Base
-  queue_as :default
+  queue_as :low
 
   def perform(employee, other_employee, skip_existing: false)
     if (existing_match = Match.between(employee, other_employee).first)

@@ -112,8 +112,9 @@ class Employee < ActiveRecord::Base
 
   def assign_firebase_token
     payload = { uid: self.id.to_s }
-    options = { expires: 1.year.from_now }
+    options = { expires: 1.week.from_now }
     self.firebase_token = @@fb_token_generator.create_token(payload)
+    self.firebase_token_generated_at = Time.zone.now
     self.save
   end
 
