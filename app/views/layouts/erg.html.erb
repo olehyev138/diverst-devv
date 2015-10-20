@@ -9,8 +9,8 @@
 <body class="erg">
 
   <header class="primary-header">
-    <%= link_to "< Back to dashboard", groups_path, style: "color: white;" %>
-    <h1><%= @group.name %></h1>
+    <%= link_to (raw("<img class='logo-mark' src='/assets/diverst-logo-mark.svg'>")), groups_path, class: "primary-header__back" %>
+    <h2 class="primary-header__title"><%= @group.name %></h2>
   </header>
 
   <header class="secondary-header">

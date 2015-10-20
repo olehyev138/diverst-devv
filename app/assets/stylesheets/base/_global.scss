@@ -44,6 +44,16 @@ img {
   }
 }
 
+.logo-mark {
+  width: 28px;
+  height: 28px;
+
+  @include mq(medium) {
+    width: 36px;
+    height: 36px;
+  }
+}
+
 .site-wrap {
   width: 90%;
   max-width: 800px;

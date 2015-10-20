@@ -9,20 +9,31 @@
   padding: 0 $spacing-medium;
   background-color: $diverst-purple;
   color: $diverst-white;
+  @include display(flex);
+  @include align-items(center);
   @include z-index(primary-header);
 
   @include mq(medium) {
     height: 75px;
     padding: 0 $spacing-large;
   }
+
+  h2 {
+    color: $diverst-white;
+  }
+}
+
+.primary-header__back {
+  width: 25%;
+}
+
+.primary-header__title {
+  width: 50%;
+  text-align: center;
 }
 
 .primary-header__main {
   @include flex(1);
-}
-
-.primary-header__logo {
-  @include v-center;
 }
 
 
