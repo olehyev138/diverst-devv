@@ -12,8 +12,8 @@
             <div class="flex-row__cell"><strong><%= field.object.title %></strong></div>
             <div class="flex-row__cell">
               <div class="segmented-control">
-                <a href="#" class="segmented-control__item<%= " segmented-control__item--is-selected" if field.object.match_polarity %>">Different</a>
-                <a href="#" class="segmented-control__item<%= " segmented-control__item--is-selected" unless field.object.match_polarity %>">Same</a>
+                <a class="segmented-control__item<%= " segmented-control__item--is-selected" if field.object.match_polarity %>">Different</a>
+                <a class="segmented-control__item<%= " segmented-control__item--is-selected" unless field.object.match_polarity %>">Same</a>
                 <%= field.input_field :match_polarity, as: :hidden %>
               </div>
             </div>
