@@ -1,7 +1,4 @@
 <%= simple_form_for @enterprise do |f| %>
   <%= render "shared/fields/creation/custom_fields", f: f %>
-
-  <br><br>
-
-  <%= f.submit "Save employee fields" %>
+  <%= f.button :submit, value: "Save employee fields" %>
 <% end %>
