@@ -5,15 +5,18 @@ table {
 }
 
 td {
-  padding: $spacing-large $spacing-medium;
+  padding: $spacing-small*1.5;
+}
 
+tbody tr {
   .table--has-border & {
-    border-bottom: 1px solid $diverst-border;
+    border-top: 1px solid $diverst-border;
   }
 }
 
 th {
-  padding: $spacing-medium;
+  padding: $spacing-small*1.5;
   text-align: left;
-  @include caps-bold;
+  @include font-regular;
+  @extend .highlight;
 }

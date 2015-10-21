@@ -46,6 +46,19 @@ body {
   -webkit-font-smoothing: subpixel-antialiased;
 }
 
+// Caps 
+
+@mixin caps {
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  @include font-regular;
+
+  @include mq(medium) {
+    font-size: 14px;
+  }
+}
+
 
 // Caps bold
 

@@ -1,29 +1,37 @@
-<h1>Employees</h1>
+<div class="content__header">
+  <h1>Employees</h1>
+  <%= link_to "Add an employee", new_employee_invitation_path, class: "btn btn--primary" %>
+</div>
 
-<%= link_to "Add an employee", new_employee_invitation_path %>
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <h4>Invitation sent</h4>
+      <table class="table--has-border">
+        <thead>
+          <th>Email</th>
+          <th></th>
+        </thead>
+        <tbody>
+          <% @employees.invitation_not_accepted.each do |employee| %>
+            <tr>
+              <td>
+                <%= link_to employee_path(employee) do %>
+                  <%= employee.email %>
+                <% end %>
+              </td>
+              <td class="text-right">
+                <%= link_to "Revoke invitation", employee_path(employee), method: :delete, class: "error" %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-<h2>Invitation sent</h2>
 
-<table>
-  <thead>
-    <th>Email</th>
-    <% current_admin.enterprise.fields.each do |field| %>
-      <th><%= field.title %></th>
-    <% end %>
-    <th>Options</th>
-  </thead>
-  <tbody>
-    <% @employees.invitation_not_accepted.each do |employee| %>
-      <tr>
-        <td><%= employee.email %></td>
-        <% current_admin.enterprise.fields.each do |field| %>
-          <td><%= employee.string_for_field(field) %></td>
-        <% end %>
-        <td><%= link_to "Details", employee_path(employee) %> - <%= link_to "Revoke invitation", employee_path(employee), method: :delete %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+
+</div>
 
 <h2>Manually added</h2>
 
