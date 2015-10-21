@@ -69,10 +69,14 @@ img {
 
 .site-wrap {
   width: 90%;
-  max-width: 800px;
+  max-width: 840px;
   margin: 0 auto;
 
   &--small {
     max-width: 400px;
+  }
+
+  &--medium {
+    width: 720px;
   }
 }

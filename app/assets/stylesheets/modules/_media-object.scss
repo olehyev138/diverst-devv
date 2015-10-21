@@ -1,0 +1,30 @@
+// Media object
+
+.media-object {
+  padding: $spacing-large;
+  margin-bottom: $spacing-large;
+  cursor: pointer;
+  position: relative;
+  @extend .field__input;
+
+  &--selected {
+    border-color: $diverst-purple;
+    box-shadow: 0 0 0 1px $diverst-purple;
+
+    &:after {
+      content: "";
+      position: absolute;
+      display: block;
+      top: 0;
+      right: 0;
+      background-color: $diverst-purple;
+      border-radius: 0 0 0 $border-radius;
+      @include icon(checkmark-white, 30px, 30px, 24px, 16px);
+    }
+  }
+}
+
+.media-object__image {
+  width: 100px;
+  height: 100px;
+}

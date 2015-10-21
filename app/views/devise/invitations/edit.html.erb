@@ -14,21 +14,21 @@
 
         <% end -%>
 
-        <h4>Choose your ERG</h4>
-        <div class="field">
-          <% resource.enterprise.groups.each do |group| %>
-            <label class="control">
-              <%= check_box_tag "groups[#{group.id}][]", group.id, false, class: "control__input" %>
-              <span class="control__indicator control__indicator--checkbox"></span>
-              <span class="control__label">
-                <span class="highlight"><%= group.name %></span> - 
-                <span class="muted"><%= group.description %></span>
-              </span>
-            </label>
-          <% end %>
+        <h2>Choose your ERG</h2>
+        <% resource.enterprise.groups.each do |group| %>
+        <div class="media-object">
+          <div class="flex-row">
+            <div class="flex-row__cell">
+              <img class="media-object__image" src="http://placehold.it/300x300">
+            </div>
+            <div class="flex-row__cell flex-row__cell--grow">
+              <h4><%= group.name %></h4>
+              <p><%= group.description %></p>
+            </div>
+          </div>
         </div>
-
-        <br>
+          
+        <% end %>
 
         <%= f.input :password %>
         <%= f.input :password_confirmation %>
