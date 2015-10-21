@@ -1,5 +1,6 @@
 class Group < ActiveRecord::Base
-  has_and_belongs_to_many :members, class_name: "Employee"
+  has_many :employee_groups
+  has_many :members, through: :employee_groups, class_name: "Employee", source: :employee
   belongs_to :enterprise
   has_and_belongs_to_many :polls
   has_many :events

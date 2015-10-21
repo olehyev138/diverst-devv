@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151020185737) do
+ActiveRecord::Schema.define(version: 20151021025617) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -40,6 +40,12 @@ ActiveRecord::Schema.define(version: 20151020185737) do
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
     t.string   "platform",    limit: 255
+  end
+
+  create_table "employee_groups", force: :cascade do |t|
+    t.integer  "employee_id", limit: 4
+    t.integer  "group_id",    limit: 4
+    t.datetime "created_at"
   end
 
   create_table "employees", force: :cascade do |t|
@@ -80,11 +86,6 @@ ActiveRecord::Schema.define(version: 20151020185737) do
   add_index "employees", ["invitations_count"], name: "index_employees_on_invitations_count", using: :btree
   add_index "employees", ["invited_by_id"], name: "index_employees_on_invited_by_id", using: :btree
   add_index "employees", ["reset_password_token"], name: "index_employees_on_reset_password_token", unique: true, using: :btree
-
-  create_table "employees_groups", force: :cascade do |t|
-    t.integer "employee_id", limit: 4
-    t.integer "group_id",    limit: 4
-  end
 
   create_table "employees_segments", force: :cascade do |t|
     t.integer "employee_id", limit: 4

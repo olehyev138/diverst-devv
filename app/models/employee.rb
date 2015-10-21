@@ -11,7 +11,8 @@ class Employee < ActiveRecord::Base
   belongs_to :enterprise, inverse_of: :employees
   has_many :devices
   has_and_belongs_to_many :segments
-  has_and_belongs_to_many :groups
+  has_many :employee_groups
+  has_many :groups, through: :employee_groups
   has_many :topic_feedbacks
   has_many :poll_responses
 
