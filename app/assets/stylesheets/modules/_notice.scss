@@ -11,6 +11,10 @@
   color: $diverst-white;
   text-align: center;
   border-radius: $border-radius;
+
+  &:empty {
+    display: none; // Hides the element if there is no content
+  }
 }
 
 .alert {
