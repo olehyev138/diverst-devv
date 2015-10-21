@@ -1,9 +1,15 @@
-<h1>Messages</h1>
+<div class="content__header">
+  <h1>Messages</h1>
+  <%= link_to "+Create new", new_group_group_message_path, class: "btn btn--primary" %>
+</div>
 
-<ul>
-  <% @messages.each do |message| %>
-    <li><%= message.subject %></li>
-  <% end %>
-</ul>
-
-<%= link_to "+Create new", new_group_group_message_path %>
+<div class="content__main">
+  <div class="card">
+    <% @messages.each do |message| %>
+      <div class="card__section card__section--border">
+        <span class="highlight"><%= message.subject %> - </span> 
+        <%= message.content %>
+      </div>
+    <% end %>
+  </div>
+</div>
