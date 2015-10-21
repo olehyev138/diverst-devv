@@ -21,6 +21,17 @@
 
 var Utility = (function() {
 
+  // Autohides alert after a certain amount of time
+  var autoHideAlerts = function() {
+    $('p.notice, p.alert').fadeOut(300, function() { $(this).remove(); });
+  };
 
+  return {
+    autoHideAlerts: autoHideAlerts
+  };
 
 })();
+
+setTimeout(function() {
+  Utility.autoHideAlerts();
+}, 2000);
