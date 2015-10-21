@@ -5,6 +5,8 @@ class PollResponsesController < ApplicationController
   before_action :set_response, only: [:edit, :update, :destroy, :show]
   skip_before_action :verify_authenticity_token, only: [:create]
 
+  layout "guest"
+
   def index
     @responses = @poll.responses
   end

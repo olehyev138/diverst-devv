@@ -3,17 +3,24 @@
 </div>
 
 <div class="content__main">
-  <div class="card">
-    <% @members.each do |member| %>
-      <div class="card__section card__section--border">
-        <div class="flex-row flex-row--middle">
-          <div class="flex-row__cell flex-row__cell--grow"><%= member.name %></div>
-          <div class="flex-row__cell"><%= link_to "remove", group_group_member_path(@group, member), method: :delete %></div>
+    <div class="row">
+
+      <% @members.each do |member| %>
+        <div class="col sm-12 md-4 lg-3">
+          <div class="card">
+            <div class="card__section card__section--border">
+              <div class="flex-row flex-row--middle">
+                <div class="flex-row__cell flex-row__cell--grow flex-row__cell--ellipsis"><%= member.name %></div>
+                <div class="flex-row__cell">
+                <%= link_to group_group_member_path(@group, member), method: :delete do %>
+                  <span class="icon icon--remove-red"></span>
+                <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    <% end %>
-    <div class="card__section card__section--border">
-      <%= paginate @members %>
-    </div>
+      <% end %>
   </div>
+  <%= paginate @members %>
 </div>

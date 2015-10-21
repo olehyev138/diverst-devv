@@ -28,7 +28,7 @@
 <% elsif cf.is_a? CheckboxField %>
   <% unless cf.alternative_layout %>
     <div class="field">
-      <label><%= cf.title %></label>
+      <label class="field__label"><%= cf.title %></label>
       <% cf.options.each do |option| %>
         <label class="control">
           <%= check_box_tag "custom-fields[#{cf.id}][]", option, resource.info[cf] && resource.info[cf].include?(option), class: "control__input" %>

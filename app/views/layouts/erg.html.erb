@@ -9,7 +9,10 @@
 <body class="erg">
 
   <header class="primary-header">
-    <%= link_to (raw("<img class='logo-mark' src='/assets/diverst-logo-mark.svg'>")), groups_path, class: "primary-header__back" %>
+    <%= link_to groups_path, class: "primary-header__back" do %>
+      <%= image_tag('diverst-logo-mark.svg', class: 'logo-mark') %>
+      Back to Diverst
+    <% end %>
     <h2 class="primary-header__title"><%= @group.name %></h2>
   </header>
 

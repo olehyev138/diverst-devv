@@ -44,6 +44,10 @@
   @include icon(remove, 16px, 16px);
 }
 
+.icon--remove-red {
+  @include icon(remove-red, 16px, 16px);
+}
+
 .icon--star-purple {
   @include icon(star-purple);
 }

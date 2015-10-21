@@ -1,6 +1,16 @@
 class Employees::InvitationsController < Devise::InvitationsController
-  layout "global_settings"
-  layout "guest", only: [:edit]
+  layout :resolve_layout
+
+  protected
+
+  def resolve_layout
+    case action_name
+    when "edit"
+      "guest"
+    else
+      "global_settings"
+    end
+  end
 
   private
 

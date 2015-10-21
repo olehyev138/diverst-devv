@@ -24,7 +24,14 @@
 }
 
 .primary-header__back {
+  color: $diverst-white;
   width: 25%;
+  @include display(flex);
+  @include align-items(center);
+
+  .logo-mark {
+    margin-right: $spacing-medium;
+  }
 }
 
 .primary-header__title {
