@@ -36,22 +36,7 @@
 
 .content__header {
   margin-bottom: $spacing-large;
-  @include display(flex);
-  @include flex-direction(column);
-  @include align-items(center);
   @include clearfix;
-
-  @include mq(small) {
-    @include flex-direction(row);
-  }
-
-  h1 {
-    @include flex(1);
-
-    @include mq(small) {
-      margin: 0;
-    }
-  }
 }
 
 .content__section {

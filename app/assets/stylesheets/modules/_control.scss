@@ -6,6 +6,7 @@
   text-align: left; // Force checkbox to always be left-aligned
   margin-bottom: $spacing-medium;
   @include user-select(none);
+  @include display(flex);
 
   .table-view & {
     margin: 0; // Remove margin when within table view
@@ -28,6 +29,7 @@
   vertical-align: middle;
   border: 1px solid $diverst-border;
   background-color: $diverst-white;
+  @include flex-shrink(0);
   @include transition(background-color $time $curve, border-color $time $curve);
 
   .control__input:checked + & {

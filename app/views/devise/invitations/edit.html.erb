@@ -1,4 +1,7 @@
-<h2>Joining Diverst</h2>
+<div class="content__header">
+  <img class="logo logo--large" src="<%= image_path "diverst-logo.svg" %>">
+  <p>Intro text goes here</p>
+</div>
 
 <div class="content__main">
   <div class="card">
@@ -11,14 +14,16 @@
 
         <% end -%>
 
+        <h4>Choose your ERG</h4>
         <div class="field">
-          <label>Ben oui choose dont tes ERGs mon homme</label>
           <% resource.enterprise.groups.each do |group| %>
             <label class="control">
               <%= check_box_tag "groups[#{group.id}][]", group.id, false, class: "control__input" %>
               <span class="control__indicator control__indicator--checkbox"></span>
-              <span class="control__label"><%= group.name %></span>
-              <p><%= group.description %></p>
+              <span class="control__label">
+                <span class="highlight"><%= group.name %></span> - 
+                <span class="muted"><%= group.description %></span>
+              </span>
             </label>
           <% end %>
         </div>
@@ -28,7 +33,7 @@
         <%= f.input :password %>
         <%= f.input :password_confirmation %>
 
-        <%= f.button :submit, "Create my account" %>
+        <%= f.button :submit, "Create my account", class: "btn--secondary btn--large btn--full" %>
       <% end %>
     </div>
   </div>

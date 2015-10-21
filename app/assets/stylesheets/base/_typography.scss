@@ -96,12 +96,8 @@ h3,
 
 h4,
 .h4 {
-  margin-bottom: $spacing-small;
+  margin-bottom: $spacing-medium;
   @include font-size($h4-font-size);
-
-  @include mq(medium) {
-    margin-bottom: $spacing-medium;
-  }
 }
 
 

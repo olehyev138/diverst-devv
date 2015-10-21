@@ -1,0 +1,17 @@
+.guest {
+  background-color: $diverst-purple;
+
+  .content__header {
+    padding: 60px 0 30px 0;
+    text-align: center;
+    color: $diverst-white;
+
+    .logo {
+      margin-bottom: $spacing-large;
+    }
+  }
+
+  .content__main {
+    margin-bottom: 72px;
+  }
+}
