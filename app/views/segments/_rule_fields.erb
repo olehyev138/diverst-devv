@@ -1,7 +1,21 @@
 <div class="nested-fields">
-  <%= f.select :field_id, current_admin.enterprise.fields.all.map{|field| [field.title, field.id, {"data-operators" => SegmentRule.operators_for_field(field).to_json, "data-options" => (field.class.method_defined?(:options) ? field.options.to_json : "[]")}]}, {}, { class: 'field' } %>
-  <%= f.input_field :operator, class: "operator", collection: [], label: false %>
-  <%= f.input_field :values, class: "values", label: false %>
-  <%= f.input_field :values, class: "multi-select", label: false, collection: [], multiple: "multiple" %>
-  <%= link_to_remove_association "remove", f %>
+  <div class="flex-row">
+    <div class="flex-row__cell">
+      <%= link_to_remove_association f do %>
+      <span class="icon icon--remove"></span>
+      <% end %>
+    </div>
+    <div class="flex-row__cell">
+      <%= f.select :field_id, current_admin.enterprise.fields.all.map{|field| [field.title, field.id, {"data-operators" => SegmentRule.operators_for_field(field).to_json, "data-options" => (field.class.method_defined?(:options) ? field.options.to_json : "[]")}]}, {}, { class: 'field' } %>
+    </div>
+    <div class="flex-row__cell">
+      <%= f.input_field :operator, class: "operator", collection: [], label: false %>
+    </div>
+    <div class="flex-row__cell">
+      <%= f.input_field :values, class: "values", label: false %>
+    </div>
+    <div class="flex-row__cell">
+      <%= f.input_field :values, class: "multi-select", label: false, collection: [], multiple: "multiple" %>
+    </div>
+  </div>
 </div>
