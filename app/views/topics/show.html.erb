@@ -7,7 +7,7 @@
 <h3>Starred</h3>
 
 <% @topic.feedbacks.where(featured: true).order(created_at: :desc).each do |feedback| %>
-  <div style="margin-bottom: 10px;">
+  <div>
     <%= feedback.content %><br>
     <strong>Submitted by <%= feedback.employee.first_name %> <%= feedback.employee.last_name %> on <%= feedback.created_at.to_s :slashes %> at <%= feedback.created_at.to_s :time %></strong><br>
     <a href="#" data-topic-id="<%= @topic.id %>" data-feedback-id="<%= feedback.id %>" data-starred="<%= feedback.featured %>" class="star-button"><%= feedback.featured ? "Unstar" : "Star" %></a> - <%= link_to "Delete", topic_topic_feedback_path(@topic, feedback), method: :delete, data: { confirm: "Are you sure?" } %>
@@ -17,7 +17,7 @@
 <h3>Other</h3>
 
 <% @topic.feedbacks.where(featured: false).order(created_at: :desc).each do |feedback| %>
-  <div style="margin-bottom: 10px;">
+  <div>
     <%= feedback.content %><br>
     <strong>Submitted by <%= feedback.employee.first_name %> <%= feedback.employee.last_name %> on <%= feedback.created_at.to_s :slashes %> at <%= feedback.created_at.to_s :time %></strong><br>
     <a href="#" data-topic-id="<%= @topic.id %>" data-feedback-id="<%= feedback.id %>" data-starred="<%= feedback.featured %>" class="star-button"><%= feedback.featured ? "Unstar" : "Star" %></a> - <%= link_to "Delete", topic_topic_feedback_path(@topic, feedback), method: :delete, data: { confirm: "Are you sure?" } %>

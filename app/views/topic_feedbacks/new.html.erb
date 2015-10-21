@@ -1,4 +1,15 @@
-<%= simple_form_for [@topic, @feedback] do |f| %>
-  <%= f.input :content %>
-  <%= f.submit "Send feedback" %>
-<% end %>
+<div class="content__header">
+  <img class="logo logo--large" src="<%= image_path "diverst-logo.svg" %>">
+  <p>Connect with someone within Anycorp based on your common interest but diverse background to explore new ideas or think outside the box to solve problems.</p>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <%= simple_form_for [@topic, @feedback] do |f| %>
+        <%= f.input :content %>
+        <%= f.button :submit, value: "Submit Feedback", class: "btn--secondary btn--large btn--full" %>
+      <% end %>
+    </div>
+  </div>
+</div>
