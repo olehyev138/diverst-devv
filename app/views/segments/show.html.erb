@@ -1,17 +1,27 @@
-<h1><%= @segment.name %></h1>
+<div class="content__header">
+  <h1><%= @segment.name %></h1>  
+</div>
 
-<h2>Rules</h2>
+<div class="content__main">
+  <ul>
+    <% @segment.rules.each do |rule| %>
+      <li><%= rule.field.title %> <%= SegmentRule.operator_text(rule.operator) %> <%= JSON.parse(rule.values).join(', ') %></li>
+    <% end %>
+  </ul>
 
-<ul>
-  <% @segment.rules.each do |rule| %>
-    <li><%= rule.field.title %> <%= SegmentRule.operator_text(rule.operator) %> <%= JSON.parse(rule.values).join(', ') %></li>
-  <% end %>
-</ul>
-
-<h2>Members</h2>
-
-<ul>
-  <% @segment.members.each do |member| %>
-    <li><%= link_to member.name, member %></li>
-  <% end %>
-</ul>
+  <div class="row">
+    <% @segment.members.each do |member| %>
+      <div class="col sm-12 md-4 lg-3">
+      <div class="card">
+        <div class="card__section">
+          <div class="flex-row">
+            <div class="flex-row__cell flex-row__cell--ellipsis">
+              <%= link_to member.name, member %>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+    <% end %>
+  </div>
+</div>
