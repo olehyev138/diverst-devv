@@ -5,6 +5,7 @@
   margin-bottom: $spacing-medium;
   border-radius: $border-radius;
   background-color: $diverst-white;
+  width: 100%;
   @include drop-shadow;
   @include transition(box-shadow $time $curve);
 

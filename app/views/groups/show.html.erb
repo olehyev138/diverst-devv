@@ -6,8 +6,9 @@
 
 <div class="content__main">
 
-  <div class="row">
-    <div class="col sm-12 md-6">
+  <div class="row row--equal-height">
+
+    <div class="col sm-12 md-4">
       <div class="card">
         <div class="card__section">
           <h4>Newest Members</h4>
@@ -21,9 +22,10 @@
       </div>
     </div>
 
-    <div class="col sm-12 md-6">
+    <div class="col sm-12 md-4">
       <div class="card">
         <div class="card__section">
+
           <h4>Latest Events</h4>
           <%= link_to "View all", group_events_path(@group), class: "card__action" %>
 
@@ -51,10 +53,22 @@
             </div>
           </div>
 
-
         </div>
       </div>
     </div>
-  </div>
 
+    <div class="col sm-12 md-4">
+      <div class="card card--secondary">
+        <div class="card__section">
+          <h4>Top Performers</h4>
+          <ol>
+          <% @group.members.limit(5).each do |member| %>
+            <li><%= link_to member.name, member %></li>
+          <% end %>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>
