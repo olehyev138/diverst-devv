@@ -36,7 +36,21 @@
 
 .content__header {
   margin-bottom: $spacing-large;
-  @include clearfix;
+  @include display(flex);
+  @include flex-direction(column);
+  @include align-items(center);
+
+  @include mq(small) {
+    @include flex-direction(row);
+  }
+
+  h1 {
+    @include flex(1);
+
+    @include mq(small) {
+      margin: 0;
+    }
+  }
 }
 
 .content__section {
