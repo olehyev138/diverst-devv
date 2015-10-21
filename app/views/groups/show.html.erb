@@ -11,7 +11,7 @@
       <div class="card">
         <div class="card__section">
           <h4>Newest Members</h4>
-          <%= link_to "View all", group_group_members_path(@group), class: "card__link" %>
+          <%= link_to "View all", group_group_members_path(@group), class: "card__action" %>
           <ol>
           <% @group.members.limit(5).each do |member| %>
             <li><%= link_to member.name, member %></li>
@@ -25,7 +25,7 @@
       <div class="card">
         <div class="card__section">
           <h4>Latest Events</h4>
-          <%= link_to "View all", group_events_path(@group), class: "card__link" %>
+          <%= link_to "View all", group_events_path(@group), class: "card__action" %>
 
           <div class="flex-row flex-row--middle">
             <div class="flex-row__cell flex-row__cell--grow">
