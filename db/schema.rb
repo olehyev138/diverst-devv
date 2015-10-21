@@ -43,9 +43,8 @@ ActiveRecord::Schema.define(version: 20151021025617) do
   end
 
   create_table "employee_groups", force: :cascade do |t|
-    t.integer  "employee_id", limit: 4
-    t.integer  "group_id",    limit: 4
-    t.datetime "created_at"
+    t.integer "employee_id", limit: 4
+    t.integer "group_id",    limit: 4
   end
 
   create_table "employees", force: :cascade do |t|

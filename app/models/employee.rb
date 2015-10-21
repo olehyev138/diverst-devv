@@ -2,7 +2,7 @@ class Employee < ActiveRecord::Base
   @@fb_token_generator = Firebase::FirebaseTokenGenerator.new(ENV["FIREBASE_SECRET"])
 
   # Include default devise modules.
-  devise :database_authenticatable, :invitable, :registerable,
+  devise :database_authenticatable, :invitable,
          :recoverable, :rememberable, :trackable, :validatable, :async
 
   include DeviseTokenAuth::Concerns::User

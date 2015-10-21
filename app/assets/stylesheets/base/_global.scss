@@ -15,6 +15,11 @@ body {
   background-color: $diverst-background;
   color: $diverst-grey;
   overflow-x: hidden;
+
+  &.auth {
+    @include display(flex);
+    @include align-items(center);
+  }
 }
 
 a {
@@ -69,17 +74,5 @@ img {
 
   &--small {
     max-width: 400px;
-  }
-
-  &--form {
-    margin-top: 20%;
-
-    @include mq(medium) {
-      margin-top: 15%;
-    }
-
-    @include mq(large) {
-      margin-top: 10%;
-    }
   }
 }

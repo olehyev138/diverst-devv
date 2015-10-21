@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Diverst</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body class="auth">
+
+<% if notice.present? %><p class="notice"><%= notice %></p><% end %>
+<% if notice.present? %><p class="alert"><%= alert %></p><% end %>
+
+
+<div class="site-wrap site-wrap--small site-wrap--form">
+  <img class="logo logo--large" src="<%= image_path "diverst-logo-purple.svg" %>">
+  <div class="card">
+    <div class="card__section">
+      <%= yield %>
+    </div>
+  </div>
+  <%= yield :links %>
+</div>
+
+</body>
+</html>

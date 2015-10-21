@@ -7,6 +7,7 @@
   margin-bottom: $spacing-medium;
   @include user-select(none);
   @include display(flex);
+  @include align-items(center);
 
   .table-view & {
     margin: 0; // Remove margin when within table view
