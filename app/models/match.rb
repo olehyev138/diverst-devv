@@ -8,7 +8,7 @@ class Match < ActiveRecord::Base
   }.freeze
 
   @@expiration_time = 2.weeks
-  @@expires_soon_time = @@expiration_time / 2
+  @@expires_soon_time = 1.week
 
   belongs_to :user1, class_name: "Employee"
   belongs_to :user2, class_name: "Employee"

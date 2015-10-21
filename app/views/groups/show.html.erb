@@ -29,29 +29,18 @@
           <h4>Latest Events</h4>
           <%= link_to "View all", group_events_path(@group), class: "card__action" %>
 
-          <div class="flex-row flex-row--middle">
-            <div class="flex-row__cell flex-row__cell--grow">
-              <span class="highlight">News title</span><br>
-              <small>News description</small><br>
-              <small class="muted">Oct 12, 2015</small>
-              </p>
+          <% @events.each do |event| %>
+            <div class="flex-row flex-row--middle">
+              <div class="flex-row__cell flex-row__cell--grow">
+                <span class="highlight"><%= event.title %></span><br>
+                <small><%= event.description %></small><br>
+                <small class="muted"><%= event.created_at.to_s :slashes %></small>
+              </div>
+              <div class="flex-row__cell">
+                <span class="icon icon--chevron-right"></span>
+              </div>
             </div>
-            <div class="flex-row__cell">
-              <span class="icon icon--chevron-right"></span>
-            </div>
-          </div>
-
-          <div class="flex-row flex-row--middle">
-            <div class="flex-row__cell flex-row__cell--grow">
-              <span class="highlight">News title</span><br>
-              <small>News description</small><br>
-              <small class="muted">Oct 12, 2015</small>
-              </p>
-            </div>
-            <div class="flex-row__cell">
-              <span class="icon icon--chevron-right"></span>
-            </div>
-          </div>
+          <% end %>
 
         </div>
       </div>

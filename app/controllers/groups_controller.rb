@@ -14,6 +14,10 @@ class GroupsController < ApplicationController
     @group = current_admin.enterprise.groups.new
   end
 
+  def show
+    @events = @group.events
+  end
+
   def create
     @group = current_admin.enterprise.groups.new(group_params)
 
