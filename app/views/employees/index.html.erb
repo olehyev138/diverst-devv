@@ -6,21 +6,25 @@
 <div class="content__main">
   <div class="card">
     <div class="card__section">
-      <h4>Invitation sent</h4>
-      <table class="table--has-border">
-        <thead>
-          <th>Email</th>
-          <th>Options</th>
-        </thead>
-        <tbody>
-          <% @employees.invitation_not_accepted.each do |employee| %>
-            <tr>
-              <td><%= link_to employee.email, employee_path(employee) %></td>
-              <td class="text-right"><%= link_to "Revoke invitation", employee_path(employee), method: :delete, class: "error" %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+      <h4>Invitations sent</h4>
+      <% if @employees.invitation_not_accepted.any? %>
+        <table class="table--has-border">
+          <thead>
+            <th>Email</th>
+            <th></th>
+          </thead>
+          <tbody>
+            <% @employees.invitation_not_accepted.each do |employee| %>
+              <tr>
+                <td><%= link_to employee.email, employee_path(employee) %></td>
+                <td class="text-right"><%= link_to "Revoke invitation", employee_path(employee), method: :delete, class: "error" %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <p>No invitation has been sent out yet. Employees you <%= link_to "manually invite", new_employee_invitation_path %> will be shown here until they accept their invitation.</p>
+      <% end %>
     </div>
   </div>
 </div>
@@ -33,15 +37,14 @@
         <thead>
           <th>Name</th>
           <th>Email</th>
-          <th>Options</th>
+          <th></th>
         </thead>
         <tbody>
           <% @employees.invitation_accepted.each do |employee| %>
             <tr>
-              <td><%= employee.name %></td>
+              <td><%= link_to employee.name, employee_path(employee) %></td>
               <td><%= employee.email %></td>
-              <td>
-                <%= link_to "Details", employee_path(employee) %>
+              <td class="text-right">
                 <%= link_to "Delete", employee_path(employee), method: :delete, class: "error" %>
               </td>
             </tr>
@@ -59,28 +62,34 @@
   <div class="card">
     <div class="card__section">
       <h4>SAML</h4>
-      <table class="table--has-border">
-        <thead>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Options</th>
-        </thead>
-        <tbody>
-          <% @employees.where(auth_source: "saml").each do |employee| %>
-            <tr>
-              <td><%= employee.name %></td>
-              <td><%= employee.email %></td>
-              <td>
-                <%= link_to "Details", employee_path(employee) %>
-                <%= link_to "Delete", employee_path(employee), method: :delete, class: "error" %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+      <% if @employees.where(auth_source: "saml").any? %>
+        <table class="table--has-border">
+          <thead>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Options</th>
+          </thead>
+          <tbody>
+            <% @employees.where(auth_source: "saml").each do |employee| %>
+              <tr>
+                <td><%= employee.name %></td>
+                <td><%= employee.email %></td>
+                <td>
+                  <%= link_to "Details", employee_path(employee) %>
+                  <%= link_to "Delete", employee_path(employee), method: :delete, class: "error" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <p>No employee has signed in through SAML yet. When they do, they will show up here. If you can't sign in through SAML, try <%= link_to "setting it up", edit_auth_enterprise_path(current_admin.enterprise) %> from the global settings.</p>
+      <% end %>
     </div>
-    <div class="card__section">
-      <%= paginate @employees %>
-    </div>
+    <% if @employees.where(auth_source: "saml").any? %>
+      <div class="card__section">
+        <%= paginate @employees %>
+      </div>
+    <% end %>
   </div>
 </div>
