@@ -26,11 +26,32 @@
         <div class="card__section">
           <h4>Latest Events</h4>
           <%= link_to "View all", group_events_path(@group), class: "card__link" %>
-          <ol>
-          <% @group.events.limit(5).each do |event| %>
-            <li><%= link_to event.name, event %></li>
-          <% end %>
-          </ol>
+
+          <div class="flex-row flex-row--middle">
+            <div class="flex-row__cell flex-row__cell--grow">
+              <span class="highlight">News title</span><br>
+              <small>News description</small><br>
+              <small class="muted">Oct 12, 2015</small>
+              </p>
+            </div>
+            <div class="flex-row__cell">
+              <span class="icon icon--chevron-right"></span>
+            </div>
+          </div>
+
+          <div class="flex-row flex-row--middle">
+            <div class="flex-row__cell flex-row__cell--grow">
+              <span class="highlight">News title</span><br>
+              <small>News description</small><br>
+              <small class="muted">Oct 12, 2015</small>
+              </p>
+            </div>
+            <div class="flex-row__cell">
+              <span class="icon icon--chevron-right"></span>
+            </div>
+          </div>
+
+
         </div>
       </div>
     </div>

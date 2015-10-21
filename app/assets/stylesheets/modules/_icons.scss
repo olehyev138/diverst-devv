@@ -35,6 +35,10 @@
   @include icon(chevron-down-purple);
 }
 
+.icon--chevron-right {
+  @include icon(chevron-right);
+}
+
 .icon--reorder {
   @include icon(reorder, 16px, 16px);
   cursor: move;
