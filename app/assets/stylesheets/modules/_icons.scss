@@ -1,6 +1,6 @@
 // Icons
 
-@mixin icon($filename, $width: 24px, $height: 24px, $background-width: 24px, $background-height: 24px) {
+@mixin icon($filename, $width: 24px, $height: 24px, $background-width: null, $background-height: null) {
   background-image: image-url('icons/#{$filename}.svg');
   background-repeat: no-repeat;
   background-position: center center;

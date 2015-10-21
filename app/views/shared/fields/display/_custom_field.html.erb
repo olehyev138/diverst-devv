@@ -3,7 +3,7 @@
     <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "custom-fields[#{cf.id}]", value: resource.info[cf] } %>
   <% else # Textarea %>
     <div class="field">
-      <label><%= cf.title %></label>
+      <label class="field__label"><%= cf.title %></label>
       <div class="field__input-wrapper">
         <textarea name="custom-fields[<%= cf.id %>]" cols="30" rows="10" class="field__input"><%= resource.info[cf] %></textarea>
       </div>
@@ -15,7 +15,7 @@
   <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "custom-fields[#{cf.id}]", value: resource.info[cf], type: "text", placeholder: "MM/DD/YYYY" } %>
 <% elsif cf.is_a? SelectField %>
   <div class="field">
-    <label><%= cf.title %></label>
+    <label class="field__label"><%= cf.title %></label>
     <div class="field__input-wrapper">
       <span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
       <select class="field__input field__input--right-add-on" name="custom-fields[<%= cf.id %>]">
@@ -39,7 +39,7 @@
     </div>
   <% else # Select2 %>
     <div class="field pills">
-      <label><%= cf.title %></label>
+      <label class="field__label"><%= cf.title %></label>
       <div class="field__input-wrapper">
         <select name="custom-fields[<%= cf.id %>][]" class="field__input select2" multiple="multiple">
           <% cf.options.each do |option| %>
