@@ -1,6 +1,6 @@
 class TopicFeedbacksController < ApplicationController
-  before_action :authenticate_employee!, except: [:destroy]
-  before_action :authenticate_admin!, only: [:destroy]
+  before_action :authenticate_admin!, except: [:new, :create]
+  before_action :authenticate_employee!, only: [:new, :create]
   before_action :set_topic
   before_action :set_feedback, only: [:update, :destroy, :show]
 
@@ -37,7 +37,7 @@ class TopicFeedbacksController < ApplicationController
   protected
 
   def set_topic
-    @topic = current_employee.enterprise.topics.find(params[:topic_id])
+    @topic = (current_employee || current_admin).enterprise.topics.find(params[:topic_id])
   end
 
   def set_feedback
