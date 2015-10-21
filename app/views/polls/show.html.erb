@@ -1,63 +1,66 @@
-<h1><%= @poll.title %></h1>
+<div class="content__header">
+  <h1><%= @poll.title %></h1>
+</div>
 
-<p><%= @poll.description %></p>
+<div class="content__main">
+  <p><%= @poll.description %></p>
 
-<h2>Fields</h2>
-
-<% @poll.fields.each do |field| %>
-  <div class="card">
-    <div class="card__section">
-      <h3><%= field.title %></h3>
-      <% if field.type == "TextField" %>
-        <ul>
-          <% @poll.responses.each do |response| %>
-            <li><%= response.info[field] %></li>
-          <% end %>
-          <% if @poll.responses.empty? %>
-            <p>No response yet.</p>
-          <% end %>
-        </ul>
-      <% elsif field.type == "CheckboxField" || field.type == "SelectField" %>
-        <div class="field-chart" data-source="<%= answer_popularities_poll_poll_field_path(@poll, field) %>"></div>
-      <% elsif field.type == "NumericField" %>
-        <% @stats = field.stats_in(@poll.responses) %>
-        Mean: <%= @stats[:mean] %><br>
-        Min: <%= @stats[:min] %><br>
-        Max: <%= @stats[:max] %><br>
-        Median: <%= @stats[:median] %>
-      <% end %>
-    </div>
-  </div>
-<% end %>
-
-<h2>Responses</h2>
-
-<table>
-  <thead>
-    <th>Respondent</th>
-    <% @poll.fields.each do |field| %>
-      <th><%= field.title %></th>
-    <% end %>
-  </thead>
-  <tbody>
-    <% @poll.responses.each do |response| %>
-      <tr>
-        <td><%= response.employee.name %></td>
-        <% @poll.fields.each do |field| %>
-          <td><%= field.string_value response.info[field] %></td>
+  <% @poll.fields.each do |field| %>
+    <div class="card">
+      <div class="card__section">
+        <h3><%= field.title %></h3>
+        <% if field.type == "TextField" %>
+          <ul>
+            <% @poll.responses.each do |response| %>
+              <li><%= response.info[field] %></li>
+            <% end %>
+            <% if @poll.responses.empty? %>
+              <p>No response yet.</p>
+            <% end %>
+          </ul>
+        <% elsif field.type == "CheckboxField" || field.type == "SelectField" %>
+          <div class="field-chart" data-source="<%= answer_popularities_poll_poll_field_path(@poll, field) %>"></div>
+        <% elsif field.type == "NumericField" %>
+          <% @stats = field.stats_in(@poll.responses) %>
+          Mean: <%= @stats[:mean] %><br>
+          Min: <%= @stats[:min] %><br>
+          Max: <%= @stats[:max] %><br>
+          Median: <%= @stats[:median] %>
         <% end %>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+      </div>
+    </div>
+  <% end %>
 
-<h2>General stats</h2>
+  <h2>Responses</h2>
 
-<ul>
-  <li># of invitations: <%= @poll.employees.count %></li>
-  <li># of responses: <%= @poll.responses.count %></li>
-  <li>Response rate: <%= @poll.employees.count > 0 ? "#{(@poll.responses.count.to_f / @poll.employees.count * 100).to_i}%" : "N/A" %></li>
-</ul>
+  <table>
+    <thead>
+      <th>Respondent</th>
+      <% @poll.fields.each do |field| %>
+        <th><%= field.title %></th>
+      <% end %>
+    </thead>
+    <tbody>
+      <% @poll.responses.each do |response| %>
+        <tr>
+          <td><%= response.employee.name %></td>
+          <% @poll.fields.each do |field| %>
+            <td><%= field.string_value response.info[field] %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <h2>General stats</h2>
+
+  <ul>
+    <li># of invitations: <%= @poll.employees.count %></li>
+    <li># of responses: <%= @poll.responses.count %></li>
+    <li>Response rate: <%= @poll.employees.count > 0 ? "#{(@poll.responses.count.to_f / @poll.employees.count * 100).to_i}%" : "N/A" %></li>
+  </ul>
+
+</div>
 
 <script>
   $(document).on('page:change', function() {
@@ -106,7 +109,8 @@
           series: [{
             name: 'All respondents',
             data: pollAnswerCounts
-          }]
+          }],
+          colors: ['#7B77C9']
         });
       });
     });
