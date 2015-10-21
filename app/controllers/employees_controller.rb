@@ -5,7 +5,7 @@ class EmployeesController < ApplicationController
   layout "global_settings"
 
   def index
-    @employees = current_admin.enterprise.employees
+    @employees = current_admin.enterprise.employees.page(params[:page])
 
     respond_to do |format|
       format.html

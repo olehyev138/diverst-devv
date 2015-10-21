@@ -10,71 +10,77 @@
       <table class="table--has-border">
         <thead>
           <th>Email</th>
-          <th></th>
+          <th>Options</th>
         </thead>
         <tbody>
           <% @employees.invitation_not_accepted.each do |employee| %>
             <tr>
-              <td>
-                <%= link_to employee_path(employee) do %>
-                  <%= employee.email %>
-                <% end %>
-              </td>
-              <td class="text-right">
-                <%= link_to "Revoke invitation", employee_path(employee), method: :delete, class: "error" %></td>
+              <td><%= link_to employee.email, employee_path(employee) %></td>
+              <td class="text-right"><%= link_to "Revoke invitation", employee_path(employee), method: :delete, class: "error" %></td>
             </tr>
           <% end %>
         </tbody>
       </table>
     </div>
   </div>
-
-
-
 </div>
 
-<h2>Manually added</h2>
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <h4>Manually added</h4>
+      <table class="table--has-border">
+        <thead>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Options</th>
+        </thead>
+        <tbody>
+          <% @employees.invitation_accepted.each do |employee| %>
+            <tr>
+              <td><%= employee.name %></td>
+              <td><%= employee.email %></td>
+              <td>
+                <%= link_to "Details", employee_path(employee) %>
+                <%= link_to "Delete", employee_path(employee), method: :delete, class: "error" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <div class="card__section">
+      <%= paginate @employees %>
+    </div>
+  </div>
+</div>
 
-<table>
-  <thead>
-    <th>Email</th>
-    <% current_admin.enterprise.fields.each do |field| %>
-      <th><%= field.title %></th>
-    <% end %>
-    <th>Options</th>
-  </thead>
-  <tbody>
-    <% @employees.invitation_accepted.each do |employee| %>
-      <tr>
-        <td><%= employee.email %></td>
-        <% current_admin.enterprise.fields.each do |field| %>
-          <td><%= employee.string_for_field(field) %></td>
-        <% end %>
-        <td><%= link_to "Details", employee_path(employee) %> - <%= link_to "Delete", employee_path(employee), method: :delete %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<h2>SAML</h2>
-
-<table>
-  <thead>
-    <th>Email</th>
-    <% current_admin.enterprise.fields.each do |field| %>
-      <th><%= field.title %></th>
-    <% end %>
-    <th>Options</th>
-  </thead>
-  <tbody>
-    <% @employees.where(auth_source: "saml").each do |employee| %>
-      <tr>
-        <td><%= employee.email %></td>
-        <% current_admin.enterprise.fields.each do |field| %>
-          <td><%= employee.string_for_field(field) %></td>
-        <% end %>
-        <td><%= link_to "Details", employee_path(employee) %> - <%= link_to "Delete", employee_path(employee), method: :delete %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <h4>SAML</h4>
+      <table class="table--has-border">
+        <thead>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Options</th>
+        </thead>
+        <tbody>
+          <% @employees.where(auth_source: "saml").each do |employee| %>
+            <tr>
+              <td><%= employee.name %></td>
+              <td><%= employee.email %></td>
+              <td>
+                <%= link_to "Details", employee_path(employee) %>
+                <%= link_to "Delete", employee_path(employee), method: :delete, class: "error" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <div class="card__section">
+      <%= paginate @employees %>
+    </div>
+  </div>
+</div>
