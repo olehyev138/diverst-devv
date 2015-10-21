@@ -1,4 +1,17 @@
-<%= simple_form_for @enterprise do |f| %>
-  <%= render "shared/fields/creation/custom_fields", f: f %>
-  <%= f.button :submit, value: "Save employee fields" %>
-<% end %>
+<div class="row">
+  <div class="col sm-12 md-8">
+    <%= simple_form_for @enterprise do |f| %>
+      <%= render "shared/fields/creation/custom_fields", f: f %>
+      <%= f.button :submit, value: "Save employee fields" %>
+    <% end %>
+  </div>
+  <div class="col sm-12 md-4">
+    <div class="card card--secondary">
+      <div class="card__section">
+        <ul class="unstyled">
+          <li><a href="#">Test</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
