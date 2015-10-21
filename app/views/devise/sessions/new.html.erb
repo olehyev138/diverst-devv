@@ -4,7 +4,7 @@
   <%= f.input :password, autocomplete: "off" %>
 
   <% if devise_mapping.rememberable? -%>
-    <%= f.input :remember_me, as: :boolean %>
+    <%= f.input :remember_me, as: :boolean, wrapper: :boolean_checkbox %>
   <% end -%>
 
   <%= f.button :submit, value: "Log in" %>

@@ -55,7 +55,7 @@ SimpleForm.setup do |config|
     # b.use :full_error, wrap_with: { tag: :span, class: :error }
   end
 
-  config.wrappers :boolean, class: :field, hint_class: :field_with_hint, error_class: :field_with_errors do |b|
+  config.wrappers :boolean_toggle, class: :field, hint_class: :field_with_hint, error_class: :field_with_errors do |b|
     b.use :html5
 
     b.use :hint,  wrap_with: { tag: :span, class: :hint }
@@ -64,6 +64,19 @@ SimpleForm.setup do |config|
     b.wrapper tag: 'label', class: 'control' do |ba|
       ba.use :input, class: "control__input"
       ba.wrapper tag: 'span', class: 'control__indicator control__indicator--toggle' do end
+      ba.use :label, class: "control__label"
+    end
+  end
+
+  config.wrappers :boolean_checkbox, class: :field, hint_class: :field_with_hint, error_class: :field_with_errors do |b|
+    b.use :html5
+
+    b.use :hint,  wrap_with: { tag: :span, class: :hint }
+    b.use :error, wrap_with: { tag: :span, class: :error }
+
+    b.wrapper tag: 'label', class: 'control' do |ba|
+      ba.use :input, class: "control__input"
+      ba.wrapper tag: 'span', class: 'control__indicator control__indicator--checkbox' do end
       ba.use :label, class: "control__label"
     end
   end
@@ -165,7 +178,7 @@ SimpleForm.setup do |config|
   # Custom wrappers for input types. This should be a hash containing an input
   # type as key and the wrapper that will be used for all inputs with specified type.
   config.wrapper_mappings = {
-    boolean: :boolean,
+    boolean: :boolean_toggle,
     select: :select
   }
 
