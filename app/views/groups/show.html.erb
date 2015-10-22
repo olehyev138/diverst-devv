@@ -1,8 +1,6 @@
 <div class="content__header">
-  <h1><%= @group.name %></h1>
+  <p><%= @group.description %></p>
 </div>
-
-<p><%= @group.description %></p>
 
 <div class="content__main">
 
@@ -30,7 +28,7 @@
           <%= link_to "View all", group_events_path(@group), class: "card__action" %>
 
           <% @events.each do |event| %>
-            <div class="flex-row flex-row--middle">
+            <div class="flex-row flex-row--middle flex-row--border">
               <div class="flex-row__cell flex-row__cell--grow">
                 <span class="highlight"><%= event.title %></span><br>
                 <small><%= event.description %></small><br>

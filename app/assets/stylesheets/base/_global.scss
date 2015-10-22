@@ -26,10 +26,6 @@ a {
   text-decoration: none;
   color: $diverst-purple;
   outline: 0;
-
-  & + & {
-    margin-left: $spacing-small;
-  }
 }
 
 img {
