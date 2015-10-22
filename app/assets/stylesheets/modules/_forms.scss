@@ -71,6 +71,7 @@ input[type="password"] {
   color: $diverst-black;
   border-radius: $border-radius;
   @include transition(all $time $curve);
+  @include backface-visibility(hidden);
 
   &--large {
     font-size: 110%;

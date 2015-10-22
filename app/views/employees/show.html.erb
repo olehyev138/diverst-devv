@@ -1,13 +1,28 @@
-<h1>Employee details</h1>
+<div class="content__header">
+  <h1>Employee details</h1>
+  <%= link_to "Edit Employee", edit_employee_path(@employee), class: "btn btn--primary" %>
+</div>
 
-<%= link_to "Edit", edit_employee_path(@employee) %><br><br>
+<div class="content__main">
 
-<label><strong>Email</strong></label>
-<p><%= @employee.email %></p>
+  <div class="card">
+    <div class="card__section card__section--border">
+      <label><strong>Name</strong></label>
+      <p><%= @employee.name %></p>
+    </div>
+    <div class="card__section card__section--border">
+      <label><strong>Email</strong></label>
+      <p><%= @employee.email %></p>
+    </div>
+  </div>
 
-<h2>Custom fields</h2>
+  <div class="card">
+    <% @employee.enterprise.fields.each do |field| %>
+      <div class="card__section card__section--border">
+        <label><strong><%= field.title %></strong></label>
+        <p><%= @employee.string_for_field(field) %></p>
+      </div>
+    <% end %>
+  </div>
 
-<% @employee.enterprise.fields.each do |field| %>
-  <label><strong><%= field.title %></strong></label>
-  <p><%= @employee.string_for_field(field) %></p>
-<% end %>
+</div>
