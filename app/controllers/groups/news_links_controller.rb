@@ -53,7 +53,6 @@ class Groups::NewsLinksController < ApplicationController
       :url,
       :title,
       :description
-      #segment_ids: []
     )
   end
 end

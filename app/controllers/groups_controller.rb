@@ -15,7 +15,10 @@ class GroupsController < ApplicationController
   end
 
   def show
-    @events = @group.events
+    @events = @group.events.limit(3)
+    @news_links = @group.news_links.limit(3)
+    @employee_groups = @group.employee_groups.order(created_at: :desc).limit(5)
+    @messages = @group.messages.limit(3)
   end
 
   def create
