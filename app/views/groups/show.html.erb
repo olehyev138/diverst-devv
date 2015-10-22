@@ -15,6 +15,16 @@
             <div class="card__section">
               <h4>Newest Members</h4>
               <%= link_to "View all", group_group_members_path(@group), class: "card__action" %>
+              <div class="row">
+                <div class="col sm-12 md-6">
+                  <a href="#TODO">Name</a><br>
+                  Date
+                </div>
+                <div class="col sm-12 md-6">
+                  <a href="#TODO">Name</a><br>
+                  Date
+                </div>
+              </div>
               <ol>
               <% @employee_groups.each do |employee_group| %>
                 <li><%= link_to employee_group.employee.name, employee_group.employee %><br><%= employee_group.created_at.to_s(:datetime) %></li>
@@ -32,7 +42,7 @@
               <%= link_to "View all", group_events_path(@group), class: "card__action" %>
 
               <% @events.each do |event| %>
-                <%= link_to [@group, event], class: "block" do %>
+                <%= link_to [@group, event], class: "block block-section" do %>
                   <div class="flex-row flex-row--middle">
                     <div class="flex-row__cell flex-row__cell--grow">
                       <span class="highlight"><%= event.title %></span><br>

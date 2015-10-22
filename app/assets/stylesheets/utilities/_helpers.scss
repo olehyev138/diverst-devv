@@ -37,3 +37,21 @@
 .block {
   display: block;
 }
+
+.block-section {
+  padding: $spacing-medium 0;
+  border-bottom: 1px solid $diverst-border;
+
+  &:hover .icon {
+    @include transform(translate3d(5px, 0, 0));
+  }
+
+  .icon {
+    @include transition(transform $time $curve);
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+    border-bottom: none;
+  }
+}
