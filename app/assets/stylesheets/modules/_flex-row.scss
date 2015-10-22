@@ -11,10 +11,6 @@
   &--baseline {
     @include align-items(baseline);
   }
-
-  a + a {
-    margin-left: $spacing-small;
-  }
 }
 
 .flex-row__cell {

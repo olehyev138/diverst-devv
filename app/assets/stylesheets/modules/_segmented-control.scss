@@ -14,7 +14,6 @@
   background-color: $diverst-white;
   color: rgba($diverst-grey-light, 0.5);
   border: 1px solid $diverst-border;
-  margin: 0; // Overrides the a + a margin defined in global.scss
   cursor: pointer;
 
   &--is-selected {
