@@ -8,19 +8,27 @@
   @include user-select(none);
   @extend .field__input;
 
+  &:after {
+    content: "";
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    display: block;
+    top: 0;
+    right: 0;
+    background-color: $diverst-purple;
+    border-radius: 0 0 0 $border-radius;
+    @include icon(checkmark-white, 30px, 30px, 24px, 16px);
+    @include transition(opacity $time $curve, visibility $time $curve);
+  }
+
   &--selected {
     border-color: $diverst-purple;
     box-shadow: 0 0 0 1px $diverst-purple;
 
     &:after {
-      content: "";
-      position: absolute;
-      display: block;
-      top: 0;
-      right: 0;
-      background-color: $diverst-purple;
-      border-radius: 0 0 0 $border-radius;
-      @include icon(checkmark-white, 30px, 30px, 24px, 16px);
+      opacity: 1;
+      visibility: visible;
     }
   }
 }
