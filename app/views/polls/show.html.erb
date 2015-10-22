@@ -61,18 +61,18 @@
 
     <div class="card">
       <div class="card__section">
-     
-        <% @poll.responses.each do |response| %>
+
+        <% @poll.responses.order(created_at: :desc).each do |response| %>
           <div class="block-section">
-            <div class="flex-row">
+            <div class="flex-row poll-response--title">
               <div class="flex-row__cell flex-row__cell--grow">
-                <h4>Employee name - <span class="muted">answered <%= time_ago_in_words(response.created_at) %> ago</span></h4>
+                <h4><%= response.employee.name %> - <span class="muted">answered <%= time_ago_in_words(response.created_at) %> ago</span></h4>
               </div>
               <div class="flex-row__cell">
                 <span class="icon icon--chevron-down-purple"></span>
               </div>
             </div>
-            <div>
+            <div class="poll-response--details collapsed">
               <ul class="unstyled">
                 <% @poll.fields.each do |field| %>
                   <li><small><%= field.title %></small> <span class="block highlight"><%= field.string_value response.info[field] %></span></li>
@@ -92,6 +92,12 @@
   $(document).on('page:change', function() {
     $(document).off('page:change');
 
+    // Accordeon the poll responses
+    $('.poll-response--title').click(function() {
+      $(this).next('.poll-response--details').toggleClass('collapsed');
+    });
+
+    // Render field charts
     $('.field-chart').each(function() {
       var $chart = $(this);
       var dataUrl = $(this).data('source');

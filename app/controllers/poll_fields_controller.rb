@@ -1,5 +1,5 @@
 class PollFieldsController < ApplicationController
-  before_action :authenticate_employee!
+  before_action :authenticate_admin!
   before_action :set_field, only: [:answer_popularities]
   before_action :set_poll
 

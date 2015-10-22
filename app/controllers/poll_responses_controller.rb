@@ -1,6 +1,6 @@
 class PollResponsesController < ApplicationController
-  before_action :authenticate_admin!
-  before_action :authenticate_employee!, only: [:new, :thank_you]
+  before_action :authenticate_admin!, except: [:new, :create, :thank_you]
+  before_action :authenticate_employee!, only: [:new, :create, :thank_you]
   before_action :set_poll
   before_action :set_response, only: [:edit, :update, :destroy, :show]
   skip_before_action :verify_authenticity_token, only: [:create]
