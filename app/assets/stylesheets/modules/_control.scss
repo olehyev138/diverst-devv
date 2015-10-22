@@ -36,11 +36,6 @@
     border-color: $diverst-purple;
   }
 
-  .control__input:focus + & {
-    border-color: $diverst-purple;
-    box-shadow: 0 0 0 1px $diverst-purple;
-  }
-
   &:after {
     content: "";
     position: absolute;
@@ -77,6 +72,11 @@
 		@include icon(checkmark-white, 16px, 16px);
 		@include transform(scale(0.3));
 	}
+
+  .control__input:focus + & {
+    border-color: $diverst-purple;
+    box-shadow: 0 0 0 1px $diverst-purple;
+  }
 }
 
 

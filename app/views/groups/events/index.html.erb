@@ -4,34 +4,42 @@
 </div>
 
 <div class="content__main">
+<h3>Upcoming Events</h3>
   <div class="card">
-    <div class="card__section card__section--border">
-      <h4>Upcoming events</h4>
-
-        <% @upcoming_events.each do |event| %>
-          <a href="#TODO" class="block block-section">
-            <div class="flex-row flex-row--middle">
-              <div class="flex-row__cell flex-row__cell--grow">
-                <span class="highlight"><%= event.title %></span><br>
-                <small><%= event.description %></small><br>
-                <small class="muted"><%= event.created_at.to_s :slashes %></small>
-              </div>
-              <div class="flex-row__cell">
-                <span class="icon icon--chevron-right"></span>
-              </div>
+    <% @upcoming_events.each do |event| %>
+      <div class="card__section card__section--border">
+        <a href="#TODO" class="block block-section">
+          <div class="flex-row flex-row--middle">
+            <div class="flex-row__cell flex-row__cell--grow">
+              <span class="highlight"><%= event.title %></span><br>
+              <small><%= event.description %></small><br>
+              <small class="muted"><%= event.start.to_s :slashes %></small>
             </div>
-          </a>
-        <% end %>
-    </div>
+            <div class="flex-row__cell">
+              <span class="icon icon--chevron-right"></span>
+            </div>
+          </div>
+        </a>
+      </div>
+    <% end %>
   </div>
+  <h3>Past events</h3>
   <div class="card">
-    <div class="card__section card__section--border">
-      <h4>Past events</h4>
-      <ul class="unstyled">
-        <% @past_events.each do |event| %>
-          <li><%= event.title %></li>
-        <% end %>
-      </ul>
-    </div>
+    <% @past_events.each do |event| %>
+      <div class="card__section card__section--border">
+        <a href="#TODO" class="block block-section">
+          <div class="flex-row flex-row--middle">
+            <div class="flex-row__cell flex-row__cell--grow">
+              <span class="highlight"><%= event.title %></span><br>
+              <small><%= event.description %></small><br>
+              <small class="muted">Ended <%= time_ago_in_words(event.end) %> ago</small>
+            </div>
+            <div class="flex-row__cell">
+              <span class="icon icon--chevron-right"></span>
+            </div>
+          </div>
+        </a>
+      </div>
+    <% end %>
   </div>
 </div>

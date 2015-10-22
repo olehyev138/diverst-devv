@@ -1,14 +1,14 @@
 <div class="content__header">
   <h1><%= @topic.statement %></h1>
-  Expires on <%= @topic.expiration.to_s :slashes %>
+  <p>Expires on <%= @topic.expiration.to_s :slashes %></p>
 </div>
 
 <div class="content__main">
+  <h3>Starred Feedback</h3>
   <div class="card">
-    <div class="card__section">
-      <h4>Starred Feedback</h4>
-      <% @topic.feedbacks.where(featured: true).order(created_at: :desc).each do |feedback| %>
-        <div class="flex-row">
+    <% @topic.feedbacks.where(featured: true).order(created_at: :desc).each do |feedback| %>
+      <div class="card__section">
+        <div class="flex-row flex-row--middle">
           <div class="flex-row__cell flex-row__cell--grow">
             <%= feedback.content %><br>
             <small><%= feedback.employee.first_name %> <%= feedback.employee.last_name %> on <%= feedback.created_at.to_s :slashes %> at <%= feedback.created_at.to_s :ampmtime %></small>
@@ -17,25 +17,25 @@
             <a href="#" data-topic-id="<%= @topic.id %>" data-feedback-id="<%= feedback.id %>" data-starred="<%= feedback.featured %>" class="star-button"><%= feedback.featured ? "Unstar" : "Star" %></a> <%= link_to "Delete", topic_topic_feedback_path(@topic, feedback), method: :delete, class: "error", data: { confirm: "Are you sure?" } %>
           </div>
         </div>
-      <% end %>
-    </div>
+      </div>
+    <% end %>
   </div>
 
+  <h3>Other Feedback</h3>
   <div class="card">
-    <div class="card__section">
-      <h4>Other Feedback</h4>
-      <% @topic.feedbacks.where(featured: [false, nil]).order(created_at: :desc).each do |feedback| %>
-        <div class="flex-row">
+    <% @topic.feedbacks.where(featured: [false, nil]).order(created_at: :desc).each do |feedback| %>
+      <div class="card__section card__section--border">
+        <div class="flex-row flex-row--middle">
           <div class="flex-row__cell flex-row__cell--grow">
             <%= feedback.content %><br>
-            <small><%= feedback.employee.first_name %> <%= feedback.employee.last_name %> on <%= feedback.created_at.to_s :slashes %> at <%= feedback.created_at.to_s :ampmtime %></small>
+            <small><span class="highlight"><%= feedback.employee.name %></span> on <%= feedback.created_at.to_s :slashes %> at<%= feedback.created_at.to_s :ampmtime %></small>
           </div>
           <div class="flex-row__cell">
             <a href="#" data-topic-id="<%= @topic.id %>" data-feedback-id="<%= feedback.id %>" data-starred="<%= feedback.featured %>" class="star-button"><%= feedback.featured ? "Unstar" : "Star" %></a> <%= link_to "Delete", topic_topic_feedback_path(@topic, feedback), method: :delete, class: "error", data: { confirm: "Are you sure?" } %>
           </div>
         </div>
-      <% end %>
-    </div>
+      </div>
+    <% end %>
   </div>
 </div>
 

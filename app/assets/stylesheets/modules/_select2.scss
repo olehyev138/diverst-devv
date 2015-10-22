@@ -12,3 +12,8 @@
   vertical-align: 1px !important;
   margin-right: $spacing-small/2 !important;
 }
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+  background-color: mix($diverst-white, $diverst-border, 50%) !important;
+  color: $diverst-black !important;
+}
