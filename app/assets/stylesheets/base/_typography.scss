@@ -126,7 +126,14 @@ ol {
 ul,
 ol {
   padding-left: 1.5em;
-  line-height: 1.8;
+
+  li {
+    margin-bottom: $spacing-small;
+
+    &:last-child {
+      margin: 0;
+    }
+  }
 }
 
 .unstyled {

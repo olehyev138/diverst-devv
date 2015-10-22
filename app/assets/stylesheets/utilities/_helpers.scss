@@ -37,3 +37,26 @@
 .block {
   display: block;
 }
+
+.block-section {
+  cursor: pointer;
+  padding: $spacing-medium 0;
+  border-bottom: 1px solid $diverst-border;
+
+  &:only-child {
+    padding: 0;
+  }
+
+  &:hover .icon--chevron-right {
+    @include transform(translate3d(5px, 0, 0));
+  }
+
+  .icon--chevron-right {
+    @include transition(transform $time $curve);
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+    border-bottom: none;
+  }
+}

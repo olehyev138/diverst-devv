@@ -28,6 +28,12 @@ a {
   outline: 0;
 }
 
+.link-group {
+  a + a {
+    margin-left: $spacing-small;
+  }
+}
+
 img {
   vertical-align: top;
 }

@@ -4,9 +4,9 @@
 </div>
 
 <div class="content__main">
+  <h3>Invitations sent</h3>
   <div class="card">
     <div class="card__section">
-      <h4>Invitations sent</h4>
       <% if @employees.invitation_not_accepted.any? %>
         <table class="table--has-border">
           <thead>
@@ -27,12 +27,10 @@
       <% end %>
     </div>
   </div>
-</div>
 
-<div class="content__main">
+  <h3>Manually added</h3>
   <div class="card">
     <div class="card__section">
-      <h4>Manually added</h4>
       <table class="table--has-border">
         <thead>
           <th>Name</th>
@@ -56,12 +54,10 @@
       <%= paginate @employees %>
     </div>
   </div>
-</div>
-
-<div class="content__main">
+  
+  <h3>SAML</h3>
   <div class="card">
     <div class="card__section">
-      <h4>SAML</h4>
       <% if @employees.where(auth_source: "saml").any? %>
         <table class="table--has-border">
           <thead>

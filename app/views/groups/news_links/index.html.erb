@@ -7,12 +7,20 @@
   <div class="card">
     <% @news_links.each do |news_link| %>
       <div class="card__section card__section--border">
-        <h4><%= news_link.title %></h4>
-        <p>
-          <%= news_link.description %>
-          <br>
-          <%= link_to news_link.url, news_link.url %>
-        </p>
+      <div class="flex-row flex-row--middle">
+        <div class="flex-row__cell flex-row__cell--grow">
+          <h4><%= news_link.title %></h4>
+          <p>
+            <%= news_link.description %>
+            <br>
+            <%= link_to news_link.url, news_link.url %>
+          </p>
+        </div>
+        <div class="flex-row__cell link-group">
+          <%= link_to "Edit", edit_group_news_link_path(@group, news_link) %>
+          <%= link_to "Delete", group_news_link_path(@group, news_link), method: :delete, class: "error" %>
+        </div>
+      </div>
       </div>
     <% end %>
   </div>
