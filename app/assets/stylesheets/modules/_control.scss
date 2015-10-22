@@ -29,15 +29,16 @@
   border: 1px solid $diverst-border;
   background-color: $diverst-white;
   @include flex-shrink(0);
-  @include transition(background-color $time $curve, border-color $time $curve);
+  @include transition(background-color $time $curve, border-color $time $curve, box-shadow $time $curve);
 
   .control__input:checked + & {
     background-color: $diverst-purple;
     border-color: $diverst-purple;
   }
 
-  .control__input:focus & {
+  .control__input:focus + & {
     border-color: $diverst-purple;
+    box-shadow: 0 0 0 1px $diverst-purple;
   }
 
   &:after {
