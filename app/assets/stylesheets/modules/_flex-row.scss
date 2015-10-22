@@ -12,6 +12,26 @@
     @include align-items(baseline);
   }
 
+  &--border {
+    border-bottom: 1px solid $diverst-border;
+    padding-bottom: $spacing-medium;
+
+    .icon {
+      @include transition(transform $time $curve);
+    }
+
+    &:hover {
+      .icon {
+        @include transform(translate3d(5px, 0, 0));
+      }
+    }
+
+    &:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+  }
+
   & + & {
     margin-top: $spacing-medium;
   }
