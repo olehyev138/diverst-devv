@@ -1,11 +1,17 @@
-<h1>News</h1>
+<div class="content__header">
+  <h1>News</h1>
+  <%= link_to "+ Create news link", new_group_news_link_path, class: "btn btn--primary" %>
+</div>
 
-<% @news_links.each do |news_link| %>
-  <div>
-    <h3><%= news_link.title %> - <%= link_to "Remove", group_news_link_path(@group, news_link), method: :delete %></h3>
-    <p><%= news_link.description %></p>
-    <span><%= link_to news_link.url %></span>
+<div class="content__main">
+  <div class="card">
+    <% @news_links.each do |news_link| %>
+      <div class="card__section card__section--border">
+        <h3><%= news_link.title %></h3>
+        <p><%= news_link.description %><br><%= link_to news_link.url %></p>
+      </div>
+    <% end %>
   </div>
-<% end %>
+</div>
 
-<%= link_to "+Create new", new_group_news_link_path %>
+

@@ -190,14 +190,6 @@ ActiveRecord::Schema.define(version: 20151021025617) do
     t.datetime "both_accepted_at"
   end
 
-  create_table "messages", force: :cascade do |t|
-    t.integer  "author_id",    limit: 4
-    t.integer  "recipient_id", limit: 4
-    t.text     "content",      limit: 65535
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-  end
-
   create_table "news_links", force: :cascade do |t|
     t.string   "title",       limit: 255
     t.string   "description", limit: 255
@@ -251,9 +243,9 @@ ActiveRecord::Schema.define(version: 20151021025617) do
     t.integer  "topic_id",    limit: 4
     t.text     "content",     limit: 65535
     t.integer  "employee_id", limit: 4
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-    t.boolean  "featured",    limit: 1
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+    t.boolean  "featured",    limit: 1,     default: false
   end
 
   create_table "topics", force: :cascade do |t|
