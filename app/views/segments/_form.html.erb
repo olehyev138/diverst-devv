@@ -46,7 +46,7 @@
 
   // Make each rule form adapt as the user selects different options
   $('#rules').on('cocoon:after-insert', function(e, insertedItem) {
-    var $fieldSelect = insertedItem.find('.field');
+    var $fieldSelect = insertedItem.find('.custom-field');
     var $operatorSelect = insertedItem.find('.operator');
     var $singleValueField = insertedItem.find('.values');
     var $multiValueField = insertedItem.find('.multi-select');
@@ -55,8 +55,8 @@
 
     // When the field is changed, populate the operators select field with the appropriate operations for the selected field
     $fieldSelect.change(function() {
-      $multiValueField.css('display', 'none');
-      $singleValueField.css('display', 'none');
+      $multiValueField.parents('.flex-row__cell').css('display', 'none');
+      $singleValueField.parents('.flex-row__cell').css('display', 'none');
 
       var fieldOperators = $(this).find(":selected").data('operators');
       $operatorSelect.find('option').remove();
@@ -69,13 +69,13 @@
         }
       });
 
-      $operatorSelect.css('display', 'inline-block');
+      $operatorSelect.parents('.flex-row__cell').css('display', 'inline-block');
     });
 
     // When the operator is changed, create the appropriate value field
     $operatorSelect.change(function() {
-      $multiValueField.css('display', 'none').prop('disabled', true);
-      $singleValueField.css('display', 'none').prop('disabled', true);
+      $multiValueField.parents('.flex-row__cell').css('display', 'none').prop('disabled', true);
+      $singleValueField.parents('.flex-row__cell').css('display', 'none').prop('disabled', true);
 
       var selectedOperator = operators.filter(function(operator) {
         return operator.id === parseInt($operatorSelect.val());
@@ -84,6 +84,8 @@
       var options = $fieldSelect.find(":selected").data('options');
 
       if (options.length) {
+        $multiValueField.find('option').remove();
+
         options.forEach(function(option) {
           $multiValueField[0].add(new Option(option, option));
         });
@@ -96,12 +98,13 @@
         }
 
         $multiValueField.prop('disabled', false);
-        $multiValueField.css('display', 'inline-block');
+        $multiValueField.parents('.flex-row__cell').css('display', 'inline-block');
         $multiValueField.select2();
       }
       else {
+        console.log("no options");
         $singleValueField.prop('disabled', false);
-        $singleValueField.css('display', 'inline-block');
+        $singleValueField.parents('.flex-row__cell').css('display', 'inline-block');
       }
     });
   });

@@ -7,7 +7,7 @@
   <div class="card">
     <% @messages.each do |message| %>
       <div class="card__section card__section--border">
-        <h3><%= message.subject %> - <span class="muted">Date</span></h3>
+        <h3><%= message.subject %> - <span class="muted" title="<%= message.created_at.to_s :datetime %>"><%= time_ago_in_words(message.created_at) %> ago</span></h3>
         <p><%= message.content %></p>
       </div>
     <% end %>

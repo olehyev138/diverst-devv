@@ -82,15 +82,15 @@ SimpleForm.setup do |config|
   end
 
   config.wrappers :select, class: :field, hint_class: :field_with_hint, error_class: :field_with_errors do |b|
-    b.wrapper :tag => 'span', :class => 'field__add-on field__add-on--right' do |ba|
-      ba.wrapper tag: 'span', class: 'icon icon--chevron-down' do end
-    end
-
     b.use :html5
 
     b.use :label, class: :field__label
 
     b.wrapper :tag => 'div', :class => 'field__input-wrapper' do |ba|
+      ba.wrapper :tag => 'span', :class => 'field__add-on field__add-on--right' do |bb|
+        bb.wrapper tag: 'span', class: 'icon icon--chevron-down' do end
+      end
+
       ba.use :input, class: "field__input field__input--right-add-on"
     end
 

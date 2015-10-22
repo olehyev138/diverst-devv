@@ -17,7 +17,7 @@
               <%= link_to "View all", group_group_members_path(@group), class: "card__action" %>
               <ol>
               <% @employee_groups.each do |employee_group| %>
-                <li><%= link_to employee_group.employee.name, employee_group.employee %><br><%= employee_group.created_at.to_s(:datetime) %></li>
+                <li><%= employee_group.employee.name %><br><%= time_ago_in_words(employee_group.created_at) %> ago</li>
               <% end %>
               </ol>
             </div>
@@ -28,7 +28,7 @@
           <div class="card">
             <div class="card__section">
 
-              <h4>Latest Events</h4>
+              <h4>Upcoming Events</h4>
               <%= link_to "View all", group_events_path(@group), class: "card__action" %>
 
               <% @events.each do |event| %>
@@ -45,6 +45,7 @@
                   </div>
                 <% end %>
               <% end %>
+
             </div>
           </div>
         </div>
