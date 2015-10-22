@@ -34,4 +34,4 @@ var Utility = (function() {
 
 setTimeout(function() {
   Utility.autoHideAlerts();
-}, 2000);
+}, 4500);

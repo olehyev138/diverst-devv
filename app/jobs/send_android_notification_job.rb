@@ -7,6 +7,5 @@ class SendAndroidNotificationJob < ActiveJob::Base
     registration_ids = [device_token]
     options = {data: data, collapse_key: "updated_score"}
     response = gcm.send(registration_ids, options)
-    pp response
   end
 end

@@ -5,6 +5,7 @@
   margin-bottom: $spacing-large;
   cursor: pointer;
   position: relative;
+  @include user-select(none);
   @extend .field__input;
 
   &--selected {

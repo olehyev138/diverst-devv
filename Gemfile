@@ -63,4 +63,6 @@ group :development, :test do
   gem 'spring'
 
   gem 'active_record_query_trace'
+
+  gem 'pry-rails'
 end
