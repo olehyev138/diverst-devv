@@ -16,4 +16,8 @@ class EmployeeSerializer < ActiveModel::Serializer
 
     fields_hash
   end
+
+  def last_name
+    "#{(object.last_name || "")[0].capitalize}."
+  end
 end
