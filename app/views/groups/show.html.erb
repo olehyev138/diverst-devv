@@ -64,7 +64,7 @@
               <%= link_to "View all", group_news_links_path(@group), class: "card__action" %>
 
               <% @news_links.each do |news_link| %>
-                <%= link_to news_link.url, class: "block", target: "_blank" do %>
+                <%= link_to news_link.url, class: "block block-section", target: "_blank" do %>
                   <div class="flex-row flex-row--middle">
                     <div class="flex-row__cell flex-row__cell--grow">
                       <span class="highlight"><%= news_link.title %></span><br>
@@ -90,7 +90,7 @@
               <%= link_to "View all", group_group_messages_path(@group), class: "card__action" %>
 
               <% @messages.each do |message| %>
-                <%= link_to [@group, message], class: "block", target: "_blank" do %>
+                <%= link_to [@group, message], class: "block block-section", target: "_blank" do %>
                   <div class="flex-row flex-row--middle">
                     <div class="flex-row__cell flex-row__cell--grow">
                       <span class="highlight"><%= message.subject %></span><br>
