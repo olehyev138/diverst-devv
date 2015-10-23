@@ -5,7 +5,7 @@ class EmployeeSerializer < ActiveModel::Serializer
     :fields
 
   def fields
-    fields = object.enterprise.fields
+    fields = object.enterprise.mobile_fields.map(&:field)
     fields_hash = []
     fields.each do |field|
       fields_hash << {

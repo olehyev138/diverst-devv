@@ -31,6 +31,7 @@ Rails.application.routes.draw do
       get 'edit_auth'
       get 'edit_fields'
       get 'edit_algo'
+      get 'edit_mobile_fields'
     end
   end
 

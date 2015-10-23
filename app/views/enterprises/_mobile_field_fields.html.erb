@@ -1,0 +1,17 @@
+<div class="nested-fields">
+  <div class="flex-row flex-row--baseline">
+    <div class="flex-row__cell">
+      <%= link_to_remove_association f do %>
+        <span class="icon icon--remove"></span>
+      <% end %>
+    </div>
+    <div class="flex-row__cell flex-row__cell--grow">
+      <div class="field">
+        <div class="field__input-wrapper">
+          <%= f.association :field, label: false %>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row__cell"><span class="icon icon--reorder"></span></div>
+  </div>
+</div>

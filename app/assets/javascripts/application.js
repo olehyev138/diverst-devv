@@ -17,6 +17,7 @@
 //= require select2
 //= require highcharts
 //= require rangeslider.js/dist/rangeslider
+//= require Sortable
 //= require_tree .
 
 var Utility = (function() {

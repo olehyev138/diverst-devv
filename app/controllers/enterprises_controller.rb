@@ -1,18 +1,11 @@
 class EnterprisesController < ApplicationController
   before_action :authenticate_admin!
-  before_action :set_enterprise, only: [:edit, :edit_auth, :edit_fields, :edit_algo, :update, :delete]
+  before_action :set_enterprise, only: [:edit, :edit_auth, :edit_fields, :edit_mobile_fields, :edit_algo, :update, :delete]
 
   layout :resolve_layout
 
-  def index
-    @enterprises = Enterprise.all
-  end
-
-  def new
-    @enterprise = Enterprise.new
-  end
-
   def update
+    # Render the appropriate view in case validation fails
     referer = env['HTTP_REFERER']
     routes = env['action_dispatch.routes']
     info = routes.recognize_path(referer, method: :get)
@@ -28,7 +21,7 @@ class EnterprisesController < ApplicationController
 
   def resolve_layout
     case action_name
-    when "edit_algo"
+    when "edit_algo", "edit_mobile_fields"
       "handshake"
     else
       "global_settings"
@@ -48,6 +41,11 @@ class EnterprisesController < ApplicationController
       :idp_sso_target_url,
       :idp_slo_target_url,
       :idp_cert,
+      mobile_fields_attributes: [
+        :id,
+        :field_id,
+        :_destroy
+      ],
       fields_attributes: [
         :id,
         :title,

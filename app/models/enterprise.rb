@@ -6,8 +6,10 @@ class Enterprise < ActiveRecord::Base
   has_many :segments, inverse_of: :enterprise
   has_many :groups, inverse_of: :enterprise
   has_many :polls, inverse_of: :enterprise
+  has_many :mobile_fields, inverse_of: :enterprise
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :mobile_fields, reject_if: :all_blank, allow_destroy: true
 
   def saml_settings
     settings = OneLogin::RubySaml::Settings.new

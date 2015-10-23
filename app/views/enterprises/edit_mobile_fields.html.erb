@@ -1,0 +1,27 @@
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <p>Define the fields that will be displayed on each employee's profile in the mobile app. You can order them as you see fit.</p>
+      <%= simple_form_for @enterprise do |f| %>
+        <div id="mobile_fields">
+          <%= f.simple_fields_for :mobile_fields do |mobile_field| %>
+            <%= render "mobile_field_fields", f: mobile_field %>
+          <% end %>
+          <div class="link">
+            <%= link_to_add_association "Add a field", f, :mobile_fields %>
+          </div>
+        </div>
+
+        <%= f.button :submit %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  var listWithHandle = document.getElementById("mobile_fields");
+  Sortable.create(listWithHandle, {
+    handle: '.icon--reorder',
+    animation: 150
+  });
+</script>
