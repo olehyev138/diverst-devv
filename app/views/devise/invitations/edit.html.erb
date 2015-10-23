@@ -6,6 +6,23 @@
 <div class="content__main">
   <div class="card">
     <div class="card__section">
+
+      <div class="row">
+        <div class="col sm-6 md-3 lg-5">
+          <%= image_tag "cdo.png", class: "block", style: "width: 100%" %>
+        </div>
+        <div class="col sm-6 md-3 lg-7">
+          <h3>Lorna Powell, CDO</h3>
+          <p>Hi! This is Lorna, Chief Diversity Officer at Anycorp. Employee diversity is an element of our culture we take to heart. Not only do we think that it’s important for everyone to be fairly represented, but diverse teams produce better results. That’s why I’m inviting you to join Diverst, a platform where you can meet new colleagues with unique perspectives, collaborate on interesting problems and develop new ideas together. Join us by selecting the ERGs that best represent your interests or that you are already part of.</p>
+          <%= link_to "Here's a link to my vCard", '#' %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__section">
       <%= simple_form_for resource, :as => resource_name, :url => invitation_path(resource_name), :html => { :method => :put } do |f| %>
         <%= devise_error_messages! %>
         <%= f.hidden_field :invitation_token %>
