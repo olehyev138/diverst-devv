@@ -1110,7 +1110,7 @@ admin = Admin.create(
   enterprise: enterprise,
   first_name: "Francis",
   last_name: "Marineau",
-  email: "frank.marineau@gmail.com",
+  email: "info@diverst.com",
   password: "password",
   password_confirmation: "password"
 )

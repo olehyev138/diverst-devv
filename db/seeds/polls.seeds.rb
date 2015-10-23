@@ -71,4 +71,17 @@ Hot Dog"
   )
 
   p.save
+
+  100.times do
+    r = p.responses.new(
+      employee: Employee.find(rand(1..(Employee.count-1)))
+    )
+
+    r.info[p.fields[0]] = p.fields[0].options[rand(0..p.fields[0].options.count-1)]
+    r.info[p.fields[1]] = p.fields[1].options[rand(0..p.fields[1].options.count-1)]
+    r.info[p.fields[2]] = p.fields[2].options[rand(0..p.fields[2].options.count-1)]
+    r.info[p.fields[3]] = Faker::Lorem.paragraph
+  end
+
+  p.save
 end
