@@ -68,7 +68,7 @@
                   <div class="flex-row flex-row--middle">
                     <div class="flex-row__cell flex-row__cell--grow">
                       <span class="highlight"><%= news_link.title %></span><br>
-                      <small class="body-color"><%= news_link.description %></small><br>
+                      <small class="body-color"><%= truncate(news_link.description, length: 100) %></small><br>
                       <small class="muted"><%= news_link.created_at.to_s :slashes %></small>
                     </div>
                     <div class="flex-row__cell">
