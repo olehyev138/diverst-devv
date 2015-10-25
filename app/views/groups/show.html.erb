@@ -42,7 +42,7 @@
                   <div class="flex-row flex-row--middle">
                     <div class="flex-row__cell flex-row__cell--grow">
                       <span class="highlight"><%= event.title %></span><br>
-                      <small class="body-color"><%= truncate(event.description, length: 100) %></small><br>
+                      <small class="body-color"><%= truncate(event.description, length: 90) %></small><br>
                       <small class="muted"><%= event.start.to_s :slashes %></small>
                     </div>
                     <div class="flex-row__cell">
@@ -68,7 +68,7 @@
                   <div class="flex-row flex-row--middle">
                     <div class="flex-row__cell flex-row__cell--grow">
                       <span class="highlight"><%= news_link.title %></span><br>
-                      <small class="body-color"><%= truncate(news_link.description, length: 100) %></small><br>
+                      <small class="body-color"><%= truncate(news_link.description, length: 90) %></small><br>
                       <small class="muted"><%= news_link.created_at.to_s :slashes %></small>
                     </div>
                     <div class="flex-row__cell">
@@ -94,7 +94,7 @@
                   <div class="flex-row flex-row--middle">
                     <div class="flex-row__cell flex-row__cell--grow">
                       <span class="highlight"><%= message.subject %></span><br>
-                      <small class="body-color"><%= truncate(message.content, length: 100) %></small><br>
+                      <small class="body-color"><%= truncate(message.content, length: 90) %></small><br>
                       <small class="muted"><%= message.created_at.to_s :slashes %></small>
                     </div>
                     <div class="flex-row__cell">

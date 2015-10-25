@@ -89,7 +89,6 @@ nb_employees.times do |i|
     puts "Employee ##{i+1} created successfully."
   else
     puts "Error(s) saving employee ##{i+1}: "
-    pp(employee.errors.messages)
   end
 end
 

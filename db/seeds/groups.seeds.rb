@@ -12,7 +12,7 @@
     puts "Group ##{i+1} created successfully."
   else
     puts "Error(s) saving group ##{i+1}: "
-    pp(g.errors.messages)
+    puts g.errors.messages
   end
 end
 

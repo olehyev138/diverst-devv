@@ -22,7 +22,7 @@
     <%= active_link_to "Messages", group_group_messages_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
     <%= active_link_to "Events", group_events_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
     <%= active_link_to "News", group_news_links_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-    <%= active_link_to "Settings", '#', class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+    <%= active_link_to "Settings", '#', active: [""], class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   </header>
 
   <div class="content">
