@@ -12,3 +12,8 @@
   display: inline-block;
   margin-bottom: $spacing-medium;
 }
+
+select.datetime {
+  display: inline-block;
+  width: auto;
+}

@@ -94,7 +94,7 @@
                   <div class="flex-row flex-row--middle">
                     <div class="flex-row__cell flex-row__cell--grow">
                       <span class="highlight"><%= message.subject %></span><br>
-                      <small><%= message.content %></small><br>
+                      <small style="color: #68727A;"><%= truncate(message.content, length: 100) %></small><br>
                       <small class="muted"><%= message.created_at.to_s :slashes %></small>
                     </div>
                     <div class="flex-row__cell">

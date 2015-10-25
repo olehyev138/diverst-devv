@@ -52,6 +52,7 @@ class Groups::EventsController < ApplicationController
     .require(:event)
     .permit(
       :title,
+      :description,
       :start,
       :end,
       :location,

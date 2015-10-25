@@ -9,7 +9,9 @@
     <div class="card card--secondary" id="sidebar">
       <div class="card__section">
         <ul class="unstyled">
-          <li><a href="#">Test</a></li>
+          <% @enterprise.fields.each do |field| %>
+            <li><%= link_to field.title, "#" %></li>
+          <% end %>
         </ul>
       </div>
     </div>
