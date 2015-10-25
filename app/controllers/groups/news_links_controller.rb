@@ -25,7 +25,7 @@ class Groups::NewsLinksController < ApplicationController
 
   def update
     if @news_link.update(news_link_params)
-      redirect_to @news_link
+      redirect_to action: :index
     else
       render :edit
     end

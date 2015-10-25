@@ -42,7 +42,7 @@
                   <div class="flex-row flex-row--middle">
                     <div class="flex-row__cell flex-row__cell--grow">
                       <span class="highlight"><%= event.title %></span><br>
-                      <small><%= event.description %></small><br>
+                      <small class="body-color"><%= truncate(event.description, length: 100) %></small><br>
                       <small class="muted"><%= event.start.to_s :slashes %></small>
                     </div>
                     <div class="flex-row__cell">
@@ -68,7 +68,7 @@
                   <div class="flex-row flex-row--middle">
                     <div class="flex-row__cell flex-row__cell--grow">
                       <span class="highlight"><%= news_link.title %></span><br>
-                      <small><%= news_link.description %></small><br>
+                      <small class="body-color"><%= news_link.description %></small><br>
                       <small class="muted"><%= news_link.created_at.to_s :slashes %></small>
                     </div>
                     <div class="flex-row__cell">
@@ -90,11 +90,11 @@
               <%= link_to "View all", group_group_messages_path(@group), class: "card__action" %>
 
               <% @messages.each do |message| %>
-                <%= link_to [@group, message], class: "block block-section", target: "_blank" do %>
+                <%= link_to [@group, message], class: "block block-section" do %>
                   <div class="flex-row flex-row--middle">
                     <div class="flex-row__cell flex-row__cell--grow">
                       <span class="highlight"><%= message.subject %></span><br>
-                      <small style="color: #68727A;"><%= truncate(message.content, length: 100) %></small><br>
+                      <small class="body-color"><%= truncate(message.content, length: 100) %></small><br>
                       <small class="muted"><%= message.created_at.to_s :slashes %></small>
                     </div>
                     <div class="flex-row__cell">
@@ -113,11 +113,21 @@
     <div class="col sm-12 md-3">
       <div class="card card--secondary">
         <div class="card__section">
-          <h4>Top Performers</h4>
+          <h4>Top Performers in this ERG</h4>
           <ol>
-          <% @group.members.limit(5).each do |member| %>
-            <li><%= link_to member.name, member %></li>
-          <% end %>
+            <% @group.members.limit(5).each do |member| %>
+              <li><%= link_to member.name, member %></li>
+            <% end %>
+          </ol>
+        </div>
+        <div class="card__section">
+          <h4>Top ERGs</h4>
+          <ol>
+            <li><a href="#">PRIDE</a></li>
+            <li><a href="#">AALF</a></li>
+            <li><strong>WiNG</strong></li>
+            <li><a href="#">SOAR</a></li>
+            <li><a href="#">PANG</a></li>
           </ol>
         </div>
       </div>
