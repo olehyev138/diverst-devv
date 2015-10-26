@@ -7,6 +7,11 @@ class EmployeeSerializer < ActiveModel::Serializer
   def fields
     fields = object.enterprise.mobile_fields.map(&:field)
     fields_hash = []
+    fields_hash << {
+      title: "Topic of conversation",
+      value: match.topic.statement
+    }
+
     fields.each do |field|
       fields_hash << {
         title: field.title,
