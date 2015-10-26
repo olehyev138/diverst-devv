@@ -38,7 +38,7 @@
               <%= link_to "View all", group_events_path(@group), class: "card__action" %>
 
               <% @events.each do |event| %>
-                <%= link_to [@group, event], class: "block block-section" do %>
+                <%= link_to group_events_path(@group), class: "block block-section" do %>
                   <div class="flex-row flex-row--middle">
                     <div class="flex-row__cell flex-row__cell--grow">
                       <span class="highlight"><%= event.title %></span><br>
@@ -90,7 +90,7 @@
               <%= link_to "View all", group_group_messages_path(@group), class: "card__action" %>
 
               <% @messages.each do |message| %>
-                <%= link_to [@group, message], class: "block block-section" do %>
+                <%= link_to group_group_messages_path(@group), class: "block block-section" do %>
                   <div class="flex-row flex-row--middle">
                     <div class="flex-row__cell flex-row__cell--grow">
                       <span class="highlight"><%= message.subject %></span><br>
