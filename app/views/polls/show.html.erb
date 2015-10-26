@@ -35,10 +35,12 @@
         <% if @poll.responses.any? %>
           <% if field.type == "TextField" %>
             <ul>
-              <% @poll.responses.each do |response| %>
+              <% @field_responses = @poll.responses.page(params["field_#{field.id}_page"]).per(5); @field_responses.each do |response| %>
                 <li><%= response.info[field] %></li>
               <% end %>
             </ul>
+
+            <%= paginate @field_responses, param_name: "field_#{field.id}_page" %>
           <% elsif field.type == "CheckboxField" || field.type == "SelectField" %>
             <div class="field-chart" data-source="<%= answer_popularities_poll_poll_field_path(@poll, field) %>"></div>
           <% elsif field.type == "NumericField" %>
@@ -62,7 +64,7 @@
     <div class="card">
       <div class="card__section">
 
-        <% @poll.responses.order(created_at: :desc).each do |response| %>
+        <% @responses.each do |response| %>
           <div class="block-section poll-response">
             <div class="flex-row flex-row--baseline poll-response_title">
               <div class="flex-row__cell flex-row__cell--grow">
@@ -81,6 +83,10 @@
             </div>
           </div>
         <% end %>
+      </div>
+
+      <div class="card__section">
+        <%= paginate @responses, param_name: "response_page" %>
       </div>
     </div>
 

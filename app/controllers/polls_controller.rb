@@ -23,6 +23,10 @@ class PollsController < ApplicationController
     end
   end
 
+  def show
+    @responses = @poll.responses.order(created_at: :desc).page(params[:response_page]).per(5)
+  end
+
   def update
     if @poll.update(poll_params)
       redirect_to @poll
