@@ -17,7 +17,7 @@
               <%= link_to "View all", group_group_members_path(@group), class: "card__action" %>
 
               <% @employee_groups.each_slice(2) do |employee_group_slice| %>
-                <div class="row">
+                <div class="row mb10">
                   <% employee_group_slice.each do |employee_group| %>
                     <div class="col sm-12 md-6">
                       <%= link_to employee_group.employee.name, employee_group.employee %><br>
