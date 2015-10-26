@@ -33,7 +33,7 @@
           <div class="media-object" data-group-id="<%= group.id %>">
             <div class="flex-row">
               <div class="flex-row__cell">
-                <img class="media-object__image" src="http://placehold.it/300x300">
+                <%= image_tag group.logo.url(:medium) %>
               </div>
               <div class="flex-row__cell flex-row__cell--grow">
                 <h4><%= group.name %></h4>
