@@ -63,8 +63,8 @@
       <div class="card__section">
 
         <% @poll.responses.order(created_at: :desc).each do |response| %>
-          <div class="block-section">
-            <div class="flex-row poll-response--title">
+          <div class="block-section poll-response">
+            <div class="flex-row poll-response_title">
               <div class="flex-row__cell flex-row__cell--grow">
                 <h4><%= response.employee.name %> - <span class="muted">answered <%= time_ago_in_words(response.created_at) %> ago</span></h4>
               </div>
@@ -72,7 +72,7 @@
                 <span class="icon icon--chevron-down-purple"></span>
               </div>
             </div>
-            <div class="poll-response--details collapsed">
+            <div class="poll-response_details collapsed">
               <ul class="unstyled">
                 <% @poll.fields.each do |field| %>
                   <li><small><%= field.title %></small> <span class="block highlight"><%= field.string_value response.info[field] %></span></li>
@@ -93,8 +93,9 @@
     $(document).off('page:change');
 
     // Accordeon the poll responses
-    $('.poll-response--title').click(function() {
-      $(this).next('.poll-response--details').toggleClass('collapsed');
+    $('.poll-response').click(function() {
+      $(this).find('.poll-response_details').toggleClass('collapsed');
+      $(this).find('.icon').toggleClass('icon--rotate');
     });
 
     // Render field charts
