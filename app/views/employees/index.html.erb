@@ -31,30 +31,18 @@
   <h3>Manually added</h3>
   <div class="card">
     <div class="card__section">
-      <table class="table--has-border">
+      <table class="table--has-border" id="employees-table" data-source="<%= employees_path(format: :json) %>">
         <thead>
-          <th>Name</th>
+          <th>First name</th>
+          <th>Last name</th>
           <th>Email</th>
-          <th></th>
+          <th>Options</th>
         </thead>
-        <tbody>
-          <% @employees.invitation_accepted.each do |employee| %>
-            <tr>
-              <td><%= link_to employee.name, employee_path(employee) %></td>
-              <td><%= employee.email %></td>
-              <td class="text-right">
-                <%= link_to "Delete", employee_path(employee), method: :delete, class: "error" %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
+        <tbody></tbody>
       </table>
     </div>
-    <div class="card__section">
-      <%= paginate @employees %>
-    </div>
   </div>
-  
+
   <h3>SAML</h3>
   <div class="card">
     <div class="card__section">
@@ -89,3 +77,18 @@
     <% end %>
   </div>
 </div>
+
+<script>
+  jQuery(document).ready(function() {
+    $('#employees-table').dataTable({
+      serverSide: true,
+      ajax: $('#employees-table').data('source'),
+      pagingType: "full_numbers",
+      dom: "frtp",
+      language: {
+        search: "",
+        searchPlaceholder: "Search..."
+      }
+    });
+  });
+</script>

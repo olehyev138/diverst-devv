@@ -1,13 +1,23 @@
 // Pagination
 
-.pagination {
+.dataTables_paginate {
   text-align: center;
+  margin-top: $spacing-medium;
 
-  > span a,
-  .current {
+  .paginate_button {
     display: inline-block;
     padding: $spacing-small/2 $spacing-small;
     border-radius: $border-radius/2;
     border: 1px solid $diverst-border;
+    cursor: pointer;
+    margin-left: -1px;
+
+    &.current {
+      color: $diverst-black;
+    }
+  }
+
+  .ellipsis {
+    padding: $spacing-small/2 $spacing-small;
   }
 }

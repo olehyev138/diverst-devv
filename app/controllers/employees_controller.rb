@@ -9,7 +9,7 @@ class EmployeesController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render json: @employees }
+      format.json { render json: EmployeeDatatable.new(view_context) }
     end
   end
 

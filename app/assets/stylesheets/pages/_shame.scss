@@ -17,3 +17,12 @@ select.datetime {
   display: inline-block;
   width: auto;
 }
+
+.dataTables_filter {
+  @extend .field__input-wrapper;
+}
+
+.dataTables_filter input {
+  @extend .field__input;
+  @include box-sizing(border-box);
+}

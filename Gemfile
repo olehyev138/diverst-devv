@@ -51,6 +51,8 @@ gem "paperclip", "~> 4.3"
 gem 'aws-sdk', '< 2.0'
 gem 'kaminari'
 gem 'pismo'
+gem 'jquery-datatables-rails'
+gem 'ajax-datatables-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
