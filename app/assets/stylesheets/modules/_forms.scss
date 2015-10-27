@@ -132,3 +132,8 @@ input[type="password"] {
 label {
   cursor: pointer;
 }
+
+
+.field__hint {
+  margin-bottom: $spacing-medium;
+}

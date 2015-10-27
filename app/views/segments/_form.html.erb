@@ -1,16 +1,22 @@
 <%= simple_form_for @segment do |f| %>
-  <%= f.input :name %>
-
-  <div id="rules">
-    <%= f.simple_fields_for :rules do |field| %>
-      <%= render 'rule_fields', f: field %>
-    <% end %>
-    <div class="link">
-      <%= link_to_add_association "Add a criterion", f, :rules %>
-    </div>
+  <div class="card__section card__section--border">
+    <p class="field__hint">Start off by giving your segment a name</p>
+    <%= f.input :name, label: false %>
   </div>
 
-  <%= f.button :submit, value: "Create ERG" %>
+  <div class="card__section card__section--border">
+    <p class="field__hint">To be a part of this segment, an employee must meet <strong>all</strong> the following criteria</p>
+    <div id="rules">
+      <%= f.simple_fields_for :rules do |field| %>
+        <%= render 'rule_fields', f: field %>
+      <% end %>
+      <div class="link">
+        <%= link_to_add_association "Add a criterion", f, :rules %>
+      </div>
+
+      <%= f.button :submit, value: "Create ERG" %>
+    </div>
+  </div>
 <% end %>
 
 <script>
