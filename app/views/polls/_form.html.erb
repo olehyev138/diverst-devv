@@ -1,15 +1,48 @@
-<%= simple_form_for @poll do |f| %>
-  <%= f.input :title %>
-  <%= f.input :description %>
-  <%= f.association :groups, input_html: { class: "select2" } %>
-  <%= f.association :segments, input_html: { class: "select2" } %>
+<div class="content__main">
+  <%= simple_form_for @poll do |f| %>
 
-  <h2>Fields</h2>
-  <%= render "shared/fields/creation/custom_fields", f: f %>
+    <div class="card">
+      <div class="card__section card__section--border">
+        <p class="field__hint">Start off by giving your poll a name</p>
+        <%= f.input :title, label: false %>
+      </div>
 
-  <%= f.button :submit %>
-<% end %>
+      <div class="card__section card__section--border">
+        <p class="field__hint">Decscribe what the goal of the poll is. The respondants will see this</p>
+        <%= f.input :description, label: false %>
+      </div>
 
-<script>
-  $('.select2').select2();
-</script>
+      <div class="card__section card__section--border">
+        <p class="field__hint">Choose the <strong>ERGs</strong> you want to target</p>
+        <%= f.association :groups, input_html: { class: "select2" }, label: false %>
+      </div>
+
+      <div class="card__section card__section--border">
+        <p class="field__hint">Choose the <strong>segments</strong> you want to target within these ERGs</p>
+        <%= f.association :segments, input_html: { class: "select2" }, label: false %>
+      </div>
+    </div>
+
+    <h2>Fields</h2>
+
+    <div class="card">
+      <div id="fields">
+        <%= f.simple_fields_for :fields do |field| %>
+          <%= render 'field_fields', f: field %>
+        <% end %>
+      </div>
+
+      <div class="link">
+        <div class="card__section card__section--border">
+          <%= link_to_add_association "Add text field", f, :fields, wrap_object: Proc.new { TextField.new } %>
+          <%= link_to_add_association "Add select field", f, :fields, wrap_object: Proc.new { SelectField.new } %>
+          <%= link_to_add_association "Add checkbox field", f, :fields, wrap_object: Proc.new { CheckboxField.new } %>
+          <%= link_to_add_association "Add numeric field", f, :fields, wrap_object: Proc.new { NumericField.new } %>
+          <%= link_to_add_association "Add date field", f, :fields, wrap_object: Proc.new { DateField.new } %>
+        </div>
+      </div>
+    </div>
+
+    <%= f.button :submit %>
+  <% end %>
+</div>

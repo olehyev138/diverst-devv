@@ -1,0 +1,11 @@
+<div class="nested-fields card__section card__section--border">
+  <div class="card__action">
+    <%= link_to_remove_association "Remove", f, class: "error" %>
+  </div>
+
+  <%= render 'shared/fields/creation/text_field', f: f if f.object.type == 'TextField' %>
+  <%= render 'shared/fields/creation/select_field', f: f if f.object.type == 'SelectField' %>
+  <%= render 'shared/fields/creation/checkbox_field', f: f if f.object.type == 'CheckboxField' %>
+  <%= render 'shared/fields/creation/numeric_field', f: f if f.object.type == 'NumericField' %>
+  <%= render 'shared/fields/creation/date_field', f: f if f.object.type == 'DateField' %>
+</div>

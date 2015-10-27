@@ -1,117 +1,122 @@
-<%= simple_form_for @segment do |f| %>
-  <div class="card__section card__section--border">
-    <p class="field__hint">Start off by giving your segment a name</p>
-    <%= f.input :name, label: false %>
-  </div>
-
-  <div class="card__section card__section--border">
-    <p class="field__hint">To be a part of this segment, an employee must meet <strong>all</strong> the following criteria</p>
-    <div id="rules">
-      <%= f.simple_fields_for :rules do |field| %>
-        <%= render 'rule_fields', f: field %>
-      <% end %>
-      <div class="link">
-        <%= link_to_add_association "Add a criterion", f, :rules %>
+<div class="content__main">
+  <div class="card">
+    <%= simple_form_for @segment do |f| %>
+      <div class="card__section card__section--border">
+        <p class="field__hint">Start off by giving your segment a name</p>
+        <%= f.input :name, label: false %>
       </div>
 
-      <%= f.button :submit, value: "Create ERG" %>
-    </div>
+      <div class="card__section card__section--border">
+        <p class="field__hint">To be a part of this segment, an employee must meet <strong>all</strong> the following criteria</p>
+        <div id="rules">
+          <%= f.simple_fields_for :rules do |field| %>
+            <%= render 'rule_fields', f: field %>
+          <% end %>
+          <div class="link">
+            <%= link_to_add_association "Add a criterion", f, :rules %>
+          </div>
+
+          <%= f.button :submit, value: "Create segment" %>
+        </div>
+      </div>
+    <% end %>
   </div>
-<% end %>
+</div>
 
-<script>
-  var operators = [{
-    id: 0,
-    name: "equals",
-    isMultiSelect: false
-  }, {
-    id: 1,
-    name: "greater than",
-    isMultiSelect: false
-  }, {
-    id: 2,
-    name: "lesser than",
-    isMultiSelect: false
-  }, {
-    id: 3,
-    name: "is not",
-    isMultiSelect: false
-  }, {
-    id: 4,
-    name: "contains any of",
-    isMultiSelect: true
-  }, {
-    id: 5,
-    name: "contains all of",
-    isMultiSelect: true
-  }, {
-    id: 6,
-    name: "does not contain",
-    isMultiSelect: true
-  }];
+<% content_for :page_scripts do %>
+  <script>
+    var operators = [{
+      id: 0,
+      name: "equals",
+      isMultiSelect: false
+    }, {
+      id: 1,
+      name: "greater than",
+      isMultiSelect: false
+    }, {
+      id: 2,
+      name: "lesser than",
+      isMultiSelect: false
+    }, {
+      id: 3,
+      name: "is not",
+      isMultiSelect: false
+    }, {
+      id: 4,
+      name: "contains any of",
+      isMultiSelect: true
+    }, {
+      id: 5,
+      name: "contains all of",
+      isMultiSelect: true
+    }, {
+      id: 6,
+      name: "does not contain",
+      isMultiSelect: true
+    }];
 
-  // Make each rule form adapt as the user selects different options
-  $('#rules').on('cocoon:after-insert', function(e, insertedItem) {
-    var $fieldSelect = insertedItem.find('.custom-field');
-    var $operatorSelect = insertedItem.find('.operator');
-    var $singleValueField = insertedItem.find('.values');
-    var $multiValueField = insertedItem.find('.multi-select');
+    // Make each rule form adapt as the user selects different options
+    $('#rules').on('cocoon:after-insert', function(e, insertedItem) {
+      var $fieldSelect = insertedItem.find('.custom-field');
+      var $operatorSelect = insertedItem.find('.operator');
+      var $singleValueField = insertedItem.find('.values');
+      var $multiValueField = insertedItem.find('.multi-select');
 
-    $singleValueField.attr('name', $singleValueField.attr('name') + '[]');
+      $singleValueField.attr('name', $singleValueField.attr('name') + '[]');
 
-    // When the field is changed, populate the operators select field with the appropriate operations for the selected field
-    $fieldSelect.change(function() {
-      $multiValueField.parents('.flex-row__cell').css('display', 'none');
-      $singleValueField.parents('.flex-row__cell').css('display', 'none');
+      // When the field is changed, populate the operators select field with the appropriate operations for the selected field
+      $fieldSelect.change(function() {
+        $multiValueField.parents('.flex-row__cell').css('display', 'none');
+        $singleValueField.parents('.flex-row__cell').css('display', 'none');
 
-      var fieldOperators = $(this).find(":selected").data('operators');
-      $operatorSelect.find('option').remove();
+        var fieldOperators = $(this).find(":selected").data('operators');
+        $operatorSelect.find('option').remove();
 
-      $operatorSelect[0].add(new Option("", ""));
+        $operatorSelect[0].add(new Option("", ""));
 
-      operators.forEach(function(operator) {
-        if (fieldOperators.indexOf(operator.id) > -1) {
-          $operatorSelect[0].add(new Option(operator.name, operator.id));
-        }
-      });
-
-      $operatorSelect.parents('.flex-row__cell').css('display', 'inline-block');
-    });
-
-    // When the operator is changed, create the appropriate value field
-    $operatorSelect.change(function() {
-      $multiValueField.parents('.flex-row__cell').css('display', 'none').prop('disabled', true);
-      $singleValueField.parents('.flex-row__cell').css('display', 'none').prop('disabled', true);
-
-      var selectedOperator = operators.filter(function(operator) {
-        return operator.id === parseInt($operatorSelect.val());
-      })[0];
-
-      var options = $fieldSelect.find(":selected").data('options');
-
-      if (options.length) {
-        $multiValueField.find('option').remove();
-
-        options.forEach(function(option) {
-          $multiValueField[0].add(new Option(option, option));
+        operators.forEach(function(operator) {
+          if (fieldOperators.indexOf(operator.id) > -1) {
+            $operatorSelect[0].add(new Option(operator.name, operator.id));
+          }
         });
 
-        if (selectedOperator.isMultiSelect) {
-          $multiValueField.prop('multiple', 'multiple');
+        $operatorSelect.parents('.flex-row__cell').css('display', 'inline-block');
+      });
+
+      // When the operator is changed, create the appropriate value field
+      $operatorSelect.change(function() {
+        $multiValueField.parents('.flex-row__cell').css('display', 'none').prop('disabled', true);
+        $singleValueField.parents('.flex-row__cell').css('display', 'none').prop('disabled', true);
+
+        var selectedOperator = operators.filter(function(operator) {
+          return operator.id === parseInt($operatorSelect.val());
+        })[0];
+
+        var options = $fieldSelect.find(":selected").data('options');
+
+        if (options.length) {
+          $multiValueField.find('option').remove();
+
+          options.forEach(function(option) {
+            $multiValueField[0].add(new Option(option, option));
+          });
+
+          if (selectedOperator.isMultiSelect) {
+            $multiValueField.prop('multiple', 'multiple');
+          }
+          else {
+            $multiValueField.prop('multiple', '');
+          }
+
+          $multiValueField.prop('disabled', false);
+          $multiValueField.parents('.flex-row__cell').css('display', 'inline-block');
+          $multiValueField.select2();
         }
         else {
-          $multiValueField.prop('multiple', '');
+          $singleValueField.prop('disabled', false);
+          $singleValueField.parents('.flex-row__cell').css('display', 'inline-block');
         }
-
-        $multiValueField.prop('disabled', false);
-        $multiValueField.parents('.flex-row__cell').css('display', 'inline-block');
-        $multiValueField.select2();
-      }
-      else {
-        console.log("no options");
-        $singleValueField.prop('disabled', false);
-        $singleValueField.parents('.flex-row__cell').css('display', 'inline-block');
-      }
+      });
     });
-  });
-</script>
+  </script>
+<% end %>

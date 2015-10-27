@@ -1,4 +1,4 @@
-<div class="nested-fields">
+<div class="nested-fields space-bottom">
   <div class="flex-row flex-row--baseline">
     <div class="flex-row__cell">
       <%= link_to_remove_association f do %>
@@ -14,8 +14,10 @@
     <div class="flex-row__cell" style="display: none;">
       <%= f.input :values, input_html: { class: "values" }, label: false %>
     </div>
-    <div class="flex-row__cell" style="display: none;">
-      <%= f.input_field :values, class: "multi-select", label: false, collection: [], multiple: "multiple" %>
+    <div class="flex-row__cell flex-row__cell--grow" style="display: none;">
+      <div class="field__input-wrapper">
+        <%= f.input_field :values, class: "field__input multi-select", label: false, collection: [], multiple: "multiple" %>
+      </div>
     </div>
   </div>
 </div>

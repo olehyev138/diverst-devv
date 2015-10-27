@@ -1,4 +1,4 @@
-// Pagination
+// Datatables pagination
 
 .dataTables_paginate {
   text-align: center;
@@ -19,5 +19,20 @@
 
   .ellipsis {
     padding: $spacing-small/2 $spacing-small;
+  }
+}
+
+// Kaminari Pagination
+
+.pagination {
+  text-align: center;
+
+  > span a,
+  .current {
+    display: inline-block;
+    padding: $spacing-small/2 $spacing-small;
+    border-radius: $border-radius/2;
+    border: 1px solid $diverst-border;
+    margin: 0 0 0 -1px;
   }
 }

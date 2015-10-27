@@ -7,6 +7,10 @@
     color: $diverst-white;
     @include flex-direction(column);
 
+    p {
+      color: inherit;
+    }
+
     .logo {
       margin-bottom: $spacing-large;
     }

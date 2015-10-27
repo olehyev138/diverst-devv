@@ -1,3 +1,13 @@
-<h1>Create a new poll</h1>
+<div class="content__header">
+  <h1>Create a new poll</h1>
+</div>
 
-<%= render "form" %>
+<div class="content__main">
+  <%= render "form" %>
+</div>
+
+<% content_for :page_scripts do %>
+  <script>
+  $('.select2').select2();
+  </script>
+<% end %>
