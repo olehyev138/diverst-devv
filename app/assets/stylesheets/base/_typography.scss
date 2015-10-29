@@ -46,7 +46,7 @@ body {
   -webkit-font-smoothing: subpixel-antialiased;
 }
 
-// Caps 
+// Caps
 
 @mixin caps {
   font-size: 13px;
@@ -161,7 +161,6 @@ strong {
 }
 
 small {
-  color: $diverst-grey;
   display: inline-block;
   @include font-size($small-font-size);
 }
