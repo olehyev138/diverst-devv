@@ -27,10 +27,10 @@
         </a>
       </li>
       <li class="nav__item">
-        <a class="nav__link" href="#">
+        <%= active_link_to campaigns_path, class: "nav__link", class_active: "nav__link--is-selected" do %>
           <span class="nav__icon icon icon--unify"></span>
           <span class="nav__text">Unify</span>
-        </a>
+        <% end %>
       </li>
       <li class="nav__item">
         <%= active_link_to polls_path, class: "nav__link", class_active: "nav__link--is-selected" do %>

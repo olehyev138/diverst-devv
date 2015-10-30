@@ -1,0 +1,29 @@
+<div class="content__header">
+  <h1>Campaigns</h1>
+  <%= link_to "New campaign", new_campaign_path, class: "btn btn--primary" %>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <table class="table--has-border" id="employees-table" data-source="<%= employees_path(format: :json) %>">
+        <thead>
+          <th>Title</th>
+          <th>ERGs</th>
+          <th>Start date</th>
+          <th># of invitations</th>
+          <th>Nb of questions</th>
+        </thead>
+        <tbody>
+          <% @campaigns.each do |campaign| %>
+            <td><%= link_to campaign.title, questions_path(campaign) %></td>
+            <td><%= campaign.groups.pluck(:name).join(', ') %></td>
+            <td><%= campaign.start.to_s :dateonly %></td>
+            <td><%= campaign.invitations.count %></td>
+            <td><%= campaign.questions.count %></td>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

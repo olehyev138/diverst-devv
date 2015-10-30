@@ -1,0 +1,14 @@
+<div class="content__header">
+  <h1><%= @campaign.title %></h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <% @questions.each do |question| %>
+      <div class="card__section card__section--border">
+        <h2><%= question.title %></h2>
+        <p><%= question.description %></p>
+      </div>
+    <% end %>
+  </div>
+</div>

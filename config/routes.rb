@@ -76,6 +76,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :campaigns do
+    member do
+      resources :questions
+    end
+  end
+
   resources :admins
 
   devise_scope :employee do

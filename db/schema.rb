@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151023165900) do
+ActiveRecord::Schema.define(version: 20151030201542) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -33,6 +33,35 @@ ActiveRecord::Schema.define(version: 20151023165900) do
 
   add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
   add_index "admins", ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true, using: :btree
+
+  create_table "campaign_invitations", force: :cascade do |t|
+    t.integer  "campaign_id", limit: 4
+    t.integer  "employee_id", limit: 4
+    t.integer  "response",    limit: 4
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+  end
+
+  create_table "campaigns", force: :cascade do |t|
+    t.string   "title",         limit: 255
+    t.text     "description",   limit: 65535
+    t.datetime "start"
+    t.datetime "end"
+    t.integer  "nb_invites",    limit: 4
+    t.integer  "enterprise_id", limit: 4
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+  end
+
+  create_table "campaigns_groups", force: :cascade do |t|
+    t.integer "campaign_id", limit: 4
+    t.integer "group_id",    limit: 4
+  end
+
+  create_table "campaigns_segments", force: :cascade do |t|
+    t.integer "campaign_id", limit: 4
+    t.integer "segment_id",  limit: 4
+  end
 
   create_table "devices", force: :cascade do |t|
     t.string   "token",       limit: 255
@@ -231,6 +260,25 @@ ActiveRecord::Schema.define(version: 20151023165900) do
   create_table "polls_segments", force: :cascade do |t|
     t.integer "poll_id",    limit: 4
     t.integer "segment_id", limit: 4
+  end
+
+  create_table "questions", force: :cascade do |t|
+    t.string   "title",       limit: 255
+    t.text     "description", limit: 65535
+    t.integer  "campaign_id", limit: 4
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  create_table "questions_campaigns", force: :cascade do |t|
+    t.string   "title",         limit: 255
+    t.text     "description",   limit: 65535
+    t.datetime "start"
+    t.datetime "end"
+    t.integer  "nb_invites",    limit: 4
+    t.integer  "enterprise_id", limit: 4
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
   end
 
   create_table "segment_rules", force: :cascade do |t|
