@@ -7,6 +7,8 @@ class Employee < ActiveRecord::Base
 
   include DeviseTokenAuth::Concerns::User
   include ContainsFields
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
 
   belongs_to :enterprise, inverse_of: :employees
   has_many :devices
@@ -112,6 +114,13 @@ class Employee < ActiveRecord::Base
     self.firebase_token = @@fb_token_generator.create_token(payload)
     self.firebase_token_generated_at = Time.zone.now
     self.save
+  end
+
+  def as_indexed_json(options = {})
+    self.as_json({
+      except: [:data],
+      methods: [:info]
+    })
   end
 
   protected
