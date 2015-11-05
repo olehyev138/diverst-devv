@@ -1,4 +1,4 @@
 WAIT=1
 ATTEMPTS=15
 
-/
+/simple_check.txt simple_check
