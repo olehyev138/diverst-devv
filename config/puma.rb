@@ -1,5 +1,6 @@
-threads_count = Integer(ENV['MAX_THREADS'] || 16)
-threads threads_count, threads_count
+min_threads = Integer(ENV['MIN_THREADS'] || 1)
+max_threads = Integer(ENV['MAX_THREADS'] || 16)
+threads min_threads, max_threads
 
 preload_app!
 
