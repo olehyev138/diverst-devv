@@ -10,6 +10,10 @@ class GroupsController < ApplicationController
     @groups = current_admin.enterprise.groups
   end
 
+  def metrics
+
+  end
+
   def new
     @group = current_admin.enterprise.groups.new
   end
