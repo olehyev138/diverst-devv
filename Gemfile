@@ -1,11 +1,11 @@
 source 'https://rubygems.org'
 
-ruby '2.2.2'
+ruby '2.2.2', :engine => 'jruby', :engine_version => '9.0.0.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.1'
 
-gem 'mysql2', '~> 0.3.18'
+gem 'activerecord-jdbcmysql-adapter', '~> 1.3', '>= 1.3.19'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
@@ -35,7 +35,6 @@ gem 'sinatra', :require => nil # Required for sidekiq's dashboard
 gem 'newrelic_rpm'
 gem "seedbank"
 gem 'rails-patch-json-encode'
-gem 'oj'
 gem 'faker'
 gem 'active_model_serializers'
 gem 'devise_token_auth', github: 'lynndylanhurley/devise_token_auth'
@@ -50,19 +49,13 @@ gem 'active_link_to'
 gem "paperclip", "~> 4.3"
 gem 'aws-sdk', '< 2.0'
 gem 'kaminari'
-gem 'pismo'
+# gem 'pismo'
 gem 'jquery-datatables-rails'
 gem 'ajax-datatables-rails'
 gem 'elasticsearch-model', '~> 0.1'
 gem 'elasticsearch-rails', '~> 0.1'
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug'
-
-  # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 2.0'
-
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 
