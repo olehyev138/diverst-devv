@@ -49,7 +49,6 @@ gem 'active_link_to'
 gem "paperclip", "~> 4.3"
 gem 'aws-sdk', '< 2.0'
 gem 'kaminari'
-# gem 'pismo'
 gem 'jquery-datatables-rails'
 gem 'ajax-datatables-rails'
 gem 'elasticsearch-model', '~> 0.1'
