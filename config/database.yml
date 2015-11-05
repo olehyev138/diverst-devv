@@ -2,7 +2,7 @@ default: &default
   adapter: mysql2
   encoding: utf8
   url: <%= ENV["DATABASE_URL"] %>
-  pool: <%= ENV["DB_POOL"] || ENV['MAX_THREADS'] || 8 %>
+  pool: <%= ENV["DB_POOL"] || ENV['MAX_THREADS'] || 20 %>
 
 development:
   <<: *default
@@ -11,7 +11,6 @@ development:
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
-  <<: *default
 
 production:
   <<: *default
