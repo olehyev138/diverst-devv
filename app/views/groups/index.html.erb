@@ -4,6 +4,11 @@
 </div>
 
 <div class="content__main">
+  <h2>Metrics test</h2>
+  <div class="card">
+    <div id="test-chart"></div>
+  </div>
+
   <div class="card">
     <% @groups.each do |group| %>
       <div class="card__section card__section--border">
@@ -21,3 +26,55 @@
     <% end %>
   </div>
 </div>
+
+<script>
+  $.get('/fields/14/stats', function(data) {
+    var ranges = data.aggregations.stats.buckets.map(function(bucket) { return bucket.key; });
+    var values = data.aggregations.stats.buckets.map(function(bucket) { return bucket.stats.count; });
+
+    console.log(ranges);
+    console.log(values);
+
+    $("#test-chart").highcharts({
+      chart: {
+        type: 'bar',
+        style: {
+          fontFamily: 'Helvetica Neue, sans-serif'
+        }
+      },
+      title: {
+        text: ''
+      },
+      xAxis: {
+        categories: ranges,
+        crosshair: true
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: 'Nb of employees'
+        },
+        allowDecimals: false
+      },
+      tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+          '<td style="padding:0"><b>{point.y} respondents</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+      },
+      plotOptions: {
+        column: {
+          pointPadding: 0.2,
+          borderWidth: 0
+        }
+      },
+      series: [{
+        name: 'All employees',
+        data: values
+      }],
+      colors: ['#7B77C9']
+    });
+  });
+</script>

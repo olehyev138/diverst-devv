@@ -59,10 +59,16 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :poll_fields, path: "fields" do
+    resources :poll_fields do
       member do
         get 'answer_popularities'
       end
+    end
+  end
+
+  resources :fields do
+    member do
+      get 'stats'
     end
   end
 

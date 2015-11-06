@@ -66,4 +66,27 @@ class NumericField < Field
       median: values.median
     }
   end
+
+  def elastic_stats
+    Employee.search(
+      size: 0,
+      aggs: {
+        stats: {
+          range: {
+            field: "info.#{self.id}",
+            ranges: [
+              { to: 20 },
+              { from: 20, to: 30 },
+              { from: 30 }
+            ]
+          },
+          aggs: {
+            stats: {
+              stats: { field: "info.#{self.id}" }
+            }
+          }
+        }
+      }
+    ).response
+  end
 end
