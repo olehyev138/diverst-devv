@@ -2,7 +2,7 @@ default: &default
   adapter: mysql2
   encoding: utf8
   url: <%= ENV["DATABASE_URL"] %>
-  pool: <%= ENV["DB_POOL"] || ENV['MAX_THREADS'] || 50 %>
+  pool: <%= ENV["DB_POOL"] || ENV['MAX_THREADS'] || 110 %>
 
 development:
   <<: *default
