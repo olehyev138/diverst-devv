@@ -1,11 +1,11 @@
 source 'https://rubygems.org'
 
-ruby '2.2.2', :engine => 'jruby', :engine_version => '9.0.0.0'
+ruby '2.2.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.1'
 
-gem 'activerecord-jdbcmysql-adapter', '~> 1.3', '>= 1.3.19'
+gem 'mysql2', '~> 0.3.18'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
@@ -35,6 +35,7 @@ gem 'sinatra', :require => nil # Required for sidekiq's dashboard
 gem 'newrelic_rpm'
 gem "seedbank"
 gem 'rails-patch-json-encode'
+# gem 'oj'
 gem 'faker'
 gem 'active_model_serializers'
 gem 'devise_token_auth', github: 'lynndylanhurley/devise_token_auth'
