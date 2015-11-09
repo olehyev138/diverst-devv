@@ -68,6 +68,7 @@ class NumericField < Field
   end
 
   def elastic_stats
+    # Dynamically calculate bucket sizes
     stats = Employee.search(size: 0, aggs: { global_stats: { stats: { field: "info.#{self.id}" } } }).response
 
     min = stats[:aggregations][:global_stats][:min]
@@ -92,6 +93,7 @@ class NumericField < Field
       ranges << range
     end
 
+    # Execute the query using the calculated bucket sizes
     Employee.search(
       size: 0,
       aggs: {
