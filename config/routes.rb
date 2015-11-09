@@ -35,6 +35,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :graphs do
+    member do
+      get 'data'
+    end
+  end
+
   resources :groups do
     scope module: :groups do
       resources :group_members, path: "members"

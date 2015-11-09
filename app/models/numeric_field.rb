@@ -67,7 +67,7 @@ class NumericField < Field
     }
   end
 
-  def elastic_stats
+  def elastic_stats(aggr_field: nil)
     # Dynamically calculate bucket sizes
     stats = Employee.search(size: 0, aggs: { global_stats: { stats: { field: "info.#{self.id}" } } }).response
 
@@ -93,24 +93,48 @@ class NumericField < Field
       ranges << range
     end
 
-    # Execute the query using the calculated bucket sizes
-    Employee.search(
-      size: 0,
-      aggs: {
-        aggregation: {
-          terms: {
-            field: "info.1"
-          },
-          aggs: {
-            ranges: {
-              range: {
-                field: "info.#{self.id}",
-                ranges: ranges
-              }
-            }
-          }
+    # Craft the aggregation query depending on if we have a field to aggregate on or not
+    range_agg = {
+      ranges: {
+        range: {
+          field: "info.#{self.id}",
+          ranges: ranges
         }
       }
+    }
+
+    if aggr_field.nil?
+      aggs = range_agg
+    else
+      aggs = {
+        aggregation: {
+          terms: {
+            field: "info.#{aggr_field.id}"
+          },
+          aggs: range_agg
+        }
+      }
+    end
+
+    # Execute the Elasticsearch query
+    Employee.search(
+      size: 0,
+      aggs: aggs
     ).response
+  end
+
+  def highcharts_data(aggr_field:)
+    data = elastic_stats(aggr_field)
+
+    series = data[:aggregations][:aggregation][:buckets].map do |aggr_bucket|
+      {
+        name: aggr_bucket[:key],
+        data: aggr_bucket[:ranges][:buckets].map{ |range_bucket| range_bucket[:doc_count] }
+      }
+    end
+
+    ranges = data[:aggregations][:aggregation][:buckets][0][:ranges][:buckets].map{ |range_bucket| range_bucket[:key] }
+
+    { series: series, ranges: ranges }
   end
 end

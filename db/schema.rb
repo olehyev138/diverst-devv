@@ -170,6 +170,7 @@ ActiveRecord::Schema.define(version: 20151109044639) do
   end
 
   create_table "graphs", force: :cascade do |t|
+    t.integer  "enterprise_id",  limit: 4
     t.integer  "field_id",       limit: 4
     t.integer  "aggregation_id", limit: 4
     t.datetime "created_at",               null: false

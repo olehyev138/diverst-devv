@@ -37,59 +37,57 @@
 </div>
 
 <script>
-  $.get('/fields/14/stats', function(data) {
-    var series = data.aggregations.aggregation.buckets.map(function(aggrBucket) {
-      return {
-        name: aggrBucket.key,
-        data: aggrBucket.ranges.buckets.map(function(rangeBucket) { return rangeBucket.doc_count; })
-      };
-    });
+  var graph = new Graph(1);
+  // $.get('/fields/14/stats', function(data) {
+  //   var series = data.aggregations.aggregation.buckets.map(function(aggrBucket) {
+  //     return {
+  //       name: aggrBucket.key,
+  //       data: aggrBucket.ranges.buckets.map(function(rangeBucket) { return rangeBucket.doc_count; })
+  //     };
+  //   });
 
-    var ranges = data.aggregations.aggregation.buckets[0].ranges.buckets.map(function(rangeBucket) { return rangeBucket.key });
+  //   var ranges = data.aggregations.aggregation.buckets[0].ranges.buckets.map(function(rangeBucket) { return rangeBucket.key });
 
-    $("#test-chart").highcharts({
-      chart: {
-        type: 'bar',
-        style: {
-          fontFamily: 'Helvetica Neue, sans-serif'
-        }
-      },
-      title: {
-        text: ''
-      },
-      xAxis: {
-        categories: ranges,
-        title: {
-          text: 'Seniority'
-        }
-      },
-      yAxis: {
-        min: 0,
-        title: {
-          text: 'Nb of employees'
-        },
-        allowDecimals: false
-      },
-      legend: {
-        reversed: true
-      },
-      plotOptions: {
-        series: {
-          stacking: 'normal'
-        }
-      },
-      tooltip: {
-        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-          '<td style="padding:0"><b>{point.y} employees</b></td></tr>',
-        footerFormat: '</table>',
-        shared: true,
-        useHTML: true
-      },
-      series: series,
-      //colors: ['#7B77C9']
-    });
-  });
+  //   $("#test-chart").highcharts({
+  //     chart: {
+  //       type: 'bar',
+  //       style: {
+  //         fontFamily: 'Helvetica Neue, sans-serif'
+  //       }
+  //     },
+  //     title: {
+  //       text: ''
+  //     },
+  //     xAxis: {
+  //       categories: ranges,
+  //       title: {
+  //         text: 'Seniority'
+  //       }
+  //     },
+  //     yAxis: {
+  //       min: 0,
+  //       title: {
+  //         text: 'Nb of employees'
+  //       },
+  //       allowDecimals: false
+  //     },
+  //     plotOptions: {
+  //       series: {
+  //         stacking: 'normal'
+  //       }
+  //     },
+  //     tooltip: {
+  //       headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+  //       pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+  //         '<td style="padding:0"><b>{point.y} employees</b></td></tr>',
+  //       footerFormat: '</table>',
+  //       shared: true,
+  //       useHTML: true
+  //     },
+  //     series: series,
+  //     //colors: ['#7B77C9']
+  //   });
+  // });
 
   $.get('/fields/1/stats', function(data) {
     var chartData = data.aggregations.sums.buckets.map(function(bucket) { return { name: bucket.key, y: bucket.doc_count } });
