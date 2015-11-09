@@ -32,9 +32,6 @@
     var ranges = data.aggregations.stats.buckets.map(function(bucket) { return bucket.key; });
     var values = data.aggregations.stats.buckets.map(function(bucket) { return bucket.stats.count; });
 
-    console.log(ranges);
-    console.log(values);
-
     $("#test-chart").highcharts({
       chart: {
         type: 'bar',

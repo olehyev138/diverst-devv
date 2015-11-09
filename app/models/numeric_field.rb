@@ -68,17 +68,37 @@ class NumericField < Field
   end
 
   def elastic_stats
+    stats = Employee.search(size: 0, aggs: { global_stats: { stats: { field: "info.#{self.id}" } } }).response
+
+    min = stats[:aggregations][:global_stats][:min]
+    max = stats[:aggregations][:global_stats][:max]
+
+    nb_buckets = 5
+    delta = max - min
+    bucket_size = (delta / nb_buckets).floor
+
+    ranges = []
+    nb_buckets.times do |i|
+      range = {}
+
+      if i < nb_buckets - 1
+        range[:to] = min + (i+1)*bucket_size
+      end
+
+      if i > 0
+        range[:from] = min + i*bucket_size
+      end
+
+      ranges << range
+    end
+
     Employee.search(
       size: 0,
       aggs: {
         stats: {
           range: {
             field: "info.#{self.id}",
-            ranges: [
-              { to: 20 },
-              { from: 20, to: 30 },
-              { from: 30 }
-            ]
+            ranges: ranges
           },
           aggs: {
             stats: {

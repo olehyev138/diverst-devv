@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151030201542) do
+ActiveRecord::Schema.define(version: 20151109044639) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -167,6 +167,13 @@ ActiveRecord::Schema.define(version: 20151030201542) do
     t.datetime "updated_at",                                       null: false
     t.boolean  "alternative_layout", limit: 1,     default: false
     t.integer  "poll_id",            limit: 4
+  end
+
+  create_table "graphs", force: :cascade do |t|
+    t.integer  "field_id",       limit: 4
+    t.integer  "aggregation_id", limit: 4
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   create_table "group_messages", force: :cascade do |t|
