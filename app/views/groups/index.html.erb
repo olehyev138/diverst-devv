@@ -5,8 +5,17 @@
 
 <div class="content__main">
   <h2>Metrics test</h2>
+
   <div class="card">
     <div id="test-chart"></div>
+  </div>
+
+  <div class="card">
+    <div id="test2-chart"></div>
+  </div>
+
+  <div class="card">
+    <div id="test3-chart"></div>
   </div>
 
   <div class="card">
@@ -29,8 +38,14 @@
 
 <script>
   $.get('/fields/14/stats', function(data) {
-    var ranges = data.aggregations.stats.buckets.map(function(bucket) { return bucket.key; });
-    var values = data.aggregations.stats.buckets.map(function(bucket) { return bucket.stats.count; });
+    var series = data.aggregations.aggregation.buckets.map(function(aggrBucket) {
+      return {
+        name: aggrBucket.key,
+        data: aggrBucket.ranges.buckets.map(function(rangeBucket) { return rangeBucket.doc_count; })
+      };
+    });
+
+    var ranges = data.aggregations.aggregation.buckets[0].ranges.buckets.map(function(rangeBucket) { return rangeBucket.key });
 
     $("#test-chart").highcharts({
       chart: {
@@ -44,7 +59,93 @@
       },
       xAxis: {
         categories: ranges,
-        crosshair: true
+        title: {
+          text: 'Seniority'
+        }
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: 'Nb of employees'
+        },
+        allowDecimals: false
+      },
+      legend: {
+        reversed: true
+      },
+      plotOptions: {
+        series: {
+          stacking: 'normal'
+        }
+      },
+      tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+          '<td style="padding:0"><b>{point.y} employees</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+      },
+      series: series,
+      //colors: ['#7B77C9']
+    });
+  });
+
+  $.get('/fields/1/stats', function(data) {
+    var chartData = data.aggregations.sums.buckets.map(function(bucket) { return { name: bucket.key, y: bucket.doc_count } });
+
+    $("#test2-chart").highcharts({
+      chart: {
+        type: 'pie',
+        style: {
+          fontFamily: 'Helvetica Neue, sans-serif'
+        }
+      },
+      title: {
+        text: ''
+      },
+      series:[{
+        name: "Gender",
+        data: chartData
+      }],
+      tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+          '<td style="padding:0"><b>{point.y} employees</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+      },
+      plotOptions: {
+        column: {
+          pointPadding: 0.2,
+          borderWidth: 0
+        }
+      },
+      colors: ['#7B77C9']
+    });
+  });
+
+  $.get('/fields/6/stats', function(data) {
+    var ranges = data.aggregations.sums.buckets.map(function(bucket) { return bucket.key; });
+    var values = data.aggregations.sums.buckets.map(function(bucket) { return bucket.doc_count; });
+
+    $("#test3-chart").highcharts({
+      chart: {
+        type: 'bar',
+        style: {
+          fontFamily: 'Helvetica Neue, sans-serif'
+        }
+      },
+      title: {
+        text: ''
+      },
+      xAxis: {
+        categories: ranges,
+        crosshair: true,
+        title: {
+          text: 'Spoken language'
+        },
       },
       yAxis: {
         min: 0,
@@ -56,7 +157,7 @@
       tooltip: {
         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
         pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-          '<td style="padding:0"><b>{point.y} respondents</b></td></tr>',
+          '<td style="padding:0"><b>{point.y} employees</b></td></tr>',
         footerFormat: '</table>',
         shared: true,
         useHTML: true

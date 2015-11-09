@@ -75,4 +75,17 @@ class SelectField < Field
       !rule.values_array.include?(employee.info[rule.field][0])
     end
   end
+
+  def elastic_stats
+    Employee.search(
+      size: 0,
+      aggs: {
+        sums: {
+          terms: {
+            field: "info.#{self.id}"
+          }
+        }
+      }
+    ).response
+  end
 end

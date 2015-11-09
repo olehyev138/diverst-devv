@@ -97,14 +97,16 @@ class NumericField < Field
     Employee.search(
       size: 0,
       aggs: {
-        stats: {
-          range: {
-            field: "info.#{self.id}",
-            ranges: ranges
+        aggregation: {
+          terms: {
+            field: "info.1"
           },
           aggs: {
-            stats: {
-              stats: { field: "info.#{self.id}" }
+            ranges: {
+              range: {
+                field: "info.#{self.id}",
+                ranges: ranges
+              }
             }
           }
         }
