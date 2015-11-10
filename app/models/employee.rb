@@ -7,8 +7,8 @@ class Employee < ActiveRecord::Base
 
   include DeviseTokenAuth::Concerns::User
   include ContainsFields
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
+  #include Elasticsearch::Model
+  #include Elasticsearch::Model::Callbacks
 
   belongs_to :enterprise, inverse_of: :employees
   has_many :devices
