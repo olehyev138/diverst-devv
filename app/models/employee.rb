@@ -10,15 +10,6 @@ class Employee < ActiveRecord::Base
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
 
-  mappings dynamic: false do
-    indexes :info, type: "object", fields: {
-      raw: {
-        type: "object",
-        index: "not_analyzed"
-      }
-    }
-  end
-
   belongs_to :enterprise, inverse_of: :employees
   has_many :devices
   has_and_belongs_to_many :segments
@@ -130,6 +121,29 @@ class Employee < ActiveRecord::Base
       except: [:data],
       methods: [:info]
     })
+  end
+
+  def self.mappingue
+    {
+      employee: {
+        dynamic_templates: [{
+          string_template: {
+            type: "string",
+            mapping: {
+              fields: {
+                raw: {
+                  type: "string",
+                  index: "not_analyzed"
+                }
+              }
+            },
+            match_mapping_type: "string",
+            match: "*"
+          }
+        }],
+        properties: {}
+      }
+    }
   end
 
   protected

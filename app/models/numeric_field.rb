@@ -104,7 +104,7 @@ class NumericField < Field
       aggs = {
         aggregation: {
           terms: {
-            field: "info.#{aggr_field.id}"
+            field: "info.#{aggr_field.id}.raw"
           },
           aggs: range_agg
         }
