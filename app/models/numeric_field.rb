@@ -124,7 +124,7 @@ class NumericField < Field
     if aggr_field # If there is an aggregation
       series = data[:aggregations][:aggregation][:buckets].map do |aggr_bucket|
         {
-          name: "#{aggr_field.title}: #{aggr_bucket[:key]}",
+          name: "#{aggr_bucket[:key]}",
           data: aggr_bucket[:ranges][:buckets].map{ |range_bucket| range_bucket[:doc_count] }
         }
       end
@@ -135,7 +135,7 @@ class NumericField < Field
 
       return {
         series: series,
-        ranges: ranges,
+        categories: ranges,
         xAxisTitle: self.title
       }
     else # If there is no aggregation
@@ -148,7 +148,7 @@ class NumericField < Field
 
       return {
         series: series,
-        ranges: ranges,
+        categories: ranges,
         xAxisTitle: self.title
       }
     end

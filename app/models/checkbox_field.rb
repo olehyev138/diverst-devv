@@ -67,17 +67,4 @@ class CheckboxField < Field
       (employee.info[rule.field] & rule.values_array).size == 0
     end
   end
-
-  def elastic_stats
-    Employee.search(
-      size: 0,
-      aggs: {
-        sums: {
-          terms: {
-            field: "info.#{self.id}"
-          }
-        }
-      }
-    ).response
-  end
 end

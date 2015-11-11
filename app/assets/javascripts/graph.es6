@@ -20,10 +20,15 @@ class Graph {
 
   attachToElement() {
     if (this.data.type === "NumericField")
-      this.renderBarChart(this.data.highcharts);
+      this.renderBarChart()
+    else if (this.data.type === "CheckboxField" || this.data.type === "SelectField")
+      if (this.data.hasAggregation)
+        this.renderBarChart()
+      else
+        this.renderPieChart()
   }
 
-  renderBarChart(data) {
+  renderBarChart() {
     this.$element.highcharts({
       chart: {
         type: 'bar',
@@ -32,12 +37,12 @@ class Graph {
         }
       },
       title: {
-        text: ''
+        text: this.data.title
       },
       xAxis: {
-        categories: data.ranges,
+        categories: this.data.highcharts.categories,
         title: {
-          text: data.xAxisTitle
+          text: this.data.highcharts.xAxisTitle
         }
       },
       yAxis: {
@@ -60,11 +65,11 @@ class Graph {
         shared: true,
         useHTML: true
       },
-      series: data.series
+      series: this.data.highcharts.series
     });
   }
 
-  renderPieChart(data) {
+  renderPieChart() {
     this.$element.highcharts({
       chart: {
         type: 'pie',
@@ -73,12 +78,9 @@ class Graph {
         }
       },
       title: {
-        text: ''
+        text: this.data.title
       },
-      series: [{
-        name: data.fieldTitle,
-        data: data.seriesData
-      }],
+      series: this.data.highcharts.series,
       tooltip: {
         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
         pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
@@ -92,8 +94,7 @@ class Graph {
           pointPadding: 0.2,
           borderWidth: 0
         }
-      },
-      colors: ['#7B77C9']
+      }
     });
   }
 }

@@ -19,6 +19,10 @@
   </div>
 
   <div class="card">
+    <div id="test4-chart"></div>
+  </div>
+
+  <div class="card">
     <% @groups.each do |group| %>
       <div class="card__section card__section--border">
         <div class="flex-row flex-row--middle">
@@ -38,89 +42,7 @@
 
 <script>
   var graph = new Graph(1, $('#test-chart'));
-
-  $.get('/fields/1/stats', function(data) {
-    var chartData = data.aggregations.sums.buckets.map(function(bucket) { return { name: bucket.key, y: bucket.doc_count } });
-
-    $("#test2-chart").highcharts({
-      chart: {
-        type: 'pie',
-        style: {
-          fontFamily: 'Helvetica Neue, sans-serif'
-        }
-      },
-      title: {
-        text: ''
-      },
-      series:[{
-        name: "Gender",
-        data: chartData
-      }],
-      tooltip: {
-        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-          '<td style="padding:0"><b>{point.y} employees</b></td></tr>',
-        footerFormat: '</table>',
-        shared: true,
-        useHTML: true
-      },
-      plotOptions: {
-        column: {
-          pointPadding: 0.2,
-          borderWidth: 0
-        }
-      },
-      colors: ['#7B77C9']
-    });
-  });
-
-  $.get('/fields/6/stats', function(data) {
-    var ranges = data.aggregations.sums.buckets.map(function(bucket) { return bucket.key; });
-    var values = data.aggregations.sums.buckets.map(function(bucket) { return bucket.doc_count; });
-
-    $("#test3-chart").highcharts({
-      chart: {
-        type: 'bar',
-        style: {
-          fontFamily: 'Helvetica Neue, sans-serif'
-        }
-      },
-      title: {
-        text: ''
-      },
-      xAxis: {
-        categories: ranges,
-        crosshair: true,
-        title: {
-          text: 'Spoken language'
-        },
-      },
-      yAxis: {
-        min: 0,
-        title: {
-          text: 'Nb of employees'
-        },
-        allowDecimals: false
-      },
-      tooltip: {
-        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-          '<td style="padding:0"><b>{point.y} employees</b></td></tr>',
-        footerFormat: '</table>',
-        shared: true,
-        useHTML: true
-      },
-      plotOptions: {
-        column: {
-          pointPadding: 0.2,
-          borderWidth: 0
-        }
-      },
-      series: [{
-        name: 'All employees',
-        data: values
-      }],
-      colors: ['#7B77C9']
-    });
-  });
+  var graph2 = new Graph(2, $('#test2-chart'));
+  var graph3 = new Graph(4, $('#test3-chart'));
+  var graph4 = new Graph(5, $('#test4-chart'));
 </script>
