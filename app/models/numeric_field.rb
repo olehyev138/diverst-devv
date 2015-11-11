@@ -82,13 +82,8 @@ class NumericField < Field
     nb_buckets.times do |i|
       range = {}
 
-      if i < nb_buckets - 1
-        range[:to] = min + (i+1)*bucket_size
-      end
-
-      if i > 0
-        range[:from] = min + i*bucket_size
-      end
+      range[:from] = min + i*bucket_size
+      range[:to] = range[:from] + bucket_size
 
       ranges << range
     end
@@ -123,18 +118,39 @@ class NumericField < Field
     ).response
   end
 
-  def highcharts_data(aggr_field:)
-    data = elastic_stats(aggr_field)
+  def highcharts_data(aggr_field: nil)
+    data = elastic_stats(aggr_field: aggr_field)
 
-    series = data[:aggregations][:aggregation][:buckets].map do |aggr_bucket|
-      {
-        name: aggr_bucket[:key],
-        data: aggr_bucket[:ranges][:buckets].map{ |range_bucket| range_bucket[:doc_count] }
+    if aggr_field # If there is an aggregation
+      series = data[:aggregations][:aggregation][:buckets].map do |aggr_bucket|
+        {
+          name: "#{aggr_field.title}: #{aggr_bucket[:key]}",
+          data: aggr_bucket[:ranges][:buckets].map{ |range_bucket| range_bucket[:doc_count] }
+        }
+      end
+
+      pp data
+
+      ranges = data[:aggregations][:aggregation][:buckets][0][:ranges][:buckets].map{ |range_bucket| range_bucket[:key].gsub(/\.0/, '') }
+
+      return {
+        series: series,
+        ranges: ranges,
+        xAxisTitle: self.title
+      }
+    else # If there is no aggregation
+      series = [{
+        name: self.title,
+        data: data[:aggregations][:ranges][:buckets].map{ |range_bucket| range_bucket[:doc_count] }
+      }]
+
+      ranges = data[:aggregations][:ranges][:buckets].map{ |range_bucket| range_bucket[:key].gsub(/\.0/, '') }
+
+      return {
+        series: series,
+        ranges: ranges,
+        xAxisTitle: self.title
       }
     end
-
-    ranges = data[:aggregations][:aggregation][:buckets][0][:ranges][:buckets].map{ |range_bucket| range_bucket[:key] }
-
-    { series: series, ranges: ranges }
   end
 end

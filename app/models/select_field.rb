@@ -88,4 +88,40 @@ class SelectField < Field
       }
     ).response
   end
+
+  def highcharts_data(aggr_field: nil)
+    data = elastic_stats(aggr_field: aggr_field)
+
+    if aggr_field # If there is an aggregation
+      # series = data[:aggregations][:aggregation][:buckets].map do |aggr_bucket|
+      #   {
+      #     name: aggr_bucket[:key],
+      #     data: aggr_bucket[:ranges][:buckets].map{ |range_bucket| range_bucket[:doc_count] }
+      #   }
+      # end
+
+      # ranges = data[:aggregations][:aggregation][:buckets][0][:ranges][:buckets].map{ |range_bucket| range_bucket[:key].gsub(/\.0/, '') }
+
+      # return {
+      #   series: series,
+      #   ranges: ranges,
+      #   xAxisTitle: self.title
+      # }
+    else # If there is no aggregation
+      ranges = data[:aggregations][:ranges][:buckets].map{ |bucket| bucket[:key] }
+      values = data[:aggregations][:ranges][:buckets].map{ |bucket| bucket[:doc_count] }
+
+      seriesData = data[:aggregations][:ranges][:buckets].map do |range_bucket|
+        {
+          name: range_bucket[:key],
+          y: range_bucket[:doc_count]
+        }
+      end
+
+      return {
+        fieldTitle: self.title,
+        seriesData: seriesData
+      }
+    end
+  end
 end

@@ -7,8 +7,17 @@ class Employee < ActiveRecord::Base
 
   include DeviseTokenAuth::Concerns::User
   include ContainsFields
-  #include Elasticsearch::Model
-  #include Elasticsearch::Model::Callbacks
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
+
+  mappings dynamic: false do
+    indexes :info, type: "object", fields: {
+      raw: {
+        type: "object",
+        index: "not_analyzed"
+      }
+    }
+  end
 
   belongs_to :enterprise, inverse_of: :employees
   has_many :devices

@@ -1,1 +1,2 @@
 name: "diverst"
+script.engine.groovy.inline.aggs: on
