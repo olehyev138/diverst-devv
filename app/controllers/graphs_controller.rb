@@ -10,7 +10,6 @@ class GraphsController < ApplicationController
   end
 
   def create
-    pp @metrics_dashboard
     @graph = @metrics_dashboard.graphs.new(graph_params)
 
     if @graph.save

@@ -21,6 +21,9 @@ class Employee < ActiveRecord::Base
   before_validation :generate_password_if_saml
   after_create :assign_firebase_token
 
+  scope :for_segments, -> (segments) { joins(:segments).where("segments.id" => segments.map(&:id)) }
+  scope :for_groups, -> (groups) { joins(:groups).where("groups.id" => segments.map(&:id)) }
+
   def name
     "#{self.first_name} #{self.last_name}"
   end

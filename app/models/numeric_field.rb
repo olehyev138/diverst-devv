@@ -67,7 +67,7 @@ class NumericField < Field
     }
   end
 
-  def elastic_stats(aggr_field: nil)
+  def elastic_stats(aggr_field: nil, target_segment_ids: nil)
     # Dynamically calculate bucket sizes
     stats = Employee.search(size: 0, aggs: { global_stats: { stats: { field: "info.#{self.id}" } } }).response
 
@@ -111,15 +111,26 @@ class NumericField < Field
       }
     end
 
-    # Execute the Elasticsearch query
-    Employee.search(
+    search_hash = {
       size: 0,
       aggs: aggs
-    ).response
+    }
+
+    # Filter the query by segments if there are any specified
+    if !target_segment_ids.nil?
+      search_hash[:query] = {
+        terms: {
+          id: Employee.joins(:segments).where("segments.id" => target_segment_ids).ids
+        }
+      }
+    end
+
+    # Execute the elasticsearch query
+    Employee.search(search_hash).response
   end
 
-  def highcharts_data(aggr_field: nil)
-    data = elastic_stats(aggr_field: aggr_field)
+  def highcharts_data(aggr_field: nil, target_segment_ids: nil)
+    data = elastic_stats(aggr_field: aggr_field, target_segment_ids: target_segment_ids)
 
     if aggr_field # If there is an aggregation
       series = data[:aggregations][:aggregation][:buckets].map do |aggr_bucket|

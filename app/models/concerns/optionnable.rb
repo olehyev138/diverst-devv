@@ -41,12 +41,13 @@ module Optionnable
     answer_counts_formatted
   end
 
-  def elastic_stats(aggr_field: nil)
+  def elastic_stats(aggr_field: nil, target_segment_ids: nil)
     # Craft the aggregation query depending on if we have a field to aggregate on or not
     term_agg = {
       terms: {
         terms: {
-          field: "info.#{self.id}.raw"
+          field: "info.#{self.id}.raw",
+          min_doc_count: 0
         }
       }
     }
@@ -57,21 +58,34 @@ module Optionnable
       aggs = {
         aggregation: {
           terms: {
-            field: "info.#{aggr_field.id}.raw"
+            field: "info.#{aggr_field.id}.raw",
+            min_doc_count: 0
           },
           aggs: term_agg
         }
       }
     end
 
-    Employee.search(
+    search_hash = {
       size: 0,
       aggs: aggs
-    ).response
+    }
+
+    # Filter the query by segments if there are any specified
+    if !target_segment_ids.nil?
+      search_hash[:query] = {
+        terms: {
+          id: Employee.joins(:segments).where("segments.id" => target_segment_ids).ids
+        }
+      }
+    end
+
+    # Execute the elasticsearch query
+    Employee.search(search_hash).response
   end
 
-  def highcharts_data(aggr_field: nil)
-    data = elastic_stats(aggr_field: aggr_field)
+  def highcharts_data(aggr_field: nil, target_segment_ids: nil)
+    data = elastic_stats(aggr_field: aggr_field, target_segment_ids: target_segment_ids)
 
     if aggr_field # If there is an aggregation
       series = data[:aggregations][:aggregation][:buckets].map do |aggr_bucket|

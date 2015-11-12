@@ -11,7 +11,7 @@ class Graph < ActiveRecord::Base
   def data
     {
       type: field.type,
-      highcharts: field.highcharts_data(aggr_field: aggregation),
+      highcharts: field.highcharts_data(aggr_field: aggregation, target_segment_ids: self.metrics_dashboard.segments.ids),
       hasAggregation: !self.aggregation.nil?,
       title: self.title
     }
