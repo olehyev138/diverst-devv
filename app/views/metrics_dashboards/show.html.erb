@@ -1,20 +1,15 @@
 <div class="content__header">
   <h1>Metrics</h1>
+  <div class="field__input-wrapper" style="width: 250px;">
+    <span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
+    <select class="field__input field__input--right-add-on" id="dashboard-select">
+      <% current_admin.enterprise.metrics_dashboards.each do |metrics_dashboard| %>
+        <option value="<%= metrics_dashboard.id %>"<%= " selected disabled" if metrics_dashboard == @metrics_dashboard %>><%= metrics_dashboard.name %></option>
+      <% end %>
+    </select>
+  </div>
   <%= link_to "New Dashboard", new_metrics_dashboard_path, class: "btn btn--secondary" %>
   <%= link_to "New Graph", new_metrics_dashboard_graph_path(@metrics_dashboard), class: "btn btn--primary" %>
-</div>
-
-<div class="content__main">
-  <div class="row row--equal-height">
-      <% current_admin.enterprise.metrics_dashboards.each do |metrics_dashboard| %>
-        <div class="col sm-12 md-6">
-          <div class="card">
-            <h4><%= link_to "#{metrics_dashboard.name} (#{metrics_dashboard.segments.map(&:name).join(', ')})", metrics_dashboard %></h4>
-          </div>
-        </div>
-      <% end %>
-    </div>
-  </div>
 </div>
 
 <div class="content__main">
@@ -40,5 +35,9 @@
 <script>
   var graphs = $('.graph').map(function() {
     return new Graph($(this).data('graph-id'), $(this));
+  });
+
+  $('#dashboard-select').change(function() {
+    location = "/metrics_dashboards/" + $(this).find(":selected").val();
   });
 </script>
