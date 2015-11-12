@@ -7,7 +7,7 @@ class Enterprise < ActiveRecord::Base
   has_many :groups, inverse_of: :enterprise
   has_many :polls, inverse_of: :enterprise
   has_many :mobile_fields, inverse_of: :enterprise
-  has_many :graphs, inverse_of: :enterprise
+  has_many :metrics_dashboards, inverse_of: :enterprise
   has_many :campaigns
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true

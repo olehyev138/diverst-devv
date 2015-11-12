@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151109044639) do
+ActiveRecord::Schema.define(version: 20151112195758) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -170,11 +170,11 @@ ActiveRecord::Schema.define(version: 20151109044639) do
   end
 
   create_table "graphs", force: :cascade do |t|
-    t.integer  "enterprise_id",  limit: 4
-    t.integer  "field_id",       limit: 4
-    t.integer  "aggregation_id", limit: 4
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.integer  "metrics_dashboard_id", limit: 4
+    t.integer  "field_id",             limit: 4
+    t.integer  "aggregation_id",       limit: 4
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
   end
 
   create_table "group_messages", force: :cascade do |t|
@@ -227,6 +227,18 @@ ActiveRecord::Schema.define(version: 20151109044639) do
     t.integer  "user1_rating",        limit: 4
     t.integer  "user2_rating",        limit: 4
     t.datetime "both_accepted_at"
+  end
+
+  create_table "metrics_dashboards", force: :cascade do |t|
+    t.integer  "enterprise_id", limit: 4
+    t.string   "name",          limit: 255
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  create_table "metrics_dashboards_segments", force: :cascade do |t|
+    t.integer "metrics_dashboard_id", limit: 4
+    t.integer "segment_id",           limit: 4
   end
 
   create_table "mobile_fields", force: :cascade do |t|

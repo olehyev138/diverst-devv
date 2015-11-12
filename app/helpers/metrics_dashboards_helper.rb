@@ -1,0 +1,2 @@
+module MetricsDashboardsHelper
+end

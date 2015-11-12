@@ -1,5 +1,5 @@
 class Graph < ActiveRecord::Base
-  belongs_to :enterprise, inverse_of: :graphs
+  belongs_to :metrics_dashboard, inverse_of: :graphs
   belongs_to :field
   belongs_to :aggregation, class_name: "Field"
 

@@ -35,12 +35,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :graphs do
-    member do
-      get 'data'
-    end
-  end
-
   resources :groups do
     scope module: :groups do
       resources :group_members, path: "members"
@@ -116,5 +110,13 @@ Rails.application.routes.draw do
     end
   end
 
-  root to: "employees#index"
+  resources :metrics_dashboards do
+    resources :graphs, shallow: true do
+      member do
+        get 'data'
+      end
+    end
+  end
+
+  root to: "metrics_dashboards#index"
 end

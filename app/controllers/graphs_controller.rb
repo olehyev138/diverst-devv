@@ -1,30 +1,32 @@
 class GraphsController < ApplicationController
   before_action :authenticate_admin!
+  before_action :set_metrics_dashboard, except: [:data, :show, :edit, :update, :destroy]
   before_action :set_graph, except: [:index, :new, :create]
 
   layout 'global_settings'
 
   def new
-    @graph = current_admin.enterprise.graphs.new
+    @graph = @metrics_dashboard.graphs.new
   end
 
   def create
-    @graph = current_admin.enterprise.graphs.new(graph_params)
+    pp @metrics_dashboard
+    @graph = @metrics_dashboard.graphs.new(graph_params)
 
     if @graph.save
-      redirect_to action: :index
+      redirect_to @metrics_dashboard
     else
       render :edit
     end
   end
 
   def index
-    @graphs = current_admin.enterprise.graphs
+    @graphs = @metrics_dashboard.graphs
   end
 
    def update
     if @graph.update(graph_params)
-      redirect_to action: :index
+      redirect_to @metrics_dashboard
     else
       render :edit
     end
@@ -32,7 +34,7 @@ class GraphsController < ApplicationController
 
   def destroy
     @graph.destroy
-    redirect_to action: :index
+    redirect_to :back
   end
 
   def data
@@ -41,8 +43,12 @@ class GraphsController < ApplicationController
 
   protected
 
+  def set_metrics_dashboard
+    @metrics_dashboard = current_admin.enterprise.metrics_dashboards.find(params[:metrics_dashboard_id])
+  end
+
   def set_graph
-    @graph = current_admin.enterprise.graphs.find(params[:id])
+    @graph = Graph.where(metrics_dashboard_id: current_admin.enterprise.metrics_dashboards.ids).find(params[:id])
   end
 
   def graph_params
