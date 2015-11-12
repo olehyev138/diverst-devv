@@ -4,24 +4,6 @@
 </div>
 
 <div class="content__main">
-  <h2>Metrics test</h2>
-
-  <div class="card">
-    <div id="test-chart"></div>
-  </div>
-
-  <div class="card">
-    <div id="test2-chart"></div>
-  </div>
-
-  <div class="card">
-    <div id="test3-chart"></div>
-  </div>
-
-  <div class="card">
-    <div id="test4-chart"></div>
-  </div>
-
   <div class="card">
     <% @groups.each do |group| %>
       <div class="card__section card__section--border">
@@ -39,10 +21,3 @@
     <% end %>
   </div>
 </div>
-
-<script>
-  var graph = new Graph(1, $('#test-chart'));
-  var graph2 = new Graph(2, $('#test2-chart'));
-  var graph3 = new Graph(4, $('#test3-chart'));
-  var graph4 = new Graph(5, $('#test4-chart'));
-</script>

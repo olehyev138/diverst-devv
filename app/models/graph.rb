@@ -5,7 +5,7 @@ class Graph < ActiveRecord::Base
 
   def title
     return field.title if aggregation.nil?
-    "#{field.title} by #{aggregation.title}"
+    "#{aggregation.title} by #{field.title}"
   end
 
   def data

@@ -37,7 +37,7 @@ class Graph {
         }
       },
       title: {
-        text: this.data.title
+        text: ''
       },
       xAxis: {
         categories: this.data.highcharts.categories,
@@ -78,7 +78,7 @@ class Graph {
         }
       },
       title: {
-        text: this.data.title
+        text: ''
       },
       series: this.data.highcharts.series,
       tooltip: {
@@ -88,12 +88,6 @@ class Graph {
         footerFormat: '</table>',
         shared: true,
         useHTML: true
-      },
-      plotOptions: {
-        column: {
-          pointPadding: 0.2,
-          borderWidth: 0
-        }
       }
     });
   }

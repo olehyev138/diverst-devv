@@ -129,8 +129,6 @@ class NumericField < Field
         }
       end
 
-      pp data
-
       ranges = data[:aggregations][:aggregation][:buckets][0][:ranges][:buckets].map{ |range_bucket| range_bucket[:key].gsub(/\.0/, '') }
 
       return {

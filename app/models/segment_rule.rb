@@ -54,7 +54,6 @@ class SegmentRule < ActiveRecord::Base
   end
 
   def remove_empty_values
-    pp self.values
     self.values = values_array.reject(&:empty?).to_json
   end
 end
