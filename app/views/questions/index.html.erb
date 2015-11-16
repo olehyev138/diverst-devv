@@ -1,5 +1,6 @@
 <div class="content__header">
   <h1><%= @campaign.title %></h1>
+  <%= link_to "New Question", new_campaign_question_path(@campaign), class: "btn btn--primary" %>
 </div>
 
 <div class="content__main">
