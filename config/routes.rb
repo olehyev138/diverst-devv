@@ -83,10 +83,12 @@ Rails.application.routes.draw do
   end
 
   resources :campaigns do
-    resources :questions
+    resources :questions do
+      resources :answers
+    end
   end
 
-  resources :answers do
+  resources :answers, only: [:index] do
     member do
       put 'vote'
     end

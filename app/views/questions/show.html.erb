@@ -35,6 +35,15 @@
       </div>
     <% end %>
   </div>
+
+  <div class="card">
+    <div class="card__section">
+    <h3>Write an answer</h3>
+    <%= simple_form_for [@campaign, @question, @question.answers.new] do |f| %>
+      <%= f.input :content %>
+      <%= f.button :submit %>
+    <% end %>
+  </div>
 </div>
 
 <script>
@@ -47,8 +56,6 @@
           upvoted: !$(this).data('upvoted')
         }
       }
-    }, function(res) {
-      console.log("meow");
     });
 
     var voteChange = ($(this).data('upvoted') ? -1 : 1);
