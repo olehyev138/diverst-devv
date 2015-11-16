@@ -25,7 +25,7 @@ class GraphsController < ApplicationController
 
    def update
     if @graph.update(graph_params)
-      redirect_to @metrics_dashboard
+      redirect_to @graph.metrics_dashboard
     else
       render :edit
     end

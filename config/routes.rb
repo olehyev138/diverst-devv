@@ -83,8 +83,12 @@ Rails.application.routes.draw do
   end
 
   resources :campaigns do
+    resources :questions
+  end
+
+  resources :answers do
     member do
-      resources :questions
+      put 'vote'
     end
   end
 

@@ -15,7 +15,7 @@
   <nav class="nav">
     <ul class="nav__list nav__list--primary">
       <!-- <li class="nav__item">
-        <%= active_link_to topics_path, class: "nav__link", class_active: "nav__link--is-selected" do %>
+        <%= link_to topics_path, class: "nav__link" do %>
           <span class="nav__icon icon icon--handshake"></span>
           <span class="nav__text">Handshake</span>
         <% end %>
@@ -27,13 +27,13 @@
         </a>
       </li>
       <li class="nav__item">
-        <%= active_link_to campaigns_path, class: "nav__link", class_active: "nav__link--is-selected" do %>
+        <%= link_to campaigns_path, class: "nav__link" do %>
           <span class="nav__icon icon icon--unify"></span>
           <span class="nav__text">Unify</span>
         <% end %>
       </li>
       <li class="nav__item">
-        <%= active_link_to polls_path, class: "nav__link", class_active: "nav__link--is-selected" do %>
+        <%= link_to polls_path, class: "nav__link" do %>
           <span class="nav__icon icon icon--market-scope"></span>
           <span class="nav__text">Market Scope</span>
         <% end %>
@@ -41,7 +41,7 @@
     </ul>
     <ul class="nav__list nav__list--secondary">
       <li class="nav__item">
-        <%= active_link_to groups_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['groups', 'segments', 'enterprises', 'admins', 'employees'], []] do %>
+        <%= link_to groups_path, class: "nav__link" do %>
           <span class="nav__text">Global Settings</span>
         <% end %>
       </li>

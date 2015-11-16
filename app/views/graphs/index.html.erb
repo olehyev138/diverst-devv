@@ -8,7 +8,7 @@
       <% @graphs.each do |graph| %>
         <div class="col sm-12 md-6">
           <div class="card">
-            <div class="card__section">
+            <div class="card__section card__section--border">
               <div class="card__action">
                 <%= link_to "Edit", edit_graph_path(graph) %> -
                 <%= link_to "Remove", graph_path(graph), method: :delete, class: "error" %>

@@ -17,6 +17,7 @@ class Employee < ActiveRecord::Base
   has_many :groups, through: :employee_groups
   has_many :topic_feedbacks
   has_many :poll_responses
+  has_many :answers, inverse_of: :author, foreign_key: "author_id"
 
   before_validation :generate_password_if_saml
   after_create :assign_firebase_token

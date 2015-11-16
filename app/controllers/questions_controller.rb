@@ -6,7 +6,7 @@ class QuestionsController < ApplicationController
   layout "unify"
 
   def index
-    @questions = @campaign.questions
+    @questions = @campaign.questions.order(created_at: :desc)
   end
 
   def new
@@ -39,7 +39,7 @@ class QuestionsController < ApplicationController
   protected
 
   def set_campaign
-    @campaign = current_admin.enterprise.campaigns.find(params[:campaign_id] || params[:id])
+    @campaign = current_admin.enterprise.campaigns.find(params[:campaign_id])
   end
 
   def set_question

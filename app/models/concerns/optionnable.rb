@@ -88,14 +88,32 @@ module Optionnable
     data = elastic_stats(aggr_field: aggr_field, target_segment_ids: target_segment_ids)
 
     if aggr_field # If there is an aggregation
+      terms_has_other = false
+
       series = data[:aggregations][:aggregation][:buckets].map do |aggr_bucket|
+        bucket_data = aggr_bucket[:terms][:buckets].map do |option_bucket|
+          option_bucket[:doc_count]
+        end
+
+        other_docs_count = aggr_bucket[:terms][:sum_other_doc_count]
+
+        if other_docs_count > 0
+          bucket_data << other_docs_count
+          terms_has_other = true
+        end
+
         {
           name: aggr_bucket[:key],
-          data: aggr_bucket[:terms][:buckets].map{ |option_bucket| option_bucket[:doc_count] }
+          data: bucket_data
         }
       end
 
       options = data[:aggregations][:aggregation][:buckets][0][:terms][:buckets].map{ |option_bucket| option_bucket[:key].gsub(/\.0/, '') }
+
+      options << "Other" if terms_has_other
+
+      aggr_other_docs_count = data[:aggregations][:aggregation][:sum_other_doc_count]
+      series << { name: "Other", data: [aggr_other_docs_count]} if aggr_other_docs_count > 0
 
       return {
         series: series,
@@ -109,6 +127,9 @@ module Optionnable
           y: option_bucket[:doc_count]
         }
       end
+
+      other_docs_count = data[:aggregations][:terms][:sum_other_doc_count]
+      seriesData << { name: "Other", y: other_docs_count} if other_docs_count > 0
 
       series = [{
         name: self.title,

@@ -16,7 +16,7 @@
         </thead>
         <tbody>
           <% @campaigns.each do |campaign| %>
-            <td><%= link_to campaign.title, questions_path(campaign) %></td>
+            <td><%= link_to campaign.title, campaign_questions_path(campaign) %></td>
             <td><%= campaign.groups.pluck(:name).join(', ') %></td>
             <td><%= campaign.start.to_s :dateonly %></td>
             <td><%= campaign.invitations.count %></td>

@@ -61,6 +61,12 @@ group :development, :test do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 
+  gem 'guard-livereload', '~> 2.4', require: false
+  gem 'rb-readline'
+  gem "rack-livereload"
+
+  gem 'quiet_assets'
+
   gem 'active_record_query_trace'
 
   gem 'pry-rails'
