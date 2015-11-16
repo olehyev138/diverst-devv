@@ -6,14 +6,14 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
-<body class="employee">
+<body class="erg">
 
   <header class="primary-header">
     <a href="#"><img class="primary-header__logo logo" src="<%= image_path "diverst-logo.svg" %>"></a>
   </header>
 
   <header class="secondary-header">
-    <%= yield :secondary_nav %>
+    <%= active_link_to "My Scrums", campaigns_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   </header>
 
   <div class="content">
@@ -24,6 +24,5 @@
       <%= yield %>
     </div>
   </div>
-
 </body>
 </html>
