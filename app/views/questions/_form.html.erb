@@ -1,11 +1,15 @@
 <div class="content__main">
-  <div class="card">
-    <div class="card__section">
-      <%= simple_form_for [@campaign, @question] do |f| %>
-        <%= f.input :title %>
-        <%= f.input :description %>
-        <%= f.button :submit %>
-      <% end %>
+  <%= simple_form_for [@campaign, @question] do |f| %>
+    <div class="card">
+      <div class="card__section card__section--border">
+        <p class="field__hint">Start by giving a <strong>title</strong> to your question</p>
+        <%= f.input :title, label: false, placeholder: "What do you think of our new strategy for... ?" %>
+      </div>
+      <div class="card__section card__section--border">
+        <p class="field__hint">Optionnally define a <strong>description</strong> to further explain what you need resolution for</p>
+        <%= f.input :description, label: false, placeholder: "We've been hammering at this problem for a very long time, and we need your input on how to..." %>
+      </div>
     </div>
-  </div>
+    <%= f.button :submit %>
+  <% end %>
 </div>
