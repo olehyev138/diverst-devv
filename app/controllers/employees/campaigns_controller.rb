@@ -1,25 +1,11 @@
-class CampaignsController < ApplicationController
-  before_action :authenticate_admin!, except: [:index, :show]
+class Employees::CampaignsController < ApplicationController
+  before_action :authenticate_employee!
   before_action :set_campaign, only: [:edit, :update, :destroy, :show]
 
-  layout :resolve_layout
+  layout "employee"
 
   def index
-    @campaigns = current_user.enterprise.campaigns
-  end
-
-  def new
-    @campaign = current_user.enterprise.campaigns.new
-  end
-
-  def create
-    @campaign = current_user.enterprise.campaigns.new(campaign_params)
-
-    if @campaign.save
-      redirect_to action: :index
-    else
-      render :edit
-    end
+    @campaigns = current_employee.campaigns
   end
 
   def show
@@ -63,10 +49,5 @@ class CampaignsController < ApplicationController
         :description
       ]
     )
-  end
-
-  def resolve_layout
-    return "employee" if current_admin.nil?
-    "unify"
   end
 end

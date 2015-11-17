@@ -3,7 +3,7 @@ class CreateCampaignInvitations < ActiveRecord::Migration
     create_table :campaign_invitations do |t|
       t.belongs_to :campaign
       t.belongs_to :employee
-      t.integer :response
+      t.integer :response, default: 0
 
       t.timestamps null: false
     end

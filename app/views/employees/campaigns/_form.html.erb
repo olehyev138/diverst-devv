@@ -1,0 +1,60 @@
+<div class="content__main">
+  <%= simple_form_for @campaign do |f| %>
+
+    <div class="card">
+      <div class="card__section card__section--border">
+        <p class="field__hint">Start off by giving your campaign a name</p>
+        <%= f.input :title, label: false %>
+      </div>
+
+      <div class="card__section card__section--border">
+        <p class="field__hint">Decscribe what the goal of the campaign is. The respondants will see this.</p>
+        <%= f.input :description, label: false %>
+      </div>
+
+      <div class="card__section card__section--border">
+        <p class="field__hint">Choose the campaign's start and end time</p>
+        <%= f.input :start, label: false %>
+        <%= f.input :end, label: false %>
+      </div>
+
+      <div class="card__section card__section--border">
+        <p class="field__hint">Choose the <strong>ERGs</strong> you want to target</p>
+        <%= f.association :groups, input_html: { class: "select2" }, label: false %>
+      </div>
+
+      <div class="card__section card__section--border">
+        <p class="field__hint">Choose the <strong>segments</strong> you want to target within these ERGs</p>
+        <%= f.association :segments, input_html: { class: "select2" }, label: false %>
+      </div>
+
+      <div class="card__section card__section--border">
+        <p class="field__hint">How many invites do you want to send out?</p>
+        <%= f.input :nb_invites, label: false, max: current_admin.enterprise.employees.count %>
+      </div>
+    </div>
+
+    <h2>Questions</h2>
+    <p>Define the questions you want to ask your audience.</p>
+    <div class="card">
+      <div id="questions">
+        <%= f.simple_fields_for :questions do |question| %>
+          <%= render 'question_fields', f: question %>
+        <% end %>
+      </div>
+      <div class="link">
+        <div class="card__section">
+          <%= link_to_add_association "Add question", f, :questions %>
+        </div>
+      </div>
+    </div>
+
+    <%= f.button :submit, value: "Create campaign" %>
+  <% end %>
+</div>
+
+<% content_for :page_scripts do %>
+  <script>
+    $('.select2').select2();
+  </script>
+<% end %>

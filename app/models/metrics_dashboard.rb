@@ -6,7 +6,7 @@ class MetricsDashboard < ActiveRecord::Base
   # Returns a query to the list of employees targeted by the dashboard
   def target
     if segments.empty?
-      enterprise.employees.for_segments(segments)
+      enterprise.employees.for_segment(segments)
     else
       enterprise.employees
     end

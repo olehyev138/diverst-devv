@@ -18,12 +18,14 @@ class Employee < ActiveRecord::Base
   has_many :topic_feedbacks
   has_many :poll_responses
   has_many :answers, inverse_of: :author, foreign_key: "author_id"
+  has_many :invitations, class_name: "CampaignInvitation"
+  has_many :campaigns, through: :invitations
 
   before_validation :generate_password_if_saml
   after_create :assign_firebase_token
 
   scope :for_segments, -> (segments) { joins(:segments).where("segments.id" => segments.map(&:id)) }
-  scope :for_groups, -> (groups) { joins(:groups).where("groups.id" => segments.map(&:id)) }
+  scope :for_groups, -> (groups) { joins(:groups).where("groups.id" => groups.map(&:id)) }
 
   def name
     "#{self.first_name} #{self.last_name}"

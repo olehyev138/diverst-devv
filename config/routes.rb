@@ -15,7 +15,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :employees
+  resources :employees, path: "admin_employees"
 
   resources :enterprises do
     resources :saml do
@@ -97,6 +97,16 @@ Rails.application.routes.draw do
   resources :admins
 
   devise_scope :employee do
+    namespace :employees do
+      root :to => "campaigns#index"
+
+      resources :campaigns do
+        resources :questions do
+          resources :answers
+        end
+      end
+    end
+
     resources :matches do
       collection do
         get :test
