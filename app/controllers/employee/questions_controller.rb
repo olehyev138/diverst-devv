@@ -1,4 +1,4 @@
-class Employees::QuestionsController < ApplicationController
+class Employee::QuestionsController < ApplicationController
   before_action :authenticate_employee!
   before_action :set_campaign
   before_action :set_question, only: [:edit, :update, :destroy, :show]

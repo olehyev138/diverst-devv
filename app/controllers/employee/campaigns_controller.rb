@@ -1,4 +1,4 @@
-class Employees::CampaignsController < ApplicationController
+class Employee::CampaignsController < ApplicationController
   before_action :authenticate_employee!
   before_action :set_campaign, only: [:edit, :update, :destroy, :show]
 

@@ -1,11 +1,15 @@
 <div class="content__header">
-  <h1><%= @campaign.title %></h1>
+  <h1>
+    <%= link_to "My Scrums", employee_campaigns_path %> /
+    <%= @campaign.title %>
+  </h1>
 </div>
 
 <div class="content__main">
+  <p class="block"><%= @campaign.description %></p>
   <div class="card">
     <% @questions.each do |question| %>
-      <%= link_to employees_campaign_question_path(@campaign, question), class: "block block-section" do %>
+      <%= link_to employee_campaign_question_path(@campaign, question), class: "block block-section" do %>
         <div class="card__section card__section--border">
           <div class="flex-row flex-row--middle">
             <div class="flex-row__cell flex-row__cell--grow">

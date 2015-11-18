@@ -50,6 +50,10 @@
     @include mq(small) {
       margin: 0;
     }
+
+    a {
+      color: $diverst-grey;
+    }
   }
 }
 

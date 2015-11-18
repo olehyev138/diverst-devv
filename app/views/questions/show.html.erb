@@ -8,6 +8,7 @@
         <small class="flex-row__cell highlight"><%= pluralize(@question.answers.count, 'question') %> </small>
       </div>
     </div>
+
     <% @question.answers.each do |answer| %>
       <div class="card__section card__section--border">
         <div class="flex-row">
@@ -33,15 +34,6 @@
           </div>
         </div>
       </div>
-    <% end %>
-  </div>
-
-  <div class="card">
-    <div class="card__section">
-    <h3>Write an answer</h3>
-    <%= simple_form_for [@campaign, @question, @question.answers.new] do |f| %>
-      <%= f.input :content, label: false, placeholder: "Type an answer here..." %>
-      <%= f.button :submit %>
     <% end %>
   </div>
 </div>

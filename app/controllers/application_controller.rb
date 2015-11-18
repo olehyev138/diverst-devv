@@ -16,4 +16,9 @@ class ApplicationController < ActionController::Base
   def not_found!
     raise ActionController::RoutingError.new('Not Found')
   end
+
+  def after_sign_in_path_for(resource)
+    return employees_campaigns_path if resource.is_a? Employee
+    return metrics_dashboards_path if resource.is_a? Admin
+  end
 end

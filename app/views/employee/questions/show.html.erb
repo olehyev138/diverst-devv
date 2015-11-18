@@ -1,4 +1,12 @@
-<div class="content_main">
+<div class="content__header">
+  <h1>
+    <%= link_to "My Scrums", employee_campaigns_path %> /
+    <%= link_to @campaign.title, employee_campaign_questions_path(@campaign) %> /
+    <%= @question.title.truncate(80) %>
+  </h1>
+</div>
+
+<div class="content__main">
   <div class="card">
     <div class="card__section card__section--border">
       <h3><span class="accent">Q:</span> <%= @question.title %></h3>
@@ -39,7 +47,7 @@
   <div class="card">
     <div class="card__section">
     <h3>Write an answer</h3>
-    <%= simple_form_for [@campaign, @question, @question.answers.new] do |f| %>
+    <%= simple_form_for [:employee, @campaign, @question, @question.answers.new] do |f| %>
       <%= f.input :content, label: false, placeholder: "Type an answer here..." %>
       <%= f.button :submit %>
     <% end %>
@@ -50,7 +58,7 @@
   $('.counter').click(function() {
     $.ajax({
       method: 'put',
-      url: '/answers/' + $(this).data('answer-id') + '/vote',
+      url: '/employee/answers/' + $(this).data('answer-id') + '/vote',
       data: {
         answer: {
           upvoted: !$(this).data('upvoted')
@@ -64,4 +72,7 @@
     $(this).data('upvoted', !$(this).data('upvoted'));
     $(this).toggleClass('counter--active');
   });
+
+  // Preload active arrow image
+  var image = new Image(); image.src = "<%= image_path('icons/upvote-active.svg') %>";
 </script>

@@ -88,21 +88,19 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :answers, only: [:index] do
-    member do
-      put 'vote'
-    end
-  end
-
   resources :admins
 
   devise_scope :employee do
-    namespace :employees do
+    namespace :employee do
       root :to => "campaigns#index"
 
       resources :campaigns do
         resources :questions do
-          resources :answers
+          resources :answers, shallow: true do
+            member do
+              put 'vote'
+            end
+          end
         end
       end
     end
