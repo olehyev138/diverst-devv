@@ -4,19 +4,25 @@
 
 <div class="content__main">
   <div class="card">
-    <% @campaigns.each do |campaign| %>
-      <%= link_to employee_campaign_questions_path(campaign), class: "block block-section" do %>
-        <div class="card__section card__section--border">
-          <div class="flex-row flex-row--middle">
-            <div class="flex-row__cell flex-row__cell--grow">
-              <h2><%= campaign.title %></h2>
-              <p><%= campaign.description %></p>
-            </div>
-            <div class="flex-row__cell">
-              <span class="icon icon--chevron-right"></span>
+    <% if @campaigns.empty? %>
+      <div class="card__section">
+        <p>You don't have any scrum sessions yet. When you're invited to one, it will show up here.</p>
+      </div>
+    <% else %>
+      <% @campaigns.each do |campaign| %>
+        <%= link_to employee_campaign_questions_path(campaign), class: "block block-section" do %>
+          <div class="card__section card__section--border">
+            <div class="flex-row flex-row--middle">
+              <div class="flex-row__cell flex-row__cell--grow">
+                <h2><%= campaign.title %></h2>
+                <p><%= campaign.description %></p>
+              </div>
+              <div class="flex-row__cell">
+                <span class="icon icon--chevron-right"></span>
+              </div>
             </div>
           </div>
-        </div>
+        <% end %>
       <% end %>
     <% end %>
   </div>
