@@ -4,7 +4,7 @@ class AnswersController < ApplicationController
   before_action :set_question, except: [:vote]
   before_action :set_answer, only: [:vote]
 
-  layout "market_scope"
+  layout "unify"
 
   def vote
     if vote_params[:upvoted] == "true"

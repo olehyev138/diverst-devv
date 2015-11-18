@@ -85,6 +85,10 @@ Rails.application.routes.draw do
   resources :campaigns do
     resources :questions do
       resources :answers
+
+      member do
+        patch 'reopen'
+      end
     end
   end
 

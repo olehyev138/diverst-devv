@@ -1,4 +1,17 @@
 <div class="content_main">
+
+   <% if !@question.solved_at.nil? %>
+    <div class="card">
+      <div class="card__section card__section--border">
+        <h3>This question was marked as solved <%= time_ago_in_words @question.solved_at %> ago</h3>
+        <p><%= @question.conclusion %></p>
+        <%= simple_form_for [@campaign, @question], url: reopen_campaign_question_path(@campaign, @question) do |f| %>
+          <%= f.button :submit, value: "Reopen" %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
   <div class="card">
     <div class="card__section card__section--border">
       <h3><span class="accent">Q:</span> <%= @question.title %></h3>
@@ -14,7 +27,6 @@
         <div class="flex-row">
           <div class="flex-row__cell">
             <div class="counter<%= answer.votes.include?(current_employee) ? " counter--active" : "" %>" data-answer-id="<%= answer.id %>" data-upvoted="<%= answer.votes.include? current_employee %>">
-              <span class="icon icon--upvote counter__arrow"></span>
               <span class="counter__number"><%= answer.votes.count %></span>
             </div>
           </div>
@@ -36,24 +48,16 @@
       </div>
     <% end %>
   </div>
+  <% if @question.solved_at.nil? %>
+    <%= simple_form_for [@campaign, @question] do |f| %>
+      <div class="card">
+        <div class="card__section card__section--border">
+          <h3>Mark this question as solved</h3>
+          <p class="field__hint">Mark this question as solved by explaining what the outcome of the discsussions has been. This will block further communications on this question.</p>
+          <%= f.input :conclusion, label: false, placeholder: "We have decided to do..." %>
+          <%= f.button :submit, value: "Close question" %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
 </div>
-
-<script>
-  $('.counter').click(function() {
-    $.ajax({
-      method: 'put',
-      url: '/answers/' + $(this).data('answer-id') + '/vote',
-      data: {
-        answer: {
-          upvoted: !$(this).data('upvoted')
-        }
-      }
-    });
-
-    var voteChange = ($(this).data('upvoted') ? -1 : 1);
-    $(this).find('.counter__number').text(parseInt($(this).find('.counter__number').text()) + voteChange);
-
-    $(this).data('upvoted', !$(this).data('upvoted'));
-    $(this).toggleClass('counter--active');
-  });
-</script>

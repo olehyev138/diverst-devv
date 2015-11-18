@@ -7,6 +7,16 @@
 </div>
 
 <div class="content__main">
+
+  <% if !@question.solved_at.nil? %>
+    <div class="card">
+      <div class="card__section card__section--border">
+        <h3>This question was marked as solved <%= time_ago_in_words @question.solved_at %> ago</h3>
+        <p><%= @question.conclusion %></p>
+      </div>
+    </div>
+  <% end %>
+
   <div class="card">
     <div class="card__section card__section--border">
       <h3><span class="accent">Q:</span> <%= @question.title %></h3>
@@ -16,7 +26,7 @@
         <small class="flex-row__cell highlight"><%= pluralize(@question.answers.count, 'question') %> </small>
       </div>
     </div>
-    <% @question.answers.each do |answer| %>
+    <% @question.answers.order(created_at: :desc).each do |answer| %>
       <div class="card__section card__section--border">
         <div class="flex-row">
           <div class="flex-row__cell">
@@ -47,9 +57,13 @@
   <div class="card">
     <div class="card__section">
     <h3>Write an answer</h3>
-    <%= simple_form_for [:employee, @campaign, @question, @question.answers.new] do |f| %>
-      <%= f.input :content, label: false, placeholder: "Type an answer here..." %>
-      <%= f.button :submit %>
+    <% if @question.solved_at.nil? %>
+      <%= simple_form_for [:employee, @campaign, @question, @question.answers.new] do |f| %>
+        <%= f.input :content, label: false, placeholder: "Type an answer here..." %>
+        <%= f.button :submit %>
+      <% end %>
+    <% else %>
+      <p>This question is closed and doesn't take additional answers.</p>
     <% end %>
   </div>
 </div>

@@ -1,7 +1,7 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_admin!
   before_action :set_campaign
-  before_action :set_question, only: [:edit, :update, :destroy, :show]
+  before_action :set_question, only: [:edit, :update, :destroy, :show, :reopen]
 
   layout "unify"
 
@@ -23,9 +23,16 @@ class QuestionsController < ApplicationController
     end
   end
 
+  def reopen
+    @question.update(solved_at: nil)
+    redirect_to :back
+  end
+
   def update
+    @question.solved_at = Time.zone.now if question_params[:conclusion].present?
+
     if @question.update(question_params)
-      redirect_to @question
+      redirect_to [@campaign, @question]
     else
       render :edit
     end
@@ -51,6 +58,7 @@ class QuestionsController < ApplicationController
     .require(:question)
     .permit(
       :title,
+      :conclusion,
       :description
     )
   end
