@@ -9,28 +9,32 @@
 <div class="content__main">
   <div class="card">
     <div class="card__section">
-      <table class="table--has-border">
-        <thead>
-          <th>Title</th>
-          <th># of answers</th>
-          <th>Creation date</th>
-          <th>Last activity</th>
-          <th>Solved?</th>
-          <th>Options</th>
-        </thead>
-        <tbody>
-          <% @questions.each do |question| %>
-            <tr>
-              <td><%= link_to question.title, campaign_question_path(@campaign, question) %></td>
-              <td><%= question.answers.count %></td>
-              <td><%= question.created_at.to_s :dateonly %></td>
-              <td><%= question.answers.order(created_at: :desc).first ? question.answers.order(created_at: :desc).first.created_at.to_s(:dateonly) : "None yet" %></td>
-              <td><%= question.solved_at.nil? ? "No" : "Yes" %></td>
-              <td><%= link_to "Edit", edit_campaign_question_path(@campaign, question) %> - <%= link_to "Delete", campaign_question_path(@campaign, question), method: :delete, class: "error" %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+      <% if @questions.empty? %>
+        <p>There are no questions in this campaign yet. <%= link_to "Create one", new_campaign_question_path(@campaign) %> and start leveraging your team's diverse opinions to solve problems.</p>
+      <% else %>
+        <table class="table--has-border">
+          <thead>
+            <th>Title</th>
+            <th># of answers</th>
+            <th>Creation date</th>
+            <th>Last activity</th>
+            <th>Solved?</th>
+            <th>Options</th>
+          </thead>
+          <tbody>
+            <% @questions.each do |question| %>
+              <tr>
+                <td><%= link_to question.title, campaign_question_path(@campaign, question) %></td>
+                <td><%= question.answers.count %></td>
+                <td><%= question.created_at.to_s :dateonly %></td>
+                <td><%= question.answers.order(created_at: :desc).first ? question.answers.order(created_at: :desc).first.created_at.to_s(:dateonly) : "None yet" %></td>
+                <td><%= question.solved_at.nil? ? "No" : "Yes" %></td>
+                <td><%= link_to "Edit", edit_campaign_question_path(@campaign, question) %> - <%= link_to "Delete", campaign_question_path(@campaign, question), method: :delete, class: "error", data: { confirm: "Are you sure?" } %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
     </div>
   </div>
 </div>

@@ -21,19 +21,19 @@
         <% end %>
       </li> -->
       <li class="nav__item">
-        <a class="nav__link nav__link--active" href="#">
+        <a class="nav__link" href="#">
           <span class="nav__icon icon icon--coffee-talk"></span>
           <span class="nav__text">Coffee Talk</span>
         </a>
       </li>
       <li class="nav__item">
-        <%= link_to campaigns_path, class: "nav__link" do %>
+        <%= active_link_to campaigns_path, class: "nav__link", class_active: "nav__link--is-selected" do %>
           <span class="nav__icon icon icon--unify"></span>
           <span class="nav__text">Unify</span>
         <% end %>
       </li>
       <li class="nav__item">
-        <%= link_to polls_path, class: "nav__link" do %>
+        <%= active_link_to polls_path, class: "nav__link", class_active: "nav__link--is-selected" do %>
           <span class="nav__icon icon icon--market-scope"></span>
           <span class="nav__text">Market Scope</span>
         <% end %>
@@ -41,7 +41,7 @@
     </ul>
     <ul class="nav__list nav__list--secondary">
       <li class="nav__item">
-        <%= link_to groups_path, class: "nav__link" do %>
+        <%= active_link_to groups_path, class: "nav__link", class_active: "nav__link--is-selected" do %>
           <span class="nav__text">Global Settings</span>
         <% end %>
       </li>

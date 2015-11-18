@@ -1,4 +1,12 @@
-<div class="content_main">
+<div class="content__header">
+  <h1>
+    <%= link_to "Campaigns", campaigns_path %> /
+    <%= link_to @campaign.title, campaign_questions_path(@campaign) %> /
+    <%= @question.title.truncate(80) %>
+  </h1>
+</div>
+
+<div class="content__main">
 
    <% if !@question.solved_at.nil? %>
     <div class="card">
@@ -18,7 +26,7 @@
       <p><%= @question.description %></p>
       <div class="flex-row flex-row--middle">
         <small class="flex-row__cell">Submitted <%= time_ago_in_words(@question.created_at) %> ago</small>
-        <small class="flex-row__cell highlight"><%= pluralize(@question.answers.count, 'question') %> </small>
+        <small class="flex-row__cell highlight"><%= pluralize(@question.answers.count, 'answer') %> </small>
       </div>
     </div>
 

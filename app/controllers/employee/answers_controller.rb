@@ -7,6 +7,8 @@ class Employee::AnswersController < ApplicationController
   layout "employee"
 
   def vote
+    return head 403 if !@answer.question.solved_at.nil?
+
     if vote_params[:upvoted] == "true"
       AnswerUpvote.find_or_create_by(employee_id: current_employee.id, answer_id: @answer.id)
     else
