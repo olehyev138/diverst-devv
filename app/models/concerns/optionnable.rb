@@ -72,7 +72,7 @@ module Optionnable
     }
 
     # Filter the query by segments if there are any specified
-    if !target_segment_ids.nil?
+    if !target_segment_ids.nil? && !target_segment_ids.empty?
       search_hash[:query] = {
         terms: {
           id: Employee.joins(:segments).where("segments.id" => target_segment_ids).ids

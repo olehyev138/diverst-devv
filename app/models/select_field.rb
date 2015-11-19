@@ -11,18 +11,22 @@ class SelectField < Field
     puts "------------ POPULARITY START"
 
     nb_employees_chose = 0
+    nb_employees_answered = 0
 
     Benchmark.bm do |x|
       x.report do
         employees.each do |employee|
-          nb_employees_chose += 1 if employee.info[self][0] == value
+          if employee.info[self] && employee.info[self][0]
+            nb_employees_answered += 1
+            nb_employees_chose += 1 if employee.info[self][0] == value
+          end
         end
       end
     end
 
     puts "------------ POPULARITY END"
 
-    nb_employees_chose.to_f / employees.size
+    nb_employees_chose.to_f / nb_employees_answered
   end
 
   # Get a match score based on two things:

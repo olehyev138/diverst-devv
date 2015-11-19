@@ -8,6 +8,7 @@ class Employee::AnswersController < ApplicationController
 
   def vote
     return head 403 if !@answer.question.solved_at.nil?
+    return head 403 if @answer.author == current_employee # Cant vote on your own answer
 
     if vote_params[:upvoted] == "true"
       AnswerUpvote.find_or_create_by(employee_id: current_employee.id, answer_id: @answer.id)
@@ -38,7 +39,8 @@ class Employee::AnswersController < ApplicationController
   end
 
   def set_answer
-    @answer = current_employee.answers.find(params[:id])
+    @answer = Answer.find(params[:id])
+    return head 403 if @answer.question.campaign.employees.where(id: current_employee.id).count < 1
   end
 
   def vote_params

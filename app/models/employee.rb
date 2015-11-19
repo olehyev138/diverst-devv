@@ -24,8 +24,8 @@ class Employee < ActiveRecord::Base
   before_validation :generate_password_if_saml
   after_create :assign_firebase_token
 
-  scope :for_segments, -> (segments) { joins(:segments).where("segments.id" => segments.map(&:id)) }
-  scope :for_groups, -> (groups) { joins(:groups).where("groups.id" => groups.map(&:id)) }
+  scope :for_segments, -> (segments) { joins(:segments).where("segments.id" => segments.map(&:id)) if segments.any? }
+  scope :for_groups, -> (groups) { joins(:groups).where("groups.id" => groups.map(&:id)) if groups.any? }
 
   def name
     "#{self.first_name} #{self.last_name}"
@@ -88,7 +88,7 @@ class Employee < ActiveRecord::Base
     self.active_matches.order(score: :desc).limit(n)
   end
 
-  def update_match_scores
+  def self.update_match_scores
     self.enterprise.employees.where.not(id: self.id).each do |other_employee|
       CalculateMatchScoreJob.perform_later(self, other_employee, skip_existing: false)
     end

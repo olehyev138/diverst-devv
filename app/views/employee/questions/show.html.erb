@@ -2,7 +2,7 @@
   <h1>
     <%= link_to "My Scrums", employee_campaigns_path %> /
     <%= link_to @campaign.title, employee_campaign_questions_path(@campaign) %> /
-    <%= @question.title.truncate(80) %>
+    <%= @question.title.truncate(60) %>
   </h1>
 </div>
 
@@ -23,7 +23,7 @@
       <p><%= @question.description %></p>
       <div class="flex-row flex-row--middle">
         <small class="flex-row__cell">Submitted <%= time_ago_in_words(@question.created_at) %> ago</small>
-        <small class="flex-row__cell highlight"><%= pluralize(@question.answers.count, 'question') %> </small>
+        <small class="flex-row__cell highlight"><%= pluralize(@question.answers.count, 'answers') %> </small>
       </div>
     </div>
     <% @question.answers.order(created_at: :desc).each do |answer| %>
@@ -31,7 +31,7 @@
         <div class="flex-row">
           <div class="flex-row__cell">
             <div class="counter<%= answer.votes.include?(current_employee) ? " counter--active" : "" %>" data-answer-id="<%= answer.id %>" data-upvoted="<%= answer.votes.include? current_employee %>">
-              <span class="icon icon--upvote counter__arrow"></span>
+              <% if answer.author != current_employee %><span class="icon icon--upvote counter__arrow"></span><% end %>
               <span class="counter__number"><%= answer.votes.count %></span>
             </div>
           </div>
@@ -87,6 +87,7 @@
     $(this).toggleClass('counter--active');
   });
 
-  // Preload active arrow image
-  var image = new Image(); image.src = "<%= image_path('icons/upvote-active.svg') %>";
+  // Preload arrow images
+  var image = new Image(); image.src = "<%= image_path('icons/upvote.svg') %>";
+  var image2 = new Image(); image2.src = "<%= image_path('icons/upvote-active.svg') %>";
 </script>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151118182321) do
+ActiveRecord::Schema.define(version: 20151119205010) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -218,6 +218,11 @@ ActiveRecord::Schema.define(version: 20151118182321) do
     t.boolean  "send_invitations",  limit: 1
   end
 
+  create_table "groups_metrics_dashboards", force: :cascade do |t|
+    t.integer "groups_id",            limit: 4
+    t.integer "metrics_dashboard_id", limit: 4
+  end
+
   create_table "groups_polls", force: :cascade do |t|
     t.integer "group_id", limit: 4
     t.integer "poll_id",  limit: 4
@@ -249,6 +254,11 @@ ActiveRecord::Schema.define(version: 20151118182321) do
     t.string   "name",          limit: 255
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
+  end
+
+  create_table "metrics_dashboards_groups", force: :cascade do |t|
+    t.integer "metrics_dashboard_id", limit: 4
+    t.integer "group_id",             limit: 4
   end
 
   create_table "metrics_dashboards_segments", force: :cascade do |t|
