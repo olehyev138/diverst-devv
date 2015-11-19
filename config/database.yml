@@ -1,7 +1,7 @@
 default: &default
   adapter: mysql2
   encoding: utf8
-  url: <%= ENV["DATABASE_URL"] %>
+  url: <%= ENV["DATABASE_URL"].gsub('mysql', 'mysql2') %>
   pool: <%= ENV["DB_POOL"] || ENV['MAX_THREADS'] || 20 %>
   #wait_timeout: 300
 

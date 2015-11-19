@@ -29,5 +29,7 @@ module Diverst
     config.assets.paths << Rails.root.join('vendor', 'assets', 'bower_components')
 
     config.active_job.queue_adapter = :sidekiq
+
+    puts ENV["DATABASE_URL"].gsub('mysql', 'mysql2')
   end
 end
