@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151119205010) do
+ActiveRecord::Schema.define(version: 20151119215526) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -34,11 +34,19 @@ ActiveRecord::Schema.define(version: 20151119205010) do
   add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
   add_index "admins", ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true, using: :btree
 
+  create_table "answer_comments", force: :cascade do |t|
+    t.text     "content",    limit: 65535
+    t.integer  "author_id",  limit: 4
+    t.integer  "answer_id",  limit: 4
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
   create_table "answer_upvotes", force: :cascade do |t|
-    t.integer  "employee_id", limit: 4
-    t.integer  "answer_id",   limit: 4
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
+    t.integer  "author_id",  limit: 4
+    t.integer  "answer_id",  limit: 4
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
   end
 
   create_table "answers", force: :cascade do |t|
@@ -256,11 +264,6 @@ ActiveRecord::Schema.define(version: 20151119205010) do
     t.datetime "updated_at",                null: false
   end
 
-  create_table "metrics_dashboards_groups", force: :cascade do |t|
-    t.integer "metrics_dashboard_id", limit: 4
-    t.integer "group_id",             limit: 4
-  end
-
   create_table "metrics_dashboards_segments", force: :cascade do |t|
     t.integer "metrics_dashboard_id", limit: 4
     t.integer "segment_id",           limit: 4
@@ -315,17 +318,6 @@ ActiveRecord::Schema.define(version: 20151119205010) do
     t.datetime "updated_at",                null: false
     t.datetime "solved_at"
     t.text     "conclusion",  limit: 65535
-  end
-
-  create_table "questions_campaigns", force: :cascade do |t|
-    t.string   "title",         limit: 255
-    t.text     "description",   limit: 65535
-    t.datetime "start"
-    t.datetime "end"
-    t.integer  "nb_invites",    limit: 4
-    t.integer  "enterprise_id", limit: 4
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
   end
 
   create_table "segment_rules", force: :cascade do |t|

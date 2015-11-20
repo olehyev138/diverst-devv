@@ -101,6 +101,8 @@ Rails.application.routes.draw do
       resources :campaigns do
         resources :questions do
           resources :answers, shallow: true do
+            resources :answer_comments, path: "comments"
+
             member do
               put 'vote'
             end

@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    return employees_campaigns_path if resource.is_a? Employee
+    return employee_campaigns_path if resource.is_a? Employee
     return metrics_dashboards_path if resource.is_a? Admin
   end
 end

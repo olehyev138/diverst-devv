@@ -46,6 +46,33 @@
             <div class="flex-row answer__container">
               <div class="flex-row__cell">
                 <p><%= answer.content %></p>
+
+                <% answer.comments.each do |comment| %>
+                  <div class="flex-row">
+                    <div class="flex-row__cell">
+                      <div style="visibility: hidden;" class="counter<%= answer.votes.include?(current_employee) ? " counter--active" : "" %>" data-answer-id="<%= answer.id %>" data-upvoted="<%= answer.votes.include? current_employee %>">
+                      </div>
+                    </div>
+
+                    <div class="flex-row__cell flex-row__cell--grow" style="margin-bottom: 30px;">
+                      <div class="flex-row flex-row--middle">
+                        <div class="flex-row__cell">
+                          <span class="highlight"><%= comment.author.name %></span>
+                          <span class="muted"><%= time_ago_in_words(comment.created_at) %> ago</span>
+                        </div>
+                      </div>
+                      <div class="flex-row answer__container">
+                        <div class="flex-row__cell">
+                          <p><%= comment.content %></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                <% end %>
+
+                <%= simple_form_for [:employee, answer, answer.comments.new] do |f| %>
+                  <%= f.input :content, label: false, placeholder: "Enter a comment...", input_html: { rows: 2, class: "submit-on-return", style: "margin-left: 33px; width: 1030px; min-height: auto;" } %>
+                <% end %>
               </div>
             </div>
           </div>
@@ -60,7 +87,7 @@
     <% if @question.solved_at.nil? %>
       <%= simple_form_for [:employee, @campaign, @question, @question.answers.new] do |f| %>
         <%= f.input :content, label: false, placeholder: "Type an answer here..." %>
-        <%= f.button :submit %>
+        <%= f.button :submit, value: "Submit" %>
       <% end %>
     <% else %>
       <p>This question is closed and doesn't take additional answers.</p>
@@ -90,4 +117,7 @@
   // Preload arrow images
   var image = new Image(); image.src = "<%= image_path('icons/upvote.svg') %>";
   var image2 = new Image(); image2.src = "<%= image_path('icons/upvote-active.svg') %>";
+
+  // Submit comments using the return key
+  Utility.submitOnReturn($('.submit-on-return'));
 </script>

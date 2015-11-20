@@ -69,5 +69,5 @@ group :development, :test do
 
   gem 'active_record_query_trace'
 
-  gem 'pry-rails'
+  # gem 'pry-rails'
 end

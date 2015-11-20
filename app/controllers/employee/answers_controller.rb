@@ -11,9 +11,9 @@ class Employee::AnswersController < ApplicationController
     return head 403 if @answer.author == current_employee # Cant vote on your own answer
 
     if vote_params[:upvoted] == "true"
-      AnswerUpvote.find_or_create_by(employee_id: current_employee.id, answer_id: @answer.id)
+      AnswerUpvote.find_or_create_by(author_id: current_employee.id, answer_id: @answer.id)
     else
-      vote = AnswerUpvote.where(employee_id: current_employee.id, answer_id: @answer.id).first
+      vote = AnswerUpvote.where(author_id: current_employee.id, answer_id: @answer.id).first
       vote.destroy if vote
     end
 

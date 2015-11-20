@@ -5,4 +5,5 @@ class Answer < ActiveRecord::Base
 
   has_many :answer_upvotes
   has_many :votes, through: :answer_upvotes, source: :employee
+  has_many :comments, class_name: "AnswerComment"
 end

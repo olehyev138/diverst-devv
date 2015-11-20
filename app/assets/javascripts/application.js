@@ -28,8 +28,19 @@ var Utility = (function() {
     $('p.notice, p.alert').fadeOut(300, function() { $(this).remove(); });
   };
 
+  // Submits the passed input's form when pressing return while the input is focused
+  var submitOnReturn = function($el) {
+    $el.keydown(function(e) {
+      if (e.keyCode === 13 && !e.shiftKey) {
+        $(this.form).submit();
+        return false;
+      }
+    });
+  };
+
   return {
-    autoHideAlerts: autoHideAlerts
+    autoHideAlerts: autoHideAlerts,
+    submitOnReturn: submitOnReturn
   };
 
 })();

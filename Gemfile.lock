@@ -235,8 +235,6 @@ GEM
       method_source (~> 0.8.1)
       slop (~> 3.4)
       spoon (~> 0.0)
-    pry-rails (0.3.4)
-      pry (>= 0.9.10)
     puma (2.15.3)
     puma (2.15.3-java)
     quiet_assets (1.1.0)
@@ -384,7 +382,6 @@ DEPENDENCIES
   mysql2 (~> 0.3.18)
   newrelic_rpm
   paperclip (~> 4.3)
-  pry-rails
   puma
   quiet_assets
   rack-livereload
