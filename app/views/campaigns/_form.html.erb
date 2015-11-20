@@ -29,8 +29,13 @@
       </div>
 
       <div class="card__section card__section--border">
-        <p class="field__hint">How many invites do you want to send out?</p>
+        <p class="field__hint">How many <strong>invites</strong> do you want to send out?</p>
         <%= f.input :nb_invites, label: false, max: current_admin.enterprise.employees.count %>
+      </div>
+
+      <div class="card__section card__section--border">
+        <p class="field__hint">Optionally upload an <strong>image</strong> that represents the campaign's purpose</p>
+        <%= f.input :image, as: :file, label: false %>
       </div>
     </div>
 
