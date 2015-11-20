@@ -13,6 +13,9 @@
         <%= link_to employee_campaign_questions_path(campaign), class: "block block-section" do %>
           <div class="card__section card__section--border">
             <div class="flex-row flex-row--middle">
+              <div class="flex-row__cell">
+                <%= image_tag campaign.image.url(:thumb), class: "avatar avatar--large" %>
+              </div>
               <div class="flex-row__cell flex-row__cell--grow">
                 <h2><%= campaign.title %></h2>
                 <p><%= campaign.description %></p>

@@ -7,8 +7,29 @@
 </div>
 
 <div class="content__main">
+
+  <div class="row row--equal-height">
+    <div class="col sm-12 md-6">
+      <div class="card">
+        <div class="card__section">
+          <h3>Contributions per ERG</h3>
+          <div id="graph1"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col sm-12 md-6">
+      <div class="card">
+        <div class="card__section">
+          <h3>Top performers</h3>
+          <div id="graph2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="card">
     <div class="card__section">
+      <h3>Questions</h3>
       <% if @questions.empty? %>
         <p>There are no questions in this campaign yet. <%= link_to "Create one", new_campaign_question_path(@campaign) %> and start leveraging your team's diverse opinions to solve problems.</p>
       <% else %>
@@ -37,4 +58,85 @@
       <% end %>
     </div>
   </div>
+
 </div>
+
+<script>
+  $(document).on('page:change', function() {
+    $(document).off('page:change');
+
+    $('#graph1').highcharts({
+      chart: {
+        type: 'pie',
+        style: {
+          fontFamily: 'Helvetica Neue, sans-serif'
+        }
+      },
+      title: {
+        text: ''
+      },
+      series: [{
+        name: "ERGs",
+        data: [{
+          name: "WiNG",
+          y: 123
+        }, {
+          name: "AIDA",
+          y: 45
+        }, {
+          name: "PRIDE",
+          y: 13
+        }]
+      }],
+      tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="padding:0"><b>{point.y} employees</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+      }
+    });
+  });
+
+  $('#graph2').highcharts({
+    chart: {
+      type: 'bar',
+      style: {
+        fontFamily: 'Helvetica Neue, sans-serif'
+      }
+    },
+    title: {
+      text: ''
+    },
+    xAxis: {
+      categories: ["Laura Haniotis", "Ovidiu Schiopu", "Andre Laurin", "Francis Marineau"],
+      title: {
+        text: ''
+      }
+    },
+    yAxis: {
+      min: 0,
+      title: {
+        text: 'Nb of employees'
+      },
+      allowDecimals: false
+    },
+    plotOptions: {
+      series: {
+        stacking: 'normal'
+      }
+    },
+    tooltip: {
+      headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+      pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+        '<td style="padding:0"><b>{point.y} employees</b></td></tr>',
+      footerFormat: '</table>',
+      shared: true,
+      useHTML: true
+    },
+    series: [{
+      name: "Performance score",
+      data: [145, 132, 84, 12]
+    }]
+  });
+</script>

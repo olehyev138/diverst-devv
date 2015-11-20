@@ -30,7 +30,7 @@
       </div>
     </div>
 
-    <% @question.answers.each do |answer| %>
+    <% @question.answers.order(created_at: :desc).each do |answer| %>
       <div class="card__section card__section--border">
         <div class="flex-row">
           <div class="flex-row__cell">

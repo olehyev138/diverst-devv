@@ -28,7 +28,7 @@ class CampaignsController < ApplicationController
 
   def update
     if @campaign.update(campaign_params)
-      redirect_to @campaign
+      redirect_to action: :index
     else
       render :edit
     end
