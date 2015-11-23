@@ -1,7 +1,8 @@
 class AnswersController < ApplicationController
   before_action :authenticate_admin!
-  before_action :set_campaign
-  before_action :set_question
+  before_action :set_campaign, only: [:index, :new, :create]
+  before_action :set_question, only: [:index, :new, :create]
+  before_action :set_answer, except: [:index, :new]
 
   layout "unify"
 
@@ -10,7 +11,15 @@ class AnswersController < ApplicationController
     @answer.author = current_employee
     @answer.save
 
-    redirect_to [@campaign, @question]
+    redirect_to @question
+  end
+
+  def update
+    if @answer.update(answer_params)
+      head 200
+    else
+      head 500
+    end
   end
 
   protected
@@ -23,19 +32,16 @@ class AnswersController < ApplicationController
     @question = @campaign.questions.find(params[:question_id])
   end
 
-  def vote_params
-    params
-    .require(:answer)
-    .permit(
-      :upvoted
-    )
+  def set_answer
+    @answer = current_admin.enterprise.answers.find(params[:id])
   end
 
   def answer_params
     params
     .require(:answer)
     .permit(
-      :content
+      :content,
+      :chosen
     )
   end
 end

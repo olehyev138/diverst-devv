@@ -13,7 +13,12 @@
   </header>
 
   <header class="secondary-header">
+    <%= link_to "Home", employee_campaigns_path, class: "secondary-header__tab" %>
     <%= active_link_to "My Scrums", employee_campaigns_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+    <%= link_to "Mentors", employee_campaigns_path, class: "secondary-header__tab" %>
+    <%= link_to "News", employee_campaigns_path, class: "secondary-header__tab" %>
+    <%= link_to "Messages", employee_campaigns_path, class: "secondary-header__tab" %>
+    <%= link_to "Events", employee_campaigns_path, class: "secondary-header__tab" %>
   </header>
 
   <div class="content">

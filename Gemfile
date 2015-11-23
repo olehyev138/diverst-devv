@@ -35,7 +35,7 @@ gem 'sinatra', :require => nil # Required for sidekiq's dashboard
 gem 'newrelic_rpm'
 gem "seedbank"
 gem 'rails-patch-json-encode'
-# gem 'oj'
+gem 'oj'
 gem 'faker'
 gem 'active_model_serializers'
 gem 'devise_token_auth'

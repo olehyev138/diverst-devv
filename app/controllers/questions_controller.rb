@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_admin!
-  before_action :set_campaign
+  before_action :set_campaign, only: [:index, :new, :create]
   before_action :set_question, only: [:edit, :update, :destroy, :show, :reopen]
 
   layout "unify"
@@ -32,7 +32,7 @@ class QuestionsController < ApplicationController
     @question.solved_at = Time.zone.now if question_params[:conclusion].present?
 
     if @question.update(question_params)
-      redirect_to [@campaign, @question]
+      redirect_to @question
     else
       render :edit
     end
@@ -50,7 +50,7 @@ class QuestionsController < ApplicationController
   end
 
   def set_question
-    @question = @campaign.questions.find(params[:id])
+    @question = current_admin.enterprise.questions.find(params[:id])
   end
 
   def question_params

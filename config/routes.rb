@@ -83,8 +83,8 @@ Rails.application.routes.draw do
   end
 
   resources :campaigns do
-    resources :questions do
-      resources :answers
+    resources :questions, shallow: true do
+      resources :answers, shallow: true
 
       member do
         patch 'reopen'
@@ -98,10 +98,10 @@ Rails.application.routes.draw do
     namespace :employee do
       root :to => "campaigns#index"
 
-      resources :campaigns do
-        resources :questions do
+      resources :campaigns, shallow: true do
+        resources :questions, shallow: true do
           resources :answers, shallow: true do
-            resources :answer_comments, path: "comments"
+            resources :answer_comments, shallow: true, path: "comments"
 
             member do
               put 'vote'

@@ -7,13 +7,13 @@ class MetricsDashboard < ActiveRecord::Base
   # Returns a query to the list of employees targeted by the dashboard
   def target
     if segments.empty?
-      enterprise.employees.for_segments(segments)
-    else
       enterprise.employees
+    else
+      enterprise.employees.for_segments(segments)
     end
   end
 
   def percentage_of_total
-    (target.count / enterprise.employees.count * 100).ceil
+    (target.count.to_f / enterprise.employees.count * 100).ceil
   end
 end

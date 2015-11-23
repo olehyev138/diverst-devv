@@ -9,7 +9,7 @@
   <p class="block"><%= @campaign.description %></p>
   <div class="card">
     <% @questions.each do |question| %>
-      <%= link_to employee_campaign_question_path(@campaign, question), class: "block block-section" do %>
+      <%= link_to employee_question_path(question), class: "block block-section" do %>
         <div class="card__section card__section--border">
           <div class="flex-row flex-row--middle">
             <div class="flex-row__cell flex-row__cell--grow">

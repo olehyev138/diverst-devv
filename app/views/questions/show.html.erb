@@ -1,8 +1,8 @@
 <div class="content__header">
   <h1>
     <%= link_to "Campaigns", campaigns_path %> /
-    <%= link_to @campaign.title, campaign_questions_path(@campaign) %> /
-    <%= @question.title.truncate(80) %>
+    <%= link_to @question.campaign.title, campaign_questions_path(@question.campaign) %> /
+    <%= @question.title.truncate(60) %>
   </h1>
 </div>
 
@@ -13,7 +13,7 @@
       <div class="card__section card__section--border">
         <h3>This question was marked as solved <%= time_ago_in_words @question.solved_at %> ago</h3>
         <p><%= @question.conclusion %></p>
-        <%= simple_form_for [@campaign, @question], url: reopen_campaign_question_path(@campaign, @question) do |f| %>
+        <%= simple_form_for @question, url: reopen_question_path(@question) do |f| %>
           <%= f.button :submit, value: "Reopen" %>
         <% end %>
       </div>
@@ -33,9 +33,12 @@
     <% @question.answers.order(created_at: :desc).each do |answer| %>
       <div class="card__section card__section--border">
         <div class="flex-row">
-          <div class="flex-row__cell">
+          <div class="flex-row__cell text-center">
             <div class="counter<%= answer.votes.include?(current_employee) ? " counter--active" : "" %>" data-answer-id="<%= answer.id %>" data-upvoted="<%= answer.votes.include? current_employee %>">
               <span class="counter__number"><%= answer.votes.count %></span>
+            </div>
+            <div class="chosen">
+              <a href="#" class="star-button" data-answer-id="<%= answer.id %>" data-starred="<%= answer.chosen %>"><%= answer.chosen ? "Unstar" : "Star" %></a>
             </div>
           </div>
 
@@ -79,7 +82,7 @@
   </div>
 
   <% if @question.solved_at.nil? %>
-    <%= simple_form_for [@campaign, @question] do |f| %>
+    <%= simple_form_for @question do |f| %>
       <div class="card">
         <div class="card__section card__section--border">
           <h3>Mark this question as solved</h3>
@@ -91,3 +94,27 @@
     <% end %>
   <% end %>
 </div>
+
+<script>
+  $('.star-button').click(function(e) {
+    var answerId = $(this).data('answer-id');
+    var isStarred = !$(this).data('starred');
+
+    $.ajax({
+      url: '/answers/' + answerId + '.json',
+      method: 'put',
+      data: {
+        answer: {
+          chosen: isStarred
+        }
+      }
+    });
+
+    var newText = $(this).text() == "Star" ? "Unstar" : "Star";
+    $(this).text(newText);
+    $(this).data('starred', !$(this).data('starred'));
+
+    e.preventDefault();
+    return false;
+  });
+</script>

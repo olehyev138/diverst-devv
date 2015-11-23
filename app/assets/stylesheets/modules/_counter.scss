@@ -6,6 +6,7 @@
   border: 1px solid $diverst-border;
   color: $diverst-grey-light;
   cursor: pointer;
+  display: inline-block;
   @include font-size($small-font-size);
   @include user-select(none);
 

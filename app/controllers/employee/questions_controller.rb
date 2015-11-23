@@ -1,7 +1,7 @@
 class Employee::QuestionsController < ApplicationController
   before_action :authenticate_employee!
-  before_action :set_campaign
-  before_action :set_question, only: [:edit, :update, :destroy, :show]
+  before_action :set_campaign, only: [:index, :new, :create]
+  before_action :set_question, only: [:edit, :update, :destroy, :show, :reopen]
 
   layout "employee"
 
@@ -12,10 +12,10 @@ class Employee::QuestionsController < ApplicationController
   protected
 
   def set_campaign
-    @campaign = current_employee.campaigns.find(params[:campaign_id])
+    @campaign = current_admin.enterprise.campaigns.find(params[:campaign_id])
   end
 
   def set_question
-    @question = @campaign.questions.find(params[:id])
+    @question = current_admin.enterprise.questions.find(params[:id])
   end
 end
