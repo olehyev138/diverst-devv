@@ -1,5 +1,68 @@
 <div class="content__header">
-  <h1>Metrics dashboards</h1>
+  <h1>General metrics</h1>
+</div>
+
+<div class="content__main">
+
+  <div class="card">
+    <div class="card__section">
+      <div class="flex-row">
+        <div class="flex-row__cell">
+          <small># of employees</small><br>
+          <strong><%= @nb_employees %></strong>
+        </div>
+        <div class="flex-row__cell">
+          <small>Matches presented</small><br>
+          <strong>2,034</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row row--equal-height">
+
+    <div class="col sm-12 md-6">
+      <div class="card">
+        <div class="card__section">
+          <h4>ERG population</h4>
+          <div class="graph" data-graph-id="group_population"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col sm-12 md-6">
+      <div class="card">
+        <div class="card__section">
+          <h4>Segment population</h4>
+          <div class="graph" data-graph-id="segment_population"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col sm-12 md-6">
+      <div class="card">
+        <div class="card__section">
+          <h4>Events created in the last 30 days</h4>
+          <div class="graph" data-graph-id="events_created"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col sm-12 md-6">
+      <div class="card">
+        <div class="card__section">
+          <h4>Messages sent in the last 30 days</h4>
+          <div class="graph" data-graph-id="messages_sent"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="content__header">
+  <h1>Specific metrics dashboards</h1>
   <%= link_to "New dashboard", new_metrics_dashboard_path, class: "btn btn--primary" %>
 </div>
 
@@ -33,3 +96,9 @@
     </div>
   </div>
 </div>
+
+<script>
+  var graphs = $('.graph').map(function() {
+    return new Graph('/generic_graphs/' + $(this).data('graph-id'), $(this));
+  });
+</script>

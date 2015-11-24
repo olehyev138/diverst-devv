@@ -138,5 +138,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resource :generic_graphs do
+    get 'group_population'
+    get 'segment_population'
+    get 'events_created'
+    get 'messages_sent'
+  end
+
   root to: "metrics_dashboards#index"
 end

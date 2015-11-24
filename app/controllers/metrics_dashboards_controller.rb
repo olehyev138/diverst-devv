@@ -20,6 +20,7 @@ class MetricsDashboardsController < ApplicationController
 
   def index
     @dashboards = current_admin.enterprise.metrics_dashboards
+    @nb_employees = current_admin.enterprise.employees.count
   end
 
    def update

@@ -1,6 +1,6 @@
 class Graph {
-  constructor(graphId, $element) {
-    this.dataUrl = '/graphs/' + graphId + '/data';
+  constructor(dataUrl, $element) {
+    this.dataUrl = dataUrl;
     this.$element = $element;
     this.data = {};
 
@@ -19,7 +19,7 @@ class Graph {
   }
 
   attachToElement() {
-    if (this.data.type === "NumericField")
+    if (this.data.type === "NumericField" || this.data.type === "SelectField" || this.data.type === "bar")
       this.renderBarChart()
     else if (this.data.type === "CheckboxField" || this.data.type === "SelectField")
       if (this.data.hasAggregation)

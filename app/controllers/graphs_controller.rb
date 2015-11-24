@@ -40,6 +40,10 @@ class GraphsController < ApplicationController
     render json: @graph.data
   end
 
+  def group_population
+    GroupPopulationGraph.data
+  end
+
   protected
 
   def set_metrics_dashboard
