@@ -20,7 +20,7 @@ other_fields = [
   experience_field = NumericField.where(title: "Experience in your field (in years)").first,
   countries_worked_field = SelectField.where(title: "Countries worked in").first,
   military_field = SelectField.where(title: "Veteran?").first,
-  military_field = SelectField.where(title: "Office location").first,
+  office_location_field = SelectField.where(title: "Office location").first,
   seniority_field = NumericField.where(title: "Seniority (in years)").first
 ]
 

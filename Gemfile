@@ -56,6 +56,7 @@ gem 'elasticsearch-model', '~> 0.1'
 gem 'elasticsearch-rails', '~> 0.1'
 gem 'sprockets', '>= 3.0.0'
 gem 'sprockets-es6'
+gem 'awesome_print'
 
 group :development, :test do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring

@@ -84,22 +84,35 @@ module Optionnable
     Employee.search(search_hash).response
   end
 
+  # Get highcharts-usable stats from the field by querying elasticsearch and formatting its response
   def highcharts_data(aggr_field: nil, target_segment_ids: nil)
     data = elastic_stats(aggr_field: aggr_field, target_segment_ids: target_segment_ids)
 
     if aggr_field # If there is an aggregation
-      terms_has_other = false
+      at_least_one_bucket_has_other = false
+
+      options = data[:aggregations][:aggregation][:buckets].map { |aggr_bucket|
+        bucket_data = aggr_bucket[:terms][:buckets].map do |option_bucket|
+          option_bucket[:key]
+        end
+      }.flatten.uniq
 
       series = data[:aggregations][:aggregation][:buckets].map do |aggr_bucket|
-        bucket_data = aggr_bucket[:terms][:buckets].map do |option_bucket|
-          option_bucket[:doc_count]
+        bucket_data = options.map do |option|
+          bucket = aggr_bucket[:terms][:buckets].find{ |b| b[:key] == option }
+
+          if bucket
+            bucket[:doc_count]
+          else
+            0
+          end
         end
 
         other_docs_count = aggr_bucket[:terms][:sum_other_doc_count]
 
         if other_docs_count > 0
           bucket_data << other_docs_count
-          terms_has_other = true
+          at_least_one_bucket_has_other = true
         end
 
         {
@@ -108,12 +121,61 @@ module Optionnable
         }
       end
 
-      options = data[:aggregations][:aggregation][:buckets][0][:terms][:buckets].map{ |option_bucket| option_bucket[:key].gsub(/\.0/, '') }
+      if at_least_one_bucket_has_other
+        options << "Other"
+      end
 
-      options << "Other" if terms_has_other
+      sum_other_doc_count = data[:aggregations][:aggregation][:sum_other_doc_count]
 
-      aggr_other_docs_count = data[:aggregations][:aggregation][:sum_other_doc_count]
-      series << { name: "Other", data: [aggr_other_docs_count]} if aggr_other_docs_count > 0
+      if sum_other_doc_count > 0
+        must_nots = []
+
+        series.each do |serie|
+          must_nots << {
+            term: {
+              "info.#{aggr_field.id}.raw" => serie[:name]
+            }
+          }
+        end
+
+        others_hash = {
+          size: 0,
+          query: {
+            filtered: {
+              filter: {
+                bool: {
+                  must_not: must_nots
+                }
+              }
+            }
+          },
+          aggs: {
+            aggregation: {
+              terms: {
+                field: "info.#{self.id}.raw",
+                min_doc_count: 0,
+                order: {
+                  "_term" => "asc"
+                }
+              }
+            }
+          }
+        }
+
+        others = Employee.search(others_hash).response
+
+        others_data = options.map do |option|
+          bucket = others[:aggregations][:aggregation][:buckets].find{ |b| b[:key] == option }
+
+          if bucket
+            bucket[:doc_count]
+          else
+            0
+          end
+        end
+
+        series << { name: "Other", data: others_data }
+      end
 
       return {
         series: series,

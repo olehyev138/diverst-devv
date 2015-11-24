@@ -1086,7 +1086,7 @@ office_location_field = SelectField.create(
   match_polarity: true,
   match_weight: 0.2,
   enterprise: enterprise,
-  options: "NA
+  options_text: "NA
 EU
 CN
 JP"
