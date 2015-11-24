@@ -19,7 +19,7 @@ class MetricsDashboardsController < ApplicationController
   end
 
   def index
-    redirect_to current_admin.enterprise.metrics_dashboards.first
+    @dashboards = current_admin.enterprise.metrics_dashboards
   end
 
    def update
