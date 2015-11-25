@@ -113,6 +113,7 @@ Rails.application.routes.draw do
       end
 
       resources :news_links
+      resources :messages
     end
 
     resources :matches do
