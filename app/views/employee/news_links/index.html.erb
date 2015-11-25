@@ -1,0 +1,22 @@
+<div class="content__header">
+  <h1>News</h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <% @news_links.each do |news_link| %>
+      <div class="card__section card__section--border">
+        <div class="flex-row flex-row--middle">
+          <div class="flex-row__cell flex-row__cell--grow">
+            <h4><%= news_link.title %> <span class="muted"> - <%= news_link.group.name %></span></h4>
+            <p>
+              <%= news_link.description %>
+              <br>
+              <%= link_to news_link.url, news_link.url, target: "_blank" %>
+            </p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

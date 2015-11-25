@@ -20,6 +20,7 @@ class Employee < ActiveRecord::Base
   has_many :answers, inverse_of: :author, foreign_key: "author_id"
   has_many :invitations, class_name: "CampaignInvitation"
   has_many :campaigns, through: :invitations
+  has_many :news_links, through: :groups
 
   before_validation :generate_password_if_saml
   after_create :assign_firebase_token

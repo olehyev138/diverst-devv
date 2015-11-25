@@ -15,7 +15,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :employees, path: "admin_employees"
+  resources :employees
 
   resources :enterprises do
     resources :saml do
@@ -111,6 +111,8 @@ Rails.application.routes.draw do
           end
         end
       end
+
+      resources :news_links
     end
 
     resources :matches do
