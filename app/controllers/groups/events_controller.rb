@@ -26,7 +26,7 @@ class Groups::EventsController < ApplicationController
 
   def update
     if @event.update(event_params)
-      redirect_to @event
+      redirect_to [@group, @event]
     else
       render :edit
     end

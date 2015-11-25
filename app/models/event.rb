@@ -4,4 +4,12 @@ class Event < ActiveRecord::Base
 
   scope :past, -> { where('end < ?', Time.now) }
   scope :upcoming, -> { where('end >= ?', Time.now) }
+
+  def time_string
+    if self.start.to_date === self.end.to_date # If the event starts and ends on the same day
+      "#{self.start.to_s :dateonly} from #{self.start.to_s :ampmtime} to #{self.end.to_s :ampmtime}"
+    else
+      "From #{self.start.to_s :datetime} to #{self.end.to_s :datetime}"
+    end
+  end
 end
