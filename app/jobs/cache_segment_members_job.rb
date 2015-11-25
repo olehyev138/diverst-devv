@@ -4,7 +4,6 @@ class CacheSegmentMembersJob < ActiveJob::Base
   queue_as :default
 
   def perform(segment)
-    fields = segment.enterprise.fields
     employees = segment.enterprise.employees.all
 
     new_members = employees.select do |employee|

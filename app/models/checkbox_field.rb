@@ -37,6 +37,8 @@ class CheckboxField < Field
       # Get the average popularity
       avg_popularity = popularities.sum / popularities.size
     end
+
+    avg_popularity
   end
 
   def match_score_between(e1, e2, employees)

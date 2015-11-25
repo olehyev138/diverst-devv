@@ -92,7 +92,7 @@ module Optionnable
       at_least_one_bucket_has_other = false
 
       options = data[:aggregations][:aggregation][:buckets].map { |aggr_bucket|
-        bucket_data = aggr_bucket[:terms][:buckets].map do |option_bucket|
+        aggr_bucket[:terms][:buckets].map do |option_bucket|
           option_bucket[:key]
         end
       }.flatten.uniq

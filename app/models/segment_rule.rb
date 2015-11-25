@@ -20,7 +20,7 @@ class SegmentRule < ActiveRecord::Base
   end
 
   def self.operator_text(id)
-    operators.select{ |k, v| v == id }.keys[0].to_s.gsub("_", " ")
+    operators.select{ |_, v| v == id }.keys[0].to_s.gsub("_", " ")
   end
 
   def values_array

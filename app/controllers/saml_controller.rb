@@ -96,7 +96,7 @@ class SamlController < ApplicationController
     settings = @enterprise.saml_settings
     request_id = session[:transaction_id]
     logout_response = OneLogin::RubySaml::Logoutresponse.new(params[:SAMLResponse], settings, :matches_request_id => request_id, :get_params => params)
-    logger.info "LogoutResponse is: #{logout_response.response.to_s}"
+  logger.info "LogoutResponse is: #{logout_response.response}"
 
     # Validate the SAML Logout Response
     if not logout_response.validate

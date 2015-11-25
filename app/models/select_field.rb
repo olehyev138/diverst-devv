@@ -46,12 +46,6 @@ class SelectField < Field
         e1_popularity = self.popularity_for_value(e1_value, employees)
         e2_popularity = self.popularity_for_value(e2_value, employees)
 
-        if e1_value == e2_value
-          popularity_total = e1_popularity
-        else
-          popularity_total = e1_popularity + e2_popularity
-        end
-
         # Size score
         if e1_value == e2_value
           size_score = 1 - e1_popularity
@@ -60,9 +54,15 @@ class SelectField < Field
         end
 
         # Contrast score
-        popularity_total = e1_popularity + e2_popularity
+        if e1_value == e2_value
+          popularity_total = e1_popularity
+        else
+          popularity_total = e1_popularity + e2_popularity
+        end
+
         contrast_score = (e1_popularity - e2_popularity).abs / popularity_total
 
+        # Total score
         total_score = (size_score + contrast_score).to_f / 2
       end
     end

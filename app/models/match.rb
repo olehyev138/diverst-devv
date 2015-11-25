@@ -153,7 +153,7 @@ class Match < ActiveRecord::Base
   end
 
   def set_accept_date
-    both_accepted_at = Time.zone.now if both_accepted? && both_accepted_at.nil?
+    Time.zone.now if both_accepted? && both_accepted_at.nil?
   end
 
   # Picks a random topic that hasn't been answered by neither of the match's users

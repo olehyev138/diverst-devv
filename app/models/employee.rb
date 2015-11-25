@@ -33,7 +33,7 @@ class Employee < ActiveRecord::Base
     "#{self.first_name} #{self.last_name}"
   end
 
-  def set_info_from_saml(nameid, attrs, enterprise)
+  def set_info_from_saml(nameid, _attrs, enterprise)
     self.email = nameid
 
     saml_employee_info = {}
@@ -119,12 +119,12 @@ class Employee < ActiveRecord::Base
   def assign_firebase_token
     payload = { uid: self.id.to_s }
     options = { expires: 1.week.from_now }
-    self.firebase_token = @@fb_token_generator.create_token(payload)
+    self.firebase_token = @@fb_token_generator.create_token(payload, options)
     self.firebase_token_generated_at = Time.zone.now
     self.save
   end
 
-  def as_indexed_json(options = {})
+  def as_indexed_json(*)
     self.as_json({
       except: [:data],
       methods: [:info]
