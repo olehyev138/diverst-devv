@@ -31,6 +31,10 @@
       visibility: visible;
     }
   }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 
 .media-object__image {

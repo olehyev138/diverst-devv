@@ -4,6 +4,13 @@ class Employee::GroupsController < ApplicationController
   layout "employee"
 
   def index
-    @groups = current_employee.employee_groups.order(created_at: :desc).map(&:group)
+    @groups = current_employee.enterprise.groups
+  end
+
+  def join
+    @group = current_employee.enterprise.groups.find(params[:id])
+    return if @group.members.include? current_employee
+    @group.members << current_employee
+    @group.save
   end
 end

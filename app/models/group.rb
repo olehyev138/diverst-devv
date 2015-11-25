@@ -1,5 +1,5 @@
 class Group < ActiveRecord::Base
-  has_many :employee_groups
+  has_many :employee_groups, dependent: :destroy
   has_many :members, through: :employee_groups, class_name: "Employee", source: :employee
   belongs_to :enterprise
   has_and_belongs_to_many :polls
@@ -11,25 +11,13 @@ class Group < ActiveRecord::Base
   has_attached_file :logo, styles: { medium: "300x300>", thumb: "100x100>" }, default_url: ActionController::Base.helpers.image_path("missing.png")
   validates_attachment_content_type :logo, content_type: /\Aimage\/.*\Z/
 
-  after_create :send_invitation_emails, if: :send_invitations?
-
-  def employees_to_invite
-    query = self.enterprise.employees
-
-    unless invitation_segments.empty?
-      query = query
-      .joins(:segments)
-      .where(
-        "segments.id" => self.invitation_segments.ids
-      )
-    end
-
-    query
-  end
+  before_save :send_invitation_emails, if: :send_invitations?
 
   protected
 
   def send_invitation_emails
-    GroupMailer.delay.invitation(self)
+    GroupMailer.delay.invitation(self, self.invitation_segments)
+    self.send_invitations = false
+    self.invitation_segments.clear
   end
 end

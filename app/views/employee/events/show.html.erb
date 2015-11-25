@@ -1,0 +1,19 @@
+<div class="content__header">
+  <h1>
+    <%= link_to "Events", employee_events_path %> /
+    <%= @event.title %>
+  </h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <h4>Description</h4>
+      <p><%= @event.description %></p>
+      <h4>Date &amp; time</h4>
+      <p><%= @event.time_string %></p>
+      <h4>Location</h4>
+      <p><%= @event.location %></p>
+    </div>
+  </div>
+</div>

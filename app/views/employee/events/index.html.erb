@@ -1,0 +1,51 @@
+<div class="content__header">
+  <h1>Events</h1>
+</div>
+
+<div class="content__main">
+  <h3>Upcoming Events</h3>
+  <div class="card">
+    <% if @upcoming_events.empty? %>
+      <div class="card__section">
+        <p>There are no upcoming events scheduled at this time.</p>
+      </div>
+    <% else %>
+      <% @upcoming_events.each do |event| %>
+        <div class="card__section card__section--border">
+          <%= link_to employee_event_path(event), class: "block block-section" do %>
+            <div class="flex-row flex-row--middle">
+              <div class="flex-row__cell flex-row__cell--grow">
+                <span class="highlight"><%= event.title %></span><span class="muted"> - <%= event.group.name %></span><br>
+                <small><%= event.description %></small><br>
+                <small class="muted"><%= event.start.to_s :slashes %></small>
+              </div>
+              <div class="flex-row__cell">
+                <span class="icon icon--chevron-right"></span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <h3>Past events</h3>
+  <div class="card">
+    <% @past_events.each do |event| %>
+      <div class="card__section card__section--border">
+        <%= link_to employee_event_path(event), class: "block block-section" do %>
+          <div class="flex-row flex-row--middle">
+            <div class="flex-row__cell flex-row__cell--grow">
+              <span class="highlight"><%= event.title %><span class="muted"> - <%= event.group.name %></span><br>
+              <small><%= event.description %></small><br>
+              <small class="muted">Ended <%= time_ago_in_words(event.end) %> ago</small>
+            </div>
+            <div class="flex-row__cell">
+              <span class="icon icon--chevron-right"></span>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
