@@ -23,7 +23,7 @@ class MetricsDashboardsController < ApplicationController
     @nb_employees = current_admin.enterprise.employees.count
   end
 
-   def update
+  def update
     if @metrics_dashboard.update(metrics_dashboard_params)
       redirect_to action: :index
     else

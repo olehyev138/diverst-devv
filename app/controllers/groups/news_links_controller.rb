@@ -42,8 +42,8 @@ class Groups::NewsLinksController < ApplicationController
     page = Pismo::Document.new(params[:url])
 
     render json: {
-      title: "",
-      description: ""
+      title: page.title,
+      description: page.lede
     }
   end
 

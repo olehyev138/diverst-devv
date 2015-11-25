@@ -39,7 +39,7 @@ Rails.application.routes.draw do
     scope module: :groups do
       resources :group_members, path: "members"
       resources :group_messages, path: "messages"
-      resources :events
+      resources :events, shallow: true
       resources :news_links
     end
 
@@ -114,6 +114,7 @@ Rails.application.routes.draw do
 
       resources :news_links
       resources :messages
+      resources :groups
     end
 
     resources :matches do

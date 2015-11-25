@@ -23,7 +23,7 @@ class GraphsController < ApplicationController
     @graphs = @metrics_dashboard.graphs
   end
 
-   def update
+  def update
     if @graph.update(graph_params)
       redirect_to @graph.metrics_dashboard
     else

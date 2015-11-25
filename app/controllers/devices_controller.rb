@@ -69,7 +69,7 @@ class DevicesController < ApplicationController
 
       registration_ids = [@device.token] # an array of one or more client registration IDs
       options = {data: {score: "123"}, collapse_key: "updated_score"}
-      response = gcm.send(registration_ids, options)
+      gcm.send(registration_ids, options)
     end
   end
 

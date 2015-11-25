@@ -17,7 +17,7 @@ class EmployeesController < ApplicationController
     @employee.assign_attributes(employee_params)
     @employee.info.merge(fields: @employee.enterprise.fields, form_data: params['custom-fields'])
 
-  if @employee.save
+    if @employee.save
       redirect_to @employee
     else
       render :edit
