@@ -46,6 +46,7 @@ gem "bower-rails", "~> 0.10.0"
 gem 'gcm'
 gem 'clockwork'
 gem 'bourbon'
+gem 'pismo'
 gem 'active_link_to'
 gem "paperclip", "~> 4.3"
 gem 'aws-sdk', '< 2.0'

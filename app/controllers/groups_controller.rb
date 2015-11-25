@@ -1,6 +1,7 @@
 class GroupsController < ApplicationController
-  before_action :authenticate_admin!, except: [:join]
+  before_action :authenticate_admin!, except: [:show, :join]
   before_action :authenticate_employee!, only: [:join]
+  before_action :authenticate_user!, only: [:show]
   before_action :set_group, only: [:edit, :update, :destroy, :show]
   skip_before_action :verify_authenticity_token, only: [:create]
 
@@ -8,10 +9,6 @@ class GroupsController < ApplicationController
 
   def index
     @groups = current_admin.enterprise.groups
-  end
-
-  def metrics
-
   end
 
   def new
@@ -65,7 +62,7 @@ class GroupsController < ApplicationController
   end
 
   def set_group
-    @group = current_admin.enterprise.groups.find(params[:id])
+    @group = current_user.enterprise.groups.find(params[:id])
   end
 
   def group_params

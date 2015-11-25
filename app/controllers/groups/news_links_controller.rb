@@ -1,5 +1,6 @@
 class Groups::NewsLinksController < ApplicationController
-  before_action :authenticate_admin!, except: [:url_info]
+  before_action :authenticate_user!
+  before_action :authenticate_admin!, except: [:index, :show]
   before_action :set_group, except: [:url_info]
   before_action :set_news_link, only: [:edit, :update, :destroy]
 
@@ -36,10 +37,20 @@ class Groups::NewsLinksController < ApplicationController
     redirect_to action: :index
   end
 
+  # Gets basic information about a web article (title and lede) from its url
+  def url_info
+    page = Pismo::Document.new(params[:url])
+
+    render json: {
+      title: "",
+      description: ""
+    }
+  end
+
   protected
 
   def set_group
-    @group = current_admin.enterprise.groups.find(params[:group_id])
+    @group = current_user.enterprise.groups.find(params[:group_id])
   end
 
   def set_news_link

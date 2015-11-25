@@ -1,5 +1,5 @@
 class Groups::GroupMembersController < ApplicationController
-  before_action :authenticate_admin!
+  before_action :authenticate_user!
   before_action :set_group
   before_action :set_member, only: [:edit, :update, :destroy]
 
@@ -18,7 +18,7 @@ class Groups::GroupMembersController < ApplicationController
   protected
 
   def set_group
-    @group = current_admin.enterprise.groups.find(params[:group_id])
+    @group = current_user.enterprise.groups.find(params[:group_id])
   end
 
   def set_member

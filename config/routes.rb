@@ -48,8 +48,10 @@ Rails.application.routes.draw do
     end
   end
 
-  scope :news_links do
-    get 'url_info', to: "news_links#url_info"
+  resources :news_links, only: [] do
+    collection do
+      get 'url_info'
+    end
   end
 
   resources :polls do

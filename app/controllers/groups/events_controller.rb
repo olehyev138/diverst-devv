@@ -1,5 +1,5 @@
 class Groups::EventsController < ApplicationController
-  before_action :authenticate_admin!
+  before_action :authenticate_user!
   before_action :set_group
   before_action :set_event, only: [:edit, :update, :destroy, :show]
 
@@ -40,7 +40,7 @@ class Groups::EventsController < ApplicationController
   protected
 
   def set_group
-    @group = current_admin.enterprise.groups.find(params[:group_id])
+    @group = current_user.enterprise.groups.find(params[:group_id])
   end
 
   def set_event

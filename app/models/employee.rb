@@ -6,11 +6,11 @@ class Employee < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable, :async
 
   include DeviseTokenAuth::Concerns::User
-  include ContainsFields
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
+  include ContainsFields
+  include IsUser
 
-  belongs_to :enterprise, inverse_of: :employees
   has_many :devices
   has_and_belongs_to_many :segments
   has_many :employee_groups

@@ -5,7 +5,7 @@ class Admin < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable, :async
 
   include DeviseInvitable::Inviter
+  include IsUser
 
-  belongs_to :enterprise, inverse_of: :admins
   has_many :topics, inverse_of: :admin
 end

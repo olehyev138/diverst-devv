@@ -1,6 +1,6 @@
 <div class="content__header">
   <h1>News</h1>
-  <%= link_to "+ Create news link", new_group_news_link_path, class: "btn btn--primary" %>
+  <%= link_to "+ Create news link", new_group_news_link_path, class: "btn btn--primary" if is_admin? %>
 </div>
 
 <div class="content__main">
@@ -16,10 +16,12 @@
             <%= link_to news_link.url, news_link.url %>
           </p>
         </div>
-        <div class="flex-row__cell link-group">
-          <%= link_to "Edit", edit_group_news_link_path(@group, news_link) %>
-          <%= link_to "Delete", group_news_link_path(@group, news_link), method: :delete, class: "error" %>
-        </div>
+        <% if is_admin? %>
+          <div class="flex-row__cell link-group">
+            <%= link_to "Edit", edit_group_news_link_path(@group, news_link) %>
+            <%= link_to "Delete", group_news_link_path(@group, news_link), method: :delete, class: "error" %>
+          </div>
+        <% end %>
       </div>
       </div>
     <% end %>

@@ -1,14 +1,14 @@
 <div class="content__header">
   <h1>Events</h1>
-  <%= link_to "+ Create new event", new_group_event_path, class: "btn btn--primary" %>
+  <%= link_to "+ Create new event", new_group_event_path, class: "btn btn--primary" if is_admin? %>
 </div>
 
 <div class="content__main">
-<h3>Upcoming Events</h3>
+  <h3>Upcoming Events</h3>
   <div class="card">
     <% @upcoming_events.each do |event| %>
       <div class="card__section card__section--border">
-        <a href="#TODO" class="block block-section">
+        <%= link_to group_event_path(@group, event), class: "block block-section" do %>
           <div class="flex-row flex-row--middle">
             <div class="flex-row__cell flex-row__cell--grow">
               <span class="highlight"><%= event.title %></span><br>
@@ -19,7 +19,7 @@
               <span class="icon icon--chevron-right"></span>
             </div>
           </div>
-        </a>
+        <% end %>
       </div>
     <% end %>
   </div>
@@ -27,7 +27,7 @@
   <div class="card">
     <% @past_events.each do |event| %>
       <div class="card__section card__section--border">
-        <a href="#TODO" class="block block-section">
+        <%= link_to group_event_path(@group, event), class: "block block-section" do %>
           <div class="flex-row flex-row--middle">
             <div class="flex-row__cell flex-row__cell--grow">
               <span class="highlight"><%= event.title %></span><br>
@@ -38,7 +38,7 @@
               <span class="icon icon--chevron-right"></span>
             </div>
           </div>
-        </a>
+        <% end %>
       </div>
     <% end %>
   </div>

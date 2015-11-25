@@ -1,5 +1,5 @@
 class Groups::GroupMessagesController < ApplicationController
-  before_action :authenticate_admin!
+  before_action :authenticate_user!
   before_action :set_group
   before_action :set_message, only: [:show]
 
@@ -26,7 +26,7 @@ class Groups::GroupMessagesController < ApplicationController
   protected
 
   def set_group
-    @group = current_admin.enterprise.groups.find(params[:group_id])
+    @group = current_user.enterprise.groups.find(params[:group_id])
   end
 
   def set_message

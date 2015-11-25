@@ -12,9 +12,11 @@
               <div class="flex-row flex-row--middle">
                 <div class="flex-row__cell flex-row__cell--grow flex-row__cell--ellipsis"><%= member.name %></div>
                 <div class="flex-row__cell">
-                <%= link_to group_group_member_path(@group, member), method: :delete do %>
-                  <span class="icon icon--remove-red"></span>
-                <% end %>
+                  <% if is_admin? %>
+                    <%= link_to group_group_member_path(@group, member), method: :delete do %>
+                      <span class="icon icon--remove-red"></span>
+                    <% end %>
+                  <% end %>
                 </div>
               </div>
             </div>

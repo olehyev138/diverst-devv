@@ -12,10 +12,10 @@ class Employee::QuestionsController < ApplicationController
   protected
 
   def set_campaign
-    @campaign = current_admin.enterprise.campaigns.find(params[:campaign_id])
+    @campaign = current_employee.enterprise.campaigns.find(params[:campaign_id])
   end
 
   def set_question
-    @question = current_admin.enterprise.questions.find(params[:id])
+    @question = current_employee.enterprise.questions.find(params[:id])
   end
 end
