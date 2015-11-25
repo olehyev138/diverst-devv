@@ -198,8 +198,11 @@ module Optionnable
         data: seriesData
       }]
 
+      categories = data[:aggregations][:terms][:buckets].map{ |b| b[:key] }
+
       return {
-        series: series
+        series: series,
+        categories: categories
       }
     end
   end
