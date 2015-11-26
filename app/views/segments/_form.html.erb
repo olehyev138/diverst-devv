@@ -16,7 +16,7 @@
             <%= link_to_add_association "Add a criterion", f, :rules %>
           </div>
 
-          <%= f.button :submit, value: "Create segment" %>
+          <%= f.button :submit %>
         </div>
       </div>
     <% end %>
@@ -55,36 +55,39 @@
       isMultiSelect: true
     }];
 
-    // Make each rule form adapt as the user selects different options
-    $('#rules').on('cocoon:after-insert', function(e, insertedItem) {
-      var $fieldSelect = insertedItem.find('.custom-field');
-      var $operatorSelect = insertedItem.find('.operator');
-      var $singleValueField = insertedItem.find('.values');
-      var $multiValueField = insertedItem.find('.multi-select');
+    var makeRuleDynamic = function($ruleEl) {
+      var $fieldSelect = $ruleEl.find('.custom-field');
+      var $operatorSelect = $ruleEl.find('.operator');
+      var $singleValueField = $ruleEl.find('.values');
+      var $multiValueField = $ruleEl.find('.multi-select');
+
+      $singleValueField.removeAttr('value');
+      $multiValueField.removeAttr('value');
 
       $singleValueField.attr('name', $singleValueField.attr('name') + '[]');
 
-      // When the field is changed, populate the operators select field with the appropriate operations for the selected field
-      $fieldSelect.change(function() {
+      var handleFieldChange = function() {
         $multiValueField.parents('.flex-row__cell').css('display', 'none');
         $singleValueField.parents('.flex-row__cell').css('display', 'none');
 
-        var fieldOperators = $(this).find(":selected").data('operators');
+        var fieldOperators = $(this).find(":selected").data('operators') || [];
         $operatorSelect.find('option').remove();
 
         $operatorSelect[0].add(new Option("", ""));
 
         operators.forEach(function(operator) {
           if (fieldOperators.indexOf(operator.id) > -1) {
-            $operatorSelect[0].add(new Option(operator.name, operator.id));
+            $operatorSelect[0].add(new Option(operator.name, operator.id, true, operator.id === $operatorSelect.data('operator-id')));
           }
         });
 
         $operatorSelect.parents('.flex-row__cell').css('display', 'inline-block');
-      });
+      };
 
-      // When the operator is changed, create the appropriate value field
-      $operatorSelect.change(function() {
+      // When the field is changed, populate the operators select field with the appropriate operations for the selected field
+      $fieldSelect.change(handleFieldChange);
+
+      var handleOperatorChange = function() {
         $multiValueField.parents('.flex-row__cell').css('display', 'none').prop('disabled', true);
         $singleValueField.parents('.flex-row__cell').css('display', 'none').prop('disabled', true);
 
@@ -97,8 +100,10 @@
         if (options.length) {
           $multiValueField.find('option').remove();
 
+          var selectedValues = $multiValueField.data('selected-values') || [];
+
           options.forEach(function(option) {
-            $multiValueField[0].add(new Option(option, option));
+            $multiValueField[0].add(new Option(option, option, true, selectedValues.indexOf(option) > -1));
           });
 
           if (selectedOperator.isMultiSelect) {
@@ -116,7 +121,25 @@
           $singleValueField.prop('disabled', false);
           $singleValueField.parents('.flex-row__cell').css('display', 'inline-block');
         }
-      });
+      };
+
+      // When the operator is changed, create the appropriate value field
+      $operatorSelect.change(handleOperatorChange);
+
+      // Initial setup
+      if ($fieldSelect.find(":selected")[0].innerHTML !== "") {
+        handleFieldChange.call($fieldSelect);
+        handleOperatorChange.call($operatorSelect);
+      }
+    };
+
+    // Make each rule form adapt as the user selects different options
+    $('#rules').on('cocoon:after-insert', function(e, insertedItem) {
+      makeRuleDynamic(insertedItem);
+    });
+
+    $('#rules > .nested-fields').each(function() {
+      makeRuleDynamic($(this));
     });
   </script>
 <% end %>

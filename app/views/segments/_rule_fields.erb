@@ -9,14 +9,14 @@
       <%= f.input :field_id, input_html: { class: "custom-field" }, label: false, collection: current_admin.enterprise.fields.all.map{|field| [field.title, field.id, {"data-operators" => SegmentRule.operators_for_field(field).to_json, "data-options" => (field.class.method_defined?(:options) ? field.options.to_json : "[]")}]} %>
     </div>
     <div class="flex-row__cell" style="display: none;">
-      <%= f.input :operator, input_html: { class: "operator" }, collection: [], label: false %>
+      <%= f.input :operator, input_html: { class: "operator", 'data-operator-id' => f.object.operator }, collection: [], label: false %>
     </div>
     <div class="flex-row__cell" style="display: none;">
-      <%= f.input :values, input_html: { class: "values" }, label: false %>
+      <%= f.input :values, input_html: { class: "values", 'data-selected-values' => f.object.values }, label: false, value: "" %>
     </div>
     <div class="flex-row__cell flex-row__cell--grow" style="display: none;">
       <div class="field__input-wrapper">
-        <%= f.input_field :values, class: "field__input multi-select", label: false, collection: [], multiple: "multiple" %>
+        <%= f.input_field :values, class: "field__input multi-select", 'data-selected-values' => f.object.values, label: false, collection: [], multiple: "multiple", value: "" %>
       </div>
     </div>
   </div>
