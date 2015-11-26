@@ -94,7 +94,7 @@ Rails.application.routes.draw do
 
   devise_scope :employee do
     namespace :employee do
-      root :to => "campaigns#index"
+      root :to => "dashboard#home"
 
       resources :campaigns, shallow: true do
         resources :questions, shallow: true do
