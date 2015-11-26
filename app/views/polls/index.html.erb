@@ -5,16 +5,41 @@
 
 <div class="content__main">
   <div class="card">
-    <% @polls.each do |poll| %>
-      <div class="card__section card__section--border">
-        <div class="flex-row">
-          <div class="flex-row__cell flex-row__cell--grow"><%= link_to "#{poll.title}", poll_path(poll), class: "accent" %> - <%= pluralize poll.fields.count, "question" %></div>
-          <div class="flex-row__cell link-group">
-            <%= link_to "Edit", edit_poll_path(poll), class: "muted" %>
-            <%= link_to "Delete", poll_path(poll), method: :delete, class: "error" %>
-          </div>
-        </div>
-      </div>
-    <% end %>
+    <div class="card__section">
+      <% if @polls.empty? %>
+        <p>There are no polls yet. <%= link_to "Create one", new_poll_path %> and start solving problems with your team's diverse opinions.</p>
+      <% else %>
+        <table class="table--has-border" id="polls-table">
+          <thead>
+            <th>Title</th>
+            <th># of questions</th>
+            <th># of responses</th>
+            <th>Creation date</th>
+            <th>Options</th>
+          </thead>
+          <tbody>
+            <% @polls.each do |poll| %>
+              <tr>
+                <td><%= link_to poll.title, poll_path(poll) %></td>
+                <td><%= poll.fields.count %></td>
+                <td><%= poll.responses.count %></td>
+                <td><%= poll.created_at.to_s :reversed_slashes %></td>
+                <td><%= link_to "Edit", edit_poll_path(poll) %> - <%= link_to "Delete", poll_path(poll), method: :delete, class: "error", data: { confirm: "Are you sure?" } %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+    </div>
   </div>
 </div>
+
+<script>
+  $(document).on('page:change', function() {
+    $(document).off('page:change');
+
+    $('#polls-table').dataTable(Utility.mergeWithDTDefaults({
+      order: [[2, "desc"]]
+    }));
+  });
+</script>

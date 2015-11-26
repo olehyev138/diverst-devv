@@ -12,7 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require dataTables/jquery.dataTables
+//= require datatables
 //= require turbolinks
 //= require cocoon
 //= require select2
@@ -38,9 +38,24 @@ var Utility = (function() {
     });
   };
 
+  var defaultDatatablesOptions = {
+    pagingType: "full_numbers",
+    dom: "frtpl",
+    language: {
+    search: "",
+      searchPlaceholder: "Search..."
+    }
+  };
+
+  var mergeWithDTDefaults = function(params) {
+    return $.extend(true, {}, defaultDatatablesOptions, params);
+  }
+
   return {
     autoHideAlerts: autoHideAlerts,
-    submitOnReturn: submitOnReturn
+    submitOnReturn: submitOnReturn,
+    mergeWithDTDefaults: mergeWithDTDefaults,
+    defaultDatatablesOptions: defaultDatatablesOptions
   };
 
 })();

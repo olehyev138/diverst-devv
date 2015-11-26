@@ -9,20 +9,21 @@
       <% if @campaigns.empty? %>
         <p>There are no campaigns yet. <%= link_to "Create one", new_campaign_path %> and start solving problems with your team's diverse opinions.</p>
       <% else %>
-        <table class="table--has-border" id="employees-table" data-source="<%= employees_path(format: :json) %>">
+        <table class="table--has-border" id="campaigns-table">
           <thead>
             <th>Title</th>
             <th>ERGs</th>
             <th>Start date</th>
             <th># of invitations</th>
             <th>Nb of questions</th>
+            <th>Options</th>
           </thead>
           <tbody>
             <% @campaigns.each do |campaign| %>
               <tr>
                 <td><%= link_to campaign.title, campaign_questions_path(campaign) %></td>
                 <td><%= campaign.groups.pluck(:name).join(', ') %></td>
-                <td><%= campaign.start.to_s :dateonly %></td>
+                <td><%= campaign.start.to_s :reversed_slashes %></td>
                 <td><%= campaign.invitations.count %></td>
                 <td><%= campaign.questions.count %></td>
                 <td><%= link_to "Edit", edit_campaign_path(campaign) %> - <%= link_to "Delete", campaign_path(campaign), method: :delete, class: "error", data: { confirm: "Are you sure?" } %></td>
@@ -34,3 +35,11 @@
     </div>
   </div>
 </div>
+
+<script>
+  $(document).ready(function() {
+    $('#campaigns-table').dataTable(Utility.mergeWithDTDefaults({
+      order: [[2, "desc"]]
+    }));
+  });
+</script>

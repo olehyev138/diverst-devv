@@ -8,7 +8,7 @@
   <div class="card">
     <div class="card__section">
       <% if @employees.invitation_not_accepted.any? %>
-        <table class="table--has-border">
+        <table class="table--has-border" id="invited-employees-table">
           <thead>
             <th>Email</th>
             <th></th>
@@ -79,16 +79,12 @@
 </div>
 
 <script>
-  jQuery(document).ready(function() {
-    $('#employees-table').dataTable({
+  $(document).ready(function() {
+    $('#employees-table').dataTable(Utility.mergeWithDTDefaults({
       serverSide: true,
-      ajax: $('#employees-table').data('source'),
-      pagingType: "full_numbers",
-      dom: "frtp",
-      language: {
-        search: "",
-        searchPlaceholder: "Search..."
-      }
-    });
+      ajax: $('#employees-table').data('source')
+    }));
+
+    $('#invited-employees-table').dataTable(Utility.defaultDatatablesOptions);
   });
 </script>

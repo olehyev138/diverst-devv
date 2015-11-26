@@ -1,4 +1,4 @@
-class Employee::InvitationsController < Devise::InvitationsController
+class Employees::InvitationsController < Devise::InvitationsController
   layout :resolve_layout
   before_filter :configure_permitted_parameters, if: :devise_controller?
 

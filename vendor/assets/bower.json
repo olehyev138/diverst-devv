@@ -5,6 +5,7 @@
     "select2": "latest",
     "highcharts": "latest",
     "rangeslider.js": "latest",
-    "Sortable": "latest"
+    "Sortable": "latest",
+    "datatables": "latest"
   }
 }

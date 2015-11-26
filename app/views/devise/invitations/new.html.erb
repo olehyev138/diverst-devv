@@ -10,6 +10,8 @@
 
         <% resource.class.invite_key_fields.each do |field| -%>
           <%= f.input :email %>
+          <%= f.input :first_name %>
+          <%= f.input :last_name %>
 
           <% current_admin.enterprise.fields.each do |cf| %>
             <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: resource %>

@@ -34,13 +34,18 @@
         <h4><%= field.title %></h4>
         <% if @poll.responses.any? %>
           <% if field.type == "TextField" %>
-            <ul>
-              <% @field_responses = @poll.responses.page(params["field_#{field.id}_page"]).per(5); @field_responses.each do |response| %>
-                <li><%= response.info[field] %></li>
-              <% end %>
-            </ul>
-
-            <%= paginate @field_responses, param_name: "field_#{field.id}_page" %>
+            <table class="table--has-border textfield-datatable">
+              <thead style="display: none;">
+                <th>Response</th>
+              </thead>
+              <tbody>
+                <% @poll.responses.each do |response| %>
+                  <tr>
+                    <td><%= response.info[field] %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
           <% elsif field.type == "CheckboxField" || field.type == "SelectField" %>
             <div class="field-chart" data-source="<%= answer_popularities_poll_poll_field_path(@poll, field) %>"></div>
           <% elsif field.type == "NumericField" %>
@@ -64,30 +69,22 @@
     <div class="card">
       <div class="card__section">
 
-        <% @responses.each do |response| %>
-          <div class="block-section poll-response">
-            <div class="flex-row flex-row--baseline poll-response_title">
-              <div class="flex-row__cell flex-row__cell--grow">
-                <h4><%= response.employee.name %> - <span class="muted">answered <%= time_ago_in_words(response.created_at) %> ago</span></h4>
-              </div>
-              <div class="flex-row__cell">
-                <span class="icon icon--chevron-down-purple"></span>
-              </div>
-            </div>
-            <div class="poll-response_details collapsed">
-              <ul class="unstyled">
-                <% @poll.fields.each do |field| %>
-                  <li><small><%= field.title %></small> <span class="block highlight"><%= field.string_value response.info[field] %></span></li>
-                <% end %>
-              </ul>
-            </div>
-          </div>
-        <% end %>
-      </div>
-
-      <div class="card__section">
-        <%= paginate @responses, param_name: "response_page" %>
-      </div>
+      <table class="table--has-border responses-datatable">
+        <thead>
+          <th>Respondant</th>
+          <th>Date</th>
+          <th>Options</th>
+        </thead>
+        <tbody>
+          <% @responses.each do |response| %>
+            <tr>
+              <td><%= response.employee.name %></td>
+              <td><%= response.created_at.to_s :reversed_slashes %></td>
+              <td><a href="#" class="row-expand">Show</a></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     </div>
 
   <% end %>
@@ -156,5 +153,31 @@
         });
       });
     });
+  });
+
+  $('.textfield-datatable').dataTable(Utility.mergeWithDTDefaults({
+    lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+    aaSorting: []
+  }));
+
+  var responsesTable = $('.responses-datatable').DataTable(Utility.mergeWithDTDefaults({
+    order: [[1, "desc"]]
+  }));
+
+  $('.responses-datatable tbody').on('click', 'a.row-expand', function(e) {
+    var tr = $(this).closest('tr');
+    var row = responsesTable.row(tr);
+
+    if (row.child.isShown()) {
+      // This row is already open - close it
+      row.child.hide();
+    }
+    else {
+      // Open this row
+      row.child("<div>meeeoooowwwwwww</div>").show();
+    }
+
+    e.preventDefault();
+    return false;
   });
 </script>
