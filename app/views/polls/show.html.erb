@@ -73,11 +73,11 @@
         <thead>
           <th>Respondant</th>
           <th>Date</th>
-          <th>Options</th>
+          <th>Response</th>
         </thead>
         <tbody>
           <% @responses.each do |response| %>
-            <tr>
+            <tr data-response-id="<%= response.id %>">
               <td><%= response.employee.name %></td>
               <td><%= response.created_at.to_s :reversed_slashes %></td>
               <td><a href="#" class="row-expand">Show</a></td>
@@ -85,6 +85,18 @@
           <% end %>
         </tbody>
       </table>
+
+      <div style="display: none;">
+        <% @responses.each do |response| %>
+          <div class="poll-response_details" id="response-details-<%= response.id %>">
+            <ul class="unstyled">
+              <% @poll.fields.each do |field| %>
+                <li><small><%= field.title %></small> <span class="block highlight"><%= field.string_value response.info[field] %></span></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+      </div>
     </div>
 
   <% end %>
@@ -94,12 +106,6 @@
 <script>
   $(document).on('page:change', function() {
     $(document).off('page:change');
-
-    // Accordeon the poll responses
-    $('.poll-response').click(function() {
-      $(this).find('.poll-response_details').toggleClass('collapsed');
-      $(this).find('.icon').toggleClass('icon--rotate');
-    });
 
     // Render field charts
     $('.field-chart').each(function() {
@@ -164,17 +170,21 @@
     order: [[1, "desc"]]
   }));
 
+  responsesTable.rows().every(function () {
+    this.child($('#response-details-' + $(this.node()).data('response-id'))).hide();
+  });
+
   $('.responses-datatable tbody').on('click', 'a.row-expand', function(e) {
     var tr = $(this).closest('tr');
     var row = responsesTable.row(tr);
 
     if (row.child.isShown()) {
-      // This row is already open - close it
       row.child.hide();
+      $(this).text("Show");
     }
     else {
-      // Open this row
-      row.child("<div>meeeoooowwwwwww</div>").show();
+      row.child.show();
+      $(this).text("Hide");
     }
 
     e.preventDefault();
