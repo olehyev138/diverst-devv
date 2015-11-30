@@ -38,7 +38,15 @@ class Campaign < ActiveRecord::Base
   end
 
   def top_performers
-    top_answers_hash = self.answers.group(:author).count
+    top_answers_count_hash = self.answers.group(:author).order('count_all').count
+
+    top_answers_hash = top_answers_count_hash.map do |employee, _|
+      [
+        employee,
+        self.answers.where(author: employee).map{ |a| a.votes.count }.sum
+      ]
+    end.to_h
+
     top_comments_hash = self.answer_comments.group('answer_comments.author_id').order('count_all').count.map{ |k, v| [Employee.find(k), v] }.to_h
     top_combined_hash = top_answers_hash.merge(top_comments_hash){ |k, a_value, b_value| a_value + b_value }
 
