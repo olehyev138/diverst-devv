@@ -13,12 +13,13 @@
   </header>
 
   <header class="secondary-header">
-    <%= link_to "Home", employee_campaigns_path, class: "secondary-header__tab" %>
+    <%= link_to "Home", employee_root_path, class: "secondary-header__tab" %>
     <%= active_link_to "My Scrums", employee_campaigns_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
     <%= active_link_to "News", employee_news_links_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
     <%= active_link_to "Messages", employee_messages_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
     <%= active_link_to "Events", employee_events_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
     <%= active_link_to "Groups", employee_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+    <%= link_to "Log out", destroy_employee_session_path, method: :delete, class: "secondary-header__tab" %>
   </header>
 
   <div class="content">

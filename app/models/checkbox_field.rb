@@ -6,6 +6,11 @@ class CheckboxField < Field
     values.join(', ')
   end
 
+  def csv_value(values)
+    return "" if !values
+    values.join(',')
+  end
+
   def popularity_for_no_option(employees)
     nb_employees_chose = 0
     employees.each do |employee|

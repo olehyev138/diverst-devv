@@ -29,6 +29,55 @@ class EmployeesController < ApplicationController
     redirect_to :back
   end
 
+  def sample_csv
+    csv_string = CSV.generate do |csv|
+      csv << ["First name", "Last name", "Email"].concat(current_admin.enterprise.fields.map(&:title))
+
+      current_admin.enterprise.employees.order(created_at: :desc).limit(5).each do |employee|
+        employee_columns = [employee.first_name, employee.last_name, employee.email]
+
+        current_admin.enterprise.fields.each do |field|
+          employee_columns << field.csv_value(employee.info[field])
+        end
+
+        csv << employee_columns
+      end
+    end
+
+    send_data csv_string, filename: "diverst_import.csv"
+  end
+
+  def parse_csv
+    @table = CSV.table params[:file].tempfile
+    @failed_rows = []
+    @successful_rows = []
+
+    @table.each_with_index do |row, row_index|
+      employee = Employee.from_csv_row(row, enterprise: current_admin.enterprise)
+
+      if employee
+        if employee.save
+          employee.invite!(current_admin)
+          @successful_rows << row
+        else
+          # ActiveRecord validation failed on employee
+          @failed_rows << {
+            row: row,
+            row_index: row_index + 1,
+            error: employee.errors.full_messages.join(', ')
+          }
+        end
+      else
+        # Employee.from_csv_row returned nil
+        @failed_rows << {
+          row: row,
+          row_index: row_index + 1,
+          error: "Missing required information"
+        }
+      end
+    end
+  end
+
   protected
 
   def set_employee

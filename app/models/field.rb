@@ -32,4 +32,8 @@ class Field < ActiveRecord::Base
   def string_value(value)
     value
   end
+
+  def csv_value(value)
+    value
+  end
 end

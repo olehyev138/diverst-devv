@@ -155,6 +155,28 @@ class Employee < ActiveRecord::Base
     }
   end
 
+  def self.from_csv_row(row, enterprise:)
+    return nil if row[0].nil? || row[1].nil? || row[2].nil? # Require first_name, last_name and email
+
+    employee = Employee.new(
+      first_name: row[0],
+      last_name: row[1],
+      email: row[2],
+      enterprise: enterprise
+    )
+
+    enterprise.fields.each_with_index do |field, i|
+      employee.info[field] = field.process_field_value row[3+i]
+    end
+
+    employee
+  end
+
+  def password_required?
+    # !invitation_accepted_at.nil?
+    false
+  end
+
   protected
 
   # Generate a random password if the user is using SAML

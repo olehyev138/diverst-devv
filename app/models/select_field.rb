@@ -6,6 +6,11 @@ class SelectField < Field
     value[0]
   end
 
+  def csv_value(value)
+    return "" if value.nil? || value.empty?
+    value[0]
+  end
+
   # 0 to 1. 1 being everybody in the business has chosen this option, 0 being nobody chose it
   def popularity_for_value(value, employees)
     puts "------------ POPULARITY START"

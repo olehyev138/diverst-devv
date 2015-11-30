@@ -20,6 +20,11 @@ class DateField < Field
     value.strftime("%s").to_i
   end
 
+  def csv_value(value)
+    return "" if value.nil?
+    value.strftime("%m/%d/%Y")
+  end
+
   def match_score_between(e1, e2, employees)
     score = 0
     Benchmark.bm do |x|

@@ -15,7 +15,13 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :employees
+  resources :employees do
+    collection do
+      get 'import_csv'
+      get 'sample_csv'
+      post 'parse_csv'
+    end
+  end
 
   resources :enterprises do
     resources :saml do
