@@ -48,7 +48,7 @@ class Campaign < ActiveRecord::Base
     end.to_h
 
     top_comments_hash = self.answer_comments.group('answer_comments.author_id').order('count_all').count.map{ |k, v| [Employee.find(k), v] }.to_h
-    top_combined_hash = top_answers_hash.merge(top_comments_hash){ |k, a_value, b_value| a_value + b_value }
+    top_combined_hash = top_answers_hash.merge(top_comments_hash){ |_k, a_value, b_value| a_value + b_value }.sort_by{ |_k, v| v }.reverse!.to_h
 
     series = [{
       name: "# of interactions",
