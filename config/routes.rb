@@ -48,6 +48,12 @@ Rails.application.routes.draw do
       resources :events
       resources :news_links
     end
+
+    member do
+      get 'import_csv'
+      get 'sample_csv'
+      post 'parse_csv'
+    end
   end
 
   resources :news_links, only: [] do

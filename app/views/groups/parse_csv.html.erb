@@ -1,0 +1,25 @@
+<div class="content__header">
+  <h1>Add employees to a group via CSV</h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <h3>Successful</h3>
+      <p>
+        <%= pluralize(@successful_rows.count, 'employees') %> out of the submitted <%= @table.count %> were added to <%= @group.name %>.
+      </p>
+
+      <h3>Unsuccessful</h3>
+      <% if @failed_rows.empty? %>
+        <p>All the provided emails were successfully added.</p>
+      <% else %>
+        <ul>
+          <% @failed_rows.each do |failed_row| %>
+            <li><strong>Row #<%= failed_row[:row_index] %>: </strong><%= failed_row[:error] %></li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
+  </div>
+</div>

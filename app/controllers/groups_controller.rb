@@ -1,7 +1,7 @@
 class GroupsController < ApplicationController
   before_action :authenticate_admin!, except: [:show]
   before_action :authenticate_user!, only: [:show]
-  before_action :set_group, only: [:edit, :update, :destroy, :show]
+  before_action :set_group, only: [:edit, :update, :destroy, :show, :import_csv, :sample_csv, :parse_csv]
   skip_before_action :verify_authenticity_token, only: [:create]
 
   layout :resolve_layout
@@ -42,6 +42,45 @@ class GroupsController < ApplicationController
   def destroy
     @group.destroy
     redirect_to action: :index
+  end
+
+  def sample_csv
+    csv_string = CSV.generate do |csv|
+      csv << ["Email"]
+
+      @group.members.limit(5).each do |employee|
+        csv << [employee.email]
+      end
+    end
+
+    send_data csv_string, filename: "erg_import_example.csv"
+  end
+
+  def parse_csv
+    @table = CSV.table params[:file].tempfile
+    @failed_rows = []
+    @successful_rows = []
+
+    @table.each_with_index do |row, row_index|
+      email = row[0]
+      employee = Employee.where(email: email).first
+
+      if employee
+        if !@group.members.include? employee
+          @group.members << employee
+        end
+
+        @successful_rows << row
+      else
+        @failed_rows << {
+          row: row,
+          row_index: row_index + 1,
+          error: "There is no employee with this email address in the database"
+        }
+      end
+    end
+
+    @group.save
   end
 
   protected
