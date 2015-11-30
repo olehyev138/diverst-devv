@@ -39,22 +39,24 @@
       </div>
     </div>
 
-    <h2>Questions</h2>
-    <p>Define the questions you want to ask your audience.</p>
-    <div class="card">
-      <div id="questions">
-        <%= f.simple_fields_for :questions do |question| %>
-          <%= render 'question_fields', f: question %>
-        <% end %>
-      </div>
-      <div class="link">
-        <div class="card__section">
-          <%= link_to_add_association "Add question", f, :questions %>
+    <% if @campaign.new_record? %>
+      <h2>Questions</h2>
+      <p>Define the questions you want to ask your audience.</p>
+      <div class="card">
+        <div id="questions">
+          <%= f.simple_fields_for :questions do |question| %>
+            <%= render 'question_fields', f: question %>
+          <% end %>
+        </div>
+        <div class="link">
+          <div class="card__section">
+            <%= link_to_add_association "Add question", f, :questions %>
+          </div>
         </div>
       </div>
-    </div>
+    <% end %>
 
-    <%= f.button :submit, value: "Create campaign" %>
+    <%= f.button :submit %>
   <% end %>
 </div>
 

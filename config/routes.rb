@@ -94,6 +94,11 @@ Rails.application.routes.draw do
         patch 'reopen'
       end
     end
+
+    member do
+      get 'contributions_per_erg'
+      get 'top_performers'
+    end
   end
 
   resources :admins

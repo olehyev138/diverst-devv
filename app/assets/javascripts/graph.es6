@@ -19,13 +19,15 @@ class Graph {
   }
 
   attachToElement() {
-    if (this.data.type === "NumericField" || this.data.type === "SelectField" || this.data.type === "bar")
+    if (this.data.type === "NumericField" || this.data.type === "bar")
       this.renderBarChart()
     else if (this.data.type === "CheckboxField" || this.data.type === "SelectField")
       if (this.data.hasAggregation)
         this.renderBarChart()
       else
         this.renderPieChart()
+    else if (this.data.type === "pie")
+      this.renderPieChart()
   }
 
   renderBarChart() {
@@ -60,12 +62,15 @@ class Graph {
       tooltip: {
         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
         pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-          '<td style="padding:0"><b>{point.y} employees</b></td></tr>',
+          '<td style="padding:0"><b>{point.y}</b></td></tr>',
         footerFormat: '</table>',
         shared: true,
         useHTML: true
       },
-      series: this.data.highcharts.series
+      series: this.data.highcharts.series,
+      credits: {
+        enabled: false
+      }
     });
   }
 
@@ -83,10 +88,13 @@ class Graph {
       series: this.data.highcharts.series,
       tooltip: {
         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-        pointFormat: '<tr><td style="padding:0"><b>{point.y} employees</b></td></tr>',
+        pointFormat: '<tr><td style="padding:0"><b>{point.y}</b></td></tr>',
         footerFormat: '</table>',
         shared: true,
         useHTML: true
+      },
+      credits: {
+        enabled: false
       }
     });
   }

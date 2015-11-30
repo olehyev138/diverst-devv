@@ -1,6 +1,6 @@
 class CampaignsController < ApplicationController
   before_action :authenticate_admin!, except: [:index, :show]
-  before_action :set_campaign, only: [:edit, :update, :destroy, :show]
+  before_action :set_campaign, only: [:edit, :update, :destroy, :show, :contributions_per_erg, :top_performers]
 
   layout :resolve_layout
 
@@ -37,6 +37,20 @@ class CampaignsController < ApplicationController
   def destroy
     @campaign.destroy
     redirect_to action: :index
+  end
+
+  def contributions_per_erg
+    render json: {
+      highcharts: @campaign.contributions_per_erg,
+      type: "pie"
+    }
+  end
+
+  def top_performers
+    render json: {
+      highcharts: @campaign.top_performers,
+      type: "bar"
+    }
   end
 
   protected
