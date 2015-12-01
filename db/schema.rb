@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151201181426) do
+ActiveRecord::Schema.define(version: 20151201230635) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -190,13 +190,15 @@ ActiveRecord::Schema.define(version: 20151201181426) do
     t.boolean  "match_exclude",      limit: 1
     t.boolean  "match_polarity",     limit: 1
     t.float    "match_weight",       limit: 24
-    t.integer  "enterprise_id",      limit: 4
     t.datetime "created_at",                                       null: false
     t.datetime "updated_at",                                       null: false
     t.boolean  "alternative_layout", limit: 1,     default: false
-    t.integer  "poll_id",            limit: 4
     t.boolean  "private",            limit: 1
+    t.integer  "container_id",       limit: 4
+    t.string   "container_type",     limit: 255
   end
+
+  add_index "fields", ["container_type", "container_id"], name: "index_fields_on_container_type_and_container_id", using: :btree
 
   create_table "graphs", force: :cascade do |t|
     t.integer  "metrics_dashboard_id", limit: 4

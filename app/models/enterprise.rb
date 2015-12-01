@@ -1,7 +1,7 @@
 class Enterprise < ActiveRecord::Base
   has_many :admins, inverse_of: :enterprise
   has_many :employees, inverse_of: :enterprise
-  has_many :fields, inverse_of: :enterprise
+  has_many :fields, as: :container
   has_many :topics, inverse_of: :enterprise
   has_many :segments, inverse_of: :enterprise
   has_many :groups, inverse_of: :enterprise

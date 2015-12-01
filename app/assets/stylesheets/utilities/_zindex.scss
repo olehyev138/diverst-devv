@@ -5,7 +5,8 @@ $z-index: (
   primary-header    : 989,
   secondary-header  : 997,
   nav               : 996,
-  content           : 995
+  card__action      : 995,
+  content           : 994
 );
 
 @function z-index($key) {

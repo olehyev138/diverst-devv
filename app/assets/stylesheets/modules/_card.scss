@@ -57,6 +57,7 @@
   position: absolute;
   top: $spacing-medium;
   right: $spacing-medium;
+  @include z-index(card__action);
   @extend small;
 
   @include mq(medium) {
