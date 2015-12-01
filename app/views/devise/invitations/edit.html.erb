@@ -45,8 +45,15 @@
 
         <%= f.input :first_name %>
         <%= f.input :last_name %>
-        <%= f.input :password %>
-        <%= f.input :password_confirmation %>
+
+        <% if !resource.enterprise.has_enabled_saml? %>
+          <%= f.input :password %>
+          <%= f.input :password_confirmation %>
+        <% end %>
+
+        <% resource.enterprise.fields.where(private: false).each do |cf| %>
+          <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: resource %>
+        <% end %>
 
         <%= f.button :submit, "Create my account", class: "btn--secondary btn--large btn--full" %>
       <% end %>

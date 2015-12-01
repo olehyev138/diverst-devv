@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151124195346) do
+ActiveRecord::Schema.define(version: 20151201181426) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -195,6 +195,7 @@ ActiveRecord::Schema.define(version: 20151124195346) do
     t.datetime "updated_at",                                       null: false
     t.boolean  "alternative_layout", limit: 1,     default: false
     t.integer  "poll_id",            limit: 4
+    t.boolean  "private",            limit: 1
   end
 
   create_table "graphs", force: :cascade do |t|
