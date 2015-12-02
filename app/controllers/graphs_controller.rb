@@ -47,11 +47,11 @@ class GraphsController < ApplicationController
   protected
 
   def set_metrics_dashboard
-    @metrics_dashboard = current_admin.enterprise.metrics_dashboards.find(params[:metrics_dashboard_id])
+    @metrics_dashboard = current_admin.enterprise.metrics_dashboards.find(params[:metric_dashboard_id])
   end
 
   def set_graph
-    @graph = Graph.where(metrics_dashboard_id: current_admin.enterprise.metrics_dashboards.ids).find(params[:id])
+    @graph = Graph.where(collection_id: current_admin.enterprise.metrics_dashboards.ids, collection_type: "MetricsDashboard").find(params[:id])
   end
 
   def graph_params

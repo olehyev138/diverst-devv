@@ -4,7 +4,7 @@
     <div class="card">
       <div class="card__section card__section--border">
         <p class="field__hint">Choose the field that the graph will represent</p>
-        <%= f.association :field, label: false %>
+        <%= f.association :field, label: false, collection: current_admin.enterprise.fields %>
       </div>
 
       <div class="card__section card__section--border">

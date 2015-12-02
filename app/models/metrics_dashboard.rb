@@ -1,6 +1,6 @@
 class MetricsDashboard < ActiveRecord::Base
   belongs_to :enterprise, inverse_of: :metrics_dashboards
-  has_many :graphs, inverse_of: :metrics_dashboard
+  has_many :graphs, as: :collection
   has_and_belongs_to_many :segments
   has_and_belongs_to_many :groups
 
