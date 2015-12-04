@@ -1,8 +1,8 @@
 config = {
-  host: "http://localhost:9200/",
+  host: ENV["ELASTICSEARCH_URL"],
   transport_options: {
     request: { timeout: 5 }
-  },
+  }
 }
 
 if File.exists?("config/elasticsearch.yml")
