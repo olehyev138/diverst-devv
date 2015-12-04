@@ -19,6 +19,8 @@ class Enterprise < ActiveRecord::Base
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :mobile_fields, reject_if: :all_blank, allow_destroy: true
 
+  include ContainsResources
+
   def saml_settings
     settings = OneLogin::RubySaml::Settings.new
 

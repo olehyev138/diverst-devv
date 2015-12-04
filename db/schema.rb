@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151201234653) do
+ActiveRecord::Schema.define(version: 20151204042827) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -330,6 +330,20 @@ ActiveRecord::Schema.define(version: 20151201234653) do
     t.datetime "solved_at"
     t.text     "conclusion",  limit: 65535
   end
+
+  create_table "resources", force: :cascade do |t|
+    t.string   "title",             limit: 255
+    t.integer  "container_id",      limit: 4
+    t.string   "container_type",    limit: 255
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.string   "file_file_name",    limit: 255
+    t.string   "file_content_type", limit: 255
+    t.integer  "file_file_size",    limit: 4
+    t.datetime "file_updated_at"
+  end
+
+  add_index "resources", ["container_type", "container_id"], name: "index_resources_on_container_type_and_container_id", using: :btree
 
   create_table "segment_rules", force: :cascade do |t|
     t.integer  "segment_id", limit: 4

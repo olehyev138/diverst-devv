@@ -33,6 +33,8 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :resources
+
     member do
       get 'edit_auth'
       get 'edit_fields'
@@ -47,6 +49,7 @@ Rails.application.routes.draw do
       resources :group_messages, path: "messages"
       resources :events
       resources :news_links
+      resources :resources
     end
 
     member do
