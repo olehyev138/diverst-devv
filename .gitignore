@@ -26,3 +26,6 @@ dump.rdb
 
 # Ignore bower components
 vendor/assets/bower_components
+
+# Ignore paperclip uploads
+/public/system/**
