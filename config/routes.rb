@@ -74,6 +74,8 @@ Rails.application.routes.draw do
         get 'answer_popularities'
       end
     end
+
+    resources :graphs, only: [:new, :create]
   end
 
   resources :fields do

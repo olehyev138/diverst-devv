@@ -35,4 +35,8 @@ class Field < ActiveRecord::Base
   def csv_value(value)
     value
   end
+
+  def graphable?
+    ["SelectField", "CheckboxField", "NumericField"].include? self.type
+  end
 end

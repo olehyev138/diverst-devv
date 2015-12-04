@@ -8,4 +8,6 @@
   <%= render 'shared/fields/creation/checkbox_field', f: f if f.object.type == 'CheckboxField' %>
   <%= render 'shared/fields/creation/numeric_field', f: f if f.object.type == 'NumericField' %>
   <%= render 'shared/fields/creation/date_field', f: f if f.object.type == 'DateField' %>
+
+  <%= f.hidden_field :type %>
 </div>

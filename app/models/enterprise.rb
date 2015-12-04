@@ -9,6 +9,8 @@ class Enterprise < ActiveRecord::Base
   has_many :polls, inverse_of: :enterprise
   has_many :mobile_fields, inverse_of: :enterprise
   has_many :metrics_dashboards, inverse_of: :enterprise
+  has_many :graphs, through: :metrics_dashboards
+  has_many :poll_graphs, through: :polls, source: :graphs
   has_many :campaigns
   has_many :questions, through: :campaigns
   has_many :answers, through: :questions

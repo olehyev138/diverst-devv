@@ -1,18 +1,22 @@
 <div class="content__header">
   <h1><%= @poll.title %></h1>
+  <%= link_to "New Graph", new_poll_graph_path(@poll), class: "btn btn--primary" %>
 </div>
 
 <div class="content__main">
-  <p><%= @poll.description %></p>
-
-  <h3>Stats</h3>
+  <p></p>
 
   <div class="card">
     <div class="card__section">
+      <div class="row row--spacing-bottom">
+        <div class="col sm-12">
+          <p style="font-style: italic;"><%= @poll.description %></p>
+        </div>
+      </div>
       <div class="row">
         <div class="col sm-6 md-3 lg-2">
           <small>Invitations</small>
-          <h2><%= @poll.employees.count %></h2>
+          <h2><%= @poll.targeted_employees.count %></h2>
         </div>
         <div class="col sm-6 md-3 lg-2">
           <small>Responses</small>
@@ -20,45 +24,36 @@
         </div>
         <div class="col sm-6 md-3 lg-2">
           <small>Response rate</small>
-          <h2><%= @poll.employees.count > 0 ? "#{(@poll.responses.count.to_f / @poll.employees.count * 100).to_i}%" : "N/A" %></h2>
+          <h2><%= @poll.targeted_employees.count > 0 ? "#{(@poll.responses.count.to_f / @poll.targeted_employees.count * 100).to_i}%" : "N/A" %></h2>
         </div>
       </div>
     </div>
   </div>
 
-  <h3>Fields</h3>
+  <h3>Field graphs</h3>
 
-  <% @poll.fields.each do |field| %>
+  <% if @poll.graphs.empty? %>
     <div class="card">
       <div class="card__section">
-        <h4><%= field.title %></h4>
-        <% if @poll.responses.any? %>
-          <% if field.type == "TextField" %>
-            <table class="table--has-border textfield-datatable">
-              <thead style="display: none;">
-                <th>Response</th>
-              </thead>
-              <tbody>
-                <% @poll.responses.each do |response| %>
-                  <tr>
-                    <td><%= response.info[field] %></td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
-          <% elsif field.type == "CheckboxField" || field.type == "SelectField" %>
-            <div class="field-chart" data-source="<%= answer_popularities_poll_poll_field_path(@poll, field) %>"></div>
-          <% elsif field.type == "NumericField" %>
-            <% @stats = field.stats_in(@poll.responses) %>
-            Mean: <%= @stats[:mean] %><br>
-            Min: <%= @stats[:min] %><br>
-            Max: <%= @stats[:max] %><br>
-            Median: <%= @stats[:median] %>
-          <% end %>
-        <% else %>
-          <p>No response yet.</p>
-        <% end %>
+        <p>There are no graphs yet. <%= link_to "Create one", new_poll_graph_path(@poll) %> to start analyzing your employees' responses.</p>
       </div>
+    </div>
+  <% else %>
+     <div class="row row--equal-height">
+      <% @poll.graphs.each do |graph| %>
+        <div class="col sm-12 md-6">
+          <div class="card">
+            <div class="card__section">
+              <div class="card__action">
+                <%= link_to "Edit", edit_graph_path(graph) %> -
+                <%= link_to "Remove", graph_path(graph), method: :delete, class: "error" %>
+              </div>
+              <h4><%= graph.title %></h4>
+              <div class="graph" data-graph-id="<%= graph.id %>"></div>
+            </div>
+          </div>
+        </div>
+      <% end %>
     </div>
   <% end %>
 
@@ -107,87 +102,41 @@
   $(document).on('page:change', function() {
     $(document).off('page:change');
 
-    // Render field charts
-    $('.field-chart').each(function() {
-      var $chart = $(this);
-      var dataUrl = $(this).data('source');
-
-      $.get(dataUrl, function(data) {
-        var pollOptions = data.map(function(entry) { return entry.answer; });
-        var pollAnswerCounts = data.map(function(entry) { return entry.count; });
-
-        $chart.highcharts({
-          chart: {
-            type: 'column',
-            style: {
-              fontFamily: 'Helvetica Neue, sans-serif'
-            }
-          },
-          title: {
-            text: ''
-          },
-          xAxis: {
-            categories: pollOptions,
-            crosshair: true
-          },
-          yAxis: {
-            min: 0,
-            title: {
-              text: 'Nb of answers'
-            },
-            allowDecimals: false
-          },
-          tooltip: {
-            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-              '<td style="padding:0"><b>{point.y} respondents</b></td></tr>',
-            footerFormat: '</table>',
-            shared: true,
-            useHTML: true
-          },
-          plotOptions: {
-            column: {
-              pointPadding: 0.2,
-              borderWidth: 0
-            }
-          },
-          series: [{
-            name: 'All respondents',
-            data: pollAnswerCounts
-          }],
-          colors: ['#7B77C9']
-        });
-      });
+    // Graphs
+    var graphs = $('.graph').map(function() {
+      return new Graph('/graphs/' + $(this).data('graph-id') + '/data', $(this));
     });
-  });
 
-  $('.textfield-datatable').dataTable(Utility.mergeWithDTDefaults({
-    lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
-    aaSorting: []
-  }));
+    // TODO: This doesnt exist anymore. We should have a way to reincorporate it.
+    $('.textfield-datatable').dataTable(Utility.mergeWithDTDefaults({
+      lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+      aaSorting: []
+    }));
 
-  var responsesTable = $('.responses-datatable').DataTable(Utility.mergeWithDTDefaults({
-    order: [[1, "desc"]]
-  }));
+    // Responses table
+    var responsesTable = $('.responses-datatable').DataTable(Utility.mergeWithDTDefaults({
+      order: [[1, "desc"]]
+    }));
 
-  responsesTable.rows().every(function () {
-    this.child($('#response-details-' + $(this.node()).data('response-id'))).hide();
-  });
+    responsesTable.rows().every(function () {
+      this.child($('#response-details-' + $(this.node()).data('response-id'))).hide();
+    });
 
-  $('.responses-datatable tbody').on('click', 'a.row-expand', function(e) {
-    var tr = $(this).closest('tr');
-    var row = responsesTable.row(tr);
+    $('.responses-datatable tbody').on('click', 'a.row-expand', function(e) {
+      var tr = $(this).closest('tr');
+      var row = responsesTable.row(tr);
 
-    if (row.child.isShown()) {
-      row.child.hide();
-      $(this).text("Show");
-    }
-    else {
-      row.child.show();
-      $(this).text("Hide");
-    }
+      if (row.child.isShown()) {
+        row.child.hide();
+        $(this).text("Show");
+      }
+      else {
+        row.child.show();
+        $(this).text("Hide");
+      }
 
-    e.preventDefault();
-    return false;
+      e.preventDefault();
+      return false;
+    });
   });
 </script>

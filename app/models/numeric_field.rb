@@ -67,9 +67,9 @@ class NumericField < Field
     }
   end
 
-  def elastic_stats(aggr_field: nil, target_segment_ids: nil)
+  def elastic_stats(aggr_field: nil, target_ids: Employee.ids)
     # Dynamically calculate bucket sizes
-    stats = Employee.search(size: 0, aggs: { global_stats: { stats: { field: "info.#{self.id}" } } }).response
+    stats = Employee.search(size: 0, aggs: { global_stats: { stats: { field: "combined_info.#{self.id}" } } }).response
 
     min = stats[:aggregations][:global_stats][:min]
     max = stats[:aggregations][:global_stats][:max]
@@ -92,7 +92,7 @@ class NumericField < Field
     range_agg = {
       ranges: {
         range: {
-          field: "info.#{self.id}",
+          field: "combined_info.#{self.id}",
           ranges: ranges
         }
       }
@@ -104,7 +104,7 @@ class NumericField < Field
       aggs = {
         aggregation: {
           terms: {
-            field: "info.#{aggr_field.id}.raw"
+            field: "combined_info.#{aggr_field.id}.raw"
           },
           aggs: range_agg
         }
@@ -117,10 +117,10 @@ class NumericField < Field
     }
 
     # Filter the query by segments if there are any specified
-    if !target_segment_ids.nil? && !target_segment_ids.empty?
+    if !target_ids.nil? && !target_ids.empty?
       search_hash[:query] = {
         terms: {
-          id: Employee.joins(:segments).where("segments.id" => target_segment_ids).ids
+          id: target_ids
         }
       }
     end
@@ -129,8 +129,8 @@ class NumericField < Field
     Employee.search(search_hash).response
   end
 
-  def highcharts_data(aggr_field: nil, target_segment_ids: nil)
-    data = elastic_stats(aggr_field: aggr_field, target_segment_ids: target_segment_ids)
+  def highcharts_data(aggr_field: nil, target_ids: nil)
+    data = elastic_stats(aggr_field: aggr_field, target_ids: target_ids)
 
     if aggr_field # If there is an aggregation
       series = data[:aggregations][:aggregation][:buckets].map do |aggr_bucket|

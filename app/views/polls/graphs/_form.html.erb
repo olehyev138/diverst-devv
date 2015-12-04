@@ -1,14 +1,16 @@
+<% puts @poll %>
+
 <div class="content__main">
-  <%= simple_form_for [@collection, @graph] do |f| %>
+  <%= simple_form_for [@poll, @graph] do |f| %>
     <div class="card">
       <div class="card__section card__section--border">
         <p class="field__hint">Choose the field that the graph will represent</p>
-        <%= f.association :field, label: false, collection: f.object.collection.graphable_fields(current_admin) %>
+        <%= f.association :field, label: false, collection: @poll.fields + current_admin.enterprise.fields %>
       </div>
 
       <div class="card__section card__section--border">
         <p class="field__hint">Choose a field to aggregate the data on (optional)</p>
-        <%= f.association :aggregation, label: false, collection: f.object.collection.graphable_fields(current_admin) %>
+        <%= f.association :aggregation, label: false, collection: @poll.fields + current_admin.enterprise.fields %>
       </div>
     </div>
 

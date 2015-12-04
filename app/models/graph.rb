@@ -9,9 +9,11 @@ class Graph < ActiveRecord::Base
   end
 
   def data
+    target_ids = self.collection.graphs_population.ids
+
     {
       type: field.type,
-      highcharts: field.highcharts_data(aggr_field: aggregation, target_segment_ids: self.collection.segments.ids),
+      highcharts: field.highcharts_data(aggr_field: aggregation, target_ids: target_ids),
       hasAggregation: !self.aggregation.nil?,
       title: self.title
     }

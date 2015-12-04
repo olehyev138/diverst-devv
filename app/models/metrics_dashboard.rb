@@ -13,7 +13,16 @@ class MetricsDashboard < ActiveRecord::Base
     end
   end
 
+  def graphs_population
+    target
+  end
+
   def percentage_of_total
     (target.count.to_f / enterprise.employees.count * 100).ceil
+  end
+
+  # Defines which fields will be usable when creating graphs
+  def graphable_fields(admin)
+    admin.enterprise.fields
   end
 end

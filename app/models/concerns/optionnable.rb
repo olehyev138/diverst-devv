@@ -41,12 +41,12 @@ module Optionnable
     answer_counts_formatted
   end
 
-  def elastic_stats(aggr_field: nil, target_segment_ids: nil)
+  def elastic_stats(aggr_field: nil, target_ids: Employee.ids)
     # Craft the aggregation query depending on if we have a field to aggregate on or not
     term_agg = {
       terms: {
         terms: {
-          field: "info.#{self.id}.raw",
+          field: "combined_info.#{self.id}.raw",
           min_doc_count: 0
         }
       }
@@ -58,7 +58,7 @@ module Optionnable
       aggs = {
         aggregation: {
           terms: {
-            field: "info.#{aggr_field.id}.raw",
+            field: "combined_info.#{aggr_field.id}.raw",
             min_doc_count: 0
           },
           aggs: term_agg
@@ -72,10 +72,10 @@ module Optionnable
     }
 
     # Filter the query by segments if there are any specified
-    if !target_segment_ids.nil? && !target_segment_ids.empty?
+    if !target_ids.nil? && !target_ids.empty?
       search_hash[:query] = {
         terms: {
-          id: Employee.joins(:segments).where("segments.id" => target_segment_ids).ids
+          id: target_ids
         }
       }
     end
@@ -85,8 +85,8 @@ module Optionnable
   end
 
   # Get highcharts-usable stats from the field by querying elasticsearch and formatting its response
-  def highcharts_data(aggr_field: nil, target_segment_ids: nil)
-    data = elastic_stats(aggr_field: aggr_field, target_segment_ids: target_segment_ids)
+  def highcharts_data(aggr_field: nil, target_ids: nil)
+    data = elastic_stats(aggr_field: aggr_field, target_ids: target_ids)
 
     if aggr_field # If there is an aggregation
       at_least_one_bucket_has_other = false
@@ -127,13 +127,15 @@ module Optionnable
 
       sum_other_doc_count = data[:aggregations][:aggregation][:sum_other_doc_count]
 
+      # Handle 'Other' bucket
       if sum_other_doc_count > 0
+        # Fetch all the missing buckets (exclude the ones that were already fetched)
         must_nots = []
 
         series.each do |serie|
           must_nots << {
             term: {
-              "info.#{aggr_field.id}.raw" => serie[:name]
+              "combined_info.#{aggr_field.id}.raw" => serie[:name]
             }
           }
         end
@@ -152,7 +154,7 @@ module Optionnable
           aggs: {
             aggregation: {
               terms: {
-                field: "info.#{self.id}.raw",
+                field: "combined_info.#{self.id}.raw",
                 min_doc_count: 0,
                 order: {
                   "_term" => "asc"

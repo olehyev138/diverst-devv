@@ -1,31 +1,31 @@
 class GraphsController < ApplicationController
   before_action :authenticate_admin!
-  before_action :set_metrics_dashboard, except: [:data, :show, :edit, :update, :destroy]
+  before_action :set_collection, except: [:data, :show, :edit, :update, :destroy]
   before_action :set_graph, except: [:index, :new, :create]
 
   layout 'global_settings'
 
   def new
-    @graph = @metrics_dashboard.graphs.new
+    @graph = @collection.graphs.new
   end
 
   def create
-    @graph = @metrics_dashboard.graphs.new(graph_params)
+    @graph = @collection.graphs.new(graph_params)
 
     if @graph.save
-      redirect_to @metrics_dashboard
+      redirect_to @collection
     else
       render :edit
     end
   end
 
   def index
-    @graphs = @metrics_dashboard.graphs
+    @graphs = @collection.graphs
   end
 
   def update
     if @graph.update(graph_params)
-      redirect_to @graph.metrics_dashboard
+      redirect_to @graph.collection
     else
       render :edit
     end
@@ -46,12 +46,16 @@ class GraphsController < ApplicationController
 
   protected
 
-  def set_metrics_dashboard
-    @metrics_dashboard = current_admin.enterprise.metrics_dashboards.find(params[:metric_dashboard_id])
+  def set_collection
+    if params[:metric_dashboard_id]
+      @collection = current_admin.enterprise.metric_dashboards.find(params[:metric_dashboard_id])
+    elsif params[:poll_id]
+      @collection = current_admin.enterprise.polls.find(params[:poll_id])
+    end
   end
 
   def set_graph
-    @graph = Graph.where(collection_id: current_admin.enterprise.metrics_dashboards.ids, collection_type: "MetricsDashboard").find(params[:id])
+    @graph = Graph.find(params[:id])
   end
 
   def graph_params

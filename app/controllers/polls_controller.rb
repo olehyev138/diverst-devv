@@ -14,7 +14,6 @@ class PollsController < ApplicationController
 
   def create
     @poll = current_admin.enterprise.polls.new(poll_params)
-    @poll.send_invitation_emails
 
     if @poll.save
       redirect_to action: :index

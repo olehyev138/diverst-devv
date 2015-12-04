@@ -29,6 +29,7 @@ class Employee < ActiveRecord::Base
 
   scope :for_segments, -> (segments) { joins(:segments).where("segments.id" => segments.map(&:id)) if segments.any? }
   scope :for_groups, -> (groups) { joins(:groups).where("groups.id" => groups.map(&:id)) if groups.any? }
+  scope :answered_poll, -> (poll) { joins(:poll_responses).where( poll_responses: { poll_id: poll.id } ) }
 
   def name
     "#{self.first_name} #{self.last_name}"
@@ -128,7 +129,7 @@ class Employee < ActiveRecord::Base
   def as_indexed_json(*)
     self.as_json({
       except: [:data],
-      methods: [:info]
+      methods: [:combined_info]
     })
   end
 
@@ -173,8 +174,17 @@ class Employee < ActiveRecord::Base
   end
 
   def password_required?
-    # !invitation_accepted_at.nil?
     false
+  end
+
+  def info_hash
+    JSON.parse self.data
+  end
+
+  # Returns a hash of all the user's fields combined with all their poll fields
+  def combined_info
+    polls_hash = self.poll_responses.map(&:info).reduce({}) { |a, b| a.merge(b) }
+    self.info_hash.merge(polls_hash) # We use info_hash instead of just info because merge accesses the hash using [], which is overriden in FieldData
   end
 
   protected
