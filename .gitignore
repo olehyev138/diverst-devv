@@ -29,3 +29,6 @@ vendor/assets/bower_components
 
 # Ignore paperclip uploads
 /public/system/**
+
+# Ignore RSpec status persistence
+spec/examples.txt
