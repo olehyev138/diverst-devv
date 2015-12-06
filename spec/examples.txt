@@ -1,0 +1,6 @@
+example_id                                 | status | run_time        |
+------------------------------------------ | ------ | --------------- |
+./spec/features/admin_logs_in_spec.rb[1:1] | passed | 0.41921 seconds |
+./spec/features/admin_logs_in_spec.rb[1:2] | passed | 0.2046 seconds  |
+./spec/model/event_spec.rb[1:1:1]          | passed | 1.14 seconds    |
+./spec/model/event_spec.rb[1:1:2]          | passed | 1.13 seconds    |
