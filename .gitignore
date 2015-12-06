@@ -32,3 +32,6 @@ vendor/assets/bower_components
 
 # Ignore RSpec status persistence
 spec/examples.txt
+
+# Ignore binstubs
+bin

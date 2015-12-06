@@ -4,8 +4,7 @@ class Graph < ActiveRecord::Base
   belongs_to :aggregation, class_name: "Field"
 
   def title
-    return field.title if aggregation.nil?
-    "#{aggregation.title} by #{field.title}".gsub('?', '')
+    field.title
   end
 
   def data

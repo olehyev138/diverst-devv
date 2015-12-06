@@ -48,7 +48,8 @@
                 <%= link_to "Edit", edit_graph_path(graph) %> -
                 <%= link_to "Remove", graph_path(graph), method: :delete, class: "error" %>
               </div>
-              <h4><%= graph.title %></h4>
+              <h4 class="no-margin"><%= truncate(graph.title, length: 50) %></h4>
+              <% if !graph.aggregation.nil? %><small><%= aggregation_text(graph) %></small><% end %>
               <div class="graph" data-graph-id="<%= graph.id %>"></div>
             </div>
           </div>

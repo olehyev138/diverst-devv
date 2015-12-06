@@ -62,3 +62,5 @@ group :development, :test do
   gem 'database_cleaner'
   # gem 'pry-rails'
 end
+
+gem 'spring-commands-rspec', group: :development

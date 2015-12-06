@@ -52,4 +52,12 @@ FactoryGirl.define do
     association :group, factory: :group_with_employees
   end
 
+  factory :campaign do
+    title "My Campaign"
+    description "Awesome description"
+    enterprise
+    start DateTime.new(2015, 11, 10)
+    self.end DateTime.new(2015, 11, 13) # We specify self here since end is a reserved keyword
+  end
+
 end

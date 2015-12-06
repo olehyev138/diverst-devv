@@ -22,36 +22,30 @@ RSpec.describe Event do
   end
 
   describe "scopes" do
-    current_datetime = DateTime.new(2015, 11, 10, 13, 00)
     let(:past_event) { create(:event, start: DateTime.new(2015, 11, 9, 12, 30), end: DateTime.new(2015, 11, 9, 2, 30)) }
     let(:ongoing_event) { create(:event, start: DateTime.new(2015, 11, 10, 12, 30), end: DateTime.new(2015, 11, 10, 13, 30)) }
     let(:upcoming_event) { create(:event, start: DateTime.new(2015, 11, 11, 12, 30), end: DateTime.new(2015, 11, 11, 13, 30)) }
 
     before do
+      current_datetime = DateTime.new(2015, 11, 10, 13, 00)
       allow(DateTime).to receive(:now).and_return(current_datetime)
     end
 
-    context ".past" do
-      subject { Event.past }
-
+    describe ".past" do
       it "only include the past event" do
-        expect(subject).to eq [past_event]
+        expect(Event.past).to eq [past_event]
       end
     end
 
-    context ".ongoing" do
-      subject { Event.ongoing }
-
+    describe ".ongoing" do
       it "only include the ongoing event" do
-        expect(subject).to eq [ongoing_event]
+        expect(Event.ongoing).to eq [ongoing_event]
       end
     end
 
-    context ".upcoming" do
-      subject { Event.upcoming }
-
+    describe ".upcoming" do
       it "only include the upcoming event" do
-        expect(subject).to eq [upcoming_event]
+        expect(Event.upcoming).to eq [upcoming_event]
       end
     end
   end
