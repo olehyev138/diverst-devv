@@ -33,7 +33,9 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :resources
+    scope module: :enterprises do
+      resources :resources
+    end
 
     member do
       get 'edit_auth'

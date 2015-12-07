@@ -4,14 +4,18 @@ module IsResources
   included do
     before_action :set_container
     before_action :set_resource, except: [:index, :new, :create]
+
+    prepend_view_path "app/views/shared/resources"
   end
 
   def index
     @resources = @container.resources
+    render "/index"
   end
 
   def new
     @resource = @container.resources.new
+    render "/new"
   end
 
   def create
@@ -20,7 +24,7 @@ module IsResources
     if @resource.save
       redirect_to action: :index
     else
-      render :edit
+      render "/edit"
     end
   end
 
@@ -35,7 +39,7 @@ module IsResources
     if @resource.update(resource_params)
       redirect_to action: :index
     else
-      render :edit
+      render "/edit"
     end
   end
 

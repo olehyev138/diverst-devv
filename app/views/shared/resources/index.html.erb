@@ -1,6 +1,6 @@
 <div class="content__header">
   <h1>Resources</h1>
-  <%= link_to "+ Add resource", new_group_resource_path, class: "btn btn--primary" if is_admin? %>
+  <%= link_to "+ Add resource", new_enterprise_resource_path, class: "btn btn--primary" if is_admin? %>
 </div>
 
 <div class="content__main">
@@ -18,13 +18,13 @@
         <tbody>
           <% @resources.each do |resource| %>
             <tr>
-              <td><%= link_to resource.title, group_resource_path(@group, resource) %></td>
+              <td><%= link_to resource.title, [@container, resource] %></td>
               <td><%= resource.created_at.to_s :reversed_slashes %></td>
               <td>PDF</td>
               <% if is_admin? %>
                 <td>
-                  <%= link_to "Edit", edit_group_resource_path(@group, resource) %> -
-                  <%= link_to "Delete", group_resource_path(@group, resource), method: :delete, class: "error", data: { confirm: "Are you sure?" } %>
+                  <%= link_to "Edit", polymorphic_path([@container, resource], action: "edit") %> -
+                  <%= link_to "Delete", [@container, resource], method: :delete, class: "error", data: { confirm: "Are you sure?" } %>
                 </td>
               <% end %>
             </tr>

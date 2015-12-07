@@ -15,6 +15,7 @@ class Enterprise < ActiveRecord::Base
   has_many :questions, through: :campaigns
   has_many :answers, through: :questions
   has_many :answer_comments, through: :answers
+  has_many :resources, as: :container
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :mobile_fields, reject_if: :all_blank, allow_destroy: true
