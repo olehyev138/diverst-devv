@@ -1,3 +1,5 @@
+require "rails_helper"
+
 RSpec.describe Event do
   describe "#time_string" do
     context "when the event occurs on a single day" do

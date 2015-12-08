@@ -32,6 +32,7 @@ class Employee < ActiveRecord::Base
   scope :for_segments, -> (segments) { joins(:segments).where("segments.id" => segments.map(&:id)) if segments.any? }
   scope :for_groups, -> (groups) { joins(:groups).where("groups.id" => groups.map(&:id)) if groups.any? }
   scope :answered_poll, -> (poll) { joins(:poll_responses).where( poll_responses: { poll_id: poll.id } ) }
+  scope :top_participants, -> (n) { order(participation_score_7days: :desc).limit(n) }
 
   def name
     "#{self.first_name} #{self.last_name}"
@@ -113,14 +114,14 @@ class Employee < ActiveRecord::Base
     part_of_segment
   end
 
-  def participation_score
+  def participation_score(from:, to: Time.now)
     score = 0
 
-    score += 5 * self.poll_responses.count
-    score += 5 * self.answer_upvotes.count
-    score += 3 * self.answer_comments.count
-    score += 3 * self.enterprise.answer_upvotes.where(answer: self.answers).count
-    score += 1 * self.answer_upvotes.count
+    score += 5 * self.poll_responses.where("created_at > ?", from).where("created_at < ?", to).count
+    score += 5 * self.answers.where("created_at > ?", from).where("created_at < ?", to).count
+    score += 3 * self.enterprise.answer_upvotes.where(answer: self.answers).where("answers.created_at > ?", from).where("answers.created_at < ?", to).count
+    score += 3 * self.answer_comments.where("created_at > ?", from).where("created_at < ?", to).count
+    score += 1 * self.answer_upvotes.where("created_at > ?", from).where("created_at < ?", to).count # 1 point per upvote given
 
     score
   end

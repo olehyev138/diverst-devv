@@ -91,13 +91,13 @@ FactoryGirl.define do
     start DateTime.new(2015, 11, 10)
     self.end DateTime.new(2015, 11, 13) # We specify self here since end is a reserved keyword
 
-    factory :campaign_with_questions do
+    factory :campaign_filled do
       transient do
-        question_count 10
+        question_count 2
       end
 
       after(:create) do |campaign, evaluator|
-        create_list(:question_with_answers, evaluator.question_count, campaign: campaign)
+        create_list(:question_filled, evaluator.question_count, campaign: campaign)
       end
     end
   end
@@ -107,13 +107,13 @@ FactoryGirl.define do
     description "This is a question."
     campaign
 
-    factory :question_with_answers do
+    factory :question_filled do
       transient do
-        answer_count 10
+        answer_count 2
       end
 
       after(:create) do |question, evaluator|
-        create_list(:answer, evaluator.answer_count, question: question)
+        create_list(:answer_filled, evaluator.answer_count, question: question)
       end
     end
   end
@@ -123,6 +123,22 @@ FactoryGirl.define do
     question
     association :author, factory: :employee
     chosen false
+
+    trait :upvoted_2_times do
+      after(:create) do |answer, evaluator|
+        evaluator.votes create_list(:answer_upvote, 2, answer: answer)
+      end
+    end
+
+    factory :answer_filled do
+      transient do
+        comment_count 2
+      end
+
+      after(:create) do |answer, evaluator|
+        evaluator.comments create_list(:answer_comment, evaluator.comment_count, answer: answer)
+      end
+    end
   end
 
   factory :answer_comment do

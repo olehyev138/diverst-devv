@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151204042827) do
+ActiveRecord::Schema.define(version: 20151208222133) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -137,6 +137,7 @@ ActiveRecord::Schema.define(version: 20151204042827) do
     t.text     "tokens",                      limit: 65535
     t.string   "firebase_token",              limit: 255
     t.datetime "firebase_token_generated_at"
+    t.integer  "participation_score_7days",   limit: 4
   end
 
   add_index "employees", ["email"], name: "index_employees_on_email", unique: true, using: :btree

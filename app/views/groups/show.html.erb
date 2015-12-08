@@ -113,15 +113,19 @@
     <div class="col sm-12 md-3">
       <div class="card card--secondary">
         <div class="card__section">
-          <h4>Top Performers in this ERG</h4>
+          <h4>Top Performers this week</h4>
           <ol>
-            <% @group.members.limit(5).each do |member| %>
-              <li><%= link_to member.name, member %></li>
+            <% @group.members.top_participants(10).each do |member| %>
+              <% if member == current_user %>
+                <li><strong><%= member.name %> (<%= member.participation_score_7days %>)</strong></li>
+              <% else %>
+                <li><%= link_to member.name, member %> (<%= member.participation_score_7days %>)</li>
+              <% end %>
             <% end %>
           </ol>
         </div>
         <div class="card__section">
-          <h4>Top ERGs</h4>
+          <h4>Top ERGs this week</h4>
           <ol>
             <li><a href="#">PRIDE</a></li>
             <li><a href="#">AALF</a></li>
