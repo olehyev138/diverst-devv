@@ -3,9 +3,11 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     begin
+      puts "START"
       DatabaseCleaner.start
       FactoryGirl.lint
     ensure
+      puts "CLEAN"
       DatabaseCleaner.clean
     end
   end

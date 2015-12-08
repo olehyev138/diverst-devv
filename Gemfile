@@ -18,7 +18,7 @@ gem 'simple_form'
 gem 'rails_12factor', group: :production
 gem 'cocoon'
 gem 'ruby-saml', '~> 1.0.0'
-gem 'sidekiq'
+gem 'sidekiq', '< 5'
 gem 'devise-async'
 gem 'sinatra', :require => nil # Required for sidekiq's dashboard
 gem 'newrelic_rpm'

@@ -17,7 +17,9 @@ class Employee < ActiveRecord::Base
   has_many :groups, through: :employee_groups
   has_many :topic_feedbacks
   has_many :poll_responses
-  has_many :answers, inverse_of: :author, foreign_key: "author_id"
+  has_many :answers, inverse_of: :author, foreign_key: :author_id
+  has_many :answer_upvotes, foreign_key: :author_id
+  has_many :answer_comments, foreign_key: :author_id
   has_many :invitations, class_name: "CampaignInvitation"
   has_many :campaigns, through: :invitations
   has_many :news_links, through: :groups
@@ -109,6 +111,18 @@ class Employee < ActiveRecord::Base
     end
 
     part_of_segment
+  end
+
+  def participation_score
+    score = 0
+
+    score += 5 * self.poll_responses.count
+    score += 5 * self.answer_upvotes.count
+    score += 3 * self.answer_comments.count
+    score += 3 * self.enterprise.answer_upvotes.where(answer: self.answers).count
+    score += 1 * self.answer_upvotes.count
+
+    score
   end
 
   # Sends a push notification to all of the user's devices
