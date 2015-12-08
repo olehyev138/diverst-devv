@@ -60,4 +60,12 @@ FactoryGirl.define do
     self.end DateTime.new(2015, 11, 13) # We specify self here since end is a reserved keyword
   end
 
+  factory :resource do
+    title "My Resource"
+    # associaion :container, factory: :enterprise
+    file_file_name { 'test.pdf' }
+    file_content_type { 'application/pdf' }
+    file_file_size { 1024 }
+  end
+
 end

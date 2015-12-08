@@ -1,6 +1,6 @@
 <div class="content__header">
   <h1>Resources</h1>
-  <%= link_to "+ Add resource", new_enterprise_resource_path, class: "btn btn--primary" if is_admin? %>
+  <%= link_to "+ Add resource", polymorphic_path([@container, :resource], action: "new"), class: "btn btn--primary" if is_admin? %>
 </div>
 
 <div class="content__main">
@@ -18,9 +18,9 @@
         <tbody>
           <% @resources.each do |resource| %>
             <tr>
-              <td><%= link_to resource.title, [@container, resource] %></td>
+              <td><%= link_to resource.title, resource.file.url %></td>
               <td><%= resource.created_at.to_s :reversed_slashes %></td>
-              <td>PDF</td>
+              <td><%= resource.file_extension %></td>
               <% if is_admin? %>
                 <td>
                   <%= link_to "Edit", polymorphic_path([@container, resource], action: "edit") %> -
