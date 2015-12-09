@@ -1,6 +1,6 @@
 class PollsController < ApplicationController
   before_action :authenticate_admin!
-  before_action :set_poll, only: [:edit, :update, :destroy, :show]
+  before_action :set_poll, only: [:edit, :update, :destroy, :show, :export_csv]
 
   layout "market_scope"
 
@@ -37,6 +37,10 @@ class PollsController < ApplicationController
   def destroy
     @poll.destroy
     redirect_to action: :index
+  end
+
+  def export_csv
+    send_data @poll.responses_csv, filename: "#{@poll.title}_responses.csv"
   end
 
   protected

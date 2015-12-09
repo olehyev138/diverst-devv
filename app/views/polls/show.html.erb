@@ -1,6 +1,13 @@
 <div class="content__header">
   <h1><%= @poll.title %></h1>
-  <%= link_to "New Graph", new_poll_graph_path(@poll), class: "btn btn--primary" %>
+  <div class="flex-row flex-row--middle">
+    <div class="flex-row__cell">
+      <%= link_to "Export CSV", export_csv_poll_path(@poll), class: "btn btn--tertiary" %>
+    </div>
+    <div class="flex-row__cell">
+      <%= link_to "New Graph", new_poll_graph_path(@poll), class: "btn btn--primary" %>
+    </div>
+  </div>
 </div>
 
 <div class="content__main">

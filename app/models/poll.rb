@@ -36,6 +36,22 @@ class Poll < ActiveRecord::Base
     admin.enterprise.fields + self.fields
   end
 
+  def responses_csv
+    CSV.generate do |csv|
+      csv << ["id"].concat(fields.map(&:title))
+
+      self.responses.order(created_at: :desc).each do |response|
+        response_column = [response.id]
+
+        self.fields.each do |field|
+          response_column << field.csv_value(response.info[field])
+        end
+
+        csv << response_column
+      end
+    end
+  end
+
   protected
 
   def send_invitation_emails

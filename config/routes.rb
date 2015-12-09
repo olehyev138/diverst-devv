@@ -70,6 +70,10 @@ Rails.application.routes.draw do
   end
 
   resources :polls do
+    member do
+      get 'export_csv'
+    end
+
     resources :poll_responses, path: "responses" do
       member do
         get 'thank_you'
