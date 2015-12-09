@@ -1,5 +1,6 @@
 <div class="content__header">
-  <h1><%= @segment.name %></h1>  
+  <h1><%= @segment.name %></h1>
+  <%= link_to "Export members", export_csv_segment_path(@segment), class: "btn btn--secondary" %>
 </div>
 
 <div class="content__main">

@@ -95,7 +95,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :segments
+  resources :segments do
+    member do
+      get 'export_csv'
+    end
+  end
 
   resources :topics do
     resources :topic_feedbacks, path: "feedbacks" do

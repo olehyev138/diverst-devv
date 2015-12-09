@@ -1,6 +1,6 @@
 class SegmentsController < ApplicationController
   before_action :authenticate_admin!
-  before_action :set_segment, only: [:edit, :update, :destroy, :show]
+  before_action :set_segment, only: [:edit, :update, :destroy, :show, :export_csv]
   skip_before_action :verify_authenticity_token, only: [:create]
 
   layout "global_settings"
@@ -34,6 +34,11 @@ class SegmentsController < ApplicationController
   def destroy
     @segment.destroy
     redirect_to action: :index
+  end
+
+  def export_csv
+    employees_csv = Employee.to_csv employees: @segment.members, fields: @segment.enterprise.fields
+    send_data employees_csv, filename: "#{@segment.name}.csv"
   end
 
   protected
