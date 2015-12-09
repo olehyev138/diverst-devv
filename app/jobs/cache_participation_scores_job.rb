@@ -5,5 +5,9 @@ class CacheParticipationScoresJob < ActiveJob::Base
     Employee.all.each do |employee|
       employee.update(participation_score_7days: employee.participation_score(from: 1.week.ago))
     end
+
+    Group.all.each do |group|
+      group.update(participation_score_7days: group.participation_score(from: 1.week.ago))
+    end
   end
 end

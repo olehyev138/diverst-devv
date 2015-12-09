@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151208222133) do
+ActiveRecord::Schema.define(version: 20151209084124) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -152,14 +152,15 @@ ActiveRecord::Schema.define(version: 20151208222133) do
   end
 
   create_table "enterprises", force: :cascade do |t|
-    t.string   "name",               limit: 255
-    t.string   "idp_entity_id",      limit: 255
-    t.string   "idp_sso_target_url", limit: 255
-    t.string   "idp_slo_target_url", limit: 255
-    t.text     "idp_cert",           limit: 65535
-    t.boolean  "has_enabled_saml",   limit: 1
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
+    t.string   "name",                      limit: 255
+    t.string   "idp_entity_id",             limit: 255
+    t.string   "idp_sso_target_url",        limit: 255
+    t.string   "idp_slo_target_url",        limit: 255
+    t.text     "idp_cert",                  limit: 65535
+    t.boolean  "has_enabled_saml",          limit: 1
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.integer  "participation_score_7days", limit: 4
   end
 
   create_table "events", force: :cascade do |t|
@@ -226,16 +227,17 @@ ActiveRecord::Schema.define(version: 20151208222133) do
   end
 
   create_table "groups", force: :cascade do |t|
-    t.integer  "enterprise_id",     limit: 4
-    t.string   "name",              limit: 255
-    t.text     "description",       limit: 65535
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
-    t.string   "logo_file_name",    limit: 255
-    t.string   "logo_content_type", limit: 255
-    t.integer  "logo_file_size",    limit: 4
+    t.integer  "enterprise_id",             limit: 4
+    t.string   "name",                      limit: 255
+    t.text     "description",               limit: 65535
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.string   "logo_file_name",            limit: 255
+    t.string   "logo_content_type",         limit: 255
+    t.integer  "logo_file_size",            limit: 4
     t.datetime "logo_updated_at"
-    t.boolean  "send_invitations",  limit: 1
+    t.boolean  "send_invitations",          limit: 1
+    t.integer  "participation_score_7days", limit: 4
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|

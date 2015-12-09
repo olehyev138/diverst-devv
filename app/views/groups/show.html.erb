@@ -127,11 +127,13 @@
         <div class="card__section">
           <h4>Top ERGs this week</h4>
           <ol>
-            <li><a href="#">PRIDE</a></li>
-            <li><a href="#">AALF</a></li>
-            <li><strong>WiNG</strong></li>
-            <li><a href="#">SOAR</a></li>
-            <li><a href="#">PANG</a></li>
+            <% @group.enterprise.groups.top_participants(10).each do |group| %>
+              <% if group == @group %>
+                <li><strong><%= group.name %> (<%= group.participation_score_7days %>)</strong></li>
+              <% else %>
+                <li><%= link_to group.name, group %> (<%= group.participation_score_7days %>)</li>
+              <% end %>
+            <% end %>
           </ol>
         </div>
       </div>
