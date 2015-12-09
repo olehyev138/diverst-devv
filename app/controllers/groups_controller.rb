@@ -1,10 +1,12 @@
 class GroupsController < ApplicationController
   before_action :authenticate_admin!, except: [:show]
   before_action :authenticate_user!, only: [:show]
-  before_action :set_group, only: [:edit, :update, :destroy, :show, :import_csv, :sample_csv, :parse_csv]
+  before_action :set_group, except: [:index, :new, :create]
   skip_before_action :verify_authenticity_token, only: [:create]
 
   layout :resolve_layout
+
+  helper ApplicationHelper
 
   def index
     @groups = current_admin.enterprise.groups
@@ -81,6 +83,11 @@ class GroupsController < ApplicationController
     end
 
     @group.save
+  end
+
+  def export_csv
+    employees_csv = Employee.to_csv employees: @group.members, fields: @group.enterprise.fields
+    send_data employees_csv, filename: "#{@group.file_safe_name}_employees.csv"
   end
 
   protected

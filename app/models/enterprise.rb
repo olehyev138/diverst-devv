@@ -53,19 +53,7 @@ class Enterprise < ActiveRecord::Base
     GenerateEnterpriseMatchesJob.perform_later self
   end
 
-  def employees_csv(nb_rows)
-    CSV.generate do |csv|
-      csv << ["First name", "Last name", "Email"].concat(self.fields.map(&:title))
-
-      self.employees.order(created_at: :desc).limit(nb_rows).each do |employee|
-        employee_columns = [employee.first_name, employee.last_name, employee.email]
-
-        self.fields.each do |field|
-          employee_columns << field.csv_value(employee.info[field])
-        end
-
-        csv << employee_columns
-      end
-    end
+  def employees_csv
+    Employee.to_csv(employees: self.employees, fields: self.fields, nb_rows: nb_rows)
   end
 end

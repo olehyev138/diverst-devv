@@ -35,6 +35,10 @@ class Group < ActiveRecord::Base
     score
   end
 
+  def file_safe_name
+    self.name.gsub!(/[^0-9A-Za-z.\-]/, '_')
+  end
+
   protected
 
   def send_invitation_emails

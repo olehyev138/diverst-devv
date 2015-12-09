@@ -13,7 +13,8 @@
           </div>
           <div class="flex-row__cell flex-row__cell--grow"><%= link_to "#{group.name}", group_path(group), class: "accent" %> - <%= pluralize group.members.count, "member" %></div>
           <div class="flex-row__cell link-group">
-            <%= link_to "Import CSV", import_csv_group_path(group), class: "muted" %>
+            <%= link_to "Export", export_csv_group_path(group), class: "muted" %>
+            <%= link_to "Import", import_csv_group_path(group), class: "muted" %>
             <%= link_to "Edit", edit_group_path(group), class: "muted" %>
             <%= link_to "Delete", group_path(group), method: :delete, class: "error" %>
           </div>

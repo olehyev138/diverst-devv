@@ -56,6 +56,7 @@ Rails.application.routes.draw do
     end
 
     member do
+      get 'export_csv'
       get 'import_csv'
       get 'sample_csv'
       post 'parse_csv'

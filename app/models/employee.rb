@@ -202,6 +202,22 @@ class Employee < ActiveRecord::Base
     self.info_hash.merge(polls_hash) # We use info_hash instead of just info because merge accesses the hash using [], which is overriden in FieldData
   end
 
+  def self.to_csv(employees:, fields:, nb_rows: nil)
+    CSV.generate do |csv|
+      csv << ["id", "First name", "Last name", "Email"].concat(fields.map(&:title))
+
+      employees.order(created_at: :desc).limit(nb_rows).each do |employee|
+        employee_columns = [employee.id, employee.first_name, employee.last_name, employee.email]
+
+        fields.each do |field|
+          employee_columns << field.csv_value(employee.info[field])
+        end
+
+        csv << employee_columns
+      end
+    end
+  end
+
   protected
 
   # Generate a random password if the user is using SAML
