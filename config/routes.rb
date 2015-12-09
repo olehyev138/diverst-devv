@@ -17,6 +17,7 @@ Rails.application.routes.draw do
 
   resources :employees do
     collection do
+      get 'export_csv'
       get 'import_csv'
       get 'sample_csv'
       post 'parse_csv'

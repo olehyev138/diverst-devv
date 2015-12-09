@@ -2,7 +2,10 @@
   <h1>Employees</h1>
   <div class="flex-row flex-row--middle">
     <div class="flex-row__cell">
-      <%= link_to "Import via CSV", import_csv_employees_path, class: "btn btn--secondary" %>
+      <%= link_to "Export CSV", export_csv_employees_path, class: "btn btn--secondary" %>
+    </div>
+    <div class="flex-row__cell">
+      <%= link_to "Import CSV", import_csv_employees_path, class: "btn btn--secondary" %>
     </div>
     <div class="flex-row__cell">
       <%= link_to "Add an employee", new_employee_invitation_path, class: "btn btn--primary" %>

@@ -30,21 +30,7 @@ class EmployeesController < ApplicationController
   end
 
   def sample_csv
-    csv_string = CSV.generate do |csv|
-      csv << ["First name", "Last name", "Email"].concat(current_admin.enterprise.fields.map(&:title))
-
-      current_admin.enterprise.employees.order(created_at: :desc).limit(5).each do |employee|
-        employee_columns = [employee.first_name, employee.last_name, employee.email]
-
-        current_admin.enterprise.fields.each do |field|
-          employee_columns << field.csv_value(employee.info[field])
-        end
-
-        csv << employee_columns
-      end
-    end
-
-    send_data csv_string, filename: "diverst_import.csv"
+    send_data current_admin.enterprise.employees_csv(5), filename: "diverst_import.csv"
   end
 
   def parse_csv
@@ -76,6 +62,10 @@ class EmployeesController < ApplicationController
         }
       end
     end
+  end
+
+  def export_csv
+    send_data current_admin.enterprise.employees_csv(nil), filename: "diverst_employees.csv"
   end
 
   protected
