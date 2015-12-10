@@ -9,6 +9,12 @@ Rails.application.routes.draw do
     mount_devise_token_auth_for 'Employee', at: 'auth'
   end
 
+  namespace :auth do
+    namespace :callbacks do
+      post 'yammer', to: 'yammer#callback'
+    end
+  end
+
   resources :devices do
     member do
       post 'test_notif'
@@ -47,7 +53,7 @@ Rails.application.routes.draw do
   end
 
   resources :groups do
-    scope module: :groups do
+    namespace :groups do
       resources :group_members, path: "members"
       resources :group_messages, path: "messages"
       resources :events

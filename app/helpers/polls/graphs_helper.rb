@@ -1,2 +1,0 @@
-module Polls::GraphsHelper
-end

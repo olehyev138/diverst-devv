@@ -1,2 +1,0 @@
-module Employee::EventsHelper
-end
