@@ -39,6 +39,14 @@ class Group < ActiveRecord::Base
     self.name.gsub!(/[^0-9A-Za-z.\-]/, '_')
   end
 
+  def self.create_events
+    Group.all.each do |group|
+      (20 - group.id).times do
+        group.events << Event.create(title: "Test Event", start: 2.days.from_now, end: 2.days.from_now + 2.hours, description: "This is a placeholder event.")
+      end
+    end
+  end
+
   protected
 
   def send_invitation_emails
