@@ -10,8 +10,10 @@ Rails.application.routes.draw do
   end
 
   namespace :auth do
-    namespace :callbacks do
-      post 'yammer', to: 'yammer#callback'
+    scope :yammer do
+      get 'login', to: 'yammer#login'
+      get 'callback', to: 'yammer#callback'
+      get 'callback2', to: 'yammer#callback2'
     end
   end
 

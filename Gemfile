@@ -15,7 +15,6 @@ gem 'figaro'
 gem 'devise'
 gem 'devise_invitable'
 gem 'simple_form'
-gem 'rails_12factor', group: :production
 gem 'cocoon'
 gem 'ruby-saml', '~> 1.0.0'
 gem 'sidekiq', '< 5'
@@ -47,6 +46,7 @@ gem 'elasticsearch-rails', '~> 0.1'
 gem 'sprockets', '>= 3.0.0'
 gem 'sprockets-es6'
 gem 'awesome_print'
+gem 'yam'
 
 group :development, :test do
   gem 'spring' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
@@ -61,6 +61,15 @@ group :development, :test do
   gem 'poltergeist'
   gem 'database_cleaner'
   # gem 'pry-rails'
+end
+
+group :development do
+  gem 'capistrano'
+  gem 'capistrano3-puma'
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rvm'
+  gem 'capistrano-bower'
 end
 
 gem 'spring-commands-rspec', group: :development
