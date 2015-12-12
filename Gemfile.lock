@@ -353,6 +353,9 @@ GEM
       rspec-mocks (~> 3.4.0)
       rspec-support (~> 3.4.0)
     rspec-support (3.4.1)
+    rspec_junit_formatter (0.2.2)
+      builder (< 4)
+      rspec-core (>= 2, < 4, != 2.12.0)
     ruby-saml (1.0.0)
       nokogiri (>= 1.5.10)
       uuid (~> 2.3)
@@ -492,6 +495,7 @@ DEPENDENCIES
   rails-patch-json-encode
   rb-readline
   rspec-rails (~> 3.0)
+  rspec_junit_formatter (= 0.2.2)
   ruby-saml (~> 1.0.0)
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)

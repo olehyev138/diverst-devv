@@ -117,11 +117,11 @@ class Employee < ActiveRecord::Base
   def participation_score(from:, to: Time.now)
     score = 0
 
-    score += 5 * self.poll_responses.where("created_at > ?", from).where("created_at < ?", to).count
-    score += 5 * self.answers.where("created_at > ?", from).where("created_at < ?", to).count
-    score += 3 * self.enterprise.answer_upvotes.where(answer: self.answers).where("answers.created_at > ?", from).where("answers.created_at < ?", to).count
-    score += 3 * self.answer_comments.where("created_at > ?", from).where("created_at < ?", to).count
-    score += 1 * self.answer_upvotes.where("created_at > ?", from).where("created_at < ?", to).count # 1 point per upvote given
+    score += 5 * self.poll_responses.where("created_at > ?", from).where("created_at <= ?", to).count
+    score += 5 * self.answers.where("created_at > ?", from).where("created_at <= ?", to).count
+    score += 3 * self.enterprise.answer_upvotes.where(answer: self.answers).where("answers.created_at > ?", from).where("answers.created_at <= ?", to).count
+    score += 3 * self.answer_comments.where("created_at > ?", from).where("created_at <= ?", to).count
+    score += 1 * self.answer_upvotes.where("created_at > ?", from).where("created_at <= ?", to).count # 1 point per upvote given
 
     score
   end
@@ -169,6 +169,18 @@ class Employee < ActiveRecord::Base
         properties: {}
       }
     }
+  end
+
+  def self.reset_elasticsearch
+    Employee.__elasticsearch__.client.indices.create(
+      index: Employee.index_name,
+      body: {
+        settings: Employee.settings.to_hash,
+        mappings: Employee.mappingue.to_hash
+      }
+    )
+
+    Employee.import
   end
 
   def self.from_csv_row(row, enterprise:)
