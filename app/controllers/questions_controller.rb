@@ -29,7 +29,7 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    @question.solved_at = Time.zone.now if question_params[:conclusion].present?
+    @question.solved_at = Time.now if question_params[:conclusion].present?
 
     if @question.update(question_params)
       redirect_to @question

@@ -44,7 +44,7 @@ class Match < ActiveRecord::Base
 
   def update_score
     self.score = self.user1.match_score_with(self.user2)
-    self.score_calculated_at = Time.zone.now
+    self.score_calculated_at = Time.now
   end
 
   def set_status(employee:, status:)
@@ -153,7 +153,7 @@ class Match < ActiveRecord::Base
   end
 
   def set_accept_date
-    Time.zone.now if both_accepted? && both_accepted_at.nil?
+    Time.now if both_accepted? && both_accepted_at.nil?
   end
 
   # Picks a random topic that hasn't been answered by neither of the match's users
