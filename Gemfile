@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.2.2'
+ruby '2.2.3'
 
 gem 'rails', '4.2.1'
 gem 'mysql2', '~> 0.3.18'
@@ -70,6 +70,7 @@ group :development do
   gem 'capistrano-bundler', require: false
   gem 'capistrano-rvm'
   gem 'capistrano-bower'
+  gem 'capistrano-rails-console'
 end
 
 gem 'spring-commands-rspec', group: :development
