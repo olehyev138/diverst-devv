@@ -6,6 +6,7 @@
   <%= active_link_to "Metrics", metrics_dashboards_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <%= active_link_to "Fields", edit_fields_enterprise_path(current_admin.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <%= active_link_to "Resources", enterprise_resources_path(current_admin.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to "Integrations", enterprise_integrations_path(current_admin.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
 <% end %>
 
 <%= render template: "layouts/dashboard" %>

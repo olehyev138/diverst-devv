@@ -482,6 +482,7 @@ DEPENDENCIES
   gcm
   guard-livereload (~> 2.4)
   houston
+  httparty (~> 0.13)
   jquery-datatables-rails
   jquery-rails
   kaminari

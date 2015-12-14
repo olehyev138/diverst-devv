@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151209084124) do
+ActiveRecord::Schema.define(version: 20151214074020) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -160,6 +160,7 @@ ActiveRecord::Schema.define(version: 20151209084124) do
     t.boolean  "has_enabled_saml",   limit: 1
     t.datetime "created_at",                       null: false
     t.datetime "updated_at",                       null: false
+    t.string   "yammer_token",       limit: 255
   end
 
   create_table "events", force: :cascade do |t|

@@ -95,12 +95,6 @@ class Employee < ActiveRecord::Base
     self.active_matches.order(score: :desc).limit(n)
   end
 
-  def self.update_match_scores
-    self.enterprise.employees.where.not(id: self.id).each do |other_employee|
-      CalculateMatchScoreJob.perform_later(self, other_employee, skip_existing: false)
-    end
-  end
-
   def is_part_of_segment?(segment)
     part_of_segment = true
 
@@ -183,6 +177,21 @@ class Employee < ActiveRecord::Base
     )
 
     Employee.import
+  end
+
+  def self.update_match_scores
+    self.enterprise.employees.where.not(id: self.id).each do |other_employee|
+      CalculateMatchScoreJob.perform_later(self, other_employee, skip_existing: false)
+    end
+  end
+
+  def self.from_yammer(yammer_user)
+    Employee.new(
+      first_name: yammer_user["first_name"],
+      last_name: yammer_user["last_name"],
+      email: yammer_user["contact"]["email_addresses"][0]["address"],
+      auth_source: "yammer",
+    )
   end
 
   def self.from_csv_row(row, enterprise:)

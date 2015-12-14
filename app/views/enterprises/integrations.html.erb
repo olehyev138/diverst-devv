@@ -1,0 +1,30 @@
+<div class="content__header">
+  <h1>Integrations</h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <table class="table--has-border">
+        <thead>
+          <th>Integration name</th>
+          <th>Options</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Yammer</td>
+            <td>
+              <% if current_admin.enterprise.yammer_token.blank? %>
+                <%= link_to "Connect", auth_yammer_login_path %>
+              <% else %>
+                Connected
+              <% end %>
+              -
+              <%= link_to "Configure" %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

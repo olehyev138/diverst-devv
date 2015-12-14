@@ -10,10 +10,9 @@ Rails.application.routes.draw do
   end
 
   namespace :auth do
-    scope :yammer do
+    scope :yammer, as: :yammer do
       get 'login', to: 'yammer#login'
       get 'callback', to: 'yammer#callback'
-      get 'callback2', to: 'yammer#callback2'
     end
   end
 
@@ -52,6 +51,8 @@ Rails.application.routes.draw do
       get 'edit_algo'
       get 'edit_mobile_fields'
     end
+
+    get 'integrations'
   end
 
   resources :groups do
