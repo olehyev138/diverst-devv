@@ -47,8 +47,8 @@ class GraphsController < ApplicationController
   protected
 
   def set_collection
-    if params[:metric_dashboard_id]
-      @collection = current_admin.enterprise.metric_dashboards.find(params[:metric_dashboard_id])
+    if params[:metrics_dashboard_id]
+      @collection = current_admin.enterprise.metrics_dashboards.find(params[:metrics_dashboard_id])
     elsif params[:poll_id]
       @collection = current_admin.enterprise.polls.find(params[:poll_id])
     end

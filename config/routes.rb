@@ -55,9 +55,12 @@ Rails.application.routes.draw do
   end
 
   resources :groups do
-    namespace :groups do
+    scope module: :groups do
       resources :group_members, path: "members"
       resources :group_messages, path: "messages"
+    end
+
+    scope :groups, module: :groups do
       resources :events
       resources :news_links
       resources :resources
