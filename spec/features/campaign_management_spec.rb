@@ -11,8 +11,8 @@ RSpec.feature "Campaign management" do
     campaign = {
       title: "My Campaign",
       description: "Look at that sweet campaign!",
-      start_time: DateTime.new(2015, 11, 10, 12, 30),
-      end_time: DateTime.new(2015, 11, 15, 12, 30),
+      start_time: Time.new(2015, 11, 10, 12, 30),
+      end_time: Time.new(2015, 11, 15, 12, 30),
     }
 
     visit new_campaign_path

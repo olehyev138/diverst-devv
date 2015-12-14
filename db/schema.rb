@@ -61,9 +61,9 @@ ActiveRecord::Schema.define(version: 20151209084124) do
   create_table "campaign_invitations", force: :cascade do |t|
     t.integer  "campaign_id", limit: 4
     t.integer  "employee_id", limit: 4
-    t.integer  "response",    limit: 4
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
+    t.integer  "response",    limit: 4, default: 0
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
   end
 
   create_table "campaigns", force: :cascade do |t|
@@ -137,7 +137,7 @@ ActiveRecord::Schema.define(version: 20151209084124) do
     t.text     "tokens",                      limit: 65535
     t.string   "firebase_token",              limit: 255
     t.datetime "firebase_token_generated_at"
-    t.integer  "participation_score_7days",   limit: 4
+    t.integer  "participation_score_7days",   limit: 4,     default: 0
   end
 
   add_index "employees", ["email"], name: "index_employees_on_email", unique: true, using: :btree
@@ -152,15 +152,14 @@ ActiveRecord::Schema.define(version: 20151209084124) do
   end
 
   create_table "enterprises", force: :cascade do |t|
-    t.string   "name",                      limit: 255
-    t.string   "idp_entity_id",             limit: 255
-    t.string   "idp_sso_target_url",        limit: 255
-    t.string   "idp_slo_target_url",        limit: 255
-    t.text     "idp_cert",                  limit: 65535
-    t.boolean  "has_enabled_saml",          limit: 1
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
-    t.integer  "participation_score_7days", limit: 4
+    t.string   "name",               limit: 255
+    t.string   "idp_entity_id",      limit: 255
+    t.string   "idp_sso_target_url", limit: 255
+    t.string   "idp_slo_target_url", limit: 255
+    t.text     "idp_cert",           limit: 65535
+    t.boolean  "has_enabled_saml",   limit: 1
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
   end
 
   create_table "events", force: :cascade do |t|
@@ -195,7 +194,7 @@ ActiveRecord::Schema.define(version: 20151209084124) do
     t.datetime "created_at",                                       null: false
     t.datetime "updated_at",                                       null: false
     t.boolean  "alternative_layout", limit: 1,     default: false
-    t.boolean  "private",            limit: 1
+    t.boolean  "private",            limit: 1,     default: false
     t.integer  "container_id",       limit: 4
     t.string   "container_type",     limit: 255
   end

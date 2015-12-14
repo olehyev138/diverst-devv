@@ -47,7 +47,6 @@ gem 'sprockets', '>= 3.0.0'
 gem 'sprockets-es6'
 gem 'awesome_print'
 gem 'yam'
-gem 'rspec_junit_formatter', '0.2.2'
 
 group :development, :test do
   gem 'spring' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
@@ -64,6 +63,10 @@ group :development, :test do
   # gem 'pry-rails'
 end
 
+gem 'rspec_junit_formatter', '0.2.2', group: :test
+
+gem "parallel_tests", group: :development
+
 group :development do
   gem 'capistrano'
   gem 'capistrano3-puma'
@@ -72,6 +75,5 @@ group :development do
   gem 'capistrano-rvm'
   gem 'capistrano-bower'
   gem 'capistrano-rails-console'
+  gem 'spring-commands-rspec'
 end
-
-gem 'spring-commands-rspec', group: :development

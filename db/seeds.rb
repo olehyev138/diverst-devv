@@ -38,7 +38,7 @@ gender_field = SelectField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  enterprise: enterprise,
+  container: enterprise,
   options_text: "Male
 Female"
 )
@@ -51,7 +51,7 @@ birth_field = DateField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  enterprise: enterprise
+  container: enterprise
 )
 
 disabilities_field = SelectField.create(
@@ -62,7 +62,7 @@ disabilities_field = SelectField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  enterprise: enterprise,
+  container: enterprise,
   options_text: "Yes
 No"
 )
@@ -75,7 +75,7 @@ nationality_field = SelectField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  enterprise: enterprise,
+  container: enterprise,
   options_text: "Afghanistan
 Albania
 Algeria
@@ -350,7 +350,7 @@ belief_field = SelectField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  enterprise: enterprise,
+  container: enterprise,
   options_text: "Atheism
 Christianity
 Islam
@@ -370,7 +370,7 @@ languages_field = CheckboxField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  enterprise: enterprise,
+  container: enterprise,
   options_text: "English
 Mandarin
 Spanish
@@ -406,7 +406,7 @@ ethnicity_field = SelectField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  enterprise: enterprise,
+  container: enterprise,
   options_text: "Caucasian
 Hispanic
 Latino
@@ -427,7 +427,7 @@ kids_field = SelectField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  enterprise: enterprise,
+  container: enterprise,
   options_text: "Single
 In a relationship
 Married
@@ -442,7 +442,7 @@ orientation_field = SelectField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  enterprise: enterprise,
+  container: enterprise,
   options_text: "Yes
 No"
 )
@@ -455,7 +455,7 @@ hobbies_field = SelectField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  enterprise: enterprise,
+  container: enterprise,
   options_text: "3D printing
 Amateur radio
 Acting
@@ -744,7 +744,7 @@ title_field = TextField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  enterprise: enterprise
+  container: enterprise
 )
 
 education_field = SelectField.create(
@@ -755,7 +755,7 @@ education_field = SelectField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  enterprise: enterprise,
+  container: enterprise,
   options_text: "High School
 Bachelor's degree
 Master's degree
@@ -770,7 +770,7 @@ certifications_field = CheckboxField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  enterprise: enterprise,
+  container: enterprise,
   options_text: "Microsoft Certified Partner
 Google Partner
 Apple Genius"
@@ -786,7 +786,7 @@ experience_field = NumericField.create(
   match_weight: 0.2,
   min: 0,
   max: 100,
-  enterprise: enterprise
+  container: enterprise
 )
 
 countries_worked_field = CheckboxField.create(
@@ -797,7 +797,7 @@ countries_worked_field = CheckboxField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  enterprise: enterprise,
+  container: enterprise,
   options_text: "Afghanistan
 Albania
 Algeria
@@ -1072,7 +1072,7 @@ military_field = SelectField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  enterprise: enterprise,
+  container: enterprise,
   options_text: "Yes
 No"
 )
@@ -1085,7 +1085,7 @@ office_location_field = SelectField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  enterprise: enterprise,
+  container: enterprise,
   options_text: "NA
 EU
 CN
@@ -1102,7 +1102,7 @@ seniority_field = NumericField.create(
   match_weight: 0.2,
   min: 0,
   max: 40,
-  enterprise: enterprise
+  container: enterprise
 )
 
 

@@ -95,13 +95,6 @@ class Graph {
       },
       credits: {
         enabled: false
-      },
-      plotOptions: {
-        pie: {
-          dataLabels: {
-            enabled: false
-          }
-        }
       }
     });
   }

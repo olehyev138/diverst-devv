@@ -172,6 +172,8 @@ class Employee < ActiveRecord::Base
   end
 
   def self.reset_elasticsearch
+    Employee.__elasticsearch__.client.indices.delete index: Employee.index_name rescue nil
+
     Employee.__elasticsearch__.client.indices.create(
       index: Employee.index_name,
       body: {
