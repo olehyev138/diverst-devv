@@ -7,6 +7,7 @@ require 'spec_helper'
 require 'rspec/rails'
 require 'capybara/rails'
 require 'capybara/poltergeist'
+require 'sidekiq/testing'
 
 Capybara.javascript_driver = :poltergeist
 
