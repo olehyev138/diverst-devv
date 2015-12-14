@@ -1,3 +1,6 @@
+machine:
+  timezone:
+    America/New_York
 deployment:
   production:
     branch: master
