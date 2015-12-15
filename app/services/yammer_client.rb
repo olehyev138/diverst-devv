@@ -13,6 +13,39 @@ class YammerClient
     }
   end
 
+  def groups
+    HTTParty.get 'https://www.yammer.com/api/v1/groups.json', {
+      headers: {
+        'Authorization' => "Bearer #{@token}"
+      }
+    }
+  end
+
+  def create_group(body)
+    HTTParty.post 'https://www.yammer.com/api/v1/groups.json', {
+      body: body,
+      headers: {
+        'Authorization' => "Bearer #{@token}"
+      }
+    }
+  end
+
+  def token_for_user(user_id:)
+    HTTParty.get "https://www.yammer.com/api/v1/oauth/tokens.json?consumer_key=#{ENV["YAMMER_CLIENT_ID"]}&user_id=#{user_id}", {
+      headers: {
+        'Authorization' => "Bearer #{@token}"
+      }
+    }
+  end
+
+  def subscribe_to_group(group_id)
+    HTTParty.post "https://www.yammer.com/api/v1/group_memberships.json?group_id=#{group_id}", {
+      headers: {
+        'Authorization' => "Bearer #{@token}"
+      }
+    }
+  end
+
   def self.auth_client
     Yammer::OAuth2Client.new(ENV["YAMMER_CLIENT_ID"], ENV["YAMMER_CLIENT_SECRET"])
   end

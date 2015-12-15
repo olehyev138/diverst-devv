@@ -26,31 +26,23 @@ class DateField < Field
   end
 
   def match_score_between(e1, e2, employees)
-    score = 0
-    Benchmark.bm do |x|
-      x.report do
-        e1_value = e1.info[self].strftime("%s").to_i
-        e2_value = e2.info[self].strftime("%s").to_i
+    e1_value = e1.info[self].strftime("%s").to_i
+    e2_value = e2.info[self].strftime("%s").to_i
 
-        return score = nil unless e1_value && e2_value
+    return nil unless e1_value && e2_value
 
-        values = employees.map do |employee|
-          employee.info[self].to_i
-        end
-
-        values.compact!
-        values.reject! { |value| (value - values.mean).abs >= values.standard_deviation*2 } # Reject abberrant values
-        return score = nil if values.empty?
-
-        high_delta = values.max - values.min
-        return score = 0 if high_delta == 0 # Lets not divide by zero shall we
-        delta = (e1_value - e2_value).abs
-        score = delta.to_f / high_delta
-      end
+    values = employees.map do |employee|
+      employee.info[self].to_i
     end
 
-    puts "DATE BENCCCCHMAAARRRRRRKKKKK"
-    score
+    values.compact!
+    values.reject! { |value| (value - values.mean).abs >= values.standard_deviation*2 } # Reject abberrant values
+    return nil if values.empty?
+
+    high_delta = values.max - values.min
+    return 0 if high_delta == 0 # Lets not divide by zero shall we
+    delta = (e1_value - e2_value).abs
+    delta.to_f / high_delta
   end
 
   def validates_rule_for_employee?(rule:, employee:)

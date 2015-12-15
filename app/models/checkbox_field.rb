@@ -47,21 +47,14 @@ class CheckboxField < Field
   end
 
   def match_score_between(e1, e2, employees)
-    total_score = 0
-    Benchmark.bm do |x|
-      x.report do
-        e1_popularity = self.employee_popularity(e1, employees)
-        e2_popularity = self.employee_popularity(e2, employees)
+    e1_popularity = self.employee_popularity(e1, employees)
+    e2_popularity = self.employee_popularity(e2, employees)
 
-        # Returns nil if we don't have all the employee info necessary to get a score
-        return nil unless e1_popularity && e2_popularity
+    # Returns nil if we don't have all the employee info necessary to get a score
+    return nil unless e1_popularity && e2_popularity
 
-        # The total score is the absolute difference between both averages
-        total_score = (e1_popularity - e2_popularity).abs
-      end
-    end
-    puts "CHECKBOX BENCCCCHMAAARRRRRRKKKKK"
-    total_score
+    # The total score is the absolute difference between both averages
+    total_score = (e1_popularity - e2_popularity).abs
   end
 
   def validates_rule_for_employee?(rule:, employee:)

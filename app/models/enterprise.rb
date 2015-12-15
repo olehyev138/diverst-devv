@@ -55,6 +55,12 @@ class Enterprise < ActiveRecord::Base
     GenerateEnterpriseMatchesJob.perform_later self
   end
 
+  def update_match_scores
+    self.enterprise.employees.where.not(id: self.id).each do |other_employee|
+      CalculateMatchScoreJob.perform_later(self, other_employee, skip_existing: false)
+    end
+  end
+
   def employees_csv
     Employee.to_csv(employees: self.employees, fields: self.fields, nb_rows: nb_rows)
   end
