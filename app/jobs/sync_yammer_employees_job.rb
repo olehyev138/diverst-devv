@@ -2,7 +2,7 @@ class SyncYammerEmployeesJob < ActiveJob::Base
   queue_as :default
 
   def perform
-    Enterprise.all.each do |enterprise|
+    Enterprise.where(yammer_import: true).each do |enterprise|
       if !enterprise.yammer_token.blank? # Check if the enterprise has setup their Yammer integration
         yammer_users = HTTParty.get 'https://www.yammer.com/api/v1/users.json', {
           headers: {
@@ -17,8 +17,7 @@ class SyncYammerEmployeesJob < ActiveJob::Base
             # Check if user doesn't already exist
             existing_emails = enterprise.employees.all.map(&:email)
             if !existing_emails.include? primary_email
-              employee = Employee.from_yammer(yammer_user)
-              enterprise.employees << employee
+              employee = Employee.from_yammer(yammer_user, enterprise: enterprise)
               employee.invite!
             else
               # TODO: Update existing employees from Yammer their info

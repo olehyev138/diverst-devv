@@ -185,13 +185,20 @@ class Employee < ActiveRecord::Base
     end
   end
 
-  def self.from_yammer(yammer_user)
-    Employee.new(
+  def self.from_yammer(yammer_user, enterprise: enterprise)
+    employee = Employee.new(
       first_name: yammer_user["first_name"],
       last_name: yammer_user["last_name"],
       email: yammer_user["contact"]["email_addresses"][0]["address"],
       auth_source: "yammer",
+      enterprise: enterprise
     )
+
+    enterprise.yammer_field_mappings.each do |mapping|
+      employee.info[mapping.diverst_field] = yammer_user[mapping.yammer_field_name]
+    end
+
+    employee
   end
 
   def self.from_csv_row(row, enterprise:)

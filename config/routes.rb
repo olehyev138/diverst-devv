@@ -9,10 +9,11 @@ Rails.application.routes.draw do
     mount_devise_token_auth_for 'Employee', at: 'auth'
   end
 
-  namespace :auth do
+  namespace :integrations do
     scope :yammer, as: :yammer do
       get 'login', to: 'yammer#login'
       get 'callback', to: 'yammer#callback'
+      get 'configure', to: 'yammer#configure'
     end
   end
 

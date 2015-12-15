@@ -1,0 +1,41 @@
+<div class="content__header">
+  <h1>
+    <%= link_to "Integrations", enterprise_integrations_path(current_admin.enterprise), class: "muted" %> /
+    Yammer
+  </h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section card__section--border">
+      <h3>Employee sync</h3>
+      <p>This feature allows you to import employees from Yammer to Diverst. New employees created in Yammer will get imported as they are created.</p>
+
+      <%= simple_form_for current_admin.enterprise do |f| %>
+        <%= f.input :yammer_import, label: "Enable this feature" %>
+
+        <strong>User fields</strong>
+        <p>Map Yammer fields to their corresponding Diverst fields to automatically import them.</p>
+
+        <div id="yammer_field_mappings">
+          <%= f.simple_fields_for :yammer_field_mappings do |y| %>
+            <%= render 'yammer_field_mapping_fields', f: y %>
+          <% end %>
+          <div class="links">
+            <%= link_to_add_association "Add a mapping", f, :yammer_field_mappings %>
+          </div>
+        </div>
+
+        <%= f.button :submit, value: "Save changes" %>
+      <% end %>
+    </div>
+    <div class="card__section card__section--border">
+      <h3>ERG sync</h3>
+      <p>Creates a Yammer group for each Diverst ERG and keeps their members in sync. Also posts Diverst notifications in the Yammer group.</p>
+
+      <%= simple_form_for current_admin.enterprise do |f| %>
+        <%= f.input :yammer_group_sync, label: "Enable this feature" %>
+      <% end %>
+    </div>
+  </div>
+</div>

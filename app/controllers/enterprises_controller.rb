@@ -41,6 +41,7 @@ class EnterprisesController < ApplicationController
       :idp_sso_target_url,
       :idp_slo_target_url,
       :idp_cert,
+      :yammer_import,
       mobile_fields_attributes: [
         :id,
         :field_id,
@@ -61,6 +62,12 @@ class EnterprisesController < ApplicationController
         :max,
         :options_text,
         :alternative_layout
+      ],
+      yammer_field_mappings_attributes: [
+        :id,
+        :yammer_field_name,
+        :diverst_field_id,
+        :_destroy
       ]
     )
   end

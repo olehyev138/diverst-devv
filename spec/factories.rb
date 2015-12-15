@@ -152,4 +152,8 @@ FactoryGirl.define do
     association :answer
   end
 
+  factory :yammer_field_mapping do
+
+  end
+
 end

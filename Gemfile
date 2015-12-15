@@ -48,6 +48,7 @@ gem 'sprockets-es6'
 gem 'awesome_print'
 gem 'yam'
 gem 'httparty', '~> 0.13'
+gem 'appsignal', '~> 0.12.rc'
 
 group :development, :test do
   gem 'spring' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring

@@ -15,12 +15,12 @@
             <td>Yammer</td>
             <td>
               <% if current_admin.enterprise.yammer_token.blank? %>
-                <%= link_to "Connect", auth_yammer_login_path %>
+                <%= link_to "Connect", integrations_yammer_login_path %>
               <% else %>
                 Connected
               <% end %>
               -
-              <%= link_to "Configure" %>
+              <%= link_to "Configure", integrations_yammer_configure_path %>
             </td>
           </tr>
         </tbody>
