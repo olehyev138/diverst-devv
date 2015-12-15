@@ -155,4 +155,68 @@ FactoryGirl.define do
 
   end
 
+  factory :graph do
+    # association :field, factory: :graph_field
+    # association :aggregation, factory: :graph_field
+
+    factory :dashboard_graph do
+      association :collection, factory: :metrics_dashboard
+    end
+
+    factory :poll_graph do
+      association :collection, factory: :poll
+    end
+  end
+
+  factory :metrics_dashboard do
+    enterprise
+    name "Metrics dashboard"
+
+    factory :metrics_dashboard_with_graphs do
+      transient do
+        graph_count 2
+      end
+
+      after(:create) do |metrics_dashboard, evaluator|
+        evaluator.graphs create_list(:dashboard_graph, evaluator.graph_count, collection: metrics_dashboard)
+      end
+    end
+  end
+
+  factory :field do
+    type "TextField"
+    title "My Field"
+    gamification_value 1
+    show_on_vcard false
+    saml_attribute nil
+
+    factory :checkbox_field do
+      type "CheckboxField"
+      options_text "Yes\nNo"
+    end
+
+    factory :select_field do
+      type "SelectField"
+      options_text "Yes\nNo"
+    end
+
+    factory :numeric_field do
+      type "NumericField"
+      min 1
+      max 100
+    end
+
+    match_exclude true
+    match_polarity true
+    match_weight 1
+
+    factory :enterprise_field do
+      association :container, factory: :enterprise
+    end
+
+    factory :graph_field do
+      association :container, factory: :graph
+    end
+  end
+
 end

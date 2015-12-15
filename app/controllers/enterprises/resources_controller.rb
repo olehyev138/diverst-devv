@@ -4,16 +4,11 @@ class Enterprises::ResourcesController < ApplicationController
   before_action :authenticate_user!
   before_action :authenticate_admin!, except: [:index, :show]
 
-  layout :resolve_layout
+  layout "global_settings"
 
   protected
 
   def set_container
     @container = current_user.enterprise
-  end
-
-  def resolve_layout
-    return "global_settings" if current_user.is_a? Admin
-    "employee"
   end
 end

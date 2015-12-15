@@ -29,8 +29,8 @@ class Employee < ActiveRecord::Base
   before_validation :generate_password_if_saml
   after_create :assign_firebase_token
 
-  scope :for_segments, -> (segments) { joins(:segments).where("segments.id" => segments.map(&:id)).group(:id) if segments.any? }
-  scope :for_groups, -> (groups) { joins(:groups).where("groups.id" => groups.map(&:id)).group(:id) if groups.any? }
+  scope :for_segments, -> (segments) { joins(:segments).where("segments.id" => segments.map(&:id)).distinct if segments.any? }
+  scope :for_groups, -> (groups) { joins(:groups).where("groups.id" => groups.map(&:id)).distinct if groups.any? }
   scope :answered_poll, -> (poll) { joins(:poll_responses).where( poll_responses: { poll_id: poll.id } ) }
   scope :top_participants, -> (n) { order(participation_score_7days: :desc).limit(n) }
 
