@@ -18,6 +18,10 @@ module IsResources
     render "/new"
   end
 
+  def edit
+    render '/edit'
+  end
+
   def create
     @resource = @container.resources.new(resource_params)
 
