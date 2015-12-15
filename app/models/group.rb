@@ -18,6 +18,7 @@ class Group < ActiveRecord::Base
   validates_attachment_content_type :logo, content_type: /\Aimage\/.*\Z/
 
   before_save :send_invitation_emails, if: :send_invitations?
+  before_save :create_yammer_group, if: :should_create_yammer_group?
 
   scope :top_participants, -> (n) { order(participation_score_7days: :desc).limit(n) }
 
@@ -47,11 +48,29 @@ class Group < ActiveRecord::Base
     end
   end
 
-  protected
+  private
 
   def send_invitation_emails
     GroupMailer.delay.invitation(self, self.invitation_segments)
     self.send_invitations = false
     self.invitation_segments.clear
+  end
+
+  def create_yammer_group
+    yammer = YammerClient.new(self.enterprise.yammer_token)
+    group = yammer.create_group(
+      name: self.name,
+      description: self.description
+    )
+
+    # yammer.subscribe_to_group(group["id"])
+
+    self.update(yammer_group_created: true)
+  end
+
+  def should_create_yammer_group?
+    yammer_create_group? &&
+    !yammer_group_created &&
+    !self.enterprise.yammer_token.nil?
   end
 end

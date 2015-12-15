@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151214230928) do
+ActiveRecord::Schema.define(version: 20151215094556) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -138,6 +138,7 @@ ActiveRecord::Schema.define(version: 20151214230928) do
     t.string   "firebase_token",              limit: 255
     t.datetime "firebase_token_generated_at"
     t.integer  "participation_score_7days",   limit: 4,     default: 0
+    t.string   "yammer_token",                limit: 255
   end
 
   add_index "employees", ["email"], name: "index_employees_on_email", unique: true, using: :btree
@@ -240,6 +241,10 @@ ActiveRecord::Schema.define(version: 20151214230928) do
     t.datetime "logo_updated_at"
     t.boolean  "send_invitations",          limit: 1
     t.integer  "participation_score_7days", limit: 4
+    t.boolean  "yammer_create_group",       limit: 1
+    t.boolean  "yammer_group_created",      limit: 1
+    t.string   "yammer_group_name",         limit: 255
+    t.boolean  "yammer_sync_employees",     limit: 1
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|

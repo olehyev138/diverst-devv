@@ -29,8 +29,8 @@ class Employee < ActiveRecord::Base
   before_validation :generate_password_if_saml
   after_create :assign_firebase_token
 
-  scope :for_segments, -> (segments) { joins(:segments).where("segments.id" => segments.map(&:id)) if segments.any? }
-  scope :for_groups, -> (groups) { joins(:groups).where("groups.id" => groups.map(&:id)) if groups.any? }
+  scope :for_segments, -> (segments) { joins(:segments).where("segments.id" => segments.map(&:id)).group(:id) if segments.any? }
+  scope :for_groups, -> (groups) { joins(:groups).where("groups.id" => groups.map(&:id)).group(:id) if groups.any? }
   scope :answered_poll, -> (poll) { joins(:poll_responses).where( poll_responses: { poll_id: poll.id } ) }
   scope :top_participants, -> (n) { order(participation_score_7days: :desc).limit(n) }
 
@@ -38,6 +38,7 @@ class Employee < ActiveRecord::Base
     "#{self.first_name} #{self.last_name}"
   end
 
+  # Update the user with info from the SAML auth response
   def set_info_from_saml(nameid, _attrs, enterprise)
     self.email = nameid
 
@@ -56,29 +57,21 @@ class Employee < ActiveRecord::Base
     field.string_value self.info[field]
   end
 
+  # Get the match score between the employee and `other_employee`
   def match_score_with(other_employee)
     weight_total = 0
     total_score = 0
 
-    Benchmark.bm do |x|
+    employees = self.enterprise.employees.select([:id, :data]).all
+    self.enterprise.match_fields.each do |field|
+      field_score = field.match_score_between(self, other_employee, employees)
 
-      x.report do
-        employees = self.enterprise.employees.select([:id, :data]).all
-        self.enterprise.match_fields.each do |field|
-          field_score = field.match_score_between(self, other_employee, employees)
-
-          unless field_score.nil? || field_score.nan?
-            weight_total += field.match_weight
-            total_score += field.match_weight * field_score
-          end
-        end
+      unless field_score.nil? || field_score.nan?
+        weight_total += field.match_weight
+        total_score += field.match_weight * field_score
       end
-
     end
 
-    puts "TOTAL SCORE CALCULATION BENCHERONI"
-
-    puts "TSCORE: #{total_score / weight_total}"
     total_score / weight_total
   end
 
@@ -95,6 +88,7 @@ class Employee < ActiveRecord::Base
     self.active_matches.order(score: :desc).limit(n)
   end
 
+  # Checks if the user is part of the specified segment
   def is_part_of_segment?(segment)
     part_of_segment = true
 
@@ -108,6 +102,7 @@ class Employee < ActiveRecord::Base
     part_of_segment
   end
 
+  # Get a score indicating the user's participation in the platform
   def participation_score(from:, to: Time.now)
     score = 0
 
@@ -127,6 +122,7 @@ class Employee < ActiveRecord::Base
     end
   end
 
+  # Generate a Firebase token for the user and update the user with it
   def assign_firebase_token
     payload = { uid: self.id.to_s }
     options = { expires: 1.week.from_now }
@@ -135,6 +131,7 @@ class Employee < ActiveRecord::Base
     self.save
   end
 
+  # Add the combined info from both the employee's fields and his/her poll answers to ES
   def as_indexed_json(*)
     self.as_json({
       except: [:data],
@@ -142,6 +139,7 @@ class Employee < ActiveRecord::Base
     })
   end
 
+  # Custom ES mapping that creates an unanalyzed version of all string fields for exact-match term queries
   def self.mappingue
     {
       employee: {
@@ -165,6 +163,7 @@ class Employee < ActiveRecord::Base
     }
   end
 
+  # Deletes the ES index, creates a new one and imports all employees in it
   def self.reset_elasticsearch
     Employee.__elasticsearch__.client.indices.delete index: Employee.index_name rescue nil
 
@@ -179,13 +178,15 @@ class Employee < ActiveRecord::Base
     Employee.import
   end
 
-  def self.update_match_scores
+  # Updates this employee's match scores with all other enterprise employees
+  def update_match_scores
     self.enterprise.employees.where.not(id: self.id).each do |other_employee|
       CalculateMatchScoreJob.perform_later(self, other_employee, skip_existing: false)
     end
   end
 
-  def self.from_yammer(yammer_user, enterprise: enterprise)
+  # Initializes an employee from a yammer user
+  def self.from_yammer(yammer_user, enterprise:)
     employee = Employee.new(
       first_name: yammer_user["first_name"],
       last_name: yammer_user["last_name"],
@@ -194,6 +195,7 @@ class Employee < ActiveRecord::Base
       enterprise: enterprise
     )
 
+    # Map Yammer fields with Diverst fields as per the mappings defined in the integration configuration
     enterprise.yammer_field_mappings.each do |mapping|
       employee.info[mapping.diverst_field] = yammer_user[mapping.yammer_field_name]
     end
@@ -201,6 +203,7 @@ class Employee < ActiveRecord::Base
     employee
   end
 
+  # Initializes an employee from a CSV row
   def self.from_csv_row(row, enterprise:)
     return nil if row[0].nil? || row[1].nil? || row[2].nil? # Require first_name, last_name and email
 
@@ -222,6 +225,7 @@ class Employee < ActiveRecord::Base
     false
   end
 
+  # Raw hash of employee info needed when the FieldData Hash[] overrides are an annoyance
   def info_hash
     JSON.parse self.data
   end
@@ -232,6 +236,7 @@ class Employee < ActiveRecord::Base
     self.info_hash.merge(polls_hash) # We use info_hash instead of just info because merge accesses the hash using [], which is overriden in FieldData
   end
 
+  # Export a CSV with the specified employees
   def self.to_csv(employees:, fields:, nb_rows: nil)
     CSV.generate do |csv|
       csv << ["id", "First name", "Last name", "Email"].concat(fields.map(&:title))
