@@ -61,7 +61,7 @@ class Enterprise < ActiveRecord::Base
     end
   end
 
-  def employees_csv
+  def employees_csv(nb_rows)
     Employee.to_csv(employees: self.employees, fields: self.fields, nb_rows: nb_rows)
   end
 end
