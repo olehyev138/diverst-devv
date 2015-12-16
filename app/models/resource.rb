@@ -6,5 +6,7 @@ class Resource < ActiveRecord::Base
 
   def file_extension
     File.extname(file_file_name)[1..-1].upcase
+  rescue
+    ""
   end
 end
