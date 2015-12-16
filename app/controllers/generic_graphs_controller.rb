@@ -8,7 +8,7 @@ class GenericGraphsController < ApplicationController
           data: current_admin.enterprise.groups.map{ |g| g.members.count }
         }],
         categories: current_admin.enterprise.groups.map(&:name),
-        xAxisTitle: "ERG"
+        xAxisTitle: "BRG"
       },
       hasAggregation: false
     }
@@ -38,7 +38,7 @@ class GenericGraphsController < ApplicationController
           data: current_admin.enterprise.groups.map{ |g| g.events.where("created_at > ?", 1.month.ago).count }
         }],
         categories: current_admin.enterprise.groups.map(&:name),
-        xAxisTitle: "ERG"
+        xAxisTitle: "BRG"
       },
       hasAggregation: false
     }
@@ -53,7 +53,7 @@ class GenericGraphsController < ApplicationController
           data: current_admin.enterprise.groups.map{ |g| g.messages.where("created_at > ?", 1.month.ago).count }
         }],
         categories: current_admin.enterprise.groups.map(&:name),
-        xAxisTitle: "ERG"
+        xAxisTitle: "BRG"
       },
       hasAggregation: false
     }
