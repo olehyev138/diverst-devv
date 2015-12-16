@@ -1,8 +1,7 @@
 class Groups::ResourcesController < ApplicationController
   include IsResources
 
-  before_action :authenticate_user!
-  before_action :authenticate_admin!, except: [:index, :show]
+  before_action :authenticate_admin!
 
   layout "erg"
 

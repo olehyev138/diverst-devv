@@ -10,7 +10,6 @@
         <thead>
           <th>Title</th>
           <th>Creation date</th>
-          <th>File type</th>
           <% if is_admin? %>
             <th>Options</th>
           <% end %>
@@ -18,9 +17,8 @@
         <tbody>
           <% @resources.each do |resource| %>
             <tr>
-              <td><%= link_to resource.title, resource.file.url %></td>
+              <td><%= link_to resource.title, resource.file.url %> <span class="badge badge--spaced" style="background-color: #<%= color_hex_for_extension(resource.file_extension) %>;"><%= resource.file_extension %></span></td>
               <td><%= resource.created_at.to_s :reversed_slashes %></td>
-              <td><%= resource.file_extension %></td>
               <% if is_admin? %>
                 <td>
                   <%= link_to "Edit", polymorphic_path([@container, resource], action: "edit") %> -
