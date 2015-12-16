@@ -1,6 +1,5 @@
 class Employee::AnswersController < ApplicationController
   before_action :authenticate_employee!
-  before_action :set_campaign, except: [:vote]
   before_action :set_question, except: [:vote]
   before_action :set_answer, only: [:vote]
 
@@ -30,12 +29,8 @@ class Employee::AnswersController < ApplicationController
 
   protected
 
-  def set_campaign
-    @campaign = current_employee.enterprise.campaigns.find(params[:campaign_id])
-  end
-
   def set_question
-    @question = @campaign.questions.find(params[:question_id])
+    @question = current_employee.enterprise.questions.find(params[:question_id])
   end
 
   def set_answer

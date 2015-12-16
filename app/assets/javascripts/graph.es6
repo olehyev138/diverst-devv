@@ -82,6 +82,19 @@ class Graph {
           fontFamily: 'Helvetica Neue, sans-serif'
         }
       },
+      plotOptions: {
+        pie: {
+          dataLabels: {
+            enabled: true,
+            format: "{point.name}",
+            style: {
+              width:'70px',
+              textOverflow: 'ellipsis',
+              overflow: 'hidden'
+            }
+          }
+        }
+      },
       title: {
         text: ''
       },

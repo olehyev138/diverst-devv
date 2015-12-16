@@ -69,12 +69,16 @@
 
   <div class="card">
     <div class="card__section">
-      <p>These are the textual answers to the different qualitative questions in this survey. Click on any of them to view the responses.</p>
-      <ul>
-        <% @poll.fields.where(type: "TextField").each do |text_field| %>
-          <li><%= link_to text_field.title, poll_poll_field_path(@poll, text_field) %></li>
-        <% end %>
-      </ul>
+      <% if @poll.fields.where(type: "TextField").count > 0 %>
+        <p>These are the textual answers to the different qualitative questions in this survey. Click on any of them to view the responses.</p>
+        <ul>
+          <% @poll.fields.where(type: "TextField").each do |text_field| %>
+            <li><%= link_to text_field.title, poll_poll_field_path(@poll, text_field) %></li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p>This survey doesn't contain any text field. If you <%= link_to "add some", edit_poll_path(@poll) %>, their answers will be displayed here.</p>
+      <% end %>
     </div>
   </div>
 

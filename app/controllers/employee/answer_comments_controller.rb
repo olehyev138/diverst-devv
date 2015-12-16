@@ -9,7 +9,7 @@ class Employee::AnswerCommentsController < ApplicationController
     @comment.author = current_employee
     @comment.save
 
-    redirect_to [:employee, @answer.question.campaign, @answer.question]
+    redirect_to [:employee, @answer.question]
   end
 
   protected

@@ -1,18 +1,8 @@
 class AnswersController < ApplicationController
   before_action :authenticate_admin!
-  before_action :set_campaign, only: [:index, :new, :create]
-  before_action :set_question, only: [:index, :new, :create]
-  before_action :set_answer, except: [:index, :new]
+  before_action :set_answer
 
   layout "unify"
-
-  def create
-    @answer = @question.answers.new(answer_params)
-    @answer.author = current_employee
-    @answer.save
-
-    redirect_to @question
-  end
 
   def update
     if @answer.update(answer_params)
@@ -23,14 +13,6 @@ class AnswersController < ApplicationController
   end
 
   protected
-
-  def set_campaign
-    @campaign = current_employee.enterprise.campaigns.find(params[:campaign_id])
-  end
-
-  def set_question
-    @question = @campaign.questions.find(params[:question_id])
-  end
 
   def set_answer
     @answer = current_admin.enterprise.answers.find(params[:id])
