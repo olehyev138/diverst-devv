@@ -143,6 +143,11 @@ Rails.application.routes.draw do
     namespace :employee do
       root :to => "dashboard#home"
 
+      resources :news_links
+      resources :messages
+      resources :events
+      resources :resources
+
       resources :campaigns, shallow: true do
         resources :questions, shallow: true do
           resources :answers, shallow: true do
@@ -155,14 +160,11 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :news_links
-      resources :messages
       resources :groups do
         member do
           get 'join'
         end
       end
-      resources :events
     end
 
     resources :matches do

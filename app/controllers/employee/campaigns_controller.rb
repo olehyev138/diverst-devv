@@ -5,7 +5,7 @@ class Employee::CampaignsController < ApplicationController
   layout "employee"
 
   def index
-    @campaigns = current_employee.campaigns
+    @campaigns = current_employee.campaigns.order(created_at: :desc)
   end
 
   def show

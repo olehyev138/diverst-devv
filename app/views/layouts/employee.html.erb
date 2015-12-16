@@ -19,7 +19,7 @@
     <%= active_link_to "Messages", employee_messages_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
     <%= active_link_to "Events", employee_events_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
     <%= active_link_to "Groups", employee_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-    <%= active_link_to "Resources", enterprise_resources_path(current_employee.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+    <%= active_link_to "Resources", employee_resources_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
     <%= link_to "Log out", destroy_employee_session_path, method: :delete, class: "secondary-header__tab" %>
   </header>
 
