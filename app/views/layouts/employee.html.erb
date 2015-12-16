@@ -9,7 +9,7 @@
 <body class="erg">
 
   <header class="primary-header">
-    <a href="#"><img class="primary-header__logo logo" src="<%= image_path "diverst-logo.svg" %>"></a>
+    <%= link_to employee_root_path do %><img class="primary-header__logo logo" src="<%= image_path "diverst-logo.svg" %>"><% end %>
   </header>
 
   <header class="secondary-header">
@@ -20,6 +20,7 @@
     <%= active_link_to "Events", employee_events_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
     <%= active_link_to "Groups", employee_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
     <%= active_link_to "Resources", employee_resources_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+    <%= link_to "Mentoring", '#', class: "secondary-header__tab" %>
     <%= link_to "Log out", destroy_employee_session_path, method: :delete, class: "secondary-header__tab" %>
   </header>
 
