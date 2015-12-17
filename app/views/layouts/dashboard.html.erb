@@ -15,33 +15,39 @@
   <nav class="nav">
     <ul class="nav__list nav__list--primary">
       <li class="nav__item">
-        <%= active_link_to topics_path, class: "nav__link", class_active: "nav__link--is-selected" do %>
+        <%= active_link_to groups_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['enterprises', 'groups', 'segments', 'metrics_dashboards', 'enterprises/resources'], ['index', 'edit', 'show', 'new']] do %>
+          <span class="nav__icon icon icon--market-scope"></span>
+          <span class="nav__text">Manage ERGs</span>
+        <% end %>
+      </li>
+      <li class="nav__item">
+        <%= active_link_to topics_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['topics', 'enterprises'], ['index', 'edit', 'show', 'new', 'edit_algo', 'edit_mobile_fields']] do %>
           <span class="nav__icon icon icon--handshake"></span>
-          <span class="nav__text">Handshake</span>
+          <span class="nav__text">Meet</span>
         <% end %>
       </li>
       <li class="nav__item">
         <a class="nav__link" href="#">
           <span class="nav__icon icon icon--coffee-talk"></span>
-          <span class="nav__text">Coffee Talk</span>
+          <span class="nav__text">Mentor</span>
         </a>
       </li>
       <li class="nav__item">
-        <%= active_link_to campaigns_path, class: "nav__link", class_active: "nav__link--is-selected" do %>
+        <%= active_link_to campaigns_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['campaigns', 'questions'], []] do %>
           <span class="nav__icon icon icon--unify"></span>
-          <span class="nav__text">Unify</span>
+          <span class="nav__text">Collaborate</span>
         <% end %>
       </li>
       <li class="nav__item">
         <%= active_link_to polls_path, class: "nav__link", class_active: "nav__link--is-selected" do %>
           <span class="nav__icon icon icon--market-scope"></span>
-          <span class="nav__text">Market Scope</span>
+          <span class="nav__text">Scope</span>
         <% end %>
       </li>
     </ul>
     <ul class="nav__list nav__list--secondary">
       <li class="nav__item">
-        <%= active_link_to groups_path, class: "nav__link", class_active: "nav__link--is-selected" do %>
+        <%= active_link_to employees_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['employees', 'enterprises'], ['index', 'edit', 'show', 'new', 'edit_auth', 'edit_fields', 'integrations']] do %>
           <span class="nav__text">Global Settings</span>
         <% end %>
       </li>

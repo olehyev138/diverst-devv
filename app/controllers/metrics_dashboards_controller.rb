@@ -2,7 +2,7 @@ class MetricsDashboardsController < ApplicationController
   before_action :authenticate_admin!
   before_action :set_metrics_dashboard, except: [:index, :new, :create]
 
-  layout 'global_settings'
+  layout 'erg_manager'
 
   def new
     @metrics_dashboard = current_admin.enterprise.metrics_dashboards.new

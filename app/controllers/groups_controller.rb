@@ -97,7 +97,7 @@ class GroupsController < ApplicationController
     when "show"
       "erg"
     else
-      "global_settings"
+      "erg_manager"
     end
   end
 

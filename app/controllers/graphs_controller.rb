@@ -3,7 +3,7 @@ class GraphsController < ApplicationController
   before_action :set_collection, except: [:data, :show, :edit, :update, :destroy]
   before_action :set_graph, except: [:index, :new, :create]
 
-  layout 'global_settings'
+  layout 'market_scope'
 
   def new
     @graph = @collection.graphs.new
