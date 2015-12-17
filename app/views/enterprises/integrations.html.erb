@@ -15,8 +15,8 @@
             <p>Sync employees and groups, notify your employees through Yammer messages and post Diverst content directly to Yammer communities.</p>
           </div>
           <div class="flex-row__cell">
-            <%= link_to "Configure", integrations_yammer_configure_path, class: "btn btn--primary" if current_admin.enterprise.yammer_import? %>
-            <%= link_to "Activate", integrations_yammer_configure_path, class: "btn btn--secondary" if !current_admin.enterprise.yammer_import? %>
+            <%= link_to "Configure", integrations_yammer_configure_path, class: "btn btn--primary" if current_admin.enterprise.yammer_token %>
+            <%= link_to "Connect", integrations_yammer_login_path, class: "btn btn--secondary" if current_admin.enterprise.yammer_token.nil? %>
           </div>
         </div>
       </div>
@@ -31,7 +31,7 @@
           </div>
           <div class="flex-row__cell">
             <%= link_to "Configure", integrations_yammer_configure_path, class: "btn btn--primary" if false %>
-            <%= link_to "Activate", integrations_yammer_configure_path, class: "btn btn--secondary" if !false %>
+            <%= link_to "Connect", integrations_yammer_login_path, class: "btn btn--secondary" if true %>
           </div>
         </div>
       </div>

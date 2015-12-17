@@ -8,8 +8,21 @@ class Integrations::YammerController < ApplicationController
   end
 
   def callback
+    if params[:code].nil?
+      redirect_to enterprise_integrations_path(current_admin.enterprise), alert: "Yammer authentication failed"
+    end
+
     response = YammerClient.access_token_from(authorization_code: params[:code])
-    current_admin.enterprise.update(yammer_token: response["access_token"]["token"])
-    redirect_to enterprise_integrations_path(current_admin.enterprise)
+    user_token = response["access_token"]["token"]
+
+    yammer = YammerClient.new(user_token)
+    yammer_user = yammer.current_user
+
+    if yammer_user["verified_admin"] == "true" || yammer_user["verified_admin"] == true
+      current_admin.enterprise.update(yammer_token: user_token)
+      redirect_to enterprise_integrations_path(current_admin.enterprise)
+    else
+      redirect_to enterprise_integrations_path(current_admin.enterprise), alert: "This Yammer account is not a verified admin in its network"
+    end
   end
 end

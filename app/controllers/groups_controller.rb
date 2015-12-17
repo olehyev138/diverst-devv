@@ -113,6 +113,8 @@ class GroupsController < ApplicationController
       :description,
       :logo,
       :send_invitations,
+      :yammer_create_group,
+      :yammer_sync_employees,
       member_ids: [],
       invitation_segment_ids: []
     )

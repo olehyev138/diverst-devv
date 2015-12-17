@@ -31,7 +31,29 @@ class YammerClient
   end
 
   def token_for_user(user_id:)
-    HTTParty.get "https://www.yammer.com/api/v1/oauth/tokens.json?consumer_key=#{ENV["YAMMER_CLIENT_ID"]}&user_id=#{user_id}", {
+    response = HTTParty.get "https://www.yammer.com/api/v1/oauth/tokens.json?consumer_key=#{ENV["YAMMER_CLIENT_ID"]}&user_id=#{user_id}", {
+      headers: {
+        'Authorization' => "Bearer #{@token}"
+      }
+    }
+
+    return response[0] if !response.nil?
+    response
+  end
+
+  def user_with_email(email)
+    response = HTTParty.get "https://www.yammer.com/api/v1/users/by_email.json?email=#{email}", {
+      headers: {
+        'Authorization' => "Bearer #{@token}"
+      }
+    }
+
+    return response[0] if !response.nil?
+    response
+  end
+
+  def current_user
+    HTTParty.get "https://www.yammer.com/api/v1/users/current.json", {
       headers: {
         'Authorization' => "Bearer #{@token}"
       }

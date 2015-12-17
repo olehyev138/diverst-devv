@@ -48,24 +48,46 @@ class Group < ActiveRecord::Base
     end
   end
 
-  private
+  def sync_yammer_employees
+    yammer = YammerClient.new(self.enterprise.yammer_token)
 
-  def send_invitation_emails
-    GroupMailer.delay.invitation(self, self.invitation_segments)
-    self.send_invitations = false
-    self.invitation_segments.clear
+    # Subscribe employees who are part of the ERG in Diverst to the Yammer group
+    self.members.each do |employee|
+      yammer_user = yammer.user_with_email(employee.email)
+      next if yammer_user.nil? # Skip employee if he/she isn't part of the Yammer network
+
+      # Cache the employee's yammer token if it's not
+      if employee.yammer_token.nil?
+        yammer_user_token = yammer.token_for_user(user_id: yammer_user["id"])
+        employee.update(yammer_token: yammer_user_token["token"])
+      end
+
+      # Impersonate the employee and subscribe to the group
+      employee_yammer = YammerClient.new(employee.yammer_token)
+      employee_yammer.subscribe_to_group(self.yammer_id)
+    end
   end
 
+  private
+
   def create_yammer_group
+    # Create the group in Yammer
     yammer = YammerClient.new(self.enterprise.yammer_token)
     group = yammer.create_group(
       name: self.name,
       description: self.description
     )
 
-    # yammer.subscribe_to_group(group["id"])
+    if !group["id"].nil?
+      self.update(yammer_group_created: true, yammer_id: group["id"])
+      SyncYammerGroupJob.perform_later(self)
+    end
+  end
 
-    self.update(yammer_group_created: true)
+  def send_invitation_emails
+    GroupMailer.delay.invitation(self, self.invitation_segments)
+    self.send_invitations = false
+    self.invitation_segments.clear
   end
 
   def should_create_yammer_group?

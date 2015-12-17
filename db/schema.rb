@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151215094556) do
+ActiveRecord::Schema.define(version: 20151216215423) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -245,6 +245,7 @@ ActiveRecord::Schema.define(version: 20151215094556) do
     t.boolean  "yammer_group_created",      limit: 1
     t.string   "yammer_group_name",         limit: 255
     t.boolean  "yammer_sync_employees",     limit: 1
+    t.integer  "yammer_id",                 limit: 4
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|

@@ -1,6 +1,6 @@
 <div class="content__main">
-  <div class="card">
-    <%= simple_form_for @group do |f| %>
+  <%= simple_form_for @group do |f| %>
+    <div class="card">
       <div class="card__section card__section--border">
         <%= f.input :name %>
         <%= f.input :description %>
@@ -9,17 +9,41 @@
         <%= f.input :send_invitations %>
         <%= f.association :invitation_segments, input_html: { class: "select2" }, wrapper_html: { style: "display: none;" } %>
       </div>
-      <div class="card__section card__section--border">
-        <%= f.input :yammer_create_group %>
-        <%= f.button :submit %>
-      </div>
-    <% end %>
-  </div>
+
+      <% if !@group.enterprise.yammer_token.nil? %>
+        <div class="card__section card__section--border">
+          <h3>Yammer</h3>
+
+          <div class="flex-row flex-row--middle mb10">
+            <div class="flex-row__cell">
+              <%= f.input :yammer_create_group, label: false %>
+            </div>
+            <div class="flex-row__cell">
+              <strong>Create Yammer group</strong>
+              <p>Creates a matching group for this BRG in Yammer.</p>
+            </div>
+          </div>
+
+          <div class="flex-row flex-row--middle">
+            <div class="flex-row__cell">
+              <%= f.input :yammer_sync_employees, label: false %>
+            </div>
+            <div class="flex-row__cell">
+              <strong>Employee sync</strong>
+              <p>Automatically adds employees to this BRG's Yammer group as they join it in Diverst.</p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <%= f.button :submit %>
+
+  <% end %>
 </div>
 
 <script>
   $('.select2').select2();
-
 
   $sendInvitations = $('#group_send_invitations');
   $invitationSegments = $('.group_invitation_segments');

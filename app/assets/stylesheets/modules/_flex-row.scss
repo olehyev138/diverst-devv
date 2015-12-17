@@ -1,7 +1,9 @@
 // Flex row
 
 .flex-row {
-  margin: 0 -#{$spacing-small};
+  margin-left: -#{$spacing-small};
+  margin-right: -#{$spacing-small};
+
   @include display(flex);
 
   &--middle {

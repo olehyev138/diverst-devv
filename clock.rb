@@ -8,4 +8,5 @@ every(1.hour, 'Handle expired jobs') { HandleMatchExpirationJob.perform_later }
 every(1.hour, 'Update cached segment members') { Segment.update_all_members }
 every(1.day, 'Regenerate firebase tokens') { GenerateFirebaseTokensJob.perform_later }
 every(30.minutes, 'Cache participation scores') { CacheParticipationScoresJob.perform_later }
-every(10.minutes, 'Sync yammer users with enterprise employees') { SyncYammerEmployeesJob.perform_later }
+every(10.minutes, 'Sync Yammer users with enterprise employees') { SyncYammerEmployeesJob.perform_later }
+every(30.minutes, 'Sync Yammer members') { Group.all.each{ |group| SyncYammerGroupJob.perform_later(group) } }
