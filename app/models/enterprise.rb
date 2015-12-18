@@ -71,7 +71,7 @@ class Enterprise < ActiveRecord::Base
   private
 
   def create_elasticsearch_only_fields
-    self.fields << SystemField.create
+    self.fields << GroupsField.create
     self.fields << SegmentsField.create
   end
 end
