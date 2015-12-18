@@ -39,4 +39,8 @@ class Field < ActiveRecord::Base
   def graphable?
     ["SelectField", "CheckboxField", "NumericField"].include? self.type
   end
+
+  def format_value_name(value)
+    value
+  end
 end

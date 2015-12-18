@@ -15,7 +15,7 @@
   <nav class="nav">
     <ul class="nav__list nav__list--primary">
       <li class="nav__item">
-        <%= active_link_to groups_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['enterprises', 'groups', 'segments', 'metrics_dashboards', 'enterprises/resources'], ['index', 'edit', 'show', 'new']] do %>
+        <%= active_link_to metrics_dashboards_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['enterprises', 'groups', 'segments', 'metrics_dashboards', 'enterprises/resources'], ['index', 'edit', 'show', 'new']] do %>
           <span class="nav__icon icon icon--market-scope"></span>
           <span class="nav__text">Manage ERGs</span>
         <% end %>

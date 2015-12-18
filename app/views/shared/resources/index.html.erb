@@ -17,7 +17,7 @@
         <tbody>
           <% @resources.each do |resource| %>
             <tr>
-              <td><%= link_to resource.title, resource.file.url %> <span class="badge badge--spaced" style="background-color: #<%= color_hex_for_extension(resource.file_extension) %>;"><%= resource.file_extension %></span></td>
+              <td><%= link_to resource.title, resource.file.url, target: '_blank' %> <span class="badge badge--spaced" style="background-color: #<%= color_hex_for_extension(resource.file_extension) %>;"><%= resource.file_extension %></span></td>
               <td><%= resource.created_at.to_s :reversed_slashes %></td>
               <% if is_admin? %>
                 <td>

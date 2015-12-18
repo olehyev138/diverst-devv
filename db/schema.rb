@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151216215423) do
+ActiveRecord::Schema.define(version: 20151218093610) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -206,12 +206,14 @@ ActiveRecord::Schema.define(version: 20151216215423) do
   add_index "fields", ["container_type", "container_id"], name: "index_fields_on_container_type_and_container_id", using: :btree
 
   create_table "graphs", force: :cascade do |t|
-    t.integer  "field_id",        limit: 4
-    t.integer  "aggregation_id",  limit: 4
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-    t.integer  "collection_id",   limit: 4
-    t.string   "collection_type", limit: 255
+    t.integer  "field_id",           limit: 4
+    t.integer  "aggregation_id",     limit: 4
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.integer  "collection_id",      limit: 4
+    t.string   "collection_type",    limit: 255
+    t.string   "custom_field",       limit: 255
+    t.string   "custom_aggregation", limit: 255
   end
 
   add_index "graphs", ["collection_type", "collection_id"], name: "index_graphs_on_collection_type_and_collection_id", using: :btree

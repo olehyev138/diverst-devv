@@ -232,8 +232,18 @@ class Employee < ActiveRecord::Base
 
   # Returns a hash of all the user's fields combined with all their poll fields
   def combined_info
-    polls_hash = self.poll_responses.map(&:info).reduce({}) { |a, b| a.merge(b) }
-    self.info_hash.merge(polls_hash) # We use info_hash instead of just info because merge accesses the hash using [], which is overriden in FieldData
+    combined_hash = {}
+
+    polls_hash = self.poll_responses.map(&:info).reduce({}) { |a, b| a.merge(b) } # Get a hash of all the combined poll response answers for this employee
+    groups_hash = { groups: self.groups.map(&:name) }
+    segments_hash = { segments: self.segments.ids }
+
+    # Merge all the hashes to the main info hash
+    # We use info_hash instead of just info because Hash#merge accesses uses [], which is overriden in FieldData
+    self.info_hash
+      .merge(polls_hash)
+      .merge(groups_hash)
+      .merge(segments_hash)
   end
 
   # Export a CSV with the specified employees

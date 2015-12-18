@@ -43,25 +43,25 @@ module Optionnable
 
   def elastic_stats(aggr_field: nil, target_ids: Employee.ids)
     # Craft the aggregation query depending on if we have a field to aggregate on or not
-    term_agg = {
+    term_query = {
       terms: {
         terms: {
-          field: "combined_info.#{self.id}.raw",
+          field: self.elasticsearch_field,
           min_doc_count: 0
         }
       }
     }
 
     if aggr_field.nil?
-      aggs = term_agg
+      aggs = term_query
     else
       aggs = {
         aggregation: {
           terms: {
-            field: "combined_info.#{aggr_field.id}.raw",
+            field: aggr_field.elasticsearch_field,
             min_doc_count: 0
           },
-          aggs: term_agg
+          aggs: term_query
         }
       }
     end
@@ -81,6 +81,7 @@ module Optionnable
     end
 
     # Execute the elasticsearch query
+    ap search_hash
     Employee.search(search_hash).response
   end
 
@@ -135,7 +136,7 @@ module Optionnable
         series.each do |serie|
           must_nots << {
             term: {
-              "combined_info.#{aggr_field.id}.raw" => serie[:name]
+              "#{aggr_field.elasticsearch_field}" => serie[:name]
             }
           }
         end
@@ -154,7 +155,7 @@ module Optionnable
           aggs: {
             aggregation: {
               terms: {
-                field: "combined_info.#{self.id}.raw",
+                field: self.elasticsearch_field,
                 min_doc_count: 0,
                 order: {
                   "_term" => "asc"
@@ -181,7 +182,7 @@ module Optionnable
 
       return {
         series: series,
-        categories: options,
+        categories: options.map{|o| self.format_value_name(o) },
         xAxisTitle: self.title
       }
     else # If there is no aggregation
@@ -204,6 +205,14 @@ module Optionnable
         series: series
       }
     end
+  end
+
+  def elasticsearch_field
+    "combined_info.#{self.id}.raw"
+  end
+
+  def format_value_name(value)
+    value
   end
 
   protected

@@ -21,7 +21,7 @@ class Graph {
   attachToElement() {
     if (this.data.type === "NumericField" || this.data.type === "bar")
       this.renderBarChart()
-    else if (this.data.type === "CheckboxField" || this.data.type === "SelectField")
+    else if (this.data.type === "CheckboxField" || this.data.type === "SelectField" || this.data.type === "GroupsField")
       if (this.data.hasAggregation)
         this.renderBarChart()
       else
