@@ -77,5 +77,6 @@ group :development do
   gem 'capistrano-rvm'
   gem 'capistrano-bower'
   gem 'capistrano-rails-console'
+  gem 'capistrano-sidekiq'
   gem 'spring-commands-rspec'
 end

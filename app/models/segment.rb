@@ -7,7 +7,7 @@ class Segment < ActiveRecord::Base
   has_and_belongs_to_many :group_messages
   has_and_belongs_to_many :groups, inverse_of: :invitation_segments, join_table: "invitation_segments_groups"
 
-  after_create :update_cached_members
+  after_commit :update_cached_members
 
   accepts_nested_attributes_for :rules, reject_if: :all_blank, allow_destroy: true
 

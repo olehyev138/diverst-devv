@@ -4,6 +4,10 @@ threads min_threads, max_threads
 
 preload_app!
 
+on_worker_boot do
+  ActiveRecord::Base.establish_connection
+end
+
 rackup      DefaultRackup
 port        ENV['PORT']     || 3000
 environment ENV['RACK_ENV'] || 'development'
