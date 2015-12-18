@@ -81,7 +81,7 @@ module Optionnable
     end
 
     # Execute the elasticsearch query
-    ap search_hash
+    puts search_hash.to_json
     Employee.search(search_hash).response
   end
 

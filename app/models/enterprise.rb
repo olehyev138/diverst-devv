@@ -1,7 +1,8 @@
 class Enterprise < ActiveRecord::Base
   has_many :admins, inverse_of: :enterprise
   has_many :employees, inverse_of: :enterprise
-  has_many :fields, as: :container
+  has_many :graph_fields, as: :container, class_name: "Field"
+  has_many :fields, -> { where elasticsearch_only: false }, as: :container
   has_many :topics, inverse_of: :enterprise
   has_many :segments, inverse_of: :enterprise
   has_many :groups, inverse_of: :enterprise
@@ -22,6 +23,8 @@ class Enterprise < ActiveRecord::Base
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :mobile_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :yammer_field_mappings, reject_if: :all_blank, allow_destroy: true
+
+  before_create :create_elasticsearch_only_fields
 
   include ContainsResources
 
@@ -63,5 +66,12 @@ class Enterprise < ActiveRecord::Base
 
   def employees_csv(nb_rows)
     Employee.to_csv(employees: self.employees, fields: self.fields, nb_rows: nb_rows)
+  end
+
+  private
+
+  def create_elasticsearch_only_fields
+    self.fields << SystemField.create
+    self.fields << SegmentsField.create
   end
 end

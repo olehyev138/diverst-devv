@@ -17,4 +17,12 @@ class Graph < ActiveRecord::Base
       title: self.title
     }
   end
+
+  def field
+    Field.unscoped{ super }
+  end
+
+  def aggregation
+    Field.unscoped{ super }
+  end
 end

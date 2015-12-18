@@ -23,6 +23,6 @@ class MetricsDashboard < ActiveRecord::Base
 
   # Defines which fields will be usable when creating graphs
   def graphable_fields(admin)
-    admin.enterprise.fields
+    admin.enterprise.graph_fields
   end
 end

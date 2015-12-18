@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151218093610) do
+ActiveRecord::Schema.define(version: 20151218181815) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -201,6 +201,7 @@ ActiveRecord::Schema.define(version: 20151218093610) do
     t.boolean  "private",            limit: 1,     default: false
     t.integer  "container_id",       limit: 4
     t.string   "container_type",     limit: 255
+    t.boolean  "elasticsearch_only", limit: 1,     default: false
   end
 
   add_index "fields", ["container_type", "container_id"], name: "index_fields_on_container_type_and_container_id", using: :btree
