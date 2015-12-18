@@ -9,6 +9,8 @@ class GroupsField < Field
 
   def format_value_name(value)
     Group.find(value).name
+  rescue
+    "Deleted ERG"
   end
 
   private

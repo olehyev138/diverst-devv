@@ -81,7 +81,6 @@ module Optionnable
     end
 
     # Execute the elasticsearch query
-    puts search_hash.to_json
     Employee.search(search_hash).response
   end
 
@@ -188,7 +187,7 @@ module Optionnable
     else # If there is no aggregation
       seriesData = data[:aggregations][:terms][:buckets].map do |option_bucket|
         {
-          name: option_bucket[:key],
+          name: self.format_value_name(option_bucket[:key]),
           y: option_bucket[:doc_count]
         }
       end

@@ -263,7 +263,7 @@ class Employee < ActiveRecord::Base
     end
   end
 
-  protected
+  private
 
   # Generate a random password if the user is using SAML
   def generate_password_if_saml

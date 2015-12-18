@@ -1,6 +1,6 @@
 class Group < ActiveRecord::Base
-  has_many :employee_groups, dependent: :destroy
-  has_many :members, through: :employee_groups, class_name: "Employee", source: :employee
+  has_many :employee_groups
+  has_many :members, through: :employee_groups, class_name: "Employee", source: :employee, after_remove: :update_elasticsearch_member
   belongs_to :enterprise
   has_and_belongs_to_many :polls
   has_many :poll_responses, through: :polls, source: :responses
@@ -19,6 +19,8 @@ class Group < ActiveRecord::Base
 
   before_save :send_invitation_emails, if: :send_invitations?
   before_save :create_yammer_group, if: :should_create_yammer_group?
+  before_destroy :handle_deletion
+  after_commit :update_all_elasticsearch_members
 
   scope :top_participants, -> (n) { order(participation_score_7days: :desc).limit(n) }
 
@@ -94,5 +96,28 @@ class Group < ActiveRecord::Base
     yammer_create_group? &&
     !yammer_group_created &&
     !self.enterprise.yammer_token.nil?
+  end
+
+  def update_elasticsearch_member(member)
+    member.__elasticsearch__.update_document
+  end
+
+  # Update members in elastic_search
+  def update_all_elasticsearch_members
+    self.members.each do |member|
+      update_elasticsearch_member(member)
+    end
+  end
+
+  def handle_deletion
+    old_members = self.members.ids
+
+    # Delete member associations
+    EmployeeGroup.where(group_id: self.id).delete_all
+
+    # Update members in elastic_search
+    Employee.where(id: old_members).each do |member|
+      update_elasticsearch_member(member)
+    end
   end
 end
