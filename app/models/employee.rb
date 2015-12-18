@@ -235,7 +235,7 @@ class Employee < ActiveRecord::Base
     combined_hash = {}
 
     polls_hash = self.poll_responses.map(&:info).reduce({}) { |a, b| a.merge(b) } # Get a hash of all the combined poll response answers for this employee
-    groups_hash = { groups: self.groups.map(&:name) }
+    groups_hash = { groups: self.groups.ids }
     segments_hash = { segments: self.segments.ids }
 
     # Merge all the hashes to the main info hash
