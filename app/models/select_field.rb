@@ -60,11 +60,15 @@ class SelectField < Field
   end
 
   def validates_rule_for_employee?(rule:, employee:)
+    return false if employee.info[rule.field].nil?
+
+    field_value = employee.info[rule.field][0]
+
     case rule.operator
     when SegmentRule.operators[:contains_any_of]
-      rule.values_array.include?(employee.info[rule.field][0])
+      rule.values_array.include?(field_value)
     when SegmentRule.operators[:is_not]
-      !rule.values_array.include?(employee.info[rule.field][0])
+      !rule.values_array.include?(field_value)
     end
   end
 end

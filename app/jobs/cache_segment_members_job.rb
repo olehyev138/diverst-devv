@@ -13,5 +13,8 @@ class CacheSegmentMembersJob < ActiveJob::Base
     segment.members = new_members
 
     segment.save
+
+    # Update segment employees in Elasticsearch to reflect their new segment
+    new_members.each{ |e| e.__elasticsearch__.update_document }
   end
 end

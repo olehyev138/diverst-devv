@@ -28,6 +28,7 @@ class SegmentRule < ActiveRecord::Base
   end
 
   def followed_by?(employee)
+    puts self.field.title
     self.field.validates_rule_for_employee?(rule: self, employee: employee)
   end
 
