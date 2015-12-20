@@ -15,9 +15,7 @@
       <%= f.input :values, input_html: { class: "values", 'data-selected-values' => f.object.values }, label: false, value: "" %>
     </div>
     <div class="flex-row__cell flex-row__cell--grow" style="display: none;">
-      <div class="field__input-wrapper">
-        <%= f.input_field :values, class: "field__input multi-select", 'data-selected-values' => f.object.values, label: false, collection: [], multiple: "multiple", value: "" %>
-      </div>
+      <%= f.input :values, input_html: { class: "field__input multi-select", 'data-selected-values' => f.object.values, multiple: "multiple", }, label: false, collection: [], value: "", include_hidden: false %>
     </div>
   </div>
 </div>

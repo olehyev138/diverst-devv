@@ -88,7 +88,7 @@
       $fieldSelect.change(handleFieldChange);
 
       var handleOperatorChange = function() {
-        $multiValueField.parents('.flex-row__cell').css('display', 'none').prop('disabled', true);
+        $multiValueField.parents('.flex-row__cell').css('display', 'none')
         $singleValueField.parents('.flex-row__cell').css('display', 'none').prop('disabled', true);
 
         var selectedOperator = operators.filter(function(operator) {
@@ -113,11 +113,14 @@
             $multiValueField.prop('multiple', '');
           }
 
+          $singleValueField.prop('disabled', true);
           $multiValueField.prop('disabled', false);
+
           $multiValueField.parents('.flex-row__cell').css('display', 'inline-block');
           $multiValueField.select2();
         }
         else {
+          $multiValueField.prop('disabled', true);
           $singleValueField.prop('disabled', false);
           $singleValueField.parents('.flex-row__cell').css('display', 'inline-block');
         }

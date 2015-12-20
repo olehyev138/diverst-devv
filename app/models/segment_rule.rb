@@ -2,9 +2,6 @@ class SegmentRule < ActiveRecord::Base
   belongs_to :segment
   belongs_to :field
 
-  before_save :remove_empty_values
-  after_save :update_segment_members
-
   @@operators = {
     equals: 0,
     greater_than: 1,
