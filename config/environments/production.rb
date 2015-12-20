@@ -91,7 +91,7 @@ Rails.application.configure do
 
   # Setup Loggly
   require 'syslogger'
-  config.logger = Syslogger.new("Diverst", Syslog::LOG_PID, Syslog::LOG_LOCAL7)
+  config.logger = config.logger = ActiveSupport::TaggedLogging.new(Syslogger.new("Diverst", Syslog::LOG_PID, Syslog::LOG_LOCAL7))
   config.lograge.enabled = true
   config.lograge.formatter = Lograge::Formatters::Json.new
 end
