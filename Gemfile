@@ -49,6 +49,8 @@ gem 'awesome_print'
 gem 'yam'
 gem 'httparty', '~> 0.13'
 gem 'appsignal', '~> 0.12.rc'
+gem 'syslogger', '~> 1.6.0'
+gem 'lograge', '~> 0.3.1'
 
 group :development, :test do
   gem 'spring' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring

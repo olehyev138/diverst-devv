@@ -88,4 +88,10 @@ Rails.application.configure do
   }
 
   config.action_mailer.default_url_options = { host: ENV["DOMAIN"] }
+
+  # Setup Loggly
+  require 'syslogger'
+  config.logger = Syslogger.new("Diverst", Syslog::LOG_PID, Syslog::LOG_LOCAL7)
+  config.lograge.enabled = true
+  config.lograge.formatter = Lograge::Formatters::Json.new
 end
