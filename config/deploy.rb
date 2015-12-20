@@ -27,6 +27,7 @@ set :puma_init_active_record, true
 set :puma_preload_app, true
 
 set :sidekiq_config, 'config/sidekiq.yml'
+set :sidekiq_log, '/dev/null'
 set :sidekiq_processes, 1
 
 require 'appsignal/capistrano'
