@@ -20,6 +20,7 @@ select {
 
 textarea {
   min-height: 100px;
+  resize: vertical;
 }
 
 input[type="password"] {
