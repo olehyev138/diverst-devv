@@ -3,7 +3,7 @@
   "dependencies": {
     "jquery": "latest",
     "select2": "latest",
-    "highcharts": "latest",
+    "highcharts": "4.2.0",
     "rangeslider.js": "latest",
     "Sortable": "latest",
     "datatables": "latest"

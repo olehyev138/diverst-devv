@@ -3,7 +3,7 @@
 
 asset 'jquery'
 asset 'select2'
-asset 'highcharts'
+asset 'highcharts', '4.2.0'
 asset 'rangeslider.js'
 asset 'Sortable'
 asset 'datatables'
