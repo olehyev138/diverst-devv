@@ -16,7 +16,7 @@
 //= require turbolinks
 //= require cocoon
 //= require select2
-//= require highcharts/lib/highcharts
+//= require highcharts
 //= require rangeslider.js/dist/rangeslider
 //= require Sortable
 //= require_tree .
