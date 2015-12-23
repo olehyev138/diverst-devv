@@ -70,7 +70,8 @@ class Graph {
       series: this.data.highcharts.series,
       credits: {
         enabled: false
-      }
+      },
+      colors: ['#7B77C9', '#F15E57', '#FE6D4B', '#9FD661', '#40D0AD', '#48C0EB', '#5A9AEF', '#EE85C1']
     });
   }
 
@@ -108,7 +109,8 @@ class Graph {
       },
       credits: {
         enabled: false
-      }
+      },
+      colors: ['#7B77C9', '#F15E57', '#FE6D4B', '#9FD661', '#40D0AD', '#48C0EB', '#5A9AEF', '#EE85C1']
     });
   }
 }
