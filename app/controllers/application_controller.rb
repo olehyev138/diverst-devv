@@ -24,4 +24,11 @@ class ApplicationController < ActionController::Base
     return new_employee_session_path if resource == :employee
     return new_admin_session_path if resource == :admin
   end
+
+  def cors_allow_all
+    headers['Access-Control-Allow-Origin'] = '*'
+    headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
+    headers['Access-Control-Request-Method'] = '*'
+    headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  end
 end

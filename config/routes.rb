@@ -201,5 +201,7 @@ Rails.application.routes.draw do
     get 'messages_sent'
   end
 
-  root to: "metrics_dashboards#index"
+  namespace :website do
+    resources :leads
+  end
 end
