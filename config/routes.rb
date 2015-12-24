@@ -204,4 +204,6 @@ Rails.application.routes.draw do
   namespace :website do
     resources :leads
   end
+
+  root to: "metrics_dashboards#index"
 end
