@@ -68,6 +68,10 @@ class Enterprise < ActiveRecord::Base
     Employee.to_csv(employees: self.employees, fields: self.fields, nb_rows: nb_rows)
   end
 
+  def es_employees_index_name
+    "#{self.id}_employees"
+  end
+
   private
 
   def create_elasticsearch_only_fields

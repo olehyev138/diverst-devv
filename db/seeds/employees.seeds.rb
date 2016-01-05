@@ -50,12 +50,6 @@ nb_employees.times do |i|
   if rand(100) < 2
     index = rand(disabilities_field.options.count)
     employee.info[disabilities_field] = disabilities_field.options[index]
-
-    # Chance to pick another random disability
-    if rand(100) < 2
-      index = rand(disabilities_field.options.count)
-      employee.info[disabilities_field] << disabilities_field.options[index]
-    end
   end
 
   # Pick gender with a 70-30 repartition

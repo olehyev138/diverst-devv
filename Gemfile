@@ -48,7 +48,6 @@ gem 'sprockets-es6'
 gem 'awesome_print'
 gem 'yam'
 gem 'httparty', '~> 0.13'
-gem 'appsignal', '~> 0.12.rc'
 gem 'syslogger', '~> 1.6.0'
 gem 'lograge', '~> 0.3.1'
 gem 'sidekiq-logging-json', github: 'frankmarineau/Sidekiq-Logging-JSON'
@@ -72,6 +71,8 @@ end
 gem 'rspec_junit_formatter', '0.2.2', group: :test
 
 gem "parallel_tests", group: :development
+
+gem 'appsignal', '~> 0.12.rc', group: :production
 
 group :development do
   gem 'capistrano'

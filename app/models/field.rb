@@ -43,4 +43,9 @@ class Field < ActiveRecord::Base
   def format_value_name(value)
     value
   end
+
+  def enterprise
+    return self.container if self.container.is_a? Enterprise
+    self.container.enterprise
+  end
 end

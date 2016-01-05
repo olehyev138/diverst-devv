@@ -164,18 +164,20 @@ class Employee < ActiveRecord::Base
   end
 
   # Deletes the ES index, creates a new one and imports all employees in it
-  def self.reset_elasticsearch
-    Employee.__elasticsearch__.client.indices.delete index: Employee.index_name rescue nil
+  def self.reset_elasticsearch(enterprise:)
+    index = enterprise.es_employees_index_name
+
+    Employee.__elasticsearch__.client.indices.delete index: index rescue nil
 
     Employee.__elasticsearch__.client.indices.create(
-      index: Employee.index_name,
+      index: index,
       body: {
         settings: Employee.settings.to_hash,
         mappings: Employee.mappingue.to_hash
       }
     )
 
-    Employee.import
+    Employee.import index: index
   end
 
   # Updates this employee's match scores with all other enterprise employees
