@@ -1,6 +1,6 @@
 <div class="content__header">
   <h1>
-    <%= link_to "My Scrums", employee_campaigns_path %> /
+    <%= link_to "My Campaigns", employee_campaigns_path %> /
     <%= link_to @question.campaign.title, employee_campaign_questions_path(@question.campaign) %> /
     <%= @question.title.truncate(60) %>
   </h1>

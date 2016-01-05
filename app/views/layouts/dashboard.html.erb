@@ -16,8 +16,20 @@
     <ul class="nav__list nav__list--primary">
       <li class="nav__item">
         <%= active_link_to metrics_dashboards_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['enterprises', 'groups', 'segments', 'metrics_dashboards', 'enterprises/resources'], ['index', 'edit', 'show', 'new']] do %>
+          <span class="nav__icon icon icon--manage"></span>
+          <span class="nav__text">Manage ERG</span>
+        <% end %>
+      </li>
+      <li class="nav__item">
+        <%= active_link_to campaigns_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['campaigns', 'questions'], []] do %>
+          <span class="nav__icon icon icon--unify"></span>
+          <span class="nav__text">Collaborate</span>
+        <% end %>
+      </li>
+      <li class="nav__item">
+        <%= active_link_to polls_path, class: "nav__link", class_active: "nav__link--is-selected" do %>
           <span class="nav__icon icon icon--market-scope"></span>
-          <span class="nav__text">Manage ERGs</span>
+          <span class="nav__text">Scope</span>
         <% end %>
       </li>
       <li class="nav__item">
@@ -31,18 +43,6 @@
           <span class="nav__icon icon icon--coffee-talk"></span>
           <span class="nav__text">Mentor</span>
         </a>
-      </li>
-      <li class="nav__item">
-        <%= active_link_to campaigns_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['campaigns', 'questions'], []] do %>
-          <span class="nav__icon icon icon--unify"></span>
-          <span class="nav__text">Collaborate</span>
-        <% end %>
-      </li>
-      <li class="nav__item">
-        <%= active_link_to polls_path, class: "nav__link", class_active: "nav__link--is-selected" do %>
-          <span class="nav__icon icon icon--market-scope"></span>
-          <span class="nav__text">Scope</span>
-        <% end %>
       </li>
     </ul>
     <ul class="nav__list nav__list--secondary">

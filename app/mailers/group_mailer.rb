@@ -23,6 +23,6 @@ class GroupMailer < ApplicationMailer
 
     employees_to_invite
 
-    mail(to: group.employees_to_invite.first.email, bcc: group.employees_to_invite[1..-1].pluck(:email), subject: "You've been invited to join a new BRG")
+    mail(to: group.employees_to_invite.first.email, bcc: group.employees_to_invite[1..-1].pluck(:email), subject: "You've been invited to join a new ERG")
   end
 end

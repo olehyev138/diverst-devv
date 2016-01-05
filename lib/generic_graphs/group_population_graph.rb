@@ -11,7 +11,7 @@ class GroupPopulationGraph
         xAxisTitle: "Nb. of employees"
       },
       hasAggregation: false,
-      title: "Number of employees per BRG"
+      title: "Number of employees per ERG"
     }
   end
 end

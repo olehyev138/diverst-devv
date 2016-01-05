@@ -71,6 +71,10 @@
 
 // Product icons
 
+.icon--manage {
+  @include icon(manage);
+}
+
 .icon--handshake {
   @include icon(handshake);
 }

@@ -227,6 +227,7 @@ class Employee < ActiveRecord::Base
 
   # Raw hash of employee info needed when the FieldData Hash[] overrides are an annoyance
   def info_hash
+    return {} if self.data.nil?
     JSON.parse self.data
   end
 

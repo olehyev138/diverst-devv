@@ -1,6 +1,6 @@
 <% content_for :secondary_nav do %>
   <%= active_link_to "Metrics", metrics_dashboards_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['metrics_dashboards'], []] %>
-  <%= active_link_to "BRGs", groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to "ERGs", groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <%= active_link_to "Segments", segments_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <%= active_link_to "Resources", enterprise_resources_path(current_admin.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
 <% end %>

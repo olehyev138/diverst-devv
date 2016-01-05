@@ -1,4 +1,4 @@
-nb_employees = 200
+nb_employees = 800
 
 enterprise = Enterprise.first
 domain_name = enterprise.name.parameterize + ".com"

@@ -13,7 +13,6 @@ class Segment < ActiveRecord::Base
   after_commit :update_cached_members
 
   def update_cached_members
-    puts "888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888"
     CacheSegmentMembersJob.perform_later self
   end
 
