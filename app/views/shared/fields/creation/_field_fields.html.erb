@@ -1,20 +1,22 @@
-<div class="nested-fields">
-  <div class="card">
-    <div class="card__action">
-      <%= link_to_remove_association "Remove", f, class: "error" %>
-    </div>
-    <div class="card__section">
-      <%= render 'shared/fields/creation/text_field', f: f if f.object.type == 'TextField' %>
-      <%= render 'shared/fields/creation/select_field', f: f if f.object.type == 'SelectField' %>
-      <%= render 'shared/fields/creation/checkbox_field', f: f if f.object.type == 'CheckboxField' %>
-      <%= render 'shared/fields/creation/numeric_field', f: f if f.object.type == 'NumericField' %>
-      <%= render 'shared/fields/creation/date_field', f: f if f.object.type == 'DateField' %>
+<div class="nested-fields card__section card__section--border card__section--accordeon">
+  <div class="card__action">
+    <a href="#" class="expand-link">Edit</a> -
+    <%= link_to_remove_association "Remove", f, class: "error" %>
+  </div>
 
-      <%= f.input :private, label: "Hide from employees" %>
-      <%= f.input :show_on_vcard %>
-      <%= f.input :gamification_value %>
-      <%= f.hidden_field :type %>
-      <%= f.input :saml_attribute %>
-    </div>
+  <h4><%= f.object.title %></h4>
+
+  <div class="card__content">
+    <%= render 'shared/fields/creation/text_field', f: f if f.object.type == 'TextField' %>
+    <%= render 'shared/fields/creation/select_field', f: f if f.object.type == 'SelectField' %>
+    <%= render 'shared/fields/creation/checkbox_field', f: f if f.object.type == 'CheckboxField' %>
+    <%= render 'shared/fields/creation/numeric_field', f: f if f.object.type == 'NumericField' %>
+    <%= render 'shared/fields/creation/date_field', f: f if f.object.type == 'DateField' %>
+
+    <%= f.input :private, label: "Hide from employees" %>
+    <%= f.input :show_on_vcard %>
+    <%= f.input :gamification_value %>
+    <%= f.hidden_field :type %>
+    <%= f.input :saml_attribute %>
   </div>
 </div>

@@ -88,34 +88,34 @@
 
     <div class="card">
       <div class="card__section">
+        <table class="table--has-border responses-datatable">
+          <thead>
+            <th>Respondant</th>
+            <th>Date</th>
+            <th>Response</th>
+          </thead>
+          <tbody>
+            <% @responses.each do |response| %>
 
-      <table class="table--has-border responses-datatable">
-        <thead>
-          <th>Respondant</th>
-          <th>Date</th>
-          <th>Response</th>
-        </thead>
-        <tbody>
-          <% @responses.each do |response| %>
-            <tr data-response-id="<%= response.id %>">
-              <td><%= response.employee.name %></td>
-              <td><%= response.created_at.to_s :reversed_slashes %></td>
-              <td><a href="#" class="row-expand">Show</a></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+              <tr data-response-id="<%= response.id %>">
+                <td><%= response.employee.name %></td>
+                <td><%= response.created_at.to_s :reversed_slashes %></td>
+                <td><a href="#" class="row-expand">Show</a></td>
+              </tr>
 
-      <div style="display: none;">
-        <% @responses.each do |response| %>
-          <div class="poll-response_details" id="response-details-<%= response.id %>">
-            <ul class="unstyled">
-              <% @poll.fields.each do |field| %>
-                <li><small><%= field.title %></small> <span class="block highlight"><%= field.string_value response.info[field] %></span></li>
-              <% end %>
-            </ul>
-          </div>
-        <% end %>
+              <div style="display: none;">
+                <div class="poll-response_details" id="response-details-<%= response.id %>">
+                  <ul class="unstyled">
+                    <% @poll.fields.each do |field| %>
+                      <li><small><%= field.title %></small> <span class="block highlight"><%= field.string_value response.info[field] %></span></li>
+                    <% end %>
+                  </ul>
+                </div>
+              </div>
+
+            <% end %>
+          </tbody>
+        </table>
       </div>
     </div>
 

@@ -37,6 +37,21 @@
   }
 }
 
+.card__section--accordeon {
+  h4 {
+    margin-bottom: 0;
+  }
+
+  .card__content {
+    margin-top: 8px;
+    display: none;
+
+    &--is-visible {
+      display: block;
+    }
+  }
+}
+
 .card__section--border {
   border-bottom: 1px solid $diverst-border;
 

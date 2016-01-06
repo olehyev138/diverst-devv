@@ -3,21 +3,29 @@
 </div>
 
 <div class="row">
-  <div class="col sm-12 md-8">
+  <div class="col sm-12">
     <%= simple_form_for @enterprise do |f| %>
       <%= render "shared/fields/creation/custom_fields", f: f %>
       <%= f.button :submit, value: "Save employee fields" %>
     <% end %>
   </div>
-  <div class="col sm-12 md-4">
-    <div class="card card--secondary" id="sidebar">
-      <div class="card__section">
-        <ul class="unstyled">
-          <% @enterprise.fields.each do |field| %>
-            <li><%= link_to field.title, "#" %></li>
-          <% end %>
-        </ul>
-      </div>
-    </div>
-  </div>
 </div>
+
+<script>
+  var handleNewField = function($fieldEl) {
+    $fieldEl.find('.expand-link').click(function() {
+      console.log($fieldEl.find('.card__content'))
+      $fieldEl.find('.card__content').toggleClass('card__content--is-visible');
+      $(this).text($(this).text() === "Edit" ? "Close" : "Edit");
+    });
+  };
+
+  $('.nested-fields').each(function() {
+    handleNewField($(this));
+  });
+
+  $('#fields').on('cocoon:after-insert', function(e, insertedItem) {
+    handleNewField(insertedItem);
+    insertedItem.find('.expand-link').click(); // Expand newly added fields
+  });
+</script>
