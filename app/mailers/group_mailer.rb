@@ -7,22 +7,16 @@ class GroupMailer < ApplicationMailer
 
   # Invite the specified segments to join a group.
   def invitation(group, invitation_segments)
-    employees_to_invite = self.enterprise.employees
-    .joins(:employee_groups)
-    .where.not(
-      "employee_groups.id" => group.id
-    )
+    template = Liquid::Template.parse(group.enterprise.emails.where(slug: 'diverst-invitation').first.custom_html_template)
+    @content = template.render({
+      'group' => {
+        'image' => view_context.image_tag(group.logo.url(:thumb)),
+        'name' => group.name,
+        'description' => group.description
+      },
+      'accept_link' => view_context.join_group_path(group)
+    })
 
-    unless invitation_segments.empty?
-      employees_to_invite = query
-      .joins(:segments)
-      .where(
-        "segments.id" => invitation_segments.ids
-      )
-    end
-
-    employees_to_invite
-
-    mail(to: group.employees_to_invite.first.email, bcc: group.employees_to_invite[1..-1].pluck(:email), subject: "You've been invited to join a new ERG")
+    mail(to: 'frank.marineau@gmail.com', subject: "You've been invited to join a new ERG")
   end
 end

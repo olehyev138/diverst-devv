@@ -1,0 +1,36 @@
+<div class="content__header">
+  <h1>Emails</h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <table class="table--has-border" id="emails-table">
+        <thead>
+          <th>Name</th>
+          <th>Custom template?</th>
+          <th>Last update</th>
+        </thead>
+        <tbody>
+          <% @emails.each do |email| %>
+            <tr>
+              <td><%= link_to email.name, edit_email_path(email) %></td>
+              <td><%= email.custom_html_template.nil? ? "No" : "Yes" %></td>
+              <td><%= time_ago_in_words(email.updated_at) %> ago</td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).on('page:change', function() {
+    $(document).off('page:change');
+
+    $('#emails-table').dataTable(Utility.mergeWithDTDefaults({
+      order: [[2, "desc"]]
+    }));
+  });
+</script>

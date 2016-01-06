@@ -1,0 +1,16 @@
+<div class="content__header">
+  <h1><%= @email.name %></h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <h3>Edit template</h3>
+      <%= simple_form_for @email do |f| %>
+        <%= f.input :custom_html_template %>
+        <%= f.input :custom_txt_template %>
+        <%= f.button :submit %>
+      <% end %>
+    </div>
+  </div>
+</div>
