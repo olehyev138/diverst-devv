@@ -223,6 +223,7 @@ class Employee < ActiveRecord::Base
     employee
   end
 
+  # Is set to false to allow users to login via SAML without a password
   def password_required?
     false
   end
