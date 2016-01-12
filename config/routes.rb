@@ -205,5 +205,7 @@ Rails.application.routes.draw do
     resources :leads
   end
 
+  resources :emails
+
   root to: "metrics_dashboards#index"
 end

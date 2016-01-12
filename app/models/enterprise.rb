@@ -19,6 +19,7 @@ class Enterprise < ActiveRecord::Base
   has_many :answer_upvotes, through: :answers
   has_many :resources, as: :container
   has_many :yammer_field_mappings
+  has_many :emails
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :mobile_fields, reject_if: :all_blank, allow_destroy: true

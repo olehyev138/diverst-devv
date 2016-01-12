@@ -87,8 +87,6 @@ Rails.application.configure do
     }
   }
 
-  config.action_mailer.default_url_options = { host: ENV["DOMAIN"] }
-
   # Setup Loggly
   require 'syslogger'
   config.logger = ActiveSupport::TaggedLogging.new(Syslogger.new("Diverst", Syslog::LOG_PID, Syslog::LOG_LOCAL7))

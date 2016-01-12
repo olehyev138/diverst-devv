@@ -29,5 +29,7 @@ module Diverst
     config.assets.paths << Rails.root.join('vendor', 'assets', 'bower_components')
 
     config.active_job.queue_adapter = :sidekiq
+
+    Rails.application.routes.default_url_options[:host] = ENV["DOMAIN"]
   end
 end
