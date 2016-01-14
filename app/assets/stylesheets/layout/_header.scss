@@ -9,8 +9,8 @@
   padding: 0 $spacing-medium;
   background-color: $diverst-purple;
   color: $diverst-white;
-  @include display(flex);
-  @include align-items(center);
+  display: flex;
+  align-items: center;
   @include z-index(primary-header);
 
   @include mq(medium) {
@@ -26,8 +26,8 @@
 .primary-header__back {
   color: $diverst-white;
   width: 25%;
-  @include display(flex);
-  @include align-items(center);
+  display: flex;
+  align-items: center;
 
   .logo-mark {
     margin-right: $spacing-medium;
@@ -40,7 +40,7 @@
 }
 
 .primary-header__main {
-  @include flex(1);
+  flex: 1;
 }
 
 
@@ -84,7 +84,7 @@
   line-height: 50px;
   padding: 0 $spacing-medium;
   box-shadow: inset 0 0 0 0 $diverst-purple;
-  @include transition(color $time $curve, box-shadow $time $curve);
+  transition: color $time $curve, box-shadow $time $curve;
   @include caps-bold;
 
   @include mq(medium) {

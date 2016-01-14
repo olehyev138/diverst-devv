@@ -33,7 +33,6 @@ gem 'houston'
 gem 'bower-rails', '~> 0.10.0'
 gem 'gcm'
 gem 'clockwork'
-gem 'bourbon'
 gem 'pismo'
 gem 'active_link_to'
 gem 'paperclip', '~> 4.3'
@@ -85,4 +84,5 @@ group :development do
   gem 'capistrano-rails-console'
   gem 'capistrano-sidekiq'
   gem 'spring-commands-rspec'
+  gem 'pry-rails'
 end

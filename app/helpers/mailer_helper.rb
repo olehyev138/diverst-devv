@@ -1,6 +1,6 @@
 module MailerHelper
   def html_template(enterprise, template_slug)
-    email = group.enterprise.emails.where(slug: template_slug).first
+    email = enterprise.emails.where(slug: template_slug).first
 
     # Parse the custom template if one is defined. If not, return the default template
     if email

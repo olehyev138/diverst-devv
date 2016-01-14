@@ -26,9 +26,9 @@
   visibility: hidden;
   pointer-events: none;
   @include z-index(tooltip);
-  @include transition(all $time $curve);
-  @include transform(translate3d(-50%, 5px, 0));
-  @include transform-origin(center bottom);
+  transition: all $time $curve;
+  transform: translate3d(-50%, 5px, 0);
+  transform-origin: center bottom;
 
   .has-tooltip:hover &,
   .has-tooltip:focus &,
@@ -36,7 +36,7 @@
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
-    @include transform(translate3d(-50%, 0, 0));
+    transform: translate3d(-50%, 0, 0);
   }
 
   &:after {

@@ -16,6 +16,29 @@
 }
 
 
+// Clearfix
+
+@mixin clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+
+// Ellipsis
+
+@mixin ellipsis($width: 100%) {
+  display: inline-block;
+  max-width: $width;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+
+
 // Visually hidden
 
 @mixin visually-hidden {
@@ -62,5 +85,5 @@
 @mixin v-center($position: relative) {
   position: $position;
   top: 50%;
-  @include transform(translate3d(0, -50%, 0));
+  transform: translate3d(0, -50%, 0);
 }
