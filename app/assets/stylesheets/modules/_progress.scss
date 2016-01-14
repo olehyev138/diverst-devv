@@ -19,5 +19,5 @@
   max-width: 100%;
   background-color: $diverst-purple;
   border-radius: $border-radius;
-  @include transition(width $time $curve);
+  transition: width $time $curve;
 }

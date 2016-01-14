@@ -20,5 +20,5 @@ select.datetime {
 
 .dataTables_filter input {
   @extend .field__input;
-  @include box-sizing(border-box);
+  box-sizing: border-box;
 }
