@@ -8,7 +8,7 @@
   cursor: pointer;
   display: inline-block;
   @include font-size($small-font-size);
-  @include user-select(none);
+  user-select: none;
 
   &--active {
     color: $diverst-purple;

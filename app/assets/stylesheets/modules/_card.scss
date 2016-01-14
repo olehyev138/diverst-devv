@@ -7,7 +7,7 @@
   background-color: $diverst-white;
   width: 100%;
   @include drop-shadow;
-  @include transition(box-shadow $time $curve);
+  transition: box-shadow $time $curve;
 
   @include mq(medium) {
     margin-bottom: $spacing-large;

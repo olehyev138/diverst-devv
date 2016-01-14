@@ -9,7 +9,7 @@ input, select, textarea {
   border: 0;
   border-radius: 0;
   -webkit-font-smoothing: subpixel-antialiased; // Safari transform bug
-  @include appearance(none);
+  appearance: none;
 }
 
 select {
@@ -71,8 +71,8 @@ input[type="password"] {
   border: 1px solid $diverst-border;
   color: $diverst-black;
   border-radius: $border-radius;
-  @include transition(all $time $curve);
-  @include backface-visibility(hidden);
+  transition: all $time $curve;
+  backface-visibility: hidden;
 
   &--large {
     font-size: 110%;
@@ -90,10 +90,6 @@ input[type="password"] {
 
   &:-webkit-autofill {
     -webkit-box-shadow: 0 0 0px 1000px $diverst-white inset;
-  }
-
-  @include placeholder {
-    color: rgba($diverst-grey-light, 0.5);
   }
 }
 

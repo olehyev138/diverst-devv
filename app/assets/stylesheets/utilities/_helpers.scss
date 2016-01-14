@@ -48,11 +48,11 @@
   }
 
   &:hover .icon--chevron-right {
-    @include transform(translate3d(5px, 0, 0));
+    transform: translate3d(5px, 0, 0);
   }
 
   .icon--chevron-right {
-    @include transition(transform $time $curve);
+    transition: transform $time $curve;
   }
 
   &:last-child {
