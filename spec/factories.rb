@@ -9,11 +9,7 @@ FactoryGirl.define do
   end
 
   factory :employee do
-<<<<<<< HEAD
     email { generate(:email_address) }
-=======
-    email :email_address
->>>>>>> 419856bf8a245c116c0d27bb483da12dfc794b5e
     first_name "Frank"
     last_name "Marineau"
     password 'f4k3p455w0rd'
@@ -24,11 +20,7 @@ FactoryGirl.define do
   end
 
   factory :admin do
-<<<<<<< HEAD
     email { generate(:email_address) }
-=======
-    email :email_address
->>>>>>> 419856bf8a245c116c0d27bb483da12dfc794b5e
     password 'f4k3p455w0rd'
     enterprise
   end
@@ -241,16 +233,11 @@ FactoryGirl.define do
       end
 
       after(:create) do |email, evaluator|
-<<<<<<< HEAD
         evaluator.variables create_list(:email_variable, evaluator.variable_count, email: email)
-=======
-        evaluator.graphs create_list(:variables, evaluator.variable_count, collection: email)
->>>>>>> 419856bf8a245c116c0d27bb483da12dfc794b5e
       end
     end
   end
 
-<<<<<<< HEAD
   factory :email_variable do
     email
     key "mysterious-variable"
@@ -258,6 +245,4 @@ FactoryGirl.define do
     required false
   end
 
-=======
->>>>>>> 419856bf8a245c116c0d27bb483da12dfc794b5e
 end
