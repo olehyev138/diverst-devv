@@ -84,4 +84,5 @@ group :development do
   gem 'capistrano-rails-console'
   gem 'capistrano-sidekiq'
   gem 'spring-commands-rspec'
+  gem 'pry-rails'
 end

@@ -3,6 +3,7 @@ class CreateEmails < ActiveRecord::Migration
     create_table :emails do |t|
       t.string :name
       t.string :slug
+      t.boolean :use_custom_templates
       t.text :custom_html_template
       t.text :custom_txt_template
 

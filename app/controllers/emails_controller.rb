@@ -26,6 +26,7 @@ class EmailsController < ApplicationController
     params
     .require(:email)
     .permit(
+      :use_custom_templates,
       :custom_html_template,
       :custom_txt_template
     )

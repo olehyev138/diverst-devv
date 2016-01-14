@@ -111,6 +111,7 @@ ActiveRecord::Schema.define(version: 20160106212613) do
   create_table "emails", force: :cascade do |t|
     t.string   "name",                 limit: 255
     t.string   "slug",                 limit: 255
+    t.boolean  "use_custom_templates", limit: 1
     t.text     "custom_html_template", limit: 65535
     t.text     "custom_txt_template",  limit: 65535
     t.integer  "enterprise_id",        limit: 4

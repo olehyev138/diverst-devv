@@ -1,9 +1,5 @@
-FactoryGirl.define do  factory :email do
-    
-  end
-
-
-  sequence :email do |n|
+FactoryGirl.define do
+  sequence :email_address do |n|
     "user#{n}@diverst.com"
   end
 
@@ -13,7 +9,7 @@ FactoryGirl.define do  factory :email do
   end
 
   factory :employee do
-    email
+    email { generate(:email_address) }
     first_name "Frank"
     last_name "Marineau"
     password 'f4k3p455w0rd'
@@ -24,7 +20,7 @@ FactoryGirl.define do  factory :email do
   end
 
   factory :admin do
-    email
+    email { generate(:email_address) }
     password 'f4k3p455w0rd'
     enterprise
   end
@@ -220,6 +216,33 @@ FactoryGirl.define do  factory :email do
     factory :graph_field do
       association :container, factory: :graph
     end
+  end
+
+  factory :email do
+    name "Awesome Email"
+    slug "awesome-email"
+    use_custom_templates true
+    custom_html_template "<strong>Hey there</strong>"
+    custom_txt_template "Hey there"
+
+    enterprise
+
+    factory :email_with_variables do
+      transient do
+        variable_count 5
+      end
+
+      after(:create) do |email, evaluator|
+        evaluator.variables create_list(:email_variable, evaluator.variable_count, email: email)
+      end
+    end
+  end
+
+  factory :email_variable do
+    email
+    key "mysterious-variable"
+    description "This is a mysterious variable!"
+    required false
   end
 
 end
