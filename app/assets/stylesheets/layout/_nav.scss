@@ -38,10 +38,10 @@
   padding: 12px $spacing-large;
   color: $diverst-grey-light;
   box-shadow: inset 0 0 0 0 $diverst-purple;
-  @include transition(color $time $curve, box-shadow $time $curve);
+  transition: color $time $curve, box-shadow $time $curve;
   @include caps-bold;
-  @include display(flex);
-  @include align-items(center);
+  display: flex;
+  align-items: center;
 
   &:hover,
   &:focus,
@@ -59,7 +59,7 @@
   height: 20px;
   margin-right: 12px;
   opacity: 0.5;
-  @include transition(opacity $time $curve);
+  transition: opacity $time $curve;
 
   .nav__link:hover &,
   .nav__link:focus &,

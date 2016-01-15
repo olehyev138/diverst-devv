@@ -35,13 +35,13 @@
   border-radius: $border-radius;
   outline: 0;
   @include caps-bold;
-  @include transition(background-color $time $curve, color $time $curve);
+  transition: background-color $time $curve, color $time $curve;
 
   &[disabled] {
     cursor: default;
     pointer-events: none;
     opacity: 0.4;
-    @include user-select(none);
+    user-select: none;
   }
 }
 

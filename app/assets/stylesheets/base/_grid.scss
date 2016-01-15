@@ -9,12 +9,12 @@ $gutter: $spacing-large;
   @include clearfix;
 
   &--equal-height {
-    @include display(flex);
-    @include flex-wrap(wrap);
+    display: flex;
+    flex-wrap: wrap;
 
     > .col {
-      @include display(flex);
-      @include flex(1 0 auto);
+      display: flex;
+      flex: 1 0 auto;
     }
   }
 }

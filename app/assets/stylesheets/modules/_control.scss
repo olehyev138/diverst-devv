@@ -5,7 +5,7 @@
   cursor: pointer;
   text-align: left; // Force checkbox to always be left-aligned
   margin-bottom: $spacing-medium;
-  @include user-select(none);
+  user-select: none;
 
   .table-view & {
     margin: 0; // Remove margin when within table view
@@ -28,8 +28,8 @@
   vertical-align: middle;
   border: 1px solid $diverst-border;
   background-color: $diverst-white;
-  @include flex-shrink(0);
-  @include transition(background-color $time $curve, border-color $time $curve, box-shadow $time $curve);
+  flex-shrink: 0;
+  transition: background-color $time $curve, border-color $time $curve, box-shadow $time $curve;
 
   .control__input:checked + & {
     background-color: $diverst-purple;
@@ -42,10 +42,10 @@
     display: block;
     top: 50%;
     left: 50%;
-    @include transition(transform $time $curve);
+    transition: transform $time $curve;
 
     .control__input:checked + & {
-      @include transform(none);
+      transform: none;
     }
   }
 }
@@ -69,8 +69,8 @@
 	&:after {
 		margin-left: -$spacing-small;
 		margin-top: -$spacing-small;
+    transform: scale(0.3);
 		@include icon(checkmark-white, 16px, 16px);
-		@include transform(scale(0.3));
 	}
 
   .control__input:focus + & {
@@ -92,7 +92,7 @@
     background-color: $diverst-white;
     margin-left: -(6px * 0.5);
     margin-top: -(6px * 0.5);
-    @include transform(scale(0.3));
+    transform: scale(0.3);
   }
 }
 
@@ -122,10 +122,10 @@
     height: 22px;
     border-radius: 50%;
     background-color: $diverst-white;
-    @include transition(transform $time $curve);
+    transition: transform $time $curve;
 
     .control__input:checked + & {
-      @include transform(translate3d(18px, 0, 0));
+      transform: translate3d(18px, 0, 0);
     }
   }
 }

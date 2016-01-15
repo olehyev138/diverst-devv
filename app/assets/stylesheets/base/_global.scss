@@ -17,8 +17,8 @@ body {
   overflow-x: hidden;
 
   &.auth {
-    @include display(flex);
-    @include align-items(center);
+    display: flex;
+    align-items: center;
   }
 }
 

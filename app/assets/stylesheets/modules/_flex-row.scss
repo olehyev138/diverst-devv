@@ -3,15 +3,14 @@
 .flex-row {
   margin-left: -#{$spacing-small};
   margin-right: -#{$spacing-small};
-
-  @include display(flex);
+  display: flex;
 
   &--middle {
-    @include align-items(center);
+    align-items: center;
   }
 
   &--baseline {
-    @include align-items(baseline);
+    align-items: baseline
   }
 }
 
@@ -19,7 +18,7 @@
   padding: 0 $spacing-small;
 
   &--grow {
-    @include flex(1);
+    flex: 1;
   }
 
   &--ellipsis {
