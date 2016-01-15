@@ -87,7 +87,6 @@ module Optionnable
   # Get highcharts-usable stats from the field by querying elasticsearch and formatting its response
   def highcharts_data(aggr_field: nil, segments: nil)
     data = elastic_stats(aggr_field: aggr_field, segments: segments)
-    ap data
 
     if aggr_field # If there is an aggregation
       at_least_one_bucket_has_other = false
