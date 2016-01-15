@@ -69,8 +69,14 @@ class Enterprise < ActiveRecord::Base
     Employee.to_csv(employees: self.employees, fields: self.fields, nb_rows: nb_rows)
   end
 
+  # Returns the index name to be used in Elasticsearch to store this enterprise's employees
   def es_employees_index_name
     "#{self.id}_employees"
+  end
+
+  # Run an elasticsearch query on the enterprise's employees
+  def search_employees(search_hash)
+    Elasticsearch::Model.client.search(index: self.es_employees_index_name, body: search_hash)
   end
 
   private
