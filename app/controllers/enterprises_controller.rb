@@ -1,6 +1,6 @@
 class EnterprisesController < ApplicationController
   before_action :authenticate_admin!
-  before_action :set_enterprise, only: [:edit, :edit_auth, :edit_fields, :edit_mobile_fields, :edit_algo, :update, :delete]
+  before_action :set_enterprise, only: [:edit, :edit_auth, :edit_fields, :edit_mobile_fields, :edit_algo, :edit_branding, :update, :delete]
 
   layout :resolve_layout
 
