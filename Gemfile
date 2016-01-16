@@ -52,6 +52,7 @@ gem 'lograge', '~> 0.3.1'
 gem 'sidekiq-logging-json', github: 'frankmarineau/Sidekiq-Logging-JSON'
 gem 'basecrm'
 gem 'liquid'
+gem "autoprefixer-rails"
 
 group :development, :test do
   gem 'spring' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
