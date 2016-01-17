@@ -48,7 +48,7 @@
 // Variants
 
 .btn--primary {
-  @include button($diverst-purple);
+  @include button($primary-color);
 }
 
 .btn--secondary {

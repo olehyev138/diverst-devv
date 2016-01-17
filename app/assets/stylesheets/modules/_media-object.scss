@@ -16,15 +16,15 @@
     display: block;
     top: 0;
     right: 0;
-    background-color: $diverst-purple;
+    background-color: $primary-color;
     border-radius: 0 0 0 $border-radius;
     @include icon(checkmark-white, 30px, 30px, 24px, 16px);
     transition: opacity $time $curve, visibility $time $curve;
   }
 
   &--selected {
-    border-color: $diverst-purple;
-    box-shadow: 0 0 0 1px $diverst-purple;
+    border-color: $primary-color;
+    box-shadow: 0 0 0 1px $primary-color;
 
     &:after {
       opacity: 1;

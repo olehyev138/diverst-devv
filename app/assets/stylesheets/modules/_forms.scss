@@ -84,8 +84,8 @@ input[type="password"] {
   }
 
   &:focus:not(.field__input--ghost) {
-    border-color: $diverst-purple;
-    box-shadow: 0 0 0 1px $diverst-purple;
+    border-color: $primary-color;
+    box-shadow: 0 0 0 1px $primary-color;
   }
 
   &:-webkit-autofill {

@@ -25,8 +25,10 @@ module Diverst
 
     # Load core extensions
     Dir[File.join(Rails.root, "lib", "core_ext", "*.rb")].each { |l| require l }
+    Dir[File.join(Rails.root, "lib", "*.rb")].each { |l| require l }
 
-    config.assets.paths << Rails.root.join('vendor', 'assets', 'bower_components')
+    config.assets.paths << Rails.root.join('vendor', 'assets', 'bower_components') # Bower
+    config.assets.paths << Rails.root.join('tmp', 'themes') # Custom themes
 
     config.active_job.queue_adapter = :sidekiq
 
