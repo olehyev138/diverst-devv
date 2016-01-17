@@ -42,6 +42,11 @@ class EnterprisesController < ApplicationController
       :idp_slo_target_url,
       :idp_cert,
       :yammer_import,
+      theme_attributes: [
+        :id,
+        :primary_color,
+        :logo
+      ],
       mobile_fields_attributes: [
         :id,
         :field_id,

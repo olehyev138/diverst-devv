@@ -6,11 +6,12 @@
   <div class="card">
     <div class="card__section">
       <%= simple_form_for @enterprise do |f| %>
-        <%= f.input :use_custom_branding %>
-        <%= f.input :primary_color %>
-        <%= f.input :logo, as: :file %>
+        <%= f.simple_fields_for :theme do |t| %>
+          <%= t.input :primary_color %>
+          <%= t.input :logo, as: :file %>
 
-        <%= f.button :submit, "Save branding" %>
+          <%= t.button :submit, "Save branding" %>
+        <% end %>
       <% end %>
     </div>
   </div>

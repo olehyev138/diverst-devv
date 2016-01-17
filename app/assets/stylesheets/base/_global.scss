@@ -24,7 +24,7 @@ body {
 
 a {
   text-decoration: none;
-  color: $diverst-purple;
+  color: $primary-color;
   outline: 0;
 }
 
@@ -52,7 +52,7 @@ img {
 
   &--large {
     height: 36px;
-    
+
     @include mq(medium) {
       height: 48px;
     }

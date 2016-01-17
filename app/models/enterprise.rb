@@ -20,10 +20,12 @@ class Enterprise < ActiveRecord::Base
   has_many :resources, as: :container
   has_many :yammer_field_mappings
   has_many :emails
+  belongs_to :theme
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :mobile_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :yammer_field_mappings, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :theme, reject_if: :all_blank, allow_destroy: true
 
   before_create :create_elasticsearch_only_fields
 
