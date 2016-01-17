@@ -4,6 +4,7 @@ class CreateThemes < ActiveRecord::Migration
       t.attachment :logo
       t.string :primary_color
       t.string :digest
+      t.boolean :default, default: false
     end
   end
 end

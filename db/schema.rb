@@ -403,6 +403,7 @@ ActiveRecord::Schema.define(version: 20160116223333) do
     t.datetime "logo_updated_at"
     t.string   "primary_color",     limit: 255
     t.string   "digest",            limit: 255
+    t.boolean  "default",           limit: 1,   default: false
   end
 
   create_table "topic_feedbacks", force: :cascade do |t|
