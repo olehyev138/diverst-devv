@@ -1,6 +1,9 @@
 class Theme < ActiveRecord::Base
   has_one :enterprise
 
+  has_attached_file :logo, styles: { medium: "300x300>", thumb: "100x100>" }, default_url: ActionController::Base.helpers.image_path("missing.png")
+  validates_attachment_content_type :logo, content_type: /\Aimage\/.*\Z/
+
   after_save :compile, :if => :changed?
 
   def delete_asset
@@ -25,6 +28,10 @@ class Theme < ActiveRecord::Base
 
   def asset_url
     "#{ActionController::Base.asset_host}/#{asset_path}"
+  end
+
+  def self.default
+    Theme.where(default: true).first
   end
 
   private

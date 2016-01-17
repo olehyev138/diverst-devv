@@ -27,7 +27,8 @@ RBkf3lC+Uym8UhW5nBqSIdQ48pIuGYDInBxqjbpX4dUYL8R8LuDPvUfAXVPR64Us
 wTsvlo/0p1sX89445zP+IPycIwo1W44t4tImhm3k2UUHKbuEzDKLYq2K2TyH/s7o
 A5bYGY36o0HQqna1jAGDM8l3t7uwbpsMwf5O/CVPgcXBqUxJSX2J0g==
 -----END CERTIFICATE-----\n",
-  has_enabled_saml: true
+  has_enabled_saml: true,
+  theme_id: 1
 )
 
 gender_field = SelectField.create(
