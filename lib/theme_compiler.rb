@@ -8,8 +8,10 @@ class ThemeCompiler
     @tmp_asset_name = SecureRandom.hex
     @env = if Rails.application.assets.is_a?(Sprockets::Index) && Rails.env != "test"
       Rails.application.assets.instance_variable_get('@environment')
+      puts "@environment"
     else
       Rails.application.assets
+      puts "ras"
     end
   end
 
