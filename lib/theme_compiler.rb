@@ -48,18 +48,21 @@ class ThemeCompiler
   end
 
   def upload
-
-    # if Rails.env.production?
-    #   FOG_STORAGE.directories.get(ENV['FOG_DIRECTORY']).files.create(
-    #     :key    => theme.asset_path(asset.digest),
-    #     :body   => StringIO.new(compressed_body),
-    #     :public => true,
-    #     :content_type => 'text/css'
-    #   )
-    # else
-      puts asset.digest
+    if Rails.env.production?
+      connection = Fog::Storage.new({
+        provider: 'AWS',
+        aws_access_key_id: ENV["AWS_ACCESS_KEY_ID"],
+        aws_secret_access_key: ENV["AWS_SECRET_ACCESS_KEY"]
+      })
+      connection.directories.get(ENV['S3_BUCKET_NAME']).files.create(
+        key: theme.asset_path(asset.digest),
+        body: StringIO.new(compressed_body),
+        public: true,
+        content_type: 'text/css'
+      )
+    else
       File.write(File.join(Rails.root, 'public', theme.asset_path(asset.digest)), compressed_body)
-    # end
+    end
 
     theme.delete_asset
     theme.update_column(:digest, asset.digest)
