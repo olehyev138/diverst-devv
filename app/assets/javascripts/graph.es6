@@ -3,6 +3,7 @@ class Graph {
     this.dataUrl = dataUrl;
     this.$element = $element;
     this.data = {};
+    this.primaryColor = $('.primary-header').css('background-color');
 
     this.updateData(this.dataUrl);
   }
@@ -71,7 +72,7 @@ class Graph {
       credits: {
         enabled: false
       },
-      colors: ['#7B77C9', '#F15E57', '#FE6D4B', '#9FD661', '#40D0AD', '#48C0EB', '#5A9AEF', '#EE85C1']
+      colors: [this.primaryColor, '#F15E57', '#FE6D4B', '#9FD661', '#40D0AD', '#48C0EB', '#5A9AEF', '#EE85C1']
     });
   }
 
@@ -110,7 +111,7 @@ class Graph {
       credits: {
         enabled: false
       },
-      colors: ['#7B77C9', '#F15E57', '#FE6D4B', '#9FD661', '#40D0AD', '#48C0EB', '#5A9AEF', '#EE85C1']
+      colors: [this.primaryColor, '#F15E57', '#FE6D4B', '#9FD661', '#40D0AD', '#48C0EB', '#5A9AEF', '#EE85C1']
     });
   }
 }
