@@ -35,3 +35,6 @@ spec/examples.txt
 
 # Custom themes
 /public/assets/themes/*
+
+# Precompiled assets when testing prod environment
+/public/assets/*

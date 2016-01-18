@@ -15,6 +15,3 @@
     puts g.errors.messages
   end
 end
-
-Enterprise.first.groups.first.members << Enterprise.first.employees.first
-Enterprise.first.groups.first.members << Enterprise.first.employees.second

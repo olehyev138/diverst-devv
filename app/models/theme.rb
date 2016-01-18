@@ -12,9 +12,9 @@ class Theme < ActiveRecord::Base
     puts "asset deletion"
 
     # if Rails.env.production?
-    #   FOG_STORAGE.directories.get(ENV['FOG_DIRECTORY']).files.get(asset_path).try(:destroy)
+      # FOG_STORAGE.directories.get(ENV['FOG_DIRECTORY']).files.get(asset_path).try(:destroy)
     # else
-      File.delete(File.join(Rails.root, 'public', asset_path(digest)))
+      # File.delete(File.join(Rails.root, 'public', asset_path(digest)))
     # end
   end
 
@@ -27,7 +27,11 @@ class Theme < ActiveRecord::Base
   end
 
   def asset_url
-    "#{ActionController::Base.asset_host}/#{asset_path}"
+    if Rails.env.production?
+      "https://#{ENV["S3_BUCKET_NAME"]}.s3.amazonaws.com/#{asset_path}"
+    else
+      "#{ActionController::Base.asset_host}/#{asset_path}"
+    end
   end
 
   def self.default
