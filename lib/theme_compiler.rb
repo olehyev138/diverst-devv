@@ -6,13 +6,7 @@ class ThemeCompiler
     @body = File.read(File.join(Rails.root, 'app', 'assets', 'stylesheets', '_application.scss'))
     @tmp_themes_path = File.join(Rails.root, 'tmp', 'themes')
     @tmp_asset_name = SecureRandom.hex
-    @env = if Rails.application.assets.is_a?(Sprockets::Index) && Rails.env != "test"
-      Rails.application.assets.instance_variable_get('@environment')
-      puts "@environment"
-    else
-      Rails.application.assets
-      puts "ras"
-    end
+    @env = Rails.application.assets
   end
 
   def compute
