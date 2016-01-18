@@ -1,4 +1,6 @@
 class Enterprise < ActiveRecord::Base
+  include ContainsResources
+
   has_many :admins, inverse_of: :enterprise
   has_many :employees, inverse_of: :enterprise
   has_many :graph_fields, as: :container, class_name: "Field"
@@ -20,14 +22,14 @@ class Enterprise < ActiveRecord::Base
   has_many :resources, as: :container
   has_many :yammer_field_mappings
   has_many :emails
+  belongs_to :theme
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :mobile_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :yammer_field_mappings, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :theme, reject_if: :all_blank, allow_destroy: true
 
   before_create :create_elasticsearch_only_fields
-
-  include ContainsResources
 
   def saml_settings
     settings = OneLogin::RubySaml::Settings.new
@@ -69,8 +71,14 @@ class Enterprise < ActiveRecord::Base
     Employee.to_csv(employees: self.employees, fields: self.fields, nb_rows: nb_rows)
   end
 
+  # Returns the index name to be used in Elasticsearch to store this enterprise's employees
   def es_employees_index_name
     "#{self.id}_employees"
+  end
+
+  # Run an elasticsearch query on the enterprise's employees
+  def search_employees(search_hash)
+    Elasticsearch::Model.client.search(index: self.es_employees_index_name, body: search_hash)
   end
 
   private

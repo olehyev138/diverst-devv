@@ -32,3 +32,9 @@ vendor/assets/bower_components
 
 # Ignore RSpec status persistence
 spec/examples.txt
+
+# Custom themes
+/public/assets/themes/*
+
+# Precompiled assets when testing prod environment
+/public/assets/*

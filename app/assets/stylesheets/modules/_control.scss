@@ -32,8 +32,8 @@
   transition: background-color $time $curve, border-color $time $curve, box-shadow $time $curve;
 
   .control__input:checked + & {
-    background-color: $diverst-purple;
-    border-color: $diverst-purple;
+    background-color: $primary-color;
+    border-color: $primary-color;
   }
 
   &:after {
@@ -74,8 +74,8 @@
 	}
 
   .control__input:focus + & {
-    border-color: $diverst-purple;
-    box-shadow: 0 0 0 1px $diverst-purple;
+    border-color: $primary-color;
+    box-shadow: 0 0 0 1px $primary-color;
   }
 }
 
@@ -108,8 +108,8 @@
   background-color: $diverst-border;
 
   .control__input:checked + & {
-    background-color: $diverst-purple;
-    border-color: $diverst-purple;
+    background-color: $primary-color;
+    border-color: $primary-color;
   }
 
   &:after {

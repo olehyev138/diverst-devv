@@ -1,0 +1,19 @@
+<div class="content__header">
+  <h1>Branding</h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <%= simple_form_for @enterprise, url: update_branding_enterprise_path(@enterprise) do |f| %>
+        <%= f.simple_fields_for :theme do |t| %>
+          <%= t.input :primary_color %>
+          <%= t.input :logo, as: :file %>
+
+          <%= t.button :submit, "Save branding" %>
+          <%= link_to "Restore to default", restore_default_branding_enterprise_path(@enterprise), class: "btn btn--secondary", method: :patch %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

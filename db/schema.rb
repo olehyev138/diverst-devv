@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160106212613) do
+ActiveRecord::Schema.define(version: 20160116223333) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -184,6 +184,7 @@ ActiveRecord::Schema.define(version: 20160106212613) do
     t.string   "yammer_token",       limit: 255
     t.boolean  "yammer_import",      limit: 1,     default: false
     t.boolean  "yammer_group_sync",  limit: 1,     default: false
+    t.integer  "theme_id",           limit: 4
   end
 
   create_table "events", force: :cascade do |t|
@@ -393,6 +394,16 @@ ActiveRecord::Schema.define(version: 20160106212613) do
     t.string   "name",          limit: 255
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
+  end
+
+  create_table "themes", force: :cascade do |t|
+    t.string   "logo_file_name",    limit: 255
+    t.string   "logo_content_type", limit: 255
+    t.integer  "logo_file_size",    limit: 4
+    t.datetime "logo_updated_at"
+    t.string   "primary_color",     limit: 255
+    t.string   "digest",            limit: 255
+    t.boolean  "default",           limit: 1,   default: false
   end
 
   create_table "topic_feedbacks", force: :cascade do |t|

@@ -51,6 +51,9 @@ Rails.application.routes.draw do
       get 'edit_fields'
       get 'edit_algo'
       get 'edit_mobile_fields'
+      get 'edit_branding'
+      patch 'update_branding'
+      patch 'restore_default_branding'
     end
 
     get 'integrations'

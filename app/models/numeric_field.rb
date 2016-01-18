@@ -61,14 +61,7 @@ class NumericField < Field
     }
   end
 
-  def elastic_stats(aggr_field: nil, target_ids: Employee.ids)
-    # Dynamically calculate bucket sizes
-    stats = Employee.search(size: 0, aggs: { global_stats: { stats: { field: "combined_info.#{self.id}" } } }).response
-
-    min = stats[:aggregations][:global_stats][:min]
-    max = stats[:aggregations][:global_stats][:max]
-
-    nb_buckets = 5
+  def get_buckets_for_range(nb_buckets:, min:, max:)
     delta = max - min
     bucket_size = (delta / nb_buckets).floor
 
@@ -76,18 +69,30 @@ class NumericField < Field
     nb_buckets.times do |i|
       range = {}
 
-      range[:from] = min + i*bucket_size
+      range[:from] = min + i * bucket_size
       range[:to] = range[:from] + bucket_size
 
       ranges << range
     end
+
+    ranges
+  end
+
+  def elastic_stats(aggr_field: nil, segments: self.enterprise.enterprise.segments.all)
+    # Dynamically calculate bucket sizes
+    stats = Enterprise.first.search_employees(size: 0, aggs: { global_stats: { stats: { field: "combined_info.#{self.id}" } } })
+
+    min = stats['aggregations']['global_stats']['min']
+    max = stats['aggregations']['global_stats']['max']
+
+    buckets = get_buckets_for_range(nb_buckets: 5, min: min, max: max)
 
     # Craft the aggregation query depending on if we have a field to aggregate on or not
     range_agg = {
       ranges: {
         range: {
           field: "combined_info.#{self.id}",
-          ranges: ranges
+          ranges: buckets
         }
       }
     }
@@ -111,43 +116,47 @@ class NumericField < Field
     }
 
     # Filter the query by segments if there are any specified
-    if !target_ids.nil? && !target_ids.empty?
-      search_hash[:query] = {
+    if !segments.nil? && !segments.empty?
+      search_hash["query"] = {
         terms: {
-          id: target_ids
+          "combined_info.segments" => segments.ids
         }
       }
     end
 
+    puts search_hash.to_json
+
     # Execute the elasticsearch query
-    Employee.search(search_hash).response
+    Enterprise.first.search_employees(search_hash)
   end
 
-  def highcharts_data(aggr_field: nil, target_ids: nil)
-    data = elastic_stats(aggr_field: aggr_field, target_ids: target_ids)
+  def highcharts_data(aggr_field: nil, segments: self.enterprise.enterprise.segments.all)
+    data = elastic_stats(aggr_field: aggr_field, segments: segments)
 
-    if aggr_field # If there is an aggregation
-      series = data[:aggregations][:aggregation][:buckets].map do |aggr_bucket|
+    if aggr_field # If there IS an aggregation
+      series = data['aggregations']['aggregation']['buckets'].map do |aggr_bucket|
         {
-          name: "#{aggr_bucket[:key]}",
-          data: aggr_bucket[:ranges][:buckets].map{ |range_bucket| range_bucket[:doc_count] }
+          name: aggr_bucket['key'],
+          data: aggr_bucket['ranges']['buckets'].map{ |range_bucket| range_bucket['doc_count'] }
         }
       end
 
-      ranges = data[:aggregations][:aggregation][:buckets][0][:ranges][:buckets].map{ |range_bucket| range_bucket[:key].gsub(/\.0/, '') }
+      puts data.to_json
+
+      ranges = data['aggregations']['aggregation']['buckets'][0]['ranges']['buckets'].map{ |range_bucket| range_bucket['key'].gsub(/\.0/, '') }
 
       return {
         series: series,
         categories: ranges,
         xAxisTitle: self.title
       }
-    else # If there is no aggregation
+    else # If there ISN'T an aggregation
       series = [{
         name: self.title,
-        data: data[:aggregations][:ranges][:buckets].map{ |range_bucket| range_bucket[:doc_count] }
+        data: data['aggregations']['ranges']['buckets'].map{ |range_bucket| range_bucket['doc_count'] }
       }]
 
-      ranges = data[:aggregations][:ranges][:buckets].map{ |range_bucket| range_bucket[:key].gsub(/\.0/, '') }
+      ranges = data['aggregations']['ranges']['buckets'].map{ |range_bucket| range_bucket['key'].gsub(/\.0/, '') }
 
       return {
         series: series,

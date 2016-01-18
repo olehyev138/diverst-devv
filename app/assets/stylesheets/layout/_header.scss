@@ -7,7 +7,7 @@
   top: 0;
   left: 0;
   padding: 0 $spacing-medium;
-  background-color: $diverst-purple;
+  background-color: $primary-color;
   color: $diverst-white;
   display: flex;
   align-items: center;
@@ -83,7 +83,7 @@
   height: 100%;
   line-height: 50px;
   padding: 0 $spacing-medium;
-  box-shadow: inset 0 0 0 0 $diverst-purple;
+  box-shadow: inset 0 0 0 0 $primary-color;
   transition: color $time $curve, box-shadow $time $curve;
   @include caps-bold;
 
@@ -98,6 +98,6 @@
   }
 
   &--is-selected {
-    box-shadow: inset 0 -3px 0 0 $diverst-purple;
+    box-shadow: inset 0 -3px 0 0 $primary-color;
   }
 }

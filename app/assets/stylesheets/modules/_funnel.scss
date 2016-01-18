@@ -21,7 +21,7 @@
     content: "";
     display: block;
     left: calc(100% - 12px);
-    color: $diverst-purple;
+    color: $primary-color;
     @include icon(chevron-right);
     @include v-center(absolute);
   }
