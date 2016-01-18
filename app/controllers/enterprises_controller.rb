@@ -1,6 +1,6 @@
 class EnterprisesController < ApplicationController
   before_action :authenticate_admin!
-  before_action :set_enterprise, only: [:edit, :edit_auth, :edit_fields, :edit_mobile_fields, :edit_algo, :edit_branding, :update, :delete]
+  before_action :set_enterprise, except: [:index, :new, :create]
 
   layout :resolve_layout
 
@@ -17,6 +17,24 @@ class EnterprisesController < ApplicationController
     end
   end
 
+  def update_branding
+    if @enterprise.theme.default?
+      @enterprise.theme = Theme.create(enterprise_params[:theme_attributes])
+      @enterprise.save
+    else
+      @enterprise.update_attributes(enterprise_params)
+    end
+
+    redirect_to :back
+  end
+
+  def restore_default_branding
+    @enterprise.theme = Theme.default
+    @enterprise.save
+
+    redirect_to :back
+  end
+
   protected
 
   def resolve_layout
@@ -29,7 +47,7 @@ class EnterprisesController < ApplicationController
   end
 
   def set_enterprise
-    @enterprise = Enterprise.find(params[:id])
+    @enterprise = Enterprise.find(params[:id] || params[:enterprise_id])
   end
 
   def enterprise_params
@@ -43,7 +61,6 @@ class EnterprisesController < ApplicationController
       :idp_cert,
       :yammer_import,
       theme_attributes: [
-        :id,
         :primary_color,
         :logo
       ],
