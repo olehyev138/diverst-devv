@@ -1,14 +1,17 @@
-FactoryGirl.define do  factory :theme do
-    
-  end
-
+FactoryGirl.define do
   sequence :email_address do |n|
     "user#{n}@diverst.com"
+  end
+
+  sequence :hex_color do |n|
+    n.to_s(16)[0..5].rjust(6, '0')
   end
 
   factory :enterprise do
     name 'Hyperion'
     created_at { Time.now }
+
+    theme nil
   end
 
   factory :employee do
@@ -246,6 +249,11 @@ FactoryGirl.define do  factory :theme do
     key "mysterious-variable"
     description "This is a mysterious variable!"
     required false
+  end
+
+  factory :theme do
+    primary_color { generate(:hex_color) }
+    default false
   end
 
 end
