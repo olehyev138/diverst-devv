@@ -1,7 +1,9 @@
 // Icons
 
+@function remote-image-url($path) { @return unquote("url(http://#{$domain}" + image-path($path) + ")"); }
+
 @mixin icon($filename, $width: 24px, $height: 24px, $background-width: null, $background-height: null) {
-  background-image: image-url('/icons/#{$filename}.svg');
+  background-image: remote-image-url('icons/#{$filename}.svg');
   background-repeat: no-repeat;
   background-position: center center;
   width: $width;

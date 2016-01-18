@@ -42,21 +42,21 @@ Rails.application.routes.draw do
       end
     end
 
-    scope module: :enterprises do
-      resources :resources
-    end
-
     member do
       get 'edit_auth'
       get 'edit_fields'
-      get 'edit_algo'
       get 'edit_mobile_fields'
       get 'edit_branding'
+      get 'edit_algo'
+      get 'integrations'
+      get 'theme'
       patch 'update_branding'
       patch 'restore_default_branding'
     end
 
-    get 'integrations'
+    scope module: :enterprises do
+      resources :resources
+    end
   end
 
   resources :groups do
