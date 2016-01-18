@@ -17,8 +17,12 @@ class EnterprisesController < ApplicationController
     end
   end
 
+  def edit_branding
+    @enterprise.theme = Theme.new if @enterprise.theme.nil?
+  end
+
   def update_branding
-    if @enterprise.theme.default?
+    if !@enterprise.theme.nil? && @enterprise.theme.default?
       @enterprise.theme = Theme.create(enterprise_params[:theme_attributes])
       @enterprise.save
     else
@@ -29,9 +33,7 @@ class EnterprisesController < ApplicationController
   end
 
   def restore_default_branding
-    @enterprise.theme = Theme.default
-    @enterprise.save
-
+    @enterprise.theme.delete
     redirect_to :back
   end
 
