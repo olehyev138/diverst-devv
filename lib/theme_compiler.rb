@@ -7,6 +7,8 @@ class ThemeCompiler
     @tmp_themes_path = File.join(Rails.root, 'tmp', 'themes')
     @tmp_asset_name = SecureRandom.hex
     @env = Rails.application.assets
+    puts "Initializing theme"
+    puts Rails.application.assets
   end
 
   def compute
