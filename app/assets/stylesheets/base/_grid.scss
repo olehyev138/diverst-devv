@@ -29,6 +29,10 @@ $gutter: $spacing-large;
   padding-right: ($gutter/2);
 }
 
+.col--stacked {
+  flex-direction: column;
+}
+
 @for $i from 1 through $columns {
   .sm-#{$i} {
     width: (((100 / $columns) * $i) * 1%);

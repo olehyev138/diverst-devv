@@ -36,6 +36,7 @@
   outline: 0;
   @include caps-bold;
   transition: background-color $time $curve, color $time $curve;
+  line-height: inherit;
 
   &[disabled] {
     cursor: default;

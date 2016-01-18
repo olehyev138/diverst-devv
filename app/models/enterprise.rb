@@ -1,4 +1,6 @@
 class Enterprise < ActiveRecord::Base
+  include ContainsResources
+
   has_many :admins, inverse_of: :enterprise
   has_many :employees, inverse_of: :enterprise
   has_many :graph_fields, as: :container, class_name: "Field"
@@ -28,8 +30,6 @@ class Enterprise < ActiveRecord::Base
   accepts_nested_attributes_for :theme, reject_if: :all_blank, allow_destroy: true
 
   before_create :create_elasticsearch_only_fields
-
-  include ContainsResources
 
   def saml_settings
     settings = OneLogin::RubySaml::Settings.new
