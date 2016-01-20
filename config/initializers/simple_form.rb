@@ -17,8 +17,8 @@ SimpleForm.setup do |config|
     b.use :html5
 
     b.use :hint,  wrap_with: { tag: :span, class: :hint }
-    b.use :error, wrap_with: { tag: :span, class: :error }
     b.use :label, class: :field__label
+    b.use :error, wrap_with: { tag: :span, class: :error }
 
     b.wrapper :tag => 'div', :class => 'field__input-wrapper' do |ba|
 

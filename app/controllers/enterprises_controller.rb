@@ -5,15 +5,10 @@ class EnterprisesController < ApplicationController
   layout :resolve_layout
 
   def update
-    # Render the appropriate view in case validation fails
-    referer = env['HTTP_REFERER']
-    routes = env['action_dispatch.routes']
-    info = routes.recognize_path(referer, method: :get)
-
     if @enterprise.update_attributes(enterprise_params)
       redirect_to :back
     else
-      render info[:action]
+      render params["source"]
     end
   end
 
@@ -24,12 +19,18 @@ class EnterprisesController < ApplicationController
   def update_branding
     if !@enterprise.theme.nil? && @enterprise.theme.default?
       @enterprise.theme = Theme.create(enterprise_params[:theme_attributes])
-      @enterprise.save
+      if @enterprise.save
+        redirect_to action: :edit_branding
+      else
+        render :edit_branding
+      end
     else
-      @enterprise.update_attributes(enterprise_params)
+      if @enterprise.update_attributes(enterprise_params)
+        redirect_to action: :edit_branding
+      else
+        render :edit_branding
+      end
     end
-
-    redirect_to :back
   end
 
   def restore_default_branding

@@ -4,7 +4,7 @@
 
 <div class="row">
   <div class="col sm-12">
-    <%= simple_form_for @enterprise do |f| %>
+    <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_fields') do |f| %>
       <%= render "shared/fields/creation/custom_fields", f: f %>
       <%= f.button :submit, value: "Save employee fields" %>
     <% end %>
@@ -14,7 +14,6 @@
 <script>
   var handleNewField = function($fieldEl) {
     $fieldEl.find('.expand-link').click(function() {
-      console.log($fieldEl.find('.card__content'))
       $fieldEl.find('.card__content').toggleClass('card__content--is-visible');
       $(this).text($(this).text() === "Edit" ? "Close" : "Edit");
     });

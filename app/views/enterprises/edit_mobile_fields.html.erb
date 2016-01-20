@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card__section">
       <p>Define the fields that will be displayed on each employee's profile in the mobile app. You can order them as you see fit.</p>
-      <%= simple_form_for @enterprise do |f| %>
+      <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_mobile_fields') do |f| %>
         <div id="mobile_fields">
           <%= f.simple_fields_for :mobile_fields do |mobile_field| %>
             <%= render "mobile_field_fields", f: mobile_field %>

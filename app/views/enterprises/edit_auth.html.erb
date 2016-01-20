@@ -5,7 +5,7 @@
 <div class="content__main">
   <div class="card">
     <div class="card__section">
-      <%= simple_form_for @enterprise do |f| %>
+      <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_auth') do |f| %>
         <%= f.input :has_enabled_saml, label: "Enable SAML?", placeholder: "https://example.com/saml/metadata/123456" %>
         <%= f.input :idp_entity_id, label: "IdP Metadata URL" %>
         <%= f.input :idp_sso_target_url, label: "Login URL" %>

@@ -3,7 +3,7 @@
 </div>
 
 <div class="content__main">
-  <%= simple_form_for @enterprise do |f| %>
+  <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_algo') do |f| %>
     <div class="card">
       <%= f.simple_fields_for :fields, @enterprise.match_fields(include_disabled: true) do |field| %>
         <div class="card__section card__section--border">

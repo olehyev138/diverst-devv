@@ -31,6 +31,8 @@ class Enterprise < ActiveRecord::Base
 
   before_create :create_elasticsearch_only_fields
 
+  validates :idp_sso_target_url, url: { allow_blank: true }
+
   def saml_settings
     settings = OneLogin::RubySaml::Settings.new
 
