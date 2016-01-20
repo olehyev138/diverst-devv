@@ -1,5 +1,9 @@
 // Colors
 
+.white {
+  color: white;
+}
+
 .accent {
   color: $primary-color;
 }
@@ -76,4 +80,8 @@
 
 .no-margin {
   margin: 0;
+}
+
+.full-width {
+  width: 100%;
 }

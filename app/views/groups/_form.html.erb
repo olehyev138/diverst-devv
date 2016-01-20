@@ -5,9 +5,9 @@
         <%= f.input :name %>
         <%= f.input :description %>
         <%= f.input :logo, as: :file %>
-        <%= f.association :members, input_html: { class: "select2" } %>
+        <%= f.association :manager, input_html: { class: "select2" } %>
         <%= f.input :send_invitations %>
-        <%= f.association :invitation_segments, input_html: { class: "select2" }, wrapper_html: { style: "display: none;" } %>
+        <%= f.association :invitation_segments, input_html: { class: "select2"}, wrapper_html: { style: "display: none;" } %>
       </div>
 
       <% if !@group.enterprise.yammer_token.nil? %>
@@ -43,7 +43,10 @@
 </div>
 
 <script>
-  $('.select2').select2();
+  $('.select2').select2({
+    allowClear: true,
+    placeholder: "None"
+  });
 
   $sendInvitations = $('#group_send_invitations');
   $invitationSegments = $('.group_invitation_segments');
@@ -51,7 +54,7 @@
   $sendInvitations.change(function() {
     if ($(this).is(":checked")) {
       $invitationSegments.css('display', 'block');
-      $('.select2').select2();
+      $('#group_invitation_segment_ids').select2();
     }
     else {
       $invitationSegments.css('display', 'none');

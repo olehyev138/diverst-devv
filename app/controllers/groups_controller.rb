@@ -35,7 +35,7 @@ class GroupsController < ApplicationController
 
   def update
     if @group.update(group_params)
-      redirect_to @group
+      redirect_to :back
     else
       render :edit
     end
@@ -115,6 +115,7 @@ class GroupsController < ApplicationController
       :send_invitations,
       :yammer_create_group,
       :yammer_sync_employees,
+      :manager_id,
       member_ids: [],
       invitation_segment_ids: []
     )
