@@ -9,7 +9,7 @@
 <body class="dashboard">
 
   <header class="primary-header">
-    <a href="#"><img class="primary-header__logo logo" src="<%= (current_user.enterprise.theme.nil? ? image_path('diverst-logo.svg') : current_user.enterprise.theme.logo.url) %>"></a>
+    <a href="#"><img class="primary-header__logo logo" src="<%= logo_url %>"></a>
   </header>
 
   <nav class="nav">

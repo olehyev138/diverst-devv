@@ -5,8 +5,10 @@ Rails.application.routes.draw do
   devise_for :admins
   devise_for :employees, :controllers => { :invitations => 'employees/invitations' }
 
+  get 'omniauth/:provider/callback', to: 'omni_auth#callback'
+
   namespace :employees, defaults: { format: :json } do
-    mount_devise_token_auth_for 'Employee', at: 'auth'
+    mount_devise_token_auth_for 'Employee', at: 'auth/token'
   end
 
   namespace :integrations do
@@ -187,6 +189,8 @@ Rails.application.routes.draw do
         put 'leave'
       end
     end
+
+    resources :employees
   end
 
   resources :metrics_dashboards do

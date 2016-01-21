@@ -55,6 +55,8 @@ gem 'liquid'
 gem "autoprefixer-rails"
 gem 'fog'
 gem "validate_url"
+gem 'omniauth-linkedin-oauth2'
+gem 'omniauth-oauth2', '1.3.1' # Temporary fix to address: https://github.com/decioferreira/omniauth-linkedin-oauth2/issues/28
 
 group :development, :test do
   gem 'spring' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring

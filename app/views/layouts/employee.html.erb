@@ -9,7 +9,14 @@
 <body class="erg">
 
   <header class="primary-header">
-    <%= link_to employee_root_path do %><img class="primary-header__logo logo" src="<%= image_path "diverst-logo.svg" %>"><% end %>
+    <div class="flex-row flex-row--middle full-width">
+      <div class="flex-row__cell flex-row__cell--grow">
+        <%= link_to employee_root_path do %><img class="primary-header__logo logo" src="<%= logo_url %>"><% end %>
+      </div>
+      <div class="flex-row__cell">
+        <%= link_to current_user.name, current_user, class: "white" %>
+      </div>
+    </div>
   </header>
 
   <header class="secondary-header">

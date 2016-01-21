@@ -25,6 +25,7 @@ class Employee < ActiveRecord::Base
   has_many :news_links, through: :groups
   has_many :messages, through: :groups
   has_many :events, through: :groups
+  has_many :managed_groups, foreign_key: :manager_id, class_name: "Group"
 
   before_validation :generate_password_if_saml
   after_create :assign_firebase_token
