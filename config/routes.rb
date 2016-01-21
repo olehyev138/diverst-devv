@@ -170,6 +170,8 @@ Rails.application.routes.draw do
           get 'join'
         end
       end
+
+      resources :employees
     end
 
     resources :matches do
@@ -189,8 +191,6 @@ Rails.application.routes.draw do
         put 'leave'
       end
     end
-
-    resources :employees
   end
 
   resources :metrics_dashboards do

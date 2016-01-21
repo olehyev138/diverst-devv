@@ -114,9 +114,9 @@
       <% if manager = @group.manager %>
         <div class="card card--secondary">
           <div class="card__section">
-            <h4>Your ERG manager</h4>
+            <h4>Your ERG manager <%= image_tag('linkedin.png') %></h4>
             <div style="overflow: auto;">
-              <%= image_tag('erg-manager.jpg', class: "avatar avatar--round", style: "float: left; margin-right: 1em;") %>
+              <%= image_tag(manager.avatar.url, class: "avatar avatar--round", style: "float: left; margin-right: 1em;") %>
               <div style="float: left;">
                 <strong><%= manager.name %></strong><br>
                 <span>Human Capital Leader</span>
