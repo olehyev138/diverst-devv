@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160120200621) do
+ActiveRecord::Schema.define(version: 20160121011055) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
@@ -160,6 +160,10 @@ ActiveRecord::Schema.define(version: 20160120200621) do
     t.integer  "participation_score_7days",   limit: 4,     default: 0
     t.string   "yammer_token",                limit: 255
     t.string   "linkedin_profile_url",        limit: 255
+    t.string   "avatar_file_name",            limit: 255
+    t.string   "avatar_content_type",         limit: 255
+    t.integer  "avatar_file_size",            limit: 4
+    t.datetime "avatar_updated_at"
   end
 
   add_index "employees", ["email"], name: "index_employees_on_email", unique: true, using: :btree
