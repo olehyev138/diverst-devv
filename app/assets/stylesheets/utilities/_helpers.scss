@@ -78,10 +78,22 @@
   margin-bottom: $spacing-medium;
 }
 
+.mblarge {
+  margin-bottom: $spacing-large;
+}
+
 .no-margin {
   margin: 0;
 }
 
 .full-width {
   width: 100%;
+}
+
+.fleft {
+  float: left;
+}
+
+.fright {
+  float: right;
 }

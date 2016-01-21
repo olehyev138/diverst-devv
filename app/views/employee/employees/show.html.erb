@@ -1,8 +1,6 @@
 <div class="flex-row flex-row--middle">
   <div class="flex-row__cell">
-    <%= link_to "http://linkedin.com", class: "text-right" do %>
-      <%= image_tag(@employee.avatar.url) %>
-    <% end %>
+    <%= image_tag(@employee.avatar.url) %>
   </div>
   <div class="flex-row__cell">
     <h1><%= @employee.name %></h1>
