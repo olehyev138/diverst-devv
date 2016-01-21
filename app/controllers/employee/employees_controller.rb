@@ -5,7 +5,7 @@ class EmployeesController < ApplicationController
   layout "employee"
 
   def update
-    redirect_to [:employee, @employee] if @employee != current_user && !current_user.is_a? Admin
+    redirect_to [:employee, @employee] if @employee != current_user && !current_user.is_a?(Admin)
 
     if @employee.update_attributes(employee_params)
       redirect_to [:employee, @employee]
