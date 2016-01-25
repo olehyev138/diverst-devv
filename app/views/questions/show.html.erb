@@ -38,42 +38,28 @@
               <span class="counter__number"><%= answer.votes.count %></span>
             </div>
             <div class="chosen">
-              <a href="#" class="star-button" data-answer-id="<%= answer.id %>" data-starred="<%= answer.chosen %>"><%= inline_svg('icons/star-purple.svg', class: "icon-inline#{ answer.chosen ? ' icon-inline--colored' : '' }") %></span></a>
+              <a href="#" class="star-button" data-answer-id="<%= answer.id %>" data-starred="<%= answer.chosen %>" title="Star this answer"><%= inline_svg('icons/star-purple.svg', class: "icon-inline#{ answer.chosen ? ' icon-inline--yellow' : '' }") %></span></a>
             </div>
           </div>
 
-          <div class="flex-row__cell flex-row__cell--grow">
-            <div class="flex-row flex-row--middle">
-              <div class="flex-row__cell">
-                <span class="highlight"><%= answer.author.name %></span>
-                <span class="muted"><%= time_ago_in_words(answer.created_at) %> ago</span>
-              </div>
+          <div class="answer">
+            <div class="answer__metadata">
+              <span class="highlight"><%= answer.author.name %></span>
+              <span class="muted"><%= time_ago_in_words(answer.created_at) %> ago</span>
             </div>
-            <div class="flex-row answer__container">
-              <div class="flex-row__cell">
-                <p><%= answer.content %></p>
+            <div class="answer__content">
+              <p><%= answer.content %></p>
 
-                <% answer.comments.each do |comment| %>
-                  <div class="flex-row">
-                    <div class="flex-row__cell">
-                    </div>
-
-                    <div class="flex-row__cell flex-row__cell--grow" style="margin-bottom: 30px;">
-                      <div class="flex-row flex-row--middle">
-                        <div class="flex-row__cell">
-                          <span class="highlight"><%= comment.author.name %></span>
-                          <span class="muted"><%= time_ago_in_words(comment.created_at) %> ago</span>
-                        </div>
-                      </div>
-                      <div class="flex-row answer__container">
-                        <div class="flex-row__cell">
-                          <p><%= comment.content %></p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                <% end %>
-              </div>
+              <% answer.comments.order(created_at: :asc).each do |comment| %>
+                <div class="comment">
+                  <p>
+                    <%= comment.content %> &mdash;
+                    <span class="accent"><%= comment.author.name %></span>
+                    <span class="muted"><%= time_ago_in_words(comment.created_at) %> ago</span> &mdash;
+                    <%= link_to "Delete", answer_comment_path(comment), method: :delete, class: 'error', data: { confirm: "Are you sure?" } %>
+                  </p>
+                </div>
+              <% end %>
             </div>
           </div>
         </div>
@@ -111,7 +97,7 @@
     });
 
     $(this).data('starred', !$(this).data('starred'));
-    $(this).children('svg').attr('class', 'icon-inline' + (isStarred ? ' icon-inline--colored' : ''));
+    $(this).children('svg').attr('class', 'icon-inline' + (isStarred ? ' icon-inline--yellow' : ''));
 
     e.preventDefault();
     return false;

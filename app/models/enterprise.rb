@@ -17,8 +17,8 @@ class Enterprise < ActiveRecord::Base
   has_many :campaigns
   has_many :questions, through: :campaigns
   has_many :answers, through: :questions
-  has_many :answer_comments, through: :answers
-  has_many :answer_upvotes, through: :answers
+  has_many :answer_comments, through: :answers, source: :comments
+  has_many :answer_upvotes, through: :answers, source: :votes
   has_many :resources, as: :container
   has_many :yammer_field_mappings
   has_many :emails

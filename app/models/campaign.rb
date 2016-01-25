@@ -13,7 +13,7 @@ class Campaign < ActiveRecord::Base
   has_attached_file :image, styles: { medium: "300x300>", thumb: "100x100>" }, default_url: ActionController::Base.helpers.image_path("missing.png")
   validates_attachment_content_type :image, content_type: /\Aimage\/.*\Z/
 
-  has_attached_file :banner, styles: { medium: "300x300>", thumb: "100x100>" }, default_url: ActionController::Base.helpers.image_path("missing.png")
+  has_attached_file :banner, styles: { medium: "1200x1200>", thumb: "100x100>" }, default_url: ActionController::Base.helpers.image_path("missing.png")
   validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
 
   after_create :create_invites

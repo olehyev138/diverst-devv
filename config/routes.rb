@@ -129,7 +129,9 @@ Rails.application.routes.draw do
 
   resources :campaigns do
     resources :questions, shallow: true do
-      resources :answers, shallow: true
+      resources :answers, shallow: true do
+        resources :answer_comments, path: "comments", shallow: true
+      end
 
       member do
         patch 'reopen'

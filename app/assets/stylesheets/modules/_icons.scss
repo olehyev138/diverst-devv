@@ -21,13 +21,17 @@
 .icon-inline {
   display: inline-block;
   vertical-align: middle;
-  width: $spacing-large;
-  height: $spacing-large;
+  width: 1.75em;
+  height: 1.75em;
   fill: $diverst-grey-light;
 }
 
 .icon-inline--colored {
   fill: $primary-color;
+}
+
+.icon-inline--yellow {
+  fill: $diverst-yellow;
 }
 
 h4 .icon {
@@ -71,7 +75,7 @@ h4 .icon {
   @include icon(remove-red, 16px, 16px);
 }
 
-.icon--star-purple {
+.icon--star-yellow {
   @include icon(star-purple);
   fill: $primary-color;
 }
