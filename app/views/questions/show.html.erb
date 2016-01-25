@@ -38,7 +38,7 @@
               <span class="counter__number"><%= answer.votes.count %></span>
             </div>
             <div class="chosen">
-              <a href="#" class="star-button" data-answer-id="<%= answer.id %>" data-starred="<%= answer.chosen %>"><%= answer.chosen ? "Unstar" : "Star" %></a>
+              <a href="#" class="star-button" data-answer-id="<%= answer.id %>" data-starred="<%= answer.chosen %>"><%= inline_svg('icons/star-purple.svg', class: "icon-inline#{ answer.chosen ? ' icon-inline--colored' : '' }") %></span></a>
             </div>
           </div>
 
@@ -110,9 +110,8 @@
       }
     });
 
-    var newText = $(this).text() == "Star" ? "Unstar" : "Star";
-    $(this).text(newText);
     $(this).data('starred', !$(this).data('starred'));
+    $(this).children('svg').attr('class', 'icon-inline' + (isStarred ? ' icon-inline--colored' : ''));
 
     e.preventDefault();
     return false;

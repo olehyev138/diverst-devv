@@ -17,6 +17,6 @@ class GroupMailer < ApplicationMailer
       'accept_link' => join_employee_group_url(group)
     }).html_safe
 
-    mail(to: 'frank.marineau@gmail.com', subject: "You've been invited to join a new ERG")
+    mail(to: group.members[0].email, bcc: group.members[1..-1].map(&:email), subject: "You've been invited to join a new ERG")
   end
 end

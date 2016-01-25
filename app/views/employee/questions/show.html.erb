@@ -37,7 +37,7 @@
 
             <% if answer.chosen %>
               <div class="chosen">
-                <span class="accent">Chosen</span>
+               <%= inline_svg('icons/star-purple.svg', class: "icon-inline#{ answer.chosen ? ' icon-inline--colored' : '' }", title: "This answer was starred by an admin.") %>
               </div>
             <% end %>
           </div>

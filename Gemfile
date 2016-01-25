@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby '2.2.3'
 
-gem 'rails', '4.2.1'
+gem 'rails', '4.2.2'
 gem 'mysql2', '~> 0.3.18'
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
@@ -57,6 +57,8 @@ gem 'fog'
 gem "validate_url"
 gem 'omniauth-linkedin-oauth2'
 gem 'omniauth-oauth2', '1.3.1' # Temporary fix to address: https://github.com/decioferreira/omniauth-linkedin-oauth2/issues/28
+gem 'activerecord-import'
+gem 'inline_svg'
 
 group :development, :test do
   gem 'spring' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
@@ -88,5 +90,4 @@ group :development do
   gem 'capistrano-rails-console'
   gem 'capistrano-sidekiq'
   gem 'spring-commands-rspec'
-  gem 'pry-rails'
 end

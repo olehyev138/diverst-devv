@@ -3,4 +3,5 @@
 :queues:
   - critical
   - default
+  - mailers
   - low

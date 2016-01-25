@@ -16,8 +16,16 @@ class Campaign < ActiveRecord::Base
   after_create :create_invites
 
   def create_invites
-    enterprise.employees.for_groups(self.groups).each do |employee_to_invite|
-      self.invitations.create(employee: employee_to_invite)
+    invites = enterprise.employees.for_groups(self.groups).map do |employee_to_invite|
+      CampaignInvitation.new(campaign: self, employee: employee_to_invite)
+    end
+
+    CampaignInvitation.import invites
+  end
+
+  def send_invitation_emails
+    self.invitations.where(email_sent: false).each do |invitation|
+      CampaignMailer.invitation(invitation).deliver_now
     end
   end
 

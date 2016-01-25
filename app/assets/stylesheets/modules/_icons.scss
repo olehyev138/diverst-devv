@@ -18,6 +18,22 @@
   height: $spacing-medium;
 }
 
+.icon-inline {
+  display: inline-block;
+  vertical-align: middle;
+  width: $spacing-large;
+  height: $spacing-large;
+  fill: $diverst-grey-light;
+}
+
+.icon-inline--colored {
+  fill: $primary-color;
+}
+
+h4 .icon {
+  margin-right: $spacing-small;
+}
+
 .icon--large {
   width: $spacing-large;
   height: $spacing-large;
@@ -57,6 +73,7 @@
 
 .icon--star-purple {
   @include icon(star-purple);
+  fill: $primary-color;
 }
 
 
@@ -91,4 +108,32 @@
 
 .icon--unify {
   @include icon(unify);
+}
+
+
+// Random icons
+
+.icon--news {
+  @include icon(news);
+  background-size: 100%;
+}
+
+.icon--chat {
+  @include icon(chat);
+  background-size: 100%;
+}
+
+.icon--members {
+  @include icon(manage-dark);
+  background-size: 100%;
+}
+
+.icon--trophy {
+  @include icon(trophy);
+  background-size: 100%;
+}
+
+.icon--calendar {
+  @include icon(calendar);
+  background-size: 100%;
 }

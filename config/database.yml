@@ -11,7 +11,7 @@ development: &default
 test:
   adapter: mysql2
   encoding: utf8
-  database: diverst_testabababab
+  database: diverst_test
 
 production:
   <<: *default
