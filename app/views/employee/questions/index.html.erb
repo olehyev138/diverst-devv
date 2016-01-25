@@ -6,6 +6,10 @@
 </div>
 
 <div class="content__main">
+  <% if @campaign.banner.exists? %>
+    <div style="background-image: url(<%= @campaign.banner.url %>); width: 100%; height: 200px; background-position: center; background-size: 100%; margin-bottom: 20px;"></div>
+  <% end %>
+
   <p class="block"><%= @campaign.description %></p>
   <div class="card">
     <% @questions.each do |question| %>

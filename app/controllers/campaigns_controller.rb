@@ -69,6 +69,7 @@ class CampaignsController < ApplicationController
       :end,
       :nb_invites,
       :image,
+      :banner,
       group_ids: [],
       segment_ids: [],
       questions_attributes: [
