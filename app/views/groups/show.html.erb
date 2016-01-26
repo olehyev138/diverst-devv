@@ -13,7 +13,7 @@
         <div class="col sm-12 md-6">
           <div class="card">
             <div class="card__section">
-              <h4><span class="icon icon--members"></span>Newest Members</h4>
+              <h4 class="card__title"><%= inline_svg('icons/manage.svg', class: "icon card__icon") %></span>Newest Members</h4>
               <%= link_to "View all", group_group_members_path(@group), class: "card__action" %>
 
               <% @employee_groups.each_slice(2) do |employee_group_slice| %>
@@ -34,7 +34,7 @@
           <div class="card">
             <div class="card__section">
 
-              <h4><span class="icon icon--calendar"></span>Upcoming Events</h4>
+              <h4 class="card__title"><%= inline_svg('icons/calendar.svg', class: "icon card__icon") %>Upcoming Events</h4>
               <%= link_to "View all", group_events_path(@group), class: "card__action" %>
 
               <% @events.each do |event| %>
@@ -60,7 +60,7 @@
           <div class="card">
             <div class="card__section">
 
-              <h4><span class="icon icon--news"></span>Latest News</h4>
+              <h4 class="card__title"><%= inline_svg('icons/news.svg', class: "icon card__icon") %>Latest News</h4>
               <%= link_to "View all", group_news_links_path(@group), class: "card__action" %>
 
               <% @news_links.each do |news_link| %>
@@ -86,7 +86,7 @@
           <div class="card">
             <div class="card__section">
 
-              <h4><span class="icon icon--chat"></span>Latest Messages</h4>
+              <h4 class="card__title"><%= inline_svg('icons/chat.svg', class: "icon card__icon") %>Latest Messages</h4>
               <%= link_to "View all", group_group_messages_path(@group), class: "card__action" %>
 
               <% @messages.each do |message| %>
@@ -131,8 +131,8 @@
 
       <div class="card card--secondary">
         <div class="card__section">
-          <h4><span class="icon icon--trophy"></span>Leaderboards</h4>
-          <h4 class="muted">Top Performers this week</h4>
+          <h4 class="card__title"><%= inline_svg('icons/trophy.svg', class: "icon card__icon") %>Leaderboards</h4>
+          <h5>Top Performers this week</h5>
           <ol>
             <% @group.members.top_participants(10).each do |member| %>
               <% if member == current_user %>
@@ -144,7 +144,7 @@
           </ol>
         </div>
         <div class="card__section">
-          <h4 class="muted">Top ERGs this week</h4>
+          <h5>Top ERGs this week</h5>
           <ol>
             <% @group.enterprise.groups.top_participants(10).each do |group| %>
               <% if group == @group %>

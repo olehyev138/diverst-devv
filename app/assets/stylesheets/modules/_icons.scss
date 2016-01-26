@@ -18,6 +18,10 @@
   height: $spacing-medium;
 }
 
+.icon--negative {
+  fill: $red;
+}
+
 .icon-inline {
   display: inline-block;
   vertical-align: middle;
@@ -65,14 +69,6 @@ h4 .icon {
 .icon--reorder {
   @include icon(reorder, 16px, 16px);
   cursor: move;
-}
-
-.icon--remove {
-  @include icon(remove, 16px, 16px);
-}
-
-.icon--remove-red {
-  @include icon(remove-red, 16px, 16px);
 }
 
 .icon--star-yellow {

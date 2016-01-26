@@ -14,7 +14,7 @@
                 <div class="flex-row__cell">
                   <% if is_admin? %>
                     <%= link_to group_group_member_path(@group, member), method: :delete do %>
-                      <span class="icon icon--remove-red"></span>
+                      <%= inline_svg('icons/remove.svg', class: "icon icon--negative") %>
                     <% end %>
                   <% end %>
                 </div>
