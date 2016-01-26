@@ -37,7 +37,8 @@
   }
 }
 
-.card__section--accordeon {
+.card__section--accordion {
+
   h4 {
     margin-bottom: 0;
   }
@@ -58,6 +59,13 @@
   &:last-child {
     border: 0;
   }
+}
+
+.card__icon {
+  position: relative;
+  margin-right: $spacing-small;
+  top: -2px;
+  fill: $primary-color;
 }
 
 
