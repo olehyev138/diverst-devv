@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe Employee do
   describe "#participation_score" do
+    subject { create(:employee) }
     let (:employee) { create(:employee) }
     let (:campaigns) { create_list(:campaign_filled, 2) }
 
@@ -53,4 +54,6 @@ RSpec.describe Employee do
       expect(employee.participation_score(from: 0)).to eq 10
     end
   end
+
+  it { is_expected.to have_attached_file(:avatar) }
 end
