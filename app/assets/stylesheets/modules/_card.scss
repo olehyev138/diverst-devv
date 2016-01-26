@@ -39,12 +39,12 @@
 
 .card__section--accordion {
 
-  h4 {
+  .card__title {
     margin-bottom: 0;
   }
 
   .card__content {
-    margin-top: 8px;
+    margin-top: $spacing-small;
     display: none;
 
     &--is-visible {
