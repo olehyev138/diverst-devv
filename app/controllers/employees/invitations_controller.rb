@@ -7,7 +7,7 @@ class Employees::InvitationsController < Devise::InvitationsController
   def resolve_layout
     case action_name
     when "edit"
-      "guest"
+      false # No layout since we have no logged in user and the themes require one in the layout
     else
       "global_settings"
     end
