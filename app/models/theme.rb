@@ -4,8 +4,9 @@ class Theme < ActiveRecord::Base
   has_attached_file :logo, styles: { medium: "300x300>", thumb: "100x100>" }, default_url: ActionController::Base.helpers.image_path("missing.png")
   validates_attachment_content_type :logo, content_type: /\Aimage\/.*\Z/
 
-  validates :primary_color, presence: true, length: { is: 6 }
+  validates :primary_color, presence: true, format: { with: /\A#(?:[0-9a-fA-F]{3}){1,2}\z/, message: 'should be a valid hex color' }
 
+  before_validation :append_hash_to_colors
   after_save :compile, :if => :changed?
 
   def delete_asset
@@ -36,11 +37,11 @@ class Theme < ActiveRecord::Base
     end
   end
 
-  def self.default
-    Theme.where(default: true).first
-  end
-
   private
+
+  def append_hash_to_colors
+    self.primary_color.insert(0, '#') if self.primary_color[0] != '#'
+  end
 
   def compile
     theme_compiler = ThemeCompiler.new(self)
