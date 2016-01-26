@@ -37,13 +37,14 @@
   }
 }
 
-.card__section--accordeon {
-  h4 {
+.card__section--accordion {
+
+  .card__title {
     margin-bottom: 0;
   }
 
   .card__content {
-    margin-top: 8px;
+    margin-top: $spacing-small;
     display: none;
 
     &--is-visible {
@@ -58,6 +59,17 @@
   &:last-child {
     border: 0;
   }
+}
+
+.card__title {
+  margin-bottom: $spacing-medium;
+}
+
+.card__icon {
+  position: relative;
+  margin-right: $spacing-small;
+  top: -2px;
+  fill: $primary-color;
 }
 
 

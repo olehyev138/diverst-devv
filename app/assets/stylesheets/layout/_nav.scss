@@ -55,11 +55,13 @@
 }
 
 .nav__icon {
-  width: 20px;
-  height: 20px;
-  margin-right: 12px;
+  width: $spacing-large;
+  height: $spacing-large;
+  fill: $diverst-white;
+  margin-right: $spacing-small*1.5;
   opacity: 0.5;
   transition: opacity $time $curve;
+  -webkit-backface-visibility: hidden;
 
   .nav__link:hover &,
   .nav__link:focus &,

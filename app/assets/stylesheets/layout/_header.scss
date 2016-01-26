@@ -56,6 +56,8 @@
   background-color: $diverst-white;
   overflow: hidden;
   text-align: center;
+  white-space: nowrap;
+  overflow-x: scroll;
   @include z-index(secondary-header);
   @include drop-shadow;
 
@@ -64,6 +66,8 @@
     top: 75px;
     left: 0;
     padding: 0 $spacing-large;
+    white-space: normal;
+    overflow: hidden;
 
     .dashboard & {
       left: $nav-width;
