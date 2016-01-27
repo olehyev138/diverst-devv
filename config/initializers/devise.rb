@@ -304,63 +304,63 @@ Devise.setup do |config|
 
   # ==> Configuration for :saml_authenticatable
 
-#   # Create user if the user does not exist. (Default is false)
-#   config.saml_create_user = true
+  #   # Create user if the user does not exist. (Default is false)
+  #   config.saml_create_user = true
 
-#   # Set the default user key. The user will be looked up by this key. Make
-#   # sure that the Authentication Response includes the attribute.
-#   config.saml_default_user_key = :email
+  #   # Set the default user key. The user will be looked up by this key. Make
+  #   # sure that the Authentication Response includes the attribute.
+  #   config.saml_default_user_key = :email
 
-#   # Optional. This stores the session index defined by the IDP during login.  If provided it will be used as a salt
-#   # for the user's session to facilitate an IDP initiated logout request.
-#   config.saml_session_index_key = :session_index
+  #   # Optional. This stores the session index defined by the IDP during login.  If provided it will be used as a salt
+  #   # for the user's session to facilitate an IDP initiated logout request.
+  #   config.saml_session_index_key = :session_index
 
-#   # You can set this value to use Subject or SAML assertation as info to which email will be compared
-#   # If you don't set it then email will be extracted from SAML assertation attributes
-#   config.saml_use_subject = true
+  #   # You can set this value to use Subject or SAML assertation as info to which email will be compared
+  #   # If you don't set it then email will be extracted from SAML assertation attributes
+  #   config.saml_use_subject = true
 
-#   # Configure with your SAML settings (see ruby-saml for more information).
-#   config.saml_configure do |settings|
-#     settings.assertion_consumer_service_url = "http://localhost:3000/employees/saml/auth"
-#     settings.idp_entity_id                  = "https://app.onelogin.com/saml/metadata/468755"
-#     settings.idp_sso_target_url             = "https://v7.onelogin.com/trust/saml2/http-post/sso/468755"
-#     settings.idp_slo_target_url             = "https://v7.onelogin.com/trust/saml2/http-redirect/slo/468755"
-#     settings.idp_cert                       = "-----BEGIN CERTIFICATE-----
-# MIIEFDCCAvygAwIBAgIUBvDB5WYcA+HOo/4oreMClnDKG4QwDQYJKoZIhvcNAQEF
-# BQAwVzELMAkGA1UEBhMCVVMxEDAOBgNVBAoMB1ZvbHVtZTcxFTATBgNVBAsMDE9u
-# ZUxvZ2luIElkUDEfMB0GA1UEAwwWT25lTG9naW4gQWNjb3VudCA2NzM5MzAeFw0x
-# NTA4MTYwMjE3NTZaFw0yMDA4MTcwMjE3NTZaMFcxCzAJBgNVBAYTAlVTMRAwDgYD
-# VQQKDAdWb2x1bWU3MRUwEwYDVQQLDAxPbmVMb2dpbiBJZFAxHzAdBgNVBAMMFk9u
-# ZUxvZ2luIEFjY291bnQgNjczOTMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
-# AoIBAQCqLImUK0K34D6kKWpIOXVcAuNIYulD46Uz3h8WpCC9JZsc6+Nse7jvC5QV
-# jsJqctuoEcnHUX7tyUeY2RH8PHs7APAGCkWZot07rQ0Dpr3EK8yJSqOKCjDyhzM/
-# MCyxGHXwsaiCHPaUmi6PvHT7qMTtRGLL1CJf30h0D6hH07EOn0biNLJZFjrUL/Fp
-# vWwAxN/e/rtmiBpCXgeWcGvNGi6L/z1GICFON0++OBSK6QtGmNWfb7f8kA2q20yS
-# Em8EsfnE9fWL+h4SDA/0oQal5L6nRdY4j+OBnvXO8opMAuAtKWdoUb5bOJbLMMbs
-# JtYRgVh23iZNbVbvTEJywTVR/V5tAgMBAAGjgdcwgdQwDAYDVR0TAQH/BAIwADAd
-# BgNVHQ4EFgQURtFr30idIj5cpSYKV0v7JJ6hFPcwgZQGA1UdIwSBjDCBiYAURtFr
-# 30idIj5cpSYKV0v7JJ6hFPehW6RZMFcxCzAJBgNVBAYTAlVTMRAwDgYDVQQKDAdW
-# b2x1bWU3MRUwEwYDVQQLDAxPbmVMb2dpbiBJZFAxHzAdBgNVBAMMFk9uZUxvZ2lu
-# IEFjY291bnQgNjczOTOCFAbwweVmHAPhzqP+KK3jApZwyhuEMA4GA1UdDwEB/wQE
-# AwIHgDANBgkqhkiG9w0BAQUFAAOCAQEAd5fBLwWTjEq7Sefv6MXsDWCY+tbo0+Ys
-# jgajsDupJGF1PITEKVFXN+7p6J38C8NGnfdQLOzrYpkKBzyaJsDm67iCQD5rz6CL
-# MjF8n/vVVYuN0RcfPl28Du5g8gjhcF4wXldK/NiQ9gvckW005pswVxq0Xh3y0l4w
-# RBkf3lC+Uym8UhW5nBqSIdQ48pIuGYDInBxqjbpX4dUYL8R8LuDPvUfAXVPR64Us
-# wTsvlo/0p1sX89445zP+IPycIwo1W44t4tImhm3k2UUHKbuEzDKLYq2K2TyH/s7o
-# A5bYGY36o0HQqna1jAGDM8l3t7uwbpsMwf5O/CVPgcXBqUxJSX2J0g==
-# -----END CERTIFICATE-----
-# "
-#     # or settings.idp_cert_fingerprint           = "3B:05:BE:0A:EC:84:CC:D4:75:97:B3:A2:22:AC:56:21:44:EF:59:E6"
-#     #    settings.idp_cert_fingerprint_algorithm = XMLSecurity::Document::SHA1
+  #   # Configure with your SAML settings (see ruby-saml for more information).
+  #   config.saml_configure do |settings|
+  #     settings.assertion_consumer_service_url = "http://localhost:3000/employees/saml/auth"
+  #     settings.idp_entity_id                  = "https://app.onelogin.com/saml/metadata/468755"
+  #     settings.idp_sso_target_url             = "https://v7.onelogin.com/trust/saml2/http-post/sso/468755"
+  #     settings.idp_slo_target_url             = "https://v7.onelogin.com/trust/saml2/http-redirect/slo/468755"
+  #     settings.idp_cert                       = "-----BEGIN CERTIFICATE-----
+  # MIIEFDCCAvygAwIBAgIUBvDB5WYcA+HOo/4oreMClnDKG4QwDQYJKoZIhvcNAQEF
+  # BQAwVzELMAkGA1UEBhMCVVMxEDAOBgNVBAoMB1ZvbHVtZTcxFTATBgNVBAsMDE9u
+  # ZUxvZ2luIElkUDEfMB0GA1UEAwwWT25lTG9naW4gQWNjb3VudCA2NzM5MzAeFw0x
+  # NTA4MTYwMjE3NTZaFw0yMDA4MTcwMjE3NTZaMFcxCzAJBgNVBAYTAlVTMRAwDgYD
+  # VQQKDAdWb2x1bWU3MRUwEwYDVQQLDAxPbmVMb2dpbiBJZFAxHzAdBgNVBAMMFk9u
+  # ZUxvZ2luIEFjY291bnQgNjczOTMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+  # AoIBAQCqLImUK0K34D6kKWpIOXVcAuNIYulD46Uz3h8WpCC9JZsc6+Nse7jvC5QV
+  # jsJqctuoEcnHUX7tyUeY2RH8PHs7APAGCkWZot07rQ0Dpr3EK8yJSqOKCjDyhzM/
+  # MCyxGHXwsaiCHPaUmi6PvHT7qMTtRGLL1CJf30h0D6hH07EOn0biNLJZFjrUL/Fp
+  # vWwAxN/e/rtmiBpCXgeWcGvNGi6L/z1GICFON0++OBSK6QtGmNWfb7f8kA2q20yS
+  # Em8EsfnE9fWL+h4SDA/0oQal5L6nRdY4j+OBnvXO8opMAuAtKWdoUb5bOJbLMMbs
+  # JtYRgVh23iZNbVbvTEJywTVR/V5tAgMBAAGjgdcwgdQwDAYDVR0TAQH/BAIwADAd
+  # BgNVHQ4EFgQURtFr30idIj5cpSYKV0v7JJ6hFPcwgZQGA1UdIwSBjDCBiYAURtFr
+  # 30idIj5cpSYKV0v7JJ6hFPehW6RZMFcxCzAJBgNVBAYTAlVTMRAwDgYDVQQKDAdW
+  # b2x1bWU3MRUwEwYDVQQLDAxPbmVMb2dpbiBJZFAxHzAdBgNVBAMMFk9uZUxvZ2lu
+  # IEFjY291bnQgNjczOTOCFAbwweVmHAPhzqP+KK3jApZwyhuEMA4GA1UdDwEB/wQE
+  # AwIHgDANBgkqhkiG9w0BAQUFAAOCAQEAd5fBLwWTjEq7Sefv6MXsDWCY+tbo0+Ys
+  # jgajsDupJGF1PITEKVFXN+7p6J38C8NGnfdQLOzrYpkKBzyaJsDm67iCQD5rz6CL
+  # MjF8n/vVVYuN0RcfPl28Du5g8gjhcF4wXldK/NiQ9gvckW005pswVxq0Xh3y0l4w
+  # RBkf3lC+Uym8UhW5nBqSIdQ48pIuGYDInBxqjbpX4dUYL8R8LuDPvUfAXVPR64Us
+  # wTsvlo/0p1sX89445zP+IPycIwo1W44t4tImhm3k2UUHKbuEzDKLYq2K2TyH/s7o
+  # A5bYGY36o0HQqna1jAGDM8l3t7uwbpsMwf5O/CVPgcXBqUxJSX2J0g==
+  # -----END CERTIFICATE-----
+  # "
+  #     # or settings.idp_cert_fingerprint           = "3B:05:BE:0A:EC:84:CC:D4:75:97:B3:A2:22:AC:56:21:44:EF:59:E6"
+  #     #    settings.idp_cert_fingerprint_algorithm = XMLSecurity::Document::SHA1
 
-#     settings.name_identifier_format         = "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"
+  #     settings.name_identifier_format         = "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"
 
-#     # Security section
-#     settings.security[:authn_requests_signed] = false
-#     settings.security[:logout_requests_signed] = false
-#     settings.security[:logout_responses_signed] = false
-#     settings.security[:metadata_signed] = false
-#     settings.security[:digest_method] = XMLSecurity::Document::SHA1
-#     settings.security[:signature_method] = XMLSecurity::Document::RSA_SHA1
-#   end
+  #     # Security section
+  #     settings.security[:authn_requests_signed] = false
+  #     settings.security[:logout_requests_signed] = false
+  #     settings.security[:logout_responses_signed] = false
+  #     settings.security[:metadata_signed] = false
+  #     settings.security[:digest_method] = XMLSecurity::Document::SHA1
+  #     settings.security[:signature_method] = XMLSecurity::Document::RSA_SHA1
+  #   end
 end

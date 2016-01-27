@@ -2,12 +2,12 @@ class SelectField < Field
   include Optionnable
 
   def string_value(value)
-    return "-" if value.nil? || value.empty?
+    return '-' if value.nil? || value.empty?
     value[0]
   end
 
   def csv_value(value)
-    return "" if value.nil? || value.empty?
+    return '' if value.nil? || value.empty?
     value[0]
   end
 
@@ -36,27 +36,27 @@ class SelectField < Field
     e1_value = e1.info[self][0]
     e2_value = e2.info[self][0]
 
-    e1_popularity = self.popularity_for_value(e1_value, employees)
-    e2_popularity = self.popularity_for_value(e2_value, employees)
+    e1_popularity = popularity_for_value(e1_value, employees)
+    e2_popularity = popularity_for_value(e2_value, employees)
 
     # Size score
-    if e1_value == e2_value
-      size_score = 1 - e1_popularity
-    else
-      size_score = 1 - e1_popularity + e2_popularity
+    size_score = if e1_value == e2_value
+                   1 - e1_popularity
+                 else
+                   1 - e1_popularity + e2_popularity
     end
 
     # Contrast score
-    if e1_value == e2_value
-      popularity_total = e1_popularity
-    else
-      popularity_total = e1_popularity + e2_popularity
+    popularity_total = if e1_value == e2_value
+                         e1_popularity
+                       else
+                         e1_popularity + e2_popularity
     end
 
     contrast_score = (e1_popularity - e2_popularity).abs / popularity_total
 
     # Total score
-    total_score = (size_score + contrast_score).to_f / 2
+    (size_score + contrast_score).to_f / 2
   end
 
   def validates_rule_for_employee?(rule:, employee:)

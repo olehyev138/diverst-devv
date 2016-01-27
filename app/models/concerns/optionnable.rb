@@ -41,29 +41,29 @@ module Optionnable
     answer_counts_formatted
   end
 
-  def elastic_stats(aggr_field: nil, segments: self.enterprise.enterprise.segments.all)
+  def elastic_stats(aggr_field: nil, segments: enterprise.enterprise.segments.all)
     # Craft the aggregation query depending on if we have a field to aggregate on or not
     term_query = {
       terms: {
         terms: {
-          field: self.elasticsearch_field,
+          field: elasticsearch_field,
           min_doc_count: 0
         }
       }
     }
 
-    if aggr_field.nil?
-      aggs = term_query
-    else
-      aggs = {
-        aggregation: {
-          terms: {
-            field: aggr_field.elasticsearch_field,
-            min_doc_count: 0
-          },
-          aggs: term_query
-        }
-      }
+    aggs = if aggr_field.nil?
+             term_query
+           else
+             {
+               aggregation: {
+                 terms: {
+                   field: aggr_field.elasticsearch_field,
+                   min_doc_count: 0
+                 },
+                 aggs: term_query
+               }
+             }
     end
 
     search_hash = {
@@ -73,15 +73,15 @@ module Optionnable
 
     # Filter the query by segments if there are any specified
     if !segments.nil? && !segments.empty?
-      search_hash["query"] = {
+      search_hash['query'] = {
         terms: {
-          "combined_info.segments" => segments.ids
+          'combined_info.segments' => segments.ids
         }
       }
     end
 
     # Execute the elasticsearch query
-    Elasticsearch::Model.client.search(index: self.enterprise.es_employees_index_name, body: search_hash)
+    Elasticsearch::Model.client.search(index: enterprise.es_employees_index_name, body: search_hash)
   end
 
   # Get highcharts-usable stats from the field by querying elasticsearch and formatting its response
@@ -91,24 +91,24 @@ module Optionnable
     if aggr_field # If there is an aggregation
       at_least_one_bucket_has_other = false
 
-      options = data["aggregations"]["aggregation"]["buckets"].map { |aggr_bucket|
-        aggr_bucket["terms"]["buckets"].map do |option_bucket|
-          option_bucket["key"]
+      options = data['aggregations']['aggregation']['buckets'].map { |aggr_bucket|
+        aggr_bucket['terms']['buckets'].map do |option_bucket|
+          option_bucket['key']
         end
       }.flatten.uniq
 
-      series = data["aggregations"]["aggregation"]["buckets"].map do |aggr_bucket|
+      series = data['aggregations']['aggregation']['buckets'].map do |aggr_bucket|
         bucket_data = options.map do |option|
-          bucket = aggr_bucket["terms"]["buckets"].find{ |b| b["key"] == option }
+          bucket = aggr_bucket['terms']['buckets'].find { |b| b['key'] == option }
 
           if bucket
-            bucket["doc_count"]
+            bucket['doc_count']
           else
             0
           end
         end
 
-        other_docs_count = aggr_bucket["terms"]["sum_other_doc_count"]
+        other_docs_count = aggr_bucket['terms']['sum_other_doc_count']
 
         if other_docs_count > 0
           bucket_data << other_docs_count
@@ -116,16 +116,14 @@ module Optionnable
         end
 
         {
-          name: aggr_bucket["key"],
+          name: aggr_bucket['key'],
           data: bucket_data
         }
       end
 
-      if at_least_one_bucket_has_other
-        options << "Other"
-      end
+      options << 'Other' if at_least_one_bucket_has_other
 
-      sum_other_doc_count = data["aggregations"]["aggregation"]["sum_other_doc_count"]
+      sum_other_doc_count = data['aggregations']['aggregation']['sum_other_doc_count']
 
       # Handle 'Other' bucket
       if sum_other_doc_count > 0
@@ -135,7 +133,7 @@ module Optionnable
         series.each do |serie|
           must_nots << {
             term: {
-              "#{aggr_field.elasticsearch_field}" => serie["name"]
+              aggr_field.elasticsearch_field.to_s => serie['name']
             }
           }
         end
@@ -154,49 +152,49 @@ module Optionnable
           aggs: {
             aggregation: {
               terms: {
-                field: self.elasticsearch_field,
+                field: elasticsearch_field,
                 min_doc_count: 0,
                 order: {
-                  "_term" => "asc"
+                  '_term' => 'asc'
                 }
               }
             }
           }
         }
 
-        others = Elasticsearch::Model.client.search(index: self.container.enterprise.es_employees_index_name, body: others_hash)
+        others = Elasticsearch::Model.client.search(index: container.enterprise.es_employees_index_name, body: others_hash)
 
         others_data = options.map do |option|
-          bucket = others["aggregations"]["aggregation"]["buckets"].find{ |b| b["key"] == option }
+          bucket = others['aggregations']['aggregation']['buckets'].find { |b| b['key'] == option }
 
           if bucket
-            bucket["doc_count"]
+            bucket['doc_count']
           else
             0
           end
         end
 
-        series << { name: "Other", data: others_data }
+        series << { name: 'Other', data: others_data }
       end
 
       return {
         series: series,
-        categories: options.map{|o| self.format_value_name(o) },
-        xAxisTitle: self.title
+        categories: options.map { |o| format_value_name(o) },
+        xAxisTitle: title
       }
     else # If there is no aggregation
-      seriesData = data["aggregations"]["terms"]["buckets"].map do |option_bucket|
+      seriesData = data['aggregations']['terms']['buckets'].map do |option_bucket|
         {
-          name: self.format_value_name(option_bucket["key"]),
-          y: option_bucket["doc_count"]
+          name: format_value_name(option_bucket['key']),
+          y: option_bucket['doc_count']
         }
       end
 
-      other_docs_count = data["aggregations"]["terms"]["sum_other_doc_count"]
-      seriesData << { name: "Other", y: other_docs_count} if other_docs_count > 0
+      other_docs_count = data['aggregations']['terms']['sum_other_doc_count']
+      seriesData << { name: 'Other', y: other_docs_count } if other_docs_count > 0
 
       series = [{
-        name: self.title,
+        name: title,
         data: seriesData
       }]
 
@@ -207,7 +205,7 @@ module Optionnable
   end
 
   def elasticsearch_field
-    "combined_info.#{self.id}.raw"
+    "combined_info.#{id}.raw"
   end
 
   def format_value_name(value)
@@ -217,7 +215,7 @@ module Optionnable
   protected
 
   def set_options_array
-    return self.options = [] if self.options_text.nil?
-    self.options = self.options_text.lines.map(&:chomp)
+    return self.options = [] if options_text.nil?
+    self.options = options_text.lines.map(&:chomp)
   end
 end

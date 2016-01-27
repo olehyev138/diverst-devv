@@ -3,7 +3,7 @@ class Groups::GroupMembersController < ApplicationController
   before_action :set_group
   before_action :set_member, only: [:edit, :update, :destroy]
 
-  layout "erg"
+  layout 'erg'
 
   def index
     @members = @group.members.page(params[:page])

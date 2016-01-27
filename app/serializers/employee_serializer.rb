@@ -10,7 +10,7 @@ class EmployeeSerializer < ActiveModel::Serializer
 
     if scope.is_a? Match
       fields_hash << {
-        title: "Topic of conversation",
+        title: 'Topic of conversation',
         value: scope.topic.statement
       }
     end
@@ -26,6 +26,6 @@ class EmployeeSerializer < ActiveModel::Serializer
   end
 
   def last_name
-    "#{(object.last_name || "")[0].capitalize}."
+    "#{(object.last_name || '')[0].capitalize}."
   end
 end

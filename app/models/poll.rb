@@ -1,9 +1,11 @@
 class Poll < ActiveRecord::Base
   has_many :fields, as: :container
-  has_many :responses, class_name: "PollResponse", inverse_of: :poll
+  has_many :responses, class_name: 'PollResponse', inverse_of: :poll
   has_many :graphs, as: :collection
-  has_and_belongs_to_many :segments, inverse_of: :polls
-  has_and_belongs_to_many :groups, inverse_of: :polls
+  has_many :polls_segments
+  has_many :segments, inverse_of: :polls, through: :polls_segments
+  has_many :groups_polls
+  has_many :groups, inverse_of: :polls, through: :groups_polls
   belongs_to :enterprise, inverse_of: :polls
 
   after_create :send_invitation_emails
@@ -20,30 +22,26 @@ class Poll < ActiveRecord::Base
   def targeted_employees
     target = Employee.all
 
-    if !segments.empty?
-      target = target.for_segments(segments)
-    end
+    target = target.for_segments(segments) unless segments.empty?
 
-    if !groups.empty?
-      target = target.for_groups(groups)
-    end
+    target = target.for_groups(groups) unless groups.empty?
 
     target
   end
 
   # Defines which fields will be usable when creating graphs
   def graphable_fields(admin)
-    admin.enterprise.fields + self.fields
+    admin.enterprise.fields + fields
   end
 
   def responses_csv
     CSV.generate do |csv|
-      csv << ["id"].concat(fields.map(&:title))
+      csv << ['id'].concat(fields.map(&:title))
 
-      self.responses.order(created_at: :desc).each do |response|
+      responses.order(created_at: :desc).each do |response|
         response_column = [response.id]
 
-        self.fields.each do |field|
+        fields.each do |field|
           response_column << field.csv_value(response.info[field])
         end
 
@@ -55,15 +53,15 @@ class Poll < ActiveRecord::Base
   protected
 
   def send_invitation_emails
-    self.targeted_employees.each do |employee|
+    targeted_employees.each do |employee|
       PollMailer.delay.invitation(self, employee)
     end
   end
 
   # Creates one graph per field when the poll is created
   def create_default_graphs
-    self.fields.each do |field|
-      self.graphs.create(field: field) if field.graphable?
+    fields.each do |field|
+      graphs.create(field: field) if field.graphable?
     end
   end
 end

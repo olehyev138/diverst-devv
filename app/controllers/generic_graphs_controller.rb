@@ -1,14 +1,14 @@
 class GenericGraphsController < ApplicationController
   def group_population
     render json: {
-      type: "bar",
+      type: 'bar',
       highcharts: {
         series: [{
-          title: "Number of employees",
-          data: current_admin.enterprise.groups.map{ |g| g.members.count }
+          title: 'Number of employees',
+          data: current_admin.enterprise.groups.map { |g| g.members.count }
         }],
         categories: current_admin.enterprise.groups.map(&:name),
-        xAxisTitle: "ERG"
+        xAxisTitle: 'ERG'
       },
       hasAggregation: false
     }
@@ -16,14 +16,14 @@ class GenericGraphsController < ApplicationController
 
   def segment_population
     render json: {
-      type: "bar",
+      type: 'bar',
       highcharts: {
         series: [{
-          title: "Number of employees",
-          data: current_admin.enterprise.segments.map{ |s| s.members.count }
+          title: 'Number of employees',
+          data: current_admin.enterprise.segments.map { |s| s.members.count }
         }],
         categories: current_admin.enterprise.segments.map(&:name),
-        xAxisTitle: "Segment"
+        xAxisTitle: 'Segment'
       },
       hasAggregation: false
     }
@@ -31,15 +31,15 @@ class GenericGraphsController < ApplicationController
 
   def events_created
     render json: {
-      type: "bar",
+      type: 'bar',
       highcharts: {
         series: [{
-          title: "Events created",
-          data: current_admin.enterprise.groups.map{ |g| g.events.where("created_at > ?", 1.month.ago).count }
+          title: 'Events created',
+          data: current_admin.enterprise.groups.map { |g| g.events.where('created_at > ?', 1.month.ago).count }
         }],
         categories: current_admin.enterprise.groups.map(&:name),
-        xAxisTitle: "ERG",
-        yAxisTitle: "Nb of events"
+        xAxisTitle: 'ERG',
+        yAxisTitle: 'Nb of events'
       },
       hasAggregation: false
     }
@@ -47,15 +47,15 @@ class GenericGraphsController < ApplicationController
 
   def messages_sent
     render json: {
-      type: "bar",
+      type: 'bar',
       highcharts: {
         series: [{
-          title: "Messages sent",
-          data: current_admin.enterprise.groups.map{ |g| g.messages.where("created_at > ?", 1.month.ago).count }
+          title: 'Messages sent',
+          data: current_admin.enterprise.groups.map { |g| g.messages.where('created_at > ?', 1.month.ago).count }
         }],
         categories: current_admin.enterprise.groups.map(&:name),
-        xAxisTitle: "ERG",
-        yAxisTitle: "Nb of messages"
+        xAxisTitle: 'ERG',
+        yAxisTitle: 'Nb of messages'
       },
       hasAggregation: false
     }

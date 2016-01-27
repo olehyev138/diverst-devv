@@ -3,9 +3,7 @@ class HandleMatchExpirationJob < ActiveJob::Base
 
   def perform
     # Send push notifications for conversations that expire soon
-    Match.soon_expired.each do |match|
-      match.expires_soon_notification
-    end
+    Match.soon_expired.each(&:expires_soon_notification)
 
     # Archive expired conversations
     Match.expired.not_archived.update_all(archived: true)

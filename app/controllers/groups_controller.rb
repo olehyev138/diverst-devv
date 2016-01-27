@@ -48,14 +48,14 @@ class GroupsController < ApplicationController
 
   def sample_csv
     csv_string = CSV.generate do |csv|
-      csv << ["Email"]
+      csv << ['Email']
 
       @group.members.limit(5).each do |employee|
         csv << [employee.email]
       end
     end
 
-    send_data csv_string, filename: "erg_import_example.csv"
+    send_data csv_string, filename: 'erg_import_example.csv'
   end
 
   def parse_csv
@@ -68,16 +68,14 @@ class GroupsController < ApplicationController
       employee = Employee.where(email: email).first
 
       if employee
-        if !@group.members.include? employee
-          @group.members << employee
-        end
+        @group.members << employee unless @group.members.include? employee
 
         @successful_rows << row
       else
         @failed_rows << {
           row: row,
           row_index: row_index + 1,
-          error: "There is no employee with this email address in the database"
+          error: 'There is no employee with this email address in the database'
         }
       end
     end
@@ -94,10 +92,10 @@ class GroupsController < ApplicationController
 
   def resolve_layout
     case action_name
-    when "show"
-      "erg"
+    when 'show'
+      'erg'
     else
-      "erg_manager"
+      'erg_manager'
     end
   end
 
@@ -107,17 +105,17 @@ class GroupsController < ApplicationController
 
   def group_params
     params
-    .require(:group)
-    .permit(
-      :name,
-      :description,
-      :logo,
-      :send_invitations,
-      :yammer_create_group,
-      :yammer_sync_employees,
-      :manager_id,
-      member_ids: [],
-      invitation_segment_ids: []
-    )
+      .require(:group)
+      .permit(
+        :name,
+        :description,
+        :logo,
+        :send_invitations,
+        :yammer_create_group,
+        :yammer_sync_employees,
+        :manager_id,
+        member_ids: [],
+        invitation_segment_ids: []
+      )
   end
 end

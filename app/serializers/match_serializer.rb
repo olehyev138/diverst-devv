@@ -4,7 +4,7 @@ class MatchSerializer < ActiveModel::Serializer
     :topic
 
   def user
-    EmployeeSerializer.new(object.other(scope), { scope: object })
+    EmployeeSerializer.new(object.other(scope), scope: object)
   end
 
   def topic

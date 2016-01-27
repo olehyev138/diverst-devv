@@ -48,10 +48,10 @@ class MetricsDashboardsController < ApplicationController
 
   def metrics_dashboard_params
     params
-    .require(:metrics_dashboard)
-    .permit(
-      :name,
-      segment_ids: []
-    )
+      .require(:metrics_dashboard)
+      .permit(
+        :name,
+        segment_ids: []
+      )
   end
 end

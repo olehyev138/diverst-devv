@@ -3,7 +3,7 @@ class Employee::QuestionsController < ApplicationController
   before_action :set_campaign, only: [:index, :new, :create]
   before_action :set_question, only: [:edit, :update, :destroy, :show, :reopen]
 
-  layout "employee"
+  layout 'employee'
 
   def index
     @questions = @campaign.questions.order(created_at: :desc)

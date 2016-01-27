@@ -4,7 +4,7 @@ class TopicFeedbacksController < ApplicationController
   before_action :set_topic
   before_action :set_feedback, only: [:update, :destroy, :show]
 
-  layout "guest"
+  layout 'guest'
 
   def new
     @feedback = @topic.feedbacks.new
@@ -46,18 +46,18 @@ class TopicFeedbacksController < ApplicationController
 
   def feedback_params
     params
-    .require(:topic_feedback)
-    .permit(
-      :content
-    )
+      .require(:topic_feedback)
+      .permit(
+        :content
+      )
   end
 
   def admin_feedback_params
     params
-    .require(:topic_feedback)
-    .permit(
-      :content,
-      :featured
-    )
+      .require(:topic_feedback)
+      .permit(
+        :content,
+        :featured
+      )
   end
 end

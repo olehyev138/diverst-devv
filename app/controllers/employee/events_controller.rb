@@ -2,7 +2,7 @@ class Employee::EventsController < ApplicationController
   before_action :authenticate_employee!
   before_action :set_event, only: [:show]
 
-  layout "employee"
+  layout 'employee'
 
   def index
     @upcoming_events = current_employee.events.upcoming

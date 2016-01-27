@@ -1,12 +1,12 @@
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe Employee do
-  describe "#participation_score" do
+  describe '#participation_score' do
     subject { create(:employee) }
-    let (:employee) { create(:employee) }
-    let (:campaigns) { create_list(:campaign_filled, 2) }
+    let(:employee) { create(:employee) }
+    let(:campaigns) { create_list(:campaign_filled, 2) }
 
-    it "returns 5 points per poll response" do
+    it 'returns 5 points per poll response' do
       polls = create_list(:poll_with_responses, 5)
 
       polls.each do |poll|
@@ -17,7 +17,7 @@ RSpec.describe Employee do
       expect(employee.participation_score(from: 0)).to eq 25
     end
 
-    it "returns 5 points per scrum answer and 1 point per answer upvote received" do
+    it 'returns 5 points per scrum answer and 1 point per answer upvote received' do
       campaigns.each do |campaign|
         campaign.questions.each do |question|
           answer = build(:answer, author: employee, question: question)
@@ -31,7 +31,7 @@ RSpec.describe Employee do
       expect(employee.participation_score(from: 0)).to eq 28
     end
 
-    it "returns 3 points per scrum comment" do
+    it 'returns 3 points per scrum comment' do
       campaigns.each do |campaign|
         campaign.questions.each do |question|
           question.answers.each do |answer|
@@ -48,7 +48,7 @@ RSpec.describe Employee do
       expect(employee.participation_score(from: 0)).to eq 24
     end
 
-    it "returns 1 point per scrum upvote given" do
+    it 'returns 1 point per scrum upvote given' do
       create_list(:answer_upvote, 10, employee: employee)
 
       expect(employee.participation_score(from: 0)).to eq 10

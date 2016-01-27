@@ -1,11 +1,11 @@
 class DateField < Field
   def string_value(value)
-    return "-" if value.nil?
+    return '-' if value.nil?
     value.to_s :slashes
   end
 
   def process_field_value(value)
-    Time.strptime(value, "%m/%d/%Y")
+    Time.strptime(value, '%m/%d/%Y')
   rescue
     nil
   end
@@ -17,17 +17,17 @@ class DateField < Field
 
   def serialize_value(value)
     return nil if value.nil?
-    value.strftime("%s").to_i
+    value.strftime('%s').to_i
   end
 
   def csv_value(value)
-    return "" if value.nil?
-    value.strftime("%m/%d/%Y")
+    return '' if value.nil?
+    value.strftime('%m/%d/%Y')
   end
 
   def match_score_between(e1, e2, employees)
-    e1_value = e1.info[self].strftime("%s").to_i
-    e2_value = e2.info[self].strftime("%s").to_i
+    e1_value = e1.info[self].strftime('%s').to_i
+    e2_value = e2.info[self].strftime('%s').to_i
 
     return nil unless e1_value && e2_value
 
@@ -36,7 +36,7 @@ class DateField < Field
     end
 
     values.compact!
-    values.reject! { |value| (value - values.mean).abs >= values.standard_deviation*2 } # Reject abberrant values
+    values.reject! { |value| (value - values.mean).abs >= values.standard_deviation * 2 } # Reject abberrant values
     return nil if values.empty?
 
     high_delta = values.max - values.min

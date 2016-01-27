@@ -79,17 +79,17 @@ Rails.application.configure do
 
   # Save paperclip attachments to S3
   config.paperclip_defaults = {
-    :storage => :s3,
-    :s3_credentials => {
-      :bucket => ENV['S3_BUCKET_NAME'],
-      :access_key_id => ENV['AWS_ACCESS_KEY_ID'],
-      :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY']
+    storage: :s3,
+    s3_credentials: {
+      bucket: ENV['S3_BUCKET_NAME'],
+      access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+      secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
     }
   }
 
   # Setup Loggly
   require 'syslogger'
-  config.logger = ActiveSupport::TaggedLogging.new(Syslogger.new("Diverst", Syslog::LOG_PID, Syslog::LOG_LOCAL7))
+  config.logger = ActiveSupport::TaggedLogging.new(Syslogger.new('Diverst', Syslog::LOG_PID, Syslog::LOG_LOCAL7))
   config.lograge.enabled = true
   config.lograge.formatter = Lograge::Formatters::Json.new
 

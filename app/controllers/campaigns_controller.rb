@@ -42,14 +42,14 @@ class CampaignsController < ApplicationController
   def contributions_per_erg
     render json: {
       highcharts: @campaign.contributions_per_erg,
-      type: "pie"
+      type: 'pie'
     }
   end
 
   def top_performers
     render json: {
       highcharts: @campaign.top_performers,
-      type: "bar"
+      type: 'bar'
     }
   end
 
@@ -61,28 +61,28 @@ class CampaignsController < ApplicationController
 
   def campaign_params
     params
-    .require(:campaign)
-    .permit(
-      :title,
-      :description,
-      :start,
-      :end,
-      :nb_invites,
-      :image,
-      :banner,
-      group_ids: [],
-      segment_ids: [],
-      questions_attributes: [
-        :id,
-        :_destroy,
+      .require(:campaign)
+      .permit(
         :title,
-        :description
-      ]
-    )
+        :description,
+        :start,
+        :end,
+        :nb_invites,
+        :image,
+        :banner,
+        group_ids: [],
+        segment_ids: [],
+        questions_attributes: [
+          :id,
+          :_destroy,
+          :title,
+          :description
+        ]
+      )
   end
 
   def resolve_layout
-    return "employee" if current_admin.nil?
-    "unify"
+    return 'employee' if current_admin.nil?
+    'unify'
   end
 end

@@ -10,10 +10,10 @@ class Device < ActiveRecord::Base
   end
 
   def notify(message, data)
-    if self.platform == 'apple'
-      SendAppleNotificationJob.perform_later(self.token, message, data)
-    elsif self.platform == 'android'
-      SendAndroidNotificationJob.perform_later(self.token, message, data)
+    if platform == 'apple'
+      SendAppleNotificationJob.perform_later(token, message, data)
+    elsif platform == 'android'
+      SendAndroidNotificationJob.perform_later(token, message, data)
     end
   end
 end

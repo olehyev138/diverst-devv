@@ -60,10 +60,10 @@ class GraphsController < ApplicationController
 
   def graph_params
     params
-    .require(:graph)
-    .permit(
-      :field_id,
-      :aggregation_id
-    )
+      .require(:graph)
+      .permit(
+        :field_id,
+        :aggregation_id
+      )
   end
 end

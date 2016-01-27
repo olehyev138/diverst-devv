@@ -27,8 +27,8 @@ module ApplicationHelper
     current_user.enterprise.theme.nil? ? image_path('diverst-logo.svg') : current_user.enterprise.theme.logo.url
   end
 
-  def employee_avatar_url(employee)
-    return ActionController::Base.helpers.image_path("missing.png") unless self.linkedin_profile_url
-    return "TODO"
+  def employee_avatar_url(_employee)
+    return ActionController::Base.helpers.image_path('missing.png') unless linkedin_profile_url
+    'TODO'
   end
 end

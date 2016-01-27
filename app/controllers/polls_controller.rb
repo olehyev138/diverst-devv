@@ -2,7 +2,7 @@ class PollsController < ApplicationController
   before_action :authenticate_admin!
   before_action :set_poll, only: [:edit, :update, :destroy, :show, :export_csv]
 
-  layout "market_scope"
+  layout 'market_scope'
 
   def index
     @polls = current_admin.enterprise.polls
@@ -51,28 +51,28 @@ class PollsController < ApplicationController
 
   def poll_params
     params
-    .require(:poll)
-    .permit(
-      :title,
-      :description,
-      group_ids: [],
-      segment_ids: [],
-      fields_attributes: [
-        :id,
+      .require(:poll)
+      .permit(
         :title,
-        :_destroy,
-        :gamification_value,
-        :show_on_vcard,
-        :saml_attribute,
-        :type,
-        :match_exclude,
-        :match_weight,
-        :match_polarity,
-        :min,
-        :max,
-        :options_text,
-        :alternative_layout
-      ]
-    )
+        :description,
+        group_ids: [],
+        segment_ids: [],
+        fields_attributes: [
+          :id,
+          :title,
+          :_destroy,
+          :gamification_value,
+          :show_on_vcard,
+          :saml_attribute,
+          :type,
+          :match_exclude,
+          :match_weight,
+          :match_polarity,
+          :min,
+          :max,
+          :options_text,
+          :alternative_layout
+        ]
+      )
   end
 end

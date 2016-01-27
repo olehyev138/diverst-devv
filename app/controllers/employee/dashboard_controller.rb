@@ -1,7 +1,7 @@
 class Employee::DashboardController < ApplicationController
   before_action :authenticate_employee!
 
-  layout "employee"
+  layout 'employee'
 
   def home
     @upcoming_events = current_employee.events.upcoming.limit(4)

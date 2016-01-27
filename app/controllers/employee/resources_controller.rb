@@ -3,7 +3,7 @@ class Employee::ResourcesController < ApplicationController
 
   before_action :authenticate_employee!
 
-  layout "employee"
+  layout 'employee'
 
   protected
 

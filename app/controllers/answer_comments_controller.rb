@@ -13,12 +13,11 @@ class AnswerCommentsController < ApplicationController
     @comment = current_admin.enterprise.answer_comments.find(params[:id])
   end
 
-
   def comment_params
     params
-    .require(:answer_comment)
-    .permit(
-      :content
-    )
+      .require(:answer_comment)
+      .permit(
+        :content
+      )
   end
 end

@@ -1,26 +1,24 @@
 class Graph < ActiveRecord::Base
   belongs_to :collection, polymorphic: true
   belongs_to :field
-  belongs_to :aggregation, class_name: "Field"
+  belongs_to :aggregation, class_name: 'Field'
 
-  def title
-    field.title
-  end
+  delegate :title, to: :field
 
   def data
     {
       type: field.type,
       highcharts: field.highcharts_data(aggr_field: aggregation, segments: collection.segments),
-      hasAggregation: !self.aggregation.nil?,
-      title: self.title
+      hasAggregation: !aggregation.nil?,
+      title: title
     }
   end
 
   def field
-    Field.unscoped{ super }
+    Field.unscoped { super }
   end
 
   def aggregation
-    Field.unscoped{ super }
+    Field.unscoped { super }
   end
 end

@@ -8,11 +8,11 @@ class ApplicationController < ActionController::Base
   protected
 
   def authenticate_inviter!
-    authenticate_admin!(:force => true)
+    authenticate_admin!(force: true)
   end
 
   def not_found!
-    raise ActionController::RoutingError.new('Not Found')
+    fail ActionController::RoutingError.new('Not Found')
   end
 
   def after_sign_in_path_for(resource)

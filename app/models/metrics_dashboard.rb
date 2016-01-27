@@ -1,8 +1,10 @@
 class MetricsDashboard < ActiveRecord::Base
   belongs_to :enterprise, inverse_of: :metrics_dashboards
   has_many :graphs, as: :collection
-  has_and_belongs_to_many :segments
-  has_and_belongs_to_many :groups
+  has_many :metrics_dashboards_segments
+  has_many :segments, through: :metrics_dashboards_segments
+  has_many :groups_metrics_dashboards
+  has_many :groups, through: :groups_metrics_dashboards
 
   # Returns a query to the list of employees targeted by the dashboard
   def target

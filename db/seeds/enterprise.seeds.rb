@@ -1,9 +1,9 @@
 after :themes do
   enterprise = Enterprise.create(
-    name: "Acme Corp.",
-    idp_entity_id: "https://app.onelogin.com/saml/metadata/468755",
-    idp_sso_target_url: "https://v7.onelogin.com/trust/saml2/http-post/sso/468755",
-    idp_slo_target_url: "https://v7.onelogin.com/trust/saml2/http-redirect/slo/468755",
+    name: 'Acme Corp.',
+    idp_entity_id: 'https://app.onelogin.com/saml/metadata/468755',
+    idp_sso_target_url: 'https://v7.onelogin.com/trust/saml2/http-post/sso/468755',
+    idp_slo_target_url: 'https://v7.onelogin.com/trust/saml2/http-redirect/slo/468755',
     idp_cert: "-----BEGIN CERTIFICATE-----
   MIIEFDCCAvygAwIBAgIUBvDB5WYcA+HOo/4oreMClnDKG4QwDQYJKoZIhvcNAQEF
   BQAwVzELMAkGA1UEBhMCVVMxEDAOBgNVBAoMB1ZvbHVtZTcxFTATBgNVBAsMDE9u
@@ -32,9 +32,9 @@ after :themes do
     theme_id: 1
   )
 
-  gender_field = SelectField.create(
-    title: "Gender",
-    saml_attribute: "",
+  SelectField.create(
+    title: 'Gender',
+    saml_attribute: '',
     gamification_value: 10,
     show_on_vcard: true,
     match_exclude: false,
@@ -45,9 +45,9 @@ after :themes do
   Female"
   )
 
-  birth_field = DateField.create(
-    title: "Date of birth",
-    saml_attribute: "",
+  DateField.create(
+    title: 'Date of birth',
+    saml_attribute: '',
     gamification_value: 5,
     show_on_vcard: true,
     match_exclude: false,
@@ -56,9 +56,9 @@ after :themes do
     container: enterprise
   )
 
-  disabilities_field = SelectField.create(
-    title: "Disabilities?",
-    saml_attribute: "",
+  SelectField.create(
+    title: 'Disabilities?',
+    saml_attribute: '',
     gamification_value: 10,
     show_on_vcard: true,
     match_exclude: false,
@@ -69,9 +69,9 @@ after :themes do
   No"
   )
 
-  nationality_field = SelectField.create(
-    title: "Nationality",
-    saml_attribute: "",
+  SelectField.create(
+    title: 'Nationality',
+    saml_attribute: '',
     gamification_value: 10,
     show_on_vcard: true,
     match_exclude: false,
@@ -344,9 +344,9 @@ after :themes do
   Åland Islands"
   )
 
-  belief_field = SelectField.create(
-    title: "Belief",
-    saml_attribute: "",
+  SelectField.create(
+    title: 'Belief',
+    saml_attribute: '',
     gamification_value: 10,
     show_on_vcard: true,
     match_exclude: false,
@@ -364,9 +364,9 @@ after :themes do
   Other"
   )
 
-  languages_field = CheckboxField.create(
-    title: "Spoken languages",
-    saml_attribute: "",
+  CheckboxField.create(
+    title: 'Spoken languages',
+    saml_attribute: '',
     gamification_value: 10,
     show_on_vcard: true,
     match_exclude: false,
@@ -400,9 +400,9 @@ after :themes do
   Yue (Cantonese)"
   )
 
-  ethnicity_field = SelectField.create(
-    title: "Ethnicity",
-    saml_attribute: "",
+  SelectField.create(
+    title: 'Ethnicity',
+    saml_attribute: '',
     gamification_value: 10,
     show_on_vcard: true,
     match_exclude: false,
@@ -421,9 +421,9 @@ after :themes do
   Other"
   )
 
-  kids_field = SelectField.create(
-    title: "Status",
-    saml_attribute: "",
+  SelectField.create(
+    title: 'Status',
+    saml_attribute: '',
     gamification_value: 10,
     show_on_vcard: true,
     match_exclude: false,
@@ -436,9 +436,9 @@ after :themes do
   Single parent"
   )
 
-  orientation_field = SelectField.create(
-    title: "LGBT?",
-    saml_attribute: "",
+  SelectField.create(
+    title: 'LGBT?',
+    saml_attribute: '',
     gamification_value: 10,
     show_on_vcard: true,
     match_exclude: false,
@@ -449,9 +449,9 @@ after :themes do
   No"
   )
 
-  hobbies_field = SelectField.create(
-    title: "Hobbies",
-    saml_attribute: "",
+  SelectField.create(
+    title: 'Hobbies',
+    saml_attribute: '',
     gamification_value: 10,
     show_on_vcard: true,
     match_exclude: false,
@@ -738,9 +738,9 @@ after :themes do
   )
 
   # Professional fields
-  title_field = TextField.create(
-    title: "Current title",
-    saml_attribute: "",
+  TextField.create(
+    title: 'Current title',
+    saml_attribute: '',
     gamification_value: 10,
     show_on_vcard: true,
     match_exclude: false,
@@ -749,9 +749,9 @@ after :themes do
     container: enterprise
   )
 
-  education_field = SelectField.create(
-    title: "Education level",
-    saml_attribute: "",
+  SelectField.create(
+    title: 'Education level',
+    saml_attribute: '',
     gamification_value: 10,
     show_on_vcard: true,
     match_exclude: false,
@@ -764,9 +764,9 @@ after :themes do
   PhD"
   )
 
-  certifications_field = CheckboxField.create(
-    title: "Certifications",
-    saml_attribute: "",
+  CheckboxField.create(
+    title: 'Certifications',
+    saml_attribute: '',
     gamification_value: 10,
     show_on_vcard: true,
     match_exclude: false,
@@ -778,9 +778,9 @@ after :themes do
   Apple Genius"
   )
 
-  experience_field = NumericField.create(
-    title: "Experience in your field (in years)",
-    saml_attribute: "",
+  NumericField.create(
+    title: 'Experience in your field (in years)',
+    saml_attribute: '',
     gamification_value: 10,
     show_on_vcard: true,
     match_exclude: false,
@@ -791,9 +791,9 @@ after :themes do
     container: enterprise
   )
 
-  countries_worked_field = CheckboxField.create(
-    title: "Countries worked in",
-    saml_attribute: "",
+  CheckboxField.create(
+    title: 'Countries worked in',
+    saml_attribute: '',
     gamification_value: 10,
     show_on_vcard: true,
     match_exclude: false,
@@ -1066,9 +1066,9 @@ after :themes do
   Åland Islands"
   )
 
-  military_field = SelectField.create(
-    title: "Veteran?",
-    saml_attribute: "",
+  SelectField.create(
+    title: 'Veteran?',
+    saml_attribute: '',
     gamification_value: 10,
     show_on_vcard: true,
     match_exclude: false,
@@ -1079,9 +1079,9 @@ after :themes do
   No"
   )
 
-  office_location_field = SelectField.create(
-    title: "Office location",
-    saml_attribute: "",
+  SelectField.create(
+    title: 'Office location',
+    saml_attribute: '',
     gamification_value: 10,
     show_on_vcard: true,
     match_exclude: false,
@@ -1094,9 +1094,9 @@ after :themes do
   JP"
   )
 
-  seniority_field = NumericField.create(
-    title: "Seniority (in years)",
-    saml_attribute: "",
+  NumericField.create(
+    title: 'Seniority (in years)',
+    saml_attribute: '',
     gamification_value: 10,
     show_on_vcard: true,
     match_exclude: false,
@@ -1107,13 +1107,12 @@ after :themes do
     container: enterprise
   )
 
-
-  admin = Admin.create(
+  Admin.create(
     enterprise: enterprise,
-    first_name: "Francis",
-    last_name: "Marineau",
-    email: "info@diverst.com",
-    password: "password",
-    password_confirmation: "password"
+    first_name: 'Francis',
+    last_name: 'Marineau',
+    email: 'info@diverst.com',
+    password: 'password',
+    password_confirmation: 'password'
   )
 end

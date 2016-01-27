@@ -3,7 +3,7 @@ class OmniAuthController < ApplicationController
 
   def callback
     @oauth = request.env['omniauth.auth']
-    self.linkedin if @oauth['provider'] == 'linkedin'
+    linkedin if @oauth['provider'] == 'linkedin'
   end
 
   def linkedin

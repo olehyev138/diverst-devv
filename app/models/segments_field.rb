@@ -4,7 +4,7 @@ class SegmentsField < Field
   include Optionnable
 
   def elasticsearch_field
-    "combined_info.segments"
+    'combined_info.segments'
   end
 
   def format_value_name(value)
@@ -14,7 +14,7 @@ class SegmentsField < Field
   private
 
   def init
-    self.title = "Segments"
+    self.title = 'Segments'
     self.elasticsearch_only = true
   end
 end

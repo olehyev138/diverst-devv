@@ -24,14 +24,14 @@ module Diverst
     config.active_record.raise_in_transactional_callbacks = true
 
     # Load core extensions
-    Dir[File.join(Rails.root, "lib", "core_ext", "*.rb")].each { |l| require l }
-    Dir[File.join(Rails.root, "lib", "*.rb")].each { |l| require l }
+    Dir[File.join(Rails.root, 'lib', 'core_ext', '*.rb')].each { |l| require l }
+    Dir[File.join(Rails.root, 'lib', '*.rb')].each { |l| require l }
 
     config.assets.paths << Rails.root.join('vendor', 'assets', 'bower_components') # Bower
     config.assets.paths << Rails.root.join('tmp', 'themes') # Custom themes
 
     config.active_job.queue_adapter = :sidekiq
 
-    Rails.application.routes.default_url_options[:host] = ENV["DOMAIN"]
+    Rails.application.routes.default_url_options[:host] = ENV['DOMAIN']
   end
 end

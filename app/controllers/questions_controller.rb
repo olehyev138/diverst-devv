@@ -3,7 +3,7 @@ class QuestionsController < ApplicationController
   before_action :set_campaign, only: [:index, :new, :create]
   before_action :set_question, only: [:edit, :update, :destroy, :show, :reopen]
 
-  layout "unify"
+  layout 'unify'
 
   def index
     @questions = @campaign.questions.order(created_at: :desc)
@@ -29,7 +29,7 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    @question.solved_at = Time.now if question_params[:conclusion].present?
+    @question.solved_at = Time.current if question_params[:conclusion].present?
 
     if @question.update(question_params)
       redirect_to @question
@@ -55,11 +55,11 @@ class QuestionsController < ApplicationController
 
   def question_params
     params
-    .require(:question)
-    .permit(
-      :title,
-      :conclusion,
-      :description
-    )
+      .require(:question)
+      .permit(
+        :title,
+        :conclusion,
+        :description
+      )
   end
 end

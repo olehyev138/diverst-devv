@@ -1,9 +1,9 @@
 class Employee < ActiveRecord::Base
-  @@fb_token_generator = Firebase::FirebaseTokenGenerator.new(ENV["FIREBASE_SECRET"])
+  @@fb_token_generator = Firebase::FirebaseTokenGenerator.new(ENV['FIREBASE_SECRET'])
 
   # Include default devise modules.
   devise :database_authenticatable, :invitable,
-         :recoverable, :rememberable, :trackable, :validatable, :async
+    :recoverable, :rememberable, :trackable, :validatable, :async
 
   include DeviseTokenAuth::Concerns::User
   include Elasticsearch::Model
@@ -12,7 +12,8 @@ class Employee < ActiveRecord::Base
   include IsUser
 
   has_many :devices
-  has_and_belongs_to_many :segments
+  has_many :employees_segments
+  has_many :segments, through: :employees_segments
   has_many :employee_groups
   has_many :groups, through: :employee_groups
   has_many :topic_feedbacks
@@ -20,26 +21,26 @@ class Employee < ActiveRecord::Base
   has_many :answers, inverse_of: :author, foreign_key: :author_id
   has_many :answer_upvotes, foreign_key: :author_id
   has_many :answer_comments, foreign_key: :author_id
-  has_many :invitations, class_name: "CampaignInvitation"
+  has_many :invitations, class_name: 'CampaignInvitation'
   has_many :campaigns, through: :invitations
   has_many :news_links, through: :groups
   has_many :messages, through: :groups
   has_many :events, through: :groups
-  has_many :managed_groups, foreign_key: :manager_id, class_name: "Group"
+  has_many :managed_groups, foreign_key: :manager_id, class_name: 'Group'
 
-  has_attached_file :avatar, styles: { medium: "300x300>", thumb: "100x100>" }, default_url: ActionController::Base.helpers.image_path("missing.png")
+  has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('missing.png')
   validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
 
   before_validation :generate_password_if_saml
   after_create :assign_firebase_token
 
-  scope :for_segments, -> (segments) { joins(:segments).where("segments.id" => segments.map(&:id)).distinct if segments.any? }
-  scope :for_groups, -> (groups) { joins(:groups).where("groups.id" => groups.map(&:id)).distinct if groups.any? }
-  scope :answered_poll, -> (poll) { joins(:poll_responses).where( poll_responses: { poll_id: poll.id } ) }
+  scope :for_segments, -> (segments) { joins(:segments).where('segments.id' => segments.map(&:id)).distinct if segments.any? }
+  scope :for_groups, -> (groups) { joins(:groups).where('groups.id' => groups.map(&:id)).distinct if groups.any? }
+  scope :answered_poll, -> (poll) { joins(:poll_responses).where(poll_responses: { poll_id: poll.id }) }
   scope :top_participants, -> (n) { order(participation_score_7days: :desc).limit(n) }
 
   def name
-    "#{self.first_name} #{self.last_name}"
+    "#{first_name} #{last_name}"
   end
 
   # Update the user with info from the SAML auth response
@@ -48,9 +49,9 @@ class Employee < ActiveRecord::Base
 
     saml_employee_info = {}
 
-    self.info = self.info.merge(fields: self.enterprise.fields, form_data: saml_employee_info)
+    self.info = info.merge(fields: self.enterprise.fields, form_data: saml_employee_info)
 
-    self.save!
+    save!
     enterprise.employees << self
     enterprise.save!
 
@@ -58,7 +59,7 @@ class Employee < ActiveRecord::Base
   end
 
   def string_for_field(field)
-    field.string_value self.info[field]
+    field.string_value info[field]
   end
 
   # Get the match score between the employee and `other_employee`
@@ -66,8 +67,8 @@ class Employee < ActiveRecord::Base
     weight_total = 0
     total_score = 0
 
-    employees = self.enterprise.employees.select([:id, :data]).all
-    self.enterprise.match_fields.each do |field|
+    employees = enterprise.employees.select([:id, :data]).all
+    enterprise.match_fields.each do |field|
       field_score = field.match_score_between(self, other_employee, employees)
 
       unless field_score.nil? || field_score.nan?
@@ -89,7 +90,7 @@ class Employee < ActiveRecord::Base
 
   # Get the n top unswiped matches for the user
   def top_matches(n = 10)
-    self.active_matches.order(score: :desc).limit(n)
+    active_matches.order(score: :desc).limit(n)
   end
 
   # Checks if the user is part of the specified segment
@@ -107,40 +108,38 @@ class Employee < ActiveRecord::Base
   end
 
   # Get a score indicating the user's participation in the platform
-  def participation_score(from:, to: Time.now)
+  def participation_score(from:, to: Time.current)
     score = 0
 
-    score += 5 * self.poll_responses.where("created_at > ?", from).where("created_at <= ?", to).count
-    score += 5 * self.answers.where("created_at > ?", from).where("created_at <= ?", to).count
-    score += 3 * self.enterprise.answer_upvotes.where(answer: self.answers).where("answers.created_at > ?", from).where("answers.created_at <= ?", to).count
-    score += 3 * self.answer_comments.where("created_at > ?", from).where("created_at <= ?", to).count
-    score += 1 * self.answer_upvotes.where("created_at > ?", from).where("created_at <= ?", to).count # 1 point per upvote given
+    score += 5 * poll_responses.where('created_at > ?', from).where('created_at <= ?', to).count
+    score += 5 * answers.where('created_at > ?', from).where('created_at <= ?', to).count
+    score += 3 * enterprise.answer_upvotes.where(answer: answers).where('answers.created_at > ?', from).where('answers.created_at <= ?', to).count
+    score += 3 * answer_comments.where('created_at > ?', from).where('created_at <= ?', to).count
+    score += 1 * answer_upvotes.where('created_at > ?', from).where('created_at <= ?', to).count # 1 point per upvote given
 
     score
   end
 
   # Sends a push notification to all of the user's devices
   def notify(message, data)
-    self.devices.each do |device|
+    devices.each do |device|
       device.notify(message, data)
     end
   end
 
   # Generate a Firebase token for the user and update the user with it
   def assign_firebase_token
-    payload = { uid: self.id.to_s }
+    payload = { uid: id.to_s }
     options = { expires: 1.week.from_now }
     self.firebase_token = @@fb_token_generator.create_token(payload, options)
-    self.firebase_token_generated_at = Time.now
-    self.save
+    self.firebase_token_generated_at = Time.current
+    save
   end
 
   # Add the combined info from both the employee's fields and his/her poll answers to ES
   def as_indexed_json(*)
-    self.as_json({
-      except: [:data],
-      methods: [:combined_info]
-    })
+    as_json(except: [:data],
+            methods: [:combined_info])
   end
 
   # Custom ES mapping that creates an unanalyzed version of all string fields for exact-match term queries
@@ -149,17 +148,17 @@ class Employee < ActiveRecord::Base
       employee: {
         dynamic_templates: [{
           string_template: {
-            type: "string",
+            type: 'string',
             mapping: {
               fields: {
                 raw: {
-                  type: "string",
-                  index: "not_analyzed"
+                  type: 'string',
+                  index: 'not_analyzed'
                 }
               }
             },
-            match_mapping_type: "string",
-            match: "*"
+            match_mapping_type: 'string',
+            match: '*'
           }
         }],
         properties: {}
@@ -171,7 +170,11 @@ class Employee < ActiveRecord::Base
   def self.reset_elasticsearch(enterprise:)
     index = enterprise.es_employees_index_name
 
-    Employee.__elasticsearch__.client.indices.delete index: index rescue nil
+    begin
+      Employee.__elasticsearch__.client.indices.delete index: index
+    rescue
+      nil
+    end
 
     Employee.__elasticsearch__.client.indices.create(
       index: index,
@@ -186,7 +189,7 @@ class Employee < ActiveRecord::Base
 
   # Updates this employee's match scores with all other enterprise employees
   def update_match_scores
-    self.enterprise.employees.where.not(id: self.id).each do |other_employee|
+    enterprise.employees.where.not(id: id).each do |other_employee|
       CalculateMatchScoreJob.perform_later(self, other_employee, skip_existing: false)
     end
   end
@@ -194,10 +197,10 @@ class Employee < ActiveRecord::Base
   # Initializes an employee from a yammer user
   def self.from_yammer(yammer_user, enterprise:)
     employee = Employee.new(
-      first_name: yammer_user["first_name"],
-      last_name: yammer_user["last_name"],
-      email: yammer_user["contact"]["email_addresses"][0]["address"],
-      auth_source: "yammer",
+      first_name: yammer_user['first_name'],
+      last_name: yammer_user['last_name'],
+      email: yammer_user['contact']['email_addresses'][0]['address'],
+      auth_source: 'yammer',
       enterprise: enterprise
     )
 
@@ -221,7 +224,7 @@ class Employee < ActiveRecord::Base
     )
 
     enterprise.fields.each_with_index do |field, i|
-      employee.info[field] = field.process_field_value row[3+i]
+      employee.info[field] = field.process_field_value row[3 + i]
     end
 
     employee
@@ -234,21 +237,21 @@ class Employee < ActiveRecord::Base
 
   # Raw hash of employee info needed when the FieldData Hash[] overrides are an annoyance
   def info_hash
-    return {} if self.data.nil?
-    JSON.parse self.data
+    return {} if data.nil?
+    JSON.parse data
   end
 
   # Returns a hash of all the user's fields combined with all their poll fields
   def combined_info
     combined_hash = {}
 
-    polls_hash = self.poll_responses.map(&:info).reduce({}) { |a, b| a.merge(b) } # Get a hash of all the combined poll response answers for this employee
-    groups_hash = { groups: self.groups.ids }
-    segments_hash = { segments: self.segments.ids }
+    polls_hash = poll_responses.map(&:info).reduce({}) { |a, e| a.merge(e) } # Get a hash of all the combined poll response answers for this employee
+    groups_hash = { groups: groups.ids }
+    segments_hash = { segments: segments.ids }
 
     # Merge all the hashes to the main info hash
     # We use info_hash instead of just info because Hash#merge accesses uses [], which is overriden in FieldData
-    self.info_hash
+    info_hash
       .merge(polls_hash)
       .merge(groups_hash)
       .merge(segments_hash)
@@ -257,7 +260,7 @@ class Employee < ActiveRecord::Base
   # Export a CSV with the specified employees
   def self.to_csv(employees:, fields:, nb_rows: nil)
     CSV.generate do |csv|
-      csv << ["id", "First name", "Last name", "Email"].concat(fields.map(&:title))
+      csv << ['id', 'First name', 'Last name', 'Email'].concat(fields.map(&:title))
 
       employees.order(created_at: :desc).limit(nb_rows).each do |employee|
         employee_columns = [employee.id, employee.first_name, employee.last_name, employee.email]
@@ -275,6 +278,6 @@ class Employee < ActiveRecord::Base
 
   # Generate a random password if the user is using SAML
   def generate_password_if_saml
-    self.password = self.password_confirmation = SecureRandom.urlsafe_base64 if self.auth_source == "saml" && self.new_record?
+    self.password = self.password_confirmation = SecureRandom.urlsafe_base64 if auth_source == 'saml' && new_record?
   end
 end

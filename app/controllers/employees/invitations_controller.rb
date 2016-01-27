@@ -1,15 +1,15 @@
 class Employees::InvitationsController < Devise::InvitationsController
   layout :resolve_layout
-  before_filter :configure_permitted_parameters, if: :devise_controller?
+  before_action :configure_permitted_parameters, if: :devise_controller?
 
   protected
 
   def resolve_layout
     case action_name
-    when "edit"
+    when 'edit'
       false # No layout since we have no logged in user and the themes require one in the layout
     else
-      "global_settings"
+      'global_settings'
     end
   end
 
@@ -20,7 +20,7 @@ class Employees::InvitationsController < Devise::InvitationsController
     resource_class.invite!(invite_params, current_inviter) do |invitable|
       invitable.enterprise = current_inviter.enterprise
       invitable.info.merge(fields: invitable.enterprise.fields, form_data: params['custom-fields'])
-      invitable.auth_source = "manual"
+      invitable.auth_source = 'manual'
       invitable.save!
     end
   end

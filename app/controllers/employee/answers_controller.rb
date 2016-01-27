@@ -3,13 +3,13 @@ class Employee::AnswersController < ApplicationController
   before_action :set_question, except: [:vote]
   before_action :set_answer, only: [:vote]
 
-  layout "employee"
+  layout 'employee'
 
   def vote
-    return head 403 if !@answer.question.solved_at.nil?
+    return head 403 unless @answer.question.solved_at.nil?
     return head 403 if @answer.author == current_employee # Cant vote on your own answer
 
-    if vote_params[:upvoted] == "true"
+    if vote_params[:upvoted] == 'true'
       AnswerUpvote.find_or_create_by(author_id: current_employee.id, answer_id: @answer.id)
     else
       vote = AnswerUpvote.where(author_id: current_employee.id, answer_id: @answer.id).first
@@ -40,17 +40,17 @@ class Employee::AnswersController < ApplicationController
 
   def vote_params
     params
-    .require(:answer)
-    .permit(
-      :upvoted
-    )
+      .require(:answer)
+      .permit(
+        :upvoted
+      )
   end
 
   def answer_params
     params
-    .require(:answer)
-    .permit(
-      :content
-    )
+      .require(:answer)
+      .permit(
+        :content
+      )
   end
 end

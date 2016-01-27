@@ -1,2 +1,17 @@
 Rails:
   Enabled: true
+Documentation:
+  Enabled: false
+Style/ClassAndModuleChildren:
+  Enabled: false
+Metrics/LineLength:
+  Enabled: false
+Style/AlignParameters:
+  EnforcedStyle: with_fixed_indentation
+Style/BlockDelimiters:
+  Enabled: false
+
+AllCops:
+  Exclude:
+    - bin/**/*
+  TargetRubyVersion: 2.3

@@ -14,7 +14,7 @@ class Enterprises::ResourcesController < ApplicationController
 
   def resolve_layout
     ap current_user
-    return "erg_manager" if current_user(:admin).is_a? Admin
-    "employee"
+    return 'erg_manager' if current_user(:admin).is_a? Admin
+    'employee'
   end
 end

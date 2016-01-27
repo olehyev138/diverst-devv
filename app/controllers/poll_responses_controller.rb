@@ -5,7 +5,7 @@ class PollResponsesController < ApplicationController
   before_action :set_response, only: [:edit, :update, :destroy, :show]
   skip_before_action :verify_authenticity_token, only: [:create]
 
-  layout "guest"
+  layout 'guest'
 
   def index
     @responses = @poll.responses
@@ -14,7 +14,7 @@ class PollResponsesController < ApplicationController
   def new
     # Redirect to thank you page if employee already answered
     if response = current_employee.poll_responses.where(poll: @poll).first
-      redirect_to action: "thank_you", id: response.id
+      redirect_to action: 'thank_you', id: response.id
     end
 
     @response = @poll.responses.new
@@ -22,7 +22,7 @@ class PollResponsesController < ApplicationController
 
   def create
     @response = @poll.responses.new
-    @response.info.merge(fields: @response.poll.fields, form_data: params["custom-fields"])
+    @response.info.merge(fields: @response.poll.fields, form_data: params['custom-fields'])
     @response.employee = current_employee
 
     if @response.save

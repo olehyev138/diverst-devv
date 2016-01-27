@@ -2,12 +2,12 @@ class CheckboxField < Field
   include Optionnable
 
   def string_value(values)
-    return "-" if !values
+    return '-' unless values
     values.join(', ')
   end
 
   def csv_value(values)
-    return "" if !values
+    return '' unless values
     values.join(',')
   end
 
@@ -32,11 +32,11 @@ class CheckboxField < Field
 
     # If the user didn't select any option, the popularity will be set to the popularity of choosing no option
     if values.nil? || values.empty?
-      avg_popularity = self.popularity_for_no_option(employees)
+      avg_popularity = popularity_for_no_option(employees)
     else
       # Get an array of all the checked options' popularities
       popularities = values.map do |value|
-        self.popularity_for_value(value, employees)
+        popularity_for_value(value, employees)
       end
 
       # Get the average popularity
@@ -47,8 +47,8 @@ class CheckboxField < Field
   end
 
   def match_score_between(e1, e2, employees)
-    e1_popularity = self.employee_popularity(e1, employees)
-    e2_popularity = self.employee_popularity(e2, employees)
+    e1_popularity = employee_popularity(e1, employees)
+    e2_popularity = employee_popularity(e2, employees)
 
     # Returns nil if we don't have all the employee info necessary to get a score
     return nil unless e1_popularity && e2_popularity

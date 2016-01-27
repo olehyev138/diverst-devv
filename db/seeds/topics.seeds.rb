@@ -1,4 +1,4 @@
-10.times do |i|
+10.times do |_i|
   Enterprise.first.topics.create(
     admin: Enterprise.first.admins.first,
     statement: Faker::Lorem.sentence,

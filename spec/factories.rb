@@ -9,19 +9,19 @@ FactoryGirl.define do
 
   factory :enterprise do
     name 'Hyperion'
-    created_at { Time.now }
+    created_at { Time.current }
 
     theme nil
   end
 
   factory :employee do
     email { generate(:email_address) }
-    first_name "Frank"
-    last_name "Marineau"
+    first_name 'Frank'
+    last_name 'Marineau'
     password 'f4k3p455w0rd'
-    invitation_created_at Time.now
-    invitation_sent_at Time.now
-    invitation_accepted_at Time.now
+    invitation_created_at Time.current
+    invitation_sent_at Time.current
+    invitation_accepted_at Time.current
     enterprise
   end
 
@@ -52,23 +52,23 @@ FactoryGirl.define do
   end
 
   factory :event do
-    title "Incredible event"
-    description "This event is going to be awesome!"
-    location "Montreal"
+    title 'Incredible event'
+    description 'This event is going to be awesome!'
+    location 'Montreal'
     max_attendees 15
     association :group, factory: :group_with_employees
   end
 
   factory :resource do
-    title "My Resource"
+    title 'My Resource'
     file_file_name { 'test.pdf' }
     file_content_type { 'application/pdf' }
     file_file_size { 1024 }
   end
 
   factory :poll do
-    title "My Poll"
-    description "This poll is awesome."
+    title 'My Poll'
+    description 'This poll is awesome.'
     nb_invitations 10
     enterprise
 
@@ -89,11 +89,11 @@ FactoryGirl.define do
   end
 
   factory :campaign do
-    title "My Campaign"
-    description "Awesome description"
+    title 'My Campaign'
+    description 'Awesome description'
     enterprise
-    start DateTime.new(2015, 11, 10)
-    self.end DateTime.new(2015, 11, 13) # We specify self here since end is a reserved keyword
+    start Time.zone.local(2015, 11, 10)
+    self.end Time.zone.local(2015, 11, 13) # We specify self here since end is a reserved keyword
 
     factory :campaign_filled do
       transient do
@@ -107,8 +107,8 @@ FactoryGirl.define do
   end
 
   factory :question do
-    title "My Question?"
-    description "This is a question."
+    title 'My Question?'
+    description 'This is a question.'
     campaign
 
     factory :question_filled do
@@ -123,7 +123,7 @@ FactoryGirl.define do
   end
 
   factory :answer do
-    content "This is an answer."
+    content 'This is an answer.'
     question
     association :author, factory: :employee
     chosen false
@@ -146,7 +146,7 @@ FactoryGirl.define do
   end
 
   factory :answer_comment do
-    content "This is a comment."
+    content 'This is a comment.'
     answer
     association :author, factory: :employee
   end
@@ -157,7 +157,6 @@ FactoryGirl.define do
   end
 
   factory :yammer_field_mapping do
-
   end
 
   factory :graph do
@@ -175,7 +174,7 @@ FactoryGirl.define do
 
   factory :metrics_dashboard do
     enterprise
-    name "Metrics dashboard"
+    name 'Metrics dashboard'
 
     factory :metrics_dashboard_with_graphs do
       transient do
@@ -189,24 +188,24 @@ FactoryGirl.define do
   end
 
   factory :field do
-    type "TextField"
-    title "My Field"
+    type 'TextField'
+    title 'My Field'
     gamification_value 1
     show_on_vcard false
     saml_attribute nil
 
     factory :checkbox_field do
-      type "CheckboxField"
+      type 'CheckboxField'
       options_text "Yes\nNo"
     end
 
     factory :select_field do
-      type "SelectField"
+      type 'SelectField'
       options_text "Yes\nNo"
     end
 
     factory :numeric_field do
-      type "NumericField"
+      type 'NumericField'
       min 1
       max 100
     end
@@ -225,11 +224,11 @@ FactoryGirl.define do
   end
 
   factory :email do
-    name "Awesome Email"
-    slug "awesome-email"
+    name 'Awesome Email'
+    slug 'awesome-email'
     use_custom_templates true
-    custom_html_template "<strong>Hey there</strong>"
-    custom_txt_template "Hey there"
+    custom_html_template '<strong>Hey there</strong>'
+    custom_txt_template 'Hey there'
 
     enterprise
 
@@ -246,8 +245,8 @@ FactoryGirl.define do
 
   factory :email_variable do
     email
-    key "mysterious-variable"
-    description "This is a mysterious variable!"
+    key 'mysterious-variable'
+    description 'This is a mysterious variable!'
     required false
   end
 
@@ -255,5 +254,4 @@ FactoryGirl.define do
     primary_color { generate(:hex_color) }
     default false
   end
-
 end

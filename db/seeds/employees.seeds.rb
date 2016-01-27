@@ -1,27 +1,27 @@
 nb_employees = 800
 
 enterprise = Enterprise.first
-domain_name = enterprise.name.parameterize + ".com"
-gender_field = SelectField.where(title: "Gender").first
-birth_field = DateField.where(title: "Date of birth").first
-disabilities_field = SelectField.where(title: "Disabilities?").first
-title_field = TextField.where(title: "Current title").first
+domain_name = enterprise.name.parameterize + '.com'
+gender_field = SelectField.where(title: 'Gender').first
+birth_field = DateField.where(title: 'Date of birth').first
+disabilities_field = SelectField.where(title: 'Disabilities?').first
+title_field = TextField.where(title: 'Current title').first
 
 other_fields = [
-  nationality_field = SelectField.where(title: "Nationality").first,
-  belief_field = SelectField.where(title: "Belief").first,
-  languages_field = CheckboxField.where(title: "Spoken languages").first,
-  ethnicity_field = SelectField.where(title: "Ethnicity").first,
-  kids_field = SelectField.where(title: "Status").first,
-  orientation_field = SelectField.where(title: "LGBT?").first,
-  hobbies_field = SelectField.where(title: "Hobbies").first,
-  education_field = SelectField.where(title: "Education level").first,
-  certifications_field = CheckboxField.where(title: "Certifications").first,
-  experience_field = NumericField.where(title: "Experience in your field (in years)").first,
-  countries_worked_field = SelectField.where(title: "Countries worked in").first,
-  military_field = SelectField.where(title: "Veteran?").first,
-  office_location_field = SelectField.where(title: "Office location").first,
-  seniority_field = NumericField.where(title: "Seniority (in years)").first
+  SelectField.where(title: 'Nationality').first,
+  SelectField.where(title: 'Belief').first,
+  CheckboxField.where(title: 'Spoken languages').first,
+  SelectField.where(title: 'Ethnicity').first,
+  SelectField.where(title: 'Status').first,
+  SelectField.where(title: 'LGBT?').first,
+  SelectField.where(title: 'Hobbies').first,
+  SelectField.where(title: 'Education level').first,
+  CheckboxField.where(title: 'Certifications').first,
+  NumericField.where(title: 'Experience in your field (in years)').first,
+  SelectField.where(title: 'Countries worked in').first,
+  SelectField.where(title: 'Veteran?').first,
+  SelectField.where(title: 'Office location').first,
+  NumericField.where(title: 'Seniority (in years)').first
 ]
 
 nb_employees.times do |i|
@@ -32,13 +32,13 @@ nb_employees.times do |i|
     first_name: first_name,
     last_name: last_name,
     email: Faker::Internet.user_name("#{first_name} #{last_name}", %w(. _ -)) + "@#{domain_name}",
-    auth_source: "manual",
+    auth_source: 'manual',
     enterprise: enterprise,
     invited_by_id: enterprise.admins.first.id,
-    invited_by_type: "Admin",
+    invited_by_type: 'Admin',
     invitation_created_at: invite_time = Faker::Time.between(30.days.ago, 3.days.ago),
     invitation_sent_at: invite_time,
-    invitation_accepted_at: Faker::Time.between(invite_time, Date.today),
+    invitation_accepted_at: Faker::Time.between(invite_time, Time.zone.today),
     password: password = SecureRandom.urlsafe_base64,
     password_confirmation: password
   )
@@ -53,10 +53,10 @@ nb_employees.times do |i|
   end
 
   # Pick gender with a 70-30 repartition
-  if rand(100) > 30
-    employee.info[gender_field] = "Male"
-  else
-    employee.info[gender_field] = "Female"
+  employee.info[gender_field] = if rand(100) > 30
+                                  'Male'
+                                else
+                                  'Female'
   end
 
   # Pick random stuff for the rest of the fields
@@ -80,20 +80,20 @@ nb_employees.times do |i|
   end
 
   if employee.save
-    puts "Employee ##{i+1} created successfully."
+    logger.info "Employee ##{i + 1} created successfully."
   else
-    puts "Error(s) saving employee ##{i+1}: "
+    logger.info "Error(s) saving employee ##{i + 1}: "
   end
 end
 
 e1 = Employee.first
 e2 = Employee.second
 
-e1.update(email: "frank@diverst.com", first_name: "Francis", last_name: "Marineau", password: "password", password_confirmation: "password")
-e2.update(email: "andre@diverst.com", first_name: "André", last_name: "Laurin", password: "password", password_confirmation: "password")
+e1.update(email: 'frank@diverst.com', first_name: 'Francis', last_name: 'Marineau', password: 'password', password_confirmation: 'password')
+e2.update(email: 'andre@diverst.com', first_name: "André", last_name: 'Laurin', password: 'password', password_confirmation: 'password')
 
-e1.info[gender_field] = "Female"
-e2.info[gender_field] = "Female"
+e1.info[gender_field] = 'Female'
+e2.info[gender_field] = 'Female'
 
 e1.save
 e2.save

@@ -3,7 +3,7 @@ class Groups::GroupMessagesController < ApplicationController
   before_action :set_group
   before_action :set_message, only: [:show]
 
-  layout "erg"
+  layout 'erg'
 
   def index
     @messages = @group.messages.page(0)
@@ -35,11 +35,11 @@ class Groups::GroupMessagesController < ApplicationController
 
   def message_params
     params
-    .require(:group_message)
-    .permit(
-      :subject,
-      :content,
-      segment_ids: []
-    )
+      .require(:group_message)
+      .permit(
+        :subject,
+        :content,
+        segment_ids: []
+      )
   end
 end

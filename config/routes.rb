@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   mount Sidekiq::Web => '/sidekiq'
 
   devise_for :admins
-  devise_for :employees, :controllers => { :invitations => 'employees/invitations' }
+  devise_for :employees, controllers: { invitations: 'employees/invitations' }
 
   get 'omniauth/:provider/callback', to: 'omni_auth#callback'
 
@@ -63,8 +63,8 @@ Rails.application.routes.draw do
 
   resources :groups do
     scope module: :groups do
-      resources :group_members, path: "members"
-      resources :group_messages, path: "messages"
+      resources :group_members, path: 'members'
+      resources :group_messages, path: 'messages'
     end
 
     scope :groups, module: :groups do
@@ -92,7 +92,7 @@ Rails.application.routes.draw do
       get 'export_csv'
     end
 
-    resources :poll_responses, path: "responses" do
+    resources :poll_responses, path: 'responses' do
       member do
         get 'thank_you'
       end
@@ -120,7 +120,7 @@ Rails.application.routes.draw do
   end
 
   resources :topics do
-    resources :topic_feedbacks, path: "feedbacks" do
+    resources :topic_feedbacks, path: 'feedbacks' do
       collection do
         get 'thank_you'
       end
@@ -130,7 +130,7 @@ Rails.application.routes.draw do
   resources :campaigns do
     resources :questions, shallow: true do
       resources :answers, shallow: true do
-        resources :answer_comments, path: "comments", shallow: true
+        resources :answer_comments, path: 'comments', shallow: true
       end
 
       member do
@@ -148,7 +148,7 @@ Rails.application.routes.draw do
 
   devise_scope :employee do
     namespace :employee do
-      root :to => "dashboard#home"
+      root to: 'dashboard#home'
 
       resources :news_links
       resources :messages
@@ -158,7 +158,7 @@ Rails.application.routes.draw do
       resources :campaigns, shallow: true do
         resources :questions, shallow: true do
           resources :answers, shallow: true do
-            resources :answer_comments, shallow: true, path: "comments"
+            resources :answer_comments, shallow: true, path: 'comments'
 
             member do
               put 'vote'
@@ -216,5 +216,5 @@ Rails.application.routes.draw do
 
   resources :emails
 
-  root to: "metrics_dashboards#index"
+  root to: 'metrics_dashboards#index'
 end

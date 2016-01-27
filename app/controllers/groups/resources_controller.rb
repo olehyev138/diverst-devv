@@ -3,7 +3,7 @@ class Groups::ResourcesController < ApplicationController
 
   before_action :authenticate_admin!
 
-  layout "erg"
+  layout 'erg'
 
   protected
 

@@ -16,14 +16,14 @@ class FieldsController < ApplicationController
 
   def field_params
     params
-    .require(:field)
-    .permit(
-      :name,
-      :description,
-      :logo,
-      :send_invitations,
-      member_ids: [],
-      invitation_segment_ids: []
-    )
+      .require(:field)
+      .permit(
+        :name,
+        :description,
+        :logo,
+        :send_invitations,
+        member_ids: [],
+        invitation_segment_ids: []
+      )
   end
 end

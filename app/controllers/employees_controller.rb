@@ -2,7 +2,7 @@ class EmployeesController < ApplicationController
   before_action :authenticate_admin!
   before_action :set_employee, only: [:edit, :update, :destroy, :show]
 
-  layout "global_settings"
+  layout 'global_settings'
 
   def index
     @employees = current_admin.enterprise.employees.page(params[:page])
@@ -30,7 +30,7 @@ class EmployeesController < ApplicationController
   end
 
   def sample_csv
-    send_data current_admin.enterprise.employees_csv(5), filename: "diverst_import.csv"
+    send_data current_admin.enterprise.employees_csv(5), filename: 'diverst_import.csv'
   end
 
   def parse_csv
@@ -58,14 +58,14 @@ class EmployeesController < ApplicationController
         @failed_rows << {
           row: row,
           row_index: row_index + 1,
-          error: "Missing required information"
+          error: 'Missing required information'
         }
       end
     end
   end
 
   def export_csv
-    send_data current_admin.enterprise.employees_csv(nil), filename: "diverst_employees.csv"
+    send_data current_admin.enterprise.employees_csv(nil), filename: 'diverst_employees.csv'
   end
 
   protected

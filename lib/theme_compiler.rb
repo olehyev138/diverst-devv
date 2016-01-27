@@ -35,21 +35,20 @@ class ThemeCompiler
   end
 
   def compress
-    @compressed_body = ::Sass::Engine.new(asset.source, {
-      :syntax => :scss,
-      :cache => false,
-      :read_cache => false,
-      :style => :compressed
-    }).render
+    @compressed_body = ::Sass::Engine.new(asset.source,       syntax: :scss,
+                                                              cache: false,
+                                                              read_cache: false,
+                                                              style: :compressed).render
   end
 
   def upload
     if Rails.env.production?
-      connection = Fog::Storage.new({
+      connection = Fog::Storage.new(
         provider: 'AWS',
-        aws_access_key_id: ENV["AWS_ACCESS_KEY_ID"],
-        aws_secret_access_key: ENV["AWS_SECRET_ACCESS_KEY"]
-      })
+        aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+        aws_secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
+      )
+
       connection.directories.get(ENV['S3_BUCKET_NAME']).files.create(
         key: theme.asset_path(asset.digest),
         body: StringIO.new(compressed_body),

@@ -1,19 +1,20 @@
 class GroupMessage < ActiveRecord::Base
-  has_and_belongs_to_many :segments
+  has_many :group_messages_segments
+  has_many :segments, through: :group_messages_segments
   belongs_to :group
 
   after_create :send_emails
 
   def employees
     if segments.empty?
-      self.group.members
+      group.members
     else
       Employee
-      .joins(:groups, :segments)
-      .where(
-        "groups.id" => self.group.id,
-        "segments.id" => self.segments.ids
-      )
+        .joins(:groups, :segments)
+        .where(
+          'groups.id' => group.id,
+          'segments.id' => segments.ids
+        )
     end
   end
 

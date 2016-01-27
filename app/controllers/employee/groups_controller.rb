@@ -1,7 +1,7 @@
 class Employee::GroupsController < ApplicationController
   before_action :authenticate_employee!
 
-  layout "employee"
+  layout 'employee'
 
   def index
     @groups = current_employee.enterprise.groups

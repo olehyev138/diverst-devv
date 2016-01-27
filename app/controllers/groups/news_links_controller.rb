@@ -4,7 +4,7 @@ class Groups::NewsLinksController < ApplicationController
   before_action :set_group, except: [:url_info]
   before_action :set_news_link, only: [:edit, :update, :destroy]
 
-  layout "erg"
+  layout 'erg'
 
   def index
     @news_links = @group.news_links
@@ -59,11 +59,11 @@ class Groups::NewsLinksController < ApplicationController
 
   def news_link_params
     params
-    .require(:news_link)
-    .permit(
-      :url,
-      :title,
-      :description
-    )
+      .require(:news_link)
+      .permit(
+        :url,
+        :title,
+        :description
+      )
   end
 end

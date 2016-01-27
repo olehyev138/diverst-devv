@@ -2,7 +2,7 @@ class Employee::CampaignsController < ApplicationController
   before_action :authenticate_employee!
   before_action :set_campaign, only: [:edit, :update, :destroy, :show]
 
-  layout "employee"
+  layout 'employee'
 
   def index
     @campaigns = current_employee.campaigns.order(created_at: :desc)
@@ -33,21 +33,21 @@ class Employee::CampaignsController < ApplicationController
 
   def campaign_params
     params
-    .require(:campaign)
-    .permit(
-      :title,
-      :description,
-      :start,
-      :end,
-      :nb_invites,
-      group_ids: [],
-      segment_ids: [],
-      questions_attributes: [
-        :id,
-        :_destroy,
+      .require(:campaign)
+      .permit(
         :title,
-        :description
-      ]
-    )
+        :description,
+        :start,
+        :end,
+        :nb_invites,
+        group_ids: [],
+        segment_ids: [],
+        questions_attributes: [
+          :id,
+          :_destroy,
+          :title,
+          :description
+        ]
+      )
   end
 end

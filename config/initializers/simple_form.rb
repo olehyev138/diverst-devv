@@ -20,8 +20,7 @@ SimpleForm.setup do |config|
     b.use :label, class: :field__label
     b.use :error, wrap_with: { tag: :span, class: :error }
 
-    b.wrapper :tag => 'div', :class => 'field__input-wrapper' do |ba|
-
+    b.wrapper tag: 'div', class: 'field__input-wrapper' do |ba|
       # Calculates placeholders automatically from I18n
       # You can also pass a string as f.input placeholder: "Placeholder"
       ba.use :placeholder
@@ -45,7 +44,7 @@ SimpleForm.setup do |config|
       ba.optional :readonly
 
       ## Input
-      ba.use :input, class: "field__input"
+      ba.use :input, class: 'field__input'
     end
 
     ## full_messages_for
@@ -62,9 +61,9 @@ SimpleForm.setup do |config|
     b.use :error, wrap_with: { tag: :span, class: :error }
 
     b.wrapper tag: 'label', class: 'control' do |ba|
-      ba.use :input, class: "control__input"
+      ba.use :input, class: 'control__input'
       ba.wrapper tag: 'span', class: 'control__indicator control__indicator--toggle' do end
-      ba.use :label, class: "control__label"
+      ba.use :label, class: 'control__label'
     end
   end
 
@@ -75,9 +74,9 @@ SimpleForm.setup do |config|
     b.use :error, wrap_with: { tag: :span, class: :error }
 
     b.wrapper tag: 'label', class: 'control' do |ba|
-      ba.use :input, class: "control__input"
+      ba.use :input, class: 'control__input'
       ba.wrapper tag: 'span', class: 'control__indicator control__indicator--checkbox' do end
-      ba.use :label, class: "control__label"
+      ba.use :label, class: 'control__label'
     end
   end
 
@@ -86,12 +85,12 @@ SimpleForm.setup do |config|
 
     b.use :label, class: :field__label
 
-    b.wrapper :tag => 'div', :class => 'field__input-wrapper' do |ba|
-      ba.wrapper :tag => 'span', :class => 'field__add-on field__add-on--right' do |bb|
+    b.wrapper tag: 'div', class: 'field__input-wrapper' do |ba|
+      ba.wrapper tag: 'span', class: 'field__add-on field__add-on--right' do |bb|
         bb.wrapper tag: 'span', class: 'icon icon--chevron-down' do end
       end
 
-      ba.use :input, class: "field__input field__input--right-add-on"
+      ba.use :input, class: 'field__input field__input--right-add-on'
     end
 
     b.use :hint,  wrap_with: { tag: :span, class: :hint }
@@ -202,7 +201,7 @@ SimpleForm.setup do |config|
   # config.cache_discovery = !Rails.env.development?
 
   # Default class for inputs
-  config.input_class = ""
+  config.input_class = ''
 
   # Define the default class of the input wrapper of the boolean input.
   config.boolean_label_class = 'checkbox'

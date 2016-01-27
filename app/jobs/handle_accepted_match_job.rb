@@ -9,7 +9,7 @@ class HandleAcceptedMatchJob < ActiveJob::Base
     # Create the Firebase conversation
     base_uri = 'https://diverst.firebaseio.com'
     firebase = Firebase::Client.new(base_uri)
-    firebase.set("conversations/#{match.id}", { id: match.id, users: [match.user1.id, match.user2.id] })
+    firebase.set("conversations/#{match.id}", id: match.id, users: [match.user1.id, match.user2.id])
 
     # Notify the users of the match
     match.both_accepted_notification

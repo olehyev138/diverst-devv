@@ -11,8 +11,8 @@ class SyncYammerGroupJob < ActiveJob::Base
 
       # Cache the employee's yammer token if it's not
       if employee.yammer_token.nil?
-        yammer_user_token = yammer.token_for_user(user_id: yammer_user["id"])
-        employee.update(yammer_token: yammer_user_token["token"])
+        yammer_user_token = yammer.token_for_user(user_id: yammer_user['id'])
+        employee.update(yammer_token: yammer_user_token['token'])
       end
 
       # Impersonate the employee and subscribe to the group

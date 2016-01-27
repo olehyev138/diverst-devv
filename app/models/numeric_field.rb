@@ -1,6 +1,6 @@
 class NumericField < Field
   def string_value(value)
-    return "-" if value.nil?
+    return '-' if value.nil?
     value
   end
 
@@ -22,7 +22,7 @@ class NumericField < Field
 
     return nil if values.empty?
 
-    values.reject! { |value| (value - values.mean).abs >= values.standard_deviation*2 } # Reject abberrant values
+    values.reject! { |value| (value - values.mean).abs >= values.standard_deviation * 2 } # Reject abberrant values
 
     high_delta = values.max - values.min
     delta = (e1_value - e2_value).abs
@@ -78,9 +78,9 @@ class NumericField < Field
     ranges
   end
 
-  def elastic_stats(aggr_field: nil, segments: self.enterprise.enterprise.segments.all)
+  def elastic_stats(aggr_field: nil, segments: enterprise.enterprise.segments.all)
     # Dynamically calculate bucket sizes
-    stats = Enterprise.first.search_employees(size: 0, aggs: { global_stats: { stats: { field: "combined_info.#{self.id}" } } })
+    stats = Enterprise.first.search_employees(size: 0, aggs: { global_stats: { stats: { field: "combined_info.#{id}" } } })
 
     min = stats['aggregations']['global_stats']['min']
     max = stats['aggregations']['global_stats']['max']
@@ -91,23 +91,23 @@ class NumericField < Field
     range_agg = {
       ranges: {
         range: {
-          field: "combined_info.#{self.id}",
+          field: "combined_info.#{id}",
           ranges: buckets
         }
       }
     }
 
-    if aggr_field.nil?
-      aggs = range_agg
-    else
-      aggs = {
-        aggregation: {
-          terms: {
-            field: "combined_info.#{aggr_field.id}.raw"
-          },
-          aggs: range_agg
-        }
-      }
+    aggs = if aggr_field.nil?
+             range_agg
+           else
+             {
+               aggregation: {
+                 terms: {
+                   field: "combined_info.#{aggr_field.id}.raw"
+                 },
+                 aggs: range_agg
+               }
+             }
     end
 
     search_hash = {
@@ -117,51 +117,47 @@ class NumericField < Field
 
     # Filter the query by segments if there are any specified
     if !segments.nil? && !segments.empty?
-      search_hash["query"] = {
+      search_hash['query'] = {
         terms: {
-          "combined_info.segments" => segments.ids
+          'combined_info.segments' => segments.ids
         }
       }
     end
-
-    puts search_hash.to_json
 
     # Execute the elasticsearch query
     Enterprise.first.search_employees(search_hash)
   end
 
-  def highcharts_data(aggr_field: nil, segments: self.enterprise.enterprise.segments.all)
+  def highcharts_data(aggr_field: nil, segments: enterprise.enterprise.segments.all)
     data = elastic_stats(aggr_field: aggr_field, segments: segments)
 
     if aggr_field # If there IS an aggregation
       series = data['aggregations']['aggregation']['buckets'].map do |aggr_bucket|
         {
           name: aggr_bucket['key'],
-          data: aggr_bucket['ranges']['buckets'].map{ |range_bucket| range_bucket['doc_count'] }
+          data: aggr_bucket['ranges']['buckets'].map { |range_bucket| range_bucket['doc_count'] }
         }
       end
 
-      puts data.to_json
-
-      ranges = data['aggregations']['aggregation']['buckets'][0]['ranges']['buckets'].map{ |range_bucket| range_bucket['key'].gsub(/\.0/, '') }
+      ranges = data['aggregations']['aggregation']['buckets'][0]['ranges']['buckets'].map { |range_bucket| range_bucket['key'].gsub(/\.0/, '') }
 
       return {
         series: series,
         categories: ranges,
-        xAxisTitle: self.title
+        xAxisTitle: title
       }
     else # If there ISN'T an aggregation
       series = [{
-        name: self.title,
-        data: data['aggregations']['ranges']['buckets'].map{ |range_bucket| range_bucket['doc_count'] }
+        name: title,
+        data: data['aggregations']['ranges']['buckets'].map { |range_bucket| range_bucket['doc_count'] }
       }]
 
-      ranges = data['aggregations']['ranges']['buckets'].map{ |range_bucket| range_bucket['key'].gsub(/\.0/, '') }
+      ranges = data['aggregations']['ranges']['buckets'].map { |range_bucket| range_bucket['key'].gsub(/\.0/, '') }
 
       return {
         series: series,
         categories: ranges,
-        xAxisTitle: self.title
+        xAxisTitle: title
       }
     end
   end

@@ -19,7 +19,7 @@ gem 'cocoon'
 gem 'ruby-saml', '~> 1.0.0'
 gem 'sidekiq', '< 5'
 gem 'devise-async'
-gem 'sinatra', :require => nil # Required for sidekiq's dashboard
+gem 'sinatra', require: nil # Required for sidekiq's dashboard
 gem 'newrelic_rpm'
 gem 'seedbank'
 gem 'rails-patch-json-encode'
@@ -52,9 +52,9 @@ gem 'lograge', '~> 0.3.1'
 gem 'sidekiq-logging-json', github: 'frankmarineau/Sidekiq-Logging-JSON'
 gem 'basecrm'
 gem 'liquid'
-gem "autoprefixer-rails"
+gem 'autoprefixer-rails'
 gem 'fog'
-gem "validate_url"
+gem 'validate_url'
 gem 'omniauth-linkedin-oauth2'
 gem 'omniauth-oauth2', '1.3.1' # Temporary fix to address: https://github.com/decioferreira/omniauth-linkedin-oauth2/issues/28
 gem 'activerecord-import'
@@ -77,7 +77,7 @@ end
 
 gem 'rspec_junit_formatter', '0.2.2', group: :test
 
-gem "parallel_tests", group: :development
+gem 'parallel_tests', group: :development
 
 gem 'appsignal', '~> 0.12.rc', group: :production
 

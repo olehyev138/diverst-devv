@@ -3,7 +3,7 @@ class Groups::EventsController < ApplicationController
   before_action :set_group
   before_action :set_event, only: [:edit, :update, :destroy, :show]
 
-  layout "erg"
+  layout 'erg'
 
   def index
     @upcoming_events = @group.events.upcoming
@@ -49,15 +49,15 @@ class Groups::EventsController < ApplicationController
 
   def event_params
     params
-    .require(:event)
-    .permit(
-      :title,
-      :description,
-      :start,
-      :end,
-      :location,
-      :max_attendees,
-      segment_ids: []
-    )
+      .require(:event)
+      .permit(
+        :title,
+        :description,
+        :start,
+        :end,
+        :location,
+        :max_attendees,
+        segment_ids: []
+      )
   end
 end

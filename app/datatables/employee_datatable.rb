@@ -22,7 +22,7 @@ class EmployeeDatatable < AjaxDatatablesRails::Base
         record.first_name,
         record.last_name,
         record.email,
-        "#{link_to("Details", employee_path(record))} - #{link_to("Remove", employee_path(record), class: 'error', method: :delete)}"
+        "#{link_to('Details', employee_path(record))} - #{link_to('Remove', employee_path(record), class: 'error', method: :delete)}"
       ]
     end
   end

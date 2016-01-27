@@ -2,7 +2,7 @@ class TopicsController < ApplicationController
   before_action :authenticate_admin!
   before_action :set_topic, only: [:edit, :update, :destroy, :show]
 
-  layout "handshake"
+  layout 'handshake'
 
   def index
     @topics = current_admin.enterprise.topics
@@ -44,10 +44,10 @@ class TopicsController < ApplicationController
 
   def topic_params
     params
-    .require(:topic)
-    .permit(
-      :statement,
-      :expiration
-    )
+      .require(:topic)
+      .permit(
+        :statement,
+        :expiration
+      )
   end
 end

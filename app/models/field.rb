@@ -37,7 +37,7 @@ class Field < ActiveRecord::Base
   end
 
   def graphable?
-    ["SelectField", "CheckboxField", "NumericField"].include? self.type
+    %w(SelectField CheckboxField NumericField).include? type
   end
 
   def format_value_name(value)
@@ -45,7 +45,7 @@ class Field < ActiveRecord::Base
   end
 
   def enterprise
-    return self.container if self.container.is_a? Enterprise
-    self.container.enterprise
+    return container if container.is_a? Enterprise
+    container.enterprise
   end
 end

@@ -2,16 +2,16 @@ after :segments do
   enterprise = Enterprise.first
 
   p = enterprise.polls.new(
-    title: "New Latino attraction at Disney World",
+    title: 'New Latino attraction at Disney World',
     description: "We’re planning on building a new attraction at Disney World before the beginning of summer. Since this park receives a significant amount of hispanic visitors each year, we want to make sure it doesn’t clash with their culture and is appealing to them.",
     groups: [enterprise.groups.first],
     segments: [enterprise.segments.first]
   )
 
   p.fields.new(
-    type: "SelectField",
-    title: "Would you download an app for attractions, food and ride?",
-    saml_attribute: "",
+    type: 'SelectField',
+    title: 'Would you download an app for attractions, food and ride?',
+    saml_attribute: '',
     gamification_value: 10,
     show_on_vcard: false,
     match_exclude: true,
@@ -23,9 +23,9 @@ No"
   )
 
   p.fields.new(
-    type: "SelectField",
+    type: 'SelectField',
     title: "What’s an acceptable surcharge for the added attraction?",
-    saml_attribute: "",
+    saml_attribute: '',
     gamification_value: 10,
     show_on_vcard: false,
     match_exclude: true,
@@ -39,9 +39,9 @@ $10 - $15"
   )
 
   p.fields.new(
-    type: "CheckboxField",
-    title: "What kind of kind of snack stands should we have?",
-    saml_attribute: "",
+    type: 'CheckboxField',
+    title: 'What kind of kind of snack stands should we have?',
+    saml_attribute: '',
     gamification_value: 10,
     show_on_vcard: false,
     match_exclude: true,
@@ -58,9 +58,9 @@ Hot Dog"
   )
 
   p.fields.new(
-    type: "TextField",
-    title: "How could we avoid hispanic stereotypes throughout the park?",
-    saml_attribute: "",
+    type: 'TextField',
+    title: 'How could we avoid hispanic stereotypes throughout the park?',
+    saml_attribute: '',
     gamification_value: 10,
     show_on_vcard: false,
     match_exclude: true,
@@ -74,12 +74,12 @@ Hot Dog"
 
   100.times do
     r = p.responses.new(
-      employee: Employee.find(rand(1..(Employee.count-1)))
+      employee: Employee.find(rand(1..(Employee.count - 1)))
     )
 
-    r.info[p.fields[0]] = p.fields[0].options[rand(0..p.fields[0].options.count-1)]
-    r.info[p.fields[1]] = p.fields[1].options[rand(0..p.fields[1].options.count-1)]
-    r.info[p.fields[2]] = p.fields[2].options[rand(0..p.fields[2].options.count-1)]
+    r.info[p.fields[0]] = p.fields[0].options[rand(0..p.fields[0].options.count - 1)]
+    r.info[p.fields[1]] = p.fields[1].options[rand(0..p.fields[1].options.count - 1)]
+    r.info[p.fields[2]] = p.fields[2].options[rand(0..p.fields[2].options.count - 1)]
     r.info[p.fields[3]] = Faker::Lorem.paragraph
   end
 

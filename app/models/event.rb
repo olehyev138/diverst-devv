@@ -1,16 +1,17 @@
 class Event < ActiveRecord::Base
-  has_and_belongs_to_many :segments
+  has_many :events_segments
+  has_many :segments, through: :events_segments
   belongs_to :group
 
-  scope :past, -> { where('end < ?', Time.now).order(start: :desc) }
-  scope :upcoming, -> { where('start > ?', Time.now).order(start: :desc) }
-  scope :ongoing, -> { where('start <= ?', Time.now).where('end >= ?', Time.now).order(start: :desc) }
+  scope :past, -> { where('end < ?', Time.current).order(start: :desc) }
+  scope :upcoming, -> { where('start > ?', Time.current).order(start: :desc) }
+  scope :ongoing, -> { where('start <= ?', Time.current).where('end >= ?', Time.current).order(start: :desc) }
 
   def time_string
-    if self.start.to_date === self.end.to_date # If the event starts and ends on the same day
-      "#{self.start.to_s :dateonly} from #{self.start.to_s :ampmtime} to #{self.end.to_s :ampmtime}"
+    if start.to_date == self.end.to_date # If the event starts and ends on the same day
+      "#{start.to_s :dateonly} from #{start.to_s :ampmtime} to #{self.end.to_s :ampmtime}"
     else
-      "From #{self.start.to_s :datetime} to #{self.end.to_s :datetime}"
+      "From #{start.to_s :datetime} to #{self.end.to_s :datetime}"
     end
   end
 end

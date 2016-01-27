@@ -1,5 +1,5 @@
 <%= simple_form_for @topic do |f| %>
   <%= f.input :statement %>
-  <%= f.input :expiration, default: Time.now + 1.month %>
+  <%= f.input :expiration, default: Time.current + 1.month %>
   <%= f.submit "Create topic", class: "btn btn--primary" %>
 <% end %>

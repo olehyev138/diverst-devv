@@ -2,7 +2,7 @@ class EmailsController < ApplicationController
   before_action :authenticate_admin!
   before_action :set_email, only: [:edit, :update, :show]
 
-  layout "global_settings"
+  layout 'global_settings'
 
   def index
     @emails = current_admin.enterprise.emails
@@ -24,11 +24,11 @@ class EmailsController < ApplicationController
 
   def email_params
     params
-    .require(:email)
-    .permit(
-      :use_custom_templates,
-      :custom_html_template,
-      :custom_txt_template
-    )
+      .require(:email)
+      .permit(
+        :use_custom_templates,
+        :custom_html_template,
+        :custom_txt_template
+      )
   end
 end

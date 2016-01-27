@@ -1,5 +1,5 @@
 class SamlController < ApplicationController
-  skip_before_action :verify_authenticity_token, :only => [:acs, :logout]
+  skip_before_action :verify_authenticity_token, only: [:acs, :logout]
   before_action :set_enterprise
 
   def index
@@ -9,7 +9,7 @@ class SamlController < ApplicationController
   def sso
     settings = @enterprise.saml_settings
     if settings.nil?
-      render :action => :no_settings
+      render action: :no_settings
       return
     end
 
@@ -19,16 +19,14 @@ class SamlController < ApplicationController
 
   def acs
     settings = @enterprise.saml_settings
-    response = OneLogin::RubySaml::Response.new(params[:SAMLResponse], :settings => settings)
+    response = OneLogin::RubySaml::Response.new(params[:SAMLResponse], settings: settings)
 
     if response.is_valid?
       nameid = response.nameid
       attrs = response.attributes
 
       unless employee = Employee.find_by_email(nameid)
-        employee = Employee.new({
-          auth_source: "saml"
-        })
+        employee = Employee.new(auth_source: 'saml')
       end
 
       employee.set_info_from_saml(nameid, attrs, @enterprise)
@@ -39,14 +37,14 @@ class SamlController < ApplicationController
     else
       logger.info "Response Invalid. Errors: #{response.errors}"
       @errors = response.errors
-      render :action => :fail
+      render action: :fail
     end
   end
 
   def metadata
     settings = @enterprise.saml_settings
     meta = OneLogin::RubySaml::Metadata.new
-    render :xml => meta.generate(settings, true)
+    render xml: meta.generate(settings, true)
   end
 
   # Trigger SP and IdP initiated Logout requests
@@ -77,7 +75,7 @@ class SamlController < ApplicationController
 
       # Since we created a new SAML request, save the transaction_id
       # to compare it with the response we get back
-      logout_request = OneLogin::RubySaml::Logoutrequest.new()
+      logout_request = OneLogin::RubySaml::Logoutrequest.new
       session[:transaction_id] = logout_request.uuid
       logger.info "New SP SLO for User ID: '#{session[:nameid]}', Transaction ID: '#{session[:transaction_id]}'"
 
@@ -86,7 +84,7 @@ class SamlController < ApplicationController
       end
 
       relayState = url_for controller: 'saml', action: 'index'
-      redirect_to(logout_request.create(settings, :RelayState => relayState))
+      redirect_to(logout_request.create(settings, RelayState: relayState))
     end
   end
 
@@ -95,14 +93,14 @@ class SamlController < ApplicationController
   def process_logout_response
     settings = @enterprise.saml_settings
     request_id = session[:transaction_id]
-    logout_response = OneLogin::RubySaml::Logoutresponse.new(params[:SAMLResponse], settings, :matches_request_id => request_id, :get_params => params)
-  logger.info "LogoutResponse is: #{logout_response.response}"
+    logout_response = OneLogin::RubySaml::Logoutresponse.new(params[:SAMLResponse], settings, matches_request_id: request_id, get_params: params)
+    logger.info "LogoutResponse is: #{logout_response.response}"
 
     # Validate the SAML Logout Response
-    if not logout_response.validate
+    if !logout_response.validate
       error_msg = "The SAML Logout Response is invalid.  Errors: #{logout_response.errors}"
       logger.error error_msg
-      render :inline => error_msg
+      render inline: error_msg
     else
       # Actually log out this session
       if logout_response.success?
@@ -115,18 +113,18 @@ class SamlController < ApplicationController
   # Method to handle IdP initiated logouts
   def idp_logout_request
     settings = @enterprise.saml_settings
-    logout_request = OneLogin::RubySaml::SloLogoutrequest.new(params[:SAMLRequest], :settings => settings)
-    if not logout_request.is_valid?
+    logout_request = OneLogin::RubySaml::SloLogoutrequest.new(params[:SAMLRequest], settings: settings)
+    unless logout_request.is_valid?
       error_msg = "IdP initiated LogoutRequest was not valid!. Errors: #{logout_request.errors}"
       logger.error error_msg
-      render :inline => error_msg
+      render inline: error_msg
     end
     logger.info "IdP initiated Logout for #{logout_request.nameid}"
 
     # Actually log out this session
     reset_session
 
-    logout_response = OneLogin::RubySaml::SloLogoutresponse.new.create(settings, logout_request.id, nil, :RelayState => params[:RelayState])
+    logout_response = OneLogin::RubySaml::SloLogoutresponse.new.create(settings, logout_request.id, nil, RelayState: params[:RelayState])
     redirect_to logout_response
   end
 
@@ -135,5 +133,4 @@ class SamlController < ApplicationController
   def set_enterprise
     @enterprise = Enterprise.find(params[:enterprise_id])
   end
-
 end

@@ -1,5 +1,5 @@
 ActionMailer::Base.delivery_method = :smtp
-ActionMailer::Base.default charset: "utf-8"
+ActionMailer::Base.default charset: 'utf-8'
 ActionMailer::Base.smtp_settings = {
   port: 587,
   address: 'smtp.mandrillapp.com',

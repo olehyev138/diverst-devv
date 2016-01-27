@@ -2,7 +2,7 @@ class AnswersController < ApplicationController
   before_action :authenticate_admin!
   before_action :set_answer
 
-  layout "unify"
+  layout 'unify'
 
   def update
     if @answer.update(answer_params)
@@ -20,10 +20,10 @@ class AnswersController < ApplicationController
 
   def answer_params
     params
-    .require(:answer)
-    .permit(
-      :content,
-      :chosen
-    )
+      .require(:answer)
+      .permit(
+        :content,
+        :chosen
+      )
   end
 end

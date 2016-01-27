@@ -9,9 +9,9 @@
   end
 
   if g.save
-    puts "Group ##{i+1} created successfully."
+    logger.info "Group ##{i + 1} created successfully."
   else
-    puts "Error(s) saving group ##{i+1}: "
-    puts g.errors.messages
+    logger.info "Error(s) saving group ##{i + 1}: "
+    logger.info g.errors.messages
   end
 end
