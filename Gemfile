@@ -72,6 +72,7 @@ group :development, :test do
   gem 'capybara'
   gem 'poltergeist'
   gem 'database_cleaner'
+  gem 'fuubar'
 end
 
 gem 'rspec_junit_formatter', '0.2.2', group: :test

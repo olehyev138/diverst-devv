@@ -13,7 +13,7 @@ RSpec.describe Theme, type: :model do
 
   it "doesnt auto-append a hash if one is already present" do
     theme = build(:theme, primary_color: "#f15e58")
-    is_valid = theme.valid?
+    theme.valid?
     expect(theme.primary_color).to eq '#f15e58'
   end
 
