@@ -57,6 +57,7 @@ class Groups::EventsController < ApplicationController
         :end,
         :location,
         :max_attendees,
+        :picture,
         segment_ids: []
       )
   end

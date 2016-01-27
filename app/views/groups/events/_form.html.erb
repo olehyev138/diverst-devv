@@ -9,6 +9,7 @@
         <%= f.input :location %>
         <%= f.association :segments, input_html: { class: "select2" } %>
         <%= f.input :max_attendees %>
+        <%= f.input :picture, as: :file %>
 
         <%= f.button :submit %>
       <% end %>
