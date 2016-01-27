@@ -1,5 +1,5 @@
 <div class="content__header">
-  <img class="logo logo--large" src="<%= image_path "diverst-logo.svg" %>">
+  <img class="logo logo--large" src="<%= (current_employee.enterprise.theme.nil? ? image_path('diverst-logo.svg') : current_employee.enterprise.theme.logo.url) %>">
   <p>Connect with someone within Anycorp based on your common interest but diverse background to explore new ideas or think outside the box to solve problems.</p>
 </div>
 
@@ -14,7 +14,7 @@
     <div class="card__section">
       <%= simple_form_for [@poll, @response] do |f| %>
         <% @poll.fields.each do |cf| %>
-          <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: Employee.first %>
+          <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: current_employee %>
         <% end %>
 
         <%= f.button :submit, class: 'btn--secondary btn--large btn--full', value: "Submit response" %>
