@@ -8,7 +8,9 @@
 <div class="content__main">
   <div class="card">
     <div class="card__section">
-      <div style="background-image: url(<%= @event.picture.url %>); height: 300px; background-size: 100%; background-position: center; margin-bottom: 35px;"></div>
+      <% if @event.picture.exists? %>
+        <div style="background-image: url(<%= @event.picture.url %>); height: 300px; background-size: 100%; background-position: center; margin-bottom: 35px;"></div>
+      <% end %>
       <h4>Description</h4>
       <p><%= @event.description %></p>
       <h4>Date &amp; time</h4>
