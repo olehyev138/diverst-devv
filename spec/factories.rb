@@ -3,8 +3,8 @@ FactoryGirl.define do
     "user#{n}@diverst.com"
   end
 
-  sequence :hex_color do |n|
-    n.to_s(16)[0..5].rjust(6, '0')
+  sequence :hex_color do
+    '#' + '%06x' % (rand * 0xffffff)
   end
 
   factory :enterprise do
@@ -252,6 +252,8 @@ FactoryGirl.define do
 
   factory :theme do
     primary_color { generate(:hex_color) }
-    default false
+    logo_file_name { 'logo.png' }
+    logo_content_type { 'image/png' }
+    logo_file_size { 1024 }
   end
 end
