@@ -8,6 +8,7 @@
     <div class="card__section">
       <table class="table--has-border" id="resources-table">
         <thead>
+          <th></th>
           <th>Title</th>
           <th>Creation date</th>
           <% if is_admin? %>
@@ -17,7 +18,8 @@
         <tbody>
           <% @resources.each do |resource| %>
             <tr>
-              <td><%= link_to resource.title, resource.file.url, target: '_blank' %> <span class="badge badge--spaced" style="background-color: #<%= color_hex_for_extension(resource.file_extension) %>;"><%= resource.file_extension %></span></td>
+              <td class="icon-column"><a href="<%= resource.file.url %>" class="icon icon--bg icon--large" style="background-image: url(<%= thumbnail_for_resource(resource) %>)"></a></td>
+              <td><%= link_to resource.title, resource.file.url, target: '_blank' %></td>
               <td><%= resource.created_at.to_s :reversed_slashes %></td>
               <% if is_admin? %>
                 <td>

@@ -11,8 +11,6 @@ class OmniAuthController < ApplicationController
       linkedin_profile_url: @oauth['info']['urls']['public_profile']
     )
 
-    ap @oauth['info']['urls']['public_profile']
-
     # Set the user's avatar
     picture_url = @oauth['info']['image']
     SaveEmployeeAvatarFromUrlJob.perform_later(current_employee, picture_url)
