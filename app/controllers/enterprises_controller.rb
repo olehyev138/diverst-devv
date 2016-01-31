@@ -17,19 +17,10 @@ class EnterprisesController < ApplicationController
   end
 
   def update_branding
-    if !@enterprise.theme.nil? && @enterprise.theme.default?
-      @enterprise.theme = Theme.create(enterprise_params[:theme_attributes])
-      if @enterprise.save
-        redirect_to action: :edit_branding
-      else
-        render :edit_branding
-      end
+    if @enterprise.update_attributes(enterprise_params)
+      redirect_to action: :edit_branding
     else
-      if @enterprise.update_attributes(enterprise_params)
-        redirect_to action: :edit_branding
-      else
-        render :edit_branding
-      end
+      render :edit_branding
     end
   end
 
@@ -64,6 +55,7 @@ class EnterprisesController < ApplicationController
         :idp_cert,
         :yammer_import,
         theme_attributes: [
+          :id,
           :primary_color,
           :logo
         ],

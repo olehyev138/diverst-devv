@@ -20,3 +20,7 @@ th {
   @include font-regular;
   @extend .highlight;
 }
+
+td.icon-column {
+  width: $spacing-large;
+}

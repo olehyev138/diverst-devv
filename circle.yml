@@ -1,6 +1,8 @@
 machine:
   timezone:
     America/New_York
+  services:
+    - elasticsearch
 deployment:
   production:
     branch: master

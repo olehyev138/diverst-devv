@@ -20,7 +20,9 @@ class MetricsDashboard < ActiveRecord::Base
   end
 
   def percentage_of_total
-    (target.count.to_f / enterprise.employees.count * 100).ceil
+    return 0 if enterprise.employees.count == 0
+    return 100 if target.count > enterprise.employees.count
+    (target.count.to_f / enterprise.employees.count * 100).round
   end
 
   # Defines which fields will be usable when creating graphs

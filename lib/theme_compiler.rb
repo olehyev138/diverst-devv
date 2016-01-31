@@ -17,7 +17,7 @@ class ThemeCompiler
     delete_temporary_file
   end
 
-  private
+  protected
 
   def create_temporary_file
     FileUtils.mkdir_p(tmp_themes_path) unless File.directory?(tmp_themes_path)
@@ -35,10 +35,10 @@ class ThemeCompiler
   end
 
   def compress
-    @compressed_body = ::Sass::Engine.new(asset.source,       syntax: :scss,
-                                                              cache: false,
-                                                              read_cache: false,
-                                                              style: :compressed).render
+    @compressed_body = ::Sass::Engine.new(asset.source, syntax: :scss,
+                                                        cache: false,
+                                                        read_cache: false,
+                                                        style: :compressed).render
   end
 
   def upload
@@ -59,7 +59,7 @@ class ThemeCompiler
       File.write(File.join(Rails.root, 'public', theme.asset_path(asset.digest)), compressed_body)
     end
 
-    theme.delete_asset
+    theme.delete_asset if theme.digest != asset.digest
     theme.update_column(:digest, asset.digest)
   end
 

@@ -5,7 +5,7 @@ class Resource < ActiveRecord::Base
   validates_attachment_content_type :file, content_type: /.*/
 
   def file_extension
-    File.extname(file_file_name)[1..-1].upcase
+    File.extname(file_file_name)[1..-1].downcase
   rescue
     ''
   end

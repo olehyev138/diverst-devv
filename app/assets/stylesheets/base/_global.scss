@@ -82,3 +82,10 @@ img {
     max-width: 720px;
   }
 }
+
+hr {
+  border: 0;
+  height: 1px;
+  margin: $spacing-medium 0;
+  background-color: $diverst-border;
+}

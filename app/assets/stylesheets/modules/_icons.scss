@@ -30,6 +30,16 @@
   fill: $diverst-grey-light;
 }
 
+.icon--bg {
+  @extend .icon;
+  background-size: 100%;
+}
+
+.icon--large {
+  width: $spacing-large;
+  height: $spacing-large;
+}
+
 .icon-inline--colored {
   fill: $primary-color;
 }

@@ -1,16 +1,34 @@
-<div class="content__header">
-  <h1>
-    <%= link_to "My Campaigns", employee_campaigns_path %> /
-    <%= @campaign.title %>
-  </h1>
-</div>
-
 <div class="content__main">
-  <% if @campaign.banner.exists? %>
-    <div style="background-image: url(<%= @campaign.banner.url %>); width: 100%; height: 310px; background-position: center; background-size: 100%; margin-bottom: 20px;"></div>
-  <% end %>
+  <div class="card">
+    <div class="card__section card__section--cover" style="background-image: url(<%= @campaign.banner.url %>)">
+      <h1 class="card__section--cover__title"><%= @campaign.title %></h1>
+    </div>
+    <div class="card__section card__section--border">
+      <div class="flex-row flex-row--spaced flex-row--middle">
+        <div class="flex-row__cell flex-row__cell--spaced flex-5">
+          <p class="emphasis"><%= @campaign.description %></p>
+        </div>
+        <div class="flex-row__cell flex-row__cell--spaced flex-3">
+          <div class="flex-row flex-row--middle">
+            <div class="flex-row__cell">
+              <h3 class="inline-block">Participating ERGs</h3>
+            </div>
+            <div class="flex-row__cell">
+              <% @campaign.groups.each do |group| %>
+                <div class="avatar avatar--small avatar--round inline-block" style="background-image: url(<%= image_url group.logo.url(:thumb) %>)"></div>
+              <% end %>
+            </div>
+          </div>
+          <hr>
+          <h3><%= @campaign.employees.count %> participants</h3>
+          <hr>
+          <h3><%= @campaign.progression %>% solved</h3>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <p class="block"><%= @campaign.description %></p>
+  <h1 style="margin-top: 50px;">Questions</h1>
   <div class="card">
     <% @questions.each do |question| %>
       <%= link_to employee_question_path(question), class: "block block-section" do %>

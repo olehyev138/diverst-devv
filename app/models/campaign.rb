@@ -74,4 +74,10 @@ class Campaign < ActiveRecord::Base
       xAxisTitle: '# of interactions'
     }
   end
+
+  # Returns the % of questions that have been closed
+  def progression
+    return 0 if questions.count == 0
+    (questions.solved.count.to_f / questions.count * 100).round
+  end
 end

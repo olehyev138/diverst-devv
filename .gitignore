@@ -34,7 +34,7 @@ vendor/assets/bower_components
 spec/examples.txt
 
 # Custom themes
-/public/assets/themes/*
+/public/assets/themes/*.css
 
 # Precompiled assets when testing prod environment
 /public/assets/*
