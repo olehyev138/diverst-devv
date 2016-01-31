@@ -51,11 +51,42 @@ FactoryGirl.define do
     end
   end
 
+  factory :segment do
+    name "Incredible segment"
+    enterprise
+
+    factory :segment_with_employees do
+      transient do
+        employees_count 100
+      end
+
+      after(:create) do |segment, evaluator|
+        evaluator.members create_list(:employee, evaluator.employees_count, segments: [segment])
+      end
+    end
+  end
+
   factory :event do
     title 'Incredible event'
     description 'This event is going to be awesome!'
     location 'Montreal'
     max_attendees 15
+
+    association :group, factory: :group_with_employees
+  end
+
+  factory :group_message do
+    subject 'Subject of an awesome message'
+    content 'This is the coolest message content I\'ve seen in a while!'
+
+    association :group, factory: :group_with_employees
+  end
+
+  factory :news_link do
+    title 'Awesome news article'
+    description 'This is the best news article out there!'
+    url 'http://google.com'
+
     association :group, factory: :group_with_employees
   end
 
