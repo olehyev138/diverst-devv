@@ -61,6 +61,25 @@
   }
 }
 
+.card__section--cover {
+  min-height: 300px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: inset 0 -150px 60px -60px rgba(0, 0, -1, 0.5);
+}
+
+.card__section--cover__title {
+  color: $diverst-white;
+  position: absolute;
+  bottom: $spacing-medium;
+  text-shadow: 0 0 5px rgba(0,0,0,.8);
+  font-size: 30px;
+
+  @include mq(medium) {
+    padding: $spacing-large;
+  }
+}
+
 .card__title {
   margin-bottom: $spacing-medium;
 }

@@ -14,6 +14,16 @@
   }
 }
 
+.flex-row--spaced {
+  margin-left: -#{$spacing-medium};
+  margin-right: -#{$spacing-medium};
+}
+
+.flex-row--tight {
+  margin-left: -#{$spacing-small/2};
+  margin-right: -#{$spacing-small/2};
+}
+
 .flex-row__cell {
   padding: 0 $spacing-small;
 
@@ -23,5 +33,19 @@
 
   &--ellipsis {
     @include ellipsis(100%);
+  }
+}
+
+.flex-row__cell--spaced {
+  padding: 0 $spacing-medium;
+}
+
+.flex-row__cell--tight {
+  padding: 0 $spacing-small/2;
+}
+
+@for $i from 1 through $columns {
+  .flex-#{$i} {
+    flex: $i;
   }
 }
