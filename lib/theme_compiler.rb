@@ -43,18 +43,19 @@ class ThemeCompiler
 
   def upload
     if Rails.env.production?
-      connection = Fog::Storage.new(
-        provider: 'AWS',
-        aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-        aws_secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
-      )
+      # TODO: Delete old theme files on production
+      # connection = Fog::Storage.new(
+      #   provider: 'AWS',
+      #   aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+      #   aws_secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
+      # )
 
-      connection.directories.get(ENV['S3_BUCKET_NAME']).files.create(
-        key: theme.asset_path(asset.digest),
-        body: StringIO.new(compressed_body),
-        public: true,
-        content_type: 'text/css'
-      )
+      # connection.directories.get(ENV['S3_BUCKET_NAME']).files.create(
+      #   key: theme.asset_path(asset.digest),
+      #   body: StringIO.new(compressed_body),
+      #   public: true,
+      #   content_type: 'text/css'
+      # )
     else
       File.write(File.join(Rails.root, 'public', theme.asset_path(asset.digest)), compressed_body)
     end
