@@ -64,14 +64,15 @@ class Campaign < ActiveRecord::Base
     top_combined_hash = top_answers_hash.merge(top_comments_hash) { |_k, a_value, b_value| a_value + b_value }.sort_by { |_k, v| v }.reverse!.to_h
 
     series = [{
-      name: '# of interactions',
-      data: top_combined_hash.values
+      name: 'Score',
+      data: top_combined_hash.values[0..14]
     }]
 
     {
       series: series,
-      categories: top_combined_hash.keys.map(&:name),
-      xAxisTitle: '# of interactions'
+      categories: top_combined_hash.keys.map(&:name)[0..14],
+      xAxisTitle: 'Employee',
+      yAxisTitle: 'Score'
     }
   end
 
