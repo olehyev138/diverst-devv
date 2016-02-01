@@ -13,7 +13,8 @@ class Theme < ActiveRecord::Base
     return unless digest?
 
     if Rails.env.production?
-      FOG_STORAGE.directories.get(ENV['FOG_DIRECTORY']).files.get(asset_path).try(:destroy)
+      # TODO: Delete old theme files on S3
+      # FOG_STORAGE.directories.get(ENV['FOG_DIRECTORY']).files.get(asset_path).try(:destroy)
     else
       File.delete(File.join(Rails.root, 'public', asset_path(digest)))
     end
