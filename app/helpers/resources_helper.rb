@@ -1,20 +1,25 @@
 module ResourcesHelper
   def thumbnail_for_resource(resource)
-    return resource.file.url if resource.file_content_type.start_with?('image/')
-    image_url("icons/filetypes/#{file_extension_icon(resource.file_extension)}")
+    return resource.file.url if resource.file_content_type.start_with?('image')
+    image_url("icons/filetypes/#{thumbnail_for_resource_extension(resource)}")
   end
 
-  def file_extension_icon(ext)
-    case ext.downcase
-    when /doc/
+  def thumbnail_for_resource_extension(res)
+    # Try looking for extensions first
+    case res.file_extension.downcase
+    when %r{doc}
       'word.png'
     when 'pdf'
       'pdf.png'
-    when /xls/
+    when %r{xlsx?|csv}
       'excel.png'
-    when /ppt/
+    when %r{ppt}
       'powerpoint.png'
+    when %r{zip|rar|7z|tar|bz2}
+      return 'archive.png'
     else
+      # Look for MIME types
+      return 'video.png' if res.file_content_type.start_with?('video')
       'other.png'
     end
   end
