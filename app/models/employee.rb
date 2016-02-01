@@ -206,7 +206,8 @@ class Employee < ActiveRecord::Base
 
     # Map Yammer fields with Diverst fields as per the mappings defined in the integration configuration
     enterprise.yammer_field_mappings.each do |mapping|
-      employee.info[mapping.diverst_field] = yammer_user[mapping.yammer_field_name]
+      yammer_value = yammer_user[mapping.yammer_field_name]
+      employee.info[mapping.diverst_field] = yammer_value unless yammer_value.nil?
     end
 
     employee
