@@ -4,7 +4,7 @@
   <%= active_link_to "Fields", edit_fields_enterprise_path(current_admin.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <%= active_link_to "Emails", emails_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <%= active_link_to "Branding", edit_branding_enterprise_path(current_admin.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-  <%= active_link_to "Integrations", integrations_enterprise_path(current_admin.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to "Integrations", integrations_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
 <% end %>
 
 <%= render template: "layouts/dashboard" %>

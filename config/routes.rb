@@ -50,7 +50,6 @@ Rails.application.routes.draw do
       get 'edit_mobile_fields'
       get 'edit_branding'
       get 'edit_algo'
-      get 'integrations'
       get 'theme'
       patch 'update_branding'
       patch 'restore_default_branding'
@@ -60,6 +59,8 @@ Rails.application.routes.draw do
       resources :resources
     end
   end
+
+  get 'integrations', to: 'integrations#index'
 
   resources :groups do
     scope module: :groups do
