@@ -39,10 +39,6 @@ class Employee < ActiveRecord::Base
   scope :answered_poll, -> (poll) { joins(:poll_responses).where(poll_responses: { poll_id: poll.id }) }
   scope :top_participants, -> (n) { order(participation_score_7days: :desc).limit(n) }
 
-  def name
-    "#{first_name} #{last_name}"
-  end
-
   # Update the user with info from the SAML auth response
   def set_info_from_saml(nameid, _attrs, enterprise)
     self.email = nameid

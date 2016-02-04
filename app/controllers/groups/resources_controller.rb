@@ -1,5 +1,6 @@
 class Groups::ResourcesController < ApplicationController
   include IsResources
+  include AccessControl
 
   before_action :authenticate_admin!
 

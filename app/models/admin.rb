@@ -8,4 +8,6 @@ class Admin < ActiveRecord::Base
   include IsUser
 
   has_many :topics, inverse_of: :admin
+
+  scope :not_owners, -> { where(owner: false) }
 end

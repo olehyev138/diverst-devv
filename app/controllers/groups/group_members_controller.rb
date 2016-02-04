@@ -1,4 +1,6 @@
 class Groups::GroupMembersController < ApplicationController
+  include AccessControl
+
   before_action :authenticate_user!
   before_action :set_group
   before_action :set_member, only: [:edit, :update, :destroy]
