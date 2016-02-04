@@ -26,7 +26,12 @@
                 <td><%= campaign.start.to_s :reversed_slashes %></td>
                 <td><%= campaign.invitations.count %></td>
                 <td><%= campaign.questions.count %></td>
-                <td><%= link_to "Edit", edit_campaign_path(campaign) %> - <%= link_to "Delete", campaign_path(campaign), method: :delete, class: "error", data: { confirm: "Are you sure?" } %></td>
+                  <td>
+                    <% if can_edit_resource?(campaign) %>
+                      <%= link_to "Edit", edit_campaign_path(campaign) %> -
+                      <%= link_to "Delete", campaign_path(campaign), method: :delete, class: "error", data: { confirm: "Are you sure?" } %>
+                    <% end %>
+                  </td>
               </tr>
             <% end %>
           </tbody>

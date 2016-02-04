@@ -1,5 +1,6 @@
 class Campaign < ActiveRecord::Base
   belongs_to :enterprise
+  belongs_to :admin
   has_many :questions
   has_many :campaigns_groups
   has_many :groups, through: :campaigns_groups

@@ -48,7 +48,7 @@
     </ul>
     <ul class="nav__list nav__list--secondary">
       <li class="nav__item">
-        <%= active_link_to employees_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['employees', 'enterprises'], ['index', 'edit', 'show', 'new', 'edit_auth', 'edit_fields', 'integrations']] do %>
+        <%= active_link_to employees_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['employees', 'enterprises', 'admins', 'integrations'], ['index', 'edit', 'show', 'new', 'edit_auth', 'edit_fields', 'edit_branding']] do %>
           <span class="nav__text">Global Settings</span>
         <% end %>
       </li>

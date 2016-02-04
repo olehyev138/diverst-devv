@@ -31,4 +31,9 @@ class ApplicationController < ActionController::Base
     headers['Access-Control-Request-Method'] = '*'
     headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
   end
+
+  def authenticate_owner!
+    authenticate_admin!
+    redirect_to root_path unless current_admin.owner?
+  end
 end

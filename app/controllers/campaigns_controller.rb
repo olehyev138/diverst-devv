@@ -1,19 +1,23 @@
 class CampaignsController < ApplicationController
+  include AccessControl
+
   before_action :authenticate_admin!, except: [:index, :show]
   before_action :set_campaign, only: [:edit, :update, :destroy, :show, :contributions_per_erg, :top_performers]
+  before_action -> { resource_editors_only!(@campaign) }, except: [:index, :show]
 
   layout :resolve_layout
 
   def index
-    @campaigns = current_user.enterprise.campaigns
+    @campaigns = current_admin.enterprise.campaigns
   end
 
   def new
-    @campaign = current_user.enterprise.campaigns.new
+    @campaign = current_admin.enterprise.campaigns.new
   end
 
   def create
-    @campaign = current_user.enterprise.campaigns.new(campaign_params)
+    @campaign = current_admin.enterprise.campaigns.new(campaign_params)
+    @campaign.admin = current_admin
 
     if @campaign.save
       redirect_to action: :index
@@ -56,7 +60,7 @@ class CampaignsController < ApplicationController
   protected
 
   def set_campaign
-    @campaign = current_user.enterprise.campaigns.find(params[:id])
+    @campaign = current_admin.enterprise.campaigns.find(params[:id])
   end
 
   def campaign_params

@@ -1,0 +1,41 @@
+<div class="content__header">
+  <h1>Admins</h1>
+  <%= link_to "New Admin", new_admin_path, class: "btn btn--primary" %>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <% if @admins.count > 0 %>
+        <table>
+          <thead>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Last sign in</th>
+            <th>Options</th>
+          </thead>
+          <tbody>
+            <% @admins.each do |admin| %>
+              <tr>
+                <td><%= admin.name %></td>
+                <td><%= admin.email %></td>
+                <td><%= last_sign_in_text(admin) %></td>
+                <td><%= link_to "Edit", edit_admin_path(admin) %> - <%= link_to "Delete", admin_path(admin), method: :delete, class: "error", data: { confirm: 'Are you sure?' } %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <p>You are the only admin in the enterprise. <%= link_to "Create one now", new_admin_path %> to share access to the admin dashboard.</p>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  var listWithHandle = document.getElementById("mobile_fields");
+  Sortable.create(listWithHandle, {
+    handle: '.icon--reorder',
+    animation: 150
+  });
+</script>
