@@ -180,7 +180,7 @@ class Employee < ActiveRecord::Base
       }
     )
 
-    Employee.import index: index
+    Employee.__elasticsearch__.import index: index # We don't directly call Employee.import since activerecord-import overrides that
   end
 
   # Updates this employee's match scores with all other enterprise employees

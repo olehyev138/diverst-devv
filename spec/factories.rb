@@ -28,6 +28,7 @@ FactoryGirl.define do
   factory :admin do
     email { generate(:email_address) }
     password 'f4k3p455w0rd'
+    owner true
     enterprise
   end
 

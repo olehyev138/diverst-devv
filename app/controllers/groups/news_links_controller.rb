@@ -2,8 +2,8 @@ class Groups::NewsLinksController < ApplicationController
   include AccessControl
 
   before_action :authenticate_user!
-  before_action :authenticate_admin!, except: [:index, :show]
   before_action :set_group, except: [:url_info]
+  before_action :group_managers_only!, except: [:index]
   before_action :set_news_link, only: [:edit, :update, :destroy]
 
   layout 'erg'

@@ -23,4 +23,9 @@ module ResourcesHelper
       'other.png'
     end
   end
+
+  def can_manage_resources?
+    return is_admin? if @container.is_a? Enterprise
+    @container.managers.include?(current_user)
+  end
 end

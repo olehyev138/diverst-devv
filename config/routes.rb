@@ -34,6 +34,8 @@ Rails.application.routes.draw do
     end
   end
 
+  get 'integrations', to: 'integrations#index'
+
   resources :enterprises do
     resources :saml do
       collection do

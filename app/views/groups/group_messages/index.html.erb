@@ -1,6 +1,6 @@
 <div class="content__header">
   <h1>Messages</h1>
-  <%= link_to "+ Create new message", new_group_group_message_path, class: "btn btn--primary" if is_admin? %>
+  <%= link_to "+ Create new message", new_group_group_message_path, class: "btn btn--primary" if can_manage_group?(@group) %>
 </div>
 
 <div class="content__main">

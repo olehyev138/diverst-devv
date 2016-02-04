@@ -3,6 +3,7 @@ class Groups::ResourcesController < ApplicationController
   include AccessControl
 
   before_action :authenticate_admin!
+  before_action :group_managers_only!, except: [:show, :index]
 
   layout 'erg'
 

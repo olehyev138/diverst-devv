@@ -1,31 +1,37 @@
 <div class="content__header">
   <h1>
     <%= link_to "Admins", admins_path %> /
-    Create an admin
+    Edit an admin
   </h1>
 </div>
 <div class="content__main">
-  <div class="card">
-    <div class="card__section">
-      <h3>General information</h3>
-      <%= simple_form_for @admin do |f| %>
-        <%= f.input :first_name %>
-        <%= f.input :last_name %>
-        <%= f.input :email %>
+  <div class="row">
+    <div class="col lg-7">
+      <div class="card">
+        <div class="card__section">
+          <h3>General information</h3>
+          <%= simple_form_for @admin do |f| %>
+            <%= f.input :first_name %>
+            <%= f.input :last_name %>
+            <%= f.input :email %>
 
-        <%= f.button :submit %>
-      <% end %>
+            <%= f.button :submit %>
+          <% end %>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="card">
-    <div class="card__section">
-      <h3>Change password</h3>
-      <%= simple_form_for @admin do |f| %>
-        <%= f.input :password %>
-        <%= f.input :password_confirmation %>
+    <div class="col lg-5">
+      <div class="card">
+        <div class="card__section">
+          <h3>Authentication</h3>
+          <%= simple_form_for @admin do |f| %>
+            <%= f.input :password %>
+            <%= f.input :password_confirmation %>
 
-        <%= f.button :submit %>
-      <% end %>
+            <%= f.button :submit, value: "Change password" %>
+          <% end %>
+        </div>
+      </div>
     </div>
   </div>
 </div>

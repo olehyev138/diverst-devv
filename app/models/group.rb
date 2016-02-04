@@ -16,7 +16,8 @@ class Group < ActiveRecord::Base
   has_many :questions, through: :campaigns
   has_many :answers, through: :questions
   has_many :answer_upvotes, through: :answers
-  belongs_to :manager, class_name: 'Employee'
+  has_many :groups_managers
+  has_many :managers, through: :groups_managers, source: :employee
 
   has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('missing.png')
   validates_attachment_content_type :logo, content_type: %r{\Aimage\/.*\Z}

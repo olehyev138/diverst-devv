@@ -3,7 +3,7 @@ class CampaignsController < ApplicationController
 
   before_action :authenticate_admin!, except: [:index, :show]
   before_action :set_campaign, only: [:edit, :update, :destroy, :show, :contributions_per_erg, :top_performers]
-  before_action -> { resource_editors_only!(@campaign) }, except: [:index, :show]
+  before_action -> { resource_editors_only!(@campaign) }, only: [:edit, :update, :destroy]
 
   layout :resolve_layout
 
