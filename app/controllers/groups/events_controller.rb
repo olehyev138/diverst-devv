@@ -3,6 +3,7 @@ class Groups::EventsController < ApplicationController
 
   before_action :authenticate_user!
   before_action :set_group
+  before_action :group_managers_only!, except: [:show, :index]
   before_action :set_event, only: [:edit, :update, :destroy, :show]
 
   layout 'erg'

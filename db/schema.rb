@@ -12,6 +12,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 20160203213223) do
+
   create_table "admins", force: :cascade do |t|
     t.string   "first_name",             limit: 255
     t.string   "last_name",              limit: 255
@@ -91,6 +92,11 @@ ActiveRecord::Schema.define(version: 20160203213223) do
   create_table "campaigns_groups", force: :cascade do |t|
     t.integer "campaign_id", limit: 4
     t.integer "group_id",    limit: 4
+  end
+
+  create_table "campaigns_managers", force: :cascade do |t|
+    t.integer "campaign_id", limit: 4
+    t.integer "employee_id", limit: 4
   end
 
   create_table "campaigns_segments", force: :cascade do |t|
@@ -289,6 +295,11 @@ ActiveRecord::Schema.define(version: 20160203213223) do
     t.integer  "manager_id",                limit: 4
   end
 
+  create_table "groups_managers", force: :cascade do |t|
+    t.integer "group_id",    limit: 4
+    t.integer "employee_id", limit: 4
+  end
+
   create_table "groups_metrics_dashboards", force: :cascade do |t|
     t.integer "group_id",             limit: 4
     t.integer "metrics_dashboard_id", limit: 4
@@ -416,6 +427,11 @@ ActiveRecord::Schema.define(version: 20160203213223) do
     t.integer  "admin_id",      limit: 4
   end
 
+  create_table "survey_managers", force: :cascade do |t|
+    t.integer "survey_id",   limit: 4
+    t.integer "employee_id", limit: 4
+  end
+
   create_table "themes", force: :cascade do |t|
     t.string   "logo_file_name",    limit: 255
     t.string   "logo_content_type", limit: 255
@@ -446,11 +462,11 @@ ActiveRecord::Schema.define(version: 20160203213223) do
   end
 
   create_table "yammer_field_mappings", force: :cascade do |t|
-    t.integer  "enterprise_id",     limit: 4
     t.string   "yammer_field_name", limit: 255
     t.integer  "diverst_field_id",  limit: 4
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
+    t.integer  "enterprise_id",     limit: 4
   end
 
 end

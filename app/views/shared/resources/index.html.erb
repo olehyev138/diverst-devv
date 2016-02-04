@@ -1,6 +1,6 @@
 <div class="content__header">
   <h1>Resources</h1>
-  <%= link_to "+ Add resource", polymorphic_path([@container, :resource], action: "new"), class: "btn btn--primary" if is_admin? %>
+  <%= link_to "+ Add resource", polymorphic_path([@container, :resource], action: "new"), class: "btn btn--primary" if can_manage_resources? %>
 </div>
 
 <div class="content__main">

@@ -10,7 +10,14 @@
 <body class="dashboard">
 
   <header class="primary-header">
-    <a href="/"><img class="primary-header__logo logo" src="<%= logo_url %>"></a>
+    <div class="flex-row flex-row--middle full-width">
+      <div class="flex-row__cell flex-row__cell--grow">
+        <%= link_to employee_root_path do %><img class="primary-header__logo logo" src="<%= logo_url %>"><% end %>
+      </div>
+      <div class="flex-row__cell">
+        <%= current_admin.name %>
+      </div>
+    </div>
   </header>
 
   <nav class="nav">

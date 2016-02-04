@@ -34,6 +34,8 @@ Rails.application.routes.draw do
     end
   end
 
+  get 'integrations', to: 'integrations#index'
+
   resources :enterprises do
     resources :saml do
       collection do
@@ -50,7 +52,6 @@ Rails.application.routes.draw do
       get 'edit_mobile_fields'
       get 'edit_branding'
       get 'edit_algo'
-      get 'integrations'
       get 'theme'
       patch 'update_branding'
       patch 'restore_default_branding'
