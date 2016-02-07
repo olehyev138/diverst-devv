@@ -1,6 +1,5 @@
 class PollResponsesController < ApplicationController
-  before_action :authenticate_admin!, except: [:new, :create, :thank_you]
-  before_action :authenticate_employee!, only: [:new, :create, :thank_you]
+  before_action :authenticate_user!, only: [:new, :create, :thank_you]
   before_action :set_poll
   before_action :set_response, only: [:edit, :update, :destroy, :show]
   skip_before_action :verify_authenticity_token, only: [:create]
@@ -12,8 +11,8 @@ class PollResponsesController < ApplicationController
   end
 
   def new
-    # Redirect to thank you page if employee already answered
-    if response = current_employee.poll_responses.where(poll: @poll).first
+    # Redirect to thank you page if user already answered
+    if response = current_user.poll_responses.where(poll: @poll).first
       redirect_to action: 'thank_you', id: response.id
     end
 
@@ -23,7 +22,7 @@ class PollResponsesController < ApplicationController
   def create
     @response = @poll.responses.new
     @response.info.merge(fields: @response.poll.fields, form_data: params['custom-fields'])
-    @response.employee = current_employee
+    @response.user = current_user
 
     if @response.save
       redirect_to action: :thank_you, poll_id: @poll.id, id: @response.id

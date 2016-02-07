@@ -1,5 +1,5 @@
 <div class="content__header">
-  <img class="logo logo--large" src="<%= (current_employee.enterprise.theme.nil? ? image_path('diverst-logo.svg') : current_employee.enterprise.theme.logo.url) %>">
+  <img class="logo logo--large" src="<%= (current_user.enterprise.theme.nil? ? image_path('diverst-logo.svg') : current_user.enterprise.theme.logo.url) %>">
 </div>
 
 <div class="content__main">
@@ -13,7 +13,7 @@
     <div class="card__section">
       <%= simple_form_for [@poll, @response] do |f| %>
         <% @poll.fields.each do |cf| %>
-          <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: current_employee %>
+          <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: current_user %>
         <% end %>
 
         <%= f.button :submit, class: 'btn--secondary btn--large btn--full', value: "Submit response" %>

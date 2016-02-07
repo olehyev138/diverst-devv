@@ -8,14 +8,14 @@ class NumericField < Field
     value.to_i
   end
 
-  def match_score_between(e1, e2, employees)
+  def match_score_between(e1, e2, users)
     e1_value = e1.info[self]
     e2_value = e2.info[self]
 
     return nil unless e1_value && e2_value
 
-    values = employees.map do |employee|
-      employee.info[self]
+    values = users.map do |user|
+      user.info[self]
     end
 
     values.compact!
@@ -31,18 +31,18 @@ class NumericField < Field
     score
   end
 
-  def validates_rule_for_employee?(rule:, employee:)
-    return false if employee.info[rule.field].nil?
+  def validates_rule_for_user?(rule:, user:)
+    return false if user.info[rule.field].nil?
 
     case rule.operator
     when SegmentRule.operators[:equals]
-      employee.info[rule.field] == rule.values_array[0].to_i
+      user.info[rule.field] == rule.values_array[0].to_i
     when SegmentRule.operators[:greater_than]
-      employee.info[rule.field] > rule.values_array[0].to_i
+      user.info[rule.field] > rule.values_array[0].to_i
     when SegmentRule.operators[:lesser_than]
-      employee.info[rule.field] < rule.values_array[0].to_i
+      user.info[rule.field] < rule.values_array[0].to_i
     when SegmentRule.operators[:is_not]
-      employee.info[rule.field] != rule.values_array[0].to_i
+      user.info[rule.field] != rule.values_array[0].to_i
     end
   end
 
@@ -80,7 +80,7 @@ class NumericField < Field
 
   def elastic_stats(aggr_field: nil, segments: enterprise.enterprise.segments.all)
     # Dynamically calculate bucket sizes
-    stats = Enterprise.first.search_employees(size: 0, aggs: { global_stats: { stats: { field: "combined_info.#{id}" } } })
+    stats = Enterprise.first.search_users(size: 0, aggs: { global_stats: { stats: { field: "combined_info.#{id}" } } })
 
     min = stats['aggregations']['global_stats']['min']
     max = stats['aggregations']['global_stats']['max']
@@ -125,7 +125,7 @@ class NumericField < Field
     end
 
     # Execute the elasticsearch query
-    Enterprise.first.search_employees(search_hash)
+    Enterprise.first.search_users(search_hash)
   end
 
   def highcharts_data(aggr_field: nil, segments: enterprise.enterprise.segments.all)

@@ -51,7 +51,7 @@ class Graph {
       yAxis: {
         min: 0,
         title: {
-          text: this.data.highcharts.yAxisTitle || 'Nb of employees'
+          text: this.data.highcharts.yAxisTitle || 'Nb of users'
         },
         allowDecimals: false
       },

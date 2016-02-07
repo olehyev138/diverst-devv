@@ -1,15 +1,18 @@
 class MetricsDashboardsController < ApplicationController
-  before_action :authenticate_admin!
+  after_action :verify_authorized
   before_action :set_metrics_dashboard, except: [:index, :new, :create]
 
   layout 'erg_manager'
 
   def new
-    @metrics_dashboard = current_admin.enterprise.metrics_dashboards.new
+    authorize MetricsDashboard
+    @metrics_dashboard = current_user.enterprise.metrics_dashboards.new
   end
 
   def create
-    @metrics_dashboard = current_admin.enterprise.metrics_dashboards.new(metrics_dashboard_params)
+    authorize MetricsDashboard
+    @metrics_dashboard = current_user.enterprise.metrics_dashboards.new(metrics_dashboard_params)
+    @metrics_dashboard.owner = current_user
 
     if @metrics_dashboard.save
       redirect_to @metrics_dashboard
@@ -19,11 +22,22 @@ class MetricsDashboardsController < ApplicationController
   end
 
   def index
-    @dashboards = current_admin.enterprise.metrics_dashboards
-    @nb_employees = current_admin.enterprise.employees.count
+    authorize MetricsDashboard
+    @dashboards = policy_scope(MetricsDashboard)
+    @nb_users = current_user.enterprise.users.count
+  end
+
+  def show
+    authorize @metrics_dashboard
+  end
+
+  def edit
+    authorize @metrics_dashboard
   end
 
   def update
+    authorize @metrics_dashboard
+
     if @metrics_dashboard.update(metrics_dashboard_params)
       redirect_to action: :index
     else
@@ -32,6 +46,8 @@ class MetricsDashboardsController < ApplicationController
   end
 
   def destroy
+    authorize @metrics_dashboard
+
     @metrics_dashboard.destroy
     redirect_to action: :index
   end
@@ -43,7 +59,7 @@ class MetricsDashboardsController < ApplicationController
   protected
 
   def set_metrics_dashboard
-    @metrics_dashboard = current_admin.enterprise.metrics_dashboards.find(params[:id])
+    @metrics_dashboard = current_user.enterprise.metrics_dashboards.find(params[:id])
   end
 
   def metrics_dashboard_params

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Diverst</title>
+  <%= stylesheet_link_tag (current_user.enterprise.theme.nil? ? "application" : current_user.enterprise.theme.asset_url), media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+  <link rel="icon" type="image/png" href="/favicon.png">
+</head>
+<body class="erg">
+
+  <header class="primary-header">
+    <div class="flex-row flex-row--middle full-width">
+      <div class="flex-row__cell flex-row__cell--grow">
+        <%= link_to user_root_path do %><img class="primary-header__logo logo" src="<%= logo_url %>"><% end %>
+      </div>
+      <div class="flex-row__cell">
+        <%= link_to current_user.name, current_user, class: "white" %>
+      </div>
+    </div>
+  </header>
+
+  <header class="secondary-header">
+    <%= link_to "Home", user_root_path, class: "secondary-header__tab" %>
+    <%= active_link_to "Campaigns", user_campaigns_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+    <%= active_link_to "News", user_news_links_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+    <%= active_link_to "Messages", user_messages_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+    <%= active_link_to "Events", user_events_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+    <%= active_link_to "Groups", user_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+    <%= active_link_to "Resources", user_resources_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+    <%= link_to "Mentoring", '#', class: "secondary-header__tab" %>
+    <%= link_to "Log out", destroy_user_session_path, method: :delete, class: "secondary-header__tab" %>
+  </header>
+
+  <div class="content">
+    <div class="content__inner">
+      <% if notice.present? %><p class="notice"><%= notice %></p><% end %>
+      <% if alert.present? %><p class="alert"><%= alert %></p><% end %>
+
+      <%= yield %>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,12 +1,12 @@
 <div class="content__header">
   <h1>General</h1>
   <div class="flex-row flex-row--middle">
-    <p class="no-margin flex-row__cell"><%= @metrics_dashboard.target.count %> employees (<%= @metrics_dashboard.percentage_of_total %>% of total)</p>
+    <p class="no-margin flex-row__cell"><%= @metrics_dashboard.target.count %> users (<%= @metrics_dashboard.percentage_of_total %>% of total)</p>
     <div class="flex-row__cell">
       <div class="field__input-wrapper" style="width: 250px;">
         <span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
         <select class="field__input field__input--right-add-on" id="dashboard-select">
-          <% current_admin.enterprise.metrics_dashboards.each do |metrics_dashboard| %>
+          <% current_user.enterprise.metrics_dashboards.each do |metrics_dashboard| %>
             <option value="<%= metrics_dashboard.id %>"<%= " selected disabled" if metrics_dashboard == @metrics_dashboard %>><%= metrics_dashboard.name %></option>
           <% end %>
         </select>

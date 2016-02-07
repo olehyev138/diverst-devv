@@ -321,7 +321,7 @@ Devise.setup do |config|
 
   #   # Configure with your SAML settings (see ruby-saml for more information).
   #   config.saml_configure do |settings|
-  #     settings.assertion_consumer_service_url = "http://localhost:3000/employees/saml/auth"
+  #     settings.assertion_consumer_service_url = "http://localhost:3000/users/saml/auth"
   #     settings.idp_entity_id                  = "https://app.onelogin.com/saml/metadata/468755"
   #     settings.idp_sso_target_url             = "https://v7.onelogin.com/trust/saml2/http-post/sso/468755"
   #     settings.idp_slo_target_url             = "https://v7.onelogin.com/trust/saml2/http-redirect/slo/468755"

@@ -14,7 +14,7 @@ FactoryGirl.define do
     theme nil
   end
 
-  factory :employee do
+  factory :user do
     email { generate(:email_address) }
     first_name 'Frank'
     last_name 'Marineau'
@@ -32,8 +32,8 @@ FactoryGirl.define do
     enterprise
   end
 
-  factory :employee_group do
-    association :employee
+  factory :user_group do
+    association :user
     association :group
   end
 
@@ -41,13 +41,13 @@ FactoryGirl.define do
     name 'LGBT'
     enterprise
 
-    factory :group_with_employees do
+    factory :group_with_users do
       transient do
-        employees_count 100
+        users_count 100
       end
 
       after(:create) do |group, evaluator|
-        create_list(:employee_group, evaluator.employees_count, group: group)
+        create_list(:user_group, evaluator.users_count, group: group)
       end
     end
   end
@@ -56,13 +56,13 @@ FactoryGirl.define do
     name "Incredible segment"
     enterprise
 
-    factory :segment_with_employees do
+    factory :segment_with_users do
       transient do
-        employees_count 100
+        users_count 100
       end
 
       after(:create) do |segment, evaluator|
-        evaluator.members create_list(:employee, evaluator.employees_count, segments: [segment])
+        evaluator.members create_list(:user, evaluator.users_count, segments: [segment])
       end
     end
   end
@@ -73,14 +73,14 @@ FactoryGirl.define do
     location 'Montreal'
     max_attendees 15
 
-    association :group, factory: :group_with_employees
+    association :group, factory: :group_with_users
   end
 
   factory :group_message do
     subject 'Subject of an awesome message'
     content 'This is the coolest message content I\'ve seen in a while!'
 
-    association :group, factory: :group_with_employees
+    association :group, factory: :group_with_users
   end
 
   factory :news_link do
@@ -88,7 +88,7 @@ FactoryGirl.define do
     description 'This is the best news article out there!'
     url 'http://google.com'
 
-    association :group, factory: :group_with_employees
+    association :group, factory: :group_with_users
   end
 
   factory :resource do
@@ -117,7 +117,7 @@ FactoryGirl.define do
 
   factory :poll_response do
     poll
-    employee
+    user
   end
 
   factory :campaign do
@@ -157,7 +157,7 @@ FactoryGirl.define do
   factory :answer do
     content 'This is an answer.'
     question
-    association :author, factory: :employee
+    association :author, factory: :user
     chosen false
 
     trait :upvoted_2_times do
@@ -180,11 +180,11 @@ FactoryGirl.define do
   factory :answer_comment do
     content 'This is a comment.'
     answer
-    association :author, factory: :employee
+    association :author, factory: :user
   end
 
   factory :answer_upvote do
-    association :employee
+    association :user
     association :answer
   end
 

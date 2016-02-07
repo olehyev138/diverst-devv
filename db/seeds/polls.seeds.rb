@@ -73,8 +73,10 @@ Hot Dog"
   p.save
 
   100.times do
+    offset = rand(User.count)
+
     r = p.responses.new(
-      employee: Employee.find(rand(1..(Employee.count - 1)))
+      user: User.offset(offset).first
     )
 
     r.info[p.fields[0]] = p.fields[0].options[rand(0..p.fields[0].options.count - 1)]

@@ -27,10 +27,8 @@
                 <td><%= campaign.invitations.count %></td>
                 <td><%= campaign.questions.count %></td>
                   <td>
-                    <% if can_edit_resource?(campaign) %>
-                      <%= link_to "Edit", edit_campaign_path(campaign) %> -
-                      <%= link_to "Delete", campaign_path(campaign), method: :delete, class: "error", data: { confirm: "Are you sure?" } %>
-                    <% end %>
+                    <%= link_to "Edit", edit_campaign_path(campaign) if policy(campaign).edit? %> -
+                    <%= link_to "Delete", campaign_path(campaign), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(campaign).destroy? %>
                   </td>
               </tr>
             <% end %>

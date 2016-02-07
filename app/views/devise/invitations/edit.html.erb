@@ -81,9 +81,9 @@
         $('.group-id-field').remove();
 
         $('.media-object--selected').each(function() {
-          var $hiddenField = $('<input type="hidden" name="employee[group_ids][]" class="group-id-field"/>')
+          var $hiddenField = $('<input type="hidden" name="user[group_ids][]" class="group-id-field"/>')
           $hiddenField.val($(this).data('group-id'));
-          $('#edit_employee').append($hiddenField);
+          $('#edit_user').append($hiddenField);
         });
       });
     </script>

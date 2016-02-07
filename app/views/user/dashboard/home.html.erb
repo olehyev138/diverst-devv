@@ -1,0 +1,112 @@
+<div class="content__header">
+  <h1>Home</h1>
+</div>
+
+<div class="content__main">
+
+  <div class="row row--equal-height">
+
+    <div class="col sm-12 md-9">
+
+      <div class="row row--equal-height">
+
+        <div class="col sm-12 md-6">
+          <div class="card">
+            <div class="card__section">
+
+              <h4>Upcoming Events</h4>
+              <%= link_to "View all", user_events_path, class: "card__action" %>
+
+              <% @upcoming_events.each do |event| %>
+                <%= link_to user_event_path(event), class: "block block-section" do %>
+                  <div class="flex-row flex-row--middle">
+                    <div class="flex-row__cell flex-row__cell--grow">
+                      <span class="highlight"><%= event.title %></span><br>
+                      <small><%= truncate(event.description, length: 90) %></small><br>
+                      <small class="muted"><%= event.start.to_s :slashes %></small>
+                    </div>
+                    <div class="flex-row__cell">
+                      <span class="icon icon--chevron-right"></span>
+                    </div>
+                  </div>
+                <% end %>
+              <% end %>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="col sm-12 md-6">
+          <div class="card">
+            <div class="card__section">
+
+              <h4>Latest News</h4>
+              <%= link_to "View all", user_news_links_path, class: "card__action" %>
+
+              <% @news_links.each do |news_link| %>
+                <%= link_to news_link.url, class: "block block-section", target: "_blank" do %>
+                  <div class="flex-row flex-row--middle">
+                    <div class="flex-row__cell flex-row__cell--grow">
+                      <span class="highlight"><%= news_link.title %></span><br>
+                      <small><%= truncate(news_link.description, length: 90) %></small><br>
+                      <small class="muted"><%= news_link.created_at.to_s :slashes %></small>
+                    </div>
+                    <div class="flex-row__cell">
+                      <span class="icon icon--chevron-right"></span>
+                    </div>
+                  </div>
+                <% end %>
+              <% end %>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="col sm-12 md-6">
+          <div class="card">
+            <div class="card__section">
+
+              <h4>Latest Messages</h4>
+              <%= link_to "View all", user_messages_path, class: "card__action" %>
+
+              <% @messages.each do |message| %>
+                <%= link_to user_message_path(message), class: "block block-section" do %>
+                  <div class="flex-row flex-row--middle">
+                    <div class="flex-row__cell flex-row__cell--grow">
+                      <span class="highlight"><%= message.subject %></span><br>
+                      <small><%= truncate(message.content, length: 90) %></small><br>
+                      <small class="muted"><%= message.created_at.to_s :slashes %></small>
+                    </div>
+                    <div class="flex-row__cell">
+                      <span class="icon icon--chevron-right"></span>
+                    </div>
+                  </div>
+                <% end %>
+              <% end %>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col sm-12 md-3">
+      <div class="card card--secondary">
+        <div class="card__section">
+          <h4>Top Performers this week</h4>
+        </div>
+        <div class="card__section">
+          <h4>Top ERGs</h4>
+          <ol>
+            <li><a href="#">PRIDE</a></li>
+            <li><a href="#">AALF</a></li>
+            <li><strong>WiNG</strong></li>
+            <li><a href="#">SOAR</a></li>
+            <li><a href="#">PANG</a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -24,8 +24,8 @@ class SegmentRule < ActiveRecord::Base
     JSON.parse self[:values]
   end
 
-  def followed_by?(employee)
-    field.validates_rule_for_employee?(rule: self, employee: employee)
+  def followed_by?(user)
+    field.validates_rule_for_user?(rule: self, user: user)
   end
 
   # Returns the array of operators that can be used with a given field's type

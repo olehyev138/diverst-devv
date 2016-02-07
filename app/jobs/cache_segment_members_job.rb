@@ -4,11 +4,11 @@ class CacheSegmentMembersJob < ActiveJob::Base
   queue_as :default
 
   def perform(segment)
-    employees = segment.enterprise.employees.all
+    users = segment.enterprise.users.all
     old_members = segment.members.all
 
-    new_members = employees.select do |employee|
-      employee.is_part_of_segment?(segment)
+    new_members = users.select do |user|
+      user.is_part_of_segment?(segment)
     end
 
     members_to_remove = old_members - new_members
@@ -20,7 +20,7 @@ class CacheSegmentMembersJob < ActiveJob::Base
 
     members_to_add.each do |member|
       segment.members << member
-      member.__elasticsearch__.update_document # Update employee in Elasticsearch to reflect their new segment
+      member.__elasticsearch__.update_document # Update user in Elasticsearch to reflect their new segment
     end
   end
 end

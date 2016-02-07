@@ -1,7 +1,7 @@
 <%= simple_form_for @match, url: test_matches_path do |f| %>
-  <h1>Employee 1</h1>
+  <h1>User 1</h1>
   <%= f.simple_fields_for :user1 do |e1| %>
-    <% current_admin.enterprise.match_fields.each do |cf| %>
+    <% current_user.enterprise.match_fields.each do |cf| %>
       <% if cf.is_a? TextField %>
         <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "match[user1_attributes[custom-fields[#{cf.id}]]]", value: @match.user1.info[cf] } %>
       <% elsif cf.is_a? NumericField %>
@@ -27,10 +27,10 @@
     <% end %>
   <% end %>
 
-  <h1>Employee 2</h1>
+  <h1>User 2</h1>
 
   <%= f.simple_fields_for :user2 do |e2| %>
-    <% current_admin.enterprise.match_fields.each do |cf| %>
+    <% current_user.enterprise.match_fields.each do |cf| %>
       <% if cf.is_a? TextField %>
         <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "match[user2_attributes[custom-fields[#{cf.id}]]]", value: @match.user2.info[cf] } %>
       <% elsif cf.is_a? NumericField %>
@@ -66,7 +66,7 @@
     <strong>Match score:</strong> <%= @match.user1.match_score_with(@match.user2) %><br>
     <h3>Scores per field</h3>
     <% @match.user1.enterprise.match_fields.each do |field| %>
-      <strong><%= field.title %>:</strong> <%= field.match_score_between(@match.user1, @match.user2, @match.user1.enterprise.employees) %> x <em><%= field.match_weight %></em> <br>
+      <strong><%= field.title %>:</strong> <%= field.match_score_between(@match.user1, @match.user2, @match.user1.enterprise.users) %> x <em><%= field.match_weight %></em> <br>
     <% end %>
   </div>
 <% end %>

@@ -1,5 +1,4 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_admin!
   before_action :set_answer
 
   layout 'unify'
@@ -15,7 +14,7 @@ class AnswersController < ApplicationController
   protected
 
   def set_answer
-    @answer = current_admin.enterprise.answers.find(params[:id])
+    @answer = current_user.enterprise.answers.find(params[:id])
   end
 
   def answer_params

@@ -8,9 +8,9 @@
 <div class="content__main">
   <div class="card">
     <div class="card__section">
-      <p>This feature allows you to import employees from Yammer to Diverst. New employees created in Yammer will get imported as they are created.</p>
+      <p>This feature allows you to import users from Yammer to Diverst. New users created in Yammer will get imported as they are created.</p>
 
-      <%= simple_form_for current_admin.enterprise do |f| %>
+      <%= simple_form_for current_user.enterprise do |f| %>
         <%= f.input :yammer_import, label: "Enable this feature" %>
 
         <strong>User fields</strong>

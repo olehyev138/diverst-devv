@@ -1,6 +1,5 @@
 class FieldsController < ApplicationController
-  before_action :authenticate_admin!, except: [:join]
-  before_action :authenticate_employee!, only: [:join]
+  before_action :authenticate_user!, only: [:join]
   before_action :set_field, only: [:edit, :update, :destroy, :show, :stats]
   skip_before_action :verify_authenticity_token, only: [:create]
 
@@ -11,7 +10,7 @@ class FieldsController < ApplicationController
   protected
 
   def set_field
-    @field = current_admin.enterprise.fields.find(params[:id])
+    @field = current_user.enterprise.fields.find(params[:id])
   end
 
   def field_params

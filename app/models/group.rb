@@ -1,6 +1,6 @@
 class Group < ActiveRecord::Base
-  has_many :employee_groups
-  has_many :members, through: :employee_groups, class_name: 'Employee', source: :employee, after_remove: :update_elasticsearch_member
+  has_many :user_groups
+  has_many :members, through: :user_groups, class_name: 'User', source: :user, after_remove: :update_elasticsearch_member
   belongs_to :enterprise
   has_many :groups_polls
   has_many :polls, through: :groups_polls
@@ -17,7 +17,7 @@ class Group < ActiveRecord::Base
   has_many :answers, through: :questions
   has_many :answer_upvotes, through: :answers
   has_many :groups_managers
-  has_many :managers, through: :groups_managers, source: :employee
+  has_many :managers, through: :groups_managers, source: :user
 
   has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('missing.png')
   validates_attachment_content_type :logo, content_type: %r{\Aimage\/.*\Z}
@@ -55,23 +55,23 @@ class Group < ActiveRecord::Base
     end
   end
 
-  def sync_yammer_employees
+  def sync_yammer_users
     yammer = YammerClient.new(enterprise.yammer_token)
 
-    # Subscribe employees who are part of the ERG in Diverst to the Yammer group
-    members.each do |employee|
-      yammer_user = yammer.user_with_email(employee.email)
-      next if yammer_user.nil? # Skip employee if he/she isn't part of the Yammer network
+    # Subscribe users who are part of the ERG in Diverst to the Yammer group
+    members.each do |user|
+      yammer_user = yammer.user_with_email(user.email)
+      next if yammer_user.nil? # Skip user if he/she isn't part of the Yammer network
 
-      # Cache the employee's yammer token if it's not
-      if employee.yammer_token.nil?
+      # Cache the user's yammer token if it's not
+      if user.yammer_token.nil?
         yammer_user_token = yammer.token_for_user(user_id: yammer_user['id'])
-        employee.update(yammer_token: yammer_user_token['token'])
+        user.update(yammer_token: yammer_user_token['token'])
       end
 
-      # Impersonate the employee and subscribe to the group
-      employee_yammer = YammerClient.new(employee.yammer_token)
-      employee_yammer.subscribe_to_group(yammer_id)
+      # Impersonate the user and subscribe to the group
+      user_yammer = YammerClient.new(user.yammer_token)
+      user_yammer.subscribe_to_group(yammer_id)
     end
   end
 
@@ -118,10 +118,10 @@ class Group < ActiveRecord::Base
     old_members = members.ids
 
     # Delete member associations
-    EmployeeGroup.where(group_id: id).delete_all
+    UserGroup.where(group_id: id).delete_all
 
     # Update members in elastic_search
-    Employee.where(id: old_members).find_each do |member|
+    User.where(id: old_members).find_each do |member|
       update_elasticsearch_member(member)
     end
   end

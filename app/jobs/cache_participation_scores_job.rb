@@ -2,8 +2,8 @@ class CacheParticipationScoresJob < ActiveJob::Base
   queue_as :default
 
   def perform
-    Employee.all.each do |employee|
-      employee.update(participation_score_7days: employee.participation_score(from: 1.week.ago))
+    User.all.each do |user|
+      user.update(participation_score_7days: user.participation_score(from: 1.week.ago))
     end
 
     Group.all.each do |group|

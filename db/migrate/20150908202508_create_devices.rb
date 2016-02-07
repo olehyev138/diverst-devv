@@ -3,7 +3,7 @@ class CreateDevices < ActiveRecord::Migration
     create_table :devices do |t|
       t.integer :platform
       t.string :token
-      t.belongs_to :employee
+      t.belongs_to :user
 
       t.timestamps null: false
     end

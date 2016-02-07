@@ -1,5 +1,4 @@
 class GroupsController < ApplicationController
-  before_action :authenticate_admin!, except: [:show]
   before_action :authenticate_user!, only: [:show]
   before_action :set_group, except: [:index, :new, :create]
   skip_before_action :verify_authenticity_token, only: [:create]
@@ -9,22 +8,22 @@ class GroupsController < ApplicationController
   helper ApplicationHelper
 
   def index
-    @groups = current_admin.enterprise.groups
+    @groups = current_user.enterprise.groups
   end
 
   def new
-    @group = current_admin.enterprise.groups.new
+    @group = current_user.enterprise.groups.new
   end
 
   def show
     @events = @group.events.limit(3)
     @news_links = @group.news_links.limit(3)
-    @employee_groups = @group.employee_groups.order(created_at: :desc).limit(8)
+    @user_groups = @group.user_groups.order(created_at: :desc).limit(8)
     @messages = @group.messages.limit(3)
   end
 
   def create
-    @group = current_admin.enterprise.groups.new(group_params)
+    @group = current_user.enterprise.groups.new(group_params)
 
     if @group.save
       redirect_to action: :index
@@ -50,8 +49,8 @@ class GroupsController < ApplicationController
     csv_string = CSV.generate do |csv|
       csv << ['Email']
 
-      @group.members.limit(5).each do |employee|
-        csv << [employee.email]
+      @group.members.limit(5).each do |user|
+        csv << [user.email]
       end
     end
 
@@ -65,17 +64,17 @@ class GroupsController < ApplicationController
 
     @table.each_with_index do |row, row_index|
       email = row[0]
-      employee = Employee.where(email: email).first
+      user = User.where(email: email).first
 
-      if employee
-        @group.members << employee unless @group.members.include? employee
+      if user
+        @group.members << user unless @group.members.include? user
 
         @successful_rows << row
       else
         @failed_rows << {
           row: row,
           row_index: row_index + 1,
-          error: 'There is no employee with this email address in the database'
+          error: 'There is no user with this email address in the database'
         }
       end
     end
@@ -84,8 +83,8 @@ class GroupsController < ApplicationController
   end
 
   def export_csv
-    employees_csv = Employee.to_csv employees: @group.members, fields: @group.enterprise.fields
-    send_data employees_csv, filename: "#{@group.file_safe_name}_employees.csv"
+    users_csv = User.to_csv users: @group.members, fields: @group.enterprise.fields
+    send_data users_csv, filename: "#{@group.file_safe_name}_users.csv"
   end
 
   protected
@@ -112,7 +111,7 @@ class GroupsController < ApplicationController
         :logo,
         :send_invitations,
         :yammer_create_group,
-        :yammer_sync_employees,
+        :yammer_sync_users,
         manager_ids: [],
         member_ids: [],
         invitation_segment_ids: []

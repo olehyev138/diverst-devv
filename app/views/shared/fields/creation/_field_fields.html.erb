@@ -13,7 +13,7 @@
     <%= render 'shared/fields/creation/numeric_field', f: f if f.object.type == 'NumericField' %>
     <%= render 'shared/fields/creation/date_field', f: f if f.object.type == 'DateField' %>
 
-    <%= f.input :private, label: "Hide from employees" %>
+    <%= f.input :private, label: "Hide from users" %>
     <%= f.input :show_on_vcard %>
     <%= f.input :gamification_value %>
     <%= f.hidden_field :type %>

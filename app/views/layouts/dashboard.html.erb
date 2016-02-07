@@ -12,10 +12,10 @@
   <header class="primary-header">
     <div class="flex-row flex-row--middle full-width">
       <div class="flex-row__cell flex-row__cell--grow">
-        <%= link_to employee_root_path do %><img class="primary-header__logo logo" src="<%= logo_url %>"><% end %>
+        <%= link_to user_root_path do %><img class="primary-header__logo logo" src="<%= logo_url %>"><% end %>
       </div>
       <div class="flex-row__cell">
-        <%= current_admin.name %>
+        <%= current_user.name %>
       </div>
     </div>
   </header>
@@ -55,12 +55,12 @@
     </ul>
     <ul class="nav__list nav__list--secondary">
       <li class="nav__item">
-        <%= active_link_to employees_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['employees', 'enterprises', 'admins', 'integrations'], ['index', 'edit', 'show', 'new', 'edit_auth', 'edit_fields', 'edit_branding']] do %>
+        <%= active_link_to users_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['users', 'enterprises', 'users', 'integrations'], ['index', 'edit', 'show', 'new', 'edit_auth', 'edit_fields', 'edit_branding']] do %>
           <span class="nav__text">Global Settings</span>
         <% end %>
       </li>
       <li class="nav__item">
-        <%= link_to destroy_admin_session_path, method: :delete, class: "nav__link" do %>
+        <%= link_to user_session_path, method: :delete, class: "nav__link" do %>
           <span class="nav__text">Logout</span>
         <% end %>
       </li>

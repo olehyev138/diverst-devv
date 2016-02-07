@@ -11,32 +11,32 @@ class CheckboxField < Field
     values.join(',')
   end
 
-  def popularity_for_no_option(employees)
-    nb_employees_chose = 0
-    employees.each do |employee|
-      nb_employees_chose += 1 if employee.info[self].nil?
+  def popularity_for_no_option(users)
+    nb_users_chose = 0
+    users.each do |user|
+      nb_users_chose += 1 if user.info[self].nil?
     end
-    nb_employees_chose.to_f / employees.size
+    nb_users_chose.to_f / users.size
   end
 
-  def popularity_for_value(value, employees)
-    nb_employees_chose = 0
-    employees.each do |employee|
-      nb_employees_chose += 1 if employee.info[self] && employee.info[self].include?(value)
+  def popularity_for_value(value, users)
+    nb_users_chose = 0
+    users.each do |user|
+      nb_users_chose += 1 if user.info[self] && user.info[self].include?(value)
     end
-    nb_employees_chose.to_f / employees.size
+    nb_users_chose.to_f / users.size
   end
 
-  def employee_popularity(employee, employees)
-    values = employee.info[self]
+  def user_popularity(user, users)
+    values = user.info[self]
 
     # If the user didn't select any option, the popularity will be set to the popularity of choosing no option
     if values.nil? || values.empty?
-      avg_popularity = popularity_for_no_option(employees)
+      avg_popularity = popularity_for_no_option(users)
     else
       # Get an array of all the checked options' popularities
       popularities = values.map do |value|
-        popularity_for_value(value, employees)
+        popularity_for_value(value, users)
       end
 
       # Get the average popularity
@@ -46,27 +46,27 @@ class CheckboxField < Field
     avg_popularity
   end
 
-  def match_score_between(e1, e2, employees)
-    e1_popularity = employee_popularity(e1, employees)
-    e2_popularity = employee_popularity(e2, employees)
+  def match_score_between(e1, e2, users)
+    e1_popularity = user_popularity(e1, users)
+    e2_popularity = user_popularity(e2, users)
 
-    # Returns nil if we don't have all the employee info necessary to get a score
+    # Returns nil if we don't have all the user info necessary to get a score
     return nil unless e1_popularity && e2_popularity
 
     # The total score is the absolute difference between both averages
     total_score = (e1_popularity - e2_popularity).abs
   end
 
-  def validates_rule_for_employee?(rule:, employee:)
-    return false if employee.info[rule.field].nil?
+  def validates_rule_for_user?(rule:, user:)
+    return false if user.info[rule.field].nil?
 
     case rule.operator
     when SegmentRule.operators[:contains_any_of]
-      (employee.info[rule.field] & rule.values_array).size > 0
+      (user.info[rule.field] & rule.values_array).size > 0
     when SegmentRule.operators[:contains_all_of]
-      (employee.info[rule.field] & rule.values_array).size == rule.values_array.size
+      (user.info[rule.field] & rule.values_array).size == rule.values_array.size
     when SegmentRule.operators[:does_not_contain]
-      (employee.info[rule.field] & rule.values_array).size == 0
+      (user.info[rule.field] & rule.values_array).size == 0
     end
   end
 end

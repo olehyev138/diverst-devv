@@ -10,8 +10,8 @@ class Match < ActiveRecord::Base
   @@expiration_time = 2.weeks
   @@expires_soon_time = 1.week
 
-  belongs_to :user1, class_name: 'Employee'
-  belongs_to :user2, class_name: 'Employee'
+  belongs_to :user1, class_name: 'User'
+  belongs_to :user2, class_name: 'User'
   belongs_to :topic
 
   before_create :associate_topic
@@ -21,9 +21,9 @@ class Match < ActiveRecord::Base
   accepts_nested_attributes_for :user2, reject_if: :all_blank, allow_destroy: true
 
   scope :not_archived, -> { where(archived: false) }
-  scope :has_employee, ->(employee) { where('user1_id = ? OR user2_id = ?', employee.id, employee.id) }
-  scope :between, ->(employee1, employee2) { has_employee(employee1).has_employee(employee2) }
-  scope :active_for, ->(employee) { where('user1_id = ? AND user1_status = ? AND user2_status <> ? OR user2_id = ? AND user2_status = ? AND user1_status <> ?', employee.id, status[:unswiped], status[:rejected], employee.id, status[:unswiped], status[:rejected]) } # An active match is a match that should still be shown in the swipes screen. It hasn't been rejected by anybody and hasn't been swiped yet
+  scope :has_user, ->(user) { where('user1_id = ? OR user2_id = ?', user.id, user.id) }
+  scope :between, ->(user1, user2) { has_user(user1).has_user(user2) }
+  scope :active_for, ->(user) { where('user1_id = ? AND user1_status = ? AND user2_status <> ? OR user2_id = ? AND user2_status = ? AND user1_status <> ?', user.id, status[:unswiped], status[:rejected], user.id, status[:unswiped], status[:rejected]) } # An active match is a match that should still be shown in the swipes screen. It hasn't been rejected by anybody and hasn't been swiped yet
   scope :accepted, -> { where('user2_status = ? AND user1_status = ?', @@status[:accepted], @@status[:accepted]) }
   scope :conversations, -> { where('(user2_status = ? OR user2_status = ?) AND (user1_status = ? OR user1_status = ?)', @@status[:saved], @@status[:accepted], @@status[:saved], @@status[:accepted]) }
   scope :soon_expired, lambda { # Matches that have been created between 1 week and 2 weeks ago
@@ -47,51 +47,51 @@ class Match < ActiveRecord::Base
     self.score_calculated_at = Time.current
   end
 
-  def set_status(employee:, status:)
-    if employee.id == user1_id
+  def set_status(user:, status:)
+    if user.id == user1_id
       self.user1_status = status
-    elsif employee.id == user2_id
+    elsif user.id == user2_id
       self.user2_status = status
     else
-      fail Exception.new('Employee not part of match')
+      fail Exception.new('User not part of match')
     end
   end
 
-  def set_rating(employee:, rating:)
-    if employee.id == user1_id
+  def set_rating(user:, rating:)
+    if user.id == user1_id
       self.user1_rating = rating
-    elsif employee.id == user2_id
+    elsif user.id == user2_id
       self.user2_rating = rating
     else
-      fail Exception.new('Employee not part of match')
+      fail Exception.new('User not part of match')
     end
   end
 
-  def status_for(employee)
-    if employee.id == user1_id
+  def status_for(user)
+    if user.id == user1_id
       user1_status
-    elsif employee.id == user2_id
+    elsif user.id == user2_id
       user2_status
     else
-      fail Exception.new('Employee not part of match')
+      fail Exception.new('User not part of match')
     end
   end
 
-  def rating_for(employee)
-    if employee.id == user1_id
+  def rating_for(user)
+    if user.id == user1_id
       user1_rating
-    elsif employee.id == user2_id
+    elsif user.id == user2_id
       user2_rating
     else
-      fail Exception.new('Employee not part of match')
+      fail Exception.new('User not part of match')
     end
   end
 
-  # Returns the other employee
-  def other(employee)
-    return user2 if user1_id == employee.id
-    return user1 if user2_id == employee.id
-    fail Exception.new('Employee not part of match')
+  # Returns the other user
+  def other(user)
+    return user2 if user1_id == user.id
+    return user1 if user2_id == user.id
+    fail Exception.new('User not part of match')
   end
 
   def both_accepted?
@@ -135,13 +135,13 @@ class Match < ActiveRecord::Base
     (user1_status == @@status[:accepted] || user1_status == @@status[:saved]) && (user2_status == @@status[:accepted] || user2_status == @@status[:saved])
   end
 
-  def expires_soon_for?(employee:)
+  def expires_soon_for?(user:)
     conversation_state? &&
       !archived &&
       !both_accepted_at.nil? &&
       both_accepted_at < @@expires_soon_time.ago &&
       both_accepted_at > @@expiration_time.ago &&
-      status_for(employee) != @@status[:saved]
+      status_for(user) != @@status[:saved]
   end
 
   def expiration_date

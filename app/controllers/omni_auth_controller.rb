@@ -1,5 +1,5 @@
 class OmniAuthController < ApplicationController
-  before_action :authenticate_employee!
+  before_action :authenticate_user!
 
   def callback
     @oauth = request.env['omniauth.auth']
@@ -7,13 +7,13 @@ class OmniAuthController < ApplicationController
   end
 
   def linkedin
-    current_employee.update(
+    current_user.update(
       linkedin_profile_url: @oauth['info']['urls']['public_profile']
     )
 
     # Set the user's avatar
     picture_url = @oauth['info']['image']
-    SaveEmployeeAvatarFromUrlJob.perform_later(current_employee, picture_url)
+    SaveUserAvatarFromUrlJob.perform_later(current_user, picture_url)
 
     redirect_to '/'
   end
