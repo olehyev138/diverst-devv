@@ -3,7 +3,7 @@ class CreateTopicFeedbacks < ActiveRecord::Migration
     create_table :topic_feedbacks do |t|
       t.belongs_to :topic
       t.text :content
-      t.belongs_to :employee
+      t.belongs_to :user
 
       t.timestamps null: false
     end

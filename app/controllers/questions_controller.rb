@@ -1,5 +1,4 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_admin!
   before_action :set_campaign, only: [:index, :new, :create]
   before_action :set_question, only: [:edit, :update, :destroy, :show, :reopen]
 
@@ -46,11 +45,11 @@ class QuestionsController < ApplicationController
   protected
 
   def set_campaign
-    @campaign = current_admin.enterprise.campaigns.find(params[:campaign_id])
+    @campaign = current_user.enterprise.campaigns.find(params[:campaign_id])
   end
 
   def set_question
-    @question = current_admin.enterprise.questions.find(params[:id])
+    @question = current_user.enterprise.questions.find(params[:id])
   end
 
   def question_params

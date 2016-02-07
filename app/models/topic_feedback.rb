@@ -1,4 +1,4 @@
 class TopicFeedback < ActiveRecord::Base
   belongs_to :topic
-  belongs_to :employee
+  belongs_to :user
 end

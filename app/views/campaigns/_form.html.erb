@@ -30,7 +30,12 @@
 
       <div class="card__section card__section--border">
         <p class="field__hint">How many <strong>invites</strong> do you want to send out?</p>
-        <%= f.input :nb_invites, label: false, max: current_admin.enterprise.employees.count %>
+        <%= f.input :nb_invites, label: false, max: current_user.enterprise.users.count %>
+      </div>
+
+      <div class="card__section card__section--border">
+        <p class="field__hint">Assign <strong>managers</strong> to the group. They will be allowed access to administrative features related to this gorup only.</p>
+        <%= f.association :managers, input_html: { class: "select2" }, label: false %>
       </div>
 
       <div class="card__section card__section--border">

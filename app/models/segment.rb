@@ -1,8 +1,8 @@
 class Segment < ActiveRecord::Base
   belongs_to :enterprise
   has_many :rules, class_name: 'SegmentRule'
-  has_many :employees_segments
-  has_many :members, class_name: 'Employee', through: :employees_segments, source: :employee
+  has_many :users_segments
+  has_many :members, class_name: 'User', through: :users_segments, source: :user
   has_many :polls_segments
   has_many :polls, through: :polls_segments
   has_many :events_segments

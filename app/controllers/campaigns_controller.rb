@@ -1,23 +1,20 @@
 class CampaignsController < ApplicationController
-  include AccessControl
-
-  before_action :authenticate_admin!, except: [:index, :show]
   before_action :set_campaign, only: [:edit, :update, :destroy, :show, :contributions_per_erg, :top_performers]
   before_action -> { resource_editors_only!(@campaign) }, only: [:edit, :update, :destroy]
 
   layout :resolve_layout
 
   def index
-    @campaigns = current_admin.enterprise.campaigns
+    @campaigns = current_user.enterprise.campaigns
   end
 
   def new
-    @campaign = current_admin.enterprise.campaigns.new
+    @campaign = current_user.enterprise.campaigns.new
   end
 
   def create
-    @campaign = current_admin.enterprise.campaigns.new(campaign_params)
-    @campaign.admin = current_admin
+    @campaign = current_user.enterprise.campaigns.new(campaign_params)
+    @campaign.owner = current_user
 
     if @campaign.save
       redirect_to action: :index
@@ -60,7 +57,7 @@ class CampaignsController < ApplicationController
   protected
 
   def set_campaign
-    @campaign = current_admin.enterprise.campaigns.find(params[:id])
+    @campaign = current_user.enterprise.campaigns.find(params[:id])
   end
 
   def campaign_params
@@ -76,6 +73,7 @@ class CampaignsController < ApplicationController
         :banner,
         group_ids: [],
         segment_ids: [],
+        manager_ids: [],
         questions_attributes: [
           :id,
           :_destroy,
@@ -86,7 +84,7 @@ class CampaignsController < ApplicationController
   end
 
   def resolve_layout
-    return 'employee' if current_admin.nil?
+    return 'user' if current_user.nil?
     'unify'
   end
 end

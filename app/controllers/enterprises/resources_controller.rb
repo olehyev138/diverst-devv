@@ -1,10 +1,11 @@
 class Enterprises::ResourcesController < ApplicationController
   include IsResources
 
-  before_action :authenticate_user!
-  before_action :authenticate_admin!, except: [:index, :show]
-
   layout :resolve_layout
+
+  def new
+    authorize Resource
+  end
 
   protected
 
@@ -13,7 +14,7 @@ class Enterprises::ResourcesController < ApplicationController
   end
 
   def resolve_layout
-    return 'erg_manager' if current_user(:admin).is_a? Admin
-    'employee'
+    # return 'erg_manager' if current_user(:admin).is_a? Admin TODO
+    'user'
   end
 end

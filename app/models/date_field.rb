@@ -25,14 +25,14 @@ class DateField < Field
     value.strftime('%m/%d/%Y')
   end
 
-  def match_score_between(e1, e2, employees)
+  def match_score_between(e1, e2, users)
     e1_value = e1.info[self].strftime('%s').to_i
     e2_value = e2.info[self].strftime('%s').to_i
 
     return nil unless e1_value && e2_value
 
-    values = employees.map do |employee|
-      employee.info[self].to_i
+    values = users.map do |user|
+      user.info[self].to_i
     end
 
     values.compact!
@@ -45,16 +45,16 @@ class DateField < Field
     delta.to_f / high_delta
   end
 
-  def validates_rule_for_employee?(rule:, employee:)
+  def validates_rule_for_user?(rule:, user:)
     case rule.operator
     when SegmentRule.operators[:equals]
-      employee.info[rule.field] == rule.values_array[0].to_i
+      user.info[rule.field] == rule.values_array[0].to_i
     when SegmentRule.operators[:greater_than]
-      employee.info[rule.field] > rule.values_array[0].to_i
+      user.info[rule.field] > rule.values_array[0].to_i
     when SegmentRule.operators[:lesser_than]
-      employee.info[rule.field] < rule.values_array[0].to_i
+      user.info[rule.field] < rule.values_array[0].to_i
     when SegmentRule.operators[:is_not]
-      employee.info[rule.field] != rule.values_array[0].to_i
+      user.info[rule.field] != rule.values_array[0].to_i
     end
   end
 end

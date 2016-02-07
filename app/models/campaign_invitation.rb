@@ -1,4 +1,4 @@
 class CampaignInvitation < ActiveRecord::Base
   belongs_to :campaign
-  belongs_to :employee
+  belongs_to :user
 end

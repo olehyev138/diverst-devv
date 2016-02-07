@@ -2,13 +2,12 @@ Rails.application.routes.draw do
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
 
-  devise_for :admins
-  devise_for :employees, controllers: { invitations: 'employees/invitations' }
+  devise_for :users, controllers: { invitations: 'users/invitations' }
 
   get 'omniauth/:provider/callback', to: 'omni_auth#callback'
 
-  namespace :employees, defaults: { format: :json } do
-    mount_devise_token_auth_for 'Employee', at: 'auth/token'
+  namespace :users, defaults: { format: :json } do
+    mount_devise_token_auth_for 'User', at: 'auth/token'
   end
 
   namespace :integrations do
@@ -25,7 +24,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :employees do
+  resources :users do
     collection do
       get 'export_csv'
       get 'import_csv'
@@ -145,10 +144,8 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :admins
-
-  devise_scope :employee do
-    namespace :employee do
+  devise_scope :user do
+    namespace :user do
       root to: 'dashboard#home'
 
       resources :news_links
@@ -174,7 +171,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :employees
+      resources :users
     end
 
     resources :matches do

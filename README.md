@@ -6,7 +6,7 @@ Technical API reference documentation for Diverst
 
 ### Login
 
-POST to */employees/auth/sign_in* with the following parameters:
+POST to */users/auth/sign_in* with the following parameters:
 
 ```json
 {
@@ -15,17 +15,17 @@ POST to */employees/auth/sign_in* with the following parameters:
 }
 ```
 
-You will get the logged in employee as a response. All the authentication parameters will be in the response's header. They are: `access-token`, `client` and `uid`. Include these 3 headers in your next request to authenticate it.
+You will get the logged in user as a response. All the authentication parameters will be in the response's header. They are: `access-token`, `client` and `uid`. Include these 3 headers in your next request to authenticate it.
 
 ### Validation
 
-Call GET */employees/auth/validate_token* with your auth headers to see if your token is valid. If it is valid, it also returns the user (useful to update it locally).
+Call GET */users/auth/validate_token* with your auth headers to see if your token is valid. If it is valid, it also returns the user (useful to update it locally).
 
 ## Matches
 
 ### GET /matches
 
-Returns a list of the top 10 potential matches for the authenticated employee.
+Returns a list of the top 10 potential matches for the authenticated user.
 
 ### PUT /matches/:id/swipe
 

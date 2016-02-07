@@ -6,7 +6,7 @@ class ConversationSerializer < ActiveModel::Serializer
     :expiration_date
 
   def user
-    EmployeeSerializer.new object.other(scope)
+    UserSerializer.new object.other(scope)
   end
 
   def saved
@@ -14,6 +14,6 @@ class ConversationSerializer < ActiveModel::Serializer
   end
 
   def expires_soon
-    object.expires_soon_for?(employee: scope)
+    object.expires_soon_for?(user: scope)
   end
 end

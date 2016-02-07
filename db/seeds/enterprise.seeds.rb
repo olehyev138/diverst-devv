@@ -1106,7 +1106,7 @@ NumericField.create(
   container: enterprise
 )
 
-Admin.create(
+User.create(
   enterprise: enterprise,
   first_name: 'Francis',
   last_name: 'Marineau',

@@ -34,7 +34,7 @@
       <div class="card__section card__section--border">
         <div class="flex-row">
           <div class="flex-row__cell text-center">
-            <div class="counter<%= answer.votes.include?(current_employee) ? " counter--active" : "" %>" data-answer-id="<%= answer.id %>" data-upvoted="<%= answer.votes.include? current_employee %>">
+            <div class="counter<%= answer.votes.include?(current_user) ? " counter--active" : "" %>" data-answer-id="<%= answer.id %>" data-upvoted="<%= answer.votes.include? current_user %>">
               <span class="counter__number"><%= answer.votes.count %></span>
             </div>
             <div class="chosen">

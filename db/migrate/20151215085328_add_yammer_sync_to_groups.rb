@@ -4,7 +4,7 @@ class AddYammerSyncToGroups < ActiveRecord::Migration
       t.boolean :yammer_create_group
       t.boolean :yammer_group_created
       t.string :yammer_group_name
-      t.boolean :yammer_sync_employees
+      t.boolean :yammer_sync_users
     end
   end
 end

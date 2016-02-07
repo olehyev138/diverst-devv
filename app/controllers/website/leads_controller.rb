@@ -24,7 +24,7 @@ class Website::LeadsController < ApplicationController
                                                                        postal_code: params['visitor_info']['postal']
                                                                      },
                                                                      custom_fields: {
-                                                                       'Number of employees' => params['nbEmployeesInput'].to_i,
+                                                                       'Number of users' => params['nbUsersInput'].to_i,
                                                                        'Size of DI department' => params['sizeOfDITeam'].to_i,
                                                                        'Turnover rate' => params['turnoverRate'].to_i,
                                                                        'Average salary' => params['averageSalaryInput'].to_i,

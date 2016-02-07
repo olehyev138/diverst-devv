@@ -1,11 +1,10 @@
 class EmailsController < ApplicationController
-  before_action :authenticate_admin!
   before_action :set_email, only: [:edit, :update, :show]
 
   layout 'global_settings'
 
   def index
-    @emails = current_admin.enterprise.emails
+    @emails = current_user.enterprise.emails
   end
 
   def update
@@ -19,7 +18,7 @@ class EmailsController < ApplicationController
   protected
 
   def set_email
-    @email = current_admin.enterprise.emails.find(params[:id])
+    @email = current_user.enterprise.emails.find(params[:id])
   end
 
   def email_params

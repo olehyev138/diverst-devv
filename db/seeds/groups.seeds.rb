@@ -4,8 +4,8 @@
     description: Faker::Lorem.sentence
   )
 
-  Employee.all.each do |employee|
-    g.members << employee if rand(100) < 25
+  User.all.each do |user|
+    g.members << user if rand(100) < 25
   end
 
   if g.save

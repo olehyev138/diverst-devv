@@ -11,29 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160203213223) do
-
-  create_table "admins", force: :cascade do |t|
-    t.string   "first_name",             limit: 255
-    t.string   "last_name",              limit: 255
-    t.integer  "enterprise_id",          limit: 4
-    t.datetime "created_at",                                         null: false
-    t.datetime "updated_at",                                         null: false
-    t.string   "email",                  limit: 255, default: "",    null: false
-    t.string   "encrypted_password",     limit: 255, default: "",    null: false
-    t.string   "reset_password_token",   limit: 255
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          limit: 4,   default: 0,     null: false
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip",     limit: 255
-    t.string   "last_sign_in_ip",        limit: 255
-    t.boolean  "owner",                  limit: 1,   default: false
-  end
-
-  add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
-  add_index "admins", ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true, using: :btree
+ActiveRecord::Schema.define(version: 20160207203410) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -62,7 +40,7 @@ ActiveRecord::Schema.define(version: 20160203213223) do
 
   create_table "campaign_invitations", force: :cascade do |t|
     t.integer  "campaign_id", limit: 4
-    t.integer  "employee_id", limit: 4
+    t.integer  "user_id",     limit: 4
     t.integer  "response",    limit: 4, default: 0
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
@@ -86,7 +64,7 @@ ActiveRecord::Schema.define(version: 20160203213223) do
     t.string   "banner_content_type", limit: 255
     t.integer  "banner_file_size",    limit: 4
     t.datetime "banner_updated_at"
-    t.integer  "admin_id",            limit: 4
+    t.integer  "owner_id",            limit: 4
   end
 
   create_table "campaigns_groups", force: :cascade do |t|
@@ -96,7 +74,7 @@ ActiveRecord::Schema.define(version: 20160203213223) do
 
   create_table "campaigns_managers", force: :cascade do |t|
     t.integer "campaign_id", limit: 4
-    t.integer "employee_id", limit: 4
+    t.integer "user_id",     limit: 4
   end
 
   create_table "campaigns_segments", force: :cascade do |t|
@@ -105,11 +83,11 @@ ActiveRecord::Schema.define(version: 20160203213223) do
   end
 
   create_table "devices", force: :cascade do |t|
-    t.string   "token",       limit: 255
-    t.integer  "employee_id", limit: 4
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-    t.string   "platform",    limit: 255
+    t.string   "token",      limit: 255
+    t.integer  "user_id",    limit: 4
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.string   "platform",   limit: 255
   end
 
   create_table "email_variables", force: :cascade do |t|
@@ -130,64 +108,6 @@ ActiveRecord::Schema.define(version: 20160203213223) do
     t.integer  "enterprise_id",        limit: 4
     t.datetime "created_at",                         null: false
     t.datetime "updated_at",                         null: false
-  end
-
-  create_table "employee_groups", force: :cascade do |t|
-    t.integer  "employee_id", limit: 4
-    t.integer  "group_id",    limit: 4
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "employees", force: :cascade do |t|
-    t.string   "first_name",                  limit: 255
-    t.string   "last_name",                   limit: 255
-    t.text     "data",                        limit: 65535
-    t.string   "auth_source",                 limit: 255
-    t.integer  "enterprise_id",               limit: 4
-    t.datetime "created_at",                                                  null: false
-    t.datetime "updated_at",                                                  null: false
-    t.string   "email",                       limit: 255,   default: "",      null: false
-    t.string   "encrypted_password",          limit: 255,   default: ""
-    t.string   "reset_password_token",        limit: 255
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.integer  "sign_in_count",               limit: 4,     default: 0,       null: false
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip",          limit: 255
-    t.string   "last_sign_in_ip",             limit: 255
-    t.string   "invitation_token",            limit: 255
-    t.datetime "invitation_created_at"
-    t.datetime "invitation_sent_at"
-    t.datetime "invitation_accepted_at"
-    t.integer  "invitation_limit",            limit: 4
-    t.integer  "invited_by_id",               limit: 4
-    t.string   "invited_by_type",             limit: 255
-    t.integer  "invitations_count",           limit: 4,     default: 0
-    t.string   "provider",                    limit: 255,   default: "email", null: false
-    t.string   "uid",                         limit: 255,   default: "",      null: false
-    t.text     "tokens",                      limit: 65535
-    t.string   "firebase_token",              limit: 255
-    t.datetime "firebase_token_generated_at"
-    t.integer  "participation_score_7days",   limit: 4,     default: 0
-    t.string   "yammer_token",                limit: 255
-    t.string   "linkedin_profile_url",        limit: 255
-    t.string   "avatar_file_name",            limit: 255
-    t.string   "avatar_content_type",         limit: 255
-    t.integer  "avatar_file_size",            limit: 4
-    t.datetime "avatar_updated_at"
-  end
-
-  add_index "employees", ["email"], name: "index_employees_on_email", unique: true, using: :btree
-  add_index "employees", ["invitation_token"], name: "index_employees_on_invitation_token", unique: true, using: :btree
-  add_index "employees", ["invitations_count"], name: "index_employees_on_invitations_count", using: :btree
-  add_index "employees", ["invited_by_id"], name: "index_employees_on_invited_by_id", using: :btree
-  add_index "employees", ["reset_password_token"], name: "index_employees_on_reset_password_token", unique: true, using: :btree
-
-  create_table "employees_segments", force: :cascade do |t|
-    t.integer "employee_id", limit: 4
-    t.integer "segment_id",  limit: 4
   end
 
   create_table "enterprises", force: :cascade do |t|
@@ -290,14 +210,14 @@ ActiveRecord::Schema.define(version: 20160203213223) do
     t.boolean  "yammer_create_group",       limit: 1
     t.boolean  "yammer_group_created",      limit: 1
     t.string   "yammer_group_name",         limit: 255
-    t.boolean  "yammer_sync_employees",     limit: 1
+    t.boolean  "yammer_sync_users",         limit: 1
     t.integer  "yammer_id",                 limit: 4
     t.integer  "manager_id",                limit: 4
   end
 
   create_table "groups_managers", force: :cascade do |t|
-    t.integer "group_id",    limit: 4
-    t.integer "employee_id", limit: 4
+    t.integer "group_id", limit: 4
+    t.integer "user_id",  limit: 4
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
@@ -336,6 +256,7 @@ ActiveRecord::Schema.define(version: 20160203213223) do
     t.string   "name",          limit: 255
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
+    t.integer  "owner_id",      limit: 4
   end
 
   create_table "metrics_dashboards_segments", force: :cascade do |t|
@@ -361,11 +282,11 @@ ActiveRecord::Schema.define(version: 20160203213223) do
   end
 
   create_table "poll_responses", force: :cascade do |t|
-    t.integer  "poll_id",     limit: 4
-    t.integer  "employee_id", limit: 4
-    t.text     "data",        limit: 65535
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.integer  "poll_id",    limit: 4
+    t.integer  "user_id",    limit: 4
+    t.text     "data",       limit: 65535
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   create_table "polls", force: :cascade do |t|
@@ -377,7 +298,7 @@ ActiveRecord::Schema.define(version: 20160203213223) do
     t.integer  "enterprise_id",  limit: 4
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
-    t.integer  "admin_id",       limit: 4
+    t.integer  "owner_id",       limit: 4
   end
 
   create_table "polls_segments", force: :cascade do |t|
@@ -405,7 +326,7 @@ ActiveRecord::Schema.define(version: 20160203213223) do
     t.string   "file_content_type", limit: 255
     t.integer  "file_file_size",    limit: 4
     t.datetime "file_updated_at"
-    t.integer  "admin_id",          limit: 4
+    t.integer  "owner_id",          limit: 4
   end
 
   add_index "resources", ["container_type", "container_id"], name: "index_resources_on_container_type_and_container_id", using: :btree
@@ -424,12 +345,12 @@ ActiveRecord::Schema.define(version: 20160203213223) do
     t.string   "name",          limit: 255
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
-    t.integer  "admin_id",      limit: 4
+    t.integer  "owner_id",      limit: 4
   end
 
   create_table "survey_managers", force: :cascade do |t|
-    t.integer "survey_id",   limit: 4
-    t.integer "employee_id", limit: 4
+    t.integer "survey_id", limit: 4
+    t.integer "user_id",   limit: 4
   end
 
   create_table "themes", force: :cascade do |t|
@@ -443,30 +364,88 @@ ActiveRecord::Schema.define(version: 20160203213223) do
   end
 
   create_table "topic_feedbacks", force: :cascade do |t|
-    t.integer  "topic_id",    limit: 4
-    t.text     "content",     limit: 65535
-    t.integer  "employee_id", limit: 4
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
-    t.boolean  "featured",    limit: 1,     default: false
+    t.integer  "topic_id",   limit: 4
+    t.text     "content",    limit: 65535
+    t.integer  "user_id",    limit: 4
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.boolean  "featured",   limit: 1,     default: false
   end
 
   create_table "topics", force: :cascade do |t|
     t.text     "statement",     limit: 65535
     t.date     "expiration"
-    t.integer  "admin_id",      limit: 4
+    t.integer  "user_id",       limit: 4
     t.integer  "enterprise_id", limit: 4
     t.integer  "category_id",   limit: 4
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
   end
 
+  create_table "user_groups", force: :cascade do |t|
+    t.integer  "user_id",    limit: 4
+    t.integer  "group_id",   limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string   "first_name",                  limit: 255
+    t.string   "last_name",                   limit: 255
+    t.text     "data",                        limit: 65535
+    t.string   "auth_source",                 limit: 255
+    t.integer  "enterprise_id",               limit: 4
+    t.datetime "created_at",                                                  null: false
+    t.datetime "updated_at",                                                  null: false
+    t.string   "email",                       limit: 255,   default: "",      null: false
+    t.string   "encrypted_password",          limit: 255,   default: ""
+    t.string   "reset_password_token",        limit: 255
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",               limit: 4,     default: 0,       null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip",          limit: 255
+    t.string   "last_sign_in_ip",             limit: 255
+    t.string   "invitation_token",            limit: 255
+    t.datetime "invitation_created_at"
+    t.datetime "invitation_sent_at"
+    t.datetime "invitation_accepted_at"
+    t.integer  "invitation_limit",            limit: 4
+    t.integer  "invited_by_id",               limit: 4
+    t.string   "invited_by_type",             limit: 255
+    t.integer  "invitations_count",           limit: 4,     default: 0
+    t.string   "provider",                    limit: 255,   default: "email", null: false
+    t.string   "uid",                         limit: 255,   default: "",      null: false
+    t.text     "tokens",                      limit: 65535
+    t.string   "firebase_token",              limit: 255
+    t.datetime "firebase_token_generated_at"
+    t.integer  "participation_score_7days",   limit: 4,     default: 0
+    t.string   "yammer_token",                limit: 255
+    t.string   "linkedin_profile_url",        limit: 255
+    t.string   "avatar_file_name",            limit: 255
+    t.string   "avatar_content_type",         limit: 255
+    t.integer  "avatar_file_size",            limit: 4
+    t.datetime "avatar_updated_at"
+  end
+
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["invitation_token"], name: "index_users_on_invitation_token", unique: true, using: :btree
+  add_index "users", ["invitations_count"], name: "index_users_on_invitations_count", using: :btree
+  add_index "users", ["invited_by_id"], name: "index_users_on_invited_by_id", using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+
+  create_table "users_segments", force: :cascade do |t|
+    t.integer "user_id",    limit: 4
+    t.integer "segment_id", limit: 4
+  end
+
   create_table "yammer_field_mappings", force: :cascade do |t|
+    t.integer  "enterprise_id",     limit: 4
     t.string   "yammer_field_name", limit: 255
     t.integer  "diverst_field_id",  limit: 4
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
-    t.integer  "enterprise_id",     limit: 4
   end
 
 end

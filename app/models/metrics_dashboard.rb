@@ -1,17 +1,18 @@
 class MetricsDashboard < ActiveRecord::Base
   belongs_to :enterprise, inverse_of: :metrics_dashboards
+  belongs_to :owner, class_name: "User"
   has_many :graphs, as: :collection
   has_many :metrics_dashboards_segments
   has_many :segments, through: :metrics_dashboards_segments
   has_many :groups_metrics_dashboards
   has_many :groups, through: :groups_metrics_dashboards
 
-  # Returns a query to the list of employees targeted by the dashboard
+  # Returns a query to the list of users targeted by the dashboard
   def target
     if segments.empty?
-      enterprise.employees
+      enterprise.users
     else
-      enterprise.employees.for_segments(segments)
+      enterprise.users.for_segments(segments)
     end
   end
 
@@ -20,9 +21,9 @@ class MetricsDashboard < ActiveRecord::Base
   end
 
   def percentage_of_total
-    return 0 if enterprise.employees.count == 0
-    return 100 if target.count > enterprise.employees.count
-    (target.count.to_f / enterprise.employees.count * 100).round
+    return 0 if enterprise.users.count == 0
+    return 100 if target.count > enterprise.users.count
+    (target.count.to_f / enterprise.users.count * 100).round
   end
 
   # Defines which fields will be usable when creating graphs

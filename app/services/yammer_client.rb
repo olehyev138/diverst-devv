@@ -66,7 +66,7 @@ class YammerClient
     auth_client.webserver_authorization_url
   end
 
-  # Used to define the Yammer fields you can map to Diverst fields when importing employees from Yammer
+  # Used to define the Yammer fields you can map to Diverst fields when importing users from Yammer
   def self.user_fields
     %w(id network_id state guid job_title location significant_other kids_names interests summary expertise full_name activated_at auto_activated show_ask_for_photo first_name last_name network_name url web_url name mugshot_url mugshot_url_template birth_date timezone admin verified_admin supervisor_admin can_broadcast department email can_create_new_network can_browse_external_networks show_invite_lightbox)
   end

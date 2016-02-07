@@ -1,5 +1,5 @@
 class AnswerCommentsController < ApplicationController
-  before_action :authenticate_admin!
+  # before_action :authenticate_admin!
   before_action :set_comment
 
   def destroy
@@ -10,7 +10,7 @@ class AnswerCommentsController < ApplicationController
   protected
 
   def set_comment
-    @comment = current_admin.enterprise.answer_comments.find(params[:id])
+    @comment = current_user.enterprise.answer_comments.find(params[:id])
   end
 
   def comment_params

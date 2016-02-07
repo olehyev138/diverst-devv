@@ -1,12 +1,12 @@
 <div class="content__header">
-  <h1>Employee fields</h1>
+  <h1>User fields</h1>
 </div>
 
 <div class="row">
   <div class="col sm-12">
     <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_fields') do |f| %>
       <%= render "shared/fields/creation/custom_fields", f: f %>
-      <%= f.button :submit, value: "Save employee fields" %>
+      <%= f.button :submit, value: "Save user fields" %>
     <% end %>
   </div>
 </div>
