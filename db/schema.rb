@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160207203410) do
+ActiveRecord::Schema.define(version: 20160208195640) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -281,6 +281,44 @@ ActiveRecord::Schema.define(version: 20160207203410) do
     t.datetime "updated_at",              null: false
   end
 
+  create_table "policy_groups", force: :cascade do |t|
+    t.string   "name",                        limit: 255
+    t.integer  "enterprise_id",               limit: 4
+    t.boolean  "campaigns_index",             limit: 1
+    t.boolean  "campaigns_create",            limit: 1
+    t.boolean  "campaigns_manage",            limit: 1
+    t.boolean  "polls_index",                 limit: 1
+    t.boolean  "polls_create",                limit: 1
+    t.boolean  "polls_manage",                limit: 1
+    t.boolean  "events_index",                limit: 1
+    t.boolean  "events_create",               limit: 1
+    t.boolean  "events_manage",               limit: 1
+    t.boolean  "group_messages_index",        limit: 1
+    t.boolean  "group_messages_create",       limit: 1
+    t.boolean  "group_messages_manage",       limit: 1
+    t.boolean  "groups_index",                limit: 1
+    t.boolean  "groups_create",               limit: 1
+    t.boolean  "groups_manage",               limit: 1
+    t.boolean  "groups_members_index",        limit: 1
+    t.boolean  "groups_members_manage",       limit: 1
+    t.boolean  "metrics_dashboards_index",    limit: 1
+    t.boolean  "metrics_dashboards_create",   limit: 1
+    t.boolean  "news_links_index",            limit: 1
+    t.boolean  "news_links_create",           limit: 1
+    t.boolean  "news_links_manage",           limit: 1
+    t.boolean  "enterprise_resources_index",  limit: 1
+    t.boolean  "enterprise_resources_create", limit: 1
+    t.boolean  "enterprise_resources_manage", limit: 1
+    t.boolean  "segments_index",              limit: 1
+    t.boolean  "segments_create",             limit: 1
+    t.boolean  "segments_manage",             limit: 1
+    t.boolean  "users_index",                 limit: 1
+    t.boolean  "users_manage",                limit: 1
+    t.boolean  "global_settings_manage",      limit: 1
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+  end
+
   create_table "poll_responses", force: :cascade do |t|
     t.integer  "poll_id",    limit: 4
     t.integer  "user_id",    limit: 4
@@ -427,6 +465,7 @@ ActiveRecord::Schema.define(version: 20160207203410) do
     t.string   "avatar_content_type",         limit: 255
     t.integer  "avatar_file_size",            limit: 4
     t.datetime "avatar_updated_at"
+    t.integer  "policy_group_id",             limit: 4
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

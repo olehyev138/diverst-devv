@@ -1,18 +1,21 @@
 class CampaignsController < ApplicationController
   before_action :set_campaign, only: [:edit, :update, :destroy, :show, :contributions_per_erg, :top_performers]
-  before_action -> { resource_editors_only!(@campaign) }, only: [:edit, :update, :destroy]
+  after_action :verify_authorized
 
   layout :resolve_layout
 
   def index
-    @campaigns = current_user.enterprise.campaigns
+    authorize Campaign
+    @campaigns = policy_scope(Campaign)
   end
 
   def new
+    authorize Campaign
     @campaign = current_user.enterprise.campaigns.new
   end
 
   def create
+    authorize Campaign
     @campaign = current_user.enterprise.campaigns.new(campaign_params)
     @campaign.owner = current_user
 
@@ -24,10 +27,12 @@ class CampaignsController < ApplicationController
   end
 
   def show
+    authorize @campaign
     @questions = @campaign.questions.order(created_at: :desc).page(params[:page]).per(10)
   end
 
   def update
+    authorize @campaign
     if @campaign.update(campaign_params)
       redirect_to action: :index
     else
@@ -36,6 +41,7 @@ class CampaignsController < ApplicationController
   end
 
   def destroy
+    authorize @campaign
     @campaign.destroy
     redirect_to action: :index
   end

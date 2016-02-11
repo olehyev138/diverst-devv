@@ -3,10 +3,6 @@ class ResourcePolicy < ApplicationPolicy
     true
   end
 
-  def new?
-    false
-  end
-
   def create?
     true
   end

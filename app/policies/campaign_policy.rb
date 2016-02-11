@@ -1,21 +1,16 @@
 class CampaignPolicy < ApplicationPolicy
   def index?
-    true
-  end
-
-  def new?
-    false
+    @policy_group.campaigns_index?
   end
 
   def create?
-    true
+    @policy_group.campaigns_create?
   end
 
-  def edit?
-    true
-  end
-
-  def destroy?
-    true
+  class Scope < Scope
+    def resolve
+      return scope if @policy_group.campaigns_manage?
+      scope.where(owner_id: user.id)
+    end
   end
 end

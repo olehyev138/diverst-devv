@@ -4,16 +4,15 @@ class GroupPolicy
     @group = group
   end
 
-  def manage?
-    @user.is_a?(Admin) || @group.managers.exists?(user.id)
+  def manage_members?
+    @group.managers.exists?(user.id)
   end
 
   def create?
-    @user.is_a?(Admin)
+    @group.managers.exists?(user.id)
   end
 
   def edit?
-    return false unless @user.is_a?(Admin)
-    @user.owner? || @group.admin == @user
+    @group.managers.exists?(user.id)
   end
 end

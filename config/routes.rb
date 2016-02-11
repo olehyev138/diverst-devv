@@ -212,6 +212,7 @@ Rails.application.routes.draw do
     resources :leads
   end
 
+  resources :policy_groups
   resources :emails
 
   root to: 'metrics_dashboards#index'

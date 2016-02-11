@@ -63,7 +63,7 @@
 
 <div class="content__header">
   <h1>Specific metrics dashboards</h1>
-  <%= link_to "New dashboard", new_metrics_dashboard_path, class: "btn btn--primary" %>
+  <%= link_to "New dashboard", new_metrics_dashboard_path, class: "btn btn--primary" if policy(MetricsDashboard).new? %>
 </div>
 
 <div class="content__main">

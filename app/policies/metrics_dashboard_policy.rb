@@ -1,22 +1,15 @@
 class MetricsDashboardPolicy < ApplicationPolicy
   def index?
-    true
+    @policy_group.metrics_dashboards_index?
   end
 
   def create?
-    true
+    @policy_group.metrics_dashboards_create?
   end
 
-  class Scope
-    attr_reader :user, :scope
-
-    def initialize(user, scope)
-      @user = user
-      @scope = scope
-    end
-
+  class Scope < Scope
     def resolve
-      scope.where(owner: user)
+      scope.where(owner_id: user.id)
     end
   end
 end

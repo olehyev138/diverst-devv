@@ -23,6 +23,7 @@ class Enterprise < ActiveRecord::Base
   has_many :yammer_field_mappings
   has_many :emails
   belongs_to :theme
+  has_many :policy_groups
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :mobile_fields, reject_if: :all_blank, allow_destroy: true

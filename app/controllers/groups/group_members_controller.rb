@@ -1,9 +1,5 @@
 class Groups::GroupMembersController < ApplicationController
-  include AccessControl
-
-  before_action :authenticate_user!
   before_action :set_group
-  before_action :group_managers_only!, except: [:show, :index]
   before_action :set_member, only: [:edit, :update, :destroy]
 
   layout 'erg'

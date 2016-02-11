@@ -1,4 +1,10 @@
-FactoryGirl.define do
+FactoryGirl.define do  factory :permission_group do
+    
+  end
+  factory :policy_group do
+    
+  end
+
   sequence :email_address do |n|
     "user#{n}@diverst.com"
   end
