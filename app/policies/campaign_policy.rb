@@ -9,7 +9,7 @@ class CampaignPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      return scope if @policy_group.campaigns_manage?
+      return scope.all if @policy_group.campaigns_manage?
       scope.where(owner_id: user.id)
     end
   end
