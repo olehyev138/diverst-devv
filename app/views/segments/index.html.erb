@@ -1,6 +1,6 @@
 <div class="content__header">
   <h1>Segments</h1>
-  <%= link_to "+ New Segment", new_segment_path, class: "btn btn--primary" %>
+  <%= link_to "+ New Segment", new_segment_path, class: "btn btn--primary" if policy(Segment).new? %>
 </div>
 
 <div class="content__main">
@@ -22,7 +22,7 @@
                 <td><%= segment.members.count %></td>
                 <td><%= segment.rules.count %></td>
                 <td><%= segment.created_at.to_s :reversed_slashes %></td>
-                <td><%= link_to "Edit", edit_segment_path(segment) %> - <%= link_to "Delete", segment_path(segment), method: :delete, class: "error" %></td>
+                <td><%= link_to "Edit", edit_segment_path(segment) if policy(segment).edit? %> - <%= link_to "Delete", segment_path(segment), method: :delete, class: "error" if policy(segment).destroy? %></td>
               </tr>
             <% end %>
           </tbody>

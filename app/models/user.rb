@@ -27,6 +27,7 @@ class User < ActiveRecord::Base
   has_many :events, through: :groups
   has_many :managed_groups, foreign_key: :manager_id, class_name: 'Group'
   belongs_to :enterprise, inverse_of: :users
+  belongs_to :policy_group
 
   has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('missing.png')
   validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/

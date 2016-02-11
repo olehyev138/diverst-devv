@@ -1,0 +1,35 @@
+<div class="content__header">
+  <h1>Permission groups</h1>
+  <%= link_to "New permission group", new_policy_group_path, class: "btn btn--primary" if policy(PolicyGroup).new? %>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <table class="table--has-border" id="policy-groups-table">
+        <thead>
+          <th>Name</th>
+          <th># of members</th>
+        </thead>
+        <tbody>
+          <% @policy_groups.each do |policy_group| %>
+            <tr>
+              <td><%= link_to policy_group.name, edit_policy_group_path(policy_group) %></td>
+              <td><%= policy_group.users.count %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).on('page:change', function() {
+    $(document).off('page:change');
+
+    $('#policy-groups-table').dataTable(Utility.mergeWithDTDefaults({
+      order: [[2, "desc"]]
+    }));
+  });
+</script>

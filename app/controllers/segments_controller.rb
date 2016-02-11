@@ -1,18 +1,22 @@
 class SegmentsController < ApplicationController
   before_action :set_segment, only: [:edit, :update, :destroy, :show, :export_csv]
   skip_before_action :verify_authenticity_token, only: [:create]
+  after_action :verify_authorized
 
   layout 'erg_manager'
 
   def index
-    @segments = current_user.enterprise.segments
+    authorize Segment
+    @segments = policy_scope(Segment)
   end
 
   def new
+    authorize Segment
     @segment = current_user.enterprise.segments.new
   end
 
   def create
+    authorize Segment
     @segment = current_user.enterprise.segments.new(segment_params)
 
     if @segment.save
@@ -23,6 +27,7 @@ class SegmentsController < ApplicationController
   end
 
   def update
+    authorize @segment
     if @segment.update(segment_params)
       redirect_to @segment
     else
@@ -31,11 +36,13 @@ class SegmentsController < ApplicationController
   end
 
   def destroy
+    authorize @segment
     @segment.destroy
     redirect_to action: :index
   end
 
   def export_csv
+    authorize @segment, :show
     users_csv = User.to_csv users: @segment.members, fields: @segment.enterprise.fields
     send_data users_csv, filename: "#{@segment.name}.csv"
   end

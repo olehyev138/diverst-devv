@@ -6,6 +6,7 @@ class ApplicationPolicy
 
     @user = user
     @record = record
+    @policy_group = @user.policy_group
   end
 
   def index?
@@ -46,6 +47,7 @@ class ApplicationPolicy
     def initialize(user, scope)
       @user = user
       @scope = scope
+      @policy_group = @user.policy_group
     end
 
     def resolve

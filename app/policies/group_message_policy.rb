@@ -1,0 +1,2 @@
+class GroupMessagePolicy < ApplicationPolicy
+end

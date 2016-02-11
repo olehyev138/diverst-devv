@@ -1,5 +1,4 @@
 class User::EventsController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_event, only: [:show]
 
   layout 'user'

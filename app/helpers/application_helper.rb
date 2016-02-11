@@ -1,7 +1,6 @@
 module ApplicationHelper
   def back_to_diverst_path
-    return groups_path if is_admin?
-    user_campaigns_path
+    groups_path # TODO
   end
 
   def logo_url
