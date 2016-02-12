@@ -7,10 +7,13 @@ class CampaignPolicy < ApplicationPolicy
     @policy_group.campaigns_create?
   end
 
-  class Scope < Scope
-    def resolve
-      return scope.all if @policy_group.campaigns_manage?
-      scope.where(owner_id: user.id)
-    end
+  def update?
+    return true if @policy_group.campaigns_manage?
+    @record.owner == @user
+  end
+
+  def destroy?
+    return true if @policy_group.campaigns_manage?
+    @record.owner == @user
   end
 end

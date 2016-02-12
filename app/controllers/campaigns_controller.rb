@@ -31,6 +31,10 @@ class CampaignsController < ApplicationController
     @questions = @campaign.questions.order(created_at: :desc).page(params[:page]).per(10)
   end
 
+  def edit
+    authorize @campaign
+  end
+
   def update
     authorize @campaign
     if @campaign.update(campaign_params)
@@ -47,6 +51,7 @@ class CampaignsController < ApplicationController
   end
 
   def contributions_per_erg
+    authorize @campaign, :show?
     render json: {
       highcharts: @campaign.contributions_per_erg,
       type: 'pie'
@@ -54,6 +59,7 @@ class CampaignsController < ApplicationController
   end
 
   def top_performers
+    authorize @campaign, :show?
     render json: {
       highcharts: @campaign.top_performers,
       type: 'bar'

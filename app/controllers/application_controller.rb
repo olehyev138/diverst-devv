@@ -15,7 +15,6 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(resource)
     return user_campaigns_path if resource.is_a? User
-    return metrics_dashboards_path if resource.is_a? Admin
   end
 
   def after_sign_out_path_for(resource)

@@ -26,7 +26,7 @@ class ApplicationPolicy
   end
 
   def update?
-    false
+    scope.where(:id => record.id).exists?
   end
 
   def edit?
@@ -51,7 +51,7 @@ class ApplicationPolicy
     end
 
     def resolve
-      scope
+      scope.where(enterprise: @user.enterprise)
     end
   end
 end

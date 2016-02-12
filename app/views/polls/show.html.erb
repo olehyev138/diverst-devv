@@ -5,14 +5,12 @@
       <%= link_to "Export CSV", export_csv_poll_path(@poll), class: "btn btn--tertiary" %>
     </div>
     <div class="flex-row__cell">
-      <%= link_to "New Graph", new_poll_graph_path(@poll), class: "btn btn--primary" %>
+      <%= link_to "New Graph", new_poll_graph_path(@poll), class: "btn btn--primary" if policy(@poll).edit? %>
     </div>
   </div>
 </div>
 
 <div class="content__main">
-  <p></p>
-
   <div class="card">
     <div class="card__section">
       <div class="row row--spacing-bottom">
@@ -51,10 +49,12 @@
         <div class="col sm-12 md-6">
           <div class="card">
             <div class="card__section">
-              <div class="card__action">
-                <%= link_to "Edit", edit_graph_path(graph) %> -
-                <%= link_to "Remove", graph_path(graph), method: :delete, class: "error" %>
-              </div>
+              <% if policy(@poll).edit? %>
+                <div class="card__action">
+                  <%= link_to "Edit", edit_graph_path(graph) %> -
+                  <%= link_to "Remove", graph_path(graph), method: :delete, class: "error" %>
+                </div>
+              <% end %>
               <h4 class="no-margin"><%= truncate(graph.title, length: 50) %></h4>
               <% if !graph.aggregation.nil? %><small><%= aggregation_text(graph) %></small><% end %>
               <div class="graph" data-graph-id="<%= graph.id %>"></div>

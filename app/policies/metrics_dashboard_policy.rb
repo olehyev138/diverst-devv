@@ -9,7 +9,7 @@ class MetricsDashboardPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      scope.where(owner_id: user.id)
+      scope.where(owner: user)
     end
   end
 end

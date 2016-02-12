@@ -51,6 +51,9 @@ class PolicyGroupsController < ApplicationController
         :events_index,
         :events_create,
         :events_manage,
+        :polls_index,
+        :polls_create,
+        :polls_manage,
         :group_messages_index,
         :group_messages_create,
         :group_messages_manage,
@@ -72,6 +75,7 @@ class PolicyGroupsController < ApplicationController
         :segments_manage,
         :users_index,
         :users_manage,
+        :global_settings_manage,
         user_ids: []
       )
   end

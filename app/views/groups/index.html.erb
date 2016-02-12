@@ -1,6 +1,6 @@
 <div class="content__header">
   <h1>ERGs</h1>
-  <%= link_to "New ERG", new_group_path, class: "btn btn--primary" %>
+  <%= link_to "New ERG", new_group_path, class: "btn btn--primary" if policy(Group).new? %>
 </div>
 
 <div class="content__main">
@@ -13,10 +13,10 @@
           </div>
           <div class="flex-row__cell flex-row__cell--grow"><%= link_to "#{group.name}", group_path(group), class: "accent" %> - <%= pluralize group.members.count, "member" %></div>
           <div class="flex-row__cell link-group">
-            <%= link_to "Export", export_csv_group_path(group), class: "muted" %>
-            <%= link_to "Import", import_csv_group_path(group), class: "muted" %>
-            <%= link_to "Edit", edit_group_path(group), class: "muted" %>
-            <%= link_to "Delete", group_path(group), method: :delete, class: "error" %>
+            <%= link_to "Export", export_csv_group_path(group), class: "muted" if policy(group).show? %>
+            <%= link_to "Import", import_csv_group_path(group), class: "muted" if policy(group).edit? %>
+            <%= link_to "Edit", edit_group_path(group), class: "muted" if policy(group).edit? %>
+            <%= link_to "Delete", group_path(group), method: :delete, class: "error" if policy(group).destroy? %>
           </div>
         </div>
       </div>

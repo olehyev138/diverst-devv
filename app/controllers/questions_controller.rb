@@ -1,18 +1,26 @@
 class QuestionsController < ApplicationController
   before_action :set_campaign, only: [:index, :new, :create]
   before_action :set_question, only: [:edit, :update, :destroy, :show, :reopen]
+  after_action :verify_authorized
 
   layout 'unify'
 
   def index
+    authorize @campaign
     @questions = @campaign.questions.order(created_at: :desc)
   end
 
   def new
+    authorize @campaign
     @question = @campaign.questions.new
   end
 
+  def show
+    authorize @question.campaign
+  end
+
   def create
+    authorize @campaign
     @question = @campaign.questions.new(question_params)
 
     if @question.save
@@ -23,11 +31,17 @@ class QuestionsController < ApplicationController
   end
 
   def reopen
+    authorize @question.campaign, :edit?
     @question.update(solved_at: nil)
     redirect_to :back
   end
 
+  def edit
+    authorize @question.campaign
+  end
+
   def update
+    authorize @question.campaign
     @question.solved_at = Time.current if question_params[:conclusion].present?
 
     if @question.update(question_params)
@@ -38,6 +52,7 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
+    authorize @question.campaign
     @question.destroy
     redirect_to :back
   end

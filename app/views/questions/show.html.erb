@@ -13,8 +13,10 @@
       <div class="card__section card__section--border">
         <h3>This question was marked as solved <%= time_ago_in_words @question.solved_at %> ago</h3>
         <p><%= @question.conclusion %></p>
-        <%= simple_form_for @question, url: reopen_question_path(@question) do |f| %>
-          <%= f.button :submit, value: "Reopen" %>
+        <% if policy(@question.campaign).edit? %>
+          <%= simple_form_for @question, url: reopen_question_path(@question) do |f| %>
+            <%= f.button :submit, value: "Reopen" %>
+          <% end %>
         <% end %>
       </div>
     </div>

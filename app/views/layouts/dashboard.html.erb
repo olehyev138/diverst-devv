@@ -15,6 +15,9 @@
         <%= link_to user_root_path do %><img class="primary-header__logo logo" src="<%= logo_url %>"><% end %>
       </div>
       <div class="flex-row__cell">
+        <%= link_to "Employee dashboard", user_campaigns_path, class: "white" %>
+      </div>
+      <div class="flex-row__cell">
         <%= current_user.name %>
       </div>
     </div>
@@ -23,23 +26,25 @@
   <nav class="nav">
     <ul class="nav__list nav__list--primary">
       <li class="nav__item">
-        <% if policy(MetricsDashboard).index? %>
-          <%= active_link_to metrics_dashboards_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['enterprises', 'groups', 'segments', 'metrics_dashboards', 'enterprises/resources'], ['index', 'edit', 'show', 'new']] do %>
-            <%= inline_svg('icons/manage.svg', class: "icon nav__icon") %>
-            <span class="nav__text">Manage ERG</span>
+        <%= active_link_to metrics_dashboards_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['enterprises', 'groups', 'segments', 'metrics_dashboards', 'enterprises/resources'], ['index', 'edit', 'show', 'new']] do %>
+          <%= inline_svg('icons/manage.svg', class: "icon nav__icon") %>
+          <span class="nav__text">Manage ERG</span>
+        <% end %>
+      </li>
+      <li class="nav__item">
+        <% if policy(Campaign).index? %>
+          <%= active_link_to campaigns_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['campaigns', 'questions'], []] do %>
+            <%= inline_svg('icons/collaborate.svg', class: "icon nav__icon") %>
+            <span class="nav__text">Collaborate</span>
           <% end %>
         <% end %>
       </li>
       <li class="nav__item">
-        <%= active_link_to campaigns_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['campaigns', 'questions'], []] do %>
-          <%= inline_svg('icons/collaborate.svg', class: "icon nav__icon") %>
-          <span class="nav__text">Collaborate</span>
-        <% end %>
-      </li>
-      <li class="nav__item">
-        <%= active_link_to polls_path, class: "nav__link", class_active: "nav__link--is-selected" do %>
-          <%= inline_svg('icons/scope.svg', class: "icon nav__icon") %>
-          <span class="nav__text">Scope</span>
+        <% if policy(Poll).index? %>
+          <%= active_link_to polls_path, class: "nav__link", class_active: "nav__link--is-selected" do %>
+            <%= inline_svg('icons/scope.svg', class: "icon nav__icon") %>
+            <span class="nav__text">Scope</span>
+          <% end %>
         <% end %>
       </li>
       <li class="nav__item">
@@ -56,13 +61,15 @@
       </li>
     </ul>
     <ul class="nav__list nav__list--secondary">
+      <% if GlobalSettingsPolicy.new(current_user).update? %>
+        <li class="nav__item">
+          <%= active_link_to users_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['users', 'enterprises', 'users', 'integrations'], ['index', 'edit', 'show', 'new', 'edit_auth', 'edit_fields', 'edit_branding']] do %>
+            <span class="nav__text">Global Settings</span>
+          <% end %>
+        </li>
+      <% end %>
       <li class="nav__item">
-        <%= active_link_to users_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['users', 'enterprises', 'users', 'integrations'], ['index', 'edit', 'show', 'new', 'edit_auth', 'edit_fields', 'edit_branding']] do %>
-          <span class="nav__text">Global Settings</span>
-        <% end %>
-      </li>
-      <li class="nav__item">
-        <%= link_to user_session_path, method: :delete, class: "nav__link" do %>
+        <%= link_to destroy_user_session_path, method: :delete, class: "nav__link" do %>
           <span class="nav__text">Logout</span>
         <% end %>
       </li>
