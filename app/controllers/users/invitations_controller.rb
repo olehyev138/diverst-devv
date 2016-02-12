@@ -1,6 +1,7 @@
 class Users::InvitationsController < Devise::InvitationsController
   layout :resolve_layout
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :ensure_policy, before: [:new]
 
   protected
 
@@ -13,7 +14,7 @@ class Users::InvitationsController < Devise::InvitationsController
     end
   end
 
-  private
+  protected
 
   # Before the vCard is sent out (right after invitation)
   def invite_resource
@@ -29,6 +30,7 @@ class Users::InvitationsController < Devise::InvitationsController
   def accept_resource
     resource = resource_class.accept_invitation!(update_resource_params)
     resource.info.merge(fields: resource.enterprise.fields, form_data: params['custom-fields'])
+    resource.permission_group = resource.enterprise.policy_groups.first # TODO ASSIGN DEFAULT GROUP
 
     resource.save
     resource
@@ -38,5 +40,9 @@ class Users::InvitationsController < Devise::InvitationsController
     # Only add some parameters
     devise_parameter_sanitizer.for(:invite).concat [:first_name, :last_name, :email, group_ids: []]
     devise_parameter_sanitizer.for(:accept_invitation).concat [:first_name, :last_name, group_ids: []]
+  end
+
+  def ensure_policy
+    authorize User, :new?
   end
 end

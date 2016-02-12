@@ -1,9 +1,12 @@
 class EnterprisesController < ApplicationController
   before_action :set_enterprise, except: [:index, :new, :create]
+  after_action :verify_authorized
 
   layout :resolve_layout
 
   def update
+    authorize @enterprise
+
     if @enterprise.update_attributes(enterprise_params)
       redirect_to :back
     else
@@ -11,11 +14,21 @@ class EnterprisesController < ApplicationController
     end
   end
 
+  def edit_fields
+    authorize @enterprise
+  end
+
+  def edit_auth
+    authorize @enterprise
+  end
+
   def edit_branding
+    authorize @enterprise
     @enterprise.theme = Theme.new if @enterprise.theme.nil?
   end
 
   def update_branding
+    authorize @enterprise
     if @enterprise.update_attributes(enterprise_params)
       redirect_to action: :edit_branding
     else
@@ -24,6 +37,7 @@ class EnterprisesController < ApplicationController
   end
 
   def restore_default_branding
+    authorize @enterprise
     @enterprise.theme.delete
     redirect_to :back
   end

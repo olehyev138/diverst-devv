@@ -1,21 +1,25 @@
 class GroupsController < ApplicationController
-  before_action :authenticate_user!, only: [:show]
   before_action :set_group, except: [:index, :new, :create]
   skip_before_action :verify_authenticity_token, only: [:create]
+  after_action :verify_authorized
 
   layout :resolve_layout
 
   helper ApplicationHelper
 
   def index
+    authorize Group
     @groups = current_user.enterprise.groups
   end
 
   def new
+    authorize Group
     @group = current_user.enterprise.groups.new
   end
 
   def show
+    authorize @group
+
     @events = @group.events.limit(3)
     @news_links = @group.news_links.limit(3)
     @user_groups = @group.user_groups.order(created_at: :desc).limit(8)
@@ -23,6 +27,8 @@ class GroupsController < ApplicationController
   end
 
   def create
+    authorize @group
+
     @group = current_user.enterprise.groups.new(group_params)
 
     if @group.save
@@ -32,7 +38,13 @@ class GroupsController < ApplicationController
     end
   end
 
+  def edit
+    authorize @group
+  end
+
   def update
+    authorize @group
+
     if @group.update(group_params)
       redirect_to :back
     else
@@ -41,11 +53,19 @@ class GroupsController < ApplicationController
   end
 
   def destroy
+    authorize @group
+
     @group.destroy
     redirect_to action: :index
   end
 
+  def import_csv
+    authorize @group, :edit?
+  end
+
   def sample_csv
+    authorize @group, :show?
+
     csv_string = CSV.generate do |csv|
       csv << ['Email']
 
@@ -58,6 +78,8 @@ class GroupsController < ApplicationController
   end
 
   def parse_csv
+    authorize @group, :edit?
+
     @table = CSV.table params[:file].tempfile
     @failed_rows = []
     @successful_rows = []
@@ -83,6 +105,8 @@ class GroupsController < ApplicationController
   end
 
   def export_csv
+    authorize @group, :show?
+
     users_csv = User.to_csv users: @group.members, fields: @group.enterprise.fields
     send_data users_csv, filename: "#{@group.file_safe_name}_users.csv"
   end

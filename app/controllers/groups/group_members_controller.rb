@@ -1,15 +1,18 @@
 class Groups::GroupMembersController < ApplicationController
   before_action :set_group
   before_action :set_member, only: [:edit, :update, :destroy]
+  after_action :verify_authorized
 
   layout 'erg'
 
   def index
+    authorize @group, :show?
     @members = @group.members.page(params[:page])
   end
 
   # Removes a member from the group
   def destroy
+    authorize @group, :edit?
     @group.members.delete(@member)
     redirect_to :back
   end

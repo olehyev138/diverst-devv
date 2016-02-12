@@ -11,6 +11,7 @@ class Segment < ActiveRecord::Base
   has_many :group_messages, through: :group_messages_segments
   has_many :invitation_segments_groups
   has_many :groups, inverse_of: :invitation_segments, through: :invitation_segments_groups
+  belongs_to :owner, class_name: "User"
 
   accepts_nested_attributes_for :rules, reject_if: :all_blank, allow_destroy: true
 

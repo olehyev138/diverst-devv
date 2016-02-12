@@ -1,21 +1,17 @@
 class UserPolicy < ApplicationPolicy
   def index?
-    true
-  end
-
-  def new?
-    false
+    @policy_group.global_settings_manage?
   end
 
   def create?
-    true
+    @policy_group.global_settings_manage?
   end
 
-  def edit?
-    true
+  def update?
+    @policy_group.global_settings_manage?
   end
 
   def destroy?
-    true
+    @policy_group.global_settings_manage?
   end
 end

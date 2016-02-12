@@ -1,9 +1,11 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:edit, :update, :destroy, :show]
+  after_action :verify_authorized
 
   layout 'global_settings'
 
   def index
+    authorize User
     @users = current_user.enterprise.users.page(params[:page])
 
     respond_to do |format|
@@ -12,7 +14,20 @@ class UsersController < ApplicationController
     end
   end
 
+  def new
+    authorize User
+  end
+
+  def show
+    authorize @user
+  end
+
+  def edit
+    authorize @user
+  end
+
   def update
+    authorize @user
     @user.assign_attributes(user_params)
     @user.info.merge(fields: @user.enterprise.fields, form_data: params['custom-fields'])
 
@@ -24,15 +39,23 @@ class UsersController < ApplicationController
   end
 
   def destroy
+    authorize @user
     @user.destroy
     redirect_to :back
   end
 
   def sample_csv
+    authorize User, :index?
     send_data current_user.enterprise.users_csv(5), filename: 'diverst_import.csv'
   end
 
+  def import_csv
+    authorize User, :new?
+  end
+
   def parse_csv
+    authorize User, :new?
+
     @table = CSV.table params[:file].tempfile
     @failed_rows = []
     @successful_rows = []
@@ -64,6 +87,7 @@ class UsersController < ApplicationController
   end
 
   def export_csv
+    authorize User, :index?
     send_data current_user.enterprise.users_csv(nil), filename: 'diverst_users.csv'
   end
 

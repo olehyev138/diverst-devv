@@ -7,6 +7,7 @@ class Poll < ActiveRecord::Base
   has_many :groups_polls
   has_many :groups, inverse_of: :polls, through: :groups_polls
   belongs_to :enterprise, inverse_of: :polls
+  belongs_to :owner, class_name: "User"
 
   after_create :send_invitation_emails
   after_create :create_default_graphs

@@ -1,18 +1,20 @@
-class GroupPolicy
-  def initialize(user, group)
-    @user = user
-    @group = group
-  end
-
-  def manage_members?
-    @group.managers.exists?(user.id)
+class GroupPolicy < ApplicationPolicy
+  def index?
+    @policy_group.groups_index?
   end
 
   def create?
-    @group.managers.exists?(user.id)
+    @policy_group.groups_create?
   end
 
-  def edit?
-    @group.managers.exists?(user.id)
+  def update?
+    return true if @policy_group.groups_manage?
+    return true if @record.owner == @user
+    @record.managers.exists?(user.id)
+  end
+
+  def destroy?
+    return true if @policy_group.groups_manage?
+    @record.owner == @user
   end
 end

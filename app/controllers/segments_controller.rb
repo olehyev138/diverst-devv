@@ -26,6 +26,14 @@ class SegmentsController < ApplicationController
     end
   end
 
+  def show
+    authorize @segment
+  end
+
+  def edit
+    authorize @segment
+  end
+
   def update
     authorize @segment
     if @segment.update(segment_params)
@@ -42,7 +50,7 @@ class SegmentsController < ApplicationController
   end
 
   def export_csv
-    authorize @segment, :show
+    authorize @segment, :show?
     users_csv = User.to_csv users: @segment.members, fields: @segment.enterprise.fields
     send_data users_csv, filename: "#{@segment.name}.csv"
   end

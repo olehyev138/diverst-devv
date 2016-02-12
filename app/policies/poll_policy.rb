@@ -1,4 +1,4 @@
-class SegmentPolicy < ApplicationPolicy
+class PollPolicy < ApplicationPolicy
   def index?
     @policy_group.polls_index?
   end
