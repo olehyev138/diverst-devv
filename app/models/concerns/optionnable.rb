@@ -81,7 +81,7 @@ module Optionnable
     end
 
     # Execute the elasticsearch query
-    Elasticsearch::Model.client.search(index: enterprise.es_employees_index_name, body: search_hash)
+    Elasticsearch::Model.client.search(index: enterprise.es_users_index_name, body: search_hash)
   end
 
   # Get highcharts-usable stats from the field by querying elasticsearch and formatting its response
@@ -162,7 +162,7 @@ module Optionnable
           }
         }
 
-        others = Elasticsearch::Model.client.search(index: container.enterprise.es_employees_index_name, body: others_hash)
+        others = Elasticsearch::Model.client.search(index: container.enterprise.es_users_index_name, body: others_hash)
 
         others_data = options.map do |option|
           bucket = others['aggregations']['aggregation']['buckets'].find { |b| b['key'] == option }

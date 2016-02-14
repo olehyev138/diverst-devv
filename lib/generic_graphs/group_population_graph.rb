@@ -4,14 +4,14 @@ class GroupPopulationGraph
       type: 'bar',
       highcharts: {
         series: [{
-          title: 'Number of employees',
-          data: current_admin.enterprise.groups.map { |g| g.members.count }
+          title: 'Number of users',
+          data: current_user.enterprise.groups.map { |g| g.members.count }
         }],
-        categories: current_admin.enterprise.groups.map(&:name),
-        xAxisTitle: 'Nb. of employees'
+        categories: current_user.enterprise.groups.map(&:name),
+        xAxisTitle: 'Nb. of users'
       },
       hasAggregation: false,
-      title: 'Number of employees per ERG'
+      title: 'Number of users per ERG'
     }
   end
 end

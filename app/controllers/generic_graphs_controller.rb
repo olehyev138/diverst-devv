@@ -4,10 +4,10 @@ class GenericGraphsController < ApplicationController
       type: 'bar',
       highcharts: {
         series: [{
-          title: 'Number of employees',
-          data: current_admin.enterprise.groups.map { |g| g.members.count }
+          title: 'Number of users',
+          data: current_user.enterprise.groups.map { |g| g.members.count }
         }],
-        categories: current_admin.enterprise.groups.map(&:name),
+        categories: current_user.enterprise.groups.map(&:name),
         xAxisTitle: 'ERG'
       },
       hasAggregation: false
@@ -19,10 +19,10 @@ class GenericGraphsController < ApplicationController
       type: 'bar',
       highcharts: {
         series: [{
-          title: 'Number of employees',
-          data: current_admin.enterprise.segments.map { |s| s.members.count }
+          title: 'Number of users',
+          data: current_user.enterprise.segments.map { |s| s.members.count }
         }],
-        categories: current_admin.enterprise.segments.map(&:name),
+        categories: current_user.enterprise.segments.map(&:name),
         xAxisTitle: 'Segment'
       },
       hasAggregation: false
@@ -35,9 +35,9 @@ class GenericGraphsController < ApplicationController
       highcharts: {
         series: [{
           title: 'Events created',
-          data: current_admin.enterprise.groups.map { |g| g.events.where('created_at > ?', 1.month.ago).count }
+          data: current_user.enterprise.groups.map { |g| g.events.where('created_at > ?', 1.month.ago).count }
         }],
-        categories: current_admin.enterprise.groups.map(&:name),
+        categories: current_user.enterprise.groups.map(&:name),
         xAxisTitle: 'ERG',
         yAxisTitle: 'Nb of events'
       },
@@ -51,9 +51,9 @@ class GenericGraphsController < ApplicationController
       highcharts: {
         series: [{
           title: 'Messages sent',
-          data: current_admin.enterprise.groups.map { |g| g.messages.where('created_at > ?', 1.month.ago).count }
+          data: current_user.enterprise.groups.map { |g| g.messages.where('created_at > ?', 1.month.ago).count }
         }],
-        categories: current_admin.enterprise.groups.map(&:name),
+        categories: current_user.enterprise.groups.map(&:name),
         xAxisTitle: 'ERG',
         yAxisTitle: 'Nb of messages'
       },

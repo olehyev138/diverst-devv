@@ -1,6 +1,6 @@
 <div class="content__header">
   <h1>Campaigns</h1>
-  <%= link_to "New campaign", new_campaign_path, class: "btn btn--primary" %>
+  <%= link_to "New campaign", new_campaign_path, class: "btn btn--primary" if policy(Campaign).new? %>
 </div>
 
 <div class="content__main">
@@ -26,7 +26,10 @@
                 <td><%= campaign.start.to_s :reversed_slashes %></td>
                 <td><%= campaign.invitations.count %></td>
                 <td><%= campaign.questions.count %></td>
-                <td><%= link_to "Edit", edit_campaign_path(campaign) %> - <%= link_to "Delete", campaign_path(campaign), method: :delete, class: "error", data: { confirm: "Are you sure?" } %></td>
+                  <td>
+                    <%= link_to "Edit", edit_campaign_path(campaign) if policy(campaign).edit? %> -
+                    <%= link_to "Delete", campaign_path(campaign), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(campaign).destroy? %>
+                  </td>
               </tr>
             <% end %>
           </tbody>

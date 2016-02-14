@@ -1,6 +1,6 @@
 <div class="content__header">
   <h1>News</h1>
-  <%= link_to "+ Create news link", new_group_news_link_path, class: "btn btn--primary" if is_admin? %>
+  <%= link_to "+ Create news link", new_group_news_link_path, class: "btn btn--primary" if policy(NewsLink).new? %>
 </div>
 
 <div class="content__main">
@@ -27,5 +27,3 @@
     <% end %>
   </div>
 </div>
-
-

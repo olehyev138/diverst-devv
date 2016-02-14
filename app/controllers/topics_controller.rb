@@ -1,20 +1,19 @@
 class TopicsController < ApplicationController
-  before_action :authenticate_admin!
   before_action :set_topic, only: [:edit, :update, :destroy, :show]
 
   layout 'handshake'
 
   def index
-    @topics = current_admin.enterprise.topics
+    @topics = current_user.enterprise.topics
   end
 
   def new
-    @topic = current_admin.enterprise.topics.new
+    @topic = current_user.enterprise.topics.new
   end
 
   def create
-    @topic = current_admin.enterprise.topics.new(topic_params)
-    @topic.admin = current_admin
+    @topic = current_user.enterprise.topics.new(topic_params)
+    @topic.admin = current_user
 
     if @topic.save
       redirect_to action: :index
@@ -39,7 +38,7 @@ class TopicsController < ApplicationController
   protected
 
   def set_topic
-    @topic = current_admin.enterprise.topics.find(params[:id])
+    @topic = current_user.enterprise.topics.find(params[:id])
   end
 
   def topic_params

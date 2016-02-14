@@ -1,8 +1,8 @@
 class Segment < ActiveRecord::Base
   belongs_to :enterprise
   has_many :rules, class_name: 'SegmentRule'
-  has_many :employees_segments
-  has_many :members, class_name: 'Employee', through: :employees_segments, source: :employee
+  has_many :users_segments
+  has_many :members, class_name: 'User', through: :users_segments, source: :user
   has_many :polls_segments
   has_many :polls, through: :polls_segments
   has_many :events_segments
@@ -11,6 +11,7 @@ class Segment < ActiveRecord::Base
   has_many :group_messages, through: :group_messages_segments
   has_many :invitation_segments_groups
   has_many :groups, inverse_of: :invitation_segments, through: :invitation_segments_groups
+  belongs_to :owner, class_name: "User"
 
   accepts_nested_attributes_for :rules, reject_if: :all_blank, allow_destroy: true
 

@@ -2,7 +2,7 @@ class Enterprise < ActiveRecord::Base
   include ContainsResources
 
   has_many :admins, inverse_of: :enterprise
-  has_many :employees, inverse_of: :enterprise
+  has_many :users, inverse_of: :enterprise
   has_many :graph_fields, as: :container, class_name: 'Field'
   has_many :fields, -> { where elasticsearch_only: false }, as: :container
   has_many :topics, inverse_of: :enterprise
@@ -23,6 +23,7 @@ class Enterprise < ActiveRecord::Base
   has_many :yammer_field_mappings
   has_many :emails
   belongs_to :theme
+  has_many :policy_groups
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :mobile_fields, reject_if: :all_blank, allow_destroy: true
@@ -64,23 +65,23 @@ class Enterprise < ActiveRecord::Base
   end
 
   def update_match_scores
-    enterprise.employees.where.not(id: id).each do |other_employee|
-      CalculateMatchScoreJob.perform_later(self, other_employee, skip_existing: false)
+    enterprise.users.where.not(id: id).each do |other_user|
+      CalculateMatchScoreJob.perform_later(self, other_user, skip_existing: false)
     end
   end
 
-  def employees_csv(nb_rows)
-    Employee.to_csv(employees: employees, fields: fields, nb_rows: nb_rows)
+  def users_csv(nb_rows)
+    User.to_csv(users: users, fields: fields, nb_rows: nb_rows)
   end
 
-  # Returns the index name to be used in Elasticsearch to store this enterprise's employees
-  def es_employees_index_name
-    "#{id}_employees"
+  # Returns the index name to be used in Elasticsearch to store this enterprise's users
+  def es_users_index_name
+    "#{id}_users"
   end
 
-  # Run an elasticsearch query on the enterprise's employees
-  def search_employees(search_hash)
-    Elasticsearch::Model.client.search(index: es_employees_index_name, body: search_hash)
+  # Run an elasticsearch query on the enterprise's users
+  def search_users(search_hash)
+    Elasticsearch::Model.client.search(index: es_users_index_name, body: search_hash)
   end
 
   private

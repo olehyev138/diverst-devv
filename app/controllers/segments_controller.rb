@@ -1,20 +1,23 @@
 class SegmentsController < ApplicationController
-  before_action :authenticate_admin!
   before_action :set_segment, only: [:edit, :update, :destroy, :show, :export_csv]
   skip_before_action :verify_authenticity_token, only: [:create]
+  after_action :verify_authorized
 
   layout 'erg_manager'
 
   def index
-    @segments = current_admin.enterprise.segments
+    authorize Segment
+    @segments = policy_scope(Segment)
   end
 
   def new
-    @segment = current_admin.enterprise.segments.new
+    authorize Segment
+    @segment = current_user.enterprise.segments.new
   end
 
   def create
-    @segment = current_admin.enterprise.segments.new(segment_params)
+    authorize Segment
+    @segment = current_user.enterprise.segments.new(segment_params)
 
     if @segment.save
       redirect_to action: :index
@@ -23,7 +26,16 @@ class SegmentsController < ApplicationController
     end
   end
 
+  def show
+    authorize @segment
+  end
+
+  def edit
+    authorize @segment
+  end
+
   def update
+    authorize @segment
     if @segment.update(segment_params)
       redirect_to @segment
     else
@@ -32,19 +44,21 @@ class SegmentsController < ApplicationController
   end
 
   def destroy
+    authorize @segment
     @segment.destroy
     redirect_to action: :index
   end
 
   def export_csv
-    employees_csv = Employee.to_csv employees: @segment.members, fields: @segment.enterprise.fields
-    send_data employees_csv, filename: "#{@segment.name}.csv"
+    authorize @segment, :show?
+    users_csv = User.to_csv users: @segment.members, fields: @segment.enterprise.fields
+    send_data users_csv, filename: "#{@segment.name}.csv"
   end
 
   protected
 
   def set_segment
-    @segment = current_admin.enterprise.segments.find(params[:id])
+    @segment = current_user.enterprise.segments.find(params[:id])
   end
 
   def segment_params

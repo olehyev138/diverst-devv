@@ -3,7 +3,7 @@
     <%= link_to "Campaigns", campaigns_path %> /
     <%= @campaign.title %>
   </h1>
-  <%= link_to "New Question", new_campaign_question_path(@campaign), class: "btn btn--primary" %>
+  <%= link_to "New Question", new_campaign_question_path(@campaign), class: "btn btn--primary" if policy(@campaign).edit? %>
 </div>
 
 <div class="content__main">
@@ -40,7 +40,9 @@
             <th>Creation date</th>
             <th>Last activity</th>
             <th>Solved?</th>
-            <th>Options</th>
+            <% if policy(@campaign).edit? %>
+              <th>Options</th>
+            <% end %>
           </thead>
           <tbody>
             <% @questions.each do |question| %>
@@ -50,7 +52,10 @@
                 <td><%= question.created_at.to_s :dateonly %></td>
                 <td><%= question.answers.order(created_at: :desc).first ? question.answers.order(created_at: :desc).first.created_at.to_s(:dateonly) : "None yet" %></td>
                 <td><%= question.solved_at.nil? ? "No" : "Yes" %></td>
-                <td><%= link_to "Edit", edit_question_path(question) %> - <%= link_to "Delete", question_path(question), method: :delete, class: "error", data: { confirm: "Are you sure?" } %></td>
+                <td>
+                  <% if policy(@campaign).edit? %>
+                    <%= link_to "Edit", edit_question_path(question) %> - <%= link_to "Delete", question_path(question), method: :delete, class: "error", data: { confirm: "Are you sure?" } %></td>
+                  <% end %>
               </tr>
             <% end %>
           </tbody>

@@ -1,0 +1,21 @@
+<div class="content__header">
+  <h1>Edit user</h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <%= simple_form_for @user do |f| %>
+        <%= f.input :email %>
+        <% @user.enterprise.fields.each do |cf| %>
+          <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: @user %>
+        <% end %>
+        <%= f.button :submit, "Save" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  $('.select2').select2();
+</script>

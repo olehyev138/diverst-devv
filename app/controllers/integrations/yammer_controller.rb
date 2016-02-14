@@ -1,5 +1,4 @@
 class Integrations::YammerController < ApplicationController
-  before_action :authenticate_admin!
 
   layout 'global_settings'
 
@@ -19,7 +18,7 @@ class Integrations::YammerController < ApplicationController
     yammer_user = yammer.current_user
 
     if yammer_user['verified_admin'] == 'true' || yammer_user['verified_admin'] == true
-      current_admin.enterprise.update(yammer_token: user_token)
+      current_user.enterprise.update(yammer_token: user_token)
       redirect_to integrations_path
     else
       redirect_to integrations_path, alert: 'This Yammer account is not a verified admin in its network'

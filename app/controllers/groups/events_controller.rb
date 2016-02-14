@@ -1,5 +1,4 @@
 class Groups::EventsController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_group
   before_action :set_event, only: [:edit, :update, :destroy, :show]
 

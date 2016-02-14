@@ -1,19 +1,23 @@
 class CampaignsController < ApplicationController
-  before_action :authenticate_admin!, except: [:index, :show]
   before_action :set_campaign, only: [:edit, :update, :destroy, :show, :contributions_per_erg, :top_performers]
+  after_action :verify_authorized
 
   layout :resolve_layout
 
   def index
-    @campaigns = current_user.enterprise.campaigns
+    authorize Campaign
+    @campaigns = policy_scope(Campaign)
   end
 
   def new
+    authorize Campaign
     @campaign = current_user.enterprise.campaigns.new
   end
 
   def create
+    authorize Campaign
     @campaign = current_user.enterprise.campaigns.new(campaign_params)
+    @campaign.owner = current_user
 
     if @campaign.save
       redirect_to action: :index
@@ -23,10 +27,16 @@ class CampaignsController < ApplicationController
   end
 
   def show
+    authorize @campaign
     @questions = @campaign.questions.order(created_at: :desc).page(params[:page]).per(10)
   end
 
+  def edit
+    authorize @campaign
+  end
+
   def update
+    authorize @campaign
     if @campaign.update(campaign_params)
       redirect_to action: :index
     else
@@ -35,11 +45,13 @@ class CampaignsController < ApplicationController
   end
 
   def destroy
+    authorize @campaign
     @campaign.destroy
     redirect_to action: :index
   end
 
   def contributions_per_erg
+    authorize @campaign, :show?
     render json: {
       highcharts: @campaign.contributions_per_erg,
       type: 'pie'
@@ -47,6 +59,7 @@ class CampaignsController < ApplicationController
   end
 
   def top_performers
+    authorize @campaign, :show?
     render json: {
       highcharts: @campaign.top_performers,
       type: 'bar'
@@ -72,6 +85,7 @@ class CampaignsController < ApplicationController
         :banner,
         group_ids: [],
         segment_ids: [],
+        manager_ids: [],
         questions_attributes: [
           :id,
           :_destroy,
@@ -82,7 +96,7 @@ class CampaignsController < ApplicationController
   end
 
   def resolve_layout
-    return 'employee' if current_admin.nil?
+    return 'user' if current_user.nil?
     'unify'
   end
 end

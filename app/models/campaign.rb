@@ -1,14 +1,17 @@
 class Campaign < ActiveRecord::Base
   belongs_to :enterprise
+  belongs_to :owner, class_name: "User"
   has_many :questions
   has_many :campaigns_groups
   has_many :groups, through: :campaigns_groups
   has_many :campaigns_segments
   has_many :segments, through: :campaigns_segments
   has_many :invitations, class_name: 'CampaignInvitation'
-  has_many :employees, through: :invitations
+  has_many :users, through: :invitations
   has_many :answers, through: :questions
   has_many :answer_comments, through: :questions
+  has_many :campaigns_managers
+  has_many :managers, through: :campaigns_managers, source: :user
 
   accepts_nested_attributes_for :questions, reject_if: :all_blank, allow_destroy: true
 
@@ -21,8 +24,8 @@ class Campaign < ActiveRecord::Base
   after_create :create_invites
 
   def create_invites
-    invites = enterprise.employees.for_groups(groups).map do |employee_to_invite|
-      CampaignInvitation.new(campaign: self, employee: employee_to_invite)
+    invites = enterprise.users.for_groups(groups).map do |user_to_invite|
+      CampaignInvitation.new(campaign: self, user: user_to_invite)
     end
 
     CampaignInvitation.import invites
@@ -53,14 +56,14 @@ class Campaign < ActiveRecord::Base
   def top_performers
     top_answers_count_hash = answers.group(:author).order('count_all').count
 
-    top_answers_hash = top_answers_count_hash.map do |employee, _|
+    top_answers_hash = top_answers_count_hash.map do |user, _|
       [
-        employee,
-        answers.where(author: employee).map { |a| a.votes.count }.sum
+        user,
+        answers.where(author: user).map { |a| a.votes.count }.sum
       ]
     end.to_h
 
-    top_comments_hash = answer_comments.group('answer_comments.author_id').order('count_all').count.map { |k, v| [Employee.find(k), v] }.to_h
+    top_comments_hash = answer_comments.group('answer_comments.author_id').order('count_all').count.map { |k, v| [User.find(k), v] }.to_h
     top_combined_hash = top_answers_hash.merge(top_comments_hash) { |_k, a_value, b_value| a_value + b_value }.sort_by { |_k, v| v }.reverse!.to_h
 
     series = [{

@@ -1,22 +1,22 @@
 class DevicesController < ApplicationController
   include DeviseTokenAuth::Concerns::SetUserByToken
-  before_action :authenticate_employee!
+  before_action :authenticate_user!
   before_action :set_device, only: [:update, :test_notif]
-  serialization_scope :current_employee
+  serialization_scope :current_user
 
   APN = Houston::Client.development
 
   def index
-    @devices = current_employee.devices
+    @devices = current_user.devices
     render json: @devices
   end
 
   def create
     # Prevent from adding duplicates
-    devices_with_token = current_employee.devices.where(token: device_params[:token])
+    devices_with_token = current_user.devices.where(token: device_params[:token])
     return render json: devices_with_token.first if devices_with_token.size > 0
 
-    @device = current_employee.devices.new(device_params)
+    @device = current_user.devices.new(device_params)
 
     if @device.save
       render json: @device
@@ -27,7 +27,7 @@ class DevicesController < ApplicationController
 
   # Delete a device by its push token
   def destroy
-    device = current_employee.devices.where(token: params[:id]).first
+    device = current_user.devices.where(token: params[:id]).first
     not_found! if device.nil?
 
     if device.destroy
@@ -74,7 +74,7 @@ class DevicesController < ApplicationController
   protected
 
   def set_device
-    @device = current_employee.devices.find(params[:id])
+    @device = current_user.devices.find(params[:id])
   end
 
   def device_params

@@ -1,0 +1,112 @@
+<div class="content__header">
+  <h1>
+    <%= link_to "My Campaigns", user_campaigns_path %> /
+    <%= link_to @question.campaign.title, user_campaign_questions_path(@question.campaign) %> /
+    <%= @question.title.truncate(60) %>
+  </h1>
+</div>
+
+<div class="content__main">
+
+  <% if !@question.solved_at.nil? %>
+    <div class="card">
+      <div class="card__section card__section--border">
+        <h3>This question was marked as solved <%= time_ago_in_words @question.solved_at %> ago</h3>
+        <p><%= @question.conclusion %></p>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="card">
+    <div class="card__section card__section--border">
+      <h3><span class="accent">Q:</span> <%= @question.title %></h3>
+      <p><%= @question.description %></p>
+      <div class="flex-row flex-row--middle">
+        <small class="flex-row__cell">Submitted <%= time_ago_in_words(@question.created_at) %> ago</small>
+        <small class="flex-row__cell highlight"><%= pluralize(@question.answers.count, 'answers') %> </small>
+      </div>
+    </div>
+    <% @question.answers.order(created_at: :desc).each do |answer| %>
+      <div class="card__section card__section--border">
+        <div class="flex-row">
+          <div class="flex-row__cell text-center">
+            <div class="counter<%= answer.votes.include?(current_user) ? " counter--active" : "" %><%= answer.author != current_user ? " counter--votable" : "" %>" data-answer-id="<%= answer.id %>" data-upvoted="<%= answer.votes.include? current_user %>">
+              <% if answer.author != current_user %><span class="icon icon--upvote counter__arrow"></span><% end %>
+              <span class="counter__number"><%= answer.upvote_count %></span>
+            </div>
+
+            <% if answer.chosen %>
+              <div class="chosen">
+                <%= inline_svg('icons/star-purple.svg', class: "icon-inline#{ answer.chosen ? ' icon-inline--yellow' : '' }", title: "This answer was starred by an admin.") %>
+              </div>
+            <% end %>
+          </div>
+
+          <div class="answer">
+            <div class="answer__metadata">
+              <span class="highlight"><%= answer.author.name %></span>
+              <span class="muted"><%= time_ago_in_words(answer.created_at) %> ago</span>
+            </div>
+            <div class="answer__content">
+              <p><%= answer.content %></p>
+
+              <% answer.comments.order(created_at: :asc).each do |comment| %>
+                <div class="comment">
+                  <p>
+                    <%= comment.content %> &mdash;
+                    <span class="accent"><%= comment.author.name %></span>
+                    <span class="muted"><%= time_ago_in_words(comment.created_at) %> ago</span>
+                  </p>
+                </div>
+              <% end %>
+
+              <%= simple_form_for [:user, answer, answer.comments.new] do |f| %>
+                <%= f.input :content, label: false, placeholder: "Enter a comment...", input_html: { rows: 2, class: "comment__input submit-on-return" } %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="card">
+    <div class="card__section">
+    <h3>Write an answer</h3>
+    <% if @question.solved_at.nil? %>
+      <%= simple_form_for [:user, @campaign, @question, @question.answers.new] do |f| %>
+        <%= f.input :content, label: false, placeholder: "Type an answer here..." %>
+        <%= f.button :submit, value: "Submit" %>
+      <% end %>
+    <% else %>
+      <p>This question is closed and doesn't take additional answers.</p>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  $('.counter--votable').click(function() {
+    $.ajax({
+      method: 'put',
+      url: '/user/answers/' + $(this).data('answer-id') + '/vote',
+      data: {
+        answer: {
+          upvoted: !$(this).data('upvoted')
+        }
+      }
+    });
+
+    var voteChange = ($(this).data('upvoted') ? -1 : 1);
+    $(this).find('.counter__number').text(parseInt($(this).find('.counter__number').text()) + voteChange);
+
+    $(this).data('upvoted', !$(this).data('upvoted'));
+    $(this).toggleClass('counter--active');
+  });
+
+  // Preload arrow images
+  var image = new Image(); image.src = "<%= image_path('icons/upvote.svg') %>";
+  var image2 = new Image(); image2.src = "<%= image_path('icons/upvote-active.svg') %>";
+
+  // Submit comments using the return key
+  Utility.submitOnReturn($('.submit-on-return'));
+</script>

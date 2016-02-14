@@ -12,7 +12,7 @@
         <tbody>
           <% @poll.responses.order(created_at: :desc).each do |response| %>
             <tr>
-              <td><%= response.info[@field] %> - <em><%= response.employee.name %>, <%= time_ago_in_words(response.created_at) %> ago</em></td>
+              <td><%= response.info[@field] %> - <em><%= response.user.name %>, <%= time_ago_in_words(response.created_at) %> ago</em></td>
             </tr>
           <% end %>
         </tbody>

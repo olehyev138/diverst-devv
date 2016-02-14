@@ -5,14 +5,12 @@
       <%= link_to "Export CSV", export_csv_poll_path(@poll), class: "btn btn--tertiary" %>
     </div>
     <div class="flex-row__cell">
-      <%= link_to "New Graph", new_poll_graph_path(@poll), class: "btn btn--primary" %>
+      <%= link_to "New Graph", new_poll_graph_path(@poll), class: "btn btn--primary" if policy(@poll).edit? %>
     </div>
   </div>
 </div>
 
 <div class="content__main">
-  <p></p>
-
   <div class="card">
     <div class="card__section">
       <div class="row row--spacing-bottom">
@@ -23,7 +21,7 @@
       <div class="row">
         <div class="col sm-6 md-3 lg-2">
           <small>Invitations</small>
-          <h2><%= @poll.targeted_employees.count %></h2>
+          <h2><%= @poll.targeted_users.count %></h2>
         </div>
         <div class="col sm-6 md-3 lg-2">
           <small>Responses</small>
@@ -31,7 +29,7 @@
         </div>
         <div class="col sm-6 md-3 lg-2">
           <small>Response rate</small>
-          <h2><%= @poll.targeted_employees.count > 0 ? "#{(@poll.responses.count.to_f / @poll.targeted_employees.count * 100).to_i}%" : "N/A" %></h2>
+          <h2><%= @poll.targeted_users.count > 0 ? "#{(@poll.responses.count.to_f / @poll.targeted_users.count * 100).to_i}%" : "N/A" %></h2>
         </div>
       </div>
     </div>
@@ -42,7 +40,7 @@
   <% if @poll.graphs.empty? %>
     <div class="card">
       <div class="card__section">
-        <p>There are no graphs yet. <%= link_to "Create one", new_poll_graph_path(@poll) %> to start analyzing your employees' responses.</p>
+        <p>There are no graphs yet. <%= link_to "Create one", new_poll_graph_path(@poll) %> to start analyzing your users' responses.</p>
       </div>
     </div>
   <% else %>
@@ -51,10 +49,12 @@
         <div class="col sm-12 md-6">
           <div class="card">
             <div class="card__section">
-              <div class="card__action">
-                <%= link_to "Edit", edit_graph_path(graph) %> -
-                <%= link_to "Remove", graph_path(graph), method: :delete, class: "error" %>
-              </div>
+              <% if policy(@poll).edit? %>
+                <div class="card__action">
+                  <%= link_to "Edit", edit_graph_path(graph) %> -
+                  <%= link_to "Remove", graph_path(graph), method: :delete, class: "error" %>
+                </div>
+              <% end %>
               <h4 class="no-margin"><%= truncate(graph.title, length: 50) %></h4>
               <% if !graph.aggregation.nil? %><small><%= aggregation_text(graph) %></small><% end %>
               <div class="graph" data-graph-id="<%= graph.id %>"></div>
@@ -98,7 +98,7 @@
             <% @responses.each do |response| %>
 
               <tr data-response-id="<%= response.id %>">
-                <td><%= response.employee.name %></td>
+                <td><%= response.user.name %></td>
                 <td><%= response.created_at.to_s :reversed_slashes %></td>
                 <td><a href="#" class="row-expand">Show</a></td>
               </tr>

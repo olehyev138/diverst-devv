@@ -1,19 +1,23 @@
 class PollsController < ApplicationController
-  before_action :authenticate_admin!
   before_action :set_poll, only: [:edit, :update, :destroy, :show, :export_csv]
+  after_action :verify_authorized
 
   layout 'market_scope'
 
   def index
-    @polls = current_admin.enterprise.polls
+    authorize Poll
+    @polls = policy_scope(Poll)
   end
 
   def new
-    @poll = current_admin.enterprise.polls.new
+    authorize Poll
+    @poll = current_user.enterprise.polls.new
   end
 
   def create
-    @poll = current_admin.enterprise.polls.new(poll_params)
+    authorize Poll
+    @poll = current_user.enterprise.polls.new(poll_params)
+    @poll.owner = current_user
 
     if @poll.save
       redirect_to action: :index
@@ -23,10 +27,16 @@ class PollsController < ApplicationController
   end
 
   def show
+    authorize @poll
     @responses = @poll.responses.order(created_at: :desc).page(params[:response_page]).per(5)
   end
 
+  def edit
+    authorize @poll
+  end
+
   def update
+    authorize @poll
     if @poll.update(poll_params)
       redirect_to @poll
     else
@@ -35,18 +45,20 @@ class PollsController < ApplicationController
   end
 
   def destroy
+    authorize @poll
     @poll.destroy
     redirect_to action: :index
   end
 
   def export_csv
+    authorize @poll, :show?
     send_data @poll.responses_csv, filename: "#{@poll.title}_responses.csv"
   end
 
   protected
 
   def set_poll
-    @poll = current_admin.enterprise.polls.find(params[:id])
+    @poll = current_user.enterprise.polls.find(params[:id])
   end
 
   def poll_params

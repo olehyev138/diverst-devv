@@ -3,12 +3,12 @@
     <div class="card">
       <div class="card__section card__section--border">
         <p class="field__hint">Choose the field that the graph will represent</p>
-        <%= f.association :field, label: false, collection: @poll.fields + current_admin.enterprise.fields %>
+        <%= f.association :field, label: false, collection: @poll.fields + current_user.enterprise.fields %>
       </div>
 
       <div class="card__section card__section--border">
         <p class="field__hint">Choose a field to aggregate the data on (optional)</p>
-        <%= f.association :aggregation, label: false, collection: @poll.fields + current_admin.enterprise.fields %>
+        <%= f.association :aggregation, label: false, collection: @poll.fields + current_user.enterprise.fields %>
       </div>
     </div>
 

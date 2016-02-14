@@ -3,7 +3,7 @@ class CreateTopics < ActiveRecord::Migration
     create_table :topics do |t|
       t.text :statement
       t.date :expiration
-      t.belongs_to :admin
+      t.belongs_to :user
       t.belongs_to :enterprise
       t.belongs_to :category
 

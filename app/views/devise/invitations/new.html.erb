@@ -1,5 +1,5 @@
 <div class="content__header">
-  <h1>Add an employee</h1>
+  <h1>Add an user</h1>
 </div>
 
 <div class="content__main">
@@ -13,7 +13,7 @@
           <%= f.input :first_name %>
           <%= f.input :last_name %>
 
-          <% current_admin.enterprise.fields.each do |cf| %>
+          <% current_user.enterprise.fields.each do |cf| %>
             <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: resource %>
           <% end %>
 

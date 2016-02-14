@@ -1,8 +1,6 @@
 class Groups::ResourcesController < ApplicationController
   include IsResources
 
-  before_action :authenticate_admin!
-
   layout 'erg'
 
   protected

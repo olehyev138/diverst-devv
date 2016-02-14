@@ -1,7 +1,7 @@
 <% content_for :secondary_nav do %>
   <%= active_link_to "Topics", topics_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-  <%= active_link_to "Algorithm", edit_algo_enterprise_path(current_admin.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-  <%= active_link_to "Mobile fields", edit_mobile_fields_enterprise_path(current_admin.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to "Algorithm", edit_algo_enterprise_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to "Mobile fields", edit_mobile_fields_enterprise_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
 <% end %>
 
 <%= render template: "layouts/dashboard" %>

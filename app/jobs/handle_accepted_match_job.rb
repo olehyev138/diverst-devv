@@ -1,4 +1,4 @@
-# This job is fired as soon as two employees accept a match. Here is what is being done here:
+# This job is fired as soon as two users accept a match. Here is what is being done here:
 #   - Notify the users via a push notification
 #   - Create the conversation in Firebase
 

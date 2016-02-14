@@ -1,5 +1,4 @@
 class Polls::GraphsController < ApplicationController
-  before_action :authenticate_admin!
   before_action :set_poll, except: [:data, :show, :edit, :update, :destroy]
   before_action :set_graph, except: [:index, :new, :create]
 
@@ -43,11 +42,11 @@ class Polls::GraphsController < ApplicationController
   protected
 
   def set_poll
-    @poll = current_admin.enterprise.polls.find(params[:poll_id])
+    @poll = current_user.enterprise.polls.find(params[:poll_id])
   end
 
   def set_graph
-    @graph = current_admin.enterprise.poll_graphs.find(params[:id])
+    @graph = current_user.enterprise.poll_graphs.find(params[:id])
   end
 
   def graph_params

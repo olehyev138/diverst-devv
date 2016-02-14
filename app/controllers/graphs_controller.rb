@@ -1,5 +1,4 @@
 class GraphsController < ApplicationController
-  before_action :authenticate_admin!
   before_action :set_collection, except: [:data, :show, :edit, :update, :destroy]
   before_action :set_graph, except: [:index, :new, :create]
 
@@ -48,9 +47,9 @@ class GraphsController < ApplicationController
 
   def set_collection
     if params[:metrics_dashboard_id]
-      @collection = current_admin.enterprise.metrics_dashboards.find(params[:metrics_dashboard_id])
+      @collection = current_user.enterprise.metrics_dashboards.find(params[:metrics_dashboard_id])
     elsif params[:poll_id]
-      @collection = current_admin.enterprise.polls.find(params[:poll_id])
+      @collection = current_user.enterprise.polls.find(params[:poll_id])
     end
   end
 

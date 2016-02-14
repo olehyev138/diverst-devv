@@ -16,12 +16,12 @@
               <h4 class="card__title"><%= inline_svg('icons/manage.svg', class: "icon card__icon") %></span>Newest Members</h4>
               <%= link_to "View all", group_group_members_path(@group), class: "card__action" %>
 
-              <% @employee_groups.each_slice(2) do |employee_group_slice| %>
+              <% @user_groups.each_slice(2) do |user_group_slice| %>
                 <div class="row mb10">
-                  <% employee_group_slice.each do |employee_group| %>
+                  <% user_group_slice.each do |user_group| %>
                     <div class="col sm-12 md-6">
-                      <%= link_to employee_group.employee.name, employee_group.employee %><br>
-                      <%= time_ago_in_words(employee_group.created_at) %> ago
+                      <%= link_to user_group.user.name, user_group.user %><br>
+                      <%= time_ago_in_words(user_group.created_at) %> ago
                     </div>
                   <% end %>
                 </div>
@@ -111,24 +111,6 @@
     </div>
 
     <div class="col col--stacked sm-12 md-3">
-      <% if manager = @group.manager %>
-        <div class="card card--secondary">
-          <div class="card__section">
-            <h4 style="overflow: auto;">
-              <span class="inline-block fleft">Your ERG manager</span>
-              <%= link_to image_tag('linkedin.png'), manager.linkedin_profile_url, target: '_blank', class: 'inline-block fright' if manager.linkedin_profile_url %>
-            </h4>
-            <div style="overflow: auto; clear: both;">
-              <%= image_tag(manager.avatar.url, class: "avatar avatar--round", style: "float: left; margin-right: 1em;") %>
-              <div style="float: left;">
-                <strong><%= manager.name %></strong><br>
-                <span>Human Capital Leader</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      <% end %>
-
       <div class="card card--secondary">
         <div class="card__section">
           <h4 class="card__title"><%= inline_svg('icons/trophy.svg', class: "icon card__icon") %>Leaderboards</h4>

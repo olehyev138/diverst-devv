@@ -1,6 +1,5 @@
 class TopicFeedbacksController < ApplicationController
-  before_action :authenticate_admin!, except: [:new, :create]
-  before_action :authenticate_employee!, only: [:new, :create]
+  before_action :authenticate_user!, only: [:new, :create]
   before_action :set_topic
   before_action :set_feedback, only: [:update, :destroy, :show]
 
@@ -12,7 +11,7 @@ class TopicFeedbacksController < ApplicationController
 
   def create
     @feedback = @topic.feedbacks.new(feedback_params)
-    @feedback.employee = current_employee
+    @feedback.user = current_user
 
     if @feedback.save
       redirect_to action: :thank_you
@@ -37,7 +36,7 @@ class TopicFeedbacksController < ApplicationController
   protected
 
   def set_topic
-    @topic = (current_employee || current_admin).enterprise.topics.find(params[:topic_id])
+    @topic = (current_user || current_user).enterprise.topics.find(params[:topic_id])
   end
 
   def set_feedback

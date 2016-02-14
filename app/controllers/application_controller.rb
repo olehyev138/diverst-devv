@@ -1,28 +1,26 @@
 class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
+  include Pundit
+
   protect_from_forgery with: :null_session
 
-  devise_group :user, contains: [:employee, :admin]
+  include ApplicationHelper
+
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   protected
-
-  def authenticate_inviter!
-    authenticate_admin!(force: true)
-  end
 
   def not_found!
     fail ActionController::RoutingError.new('Not Found')
   end
 
   def after_sign_in_path_for(resource)
-    return employee_campaigns_path if resource.is_a? Employee
-    return metrics_dashboards_path if resource.is_a? Admin
+    return user_campaigns_path if resource.is_a? User
   end
 
   def after_sign_out_path_for(resource)
-    return new_employee_session_path if resource == :employee
-    return new_admin_session_path if resource == :admin
+    return new_user_session_path
   end
 
   def cors_allow_all
@@ -30,5 +28,17 @@ class ApplicationController < ActionController::Base
     headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
     headers['Access-Control-Request-Method'] = '*'
     headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  end
+
+  private
+
+  def user_not_authorized
+    flash[:alert] = "You are not authorized to perform this action."
+
+    if !current_user
+      redirect_to new_user_session_path
+    else
+      redirect_to(request.referrer || default_path)
+    end
   end
 end
