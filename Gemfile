@@ -62,7 +62,7 @@ gem 'inline_svg'
 gem 'pundit'
 
 group :development, :test do
-  gem 'spring' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'spring', '1.6.2' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'guard-livereload', '~> 2.4', require: false
   gem 'rb-readline'
   gem 'rack-livereload'
