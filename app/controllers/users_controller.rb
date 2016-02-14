@@ -6,7 +6,7 @@ class UsersController < ApplicationController
 
   def index
     authorize User
-    @users = current_user.enterprise.users.page(params[:page])
+    @users = policy_scope(User)
 
     respond_to do |format|
       format.html
