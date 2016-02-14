@@ -27,6 +27,10 @@ class EnterprisesController < ApplicationController
     @enterprise.theme = Theme.new if @enterprise.theme.nil?
   end
 
+  def edit_algo
+    authorize @enterprise, :edit?
+  end
+
   def update_branding
     authorize @enterprise
     if @enterprise.update_attributes(enterprise_params)

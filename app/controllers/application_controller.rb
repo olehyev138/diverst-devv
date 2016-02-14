@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :null_session
 
+  include ApplicationHelper
+
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   protected
@@ -36,7 +38,7 @@ class ApplicationController < ActionController::Base
     if !current_user
       redirect_to new_user_session_path
     else
-      redirect_to(request.referrer || root_path)
+      redirect_to(request.referrer || default_path)
     end
   end
 end
