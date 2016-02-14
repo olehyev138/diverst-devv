@@ -208,8 +208,12 @@ class User < ActiveRecord::Base
 
     # Map Yammer fields with Diverst fields as per the mappings defined in the integration configuration
     enterprise.yammer_field_mappings.each do |mapping|
+<<<<<<< HEAD:app/models/user.rb
       yammer_value = yammer_user[mapping.yammer_field_name]
       user.info[mapping.diverst_field] = yammer_value unless yammer_value.nil?
+=======
+      user.info[mapping.diverst_field] = yammer_user[mapping.yammer_field_name]
+>>>>>>> 28461c1a86cb13617d1f0483129071b51bd75a78:app/models/user.rb
     end
 
     user
