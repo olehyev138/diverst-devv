@@ -1,5 +1,5 @@
 after :enterprise do
-  nb_users = 10
+  nb_users = 400
 
   enterprise = Enterprise.first
   domain_name = enterprise.name.parameterize + '.com'
