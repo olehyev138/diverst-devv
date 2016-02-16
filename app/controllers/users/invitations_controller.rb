@@ -1,7 +1,7 @@
 class Users::InvitationsController < Devise::InvitationsController
   layout :resolve_layout
   before_action :configure_permitted_parameters, if: :devise_controller?
-  before_action :ensure_policy, before: [:new]
+  before_action :ensure_policy, only: [:new]
 
   protected
 
