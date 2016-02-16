@@ -3,6 +3,20 @@
     <%= image_tag(@user.avatar.url) %>
   </div>
   <div class="flex-row__cell">
-    <h1><%= @user.name %></h1>
+    <h1 style="margin-bottom: 5px;"><%= @user.name %></h1>
+    <%= link_to 'Connect your LinkedIn account', '/omniauth/linkedin' unless @user.linkedin_profile_url %>
   </div>
+</div>
+
+<div class="card" style="margin-top: 30px;">
+  <div class="card__section card__section--border">
+    <label><strong>Email</strong></label>
+    <p><%= @user.email %></p>
+  </div>
+  <% @user.enterprise.fields.each do |field| %>
+    <div class="card__section card__section--border">
+      <label><strong><%= field.title %></strong></label>
+      <p><%= @user.string_for_field(field) %></p>
+    </div>
+  <% end %>
 </div>

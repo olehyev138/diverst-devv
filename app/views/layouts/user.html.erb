@@ -18,7 +18,7 @@
         <%= link_to "Admin Dashboard", root_admin_path, class: "white" if root_admin_path %>
       </div>
       <div class="flex-row__cell">
-        <%= link_to current_user.name, current_user, class: "white" %>
+        <%= link_to current_user.name, user_user_path(current_user), class: "white" %>
       </div>
     </div>
   </header>

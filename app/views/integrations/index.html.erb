@@ -20,21 +20,6 @@
           </div>
         </div>
       </div>
-      <div class="media-object<%= " media-object--selected" if false %>">
-        <div class="flex-row flex-row--middle">
-          <div class="flex-row__cell">
-            <%= image_tag "integrations/chatter.png", class: "media-object__image" %>
-          </div>
-          <div class="flex-row__cell flex-row__cell--grow">
-            <h4>Chatter</h4>
-            <p>Syncs your Chatter users with Diverst. Every new user created in Chatter will be added to Diverst and their information will be updated when necessary.</p>
-          </div>
-          <div class="flex-row__cell">
-            <%= link_to "Configure", integrations_yammer_configure_path, class: "btn btn--primary" if false %>
-            <%= link_to "Connect", integrations_yammer_login_path, class: "btn btn--secondary" if true %>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </div>

@@ -4,52 +4,60 @@
 </div>
 
 <div class="content__main">
-  <h3>Upcoming Events</h3>
-  <div class="card">
-    <% @upcoming_events.each do |event| %>
-      <div class="card__section card__section--border">
-        <%= link_to group_event_path(@group, event), class: "block block-section" do %>
-          <div class="flex-row flex-row--middle">
-            <% if event.picture.exists? %>
-              <div class="flex-row__cell">
-                <div style="background-image: url(<%= event.picture.url %>); width: 100px; height: 85px; background-size: cover; background-position: center;"></div>
+  <% unless @upcoming_events.empty? %>
+    <h3>Upcoming Events</h3>
+    <div class="card">
+      <% @upcoming_events.each do |event| %>
+        <div class="card__section card__section--border">
+          <%= link_to group_event_path(@group, event), class: "block block-section" do %>
+            <div class="flex-row flex-row--middle">
+              <% if event.picture.exists? %>
+                <div class="flex-row__cell">
+                  <div style="background-image: url(<%= event.picture.url %>); width: 100px; height: 85px; background-size: cover; background-position: center;"></div>
+                </div>
+              <% end %>
+              <div class="flex-row__cell flex-row__cell--grow">
+                <span class="highlight"><%= event.title %></span><br>
+                <small><%= event.description %></small><br>
+                <small class="muted"><%= event.start.to_s :slashes %></small>
               </div>
-            <% end %>
-            <div class="flex-row__cell flex-row__cell--grow">
-              <span class="highlight"><%= event.title %></span><br>
-              <small><%= event.description %></small><br>
-              <small class="muted"><%= event.start.to_s :slashes %></small>
+              <div class="flex-row__cell">
+                <span class="icon icon--chevron-right"></span>
+              </div>
             </div>
-            <div class="flex-row__cell">
-              <span class="icon icon--chevron-right"></span>
-            </div>
-          </div>
-        <% end %>
-      </div>
-    <% end %>
-  </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
   <h3>Past events</h3>
   <div class="card">
-    <% @past_events.each do |event| %>
-      <div class="card__section card__section--border">
-        <%= link_to group_event_path(@group, event), class: "block block-section" do %>
-          <div class="flex-row flex-row--middle">
-            <% if event.picture.exists? %>
-              <div class="flex-row__cell">
-                <div style="background-image: url(<%= event.picture.url %>); width: 100px; height: 85px; background-size: cover; background-position: center;"></div>
-              </div>
-            <% end %>
-            <div class="flex-row__cell flex-row__cell--grow">
-              <span class="highlight"><%= event.title %></span><br>
-              <small><%= event.description %></small><br>
-              <small class="muted">Ended <%= time_ago_in_words(event.end) %> ago</small>
-            </div>
-            <div class="flex-row__cell">
-              <span class="icon icon--chevron-right"></span>
-            </div>
-          </div>
-        <% end %>
+    <% if @past_events.empty? %>
+      <div class="card__section">
+        <p>There are no events in this group.</p>
       </div>
+    <% else %>
+      <% @past_events.each do |event| %>
+        <div class="card__section card__section--border">
+          <%= link_to group_event_path(@group, event), class: "block block-section" do %>
+            <div class="flex-row flex-row--middle">
+              <% if event.picture.exists? %>
+                <div class="flex-row__cell">
+                  <div style="background-image: url(<%= event.picture.url %>); width: 100px; height: 85px; background-size: cover; background-position: center;"></div>
+                </div>
+              <% end %>
+              <div class="flex-row__cell flex-row__cell--grow">
+                <span class="highlight"><%= event.title %></span><br>
+                <small><%= event.description %></small><br>
+                <small class="muted">Ended <%= time_ago_in_words(event.end) %> ago</small>
+              </div>
+              <div class="flex-row__cell">
+                <span class="icon icon--chevron-right"></span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
     <% end %>
   </div>
 </div>
