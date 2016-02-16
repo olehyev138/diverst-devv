@@ -80,7 +80,7 @@ gem 'rspec_junit_formatter', '0.2.2', group: :test
 
 gem 'parallel_tests', group: :development
 
-gem 'appsignal', '~> 0.12.rc', group: :production
+gem 'appsignal', group: :production
 
 group :development do
   gem 'capistrano'

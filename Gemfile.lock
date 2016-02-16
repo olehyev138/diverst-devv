@@ -618,7 +618,7 @@ DEPENDENCIES
   active_record_query_trace
   activerecord-import
   ajax-datatables-rails
-  appsignal (~> 0.12.rc)
+  appsignal
   autoprefixer-rails
   awesome_print
   aws-sdk (< 2.0)
