@@ -25,6 +25,11 @@ after :enterprise do
     NumericField.where(title: 'Seniority (in years)').first
   ]
 
+  policy_group = enterprise.policy_groups.create(
+    name: "Superadmins",
+    global_settings_manage: true
+  )
+
   nb_users.times do |i|
     first_name = Faker::Name.first_name
     last_name = Faker::Name.last_name
@@ -40,7 +45,8 @@ after :enterprise do
       invitation_sent_at: invite_time,
       invitation_accepted_at: Faker::Time.between(invite_time, Time.zone.today),
       password: password = SecureRandom.urlsafe_base64,
-      password_confirmation: password
+      password_confirmation: password,
+      policy_group: policy_group
     )
 
     user.info[title_field] = Faker::Name.title
