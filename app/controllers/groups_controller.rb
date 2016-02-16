@@ -27,7 +27,7 @@ class GroupsController < ApplicationController
   end
 
   def create
-    authorize @group
+    authorize Group
 
     @group = current_user.enterprise.groups.new(group_params)
 
