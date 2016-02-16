@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.feature 'An ERG dashboard' do
-  let(:admin) { create(:admin) }
-  let(:group) { create(:group_with_users, users_count: 5, enterprise: admin.enterprise) }
+  let(:user) { create(:user) }
+  let(:group) { create(:group_with_users, users_count: 5, enterprise: user.enterprise) }
 
   before do
-    login_as(admin, scope: :admin)
+    login_as(user, scope: :user)
   end
 
   it 'shows the newest members' do
@@ -45,8 +45,8 @@ RSpec.feature 'An ERG dashboard' do
       expect(page).to have_content group.members.last.name
     end
 
-    it 'allows admins to delete members' do
-      member = create(:user, enterprise: admin.enterprise, groups: [group], first_name: "Testing", last_name: "User")
+    it 'allows users to delete members' do
+      member = create(:user, enterprise: user.enterprise, groups: [group], first_name: "Testing", last_name: "User")
 
       visit group_group_members_path(group)
       expect(page).to have_content member.name
@@ -65,10 +65,10 @@ RSpec.feature 'An ERG dashboard' do
       expect(page).to have_content message.subject
     end
 
-    it 'allows admins to create messages' do
+    it 'allows users to create messages' do
       message_subject = 'I am a subject'
       message_content = 'The message content'
-      create(:segment_with_users, enterprise: admin.enterprise)
+      create(:segment_with_users, enterprise: user.enterprise)
 
       visit group_group_messages_path(group)
       click_on 'Create new message'
@@ -99,8 +99,8 @@ RSpec.feature 'An ERG dashboard' do
       expect(page).to have_content event.title
     end
 
-    it 'allows admins to create events' do
-      create(:segment_with_users, enterprise: admin.enterprise)
+    it 'allows users to create events' do
+      create(:segment_with_users, enterprise: user.enterprise)
       event_title = 'Sick event!'
       event_description = 'Awesome event description'
 
