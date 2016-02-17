@@ -28,7 +28,12 @@ class EnterprisesController < ApplicationController
 
   def edit_branding
     authorize @enterprise
-    @enterprise.theme = Theme.new if @enterprise.theme.nil?
+
+    @theme = if @enterprise.theme.nil?
+      Theme.new
+    else
+      @enterprise.theme
+    end
   end
 
   def edit_algo
@@ -37,7 +42,8 @@ class EnterprisesController < ApplicationController
 
   def update_branding
     authorize @enterprise
-    if @enterprise.update_attributes(enterprise_params)
+
+    if @enterprise.update_attributes(theme_attributes: enterprise_params[:theme])
       redirect_to action: :edit_branding
     else
       render :edit_branding
@@ -46,7 +52,7 @@ class EnterprisesController < ApplicationController
 
   def restore_default_branding
     authorize @enterprise
-    @enterprise.theme.delete
+    @enterprise.theme.destroy
     redirect_to :back
   end
 
@@ -62,7 +68,7 @@ class EnterprisesController < ApplicationController
   end
 
   def set_enterprise
-    @enterprise = Enterprise.find(params[:id] || params[:enterprise_id])
+    @enterprise = current_user.enterprise
   end
 
   def enterprise_params
@@ -75,7 +81,7 @@ class EnterprisesController < ApplicationController
         :idp_slo_target_url,
         :idp_cert,
         :yammer_import,
-        theme_attributes: [
+        theme: [
           :id,
           :primary_color,
           :logo
