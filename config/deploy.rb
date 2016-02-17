@@ -2,7 +2,7 @@ lock '3.4.0'
 
 set :application, 'diverst'
 set :repo_url, 'git@github.com:vol7/diverst.git'
-set :branch, :master
+set :branch, ENV["REVISION"] || ENV["BRANCH_NAME"] || :master
 set :deploy_to, '/home/deploy/diverst'
 set :pty, true
 set :linked_files, %w(config/application.yml)

@@ -1,5 +1,5 @@
 enterprise = Enterprise.create(
-  name: 'Acme Corp.',
+  name: "enterprise#{Enterprise.count + 1}",
   idp_entity_id: 'https://app.onelogin.com/saml/metadata/468755',
   idp_sso_target_url: 'https://v7.onelogin.com/trust/saml2/http-post/sso/468755',
   idp_slo_target_url: 'https://v7.onelogin.com/trust/saml2/http-redirect/slo/468755',
@@ -1104,13 +1104,4 @@ NumericField.create(
   min: 0,
   max: 40,
   container: enterprise
-)
-
-User.create(
-  enterprise: enterprise,
-  first_name: 'Francis',
-  last_name: 'Marineau',
-  email: 'info@diverst.com',
-  password: 'password',
-  password_confirmation: 'password'
 )

@@ -1,5 +1,5 @@
 after :segments do
-  enterprise = Enterprise.first
+  enterprise = Enterprise.last
 
   p = enterprise.polls.new(
     title: 'New Latino attraction at Disney World',
@@ -73,10 +73,10 @@ Hot Dog"
   p.save
 
   100.times do
-    offset = rand(User.count)
+    offset = rand(enterprise.users.count)
 
     r = p.responses.new(
-      user: User.offset(offset).first
+      user: enterprise.users.offset(offset).first
     )
 
     r.info[p.fields[0]] = p.fields[0].options[rand(0..p.fields[0].options.count - 1)]

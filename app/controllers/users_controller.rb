@@ -10,7 +10,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render json: UserDatatable.new(view_context) }
+      format.json { render json: UserDatatable.new(view_context, @users) }
     end
   end
 

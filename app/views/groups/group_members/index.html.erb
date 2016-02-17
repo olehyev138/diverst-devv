@@ -11,7 +11,7 @@
             <div class="flex-row flex-row--middle">
               <div class="flex-row__cell flex-row__cell--grow flex-row__cell--ellipsis"><%= member.name %></div>
               <div class="flex-row__cell">
-                <% if policy(member).destroy? %>
+                <% if policy(@group).manage_members? %>
                   <%= link_to group_group_member_path(@group, member), method: :delete do %>
                     <%= inline_svg('icons/remove.svg', class: "icon icon--negative") %>
                   <% end %>

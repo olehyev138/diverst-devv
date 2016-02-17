@@ -1,28 +1,29 @@
 after :enterprise do
-  nb_users = 400
+  puts "Importing users"
+  nb_users = ENV["NB_USERS"] || 400
 
-  enterprise = Enterprise.first
+  enterprise = Enterprise.last
   domain_name = enterprise.name.parameterize + '.com'
-  gender_field = SelectField.where(title: 'Gender').first
-  birth_field = DateField.where(title: 'Date of birth').first
-  disabilities_field = SelectField.where(title: 'Disabilities?').first
-  title_field = TextField.where(title: 'Current title').first
+  gender_field = enterprise.fields.where(title: 'Gender').first
+  birth_field = enterprise.fields.where(title: 'Date of birth').first
+  disabilities_field = enterprise.fields.where(title: 'Disabilities?').first
+  title_field = enterprise.fields.where(title: 'Current title').first
 
   other_fields = [
-    SelectField.where(title: 'Nationality').first,
-    SelectField.where(title: 'Belief').first,
-    CheckboxField.where(title: 'Spoken languages').first,
-    SelectField.where(title: 'Ethnicity').first,
-    SelectField.where(title: 'Status').first,
-    SelectField.where(title: 'LGBT?').first,
-    SelectField.where(title: 'Hobbies').first,
-    SelectField.where(title: 'Education level').first,
-    CheckboxField.where(title: 'Certifications').first,
-    NumericField.where(title: 'Experience in your field (in years)').first,
-    SelectField.where(title: 'Countries worked in').first,
-    SelectField.where(title: 'Veteran?').first,
-    SelectField.where(title: 'Office location').first,
-    NumericField.where(title: 'Seniority (in years)').first
+    enterprise.fields.where(title: 'Nationality').first,
+    enterprise.fields.where(title: 'Belief').first,
+    enterprise.fields.where(title: 'Spoken languages').first,
+    enterprise.fields.where(title: 'Ethnicity').first,
+    enterprise.fields.where(title: 'Status').first,
+    enterprise.fields.where(title: 'LGBT?').first,
+    enterprise.fields.where(title: 'Hobbies').first,
+    enterprise.fields.where(title: 'Education level').first,
+    enterprise.fields.where(title: 'Certifications').first,
+    enterprise.fields.where(title: 'Experience in your field (in years)').first,
+    enterprise.fields.where(title: 'Countries worked in').first,
+    enterprise.fields.where(title: 'Veteran?').first,
+    enterprise.fields.where(title: 'Office location').first,
+    enterprise.fields.where(title: 'Seniority (in years)').first
   ]
 
   policy_group = enterprise.policy_groups.create(
@@ -30,17 +31,55 @@ after :enterprise do
     global_settings_manage: true
   )
 
-  nb_users.times do |i|
-    first_name = Faker::Name.first_name
-    last_name = Faker::Name.last_name
+  # Create our own users
+  u1 = enterprise.users.new(
+    email: "frank@#{domain_name}",
+    first_name: 'Francis',
+    last_name: 'Marineau',
+    password: 'password',
+    password_confirmation: 'password',
+    policy_group: policy_group,
+    invitation_accepted_at: Faker::Time.between(3.days.ago, Time.current)
+  )
 
-    user = User.create(
-      first_name: first_name,
-      last_name: last_name,
+  u2 = enterprise.users.new(
+    email: "andre@#{domain_name}",
+    first_name: 'André',
+    last_name: 'Laurin',
+    password: 'password',
+    password_confirmation: 'password',
+    policy_group: policy_group,
+    invitation_accepted_at: Faker::Time.between(3.days.ago, Time.current)
+  )
+
+  u3 = enterprise.users.new(
+    email: "ryan@#{domain_name}",
+    first_name: 'Ryan',
+    last_name: 'Dankoff',
+    password: 'password',
+    password_confirmation: 'password',
+    policy_group: policy_group,
+    invitation_accepted_at: Faker::Time.between(3.days.ago, Time.current)
+  )
+
+  u1.info[gender_field] = 'Female'
+  u2.info[gender_field] = 'Female'
+  u3.info[gender_field] = 'Female'
+
+  u1.save
+  u2.save
+  u3.save
+
+  users_to_create = []
+
+  # Populate generic users
+  nb_users.times do |i|
+    user = enterprise.users.new(
+      first_name: first_name = Faker::Name.first_name,
+      last_name: last_name = Faker::Name.last_name,
       email: Faker::Internet.user_name("#{first_name} #{last_name}", %w(. _ -)) + "@#{domain_name}",
       auth_source: 'manual',
-      enterprise: enterprise,
-      invited_by_id: enterprise.users.first.id,
+      invited_by_id: u1.id,
       invitation_created_at: invite_time = Faker::Time.between(30.days.ago, 3.days.ago),
       invitation_sent_at: invite_time,
       invitation_accepted_at: Faker::Time.between(invite_time, Time.zone.today),
@@ -60,9 +99,9 @@ after :enterprise do
 
     # Pick gender with a 70-30 repartition
     user.info[gender_field] = if rand(100) > 30
-                                    'Male'
-                                  else
-                                    'Female'
+      'Male'
+    else
+      'Female'
     end
 
     # Pick random stuff for the rest of the fields
@@ -85,22 +124,9 @@ after :enterprise do
       end
     end
 
-    if user.save
-      puts "User ##{i + 1} created successfully."
-    else
-      puts "Error(s) saving user ##{i + 1}: "
-    end
+    users_to_create << user
   end
 
-  e1 = User.first
-  e2 = User.second
-
-  e1.update(email: 'frank@diverst.com', first_name: 'Francis', last_name: 'Marineau', password: 'password', password_confirmation: 'password')
-  e2.update(email: 'andre@diverst.com', first_name: "André", last_name: 'Laurin', password: 'password', password_confirmation: 'password')
-
-  e1.info[gender_field] = 'Female'
-  e2.info[gender_field] = 'Female'
-
-  e1.save
-  e2.save
+  User.import users_to_create
+  puts "Importing users [DONE]"
 end

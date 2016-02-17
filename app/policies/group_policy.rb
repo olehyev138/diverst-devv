@@ -13,6 +13,12 @@ class GroupPolicy < ApplicationPolicy
     @record.managers.exists?(user.id)
   end
 
+  def manage_members?
+    return true if @policy_group.groups_manage?
+    return true if @record.owner == @user
+    @record.managers.exists?(user.id)
+  end
+
   def destroy?
     return true if @policy_group.groups_manage?
     @record.owner == @user

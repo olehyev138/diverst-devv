@@ -1,17 +1,20 @@
-10.times do |i|
-  g = Enterprise.first.groups.new(
-    name: Faker::Commerce.color.capitalize,
-    description: Faker::Lorem.sentence
-  )
+after :users do
+  enterprise = Enterprise.last
+  nb_groups = ENV["NB_GROUPS"] || 10
+  groups_to_create = []
 
-  User.all.each do |user|
-    g.members << user if rand(100) < 25
+  nb_groups.times do |i|
+    g = enterprise.groups.new(
+      name: Faker::Commerce.color.capitalize,
+      description: Faker::Lorem.sentence
+    )
+
+    enterprise.users.each do |user|
+      g.members << user if rand(100) < 25
+    end
+
+    groups_to_create << g
   end
 
-  if g.save
-    puts "Group ##{i + 1} created successfully."
-  else
-    puts "Error(s) saving group ##{i + 1}: "
-    puts g.errors.messages
-  end
+  Group.import groups_to_create
 end

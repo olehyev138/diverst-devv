@@ -1,9 +1,11 @@
-s = Enterprise.first.segments.new(
+enterprise = Enterprise.last
+
+s = enterprise.segments.new(
   name: 'Females'
 )
 
 s.rules.new(
-  field: SelectField.where(title: 'Gender').first,
+  field: enterprise.fields.where(title: 'Gender').first,
   operator: SegmentRule.operators[:contains_any_of],
   values: ['Female']
 )
