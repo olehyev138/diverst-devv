@@ -5,9 +5,9 @@
         <%= f.input :name %>
         <%= f.input :description %>
         <%= f.input :logo, as: :file %>
-        <%= f.association :managers, input_html: { class: "select2" } %>
+        <%= f.association :managers, collection: @group.enterprise.users, input_html: { class: "select2" } %>
         <%= f.input :send_invitations %>
-        <%= f.association :invitation_segments, input_html: { class: "select2"}, wrapper_html: { style: "display: none;" } %>
+        <%= f.association :invitation_segments, collection: @group.enterprise.segments, input_html: { class: "select2"}, wrapper_html: { style: "display: none;" } %>
       </div>
 
       <% if !@group.enterprise.yammer_token.nil? %>

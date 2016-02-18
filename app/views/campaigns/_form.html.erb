@@ -20,12 +20,12 @@
 
       <div class="card__section card__section--border">
         <p class="field__hint">Choose the <strong>ERGs</strong> you want to target</p>
-        <%= f.association :groups, input_html: { class: "select2" }, label: false %>
+        <%= f.association :groups, collection: @campaign.enterprise.groups, input_html: { class: "select2" }, label: false %>
       </div>
 
       <div class="card__section card__section--border">
         <p class="field__hint">Choose the <strong>segments</strong> you want to target within these ERGs</p>
-        <%= f.association :segments, input_html: { class: "select2" }, label: false %>
+        <%= f.association :segments, collection: @campaign.enterprise.segments, input_html: { class: "select2" }, label: false %>
       </div>
 
       <div class="card__section card__section--border">
@@ -35,7 +35,7 @@
 
       <div class="card__section card__section--border">
         <p class="field__hint">Assign <strong>managers</strong> to the group. They will be allowed access to administrative features related to this group only.</p>
-        <%= f.association :managers, input_html: { class: "select2" }, label: false %>
+        <%= f.association :managers, collection: @campaign.enterprise.users, input_html: { class: "select2" }, label: false %>
       </div>
 
       <div class="card__section card__section--border">

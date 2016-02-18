@@ -8,7 +8,7 @@
     <div class="flex-row__cell flex-row__cell--grow">
       <div class="field">
         <div class="field__input-wrapper">
-          <%= f.association :field, label: false %>
+          <%= f.association :field, collection: f.object.enterprise.fields, label: false %>
         </div>
       </div>
     </div>
