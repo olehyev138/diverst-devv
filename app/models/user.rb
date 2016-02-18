@@ -7,7 +7,6 @@ class User < ActiveRecord::Base
 
   include DeviseTokenAuth::Concerns::User
   include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
   include ContainsFields
 
   has_many :devices
@@ -34,6 +33,18 @@ class User < ActiveRecord::Base
 
   before_validation :generate_password_if_saml
   after_create :assign_firebase_token
+
+  after_commit on: [:create] do
+    __elasticsearch__.index_document(index: enterprise.es_users_index_name)
+  end
+
+  after_commit on: [:update] do
+    __elasticsearch__.update_document(index: enterprise.es_users_index_name)
+  end
+
+  after_commit on: [:destroy] do
+    __elasticsearch__.delete_document(index: enterprise.es_users_index_name)
+  end
 
   scope :for_segments, -> (segments) { joins(:segments).where('segments.id' => segments.map(&:id)).distinct if segments.any? }
   scope :for_groups, -> (groups) { joins(:groups).where('groups.id' => groups.map(&:id)).distinct if groups.any? }
