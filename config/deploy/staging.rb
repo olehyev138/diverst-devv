@@ -7,7 +7,6 @@
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 server '52.90.224.202', user: 'deploy', roles: %w(web app db)
-set :branch, :development
 
 # role-based syntax
 # ==================
@@ -28,6 +27,9 @@ set :branch, :development
 # For available Capistrano configuration variables see the documentation page.
 # http://capistranorb.com/documentation/getting-started/configuration/
 # Feel free to add new variables to customise your setup.
+
+set :branch, :development
+set :rails_env, :production
 
 # Custom SSH Options
 # ==================
