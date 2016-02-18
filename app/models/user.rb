@@ -186,7 +186,11 @@ class User < ActiveRecord::Base
       }
     )
 
-    User.__elasticsearch__.import index: index # We don't directly call User.import since activerecord-import overrides that
+    # We don't directly call User.import since activerecord-import overrides that
+    User.__elasticsearch__.import(
+      index: index,
+      query: -> { where(enterprise: enterprise) }
+    )
   end
 
   # Updates this user's match scores with all other enterprise users
