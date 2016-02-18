@@ -31,7 +31,7 @@
       <label class="field__label"><%= cf.title %></label>
       <div class="field__input-wrapper">
         <span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
-        <select class="field__input field__input--right-add-on" name="custom-fields[<%= cf.id %>]">
+        <select class="field__input field__input--right-add-on select2" name="custom-fields[<%= cf.id %>]" multiple>
           <% cf.options.each do |option| %>
             <option value="<%= option %>"<%= " selected=selected" if resource.info[cf] == option %>><%= option %></option>
           <% end %>
