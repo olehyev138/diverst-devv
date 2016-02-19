@@ -1,13 +1,19 @@
 class NewsLinkPolicy < ApplicationPolicy
   def index?
-    @policy_group.group_messages_index?
+    @policy_group.news_links_index?
   end
 
   def create?
-    @policy_group.group_messages_create?
+    @policy_group.news_links_create?
+  end
+
+  def update?
+    return true if @policy_group.news_links_manage?
+    @record.owner == @user
   end
 
   def destroy?
-    return true if @policy_group.polls_manage?
+    return true if @policy_group.news_links_manage?
+    @record.owner == @user
   end
 end
