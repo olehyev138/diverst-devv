@@ -1,4 +1,3 @@
-ActionMailer::Base.delivery_method = :smtp
 ActionMailer::Base.default charset: 'utf-8'
 ActionMailer::Base.smtp_settings = {
   port: 587,
@@ -8,3 +7,5 @@ ActionMailer::Base.smtp_settings = {
   domain: ENV['MANDRILL_DOMAIN'],
   authentication: :plain
 }
+
+ActionMailer::Base.register_interceptor(PreventMailInterceptor)
