@@ -20,7 +20,7 @@
       <span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
       <select class="field__input field__input--right-add-on" name="custom-fields[<%= cf.id %>]">
         <% cf.options.each do |option| %>
-          <option value="<%= option %>"<%= " selected=selected" if resource.info[cf][0] == option %>><%= option %></option>
+          <option value="<%= option %>"<%= " selected=selected" if resource.info[cf] && resource.info[cf][0] == option %>><%= option %></option>
         <% end %>
       </select>
     </div>
@@ -33,7 +33,7 @@
         <span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
         <select class="field__input field__input--right-add-on select2" name="custom-fields[<%= cf.id %>][]" multiple="multiple">
           <% cf.options.each do |option| %>
-            <option value="<%= option %>"<%= " selected=selected" if resource.info[cf].include?(option) %>><%= option %></option>
+            <option value="<%= option %>"<%= " selected=selected" if resource.info[cf] && resource.info[cf].include?(option) %>><%= option %></option>
           <% end %>
         </select>
       </div>
