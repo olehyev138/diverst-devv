@@ -372,6 +372,7 @@ CheckboxField.create(
   match_polarity: true,
   match_weight: 0.2,
   container: enterprise,
+  alternative_layout: true,
   options_text: "English
 Mandarin
 Spanish
@@ -448,7 +449,7 @@ SelectField.create(
 No"
 )
 
-SelectField.create(
+CheckboxField.create(
   title: 'Hobbies',
   saml_attribute: '',
   gamification_value: 10,
@@ -456,6 +457,7 @@ SelectField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
+  alternative_layout: true,
   container: enterprise,
   options_text: "3D printing
 Amateur radio
@@ -799,7 +801,8 @@ CheckboxField.create(
   match_polarity: true,
   match_weight: 0.2,
   container: enterprise,
-  options_text: "Afghanistan
+  alternative_layout: true,
+  options_text: "Afghanistan,
 Albania
 Algeria
 American Samoa

@@ -128,5 +128,6 @@ after :enterprise do
   end
 
   User.import users_to_create
+  User.reset_elasticsearch(enterprise: enterprise)
   puts "Importing users [DONE]"
 end
