@@ -73,8 +73,6 @@
         var fieldOperators = $(this).find(":selected").data('operators') || [];
         $operatorSelect.find('option').remove();
 
-        $operatorSelect[0].add(new Option("", ""));
-
         operators.forEach(function(operator) {
           if (fieldOperators.indexOf(operator.id) > -1) {
             $operatorSelect[0].add(new Option(operator.name, operator.id, true, operator.id === $operatorSelect.data('operator-id')));
