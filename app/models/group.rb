@@ -129,6 +129,7 @@ class Group < ActiveRecord::Base
 
   def self.avg_members_per_group(enterprise:)
     group_sizes = UserGroup.where(group: enterprise.groups).group(:group).count.values
+    return nil if group_sizes.length == 0
     group_sizes.sum / group_sizes.length
   end
 end
