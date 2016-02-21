@@ -8,6 +8,10 @@ class PollFieldsController < ApplicationController
     render json: @field.answer_popularities(entries: @poll.responses)
   end
 
+  def show
+    @responses = @poll.responses.includes(:user)
+  end
+
   protected
 
   def set_poll

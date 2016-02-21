@@ -81,7 +81,7 @@ module Optionnable
     end
 
     # Execute the elasticsearch query
-    Elasticsearch::Model.client.search(index: container.es_users_index_name || container.enterprise.es_users_index_name, body: search_hash)
+    Elasticsearch::Model.client.search(index: container.try(:es_users_index_name) || container.enterprise.es_users_index_name, body: search_hash)
   end
 
   # Get highcharts-usable stats from the field by querying elasticsearch and formatting its response

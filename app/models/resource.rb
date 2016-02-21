@@ -3,7 +3,8 @@ class Resource < ActiveRecord::Base
   belongs_to :owner, class_name: "User"
 
   has_attached_file :file
-  validates_attachment_content_type :file, content_type: /.*/
+  validates_with AttachmentPresenceValidator, attributes: :file
+  do_not_validate_attachment_file_type :file
 
   def file_extension
     File.extname(file_file_name)[1..-1].downcase
