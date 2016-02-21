@@ -23,7 +23,11 @@ class Campaign < ActiveRecord::Base
 
   after_create :create_invites
 
+  scope :ongoing, -> { where('start < :current_time AND end > :current_time', current_time: Time.current) }
+
   def create_invites
+    return if enterprise.nil?
+
     invites = enterprise.users.for_groups(groups).map do |user_to_invite|
       CampaignInvitation.new(campaign: self, user: user_to_invite)
     end

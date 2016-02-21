@@ -8,12 +8,32 @@
     <div class="card__section">
       <div class="flex-row">
         <div class="flex-row__cell">
-          <small># of users</small><br>
-          <strong><%= @nb_users %></strong>
+          <small>Users</small><br>
+          <strong><%= @general_metrics[:nb_users] %></strong>
         </div>
         <div class="flex-row__cell">
-          <small>Matches presented</small><br>
-          <strong>2,034</strong>
+          <small>ERGs</small><br>
+          <strong><%= @general_metrics[:nb_ergs] %></strong>
+        </div>
+        <div class="flex-row__cell">
+          <small>Segments</small><br>
+          <strong><%= @general_metrics[:nb_segments] %></strong>
+        </div>
+        <div class="flex-row__cell">
+          <small>Resources</small><br>
+          <strong><%= @general_metrics[:nb_resources] %></strong>
+        </div>
+        <div class="flex-row__cell">
+          <small>Surveys</small><br>
+          <strong><%= @general_metrics[:nb_polls] %></strong>
+        </div>
+        <div class="flex-row__cell">
+          <small>Ongoing campaigns</small><br>
+          <strong><%= @general_metrics[:nb_ongoing_campaigns] %></strong>
+        </div>
+        <div class="flex-row__cell">
+          <small>Average # of members per ERG</small><br>
+          <strong><%= @general_metrics[:average_nb_members_per_group] %></strong>
         </div>
       </div>
     </div>

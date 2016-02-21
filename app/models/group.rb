@@ -126,4 +126,9 @@ class Group < ActiveRecord::Base
       update_elasticsearch_member(member)
     end
   end
+
+  def self.avg_members_per_group(enterprise:)
+    group_sizes = UserGroup.where(group: enterprise.groups).group(:group).count.values
+    group_sizes.sum / group_sizes.length
+  end
 end
