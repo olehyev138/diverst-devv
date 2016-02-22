@@ -40,6 +40,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.add_recipe "elasticsearch"
     chef.add_recipe "java"
     chef.add_recipe "redisio"
+    chef.add_recipe "imagemagick"
 
     # Install Ruby 2.3.0 and Bundler
     # Set an empty root password for MySQL to make things simple1

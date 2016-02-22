@@ -18,6 +18,7 @@ class Group < ActiveRecord::Base
   has_many :answer_upvotes, through: :answers
   has_many :groups_managers
   has_many :managers, through: :groups_managers, source: :user
+  belongs_to :lead_manager, class_name: "User"
   belongs_to :owner, class_name: "User"
 
   has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('missing.png')
@@ -110,7 +111,7 @@ class Group < ActiveRecord::Base
 
   # Update members in elastic_search
   def update_all_elasticsearch_members
-    members.each do |member|
+    members.includes(:poll_responses).each do |member|
       update_elasticsearch_member(member)
     end
   end

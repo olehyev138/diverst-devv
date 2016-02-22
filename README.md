@@ -9,10 +9,12 @@ In the vagrant machine:
 
 ```
 echo "cd /vagrant" >> /home/vagrant/.bashrc
+mkdir ~/log
+touch ~/log/sidekiq.yml
 cd /vagrant
 rake db:create db:migrate db:seed
-redis-server /etc/redis/6379.conf
-bundle exec sidekiq -C config/sidekiq -d -L /vagrant/log/sidekiq.log
+sudo redis-server /etc/redis/6379.conf
+bundle exec sidekiq -C config/sidekiq -d -L ~/log/sidekiq.log
 nohup bundle exec guard >/dev/null 2>&1 &
 rails s
 ```
