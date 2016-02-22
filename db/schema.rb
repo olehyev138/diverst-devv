@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160212055131) do
+ActiveRecord::Schema.define(version: 20160222073111) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -216,6 +216,7 @@ ActiveRecord::Schema.define(version: 20160212055131) do
     t.integer  "yammer_id",                 limit: 4
     t.integer  "manager_id",                limit: 4
     t.integer  "owner_id",                  limit: 4
+    t.integer  "lead_manager_id",           limit: 4
   end
 
   create_table "groups_managers", force: :cascade do |t|
