@@ -92,8 +92,11 @@ group :development do
   gem 'capistrano-rails-console'
   gem 'capistrano-sidekiq'
   gem 'spring-commands-rspec'
-  gem "better_errors"
-  gem "binding_of_caller"
-  gem "bullet"
-  gem "slack-notifier" # For Bullet
+  gem 'better_errors'
+  gem 'binding_of_caller'
+  gem 'bullet'
+  gem 'slack-notifier' # For Bullet
+
+  gem 'pry-rails'
+  gem 'pry-theme'
 end

@@ -36,3 +36,7 @@ spec/examples.txt
 
 # Precompiled assets when testing prod environment locally
 /public/assets/*
+
+# Vagrant files
+.vagrant/
+cookbooks/

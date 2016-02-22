@@ -53,3 +53,6 @@ guard 'livereload' do
   watch(%r{app/helpers/.+\.rb})
   watch(%r{config/locales/.+\.yml})
 end
+
+# Config for running in a background subshell
+interactor :off
