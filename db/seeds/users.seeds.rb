@@ -1,6 +1,6 @@
 after :enterprise do
   puts "Importing users"
-  nb_users = ENV["NB_USERS"] || 400
+  nb_users = ENV["NB_USERS"].to_i || 100
 
   enterprise = Enterprise.last
   domain_name = enterprise.name.parameterize + '.com'
@@ -28,11 +28,52 @@ after :enterprise do
 
   policy_group = enterprise.policy_groups.create(
     name: "Superadmins",
+
+    campaigns_index: true,
+    campaigns_create: true,
+    campaigns_manage: true,
+
+    polls_index: true,
+    polls_create: true,
+    polls_manage: true,
+
+    events_index: true,
+    events_create: true,
+    events_manage: true,
+
+    group_messages_index: true,
+    group_messages_create: true,
+    group_messages_manage: true,
+
+    groups_index: true,
+    groups_create: true,
+    groups_manage: true,
+    groups_members_index: true,
+    groups_members_manage: true,
+
+    metrics_dashboards_index: true,
+    metrics_dashboards_create: true,
+
+    news_links_index: true,
+    news_links_create: true,
+    news_links_manage: true,
+
+    enterprise_resources_index: true,
+    enterprise_resources_create: true,
+    enterprise_resources_manage: true,
+
+    segments_index: true,
+    segments_create: true,
+    segments_manage: true,
+
+    users_index: true,
+    users_manage: true,
+
     global_settings_manage: true
   )
 
   # Create our own users
-  u1 = enterprise.users.new(
+  u1 = enterprise.users.create(
     email: "frank@#{domain_name}",
     first_name: 'Francis',
     last_name: 'Marineau',
@@ -42,7 +83,7 @@ after :enterprise do
     invitation_accepted_at: Faker::Time.between(3.days.ago, Time.current)
   )
 
-  u2 = enterprise.users.new(
+  u2 = enterprise.users.create(
     email: "andre@#{domain_name}",
     first_name: 'André',
     last_name: 'Laurin',
@@ -52,7 +93,7 @@ after :enterprise do
     invitation_accepted_at: Faker::Time.between(3.days.ago, Time.current)
   )
 
-  u3 = enterprise.users.new(
+  u3 = enterprise.users.create(
     email: "ryan@#{domain_name}",
     first_name: 'Ryan',
     last_name: 'Dankoff',
@@ -61,14 +102,6 @@ after :enterprise do
     policy_group: policy_group,
     invitation_accepted_at: Faker::Time.between(3.days.ago, Time.current)
   )
-
-  u1.info[gender_field] = 'Female'
-  u2.info[gender_field] = 'Female'
-  u3.info[gender_field] = 'Female'
-
-  u1.save
-  u2.save
-  u3.save
 
   users_to_create = []
 
@@ -87,6 +120,13 @@ after :enterprise do
       password_confirmation: password,
       policy_group: policy_group
     )
+
+    users_to_create << user
+  end
+
+  User.import users_to_create
+
+  enterprise.users.find_each do |user|
 
     user.info[title_field] = Faker::Name.title
     user.info[birth_field] = Faker::Date.between(60.years.ago, 18.years.ago)
@@ -124,10 +164,9 @@ after :enterprise do
       end
     end
 
-    users_to_create << user
+    user.save
   end
 
-  User.import users_to_create
   User.reset_elasticsearch(enterprise: enterprise)
   puts "Importing users [DONE]"
 end
