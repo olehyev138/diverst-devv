@@ -80,6 +80,8 @@
         });
 
         $operatorSelect.parents('.flex-row__cell').css('display', 'inline-block');
+
+        handleOperatorChange();
       };
 
       // When the field is changed, populate the operators select field with the appropriate operations for the selected field
@@ -101,21 +103,26 @@
           var selectedValues = $multiValueField.data('selected-values') || [];
 
           options.forEach(function(option) {
-            $multiValueField[0].add(new Option(option, option, true, selectedValues.indexOf(option) > -1));
+            $multiValueField[0].add(new Option(option, option, false, selectedValues.indexOf(option) > -1));
           });
 
           if (selectedOperator.isMultiSelect) {
             $multiValueField.prop('multiple', 'multiple');
+            var placeholderText = "Select one or more options";
           }
           else {
             $multiValueField.prop('multiple', '');
+            var placeholderText = "Select an option";
           }
 
           $singleValueField.prop('disabled', true);
           $multiValueField.prop('disabled', false);
 
           $multiValueField.parents('.flex-row__cell').css('display', 'inline-block');
-          $multiValueField.select2();
+          $multiValueField.select2({
+            allowClear: true,
+            placeholder: placeholderText
+          });
         }
         else {
           $multiValueField.prop('disabled', true);
