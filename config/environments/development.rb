@@ -54,6 +54,5 @@ Rails.application.configure do
     Bullet.enable = true
     Bullet.rails_logger = true
     Bullet.add_footer = true
-    Bullet.slack = { webhook_url: 'https://hooks.slack.com/services/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' }
   end
 end

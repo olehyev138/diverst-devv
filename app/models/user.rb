@@ -103,7 +103,20 @@ class User < ActiveRecord::Base
 
   # Get the n top unswiped matches for the user
   def top_matches(n = 10)
-    active_matches.order(score: :desc).limit(n)
+    active_matches
+      .includes(:topic,
+        user1: {
+          enterprise: {
+            mobile_fields: :field
+          }
+        },
+        user2: {
+          enterprise: {
+            mobile_fields: :field
+          }
+        }
+      )
+      .order(score: :desc).limit(n)
   end
 
   # Checks if the user is part of the specified segment

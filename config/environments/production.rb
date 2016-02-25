@@ -92,6 +92,4 @@ Rails.application.configure do
   config.logger = ActiveSupport::TaggedLogging.new(Syslogger.new('Diverst', Syslog::LOG_PID, Syslog::LOG_LOCAL7))
   config.lograge.enabled = true
   config.lograge.formatter = Lograge::Formatters::Json.new
-
-  Sidekiq.logger.formatter = Sidekiq::Logging::Json::Logger.new
 end
