@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
   has_many :devices
   has_many :users_segments
   has_many :segments, through: :users_segments
-  has_many :user_groups
+  has_many :user_groups, dependent: :destroy
   has_many :groups, through: :user_groups
   has_many :topic_feedbacks
   has_many :poll_responses

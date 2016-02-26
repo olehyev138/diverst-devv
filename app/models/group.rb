@@ -1,5 +1,5 @@
 class Group < ActiveRecord::Base
-  has_many :user_groups
+  has_many :user_groups, dependent: :destroy
   has_many :members, through: :user_groups, class_name: 'User', source: :user, after_remove: :update_elasticsearch_member
   belongs_to :enterprise
   has_many :groups_polls
@@ -105,6 +105,7 @@ class Group < ActiveRecord::Base
       !enterprise.yammer_token.nil?
   end
 
+  # This method only exists because it's used in a callback
   def update_elasticsearch_member(member)
     member.__elasticsearch__.update_document
   end
@@ -118,9 +119,6 @@ class Group < ActiveRecord::Base
 
   def handle_deletion
     old_members = members.ids
-
-    # Delete member associations
-    UserGroup.where(group_id: id).delete_all
 
     # Update members in elastic_search
     User.where(id: old_members).find_each do |member|
