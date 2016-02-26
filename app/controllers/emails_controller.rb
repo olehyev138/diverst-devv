@@ -27,7 +27,8 @@ class EmailsController < ApplicationController
       .permit(
         :use_custom_templates,
         :custom_html_template,
-        :custom_txt_template
+        :custom_txt_template,
+        :subject
       )
   end
 end
