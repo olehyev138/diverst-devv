@@ -33,7 +33,7 @@ set :sidekiq_processes, 1
 namespace :deploy do
 
   desc 'Recompile all enterprise themes'
-  task :recompile_themes, [:command] => 'deploy:set_rails_env' do |task, args|
+  task 'themes:recompile', [:command] => 'deploy:set_rails_env' do |task, args|
     on primary(:app) do
       within current_path do
         with :rails_env => fetch(:rails_env) do
