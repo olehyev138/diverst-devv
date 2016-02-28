@@ -91,6 +91,7 @@ group :development do
   gem 'parallel_tests'
   gem 'pry-rails'
   gem 'pry-theme'
+  gem 'meta_request' # Necessary for rails_panel Chrome extension
 end
 
 group :production do

@@ -1,6 +1,6 @@
 <div class="flex-row flex-row--middle">
   <div class="flex-row__cell">
-    <%= image_tag(@user.avatar.url) %>
+    <%= image_tag(@user.avatar.expiring_url(10)) %>
   </div>
   <div class="flex-row__cell">
     <h1 style="margin-bottom: 5px;"><%= @user.name %></h1>
