@@ -38,6 +38,22 @@ RSpec.feature 'An ERG dashboard' do
     expect(page).to have_content group.messages.last.subject
   end
 
+  it 'allows to a non-member to opt in' do
+    visit group_path(group)
+    click_on 'Join this ERG'
+
+    expect(page).to have_content 'Leave this ERG'
+  end
+
+  it 'allows to a member to opt out' do
+    group.members << user
+
+    visit group_path(group)
+    click_on 'Leave this ERG'
+
+    expect(group.members.ids).not_to include user.id
+  end
+
   describe 'in the members section' do
     it 'shows members' do
       visit group_group_members_path(group)
