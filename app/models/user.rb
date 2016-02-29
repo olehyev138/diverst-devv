@@ -224,7 +224,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  # Initializes an user from a yammer user
+  # Initializes a user from a yammer user
   def self.from_yammer(yammer_user, enterprise:)
     user = User.new(
       first_name: yammer_user['first_name'],
@@ -243,7 +243,7 @@ class User < ActiveRecord::Base
     user
   end
 
-  # Initializes an user from a CSV row
+  # Initializes a user from a CSV row
   def self.from_csv_row(row, enterprise:)
     return nil if row[0].nil? || row[1].nil? || row[2].nil? # Require first_name, last_name and email
 

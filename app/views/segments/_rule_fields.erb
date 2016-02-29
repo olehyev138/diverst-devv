@@ -6,16 +6,16 @@
       <% end %>
     </div>
     <div class="flex-row__cell">
-      <%= f.input :field_id, input_html: { class: "custom-field" }, label: false, collection: current_user.enterprise.fields.all.map{|field| [field.title, field.id, {"data-operators" => SegmentRule.operators_for_field(field).to_json, "data-options" => (field.class.method_defined?(:options) ? field.options.to_json : "[]")}]} %>
+      <%= f.input :field_id, input_html: { class: "custom-field" }, label: false, collection: current_user.enterprise.fields.all.map{|field| [field.title, field.id, {"data-operators" => SegmentRule.operators_for_field(field).to_json, "data-type" => field.class, "data-options" => (field.class.method_defined?(:options) ? field.options.to_json : "[]")}]} %>
     </div>
     <div class="flex-row__cell" style="display: none;">
       <%= f.input :operator, input_html: { class: "operator", 'data-operator-id' => f.object.operator }, collection: [], label: false %>
     </div>
     <div class="flex-row__cell" style="display: none;">
-      <%= f.input :values, input_html: { class: "values", 'data-selected-values' => f.object.values }, label: false, value: "" %>
+      <%= f.input :values, input_html: { class: "value-text", 'data-selected-values' => f.object.values }, label: false, value: "" %>
     </div>
     <div class="flex-row__cell flex-row__cell--grow" style="display: none;">
-      <%= f.input :values, input_html: { class: "field__input multi-select", 'data-selected-values' => f.object.values, multiple: "multiple", }, label: false, collection: [], value: "", include_hidden: false %>
+      <%= f.input :values, input_html: { class: "field__input value-select", 'data-selected-values' => f.object.values, multiple: "multiple", }, label: false, collection: [], value: "", include_hidden: false %>
     </div>
   </div>
 </div>

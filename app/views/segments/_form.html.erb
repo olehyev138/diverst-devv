@@ -7,7 +7,7 @@
       </div>
 
       <div class="card__section card__section--border">
-        <p class="field__hint">To be a part of this segment, an user must meet <strong>all</strong> the following criteria</p>
+        <p class="field__hint">To be a part of this segment, a user must meet <strong>all</strong> the following criteria</p>
         <div id="rules">
           <%= f.simple_fields_for :rules do |field| %>
             <%= render 'rule_fields', f: field %>
@@ -58,17 +58,18 @@
     var makeRuleDynamic = function($ruleEl) {
       var $fieldSelect = $ruleEl.find('.custom-field');
       var $operatorSelect = $ruleEl.find('.operator');
-      var $singleValueField = $ruleEl.find('.values');
-      var $multiValueField = $ruleEl.find('.multi-select');
+      var $valueText = $ruleEl.find('.value-text');
+      var $valueSelect = $ruleEl.find('.value-select');
+      var datePicker;
 
-      $singleValueField.removeAttr('value');
-      $multiValueField.removeAttr('value');
+      $valueText.removeAttr('value');
+      $valueSelect.removeAttr('value');
 
-      $singleValueField.attr('name', $singleValueField.attr('name') + '[]');
+      $valueText.attr('name', $valueText.attr('name') + '[]');
 
       var handleFieldChange = function() {
-        $multiValueField.parents('.flex-row__cell').css('display', 'none');
-        $singleValueField.parents('.flex-row__cell').css('display', 'none');
+        $valueSelect.parents('.flex-row__cell').css('display', 'none');
+        $valueText.parents('.flex-row__cell').css('display', 'none');
 
         var fieldOperators = $(this).find(":selected").data('operators') || [];
         $operatorSelect.find('option').remove();
@@ -88,8 +89,8 @@
       $fieldSelect.change(handleFieldChange);
 
       var handleOperatorChange = function() {
-        $multiValueField.parents('.flex-row__cell').css('display', 'none')
-        $singleValueField.parents('.flex-row__cell').css('display', 'none').prop('disabled', true);
+        $valueSelect.parents('.flex-row__cell').css('display', 'none')
+        $valueText.parents('.flex-row__cell').css('display', 'none').prop('disabled', true);
 
         var selectedOperator = operators.filter(function(operator) {
           return operator.id === parseInt($operatorSelect.val());
@@ -98,36 +99,52 @@
         var options = $fieldSelect.find(":selected").data('options');
 
         if (options.length) {
-          $multiValueField.find('option').remove();
+          $valueSelect.find('option').remove();
 
-          var selectedValues = $multiValueField.data('selected-values') || [];
+          var selectedValues = $valueSelect.data('selected-values') || [];
 
           options.forEach(function(option) {
-            $multiValueField[0].add(new Option(option, option, false, selectedValues.indexOf(option) > -1));
+            $valueSelect[0].add(new Option(option, option, false, selectedValues.indexOf(option) > -1));
           });
 
           if (selectedOperator.isMultiSelect) {
-            $multiValueField.prop('multiple', 'multiple');
+            $valueSelect.prop('multiple', 'multiple');
             var placeholderText = "Select one or more options";
           }
           else {
-            $multiValueField.prop('multiple', '');
+            $valueSelect.prop('multiple', '');
             var placeholderText = "Select an option";
           }
 
-          $singleValueField.prop('disabled', true);
-          $multiValueField.prop('disabled', false);
+          $valueText.prop('disabled', true);
+          $valueSelect.prop('disabled', false);
 
-          $multiValueField.parents('.flex-row__cell').css('display', 'inline-block');
-          $multiValueField.select2({
+          $valueSelect.parents('.flex-row__cell').css('display', 'inline-block');
+          $valueSelect.select2({
             allowClear: true,
             placeholder: placeholderText
           });
         }
         else {
-          $multiValueField.prop('disabled', true);
-          $singleValueField.prop('disabled', false);
-          $singleValueField.parents('.flex-row__cell').css('display', 'inline-block');
+          $valueSelect.prop('disabled', true);
+          $valueText.prop('disabled', false);
+          $valueText.parents('.flex-row__cell').css('display', 'inline-block');
+          $valueText.val('');
+
+          // Add datepicker if field is of type DateField
+          var fieldType = $fieldSelect.find(":selected").data('type');
+
+          if (fieldType === 'DateField') {
+            if (!datePicker) {
+              datePicker = new Pikaday({
+                field: $valueText[0],
+                yearRange: [1900, new Date().getFullYear()]
+              });
+            }
+          }
+          else {
+            if (datePicker) datePicker.destroy();
+          }
         }
       };
 
