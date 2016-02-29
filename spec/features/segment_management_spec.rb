@@ -20,7 +20,7 @@ RSpec.feature 'Segment management' do
     click_on "Add a criterion"
     select user.enterprise.fields.last.title, from: page.find('select')[:id]
     select 'equals', from: page.find('.operator')[:id]
-    fill_in page.find('.values')[:id], with: 'asdads'
+    fill_in page.find('.value-text')[:id], with: '10'
     click_on 'Create Segment'
 
     expect(page).to have_content segment[:name]
