@@ -70,6 +70,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         oracle: {
           accept_oracle_download_terms: true
         }
+      },
+      nodejs: {
+        npm_packages: [{
+          name: 'bower'
+        }]
       }
    }
   end
