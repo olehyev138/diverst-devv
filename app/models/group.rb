@@ -21,7 +21,7 @@ class Group < ActiveRecord::Base
   belongs_to :lead_manager, class_name: "User"
   belongs_to :owner, class_name: "User"
 
-  has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('missing.png'), s3_permissions: :private, s3_protocol: :https
+  has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('missing.png'), s3_permissions: :private
   validates_attachment_content_type :logo, content_type: %r{\Aimage\/.*\Z}
 
   before_save :send_invitation_emails, if: :send_invitations?
