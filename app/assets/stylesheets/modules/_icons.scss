@@ -1,6 +1,6 @@
 // Icons
 
-@function remote-image-url($path) { @return unquote("url(https://#{$domain}" + image-path($path) + ")"); }
+@function remote-image-url($path) { @return unquote("url(//#{$domain}" + image-path($path) + ")"); } // We explicitely specify the domain because if we don't, the browser tries to load the images from S3's domain (for themes)
 
 @mixin icon($filename, $width: 24px, $height: 24px, $background-width: null, $background-height: null) {
   background-image: remote-image-url('icons/#{$filename}.svg');
