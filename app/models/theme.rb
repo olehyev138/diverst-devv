@@ -1,7 +1,7 @@
 class Theme < ActiveRecord::Base
   has_one :enterprise
 
-  has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('missing.png')
+  has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('missing.png'), s3_permissions: :private, s3_protocol: :https
   validates_attachment_content_type :logo, content_type: %r{\Aimage\/.*\Z}
 
   validates :primary_color, presence: true, format: { with: %r{\A#(?:[0-9a-fA-F]{3}){1,2}\z}, message: 'should be a valid hex color' }

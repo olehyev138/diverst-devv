@@ -7,7 +7,7 @@ class Event < ActiveRecord::Base
   scope :upcoming, -> { where('start > ?', Time.current).order(start: :desc) }
   scope :ongoing, -> { where('start <= ?', Time.current).where('end >= ?', Time.current).order(start: :desc) }
 
-  has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('missing.png')
+  has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('missing.png'), s3_permissions: :private, s3_protocol: :https
   validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
 
   def time_string
