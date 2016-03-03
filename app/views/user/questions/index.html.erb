@@ -15,7 +15,7 @@
             </div>
             <div class="flex-row__cell">
               <% @campaign.groups.each do |group| %>
-                <div class="avatar avatar--small avatar--round inline-block" style="background-image: url(<%= image_url group.logo.expiring_url(10, :thumb) %>)"></div>
+                <div class="avatar avatar--small avatar--round inline-block tooltipster" style="background-image: url(<%= image_url group.logo.expiring_url(10, :thumb) %>)" title="<%= group.name %>"></div>
               <% end %>
             </div>
           </div>
@@ -47,3 +47,9 @@
     <% end %>
   </div>
 </div>
+
+<script>
+  $(document).ready(function() {
+    $('.tooltipster').tooltipster();
+  });
+</script>

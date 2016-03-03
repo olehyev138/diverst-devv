@@ -21,6 +21,7 @@
 //= require Sortable
 //= require moment
 //= require pikaday
+//= require tooltipster
 //= require_tree .
 
 var Utility = (function() {
