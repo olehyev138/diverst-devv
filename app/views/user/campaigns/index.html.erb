@@ -14,7 +14,7 @@
           <div class="card__section card__section--border">
             <div class="flex-row flex-row--middle">
               <div class="flex-row__cell">
-                <%= image_tag campaign.image.url(:thumb), class: "avatar avatar--large" %>
+                <%= image_tag campaign.image.expiring_url(10, :thumb), class: "avatar avatar--large" %>
               </div>
               <div class="flex-row__cell flex-row__cell--grow">
                 <h2><%= campaign.title %></h2>

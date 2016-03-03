@@ -23,7 +23,7 @@ class GroupMailer < ApplicationMailer
   def invitation(group, invitation_segments)
     template_locals = global_template_vars(group: group).merge({
       'group' => {
-        'image' => view_context.image_tag(group.logo.url(:thumb)),
+        'image' => view_context.image_tag(group.logo.expiring_url(:thumb, 10)),
         'name' => group.name,
         'description' => group.description
       },
@@ -46,7 +46,7 @@ class GroupMailer < ApplicationMailer
   def global_template_vars(group:)
     {
       'group' => {
-        'image' => view_context.image_tag(group.logo.url(:thumb)),
+        'image' => view_context.image_tag(group.logo.expiring_url(:thumb, 10)),
         'name' => group.name,
         'description' => group.description
       }

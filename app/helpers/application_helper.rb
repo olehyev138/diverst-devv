@@ -4,7 +4,7 @@ module ApplicationHelper
   end
 
   def logo_url
-    current_user.enterprise.theme.nil? ? image_path('diverst-logo.svg') : current_user.enterprise.theme.logo.url
+    current_user.enterprise.theme.nil? ? image_path('diverst-logo.svg') : current_user.enterprise.theme.logo.expiring_url(10)
   end
 
   def last_sign_in_text(user)

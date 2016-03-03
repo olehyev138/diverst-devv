@@ -9,7 +9,7 @@
       <div class="card__section card__section--border">
         <div class="flex-row flex-row--middle">
           <div class="flex-row__cell">
-            <%= link_to group_path(group) do %><%= image_tag group.logo.url(:thumb), class: "avatar" %><% end %>
+            <%= link_to group_path(group) do %><%= image_tag group.logo.expiring_url(10, :thumb), class: "avatar" %><% end %>
           </div>
           <div class="flex-row__cell flex-row__cell--grow"><%= link_to "#{group.name}", group_path(group), class: "accent" %> - <%= pluralize group.members.count, "member" %></div>
           <div class="flex-row__cell link-group">
