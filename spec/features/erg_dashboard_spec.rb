@@ -8,13 +8,13 @@ RSpec.feature 'An ERG dashboard' do
     login_as(user, scope: :user)
   end
 
-  it 'shows the newest members' do
+  scnenario 'shows the newest members' do
     visit group_path(group)
 
     expect(page).to have_content group.members.last.name
   end
 
-  it 'shows the upcoming events' do
+  scnenario 'shows the upcoming events' do
     create_list(:event, 5, group: group, start: 2.days.from_now)
 
     visit group_path(group)
@@ -22,7 +22,7 @@ RSpec.feature 'An ERG dashboard' do
     expect(page).to have_content group.events.last.title
   end
 
-  it 'shows the latest news' do
+  scnenario 'shows the latest news' do
     create_list(:news_link, 5, group: group)
 
     visit group_path(group)
@@ -30,7 +30,7 @@ RSpec.feature 'An ERG dashboard' do
     expect(page).to have_content group.news_links.last.title
   end
 
-  it 'shows the latest messages' do
+  scnenario 'shows the latest messages' do
     create_list(:group_message, 5, group: group)
 
     visit group_path(group)
@@ -38,14 +38,14 @@ RSpec.feature 'An ERG dashboard' do
     expect(page).to have_content group.messages.last.subject
   end
 
-  it 'allows to a non-member to opt in' do
+  scnenario 'allows to a non-member to opt in' do
     visit group_path(group)
     click_on 'Join this ERG'
 
     expect(page).to have_content 'Leave this ERG'
   end
 
-  it 'allows to a member to opt out' do
+  scnenario 'allows to a member to opt out' do
     group.members << user
 
     visit group_path(group)
@@ -54,14 +54,14 @@ RSpec.feature 'An ERG dashboard' do
     expect(group.members.ids).not_to include user.id
   end
 
-  describe 'in the members section' do
-    it 'shows members' do
+  context 'in the members section' do
+    scnenario 'shows members' do
       visit group_group_members_path(group)
 
       expect(page).to have_content group.members.last.name
     end
 
-    it 'allows users to delete members' do
+    scnenario 'allows users to delete members' do
       member = create(:user, enterprise: user.enterprise, groups: [group], first_name: "Testing", last_name: "User")
 
       visit group_group_members_path(group)
@@ -72,8 +72,8 @@ RSpec.feature 'An ERG dashboard' do
     end
   end
 
-  describe 'in the messages section' do
-    it 'shows the existing messages' do
+  context 'in the messages section' do
+    scnenario 'shows the existing messages' do
       message = create(:group_message, group: group)
 
       visit group_group_messages_path(group)
@@ -81,7 +81,7 @@ RSpec.feature 'An ERG dashboard' do
       expect(page).to have_content message.subject
     end
 
-    it 'allows users to create messages' do
+    scnenario 'allows users to create messages' do
       message_subject = 'I am a subject'
       message_content = 'The message content'
       create(:segment_with_users, enterprise: user.enterprise)
@@ -98,8 +98,8 @@ RSpec.feature 'An ERG dashboard' do
     end
   end
 
-  describe 'in the events section' do
-    it 'shows the upcoming events' do
+  context 'in the events section' do
+    scnenario 'shows the upcoming events' do
       event = create(:event, group: group, start: 1.day.from_now, end: 1.day.from_now + 2.hours)
 
       visit group_events_path(group)
@@ -107,7 +107,7 @@ RSpec.feature 'An ERG dashboard' do
       expect(page).to have_content event.title
     end
 
-    it 'shows the past events' do
+    scnenario 'shows the past events' do
       event = create(:event, group: group, start: 1.day.ago, end: 1.day.ago + 2.hours)
 
       visit group_events_path(group)
@@ -115,7 +115,7 @@ RSpec.feature 'An ERG dashboard' do
       expect(page).to have_content event.title
     end
 
-    it 'allows users to create events' do
+    scnenario 'allows users to create events' do
       create(:segment_with_users, enterprise: user.enterprise)
       event_title = 'Sick event!'
       event_description = 'Awesome event description'

@@ -36,8 +36,8 @@
       <div class="card__section card__section--border">
         <div class="flex-row">
           <div class="flex-row__cell text-center">
-            <div class="counter<%= answer.votes.include?(current_user) ? " counter--active" : "" %>" data-answer-id="<%= answer.id %>" data-upvoted="<%= answer.votes.include? current_user %>">
-              <span class="counter__number"><%= answer.votes.count %></span>
+            <div class="counter<%= answer.voters.include?(current_user) ? " counter--active" : "" %>" data-answer-id="<%= answer.id %>" data-upvoted="<%= answer.voters.include? current_user %>">
+              <span class="counter__number"><%= answer.upvote_count %></span>
             </div>
             <div class="chosen">
               <a href="#" class="star-button" data-answer-id="<%= answer.id %>" data-starred="<%= answer.chosen %>" title="Star this answer"><%= inline_svg('icons/star-purple.svg', class: "icon-inline#{ answer.chosen ? ' icon-inline--yellow' : '' }") %></span></a>
