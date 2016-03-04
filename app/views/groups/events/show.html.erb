@@ -3,7 +3,14 @@
     <%= link_to "Events", group_events_path(@group) %> /
     <%= @event.title %>
   </h1>
-  <%= link_to "Edit event", edit_group_event_path(@group, @event), class: "btn btn--primary" if policy(@group).edit? %>
+  <div class="flex-row">
+    <div class="flex-row__cell">
+      <%= link_to "Delete event", group_event_path(@group, @event), method: :delete, class: "btn btn--secondary" if policy(@group).destroy? %>
+    </div>
+    <div class="flex-row__cell">
+      <%= link_to "Edit event", edit_group_event_path(@group, @event), class: "btn btn--primary" if policy(@group).edit? %>
+    </div>
+  </div>
 </div>
 
 <div class="content__main">
