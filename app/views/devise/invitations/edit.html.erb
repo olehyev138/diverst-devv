@@ -12,7 +12,7 @@
 
   <div class="site-wrap site-wrap--medium">
     <div class="content__header">
-      <img class="logo logo--large" src="<%= (resource.enterprise.theme.nil? ? image_path('diverst-logo.svg') : resource.enterprise.theme.logo.expiring_url(10)) %>">
+      <img class="logo logo--large" src="<%= (resource.enterprise.theme.nil? ? image_path('diverst-logo.svg') : resource.enterprise.theme.logo.expiring_url(3600)) %>">
     </div>
 
     <div class="content__main">
@@ -45,7 +45,7 @@
               <div class="media-object" data-group-id="<%= group.id %>">
                 <div class="flex-row">
                   <div class="flex-row__cell">
-                    <%= image_tag group.logo.expiring_url(10, :medium) %>
+                    <%= image_tag group.logo.expiring_url(3600, :medium) %>
                   </div>
                   <div class="flex-row__cell flex-row__cell--grow">
                     <h4><%= group.name %></h4>
