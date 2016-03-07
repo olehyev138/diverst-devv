@@ -1,0 +1,12 @@
+<div class="content__main">
+  <%= simple_form_for @update do |f| %>
+
+    <div class="card">
+      <% @initiative.fields.each do |cf| %>
+        <%= render "shared/fields/display/custom_field", f: f, cf: cf, resource: @update %>
+      <% end %>
+    </div>
+
+    <%= f.button :submit %>
+  <% end %>
+</div>
