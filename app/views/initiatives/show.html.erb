@@ -5,7 +5,31 @@
 <div class="content__main">
   <div class="card">
     <div class="card__section">
-
+      <table class="table--has-border" id="updates-table">
+        <thead>
+          <th>Metric</th>
+          <% @updates.each_with_index do |update, index| %>
+            <th>
+              <% if index == @updates.size - 1 %>
+                Last update
+              <% else %>
+                <%= pluralize(@updates.size - index - 1, 'update') %> ago
+              <% end %>
+              (<%= update.created_at.to_s :reversed_slashes %>)
+            </th>
+          <% end %>
+        </thead>
+        <tbody>
+          <% @initiative.fields.each do |field| %>
+            <tr>
+              <td><%= field.title %></td>
+              <% @updates.each do |update| %>
+                <td><%= field.string_value update.info[field] %></td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
