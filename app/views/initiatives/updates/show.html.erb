@@ -1,0 +1,167 @@
+<div class="content__header">
+  <h1><%= @poll.title %></h1>
+  <div class="flex-row flex-row--middle">
+    <div class="flex-row__cell">
+      <%= link_to "Export CSV", export_csv_poll_path(@poll), class: "btn btn--tertiary" %>
+    </div>
+    <div class="flex-row__cell">
+      <%= link_to "New Graph", new_poll_graph_path(@poll), class: "btn btn--primary" if policy(@poll).edit? %>
+    </div>
+  </div>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <div class="row row--spacing-bottom">
+        <div class="col sm-12">
+          <p style="font-style: italic;"><%= @poll.description %></p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col sm-6 md-3 lg-2">
+          <small>Invitations</small>
+          <h2><%= @poll.targeted_users.count %></h2>
+        </div>
+        <div class="col sm-6 md-3 lg-2">
+          <small>Responses</small>
+          <h2><%= @poll.responses.count %></h2>
+        </div>
+        <div class="col sm-6 md-3 lg-2">
+          <small>Response rate</small>
+          <h2><%= @poll.targeted_users.count > 0 ? "#{(@poll.responses.count.to_f / @poll.targeted_users.count * 100).to_i}%" : "N/A" %></h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Field graphs</h3>
+
+  <% if @graphs.empty? %>
+    <div class="card">
+      <div class="card__section">
+        <p>There are no graphs yet. <%= link_to "Create one", new_poll_graph_path(@poll) %> to start analyzing your users' responses.</p>
+      </div>
+    </div>
+  <% else %>
+     <div class="row row--equal-height">
+      <% @graphs.each do |graph| %>
+        <div class="col sm-12 md-6">
+          <div class="card">
+            <div class="card__section">
+              <% if policy(@poll).edit? %>
+                <div class="card__action">
+                  <%= link_to "Edit", edit_graph_path(graph) %> -
+                  <%= link_to "Remove", graph_path(graph), method: :delete, class: "error" %>
+                </div>
+              <% end %>
+              <h4 class="no-margin"><%= truncate(graph.title, length: 50) %></h4>
+              <% if !graph.aggregation.nil? %><small><%= aggregation_text(graph) %></small><% end %>
+              <div class="graph" data-graph-id="<%= graph.id %>"></div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <h3>Textual answers</h3>
+
+  <div class="card">
+    <div class="card__section">
+      <% if @poll.fields.where(type: "TextField").count > 0 %>
+        <p>These are the textual answers to the different qualitative questions in this survey. Click on any of them to view the responses.</p>
+        <ul>
+          <% @poll.fields.where(type: "TextField").each do |text_field| %>
+            <li><%= link_to text_field.title, poll_poll_field_path(@poll, text_field) %></li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p>This survey doesn't contain any text field. If you <%= link_to "add some", edit_poll_path(@poll) %>, their answers will be displayed here.</p>
+      <% end %>
+    </div>
+  </div>
+
+  <% if @poll.responses.any? %>
+
+    <h3>Responses</h3>
+
+    <div class="card">
+      <div class="card__section">
+        <table class="table--has-border responses-datatable">
+          <thead>
+            <th>Respondent</th>
+            <th>Date</th>
+            <th>Response</th>
+          </thead>
+          <tbody>
+            <% @responses.each do |response| %>
+
+              <tr data-response-id="<%= response.id %>">
+                <td><%= response.user.name %></td>
+                <td><%= response.created_at.to_s :reversed_slashes %></td>
+                <td><a href="#" class="row-expand">Show</a></td>
+              </tr>
+
+              <div style="display: none;">
+                <div class="poll-response_details" id="response-details-<%= response.id %>">
+                  <ul class="unstyled">
+                    <% @poll.fields.each do |field| %>
+                      <li><small><%= field.title %></small> <span class="block highlight"><%= field.string_value response.info[field] %></span></li>
+                    <% end %>
+                  </ul>
+                </div>
+              </div>
+
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  <% end %>
+
+</div>
+
+<script>
+  $(document).on('page:change', function() {
+    $(document).off('page:change');
+
+    // Graphs
+    var graphs = $('.graph').map(function() {
+      return new Graph('/graphs/' + $(this).data('graph-id') + '/data', $(this));
+    });
+
+    // TODO: This doesnt exist anymore. We should have a way to reincorporate it.
+    $('.textfield-datatable').dataTable(Utility.mergeWithDTDefaults({
+      lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+      aaSorting: []
+    }));
+
+    // Responses table
+    var responsesTable = $('.responses-datatable').DataTable(Utility.mergeWithDTDefaults({
+      order: [[1, "desc"]]
+    }));
+
+    responsesTable.rows().every(function () {
+      this.child($('#response-details-' + $(this.node()).data('response-id'))).hide();
+    });
+
+    $('.responses-datatable tbody').on('click', 'a.row-expand', function(e) {
+      var tr = $(this).closest('tr');
+      var row = responsesTable.row(tr);
+
+      if (row.child.isShown()) {
+        row.child.hide();
+        $(this).text("Show");
+      }
+      else {
+        row.child.show();
+        $(this).text("Hide");
+      }
+
+      e.preventDefault();
+      return false;
+    });
+  });
+</script>
