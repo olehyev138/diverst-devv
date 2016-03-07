@@ -1,22 +1,22 @@
 require 'rails_helper'
 
-RSpec.feature 'Admin visits the metrics section' do
-  let(:admin) { create(:admin) }
+RSpec.feature 'user visits the metrics section' do
+  let(:user) { create(:user) }
 
   before do
-    login_as(admin, scope: :admin)
+    login_as(user, scope: :user)
   end
 
-  scenario 'they see the created metrics dashboards' do
-    create(:metrics_dashboard, enterprise: admin.enterprise, name: "Test Dashboard")
+  scenario 'they can\'t see metrics dashboards created by others' do
+    create(:metrics_dashboard, enterprise: user.enterprise, owner: create(:user, enterprise: user.enterprise), name: "Test Dashboard")
 
     visit metrics_dashboards_path
 
-    expect(page).to have_content 'Test Dashboard'
+    expect(page).not_to have_content 'Test Dashboard'
   end
 
   scenario 'they can delete a metrics dashboard' do
-    create(:metrics_dashboard, enterprise: admin.enterprise, name: "Test Dashboard")
+    create(:metrics_dashboard, enterprise: user.enterprise, owner: user, name: "Test Dashboard")
 
     visit metrics_dashboards_path
     click_on 'Delete'
@@ -25,7 +25,7 @@ RSpec.feature 'Admin visits the metrics section' do
   end
 
   scenario 'they can edit a metrics dashboard' do
-    create(:metrics_dashboard, enterprise: admin.enterprise, name: "Test Dashboard")
+    create(:metrics_dashboard, enterprise: user.enterprise, owner: user, name: "Test Dashboard")
 
     visit metrics_dashboards_path
     click_on 'Edit'
@@ -38,8 +38,8 @@ RSpec.feature 'Admin visits the metrics section' do
   scenario 'they can add graphs to an existing metrics dashboard' do
     field1 = create(:field, type: 'CheckboxField', title: 'Field #1')
     field2 = create(:field, type: 'CheckboxField', title: 'Field #2')
-    admin.enterprise = create(:enterprise, fields: [field1, field2])
-    dashboard = create(:metrics_dashboard, enterprise: admin.enterprise, name: "Test Dashboard")
+    user.enterprise = create(:enterprise, fields: [field1, field2])
+    dashboard = create(:metrics_dashboard, enterprise: user.enterprise, owner: user, name: "Test Dashboard")
 
     visit metrics_dashboard_path(dashboard)
     click_on 'New Graph'

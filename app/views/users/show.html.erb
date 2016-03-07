@@ -17,7 +17,7 @@
   </div>
 
   <div class="card">
-    <% @user.enterprise.fields.each do |field| %>
+    <% @user.enterprise.fields.where(private: false).each do |field| %>
       <div class="card__section card__section--border">
         <label><strong><%= field.title %></strong></label>
         <p><%= @user.string_for_field(field) %></p>

@@ -35,5 +35,7 @@ module Diverst
     Rails.application.routes.default_url_options[:host] = ENV['DOMAIN']
 
     config.action_dispatch.rescue_responses["Pundit::NotAuthorizedError"] = :forbidden
+
+    ActionMailer::Base.delivery_method = :smtp
   end
 end

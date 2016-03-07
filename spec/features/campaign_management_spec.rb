@@ -2,13 +2,13 @@ require 'rails_helper'
 
 RSpec.feature 'Campaign management' do
 
-  let(:admin) { create(:admin, owner: false) }
+  let(:user) { create(:user) }
 
   before do
-    login_as(admin, scope: :admin)
+    login_as(user, scope: :user)
   end
 
-  scenario 'Admin creates a new campaign', :js do
+  scenario 'user creates a new campaign', :js do
     campaign = {
       title: 'My Campaign',
       description: 'Look at that sweet campaign!',
@@ -32,8 +32,8 @@ RSpec.feature 'Campaign management' do
     expect(page.find('table').all('tr')[1]).to have_content campaign[:title]
   end
 
-  scenario 'Admin deletes a campaign' do
-    campaign = create(:campaign, enterprise: admin.enterprise, admin: admin)
+  scenario 'user deletes a campaign' do
+    campaign = create(:campaign, enterprise: user.enterprise, owner: user)
 
     visit campaigns_path
     expect(page).to have_content(campaign.title)
@@ -43,30 +43,19 @@ RSpec.feature 'Campaign management' do
     expect(page).not_to have_content(campaign.title)
   end
 
-  context 'Another admin creates a campaign' do
-    scenario 'other admins can view it' do
-      other_admin = create(:admin, enterprise: admin.enterprise)
-      campaign = create(:campaign, enterprise: admin.enterprise, admin: other_admin)
+  context 'Another user creates a campaign' do
+    scenario 'other users can view it' do
+      other_user = create(:user, enterprise: user.enterprise)
+      campaign = create(:campaign, enterprise: user.enterprise, owner: other_user)
 
       visit campaigns_path
 
       expect(page).to have_content(campaign.title)
     end
 
-    scenario 'other admins can\'t edit or delete it' do
-      other_admin = create(:admin, enterprise: admin.enterprise)
-      campaign = create(:campaign, enterprise: admin.enterprise, admin: other_admin)
-
-      visit campaigns_path
-
-      expect(page).not_to have_content('Delete')
-      expect(page).not_to have_content('Edit')
-    end
-
-    scenario 'owners can still edit it' do
-      other_admin = create(:admin, enterprise: admin.enterprise)
-      campaign = create(:campaign, enterprise: admin.enterprise, admin: other_admin)
-      admin.update(owner: true)
+    scenario 'other users with manage all permission can edit or delete it' do
+      other_user = create(:user, enterprise: user.enterprise)
+      campaign = create(:campaign, enterprise: user.enterprise, owner: other_user)
 
       visit campaigns_path
 

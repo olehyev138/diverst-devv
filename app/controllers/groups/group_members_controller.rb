@@ -12,9 +12,20 @@ class Groups::GroupMembersController < ApplicationController
 
   # Removes a member from the group
   def destroy
-    authorize @group, :edit?
+    authorize @member, :join_or_leave_groups?
     @group.members.delete(@member)
     redirect_to :back
+  end
+
+  def create
+    authorize current_user, :join_or_leave_groups?
+    @group_member = @group.user_groups.new(group_member_params)
+
+    if @group_member.save
+      redirect_to :back
+    else
+      render :edit
+    end
   end
 
   protected
@@ -25,5 +36,11 @@ class Groups::GroupMembersController < ApplicationController
 
   def set_member
     @member = @group.members.find(params[:id])
+  end
+
+  def group_member_params
+    params.require(:user).permit(
+      :user_id
+    )
   end
 end

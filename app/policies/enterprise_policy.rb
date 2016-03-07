@@ -13,6 +13,10 @@ class EnterprisePolicy < ApplicationPolicy
     @policy_group.global_settings_manage?
   end
 
+  def edit_mobile_fields?
+    @policy_group.global_settings_manage?
+  end
+
   # Branding
 
   def update_branding?

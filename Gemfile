@@ -22,7 +22,6 @@ gem 'devise-async'
 gem 'sinatra', require: nil # Required for sidekiq's dashboard
 gem 'newrelic_rpm'
 gem 'seedbank'
-gem 'rails-patch-json-encode'
 gem 'oj'
 gem 'faker'
 gem 'active_model_serializers'
@@ -47,10 +46,6 @@ gem 'sprockets-es6'
 gem 'awesome_print'
 gem 'yam'
 gem 'httparty', '~> 0.13'
-gem 'syslogger', '~> 1.6.0'
-gem 'lograge', '~> 0.3.1'
-gem 'sidekiq-logging-json', github: 'frankmarineau/Sidekiq-Logging-JSON'
-gem 'basecrm'
 gem 'liquid'
 gem 'autoprefixer-rails'
 gem 'fog'
@@ -73,14 +68,9 @@ group :development, :test do
   gem 'capybara'
   gem 'poltergeist'
   gem 'database_cleaner'
-  gem 'fuubar'
 end
 
 gem 'rspec_junit_formatter', '0.2.2', group: :test
-
-gem 'parallel_tests', group: :development
-
-gem 'appsignal', '~> 0.12.rc', group: :production
 
 group :development do
   gem 'capistrano'
@@ -92,6 +82,19 @@ group :development do
   gem 'capistrano-rails-console'
   gem 'capistrano-sidekiq'
   gem 'spring-commands-rspec'
-  gem "better_errors"
-  gem "binding_of_caller"
+  gem 'better_errors'
+  gem 'binding_of_caller'
+  gem 'bullet'
+  gem 'slack-notifier' # For Bullet
+  gem 'fuubar'
+  gem 'parallel_tests'
+  gem 'pry-rails'
+  gem 'pry-theme'
+  gem 'meta_request' # Necessary for rails_panel Chrome extension
+end
+
+group :production do
+  gem 'syslogger', '~> 1.6.0'
+  gem 'lograge', '~> 0.3.1'
+  gem 'appsignal'
 end

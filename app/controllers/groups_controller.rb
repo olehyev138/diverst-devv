@@ -22,12 +22,12 @@ class GroupsController < ApplicationController
 
     @events = @group.events.limit(3)
     @news_links = @group.news_links.limit(3)
-    @user_groups = @group.user_groups.order(created_at: :desc).limit(8)
+    @user_groups = @group.user_groups.order(created_at: :desc).includes(:user).limit(8)
     @messages = @group.messages.limit(3)
   end
 
   def create
-    authorize @group
+    authorize Group
 
     @group = current_user.enterprise.groups.new(group_params)
 
@@ -136,6 +136,7 @@ class GroupsController < ApplicationController
         :send_invitations,
         :yammer_create_group,
         :yammer_sync_users,
+        :lead_manager_id,
         manager_ids: [],
         member_ids: [],
         invitation_segment_ids: []

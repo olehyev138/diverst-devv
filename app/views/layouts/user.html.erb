@@ -15,10 +15,8 @@
         <%= link_to user_root_path do %><img class="primary-header__logo logo" src="<%= logo_url %>"><% end %>
       </div>
       <div class="flex-row__cell">
-        <%= link_to "Admin Dashboard", root_admin_path, class: "white" if root_admin_path %>
-      </div>
-      <div class="flex-row__cell">
-        <%= link_to current_user.name, current_user, class: "white" %>
+        <%= link_to "Admin Dashboard", root_admin_path, class: "white" if root_admin_path %> &nbsp;|&nbsp;
+        <%= link_to current_user.name, user_user_path(current_user), class: "white" %>
       </div>
     </div>
   </header>
@@ -31,7 +29,6 @@
     <%= active_link_to "Events", user_events_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
     <%= active_link_to "Groups", user_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
     <%= active_link_to "Resources", user_resources_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-    <%= link_to "Mentoring", '#', class: "secondary-header__tab" %>
     <%= link_to "Log out", destroy_user_session_path, method: :delete, class: "secondary-header__tab" %>
   </header>
 

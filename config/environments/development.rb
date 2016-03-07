@@ -39,8 +39,20 @@ Rails.application.configure do
   # Raises error for missing translations
   config.action_view.raise_on_missing_translations = true
 
+  # Traces the source of SQL queries when set to true
   ActiveRecordQueryTrace.enabled = false
 
+  # Don't generate assets and helpers when using `rails generate`
   config.generators.assets = false
   config.generators.helper = false
+
+  # Disable on-disk logging to accelerate Vagrant development
+  config.logger = ActiveSupport::Logger.new(nil)
+
+  # Enable Bullet to track redundant DB queries
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.rails_logger = true
+    Bullet.add_footer = true
+  end
 end

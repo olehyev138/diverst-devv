@@ -1,7 +1,7 @@
 class Users::InvitationsController < Devise::InvitationsController
   layout :resolve_layout
   before_action :configure_permitted_parameters, if: :devise_controller?
-  before_action :ensure_policy, before: [:new]
+  before_action :ensure_policy, only: [:new]
 
   protected
 
@@ -30,7 +30,7 @@ class Users::InvitationsController < Devise::InvitationsController
   def accept_resource
     resource = resource_class.accept_invitation!(update_resource_params)
     resource.info.merge(fields: resource.enterprise.fields, form_data: params['custom-fields'])
-    resource.permission_group = resource.enterprise.policy_groups.first # TODO ASSIGN DEFAULT GROUP
+    resource.policy_group = resource.enterprise.policy_groups.first # TODO ASSIGN DEFAULT GROUP
 
     resource.save
     resource

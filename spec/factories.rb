@@ -1,10 +1,4 @@
-FactoryGirl.define do  factory :permission_group do
-    
-  end
-  factory :policy_group do
-    
-  end
-
+FactoryGirl.define do
   sequence :email_address do |n|
     "user#{n}@diverst.com"
   end
@@ -29,13 +23,54 @@ FactoryGirl.define do  factory :permission_group do
     invitation_sent_at Time.current
     invitation_accepted_at Time.current
     enterprise
+    policy_group
   end
 
-  factory :admin do
-    email { generate(:email_address) }
-    password 'f4k3p455w0rd'
-    owner true
+  factory :policy_group do
+    name "Policy group"
     enterprise
+
+    campaigns_index true
+    campaigns_create true
+    campaigns_manage true
+
+    polls_index true
+    polls_create true
+    polls_manage true
+
+    events_index true
+    events_create true
+    events_manage true
+
+    group_messages_index true
+    group_messages_create true
+    group_messages_manage true
+
+    groups_index true
+    groups_create true
+    groups_manage true
+    groups_members_index true
+    groups_members_manage true
+
+    metrics_dashboards_index true
+    metrics_dashboards_create true
+
+    news_links_index true
+    news_links_create true
+    news_links_manage true
+
+    enterprise_resources_index true
+    enterprise_resources_create true
+    enterprise_resources_manage true
+
+    segments_index true
+    segments_create true
+    segments_manage true
+
+    users_index true
+    users_manage true
+
+    global_settings_manage true
   end
 
   factory :user_group do
@@ -71,6 +106,23 @@ FactoryGirl.define do  factory :permission_group do
         evaluator.members create_list(:user, evaluator.users_count, segments: [segment])
       end
     end
+
+    factory :segment_with_rules do
+      transient do
+        rules_count 2
+      end
+
+      after(:create) do |segment, evaluator|
+        evaluator.rules create_list(:segment_rule, evaluator.rules_count, segment: segment)
+      end
+    end
+  end
+
+  factory :segment_rule do
+    segment
+    field
+    operator SegmentRule.operators[:equals]
+    values ['abc'].to_json
   end
 
   factory :event do

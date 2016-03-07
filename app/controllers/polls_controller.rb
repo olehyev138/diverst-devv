@@ -28,7 +28,13 @@ class PollsController < ApplicationController
 
   def show
     authorize @poll
-    @responses = @poll.responses.order(created_at: :desc).page(params[:response_page]).per(5)
+
+    @graphs = @poll.graphs.includes(:field, :aggregation)
+    @responses = @poll.responses
+      .includes(:user)
+      .order(created_at: :desc)
+      .page(params[:response_page])
+      .per(5)
   end
 
   def edit

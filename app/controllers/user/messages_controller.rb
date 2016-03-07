@@ -4,6 +4,6 @@ class User::MessagesController < ApplicationController
   layout 'user'
 
   def index
-    @messages = current_user.messages.order(created_at: :desc)
+    @messages = current_user.messages.order(created_at: :desc).includes(:group)
   end
 end

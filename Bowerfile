@@ -2,8 +2,11 @@
 # Check out https://github.com/42dev/bower-rails#ruby-dsl-configuration for more options
 
 asset 'jquery'
-asset 'select2'
+asset 'select2', '4.0.2-rc.1', github: 'select2/select2'
 asset 'highcharts'
 asset 'rangeslider.js'
 asset 'Sortable'
 asset 'datatables'
+asset 'pikaday'
+asset 'moment'
+asset 'tooltipster'

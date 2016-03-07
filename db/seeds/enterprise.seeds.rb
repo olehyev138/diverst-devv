@@ -1,5 +1,5 @@
 enterprise = Enterprise.create(
-  name: 'Acme Corp.',
+  name: "enterprise#{Enterprise.count + 1}",
   idp_entity_id: 'https://app.onelogin.com/saml/metadata/468755',
   idp_sso_target_url: 'https://v7.onelogin.com/trust/saml2/http-post/sso/468755',
   idp_slo_target_url: 'https://v7.onelogin.com/trust/saml2/http-redirect/slo/468755',
@@ -372,6 +372,7 @@ CheckboxField.create(
   match_polarity: true,
   match_weight: 0.2,
   container: enterprise,
+  alternative_layout: true,
   options_text: "English
 Mandarin
 Spanish
@@ -448,7 +449,7 @@ SelectField.create(
 No"
 )
 
-SelectField.create(
+CheckboxField.create(
   title: 'Hobbies',
   saml_attribute: '',
   gamification_value: 10,
@@ -456,6 +457,7 @@ SelectField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
+  alternative_layout: true,
   container: enterprise,
   options_text: "3D printing
 Amateur radio
@@ -799,7 +801,8 @@ CheckboxField.create(
   match_polarity: true,
   match_weight: 0.2,
   container: enterprise,
-  options_text: "Afghanistan
+  alternative_layout: true,
+  options_text: "Afghanistan,
 Albania
 Algeria
 American Samoa
@@ -1104,13 +1107,4 @@ NumericField.create(
   min: 0,
   max: 40,
   container: enterprise
-)
-
-User.create(
-  enterprise: enterprise,
-  first_name: 'Francis',
-  last_name: 'Marineau',
-  email: 'info@diverst.com',
-  password: 'password',
-  password_confirmation: 'password'
 )

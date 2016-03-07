@@ -4,7 +4,7 @@
       <%= simple_form_for [@group, @message] do |f| %>
         <%= f.input :subject %>
         <%= f.input :content %>
-        <%= f.association :segments, input_html: { class: "select2" } %>
+        <%= f.association :segments, collection: @group.enterprise.segments, input_html: { class: "select2" } %>
 
         <%= f.button :submit %>
       <% end %>

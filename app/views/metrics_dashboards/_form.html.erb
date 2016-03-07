@@ -4,12 +4,12 @@
     <div class="card">
       <div class="card__section card__section--border">
         <p class="field__hint">Choose what <strong>groups</strong> should be included in this dashboard</p>
-        <%= f.association :groups, label: false, input_html: { class: "select2" } %>
+        <%= f.association :groups, collection: @metrics_dashboard.enterprise.groups, label: false, input_html: { class: "select2" } %>
       </div>
 
       <div class="card__section card__section--border">
         <p class="field__hint">Drill down further by selecting the <strong>segments</strong> that should be included</p>
-        <%= f.association :segments, label: false, input_html: { class: "select2" } %>
+        <%= f.association :segments, collection: @metrics_dashboard.enterprise.segments, label: false, input_html: { class: "select2" } %>
       </div>
 
       <div class="card__section card__section--border">

@@ -19,6 +19,6 @@ class GroupMessage < ActiveRecord::Base
   end
 
   def send_emails
-    GroupMailer.delay.group_message(self)
+    GroupMailer.group_message(self).deliver_later
   end
 end

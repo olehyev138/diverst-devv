@@ -13,8 +13,6 @@ module ContainsFields
     @info.extend(FieldData)
   end
 
-  protected
-
   # Called before validation to presist the (maybe) edited info object in the DB
   def transfer_info_to_data
     self.data = JSON.generate @info unless @info.nil?

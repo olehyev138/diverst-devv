@@ -7,13 +7,12 @@ class User < ActiveRecord::Base
 
   include DeviseTokenAuth::Concerns::User
   include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
   include ContainsFields
 
   has_many :devices
   has_many :users_segments
   has_many :segments, through: :users_segments
-  has_many :user_groups
+  has_many :user_groups, dependent: :destroy
   has_many :groups, through: :user_groups
   has_many :topic_feedbacks
   has_many :poll_responses
@@ -29,11 +28,23 @@ class User < ActiveRecord::Base
   belongs_to :enterprise, inverse_of: :users
   belongs_to :policy_group
 
-  has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('missing.png')
+  has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('missing.png'), s3_permissions: :private
   validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
 
   before_validation :generate_password_if_saml
   after_create :assign_firebase_token
+
+  after_commit on: [:create] do
+    __elasticsearch__.index_document(index: enterprise.es_users_index_name)
+  end
+
+  after_commit on: [:update] do
+    __elasticsearch__.update_document(index: enterprise.es_users_index_name)
+  end
+
+  after_commit on: [:destroy] do
+    __elasticsearch__.delete_document(index: enterprise.es_users_index_name)
+  end
 
   scope :for_segments, -> (segments) { joins(:segments).where('segments.id' => segments.map(&:id)).distinct if segments.any? }
   scope :for_groups, -> (groups) { joins(:groups).where('groups.id' => groups.map(&:id)).distinct if groups.any? }
@@ -92,7 +103,20 @@ class User < ActiveRecord::Base
 
   # Get the n top unswiped matches for the user
   def top_matches(n = 10)
-    active_matches.order(score: :desc).limit(n)
+    active_matches
+      .includes(:topic,
+        user1: {
+          enterprise: {
+            mobile_fields: :field
+          }
+        },
+        user2: {
+          enterprise: {
+            mobile_fields: :field
+          }
+        }
+      )
+      .order(score: :desc).limit(n)
   end
 
   # Checks if the user is part of the specified segment
@@ -186,7 +210,11 @@ class User < ActiveRecord::Base
       }
     )
 
-    User.__elasticsearch__.import index: index # We don't directly call User.import since activerecord-import overrides that
+    # We don't directly call User.import since activerecord-import overrides that
+    User.__elasticsearch__.import(
+      index: index,
+      query: -> { where(enterprise: enterprise) }
+    )
   end
 
   # Updates this user's match scores with all other enterprise users
@@ -196,7 +224,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  # Initializes an user from a yammer user
+  # Initializes a user from a yammer user
   def self.from_yammer(yammer_user, enterprise:)
     user = User.new(
       first_name: yammer_user['first_name'],
@@ -215,7 +243,7 @@ class User < ActiveRecord::Base
     user
   end
 
-  # Initializes an user from a CSV row
+  # Initializes a user from a CSV row
   def self.from_csv_row(row, enterprise:)
     return nil if row[0].nil? || row[1].nil? || row[2].nil? # Require first_name, last_name and email
 

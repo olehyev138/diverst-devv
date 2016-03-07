@@ -1,7 +1,7 @@
 class Theme < ActiveRecord::Base
   has_one :enterprise
 
-  has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('missing.png')
+  has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('missing.png'), s3_permissions: :private
   validates_attachment_content_type :logo, content_type: %r{\Aimage\/.*\Z}
 
   validates :primary_color, presence: true, format: { with: %r{\A#(?:[0-9a-fA-F]{3}){1,2}\z}, message: 'should be a valid hex color' }
@@ -14,7 +14,7 @@ class Theme < ActiveRecord::Base
 
     if Rails.env.production?
       # TODO: Delete old theme files on S3
-      # FOG_STORAGE.directories.get(ENV['FOG_DIRECTORY']).files.get(asset_path).try(:destroy)
+      # FOG_STORAGE.directories.get(ENV["S3_BUCKET_NAME"]).files.get(asset_path).try(:destroy)
     else
       File.delete(File.join(Rails.root, 'public', asset_path(digest)))
     end

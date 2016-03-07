@@ -37,7 +37,7 @@
 
   <h3>Field graphs</h3>
 
-  <% if @poll.graphs.empty? %>
+  <% if @graphs.empty? %>
     <div class="card">
       <div class="card__section">
         <p>There are no graphs yet. <%= link_to "Create one", new_poll_graph_path(@poll) %> to start analyzing your users' responses.</p>
@@ -45,7 +45,7 @@
     </div>
   <% else %>
      <div class="row row--equal-height">
-      <% @poll.graphs.each do |graph| %>
+      <% @graphs.each do |graph| %>
         <div class="col sm-12 md-6">
           <div class="card">
             <div class="card__section">
@@ -90,7 +90,7 @@
       <div class="card__section">
         <table class="table--has-border responses-datatable">
           <thead>
-            <th>Respondant</th>
+            <th>Respondent</th>
             <th>Date</th>
             <th>Response</th>
           </thead>

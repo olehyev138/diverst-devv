@@ -1,6 +1,6 @@
 <div class="content__main">
   <div class="card">
-    <div class="card__section card__section--cover" style="background-image: url(<%= @campaign.banner.url %>)">
+    <div class="card__section card__section--cover" style="background-image: url(<%= @campaign.banner.expiring_url(3600) %>)">
       <h1 class="card__section--cover__title"><%= @campaign.title %></h1>
     </div>
     <div class="card__section card__section--border">
@@ -15,7 +15,7 @@
             </div>
             <div class="flex-row__cell">
               <% @campaign.groups.each do |group| %>
-                <div class="avatar avatar--small avatar--round inline-block" style="background-image: url(<%= image_url group.logo.url(:thumb) %>)"></div>
+                <div class="avatar avatar--small avatar--round inline-block tooltipster" style="background-image: url(<%= image_url group.logo.expiring_url(3600, :thumb) %>)" title="<%= group.name %>"></div>
               <% end %>
             </div>
           </div>
@@ -47,3 +47,9 @@
     <% end %>
   </div>
 </div>
+
+<script>
+  $(document).ready(function() {
+    $('.tooltipster').tooltipster();
+  });
+</script>

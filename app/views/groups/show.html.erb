@@ -111,6 +111,23 @@
     </div>
 
     <div class="col col--stacked sm-12 md-3">
+      <% if manager = @group.lead_manager %>
+        <div class="card card--secondary">
+          <div class="card__section">
+            <h4 style="overflow: auto;">
+              <span class="inline-block fleft">Your ERG manager</span>
+              <%= link_to image_tag('linkedin.png'), manager.linkedin_profile_url, target: '_blank', class: 'inline-block fright' if manager.linkedin_profile_url %>
+            </h4>
+            <div style="overflow: auto; clear: both;">
+              <%= image_tag(manager.avatar.expiring_url(3600), class: "avatar avatar--round", style: "float: left; margin-right: 1em;") %>
+              <div style="float: left;">
+                <strong><%= manager.name %></strong><br>
+                <span>Human Capital Leader</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
       <div class="card card--secondary">
         <div class="card__section">
           <h4 class="card__title"><%= inline_svg('icons/trophy.svg', class: "icon card__icon") %>Leaderboards</h4>
@@ -138,6 +155,15 @@
           </ol>
         </div>
       </div>
+
+      <% if @group.members.where(id: current_user.id).count > 0 %>
+        <%= link_to 'Leave this ERG', group_group_member_path(@group, current_user), method: :delete, class: 'error' %>
+      <% else %>
+        <%= simple_form_for :user, url: group_group_members_path(@group), method: :post do |f| %>
+          <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
+          <%= f.submit 'Join this ERG', class: "btn btn--primary" %>
+        <% end %>
+      <% end %>
     </div>
 
   </div>

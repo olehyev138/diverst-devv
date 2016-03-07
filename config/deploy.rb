@@ -2,9 +2,9 @@ lock '3.4.0'
 
 set :application, 'diverst'
 set :repo_url, 'git@github.com:vol7/diverst.git'
-set :branch, :master
+set :branch, ENV["REVISION"] || ENV["BRANCH_NAME"] || :master
 set :deploy_to, '/home/deploy/diverst'
-set :pty, true
+set :pty, false
 set :linked_files, %w(config/application.yml)
 set :linked_dirs, %w(log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads)
 set :keep_releases, 5
@@ -29,5 +29,22 @@ set :puma_preload_app, true
 set :sidekiq_config, 'config/sidekiq.yml'
 set :sidekiq_log, '/dev/null'
 set :sidekiq_processes, 1
+
+namespace :deploy do
+
+  desc 'Recompile all enterprise themes'
+  task :recompile_themes, [:command] => 'deploy:set_rails_env' do |task, args|
+    on primary(:app) do
+      within current_path do
+        with :rails_env => fetch(:rails_env) do
+          rake 'themes:recompile'
+        end
+      end
+    end
+  end
+
+  after :finishing, "deploy:recompile_themes"
+
+end
 
 require 'appsignal/capistrano'

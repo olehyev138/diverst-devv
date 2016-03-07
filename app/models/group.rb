@@ -1,5 +1,5 @@
 class Group < ActiveRecord::Base
-  has_many :user_groups
+  has_many :user_groups, dependent: :destroy
   has_many :members, through: :user_groups, class_name: 'User', source: :user, after_remove: :update_elasticsearch_member
   belongs_to :enterprise
   has_many :groups_polls
@@ -18,9 +18,10 @@ class Group < ActiveRecord::Base
   has_many :answer_upvotes, through: :answers
   has_many :groups_managers
   has_many :managers, through: :groups_managers, source: :user
+  belongs_to :lead_manager, class_name: "User"
   belongs_to :owner, class_name: "User"
 
-  has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('missing.png')
+  has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('missing.png'), s3_permissions: :private
   validates_attachment_content_type :logo, content_type: %r{\Aimage\/.*\Z}
 
   before_save :send_invitation_emails, if: :send_invitations?
@@ -104,13 +105,14 @@ class Group < ActiveRecord::Base
       !enterprise.yammer_token.nil?
   end
 
+  # This method only exists because it's used in a callback
   def update_elasticsearch_member(member)
     member.__elasticsearch__.update_document
   end
 
   # Update members in elastic_search
   def update_all_elasticsearch_members
-    members.each do |member|
+    members.includes(:poll_responses).each do |member|
       update_elasticsearch_member(member)
     end
   end
@@ -118,12 +120,15 @@ class Group < ActiveRecord::Base
   def handle_deletion
     old_members = members.ids
 
-    # Delete member associations
-    UserGroup.where(group_id: id).delete_all
-
     # Update members in elastic_search
     User.where(id: old_members).find_each do |member|
       update_elasticsearch_member(member)
     end
+  end
+
+  def self.avg_members_per_group(enterprise:)
+    group_sizes = UserGroup.where(group: enterprise.groups).group(:group).count.values
+    return nil if group_sizes.length == 0
+    group_sizes.sum / group_sizes.length
   end
 end
