@@ -228,5 +228,16 @@ Rails.application.routes.draw do
   resources :policy_groups
   resources :emails
 
+
+  # Planning
+
+  resources :outcomes
+  resources :pillars
+  resources :initiatives do
+    scope module: 'initiatives' do
+      resources :updates
+    end
+  end
+
   root to: 'metrics_dashboards#index'
 end

@@ -24,6 +24,9 @@ class Enterprise < ActiveRecord::Base
   has_many :emails
   belongs_to :theme
   has_many :policy_groups
+  has_many :outcomes
+  has_many :pillars, through: :outcomes
+  has_many :initiatives, through: :pillars
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :mobile_fields, reject_if: :all_blank, allow_destroy: true
