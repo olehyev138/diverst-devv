@@ -7,10 +7,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Use Ubuntu 14.04 Trusty Tahr 64-bit as our operating system
   config.vm.box = "ubuntu/trusty64"
 
-  # Configurate the virtual machine to use 2GB of RAM
   config.vm.provider :virtualbox do |v|
     host = RbConfig::CONFIG["host_os"]
 
+    # Configure the virtual machine to use half the system's RAM and CPUs
     if host =~ /darwin/ # OS X
       # sysctl returns bytes, convert to MB
       v.memory = `sysctl -n hw.memsize`.to_i / 1024 / 1024 / 2
@@ -20,6 +20,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       v.memory = `grep 'MemTotal' /proc/meminfo | sed -e 's/MemTotal://' -e 's/ kB//'`.to_i / 1024 / 2
       v.cpus = `nproc`.to_i
     end
+
+    # Fix for Rails not autoreloading: https://github.com/rails/rails/issues/16678#issuecomment-113058925
+    v.customize ["guestproperty", "set", :id, "--timesync-threshold", 5000]
   end
 
   # Forward the Rails server default port to the host

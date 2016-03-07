@@ -1,0 +1,6 @@
+<% content_for :secondary_nav do %>
+  <%= active_link_to "Overview", initiatives_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Initiative).index? %>
+  <%= active_link_to "Metrics", initiative_path(current_user.enterprise.initiatives.first), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Initiative).index? %>
+<% end %>
+
+<%= render template: "layouts/dashboard" %>
