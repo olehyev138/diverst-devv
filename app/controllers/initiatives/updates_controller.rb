@@ -13,12 +13,12 @@ class Initiatives::UpdatesController < ApplicationController
   def new
     authorize InitiativeUpdate
     @update = @initiative.updates.new
-    binding.pry
   end
 
   def create
     authorize InitiativeUpdate
-    @update = @initiative.updates.new(update_params)
+    @update = @initiative.updates.new
+    @update.info.merge(fields: @initiative.fields, form_data: params['custom-fields'])
     @update.owner = current_user
 
     if @update.save
@@ -63,7 +63,7 @@ class Initiatives::UpdatesController < ApplicationController
 
   def update_params
     params
-      .require(:update)
+      .require(:initiative_update)
       .permit(
 
       )
