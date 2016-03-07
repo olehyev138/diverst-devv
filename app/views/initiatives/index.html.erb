@@ -13,7 +13,8 @@
         <% @initiatives.each do |initiative| %>
           <div class="card__section card__section--border">
             <h2><%= initiative.name %></h2>
-            <%= link_to "Update", new_initiative_update_path(initiative) %>
+            <%= link_to "Publish an update", new_initiative_update_path(initiative) %>
+            <%= link_to "Edit", edit_initiative_path(initiative) %>
           </div>
         <% end %>
       <% end %>

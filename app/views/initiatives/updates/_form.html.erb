@@ -2,9 +2,11 @@
   <%= simple_form_for @update do |f| %>
 
     <div class="card">
-      <% @initiative.fields.each do |cf| %>
-        <%= render "shared/fields/display/custom_field", f: f, cf: cf, resource: @update %>
-      <% end %>
+      <div class="card__section">
+        <% @initiative.fields.each do |cf| %>
+          <%= render "shared/fields/display/custom_field", f: f, cf: cf, resource: @update %>
+        <% end %>
+      </div>
     </div>
 
     <%= f.button :submit %>

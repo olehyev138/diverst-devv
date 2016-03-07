@@ -28,6 +28,7 @@ class InitiativesController < ApplicationController
 
   def show
     authorize @initiative
+    @updates = @initiative.updates.order(created_at: :desc).limit(3).reverse # Shows the last 3 updates in chronological order
   end
 
   def edit
@@ -60,7 +61,22 @@ class InitiativesController < ApplicationController
       .require(:initiative)
       .permit(
         :title,
-        :description
+        :start,
+        :end,
+        :estimated_funding,
+        fields_attributes: [
+          :id,
+          :title,
+          :_destroy,
+          :gamification_value,
+          :show_on_vcard,
+          :saml_attribute,
+          :type,
+          :min,
+          :max,
+          :options_text,
+          :alternative_layout
+        ]
       )
   end
 end
