@@ -5,6 +5,7 @@
 <div class="content__main">
   <div class="card">
     <div class="card__section">
+      <h3>Metrics</h3>
       <table class="table--has-border" id="updates-table">
         <thead>
           <th>Metric</th>
@@ -32,4 +33,43 @@
       </table>
     </div>
   </div>
+
+  <div class="card">
+    <div class="card__section">
+      <h3>Graphs</h3>
+      <% @initiative.fields.each do |field| %>
+        <div class="graph" style="width: 49%; display: inline-block;" data-title="<%= field.title %>"></div>
+      <% end %>
+    </div>
+  </div>
 </div>
+
+<script>
+  $('.graph').each(function() {
+    var lastValue = 100;
+    $(this).highcharts({
+      title: {
+        text: $(this).data('title')
+      },
+      xAxis: {
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      },
+      yAxis: {
+        title: {
+          text: 'Nb of participants'
+        }
+      },
+      tooltip: {
+        valueSuffix: ' employees'
+      },
+      series: [{
+        name: 'Employee count',
+        data: Array.apply(null, Array(12)).map(function() {
+          var nextValue = lastValue + Math.random() * 100
+          lastValue = nextValue;
+          return Math.round(nextValue);
+        })
+      }]
+    });
+  });
+</script>

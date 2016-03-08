@@ -24,7 +24,7 @@ class MetricsDashboardsController < ApplicationController
   def index
     authorize MetricsDashboard
 
-    @dashboards = policy_scope(MetricsDashboard)
+    @dashboards = policy_scope(MetricsDashboard).includes(:enterprise, :segments)
 
     enterprise = current_user.enterprise
     @general_metrics = {
