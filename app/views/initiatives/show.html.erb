@@ -36,7 +36,27 @@
 
   <div class="card">
     <div class="card__section">
-      <h3>Graphs</h3>
+      <div class="flex-row">
+        <div class="flex-row__cell flex-row__cell--grow">
+          <h3>Graphs</h3>
+        </div>
+        <div class="flex-row__cell">
+          <div class="form--inline">
+            <div class="field">
+              <div class="field__input-wrapper">
+                <input type="text" class="field__input datepicker" value="2015-03-01">
+              </div>
+            </div>
+            <label>to </label>
+            <div class="field">
+              <div class="field__input-wrapper">
+                <input type="text" class="field__input datepicker" value="2015-03-31">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <% @initiative.fields.each do |field| %>
         <div class="graph" style="width: 49%; display: inline-block;" data-title="<%= field.title %>"></div>
       <% end %>
@@ -45,6 +65,8 @@
 </div>
 
 <script>
+  // Line graphs
+
   $('.graph').each(function() {
     var lastValue = 100;
     $(this).highcharts({
@@ -70,6 +92,16 @@
           return Math.round(nextValue);
         })
       }]
+    });
+  });
+
+
+  // Date filters datepickers
+
+  $('.datepicker').each(function() {
+    new Pikaday({
+      field: this,
+      yearRange: [1900, new Date().getFullYear()]
     });
   });
 </script>

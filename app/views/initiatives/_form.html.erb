@@ -3,7 +3,12 @@
 
     <div class="card">
       <div class="card__section card__section--border">
-        <p class="field__hint">Start off by giving your initiative a <strong>name</strong></p>
+        <p class="field__hint">Start off by choosing which <strong>pillar</strong> this initiative will live in</p>
+        <%= f.association :pillar, label: false, include_blank: false %>
+      </div>
+
+      <div class="card__section card__section--border">
+        <p class="field__hint">Give it a <strong>name</strong></p>
         <%= f.input :name, label: false %>
       </div>
 
@@ -20,9 +25,10 @@
 
     </div>
 
-    <h2>Metrics</h2>
-
     <div class="card">
+      <div class="card__section card__section--border">
+        <p>Define the <strong>metrics</strong> you want to track for this initiative</p>
+      </div>
       <div id="fields">
         <%= f.simple_fields_for :fields do |field| %>
           <%= render 'field_fields', f: field %>
