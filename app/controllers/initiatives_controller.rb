@@ -11,12 +11,13 @@ class InitiativesController < ApplicationController
 
   def new
     authorize Initiative
-    @initiative = current_user.enterprise.initiatives.new
+    @initiative = Initiative.new
   end
 
   def create
     authorize Initiative
-    @initiative = current_user.enterprise.initiatives.new(initiative_params)
+    @initiative = Initiatives.new(initiative_params)
+    @initiative.enterprise = current_user.enterprise
     @initiative.owner = current_user
 
     if @initiative.save

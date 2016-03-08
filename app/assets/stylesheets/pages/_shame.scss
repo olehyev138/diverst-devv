@@ -7,6 +7,10 @@
 .add_fields {
   display: inline-block;
   margin-bottom: $spacing-medium;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 
 select.datetime {
