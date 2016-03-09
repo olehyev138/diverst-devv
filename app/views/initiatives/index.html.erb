@@ -1,45 +1,52 @@
-<div class="content__header">
-  <h1>Initiatives</h1>
-  <%= link_to "New Initiative", new_initiative_path, class: "btn btn--primary" if policy(Initiative).new? %>
-</div>
-
 <div class="content__main">
-  <div class="card">
-      <% if @initiatives.empty? %>
-        <div class="card__section">
-          <p>There are no initiatives yet. <%= link_to "Create one", new_initiative_path %> and start solving problems with your team's diverse opinions.</p>
-        </div>
-      <% else %>
-        <% @initiatives.each do |initiative| %>
-          <div class="card__section card__section--border">
-            <h2><%= initiative.name %></h2>
+  <% if @initiatives.empty? %>
+    <div class="card__section">
+      <p>There are no initiatives yet. <%= link_to "Create one", new_initiative_path %> and start solving problems with your team's diverse opinions.</p>
+    </div>
+  <% else %>
+    <% @outcomes.each do |outcome| %>
+      <div class="content__header">
+        <h1><%= outcome.name %></h1>
+        <%= link_to "New Initiative", new_initiative_path, class: "btn btn--primary" if policy(Initiative).new? %>
+      </div>
 
-            <% initiative.fields.each_slice(3) do |field_row| %>
-              <div class="row">
-                <% field_row.each do |field| %>
-                  <div class="col sm-4">
-                    <h4><%= field.title %></h4>
-                    <div class="flex-row">
-                      <div class="flex-row__cell">
-                        <div class="sparkline"></div>
-                      </div>
-                      <div class="flex-row__cell">
-                        <span><%= initiative.updates.last.info[field] %></span>
+      <% @pillars.each do |pillar| %>
+        <div class="card">
+          <div class="card__section card__section--border">
+            <h2><%= pillar.name %></h2>
+          </div>
+
+          <% pillar.initiatives.each do |initiative| %>
+            <div class="card__section card__section--border">
+              <h3><%= initiative.name %></h3>
+
+              <% initiative.fields.each_slice(3) do |field_row| %>
+                <div class="row">
+                  <% field_row.each do |field| %>
+                    <div class="col sm-4">
+                      <h4><%= field.title %></h4>
+                      <div class="flex-row">
+                        <div class="flex-row__cell">
+                          <div class="sparkline"></div>
+                        </div>
+                        <div class="flex-row__cell">
+                          <span><%= initiative.updates.last.info[field] %></span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                <% end %>
-              </div>
-            <% end %>
+                  <% end %>
+                </div>
+              <% end %>
 
-            <%= link_to "Publish an update", new_initiative_update_path(initiative) %> -
-            <%= link_to "Edit", edit_initiative_path(initiative) %> -
-            <%= link_to "Delete", initiative_path(initiative), method: :delete, data: { confirm: "Are you sure?" }, class: "error" %>
-          </div>
+              <%= link_to "Publish an update", new_initiative_update_path(initiative) %> -
+              <%= link_to "Edit", edit_initiative_path(initiative) %> -
+              <%= link_to "Delete", initiative_path(initiative), method: :delete, data: { confirm: "Are you sure?" }, class: "error" %>
+            </div>
+          <% end %>
         <% end %>
       <% end %>
     </div>
-  </div>
+  <% end %>
 </div>
 
 <script>
