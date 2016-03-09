@@ -6,7 +6,9 @@ class InitiativesController < ApplicationController
 
   def index
     authorize Initiative
-    @initiatives = policy_scope(Initiative)
+    @initiatives = policy_scope(Initiative).includes(pillar: :outcome)
+    @pillars = @initiatives.map{ |i| i.pillar }
+    @outcomes = @pillars.map{ |p| p.outcome }
   end
 
   def new
