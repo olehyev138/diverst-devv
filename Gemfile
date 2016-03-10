@@ -55,7 +55,6 @@ gem 'omniauth-oauth2', '1.3.1' # Temporary fix to address: https://github.com/de
 gem 'activerecord-import'
 gem 'inline_svg'
 gem 'pundit'
-gem 'money-rails'
 
 group :development, :test do
   gem 'spring', '1.6.2' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring

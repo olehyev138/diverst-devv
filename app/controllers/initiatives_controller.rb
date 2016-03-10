@@ -1,4 +1,5 @@
 class InitiativesController < ApplicationController
+  before_action :set_group
   before_action :set_initiative, only: [:edit, :update, :destroy, :show]
   after_action :verify_authorized
 
@@ -18,8 +19,8 @@ class InitiativesController < ApplicationController
 
   def create
     authorize Initiative
-    @initiative = Initiatives.new(initiative_params)
-    @initiative.enterprise = current_user.enterprise
+    @initiative = Initiative.new(initiative_params)
+    @initiative.estimated_funding *= 100
     @initiative.owner = current_user
 
     if @initiative.save
@@ -55,18 +56,23 @@ class InitiativesController < ApplicationController
 
   protected
 
+  def set_group
+    @group = current_user.enterprise.groups.find(params[:group_id])
+  end
+
   def set_initiative
-    @initiative = current_user.enterprise.initiatives.find(params[:id])
+    @initiative = @group.initiatives.find(params[:id])
   end
 
   def initiative_params
     params
       .require(:initiative)
       .permit(
-        :title,
+        :name,
         :start,
         :end,
         :estimated_funding,
+        :pillar_id,
         fields_attributes: [
           :id,
           :title,

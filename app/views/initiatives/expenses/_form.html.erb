@@ -1,0 +1,17 @@
+<div class="content__main">
+  <%= simple_form_for [@initiative, @expense], url: url do |f| %>
+
+    <div class="card">
+      <div class="card__section card__section--border">
+        <p>Start off by giving the expense a <strong>description</strong></p>
+        <%= f.input :description, label: false %>
+      </div>
+      <div class="card__section card__section--border">
+        <p>Specify the <strong>amount</strong> spent</p>
+        <%= f.input :amount, label: false %>
+      </div>
+    </div>
+
+    <%= f.button :submit %>
+  <% end %>
+</div>

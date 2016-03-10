@@ -1,4 +1,5 @@
 class Initiatives::UpdatesController < ApplicationController
+  before_action :set_group
   before_action :set_initiative
   before_action :set_update, only: [:edit, :update, :destroy, :show, :export_csv]
   after_action :verify_authorized
@@ -7,7 +8,7 @@ class Initiatives::UpdatesController < ApplicationController
 
   def index
     authorize InitiativeUpdate
-    @updates = policy_scope(InitiativeUpdate)
+    @updates = @initiative.updates
   end
 
   def new
@@ -39,7 +40,7 @@ class Initiatives::UpdatesController < ApplicationController
   def update
     authorize @update
     if @update.update(update_params)
-      redirect_to @update
+      redirect_to action: :index
     else
       render :edit
     end
@@ -53,19 +54,15 @@ class Initiatives::UpdatesController < ApplicationController
 
   protected
 
+  def set_group
+    @group = Group.find(params[:group_id])
+  end
+
   def set_initiative
-    @initiative = current_user.enterprise.initiatives.find(params[:initiative_id])
+    @initiative = Initiative.find(params[:initiative_id])
   end
 
   def set_update
     @update = @initiative.updates.find(params[:id])
-  end
-
-  def update_params
-    params
-      .require(:initiative_update)
-      .permit(
-
-      )
   end
 end
