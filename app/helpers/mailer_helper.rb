@@ -19,7 +19,7 @@ module MailerHelper
 
   private
 
-  def email_for(enterprise: enterprise, slug: slug)
+  def email_for(enterprise:, slug:)
     email = enterprise.emails.where(slug: slug).first
   end
 end
