@@ -53,12 +53,14 @@
           <span class="nav__text">Meet</span>
         <% end %>
       </li>
-      <li class="nav__item">
-        <%= active_link_to group_initiatives_path(policy_scope(Group).first), class: "nav__link", class_active: "nav__link--is-selected", active: [['initiatives', 'outcomes', 'pillars'], []] do %>
-          <%= inline_svg('icons/plan.svg', class: "icon nav__icon") %>
-          <span class="nav__text">Plan</span>
-        <% end %>
-      </li>
+      <% if default_group = policy_scope(Group).first %>
+        <li class="nav__item">
+          <%= active_link_to group_initiatives_path(default_group), class: "nav__link", class_active: "nav__link--is-selected", active: [['initiatives', 'outcomes', 'pillars'], []] do %>
+            <%= inline_svg('icons/plan.svg', class: "icon nav__icon") %>
+            <span class="nav__text">Plan</span>
+          <% end %>
+        </li>
+      <% end %>
     </ul>
     <ul class="nav__list nav__list--secondary">
       <% if GlobalSettingsPolicy.new(current_user).update? %>
