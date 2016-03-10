@@ -1,0 +1,10 @@
+<div class="card__section card__section--border nested-fields">
+  <div class="flex-row flex-row--middle">
+    <div class="flex-row__cell flex-row__cell--grow">
+      <%= f.input :name, label: false, placeholder: "Pillar name" %>
+    </div>
+    <div class="flex-row__cell">
+      <%= link_to_remove_association "Remove pillar", f, class: "error" %>
+    </div>
+  </div>
+</div>

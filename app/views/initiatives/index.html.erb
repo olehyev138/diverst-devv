@@ -1,13 +1,15 @@
 <div class="content__main">
   <% if @initiatives.empty? %>
-    <div class="card__section">
-      <p>There are no initiatives yet. <%= link_to "Create one", new_initiative_path %> and start solving problems with your team's diverse opinions.</p>
+    <div class="card">
+      <div class="card__section">
+        <p>There are no initiatives yet. <%= link_to "Create one", new_group_initiative_path(@group) %> and start solving problems with your team's diverse opinions.</p>
+      </div>
     </div>
   <% else %>
     <% @outcomes.each do |outcome| %>
       <div class="content__header">
         <h1><%= outcome.name %></h1>
-        <%= link_to "New Initiative", new_initiative_path, class: "btn btn--primary" if policy(Initiative).new? %>
+        <%= link_to "New Initiative", new_group_initiative_path(@group), class: "btn btn--primary" if policy(Initiative).new? %>
       </div>
 
       <% @pillars.each do |pillar| %>
@@ -20,27 +22,31 @@
             <div class="card__section card__section--border">
               <h3><%= initiative.name %></h3>
 
-              <% initiative.fields.each_slice(3) do |field_row| %>
-                <div class="row">
-                  <% field_row.each do |field| %>
-                    <div class="col sm-4">
-                      <h4><%= field.title %></h4>
-                      <div class="flex-row">
-                        <div class="flex-row__cell">
-                          <div class="sparkline"></div>
-                        </div>
-                        <div class="flex-row__cell">
-                          <span><%= initiative.updates.last.info[field] %></span>
+              <% if last_update = initiative.updates.last %>
+                <% initiative.fields.each_slice(3) do |field_row| %>
+                  <div class="row">
+                    <% field_row.each do |field| %>
+                      <div class="col sm-4">
+                        <h4><%= field.title %></h4>
+                        <div class="flex-row">
+                          <div class="flex-row__cell">
+                            <div class="sparkline"></div>
+                          </div>
+                          <div class="flex-row__cell">
+                            <span><%= last_update.info[field] %></span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  <% end %>
-                </div>
+                    <% end %>
+                  </div>
+                <% end %>
+              <% else %>
+                <p>Publish an update to see data on this initiative</p>
               <% end %>
 
-              <%= link_to "Publish an update", new_initiative_update_path(initiative) %> -
-              <%= link_to "Edit", edit_initiative_path(initiative) %> -
-              <%= link_to "Delete", initiative_path(initiative), method: :delete, data: { confirm: "Are you sure?" }, class: "error" %>
+              <%= link_to "Publish an update", new_group_initiative_update_path(@group, initiative) %> -
+              <%= link_to "Edit", edit_group_initiative_path(@group, initiative) %> -
+              <%= link_to "Delete", group_initiative_path(@group, initiative), method: :delete, data: { confirm: "Are you sure?" }, class: "error" %>
             </div>
           <% end %>
         <% end %>

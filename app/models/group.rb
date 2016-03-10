@@ -20,6 +20,11 @@ class Group < ActiveRecord::Base
   has_many :managers, through: :groups_managers, source: :user
   belongs_to :lead_manager, class_name: "User"
   belongs_to :owner, class_name: "User"
+  has_many :outcomes
+  has_many :pillars, through: :outcomes
+  has_many :initiatives, through: :pillars
+
+  accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
 
   has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('missing.png'), s3_permissions: :private
   validates_attachment_content_type :logo, content_type: %r{\Aimage\/.*\Z}

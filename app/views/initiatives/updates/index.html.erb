@@ -1,13 +1,13 @@
 <div class="content__header">
   <h1>Updates</h1>
-  <%= link_to "New Update", new_initiative_update_path, class: "btn btn--primary" if policy(InitiativeUpdate).new? %>
+  <%= link_to "New Update", new_group_initiative_update_path(@group, @initiative), class: "btn btn--primary" if policy(InitiativeUpdate).new? %>
 </div>
 
 <div class="content__main">
   <div class="card">
     <div class="card__section">
       <% if @updates.empty? %>
-        <p>There are no updates yet. <%= link_to "Create one", new_initiative_update_path %> to track your initiative's progress.</p>
+        <p>There are no updates yet. <%= link_to "Create one", new_group_initiative_update_path(@group, @initiative) %> to track your initiative's progress.</p>
       <% else %>
         <table class="table--has-border" id="updates-table">
           <thead>
@@ -17,8 +17,8 @@
           <tbody>
             <% @updates.each do |update| %>
               <tr>
-                <td><%= link_to update.created_at.to_s(:reversed_slashes), initiative_update_path(@initiative, update) %></td>
-                <td><%= link_to "Edit", edit_initiative_update_path(@initiative, update) if policy(update).edit? %> - <%= link_to "Delete", initiative_update_path(@initiative, update), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(update).destroy? %></td>
+                <td><%= link_to update.created_at.to_s(:reversed_slashes), group_initiative_update_path(@group, @initiative, update) %></td>
+                <td><%= link_to "Edit", edit_group_initiative_update_path(@group, @initiative, update) if policy(update).edit? %> - <%= link_to "Delete", group_initiative_update_path(@group, @initiative, update), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(update).destroy? %></td>
               </tr>
             <% end %>
           </tbody>
@@ -27,13 +27,3 @@
     </div>
   </div>
 </div>
-
-<script>
-  $(document).on('page:change', function() {
-    $(document).off('page:change');
-
-    $('#updates-table').dataTable(Utility.mergeWithDTDefaults({
-      order: [[2, "desc"]]
-    }));
-  });
-</script>
