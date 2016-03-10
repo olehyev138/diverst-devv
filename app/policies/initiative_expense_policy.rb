@@ -1,10 +1,10 @@
-class InitiativePolicy < ApplicationPolicy
+class InitiativeExpensePolicy < ApplicationPolicy
   def index?
     @policy_group.initiatives_index?
   end
 
   def create?
-    @policy_group.initiatives_create?
+    @policy_group.initiatives_manage?
   end
 
   def update?
@@ -19,9 +19,9 @@ class InitiativePolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      scope.joins(pillar: { outcome: :group }).where(
-        groups: {
-          enterprise_id: @user.enterprise.id
+      scope.joins(initiative: { pillar: :outcome }).where(
+        outcomes: {
+          group_id: @user.enterprise.groups.pluck(:id)
         }
       )
     end

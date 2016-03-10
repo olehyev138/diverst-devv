@@ -21,7 +21,7 @@ class InitiativeUpdatePolicy < ApplicationPolicy
     def resolve
       scope.joins(initiative: { pillar: :outcome }).where(
         outcomes: {
-          enterprise_id: @user.enterprise.id
+          group_id: @user.enterprise.groups.pluck(:id)
         }
       )
     end

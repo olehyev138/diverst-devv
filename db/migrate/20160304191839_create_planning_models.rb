@@ -3,7 +3,7 @@ class CreatePlanningModels < ActiveRecord::Migration
     create_table :outcomes do |t|
       t.string :name
 
-      t.belongs_to :enterprise
+      t.belongs_to :group
 
       t.timestamps null: false
     end
@@ -21,8 +21,8 @@ class CreatePlanningModels < ActiveRecord::Migration
       t.string :name
       t.datetime :start
       t.datetime :end
-      t.money :estimated_funding
-      t.money :actual_funding
+      t.integer :estimated_funding
+      t.integer :actual_funding
 
       t.belongs_to :owner
       t.belongs_to :pillar
