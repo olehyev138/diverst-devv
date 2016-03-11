@@ -7,9 +7,7 @@ class InitiativesController < ApplicationController
 
   def index
     authorize Initiative
-    @initiatives = policy_scope(Initiative).includes(pillar: :outcome)
-    @pillars = @initiatives.map{ |i| i.pillar }
-    @outcomes = @pillars.map{ |p| p.outcome }
+    @outcomes = @group.outcomes.includes(pillars: :initiatives)
   end
 
   def new
@@ -20,7 +18,6 @@ class InitiativesController < ApplicationController
   def create
     authorize Initiative
     @initiative = Initiative.new(initiative_params)
-    @initiative.estimated_funding *= 100
     @initiative.owner = current_user
 
     if @initiative.save
@@ -42,7 +39,7 @@ class InitiativesController < ApplicationController
   def update
     authorize @initiative
     if @initiative.update(initiative_params)
-      redirect_to @initiative
+      redirect_to [@group, :initiatives]
     else
       render :edit
     end

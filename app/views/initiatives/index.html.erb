@@ -1,8 +1,8 @@
 <div class="content__main">
-  <% if @initiatives.empty? %>
+  <% if @outcomes.empty? %>
     <div class="card">
       <div class="card__section">
-        <p>There are no initiatives yet. <%= link_to "Create one", new_group_initiative_path(@group) %> and start solving problems with your team's diverse opinions.</p>
+        <p>There are no outcomes yet. <%= link_to "Create one", new_group_outcome_path(@group) %> and start solving problems with your team's diverse opinions.</p>
       </div>
     </div>
   <% else %>
@@ -12,46 +12,61 @@
         <%= link_to "New Initiative", new_group_initiative_path(@group), class: "btn btn--primary" if policy(Initiative).new? %>
       </div>
 
-      <% @pillars.each do |pillar| %>
+
+      <% if outcome.pillars.empty? %>
         <div class="card">
-          <div class="card__section card__section--border">
-            <h2><%= pillar.name %></h2>
+          <div class="card__section">
+            <p>There are no pillars in this outcome yet. <%= link_to "Create some", group_outcomes_path(@group) %> and start solving problems with your team's diverse opinions.</p>
           </div>
-
-          <% pillar.initiatives.each do |initiative| %>
+        </div>
+      <% else %>
+        <% outcome.pillars.each do |pillar| %>
+          <div class="card">
             <div class="card__section card__section--border">
-              <h3><%= initiative.name %></h3>
+              <h2><%= pillar.name %></h2>
+            </div>
 
-              <% if last_update = initiative.updates.last %>
-                <% initiative.fields.each_slice(3) do |field_row| %>
-                  <div class="row">
-                    <% field_row.each do |field| %>
-                      <div class="col sm-4">
-                        <h4><%= field.title %></h4>
-                        <div class="flex-row">
-                          <div class="flex-row__cell">
-                            <div class="sparkline"></div>
+            <% if pillar.initiatives.empty? %>
+              <div class="card__section card__section--border">
+                There are no active initiatives in this pillar.
+              </div>
+            <% else %>
+              <% pillar.initiatives.each do |initiative| %>
+                <div class="card__section card__section--border">
+                  <h3><%= initiative.name %></h3>
+
+                  <% if last_update = initiative.updates.last %>
+                    <% initiative.fields.each_slice(3) do |field_row| %>
+                      <div class="row">
+                        <% field_row.each do |field| %>
+                          <div class="col sm-4">
+                            <h4><%= field.title %></h4>
+                            <div class="flex-row">
+                              <div class="flex-row__cell">
+                                <div class="sparkline"></div>
+                              </div>
+                              <div class="flex-row__cell">
+                                <span><%= last_update.info[field] %></span>
+                              </div>
+                            </div>
                           </div>
-                          <div class="flex-row__cell">
-                            <span><%= last_update.info[field] %></span>
-                          </div>
-                        </div>
+                        <% end %>
                       </div>
                     <% end %>
-                  </div>
-                <% end %>
-              <% else %>
-                <p>Publish an update to see data on this initiative</p>
-              <% end %>
+                  <% else %>
+                    <p>Publish an update to see data on this initiative</p>
+                  <% end %>
 
-              <%= link_to "Publish an update", new_group_initiative_update_path(@group, initiative) %> -
-              <%= link_to "Edit", edit_group_initiative_path(@group, initiative) %> -
-              <%= link_to "Delete", group_initiative_path(@group, initiative), method: :delete, data: { confirm: "Are you sure?" }, class: "error" %>
-            </div>
-          <% end %>
+                  <%= link_to "Publish an update", new_group_initiative_update_path(@group, initiative) %> -
+                  <%= link_to "Edit", edit_group_initiative_path(@group, initiative) %> -
+                  <%= link_to "Delete", group_initiative_path(@group, initiative), method: :delete, data: { confirm: "Are you sure?" }, class: "error" %>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
         <% end %>
       <% end %>
-    </div>
+    <% end %>
   <% end %>
 </div>
 
