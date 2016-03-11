@@ -1,0 +1,19 @@
+.metric {
+  border-right: 1px solid $diverst-border;
+  display: inline-block;
+  line-height: 1;
+}
+
+.metric__title {
+  font-size: 14px;
+}
+
+.metric__value {
+  margin-bottom: 0;
+  font-weight: normal;
+  font-size: 25px;
+}
+
+.metric__sparkline {
+  margin-bottom: 3px;
+}

@@ -8,8 +8,7 @@ Highcharts.SparkLine = function (a, b, c) {
       borderWidth: 0,
       type: 'area',
       margin: [2, 0, 2, 0],
-      width: 120,
-      height: 20,
+      height: 30,
       style: {
         overflow: 'visible'
       },
@@ -69,12 +68,7 @@ Highcharts.SparkLine = function (a, b, c) {
           }
         },
         marker: {
-          radius: 1,
-          states: {
-            hover: {
-              radius: 2
-            }
-          }
+          enabled: false
         },
         fillOpacity: 0.25
       },
