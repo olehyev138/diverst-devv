@@ -25,7 +25,7 @@
             <tr>
               <td><%= field.title %></td>
               <% @updates.each do |update| %>
-                <td><%= field.string_value update.info[field] %> <%= InitiativeUpdateDecorator.decorate(update).variance_from_previous(field) %></td>
+                <td><%= number_with_delimiter(field.string_value(update.info[field]), :delimiter => ',') %> <%= InitiativeUpdateDecorator.decorate(update).variance_from_previous(field) %></td>
               <% end %>
             </tr>
           <% end %>

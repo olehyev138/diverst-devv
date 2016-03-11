@@ -24,10 +24,21 @@ $gutter: $spacing-large;
   margin-bottom: $gutter;
 }
 
+.row--narrow {
+  margin-left: (-$gutter/4);
+  margin-right: (-$gutter/4);
+}
+
 .col {
   float: left;
   padding-left: ($gutter/2);
   padding-right: ($gutter/2);
+}
+
+.col--narrow {
+  float: left;
+  padding-left: ($gutter/4);
+  padding-right: ($gutter/4);
 }
 
 .col--stacked {
