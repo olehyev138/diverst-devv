@@ -39,7 +39,9 @@ class Initiatives::UpdatesController < ApplicationController
 
   def update
     authorize @update
-    if @update.update(update_params)
+    @update.info.merge(fields: @initiative.fields, form_data: params['custom-fields'])
+
+    if @update.save
       redirect_to action: :index
     else
       render :edit

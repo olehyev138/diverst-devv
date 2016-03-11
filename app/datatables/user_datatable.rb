@@ -8,12 +8,10 @@ class UserDatatable < AjaxDatatablesRails::Base
   end
 
   def sortable_columns
-    # Declare strings in this format: ModelName.column_name
     @sortable_columns ||= ['User.first_name', 'User.last_name', 'User.email', 'User.first_name']
   end
 
   def searchable_columns
-    # Declare strings in this format: ModelName.column_name
     @searchable_columns ||= ['User.first_name', 'User.last_name', 'User.email']
   end
 
@@ -22,8 +20,6 @@ class UserDatatable < AjaxDatatablesRails::Base
   def data
     records.map do |record|
       [
-        # comma separated list of the values for each cell of a table row
-        # example: record.attribute,
         record.first_name,
         record.last_name,
         record.email,
@@ -33,7 +29,6 @@ class UserDatatable < AjaxDatatablesRails::Base
   end
 
   def get_raw_records
-    # insert query here
     @users
   end
 
