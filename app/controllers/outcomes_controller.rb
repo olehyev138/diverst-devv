@@ -50,7 +50,7 @@ class OutcomesController < ApplicationController
   protected
 
   def set_group
-    @group = current_user.enterprise.groups.find(params[:group_id])
+    @group = current_user.enterprise.groups.includes(outcomes: :pillars).find(params[:group_id])
   end
 
   def set_outcome

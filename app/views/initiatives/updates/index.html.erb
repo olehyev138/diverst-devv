@@ -1,5 +1,11 @@
 <div class="content__header">
-  <h1>Updates</h1>
+  <h1>
+    <span class="muted">
+      <%= @group.name %> /
+      <%= @initiative.name %> /
+    </span>
+    Updates
+  </h1>
   <%= link_to "New Update", new_group_initiative_update_path(@group, @initiative), class: "btn btn--primary" if policy(InitiativeUpdate).new? %>
 </div>
 

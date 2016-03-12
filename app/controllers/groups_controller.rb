@@ -147,6 +147,7 @@ class GroupsController < ApplicationController
           pillars_attributes: [
             :id,
             :name,
+            :value_proposition,
             :_destroy
           ]
         ]
