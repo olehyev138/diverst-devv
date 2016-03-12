@@ -17,7 +17,7 @@ class QuestionsController < ApplicationController
 
   def show
     authorize @question.campaign
-    @answers = @question.answers.includes(:votes, :author, :comments)
+    @answers = @question.answers.includes(:author, :comments)
   end
 
   def create

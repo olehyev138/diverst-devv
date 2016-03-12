@@ -7,7 +7,7 @@ class InitiativesController < ApplicationController
 
   def index
     authorize Initiative
-    @outcomes = @group.outcomes.includes(pillars: :initiatives)
+    @outcomes = @group.outcomes.includes(pillars: { initiatives: :fields })
   end
 
   def new
