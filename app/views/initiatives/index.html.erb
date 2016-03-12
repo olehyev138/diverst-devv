@@ -24,7 +24,8 @@
         <% outcome.pillars.each do |pillar| %>
           <div class="card">
             <div class="card__section card__section--border">
-              <h2><%= pillar.name %></h2>
+              <h2 class="no-margin"><%= pillar.name %></h2>
+              <p class="muted"><%= pillar.value_proposition %></p>
             </div>
 
             <% if pillar.initiatives.empty? %>
@@ -67,7 +68,7 @@
                           <strong>Expenses</strong><br>
                           <%= number_to_currency initiative.expenses.sum(:amount) %>
                         </div>
-                        <div class="flex-row__cell flex-row__cell--grow flex-row__cell--spaced">
+                        <div class="flex-row__cell flex-row__cell--grow flex-row__cell--spaced" style="margin-bottom: 20px;">
                           <div class="progress-bar">
                             <div class="progress-bar__fill" style="width: <%= initiative.expenses.sum(:amount).to_f / initiative.estimated_funding * 100 %>%;"></div>
                           </div>
