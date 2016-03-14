@@ -139,7 +139,18 @@ class GroupsController < ApplicationController
         :lead_manager_id,
         manager_ids: [],
         member_ids: [],
-        invitation_segment_ids: []
+        invitation_segment_ids: [],
+        outcomes_attributes: [
+          :id,
+          :name,
+          :_destroy,
+          pillars_attributes: [
+            :id,
+            :name,
+            :value_proposition,
+            :_destroy
+          ]
+        ]
       )
   end
 end

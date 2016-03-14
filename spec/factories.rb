@@ -1,4 +1,13 @@
 FactoryGirl.define do
+  factory :initiative do
+    
+  end
+  factory :pillar do
+    
+  end
+  factory :outcome do
+    
+  end
   sequence :email_address do |n|
     "user#{n}@diverst.com"
   end

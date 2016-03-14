@@ -1,0 +1,135 @@
+<% if @outcomes.empty? %>
+  <div class="content__main">
+    <div class="card">
+      <div class="card__section">
+        <p>There are no outcomes yet. <%= link_to "Create one", new_group_outcome_path(@group) %> and start solving problems with your team's diverse opinions.</p>
+      </div>
+    </div>
+  </div>
+<% else %>
+  <% @outcomes.each do |outcome| %>
+    <div class="content__header">
+      <h1><span class="muted"><%= @group.name %> /</span> <%= outcome.name %></h1>
+      <%= link_to "New Initiative", new_group_initiative_path(@group), class: "btn btn--primary" if policy(Initiative).new? %>
+    </div>
+
+    <div class="content__main">
+      <% if outcome.pillars.empty? %>
+        <div class="card">
+          <div class="card__section">
+            <p>There are no pillars in this outcome yet. <%= link_to "Create some", group_outcomes_path(@group) %> and start solving problems with your team's diverse opinions.</p>
+          </div>
+        </div>
+      <% else %>
+        <% outcome.pillars.each do |pillar| %>
+          <div class="card">
+            <div class="card__section card__section--border">
+              <h2 class="no-margin"><%= pillar.name %></h2>
+              <p class="muted"><%= pillar.value_proposition %></p>
+            </div>
+
+            <% if pillar.initiatives.empty? %>
+              <div class="card__section card__section--border">
+                There are no active initiatives in this pillar.
+              </div>
+            <% else %>
+              <% pillar.initiatives.each do |initiative| %>
+                <div class="card__section card__section--border">
+                  <h3><%= initiative.name %></h3>
+                  <div class="card__action">
+                    <%= link_to "Budget", group_initiative_expenses_path(@group, initiative) %> -
+                    <%= link_to "Updates", group_initiative_updates_path(@group, initiative) %> -
+                    <%= link_to "Metrics", group_initiative_path(@group, initiative) %> |
+                    <%= link_to "Edit", edit_group_initiative_path(@group, initiative) %> -
+                    <%= link_to "Delete", group_initiative_path(@group, initiative), method: :delete, data: { confirm: "Are you sure?" }, class: "error" %>
+                  </div>
+
+                  <div class="flex-row flex-row--spaced flex-row--middle">
+                    <div class="flex-row__cell flex-row__cell--spaced flex-row__cell--grow">
+                      <% if last_update = initiative.updates.last %>
+                        <% initiative.fields.each_slice(3) do |field_row| %>
+                          <div class="flex-row flex-row--spacing-bottom">
+                            <% field_row.each do |field| %>
+                              <div class="flex-row__cell flex-row__cell--grow metric">
+                                <span class="metric__title"><%= field.title %></span>
+                                <h4 class="metric__value"><%= last_update.info[field] || "N/A" %></h4>
+                                <div class="metric__sparkline js-sparkline" data-last-value="<%= last_update.info[field] %>"></div>
+                              </div>
+                            <% end %>
+                          </div>
+                        <% end %>
+                      <% else %>
+                        <p>Publish an update to see data on this initiative</p>
+                      <% end %>
+                    </div>
+                    <div class="flex-row__cell flex-row__cell--spaced flex-row__cell--grow">
+
+                      <div class="flex-row flex-row--middle flex-row--spaced flex-row--spacing-bottom">
+                        <div class="flex-row__cell flex-row__cell--spaced">
+                          <strong>Expenses</strong><br>
+                          <%= number_to_currency initiative.expenses.sum(:amount) %>
+                        </div>
+                        <div class="flex-row__cell flex-row__cell--grow flex-row__cell--spaced" style="margin-bottom: 20px;">
+                          <div class="progress-bar">
+                            <div class="progress-bar__fill" style="width: <%= initiative.expenses.sum(:amount).to_f / initiative.estimated_funding * 100 %>%;"></div>
+                          </div>
+                        </div>
+                        <div class="flex-row__cell flex-row__cell--spaced">
+                          <strong>Budget</strong><br>
+                          <%= number_to_currency initiative.estimated_funding %>
+                        </div>
+                      </div>
+
+                      <div class="flex-row flex-row--middle flex-row--spaced">
+                        <div class="flex-row__cell flex-row__cell--spaced">
+                          <strong>Start date</strong><br>
+                          <%= initiative.start.to_s :reversed_slashes %>
+                        </div>
+                        <div class="flex-row__cell flex-row__cell--grow flex-row__cell--spaced" style="margin-bottom: 20px;">
+                          <div class="progress-bar">
+                            <div class="progress-bar__fill" style="width: <%= InitiativeDecorator.decorate(initiative).progress_percentage %>%;"></div>
+                          </div>
+                        </div>
+                        <div class="flex-row__cell flex-row__cell--spaced">
+                          <strong>End date</strong><br>
+                          <%= initiative.end.to_s :reversed_slashes %>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
+
+<script>
+  $(document).on('page:change', function() {
+    $(document).off('page:change');
+
+    $('.js-sparkline').each(function() {
+      var lastValue = $(this).data('last-value');
+      var data = [];
+      for (var i = 10; i >= 0 ; i--) {
+        data[i] = Math.floor(lastValue);
+        lastValue = lastValue - Math.random()*(Math.random()-0.2) * lastValue;
+      }
+
+      $(this).highcharts('SparkLine', {
+        series: [{
+          data: data,
+          pointStart: 1
+        }],
+        tooltip: {
+          headerFormat: '',
+          pointFormat: '<b>{point.y}</b>'
+        }
+      });
+    });
+  });
+</script>

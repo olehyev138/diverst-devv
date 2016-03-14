@@ -69,6 +69,10 @@ after :enterprise do
     users_index: true,
     users_manage: true,
 
+    initiatives_index: true,
+    initiatives_create: true,
+    initiatives_manage: true,
+
     global_settings_manage: true
   )
 

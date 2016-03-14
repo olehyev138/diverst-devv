@@ -75,6 +75,17 @@ Rails.application.routes.draw do
       resources :resources
     end
 
+    # Planning
+
+    resources :outcomes
+    resources :pillars
+    resources :initiatives do
+      scope module: 'initiatives' do
+        resources :updates
+        resources :expenses
+      end
+    end
+
     member do
       get 'export_csv'
       get 'import_csv'
