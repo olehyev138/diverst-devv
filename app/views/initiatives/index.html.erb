@@ -63,7 +63,8 @@
                       <% end %>
                     </div>
                     <div class="flex-row__cell flex-row__cell--spaced flex-row__cell--grow">
-                      <div class="flex-row flex-row--middle flex-row--spaced">
+
+                      <div class="flex-row flex-row--middle flex-row--spaced flex-row--spacing-bottom">
                         <div class="flex-row__cell flex-row__cell--spaced">
                           <strong>Expenses</strong><br>
                           <%= number_to_currency initiative.expenses.sum(:amount) %>
@@ -78,6 +79,23 @@
                           <%= number_to_currency initiative.estimated_funding %>
                         </div>
                       </div>
+
+                      <div class="flex-row flex-row--middle flex-row--spaced">
+                        <div class="flex-row__cell flex-row__cell--spaced">
+                          <strong>Start date</strong><br>
+                          <%= initiative.start.to_s :reversed_slashes %>
+                        </div>
+                        <div class="flex-row__cell flex-row__cell--grow flex-row__cell--spaced" style="margin-bottom: 20px;">
+                          <div class="progress-bar">
+                            <div class="progress-bar__fill" style="width: <%= InitiativeDecorator.decorate(initiative).progress_percentage %>%;"></div>
+                          </div>
+                        </div>
+                        <div class="flex-row__cell flex-row__cell--spaced">
+                          <strong>End date</strong><br>
+                          <%= initiative.end.to_s :reversed_slashes %>
+                        </div>
+                      </div>
+
                     </div>
                   </div>
                 </div>
