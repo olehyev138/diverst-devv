@@ -76,6 +76,9 @@ class PolicyGroupsController < ApplicationController
         :users_index,
         :users_manage,
         :global_settings_manage,
+        :initiatives_index,
+        :initiatives_create,
+        :initiatives_manage,
         user_ids: []
       )
   end
