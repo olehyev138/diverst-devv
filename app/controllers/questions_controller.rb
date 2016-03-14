@@ -3,7 +3,7 @@ class QuestionsController < ApplicationController
   before_action :set_question, only: [:edit, :update, :destroy, :show, :reopen]
   after_action :verify_authorized
 
-  layout 'unify'
+  layout 'collaborate'
 
   def index
     authorize @campaign
