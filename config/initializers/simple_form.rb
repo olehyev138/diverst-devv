@@ -54,6 +54,49 @@ SimpleForm.setup do |config|
     # b.use :full_error, wrap_with: { tag: :span, class: :error }
   end
 
+  config.wrappers :currency, class: :field, hint_class: :field_with_hint, error_class: :field_with_errors do |b|
+    b.use :html5
+
+    b.use :hint,  wrap_with: { tag: :span, class: :hint }
+    b.use :label, class: :field__label
+    b.use :error, wrap_with: { tag: :span, class: :error }
+
+    b.wrapper tag: 'div', class: 'field__input-wrapper' do |ba|
+      ba.wrapper tag: 'span', class: 'field__add-on field__add-on--left field__add-on--dollar' do end
+
+      # Calculates placeholders automatically from I18n
+      # You can also pass a string as f.input placeholder: "Placeholder"
+      ba.use :placeholder
+
+      ## Optional extensions
+      # They are disabled unless you pass `f.input EXTENSION_NAME => true`
+      # to the input. If so, they will retrieve the values from the model
+      # if any exists. If you want to enable any of those
+      # extensions by default, you can change `b.optional` to `b.use`.
+
+      # Calculates maxlength from length validations for string inputs
+      ba.optional :maxlength
+
+      # Calculates pattern from format validations for string inputs
+      ba.optional :pattern
+
+      # Calculates min and max from length validations for numeric inputs
+      ba.optional :min_max
+
+      # Calculates readonly automatically from readonly attributes
+      ba.optional :readonly
+
+      ## Input
+      ba.use :input, class: 'field__input field__input--left-add-on'
+    end
+
+    ## full_messages_for
+    # If you want to display the full error message for the attribute, you can
+    # use the component :full_error, like:
+    #
+    # b.use :full_error, wrap_with: { tag: :span, class: :error }
+  end
+
   config.wrappers :boolean_toggle, class: :field, hint_class: :field_with_hint, error_class: :field_with_errors do |b|
     b.use :html5
 
