@@ -146,6 +146,10 @@ Rails.application.routes.draw do
         resources :answer_comments, path: 'comments', shallow: true
       end
 
+      scope module: :questions do
+        resource :roi, controller: "roi"
+      end
+
       member do
         patch 'reopen'
       end

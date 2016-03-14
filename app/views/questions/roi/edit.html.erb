@@ -1,0 +1,31 @@
+<div class="content__header">
+  <h1>Specify this question's ROI</h1>
+</div>
+
+<div class="content__main">
+  <% if @answers.empty? %>
+    <div class="card">
+      <div class="card__section">
+        <p>There are no starred answers in this question. <%= link_to "Start starring", question_path(@question) %> the best ideas to track their ROI.</p>
+      </div>
+    </div>
+  <% else %>
+    <%= simple_form_for @question do |f| %>
+      <%= f.simple_fields_for :answers, @answers do |a| %>
+        <div class="card">
+          <div class="card__section card__section--border">
+            <h3>Question #<%= a.index + 1 %></h3>
+            <p><%= a.object.content %> - <em><%= a.object.author.name %></em></p>
+          </div>
+          <div class="card__section card__section--border">
+            <%= a.input :outcome %>
+            <%= a.input :value %>
+            <%= a.input :benefit_type %>
+          </div>
+        </div>
+      <% end %>
+
+      <%= f.button :submit %>
+    <% end %>
+  <% end %>
+</div>

@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :set_answer
 
-  layout 'unify'
+  layout 'collaborate'
 
   def update
     if @answer.update(answer_params)

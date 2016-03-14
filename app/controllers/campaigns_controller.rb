@@ -97,6 +97,6 @@ class CampaignsController < ApplicationController
 
   def resolve_layout
     return 'user' if current_user.nil?
-    'unify'
+    'collaborate'
   end
 end
