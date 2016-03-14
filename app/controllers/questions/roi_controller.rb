@@ -11,19 +11,6 @@ class Questions::RoiController < ApplicationController
   end
 
   def set_answers
-    @answers = @question.answers.where(chosen: true)
-  end
-
-  def answer_params
-    params
-      .require(:question)
-      .permit(
-        answers_attributes: [
-          :id,
-          :outcome,
-          :value,
-          :benefit_type
-        ]
-      )
+    @answers = @question.answers.where(chosen: true).includes(:author)
   end
 end

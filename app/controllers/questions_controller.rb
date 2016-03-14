@@ -74,7 +74,14 @@ class QuestionsController < ApplicationController
       .permit(
         :title,
         :conclusion,
-        :description
+        :description,
+        answers_attributes: [
+          :id,
+          :outcome,
+          :value,
+          :benefit_type,
+          :supporting_document
+        ]
       )
   end
 end
