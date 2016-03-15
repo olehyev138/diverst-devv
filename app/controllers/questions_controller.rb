@@ -3,7 +3,7 @@ class QuestionsController < ApplicationController
   before_action :set_question, only: [:edit, :update, :destroy, :show, :reopen]
   after_action :verify_authorized
 
-  layout 'unify'
+  layout 'collaborate'
 
   def index
     authorize @campaign
@@ -74,7 +74,14 @@ class QuestionsController < ApplicationController
       .permit(
         :title,
         :conclusion,
-        :description
+        :description,
+        answers_attributes: [
+          :id,
+          :outcome,
+          :value,
+          :benefit_type,
+          :supporting_document
+        ]
       )
   end
 end

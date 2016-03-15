@@ -100,7 +100,7 @@ input[type="password"] {
 // Field add ons
 
 .field__input--left-add-on {
-  padding-left: 40px;
+  padding-left: 25px;
 }
 
 .field__input--right-add-on {
@@ -117,6 +117,10 @@ input[type="password"] {
 
   &--right {
     right: 12px;
+  }
+
+  &--dollar::before {
+    content: "$";
   }
 }
 
