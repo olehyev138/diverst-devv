@@ -50,7 +50,7 @@
                 <td><%= link_to question.title, question_path(question) %></td>
                 <td><%= question.answers.count %></td>
                 <td><%= question.created_at.to_s :dateonly %></td>
-                <td><%= number_to_currency question.answers.map{|q| q.value}.sum %></td>
+                <td><%= number_to_currency question.answers.where.not(value: nil).map{|q| q.value}.sum %></td>
                 <td><%= question.solved_at.nil? ? "No" : "Yes" %></td>
                 <td>
                   <% if policy(@campaign).edit? %>
