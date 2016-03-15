@@ -91,6 +91,8 @@ group :development do
   gem 'slack-notifier' # For Bullet
   gem 'parallel_tests'
   gem 'meta_request' # Necessary for rails_panel Chrome extension
+  gem 'flamegraph'
+  gem 'rack-mini-profiler'
 end
 
 group :production do

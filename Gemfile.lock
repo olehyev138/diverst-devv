@@ -186,6 +186,9 @@ GEM
     faraday (0.9.2)
       multipart-post (>= 1.2, < 3)
     fast-stemmer (1.0.2)
+    fast_stack (0.1.0)
+      rake
+      rake-compiler
     ffi (1.9.10)
     figaro (1.1.1)
       thor (~> 0.14)
@@ -195,6 +198,8 @@ GEM
     firebase_token_generator (2.0.0)
     fission (0.5.0)
       CFPropertyList (~> 2.2)
+    flamegraph (0.1.0)
+      fast_stack
     fog (1.37.0)
       fog-aliyun (>= 0.1.0)
       fog-atmos
@@ -460,6 +465,8 @@ GEM
       rack (~> 1.4)
     rack-livereload (0.3.16)
       rack
+    rack-mini-profiler (0.9.9.2)
+      rack (>= 1.2.0)
     rack-protection (1.5.3)
       rack
     rack-test (0.6.3)
@@ -489,6 +496,8 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     rake (11.1.1)
+    rake-compiler (0.9.6)
+      rake
     rb-fsevent (0.9.7)
     rb-inotify (0.9.7)
       ffi (>= 0.5.0)
@@ -654,6 +663,7 @@ DEPENDENCIES
   figaro
   firebase
   firebase_token_generator
+  flamegraph
   fog
   gcm
   guard-livereload (~> 2.4)
@@ -681,6 +691,7 @@ DEPENDENCIES
   pundit
   quiet_assets
   rack-livereload
+  rack-mini-profiler
   rails (~> 4.2.6)
   rb-readline
   rspec-rails (~> 3.0)
