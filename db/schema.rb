@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(version: 20160314200850) do
     t.text     "content",                          limit: 65535
     t.datetime "created_at",                                                 null: false
     t.datetime "updated_at",                                                 null: false
-    t.boolean  "chosen",                           limit: 1
+    t.boolean  "chosen"
     t.integer  "upvote_count",                     limit: 4,     default: 0
     t.text     "outcome",                          limit: 65535
     t.integer  "value",                            limit: 4
@@ -51,7 +51,7 @@ ActiveRecord::Schema.define(version: 20160314200850) do
     t.integer  "response",    limit: 4, default: 0
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
-    t.boolean  "email_sent",  limit: 1, default: false
+    t.boolean  "email_sent",            default: false
   end
 
   create_table "campaigns", force: :cascade do |t|
@@ -101,7 +101,7 @@ ActiveRecord::Schema.define(version: 20160314200850) do
     t.integer  "email_id",    limit: 4
     t.string   "key",         limit: 255
     t.text     "description", limit: 65535
-    t.boolean  "required",    limit: 1
+    t.boolean  "required"
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
   end
@@ -109,7 +109,7 @@ ActiveRecord::Schema.define(version: 20160314200850) do
   create_table "emails", force: :cascade do |t|
     t.string   "name",                 limit: 255
     t.string   "slug",                 limit: 255
-    t.boolean  "use_custom_templates", limit: 1
+    t.boolean  "use_custom_templates"
     t.text     "custom_html_template", limit: 65535
     t.text     "custom_txt_template",  limit: 65535
     t.integer  "enterprise_id",        limit: 4
@@ -124,12 +124,12 @@ ActiveRecord::Schema.define(version: 20160314200850) do
     t.string   "idp_sso_target_url", limit: 255
     t.string   "idp_slo_target_url", limit: 255
     t.text     "idp_cert",           limit: 65535
-    t.boolean  "has_enabled_saml",   limit: 1
+    t.boolean  "has_enabled_saml"
     t.datetime "created_at",                                       null: false
     t.datetime "updated_at",                                       null: false
     t.string   "yammer_token",       limit: 255
-    t.boolean  "yammer_import",      limit: 1,     default: false
-    t.boolean  "yammer_group_sync",  limit: 1,     default: false
+    t.boolean  "yammer_import",                    default: false
+    t.boolean  "yammer_group_sync",                default: false
     t.integer  "theme_id",           limit: 4
   end
 
@@ -159,21 +159,21 @@ ActiveRecord::Schema.define(version: 20160314200850) do
     t.string   "type",               limit: 255
     t.string   "title",              limit: 255
     t.integer  "gamification_value", limit: 4,     default: 1
-    t.boolean  "show_on_vcard",      limit: 1
+    t.boolean  "show_on_vcard"
     t.string   "saml_attribute",     limit: 255
     t.text     "options_text",       limit: 65535
     t.integer  "min",                limit: 4
     t.integer  "max",                limit: 4
-    t.boolean  "match_exclude",      limit: 1
-    t.boolean  "match_polarity",     limit: 1
+    t.boolean  "match_exclude"
+    t.boolean  "match_polarity"
     t.float    "match_weight",       limit: 24
     t.datetime "created_at",                                       null: false
     t.datetime "updated_at",                                       null: false
-    t.boolean  "alternative_layout", limit: 1,     default: false
-    t.boolean  "private",            limit: 1,     default: false
+    t.boolean  "alternative_layout",               default: false
+    t.boolean  "private",                          default: false
     t.integer  "container_id",       limit: 4
     t.string   "container_type",     limit: 255
-    t.boolean  "elasticsearch_only", limit: 1,     default: false
+    t.boolean  "elasticsearch_only",               default: false
   end
 
   add_index "fields", ["container_type", "container_id"], name: "index_fields_on_container_type_and_container_id", using: :btree
@@ -215,12 +215,12 @@ ActiveRecord::Schema.define(version: 20160314200850) do
     t.string   "logo_content_type",         limit: 255
     t.integer  "logo_file_size",            limit: 4
     t.datetime "logo_updated_at"
-    t.boolean  "send_invitations",          limit: 1
+    t.boolean  "send_invitations"
     t.integer  "participation_score_7days", limit: 4
-    t.boolean  "yammer_create_group",       limit: 1
-    t.boolean  "yammer_group_created",      limit: 1
+    t.boolean  "yammer_create_group"
+    t.boolean  "yammer_group_created"
     t.string   "yammer_group_name",         limit: 255
-    t.boolean  "yammer_sync_users",         limit: 1
+    t.boolean  "yammer_sync_users"
     t.integer  "yammer_id",                 limit: 4
     t.integer  "manager_id",                limit: 4
     t.integer  "owner_id",                  limit: 4
@@ -301,7 +301,7 @@ ActiveRecord::Schema.define(version: 20160314200850) do
     t.time     "score_calculated_at"
     t.datetime "created_at",                                     null: false
     t.datetime "updated_at",                                     null: false
-    t.boolean  "archived",            limit: 1,  default: false
+    t.boolean  "archived",                       default: false
     t.integer  "topic_id",            limit: 4
     t.integer  "user1_rating",        limit: 4
     t.integer  "user2_rating",        limit: 4
@@ -356,42 +356,42 @@ ActiveRecord::Schema.define(version: 20160314200850) do
   create_table "policy_groups", force: :cascade do |t|
     t.string   "name",                        limit: 255
     t.integer  "enterprise_id",               limit: 4
-    t.boolean  "campaigns_index",             limit: 1,   default: false
-    t.boolean  "campaigns_create",            limit: 1,   default: false
-    t.boolean  "campaigns_manage",            limit: 1,   default: false
-    t.boolean  "polls_index",                 limit: 1,   default: false
-    t.boolean  "polls_create",                limit: 1,   default: false
-    t.boolean  "polls_manage",                limit: 1,   default: false
-    t.boolean  "events_index",                limit: 1,   default: false
-    t.boolean  "events_create",               limit: 1,   default: false
-    t.boolean  "events_manage",               limit: 1,   default: false
-    t.boolean  "group_messages_index",        limit: 1,   default: false
-    t.boolean  "group_messages_create",       limit: 1,   default: false
-    t.boolean  "group_messages_manage",       limit: 1,   default: false
-    t.boolean  "groups_index",                limit: 1,   default: false
-    t.boolean  "groups_create",               limit: 1,   default: false
-    t.boolean  "groups_manage",               limit: 1,   default: false
-    t.boolean  "groups_members_index",        limit: 1,   default: false
-    t.boolean  "groups_members_manage",       limit: 1,   default: false
-    t.boolean  "metrics_dashboards_index",    limit: 1,   default: false
-    t.boolean  "metrics_dashboards_create",   limit: 1,   default: false
-    t.boolean  "news_links_index",            limit: 1,   default: false
-    t.boolean  "news_links_create",           limit: 1,   default: false
-    t.boolean  "news_links_manage",           limit: 1,   default: false
-    t.boolean  "enterprise_resources_index",  limit: 1,   default: false
-    t.boolean  "enterprise_resources_create", limit: 1,   default: false
-    t.boolean  "enterprise_resources_manage", limit: 1,   default: false
-    t.boolean  "segments_index",              limit: 1,   default: false
-    t.boolean  "segments_create",             limit: 1,   default: false
-    t.boolean  "segments_manage",             limit: 1,   default: false
-    t.boolean  "users_index",                 limit: 1,   default: false
-    t.boolean  "users_manage",                limit: 1,   default: false
-    t.boolean  "global_settings_manage",      limit: 1,   default: false
+    t.boolean  "campaigns_index",                         default: false
+    t.boolean  "campaigns_create",                        default: false
+    t.boolean  "campaigns_manage",                        default: false
+    t.boolean  "polls_index",                             default: false
+    t.boolean  "polls_create",                            default: false
+    t.boolean  "polls_manage",                            default: false
+    t.boolean  "events_index",                            default: false
+    t.boolean  "events_create",                           default: false
+    t.boolean  "events_manage",                           default: false
+    t.boolean  "group_messages_index",                    default: false
+    t.boolean  "group_messages_create",                   default: false
+    t.boolean  "group_messages_manage",                   default: false
+    t.boolean  "groups_index",                            default: false
+    t.boolean  "groups_create",                           default: false
+    t.boolean  "groups_manage",                           default: false
+    t.boolean  "groups_members_index",                    default: false
+    t.boolean  "groups_members_manage",                   default: false
+    t.boolean  "metrics_dashboards_index",                default: false
+    t.boolean  "metrics_dashboards_create",               default: false
+    t.boolean  "news_links_index",                        default: false
+    t.boolean  "news_links_create",                       default: false
+    t.boolean  "news_links_manage",                       default: false
+    t.boolean  "enterprise_resources_index",              default: false
+    t.boolean  "enterprise_resources_create",             default: false
+    t.boolean  "enterprise_resources_manage",             default: false
+    t.boolean  "segments_index",                          default: false
+    t.boolean  "segments_create",                         default: false
+    t.boolean  "segments_manage",                         default: false
+    t.boolean  "users_index",                             default: false
+    t.boolean  "users_manage",                            default: false
+    t.boolean  "global_settings_manage",                  default: false
     t.datetime "created_at",                                              null: false
     t.datetime "updated_at",                                              null: false
-    t.boolean  "initiatives_index",           limit: 1,   default: false
-    t.boolean  "initiatives_create",          limit: 1,   default: false
-    t.boolean  "initiatives_manage",          limit: 1,   default: false
+    t.boolean  "initiatives_index",                       default: false
+    t.boolean  "initiatives_create",                      default: false
+    t.boolean  "initiatives_manage",                      default: false
   end
 
   create_table "poll_responses", force: :cascade do |t|
@@ -473,7 +473,7 @@ ActiveRecord::Schema.define(version: 20160314200850) do
     t.datetime "logo_updated_at"
     t.string   "primary_color",     limit: 255
     t.string   "digest",            limit: 255
-    t.boolean  "default",           limit: 1,   default: false
+    t.boolean  "default",                       default: false
   end
 
   create_table "topic_feedbacks", force: :cascade do |t|
@@ -482,7 +482,7 @@ ActiveRecord::Schema.define(version: 20160314200850) do
     t.integer  "user_id",    limit: 4
     t.datetime "created_at",                               null: false
     t.datetime "updated_at",                               null: false
-    t.boolean  "featured",   limit: 1,     default: false
+    t.boolean  "featured",                 default: false
   end
 
   create_table "topics", force: :cascade do |t|
