@@ -61,7 +61,7 @@
               </div>
             </div>
             <div class="answer__content">
-              <% if answer.outcome %>
+              <% unless answer.outcome.blank? %>
                 <strong>Plausible business outcome:</strong>
                 <p style="font-style: italic;" class="accent"><%= answer.outcome %></p>
               <% end %>
