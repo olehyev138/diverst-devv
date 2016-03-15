@@ -126,7 +126,6 @@ RSpec.feature 'An ERG dashboard' do
       fill_in 'event_description', with: event_description
       fill_in 'event_location', with: 'Montreal'
       fill_in 'event_description', with: event_description
-      page.first('#event_segment_ids option').select_option # Select a segment
       fill_in 'event_max_attendees', with: 15
 
       submit_form
