@@ -17,7 +17,10 @@ class QuestionsController < ApplicationController
 
   def show
     authorize @question.campaign
-    @answers = @question.answers.includes(:author, :comments).order(chosen: :desc).order(upvote_count: :desc)
+    @answers = @question.answers
+      .includes(:author, comments: :author)
+      .order(chosen: :desc)
+      .order(upvote_count: :desc)
   end
 
   def create

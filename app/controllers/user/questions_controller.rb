@@ -9,6 +9,13 @@ class User::QuestionsController < ApplicationController
     @questions = @campaign.questions.order(created_at: :desc)
   end
 
+  def show
+    @answers = @question.answers
+      .includes(:author, comments: :author)
+      .order(chosen: :desc)
+      .order(upvote_count: :desc)
+  end
+
   protected
 
   def set_campaign
