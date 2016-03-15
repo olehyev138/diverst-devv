@@ -122,7 +122,7 @@
         data: [
         <% @campaign.groups.each do |group| %>
           {
-            name: "<%= @campaign.groups.first.name %>",
+            name: "<%= group.name %>",
             y: 45000 + Math.floor(Math.random() * 70000)
           },
         <% end %>
@@ -152,7 +152,7 @@
         text: ''
       },
       xAxis: {
-        categories: [<%= @campaign.questions.map{|q| "'#{q.title}'" }.join(', ').html_safe %>],
+        categories: [<%= @campaign.questions.map{|q| '"' + q.title + '"' }.join(', ').html_safe %>],
         title: {
           text: "ERG"
         }
