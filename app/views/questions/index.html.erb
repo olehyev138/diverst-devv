@@ -54,8 +54,9 @@
                 <td><%= question.solved_at.nil? ? "No" : "Yes" %></td>
                 <td>
                   <% if policy(@campaign).edit? %>
-                    <%= link_to "Edit", edit_question_path(question) %> - <%= link_to "Delete", question_path(question), method: :delete, class: "error", data: { confirm: "Are you sure?" } %></td>
+                    <%= link_to "Edit", edit_question_path(question) %> - <%= link_to "Delete", question_path(question), method: :delete, class: "error", data: { confirm: "Are you sure?" } %>
                   <% end %>
+                </td>
               </tr>
             <% end %>
           </tbody>
