@@ -305,9 +305,6 @@ GEM
       fog-core
       nokogiri (~> 1.5, >= 1.5.11)
     formatador (0.2.5)
-    fuubar (2.0.0)
-      rspec (~> 3.0)
-      ruby-progressbar (~> 1.4)
     gcm (0.1.1)
       httparty
       json
@@ -510,10 +507,6 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
-    rspec (3.4.0)
-      rspec-core (~> 3.4.0)
-      rspec-expectations (~> 3.4.0)
-      rspec-mocks (~> 3.4.0)
     rspec-core (3.4.4)
       rspec-support (~> 3.4.0)
     rspec-expectations (3.4.0)
@@ -534,7 +527,6 @@ GEM
     rspec_junit_formatter (0.2.2)
       builder (< 4)
       rspec-core (>= 2, < 4, != 2.12.0)
-    ruby-progressbar (1.7.5)
     ruby-saml (1.0.0)
       nokogiri (>= 1.5.10)
       uuid (~> 2.3)
@@ -663,7 +655,6 @@ DEPENDENCIES
   firebase
   firebase_token_generator
   fog
-  fuubar
   gcm
   guard-livereload (~> 2.4)
   houston

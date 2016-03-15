@@ -87,7 +87,6 @@ group :development do
   gem 'binding_of_caller'
   gem 'bullet'
   gem 'slack-notifier' # For Bullet
-  gem 'fuubar'
   gem 'parallel_tests'
   gem 'pry-rails'
   gem 'pry-theme'
