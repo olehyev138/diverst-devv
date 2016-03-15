@@ -66,7 +66,13 @@
 </div>
 
 <script>
-  var lastValue = 61750;
+  var lastValue = <%= @expenses.sum(:amount) %>;
+  var data = [];
+  for (var i = 11; i >= 0 ; i--) {
+    data[i] = Math.floor(lastValue);
+    lastValue = lastValue - Math.random() * Math.random() * lastValue;
+  }
+
   $('.graph').highcharts({
     title: {
       text: 'Total expenses over time'
@@ -86,18 +92,15 @@
         label: {
           text: "Budget"
         }
-      }]
+      }],
+      max: <%= @initiative.estimated_funding > @expenses.sum(:amount) ? @initiative.estimated_funding * 1.1 : @expenses.sum(:amount) %>
     },
     tooltip: {
       valuePrefix: '$'
     },
     series: [{
       name: 'Total expenses',
-      data: Array.apply(null, Array(12)).map(function() {
-        var nextValue = lastValue + Math.random() * 10000
-        lastValue = nextValue;
-        return Math.round(nextValue);
-      }),
+      data: data,
       color: '<%= current_user.enterprise.theme.try(:primary_color) || "#7B77C9" %>'
     }]
   });
