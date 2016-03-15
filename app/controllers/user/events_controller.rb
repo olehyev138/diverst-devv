@@ -6,6 +6,7 @@ class User::EventsController < ApplicationController
   def index
     @upcoming_events = current_user.events.upcoming
     @past_events = current_user.events.past.page(0)
+    @ongoing_events = current_user.events.ongoing
   end
 
   protected

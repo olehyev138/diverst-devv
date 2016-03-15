@@ -1,13 +1,4 @@
 FactoryGirl.define do
-  factory :initiative do
-    
-  end
-  factory :pillar do
-    
-  end
-  factory :outcome do
-    
-  end
   sequence :email_address do |n|
     "user#{n}@diverst.com"
   end
@@ -78,6 +69,10 @@ FactoryGirl.define do
 
     users_index true
     users_manage true
+
+    initiatives_index true
+    initiatives_create true
+    initiatives_manage true
 
     global_settings_manage true
   end
@@ -354,5 +349,17 @@ FactoryGirl.define do
     logo_file_name { 'logo.png' }
     logo_content_type { 'image/png' }
     logo_file_size { 1024 }
+  end
+
+  factory :initiative do
+
+  end
+
+  factory :pillar do
+
+  end
+
+  factory :outcome do
+
   end
 end

@@ -69,6 +69,8 @@ group :development, :test do
   gem 'capybara'
   gem 'poltergeist'
   gem 'database_cleaner'
+  gem 'pry-rails'
+  gem 'pry-theme'
 end
 
 gem 'rspec_junit_formatter', '0.2.2', group: :test
@@ -89,8 +91,6 @@ group :development do
   gem 'slack-notifier' # For Bullet
   gem 'fuubar'
   gem 'parallel_tests'
-  gem 'pry-rails'
-  gem 'pry-theme'
   gem 'meta_request' # Necessary for rails_panel Chrome extension
 end
 
