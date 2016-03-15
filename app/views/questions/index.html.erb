@@ -31,7 +31,7 @@
                 <td><%= link_to question.title, question_path(question) %></td>
                 <td><%= question.answers.count %></td>
                 <td><%= question.created_at.to_s :dateonly %></td>
-                <td><%= number_to_currency question.answers.where.not(value: nil).sum(:value) %></td>
+                <td><%= number_to_currency(question.answers.where.not(value: nil).sum(:value), precision: 0) %></td>
                 <td><%= question.solved_at.nil? ? "No" : "Yes" %></td>
                 <td>
                   <% if policy(@campaign).edit? %>
@@ -119,16 +119,14 @@
       },
       series: [{
         name: "ERGs",
-        data: [{
-          name: "<%= @campaign.groups.first.name %>",
-          y: 23000
-        }, {
-          name: "<%= @campaign.groups.second.name %>",
-          y: 12000
-        }, {
-          name: "<%= @campaign.groups.third.name %>",
-          y: 34500
-        }]
+        data: [
+        <% @campaign.groups.each do |group| %>
+          {
+            name: "<%= @campaign.groups.first.name %>",
+            y: 45000 + Math.floor(Math.random() * 70000)
+          },
+        <% end %>
+        ]
       }],
       tooltip: {
         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
