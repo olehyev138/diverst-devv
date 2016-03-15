@@ -6,7 +6,8 @@ class Groups::EventsController < ApplicationController
 
   def index
     @upcoming_events = @group.events.upcoming
-    @past_events = @group.events.past.page(0)
+    @past_events = @group.events.past
+    @ongoing_events = @group.events.ongoing
   end
 
   def new

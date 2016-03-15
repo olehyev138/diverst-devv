@@ -124,14 +124,13 @@ RSpec.feature 'An ERG dashboard' do
       click_on 'Create new event'
       fill_in 'event_title', with: event_title
       fill_in 'event_description', with: event_description
+      select Time.current.year + 1, from: "event_end_1i"
       fill_in 'event_location', with: 'Montreal'
-      fill_in 'event_description', with: event_description
       fill_in 'event_max_attendees', with: 15
 
       submit_form
 
       expect(page).to have_content event_title
-      expect(page).to have_content event_description
     end
   end
 end
