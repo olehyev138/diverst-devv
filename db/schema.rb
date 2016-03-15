@@ -29,13 +29,20 @@ ActiveRecord::Schema.define(version: 20160309224600) do
   end
 
   create_table "answers", force: :cascade do |t|
-    t.integer  "question_id",  limit: 4
-    t.integer  "author_id",    limit: 4
-    t.text     "content",      limit: 65535
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
-    t.boolean  "chosen",       limit: 1
-    t.integer  "upvote_count", limit: 4,     default: 0
+    t.integer  "question_id",                      limit: 4
+    t.integer  "author_id",                        limit: 4
+    t.text     "content",                          limit: 65535
+    t.datetime "created_at",                                                 null: false
+    t.datetime "updated_at",                                                 null: false
+    t.boolean  "chosen",                           limit: 1
+    t.integer  "upvote_count",                     limit: 4,     default: 0
+    t.text     "outcome",                          limit: 65535
+    t.integer  "value",                            limit: 4
+    t.integer  "benefit_type",                     limit: 4
+    t.string   "supporting_document_file_name",    limit: 255
+    t.string   "supporting_document_content_type", limit: 255
+    t.integer  "supporting_document_file_size",    limit: 4
+    t.datetime "supporting_document_updated_at"
   end
 
   create_table "campaign_invitations", force: :cascade do |t|
@@ -278,21 +285,6 @@ ActiveRecord::Schema.define(version: 20160309224600) do
     t.integer  "pillar_id",         limit: 4
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
-  end
-
-  create_table "initiatives_fields", force: :cascade do |t|
-    t.integer "initiative_id", limit: 4
-    t.integer "field_id",      limit: 4
-  end
-
-  create_table "initiatives_groups", force: :cascade do |t|
-    t.integer "initiative_id", limit: 4
-    t.integer "group_id",      limit: 4
-  end
-
-  create_table "initiatives_users", force: :cascade do |t|
-    t.integer "initiative_id", limit: 4
-    t.integer "user_id",       limit: 4
   end
 
   create_table "invitation_segments_groups", force: :cascade do |t|
