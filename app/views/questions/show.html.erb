@@ -57,7 +57,7 @@
               <span class="muted"><%= time_ago_in_words(answer.created_at) %> ago</span>
               <div class="fright">
                 <% if answer.value %>Estimated <%= number_to_currency(answer.value, precision: 0) %> in <%= answer.benefit_type == 0 ? "revenue" : "cost savings" %><% end %>
-                <% if answer.supporting_document %> (<%= link_to "documentation", answer.supporting_document.url %>)<% end %>
+                <% if answer.supporting_document.exists? %> (<%= link_to "documentation", answer.supporting_document.url %>)<% end %>
               </div>
             </div>
             <div class="answer__content">
