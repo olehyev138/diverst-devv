@@ -59,6 +59,10 @@ class GroupsController < ApplicationController
     redirect_to action: :index
   end
 
+  def metrics
+    authorize @group, :show?
+  end
+
   def import_csv
     authorize @group, :edit?
   end
@@ -117,6 +121,8 @@ class GroupsController < ApplicationController
     case action_name
     when 'show'
       'erg'
+    when 'metrics'
+      'plan'
     else
       'erg_manager'
     end

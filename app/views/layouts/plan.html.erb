@@ -1,7 +1,7 @@
 <% content_for :secondary_nav do %>
   <%= active_link_to "Overview", group_initiatives_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['initiatives'], ['index']] if policy(Initiative).index? %>
+  <%= active_link_to "Metrics", metrics_group_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <% if default_initiative = @group.initiatives.first %>
-    <%= active_link_to "Metrics", group_initiative_path(@group, default_initiative), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['initiatives', 'initiative_updates'], ['show']] if policy(Initiative).index? %>
     <%= active_link_to "Updates", group_initiative_updates_path(@group, default_initiative), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Initiative).index? %>
     <%= active_link_to "Budget", group_initiative_expenses_path(@group, default_initiative), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Initiative).index? %>
   <% end %>
