@@ -91,6 +91,7 @@ Rails.application.routes.draw do
       get 'import_csv'
       get 'sample_csv'
       post 'parse_csv'
+      get 'metrics'
     end
   end
 

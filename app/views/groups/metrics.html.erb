@@ -1,0 +1,124 @@
+<div class="content__header">
+  <h1>
+    <span class="muted"><%= @group.name %> /</span>
+    Plan metrics
+  </h1>
+</div>
+
+<div class="content__main">
+
+  <div class="card">
+    <div class="card__section">
+      <table class="table--has-border">
+        <thead>
+          <th>Metric</th>
+          <th>Q1</th>
+          <th>Q2</th>
+          <th>Q3</th>
+          <th>Q4</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td>D&I Learning Completion</td>
+            <td>73</td>
+            <td>77</td>
+            <td>79</td>
+            <td>85</td>
+          </tr>
+          <tr>
+            <td># of chapters</td>
+            <td>14</td>
+            <td>16</td>
+            <td>16</td>
+            <td>17</td>
+          </tr>
+          <tr>
+            <td># of volunteer hours</td>
+            <td>0</td>
+            <td>9</td>
+            <td>2</td>
+            <td>7</td>
+          </tr>
+          <tr>
+            <td># of members</td>
+            <td>1,353</td>
+            <td>1,527</td>
+            <td>1,747</td>
+            <td>1,847</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row row--equal-height">
+    <div class="col sm-12 md-6">
+      <div class="card">
+        <div class="card__section">
+          <h3>D&I Learning Completion</h3>
+          <div class="graph" data-value="85"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col sm-12 md-6">
+      <div class="card">
+        <div class="card__section">
+          <h3># of chapters</h3>
+          <div class="graph" data-value="17"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row row--equal-height">
+    <div class="col sm-12 md-6">
+      <div class="card">
+        <div class="card__section">
+          <h3># of volunteer hours</h3>
+          <div class="graph" data-value="7"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col sm-12 md-6">
+      <div class="card">
+        <div class="card__section">
+          <h3># of members</h3>
+          <div class="graph" data-value="1847"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  $('.graph').each(function() {
+    var lastValue = $(this).data('value');
+    var data = [];
+    for (var i = 10; i >= 0 ; i--) {
+      data[i] = Math.floor(lastValue);
+      lastValue = lastValue - Math.random()*(Math.random()-0.2) * lastValue;
+    }
+
+    $(this).highcharts({
+      title: {
+        text: $(this).data('title')
+      },
+      xAxis: {
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      },
+      yAxis: {
+        title: {
+          text: 'Nb of participants'
+        }
+      },
+      tooltip: {
+        valueSuffix: ' employees'
+      },
+      series: [{
+        name: 'Employee count',
+        data: data
+      }]
+    });
+  });
+</script>
