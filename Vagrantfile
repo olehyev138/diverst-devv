@@ -27,6 +27,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Forward the Rails server default port to the host
   config.vm.network :forwarded_port, guest: 3000, host: 3000
+  config.vm.network :forwarded_port, guest: 9200, host: 9200
   config.vm.network :forwarded_port, guest: 35729, host: 35729
 
   # Use Chef Solo to provision the VM
