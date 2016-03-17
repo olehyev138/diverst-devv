@@ -93,6 +93,7 @@ group :development do
   gem 'meta_request' # Necessary for rails_panel Chrome extension
   gem 'flamegraph'
   gem 'rack-mini-profiler'
+  gem 'stackprof'
 end
 
 group :production do

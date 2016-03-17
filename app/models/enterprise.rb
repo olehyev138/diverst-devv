@@ -34,6 +34,9 @@ class Enterprise < ActiveRecord::Base
 
   validates :idp_sso_target_url, url: { allow_blank: true }
 
+  has_attached_file :cdo_picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('missing.png'), s3_permissions: :private
+  validates_attachment_content_type :cdo_picture, content_type: %r{\Aimage\/.*\Z}
+
   def saml_settings
     settings = OneLogin::RubySaml::Settings.new
 
