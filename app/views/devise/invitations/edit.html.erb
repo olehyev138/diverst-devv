@@ -21,7 +21,7 @@
 
           <div class="row">
             <div class="col sm-6 md-3 lg-5">
-              <%= image_tag resource.enterprise.cdo_picture.url, class: "block", style: "width: 100%; background-size: cover; background-position: bottom center;" %>
+              <%= image_tag resource.enterprise.cdo_picture.expiring_url(3600), class: "block", style: "width: 100%; background-size: cover; background-position: bottom center;" %>
             </div>
             <div class="col sm-6 md-3 lg-7">
               <h3><%= resource.enterprise.cdo_name %>, <%= resource.enterprise.cdo_title %></h3>
