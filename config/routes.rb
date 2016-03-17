@@ -52,7 +52,6 @@ Rails.application.routes.draw do
       get 'edit_mobile_fields'
       get 'edit_branding'
       get 'edit_algo'
-      get 'edit_cdo'
       get 'theme'
       patch 'update_branding'
       patch 'restore_default_branding'
