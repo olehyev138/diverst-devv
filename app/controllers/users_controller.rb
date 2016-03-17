@@ -91,6 +91,18 @@ class UsersController < ApplicationController
     send_data current_user.enterprise.users_csv(nil), filename: 'diverst_users.csv'
   end
 
+  def date_histogram
+    authorize User, :index?
+
+    g = DateHistogramGraph.new(
+      index: current_user.enterprise.es_users_index_name,
+      field: 'created_at',
+      interval: 'month'
+    )
+
+    render json: g.query_elasticsearch
+  end
+
   protected
 
   def set_user
