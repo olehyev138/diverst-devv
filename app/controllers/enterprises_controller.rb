@@ -18,6 +18,10 @@ class EnterprisesController < ApplicationController
     authorize @enterprise
   end
 
+  def edit_cdo
+    authorize @enterprise, :edit?
+  end
+
   def edit_mobile_fields
     authorize @enterprise
   end
@@ -81,6 +85,9 @@ class EnterprisesController < ApplicationController
         :idp_slo_target_url,
         :idp_cert,
         :yammer_import,
+        :cdo_name,
+        :cdo_title,
+        :cdo_picture,
         theme: [
           :id,
           :primary_color,
