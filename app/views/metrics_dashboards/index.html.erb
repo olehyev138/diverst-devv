@@ -77,6 +77,15 @@
       </div>
     </div>
 
+    <div class="col sm-12 md-6">
+      <div class="card">
+        <div class="card__section">
+          <h4># of employees over time</h4>
+          <div id="users-date-histogram"></div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
 </div>
@@ -121,4 +130,6 @@
   var graphs = $('.graph').map(function() {
     return new Graph('/generic_graphs/' + $(this).data('graph-id'), $(this));
   });
+
+  new DateHistogramGraph('/users/date_histogram', $('#users-date-histogram'))
 </script>
