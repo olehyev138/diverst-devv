@@ -102,6 +102,9 @@
       name: 'Total expenses',
       data: data,
       color: '<%= current_user.enterprise.theme.try(:primary_color) || "#7B77C9" %>'
-    }]
+    }],
+    credits: {
+      enabled: false
+    }
   });
 </script>
