@@ -59,6 +59,9 @@ class DateHistogramGraph {
         name: 'Employee count',
         data: this.summedData()
       }],
+      credits: {
+        enabled: false
+      },
       colors: [this.primaryColor, '#F15E57', '#FE6D4B', '#9FD661', '#40D0AD', '#48C0EB', '#5A9AEF', '#EE85C1']
     });
   }
