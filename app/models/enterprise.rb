@@ -82,6 +82,11 @@ class Enterprise < ActiveRecord::Base
     "#{id}_users"
   end
 
+  # Returns the index name to be used in Elasticsearch to store this enterprise's initiatives
+  def es_initiatives_index_name
+    "#{id}_initiatives"
+  end
+
   # Run an elasticsearch query on the enterprise's users
   def search_users(search_hash)
     Elasticsearch::Model.client.search(index: es_users_index_name, body: search_hash)
