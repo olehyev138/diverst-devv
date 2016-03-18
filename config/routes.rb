@@ -84,6 +84,11 @@ Rails.application.routes.draw do
       scope module: 'initiatives' do
         resources :updates
         resources :expenses
+        resources :fields do
+          member do
+            get 'date_histogram'
+          end
+        end
       end
     end
 

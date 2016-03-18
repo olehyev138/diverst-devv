@@ -1,4 +1,4 @@
-class Initiatives::ExpensesController < ApplicationController
+class Initiatives::FieldsController < ApplicationController
   before_action :set_group
   before_action :set_initiative
   before_action :set_expense, only: [:edit, :update, :destroy, :show, :export_csv]
