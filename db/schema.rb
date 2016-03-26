@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160317200858) do
+ActiveRecord::Schema.define(version: 20160326205317) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -29,16 +29,20 @@ ActiveRecord::Schema.define(version: 20160317200858) do
   end
 
   create_table "answers", force: :cascade do |t|
-    t.integer  "question_id",  limit: 4
-    t.integer  "author_id",    limit: 4
-    t.text     "content",      limit: 65535
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.integer  "question_id",                      limit: 4
+    t.integer  "author_id",                        limit: 4
+    t.text     "content",                          limit: 65535
+    t.datetime "created_at",                                                 null: false
+    t.datetime "updated_at",                                                 null: false
     t.boolean  "chosen"
-    t.integer  "upvote_count", limit: 4,     default: 0
-    t.text     "outcome",      limit: 65535
-    t.integer  "value",        limit: 4
-    t.integer  "benefit_type", limit: 4
+    t.integer  "upvote_count",                     limit: 4,     default: 0
+    t.text     "outcome",                          limit: 65535
+    t.integer  "value",                            limit: 4
+    t.integer  "benefit_type",                     limit: 4
+    t.string   "supporting_document_file_name",    limit: 255
+    t.string   "supporting_document_content_type", limit: 255
+    t.integer  "supporting_document_file_size",    limit: 4
+    t.datetime "supporting_document_updated_at"
   end
 
   create_table "campaign_invitations", force: :cascade do |t|
