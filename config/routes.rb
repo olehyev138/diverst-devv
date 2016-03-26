@@ -86,7 +86,7 @@ Rails.application.routes.draw do
         resources :expenses
         resources :fields do
           member do
-            get 'date_histogram'
+            get 'time_series'
           end
         end
       end

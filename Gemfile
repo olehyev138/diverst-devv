@@ -88,7 +88,6 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'bullet'
-  gem 'slack-notifier' # For Bullet
   gem 'parallel_tests'
   gem 'meta_request' # Necessary for rails_panel Chrome extension
   gem 'flamegraph'

@@ -6,16 +6,11 @@ class Initiatives::FieldsController < ApplicationController
 
   layout 'plan'
 
-  def date_histogram
+  def time_series
     authorize Initiative, :index?
 
-    graph = DateHistogramGraph.new(
-      index: current_user.enterprise.es_initiatives_index_name,
-      field: "info.#{@field.id}.raw",
-      interval: params[:interval] || 'month'
-    )
-
-    render json: graph.query_elasticsearch
+    highcharts_data = @initiative.highcharts_history(field: @field)
+    render json: highcharts_data
   end
 
   protected

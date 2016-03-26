@@ -25,8 +25,14 @@ class Initiative < ActiveRecord::Base
   def as_indexed_json(*)
     as_json(
       except: [:data],
-      methods: [:info]
+      methods: [:updates_info]
     )
+  end
+
+  def updates_info
+    self.updates.map do |update|
+      InitiativeUpdateSerializer.new(update).to_json
+    end
   end
 
   # Custom ES mapping that creates an unanalyzed version of all string fields for exact-match term queries
@@ -81,5 +87,18 @@ class Initiative < ActiveRecord::Base
         )
       }
     )
+  end
+
+  def highcharts_history(field:, from: 1.year.ago, to: Time.current)
+    self.updates
+    .where('created_at >= ?', from)
+    .where('created_at <= ?', to)
+    .order(created_at: :asc)
+    .map do |update|
+      [
+        update.created_at.to_i * 1000, # We multiply by 1000 to get milliseconds for highcharts
+        update.info[field]
+      ]
+    end
   end
 end

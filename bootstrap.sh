@@ -1,5 +1,8 @@
 sudo su -
 
+# Automatically move to the project folder on login
+echo "cd /vagrant" >> /home/vagrant/.bashrc
+
 # either of the next two lines is needed to be able to access "localhost:9200" from the host os
 echo "network.bind_host: 0" >> /etc/elasticsearch/elasticsearch.yml
 echo "network.host: 0.0.0.0" >> /etc/elasticsearch/elasticsearch.yml

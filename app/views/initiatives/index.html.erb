@@ -53,7 +53,7 @@
                               <div class="flex-row__cell flex-row__cell--grow metric">
                                 <span class="metric__title"><%= field.title %></span>
                                 <h4 class="metric__value"><%= last_update.info[field] || "N/A" %></h4>
-                                <div class="metric__sparkline js-sparkline" data-last-value="<%= last_update.info[field] %>"></div>
+                                <div class="metric__sparkline js-sparkline" data-initiative-id="<%= initiative.id %>" data-field-id="<%= field.id %>"></div>
                               </div>
                             <% end %>
                           </div>
@@ -113,23 +113,8 @@
     $(document).off('page:change');
 
     $('.js-sparkline').each(function() {
-      var lastValue = $(this).data('last-value');
-      var data = [];
-      for (var i = 10; i >= 0 ; i--) {
-        data[i] = Math.floor(lastValue);
-        lastValue = lastValue - Math.random()*(Math.random()-0.2) * lastValue;
-      }
-
-      $(this).highcharts('SparkLine', {
-        series: [{
-          data: data,
-          pointStart: 1
-        }],
-        tooltip: {
-          headerFormat: '',
-          pointFormat: '<b>{point.y}</b>'
-        }
-      });
+      var url = '/groups/<%= @group.id %>/initiatives/' + $(this).data('initiative-id') + '/fields/' + $(this).data('field-id') + '/time_series';
+      new TimeSeriesGraph(url, $(this), $(this).data('field-title'), true);
     });
   });
 </script>
