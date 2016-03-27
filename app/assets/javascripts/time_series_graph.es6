@@ -89,14 +89,7 @@ class TimeSeriesGraph {
         pointFormat: '<b>{point.y}</b>'
       },
       xAxis: {
-        type: 'datetime',
-        dateTimeLabelFormats: {
-          month: '%b',
-          day: '%b %e',
-        },
-        title: {
-          text: 'Date'
-        }
+        type: 'datetime'
       }
     });
   }

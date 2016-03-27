@@ -9,7 +9,11 @@ class Initiatives::FieldsController < ApplicationController
   def time_series
     authorize Initiative, :index?
 
-    highcharts_data = @initiative.highcharts_history(field: @field)
+    highcharts_data = @initiative.highcharts_history(
+      field: @field,
+      from: 1.year.ago
+    )
+
     render json: highcharts_data
   end
 
