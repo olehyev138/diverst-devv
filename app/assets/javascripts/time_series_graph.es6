@@ -29,7 +29,7 @@ class TimeSeriesGraph {
     if (this.spark)
       this.renderSparkLine();
     else
-      this.renderLineChart;
+      this.renderLineChart();
   }
 
   renderLineChart() {
