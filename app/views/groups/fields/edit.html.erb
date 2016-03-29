@@ -11,33 +11,40 @@
       </div>
     </div>
     <div class="flex-row__cell flex-row__cell--grow">
-      <h1> / Planning structure</h1>
+      <h1> / Group fields</h1>
     </div>
   </div>
 </div>
 
 <div class="content__main">
-
-  <div class="card">
-    <div class="card__section">
-      <p>This section allows you to edit the structrure of this ERG's plan. Add outcomes and pillars within each outcome to plan your diversity approach.</p>
-    </div>
-  </div>
-
   <%= simple_form_for @group do |f| %>
+    <div class="card">
 
-    <div id="outcomes">
-      <%= f.simple_fields_for :outcomes do |o| %>
-        <%= render "outcome_fields", f: o %>
-      <% end %>
-        <%= link_to_add_association "+Add outcome", f, :outcomes, class: "btn btn--secondary" %>
-        <%= f.button :submit, value: "Update plan", class: "fright" %>
+      <div class="card__section card__section--border">
+        <p>Define the <strong>metrics</strong> you want to track for this initiative</p>
+      </div>
+
+      <div id="fields">
+        <%= f.simple_fields_for :fields do |field| %>
+          <%= render 'field_fields', f: field %>
+        <% end %>
+      </div>
+
+      <div class="link">
+        <div class="card__section card__section--border">
+          <%= link_to_add_association "+Add metric", f, :fields, wrap_object: Proc.new { NumericField.new } %>
+        </div>
+      </div>
+
     </div>
+
+    <%= f.button :submit %>
+
   <% end %>
 </div>
 
 <script>
   $('#js-group-select').change(function() {
-    location = "/groups/" + $(this).find(":selected").val() + '/outcomes';
+    location = "/groups/" + $(this).find(":selected").val() + '/fields/edit';
   });
 </script>

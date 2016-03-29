@@ -19,4 +19,24 @@ class Initiative < ActiveRecord::Base
       ]
     end
   end
+
+  def expenses_highcharts_history(from: 1.year.ago, to: Time.current)
+    highcharts_expenses = self.expenses
+    .where('created_at >= ?', from)
+    .where('created_at <= ?', to)
+    .order(created_at: :asc)
+    .map do |expense|
+      [
+        expense.created_at.to_i * 1000, # We multiply by 1000 to get milliseconds for highcharts
+        expense.amount
+      ]
+    end
+
+    expenses_sum = 0
+
+    highcharts_expenses.each_with_index do |hc_expense, i|
+      next if i == 0
+      hc_expense[1] += highcharts_expenses[i - 1][1]
+    end
+  end
 end

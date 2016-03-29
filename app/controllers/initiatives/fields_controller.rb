@@ -11,7 +11,8 @@ class Initiatives::FieldsController < ApplicationController
 
     highcharts_data = @initiative.highcharts_history(
       field: @field,
-      from: 1.year.ago
+      from: Time.at(params[:from].to_i / 1000) || 1.year.ago,
+      to: Time.at(params[:to].to_i / 1000) || Time.current
     )
 
     render json: highcharts_data

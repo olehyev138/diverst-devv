@@ -61,50 +61,16 @@
     </div>
   </div>
   <div class="card__section card__section--border">
-    <div class="graph"></div>
+    <div class="graph js-expenses-graph"></div>
   </div>
 </div>
 
 <script>
-  var lastValue = <%= @expenses.sum(:amount) %>;
-  var data = [];
-  for (var i = 11; i >= 0 ; i--) {
-    data[i] = Math.floor(lastValue);
-    lastValue = lastValue - Math.random() * Math.random() * lastValue;
-  }
+  var url = '/groups/<%= @group.id %>/initiatives/<%= @initiative.id %>/expenses/time_series';
 
-  $('.graph').highcharts({
-    title: {
-      text: 'Total expenses over time'
-    },
-    xAxis: {
-      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-    },
-    yAxis: {
-      title: {
-        text: 'Amount spent (USD)'
-      },
-      plotLines: [{
-        color: '#980006',
-        width: 1,
-        value: <%= @initiative.estimated_funding %>,
-        dashStyle: 'Dash',
-        label: {
-          text: "Budget"
-        }
-      }],
-      max: <%= @initiative.estimated_funding > @expenses.sum(:amount) ? @initiative.estimated_funding * 1.1 : @expenses.sum(:amount) %>
-    },
-    tooltip: {
-      valuePrefix: '$'
-    },
-    series: [{
-      name: 'Total expenses',
-      data: data,
-      color: '<%= current_user.enterprise.theme.try(:primary_color) || "#7B77C9" %>'
-    }],
-    credits: {
-      enabled: false
-    }
+  new TimeSeriesGraph({
+    dataUrl: url,
+    element: $('.js-expenses-graph').eq(0),
+    title: 'Expenses over time'
   });
 </script>

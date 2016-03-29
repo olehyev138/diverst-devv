@@ -1,0 +1,16 @@
+<div class="content__header">
+  <h1><%= @update.created_at.to_s :reversed_slashes %></h1>
+</div>
+
+<div class="content__main">
+
+  <div class="card">
+    <% @group.fields.each do |field| %>
+      <div class="card__section card__section--border">
+        <label><strong><%= field.title %></strong></label>
+        <p><%= field.string_value @update.info[field] %></p>
+      </div>
+    <% end %>
+  </div>
+
+</div>

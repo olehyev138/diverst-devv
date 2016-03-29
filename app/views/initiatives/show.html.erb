@@ -44,19 +44,19 @@
           <div class="form--inline">
             <div class="field">
               <div class="field__input-wrapper">
-                <input type="text" class="field__input datepicker" value="2015-03-01">
+                <input type="text" class="field__input datepicker js-from-picker">
               </div>
             </div>
             <label>to </label>
             <div class="field">
               <div class="field__input-wrapper">
-                <input type="text" class="field__input datepicker" value="2015-03-31">
+                <input type="text" class="field__input datepicker js-to-picker">
               </div>
             </div>
           </div>
         </div>
         <div class="flex-row__cell">
-          <a class="btn btn--primary btn--small" href="#">Filter</a>
+          <a class="btn btn--primary btn--small js-time-range-btn" href="#">Filter</a>
         </div>
       </div>
 
@@ -68,20 +68,51 @@
 </div>
 
 <script>
+  // Date filters datepickers
+
+  var fromPicker = new Pikaday({
+    field: $('.js-from-picker')[0],
+    format: 'D MMM YYYY',
+    yearRange: [new Date().getFullYear() - 2, new Date().getFullYear()]
+  });
+
+  fromPicker.setMoment(moment().startOf('year'));
+
+  var toPicker = new Pikaday({
+    field: $('.js-to-picker')[0],
+    format: 'D MMM YYYY',
+    yearRange: [new Date().getFullYear() - 2, new Date().getFullYear()]
+  });
+
+  toPicker.setMoment(moment().endOf('year'));
+
+
   // Field time series graphs
+
+  var graphs = [];
 
   $('.graph').each(function() {
     var url = '/groups/<%= @group.id %>/initiatives/<%= @initiative.id %>/fields/' + $(this).data('field-id') + '/time_series';
-    new TimeSeriesGraph(url, $(this), $(this).data('field-title'));
+
+    graphs.push(
+      new TimeSeriesGraph({
+        dataUrl: url,
+        element: $(this),
+        title: $(this).data('field-title'),
+        from: fromPicker.getDate(),
+        to: toPicker.getDate()
+      })
+    );
   });
 
 
-  // Date filters datepickers
+  // Date filter button
 
-  $('.datepicker').each(function() {
-    new Pikaday({
-      field: this,
-      yearRange: [1900, new Date().getFullYear()]
+  $('.js-time-range-btn').click(function() {
+    graphs.forEach(function(graph) {
+      graph.from = fromPicker.getDate();
+      graph.to = toPicker.getDate();
+      graph.updateData();
     });
   });
 </script>

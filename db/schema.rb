@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160326205317) do
+ActiveRecord::Schema.define(version: 20160329195305) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -198,6 +198,13 @@ ActiveRecord::Schema.define(version: 20160326205317) do
 
   add_index "graphs", ["collection_type", "collection_id"], name: "index_graphs_on_collection_type_and_collection_id", using: :btree
 
+  create_table "group_fields", force: :cascade do |t|
+    t.integer  "group_id",   limit: 4
+    t.integer  "field_id",   limit: 4
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
   create_table "group_messages", force: :cascade do |t|
     t.integer  "group_id",   limit: 4
     t.string   "subject",    limit: 255
@@ -210,6 +217,15 @@ ActiveRecord::Schema.define(version: 20160326205317) do
   create_table "group_messages_segments", force: :cascade do |t|
     t.integer "group_message_id", limit: 4
     t.integer "segment_id",       limit: 4
+  end
+
+  create_table "group_updates", force: :cascade do |t|
+    t.text     "data",       limit: 65535
+    t.text     "comments",   limit: 65535
+    t.integer  "owner_id",   limit: 4
+    t.integer  "group_id",   limit: 4
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   create_table "groups", force: :cascade do |t|

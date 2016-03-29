@@ -23,8 +23,11 @@ class Group < ActiveRecord::Base
   has_many :outcomes
   has_many :pillars, through: :outcomes
   has_many :initiatives, through: :pillars
+  has_many :updates, class_name: "GroupUpdate", dependent: :destroy
+  has_many :fields, as: :container, dependent: :destroy
 
   accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
 
   has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('missing.png'), s3_permissions: :private
   validates_attachment_content_type :logo, content_type: %r{\Aimage\/.*\Z}
@@ -79,6 +82,19 @@ class Group < ActiveRecord::Base
       # Impersonate the user and subscribe to the group
       user_yammer = YammerClient.new(user.yammer_token)
       user_yammer.subscribe_to_group(yammer_id)
+    end
+  end
+
+  def highcharts_history(field:, from: 1.year.ago, to: Time.current)
+    self.updates
+    .where('created_at >= ?', from)
+    .where('created_at <= ?', to)
+    .order(created_at: :asc)
+    .map do |update|
+      [
+        update.created_at.to_i * 1000, # We multiply by 1000 to get milliseconds for highcharts
+        update.info[field]
+      ]
     end
   end
 

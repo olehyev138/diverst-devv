@@ -1,0 +1,14 @@
+<div class="content__main">
+  <%= simple_form_for [@group, @update], url: url do |f| %>
+
+    <div class="card">
+      <div class="card__section">
+        <% @group.fields.each do |cf| %>
+          <%= render "shared/fields/display/custom_field", f: f, cf: cf, resource: @update %>
+        <% end %>
+      </div>
+    </div>
+
+    <%= f.button :submit %>
+  <% end %>
+</div>

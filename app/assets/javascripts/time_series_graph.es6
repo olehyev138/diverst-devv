@@ -1,41 +1,49 @@
 class TimeSeriesGraph {
-  constructor(dataUrl, $element, title, spark = false) {
-    this.dataUrl = dataUrl;
-    this.$element = $element;
+  constructor({ dataUrl, element, title, spark = false, from, to }) {
+    this.$element = element;
     this.title = title;
     this.spark = spark;
     this.data = [];
+    this.from = from;
+    this.to = to;
     this.primaryColor = $('.primary-header').css('background-color');
+    this.attached = false;
+    this.chart = null;
+    this.dataUrl = dataUrl;
 
-    this.updateData(this.dataUrl);
+    this.updateData();
   }
 
   updateData() {
-    $.get(this.dataUrl, (data) => {
-      this.onDataUpdate(data);
+    this.dataUrl = URI(this.dataUrl).query({
+      from: this.from ? +this.from : null,
+      to: this.to ? +this.to : null
+    });
+
+    $.get(`${this.dataUrl}`, (data) => {
+      this.data = data;
+
+      if (this.attached) {
+        this.attachToElement();
+      }
+      else {
+        this.attached = true;
+        this.attachToElement();
+      }
     });
   }
 
-  onDataUpdate(data) {
-    this.data = data;
-    this.attachToElement();
-  }
-
   attachToElement() {
-    this.render();
-  }
-
-  render() {
     if (this.spark)
-      this.renderSparkLine();
+      this.attachSparkLine();
     else
-      this.renderLineChart();
+      this.attachLineGraph();
   }
 
-  renderLineChart() {
-    this.$element.highcharts({
+  attachLineGraph() {
+    var chart = this.$element.highcharts({
       chart: {
-        type: 'spline'
+        type: 'line'
       },
       title: {
         text: this.title
@@ -78,8 +86,8 @@ class TimeSeriesGraph {
     });
   }
 
-  renderSparkLine() {
-    this.$element.highcharts('SparkLine', {
+  attachSparkLine() {
+    this.chart = this.$element.highcharts('SparkLine', {
       series: [{
         data: this.data,
         pointStart: 1
