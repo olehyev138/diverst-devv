@@ -2,7 +2,6 @@
   <%= active_link_to "Initiatives", group_initiatives_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['initiatives'], ['index']] %>
   <%= active_link_to "Metrics", metrics_group_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <%= active_link_to "Structure", group_outcomes_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-  <%= active_link_to "Metrics", edit_fields_group_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <%= active_link_to "Updates", group_updates_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
 <% end %>
 
