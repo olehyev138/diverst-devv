@@ -145,6 +145,10 @@ Rails.application.routes.draw do
         get 'thank_you'
       end
     end
+
+    collection do
+      get 'metrics'
+    end
   end
 
   resources :campaigns do

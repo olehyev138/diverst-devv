@@ -1,0 +1,145 @@
+<div class="content__header">
+  <h1>Metrics</h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <h2>This week in numbers</h2>
+      <div class="flex-row">
+        <div class="flex-row__cell">
+          <small>Active topics</small><br>
+          <strong>38</strong>
+        </div>
+        <div class="flex-row__cell">
+          <small>Submitted feedbacks</small><br>
+          <strong>412</strong>
+        </div>
+        <div class="flex-row__cell">
+          <small>Starred feedbacks</small><br>
+          <strong>187</strong>
+        </div>
+        <div class="flex-row__cell">
+          <small>Starred feedbacks</small><br>
+          <strong>187</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__section">
+      <div class="graph js-connections-graph"></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col sm-6">
+      <div class="card">
+        <div class="card__section">
+          <h3>ERG bias</h3>
+          <table class="table--has-border">
+            <thead>
+              <th>ERG combination</th>
+              <th>Rejection rate</th>
+            </thead>
+            <tbody>
+              <tr>
+                <td>African-American<span class="highlight"> vs. </span>Asian</td>
+                <td>56% <span class="error">(+12%)</span></td>
+              </tr>
+              <tr>
+                <td>Asia Link Network<span class="highlight"> vs. </span>Global Network</td>
+                <td>39% <span class="positive">(-9%)</span></td>
+              </tr>
+              <tr>
+                <td>Latino Cultural Network<span class="highlight"> vs. </span>Pride Network</td>
+                <td>27% <span class="positive">(-15%)</span></td>
+              </tr>
+              <tr>
+                <td>Women's Network<span class="highlight"> vs. </span>Veterans Network</td>
+                <td>19% <span class="error">(+15%)</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col sm-6">
+      <div class="card">
+        <div class="card__section">
+          <h3>Segment bias</h3>
+          <table class="table--has-border">
+            <thead>
+              <th>Segment combination</th>
+              <th>Rejection rate</th>
+            </thead>
+            <tbody>
+              <tr>
+                <td>New Hires (1 year or less)<span class="highlight"> vs. </span>20+ Years Seniority</td>
+                <td>79% <span class="positive">(-11%)</span></td>
+              </tr>
+              <tr>
+                <td>Not from the US<span class="highlight"> vs. </span>Women in tech</td>
+                <td>67% <span class="error">(+4%)</span></td>
+              </tr>
+              <tr>
+                <td>MBA Graduates<span class="highlight"> vs. </span>Experience Leaders</td>
+                <td>53% <span class="positive">(-15%)</span></td>
+              </tr>
+              <tr>
+                <td>Remote workers with families<span class="highlight"> vs. </span>Not from the US</td>
+                <td>25% <span class="error">(+3%)</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var data1 = [];
+  var lastValue = 143;
+  for (var i = 10; i >= 0 ; i--) {
+    data1[i] = Math.floor(lastValue);
+    lastValue = lastValue - Math.random()*(Math.random()-0.2) * lastValue;
+  }
+
+  var data2 = [];
+  var lastValue = 254;
+  for (var i = 10; i >= 0 ; i--) {
+    data2[i] = Math.floor(lastValue);
+    lastValue = lastValue - Math.random()*(Math.random()-0.2) * lastValue;
+  }
+
+  $('.js-connections-graph').highcharts({
+    title: {
+      text: 'Connections over time'
+    },
+    xAxis: {
+      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    },
+    yAxis: {
+      title: {
+        text: 'Nb of connections'
+      }
+    },
+    tooltip: {
+      valueSuffix: ' connections'
+    },
+    series: [{
+      name: 'Connections rejected',
+      data: data1,
+      color: '#7E0005'
+    }, {
+      name: 'Connections made',
+      data: data2,
+      color: '#149A3B'
+    }],
+    credits: {
+      enabled: false
+    }
+  });
+</script>
