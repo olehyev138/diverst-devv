@@ -147,7 +147,14 @@
 
     $('.js-sparkline').each(function() {
       var url = '/groups/<%= @group.id %>/initiatives/' + $(this).data('initiative-id') + '/fields/' + $(this).data('field-id') + '/time_series';
-      new TimeSeriesGraph(url, $(this), $(this).data('field-title'), true);
+      new TimeSeriesGraph({
+        dataUrl: url,
+        element: $(this),
+        title: $(this).data('field-title'),
+        from: moment().startOf('year'),
+        to: moment(),
+        spark: true
+      })
     });
 
     $('#js-group-select').change(function() {
