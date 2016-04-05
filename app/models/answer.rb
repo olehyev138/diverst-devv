@@ -9,4 +9,10 @@ class Answer < ActiveRecord::Base
 
   has_attached_file :supporting_document, s3_permissions: :private
   do_not_validate_attachment_file_type :supporting_document
+
+  def supporting_document_extension
+    File.extname(file_file_name)[1..-1].downcase
+  rescue
+    ''
+  end
 end
