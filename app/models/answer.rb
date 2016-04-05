@@ -11,7 +11,7 @@ class Answer < ActiveRecord::Base
   do_not_validate_attachment_file_type :supporting_document
 
   def supporting_document_extension
-    File.extname(file_file_name)[1..-1].downcase
+    File.extname(supporting_document_file_name)[1..-1].downcase
   rescue
     ''
   end
