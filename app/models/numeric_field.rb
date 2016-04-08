@@ -78,7 +78,7 @@ class NumericField < Field
     ranges
   end
 
-  def elastic_stats(aggr_field: nil, segments: enterprise.enterprise.segments.all)
+  def elastic_stats(aggr_field: nil, segments: container.enterprise.segments.all)
     # Dynamically calculate bucket sizes
     stats = Enterprise.first.search_users(size: 0, aggs: { global_stats: { stats: { field: "combined_info.#{id}" } } })
 
@@ -128,7 +128,7 @@ class NumericField < Field
     Enterprise.first.search_users(search_hash)
   end
 
-  def highcharts_data(aggr_field: nil, segments: enterprise.enterprise.segments.all)
+  def highcharts_stats(aggr_field: nil, segments: container.enterprise.segments.all)
     data = elastic_stats(aggr_field: aggr_field, segments: segments)
 
     if aggr_field # If there IS an aggregation

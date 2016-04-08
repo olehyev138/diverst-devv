@@ -41,19 +41,10 @@ module Optionnable
     answer_counts_formatted
   end
 
-  def elastic_stats(aggr_field: nil, segments: enterprise.enterprise.segments.all)
+  def elastic_stats(aggr_field: nil, segments: container.enterprise.segments.all)
     # Craft the aggregation query depending on if we have a field to aggregate on or not
-    term_query = {
-      terms: {
-        terms: {
-          field: elasticsearch_field,
-          min_doc_count: 0
-        }
-      }
-    }
-
     aggs = if aggr_field.nil?
-      term_query
+      es_term_aggregation
     else
      {
        aggregation: {
@@ -61,16 +52,59 @@ module Optionnable
             field: aggr_field.elasticsearch_field,
             min_doc_count: 0
           },
-          aggs: term_query
+          aggs: es_term_aggregation
         }
       }
     end
 
-    search_hash = {
-      size: 0,
-      aggs: aggs
+    execute_elasticsearch_query(
+      index: container.enterprise.es_users_index_name,
+      segments: segments,
+      search_hash: {
+        aggs: aggs
+      }
+    )
+  end
+
+  def elastic_timeseries(segments: container.enterprise.segments.all)
+    aggs = es_term_aggregation(
+      aggs: {
+        date_histogram: {
+          date_histogram: {
+            field: 'created_at',
+            interval: '1d',
+            min_doc_count: 1
+          }
+        }
+      },
+      sample: true
+    )
+
+    execute_elasticsearch_query(
+      index: container.enterprise.es_samples_index_name,
+      segments: segments,
+      search_hash: {
+        aggs: aggs
+      }
+    )
+  end
+
+  def es_term_aggregation(aggs: nil, sample: false)
+    term_query = {
+      terms: {
+        terms: {
+          field: sample ? elasticsearch_sample_field : elasticsearch_field,
+          min_doc_count: 0
+        }
+      }
     }
 
+    term_query[:terms][:aggs] = aggs unless aggs.nil?
+
+    term_query
+  end
+
+  def execute_elasticsearch_query(segments:, search_hash:, index:)
     # Filter the query by segments if there are any specified
     if !segments.nil? && !segments.empty?
       search_hash['query'] = {
@@ -81,11 +115,15 @@ module Optionnable
     end
 
     # Execute the elasticsearch query
-    Elasticsearch::Model.client.search(index: container.es_users_index_name, body: search_hash)
+    Elasticsearch::Model.client.search(
+      index: index,
+      body: search_hash,
+      search_type: 'count'
+    )
   end
 
   # Get highcharts-usable stats from the field by querying elasticsearch and formatting its response
-  def highcharts_data(aggr_field: nil, segments: nil)
+  def highcharts_stats(aggr_field: nil, segments: container.enterprise.segments.all)
     data = elastic_stats(aggr_field: aggr_field, segments: segments)
 
     if aggr_field # If there is an aggregation
@@ -162,7 +200,11 @@ module Optionnable
           }
         }
 
-        others = Elasticsearch::Model.client.search(index: container.enterprise.es_users_index_name, body: others_hash)
+        others = Elasticsearch::Model.client.search(
+          index: container.enterprise.es_users_index_name,
+          body: others_hash,
+          search_type: 'count'
+        )
 
         others_data = options.map do |option|
           bucket = others['aggregations']['aggregation']['buckets'].find { |b| b['key'] == option }
@@ -183,23 +225,44 @@ module Optionnable
         xAxisTitle: title
       }
     else # If there is no aggregation
-      seriesData = data['aggregations']['terms']['buckets'].map do |option_bucket|
+      buckets = data['aggregations']['terms']['buckets']
+      other_docs_count = data['aggregations']['terms']['sum_other_doc_count']
+
+      seriesData = buckets.map do |option_bucket|
         {
           name: format_value_name(option_bucket['key']),
           y: option_bucket['doc_count']
         }
       end
 
-      other_docs_count = data['aggregations']['terms']['sum_other_doc_count']
       seriesData << { name: 'Other', y: other_docs_count } if other_docs_count > 0
 
-      series = [{
+      {
         name: title,
         data: seriesData
-      }]
+      }
+    end
+  end
 
-      return {
-        series: series
+  def highcharts_timeseries(segments:)
+    data = elastic_timeseries(segments: segments)
+
+    ap data
+
+    series = data['aggregations']['terms']['buckets'].map do |term_bucket|
+      time_buckets = term_bucket['date_histogram']['buckets']
+      other_docs_count = term_bucket['date_histogram']['sum_other_doc_count']
+
+      term_data = time_buckets.map do |time_bucket|
+        [
+          time_bucket['key'],
+          time_bucket['doc_count']
+        ]
+      end
+
+      {
+        name: format_value_name(term_bucket['key']),
+        data: term_data
       }
     end
   end
@@ -208,8 +271,8 @@ module Optionnable
     "combined_info.#{id}.raw"
   end
 
-  def format_value_name(value)
-    value
+  def elasticsearch_sample_field
+    "info.#{id}.raw"
   end
 
   protected

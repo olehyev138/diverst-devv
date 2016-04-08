@@ -9,6 +9,9 @@ class User < ActiveRecord::Base
   include Elasticsearch::Model
   include ContainsFields
 
+  belongs_to :enterprise, inverse_of: :users
+  belongs_to :policy_group
+
   has_many :devices
   has_many :users_segments
   has_many :segments, through: :users_segments
@@ -25,8 +28,7 @@ class User < ActiveRecord::Base
   has_many :messages, through: :groups
   has_many :events, through: :groups
   has_many :managed_groups, foreign_key: :manager_id, class_name: 'Group'
-  belongs_to :enterprise, inverse_of: :users
-  belongs_to :policy_group
+  has_many :samples
 
   has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('missing.png'), s3_permissions: :private
   validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
@@ -169,7 +171,7 @@ class User < ActiveRecord::Base
   end
 
   # Custom ES mapping that creates an unanalyzed version of all string fields for exact-match term queries
-  def self.mappingue
+  def self.custom_mapping
     {
       user: {
         dynamic_templates: [{
@@ -206,7 +208,7 @@ class User < ActiveRecord::Base
       index: index,
       body: {
         settings: User.settings.to_hash,
-        mappings: User.mappingue.to_hash
+        mappings: User.custom_mapping.to_hash
       }
     )
 

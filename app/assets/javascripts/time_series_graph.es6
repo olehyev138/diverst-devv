@@ -65,13 +65,10 @@ class TimeSeriesGraph {
         enabled: false
       },
       tooltip: {
-        headerFormat: '<b>{point.x:%b %e}</b><br>',
-        pointFormat: '{point.y}'
+        headerFormat: '<strong>{series.name}</strong><br>',
+        pointFormat: '{point.x:%b %e}: {point.y}'
       },
-      series: [{
-        name: this.title,
-        data: this.data
-      }],
+      series: this.data.highcharts,
       plotOptions: {
         spline: {
           marker: {
@@ -88,13 +85,10 @@ class TimeSeriesGraph {
 
   attachSparkLine() {
     this.chart = this.$element.highcharts('SparkLine', {
-      series: [{
-        data: this.data,
-        pointStart: 1
-      }],
+      series: this.data.highcharts,
       tooltip: {
         headerFormat: '',
-        pointFormat: '<b>{point.y}</b>'
+        pointFormat: '{point.y}'
       },
       xAxis: {
         type: 'datetime'

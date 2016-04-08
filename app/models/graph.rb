@@ -8,8 +8,9 @@ class Graph < ActiveRecord::Base
   def data
     {
       type: field.type,
-      highcharts: field.highcharts_data(aggr_field: aggregation, segments: collection.segments),
+      highcharts: time_series ? field.highcharts_timeseries(segments: collection.segments) : field.highcharts_stats(aggr_field: aggregation, segments: collection.segments),
       hasAggregation: !aggregation.nil?,
+      time_series: time_series,
       title: title
     }
   end

@@ -1,4 +1,7 @@
 FactoryGirl.define do
+  factory :sample do
+    
+  end
   factory :group_field do
     
   end

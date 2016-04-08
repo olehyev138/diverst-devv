@@ -100,7 +100,7 @@ class Graph {
       title: {
         text: ''
       },
-      series: this.data.highcharts.series,
+      series: [this.data.highcharts],
       tooltip: {
         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
         pointFormat: '<tr><td style="padding:0"><b>{point.y}</b></td></tr>',
