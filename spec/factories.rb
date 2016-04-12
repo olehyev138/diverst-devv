@@ -1,4 +1,10 @@
 FactoryGirl.define do
+  factory :group_field do
+    
+  end
+  factory :group_update do
+    
+  end
   sequence :email_address do |n|
     "user#{n}@diverst.com"
   end

@@ -44,70 +44,75 @@
           <div class="form--inline">
             <div class="field">
               <div class="field__input-wrapper">
-                <input type="text" class="field__input datepicker" value="2015-03-01">
+                <input type="text" class="field__input datepicker js-from-picker">
               </div>
             </div>
             <label>to </label>
             <div class="field">
               <div class="field__input-wrapper">
-                <input type="text" class="field__input datepicker" value="2015-03-31">
+                <input type="text" class="field__input datepicker js-to-picker">
               </div>
             </div>
           </div>
         </div>
         <div class="flex-row__cell">
-          <a class="btn btn--primary btn--small" href="#">Filter</a>
+          <a class="btn btn--primary btn--small js-time-range-btn" href="#">Filter</a>
         </div>
       </div>
 
       <% @initiative.fields.each do |field| %>
-        <div class="graph" style="width: 49%; display: inline-block;" data-title="<%= field.title %>"></div>
+        <div class="graph" style="width: 49%; display: inline-block;" data-field-id="<%= field.id %>" data-field-title="<%= field.title %>"></div>
       <% end %>
     </div>
   </div>
 </div>
 
 <script>
-  // Line graphs
+  // Date filters datepickers
+
+  var fromPicker = new Pikaday({
+    field: $('.js-from-picker')[0],
+    format: 'D MMM YYYY',
+    yearRange: [new Date().getFullYear() - 2, new Date().getFullYear()]
+  });
+
+  fromPicker.setMoment(moment().startOf('year'));
+
+  var toPicker = new Pikaday({
+    field: $('.js-to-picker')[0],
+    format: 'D MMM YYYY',
+    yearRange: [new Date().getFullYear() - 2, new Date().getFullYear()]
+  });
+
+  toPicker.setMoment(moment().endOf('year'));
+
+
+  // Field time series graphs
+
+  var graphs = [];
 
   $('.graph').each(function() {
-    var lastValue = 100;
-    $(this).highcharts({
-      title: {
-        text: $(this).data('title')
-      },
-      xAxis: {
-        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-      },
-      yAxis: {
-        title: {
-          text: 'Nb of participants'
-        }
-      },
-      tooltip: {
-        valueSuffix: ' employees'
-      },
-      series: [{
-        name: 'Employee count',
-        data: Array.apply(null, Array(12)).map(function() {
-          var nextValue = lastValue + Math.random() * 100
-          lastValue = nextValue;
-          return Math.round(nextValue);
-        })
-      }],
-      credits: {
-        enabled: false
-      }
-    });
+    var url = '/groups/<%= @group.id %>/initiatives/<%= @initiative.id %>/fields/' + $(this).data('field-id') + '/time_series';
+
+    graphs.push(
+      new TimeSeriesGraph({
+        dataUrl: url,
+        element: $(this),
+        title: $(this).data('field-title'),
+        from: fromPicker.getDate(),
+        to: toPicker.getDate()
+      })
+    );
   });
 
 
-  // Date filters datepickers
+  // Date filter button
 
-  $('.datepicker').each(function() {
-    new Pikaday({
-      field: this,
-      yearRange: [1900, new Date().getFullYear()]
+  $('.js-time-range-btn').click(function() {
+    graphs.forEach(function(graph) {
+      graph.from = fromPicker.getDate();
+      graph.to = toPicker.getDate();
+      graph.updateData();
     });
   });
 </script>

@@ -1,4 +1,21 @@
 <% if @outcomes.empty? %>
+  <div class="content__header">
+    <div class="flex-row flex-row--middle full-width">
+      <div class="flex-row__cell flex-row__cell--grow">
+        <div class="field__input-wrapper" style="width: 250px;">
+          <span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
+          <select class="field__input field__input--right-add-on" id="js-group-select">
+            <% current_user.enterprise.groups.each do |group| %>
+              <option value="<%= group.id %>"<%= " selected disabled" if group == @group %>><%= group.name %></option>
+            <% end %>
+          </select>
+        </div>
+      </div>
+      <div class="flex-row__cell">
+        <%= link_to "New Initiative", new_group_initiative_path(@group), class: "btn btn--primary" if policy(Initiative).new? %>
+      </div>
+    </div>
+  </div>
   <div class="content__main">
     <div class="card">
       <div class="card__section">
@@ -9,8 +26,24 @@
 <% else %>
   <% @outcomes.each do |outcome| %>
     <div class="content__header">
-      <h1><span class="muted"><%= @group.name %> /</span> <%= outcome.name %></h1>
-      <%= link_to "New Initiative", new_group_initiative_path(@group), class: "btn btn--primary" if policy(Initiative).new? %>
+      <div class="flex-row flex-row--middle full-width">
+        <div class="flex-row__cell">
+          <div class="field__input-wrapper" style="width: 250px;">
+            <span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
+            <select class="field__input field__input--right-add-on" id="js-group-select">
+              <% current_user.enterprise.groups.each do |group| %>
+                <option value="<%= group.id %>"<%= " selected disabled" if group == @group %>><%= group.name %></option>
+              <% end %>
+            </select>
+          </div>
+        </div>
+        <div class="flex-row__cell flex-row__cell--grow">
+          <h1>/ <%= outcome.name %></h1>
+        </div>
+        <div class="flex-row__cell">
+          <%= link_to "New Initiative", new_group_initiative_path(@group), class: "btn btn--primary" if policy(Initiative).new? %>
+        </div>
+      </div>
     </div>
 
     <div class="content__main">
@@ -53,7 +86,7 @@
                               <div class="flex-row__cell flex-row__cell--grow metric">
                                 <span class="metric__title"><%= field.title %></span>
                                 <h4 class="metric__value"><%= last_update.info[field] || "N/A" %></h4>
-                                <div class="metric__sparkline js-sparkline" data-last-value="<%= last_update.info[field] %>"></div>
+                                <div class="metric__sparkline js-sparkline" data-initiative-id="<%= initiative.id %>" data-field-id="<%= field.id %>"></div>
                               </div>
                             <% end %>
                           </div>
@@ -113,23 +146,19 @@
     $(document).off('page:change');
 
     $('.js-sparkline').each(function() {
-      var lastValue = $(this).data('last-value');
-      var data = [];
-      for (var i = 10; i >= 0 ; i--) {
-        data[i] = Math.floor(lastValue);
-        lastValue = lastValue - Math.random()*(Math.random()-0.2) * lastValue;
-      }
+      var url = '/groups/<%= @group.id %>/initiatives/' + $(this).data('initiative-id') + '/fields/' + $(this).data('field-id') + '/time_series';
+      new TimeSeriesGraph({
+        dataUrl: url,
+        element: $(this),
+        title: $(this).data('field-title'),
+        from: moment().startOf('year'),
+        to: moment(),
+        spark: true
+      })
+    });
 
-      $(this).highcharts('SparkLine', {
-        series: [{
-          data: data,
-          pointStart: 1
-        }],
-        tooltip: {
-          headerFormat: '',
-          pointFormat: '<b>{point.y}</b>'
-        }
-      });
+    $('#js-group-select').change(function() {
+      location = "/groups/" + $(this).find(":selected").val() + '/initiatives';
     });
   });
 </script>

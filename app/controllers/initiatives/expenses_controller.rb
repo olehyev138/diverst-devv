@@ -1,7 +1,7 @@
 class Initiatives::ExpensesController < ApplicationController
   before_action :set_group
   before_action :set_initiative
-  before_action :set_expense, only: [:edit, :update, :destroy, :show, :export_csv]
+  before_action :set_expense, only: [:edit, :update, :destroy, :show]
   after_action :verify_authorized
 
   layout 'plan'
@@ -26,6 +26,17 @@ class Initiatives::ExpensesController < ApplicationController
     else
       render :edit
     end
+  end
+
+  def time_series
+    authorize InitiativeExpense, :index?
+
+    highcharts_data = @initiative.expenses_highcharts_history(
+      from: params[:from] ? Time.at(params[:from].to_i / 1000) : 1.year.ago,
+      to: params[:to] ? Time.at(params[:to].to_i / 1000) : Time.current
+    )
+
+    render json: highcharts_data
   end
 
   def show

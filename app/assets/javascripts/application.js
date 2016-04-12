@@ -23,6 +23,7 @@
 //= require moment
 //= require pikaday
 //= require tooltipster
+//= require urijs
 //= require_tree .
 
 var Utility = (function() {

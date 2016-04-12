@@ -1,11 +1,8 @@
 <% content_for :secondary_nav do %>
-  <%= active_link_to "Overview", group_initiatives_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['initiatives'], ['index']] if policy(Initiative).index? %>
+  <%= active_link_to "Initiatives", group_initiatives_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['initiatives'], ['index']] %>
   <%= active_link_to "Metrics", metrics_group_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-  <% if default_initiative = @group.initiatives.first %>
-    <%= active_link_to "Updates", group_initiative_updates_path(@group, default_initiative), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Initiative).index? %>
-    <%= active_link_to "Budget", group_initiative_expenses_path(@group, default_initiative), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Initiative).index? %>
-  <% end %>
-  <%= active_link_to "Structure", group_outcomes_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Initiative).index? %>
+  <%= active_link_to "Structure", group_outcomes_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to "Updates", group_updates_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
 <% end %>
 
 <%= render template: "layouts/dashboard" %>

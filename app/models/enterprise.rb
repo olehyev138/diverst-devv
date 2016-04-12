@@ -24,9 +24,6 @@ class Enterprise < ActiveRecord::Base
   has_many :emails
   belongs_to :theme
   has_many :policy_groups
-  has_many :outcomes
-  has_many :pillars, through: :outcomes
-  has_many :initiatives, through: :pillars
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :mobile_fields, reject_if: :all_blank, allow_destroy: true
@@ -36,6 +33,9 @@ class Enterprise < ActiveRecord::Base
   before_create :create_elasticsearch_only_fields
 
   validates :idp_sso_target_url, url: { allow_blank: true }
+
+  has_attached_file :cdo_picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('missing.png'), s3_permissions: :private
+  validates_attachment_content_type :cdo_picture, content_type: %r{\Aimage\/.*\Z}
 
   def saml_settings
     settings = OneLogin::RubySaml::Settings.new

@@ -1,0 +1,51 @@
+<div class="content__header">
+  <div class="flex-row flex-row--middle full-width">
+    <div class="flex-row__cell">
+      <div class="field__input-wrapper" style="width: 250px;">
+        <span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
+        <select class="field__input field__input--right-add-on" id="js-group-select">
+          <% current_user.enterprise.groups.each do |group| %>
+            <option value="<%= group.id %>"<%= " selected disabled" if group == @group %>><%= group.name %></option>
+          <% end %>
+        </select>
+      </div>
+    </div>
+    <div class="flex-row__cell flex-row__cell--grow">
+      <h1> / Updates</h1>
+    </div>
+    <div class="flex-row__cell">
+      <%= link_to "New Update", new_group_update_path(@group), class: "btn btn--primary" %>
+    </div>
+  </div>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <% if @updates.empty? %>
+        <p>There are no updates yet. <%= link_to "Create one", new_group_update_path(@group) %> to track your initiative's progress.</p>
+      <% else %>
+        <table class="table--has-border" id="updates-table">
+          <thead>
+            <th>Date</th>
+            <th>Options</th>
+          </thead>
+          <tbody>
+            <% @updates.each do |update| %>
+              <tr>
+                <td><%= link_to update.created_at.to_s(:reversed_slashes), group_update_path(@group, update) %></td>
+                <td><%= link_to "Edit", edit_group_update_path(@group, update) %> - <%= link_to "Delete", group_update_path(@group, update), method: :delete, class: "error", data: { confirm: "Are you sure?" } %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  $('#js-group-select').change(function() {
+    location = "/groups/" + $(this).find(":selected").val() + '/updates';
+  });
+</script>

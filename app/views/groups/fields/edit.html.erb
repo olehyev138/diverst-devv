@@ -1,0 +1,50 @@
+<div class="content__header">
+  <div class="flex-row flex-row--middle full-width">
+    <div class="flex-row__cell">
+      <div class="field__input-wrapper" style="width: 250px;">
+        <span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
+        <select class="field__input field__input--right-add-on" id="js-group-select">
+          <% current_user.enterprise.groups.each do |group| %>
+            <option value="<%= group.id %>"<%= " selected disabled" if group == @group %>><%= group.name %></option>
+          <% end %>
+        </select>
+      </div>
+    </div>
+    <div class="flex-row__cell flex-row__cell--grow">
+      <h1> / Group fields</h1>
+    </div>
+  </div>
+</div>
+
+<div class="content__main">
+  <%= simple_form_for @group do |f| %>
+    <div class="card">
+
+      <div class="card__section card__section--border">
+        <p>Define the <strong>metrics</strong> you want to track for this initiative</p>
+      </div>
+
+      <div id="fields">
+        <%= f.simple_fields_for :fields do |field| %>
+          <%= render 'field_fields', f: field %>
+        <% end %>
+      </div>
+
+      <div class="link">
+        <div class="card__section card__section--border">
+          <%= link_to_add_association "+Add metric", f, :fields, wrap_object: Proc.new { NumericField.new } %>
+        </div>
+      </div>
+
+    </div>
+
+    <%= f.button :submit %>
+
+  <% end %>
+</div>
+
+<script>
+  $('#js-group-select').change(function() {
+    location = "/groups/" + $(this).find(":selected").val() + '/fields/edit';
+  });
+</script>

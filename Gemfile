@@ -2,8 +2,8 @@ source 'https://rubygems.org'
 
 ruby '2.3.0'
 
-gem 'rails', '4.2.2'
-gem 'mysql2', '~> 0.3.18'
+gem 'rails', '~> 4.2.6'
+gem 'mysql2', '~> 0.4.3'
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails'
@@ -58,7 +58,7 @@ gem 'pundit'
 gem 'draper'
 
 group :development, :test do
-  gem 'spring', '1.6.2' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'spring', '~> 1.6.2' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'guard-livereload', '~> 2.4', require: false
   gem 'rb-readline'
   gem 'rack-livereload'
@@ -73,7 +73,7 @@ group :development, :test do
   gem 'pry-theme'
 end
 
-gem 'rspec_junit_formatter', '0.2.2', group: :test
+gem 'rspec_junit_formatter', '~> 0.2.3', group: :test
 
 group :development do
   gem 'capistrano'
@@ -88,14 +88,15 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'bullet'
-  gem 'slack-notifier' # For Bullet
-  gem 'fuubar'
   gem 'parallel_tests'
   gem 'meta_request' # Necessary for rails_panel Chrome extension
+  gem 'flamegraph'
+  gem 'rack-mini-profiler'
+  gem 'stackprof'
 end
 
 group :production do
   gem 'syslogger', '~> 1.6.0'
-  gem 'lograge', '~> 0.3.1'
+  gem 'lograge', '~> 0.3'
   gem 'appsignal'
 end

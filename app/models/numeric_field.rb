@@ -98,16 +98,16 @@ class NumericField < Field
     }
 
     aggs = if aggr_field.nil?
-             range_agg
-           else
-             {
-               aggregation: {
-                 terms: {
-                   field: "combined_info.#{aggr_field.id}.raw"
-                 },
-                 aggs: range_agg
-               }
-             }
+      range_agg
+    else
+      {
+        aggregation: {
+          terms: {
+            field: "combined_info.#{aggr_field.id}.raw"
+          },
+          aggs: range_agg
+        }
+      }
     end
 
     search_hash = {

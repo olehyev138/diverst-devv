@@ -61,6 +61,7 @@ class GroupsController < ApplicationController
 
   def metrics
     authorize @group, :show?
+    @updates = @group.updates
   end
 
   def import_csv
@@ -115,6 +116,10 @@ class GroupsController < ApplicationController
     send_data users_csv, filename: "#{@group.file_safe_name}_users.csv"
   end
 
+  def edit_fields
+    authorize @group, :edit?
+  end
+
   protected
 
   def resolve_layout
@@ -122,6 +127,8 @@ class GroupsController < ApplicationController
     when 'show'
       'erg'
     when 'metrics'
+      'plan'
+    when 'edit_fields'
       'plan'
     else
       'erg_manager'
@@ -156,6 +163,19 @@ class GroupsController < ApplicationController
             :value_proposition,
             :_destroy
           ]
+        ],
+        fields_attributes: [
+          :id,
+          :title,
+          :_destroy,
+          :gamification_value,
+          :show_on_vcard,
+          :saml_attribute,
+          :type,
+          :min,
+          :max,
+          :options_text,
+          :alternative_layout
         ]
       )
   end

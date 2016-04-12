@@ -70,10 +70,16 @@ Rails.application.routes.draw do
       resources :group_messages, path: 'messages'
     end
 
-    scope :groups, module: :groups do
+    scope module: :groups do
       resources :events
       resources :news_links
       resources :resources
+      resources :fields do
+        member do
+          get 'time_series'
+        end
+      end
+      resources :updates
     end
 
     # Planning
@@ -83,10 +89,16 @@ Rails.application.routes.draw do
     resources :initiatives do
       scope module: 'initiatives' do
         resources :updates
-        resources :expenses
+
+        resources :expenses do
+          collection do
+            get 'time_series'
+          end
+        end
+
         resources :fields do
           member do
-            get 'date_histogram'
+            get 'time_series'
           end
         end
       end
@@ -98,6 +110,7 @@ Rails.application.routes.draw do
       get 'sample_csv'
       post 'parse_csv'
       get 'metrics'
+      get 'edit_fields'
     end
   end
 
@@ -242,17 +255,6 @@ Rails.application.routes.draw do
 
   resources :policy_groups
   resources :emails
-
-
-  # Planning
-
-  resources :outcomes
-  resources :pillars
-  resources :initiatives do
-    scope module: 'initiatives' do
-      resources :updates
-    end
-  end
 
   root to: 'metrics_dashboards#index'
 end
