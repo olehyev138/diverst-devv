@@ -6,6 +6,7 @@ class GraphsController < ApplicationController
 
   def new
     @graph = @collection.graphs.new
+    @graph.range_from = 1.year.ago
   end
 
   def create
@@ -62,7 +63,10 @@ class GraphsController < ApplicationController
       .require(:graph)
       .permit(
         :field_id,
-        :aggregation_id
+        :aggregation_id,
+        :time_series,
+        :range_from,
+        :range_to
       )
   end
 end

@@ -1,4 +1,40 @@
 <div class="content__header">
+  <h1>Specific metrics dashboards</h1>
+  <%= link_to "New dashboard", new_metrics_dashboard_path, class: "btn btn--primary" if policy(MetricsDashboard).new? %>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <% if @dashboards.empty? %>
+        <p>There are no dashboards yet. <%= link_to "Create one", new_metrics_dashboard_path %> to start getting valuable insight on your team's diversity.</p>
+      <% else %>
+        <table class="table--has-border" id="users-table">
+          <thead>
+            <th>Title</th>
+            <th># of graphs</th>
+            <th># of targeted users</th>
+            <th>Creation date</th>
+            <th>Options</th>
+          </thead>
+          <tbody>
+            <% @dashboards.each do |dashboard| %>
+              <tr>
+                <td><%= link_to dashboard.name, metrics_dashboard_path(dashboard) %></td>
+                <td><%= dashboard.graphs.count %></td>
+                <td><%= dashboard.target.count %></td>
+                <td><%= dashboard.created_at.to_s :dateonly %></td>
+                <td><%= link_to "Edit", edit_metrics_dashboard_path(dashboard) %> - <%= link_to "Delete", metrics_dashboard_path(dashboard), method: :delete, class: "error", data: { confirm: "Are you sure?" } %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="content__header">
   <h1>General metrics</h1>
 </div>
 
@@ -88,42 +124,6 @@
 
   </div>
 
-</div>
-
-<div class="content__header">
-  <h1>Specific metrics dashboards</h1>
-  <%= link_to "New dashboard", new_metrics_dashboard_path, class: "btn btn--primary" if policy(MetricsDashboard).new? %>
-</div>
-
-<div class="content__main">
-  <div class="card">
-    <div class="card__section">
-      <% if @dashboards.empty? %>
-        <p>There are no dashboards yet. <%= link_to "Create one", new_metrics_dashboard_path %> to start getting valuable insight on your team's diversity.</p>
-      <% else %>
-        <table class="table--has-border" id="users-table">
-          <thead>
-            <th>Title</th>
-            <th># of graphs</th>
-            <th># of targeted users</th>
-            <th>Creation date</th>
-            <th>Options</th>
-          </thead>
-          <tbody>
-            <% @dashboards.each do |dashboard| %>
-              <tr>
-                <td><%= link_to dashboard.name, metrics_dashboard_path(dashboard) %></td>
-                <td><%= dashboard.graphs.count %></td>
-                <td><%= dashboard.target.count %></td>
-                <td><%= dashboard.created_at.to_s :dateonly %></td>
-                <td><%= link_to "Edit", edit_metrics_dashboard_path(dashboard) %> - <%= link_to "Delete", metrics_dashboard_path(dashboard), method: :delete, class: "error", data: { confirm: "Are you sure?" } %></td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      <% end %>
-    </div>
-  </div>
 </div>
 
 <script>

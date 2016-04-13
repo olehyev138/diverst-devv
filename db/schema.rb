@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160405194555) do
+ActiveRecord::Schema.define(version: 20160413074434) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -195,6 +195,8 @@ ActiveRecord::Schema.define(version: 20160405194555) do
     t.string   "custom_field",       limit: 255
     t.string   "custom_aggregation", limit: 255
     t.boolean  "time_series",                    default: false
+    t.datetime "range_from"
+    t.datetime "range_to"
   end
 
   add_index "graphs", ["collection_type", "collection_id"], name: "index_graphs_on_collection_type_and_collection_id", using: :btree
@@ -309,21 +311,6 @@ ActiveRecord::Schema.define(version: 20160405194555) do
     t.integer  "pillar_id",         limit: 4
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
-  end
-
-  create_table "initiatives_fields", force: :cascade do |t|
-    t.integer "initiative_id", limit: 4
-    t.integer "field_id",      limit: 4
-  end
-
-  create_table "initiatives_groups", force: :cascade do |t|
-    t.integer "initiative_id", limit: 4
-    t.integer "group_id",      limit: 4
-  end
-
-  create_table "initiatives_users", force: :cascade do |t|
-    t.integer "initiative_id", limit: 4
-    t.integer "user_id",       limit: 4
   end
 
   create_table "invitation_segments_groups", force: :cascade do |t|
