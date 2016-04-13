@@ -2,13 +2,28 @@
   <%= simple_form_for [@collection, @graph] do |f| %>
     <div class="card">
       <div class="card__section card__section--border">
-        <p class="field__hint">Choose the field that the graph will represent</p>
+        <p class="field__hint">Choose the <strong>field</strong> that the graph will represent</p>
         <%= f.association :field, label: false, collection: f.object.collection.graphable_fields(current_user), include_blank: false %>
       </div>
 
       <div class="card__section card__section--border">
-        <p class="field__hint">Choose a field to aggregate the data on (optional)</p>
+        <p class="field__hint">Choose a field to <strong>aggregate</strong> the data on (optional)</p>
         <%= f.association :aggregation, label: false, collection: f.object.collection.graphable_fields(current_user) %>
+      </div>
+
+      <div class="card__section card__section--border">
+        <p class="field__hint">Choose the <strong>type</strong> of graph you want to display</p>
+        <div class="segmented-control">
+          <a class="js-graph-type-button segmented-control__item<%= " segmented-control__item--is-selected" if !f.object.time_series %>" data-value="false">Current values</a>
+          <a class="js-graph-type-button segmented-control__item<%= " segmented-control__item--is-selected" if f.object.time_series %>" data-value="true">Values over time</a>
+          <%= f.input_field :time_series, as: :hidden %>
+        </div>
+      </div>
+
+      <div class="card__section card__section--border js-date-range<%= " hidden" unless f.object.time_series %>">
+        <p class="field__hint">Specify the graph's <strong>date range</strong></p>
+        <%= f.input :range_from, label: "From" %>
+        <%= f.input :range_to, label: "To" %>
       </div>
     </div>
 
@@ -19,5 +34,16 @@
 <% content_for :page_scripts do %>
   <script>
     $('.select2').select2();
+
+    $('.segmented-control__item').click(function() {
+      $(this).parent().find('.segmented-control__item').removeClass('segmented-control__item--is-selected');
+      $(this).addClass('segmented-control__item--is-selected');
+      $(this).parent().find('input').val($(this).data('value'));
+    });
+
+    $('.js-graph-type-button').click(function() {
+      var isRangeVisible = $(this).data('value') ? 'block' : 'none';
+      $('.js-date-range').css('display', isRangeVisible);
+    });
   </script>
 <% end %>

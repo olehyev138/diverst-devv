@@ -20,7 +20,6 @@ gem 'ruby-saml', '~> 1.0.0'
 gem 'sidekiq', '< 5'
 gem 'devise-async'
 gem 'sinatra', require: nil # Required for sidekiq's dashboard
-gem 'newrelic_rpm'
 gem 'seedbank'
 gem 'oj'
 gem 'faker'
@@ -91,12 +90,13 @@ group :development do
   gem 'parallel_tests'
   gem 'meta_request' # Necessary for rails_panel Chrome extension
   gem 'flamegraph'
-  gem 'rack-mini-profiler'
-  gem 'stackprof'
+  # gem 'rack-mini-profiler'
+  # gem 'stackprof'
 end
 
 group :production do
   gem 'syslogger', '~> 1.6.0'
   gem 'lograge', '~> 0.3'
   gem 'appsignal'
+  gem 'newrelic_rpm'
 end

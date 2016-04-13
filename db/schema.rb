@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160329195305) do
+ActiveRecord::Schema.define(version: 20160413074434) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -188,12 +188,15 @@ ActiveRecord::Schema.define(version: 20160329195305) do
   create_table "graphs", force: :cascade do |t|
     t.integer  "field_id",           limit: 4
     t.integer  "aggregation_id",     limit: 4
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
     t.integer  "collection_id",      limit: 4
     t.string   "collection_type",    limit: 255
     t.string   "custom_field",       limit: 255
     t.string   "custom_aggregation", limit: 255
+    t.boolean  "time_series",                    default: false
+    t.datetime "range_from"
+    t.datetime "range_to"
   end
 
   add_index "graphs", ["collection_type", "collection_id"], name: "index_graphs_on_collection_type_and_collection_id", using: :btree
@@ -481,6 +484,13 @@ ActiveRecord::Schema.define(version: 20160329195305) do
   end
 
   add_index "resources", ["container_type", "container_id"], name: "index_resources_on_container_type_and_container_id", using: :btree
+
+  create_table "samples", force: :cascade do |t|
+    t.integer  "user_id",    limit: 4
+    t.text     "data",       limit: 65535
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
 
   create_table "segment_rules", force: :cascade do |t|
     t.integer  "segment_id", limit: 4

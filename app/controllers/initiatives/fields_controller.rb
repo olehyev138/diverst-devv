@@ -15,7 +15,12 @@ class Initiatives::FieldsController < ApplicationController
       to: Time.at(params[:to].to_i / 1000) || Time.current
     )
 
-    render json: highcharts_data
+    render json: {
+      highcharts: [{
+        name: @field.title,
+        data: highcharts_data
+      }]
+    }
   end
 
   protected

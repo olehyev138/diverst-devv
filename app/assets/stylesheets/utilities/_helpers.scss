@@ -46,6 +46,10 @@
   display: block;
 }
 
+.hidden {
+  display: none;
+}
+
 .block-section {
   cursor: pointer;
   padding: $spacing-medium 0;
