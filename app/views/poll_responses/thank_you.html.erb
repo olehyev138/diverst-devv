@@ -1,13 +1,11 @@
 <div class="content__header">
-  <img class="logo logo--large" src="<%= image_path "diverst-logo.svg" %>">
-  <p>Connect with someone within Anycorp based on your common interest but diverse background to explore new ideas or think outside the box to solve problems.</p>
+  <img class="logo logo--large" src="<%= (current_user.enterprise.theme.nil? ? image_path('diverst-logo.svg') : current_user.enterprise.theme.logo.expiring_url(3600)) %>">
 </div>
 
 <div class="content__main">
   <div class="card">
     <div class="card__section">
-      <h2>Thank you for answering!</h2>
-      <p>TODO</p>
+      <h2>Thank you for your response</h2>
     </div>
   </div>
 </div>
