@@ -7,7 +7,7 @@
     <%= f.input :name, label: "Outcome name" %>
   </div>
   <div class="card__section card__section--border">
-    <p>You can create as many <strong>pillars</strong> as you want for this outcome.</p>
+    <p>You can create as many <strong>programs</strong> as you want for this outcome.</p>
   </div>
   <div id="pillars">
     <%= f.simple_fields_for :pillars do |pillar| %>
@@ -16,7 +16,7 @@
   </div>
   <div class="links">
     <div class="card__section card__section--border">
-      <%= link_to_add_association "+Add pillar", f, :pillars %>
+      <%= link_to_add_association "+Add program", f, :pillars %>
     </div>
   </div>
 </div>
