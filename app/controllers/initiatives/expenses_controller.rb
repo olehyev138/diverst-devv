@@ -36,7 +36,12 @@ class Initiatives::ExpensesController < ApplicationController
       to: params[:to] ? Time.at(params[:to].to_i / 1000) : Time.current
     )
 
-    render json: highcharts_data
+    render json: {
+      highcharts: [{
+        name: "Expenses",
+        data: highcharts_data
+      }]
+    }
   end
 
   def show

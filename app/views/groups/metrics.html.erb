@@ -31,7 +31,7 @@
               <% if index == @updates.size - 1 %>
                 Last update
               <% else %>
-                <%= pluralize(@updates.size - index - 1, 'update') %> ago
+                <%= pluralize(@updates.size - index, 'updates') %> ago
               <% end %>
               (<%= update.created_at.to_s :reversed_slashes %>)
             </th>
