@@ -237,9 +237,11 @@ module Optionnable
 
       seriesData << { name: 'Other', y: other_docs_count } if other_docs_count > 0
 
-      {
-        name: title,
-        data: seriesData
+      return {
+        series: [{
+          name: title,
+          data: seriesData
+        }]
       }
     end
   end
