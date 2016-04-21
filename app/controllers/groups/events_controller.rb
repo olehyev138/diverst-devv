@@ -24,6 +24,10 @@ class Groups::EventsController < ApplicationController
     end
   end
 
+  def show
+    @comment = @event.comments.where(user: current_user).first || EventComment.new(event: @event)
+  end
+
   def update
     if @event.update(event_params)
       redirect_to [@group, @event]

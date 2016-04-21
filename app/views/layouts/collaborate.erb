@@ -1,5 +1,6 @@
 <% content_for :secondary_nav do %>
   <%= active_link_to "Campaigns", campaigns_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['campaigns', 'questions'], []] %>
+  <%= active_link_to "Expenses", expenses_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
 <% end %>
 
 <%= render template: "layouts/dashboard" %>

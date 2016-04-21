@@ -2,6 +2,11 @@ class Event < ActiveRecord::Base
   has_many :events_segments
   has_many :segments, through: :events_segments
   belongs_to :group
+  has_many :event_attendances
+  has_many :attendees, through: :event_attendances, source: :user
+  has_many :event_invitees
+  has_many :invitees, through: :event_invitees, source: :user
+  has_many :comments, class_name: "EventComment"
 
   scope :past, -> { where('end < ?', Time.current).order(start: :desc) }
   scope :upcoming, -> { where('start > ?', Time.current).order(start: :desc) }

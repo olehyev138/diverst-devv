@@ -14,19 +14,34 @@
       <%= f.simple_fields_for :answers, @answers do |a| %>
         <div class="card">
           <div class="card__section card__section--border">
-            <h3>Question #<%= a.index + 1 %></h3>
+            <h3>Answer #<%= a.index + 1 %></h3>
             <p><%= a.object.content %> - <em><%= a.object.author.name %></em></p>
           </div>
           <div class="card__section card__section--border">
+            <h4>Planning</h4>
             <%= a.input :outcome %>
-            <%= a.input :value, wrapper: :currency %>
-            <label class="field__label">Financial benefit</label>
+            <%= a.input :supporting_document, as: :file %>
+          </div>
+          <div class="card__section card__section--border">
+            <h4>Financials</h4>
+            <label class="field__label">Benefit type</label>
             <div class="segmented-control">
               <a class="segmented-control__item<%= " segmented-control__item--is-selected" if a.object.benefit_type == 0 %>" data-value="0">Revenue</a>
               <a class="segmented-control__item<%= " segmented-control__item--is-selected" if a.object.benefit_type == 1 %>" data-value="1">Cost saving</a>
               <%= a.input :benefit_type, as: :hidden %>
             </div>
-            <%= a.input :supporting_document, as: :file %>
+            <%= a.input :value, wrapper: :currency, label: "Base amount" %>
+          </div>
+          <div class="card__section card__section--border">
+            <div id="fields">
+              <%= a.simple_fields_for :expenses, a.object.expenses do |e| %>
+                <%= render 'expense_fields', f: e %>
+              <% end %>
+            </div>
+
+            <div class="link">
+              <%= link_to_add_association "Add an expense", a, :expenses %>
+            </div>
           </div>
         </div>
       <% end %>

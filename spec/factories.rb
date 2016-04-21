@@ -1,4 +1,7 @@
 FactoryGirl.define do
+  factory :event_attendance do
+    
+  end
   factory :sample do
     
   end

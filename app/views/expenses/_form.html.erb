@@ -1,0 +1,23 @@
+<div class="content__main">
+  <%= simple_form_for @expense do |f| %>
+
+    <div class="card">
+      <div class="card__section card__section--border">
+        <p class="field__hint">Start off by giving your expense a <strong>name</strong></p>
+        <%= f.input :name, label: false, placeholder: "Trip to HQ" %>
+      </div>
+
+      <div class="card__section card__section--border">
+        <p class="field__hint">What is the <strong>cost</strong> of a single unit?</p>
+        <%= f.input :price, label: false, placeholder: "4500" %>
+      </div>
+
+      <div class="card__section card__section--border">
+        <p class="field__hint">Choose a <strong>category</strong> to group this expense in</p>
+        <%= f.input :category, collection: Expense.categories, label: false, include_blank: false %>
+      </div>
+    </div>
+
+    <%= f.button :submit %>
+  <% end %>
+</div>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160413074434) do
+ActiveRecord::Schema.define(version: 20160420234149) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -19,6 +19,12 @@ ActiveRecord::Schema.define(version: 20160413074434) do
     t.integer  "answer_id",  limit: 4
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
+  end
+
+  create_table "answer_expenses", force: :cascade do |t|
+    t.integer "answer_id",  limit: 4
+    t.integer "expense_id", limit: 4
+    t.integer "quantity",   limit: 4
   end
 
   create_table "answer_upvotes", force: :cascade do |t|
@@ -140,6 +146,24 @@ ActiveRecord::Schema.define(version: 20160413074434) do
     t.text     "cdo_message",              limit: 65535
   end
 
+  create_table "event_attendances", force: :cascade do |t|
+    t.integer  "event_id",   limit: 4
+    t.integer  "user_id",    limit: 4
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  create_table "event_comments", force: :cascade do |t|
+    t.integer "event_id", limit: 4
+    t.integer "user_id",  limit: 4
+    t.text    "content",  limit: 65535
+  end
+
+  create_table "event_invitees", force: :cascade do |t|
+    t.integer "event_id", limit: 4
+    t.integer "user_id",  limit: 4
+  end
+
   create_table "events", force: :cascade do |t|
     t.string   "title",                limit: 255
     t.text     "description",          limit: 65535
@@ -160,6 +184,13 @@ ActiveRecord::Schema.define(version: 20160413074434) do
   create_table "events_segments", force: :cascade do |t|
     t.integer "event_id",   limit: 4
     t.integer "segment_id", limit: 4
+  end
+
+  create_table "expenses", force: :cascade do |t|
+    t.integer "enterprise_id", limit: 4
+    t.string  "name",          limit: 255
+    t.integer "price",         limit: 4
+    t.string  "category",      limit: 255
   end
 
   create_table "fields", force: :cascade do |t|
@@ -311,21 +342,6 @@ ActiveRecord::Schema.define(version: 20160413074434) do
     t.integer  "pillar_id",         limit: 4
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
-  end
-
-  create_table "initiatives_fields", force: :cascade do |t|
-    t.integer "initiative_id", limit: 4
-    t.integer "field_id",      limit: 4
-  end
-
-  create_table "initiatives_groups", force: :cascade do |t|
-    t.integer "initiative_id", limit: 4
-    t.integer "group_id",      limit: 4
-  end
-
-  create_table "initiatives_users", force: :cascade do |t|
-    t.integer "initiative_id", limit: 4
-    t.integer "user_id",       limit: 4
   end
 
   create_table "invitation_segments_groups", force: :cascade do |t|

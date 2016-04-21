@@ -27,6 +27,10 @@ class User < ActiveRecord::Base
   has_many :news_links, through: :groups
   has_many :messages, through: :groups
   has_many :events, through: :groups
+  has_many :event_attendances
+  has_many :attending_events, through: :event_attendances, source: :event
+  has_many :event_invitees
+  has_many :invited_events, through: :event_invitees, source: :event
   has_many :managed_groups, foreign_key: :manager_id, class_name: 'Group'
   has_many :samples
 

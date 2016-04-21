@@ -71,7 +71,14 @@ Rails.application.routes.draw do
     end
 
     scope module: :groups do
-      resources :events
+      resources :events do
+        resource :attendance do
+          get 'erg_graph'
+          get 'segment_graph'
+        end
+        resources :comments
+      end
+
       resources :news_links
       resources :resources
       resources :fields do
@@ -184,6 +191,8 @@ Rails.application.routes.draw do
       get 'top_performers'
     end
   end
+
+  resources :expenses
 
   devise_scope :user do
     namespace :user do
