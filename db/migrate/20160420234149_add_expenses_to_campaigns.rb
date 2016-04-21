@@ -5,6 +5,7 @@ class AddExpensesToCampaigns < ActiveRecord::Migration
       t.string :name
       t.integer :price
       t.string :category
+      t.boolean :income, default: false
     end
 
     create_table :answer_expenses do |t|

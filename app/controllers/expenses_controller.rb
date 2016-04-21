@@ -32,7 +32,7 @@ class ExpensesController < ApplicationController
   def update
     authorize @expense
     if @expense.update(expense_params)
-      redirect_to @expense
+      redirect_to action: :index
     else
       render :edit
     end

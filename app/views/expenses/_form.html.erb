@@ -3,7 +3,7 @@
 
     <div class="card">
       <div class="card__section card__section--border">
-        <p class="field__hint">Start off by giving your expense a <strong>name</strong></p>
+        <p class="field__hint">Start off by giving your item a <strong>name</strong></p>
         <%= f.input :name, label: false, placeholder: "Trip to HQ" %>
       </div>
 
@@ -13,11 +13,28 @@
       </div>
 
       <div class="card__section card__section--border">
-        <p class="field__hint">Choose a <strong>category</strong> to group this expense in</p>
+        <p class="field__hint">Choose a <strong>category</strong> to group this item in</p>
         <%= f.input :category, collection: Expense.categories, label: false, include_blank: false %>
+      </div>
+
+      <div class="card__section card__section--border">
+        <p class="field__hint">What is the <strong>nature</strong> of this item?</p>
+        <div class="segmented-control">
+          <a class="segmented-control__item<%= " segmented-control__item--is-selected" if f.object.income %>" data-value="1">Income</a>
+          <a class="segmented-control__item<%= " segmented-control__item--is-selected" if !f.object.income %>" data-value="0">Expense</a>
+          <%= f.input :income, as: :hidden, wrapper_html: { style: "display: none" } %>
+        </div>
       </div>
     </div>
 
     <%= f.button :submit %>
   <% end %>
 </div>
+
+<script>
+  $('.segmented-control__item').click(function() {
+    $(this).parent().find('.segmented-control__item').removeClass('segmented-control__item--is-selected');
+    $(this).addClass('segmented-control__item--is-selected');
+    $(this).parent().find('input').val($(this).data('value'));
+  });
+</script>
