@@ -6,7 +6,7 @@ class Groups::AttendancesController < ApplicationController
   layout 'erg'
 
   def show
-    @attendees = @event.attendees.page(params[:page])
+    @attendances = @event.event_attendances.includes(:user)
   end
 
   def create
