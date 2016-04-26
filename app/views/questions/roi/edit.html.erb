@@ -33,14 +33,13 @@
             <%= a.input :value, wrapper: :currency, label: "Base amount" %>
           </div>
           <div class="card__section card__section--border">
-            <div id="fields">
+            <div id="expenses">
               <%= a.simple_fields_for :expenses, a.object.expenses do |e| %>
                 <%= render 'expense_fields', f: e %>
               <% end %>
-            </div>
-
-            <div class="link">
-              <%= link_to_add_association "Add an expense", a, :expenses %>
+              <div class="link">
+                <%= link_to_add_association "Add an expense", a, :expenses %>
+              </div>
             </div>
           </div>
         </div>
@@ -56,5 +55,28 @@
     $(this).parent().find('.segmented-control__item').removeClass('segmented-control__item--is-selected');
     $(this).addClass('segmented-control__item--is-selected');
     $(this).parent().find('input').val($(this).data('value'));
+  });
+
+  var addIcon = function(o) {
+    if (!o.id)
+      return o.text; // optgroup
+    else
+      return '<img src="' + $(o.element).data('icon-url') + '" class="icon icon--large"> ' + o.text;
+  };
+
+  var initExpenseSelect = function($el) {
+    $el.select2({
+      templateSelection: addIcon,
+      templateResult: addIcon,
+      escapeMarkup: function(m) {
+        return m;
+      }
+    });
+  };
+
+  initExpenseSelect($('.js-expense-select'));
+
+  $('#expenses').on('cocoon:after-insert', function(e, insertedItem) {
+    initExpenseSelect(insertedItem.find('.js-expense-select'));
   });
 </script>

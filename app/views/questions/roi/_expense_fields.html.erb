@@ -3,7 +3,7 @@
     <div class="flex-row__cell flex-row__cell--grow">
       <div class="field">
         <div class="field__input-wrapper">
-          <%= f.association :expense, label: "Expense type", include_blank: false %>
+          <%= f.association :expense, label: "Expense type", include_blank: false, input_html: { class: "js-expense-select select2" }, collection: current_user.enterprise.expenses.all.map{ |expense| [expense.name, expense.id, {"data-icon-url" => image_url("icons/financial/#{expense.icon_name}.png") }] } %>
         </div>
       </div>
     </div>
