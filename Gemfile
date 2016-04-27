@@ -89,7 +89,7 @@ group :development do
   gem 'bullet'
   gem 'parallel_tests'
   gem 'meta_request' # Necessary for rails_panel Chrome extension
-  gem 'flamegraph'
+  # gem 'flamegraph'
   # gem 'rack-mini-profiler'
   # gem 'stackprof'
 end

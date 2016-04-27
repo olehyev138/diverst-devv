@@ -16,17 +16,73 @@
 <div class="content__main">
   <div class="card">
     <div class="card__section">
-      <% if @event.picture.exists? %>
-        <div style="background-image: url(<%= @event.picture.expiring_url(3600) %>); height: 300px; background-size: 100%; background-position: center; margin-bottom: 35px;"></div>
-      <% end %>
-      <h4>Description</h4>
-      <p><%= @event.description %></p>
-      <h4>Date &amp; time</h4>
-      <p><%= @event.time_string %></p>
-      <h4>Location</h4>
-      <p><%= @event.location %></p>
+      <div class="row">
+        <div class="col sm-8">
+          <% if @event.picture.exists? %>
+            <div style="background-image: url(<%= @event.picture.expiring_url(3600) %>); height: 300px; background-size: 100%; background-position: center; margin-bottom: 35px;"></div>
+          <% end %>
+          <h4>Description</h4>
+          <p><%= @event.description %></p>
+          <h4>Date &amp; time</h4>
+          <p><%= @event.time_string %></p>
+          <h4>Location</h4>
+          <p><%= @event.location %></p>
+        </div>
+        <div class="col sm-4">
+          <h4>Attendees (<%= @event.attendees.count %>)</h4>
+          <p>
+            <% @event.attendees.limit(10).each do |attendee| %>
+              <%= attendee.name %><br>
+            <% end %>
+            <%= link_to "View #{@event.attendees.count - 10} more...", group_event_attendance_path(@group, @event) if @event.attendees.count > 10 %>
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 
-  <a href="#" class="btn btn--primary">Join event</a>
+  <a href="#" class="btn btn--primary js-join-event" data-joined="<%= current_user.attending_events.include? @event %>"><%= current_user.attending_events.include?(@event) ? "Leave event" : "Join event" %></a>
 </div>
+
+<div class="content__header" style="margin-top: 30px;">
+  <h1>Comments</h1>
+</div>
+
+<% if @comment.persisted? %>
+  <div class="content__section">
+    <div class="card">
+      <div class="card__section">
+        <p>You left the following comment:</p>
+        <p style="font-style: italic;"><%= @comment.content %></p>
+        <p>Thank you for your feedback.</p>
+      </div>
+    </div>
+  </div>
+<% else %>
+  <div class="content__section">
+    <div class="card">
+      <div class="card__section">
+        <p>Tell us about what you learned during this event, what you liked / disliked, etc.</p>
+        <%= simple_form_for [@group, @event, @comment], url: group_event_comments_path(@group.id, @event.id) do |f| %>
+          <%= f.input :content, label: false %>
+          <%= f.button :submit, value: "Submit" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<script>
+  $('.js-join-event').click(function() {
+    if ($(this).data('joined')) {
+      $.ajax({ url: '<%= group_event_attendance_path(@group, @event) %>', type: 'DELETE' });
+      $(this).data('joined', false)
+      $(this).text('Join event')
+    }
+    else {
+      $.ajax({ url: '<%= group_event_attendance_path(@group, @event) %>', type: 'POST' });
+      $(this).data('joined', true)
+      $(this).text('Leave event')
+    }
+  });
+</script>

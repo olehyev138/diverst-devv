@@ -1,7 +1,6 @@
 class Enterprise < ActiveRecord::Base
   include ContainsResources
 
-  has_many :admins, inverse_of: :enterprise
   has_many :users, inverse_of: :enterprise
   has_many :graph_fields, as: :container, class_name: 'Field'
   has_many :fields, -> { where elasticsearch_only: false }, as: :container
@@ -24,6 +23,7 @@ class Enterprise < ActiveRecord::Base
   has_many :emails
   belongs_to :theme
   has_many :policy_groups
+  has_many :expenses
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :mobile_fields, reject_if: :all_blank, allow_destroy: true

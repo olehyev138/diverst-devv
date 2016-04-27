@@ -1,0 +1,45 @@
+<div class="content__header">
+  <h1>Financial database</h1>
+  <%= link_to "New Item", new_expense_path, class: "btn btn--primary" if policy(Expense).new? %>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <% if @expenses.empty? %>
+        <p>There are no items yet. <%= link_to "Create one", new_expense_path %> to start tracking your campaigns' ROI more efficiently.</p>
+      <% else %>
+        <table class="table--has-border" id="expenses-table">
+          <thead>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Type</th>
+            <th>Options</th>
+          </thead>
+          <tbody>
+            <% @expenses.each do |expense| %>
+              <tr>
+                <td><%= expense.name %></td>
+                <td><%= number_to_currency expense.price %></td>
+                <td><%= image_tag "icons/financial/#{expense.icon_name}.png", class: "icon icon--large" %> <%= expense.category %></td>
+                <td><%= expense.income? ? "Income" : "Expense" %></td>
+                <td><%= link_to "Edit", edit_expense_path(expense) if policy(expense).edit? %> - <%= link_to "Delete", expense_path(expense), method: :delete, class: "error", data: { confirm: "Are you sure?" }  if policy(expense).destroy? %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).on('page:change', function() {
+    $(document).off('page:change');
+
+    $('#expenses-table').dataTable(Utility.mergeWithDTDefaults({
+      order: [[2, "desc"]]
+    }));
+  });
+</script>

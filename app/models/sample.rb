@@ -5,43 +5,33 @@ class Sample < ActiveRecord::Base
   include Elasticsearch::Model
 
   after_commit on: [:create] do
-    __elasticsearch__.index_document(index: user.enterprise.es_samples_index_name)
+    IndexElasticsearchJob.perform_later(
+      model_name: 'Sample',
+      operation: 'index',
+      index: user.enterprise.es_samples_index_name,
+      record_id: id
+    )
   end
 
   after_commit on: [:update] do
-    __elasticsearch__.update_document(index: user.enterprise.es_samples_index_name)
+    IndexElasticsearchJob.perform_later(
+      model_name: 'Sample',
+      operation: 'update',
+      index: user.enterprise.es_samples_index_name,
+      record_id: id
+    )
   end
 
   after_commit on: [:destroy] do
-    __elasticsearch__.delete_document(index: user.enterprise.es_samples_index_name)
-  end
-
-  # Deletes the ES index, creates a new one and imports all users in it
-  def self.reset_elasticsearch(enterprise:)
-    index = enterprise.es_samples_index_name
-
-    begin
-      Sample.__elasticsearch__.client.indices.delete index: index
-    rescue
-      nil
-    end
-
-    Sample.__elasticsearch__.client.indices.create(
-      index: index,
-      body: {
-        settings: Sample.settings.to_hash,
-        mappings: Sample.custom_mapping.to_hash
-      }
-    )
-
-    # We don't directly call Sample.import since activerecord-import overrides that
-    Sample.__elasticsearch__.import(
-      index: index,
-      query: -> {
-        joins(:user).where(users: { enterprise_id: enterprise.id })
-      }
+    IndexElasticsearchJob.perform_later(
+      model_name: 'Sample',
+      operation: 'delete',
+      index: user.enterprise.es_samples_index_name,
+      record_id: id
     )
   end
+
+  scope :es_index_for_enterprise, -> (enterprise) { joins(:user).where(users: { enterprise_id: enterprise.id }) }
 
   # Add the combined info from both the user's fields and his/her poll answers to ES
   def as_indexed_json(*)

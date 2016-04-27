@@ -83,7 +83,13 @@ class QuestionsController < ApplicationController
           :outcome,
           :value,
           :benefit_type,
-          :supporting_document
+          :supporting_document,
+          expenses_attributes: [
+            :id,
+            :_destroy,
+            :expense_id,
+            :quantity
+          ]
         ]
       )
   end

@@ -1,0 +1,63 @@
+<div class="content__header">
+  <h1>
+    <%= link_to "Events", group_events_path(@group) %> /
+    <%= link_to @event.title, [@group, @event] %> /
+    Attendees
+  </h1>
+</div>
+
+<div class="content__main">
+
+  <div class="row row--equal-height">
+
+    <div class="col sm-12 md-6">
+      <div class="card">
+        <div class="card__section">
+          <h4>Attendance by ERG</h4>
+          <div class="graph js-erg-graph"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col sm-12 md-6">
+      <div class="card">
+        <div class="card__section">
+          <h4>Attendance by segment</h4>
+          <div class="graph js-segment-graph"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <div class="card__section">
+      <table class="table--has-border" id="attendees-table">
+        <thead>
+          <th>Name</th>
+          <th>Date joined</th>
+        </thead>
+        <tbody>
+          <% @attendances.each do |attendance| %>
+            <tr>
+              <td><%= link_to attendance.user.name, user_path(attendance.user) %></td>
+              <td><%= attendance.created_at.to_s :reversed_slashes %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  $('#attendees-table').dataTable(Utility.mergeWithDTDefaults({
+    order: [[1, "desc"]]
+  }));
+
+  var url = '<%= erg_graph_group_event_attendance_path(@group, @event) %>';
+  new Graph(url, $('.js-erg-graph').eq(0));
+
+  var url = '<%= segment_graph_group_event_attendance_path(@group, @event) %>';
+  new Graph(url, $('.js-segment-graph').eq(0));
+</script>

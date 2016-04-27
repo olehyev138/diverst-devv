@@ -4,9 +4,9 @@ class User::EventsController < ApplicationController
   layout 'user'
 
   def index
-    @upcoming_events = current_user.events.upcoming
-    @past_events = current_user.events.past.page(0)
-    @ongoing_events = current_user.events.ongoing
+    @upcoming_events = current_user.events.upcoming + current_user.invited_events.upcoming
+    @past_events = current_user.events.past + current_user.invited_events.past
+    @ongoing_events = current_user.events.ongoing + current_user.invited_events.ongoing
   end
 
   protected

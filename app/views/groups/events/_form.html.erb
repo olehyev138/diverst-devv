@@ -1,7 +1,7 @@
-<div class="content__main">
-  <div class="card">
-    <div class="card__section">
-      <%= simple_form_for [@group, @event] do |f| %>
+<%= simple_form_for [@group, @event] do |f| %>
+  <div class="content__main">
+    <div class="card">
+      <div class="card__section card__section--border">
         <%= f.input :title %>
         <%= f.input :description %>
         <%= f.input :start %>
@@ -10,12 +10,15 @@
         <%= f.association :segments, collection: @group.enterprise.segments, input_html: { class: "select2" } %>
         <%= f.input :max_attendees %>
         <%= f.input :picture, as: :file %>
-
+      </div>
+      <div class="card__section card__section--border">
+        <p>Choose the <strong>external members</strong> you want to invite</p>
+        <%= f.association :attendees, collection: @group.enterprise.users, input_html: { class: "select2" }, label: false %>
         <%= f.button :submit %>
-      <% end %>
+      </div>
     </div>
   </div>
-</div>
+<% end %>
 
 <script>
   $('.select2').select2();

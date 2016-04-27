@@ -27,6 +27,10 @@ class User < ActiveRecord::Base
   has_many :news_links, through: :groups
   has_many :messages, through: :groups
   has_many :events, through: :groups
+  has_many :event_attendances
+  has_many :attending_events, through: :event_attendances, source: :event
+  has_many :event_invitees
+  has_many :invited_events, through: :event_invitees, source: :event
   has_many :managed_groups, foreign_key: :manager_id, class_name: 'Group'
   has_many :samples
 
@@ -37,15 +41,30 @@ class User < ActiveRecord::Base
   after_create :assign_firebase_token
 
   after_commit on: [:create] do
-    __elasticsearch__.index_document(index: enterprise.es_users_index_name)
+    IndexElasticsearchJob.perform_later(
+      model_name: 'User',
+      operation: 'index',
+      index: enterprise.es_users_index_name,
+      record_id: id
+    )
   end
 
   after_commit on: [:update] do
-    __elasticsearch__.update_document(index: enterprise.es_users_index_name)
+    IndexElasticsearchJob.perform_later(
+      model_name: 'User',
+      operation: 'update',
+      index: enterprise.es_users_index_name,
+      record_id: id
+    )
   end
 
   after_commit on: [:destroy] do
-    __elasticsearch__.delete_document(index: enterprise.es_users_index_name)
+    IndexElasticsearchJob.perform_later(
+      model_name: 'User',
+      operation: 'delete',
+      index: enterprise.es_users_index_name,
+      record_id: id
+    )
   end
 
   scope :for_segments, -> (segments) { joins(:segments).where('segments.id' => segments.map(&:id)).distinct if segments.any? }
@@ -53,6 +72,7 @@ class User < ActiveRecord::Base
   scope :answered_poll, -> (poll) { joins(:poll_responses).where(poll_responses: { poll_id: poll.id }) }
   scope :top_participants, -> (n) { order(participation_score_7days: :desc).limit(n) }
   scope :not_owners, -> { where(owner: false) }
+  scope :es_index_for_enterprise, -> (enterprise) { where(enterprise: enterprise) }
 
   def name
     "#{first_name} #{last_name}"
@@ -192,31 +212,6 @@ class User < ActiveRecord::Base
         properties: {}
       }
     }
-  end
-
-  # Deletes the ES index, creates a new one and imports all users in it
-  def self.reset_elasticsearch(enterprise:)
-    index = enterprise.es_users_index_name
-
-    begin
-      User.__elasticsearch__.client.indices.delete index: index
-    rescue
-      nil
-    end
-
-    User.__elasticsearch__.client.indices.create(
-      index: index,
-      body: {
-        settings: User.settings.to_hash,
-        mappings: User.custom_mapping.to_hash
-      }
-    )
-
-    # We don't directly call User.import since activerecord-import overrides that
-    User.__elasticsearch__.import(
-      index: index,
-      query: -> { where(enterprise: enterprise) }
-    )
   end
 
   # Updates this user's match scores with all other enterprise users
