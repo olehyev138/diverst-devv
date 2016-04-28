@@ -30,6 +30,8 @@ set :sidekiq_config, 'config/sidekiq.yml'
 set :sidekiq_log, '/dev/null'
 set :sidekiq_processes, 1
 
+set :clockwork_file, "clock.rb"
+
 namespace :deploy do
 
   desc 'Recompile all enterprise themes'

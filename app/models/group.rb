@@ -15,7 +15,7 @@ class Group < ActiveRecord::Base
   has_many :campaigns, through: :campaigns_groups
   has_many :questions, through: :campaigns
   has_many :answers, through: :questions
-  has_many :answer_upvotes, through: :answers
+  has_many :answer_upvotes, through: :answers, source: :votes
   has_many :groups_managers
   has_many :managers, through: :groups_managers, source: :user
   belongs_to :lead_manager, class_name: "User"

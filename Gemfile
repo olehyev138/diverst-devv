@@ -55,6 +55,7 @@ gem 'activerecord-import'
 gem 'inline_svg'
 gem 'pundit'
 gem 'draper'
+gem 'daemons' # For capistrano-clockwork
 
 group :development, :test do
   gem 'spring', '~> 1.6.2' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
@@ -83,6 +84,7 @@ group :development do
   gem 'capistrano-bower'
   gem 'capistrano-rails-console'
   gem 'capistrano-sidekiq'
+  gem 'capistrano-clockwork'
   gem 'spring-commands-rspec'
   gem 'better_errors'
   gem 'binding_of_caller'
