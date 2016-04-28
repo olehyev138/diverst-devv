@@ -2,7 +2,7 @@ class SyncYammerGroupJob < ActiveJob::Base
   queue_as :default
 
   def perform(group)
-    return if !group.enterprise,yammer_token
+    return if !group.enterprise.yammer_token
 
     yammer = YammerClient.new(group.enterprise.yammer_token)
 
