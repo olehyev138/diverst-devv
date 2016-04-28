@@ -2,6 +2,8 @@ class SyncYammerGroupJob < ActiveJob::Base
   queue_as :default
 
   def perform(group)
+    return if !group.enterprise,yammer_token
+
     yammer = YammerClient.new(group.enterprise.yammer_token)
 
     # Subscribe users who are part of the ERG in Diverst to the Yammer group

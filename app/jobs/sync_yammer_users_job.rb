@@ -3,7 +3,8 @@ class SyncYammerUsersJob < ActiveJob::Base
 
   def perform
     Enterprise.where(yammer_import: true).each do |enterprise|
-      next if enterprise.yammer_token.blank? # Check if the enterprise has setup their Yammer integration
+      next if !enterprise.yammer_token # Check if the enterprise has setup their Yammer integration
+
       yammer_users = HTTParty.get 'https://www.yammer.com/api/v1/users.json', headers: {
         'Authorization' => "Bearer #{enterprise.yammer_token}"
       }
