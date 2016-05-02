@@ -7,6 +7,7 @@ class Event < ActiveRecord::Base
   has_many :event_invitees
   has_many :invitees, through: :event_invitees, source: :user
   has_many :comments, class_name: "EventComment"
+  has_many :fields, as: :container
 
   scope :past, -> { where('end < ?', Time.current).order(start: :desc) }
   scope :upcoming, -> { where('start > ?', Time.current).order(start: :desc) }
@@ -14,6 +15,8 @@ class Event < ActiveRecord::Base
 
   has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('missing.png'), s3_permissions: :private
   validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
+
+  accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
 
   def time_string
     if start.to_date == self.end.to_date # If the event starts and ends on the same day
