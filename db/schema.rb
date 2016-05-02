@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160420234149) do
+ActiveRecord::Schema.define(version: 20160428205109) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -159,6 +159,11 @@ ActiveRecord::Schema.define(version: 20160420234149) do
     t.text    "content",  limit: 65535
   end
 
+  create_table "event_fields", force: :cascade do |t|
+    t.integer "field_id", limit: 4
+    t.integer "event_id", limit: 4
+  end
+
   create_table "event_invitees", force: :cascade do |t|
     t.integer "event_id", limit: 4
     t.integer "user_id",  limit: 4
@@ -191,6 +196,7 @@ ActiveRecord::Schema.define(version: 20160420234149) do
     t.string  "name",          limit: 255
     t.integer "price",         limit: 4
     t.string  "category",      limit: 255
+    t.boolean "income",                    default: false
   end
 
   create_table "fields", force: :cascade do |t|

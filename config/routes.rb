@@ -198,6 +198,8 @@ Rails.application.routes.draw do
     namespace :user do
       root to: 'dashboard#home'
 
+      get 'rewards', to: 'dashboard#rewards'
+
       resources :news_links
       resources :messages
       resources :events

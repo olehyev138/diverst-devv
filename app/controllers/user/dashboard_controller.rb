@@ -8,4 +8,7 @@ class User::DashboardController < ApplicationController
     @news_links = current_user.news_links.limit(3)
     @messages = current_user.messages.limit(3)
   end
+
+  def rewards
+  end
 end
