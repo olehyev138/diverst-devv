@@ -6,7 +6,7 @@ class ExpensesController < ApplicationController
 
   def index
     authorize Expense
-    @expenses = policy_scope(Expense)
+    @expenses = policy_scope(Expense).includes(:category)
   end
 
   def new
@@ -56,7 +56,8 @@ class ExpensesController < ApplicationController
       .permit(
         :name,
         :price,
-        :category
+        :category,
+        :income
       )
   end
 end

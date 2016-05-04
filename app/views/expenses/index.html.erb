@@ -1,6 +1,14 @@
 <div class="content__header">
   <h1>Financial database</h1>
-  <%= link_to "New Item", new_expense_path, class: "btn btn--primary" if policy(Expense).new? %>
+
+  <div class="flex-row">
+    <div class="flex-row__cell">
+      <%= link_to "Manage categories", expense_categories_path, class: "btn btn--secondary" if policy(ExpenseCategory).index? %>
+    </div>
+    <div class="flex-row__cell">
+      <%= link_to "New Item", new_expense_path, class: "btn btn--primary" if policy(Expense).new? %>
+    </div>
+  </div>
 </div>
 
 <div class="content__main">
@@ -22,7 +30,7 @@
               <tr>
                 <td><%= expense.name %></td>
                 <td><%= number_to_currency expense.price %></td>
-                <td><%= image_tag "icons/financial/#{expense.icon_name}.png", class: "icon icon--large" %> <%= expense.category %></td>
+                <td><%= image_tag expense.category.icon.url(:thumb), class: "icon icon--large" %> <%= expense.category.name %></td>
                 <td><%= expense.income? ? "Income" : "Expense" %></td>
                 <td><%= link_to "Edit", edit_expense_path(expense) if policy(expense).edit? %> - <%= link_to "Delete", expense_path(expense), method: :delete, class: "error", data: { confirm: "Are you sure?" }  if policy(expense).destroy? %></td>
               </tr>

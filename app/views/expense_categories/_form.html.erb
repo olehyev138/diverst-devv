@@ -1,0 +1,17 @@
+<div class="content__main">
+  <%= simple_form_for @expense_category do |f| %>
+
+    <div class="card">
+      <div class="card__section card__section--border">
+        <p class="field__hint">Give your category a <strong>name</strong></p>
+        <%= f.input :name, label: false, placeholder: "Travel" %>
+      </div>
+      <div class="card__section card__section--border">
+        <p class="field__hint">Optionally upload an <strong>icon</strong> that represents the category</p>
+        <%= f.input :icon, as: :file, label: false %>
+      </div>
+    </div>
+
+    <%= f.button :submit %>
+  <% end %>
+</div>

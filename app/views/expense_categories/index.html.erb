@@ -1,0 +1,39 @@
+<div class="content__header">
+  <h1>Item categories</h1>
+  <%= link_to "New Category", new_expense_category_path, class: "btn btn--primary" if policy(ExpenseCategory).new? %>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <% if @expense_categories.empty? %>
+        <p>There are no categories yet. <%= link_to "Create one", new_expense_category_path %> to start tracking your campaigns' ROI more efficiently.</p>
+      <% else %>
+        <table class="table--has-border" class="js-expense-categories-table">
+          <thead>
+            <th>Name</th>
+            <th>Options</th>
+          </thead>
+          <tbody>
+            <% @expense_categories.each do |category| %>
+              <tr>
+                <td><%= category.name %></td>
+                <td><%= link_to "Edit", edit_expense_category_path(category) if policy(category).edit? %> - <%= link_to "Delete", expense_category_path(category), method: :delete, class: "error", data: { confirm: "Are you sure?" }  if policy(category).destroy? %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).on('page:change', function() {
+    $(document).off('page:change');
+
+    $('.js-expense-categories-table').dataTable(Utility.mergeWithDTDefaults({
+      order: [[2, "desc"]]
+    }));
+  });
+</script>

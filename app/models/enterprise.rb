@@ -24,6 +24,7 @@ class Enterprise < ActiveRecord::Base
   belongs_to :theme
   has_many :policy_groups
   has_many :expenses
+  has_many :expense_categories
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :mobile_fields, reject_if: :all_blank, allow_destroy: true

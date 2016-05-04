@@ -1,11 +1,5 @@
 class Expense < ActiveRecord::Base
   belongs_to :enterprise
-
-  def self.categories
-    ["Capital", "Office supplies", "Transportation", "Shipping", "Information technology", "Telecommunications", "Labor", "Real estate", "Services", "Training"]
-  end
-
-  def icon_name
-    self.category.parameterize
-  end
+  belongs_to :category, class_name: "ExpenseCategory"
+  has_many :answer_expenses
 end

@@ -193,6 +193,7 @@ Rails.application.routes.draw do
   end
 
   resources :expenses
+  resources :expense_categories
 
   devise_scope :user do
     namespace :user do
