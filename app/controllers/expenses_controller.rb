@@ -56,7 +56,7 @@ class ExpensesController < ApplicationController
       .permit(
         :name,
         :price,
-        :category,
+        :category_id,
         :income
       )
   end

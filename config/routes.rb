@@ -175,6 +175,10 @@ Rails.application.routes.draw do
     resources :questions, shallow: true do
       resources :answers, shallow: true do
         resources :answer_comments, path: 'comments', shallow: true
+
+        member do
+          get 'breakdown'
+        end
       end
 
       scope module: :questions do
