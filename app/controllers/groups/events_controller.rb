@@ -1,6 +1,6 @@
 class Groups::EventsController < ApplicationController
   before_action :set_group
-  before_action :set_event, only: [:edit, :update, :destroy, :show]
+  before_action :set_event, only: [:edit, :update, :destroy, :show, :export_ics]
 
   layout 'erg'
 
@@ -39,6 +39,19 @@ class Groups::EventsController < ApplicationController
   def destroy
     @event.destroy
     redirect_to action: :index
+  end
+
+  def export_ics
+    cal = Icalendar::Calendar.new
+    cal.event do |e|
+      e.dtstart     = @event.start
+      e.dtend       = @event.end
+      e.summary     = @event.title
+      e.description = @event.description
+      e.ip_class    = "PRIVATE"
+    end
+
+    send_data cal.to_ical, filename: "#{@event.title.parameterize}.ics", disposition: 'attachment'
   end
 
   protected

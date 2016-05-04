@@ -56,6 +56,7 @@ gem 'inline_svg'
 gem 'pundit'
 gem 'draper'
 gem 'daemons' # For capistrano-clockwork
+gem 'icalendar'
 
 group :development, :test do
   gem 'spring', '~> 1.6.2' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring

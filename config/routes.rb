@@ -76,7 +76,12 @@ Rails.application.routes.draw do
           get 'erg_graph'
           get 'segment_graph'
         end
+
         resources :comments
+
+        member do
+          get 'export_ics'
+        end
       end
 
       resources :news_links
