@@ -209,6 +209,7 @@ Rails.application.routes.draw do
       root to: 'dashboard#home'
 
       get 'rewards', to: 'dashboard#rewards'
+      get 'bias', to: 'dashboard#bias'
 
       resources :news_links
       resources :messages
