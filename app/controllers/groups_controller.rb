@@ -1,5 +1,5 @@
 class GroupsController < ApplicationController
-  before_action :set_group, except: [:index, :new, :create]
+  before_action :set_group, except: [:index, :new, :create, :plan_overview]
   skip_before_action :verify_authenticity_token, only: [:create]
   after_action :verify_authorized
 
@@ -10,6 +10,11 @@ class GroupsController < ApplicationController
   def index
     authorize Group
     @groups = current_user.enterprise.groups
+  end
+
+  def plan_overview
+    authorize Group, :index?
+    @groups = current_user.enterprise.groups.includes(:initiatives)
   end
 
   def new
@@ -128,7 +133,7 @@ class GroupsController < ApplicationController
       'erg'
     when 'metrics'
       'plan'
-    when 'edit_fields'
+    when 'edit_fields', 'plan_overview'
       'plan'
     else
       'erg_manager'

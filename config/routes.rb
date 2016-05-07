@@ -124,6 +124,10 @@ Rails.application.routes.draw do
       get 'metrics'
       get 'edit_fields'
     end
+
+    collection do
+      get 'plan_overview'
+    end
   end
 
   resources :news_links, only: [] do
