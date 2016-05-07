@@ -58,7 +58,7 @@ module Optionnable
     end
 
     execute_elasticsearch_query(
-      index: container.enterprise.es_users_index_name,
+      index: User.es_index_name(enterprise: container.class == Enterprise ? container : container.enterprise),
       segments: segments,
       search_hash: {
         aggs: aggs
@@ -81,7 +81,7 @@ module Optionnable
     )
 
     execute_elasticsearch_query(
-      index: container.enterprise.es_samples_index_name,
+      index: Sample.es_index_name(enterprise: container.enterprise),
       segments: segments,
       search_hash: {
         aggs: aggs

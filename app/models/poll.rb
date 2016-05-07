@@ -14,8 +14,6 @@ class Poll < ActiveRecord::Base
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
 
-  delegate :es_users_index_name, to: :enterprise # Necessary to be a field container. Fields will refer `container.es_users_index_name` to this to get the elasticsearch index
-
   # Returns the list of users who have answered the poll
   def graphs_population
     User.answered_poll(self)

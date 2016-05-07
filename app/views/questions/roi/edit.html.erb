@@ -34,7 +34,7 @@
           </div>
           <div class="card__section card__section--border">
             <div id="expenses">
-              <%= a.simple_fields_for :expenses, a.object.expenses do |e| %>
+              <%= a.simple_fields_for :expenses, a.object.expenses.includes(expense: :category) do |e| %>
                 <%= render 'expense_fields', f: e %>
               <% end %>
               <div class="link">
