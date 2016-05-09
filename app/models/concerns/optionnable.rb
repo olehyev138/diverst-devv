@@ -201,7 +201,7 @@ module Optionnable
         }
 
         others = Elasticsearch::Model.client.search(
-          index: container.enterprise.es_users_index_name,
+          index: User.es_index_name(enterprise: container.class == Enterprise ? container : container.enterprise),
           body: others_hash,
           search_type: 'count'
         )
