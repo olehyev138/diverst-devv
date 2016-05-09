@@ -3,7 +3,7 @@
     <div class="flex-row__cell flex-row__cell--grow">
       <div class="field">
         <div class="field__input-wrapper">
-          <%= f.association :expense, label: false, include_blank: false, input_html: { class: "js-expense-select select2" }, collection: current_user.enterprise.expenses.all.map{ |expense| [expense.name, expense.id, {"data-icon-url" => expense.category.icon.url(:thumb) }] } %>
+          <%= f.association :expense, label: false, include_blank: false, input_html: { class: "js-expense-select select2" }, collection: current_user.enterprise.expenses.all.map{ |expense| [expense.name, expense.id, {"data-icon-url" => expense.category.icon.expiring_url(3600, :thumb) }] } %>
         </div>
       </div>
     </div>
