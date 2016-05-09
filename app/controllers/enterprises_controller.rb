@@ -18,8 +18,12 @@ class EnterprisesController < ApplicationController
     authorize @enterprise
   end
 
+  def bias
+    authorize @enterprise, :update?
+  end
+
   def edit_cdo
-    authorize @enterprise, :edit?
+    authorize @enterprise, :update?
   end
 
   def edit_mobile_fields
@@ -65,6 +69,8 @@ class EnterprisesController < ApplicationController
   def resolve_layout
     case action_name
     when 'edit_algo', 'edit_mobile_fields'
+      'handshake'
+    when 'bias'
       'handshake'
     else
       'global_settings'

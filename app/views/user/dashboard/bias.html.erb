@@ -11,7 +11,12 @@
       <div class="row">
         <div class="col sm-3">
           <h3>ERG</h3>
-          <% current_user.enterprise.groups.each do |group| %>
+          <% current_user.enterprise.groups[0..current_user.enterprise.groups.count/2 - 1].each do |group| %>
+            <label class="control"><input type="checkbox" class="control__input"><span class="control__indicator control__indicator--checkbox"></span> &nbsp;&nbsp;<%= group.name %></label>
+          <% end %>
+        </div>
+        <div class="col sm-3" style="padding-top: 35px;">
+          <% current_user.enterprise.groups[current_user.enterprise.groups.count/2..-1].each do |group| %>
             <label class="control"><input type="checkbox" class="control__input"><span class="control__indicator control__indicator--checkbox"></span> &nbsp;&nbsp;<%= group.name %></label>
           <% end %>
         </div>
@@ -32,7 +37,7 @@
       </div>
 
       <p style="margin-top: 30px;">
-        <strong style="margin-bottom: 15px; display: inline-block;">Severity of bias</strong>
+        <strong style="margin-bottom: 15px; display: inline-block;">Severity of bias: <span class="js-bias-severity"></span></strong>
         <span class="flex-row flex-row--middle">
           <span class="flex-row__cell">
             1
@@ -46,16 +51,25 @@
         </span>
       </p>
 
+      <p><a href="#">+ Add a bias</a></p>
+
       <a href="#" class="btn btn--primary">Submit</a>
     </div>
   </div>
 </div>
 
 <script>
-  $('input[type="range"]').rangeslider({
+  var $slider = $('input[type="range"]').eq(0);
+  $slider.rangeslider({
     polyfill: false,
     rangeClass: 'range-slider',
     fillClass: 'range-slider__line',
     handleClass: 'range-slider__handle',
+    onInit: function() {
+      $('.js-bias-severity').text($slider.val());
+    },
+    onSlide: function() {
+      $('.js-bias-severity').text($slider.val());
+    }
   });
 </script>

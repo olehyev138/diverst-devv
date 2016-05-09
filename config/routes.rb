@@ -55,6 +55,7 @@ Rails.application.routes.draw do
       get 'theme'
       patch 'update_branding'
       patch 'restore_default_branding'
+      get 'bias'
     end
 
     scope module: :enterprises do
