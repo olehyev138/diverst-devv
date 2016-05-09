@@ -57,7 +57,8 @@ class ExpenseCategoriesController < ApplicationController
         :name,
         :price,
         :category,
-        :income
+        :income,
+        :icon
       )
   end
 end
