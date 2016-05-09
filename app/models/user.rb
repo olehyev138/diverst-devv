@@ -44,7 +44,7 @@ class User < ActiveRecord::Base
     IndexElasticsearchJob.perform_later(
       model_name: 'User',
       operation: 'index',
-      index: enterprise.es_users_index_name,
+      index: User.es_index_name(enterprise: self.enterprise),
       record_id: id
     )
   end
@@ -53,7 +53,7 @@ class User < ActiveRecord::Base
     IndexElasticsearchJob.perform_later(
       model_name: 'User',
       operation: 'update',
-      index: enterprise.es_users_index_name,
+      index: User.es_index_name(enterprise: self.enterprise),
       record_id: id
     )
   end
@@ -62,7 +62,7 @@ class User < ActiveRecord::Base
     IndexElasticsearchJob.perform_later(
       model_name: 'User',
       operation: 'delete',
-      index: enterprise.es_users_index_name,
+      index: User.es_index_name(enterprise: self.enterprise),
       record_id: id
     )
   end
@@ -182,6 +182,11 @@ class User < ActiveRecord::Base
     self.firebase_token = @@fb_token_generator.create_token(payload, options)
     self.firebase_token_generated_at = Time.current
     save
+  end
+
+  # Returns the index name to be used in Elasticsearch to store this enterprise's users
+  def self.es_index_name(enterprise:)
+    "#{enterprise.id}_users"
   end
 
   # Add the combined info from both the user's fields and his/her poll answers to ES

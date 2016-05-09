@@ -29,6 +29,7 @@
     <%= active_link_to "Events", user_events_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
     <%= active_link_to "Groups", user_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
     <%= active_link_to "Rewards", user_rewards_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+    <%= active_link_to "Bias", user_bias_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
     <%= link_to "Log out", destroy_user_session_path, method: :delete, class: "secondary-header__tab" %>
   </header>
 

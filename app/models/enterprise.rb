@@ -24,6 +24,7 @@ class Enterprise < ActiveRecord::Base
   belongs_to :theme
   has_many :policy_groups
   has_many :expenses
+  has_many :expense_categories
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :mobile_fields, reject_if: :all_blank, allow_destroy: true
@@ -77,20 +78,10 @@ class Enterprise < ActiveRecord::Base
     User.to_csv(users: users, fields: fields, nb_rows: nb_rows)
   end
 
-  # Returns the index name to be used in Elasticsearch to store this enterprise's users
-  def es_users_index_name
-    "#{id}_users"
-  end
-
-  # Returns the index name to be used in Elasticsearch to store this enterprise's initiatives
-  def es_samples_index_name
-    "#{id}_samples"
-  end
-
   # Run an elasticsearch query on the enterprise's users
   def search_users(search_hash)
     Elasticsearch::Model.client.search(
-      index: es_users_index_name,
+      index: User.es_index_name(enterprise: self),
       body: search_hash,
       search_type: 'count'
     )

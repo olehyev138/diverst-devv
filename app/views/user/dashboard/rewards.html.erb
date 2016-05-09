@@ -1,5 +1,5 @@
 <div class="content__header">
-  <h1><span class="icon icon--large"><%= image_tag('linkedin.png') %></span> Rewards</h1>
+  <h1>Rewards</h1>
 </div>
 
 <div class="content__main">
@@ -10,12 +10,12 @@
       <div class="card">
         <div class="card__section">
 
-          <h4>Total points: 1,275</h4>
+          <h4>My points: 1,275</h4>
 
           <table class="table--has-border" id="campaigns-table">
             <thead>
               <th>Achievement</th>
-              <th>Reward</th>
+              <th>Points</th>
             </thead>
             <tbody>
               <tr><td>Attend event</td><td>200</td></tr>
@@ -34,7 +34,7 @@
       <div class="card">
         <div class="card__section">
 
-          <h4>Redeem</h4>
+          <h4><span class="icon icon--large" style="margin-bottom: 5px;"><%= image_tag('linkedin.png') %></span>Rewards</h4>
 
           <table class="table--has-border" id="campaigns-table">
             <thead>
@@ -46,7 +46,7 @@
               <tr><td><%= image_tag 'linkedin-full.png', style: "height: 24px; display: inline-block;" %> recommendation</td><td>500</td><td><label class="control"><input type="checkbox" class="control__input"><span class="control__indicator control__indicator--checkbox"></span></label></td></tr>
               <tr><td><%= image_tag 'linkedin-full.png', style: "height: 24px; display: inline-block;" %> fast track</td><td>2,000</td><td><label class="control"><input type="checkbox" class="control__input"><span class="control__indicator control__indicator--checkbox"></span></label></td></tr>
               <tr><td><%= image_tag 'linkedin-full.png', style: "height: 24px; display: inline-block;" %> advancement</td><td>2,000</td><td><label class="control"><input type="checkbox" class="control__input"><span class="control__indicator control__indicator--checkbox"></span></label></td></tr>
-              <tr><td><%= image_tag 'linkedin-full.png', style: "height: 24px; display: inline-block;" %> travel (Hawaii)</td><td>1,000</td><td><label class="control"><input type="checkbox" class="control__input"><span class="control__indicator control__indicator--checkbox"></span></label></td></tr>
+              <tr><td><%= image_tag 'linkedin-full.png', style: "height: 24px; display: inline-block;" %> executive mentorship</td><td>3,000</td><td><label class="control"><input type="checkbox" class="control__input"><span class="control__indicator control__indicator--checkbox"></span></label></td></tr>
             </tbody>
           </table>
 
@@ -56,5 +56,119 @@
       </div>
     </div>
 
+  </div>
+
+  <div class="card">
+    <div class="card__section">
+      <h3>Reward catalogue</h3>
+
+      <div class="row row--spacing-bottom">
+        <div class="col sm-4">
+          <div class="flex-row">
+            <div class="flex-row__cell">
+              <%= image_tag 'rewards/golf-bag.jpg', style: "width: 120px;" %>
+            </div>
+            <div class="flex-row__cell">
+              <h4>Golf bags</h4>
+              <p>
+                100 - 200 points<br>
+                <a href="#">Choose options...</a>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col sm-4">
+          <div class="flex-row">
+            <div class="flex-row__cell">
+              <%= image_tag 'rewards/gift-card.jpg', style: "width: 120px;" %>
+            </div>
+            <div class="flex-row__cell">
+              <h4>Gift cards</h4>
+              <p>
+                100 - 2000 points<br>
+                <a href="#">Choose options...</a>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col sm-4">
+          <div class="flex-row">
+            <div class="flex-row__cell">
+              <%= image_tag 'rewards/telescope.jpg', style: "width: 120px;" %>
+            </div>
+            <div class="flex-row__cell">
+              <h4>Telescope</h4>
+              <p>
+                150 - 275 points<br>
+                <a href="#">Choose options...</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row row--spacing-bottom">
+        <div class="col sm-4">
+          <div class="flex-row">
+            <div class="flex-row__cell">
+              <%= image_tag 'rewards/travel.jpg', style: "width: 120px;" %>
+            </div>
+            <div class="flex-row__cell">
+              <h4>Travel packages</h4>
+              <p>
+                2000 - 4500 points<br>
+                <a href="#">Choose options...</a>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col sm-4">
+          <div class="flex-row">
+            <div class="flex-row__cell">
+              <%= image_tag 'rewards/house.jpg', style: "width: 120px;" %>
+            </div>
+            <div class="flex-row__cell">
+              <h4>Weekend retreat</h4>
+              <p>
+                500 - 800 points<br>
+                <a href="#">Choose options...</a>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col sm-4">
+          <div class="flex-row">
+            <div class="flex-row__cell">
+              <%= image_tag 'rewards/gopro.jpg', style: "width: 120px;" %>
+            </div>
+            <div class="flex-row__cell">
+              <h4>GoPro</h4>
+              <p>
+                150 - 200 points<br>
+                <a href="#">Choose options...</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row row--spacing-bottom">
+        <div class="col sm-4">
+          <div class="flex-row">
+            <div class="flex-row__cell">
+              <%= image_tag 'rewards/macbook.jpg', style: "width: 120px;" %>
+            </div>
+            <div class="flex-row__cell">
+              <h4>Laptops</h4>
+              <p>
+                1250 - 2400 points<br>
+                <a href="#">Choose options...</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 </div>

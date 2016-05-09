@@ -55,6 +55,7 @@ Rails.application.routes.draw do
       get 'theme'
       patch 'update_branding'
       patch 'restore_default_branding'
+      get 'bias'
     end
 
     scope module: :enterprises do
@@ -76,7 +77,12 @@ Rails.application.routes.draw do
           get 'erg_graph'
           get 'segment_graph'
         end
+
         resources :comments
+
+        member do
+          get 'export_ics'
+        end
       end
 
       resources :news_links
@@ -118,6 +124,10 @@ Rails.application.routes.draw do
       post 'parse_csv'
       get 'metrics'
       get 'edit_fields'
+    end
+
+    collection do
+      get 'plan_overview'
     end
   end
 
@@ -175,6 +185,10 @@ Rails.application.routes.draw do
     resources :questions, shallow: true do
       resources :answers, shallow: true do
         resources :answer_comments, path: 'comments', shallow: true
+
+        member do
+          get 'breakdown'
+        end
       end
 
       scope module: :questions do
@@ -193,12 +207,14 @@ Rails.application.routes.draw do
   end
 
   resources :expenses
+  resources :expense_categories
 
   devise_scope :user do
     namespace :user do
       root to: 'dashboard#home'
 
       get 'rewards', to: 'dashboard#rewards'
+      get 'bias', to: 'dashboard#bias'
 
       resources :news_links
       resources :messages

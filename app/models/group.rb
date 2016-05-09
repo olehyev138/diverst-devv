@@ -100,8 +100,8 @@ class Group < ActiveRecord::Base
 
   private
 
+  # Create the group in Yammer
   def create_yammer_group
-    # Create the group in Yammer
     yammer = YammerClient.new(enterprise.yammer_token)
     group = yammer.create_group(
       name: name,

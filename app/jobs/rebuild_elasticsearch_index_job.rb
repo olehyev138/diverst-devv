@@ -2,8 +2,8 @@ class RebuildElasticsearchIndexJob < ActiveJob::Base
   queue_as :default
 
   def perform(model_name:, enterprise:)
-    index = enterprise.es_samples_index_name
     model = model_name.constantize
+    index = model.es_index_name(enterprise: enterprise)
 
     begin
       model.__elasticsearch__.client.indices.delete index: index

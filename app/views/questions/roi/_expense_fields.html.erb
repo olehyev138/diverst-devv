@@ -3,14 +3,17 @@
     <div class="flex-row__cell flex-row__cell--grow">
       <div class="field">
         <div class="field__input-wrapper">
-          <%= f.association :expense, label: "Expense type", include_blank: false, input_html: { class: "js-expense-select select2" }, collection: current_user.enterprise.expenses.all.map{ |expense| [expense.name, expense.id, {"data-icon-url" => image_url("icons/financial/#{expense.icon_name}.png") }] } %>
+          <%= f.association :expense, label: false, include_blank: false, input_html: { class: "js-expense-select select2" }, collection: current_user.enterprise.expenses.all.map{ |expense| [expense.name, expense.id, {"data-icon-url" => expense.category.icon.url(:thumb) }] } %>
         </div>
       </div>
     </div>
     <div class="flex-row__cell">
+      &#215;
+    </div>
+    <div class="flex-row__cell">
       <div class="field">
         <div class="field__input-wrapper">
-          <%= f.input :quantity %>
+          <%= f.input :quantity, label: false, placeholder: "How many?" %>
         </div>
       </div>
     </div>

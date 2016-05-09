@@ -8,7 +8,7 @@ class Sample < ActiveRecord::Base
     IndexElasticsearchJob.perform_later(
       model_name: 'Sample',
       operation: 'index',
-      index: user.enterprise.es_samples_index_name,
+      index: Sample.es_index_name(enterprise: user.enterprise),
       record_id: id
     )
   end
@@ -17,7 +17,7 @@ class Sample < ActiveRecord::Base
     IndexElasticsearchJob.perform_later(
       model_name: 'Sample',
       operation: 'update',
-      index: user.enterprise.es_samples_index_name,
+      index: Sample.es_index_name(enterprise: user.enterprise),
       record_id: id
     )
   end
@@ -26,12 +26,17 @@ class Sample < ActiveRecord::Base
     IndexElasticsearchJob.perform_later(
       model_name: 'Sample',
       operation: 'delete',
-      index: user.enterprise.es_samples_index_name,
+      index: Sample.es_index_name(enterprise: user.enterprise),
       record_id: id
     )
   end
 
   scope :es_index_for_enterprise, -> (enterprise) { joins(:user).where(users: { enterprise_id: enterprise.id }) }
+
+  # Returns the index name to be used in Elasticsearch to store this enterprise's users
+  def self.es_index_name(enterprise:)
+    "#{enterprise.id}_samples"
+  end
 
   # Add the combined info from both the user's fields and his/her poll answers to ES
   def as_indexed_json(*)

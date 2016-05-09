@@ -171,6 +171,6 @@ after :enterprise do
     user.save
   end
 
-  User.reset_elasticsearch(enterprise: enterprise)
+  RebuildElasticsearchIndexJob.perform_now(model_name: 'User', enterprise: enterprise)
   puts "Importing users [DONE]"
 end

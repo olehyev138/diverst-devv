@@ -1,0 +1,34 @@
+<div class="content__header">
+  <h1>Overview</h1>
+</div>
+
+<div class="content__main">
+  <% @groups.each do |group| %>
+    <div class="card">
+      <div class="card__section">
+        <h3><%= group.name %></h3>
+        <table class="table--has-border">
+          <thead>
+            <th>Initiative</th>
+            <th>Estimated funding</th>
+            <th>Spent so far</th>
+          </thead>
+          <tbody>
+            <% group.initiatives.each do |initiative| %>
+              <tr>
+                <td><%= initiative.name %></td>
+                <td><%= number_to_currency initiative.estimated_funding, precision: 0 %></td>
+                <td><%= number_to_currency initiative.expenses.sum(:amount), precision: 0 %></td>
+              </tr>
+            <% end %>
+            <tr class="highlight">
+              <td>Total for <%= group.name %></td>
+              <td><%= number_to_currency group.initiatives.sum(:estimated_funding), precision: 0 %></td>
+              <td><%= number_to_currency group.initiatives.map{ |i| i.expenses.sum(:amount) }.sum, precision: 0 %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% end %>
+</div>
