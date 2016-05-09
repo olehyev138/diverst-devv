@@ -75,7 +75,24 @@ class Groups::EventsController < ApplicationController
         :location,
         :max_attendees,
         :picture,
-        segment_ids: []
+        :attendee_ids,
+        segment_ids: [],
+        fields_attributes: [
+          :id,
+          :title,
+          :_destroy,
+          :gamification_value,
+          :show_on_vcard,
+          :saml_attribute,
+          :type,
+          :match_exclude,
+          :match_weight,
+          :match_polarity,
+          :min,
+          :max,
+          :options_text,
+          :alternative_layout
+        ]
       )
   end
 end
