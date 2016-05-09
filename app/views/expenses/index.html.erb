@@ -30,7 +30,7 @@
               <tr>
                 <td><%= expense.name %></td>
                 <td><%= number_to_currency expense.price %></td>
-                <td><%= image_tag expense.category.icon.url(:thumb), class: "icon icon--large" %> <%= expense.category.name %></td>
+                <td><%= image_tag expense.category.icon.expiring_url(3600, :thumb), class: "icon icon--large" %> <%= expense.category.name %></td>
                 <td><%= expense.income? ? "Income" : "Expense" %></td>
                 <td><%= link_to "Edit", edit_expense_path(expense) if policy(expense).edit? %> - <%= link_to "Delete", expense_path(expense), method: :delete, class: "error", data: { confirm: "Are you sure?" }  if policy(expense).destroy? %></td>
               </tr>
