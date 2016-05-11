@@ -4,7 +4,7 @@ class BiasesController < ApplicationController
   layout :resolve_layout
 
   def index
-    @biases = current_user.enterprise.biases
+    @biases = current_user.enterprise.biases.includes(:user)
 
     @claims = @biases.map{ |bias|
       bias.groups_from.pluck(:name).map{ |group_from|
@@ -64,6 +64,7 @@ class BiasesController < ApplicationController
       .permit(
         :anonymous,
         :severity,
+        :description,
         groups_from_ids: [],
         groups_to_ids: []
       )
