@@ -25,6 +25,7 @@ class Enterprise < ActiveRecord::Base
   has_many :policy_groups
   has_many :expenses
   has_many :expense_categories
+  has_many :biases, through: :users, class_name: "Bias"
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :mobile_fields, reject_if: :all_blank, allow_destroy: true

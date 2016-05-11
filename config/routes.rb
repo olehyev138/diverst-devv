@@ -34,6 +34,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :biases
+
   get 'integrations', to: 'integrations#index'
 
   resources :enterprises do

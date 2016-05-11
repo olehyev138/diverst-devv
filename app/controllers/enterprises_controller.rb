@@ -71,7 +71,7 @@ class EnterprisesController < ApplicationController
     when 'edit_algo', 'edit_mobile_fields'
       'handshake'
     when 'bias'
-      'handshake'
+      'bias'
     else
       'global_settings'
     end

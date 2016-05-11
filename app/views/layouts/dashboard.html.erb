@@ -48,7 +48,7 @@
         </li>
       <% end %>
       <li class="nav__item">
-        <%= active_link_to bias_enterprise_path(current_user.enterprise), class: "nav__link", class_active: "nav__link--is-selected", active: [['enterprises'], ['bias']] do %>
+        <%= active_link_to biases_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['enterprises'], ['bias']] do %>
           <%= inline_svg('icons/meet.svg', class: "icon nav__icon") %>
           <span class="nav__text">Bias</span>
         <% end %>

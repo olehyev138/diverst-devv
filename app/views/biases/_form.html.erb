@@ -1,0 +1,62 @@
+<div class="content__main">
+  <%= simple_form_for @bias do |f| %>
+    <div class="card">
+      <div class="card__section">
+        <%= f.input :anonymous, label: "I want to remain anonymous", wrapper: :boolean_toggle %>
+        <p>Where have you seen unconscious bias in your organization? (your entries will be kept strictly confidential)</p>
+
+        <div class="row">
+          <div class="col sm-6">
+            <h3>From</h3>
+            <%= f.association :groups_from, input_html: { class: "select2" }, label: "Groups" %>
+            <%= f.association :groups_from, input_html: { class: "select2" }, label: "Office locations" %>
+            <%= f.association :groups_from, input_html: { class: "select2" }, label: "Departments" %>
+          </div>
+          <div class="col sm-6">
+            <h3>Against</h3>
+            <%= f.association :groups_to, input_html: { class: "select2" }, label: "Groups" %>
+            <%= f.association :groups_to, input_html: { class: "select2" }, label: "Office locations" %>
+            <%= f.association :groups_to, input_html: { class: "select2" }, label: "Departments" %>
+          </div>
+        </div>
+
+        <p style="margin-top: 20px;">
+          <strong style="margin-bottom: 15px; display: inline-block;">Severity of bias: <span class="js-bias-severity"></span></strong>
+          <span class="flex-row flex-row--middle">
+            <span class="flex-row__cell">
+              1
+            </span>
+            <span class="flex-row__cell flex-row__cell--grow">
+              <%= f.input_field :severity, as: :range, min: 1, max: 10 %>
+            </span>
+            <span class="flex-row__cell">
+              10
+            </span>
+          </span>
+        </p>
+
+        <%= f.button :submit, value: "Submit bias", style: "margin-top: 30px;" %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<% content_for :page_scripts do %>
+  <script>
+    $('.select2').select2();
+
+    var $slider = $('input[type="range"]').eq(0);
+    $slider.rangeslider({
+      polyfill: false,
+      rangeClass: 'range-slider',
+      fillClass: 'range-slider__line',
+      handleClass: 'range-slider__handle',
+      onInit: function() {
+        $('.js-bias-severity').text($slider.val());
+      },
+      onSlide: function() {
+        $('.js-bias-severity').text($slider.val());
+      }
+    });
+  </script>
+<% end %>

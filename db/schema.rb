@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160504201636) do
+ActiveRecord::Schema.define(version: 20160511055323) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -49,6 +49,26 @@ ActiveRecord::Schema.define(version: 20160504201636) do
     t.string   "supporting_document_content_type", limit: 255
     t.integer  "supporting_document_file_size",    limit: 4
     t.datetime "supporting_document_updated_at"
+  end
+
+  create_table "biases", force: :cascade do |t|
+    t.integer  "user_id",    limit: 4
+    t.text     "from_data",  limit: 65535
+    t.text     "to_data",    limit: 65535
+    t.boolean  "anonymous"
+    t.integer  "severity",   limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "biases_from_groups", force: :cascade do |t|
+    t.integer "group_id", limit: 4
+    t.integer "bias_id",  limit: 4
+  end
+
+  create_table "biases_to_groups", force: :cascade do |t|
+    t.integer "group_id", limit: 4
+    t.integer "bias_id",  limit: 4
   end
 
   create_table "campaign_invitations", force: :cascade do |t|
@@ -192,8 +212,12 @@ ActiveRecord::Schema.define(version: 20160504201636) do
   end
 
   create_table "expense_categories", force: :cascade do |t|
-    t.integer  "enterprise_id", limit: 4
-    t.string   "name",          limit: 255
+    t.integer  "enterprise_id",     limit: 4
+    t.string   "name",              limit: 255
+    t.string   "icon_file_name",    limit: 255
+    t.string   "icon_content_type", limit: 255
+    t.integer  "icon_file_size",    limit: 4
+    t.datetime "icon_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
