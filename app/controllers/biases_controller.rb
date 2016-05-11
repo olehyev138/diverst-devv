@@ -1,7 +1,7 @@
 class BiasesController < ApplicationController
   before_action :set_bias, only: [:edit, :update, :destroy, :show]
 
-  layout 'bias'
+  layout :resolve_layout
 
   def index
     @biases = current_user.enterprise.biases
@@ -44,6 +44,15 @@ class BiasesController < ApplicationController
   end
 
   protected
+
+  def resolve_layout
+    case action_name
+    when 'new'
+      'user'
+    else
+      'bias'
+    end
+  end
 
   def set_bias
     @bias = @group.biases.find(params[:id])

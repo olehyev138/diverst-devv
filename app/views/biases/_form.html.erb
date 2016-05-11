@@ -27,7 +27,7 @@
               1
             </span>
             <span class="flex-row__cell flex-row__cell--grow">
-              <%= f.input_field :severity, as: :range, min: 1, max: 10 %>
+              <%= f.input_field :severity, as: :range, min: 1, max: 10, input_html: { class: 'js-bias-severity' } %>
             </span>
             <span class="flex-row__cell">
               10
@@ -41,22 +41,20 @@
   <% end %>
 </div>
 
-<% content_for :page_scripts do %>
-  <script>
-    $('.select2').select2();
+<script>
+  $('.select2').select2();
 
-    var $slider = $('input[type="range"]').eq(0);
-    $slider.rangeslider({
-      polyfill: false,
-      rangeClass: 'range-slider',
-      fillClass: 'range-slider__line',
-      handleClass: 'range-slider__handle',
-      onInit: function() {
-        $('.js-bias-severity').text($slider.val());
-      },
-      onSlide: function() {
-        $('.js-bias-severity').text($slider.val());
-      }
-    });
-  </script>
-<% end %>
+  var $slider = $('input[type="range"]').eq(0);
+  $slider.rangeslider({
+    polyfill: false,
+    rangeClass: 'range-slider',
+    fillClass: 'range-slider__line',
+    handleClass: 'range-slider__handle',
+    onInit: function() {
+      $('.js-bias-severity').text($slider.val());
+    },
+    onSlide: function() {
+      $('.js-bias-severity').text($slider.val());
+    }
+  });
+</script>
