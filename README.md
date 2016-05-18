@@ -1,165 +1,38 @@
-# Getting started
+# Setting up your development environment
 
+The first thing we need to do is provision a VM using Vagrant. You'll need [VirtualBox](https://www.virtualbox.org/) and [Vagrant](https://www.vagrantup.com/downloads.html) installed on your machine for this. You'll also need two vagrant plugins:
+
+```bash
+vagrant plugin install vagrant-librarian-chef
+vagrant plugin install vagrant-rsync-back
 ```
+
+At this point, you should be able to provision the machine (this will take a while, as in ~20 minutes):
+
+```bash
 vagrant up
+```
+
+You should now have a fully-provisionned Ubuntu box ready to run Diverst. The next step is to make sure files from your host machine get continuously synced to the guest machine. For this, open a new terminal tab and run the following command:
+
+```bash
+vagrant rsync-auto
+```
+
+Leave this running while you develop. You can now SSH into the machine by running:
+
+```bash
 vagrant ssh
 ```
 
-In the vagrant machine:
+Once you're logged into the VM, You'll need to run a few things to setup the app and the DB:
 
+```bash
+bundle # Install all dependencies
+rake db:create db:migrate db:seed # Create, migrate and seed the development DB
+RAILS_ENV=test bundle exec rails db:create # Create the test DB
+sudo redis-server /etc/redis/6379.conf # Launch a redis server
+bundle exec sidekiq -C config/sidekiq -d -L ~/log/sidekiq.log # Run a sidekiq worker daemon
+nohup bundle exec guard >/dev/null 2>&1 & # Run guard for livereload
+rails s # Launch the Rails server (Puma)
 ```
-echo "cd /vagrant" >> /home/vagrant/.bashrc
-mkdir ~/log
-touch ~/log/sidekiq.yml
-cd /vagrant
-rake db:create db:migrate db:seed
-sudo redis-server /etc/redis/6379.conf
-bundle exec sidekiq -C config/sidekiq -d -L ~/log/sidekiq.log
-nohup bundle exec guard >/dev/null 2>&1 &
-rails s
-```
-
-# API Doc
-
-Technical API reference documentation for Diverst
-
-## Authentication
-
-### Login
-
-POST to */users/auth/sign_in* with the following parameters:
-
-```json
-{
-  "email": "john@example.com",
-  "password": "s3cr3t"
-}
-```
-
-You will get the logged in user as a response. All the authentication parameters will be in the response's header. They are: `access-token`, `client` and `uid`. Include these 3 headers in your next request to authenticate it.
-
-### Validation
-
-Call GET */users/auth/validate_token* with your auth headers to see if your token is valid. If it is valid, it also returns the user (useful to update it locally).
-
-## Matches
-
-### GET /matches
-
-Returns a list of the top 10 potential matches for the authenticated user.
-
-### PUT /matches/:id/swipe
-
-Swipes a match. Accepted is 1 and rejected is 2.
-
-**Request parameters**
-```json
-{
-  "swipe": {
-    "choice": 1
-  }
-}
-```
-
-## Conversations
-
-The conversation list and its associated CRUD operations are managed by the API, but the atual conversation messages are stored in Firebase to simplify mobile development.
-
-### GET /conversations
-
-Returns the list of active conversations (matches that have been accepted by both users and initialised into Firebase conversations). The `saved` attribute defines if the conversation has been opted in by both people or not yet.
-
-### PUT /conversations/:id/opt_in
-
-Opts in to a conversation (makes it permanent). Users have to opt in or out of conversations or else they get deleted after x days. It's like a trial to see if you connect well with the other person. You also rate your interaction with the other from 1 to 5.
-
-**Request parameters**
-```json
-{
-  "rating": 5
-}
-```
-
-### PUT /conversations/:id/leave
-
-Leave a conversation during a trial. You need to rate the user you were trying out even though you're opting out.
-
-### DELETE /conversations/:id
-
-Leave a conversation that is already saved (both have opted in). It will notify the other user that he's been ditched.
-
-**Request parameters**
-```json
-{
-  "rating": 1
-}
-```
-
-### Firebase
-
-Once a match is accepted, it is transformed in a conversation and is stored in Firebase. Conversations are stored in `https://diverst.firebaseio.com/conversations`. They are indexed by the ID they have been assigned when created on our API.
-
-For example, when match #12 gets swiped by both users, it becomes conversation #12 on the server and the corresponding entry is created in Firebase at `https://diverst.firebaseio.com/conversations/12`.
-
-Here is an example of a conversation object in Firebase that shows the desired structure for messages:
-
-```json
-{
-  "messages": [{
-    "content": "Allo papa",
-    "date": 1234567890,
-    "sender": 5
-  }, {
-    "content": "ben oui",
-    "date": 1234567890,
-    "sender": 12
-  }],
-  "users": [5, 12]
-}
-```
-
-To store the send date/time of a message, use Firebase's [server timestamps](https://www.firebase.com/docs/ios/guide/offline-capabilities.html#section-latency).
-
-## Devices
-
-We track multiple devices per user to handle push notifications. The idea would be to add the device to the user's list of devices the first time he uses it and delete it when the user logs out (?).
-
-### GET /devices
-
-Get the list of the user's devices.
-
-### POST /devices
-
-Create a new device for the authenticated user. The accepted values for platform (I don't actually check) will be `apple`, `android` and `web`.
-
-**Request parameters**
-```json
-{
-  "device": {
-    "token": "dsakjhdsakjhdaslksfgh ksdfh lkdsajkdfas",
-    "platform": "apple"
-  }
-}
-```
-
-### POST /devices
-
-Create a new device for the authenticated user. The accepted values for platform (I don't actually check) will be `apple`, `android` and `web`. The API will ignore your request if you try to add a device with a token that has already been registered with this user.
-
-**Request parameters**
-```json
-{
-  "device": {
-    "token": "dsakjhdsakjhdaslksfgh ksdfh lkdsajkdfas",
-    "platform": "apple"
-  }
-}
-```
-
-### DELETE /devices/:token
-
-Deletes a device by its push token (not its id).
-
-### POST /devices/:id/test_notif
-
-Sends a test notification to the specified device. This is just to see if the push setup works.

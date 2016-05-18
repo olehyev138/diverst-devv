@@ -17,6 +17,7 @@
 //= require cocoon
 //= require select2
 //= require highcharts
+//= require highcharts/highcharts-more
 //= require sparklines
 //= require rangeslider.js/dist/rangeslider
 //= require Sortable

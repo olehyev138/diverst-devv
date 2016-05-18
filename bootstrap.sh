@@ -15,5 +15,8 @@ echo "http.cors.allow-origin: /https?:\/\/localhost(:[0-9]+)?/" >> /etc/elastics
 echo "script.inline: on" >> /etc/elasticsearch/elasticsearch.yml
 echo "script.indexed: on" >> /etc/elasticsearch/elasticsearch.yml
 
-# Install the Head plugin
+# Install the Head elasticsearch plugin
 /usr/share/elasticsearch/bin/plugin install mobz/elasticsearch-head
+
+# Create a logfile for sidekiq (crashes if it's not created beforehand)
+mkdir /home/vagrant/log && touch /home/vagrant/log/sidekiq.yml

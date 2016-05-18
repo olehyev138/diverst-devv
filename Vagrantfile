@@ -83,6 +83,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
    }
   end
 
+  # In addition to using Chef, we run a couple of custom provisioning commands
+  config.vm.provision :shell, path: "bootstrap.sh"
+
   # Use rsync for shared folders (much faster)
   config.vm.synced_folder ".", "/vagrant", type: "rsync"
 
