@@ -91,6 +91,7 @@ class EnterprisesController < ApplicationController
         :idp_slo_target_url,
         :idp_cert,
         :yammer_import,
+        :cdo_message,
         :cdo_name,
         :cdo_title,
         :cdo_picture,

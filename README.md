@@ -29,8 +29,9 @@ Once you're logged into the VM, You'll need to run a few things to setup the app
 
 ```bash
 bundle # Install all dependencies
+rake bower:install # Install bower javascript vendors
 rake db:create db:migrate db:seed # Create, migrate and seed the development DB
-RAILS_ENV=test bundle exec rails db:create # Create the test DB
+RAILS_ENV=test bundle exec rake db:create # Create the test DB
 sudo redis-server /etc/redis/6379.conf # Launch a redis server
 bundle exec sidekiq -C config/sidekiq -d -L ~/log/sidekiq.log # Run a sidekiq worker daemon
 nohup bundle exec guard >/dev/null 2>&1 & # Run guard for livereload
