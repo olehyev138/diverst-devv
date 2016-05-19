@@ -16,7 +16,9 @@
         <tbody>
           <% @resources.each do |resource| %>
             <tr>
-              <td class="icon-column"><a href="<%= resource.file.expiring_url(3600) %>" class="icon icon--bg icon--large" style="background-image: url(<%= thumbnail_for_resource(resource) %>)"></a></td>
+              <td class="icon-column">
+                <a href="<%= resource.file.expiring_url(3600) %>" class="icon icon--bg icon--large" style="background-image: url(<%= thumbnail_for_resource(resource) %>)"></a>
+              </td>
               <td><%= link_to resource.title, resource.file.expiring_url(3600), target: '_blank' %></td>
               <td><%= resource.created_at.to_s :reversed_slashes %></td>
               <td>
@@ -30,3 +32,15 @@
     </div>
   </div>
 </div>
+
+
+
+<script>
+  $(document).on('page:change', function() {
+    $(document).off('page:change');
+
+    $('#resources-table').dataTable(Utility.mergeWithDTDefaults({
+      order: [[2  , "desc"]]
+    }));
+  });
+</script>
