@@ -37,7 +37,7 @@
               <h4 class="card__title"><%= inline_svg('icons/calendar.svg', class: "icon card__icon") %>Upcoming Events</h4>
               <%= link_to "View all", group_events_path(@group), class: "card__action" %>
 
-              <% @events.each do |event| %>
+              <% @upcoming_events.each do |event| %>
                 <%= link_to group_events_path(@group), class: "block block-section" do %>
                   <div class="flex-row flex-row--middle">
                     <div class="flex-row__cell flex-row__cell--grow">
