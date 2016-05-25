@@ -25,7 +25,7 @@ class GroupsController < ApplicationController
   def show
     authorize @group
 
-    @events = @group.events.limit(3)
+    @upcoming_events = @group.events.upcoming.limit(3)
     @news_links = @group.news_links.limit(3)
     @user_groups = @group.user_groups.order(created_at: :desc).includes(:user).limit(8)
     @messages = @group.messages.limit(3)
