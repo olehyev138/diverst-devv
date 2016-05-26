@@ -5,7 +5,7 @@ class AnswersController < ApplicationController
 
   def update
     if @answer.update(answer_params)
-      head 200
+      head :no_content #204
     else
       head 500
     end
