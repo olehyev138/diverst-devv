@@ -14,21 +14,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     if host =~ /darwin/ # OS X
       # sysctl returns bytes, convert to MB
       v.memory = `sysctl -n hw.memsize`.to_i / 1024 / 1024 / 2
-      v.cpus = `sysctl -n hw.ncpu`.to_i
+      v.cpus = `sysctl -n hw.ncpu`.to_i / 2
     elsif host =~ /linux/ # Linux
       # meminfo returns kilobytes, convert to MB
       v.memory = `grep 'MemTotal' /proc/meminfo | sed -e 's/MemTotal://' -e 's/ kB//'`.to_i / 1024 / 2
-      v.cpus = `nproc`.to_i
+      v.cpus = `nproc`.to_i / 2
     end
 
     # Fix for Rails not autoreloading: https://github.com/rails/rails/issues/16678#issuecomment-113058925
     v.customize ["guestproperty", "set", :id, "--timesync-threshold", 5000]
   end
 
-  # Forward the Rails server default port to the host
-  config.vm.network :forwarded_port, guest: 3000, host: 3000
-  config.vm.network :forwarded_port, guest: 9200, host: 9200
-  config.vm.network :forwarded_port, guest: 35729, host: 35729
+  # Create a private network instead of forwarding ports to prevent CPU spike: https://www.virtualbox.org/ticket/14137#comment:17
+  config.vm.network "private_network", ip: "192.168.3.4"
 
   # Use Chef Solo to provision the VM
   config.vm.provision :chef_solo do |chef|
