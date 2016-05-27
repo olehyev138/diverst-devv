@@ -37,3 +37,9 @@ bundle exec sidekiq -C config/sidekiq -d -L ~/log/sidekiq.log # Run a sidekiq wo
 nohup bundle exec guard >/dev/null 2>&1 & # Run guard for livereload
 rails s # Launch the Rails server (Puma)
 ```
+
+
+You'll want to create an entry in your hosts file e.g.:`192.168.3.4 vagrant.dev` to access the webapp in your browser using [http://vagrant.dev:3000](http://vagrant.dev:3000). You won't be able to access it through localhost like before.
+
+
+

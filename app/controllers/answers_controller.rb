@@ -5,7 +5,7 @@ class AnswersController < ApplicationController
 
   def update
     if @answer.update(answer_params)
-      head 200
+      render json: @answer
     else
       head 500
     end
