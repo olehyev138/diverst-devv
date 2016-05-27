@@ -47,7 +47,7 @@
               <span class="counter__number"><%= answer.upvote_count %></span>
             </div>
             <div class="chosen">
-              <a href="#" class="star-button" data-answer-id="<%= answer.id %>" data-starred="<%= answer.chosen %>" title="Star this answer"><%= inline_svg('icons/star-purple.svg', class: "icon-inline#{ answer.chosen ? ' icon-inline--yellow' : '' }") %></span></a>
+              <a href="#" class="star-button" data-answer-id="<%= answer.id %>" data-starred="<%= answer.chosen %>" data-last-known-state="<%= answer.chosen %>" title="Star this answer"><%= inline_svg('icons/star-purple.svg', class: "icon-inline#{ answer.chosen ? ' icon-inline--yellow' : '' }") %></span></a>
             </div>
           </div>
 
@@ -100,9 +100,9 @@
     e.preventDefault();
 
     var star = $(this);
-    var business_case_link = star.closest('.card__section').find('.business-case');
+    var businessCaseLink = star.closest('.card__section').find('.business-case');
     var answerId = star.data('answer-id');
-    var isStarred = !star.data('starred');
+    var isStarred = star.data('starred');
 
     $.ajax({
       url: '/answers/' + answerId + '.json',
@@ -110,19 +110,30 @@
       dataType: 'json',
       data: {
         answer: {
-          chosen: isStarred
+          chosen: !isStarred
         }
       },
+      error: function(data){
+        setState(star.data('last-known-state'));
+      },
       success: function(data){
-        if (isStarred) {
-          business_case_link.removeClass('hidden');
-        } else {
-          business_case_link.addClass('hidden');
-        }
-        star.data('starred', !star.data('starred'));
-        star.children('svg').attr('class', 'icon-inline' + (isStarred ? ' icon-inline--yellow' : ''));
+        setState(data.chosen);
+        star.data('last-known-state', data.chosen);
       }
     });
+
+    setState(!isStarred);
+
+
+    function setState(state){
+      if (state) {
+        businessCaseLink.removeClass('hidden');
+      } else {
+        businessCaseLink.addClass('hidden');
+      }
+      star.data('starred', state);
+      star.children('svg').attr('class', 'icon-inline' + (state ? ' icon-inline--yellow' : ''));
+    }
 
   });
 </script>
