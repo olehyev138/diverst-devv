@@ -11,6 +11,11 @@ class AnswersController < ApplicationController
     end
   end
 
+  def destroy
+    @answer.destroy
+    redirect_to :back
+  end
+
   protected
 
   def set_answer

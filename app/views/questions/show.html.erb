@@ -62,7 +62,10 @@
               </div>
             </div>
             <div class="answer__content">
-              <p><%= answer.content %></p>
+              <p>
+                <%= answer.content %> &mdash;
+                <%= link_to "Delete", answer_path(answer), method: :delete, class: 'error', data: { confirm: "Are you sure?" } %>
+              </p>
 
               <% answer.comments.each do |comment| %>
                 <div class="comment">
