@@ -12,6 +12,7 @@
           <%= f.input :email %>
           <%= f.input :first_name %>
           <%= f.input :last_name %>
+          <%= f.input :job_title %>
 
           <% current_user.enterprise.fields.each do |cf| %>
             <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: resource %>

@@ -294,10 +294,10 @@ class User < ActiveRecord::Base
   # Export a CSV with the specified users
   def self.to_csv(users:, fields:, nb_rows: nil)
     CSV.generate do |csv|
-      csv << ['id', 'First name', 'Last name', 'Email'].concat(fields.map(&:title))
+      csv << ['id', 'First name', 'Last name', 'Email', 'Job Title'].concat(fields.map(&:title))
 
       users.order(created_at: :desc).limit(nb_rows).each do |user|
-        user_columns = [user.id, user.first_name, user.last_name, user.email]
+        user_columns = [user.id, user.first_name, user.last_name, user.email, user.job_title]
 
         fields.each do |field|
           user_columns << field.csv_value(user.info[field])

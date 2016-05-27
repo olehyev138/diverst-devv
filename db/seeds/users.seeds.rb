@@ -115,6 +115,7 @@ after :enterprise do
       first_name: first_name = Faker::Name.first_name,
       last_name: last_name = Faker::Name.last_name,
       email: Faker::Internet.user_name("#{first_name} #{last_name}", %w(. _ -)) + "@#{domain_name}",
+      job_title: Faker::Name.title,
       auth_source: 'manual',
       invited_by_id: u1.id,
       invitation_created_at: invite_time = Faker::Time.between(30.days.ago, 3.days.ago),
