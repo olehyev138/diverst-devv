@@ -113,7 +113,8 @@ class UsersController < ApplicationController
     params.require(:user).permit(
       :email,
       :first_name,
-      :last_name
+      :last_name,
+      :job_title
     )
   end
 end

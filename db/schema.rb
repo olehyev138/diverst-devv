@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160511175410) do
+ActiveRecord::Schema.define(version: 20160527181839) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -576,6 +576,7 @@ ActiveRecord::Schema.define(version: 20160511175410) do
     t.string   "primary_color",     limit: 255
     t.string   "digest",            limit: 255
     t.boolean  "default",                       default: false
+    t.string   "secondary_color",   limit: 255
   end
 
   create_table "topic_feedbacks", force: :cascade do |t|
@@ -643,6 +644,7 @@ ActiveRecord::Schema.define(version: 20160511175410) do
     t.integer  "avatar_file_size",            limit: 4
     t.datetime "avatar_updated_at"
     t.integer  "policy_group_id",             limit: 4
+    t.string   "job_title",                   limit: 255
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
