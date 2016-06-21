@@ -1,27 +1,76 @@
 require 'rails_helper'
 
 RSpec.describe Theme, type: :model do
-  describe 'color validation' do
-    it 'is invalid with incorrect color' do
-      expect(build(:theme, primary_color: '#zz1122')).to be_invalid
-    end
+  let(:theme) {build :theme }
 
-    it 'is valid with correct color' do
-      expect(build(:theme, primary_color: '#f15e58')).to be_valid
+  describe 'validation' do
+    describe 'color validation' do
+      describe 'primary color' do
+        it 'is invalid with incorrect color' do
+          theme.primary_color = '#zz1122'
+          expect(theme).to be_invalid
+        end
+
+        it 'is valid with correct color' do
+          theme.primary_color = '#f15e58'
+          expect(theme).to be_valid
+        end
+      end
+
+      describe 'secondary color' do
+        it 'is valid without secondary color' do
+          theme.secondary_color = nil
+          expect(theme).to be_valid
+        end
+
+        it 'is invalid with incorrect color' do
+          theme.secondary_color = '#zz1122'
+          expect(theme).to be_invalid
+        end
+
+        it 'is valid with correct color' do
+          theme.secondary_color = '#f15e58'
+          expect(theme).to be_valid
+        end
+      end
     end
   end
 
-  describe 'appending hash to colors' do
-    it 'triggers if hash is not present' do
-      theme = build(:theme, primary_color: 'f15e58')
-      theme.valid?
-      expect(theme.primary_color).to eq '#f15e58'
+  describe 'color' do
+    describe 'hash appending' do
+      it 'triggers if hash is not present' do
+        theme.primary_color = 'ffffff'
+        theme.secondary_color = '000000'
+        theme.valid?
+
+        expect(theme.primary_color).to eq '#ffffff'
+        expect(theme.secondary_color).to eq '#000000'
+      end
+
+      it 'does not trigger if hash is present' do
+        theme.primary_color = '#ffffff'
+        theme.secondary_color = '#000000'
+        theme.valid?
+
+        expect(theme.primary_color).to eq '#ffffff'
+        expect(theme.secondary_color).to eq '#000000'
+      end
+    end
+  end
+
+  describe '#charts_color' do
+    context 'with both secondary and primary colors' do
+      it 'is equal to secondary_color' do
+        expect(theme.charts_color).to eq theme.secondary_color
+      end
     end
 
-    it 'does not trigger if hash is present' do
-      theme = build(:theme, primary_color: '#f15e58')
-      theme.valid?
-      expect(theme.primary_color).to eq '#f15e58'
+    context 'with primary color only' do
+      before { theme.secondary_color = nil }
+
+      it 'is equal to primary_color' do
+        expect(theme.charts_color).to eq theme.primary_color
+      end
     end
   end
 end

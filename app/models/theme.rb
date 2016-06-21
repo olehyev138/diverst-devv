@@ -5,6 +5,7 @@ class Theme < ActiveRecord::Base
   validates_attachment_content_type :logo, content_type: %r{\Aimage\/.*\Z}
 
   validates :primary_color, presence: true, format: { with: %r{\A#(?:[0-9a-fA-F]{3}){1,2}\z}, message: 'should be a valid hex color' }
+  validates :secondary_color, format: { with: %r{\A#(?:[0-9a-fA-F]{3}){1,2}\z}, allow_blank: true, message: 'should be a valid hex color' }
 
   before_validation :append_hash_to_colors
   after_save :compile, if: :changed?
@@ -14,7 +15,7 @@ class Theme < ActiveRecord::Base
   end
 
   def charts_color
-    primary_color
+    secondary_color || primary_color
   end
 
   def delete_asset
@@ -52,6 +53,12 @@ class Theme < ActiveRecord::Base
   private
 
   def append_hash_to_colors
-    primary_color.insert(0, '#') if primary_color[0] != '#'
+    if primary_color.present?
+      primary_color.insert(0, '#') unless primary_color[0] == '#'
+    end
+
+    if secondary_color.present?
+      secondary_color.insert(0, '#') unless secondary_color[0] == '#'
+    end
   end
 end
