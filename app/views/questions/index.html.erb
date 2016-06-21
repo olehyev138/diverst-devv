@@ -138,7 +138,7 @@
       credits: {
         enabled: false
       },
-      colors: ['<%= current_user.enterprise.theme.try(:primary_color) || "#7B77C9" %>', '#F15E57', '#FE6D4B', '#9FD661', '#40D0AD', '#48C0EB', '#5A9AEF', '#EE85C1']
+      colors: ['<%= current_user.enterprise.theme.try(:charts_color) || "#7B77C9" %>', '#F15E57', '#FE6D4B', '#9FD661', '#40D0AD', '#48C0EB', '#5A9AEF', '#EE85C1']
     });
 
     $('#js-valuable-questions').highcharts({
@@ -184,7 +184,7 @@
       credits: {
         enabled: false
       },
-      colors: ['<%= current_user.enterprise.theme.try(:primary_color) || "#7B77C9" %>', '#F15E57', '#FE6D4B', '#9FD661', '#40D0AD', '#48C0EB', '#5A9AEF', '#EE85C1']
+      colors: ['<%= current_user.enterprise.theme.try(:charts_color) || "#7B77C9" %>', '#F15E57', '#FE6D4B', '#9FD661', '#40D0AD', '#48C0EB', '#5A9AEF', '#EE85C1']
     });
   });
 </script>

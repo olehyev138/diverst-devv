@@ -9,6 +9,14 @@ class Theme < ActiveRecord::Base
   before_validation :append_hash_to_colors
   after_save :compile, if: :changed?
 
+  def branding_color
+    primary_color
+  end
+
+  def charts_color
+    primary_color
+  end
+
   def delete_asset
     return unless digest?
 

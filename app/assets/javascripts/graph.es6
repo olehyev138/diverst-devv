@@ -3,7 +3,9 @@ class Graph {
     this.dataUrl = dataUrl;
     this.$element = $element;
     this.data = {};
-    this.primaryColor = $('.primary-header').css('background-color');
+
+    this.brandingColor = BRANDING_COLOR || $('.primary-header').css('background-color')
+    this.chartsColor = CHARTS_COLOR || this.brandingColor
 
     this.updateData(this.dataUrl);
   }
@@ -72,7 +74,7 @@ class Graph {
       credits: {
         enabled: false
       },
-      colors: [this.primaryColor, '#F15E57', '#FE6D4B', '#9FD661', '#40D0AD', '#48C0EB', '#5A9AEF', '#EE85C1']
+      colors: [this.chartsColor, '#F15E57', '#FE6D4B', '#9FD661', '#40D0AD', '#48C0EB', '#5A9AEF', '#EE85C1']
     });
   }
 
@@ -111,7 +113,7 @@ class Graph {
       credits: {
         enabled: false
       },
-      colors: [this.primaryColor, '#F15E57', '#FE6D4B', '#9FD661', '#40D0AD', '#48C0EB', '#5A9AEF', '#EE85C1']
+      colors: [this.chartsColor, '#F15E57', '#FE6D4B', '#9FD661', '#40D0AD', '#48C0EB', '#5A9AEF', '#EE85C1']
     });
   }
 }
