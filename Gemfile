@@ -73,6 +73,8 @@ group :development, :test do
   gem 'database_cleaner' # Necessary to clean the DB between tests
   gem 'pry-rails' # Better Rails console
   gem 'pry-theme' # Themes for pry
+
+  gem 'byebug' # Debugger
 end
 
 gem 'rspec_junit_formatter', '~> 0.2.3', group: :test # Formats tests for CircleCI
