@@ -98,6 +98,7 @@ class EnterprisesController < ApplicationController
         theme: [
           :id,
           :primary_color,
+          :secondary_color,
           :logo
         ],
         mobile_fields_attributes: [
