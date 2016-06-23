@@ -59,17 +59,39 @@ RSpec.describe Theme, type: :model do
   end
 
   describe '#charts_color' do
-    context 'with both secondary and primary colors' do
-      it 'is equal to secondary_color' do
-        expect(theme.charts_color).to eq theme.secondary_color
+    context 'with use_secondary_color=true' do
+      before { theme.use_secondary_color = true }
+
+      context 'with both secondary and primary colors' do
+        it 'is equal to secondary_color' do
+          expect(theme.charts_color).to eq theme.secondary_color
+        end
+      end
+
+      context 'with primary color only' do
+        before { theme.secondary_color = nil }
+
+        it 'is queal to primary color' do
+          expect(theme.charts_color).to eq theme.primary_color
+        end
       end
     end
 
-    context 'with primary color only' do
-      before { theme.secondary_color = nil }
+    context 'with use_secondary_color=false' do
+      before { theme.use_secondary_color = false }
 
-      it 'is equal to primary_color' do
-        expect(theme.charts_color).to eq theme.primary_color
+      context 'with both secondary and primary colors' do
+        it 'is queal to primary color' do
+          expect(theme.charts_color).to eq theme.primary_color
+        end
+      end
+
+      context 'with primary color only' do
+        before { theme.secondary_color = nil }
+
+        it 'is queal to primary color' do
+          expect(theme.charts_color).to eq theme.primary_color
+        end
       end
     end
   end

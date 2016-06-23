@@ -15,6 +15,8 @@ class Theme < ActiveRecord::Base
   end
 
   def charts_color
+    return primary_color unless use_secondary_color
+
     secondary_color || primary_color
   end
 

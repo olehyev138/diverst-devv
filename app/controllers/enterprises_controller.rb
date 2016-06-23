@@ -98,6 +98,7 @@ class EnterprisesController < ApplicationController
         theme: [
           :id,
           :primary_color,
+          :use_secondary_color,
           :secondary_color,
           :logo
         ],
