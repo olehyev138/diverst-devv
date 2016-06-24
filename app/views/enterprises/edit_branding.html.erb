@@ -7,11 +7,15 @@
     <div class="card__section">
       <%= simple_form_for @enterprise, url: update_branding_enterprise_path(@enterprise, source: 'edit_branding'), html: {id: 'edit_enterprise_branding'} do |f| %>
         <%= f.simple_fields_for @theme do |t| %>
-          <%= t.input :primary_color, id: 'primary_color',input_html: { class: 'jscolor' } %>
-
-          <%= t.input :use_secondary_color, id: 'use_secondary_color', label: 'Use different color for charts' %>
-          <%= t.input :secondary_color, id: 'secondary_color', input_html: { class: 'jscolor' }, label: 'Charts color' %>
-
+          <div id="colors_row" class="row">
+            <div id='primary_color_column' class="col sm-6">
+              <%= t.input :primary_color, id: 'primary_color',input_html: { class: 'jscolor' } %>
+            </div>
+            <div class="col sm-6">
+              <%= t.input :use_secondary_color, id: 'use_secondary_color', label: 'Use different color for charts' %>
+              <%= t.input :secondary_color, id: 'secondary_color', input_html: { class: 'jscolor' }, label: 'Charts color' %>
+            </div>
+          </div>
           <%= t.input :logo, as: :file %>
 
           <%= t.button :submit, "Save branding" %>
