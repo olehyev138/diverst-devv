@@ -25,6 +25,7 @@
 //= require pikaday
 //= require tooltipster
 //= require urijs
+//= require jscolor/jscolor
 //= require_tree .
 
 var Utility = (function() {

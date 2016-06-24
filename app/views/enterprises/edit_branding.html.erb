@@ -7,10 +7,10 @@
     <div class="card__section">
       <%= simple_form_for @enterprise, url: update_branding_enterprise_path(@enterprise, source: 'edit_branding'), html: {id: 'edit_enterprise_branding'} do |f| %>
         <%= f.simple_fields_for @theme do |t| %>
-          <%= t.input :primary_color, id: 'primary_color' %>
+          <%= t.input :primary_color, id: 'primary_color',input_html: { class: 'jscolor' } %>
 
           <%= t.input :use_secondary_color, id: 'use_secondary_color', label: 'Use different color for charts' %>
-          <%= t.input :secondary_color, id: 'secondary_color', label: 'Charts color' %>
+          <%= t.input :secondary_color, id: 'secondary_color', input_html: { class: 'jscolor' }, label: 'Charts color' %>
 
           <%= t.input :logo, as: :file %>
 
