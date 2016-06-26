@@ -1,4 +1,8 @@
 FactoryGirl.define do
+  factory :city do
+    name "MyString"
+  end
+
   factory :event_attendance do
     
   end
