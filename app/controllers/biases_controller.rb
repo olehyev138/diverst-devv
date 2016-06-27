@@ -66,7 +66,11 @@ class BiasesController < ApplicationController
         :severity,
         :description,
         groups_from_ids: [],
-        groups_to_ids: []
+        groups_to_ids: [],
+        cities_from_ids: [],
+        cities_to_ids: [],
+        departmrnts_from_ids: [],
+        departmrnts_to_ids: []
       )
   end
 end

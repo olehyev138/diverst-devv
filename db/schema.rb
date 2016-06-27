@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160626162650) do
+ActiveRecord::Schema.define(version: 20160627095618) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -67,6 +67,11 @@ ActiveRecord::Schema.define(version: 20160626162650) do
     t.integer "city_id", limit: 4
   end
 
+  create_table "biases_from_departments", force: :cascade do |t|
+    t.integer "bias_id",       limit: 4
+    t.integer "department_id", limit: 4
+  end
+
   create_table "biases_from_groups", force: :cascade do |t|
     t.integer "group_id", limit: 4
     t.integer "bias_id",  limit: 4
@@ -75,6 +80,11 @@ ActiveRecord::Schema.define(version: 20160626162650) do
   create_table "biases_to_cities", force: :cascade do |t|
     t.integer "bias_id", limit: 4
     t.integer "city_id", limit: 4
+  end
+
+  create_table "biases_to_departments", force: :cascade do |t|
+    t.integer "bias_id",       limit: 4
+    t.integer "department_id", limit: 4
   end
 
   create_table "biases_to_groups", force: :cascade do |t|
@@ -130,6 +140,13 @@ ActiveRecord::Schema.define(version: 20160626162650) do
     t.string   "name",       limit: 255
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+  end
+
+  create_table "departments", force: :cascade do |t|
+    t.integer  "enterprise_id", limit: 4,   null: false
+    t.string   "name",          limit: 255
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
   create_table "devices", force: :cascade do |t|

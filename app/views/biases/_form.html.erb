@@ -10,13 +10,21 @@
             <h3>From</h3>
             <%= f.association :groups_from, input_html: { class: "select2" }, label: "Groups" %>
             <%= f.association :cities_from,   input_html: { class: "select2" }, label: "Office locations" %>
-            <%= f.association :groups_from, input_html: { class: "select2" }, label: "Departments" %>
+            <%= f.association :departments_from,
+                              collection: current_user.enterprise.departments,
+                              input_html: { class: "select2" },
+                              label: "Departments"
+            %>
           </div>
           <div class="col sm-6">
             <h3>Against</h3>
             <%= f.association :groups_to, input_html: { class: "select2" }, label: "Groups" %>
             <%= f.association :cities_to,   input_html: { class: "select2" }, label: "Office locations" %>
-            <%= f.association :groups_to, input_html: { class: "select2" }, label: "Departments" %>
+            <%= f.association :departments_to,
+                              collection: current_user.enterprise.departments,
+                              input_html: { class: "select2" },
+                              label: "Departments"
+            %>
           </div>
         </div>
 

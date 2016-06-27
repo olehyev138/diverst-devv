@@ -6,6 +6,8 @@ class Bias < ActiveRecord::Base
   has_and_belongs_to_many :cities_from, join_table: 'biases_from_cities', class_name: 'City'
   has_and_belongs_to_many :cities_to, join_table: 'biases_to_cities', class_name: 'City'
 
+  has_and_belongs_to_many :departments_from, join_table: 'biases_from_departments', class_name: 'Department'
+  has_and_belongs_to_many :departments_to, join_table: 'biases_to_departments', class_name: 'Department'
 
   self.table_name = 'biases'
 end

@@ -1,4 +1,10 @@
 FactoryGirl.define do
+  factory :department do
+    enterprise
+    name "IT"
+  end
+
+
   factory :city do
     name "MyString"
   end
