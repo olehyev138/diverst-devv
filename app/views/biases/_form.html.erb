@@ -29,6 +29,14 @@
         </div>
 
         <%= f.input :description, wrapper_html: { style: "margin-top: 30px;" }, label: "Optionally describe the observed bias" %>
+        <div>
+          <%= f.input :spoken_words %>
+          <%= f.input :marginalized_in_meetings %>
+          <%= f.input :called_name %>
+          <%= f.input :contributions_ignored %>
+          <%= f.input :in_documents %>
+          <%= f.input :unfairly_criticized %>
+        </div>
 
         <p style="margin-top: 20px;">
           <strong style="margin-bottom: 15px; display: inline-block;">Severity of bias: <span class="js-bias-severity"></span></strong>

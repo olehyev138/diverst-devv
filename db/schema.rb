@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160627095618) do
+ActiveRecord::Schema.define(version: 20160627103641) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -52,14 +52,20 @@ ActiveRecord::Schema.define(version: 20160627095618) do
   end
 
   create_table "biases", force: :cascade do |t|
-    t.integer  "user_id",     limit: 4
-    t.text     "from_data",   limit: 65535
-    t.text     "to_data",     limit: 65535
+    t.integer  "user_id",                  limit: 4
+    t.text     "from_data",                limit: 65535
+    t.text     "to_data",                  limit: 65535
     t.boolean  "anonymous"
-    t.integer  "severity",    limit: 4
+    t.integer  "severity",                 limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "description", limit: 65535
+    t.text     "description",              limit: 65535
+    t.boolean  "spoken_words",                           default: false
+    t.boolean  "marginalized_in_meetings",               default: false
+    t.boolean  "called_name",                            default: false
+    t.boolean  "contributions_ignored",                  default: false
+    t.boolean  "in_documents",                           default: false
+    t.boolean  "unfairly_criticized",                    default: false
   end
 
   create_table "biases_from_cities", force: :cascade do |t|
