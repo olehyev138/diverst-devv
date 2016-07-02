@@ -1,0 +1,27 @@
+<div class="content__header">
+  <h1>Add Members to <%= @group.name %></h1>
+</div>
+
+<div class="content__main">
+  <%= simple_form_for @group, :url => add_members_group_group_members_path(@group), :method => :post do |f| %>
+    <div class="card">
+      <div class="card__section card__section--border">
+        <%= f.association :members,
+                            collection: @group.enterprise.users,
+                            selected: [],
+                            input_html: { class: "select2" },
+                            label: 'Select new members'
+        %>
+      </div>
+    </div>
+
+    <%= f.button :submit %>
+  <% end %>
+</div>
+
+<script>
+  $('.select2').select2({
+    allowClear: true,
+    placeholder: "None"
+  });
+</script>

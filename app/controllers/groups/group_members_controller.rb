@@ -1,6 +1,6 @@
 class Groups::GroupMembersController < ApplicationController
   before_action :set_group
-  before_action :set_member, only: [:edit, :update, :destroy]
+  before_action :set_member, only: [:edit, :update, :destroy, :remove_member]
   after_action :verify_authorized
 
   layout 'erg'
@@ -10,11 +10,16 @@ class Groups::GroupMembersController < ApplicationController
     @members = @group.members.page(params[:page])
   end
 
+  def new
+    #TODO only show enterprise users not currently in group
+    authorize @group, :manage_members?
+  end
+
   # Removes a member from the group
   def destroy
     authorize @member, :join_or_leave_groups?
     @group.members.delete(@member)
-    redirect_to :back
+    redirect_to action: :index
   end
 
   def create
@@ -26,6 +31,28 @@ class Groups::GroupMembersController < ApplicationController
     else
       render :edit
     end
+  end
+
+  def add_members
+    authorize @group, :manage_members?
+
+    add_members_params[:member_ids].each do |user_id|
+      user = User.find_by_id(user_id)
+
+      # Only add association fif user exists and belongs to the same enterprise
+      next if (!user) || (user.enterprise != @group.enterprise)
+      next if @group.members.include? user
+
+      @group.members << user
+    end
+
+    redirect_to action: 'index'
+  end
+
+  def remove_member
+    authorize @group, :manage_members?
+    @group.members.delete(@member)
+    redirect_to action: :index
   end
 
   protected
@@ -41,6 +68,12 @@ class Groups::GroupMembersController < ApplicationController
   def group_member_params
     params.require(:user).permit(
       :user_id
+    )
+  end
+
+  def add_members_params
+    params.require(:group).permit(
+      member_ids: []
     )
   end
 end

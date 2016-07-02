@@ -1,28 +1,35 @@
 <div class="content__header">
   <h1>Members</h1>
+  <% if policy(@group).manage_members? %>
+    <%= link_to "+ Add members", new_group_group_member_path(@group), class: "btn btn--primary" %>
+  <% end %>
 </div>
 
 <div class="content__main">
-  <div class="row">
-    <% @members.each do |member| %>
-      <div class="col sm-12 md-4 lg-3">
-        <div class="card">
-          <div class="card__section card__section--border">
-            <div class="flex-row flex-row--middle">
-              <div class="flex-row__cell flex-row__cell--grow flex-row__cell--ellipsis"><%= member.name %></div>
-              <div class="flex-row__cell">
+  <div class="card">
+    <div class="card__section">
+      <table class="table--has-border" id="resources-table">
+        <thead>
+          <th>Name</th>
+          <th>Actions</th>
+        </thead>
+        <tbody>
+          <% @members.each do |member| %>
+            <tr>
+              <td>
+                <%= member.name %>
+              </td>
+              <td>
+                <%= link_to 'Show user', user_path(member)%>
                 <% if policy(@group).manage_members? %>
-                  <%= link_to group_group_member_path(@group, member), method: :delete do %>
-                    <%= inline_svg('icons/remove.svg', class: "icon icon--negative") %>
-                  <% end %>
+                  <%= link_to 'Remove From Group', remove_member_group_group_member_path(@group, member), method: :delete %>
                 <% end %>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <%= paginate @members %>
+    </div>
   </div>
-
-  <%= paginate @members %>
 </div>

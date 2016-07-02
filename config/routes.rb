@@ -69,7 +69,14 @@ Rails.application.routes.draw do
 
   resources :groups do
     scope module: :groups do
-      resources :group_members, path: 'members'
+      resources :group_members, path: 'members' do
+        collection do
+          post 'add_members'
+        end
+        member do
+          delete 'remove_member'
+        end
+      end
       resources :group_messages, path: 'messages'
     end
 
