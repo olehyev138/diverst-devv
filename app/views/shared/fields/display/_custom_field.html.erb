@@ -10,7 +10,28 @@
     </div>
   <% end %>
 <% elsif cf.is_a? NumericField %>
-  <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "custom-fields[#{cf.id}]", value: resource.info[cf], type: "number", min: cf.min, max: cf.max } %>
+  <% unless cf.alternative_layout %>
+    <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "custom-fields[#{cf.id}]", value: resource.info[cf], type: "number", min: cf.min, max: cf.max } %>
+  <% else %>
+    <div class="numeric_slider" style="margin-bottom: 25px;">
+      <div class="row">
+        <span><%= f.label cf.title.downcase.to_sym, input_html:{class: 'field__label'} %></span>
+        <b><span class='current_value'></span></b>
+      </div>
+
+      <span class="flex-row flex-row--middle">
+        <span class="min_value flex-row__cell">
+          <%= cf.min %>
+        </span>
+        <span class="flex-row__cell flex-row__cell--grow" >
+          <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { type: 'range', name: "custom-fields[#{cf.id}]", value: resource.info[cf], min: cf.min, max: cf.max }, label: false %>
+        </span>
+        <span class="max_value flex-row__cell">
+          <%= cf.max %>
+        </span>
+      </span>
+    </div>
+  <% end %>
 <% elsif cf.is_a? DateField %>
   <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "custom-fields[#{cf.id}]", value: resource.info[cf], type: "text", placeholder: "MM/DD/YYYY" } %>
 <% elsif cf.is_a? SelectField %>
@@ -50,3 +71,19 @@
     </div>
   <% end %>
 <% end %>
+
+<script>
+  $(document).ready(function(){
+    $('input[type=range]').rangeslider({
+      polyfill: false,
+      rangeClass: 'range-slider',
+      fillClass: 'range-slider__line',
+      handleClass: 'range-slider__handle'
+    }).on('change', function(){
+      $currentValueField = $(this).closest('.numeric_slider')
+                                    .find('.current_value');
+
+      $currentValueField.html( $(this).val() );
+    }).change();
+  });
+</script>
