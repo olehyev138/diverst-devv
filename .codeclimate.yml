@@ -9,6 +9,8 @@ engines:
       languages:
       - ruby
       - javascript
+  reek:
+    enabled: true
   eslint:
     enabled: true
   fixme:
