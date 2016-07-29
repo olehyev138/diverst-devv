@@ -97,6 +97,8 @@ FactoryGirl.define do
     initiatives_manage true
 
     global_settings_manage true
+
+    default_for_enterprise false
   end
 
   factory :user_group do
