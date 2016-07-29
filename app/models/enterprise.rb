@@ -94,6 +94,10 @@ class Enterprise < ActiveRecord::Base
     self
   end
 
+  def default_policy_group
+    PolicyGroup.default_group(self.id)
+  end
+
   private
 
   def create_elasticsearch_only_fields
