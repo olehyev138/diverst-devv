@@ -10,12 +10,14 @@
         <thead>
           <th>Name</th>
           <th># of members</th>
+          <th>Default group</th>
         </thead>
         <tbody>
           <% @policy_groups.each do |policy_group| %>
             <tr>
               <td><%= link_to policy_group.name, edit_policy_group_path(policy_group) %></td>
               <td><%= policy_group.users.count %></td>
+              <td><%= policy_group.default_for_enterprise ? 'Yes': 'No'%></td>
             </tr>
           <% end %>
         </tbody>
