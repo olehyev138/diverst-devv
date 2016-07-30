@@ -45,6 +45,8 @@ class PolicyGroupsController < ApplicationController
       .require(:policy_group)
       .permit(
         :name,
+        :default_for_enterprise,
+
         :campaigns_index,
         :campaigns_create,
         :campaigns_manage,
