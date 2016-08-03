@@ -95,7 +95,7 @@ class UsersController < ApplicationController
     authorize User, :index?
 
     g = DateHistogramGraph.new(
-      index: User.es_index_name(enterprise: enterprise),
+      index: User.es_index_name(enterprise: current_user.enterprise),
       field: 'created_at',
       interval: 'month'
     )
