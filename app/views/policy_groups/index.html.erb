@@ -10,17 +10,23 @@
         <thead>
           <th>Name</th>
           <th># of members</th>
+          <th>Default group</th>
         </thead>
         <tbody>
           <% @policy_groups.each do |policy_group| %>
             <tr>
               <td><%= link_to policy_group.name, edit_policy_group_path(policy_group) %></td>
               <td><%= policy_group.users.count %></td>
+              <td><%= policy_group.default_for_enterprise ? 'Yes': 'No'%></td>
             </tr>
           <% end %>
         </tbody>
       </table>
     </div>
+  </div>
+  <div class="card">
+    <h2>Permission group for new users</h2>
+    New users will be assigned to <strong><%= current_user.enterprise.default_policy_group.name %></strong> permission group. You can change this in corresponding permission group's settings.
   </div>
 </div>
 

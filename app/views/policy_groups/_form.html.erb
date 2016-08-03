@@ -7,6 +7,10 @@
         <%= f.input :name, label: false %>
       </div>
       <div class="card__section card__section--border">
+        <p class="field__hint">Should <strong>permission group</strong> be a default for new users in the <strong><%= @policy_group.enterprise.name %></strong>?</p>
+        <%= f.input :default_for_enterprise, label: 'Use as default' %>
+      </div>
+      <div class="card__section card__section--border">
         <h2>General</h2>
         <div class="row row--spacing-bottom">
           <div class="col md-3">
@@ -92,7 +96,12 @@
         </div>
       </div>
       <div class="card__section card__section--border">
-        <p>Choose the <strong>users</strong> that will initially be part of this group</p>
+        <% if @policy_group.new_record? %>
+          <p>Choose the <strong>users</strong> that will initially be part of this group</p>
+        <% else %>
+          <p>You can edit <strong>users</strong> that are part of this group</p>
+        <% end %>
+
         <%= f.association :users, collection: @policy_group.enterprise.users, label: false, input_html: { class: "select2" } %>
       </div>
     </div>

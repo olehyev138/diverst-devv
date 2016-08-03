@@ -30,7 +30,7 @@ class Users::InvitationsController < Devise::InvitationsController
   def accept_resource
     resource = resource_class.accept_invitation!(update_resource_params)
     resource.info.merge(fields: resource.enterprise.fields, form_data: params['custom-fields'])
-    resource.policy_group = resource.enterprise.policy_groups.first # TODO ASSIGN DEFAULT GROUP
+    resource.policy_group = resource.enterprise.default_policy_group
 
     resource.save
     resource
