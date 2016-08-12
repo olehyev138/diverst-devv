@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby '2.3.0'
 
-gem 'rails', '~> 4.2.6'
+gem 'rails', '~> 4.2.7.1'
 gem 'mysql2', '~> 0.4.3'
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
@@ -10,13 +10,15 @@ gem 'jquery-rails'
 gem 'turbolinks'
 gem 'sdoc', '~> 0.4.0', group: :doc # bundle exec rake doc:rails generates the API under doc/api.
 
+gem 'nokogiri', '>= 1.6.8' # need to specify this explicitly, old version has exploit
+
 gem 'puma' # Better web server than WEBRick
 gem 'figaro' # Inject ENV from application.yml
 gem 'devise' # Authentication
 gem 'devise_invitable' # Invite system (admins invite normal users)
 gem 'simple_form' # Better forms
 gem 'cocoon' # Nested forms (deals with the JS for you)
-gem 'ruby-saml', '~> 1.0.0'
+gem 'ruby-saml', '>= 1.3.0'
 gem 'sidekiq', '< 5' # Background jobs
 gem 'devise-async' # Performs many devise tasks in the background using Sidekiq
 gem 'sinatra', require: nil # Required for sidekiq's dashboard
