@@ -18,7 +18,7 @@ gem 'devise' # Authentication
 gem 'devise_invitable' # Invite system (admins invite normal users)
 gem 'simple_form' # Better forms
 gem 'cocoon' # Nested forms (deals with the JS for you)
-gem 'ruby-saml', '~> 1.0.0'
+gem 'ruby-saml', '>= 1.3.0'
 gem 'sidekiq', '< 5' # Background jobs
 gem 'devise-async' # Performs many devise tasks in the background using Sidekiq
 gem 'sinatra', require: nil # Required for sidekiq's dashboard
