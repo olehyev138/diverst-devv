@@ -1,4 +1,6 @@
 class DateField < Field
+  include Optionnable
+
   def string_value(value)
     return '-' if value.nil?
     value.to_s :slashes
