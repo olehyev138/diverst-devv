@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160729123432) do
+ActiveRecord::Schema.define(version: 20160822121854) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -55,7 +55,7 @@ ActiveRecord::Schema.define(version: 20160729123432) do
     t.integer  "user_id",                  limit: 4
     t.text     "from_data",                limit: 65535
     t.text     "to_data",                  limit: 65535
-    t.boolean  "anonymous"
+    t.boolean  "anonymous",                              default: true
     t.integer  "severity",                 limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
