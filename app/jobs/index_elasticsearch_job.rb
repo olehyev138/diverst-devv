@@ -2,7 +2,7 @@ class IndexElasticsearchJob < ActiveJob::Base
   queue_as :default
 
   Logger = Sidekiq.logger.level == Logger::DEBUG ? Sidekiq.logger : nil
-  Client = Elasticsearch::Client.new host: 'localhost:9200', logger: Logger
+  Client = Elasticsearch::Client.new host: ENV['ELASTICSEARCH_URL'], logger: Logger
 
   def perform(model_name:, operation:, record_id:, index:)
     logger.debug [operation, "ID: #{record_id}"]
