@@ -55,5 +55,40 @@ RSpec.describe User do
     end
   end
 
+  describe '#active_group_member?' do
+    let!(:enterprise) { create(:enterprise)}
+    let!(:user) { create(:user, enterprise: enterprise) }
+    let!(:group) { create(:group, enterprise: enterprise) }
+
+    subject { user.active_group_member?(group.id) }
+
+    context 'when user is not group member' do
+      it 'is false' do
+        expect(subject).to eq false
+      end
+    end
+
+    context 'when user is a group member' do
+      before { user.groups << group }
+
+      context 'when user is not accepted' do
+        it 'is false' do
+          expect(subject).to eq false
+        end
+      end
+
+      context 'when user is accepted' do
+        before do
+          user_group = user.user_groups.where(group_id: group.id).first
+          user_group.update(accepted_member: true)
+        end
+
+        it 'is true' do
+          expect(subject).to eq true
+        end
+      end
+    end
+  end
+
   it { is_expected.to have_attached_file(:avatar) }
 end

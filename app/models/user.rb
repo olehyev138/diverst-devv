@@ -308,6 +308,13 @@ class User < ActiveRecord::Base
     end
   end
 
+  def active_group_member?( group_id )
+    user_group = user_groups.where(group_id: group_id).first
+    return false if user_group.blank?
+
+    user_group.accepted_member
+  end
+
   private
 
   # Generate a random password if the user is using SAML
