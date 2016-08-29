@@ -19,6 +19,10 @@ class GroupPolicy < ApplicationPolicy
     @record.active_members.exists? @user
   end
 
+  def view_messages?
+    view_members?
+  end
+
   def manage_members?
     return true if @policy_group.groups_manage?
     return true if @record.owner == @user
