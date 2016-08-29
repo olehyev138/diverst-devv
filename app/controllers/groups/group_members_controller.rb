@@ -7,7 +7,7 @@ class Groups::GroupMembersController < ApplicationController
 
   def index
     authorize @group, :show?
-    @members = @group.members.page(params[:page])
+    @members = @group.active_members.page(params[:page])
   end
 
   def pending

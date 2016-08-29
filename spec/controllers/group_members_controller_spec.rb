@@ -12,6 +12,15 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
 
       context 'with correct group' do
         let(:group) { FactoryGirl.create(:group, enterprise: user.enterprise)}
+        let(:active_user) { FactoryGirl.create(:user, enterprise: user.enterprise) }
+        let(:pending_user) { FactoryGirl.create(:user, enterprise: user.enterprise) }
+
+        before do
+          group.members << active_user
+          group.members << pending_user
+
+          group.accept_user_to_group(active_user.id)
+        end
 
         before { get_index(group.to_param) }
 
@@ -23,7 +32,17 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
           expect(response).to render_template :index
         end
 
-        xit 'sets @members'
+        describe 'setting @members' do
+          before { @members = assigns(:members) }
+
+          it 'includes active members' do
+            expect(@members).to include( active_user )
+          end
+
+          it 'does not include pending members' do
+            expect(@members).to_not include( pending_user )
+          end
+        end
       end
 
       context 'with incorect group'
