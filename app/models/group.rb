@@ -53,6 +53,14 @@ class Group < ActiveRecord::Base
     score
   end
 
+  def active_members
+    filter_by_membership true
+  end
+
+  def pending_members
+    filter_by_membership false
+  end
+
   def file_safe_name
     name.gsub!(/[^0-9A-Za-z.\-]/, '_')
   end
@@ -109,6 +117,10 @@ class Group < ActiveRecord::Base
   end
 
   private
+
+  def filter_by_membership(membership_status)
+    members.references(:user_groups).where('user_groups.accepted_member=?', membership_status)
+  end
 
   # Create the group in Yammer
   def create_yammer_group
