@@ -308,6 +308,17 @@ class User < ActiveRecord::Base
     end
   end
 
+  def group_member?( group_id )
+    user_group = user_groups.where(group_id: group_id).first
+    user_group.present?
+  end
+
+  def pending_group_member?(group_id)
+    return false unless group_member?(group_id)
+
+    !active_group_member?(group_id)
+  end
+
   def active_group_member?( group_id )
     user_group = user_groups.where(group_id: group_id).first
     return false if user_group.blank?

@@ -160,6 +160,10 @@
         </div>
       </div>
 
+      <% if @current_user.pending_group_member?(@group.id) %>
+        Please wait for group administrators to process your membership request.
+      <% end %>
+
       <% if @group.members.where(id: current_user.id).count > 0 %>
         <%= link_to 'Leave this ERG', group_group_member_path(@group, current_user), method: :delete, class: 'error' %>
       <% else %>
