@@ -33,6 +33,90 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
     end
   end
 
+  describe 'GET #pending' do
+    def get_pending(group_id = nil)
+      get :pending, group_id: group_id
+    end
+
+    context 'with logged in user' do
+      let(:user) { FactoryGirl.create(:user) }
+      login_user_from_let
+
+      context 'with correct group' do
+        let(:group) { FactoryGirl.create(:group, enterprise: user.enterprise) }
+
+        let!(:pending_user) { FactoryGirl.create(:user, enterprise: user.enterprise) }
+        let!(:active_user) { FactoryGirl.create(:user, enterprise: user.enterprise) }
+
+        before do
+          group.members << pending_user
+
+          group.members << active_user
+          group.accept_user_to_group(active_user.id)
+        end
+
+        before{ get_pending(group.to_param) }
+
+        it 'returns success' do
+          expect(response).to be_success
+        end
+
+        it 'renders correct template' do
+          expect(response).to render_template :pending
+        end
+
+        it 'sets @pending_members' do
+          pending_members = assigns(:pending_members)
+
+          expect(pending_members).to include pending_user
+          expect(pending_members).to_not include active_user
+        end
+      end
+    end
+  end
+
+  describe 'POST #accept_pending' do
+    def post_accept_pending(group_id = nil, user_id = nil)
+      post :accept_pending, group_id: group_id, id: user_id
+    end
+
+    context 'with logged in user' do
+      let(:enterprise) { FactoryGirl.create :enterprise }
+      let!(:user) { FactoryGirl.create(:user, enterprise: enterprise) }
+      let!(:group) { FactoryGirl.create(:group, enterprise: enterprise) }
+
+      login_user_from_let
+
+      context 'with correct params' do
+        let(:pending_user) { FactoryGirl.create(:user, enterprise: enterprise) }
+
+        before { group.members << pending_user }
+
+        before { post_accept_pending(group.id, pending_user.id) }
+
+        it 'sets user correctly' do
+          expect(assigns(:member)).to eq pending_user
+        end
+
+        it 'accepts user to group' do
+          pending_user.reload
+
+          expect(pending_user.active_group_member?(group.id)).to eq true
+        end
+
+        it 'redirects to pending' do
+          expect(response).to redirect_to action: :pending
+        end
+      end
+
+      context 'with incorrect params' do
+      end
+    end
+
+    context 'without logged in user' do
+    end
+  end
+
   describe 'GET #new' do
     def get_new(group_id = nil)
       get :new, group_id: group_id
