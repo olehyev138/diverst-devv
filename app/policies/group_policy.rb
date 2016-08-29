@@ -13,6 +13,12 @@ class GroupPolicy < ApplicationPolicy
     @record.managers.exists?(user.id)
   end
 
+  def view_members?
+    return true if manage_members?
+
+    @record.active_members.exists? @user
+  end
+
   def manage_members?
     return true if @policy_group.groups_manage?
     return true if @record.owner == @user

@@ -10,6 +10,7 @@
 
       <div class="row row--equal-height">
 
+        <% if policy(@group).view_members? %>
         <div class="col sm-12 md-6">
           <div class="card">
             <div class="card__section">
@@ -29,6 +30,7 @@
             </div>
           </div>
         </div>
+        <% end %>
 
         <div class="col sm-12 md-6">
           <div class="card">
@@ -82,6 +84,7 @@
           </div>
         </div>
 
+        <% if policy(@group).view_members? %>
         <div class="col sm-12 md-6">
           <div class="card">
             <div class="card__section">
@@ -107,6 +110,7 @@
             </div>
           </div>
         </div>
+        <% end %>
       </div>
     </div>
 
