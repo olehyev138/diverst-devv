@@ -12,7 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require datatables
+//= require dataTables/jquery.dataTables
 //= require turbolinks
 //= require cocoon
 //= require select2
