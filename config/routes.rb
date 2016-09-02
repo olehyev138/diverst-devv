@@ -71,9 +71,11 @@ Rails.application.routes.draw do
     scope module: :groups do
       resources :group_members, path: 'members' do
         collection do
+          get 'pending'
           post 'add_members'
         end
         member do
+          post 'accept_pending'
           delete 'remove_member'
         end
       end
@@ -127,6 +129,8 @@ Rails.application.routes.draw do
     end
 
     member do
+      get 'settings'
+
       get 'export_csv'
       get 'import_csv'
       get 'sample_csv'

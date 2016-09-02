@@ -10,6 +10,7 @@
 
       <div class="row row--equal-height">
 
+        <% if policy(@group).view_members? %>
         <div class="col sm-12 md-6">
           <div class="card">
             <div class="card__section">
@@ -29,6 +30,7 @@
             </div>
           </div>
         </div>
+        <% end %>
 
         <div class="col sm-12 md-6">
           <div class="card">
@@ -82,6 +84,7 @@
           </div>
         </div>
 
+        <% if policy(@group).view_messages? %>
         <div class="col sm-12 md-6">
           <div class="card">
             <div class="card__section">
@@ -107,6 +110,7 @@
             </div>
           </div>
         </div>
+        <% end %>
       </div>
     </div>
 
@@ -155,6 +159,10 @@
           </ol>
         </div>
       </div>
+
+      <% if @current_user.pending_group_member?(@group.id) %>
+        Please wait for group administrators to process your membership request.
+      <% end %>
 
       <% if @group.members.where(id: current_user.id).count > 0 %>
         <%= link_to 'Leave this ERG', group_group_member_path(@group, current_user), method: :delete, class: 'error' %>

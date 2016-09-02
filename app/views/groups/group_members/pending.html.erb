@@ -1,0 +1,33 @@
+<div class="content__header">
+  <h1>Members</h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <table class="table--has-border" id="resources-table">
+        <thead>
+          <th>Name</th>
+          <th>Actions</th>
+        </thead>
+        <tbody>
+          <% @pending_members.each do |member| %>
+            <tr>
+              <td>
+                <%= member.name %>
+              </td>
+              <td>
+                <%= link_to 'Show user', user_path(member)%>
+                <% if policy(@group).manage_members? %>
+                  <%= link_to 'Accept Member', accept_pending_group_group_member_path(@group, member), method: :post %>
+                  <%= link_to 'Remove From Group', remove_member_group_group_member_path(@group, member), method: :delete %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <%= paginate @pending_members %>
+    </div>
+  </div>
+</div>

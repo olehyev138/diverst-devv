@@ -62,7 +62,9 @@ RSpec.feature 'An ERG dashboard' do
     end
 
     scenario 'allows users to delete members' do
-      member = create(:user, enterprise: user.enterprise, groups: [group], first_name: "Testing", last_name: "User")
+      member = create(:user, enterprise: user.enterprise, first_name: "Testing", last_name: "User")
+      group.members << member
+      group.accept_user_to_group(member.id)
 
       visit group_group_members_path(group)
       expect(page).to have_content member.name

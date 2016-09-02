@@ -1,13 +1,27 @@
 class Groups::GroupMembersController < ApplicationController
   before_action :set_group
-  before_action :set_member, only: [:edit, :update, :destroy, :remove_member]
+  before_action :set_member, only: [:edit, :update, :destroy,:accept_pending, :remove_member]
   after_action :verify_authorized
 
   layout 'erg'
 
   def index
-    authorize @group, :show?
-    @members = @group.members.page(params[:page])
+    authorize @group, :view_members?
+    @members = @group.active_members.page(params[:page])
+  end
+
+  def pending
+    authorize @group, :manage_members?
+
+    @pending_members = @group.pending_members.page(params[:page])
+  end
+
+  def accept_pending
+    authorize @group, :manage_members?
+
+    @group.accept_user_to_group(@member)
+
+    redirect_to action: :pending
   end
 
   def new

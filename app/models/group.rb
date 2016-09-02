@@ -1,4 +1,23 @@
 class Group < ActiveRecord::Base
+  extend Enumerize
+
+  enumerize :pending_users, default: :disabled,  in: [
+    :disabled,
+    :enabled
+  ]
+
+  enumerize :members_visibility, default: :managers_only, in:[
+    :global,
+    :group,
+    :managers_only
+  ]
+
+  enumerize :messages_visibility, default: :managers_only, in:[
+    :global,
+    :group,
+    :managers_only
+  ]
+
   has_many :user_groups, dependent: :destroy
   has_many :members, through: :user_groups, class_name: 'User', source: :user, after_remove: :update_elasticsearch_member
   belongs_to :enterprise
@@ -53,6 +72,22 @@ class Group < ActiveRecord::Base
     score
   end
 
+  def active_members
+    if pending_users.enabled?
+      filter_by_membership true
+    else
+      members
+    end
+  end
+
+  def pending_members
+    if pending_users.enabled?
+      filter_by_membership false
+    else
+      members.none
+    end
+  end
+
   def file_safe_name
     name.gsub!(/[^0-9A-Za-z.\-]/, '_')
   end
@@ -98,7 +133,21 @@ class Group < ActiveRecord::Base
     end
   end
 
+
+  #Users who enters group have accepted flag set to false
+  #This sets flag to true
+  def accept_user_to_group(user_id)
+    user_group = user_groups.where(user_id: user_id).first
+    return false if user_group.blank?
+
+    user_group.update(accepted_member: true)
+  end
+
   private
+
+  def filter_by_membership(membership_status)
+    members.references(:user_groups).where('user_groups.accepted_member=?', membership_status)
+  end
 
   # Create the group in Yammer
   def create_yammer_group

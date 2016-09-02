@@ -1,4 +1,8 @@
 FactoryGirl.define do
+  factory :group_settings do
+
+  end
+
   factory :department do
     enterprise
     name "IT"
@@ -116,7 +120,7 @@ FactoryGirl.define do
       end
 
       after(:create) do |group, evaluator|
-        create_list(:user_group, evaluator.users_count, group: group)
+        create_list(:user_group, evaluator.users_count, group: group, accepted_member: true)
       end
     end
   end

@@ -61,6 +61,7 @@ gem 'daemons' # For capistrano-clockwork
 gem 'icalendar' # For exporting events to your calendar
 
 gem 'mailgun_rails'
+gem 'enumerize'
 
 group :development, :test do
   gem 'spring', '~> 1.6.2' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring

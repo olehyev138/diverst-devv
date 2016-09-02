@@ -19,11 +19,21 @@
 
   <header class="secondary-header">
     <%= active_link_to "Home", group_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
-    <%= active_link_to "Members", group_group_members_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-    <%= active_link_to "Messages", group_group_messages_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+    <% if policy(@group).view_members? %>
+        <%= active_link_to "Members", group_group_members_path(@group), active: :exact, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+    <% end %>
+    <% if @group.pending_users.enabled? && policy(@group).manage_members? %>
+      <%= active_link_to "Pending Members (#{@group.pending_members.count})", pending_group_group_members_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+    <% end %>
+    <% if policy(@group).view_members? %>
+      <%= active_link_to "Messages", group_group_messages_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+    <% end %>
     <%= active_link_to "Events", group_events_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
     <%= active_link_to "News", group_news_links_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
     <%= active_link_to "Resources", group_resources_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+    <% if policy(@group).update? %>
+        <%= active_link_to "Settings", settings_group_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+    <% end %>
   </header>
 
   <div class="content">

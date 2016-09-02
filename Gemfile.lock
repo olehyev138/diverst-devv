@@ -177,6 +177,8 @@ GEM
     em-websocket (0.5.1)
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0.6.0)
+    enumerize (2.0.0)
+      activesupport (>= 3.2)
     erubis (2.7.0)
     eventmachine (1.0.9.1)
     excon (0.48.0)
@@ -661,6 +663,7 @@ DEPENDENCIES
   draper
   elasticsearch-model (~> 0.1)
   elasticsearch-rails (~> 0.1)
+  enumerize
   factory_girl_rails
   faker
   figaro

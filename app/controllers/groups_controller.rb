@@ -57,6 +57,10 @@ class GroupsController < ApplicationController
     end
   end
 
+  def settings
+    authorize @group, :update?
+  end
+
   def destroy
     authorize @group
 
@@ -155,6 +159,9 @@ class GroupsController < ApplicationController
         :yammer_create_group,
         :yammer_sync_users,
         :lead_manager_id,
+        :pending_users,
+        :members_visibility,
+        :messages_visibility,
         manager_ids: [],
         member_ids: [],
         invitation_segment_ids: [],
