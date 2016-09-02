@@ -1,4 +1,23 @@
 class Group < ActiveRecord::Base
+  extend Enumerize
+
+  enumerize :pending_users, default: :disabled,  in: [
+    :disabled,
+    :enabled
+  ]
+
+  enumerize :members_visibility, default: :managers_only, in:[
+    :global,
+    :group,
+    :managers_only
+  ]
+
+  enumerize :messages_visibility, default: :managers_only, in:[
+    :global,
+    :group,
+    :managers_only
+  ]
+
   has_many :user_groups, dependent: :destroy
   has_many :members, through: :user_groups, class_name: 'User', source: :user, after_remove: :update_elasticsearch_member
   belongs_to :enterprise

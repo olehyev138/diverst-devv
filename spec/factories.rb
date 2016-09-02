@@ -1,4 +1,8 @@
 FactoryGirl.define do
+  factory :group_settings do
+
+  end
+
   factory :department do
     enterprise
     name "IT"

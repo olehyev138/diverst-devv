@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160828130934) do
+ActiveRecord::Schema.define(version: 20160830173426) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -359,6 +359,9 @@ ActiveRecord::Schema.define(version: 20160828130934) do
     t.integer  "manager_id",                limit: 4
     t.integer  "owner_id",                  limit: 4
     t.integer  "lead_manager_id",           limit: 4
+    t.string   "pending_users",             limit: 255
+    t.string   "members_visibility",        limit: 255
+    t.string   "messages_visibility",       limit: 255
   end
 
   create_table "groups_managers", force: :cascade do |t|

@@ -129,6 +129,8 @@ Rails.application.routes.draw do
     end
 
     member do
+      get 'settings'
+
       get 'export_csv'
       get 'import_csv'
       get 'sample_csv'
