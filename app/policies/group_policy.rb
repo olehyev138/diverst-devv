@@ -14,13 +14,39 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def view_members?
-    return true if manage_members?
-
-    @record.active_members.exists? @user
+    #Ability to view members depends on settings level
+    case @record.members_visibility
+    when 'global'
+      #Everyone can see users
+      return true
+    when 'group'
+      #Only active group members can see other members
+      @record.active_members.exists? @user
+    when 'managers_only'
+      #Only users with ability to manipulate members(admins) can see other memberxs
+      return manage_members?
+    else
+      #At this point we know that something went wrong, but lets just deny access
+      return false
+    end
   end
 
   def view_messages?
-    view_members?
+    #Ability to view messages depends on settings level
+    case @record.messages_visibility
+    when 'global'
+      #Everyone can see users
+      return true
+    when 'group'
+      #Only active group messages can see other messages
+      @record.active_members.exists? @user
+    when 'managers_only'
+      #Only users with ability to manipulate messages(admins) can see other memberxs
+      return manage_members?
+    else
+      #At this point we know that something went wrong, but lets just deny access
+      return false
+    end
   end
 
   def manage_members?
