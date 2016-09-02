@@ -65,27 +65,51 @@ RSpec.describe Group do
       group.accept_user_to_group(active_user.id)
     end
 
-    describe '#active_members' do
-      subject { group.active_members }
+    context 'with disabled pending members setting' do
+      describe '#active_members' do
+        subject { group.active_members }
 
-      it 'contains active user' do
-        expect(subject).to include active_user
+        it 'contain all group users' do
+          expect(subject).to include active_user
+          expect(subject).to include pending_user
+        end
       end
 
-      it 'does not contains pending user' do
-        expect(subject).to_not include pending_user
+      describe '#pending_members' do
+        subject { group.pending_members }
+
+        it 'contains no user' do
+          expect(subject).to_not include pending_user
+          expect(subject).to_not include active_user
+        end
       end
     end
 
-    describe '#pending_members' do
-      subject { group.pending_members }
+    context 'with enabled pending members setting' do
+      before { group.pending_users = 'enabled' }
 
-      it 'contains pending user' do
-        expect(subject).to include pending_user
+      describe '#active_members' do
+        subject { group.active_members }
+
+        it 'contains active user' do
+          expect(subject).to include active_user
+        end
+
+        it 'does not contains pending user' do
+          expect(subject).to_not include pending_user
+        end
       end
 
-      it 'does not contains active user' do
-        expect(subject).to_not include active_user
+      describe '#pending_members' do
+        subject { group.pending_members }
+
+        it 'contains pending user' do
+          expect(subject).to include pending_user
+        end
+
+        it 'does not contains active user' do
+          expect(subject).to_not include active_user
+        end
       end
     end
   end

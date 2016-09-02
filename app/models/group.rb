@@ -73,11 +73,19 @@ class Group < ActiveRecord::Base
   end
 
   def active_members
-    filter_by_membership true
+    if pending_users.enabled?
+      filter_by_membership true
+    else
+      members
+    end
   end
 
   def pending_members
-    filter_by_membership false
+    if pending_users.enabled?
+      filter_by_membership false
+    else
+      members.none
+    end
   end
 
   def file_safe_name

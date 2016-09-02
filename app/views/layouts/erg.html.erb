@@ -22,7 +22,7 @@
     <% if policy(@group).view_members? %>
         <%= active_link_to "Members", group_group_members_path(@group), active: :exact, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
     <% end %>
-    <% if policy(@group).manage_members? %>
+    <% if @group.pending_users.enabled? && policy(@group).manage_members? %>
       <%= active_link_to "Pending Members (#{@group.pending_members.count})", pending_group_group_members_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
     <% end %>
     <% if policy(@group).view_members? %>
