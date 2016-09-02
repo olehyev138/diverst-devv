@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe Group do
   describe '#accept_user_to_group' do
     let!(:enterprise) { create(:enterprise) }
-    let!(:user) { create(:user) }
-    let!(:group) { create(:group) }
+    let!(:user) { create(:user, enterprise: enterprise) }
+    let!(:group) { create(:group, enterprise: enterprise) }
 
     let(:user_id) { user.id }
     subject{ group.accept_user_to_group(user.id) }
