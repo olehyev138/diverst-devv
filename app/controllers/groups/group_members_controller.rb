@@ -6,7 +6,7 @@ class Groups::GroupMembersController < ApplicationController
   layout 'erg'
 
   def index
-    authorize @group, :show?
+    authorize @group, :view_members?
     @members = @group.active_members.page(params[:page])
   end
 
