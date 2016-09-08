@@ -4,9 +4,9 @@
 
 <p>
 <% if @resource.enterprise.cdo_message.present? %>
-  At <%= @resource.enterprise.name %>, we want to recognize and celebrate our diversity with our users. We believe this is a core strength that leads to greater alignment. Please share with us a little bit about yourself so we can help you make the important connections that make your work with us more fulfilling and allow us all to celebrate what makes us unique.
-<% else %>
   <%= @resource.enterprise.cdo_message %>
+<% else %>
+  At <%= @resource.enterprise.name %>, we want to recognize and celebrate our diversity with our users. We believe this is a core strength that leads to greater alignment. Please share with us a little bit about yourself so we can help you make the important connections that make your work with us more fulfilling and allow us all to celebrate what makes us unique.
 <% end %>
 </p>
 <p>Answer only what you are comfortable with:</p>
