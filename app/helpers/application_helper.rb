@@ -4,7 +4,11 @@ module ApplicationHelper
   end
 
   def logo_url
-    current_user.enterprise.theme.nil? ? image_path('diverst-logo.svg') : current_user.enterprise.theme.logo.expiring_url(3600)
+    enterprise_logo_or_default('diverst-logo.svg')
+  end
+
+  def login_logo
+    enterprise_logo_or_default('diverst-logo-purple.svg')
   end
 
   def last_sign_in_text(user)
@@ -38,5 +42,38 @@ module ApplicationHelper
   def default_path
     return root_admin_path if root_admin_path
     return user_root_path
+  end
+
+  def default_enterprise_asset_url
+    enterprise = default_enterprise_for_styling
+
+    if enterprise.theme.nil?
+      'application'
+    else
+      enterprise.theme.asset_url
+    end
+  end
+
+  private
+
+  def default_enterprise_for_styling
+    if current_user
+      return current_user.enterprise
+    end
+
+    if ENV.key?('DEFAULT_STYLING_ENTERPRISE_ID')
+      Enterprise.find_by_id ENV['DEFAULT_STYLING_ENTERPRISE_ID']
+    else
+      nil
+    end
+  end
+
+  def enterprise_logo_or_default(default_logo_name)
+    enterprise = default_enterprise_for_styling
+    if enterprise && enterprise.theme.present? && enterprise.theme.logo.present?
+      enterprise.theme.logo.expiring_url(3601)
+    else
+      image_path(default_logo_name)
+    end
   end
 end
