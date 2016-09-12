@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
   require 'sidekiq/web'
+
+  Sidekiq::Web.use Rack::Auth::Basic do |username, password|
+    username == ENV["SIDEKIQ_DASHBOARD_USERNAME"] && password == ENV["SIDEKIQ_DASHBOARD_PASSWORD"]
+  end if Rails.env.production?
   mount Sidekiq::Web => '/sidekiq'
 
   devise_for :users, controllers: { invitations: 'users/invitations' }
