@@ -6,8 +6,8 @@
 # server 'example.com', user: 'deploy', roles: %w{app db web}, my_property: :my_value
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
 # server 'db.example.com', user: 'deploy', roles: %w{db}
-server '52.90.48.218', user: 'newdeploy', roles: %w(web app db)
-#52.42.138.110 old one
+server '52.44.18.208', user: 'newdeploy', roles: %w(web app db)
+
 #52.39.50.54 new one
 #52.90.48.218 sandbox3
 
@@ -31,7 +31,7 @@ server '52.90.48.218', user: 'newdeploy', roles: %w(web app db)
 # http://capistranorb.com/documentation/getting-started/configuration/
 # Feel free to add new variables to customise your setup.
 
-set :branch, 'staging'
+set :branch, 'develop'
 set :rails_env, :production
 
 # Custom SSH Options
