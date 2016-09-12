@@ -29,8 +29,8 @@ RSpec.describe GroupsController, type: :controller do
     let(:user) { create :user }
     let(:group) { create :group, enterprise: user.enterprise }
 
-    def get_settings(group_id = nil)
-      get :settings, group_id: group_id
+    def get_settings(group_id = -1)
+      get :settings, id: group_id
     end
 
     context 'with logged user' do

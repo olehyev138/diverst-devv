@@ -47,7 +47,7 @@ module ApplicationHelper
   def default_enterprise_asset_url
     enterprise = default_enterprise_for_styling
 
-    if enterprise.theme.nil?
+    if enterprise.nil? || enterprise.theme.nil?
       'application'
     else
       enterprise.theme.asset_url
