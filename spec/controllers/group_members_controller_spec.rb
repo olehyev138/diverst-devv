@@ -11,7 +11,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
       login_user_from_let
 
       context 'with correct group' do
-        let(:group) { FactoryGirl.create(:group, enterprise: user.enterprise)}
+        let(:group) { FactoryGirl.create(:group, enterprise: user.enterprise, pending_users: 'enabled')}
         let(:active_user) { FactoryGirl.create(:user, enterprise: user.enterprise) }
         let(:pending_user) { FactoryGirl.create(:user, enterprise: user.enterprise) }
 
@@ -62,7 +62,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
       login_user_from_let
 
       context 'with correct group' do
-        let(:group) { FactoryGirl.create(:group, enterprise: user.enterprise) }
+        let(:group) { FactoryGirl.create(:group, enterprise: user.enterprise, pending_users: 'enabled' ) }
 
         let!(:pending_user) { FactoryGirl.create(:user, enterprise: user.enterprise) }
         let!(:active_user) { FactoryGirl.create(:user, enterprise: user.enterprise) }

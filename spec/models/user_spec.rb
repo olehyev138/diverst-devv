@@ -58,7 +58,7 @@ RSpec.describe User do
   describe '#active_group_member?' do
     let!(:enterprise) { create(:enterprise)}
     let!(:user) { create(:user, enterprise: enterprise) }
-    let!(:group) { create(:group, enterprise: enterprise) }
+    let!(:group) { create(:group, enterprise: enterprise, pending_users: 'enabled') }
 
     subject { user.active_group_member?(group.id) }
 
