@@ -90,5 +90,31 @@ RSpec.describe User do
     end
   end
 
+  describe 'saml password behaviour' do
+    let(:user) { build :user, enterprise: ent, password: '', password_confirmation: '' }
+
+    context 'with saml enabled' do
+      let(:ent) { create :enterprise, has_enabled_saml: true }
+
+      it 'do not require password' do
+        expect(user).to be_valid
+      end
+    end
+
+    context 'with saml disabled' do
+      let(:ent) { create :enterprise, has_enabled_saml: false }
+
+      it 'requires password' do
+        expect(user).to be_invalid
+      end
+
+      it 'requires password confirmation to be equal to password' do
+        user.password = 'randompassword'
+
+        expect(user).to be_invalid
+      end
+    end
+  end
+
   it { is_expected.to have_attached_file(:avatar) }
 end

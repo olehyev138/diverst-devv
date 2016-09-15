@@ -63,8 +63,8 @@
             <%= f.input :last_name %>
 
             <% if !resource.enterprise.has_enabled_saml? %>
-              <%= f.input :password %>
-              <%= f.input :password_confirmation %>
+              <%= f.input :password, required: true %>
+              <%= f.input :password_confirmation, required: true %>
             <% end %>
 
             <% resource.enterprise.fields.where(private: false).each do |cf| %>

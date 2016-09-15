@@ -38,6 +38,9 @@ class User < ActiveRecord::Base
   has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('missing.png'), s3_permissions: :private
   validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
 
+  validates_presence_of :password, unless: Proc.new { |a| a.enterprise.has_enabled_saml? }
+  validates_confirmation_of :password, unless: Proc.new { |a| a.password.blank? }
+
   before_validation :generate_password_if_saml
   after_create :assign_firebase_token
 
