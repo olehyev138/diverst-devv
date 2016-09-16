@@ -59,12 +59,12 @@
               </div>
             <% end %>
 
-            <%= f.input :first_name %>
-            <%= f.input :last_name %>
+            <%= f.input :first_name, required: true %>
+            <%= f.input :last_name, required: true %>
 
             <% if !resource.enterprise.has_enabled_saml? %>
-              <%= f.input :password %>
-              <%= f.input :password_confirmation %>
+              <%= f.input :password, required: true %>
+              <%= f.input :password_confirmation, required: true %>
             <% end %>
 
             <% resource.enterprise.fields.where(private: false).each do |cf| %>
@@ -125,6 +125,7 @@
         var $confirmation = $form.find('input#user_password_confirmation');
 
         // We don't want to try password validation if passwords are disabled
+
         if( !($password.length && $confirmation.length )) {
           return true;
         }
