@@ -91,6 +91,53 @@
       });
 
       $('.select2').select2();
+
+      $('form#edit_user').on('submit', function(e) {
+        var $form = $(this);
+
+        if( !(validate_empty_fields($form) && validate_password($form) )) {
+          e.preventDefault();
+        }
+      });
+
+      function validate_empty_fields($form) {
+        var $incorrect_fields = $form.find('input.required').filter(function() { return this.value == ""; });
+
+        if( $incorrect_fields.length > 0 ) {
+          var message = 'Please provide values for the following fields:';
+
+          $.each($incorrect_fields, function(index, field){
+            var field_label_text = $(field).parent().siblings('label').text();
+
+            message += '\n ' + field_label_text;
+          }); //endof each
+
+          alert(message);
+
+          return false;
+        }
+
+        return true;
+      }
+
+      function validate_password($form) {
+        var $password  = $form.find('input#user_password');
+        var $confirmation = $form.find('input#user_password_confirmation');
+
+        // We don't want to try password validation if passwords are disabled
+        if( !($password.length && $confirmation.length )) {
+          return true;
+        }
+
+        if( $password.val() == $confirmation.val() ) {
+          return true;
+        } else {
+          var message = 'Passwords do not match!';
+          alert(message);
+
+          return false;
+        }
+      }
     </script>
   </div>
 
