@@ -23,6 +23,7 @@
 //= require Sortable
 //= require moment
 //= require pikaday
+//= require fullcalendar
 //= require tooltipster
 //= require urijs
 //= require jscolor/jscolor
