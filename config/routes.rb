@@ -95,6 +95,10 @@ Rails.application.routes.draw do
 
         resources :comments
 
+        collection do
+          get 'calendar'
+        end
+
         member do
           get 'export_ics'
         end

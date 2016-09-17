@@ -10,6 +10,13 @@ class Groups::EventsController < ApplicationController
     @ongoing_events = @group.events.ongoing
   end
 
+  def calendar
+    events = @group.events.where('start >= ?', params[:start])
+                          .where('start <= ?', params[:end])
+
+    render json: events.map{ |e| e.as_json(only:[:id, :title, :start, :end]) }
+  end
+
   def new
     @event = @group.events.new
   end
