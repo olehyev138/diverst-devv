@@ -1,6 +1,8 @@
 <div class="content__header">
   <h1>Events</h1>
   <%= link_to "+ Create new event", new_group_event_path, class: "btn btn--primary" if policy(Event).new? %>
+
+  <%= link_to "Calendar view",   calendar_view_group_events_path(@group), class: "btn btn--primary" %>
 </div>
 
 <div class="content__main">
@@ -36,24 +38,3 @@
   </div>
 
 </div>
-
-<div id="calendar"></div>
-
-<script>
-  $(document).ready(function(){
-    $('#calendar').fullCalendar({
-      header: {
-        left:   'title',
-        center: 'month,agendaWeek',
-        right:  'prev,today,next'
-      },
-      eventSources: [
-        {
-          url: '<%= calendar_group_events_path(@group) %>',
-          color: BRANDING_COLOR,
-          textColor: 'white'
-        }
-      ]
-    }); //endof fullcalendar
-  }); //endof document.ready
-</script>

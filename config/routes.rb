@@ -96,7 +96,8 @@ Rails.application.routes.draw do
         resources :comments
 
         collection do
-          get 'calendar'
+          get 'calendar_view'
+          get 'calendar_data'
         end
 
         member do
