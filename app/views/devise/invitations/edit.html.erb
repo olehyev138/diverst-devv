@@ -95,10 +95,23 @@
       $('form#edit_user').on('submit', function(e) {
         var $form = $(this);
 
-        if( !(validate_empty_fields($form) && validate_password($form) )) {
+        //TODO don't trigger password validation if there are no password fields
+        if( !is_valid($form) ) {
           e.preventDefault();
+          alert('not success');
         }
       });
+
+      function is_valid($form) {
+        // If password field is present
+        if( $form.find('input#user_password1').length ) {
+          //validate required fields and password
+          return  validate_empty_fields($form) && validate_password($form) && validate_password_length($form);
+        } else {
+          //validate required fields only
+          return validate_empty_fields($form);
+        }
+      }
 
       function validate_empty_fields($form) {
         var $incorrect_fields = $form.find('input.required').filter(function() { return this.value == ""; });
@@ -138,6 +151,19 @@
 
           return false;
         }
+      }
+
+      function validate_password_length($form) {
+        var $password  = $form.find('input#user_password');
+
+        if( $password.val().length <= 8) {
+          var message = 'Password is too short!';
+          alert(message);
+
+          return false;
+        }
+
+        return true;
       }
     </script>
   </div>

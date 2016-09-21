@@ -100,47 +100,47 @@ RSpec.describe User do
     end
 
 
-    describe 'saml password behaviour' do
-      let(:user) { build :user, enterprise: ent, password: '', password_confirmation: '' }
+    # describe 'saml password behaviour' do
+    #   let(:user) { build :user, enterprise: ent, password: '', password_confirmation: '' }
 
-      context 'with saml enabled' do
-        let(:ent) { create :enterprise, has_enabled_saml: true }
+    #   context 'with saml enabled' do
+    #     let(:ent) { create :enterprise, has_enabled_saml: true }
 
-        it 'do not require password' do
-          expect(user).to be_valid
-        end
-      end
+    #     it 'do not require password' do
+    #       expect(user).to be_valid
+    #     end
+    #   end
 
-      context 'with saml disabled' do
-        let(:ent) { create :enterprise, has_enabled_saml: false }
+    #   context 'with saml disabled' do
+    #     let(:ent) { create :enterprise, has_enabled_saml: false }
 
-        it 'requires password' do
-          expect(user).to be_invalid
-        end
+    #     it 'requires password' do
+    #       expect(user).to be_invalid
+    #     end
 
-        it 'requires password confirmation to be equal to password' do
-          user.password = 'randompassword'
+    #     it 'requires password confirmation to be equal to password' do
+    #       user.password = 'randompassword'
 
-          expect(user).to be_invalid
-        end
-      end
-    end
+    #       expect(user).to be_invalid
+    #     end
+    #   end
+    # end
 
-    describe 'first name' do
-      let(:user) { build :user, first_name: '' }
+    # describe 'first name' do
+    #   let(:user) { build :user, first_name: '' }
 
-      it 'is invalid without first name' do
-        expect(user).to_not be_valid
-      end
-    end
+    #   it 'is invalid without first name' do
+    #     expect(user).to_not be_valid
+    #   end
+    # end
 
-    describe 'last name' do
-      let(:user) { build :user, last_name: '' }
+    # describe 'last name' do
+    #   let(:user) { build :user, last_name: '' }
 
-      it 'is invalid without last name' do
-        expect(user).to_not be_valid
-      end
-    end
+    #   it 'is invalid without last name' do
+    #     expect(user).to_not be_valid
+    #   end
+    # end
   end
 
   it { is_expected.to have_attached_file(:avatar) }
