@@ -73,7 +73,8 @@ after :enterprise do
     initiatives_create: true,
     initiatives_manage: true,
 
-    global_settings_manage: true
+    global_settings_manage: true,
+    admin_pages_view: true
   )
 
   # Create our own users

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160902215010) do
+ActiveRecord::Schema.define(version: 20160921031425) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -534,6 +534,7 @@ ActiveRecord::Schema.define(version: 20160902215010) do
     t.boolean  "initiatives_create",                      default: false
     t.boolean  "initiatives_manage",                      default: false
     t.boolean  "default_for_enterprise",                  default: false
+    t.boolean  "admin_pages_view",                        default: false
   end
 
   create_table "poll_responses", force: :cascade do |t|

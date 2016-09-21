@@ -46,6 +46,7 @@ class PolicyGroupsController < ApplicationController
       .permit(
         :name,
         :default_for_enterprise,
+        :admin_pages_view,
 
         :campaigns_index,
         :campaigns_create,

@@ -16,7 +16,11 @@
         <%= link_to user_root_path do %><img class="primary-header__logo logo" src="<%= logo_url %>"><% end %>
       </div>
       <div class="flex-row__cell">
-        <%= link_to "Admin Dashboard", root_admin_path, class: "white" if root_admin_path %> &nbsp;|&nbsp;
+        <% if root_admin_path && current_user.policy_group.admin_pages_view %>
+          <%= link_to "Admin Dashboard", root_admin_path, class: "white" %>
+        &nbsp;|&nbsp;
+        <% end %>
+
         <%= link_to current_user.name, user_user_path(current_user), class: "white" %>
       </div>
     </div>

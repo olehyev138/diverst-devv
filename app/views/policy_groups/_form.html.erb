@@ -11,6 +11,10 @@
         <%= f.input :default_for_enterprise, label: 'Use as default' %>
       </div>
       <div class="card__section card__section--border">
+        <p class="field__hint">Should members of this group be able to access admin dashboard?</p>
+        <%= f.input :admin_pages_view, label: 'Admin Dashboard' %>
+      </div>
+      <div class="card__section card__section--border">
         <h2>General</h2>
         <div class="row row--spacing-bottom">
           <div class="col md-3">

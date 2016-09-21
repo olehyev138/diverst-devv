@@ -103,6 +103,7 @@ FactoryGirl.define do
     global_settings_manage true
 
     default_for_enterprise false
+    admin_pages_view true
   end
 
   factory :user_group do
