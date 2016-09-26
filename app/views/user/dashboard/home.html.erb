@@ -23,13 +23,13 @@
             <div class="card__section">
 
               <h4>Upcoming Events</h4>
-              <%= link_to "View all", user_events_path, class: "card__action" %>
+              <%= link_to "View all", user_events_path, class: "  card__action" %>
 
               <% @upcoming_events.each do |event| %>
                 <%= link_to user_event_path(event), class: "block block-section" do %>
                   <div class="flippable">
                     <div class="front">
-                      <%= image_tag event.picture.url if event.picture.present? %>
+                      <%= image_tag event.picture.url, width: '100%' if event.picture.present? %>
                     </div>
                     <div class="back">
                       <div class="flex-row flex-row--middle">
@@ -62,7 +62,7 @@
                 <%= link_to news_link.url, class: "block block-section", target: "_blank" do %>
                   <div class="flippable">
                     <div class="front">
-                      <%= image_tag news_link.picture.url if news_link.picture.present? %>
+                      <%= image_tag news_link.picture.url, width: '100%' if news_link.picture.present? %>
                     </div>
                     <div class="back">
                       <div class="flex-row flex-row--middle">
