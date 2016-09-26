@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160926121410) do
+ActiveRecord::Schema.define(version: 20160926200103) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -204,6 +204,7 @@ ActiveRecord::Schema.define(version: 20160926121410) do
     t.integer  "cdo_picture_file_size",      limit: 4
     t.datetime "cdo_picture_updated_at"
     t.text     "cdo_message",                limit: 65535
+    t.text     "cdo_message_email",          limit: 65535
     t.boolean  "collaborate_module_enabled",               default: true,  null: false
     t.boolean  "scope_module_enabled",                     default: true,  null: false
     t.boolean  "bias_module_enabled",                      default: true,  null: false

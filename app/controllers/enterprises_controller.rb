@@ -92,6 +92,7 @@ class EnterprisesController < ApplicationController
         :idp_cert,
         :yammer_import,
         :cdo_message,
+        :cdo_message_email,
         :cdo_name,
         :cdo_title,
         :cdo_picture,
