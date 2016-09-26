@@ -30,6 +30,8 @@ Rails.application.routes.draw do
 
   resources :users do
     collection do
+      get 'edit_profile'
+
       get 'export_csv'
       get 'import_csv'
       get 'sample_csv'

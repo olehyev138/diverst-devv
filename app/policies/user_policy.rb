@@ -8,6 +8,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def update?
+    return true if @record == @user
     @policy_group.global_settings_manage?
   end
 

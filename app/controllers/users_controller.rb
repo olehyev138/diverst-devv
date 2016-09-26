@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:edit, :update, :destroy, :show]
-  after_action :verify_authorized
+  after_action :verify_authorized, except: [:edit_profile]
 
-  layout 'global_settings'
+  layout :resolve_layout
 
   def index
     authorize User
@@ -22,17 +22,30 @@ class UsersController < ApplicationController
     authorize @user
   end
 
+  #For admins. Dedicated to editing any user's info
   def edit
     authorize @user
   end
 
+  #For regular users. Dedicated to editing own profile only.
+  def edit_profile
+    @user = current_user
+
+    render :edit
+  end
+
   def update
     authorize @user
+
     @user.assign_attributes(user_params)
     @user.info.merge(fields: @user.enterprise.fields, form_data: params['custom-fields'])
 
     if @user.save
-      redirect_to @user
+      if @user.policy_group.admin_pages_view?
+        redirect_to @user
+      else
+        redirect_to user_user_path(@user)
+      end
     else
       render :edit
     end
@@ -104,6 +117,15 @@ class UsersController < ApplicationController
   end
 
   protected
+
+  def resolve_layout
+    case action_name
+    when 'edit_profile'
+      'user'
+    else
+      'global_settings'
+    end
+  end
 
   def set_user
     @user = current_user.enterprise.users.find(params[:id])
