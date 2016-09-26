@@ -27,6 +27,7 @@
 //= require tooltipster
 //= require urijs
 //= require jscolor/jscolor
+//= require flip
 //= require_tree .
 
 var Utility = (function() {

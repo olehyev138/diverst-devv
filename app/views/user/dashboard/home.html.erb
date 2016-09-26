@@ -27,14 +27,21 @@
 
               <% @upcoming_events.each do |event| %>
                 <%= link_to user_event_path(event), class: "block block-section" do %>
-                  <div class="flex-row flex-row--middle">
-                    <div class="flex-row__cell flex-row__cell--grow">
-                      <span class="highlight"><%= event.title %></span><br>
-                      <small><%= truncate(event.description, length: 90) %></small><br>
-                      <small class="muted"><%= event.start.to_s :slashes %></small>
+                  <div class="flippable">
+                    <div class="front">
+                      <%= image_tag @enterprise.banner.url %>
                     </div>
-                    <div class="flex-row__cell">
-                      <span class="icon icon--chevron-right"></span>
+                    <div class="back">
+                      <div class="flex-row flex-row--middle">
+                        <div class="flex-row__cell flex-row__cell--grow">
+                          <span class="highlight"><%= event.title %></span><br>
+                          <small><%= truncate(event.description, length: 90) %></small><br>
+                          <small class="muted"><%= event.start.to_s :slashes %></small>
+                        </div>
+                        <div class="flex-row__cell">
+                          <span class="icon icon--chevron-right"></span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 <% end %>
@@ -53,19 +60,25 @@
 
               <% @news_links.each do |news_link| %>
                 <%= link_to news_link.url, class: "block block-section", target: "_blank" do %>
-                  <div class="flex-row flex-row--middle">
-                    <div class="flex-row__cell flex-row__cell--grow">
-                      <span class="highlight"><%= news_link.title %></span><br>
-                      <small><%= truncate(news_link.description, length: 90) %></small><br>
-                      <small class="muted"><%= news_link.created_at.to_s :slashes %></small>
+                  <div class="flippable">
+                    <div class="front">
+                      <%= image_tag @enterprise.banner.url %>
                     </div>
-                    <div class="flex-row__cell">
-                      <span class="icon icon--chevron-right"></span>
+                    <div class="back">
+                      <div class="flex-row flex-row--middle">
+                        <div class="flex-row__cell flex-row__cell--grow">
+                          <span class="highlight"><%= news_link.title %></span><br>
+                          <small><%= truncate(news_link.description, length: 90) %></small><br>
+                          <small class="muted"><%= news_link.created_at.to_s :slashes %></small>
+                        </div>
+                        <div class="flex-row__cell">
+                          <span class="icon icon--chevron-right"></span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 <% end %>
               <% end %>
-
             </div>
           </div>
         </div>
@@ -129,3 +142,26 @@
 
   </div>
 </div>
+
+<script>
+  $(document).ready(function() {
+    applyFlip();
+
+    function applyFlip() {
+      var flippableOptions = {
+        trigger: 'hover'
+      };
+      // Before applying flip, we need to manually set height of each element.
+      // More could be found here:
+      // http://stackoverflow.com/questions/39552827/jquery-flip-elements-overlapping-subsequent-elements
+      $('.flippable').each(function(index){
+       // var height =  $(this).parents('a').outerHeight();
+        var frontHeight = $(this).find('.front').height();
+        var backHeight = $(this).find('.back').height();
+        var biggerHeight = frontHeight > backHeight ? frontHeight : backHeight;
+
+       $(this).flip(flippableOptions).height(biggerHeight);
+      });//endof each
+    }
+  }); //endof document.ready
+</script>
