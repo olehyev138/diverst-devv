@@ -27,6 +27,22 @@
 </div>
 
 <div class="content__header">
+  <h1>User Home view</h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_branding') do |f| %>
+        <%= f.input :banner, as: :file, label: "User Home banner" %>
+
+        <%= f.button :submit, "Save user settings" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="content__header">
   <h1>Edit Program Sponsor details</h1>
 </div>
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160921031425) do
+ActiveRecord::Schema.define(version: 20160926062135) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -208,6 +208,10 @@ ActiveRecord::Schema.define(version: 20160921031425) do
     t.boolean  "scope_module_enabled",                     default: true,  null: false
     t.boolean  "bias_module_enabled",                      default: true,  null: false
     t.boolean  "plan_module_enabled",                      default: true,  null: false
+    t.string   "banner_file_name",           limit: 255
+    t.string   "banner_content_type",        limit: 255
+    t.integer  "banner_file_size",           limit: 4
+    t.datetime "banner_updated_at"
   end
 
   create_table "event_attendances", force: :cascade do |t|

@@ -95,6 +95,7 @@ class EnterprisesController < ApplicationController
         :cdo_name,
         :cdo_title,
         :cdo_picture,
+        :banner,
         theme: [
           :id,
           :primary_color,
