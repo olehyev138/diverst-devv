@@ -61,7 +61,8 @@ class Groups::NewsLinksController < ApplicationController
       .permit(
         :url,
         :title,
-        :description
+        :description,
+        :picture
       )
   end
 end

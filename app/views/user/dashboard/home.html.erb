@@ -29,7 +29,7 @@
                 <%= link_to user_event_path(event), class: "block block-section" do %>
                   <div class="flippable">
                     <div class="front">
-                      <%= image_tag @enterprise.banner.url %>
+                      <%= image_tag event.picture.url if event.picture.present? %>
                     </div>
                     <div class="back">
                       <div class="flex-row flex-row--middle">
@@ -62,7 +62,7 @@
                 <%= link_to news_link.url, class: "block block-section", target: "_blank" do %>
                   <div class="flippable">
                     <div class="front">
-                      <%= image_tag @enterprise.banner.url %>
+                      <%= image_tag news_link.picture.url if news_link.picture.present? %>
                     </div>
                     <div class="back">
                       <div class="flex-row flex-row--middle">
@@ -156,11 +156,15 @@
       // http://stackoverflow.com/questions/39552827/jquery-flip-elements-overlapping-subsequent-elements
       $('.flippable').each(function(index){
        // var height =  $(this).parents('a').outerHeight();
-        var frontHeight = $(this).find('.front').height();
+        var $front = $(this).find('.front');
+        var frontHeight = $front.height();
         var backHeight = $(this).find('.back').height();
         var biggerHeight = frontHeight > backHeight ? frontHeight : backHeight;
 
-       $(this).flip(flippableOptions).height(biggerHeight);
+        // Only apply flip if fron element contains anything
+        if($front.html().trim() ) {
+          $(this).flip(flippableOptions).height(biggerHeight);
+        }
       });//endof each
     }
   }); //endof document.ready
