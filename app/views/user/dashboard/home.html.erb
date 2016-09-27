@@ -26,7 +26,7 @@
               <%= link_to "View all", user_events_path, class: "  card__action" %>
 
               <% @upcoming_events.each do |event| %>
-                <%= link_to user_event_path(event), class: "block block-section" do %>
+                <%= link_to group_event_path(event.group, event), class: "block block-section" do %>
                   <div class="flippable">
                     <div class="front">
                       <%= image_tag event.picture.url, width: '100%' if event.picture.present? %>
