@@ -242,7 +242,13 @@ Rails.application.routes.draw do
 
       resources :news_links
       resources :messages
-      resources :events
+      resources :events do
+        collection do
+          get 'calendar'
+          get 'calendar_data'
+        end
+      end
+
       resources :resources
 
       resources :campaigns, shallow: true do

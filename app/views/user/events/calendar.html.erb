@@ -1,0 +1,28 @@
+<div class="content__header">
+  <h1>Events Calendar</h1>
+  <div class="flex-row flex-row--middle">
+    <div class="flex-row__cell">
+      <%= link_to "List View",   user_events_path, class: "btn btn--secondary" %>
+    </div>
+  </div>
+</div>
+<div id="calendar"></div>
+
+<script>
+  $(document).ready(function(){
+    $('#calendar').fullCalendar({
+      header: {
+        left:   'title',
+        center: 'month,agendaWeek',
+        right:  'prev,today,next'
+      },
+      eventSources: [
+        {
+          url: '<%= calendar_data_user_events_path %>',
+          color: BRANDING_COLOR,
+          textColor: 'white'
+        }
+      ]
+    }); //endof fullcalendar
+  }); //endof document.ready
+</script>
