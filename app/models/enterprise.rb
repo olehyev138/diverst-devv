@@ -40,7 +40,7 @@ class Enterprise < ActiveRecord::Base
   has_attached_file :cdo_picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('missing.png'), s3_permissions: :private
   validates_attachment_content_type :cdo_picture, content_type: %r{\Aimage\/.*\Z}
 
-  has_attached_file :banner, s3_permissions: :private
+  has_attached_file :banner
   validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
 
   def saml_settings
