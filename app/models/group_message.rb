@@ -1,6 +1,7 @@
 class GroupMessage < ActiveRecord::Base
   has_many :group_messages_segments
   has_many :segments, through: :group_messages_segments
+  belongs_to :owner, class_name: 'User'
   belongs_to :group
 
   after_create :send_emails

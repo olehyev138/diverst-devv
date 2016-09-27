@@ -15,6 +15,7 @@ class Groups::GroupMessagesController < ApplicationController
 
   def create
     @message = @group.messages.new(message_params)
+    @message.owner = current_user
 
     if @message.save
       redirect_to action: :index
