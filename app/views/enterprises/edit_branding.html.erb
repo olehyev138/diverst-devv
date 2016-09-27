@@ -18,6 +18,8 @@
           </div>
           <%= t.input :logo, as: :file %>
 
+          <%= t.input :logo_redirect_url %>
+
           <%= t.button :submit, "Save branding" %>
           <%= link_to "Restore to default", restore_default_branding_enterprise_path(@enterprise), class: "btn btn--secondary", method: :patch %>
         <% end %>

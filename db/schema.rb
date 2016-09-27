@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160926200103) do
+ActiveRecord::Schema.define(version: 20160927133945) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -635,6 +635,7 @@ ActiveRecord::Schema.define(version: 20160926200103) do
     t.boolean  "default",                         default: false
     t.string   "secondary_color",     limit: 255
     t.boolean  "use_secondary_color",             default: false
+    t.string   "logo_redirect_url",   limit: 255, default: ""
   end
 
   create_table "topic_feedbacks", force: :cascade do |t|

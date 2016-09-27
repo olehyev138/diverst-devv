@@ -102,7 +102,8 @@ class EnterprisesController < ApplicationController
           :primary_color,
           :use_secondary_color,
           :secondary_color,
-          :logo
+          :logo,
+          :logo_redirect_url
         ],
         mobile_fields_attributes: [
           :id,

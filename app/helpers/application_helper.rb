@@ -11,6 +11,14 @@ module ApplicationHelper
     enterprise_logo_or_default('diverst-logo-purple.svg')
   end
 
+  def logo_destination
+    if current_user.enterprise.theme.logo_redirect_url.present?
+      current_user.enterprise.theme.logo_redirect_url
+    else
+      user_root_path
+    end
+  end
+
   def last_sign_in_text(user)
     return "Never" if user.last_sign_in_at.nil?
     return "#{time_ago_in_words(user.last_sign_in_at)} ago"
