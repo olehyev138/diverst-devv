@@ -12,7 +12,7 @@ module ApplicationHelper
   end
 
   def logo_destination
-    if current_user.enterprise.theme.logo_redirect_url.present?
+    if current_user.enterprise.theme.present? && current_user.enterprise.theme.logo_redirect_url.present?
       current_user.enterprise.theme.logo_redirect_url
     else
       user_root_path
