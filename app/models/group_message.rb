@@ -19,6 +19,12 @@ class GroupMessage < ActiveRecord::Base
     end
   end
 
+  def owner_name
+    return 'Unknown' unless owner.present?
+
+    owner.first_name + owner.last_name
+  end
+
   def send_emails
     GroupMailer.group_message(self).deliver_later
   end

@@ -172,6 +172,7 @@ FactoryGirl.define do
     content 'This is the coolest message content I\'ve seen in a while!'
 
     association :group, factory: :group_with_users
+    association :owner, factory: :user
   end
 
   factory :news_link do
