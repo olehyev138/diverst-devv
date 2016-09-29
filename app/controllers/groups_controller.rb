@@ -1,4 +1,5 @@
 class GroupsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_group, except: [:index, :new, :create, :plan_overview]
   skip_before_action :verify_authenticity_token, only: [:create]
   after_action :verify_authorized
