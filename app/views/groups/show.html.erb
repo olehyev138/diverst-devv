@@ -3,14 +3,6 @@
 
   <div class="flex-row flex-row--middle">
     <div class="flex-row__cell">
-      <% if @group.members.where(id: current_user.id).count > 0 %>
-        <%= link_to 'Leave this ERG', group_group_member_path(@group, current_user), method: :delete, class: 'error' %>
-      <% else %>
-        <%= simple_form_for :user, url: group_group_members_path(@group), method: :post do |f| %>
-          <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
-          <%= f.submit 'Join this ERG', class: "btn btn--primary" %>
-        <% end %>
-      <% end %>
     </div>
   </div>
 </div>
@@ -128,9 +120,18 @@
     </div>
 
     <div class="col col--stacked sm-12 md-3">
-      <% if @current_user.pending_group_member?(@group.id) %>
-        Please wait for group administrators to process your membership request.
-      <% end %>
+        <% if @current_user.pending_group_member?(@group.id) %>
+          Please wait for group administrators to process your membership request.
+        <% end %>
+
+        <% if @group.members.where(id: current_user.id).count > 0 %>
+          <%= link_to 'Leave this ERG', group_group_member_path(@group, current_user), method: :delete, class: 'error', style: 'margin: 10px;' %>
+        <% else %>
+          <%= simple_form_for :user, url: group_group_members_path(@group), method: :post do |f| %>
+            <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
+            <%= f.submit 'Join this ERG', class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
+          <% end %>
+        <% end %>
 
       <% if manager = @group.lead_manager %>
         <div class="card card--secondary">
