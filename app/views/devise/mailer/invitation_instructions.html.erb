@@ -11,6 +11,12 @@
 </p>
 <p>Answer only what you are comfortable with:</p>
 
-<p>* Privacy statement. Diverst uses a double factor authentication protocol and regards your data as highly confidential. It only uses this data in an algorithm to match users with others based on similar interests and skills, along with what makes them unique. Your data will never be shared with anyone or anything other than the matching algorithm.</p>
+<p>* Privacy statement.
+<% if @resource.enterprise.privacy_statement.present? %>
+  <%= @resource.enterprise.privacy_statement %>
+<% else %>
+  Diverst uses a double factor authentication protocol and regards your data as highly confidential. Only authorized administrators can view this data.. Your data will never be shared with anyone or anything other than these select individuals.
+<% end %>
+</p>
 
 <p><%= link_to "Set up my profile", accept_invitation_url(@resource, :invitation_token => @token) %></p>

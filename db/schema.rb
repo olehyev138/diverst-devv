@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160930172011) do
+ActiveRecord::Schema.define(version: 20160930205352) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -213,6 +213,7 @@ ActiveRecord::Schema.define(version: 20160930172011) do
     t.string   "banner_content_type",        limit: 255
     t.integer  "banner_file_size",           limit: 4
     t.datetime "banner_updated_at"
+    t.text     "privacy_statement",          limit: 65535
   end
 
   create_table "event_attendances", force: :cascade do |t|

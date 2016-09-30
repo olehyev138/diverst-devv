@@ -93,6 +93,7 @@ class EnterprisesController < ApplicationController
         :yammer_import,
         :cdo_message,
         :cdo_message_email,
+        :privacy_statement,
         :cdo_name,
         :cdo_title,
         :cdo_picture,
