@@ -11,8 +11,13 @@
     <% else %>
       <% @messages.each do |message| %>
         <div class="card__section card__section--border">
-          <h3><%= message.subject %> - <span class="muted" title="<%= message.created_at.to_s :datetime %>"><%= time_ago_in_words(message.created_at) %> ago - <%= message.group.name %></span></h3>
-          <p><%= message.content %></p>
+          <h3><%= message.subject %> - <span class="muted" title="<%= message.created_at.to_s :datetime %>"><%= time_ago_in_words(message.created_at) %> ago (<%= message.created_at.to_formatted_s(:short) %>) - <%= message.group.name %></span></h3>
+          <p><%= message.content %>
+          <% if message.owner.present? %>
+            <br>
+            <i>by <%= message.owner.name %></i>
+          <% end %>
+          </p>
         </div>
       <% end %>
     <% end %>
