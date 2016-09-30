@@ -1,0 +1,32 @@
+<div class="content__header">
+  <h1>Comments</h1>
+</div>
+
+<div class="content__main">
+  <%= render 'comments_form' %>
+
+  <div class="card">
+    <% if @comments.empty? %>
+      <div class="card__section">
+        <p>No comments have been left yet.</p>
+      </div>
+    <% else %>
+      <% @comments.each do |comment| %>
+        <div class="card__section card__section--border">
+          <div class="flex-row flex-row--middle">
+            <div class="flex-row__cell flex-row__cell--grow">
+              <p>
+                <%= comment.content %>
+                <br>
+                by: <%= comment.author.name %>
+                <br>
+              </p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <%= render 'comments_form' %>
+</div>

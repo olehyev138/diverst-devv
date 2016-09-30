@@ -1,6 +1,6 @@
 class Groups::NewsLinksController < ApplicationController
   before_action :set_group, except: [:url_info]
-  before_action :set_news_link, only: [:edit, :update, :destroy]
+  before_action :set_news_link, only: [:comments, :create_comment, :edit, :update, :destroy]
 
   layout 'erg'
 
@@ -10,6 +10,20 @@ class Groups::NewsLinksController < ApplicationController
 
   def new
     @news_link = @group.news_links.new
+  end
+
+  def comments
+    @comments = @news_link.comments
+    @new_comment = NewsLinkComment.new
+  end
+
+  def create_comment
+    @comment = @news_link.comments.new(news_link_comment_params)
+    @comment.author = current_user
+
+    @comment.save
+
+    redirect_to action: :comments
   end
 
   def create
@@ -63,6 +77,14 @@ class Groups::NewsLinksController < ApplicationController
         :title,
         :description,
         :picture
+      )
+  end
+
+  def news_link_comment_params
+    params
+      .require(:news_link_comment)
+      .permit(
+        :content
       )
   end
 end

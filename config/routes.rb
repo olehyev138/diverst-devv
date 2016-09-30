@@ -107,7 +107,12 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :news_links
+      resources :news_links do
+        member do
+          get 'comments'
+          post 'create_comment'
+        end
+      end
       resources :resources
       resources :fields do
         member do
