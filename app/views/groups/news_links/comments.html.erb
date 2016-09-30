@@ -3,8 +3,6 @@
 </div>
 
 <div class="content__main">
-  <%= render 'comments_form' %>
-
   <div class="card">
     <% if @comments.empty? %>
       <div class="card__section">
@@ -15,11 +13,13 @@
         <div class="card__section card__section--border">
           <div class="flex-row flex-row--middle">
             <div class="flex-row__cell flex-row__cell--grow">
+              <h4><%= comment.author.name %> said:</h4>
               <p>
                 <%= comment.content %>
                 <br>
-                by: <%= comment.author.name %>
-                <br>
+                <small class="muted">
+                  <%= time_ago_in_words comment.created_at %> ago
+                </small>
               </p>
             </div>
           </div>

@@ -1,11 +1,11 @@
 <div class="card">
   <div class="card__section">
-    Leave your feedback:
+    Leave a comment:
   </div>
 
   <div class="card__section">
     <%= simple_form_for @new_comment, url:   create_comment_group_news_link_path(@group, @news_link), method: 'post' do |f| %>
-      <%= f.input :content %>
+      <%= f.input :content, label: false %>
 
       <%= f.button :submit, value: "Post a comment", style: "margin-top: 30px;" %>
     <% end %>
