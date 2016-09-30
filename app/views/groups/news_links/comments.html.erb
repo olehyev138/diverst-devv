@@ -1,5 +1,26 @@
 <div class="content__header">
-  <h1>Comments</h1>
+  <h1>News Discussion</h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section card__section--border">
+      <div class="flex-row flex-row--middle">
+        <div class="flex-row__cell flex-row__cell--grow">
+          <h4><%= @news_link.title %></h4>
+          <p>
+            <%= @news_link.description %>
+            <br>
+            <%= link_to @news_link.url, @news_link.url %>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="content__header">
+  <h2>Comments</h2>
 </div>
 
 <div class="content__main">

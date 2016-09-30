@@ -19,6 +19,7 @@
                 <br>
                 <%= link_to news_link.url, news_link.url, target: "_blank" %>
                 <br>
+                <br>
                 <%= link_to "Comments(#{news_link.comments.count})", comments_group_news_link_path(news_link.group,news_link)
                  %>
               </p>

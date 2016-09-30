@@ -13,7 +13,7 @@ class Groups::NewsLinksController < ApplicationController
   end
 
   def comments
-    @comments = @news_link.comments
+    @comments = @news_link.comments.includes(:author)
     @new_comment = NewsLinkComment.new
   end
 
