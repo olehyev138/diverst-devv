@@ -109,13 +109,12 @@
         //TODO don't trigger password validation if there are no password fields
         if( !is_valid($form) ) {
           e.preventDefault();
-          alert('not success');
         }
       });
 
       function is_valid($form) {
         // If password field is present
-        if( $form.find('input#user_password1').length ) {
+        if( $form.find('input#user_password').length ) {
           //validate required fields and password
           return  validate_empty_fields($form) && validate_password($form) && validate_password_length($form);
         } else {
