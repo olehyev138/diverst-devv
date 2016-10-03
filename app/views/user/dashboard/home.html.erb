@@ -145,7 +145,18 @@
 
 <script>
   $(document).ready(function() {
-    applyFlip();
+    //Hide all backs(with text initially). We'll show it later
+    $('.flippable .back').hide();
+
+    var images = $(".flippable .front > img");
+    var loadedImgNum = 0;
+    images.on('load', function(){
+      loadedImgNum += 1;
+      if (loadedImgNum == images.length) {
+        $('.flippable .back').show();
+        applyFlip();
+      }
+    });
 
     function applyFlip() {
       var flippableOptions = {
@@ -155,7 +166,6 @@
       // More could be found here:
       // http://stackoverflow.com/questions/39552827/jquery-flip-elements-overlapping-subsequent-elements
       $('.flippable').each(function(index){
-       // var height =  $(this).parents('a').outerHeight();
         var $front = $(this).find('.front');
         var frontHeight = $front.find('img').height();
         var backHeight = $(this).find('.back').height();
