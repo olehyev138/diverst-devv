@@ -157,7 +157,7 @@
       $('.flippable').each(function(index){
        // var height =  $(this).parents('a').outerHeight();
         var $front = $(this).find('.front');
-        var frontHeight = $front.height();
+        var frontHeight = $front.find('img').height();
         var backHeight = $(this).find('.back').height();
         var biggerHeight = frontHeight > backHeight ? frontHeight : backHeight;
 
