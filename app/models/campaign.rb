@@ -15,10 +15,10 @@ class Campaign < ActiveRecord::Base
 
   accepts_nested_attributes_for :questions, reject_if: :all_blank, allow_destroy: true
 
-  has_attached_file :image, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('missing.png'), s3_permissions: :private
+  has_attached_file :image, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
   validates_attachment_content_type :image, content_type: %r{\Aimage\/.*\Z}
 
-  has_attached_file :banner, styles: { medium: '1200x1200>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('missing.png'), s3_permissions: :private
+  has_attached_file :banner, styles: { medium: '1200x1200>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
   validates_attachment_content_type :banner, content_type: %r{\Aimage\/.*\Z}
 
   after_create :create_invites
