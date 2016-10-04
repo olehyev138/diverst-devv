@@ -5,7 +5,7 @@ class Groups::NewsLinksController < ApplicationController
   layout 'erg'
 
   def index
-    @news_links = @group.news_links
+    @news_links = @group.news_links.includes(:author).order(created_at: :desc)
   end
 
   def new
@@ -28,6 +28,7 @@ class Groups::NewsLinksController < ApplicationController
 
   def create
     @news_link = @group.news_links.new(news_link_params)
+    @news_link.author = current_user
 
     if @news_link.save
       redirect_to action: :index

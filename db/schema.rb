@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160930205352) do
+ActiveRecord::Schema.define(version: 20161004104043) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -495,6 +495,7 @@ ActiveRecord::Schema.define(version: 20160930205352) do
     t.string   "picture_content_type", limit: 255
     t.integer  "picture_file_size",    limit: 4
     t.datetime "picture_updated_at"
+    t.integer  "author_id",            limit: 4
   end
 
   create_table "outcomes", force: :cascade do |t|

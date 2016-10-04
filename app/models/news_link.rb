@@ -1,5 +1,6 @@
 class NewsLink < ActiveRecord::Base
   belongs_to :group
+  belongs_to :author, class_name: 'User'
 
   before_validation :smart_add_url_protocol
 

@@ -25,6 +25,7 @@ class User < ActiveRecord::Base
   has_many :invitations, class_name: 'CampaignInvitation'
   has_many :campaigns, through: :invitations
   has_many :news_links, through: :groups
+  has_many :own_news_links, class_name: 'NewsLink', foreign_key: :author_id
   has_many :messages, through: :groups
   has_many :events, through: :groups
   has_many :event_attendances

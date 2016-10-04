@@ -20,6 +20,9 @@
                 <br>
                 <%= link_to news_link.url, news_link.url %>
                 <br>
+                <% if news_link.author.present? %>
+                  <span class="muted">Posted by <%=  news_link.author.name %></span>
+                <% end %>
                 <br>
                 <%= link_to "Comments(#{news_link.comments.count})", comments_group_news_link_path(news_link.group,news_link)
                  %>
