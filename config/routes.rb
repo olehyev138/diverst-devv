@@ -85,7 +85,9 @@ Rails.application.routes.draw do
           delete 'remove_member'
         end
       end
-      resources :group_messages, path: 'messages'
+      resources :group_messages, path: 'messages' do
+        post 'create_comment'
+      end
     end
 
     scope module: :groups do

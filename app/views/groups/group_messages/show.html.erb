@@ -9,3 +9,36 @@
     </div>
   </div>
 </div>
+
+<div class="content__header">
+  <h2>Comments</h2>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <% if @comments.empty? %>
+      <div class="card__section">
+        <p>No comments have been left yet.</p>
+      </div>
+    <% else %>
+      <% @comments.each do |comment| %>
+        <div class="card__section card__section--border">
+          <div class="flex-row flex-row--middle">
+            <div class="flex-row__cell flex-row__cell--grow">
+              <h4><%= comment.author.name %> said:</h4>
+              <p>
+                <%= comment.content %>
+                <br>
+                <small class="muted">
+                  <%= time_ago_in_words comment.created_at %> ago
+                </small>
+              </p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <%= render 'comments_form' %>
+</div>

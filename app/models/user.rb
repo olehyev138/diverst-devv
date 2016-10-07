@@ -27,6 +27,7 @@ class User < ActiveRecord::Base
   has_many :news_links, through: :groups
   has_many :own_news_links, class_name: 'NewsLink', foreign_key: :author_id
   has_many :messages, through: :groups
+  has_many :message_comments, class_name: 'GroupMessageComment', foreign_key: :author_id
   has_many :events, through: :groups
   has_many :event_attendances
   has_many :attending_events, through: :event_attendances, source: :event
