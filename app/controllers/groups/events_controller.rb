@@ -12,10 +12,11 @@ class Groups::EventsController < ApplicationController
   end
 
   def calendar_data
-    events = @group.events.where('start >= ?', params[:start])
+    @events = @group.events.includes(:group)
+                          .where('start >= ?', params[:start])
                           .where('start <= ?', params[:end])
 
-    render json: events_to_json( events )
+    render 'shared/calendar_events', format: :json
   end
 
   def calendar_view

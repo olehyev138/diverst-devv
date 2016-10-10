@@ -19,9 +19,9 @@ class User::EventsController < ApplicationController
     invited_events = current_user.invited_events.where('start >= ?', params[:start])
                                     .where('start <= ?', params[:end])
 
-    events = own_events + invited_events
+    @events = own_events + invited_events
 
-    render json: events_to_json( events )
+    render 'shared/calendar_events', format: :json
   end
 
   protected

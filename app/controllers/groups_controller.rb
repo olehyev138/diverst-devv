@@ -27,10 +27,11 @@ class GroupsController < ApplicationController
   def calendar_data
     authorize Group, :index?
 
-    events = current_user.enterprise.events.where('start >= ?', params[:start])
+    @events = current_user.enterprise.events.includes(:group)
+                                            .where('start >= ?', params[:start])
                                             .where('start <= ?', params[:end])
 
-    render json: events_to_json( events )
+    render 'shared/calendar_events', format: :json
   end
 
   def new

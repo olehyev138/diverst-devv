@@ -353,6 +353,9 @@ GEM
       loofah (>= 2.0)
       nokogiri (~> 1.6)
     ipaddress (0.8.3)
+    jbuilder (2.6.0)
+      activesupport (>= 3.0.0, < 5.1)
+      multi_json (~> 1.2)
     jquery-datatables-rails (3.3.0)
       actionpack (>= 3.1)
       jquery-rails
@@ -676,6 +679,7 @@ DEPENDENCIES
   httparty (~> 0.13)
   icalendar
   inline_svg
+  jbuilder
   jquery-datatables-rails
   jquery-rails
   kaminari

@@ -32,12 +32,6 @@ class ApplicationController < ActionController::Base
     headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
   end
 
-  protected
-
-  def events_to_json(events)
-    events.map{ |e| e.as_json(only:[:id, :title, :start, :end]) }
-  end
-
   private
 
   def user_not_authorized
