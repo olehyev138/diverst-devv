@@ -21,7 +21,7 @@ class User::EventsController < ApplicationController
 
     events = own_events + invited_events
 
-    render json: events.map{ |e| e.as_json(only:[:id, :title, :start, :end]) }
+    render json: events_to_json( events )
   end
 
   protected

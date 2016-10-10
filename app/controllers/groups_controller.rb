@@ -30,7 +30,7 @@ class GroupsController < ApplicationController
     events = current_user.enterprise.events.where('start >= ?', params[:start])
                                             .where('start <= ?', params[:end])
 
-    render json: events.map{ |e| e.as_json(only:[:id, :title, :start, :end]) }
+    render json: events_to_json( events )
   end
 
   def new
