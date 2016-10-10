@@ -120,7 +120,13 @@ class UsersController < ApplicationController
 
   def resolve_layout
     case action_name
-    when 'edit_profile'
+    when 'show'
+      if current_user.policy_group.admin_pages_view
+        'global_settings'
+      else
+        'user'
+      end
+    when 'edit_profile',
       'user'
     else
       'global_settings'
