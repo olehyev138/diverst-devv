@@ -11,23 +11,10 @@
     <% end %>
   </div>
 </div>
-<div id="calendar"></div>
+<div id="calendar" data-calendar-data-url="<%= calendar_data_group_events_path(@group) %>"></div>
 
 <script>
   $(document).ready(function(){
-    $('#calendar').fullCalendar({
-      header: {
-        left:   'title',
-        center: 'month,agendaWeek',
-        right:  'prev,today,next'
-      },
-      eventSources: [
-        {
-          url: '<%= calendar_data_group_events_path(@group) %>',
-          color: BRANDING_COLOR,
-          textColor: 'white'
-        }
-      ]
-    }); //endof fullcalendar
+    applyFullCalendar();
   }); //endof document.ready
 </script>
