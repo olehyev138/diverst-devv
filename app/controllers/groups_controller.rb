@@ -29,7 +29,7 @@ class GroupsController < ApplicationController
     @upcoming_events = @group.events.upcoming.limit(3)
     @news_links = @group.news_links.limit(3)
     @user_groups = @group.user_groups.order(created_at: :desc).includes(:user).limit(8)
-    @messages = @group.messages.limit(3)
+    @messages = @group.messages.includes(:owner).limit(3)
   end
 
   def create
