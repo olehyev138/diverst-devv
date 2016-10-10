@@ -1,6 +1,7 @@
 class GroupsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_group, except: [:index, :new, :create, :plan_overview]
+  before_action :set_group, except: [:index, :new, :create, :plan_overview,
+                                      :calendar, :calendar_data]
   skip_before_action :verify_authenticity_token, only: [:create]
   after_action :verify_authorized
 
@@ -16,6 +17,20 @@ class GroupsController < ApplicationController
   def plan_overview
     authorize Group, :index?
     @groups = current_user.enterprise.groups.includes(:initiatives)
+  end
+
+  # calendar for all of the groups
+  def calendar
+    authorize Group, :index?
+  end
+
+  def calendar_data
+    authorize Group, :index?
+
+    events = current_user.enterprise.events.where('start >= ?', params[:start])
+                                            .where('start <= ?', params[:end])
+
+    render json: events.map{ |e| e.as_json(only:[:id, :title, :start, :end]) }
   end
 
   def new

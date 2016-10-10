@@ -3,6 +3,7 @@
   <%= active_link_to "ERGs", groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Group).index? %>
   <%= active_link_to "Segments", segments_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Segment).index? %>
   <%= active_link_to "Resources", enterprise_resources_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to "Calendar", calendar_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
 <% end %>
 
 <%= render template: "layouts/dashboard" %>

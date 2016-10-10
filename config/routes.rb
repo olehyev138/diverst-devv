@@ -159,6 +159,8 @@ Rails.application.routes.draw do
 
     collection do
       get 'plan_overview'
+      get 'calendar'
+      get 'calendar_data'
     end
   end
 

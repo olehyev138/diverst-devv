@@ -1,0 +1,20 @@
+<div id="calendar"></div>
+
+<script>
+  $(document).ready(function(){
+    $('#calendar').fullCalendar({
+      header: {
+        left:   'title',
+        center: 'month,agendaWeek',
+        right:  'prev,today,next'
+      },
+      eventSources: [
+        {
+          url: '<%= calendar_data_groups_path %>',
+          color: BRANDING_COLOR,
+          textColor: 'white'
+        }
+      ]
+    }); //endof fullcalendar
+  }); //endof document.ready
+</script>
