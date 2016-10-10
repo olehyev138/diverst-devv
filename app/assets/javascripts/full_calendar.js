@@ -12,9 +12,7 @@ function applyFullCalendar(selector) {
     },
     eventSources: [
       {
-        url: calendarDataUrl,
-        color: BRANDING_COLOR,
-        textColor: 'white'
+        url: calendarDataUrl
       }
     ]
   }); //endof fullcalendar
