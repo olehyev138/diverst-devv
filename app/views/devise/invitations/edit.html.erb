@@ -189,7 +189,7 @@
       function validate_password_length($form) {
         var $password  = $form.find('input#user_password');
 
-        if( $password.val().length <= 8) {
+        if( $password.val().length < 8) {
           var message = 'Passwords must be minimum 8 characters in length';
           alert(message);
 
