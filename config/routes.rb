@@ -255,6 +255,7 @@ Rails.application.routes.draw do
         collection do
           get 'calendar'
           get 'calendar_data'
+          get 'onboarding_calendar_data'
         end
       end
 

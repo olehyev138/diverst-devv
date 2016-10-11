@@ -24,6 +24,18 @@ class User::EventsController < ApplicationController
     render 'shared/calendar_events', format: :json
   end
 
+  #Return calendar data for onboarding screen
+  #No current user, use token for authentication
+  def onboarding_calendar_data
+    user = User.find_by_invitation_token(params[:invitation_token], true)
+
+    @events = user.enterprise.events.where('start >= ?', params[:start])
+                                    .where('start <= ?', params[:end])
+
+    @branding_color = user.enterprise.theme.branding_color
+    render 'shared/calendar_events', format: :json
+  end
+
   protected
 
   def set_event
