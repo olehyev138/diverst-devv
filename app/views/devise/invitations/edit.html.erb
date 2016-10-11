@@ -51,6 +51,11 @@
       <div class="card">
         <div class="card__section">
           <h2>ERG Events Calendar</h2>
+          <a
+            class="toggle_calendar btn btn--primary"
+            onclick="toggle_calendar();"
+            style="cursor: pointer; margin-bottom: 20px;"
+          >Show/Hide Calendar</a>
           <div id="calendar" data-calendar-data-url="<%= onboarding_calendar_data_user_events_path(invitation_token: params[:invitation_token]) %>"></div>
         </div>
       </div>
@@ -96,8 +101,15 @@
     </div>
 
     <script>
+      function toggle_calendar() {
+        $( "#calendar" ).slideToggle( "slow", function() {
+          // Animation complete.
+        });
+      }
+
       $(document).ready(function(){
         applyFullCalendar();
+        $('#calendar').hide();
       }); //endof document.ready
 
       $('.media-object').click(function() {
