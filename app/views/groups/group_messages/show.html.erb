@@ -14,13 +14,15 @@
           <% end %>
         </div>
         <div class="col sm-11">
-          <p><%= @message.content %>
-            <% if @message.owner.present? %>
-              <br>
-              <br>
-              <i>by <%= @message.owner.name %></i>
-            <% end %>
-          </p>
+          <div style="padding-left: 20px;">
+            <p><%= @message.content %>
+              <% if @message.owner.present? %>
+                <br>
+                <br>
+                <i>by <%= @message.owner.name %></i>
+              <% end %>
+            </p>
+          </div>
         </div>
       </div>
     </div>

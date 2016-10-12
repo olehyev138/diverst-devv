@@ -5,14 +5,25 @@
 <div class="content__main">
   <div class="card">
     <div class="card__section card__section--border">
-      <div class="flex-row flex-row--middle">
-        <div class="flex-row__cell flex-row__cell--grow">
-          <h4><%= @news_link.title %></h4>
-          <p>
-            <%= @news_link.description %>
-            <br>
-            <%= link_to @news_link.url, @news_link.url %>
-          </p>
+      <div class="row">
+        <div class="col sm-1">
+          <% if @news_link.author.present? %>
+            <%= image_tag @news_link.author.avatar.expiring_url(3600, :thumb), size: '100x100' %>
+          <% else %>
+            <%= image_tag '/assets/missing_user.png', size: '100x100' %>
+          <% end %>
+        </div>
+        <div class="col sm-11">
+          <div class="flex-row flex-row--middle" style="padding-left: 20px;">
+            <div class="flex-row__cell flex-row__cell--grow">
+              <h4><%= @news_link.title %></h4>
+              <p>
+                <%= @news_link.description %>
+                <br>
+                <%= link_to @news_link.url, @news_link.url %>
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -32,16 +43,27 @@
     <% else %>
       <% @comments.each do |comment| %>
         <div class="card__section card__section--border">
-          <div class="flex-row flex-row--middle">
-            <div class="flex-row__cell flex-row__cell--grow">
-              <h4><%= comment.author.name %> said:</h4>
-              <p>
-                <%= comment.content %>
-                <br>
-                <small class="muted">
-                  <%= time_ago_in_words comment.created_at %> ago
-                </small>
-              </p>
+          <div class="row">
+            <div class="col sm-1">
+              <% if comment.author.present? %>
+                <%= image_tag comment.author.avatar.expiring_url(3600, :thumb), size: '100x100' %>
+              <% else %>
+                <%= image_tag '/assets/missing_user.png', size: '100x100' %>
+              <% end %>
+            </div>
+            <div class="col sm-11">
+              <div class="flex-row flex-row--middle" style="padding-left: 20px;">
+                <div class="flex-row__cell flex-row__cell--grow">
+                  <h4><%= comment.author.name %> said:</h4>
+                  <p>
+                    <%= comment.content %>
+                    <br>
+                    <small class="muted">
+                      <%= time_ago_in_words comment.created_at %> ago
+                    </small>
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
