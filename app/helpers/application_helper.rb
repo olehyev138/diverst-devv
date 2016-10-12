@@ -21,6 +21,14 @@ module ApplicationHelper
     end
   end
 
+  def enterprise_primary_color
+    enterprise = default_enterprise_for_styling
+
+    return 'black' unless enterprise.present?
+
+    enterprise.theme.primary_color
+  end
+
   def last_sign_in_text(user)
     return "Never" if user.last_sign_in_at.nil?
     return "#{time_ago_in_words(user.last_sign_in_at)} ago"

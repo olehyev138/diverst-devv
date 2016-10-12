@@ -7,7 +7,7 @@
   <%= csrf_meta_tags %>
   <link rel="icon" type="image/png" href="/favicon.png">
 </head>
-<body class="auth">
+<body class="auth" data-primary-color="<%= enterprise_primary_color %>">
 
 <% if notice.present? %><p class="notice"><%= notice %></p><% end %>
 <% if alert.present? %><p class="alert"><%= alert %></p><% end %>
