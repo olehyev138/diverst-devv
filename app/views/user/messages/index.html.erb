@@ -11,16 +11,27 @@
     <% else %>
       <% @messages.each do |message| %>
         <div class="card__section card__section--border">
-          <h3><%= message.subject %> - <span class="muted" title="<%= message.created_at.to_s :datetime %>"><%= time_ago_in_words(message.created_at) %> ago (<%= message.created_at.to_formatted_s(:short) %>) - <%= message.group.name %></span></h3>
-          <p><%= message.content %>
-          <% if message.owner.present? %>
-            <br>
-            <i>by <%= message.owner.name %></i>
-          <% end %>
-          <br>
-          <%= link_to "Comments(#{message.comments.count})", group_group_message_path(message.group, message)
-          %>
-          </p>
+          <div class="row">
+            <div class="col">
+              <% if message.owner.present? %>
+                <%= image_tag message.owner.avatar.expiring_url(3600, :thumb), size: '100x100' %>
+              <% else %>
+                <%= image_tag '/assets/missing_user.png', size: '100x100' %>
+              <% end %>
+            </div>
+            <div class="col">
+              <h3><%= message.subject %> - <span class="muted" title="<%= message.created_at.to_s :datetime %>"><%= time_ago_in_words(message.created_at) %> ago (<%= message.created_at.to_formatted_s(:short) %>) - <%= message.group.name %></span></h3>
+              <p><%= message.content %>
+              <% if message.owner.present? %>
+                <br>
+                <i>by <%= message.owner.name %></i>
+              <% end %>
+              <br>
+              <%= link_to "Comments(#{message.comments.count})", group_group_message_path(message.group, message)
+              %>
+              </p>
+            </div>
+          </div>
         </div>
       <% end %>
     <% end %>
