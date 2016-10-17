@@ -24,9 +24,11 @@ module ApplicationHelper
   def enterprise_primary_color
     enterprise = default_enterprise_for_styling
 
-    return 'black' unless enterprise.present?
+    if enterprise.present && enterprise.theme.present?
+      return enterprise.theme.primary_color
+    end
 
-    enterprise.theme.primary_color
+    '#A901DB'
   end
 
   def last_sign_in_text(user)
