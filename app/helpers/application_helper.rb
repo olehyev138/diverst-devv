@@ -24,7 +24,7 @@ module ApplicationHelper
   def enterprise_primary_color
     enterprise = default_enterprise_for_styling
 
-    if enterprise.present && enterprise.theme.present?
+    if enterprise.present? && enterprise.theme.present?
       return enterprise.theme.primary_color
     end
 
