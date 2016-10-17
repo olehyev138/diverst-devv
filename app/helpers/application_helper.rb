@@ -28,7 +28,7 @@ module ApplicationHelper
       return enterprise.theme.primary_color
     end
 
-    '#A901DB'
+    nil
   end
 
   def last_sign_in_text(user)
