@@ -47,6 +47,7 @@
   &:focus,
   &--is-selected {
     color: $diverst-white;
+    background-color: $diverst-grey;
   }
 
   &--is-selected {
