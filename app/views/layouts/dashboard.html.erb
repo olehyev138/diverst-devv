@@ -26,7 +26,7 @@
     <ul class="nav__list nav__list--primary">
       <% if manage_erg_root_path %>
         <li class="nav__item">
-          <%= active_link_to manage_erg_root_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['enterprises', 'groups', 'segments', 'metrics_dashboards', 'enterprises/resources'], ['index', 'edit', 'show', 'new']] do %>
+          <%= active_link_to manage_erg_root_path, class: "nav__link", class_active: "nav__link--is-selected", active: active_manage_erg_link? do %>
             <%= inline_svg('icons/manage.svg', class: "icon nav__icon") %>
             <span class="nav__text">Manage ERG</span>
           <% end %>
@@ -34,7 +34,7 @@
       <% end %>
       <% if policy(Campaign).index? %>
         <li class="nav__item">
-          <%= active_link_to campaigns_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['campaigns', 'questions'], []] do %>
+          <%= active_link_to campaigns_path, class: "nav__link", class_active: "nav__link--is-selected", active: active_champaigns_link? do %>
             <%= inline_svg('icons/collaborate.svg', class: "icon nav__icon") %>
             <span class="nav__text">Collaborate</span>
           <% end %>
@@ -59,7 +59,7 @@
       <% if current_user.enterprise.plan_module_enabled %>
         <% if default_group = policy_scope(Group).first %>
           <li class="nav__item">
-            <%= active_link_to group_initiatives_path(default_group), class: "nav__link", class_active: "nav__link--is-selected", active: [['groups', 'initiatives', 'outcomes', 'groups/updates'],[]] do %>
+            <%= active_link_to group_initiatives_path(default_group), class: "nav__link", class_active: "nav__link--is-selected", active: active_plan_link? do %>
               <%= inline_svg('icons/plan.svg', class: "icon nav__icon") %>
               <span class="nav__text">Plan</span>
             <% end %>
@@ -70,7 +70,7 @@
     <ul class="nav__list nav__list--secondary">
       <% if GlobalSettingsPolicy.new(current_user).update? %>
         <li class="nav__item">
-          <%= active_link_to users_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['users', 'enterprises', 'users', 'integrations'], ['index', 'edit', 'show', 'new', 'edit_auth', 'edit_fields', 'edit_branding']] do %>
+          <%= active_link_to users_path, class: "nav__link", class_active: "nav__link--is-selected", active: active_global_settings_link? do %>
             <span class="nav__text">Global Settings</span>
           <% end %>
         </li>
