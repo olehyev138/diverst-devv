@@ -1,4 +1,6 @@
 class Initiative < ActiveRecord::Base
+  before_save :update_owner_group
+
   belongs_to :pillar
   belongs_to :owner, class_name: "User"
   has_many :updates, class_name: "InitiativeUpdate", dependent: :destroy
@@ -33,6 +35,10 @@ class Initiative < ActiveRecord::Base
 
   has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
   validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
+
+  def current_expences_sum
+    expenses.sum(:amount) || 0
+  end
 
   def time_string
     if start.to_date == self.end.to_date # If the initiative starts and ends on the same day
@@ -76,5 +82,11 @@ class Initiative < ActiveRecord::Base
       next if i == 0
       hc_expense[1] += highcharts_expenses[i - 1][1]
     end
+  end
+
+  protected
+
+  def update_owner_group
+    owner_group = pillar.try(:outcome).try(:group)
   end
 end

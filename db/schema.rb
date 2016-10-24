@@ -456,7 +456,7 @@ ActiveRecord::Schema.define(version: 20161208112130) do
     t.string   "name",                 limit: 255
     t.datetime "start"
     t.datetime "end"
-    t.integer  "estimated_funding",    limit: 4
+    t.integer  "estimated_funding",    limit: 4,     null: false
     t.integer  "actual_funding",       limit: 4
     t.integer  "owner_id",             limit: 4
     t.integer  "pillar_id",            limit: 4
