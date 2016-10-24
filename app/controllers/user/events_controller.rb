@@ -4,20 +4,20 @@ class User::EventsController < ApplicationController
   layout 'user'
 
   def index
-    @upcoming_events = current_user.events.upcoming + current_user.invited_events.upcoming
-    @past_events = current_user.events.past + current_user.invited_events.past
-    @ongoing_events = current_user.events.ongoing + current_user.invited_events.ongoing
+    @upcoming_events = current_user.initiatives.upcoming + current_user.invited_initiatives.upcoming
+    @past_events =  current_user.initiatives.past + current_user.invited_initiatives.past
+    @ongoing_events = current_user.initiatives.ongoing + current_user.invited_initiatives.ongoing
   end
 
   def calendar
   end
 
   def calendar_data
-    own_events = current_user.events.where('start >= ?', params[:start])
-                                    .where('start <= ?', params[:end])
+    own_events = current_user.initiatives.where('start >= ?', params[:start])
+                                          .where('start <= ?', params[:end])
 
-    invited_events = current_user.invited_events.where('start >= ?', params[:start])
-                                    .where('start <= ?', params[:end])
+    invited_events = current_user.invited_initiatives.where('start >= ?', params[:start])
+                                                      .where('start <= ?', params[:end])
 
     @events = own_events + invited_events
 
@@ -29,7 +29,7 @@ class User::EventsController < ApplicationController
   def onboarding_calendar_data
     user = User.find_by_invitation_token(params[:invitation_token], true)
 
-    @events = user.enterprise.events.where('start >= ?', params[:start])
+    @events = user.enterprise.initiatives.where('start >= ?', params[:start])
                                     .where('start <= ?', params[:end])
 
     @branding_color = user.enterprise.theme.branding_color
@@ -39,6 +39,6 @@ class User::EventsController < ApplicationController
   protected
 
   def set_event
-    @event = current_user.events.find(params[:id])
+    @event = current_user.initiatives.find(params[:id])
   end
 end

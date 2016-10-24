@@ -25,6 +25,13 @@ class Group < ActiveRecord::Base
   has_many :polls, through: :groups_polls
   has_many :poll_responses, through: :polls, source: :responses
   has_many :events
+
+
+  has_many :own_initiatives, class_name: 'Initiative', foreign_key: 'owner_group_id'
+  has_many :initiative_participating_groups
+  has_many :participating_initiatives, through: :initiative_participating_groups, source: :initiative
+
+
   has_many :messages, class_name: 'GroupMessage'
   has_many :news_links
   has_many :invitation_segments_groups

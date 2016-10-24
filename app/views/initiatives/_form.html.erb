@@ -7,9 +7,29 @@
         <%= f.association :pillar, label: false, include_blank: false %>
       </div>
 
+      <div class="row">
+        <div class="col sm-6">
+          <div class="card__section card__section--border">
+            <p class="field__hint">Select a <strong>group </strong>to host the event</p>
+            <%= f.association :owner_group, label: false, collection: current_user.enterprise.groups, input_html: {class: 'select2'} %>
+          </div>
+        </div>
+        <div class="col sm-6">
+          <div class="card__section card__section--border">
+            <p class="field__hint">You may also specify <strong>participating groups</strong></p>
+            <%= f.association :participating_groups, label: false, collection: current_user.enterprise.groups, input_html: {class: 'select2', multiple: true} %>
+          </div>
+        </div>
+      </div>
+
       <div class="card__section card__section--border">
-        <p class="field__hint">Give it a <strong>name</strong></p>
+        <p class="field__hint">Give your event a <strong>name</strong></p>
         <%= f.input :name, label: false %>
+      </div>
+
+      <div class="card__section card__section--border">
+        <p class="field__hint">Give it a short (or long) <strong>description</strong></p>
+        <%= f.input :description, label: false %>
       </div>
 
       <div class="card__section card__section--border">
@@ -18,11 +38,35 @@
         <%= f.input :end, label: false %>
       </div>
 
-      <div class="card__section card__section--border">
-        <p class="field__hint">Specify the initiative's <strong>estimated funding</strong></p>
-        <%= f.input :estimated_funding, label: false %>
+      <div class="row">
+        <div class="col sm-6">
+          <div class="card__section card__section--border">
+            <p class="field__hint">Specify the initiative's <strong>estimated funding</strong></p>
+            <%= f.input :estimated_funding, label: false %>
+          </div>
+        </div>
+        <div class="col sm-6">
+          <div class="card__section card__section--border">
+            <p class="field__hint">Specify maximum number of <strong>attendees</strong></p>
+            <%= f.input :max_attendees, label: false %>
+          </div>
+        </div>
       </div>
 
+      <div class="row">
+        <div class="col sm-6">
+          <div class="card__section card__section--border">
+            <p class="field__hint">Specify the <strong>location</strong></p>
+            <%= f.input :location, label: false %>
+          </div>
+        </div>
+        <div class="col sm-6">
+          <div class="card__section card__section--border">
+            <p class="field__hint">Upload a <strong>picture</strong> to be associated with this event</p>
+            <%= f.input :picture, as: :file %>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="card">

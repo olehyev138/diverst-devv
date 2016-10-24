@@ -66,10 +66,16 @@ class InitiativesController < ApplicationController
       .require(:initiative)
       .permit(
         :name,
+        :description,
+        :owner_group_id,
         :start,
         :end,
         :estimated_funding,
+        :max_attendees,
         :pillar_id,
+        :location,
+        :picture,
+        participating_group_ids: [],
         fields_attributes: [
           :id,
           :title,

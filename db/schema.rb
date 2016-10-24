@@ -12,7 +12,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 20161208112130) do
-
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
     t.integer  "author_id",  limit: 4
@@ -399,6 +398,12 @@ ActiveRecord::Schema.define(version: 20161208112130) do
     t.integer "poll_id",  limit: 4
   end
 
+  create_table "initiative_comments", force: :cascade do |t|
+    t.integer "initiative_id", limit: 4
+    t.integer "user_id",       limit: 4
+    t.text    "content",       limit: 65535
+  end
+
   create_table "initiative_expenses", force: :cascade do |t|
     t.string   "description",   limit: 255
     t.integer  "amount",        limit: 4
@@ -418,6 +423,21 @@ ActiveRecord::Schema.define(version: 20161208112130) do
     t.integer "group_id",      limit: 4
   end
 
+  create_table "initiative_invitees", force: :cascade do |t|
+    t.integer "initiative_id", limit: 4
+    t.integer "user_id",       limit: 4
+  end
+
+  create_table "initiative_participating_groups", force: :cascade do |t|
+    t.integer "initiative_id", limit: 4
+    t.integer "group_id",      limit: 4
+  end
+
+  create_table "initiative_segments", force: :cascade do |t|
+    t.integer "initiative_id", limit: 4
+    t.integer "segment_id",    limit: 4
+  end
+
   create_table "initiative_updates", force: :cascade do |t|
     t.text     "data",          limit: 65535
     t.text     "comments",      limit: 65535
@@ -433,15 +453,23 @@ ActiveRecord::Schema.define(version: 20161208112130) do
   end
 
   create_table "initiatives", force: :cascade do |t|
-    t.string   "name",              limit: 255
+    t.string   "name",                 limit: 255
     t.datetime "start"
     t.datetime "end"
-    t.integer  "estimated_funding", limit: 4
-    t.integer  "actual_funding",    limit: 4
-    t.integer  "owner_id",          limit: 4
-    t.integer  "pillar_id",         limit: 4
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.integer  "estimated_funding",    limit: 4
+    t.integer  "actual_funding",       limit: 4
+    t.integer  "owner_id",             limit: 4
+    t.integer  "pillar_id",            limit: 4
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.text     "description",          limit: 65535
+    t.integer  "max_attendees",        limit: 4
+    t.string   "picture_file_name",    limit: 255
+    t.string   "picture_content_type", limit: 255
+    t.integer  "picture_file_size",    limit: 4
+    t.datetime "picture_updated_at"
+    t.integer  "owner_group_id",       limit: 4
+    t.string   "location",             limit: 255
   end
 
   create_table "invitation_segments_groups", force: :cascade do |t|

@@ -6,15 +6,19 @@ class Groups::EventsController < ApplicationController
   layout 'erg'
 
   def index
-    @upcoming_events = @group.events.upcoming
-    @past_events = @group.events.past
-    @ongoing_events = @group.events.ongoing
+    @upcoming_events = @group.own_initiatives.upcoming
+    @past_events = @group.own_initiatives.past
+    @ongoing_events = @group.own_initiatives.ongoing
+
+    #TODO - also show participating events?
   end
 
   def calendar_data
-    @events = @group.events.includes(:group)
+    @events = @group.own_initiatives.includes(:owner_group)
                           .where('start >= ?', params[:start])
                           .where('start <= ?', params[:end])
+
+    #Todo also show participating events
 
     render 'shared/calendar_events', format: :json
   end
@@ -37,7 +41,7 @@ class Groups::EventsController < ApplicationController
   end
 
   def show
-    @comment = @event.comments.where(user: current_user).first || EventComment.new(event: @event)
+    @comment = @event.comments.where(user: current_user).first || InitiativeComment.new(initiative: @event)
   end
 
   def update
@@ -73,14 +77,14 @@ class Groups::EventsController < ApplicationController
   end
 
   def set_event
-    @event = @group.events.find(params[:id])
+    @event = @group.own_initiatives.find(params[:id])
   end
 
   def event_params
     params
       .require(:event)
       .permit(
-        :title,
+        :name,
         :description,
         :start,
         :end,

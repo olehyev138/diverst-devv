@@ -29,6 +29,12 @@ class User < ActiveRecord::Base
   has_many :messages, through: :groups
   has_many :message_comments, class_name: 'GroupMessageComment', foreign_key: :author_id
   has_many :events, through: :groups
+
+  has_many :initiative_users
+  has_many :initiatives, through: :initiative_users, source: :initiative
+  has_many :initiative_invitees
+  has_many :invited_initiatives, through: :initiative_invitees, source: :initiative
+
   has_many :event_attendances
   has_many :attending_events, through: :event_attendances, source: :event
   has_many :event_invitees
