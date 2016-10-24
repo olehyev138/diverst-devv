@@ -67,7 +67,6 @@ class InitiativesController < ApplicationController
       .permit(
         :name,
         :description,
-        :owner_group_id,
         :start,
         :end,
         :estimated_funding,

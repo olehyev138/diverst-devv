@@ -4,22 +4,12 @@
     <div class="card">
       <div class="card__section card__section--border">
         <p class="field__hint">Start off by choosing which <strong>program</strong> this initiative will live in</p>
-        <%= f.association :pillar, label: false, include_blank: false %>
+        <%= f.association :pillar, label_method: :name_with_group_prefix, label: false, include_blank: false %>
       </div>
 
-      <div class="row">
-        <div class="col sm-6">
-          <div class="card__section card__section--border">
-            <p class="field__hint">Select a <strong>group </strong>to host the event</p>
-            <%= f.association :owner_group, label: false, collection: current_user.enterprise.groups, input_html: {class: 'select2'} %>
-          </div>
-        </div>
-        <div class="col sm-6">
-          <div class="card__section card__section--border">
-            <p class="field__hint">You may also specify <strong>participating groups</strong></p>
-            <%= f.association :participating_groups, label: false, collection: current_user.enterprise.groups, input_html: {class: 'select2', multiple: true} %>
-          </div>
-        </div>
+      <div class="card__section card__section--border">
+        <p class="field__hint">You may also specify <strong>participating groups</strong></p>
+        <%= f.association :participating_groups, label: false, collection: current_user.enterprise.groups, input_html: {class: 'select2', multiple: true} %>
       </div>
 
       <div class="card__section card__section--border">
