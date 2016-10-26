@@ -7,6 +7,6 @@ class Pillar < ActiveRecord::Base
   def name_with_group_prefix
     parent_group = outcome.group
 
-    "(#{parent_group.name}) name"
+    "(#{parent_group.name}) #{name}"
   end
 end
