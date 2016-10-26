@@ -4,11 +4,6 @@
     <div class="flex-row__cell">
       <%= link_to "Calendar view",   calendar_view_group_events_path(@group), class: "btn btn--secondary" %>
     </div>
-    <% if policy(Event).new?  %>
-      <div class="flex-row__cell">
-        <%= link_to "+ Create new event", new_group_event_path, class: "btn btn--primary" %>
-      </div>
-    <% end %>
   </div>
 </div>
 
