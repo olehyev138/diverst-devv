@@ -1,5 +1,5 @@
 class Initiative < ActiveRecord::Base
-  before_save :update_owner_group
+  before_validation :update_owner_group
 
   belongs_to :pillar
   belongs_to :owner, class_name: "User"
@@ -91,6 +91,6 @@ class Initiative < ActiveRecord::Base
   protected
 
   def update_owner_group
-    owner_group = pillar.try(:outcome).try(:group)
+    self.owner_group_id = self.pillar.try(:outcome).try(:group).try(:id)
   end
 end
