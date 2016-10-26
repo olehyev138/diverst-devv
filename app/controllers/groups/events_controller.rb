@@ -26,31 +26,31 @@ class Groups::EventsController < ApplicationController
   def calendar_view
   end
 
-  def new
-    @event = @group.events.new
-  end
+  # def new
+  #   @event = @group.own_initiatives.new
+  # end
 
-  def create
-    @event = @group.events.new(event_params)
+  # def create
+  #   @event = @group.own_initiatives.new(event_params)
 
-    if @event.save
-      redirect_to action: :index
-    else
-      render :edit
-    end
-  end
+  #   if @event.save
+  #     redirect_to action: :index
+  #   else
+  #     render :edit
+  #   end
+  # end
 
   def show
     @comment = @event.comments.where(user: current_user).first || InitiativeComment.new(initiative: @event)
   end
 
-  def update
-    if @event.update(event_params)
-      redirect_to [@group, @event]
-    else
-      render :edit
-    end
-  end
+  # def update
+  #   if @event.update(event_params)
+  #     redirect_to [@group, @event]
+  #   else
+  #     render :edit
+  #   end
+  # end
 
   def destroy
     @event.destroy

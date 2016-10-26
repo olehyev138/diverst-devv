@@ -3,7 +3,7 @@
 
     <div class="card">
       <div class="card__section card__section--border">
-        <p class="field__hint">Start off by choosing which <strong>program</strong> this initiative will live in</p>
+        <p class="field__hint">Start off by choosing which <strong>program</strong> this event will participate in</p>
         <%= f.association :pillar, label_method: :name_with_group_prefix, label: false, include_blank: false %>
       </div>
 
@@ -31,7 +31,7 @@
       <div class="row">
         <div class="col sm-6">
           <div class="card__section card__section--border">
-            <p class="field__hint">Specify the initiative's <strong>estimated funding</strong></p>
+            <p class="field__hint">Specify the event's <strong>estimated funding</strong></p>
             <%= f.input :estimated_funding, label: false %>
           </div>
         </div>
@@ -61,7 +61,7 @@
 
     <div class="card">
       <div class="card__section card__section--border">
-        <p>Define the <strong>metrics</strong> you want to track for this initiative</p>
+        <p>Define the <strong>metrics</strong> you want to track for this event</p>
       </div>
       <div id="fields">
         <%= f.simple_fields_for :fields do |field| %>

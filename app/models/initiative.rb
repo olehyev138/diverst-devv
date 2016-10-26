@@ -40,6 +40,10 @@ class Initiative < ActiveRecord::Base
     expenses.sum(:amount) || 0
   end
 
+  def title
+    name
+  end
+
   def time_string
     if start.to_date == self.end.to_date # If the initiative starts and ends on the same day
       "#{start.to_s :dateonly} from #{start.to_s :ampmtime} to #{self.end.to_s :ampmtime}"
