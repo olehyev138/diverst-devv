@@ -23,7 +23,7 @@
           <tbody>
             <% @updates.each do |update| %>
               <tr>
-                <td><%= link_to update.created_at.to_s(:reversed_slashes), group_initiative_update_path(@group, @initiative, update) %></td>
+                <td><%= link_to update.reported_for.to_s(:reversed_slashes), group_initiative_update_path(@group, @initiative, update) %></td>
                 <td><%= link_to "Edit", edit_group_initiative_update_path(@group, @initiative, update) if policy(update).edit? %> - <%= link_to "Delete", group_initiative_update_path(@group, @initiative, update), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(update).destroy? %></td>
               </tr>
             <% end %>

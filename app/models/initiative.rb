@@ -58,7 +58,7 @@ class Initiative < ActiveRecord::Base
     .order(created_at: :asc)
     .map do |update|
       [
-        update.created_at.to_i * 1000, # We multiply by 1000 to get milliseconds for highcharts
+        update.reported_for_date.to_i * 1000, # We multiply by 1000 to get milliseconds for highcharts
         update.info[field]
       ]
     end
