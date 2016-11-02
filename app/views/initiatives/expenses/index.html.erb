@@ -1,4 +1,9 @@
 <div class="content__header">
+  <h1>Budget status:  <%= @initiative.budget.try(:status_title) || "Doesn't exist" %></h1>
+
+</div>
+
+<div class="content__header">
   <h1>Expenses</h1>
   <%= link_to "New Expense", new_group_initiative_expense_path(@group, @initiative), class: "btn btn--primary" if policy(InitiativeExpense).new? %>
 </div>

@@ -5,7 +5,11 @@ class Budget < ActiveRecord::Base
     return 'Pending' if is_approved.nil?
 
     if is_approved
-      'Approved'
+      if requested_amount > agreed_amount
+        'Fully Approved'
+      else
+        'Partially Approved'
+      end
     else
       'Rejected'
     end
