@@ -32,6 +32,7 @@ class Group < ActiveRecord::Base
   has_many :participating_initiatives, through: :initiative_participating_groups, source: :initiative
 
 
+  has_many :budgets, as: :subject
   has_many :messages, class_name: 'GroupMessage'
   has_many :news_links
   has_many :invitation_segments_groups
@@ -64,6 +65,16 @@ class Group < ActiveRecord::Base
   after_commit :update_all_elasticsearch_members
 
   scope :top_participants, -> (n) { order(participation_score_7days: :desc).limit(n) }
+
+  def annual_budget
+    annual_budgets = budgets.where('created_at > ?', Date.new(Date.today.year, 1, 1) )
+
+    (annual_budgets.map{ |b| b.agreed_amount || 0 } ).reduce(0, :+)
+  end
+
+  def available_budget
+    'Calculating...'
+  end
 
   def participation_score(from:, to: Time.current)
     score = 0

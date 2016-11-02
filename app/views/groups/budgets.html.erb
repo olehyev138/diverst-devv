@@ -1,0 +1,38 @@
+<div class="content__header">
+  <h1><%= @group.name%> budgets</h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <% if @group.budgets.any? %>
+        <table class="table--has-border">
+          <thead>
+            <th>Requested amount</th>
+            <th>Approved amount</th>
+            <th>Status</th>
+            <th>Requested at</th>
+            <th>Description</th>
+          </thead>
+          <tbody>
+            <% @group.budgets.each do |budget| %>
+              <tr>
+                <td>
+                  <%= number_to_currency budget.requested_amount %>
+                </td>
+                <td>
+                  <%= number_to_currency(budget.agreed_amount) %>
+                </td>
+                <td><%= budget.status_title %></td>
+                <td><%= budget.created_at.to_s :reversed_slashes %></td>
+                <td><%= budget.description %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <p>No budgets have been created yet.</p>
+      <% end %>
+    </div>
+  </div>
+</div>

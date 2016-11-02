@@ -1,4 +1,7 @@
 FactoryGirl.define do
+  factory :budget do
+    
+  end
   factory :group_settings do
 
   end

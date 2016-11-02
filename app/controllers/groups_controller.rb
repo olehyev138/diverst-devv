@@ -19,6 +19,10 @@ class GroupsController < ApplicationController
     @groups = current_user.enterprise.groups.includes(:initiatives)
   end
 
+  def budgets
+    authorize @group, :update?
+  end
+
   # calendar for all of the groups
   def calendar
     authorize Group, :index?
@@ -179,6 +183,7 @@ class GroupsController < ApplicationController
         :pending_users,
         :members_visibility,
         :messages_visibility,
+        :budget_manager_email,
         manager_ids: [],
         member_ids: [],
         invitation_segment_ids: [],

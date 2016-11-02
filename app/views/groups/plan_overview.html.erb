@@ -6,7 +6,11 @@
   <% @groups.each do |group| %>
     <div class="card">
       <div class="card__section">
-        <h3><%= group.name %></h3>
+        <h3>
+          <b><%= group.name %></b>
+          (Annual budget: <%= group.annual_budget %>.
+          Available budget: <%= group.available_budget %>)
+        </h3>
         <table class="table--has-border">
           <thead>
             <th>Initiative</th>
