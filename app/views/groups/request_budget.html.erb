@@ -1,0 +1,19 @@
+<div class="content__header">
+  <h1>New Budget Request</h1>
+</div>
+
+<div class="content__main">
+  <%= simple_form_for @budget, url: submit_budget_group_path(@group), method: :post do |f| %>
+    <div class="card">
+      <div class="card__section">
+        Your request will be sent to <b><%= @group.name %></b> financal manager for approval
+      </div>
+      <div class="card__section">
+        <%= f.input :requested_amount %>
+        <%= f.input :description %>
+
+        <%= f.button :submit, 'Send Budget Request' %>
+      </div>
+    </div>
+  <% end %>
+</div>

@@ -157,6 +157,8 @@ Rails.application.routes.draw do
       get 'edit_fields'
 
       get 'budgets'
+      get 'request_budget'
+      post 'submit_budget'
     end
 
     collection do

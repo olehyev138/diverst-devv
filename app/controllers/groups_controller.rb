@@ -23,6 +23,18 @@ class GroupsController < ApplicationController
     authorize @group, :update?
   end
 
+  def request_budget
+    authorize @group, :update?
+
+    @budget = Budget.new
+  end
+
+  def submit_budget
+    authorize @group, :update?
+
+    @group.budgets << Budget.new( budget_params )
+  end
+
   # calendar for all of the groups
   def calendar
     authorize Group, :index?
@@ -167,6 +179,15 @@ class GroupsController < ApplicationController
 
   def set_group
     @group = current_user.enterprise.groups.find(params[:id])
+  end
+
+  def budget_params
+    params
+      .require(:budget)
+      .permit(
+        :description,
+        :requested_amount
+      )
   end
 
   def group_params

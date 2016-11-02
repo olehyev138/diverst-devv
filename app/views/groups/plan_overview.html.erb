@@ -10,6 +10,7 @@
           <b><%= group.name %></b>
           (Annual budget: <%= group.annual_budget %>.
           Available budget: <%= group.available_budget %>)
+          <%= link_to "View Budget Details", budgets_group_path(group) %>
         </h3>
         <table class="table--has-border">
           <thead>
