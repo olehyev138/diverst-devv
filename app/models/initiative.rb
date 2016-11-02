@@ -1,5 +1,6 @@
 class Initiative < ActiveRecord::Base
   before_validation :update_owner_group
+  after_create :create_budget
 
   belongs_to :pillar
   belongs_to :owner, class_name: "User"
@@ -15,6 +16,7 @@ class Initiative < ActiveRecord::Base
 # update admin fields to save new fields as well
 # change name in admin to initiatives
 
+  has_one :budget, as: :subject
 
   belongs_to :owner_group, class_name: 'Group'
 
@@ -35,6 +37,18 @@ class Initiative < ActiveRecord::Base
 
   has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
   validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
+
+  def approved?
+    !pending?
+  end
+
+  def pending?
+    # If there is no budget for event then it needs no money and no approval
+    return false if budgets.empty?
+
+    # Check if there are anu budget that is not yet approved
+    budgets.any? { |budget| ! budget.is_approved }
+  end
 
   def current_expences_sum
     expenses.sum(:amount) || 0
@@ -92,5 +106,15 @@ class Initiative < ActiveRecord::Base
 
   def update_owner_group
     self.owner_group_id = self.pillar.try(:outcome).try(:group).try(:id)
+  end
+
+  def create_budget
+    return true if estimated_funding == 0
+
+    budget = Budget.new
+    budget.description = "Budget for event #{self.name}"
+    budget.requested_amount = self.estimated_funding
+
+    self.budget = budget
   end
 end
