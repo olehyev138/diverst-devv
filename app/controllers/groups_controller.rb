@@ -33,6 +33,8 @@ class GroupsController < ApplicationController
     authorize @group, :update?
 
     @group.budgets << Budget.new( budget_params )
+
+    redirect_to action: :budgets
   end
 
   # calendar for all of the groups
