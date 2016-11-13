@@ -17,7 +17,7 @@ class Initiative < ActiveRecord::Base
 # change name in admin to initiatives
 
   has_one :budget, as: :subject
-  has_many :checklists
+  has_many :checklists, as: :subject
 
   belongs_to :owner_group, class_name: 'Group'
 
