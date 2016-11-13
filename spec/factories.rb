@@ -1,6 +1,12 @@
 FactoryGirl.define do
+  factory :checklist_item do
+
+  end
+  factory :checklist do
+
+  end
   factory :budget do
-    
+
   end
   factory :group_settings do
 

@@ -11,7 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< 94f6c95bf3fde0b5a3b1adf0edc5324f010bf022
 ActiveRecord::Schema.define(version: 20161208112130) do
+=======
+ActiveRecord::Schema.define(version: 20161102131144) do
+
+>>>>>>> Add Checklist and ChecklistItem models
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
     t.integer  "author_id",  limit: 4
@@ -141,6 +146,23 @@ ActiveRecord::Schema.define(version: 20161208112130) do
   create_table "campaigns_segments", force: :cascade do |t|
     t.integer "campaign_id", limit: 4
     t.integer "segment_id",  limit: 4
+  end
+
+  create_table "checklist_items", force: :cascade do |t|
+    t.integer  "checklist_id", limit: 4
+    t.string   "title",        limit: 255
+    t.boolean  "is_done",                  default: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+  end
+
+  create_table "checklists", force: :cascade do |t|
+    t.integer  "subject_id",   limit: 4
+    t.string   "subject_type", limit: 255
+    t.string   "title",        limit: 255
+    t.integer  "author_id",    limit: 4
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   create_table "cities", force: :cascade do |t|
