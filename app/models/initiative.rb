@@ -18,6 +18,7 @@ class Initiative < ActiveRecord::Base
 
   has_one :budget, as: :subject
   has_many :checklists, as: :subject
+  has_many :checklist_items, as: :container
 
   belongs_to :owner_group, class_name: 'Group'
 
