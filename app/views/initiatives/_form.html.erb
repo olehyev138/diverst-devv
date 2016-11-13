@@ -79,6 +79,23 @@
       </div>
     </div>
 
+    <div class="card">
+      <div class="card__section card__section--border">
+        <p>Define the <strong>TODO</strong> items associated with event.</p>
+      </div>
+      <div id="fields">
+        <%= f.simple_fields_for :checklist_items do |item_form| %>
+          <%= render 'checklists/item', f: item_form %>
+        <% end %>
+      </div>
+
+      <div class="link">
+        <div class="card__section card__section--border">
+          <%= link_to_add_association "+Add TODO item", f, :checklist_items, partial: 'checklists/item' %>
+        </div>
+      </div>
+    </div>
+
     <%= f.button :submit %>
   <% end %>
 </div>

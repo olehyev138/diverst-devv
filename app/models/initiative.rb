@@ -17,8 +17,11 @@ class Initiative < ActiveRecord::Base
 # change name in admin to initiatives
 
   has_one :budget, as: :subject
+
   has_many :checklists, as: :subject
+
   has_many :checklist_items, as: :container
+  accepts_nested_attributes_for :checklist_items, reject_if: :all_blank, allow_destroy: true
 
   belongs_to :owner_group, class_name: 'Group'
 

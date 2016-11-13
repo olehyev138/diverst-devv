@@ -87,6 +87,11 @@ class InitiativesController < ApplicationController
           :max,
           :options_text,
           :alternative_layout
+        ],
+        checklist_items_attributes: [
+          :id,
+          :title,
+          :_destroy
         ]
       )
   end
