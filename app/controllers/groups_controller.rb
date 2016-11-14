@@ -188,7 +188,13 @@ class GroupsController < ApplicationController
       .require(:budget)
       .permit(
         :description,
-        :requested_amount
+        :requested_amount,
+        checklist_items_attributes: [
+          :id,
+          :title,
+          :is_done,
+          :_destroy
+        ]
       )
   end
 

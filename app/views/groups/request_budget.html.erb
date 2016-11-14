@@ -11,9 +11,25 @@
       <div class="card__section">
         <%= f.input :requested_amount %>
         <%= f.input :description %>
-
-        <%= f.button :submit, 'Send Budget Request' %>
       </div>
+    </div>
+    <div class="card">
+      <div class="card__section card__section--border">
+        <p>You can specify list of <strong>events</strong> you plan to organize with this budget (optional).</p>
+      </div>
+      <div id="fields">
+        <%= f.simple_fields_for :checklist_items do |item_form| %>
+          <%= render 'checklists/item', f: item_form %>
+        <% end %>
+      </div>
+
+      <div class="link">
+        <div class="card__section card__section--border">
+          <%= link_to_add_association "+Add Event", f, :checklist_items, partial: 'checklists/item' %>
+        </div>
+      </div>
+    </div>
+        <%= f.button :submit, 'Send Budget Request' %>
     </div>
   <% end %>
 </div>

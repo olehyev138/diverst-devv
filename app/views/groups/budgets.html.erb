@@ -13,6 +13,7 @@
             <th>Approved amount</th>
             <th>Status</th>
             <th>Requested at</th>
+            <th># of events</th>
             <th>Description</th>
           </thead>
           <tbody>
@@ -26,6 +27,7 @@
                 </td>
                 <td><%= budget.status_title %></td>
                 <td><%= budget.created_at.to_s :reversed_slashes %></td>
+                <td><%= budget.checklist_items.count %></td>
                 <td><%= budget.description %></td>
               </tr>
             <% end %>
