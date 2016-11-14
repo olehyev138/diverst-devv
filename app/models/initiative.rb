@@ -2,7 +2,7 @@ class Initiative < ActiveRecord::Base
   attr_accessor :associated_budget
 
   before_validation :update_owner_group
-  after_create :create_budget
+  after_create :associate_budget
 
   belongs_to :pillar
   belongs_to :owner, class_name: "User"
@@ -115,7 +115,7 @@ class Initiative < ActiveRecord::Base
     self.owner_group_id = self.pillar.try(:outcome).try(:group).try(:id)
   end
 
-  def create_budget
+  def associate_budget
     return true if estimated_funding == 0
 
     budget = Budget.new
