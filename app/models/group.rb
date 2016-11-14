@@ -66,14 +66,16 @@ class Group < ActiveRecord::Base
 
   scope :top_participants, -> (n) { order(participation_score_7days: :desc).limit(n) }
 
-  def annual_budget
-    annual_budgets = budgets.where('created_at > ?', Date.new(Date.today.year, 1, 1) )
-
-    (annual_budgets.map{ |b| b.agreed_amount || 0 } ).reduce(0, :+)
+  def agreed_budget
+    (budgets.map{ |b| b.agreed_amount || 0 } ).reduce(0, :+)
   end
 
   def available_budget
-    'Calculating...'
+    0
+  end
+
+  def spent_budget
+    agreed_budget - available_budget
   end
 
   def participation_score(from:, to: Time.current)

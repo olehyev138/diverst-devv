@@ -6,15 +6,31 @@
   <% @groups.each do |group| %>
     <div class="card">
       <div class="card__section">
-        <h3>
+        <h2>
           <b><%= group.name %></b>
-          (Annual budget: <%= group.annual_budget %>.
-          Available budget: <%= group.available_budget %>)
-          <%= link_to "View Budget Details", budgets_group_path(group) %>
+        </h2>
+
+        <h3 style="margin-left: 10px; margin-botton: -10px;">ERG Budget | <%= link_to "View Budget Details", budgets_group_path(group) %>
         </h3>
         <table class="table--has-border">
           <thead>
-            <th>Initiative</th>
+            <th>Agreed budget</th>
+            <th>Available budget</th>
+            <th>Spent so far</th>
+          </thead>
+          <tbody>
+            <td><%= number_to_currency group.agreed_budget %></td>
+            <td><%= number_to_currency group.available_budget %></td>
+            <td><%= number_to_currency group.spent_budget %></td>
+          </tbody>
+        </table>
+
+        <h3 style="margin-left: 10px;">
+          Event spendings:
+        </h3>
+        <table class="table--has-border">
+          <thead>
+            <th>Event</th>
             <th>Estimated funding</th>
             <th>Spent so far</th>
           </thead>
