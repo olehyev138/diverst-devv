@@ -144,6 +144,10 @@ Rails.application.routes.draw do
           end
         end
       end
+
+      member do
+        get 'todo'
+      end
     end
 
     member do

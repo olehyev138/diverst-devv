@@ -1,7 +1,7 @@
 <div class="nested-fields card__section card__section--border">
   <div class="flex-row flex-row--middle">
     <div class="flex-row__cell">
-      Done
+      <%= f.input :is_done, label: false, wrapper: :boolean_checkbox %>
     </div>
     <div class="flex-row__cell--grow">
       <%= f.input :title, label: false %>

@@ -1,6 +1,6 @@
 class InitiativesController < ApplicationController
   before_action :set_group
-  before_action :set_initiative, only: [:edit, :update, :destroy, :show]
+  before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo]
   after_action :verify_authorized
 
   layout 'plan'
@@ -51,6 +51,10 @@ class InitiativesController < ApplicationController
     redirect_to action: :index
   end
 
+  def todo
+    authorize @initiative, :update?
+  end
+
   protected
 
   def set_group
@@ -91,6 +95,7 @@ class InitiativesController < ApplicationController
         checklist_items_attributes: [
           :id,
           :title,
+          :is_done,
           :_destroy
         ]
       )

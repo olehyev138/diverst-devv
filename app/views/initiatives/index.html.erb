@@ -70,6 +70,7 @@
                 <div class="card__section card__section--border">
                   <h3><%= initiative.name %></h3>
                   <div class="card__action">
+                    <%= link_to 'TODO', todo_group_initiative_path(@group, initiative)  %> -
                     <%= link_to "Budget", group_initiative_expenses_path(@group, initiative) %> -
                     <%= link_to "Updates", group_initiative_updates_path(@group, initiative) %> -
                     <%= link_to "Metrics", group_initiative_path(@group, initiative) %> |
