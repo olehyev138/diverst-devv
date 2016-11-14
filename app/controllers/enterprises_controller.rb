@@ -18,6 +18,10 @@ class EnterprisesController < ApplicationController
     authorize @enterprise
   end
 
+  def edit_budgeting
+    authorize @enterprise, :update?
+  end
+
   def bias
     authorize @enterprise, :update?
   end

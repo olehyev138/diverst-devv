@@ -55,6 +55,7 @@ Rails.application.routes.draw do
     end
 
     member do
+      get 'edit_budgeting'
       get 'edit_auth'
       get 'edit_fields'
       get 'edit_mobile_fields'
