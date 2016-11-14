@@ -1,5 +1,5 @@
 class Initiative < ActiveRecord::Base
-  attr_accessor :associated_budget
+  attr_accessor :associated_budget_id
 
   before_validation :update_owner_group
   after_create :associate_budget
@@ -118,10 +118,31 @@ class Initiative < ActiveRecord::Base
   def associate_budget
     return true if estimated_funding == 0
 
-    budget = Budget.new
-    budget.description = "Budget for event #{self.name}"
-    budget.requested_amount = self.estimated_funding
+    if associated_budget_id.present?
+      # use existing budget
+      budget = Budget.find associated_budget_id
 
-    self.budget = budget
+      if budget.subject != owner_group
+        # make sure noone is trying to put incorrect budget value
+        return false
+      end
+
+      # Make sure we don't spend more than we have
+      if budget.available_amount >= self.estimated_funding
+        budget.available_amount -= self.estimated_funding
+      else
+        self.estimated_funding = budget.available_amount
+        budget.available_amount = 0
+      end
+      budget.save
+
+    else
+      # create new budget
+      budget = Budget.new
+      budget.description = "Budget for event #{self.name}"
+      budget.requested_amount = self.estimated_funding
+
+      self.budget = budget
+    end
   end
 end
