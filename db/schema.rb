@@ -11,7 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< a3f1099fb623d052cb1365f54489888434b120fe
 ActiveRecord::Schema.define(version: 20161208112130) do
+=======
+ActiveRecord::Schema.define(version: 20161114135242) do
+
+>>>>>>> Add available_amount to budget
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
     t.integer  "author_id",  limit: 4
@@ -99,6 +104,21 @@ ActiveRecord::Schema.define(version: 20161208112130) do
     t.integer "bias_id",  limit: 4
   end
 
+<<<<<<< a3f1099fb623d052cb1365f54489888434b120fe
+=======
+  create_table "budgets", force: :cascade do |t|
+    t.integer  "subject_id",       limit: 4
+    t.string   "subject_type",     limit: 255
+    t.text     "description",      limit: 65535
+    t.decimal  "requested_amount",               precision: 8, scale: 2
+    t.decimal  "agreed_amount",                  precision: 8, scale: 2
+    t.decimal  "available_amount",               precision: 8, scale: 2
+    t.boolean  "is_approved"
+    t.datetime "created_at",                                             null: false
+    t.datetime "updated_at",                                             null: false
+  end
+
+>>>>>>> Add available_amount to budget
   create_table "campaign_invitations", force: :cascade do |t|
     t.integer  "campaign_id", limit: 4
     t.integer  "user_id",     limit: 4
