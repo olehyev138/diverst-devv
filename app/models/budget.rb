@@ -43,4 +43,27 @@ class Budget < ActiveRecord::Base
       'Rejected'
     end
   end
+
+  def self.pre_approved_events(group)
+    related_budgets = self.where(subject_id: group.id)
+                          .where(subject_type: group.class.to_s)
+                          .approved
+                          .with_available_funds
+                          .includes(:checklist_items)
+
+    checklist_items = related_budgets.map { |b| b.checklist_items }
+
+    checklist_items.flatten
+  end
+
+  def self.pre_approved_events_for_select(group)
+
+    checklist_items = self.pre_approved_events(group)
+
+    checklist_items.map do |ci|
+      title = "#{ci.title} (max: $#{ci.container.available_amount})"
+
+      [ title , ci.container_id ]
+    end
+  end
 end

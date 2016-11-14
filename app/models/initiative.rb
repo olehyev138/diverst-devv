@@ -1,4 +1,6 @@
 class Initiative < ActiveRecord::Base
+  attr_accessor :associated_budget
+
   before_validation :update_owner_group
   after_create :create_budget
 

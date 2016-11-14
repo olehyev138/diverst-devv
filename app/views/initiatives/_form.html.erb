@@ -40,23 +40,31 @@
         </div>
         <div class="col sm-6">
           <div class="card__section card__section--border">
-            <p class="field__hint">Specify maximum number of <strong>attendees</strong></p>
-            <%= f.input :max_attendees, label: false %>
+            <p class="field__hint">(Optional)Choose one of preapproved events</strong>.
+            <br>
+            This will not require additional approvement
+            </p>
+            <%= f.input :associated_budget_id, collection: Budget.pre_approved_events_for_select(@group), label: false %>
           </div>
         </div>
       </div>
 
       <div class="row">
-        <div class="col sm-6">
+        <div class="col sm-4">
+          <div class="card__section card__section--border">
+            <p class="field__hint">Specify maximum <strong>attendees</strong></p>
+            <%= f.input :max_attendees, label: false %>
+          </div>
+        </div>
+        <div class="col sm-4">
           <div class="card__section card__section--border">
             <p class="field__hint">Specify the <strong>location</strong></p>
             <%= f.input :location, label: false %>
           </div>
         </div>
-        <div class="col sm-6">
+        <div class="col sm-4">
           <div class="card__section card__section--border">
-            <p class="field__hint">Upload a <strong>picture</strong> to be associated with this event</p>
-            <%= f.input :picture, as: :file %>
+            <%= f.input :picture, as: :file, lable: false %>
           </div>
         </div>
       </div>

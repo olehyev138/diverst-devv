@@ -78,6 +78,7 @@ class InitiativesController < ApplicationController
         :pillar_id,
         :location,
         :picture,
+        :associated_budget_id,
         participating_group_ids: [],
         fields_attributes: [
           :id,
