@@ -11,10 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< fd330a70c9721ea80d890842ed59aade385879dc
 <<<<<<< a3f1099fb623d052cb1365f54489888434b120fe
 ActiveRecord::Schema.define(version: 20161208112130) do
 =======
 ActiveRecord::Schema.define(version: 20161114135242) do
+=======
+ActiveRecord::Schema.define(version: 20161128174426) do
+>>>>>>> Change default estimated_funding for Events(Initiatives) to 0
 
 >>>>>>> Add available_amount to budget
   create_table "answer_comments", force: :cascade do |t|
@@ -476,12 +480,12 @@ ActiveRecord::Schema.define(version: 20161114135242) do
     t.string   "name",                 limit: 255
     t.datetime "start"
     t.datetime "end"
-    t.integer  "estimated_funding",    limit: 4,     null: false
+    t.integer  "estimated_funding",    limit: 4,     default: 0, null: false
     t.integer  "actual_funding",       limit: 4
     t.integer  "owner_id",             limit: 4
     t.integer  "pillar_id",            limit: 4
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
     t.text     "description",          limit: 65535
     t.integer  "max_attendees",        limit: 4
     t.string   "picture_file_name",    limit: 255
