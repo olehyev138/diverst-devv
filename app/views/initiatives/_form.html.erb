@@ -28,23 +28,22 @@
         <%= f.input :end, label: false %>
       </div>
 
-      <div class="row">
+      <div class="card__section card__section--border">
+        <button class='btn btn--primary' id='attach_budget_button'>Attach budget</button>
+      </div>
+      <div id='budget_panel' class="card_section row">
         <div class="col sm-6">
           <div class="card__section card__section--border">
-            <p class="field__hint">Specify the event's <strong>estimated funding</strong>.
-            <br>
-            Values other than 0 will create a budget for approval.
+            <p class="field__hint">Choose approved event from the list</strong>.
             </p>
-            <%= f.input :estimated_funding, label: false %>
+            <%= f.input :associated_budget_id, collection: Budget.pre_approved_events_for_select(@group), label: false %>
           </div>
         </div>
         <div class="col sm-6">
           <div class="card__section card__section--border">
-            <p class="field__hint">(Optional)Choose one of preapproved events</strong>.
-            <br>
-            This will not require additional approvement
+            <p class="field__hint">You can change <strong>estimated funding</strong>
             </p>
-            <%= f.input :associated_budget_id, collection: Budget.pre_approved_events_for_select(@group), label: false %>
+            <%= f.input :estimated_funding, label: false %>
           </div>
         </div>
       </div>
@@ -104,12 +103,22 @@
       </div>
     </div>
 
-    <%= f.button :submit %>
+    <%= f.button :submit, 'Submit' %>
   <% end %>
 </div>
 
 <% content_for :page_scripts do %>
   <script>
     $('.select2').select2();
+
+    $('#budget_panel').hide();
+
+    $('#attach_budget_button').click(function(e){
+      e.preventDefault();
+
+      $('#budget_panel').slideToggle( "slow", function() {
+          // Animation complete.
+      });
+    }); //endof click
   </script>
 <% end %>
