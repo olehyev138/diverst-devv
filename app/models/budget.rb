@@ -12,7 +12,7 @@ class Budget < ActiveRecord::Base
 
   scope :with_available_funds, -> { where('available_amount > 0')}
 
-  def approve(amount = nil)
+  def approve!(amount = nil)
     if amount.nil? # approve full
       self.agreed_amount = self.requested_amount
     else
@@ -26,7 +26,7 @@ class Budget < ActiveRecord::Base
     self.save
   end
 
-  def decline
+  def decline!
     self.update(is_approved: false)
   end
 

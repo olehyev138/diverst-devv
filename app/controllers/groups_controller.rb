@@ -2,6 +2,9 @@ class GroupsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group, except: [:index, :new, :create, :plan_overview,
                                       :calendar, :calendar_data]
+
+  before_action :set_budget, only: [:view_budget, :approve_budget, :decline_budget]
+
   skip_before_action :verify_authenticity_token, only: [:create]
   after_action :verify_authorized
 
@@ -23,6 +26,11 @@ class GroupsController < ApplicationController
     authorize @group, :update?
   end
 
+  def view_budget
+    #bTODO correct permission
+    authorize @group, :update?
+  end
+
   def request_budget
     authorize @group, :update?
 
@@ -33,6 +41,22 @@ class GroupsController < ApplicationController
     authorize @group, :update?
 
     @group.budgets << Budget.new( budget_params )
+
+    redirect_to action: :budgets
+  end
+
+  def approve_budget
+    authorize @budget, :approve?
+
+    @budget.update(budget_params)
+    @budget.approve!
+
+    redirect_to action: :budgets
+  end
+
+  def decline_budget
+    authorize @budget, :approve?
+    @budget.decline!
 
     redirect_to action: :budgets
   end
@@ -177,6 +201,11 @@ class GroupsController < ApplicationController
     else
       'erg_manager'
     end
+  end
+
+  def set_budget
+    #bTODO rework
+    @budget = Budget.find(params[:budget_id])
   end
 
   def set_group

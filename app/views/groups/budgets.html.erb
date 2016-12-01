@@ -15,6 +15,7 @@
             <th>Requested at</th>
             <th># of events</th>
             <th>Description</th>
+            <th></th>
           </thead>
           <tbody>
             <% @group.budgets.each do |budget| %>
@@ -29,6 +30,7 @@
                 <td><%= budget.created_at.to_s :reversed_slashes %></td>
                 <td><%= budget.checklist_items.count %></td>
                 <td><%= budget.description %></td>
+                <th><%= link_to 'Details', view_budget_group_path(budget_id: budget.id) %></th>
               </tr>
             <% end %>
           </tbody>

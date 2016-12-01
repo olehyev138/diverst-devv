@@ -11,6 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< b8ef9a819d4555cdce694a3b970370835ae895f1
 <<<<<<< fd330a70c9721ea80d890842ed59aade385879dc
 <<<<<<< a3f1099fb623d052cb1365f54489888434b120fe
 ActiveRecord::Schema.define(version: 20161208112130) do
@@ -19,6 +20,9 @@ ActiveRecord::Schema.define(version: 20161114135242) do
 =======
 ActiveRecord::Schema.define(version: 20161128174426) do
 >>>>>>> Change default estimated_funding for Events(Initiatives) to 0
+=======
+ActiveRecord::Schema.define(version: 20161201103308) do
+>>>>>>> Add Budget approval
 
 >>>>>>> Add available_amount to budget
   create_table "answer_comments", force: :cascade do |t|
@@ -616,6 +620,7 @@ ActiveRecord::Schema.define(version: 20161128174426) do
     t.boolean  "initiatives_manage",                      default: false
     t.boolean  "default_for_enterprise",                  default: false
     t.boolean  "admin_pages_view",                        default: false
+    t.boolean  "budget_approval",                         default: false
   end
 
   create_table "poll_responses", force: :cascade do |t|

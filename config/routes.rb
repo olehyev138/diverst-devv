@@ -162,8 +162,14 @@ Rails.application.routes.draw do
       get 'edit_fields'
 
       get 'budgets'
+
+
+      #bTODO - move budgets to another controller
+      get 'view_budget'
       get 'request_budget'
       post 'submit_budget'
+      post 'approve_budget'
+      post 'decline_budget'
     end
 
     collection do
