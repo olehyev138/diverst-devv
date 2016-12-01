@@ -113,6 +113,8 @@ FactoryGirl.define do
 
     default_for_enterprise false
     admin_pages_view true
+
+    budget_approval true
   end
 
   factory :user_group do

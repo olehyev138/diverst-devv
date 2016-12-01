@@ -54,7 +54,8 @@ policy_group = enterprise.policy_groups.create(
   initiatives_manage: true,
 
   global_settings_manage: true,
-  admin_pages_view: true
+  admin_pages_view: true,
+  budget_approval: true
 )
 
 u1 = enterprise.users.create(
