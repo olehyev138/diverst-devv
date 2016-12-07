@@ -1,7 +1,7 @@
 class Groups::GroupMessagesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
-  before_action :set_message, only: [:show]
+  before_action :set_message, only: [:show, :destroy]
 
   layout 'erg'
 
@@ -28,6 +28,12 @@ class Groups::GroupMessagesController < ApplicationController
     else
       render :edit
     end
+  end
+
+  def destroy
+    @message.destroy
+
+    redirect_to :back
   end
 
   def create_comment

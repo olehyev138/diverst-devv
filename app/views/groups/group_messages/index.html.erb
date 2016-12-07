@@ -21,17 +21,27 @@
               <% end %>
             </div>
             <div class="col sm-11">
-              <h3><%= message.subject %> - <span class="muted" title="<%= message.created_at.to_s :datetime %>"><%= time_ago_in_words(message.created_at) %> ago (<%= message.created_at.to_formatted_s(:short) %>)</span></h3>
-              <p>
-              <%= message.content %>
-              <% if message.owner.present? %>
-                <br>
-                <i>by <%= message.owner.name %></i>
-              <% end %>
-              <br>
-              <%= link_to "Comments(#{message.comments.count})", group_group_message_path(message.group, message)
-              %>
-              </p>
+              <div class="flex-row flex-row--middle">
+                <div class="flex-row__cell flex-row__cell--grow">
+                  <h3><%= message.subject %> - <span class="muted" title="<%= message.created_at.to_s :datetime %>"><%= time_ago_in_words(message.created_at) %> ago (<%= message.created_at.to_formatted_s(:short) %>)</span></h3>
+                  <p>
+                  <%= message.content %>
+                  <% if message.owner.present? %>
+                    <br>
+                    <i>by <%= message.owner.name %></i>
+                  <% end %>
+                  <br>
+                  <%= link_to "Comments(#{message.comments.count})", group_group_message_path(message.group, message)
+                  %>
+                  </p>
+                </div>
+
+                <% if policy(message).destroy? %>
+                  <div class="flex-row__cell link-group">
+                    <%= link_to "Delete", group_group_message_path(message.group, message), method: :delete, class: "error" %>
+                  </div>
+                <% end %>
+              </div>
             </div>
           </div>
         </div>
