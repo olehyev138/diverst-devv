@@ -8,6 +8,8 @@ class GroupMessagePolicy < ApplicationPolicy
   end
 
   def destroy?
-    return true if @policy_group.polls_manage?
+    return true if @record.owner == @user
+
+    @policy_group.group_messages_manage
   end
 end
