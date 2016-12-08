@@ -6,7 +6,7 @@ class Groups::GroupMessagesController < ApplicationController
   layout 'erg'
 
   def index
-    @messages = @group.messages.includes(:owner).page(0)
+    @messages = @group.messages.includes(:owner).order(created_at: :desc).page(0)
   end
 
   def show
