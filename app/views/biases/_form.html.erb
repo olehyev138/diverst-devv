@@ -39,17 +39,21 @@
         <%= f.input :description, wrapper_html: { style: "margin-top: 30px;" }, label: "Optionally describe the observed bias" %>
         <div class="row">
           <h3>Type of bias</h3>
-          <div class="col md-4">
+          <div class="col md-3">
             <%= f.input :spoken_words %>
             <%= f.input :marginalized_in_meetings %>
           </div>
-          <div class="col md-4">
+          <div class="col md-3">
             <%= f.input :called_name %>
             <%= f.input :contributions_ignored %>
           </div>
-          <div class="col md-4">
+          <div class="col md-3">
             <%= f.input :in_documents %>
             <%= f.input :unfairly_criticized %>
+          </div>
+          <div class="col md-3">
+            <%= f.input :sexual_harassment %>
+            <%= f.input :inequality %>
           </div>
         </div>
 

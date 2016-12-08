@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161005103712) do
+ActiveRecord::Schema.define(version: 20161208112130) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -66,6 +66,8 @@ ActiveRecord::Schema.define(version: 20161005103712) do
     t.boolean  "contributions_ignored",                  default: false
     t.boolean  "in_documents",                           default: false
     t.boolean  "unfairly_criticized",                    default: false
+    t.boolean  "sexual_harassment",                      default: false
+    t.boolean  "inequality",                             default: false
   end
 
   create_table "biases_from_cities", force: :cascade do |t|

@@ -71,6 +71,8 @@ class BiasesController < ApplicationController
         :contributions_ignored,
         :in_documents,
         :unfairly_criticized,
+        :sexual_harassment,
+        :inequality,
         groups_from_ids: [],
         groups_to_ids: [],
         cities_from_ids: [],
