@@ -39,6 +39,7 @@ class Initiatives::UpdatesController < ApplicationController
 
   def update
     authorize @update
+    @update.report_date = params[:report_date]
     @update.info.merge(fields: @initiative.fields, form_data: params['custom-fields'])
 
     if @update.save
