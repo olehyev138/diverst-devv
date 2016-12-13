@@ -11,20 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< b8ef9a819d4555cdce694a3b970370835ae895f1
-<<<<<<< fd330a70c9721ea80d890842ed59aade385879dc
-<<<<<<< a3f1099fb623d052cb1365f54489888434b120fe
 ActiveRecord::Schema.define(version: 20161208112130) do
-=======
-ActiveRecord::Schema.define(version: 20161114135242) do
-=======
-ActiveRecord::Schema.define(version: 20161128174426) do
->>>>>>> Change default estimated_funding for Events(Initiatives) to 0
-=======
-ActiveRecord::Schema.define(version: 20161201103308) do
->>>>>>> Add Budget approval
 
->>>>>>> Add available_amount to budget
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
     t.integer  "author_id",  limit: 4
@@ -112,8 +100,6 @@ ActiveRecord::Schema.define(version: 20161201103308) do
     t.integer "bias_id",  limit: 4
   end
 
-<<<<<<< a3f1099fb623d052cb1365f54489888434b120fe
-=======
   create_table "budgets", force: :cascade do |t|
     t.integer  "subject_id",       limit: 4
     t.string   "subject_type",     limit: 255
@@ -126,7 +112,6 @@ ActiveRecord::Schema.define(version: 20161201103308) do
     t.datetime "updated_at",                                             null: false
   end
 
->>>>>>> Add available_amount to budget
   create_table "campaign_invitations", force: :cascade do |t|
     t.integer  "campaign_id", limit: 4
     t.integer  "user_id",     limit: 4
@@ -169,6 +154,26 @@ ActiveRecord::Schema.define(version: 20161201103308) do
   create_table "campaigns_segments", force: :cascade do |t|
     t.integer "campaign_id", limit: 4
     t.integer "segment_id",  limit: 4
+  end
+
+  create_table "checklist_items", force: :cascade do |t|
+    t.string   "title",          limit: 255
+    t.boolean  "is_done",                    default: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+    t.integer  "container_id",   limit: 4
+    t.string   "container_type", limit: 255
+  end
+
+  add_index "checklist_items", ["container_type", "container_id"], name: "index_checklist_items_on_container_type_and_container_id", using: :btree
+
+  create_table "checklists", force: :cascade do |t|
+    t.integer  "subject_id",   limit: 4
+    t.string   "subject_type", limit: 255
+    t.string   "title",        limit: 255
+    t.integer  "author_id",    limit: 4
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   create_table "cities", force: :cascade do |t|
@@ -243,6 +248,7 @@ ActiveRecord::Schema.define(version: 20161201103308) do
     t.integer  "banner_file_size",           limit: 4
     t.datetime "banner_updated_at"
     t.text     "privacy_statement",          limit: 65535
+    t.string   "budget_manager_email",       limit: 255
   end
 
   create_table "event_attendances", force: :cascade do |t|
@@ -409,6 +415,7 @@ ActiveRecord::Schema.define(version: 20161201103308) do
     t.string   "pending_users",             limit: 255
     t.string   "members_visibility",        limit: 255
     t.string   "messages_visibility",       limit: 255
+    t.string   "budget_manager_email",      limit: 255
   end
 
   create_table "groups_managers", force: :cascade do |t|
@@ -473,6 +480,7 @@ ActiveRecord::Schema.define(version: 20161201103308) do
     t.integer  "initiative_id", limit: 4
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
+    t.datetime "report_date"
   end
 
   create_table "initiative_users", force: :cascade do |t|
