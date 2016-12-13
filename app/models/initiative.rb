@@ -112,6 +112,8 @@ class Initiative < ActiveRecord::Base
   protected
 
   def update_owner_group
+    return true if self.owner_group_id
+
     self.owner_group_id = self.pillar.try(:outcome).try(:group).try(:id)
   end
 
