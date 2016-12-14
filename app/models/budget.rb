@@ -3,6 +3,11 @@ class Budget < ActiveRecord::Base
 
   has_many :checklists, as: :subject
 
+  validates :subject, :requested_amount, presence: true
+  validates :requested_amount, numericality: { greater_than: 0 }
+  validates :agreed_amount, numericality: { less_than_or_equal_to: :requested_amount }, allow_nil: true
+  validates :available_amount, numericality: { less_than_or_equal_to: :agreed_amount }, allow_nil: true
+
   has_many :checklist_items, as: :container
   accepts_nested_attributes_for :checklist_items, reject_if: :all_blank, allow_destroy: true
 

@@ -5,9 +5,19 @@ FactoryGirl.define do
   factory :checklist do
 
   end
-  factory :budget do
 
+  factory :budget do
+    subject { FactoryGirl.create(:group) }
+    description { Faker::Lorem.sentence }
+    requested_amount { rand(100..1000) }
+
+    factory :approved_budget do
+      agreed_amount { requested_amount }
+      available_amount { requested_amount }
+      is_approved { true }
+    end
   end
+
   factory :group_settings do
 
   end
