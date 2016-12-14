@@ -8,7 +8,7 @@ class Initiatives::UpdatesController < ApplicationController
 
   def index
     authorize InitiativeUpdate
-    @updates = @initiative.updates
+    @updates = @initiative.updates.order(report_date: :desc)
   end
 
   def new
@@ -18,7 +18,8 @@ class Initiatives::UpdatesController < ApplicationController
 
   def create
     authorize InitiativeUpdate
-    @update = @initiative.updates.new
+
+    @update = @initiative.updates.new( initiative_update_params)
     @update.info.merge(fields: @initiative.fields, form_data: params['custom-fields'])
     @update.owner = current_user
 
@@ -39,10 +40,9 @@ class Initiatives::UpdatesController < ApplicationController
 
   def update
     authorize @update
-    @update.report_date = params[:report_date]
     @update.info.merge(fields: @initiative.fields, form_data: params['custom-fields'])
 
-    if @update.save
+    if @update.update(initiative_update_params)
       redirect_to action: :index
     else
       render :edit
@@ -67,5 +67,13 @@ class Initiatives::UpdatesController < ApplicationController
 
   def set_update
     @update = @initiative.updates.find(params[:id])
+  end
+
+  def initiative_update_params
+    params
+      .require(:initiative_update)
+      .permit(
+        :report_date
+      )
   end
 end
