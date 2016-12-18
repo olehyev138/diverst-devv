@@ -1,4 +1,7 @@
 FactoryGirl.define do
+  factory :budget_item do
+
+  end
   factory :checklist_item do
 
   end

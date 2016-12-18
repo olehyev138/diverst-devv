@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161208112130) do
+ActiveRecord::Schema.define(version: 20161217201311) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -98,6 +98,16 @@ ActiveRecord::Schema.define(version: 20161208112130) do
   create_table "biases_to_groups", force: :cascade do |t|
     t.integer "group_id", limit: 4
     t.integer "bias_id",  limit: 4
+  end
+
+  create_table "budget_items", force: :cascade do |t|
+    t.integer  "budget_id",       limit: 4
+    t.string   "title",           limit: 255
+    t.string   "estimated_price", limit: 255, default: "0"
+    t.date     "estimated_date"
+    t.boolean  "is_done",                     default: false
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
   end
 
   create_table "budgets", force: :cascade do |t|

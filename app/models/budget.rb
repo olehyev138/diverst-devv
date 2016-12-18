@@ -8,8 +8,8 @@ class Budget < ActiveRecord::Base
   validates :agreed_amount, numericality: { less_than_or_equal_to: :requested_amount }, allow_nil: true
   validates :available_amount, numericality: { less_than_or_equal_to: :agreed_amount }, allow_nil: true
 
-  has_many :checklist_items, as: :container
-  accepts_nested_attributes_for :checklist_items, reject_if: :all_blank, allow_destroy: true
+  has_many :budget_items
+  accepts_nested_attributes_for :budget_items, reject_if: :all_blank, allow_destroy: true
 
   scope :approved, -> { where(is_approved: true) }
   scope :not_approved, -> { where(is_approved: false )}

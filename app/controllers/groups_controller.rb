@@ -221,6 +221,8 @@ class GroupsController < ApplicationController
         checklist_items_attributes: [
           :id,
           :title,
+          :estimated_price,
+          :estimated_date,
           :is_done,
           :_destroy
         ]

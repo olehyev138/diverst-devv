@@ -28,7 +28,7 @@
                 </td>
                 <td><%= budget.status_title %></td>
                 <td><%= budget.created_at.to_s :reversed_slashes %></td>
-                <td><%= budget.checklist_items.count %></td>
+                <td><%= budget.budget_items.count %></td>
                 <td><%= budget.description %></td>
                 <th><%= link_to 'Details', view_budget_group_path(budget_id: budget.id) %></th>
               </tr>
