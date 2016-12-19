@@ -11,7 +11,6 @@
   <%= simple_form_for @budget, url: approve_budget_group_path(@group, budget_id: @budget.id), method: :post do |f| %>
     <div class="card">
       <div class="card__section">
-        <%= f.input :requested_amount %>
         <%= f.input :description %>
       </div>
     </div>
@@ -20,14 +19,14 @@
         <p>You can specify list of <strong>events</strong> you plan to organize with this budget (optional).</p>
       </div>
       <div id="fields">
-        <%= f.simple_fields_for :checklist_items do |item_form| %>
-          <%= render 'checklists/item', f: item_form %>
+        <%= f.simple_fields_for :budget_items do |item_form| %>
+          <%= render 'budgets/item', f: item_form %>
         <% end %>
       </div>
 
       <div class="link">
         <div class="card__section card__section--border">
-          <%= link_to_add_association "+Add Event", f, :checklist_items, partial: 'checklists/item' %>
+          <%= link_to_add_association "+Add Event", f, :budget_items, partial: 'budgets/item' %>
         </div>
       </div>
     </div>
