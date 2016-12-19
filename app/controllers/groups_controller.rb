@@ -217,8 +217,7 @@ class GroupsController < ApplicationController
       .require(:budget)
       .permit(
         :description,
-        :requested_amount,
-        checklist_items_attributes: [
+        budget_items_attributes: [
           :id,
           :title,
           :estimated_price,

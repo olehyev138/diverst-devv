@@ -17,6 +17,10 @@ class Budget < ActiveRecord::Base
 
   scope :with_available_funds, -> { where('available_amount > 0')}
 
+  def requested_amount
+    budget_items.sum(:estimated_price)
+  end
+
   def approve!(amount = nil)
     if amount.nil? # approve full
       self.agreed_amount = self.requested_amount
