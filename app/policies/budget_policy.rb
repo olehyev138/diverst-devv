@@ -1,10 +1,9 @@
 class BudgetPolicy < ApplicationPolicy
   def approve?
-    #bTODO implement this
-    true
+    @policy_group.budget_approval?
   end
 
-  def reject?
+  def decline?
     approve?
   end
 end

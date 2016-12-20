@@ -27,7 +27,6 @@ class GroupsController < ApplicationController
   end
 
   def view_budget
-    #bTODO correct permission
     authorize @group, :update?
   end
 
@@ -55,7 +54,7 @@ class GroupsController < ApplicationController
   end
 
   def decline_budget
-    authorize @budget, :approve?
+    authorize @budget, :decline?
     @budget.decline!
 
     redirect_to action: :budgets
