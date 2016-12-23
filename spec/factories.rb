@@ -1,7 +1,4 @@
 FactoryGirl.define do
-  factory :budget_item do
-
-  end
   factory :checklist_item do
 
   end
@@ -18,6 +15,19 @@ FactoryGirl.define do
       agreed_amount { requested_amount }
       available_amount { requested_amount }
       is_approved { true }
+    end
+  end
+
+  factory :budget_item do
+    budget
+
+    title { Faker::Lorem.sentence }
+    estimated_price { rand(100..1000) }
+    estimated_date { Faker::Date.between(Date.today, 1.year.from_now) }
+    is_done { false }
+
+    trait :done do
+      is_done { true }
     end
   end
 
