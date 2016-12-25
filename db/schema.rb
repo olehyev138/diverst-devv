@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161217201311) do
+ActiveRecord::Schema.define(version: 20161225132208) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -101,25 +101,23 @@ ActiveRecord::Schema.define(version: 20161217201311) do
   end
 
   create_table "budget_items", force: :cascade do |t|
-    t.integer  "budget_id",       limit: 4
-    t.string   "title",           limit: 255
-    t.string   "estimated_price", limit: 255, default: "0"
+    t.integer  "budget_id",        limit: 4
+    t.string   "title",            limit: 255
     t.date     "estimated_date"
-    t.boolean  "is_done",                     default: false
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
+    t.boolean  "is_done",                                              default: false
+    t.datetime "created_at",                                                           null: false
+    t.datetime "updated_at",                                                           null: false
+    t.decimal  "estimated_amount",             precision: 8, scale: 2
+    t.decimal  "available_amount",             precision: 8, scale: 2
   end
 
   create_table "budgets", force: :cascade do |t|
-    t.integer  "subject_id",       limit: 4
-    t.string   "subject_type",     limit: 255
-    t.text     "description",      limit: 65535
-    t.decimal  "requested_amount",               precision: 8, scale: 2
-    t.decimal  "agreed_amount",                  precision: 8, scale: 2
-    t.decimal  "available_amount",               precision: 8, scale: 2
+    t.integer  "subject_id",   limit: 4
+    t.string   "subject_type", limit: 255
+    t.text     "description",  limit: 65535
     t.boolean  "is_approved"
-    t.datetime "created_at",                                             null: false
-    t.datetime "updated_at",                                             null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   create_table "campaign_invitations", force: :cascade do |t|
@@ -516,6 +514,7 @@ ActiveRecord::Schema.define(version: 20161217201311) do
     t.datetime "picture_updated_at"
     t.integer  "owner_group_id",       limit: 4
     t.string   "location",             limit: 255
+    t.integer  "budget_item_id",       limit: 4
   end
 
   create_table "invitation_segments_groups", force: :cascade do |t|

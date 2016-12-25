@@ -9,20 +9,22 @@ FactoryGirl.define do
   factory :budget do
     subject { FactoryGirl.create(:group) }
     description { Faker::Lorem.sentence }
-    requested_amount { rand(100..1000) }
 
     factory :approved_budget do
-      agreed_amount { requested_amount }
-      available_amount { requested_amount }
       is_approved { true }
+    end
+
+    after(:create) do |budget|
+      create_list(:budget_item, 3, budget: budget)
     end
   end
 
   factory :budget_item do
-    budget
+    budget { FactoryGirl.create(:approved_budget) }
 
     title { Faker::Lorem.sentence }
-    estimated_price { rand(100..1000) }
+    estimated_amount { rand(100..1000) }
+    available_amount { estimated_amount }
     estimated_date { Faker::Date.between(Date.today, 1.year.from_now) }
     is_done { false }
 

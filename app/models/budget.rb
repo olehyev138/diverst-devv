@@ -15,24 +15,22 @@ class Budget < ActiveRecord::Base
   scope :not_approved, -> { where(is_approved: false )}
   scope :pending, -> { where(is_approved: nil )}
 
-  scope :with_available_funds, -> { where('available_amount > 0')}
+  #scope :with_available_funds, -> { where('available_amount > 0')}
 
   def requested_amount
     budget_items.sum(:estimated_price)
   end
 
-  def approve!(amount = nil)
-    if amount.nil? # approve full
-      self.agreed_amount = self.requested_amount
-    else
-      # approve partial amount
-      self.agreed_amount = amount
-    end
+  def agreed_amount
+    'Remove me'
+  end
 
-    self.available_amount = self.agreed_amount
-    self.is_approved = true
+  def available_amount
+    'Implement me'
+  end
 
-    self.save
+  def approve!
+    self.update(is_approved: true)
   end
 
   def decline!
@@ -43,36 +41,30 @@ class Budget < ActiveRecord::Base
     return 'Pending' if is_approved.nil?
 
     if is_approved
-      if requested_amount == agreed_amount
-        'Fully Approved'
-      else
-        'Partially Approved'
-      end
+      'Approved'
     else
-      'Rejected'
+      'Declined'
     end
   end
 
   def self.pre_approved_events(group)
-    related_budgets = self.where(subject_id: group.id)
+    related_budgets = self.where(subject_i  d: group.id)
                           .where(subject_type: group.class.to_s)
                           .approved
-                          .with_available_funds
-                          .includes(:checklist_items)
+                          .includes(:budget_items)
 
-    checklist_items = related_budgets.map { |b| b.checklist_items }
+    budget_items = related_budgets.map { |b| b.budget_items }
 
-    checklist_items.flatten
+    budget_items.flatten.select { |bi| bi.is_done == false }
   end
 
+  #bTODO test this method
   def self.pre_approved_events_for_select(group)
 
-    checklist_items = self.pre_approved_events(group)
+    budget_items = self.pre_approved_events(group)
 
-    checklist_items.map do |ci|
-      title = "#{ci.title} (max: $#{ci.container.available_amount})"
-
-      [ title , ci.container_id ]
+    budget_items.map do |bi|
+      [ bi.title_with_amount , bi.id ]
     end
   end
 end
