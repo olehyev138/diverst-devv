@@ -147,17 +147,52 @@ FactoryGirl.define do
     association :group
   end
 
+  factory :initiative do
+    name { Faker::Lorem.sentence }
+    description { Faker::Lorem.sentence }
+    location { Faker::Address.city }
+    # start
+    # end
+    estimated_funding { 0 }
+    owner_group { FactoryGirl.create(:group) }
+    #pillar
+
+    trait :with_budget_item do
+      budget_item { FactoryGirl.create(:budget_item) }
+      owner_group { budget_item.budget.subject }
+      estimated_funding { rand(1..budget_item.available_amount ) }
+    end
+  end
+
+  factory :pillar do
+    name { Faker::Commerce.product_name }
+  end
+
+  factory :outcome do
+    name { Faker::Commerce.product_name }
+
+    after(:create) do
+      create_list(:pillar, 3, outcome: outcome)
+    end
+  end
+
   factory :group do
     name 'LGBT'
     enterprise
 
     factory :group_with_users do
       transient do
-        users_count 100
+        users_count 10
       end
 
       after(:create) do |group, evaluator|
         create_list(:user_group, evaluator.users_count, group: group, accepted_member: true)
+      end
+    end
+
+    trait :with_outcomes do
+      after(:create) do |group|
+        group.outcomes << create(:outcome, group: group)
       end
     end
   end
@@ -168,7 +203,7 @@ FactoryGirl.define do
 
     factory :segment_with_users do
       transient do
-        users_count 100
+        users_count 10
       end
 
       after(:create) do |segment, evaluator|
@@ -417,17 +452,5 @@ FactoryGirl.define do
     logo_file_name { 'logo.png' }
     logo_content_type { 'image/png' }
     logo_file_size { 1024 }
-  end
-
-  factory :initiative do
-
-  end
-
-  factory :pillar do
-
-  end
-
-  factory :outcome do
-
   end
 end

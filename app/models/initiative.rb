@@ -1,8 +1,8 @@
 class Initiative < ActiveRecord::Base
   attr_accessor :associated_budget_id
 
-  before_validation :update_owner_group
-  after_create :associate_budget
+  validate :check_budget
+  before_create :allocate_budget_funds
 
   belongs_to :pillar
   belongs_to :owner, class_name: "User"
@@ -18,7 +18,8 @@ class Initiative < ActiveRecord::Base
 # update admin fields to save new fields as well
 # change name in admin to initiatives
 
-  has_one :budget, as: :subject
+  belongs_to :budget_item
+  has_one :budget, through: :budget_item
 
   has_many :checklists, as: :subject
 
@@ -117,34 +118,41 @@ class Initiative < ActiveRecord::Base
     self.owner_group_id = self.pillar.try(:outcome).try(:group).try(:id)
   end
 
-  def associate_budget
+  def check_budget
+    # We don't need budgets for events without allocate_budget_funds
     return true if estimated_funding == 0
 
-    if associated_budget_id.present?
-      # use existing budget
-      budget = Budget.find associated_budget_id
-
-      if budget.subject != owner_group
-        # make sure noone is trying to put incorrect budget value
-        return false
-      end
-
-      # Make sure we don't spend more than we have
-      if budget.available_amount >= self.estimated_funding
-        budget.available_amount -= self.estimated_funding
-      else
-        self.estimated_funding = budget.available_amount
-        budget.available_amount = 0
-      end
-      budget.save
-
-    else
-      # create new budget
-      budget = Budget.new
-      budget.description = "Budget for event #{self.name}"
-      budget.requested_amount = self.estimated_funding
-
-      self.budget = budget
+    if !budget_item.present?
+      errors.add(:budget_item, 'Events with funds should belong to budget')
+      return false
     end
+
+    if budget.subject != owner_group
+      # make sure noone is trying to put incorrect budget value
+      errors.add(:budget, 'You are providing wrong budget')
+      return false
+    end
+
+    if self.estimated_funding > budget_item.available_amount
+      errors.add(:budget_item, 'You can not exceed budget')
+      return false
+    end
+
+    true
+  end
+
+  def allocate_budget_funds
+    return true unless budget_item.present?
+
+    # Make sure we don't spend more than we have
+    if budget_item.available_amount >= self.estimated_funding
+      budget_item.available_amount -= self.estimated_funding
+    else
+      self.estimated_funding = budget_item.available_amount
+      budget_item.available_amount = 0
+    end
+
+    #bTODO mark budget_item as done
+    budget_item.save
   end
 end

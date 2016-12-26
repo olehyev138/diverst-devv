@@ -15,11 +15,10 @@ RSpec.feature 'An ERG dashboard' do
   end
 
   scenario 'shows the upcoming events' do
-    create_list(:event, 5, group: group, start: 2.days.from_now)
-
+    create_list(:initiative, 5, owner_group: group, start: 2.days.from_now)
     visit group_path(group)
 
-    expect(page).to have_content group.events.last.title
+    expect(page).to have_content group.own_initiatives.last.name
   end
 
   scenario 'shows the latest news' do

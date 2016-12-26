@@ -48,7 +48,7 @@ class Budget < ActiveRecord::Base
   end
 
   def self.pre_approved_events(group)
-    related_budgets = self.where(subject_i  d: group.id)
+    related_budgets = self.where(subject_id: group.id)
                           .where(subject_type: group.class.to_s)
                           .approved
                           .includes(:budget_items)
