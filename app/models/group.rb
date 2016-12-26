@@ -66,8 +66,8 @@ class Group < ActiveRecord::Base
 
   scope :top_participants, -> (n) { order(participation_score_7days: :desc).limit(n) }
 
-  def agreed_budget
-    (budgets.map{ |b| b.agreed_amount || 0 } ).reduce(0, :+)
+  def approved_budget
+    (budgets.approved.map{ |b| b.requested_amount || 0 } ).reduce(0, :+)
   end
 
   def available_budget
@@ -75,7 +75,7 @@ class Group < ActiveRecord::Base
   end
 
   def spent_budget
-    agreed_budget - available_budget
+    approved_budget - available_budget
   end
 
   def participation_score(from:, to: Time.current)
