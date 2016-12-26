@@ -3,10 +3,7 @@ class Budget < ActiveRecord::Base
 
   has_many :checklists, as: :subject
 
-  validates :subject, :requested_amount, presence: true
-  validates :requested_amount, numericality: { greater_than: 0 }
-  validates :agreed_amount, numericality: { less_than_or_equal_to: :requested_amount }, allow_nil: true
-  validates :available_amount, numericality: { less_than_or_equal_to: :agreed_amount }, allow_nil: true
+  validates :subject, presence: true
 
   has_many :budget_items
   accepts_nested_attributes_for :budget_items, reject_if: :all_blank, allow_destroy: true
@@ -18,15 +15,13 @@ class Budget < ActiveRecord::Base
   #scope :with_available_funds, -> { where('available_amount > 0')}
 
   def requested_amount
-    budget_items.sum(:estimated_price)
-  end
-
-  def agreed_amount
-    'Remove me'
+    budget_items.sum(:estimated_amount)
   end
 
   def available_amount
-    'Implement me'
+    return 0 unless is_approved
+
+    budget_items.available.sum(:available_amount)
   end
 
   def approve!

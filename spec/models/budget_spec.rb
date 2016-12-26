@@ -11,6 +11,37 @@ RSpec.describe Budget, type: :model do
     end
   end
 
+  describe 'amounts' do
+    let!(:budget) { FactoryGirl.create :approved_budget }
+    let(:requested_amount) { budget.budget_items.sum(:estimated_amount) }
+
+    before { budget.budget_items.first.update(is_done: true) }
+
+    describe '#requested_amount' do
+      it 'sums all budget items' do
+        expect(budget.requested_amount).to eq requested_amount
+      end
+    end
+
+    describe '#available_amount' do
+      context 'with approved budget' do
+        it 'sums only active budget items' do
+          active_available = requested_amount - budget.budget_items.first.estimated_amount
+
+          expect(budget.available_amount).to eq active_available
+        end
+      end
+
+      context 'with not approved budget' do
+        let!(:budget) { FactoryGirl.create :budget }
+
+        it 'always return 0' do
+          expect(budget.available_amount).to eq 0
+        end
+      end
+    end
+  end
+
   describe '#approve!' do
     let(:budget) { FactoryGirl.build :budget }
 
