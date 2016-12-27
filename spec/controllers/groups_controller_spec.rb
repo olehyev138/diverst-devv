@@ -67,6 +67,39 @@ RSpec.describe GroupsController, type: :controller do
     let!(:group) { FactoryGirl.create(:group, enterprise: user.enterprise) }
     let!(:budget) { FactoryGirl.create(:approved_budget, subject: group) }
 
+    describe 'GET #plan_overview' do
+      def get_plan_overview
+        get :plan_overview
+      end
+
+      context 'with logged user' do
+        let!(:foreign_group) { FactoryGirl.create :group }
+
+        login_user_from_let
+
+        before { get_plan_overview }
+
+        it 'return success' do
+          expect(response).to be_success
+        end
+
+        it 'shows groups from correct enterprise' do
+          groups = assigns(:groups)
+
+          expect(groups).to include group
+          expect(groups).to_not include foreign_group
+        end
+      end
+
+      context 'without logged user' do
+        before { get_plan_overview }
+
+        it 'return error' do
+          expect(response).to_not be_success
+        end
+      end
+    end
+
     describe 'GET #view_budget' do
       def get_view_budget
         get :view_budget, id: budget.subject.id, budget_id: budget.id
