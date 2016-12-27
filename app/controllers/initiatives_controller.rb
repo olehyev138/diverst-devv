@@ -1,4 +1,5 @@
 class InitiativesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_group
   before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo]
   after_action :verify_authorized
