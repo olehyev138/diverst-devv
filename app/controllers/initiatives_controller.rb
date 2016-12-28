@@ -20,6 +20,7 @@ class InitiativesController < ApplicationController
     authorize Initiative
     @initiative = Initiative.new(initiative_params)
     @initiative.owner = current_user
+    @initiative.owner_group = @group
 
     if @initiative.save
       redirect_to action: :index

@@ -99,12 +99,71 @@ RSpec.describe InitiativesController, type: :controller do
     end
   end
 
-  describe 'POST #create' do
-  end
+  describe 'POST' do
+    let!(:group) { create :group, :with_outcomes, enterprise: user.enterprise }
+    let!(:initiative) { build :initiative, owner_group: group }
 
-  describe 'POST #update' do
-  end
+    describe '#create' do
+      def post_create(group_id = -1, params = {})
+        post :create, group_id: group_id, initiative: params
+      end
 
-  describe 'DELETE #destroy' do
+      context 'with logged in user' do
+        login_user_from_let
+
+        context 'with correct params' do
+          let(:initiative_attrs) { attributes_for :initiative }
+
+          it 'creates initiative' do
+            expect{
+              post_create(group.id, initiative_attrs)
+            }.to change(Initiative, :count).by(1)
+          end
+
+          it 'creates correct initiative' do
+            post_create(group.id, initiative_attrs)
+
+            new_initiative = Initiative.last
+
+            expect(new_initiative.owner).to eq user
+            expect(new_initiative.owner_group).to eq group
+
+            expect(new_initiative.name).to eq initiative_attrs[:name]
+            expect(new_initiative.description).to eq initiative_attrs[:description]
+            expect(new_initiative.location).to eq initiative_attrs[:location]
+            expect(new_initiative.start).to be_within(1).of initiative_attrs[:start]
+            expect(new_initiative.end).to be_within(1).of initiative_attrs[:end]
+          end
+
+          it 'redirects to correct page' do
+            post_create(group.id, initiative_attrs)
+
+            expect(response).to redirect_to action: :index
+          end
+        end
+
+        context 'with incorrect params' do
+          before { post_create(group.id, initiative: {}) }
+
+          it 'returns error' do
+            expect(response).to_not be_success
+          end
+        end
+      end
+
+      context 'without logged in user' do
+        before { post_create(group.id) }
+
+        it 'return error' do
+          expect(response).to_not be_success
+        end
+      end
+    end
+
+    describe '#update' do
+    end
+
+    describe 'DELETE #destroy' do
+    end
   end
 end
