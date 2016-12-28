@@ -147,14 +147,14 @@ FactoryGirl.define do
     association :group
   end
 
-  factory :initiative do
-    name { Faker::Lorem.sentence }
-    description { Faker::Lorem.sentence }
-    location { Faker::Address.city }
-    # start
-    # end
-    estimated_funding { 0 }
-    owner_group { FactoryGirl.create(:group) }
+  factory :initiative do |f|
+    f.name { Faker::Lorem.sentence }
+    f.description { Faker::Lorem.sentence }
+    f.location { Faker::Address.city }
+    f.start { Faker::Time.between(Date.today, 1.month.from_now) }
+    f.end { Faker::Time.between(start, start + 10.days)}
+    f.estimated_funding { 0 }
+    f.owner_group { FactoryGirl.create(:group) }
     #pillar
 
     trait :with_budget_item do
