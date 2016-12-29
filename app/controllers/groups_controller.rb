@@ -219,7 +219,7 @@ class GroupsController < ApplicationController
         budget_items_attributes: [
           :id,
           :title,
-          :estimated_price,
+          :estimated_amount,
           :estimated_date,
           :is_done,
           :_destroy
