@@ -221,6 +221,37 @@ RSpec.describe InitiativesController, type: :controller do
     end
 
     describe 'DELETE #destroy' do
+      def delete_destroy(group_id=-1, id=-1)
+        delete :destroy, group_id: group_id, id: id
+      end
+
+      let!(:initiative) { create :initiative, owner_group: group }
+
+      context 'with logged in user' do
+        login_user_from_let
+
+        context 'with correct params' do
+          it 'deletes initiative' do
+            expect {
+              delete_destroy(group.id, initiative.id)
+            }.to change(Initiative, :count).by(-1)
+          end
+
+          it 'redirects to correct action' do
+            delete_destroy(group.id, initiative.id)
+
+            expect(response).to redirect_to action: :index
+          end
+        end
+      end
+
+      context 'without logged in user' do
+        before { delete_destroy(group.id) }
+
+        it 'return error' do
+          expect(response).to_not be_success
+        end
+      end
     end
   end
 end
