@@ -155,7 +155,7 @@ FactoryGirl.define do
     f.end { Faker::Time.between(start, start + 10.days)}
     f.estimated_funding { 0 }
     f.owner_group { FactoryGirl.create(:group) }
-    #pillar
+    f.pillar { owner_group.try(:pillars).try(:first) }
 
     trait :with_budget_item do
       budget_item { FactoryGirl.create(:budget_item) }

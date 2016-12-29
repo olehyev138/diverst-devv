@@ -99,11 +99,11 @@ RSpec.describe InitiativesController, type: :controller do
     end
   end
 
-  describe 'POST' do
+  describe 'non-GET' do
     let!(:group) { create :group, :with_outcomes, enterprise: user.enterprise }
     let!(:initiative) { build :initiative, owner_group: group }
 
-    describe '#create' do
+    describe 'POST #create' do
       def post_create(group_id = -1, params = {})
         post :create, group_id: group_id, initiative: params
       end
@@ -160,7 +160,64 @@ RSpec.describe InitiativesController, type: :controller do
       end
     end
 
-    describe '#update' do
+    describe 'PATCH #update' do
+      def patch_update(group_id = -1, id= -1, params = {})
+        patch :update, group_id: group_id, id: id, initiative: params
+      end
+
+      let!(:initiative) { create :initiative, owner_group: group }
+
+      context 'with logged in user' do
+        login_user_from_let
+
+        context 'with correct params' do
+          let(:initiative_attrs) { attributes_for :initiative }
+
+          it 'updates fields' do
+            patch_update(group.id, initiative.id, initiative_attrs)
+
+            updated_initiative = Initiative.find(initiative.id)
+
+            expect(updated_initiative.name).to eq initiative_attrs[:name]
+            expect(updated_initiative.description).to eq initiative_attrs[:description]
+            expect(updated_initiative.location).to eq initiative_attrs[:location]
+            expect(updated_initiative.start).to be_within(1).of initiative_attrs[:start]
+            expect(updated_initiative.end).to be_within(1).of initiative_attrs[:end]
+          end
+
+          it 'redirects to correct page' do
+            patch_update(group.id, initiative.id, initiative_attrs)
+
+            expect(response).to redirect_to [group, :initiatives]
+          end
+        end
+
+        context 'with incorrect params' do
+          before { patch_update(group.id, initiative.id, initiative: {}) }
+
+          it 'returns error' do
+            expect(response).to_not be_success
+          end
+
+          it 'does not update initiative' do
+            updated_initiative = Initiative.find(initiative.id)
+
+            expect(updated_initiative.name).to eq initiative.name
+            expect(updated_initiative.description).to eq initiative.description
+            expect(updated_initiative.location).to eq initiative.location
+            expect(updated_initiative.start).to be_within(1).of initiative.start
+            expect(updated_initiative.end).to be_within(1).of initiative.end
+          end
+        end
+      end
+
+      context 'without logged in user' do
+        before { patch_update(group.id) }
+
+        it 'return error' do
+          expect(response).to_not be_success
+        end
+      end
     end
 
     describe 'DELETE #destroy' do
