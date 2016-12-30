@@ -32,7 +32,6 @@ class User::EventsController < ApplicationController
     @events = user.enterprise.initiatives.where('start >= ?', params[:start])
                                     .where('start <= ?', params[:end])
 
-    @branding_color = user.enterprise.theme.branding_color
     render 'shared/calendar_events', format: :json
   end
 
