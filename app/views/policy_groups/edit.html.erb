@@ -1,5 +1,16 @@
 <div class="content__header">
-  <h1>Edit this permission group</h1>
+  <div class="flex-row flex-row--middle full-width">
+    <div class="flex-row__cell flex-row__cell--grow">
+      <h1>Edit this permission group</h1>
+    </div>
+    <div class="flex-row__cell">
+      <% if @policy_group.allow_deletion? %>
+        <%= link_to "Delete", policy_group_path(@policy_group), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(@policy_group).destroy? %>
+      <% else %>
+        <%= link_to "This policy can not be deleted", '#', class: "error" %>
+      <% end %>
+    </div>
+  </div>
 </div>
 
 <%= render "form" %>

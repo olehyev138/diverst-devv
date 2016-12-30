@@ -25,6 +25,13 @@ class PolicyGroup < ActiveRecord::Base
     end
   end
 
+  def allow_deletion?
+    return false if default_group?
+    return false if users.count > 0
+
+    true
+  end
+
   private
 
   # Helper method. There should be only one default group at every moment.

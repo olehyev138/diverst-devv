@@ -1,5 +1,5 @@
 class PolicyGroupsController < ApplicationController
-  before_action :set_policy_group, only: [:edit, :update]
+  before_action :set_policy_group, only: [:edit, :update, :destroy]
 
   layout 'global_settings'
 
