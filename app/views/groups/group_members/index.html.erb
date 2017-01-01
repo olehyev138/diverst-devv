@@ -21,7 +21,7 @@
             <div class="flex-row__cell link-group">
               <%= link_to 'Show user', user_path(member)%>
               <% if policy(@group).manage_members? %>
-                <%= link_to 'Remove From Group', remove_member_group_group_member_path(@group, member), method: :delete %>
+                <%= link_to 'Remove From Group', remove_member_group_group_member_path(@group, member), method: :delete, class: "error", data: { confirm: "Are you sure?" } %>
               <% end %>
             </div>
           </div>
