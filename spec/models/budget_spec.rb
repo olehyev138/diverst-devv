@@ -25,6 +25,8 @@ RSpec.describe Budget, type: :model do
 
     describe '#available_amount' do
       context 'with approved budget' do
+        before { budget.approve! }
+
         it 'sums only active budget items' do
           active_available = requested_amount - budget.budget_items.first.estimated_amount
 
@@ -45,10 +47,30 @@ RSpec.describe Budget, type: :model do
   describe '#approve!' do
     let(:budget) { FactoryGirl.build :budget }
 
-    before { budget.approve! }
+    describe 'budget items' do
+      let!(:budget) { create :budget }
+      let(:budget_item) { budget.budget_items.first }
 
-    it 'changes is_approved to true' do
-      expect(budget.is_approved).to eq true
+      context 'before approval' do
+        it 'do not have available amount' do
+          expect(budget_item.available_amount).to eq 0
+        end
+      end
+
+      context 'after approval' do
+        before { budget.approve! }
+
+        it 'changes is_approved to true' do
+          expect(budget.is_approved).to eq true
+        end
+
+        it 'do have abailable amount' do
+          budget_item.reload
+
+          expect(budget_item.available_amount).to_not eq 0
+          expect(budget_item.available_amount).to eq budget_item.estimated_amount
+        end
+      end
     end
   end
 

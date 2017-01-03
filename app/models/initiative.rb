@@ -133,26 +133,18 @@ class Initiative < ActiveRecord::Base
       return false
     end
 
-    if self.estimated_funding > budget_item.available_amount
-      errors.add(:budget_item, 'You can not exceed budget')
-      return false
-    end
-
     true
   end
 
   def allocate_budget_funds
-    return true unless budget_item.present?
-
-    # Make sure we don't spend more than we have
-    if budget_item.available_amount >= self.estimated_funding
-      budget_item.available_amount -= self.estimated_funding
-    else
+    if budget_item.present?
       self.estimated_funding = budget_item.available_amount
       budget_item.available_amount = 0
-    end
+      budget_item.is_done = true
 
-    #bTODO mark budget_item as done
-    budget_item.save
+      budget_item.save
+    else
+      self.estimated_funding = 0
+    end
   end
 end

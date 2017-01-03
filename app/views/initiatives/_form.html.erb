@@ -7,6 +7,16 @@
         <%= f.association :pillar, label_method: :name_with_group_prefix, label: false, include_blank: false %>
       </div>
 
+      <div id='budget_panel' class="card_section row">
+        <div class="col sm-6">
+          <div class="card__section card__section--border">
+            <p class="field__hint">Attach a <strong>budget</strong> to the event.
+            </p>
+            <%= f.input :budget_item_id, collection: Budget.pre_approved_events_for_select(@group), include_blank: 'Create new free event ($0)',label: false %>
+          </div>
+        </div>
+      </div>
+
       <div class="card__section card__section--border">
         <p class="field__hint">You may also specify <strong>participating groups</strong></p>
         <%= f.association :participating_groups, label: false, collection: current_user.enterprise.groups, input_html: {class: 'select2', multiple: true} %>
@@ -26,26 +36,6 @@
         <p class="field__hint">Define a <strong>start</strong> and <strong>end</strong> time</p>
         <%= f.input :start, label: false %>
         <%= f.input :end, label: false %>
-      </div>
-
-      <div class="card__section card__section--border">
-        <button class='btn btn--primary' id='attach_budget_button'>Attach budget</button>
-      </div>
-      <div id='budget_panel' class="card_section row">
-        <div class="col sm-6">
-          <div class="card__section card__section--border">
-            <p class="field__hint">Choose approved event from the list</strong>.
-            </p>
-            <%= f.input :associated_budget_id, collection: Budget.pre_approved_events_for_select(@group), label: false %>
-          </div>
-        </div>
-        <div class="col sm-6">
-          <div class="card__section card__section--border">
-            <p class="field__hint">You can change <strong>estimated funding</strong>
-            </p>
-            <%= f.input :estimated_funding, label: false %>
-          </div>
-        </div>
       </div>
 
       <div class="row">
@@ -110,15 +100,5 @@
 <% content_for :page_scripts do %>
   <script>
     $('.select2').select2();
-
-    $('#budget_panel').hide();
-
-    $('#attach_budget_button').click(function(e){
-      e.preventDefault();
-
-      $('#budget_panel').slideToggle( "slow", function() {
-          // Animation complete.
-      });
-    }); //endof click
   </script>
 <% end %>

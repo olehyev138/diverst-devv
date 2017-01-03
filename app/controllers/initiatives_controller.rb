@@ -75,12 +75,11 @@ class InitiativesController < ApplicationController
         :description,
         :start,
         :end,
-        :estimated_funding,
         :max_attendees,
         :pillar_id,
         :location,
         :picture,
-        :associated_budget_id,
+        :budget_item_id,
         participating_group_ids: [],
         fields_attributes: [
           :id,

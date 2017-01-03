@@ -10,8 +10,16 @@ class BudgetItem < ActiveRecord::Base
   scope :allocated, -> { where(is_done: true) }
 
   def title_with_amount
-    "#{title} (#{estimated_amount})"
+    "#{title} ($#{available_amount})"
   end
 
-  #bTODO after approving budget set available_amount to estimated amount
+  def available_amount
+    return 0 if is_done
+
+    read_attribute(:available_amount)
+  end
+
+  def approve!
+    self.update(available_amount: estimated_amount)
+  end
 end

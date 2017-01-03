@@ -40,15 +40,7 @@ RSpec.describe Initiative, type: :model do
       end
 
       context 'with correct budget item' do
-        let!(:initiative) { FactoryGirl.build(:initiative, :with_budget_item) }
-
-        context 'with not enough budget money' do
-          before { initiative.estimated_funding = initiative.budget_item.available_amount + 100 }
-
-          it 'shows error' do
-            expect(initiative).to_not be_valid
-          end
-        end
+        let!(:initiative) { FactoryGirl.create(:initiative, :with_budget_item) }
 
         context 'with enough budget money' do
           let!(:estimated_funding) { initiative.estimated_funding }
@@ -67,7 +59,9 @@ RSpec.describe Initiative, type: :model do
             expect(initiative.budget_item.available_amount).to eq leftover
           end
 
-          it 'marks budget item as done'
+          it 'marks budget item as done' do
+            expect(initiative.budget_item.is_done).to eq true
+          end
         end
       end
     end

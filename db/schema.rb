@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161225132208) do
+ActiveRecord::Schema.define(version: 20170103113405) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -108,7 +108,7 @@ ActiveRecord::Schema.define(version: 20161225132208) do
     t.datetime "created_at",                                                           null: false
     t.datetime "updated_at",                                                           null: false
     t.decimal  "estimated_amount",             precision: 8, scale: 2
-    t.decimal  "available_amount",             precision: 8, scale: 2
+    t.decimal  "available_amount",             precision: 8, scale: 2, default: 0.0
   end
 
   create_table "budgets", force: :cascade do |t|

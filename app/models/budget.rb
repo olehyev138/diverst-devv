@@ -25,6 +25,10 @@ class Budget < ActiveRecord::Base
   end
 
   def approve!
+    budget_items.each do |bi|
+      bi.approve!
+    end
+
     self.update(is_approved: true)
   end
 
