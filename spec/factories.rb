@@ -11,7 +11,6 @@ FactoryGirl.define do
     description { Faker::Lorem.sentence }
 
     factory :approved_budget do
-      is_approved { true }
       after(:create) do |budget|
         budget.approve!
       end

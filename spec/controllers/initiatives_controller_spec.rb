@@ -253,5 +253,31 @@ RSpec.describe InitiativesController, type: :controller do
         end
       end
     end
+
+    describe 'POST #finish_expenses' do
+      def post_finish_expenses(group_id = -1, id= -1)
+        post :finish_expenses, group_id: group_id, id: id
+      end
+
+      let(:budget) { create :approved_budget, subject: group }
+      let(:budget_item) { budget.budget_items.first }
+      let!(:initiative) { create :initiative, budget_item: budget_item, owner_group: group }
+
+      context 'with logged in user' do
+        login_user_from_let
+
+        context 'with correct params' do
+          before { post_finish_expenses(group.id, initiative.id) }
+
+          it 'marks initiative as finished' do
+            expect(initiative.reload).to be_finished_expenses
+          end
+
+          it 'redirects to correct page' do
+            expect(response).to redirect_to action: :index
+          end
+        end
+      end
+    end
   end
 end

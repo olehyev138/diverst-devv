@@ -1,7 +1,7 @@
 class InitiativesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
-  before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo]
+  before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo, :finish_expenses]
   after_action :verify_authorized
 
   layout 'plan'
@@ -45,6 +45,13 @@ class InitiativesController < ApplicationController
     else
       render :edit
     end
+  end
+
+  def finish_expenses
+    authorize @initiative, :update?
+
+    @initiative.update(finished_expenses: true)
+    redirect_to action: :index
   end
 
   def destroy

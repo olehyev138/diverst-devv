@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170104195722) do
+ActiveRecord::Schema.define(version: 20170104204138) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -501,12 +501,12 @@ ActiveRecord::Schema.define(version: 20170104195722) do
     t.string   "name",                 limit: 255
     t.datetime "start"
     t.datetime "end"
-    t.decimal  "estimated_funding",                  precision: 8, scale: 2, default: 0.0, null: false
+    t.decimal  "estimated_funding",                  precision: 8, scale: 2, default: 0.0,   null: false
     t.integer  "actual_funding",       limit: 4
     t.integer  "owner_id",             limit: 4
     t.integer  "pillar_id",            limit: 4
-    t.datetime "created_at",                                                               null: false
-    t.datetime "updated_at",                                                               null: false
+    t.datetime "created_at",                                                                 null: false
+    t.datetime "updated_at",                                                                 null: false
     t.text     "description",          limit: 65535
     t.integer  "max_attendees",        limit: 4
     t.string   "picture_file_name",    limit: 255
@@ -516,6 +516,7 @@ ActiveRecord::Schema.define(version: 20170104195722) do
     t.integer  "owner_group_id",       limit: 4
     t.string   "location",             limit: 255
     t.integer  "budget_item_id",       limit: 4
+    t.boolean  "finished_expenses",                                          default: false
   end
 
   create_table "invitation_segments_groups", force: :cascade do |t|
