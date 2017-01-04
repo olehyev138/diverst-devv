@@ -21,7 +21,7 @@ RSpec.describe Initiative, type: :model do
     end
 
     context 'with funds' do
-      let(:initiative) { FactoryGirl.build(:initiative, estimated_funding: 100) }
+      let(:initiative) { FactoryGirl.build(:initiative, owner_group: group, estimated_funding: 100) }
 
       context 'without budget' do
         it 'is not valid' do
@@ -62,6 +62,16 @@ RSpec.describe Initiative, type: :model do
           it 'marks budget item as done' do
             expect(initiative.budget_item.is_done).to eq true
           end
+        end
+      end
+
+      context 'with leftover money' do
+        before { group.leftover_money = 1000 }
+
+        let(:initiative) { build :initiative, budget_item_id: -1}
+
+        it 'is valid' do
+          expect(initiative).to be_valid
         end
       end
     end

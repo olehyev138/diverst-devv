@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170103113405) do
+ActiveRecord::Schema.define(version: 20170104195722) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -404,8 +404,8 @@ ActiveRecord::Schema.define(version: 20170103113405) do
     t.integer  "enterprise_id",             limit: 4
     t.string   "name",                      limit: 255
     t.text     "description",               limit: 65535
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.datetime "created_at",                                                                    null: false
+    t.datetime "updated_at",                                                                    null: false
     t.string   "logo_file_name",            limit: 255
     t.string   "logo_content_type",         limit: 255
     t.integer  "logo_file_size",            limit: 4
@@ -424,6 +424,7 @@ ActiveRecord::Schema.define(version: 20170103113405) do
     t.string   "members_visibility",        limit: 255
     t.string   "messages_visibility",       limit: 255
     t.string   "budget_manager_email",      limit: 255
+    t.decimal  "leftover_money",                          precision: 8, scale: 2, default: 0.0
   end
 
   create_table "groups_managers", force: :cascade do |t|
@@ -500,12 +501,12 @@ ActiveRecord::Schema.define(version: 20170103113405) do
     t.string   "name",                 limit: 255
     t.datetime "start"
     t.datetime "end"
-    t.integer  "estimated_funding",    limit: 4,     default: 0, null: false
+    t.decimal  "estimated_funding",                  precision: 8, scale: 2, default: 0.0, null: false
     t.integer  "actual_funding",       limit: 4
     t.integer  "owner_id",             limit: 4
     t.integer  "pillar_id",            limit: 4
-    t.datetime "created_at",                                     null: false
-    t.datetime "updated_at",                                     null: false
+    t.datetime "created_at",                                                               null: false
+    t.datetime "updated_at",                                                               null: false
     t.text     "description",          limit: 65535
     t.integer  "max_attendees",        limit: 4
     t.string   "picture_file_name",    limit: 255

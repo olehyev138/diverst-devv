@@ -62,8 +62,10 @@ class Budget < ActiveRecord::Base
 
     budget_items = self.pre_approved_events(group)
 
-    budget_items.map do |bi|
+    select_items = budget_items.map do |bi|
       [ bi.title_with_amount , bi.id ]
     end
+
+    select_items << [ group.title_with_leftover_amount, BudgetItem::LEFTOVER_BUDGET_ITEM_ID ]
   end
 end

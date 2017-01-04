@@ -12,11 +12,13 @@ FactoryGirl.define do
 
     factory :approved_budget do
       is_approved { true }
+      after(:create) do |budget|
+        budget.approve!
+      end
     end
 
     after(:create) do |budget|
       create_list(:budget_item, 3, budget: budget)
-      budget.approve!
     end
   end
 

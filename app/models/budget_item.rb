@@ -1,4 +1,5 @@
 class BudgetItem < ActiveRecord::Base
+  LEFTOVER_BUDGET_ITEM_ID = -1
   belongs_to :budget
   has_many :initiatives
 

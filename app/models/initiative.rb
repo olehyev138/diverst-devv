@@ -46,6 +46,14 @@ class Initiative < ActiveRecord::Base
   has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
   validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
 
+  def group
+    owner_group || pillar.outcome.group
+  end
+
+  def budget_status
+    budget.try(:status_title) || "Not attached"
+  end
+
   def approved?
     !pending?
   end
@@ -110,6 +118,10 @@ class Initiative < ActiveRecord::Base
     end
   end
 
+  def funded_by_leftover?
+    self.budget_item_id == BudgetItem::LEFTOVER_BUDGET_ITEM_ID
+  end
+
   protected
 
   def update_owner_group
@@ -119,21 +131,27 @@ class Initiative < ActiveRecord::Base
   end
 
   def check_budget
+    #byebug
     # We don't need budgets for events without allocate_budget_funds
     return true if estimated_funding == 0
 
-    if !budget_item.present?
-      errors.add(:budget_item, 'Events with funds should belong to budget')
-      return false
+    if budget.present?
+      if budget.subject != group
+        # make sure noone is trying to put incorrect budget value
+        errors.add(:budget, 'You are providing wrong budget')
+        return false
+      end
+
+      return true
     end
 
-    if budget.subject != owner_group
-      # make sure noone is trying to put incorrect budget value
-      errors.add(:budget, 'You are providing wrong budget')
-      return false
+    if funded_by_leftover?
+      return true
     end
 
-    true
+    # Here we know there is no budge, no leftover, but estimated_amount
+    # is still greater than zero, which is not valid
+    errors.add(:budget, 'Can not create event with funds but without budget')
   end
 
   def allocate_budget_funds
@@ -143,6 +161,11 @@ class Initiative < ActiveRecord::Base
       budget_item.is_done = true
 
       budget_item.save
+    elsif funded_by_leftover?
+      self.estimated_funding = owner_group.leftover_money
+      owner_group.leftover_money = 0
+
+      owner_group.save
     else
       self.estimated_funding = 0
     end

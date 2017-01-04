@@ -163,6 +163,10 @@ class Group < ActiveRecord::Base
     user_group.update(accepted_member: true)
   end
 
+  def title_with_leftover_amount
+    "Create event from #{name} leftover ($#{leftover_money})"
+  end
+
   private
 
   def filter_by_membership(membership_status)

@@ -5,7 +5,7 @@ RSpec.feature 'Initiative management' do
   let(:user) { create(:user) }
   let!(:group) { create :group, :with_outcomes, enterprise: user.enterprise }
 
-  let(:initiative_params) {
+  let!(:initiative_params) {
     {
       name:  Faker::Lorem.sentence,
       description:  Faker::Lorem.sentence,
@@ -26,13 +26,7 @@ RSpec.feature 'Initiative management' do
     before { visit new_group_initiative_path(group) }
 
     scenario 'creating initiative without budget' do
-      fill_in 'initiative_name', with: initiative_params[:name]
-      fill_in 'initiative_description', with: initiative_params[:description]
-      fill_in 'initiative_location', with: initiative_params[:location]
-      fill_date 'initiative_start', initiative_params[:start]
-      fill_date 'initiative_end', initiative_params[:end]
-      fill_in 'initiative_max_attendees', with: initiative_params[:max_attendees]
-      attach_file 'initiative_picture', initiative_params[:picture_path]
+      fill_form( initiative_params )
 
       submit_form
 
@@ -46,19 +40,13 @@ RSpec.feature 'Initiative management' do
   end
 
   context 'with budget item' do
-    let!(:budget) { create :budget, subject: group }
+    let!(:budget) { create :approved_budget, subject: group }
     let!(:budget_item) { budget.budget_items.first }
 
     before { visit new_group_initiative_path(group) }
 
     scenario 'creating initiative with budget' do
-      fill_in 'initiative_name', with: initiative_params[:name]
-      fill_in 'initiative_description', with: initiative_params[:description]
-      fill_in 'initiative_location', with: initiative_params[:location]
-      fill_date 'initiative_start', initiative_params[:start]
-      fill_date 'initiative_end', initiative_params[:end]
-      fill_in 'initiative_max_attendees', with: initiative_params[:max_attendees]
-      attach_file 'initiative_picture', initiative_params[:picture_path]
+      fill_form( initiative_params )
 
       select(budget_item.title_with_amount, from: 'initiative_budget_item_id')
 
@@ -80,7 +68,43 @@ RSpec.feature 'Initiative management' do
   end
 
   context 'with leftover money' do
+    let(:leftover) { rand(100..1000) }
 
+    before do
+      group.update(leftover_money: leftover)
+      visit new_group_initiative_path(group)
+    end
+
+    scenario 'creating initiative with leftover money' do
+      fill_form( initiative_params )
+
+      select(group.title_with_leftover_amount, from: 'initiative_budget_item_id')
+
+      submit_form
+
+      #Expect new Initiative to be created
+      expect(page).to have_current_path group_initiatives_path( group )
+
+      expect(page).to have_content initiative_params[:name]
+
+      check_initiative( initiative_params )
+
+      #Check that group leftover was decreased
+      group.reload
+      expect(group.leftover_money).to eq 0
+
+      expect(Initiative.last.estimated_funding).to eq leftover
+    end
+  end
+
+  def fill_form( initiative_params )
+    fill_in 'initiative_name', with: initiative_params[:name]
+    fill_in 'initiative_description', with: initiative_params[:description]
+    fill_in 'initiative_location', with: initiative_params[:location]
+    fill_date 'initiative_start', initiative_params[:start]
+    fill_date 'initiative_end', initiative_params[:end]
+    fill_in 'initiative_max_attendees', with: initiative_params[:max_attendees]
+    attach_file 'initiative_picture', initiative_params[:picture_path]
   end
 
   def check_initiative( initiative_params )
