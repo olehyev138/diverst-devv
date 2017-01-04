@@ -197,9 +197,11 @@ RSpec.describe GroupsController, type: :controller do
     end
 
     describe 'POST #approve_budget' do
+      it 'should be implemented'
     end
 
     describe 'POST #decline_budget' do
+      it 'should be implemented'
     end
   end
 end

@@ -16,6 +16,7 @@ FactoryGirl.define do
 
     after(:create) do |budget|
       create_list(:budget_item, 3, budget: budget)
+      budget.approve!
     end
   end
 
