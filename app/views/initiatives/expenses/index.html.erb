@@ -5,7 +5,21 @@
 
 <div class="content__header">
   <h1>Expenses</h1>
-  <%= link_to "New Expense", new_group_initiative_expense_path(@group, @initiative), class: "btn btn--primary" if policy(InitiativeExpense).new? %>
+
+  <div class="flex-row flex-row--middle">
+  <% if @initiative.finished_expenses? %>
+    <div class="flex-row__cell">
+      This initiative was closed. No new expenses is possible.
+    </div>
+  <% else %>
+    <div class="flex-row__cell">
+      <%= link_to "New Expense", new_group_initiative_expense_path(@group, @initiative), class: "btn btn--primary" if policy(InitiativeExpense).new? %>
+    </div>
+    <div class="flex-row__cell">
+      <%= link_to "Finish Expenses", finish_expenses_group_initiative_path(@group, @initiative), method: :post, class: "btn btn--secondary" if policy(@initiative).update? %>
+    </div>
+  <% end %>
+  </div>
 </div>
 
 <div class="content__main">
@@ -27,7 +41,14 @@
                 <td><%= expense.description %></td>
                 <td><%= number_to_currency expense.amount %></td>
                 <td><%= expense.created_at.to_s :dateonly %></td>
-                <td><%= link_to "Edit", edit_group_initiative_expense_path(@group, @initiative, expense) if policy(expense).edit? %> - <%= link_to "Delete", group_initiative_expense_path(@group, @initiative, expense), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(expense).destroy? %></td>
+                <td>
+                  <% if @initiative.finished_expenses? %>
+                    No option possible
+                  <% else %>
+                    <%= link_to "Edit", edit_group_initiative_expense_path(@group, @initiative, expense) if policy(expense).edit? %> - <%= link_to "Delete", group_initiative_expense_path(@group, @initiative, expense), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(expense).destroy? %>
+
+                  <% end %>
+                </td>
               </tr>
             <% end %>
             <tr style="font-weight: bold;">
