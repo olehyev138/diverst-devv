@@ -50,7 +50,7 @@ class InitiativesController < ApplicationController
   def finish_expenses
     authorize @initiative, :update?
 
-    @initiative.update(finished_expenses: true)
+    @initiative.finish_expenses!
     redirect_to action: :index
   end
 

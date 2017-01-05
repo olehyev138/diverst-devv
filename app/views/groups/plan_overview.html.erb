@@ -17,11 +17,13 @@
             <th>Approved budget</th>
             <th>Available budget</th>
             <th>Spent so far</th>
+            <th>Leftover</th>
           </thead>
           <tbody>
             <td><%= number_to_currency group.approved_budget %></td>
             <td><%= number_to_currency group.available_budget %></td>
             <td><%= number_to_currency group.spent_budget %></td>
+            <td><%= number_to_currency group.leftover_money %></td>
           </tbody>
         </table>
 

@@ -66,6 +66,15 @@ class Initiative < ActiveRecord::Base
     budgets.any? { |budget| ! budget.is_approved }
   end
 
+  def finish_expenses!
+    return false if finished_expenses?
+
+    leftover = estimated_funding - current_expences_sum
+    group.leftover_money += leftover
+    group.save
+    self.update(finished_expenses: true)
+  end
+
   def current_expences_sum
     expenses.sum(:amount) || 0
   end
