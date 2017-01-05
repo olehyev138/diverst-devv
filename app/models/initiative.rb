@@ -54,6 +54,14 @@ class Initiative < ActiveRecord::Base
     budget.try(:status_title) || "Not attached"
   end
 
+  def expenses_status
+    if finished_expenses?
+      'Expenses finished'
+    else
+      'Expenses in progress'
+    end
+  end
+
   def approved?
     !pending?
   end
