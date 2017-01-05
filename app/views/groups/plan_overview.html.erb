@@ -14,12 +14,14 @@
         </h3>
         <table class="table--has-border">
           <thead>
-            <th>Approved budget</th>
+            <th>Annual budget</th>
+            <th>Pre-approved budget</th>
             <th>Available budget</th>
             <th>Spent so far</th>
             <th>Leftover</th>
           </thead>
           <tbody>
+            <td><%= number_to_currency group.annual_budget %></td>
             <td><%= number_to_currency group.approved_budget %></td>
             <td><%= number_to_currency group.available_budget %></td>
             <td><%= number_to_currency group.spent_budget %></td>
