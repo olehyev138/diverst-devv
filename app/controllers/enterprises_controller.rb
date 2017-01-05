@@ -20,6 +20,7 @@ class EnterprisesController < ApplicationController
 
   def edit_budgeting
     authorize @enterprise, :update?
+    @groups = @enterprise.groups
   end
 
   def bias

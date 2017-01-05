@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170104204138) do
+ActiveRecord::Schema.define(version: 20170105105259) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -424,6 +424,7 @@ ActiveRecord::Schema.define(version: 20170104204138) do
     t.string   "members_visibility",        limit: 255
     t.string   "messages_visibility",       limit: 255
     t.string   "budget_manager_email",      limit: 255
+    t.decimal  "annual_budget",                           precision: 8, scale: 2
     t.decimal  "leftover_money",                          precision: 8, scale: 2, default: 0.0
   end
 

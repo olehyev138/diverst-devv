@@ -161,6 +161,8 @@ Rails.application.routes.draw do
       post 'parse_csv'
       get 'metrics'
       get 'edit_fields'
+      get 'edit_annual_budget'
+      post 'update_annual_budget'
 
       get 'budgets'
 

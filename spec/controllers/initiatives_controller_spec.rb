@@ -28,6 +28,7 @@ RSpec.describe InitiativesController, type: :controller do
     end
   end
 
+
   describe 'GET #new' do
     def get_new(group_id = -1)
       get :new, group_id: group_id

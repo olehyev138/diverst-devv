@@ -126,6 +126,20 @@ class GroupsController < ApplicationController
     redirect_to action: :index
   end
 
+  def edit_annual_budget
+    authorize @group.enterprise, :update?
+  end
+
+  def update_annual_budget
+    authorize @group.enterprise, :update?
+
+    if @group.update(annual_budget_params)
+      redirect_to edit_budgeting_enterprise_path(@group.enterprise)
+    else
+      redirect_to :back
+    end
+  end
+
   def metrics
     authorize @group, :show?
     @updates = @group.updates
@@ -269,6 +283,14 @@ class GroupsController < ApplicationController
           :options_text,
           :alternative_layout
         ]
+      )
+  end
+
+  def annual_budget_params
+    params
+      .require(:group)
+      .permit(
+        :annual_budget
       )
   end
 end

@@ -124,6 +124,33 @@ RSpec.describe GroupsController, type: :controller do
       end
     end
 
+    describe 'GET #edit_annual_budget' do
+      let(:user) { create :user }
+      let(:group) { create :group, enterprise: user.enterprise }
+
+      def get_edit_annual_budget(group_id=-1)
+        get :edit_annual_budget, id: group_id
+      end
+
+      context 'with logged user' do
+        login_user_from_let
+
+        before { get_edit_annual_budget(group.id) }
+
+        it 'return success' do
+          expect(response).to be_success
+        end
+      end
+
+      context 'without logged user' do
+        before { get_edit_annual_budget }
+
+        it 'return error' do
+          expect(response).to_not be_success
+        end
+      end
+    end
+
     describe 'GET #request_budget' do
       def get_request_budget(group_id = -1)
         get :request_budget, id: group_id
