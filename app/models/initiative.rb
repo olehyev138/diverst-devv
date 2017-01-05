@@ -87,6 +87,10 @@ class Initiative < ActiveRecord::Base
     expenses.sum(:amount) || 0
   end
 
+  def leftover
+    estimated_funding - current_expences_sum
+  end
+
   def title
     name
   end

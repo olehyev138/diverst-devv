@@ -14,18 +14,16 @@
         </h3>
         <table class="table--has-border">
           <thead>
-            <th>Annual budget</th>
-            <th>Pre-approved budget</th>
+            <th>Annual Budget</th>
+            <th>Approved budget</th>
             <th>Available budget</th>
-            <th>Spent so far</th>
-            <th>Leftover</th>
           </thead>
           <tbody>
-            <td><%= number_to_currency group.annual_budget %></td>
+            <td><%= number_to_currency( group.annual_budget || 0) %></td>
             <td><%= number_to_currency group.approved_budget %></td>
-            <td><%= number_to_currency group.available_budget %></td>
-            <td><%= number_to_currency group.spent_budget %></td>
-            <td><%= number_to_currency group.leftover_money %></td>
+            <td>
+              <%= number_to_currency group.available_budget %>
+            </td>
           </tbody>
         </table>
 
@@ -36,6 +34,7 @@
             <th>Event</th>
             <th>Estimated funding</th>
             <th>Spent so far</th>
+            <th>Unspent</th>
             <th>Spending status</th>
           </thead>
           <tbody>
@@ -43,7 +42,8 @@
               <tr>
                 <td><%= initiative.name %></td>
                 <td><%= number_to_currency initiative.estimated_funding, precision: 0 %></td>
-                <td><%= number_to_currency initiative.expenses.sum(:amount), precision: 0 %></td>
+                <td><%= number_to_currency initiative.current_expences_sum, precision: 0 %></td>
+                <td><%= number_to_currency initiative.leftover %></td>
                 <td><%= initiative.expenses_status %></td>
               </tr>
             <% end %>
@@ -51,6 +51,7 @@
               <td>Total for <%= group.name %></td>
               <td><%= number_to_currency group.initiatives.sum(:estimated_funding), precision: 0 %></td>
               <td><%= number_to_currency group.initiatives.map{ |i| i.expenses.sum(:amount) }.sum, precision: 0 %></td>
+              <td><%= number_to_currency group.initiatives.map{ |i| i.leftover }.inject(0, :+) %></td>
               <td></td>
             </tr>
           </tbody>

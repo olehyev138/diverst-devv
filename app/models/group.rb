@@ -71,7 +71,10 @@ class Group < ActiveRecord::Base
   end
 
   def available_budget
-    (budgets.map{ |b| b.available_amount || 0 } ).reduce(0, :+)
+    #(budgets.map{ |b| b.available_amount || 0 } ).reduce(0, :+)
+    return 0 unless annual_budget
+
+    annual_budget - approved_budget + leftover_money
   end
 
   def spent_budget
