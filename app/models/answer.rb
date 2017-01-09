@@ -22,7 +22,7 @@ class Answer < ActiveRecord::Base
   # Base value + total of income items - total of expense items
   def total_value
     self.value + self.expenses.includes(:expense).map{ |e|
-      e.quantity * e.expense.signed_price
+      (e.quantity || 0) * (e.expense.signed_price || 0)
     }.sum
   end
 end
