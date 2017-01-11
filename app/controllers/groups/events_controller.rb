@@ -6,19 +6,22 @@ class Groups::EventsController < ApplicationController
   layout 'erg'
 
   def index
-    @upcoming_events = @group.own_initiatives.upcoming
-    @past_events = @group.own_initiatives.past
-    @ongoing_events = @group.own_initiatives.ongoing
-
-    #TODO - also show participating events?
+    #TODO Those events are never used!
+    @upcoming_events = @group.own_initiatives.upcoming + @group.participating_initiatives.upcoming
+    @past_events = @group.own_initiatives.past + @group.participating_initiatives.past
+    @ongoing_events = @group.own_initiatives.ongoing + @group.participating_initiatives.ongoing
   end
 
   def calendar_data
-    @events = @group.own_initiatives.includes(:owner_group)
+    own_events = @group.own_initiatives.includes(:owner_group)
                           .where('start >= ?', params[:start])
                           .where('start <= ?', params[:end])
 
-    #Todo also show participating events
+    participating_events = @group.participating_initiatives.includes(:owner_group)
+                              .where('start >= ?', params[:start])
+                              .where('start <= ?', params[:end])
+
+    @events = own_events + participating_events
 
     render 'shared/calendar_events', format: :json
   end
