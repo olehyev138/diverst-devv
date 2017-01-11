@@ -84,6 +84,39 @@ RSpec.describe Budget, type: :model do
     end
   end
 
+  describe 'approver notification on creation' do
+    let(:user) { create :user }
+    let(:budget) { build :budget }
+
+    before do
+      allow(budget).to receive(:send_approval_request)
+
+      budget.save
+    end
+
+    context 'on budget creation' do
+      context 'with approver_id' do
+        let(:budget) { build :budget, approver_id: user.id }
+
+        it 'sends email request' do
+          expect(budget).to have_received(:send_approval_request)
+        end
+      end
+
+      context 'without approver_id' do
+        it 'does not send email request' do
+          expect(budget).to_not have_received(:send_approval_request)
+        end
+      end
+    end
+
+    context 'on budget update' do
+      it 'does not send email request' do
+        expect(budget).to_not have_received(:send_approval_request)
+      end
+    end
+  end
+
   describe 'self.' do
     describe 'pre_approved_events' do
       let(:group) { FactoryGirl.create :group }

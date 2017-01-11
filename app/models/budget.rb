@@ -1,4 +1,6 @@
 class Budget < ActiveRecord::Base
+  attr_accessor :approver_id
+
   belongs_to :subject, polymorphic: true
 
   has_many :checklists, as: :subject
@@ -13,6 +15,8 @@ class Budget < ActiveRecord::Base
   scope :pending, -> { where(is_approved: nil )}
 
   #scope :with_available_funds, -> { where('available_amount > 0')}
+
+  after_create :send_approval_request, if: Proc.new { |budget| budget.approver_id.present? }
 
   def requested_amount
     budget_items.sum(:estimated_amount)
@@ -67,5 +71,9 @@ class Budget < ActiveRecord::Base
     end
 
     select_items << [ group.title_with_leftover_amount, BudgetItem::LEFTOVER_BUDGET_ITEM_ID ]
+  end
+
+  def send_approval_request
+    BudgetMailer.approve_request(self, self.subject).deliver_later
   end
 end
