@@ -1,5 +1,5 @@
 class DatePickerInput < SimpleForm::Inputs::StringInput
-  def input
+  def input(wrapper_options = nil)
     value = @builder.object.send(attribute_name)
     input_html_options[:value] = case value
                                    when Date, Time, DateTime
