@@ -25,6 +25,10 @@ class PolicyGroup < ActiveRecord::Base
     end
   end
 
+  def self.users_that_able_to_accept_budgets(enterprise)
+    enterprise.users.select { |u| u.policy_group.budget_approval }
+  end
+
   def allow_deletion?
     return false if default_group?
     return false if users.count > 0

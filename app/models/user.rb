@@ -94,6 +94,15 @@ class User < ActiveRecord::Base
     "#{first_name} #{last_name}"
   end
 
+  #bTODO test this
+  def policy_group
+    if self[:policy_group_id]
+      PolicyGroup.find_by_id( self[:policy_group_id] )
+    else
+      PolicyGroup.default_group(enterprise.id)
+    end
+  end
+
   # Update the user with info from the SAML auth response
   def set_info_from_saml(nameid, _attrs, enterprise)
     self.email = nameid

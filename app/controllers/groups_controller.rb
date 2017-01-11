@@ -230,6 +230,7 @@ class GroupsController < ApplicationController
       .require(:budget)
       .permit(
         :description,
+        :approver_id,
         budget_items_attributes: [
           :id,
           :title,

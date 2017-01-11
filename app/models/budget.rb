@@ -74,6 +74,10 @@ class Budget < ActiveRecord::Base
   end
 
   def send_approval_request
-    BudgetMailer.approve_request(self, self.subject).deliver_later
+    receiver = User.find_by_id( approver_id )
+
+    return unless receiver.present?
+
+    BudgetMailer.approve_request(self, receiver).deliver_later
   end
 end
