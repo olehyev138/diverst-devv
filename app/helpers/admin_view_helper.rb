@@ -19,7 +19,7 @@ module AdminViewHelper
   end
 
   def active_plan_link?
-    if controller_name == 'groups' && (action_name == 'index' || action_name == 'edit')
+    if controller_name == 'groups' && (action_name == 'index' || action_name == 'edit' || action_name == 'new')
       return false
     end
 
