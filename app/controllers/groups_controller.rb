@@ -211,6 +211,8 @@ class GroupsController < ApplicationController
       'plan'
     when 'edit_fields', 'plan_overview'
       'plan'
+    when 'budgets', 'request_budget', 'view_budget'
+      'budgets'
     else
       'erg_manager'
     end
