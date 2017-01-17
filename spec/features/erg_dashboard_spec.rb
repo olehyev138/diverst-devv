@@ -20,7 +20,7 @@ RSpec.feature 'An ERG dashboard' do
 
     visit group_path(group)
 
-    expect(page).to have_content group.own_initiatives.last.name
+    expect(page).to have_content group.initiatives.last.name
   end
 
   scenario 'shows the latest news' do

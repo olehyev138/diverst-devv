@@ -20,7 +20,7 @@ class Groups::CommentsController < ApplicationController
   end
 
   def set_event
-    @event = @group.own_initiatives.find(params[:event_id])
+    @event = @group.initiatives.find(params[:event_id])
   end
 
   def comment_params

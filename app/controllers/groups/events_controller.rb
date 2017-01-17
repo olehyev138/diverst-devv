@@ -7,13 +7,13 @@ class Groups::EventsController < ApplicationController
 
   def index
     #TODO Those events are never used!
-    @upcoming_events = @group.own_initiatives.upcoming + @group.participating_initiatives.upcoming
-    @past_events = @group.own_initiatives.past + @group.participating_initiatives.past
-    @ongoing_events = @group.own_initiatives.ongoing + @group.participating_initiatives.ongoing
+    @upcoming_events = @group.initiatives.upcoming + @group.participating_initiatives.upcoming
+    @past_events = @group.initiatives.past + @group.participating_initiatives.past
+    @ongoing_events = @group.initiatives.ongoing + @group.participating_initiatives.ongoing
   end
 
   def calendar_data
-    own_events = @group.own_initiatives.includes(:owner_group)
+    own_events = @group.initiatives.includes(:owner_group)
                           .where('start >= ?', params[:start])
                           .where('start <= ?', params[:end])
 
@@ -80,7 +80,7 @@ class Groups::EventsController < ApplicationController
   end
 
   def set_event
-    @event = @group.own_initiatives.find(params[:id])
+    @event = @group.initiatives.find(params[:id])
   end
 
   def event_params
