@@ -35,7 +35,7 @@ class GenericGraphsController < ApplicationController
       highcharts: {
         series: [{
           title: 'Events created',
-          data: current_user.enterprise.groups.map { |g| g.initiatives.where('created_at > ?', 1.month.ago).count }
+          data: current_user.enterprise.groups.map { |g| g.initiatives.where('initiatives.created_at > ?', 1.month.ago).count }
         }],
         categories: current_user.enterprise.groups.map(&:name),
         xAxisTitle: 'ERG',
