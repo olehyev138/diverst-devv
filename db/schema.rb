@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170105105259) do
+ActiveRecord::Schema.define(version: 20170117155659) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -249,7 +249,7 @@ ActiveRecord::Schema.define(version: 20170105105259) do
     t.text     "cdo_message_email",          limit: 65535
     t.boolean  "collaborate_module_enabled",               default: true,  null: false
     t.boolean  "scope_module_enabled",                     default: true,  null: false
-    t.boolean  "bias_module_enabled",                      default: true,  null: false
+    t.boolean  "bias_module_enabled",                      default: false, null: false
     t.boolean  "plan_module_enabled",                      default: true,  null: false
     t.string   "banner_file_name",           limit: 255
     t.string   "banner_content_type",        limit: 255

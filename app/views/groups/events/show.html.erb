@@ -5,10 +5,10 @@
   </h1>
   <div class="flex-row">
     <div class="flex-row__cell">
-      <%= link_to "Delete event", group_event_path(@group, @event), method: :delete, class: "btn btn--secondary" if policy(@group).destroy? %>
+      <%= link_to "Delete event", group_initiative_path(@group, @event), method: :delete, class: "btn btn--secondary",  data: { confirm: "Are you sure?" } if policy(@event).destroy? %>
     </div>
     <div class="flex-row__cell">
-      <%= link_to "Edit event", edit_group_event_path(@group, @event), class: "btn btn--primary" if policy(@group).edit? %>
+      <%= link_to "Edit event", edit_group_initiative_path(@group, @event), class: "btn btn--primary" if policy(@event).edit? %>
     </div>
   </div>
 </div>
