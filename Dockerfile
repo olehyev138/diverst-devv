@@ -3,7 +3,7 @@ FROM ruby:2.3.0
 RUN apt-get update && apt-get install -y \
   build-essential libpq-dev nodejs npm mysql-client
 
-RUN npm install -g bower
+RUN ln -s /usr/bin/nodejs /usr/bin/node
 
 RUN mkdir -p /diverst
 
@@ -14,6 +14,9 @@ COPY Gemfile Gemfile
 RUN gem install bundler && bundle install --jobs 20 --retry 5
 
 COPY . .
+
+RUN npm install
+RUN rake bower:install['--allow-root']
 
 EXPOSE 3000
 

@@ -1,4 +1,4 @@
-# Setting up your development environment
+# Setting up your development environment with Vagrant
 
 The first thing we need to do is provision a VM using Vagrant. You'll need [VirtualBox](https://www.virtualbox.org/) and [Vagrant](https://www.vagrantup.com/downloads.html) installed on your machine for this. You'll also need two vagrant plugins:
 
@@ -42,4 +42,12 @@ rails s # Launch the Rails server (Puma)
 You'll want to create an entry in your hosts file e.g.:`192.168.3.4 vagrant.dev` to access the webapp in your browser using [http://vagrant.dev:3000](http://vagrant.dev:3000). You won't be able to access it through localhost like before.
 
 
+# Setting up your development environment with Docker
 
+Install Docker and Docker Compose
+
+```bash
+docker-compose build
+docker-compose up
+docker-compose run app rake db:create db:migrate db:seed
+```
