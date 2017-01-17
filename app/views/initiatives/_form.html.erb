@@ -4,7 +4,7 @@
     <div class="card">
       <div class="card__section card__section--border">
         <p class="field__hint">Start off by choosing which <strong>program</strong> this event will participate in</p>
-        <%= f.association :pillar, label_method: :name_with_group_prefix, label: false, include_blank: false %>
+        <%= f.association :pillar, collection: @group.pillars, label_method: :name_with_group_prefix, label: false, include_blank: false %>
       </div>
 
       <div id='budget_panel' class="card_section row">
