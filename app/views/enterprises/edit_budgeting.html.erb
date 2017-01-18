@@ -3,17 +3,6 @@
 </div>
 
 <div class="row">
-  <div class="col sm-12">
-    <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_fields') do |f| %>
-
-      <%= f.input :budget_manager_email, label: 'Enterprise budget manager email' %>
-
-      <%= f.button :submit, value: "Save budget info" %>
-    <% end %>
-  </div>
-</div>
-
-<div class="row">
   <div class="card">
     <div class="card__section">
       <h2>ERG annual budgets</h2>
