@@ -78,7 +78,11 @@ class Group < ActiveRecord::Base
   end
 
   def spent_budget
-    approved_budget - available_budget
+    if annual_budget
+      annual_budget - available_budget
+    else
+      0
+    end
   end
 
   def participation_score(from:, to: Time.current)

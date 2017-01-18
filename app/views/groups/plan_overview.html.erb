@@ -12,6 +12,23 @@
 
         <h3 style="margin-left: 10px; margin-botton: -10px;">ERG Budget | <%= link_to "View Budget Details", budgets_group_path(group) %>
         </h3>
+
+        <div class="flex-row flex-row--middle flex-row--spacing-bottom">
+          <div class="flex-row__cell flex-row__cell--spaced">
+            <strong>Expenses</strong><br>
+            <%= number_to_currency( group.spent_budget || 0) %>
+          </div>
+          <div class="flex-row__cell flex-row__cell--grow flex-row__cell--spaced" style="margin-bottom: 20px;">
+            <div class="progress-bar">
+              <div class="progress-bar__fill" style="width: <%= GroupDecorator.decorate(group).spendings_percentage %>%;>"></div>
+            </div>
+          </div>
+          <div class="flex-row__cell flex-row__cell--spaced">
+            <strong>Annual Budget</strong><br>
+            <%= number_to_currency( group.annual_budget || 0) %>
+          </div>
+        </div>
+
         <table class="table--has-border">
           <thead>
             <th>Annual Budget</th>
