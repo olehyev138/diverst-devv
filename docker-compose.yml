@@ -2,7 +2,7 @@ version: '2'
 services:
   app:
     build: .
-    command: rails server -p 3000 -b '0.0.0.0'
+    command: bundle exec rails server -p 3000 -b '0.0.0.0'
     volumes:
       - .:/diverst
     ports:
@@ -43,7 +43,7 @@ services:
 
   sidekiq:
     build: .
-    command: sidekiq -C config/sidekiq.yml -e development
+    command: bundle exec sidekiq -C config/sidekiq.yml -e development
     links:
       - mysql
       - redis

@@ -9,7 +9,7 @@
         <%= f.input :location %>
         <%= f.association :segments, collection: @group.enterprise.segments, input_html: { class: "select2" } %>
         <%= f.input :max_attendees %>
-        <%= f.input :picture, as: :file %>
+        <%= f.input :picture, as: :attachment_preview %>
       </div>
       <div class="card__section card__section--border">
         <p>Choose the <strong>external members</strong> you want to invite</p>
