@@ -20,7 +20,7 @@
 
       <div class="card__section card__section--border">
         <p class="field__hint">Specify the initiative's <strong>estimated funding</strong></p>
-        <%= f.input :estimated_funding, label: false %>
+        <%= f.input :estimated_funding, label: false, disabled: controller.action_name == "edit" %>
       </div>
 
     </div>

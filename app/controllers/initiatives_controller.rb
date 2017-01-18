@@ -38,7 +38,7 @@ class InitiativesController < ApplicationController
 
   def update
     authorize @initiative
-    if @initiative.update(initiative_params)
+    if @initiative.update(initiative_params.except!(:estimated_funding))
       redirect_to [@group, :initiatives]
     else
       render :edit
