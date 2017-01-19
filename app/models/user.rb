@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  @@fb_token_generator = Firebase::FirebaseTokenGenerator.new(ENV['FIREBASE_SECRET'])
+  @@fb_token_generator = Firebase::FirebaseTokenGenerator.new(ENV['FIREBASE_SECRET'].to_s)
 
   # Include default devise modules.
   devise :database_authenticatable, :invitable,
