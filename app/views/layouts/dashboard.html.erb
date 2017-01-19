@@ -34,7 +34,7 @@
       <% end %>
       <% if policy(Campaign).index? %>
         <li class="nav__item">
-          <%= active_link_to campaigns_path, class: "nav__link", class_active: "nav__link--is-selected", active: active_champaigns_link? do %>
+          <%= active_link_to campaigns_path, class: "nav__link", class_active: "nav__link--is-selected", active: active_engage_link? do %>
             <%= inline_svg('icons/collaborate.svg', class: "icon nav__icon") %>
             <span class="nav__text">Engage</span>
           <% end %>
