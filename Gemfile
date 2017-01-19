@@ -80,6 +80,7 @@ group :development, :test do
   gem 'database_cleaner' # Necessary to clean the DB between tests
   gem 'pry-rails' # Better Rails console
   gem 'pry-theme' # Themes for pry
+  gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
 
   gem 'byebug' # Debugger
 end

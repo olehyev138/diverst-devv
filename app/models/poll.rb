@@ -1,4 +1,6 @@
 class Poll < ActiveRecord::Base
+  enum status: [:published, :draft]
+
   has_many :fields, as: :container
   has_many :responses, class_name: 'PollResponse', inverse_of: :poll
   has_many :graphs, as: :collection
@@ -13,6 +15,8 @@ class Poll < ActiveRecord::Base
   after_create :create_default_graphs
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
+
+  validates :status, presence: true
 
   # Returns the list of users who have answered the poll
   def graphs_population
