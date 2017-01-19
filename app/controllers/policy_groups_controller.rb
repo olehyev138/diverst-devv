@@ -1,5 +1,5 @@
 class PolicyGroupsController < ApplicationController
-  before_action :set_policy_group, only: [:edit, :update]
+  before_action :set_policy_group, only: [:edit, :update, :destroy]
 
   layout 'global_settings'
 
@@ -82,6 +82,7 @@ class PolicyGroupsController < ApplicationController
         :initiatives_index,
         :initiatives_create,
         :initiatives_manage,
+        :budget_approval,
         user_ids: []
       )
   end

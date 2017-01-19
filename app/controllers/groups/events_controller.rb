@@ -6,15 +6,22 @@ class Groups::EventsController < ApplicationController
   layout 'erg'
 
   def index
-    @upcoming_events = @group.events.upcoming
-    @past_events = @group.events.past
-    @ongoing_events = @group.events.ongoing
+    #TODO Those events are never used!
+    @upcoming_events = @group.initiatives.upcoming + @group.participating_initiatives.upcoming
+    @past_events = @group.initiatives.past + @group.participating_initiatives.past
+    @ongoing_events = @group.initiatives.ongoing + @group.participating_initiatives.ongoing
   end
 
   def calendar_data
-    @events = @group.events.includes(:group)
+    own_events = @group.initiatives.includes(:owner_group)
                           .where('start >= ?', params[:start])
                           .where('start <= ?', params[:end])
+
+    participating_events = @group.participating_initiatives.includes(:owner_group)
+                              .where('start >= ?', params[:start])
+                              .where('start <= ?', params[:end])
+
+    @events = own_events + participating_events
 
     render 'shared/calendar_events', format: :json
   end
@@ -22,31 +29,31 @@ class Groups::EventsController < ApplicationController
   def calendar_view
   end
 
-  def new
-    @event = @group.events.new
-  end
+  # def new
+  #   @event = @group.own_initiatives.new
+  # end
 
-  def create
-    @event = @group.events.new(event_params)
+  # def create
+  #   @event = @group.own_initiatives.new(event_params)
 
-    if @event.save
-      redirect_to action: :index
-    else
-      render :edit
-    end
-  end
+  #   if @event.save
+  #     redirect_to action: :index
+  #   else
+  #     render :edit
+  #   end
+  # end
 
   def show
-    @comment = @event.comments.where(user: current_user).first || EventComment.new(event: @event)
+    @comment = @event.comments.where(user: current_user).first || InitiativeComment.new(initiative: @event)
   end
 
-  def update
-    if @event.update(event_params)
-      redirect_to [@group, @event]
-    else
-      render :edit
-    end
-  end
+  # def update
+  #   if @event.update(event_params)
+  #     redirect_to [@group, @event]
+  #   else
+  #     render :edit
+  #   end
+  # end
 
   def destroy
     @event.destroy
@@ -73,14 +80,14 @@ class Groups::EventsController < ApplicationController
   end
 
   def set_event
-    @event = @group.events.find(params[:id])
+    @event = @group.initiatives.find(params[:id])
   end
 
   def event_params
     params
       .require(:event)
       .permit(
-        :title,
+        :name,
         :description,
         :start,
         :end,

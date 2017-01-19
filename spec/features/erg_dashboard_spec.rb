@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.feature 'An ERG dashboard' do
   let(:user) { create(:user) }
-  let(:group) { create(:group_with_users, users_count: 5, enterprise: user.enterprise) }
+  let(:group) { create(:group_with_users, :with_outcomes, users_count: 5, enterprise: user.enterprise) }
 
   before do
     login_as(user, scope: :user)
@@ -15,11 +15,12 @@ RSpec.feature 'An ERG dashboard' do
   end
 
   scenario 'shows the upcoming events' do
-    create_list(:event, 5, group: group, start: 2.days.from_now)
+    initiative = create :initiative, owner_group: group, start: 2.days.from_now
+    group.outcomes.first.pillars.first.initiatives << initiative
 
     visit group_path(group)
 
-    expect(page).to have_content group.events.last.title
+    expect(page).to have_content group.initiatives.last.name
   end
 
   scenario 'shows the latest news' do
@@ -102,19 +103,19 @@ RSpec.feature 'An ERG dashboard' do
 
   context 'in the events section' do
     scenario 'shows the upcoming events' do
-      event = create(:event, group: group, start: 1.day.from_now, end: 1.day.from_now + 2.hours)
+      initiative = create(:initiative, owner_group: group, start: 1.day.from_now, end: 1.day.from_now + 2.hours)
 
       visit group_events_path(group)
 
-      expect(page).to have_content event.title
+      expect(page).to have_content initiative.name
     end
 
     scenario 'shows the past events' do
-      event = create(:event, group: group, start: 1.day.ago, end: 1.day.ago + 2.hours)
+      initiative = create(:initiative, owner_group: group, start: 1.day.ago, end: 1.day.ago + 2.hours)
 
       visit group_events_path(group)
 
-      expect(page).to have_content event.title
+      expect(page).to have_content initiative.name
     end
 
     scenario 'allows users to create events' do
@@ -122,16 +123,17 @@ RSpec.feature 'An ERG dashboard' do
       event_title = 'Sick event!'
       event_description = 'Awesome event description'
 
-      visit group_events_path(group)
-      click_on 'Create new event'
-      fill_in 'event_title', with: event_title
-      fill_in 'event_description', with: event_description
-      select Time.current.year + 1, from: "event_end_1i"
-      fill_in 'event_location', with: 'Montreal'
-      fill_in 'event_max_attendees', with: 15
+      visit group_initiatives_path(group)
+      click_on 'New Event'
+      fill_in 'initiative_name', with: event_title
+      fill_in 'initiative_description', with: event_description
+      select Time.current.year + 1, from: "initiative_end_1i"
+      fill_in 'initiative_location', with: 'Montreal'
+      fill_in 'initiative_max_attendees', with: 15
 
       submit_form
 
+      visit group_events_path(group)
       expect(page).to have_content event_title
     end
   end

@@ -6,12 +6,12 @@ class Groups::AttendancesController < ApplicationController
   layout 'erg'
 
   def show
-    @attendances = @event.event_attendances.includes(:user)
+    @attendances = @event.initiative_users
   end
 
   def create
     return head(204) if @attendance
-    @event.event_attendances.create(user: current_user)
+    @event.initiative_users.create(user: current_user)
     head 204
   end
 
@@ -22,7 +22,7 @@ class Groups::AttendancesController < ApplicationController
   end
 
   def erg_graph
-    erg_population = @event.group.enterprise.groups.map do |group|
+    erg_population = @event.own_group.enterprise.groups.map do |group|
       @event.attendees.joins(:user_groups).where('user_groups.group_id': group.id).count
     end
 
@@ -33,7 +33,7 @@ class Groups::AttendancesController < ApplicationController
           title: 'Number of attendees',
           data: erg_population
         }],
-        categories: @event.group.enterprise.groups.map(&:name),
+        categories: @event.own_group.enterprise.groups.map(&:name),
         xAxisTitle: 'ERG'
       },
       hasAggregation: false
@@ -41,7 +41,7 @@ class Groups::AttendancesController < ApplicationController
   end
 
   def segment_graph
-    segment_population = @event.group.enterprise.segments.map do |segment|
+    segment_population = @event.own_group.enterprise.segments.map do |segment|
       @event.attendees.joins(:users_segments).where('users_segments.segment_id': segment.id).count
     end
 
@@ -66,10 +66,10 @@ class Groups::AttendancesController < ApplicationController
   end
 
   def set_event
-    @event = @group.events.find(params[:event_id])
+    @event = @group.initiatives.find(params[:event_id])
   end
 
   def set_attendance
-    @attendance = @event.event_attendances.where(user: current_user).first
+    @attendance = @event.initiative_users.where(user: current_user).first
   end
 end

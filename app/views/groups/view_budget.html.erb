@@ -1,0 +1,42 @@
+<div class="content__header">
+  <h1>Budget details</h1>
+</div>
+
+<div class="content__main">
+    <div class="card">
+      <div class="card__section card__section--border">
+        Edit and approve budget
+      </div>
+    </div>
+  <%= simple_form_for @budget, url: approve_budget_group_path(@group, budget_id: @budget.id), method: :post do |f| %>
+    <div class="card">
+      <div class="card__section">
+        <%= f.input :description %>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card__section card__section--border">
+        <p>You can specify list of <strong>events</strong> you plan to organize with this budget (optional).</p>
+      </div>
+      <div id="fields">
+        <%= f.simple_fields_for :budget_items do |item_form| %>
+          <%= render 'budgets/item', f: item_form %>
+        <% end %>
+      </div>
+
+      <div class="link">
+        <div class="card__section card__section--border">
+          <%= link_to_add_association "+Add Event", f, :budget_items, partial: 'budgets/item' %>
+        </div>
+      </div>
+    </div>
+      <% if policy(@budget).approve? %>
+        <%= f.button :submit, 'Approve Budget' %>
+        <% #bTODO check if vulnerabilities %>
+      <% end %>
+      <% if policy(@budget).decline? %>
+        <%= link_to "Decline Budget", decline_budget_group_path(@group, budget_id: @budget.id), method: :post %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

@@ -19,19 +19,20 @@ module AdminViewHelper
   end
 
   def active_plan_link?
-    if controller_name == 'groups' && (action_name == 'index' || action_name == 'edit')
+    if controller_name == 'groups' && (action_name == 'index' || action_name == 'edit' || action_name == 'new')
       return false
     end
 
     return false unless ['groups', 'initiatives', 'outcomes', 'updates'].include? controller_name
 
-    return false if ['calendar'].include? action_name
+    return false if ['calendar', 'edit_annual_budget'].include? action_name
 
     true
   end
 
   def active_global_settings_link?
     return false unless ['users',
+                          'groups',
                           'enterprises',
                           'integrations',
                           'policy_groups',
@@ -44,7 +45,10 @@ module AdminViewHelper
                           'new',
                           'edit_auth',
                           'edit_fields',
-                          'edit_branding'].include? action_name
+                          'edit_branding',
+                          'edit_budgeting',
+                          'edit_annual_budget'
+                          ].include? action_name
 
     true
   end

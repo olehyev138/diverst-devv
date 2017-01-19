@@ -1,0 +1,39 @@
+<div class="content__header">
+  <h1>Budgeting info</h1>
+</div>
+
+<div class="row">
+  <div class="card">
+    <div class="card__section">
+      <h2>ERG annual budgets</h2>
+      <table class="table--has-border">
+        <thead>
+          <tr>
+            <th>Group Name</th>
+            <td>Annual Budget</td>
+            <td>Actions</td>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @enterprise.groups.count == 0 %>
+            There are no groups yet. Start by <%= link_to 'creating', new_group_path %> one.
+          <% end %>
+
+          <% @groups.each do |group| %>
+            <tr>
+              <td>
+                <%= link_to group.name, group_path(group) %>
+              </td>
+              <td>
+                <%= number_to_currency( group.annual_budget) || 'Not set' %>
+              </td>
+              <td>
+                <%= link_to 'Edit', edit_annual_budget_group_path(group) %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

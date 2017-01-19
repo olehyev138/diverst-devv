@@ -1,14 +1,14 @@
 <div class="content__header">
   <h1>
     <%= link_to "Events", group_events_path(@group) %> /
-    <%= @event.title %>
+    <%= @event.name %>
   </h1>
   <div class="flex-row">
     <div class="flex-row__cell">
-      <%= link_to "Delete event", group_event_path(@group, @event), method: :delete, class: "btn btn--secondary" if policy(@group).destroy? %>
+      <%= link_to "Delete event", group_initiative_path(@group, @event), method: :delete, class: "btn btn--secondary",  data: { confirm: "Are you sure?" } if policy(@event).destroy? %>
     </div>
     <div class="flex-row__cell">
-      <%= link_to "Edit event", edit_group_event_path(@group, @event), class: "btn btn--primary" if policy(@group).edit? %>
+      <%= link_to "Edit event", edit_group_initiative_path(@group, @event), class: "btn btn--primary" if policy(@event).edit? %>
     </div>
   </div>
 </div>
@@ -42,7 +42,7 @@
     </div>
   </div>
 
-  <a href="#" class="btn btn--primary js-join-event" data-joined="<%= current_user.attending_events.include? @event %>"><%= current_user.attending_events.include?(@event) ? "Leave event" : "Join event" %></a>
+  <a href="#" class="btn btn--primary js-join-event" data-joined="<%= current_user.initiatives.include? @event %>"><%= current_user.initiatives.include?(@event) ? "Leave event" : "Join event" %></a>
 </div>
 
 <div class="content__header" style="margin-top: 30px;">

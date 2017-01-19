@@ -1,17 +1,17 @@
 class ResourcePolicy < ApplicationPolicy
   def index?
-    true
+    @policy_group.enterprise_resources_index?
   end
 
   def create?
-    true
+    @policy_group.enterprise_resources_create?
   end
 
   def edit?
-    true
+    @policy_group.enterprise_resources_manage?
   end
 
   def destroy?
-    true
+    edit?
   end
 end

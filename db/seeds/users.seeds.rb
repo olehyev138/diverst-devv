@@ -74,7 +74,8 @@ after :enterprise do
     initiatives_manage: true,
 
     global_settings_manage: true,
-    admin_pages_view: true
+    admin_pages_view: true,
+    budget_approval: true
   )
 
   # Create our own users

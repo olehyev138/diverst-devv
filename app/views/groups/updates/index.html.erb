@@ -23,7 +23,7 @@
   <div class="card">
     <div class="card__section">
       <% if @updates.empty? %>
-        <p>There are no updates yet. <%= link_to "Create one", new_group_update_path(@group) %> to track your initiative's progress.</p>
+        <p>There are no updates yet. <%= link_to "Create one", new_group_update_path(@group) %> to track your event's progress.</p>
       <% else %>
         <table class="table--has-border" id="updates-table">
           <thead>
