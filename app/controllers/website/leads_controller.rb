@@ -1,6 +1,8 @@
 class Website::LeadsController < ApplicationController
   before_action :cors_allow_all
 
+  skip_before_action :verify_authenticity_token
+
   def create
     response = HTTParty.post 'https://api.getbase.com/v2/leads', headers: {
       'Authorization' => "Bearer #{ENV['BASECRM_API_KEY']}",

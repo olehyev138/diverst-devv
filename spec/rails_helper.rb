@@ -13,6 +13,7 @@ require 'sidekiq/testing'
 require 'support/controller_macros.rb'
 
 Capybara.javascript_driver = :poltergeist
+Capybara.asset_host = 'http://localhost:3000'
 
 # Devise test helpers
 include Warden::Test::Helpers

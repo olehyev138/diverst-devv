@@ -9,11 +9,11 @@ class NewsLinkPolicy < ApplicationPolicy
 
   def update?
     return true if @policy_group.news_links_manage?
-    @record.owner == @user
+    @record.author == @user
   end
 
   def destroy?
     return true if @policy_group.news_links_manage?
-    @record.owner == @user
+    @record.author == @user
   end
 end

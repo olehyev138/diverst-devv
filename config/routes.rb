@@ -55,6 +55,7 @@ Rails.application.routes.draw do
     end
 
     member do
+      get 'edit_budgeting'
       get 'edit_auth'
       get 'edit_fields'
       get 'edit_mobile_fields'
@@ -144,6 +145,11 @@ Rails.application.routes.draw do
           end
         end
       end
+
+      member do
+        get 'todo'
+        post 'finish_expenses'
+      end
     end
 
     member do
@@ -155,6 +161,18 @@ Rails.application.routes.draw do
       post 'parse_csv'
       get 'metrics'
       get 'edit_fields'
+      get 'edit_annual_budget'
+      post 'update_annual_budget'
+
+      get 'budgets'
+
+
+      #bTODO - move budgets to another controller
+      get 'view_budget'
+      get 'request_budget'
+      post 'submit_budget'
+      post 'approve_budget'
+      post 'decline_budget'
     end
 
     collection do

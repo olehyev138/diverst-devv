@@ -2,6 +2,9 @@ class GroupsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group, except: [:index, :new, :create, :plan_overview,
                                       :calendar, :calendar_data]
+
+  before_action :set_budget, only: [:view_budget, :approve_budget, :decline_budget]
+
   skip_before_action :verify_authenticity_token, only: [:create]
   after_action :verify_authorized
 
@@ -19,6 +22,44 @@ class GroupsController < ApplicationController
     @groups = current_user.enterprise.groups.includes(:initiatives)
   end
 
+  def budgets
+    authorize @group, :update?
+  end
+
+  def view_budget
+    authorize @group, :update?
+  end
+
+  def request_budget
+    authorize @group, :update?
+
+    @budget = Budget.new
+  end
+
+  def submit_budget
+    authorize @group, :update?
+
+    @group.budgets << Budget.new( budget_params )
+
+    redirect_to action: :budgets
+  end
+
+  def approve_budget
+    authorize @budget, :approve?
+
+    @budget.update(budget_params)
+    @budget.approve!
+
+    redirect_to action: :budgets
+  end
+
+  def decline_budget
+    authorize @budget, :decline?
+    @budget.decline!
+
+    redirect_to action: :budgets
+  end
+
   # calendar for all of the groups
   def calendar
     authorize Group, :index?
@@ -27,9 +68,9 @@ class GroupsController < ApplicationController
   def calendar_data
     authorize Group, :index?
 
-    @events = current_user.enterprise.events.includes(:group)
-                                            .where('start >= ?', params[:start])
-                                            .where('start <= ?', params[:end])
+    @events = current_user.enterprise.initiatives
+                .where('start >= ?', params[:start])
+                .where('start <= ?', params[:end])
 
     render 'shared/calendar_events', format: :json
   end
@@ -42,7 +83,7 @@ class GroupsController < ApplicationController
   def show
     authorize @group
 
-    @upcoming_events = @group.events.upcoming.limit(3)
+    @upcoming_events = @group.initiatives.upcoming.limit(3) + @group.participating_initiatives.upcoming.limit(3)
     @news_links = @group.news_links.limit(3)
     @user_groups = @group.user_groups.order(created_at: :desc).includes(:user).limit(8)
     @messages = @group.messages.includes(:owner).limit(3)
@@ -83,6 +124,20 @@ class GroupsController < ApplicationController
 
     @group.destroy
     redirect_to action: :index
+  end
+
+  def edit_annual_budget
+    authorize @group.enterprise, :update?
+  end
+
+  def update_annual_budget
+    authorize @group.enterprise, :update?
+
+    if @group.update(annual_budget_params)
+      redirect_to edit_budgeting_enterprise_path(@group.enterprise)
+    else
+      redirect_to :back
+    end
   end
 
   def metrics
@@ -156,13 +211,37 @@ class GroupsController < ApplicationController
       'plan'
     when 'edit_fields', 'plan_overview'
       'plan'
+    when 'budgets', 'request_budget', 'view_budget', 'edit_annual_budget'
+      'budgets'
     else
       'erg_manager'
     end
   end
 
+  def set_budget
+    #bTODO rework
+    @budget = Budget.find(params[:budget_id])
+  end
+
   def set_group
     @group = current_user.enterprise.groups.find(params[:id])
+  end
+
+  def budget_params
+    params
+      .require(:budget)
+      .permit(
+        :description,
+        :approver_id,
+        budget_items_attributes: [
+          :id,
+          :title,
+          :estimated_amount,
+          :estimated_date,
+          :is_done,
+          :_destroy
+        ]
+      )
   end
 
   def group_params
@@ -179,6 +258,7 @@ class GroupsController < ApplicationController
         :pending_users,
         :members_visibility,
         :messages_visibility,
+        :budget_manager_email,
         manager_ids: [],
         member_ids: [],
         invitation_segment_ids: [],
@@ -206,6 +286,14 @@ class GroupsController < ApplicationController
           :options_text,
           :alternative_layout
         ]
+      )
+  end
+
+  def annual_budget_params
+    params
+      .require(:group)
+      .permit(
+        :annual_budget
       )
   end
 end

@@ -1,4 +1,39 @@
 FactoryGirl.define do
+  factory :checklist_item do
+
+  end
+  factory :checklist do
+
+  end
+
+  factory :budget do
+    subject { FactoryGirl.create(:group) }
+    description { Faker::Lorem.sentence }
+
+    factory :approved_budget do
+      after(:create) do |budget|
+        budget.approve!
+      end
+    end
+
+    after(:create) do |budget|
+      create_list(:budget_item, 3, budget: budget)
+    end
+  end
+
+  factory :budget_item do
+    budget { FactoryGirl.create(:approved_budget) }
+
+    title { Faker::Lorem.sentence }
+    estimated_amount { rand(100..1000) }
+    estimated_date { Faker::Date.between(Date.today, 1.year.from_now) }
+    is_done { false }
+
+    trait :done do
+      is_done { true }
+    end
+  end
+
   factory :group_settings do
 
   end
@@ -14,16 +49,16 @@ FactoryGirl.define do
   end
 
   factory :event_attendance do
-    
+
   end
   factory :sample do
-    
+
   end
   factory :group_field do
-    
+
   end
   factory :group_update do
-    
+
   end
   sequence :email_address do |n|
     "user#{n}@diverst.com"
@@ -104,11 +139,42 @@ FactoryGirl.define do
 
     default_for_enterprise false
     admin_pages_view true
+
+    budget_approval true
   end
 
   factory :user_group do
     association :user
     association :group
+  end
+
+  factory :initiative do |f|
+    f.name { Faker::Lorem.sentence }
+    f.description { Faker::Lorem.sentence }
+    f.location { Faker::Address.city }
+    f.start { Faker::Time.between(Date.today, 1.month.from_now) }
+    f.end { Faker::Time.between(start, start + 10.days)}
+    f.estimated_funding { 0 }
+    f.owner_group { FactoryGirl.create(:group) }
+    f.pillar { owner_group.try(:pillars).try(:first) }
+
+    trait :with_budget_item do
+      budget_item { FactoryGirl.create(:budget_item) }
+      owner_group { budget_item.budget.subject }
+      estimated_funding { rand(1..budget_item.available_amount ) }
+    end
+  end
+
+  factory :pillar do
+    name { Faker::Commerce.product_name }
+  end
+
+  factory :outcome do
+    name { Faker::Commerce.product_name }
+
+    after(:create) do |outcome|
+      create_list(:pillar, 3, outcome: outcome)
+    end
   end
 
   factory :group do
@@ -117,11 +183,17 @@ FactoryGirl.define do
 
     factory :group_with_users do
       transient do
-        users_count 100
+        users_count 10
       end
 
       after(:create) do |group, evaluator|
         create_list(:user_group, evaluator.users_count, group: group, accepted_member: true)
+      end
+    end
+
+    trait :with_outcomes do
+      after(:create) do |group|
+        group.outcomes << create(:outcome, group: group)
       end
     end
   end
@@ -132,7 +204,7 @@ FactoryGirl.define do
 
     factory :segment_with_users do
       transient do
-        users_count 100
+        users_count 10
       end
 
       after(:create) do |segment, evaluator|
@@ -381,17 +453,5 @@ FactoryGirl.define do
     logo_file_name { 'logo.png' }
     logo_content_type { 'image/png' }
     logo_file_size { 1024 }
-  end
-
-  factory :initiative do
-
-  end
-
-  factory :pillar do
-
-  end
-
-  factory :outcome do
-
   end
 end

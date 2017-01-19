@@ -1,0 +1,7 @@
+Hello <%= @receiver.name %>
+<br/>
+You were asked to review new budget request for <%= @group.name %>
+<br/>
+Please visit this link in order to review the request:
+<br/>
+<%= link_to @approve_url, @approve_url %>

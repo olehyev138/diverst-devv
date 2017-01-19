@@ -1,0 +1,12 @@
+<div class="content__main">
+  <%= simple_form_for @group, url: update_annual_budget_group_path(@group), method: 'post' do |f| %>
+    <div class="card">
+      <div class="card__section card__section--border">
+        <p class="field__hint">Enter the amount of money <strong><%= link_to @group.name, group_path(@group) %> can spend annualy</strong></p>
+        <%= f.input :annual_budget, label: false %>
+      </div>
+    </div>
+
+    <%= f.button :submit %>
+  <% end %>
+</div>

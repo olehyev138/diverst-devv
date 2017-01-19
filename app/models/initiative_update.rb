@@ -4,6 +4,10 @@ class InitiativeUpdate < ActiveRecord::Base
   belongs_to :owner, class_name: "User"
   belongs_to :initiative
 
+  def reported_for_date
+    report_date || created_at
+  end
+
   # Returns the delta with another update relative to this other update for a particular field (+23%, -12%, etc.)
   def variance_with(other_update:, field:)
     value = self.info[field]

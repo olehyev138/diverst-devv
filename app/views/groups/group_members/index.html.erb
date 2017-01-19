@@ -7,29 +7,27 @@
 
 <div class="content__main">
   <div class="card">
-    <div class="card__section">
-      <table class="table--has-border" id="resources-table">
-        <thead>
-          <th>Name</th>
-          <th>Actions</th>
-        </thead>
-        <tbody>
-          <% @members.each do |member| %>
-            <tr>
-              <td>
-                <%= member.name %>
-              </td>
-              <td>
-                <%= link_to 'Show user', user_path(member)%>
-                <% if policy(@group).manage_members? %>
-                  <%= link_to 'Remove From Group', remove_member_group_group_member_path(@group, member), method: :delete %>
-                <% end %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+    <% if @members.empty? %>
+      <div class="card__section">
+        <p>No members yet.</p>
+      </div>
+    <% else %>
+      <% @members.each do |member| %>
+        <div class="card__section card__section--border">
+          <div class="flex-row flex-row--middle">
+            <div class="flex-row__cell flex-row__cell--grow">
+              <%= member.name %>
+            </div>
+            <div class="flex-row__cell link-group">
+              <%= link_to 'Show user', user_path(member)%>
+              <% if policy(@group).manage_members? %>
+                <%= link_to 'Remove From Group', remove_member_group_group_member_path(@group, member), method: :delete, class: "error", data: { confirm: "Are you sure?" } %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
       <%= paginate @members %>
-    </div>
+    <% end %>
   </div>
 </div>

@@ -20,11 +20,11 @@ class Groups::CommentsController < ApplicationController
   end
 
   def set_event
-    @event = @group.events.find(params[:event_id])
+    @event = @group.initiatives.find(params[:event_id])
   end
 
   def comment_params
-    params.require(:event_comment).permit(
+    params.require(:initiative_comment).permit(
       :content
     )
   end

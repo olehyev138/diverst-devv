@@ -1,0 +1,56 @@
+<div class="content__header">
+  <h1>New Budget Request</h1>
+</div>
+
+<div class="content__main">
+  <%= simple_form_for @budget, url: submit_budget_group_path(@group), method: :post do |f| %>
+    <div class="card">
+      <div class="card__section">
+        Your request will be sent to <b><%= @group.name %></b> financal manager for approval
+      </div>
+      <div class="card__section">
+        <%= f.input :description %>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card__section card__section--border">
+        <p>You can specify list of <strong>events</strong> you plan to organize with this budget (optional).</p>
+      </div>
+      <div id="fields">
+        <%= f.simple_fields_for :budget_items do |item_form| %>
+          <%= render 'budgets/item', f: item_form %>
+        <% end %>
+      </div>
+
+      <div class="link">
+        <div class="card__section card__section--border">
+          <%= link_to_add_association "+Add Event", f, :budget_items, partial: 'budgets/item' %>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card__section card__section--border">
+        <p>You may notify <strong>approval manager</strong> for him to review and accept your budget request faster.</p>
+      </div>
+      <div class="card__section" >
+        <%= f.input :approver_id, as: :select, collection: PolicyGroup.users_that_able_to_accept_budgets(current_user.enterprise), label: false %>
+      </div>
+    </div>
+
+    <%= f.button :submit, 'Send Budget Request' %>
+    </div>
+  <% end %>
+</div>
+
+<script>
+  $('.content__main').on('cocoon:after-insert', function(e, insertedItem) {
+    var dateField = $(insertedItem).find('input.date_picker');
+
+    var fromPicker = new Pikaday({
+      field: dateField[0],
+      format: 'D MMM YYYY',
+      yearRange: [new Date().getFullYear(), new Date().getFullYear() + 2]
+    });
+  });
+</script>

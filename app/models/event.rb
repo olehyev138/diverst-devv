@@ -1,4 +1,5 @@
 class Event < ActiveRecord::Base
+  has_many :budgets, as: :subject
   has_many :events_segments
   has_many :segments, through: :events_segments
   belongs_to :group

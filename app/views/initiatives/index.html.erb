@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="flex-row__cell">
-        <%= link_to "New Initiative", new_group_initiative_path(@group), class: "btn btn--primary" if policy(Initiative).new? %>
+        <%= link_to "New Event", new_group_initiative_path(@group), class: "btn btn--primary" if policy(Initiative).new? %>
       </div>
     </div>
   </div>
@@ -41,7 +41,7 @@
           <h1>/ <%= outcome.name %></h1>
         </div>
         <div class="flex-row__cell">
-          <%= link_to "New Initiative", new_group_initiative_path(@group), class: "btn btn--primary" if policy(Initiative).new? %>
+          <%= link_to "New Event", new_group_initiative_path(@group), class: "btn btn--primary" if policy(Initiative).new? %>
         </div>
       </div>
     </div>
@@ -63,13 +63,17 @@
 
             <% if pillar.initiatives.empty? %>
               <div class="card__section card__section--border">
-                There are no active initiatives in this program.
+                There are no active events in this program.
               </div>
             <% else %>
               <% pillar.initiatives.each do |initiative| %>
                 <div class="card__section card__section--border">
                   <h3><%= initiative.name %></h3>
                   <div class="card__action">
+                    <% if initiative.finished_expenses? %>
+                      Expenses for this event are closed
+                    <% end %>
+                    <%= link_to 'TODO', todo_group_initiative_path(@group, initiative)  %> -
                     <%= link_to "Budget", group_initiative_expenses_path(@group, initiative) %> -
                     <%= link_to "Updates", group_initiative_updates_path(@group, initiative) %> -
                     <%= link_to "Metrics", group_initiative_path(@group, initiative) %> |
@@ -92,7 +96,7 @@
                           </div>
                         <% end %>
                       <% else %>
-                        <p>Publish an update to see data on this initiative</p>
+                        <p>Publish an update to see data on this event</p>
                       <% end %>
                     </div>
                     <div class="flex-row__cell flex-row__cell--spaced flex-row__cell--grow">

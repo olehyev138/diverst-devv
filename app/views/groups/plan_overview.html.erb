@@ -6,25 +6,70 @@
   <% @groups.each do |group| %>
     <div class="card">
       <div class="card__section">
-        <h3><%= group.name %></h3>
+        <h2>
+          <b><%= group.name %></b>
+        </h2>
+
+        <h3 style="margin-left: 10px; margin-botton: -10px;">ERG Budget | <%= link_to "View Budget Details", budgets_group_path(group) %>
+        </h3>
+
+        <div class="flex-row flex-row--middle flex-row--spacing-bottom">
+          <div class="flex-row__cell flex-row__cell--spaced">
+            <strong>Expenses</strong><br>
+            <%= number_to_currency( group.spent_budget || 0) %>
+          </div>
+          <div class="flex-row__cell flex-row__cell--grow flex-row__cell--spaced" style="margin-bottom: 20px;">
+            <div class="progress-bar">
+              <div class="progress-bar__fill" style="width: <%= GroupDecorator.decorate(group).spendings_percentage %>%;>"></div>
+            </div>
+          </div>
+          <div class="flex-row__cell flex-row__cell--spaced">
+            <strong>Annual Budget</strong><br>
+            <%= number_to_currency( group.annual_budget || 0) %>
+          </div>
+        </div>
+
         <table class="table--has-border">
           <thead>
-            <th>Initiative</th>
+            <th>Annual Budget</th>
+            <th>Approved budget</th>
+            <th>Available budget</th>
+          </thead>
+          <tbody>
+            <td><%= number_to_currency( group.annual_budget || 0) %></td>
+            <td><%= number_to_currency group.approved_budget %></td>
+            <td>
+              <%= number_to_currency group.available_budget %>
+            </td>
+          </tbody>
+        </table>
+
+        <%= link_to "Events Budget Info", '#', class: "detailed_info btn btn--primary"%>
+
+        <table class="event_spendings table--has-border">
+          <thead>
+            <th>Event</th>
             <th>Estimated funding</th>
             <th>Spent so far</th>
+            <th>Unspent</th>
+            <th>Spending status</th>
           </thead>
           <tbody>
             <% group.initiatives.each do |initiative| %>
               <tr>
                 <td><%= initiative.name %></td>
                 <td><%= number_to_currency initiative.estimated_funding, precision: 0 %></td>
-                <td><%= number_to_currency initiative.expenses.sum(:amount), precision: 0 %></td>
+                <td><%= number_to_currency initiative.current_expences_sum, precision: 0 %></td>
+                <td><%= number_to_currency initiative.leftover %></td>
+                <td><%= initiative.expenses_status %></td>
               </tr>
             <% end %>
             <tr class="highlight">
               <td>Total for <%= group.name %></td>
               <td><%= number_to_currency group.initiatives.sum(:estimated_funding), precision: 0 %></td>
               <td><%= number_to_currency group.initiatives.map{ |i| i.expenses.sum(:amount) }.sum, precision: 0 %></td>
+              <td><%= number_to_currency group.initiatives.map{ |i| i.leftover }.inject(0, :+) %></td>
+              <td></td>
             </tr>
           </tbody>
         </table>
@@ -32,3 +77,11 @@
     </div>
   <% end %>
 </div>
+
+<script>
+  $('table.event_spendings').hide();
+
+  $('a.detailed_info').click(function(e){
+    $(this).siblings('table.event_spendings').toggle('fast');
+  }); //endof click
+</script>

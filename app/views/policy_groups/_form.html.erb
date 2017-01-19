@@ -15,6 +15,10 @@
         <%= f.input :admin_pages_view, label: 'Admin Dashboard' %>
       </div>
       <div class="card__section card__section--border">
+        <p class="field__hint">Should members of this group be able to approve group's budgets?</p>
+        <%= f.input :budget_approval, label: 'Budget Approval' %>
+      </div>
+      <div class="card__section card__section--border">
         <h2>General</h2>
         <div class="row row--spacing-bottom">
           <div class="col md-3">
@@ -92,7 +96,7 @@
         <h2>Planning</h2>
         <div class="row">
           <div class="col md-3">
-            <h4>Initiatives</h4>
+            <h4>Events</h4>
             <%= f.input :initiatives_index, wrapper: :boolean_checkbox, label: "View" %>
             <%= f.input :initiatives_create, wrapper: :boolean_checkbox, label: "Create" %>
             <%= f.input :initiatives_manage, wrapper: :boolean_checkbox, label: "Manage all" %>

@@ -1,11 +1,11 @@
 json.array! @events do |event|
   json.id     event.id
-  json.title  event.title
+  json.title  event.name
   json.start  event.start
   json.end    event.end
 
-  json.color  @branding_color || current_user.enterprise.theme.try(:branding_color) || '#7571bf'
+  json.color  @branding_color || enterprise_primary_color || '#7b77c9'
   json.textColor @text_color || 'white'
 
-  json.url    group_event_path(event.group, event)
+  json.url    group_event_path(event.owner_group, event)
 end

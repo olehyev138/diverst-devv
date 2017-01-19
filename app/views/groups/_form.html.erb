@@ -7,6 +7,7 @@
         <%= f.input :logo, as: :attachment_preview %>
         <%= f.association :managers, collection: @group.enterprise.users, input_html: { class: "select2" } %>
         <%= f.association :lead_manager, collection: @group.enterprise.users, input_html: { class: "select2" } %>
+        <%= f.input :budget_manager_email %>
         <%= f.input :send_invitations %>
         <%= f.association :invitation_segments, collection: @group.enterprise.segments, input_html: { class: "select2"}, wrapper_html: { style: "display: none;" } %>
       </div>

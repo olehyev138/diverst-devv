@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161208112130) do
+ActiveRecord::Schema.define(version: 20170118150249) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -100,6 +100,26 @@ ActiveRecord::Schema.define(version: 20161208112130) do
     t.integer "bias_id",  limit: 4
   end
 
+  create_table "budget_items", force: :cascade do |t|
+    t.integer  "budget_id",        limit: 4
+    t.string   "title",            limit: 255
+    t.date     "estimated_date"
+    t.boolean  "is_done",                                              default: false
+    t.datetime "created_at",                                                           null: false
+    t.datetime "updated_at",                                                           null: false
+    t.decimal  "estimated_amount",             precision: 8, scale: 2
+    t.decimal  "available_amount",             precision: 8, scale: 2, default: 0.0
+  end
+
+  create_table "budgets", force: :cascade do |t|
+    t.integer  "subject_id",   limit: 4
+    t.string   "subject_type", limit: 255
+    t.text     "description",  limit: 65535
+    t.boolean  "is_approved"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
   create_table "campaign_invitations", force: :cascade do |t|
     t.integer  "campaign_id", limit: 4
     t.integer  "user_id",     limit: 4
@@ -142,6 +162,26 @@ ActiveRecord::Schema.define(version: 20161208112130) do
   create_table "campaigns_segments", force: :cascade do |t|
     t.integer "campaign_id", limit: 4
     t.integer "segment_id",  limit: 4
+  end
+
+  create_table "checklist_items", force: :cascade do |t|
+    t.string   "title",          limit: 255
+    t.boolean  "is_done",                    default: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+    t.integer  "container_id",   limit: 4
+    t.string   "container_type", limit: 255
+  end
+
+  add_index "checklist_items", ["container_type", "container_id"], name: "index_checklist_items_on_container_type_and_container_id", using: :btree
+
+  create_table "checklists", force: :cascade do |t|
+    t.integer  "subject_id",   limit: 4
+    t.string   "subject_type", limit: 255
+    t.string   "title",        limit: 255
+    t.integer  "author_id",    limit: 4
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   create_table "cities", force: :cascade do |t|
@@ -209,13 +249,14 @@ ActiveRecord::Schema.define(version: 20161208112130) do
     t.text     "cdo_message_email",          limit: 65535
     t.boolean  "collaborate_module_enabled",               default: true,  null: false
     t.boolean  "scope_module_enabled",                     default: true,  null: false
-    t.boolean  "bias_module_enabled",                      default: true,  null: false
+    t.boolean  "bias_module_enabled",                      default: false, null: false
     t.boolean  "plan_module_enabled",                      default: true,  null: false
     t.string   "banner_file_name",           limit: 255
     t.string   "banner_content_type",        limit: 255
     t.integer  "banner_file_size",           limit: 4
     t.datetime "banner_updated_at"
     t.text     "privacy_statement",          limit: 65535
+    t.string   "budget_manager_email",       limit: 255
   end
 
   create_table "event_attendances", force: :cascade do |t|
@@ -363,8 +404,8 @@ ActiveRecord::Schema.define(version: 20161208112130) do
     t.integer  "enterprise_id",             limit: 4
     t.string   "name",                      limit: 255
     t.text     "description",               limit: 65535
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.datetime "created_at",                                                                    null: false
+    t.datetime "updated_at",                                                                    null: false
     t.string   "logo_file_name",            limit: 255
     t.string   "logo_content_type",         limit: 255
     t.integer  "logo_file_size",            limit: 4
@@ -382,6 +423,9 @@ ActiveRecord::Schema.define(version: 20161208112130) do
     t.string   "pending_users",             limit: 255
     t.string   "members_visibility",        limit: 255
     t.string   "messages_visibility",       limit: 255
+    t.string   "budget_manager_email",      limit: 255
+    t.decimal  "annual_budget",                           precision: 8, scale: 2
+    t.decimal  "leftover_money",                          precision: 8, scale: 2, default: 0.0
   end
 
   create_table "groups_managers", force: :cascade do |t|
@@ -397,6 +441,12 @@ ActiveRecord::Schema.define(version: 20161208112130) do
   create_table "groups_polls", force: :cascade do |t|
     t.integer "group_id", limit: 4
     t.integer "poll_id",  limit: 4
+  end
+
+  create_table "initiative_comments", force: :cascade do |t|
+    t.integer "initiative_id", limit: 4
+    t.integer "user_id",       limit: 4
+    t.text    "content",       limit: 65535
   end
 
   create_table "initiative_expenses", force: :cascade do |t|
@@ -418,6 +468,21 @@ ActiveRecord::Schema.define(version: 20161208112130) do
     t.integer "group_id",      limit: 4
   end
 
+  create_table "initiative_invitees", force: :cascade do |t|
+    t.integer "initiative_id", limit: 4
+    t.integer "user_id",       limit: 4
+  end
+
+  create_table "initiative_participating_groups", force: :cascade do |t|
+    t.integer "initiative_id", limit: 4
+    t.integer "group_id",      limit: 4
+  end
+
+  create_table "initiative_segments", force: :cascade do |t|
+    t.integer "initiative_id", limit: 4
+    t.integer "segment_id",    limit: 4
+  end
+
   create_table "initiative_updates", force: :cascade do |t|
     t.text     "data",          limit: 65535
     t.text     "comments",      limit: 65535
@@ -425,23 +490,36 @@ ActiveRecord::Schema.define(version: 20161208112130) do
     t.integer  "initiative_id", limit: 4
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
+    t.datetime "report_date"
   end
 
   create_table "initiative_users", force: :cascade do |t|
-    t.integer "initiative_id", limit: 4
-    t.integer "user_id",       limit: 4
+    t.integer  "initiative_id", limit: 4
+    t.integer  "user_id",       limit: 4
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
   create_table "initiatives", force: :cascade do |t|
-    t.string   "name",              limit: 255
+    t.string   "name",                 limit: 255
     t.datetime "start"
     t.datetime "end"
-    t.integer  "estimated_funding", limit: 4
-    t.integer  "actual_funding",    limit: 4
-    t.integer  "owner_id",          limit: 4
-    t.integer  "pillar_id",         limit: 4
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.decimal  "estimated_funding",                  precision: 8, scale: 2, default: 0.0,   null: false
+    t.integer  "actual_funding",       limit: 4
+    t.integer  "owner_id",             limit: 4
+    t.integer  "pillar_id",            limit: 4
+    t.datetime "created_at",                                                                 null: false
+    t.datetime "updated_at",                                                                 null: false
+    t.text     "description",          limit: 65535
+    t.integer  "max_attendees",        limit: 4
+    t.string   "picture_file_name",    limit: 255
+    t.string   "picture_content_type", limit: 255
+    t.integer  "picture_file_size",    limit: 4
+    t.datetime "picture_updated_at"
+    t.integer  "owner_group_id",       limit: 4
+    t.string   "location",             limit: 255
+    t.integer  "budget_item_id",       limit: 4
+    t.boolean  "finished_expenses",                                          default: false
   end
 
   create_table "invitation_segments_groups", force: :cascade do |t|
@@ -564,6 +642,7 @@ ActiveRecord::Schema.define(version: 20161208112130) do
     t.boolean  "initiatives_manage",                      default: false
     t.boolean  "default_for_enterprise",                  default: false
     t.boolean  "admin_pages_view",                        default: false
+    t.boolean  "budget_approval",                         default: false
   end
 
   create_table "poll_responses", force: :cascade do |t|

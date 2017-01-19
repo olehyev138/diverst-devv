@@ -8,6 +8,7 @@ class Enterprise < ActiveRecord::Base
   has_many :segments, inverse_of: :enterprise
   has_many :groups, inverse_of: :enterprise
   has_many :events, through: :groups
+  has_many :initiatives, through: :groups
   has_many :polls, inverse_of: :enterprise
   has_many :mobile_fields, inverse_of: :enterprise
   has_many :metrics_dashboards, inverse_of: :enterprise

@@ -25,6 +25,14 @@ class Group < ActiveRecord::Base
   has_many :polls, through: :groups_polls
   has_many :poll_responses, through: :polls, source: :responses
   has_many :events
+
+
+  has_many :own_initiatives, class_name: 'Initiative', foreign_key: 'owner_group_id'
+  has_many :initiative_participating_groups
+  has_many :participating_initiatives, through: :initiative_participating_groups, source: :initiative
+
+
+  has_many :budgets, as: :subject
   has_many :messages, class_name: 'GroupMessage'
   has_many :news_links
   has_many :invitation_segments_groups
@@ -57,6 +65,25 @@ class Group < ActiveRecord::Base
   after_commit :update_all_elasticsearch_members
 
   scope :top_participants, -> (n) { order(participation_score_7days: :desc).limit(n) }
+
+  def approved_budget
+    (budgets.approved.map{ |b| b.requested_amount || 0 } ).reduce(0, :+)
+  end
+
+  def available_budget
+    #(budgets.map{ |b| b.available_amount || 0 } ).reduce(0, :+)
+    return 0 unless annual_budget
+
+    annual_budget - approved_budget + leftover_money
+  end
+
+  def spent_budget
+    if annual_budget
+      annual_budget - available_budget
+    else
+      0
+    end
+  end
 
   def participation_score(from:, to: Time.current)
     score = 0
@@ -141,6 +168,10 @@ class Group < ActiveRecord::Base
     return false if user_group.blank?
 
     user_group.update(accepted_member: true)
+  end
+
+  def title_with_leftover_amount
+    "Create event from #{name} leftover ($#{leftover_money})"
   end
 
   private

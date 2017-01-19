@@ -21,7 +21,7 @@ class Campaign < ActiveRecord::Base
   has_attached_file :banner, styles: { medium: '1200x1200>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
   validates_attachment_content_type :banner, content_type: %r{\Aimage\/.*\Z}
 
-  after_create :create_invites
+  after_create :create_invites, :send_invitation_emails
 
   scope :ongoing, -> { where('start < :current_time AND end > :current_time', current_time: Time.current) }
 
@@ -37,7 +37,7 @@ class Campaign < ActiveRecord::Base
 
   def send_invitation_emails
     invitations.where(email_sent: false).find_each do |invitation|
-      CampaignMailer.invitation(invitation).deliver_now
+      CampaignMailer.invitation(invitation).deliver_later
     end
   end
 
