@@ -6,7 +6,7 @@
   <div class="card">
     <div class="card__section">
       <%= simple_form_for @user do |f| %>
-        <%= f.input :avatar, as: :file %>
+        <%= f.input :avatar, as: :attachment_preview %>
         <%= f.input :email %>
         <%= f.input :first_name %>
         <%= f.input :last_name %>

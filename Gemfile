@@ -59,6 +59,7 @@ gem 'pundit' # Authorization
 gem 'draper' # Decorators for views
 gem 'daemons' # For capistrano-clockwork
 gem 'icalendar' # For exporting events to your calendar
+gem 'simple_form_fancy_uploads', github: "TeamDiverst/simple_form_fancy_uploads", branch: "paperclip_version"
 
 gem 'mailgun_rails'
 gem 'enumerize'

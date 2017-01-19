@@ -1,3 +1,13 @@
+GIT
+  remote: git://github.com/TeamDiverst/simple_form_fancy_uploads.git
+  revision: bae8a804dc373e770c873f4459ae52456a47d935
+  branch: paperclip_version
+  specs:
+    simple_form_fancy_uploads (0.2.0)
+      carrierwave
+      rails (>= 4.0.0)
+      simple_form (~> 3.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -119,6 +129,10 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    carrierwave (1.0.0)
+      activemodel (>= 4.0.0)
+      activesupport (>= 4.0.0)
+      mime-types (>= 1.16)
     chronic (0.10.2)
     climate_control (0.1.0)
     cliver (0.3.2)
@@ -738,6 +752,7 @@ DEPENDENCIES
   seedbank
   sidekiq (< 5)
   simple_form
+  simple_form_fancy_uploads!
   sinatra
   spring (~> 1.6.2)
   spring-commands-rspec

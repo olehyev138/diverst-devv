@@ -16,7 +16,7 @@
               <%= t.input :secondary_color, id: 'secondary_color', input_html: { class: 'jscolor' }, label: 'Charts color' %>
             </div>
           </div>
-          <%= t.input :logo, as: :file %>
+          <%= t.input :logo, as: :attachment_preview %>
 
           <%= t.input :logo_redirect_url %>
 
@@ -36,7 +36,7 @@
   <div class="card">
     <div class="card__section">
       <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_branding') do |f| %>
-        <%= f.input :banner, as: :file, label: "User Home banner" %>
+        <%= f.input :banner, as: :attachment_preview, label: "User Home banner" %>
 
         <%= f.button :submit, "Save user settings" %>
       <% end %>

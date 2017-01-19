@@ -4,7 +4,7 @@
       <div class="card__section card__section--border">
         <%= f.input :name %>
         <%= f.input :description %>
-        <%= f.input :logo, as: :file %>
+        <%= f.input :logo, as: :attachment_preview %>
         <%= f.association :managers, collection: @group.enterprise.users, input_html: { class: "select2" } %>
         <%= f.association :lead_manager, collection: @group.enterprise.users, input_html: { class: "select2" } %>
         <%= f.input :budget_manager_email %>
