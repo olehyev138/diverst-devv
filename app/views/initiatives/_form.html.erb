@@ -12,7 +12,12 @@
           <div class="card__section card__section--border">
             <p class="field__hint">Attach a <strong>budget</strong> to the event.
             </p>
-            <%= f.input :budget_item_id, collection: Budget.pre_approved_events_for_select(@group), include_blank: 'Create new free event ($0)',label: false %>
+            <%= f.input :budget_item_id,
+                  collection: Budget.pre_approved_events_for_select(@group),
+                  include_blank: 'Create new free event ($0)',
+                  label: false,
+                  disabled: controller.action_name == "edit"
+            %>
           </div>
         </div>
       </div>
