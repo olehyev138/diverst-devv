@@ -258,7 +258,6 @@ class GroupsController < ApplicationController
         :pending_users,
         :members_visibility,
         :messages_visibility,
-        :budget_manager_email,
         manager_ids: [],
         member_ids: [],
         invitation_segment_ids: [],

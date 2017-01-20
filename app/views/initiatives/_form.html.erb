@@ -24,7 +24,7 @@
 
       <div class="card__section card__section--border">
         <p class="field__hint">You may also specify <strong>participating groups</strong></p>
-        <%= f.association :participating_groups, label: false, collection: current_user.enterprise.groups, input_html: {class: 'select2', multiple: true} %>
+        <%= f.association :participating_groups, label: false, collection: @group.possible_participating_groups, input_html: {class: 'select2', multiple: true} %>
       </div>
 
       <div class="card__section card__section--border">

@@ -70,13 +70,10 @@
                 <div class="card__section card__section--border">
                   <h3><%= initiative.name %></h3>
                   <div class="card__action">
-                    <% if initiative.finished_expenses? %>
-                      Expenses for this event are closed
-                    <% end %>
                     <%= link_to 'TODO', todo_group_initiative_path(@group, initiative)  %> -
                     <%= link_to "Budget", group_initiative_expenses_path(@group, initiative) %> -
                     <%= link_to "Updates", group_initiative_updates_path(@group, initiative) %> -
-                    <%= link_to "Metrics", group_initiative_path(@group, initiative) %> |
+                    <%= link_to "KPI", group_initiative_path(@group, initiative) %> |
                     <%= link_to "Edit", edit_group_initiative_path(@group, initiative) %> -
                     <%= link_to "Delete", group_initiative_path(@group, initiative), method: :delete, data: { confirm: "Are you sure?" }, class: "error" %>
                   </div>
@@ -103,7 +100,12 @@
 
                       <div class="flex-row flex-row--middle flex-row--spaced flex-row--spacing-bottom">
                         <div class="flex-row__cell flex-row__cell--spaced">
-                          <strong>Expenses</strong><br>
+                          <strong>Expenses</strong>
+                          <br>
+                          <% if initiative.finished_expenses? %>
+                            (closed)
+                            <br>
+                          <% end %>
                           <%= number_to_currency initiative.expenses.sum(:amount) %>
                         </div>
                         <div class="flex-row__cell flex-row__cell--grow flex-row__cell--spaced" style="margin-bottom: 20px;">
