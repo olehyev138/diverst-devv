@@ -103,7 +103,6 @@ class EnterprisesController < ApplicationController
         :cdo_title,
         :cdo_picture,
         :banner,
-        :budget_manager_email,
         theme: [
           :id,
           :primary_color,
