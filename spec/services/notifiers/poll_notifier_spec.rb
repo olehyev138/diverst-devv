@@ -7,7 +7,7 @@ RSpec.describe Notifiers::PollNotifier do
     let!(:poll){ create(:poll, email_sent: true) }
 
     it "should not sent emails" do
-      expect(PollMailer).to receive(:delay).exactly(0).times
+      call_mailer_exactly(0)
       notifier.notify!
     end
   end
@@ -16,7 +16,7 @@ RSpec.describe Notifiers::PollNotifier do
     let!(:poll){ create(:poll, status: "draft") }
 
     it "should not sent emails" do
-      expect(PollMailer).to receive(:delay).exactly(0).times
+      call_mailer_exactly(0)
       notifier.notify!
     end
   end
@@ -27,9 +27,7 @@ RSpec.describe Notifiers::PollNotifier do
     let!(:users){ create_list(:user, 2, groups: [group]) }
 
     it "should send emails" do
-      mailer = double("PollMailer")
-      expect(PollMailer).to receive(:delay){ mailer }.exactly(2).times
-      expect(mailer).to receive(:invitation).exactly(2).times
+      call_mailer_exactly(2)
       notifier.notify!
     end
 
@@ -37,5 +35,11 @@ RSpec.describe Notifiers::PollNotifier do
       notifier.notify!
       expect(poll.email_sent).to be_truthy
     end
+  end
+
+  def call_mailer_exactly(n)
+    mailer = double("PollMailer")
+    expect(PollMailer).to receive(:delay){ mailer }.exactly(n).times
+    expect(mailer).to receive(:invitation).exactly(n).times
   end
 end
