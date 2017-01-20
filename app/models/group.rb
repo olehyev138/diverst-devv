@@ -119,6 +119,12 @@ class Group < ActiveRecord::Base
     name.gsub!(/[^0-9A-Za-z.\-]/, '_')
   end
 
+  def possible_participating_groups
+    # return groups list without current group
+    group_id = self.id
+    self.enterprise.groups.select { |g| g.id != group_id }
+  end
+
   def self.create_events
     Group.all.find_each do |group|
       (20 - group.id).times do

@@ -1,8 +1,14 @@
 <div class="nested-fields card__section card__section--border">
   <div class="flex-row flex-row--middle">
-    <div class="flex-row__cell">
-      <%= f.input :is_done, label: false, wrapper: :boolean_checkbox %>
-    </div>
+    <% unless f.object.new_record? %>
+      <div class="flex-row__cell" style="padding-top: 25px;">
+        <% if f.object.is_done %>
+          <span class="error">Used</span>
+        <% else %>
+          <span class="positive">Available</span>
+        <% end %>
+      </div>
+    <% end %>
     <div class="flex-row__cell--grow">
       <%= f.input :title %>
     </div>
