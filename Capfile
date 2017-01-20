@@ -13,7 +13,7 @@ require 'capistrano/puma'
 require 'capistrano/puma/workers'
 require 'capistrano/rails/console'
 require 'capistrano/sidekiq'
- require 'capistrano/clockwork'
+require 'capistrano/clockwork'
 
 # Load custom tasks from `lib/capistrano/tasks` if you have any defined
 Dir.glob('lib/capistrano/tasks/*.rake').each { |r| import r }

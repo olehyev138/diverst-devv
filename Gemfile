@@ -25,7 +25,7 @@ gem 'sinatra', require: nil # Required for sidekiq's dashboard
 gem 'seedbank' # Support for multiple seed files and their ordering
 gem 'oj' # Faster JSON implementation
 gem 'faker' # Fake seed data easily
-gem 'active_model_serializers', '~> 0.9.6' # Serializes your models in a string a format
+gem 'active_model_serializers' # Serializes your models in a string a format
 gem 'devise_token_auth' # JWT tokens for auth
 gem 'firebase_token_generator' # Generate auth tokens
 gem 'firebase' # Used for realtime messaging in mobile app
