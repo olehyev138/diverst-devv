@@ -6,64 +6,64 @@ gem 'rails', '~> 4.2.7.1'
 gem 'mysql2', '~> 0.4.3'
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
-gem 'jquery-rails'
-gem 'turbolinks'
+gem 'jquery-rails', '~> 4.1', '>= 4.1.1'
+gem 'turbolinks', '~> 2.5', '>= 2.5.3'
 gem 'sdoc', '~> 0.4.0', group: :doc # bundle exec rake doc:rails generates the API under doc/api.
 
 gem 'nokogiri', '>= 1.6.8' # need to specify this explicitly, old version has exploit
 
-gem 'puma' # Better web server than WEBRick
-gem 'figaro' # Inject ENV from application.yml
-gem 'devise' # Authentication
-gem 'devise_invitable' # Invite system (admins invite normal users)
-gem 'simple_form' # Better forms
-gem 'cocoon' # Nested forms (deals with the JS for you)
+gem 'puma', '~> 3.1' # Better web server than WEBRick
+gem 'figaro', '~> 1.1', '>= 1.1.1' # Inject ENV from application.yml
+gem 'devise', '~> 3.5', '>= 3.5.6' # Authentication
+gem 'devise_invitable', '~> 1.5', '>= 1.5.5' # Invite system (admins invite normal users)
+gem 'simple_form', '~> 3.2', '>= 3.2.1' # Better forms
+gem 'cocoon', '~> 1.2', '>= 1.2.8' # Nested forms (deals with the JS for you)
 gem 'ruby-saml', '>= 1.3.0'
 gem 'sidekiq', '< 5' # Background jobs
-gem 'devise-async' # Performs many devise tasks in the background using Sidekiq
-gem 'sinatra', require: nil # Required for sidekiq's dashboard
-gem 'seedbank' # Support for multiple seed files and their ordering
-gem 'oj' # Faster JSON implementation
-gem 'faker' # Fake seed data easily
-gem 'active_model_serializers' # Serializes your models in a string a format
-gem 'devise_token_auth' # JWT tokens for auth
-gem 'firebase_token_generator' # Generate auth tokens
-gem 'firebase' # Used for realtime messaging in mobile app
-gem 'houston' # Apple push notifications
-gem 'gcm' # Android push notifications
+gem 'devise-async', '~> 0.10.1' # Performs many devise tasks in the background using Sidekiq
+gem 'sinatra', '~> 1.4', '>= 1.4.7', require: nil # Required for sidekiq's dashboard
+gem 'seedbank', '~> 0.3.0' # Support for multiple seed files and their ordering
+gem 'oj', '~> 2.14', '>= 2.14.6' # Faster JSON implementation
+gem 'faker', '~> 1.6', '>= 1.6.3' # Fake seed data easily
+gem 'active_model_serializers', '~> 0.9.6' # Serializes your models in a string a format
+gem 'devise_token_auth', '~> 0.1.37' # JWT tokens for auth
+gem 'firebase_token_generator', '~> 2.0' # Generate auth tokens
+gem 'firebase', '~> 0.2.6' # Used for realtime messaging in mobile app
+gem 'houston', '~> 2.2', '>= 2.2.3' # Apple push notifications
+gem 'gcm', '~> 0.1.1' # Android push notifications
 gem 'bower-rails', '~> 0.10.0' # Bower integration with Rails
-gem 'clockwork' # Schedule recurring jobs
-gem 'pismo' # Extracts metadata from an URL
-gem 'active_link_to' # Automatically add an active class to current nav link
+gem 'clockwork', '~> 1.2' # Schedule recurring jobs
+gem 'pismo', '~> 0.7.4' # Extracts metadata from an URL
+gem 'active_link_to', '~> 1.0', '>= 1.0.3' # Automatically add an active class to current nav link
 gem 'paperclip', '~> 4.3' # Handle attachments for models and forms
 gem 'aws-sdk', '< 2.0' # The official AWS SDK
-gem 'kaminari' # Pagination
-gem 'jquery-datatables-rails' # Datatables
-gem 'ajax-datatables-rails' # Adds AJAX routes for datatables queries
+gem 'kaminari', '~> 0.16.3' # Pagination
+gem 'jquery-datatables-rails', '~> 3.3' # Datatables
+gem 'ajax-datatables-rails', '~> 0.3.1' # Adds AJAX routes for datatables queries
 gem 'elasticsearch-model', '~> 0.1'
 gem 'elasticsearch-rails', '~> 0.1'
 gem 'sprockets', '>= 3.0.0'
-gem 'sprockets-es6'
-gem 'awesome_print' # Better pp
-gem 'yam' # Yammer ruby SDK
+gem 'sprockets-es6', '~> 0.9.0'
+gem 'awesome_print', '~> 1.6', '>= 1.6.1' # Better pp
+gem 'yam', '~> 2.5' # Yammer ruby SDK
 gem 'httparty', '~> 0.13' # HTTP request library
-gem 'liquid' # Templating engine used for email templates
-gem 'autoprefixer-rails' # Automatically adds vendor prefixes to CSS declarations
-gem 'fog' # AWS SDK
-gem 'validate_url' # Active Model validation for URLs
-gem 'omniauth-linkedin-oauth2' # OAuth for LinkedIn
+gem 'liquid', '~> 3.0', '>= 3.0.6' # Templating engine used for email templates
+gem 'autoprefixer-rails', '~> 6.3', '>= 6.3.3.1' # Automatically adds vendor prefixes to CSS declarations
+gem 'fog', '~> 1.37' # AWS SDK
+gem 'validate_url', '~> 1.0', '>= 1.0.2' # Active Model validation for URLs
+gem 'omniauth-linkedin-oauth2', '~> 0.1.5' # OAuth for LinkedIn
 gem 'omniauth-oauth2', '1.3.1' # Temporary fix to address: https://github.com/decioferreira/omniauth-linkedin-oauth2/issues/28
-gem 'activerecord-import' # Adds a faster way to INSERT multiple rows in the DB
-gem 'inline_svg' # Extract SVG files' content into the HTML
-gem 'pundit' # Authorization
-gem 'draper' # Decorators for views
-gem 'daemons' # For capistrano-clockwork
-gem 'icalendar' # For exporting events to your calendar
+gem 'activerecord-import', '~> 0.12.0' # Adds a faster way to INSERT multiple rows in the DB
+gem 'inline_svg', '~> 0.6.2' # Extract SVG files' content into the HTML
+gem 'pundit', '~> 1.1' # Authorization
+gem 'draper', '~> 2.1' # Decorators for views
+gem 'daemons', '~> 1.2', '>= 1.2.3' # For capistrano-clockwork
+gem 'icalendar', '~> 2.3' # For exporting events to your calendar
 gem 'simple_form_fancy_uploads', github: "TeamDiverst/simple_form_fancy_uploads", branch: "paperclip_version"
 
-gem 'mailgun_rails'
-gem 'enumerize'
-gem 'jbuilder'
+gem 'mailgun_rails', '~> 0.8.0'
+gem 'enumerize', '~> 2.0'
+gem 'jbuilder', '~> 2.6'
 
 group :development, :test do
   gem 'spring', '~> 1.6.2' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
