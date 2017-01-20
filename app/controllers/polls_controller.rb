@@ -73,6 +73,7 @@ class PollsController < ApplicationController
       .permit(
         :title,
         :description,
+        :status,
         group_ids: [],
         segment_ids: [],
         fields_attributes: [
