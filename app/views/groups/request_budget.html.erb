@@ -6,7 +6,7 @@
   <%= simple_form_for @budget, url: submit_budget_group_path(@group), method: :post do |f| %>
     <div class="card">
       <div class="card__section">
-        Your request will be sent to <b><%= @group.name %></b> financal manager for approval
+        Your request will be sent to <b><%= @group.name %></b> financial manager for approval
       </div>
       <div class="card__section">
         <%= f.input :description %>
