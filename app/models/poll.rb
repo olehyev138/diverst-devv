@@ -10,8 +10,7 @@ class Poll < ActiveRecord::Base
   has_many :groups, inverse_of: :polls, through: :groups_polls
   belongs_to :enterprise, inverse_of: :polls
   belongs_to :owner, class_name: "User"
-
-  after_create :send_invitation_emails
+  
   after_create :create_default_graphs
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
@@ -56,13 +55,6 @@ class Poll < ActiveRecord::Base
   end
 
   protected
-
-  def send_invitation_emails
-    targeted_users.each do |user|
-      PollMailer.delay.invitation(self, user)
-    end
-  end
-
   # Creates one graph per field when the poll is created
   def create_default_graphs
     fields.each do |field|

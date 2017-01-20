@@ -20,6 +20,7 @@ class PollsController < ApplicationController
     @poll.owner = current_user
 
     if @poll.save
+      Notifiers::PollNotifier.new(@poll).notify!
       redirect_to action: :index
     else
       render :edit
@@ -44,6 +45,7 @@ class PollsController < ApplicationController
   def update
     authorize @poll
     if @poll.update(poll_params)
+      Notifiers::PollNotifier.new(@poll).notify!
       redirect_to @poll
     else
       render :edit
