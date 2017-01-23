@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170120115728) do
+ActiveRecord::Schema.define(version: 20170120165516) do
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -658,9 +658,11 @@ ActiveRecord::Schema.define(version: 20170120115728) do
     t.time     "end"
     t.integer  "nb_invitations", limit: 4
     t.integer  "enterprise_id",  limit: 4
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
     t.integer  "owner_id",       limit: 4
+    t.integer  "status",         limit: 4,     default: 0,     null: false
+    t.boolean  "email_sent",                   default: false, null: false
   end
 
   create_table "polls_segments", force: :cascade do |t|

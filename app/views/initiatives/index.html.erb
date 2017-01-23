@@ -71,6 +71,7 @@
                   <h3><%= initiative.name %></h3>
                   <div class="card__action">
                     <%= link_to 'TODO', todo_group_initiative_path(@group, initiative)  %> -
+                    <%= link_to "Resources", group_initiative_resources_path(@group, initiative) %> -
                     <%= link_to "Budget", group_initiative_expenses_path(@group, initiative) %> -
                     <%= link_to "Updates", group_initiative_updates_path(@group, initiative) %> -
                     <%= link_to "KPI", group_initiative_path(@group, initiative) %> |
