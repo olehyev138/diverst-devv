@@ -43,7 +43,8 @@
       </div>
     </div>
 
-    <%= f.button :submit %>
+    <%= button_tag "Save and publish", value: "published", name: "poll[status]", class: "btn btn--primary" %>
+    <%= button_tag "Save as draft", value: "draft", name: "poll[status]", class: "btn btn--secondary" %>
   <% end %>
 </div>
 

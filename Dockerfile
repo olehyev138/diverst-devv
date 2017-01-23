@@ -13,7 +13,7 @@ WORKDIR /diverst
 
 COPY Gemfile Gemfile
 
-RUN gem install bundler && bundle install --jobs 20 --retry 5
+RUN bundle install --jobs 20 --retry 5
 RUN bundle config local.simple_form_fancy_uploads /simple_form_fancy_uploads
 
 COPY . .
