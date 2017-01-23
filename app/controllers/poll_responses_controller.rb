@@ -50,7 +50,7 @@ class PollResponsesController < ApplicationController
   protected
 
   def set_poll
-    @poll = Poll.find(params[:poll_id])
+    @poll = Poll.published.find(params[:poll_id])
   end
 
   def set_response
