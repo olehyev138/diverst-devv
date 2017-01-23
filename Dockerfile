@@ -19,6 +19,7 @@ RUN bundle config local.simple_form_fancy_uploads /simple_form_fancy_uploads
 COPY . .
 
 RUN npm install
+RUN npm install -g phantomjs
 RUN rake bower:install['--allow-root']
 
 EXPOSE 3000
