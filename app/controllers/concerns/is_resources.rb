@@ -34,6 +34,7 @@ module IsResources
   end
 
   def show
+    # binding.pry
     send_file @resource.file.path,
       filename: @resource.file_file_name,
       type: @resource.file_content_type,
