@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(document).on('ready page:load', function(){
   $('.date_picker_input').each(function(i, field){
     initializeDatePicker(field);
   });
@@ -15,6 +15,5 @@ $(document).ready(function(){
       format: 'YYYY-MM-DD',
       yearRange: [new Date().getFullYear(), new Date().getFullYear() + 2]
     });
-
   };
 });
