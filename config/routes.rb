@@ -144,6 +144,8 @@ Rails.application.routes.draw do
             get 'time_series'
           end
         end
+
+        resources :resources
       end
 
       member do

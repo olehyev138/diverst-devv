@@ -1,12 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Initiative, type: :model do
-  describe 'factory' do
-    let(:initiative) { FactoryGirl.build(:initiative) }
+  describe 'validations' do
+    let(:initiative) { FactoryGirl.build_stubbed(:initiative) }
 
-    it 'is valid' do
-      expect(initiative).to be_valid
-    end
+    it{ expect(initiative).to have_many(:resources) }
   end
 
   describe 'budgeting' do

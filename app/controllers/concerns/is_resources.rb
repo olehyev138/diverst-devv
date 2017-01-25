@@ -4,6 +4,7 @@ module IsResources
   included do
     before_action :set_container
     before_action :set_resource, except: [:index, :new, :create]
+    before_action :set_container_path
 
     prepend_view_path 'app/views/shared/resources'
   end
