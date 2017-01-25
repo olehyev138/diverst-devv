@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(document).on('ready page:load', function() {
   Sortable.create(document.getElementById('fields'), {
     onSort: function() {
       $("#fields .nested-fields").each(function(i) {
