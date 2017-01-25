@@ -22,6 +22,7 @@ class Initiative < ActiveRecord::Base
   has_one :budget, through: :budget_item
 
   has_many :checklists, as: :subject
+  has_many :resources, as: :container
 
   has_many :checklist_items, as: :container
   accepts_nested_attributes_for :checklist_items, reject_if: :all_blank, allow_destroy: true

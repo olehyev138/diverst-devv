@@ -10,7 +10,7 @@ class DatePickerInput < SimpleForm::Inputs::StringInput
                                  end
 
     input_html_options[:class] ||= []
-    input_html_options[:class] << "date_picker_input"
+    input_html_options[:class] << "field__input date_picker_input"
     @builder.text_field(attribute_name, input_html_options)
   end
 end

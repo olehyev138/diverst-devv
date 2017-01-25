@@ -43,3 +43,5 @@ spec/examples.txt
 # Vagrant files
 .vagrant/
 cookbooks/
+
+.byebug_history
