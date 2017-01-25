@@ -17,7 +17,7 @@ class PolicyGroupsController < ApplicationController
     if @policy_group.save
       redirect_to action: :index
     else
-      render :edit
+      render :new
     end
   end
 

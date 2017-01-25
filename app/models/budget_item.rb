@@ -5,7 +5,8 @@ class BudgetItem < ActiveRecord::Base
 
   validates :title, presence: true, length: { minimum: 2 }
   validates :estimated_amount, numericality: true
-  validates :available_amount, numericality: { less_than_or_equal_to: :estimated_amount}, allow_nil: true
+  validates :available_amount, numericality: { less_than_or_equal_to: :estimated_amount},
+    allow_nil: true, unless: -> { estimated_amount.blank? }
 
   scope :available, -> { where(is_done: false)}
   scope :allocated, -> { where(is_done: true) }
