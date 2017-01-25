@@ -61,13 +61,13 @@
           <div class="form--inline">
             <div class="field">
               <div class="field__input-wrapper">
-                <input type="text" class="field__input datepicker js-from-picker">
+                <input type="text" class="field__input datepicker date_picker_input">
               </div>
             </div>
             <label>to </label>
             <div class="field">
               <div class="field__input-wrapper">
-                <input type="text" class="field__input datepicker js-to-picker">
+                <input type="text" class="field__input datepicker date_picker_input">
               </div>
             </div>
           </div>
@@ -85,25 +85,6 @@
 </div>
 
 <script>
-  // Date filters datepickers
-
-  var fromPicker = new Pikaday({
-    field: $('.js-from-picker')[0],
-    format: 'D MMM YYYY',
-    yearRange: [new Date().getFullYear() - 2, new Date().getFullYear()]
-  });
-
-  fromPicker.setMoment(moment().startOf('year'));
-
-  var toPicker = new Pikaday({
-    field: $('.js-to-picker')[0],
-    format: 'D MMM YYYY',
-    yearRange: [new Date().getFullYear() - 2, new Date().getFullYear()]
-  });
-
-  toPicker.setMoment(moment().endOf('year'));
-
-
   // Field time series graphs
 
   var graphs = [];
