@@ -1,6 +1,7 @@
 <div class="nested-fields card__section card__section--border">
   <div class="card__action">
-    <%= link_to_remove_association "Remove", f, class: "error" %>
+    <%= link_to_remove_association "Remove", f, class: "error", data: { confirm: "Are you sure?" } %>
+    x
   </div>
 
   <%= render 'shared/fields/creation/text_field', f: f if f.object.type == 'TextField' %>
