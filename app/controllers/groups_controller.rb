@@ -38,10 +38,14 @@ class GroupsController < ApplicationController
 
   def submit_budget
     authorize @group, :update?
+    @budget = Budget.new(budget_params)
+    @group.budgets << @budget
 
-    @group.budgets << Budget.new( budget_params )
-
-    redirect_to action: :budgets
+    if @group.save
+      redirect_to action: :budgets
+    else
+      render :request_budget
+    end
   end
 
   def approve_budget

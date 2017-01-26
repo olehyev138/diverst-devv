@@ -10,7 +10,7 @@ class Poll < ActiveRecord::Base
   has_many :groups, inverse_of: :polls, through: :groups_polls
   belongs_to :enterprise, inverse_of: :polls
   belongs_to :owner, class_name: "User"
-  
+
   after_create :create_default_graphs
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
