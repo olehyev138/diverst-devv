@@ -22,7 +22,7 @@
 //= require rangeslider.js/dist/rangeslider
 //= require Sortable
 //= require moment
-//= require pikaday
+//= require pikaday-time
 //= require fullcalendar
 //= require tooltipster
 //= require urijs
