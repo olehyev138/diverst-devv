@@ -39,8 +39,14 @@
 
       <div class="card__section card__section--border">
         <p class="field__hint">Define a <strong>start</strong> and <strong>end</strong> time</p>
-        <%= f.input :start, as: :date_time_picker %>
-        <%= f.input :end, as: :date_time_picker %>
+        <div class="row">
+          <div class="col sm-6">
+            <%= f.input :start, as: :date_time_picker %>
+          </div>
+          <div class="col sm-6">
+            <%= f.input :end, as: :date_time_picker %>
+          </div>
+        </div>
       </div>
 
       <div class="row">
