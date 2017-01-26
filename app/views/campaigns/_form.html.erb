@@ -14,8 +14,8 @@
 
       <div class="card__section card__section--border">
         <p class="field__hint">Choose the campaign's start and end <strong>time</strong></p>
-        <%= f.input :start, as: :date_picker, value: @campaign.start.try(:to_date) %>
-        <%= f.input :end, as: :date_picker, value: @campaign.end.try(:to_date) %>
+        <%= f.input :start, as: :date_time_picker %>
+        <%= f.input :end, as: :date_time_picker %>
       </div>
 
       <div class="card__section card__section--border">
