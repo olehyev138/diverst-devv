@@ -14,7 +14,6 @@ $(document).on('ready page:load', function(){
   });
 
   function initializeDatePicker(field, format, showTime) {
-    console.log(showTime);
     var picker = new Pikaday({
       field: field,
       showTime: showTime,
