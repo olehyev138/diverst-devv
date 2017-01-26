@@ -30,9 +30,7 @@
         <%= f.simple_fields_for :fields do |field| %>
           <%= render 'field_fields', f: field %>
         <% end %>
-      </div>
 
-      <div class="link">
         <div class="card__section card__section--border">
           <%= link_to_add_association "Add text field", f, :fields, wrap_object: Proc.new { TextField.new } %> |
           <%= link_to_add_association "Add select field", f, :fields, wrap_object: Proc.new { SelectField.new } %> |

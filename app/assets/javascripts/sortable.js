@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(document).on('ready page:load', function() {
   element = document.getElementById('sortable');
   if(element) {
     Sortable.create(element, {
