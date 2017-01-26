@@ -31,7 +31,7 @@
 
     <div class="card">
       <div class="card__section card__section--border">
-        <p>You may notify <strong>approval manager</strong> for him to review and accept your budget request faster.</p>
+        <p>You may notify <strong>approval manager</strong> for them to review and accept your budget request faster.</p>
       </div>
       <div class="card__section" >
         <%= f.input :approver_id, as: :select, collection: PolicyGroup.users_that_able_to_accept_budgets(current_user.enterprise), label: false %>
