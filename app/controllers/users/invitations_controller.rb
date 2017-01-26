@@ -22,7 +22,7 @@ class Users::InvitationsController < Devise::InvitationsController
       invitable.enterprise = current_inviter.enterprise
       invitable.info.merge(fields: invitable.enterprise.fields, form_data: params['custom-fields'])
       invitable.auth_source = 'manual'
-      invitable.save!
+      invitable.save
     end
   end
 
