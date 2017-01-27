@@ -144,10 +144,14 @@ RSpec.describe InitiativesController, type: :controller do
         end
 
         context 'with incorrect params' do
-          before { post_create(group.id, initiative: {}) }
+          it 'does not save the new initiative' do
+            expect{ post_create(group.id, initiative: { start: nil }) }
+              .to_not change(Initiative, :count)
+          end
 
-          it 'returns error' do
-            expect(response).to_not be_success
+          it 'renders new view' do
+            post_create(group.id, initiative: {})
+            expect(response).to render_template :new
           end
         end
       end
@@ -194,11 +198,7 @@ RSpec.describe InitiativesController, type: :controller do
         end
 
         context 'with incorrect params' do
-          before { patch_update(group.id, initiative.id, initiative: {}) }
-
-          it 'returns error' do
-            expect(response).to_not be_success
-          end
+          before { patch_update(group.id, initiative.id, { start: nil }) }
 
           it 'does not update initiative' do
             updated_initiative = Initiative.find(initiative.id)
@@ -208,6 +208,10 @@ RSpec.describe InitiativesController, type: :controller do
             expect(updated_initiative.location).to eq initiative.location
             expect(updated_initiative.start).to be_within(1).of initiative.start
             expect(updated_initiative.end).to be_within(1).of initiative.end
+          end
+
+          it 'renders edit view' do
+            expect(response).to render_template :edit
           end
         end
       end
