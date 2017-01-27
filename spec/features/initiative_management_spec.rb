@@ -101,8 +101,8 @@ RSpec.feature 'Initiative management' do
     fill_in 'initiative_name', with: initiative_params[:name]
     fill_in 'initiative_description', with: initiative_params[:description]
     fill_in 'initiative_location', with: initiative_params[:location]
-    fill_date 'initiative_start', initiative_params[:start]
-    fill_date 'initiative_end', initiative_params[:end]
+    fill_in 'initiative_start', with: format_date_time(initiative_params[:start])
+    fill_in 'initiative_end', with: format_date_time(initiative_params[:end])
     fill_in 'initiative_max_attendees', with: initiative_params[:max_attendees]
     attach_file 'initiative_picture', initiative_params[:picture_path]
   end
@@ -114,12 +114,18 @@ RSpec.feature 'Initiative management' do
     expect(page).to have_field('initiative_name', with: initiative_params[:name])
     expect(page).to have_field('initiative_description', with: initiative_params[:description])
     expect(page).to have_field('initiative_location', with: initiative_params[:location])
-    check_date 'initiative_start', initiative_params[:start]
-    check_date 'initiative_end', initiative_params[:end]
+    expect(format_date_time(DateTime.parse(find_field('initiative_start').value)))
+      .to eq format_date_time(initiative_params[:start])
+    expect(format_date_time(DateTime.parse(find_field('initiative_end').value)))
+      .to eq format_date_time(initiative_params[:end])
 
     expect(page).to have_field('initiative_max_attendees', with: initiative_params[:max_attendees])
 
     #bTODO how to check that we have image?
     #expect(page).to have_field('initiative_picture', with: initiative_params[:picture_path])
+  end
+
+  def format_date_time(date_time)
+    date_time.strftime("%Y-%m-%d %H:%m")
   end
 end
