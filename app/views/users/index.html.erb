@@ -15,8 +15,10 @@
 
 <div class="content__main">
   <div class="card">
-    <h2>Permission group for new users</h2>
-    New users will be assigned to <strong><%= current_user.enterprise.default_policy_group.name %></strong> permission group. You can change this in corresponding permission group's settings.
+    <div class="card__section">
+      <h2>Permission group for new users</h2>
+      New users will be assigned to <strong><%= current_user.enterprise.default_policy_group.name %></strong> permission group. You can change this in <%= link_to 'permission groups settings', policy_groups_path %>.
+    </div>
   </div>
   <h3>Invitations sent</h3>
   <div class="card">
