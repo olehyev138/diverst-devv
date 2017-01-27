@@ -21,7 +21,18 @@ $(document).on('ready page:load', function(){
       autoClose: false,
       incrementMinuteBy: 15,
       use24hour: true,
-      yearRange: [new Date().getFullYear(), new Date().getFullYear() + 2]
+      yearRange: [new Date().getFullYear(), new Date().getFullYear() + 2],
+      onOpen: function() {
+        if($(field).val() == '') {
+          var hour = new Date().getHours();
+          var minute = Math.ceil(new Date().getMinutes()/15)*15;
+          var roundedHour = minute > 45 ? hour + 1 : hour;
+          var roundedMinute = minute > 45 ? 0 : minute;
+
+          $('.pika-select-hour').val(roundedHour);
+          $('.pika-select-minute').val(roundedMinute);
+        }
+      }
     });
   };
 });
