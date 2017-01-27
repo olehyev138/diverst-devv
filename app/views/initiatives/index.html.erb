@@ -123,7 +123,7 @@
                       <div class="flex-row flex-row--middle flex-row--spaced">
                         <div class="flex-row__cell flex-row__cell--spaced">
                           <strong>Start date</strong><br>
-                          <%= initiative.start.to_s :reversed_slashes %>
+                          <%= initiative.start.try(:to_s, :reversed_slashes) %>
                         </div>
                         <div class="flex-row__cell flex-row__cell--grow flex-row__cell--spaced" style="margin-bottom: 20px;">
                           <div class="progress-bar">
@@ -132,7 +132,7 @@
                         </div>
                         <div class="flex-row__cell flex-row__cell--spaced">
                           <strong>End date</strong><br>
-                          <%= initiative.end.to_s :reversed_slashes %>
+                          <%= initiative.end.try(:to_s, :reversed_slashes) %>
                         </div>
                       </div>
 
