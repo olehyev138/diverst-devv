@@ -1,9 +1,6 @@
 class Initiative < ActiveRecord::Base
   attr_accessor :associated_budget_id
 
-  validate :check_budget
-  before_create :allocate_budget_funds
-
   belongs_to :pillar
   belongs_to :owner, class_name: "User"
   has_many :updates, class_name: "InitiativeUpdate", dependent: :destroy
@@ -11,7 +8,6 @@ class Initiative < ActiveRecord::Base
   has_many :expenses, dependent: :destroy, class_name: "InitiativeExpense"
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
-
 
   #Ported from Event
 # todo: check events controller views and forms to work
@@ -44,8 +40,13 @@ class Initiative < ActiveRecord::Base
   scope :upcoming, -> { where('start > ?', Time.current).order(start: :asc) }
   scope :ongoing, -> { where('start <= ?', Time.current).where('end >= ?', Time.current).order(start: :desc) }
 
+  before_create :allocate_budget_funds
+
   has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
   validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
+  validates :start, presence: true
+  validates :end, presence: true
+  validate :check_budget
 
   def group
     owner_group || pillar.outcome.group

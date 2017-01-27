@@ -4,6 +4,8 @@ RSpec.describe Initiative, type: :model do
   describe 'validations' do
     let(:initiative) { FactoryGirl.build_stubbed(:initiative) }
 
+    it{ expect(initiative).to validate_presence_of(:start) }
+    it{ expect(initiative).to validate_presence_of(:end) }
     it{ expect(initiative).to have_many(:resources) }
   end
 
