@@ -48,6 +48,11 @@ class Initiative < ActiveRecord::Base
   validates :end, presence: true
   validate :check_budget
 
+  def initiative_date(date_type)
+    return "" unless ["start", "end"].include?(date_type)
+    self.send(date_type).blank? ? "" : self.send(date_type).to_s(:reversed_slashes)
+  end
+
   def group
     owner_group || pillar.outcome.group
   end
