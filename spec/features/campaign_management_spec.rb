@@ -23,6 +23,8 @@ RSpec.feature 'Campaign management' do
     fill_in 'campaign_start', with: campaign[:start_time]
     fill_in 'campaign_end', with: campaign[:end_time]
 
+    # We used 'trigger' instead of 'click_on' because Capybara raises an error when
+    # we try to click on this button in a page that we have a datetime_picker input
     find('.add_fields', text: 'Add question').trigger('click')
     find('.campaign_questions_title').set('First question')
     find('.campaign_questions_description').set("That's a cool question")
