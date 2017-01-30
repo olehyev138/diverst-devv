@@ -762,7 +762,7 @@ ActiveRecord::Schema.define(version: 20170130122803) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "accepted_member",               default: false
-    t.boolean  "enable_notification",           default: true,  null: false
+    t.boolean  "enable_notification",           default: true
   end
 
   create_table "users", force: :cascade do |t|
