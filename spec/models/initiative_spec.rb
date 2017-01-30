@@ -4,7 +4,43 @@ RSpec.describe Initiative, type: :model do
   describe 'validations' do
     let(:initiative) { FactoryGirl.build_stubbed(:initiative) }
 
+    it{ expect(initiative).to validate_presence_of(:start) }
+    it{ expect(initiative).to validate_presence_of(:end) }
     it{ expect(initiative).to have_many(:resources) }
+  end
+
+  describe ".initiative_date" do
+    let(:initiative){ build_stubbed(:initiative) }
+
+    context "when date_type is not valid" do
+      it "return an empty string" do
+        expect(initiative.initiative_date("unknown")).to eq ""
+      end
+    end
+
+    context "when date_type is start" do
+      it "when there is not an start date return an empty string" do
+        initiative.start = nil
+        expect(initiative.initiative_date("start")).to eq ""
+      end
+
+      it "when there is an start date return a reversed_slashes string" do
+        initiative.start = Date.parse("2017-01-01")
+        expect(initiative.initiative_date("start")).to eq "2017/01/01"
+      end
+    end
+
+    context "when date_type is end" do
+      it "when there is not an end date return an empty string" do
+        initiative.end = nil
+        expect(initiative.initiative_date("end")).to eq ""
+      end
+
+      it "when there is an end date return a reversed_slashes string" do
+        initiative.end = Date.parse("2017-01-01")
+        expect(initiative.initiative_date("end")).to eq "2017/01/01"
+      end
+    end
   end
 
   describe 'budgeting' do
