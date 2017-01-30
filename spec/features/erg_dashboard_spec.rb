@@ -122,12 +122,13 @@ RSpec.feature 'An ERG dashboard' do
       create(:segment_with_users, enterprise: user.enterprise)
       event_title = 'Sick event!'
       event_description = 'Awesome event description'
+      event_end = Time.current.year + 1
 
       visit group_initiatives_path(group)
       click_on 'New Event'
       fill_in 'initiative_name', with: event_title
       fill_in 'initiative_description', with: event_description
-      select Time.current.year + 1, from: "initiative_end_1i"
+      fill_in 'initiative_end', with: event_end
       fill_in 'initiative_location', with: 'Montreal'
       fill_in 'initiative_max_attendees', with: 15
 
