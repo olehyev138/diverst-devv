@@ -13,14 +13,4 @@ class User::GroupsController < ApplicationController
     @group.members << current_user
     @group.save
   end
-
-  def enable_notifications
-    user_group = UserGroup.where(user_id: current_user.id, group_id: params[:id]).first
-    if !user_group
-      render json: false, status: :not_found
-    else
-      user_group.update(enable_notification: params[:enable_notification])
-      render json: true
-    end
-  end
 end

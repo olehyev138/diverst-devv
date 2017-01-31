@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe User::GroupsController, type: :controller do
-  describe "PATCH#enable_notifications" do
+RSpec.describe Groups::UserGroupsController, type: :controller do
+  describe "PATCH#update" do
     context "with logged user" do
       let(:group){ create(:group) }
       let(:user){ create(:user) }
@@ -9,7 +9,9 @@ RSpec.describe User::GroupsController, type: :controller do
       login_user_from_let
 
       context "when exists the user_group" do
-        before(:each){ patch :enable_notifications, id: group.id, enable_notification: true }
+        before(:each) do
+          patch :update, group_id: group.id, id: user_group.id, user_group: { enable_notification: true }
+        end
 
         it "updates the enable_notification of a user_group" do
           user_group.reload
@@ -18,14 +20,6 @@ RSpec.describe User::GroupsController, type: :controller do
 
         it "return a sucessful response" do
           expect(response.status).to eq 200
-        end
-      end
-
-      context "when does not exists the user_group" do
-        before(:each){ patch :enable_notifications, id: 0 }
-
-        it "return a not_found response" do
-          expect(response.status).to eq 404
         end
       end
     end

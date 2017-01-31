@@ -5,7 +5,7 @@ $(document).on('ready page:load', function() {
     $.ajax({
       url: url,
       type: 'PATCH',
-      data: { 'enable_notification': enable_notification }
+      data: { 'user_group': { 'enable_notification': enable_notification } }
     });
   });
 });

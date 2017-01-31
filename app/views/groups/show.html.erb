@@ -135,7 +135,7 @@
               <%= f.input :enable_notification, label: "Enable notifications?", input_html:
                 {
                   class: 'ajax-toggle',
-                  'data-url': enable_notifications_user_group_path(@group)
+                  'data-url': group_user_group_path(@group, @user_group)
                 }
               %>
             <% end %>
