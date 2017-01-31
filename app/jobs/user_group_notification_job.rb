@@ -23,15 +23,15 @@ class UserGroupNotificationJob < ActiveJob::Base
 
   private
   def get_messages_count(group)
-    @messages[group.id] = GroupMessage.where(group: group, updated_at: today).count
+    @messages[group.id] = GroupMessage.where(group: group, updated_at: yesterday).count
   end
 
   def get_news_count(group)
-    @news[group.id] = NewsLink.where(group: group, updated_at: today).count
+    @news[group.id] = NewsLink.where(group: group, updated_at: yesterday).count
   end
 
-  def today
-    Date.today.beginning_of_day..Date.today.end_of_day
+  def yesterday
+    Date.yesterday.beginning_of_day..Date.yesterday.end_of_day
   end
 
   def there_is_updates?(groups)

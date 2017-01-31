@@ -133,8 +133,8 @@
           <div class="col row--spacing-bottom">
             <%= simple_form_for @user_group, method: :post do |f| %>
               <%= f.input :enable_notification, label: "Enable notifications?", input_html:
-              {
-                class: 'ajax-toggle',
+                {
+                  class: 'ajax-toggle',
                   'data-url': enable_notifications_user_group_path(@group)
                 }
               %>
