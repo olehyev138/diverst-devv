@@ -46,7 +46,7 @@ RSpec.feature 'An ERG dashboard' do
     expect(page).to have_content 'Leave this ERG'
   end
 
-  scenario 'allows to a member to opt out' do
+  scenario 'allows to a member to opt out', js: true do
     group.members << user
 
     visit group_path(group)
@@ -55,21 +55,21 @@ RSpec.feature 'An ERG dashboard' do
     expect(group.members.ids).not_to include user.id
   end
 
-  context 'in the members section' do
+  context 'in the members section', js: true do
     scenario 'shows members' do
       visit group_group_members_path(group)
 
       expect(page).to have_content group.members.last.name
     end
 
-    scenario 'allows users to delete members' do
+    scenario 'allows users to delete members', js: true do
       member = create(:user, enterprise: user.enterprise, first_name: "Testing", last_name: "User")
       group.members << member
       group.accept_user_to_group(member.id)
 
       visit group_group_members_path(group)
       expect(page).to have_content member.name
-      page.find('div.flex-row__cell', text: member.name).find(:xpath, '..').find('a[data-method=delete]').click
+      page.find('#group-members td', text: member.name).find(:xpath, '..').find('a[data-method=delete]').click
 
       expect(page).not_to have_content member.name
     end
@@ -116,26 +116,6 @@ RSpec.feature 'An ERG dashboard' do
       visit group_events_path(group)
 
       expect(page).to have_content initiative.name
-    end
-
-    scenario 'allows users to create events' do
-      create(:segment_with_users, enterprise: user.enterprise)
-      event_title = 'Sick event!'
-      event_description = 'Awesome event description'
-      event_end = Time.current.year + 1
-
-      visit group_initiatives_path(group)
-      click_on 'New Event'
-      fill_in 'initiative_name', with: event_title
-      fill_in 'initiative_description', with: event_description
-      fill_in 'initiative_end', with: event_end
-      fill_in 'initiative_location', with: 'Montreal'
-      fill_in 'initiative_max_attendees', with: 15
-
-      submit_form
-
-      visit group_events_path(group)
-      expect(page).to have_content event_title
     end
   end
 end

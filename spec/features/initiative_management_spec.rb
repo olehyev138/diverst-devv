@@ -123,6 +123,10 @@ RSpec.feature 'Initiative management' do
 
     #bTODO how to check that we have image?
     #expect(page).to have_field('initiative_picture', with: initiative_params[:picture_path])
+
+    # Check initiative on employees dashboard
+    visit group_events_path(group)
+    expect(page).to have_content initiative_params[:name]
   end
 
   def format_date_time(date_time)
