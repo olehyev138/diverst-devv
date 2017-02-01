@@ -12,22 +12,21 @@
         <p>No members yet.</p>
       </div>
     <% else %>
-      <% @members.each do |member| %>
-        <div class="card__section card__section--border">
-          <div class="flex-row flex-row--middle">
-            <div class="flex-row__cell flex-row__cell--grow">
-              <%= member.name %>
-            </div>
-            <div class="flex-row__cell link-group">
-              <%= link_to 'Show user', user_path(member)%>
-              <% if policy(@group).manage_members? %>
-                <%= link_to 'Remove From Group', remove_member_group_group_member_path(@group, member), method: :delete, class: "error", data: { confirm: "Are you sure?" } %>
-              <% end %>
-            </div>
-          </div>
-        </div>
-      <% end %>
-      <%= paginate @members %>
+      <div class="card__section">
+        <% if @members.any? %>
+          <table class="table--has-border" id="group-members" data-source="<%= group_group_members_path(format: :json) %>">
+            <thead>
+              <th>Name</th>
+              <th>Actions</th>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        <% else %>
+          <p>No members yet.</p>
+        <% end %>
+      </div>
+
     <% end %>
   </div>
 </div>
