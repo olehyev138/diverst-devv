@@ -7,7 +7,11 @@ class Groups::GroupMembersController < ApplicationController
 
   def index
     authorize @group, :view_members?
-    @members = @group.active_members.page(params[:page])
+    @members = @group.active_members
+    respond_to do |format|
+      format.html
+      format.json { render json: GroupMemberDatatable.new(view_context, @group, @members) }
+    end
   end
 
   def pending
