@@ -3,8 +3,6 @@ machine:
     America/New_York
   services:
     - elasticsearch
-  environment:
-    MAX_THREADS: "1"
 dependencies:
   pre:
     - gem install bundler
