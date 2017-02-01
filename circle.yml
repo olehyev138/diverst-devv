@@ -3,6 +3,16 @@ machine:
     America/New_York
   services:
     - elasticsearch
+dependencies:
+  pre:
+    - gem install bundler
+  cache_directories:
+    - "public/assets"
+test:
+  pre:
+    - bundle exec rake assets:precompile assets:clean:
+       environment:
+        RAILS_GROUPS: assets
 deployment:
   production:
     branch: production

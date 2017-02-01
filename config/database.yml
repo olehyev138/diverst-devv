@@ -3,7 +3,7 @@ development: &default
   encoding: utf8
   database: diverst_development
   url: <%= ENV["DATABASE_URL"] %>
-  pool: <%= ENV["DB_POOL"] || ENV['MAX_THREADS'] || 20 %>
+  pool: <%= ENV["DB_POOL"] || ENV["MAX_THREADS"] || 20 %>
   #wait_timeout: 300
 
 # Warning: The database defined as "test" will be erased and
