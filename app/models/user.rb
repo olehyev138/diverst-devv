@@ -270,24 +270,6 @@ class User < ActiveRecord::Base
     user
   end
 
-  # Initializes a user from a CSV row
-  def self.from_csv_row(row, enterprise:)
-    return nil if row[0].nil? || row[1].nil? || row[2].nil? # Require first_name, last_name and email
-
-    user = User.new(
-      first_name: row[0],
-      last_name: row[1],
-      email: row[2],
-      enterprise: enterprise
-    )
-
-    enterprise.fields.each_with_index do |field, i|
-      user.info[field] = field.process_field_value row[3 + i]
-    end
-
-    user
-  end
-
   # Is set to false to allow users to login via SAML without a password
   def password_required?
     false
