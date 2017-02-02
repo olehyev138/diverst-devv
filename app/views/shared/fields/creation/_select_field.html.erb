@@ -1,2 +1,2 @@
-<%= f.input :title %>
+<%= f.input :title, label: local_assigns.fetch(:label, "Title") %>
 <%= f.input :options_text, as: :text, label: "Options (one per line)" %>
