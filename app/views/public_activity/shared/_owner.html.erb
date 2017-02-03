@@ -1,0 +1,5 @@
+<% if activity.owner %>
+  <%= link_to activity.owner.name, user_user_path(activity.owner) %>
+<% else %>
+  Unknown user
+<% end %>

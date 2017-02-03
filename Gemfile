@@ -65,6 +65,8 @@ gem 'mailgun_rails', '~> 0.8.0'
 gem 'enumerize', '~> 2.0'
 gem 'jbuilder', '~> 2.6'
 
+gem 'public_activity', '~> 1.5'
+
 group :development, :test do
   gem 'spring', '~> 1.6.2' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'guard-livereload', '~> 2.4', require: false

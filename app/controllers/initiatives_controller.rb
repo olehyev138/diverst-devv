@@ -23,6 +23,7 @@ class InitiativesController < ApplicationController
     @initiative.owner_group = @group
 
     if @initiative.save
+      track_activity(@initiative, :create)
       redirect_to action: :index
     else
       render :new

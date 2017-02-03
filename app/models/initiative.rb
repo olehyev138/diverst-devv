@@ -1,4 +1,6 @@
 class Initiative < ActiveRecord::Base
+  include PublicActivity::Common
+
   attr_accessor :associated_budget_id
 
   belongs_to :pillar

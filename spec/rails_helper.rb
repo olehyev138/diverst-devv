@@ -12,6 +12,9 @@ require 'sidekiq/testing'
 
 require 'support/controller_macros.rb'
 
+require 'public_activity/testing'
+PublicActivity.enabled = false
+
 Capybara.javascript_driver = :poltergeist
 Capybara.asset_host = 'http://localhost:3000'
 

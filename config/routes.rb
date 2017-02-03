@@ -42,6 +42,8 @@ Rails.application.routes.draw do
 
   resources :biases
 
+  resources :notifications, only: [:index]
+
   get 'integrations', to: 'integrations#index'
 
   resources :enterprises do

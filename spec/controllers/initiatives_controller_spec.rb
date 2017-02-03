@@ -136,6 +136,30 @@ RSpec.describe InitiativesController, type: :controller do
             expect(new_initiative.end).to be_within(1).of initiative_attrs[:end]
           end
 
+          describe 'public activity' do
+            enable_public_activity
+
+            it 'creates public activity record' do
+              expect{
+                post_create(group.id, initiative_attrs)
+              }.to change(PublicActivity::Activity, :count).by(1)
+            end
+
+            it 'creates public activity with correct params' do
+              post_create(group.id, initiative_attrs)
+              activity = PublicActivity::Activity.last
+              initiative = Initiative.last
+
+              expect(activity.trackable_id).to eq initiative.id
+              expect(activity.trackable_type).to eq initiative.class.to_s
+
+              expect(activity.owner_id).to eq user.id
+              expect(activity.owner_type).to eq user.class.to_s
+
+              expect(activity.parameters[:enterprise_id]).to eq user.enterprise.id
+            end
+          end
+
           it 'redirects to correct page' do
             post_create(group.id, initiative_attrs)
 
