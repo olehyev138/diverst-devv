@@ -1,5 +1,6 @@
 class NotificationsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_enterprise
   before_action :set_activities
 
   layout 'erg_manager'
@@ -9,8 +10,11 @@ class NotificationsController < ApplicationController
 
   protected
 
+  def set_enterprise
+    @enterprise = current_user.enterprise
+  end
+
   def set_activities
-    #TODO only load activities from current enterprise
-    @activities = PublicActivity::Activity.all
+    @activities = PublicActivity::Activity.where(recipient: @enterprise)
   end
 end

@@ -18,7 +18,8 @@ class ApplicationController < ActionController::Base
   def track_activity(model, activity_name, params={})
     model.create_activity activity_name,
                 owner: current_user,
-                params: params.merge(enterprise_id: current_user.enterprise.id)
+                recipient: current_user.enterprise,
+                params: params
   end
 
   def not_found!

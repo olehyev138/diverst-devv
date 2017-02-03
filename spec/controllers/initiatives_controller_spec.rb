@@ -156,7 +156,7 @@ RSpec.describe InitiativesController, type: :controller do
               expect(activity.owner_id).to eq user.id
               expect(activity.owner_type).to eq user.class.to_s
 
-              expect(activity.parameters[:enterprise_id]).to eq user.enterprise.id
+              expect(activity.recipient).to eq user.enterprise
             end
           end
 
