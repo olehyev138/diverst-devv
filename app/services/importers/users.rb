@@ -40,17 +40,15 @@ class Importers::Users
   def update_user(row)
     user = User.where(email: row["Email"]).first
     return nil unless user
-
-    user.attributes = { first_name: row["First name"], last_name: row["Last name"] }
+    user.attributes = user_attributes(row)
     user
   end
 
   def initialize_user(row)
-    User.new(
-      first_name: row["First name"],
-      last_name: row["Last name"],
-      email: row["Email"],
-      enterprise: @enterprise
-    )
+    @enterprise.users.new user_attributes(row)
+  end
+
+  def user_attributes(row)
+    { first_name: row["First name"], last_name: row["Last name"], email: row["Email"], job_title: row["Job title"] }
   end
 end
