@@ -2,7 +2,7 @@ class Importers::Users
   attr_reader :table, :failed_rows, :successful_rows
 
   def initialize(file, manager)
-    @table = CSV.table file
+    @table = CSV.read file, headers: true
     @manager = manager
     @enterprise = manager.enterprise
 
@@ -12,46 +12,46 @@ class Importers::Users
 
   def import
     @table.each_with_index do |row, row_index|
-      user = from_csv_row(row)
-
-      if user
-        if user.save
-          user.invite!(@manager)
-          @successful_rows << row
-        else
-          # ActiveRecord validation failed on user
-          @failed_rows << {
-            row: row,
-            row_index: row_index + 1,
-            error: user.errors.full_messages.join(', ')
-          }
-        end
+      user = parse_from_csv_row(row)
+      if user.new_record? && user.save
+        user.invite!(@manager)
+        @successful_rows << row
+      elsif user.save
+        @successful_rows << row
       else
-        # User.from_csv_row returned nil
         @failed_rows << {
           row: row,
           row_index: row_index + 1,
-          error: 'Missing required information'
+          error: user.errors.full_messages.join(', ')
         }
       end
     end
   end
 
   private
-  def from_csv_row(row)
-    return nil if row[0].nil? || row[1].nil? || row[2].nil? # Require first_name, last_name and email
+  def parse_from_csv_row(row)
+    user = update_user(row) || initialize_user(row)
+    (0..row.length-1).each do |i|
+      field = Field.where(title: row.headers[i]).first
+      user.info[field] = field.process_field_value row[i] if field && !row[i].blank?
+    end
+    user
+  end
 
-    user = User.new(
-      first_name: row[0],
-      last_name: row[1],
-      email: row[2],
+  def update_user(row)
+    user = User.where(email: row["Email"]).first
+    return nil unless user
+
+    user.attributes = { first_name: row["First name"], last_name: row["Last name"] }
+    user
+  end
+
+  def initialize_user(row)
+    User.new(
+      first_name: row["First name"],
+      last_name: row["Last name"],
+      email: row["Email"],
       enterprise: @enterprise
     )
-
-    @enterprise.fields.each_with_index do |field, i|
-      user.info[field] = field.process_field_value row[3 + i]
-    end
-
-    user
   end
 end

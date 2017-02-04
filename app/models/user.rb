@@ -46,11 +46,9 @@ class User < ActiveRecord::Base
   has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: :private
   validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
 
-  # Validation of those fields is temporary disabled
-  # Will have to figure out how importing user behaves
-  # We don't won't user importing to break if first name of a record is missing
-  #validates_presence_of :first_name, :last_name
-  # validates_presence_of :password, unless: Proc.new { |a| a.enterprise.has_enabled_saml? }
+  validates :first_name, presence: true
+  validates :last_name, presence: true
+  # validates :password, presence: true, unless: Proc.new { |a| a.enterprise.has_enabled_saml? }
   # validates_confirmation_of :password, if: Proc.new { |a| a.enterprise.has_enabled_saml? && a.password.present? }
 
   before_validation :generate_password_if_saml
