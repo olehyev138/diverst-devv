@@ -68,35 +68,8 @@ class UsersController < ApplicationController
 
   def parse_csv
     authorize User, :new?
-
-    @table = CSV.table params[:file].tempfile
-    @failed_rows = []
-    @successful_rows = []
-
-    @table.each_with_index do |row, row_index|
-      user = User.from_csv_row(row, enterprise: current_user.enterprise)
-
-      if user
-        if user.save
-          user.invite!(current_user)
-          @successful_rows << row
-        else
-          # ActiveRecord validation failed on user
-          @failed_rows << {
-            row: row,
-            row_index: row_index + 1,
-            error: user.errors.full_messages.join(', ')
-          }
-        end
-      else
-        # User.from_csv_row returned nil
-        @failed_rows << {
-          row: row,
-          row_index: row_index + 1,
-          error: 'Missing required information'
-        }
-      end
-    end
+    @importer = Importers::Users.new(params[:file].tempfile, current_user)
+    @importer.import
   end
 
   def export_csv

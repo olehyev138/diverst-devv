@@ -10,8 +10,7 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-
-ActiveRecord::Schema.define(version: 20170130115502) do
+ActiveRecord::Schema.define(version: 20170130122803) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -774,11 +773,12 @@ ActiveRecord::Schema.define(version: 20170130115502) do
   end
 
   create_table "user_groups", force: :cascade do |t|
-    t.integer  "user_id",         limit: 4
-    t.integer  "group_id",        limit: 4
+    t.integer  "user_id",             limit: 4
+    t.integer  "group_id",            limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "accepted_member",           default: false
+    t.boolean  "accepted_member",               default: false
+    t.boolean  "enable_notification",           default: true
   end
 
   create_table "users", force: :cascade do |t|

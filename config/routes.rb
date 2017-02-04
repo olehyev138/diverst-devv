@@ -112,6 +112,8 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :user_groups, only: :update
+
       resources :news_links do
         member do
           get 'comments'

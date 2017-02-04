@@ -91,6 +91,7 @@ class GroupsController < ApplicationController
     @news_links = @group.news_links.limit(3)
     @user_groups = @group.user_groups.order(created_at: :desc).includes(:user).limit(8)
     @messages = @group.messages.includes(:owner).limit(3)
+    @user_group = @group.user_groups.find_by(user: current_user)
   end
 
   def create

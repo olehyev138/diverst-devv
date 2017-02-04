@@ -1,0 +1,11 @@
+Hello <%= @user.name %>, you have updates in your ERGs.
+<br/>
+<% @groups.each do |group| %>
+  ERG <%= group[:group].name %>
+  <br/>
+  <%= link_to "#{ pluralize(group[:messages_count], 'new message') }", group_group_messages_url(group[:group]) if group[:messages_count] %>
+  <br/>
+  <%= link_to "#{ group[:news_count] } news", group_news_links_url(group[:group]) if group[:news_count] > 0 %>.
+  <br/>
+  <br/>
+<% end %>

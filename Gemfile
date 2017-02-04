@@ -83,7 +83,7 @@ group :development, :test do
   gem 'pry-rails' # Better Rails console
   gem 'pry-theme' # Themes for pry
   gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
-
+  gem 'timecop', '~> 0.8.1'
   gem 'byebug' # Debugger
 end
 
