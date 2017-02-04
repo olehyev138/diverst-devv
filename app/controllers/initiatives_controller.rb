@@ -58,8 +58,14 @@ class InitiativesController < ApplicationController
 
   def destroy
     authorize @initiative
-    @initiative.destroy
-    redirect_to action: :index
+
+    track_activity(@initiative, :destroy)
+    if @initiative.destroy
+      redirect_to action: :index
+    else
+      #TODO write error message here
+      redirect_to :back
+    end
   end
 
   def todo

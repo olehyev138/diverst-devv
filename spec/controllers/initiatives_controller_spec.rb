@@ -286,6 +286,28 @@ RSpec.describe InitiativesController, type: :controller do
             }.to change(Initiative, :count).by(-1)
           end
 
+          describe 'public activity' do
+            enable_public_activity
+
+            it 'creates public activity record' do
+              expect{
+                delete_destroy(group.id, initiative.id)
+              }.to change(PublicActivity::Activity, :count).by(1)
+            end
+
+            describe 'activity record' do
+              let(:model) { Initiative.last }
+              let(:owner) { user }
+              let(:key) { 'initiative.destroy' }
+
+              before {
+                delete_destroy(group.id, initiative.id)
+              }
+
+              include_examples'correct public activity'
+            end
+          end
+
           it 'redirects to correct action' do
             delete_destroy(group.id, initiative.id)
 
