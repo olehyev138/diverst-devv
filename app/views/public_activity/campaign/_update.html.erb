@@ -1,8 +1,8 @@
 <div class="card__section">
   <%= render 'public_activity/shared/owner', activity: activity %>
-  updated event
+  updated campaign
   <% if activity.trackable %>
-    <%= link_to activity.trackable.title, group_event_path(activity.trackable.group, activity.trackable) %>
+    <%= link_to activity.trackable.title, campaign_questions_path(activity.trackable) %>
   <% else %>
     which has since been removed
   <% end %>
