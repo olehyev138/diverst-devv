@@ -3,7 +3,7 @@ class NotificationsController < ApplicationController
   before_action :set_enterprise
   before_action :set_activities
 
-  layout 'erg_manager'
+  layout 'global_settings'
 
   def index
   end
