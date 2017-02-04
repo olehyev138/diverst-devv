@@ -18,5 +18,6 @@ class NotificationsController < ApplicationController
     @activities = PublicActivity::Activity.includes(:owner, :trackable)
                                           .where(recipient: @enterprise)
                                           .order(created_at: :desc)
+                                          .limit(200)
   end
 end
