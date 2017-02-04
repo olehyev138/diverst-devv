@@ -148,6 +148,7 @@ RSpec.describe InitiativesController, type: :controller do
             describe 'activity record' do
               let(:model) { Initiative.last }
               let(:owner) { user }
+              let(:key) { 'initiative.create' }
 
               before {
                 post_create(group.id, initiative_attrs)

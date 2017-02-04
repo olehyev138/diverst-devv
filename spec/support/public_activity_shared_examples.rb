@@ -2,6 +2,8 @@ RSpec.shared_examples "correct public activity" do
   it 'creates public activity with correct params' do
     activity = PublicActivity::Activity.last
 
+    expect(activity.key).to eq key
+
     expect(activity.trackable_id).to eq model.id
     expect(activity.trackable_type).to eq model.class.to_s
 
