@@ -42,6 +42,7 @@ class InitiativesController < ApplicationController
   def update
     authorize @initiative
     if @initiative.update(initiative_params.except!(:budget_item_id))
+      track_activity(@initiative, :update)
       redirect_to [@group, :initiatives]
     else
       render :edit
