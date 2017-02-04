@@ -15,6 +15,8 @@ class NotificationsController < ApplicationController
   end
 
   def set_activities
-    @activities = PublicActivity::Activity.where(recipient: @enterprise)
+    @activities = PublicActivity::Activity.includes(:owner, :trackable)
+                                          .where(recipient: @enterprise)
+                                          .order(created_at: :desc)
   end
 end
