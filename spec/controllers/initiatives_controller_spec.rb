@@ -145,18 +145,15 @@ RSpec.describe InitiativesController, type: :controller do
               }.to change(PublicActivity::Activity, :count).by(1)
             end
 
-            it 'creates public activity with correct params' do
-              post_create(group.id, initiative_attrs)
-              activity = PublicActivity::Activity.last
-              initiative = Initiative.last
+            describe 'activity record' do
+              let(:model) { Initiative.last }
+              let(:owner) { user }
 
-              expect(activity.trackable_id).to eq initiative.id
-              expect(activity.trackable_type).to eq initiative.class.to_s
+              before {
+                post_create(group.id, initiative_attrs)
+              }
 
-              expect(activity.owner_id).to eq user.id
-              expect(activity.owner_type).to eq user.class.to_s
-
-              expect(activity.recipient).to eq user.enterprise
+              include_examples'correct public activity'
             end
           end
 
