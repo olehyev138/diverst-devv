@@ -13,10 +13,9 @@ class Importers::Users
   def import
     @table.each_with_index do |row, row_index|
       user = parse_from_csv_row(row)
-      if user.new_record? && user.save
-        user.invite!(@manager)
-        @successful_rows << row
-      elsif user.save
+      new_user = user.new_record? ? true : false
+      if user.save
+        user.invite!(@manager) if new_user
         @successful_rows << row
       else
         @failed_rows << {
