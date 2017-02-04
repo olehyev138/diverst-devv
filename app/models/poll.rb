@@ -1,4 +1,6 @@
 class Poll < ActiveRecord::Base
+  include PublicActivity::Common
+
   enum status: [:published, :draft]
 
   has_many :fields, as: :container

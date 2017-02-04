@@ -21,6 +21,7 @@ class PollsController < ApplicationController
 
     if @poll.save
       Notifiers::PollNotifier.new(@poll).notify!
+      track_activity(@poll, :create)
       redirect_to action: :index
     else
       render :edit
@@ -46,6 +47,7 @@ class PollsController < ApplicationController
     authorize @poll
     if @poll.update(poll_params)
       Notifiers::PollNotifier.new(@poll).notify!
+      track_activity(@poll, :update)
       redirect_to @poll
     else
       render :edit
@@ -54,6 +56,8 @@ class PollsController < ApplicationController
 
   def destroy
     authorize @poll
+
+    track_activity(@poll, :destroy)
     @poll.destroy
     redirect_to action: :index
   end

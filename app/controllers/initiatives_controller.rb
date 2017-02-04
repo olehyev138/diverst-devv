@@ -23,6 +23,7 @@ class InitiativesController < ApplicationController
     @initiative.owner_group = @group
 
     if @initiative.save
+      track_activity(@initiative, :create)
       redirect_to action: :index
     else
       render :new
@@ -41,6 +42,7 @@ class InitiativesController < ApplicationController
   def update
     authorize @initiative
     if @initiative.update(initiative_params.except!(:budget_item_id))
+      track_activity(@initiative, :update)
       redirect_to [@group, :initiatives]
     else
       render :edit
@@ -56,8 +58,14 @@ class InitiativesController < ApplicationController
 
   def destroy
     authorize @initiative
-    @initiative.destroy
-    redirect_to action: :index
+
+    track_activity(@initiative, :destroy)
+    if @initiative.destroy
+      redirect_to action: :index
+    else
+      #TODO write error message here
+      redirect_to :back
+    end
   end
 
   def todo

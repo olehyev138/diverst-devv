@@ -20,6 +20,7 @@ class CampaignsController < ApplicationController
     @campaign.owner = current_user
 
     if @campaign.save
+      track_activity(@campaign, :create)
       redirect_to action: :index
     else
       render :edit
@@ -38,6 +39,7 @@ class CampaignsController < ApplicationController
   def update
     authorize @campaign
     if @campaign.update(campaign_params)
+      track_activity(@campaign, :update)
       redirect_to action: :index
     else
       render :edit
@@ -46,6 +48,8 @@ class CampaignsController < ApplicationController
 
   def destroy
     authorize @campaign
+
+    track_activity(@campaign, :destroy)
     @campaign.destroy
     redirect_to action: :index
   end

@@ -136,6 +136,28 @@ RSpec.describe InitiativesController, type: :controller do
             expect(new_initiative.end).to be_within(1).of initiative_attrs[:end]
           end
 
+          describe 'public activity' do
+            enable_public_activity
+
+            it 'creates public activity record' do
+              expect{
+                post_create(group.id, initiative_attrs)
+              }.to change(PublicActivity::Activity, :count).by(1)
+            end
+
+            describe 'activity record' do
+              let(:model) { Initiative.last }
+              let(:owner) { user }
+              let(:key) { 'initiative.create' }
+
+              before {
+                post_create(group.id, initiative_attrs)
+              }
+
+              include_examples'correct public activity'
+            end
+          end
+
           it 'redirects to correct page' do
             post_create(group.id, initiative_attrs)
 
@@ -190,6 +212,28 @@ RSpec.describe InitiativesController, type: :controller do
             expect(updated_initiative.end).to be_within(1).of initiative_attrs[:end]
           end
 
+          describe 'public activity' do
+            enable_public_activity
+
+            it 'creates public activity record' do
+              expect{
+                patch_update(group.id, initiative.id, initiative_attrs)
+              }.to change(PublicActivity::Activity, :count).by(1)
+            end
+
+            describe 'activity record' do
+              let(:model) { Initiative.last }
+              let(:owner) { user }
+              let(:key) { 'initiative.update' }
+
+              before {
+                patch_update(group.id, initiative.id, initiative_attrs)
+              }
+
+              include_examples'correct public activity'
+            end
+          end
+
           it 'redirects to correct page' do
             patch_update(group.id, initiative.id, initiative_attrs)
 
@@ -240,6 +284,28 @@ RSpec.describe InitiativesController, type: :controller do
             expect {
               delete_destroy(group.id, initiative.id)
             }.to change(Initiative, :count).by(-1)
+          end
+
+          describe 'public activity' do
+            enable_public_activity
+
+            it 'creates public activity record' do
+              expect{
+                delete_destroy(group.id, initiative.id)
+              }.to change(PublicActivity::Activity, :count).by(1)
+            end
+
+            describe 'activity record' do
+              let(:model) { Initiative.last }
+              let(:owner) { user }
+              let(:key) { 'initiative.destroy' }
+
+              before {
+                delete_destroy(group.id, initiative.id)
+              }
+
+              include_examples'correct public activity'
+            end
           end
 
           it 'redirects to correct action' do

@@ -3,6 +3,8 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   include Pundit
 
+  include PublicActivity::StoreController
+
   helper_method :events_to_json
 
   protect_from_forgery with: :exception
@@ -12,6 +14,13 @@ class ApplicationController < ActionController::Base
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   protected
+
+  def track_activity(model, activity_name, params={})
+    model.create_activity activity_name,
+                owner: current_user,
+                recipient: current_user.enterprise,
+                params: params
+  end
 
   def not_found!
     fail ActionController::RoutingError.new('Not Found')

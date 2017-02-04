@@ -14,4 +14,10 @@ module ControllerMacros
       sign_in user
     end
   end
+
+  def enable_public_activity
+    before(:each) do
+      PublicActivity.enabled = true
+    end
+  end
 end
