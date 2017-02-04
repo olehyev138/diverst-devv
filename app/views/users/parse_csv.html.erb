@@ -7,13 +7,13 @@
     <div class="card__section">
       <h3>Successful imports</h3>
       <p>
-        <%= pluralize(@successful_rows.count, 'users') %> out of the submitted <%= @table.count %> have been successfully imported. Each new user will soon receive an invitation email asking them to complete their profile<% if !current_user.enterprise.has_enabled_saml? %> and choose a password<% end %>.
+        <%= pluralize(@importer.successful_rows.count, 'users') %> out of the submitted <%= @importer.table.count %> have been successfully imported. Each new user will soon receive an invitation email asking them to complete their profile<% if !current_user.enterprise.has_enabled_saml? %> and choose a password<% end %>.
       </p>
 
       <h3>Unsuccessful imports</h3>
       <p>
         <ul>
-          <% @failed_rows.each do |failed_row| %>
+          <% @importer.failed_rows.each do |failed_row| %>
             <li><strong>Row #<%= failed_row[:row_index] %>: </strong><%= failed_row[:error] %></li>
           <% end %>
         </ul>

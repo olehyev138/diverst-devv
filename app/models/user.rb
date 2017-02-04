@@ -46,11 +46,9 @@ class User < ActiveRecord::Base
   has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: :private
   validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
 
-  # Validation of those fields is temporary disabled
-  # Will have to figure out how importing user behaves
-  # We don't won't user importing to break if first name of a record is missing
-  #validates_presence_of :first_name, :last_name
-  # validates_presence_of :password, unless: Proc.new { |a| a.enterprise.has_enabled_saml? }
+  validates :first_name, presence: true
+  validates :last_name, presence: true
+  # validates :password, presence: true, unless: Proc.new { |a| a.enterprise.has_enabled_saml? }
   # validates_confirmation_of :password, if: Proc.new { |a| a.enterprise.has_enabled_saml? && a.password.present? }
 
   before_validation :generate_password_if_saml
@@ -265,24 +263,6 @@ class User < ActiveRecord::Base
     enterprise.yammer_field_mappings.each do |mapping|
       yammer_value = yammer_user[mapping.yammer_field_name]
       user.info[mapping.diverst_field] = yammer_value unless yammer_value.nil?
-    end
-
-    user
-  end
-
-  # Initializes a user from a CSV row
-  def self.from_csv_row(row, enterprise:)
-    return nil if row[0].nil? || row[1].nil? || row[2].nil? # Require first_name, last_name and email
-
-    user = User.new(
-      first_name: row[0],
-      last_name: row[1],
-      email: row[2],
-      enterprise: enterprise
-    )
-
-    enterprise.fields.each_with_index do |field, i|
-      user.info[field] = field.process_field_value row[3 + i]
     end
 
     user
