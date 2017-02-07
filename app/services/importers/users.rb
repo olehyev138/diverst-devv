@@ -31,7 +31,7 @@ class Importers::Users
   def parse_from_csv_row(row)
     user = update_user(row) || initialize_user(row)
     (0..row.length-1).each do |i|
-      field = Field.where(title: row.headers[i]).first
+      field = @enterprise.fields.where(title: row.headers[i]).first
       user.info[field] = field.process_field_value row[i] if field && !row[i].blank?
     end
     user
