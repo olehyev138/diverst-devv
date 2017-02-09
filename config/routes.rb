@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   end if Rails.env.production?
   mount Sidekiq::Web => '/sidekiq'
 
+  mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
+
   devise_for :users, controllers: { invitations: 'users/invitations' }
 
   get 'omniauth/:provider/callback', to: 'omni_auth#callback'

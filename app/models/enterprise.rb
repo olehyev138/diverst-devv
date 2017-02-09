@@ -44,6 +44,10 @@ class Enterprise < ActiveRecord::Base
   has_attached_file :banner
   validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
 
+  def cdo_message_email_html
+    cdo_message_email.to_s.gsub("\r\n", "<br>")
+  end
+
   def saml_settings
     settings = OneLogin::RubySaml::Settings.new
 
