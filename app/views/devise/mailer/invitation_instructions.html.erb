@@ -4,12 +4,11 @@
 
 <p>
 <% if @resource.enterprise.cdo_message_email.present? %>
-  <%= @resource.enterprise.cdo_message_email %>
+  <%= @resource.enterprise.cdo_message_email.gsub("\r\n", "<br>").html_safe %>
 <% else %>
   At <%= @resource.enterprise.name %>, we want to recognize and celebrate our diversity with our users. We believe this is a core strength that leads to greater alignment. Please share with us a little bit about yourself so we can help you make the important connections that make your work with us more fulfilling and allow us all to celebrate what makes us unique.
 <% end %>
 </p>
-<p>Answer only what you are comfortable with:</p>
 
 <p>* Privacy statement.
 <% if @resource.enterprise.privacy_statement.present? %>
