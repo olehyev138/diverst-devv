@@ -1,6 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe Group do
+  describe 'validations' do
+    let(:group) { FactoryGirl.build_stubbed(:group) }
+
+    it{ expect(group).to validate_presence_of(:name) }
+
+    it{ expect(group).to be_valid }
+  end
+
   describe '#accept_user_to_group' do
     let!(:enterprise) { create(:enterprise) }
     let!(:user) { create(:user, enterprise: enterprise) }
@@ -50,7 +58,6 @@ RSpec.describe Group do
       end
     end
   end
-
 
   describe 'members fetching by type' do
     let(:enterprise) { create :enterprise }
