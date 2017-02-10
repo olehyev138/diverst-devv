@@ -108,7 +108,8 @@ group :development do
   # gem 'flamegraph'
   # gem 'rack-mini-profiler'
   # gem 'stackprof'
-  gem "letter_opener"
+  gem 'letter_opener'
+  gem 'letter_opener_web', '~> 1.3', '>= 1.3.1'
 end
 
 group :production do
