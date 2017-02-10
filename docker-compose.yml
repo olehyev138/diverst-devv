@@ -35,7 +35,7 @@ services:
       - redis:/var/lib/redis/data
 
   elasticsearch:
-    image: elasticsearch:2.2.0
+    image: elasticsearch:2.3.0
     ports:
       - 9200:9200
     volumes:
