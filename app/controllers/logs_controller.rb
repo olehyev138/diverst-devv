@@ -1,4 +1,4 @@
-class NotificationsController < ApplicationController
+class LogsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_enterprise
   before_action :set_activities
