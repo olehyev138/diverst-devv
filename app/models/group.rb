@@ -1,4 +1,6 @@
 class Group < ActiveRecord::Base
+  include PublicActivity::Common
+
   extend Enumerize
 
   enumerize :pending_users, default: :disabled,  in: [

@@ -95,6 +95,28 @@ RSpec.describe GroupsController, type: :controller do
           post_create(group_attrs)
           expect(response).to redirect_to action: :index
         end
+
+        describe 'public activity' do
+          enable_public_activity
+
+          it 'creates public activity record' do
+            expect{
+              post_create(group_attrs)
+            }.to change(PublicActivity::Activity, :count).by(1)
+          end
+
+          describe 'activity record' do
+            let(:model) { Group.last }
+            let(:owner) { user }
+            let(:key) { 'group.create' }
+
+            before {
+              post_create(group_attrs)
+            }
+
+            include_examples'correct public activity'
+          end
+        end
       end
 
       context 'with incorrect params' do

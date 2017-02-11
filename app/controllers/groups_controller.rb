@@ -101,6 +101,7 @@ class GroupsController < ApplicationController
     @group.owner = current_user
 
     if @group.save
+      track_activity(@group, :create)
       redirect_to action: :index
     else
       render :new
