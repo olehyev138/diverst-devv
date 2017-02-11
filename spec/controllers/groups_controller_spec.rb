@@ -62,6 +62,70 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
+  describe 'POST #create' do
+    def post_create(params={a: 1})
+      post :create, group: params
+    end
+
+    context 'with logged in user' do
+      let(:user) { create :user }
+      let(:group_attrs) { attributes_for :group }
+
+      login_user_from_let
+
+      context 'with correct params' do
+        it 'creates group' do
+          expect{
+            post_create(group_attrs)
+          }.to change(Group, :count).by(1)
+        end
+
+        it 'creates correct group' do
+          post_create(group_attrs)
+
+          new_group = Group.last
+
+          expect(new_group.enterprise).to eq user.enterprise
+          expect(new_group.name).to eq group_attrs[:name]
+          expect(new_group.created_at).to be_within(100).of Time.now.in_time_zone
+          expect(new_group.owner).to eq user
+        end
+
+        it 'redirects to correct action' do
+          post_create(group_attrs)
+          expect(response).to redirect_to action: :index
+        end
+      end
+
+      context 'with incorrect params' do
+        it 'does not save the new group' do
+          expect{ post_create() }
+            .to_not change(Group, :count)
+        end
+
+        it 'renders new view' do
+          post_create
+          expect(response).to render_template :new
+        end
+
+        it 'shows error' do
+          post_create
+          group = assigns(:group)
+
+          expect(group.errors).to_not be_empty
+        end
+      end
+    end
+
+    context 'without logged in user' do
+      before { post_create }
+
+      it 'return error' do
+        expect(response).to_not be_success
+      end
+    end
+  end
+
   describe 'Budgeting' do
     let!(:user) { FactoryGirl.create(:user) }
     let!(:group) { FactoryGirl.create(:group, enterprise: user.enterprise) }

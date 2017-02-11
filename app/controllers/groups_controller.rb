@@ -98,11 +98,12 @@ class GroupsController < ApplicationController
     authorize Group
 
     @group = current_user.enterprise.groups.new(group_params)
+    @group.owner = current_user
 
     if @group.save
       redirect_to action: :index
     else
-      render :edit
+      render :new
     end
   end
 
