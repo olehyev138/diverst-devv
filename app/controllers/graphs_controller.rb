@@ -1,5 +1,5 @@
 class GraphsController < ApplicationController
-  before_action :set_collection, except: [:data, :show, :edit, :update, :destroy]
+  before_action :set_collection, except: [:data, :show, :edit, :update, :destroy, :export_csv]
   before_action :set_graph, except: [:index, :new, :create]
 
   layout 'dashboard'
@@ -38,6 +38,12 @@ class GraphsController < ApplicationController
 
   def data
     render json: @graph.data
+  end
+
+  def export_csv
+    strategy = @graph.time_series ? Reports::GraphTimeseries.new(@graph) : Reports::GraphStats.new(@graph)
+    report = Reports::Generator.new(strategy)
+    send_data report.to_csv, filename: "graph_#{ @graph.id }.csv"
   end
 
   def group_population
