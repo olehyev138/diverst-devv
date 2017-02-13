@@ -115,8 +115,7 @@ class UsersController < ApplicationController
       :avatar,
       :email,
       :first_name,
-      :last_name,
-      :job_title
+      :last_name
     )
   end
 end
