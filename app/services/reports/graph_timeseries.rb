@@ -1,4 +1,4 @@
-class Reports::GraphStats
+class Reports::GraphTimeseries
   def initialize
   end
 
