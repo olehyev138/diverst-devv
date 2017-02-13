@@ -116,6 +116,7 @@ class GroupsController < ApplicationController
     authorize @group
 
     if @group.update(group_params)
+      track_activity(@group, :update)
       redirect_to :back
     else
       render :edit

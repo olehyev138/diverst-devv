@@ -148,6 +148,85 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
+  describe 'PATCH #update' do
+    def patch_update( group_id = -1, params = {})
+      patch :update, id: group_id, group: params
+    end
+
+    let(:user) { create :user }
+    let!(:group) { create :group, enterprise: user.enterprise }
+
+    before { set_referrer }
+
+    context 'with logged in user' do
+      login_user_from_let
+
+      context 'with correct params' do
+        let(:group_attrs) { attributes_for :group }
+
+        it 'updates fields' do
+          patch_update(group.id, group_attrs)
+
+          updated_group = Group.find(group.id)
+
+          expect(updated_group.name).to eq group_attrs[:name]
+          expect(updated_group.description).to eq group_attrs[:description]
+        end
+
+        describe 'public activity' do
+          enable_public_activity
+
+          it 'creates public activity record' do
+            expect{
+              patch_update(group.id, group_attrs)
+            }.to change(PublicActivity::Activity, :count).by(1)
+          end
+
+          describe 'activity record' do
+            let(:model) { Group.last }
+            let(:owner) { user }
+            let(:key) { 'group.update' }
+
+            before {
+              patch_update(group.id, group_attrs)
+            }
+
+            include_examples'correct public activity'
+          end
+        end
+
+        it 'redirects to correct page' do
+          patch_update(group.id, group_attrs)
+
+          expect(response).to redirect_to default_referrer
+        end
+      end
+
+      context 'with incorrect params' do
+        before { patch_update(group.id, { name: '' }) }
+
+        it 'does not update indsitiative' do
+          updated_group = Group.find(group.id)
+
+          expect(updated_group.name).to eq group.name
+          expect(updated_group.description).to eq group.description
+        end
+
+        it 'renders edit view' do
+          expect(response).to render_template :edit
+        end
+      end
+    end
+
+    context 'without logged in user' do
+      before { patch_update(group.id) }
+
+      it 'return error' do
+        expect(response).to_not be_success
+      end
+    end
+  end
+
   describe 'Budgeting' do
     let!(:user) { FactoryGirl.create(:user) }
     let!(:group) { FactoryGirl.create(:group, enterprise: user.enterprise) }

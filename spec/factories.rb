@@ -174,7 +174,9 @@ FactoryGirl.define do
   end
 
   factory :group do
-    name 'LGBT'
+    name { Faker::Commerce.department }
+    description { Faker::Hipster.sentence }
+
     enterprise
 
     factory :group_with_users do
