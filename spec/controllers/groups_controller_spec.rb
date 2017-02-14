@@ -227,6 +227,68 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
+  describe 'DELETE #destroy' do
+    def delete_destroy(group_id = -1)
+      delete :destroy, id: group_id
+    end
+
+    let(:user) { create :user }
+    let!(:group) { create :group, enterprise: user.enterprise }
+
+    context 'with logged in user' do
+      login_user_from_let
+
+      context 'with correct params' do
+        it 'deletes initiative' do
+          expect{
+            delete_destroy(group.id)
+          }.to change(Group, :count).by(-1)
+        end
+
+        it 'redirects to correct action' do
+          delete_destroy(group.id)
+
+          expect(response).to redirect_to  action: :index
+        end
+
+          describe 'public activity' do
+            enable_public_activity
+
+            it 'creates public activity record' do
+              expect{
+                delete_destroy(group.id)
+              }.to change(PublicActivity::Activity, :count).by(1)
+            end
+
+            describe 'activity record' do
+              let(:model) { Group.last }
+              let(:owner) { user }
+              let(:key) { 'group.destroy' }
+
+              before {
+                delete_destroy(group.id)
+              }
+
+              include_examples'correct public activity'
+            end
+          end
+      end
+    end
+
+    context 'without logged in user' do
+      it 'return error' do
+        delete_destroy(group.id)
+        expect(response).to_not be_success
+      end
+
+      it 'do not change Group count' do
+        expect {
+          delete_destroy(group.id)
+        }.to_not change(Group, :count)
+      end
+    end
+  end
+
   describe 'Budgeting' do
     let!(:user) { FactoryGirl.create(:user) }
     let!(:group) { FactoryGirl.create(:group, enterprise: user.enterprise) }

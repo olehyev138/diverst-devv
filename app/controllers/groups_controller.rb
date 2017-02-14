@@ -130,8 +130,13 @@ class GroupsController < ApplicationController
   def destroy
     authorize @group
 
-    @group.destroy
-    redirect_to action: :index
+    track_activity(@group, :destroy)
+    if @group.destroy
+      redirect_to action: :index
+    else
+      #TODO write error message here
+      redirect_to :back
+    end
   end
 
   def edit_annual_budget
