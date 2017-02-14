@@ -87,7 +87,10 @@ group :development, :test do
   gem 'byebug' # Debugger
 end
 
-gem 'rspec_junit_formatter', '~> 0.2.3', group: :test # Formats tests for CircleCI
+group :test do
+  gem 'rspec_junit_formatter', '~> 0.2.3'
+  gem 'simplecov', '~> 0.13.0'
+end
 
 group :development do
   gem 'capistrano'

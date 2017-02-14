@@ -45,3 +45,6 @@ spec/examples.txt
 cookbooks/
 
 .byebug_history
+
+# Simplecov files
+/coverage

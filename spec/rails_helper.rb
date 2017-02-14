@@ -16,6 +16,9 @@ require 'support/referrer_helpers.rb'
 require 'public_activity/testing'
 PublicActivity.enabled = false
 
+require 'simplecov'
+SimpleCov.start
+
 Capybara.javascript_driver = :poltergeist
 Capybara.asset_host = 'http://localhost:3000'
 
