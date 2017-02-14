@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :metrics_dashboard do
     enterprise
-    name 'Metrics dashboard'
+    name { Faker::Lorem.sentence(3) }
 
     factory :metrics_dashboard_with_graphs do
       transient do

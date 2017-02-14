@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :policy_group do
-    name "Policy group"
+    name { Faker::Lorem.sentence(3) }
     enterprise
 
     campaigns_index true

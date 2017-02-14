@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :answer_comment do
-    content 'This is a comment.'
+    content { Faker::Lorem.paragraph(2) }
     answer
     association :author, factory: :user
   end

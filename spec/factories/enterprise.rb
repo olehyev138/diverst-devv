@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :enterprise do
-    name 'Hyperion'
+    name { Faker::Company.name }
     created_at { Time.current }
 
     theme nil

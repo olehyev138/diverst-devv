@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :segment do
-    name "Incredible segment"
+    name { Faker::Lorem.sentence(3) }
     enterprise
 
     factory :segment_with_users do

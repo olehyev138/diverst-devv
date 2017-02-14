@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :resource do
-    title 'My Resource'
+    title { Faker::Lorem.sentence(3) }
     file_file_name { 'test.pdf' }
     file_content_type { 'application/pdf' }
     file_file_size { 1024 }

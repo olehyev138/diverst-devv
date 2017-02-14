@@ -1,5 +1,5 @@
 FactoryGirl.define do
   sequence :email_address do |n|
-    "user#{n}@diverst.com"
+    "#{ n }#{ Faker::Internet.email }"
   end
 end

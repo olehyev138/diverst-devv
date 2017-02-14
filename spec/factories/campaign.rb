@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :campaign do
-    title 'My Campaign'
-    description 'Awesome description'
+    title { Faker::Lorem.sentence(3) }
+    description { Faker::Lorem.sentence }
     enterprise
     start Time.zone.local(2015, 11, 10)
     self.end Time.zone.local(2015, 11, 13) # We specify self here since end is a reserved keyword

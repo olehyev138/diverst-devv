@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :group do
-    name 'LGBT'
+    name { Faker::Lorem.sentence(3) }
     enterprise
 
     factory :group_with_users do

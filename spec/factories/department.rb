@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :department do
     enterprise
-    name "IT"
+    name { Faker::Commerce.department }
   end
 end

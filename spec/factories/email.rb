@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :email do
     name 'Awesome Email'
-    slug 'awesome-email'
+    slug { Faker::Internet.slug('awesome email', '-') }
     use_custom_templates true
     custom_html_template '<strong>Hey there</strong>'
     custom_txt_template 'Hey there'

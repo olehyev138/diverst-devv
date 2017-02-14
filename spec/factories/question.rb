@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :question do
-    title 'My Question?'
-    description 'This is a question.'
+    title "#{ Faker::Lorem.sentence(3) }?"
+    description { Faker::Lorem.sentence }
     campaign
 
     factory :question_filled do

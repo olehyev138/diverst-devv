@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :answer do
-    content 'This is an answer.'
+    content { Faker::Lorem.paragraph(2) }
     question
     association :author, factory: :user
     chosen false

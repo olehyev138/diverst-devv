@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :field do
     type 'TextField'
-    title 'My Field'
+    title { Faker::Lorem.sentence(3) }
     gamification_value 1
     show_on_vcard false
     saml_attribute nil
