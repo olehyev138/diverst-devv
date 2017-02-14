@@ -331,6 +331,7 @@ Rails.application.routes.draw do
     resources :graphs, shallow: true do
       member do
         get 'data'
+        get 'export_csv'
       end
     end
   end
