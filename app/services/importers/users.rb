@@ -2,7 +2,9 @@ class Importers::Users
   attr_reader :table, :failed_rows, :successful_rows
 
   def initialize(file, manager)
-    @table = CSV.read file, headers: true
+    @table = CSV.read file, headers: true, header_converters: lambda { |h|
+      h.split.join(" ").downcase
+    }
     @manager = manager
     @enterprise = manager.enterprise
 
@@ -31,14 +33,14 @@ class Importers::Users
   def parse_from_csv_row(row)
     user = update_user(row) || initialize_user(row)
     (0..row.length-1).each do |i|
-      field = @enterprise.fields.where(title: row.headers[i]).first
+      field = @enterprise.fields.where("LOWER(title) = ?", row.headers[i]).first
       user.info[field] = field.process_field_value row[i] if field && !row[i].blank?
     end
     user
   end
 
   def update_user(row)
-    user = User.where(email: row["Email"]).first
+    user = User.where(email: row["email"]).first
     return nil unless user
     user.attributes = user_attributes(row)
     user
@@ -49,6 +51,6 @@ class Importers::Users
   end
 
   def user_attributes(row)
-    { first_name: row["First name"], last_name: row["Last name"], email: row["Email"], job_title: row["Job title"] }
+    { first_name: row["first name"], last_name: row["last name"], email: row["email"] }
   end
 end
