@@ -174,6 +174,7 @@ GEM
       devise (> 3.5.2, <= 4.2)
       rails (< 6)
     diff-lcs (1.3)
+    docile (1.1.5)
     domain_name (0.5.20161129)
       unf (>= 0.0.5, < 1.0.0)
     draper (2.1.0)
@@ -369,7 +370,7 @@ GEM
       guard (~> 2.8)
       guard-compat (~> 1.0)
       multi_json (~> 1.8)
-    hashie (3.5.1)
+    hashie (3.5.3)
     highline (1.7.8)
     houston (2.2.4)
       commander (~> 4.4)
@@ -449,7 +450,7 @@ GEM
       net-ssh (>= 2.6.5)
     net-ssh (4.0.1)
     netrc (0.11.0)
-    newrelic_rpm (3.18.0.329)
+    newrelic_rpm (3.18.1.330)
     nokogiri (1.7.0.1)
       mini_portile2 (~> 2.1.0)
     nokogumbo (1.4.10)
@@ -467,9 +468,9 @@ GEM
       addressable (~> 2.3)
       bcrypt-ruby (~> 3.0)
     oj (2.18.1)
-    omniauth (1.4.1)
-      hashie (>= 1.2, < 4)
-      rack (>= 1.0, < 3)
+    omniauth (1.5.0)
+      hashie (~> 3.5.0, < 4)
+      rack (>= 1.6.2, < 3)
     omniauth-linkedin-oauth2 (0.1.5)
       omniauth (~> 1.0)
       omniauth-oauth2
@@ -553,7 +554,7 @@ GEM
     rb-fsevent (0.9.8)
     rb-inotify (0.9.8)
       ffi (>= 0.5.0)
-    rb-readline (0.5.3)
+    rb-readline (0.5.4)
     rbvmomi (1.9.4)
       builder (~> 3.2)
       json (>= 1.8)
@@ -617,6 +618,11 @@ GEM
     simple_form (3.4.0)
       actionpack (> 4, < 5.1)
       activemodel (> 4, < 5.1)
+    simplecov (0.13.0)
+      docile (~> 1.1.0)
+      json (>= 1.8, < 3)
+      simplecov-html (~> 0.10.0)
+    simplecov-html (0.10.0)
     sinatra (1.4.8)
       rack (~> 1.5)
       rack-protection (~> 1.4)
@@ -636,7 +642,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    sshkit (1.11.5)
+    sshkit (1.12.0)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
     sshkit-interactive (0.2.0)
@@ -766,6 +772,7 @@ DEPENDENCIES
   sidekiq (< 5)
   simple_form (~> 3.2, >= 3.2.1)
   simple_form_fancy_uploads!
+  simplecov (~> 0.13.0)
   sinatra (~> 1.4, >= 1.4.7)
   spring (~> 1.6.2)
   spring-commands-rspec
@@ -778,5 +785,8 @@ DEPENDENCIES
   validate_url (~> 1.0, >= 1.0.2)
   yam (~> 2.5)
 
+RUBY VERSION
+   ruby 2.3.0p0
+
 BUNDLED WITH
-   1.14.3
+   1.14.4
