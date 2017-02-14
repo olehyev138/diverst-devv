@@ -98,11 +98,13 @@ class GroupsController < ApplicationController
     authorize Group
 
     @group = current_user.enterprise.groups.new(group_params)
+    @group.owner = current_user
 
     if @group.save
+      track_activity(@group, :create)
       redirect_to action: :index
     else
-      render :edit
+      render :new
     end
   end
 
@@ -114,6 +116,7 @@ class GroupsController < ApplicationController
     authorize @group
 
     if @group.update(group_params)
+      track_activity(@group, :update)
       redirect_to :back
     else
       render :edit
@@ -127,8 +130,13 @@ class GroupsController < ApplicationController
   def destroy
     authorize @group
 
-    @group.destroy
-    redirect_to action: :index
+    track_activity(@group, :destroy)
+    if @group.destroy
+      redirect_to action: :index
+    else
+      #TODO write error message here
+      redirect_to :back
+    end
   end
 
   def edit_annual_budget

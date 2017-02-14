@@ -11,6 +11,7 @@ require 'capybara/poltergeist'
 require 'sidekiq/testing'
 
 require 'support/controller_macros.rb'
+require 'support/referrer_helpers.rb'
 
 require 'public_activity/testing'
 PublicActivity.enabled = false
@@ -45,6 +46,7 @@ RSpec.configure do |config|
   config.include(Shoulda::Matchers::ActiveRecord, type: :model)
   config.include Devise::TestHelpers, :type => :controller
   config.extend ControllerMacros, :type => :controller
+  config.include ReferrerHelpers, :type => :controller
   config.include CsvHelpers
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures

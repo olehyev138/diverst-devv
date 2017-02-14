@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe NotificationsController, type: :controller do
+RSpec.describe LogsController, type: :controller do
   describe 'GET #index' do
     def get_index
       get :index
