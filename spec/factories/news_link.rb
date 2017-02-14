@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :news_link do
-    title { Faker::Lorem.sentence(3) }
+    title "New link"
     description { Faker::Lorem.sentence(3) }
     url { Faker::Internet.url }
 

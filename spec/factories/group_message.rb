@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :group_message do
-    subject { Faker::Lorem.sentence(3) }
+    subject "Group message subject"
     content { Faker::Lorem.sentence }
 
     association :group, factory: :group_with_users
