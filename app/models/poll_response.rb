@@ -12,4 +12,22 @@ class PollResponse < ActiveRecord::Base
       record_id: user.id
     )
   end
+
+  after_commit on: [:update] do
+    IndexElasticsearchJob.perform_later(
+      model_name: 'User',
+      operation: 'update',
+      index: User.es_index_name(enterprise: poll.enterprise),
+      record_id: user.id
+    )
+  end
+
+  after_commit on: [:destroy] do
+    IndexElasticsearchJob.perform_later(
+      model_name: 'User',
+      operation: 'delete',
+      index: User.es_index_name(enterprise: poll.enterprise),
+      record_id: user.id
+    )
+  end
 end
