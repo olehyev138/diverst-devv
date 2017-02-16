@@ -15,10 +15,11 @@ class Segment < ActiveRecord::Base
 
   accepts_nested_attributes_for :rules, reject_if: :all_blank, allow_destroy: true
 
-  after_commit :update_cached_members
+  after_commit :update_indexes
 
-  def update_cached_members
+  def update_indexes
     CacheSegmentMembersJob.perform_later self
+    RebuildElasticsearchIndexJob.perform_now(model_name: 'User', enterprise: enterprise)
   end
 
   def self.update_all_members
