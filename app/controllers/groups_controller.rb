@@ -147,6 +147,7 @@ class GroupsController < ApplicationController
     authorize @group.enterprise, :update?
 
     if @group.update(annual_budget_params)
+      track_activity(@group, :annual_budget_update)
       redirect_to edit_budgeting_enterprise_path(@group.enterprise)
     else
       redirect_to :back
