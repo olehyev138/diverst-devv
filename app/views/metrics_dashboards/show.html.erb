@@ -29,6 +29,7 @@
           <div class="card__section">
             <div class="card__action">
               <%= link_to "Edit", edit_graph_path(graph) %> -
+              <%= link_to "Export CSV", export_csv_graph_path(graph) %> -
               <%= link_to "Remove", graph_path(graph), method: :delete, class: "error" %>
             </div>
             <h4 class="no-margin"><%= graph.title %></h4>

@@ -45,6 +45,9 @@
       <div class="card">
         <div class="card__section">
           <h4>ERG population</h4>
+          <div class="card__action">
+            <%= link_to "Export CSV", group_population_generic_graphs_path(format: :csv) %>
+          </div>
           <div class="graph" data-graph-id="group_population"></div>
         </div>
       </div>
@@ -54,6 +57,9 @@
       <div class="card">
         <div class="card__section">
           <h4>Segment population</h4>
+          <div class="card__action">
+            <%= link_to "Export CSV", segment_population_generic_graphs_path(format: :csv) %>
+          </div>
           <div class="graph" data-graph-id="segment_population"></div>
         </div>
       </div>
@@ -63,6 +69,9 @@
       <div class="card">
         <div class="card__section">
           <h4>Events created in the last 30 days</h4>
+          <div class="card__action">
+            <%= link_to "Export CSV", events_created_generic_graphs_path(format: :csv) %>
+          </div>
           <div class="graph" data-graph-id="events_created"></div>
         </div>
       </div>
@@ -72,6 +81,9 @@
       <div class="card">
         <div class="card__section">
           <h4>Messages sent in the last 30 days</h4>
+          <div class="card__action">
+            <%= link_to "Export CSV", messages_sent_generic_graphs_path(format: :csv) %>
+          </div>
           <div class="graph" data-graph-id="messages_sent"></div>
         </div>
       </div>
