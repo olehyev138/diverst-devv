@@ -8,7 +8,10 @@ Rails.application.routes.draw do
 
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
-  devise_for :users, controllers: { invitations: 'users/invitations' }
+  devise_for :users, controllers: {
+    invitations: 'users/invitations',
+    sessions: 'users/sessions'
+  }
 
   get 'omniauth/:provider/callback', to: 'omni_auth#callback'
 
