@@ -15,7 +15,7 @@ class Reports::GraphStats
 
   def get_body
     body = []
-    if @graph.has_aggregation?
+    if @graph.has_aggregation? || @graph.field.numeric?
       @graph_content[:categories].each_with_index do |category, i|
         body[i] = [category] + @graph_content[:series].map{ |s| s[:data][i] }
       end
