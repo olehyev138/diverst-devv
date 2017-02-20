@@ -93,6 +93,9 @@
       <div class="card">
         <div class="card__section">
           <h4># of employees over time</h4>
+          <div class="card__action">
+            <%= link_to "Export CSV", date_histogram_users_path(format: :csv) %>
+          </div>
           <div id="users-date-histogram"></div>
         </div>
       </div>

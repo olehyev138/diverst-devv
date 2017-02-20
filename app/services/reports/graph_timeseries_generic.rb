@@ -1,7 +1,6 @@
-class Reports::GraphGeneric < Reports::GraphStats
+class Reports::GraphTimeseriesGeneric
   def initialize(options = {})
     @title = options[:title]
-    @categories = options[:categories]
     @data = options[:data]
   end
 
@@ -10,6 +9,6 @@ class Reports::GraphGeneric < Reports::GraphStats
   end
 
   def get_body
-    @categories.zip @data
+    @data
   end
 end

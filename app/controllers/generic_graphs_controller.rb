@@ -19,7 +19,7 @@ class GenericGraphsController < ApplicationController
         }
       }
       format.csv {
-        strategy = Reports::GraphGeneric.new(title: 'Number of users ERG', categories: categories, data: data)
+        strategy = Reports::GraphStatsGeneric.new(title: 'Number of users ERG', categories: categories, data: data)
         report = Reports::Generator.new(strategy)
         send_data report.to_csv, filename: "graph_group_population.csv"
       }
@@ -46,7 +46,7 @@ class GenericGraphsController < ApplicationController
         }
       }
       format.csv {
-        strategy = Reports::GraphGeneric.new(title: 'Number of users by segment', categories: categories, data: data)
+        strategy = Reports::GraphStatsGeneric.new(title: 'Number of users by segment', categories: categories, data: data)
         report = Reports::Generator.new(strategy)
         send_data report.to_csv, filename: "graph_segment_population.csv"
       }
@@ -74,7 +74,7 @@ class GenericGraphsController < ApplicationController
         }
       }
       format.csv {
-        strategy = Reports::GraphGeneric.new(title: 'Number of events created ERG', categories: categories, data: data)
+        strategy = Reports::GraphStatsGeneric.new(title: 'Number of events created ERG', categories: categories, data: data)
         report = Reports::Generator.new(strategy)
         send_data report.to_csv, filename: "graph_events_created.csv"
       }
@@ -102,7 +102,7 @@ class GenericGraphsController < ApplicationController
         }
       }
       format.csv {
-        strategy = Reports::GraphGeneric.new(title: 'Number of messages sent ERG', categories: categories, data: data)
+        strategy = Reports::GraphStatsGeneric.new(title: 'Number of messages sent ERG', categories: categories, data: data)
         report = Reports::Generator.new(strategy)
         send_data report.to_csv, filename: "graph_messages_sent.csv"
       }
