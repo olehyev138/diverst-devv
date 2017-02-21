@@ -24,7 +24,9 @@
 
       <div class="card__section card__section--border">
         <p class="field__hint">Choose the <strong>event</strong> you want to target within these ERGs</p>
-        <%= f.association :initiative, collection: @poll.enterprise.initiatives.recent, input_html: { class: "select2" }, label: false %>
+        <%= f.association :initiative, collection: @poll.enterprise.initiatives.recent,
+          include_blank: true, selected: @poll.initiative.try(:id) || params[:initiative_id],
+          input_html: { class: "select2" }, label: false %>
       </div>
     </div>
 
