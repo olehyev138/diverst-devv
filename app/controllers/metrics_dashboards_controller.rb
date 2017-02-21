@@ -15,9 +15,10 @@ class MetricsDashboardsController < ApplicationController
     @metrics_dashboard.owner = current_user
 
     if @metrics_dashboard.save
+      track_activity(@metrics_dashboard, :create)
       redirect_to @metrics_dashboard
     else
-      render :edit
+      render :new
     end
   end
 

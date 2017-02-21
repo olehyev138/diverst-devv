@@ -1,4 +1,6 @@
 class MetricsDashboard < ActiveRecord::Base
+  include PublicActivity::Common
+
   belongs_to :enterprise, inverse_of: :metrics_dashboards
   belongs_to :owner, class_name: "User"
   has_many :graphs, as: :collection
