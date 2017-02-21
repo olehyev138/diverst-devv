@@ -9,6 +9,15 @@ RSpec.describe Initiative, type: :model do
     it{ expect(initiative).to have_many(:resources) }
   end
 
+  describe ".recent" do
+    let!(:past_initiative){ create(:initiative, created_at: 61.days.ago) }
+    let!(:recent_initiative){ create(:initiative, created_at: 1.day.ago) }
+
+    it "return initiatives created in the last 60 days" do
+      expect(Initiative.recent).to eq [recent_initiative]
+    end
+  end
+
   describe ".initiative_date" do
     let(:initiative){ build_stubbed(:initiative) }
 
