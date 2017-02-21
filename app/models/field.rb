@@ -41,6 +41,10 @@ class Field < ActiveRecord::Base
     %w(SelectField CheckboxField NumericField).include? type
   end
 
+  def numeric?
+    type == "NumericField"
+  end
+
   def format_value_name(value)
     value
   end

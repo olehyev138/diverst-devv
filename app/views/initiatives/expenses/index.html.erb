@@ -87,6 +87,9 @@
     </div>
   </div>
   <div class="card__section card__section--border">
+    <div class="card__action">
+      <%= link_to "Export CSV", time_series_group_initiative_expenses_path(format: :csv) %>
+    </div>
     <div class="graph js-expenses-graph"></div>
   </div>
 </div>

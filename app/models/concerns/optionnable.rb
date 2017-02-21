@@ -77,11 +77,11 @@ module Optionnable
           }
         }
       },
-      sample: true
+      sample: false
     )
 
     execute_elasticsearch_query(
-      index: Sample.es_index_name(enterprise: container.enterprise),
+      index: User.es_index_name(enterprise: container.enterprise),
       segments: segments,
       search_hash: {
         aggs: aggs
@@ -248,12 +248,8 @@ module Optionnable
 
   def highcharts_timeseries(segments:)
     data = elastic_timeseries(segments: segments)
-
-    ap data
-
     series = data['aggregations']['terms']['buckets'].map do |term_bucket|
       time_buckets = term_bucket['date_histogram']['buckets']
-      other_docs_count = term_bucket['date_histogram']['sum_other_doc_count']
 
       term_data = time_buckets.map do |time_bucket|
         [

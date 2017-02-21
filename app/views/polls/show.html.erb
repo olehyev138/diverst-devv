@@ -58,7 +58,7 @@
               <% end %>
               <h4 class="no-margin"><%= truncate(graph.title, length: 30) %></h4>
               <% if !graph.aggregation.nil? %><small><%= aggregation_text(graph) %></small><% end %>
-              <div class="graph" data-graph-id="<%= graph.id %>"></div>
+              <div class="graph" data-graph-id="<%= graph.id %>" data-time-series="<%= true if graph.time_series %>"></div>
             </div>
           </div>
         </div>
@@ -130,7 +130,18 @@
 
     // Graphs
     var graphs = $('.graph').map(function() {
-      return new Graph('/graphs/' + $(this).data('graph-id') + '/data', $(this));
+      if($(this).data('time-series')) {
+        return new TimeSeriesGraph(
+          {
+            dataUrl: '/graphs/' + $(this).data('graph-id') + '/data',
+            element: $(this),
+            title: ''
+          }
+        );
+      }
+      else {
+        return new Graph('/graphs/' + $(this).data('graph-id') + '/data', $(this));
+      }
     });
 
     // TODO: This doesnt exist anymore. We should have a way to reincorporate it.
