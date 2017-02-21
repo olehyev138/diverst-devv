@@ -1,4 +1,5 @@
 class MetricsDashboardsController < ApplicationController
+  before_action :authenticate_user!
   after_action :verify_authorized
   before_action :set_metrics_dashboard, except: [:index, :new, :create]
 
