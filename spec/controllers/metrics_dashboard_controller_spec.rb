@@ -110,4 +110,65 @@ RSpec.describe MetricsDashboardsController, type: :controller do
       end
     end
   end
+
+  describe 'PATCH #update' do
+    def patch_update( id = -1, params = {})
+      patch :update, id: id, metrics_dashboard: params
+    end
+
+    let(:user) { create :user }
+    let!(:metrics_dashboard) { create :metrics_dashboard, enterprise: user.enterprise, owner: user }
+
+    context 'with logged in user' do
+      login_user_from_let
+
+      context 'with correct params' do
+        let(:new_md_params) { attributes_for :metrics_dashboard }
+
+        it 'updates fields' do
+          patch_update(metrics_dashboard.id, new_md_params)
+          updated_md = MetricsDashboard.find(metrics_dashboard.id)
+
+          expect(updated_md.name).to eq new_md_params[:name]
+          expect(updated_md.enterprise).to eq user.enterprise
+        end
+
+        describe 'public activity' do
+          enable_public_activity
+
+          it 'creates public activity record' do
+            expect{
+              patch_update(metrics_dashboard.id, new_md_params)
+            }.to change(PublicActivity::Activity, :count).by(1)
+          end
+
+          describe 'activity record' do
+            let(:model) { MetricsDashboard.last }
+            let(:owner) { user }
+            let(:key) { 'metrics_dashboard.update' }
+
+            before {
+              patch_update(metrics_dashboard.id, new_md_params)
+            }
+
+            include_examples'correct public activity'
+          end
+        end
+
+        it 'redirects to correct page' do
+          patch_update(metrics_dashboard.id, new_md_params)
+
+          expect(response).to redirect_to action: :index
+        end
+      end
+    end
+
+    context 'without logged in user' do
+      before { patch_update(metrics_dashboard.id, name: 'blah') }
+
+      it 'return error' do
+        expect(response).to_not be_success
+      end
+    end
+  end
 end

@@ -53,6 +53,7 @@ class MetricsDashboardsController < ApplicationController
     authorize @metrics_dashboard
 
     if @metrics_dashboard.update(metrics_dashboard_params)
+      track_activity(@metrics_dashboard, :update)
       redirect_to action: :index
     else
       render :edit
