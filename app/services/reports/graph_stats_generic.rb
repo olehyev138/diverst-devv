@@ -1,4 +1,4 @@
-class Reports::GraphGeneric < Reports::GraphStats
+class Reports::GraphStatsGeneric
   def initialize(options = {})
     @title = options[:title]
     @categories = options[:categories]

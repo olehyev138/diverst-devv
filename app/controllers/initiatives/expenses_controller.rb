@@ -31,17 +31,25 @@ class Initiatives::ExpensesController < ApplicationController
   def time_series
     authorize InitiativeExpense, :index?
 
-    highcharts_data = @initiative.expenses_highcharts_history(
+    data = @initiative.expenses_highcharts_history(
       from: params[:from] ? Time.at(params[:from].to_i / 1000) : 1.year.ago,
       to: params[:to] ? Time.at(params[:to].to_i / 1000) : Time.current
     )
-
-    render json: {
-      highcharts: [{
-        name: "Expenses",
-        data: highcharts_data
-      }]
-    }
+    respond_to do |format|
+      format.json {
+        render json: {
+          highcharts: [{
+            name: "Expenses",
+            data: data
+          }]
+        }
+      }
+      format.csv {
+        strategy = Reports::GraphTimeseriesGeneric.new(title: 'Expenses over time', data: data)
+        report = Reports::Generator.new(strategy)
+        send_data report.to_csv, filename: "expenses.csv"
+      }
+    end
   end
 
   def show
