@@ -64,6 +64,7 @@ class MetricsDashboardsController < ApplicationController
   def destroy
     authorize @metrics_dashboard
 
+    track_activity(@metrics_dashboard, :destroy)
     @metrics_dashboard.destroy
     redirect_to action: :index
   end

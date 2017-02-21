@@ -171,4 +171,66 @@ RSpec.describe MetricsDashboardsController, type: :controller do
       end
     end
   end
+
+  describe 'DELETE #destroy' do
+    def delete_destroy(id = -1)
+      delete :destroy, id: id
+    end
+
+    let(:user) { create :user }
+    let!(:metrics_dashboard) { create :metrics_dashboard, enterprise: user.enterprise, owner: user }
+
+    context 'with logged in user' do
+      login_user_from_let
+
+      context 'with correct params' do
+        it 'deletes initiative' do
+          expect{
+            delete_destroy(metrics_dashboard.id)
+          }.to change(MetricsDashboard, :count).by(-1)
+        end
+
+        it 'redirects to correct action' do
+          delete_destroy(metrics_dashboard.id)
+
+          expect(response).to redirect_to  action: :index
+        end
+
+          describe 'public activity' do
+            enable_public_activity
+
+            it 'creates public activity record' do
+              expect{
+                delete_destroy(metrics_dashboard.id)
+              }.to change(PublicActivity::Activity, :count).by(1)
+            end
+
+            describe 'activity record' do
+              let(:model) { MetricsDashboard.last }
+              let(:owner) { user }
+              let(:key) { 'metrics_dashboard.destroy' }
+
+              before {
+                delete_destroy(metrics_dashboard.id)
+              }
+
+              include_examples'correct public activity'
+            end
+          end
+      end
+    end
+
+    context 'without logged in user' do
+      it 'return error' do
+        delete_destroy(metrics_dashboard.id)
+        expect(response).to_not be_success
+      end
+
+      it 'do not change count' do
+        expect {
+          delete_destroy(metrics_dashboard.id)
+        }.to_not change(MetricsDashboard, :count)
+      end
+    end
+  end
 end
