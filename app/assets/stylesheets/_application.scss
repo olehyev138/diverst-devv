@@ -3,7 +3,9 @@
 @import
 "select2/dist/css/select2",
 "pikaday-time/scss/pikaday",
-"tooltipster/src/css/tooltipster",
+"tooltipster/dist/css/tooltipster.core.min",
+"tooltipster/dist/css/tooltipster.bundle.min",
+"tooltipster/dist/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-borderless.min",
 "fullcalendar/dist/fullcalendar";
 
 // Partials
