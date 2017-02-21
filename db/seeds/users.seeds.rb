@@ -75,7 +75,8 @@ after :enterprise do
 
     global_settings_manage: true,
     admin_pages_view: true,
-    budget_approval: true
+    budget_approval: true,
+    logs_view: true
   )
 
   # Create our own users
