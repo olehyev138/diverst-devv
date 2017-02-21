@@ -7,6 +7,8 @@ class MetricsDashboard < ActiveRecord::Base
   has_many :groups_metrics_dashboards
   has_many :groups, through: :groups_metrics_dashboards
 
+  validates_presence_of :name
+
   # Returns a query to the list of users targeted by the dashboard
   def target
     if segments.empty?
