@@ -88,7 +88,12 @@
                               <div class="flex-row__cell flex-row__cell--grow metric">
                                 <span class="metric__title"><%= field.title %></span>
                                 <h4 class="metric__value"><%= last_update.info[field] || "N/A" %></h4>
-                                <div class="metric__sparkline js-sparkline" data-initiative-id="<%= initiative.id %>" data-field-id="<%= field.id %>"></div>
+                                <div
+                                  class="metric__sparkline graph"
+                                  data-url="<%= time_series_group_initiative_field_path(@group, initiative, field) %>"
+                                  data-title="Updates over time"
+                                  >
+                                </div>
                               </div>
                             <% end %>
                           </div>
@@ -151,18 +156,6 @@
 <script>
   $(document).on('page:change', function() {
     $(document).off('page:change');
-
-    $('.js-sparkline').each(function() {
-      var url = '/groups/<%= @group.id %>/initiatives/' + $(this).data('initiative-id') + '/fields/' + $(this).data('field-id') + '/time_series';
-      new TimeSeriesGraph({
-        dataUrl: url,
-        element: $(this),
-        title: $(this).data('field-title'),
-        from: moment().startOf('year'),
-        to: moment(),
-        spark: true
-      })
-    });
 
     $('#js-group-select').change(function() {
       location = "/groups/" + $(this).find(":selected").val() + '/initiatives';

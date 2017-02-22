@@ -90,16 +90,12 @@
     <div class="card__action">
       <%= link_to "Export CSV", time_series_group_initiative_expenses_path(format: :csv) %>
     </div>
-    <div class="graph js-expenses-graph"></div>
+    <div
+      class="graph"
+      data-url="<%= time_series_group_initiative_expenses_path(@group, @initiative) %>"
+      data-title="Expenses over time"
+      data-time-series="true"
+      >
+    </div>
   </div>
 </div>
-
-<script>
-  var url = '/groups/<%= @group.id %>/initiatives/<%= @initiative.id %>/expenses/time_series';
-
-  new TimeSeriesGraph({
-    dataUrl: url,
-    element: $('.js-expenses-graph').eq(0),
-    title: 'Expenses over time'
-  });
-</script>
