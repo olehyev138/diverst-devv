@@ -1,6 +1,6 @@
 class CampaignsController < ApplicationController
   before_action :set_campaign, only: [:edit, :update, :destroy, :show,
-    :contributions_per_erg, :top_performers, :valuable_questions]
+    :contributions_per_erg, :top_performers]
   after_action :verify_authorized
 
   layout :resolve_layout
@@ -92,26 +92,6 @@ class CampaignsController < ApplicationController
       }
       format.csv {
         strategy = Reports::GraphStatsGeneric.new(title: 'Top performers',
-          categories: data[:categories], data: data[:series].map{ |d| d[:data] }.flatten)
-        report = Reports::Generator.new(strategy)
-        send_data report.to_csv, filename: "top_performers.csv"
-      }
-    end
-  end
-
-  def valuable_questions
-    authorize @campaign, :show?
-
-    data = @campaign.valuable_questions
-    respond_to do |format|
-      format.json {
-        render json: {
-          highcharts: data,
-          type: 'bar'
-        }
-      }
-      format.csv {
-        strategy = Reports::GraphStatsGeneric.new(title: 'Most valuable questions',
           categories: data[:categories], data: data[:series].map{ |d| d[:data] }.flatten)
         report = Reports::Generator.new(strategy)
         send_data report.to_csv, filename: "top_performers.csv"

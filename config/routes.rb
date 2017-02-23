@@ -262,7 +262,6 @@ Rails.application.routes.draw do
     member do
       get 'contributions_per_erg'
       get 'top_performers'
-      get 'valuable_questions'
     end
   end
 

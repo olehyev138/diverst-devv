@@ -85,18 +85,6 @@ class Campaign < ActiveRecord::Base
     }
   end
 
-  def valuable_questions
-    {
-      series: [{
-        name: "Value of contributions",
-        data: questions.map{|q| q.answers.sum(:value) }
-      }],
-      categories: questions.map{|q| q.title },
-      xAxisTitle: 'ERG',
-      yAxisTitle: 'Total value of contributions'
-    }
-  end
-
   # Returns the % of questions that have been closed
   def progression
     return 0 if questions.count == 0
