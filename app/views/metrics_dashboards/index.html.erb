@@ -48,7 +48,7 @@
           <div class="card__action">
             <%= link_to "Export CSV", group_population_generic_graphs_path(format: :csv) %>
           </div>
-          <div class="graph" data-graph-id="group_population"></div>
+          <div class="graph" data-url="<%= group_population_generic_graphs_path %>"></div>
         </div>
       </div>
     </div>
@@ -60,7 +60,7 @@
           <div class="card__action">
             <%= link_to "Export CSV", segment_population_generic_graphs_path(format: :csv) %>
           </div>
-          <div class="graph" data-graph-id="segment_population"></div>
+          <div class="graph" data-url="<%= segment_population_generic_graphs_path %>"></div>
         </div>
       </div>
     </div>
@@ -72,7 +72,7 @@
           <div class="card__action">
             <%= link_to "Export CSV", events_created_generic_graphs_path(format: :csv) %>
           </div>
-          <div class="graph" data-graph-id="events_created"></div>
+          <div class="graph" data-url="<%= events_created_generic_graphs_path %>"></div>
         </div>
       </div>
     </div>
@@ -84,7 +84,7 @@
           <div class="card__action">
             <%= link_to "Export CSV", messages_sent_generic_graphs_path(format: :csv) %>
           </div>
-          <div class="graph" data-graph-id="messages_sent"></div>
+          <div class="graph" data-url="<%= messages_sent_generic_graphs_path %>"></div>
         </div>
       </div>
     </div>
@@ -96,7 +96,7 @@
           <div class="card__action">
             <%= link_to "Export CSV", date_histogram_users_path(format: :csv) %>
           </div>
-          <div id="users-date-histogram"></div>
+          <div class="graph" data-url="<%= date_histogram_users_path %>" data-date-histogram="true"></div>
         </div>
       </div>
     </div>
@@ -140,11 +140,3 @@
     </div>
   </div>
 </div>
-
-<script>
-  var graphs = $('.graph').map(function() {
-    return new Graph('/generic_graphs/' + $(this).data('graph-id'), $(this));
-  });
-
-  new DateHistogramGraph('/users/date_histogram', $('#users-date-histogram'))
-</script>

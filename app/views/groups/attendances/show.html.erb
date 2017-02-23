@@ -14,7 +14,10 @@
       <div class="card">
         <div class="card__section">
           <h4>Attendance by ERG</h4>
-          <div class="graph js-erg-graph"></div>
+          <div
+            data-url="<%= erg_graph_group_event_attendance_path(@group, @event) %>"
+            class="graph">
+          </div>
         </div>
       </div>
     </div>
@@ -23,7 +26,10 @@
       <div class="card">
         <div class="card__section">
           <h4>Attendance by segment</h4>
-          <div class="graph js-segment-graph"></div>
+          <div
+            data-url="<%= segment_graph_group_event_attendance_path(@group, @event) %>"
+            class="graph">
+          </div>
         </div>
       </div>
     </div>
@@ -54,10 +60,4 @@
   $('#attendees-table').dataTable(Utility.mergeWithDTDefaults({
     order: [[1, "desc"]]
   }));
-
-  var url = '<%= erg_graph_group_event_attendance_path(@group, @event) %>';
-  new Graph(url, $('.js-erg-graph').eq(0));
-
-  var url = '<%= segment_graph_group_event_attendance_path(@group, @event) %>';
-  new Graph(url, $('.js-segment-graph').eq(0));
 </script>
