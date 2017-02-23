@@ -84,7 +84,10 @@
       <div class="card">
         <div class="card__section">
           <h3>Most valuable questions</h3>
-          <div id="js-valuable-questions"></div>
+          <div class="card__action">
+            <%= link_to "Export CSV", valuable_questions_campaign_path(@campaign, format: :csv) %>
+          </div>
+          <div class="graph" data-url="<%= valuable_questions_campaign_path(@campaign) %>"></div>
         </div>
       </div>
     </div>
@@ -95,10 +98,6 @@
 <script>
   $(document).on('page:change', function() {
     $(document).off('page:change');
-
-    // var graphs = $('.graph').map(function() {
-    //   return new Graph('/campaigns/<%= @campaign.id %>/' + $(this).data('graph-id'), $(this));
-    // });
 
     $('#js-valuable-contributions').highcharts({
       chart: {
@@ -141,52 +140,6 @@
         shared: true,
         useHTML: true
       },
-      credits: {
-        enabled: false
-      },
-      colors: ['<%= current_user.enterprise.theme.try(:charts_color) || "#7B77C9" %>', '#F15E57', '#FE6D4B', '#9FD661', '#40D0AD', '#48C0EB', '#5A9AEF', '#EE85C1']
-    });
-
-    $('#js-valuable-questions').highcharts({
-      chart: {
-        type: 'bar',
-        style: {
-          fontFamily: 'Helvetica Neue, sans-serif'
-        }
-      },
-      title: {
-        text: ''
-      },
-      xAxis: {
-        categories: [<%= @campaign.questions.map{|q| '"' + q.title + '"' }.join(', ').html_safe %>],
-        title: {
-          text: "ERG"
-        }
-      },
-      yAxis: {
-        min: 0,
-        title: {
-          text: 'Total value of contributions'
-        },
-        allowDecimals: false
-      },
-      plotOptions: {
-        series: {
-          stacking: 'normal'
-        }
-      },
-      tooltip: {
-        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-          '<td style="padding:0"><b>${point.y}</b></td></tr>',
-        footerFormat: '</table>',
-        shared: true,
-        useHTML: true
-      },
-      series: [{
-        name: "Value of contributions",
-        data: [<%= @campaign.questions.map{|q| "#{q.answers.sum(:value)}" }.join(', ').html_safe %>]
-      }],
       credits: {
         enabled: false
       },
