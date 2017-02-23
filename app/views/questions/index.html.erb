@@ -51,7 +51,10 @@
       <div class="card">
         <div class="card__section">
           <h3>Contributions per ERG</h3>
-          <div class="graph" data-graph-id="contributions_per_erg"></div>
+          <div class="card__action">
+            <%= link_to "Export CSV", contributions_per_erg_campaign_path(@campaign, format: :csv) %>
+          </div>
+          <div class="graph" data-url="<%= contributions_per_erg_campaign_path(@campaign) %>"></div>
         </div>
       </div>
     </div>
@@ -59,7 +62,10 @@
       <div class="card">
         <div class="card__section">
           <h3>Top performers</h3>
-          <div class="graph" data-graph-id="top_performers"></div>
+          <div class="card__action">
+            <%= link_to "Export CSV", top_performers_campaign_path(@campaign, format: :csv) %>
+          </div>
+          <div class="graph" data-url="<%= top_performers_campaign_path(@campaign) %>"></div>
         </div>
       </div>
     </div>
@@ -90,9 +96,9 @@
   $(document).on('page:change', function() {
     $(document).off('page:change');
 
-    var graphs = $('.graph').map(function() {
-      return new Graph('/campaigns/<%= @campaign.id %>/' + $(this).data('graph-id'), $(this));
-    });
+    // var graphs = $('.graph').map(function() {
+    //   return new Graph('/campaigns/<%= @campaign.id %>/' + $(this).data('graph-id'), $(this));
+    // });
 
     $('#js-valuable-contributions').highcharts({
       chart: {

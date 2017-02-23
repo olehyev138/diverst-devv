@@ -56,18 +56,46 @@ class CampaignsController < ApplicationController
 
   def contributions_per_erg
     authorize @campaign, :show?
-    render json: {
-      highcharts: @campaign.contributions_per_erg,
-      type: 'pie'
-    }
+
+    data = @campaign.contributions_per_erg
+    respond_to do |format|
+      format.json {
+        render json: {
+          highcharts: data,
+          type: 'pie'
+        }
+      }
+      format.csv {
+        flatten_data = data[:series].map{ |d| d[:data] }.flatten
+        strategy = Reports::GraphStatsGeneric.new(
+          title: 'Contributions per ERG',
+          categories: flatten_data.map{ |d| d[:name] }.uniq,
+          data: flatten_data.map{ |d| d[:y] }
+        )
+        report = Reports::Generator.new(strategy)
+        send_data report.to_csv, filename: "contributions_per_erg.csv"
+      }
+    end
   end
 
   def top_performers
     authorize @campaign, :show?
-    render json: {
-      highcharts: @campaign.top_performers,
-      type: 'bar'
-    }
+
+    data = @campaign.top_performers
+    respond_to do |format|
+      format.json {
+        render json: {
+          highcharts: data,
+          type: 'bar'
+        }
+      }
+      format.csv {
+        strategy = Reports::GraphStatsGeneric.new(title: 'Top performers',
+          categories: data[:categories], data: data[:series].map{ |d| d[:data] }.flatten)
+        report = Reports::Generator.new(strategy)
+        send_data report.to_csv, filename: "top_performers.csv"
+      }
+    end
   end
 
   protected
