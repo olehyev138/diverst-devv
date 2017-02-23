@@ -12,12 +12,16 @@ class Poll < ActiveRecord::Base
   has_many :groups, inverse_of: :polls, through: :groups_polls
   belongs_to :enterprise, inverse_of: :polls
   belongs_to :owner, class_name: "User"
+  belongs_to :initiative
 
   after_create :create_default_graphs
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
 
   validates :status, presence: true
+  validate :validate_groups_enterprise
+  validate :validate_initiative_enterprise
+  validate :validate_segments_enterprise
 
   # Returns the list of users who have answered the poll
   def graphs_population
@@ -61,6 +65,24 @@ class Poll < ActiveRecord::Base
   def create_default_graphs
     fields.each do |field|
       graphs.create(field: field) if field.graphable?
+    end
+  end
+
+  def validate_groups_enterprise
+    if !groups.empty? && groups.map(&:enterprise_id).uniq != [enterprise_id]
+      errors.add(:groups, "is invalid")
+    end
+  end
+
+  def validate_segments_enterprise
+    if !segments.empty? && segments.map(&:enterprise_id).uniq != [enterprise_id]
+      errors.add(:segments, "is invalid")
+    end
+  end
+
+  def validate_initiative_enterprise
+    if !initiative.nil? && !enterprise.initiatives.pluck(:id).include?(initiative_id)
+      errors.add(:initiative, "is invalid")
     end
   end
 end

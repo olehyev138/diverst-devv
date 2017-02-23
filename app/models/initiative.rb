@@ -41,6 +41,7 @@ class Initiative < ActiveRecord::Base
   scope :past, -> { where('end < ?', Time.current).order(start: :desc) }
   scope :upcoming, -> { where('start > ?', Time.current).order(start: :asc) }
   scope :ongoing, -> { where('start <= ?', Time.current).where('end >= ?', Time.current).order(start: :desc) }
+  scope :recent, -> { where(created_at: 60.days.ago..Date.tomorrow) }
 
   before_create :allocate_budget_funds
 

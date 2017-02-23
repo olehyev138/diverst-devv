@@ -24,7 +24,7 @@ class PollsController < ApplicationController
       track_activity(@poll, :create)
       redirect_to action: :index
     else
-      render :edit
+      render :new
     end
   end
 
@@ -80,6 +80,7 @@ class PollsController < ApplicationController
         :title,
         :description,
         :status,
+        :initiative_id,
         group_ids: [],
         segment_ids: [],
         fields_attributes: [
