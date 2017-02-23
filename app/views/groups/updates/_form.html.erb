@@ -7,6 +7,10 @@
           <%= render "shared/fields/display/custom_field", f: f, cf: cf, resource: @update %>
         <% end %>
       </div>
+
+      <div class="card__section">
+        <%= f.input :created_at, as: :date_picker, label: "Date of update" %>
+      </div>
     </div>
 
     <%= f.button :submit %>

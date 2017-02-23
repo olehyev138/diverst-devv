@@ -17,14 +17,13 @@ class Groups::UpdatesController < ApplicationController
 
   def create
     authorize @group, :show?
-    @update = @group.updates.new
+    @update = @group.updates.new(update_params.merge({ owner_id: current_user.id }))
     @update.info.merge(fields: @group.fields, form_data: params['custom-fields'])
-    @update.owner = current_user
 
     if @update.save
       redirect_to action: :index
     else
-      render :edit
+      render :new
     end
   end
 
@@ -40,7 +39,7 @@ class Groups::UpdatesController < ApplicationController
     authorize @group, :show?
     @update.info.merge(fields: @group.fields, form_data: params['custom-fields'])
 
-    if @update.save
+    if @update.update(update_params)
       redirect_to action: :index
     else
       render :edit
@@ -61,5 +60,9 @@ class Groups::UpdatesController < ApplicationController
 
   def set_update
     @update = @group.updates.find(params[:id])
+  end
+
+  def update_params
+    params.require(:group_update).permit(:created_at)
   end
 end
