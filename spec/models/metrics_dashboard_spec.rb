@@ -5,8 +5,6 @@ RSpec.describe MetricsDashboard do
 
   describe 'validations' do
     it{ expect(subject).to validate_presence_of(:name) }
-
-    it{ expect(subject).to be_valid }
   end
 
   describe '#percentage_of_total' do
