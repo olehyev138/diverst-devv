@@ -1,5 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe GroupUpdate, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "when validating" do
+    let(:group_update){ build_stubbed(:group_update) }
+
+    it{ expect(group_update).to validate_presence_of(:created_at) }
+  end
 end
