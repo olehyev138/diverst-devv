@@ -51,7 +51,10 @@
       <div class="card">
         <div class="card__section">
           <h3>Contributions per ERG</h3>
-          <div class="graph" data-graph-id="contributions_per_erg"></div>
+          <div class="card__action">
+            <%= link_to "Export CSV", contributions_per_erg_campaign_path(@campaign, format: :csv) %>
+          </div>
+          <div class="graph" data-url="<%= contributions_per_erg_campaign_path(@campaign) %>"></div>
         </div>
       </div>
     </div>
@@ -59,132 +62,12 @@
       <div class="card">
         <div class="card__section">
           <h3>Top performers</h3>
-          <div class="graph" data-graph-id="top_performers"></div>
+          <div class="card__action">
+            <%= link_to "Export CSV", top_performers_campaign_path(@campaign, format: :csv) %>
+          </div>
+          <div class="graph" data-url="<%= top_performers_campaign_path(@campaign) %>"></div>
         </div>
       </div>
     </div>
   </div>
-
-  <div class="row row--equal-height">
-    <div class="col sm-12 md-6">
-      <div class="card">
-        <div class="card__section">
-          <h3>Contribution value per ERG</h3>
-          <div id="js-valuable-contributions"></div>
-        </div>
-      </div>
-    </div>
-    <div class="col sm-12 md-6">
-      <div class="card">
-        <div class="card__section">
-          <h3>Most valuable questions</h3>
-          <div id="js-valuable-questions"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
 </div>
-
-<script>
-  $(document).on('page:change', function() {
-    $(document).off('page:change');
-
-    var graphs = $('.graph').map(function() {
-      return new Graph('/campaigns/<%= @campaign.id %>/' + $(this).data('graph-id'), $(this));
-    });
-
-    $('#js-valuable-contributions').highcharts({
-      chart: {
-        type: 'pie',
-        style: {
-          fontFamily: 'Helvetica Neue, sans-serif'
-        }
-      },
-      plotOptions: {
-        pie: {
-          dataLabels: {
-            enabled: true,
-            format: "{point.name}",
-            style: {
-              width:'70px',
-              textOverflow: 'ellipsis',
-              overflow: 'hidden'
-            }
-          }
-        }
-      },
-      title: {
-        text: ''
-      },
-      series: [{
-        name: "ERGs",
-        data: [
-        <% @campaign.groups.each do |group| %>
-          {
-            name: "<%= group.name %>",
-            y: 45000 + Math.floor(Math.random() * 70000)
-          },
-        <% end %>
-        ]
-      }],
-      tooltip: {
-        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-        pointFormat: '<tr><td style="padding:0"><b>${point.y}</b></td></tr>',
-        footerFormat: '</table>',
-        shared: true,
-        useHTML: true
-      },
-      credits: {
-        enabled: false
-      },
-      colors: ['<%= current_user.enterprise.theme.try(:charts_color) || "#7B77C9" %>', '#F15E57', '#FE6D4B', '#9FD661', '#40D0AD', '#48C0EB', '#5A9AEF', '#EE85C1']
-    });
-
-    $('#js-valuable-questions').highcharts({
-      chart: {
-        type: 'bar',
-        style: {
-          fontFamily: 'Helvetica Neue, sans-serif'
-        }
-      },
-      title: {
-        text: ''
-      },
-      xAxis: {
-        categories: [<%= @campaign.questions.map{|q| '"' + q.title + '"' }.join(', ').html_safe %>],
-        title: {
-          text: "ERG"
-        }
-      },
-      yAxis: {
-        min: 0,
-        title: {
-          text: 'Total value of contributions'
-        },
-        allowDecimals: false
-      },
-      plotOptions: {
-        series: {
-          stacking: 'normal'
-        }
-      },
-      tooltip: {
-        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-          '<td style="padding:0"><b>${point.y}</b></td></tr>',
-        footerFormat: '</table>',
-        shared: true,
-        useHTML: true
-      },
-      series: [{
-        name: "Value of contributions",
-        data: [<%= @campaign.questions.map{|q| "#{q.answers.sum(:value)}" }.join(', ').html_safe %>]
-      }],
-      credits: {
-        enabled: false
-      },
-      colors: ['<%= current_user.enterprise.theme.try(:charts_color) || "#7B77C9" %>', '#F15E57', '#FE6D4B', '#9FD661', '#40D0AD', '#48C0EB', '#5A9AEF', '#EE85C1']
-    });
-  });
-</script>
