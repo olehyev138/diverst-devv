@@ -29,11 +29,16 @@
           <div class="card__section">
             <div class="card__action">
               <%= link_to "Edit", edit_graph_path(graph) %> -
+              <%= link_to "Export CSV", export_csv_graph_path(graph) %> -
               <%= link_to "Remove", graph_path(graph), method: :delete, class: "error" %>
             </div>
             <h4 class="no-margin"><%= graph.title %></h4>
             <% if !graph.aggregation.nil? %><small><%= aggregation_text(graph) %></small><% end %>
-            <div class="graph" data-graph-id="<%= graph.id %>" data-time-series="<%= graph.time_series %>"></div>
+            <div
+              class="graph"
+              data-url="<%= data_graph_path(graph) %>"
+              data-time-series="<%= graph.time_series %>">
+            </div>
           </div>
         </div>
       </div>
@@ -42,18 +47,6 @@
 </div>
 
 <script>
-  var graphs = $('.graph').map(function() {
-    if ($(this).data('time-series')) {
-      return new TimeSeriesGraph({
-        dataUrl: '/graphs/' + $(this).data('graph-id') + '/data',
-        element: $(this)
-      });
-    }
-    else {
-      return new Graph('/graphs/' + $(this).data('graph-id') + '/data', $(this));
-    }
-  });
-
   $('#dashboard-select').change(function() {
     location = "/metrics_dashboards/" + $(this).find(":selected").val();
   });

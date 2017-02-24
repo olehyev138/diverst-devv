@@ -8,20 +8,16 @@ class Reports::GraphStats
   end
 
   def get_header
-    header = []
-    if @graph.has_aggregation?
-      header = [@graph_content[:xAxisTitle]] + @graph_content[:series].map{ |s| s[:name] }
-    else
-      header = @graph_content[:series].map{ |s| s[:name] }
-    end
+    header = @graph_content[:series].map{ |s| s[:name] }
+    header.unshift(@graph_content[:xAxisTitle]) if @graph.has_aggregation?
     header
   end
 
   def get_body
     body = []
-    if @graph.has_aggregation?
+    if @graph.has_aggregation? || @graph.field.numeric?
       @graph_content[:categories].each_with_index do |category, i|
-        body[i] = [category] + @graph_content[:series].map{ |s| s[:data] }.flatten
+        body[i] = [category] + @graph_content[:series].map{ |s| s[:data][i] }
       end
     else
       body = @graph_content[:series].map{ |s| s[:data] }.flatten.map(&:values)

@@ -22,18 +22,41 @@ RSpec.describe Notifiers::PollNotifier do
   end
 
   describe "when poll was plublished" do
-    let!(:poll){ create(:poll, status: "published", email_sent: false) }
-    let!(:group){ create(:group, polls: [poll]) }
-    let!(:users){ create_list(:user, 2, groups: [group]) }
+    context "when there is not an initiative on poll" do
+      let!(:poll){ create(:poll, status: "published", email_sent: false) }
+      let!(:group){ create(:group, polls: [poll]) }
+      let!(:users){ create_list(:user, 2, groups: [group]) }
 
-    it "should send emails" do
-      call_mailer_exactly(2)
-      notifier.notify!
+      it "should send emails to all users" do
+        call_mailer_exactly(2)
+        notifier.notify!
+      end
+
+      it "should update poll" do
+        notifier.notify!
+        expect(poll.email_sent).to be_truthy
+      end
     end
 
-    it "should update poll" do
-      notifier.notify!
-      expect(poll.email_sent).to be_truthy
+    context "when there is an initiative on poll" do
+      let!(:enterprise){ create(:enterprise) }
+      let!(:group){ create(:group, enterprise: enterprise) }
+      let!(:outcome){ create(:outcome, group: group) }
+      let!(:pillar){ create(:pillar, outcome: outcome) }
+      let!(:initiative){ create(:initiative, owner_group_id: group.id, pillar: pillar) }
+      let!(:poll){ create(:poll, status: "published", email_sent: false, enterprise: enterprise, initiative: initiative) }
+      let!(:initiative_user){ create(:initiative_user, initiative: initiative, user: create(:user)) }
+      let!(:users){ create_list(:user, 2, groups: [group]) }
+
+      it "should send emails to users of initiative" do
+        call_mailer_exactly(1)
+        notifier.notify!
+      end
+
+      it "should update poll" do
+        notifier.notify!
+        expect(poll.email_sent).to be_truthy
+      end
     end
   end
 

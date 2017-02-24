@@ -12,7 +12,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 20170221170146) do
-
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
     t.string   "trackable_type", limit: 255
@@ -681,7 +680,10 @@ ActiveRecord::Schema.define(version: 20170221170146) do
     t.integer  "owner_id",       limit: 4
     t.integer  "status",         limit: 4,     default: 0,     null: false
     t.boolean  "email_sent",                   default: false, null: false
+    t.integer  "initiative_id",  limit: 4
   end
+
+  add_index "polls", ["initiative_id"], name: "index_polls_on_initiative_id", using: :btree
 
   create_table "polls_segments", force: :cascade do |t|
     t.integer "poll_id",    limit: 4
@@ -843,4 +845,5 @@ ActiveRecord::Schema.define(version: 20170221170146) do
     t.datetime "updated_at",                    null: false
   end
 
+  add_foreign_key "polls", "initiatives"
 end

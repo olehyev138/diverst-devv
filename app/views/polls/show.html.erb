@@ -58,7 +58,11 @@
               <% end %>
               <h4 class="no-margin"><%= truncate(graph.title, length: 30) %></h4>
               <% if !graph.aggregation.nil? %><small><%= aggregation_text(graph) %></small><% end %>
-              <div class="graph" data-graph-id="<%= graph.id %>"></div>
+              <div
+                class="graph"
+                data-url="<%= data_graph_path(graph) %>"
+                data-time-series="<%= graph.time_series %>">
+              </div>
             </div>
           </div>
         </div>
@@ -127,12 +131,6 @@
 <script>
   $(document).on('page:change', function() {
     $(document).off('page:change');
-
-    // Graphs
-    var graphs = $('.graph').map(function() {
-      return new Graph('/graphs/' + $(this).data('graph-id') + '/data', $(this));
-    });
-
     // TODO: This doesnt exist anymore. We should have a way to reincorporate it.
     $('.textfield-datatable').dataTable(Utility.mergeWithDTDefaults({
       lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
