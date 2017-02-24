@@ -1,12 +1,12 @@
 $(document).on('ready page:load', function(){
   $('.date_picker_input').each(function(i, field){
-    initializeDatePicker(field, 'YYYY-MM-DD', false);
+    initializeDatePicker(field, $(field).attr('placeholder') || 'YYYY-MM-DD', false);
   });
 
   $('.content__main').on('cocoon:after-insert', function(e, insertedItem) {
     var dateField = $(insertedItem).find('input.date_picker_input');
 
-    initializeDatePicker(dateField[0], 'YYYY-MM-DD', false);
+    initializeDatePicker(dateField[0], $(dateField[0]).attr('placeholder') || 'YYYY-MM-DD', false);
   });
 
   $('.date_time_picker_input').each(function(i, field){

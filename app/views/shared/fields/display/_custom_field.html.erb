@@ -33,7 +33,14 @@
     </div>
   <% end %>
 <% elsif cf.is_a? DateField %>
-  <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "custom-fields[#{cf.id}]", value: resource.info[cf], type: "text", placeholder: "MM/DD/YYYY" } %>
+  <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: {
+        class: "datepicker date_picker_input",
+        name: "custom-fields[#{cf.id}]",
+        value: resource.info[cf],
+        type: "text",
+        placeholder: "MM/DD/YYYY"
+      }
+  %>
 <% elsif cf.is_a? SelectField %>
   <div class="field">
     <label class="field__label"><%= cf.title %></label>
