@@ -9,18 +9,29 @@ class Initiatives::FieldsController < ApplicationController
   def time_series
     authorize Initiative, :index?
 
-    highcharts_data = @initiative.highcharts_history(
+    from = Time.at(params[:from] / 1000) rescue nil
+    to = Time.at(params[:to] / 1000) rescue nil
+    data = @initiative.highcharts_history(
       field: @field,
-      from: Time.at(params[:from].to_i / 1000) || 1.year.ago,
-      to: Time.at(params[:to].to_i / 1000) || Time.current
+      from: from || 1.year.ago,
+      to: to || Time.current + 1.day
     )
 
-    render json: {
-      highcharts: [{
-        name: @field.title,
-        data: highcharts_data
-      }]
-    }
+    respond_to do |format|
+      format.json {
+        render json: {
+          highcharts: [{
+            name: @field.title,
+            data: data
+          }]
+        }
+      }
+      format.csv {
+        strategy = Reports::GraphTimeseriesGeneric.new(data: data)
+        report = Reports::Generator.new(strategy)
+        send_data report.to_csv, filename: "metrics#{ @field.id }.csv"
+      }
+    end
   end
 
   protected
