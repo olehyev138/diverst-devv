@@ -13,7 +13,7 @@ class GroupUpdate < ActiveRecord::Base
 
     return nil if !value_to_compare
 
-    abs_variance = value - value_to_compare
+    abs_variance = value.to_i - value_to_compare.to_i
     rel_variance = abs_variance.to_f / value_to_compare
   end
 
