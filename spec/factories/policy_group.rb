@@ -53,5 +53,7 @@ FactoryGirl.define do
     admin_pages_view true
 
     budget_approval true
+
+    logs_view true
   end
 end

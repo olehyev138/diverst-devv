@@ -3,6 +3,10 @@ require 'rails_helper'
 RSpec.describe MetricsDashboard do
   subject { create(:metrics_dashboard) }
 
+  describe 'validations' do
+    it{ expect(subject).to validate_presence_of(:name) }
+  end
+
   describe '#percentage_of_total' do
     it 'returns 0 when there are no users' do
       allow(subject.enterprise).to receive(:users).and_return(double(count: 0))

@@ -7,16 +7,24 @@
         <%= f.input :name, label: false %>
       </div>
       <div class="card__section card__section--border">
-        <p class="field__hint">Should <strong>permission group</strong> be a default for new users in the <strong><%= @policy_group.enterprise.name %></strong>?</p>
+        <p class="field__hint">Should this <strong>permission group</strong> be default for new users in the <strong><%= @policy_group.enterprise.name %></strong>?</p>
         <%= f.input :default_for_enterprise, label: 'Use as default' %>
       </div>
       <div class="card__section card__section--border">
         <p class="field__hint">Should members of this group be able to access admin dashboard?</p>
         <%= f.input :admin_pages_view, label: 'Admin Dashboard' %>
       </div>
-      <div class="card__section card__section--border">
-        <p class="field__hint">Should members of this group be able to approve group's budgets?</p>
-        <%= f.input :budget_approval, label: 'Budget Approval' %>
+      <div class="card__section section--border">
+        <div class="row row--spacing-bottom">
+          <div class="col md-6">
+            <p class="field__hint">Should members of this group be able to approve budgets?</p>
+            <%= f.input :budget_approval, label: 'Budget Approval' %>
+          </div>
+          <div class="col md-6">
+            <p class="field__hint">Should members of this group be able to view activity logs?</p>
+            <%= f.input :logs_view, label: 'View Logs' %>
+          </div>
+        </div>
       </div>
       <div class="card__section card__section--border">
         <h2>General</h2>

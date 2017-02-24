@@ -1,4 +1,6 @@
 class MetricsDashboard < ActiveRecord::Base
+  include PublicActivity::Common
+
   belongs_to :enterprise, inverse_of: :metrics_dashboards
   belongs_to :owner, class_name: "User"
   has_many :graphs, as: :collection
@@ -6,6 +8,8 @@ class MetricsDashboard < ActiveRecord::Base
   has_many :segments, through: :metrics_dashboards_segments
   has_many :groups_metrics_dashboards
   has_many :groups, through: :groups_metrics_dashboards
+
+  validates_presence_of :name
 
   # Returns a query to the list of users targeted by the dashboard
   def target

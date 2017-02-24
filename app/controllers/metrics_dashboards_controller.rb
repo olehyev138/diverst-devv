@@ -1,4 +1,5 @@
 class MetricsDashboardsController < ApplicationController
+  before_action :authenticate_user!
   after_action :verify_authorized
   before_action :set_metrics_dashboard, except: [:index, :new, :create]
 
@@ -15,9 +16,10 @@ class MetricsDashboardsController < ApplicationController
     @metrics_dashboard.owner = current_user
 
     if @metrics_dashboard.save
+      track_activity(@metrics_dashboard, :create)
       redirect_to @metrics_dashboard
     else
-      render :edit
+      render :new
     end
   end
 
@@ -52,6 +54,7 @@ class MetricsDashboardsController < ApplicationController
     authorize @metrics_dashboard
 
     if @metrics_dashboard.update(metrics_dashboard_params)
+      track_activity(@metrics_dashboard, :update)
       redirect_to action: :index
     else
       render :edit
@@ -61,6 +64,7 @@ class MetricsDashboardsController < ApplicationController
   def destroy
     authorize @metrics_dashboard
 
+    track_activity(@metrics_dashboard, :destroy)
     @metrics_dashboard.destroy
     redirect_to action: :index
   end

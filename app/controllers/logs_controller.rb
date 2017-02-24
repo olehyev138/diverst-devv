@@ -6,6 +6,7 @@ class LogsController < ApplicationController
   layout 'global_settings'
 
   def index
+    authorize :log, :index?
   end
 
   protected

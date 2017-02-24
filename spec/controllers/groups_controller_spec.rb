@@ -450,6 +450,66 @@ RSpec.describe GroupsController, type: :controller do
       end
     end
 
+    describe 'POST #update_annual_budget' do
+      def post_update_annual_budget(group_id = -1, params = {})
+        post :update_annual_budget, id: group_id, group: params
+      end
+
+      let(:user) { create :user }
+      let(:group) { create :group, enterprise: user.enterprise, annual_budget: annual_budget }
+
+      let(:annual_budget) { rand(1..100) }
+      let(:new_annual_budget) { rand(101..200) } #new range so it does not intersect with old value range
+
+      context 'with logged in user' do
+        login_user_from_let
+
+        context 'with correct parsms' do
+          before do
+            post_update_annual_budget(group.id, {annual_budget: new_annual_budget})
+          end
+
+          it 'updates group annual budget' do
+            expect(group.reload.annual_budget).to eq new_annual_budget
+          end
+
+          it 'redirects to correct path' do
+            expect(response).to redirect_to edit_budgeting_enterprise_path(group.enterprise)
+          end
+
+          describe 'public activity' do
+            enable_public_activity
+
+            it 'creates public activity record' do
+              expect{
+                post_update_annual_budget(group.id, {annual_budget: new_annual_budget})
+              }.to change(PublicActivity::Activity, :count).by(1)
+            end
+
+            describe 'activity record' do
+              let(:model) { Group.last }
+              let(:owner) { user }
+              let(:key) { 'group.annual_budget_update' }
+
+              before {
+                post_update_annual_budget(group.id, {annual_budget: new_annual_budget})
+              }
+
+              include_examples'correct public activity'
+            end
+          end
+        end
+      end
+
+      context 'without logged user' do
+        before { post_update_annual_budget(group.id, {annual_budget: new_annual_budget}) }
+
+        it 'return error' do
+          expect(response).to_not be_success
+        end
+      end
+    end
+
     describe 'POST #approve_budget' do
       it 'should be implemented'
     end
