@@ -86,12 +86,16 @@
       </div>
 
       <% @group.fields.each do |field| %>
-        <div
-          class="graph"
-          style="width: 49%; display: inline-block;"
-          data-url="<%= time_series_group_field_path(@group, field) %>"
-          data-title="<%= field.title %>"
-          data-time-series="true">
+        <div class="card__section card__section--border" style="width: 49%; display: inline-block;">
+          <div class="card__action">
+            <%= link_to "Export CSV", time_series_group_field_path(@group, field, format: :csv) %>
+          </div>
+          <div
+            class="graph"
+            data-url="<%= time_series_group_field_path(@group, field) %>"
+            data-title="<%= field.title %>"
+            data-time-series="true">
+          </div>
         </div>
       <% end %>
     </div>
