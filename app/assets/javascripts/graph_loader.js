@@ -14,6 +14,9 @@ $(document).on('ready page:load', function() {
       if($("#date_picker_to").val()) {
         data['to'] = moment($("#date_picker_to").val());
       }
+      if($(this).data('spark')) {
+        data['spark'] = true;
+      }
       graphs.push(
         new TimeSeriesGraph(data)
       );
