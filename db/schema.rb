@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170221170146) do
+ActiveRecord::Schema.define(version: 20170301184551) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -245,6 +245,7 @@ ActiveRecord::Schema.define(version: 20170221170146) do
 
   create_table "enterprises", force: :cascade do |t|
     t.string   "name",                       limit: 255
+    t.string   "sp_entity_id",               limit: 255
     t.string   "idp_entity_id",              limit: 255
     t.string   "idp_sso_target_url",         limit: 255
     t.string   "idp_slo_target_url",         limit: 255

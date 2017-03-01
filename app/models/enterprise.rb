@@ -49,6 +49,7 @@ class Enterprise < ActiveRecord::Base
 
     settings.assertion_consumer_service_url = "http://#{ENV['DOMAIN']}/enterprises/#{id}/saml/acs"
 
+    settings.issuer = sp_entity_id
     settings.idp_entity_id = idp_entity_id
     settings.idp_sso_target_url = idp_sso_target_url
     settings.idp_slo_target_url = idp_slo_target_url
