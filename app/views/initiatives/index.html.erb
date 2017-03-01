@@ -92,7 +92,9 @@
                                 <div
                                   class="metric__sparkline graph"
                                   data-url="<%= time_series_group_initiative_field_path(@group, initiative, field) %>"
-                                  data-title="Updates over time"
+                                  data-title="<%= field.title %>"
+                                  data-spark="true"
+                                  data-time-series="true"
                                   >
                                 </div>
                               </div>
