@@ -51,6 +51,7 @@ class Initiative < ActiveRecord::Base
   validates :start, presence: true
   validates :end, presence: true
   validate :check_budget
+  validate :segment_enterprise
 
   def initiative_date(date_type)
     return "" unless ["start", "end"].include?(date_type)
@@ -163,7 +164,6 @@ class Initiative < ActiveRecord::Base
   end
 
   def check_budget
-    #byebug
     # We don't need budgets for events without allocate_budget_funds
     return true if estimated_funding == 0
 
@@ -184,6 +184,15 @@ class Initiative < ActiveRecord::Base
     # Here we know there is no budge, no leftover, but estimated_amount
     # is still greater than zero, which is not valid
     errors.add(:budget, 'Can not create event with funds but without budget')
+  end
+
+  def segment_enterprise
+    segments.each do |segment|
+      if segment.enterprise != owner.enterprise
+        errors.add(:segments, 'has invalid segments')
+        return
+      end
+    end
   end
 
   def allocate_budget_funds

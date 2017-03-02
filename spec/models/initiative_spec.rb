@@ -8,6 +8,26 @@ RSpec.describe Initiative, type: :model do
     it{ expect(initiative).to validate_presence_of(:end) }
     it{ expect(initiative).to have_many(:resources) }
     it{ expect(initiative).to have_many(:segments).through(:initiative_segments) }
+
+    context "segment_enterprise" do
+      let!(:user){ create(:user) }
+
+      it "and have segments with enterprise not equal to owner's enterprise" do
+        segment = create(:segment)
+        initiative = build(:initiative, owner_id: user.id, segments: [segment])
+        initiative.valid?
+
+        expect(initiative.errors.messages).to have_key(:segments)
+        expect(initiative).to be_invalid
+      end
+
+      it "and all segments with enterprise equal to owner's enterprise" do
+        segment = create(:segment, enterprise: user.enterprise)
+        initiative = build(:initiative, owner_id: user.id, segments: [segment])
+
+        expect(initiative).to be_valid
+      end
+    end
   end
 
   describe ".recent" do
