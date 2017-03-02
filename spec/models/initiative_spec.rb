@@ -1,12 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe Initiative, type: :model do
-  describe 'validations' do
-    let(:initiative) { FactoryGirl.build_stubbed(:initiative) }
+  describe 'when validating' do
+    let(:initiative) { build_stubbed(:initiative) }
 
     it{ expect(initiative).to validate_presence_of(:start) }
     it{ expect(initiative).to validate_presence_of(:end) }
     it{ expect(initiative).to have_many(:resources) }
+    it{ expect(initiative).to have_many(:segments).through(:initiative_segments) }
   end
 
   describe ".recent" do

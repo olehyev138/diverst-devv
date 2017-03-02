@@ -8,6 +8,8 @@ class Initiative < ActiveRecord::Base
   has_many :updates, class_name: "InitiativeUpdate", dependent: :destroy
   has_many :fields, as: :container, dependent: :destroy
   has_many :expenses, dependent: :destroy, class_name: "InitiativeExpense"
+  has_many :initiative_segments
+  has_many :segments, through: :initiative_segments
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
 
