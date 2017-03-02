@@ -39,6 +39,20 @@ RSpec.describe Initiative, type: :model do
     end
   end
 
+  describe ".of_segments" do
+    let(:owner){ create(:user) }
+    let(:segment){ create(:segment, enterprise: owner.enterprise) }
+    let!(:initiative_without_segment){ create(:initiative, owner_id: owner.id, segments: []) }
+    let!(:initiative_with_segment){ create(:initiative, owner_id: owner.id, segments: [segment]) }
+    let!(:initiative_with_another_segment){
+      create(:initiative, owner_id: owner.id, segments: [create(:segment, enterprise: owner.enterprise)])
+    }
+
+    it "returns initiatives that has specific segments or does not have any segment" do
+      expect(Initiative.of_segments([segment.id])).to match_array([initiative_without_segment, initiative_with_segment])
+    end
+  end
+
   describe ".initiative_date" do
     let(:initiative){ build_stubbed(:initiative) }
 

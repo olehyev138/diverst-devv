@@ -43,6 +43,12 @@ class Initiative < ActiveRecord::Base
   scope :upcoming, -> { where('start > ?', Time.current).order(start: :asc) }
   scope :ongoing, -> { where('start <= ?', Time.current).where('end >= ?', Time.current).order(start: :desc) }
   scope :recent, -> { where(created_at: 60.days.ago..Date.tomorrow) }
+  scope :of_segments, ->(segment_ids) {
+    initiative_conditions = ["initiative_segments.segment_id IS NULL"]
+    initiative_conditions << "initiative_segments.segment_id IN (#{ segment_ids.join(",") })" unless segment_ids.empty?
+    joins("LEFT JOIN initiative_segments ON initiative_segments.initiative_id = initiatives.id")
+      .where(initiative_conditions.join(" OR "))
+  }
 
   before_create :allocate_budget_funds
 
@@ -188,7 +194,7 @@ class Initiative < ActiveRecord::Base
 
   def segment_enterprise
     segments.each do |segment|
-      if segment.enterprise != owner.enterprise
+      if segment.try(:enterprise) != owner.try(:enterprise)
         errors.add(:segments, 'has invalid segments')
         return
       end

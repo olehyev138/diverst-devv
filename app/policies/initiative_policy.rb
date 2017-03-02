@@ -17,6 +17,12 @@ class InitiativePolicy < ApplicationPolicy
     @record.owner == @user
   end
 
+  def show_calendar?
+    return true if @record.segments.empty?
+    return false if (@user.segments & @record.segments).empty?
+    true
+  end
+
   class Scope < Scope
     def resolve
       scope.joins(pillar: { outcome: :group }).where(
