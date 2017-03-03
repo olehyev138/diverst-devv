@@ -48,6 +48,10 @@ RSpec.describe InitiativesController, type: :controller do
 
         expect(new_initiative).to be_new_record
       end
+
+      it 'assigns segments of enterprise' do
+        expect(assigns(:segments)).to eq user.enterprise.segments
+      end
     end
 
     context 'without logged user' do
@@ -88,6 +92,10 @@ RSpec.describe InitiativesController, type: :controller do
         assigned_initiative = assigns(:initiative)
 
         expect(assigned_initiative).to eq initiative
+      end
+
+      it 'assigns segments of enterprise' do
+        expect(assigns(:segments)).to eq user.enterprise.segments
       end
     end
 
@@ -136,6 +144,12 @@ RSpec.describe InitiativesController, type: :controller do
             expect(new_initiative.end).to be_within(1).of initiative_attrs[:end]
           end
 
+          it 'assigns segments of enterprise' do
+            post_create(group.id, initiative_attrs)
+
+            expect(assigns(:segments)).to eq user.enterprise.segments
+          end
+
           describe 'public activity' do
             enable_public_activity
 
@@ -175,6 +189,12 @@ RSpec.describe InitiativesController, type: :controller do
             post_create(group.id, initiative: {})
             expect(response).to render_template :new
           end
+
+          it 'assigns segments of enterprise' do
+            post_create(group.id, initiative: {})
+
+            expect(assigns(:segments)).to eq user.enterprise.segments
+          end
         end
       end
 
@@ -210,6 +230,12 @@ RSpec.describe InitiativesController, type: :controller do
             expect(updated_initiative.location).to eq initiative_attrs[:location]
             expect(updated_initiative.start).to be_within(1).of initiative_attrs[:start]
             expect(updated_initiative.end).to be_within(1).of initiative_attrs[:end]
+          end
+
+          it 'assigns segments of enterprise' do
+            patch_update(group.id, initiative.id, initiative_attrs)
+
+            expect(assigns(:segments)).to eq user.enterprise.segments
           end
 
           describe 'public activity' do
@@ -256,6 +282,10 @@ RSpec.describe InitiativesController, type: :controller do
 
           it 'renders edit view' do
             expect(response).to render_template :edit
+          end
+
+          it 'assigns segments of enterprise' do
+            expect(assigns(:segments)).to eq user.enterprise.segments
           end
         end
       end

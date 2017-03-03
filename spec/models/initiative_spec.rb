@@ -1,12 +1,33 @@
 require 'rails_helper'
 
 RSpec.describe Initiative, type: :model do
-  describe 'validations' do
-    let(:initiative) { FactoryGirl.build_stubbed(:initiative) }
+  describe 'when validating' do
+    let(:initiative) { build_stubbed(:initiative) }
 
     it{ expect(initiative).to validate_presence_of(:start) }
     it{ expect(initiative).to validate_presence_of(:end) }
     it{ expect(initiative).to have_many(:resources) }
+    it{ expect(initiative).to have_many(:segments).through(:initiative_segments) }
+
+    context "segment_enterprise" do
+      let!(:user){ create(:user) }
+
+      it "and have segments with enterprise not equal to owner's enterprise" do
+        segment = create(:segment)
+        initiative = build(:initiative, owner_id: user.id, segments: [segment])
+        initiative.valid?
+
+        expect(initiative.errors.messages).to have_key(:segments)
+        expect(initiative).to be_invalid
+      end
+
+      it "and all segments with enterprise equal to owner's enterprise" do
+        segment = create(:segment, enterprise: user.enterprise)
+        initiative = build(:initiative, owner_id: user.id, segments: [segment])
+
+        expect(initiative).to be_valid
+      end
+    end
   end
 
   describe ".recent" do
@@ -15,6 +36,20 @@ RSpec.describe Initiative, type: :model do
 
     it "return initiatives created in the last 60 days" do
       expect(Initiative.recent).to eq [recent_initiative]
+    end
+  end
+
+  describe ".of_segments" do
+    let(:owner){ create(:user) }
+    let(:segment){ create(:segment, enterprise: owner.enterprise) }
+    let!(:initiative_without_segment){ create(:initiative, owner_id: owner.id, segments: []) }
+    let!(:initiative_with_segment){ create(:initiative, owner_id: owner.id, segments: [segment]) }
+    let!(:initiative_with_another_segment){
+      create(:initiative, owner_id: owner.id, segments: [create(:segment, enterprise: owner.enterprise)])
+    }
+
+    it "returns initiatives that has specific segments or does not have any segment" do
+      expect(Initiative.of_segments([segment.id])).to match_array([initiative_without_segment, initiative_with_segment])
     end
   end
 

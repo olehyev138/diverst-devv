@@ -13,11 +13,15 @@ class Groups::EventsController < ApplicationController
   end
 
   def calendar_data
-    own_events = @group.initiatives.includes(:owner_group)
+    own_events = @group.initiatives
+                          .of_segments(current_user.segments.pluck(:id))
+                          .includes(:owner_group)
                           .where('start >= ?', params[:start])
                           .where('start <= ?', params[:end])
 
-    participating_events = @group.participating_initiatives.includes(:owner_group)
+    participating_events = @group.participating_initiatives
+                              .of_segments(current_user.segments.pluck(:id))
+                              .includes(:owner_group)
                               .where('start >= ?', params[:start])
                               .where('start <= ?', params[:end])
 
@@ -44,6 +48,8 @@ class Groups::EventsController < ApplicationController
   # end
 
   def show
+    authorize @event, :show_calendar?
+
     @comment = @event.comments.where(user: current_user).first || InitiativeComment.new(initiative: @event)
   end
 

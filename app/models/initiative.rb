@@ -27,10 +27,11 @@ class Initiative < ActiveRecord::Base
 
   belongs_to :owner_group, class_name: 'Group'
 
+  has_many :initiative_segments
+  has_many :segments, through: :initiative_segments
   has_many :initiative_participating_groups
   has_many :participating_groups, through: :initiative_participating_groups, source: :group, class_name: 'Group'
 
-  has_many :segments, through: :initiative_segments
   has_many :initiative_invitees
   has_many :invitees, through: :initiative_invitees, source: :user
   has_many :comments, class_name: 'InitiativeComment'
@@ -42,6 +43,12 @@ class Initiative < ActiveRecord::Base
   scope :upcoming, -> { where('start > ?', Time.current).order(start: :asc) }
   scope :ongoing, -> { where('start <= ?', Time.current).where('end >= ?', Time.current).order(start: :desc) }
   scope :recent, -> { where(created_at: 60.days.ago..Date.tomorrow) }
+  scope :of_segments, ->(segment_ids) {
+    initiative_conditions = ["initiative_segments.segment_id IS NULL"]
+    initiative_conditions << "initiative_segments.segment_id IN (#{ segment_ids.join(",") })" unless segment_ids.empty?
+    joins("LEFT JOIN initiative_segments ON initiative_segments.initiative_id = initiatives.id")
+      .where(initiative_conditions.join(" OR "))
+  }
 
   before_create :allocate_budget_funds
 
@@ -50,6 +57,7 @@ class Initiative < ActiveRecord::Base
   validates :start, presence: true
   validates :end, presence: true
   validate :check_budget
+  validate :segment_enterprise
 
   def initiative_date(date_type)
     return "" unless ["start", "end"].include?(date_type)
@@ -162,7 +170,6 @@ class Initiative < ActiveRecord::Base
   end
 
   def check_budget
-    #byebug
     # We don't need budgets for events without allocate_budget_funds
     return true if estimated_funding == 0
 
@@ -183,6 +190,15 @@ class Initiative < ActiveRecord::Base
     # Here we know there is no budge, no leftover, but estimated_amount
     # is still greater than zero, which is not valid
     errors.add(:budget, 'Can not create event with funds but without budget')
+  end
+
+  def segment_enterprise
+    segments.each do |segment|
+      if segment.try(:enterprise) != owner.try(:enterprise)
+        errors.add(:segments, 'has invalid segments')
+        return
+      end
+    end
   end
 
   def allocate_budget_funds

@@ -2,6 +2,7 @@ class InitiativesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
   before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo, :finish_expenses]
+  before_action :set_segments, only: [:new, :create, :edit, :update]
   after_action :verify_authorized
 
   layout 'plan'
@@ -82,6 +83,10 @@ class InitiativesController < ApplicationController
     @initiative = @group.initiatives.find(params[:id])
   end
 
+  def set_segments
+    @segments = current_user.enterprise.segments
+  end
+
   def initiative_params
     params
       .require(:initiative)
@@ -96,6 +101,7 @@ class InitiativesController < ApplicationController
         :picture,
         :budget_item_id,
         participating_group_ids: [],
+        segment_ids: [],
         fields_attributes: [
           :id,
           :title,
