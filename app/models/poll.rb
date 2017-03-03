@@ -22,6 +22,7 @@ class Poll < ActiveRecord::Base
   validate :validate_groups_enterprise
   validate :validate_initiative_enterprise
   validate :validate_segments_enterprise
+  validate :validate_associated_objects
 
   # Returns the list of users who have answered the poll
   def graphs_population
@@ -83,6 +84,12 @@ class Poll < ActiveRecord::Base
   def validate_initiative_enterprise
     if !initiative.nil? && !enterprise.initiatives.pluck(:id).include?(initiative_id)
       errors.add(:initiative, "is invalid")
+    end
+  end
+
+  def validate_associated_objects
+    if (!groups.empty? || !segments.empty?) && !initiative.nil?
+      errors.add(:associated_objects, "invalid configuration of poll")
     end
   end
 end

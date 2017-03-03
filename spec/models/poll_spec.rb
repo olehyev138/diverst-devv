@@ -72,6 +72,40 @@ RSpec.describe Poll, type: :model do
         end
       end
     end
+
+    context "validate configuration of associated objects" do
+      let(:enterprise){ create(:enterprise) }
+      let(:segment){ create(:segment, enterprise: enterprise) }
+      let(:group){ create(:group, enterprise: enterprise) }
+      let(:pillar){ create(:pillar, outcome: outcome) }
+      let(:outcome){ create(:outcome, group: group) }
+      let!(:initiative){ create(:initiative, owner_group_id: group.id, pillar: pillar) }
+
+      context "when poll have groups and segments" do
+        let(:poll){ build(:poll, enterprise: enterprise, groups: [group], segments: [segment]) }
+
+        it "should be valid" do
+          expect(poll).to be_valid
+        end
+      end
+
+      context "when poll have initiative" do
+        let(:poll){ build(:poll, enterprise: enterprise, initiative: initiative) }
+
+        it "should be valid" do
+          expect(poll).to be_valid
+        end
+      end
+
+      context "when poll have groups, segments and initiatives" do
+        let(:poll){ build(:poll, enterprise: enterprise, groups: [group], segments: [segment], initiative: initiative) }
+
+        it "should be invalid" do
+          poll.valid?
+          expect(poll.errors.messages).to have_key(:associated_objects)
+        end
+      end
+    end
   end
 
   describe "enumerates" do
