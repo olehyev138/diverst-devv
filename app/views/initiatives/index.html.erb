@@ -76,7 +76,7 @@
                     <%= link_to "Updates", group_initiative_updates_path(@group, initiative) %> -
                     <%= link_to "KPI", group_initiative_path(@group, initiative) %> |
                     <%= link_to "Edit", edit_group_initiative_path(@group, initiative) %> -
-                    <%= link_to "Create survey for participants", new_poll_path(initiative_id: initiative.id) %> -
+                    <%= link_to "Survey", new_poll_path(initiative_id: initiative.id) %> -
                     <%= link_to "Delete", group_initiative_path(@group, initiative), method: :delete, data: { confirm: "Are you sure?" }, class: "error" %>
                   </div>
 

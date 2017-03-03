@@ -13,20 +13,35 @@
       </div>
 
       <div class="card__section card__section--border">
-        <p class="field__hint">Choose the <strong>ERGs</strong> you want to target</p>
-        <%= f.association :groups, collection: @poll.enterprise.groups, input_html: { class: "select2" }, label: false %>
-      </div>
+        <div class="row">
+          <div class="col sm-6 poll_initiative_box">
+            <p class="field__hint">Choose the <strong>event</strong> you want to target within these ERGs</p>
+            <%= f.association :initiative,
+                  collection: @poll.enterprise.initiatives.recent,
+                  include_blank: true,
+                  selected: @poll.initiative.try(:id) || params[:initiative_id],
+                  input_html: { class: "select2" },
+                  label: false,
+                  disabled: disabled_input?
+            %>
+          </div>
 
-      <div class="card__section card__section--border">
-        <p class="field__hint">Choose the <strong>segments</strong> you want to target within these ERGs</p>
-        <%= f.association :segments, collection: @poll.enterprise.segments, input_html: { class: "select2" }, label: false %>
-      </div>
+          <div class="col sm-6 poll_group_segment_box <%= visibility_class %>">
+            <p class="field__hint">Choose the <strong>ERGs</strong> you want to target</p>
+            <%= f.association :groups,
+                  collection: @poll.enterprise.groups,
+                  input_html: { class: "select2" },
+                  label: false
+            %>
 
-      <div class="card__section card__section--border">
-        <p class="field__hint">Choose the <strong>event</strong> you want to target within these ERGs</p>
-        <%= f.association :initiative, collection: @poll.enterprise.initiatives.recent,
-          include_blank: true, selected: @poll.initiative.try(:id) || params[:initiative_id],
-          input_html: { class: "select2" }, label: false %>
+            <p class="field__hint">Choose the <strong>segments</strong> you want to target within these ERGs</p>
+            <%= f.association :segments,
+                  collection: @poll.enterprise.segments,
+                  input_html: { class: "select2" },
+                  label: false
+            %>
+          </div>
+        </div>
       </div>
     </div>
 
