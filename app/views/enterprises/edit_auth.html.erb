@@ -12,6 +12,11 @@
         <%= f.input :idp_slo_target_url, label: "Logout URL" %>
         <%= f.input :idp_cert, label: "Certificate" %>
 
+        <p>
+          You can check current saml metadata
+          <%=  link_to 'here', metadata_enterprise_saml_index_path(@enterprise) %>
+        </p>
+
         <%= f.button :submit, "Save SSO settings" %>
       <% end %>
     </div>
