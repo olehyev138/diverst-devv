@@ -91,14 +91,6 @@ RSpec.describe User do
   end
 
   describe 'validations' do
-    describe 'factory' do
-      let(:user) { build :user }
-
-      it 'has valid factory' do
-        expect(user).to be_valid
-      end
-    end
-
 
     # describe 'saml password behaviour' do
     #   let(:user) { build :user, enterprise: ent, password: '', password_confirmation: '' }
