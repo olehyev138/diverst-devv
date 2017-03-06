@@ -1,5 +1,4 @@
 require 'rails_helper'
-include ActionView::Helpers
 
 RSpec.describe BudgetMailer, type: :mailer do
   describe '#approve_request' do
@@ -23,7 +22,7 @@ RSpec.describe BudgetMailer, type: :mailer do
     end
 
     it 'assigns @name' do
-      escaped_name = h user.name
+      escaped_name = Rack::Utils.escape_html user.name
       expect(mail.body.encoded).to include(escaped_name)
     end
 
