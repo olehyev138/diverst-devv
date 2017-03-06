@@ -22,7 +22,8 @@ RSpec.describe BudgetMailer, type: :mailer do
     end
 
     it 'assigns @name' do
-      expect(mail.body.encoded).to include(user.name)
+      escaped_name = Rack::Utils.escape_html user.name
+      expect(mail.body.encoded).to include(escaped_name)
     end
 
     it 'assigns @confirmation_url' do
