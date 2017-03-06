@@ -5,8 +5,6 @@ RSpec.describe Group do
     let(:group) { FactoryGirl.build_stubbed(:group) }
 
     it{ expect(group).to validate_presence_of(:name) }
-
-    it{ expect(group).to be_valid }
   end
 
   describe '#accept_user_to_group' do
