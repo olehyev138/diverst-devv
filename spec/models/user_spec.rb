@@ -91,7 +91,9 @@ RSpec.describe User do
   end
 
   describe 'validations' do
+    let(:user) { build_stubbed :user }
 
+    it{ expect(user).to have_many(:leading_groups).through(:group_leaders) }
     # describe 'saml password behaviour' do
     #   let(:user) { build :user, enterprise: ent, password: '', password_confirmation: '' }
 

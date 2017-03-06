@@ -45,6 +45,9 @@ class User < ActiveRecord::Base
   has_many :samples
   has_many :biases, class_name: "Bias"
 
+  has_many :group_leaders
+  has_many :leading_groups, through: :group_leaders, source: :group
+
   has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: :private
   validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
 
