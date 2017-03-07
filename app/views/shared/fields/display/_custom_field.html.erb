@@ -1,9 +1,12 @@
 <% if cf.is_a? TextField %>
   <% unless cf.alternative_layout %>
-    <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "custom-fields[#{cf.id}]", value: resource.info[cf] } %>
+    <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "custom-fields[#{cf.id}]", value: resource.info[cf] }, required: cf.required %>
   <% else # Textarea %>
     <div class="field">
-      <label class="field__label"><%= cf.title %></label>
+      <label class="field__label">
+        <abbr title="required" class="<%= required_class(cf) %>">*</abbr>
+        <%= cf.title %>
+      </label>
       <div class="field__input-wrapper">
         <textarea name="custom-fields[<%= cf.id %>]" cols="30" rows="10" class="field__input"><%= resource.info[cf] %></textarea>
       </div>
@@ -11,11 +14,11 @@
   <% end %>
 <% elsif cf.is_a? NumericField %>
   <% unless cf.alternative_layout %>
-    <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "custom-fields[#{cf.id}]", value: resource.info[cf], type: "number", min: cf.min, max: cf.max } %>
+    <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "custom-fields[#{cf.id}]", value: resource.info[cf], type: "number", min: cf.min, max: cf.max }, required: cf.required %>
   <% else %>
     <div class="numeric_slider" style="margin-bottom: 25px;">
       <div class="row">
-        <span><%= f.label cf.title.downcase.to_sym, input_html:{class: 'field__label'} %></span>
+        <span><%= f.label cf.title.downcase.to_sym, input_html:{class: 'field__label'}, required: cf.required %></span>
         <b><span class='current_value'></span></b>
       </div>
 
@@ -39,11 +42,15 @@
         value: resource.info[cf],
         type: "text",
         placeholder: "MM/DD/YYYY"
-      }
+      },
+      required: cf.required
   %>
 <% elsif cf.is_a? SelectField %>
   <div class="field">
-    <label class="field__label"><%= cf.title %></label>
+    <label class="field__label">
+      <abbr title="required" class="<%= required_class(cf) %>">*</abbr>
+      <%= cf.title %>
+    </label>
     <div class="field__input-wrapper">
       <span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
       <select class="field__input field__input--right-add-on" name="custom-fields[<%= cf.id %>]">
@@ -57,7 +64,10 @@
 <% elsif cf.is_a? CheckboxField %>
   <% if cf.alternative_layout # Select2 %>
     <div class="field">
-      <label class="field__label"><%= cf.title %></label>
+      <label class="field__label">
+        <abbr title="required" class="<%= required_class(cf) %>">*</abbr>
+        <%= cf.title %>
+      </label>
       <div class="field__input-wrapper">
         <span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
         <select class="field__input field__input--right-add-on select2" name="custom-fields[<%= cf.id %>][]" multiple="multiple">
@@ -69,7 +79,10 @@
     </div>
   <% else # Checkboxes %>
     <div class="field">
-      <label class="field__label"><%= cf.title %></label>
+      <label class="field__label">
+        <abbr title="required" class="<%= required_class(cf) %>">*</abbr>
+        <%= cf.title %>
+      </label>
       <% cf.options.each do |option| %>
         <label class="control">
           <%= check_box_tag "custom-fields[#{cf.id}][]", option, resource.info[cf] && resource.info[cf].include?(option), class: "control__input" %>
