@@ -3,16 +3,14 @@ $(document).on('ready page:load', function(){
   applyFullCalendar();
 
   function listenCalendarVisibility() {
-    var hidden = false;
     $('.calendar-filters-visibility').on('click', function() {
-      hidden = $(this).text() === 'Show filters' ? false : true;
-      if(hidden) {
-        $(this).text('Show filters');
+      $('.calendar-filters').toggle();
+      if($('.calendar-filters').is(':visible')) {
+        $(this).text($(this).data('hide-text'));
       }
       else {
-        $(this).text('Hide filters');
+        $(this).text($(this).data('show-text'));
       }
-      $('.calendar-filters').toggle();
     });
   }
 
