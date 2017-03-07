@@ -17,7 +17,7 @@
 
         <% current_user.enterprise.fields.each do |field| %>
           <li>
-            <%= field.title %>
+            <%= field.title %><%= "*" if field.required %>
           </li>
         <% end %>
       </ol>
