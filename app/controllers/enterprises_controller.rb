@@ -137,7 +137,8 @@ class EnterprisesController < ApplicationController
           :max,
           :options_text,
           :alternative_layout,
-          :private
+          :private,
+          :required
         ],
         yammer_field_mappings_attributes: [
           :id,
