@@ -54,25 +54,7 @@
               <h4>Latest Messages</h4>
               <%= link_to "View all", user_messages_path, class: "card__action" %>
 
-              <% @messages.each do |message| %>
-                <%= link_to group_group_message_path(message.group, message), class: "block block-section" do %>
-                  <div class="flex-row flex-row--middle">
-                    <div class="flex-row__cell flex-row__cell--grow">
-                      <span class="highlight"><%= message.subject %></span><br>
-                      <small><%= truncate(message.content, length: 90) %></small><br>
-                      <small class="muted"><%= message.created_at.to_s :slashes %>
-                        <% if message.owner.present? %>
-                          by <%= message.owner.name %>
-                        <% end %>
-                      </small>
-                    </div>
-                    <div class="flex-row__cell">
-                      <span class="icon icon--chevron-right"></span>
-                    </div>
-                  </div>
-                <% end %>
-              <% end %>
-
+              <%= render "shared/flippable/messages", messages: @messages %>
             </div>
           </div>
         </div>
