@@ -3,7 +3,12 @@
     <div class="card">
       <div class="card__section card__section--border">
         <p class="field__hint">Choose the <strong>field</strong> that the graph will represent</p>
-        <%= f.association :field, label: false, collection: f.object.collection.graphable_fields(current_user), include_blank: false %>
+        <%= f.association :field,
+            label: false,
+            collection: f.object.collection.graphable_fields(current_user).map{ |field| [field.title, field.id, { class: field.type.underscore }] },
+            include_blank: false,
+            input_html: { class: "poll-graph-field" }
+        %>
       </div>
 
       <div class="card__section card__section--border">
@@ -14,8 +19,8 @@
       <div class="card__section card__section--border">
         <p class="field__hint">Choose the <strong>type</strong> of graph you want to display</p>
         <div class="segmented-control">
-          <a class="js-graph-type-button segmented-control__item<%= " segmented-control__item--is-selected" if !f.object.time_series %>" data-value="false">Current values</a>
-          <a class="js-graph-type-button segmented-control__item<%= " segmented-control__item--is-selected" if f.object.time_series %>" data-value="true">Values over time</a>
+          <a class="js-graph-type-button js-graph-type-stats segmented-control__item<%= " segmented-control__item--is-selected" if !f.object.time_series %>" data-value="false">Current values</a>
+          <a class="js-graph-type-button js-graph-type-timeseries segmented-control__item<%= " segmented-control__item--is-selected" if f.object.time_series %>" data-value="true">Values over time</a>
           <%= f.input_field :time_series, as: :hidden %>
         </div>
       </div>
