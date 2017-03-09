@@ -1,19 +1,19 @@
 <div class="content__header">
   <h1>Group Leaders</h1>
   <% if policy(@group).update? %>
-    <%= link_to "+ Add leader", '/', class: "btn btn--primary" %>
+    <%= link_to "+ Add leader", new_group_leader_path(@group), class: "btn btn--primary" %>
   <% end %>
 </div>
 
 <div class="content__main">
   <div class="card">
-    <% if @leaders.empty? %>
+    <% if @group_leaders.empty? %>
       <div class="card__section">
         <p>No leaders yet.</p>
       </div>
     <% else %>
       <div class="card__section">
-        <% if @leaders.any? %>
+        <% if @group_leaders.any? %>
           <table class="table--has-border" id="group-leaders">
             <thead>
               <th>Name</th>
@@ -21,10 +21,10 @@
               <th>Actions</th>
             </thead>
             <tbody>
-              <% @leaders.each do |leader| %>
+              <% @group_leaders.each do |group_leader| %>
                 <tr>
-                  <td><%= leader.name %></td>
-                  <td><%= leader.position_name %></td>
+                  <td><%= group_leader.user.name %></td>
+                  <td><%= group_leader.position_name %></td>
                   <td></td>
                 </tr>
               <% end %>
