@@ -98,6 +98,41 @@ RSpec.describe Groups::LeadersController, type: :controller do
     end
   end
 
+  describe 'GET #edit' do
+    let(:user) { create :user }
+    let(:group) { create :group, enterprise: user.enterprise }
+    let!(:group_leader) { create :group_leader, group: group }
+
+    def get_edit(group_id=-1, id=-1)
+      get :edit, group_id: group_id, id: id
+    end
+
+    context 'with logged user' do
+      login_user_from_let
+
+      before { get_edit(group.to_param, group_leader.to_param) }
+
+      it 'return success' do
+        expect(response).to be_success
+      end
+
+      it 'assigns correct group leader' do
+        expect(assigns(:group_leader)).to eq group_leader
+      end
+
+      it 'renders correct template' do
+        expect(response).to render_template :edit
+      end
+    end
+
+    context 'without logged user' do
+      before { get_edit(group.to_param, group_leader.to_param) }
+
+      it 'return error' do
+        expect(response).to_not be_success
+      end
+    end
+  end
 
   describe 'POST #create' do
     def post_create(group_id=-1, params={a: 1})

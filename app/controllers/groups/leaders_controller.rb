@@ -1,6 +1,7 @@
 class Groups::LeadersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
+  before_action :set_leader, only: [:edit]
   after_action :verify_authorized
 
   layout 'erg'
@@ -15,6 +16,10 @@ class Groups::LeadersController < ApplicationController
     authorize @group, :update?
 
     @leader = GroupLeader.new
+  end
+
+  def edit
+    authorize @group, :update?
   end
 
   def create
@@ -32,6 +37,10 @@ class Groups::LeadersController < ApplicationController
 
   def set_group
     @group = current_user.enterprise.groups.find(params[:group_id])
+  end
+
+  def set_leader
+    @group_leader = @group.group_leaders.find(params[:id])
   end
 
   def group_leader_params
