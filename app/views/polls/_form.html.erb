@@ -14,7 +14,7 @@
 
       <div class="card__section card__section--border">
         <div class="row">
-          <div class="col sm-6 poll_initiative_box">
+          <div class="col sm-12 poll_initiative_box <%= poll_initiative_visibility_class(@poll, params) %>">
             <p class="field__hint">Choose the <strong>event</strong> you want to target within these ERGs</p>
             <%= f.association :initiative,
                   collection: @poll.enterprise.initiatives.recent,
@@ -24,9 +24,12 @@
                   label: false,
                   disabled: disabled_input?
             %>
+            <%= f.input :initiative_id,
+                  as: :hidden,
+                  input_html: { value: @poll.initiative.try(:id) || params[:initiative_id] } if disabled_input? %>
           </div>
 
-          <div class="col sm-6 poll_group_segment_box <%= visibility_class %>">
+          <div class="col sm-12 poll_group_segment_box <%= poll_others_visibility_class(@poll, params) %>">
             <p class="field__hint">Choose the <strong>ERGs</strong> you want to target</p>
             <%= f.association :groups,
                   collection: @poll.enterprise.groups,
