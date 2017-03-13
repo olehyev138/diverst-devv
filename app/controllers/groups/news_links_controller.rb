@@ -34,7 +34,7 @@ class Groups::NewsLinksController < ApplicationController
       flash[:notice] = "Your news was created"
       redirect_to action: :index
     else
-      flash[:alert] = "Your news was not created. Please verify the errors"
+      flash[:alert] = "Your news was not created. Please fix the errors"
       render :edit
     end
   end
@@ -44,7 +44,7 @@ class Groups::NewsLinksController < ApplicationController
       flash[:notice] = "Your news was updated"
       redirect_to action: :index
     else
-      flash[:alert] = "Your news was not updated. Please verify the errors"
+      flash[:alert] = "Your news was not updated. Please fix the errors"
       render :edit
     end
   end

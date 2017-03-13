@@ -24,9 +24,11 @@ class Groups::GroupMessagesController < ApplicationController
     @message.owner = current_user
 
     if @message.save
+      flash[:notice] = "Your message was created"
       redirect_to action: :index
     else
-      render :edit
+      flash[:alert] = "Your message was not created. Please fix the errors"
+      render :new
     end
   end
 

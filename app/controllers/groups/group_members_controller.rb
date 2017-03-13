@@ -45,9 +45,11 @@ class Groups::GroupMembersController < ApplicationController
     @group_member = @group.user_groups.new(group_member_params)
 
     if @group_member.save
+      flash[:notice] = "The member was created"
       redirect_to :back
     else
-      render :edit
+      flash[:notice] = "The member was not created. Please fix the errors"
+      render :new
     end
   end
 
