@@ -97,6 +97,7 @@ class EnterprisesController < ApplicationController
       .require(:enterprise)
       .permit(
         :has_enabled_saml,
+        :has_enabled_onboarding_email,
         :idp_entity_id,
         :idp_sso_target_url,
         :idp_slo_target_url,
