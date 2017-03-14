@@ -13,9 +13,11 @@ class GraphsController < ApplicationController
     @graph = @collection.graphs.new(graph_params)
 
     if @graph.save
+      flash[:notice] = "Your graph was created"
       redirect_to @collection
     else
-      render :edit
+      flash[:alert] = "Your graph was not created. Please fix the errors"
+      render :new
     end
   end
 
@@ -25,8 +27,10 @@ class GraphsController < ApplicationController
 
   def update
     if @graph.update(graph_params)
+      flash[:notice] = "Your graph was updated"
       redirect_to @graph.collection
     else
+      flash[:alert] = "Your graph was not updated. Please fix the errors"
       render :edit
     end
   end
