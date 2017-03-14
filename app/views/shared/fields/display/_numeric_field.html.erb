@@ -1,0 +1,35 @@
+<% unless cf.alternative_layout %>
+  <span><%= f.label cf.title, required: cf.required %></span>
+  <span class="error"><%= field_errors(resource, cf) %></span>
+  <%= f.input cf.title.downcase.to_sym,
+      label: false,
+      as: :fake,
+      input_html: {
+        name: "custom-fields[#{cf.id}]",
+        value: resource.info[cf],
+        type: "number",
+        min: cf.min,
+        max: cf.max
+      },
+      required: cf.required %>
+<% else %>
+  <div class="numeric_slider" style="margin-bottom: 25px;">
+    <div class="row">
+      <span><%= f.label cf.title.downcase.to_sym, input_html:{class: 'field__label'}, required: cf.required %></span>
+      <span class="error"><%= field_errors(resource, cf) %></span>
+      <b><span class='current_value'></span></b>
+    </div>
+
+    <span class="flex-row flex-row--middle">
+      <span class="min_value flex-row__cell">
+        <%= cf.min %>
+      </span>
+      <span class="flex-row__cell flex-row__cell--grow" >
+        <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { type: 'range', name: "custom-fields[#{cf.id}]", value: resource.info[cf], min: cf.min, max: cf.max }, label: false %>
+      </span>
+      <span class="max_value flex-row__cell">
+        <%= cf.max %>
+      </span>
+    </span>
+  </div>
+<% end %>
