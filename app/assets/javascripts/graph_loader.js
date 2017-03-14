@@ -36,4 +36,28 @@ $(document).on('ready page:load', function() {
       graph.updateData();
     });
   });
+
+  $('.poll-graph-field').each(function() {
+    changeGraphTypeVisibility($(this));
+  });
+
+  $('.poll-graph-field').on('change', function() {
+    changeGraphTypeVisibility($(this));
+  });
+
+  function changeGraphTypeVisibility(element) {
+    var timeseriesElem = $('.js-graph-type-timeseries');
+    if($(element).find('option:selected').hasClass('numeric_field')) {
+      var statsElem = $('.js-graph-type-stats');
+
+      timeseriesElem.parent().find('.segmented-control__item--is-selected').removeClass('segmented-control__item--is-selected');
+      timeseriesElem.hide();
+      $('.js-date-range').hide();
+      statsElem.addClass('segmented-control__item--is-selected');
+      statsElem.parent().find('input').val(statsElem.first().data('value'));
+    }
+    else {
+      timeseriesElem.show();
+    }
+  }
 });
