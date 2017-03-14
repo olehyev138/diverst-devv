@@ -1,19 +1,36 @@
-function applyFullCalendar(selector) {
-  selector = selector || '#calendar';
+$(document).on('ready page:load', function(){
+  listenCalendarVisibility();
+  applyFullCalendar();
 
-  var $calendar = $(selector);
-  var calendarDataUrl = $calendar.data('calendar-data-url');
-
-  $calendar.fullCalendar({
-    header: {
-      left:   'title',
-      center: 'month,agendaWeek',
-      right:  'prev,today,next'
-    },
-    eventSources: [
-      {
-        url: calendarDataUrl
+  function listenCalendarVisibility() {
+    $('.calendar-filters-visibility').on('click', function() {
+      $('.calendar-filters').toggle();
+      if($('.calendar-filters').is(':visible')) {
+        $(this).text($(this).data('hide-text'));
       }
-    ]
-  }); //endof fullcalendar
-}
+      else {
+        $(this).text($(this).data('show-text'));
+      }
+    });
+  }
+
+  function applyFullCalendar(selector) {
+    selector = selector || '#calendar';
+
+    var $calendar = $(selector);
+    var calendarDataUrl = $calendar.data('calendar-data-url');
+
+    $calendar.fullCalendar({
+      header: {
+        left:   'title',
+        center: 'month,agendaWeek',
+        right:  'prev,today,next'
+      },
+      eventSources: [
+        {
+          url: calendarDataUrl
+        }
+      ]
+    }); //endof fullcalendar
+  }
+});
