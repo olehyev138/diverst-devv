@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170307135226) do
+ActiveRecord::Schema.define(version: 20170313141440) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -244,36 +244,37 @@ ActiveRecord::Schema.define(version: 20170307135226) do
   end
 
   create_table "enterprises", force: :cascade do |t|
-    t.string   "name",                       limit: 255
-    t.string   "sp_entity_id",               limit: 255
-    t.string   "idp_entity_id",              limit: 255
-    t.string   "idp_sso_target_url",         limit: 255
-    t.string   "idp_slo_target_url",         limit: 255
-    t.text     "idp_cert",                   limit: 65535
+    t.string   "name",                         limit: 255
+    t.string   "sp_entity_id",                 limit: 255
+    t.string   "idp_entity_id",                limit: 255
+    t.string   "idp_sso_target_url",           limit: 255
+    t.string   "idp_slo_target_url",           limit: 255
+    t.text     "idp_cert",                     limit: 65535
     t.boolean  "has_enabled_saml"
-    t.datetime "created_at",                                               null: false
-    t.datetime "updated_at",                                               null: false
-    t.string   "yammer_token",               limit: 255
-    t.boolean  "yammer_import",                            default: false
-    t.boolean  "yammer_group_sync",                        default: false
-    t.integer  "theme_id",                   limit: 4
-    t.string   "cdo_name",                   limit: 255
-    t.string   "cdo_title",                  limit: 255
-    t.string   "cdo_picture_file_name",      limit: 255
-    t.string   "cdo_picture_content_type",   limit: 255
-    t.integer  "cdo_picture_file_size",      limit: 4
+    t.datetime "created_at",                                                 null: false
+    t.datetime "updated_at",                                                 null: false
+    t.string   "yammer_token",                 limit: 255
+    t.boolean  "yammer_import",                              default: false
+    t.boolean  "yammer_group_sync",                          default: false
+    t.integer  "theme_id",                     limit: 4
+    t.string   "cdo_name",                     limit: 255
+    t.string   "cdo_title",                    limit: 255
+    t.string   "cdo_picture_file_name",        limit: 255
+    t.string   "cdo_picture_content_type",     limit: 255
+    t.integer  "cdo_picture_file_size",        limit: 4
     t.datetime "cdo_picture_updated_at"
-    t.text     "cdo_message",                limit: 65535
-    t.text     "cdo_message_email",          limit: 65535
-    t.boolean  "collaborate_module_enabled",               default: true,  null: false
-    t.boolean  "scope_module_enabled",                     default: true,  null: false
-    t.boolean  "bias_module_enabled",                      default: false, null: false
-    t.boolean  "plan_module_enabled",                      default: true,  null: false
-    t.string   "banner_file_name",           limit: 255
-    t.string   "banner_content_type",        limit: 255
-    t.integer  "banner_file_size",           limit: 4
+    t.text     "cdo_message",                  limit: 65535
+    t.text     "cdo_message_email",            limit: 65535
+    t.boolean  "collaborate_module_enabled",                 default: true,  null: false
+    t.boolean  "scope_module_enabled",                       default: true,  null: false
+    t.boolean  "bias_module_enabled",                        default: false, null: false
+    t.boolean  "plan_module_enabled",                        default: true,  null: false
+    t.string   "banner_file_name",             limit: 255
+    t.string   "banner_content_type",          limit: 255
+    t.integer  "banner_file_size",             limit: 4
     t.datetime "banner_updated_at"
-    t.text     "privacy_statement",          limit: 65535
+    t.text     "privacy_statement",            limit: 65535
+    t.boolean  "has_enabled_onboarding_email",               default: true
   end
 
   create_table "event_attendances", force: :cascade do |t|

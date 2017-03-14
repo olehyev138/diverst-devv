@@ -1,7 +1,7 @@
 class InitiativesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
-  before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo, :finish_expenses]
+  before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo, :finish_expenses, :attendees]
   before_action :set_segments, only: [:new, :create, :edit, :update]
   after_action :verify_authorized
 
@@ -76,6 +76,13 @@ class InitiativesController < ApplicationController
 
   def todo
     authorize @initiative, :update?
+  end
+
+  def attendees
+    authorize @initiative, :update?
+
+    send_data User.to_csv(users: @initiative.attendees, fields: current_user.enterprise.fields),
+      filename: "attendees.csv"
   end
 
   protected

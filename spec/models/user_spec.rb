@@ -110,7 +110,7 @@ RSpec.describe User do
         let!(:enterprise){ create(:enterprise, fields: [mandatory_field]) }
 
         it "should be valid" do
-          user.info[mandatory_field] = "Test"
+          user.info[mandatory_field] = Faker::Lorem.paragraph(2)
 
           expect(user).to be_valid
         end
