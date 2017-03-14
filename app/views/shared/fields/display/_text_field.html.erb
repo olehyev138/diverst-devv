@@ -1,0 +1,23 @@
+<% unless cf.alternative_layout %>
+  <label class="field__label">
+    <%= f.label cf.title, required: cf.required %>
+  </label>
+  <span class="error"><%= field_errors(resource, cf) %></span>
+  <%= f.input cf.title.downcase.to_sym,
+      label: false,
+      as: :fake,
+      input_html: { name: "custom-fields[#{cf.id}]",
+      value: resource.info[cf] }
+  %>
+<% else # Textarea %>
+  <div class="field">
+    <label class="field__label">
+      <abbr title="required" class="<%= required_class(cf) %>">*</abbr>
+      <%= cf.title %>
+    </label>
+    <span class="error"><%= field_errors(resource, cf) %></span>
+    <div class="field__input-wrapper">
+      <textarea name="custom-fields[<%= cf.id %>]" cols="30" rows="10" class="field__input"><%= resource.info[cf] %></textarea>
+    </div>
+  </div>
+<% end %>

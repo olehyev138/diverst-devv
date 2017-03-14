@@ -1,5 +1,5 @@
 <%= link_to news_link.url, class: "block block-section", target: "_blank" do %>
-  <div class="flippable">
+  <div class="<%= "flippable" if news_link.picture.present? %>">
     <div class="front">
       <%= image_tag news_link.picture.expiring_url(3600), width: '100%' if news_link.picture.present? %>
     </div>

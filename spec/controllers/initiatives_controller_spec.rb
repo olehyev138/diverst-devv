@@ -108,6 +108,33 @@ RSpec.describe InitiativesController, type: :controller do
     end
   end
 
+  describe "GET#attendees" do
+    let!(:group) { create :group, :with_outcomes, enterprise: user.enterprise }
+    let!(:initiative) { create :initiative, owner_group: group }
+    let!(:attendee) { create(:user) }
+
+    context 'with logged in user' do
+      login_user_from_let
+      before(:each) do
+        initiative.update(attendees: [attendee])
+      end
+
+      it "render a csv file" do
+        get :attendees, group_id: group.id, id: initiative.id
+
+        content_type = response.headers["Content-Type"]
+        expect(content_type).to eq "text/csv"
+      end
+
+      it "render a csv with attendees of an initiative" do
+        get :attendees, group_id: group.id, id: initiative.id
+
+        body = response.body.split("\n")[1]
+        expect(body).to eq "#{ attendee.first_name },#{ attendee.last_name },#{ attendee.email }"
+      end
+    end
+  end
+
   describe 'non-GET' do
     let!(:group) { create :group, :with_outcomes, enterprise: user.enterprise }
     let!(:initiative) { build :initiative, owner_group: group }

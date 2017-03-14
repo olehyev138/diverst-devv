@@ -360,6 +360,7 @@ ActiveRecord::Schema.define(version: 20170313141440) do
     t.integer  "container_id",       limit: 4
     t.string   "container_type",     limit: 255
     t.boolean  "elasticsearch_only",               default: false
+    t.boolean  "required",                         default: false
   end
 
   add_index "fields", ["container_type", "container_id"], name: "index_fields_on_container_type_and_container_id", using: :btree

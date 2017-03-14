@@ -1,5 +1,5 @@
 <%= link_to group_event_path(event.group, event), class: "block block-section" do %>
-  <div class="flippable">
+  <div class="<%= "flippable" if event.picture.present? %>">
     <div class="front">
       <%= image_tag event.picture.expiring_url(3600), width: '100%' if event.picture.present? %>
     </div>

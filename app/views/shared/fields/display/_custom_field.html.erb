@@ -1,84 +1,10 @@
-<% if cf.is_a? TextField %>
-  <% unless cf.alternative_layout %>
-    <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "custom-fields[#{cf.id}]", value: resource.info[cf] } %>
-  <% else # Textarea %>
-    <div class="field">
-      <label class="field__label"><%= cf.title %></label>
-      <div class="field__input-wrapper">
-        <textarea name="custom-fields[<%= cf.id %>]" cols="30" rows="10" class="field__input"><%= resource.info[cf] %></textarea>
-      </div>
-    </div>
-  <% end %>
-<% elsif cf.is_a? NumericField %>
-  <% unless cf.alternative_layout %>
-    <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { name: "custom-fields[#{cf.id}]", value: resource.info[cf], type: "number", min: cf.min, max: cf.max } %>
-  <% else %>
-    <div class="numeric_slider" style="margin-bottom: 25px;">
-      <div class="row">
-        <span><%= f.label cf.title.downcase.to_sym, input_html:{class: 'field__label'} %></span>
-        <b><span class='current_value'></span></b>
-      </div>
-
-      <span class="flex-row flex-row--middle">
-        <span class="min_value flex-row__cell">
-          <%= cf.min %>
-        </span>
-        <span class="flex-row__cell flex-row__cell--grow" >
-          <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { type: 'range', name: "custom-fields[#{cf.id}]", value: resource.info[cf], min: cf.min, max: cf.max }, label: false %>
-        </span>
-        <span class="max_value flex-row__cell">
-          <%= cf.max %>
-        </span>
-      </span>
-    </div>
-  <% end %>
-<% elsif cf.is_a? DateField %>
-  <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: {
-        class: "datepicker date_picker_input",
-        name: "custom-fields[#{cf.id}]",
-        value: resource.info[cf],
-        type: "text",
-        placeholder: "MM/DD/YYYY"
-      }
-  %>
-<% elsif cf.is_a? SelectField %>
-  <div class="field">
-    <label class="field__label"><%= cf.title %></label>
-    <div class="field__input-wrapper">
-      <span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
-      <select class="field__input field__input--right-add-on" name="custom-fields[<%= cf.id %>]">
-        <option disabled selected value> -- Select an option -- </option>
-        <% cf.options.each do |option| %>
-          <option value="<%= option %>"<%= " selected=selected" if resource.info[cf] && resource.info[cf][0] == option %>><%= option %></option>
-        <% end %>
-      </select>
-    </div>
-  </div>
-<% elsif cf.is_a? CheckboxField %>
-  <% if cf.alternative_layout # Select2 %>
-    <div class="field">
-      <label class="field__label"><%= cf.title %></label>
-      <div class="field__input-wrapper">
-        <span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
-        <select class="field__input field__input--right-add-on select2" name="custom-fields[<%= cf.id %>][]" multiple="multiple">
-          <% cf.options.each do |option| %>
-            <option value="<%= option %>"<%= " selected=selected" if resource.info[cf] && resource.info[cf].include?(option) %>><%= option %></option>
-          <% end %>
-        </select>
-      </div>
-    </div>
-  <% else # Checkboxes %>
-    <div class="field">
-      <label class="field__label"><%= cf.title %></label>
-      <% cf.options.each do |option| %>
-        <label class="control">
-          <%= check_box_tag "custom-fields[#{cf.id}][]", option, resource.info[cf] && resource.info[cf].include?(option), class: "control__input" %>
-          <span class="control__indicator control__indicator--checkbox"></span><span class="control__label"><%= option %></span>
-        </label>
-      <% end %>
-    </div>
-  <% end %>
-<% end %>
+<div class="field <%= field_error_class(resource, cf) %>">
+  <%= render 'shared/fields/display/text_field', resource: resource, f: f, cf: cf if cf.type == 'TextField' %>
+  <%= render 'shared/fields/display/select_field', resource: resource, f: f, cf: cf if cf.type == 'SelectField' %>
+  <%= render 'shared/fields/display/checkbox_field', resource: resource, f: f, cf: cf if cf.type == 'CheckboxField' %>
+  <%= render 'shared/fields/display/numeric_field', resource: resource, f: f, cf: cf if cf.type == 'NumericField' %>
+  <%= render 'shared/fields/display/date_field', resource: resource, f: f, cf: cf if cf.type == 'DateField' %>
+</div>
 
 <script>
   $(document).ready(function(){

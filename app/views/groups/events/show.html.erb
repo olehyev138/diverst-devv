@@ -10,6 +10,9 @@
     <div class="flex-row__cell">
       <%= link_to "Edit event", edit_group_initiative_path(@group, @event), class: "btn btn--primary" if policy(@event).edit? %>
     </div>
+    <div class="flex-row__cell">
+      <%= link_to "Export attendees", attendees_group_initiative_path(@group, @event, format: :csv), class: "btn btn--primary" if policy(@event).edit? %>
+    </div>
   </div>
 </div>
 
