@@ -24,9 +24,11 @@ class InitiativesController < ApplicationController
     @initiative.owner_group = @group
 
     if @initiative.save
+      flash[:notice] = "Your event was created"
       track_activity(@initiative, :create)
       redirect_to action: :index
     else
+      flash[:alert] = "Your event was not created. Please fix the errors"
       render :new
     end
   end
@@ -43,9 +45,11 @@ class InitiativesController < ApplicationController
   def update
     authorize @initiative
     if @initiative.update(initiative_params.except!(:budget_item_id))
+      flash[:notice] = "Your event was updated"
       track_activity(@initiative, :update)
       redirect_to [@group, :initiatives]
     else
+      flash[:alert] = "Your event was not updated. Please fix the errors"
       render :edit
     end
   end
@@ -62,9 +66,10 @@ class InitiativesController < ApplicationController
 
     track_activity(@initiative, :destroy)
     if @initiative.destroy
+      flash[:notice] = "Your event was deleted"
       redirect_to action: :index
     else
-      #TODO write error message here
+      flash[:alert] = "Your event was not deleted. Please fix the errors"
       redirect_to :back
     end
   end

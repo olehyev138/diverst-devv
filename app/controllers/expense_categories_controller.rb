@@ -19,9 +19,11 @@ class ExpenseCategoriesController < ApplicationController
     @expense_category = current_user.enterprise.expense_categories.new(expense_params)
 
     if @expense_category.save
+      flash[:notice] = "Your expense category was created"
       redirect_to action: :index
     else
-      render :edit
+      flash[:alert] = "Your expense category was not created. Please fix the errors"
+      render :new
     end
   end
 
@@ -32,8 +34,10 @@ class ExpenseCategoriesController < ApplicationController
   def update
     authorize @expense_category
     if @expense_category.update(expense_params)
+      flash[:notice] = "Your expense category was updated"
       redirect_to action: :index
     else
+      flash[:alert] = "Your expense category was not updated. Please fix the errors"
       render :edit
     end
   end

@@ -28,9 +28,11 @@ class QuestionsController < ApplicationController
     @question = @campaign.questions.new(question_params)
 
     if @question.save
+      flash[:notice] = "Your question was created"
       redirect_to action: :index
     else
-      render :edit
+      flash[:alert] = "Your question was not created. Please fix the errors"
+      render :new
     end
   end
 
@@ -49,8 +51,10 @@ class QuestionsController < ApplicationController
     @question.solved_at = Time.current if question_params[:conclusion].present?
 
     if @question.update(question_params)
+      flash[:notice] = "Your question was updated"
       redirect_to @question
     else
+      flash[:alert] = "Your question was not updated. Please fix the errors"
       render :edit
     end
   end

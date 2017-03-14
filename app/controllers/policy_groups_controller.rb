@@ -15,16 +15,20 @@ class PolicyGroupsController < ApplicationController
     @policy_group = current_user.enterprise.policy_groups.new(policy_group_params)
 
     if @policy_group.save
+      flash[:notice] = "Your policy group was created"
       redirect_to action: :index
     else
+      flash[:alert] = "Your policy group was not created. Please fix the errors"
       render :new
     end
   end
 
   def update
     if @policy_group.update(policy_group_params)
+      flash[:notice] = "Your policy group was updated"
       redirect_to action: :index
     else
+      flash[:alert] = "Your policy group was not updated. Please fix the errors"
       render :edit
     end
   end
