@@ -67,14 +67,15 @@ class GroupsController < ApplicationController
   # calendar for all of the groups
   def calendar
     authorize Group, :index?
+    enterprise = current_user.enterprise
+    @groups = enterprise.groups
+    @segments = enterprise.segments
+    @q = Initiative.ransack(params[:q])
   end
 
   def calendar_data
     authorize Group, :index?
-
-    @events = current_user.enterprise.initiatives
-                .where('start >= ?', params[:start])
-                .where('start <= ?', params[:end])
+    @events = current_user.enterprise.initiatives.ransack(params[:q]).result
 
     render 'shared/calendar_events', format: :json
   end

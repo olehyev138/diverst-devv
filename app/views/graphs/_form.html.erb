@@ -33,8 +33,6 @@
 
 <% content_for :page_scripts do %>
   <script>
-    $('.select2').select2();
-
     $('.segmented-control__item').click(function() {
       $(this).parent().find('.segmented-control__item').removeClass('segmented-control__item--is-selected');
       $(this).addClass('segmented-control__item--is-selected');
