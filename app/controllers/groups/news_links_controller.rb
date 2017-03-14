@@ -31,16 +31,20 @@ class Groups::NewsLinksController < ApplicationController
     @news_link.author = current_user
 
     if @news_link.save
+      flash[:notice] = "Your news was created"
       redirect_to action: :index
     else
+      flash[:alert] = "Your news was not created. Please fix the errors"
       render :edit
     end
   end
 
   def update
     if @news_link.update(news_link_params)
+      flash[:notice] = "Your news was updated"
       redirect_to action: :index
     else
+      flash[:alert] = "Your news was not updated. Please fix the errors"
       render :edit
     end
   end

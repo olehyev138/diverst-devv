@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Diverst</title>
-  <%= stylesheet_link_tag (current_user.enterprise.theme.nil? ? "application" : current_user.enterprise.theme.asset_url), media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-  <%= csrf_meta_tags %>
-  <link rel="icon" type="image/png" href="/favicon.png">
-</head>
-<body class="guest">
-  <% if notice.present? %><p class="notice"><%= notice %></p><% end %>
-  <% if alert.present? %><p class="alert"><%= alert %></p><% end %>
+  <head>
+    <title>Diverst</title>
+    <%= stylesheet_link_tag (current_user.enterprise.theme.nil? ? "application" : current_user.enterprise.theme.asset_url), media: 'all', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= csrf_meta_tags %>
+    <link rel="icon" type="image/png" href="/favicon.png">
+  </head>
+  <body class="guest">
+    <%= render 'partials/flash_messages' %>
 
-  <div class="site-wrap site-wrap--medium">
-    <%= yield %>
-  </div>
-
-</body>
+    <div class="site-wrap site-wrap--medium">
+      <%= yield %>
+    </div>
+  </body>
 </html>

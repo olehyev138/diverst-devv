@@ -103,8 +103,11 @@ class GroupsController < ApplicationController
 
     if @group.save
       track_activity(@group, :create)
+
+      flash[:notice] = "Your ERG was created"
       redirect_to action: :index
     else
+      flash[:alert] = "Your ERG was not created. Please fix the errors"
       render :new
     end
   end
@@ -118,8 +121,11 @@ class GroupsController < ApplicationController
 
     if @group.update(group_params)
       track_activity(@group, :update)
+
+      flash[:notice] = "Your ERG was updated"
       redirect_to :back
     else
+      flash[:alert] = "Your ERG was not updated. Please fix the errors"
       render :edit
     end
   end
