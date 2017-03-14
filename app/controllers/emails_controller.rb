@@ -4,7 +4,8 @@ class EmailsController < ApplicationController
   layout 'global_settings'
 
   def index
-    @emails = current_user.enterprise.emails
+    @enterprise = current_user.enterprise
+    @emails = @enterprise.emails
   end
 
   def update
