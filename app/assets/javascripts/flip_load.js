@@ -27,6 +27,12 @@ $(document).on('ready page:load', function(){
       // Only apply flip if fron element contains anything
       if($front.html().trim() ) {
         $(this).flip(flippableOptions).height(biggerHeight);
+        $(this).on('flip:done', function(event) {
+          if($(this).data('flip-once')) {
+            $(this).off('.flip');
+            $(this).flip(true, { trigger: 'manual' });
+          }
+        });
       }
     });//endof each
   };
