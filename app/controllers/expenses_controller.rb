@@ -19,9 +19,11 @@ class ExpensesController < ApplicationController
     @expense = current_user.enterprise.expenses.new(expense_params)
 
     if @expense.save
+      flash[:notice] = "Your expense was created"
       redirect_to action: :index
     else
-      render :edit
+      flash[:alert] = "Your expense was not created. Please fix the errors"
+      render :new
     end
   end
 
@@ -32,8 +34,10 @@ class ExpensesController < ApplicationController
   def update
     authorize @expense
     if @expense.update(expense_params)
+      flash[:notice] = "Your expense was updated"
       redirect_to action: :index
     else
+      flash[:alert] = "Your expense was not updated. Please fix the errors"
       render :edit
     end
   end

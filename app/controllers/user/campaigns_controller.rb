@@ -14,8 +14,10 @@ class User::CampaignsController < ApplicationController
 
   def update
     if @campaign.update(campaign_params)
+      flash[:notice] = "Your campaign was updated"
       redirect_to @campaign
     else
+      flash[:alert] = "Your campaign was not updated. Please fix the errors"
       render :edit
     end
   end

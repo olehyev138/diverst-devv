@@ -24,16 +24,20 @@ class BiasesController < ApplicationController
     @bias.user = current_user
 
     if @bias.save
+      flash[:notice] = "Bias was reported"
       redirect_to :back
     else
+      flash[:alert] = "Bias was not reported. Please fix the errors"
       render :new
     end
   end
 
   def update
     if @bias.update(bias_params)
+      flash[:notice] = "Bias report was updated"
       redirect_to action: :index
     else
+      flash[:alert] = "Bias report was not updated. Please fix the errors"
       render :edit
     end
   end

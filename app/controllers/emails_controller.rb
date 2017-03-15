@@ -10,8 +10,10 @@ class EmailsController < ApplicationController
 
   def update
     if @email.update(email_params)
+      flash[:notice] = "Your email was updated"
       redirect_to action: :index
     else
+      flash[:alert] = "Your email was not updated. Please fix the errors"
       render :edit
     end
   end
