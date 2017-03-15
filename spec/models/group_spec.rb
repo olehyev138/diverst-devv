@@ -6,7 +6,7 @@ RSpec.describe Group do
 
     it{ expect(group).to validate_presence_of(:name) }
 
-    it{ expect(group).to be_valid }
+    it{ expect(group).to have_many(:leaders).through(:group_leaders) }
   end
 
   describe '#accept_user_to_group' do

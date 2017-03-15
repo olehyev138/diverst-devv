@@ -55,6 +55,10 @@ class Group < ActiveRecord::Base
   has_many :updates, class_name: "GroupUpdate", dependent: :destroy
   has_many :fields, as: :container, dependent: :destroy
 
+  has_many :group_leaders
+  has_many :leaders, through: :group_leaders, source: :user
+
+
   accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
 

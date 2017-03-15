@@ -96,6 +96,7 @@ Rails.application.routes.draw do
       resources :group_messages, path: 'messages' do
         post 'create_comment'
       end
+      resources :leaders
     end
 
     scope module: :groups do

@@ -108,22 +108,15 @@
           <% end %>
         <% end %>
 
-      <% if manager = @group.lead_manager %>
-        <div class="card card--secondary">
-          <div class="card__section">
-            <h4 style="overflow: auto;">
-              <span class="inline-block fleft">Your ERG manager</span>
-              <%= link_to image_tag('linkedin.png'), manager.linkedin_profile_url, target: '_blank', class: 'inline-block fright' if manager.linkedin_profile_url %>
-            </h4>
-            <div style="overflow: auto; clear: both;">
-              <%= image_tag(manager.avatar.expiring_url(3600), class: "avatar avatar--round", style: "float: left; margin-right: 1em;") %>
-              <div style="float: left;">
-                <strong><%= manager.name %></strong><br>
-              </div>
-            </div>
-          </div>
-        </div>
-      <% end %>
+      <div class="card card--secondary">
+        <%= render('leader', leader: @group.lead_manager, position: 'Lead manager') if @group.lead_manager %>
+
+        <% @group.group_leaders.each do |group_leader| %>
+          <%= render('leader', leader: group_leader.user, position: group_leader.position_name ) %>
+        <% end %>
+      </div>
+
+
       <div class="card card--secondary">
         <div class="card__section">
           <h4 class="card__title"><%= inline_svg('icons/trophy.svg', class: "icon card__icon") %>Leaderboards</h4>

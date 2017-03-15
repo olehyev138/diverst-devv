@@ -388,6 +388,14 @@ ActiveRecord::Schema.define(version: 20170313141440) do
     t.datetime "updated_at",           null: false
   end
 
+  create_table "group_leaders", force: :cascade do |t|
+    t.integer  "group_id",      limit: 4
+    t.integer  "user_id",       limit: 4
+    t.string   "position_name", limit: 255
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
   create_table "group_message_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
     t.integer  "author_id",  limit: 4
