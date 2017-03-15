@@ -91,8 +91,6 @@ RSpec.describe User do
   end
 
   describe 'when validating' do
-    it{ expect(user).to have_many(:leading_groups).through(:group_leaders) }
-    
     context 'presence of fields' do
       let(:user){ build(:user, enterprise: enterprise) }
       let!(:mandatory_field){ create(:field, title: "Test", required: true) }
