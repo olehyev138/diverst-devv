@@ -57,10 +57,10 @@ class EnterprisesController < ApplicationController
     set_theme
 
     if @enterprise.update_attributes(theme_attributes: enterprise_params[:theme])
-      flash[:notice] = "Your branding was updated"
+      flash[:notice] = "Enterprise branding was updated"
       redirect_to action: :edit_branding
     else
-      flash[:alert] = "Your branding was not updated. Please fix the errors"
+      flash[:alert] = "Enterprise branding was not updated. Please fix the errors"
       render :edit_branding
     end
   end
