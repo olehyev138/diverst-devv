@@ -3,22 +3,19 @@
 
     <div class="card">
       <div class="card__section card__section--border">
-        <p class="field__hint">Start off by giving your item a <strong>name</strong></p>
-        <%= f.input :name, label: false, placeholder: "Trip to HQ" %>
+        <%= f.input :name, label: "Start off by giving your item a <strong>name</strong>".html_safe, placeholder: "Trip to HQ" %>
       </div>
 
       <div class="card__section card__section--border">
-        <p class="field__hint">What is the <strong>cost</strong> of a single unit?</p>
-        <%= f.input :price, label: false, placeholder: "4500" %>
+        <%= f.input :price, label: "What is the <strong>cost</strong> of a single unit?".html_safe, placeholder: "4500" %>
       </div>
 
       <div class="card__section card__section--border">
-        <p class="field__hint">Choose a <strong>category</strong> to group this item in</p>
-        <%= f.association :category, label: false, include_blank: false %>
+        <%= f.association :category, label: "Choose a <strong>category</strong> to group this item in".html_safe, include_blank: false %>
       </div>
 
       <div class="card__section card__section--border">
-        <p class="field__hint">What is the <strong>nature</strong> of this item?</p>
+        <%= f.label :income, label: "What is the <strong>nature</strong> of this item?".html_safe, class: "field__label" %>
         <div class="segmented-control">
           <a class="segmented-control__item<%= " segmented-control__item--is-selected" if f.object.income %>" data-value="true">Income</a>
           <a class="segmented-control__item<%= " segmented-control__item--is-selected" if !f.object.income %>" data-value="false">Expense</a>

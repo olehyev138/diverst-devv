@@ -18,12 +18,10 @@
       <div class="card__section card__section--border calendar-filters">
         <div class="row">
           <div class="col sm-6">
-            <%= f.label "Start date", required: false %>
-            <%= f.input :start_gteq, as: :date_picker, label: false %>
+            <%= f.input :start_gteq, as: :date_picker, label: "Start date", required: false %>
           </div>
           <div class="col sm-6">
-            <%= f.label "End date", required: false %>
-            <%= f.input :end_lteq, as: :date_picker, label: false %>
+            <%= f.input :end_lteq, as: :date_picker, label: "End date", required: false %>
           </div>
         </div>
       </div>
@@ -31,21 +29,21 @@
       <div class="card__section card__section--border calendar-filters">
         <div class="row">
           <div class="col sm-6">
-            <%= f.label "Participating groups", required: false %>
             <%= f.input :initiative_participating_groups_group_id_in,
                   as: :select,
                   collection: @groups,
                   input_html: { class: "select2", multiple: true },
-                  label: false
+                  label: "Participating groups",
+                  required: false
             %>
           </div>
           <div class="col sm-6">
-            <%= f.label "Segments to filter", required: false %>
             <%= f.input :initiative_segments_segment_id_in,
                   as: :select,
                   collection: @segments,
                   input_html: { class: "select2", multiple: true },
-                  label: false
+                  label: "Segments to filter",
+                  required: false
             %>
           </div>
         </div>

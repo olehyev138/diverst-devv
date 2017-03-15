@@ -3,19 +3,20 @@
 
     <div class="card">
       <div class="card__section card__section--border">
-        <p class="field__hint">Start off by choosing which <strong>program</strong> this event will participate in</p>
-        <%= f.association :pillar, collection: @group.pillars, label_method: :name_with_group_prefix, label: false, include_blank: false %>
+        <%= f.association :pillar,
+              collection: @group.pillars,
+              label_method: :name_with_group_prefix,
+              label: "Start off by choosing which <strong>program</strong> this event will participate in".html_safe,
+              include_blank: false %>
       </div>
 
       <div id='budget_panel' class="card_section row">
         <div class="col sm-6">
           <div class="card__section card__section--border">
-            <p class="field__hint">Attach a <strong>budget</strong> to the event.
-            </p>
             <%= f.input :budget_item_id,
                   collection: Budget.pre_approved_events_for_select(@group),
                   include_blank: 'Create new free event ($0)',
-                  label: false,
+                  label: "Attach a <strong>budget</strong> to the event.".html_safe,
                   disabled: controller.action_name == "edit"
             %>
           </div>
@@ -23,54 +24,53 @@
       </div>
 
       <div class="card__section card__section--border">
-        <p class="field__hint">You may also specify <strong>participating groups</strong></p>
-        <%= f.association :participating_groups, label: false, collection: @group.possible_participating_groups, input_html: {class: 'select2', multiple: true} %>
+        <%= f.association :participating_groups,
+          label: "You may also specify <strong>participating groups</strong>".html_safe,
+          collection: @group.possible_participating_groups,
+          input_html: {class: 'select2', multiple: true} %>
       </div>
 
       <div class="card__section card__section--border">
-        <p class="field__hint">Give your event a <strong>name</strong></p>
-        <%= f.input :name, label: false %>
+        <%= f.input :name, label: "Give your event a <strong>name</strong>".html_safe %>
       </div>
 
       <div class="card__section card__section--border">
-        <p class="field__hint">Give it a short (or long) <strong>description</strong></p>
-        <%= f.input :description, label: false %>
+        <%= f.input :description, label: "Give it a short (or long) <strong>description</strong>".html_safe %>
       </div>
 
       <div class="card__section card__section--border">
         <p class="field__hint">Define a <strong>start</strong> and <strong>end</strong> time</p>
         <div class="row">
           <div class="col sm-6">
-            <%= f.input :start, as: :date_time_picker %>
+            <%= f.input :start, as: :date_time_picker, label: "Start time" %>
           </div>
           <div class="col sm-6">
-            <%= f.input :end, as: :date_time_picker %>
+            <%= f.input :end, as: :date_time_picker, label: "End time" %>
           </div>
         </div>
       </div>
 
       <div class="card__section card__section--border">
-        <p class="field__hint">Choose the <strong>segments</strong> you want to target</p>
-        <%= f.association :segments, collection: @segments, input_html: { class: "select2" }, label: false %>
+        <%= f.association :segments,
+              collection: @segments,
+              input_html: { class: "select2" },
+              label: "Choose the <strong>segments</strong> you want to target".html_safe %>
       </div>
 
       <div class="row">
         <div class="col sm-4">
           <div class="card__section card__section--border">
-            <p class="field__hint">Specify maximum <strong>attendees</strong></p>
-            <%= f.input :max_attendees, label: false %>
+            <%= f.input :max_attendees, label: "Specify maximum <strong>attendees</strong>".html_safe %>
           </div>
         </div>
         <div class="col sm-4">
           <div class="card__section card__section--border">
-            <p class="field__hint">Specify the <strong>location</strong></p>
-            <%= f.input :location, label: false %>
+            <%= f.input :location, label: "Specify the <strong>location</strong>".html_safe %>
           </div>
         </div>
         <div class="col sm-4">
           <div class="card__section card__section--border">
-            <p class="field__hint">Specify the <strong>picture</strong></p>
-            <%= f.input :picture, as: :attachment_preview, label: false %>
+            <%= f.input :picture, as: :attachment_preview, label: "Specify the <strong>picture</strong>".html_safe %>
           </div>
         </div>
       </div>
