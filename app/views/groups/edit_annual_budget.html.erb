@@ -2,8 +2,8 @@
   <%= simple_form_for @group, url: update_annual_budget_group_path(@group), method: 'post' do |f| %>
     <div class="card">
       <div class="card__section card__section--border">
-        <p class="field__hint">Enter the amount of money <strong><%= link_to @group.name, group_path(@group) %> can spend annually</strong></p>
-        <%= f.input :annual_budget, label: false %>
+        <%= f.input :annual_budget,
+              label: "Enter the amount of money <strong>#{ link_to @group.name, group_path(@group) } can spend annually</strong>".html_safe %>
       </div>
     </div>
 

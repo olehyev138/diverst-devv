@@ -19,20 +19,24 @@
             <div class="flex-row__cell">
               <%= f.input :yammer_create_group, label: false %>
             </div>
-            <div class="flex-row__cell">
-              <strong>Create Yammer group</strong>
-              <p>Creates a matching group for this ERG in Yammer.</p>
-            </div>
+            <%= f.label :yammer_create_group do %>
+              <div class="flex-row__cell">
+                <strong>Create Yammer group</strong>
+                <p>Creates a matching group for this ERG in Yammer.</p>
+              </div>
+            <% end %>
           </div>
 
           <div class="flex-row flex-row--middle">
             <div class="flex-row__cell">
               <%= f.input :yammer_sync_users, label: false %>
             </div>
-            <div class="flex-row__cell">
-              <strong>User sync</strong>
-              <p>Automatically adds users to this ERG's Yammer group as they join it in Diverst.</p>
-            </div>
+            <%= f.label :yammer_sync_users do %>
+              <div class="flex-row__cell">
+                <strong>User sync</strong>
+                <p>Automatically adds users to this ERG's Yammer group as they join it in Diverst.</p>
+              </div>
+            <% end %>
           </div>
         </div>
       <% end %>
@@ -44,11 +48,6 @@
 </div>
 
 <script>
-  $('.select2').select2({
-    allowClear: true,
-    placeholder: "None"
-  });
-
   $sendInvitations = $('#group_send_invitations');
   $invitationSegments = $('.group_invitation_segments');
 

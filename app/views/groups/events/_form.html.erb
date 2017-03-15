@@ -12,8 +12,10 @@
         <%= f.input :picture, as: :attachment_preview %>
       </div>
       <div class="card__section card__section--border">
-        <p>Choose the <strong>external members</strong> you want to invite</p>
-        <%= f.association :attendees, collection: @group.enterprise.users, input_html: { class: "select2" }, label: false %>
+        <%= f.association :attendees,
+              collection: @group.enterprise.users,
+              input_html: { class: "select2" },
+              label: "Choose the <strong>external members</strong> you want to invite".html_safe %>
       </div>
     </div>
 

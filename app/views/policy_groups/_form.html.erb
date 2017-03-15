@@ -3,7 +3,9 @@
 
     <div class="card">
       <div class="card__section card__section--border">
-        <p class="field__hint">Start off by giving your <strong>permission group</strong> a name</p>
+        <p class="field__hint">
+          <%= f.label :name, label: "Start off by giving your <strong>permission group</strong> a name".html_safe %>
+        </p>
         <%= f.input :name, label: false %>
       </div>
       <div class="card__section card__section--border">
@@ -112,12 +114,13 @@
         </div>
       </div>
       <div class="card__section card__section--border">
-        <% if @policy_group.new_record? %>
-          <p>Choose the <strong>users</strong> that will initially be part of this group</p>
-        <% else %>
-          <p>You can edit <strong>users</strong> that are part of this group</p>
+        <%= f.label :user_ids do %>
+          <% if @policy_group.new_record? %>
+            <p>Choose the <strong>users</strong> that will initially be part of this group</p>
+          <% else %>
+            <p>You can edit <strong>users</strong> that are part of this group</p>
+          <% end %>
         <% end %>
-
         <%= f.association :users, collection: @policy_group.enterprise.users, label: false, input_html: { class: "select2" } %>
       </div>
     </div>

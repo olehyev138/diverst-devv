@@ -3,12 +3,12 @@
 
     <div class="card">
       <div class="card__section card__section--border">
-        <p class="field__hint">Give your category a <strong>name</strong></p>
-        <%= f.input :name, label: false, placeholder: "Travel" %>
+        <%= f.input :name, label: "Give your category a <strong>name</strong>".html_safe, placeholder: "Travel" %>
       </div>
       <div class="card__section card__section--border">
-        <p class="field__hint">Optionally upload an <strong>icon</strong> that represents the category</p>
-        <%= f.input :icon, as: :attachment_preview, label: false %>
+        <%= f.input :icon,
+              as: :attachment_preview,
+              label: "Optionally upload an <strong>icon</strong> that represents the category".html_safe %>
       </div>
     </div>
 

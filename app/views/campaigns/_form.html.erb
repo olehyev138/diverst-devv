@@ -3,49 +3,58 @@
 
     <div class="card">
       <div class="card__section card__section--border">
-        <p class="field__hint">Start off by giving your campaign a <strong>name</strong></p>
-        <%= f.input :title, label: false %>
+        <%= f.input :title,
+              label: "Start off by giving your campaign a <strong>name</strong>".html_safe %>
       </div>
 
       <div class="card__section card__section--border">
-        <p class="field__hint">Describe what the <strong>goal</strong> of the campaign is. The respondents will see this.</p>
-        <%= f.input :description, label: false %>
+        <%= f.input :description,
+              label: "Describe what the <strong>goal</strong> of the campaign is. The respondents will see this.".html_safe %>
       </div>
 
       <div class="card__section card__section--border">
         <p class="field__hint">Choose the campaign's start and end <strong>time</strong></p>
-        <%= f.input :start, as: :date_time_picker %>
-        <%= f.input :end, as: :date_time_picker %>
+        <%= f.input :start, as: :date_time_picker, label: "Start time" %>
+        <%= f.input :end, as: :date_time_picker, label: "End time" %>
       </div>
 
       <div class="card__section card__section--border">
-        <p class="field__hint">Choose the <strong>ERGs</strong> you want to target</p>
-        <%= f.association :groups, collection: @campaign.enterprise.groups, input_html: { class: "select2" }, label: false %>
+        <%= f.association :groups,
+              collection: @campaign.enterprise.groups,
+              input_html: { class: "select2" },
+              label: "Choose the <strong>ERGs</strong> you want to target".html_safe %>
       </div>
 
       <div class="card__section card__section--border">
-        <p class="field__hint">Choose the <strong>segments</strong> you want to target within these ERGs</p>
-        <%= f.association :segments, collection: @campaign.enterprise.segments, input_html: { class: "select2" }, label: false %>
+        <%= f.association :segments,
+              collection: @campaign.enterprise.segments,
+              input_html: { class: "select2" },
+              label: "Choose the <strong>segments</strong> you want to target within these ERGs".html_safe %>
       </div>
 
       <div class="card__section card__section--border">
-        <p class="field__hint">How many <strong>invites</strong> do you want to send out?</p>
-        <%= f.input :nb_invites, label: false, max: current_user.enterprise.users.count %>
+        <%= f.input :nb_invites,
+              label: "How many <strong>invites</strong> do you want to send out?".html_safe,
+              max: current_user.enterprise.users.count %>
       </div>
 
       <div class="card__section card__section--border">
-        <p class="field__hint">Assign <strong>managers</strong> to the group. They will be allowed access to administrative features related to this group only.</p>
-        <%= f.association :managers, collection: @campaign.enterprise.users, input_html: { class: "select2" }, label: false %>
+        <%= f.association :managers,
+              collection: @campaign.enterprise.users,
+              input_html: { class: "select2" },
+              label: "Assign <strong>managers</strong> to the group. They will be allowed access to administrative features related to this group only.".html_safe %>
       </div>
 
       <div class="card__section card__section--border">
-        <p class="field__hint">Optionally upload an <strong>image</strong> that represents the campaign's purpose</p>
-        <%= f.input :image, as: :attachment_preview, label: false %>
+        <%= f.input :image,
+              as: :attachment_preview,
+              label: "Optionally upload an <strong>image</strong> that represents the campaign's purpose".html_safe %>
       </div>
 
       <div class="card__section card__section--border">
-        <p class="field__hint">Optionally upload a <strong>banner</strong> that represents the campaign's purpose</p>
-        <%= f.input :banner, as: :attachment_preview, label: false %>
+        <%= f.input :banner,
+              as: :attachment_preview,
+              label: "Optionally upload a <strong>banner</strong> that represents the campaign's purpose".html_safe %>
       </div>
     </div>
 
