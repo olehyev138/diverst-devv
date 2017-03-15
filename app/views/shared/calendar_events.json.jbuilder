@@ -7,5 +7,5 @@ json.array! @events do |event|
   json.color  @branding_color || enterprise_primary_color || '#7b77c9'
   json.textColor @text_color || 'white'
 
-  json.url    group_event_path(event.owner_group, event)
+  json.url    group_event_path(event.owner_group, event) if event && event.owner_group
 end
