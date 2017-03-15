@@ -22,9 +22,11 @@ class CampaignsController < ApplicationController
 
     if @campaign.save
       track_activity(@campaign, :create)
+      flash[:notice] = "Your campaign was created"
       redirect_to action: :index
     else
-      render :edit
+      flash[:alert] = "Your campaign was not created. Please fix the errors"
+      render :new
     end
   end
 
@@ -41,8 +43,10 @@ class CampaignsController < ApplicationController
     authorize @campaign
     if @campaign.update(campaign_params)
       track_activity(@campaign, :update)
+      flash[:notice] = "Your campaign was updated"
       redirect_to action: :index
     else
+      flash[:alert] = "Your campaign was not updated. Please fix the errors"
       render :edit
     end
   end

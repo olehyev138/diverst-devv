@@ -42,8 +42,10 @@ class GroupsController < ApplicationController
     @group.budgets << @budget
 
     if @group.save
+      flash[:notice] = "Your budget was created"
       redirect_to action: :budgets
     else
+      flash[:alert] = "Your budget was not created. Please fix the errors"
       render :request_budget
     end
   end
@@ -67,14 +69,15 @@ class GroupsController < ApplicationController
   # calendar for all of the groups
   def calendar
     authorize Group, :index?
+    enterprise = current_user.enterprise
+    @groups = enterprise.groups
+    @segments = enterprise.segments
+    @q = Initiative.ransack(params[:q])
   end
 
   def calendar_data
     authorize Group, :index?
-
-    @events = current_user.enterprise.initiatives
-                .where('start >= ?', params[:start])
-                .where('start <= ?', params[:end])
+    @events = current_user.enterprise.initiatives.ransack(params[:q]).result
 
     render 'shared/calendar_events', format: :json
   end
@@ -102,8 +105,11 @@ class GroupsController < ApplicationController
 
     if @group.save
       track_activity(@group, :create)
+
+      flash[:notice] = "Your ERG was created"
       redirect_to action: :index
     else
+      flash[:alert] = "Your ERG was not created. Please fix the errors"
       render :new
     end
   end
@@ -117,8 +123,11 @@ class GroupsController < ApplicationController
 
     if @group.update(group_params)
       track_activity(@group, :update)
+
+      flash[:notice] = "Your ERG was updated"
       redirect_to :back
     else
+      flash[:alert] = "Your ERG was not updated. Please fix the errors"
       render :edit
     end
   end
@@ -132,9 +141,10 @@ class GroupsController < ApplicationController
 
     track_activity(@group, :destroy)
     if @group.destroy
+      flash[:notice] = "Your ERG was deleted"
       redirect_to action: :index
     else
-      #TODO write error message here
+      flash[:alert] = "Your ERG was not deleted. Please fix the errors"
       redirect_to :back
     end
   end
@@ -148,8 +158,10 @@ class GroupsController < ApplicationController
 
     if @group.update(annual_budget_params)
       track_activity(@group, :annual_budget_update)
+      flash[:notice] = "Your budget was updated"
       redirect_to edit_budgeting_enterprise_path(@group.enterprise)
     else
+      flash[:alert] = "Your budget was not updated. Please fix the errors"
       redirect_to :back
     end
   end

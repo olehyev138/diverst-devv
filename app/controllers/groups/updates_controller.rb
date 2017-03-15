@@ -21,8 +21,10 @@ class Groups::UpdatesController < ApplicationController
     @update.info.merge(fields: @group.fields, form_data: params['custom-fields'])
 
     if @update.save
+      flash[:notice] = "Your group update was created"
       redirect_to action: :index
     else
+      flash[:alert] = "Your group update was not created. Please fix the errors"
       render :new
     end
   end
@@ -40,8 +42,10 @@ class Groups::UpdatesController < ApplicationController
     @update.info.merge(fields: @group.fields, form_data: params['custom-fields'])
 
     if @update.update(update_params)
+      flash[:notice] = "Your group update was updated"
       redirect_to action: :index
     else
+      flash[:alert] = "Your group update was not updated. Please fix the errors"
       render :edit
     end
   end

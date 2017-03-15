@@ -20,8 +20,10 @@ class SegmentsController < ApplicationController
     @segment = current_user.enterprise.segments.new(segment_params)
 
     if @segment.save
+      flash[:notice] = "Your segment was created"
       redirect_to action: :index
     else
+      flash[:alert] = "Your segment was not created. Please fix the errors"
       render :edit
     end
   end
@@ -37,8 +39,10 @@ class SegmentsController < ApplicationController
   def update
     authorize @segment
     if @segment.update(segment_params)
+      flash[:notice] = "Your segment was updated"
       redirect_to @segment
     else
+      flash[:alert] = "Your segment was not updated. Please fix the errors"
       render :edit
     end
   end

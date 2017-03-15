@@ -22,8 +22,10 @@ class PollsController < ApplicationController
     if @poll.save
       Notifiers::PollNotifier.new(@poll).notify!
       track_activity(@poll, :create)
+      flash[:notice] = "Your survey was created"
       redirect_to action: :index
     else
+      flash[:alert] = "Your survey was not created. Please fix the errors"
       render :new
     end
   end
@@ -48,8 +50,10 @@ class PollsController < ApplicationController
     if @poll.update(poll_params)
       Notifiers::PollNotifier.new(@poll).notify!
       track_activity(@poll, :update)
+      flash[:notice] = "Your survey was updated"
       redirect_to @poll
     else
+      flash[:alert] = "Your survey was not updated. Please fix the errors"
       render :edit
     end
   end

@@ -3,42 +3,40 @@
 
     <div class="card">
       <div class="card__section card__section--border">
-        <p class="field__hint">Start off by giving your poll a name</p>
-        <%= f.input :title, label: false %>
+        <%= f.input :title, label: "Start off by giving your poll a name" %>
       </div>
 
       <div class="card__section card__section--border">
-        <p class="field__hint">Describe what the goal of the poll is. The respondents will see this</p>
-        <%= f.input :description, label: false %>
+        <%= f.input :description, label: "Describe what the goal of the poll is. The respondents will see this" %>
       </div>
 
       <div class="card__section card__section--border">
         <div class="row">
-          <div class="col sm-6 poll_initiative_box">
-            <p class="field__hint">Choose the <strong>event</strong> you want to target within these ERGs</p>
+          <div class="col sm-12 poll_initiative_box <%= poll_initiative_visibility_class(@poll, params) %>">
             <%= f.association :initiative,
                   collection: @poll.enterprise.initiatives.recent,
                   include_blank: true,
                   selected: @poll.initiative.try(:id) || params[:initiative_id],
                   input_html: { class: "select2" },
-                  label: false,
+                  label: "Choose the <strong>event</strong> you want to target within these ERGs".html_safe,
                   disabled: disabled_input?
             %>
+            <%= f.input :initiative_id,
+                  as: :hidden,
+                  input_html: { value: @poll.initiative.try(:id) || params[:initiative_id] } if disabled_input? %>
           </div>
 
-          <div class="col sm-6 poll_group_segment_box <%= visibility_class %>">
-            <p class="field__hint">Choose the <strong>ERGs</strong> you want to target</p>
+          <div class="col sm-12 poll_group_segment_box <%= poll_others_visibility_class(@poll, params) %>">
             <%= f.association :groups,
                   collection: @poll.enterprise.groups,
                   input_html: { class: "select2" },
-                  label: false
+                  label: "Choose the <strong>ERGs</strong> you want to target".html_safe
             %>
 
-            <p class="field__hint">Choose the <strong>segments</strong> you want to target within these ERGs</p>
             <%= f.association :segments,
                   collection: @poll.enterprise.segments,
                   input_html: { class: "select2" },
-                  label: false
+                  label: "Choose the <strong>segments</strong> you want to target within these ERGs".html_safe
             %>
           </div>
         </div>
@@ -67,9 +65,3 @@
     <%= button_tag "Save as draft", value: "draft", name: "poll[status]", class: "btn btn--secondary" %>
   <% end %>
 </div>
-
-<% content_for :page_scripts do %>
-  <script>
-    $('.select2').select2();
-  </script>
-<% end %>

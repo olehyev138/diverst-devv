@@ -41,12 +41,14 @@ class UsersController < ApplicationController
     @user.info.merge(fields: @user.enterprise.fields, form_data: params['custom-fields'])
 
     if @user.save
+      flash[:notice] = "Your user was updated"
       if @user.policy_group.admin_pages_view?
         redirect_to @user
       else
         redirect_to user_user_path(@user)
       end
     else
+      flash[:alert] = "Your user was not updated. Please fix the errors"
       render :edit
     end
   end

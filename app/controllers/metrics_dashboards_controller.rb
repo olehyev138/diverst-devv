@@ -17,8 +17,10 @@ class MetricsDashboardsController < ApplicationController
 
     if @metrics_dashboard.save
       track_activity(@metrics_dashboard, :create)
+      flash[:notice] = "Your dashboard was created"
       redirect_to @metrics_dashboard
     else
+      flash[:alert] = "Your dashboard was not created. Please fix the errors"
       render :new
     end
   end
@@ -55,8 +57,10 @@ class MetricsDashboardsController < ApplicationController
 
     if @metrics_dashboard.update(metrics_dashboard_params)
       track_activity(@metrics_dashboard, :update)
+      flash[:notice] = "Your dashboard was updated"
       redirect_to action: :index
     else
+      flash[:alert] = "Your dashboard was not updated. Please fix the errors"
       render :edit
     end
   end

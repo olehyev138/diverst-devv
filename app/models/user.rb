@@ -53,6 +53,7 @@ class User < ActiveRecord::Base
 
   validates :first_name, presence: true
   validates :last_name, presence: true
+  validate :validate_presence_fields
   # validates :password, presence: true, unless: Proc.new { |a| a.enterprise.has_enabled_saml? }
   # validates_confirmation_of :password, if: Proc.new { |a| a.enterprise.has_enabled_saml? && a.password.present? }
 
@@ -337,6 +338,14 @@ class User < ActiveRecord::Base
   end
 
   private
+  def validate_presence_fields
+    enterprise.try(:fields).to_a.each do |field|
+      if field.required && info[field].blank?
+        key = field.title.parameterize.underscore.to_sym
+        errors.add(key, "can't be blank")
+      end
+    end
+  end
 
   # Generate a random password if the user is using SAML
   def generate_password_if_saml

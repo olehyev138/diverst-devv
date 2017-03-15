@@ -8,8 +8,10 @@ class EnterprisesController < ApplicationController
     authorize @enterprise
 
     if @enterprise.update_attributes(enterprise_params)
+      flash[:notice] = "Your enterprise was updated"
       redirect_to :back
     else
+      flash[:alert] = "Your enterprise was not updated. Please fix the errors"
       render params['source']
     end
   end
@@ -55,8 +57,10 @@ class EnterprisesController < ApplicationController
     set_theme
 
     if @enterprise.update_attributes(theme_attributes: enterprise_params[:theme])
+      flash[:notice] = "Enterprise branding was updated"
       redirect_to action: :edit_branding
     else
+      flash[:alert] = "Enterprise branding was not updated. Please fix the errors"
       render :edit_branding
     end
   end
@@ -97,6 +101,7 @@ class EnterprisesController < ApplicationController
       .require(:enterprise)
       .permit(
         :has_enabled_saml,
+        :has_enabled_onboarding_email,
         :idp_entity_id,
         :idp_sso_target_url,
         :idp_slo_target_url,
@@ -137,7 +142,8 @@ class EnterprisesController < ApplicationController
           :max,
           :options_text,
           :alternative_layout,
-          :private
+          :private,
+          :required
         ],
         yammer_field_mappings_attributes: [
           :id,

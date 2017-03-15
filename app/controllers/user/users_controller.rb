@@ -8,8 +8,10 @@ class User::UsersController < ApplicationController
     redirect_to [:user, @user] if @user != current_user && !current_user.is_a?(Admin)
 
     if @user.update_attributes(user_params)
+      flash[:notice] = "Your user was updated"
       redirect_to [:user, @user]
     else
+      flash[:alert] = "Your user was not updated. Please fix the errors"
       render :edit
     end
   end

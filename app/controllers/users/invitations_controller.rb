@@ -19,6 +19,7 @@ class Users::InvitationsController < Devise::InvitationsController
   # Before the vCard is sent out (right after invitation)
   def invite_resource
     resource_class.invite!(invite_params, current_inviter) do |invitable|
+      invitable.skip_invitation = !current_user.enterprise.has_enabled_onboarding_email
       invitable.enterprise = current_inviter.enterprise
       invitable.info.merge(fields: invitable.enterprise.fields, form_data: params['custom-fields'])
       invitable.auth_source = 'manual'

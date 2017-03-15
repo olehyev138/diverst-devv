@@ -161,6 +161,7 @@ Rails.application.routes.draw do
       member do
         get 'todo'
         post 'finish_expenses'
+        get 'attendees'
       end
     end
 

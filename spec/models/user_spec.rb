@@ -90,10 +90,34 @@ RSpec.describe User do
     end
   end
 
-  describe 'validations' do
-    let(:user) { build_stubbed :user }
-
+  describe 'when validating' do
     it{ expect(user).to have_many(:leading_groups).through(:group_leaders) }
+    
+    context 'presence of fields' do
+      let(:user){ build(:user, enterprise: enterprise) }
+      let!(:mandatory_field){ create(:field, title: "Test", required: true) }
+
+      context 'with mandatory fields not filled' do
+        let!(:enterprise){ create(:enterprise, fields: [mandatory_field]) }
+
+        it "should have an error on user" do
+          user.info[mandatory_field] = ""
+          user.valid?
+
+          expect(user.errors.messages).to eq({ test: ["can't be blank"] })
+        end
+      end
+
+      context 'with mandatory fields filled' do
+        let!(:enterprise){ create(:enterprise, fields: [mandatory_field]) }
+
+        it "should be valid" do
+          user.info[mandatory_field] = Faker::Lorem.paragraph(2)
+
+          expect(user).to be_valid
+        end
+      end
+    end
     # describe 'saml password behaviour' do
     #   let(:user) { build :user, enterprise: ent, password: '', password_confirmation: '' }
 
