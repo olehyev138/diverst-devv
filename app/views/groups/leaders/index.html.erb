@@ -25,7 +25,12 @@
                 <tr>
                   <td><%= group_leader.user.name %></td>
                   <td><%= group_leader.position_name %></td>
-                  <td></td>
+                  <% if policy(@group).edit? %>
+                    <td>
+                      <%= link_to "Edit", edit_group_leader_path(@group, group_leader) %> -
+                      <%= link_to "Delete", edit_group_leader_path(@group, group_leader), class: 'error', data: { confirm: "Are you sure?" } %>
+                    </td>
+                  <% end %>
                 </tr>
               <% end %>
             </tbody>

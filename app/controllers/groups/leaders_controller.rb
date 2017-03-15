@@ -1,7 +1,7 @@
 class Groups::LeadersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
-  before_action :set_leader, only: [:edit]
+  before_action :set_leader, only: [:edit, :update, :destroy]
   after_action :verify_authorized
 
   layout 'erg'
@@ -15,7 +15,7 @@ class Groups::LeadersController < ApplicationController
   def new
     authorize @group, :update?
 
-    @leader = GroupLeader.new
+    @group_leader = GroupLeader.new
   end
 
   def edit
@@ -25,12 +25,30 @@ class Groups::LeadersController < ApplicationController
   def create
     authorize @group, :update?
     @leader = @group.group_leaders.new(group_leader_params)
-
+    #TODO notiication
     if @leader.save
       redirect_to action: :index
     else
       render :new
     end
+  end
+
+  def update
+    authorize @group, :update?
+    #TODO notiication
+    if @group_leader.update(group_leader_params)
+      redirect_to  action: :index
+    else
+      render :edit
+    end
+  end
+
+  def destroy
+    authorize @group, :update?
+
+    @group.leaders.delete(@group_leader.user)
+    #TODO notiication
+    redirect_to action: :index
   end
 
   protected

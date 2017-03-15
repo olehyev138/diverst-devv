@@ -1,1 +1,14 @@
-edit.html.erb
+<div class="content__header">
+  <h1>Edit Leader for <%= @group.name %></h1>
+</div>
+
+<div class="content__main">
+  <%= render 'form', url:  group_leader_path(@group, @group_leader) %>
+</div>
+
+<script>
+  $('.select2').select2({
+    allowClear: true,
+    placeholder: "None"
+  });
+</script>

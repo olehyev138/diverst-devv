@@ -198,4 +198,102 @@ RSpec.describe Groups::LeadersController, type: :controller do
       end
     end
   end
+
+  describe 'PATCH #update' do
+    def patch_update(group_id=-1, id=-1, params = {a: :b})
+      patch :update, group_id: group_id, id: id, group_leader: params
+    end
+
+    context 'with logged in user' do
+      let(:user) { create :user }
+      let(:group) { create :group, enterprise: user.enterprise }
+      let!(:group_leader) { create :group_leader, group: group }
+      let!(:old_position_name) { group_leader.position_name }
+
+      login_user_from_let
+
+      context 'with correct params' do
+        let(:new_params) { attributes_for :group_leader }
+
+        before { patch_update(group.to_param, group_leader.to_param, new_params) }
+
+        it 'updates fields' do
+          expect(group_leader.reload.position_name).to eq new_params[:position_name]
+        end
+
+        it 'redirects to correct action' do
+          expect(response).to redirect_to action: :index
+        end
+      end
+
+      context 'with incorrect params' do
+        before { patch_update(group.to_param, group_leader.to_param, {position_name: ''}) }
+
+        it 'does not update fields' do
+          expect(group_leader.reload.position_name).to eq old_position_name
+        end
+
+        it 'redirects to edit action' do
+          expect(response).to render_template :edit
+        end
+
+        it 'shows errors' do
+          group_leader = assigns(:group_leader)
+
+          expect(group_leader.errors).to_not be_empty
+        end
+      end
+    end
+
+    context 'without logged in user' do
+      let(:group) { create :group}
+
+      before { patch_update(group.id) }
+
+      it 'return error' do
+        expect(response).to_not be_success
+      end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    def delete_destroy(group_id = -1, id=-1)
+      delete :destroy, group_id: group_id, id: id
+    end
+
+    let(:user) { create :user }
+    let!(:group) { create :group, enterprise: user.enterprise }
+    let!(:group_leader) { create :group_leader, group: group }
+
+    context 'with logged in user' do
+      login_user_from_let
+
+      context 'with correct params' do
+        it 'deletes leader' do
+          expect{
+            delete_destroy(group.to_param, group_leader.to_param)
+          }.to change(GroupLeader, :count).by(-1)
+        end
+
+        it 'redirects to correct action' do
+          delete_destroy(group.to_param, group_leader.to_param)
+
+          expect(response).to redirect_to  action: :index
+        end
+      end
+    end
+
+    context 'without logged in user' do
+      it 'return error' do
+        delete_destroy(group.to_param, group_leader.to_param)
+        expect(response).to_not be_success
+      end
+
+      it 'do not change Group Leader count' do
+        expect {
+          delete_destroy(group.to_param, group_leader.to_param)
+        }.to_not change(GroupLeader, :count)
+      end
+    end
+  end
 end
