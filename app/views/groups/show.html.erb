@@ -93,7 +93,7 @@
         <% end %>
 
       <div class="card card--secondary">
-        <%= render('leader', leader: @group.lead_manager, position: 'Lead manager') if @group.lead_manager %>
+        <%= render('leader', leader: @group.lead_manager, position: 'ERG Leader') if @group.lead_manager %>
 
         <% @group.group_leaders.each do |group_leader| %>
           <%= render('leader', leader: group_leader.user, position: group_leader.position_name ) %>
