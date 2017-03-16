@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170313141440) do
+ActiveRecord::Schema.define(version: 20170316200837) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -452,6 +452,10 @@ ActiveRecord::Schema.define(version: 20170313141440) do
     t.string   "messages_visibility",       limit: 255
     t.decimal  "annual_budget",                           precision: 8, scale: 2
     t.decimal  "leftover_money",                          precision: 8, scale: 2, default: 0.0
+    t.string   "banner_file_name",          limit: 255
+    t.string   "banner_content_type",       limit: 255
+    t.integer  "banner_file_size",          limit: 4
+    t.datetime "banner_updated_at"
   end
 
   create_table "groups_managers", force: :cascade do |t|
