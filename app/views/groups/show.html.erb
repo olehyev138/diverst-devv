@@ -8,13 +8,9 @@
 </div>
 
 <div class="content__main">
-
   <div class="row row--equal-height">
-
     <div class="col sm-12 md-9">
-
       <div class="row row--equal-height">
-
         <% if policy(@group).view_members? %>
         <div class="col sm-12 md-6">
           <div class="card">
@@ -89,19 +85,7 @@
           Please wait for group administrators to process your membership request.
         <% end %>
 
-        <% if @group.members.where(id: current_user.id).count > 0 %>
-          <%= link_to 'Leave this ERG', group_group_member_path(@group, current_user), method: :delete, class: 'error', style: 'margin: 10px;' %>
-          <div class="col row--spacing-bottom">
-            <%= simple_form_for @user_group, method: :post do |f| %>
-              <%= f.input :enable_notification, label: "Enable notifications?", input_html:
-                {
-                  class: 'ajax-toggle',
-                  'data-url': group_user_group_path(@group, @user_group)
-                }
-              %>
-            <% end %>
-          </div>
-        <% else %>
+        <% if !@group.members.include? current_user %>
           <%= simple_form_for :user, url: group_group_members_path(@group), method: :post do |f| %>
             <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
             <%= f.submit 'Join this ERG', class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
@@ -109,7 +93,7 @@
         <% end %>
 
       <div class="card card--secondary">
-        <%= render('leader', leader: @group.lead_manager, position: 'Lead manager') if @group.lead_manager %>
+        <%= render('leader', leader: @group.lead_manager, position: 'ERG Leader') if @group.lead_manager %>
 
         <% @group.group_leaders.each do |group_leader| %>
           <%= render('leader', leader: group_leader.user, position: group_leader.position_name ) %>
@@ -144,6 +128,20 @@
           </ol>
         </div>
       </div>
+
+      <% if @group.members.include? current_user %>
+        <div class="card card--secondary">
+          <%= simple_form_for @user_group, method: :post do |f| %>
+            <%= f.input :enable_notification, label: "Enable notifications?", input_html:
+              {
+                class: 'ajax-toggle',
+                'data-url': group_user_group_path(@group, @user_group)
+              }
+            %>
+          <% end %>
+        </div>
+        <%= link_to 'Leave this ERG', group_group_member_path(@group, current_user), method: :delete, class: 'btn btn--tertiary error' %>
+      <% end %>
     </div>
   </div>
 </div>
