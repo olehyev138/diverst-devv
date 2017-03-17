@@ -14,7 +14,7 @@
     <% else %>
       <div class="card__section">
         <% if @members.any? %>
-          <table class="table--has-border" id="group-members" data-source="<%= group_group_members_path(format: :json) %>">
+          <table class="table--has-border data-table" data-source="<%= group_group_members_path(format: :json) %>">
             <thead>
               <th>Name</th>
               <th>Actions</th>

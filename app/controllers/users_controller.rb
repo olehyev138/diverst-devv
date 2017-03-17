@@ -6,7 +6,7 @@ class UsersController < ApplicationController
 
   def index
     authorize User
-    @users = policy_scope(User)
+    @users = policy_scope(User).where(search_params)
 
     respond_to do |format|
       format.html
@@ -133,5 +133,9 @@ class UsersController < ApplicationController
       :last_name,
       :active
     )
+  end
+
+  def search_params
+    params.permit(:active)
   end
 end
