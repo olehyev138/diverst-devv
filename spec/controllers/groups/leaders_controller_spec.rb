@@ -183,7 +183,7 @@ RSpec.describe Groups::LeadersController, type: :controller do
 
         it 'shows error' do
           post_create(group.to_param )
-          group_leader = assigns(:leader)
+          group_leader = assigns(:group_leader)
 
           expect(group_leader.errors).to_not be_empty
         end
