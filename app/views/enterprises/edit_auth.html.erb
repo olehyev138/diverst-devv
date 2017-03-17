@@ -6,35 +6,21 @@
   <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_auth') do |f| %>
     <div class="card">
       <div class="card__section">
-        <p>
-          You can check current saml metadata
-          <%=  link_to 'here', metadata_enterprise_saml_index_path(@enterprise) %>
-        </p>
-      </div>
-      <div class="card__section">
-          <div class="row">
-            <div class="col sm-6">
-              <%= f.input :has_enabled_saml,
-                  label: "Enable SAML?",
-                  placeholder: "https://example.com/saml/metadata/123456" %>
-            </div>
-            <div class="col sm-6">
-              <%= f.input :has_enabled_onboarding_email,
-                  label: "Enable onboarding emails?",
-                  input_html: { autofocus: true } %>
-            </div>
+        <div class="row">
+          <div class="col sm-6">
+            <%= f.input :has_enabled_saml,
+                label: "Enable SAML?",
+                placeholder: "https://example.com/saml/metadata/123456" %>
           </div>
-
+          <div class="col sm-6">
+            <%= f.input :has_enabled_onboarding_email,
+                label: "Enable onboarding emails?",
+                input_html: { autofocus: true } %>
+          </div>
+        </div>
       </div>
       <div class="card__section">
-        <%= f.input :idp_entity_id, label: "IdP Metadata URL" %>
-        <%= f.input :idp_sso_target_url, label: "Login URL" %>
-        <%= f.input :idp_slo_target_url, label: "Logout URL" %>
-        <%= f.input :idp_cert, label: "Certificate" %>
-      </div>
-
-      <div class="card__section">
-        Alternatively, you may provide XML file with metadata. Note that settings from XML will <strong>overwrite</strong> any setting provided in the form above.
+        You may provide XML file with Identity Provider metadata.
         <div class="card__section">
             <div class="flex-row">
               <div class="flex-row__cell">
@@ -50,7 +36,22 @@
             <% end %>
             </div>
         </div>
+      </div>
+      <div class="card__section">
+        <p> Note that settings from XML will <strong>be overwritten</strong> by any setting provided in the form below.</p>
+
+        <%= f.input :idp_entity_id, label: "IdP Metadata URL" %>
+        <%= f.input :idp_sso_target_url, label: "Login URL" %>
+        <%= f.input :idp_slo_target_url, label: "Logout URL" %>
+        <%= f.input :idp_cert, label: "Certificate" %>
+
         <%= f.button :submit, "Save auth settings" %>
+      </div>
+      <div class="card__section">
+        <p>
+          You can check current saml metadata
+          <%=  link_to 'here', metadata_enterprise_saml_index_path(@enterprise) %>
+        </p>
       </div>
     </div>
   <% end %>
