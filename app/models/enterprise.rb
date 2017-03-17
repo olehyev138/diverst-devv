@@ -44,6 +44,10 @@ class Enterprise < ActiveRecord::Base
   has_attached_file :banner
   validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
 
+
+  has_attached_file :xml_sso_config
+  validates_attachment_content_type :xml_sso_config, content_type: 'text/xml'
+
   def saml_settings
     settings = OneLogin::RubySaml::Settings.new
 

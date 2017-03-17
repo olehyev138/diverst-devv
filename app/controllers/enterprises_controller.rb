@@ -114,6 +114,7 @@ class EnterprisesController < ApplicationController
         :cdo_title,
         :cdo_picture,
         :banner,
+        :xml_sso_config,
         theme: [
           :id,
           :primary_color,
