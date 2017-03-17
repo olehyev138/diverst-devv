@@ -65,6 +65,20 @@ class EnterprisesController < ApplicationController
     end
   end
 
+  def delete_xml_config
+    authorize @enterprise, :update?
+
+    @enterprise.xml_sso_config = nil
+
+    if @enterprise.save
+      flash[:notice] = "Enterprise XML config was removed"
+      redirect_to action: :edit_auth
+    else
+      flash[:alert] = "Enterprise XML config was not removed. Please fix the errors"
+      render :edit_auth
+    end
+  end
+
   def restore_default_branding
     authorize @enterprise
     @enterprise.theme.try(:destroy)

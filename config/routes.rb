@@ -72,6 +72,7 @@ Rails.application.routes.draw do
       patch 'update_branding'
       patch 'restore_default_branding'
       get 'bias'
+      patch 'delete_xml_config'
     end
 
     scope module: :enterprises do

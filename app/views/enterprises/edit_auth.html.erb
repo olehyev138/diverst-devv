@@ -45,7 +45,7 @@
               </div>
             <% if @enterprise.xml_sso_config? %>
               <div class="flex-row__cell" style="padding-top: 40px;">
-                <%= link_to "Delete config file", '/', method: :delete, class: "error", data: { confirm: "Are you sure?" } %>
+                <%= link_to "Delete config file", delete_xml_config_enterprise_path(@enterprise), method: :patch, class: "error", data: { confirm: "Are you sure?" } %>
               </div>
             <% end %>
             </div>
