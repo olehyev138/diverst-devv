@@ -24,9 +24,9 @@ class Groups::LeadersController < ApplicationController
 
   def create
     authorize @group, :update?
-    @leader = @group.group_leaders.new(group_leader_params)
+    @group_leader = @group.group_leaders.new(group_leader_params)
     #TODO notiication
-    if @leader.save
+    if @group_leader.save
       redirect_to action: :index
     else
       render :new
