@@ -11,6 +11,9 @@ class User < ActiveRecord::Base
   include Elasticsearch::Model
   include ContainsFields
 
+  scope :active, -> { where(active: true) }
+  scope :inactive, -> { where(active: false) }
+
   belongs_to :enterprise, inverse_of: :users
   belongs_to :policy_group
 

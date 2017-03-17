@@ -1,6 +1,30 @@
 require 'rails_helper'
 
 RSpec.describe User do
+  describe 'scopes' do
+    let(:enterprise) { create :enterprise }
+    let!(:active_user) { create :user, enterprise: enterprise }
+    let!(:inactive_user) { create :user, enterprise: enterprise, active: false }
+
+    describe '#active' do
+      it 'only returnes active users' do
+        active_users = enterprise.users.active
+
+        expect(active_users).to include active_user
+        expect(active_users).to_not include inactive_user
+      end
+    end
+
+    describe '#inactive' do
+      it 'only returns inactive user' do
+        inactive_users = enterprise.users.inactive
+
+        expect(inactive_users).to include inactive_user
+        expect(inactive_users).to_not include active_user
+      end
+    end
+  end
+
   describe '#participation_score' do
     subject { create(:user) }
     let(:user) { create(:user) }
