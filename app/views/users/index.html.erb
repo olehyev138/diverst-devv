@@ -45,19 +45,10 @@
   </div>
 
   <h3>Manually added</h3>
-  <div class="card">
-    <div class="card__section">
-      <table class="table--has-border" id="users-table" data-source="<%= users_path(format: :json) %>">
-        <thead>
-          <th>First name</th>
-          <th>Last name</th>
-          <th>Email</th>
-          <th>Options</th>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </div>
+  <%= render "table", source: users_path(format: :json) %>
+
+  <h3>Inactive users</h3>
+  <%= render "table", source: users_path(active: false, format: :json) %>
 
   <h3>SAML</h3>
   <div class="card">
@@ -93,14 +84,3 @@
     <% end %>
   </div>
 </div>
-
-<script>
-  $(document).ready(function() {
-    $('#users-table').dataTable(Utility.mergeWithDTDefaults({
-      serverSide: true,
-      ajax: $('#users-table').data('source')
-    }));
-
-    $('#invited-users-table').dataTable(Utility.defaultDatatablesOptions);
-  });
-</script>
