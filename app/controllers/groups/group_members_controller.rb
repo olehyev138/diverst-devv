@@ -37,7 +37,7 @@ class Groups::GroupMembersController < ApplicationController
   def destroy
     authorize @member, :join_or_leave_groups?
     @group.members.delete(@member)
-    redirect_to action: :index
+    redirect_to group_path(@group)
   end
 
   def create

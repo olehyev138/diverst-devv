@@ -298,4 +298,29 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
 
     it 'check if permission check for deletion is correct'
   end
+
+  describe 'DELETE destroy' do
+    context 'with logged in user' do
+      let(:user) { create(:user) }
+      let(:group) { create(:group, enterprise: user.enterprise) }
+      login_user_from_let
+
+      before do
+        group.members << user
+      end
+
+      it 'remove a member from group' do
+        delete :destroy, group_id: group.id, id: user.id
+        group.reload
+
+        expect(group.members).to eq []
+      end
+
+      it 'redirects to home of group' do
+        delete :destroy, group_id: group.id, id: user.id
+
+        expect(response).to redirect_to group_path(group)
+      end
+    end
+  end
 end
