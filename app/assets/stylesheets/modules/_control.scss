@@ -110,6 +110,10 @@
   .control__input:checked + & {
     background-color: $primary-color;
     border-color: $primary-color;
+    background-image: image-url("icons/checkmark-white.svg");
+    background-size: 15px;
+    background-repeat: no-repeat;
+    background-position: 6px 5px;
   }
 
   &:after {
