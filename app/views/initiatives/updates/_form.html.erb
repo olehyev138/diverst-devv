@@ -3,7 +3,7 @@
 
     <div class="card">
       <div class="card__section">
-        <%= f.input :report_date %>
+        <%= f.input :report_date, input_html: { autofocus: true } %>
       </div>
       <div class="card__section">
         <% @initiative.fields.each do |cf| %>

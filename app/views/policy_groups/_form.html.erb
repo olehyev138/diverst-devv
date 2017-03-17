@@ -6,7 +6,7 @@
         <p class="field__hint">
           <%= f.label :name, label: "Start off by giving your <strong>permission group</strong> a name".html_safe %>
         </p>
-        <%= f.input :name, label: false %>
+        <%= f.input :name, label: false, input_html: { autofocus: true } %>
       </div>
       <div class="card__section card__section--border">
         <p class="field__hint">Should this <strong>permission group</strong> be default for new users in the <strong><%= @policy_group.enterprise.name %></strong>?</p>

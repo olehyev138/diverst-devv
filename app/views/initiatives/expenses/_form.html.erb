@@ -3,7 +3,9 @@
 
     <div class="card">
       <div class="card__section card__section--border">
-        <%= f.input :description, label: "Start off by giving the expense a <strong>description</strong>".html_safe %>
+        <%= f.input :description,
+              label: "Start off by giving the expense a <strong>description</strong>".html_safe,
+              input_html: { autofocus: true } %>
       </div>
       <div class="card__section card__section--border">
         <%= f.input :amount, label: "Specify the <strong>amount</strong> spent".html_safe %>

@@ -9,7 +9,7 @@
         Your request will be sent to <b><%= @group.name %></b> financial manager for approval
       </div>
       <div class="card__section">
-        <%= f.input :description %>
+        <%= f.input :description, input_html: { autofocus: true } %>
       </div>
     </div>
     <div class="card">

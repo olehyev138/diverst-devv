@@ -18,7 +18,11 @@
       <div class="card__section card__section--border calendar-filters">
         <div class="row">
           <div class="col sm-6">
-            <%= f.input :start_gteq, as: :date_picker, label: "Start date", required: false %>
+            <%= f.input :start_gteq,
+                  as: :date_picker,
+                  label: "Start date",
+                  required: false,
+                  input_html: { autofocus: true } %>
           </div>
           <div class="col sm-6">
             <%= f.input :end_lteq, as: :date_picker, label: "End date", required: false %>

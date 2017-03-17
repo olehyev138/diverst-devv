@@ -3,7 +3,8 @@
     <div class="card">
       <div class="card__section card__section--border">
         <%= f.input :annual_budget,
-              label: "Enter the amount of money <strong>#{ link_to @group.name, group_path(@group) } can spend annually</strong>".html_safe %>
+              label: "Enter the amount of money <strong>#{ link_to @group.name, group_path(@group) } can spend annually</strong>".html_safe,
+              input_html: { autofocus: true } %>
       </div>
     </div>
 

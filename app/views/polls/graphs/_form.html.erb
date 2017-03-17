@@ -4,7 +4,8 @@
       <div class="card__section card__section--border">
         <%= f.association :field,
               label: "Choose the field that the graph will represent",
-              collection: f.object.collection.graphable_fields(current_user) %>
+              collection: f.object.collection.graphable_fields(current_user),
+              input_html: { autofocus: true } %>
       </div>
 
       <div class="card__section card__section--border">
