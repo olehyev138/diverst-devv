@@ -1,13 +1,20 @@
-<div class="content__header">
-  <p style="flex: 1 1 0;"><%= @group.description %></p>
-
-  <div class="flex-row flex-row--middle">
-    <div class="flex-row__cell">
-    </div>
-  </div>
-</div>
-
 <div class="content__main">
+  <% if @group.banner.present? %>
+    <div class="row">
+      <div class="col sm-12">
+        <%= image_tag @group.banner.url, style: 'min-width: 100%;' %>
+      </div>
+    </div>
+  <% end %>
+  <% if @group.description.present? %>
+    <div class="content__header mtmedium">
+      <p style="flex: 1 1 0;"><%= @group.description %></p>
+      <div class="flex-row flex-row--middle">
+        <div class="flex-row__cell">
+        </div>
+      </div>
+    </div>
+  <% end %>
   <div class="row row--equal-height">
     <div class="col sm-12 md-9">
       <div class="row row--equal-height">
@@ -81,16 +88,16 @@
     </div>
 
     <div class="col col--stacked sm-12 md-3">
-        <% if @current_user.pending_group_member?(@group.id) %>
-          Please wait for group administrators to process your membership request.
-        <% end %>
+      <% if @current_user.pending_group_member?(@group.id) %>
+        Please wait for group administrators to process your membership request.
+      <% end %>
 
-        <% if !@group.members.include? current_user %>
-          <%= simple_form_for :user, url: group_group_members_path(@group), method: :post do |f| %>
-            <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
-            <%= f.submit 'Join this ERG', class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
-          <% end %>
+      <% if !@group.members.include? current_user %>
+        <%= simple_form_for :user, url: group_group_members_path(@group), method: :post do |f| %>
+          <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
+          <%= f.submit 'Join this ERG', class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
         <% end %>
+      <% end %>
 
       <div class="card card--secondary">
         <%= render('leader', leader: @group.lead_manager, position: 'ERG Leader') if @group.lead_manager %>
@@ -99,7 +106,6 @@
           <%= render('leader', leader: group_leader.user, position: group_leader.position_name ) %>
         <% end %>
       </div>
-
 
       <div class="card card--secondary">
         <div class="card__section">

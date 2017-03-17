@@ -28,11 +28,9 @@ class Group < ActiveRecord::Base
   has_many :poll_responses, through: :polls, source: :responses
   has_many :events
 
-
   has_many :own_initiatives, class_name: 'Initiative', foreign_key: 'owner_group_id'
   has_many :initiative_participating_groups
   has_many :participating_initiatives, through: :initiative_participating_groups, source: :initiative
-
 
   has_many :budgets, as: :subject
   has_many :messages, class_name: 'GroupMessage'
@@ -58,12 +56,14 @@ class Group < ActiveRecord::Base
   has_many :group_leaders
   has_many :leaders, through: :group_leaders, source: :user
 
-
   accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
 
   has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
   validates_attachment_content_type :logo, content_type: %r{\Aimage\/.*\Z}
+
+  has_attached_file :banner
+  validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
 
   validates :name, presence: true
 

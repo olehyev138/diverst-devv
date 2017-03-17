@@ -277,6 +277,7 @@ class GroupsController < ApplicationController
         :name,
         :description,
         :logo,
+        :banner,
         :send_invitations,
         :yammer_create_group,
         :yammer_sync_users,
