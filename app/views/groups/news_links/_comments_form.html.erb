@@ -1,7 +1,7 @@
 <div class="card">
   <div class="card__section">
     <%= simple_form_for @new_comment, url:   create_comment_group_news_link_path(@group, @news_link), method: 'post' do |f| %>
-      <%= f.input :content, label: "Leave a comment:" %>
+      <%= f.input :content, label: "Leave a comment:", input_html: { autofocus: true } %>
 
       <%= f.button :submit, value: "Post a comment", style: "margin-top: 30px;" %>
     <% end %>

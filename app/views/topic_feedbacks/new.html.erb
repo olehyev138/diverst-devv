@@ -7,7 +7,7 @@
   <div class="card">
     <div class="card__section">
       <%= simple_form_for [@topic, @feedback] do |f| %>
-        <%= f.input :content %>
+        <%= f.input :content, input_html: { autofocus: true } %>
         <%= f.button :submit, value: "Submit Feedback", class: "btn--secondary btn--large btn--full" %>
       <% end %>
     </div>

@@ -4,7 +4,8 @@
     <div class="card">
       <div class="card__section card__section--border">
         <%= f.input :title,
-              label: "Start off by giving your campaign a <strong>name</strong>".html_safe %>
+              label: "Start off by giving your campaign a <strong>name</strong>".html_safe,
+              input_html: { autofocus: true } %>
       </div>
 
       <div class="card__section card__section--border">

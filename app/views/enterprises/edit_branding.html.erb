@@ -9,7 +9,7 @@
         <%= f.simple_fields_for @theme do |t| %>
           <div id="colors_row" class="row">
             <div id='primary_color_column' class="col sm-6">
-              <%= t.input :primary_color, id: 'primary_color',input_html: { class: 'jscolor' } %>
+              <%= t.input :primary_color, id: 'primary_color',input_html: { class: 'jscolor', autofocus: true } %>
             </div>
             <div class="col sm-6">
               <%= t.input :use_secondary_color, id: 'use_secondary_color', label: 'Use different color for charts' %>

@@ -3,7 +3,10 @@
 
     <div class="card">
       <div class="card__section card__section--border">
-        <%= f.input :name, label: "Give your category a <strong>name</strong>".html_safe, placeholder: "Travel" %>
+        <%= f.input :name,
+              label: "Give your category a <strong>name</strong>".html_safe,
+              placeholder: "Travel",
+              input_html: { autofocus: true } %>
       </div>
       <div class="card__section card__section--border">
         <%= f.input :icon,

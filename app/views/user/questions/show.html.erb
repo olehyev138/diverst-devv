@@ -61,7 +61,10 @@
               <% end %>
 
               <%= simple_form_for [:user, answer, answer.comments.new] do |f| %>
-                <%= f.input :content, label: false, placeholder: "Enter a comment...", input_html: { rows: 2, class: "comment__input submit-on-return" } %>
+                <%= f.input :content,
+                      label: false,
+                      placeholder: "Enter a comment...",
+                      input_html: { rows: 2, class: "comment__input submit-on-return", autofocus: true } %>
               <% end %>
             </div>
           </div>

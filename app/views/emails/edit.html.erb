@@ -10,7 +10,9 @@
         <div class="card__section">
           <h3>Edit template</h3>
           <%= simple_form_for @email do |f| %>
-            <%= f.input :use_custom_templates, label: "Use custom templates" %>
+            <%= f.input :use_custom_templates,
+                  label: "Use custom templates",
+                  input_html: { autofocus: true } %>
             <%= f.input :subject %>
             <%= f.input :custom_html_template, input_html: { style: "min-height: 300px;" }, wrapper_html: { style: "display: #{(f.object.use_custom_templates ? "block" : "none")}" } %>
             <%= f.button :submit %>

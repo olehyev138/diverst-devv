@@ -6,7 +6,7 @@
               label: "Choose the <strong>field</strong> that the graph will represent".html_safe,
               collection: f.object.collection.graphable_fields(current_user).map{ |field| [field.title, field.id, { class: field.type.underscore }] },
               include_blank: false,
-              input_html: { class: "poll-graph-field" }
+              input_html: { class: "poll-graph-field", autofocus: true }
         %>
       </div>
 

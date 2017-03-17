@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card__section">
       <%= simple_form_for [@group, @message] do |f| %>
-        <%= f.input :subject %>
+        <%= f.input :subject, input_html: { autofocus: true } %>
         <%= f.input :content %>
         <%= f.association :segments, collection: @group.enterprise.segments, input_html: { class: "select2" } %>
 

@@ -2,7 +2,10 @@
   <%= simple_form_for @bias do |f| %>
     <div class="card">
       <div class="card__section">
-        <%= f.input :anonymous, label: "I want to remain anonymous", wrapper: :boolean_toggle %>
+        <%= f.input :anonymous,
+              label: "I want to remain anonymous",
+              wrapper: :boolean_toggle,
+              input_html: { autofocus: true } %>
         <p>Where have you seen unconscious bias in your organization? (your entries will be kept strictly confidential)</p>
 
         <div class="row">

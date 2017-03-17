@@ -6,7 +6,7 @@
         <%= f.association :groups,
               collection: @metrics_dashboard.enterprise.groups,
               label: "Choose what <strong>groups</strong> should be included in this dashboard".html_safe,
-              input_html: { class: "select2" } %>
+              input_html: { class: "select2", autofocus: true } %>
       </div>
 
       <div class="card__section card__section--border">

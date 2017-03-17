@@ -11,7 +11,7 @@
       <p>This feature allows you to import users from Yammer to Diverst. New users created in Yammer will get imported as they are created.</p>
 
       <%= simple_form_for current_user.enterprise do |f| %>
-        <%= f.input :yammer_import, label: "Enable this feature" %>
+        <%= f.input :yammer_import, label: "Enable this feature", input_html: { autofocus: true } %>
 
         <strong>User fields</strong>
         <p>Map Yammer fields to their corresponding Diverst fields to automatically import them.</p>

@@ -11,7 +11,7 @@
   <%= simple_form_for @budget, url: approve_budget_group_path(@group, budget_id: @budget.id), method: :post do |f| %>
     <div class="card">
       <div class="card__section">
-        <%= f.input :description %>
+        <%= f.input :description, input_html: { autofocus: true } %>
       </div>
     </div>
     <div class="card">

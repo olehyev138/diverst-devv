@@ -9,7 +9,7 @@
         <%= f.association :members,
                             collection: @group.enterprise.users,
                             selected: [],
-                            input_html: { class: "select2" },
+                            input_html: { class: "select2", autofocus: true },
                             label: 'Select new members'
         %>
       </div>
@@ -18,10 +18,3 @@
     <%= f.button :submit %>
   <% end %>
 </div>
-
-<script>
-  $('.select2').select2({
-    allowClear: true,
-    placeholder: "None"
-  });
-</script>

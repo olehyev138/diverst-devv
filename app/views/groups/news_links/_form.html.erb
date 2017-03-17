@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card__section">
       <%= simple_form_for [@group, @news_link] do |f| %>
-        <%= f.input :url, label: "URL" %>
+        <%= f.input :url, label: "URL", input_html: { autofocus: true } %>
         <%= f.input :title %>
         <%= f.input :description %>
 
