@@ -3,27 +3,56 @@
 </div>
 
 <div class="content__main">
-  <div class="card">
-    <div class="card__section">
-      <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_auth') do |f| %>
-        <%= f.input :has_enabled_onboarding_email,
-              label: "Enable onboarding emails?",
-              input_html: { autofocus: true } %>
-        <%= f.input :has_enabled_saml,
-              label: "Enable SAML?",
-              placeholder: "https://example.com/saml/metadata/123456" %>
+  <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_auth') do |f| %>
+    <div class="card">
+      <div class="card__section">
+        <div class="row">
+          <div class="col sm-6">
+            <%= f.input :has_enabled_saml,
+                label: "Enable SAML?",
+                placeholder: "https://example.com/saml/metadata/123456" %>
+          </div>
+          <div class="col sm-6">
+            <%= f.input :has_enabled_onboarding_email,
+                label: "Enable onboarding emails?",
+                input_html: { autofocus: true } %>
+          </div>
+        </div>
+      </div>
+      <div class="card__section">
+        You may provide XML file with Identity Provider metadata.
+        <div class="card__section">
+            <div class="flex-row">
+              <div class="flex-row__cell">
+                <%= f.input :xml_sso_config,
+                as: :attachment_preview,
+                label: 'XML config'
+                %>
+              </div>
+            <% if @enterprise.xml_sso_config? %>
+              <div class="flex-row__cell" style="padding-top: 40px;">
+                <%= link_to "Delete config file", delete_xml_config_enterprise_path(@enterprise), method: :patch, class: "error", data: { confirm: "Are you sure?" } %>
+              </div>
+            <% end %>
+            </div>
+        </div>
+      </div>
+      <div class="card__section">
+        <p> Note that settings from XML will <strong>be overwritten</strong> by any setting provided in the form below.</p>
+
         <%= f.input :idp_entity_id, label: "IdP Metadata URL" %>
         <%= f.input :idp_sso_target_url, label: "Login URL" %>
         <%= f.input :idp_slo_target_url, label: "Logout URL" %>
         <%= f.input :idp_cert, label: "Certificate" %>
 
+        <%= f.button :submit, "Save auth settings" %>
+      </div>
+      <div class="card__section">
         <p>
           You can check current saml metadata
           <%=  link_to 'here', metadata_enterprise_saml_index_path(@enterprise) %>
         </p>
-
-        <%= f.button :submit, "Save auth settings" %>
-      <% end %>
+      </div>
     </div>
-  </div>
+  <% end %>
 </div>

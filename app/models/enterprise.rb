@@ -44,8 +44,18 @@ class Enterprise < ActiveRecord::Base
   has_attached_file :banner
   validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
 
+
+  has_attached_file :xml_sso_config
+  validates_attachment_content_type :xml_sso_config, content_type: 'text/xml'
+
   def saml_settings
-    settings = OneLogin::RubySaml::Settings.new
+    if xml_sso_config?
+      idp_metadata_parser = OneLogin::RubySaml::IdpMetadataParser.new
+      file_content = Paperclip.io_adapters.for(xml_sso_config).read
+      settings = idp_metadata_parser.parse(file_content)
+    else
+      settings = OneLogin::RubySaml::Settings.new
+    end
 
     settings.assertion_consumer_service_url = "http://#{ENV['DOMAIN']}/enterprises/#{id}/saml/acs"
 
