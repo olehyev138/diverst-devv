@@ -1,17 +1,17 @@
-<div class="content__header">
-  <p style="flex: 1 1 0;"><%= @group.description %></p>
-
-  <div class="flex-row flex-row--middle">
-    <div class="flex-row__cell">
-    </div>
-  </div>
-</div>
-
 <div class="content__main">
   <% if @group.banner.present? %>
     <div class="row">
       <div class="col sm-12">
         <%= image_tag @group.banner.url, style: 'min-width: 100%;' %>
+      </div>
+    </div>
+  <% end %>
+  <% if @group.description.present? %>
+    <div class="content__header mtmedium">
+      <p style="flex: 1 1 0;"><%= @group.description %></p>
+      <div class="flex-row flex-row--middle">
+        <div class="flex-row__cell">
+        </div>
       </div>
     </div>
   <% end %>
