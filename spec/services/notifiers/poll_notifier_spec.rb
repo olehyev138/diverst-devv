@@ -24,8 +24,8 @@ RSpec.describe Notifiers::PollNotifier do
   describe "when poll was plublished" do
     context "when there is not an initiative on poll" do
       let!(:poll){ create(:poll, status: "published", email_sent: false) }
-      let!(:group){ create(:group, polls: [poll]) }
-      let!(:users){ create_list(:user, 2, groups: [group]) }
+      let!(:users){ create_list(:user, 2, enterprise: poll.enterprise) }
+      let!(:group){ create(:group, polls: [poll], members: users) }
 
       it "should send emails to all users" do
         call_mailer_exactly(2)
@@ -45,8 +45,8 @@ RSpec.describe Notifiers::PollNotifier do
       let!(:pillar){ create(:pillar, outcome: outcome) }
       let!(:initiative){ create(:initiative, owner_group_id: group.id, pillar: pillar) }
       let!(:poll){ create(:poll, status: "published", email_sent: false, enterprise: enterprise, initiative: initiative) }
-      let!(:initiative_user){ create(:initiative_user, initiative: initiative, user: create(:user)) }
-      let!(:users){ create_list(:user, 2, groups: [group]) }
+      let!(:initiative_user){ create(:initiative_user, initiative: initiative, user: create(:user, enterprise: poll.enterprise)) }
+      let!(:users){ create_list(:user, 2, enterprise: poll.enterprise, groups: [group]) }
 
       it "should send emails to users of initiative" do
         call_mailer_exactly(1)

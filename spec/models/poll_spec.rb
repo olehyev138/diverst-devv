@@ -114,4 +114,34 @@ RSpec.describe Poll, type: :model do
       it{ expect(Poll.statuses[:draft]).to eq 1 }
     end
   end
+
+  describe "targeted_users" do
+    let!(:enterprise){ create(:enterprise) }
+    let!(:poll){ create(:poll, enterprise: enterprise) }
+    let!(:user){ create(:user, enterprise: poll.enterprise) }
+
+    it "returns only users of same enterprise of poll" do
+      expect(poll.targeted_users).to eq [user]
+    end
+
+    context "with segments" do
+      let!(:user_in_segment){ create(:user, enterprise: poll.enterprise) }
+      let!(:segment){ create(:segment, members: [user_in_segment]) }
+      before(:each){ poll.update(segments: [segment]) }
+
+      it "returns users that are in segments of poll segments" do
+        expect(poll.targeted_users).to eq [user_in_segment]
+      end
+    end
+
+    context "with groups" do
+      let!(:user_in_group){ create(:user, enterprise: poll.enterprise) }
+      let!(:group){ create(:group, members: [user_in_group]) }
+      before(:each){ poll.update(groups: [group]) }
+
+      it "returns users that are in groups of poll groups" do
+        expect(poll.targeted_users).to eq [user_in_group]
+      end
+    end
+  end
 end

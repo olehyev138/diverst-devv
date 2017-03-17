@@ -31,12 +31,9 @@ class Poll < ActiveRecord::Base
 
   # Returns the list of users who meet the participation criteria for the poll
   def targeted_users
-    target = User.all
-
+    target = enterprise.users
     target = target.for_segments(segments) unless segments.empty?
-
     target = target.for_groups(groups) unless groups.empty?
-
     target
   end
 
