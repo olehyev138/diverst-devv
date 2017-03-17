@@ -13,6 +13,10 @@
       <p><%= @user.name %></p>
     </div>
     <div class="card__section card__section--border">
+      <label><strong>Status</strong></label>
+      <p><%= UserDecorator.decorate(@user).active_status %></p>
+    </div>
+    <div class="card__section card__section--border">
       <label><strong>Email</strong></label>
       <p><%= @user.email %></p>
     </div>
