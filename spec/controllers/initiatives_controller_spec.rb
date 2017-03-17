@@ -130,7 +130,7 @@ RSpec.describe InitiativesController, type: :controller do
         get :attendees, group_id: group.id, id: initiative.id
 
         body = response.body.split("\n")[1]
-        expect(body).to eq "#{ attendee.first_name },#{ attendee.last_name },#{ attendee.email }"
+        expect(body).to eq "#{ attendee.first_name },#{ attendee.last_name },#{ attendee.email },#{attendee.active}"
       end
     end
   end

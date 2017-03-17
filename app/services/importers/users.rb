@@ -51,6 +51,11 @@ class Importers::Users
   end
 
   def user_attributes(row)
-    { first_name: row["first name"], last_name: row["last name"], email: row["email"] }
+    {
+      first_name: row["first name"],
+      last_name: row["last name"],
+      email: row["email"],
+      active: row["active"]
+    }
   end
 end
