@@ -2,6 +2,24 @@
 
 table {
   width: 100%;
+
+  .sorting, .sorting_asc, .sorting_desc {
+    background-repeat: no-repeat;
+    background-position: center right;
+    cursor: pointer;
+  }
+
+  .sorting {
+    background-image: image_url('icons/sort_both.png');
+  }
+
+  .sorting_asc {
+    background-image: image_url('icons/sort_asc.png');
+  }
+
+  .sorting_desc {
+    background-image: image_url('icons/sort_desc.png');
+  }
 }
 
 td {

@@ -11,7 +11,7 @@ class GroupMemberDatatable < AjaxDatatablesRails::Base
   end
 
   def sortable_columns
-    @sortable_columns ||= ['User.first_name', 'User.last_name']
+    @sortable_columns ||= ['User.first_name', 'User.active']
   end
 
   def searchable_columns
@@ -26,6 +26,7 @@ class GroupMemberDatatable < AjaxDatatablesRails::Base
       destroy_link = generate_destroy_link(record)
       [
         record.name,
+        UserDecorator.decorate(record).active_status,
         [show_link, destroy_link].compact.join(" - ")
       ]
     end
