@@ -55,6 +55,7 @@ class Importers::Users
       first_name: row["first name"],
       last_name: row["last name"],
       email: row["email"],
+      biography: row["biography"],
       active: row["active"]
     }
   end
