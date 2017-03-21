@@ -5,7 +5,7 @@ $(document).on('ready page:load', function() {
         serverSide: true,
         ajax: $(this).data('source'),
         columnDefs: [
-          { bSortable: false, targets: [1] }
+          { bSortable: false, targets: [$(this).data('no-sortable')] }
         ]
       }));
     }
