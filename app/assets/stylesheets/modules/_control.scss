@@ -52,6 +52,7 @@
 
 .control__label {
   margin-left: $spacing-small;
+  pointer-events: none;
 
   &--left {
     margin-left: 0;

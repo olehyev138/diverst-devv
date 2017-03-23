@@ -104,7 +104,7 @@ SimpleForm.setup do |config|
     b.use :error, wrap_with: { tag: :span, class: :error }
 
     b.wrapper tag: 'label', class: 'control' do |ba|
-      ba.use :input, class: 'control__input'
+      ba.use :input, class: 'control__input', include_hidden: false
       ba.wrapper tag: 'span', class: 'control__indicator control__indicator--toggle' do end
       ba.use :label, class: 'control__label'
     end
@@ -117,7 +117,7 @@ SimpleForm.setup do |config|
     b.use :error, wrap_with: { tag: :span, class: :error }
 
     b.wrapper tag: 'label', class: 'control' do |ba|
-      ba.use :input, class: 'control__input'
+      ba.use :input, class: 'control__input', include_hidden: false
       ba.wrapper tag: 'span', class: 'control__indicator control__indicator--checkbox' do end
       ba.use :label, class: 'control__label'
     end

@@ -12,6 +12,7 @@
               <%= t.input :primary_color, id: 'primary_color',input_html: { class: 'jscolor', autofocus: true } %>
             </div>
             <div class="col sm-6">
+              <%= f.hidden_field :use_secondary_color, value: 0 %>
               <%= t.input :use_secondary_color, id: 'use_secondary_color', label: 'Use different color for charts' %>
               <%= t.input :secondary_color, id: 'secondary_color', input_html: { class: 'jscolor' }, label: 'Charts color' %>
             </div>

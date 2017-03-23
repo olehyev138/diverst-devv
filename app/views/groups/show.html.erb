@@ -138,6 +138,7 @@
       <% if @group.members.include? current_user %>
         <div class="card card--secondary">
           <%= simple_form_for @user_group, method: :post do |f| %>
+          <%= f.hidden_field :enable_notification, value: 0 %>
             <%= f.input :enable_notification, label: "Enable notifications?", input_html:
               {
                 class: 'ajax-toggle',

@@ -8,6 +8,7 @@
       <%= f.simple_fields_for :fields, @enterprise.match_fields(include_disabled: true) do |field| %>
         <div class="card__section card__section--border">
           <div class="flex-row flex-row--baseline">
+            <%= f.hidden_field :match_exclude, value: 0 %>
             <div class="flex-row__cell"><%= field.input :match_exclude, label: false %></div>
             <div class="flex-row__cell"><strong><%= field.object.title %></strong></div>
             <div class="flex-row__cell">
