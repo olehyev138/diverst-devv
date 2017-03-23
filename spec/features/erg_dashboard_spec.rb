@@ -69,7 +69,7 @@ RSpec.feature 'An ERG dashboard' do
 
       visit group_group_members_path(group)
       expect(page).to have_content member.name
-      page.find('#group-members td', text: member.name).find(:xpath, '..').find('a[data-method=delete]').click
+      page.find('.data-table td', text: member.name).find(:xpath, '..').find('a[data-method=delete]').click
 
       expect(page).not_to have_content member.name
     end

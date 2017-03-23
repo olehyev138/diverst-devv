@@ -11,7 +11,7 @@ class GroupMemberDatatable < AjaxDatatablesRails::Base
   end
 
   def sortable_columns
-    @sortable_columns ||= ['User.first_name', 'User.last_name']
+    @sortable_columns ||= ['User.first_name']
   end
 
   def searchable_columns
