@@ -1,2 +1,3 @@
 <%= f.input :title, label: local_assigns.fetch(:label, "Title") %>
+<%= f.hidden_field :alternative_layout, value: 0 %>
 <%= f.input :alternative_layout, label: "Allow multiple lines", wrapper: :boolean_checkbox %>

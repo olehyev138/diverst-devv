@@ -7,6 +7,7 @@
         <%= f.input :logo, as: :attachment_preview %>
         <%= f.association :managers, collection: @group.enterprise.users, input_html: { class: "select2" } %>
         <%= f.association :lead_manager, collection: @group.enterprise.users, input_html: { class: "select2" } %>
+        <%= f.hidden_field :send_invitations, value: 0 %>
         <%= f.input :send_invitations %>
         <%= f.association :invitation_segments, collection: @group.enterprise.segments, input_html: { class: "select2"}, wrapper_html: { style: "display: none;" } %>
       </div>
@@ -17,6 +18,7 @@
 
           <div class="flex-row flex-row--middle mb10">
             <div class="flex-row__cell">
+              <%= f.hidden_field :yammer_create_group, value: 0 %>
               <%= f.input :yammer_create_group, label: false %>
             </div>
             <%= f.label :yammer_create_group do %>
@@ -29,6 +31,7 @@
 
           <div class="flex-row flex-row--middle">
             <div class="flex-row__cell">
+              <%= f.hidden_field :yammer_sync_users, value: 0 %>
               <%= f.input :yammer_sync_users, label: false %>
             </div>
             <%= f.label :yammer_sync_users do %>

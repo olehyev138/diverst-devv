@@ -8,14 +8,15 @@
       <div class="card__section">
         <div class="row">
           <div class="col sm-6">
+            <%= f.hidden_field :has_enabled_saml, value: 0 %>
             <%= f.input :has_enabled_saml,
                 label: "Enable SAML?",
-                placeholder: "https://example.com/saml/metadata/123456" %>
+                input_html: { autofocus: true } %>
           </div>
           <div class="col sm-6">
+            <%= f.hidden_field :has_enabled_onboarding_email, value: 0 %>
             <%= f.input :has_enabled_onboarding_email,
-                label: "Enable onboarding emails?",
-                input_html: { autofocus: true } %>
+                label: "Enable onboarding emails?" %>
           </div>
         </div>
       </div>

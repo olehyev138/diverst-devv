@@ -2,6 +2,7 @@
   <%= simple_form_for @bias do |f| %>
     <div class="card">
       <div class="card__section">
+        <%= f.hidden_field :anonymous, value: 0 %>
         <%= f.input :anonymous,
               label: "I want to remain anonymous",
               wrapper: :boolean_toggle,
@@ -43,19 +44,27 @@
         <div class="row">
           <h3>Type of bias</h3>
           <div class="col md-3">
+            <%= f.hidden_field :spoken_words, value: 0 %>
             <%= f.input :spoken_words %>
+            <%= f.hidden_field :marginalized_in_meetings, value: 0 %>
             <%= f.input :marginalized_in_meetings %>
           </div>
           <div class="col md-3">
+            <%= f.hidden_field :called_name, value: 0 %>
             <%= f.input :called_name %>
+            <%= f.hidden_field :contributions_ignored, value: 0 %>
             <%= f.input :contributions_ignored %>
           </div>
           <div class="col md-3">
+            <%= f.hidden_field :in_documents, value: 0 %>
             <%= f.input :in_documents %>
+            <%= f.hidden_field :unfairly_criticized, value: 0 %>
             <%= f.input :unfairly_criticized %>
           </div>
           <div class="col md-3">
+            <%= f.hidden_field :sexual_harassment, value: 0 %>
             <%= f.input :sexual_harassment %>
+            <%= f.hidden_field :inequality, value: 0 %>
             <%= f.input :inequality, label: 'Pay Inequity' %>
           </div>
         </div>
