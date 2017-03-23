@@ -1,4 +1,8 @@
-<div>
+<div class="flippable" data-flip-once="true">
+  <div class="front text-center">
+    <%= image_tag "icons/envelope.png", size: "200" %>
+  </div>
+  <div class="back">
     <% messages.each do |message| %>
       <%= link_to group_group_message_path(message.group, message), class: "block block-section" do %>
             <div class="flex-row flex-row--middle">
@@ -17,4 +21,5 @@
             </div>
       <% end %>
     <% end %>
+  </div>
 </div>
