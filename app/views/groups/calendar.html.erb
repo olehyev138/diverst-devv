@@ -18,26 +18,11 @@
       <div class="card__section card__section--border calendar-filters">
         <div class="row">
           <div class="col sm-6">
-            <%= f.input :start_gteq,
-                  as: :date_picker,
-                  label: "Start date",
-                  required: false,
-                  input_html: { autofocus: true } %>
-          </div>
-          <div class="col sm-6">
-            <%= f.input :end_lteq, as: :date_picker, label: "End date", required: false %>
-          </div>
-        </div>
-      </div>
-
-      <div class="card__section card__section--border calendar-filters">
-        <div class="row">
-          <div class="col sm-6">
             <%= f.input :initiative_participating_groups_group_id_in,
                   as: :select,
                   collection: @groups,
-                  input_html: { class: "select2", multiple: true },
-                  label: "Participating groups",
+                  input_html: { class: "select2", multiple: true, autofocus: true },
+                  label: "Filter by ERG",
                   required: false
             %>
           </div>
@@ -46,7 +31,7 @@
                   as: :select,
                   collection: @segments,
                   input_html: { class: "select2", multiple: true },
-                  label: "Segments to filter",
+                  label: "Filter by Segment",
                   required: false
             %>
           </div>
