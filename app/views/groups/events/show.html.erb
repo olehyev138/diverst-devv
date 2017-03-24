@@ -35,7 +35,7 @@
           <h4>Attendees (<%= @event.attendees.count %>)</h4>
           <p>
             <% @event.attendees.limit(10).each do |attendee| %>
-              <%= attendee.name %><br>
+              <%= attendee.name_with_status %><br>
             <% end %>
             <%= link_to "View #{@event.attendees.count - 10} more...", group_event_attendance_path(@group, @event) if @event.attendees.count > 10 %>
           </p>

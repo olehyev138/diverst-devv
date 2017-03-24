@@ -14,7 +14,7 @@
           <% @pending_members.each do |member| %>
             <tr>
               <td>
-                <%= member.name %>
+                <%= member.name_with_status %>
               </td>
               <td>
                 <%= link_to 'Show user', user_path(member)%>

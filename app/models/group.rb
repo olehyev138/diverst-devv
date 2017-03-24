@@ -111,7 +111,7 @@ class Group < ActiveRecord::Base
     if pending_users.enabled?
       filter_by_membership true
     else
-      members
+      members.active
     end
   end
 

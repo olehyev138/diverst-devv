@@ -62,7 +62,8 @@ RSpec.describe Group do
   describe 'members fetching by type' do
     let(:enterprise) { create :enterprise }
     let!(:group) { create :group, enterprise: enterprise }
-    let!(:active_user) { create :user, enterprise: enterprise }
+    let!(:active_user) { create :user, enterprise: enterprise, active: true }
+    let!(:inactive_user) { create :user, enterprise: enterprise, active: false }
     let!(:pending_user) { create :user, enterprise: enterprise }
 
     before do
@@ -103,7 +104,7 @@ RSpec.describe Group do
         end
 
         it 'does not contains pending user' do
-          expect(subject).to_not include pending_user
+          expect(subject).to_not include [pending_user, inactive_user]
         end
       end
 
@@ -115,7 +116,7 @@ RSpec.describe Group do
         end
 
         it 'does not contains active user' do
-          expect(subject).to_not include active_user
+          expect(subject).to_not include [active_user, inactive_user]
         end
       end
     end

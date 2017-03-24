@@ -101,6 +101,11 @@ class User < ActiveRecord::Base
     "#{first_name} #{last_name}"
   end
 
+  def name_with_status
+    status = !active ? " (inactive)" : ""
+    name + status
+  end
+
   #bTODO test this
   def policy_group
     if self[:policy_group_id]
