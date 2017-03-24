@@ -28,7 +28,7 @@
         <div class="flex-row flex-row--middle">
           <div class="flex-row__cell flex-row__cell--grow">
             <%= feedback.content %><br>
-            <small><span class="highlight"><%= link_to feedback.user.name, user_path(feedback.user) %></span> on <%= feedback.created_at.to_s :slashes %> at<%= feedback.created_at.to_s :ampmtime %></small>
+            <small><span class="highlight"><%= link_to feedback.user.name_with_status, user_path(feedback.user) %></span> on <%= feedback.created_at.to_s :slashes %> at<%= feedback.created_at.to_s :ampmtime %></small>
           </div>
           <div class="flex-row__cell link-group">
             <a href="#" data-topic-id="<%= @topic.id %>" data-feedback-id="<%= feedback.id %>" data-starred="false" class="star-button">Star</a> <%= link_to "Delete", topic_topic_feedback_path(@topic, feedback), method: :delete, class: "error", data: { confirm: "Are you sure?" } %>

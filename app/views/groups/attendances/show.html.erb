@@ -46,7 +46,7 @@
         <tbody>
           <% @attendances.each do |attendance| %>
             <tr>
-              <td><%= link_to attendance.user.name, user_path(attendance.user) %></td>
+              <td><%= link_to attendance.name, user_path(attendance) %></td>
               <td><%= attendance.created_at.to_s :reversed_slashes %></td>
             </tr>
           <% end %>
