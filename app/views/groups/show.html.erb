@@ -25,14 +25,15 @@
               <h4 class="card__title"><%= inline_svg('icons/manage.svg', class: "icon card__icon") %></span>Newest Members</h4>
               <%= link_to "View all", group_group_members_path(@group), class: "card__action" %>
 
-              <% @user_groups.each_slice(2) do |user_group_slice| %>
+              <% @user_groups.limit(5).each do |user_group| %>
                 <div class="row mb10">
-                  <% user_group_slice.each do |user_group| %>
-                    <div class="col sm-12 md-6">
+                    <div class="col sm-3 md-2">
+                      <%= image_tag(user_group.user.avatar.expiring_url(3600), size: "40") %>
+                    </div>
+                    <div class="col sm-9 md-10">
                       <%= link_to user_group.user.name, user_group.user %><br>
                       <%= time_ago_in_words(user_group.created_at) %> ago
                     </div>
-                  <% end %>
                 </div>
               <% end %>
             </div>
@@ -138,6 +139,7 @@
       <% if @group.members.include? current_user %>
         <div class="card card--secondary">
           <%= simple_form_for @user_group, method: :post do |f| %>
+          <%= f.hidden_field :enable_notification, value: 0 %>
             <%= f.input :enable_notification, label: "Enable notifications?", input_html:
               {
                 class: 'ajax-toggle',

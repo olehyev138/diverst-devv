@@ -46,7 +46,7 @@ class Groups::LeadersController < ApplicationController
   def destroy
     authorize @group, :update?
 
-    @group.leaders.delete(@group_leader.user)
+    @group_leader.destroy
     #TODO notiication
     redirect_to action: :index
   end

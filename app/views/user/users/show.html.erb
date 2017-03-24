@@ -15,6 +15,14 @@
     <label><strong>Email</strong></label>
     <p><%= @user.email %></p>
   </div>
+  <div class="card__section card__section--border">
+    <label><strong>Name</strong></label>
+    <p><%= @user.first_name %> <%= @user.last_name %></p>
+  </div>
+  <div class="card__section card__section--border">
+    <label><strong>Biography</strong></label>
+    <p><%= @user.biography %></p>
+  </div>
   <% @user.enterprise.fields.where(private: false).each do |field| %>
     <div class="card__section card__section--border">
       <label><strong><%= field.title %></strong></label>

@@ -4,7 +4,6 @@
       <%= f.association :user,
             collection: @group.members,
             include_blank: true,
-            selected: [],
             input_html: { class: "select2", autofocus: true },
             label: 'Select user'
       %>

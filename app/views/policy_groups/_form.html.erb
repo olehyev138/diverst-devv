@@ -10,20 +10,24 @@
       </div>
       <div class="card__section card__section--border">
         <p class="field__hint">Should this <strong>permission group</strong> be default for new users in the <strong><%= @policy_group.enterprise.name %></strong>?</p>
+        <%= f.hidden_field :default_for_enterprise, value: 0 %>
         <%= f.input :default_for_enterprise, label: 'Use as default' %>
       </div>
       <div class="card__section card__section--border">
         <p class="field__hint">Should members of this group be able to access admin dashboard?</p>
+        <%= f.hidden_field :admin_pages_view, value: 0 %>
         <%= f.input :admin_pages_view, label: 'Admin Dashboard' %>
       </div>
       <div class="card__section section--border">
         <div class="row row--spacing-bottom">
           <div class="col md-6">
             <p class="field__hint">Should members of this group be able to approve budgets?</p>
+            <%= f.hidden_field :budget_approval, value: 0 %>
             <%= f.input :budget_approval, label: 'Budget Approval' %>
           </div>
           <div class="col md-6">
             <p class="field__hint">Should members of this group be able to view activity logs?</p>
+            <%= f.hidden_field :logs_view, value: 0 %>
             <%= f.input :logs_view, label: 'View Logs' %>
           </div>
         </div>
@@ -33,33 +37,47 @@
         <div class="row row--spacing-bottom">
           <div class="col md-3">
             <h4>Campaigns</h4>
+            <%= f.hidden_field :campaigns_index, value: 0 %>
             <%= f.input :campaigns_index, wrapper: :boolean_checkbox, label: "View" %>
+            <%= f.hidden_field :campaigns_create, value: 0 %>
             <%= f.input :campaigns_create, wrapper: :boolean_checkbox, label: "Create" %>
+            <%= f.hidden_field :campaigns_manage, value: 0 %>
             <%= f.input :campaigns_manage, wrapper: :boolean_checkbox, label: "Manage all" %>
           </div>
           <div class="col md-3">
             <h4>Surveys</h4>
+            <%= f.hidden_field :polls_index, value: 0 %>
             <%= f.input :polls_index, wrapper: :boolean_checkbox, label: "View" %>
+            <%= f.hidden_field :polls_create, value: 0 %>
             <%= f.input :polls_create, wrapper: :boolean_checkbox, label: "Create" %>
+            <%= f.hidden_field :polls_manage, value: 0 %>
             <%= f.input :polls_manage, wrapper: :boolean_checkbox, label: "Manage all" %>
           </div>
           <div class="col md-3">
             <h4>ERGs</h4>
+            <%= f.hidden_field :groups_index, value: 0 %>
             <%= f.input :groups_index, wrapper: :boolean_checkbox, label: "View" %>
+            <%= f.hidden_field :groups_create, value: 0 %>
             <%= f.input :groups_create, wrapper: :boolean_checkbox, label: "Create" %>
+            <%= f.hidden_field :groups_manage, value: 0 %>
             <%= f.input :groups_manage, wrapper: :boolean_checkbox, label: "Manage all" %>
           </div>
           <div class="col md-3">
             <h4>Enterprise resources</h4>
+            <%= f.hidden_field :enterprise_resources_index, value: 0 %>
             <%= f.input :enterprise_resources_index, wrapper: :boolean_checkbox, label: "View" %>
+            <%= f.hidden_field :enterprise_resources_create, value: 0 %>
             <%= f.input :enterprise_resources_create, wrapper: :boolean_checkbox, label: "Create" %>
+            <%= f.hidden_field :enterprise_resources_manage, value: 0 %>
             <%= f.input :enterprise_resources_manage, wrapper: :boolean_checkbox, label: "Manage all" %>
           </div>
         </div>
         <div class="row">
           <div class="col md-3">
             <h4>Metrics dashboards</h4>
+            <%= f.hidden_field :metrics_dashboards_index, value: 0 %>
             <%= f.input :metrics_dashboards_index, wrapper: :boolean_checkbox, label: "View" %>
+            <%= f.hidden_field :metrics_dashboards_create, value: 0 %>
             <%= f.input :metrics_dashboards_create, wrapper: :boolean_checkbox, label: "Create" %>
           </div>
           <div class="col md-3">
@@ -70,6 +88,7 @@
           </div>
           <div class="col md-3">
             <h4>Global settings</h4>
+            <%= f.hidden_field :global_settings_manage, value: 0 %>
             <%= f.input :global_settings_manage, wrapper: :boolean_checkbox, label: "Manage" %>
           </div>
         </div>
@@ -79,25 +98,36 @@
         <div class="row">
           <div class="col md-3">
             <h4>Events</h4>
+            <%= f.hidden_field :events_index, value: 0 %>
             <%= f.input :events_index, wrapper: :boolean_checkbox, label: "View" %>
+            <%= f.hidden_field :events_create, value: 0 %>
             <%= f.input :events_create, wrapper: :boolean_checkbox, label: "Create" %>
+            <%= f.hidden_field :events_manage, value: 0 %>
             <%= f.input :events_manage, wrapper: :boolean_checkbox, label: "Manage all" %>
           </div>
           <div class="col md-3">
             <h4>Messages</h4>
+            <%= f.hidden_field :group_messages_index, value: 0 %>
             <%= f.input :group_messages_index, wrapper: :boolean_checkbox, label: "View" %>
+            <%= f.hidden_field :group_messages_create, value: 0 %>
             <%= f.input :group_messages_create, wrapper: :boolean_checkbox, label: "Create" %>
+            <%= f.hidden_field :group_messages_manage, value: 0 %>
             <%= f.input :group_messages_manage, wrapper: :boolean_checkbox, label: "Manage all" %>
           </div>
           <div class="col md-3">
             <h4>Members</h4>
+            <%= f.hidden_field :groups_members_index, value: 0 %>
             <%= f.input :groups_members_index, wrapper: :boolean_checkbox, label: "View" %>
+            <%= f.hidden_field :groups_members_manage, value: 0 %>
             <%= f.input :groups_members_manage, wrapper: :boolean_checkbox, label: "Manage" %>
           </div>
           <div class="col md-3">
             <h4>News</h4>
+            <%= f.hidden_field :news_links_index, value: 0 %>
             <%= f.input :news_links_index, wrapper: :boolean_checkbox, label: "View" %>
+            <%= f.hidden_field :news_links_create, value: 0 %>
             <%= f.input :news_links_create, wrapper: :boolean_checkbox, label: "Create" %>
+            <%= f.hidden_field :news_links_manage, value: 0 %>
             <%= f.input :news_links_manage, wrapper: :boolean_checkbox, label: "Manage all" %>
           </div>
         </div>
@@ -107,8 +137,11 @@
         <div class="row">
           <div class="col md-3">
             <h4>Events</h4>
+            <%= f.hidden_field :initiatives_index, value: 0 %>
             <%= f.input :initiatives_index, wrapper: :boolean_checkbox, label: "View" %>
+            <%= f.hidden_field :initiatives_create, value: 0 %>
             <%= f.input :initiatives_create, wrapper: :boolean_checkbox, label: "Create" %>
+            <%= f.hidden_field :initiatives_manage, value: 0 %>
             <%= f.input :initiatives_manage, wrapper: :boolean_checkbox, label: "Manage all" %>
           </div>
         </div>
