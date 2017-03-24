@@ -13,7 +13,9 @@
   <header class="primary-header">
     <div class="flex-row flex-row--middle full-width">
       <div class="flex-row__cell flex-row__cell--grow">
-        <%= link_to logo_destination do %><img class="primary-header__logo logo" src="<%= logo_url %>"><% end %>
+        <%= link_to logo_destination do %>
+          <img class="primary-header__logo logo" src="<%= logo_url %>" alt="Home">
+        <% end %>
       </div>
       <div class="flex-row__cell">
         <% if root_admin_path && current_user.policy_group.admin_pages_view %>
