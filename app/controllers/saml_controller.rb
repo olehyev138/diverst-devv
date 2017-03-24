@@ -26,14 +26,13 @@ class SamlController < ApplicationController
       attrs = response.attributes
 
       unless user = User.find_by_email(nameid)
-        user = User.new(auth_source: 'saml')
+        user = User.new(auth_source: 'saml', enterprise: @enterprise)
+
+        user.set_info_from_saml(nameid, attrs, @enterprise)
       end
-
-      user.set_info_from_saml(nameid, attrs, @enterprise)
-
       sign_in user
 
-      redirect_to controller: :users, action: :index
+      redirect_to controller: 'user/dashboard', action: :home
     else
       logger.info "Response Invalid. Errors: #{response.errors}"
       @errors = response.errors
