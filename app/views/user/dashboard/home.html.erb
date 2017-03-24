@@ -68,9 +68,9 @@
           <ol>
             <% current_user.enterprise.users.top_participants(10).each do |member| %>
               <% if member == current_user %>
-                <li><strong><%= member.name %> (<%= member.participation_score_7days %>)</strong></li>
+                <li><strong><%= member.name_with_status %> (<%= member.participation_score_7days %>)</strong></li>
               <% else %>
-                <li><%= link_to member.name, member %> (<%= member.participation_score_7days %>)</li>
+                <li><%= link_to member.name_with_status, member %> (<%= member.participation_score_7days %>)</li>
               <% end %>
             <% end %>
           </ol>

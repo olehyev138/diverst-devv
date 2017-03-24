@@ -44,7 +44,7 @@
 
           <div class="answer">
             <div class="answer__metadata">
-              <span class="highlight"><%= answer.author.name %></span>
+              <span class="highlight"><%= answer.author.name_with_status %></span>
               <span class="muted"><%= time_ago_in_words(answer.created_at) %> ago</span>
             </div>
             <div class="answer__content">
@@ -54,7 +54,7 @@
                 <div class="comment">
                   <p>
                     <%= comment.content %> &mdash;
-                    <span class="accent"><%= comment.author.name %></span>
+                    <span class="accent"><%= comment.author.name_with_status %></span>
                     <span class="muted"><%= time_ago_in_words(comment.created_at) %> ago</span>
                   </p>
                 </div>

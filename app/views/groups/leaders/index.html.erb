@@ -23,7 +23,7 @@
             <tbody>
               <% @group_leaders.each do |group_leader| %>
                 <tr>
-                  <td><%= group_leader.user.name %></td>
+                  <td><%= group_leader.user.name_with_status %></td>
                   <td><%= group_leader.position_name %></td>
                   <% if policy(@group).edit? %>
                     <td>

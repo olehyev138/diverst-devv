@@ -184,4 +184,30 @@ RSpec.describe User do
   end
 
   it { is_expected.to have_attached_file(:avatar) }
+
+  describe "#name" do
+    let(:user){ build_stubbed(:user, first_name: "John", last_name: "Doe") }
+
+    it "return the full name of user" do
+      expect(user.name).to eq "John Doe"
+    end
+  end
+
+  describe "#name_with_status" do
+    context "of an active user" do
+      let(:user){ build_stubbed(:user, first_name: "John", last_name: "Doe", active: true) }
+
+      it "return the full name of user" do
+        expect(user.name_with_status).to eq "John Doe"
+      end
+    end
+
+    context "of an inactive user" do
+      let(:user){ build_stubbed(:user, first_name: "John", last_name: "Doe", active: false) }
+
+      it "return the full name of user with status" do
+        expect(user.name_with_status).to eq "John Doe (inactive)"
+      end
+    end
+  end
 end

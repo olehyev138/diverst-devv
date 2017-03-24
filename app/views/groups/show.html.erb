@@ -31,7 +31,7 @@
                       <%= image_tag(user_group.user.avatar.expiring_url(3600), size: "40") %>
                     </div>
                     <div class="col sm-9 md-10">
-                      <%= link_to user_group.user.name, user_group.user %><br>
+                      <%= link_to user_group.user.name_with_status, user_group.user %><br>
                       <%= time_ago_in_words(user_group.created_at) %> ago
                     </div>
                 </div>
@@ -115,9 +115,9 @@
           <ol>
             <% @group.members.top_participants(10).each do |member| %>
               <% if member == current_user %>
-                <li><strong><%= member.name %> (<%= member.participation_score_7days %>)</strong></li>
+                <li><strong><%= member.name_with_status %> (<%= member.participation_score_7days %>)</strong></li>
               <% else %>
-                <li><%= link_to member.name, member %> (<%= member.participation_score_7days %>)</li>
+                <li><%= link_to member.name_with_status, member %> (<%= member.participation_score_7days %>)</li>
               <% end %>
             <% end %>
           </ol>
