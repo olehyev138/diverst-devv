@@ -1,15 +1,26 @@
 class User::UsersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_user, only: [:edit, :update, :destroy, :show]
+  before_action :set_user, only: [:show, :edit, :update]
 
   layout 'user'
 
-  def update
-    redirect_to [:user, @user] if @user != current_user && !current_user.is_a?(Admin)
+  def show
+    authorize @user
+  end
 
-    if @user.update_attributes(user_params)
+  def edit
+    authorize @user
+  end
+
+  def update
+    authorize @user
+
+    @user.assign_attributes(user_params)
+    @user.info.merge(fields: @user.enterprise.fields, form_data: params['custom-fields'])
+
+    if @user.save
       flash[:notice] = "Your user was updated"
-      redirect_to [:user, @user]
+      redirect_to user_user_path(@user)
     else
       flash[:alert] = "Your user was not updated. Please fix the errors"
       render :edit
@@ -19,11 +30,12 @@ class User::UsersController < ApplicationController
   protected
 
   def set_user
-    @user = current_user.enterprise.users.find(params[:id])
+    @user = current_user
   end
 
   def user_params
     params.require(:user).permit(
+      :avatar,
       :email,
       :first_name,
       :last_name,

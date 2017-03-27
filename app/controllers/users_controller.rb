@@ -27,13 +27,6 @@ class UsersController < ApplicationController
     authorize @user
   end
 
-  #For regular users. Dedicated to editing own profile only.
-  def edit_profile
-    @user = current_user
-
-    render :edit
-  end
-
   def update
     authorize @user
 
@@ -42,11 +35,7 @@ class UsersController < ApplicationController
 
     if @user.save
       flash[:notice] = "Your user was updated"
-      if @user.policy_group.admin_pages_view?
-        redirect_to @user
-      else
-        redirect_to user_user_path(@user)
-      end
+      redirect_to @user
     else
       flash[:alert] = "Your user was not updated. Please fix the errors"
       render :edit
