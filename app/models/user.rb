@@ -118,10 +118,12 @@ class User < ActiveRecord::Base
   # Update the user with info from the SAML auth response
   def set_info_from_saml(nameid, _attrs, enterprise)
     self.email = nameid
+    self.first_name = _attrs[:first_name] || 'Not set'
+    self.last_name = _attrs[:last_name] || 'Not set'
 
     saml_user_info = {}
 
-    self.info = info.merge(fields: self.enterprise.fields, form_data: saml_user_info)
+    #self.info.merge(fields: enterprise.fields, form_data: saml_user_info)
 
     save!
     enterprise.users << self
