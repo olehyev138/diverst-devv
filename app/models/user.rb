@@ -345,6 +345,10 @@ class User < ActiveRecord::Base
     group.active_members.exists? self.id
   end
 
+  def active_for_authentication?
+    super && active?
+  end
+
   private
   def validate_presence_fields
     enterprise.try(:fields).to_a.each do |field|
