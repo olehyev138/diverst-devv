@@ -9,7 +9,7 @@
 
 <div class="content__main">
   <% unless @ongoing_events.empty? %>
-    <h3>Ongoing events for your ERGs</h3>
+    <h3>Ongoing events for your <%= custom_text.erg_text.pluralize %></h3>
     <div class="card">
       <% @ongoing_events.each do |event| %>
         <%= render 'event', event: event %>
@@ -17,7 +17,7 @@
     </div>
   <% end %>
 
-  <h3>Upcoming events for your ERGs</h3>
+  <h3>Upcoming events for your <%= custom_text.erg_text.pluralize %></h3>
   <div class="card">
     <% if @upcoming_events.empty? %>
       <div class="card__section">
@@ -30,7 +30,7 @@
     <% end %>
   </div>
 
-  <h3>Past events for your ERGs</h3>
+  <h3>Past events for your <%= custom_text.erg_text.pluralize %></h3>
   <div class="card">
     <% if @past_events.empty? %>
       <div class="card__section">

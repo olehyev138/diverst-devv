@@ -74,6 +74,10 @@ module ApplicationHelper
     end
   end
 
+  def custom_text
+    @custom_text ||= current_user.enterprise.custom_text rescue CustomText.new
+  end
+
   private
 
   def default_enterprise_for_styling

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170324135103) do
+ActiveRecord::Schema.define(version: 20170328114040) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -206,6 +206,13 @@ ActiveRecord::Schema.define(version: 20170324135103) do
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
   end
+
+  create_table "custom_texts", force: :cascade do |t|
+    t.text    "erg",           limit: 65535
+    t.integer "enterprise_id", limit: 4
+  end
+
+  add_index "custom_texts", ["enterprise_id"], name: "index_custom_texts_on_enterprise_id", using: :btree
 
   create_table "departments", force: :cascade do |t|
     t.integer  "enterprise_id", limit: 4,   null: false
@@ -868,5 +875,6 @@ ActiveRecord::Schema.define(version: 20170324135103) do
     t.datetime "updated_at",                    null: false
   end
 
+  add_foreign_key "custom_texts", "enterprises"
   add_foreign_key "polls", "initiatives"
 end

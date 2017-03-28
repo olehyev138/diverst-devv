@@ -31,7 +31,7 @@
         <li class="nav__item">
           <%= active_link_to manage_erg_root_path, class: "nav__link", class_active: "nav__link--is-selected", active: active_manage_erg_link? do %>
             <%= inline_svg('icons/manage.svg', class: "icon nav__icon") %>
-            <span class="nav__text">Manage ERG</span>
+            <span class="nav__text">Manage <%= custom_text.erg_text %></span>
           <% end %>
         </li>
       <% end %>

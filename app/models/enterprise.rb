@@ -28,6 +28,7 @@ class Enterprise < ActiveRecord::Base
   has_many :expense_categories
   has_many :biases, through: :users, class_name: "Bias"
   has_many :departments
+  has_one :custom_text
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :mobile_fields, reject_if: :all_blank, allow_destroy: true
@@ -47,6 +48,10 @@ class Enterprise < ActiveRecord::Base
 
   has_attached_file :xml_sso_config
   validates_attachment_content_type :xml_sso_config, content_type: 'text/xml'
+
+  def custom_text
+    super || create_custom_text
+  end
 
   def saml_settings
     if xml_sso_config?

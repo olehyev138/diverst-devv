@@ -1,7 +1,7 @@
-Hello <%= @user.name %>, you have updates in your ERGs.
+Hello <%= @user.name %>, you have updates in your <%= @custom_text.erg_text.pluralize %>.
 <br/>
 <% @groups.each do |group| %>
-  ERG <%= group[:group].name %>
+  <%= @custom_text.erg_text %> <%= group[:group].name %>
   <br/>
   <%= link_to "#{ pluralize(group[:messages_count], 'new message') }", group_group_messages_url(group[:group]) if group[:messages_count] %>
   <br/>
