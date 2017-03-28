@@ -3,7 +3,8 @@ class CustomText < ActiveRecord::Base
 
   ["erg"].each do |field|
     define_method("#{ field }_text") do
-      self.send(field) || I18n.t("custom_text.#{ field }")
+      return self.send(field) unless self.send(field).blank?
+      I18n.t("custom_text.#{ field }")
     end
   end
 end

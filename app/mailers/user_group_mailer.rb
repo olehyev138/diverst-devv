@@ -4,6 +4,6 @@ class UserGroupMailer < ApplicationMailer
     @groups = groups
     @custom_text = user.enterprise.custom_text rescue CustomText.new
 
-    mail(to: @user.email, subject: "You have updates in your #{ @custom_text.erg_text }")
+    mail(to: @user.email, subject: "You have updates in your #{ @custom_text.erg_text.pluralize }")
   end
 end
