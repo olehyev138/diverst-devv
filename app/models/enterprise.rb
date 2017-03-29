@@ -49,22 +49,24 @@ class Enterprise < ActiveRecord::Base
   validates_attachment_content_type :xml_sso_config, content_type: 'text/xml'
 
   def saml_settings
+    #if xml config file is present - take settings from it
     if xml_sso_config?
       idp_metadata_parser = OneLogin::RubySaml::IdpMetadataParser.new
       file_content = Paperclip.io_adapters.for(xml_sso_config).read
       settings = idp_metadata_parser.parse(file_content)
-    else
+    else #otherwise - initialize empty settings
       settings = OneLogin::RubySaml::Settings.new
+      settings.name_identifier_format = 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress'
     end
 
     settings.assertion_consumer_service_url = "http://#{ENV['DOMAIN']}/enterprises/#{id}/saml/acs"
 
-    settings.issuer = sp_entity_id
-    settings.idp_entity_id = idp_entity_id
-    settings.idp_sso_target_url = idp_sso_target_url
-    settings.idp_slo_target_url = idp_slo_target_url
-    settings.idp_cert = idp_cert
-    settings.name_identifier_format = 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress'
+    #override xml file settings with enterprise settings, if they are present
+    settings.issuer = sp_entity_id if sp_entity_id
+    settings.idp_entity_id = idp_entity_id if idp_entity_id
+    settings.idp_sso_target_url = idp_sso_target_url if idp_sso_target_url
+    settings.idp_slo_target_url = idp_slo_target_url if idp_slo_target_url
+    settings.idp_cert = idp_cert if idp_cert
     settings.security[:authn_requests_signed] = false
     settings.security[:logout_requests_signed] = false
     settings.security[:logout_responses_signed] = false
