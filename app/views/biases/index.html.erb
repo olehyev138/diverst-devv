@@ -93,7 +93,7 @@
     </div>
     <% @biases.each do |bias| %>
       <div class="card__section card__section--border">
-        <span class="highlight"><%= bias.anonymous ? "Respondent ##{bias.id}" : bias.user.name %></span><br>
+        <span class="highlight"><%= bias.anonymous ? "Respondent ##{bias.id}" : bias.user.name_with_status %></span><br>
         <small>Reported a bias from <span class="highlight"><%= bias.groups_from.pluck(:name).to_sentence %></span> to <span class="highlight"><%= bias.groups_to.pluck(:name).to_sentence %></span> of severity level <%= bias.severity %></small><br>
         <% if !bias.description.blank? %><small style="font-style: italic;"><%= bias.description %></small><br><% end %>
         <small class="muted"><%= time_ago_in_words bias.created_at %> ago</small>

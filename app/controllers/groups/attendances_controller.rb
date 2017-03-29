@@ -6,7 +6,7 @@ class Groups::AttendancesController < ApplicationController
   layout 'erg'
 
   def show
-    @attendances = @event.initiative_users
+    @attendances = @event.attendees.active
   end
 
   def create

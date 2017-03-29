@@ -53,7 +53,7 @@
 
           <div class="answer" style="width: 100%;">
             <div class="answer__metadata">
-              <span class="highlight"><%= answer.author.name %></span>
+              <span class="highlight"><%= answer.author.name_with_status %></span>
               <span class="muted"><%= time_ago_in_words(answer.created_at) %> ago</span>
               <div class="fright">
                 <span class="business-case<%= answer.chosen ? '': ' hidden' %>">
@@ -73,7 +73,7 @@
                 <div class="comment">
                   <p>
                     <%= comment.content %> &mdash;
-                    <span class="accent"><%= comment.author.name %></span>
+                    <span class="accent"><%= comment.author.name_with_status %></span>
                     <span class="muted"><%= time_ago_in_words(comment.created_at) %> ago</span> &mdash;
                     <%= link_to "Delete", answer_comment_path(comment), method: :delete, class: 'error', data: { confirm: "Are you sure?" } %>
                   </p>
