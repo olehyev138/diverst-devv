@@ -62,11 +62,12 @@ class Enterprise < ActiveRecord::Base
     settings.assertion_consumer_service_url = "https://#{ENV['DOMAIN']}/enterprises/#{id}/saml/acs"
 
     #override xml file settings with enterprise settings, if they are present
-    settings.issuer = sp_entity_id if sp_entity_id
-    settings.idp_entity_id = idp_entity_id if idp_entity_id
-    settings.idp_sso_target_url = idp_sso_target_url if idp_sso_target_url
-    settings.idp_slo_target_url = idp_slo_target_url if idp_slo_target_url
-    settings.idp_cert = idp_cert if idp_cert
+    settings.issuer = sp_entity_id                    if sp_entity_id.present?
+    settings.idp_entity_id = idp_entity_id            if idp_entity_id.present?
+    settings.idp_sso_target_url = idp_sso_target_url  if idp_sso_target_url.present?
+    settings.idp_slo_target_url = idp_slo_target_url  if idp_slo_target_url.present?
+    settings.idp_cert = idp_cert                      if idp_cert.present?
+
     settings.security[:authn_requests_signed] = false
     settings.security[:logout_requests_signed] = false
     settings.security[:logout_responses_signed] = false
