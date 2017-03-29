@@ -59,7 +59,7 @@ class Enterprise < ActiveRecord::Base
       settings.name_identifier_format = 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress'
     end
 
-    settings.assertion_consumer_service_url = "http://#{ENV['DOMAIN']}/enterprises/#{id}/saml/acs"
+    settings.assertion_consumer_service_url = "https://#{ENV['DOMAIN']}/enterprises/#{id}/saml/acs"
 
     #override xml file settings with enterprise settings, if they are present
     settings.issuer = sp_entity_id if sp_entity_id
