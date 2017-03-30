@@ -1,4 +1,4 @@
-<%= f.input :title, label: local_assigns.fetch(:label, "Title") %>
+<%= f.input :title, label: local_assigns.fetch(:label, "Title"), input_html: { class: "sortable-focus" } %>
 <%= f.input :options_text, as: :text, label: "Options (one per line)" %>
 <%= f.hidden_field :alternative_layout, value: 0 %>
 <%= f.input :alternative_layout, label: "Use multi-select field" %>

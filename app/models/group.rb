@@ -56,9 +56,6 @@ class Group < ActiveRecord::Base
   has_many :group_leaders
   has_many :leaders, through: :group_leaders, source: :user
 
-  accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
-  accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
-
   has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
   validates_attachment_content_type :logo, content_type: %r{\Aimage\/.*\Z}
 
@@ -73,6 +70,10 @@ class Group < ActiveRecord::Base
   after_commit :update_all_elasticsearch_members
 
   scope :top_participants, -> (n) { order(participation_score_7days: :desc).limit(n) }
+
+  accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
 
   def approved_budget
     (budgets.approved.map{ |b| b.requested_amount || 0 } ).reduce(0, :+)
