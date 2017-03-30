@@ -4,7 +4,7 @@ class ApplicationMailer < ActionMailer::Base
 
   from_address = Mail::Address.new 'info@diverst.com'
   from_address.display_name = 'Diverst'
-  default from: from_address
+  default from: from_address, content_type: 'text/html', 'Content-Transfer-Encoding': '7bit'
 
   layout 'mailer'
 end
