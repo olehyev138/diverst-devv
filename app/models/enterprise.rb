@@ -116,6 +116,22 @@ class Enterprise < ActiveRecord::Base
     PolicyGroup.default_group(self.id)
   end
 
+  def sso_fields_to_enterprise_fields(sso_attrs)
+    mapped_fields = {}
+
+    fields.each do |field|
+      sso_attrs.each do |sso_f_key, sso_f_value|
+        if sso_f_key == field.saml_attribute
+          mapped_fields.merge!(field.id => sso_f_value)
+          next
+        end
+      end
+    end
+
+    mapped_fields
+  end
+
+
   private
 
   def create_elasticsearch_only_fields
