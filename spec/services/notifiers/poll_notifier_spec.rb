@@ -62,7 +62,7 @@ RSpec.describe Notifiers::PollNotifier do
 
   def call_mailer_exactly(n)
     mailer = double("PollMailer")
-    expect(PollMailer).to receive(:delay){ mailer }.exactly(n).times
-    expect(mailer).to receive(:invitation).exactly(n).times
+    expect(PollMailer).to receive(:invitation){ mailer }.exactly(n).times
+    expect(mailer).to receive(:deliver_later).exactly(n).times
   end
 end
