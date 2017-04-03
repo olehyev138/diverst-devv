@@ -2,6 +2,29 @@
   <h1>User fields</h1>
 </div>
 
+<% if @enterprise.has_enabled_saml? %>
+  <div class="content__header" style="margin-bottom: 0px;">
+    <h2>Default fields</h2>
+  </div>
+  <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_fields') do |f| %>
+    For SSO logins, specify which attributes should be mapped to User <strong>First Name</strong> and <strong>Last Name</strong>
+    <div class="card">
+      <div class="card__section row">
+          <div class="col sm-6">
+            <%= f.input :saml_first_name_mapping, label: 'SSO First Name attribute' %>
+          </div>
+          <div class="col sm-6">
+            <%= f.input :saml_last_name_mapping, label: 'SSO Last Name attribute' %>
+          </div>
+      </div>
+    </div>
+    <%= f.button :submit, value: "Save mapping" %>
+  <% end %>
+<% end %>
+
+<div class="content__header" style="margin-top: 30px; margin-bottom: 0px;">
+  <h2>Custom fields</h2>
+</div>
 <div class="row">
   <div class="col sm-12">
     <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_fields') do |f| %>
