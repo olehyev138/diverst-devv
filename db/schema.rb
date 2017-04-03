@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170403112708) do
+ActiveRecord::Schema.define(version: 20170403143914) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -250,6 +250,8 @@ ActiveRecord::Schema.define(version: 20170403112708) do
     t.string   "idp_sso_target_url",           limit: 255
     t.string   "idp_slo_target_url",           limit: 255
     t.text     "idp_cert",                     limit: 65535
+    t.string   "saml_first_name_mapping",      limit: 255
+    t.string   "saml_last_name_mapping",       limit: 255
     t.boolean  "has_enabled_saml"
     t.datetime "created_at",                                                 null: false
     t.datetime "updated_at",                                                 null: false
