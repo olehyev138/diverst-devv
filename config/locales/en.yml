@@ -22,6 +22,7 @@
 en:
   custom_text:
     erg: ERG
+    program: Program
 
   time:
     formats:

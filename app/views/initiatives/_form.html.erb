@@ -6,7 +6,7 @@
         <%= f.association :pillar,
               collection: @group.pillars,
               label_method: :name_with_group_prefix,
-              label: "Start off by choosing which <strong>program</strong> this event will participate in".html_safe,
+              label: "Start off by choosing which <strong>#{ custom_text.program_text }</strong> this event will participate in".html_safe,
               include_blank: false,
               input_html: { autofocus: true } %>
       </div>

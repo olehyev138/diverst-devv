@@ -50,7 +50,7 @@
       <% if outcome.pillars.empty? %>
         <div class="card">
           <div class="card__section">
-            <p>There are no programs in this outcome yet. <%= link_to "Create some", group_outcomes_path(@group) %> and start solving problems with your team's diverse opinions.</p>
+            <p>There are no <%= custom_text.program_text.pluralize %> in this outcome yet. <%= link_to "Create some", group_outcomes_path(@group) %> and start solving problems with your team's diverse opinions.</p>
           </div>
         </div>
       <% else %>
@@ -63,7 +63,7 @@
 
             <% if pillar.initiatives.empty? %>
               <div class="card__section card__section--border">
-                There are no active events in this program.
+                There are no active events in this <%= custom_text.program_text %>.
               </div>
             <% else %>
               <% pillar.initiatives.each do |initiative| %>
