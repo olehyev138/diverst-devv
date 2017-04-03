@@ -121,13 +121,11 @@ class User < ActiveRecord::Base
     self.first_name = _attrs[:first_name] || 'Not set'
     self.last_name = _attrs[:last_name] || 'Not set'
 
-    saml_user_info = {}
+    saml_user_info = enterprise.sso_fields_to_enterprise_fields(_attrs)
 
-    #self.info.merge(fields: enterprise.fields, form_data: saml_user_info)
+    self.info.merge(fields: enterprise.fields, form_data: saml_user_info)
 
     save!
-    enterprise.users << self
-    enterprise.save!
 
     self
   end
