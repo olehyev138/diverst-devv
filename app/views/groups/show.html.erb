@@ -96,12 +96,12 @@
       <% if !@group.members.include? current_user %>
         <%= simple_form_for :user, url: group_group_members_path(@group), method: :post do |f| %>
           <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
-          <%= f.submit 'Join this ERG', class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
+          <%= f.submit "Join this #{ custom_text.erg_text }", class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
         <% end %>
       <% end %>
 
       <div class="card card--secondary">
-        <%= render('leader', leader: @group.lead_manager, position: 'ERG Leader') if @group.lead_manager %>
+        <%= render('leader', leader: @group.lead_manager, position: "#{ custom_text.erg_text } Leader") if @group.lead_manager %>
 
         <% @group.group_leaders.each do |group_leader| %>
           <%= render('leader', leader: group_leader.user, position: group_leader.position_name ) %>
@@ -123,7 +123,7 @@
           </ol>
         </div>
         <div class="card__section">
-          <h5>Top ERGs this week</h5>
+          <h5>Top <%= custom_text.erg_text.pluralize %> this week</h5>
           <ol>
             <% @group.enterprise.groups.top_participants(10).each do |group| %>
               <% if group == @group %>
@@ -148,7 +148,7 @@
             %>
           <% end %>
         </div>
-        <%= link_to 'Leave this ERG', group_group_member_path(@group, current_user), method: :delete, class: 'btn btn--tertiary error' %>
+        <%= link_to "Leave this #{ custom_text.erg_text }", group_group_member_path(@group, current_user), method: :delete, class: 'btn btn--tertiary error' %>
       <% end %>
     </div>
   </div>

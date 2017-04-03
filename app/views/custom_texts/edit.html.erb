@@ -1,0 +1,19 @@
+<div class="content__main">
+  <div class="row">
+
+    <div class="col sm-12 md-12">
+      <div class="card">
+        <div class="card__section">
+          <h3>Add custom texts to your app</h3>
+          <%= simple_form_for @custom_text do |f| %>
+            <%= f.input :erg,
+                  input_html: { autofocus: true },
+                  as: :string,
+                  label: "ERG" %>
+            <%= f.button :submit %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

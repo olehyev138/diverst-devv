@@ -1,15 +1,13 @@
 class ApplicationController < ActionController::Base
+  include Pundit
+  include PublicActivity::StoreController
+  include ApplicationHelper
+
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
-  include Pundit
-
-  include PublicActivity::StoreController
-
-  helper_method :events_to_json
-
   protect_from_forgery with: :exception
 
-  include ApplicationHelper
+  helper_method :events_to_json
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
