@@ -23,21 +23,21 @@ class GroupsController < ApplicationController
   end
 
   def budgets
-    authorize @group, :update?
+    authorize @group
   end
 
   def view_budget
-    authorize @group, :update?
+    authorize @group
   end
 
   def request_budget
-    authorize @group, :update?
+    authorize @group
 
     @budget = Budget.new
   end
 
   def submit_budget
-    authorize @group, :update?
+    authorize @group
     @budget = Budget.new(budget_params)
     @group.budgets << @budget
 

@@ -55,6 +55,30 @@ class GroupPolicy < ApplicationPolicy
     @record.managers.exists?(user.id)
   end
 
+  def budgets?
+    @policy_group.groups_budgets_index?
+  end
+
+  def view_budget?
+    @policy_group.groups_budgets_index?
+  end
+
+  def request_budget?
+    @policy_group.groups_budgets_request?
+  end
+
+  def submit_budget?
+    @policy_group.groups_budgets_request?
+  end
+
+  def approve_budget?
+    @policy_group.budget_approval?
+  end
+
+  def decline_budget?
+    @policy_group.budget_approval?
+  end
+
   def destroy?
     return true if @policy_group.groups_manage?
     @record.owner == @user
