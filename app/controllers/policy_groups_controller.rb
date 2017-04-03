@@ -88,6 +88,8 @@ class PolicyGroupsController < ApplicationController
         :initiatives_manage,
         :budget_approval,
         :logs_view,
+        :groups_budgets_index,
+        :groups_budgets_request,
         user_ids: []
       )
   end
