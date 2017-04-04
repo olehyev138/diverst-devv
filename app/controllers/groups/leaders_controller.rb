@@ -1,7 +1,6 @@
 class Groups::LeadersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
-  before_action :set_leader, only: [:edit, :update, :destroy]
   after_action :verify_authorized
 
   layout 'erg'
@@ -14,41 +13,17 @@ class Groups::LeadersController < ApplicationController
 
   def new
     authorize @group, :update?
-
-    @group_leader = GroupLeader.new
-  end
-
-  def edit
-    authorize @group, :update?
   end
 
   def create
     authorize @group, :update?
-    @group_leader = @group.group_leaders.new(group_leader_params)
-    #TODO notiication
-    if @group_leader.save
+    if @group.update(group_params)
+      flash[:notice] = "Leaders were updated"
       redirect_to action: :index
     else
+      flash[:alert] = "Leaders were not updated. Please fix the errors"
       render :new
     end
-  end
-
-  def update
-    authorize @group, :update?
-    #TODO notiication
-    if @group_leader.update(group_leader_params)
-      redirect_to  action: :index
-    else
-      render :edit
-    end
-  end
-
-  def destroy
-    authorize @group, :update?
-
-    @group_leader.destroy
-    #TODO notiication
-    redirect_to action: :index
   end
 
   protected
@@ -57,14 +32,7 @@ class Groups::LeadersController < ApplicationController
     @group = current_user.enterprise.groups.find(params[:group_id])
   end
 
-  def set_leader
-    @group_leader = @group.group_leaders.find(params[:id])
-  end
-
-  def group_leader_params
-    params.require(:group_leader).permit(
-      :user_id,
-      :position_name
-    )
+  def group_params
+    params.require(:group).permit(group_leaders_attributes: [:id, :user_id, :position_name, :_destroy])
   end
 end
