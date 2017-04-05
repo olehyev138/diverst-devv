@@ -1,6 +1,7 @@
 class EnterprisesController < ApplicationController
-  before_action :set_enterprise, except: [:index, :new, :create]
-  after_action :verify_authorized
+  before_action :set_enterprise, except: [:index, :new, :create, :calendar]
+  after_action :verify_authorized, except: :calendar
+  after_action :allow_iframe, only: [:calendar]
 
   layout :resolve_layout
 
@@ -83,6 +84,11 @@ class EnterprisesController < ApplicationController
     authorize @enterprise
     @enterprise.theme.try(:destroy)
     redirect_to :back
+  end
+
+  def calendar
+    @enterprise = Enterprise.find(params[:id])
+    render layout: false
   end
 
   protected

@@ -26,7 +26,6 @@ class Groups::EventsController < ApplicationController
                               .where('start <= ?', params[:end])
 
     @events = own_events + participating_events
-    @calendar_color = @group.calendar_color
 
     render 'shared/calendar_events', format: :json
   end
