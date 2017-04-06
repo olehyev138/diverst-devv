@@ -8,11 +8,11 @@ class BudgetManager
       bi.approve!
     end
     @budget.update(approver: approver, is_approved: true)
-    #send an email
+    BudgetMailer.budget_approved(@budget).deliver_later if @budget.requester
   end
 
   def decline(approver)
     @budget.update(approver: approver, is_approved: false)
-    #send an email
+    BudgetMailer.budget_declined(@budget).deliver_later if @budget.requester
   end
 end
