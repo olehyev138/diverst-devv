@@ -1,14 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe Budget, type: :model do
-  describe 'factory' do
-    let(:budget) { FactoryGirl.build(:budget) }
+  describe 'when validating' do
+    let(:budget) { FactoryGirl.build_stubbed(:budget) }
     let(:approved_budget) { FactoryGirl.build :approved_budget }
 
-    it 'is valid' do
-      expect(budget).to be_valid
-      expect(approved_budget).to be_valid
-    end
+    it { expect(budget).to validate_presence_of(:subject) }
+    it { expect(budget).to belong_to(:subject) }
+    it { expect(budget).to belong_to(:approver).class_name("User").foreign_key("approver_id") }
+    it { expect(budget).to belong_to(:requester).class_name("User").foreign_key("requester_id") }
+    it { expect(budget).to have_many(:checklists) }
+    it { expect(budget).to have_many(:budget_items) }
   end
 
   describe 'amounts' do

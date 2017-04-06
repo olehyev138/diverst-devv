@@ -1,14 +1,13 @@
 class Budget < ActiveRecord::Base
-  attr_accessor :approver_id
-
   belongs_to :subject, polymorphic: true
+  belongs_to :approver, class_name: "User", foreign_key: "approver_id"
+  belongs_to :requester, class_name: "User", foreign_key: "requester_id"
 
   has_many :checklists, as: :subject
-
-  validates :subject, presence: true
-
   has_many :budget_items
   accepts_nested_attributes_for :budget_items, reject_if: :all_blank, allow_destroy: true
+
+  validates :subject, presence: true
 
   scope :approved, -> { where(is_approved: true) }
   scope :not_approved, -> { where(is_approved: false )}
@@ -74,10 +73,8 @@ class Budget < ActiveRecord::Base
   end
 
   def send_approval_request
-    receiver = User.find_by_id( approver_id )
+    return unless approver.present?
 
-    return unless receiver.present?
-
-    BudgetMailer.approve_request(self, receiver).deliver_later
+    BudgetMailer.approve_request(self, approver).deliver_later
   end
 end
