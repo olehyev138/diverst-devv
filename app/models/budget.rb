@@ -27,18 +27,6 @@ class Budget < ActiveRecord::Base
     budget_items.available.sum(:available_amount)
   end
 
-  def approve!
-    budget_items.each do |bi|
-      bi.approve!
-    end
-
-    self.update(is_approved: true)
-  end
-
-  def decline!
-    self.update(is_approved: false)
-  end
-
   def status_title
     return 'Pending' if is_approved.nil?
 
