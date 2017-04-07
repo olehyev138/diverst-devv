@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170403162130) do
+ActiveRecord::Schema.define(version: 20170407151511) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -740,6 +740,15 @@ ActiveRecord::Schema.define(version: 20170403162130) do
 
   add_index "resources", ["container_type", "container_id"], name: "index_resources_on_container_type_and_container_id", using: :btree
 
+  create_table "reward_actions", force: :cascade do |t|
+    t.string  "label",         limit: 255, null: false
+    t.integer "points",        limit: 4
+    t.string  "key",           limit: 255, null: false
+    t.integer "enterprise_id", limit: 4
+  end
+
+  add_index "reward_actions", ["enterprise_id"], name: "index_reward_actions_on_enterprise_id", using: :btree
+
   create_table "samples", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
     t.text     "data",       limit: 65535
@@ -810,6 +819,14 @@ ActiveRecord::Schema.define(version: 20170403162130) do
     t.boolean  "enable_notification",           default: true
   end
 
+  create_table "user_reward_actions", force: :cascade do |t|
+    t.integer "user_id",          limit: 4
+    t.integer "reward_action_id", limit: 4
+  end
+
+  add_index "user_reward_actions", ["reward_action_id"], name: "index_user_reward_actions_on_reward_action_id", using: :btree
+  add_index "user_reward_actions", ["user_id"], name: "index_user_reward_actions_on_user_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "first_name",                  limit: 255
     t.string   "last_name",                   limit: 255
@@ -874,4 +891,7 @@ ActiveRecord::Schema.define(version: 20170403162130) do
   end
 
   add_foreign_key "polls", "initiatives"
+  add_foreign_key "reward_actions", "enterprises"
+  add_foreign_key "user_reward_actions", "reward_actions"
+  add_foreign_key "user_reward_actions", "users"
 end

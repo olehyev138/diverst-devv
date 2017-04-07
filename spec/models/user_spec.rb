@@ -1,6 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe User do
+  describe "when validating" do
+    let(:user) { create(:user) }
+
+    it { expect(user).to have_many(:user_reward_actions) }
+    it { expect(user).to have_many(:reward_actions).through(:user_reward_actions) }
+  end
+
   describe 'scopes' do
     let(:enterprise) { create :enterprise }
     let!(:active_user) { create :user, enterprise: enterprise }

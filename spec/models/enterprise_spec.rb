@@ -1,6 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe Enterprise, type: :model do
+  describe "when validating" do
+    let(:enterprise){ create(:enterprise) }
+
+    it { expect(enterprise).to have_many(:reward_actions) }
+  end
+
   describe ".cdo_message_email_html" do
 
     context "when cdo_message_email is not nil" do
