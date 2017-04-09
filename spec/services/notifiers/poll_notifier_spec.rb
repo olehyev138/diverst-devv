@@ -48,21 +48,39 @@ RSpec.describe Notifiers::PollNotifier do
       let!(:initiative_user){ create(:initiative_user, initiative: initiative, user: create(:user, enterprise: poll.enterprise)) }
       let!(:users){ create_list(:user, 2, enterprise: poll.enterprise, groups: [group]) }
 
-      it "should send emails to users of initiative" do
-        call_mailer_exactly(1)
-        notifier.notify!
+      context "and initiative was ended up" do
+        before(:each){ initiative.update(end: Date.yesterday) }
+
+        it "should send emails to users of initiative" do
+          call_mailer_exactly(1)
+          notifier.notify!
+        end
+
+        it "should update poll" do
+          notifier.notify!
+          expect(poll.email_sent).to be_truthy
+        end
       end
 
-      it "should update poll" do
-        notifier.notify!
-        expect(poll.email_sent).to be_truthy
+      context "and initiative was not ended up" do
+        before(:each){ initiative.update(end: Date.today + 1.day) }
+
+        it "should not send emails to users of initiative" do
+          call_mailer_exactly(0)
+          notifier.notify!
+        end
+
+        it "should not update poll" do
+          notifier.notify!
+          expect(poll.email_sent).to be_falsy
+        end
       end
     end
   end
 
   def call_mailer_exactly(n)
     mailer = double("PollMailer")
-    expect(PollMailer).to receive(:delay){ mailer }.exactly(n).times
-    expect(mailer).to receive(:invitation).exactly(n).times
+    expect(PollMailer).to receive(:invitation){ mailer }.exactly(n).times
+    expect(mailer).to receive(:deliver_later).exactly(n).times
   end
 end
