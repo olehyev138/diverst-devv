@@ -31,6 +31,9 @@ server '52.6.17.51', user: 'newdeploy', roles: %w(web app db)
 set :branch, 'develop'
 set :rails_env, :production
 
+set :rollbar_env, "symantec"
+
+
 # Custom SSH Options
 # ==================
 # You may pass any option but keep in mind that net/ssh understands a

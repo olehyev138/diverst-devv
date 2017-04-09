@@ -1,7 +1,7 @@
 <div class="content__header">
   <h1>Group Leaders</h1>
   <% if policy(@group).update? %>
-    <%= link_to "+ Add leader", new_group_leader_path(@group), class: "btn btn--primary" %>
+    <%= link_to "Manage leaders", new_group_leader_path(@group), class: "btn btn--primary" %>
   <% end %>
 </div>
 
@@ -18,19 +18,12 @@
             <thead>
               <th>Name</th>
               <th>Position</th>
-              <th>Actions</th>
             </thead>
             <tbody>
               <% @group_leaders.each do |group_leader| %>
                 <tr>
                   <td><%= group_leader.user.name_with_status %></td>
                   <td><%= group_leader.position_name %></td>
-                  <% if policy(@group).edit? %>
-                    <td>
-                      <%= link_to "Edit", edit_group_leader_path(@group, group_leader) %> -
-                      <%= link_to "Delete", group_leader_path(@group, group_leader), method: :delete, class: 'error', data: { confirm: "Are you sure?" } %>
-                    </td>
-                  <% end %>
                 </tr>
               <% end %>
             </tbody>

@@ -11,8 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170403135333) do
-
+ActiveRecord::Schema.define(version: 20170403162130) do
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
     t.string   "trackable_type", limit: 255
@@ -250,6 +249,8 @@ ActiveRecord::Schema.define(version: 20170403135333) do
     t.string   "idp_sso_target_url",           limit: 255
     t.string   "idp_slo_target_url",           limit: 255
     t.text     "idp_cert",                     limit: 65535
+    t.string   "saml_first_name_mapping",      limit: 255
+    t.string   "saml_last_name_mapping",       limit: 255
     t.boolean  "has_enabled_saml"
     t.datetime "created_at",                                                 null: false
     t.datetime "updated_at",                                                 null: false
@@ -460,6 +461,7 @@ ActiveRecord::Schema.define(version: 20170403135333) do
     t.string   "banner_content_type",       limit: 255
     t.integer  "banner_file_size",          limit: 4
     t.datetime "banner_updated_at"
+    t.string   "calendar_color",            limit: 255
   end
 
   create_table "groups_managers", force: :cascade do |t|

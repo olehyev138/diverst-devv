@@ -120,6 +120,8 @@ class EnterprisesController < ApplicationController
         :idp_sso_target_url,
         :idp_slo_target_url,
         :idp_cert,
+        :saml_first_name_mapping,
+        :saml_last_name_mapping,
         :yammer_import,
         :cdo_message,
         :cdo_message_email,

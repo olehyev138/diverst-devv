@@ -112,7 +112,7 @@
                 <div class="poll-response_details" id="response-details-<%= response.id %>">
                   <ul class="unstyled">
                     <% @poll.fields.each do |field| %>
-                      <li><small><%= field.title %></small> <span class="block highlight"><%= field.string_value response.info[field] %></span></li>
+                      <li><small><%= field.title %></small> <span class="block highlight"><%= field.string_value [response.info[field]].flatten %></span></li>
                     <% end %>
                   </ul>
                 </div>

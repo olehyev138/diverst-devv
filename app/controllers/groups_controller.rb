@@ -285,6 +285,7 @@ class GroupsController < ApplicationController
         :pending_users,
         :members_visibility,
         :messages_visibility,
+        :calendar_color,
         manager_ids: [],
         member_ids: [],
         invitation_segment_ids: [],
