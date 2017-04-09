@@ -12,7 +12,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 20170403162130) do
-
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
     t.string   "trackable_type", limit: 255
@@ -689,8 +688,9 @@ ActiveRecord::Schema.define(version: 20170403162130) do
     t.integer  "poll_id",    limit: 4
     t.integer  "user_id",    limit: 4
     t.text     "data",       limit: 65535
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.boolean  "anonymous",                default: false
   end
 
   create_table "polls", force: :cascade do |t|
