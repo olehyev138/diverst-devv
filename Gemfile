@@ -68,6 +68,8 @@ gem 'jbuilder', '~> 2.6'
 
 gem 'public_activity', '~> 1.5'
 
+gem 'rollbar', '~> 2.14.1'
+
 group :development, :test do
   gem 'spring', '~> 1.6.2' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'guard-livereload', '~> 2.4', require: false
@@ -120,6 +122,4 @@ group :production do
   gem 'syslogger', '~> 1.6.0' # Log to syslog, which is then sent to Loggly
   gem 'lograge', '~> 0.3'
   gem 'newrelic_rpm'
-
-  gem 'rollbar', '~> 2.14.1'
 end
