@@ -35,8 +35,6 @@ Rails.application.routes.draw do
 
   resources :users do
     collection do
-      get 'edit_profile'
-
       get 'export_csv'
       get 'import_csv'
       get 'sample_csv'
@@ -73,10 +71,16 @@ Rails.application.routes.draw do
       patch 'restore_default_branding'
       get 'bias'
       patch 'delete_xml_config'
+      get 'calendar'
     end
 
     scope module: :enterprises do
       resources :resources
+      resources :events, only: [] do
+        collection do
+          get 'public_calendar_data'
+        end
+      end
     end
   end
 
@@ -97,7 +101,7 @@ Rails.application.routes.draw do
       resources :group_messages, path: 'messages' do
         post 'create_comment'
       end
-      resources :leaders
+      resources :leaders, only: [:index, :new, :create]
     end
 
     scope module: :groups do

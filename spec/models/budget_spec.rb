@@ -1,14 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe Budget, type: :model do
-  describe 'factory' do
-    let(:budget) { FactoryGirl.build(:budget) }
+  describe 'when validating' do
+    let(:budget) { FactoryGirl.build_stubbed(:budget) }
     let(:approved_budget) { FactoryGirl.build :approved_budget }
 
-    it 'is valid' do
-      expect(budget).to be_valid
-      expect(approved_budget).to be_valid
-    end
+    it { expect(budget).to validate_presence_of(:subject) }
+    it { expect(budget).to belong_to(:subject) }
+    it { expect(budget).to belong_to(:approver).class_name("User").with_foreign_key("approver_id") }
+    it { expect(budget).to belong_to(:requester).class_name("User").with_foreign_key("requester_id") }
+    it { expect(budget).to have_many(:checklists) }
+    it { expect(budget).to have_many(:budget_items) }
   end
 
   describe 'amounts' do
@@ -25,7 +27,7 @@ RSpec.describe Budget, type: :model do
 
     describe '#available_amount' do
       context 'with approved budget' do
-        before { budget.approve! }
+        before { budget.is_approved = true }
 
         it 'sums only active budget items' do
           active_available = requested_amount - budget.budget_items.first.estimated_amount
@@ -41,46 +43,6 @@ RSpec.describe Budget, type: :model do
           expect(budget.available_amount).to eq 0
         end
       end
-    end
-  end
-
-  describe '#approve!' do
-    let(:budget) { FactoryGirl.build :budget }
-
-    describe 'budget items' do
-      let!(:budget) { create :budget }
-      let(:budget_item) { budget.budget_items.first }
-
-      context 'before approval' do
-        it 'do not have available amount' do
-          expect(budget_item.available_amount).to eq 0
-        end
-      end
-
-      context 'after approval' do
-        before { budget.approve! }
-
-        it 'changes is_approved to true' do
-          expect(budget.is_approved).to eq true
-        end
-
-        it 'do have abailable amount' do
-          budget_item.reload
-
-          expect(budget_item.available_amount).to_not eq 0
-          expect(budget_item.available_amount).to eq budget_item.estimated_amount
-        end
-      end
-    end
-  end
-
-  describe '#decline!' do
-    let(:budget) { FactoryGirl.build :approved_budget }
-
-    before { budget.decline! }
-
-    it 'changes is_approved to true' do
-      expect(budget.is_approved).to eq false
     end
   end
 

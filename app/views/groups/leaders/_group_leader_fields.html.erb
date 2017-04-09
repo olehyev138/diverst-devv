@@ -1,0 +1,19 @@
+<div class="nested-fields card__section card__section--border">
+  <div class="card__action">
+    <%= link_to_remove_association "Remove", f, class: "error" %>
+    x
+  </div>
+
+  <label class="field__label">
+    <%= label = "#{ inline_svg('icons/move.svg', class: 'icon') }".html_safe %>
+    <%= f.label :user, label: 'Select user', required: true %>
+  </label>
+  <%= f.association :user,
+        collection: @group.members,
+        include_blank: true,
+        input_html: { class: "select2", autofocus: true },
+        label: false
+  %>
+
+  <%= f.input :position_name, input_html: { class: "sortable-focus" } %>
+</div>

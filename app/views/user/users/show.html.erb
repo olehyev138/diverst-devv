@@ -6,7 +6,7 @@
   <div class="flex-row__cell">
     <h1 style="margin-bottom: 5px;"><%= @user.name %></h1>
     <%= link_to 'Connect with LinkedIn', '/omniauth/linkedin', class: "btn btn--secondary" unless @user.linkedin_profile_url %>
-    <%= link_to "Edit profile", edit_profile_users_path, class: "btn btn--primary" %>
+    <%= link_to "Edit profile", edit_user_user_path, class: "btn btn--primary" %>
   </div>
 </div>
 

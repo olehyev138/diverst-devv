@@ -10,9 +10,7 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-
-ActiveRecord::Schema.define(version: 20170324135103) do
-
+ActiveRecord::Schema.define(version: 20170406124048) do
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
     t.string   "trackable_type", limit: 255
@@ -135,7 +133,12 @@ ActiveRecord::Schema.define(version: 20170324135103) do
     t.boolean  "is_approved"
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
+    t.integer  "approver_id",  limit: 4
+    t.integer  "requester_id", limit: 4
   end
+
+  add_index "budgets", ["approver_id"], name: "fk_rails_a057b1443a", using: :btree
+  add_index "budgets", ["requester_id"], name: "fk_rails_d21f6fbcce", using: :btree
 
   create_table "campaign_invitations", force: :cascade do |t|
     t.integer  "campaign_id", limit: 4
@@ -250,6 +253,8 @@ ActiveRecord::Schema.define(version: 20170324135103) do
     t.string   "idp_sso_target_url",           limit: 255
     t.string   "idp_slo_target_url",           limit: 255
     t.text     "idp_cert",                     limit: 65535
+    t.string   "saml_first_name_mapping",      limit: 255
+    t.string   "saml_last_name_mapping",       limit: 255
     t.boolean  "has_enabled_saml"
     t.datetime "created_at",                                                 null: false
     t.datetime "updated_at",                                                 null: false
@@ -460,6 +465,7 @@ ActiveRecord::Schema.define(version: 20170324135103) do
     t.string   "banner_content_type",       limit: 255
     t.integer  "banner_file_size",          limit: 4
     t.datetime "banner_updated_at"
+    t.string   "calendar_color",            limit: 255
   end
 
   create_table "groups_managers", force: :cascade do |t|
@@ -655,6 +661,8 @@ ActiveRecord::Schema.define(version: 20170324135103) do
     t.boolean  "groups_manage",                           default: false
     t.boolean  "groups_members_index",                    default: false
     t.boolean  "groups_members_manage",                   default: false
+    t.boolean  "groups_budgets_index",                    default: false
+    t.boolean  "groups_budgets_request",                  default: false
     t.boolean  "metrics_dashboards_index",                default: false
     t.boolean  "metrics_dashboards_create",               default: false
     t.boolean  "news_links_index",                        default: false
@@ -684,8 +692,9 @@ ActiveRecord::Schema.define(version: 20170324135103) do
     t.integer  "poll_id",    limit: 4
     t.integer  "user_id",    limit: 4
     t.text     "data",       limit: 65535
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.boolean  "anonymous",                default: false
   end
 
   create_table "polls", force: :cascade do |t|
@@ -868,5 +877,7 @@ ActiveRecord::Schema.define(version: 20170324135103) do
     t.datetime "updated_at",                    null: false
   end
 
+  add_foreign_key "budgets", "users", column: "approver_id"
+  add_foreign_key "budgets", "users", column: "requester_id"
   add_foreign_key "polls", "initiatives"
 end

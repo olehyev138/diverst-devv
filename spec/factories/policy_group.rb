@@ -55,5 +55,8 @@ FactoryGirl.define do
     budget_approval true
 
     logs_view true
+
+    groups_budgets_request true
+    groups_budgets_index true
   end
 end
