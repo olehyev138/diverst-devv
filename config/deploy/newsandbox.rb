@@ -34,6 +34,9 @@ server '52.44.185.242', user: 'newdeploy', roles: %w(web app db)
 set :branch, 'develop'
 set :rails_env, :production
 
+set :rollbar_env, "newsandbox"
+
+
 # Custom SSH Options
 # ==================
 # You may pass any option but keep in mind that net/ssh understands a
