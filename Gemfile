@@ -119,6 +119,7 @@ end
 group :production do
   gem 'syslogger', '~> 1.6.0' # Log to syslog, which is then sent to Loggly
   gem 'lograge', '~> 0.3'
-  gem 'appsignal'
   gem 'newrelic_rpm'
+
+  gem 'rollbar', '~> 2.14.1'
 end

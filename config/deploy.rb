@@ -45,5 +45,3 @@ namespace :deploy do
   after :finishing, "deploy:recompile_themes"
 
 end
-
-require 'appsignal/capistrano'
