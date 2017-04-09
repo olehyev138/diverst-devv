@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Diverst</title>
+    <%= stylesheet_link_tag "application", media: 'all', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <link rel="icon" type="image/png" href="/favicon.png">
+  </head>
+  <body>
+    <div id="calendar" data-calendar-data-url="<%= public_calendar_data_enterprise_events_path(@enterprise) %>"></div>
+  </body>
+</html>
