@@ -71,10 +71,16 @@ Rails.application.routes.draw do
       patch 'restore_default_branding'
       get 'bias'
       patch 'delete_xml_config'
+      get 'calendar'
     end
 
     scope module: :enterprises do
       resources :resources
+      resources :events, only: [] do
+        collection do
+          get 'public_calendar_data'
+        end
+      end
     end
   end
 

@@ -42,6 +42,10 @@ class ApplicationController < ActionController::Base
     headers['Access-Control-Max-Age'] = '1728000'
   end
 
+  def allow_iframe
+    response.headers.delete "X-Frame-Options"
+  end
+
   private
 
   def user_not_authorized
