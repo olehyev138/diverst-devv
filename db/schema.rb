@@ -12,7 +12,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 20170407151511) do
-
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
     t.string   "trackable_type", limit: 255
@@ -135,7 +134,12 @@ ActiveRecord::Schema.define(version: 20170407151511) do
     t.boolean  "is_approved"
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
+    t.integer  "approver_id",  limit: 4
+    t.integer  "requester_id", limit: 4
   end
+
+  add_index "budgets", ["approver_id"], name: "fk_rails_a057b1443a", using: :btree
+  add_index "budgets", ["requester_id"], name: "fk_rails_d21f6fbcce", using: :btree
 
   create_table "campaign_invitations", force: :cascade do |t|
     t.integer  "campaign_id", limit: 4
@@ -689,8 +693,9 @@ ActiveRecord::Schema.define(version: 20170407151511) do
     t.integer  "poll_id",    limit: 4
     t.integer  "user_id",    limit: 4
     t.text     "data",       limit: 65535
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.boolean  "anonymous",                default: false
   end
 
   create_table "polls", force: :cascade do |t|
@@ -890,6 +895,8 @@ ActiveRecord::Schema.define(version: 20170407151511) do
     t.datetime "updated_at",                    null: false
   end
 
+  add_foreign_key "budgets", "users", column: "approver_id"
+  add_foreign_key "budgets", "users", column: "requester_id"
   add_foreign_key "polls", "initiatives"
   add_foreign_key "reward_actions", "enterprises"
   add_foreign_key "user_reward_actions", "reward_actions"

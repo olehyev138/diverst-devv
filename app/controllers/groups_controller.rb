@@ -38,7 +38,7 @@ class GroupsController < ApplicationController
 
   def submit_budget
     authorize @group
-    @budget = Budget.new(budget_params)
+    @budget = Budget.new(budget_params.merge({ requester_id: current_user.id }))
     @group.budgets << @budget
 
     if @group.save
@@ -53,15 +53,14 @@ class GroupsController < ApplicationController
   def approve_budget
     authorize @budget, :approve?
 
-    @budget.update(budget_params)
-    @budget.approve!
+    BudgetManager.new(@budget).approve(current_user)
 
     redirect_to action: :budgets
   end
 
   def decline_budget
     authorize @budget, :decline?
-    @budget.decline!
+    BudgetManager.new(@budget).decline(current_user)
 
     redirect_to action: :budgets
   end
@@ -278,10 +277,8 @@ class GroupsController < ApplicationController
         :description,
         :logo,
         :banner,
-        :send_invitations,
         :yammer_create_group,
         :yammer_sync_users,
-        :lead_manager_id,
         :pending_users,
         :members_visibility,
         :messages_visibility,

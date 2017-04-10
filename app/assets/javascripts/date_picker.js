@@ -20,7 +20,7 @@ $(document).on('ready page:load', function(){
       format: format,
       autoClose: false,
       incrementMinuteBy: 15,
-      use24hour: true,
+      use24hour: false,
       yearRange: [new Date().getFullYear(), new Date().getFullYear() + 2],
       onOpen: function() {
         if($(field).val() == '') {

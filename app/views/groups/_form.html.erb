@@ -5,10 +5,6 @@
         <%= f.input :name, input_html: { autofocus: true } %>
         <%= f.input :description %>
         <%= f.input :logo, as: :attachment_preview %>
-        <%= f.association :managers, collection: @group.enterprise.users, input_html: { class: "select2" } %>
-        <%= f.association :lead_manager, collection: @group.enterprise.users, input_html: { class: "select2" } %>
-        <%= f.hidden_field :send_invitations, value: 0 %>
-        <%= f.input :send_invitations %>
         <%= f.association :invitation_segments, collection: @group.enterprise.segments, input_html: { class: "select2"}, wrapper_html: { style: "display: none;" } %>
       </div>
 

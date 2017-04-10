@@ -18,4 +18,8 @@ module PollsHelper
   def disabled_input?
     params[:initiative_id].blank? ? false : true
   end
+
+  def respondent_name(response)
+    response.anonymous? ? "Anonymous User" : response.user.name_with_status
+  end
 end

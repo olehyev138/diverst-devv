@@ -8,6 +8,16 @@ class BudgetMailer < ApplicationMailer
     mail(to: @receiver.email, subject: subject(@group.name))
   end
 
+  def budget_approved(budget)
+    @budget = budget
+    mail(to: budget.requester.email, subject: "The budget for #{ budget.subject.name } was approved")
+  end
+
+  def budget_declined(budget)
+    @budget = budget
+    mail(to: budget.requester.email, subject: "The budget for #{ budget.subject.name } was declined")
+  end
+
   private
 
   def subject(group_name)
