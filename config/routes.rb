@@ -226,6 +226,13 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :rewards, only: [] do
+    collection do
+      get 'edit'
+      patch 'update_reward_actions'
+    end
+  end
+
   resources :segments do
     member do
       get 'export_csv'

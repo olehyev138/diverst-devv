@@ -34,6 +34,7 @@ class Enterprise < ActiveRecord::Base
   accepts_nested_attributes_for :mobile_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :yammer_field_mappings, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :theme, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :reward_actions, reject_if: :all_blank, allow_destroy: true
 
   before_create :create_elasticsearch_only_fields
 
@@ -44,7 +45,6 @@ class Enterprise < ActiveRecord::Base
 
   has_attached_file :banner
   validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
-
 
   has_attached_file :xml_sso_config
   validates_attachment_content_type :xml_sso_config, content_type: 'text/xml'
