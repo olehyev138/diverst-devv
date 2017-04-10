@@ -18,12 +18,9 @@
               <th>Points</th>
             </thead>
             <tbody>
-              <tr><td>Attend event</td><td>200</td></tr>
-              <tr><td>Feedback on event</td><td>100</td></tr>
-              <tr><td>Collaborate answer</td><td>550</td></tr>
-              <tr><td>Collaborate comment</td><td>125</td></tr>
-              <tr><td>Collaborate vote</td><td>50</td></tr>
-              <tr><td>Survey response</td><td>50</td></tr>
+              <% @enterprise.reward_actions.each do |reward_action| %>
+                <tr><td><%= reward_action.label %></td><td><%= reward_action.points.to_i %></td></tr>
+              <% end %>
             </tbody>
           </table>
         </div>
