@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170407151511) do
+ActiveRecord::Schema.define(version: 20170411115623) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -755,6 +755,21 @@ ActiveRecord::Schema.define(version: 20170407151511) do
 
   add_index "reward_actions", ["enterprise_id"], name: "index_reward_actions_on_enterprise_id", using: :btree
 
+  create_table "rewards", force: :cascade do |t|
+    t.integer  "enterprise_id",        limit: 4,     null: false
+    t.integer  "points",               limit: 4,     null: false
+    t.string   "label",                limit: 255,   null: false
+    t.string   "picture_file_name",    limit: 255
+    t.string   "picture_content_type", limit: 255
+    t.integer  "picture_file_size",    limit: 4
+    t.datetime "picture_updated_at"
+    t.text     "description",          limit: 65535
+    t.integer  "responsible_id",       limit: 4,     null: false
+  end
+
+  add_index "rewards", ["enterprise_id"], name: "index_rewards_on_enterprise_id", using: :btree
+  add_index "rewards", ["responsible_id"], name: "index_rewards_on_responsible_id", using: :btree
+
   create_table "samples", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
     t.text     "data",       limit: 65535
@@ -900,6 +915,8 @@ ActiveRecord::Schema.define(version: 20170407151511) do
   add_foreign_key "budgets", "users", column: "requester_id"
   add_foreign_key "polls", "initiatives"
   add_foreign_key "reward_actions", "enterprises"
+  add_foreign_key "rewards", "enterprises"
+  add_foreign_key "rewards", "users", column: "responsible_id"
   add_foreign_key "user_reward_actions", "reward_actions"
   add_foreign_key "user_reward_actions", "users"
 end

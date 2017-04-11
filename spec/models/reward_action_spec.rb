@@ -7,5 +7,6 @@ RSpec.describe RewardAction do
     it { expect(reward_action).to validate_presence_of(:label) }
     it { expect(reward_action).to validate_presence_of(:key) }
     it { expect(reward_action).to validate_numericality_of(:points).only_integer }
+    it { expect(reward_action).to belong_to(:enterprise) }
   end
 end
