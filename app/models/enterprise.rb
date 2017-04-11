@@ -28,6 +28,7 @@ class Enterprise < ActiveRecord::Base
   has_many :expense_categories
   has_many :biases, through: :users, class_name: "Bias"
   has_many :departments
+  has_many :rewards
   has_many :reward_actions
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true

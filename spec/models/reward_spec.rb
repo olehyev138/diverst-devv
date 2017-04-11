@@ -16,5 +16,27 @@ RSpec.describe Reward do
     }
     it{ expect(reward).to belong_to(:enterprise) }
     it { expect(reward).to belong_to(:responsible).class_name("User").with_foreign_key("responsible_id") }
+
+    context "#responsible_user" do
+      context "when user enterprise and reward enterprise are not the same" do
+        let(:user){ create(:user) }
+        let(:reward){ build(:reward, responsible: user) }
+
+        it "reward is invalid" do
+          reward.valid?
+          expect(reward.errors.messages).to have_key(:responsible_id)
+        end
+      end
+
+      context "when user enterprise and reward enterprise are the same" do
+        let(:enterprise){ create(:enterprise) }
+        let(:user){ create(:user, enterprise: enterprise) }
+        let(:reward){ build(:reward, enterprise: enterprise, responsible: user) }
+
+        it "reward is valid" do
+          expect(reward).to be_valid
+        end
+      end
+    end
   end
 end

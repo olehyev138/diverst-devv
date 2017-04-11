@@ -1,0 +1,30 @@
+<div class="content__main">
+  <%= simple_form_for @reward do |f| %>
+
+    <div class="card">
+      <div class="card__section card__section--border">
+        <%= f.input :label, input_html: { autofocus: true } %>
+      </div>
+
+      <div class="card__section card__section--border">
+        <%= f.input :points %>
+      </div>
+
+      <div class="card__section card__section--border">
+        <%= f.association :responsible,
+              include_blank: true,
+              input_html: { class: "select2" } %>
+      </div>
+
+      <div class="card__section card__section--border">
+        <%= f.input :picture, as: :attachment_preview %>
+      </div>
+
+      <div class="card__section card__section--border">
+        <%= f.input :description %>
+      </div>
+    </div>
+
+    <%= f.button :submit, "Save prize" %>
+  <% end %>
+</div>

@@ -8,4 +8,10 @@ class Reward < ActiveRecord::Base
   validates :points, numericality: { only_integer: true }, presence: true
   validates :label, presence: true
   validates :responsible, presence: true
+  validate :responsible_user
+
+  private
+  def responsible_user
+    errors.add(:responsible_id, "Invalid responsible") unless responsible.try(:enterprise) == enterprise
+  end
 end

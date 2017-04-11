@@ -4,6 +4,7 @@ RSpec.describe Enterprise, type: :model do
   describe "when validating" do
     let(:enterprise){ create(:enterprise) }
 
+    it { expect(enterprise).to have_many(:rewards) }
     it { expect(enterprise).to have_many(:reward_actions) }
   end
 

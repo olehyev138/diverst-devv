@@ -232,10 +232,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :rewards, only: [] do
+  resources :rewards, except: [:show]
+
+  resources :reward_actions, only: [] do
     collection do
-      get 'edit'
-      patch 'update_reward_actions'
+      patch 'update'
     end
   end
 
