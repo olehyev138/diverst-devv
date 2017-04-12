@@ -18,7 +18,7 @@
               <th>Points</th>
             </thead>
             <tbody>
-              <% @enterprise.reward_actions.each do |reward_action| %>
+              <% @reward_actions.each do |reward_action| %>
                 <tr><td><%= reward_action.label %></td><td><%= reward_action.points.to_i %></td></tr>
               <% end %>
             </tbody>
@@ -60,110 +60,21 @@
       <h3>Catalogue</h3>
 
       <div class="row row--spacing-bottom">
-        <div class="col sm-4">
-          <div class="flex-row">
-            <div class="flex-row__cell">
-              <%= image_tag 'rewards/golf-bag.jpg', style: "width: 120px;" %>
-            </div>
-            <div class="flex-row__cell">
-              <h4>Golf bags</h4>
-              <p>
-                100 - 200 points<br>
-                <a href="#">Choose options...</a>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col sm-4">
-          <div class="flex-row">
-            <div class="flex-row__cell">
-              <%= image_tag 'rewards/gift-card.jpg', style: "width: 120px;" %>
-            </div>
-            <div class="flex-row__cell">
-              <h4>Gift cards</h4>
-              <p>
-                100 - 2000 points<br>
-                <a href="#">Choose options...</a>
-              </p>
+        <% @rewards.each do |reward| %>
+          <div class="col sm-4">
+            <div class="flex-row">
+              <div class="flex-row__cell">
+                <%= image_tag reward.picture.url, style: "width: 120px;" %>
+              </div>
+              <div class="flex-row__cell">
+                <h4><%= reward.label %></h4>
+                <p>
+                  <%= reward.points %> points
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col sm-4">
-          <div class="flex-row">
-            <div class="flex-row__cell">
-              <%= image_tag 'rewards/telescope.jpg', style: "width: 120px;" %>
-            </div>
-            <div class="flex-row__cell">
-              <h4>Telescope</h4>
-              <p>
-                150 - 275 points<br>
-                <a href="#">Choose options...</a>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row row--spacing-bottom">
-        <div class="col sm-4">
-          <div class="flex-row">
-            <div class="flex-row__cell">
-              <%= image_tag 'rewards/travel.jpg', style: "width: 120px;" %>
-            </div>
-            <div class="flex-row__cell">
-              <h4>Travel packages</h4>
-              <p>
-                2000 - 4500 points<br>
-                <a href="#">Choose options...</a>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col sm-4">
-          <div class="flex-row">
-            <div class="flex-row__cell">
-              <%= image_tag 'rewards/house.jpg', style: "width: 120px;" %>
-            </div>
-            <div class="flex-row__cell">
-              <h4>Weekend retreat</h4>
-              <p>
-                500 - 800 points<br>
-                <a href="#">Choose options...</a>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col sm-4">
-          <div class="flex-row">
-            <div class="flex-row__cell">
-              <%= image_tag 'rewards/gopro.jpg', style: "width: 120px;" %>
-            </div>
-            <div class="flex-row__cell">
-              <h4>GoPro</h4>
-              <p>
-                150 - 200 points<br>
-                <a href="#">Choose options...</a>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row row--spacing-bottom">
-        <div class="col sm-4">
-          <div class="flex-row">
-            <div class="flex-row__cell">
-              <%= image_tag 'rewards/macbook.jpg', style: "width: 120px;" %>
-            </div>
-            <div class="flex-row__cell">
-              <h4>Laptops</h4>
-              <p>
-                1250 - 2400 points<br>
-                <a href="#">Choose options...</a>
-              </p>
-            </div>
-          </div>
-        </div>
+        <% end %>
       </div>
 
     </div>

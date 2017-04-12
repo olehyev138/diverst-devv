@@ -12,5 +12,7 @@ class User::DashboardController < ApplicationController
 
   def rewards
     @enterprise = current_user.enterprise
+    @reward_actions = @enterprise.reward_actions
+    @rewards = @enterprise.rewards
   end
 end
