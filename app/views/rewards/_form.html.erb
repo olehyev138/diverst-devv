@@ -3,21 +3,27 @@
 
     <div class="card">
       <div class="card__section card__section--border">
-        <%= f.input :label, input_html: { autofocus: true } %>
+        <%= f.input :label,
+              input_html: { autofocus: true },
+              label: "Choose a <strong>name</strong> best describes the prize.".html_safe %>
       </div>
 
       <div class="card__section card__section--border">
-        <%= f.input :points %>
+        <%= f.input :points,
+              label: "How much <strong>points</strong> is the necessary to redeem the prize?".html_safe %>
       </div>
 
       <div class="card__section card__section--border">
         <%= f.association :responsible,
               include_blank: true,
-              input_html: { class: "select2" } %>
+              input_html: { class: "select2" },
+              label: "Who is <strong>responsible</strong> checking the request of this prize?".html_safe %>
       </div>
 
       <div class="card__section card__section--border">
-        <%= f.input :picture, as: :attachment_preview %>
+        <%= f.input :picture,
+              as: :attachment_preview,
+              label: "Choose a <strong>picture</strong> best describes the prize.".html_safe %>
       </div>
 
       <div class="card__section card__section--border">
