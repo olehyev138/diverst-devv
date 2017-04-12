@@ -1,7 +1,9 @@
 class Reward < ActiveRecord::Base
   belongs_to :enterprise
   belongs_to :responsible, class_name: "User", foreign_key: "responsible_id"
-  has_attached_file :picture, styles: { medium: '300x300>' }
+  has_attached_file :picture,
+    styles: { thumb: '120x120>' },
+    default_url: ActionController::Base.helpers.image_path('/assets/missing.png')
 
   validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
   validates :enterprise, presence: true

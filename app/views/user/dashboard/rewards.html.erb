@@ -59,23 +59,25 @@
     <div class="card__section">
       <h3>Catalogue</h3>
 
-      <div class="row row--spacing-bottom">
-        <% @rewards.each do |reward| %>
-          <div class="col sm-4">
-            <div class="flex-row">
-              <div class="flex-row__cell">
-                <%= image_tag reward.picture.url, style: "width: 120px;" %>
-              </div>
-              <div class="flex-row__cell">
-                <h4><%= reward.label %></h4>
-                <p>
-                  <%= reward.points %> points
-                </p>
+      <% @rewards.each_slice(3) do |rewards_batch| %>
+        <div class="row row--spacing-bottom">
+          <% rewards_batch.each do |reward| %>
+            <div class="col sm-4">
+              <div class="flex-row">
+                <div class="flex-row__cell">
+                  <%= image_tag reward.picture.url, style: "width: 120px;" %>
+                </div>
+                <div class="flex-row__cell">
+                  <h4><%= reward.label %></h4>
+                  <p>
+                    <%= reward.points %> points
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        <% end %>
-      </div>
+          <% end %>
+        </div>
+      <% end %>
 
     </div>
   </div>
