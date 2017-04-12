@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170411115623) do
+ActiveRecord::Schema.define(version: 20170412141912) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -67,6 +67,18 @@ ActiveRecord::Schema.define(version: 20170411115623) do
     t.integer  "supporting_document_file_size",    limit: 4
     t.datetime "supporting_document_updated_at"
   end
+
+  create_table "badges", force: :cascade do |t|
+    t.integer  "enterprise_id",      limit: 4,   null: false
+    t.integer  "points",             limit: 4,   null: false
+    t.string   "label",              limit: 255, null: false
+    t.string   "image_file_name",    limit: 255, null: false
+    t.string   "image_content_type", limit: 255, null: false
+    t.integer  "image_file_size",    limit: 4,   null: false
+    t.datetime "image_updated_at",               null: false
+  end
+
+  add_index "badges", ["enterprise_id"], name: "index_badges_on_enterprise_id", using: :btree
 
   create_table "biases", force: :cascade do |t|
     t.integer  "user_id",                  limit: 4
@@ -911,6 +923,7 @@ ActiveRecord::Schema.define(version: 20170411115623) do
     t.datetime "updated_at",                    null: false
   end
 
+  add_foreign_key "badges", "enterprises"
   add_foreign_key "budgets", "users", column: "approver_id"
   add_foreign_key "budgets", "users", column: "requester_id"
   add_foreign_key "polls", "initiatives"
