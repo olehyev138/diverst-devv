@@ -20,10 +20,12 @@ RSpec.describe Reward do
     context "#responsible_user" do
       context "when user enterprise and reward enterprise are not the same" do
         let(:user){ create(:user) }
-        let(:reward){ build(:reward, responsible: user) }
+        let(:reward){ build(:reward) }
 
         it "reward is invalid" do
+          reward.responsible = user
           reward.valid?
+
           expect(reward.errors.messages).to have_key(:responsible_id)
         end
       end

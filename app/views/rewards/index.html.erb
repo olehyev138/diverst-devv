@@ -24,7 +24,7 @@
   </div>
   <div class="card">
     <div class="card__section">
-      <% if @rewards.empty? %>
+      <% if @rewards.try("empty?") %>
         <p>There are no prizes yet. <%= link_to "Create one", new_reward_path %>.</p>
       <% else %>
         <table class="table--has-border">
@@ -36,7 +36,7 @@
             <th>Options</th>
           </thead>
           <tbody>
-            <% @rewards.each do |reward| %>
+            <% @rewards.to_a.each do |reward| %>
               <tr>
                 <td class="icon-column">
                   <a href="<%= reward.picture.expiring_url(3600) %>" class="icon icon--bg icon--large" style="background-image: url(<%= reward.picture.expiring_url(3600) %>)"></a>

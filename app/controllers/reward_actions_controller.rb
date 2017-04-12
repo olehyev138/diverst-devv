@@ -9,7 +9,7 @@ class RewardActionsController < ApplicationController
       redirect_to :back
     else
       flash[:alert] = "Your reward actions were not updated. Please fix the errors"
-      render :edit
+      render "rewards/index"
     end
   end
 

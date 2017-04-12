@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe RewardsController, type: :controller do
-  let(:enterprise){ create(:enterprise) }
-  let(:user){ create(:user, enterprise: enterprise) }
+  let!(:enterprise){ create(:enterprise) }
+  let!(:user){ create(:user, enterprise: enterprise) }
 
   describe "POST#create" do
     describe "with logged in user" do

@@ -40,7 +40,7 @@ RSpec.describe RewardActionsController, type: :controller do
         end
 
         it 'render edit template' do
-          expect(response).to render_template :edit
+          expect(response).to render_template "rewards/index"
         end
       end
     end
