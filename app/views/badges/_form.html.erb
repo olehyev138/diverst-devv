@@ -1,0 +1,25 @@
+<div class="content__main">
+  <%= simple_form_for @badge do |f| %>
+
+    <div class="card">
+      <div class="card__section card__section--border">
+        <%= f.input :label,
+              input_html: { autofocus: true },
+              label: "Choose a <strong>title</strong> for badge.".html_safe %>
+      </div>
+
+      <div class="card__section card__section--border">
+        <%= f.input :points,
+              label: "How much <strong>points</strong> is necessary to receive this badge?".html_safe %>
+      </div>
+
+      <div class="card__section card__section--border">
+        <%= f.input :image,
+              as: :attachment_preview,
+              label: "Choose a <strong>picture</strong> for badge.".html_safe %>
+      </div>
+    </div>
+
+    <%= f.button :submit, "Save badge" %>
+  <% end %>
+</div>

@@ -233,6 +233,7 @@ Rails.application.routes.draw do
   end
 
   resources :rewards, except: [:show]
+  resources :badges, except: [:index, :show]
 
   resources :reward_actions, only: [] do
     collection do

@@ -6,6 +6,7 @@ RSpec.describe Enterprise, type: :model do
 
     it { expect(enterprise).to have_many(:rewards) }
     it { expect(enterprise).to have_many(:reward_actions) }
+    it { expect(enterprise).to have_many(:badges) }
   end
 
   describe ".cdo_message_email_html" do

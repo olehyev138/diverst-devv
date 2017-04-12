@@ -30,6 +30,7 @@ class Enterprise < ActiveRecord::Base
   has_many :departments
   has_many :rewards
   has_many :reward_actions
+  has_many :badges
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :mobile_fields, reject_if: :all_blank, allow_destroy: true

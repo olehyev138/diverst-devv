@@ -8,6 +8,7 @@ class RewardsController < ApplicationController
   def index
     authorize @enterprise, :update?
     @rewards = @enterprise.rewards
+    @badges = @enterprise.badges
   end
 
   def new
