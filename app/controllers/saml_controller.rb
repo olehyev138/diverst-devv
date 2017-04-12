@@ -29,7 +29,13 @@ class SamlController < ApplicationController
         user = User.new(auth_source: 'saml', enterprise: @enterprise)
 
         user.set_info_from_saml(nameid, attrs, @enterprise)
+
+        @enterprise.users << user
+        @enterprise.save!
       end
+
+      user.set_info_from_saml(nameid, attrs, @enterprise)
+
       sign_in user
 
       redirect_to controller: 'user/dashboard', action: :home

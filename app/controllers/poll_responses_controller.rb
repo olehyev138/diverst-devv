@@ -20,19 +20,19 @@ class PollResponsesController < ApplicationController
   end
 
   def create
-    @response = @poll.responses.new
+    @response = @poll.responses.new(poll_response_params)
     @response.info.merge(fields: @response.poll.fields, form_data: params['custom-fields'])
     @response.user = current_user
 
     if @response.save
       redirect_to action: :thank_you, poll_id: @poll.id, id: @response.id
     else
-      render :edit
+      render :new
     end
   end
 
   def update
-    if @response.update(response_params)
+    if @response.update(poll_response_params)
       redirect_to @response
     else
       render :edit
@@ -55,5 +55,9 @@ class PollResponsesController < ApplicationController
 
   def set_response
     @response = @poll.responses.find(params[:id])
+  end
+
+  def poll_response_params
+    params.require(:poll_response).permit(:anonymous)
   end
 end

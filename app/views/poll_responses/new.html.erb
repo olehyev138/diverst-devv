@@ -16,6 +16,9 @@
           <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: current_user %>
         <% end %>
 
+        <%= f.hidden_field :anonymous, value: 0 %>
+        <%= f.input :anonymous, label: "I want to remain anonymous" %>
+
         <%= f.button :submit, class: 'btn--secondary btn--large btn--full', value: "Submit response" %>
       <% end %>
     </div>

@@ -118,18 +118,28 @@ class User < ActiveRecord::Base
   # Update the user with info from the SAML auth response
   def set_info_from_saml(nameid, _attrs, enterprise)
     self.email = nameid
-    self.first_name = _attrs[:first_name] || 'Not set'
-    self.last_name = _attrs[:last_name] || 'Not set'
 
-    saml_user_info = {}
+    set_name_from_saml(_attrs, enterprise)
 
-    #self.info.merge(fields: enterprise.fields, form_data: saml_user_info)
+    saml_user_info = enterprise.sso_fields_to_enterprise_fields(_attrs)
+
+    self.info.merge(fields: enterprise.fields, form_data: saml_user_info)
 
     save!
-    enterprise.users << self
-    enterprise.save!
 
     self
+  end
+
+  def set_name_from_saml(_attrs, enterprise)
+    self.first_name ||= 'Not set'
+    if enterprise.saml_first_name_mapping.present? && _attrs[enterprise.saml_first_name_mapping]
+      self.first_name = _attrs[enterprise.saml_first_name_mapping]
+    end
+
+    self.last_name ||= 'Not set'
+    if enterprise.saml_last_name_mapping.present? && _attrs[enterprise.saml_last_name_mapping]
+      self.last_name = _attrs[enterprise.saml_last_name_mapping]
+    end
   end
 
   def string_for_field(field)
@@ -345,6 +355,10 @@ class User < ActiveRecord::Base
 
     group = self.enterprise.groups.find(group_id)
     group.active_members.exists? self.id
+  end
+
+  def active_for_authentication?
+    super && active?
   end
 
   private

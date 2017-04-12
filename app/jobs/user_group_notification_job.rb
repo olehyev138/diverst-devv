@@ -3,7 +3,7 @@ class UserGroupNotificationJob < ActiveJob::Base
 
   def perform
     @messages, @news = {}, {}
-    User.find_in_batches(batch_size: 200) do |users|
+    User.includes(user_groups: :group).find_in_batches(batch_size: 200) do |users|
       users.each do |user|
         groups = []
         user.user_groups(enable_notification: true).each do |user_group|

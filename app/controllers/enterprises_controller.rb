@@ -1,6 +1,7 @@
 class EnterprisesController < ApplicationController
-  before_action :set_enterprise, except: [:index, :new, :create]
-  after_action :verify_authorized
+  before_action :set_enterprise, except: [:index, :new, :create, :calendar]
+  after_action :verify_authorized, except: :calendar
+  after_action :allow_iframe, only: [:calendar]
 
   layout :resolve_layout
 
@@ -85,6 +86,11 @@ class EnterprisesController < ApplicationController
     redirect_to :back
   end
 
+  def calendar
+    @enterprise = Enterprise.find(params[:id])
+    render layout: false
+  end
+
   protected
 
   def resolve_layout
@@ -120,6 +126,8 @@ class EnterprisesController < ApplicationController
         :idp_sso_target_url,
         :idp_slo_target_url,
         :idp_cert,
+        :saml_first_name_mapping,
+        :saml_last_name_mapping,
         :yammer_import,
         :cdo_message,
         :cdo_message_email,

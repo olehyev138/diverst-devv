@@ -1,7 +1,19 @@
 <div class="content__header">
-  <h1>Add Leader to <%= @group.name %></h1>
+  <h1>Add Leaders to <%= @group.name %></h1>
 </div>
 
 <div class="content__main">
-  <%= render 'form', url: group_leaders_path(@group) %>
+  <%= simple_form_for @group, url: group_leaders_path, method: :post do |f| %>
+    <div class="card" id="sortable">
+      <%= f.simple_fields_for :group_leaders do |g| %>
+        <%= render "group_leader_fields", f: g %>
+      <% end %>
+
+      <div class="card__section card__section--border">
+        <%= link_to_add_association "Add a leader", f, :group_leaders %>
+      </div>
+    </div>
+
+    <%= f.button :submit, "Save Leaders" %>
+  <% end %>
 </div>

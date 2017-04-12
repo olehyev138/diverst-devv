@@ -54,22 +54,25 @@ class Enterprise < ActiveRecord::Base
   end
 
   def saml_settings
+    #if xml config file is present - take settings from it
     if xml_sso_config?
       idp_metadata_parser = OneLogin::RubySaml::IdpMetadataParser.new
       file_content = Paperclip.io_adapters.for(xml_sso_config).read
       settings = idp_metadata_parser.parse(file_content)
-    else
+    else #otherwise - initialize empty settings
       settings = OneLogin::RubySaml::Settings.new
+      settings.name_identifier_format = 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress'
     end
 
-    settings.assertion_consumer_service_url = "http://#{ENV['DOMAIN']}/enterprises/#{id}/saml/acs"
+    settings.assertion_consumer_service_url = "https://#{ENV['DOMAIN']}/enterprises/#{id}/saml/acs"
 
-    settings.issuer = sp_entity_id
-    settings.idp_entity_id = idp_entity_id
-    settings.idp_sso_target_url = idp_sso_target_url
-    settings.idp_slo_target_url = idp_slo_target_url
-    settings.idp_cert = idp_cert
-    settings.name_identifier_format = 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress'
+    #override xml file settings with enterprise settings, if they are present
+    settings.issuer = sp_entity_id                    if sp_entity_id.present?
+    settings.idp_entity_id = idp_entity_id            if idp_entity_id.present?
+    settings.idp_sso_target_url = idp_sso_target_url  if idp_sso_target_url.present?
+    settings.idp_slo_target_url = idp_slo_target_url  if idp_slo_target_url.present?
+    settings.idp_cert = idp_cert                      if idp_cert.present?
+
     settings.security[:authn_requests_signed] = false
     settings.security[:logout_requests_signed] = false
     settings.security[:logout_responses_signed] = false
@@ -117,6 +120,22 @@ class Enterprise < ActiveRecord::Base
   def default_policy_group
     PolicyGroup.default_group(self.id)
   end
+
+  def sso_fields_to_enterprise_fields(sso_attrs)
+    mapped_fields = {}
+
+    fields.each do |field|
+      sso_attrs.each do |sso_f_key, sso_f_value|
+        if sso_f_key == field.saml_attribute
+          mapped_fields.merge!(field.id => sso_f_value)
+          next
+        end
+      end
+    end
+
+    mapped_fields
+  end
+
 
   private
 

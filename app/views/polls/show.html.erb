@@ -103,7 +103,7 @@
             <% @responses.each do |response| %>
 
               <tr data-response-id="<%= response.id %>">
-                <td><%= response.user.name_with_status %></td>
+                <td><%= respondent_name(response) %></td>
                 <td><%= response.created_at.to_s :reversed_slashes %></td>
                 <td><a href="#" class="row-expand">Show</a></td>
               </tr>
@@ -112,7 +112,7 @@
                 <div class="poll-response_details" id="response-details-<%= response.id %>">
                   <ul class="unstyled">
                     <% @poll.fields.each do |field| %>
-                      <li><small><%= field.title %></small> <span class="block highlight"><%= field.string_value response.info[field] %></span></li>
+                      <li><small><%= field.title %></small> <span class="block highlight"><%= field.string_value [response.info[field]].flatten %></span></li>
                     <% end %>
                   </ul>
                 </div>

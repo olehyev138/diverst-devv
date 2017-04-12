@@ -122,6 +122,15 @@
             <%= f.input :groups_members_manage, wrapper: :boolean_checkbox, label: "Manage" %>
           </div>
           <div class="col md-3">
+            <h4>Budgets</h4>
+            <%= f.hidden_field :groups_budgets_index, value: 0 %>
+            <%= f.input :groups_budgets_index, wrapper: :boolean_checkbox, label: "View" %>
+            <%= f.hidden_field :groups_budgets_request, value: 0 %>
+            <%= f.input :groups_budgets_request, wrapper: :boolean_checkbox, label: "Request" %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col md-3">
             <h4>News</h4>
             <%= f.hidden_field :news_links_index, value: 0 %>
             <%= f.input :news_links_index, wrapper: :boolean_checkbox, label: "View" %>

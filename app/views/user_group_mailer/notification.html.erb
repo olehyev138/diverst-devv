@@ -1,11 +1,18 @@
-Hello <%= @user.name %>, you have updates in your <%= @custom_text.erg_text.pluralize %>.
-<br/>
+Hello <%= @user.name %>, you have updates in your <%= @custom_text.erg_text.pluralize %>.<br/>
+
 <% @groups.each do |group| %>
-  <%= @custom_text.erg_text %> <%= group[:group].name %>
-  <br/>
-  <%= link_to "#{ pluralize(group[:messages_count], 'new message') }", group_group_messages_url(group[:group]) if group[:messages_count] %>
-  <br/>
-  <%= link_to "#{ group[:news_count] } news", group_news_links_url(group[:group]) if group[:news_count] > 0 %>.
-  <br/>
+  <% if (group[:messages_count].to_i > 0) || (group[:news_count].to_i > 0) %>
+    <strong><%= @custom_text.erg_text %> <%= group[:group].name %></strong>
+  <% end %>
+
+  <% if group[:messages_count].to_i > 0 %>
+    <br/>
+    <%= link_to pluralize(group[:messages_count], 'new message'), group_group_messages_url(group[:group].try(:id)) %>
+  <% end %>
+
+  <% if group[:news_count].to_i > 0 %>
+    <br/>
+    <%= link_to "#{ group[:news_count] } news", group_news_links_url(group[:group].try(:id)) %>.
+  <% end %>
   <br/>
 <% end %>

@@ -16,7 +16,7 @@
         <div class="row">
           <div class="col sm-12 poll_initiative_box <%= poll_initiative_visibility_class(@poll, params) %>">
             <%= f.association :initiative,
-                  collection: @poll.enterprise.initiatives.recent,
+                  collection: @poll.enterprise.initiatives,
                   include_blank: true,
                   selected: @poll.initiative.try(:id) || params[:initiative_id],
                   input_html: { class: "select2" },

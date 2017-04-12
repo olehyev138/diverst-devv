@@ -1,12 +1,13 @@
 class Notifiers::PollNotifier
   def initialize(poll)
     @poll = poll
+    @initiative = poll.initiative
   end
 
   def notify!
     if should_notify?
       targeted_users.each do |user|
-        PollMailer.delay.invitation(@poll, user)
+        PollMailer.invitation(@poll, user).deliver_later
       end
       @poll.update(email_sent: true)
     end
@@ -14,17 +15,21 @@ class Notifiers::PollNotifier
 
   private
   def should_notify?
-    !@poll.email_sent && @poll.published?
+    !@poll.email_sent && @poll.published? && initiative_ended_up?
+  end
+
+  def initiative_ended_up?
+    return true unless @initiative
+    @initiative.end <= Date.today
   end
 
   def targeted_users
     users = @poll.targeted_users
-    users = filter_by_initiative(users) if @poll.initiative
+    users = filter_by_initiative(users) if @initiative
     users
   end
 
   def filter_by_initiative(users)
-    initiative = @poll.initiative
-    users.select{ |u| u.initiatives.where(id: initiative.id).any? }
+    users.select{ |u| u.initiatives.where(id: @initiative.id).any? }
   end
 end

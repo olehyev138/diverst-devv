@@ -11,6 +11,11 @@ $(document).on('ready page:load', function(){
     }
   });
 
+  $(".flippable .front > svg").each(function() {
+    $('.flippable .back').show();
+    applyFlip();
+  })
+
   function applyFlip() {
     var flippableOptions = {
       trigger: 'hover'
@@ -20,7 +25,7 @@ $(document).on('ready page:load', function(){
     // http://stackoverflow.com/questions/39552827/jquery-flip-elements-overlapping-subsequent-elements
     $('.flippable').each(function(index){
       var $front = $(this).find('.front');
-      var frontHeight = $front.find('img').height();
+      var frontHeight = $front.find('img, svg').height();
       var backHeight = $(this).find('.back').height();
       var biggerHeight = frontHeight > backHeight ? frontHeight : backHeight;
 
