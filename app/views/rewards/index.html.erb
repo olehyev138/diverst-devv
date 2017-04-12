@@ -2,19 +2,24 @@
   <div class="content__header">
     <h1>Actions</h1>
   </div>
-  You need to specify how much <strong>points</strong> users will receive on each action
 
-  <%= simple_form_for @enterprise, :url => reward_actions_path, method: :patch do |f| %>
-    <div class="card">
-      <div class="card__section">
-        <%= f.simple_fields_for :reward_actions do |r| %>
-          <%= r.input :points, label: r.object.label, input_html: { placeholder: "100 points" } %>
-        <% end %>
+  <div class="content__main">
+    You need to specify how much <strong>points</strong> users will receive on each action
 
-        <%= f.button :submit, "Save actions" %>
+    <%= simple_form_for @enterprise, :url => reward_actions_path, method: :patch do |f| %>
+      <div class="card">
+          <div class="card__section row">
+            <%= f.simple_fields_for :reward_actions do |r| %>
+              <div class="col md-6 mb10">
+                <%= r.input :points, label: r.object.label, input_html: { placeholder: "100 points" } %>
+              </div>
+            <% end %>
+          </div>
       </div>
-    </div>
-  <% end %>
+      <%= f.button :submit, "Save actions" %>
+
+    <% end %>
+  </div>
 </div>
 
 <div class="content__main">
