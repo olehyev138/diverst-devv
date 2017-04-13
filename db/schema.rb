@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170412141912) do
+ActiveRecord::Schema.define(version: 20170413151827) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -76,6 +76,8 @@ ActiveRecord::Schema.define(version: 20170412141912) do
     t.string   "image_content_type", limit: 255, null: false
     t.integer  "image_file_size",    limit: 4,   null: false
     t.datetime "image_updated_at",               null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "badges", ["enterprise_id"], name: "index_badges_on_enterprise_id", using: :btree
@@ -759,10 +761,12 @@ ActiveRecord::Schema.define(version: 20170412141912) do
   add_index "resources", ["container_type", "container_id"], name: "index_resources_on_container_type_and_container_id", using: :btree
 
   create_table "reward_actions", force: :cascade do |t|
-    t.string  "label",         limit: 255, null: false
-    t.integer "points",        limit: 4
-    t.string  "key",           limit: 255, null: false
-    t.integer "enterprise_id", limit: 4
+    t.string   "label",         limit: 255, null: false
+    t.integer  "points",        limit: 4
+    t.string   "key",           limit: 255, null: false
+    t.integer  "enterprise_id", limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "reward_actions", ["enterprise_id"], name: "index_reward_actions_on_enterprise_id", using: :btree
@@ -777,6 +781,8 @@ ActiveRecord::Schema.define(version: 20170412141912) do
     t.datetime "picture_updated_at"
     t.text     "description",          limit: 65535
     t.integer  "responsible_id",       limit: 4,     null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "rewards", ["enterprise_id"], name: "index_rewards_on_enterprise_id", using: :btree
@@ -853,12 +859,29 @@ ActiveRecord::Schema.define(version: 20170412141912) do
   end
 
   create_table "user_reward_actions", force: :cascade do |t|
-    t.integer "user_id",          limit: 4
-    t.integer "reward_action_id", limit: 4
+    t.integer  "user_id",          limit: 4,   null: false
+    t.integer  "reward_action_id", limit: 4,   null: false
+    t.integer  "entity_id",        limit: 4,   null: false
+    t.string   "entity_type",      limit: 255, null: false
+    t.integer  "operation",        limit: 4,   null: false
+    t.integer  "points",           limit: 4,   null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "user_reward_actions", ["reward_action_id"], name: "index_user_reward_actions_on_reward_action_id", using: :btree
   add_index "user_reward_actions", ["user_id"], name: "index_user_reward_actions_on_user_id", using: :btree
+
+  create_table "user_rewards", force: :cascade do |t|
+    t.integer  "user_id",    limit: 4, null: false
+    t.integer  "reward_id",  limit: 4, null: false
+    t.integer  "points",     limit: 4, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "user_rewards", ["reward_id"], name: "index_user_rewards_on_reward_id", using: :btree
+  add_index "user_rewards", ["user_id"], name: "index_user_rewards_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "first_name",                  limit: 255
@@ -901,6 +924,8 @@ ActiveRecord::Schema.define(version: 20170412141912) do
     t.integer  "policy_group_id",             limit: 4
     t.boolean  "active",                                    default: true
     t.text     "biography",                   limit: 65535
+    t.integer  "points",                      limit: 4,     default: 0,       null: false
+    t.integer  "credits",                     limit: 4,     default: 0,       null: false
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree
@@ -932,4 +957,6 @@ ActiveRecord::Schema.define(version: 20170412141912) do
   add_foreign_key "rewards", "users", column: "responsible_id"
   add_foreign_key "user_reward_actions", "reward_actions"
   add_foreign_key "user_reward_actions", "users"
+  add_foreign_key "user_rewards", "rewards"
+  add_foreign_key "user_rewards", "users"
 end

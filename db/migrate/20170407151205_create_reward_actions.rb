@@ -5,6 +5,8 @@ class CreateRewardActions < ActiveRecord::Migration
       t.integer :points
       t.string :key, null: false
       t.references :enterprise, index: true, foreign_key: true
+
+      t.timestamps
     end
   end
 end

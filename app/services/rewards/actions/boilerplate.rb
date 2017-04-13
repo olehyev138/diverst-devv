@@ -4,10 +4,14 @@ class Rewards::Actions::Boilerplate
       [
         "Attend event",
         "Feedback on event",
-        "Collaborate answer",
-        "Collaborate comment",
-        "Collaborate vote",
-        "Survey response"
+        "Campaign answer",
+        "Campaign comment",
+        "Campaign vote",
+        "Survey response",
+        "News post",
+        "Message post",
+        "News comment",
+        "Message comment"
       ].each do |action|
         enterprise.reward_actions.create(
           label: action,

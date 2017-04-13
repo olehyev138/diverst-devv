@@ -5,6 +5,8 @@ class CreateBadges < ActiveRecord::Migration
       t.integer :points, null: false
       t.string :label, null: false
       t.attachment :image, null: false
+
+      t.timestamps
     end
   end
 end

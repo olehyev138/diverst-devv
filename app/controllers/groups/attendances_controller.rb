@@ -12,12 +12,14 @@ class Groups::AttendancesController < ApplicationController
   def create
     return head(204) if @attendance
     @event.initiative_users.create(user: current_user)
+    user_rewarder("attend_event").add_points(@event)
     head 204
   end
 
   def destroy
     return head(204) if !@attendance
     @attendance.destroy
+    user_rewarder("attend_event").remove_points(@event)
     head 204
   end
 

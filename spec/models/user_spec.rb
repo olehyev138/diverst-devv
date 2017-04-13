@@ -4,6 +4,10 @@ RSpec.describe User do
   describe "when validating" do
     let(:user) { create(:user) }
 
+    it { expect(user).to validate_presence_of(:points) }
+    it { expect(user).to validate_numericality_of(:points).only_integer }
+    it { expect(user).to validate_presence_of(:credits) }
+    it { expect(user).to validate_numericality_of(:credits).only_integer }
     it { expect(user).to have_many(:user_reward_actions) }
     it { expect(user).to have_many(:reward_actions).through(:user_reward_actions) }
   end

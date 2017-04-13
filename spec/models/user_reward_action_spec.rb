@@ -6,7 +6,13 @@ RSpec.describe UserRewardAction do
 
     it { expect(user_reward_action).to validate_presence_of(:user) }
     it { expect(user_reward_action).to validate_presence_of(:reward_action) }
+    it { expect(user_reward_action).to validate_presence_of(:entity) }
+    it { expect(user_reward_action).to validate_presence_of(:operation) }
+    it { expect(user_reward_action).to validate_presence_of(:points) }
+    it { expect(user_reward_action).to validate_numericality_of(:points).only_integer }
     it { expect(user_reward_action).to belong_to(:user) }
     it { expect(user_reward_action).to belong_to(:reward_action) }
+    it { expect(user_reward_action).to belong_to(:entity) }
+    it { expect(user_reward_action).to define_enum_for(:operation).with([:add, :del]) }
   end
 end
