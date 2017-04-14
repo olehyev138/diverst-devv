@@ -7,7 +7,6 @@ class UserRewardAction < ActiveRecord::Base
 
   validates :user, presence: true
   validates :reward_action, presence: true
-  validates :entity, presence: true
   validates :operation, presence: true
   validates :points, numericality: { only_integer: true }, presence: true
 end

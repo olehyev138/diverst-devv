@@ -861,8 +861,8 @@ ActiveRecord::Schema.define(version: 20170413151827) do
   create_table "user_reward_actions", force: :cascade do |t|
     t.integer  "user_id",          limit: 4,   null: false
     t.integer  "reward_action_id", limit: 4,   null: false
-    t.integer  "entity_id",        limit: 4,   null: false
-    t.string   "entity_type",      limit: 255, null: false
+    t.integer  "entity_id",        limit: 4
+    t.string   "entity_type",      limit: 255
     t.integer  "operation",        limit: 4,   null: false
     t.integer  "points",           limit: 4,   null: false
     t.datetime "created_at"
