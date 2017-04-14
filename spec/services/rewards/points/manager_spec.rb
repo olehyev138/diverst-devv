@@ -74,9 +74,11 @@ RSpec.describe Rewards::Points::Manager do
       let(:manager){ Rewards::Points::Manager.new(user, reward_action.key) }
 
       before :each do
-        create(:user_reward_action, user: user, operation: "add", points: 50, created_at: Time.now + 1.second)
-        create(:user_reward_action, user: user, operation: "add", points: 50, created_at: Time.now + 2.seconds, entity: initiative)
-        create(:user_reward_action, user: user, operation: "add", points: 100, created_at: Time.now + 3.seconds, entity: initiative)
+        now = Time.now
+
+        create(:user_reward_action, user: user, operation: "add", points: 50, created_at: now + 1.second)
+        create(:user_reward_action, user: user, reward_action: reward_action, operation: "add", points: 50, created_at: now + 2.seconds, entity: initiative)
+        create(:user_reward_action, user: user, reward_action: reward_action, operation: "add", points: 100, created_at: now + 3.seconds, entity: initiative)
         create(:user_reward_action, user: user, operation: "del", points: 50, entity: initiative)
         create(:user_reward, user: user, points: 150)
       end

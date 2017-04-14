@@ -33,16 +33,18 @@ class Rewards::Points::Manager
 
   def remove_points_from_user(entity)
     last_user_reward_action_of_same_entity = UserRewardAction.where(
-      entity: entity,
-      operation: UserRewardAction.operations[:add]
+      user: @user,
+      reward_action: @reward_action,
+      operation: UserRewardAction.operations[:add],
+      entity: entity
     ).order(created_at: :desc).first
 
-    points = last_user_reward_action_of_same_entity.try(:points) || 0
+    points = last_user_reward_action_of_same_entity.try(:points)
 
     UserRewardAction.create(
       user: @user,
       reward_action: @reward_action,
-      points: points,
+      points: points.to_i,
       operation: "del",
       entity: entity
     )
