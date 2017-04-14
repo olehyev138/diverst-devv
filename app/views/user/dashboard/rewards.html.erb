@@ -10,7 +10,7 @@
       <div class="card">
         <div class="card__section">
 
-          <h4>My points: 1,275</h4>
+          <h4>My points: <%= current_user.credits %></h4>
 
           <table class="table--has-border" id="campaigns-table">
             <thead>
@@ -31,23 +31,24 @@
       <div class="card">
         <div class="card__section">
 
-          <h4><span class="icon icon--large" style="margin-bottom: 5px;"><%= image_tag('linkedin.png') %></span>Rewards</h4>
+          <h3>List of Badges</h3>
 
           <table class="table--has-border" id="campaigns-table">
             <thead>
-              <th>Reward</th>
-              <th>Cost</th>
-              <th>Redeem?</th>
+              <th></th>
+              <th>Badge</th>
+              <th>Points</th>
             </thead>
             <tbody>
-              <tr><td><%= image_tag 'linkedin-full.png', style: "height: 24px; display: inline-block;" %> recommendation</td><td>500</td><td><label class="control"><input type="checkbox" class="control__input"><span class="control__indicator control__indicator--checkbox"></span></label></td></tr>
-              <tr><td><%= image_tag 'linkedin-full.png', style: "height: 24px; display: inline-block;" %> fast track</td><td>2,000</td><td><label class="control"><input type="checkbox" class="control__input"><span class="control__indicator control__indicator--checkbox"></span></label></td></tr>
-              <tr><td><%= image_tag 'linkedin-full.png', style: "height: 24px; display: inline-block;" %> advancement</td><td>2,000</td><td><label class="control"><input type="checkbox" class="control__input"><span class="control__indicator control__indicator--checkbox"></span></label></td></tr>
-              <tr><td><%= image_tag 'linkedin-full.png', style: "height: 24px; display: inline-block;" %> executive mentorship</td><td>3,000</td><td><label class="control"><input type="checkbox" class="control__input"><span class="control__indicator control__indicator--checkbox"></span></label></td></tr>
+              <% @badges.each do |badge| %>
+              <tr>
+                <td><%= image_tag badge.image.url, style: "height: 24px; display: inline-block;" %></td>
+                <td><%= badge.label %></td>
+                <td><%= badge.points %></td>
+              </tr>
+              <% end %>
             </tbody>
           </table>
-
-          <a href="#" class="btn btn--primary" style="margin-top: 30px;">Redeem</a>
 
         </div>
       </div>
