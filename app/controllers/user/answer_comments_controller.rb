@@ -7,7 +7,7 @@ class User::AnswerCommentsController < ApplicationController
   def create
     @comment = @answer.comments.new(comment_params)
     @comment.author = current_user
-    @comment.save
+    @comment.save && user_rewarder("campaign_comment").add_points(@comment)
 
     redirect_to [:user, @answer.question]
   end

@@ -51,6 +51,7 @@ RSpec.configure do |config|
   config.extend ControllerMacros, :type => :controller
   config.include ReferrerHelpers, :type => :controller
   config.include CsvHelpers
+  config.include ModelHelpers
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"

@@ -25,6 +25,7 @@ class PollResponsesController < ApplicationController
     @response.user = current_user
 
     if @response.save
+      user_rewarder("survey_response").add_points(@response)
       redirect_to action: :thank_you, poll_id: @poll.id, id: @response.id
     else
       render :new

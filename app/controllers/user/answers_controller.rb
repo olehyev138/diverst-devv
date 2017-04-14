@@ -10,11 +10,12 @@ class User::AnswersController < ApplicationController
     return head 403 if @answer.author == current_user # Cant vote on your own answer
 
     if vote_params[:upvoted] == 'true'
-      AnswerUpvote.find_or_create_by(author_id: current_user.id, answer_id: @answer.id)
+      @vote = AnswerUpvote.find_or_create_by(author_id: current_user.id, answer_id: @answer.id)
     else
-      vote = AnswerUpvote.where(author_id: current_user.id, answer_id: @answer.id).first
-      vote.destroy if vote
+      @vote = AnswerUpvote.where(author_id: current_user.id, answer_id: @answer.id).first
+      @vote.destroy if @vote
     end
+    user_rewarder("campaign_vote").add_points(@vote)
 
     head 200
   end
@@ -22,7 +23,7 @@ class User::AnswersController < ApplicationController
   def create
     @answer = @question.answers.new(answer_params)
     @answer.author = current_user
-    @answer.save
+    @answer.save && user_rewarder("campaign_answer").add_points(@answer)
 
     redirect_to [:user, @campaign, @question]
   end

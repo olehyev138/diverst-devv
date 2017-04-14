@@ -90,12 +90,24 @@ RSpec.describe Rewards::Points::Manager do
         ).by(1)
       end
 
-      it "removes the amount of points of the latest action of same entity from points user already received" do
-        manager.remove_points(initiative)
-        user.reload
+      context "when user received points of this action" do
+        it "removes the amount of points of the latest action of same entity from points user already received" do
+          manager.remove_points(initiative)
+          user.reload
 
-        # (-100 + 50 + 50 + 100 - 50) = 50
-        expect(user.points).to eq 50
+          # (-100 + 50 + 50 + 100 - 50) = 50
+          expect(user.points).to eq 50
+        end
+      end
+
+      context "when user did not receive points of this action" do
+        it "does not remove points from user" do
+          manager.remove_points(create(:initiative))
+          user.reload
+
+          # (0 + 50 + 50 + 100 - 50) = 150
+          expect(user.points).to eq 150
+        end
       end
 
       it "updates the credits of a user considering the amount of points user received and rewards he redeemed" do

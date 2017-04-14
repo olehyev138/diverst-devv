@@ -24,6 +24,7 @@ class Groups::GroupMessagesController < ApplicationController
     @message.owner = current_user
 
     if @message.save
+      user_rewarder("message_post").add_points(@message)
       flash[:notice] = "Your message was created"
       redirect_to action: :index
     else
@@ -33,6 +34,7 @@ class Groups::GroupMessagesController < ApplicationController
   end
 
   def destroy
+    user_rewarder("message_post").remove_points(@message)
     @message.destroy
 
     redirect_to :back
@@ -45,6 +47,7 @@ class Groups::GroupMessagesController < ApplicationController
     @comment.author = current_user
 
     @message.comments << @comment
+    user_rewarder("message_comment").add_points(@comment)
 
     redirect_to group_group_message_path(@group, @message)
   end
