@@ -111,6 +111,10 @@ class User < ActiveRecord::Base
     name + status
   end
 
+  def badges
+    Badge.where("points <= ?", points).order(points: :asc)
+  end
+
   #bTODO test this
   def policy_group
     if self[:policy_group_id]

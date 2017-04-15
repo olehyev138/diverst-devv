@@ -36,6 +36,16 @@ RSpec.describe User do
     end
   end
 
+  describe '#badges' do
+    let(:user){ build_stubbed(:user, points: 100) }
+    let(:badge_one){ create(:badge, points: 100) }
+    let(:badge_two){ create(:badge, points: 101) }
+
+    it 'returns the badges based on how much points a user has' do
+      expect(user.badges).to eq [badge_one]
+    end
+  end
+
   describe '#participation_score' do
     subject { create(:user) }
     let(:user) { create(:user) }
