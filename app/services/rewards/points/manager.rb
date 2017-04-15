@@ -2,21 +2,20 @@ class Rewards::Points::Manager
   def initialize(user, action_key)
     @user = user
     @reward_action = RewardAction.where(key: action_key, enterprise: @user.enterprise).first
+    @reporting = Rewards::Points::Reporting.new(@user)
   end
 
   def add_points(entity)
     if @user && @reward_action
       add_points_to_user(entity)
-      update_user_points
-      update_user_credits
+      update_points
     end
   end
 
   def remove_points(entity)
     if @user && @reward_action
       remove_points_from_user(entity)
-      update_user_points
-      update_user_credits
+      update_points
     end
   end
 
@@ -50,29 +49,8 @@ class Rewards::Points::Manager
     )
   end
 
-  def update_user_points
-    @user.update(points: user_points)
-  end
-
-  def update_user_credits
-    @user.update(credits: user_credits)
-  end
-
-  def user_points
-    earned_points = UserRewardAction.where(
-      user: @user,
-      operation: UserRewardAction.operations[:add]
-    ).sum(:points)
-
-    removed_points = UserRewardAction.where(
-      user: @user,
-      operation: UserRewardAction.operations[:del]
-    ).sum(:points)
-
-    @user_points ||= earned_points - removed_points
-  end
-
-  def user_credits
-    user_points - UserReward.where(user: @user).sum(:points)
+  def update_points
+    @user.update(points: @reporting.user_points)
+    @user.update(credits: @reporting.user_credits)
   end
 end

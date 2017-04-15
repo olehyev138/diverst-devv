@@ -318,6 +318,15 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :rewards, only: [] do
+        resources :user_rewards, only: :create do
+          collection do
+            get :success
+            get :error
+          end
+        end
+      end
+
       resources :groups do
         member do
           get 'join'

@@ -4,7 +4,7 @@ class CreateUserRewardActions < ActiveRecord::Migration
       t.references :user, index: true, foreign_key: true, null: false
       t.references :reward_action, index: true, foreign_key: true, null: false
       t.references :entity, polymorphic: true
-      t.integer :operation, null: false
+      t.integer :operation, null: false, index: true
       t.integer :points, null: false
 
       t.timestamps

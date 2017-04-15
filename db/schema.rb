@@ -869,6 +869,7 @@ ActiveRecord::Schema.define(version: 20170413151827) do
     t.datetime "updated_at"
   end
 
+  add_index "user_reward_actions", ["operation"], name: "index_user_reward_actions_on_operation", using: :btree
   add_index "user_reward_actions", ["reward_action_id"], name: "index_user_reward_actions_on_reward_action_id", using: :btree
   add_index "user_reward_actions", ["user_id"], name: "index_user_reward_actions_on_user_id", using: :btree
 
