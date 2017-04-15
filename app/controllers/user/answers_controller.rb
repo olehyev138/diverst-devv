@@ -24,6 +24,7 @@ class User::AnswersController < ApplicationController
     @answer = @question.answers.new(answer_params)
     @answer.author = current_user
     @answer.save && user_rewarder("campaign_answer").add_points(@answer)
+    flash[:reward] = "Your answer was created. Now you have #{ current_user.credits } points"
 
     redirect_to [:user, @campaign, @question]
   end

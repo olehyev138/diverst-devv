@@ -34,7 +34,7 @@ var Utility = (function() {
 
   // Autohides alert after a certain amount of time
   var autoHideAlerts = function() {
-    $('p.notice, p.alert').fadeOut(300, function() { $(this).remove(); });
+    $('p.notice, p.alert, p.reward').fadeOut(300, function() { $(this).remove(); });
   };
 
   // Submits the passed input's form when pressing return while the input is focused

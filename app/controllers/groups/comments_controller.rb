@@ -9,6 +9,7 @@ class Groups::CommentsController < ApplicationController
     @comment = @event.comments.new(comment_params)
     @comment.user = current_user
     @comment.save && user_rewarder("feedback_on_event").add_points(@comment)
+    flash[:reward] = "Now you have #{ current_user.credits } points"
 
     redirect_to :back
   end

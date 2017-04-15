@@ -26,6 +26,7 @@ class PollResponsesController < ApplicationController
 
     if @response.save
       user_rewarder("survey_response").add_points(@response)
+      flash[:reward] = "Now you have #{ current_user.credits } points"
       redirect_to action: :thank_you, poll_id: @poll.id, id: @response.id
     else
       render :new
