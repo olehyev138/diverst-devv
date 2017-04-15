@@ -1,1 +1,10 @@
-Erro
+<div class="text-center">
+  <h1>Sorry! We can't process your reward.</h1>
+
+  <%= inline_svg('icons/remove.svg', size: "200px") %>
+
+  <p>We had a problem processing the request of your reward. Please contact the responsible of your network.</p>
+
+  <%= link_to "Back to rewards", user_rewards_path, class: "btn btn--primary" %>
+  <%= link_to "Back to your dashboard", user_root_path, class: "btn btn--secondary" %>
+</div>

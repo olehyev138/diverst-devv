@@ -1,7 +1,7 @@
 class User::UserRewardsController < ApplicationController
   before_action :authenticate_user!
 
-  layout 'global_settings'
+  layout 'user'
 
   def create
     reward = current_user.enterprise.rewards.find(params[:reward_id])

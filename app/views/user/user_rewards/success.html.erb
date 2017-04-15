@@ -1,1 +1,10 @@
-Sucesso
+<div class="text-center">
+  <h1>Congratulations! You got a new reward.</h1>
+
+  <%= inline_svg('icons/trophy.svg', size: "200px") %>
+
+  <p>The responsible of your reward was notified about your request and you will get your reward soon.</p>
+
+  <%= link_to "Back to rewards", user_rewards_path, class: "btn btn--primary" %>
+  <%= link_to "Back to your dashboard", user_root_path, class: "btn btn--secondary" %>
+</div>
