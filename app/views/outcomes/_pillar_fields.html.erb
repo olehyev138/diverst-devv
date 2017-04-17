@@ -1,9 +1,9 @@
 <div class="card__section card__section--border nested-fields">
-  <h3><%= custom_text.program_text %></h3>
+  <h3><%= c_t(:program) %></h3>
   <div class="card__action">
-    <%= link_to_remove_association "Remove #{ custom_text.program_text }", f, class: "error" %>
+    <%= link_to_remove_association "Remove #{ c_t(:program) }", f, class: "error" %>
   </div>
 
-  <%= f.input :name, placeholder: "#{ custom_text.program_text } name" %>
+  <%= f.input :name, placeholder: "#{ c_t(:program) } name" %>
   <%= f.input :value_proposition %>
 </div>

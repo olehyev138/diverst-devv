@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170406124048) do
+ActiveRecord::Schema.define(version: 20170413151827) do
+
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
     t.string   "trackable_type", limit: 255
@@ -66,6 +67,20 @@ ActiveRecord::Schema.define(version: 20170406124048) do
     t.integer  "supporting_document_file_size",    limit: 4
     t.datetime "supporting_document_updated_at"
   end
+
+  create_table "badges", force: :cascade do |t|
+    t.integer  "enterprise_id",      limit: 4,   null: false
+    t.integer  "points",             limit: 4,   null: false
+    t.string   "label",              limit: 255, null: false
+    t.string   "image_file_name",    limit: 255, null: false
+    t.string   "image_content_type", limit: 255, null: false
+    t.integer  "image_file_size",    limit: 4,   null: false
+    t.datetime "image_updated_at",               null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "badges", ["enterprise_id"], name: "index_badges_on_enterprise_id", using: :btree
 
   create_table "biases", force: :cascade do |t|
     t.integer  "user_id",                  limit: 4
@@ -753,6 +768,34 @@ ActiveRecord::Schema.define(version: 20170406124048) do
 
   add_index "resources", ["container_type", "container_id"], name: "index_resources_on_container_type_and_container_id", using: :btree
 
+  create_table "reward_actions", force: :cascade do |t|
+    t.string   "label",         limit: 255, null: false
+    t.integer  "points",        limit: 4
+    t.string   "key",           limit: 255, null: false
+    t.integer  "enterprise_id", limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "reward_actions", ["enterprise_id"], name: "index_reward_actions_on_enterprise_id", using: :btree
+
+  create_table "rewards", force: :cascade do |t|
+    t.integer  "enterprise_id",        limit: 4,     null: false
+    t.integer  "points",               limit: 4,     null: false
+    t.string   "label",                limit: 255,   null: false
+    t.string   "picture_file_name",    limit: 255
+    t.string   "picture_content_type", limit: 255
+    t.integer  "picture_file_size",    limit: 4
+    t.datetime "picture_updated_at"
+    t.text     "description",          limit: 65535
+    t.integer  "responsible_id",       limit: 4,     null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "rewards", ["enterprise_id"], name: "index_rewards_on_enterprise_id", using: :btree
+  add_index "rewards", ["responsible_id"], name: "index_rewards_on_responsible_id", using: :btree
+
   create_table "samples", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
     t.text     "data",       limit: 65535
@@ -823,6 +866,32 @@ ActiveRecord::Schema.define(version: 20170406124048) do
     t.boolean  "enable_notification",           default: true
   end
 
+  create_table "user_reward_actions", force: :cascade do |t|
+    t.integer  "user_id",          limit: 4,   null: false
+    t.integer  "reward_action_id", limit: 4,   null: false
+    t.integer  "entity_id",        limit: 4
+    t.string   "entity_type",      limit: 255
+    t.integer  "operation",        limit: 4,   null: false
+    t.integer  "points",           limit: 4,   null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "user_reward_actions", ["operation"], name: "index_user_reward_actions_on_operation", using: :btree
+  add_index "user_reward_actions", ["reward_action_id"], name: "index_user_reward_actions_on_reward_action_id", using: :btree
+  add_index "user_reward_actions", ["user_id"], name: "index_user_reward_actions_on_user_id", using: :btree
+
+  create_table "user_rewards", force: :cascade do |t|
+    t.integer  "user_id",    limit: 4, null: false
+    t.integer  "reward_id",  limit: 4, null: false
+    t.integer  "points",     limit: 4, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "user_rewards", ["reward_id"], name: "index_user_rewards_on_reward_id", using: :btree
+  add_index "user_rewards", ["user_id"], name: "index_user_rewards_on_user_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "first_name",                  limit: 255
     t.string   "last_name",                   limit: 255
@@ -864,6 +933,8 @@ ActiveRecord::Schema.define(version: 20170406124048) do
     t.integer  "policy_group_id",             limit: 4
     t.boolean  "active",                                    default: true
     t.text     "biography",                   limit: 65535
+    t.integer  "points",                      limit: 4,     default: 0,       null: false
+    t.integer  "credits",                     limit: 4,     default: 0,       null: false
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree
@@ -886,11 +957,16 @@ ActiveRecord::Schema.define(version: 20170406124048) do
     t.datetime "updated_at",                    null: false
   end
 
-<<<<<<< HEAD
-  add_foreign_key "custom_texts", "enterprises"
-=======
+  add_foreign_key "badges", "enterprises"
   add_foreign_key "budgets", "users", column: "approver_id"
   add_foreign_key "budgets", "users", column: "requester_id"
->>>>>>> develop
+  add_foreign_key "custom_texts", "enterprises"
   add_foreign_key "polls", "initiatives"
+  add_foreign_key "reward_actions", "enterprises"
+  add_foreign_key "rewards", "enterprises"
+  add_foreign_key "rewards", "users", column: "responsible_id"
+  add_foreign_key "user_reward_actions", "reward_actions"
+  add_foreign_key "user_reward_actions", "users"
+  add_foreign_key "user_rewards", "rewards"
+  add_foreign_key "user_rewards", "users"
 end

@@ -54,7 +54,7 @@
             <%= f.input :polls_manage, wrapper: :boolean_checkbox, label: "Manage all" %>
           </div>
           <div class="col md-3">
-            <h4><%= custom_text.erg_text.pluralize %></h4>
+            <h4><%= c_t(:erg).pluralize %></h4>
             <%= f.hidden_field :groups_index, value: 0 %>
             <%= f.input :groups_index, wrapper: :boolean_checkbox, label: "View" %>
             <%= f.hidden_field :groups_create, value: 0 %>
@@ -94,7 +94,7 @@
         </div>
       </div>
       <div class="card__section card__section--border">
-        <h2><%= custom_text.erg_text %> management</h2>
+        <h2><%= c_t(:erg) %> management</h2>
         <div class="row">
           <div class="col md-3">
             <h4>Events</h4>
