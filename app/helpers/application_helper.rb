@@ -3,12 +3,12 @@ module ApplicationHelper
     groups_path # TODO
   end
 
-  def logo_url
-    enterprise_logo_or_default('diverst-logo.svg')
+  def logo_url(enterprise = nil)
+    enterprise_logo_or_default('diverst-logo.svg', enterprise)
   end
 
-  def login_logo
-    enterprise_logo_or_default('diverst-logo-purple.svg')
+  def login_logo(enterprise = nil)
+    enterprise_logo_or_default('diverst-logo-purple.svg', enterprise)
   end
 
   def logo_destination
@@ -93,8 +93,9 @@ module ApplicationHelper
     end
   end
 
-  def enterprise_logo_or_default(default_logo_name)
-    enterprise = default_enterprise_for_styling
+  def enterprise_logo_or_default(default_logo_name, enterprise = nil)
+    enterprise = enterprise || default_enterprise_for_styling
+
     if enterprise && enterprise.theme.present? && enterprise.theme.logo.present?
       enterprise.theme.logo.expiring_url(3601)
     else

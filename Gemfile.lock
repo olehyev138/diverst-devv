@@ -65,11 +65,11 @@ GEM
     autoprefixer-rails (6.7.7.1)
       execjs
     awesome_print (1.7.0)
-    aws-sdk (1.66.0)
-      aws-sdk-v1 (= 1.66.0)
-    aws-sdk-v1 (1.66.0)
+    aws-sdk (1.67.0)
+      aws-sdk-v1 (= 1.67.0)
+    aws-sdk-v1 (1.67.0)
       json (~> 1.4)
-      nokogiri (>= 1.4.4)
+      nokogiri (~> 1)
     babel-source (5.8.35)
     babel-transpiler (0.7.0)
       babel-source (>= 4.0, < 6)
@@ -172,30 +172,30 @@ GEM
       rails (< 6)
     diff-lcs (1.3)
     docile (1.1.5)
-    domain_name (0.5.20170223)
+    domain_name (0.5.20170404)
       unf (>= 0.0.5, < 1.0.0)
     draper (2.1.0)
       actionpack (>= 3.0)
       activemodel (>= 3.0)
       activesupport (>= 3.0)
       request_store (~> 1.0)
-    elasticsearch (5.0.3)
-      elasticsearch-api (= 5.0.3)
-      elasticsearch-transport (= 5.0.3)
-    elasticsearch-api (5.0.3)
+    elasticsearch (5.0.4)
+      elasticsearch-api (= 5.0.4)
+      elasticsearch-transport (= 5.0.4)
+    elasticsearch-api (5.0.4)
       multi_json
     elasticsearch-model (0.1.9)
       activesupport (> 3)
       elasticsearch (> 0.4)
       hashie
     elasticsearch-rails (0.1.9)
-    elasticsearch-transport (5.0.3)
+    elasticsearch-transport (5.0.4)
       faraday
       multi_json
     em-websocket (0.5.1)
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0.6.0)
-    enumerize (2.0.1)
+    enumerize (2.1.0)
       activesupport (>= 3.2)
     erubis (2.7.0)
     eventmachine (1.2.3)
@@ -347,7 +347,7 @@ GEM
     fog-voxel (0.1.0)
       fog-core
       fog-xml
-    fog-vsphere (1.8.0)
+    fog-vsphere (1.9.1)
       fog-core
       rbvmomi (~> 1.9)
     fog-xenserver (0.3.0)
@@ -493,7 +493,7 @@ GEM
       mime-types
       mimemagic (= 0.3.0)
     parallel (1.11.1)
-    parallel_tests (2.14.0)
+    parallel_tests (2.14.1)
       parallel
     pismo (0.7.4)
       awesome_print
@@ -571,7 +571,7 @@ GEM
     rb-inotify (0.9.8)
       ffi (>= 0.5.0)
     rb-readline (0.5.4)
-    rbvmomi (1.10.0)
+    rbvmomi (1.11.0)
       builder (~> 3.0)
       json (>= 1.8)
       nokogiri (~> 1.5)
@@ -660,7 +660,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    sshkit (1.13.0)
+    sshkit (1.13.1)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
     sshkit-interactive (0.2.0)
@@ -675,7 +675,7 @@ GEM
       coffee-rails
     tzinfo (1.2.3)
       thread_safe (~> 0.1)
-    uglifier (3.1.11)
+    uglifier (3.2.0)
       execjs (>= 0.3.0, < 3)
     unf (0.1.4)
       unf_ext
