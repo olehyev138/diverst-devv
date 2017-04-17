@@ -1,0 +1,5 @@
+var flash = $('<p class="reward" style="z-index: 1000;"></p>').text('<%= flash[:reward] %>');
+$("body").append(flash);
+setTimeout(function() {
+  flash.fadeOut(300, function() { $(this).remove(); });
+}, 3000);

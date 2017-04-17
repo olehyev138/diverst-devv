@@ -17,7 +17,8 @@ class User::AnswersController < ApplicationController
     end
     user_rewarder("campaign_vote").add_points(@vote)
 
-    head 200
+    flash[:reward] = "Now you have #{ current_user.credits } points"
+    render "partials/flash_messages.js"
   end
 
   def create

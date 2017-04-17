@@ -58,7 +58,7 @@ var Utility = (function() {
 
   var mergeWithDTDefaults = function(params) {
     return $.extend(true, {}, defaultDatatablesOptions, params);
-  }
+  };
 
   return {
     autoHideAlerts: autoHideAlerts,
