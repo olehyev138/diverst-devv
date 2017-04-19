@@ -1,8 +1,8 @@
-Hello <%= @user.name %>, you have updates in your ERGs.<br/>
+Hello <%= @user.name %>, you have updates in your <%= @custom_text.erg_text.pluralize %>.<br/>
 
 <% @groups.each do |group| %>
   <% if (group[:messages_count].to_i > 0) || (group[:news_count].to_i > 0) %>
-    <strong>ERG <%= group[:group].name %></strong>
+    <strong><%= @custom_text.erg_text %> <%= group[:group].name %></strong>
   <% end %>
 
   <% if group[:messages_count].to_i > 0 %>

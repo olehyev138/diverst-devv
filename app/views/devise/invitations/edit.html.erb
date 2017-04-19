@@ -29,7 +29,7 @@
               <% if resource.enterprise.cdo_message.present? %>
                 <p> <%= simple_format resource.enterprise.cdo_message %> </p>
               <% else %>
-                <p>Hi! This is <%= resource.enterprise.cdo_name %>. We know that diverse teams produce better results, but our diversity mission is important for another reason: we want everyone to be fairly represented and have the same opportunities.  Our new diversity platform provides just that – a place where you can collaborate on interesting problems and develop new insights together. Join us by selecting the ERGs that best represent your interests.</p>
+                <p>Hi! This is <%= resource.enterprise.cdo_name %>. We know that diverse teams produce better results, but our diversity mission is important for another reason: we want everyone to be fairly represented and have the same opportunities.  Our new diversity platform provides just that – a place where you can collaborate on interesting problems and develop new insights together. Join us by selecting the <%= c_t(:erg).pluralize %> that best represent your interests.</p>
               <% end %>
             </div>
           </div>
@@ -50,7 +50,7 @@
 
       <div class="card">
         <div class="card__section">
-          <h2>ERG Events Calendar</h2>
+          <h2><%= c_t(:erg) %> Events Calendar</h2>
           <a
             class="toggle_calendar btn btn--primary"
             onclick="toggle_calendar();"
@@ -66,7 +66,7 @@
             <%= devise_error_messages! %>
             <%= f.hidden_field :invitation_token %>
 
-            <h2>Choose your ERG</h2>
+            <h2>Choose your <%= c_t(:erg) %></h2>
 
             <% resource.enterprise.groups.each do |group| %>
               <div class="media-object" data-group-id="<%= group.id %>">

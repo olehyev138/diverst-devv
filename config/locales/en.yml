@@ -20,7 +20,9 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  custom_text:
+    erg: ERG
+    program: Program
 
   time:
     formats:

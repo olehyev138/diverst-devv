@@ -23,14 +23,14 @@
         <%= f.association :groups,
               collection: @campaign.enterprise.groups,
               input_html: { class: "select2" },
-              label: "Choose the <strong>ERGs</strong> you want to target".html_safe %>
+              label: "Choose the <strong>#{ c_t(:erg).pluralize }</strong> you want to target".html_safe %>
       </div>
 
       <div class="card__section card__section--border">
         <%= f.association :segments,
               collection: @campaign.enterprise.segments,
               input_html: { class: "select2" },
-              label: "Choose the <strong>segments</strong> you want to target within these ERGs".html_safe %>
+              label: "Choose the <strong>segments</strong> you want to target within these #{ c_t(:erg) .pluralize }".html_safe %>
       </div>
 
       <div class="card__section card__section--border">

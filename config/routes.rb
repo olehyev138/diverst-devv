@@ -359,6 +359,7 @@ Rails.application.routes.draw do
 
   resources :policy_groups
   resources :emails
+  resources :custom_texts, only: [:edit, :update]
 
   root to: 'metrics_dashboards#index'
 end

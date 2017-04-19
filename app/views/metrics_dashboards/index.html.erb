@@ -12,7 +12,7 @@
           <strong><%= @general_metrics[:nb_users] %></strong>
         </div>
         <div class="flex-row__cell">
-          <small>ERGs</small><br>
+          <small><%= c_t(:erg).pluralize %></small><br>
           <strong><%= @general_metrics[:nb_ergs] %></strong>
         </div>
         <div class="flex-row__cell">
@@ -32,7 +32,7 @@
           <strong><%= @general_metrics[:nb_ongoing_campaigns] %></strong>
         </div>
         <div class="flex-row__cell">
-          <small>Average # of members per ERG</small><br>
+          <small>Average # of members per <%= c_t(:erg) %></small><br>
           <strong><%= @general_metrics[:average_nb_members_per_group] %></strong>
         </div>
       </div>
@@ -44,7 +44,7 @@
     <div class="col sm-12 md-6">
       <div class="card">
         <div class="card__section">
-          <h4>ERG population</h4>
+          <h4><%= c_t(:erg) %> population</h4>
           <div class="card__action">
             <%= link_to "Export CSV", group_population_generic_graphs_path(format: :csv) %>
           </div>

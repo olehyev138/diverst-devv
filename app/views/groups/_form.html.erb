@@ -20,7 +20,7 @@
             <%= f.label :yammer_create_group do %>
               <div class="flex-row__cell">
                 <strong>Create Yammer group</strong>
-                <p>Creates a matching group for this ERG in Yammer.</p>
+                <p>Creates a matching group for this <%= c_t(:erg) %> in Yammer.</p>
               </div>
             <% end %>
           </div>
@@ -33,7 +33,7 @@
             <%= f.label :yammer_sync_users do %>
               <div class="flex-row__cell">
                 <strong>User sync</strong>
-                <p>Automatically adds users to this ERG's Yammer group as they join it in Diverst.</p>
+                <p>Automatically adds users to this <%= c_t(:erg) %>'s Yammer group as they join it in Diverst.</p>
               </div>
             <% end %>
           </div>

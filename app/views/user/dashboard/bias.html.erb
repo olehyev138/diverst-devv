@@ -10,7 +10,7 @@
 
       <div class="row">
         <div class="col sm-3">
-          <h3>ERG</h3>
+          <h3><%= c_t(:erg) %></h3>
           <% current_user.enterprise.groups[0..current_user.enterprise.groups.count/2 - 1].each do |group| %>
             <label class="control"><input type="checkbox" class="control__input"><span class="control__indicator control__indicator--checkbox"></span> &nbsp;&nbsp;<%= group.name %></label>
           <% end %>
