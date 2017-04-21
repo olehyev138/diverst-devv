@@ -12,7 +12,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 20170413151827) do
-
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
     t.string   "trackable_type", limit: 255
@@ -225,6 +224,14 @@ ActiveRecord::Schema.define(version: 20170413151827) do
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
   end
+
+  create_table "custom_texts", force: :cascade do |t|
+    t.text    "erg",           limit: 65535
+    t.integer "enterprise_id", limit: 4
+    t.text    "program",       limit: 65535
+  end
+
+  add_index "custom_texts", ["enterprise_id"], name: "index_custom_texts_on_enterprise_id", using: :btree
 
   create_table "departments", force: :cascade do |t|
     t.integer  "enterprise_id", limit: 4,   null: false
@@ -952,6 +959,7 @@ ActiveRecord::Schema.define(version: 20170413151827) do
   add_foreign_key "badges", "enterprises"
   add_foreign_key "budgets", "users", column: "approver_id"
   add_foreign_key "budgets", "users", column: "requester_id"
+  add_foreign_key "custom_texts", "enterprises"
   add_foreign_key "polls", "initiatives"
   add_foreign_key "reward_actions", "enterprises"
   add_foreign_key "rewards", "enterprises"

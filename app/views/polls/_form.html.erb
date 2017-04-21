@@ -20,7 +20,7 @@
                   include_blank: true,
                   selected: @poll.initiative.try(:id) || params[:initiative_id],
                   input_html: { class: "select2" },
-                  label: "Choose the <strong>event</strong> you want to target within these ERGs".html_safe,
+                  label: "Choose the <strong>event</strong> you want to target within these #{ c_t(:erg).pluralize }".html_safe,
                   disabled: disabled_input?
             %>
             <%= f.input :initiative_id,
@@ -32,13 +32,13 @@
             <%= f.association :groups,
                   collection: @poll.enterprise.groups,
                   input_html: { class: "select2" },
-                  label: "Choose the <strong>ERGs</strong> you want to target".html_safe
+                  label: "Choose the <strong>#{ c_t(:erg).pluralize }</strong> you want to target".html_safe
             %>
 
             <%= f.association :segments,
                   collection: @poll.enterprise.segments,
                   input_html: { class: "select2" },
-                  label: "Choose the <strong>segments</strong> you want to target within these ERGs".html_safe
+                  label: "Choose the <strong>segments</strong> you want to target within these #{ c_t(:erg).pluralize }".html_safe
             %>
           </div>
         </div>

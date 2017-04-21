@@ -1,6 +1,6 @@
 <div class="content__header">
-  <h1>ERGs</h1>
-  <%= link_to "New ERG", new_group_path, class: "btn btn--primary" if policy(Group).new? %>
+  <h1><%= c_t(:erg).pluralize %></h1>
+  <%= link_to "New #{ c_t(:erg) }", new_group_path, class: "btn btn--primary" if policy(Group).new? %>
 </div>
 
 <div class="content__main">

@@ -50,7 +50,7 @@
     <div class="col sm-12 md-6">
       <div class="card">
         <div class="card__section">
-          <h3>Contributions per ERG</h3>
+          <h3>Contributions per <%= c_t(:erg) %></h3>
           <div class="card__action">
             <%= link_to "Export CSV", contributions_per_erg_campaign_path(@campaign, format: :csv) %>
           </div>

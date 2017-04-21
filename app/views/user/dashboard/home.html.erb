@@ -76,7 +76,7 @@
           </ol>
         </div>
         <div class="card__section">
-          <h4>Top ERGs this week</h4>
+          <h4>Top <%= c_t(:erg).pluralize %> this week</h4>
           <ol>
             <% current_user.enterprise.groups.top_participants(10).each do |group| %>
               <% if group == @group %>
