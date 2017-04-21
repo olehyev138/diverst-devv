@@ -79,7 +79,7 @@
               <h4 class="card__title"><%= inline_svg('icons/chat.svg', class: "icon card__icon") %>Latest Messages</h4>
               <%= link_to "View all", group_group_messages_path(@group), class: "card__action" %>
 
-              <%= render "shared/flippable/messages", messages: @messages %>
+              <%= render "shared/boxes/messages", messages: @messages %>
 
             </div>
           </div>
