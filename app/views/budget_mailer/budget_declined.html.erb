@@ -1,1 +1,5 @@
-Hi <%= @budget.requester.name %>! The budget for <%= @budget.subject.name %> was declined by <%= @budget.approver.name %>
+Hi <%= @budget.requester.try(:name) %>,
+<br>
+Your budget request for the <%= @budget.subject.try(:name) %> was declined by <%= @budget.approver.try(:name) %>. Please contact <%= @budget.approver.try(:name) %> to find out why it was declined.
+<br><br>
+Have a great day!
