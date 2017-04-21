@@ -1,6 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe User do
+  describe "when validating" do
+    let(:user) { create(:user) }
+
+    it { expect(user).to validate_presence_of(:points) }
+    it { expect(user).to validate_numericality_of(:points).only_integer }
+    it { expect(user).to validate_presence_of(:credits) }
+    it { expect(user).to validate_numericality_of(:credits).only_integer }
+    it { expect(user).to have_many(:user_reward_actions) }
+    it { expect(user).to have_many(:reward_actions).through(:user_reward_actions) }
+  end
+
   describe 'scopes' do
     let(:enterprise) { create :enterprise }
     let!(:active_user) { create :user, enterprise: enterprise }
@@ -22,6 +33,16 @@ RSpec.describe User do
         expect(inactive_users).to include inactive_user
         expect(inactive_users).to_not include active_user
       end
+    end
+  end
+
+  describe '#badges' do
+    let(:user){ build_stubbed(:user, points: 100) }
+    let(:badge_one){ create(:badge, points: 100) }
+    let(:badge_two){ create(:badge, points: 101) }
+
+    it 'returns the badges based on how much points a user has' do
+      expect(user.badges).to eq [badge_one]
     end
   end
 

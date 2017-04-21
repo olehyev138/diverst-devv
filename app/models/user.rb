@@ -51,11 +51,16 @@ class User < ActiveRecord::Base
   has_many :group_leaders
   has_many :leading_groups, through: :group_leaders, source: :group
 
+  has_many :user_reward_actions
+  has_many :reward_actions, through: :user_reward_actions
+
   has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: :private
   validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
 
   validates :first_name, presence: true
   validates :last_name, presence: true
+  validates :points, numericality: { only_integer: true }, presence: true
+  validates :credits, numericality: { only_integer: true }, presence: true
   validate :validate_presence_fields
   # validates :password, presence: true, unless: Proc.new { |a| a.enterprise.has_enabled_saml? }
   # validates_confirmation_of :password, if: Proc.new { |a| a.enterprise.has_enabled_saml? && a.password.present? }
@@ -104,6 +109,10 @@ class User < ActiveRecord::Base
   def name_with_status
     status = !active ? " (inactive)" : ""
     name + status
+  end
+
+  def badges
+    Badge.where("points <= ?", points).order(points: :asc)
   end
 
   #bTODO test this

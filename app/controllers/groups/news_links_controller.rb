@@ -21,7 +21,8 @@ class Groups::NewsLinksController < ApplicationController
     @comment = @news_link.comments.new(news_link_comment_params)
     @comment.author = current_user
 
-    @comment.save
+    @comment.save && user_rewarder("news_comment").add_points(@comment)
+    flash[:reward] = "Your comment was created. Now you have #{ current_user.credits } points"
 
     redirect_to action: :comments
   end
@@ -31,7 +32,8 @@ class Groups::NewsLinksController < ApplicationController
     @news_link.author = current_user
 
     if @news_link.save
-      flash[:notice] = "Your news was created"
+      user_rewarder("news_post").add_points(@news_link)
+      flash[:reward] = "Your news was created. Now you have #{ current_user.credits } points"
       redirect_to action: :index
     else
       flash[:alert] = "Your news was not created. Please fix the errors"
@@ -50,7 +52,9 @@ class Groups::NewsLinksController < ApplicationController
   end
 
   def destroy
+    user_rewarder("news_post").remove_points(@news_link)
     @news_link.destroy
+    flash[:notice] = "Your news was removed. Now you have #{ current_user.credits } points"
     redirect_to action: :index
   end
 

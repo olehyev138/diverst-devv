@@ -232,6 +232,15 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :rewards, except: [:show]
+  resources :badges, except: [:index, :show]
+
+  resources :reward_actions, only: [] do
+    collection do
+      patch 'update'
+    end
+  end
+
   resources :segments do
     member do
       get 'export_csv'
@@ -305,6 +314,15 @@ Rails.application.routes.draw do
             member do
               put 'vote'
             end
+          end
+        end
+      end
+
+      resources :rewards, only: [] do
+        resources :user_rewards, only: :create do
+          collection do
+            get :success
+            get :error
           end
         end
       end

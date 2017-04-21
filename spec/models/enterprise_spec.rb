@@ -2,7 +2,11 @@ require 'rails_helper'
 
 RSpec.describe Enterprise, type: :model do
   describe "when validating" do
-    let(:enterprise){ build_stubbed(:enterprise) }
+    let(:enterprise){ create(:enterprise) }
+
+    it { expect(enterprise).to have_many(:rewards) }
+    it { expect(enterprise).to have_many(:reward_actions) }
+    it { expect(enterprise).to have_many(:badges) }
 
     it{ expect(enterprise).to have_one(:custom_text) }
   end
@@ -15,7 +19,7 @@ RSpec.describe Enterprise, type: :model do
         expect(enterprise.custom_text).to be_an_instance_of(CustomText)
       end
     end
-
+    
     context "when enterprise have a custom_text" do
       let!(:custom_text){ create(:custom_text) }
       let!(:enterprise){ create(:enterprise, custom_text: custom_text) }

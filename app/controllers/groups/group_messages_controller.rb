@@ -24,7 +24,8 @@ class Groups::GroupMessagesController < ApplicationController
     @message.owner = current_user
 
     if @message.save
-      flash[:notice] = "Your message was created"
+      user_rewarder("message_post").add_points(@message)
+      flash[:reward] = "Your message was created. Now you have #{ current_user.credits } points"
       redirect_to action: :index
     else
       flash[:alert] = "Your message was not created. Please fix the errors"
@@ -33,7 +34,9 @@ class Groups::GroupMessagesController < ApplicationController
   end
 
   def destroy
+    user_rewarder("message_post").remove_points(@message)
     @message.destroy
+    flash[:notice] = "Your message was removed. Now you have #{ current_user.credits } points"
 
     redirect_to :back
   end
@@ -45,6 +48,8 @@ class Groups::GroupMessagesController < ApplicationController
     @comment.author = current_user
 
     @message.comments << @comment
+    user_rewarder("message_comment").add_points(@comment)
+    flash[:reward] = "Your comment was created. Now you have #{ current_user.credits } points"
 
     redirect_to group_group_message_path(@group, @message)
   end

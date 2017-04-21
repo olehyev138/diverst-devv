@@ -21,3 +21,8 @@
   @extend .notice;
   background-color: $red;
 }
+
+.reward {
+  @extend .notice;
+  background-color: $green;
+}

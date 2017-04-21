@@ -20,6 +20,10 @@ class ApplicationController < ActionController::Base
                 params: params
   end
 
+  def user_rewarder(action_key)
+    Rewards::Points::Manager.new(current_user, action_key)
+  end
+
   def not_found!
     fail ActionController::RoutingError.new('Not Found')
   end
