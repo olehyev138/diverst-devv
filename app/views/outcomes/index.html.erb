@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="flex-row__cell flex-row__cell--grow">
-      <h1> / Planning structure</h1>
+      <h1> / Planning <%= c_t(:structure) %></h1>
     </div>
   </div>
 </div>
@@ -20,7 +20,7 @@
 
   <div class="card">
     <div class="card__section">
-      <p>This section allows you to edit the structrure of this <%= c_t(:erg) %>'s plan. Add <%= c_t(:program).pluralize %> and events within each outcome to plan your diversity approach.</p>
+      <p>This section allows you to edit the structrure of this <%= c_t(:erg) %>'s plan. Add <%= c_t(:program).pluralize %> and events within each <%= c_t(:outcome) %> to plan your diversity approach.</p>
     </div>
   </div>
 
@@ -30,7 +30,7 @@
       <%= f.simple_fields_for :outcomes do |o| %>
         <%= render "outcome_fields", f: o %>
       <% end %>
-        <%= link_to_add_association "+Add outcome", f, :outcomes, class: "btn btn--secondary" %>
+        <%= link_to_add_association "+Add #{ c_t(:outcome) }", f, :outcomes, class: "btn btn--secondary" %>
         <%= f.button :submit, value: "Update plan", class: "fright" %>
     </div>
   <% end %>

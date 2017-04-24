@@ -25,6 +25,6 @@ class CustomTextsController < ApplicationController
   end
 
   def custom_texts_params
-    params.require(:custom_text).permit(:erg, :program)
+    params.require(:custom_text).permit(CustomText.keys)
   end
 end

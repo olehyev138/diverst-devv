@@ -23,6 +23,8 @@ en:
   custom_text:
     erg: ERG
     program: Program
+    structure: Structure
+    outcome: Outcome
 
   time:
     formats:
