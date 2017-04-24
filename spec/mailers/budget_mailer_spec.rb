@@ -5,7 +5,7 @@ RSpec.describe BudgetMailer, type: :mailer do
     let(:user) { create :user }
     let(:budget) { create :budget }
     let(:group) { budget.subject }
-    let(:view_budget_url) { view_budget_group_url(group, budget_id: budget.id) }
+    let(:view_budget_url) { group_budget_url(group, budget) }
 
     let(:mail) { described_class.approve_request(budget, user).deliver_now }
 

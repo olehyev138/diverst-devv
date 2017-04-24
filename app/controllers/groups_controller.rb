@@ -3,8 +3,6 @@ class GroupsController < ApplicationController
   before_action :set_group, except: [:index, :new, :create, :plan_overview,
                                       :calendar, :calendar_data]
 
-  before_action :set_budget, only: [:view_budget, :approve_budget, :decline_budget]
-
   skip_before_action :verify_authenticity_token, only: [:create]
   after_action :verify_authorized
 
@@ -20,49 +18,6 @@ class GroupsController < ApplicationController
   def plan_overview
     authorize Group, :index?
     @groups = current_user.enterprise.groups.includes(:initiatives)
-  end
-
-  def budgets
-    authorize @group
-  end
-
-  def view_budget
-    authorize @group
-  end
-
-  def request_budget
-    authorize @group
-
-    @budget = Budget.new
-  end
-
-  def submit_budget
-    authorize @group
-    @budget = Budget.new(budget_params.merge({ requester_id: current_user.id }))
-    @group.budgets << @budget
-
-    if @group.save
-      flash[:notice] = "Your budget was created"
-      redirect_to action: :budgets
-    else
-      flash[:alert] = "Your budget was not created. Please fix the errors"
-      render :request_budget
-    end
-  end
-
-  def approve_budget
-    authorize @budget, :approve?
-
-    BudgetManager.new(@budget).approve(current_user)
-
-    redirect_to action: :budgets
-  end
-
-  def decline_budget
-    authorize @budget, :decline?
-    BudgetManager.new(@budget).decline(current_user)
-
-    redirect_to action: :budgets
   end
 
   # calendar for all of the groups
@@ -148,23 +103,6 @@ class GroupsController < ApplicationController
     end
   end
 
-  def edit_annual_budget
-    authorize @group.enterprise, :update?
-  end
-
-  def update_annual_budget
-    authorize @group.enterprise, :update?
-
-    if @group.update(annual_budget_params)
-      track_activity(@group, :annual_budget_update)
-      flash[:notice] = "Your budget was updated"
-      redirect_to edit_budgeting_enterprise_path(@group.enterprise)
-    else
-      flash[:alert] = "Your budget was not updated. Please fix the errors"
-      redirect_to :back
-    end
-  end
-
   def metrics
     authorize @group, :show?
     @updates = @group.updates
@@ -236,37 +174,13 @@ class GroupsController < ApplicationController
       'plan'
     when 'edit_fields', 'plan_overview'
       'plan'
-    when 'budgets', 'request_budget', 'view_budget', 'edit_annual_budget'
-      'budgets'
     else
       'erg_manager'
     end
   end
 
-  def set_budget
-    #bTODO rework
-    @budget = Budget.find(params[:budget_id])
-  end
-
   def set_group
     @group = current_user.enterprise.groups.find(params[:id])
-  end
-
-  def budget_params
-    params
-      .require(:budget)
-      .permit(
-        :description,
-        :approver_id,
-        budget_items_attributes: [
-          :id,
-          :title,
-          :estimated_amount,
-          :estimated_date,
-          :is_done,
-          :_destroy
-        ]
-      )
   end
 
   def group_params
@@ -310,14 +224,6 @@ class GroupsController < ApplicationController
           :options_text,
           :alternative_layout
         ]
-      )
-  end
-
-  def annual_budget_params
-    params
-      .require(:group)
-      .permit(
-        :annual_budget
       )
   end
 end

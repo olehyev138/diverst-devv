@@ -3,7 +3,7 @@ class BudgetMailer < ApplicationMailer
     @receiver = receiver
     @budget = budget
     @group = budget.subject
-    @approve_url = view_budget_group_url(@group, budget_id: @budget.id)
+    @approve_url = group_budget_url(@group, @budget)
 
     mail(to: @receiver.email, subject: subject(@group.name))
   end
