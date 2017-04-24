@@ -293,6 +293,8 @@ RSpec.describe GroupsController, type: :controller do
     def get_plan_overview
       get :plan_overview
     end
+    let!(:user) { create :user }
+    let!(:group) { create(:group, enterprise: user.enterprise) }
 
     context 'with logged user' do
       let!(:foreign_group) { FactoryGirl.create :group }
