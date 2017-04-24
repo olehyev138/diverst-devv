@@ -18,9 +18,9 @@ RSpec.feature 'Segment management' do
     visit new_segment_path
     fill_in 'segment_name', with: segment[:name]
     click_on "Add a criterion"
-    select user.enterprise.fields.last.title, from: page.find('select')[:id]
-    select 'equals', from: page.find('.operator')[:id]
-    fill_in page.find('.value-text')[:id], with: '10'
+    select user.enterprise.fields.last.title, from: page.find('.custom-field select')[:id]
+    select 'equals', from: page.find('.operator select')[:id]
+    fill_in page.find('.value-text input')[:id], with: '10'
     click_on 'Create Segment'
 
     expect(page).to have_content segment[:name]
