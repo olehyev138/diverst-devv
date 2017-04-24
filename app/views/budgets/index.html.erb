@@ -1,6 +1,6 @@
 <div class="content__header">
   <h1><%= @group.name%> budgets</h1>
-  <%= link_to "New Budget Request", request_budget_group_path(@group), class: "btn btn--primary" if policy(@group).request_budget? %>
+  <%= link_to "New Budget Request", new_group_budget_path(@group), class: "btn btn--primary" if policy(@group).request_budget? %>
 </div>
 
 <div class="content__main">
@@ -30,7 +30,8 @@
                 <td><%= budget.created_at.to_s :reversed_slashes %></td>
                 <td><%= budget.budget_items.count %></td>
                 <td><%= budget.description %></td>
-                <th><%= link_to 'Details', view_budget_group_path(budget_id: budget.id) %></th>
+                <th><%= link_to 'Details', group_budget_path(@group, budget) %></th>
+                <th><%= link_to "Delete", group_budget_path(@group, budget), method: :delete, class: 'error', data: { confirm: "Are you sure?" } %></th>
               </tr>
             <% end %>
           </tbody>

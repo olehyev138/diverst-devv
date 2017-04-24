@@ -28,7 +28,7 @@
                 <%= number_to_currency( group.annual_budget) || 'Not set' %>
               </td>
               <td>
-                <%= link_to 'Edit', edit_annual_budget_group_path(group) %>
+                <%= link_to 'Edit', edit_annual_budget_group_budgets_path(group) %>
               </td>
             </tr>
           <% end %>

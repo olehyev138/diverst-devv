@@ -87,6 +87,15 @@ Rails.application.routes.draw do
   get 'integrations', to: 'integrations#index'
 
   resources :groups do
+    resources :budgets, only: [:index, :show, :new, :create, :destroy] do
+      post 'approve'
+      post 'decline'
+      collection do
+        get 'edit_annual_budget'
+        post 'update_annual_budget'
+      end
+    end
+
     scope module: :groups do
       resources :group_members, path: 'members' do
         collection do
@@ -179,18 +188,6 @@ Rails.application.routes.draw do
       post 'parse_csv'
       get 'metrics'
       get 'edit_fields'
-      get 'edit_annual_budget'
-      post 'update_annual_budget'
-
-      get 'budgets'
-
-
-      #bTODO - move budgets to another controller
-      get 'view_budget'
-      get 'request_budget'
-      post 'submit_budget'
-      post 'approve_budget'
-      post 'decline_budget'
     end
 
     collection do
