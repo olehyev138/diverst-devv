@@ -19,7 +19,7 @@
   <div class="content__main">
     <div class="card">
       <div class="card__section">
-        <p>There are no outcomes yet. <%= link_to "Create some", group_outcomes_path(@group) %> to track your diversity initiatives.</p>
+        <p>There are no <%= c_t(:outcome).pluralize %> yet. <%= link_to "Create some", group_outcomes_path(@group) %> to track your diversity initiatives.</p>
       </div>
     </div>
   </div>
@@ -56,7 +56,7 @@
       <% if outcome.pillars.empty? %>
         <div class="card">
           <div class="card__section">
-            <p>There are no <%= c_t(:program).pluralize %> in this outcome yet. <%= link_to "Create some", group_outcomes_path(@group) %> and start solving problems with your team's diverse opinions.</p>
+            <p>There are no <%= c_t(:program).pluralize %> in this <%= c_t(:outcome) %> yet. <%= link_to "Create some", group_outcomes_path(@group) %> and start solving problems with your team's diverse opinions.</p>
           </div>
         </div>
       <% else %>
