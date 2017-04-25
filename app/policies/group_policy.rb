@@ -56,11 +56,11 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def budgets?
-    @policy_group.groups_budgets_index?
+    @policy_group.groups_budgets_index? || @record.leaders.include?(@user)
   end
 
   def view_budget?
-    @policy_group.groups_budgets_index?
+    @policy_group.groups_budgets_index? || @record.leaders.include?(@user)
   end
 
   def request_budget?

@@ -6,21 +6,22 @@ class BudgetsController < ApplicationController
   layout 'budgets'
 
   def index
-    authorize @group
+    authorize @group, :budgets?
   end
 
   def show
-    authorize @group
+    authorize @group, :view_budget?
   end
 
   def new
-    authorize @group
+    authorize @group, :request_budget?
 
     @budget = Budget.new
   end
 
   def create
-    authorize @group
+    authorize @group, :submit_budget?
+
     @budget = Budget.new(budget_params.merge({ requester_id: current_user.id }))
     @group.budgets << @budget
 
@@ -49,7 +50,7 @@ class BudgetsController < ApplicationController
   end
 
   def destroy
-    authorize @group
+    authorize @group, :submit_budget?
     if @budget.destroy
       flash[:notice] = "Your budget was deleted"
       redirect_to action: :index
