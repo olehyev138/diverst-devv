@@ -23,6 +23,7 @@
 //= require Sortable
 //= require moment
 //= require pikaday-time
+//= require pikaday-time/plugins/pikaday.jquery
 //= require fullcalendar
 //= require tooltipster
 //= require urijs
