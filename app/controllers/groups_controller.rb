@@ -164,6 +164,19 @@ class GroupsController < ApplicationController
     authorize @group, :edit?
   end
 
+  def delete_attachment
+    authorize @group, :update?
+
+    @group.banner = nil
+    if @group.save
+      flash[:notice] = "Group attachment was removed"
+      redirect_to :back
+    else
+      flash[:alert] = "Group attachment was not removed. Please fix the errors"
+      render :back
+    end
+  end
+
   protected
 
   def resolve_layout

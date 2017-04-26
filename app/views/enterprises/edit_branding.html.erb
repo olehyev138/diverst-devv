@@ -37,7 +37,13 @@
   <div class="card">
     <div class="card__section">
       <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_branding') do |f| %>
-        <%= f.input :banner, as: :attachment_preview, label: "User Home banner" %>
+        <%= f.label :banner, label: "User Home banner", input_html: { class: "field__label" } %>
+        <% if @enterprise.banner? %>
+          <div class="flex-row__cell fright">
+            <%= link_to "Remove", delete_attachment_enterprise_path(@enterprise, attachment: :banner), method: :patch, class: "error", data: { confirm: "Are you sure?" } %>
+          </div>
+        <% end %>
+        <%= f.input :banner, as: :attachment_preview, label: false %>
 
         <%= f.button :submit, "Save user settings" %>
       <% end %>

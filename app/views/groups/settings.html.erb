@@ -5,7 +5,13 @@
         <%= f.input :pending_users, input_html: { autofocus: true } %>
         <%= f.input :members_visibility %>
         <%= f.input :messages_visibility %>
-        <%= f.input :banner, as: :attachment_preview %>
+        <%= f.label :banner, label: "Banner", input_html: { class: "field__label" } %>
+        <% if @group.banner? %>
+          <div class="flex-row__cell fright">
+            <%= link_to "Remove", delete_attachment_group_path(@group), method: :patch, class: "error", data: { confirm: "Are you sure?" } %>
+          </div>
+        <% end %>
+        <%= f.input :banner, as: :attachment_preview, label: false %>
         <%= f.input :calendar_color, input_html: { class: 'jscolor', autofocus: true } %>
       </div>
     </div>

@@ -66,17 +66,19 @@ class EnterprisesController < ApplicationController
     end
   end
 
-  def delete_xml_config
+  def delete_attachment
     authorize @enterprise, :update?
 
-    @enterprise.xml_sso_config = nil
+    if ["xml_sso_config", "banner"].include?(params[:attachment])
+      @enterprise.send("#{ params[:attachment] }=", nil)
+    end
 
     if @enterprise.save
-      flash[:notice] = "Enterprise XML config was removed"
-      redirect_to action: :edit_auth
+      flash[:notice] = "Enterprise attachment was removed"
+      redirect_to :back
     else
-      flash[:alert] = "Enterprise XML config was not removed. Please fix the errors"
-      render :edit_auth
+      flash[:alert] = "Enterprise attachment was not removed. Please fix the errors"
+      render :back
     end
   end
 
