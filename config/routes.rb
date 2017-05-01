@@ -70,7 +70,7 @@ Rails.application.routes.draw do
       patch 'update_branding'
       patch 'restore_default_branding'
       get 'bias'
-      patch 'delete_xml_config'
+      patch 'delete_attachment'
       get 'calendar'
     end
 
@@ -188,6 +188,7 @@ Rails.application.routes.draw do
       post 'parse_csv'
       get 'metrics'
       get 'edit_fields'
+      patch 'delete_attachment'
     end
 
     collection do
