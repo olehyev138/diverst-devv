@@ -124,6 +124,14 @@ class User < ActiveRecord::Base
     end
   end
 
+  def manageable_groups
+    manageable_groups = groups.select do |group|
+      policy = Pundit.policy(self, group)
+
+      policy.erg_leader_permissions?
+    end
+  end
+
   # Update the user with info from the SAML auth response
   def set_info_from_saml(nameid, _attrs, enterprise)
     self.email = nameid
