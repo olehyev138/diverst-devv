@@ -55,20 +55,24 @@ class GroupPolicy < ApplicationPolicy
     @record.managers.exists?(user.id)
   end
 
+  def erg_leader_permissions?
+    update? || @record.leaders.include?(@user)
+  end
+
   def budgets?
-    @policy_group.groups_budgets_index? || @record.leaders.include?(@user)
+    @policy_group.groups_budgets_index? || erg_leader_permissions?
   end
 
   def view_budget?
-    @policy_group.groups_budgets_index? || @record.leaders.include?(@user)
+    @policy_group.groups_budgets_index? || erg_leader_permissions?
   end
 
   def request_budget?
-    @policy_group.groups_budgets_request?
+    @policy_group.groups_budgets_request? || erg_leader_permissions?
   end
 
   def submit_budget?
-    @policy_group.groups_budgets_request?
+    @policy_group.groups_budgets_request?  || erg_leader_permissions?
   end
 
   def approve_budget?
