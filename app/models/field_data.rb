@@ -13,7 +13,9 @@ module FieldData
     return unless form_data
 
     fields.each do |field|
-      self[field] = field.process_field_value form_data[field.id.to_s]
+      form_data_value = form_data[field.id.to_s] || form_data[field.id] # Try both integer and string key
+
+      self[field] = field.process_field_value form_data_value
     end
   end
 end

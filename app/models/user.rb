@@ -140,11 +140,25 @@ class User < ActiveRecord::Base
 
     saml_user_info = enterprise.sso_fields_to_enterprise_fields(_attrs)
 
-    self.info.merge(fields: enterprise.fields, form_data: saml_user_info)
-
+    self.update_info(saml_user_info)
     save!
 
     self
+  end
+
+
+  #when using self.info.erge form_data argument expects _all_ enterprise fields to be present
+  def update_info(fields_info = {})
+    user_info = {}
+
+    # We need to copy user info to separate hash that has no mixins
+    self.info.each do |i|
+      user_info[i[0]] = i[1]
+    end
+
+    merged_info = user_info.merge(fields_info)
+
+    self.info.merge(fields: self.enterprise.fields, form_data: merged_info)
   end
 
   def set_name_from_saml(_attrs, enterprise)
