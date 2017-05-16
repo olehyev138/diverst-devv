@@ -132,7 +132,13 @@ class Enterprise < ActiveRecord::Base
     fields.each do |field|
       sso_attrs.each do |sso_f_key, sso_f_value|
         if sso_f_key == field.saml_attribute
-          mapped_fields.merge!(field.id => sso_f_value)
+          if sso_f_value.instance_of? Array
+            string_value = sso_f_value.join(',')
+          else
+            string_value = sso_f_value
+          end
+
+          mapped_fields.merge!(field.id => string_value)
           next
         end
       end
