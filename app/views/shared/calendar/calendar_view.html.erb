@@ -1,5 +1,5 @@
 <div class="content__main">
-  <%= search_form_for @q, url: calendar_groups_path, builder: SimpleForm::FormBuilder do |f| %>
+  <%= search_form_for @q, url: @q_form_submit_path, builder: SimpleForm::FormBuilder do |f| %>
     <div class="card">
       <div class="card__section card__section--border calendar-filters">
         <div class="row">

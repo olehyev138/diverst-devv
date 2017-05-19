@@ -13,6 +13,7 @@ class User::EventsController < ApplicationController
     enterprise = current_user.enterprise
     @groups = enterprise.groups
     @segments = enterprise.segments
+    @q_form_submit_path = calendar_user_events_path
     @q = Initiative.ransack(params[:q])
 
     render 'shared/calendar/calendar_view'
