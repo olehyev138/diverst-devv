@@ -7,7 +7,9 @@
   <%= active_link_to "Texts", edit_custom_text_path(current_user.enterprise.custom_text), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <%= active_link_to "Branding", edit_branding_enterprise_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(current_user.enterprise).edit_fields? %>
   <%= active_link_to "Integrations", integrations_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-  <%= active_link_to "Rewards", rewards_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <% if ENV['REWARDS_ENABLED'] %>
+    <%= active_link_to "DCI", rewards_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <% end %>
   <%= active_link_to "Budgeting", edit_budgeting_enterprise_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <%= active_link_to "Logs", logs_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
 <% end %>
