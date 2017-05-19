@@ -1,20 +1,6 @@
 <div class="content__main">
   <%= search_form_for @q, url: calendar_groups_path, builder: SimpleForm::FormBuilder do |f| %>
     <div class="card">
-      <div class="card__section">
-        <div class="row">
-          <div class="card__action">
-            <a
-              href="#"
-              class="calendar-filters-visibility"
-              data-show-text="Show filters"
-              data-hide-text="Hide filters"
-            >
-                Show filters
-            </a>
-          </div>
-        </div>
-      </div>
       <div class="card__section card__section--border calendar-filters">
         <div class="row">
           <div class="col sm-6">
