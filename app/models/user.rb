@@ -125,7 +125,7 @@ class User < ActiveRecord::Base
   end
 
   def manageable_groups
-    manageable_groups = groups.select do |group|
+    manageable_groups = enterprise.groups.select do |group|
       policy = Pundit.policy(self, group)
 
       policy.erg_leader_permissions?
