@@ -3,7 +3,7 @@ class Enterprises::EventsController < ApplicationController
 
   def public_calendar_data
     @events = @enterprise.initiatives
-    render 'shared/calendar_events', format: :json
+    render 'shared/calendar/events', format: :json
   end
 
   private

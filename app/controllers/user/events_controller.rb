@@ -13,15 +13,9 @@ class User::EventsController < ApplicationController
   end
 
   def calendar_data
-    own_events = current_user.initiatives.where('start >= ?', params[:start])
-                                          .where('start <= ?', params[:end])
+    @events = current_user.enterprise.initiatives.ransack(params[:q]).result
 
-    invited_events = current_user.invited_initiatives.where('start >= ?', params[:start])
-                                                      .where('start <= ?', params[:end])
-
-    @events = own_events + invited_events
-
-    render 'shared/calendar_events', format: :json
+    render 'shared/calendar/events', format: :json
   end
 
   #Return calendar data for onboarding screen
@@ -32,7 +26,7 @@ class User::EventsController < ApplicationController
     @events = user.enterprise.initiatives.where('start >= ?', params[:start])
                                     .where('start <= ?', params[:end])
 
-    render 'shared/calendar_events', format: :json
+    render 'shared/calendar/events', format: :json
   end
 
   protected

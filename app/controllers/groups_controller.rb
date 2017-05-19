@@ -27,13 +27,15 @@ class GroupsController < ApplicationController
     @groups = enterprise.groups
     @segments = enterprise.segments
     @q = Initiative.ransack(params[:q])
+
+    render 'shared/calendar/calendar_view'
   end
 
   def calendar_data
     authorize Group, :index?
     @events = current_user.enterprise.initiatives.ransack(params[:q]).result
 
-    render 'shared/calendar_events', format: :json
+    render 'shared/calendar/events', format: :json
   end
 
   def new

@@ -27,7 +27,7 @@ class Groups::EventsController < ApplicationController
 
     @events = own_events + participating_events
 
-    render 'shared/calendar_events', format: :json
+    render 'shared/calendar/events', format: :json
   end
 
   def calendar_view
