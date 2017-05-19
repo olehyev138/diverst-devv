@@ -48,7 +48,7 @@ class Groups::EventsController < ApplicationController
   # end
 
   def show
-    authorize @event, :show_calendar?
+    authorize @event
 
     @comment = @event.comments.where(user: current_user).first || InitiativeComment.new(initiative: @event)
   end
