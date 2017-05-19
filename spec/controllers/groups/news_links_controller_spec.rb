@@ -5,6 +5,40 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
   let(:group){ create(:group, enterprise: user.enterprise) }
   login_user_from_let
 
+  describe 'GET #index' do
+    def get_index(group_id)
+      get :index, group_id: group_id
+    end
+
+    let!(:news_link) { create(:news_link, group: group) }
+    let!(:foregin_news_link) { create(:news_link) }
+
+    context 'with logged user' do
+      login_user_from_let
+
+      before { get_index(group.to_param) }
+
+      it 'return success' do
+        expect(response).to be_success
+      end
+
+      it 'assigns correct newslinks' do
+        news_links = assigns(:news_links)
+
+        expect(news_links).to include news_link
+        expect(news_links).to_not include foregin_news_link
+      end
+    end
+
+    context 'without logged user' do
+      before { get_index(group.to_param) }
+
+      xit 'return error' do
+        expect(response).to redirect_to action: :index
+      end
+    end
+  end
+
   describe 'POST#create' do
     let!(:reward_action){ create(:reward_action, enterprise: user.enterprise, key: "news_post", points: 30) }
 
