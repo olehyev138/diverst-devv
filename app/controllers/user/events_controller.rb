@@ -10,6 +10,12 @@ class User::EventsController < ApplicationController
   end
 
   def calendar
+    enterprise = current_user.enterprise
+    @groups = enterprise.groups
+    @segments = enterprise.segments
+    @q = Initiative.ransack(params[:q])
+
+    render 'shared/calendar/calendar_view'
   end
 
   def calendar_data
