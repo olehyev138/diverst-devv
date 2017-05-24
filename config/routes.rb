@@ -25,6 +25,8 @@ Rails.application.routes.draw do
       get 'callback', to: 'yammer#callback'
       get 'configure', to: 'yammer#configure'
     end
+
+    get 'calendar'
   end
 
   resources :devices do
