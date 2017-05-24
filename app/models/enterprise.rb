@@ -58,6 +58,14 @@ class Enterprise < ActiveRecord::Base
     super || create_custom_text
   end
 
+  def iframe_calendar_token
+    unless self[:iframe_calendar_token]
+      self.update(iframe_calendar_token: SecureRandom.urlsafe_base64)
+    end
+
+    self[:iframe_calendar_token]
+  end
+
   def saml_settings
     #if xml config file is present - take settings from it
     if xml_sso_config?
