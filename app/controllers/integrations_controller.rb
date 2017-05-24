@@ -1,12 +1,12 @@
 class IntegrationsController < ApplicationController
+  before_action :set_enterprise_from_token, only: [:calendar]
 
   layout :resolve_layout
 
   def calendar
-    @enterprise = Enterprise.find 1
     @groups = @enterprise.groups
     @segments = @enterprise.segments
-    @q_form_submit_path = integrations_calendar_path
+    @q_form_submit_path = integrations_calendar_path(params[:token])
     @q = Initiative.ransack(params[:q])
 
     render 'shared/calendar/calendar_view'
@@ -21,5 +21,14 @@ class IntegrationsController < ApplicationController
     else
       'global_settings'
     end
+  end
+
+  def set_enterprise_from_token
+    token = params[:token]
+    not_found! if token.nil? || token.empty?
+
+    @enterprise = Enterprise.find_by_iframe_calendar_token(token)
+
+    not_found! if @enterprise.nil?
   end
 end

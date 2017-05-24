@@ -25,8 +25,6 @@ Rails.application.routes.draw do
       get 'callback', to: 'yammer#callback'
       get 'configure', to: 'yammer#configure'
     end
-
-    get 'calendar'
   end
 
   resources :devices do
@@ -50,6 +48,7 @@ Rails.application.routes.draw do
   resources :logs, only: [:index]
 
   get 'integrations', to: 'integrations#index'
+  get 'integrations/calendar/:token', to: 'integrations#calendar', as: 'integrations_calendar'
 
   resources :enterprises do
     resources :saml do
