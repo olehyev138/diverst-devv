@@ -7,6 +7,25 @@
     <div class="card__section">
       <div class="media-object">
         <div class="flex-row flex-row--middle">
+          <div class="flex-row__cell flex-row__cell--grow">
+            <h4>Embeddable calendar</h4>
+            <div class="field__input-wrapper">
+              <input class="field__input string required " name="calendar_code" value="<%=  events_calendar_iframe_code(current_user.enterprise) %>" >
+            </div>
+          </div>
+        </div>
+        <div class="row">
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="card">
+    <div class="card__section">
+      <div class="media-object">
+        <div class="flex-row flex-row--middle">
           <div class="flex-row__cell">
             <%= image_tag "integrations/yammer.png", class: "media-object__image" %>
           </div>
