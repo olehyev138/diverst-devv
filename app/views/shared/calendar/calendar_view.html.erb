@@ -1,23 +1,9 @@
 <div class="content__main">
-  <%= search_form_for @q, url: calendar_groups_path, builder: SimpleForm::FormBuilder do |f| %>
+  <%= search_form_for @q, url: @q_form_submit_path, builder: SimpleForm::FormBuilder do |f| %>
     <div class="card">
-      <div class="card__section">
-        <div class="row">
-          <div class="card__action">
-            <a
-              href="#"
-              class="calendar-filters-visibility"
-              data-show-text="Show filters"
-              data-hide-text="Hide filters"
-            >
-                Show filters
-            </a>
-          </div>
-        </div>
-      </div>
       <div class="card__section card__section--border calendar-filters">
         <div class="row">
-          <div class="col sm-6">
+          <div class="col sm-5">
             <%= f.input :initiative_participating_groups_group_id_in,
                   as: :select,
                   collection: @groups,
@@ -26,7 +12,7 @@
                   required: false
             %>
           </div>
-          <div class="col sm-6">
+          <div class="col sm-5">
             <%= f.input :initiative_segments_segment_id_in,
                   as: :select,
                   collection: @segments,
@@ -35,14 +21,22 @@
                   required: false
             %>
           </div>
+          <div class="col sm-1" style="padding-top: 15px;">
+            <%= f.button :submit, value: "Filter" %>
+          </div>
         </div>
       </div>
     </div>
-
-    <div class="calendar-filters">
-      <%= f.button :submit, value: "Filter" %>
-    </div>
   <% end %>
+
+  <div class="card">
+    Legend
+    <% @groups.each do |group| %>
+      <span class="" style="color: <%= to_color group.calendar_color %>;">
+        <%= group.name %>
+      </span>
+    <% end %>
+  </div>
 </div>
 
 <br/>

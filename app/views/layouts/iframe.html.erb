@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Diverst</title>
+  <%= stylesheet_link_tag (@enterprise.theme.nil? ? "application" : @enterprise.theme.asset_url), media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+  <link rel="icon" type="image/png" href="/favicon.png">
+</head>
+<body class="iframe_content">
+
+  <%= yield %>
+
+  <%= yield :page_scripts %>
+
+</body>
+</html>

@@ -27,7 +27,7 @@ class Groups::EventsController < ApplicationController
 
     @events = own_events + participating_events
 
-    render 'shared/calendar_events', format: :json
+    render 'shared/calendar/events', format: :json
   end
 
   def calendar_view
@@ -48,7 +48,7 @@ class Groups::EventsController < ApplicationController
   # end
 
   def show
-    authorize @event, :show_calendar?
+    authorize @event
 
     @comment = @event.comments.where(user: current_user).first || InitiativeComment.new(initiative: @event)
   end

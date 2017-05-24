@@ -3,6 +3,10 @@ class InitiativePolicy < ApplicationPolicy
     @policy_group.initiatives_index?
   end
 
+  def show?
+    index?
+  end
+
   def create?
     @policy_group.initiatives_create?
   end
