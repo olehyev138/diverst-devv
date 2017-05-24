@@ -21,8 +21,24 @@ module ApplicationHelper
     end
   end
 
-  def enterprise_primary_color
-    enterprise = default_enterprise_for_styling
+  def event_color(event)
+    calendar_color = event.try(:group).try(:calendar_color).blank? ? nil : "#" + event.try(:group).try(:calendar_color)
+
+    result_color = calendar_color || enterprise_primary_color || '#7b77c9'
+
+    to_color result_color
+  end
+
+  def to_color(color)
+    if color[0] == '#'
+      color
+    else
+      "##{color}"
+    end
+  end
+
+  def enterprise_primary_color(enterprise = nil)
+    enterprise ||= default_enterprise_for_styling
 
     if enterprise.present? && enterprise.theme.present?
       return enterprise.theme.primary_color

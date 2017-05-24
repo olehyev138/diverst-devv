@@ -28,6 +28,15 @@
       </div>
     </div>
   <% end %>
+
+  <div class="card">
+    Legend
+    <% @groups.each do |group| %>
+      <span class="" style="color: <%= to_color group.calendar_color %>;">
+        <%= group.name %>
+      </span>
+    <% end %>
+  </div>
 </div>
 
 <br/>

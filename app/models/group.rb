@@ -75,6 +75,10 @@ class Group < ActiveRecord::Base
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
 
+  def calendar_color
+    self[:calendar_color] || enterprise.try(:theme).try(:primary_color) || 'cccccc'
+  end
+
   def approved_budget
     (budgets.approved.map{ |b| b.requested_amount || 0 } ).reduce(0, :+)
   end
