@@ -13,6 +13,7 @@ $(document).on('ready page:load', function(){
         center: 'month,agendaWeek',
         right:  'prev,today,next'
       },
+      buttonIcons: false,
       eventSources: [
         {
           url: calendarDataUrl
