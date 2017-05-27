@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170524162044) do
+ActiveRecord::Schema.define(version: 20170527113816) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -493,11 +493,6 @@ ActiveRecord::Schema.define(version: 20170524162044) do
     t.integer  "banner_file_size",          limit: 4
     t.datetime "banner_updated_at"
     t.string   "calendar_color",            limit: 255
-  end
-
-  create_table "groups_managers", force: :cascade do |t|
-    t.integer "group_id", limit: 4
-    t.integer "user_id",  limit: 4
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|

@@ -8,10 +8,18 @@ class ResourcePolicy < ApplicationPolicy
   end
 
   def edit?
-    @policy_group.enterprise_resources_manage?
+    update?
+  end
+
+  def update?
+    return true if @policy_group.enterprise_resources_manage?
+
+    container_policy = Pundit.policy(@user, @record.container)
+
+    container_policy.update?
   end
 
   def destroy?
-    edit?
+    update?
   end
 end
