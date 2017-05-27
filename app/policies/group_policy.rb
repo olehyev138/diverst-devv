@@ -10,7 +10,8 @@ class GroupPolicy < ApplicationPolicy
   def update?
     return true if @policy_group.groups_manage?
     return true if @record.owner == @user
-    @record.managers.exists?(user.id)
+
+    @record.managers.include?(user)
   end
 
   def view_members?
@@ -50,9 +51,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def manage_members?
-    return true if @policy_group.groups_manage?
-    return true if @record.owner == @user
-    @record.managers.exists?(user.id)
+    update?
   end
 
   def erg_leader_permissions?

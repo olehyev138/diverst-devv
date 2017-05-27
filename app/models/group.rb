@@ -43,8 +43,6 @@ class Group < ActiveRecord::Base
   has_many :questions, through: :campaigns
   has_many :answers, through: :questions
   has_many :answer_upvotes, through: :answers, source: :votes
-  has_many :groups_managers
-  has_many :managers, through: :groups_managers, source: :user
   belongs_to :lead_manager, class_name: "User"
   belongs_to :owner, class_name: "User"
   has_many :outcomes
@@ -74,6 +72,10 @@ class Group < ActiveRecord::Base
   accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
+
+  def managers
+    leaders.to_a << owner
+  end
 
   def calendar_color
     self[:calendar_color] || enterprise.try(:theme).try(:primary_color) || 'cccccc'
