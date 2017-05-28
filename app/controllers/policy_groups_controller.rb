@@ -1,17 +1,26 @@
 class PolicyGroupsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_policy_group, only: [:edit, :update, :destroy]
+
+  after_action :verify_authorized
 
   layout 'global_settings'
 
   def index
+    authorize PolicyGroup
+
     @policy_groups = current_user.enterprise.policy_groups
   end
 
   def new
+    authorize PolicyGroup
+
     @policy_group = current_user.enterprise.policy_groups.new
   end
 
   def create
+    authorize PolicyGroup
+
     @policy_group = current_user.enterprise.policy_groups.new(policy_group_params)
 
     if @policy_group.save
@@ -24,6 +33,8 @@ class PolicyGroupsController < ApplicationController
   end
 
   def update
+    authorize PolicyGroup
+
     if @policy_group.update(policy_group_params)
       flash[:notice] = "Your policy group was updated"
       redirect_to action: :index
@@ -34,6 +45,8 @@ class PolicyGroupsController < ApplicationController
   end
 
   def destroy
+    authorize PolicyGroup
+
     @policy_group.destroy
     redirect_to action: :index
   end
