@@ -138,6 +138,7 @@ class EnterprisesController < ApplicationController
         :cdo_title,
         :cdo_picture,
         :banner,
+        :home_message,
         :xml_sso_config,
         theme: [
           :id,

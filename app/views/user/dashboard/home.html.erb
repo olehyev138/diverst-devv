@@ -5,6 +5,15 @@
 <div class="content__main">
   <div class="row">
     <div class="col sm-12">
+    <% if @enterprise.home_message.present? %>
+      <div class="content__header mtmedium">
+        <p style="flex: 1 1 0;"><%= @enterprise.home_message %></p>
+        <div class="flex-row flex-row--middle">
+          <div class="flex-row__cell">
+          </div>
+        </div>
+      </div>
+    <% end %>
       <% if @enterprise.banner.present? %>
         <div class="row enterprise-banner">
           <div class="col sm-12">

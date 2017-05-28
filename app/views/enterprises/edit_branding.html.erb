@@ -45,6 +45,9 @@
         <% end %>
         <%= f.input :banner, as: :attachment_preview, label: false %>
 
+        <%= f.label :home_message, label: "User Home message", input_html: { class: "field__label" } %>
+        <%= f.input :home_message, label: false %>
+
         <%= f.button :submit, "Save user settings" %>
       <% end %>
     </div>

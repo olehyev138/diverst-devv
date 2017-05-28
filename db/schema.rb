@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170527113816) do
+ActiveRecord::Schema.define(version: 20170527175236) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -304,6 +304,7 @@ ActiveRecord::Schema.define(version: 20170527113816) do
     t.string   "banner_content_type",          limit: 255
     t.integer  "banner_file_size",             limit: 4
     t.datetime "banner_updated_at"
+    t.string   "home_message",                 limit: 255
     t.text     "privacy_statement",            limit: 65535
     t.boolean  "has_enabled_onboarding_email",               default: true
     t.string   "xml_sso_config_file_name",     limit: 255
