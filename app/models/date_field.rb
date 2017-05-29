@@ -1,13 +1,15 @@
 class DateField < Field
   include Optionnable
 
+  DEFAULT_DATE_FORMAT = '%F' # The ISO 8601 date format (%Y-%m-%d)
+
   def string_value(value)
     return '-' if value.nil?
     value.to_s :slashes
   end
 
   def process_field_value(value)
-    Time.strptime(value, '%m/%d/%Y')
+    Time.strptime(value, '%F')
   rescue
     nil
   end
@@ -24,7 +26,7 @@ class DateField < Field
 
   def csv_value(value)
     return '' if value.nil?
-    value.strftime('%m/%d/%Y')
+    value.strftime('%F')
   end
 
   def match_score_between(e1, e2, users)
