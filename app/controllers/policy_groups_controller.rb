@@ -2,8 +2,6 @@ class PolicyGroupsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_policy_group, only: [:edit, :update, :destroy]
 
-  after_action :verify_authorized
-
   layout 'global_settings'
 
   def index
