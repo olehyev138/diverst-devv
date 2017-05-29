@@ -53,7 +53,7 @@ RSpec.describe Importers::Users do
           user.email,
           "Developer",
           "Male",
-          "01/25/1992",
+          "1992-01-25",
           "English",
           "20"
         ]
@@ -75,7 +75,7 @@ RSpec.describe Importers::Users do
       expect(saved_user.email).to eq user.email
       expect(infos.fetch(job_field.id)).to eq "Developer"
       expect(infos.fetch(gender_field.id)).to eq ["Male"]
-      expect(infos.fetch(date_field.id)).to eq Time.strptime("01/25/1992", '%m/%d/%Y').to_i
+      expect(infos.fetch(date_field.id)).to eq Time.strptime("1992-01-25", '%F').to_i
       expect(infos.fetch(languages_field.id)).to eq ["English"]
       expect(infos.fetch(years_field.id)).to eq 20
     end
@@ -102,7 +102,7 @@ RSpec.describe Importers::Users do
       user.info[job_field] = "Developer"
       user.info[gender_field] = "Male"
       user.info[languages_field] = "English"
-      user.info[date_field] = date_field.process_field_value "01/25/1992"
+      user.info[date_field] = date_field.process_field_value "1992-01-25"
       user.info[years_field] = 20
       user.save!
       user
@@ -146,7 +146,7 @@ RSpec.describe Importers::Users do
       expect(updated_user.email).to eq user.email
       expect(infos.fetch(job_field.id)).to eq "Designer"
       expect(infos.fetch(gender_field.id)).to eq ["Female"]
-      expect(infos.fetch(date_field.id)).to eq Time.strptime("01/25/1992", '%m/%d/%Y').to_i
+      expect(infos.fetch(date_field.id)).to eq Time.strptime("1992-01-25", '%F').to_i
       expect(infos.fetch(languages_field.id)).to eq ["Spanish"]
       expect(infos.fetch(years_field.id)).to eq 20
     end
