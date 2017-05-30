@@ -34,7 +34,9 @@ class GroupsController < ApplicationController
 
   def calendar_data
     authorize Group, :index?
-    @events = current_user.enterprise.initiatives.ransack(params[:q]).result
+    @events = current_user.enterprise.initiatives.ransack(
+      params[:q]&.merge(m: 'or', outcome_group_id_in: params[:q]&.dig(:initiative_participating_groups_group_id_in))
+    ).result
 
     render 'shared/calendar/events', format: :json
   end
