@@ -1,7 +1,23 @@
+<h1><%= @segment.name %></h1>
 <div class="content__header">
-  <h1><%= @segment.name %></h1>
-  <%= link_to "Export members", export_csv_segment_path(@segment), class: "btn btn--secondary" %>
+  <div class="flex-row flex-row--middle full-width">
+    <div class="flex-row__cell flex-row__cell--grow">
+      <div class="field__input-wrapper" style="width: 450px;">
+        <span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
+        <select class="field__input field__input--right-add-on" id="js-group-select">
+          <option <%= " selected disabled" if @group.nil? %>></option>
+          <% current_user.manageable_groups.each do |group| %>
+            <option value="<%= group.id %>"<%= " selected disabled" if group == @group %>><%= group.name %></option>
+          <% end %>
+        </select>
+      </div>
+    </div>
+    <div class="flex-row__cell">
+      <%= link_to "Export members", export_csv_segment_path(@segment), class: "btn btn--secondary" %>
+    </div>
+  </div>
 </div>
+
 
 <div class="content__main">
   <ul>
@@ -10,19 +26,48 @@
     <% end %>
   </ul>
 
-  <div class="row">
-    <% @segment.members.each do |member| %>
-      <div class="col sm-12 md-4 lg-3">
-      <div class="card">
-        <div class="card__section">
-          <div class="flex-row">
-            <div class="flex-row__cell flex-row__cell--ellipsis">
-              <%= link_to member.name_with_status, member %>
-            </div>
-          </div>
-        </div>
-      </div>
-      </div>
-    <% end %>
+  <div class="card">
+    <div class="card__section">
+      <% if @members.any? %>
+        <table class="table--has-border">
+          <thead>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Options</th>
+          </thead>
+          <tbody>
+            <% @members.each do |user| %>
+              <tr>
+                <td><%= user.name %></td>
+                <td><%= user.email %></td>
+                <td>
+                  <%= link_to "Details", user_path(user) %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <p>No user match search criteria.</p>
+      <% end %>
+    </div>
   </div>
 </div>
+
+
+<script>
+  $(document).on('page:change', function() {
+    $(document).off('page:change');
+
+    $('#js-group-select').change(function() {
+      var url = location.protocol + '//' + location.host + location.pathname;
+      var group_id = $(this).find(":selected").val();
+
+      if(group_id){
+        url+= '?group_id=' + group_id;
+      }
+
+      location = url
+    });
+  });
+</script>
