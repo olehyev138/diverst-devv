@@ -39,6 +39,8 @@ class Initiative < ActiveRecord::Base
   has_many :initiative_users
   has_many :attendees, through: :initiative_users, source: :user
 
+  has_one :outcome, through: :pillar
+
   scope :past, -> { where('end < ?', Time.current).order(start: :desc) }
   scope :upcoming, -> { where('start > ?', Time.current).order(start: :asc) }
   scope :ongoing, -> { where('start <= ?', Time.current).where('end >= ?', Time.current).order(start: :desc) }

@@ -8,6 +8,7 @@ RSpec.describe Initiative, type: :model do
     it{ expect(initiative).to validate_presence_of(:end) }
     it{ expect(initiative).to have_many(:resources) }
     it{ expect(initiative).to have_many(:segments).through(:initiative_segments) }
+    it{ expect(initiative).to have_one(:outcome).through(:pillar) }
 
     context "segment_enterprise" do
       let!(:user){ create(:user) }
