@@ -35,8 +35,12 @@ class SegmentsController < ApplicationController
 
     @group = @groups.find_by_id(params[:group_id])
 
-    @members = @segment.members.includes(:groups).select do |user|
-      user.groups.include? @group
+    if @group.present?
+      @members = @segment.members.includes(:groups).select do |user|
+        user.groups.include? @group
+      end
+    else
+      @members = @segment.members
     end
   end
 

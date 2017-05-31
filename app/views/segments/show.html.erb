@@ -26,23 +26,31 @@
     <% end %>
   </ul>
 
-  <div class="row">
-    <% if @members.empty? %>
-      Nothing to display here
-    <% end %>
-    <% @members.each do |member| %>
-      <div class="col sm-12 md-4 lg-3">
-      <div class="card">
-        <div class="card__section">
-          <div class="flex-row">
-            <div class="flex-row__cell flex-row__cell--ellipsis">
-              <%= link_to member.name_with_status, member %>
-            </div>
-          </div>
-        </div>
-      </div>
-      </div>
-    <% end %>
+  <div class="card">
+    <div class="card__section">
+      <% if @members.any? %>
+        <table class="table--has-border">
+          <thead>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Options</th>
+          </thead>
+          <tbody>
+            <% @members.each do |user| %>
+              <tr>
+                <td><%= user.name %></td>
+                <td><%= user.email %></td>
+                <td>
+                  <%= link_to "Details", user_path(user) %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <p>No user match search criteria.</p>
+      <% end %>
+    </div>
   </div>
 </div>
 
