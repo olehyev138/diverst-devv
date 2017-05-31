@@ -11,6 +11,7 @@
     <%= active_link_to "DCI", rewards_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <% end %>
   <%= active_link_to "Budgeting", edit_budgeting_enterprise_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to "Settings", edit_enterprise_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <%= active_link_to "Logs", logs_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
 <% end %>
 

@@ -28,6 +28,10 @@
     <label><strong>Biography</strong></label>
     <p><%= @user.biography %></p>
   </div>
+  <div class="card__section card__section--border">
+    <label><strong>Time zone</strong></label>
+    <p><%= @user.default_time_zone %></p>
+  </div>
   <% @user.enterprise.fields.where(private: false).each do |field| %>
     <div class="card__section card__section--border">
       <label><strong><%= field.title %></strong></label>

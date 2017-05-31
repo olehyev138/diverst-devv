@@ -5,6 +5,10 @@ class EnterprisesController < ApplicationController
 
   layout :resolve_layout
 
+  def edit
+    authorize @enterprise, :update?
+  end
+
   def update
     authorize @enterprise
 
@@ -140,6 +144,7 @@ class EnterprisesController < ApplicationController
         :banner,
         :home_message,
         :xml_sso_config,
+        :time_zone,
         theme: [
           :id,
           :primary_color,

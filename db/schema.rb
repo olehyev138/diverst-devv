@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170527175236) do
+ActiveRecord::Schema.define(version: 20170531211227) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -312,6 +312,7 @@ ActiveRecord::Schema.define(version: 20170527175236) do
     t.integer  "xml_sso_config_file_size",     limit: 4
     t.datetime "xml_sso_config_updated_at"
     t.string   "iframe_calendar_token",        limit: 255
+    t.string   "time_zone",                    limit: 255
   end
 
   create_table "event_attendances", force: :cascade do |t|
@@ -934,6 +935,7 @@ ActiveRecord::Schema.define(version: 20170527175236) do
     t.text     "biography",                   limit: 65535
     t.integer  "points",                      limit: 4,     default: 0,       null: false
     t.integer  "credits",                     limit: 4,     default: 0,       null: false
+    t.string   "time_zone",                   limit: 255
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree

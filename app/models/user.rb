@@ -106,6 +106,10 @@ class User < ActiveRecord::Base
     "#{first_name} #{last_name}"
   end
 
+  def default_time_zone
+    time_zone || enterprise.time_zone
+  end
+
   def name_with_status
     status = !active ? " (inactive)" : ""
     name + status
