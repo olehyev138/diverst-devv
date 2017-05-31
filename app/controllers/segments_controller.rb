@@ -30,6 +30,14 @@ class SegmentsController < ApplicationController
 
   def show
     authorize @segment
+
+    @groups = current_user.enterprise.groups
+
+    @group = @groups.find_by_id(params[:group_id])
+
+    @members = @segment.members.includes(:groups).select do |user|
+      user.groups.include? @group
+    end
   end
 
   def edit
