@@ -16,6 +16,12 @@ class UserPolicy < ApplicationPolicy
     @policy_group.global_settings_manage?
   end
 
+  def access_hidden_info?
+    return true if @record == @user
+
+    @policy_group.global_settings_manage?
+  end
+
   def join_or_leave_groups?
     return true if @record == @user
     return true if GroupPolicy.new(@record, @user).manage_members?
