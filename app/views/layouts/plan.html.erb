@@ -2,10 +2,10 @@
   <%= active_link_to "Overview", plan_overview_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <% if @group || current_user.manageable_groups.present? %>
     <%= active_link_to "Events", group_initiatives_path(@group || current_user.manageable_groups.first), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['initiatives'], ['index']] %>
+  <%= active_link_to "KPI", metrics_group_path(@group || current_user.manageable_groups.first), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to c_t(:structure), group_outcomes_path(@group ||  current_user.manageable_groups.first), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to "Updates", group_updates_path(@group ||  current_user.manageable_groups.first), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <% end %>
-  <%= active_link_to "KPI", metrics_group_path(@group || current_user.enterprise.groups.first), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-  <%= active_link_to c_t(:structure), group_outcomes_path(@group || current_user.enterprise.groups.first), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-  <%= active_link_to "Updates", group_updates_path(@group || current_user.enterprise.groups.first), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
 <% end %>
 
 <%= render template: "layouts/dashboard" %>
