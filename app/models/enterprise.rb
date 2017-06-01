@@ -58,6 +58,10 @@ class Enterprise < ActiveRecord::Base
     super || create_custom_text
   end
 
+  def default_time_zone
+    time_zone || 'UTC'
+  end
+
   def iframe_calendar_token
     unless self[:iframe_calendar_token]
       self.update(iframe_calendar_token: SecureRandom.urlsafe_base64)
