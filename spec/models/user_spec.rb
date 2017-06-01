@@ -36,6 +36,30 @@ RSpec.describe User do
     end
   end
 
+  describe '#erg_leader?' do
+    let!(:user) { create :user }
+    let!(:group) { create :group, enterprise: user.enterprise }
+
+    subject { user.erg_leader? }
+
+    context 'when user is a leader of an erg' do
+      before  do
+        group.members << user
+        group.group_leaders << GroupLeader.new(group: group, user: user, position_name: 'blah')
+      end
+
+      it 'returns true' do
+        expect(subject).to eq true
+      end
+    end
+
+    context 'when user is not a leader of an erg' do
+      it 'returns false' do
+        expect(subject).to eq false
+      end
+    end
+  end
+
   describe '#badges' do
     let(:user){ build_stubbed(:user, points: 100) }
     let(:badge_one){ create(:badge, points: 100) }

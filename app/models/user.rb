@@ -126,7 +126,11 @@ class User < ActiveRecord::Base
 
   #Return true if user is a leader of at least 1 group
   def erg_leader?
-    true
+    g = groups.includes(:leaders).select do |group|
+      group.leaders.include? self
+    end
+
+    g.present?
   end
 
   def manageable_groups
