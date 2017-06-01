@@ -124,6 +124,11 @@ class User < ActiveRecord::Base
     end
   end
 
+  #Return true if user is a leader of at least 1 group
+  def erg_leader?
+    true
+  end
+
   def manageable_groups
     manageable_groups = enterprise.groups.select do |group|
       policy = Pundit.policy(self, group)

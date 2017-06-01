@@ -16,7 +16,7 @@ class GroupsController < ApplicationController
   end
 
   def plan_overview
-    authorize Group, :index?
+    authorize Group
     @groups = current_user.enterprise.groups.includes(:initiatives)
   end
 
@@ -117,7 +117,7 @@ class GroupsController < ApplicationController
   end
 
   def metrics
-    authorize @group, :show?
+    authorize @group
     @updates = @group.updates
   end
 

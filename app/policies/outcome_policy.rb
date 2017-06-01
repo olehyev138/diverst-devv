@@ -1,6 +1,8 @@
 class OutcomePolicy < ApplicationPolicy
   def index?
-    @policy_group.initiatives_index?
+    return true if @policy_group.initiatives_index?
+
+    @user.erg_leader?
   end
 
   def create?
