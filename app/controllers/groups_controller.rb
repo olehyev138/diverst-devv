@@ -1,10 +1,10 @@
 class GroupsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:calendar_data]
   before_action :set_group, except: [:index, :new, :create, :plan_overview,
                                       :calendar, :calendar_data]
 
-  skip_before_action :verify_authenticity_token, only: [:create]
-  after_action :verify_authorized
+  skip_before_action :verify_authenticity_token, only: [:create, :calendar_data]
+  after_action :verify_authorized, except: [:calendar_data]
 
   layout :resolve_layout
 
@@ -33,8 +33,16 @@ class GroupsController < ApplicationController
   end
 
   def calendar_data
-    authorize Group, :index?
-    @events = current_user.enterprise.initiatives
+    #To allow logged users see embedded calendars of other enterprises, we check for token first
+    if params[:token]
+      enterprise = Enterprise.find_by_iframe_calendar_token(params[:token])
+    else
+      enterprise = current_user&.enterprise
+    end
+
+    not_found! if enterprise.nil?
+
+    @events = enterprise.initiatives
       .ransack(
         initiative_participating_groups_group_id_in: params[:q]&.dig(:initiative_participating_groups_group_id_in),
         outcome_group_id_in: params[:q]&.dig(:initiative_participating_groups_group_id_in),
