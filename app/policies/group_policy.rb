@@ -3,6 +3,16 @@ class GroupPolicy < ApplicationPolicy
     @policy_group.groups_index?
   end
 
+  def plan_overview?
+    return true if index?
+
+    @user.erg_leader?
+  end
+
+  def metrics?
+    update?
+  end
+
   def create?
     @policy_group.groups_create?
   end

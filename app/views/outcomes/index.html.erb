@@ -4,7 +4,7 @@
       <div class="field__input-wrapper" style="width: 250px;">
         <span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
         <select class="field__input field__input--right-add-on" id="js-group-select">
-          <% current_user.enterprise.groups.each do |group| %>
+          <% current_user.manageable_groups.each do |group| %>
             <option value="<%= group.id %>"<%= " selected disabled" if group == @group %>><%= group.name %></option>
           <% end %>
         </select>

@@ -32,10 +32,14 @@
     <label><strong>Time zone</strong></label>
     <p><%= @user.default_time_zone %></p>
   </div>
-  <% @user.enterprise.fields.where(private: false).each do |field| %>
+  <% if policy(@user).access_hidden_info? %>
+    <h2>Hidden info</h2>
+    <h4>Only D&I Management can see hidden fields</h4>
+    <% @user.enterprise.fields.where(private: false).each do |field| %>
     <div class="card__section card__section--border">
       <label><strong><%= field.title %></strong></label>
       <p><%= @user.string_for_field(field) %></p>
     </div>
+    <% end %>
   <% end %>
 </div>
