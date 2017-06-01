@@ -30,10 +30,12 @@ module ApplicationHelper
   end
 
   def to_color(color)
-    if color[0] == '#'
-      color
+    trimmed_color = color.tr('#', '')
+
+    if trimmed_color.to_i(16).to_s(16) == trimmed_color.downcase  #if string is a valid hex number
+      '#' + trimmed_color
     else
-      "##{color}"
+      trimmed_color
     end
   end
 
