@@ -36,9 +36,7 @@ class SegmentsController < ApplicationController
     @group = @groups.find_by_id(params[:group_id])
 
     if @group.present?
-      @members = @segment.members.includes(:groups).select do |user|
-        user.groups.include? @group
-      end
+      @members = segment_members_of_group(@segment, @group)
     else
       @members = @segment.members
     end
@@ -67,11 +65,26 @@ class SegmentsController < ApplicationController
 
   def export_csv
     authorize @segment, :show?
-    users_csv = User.to_csv users: @segment.members, fields: @segment.enterprise.fields
+
+    if group = current_user.enterprise.groups.find_by_id(params[:group_id])
+      users_ids = segment_members_of_group(@segment, group).map { |user| user.id }
+
+      users = User.where(id: [users_ids])
+    else
+      users = @segment.members
+    end
+
+    users_csv = User.to_csv users: users, fields: @segment.enterprise.fields
     send_data users_csv, filename: "#{@segment.name}.csv"
   end
 
   protected
+
+  def segment_members_of_group(segment, group)
+    segment.members.includes(:groups).select do |user|
+      user.groups.include? group
+    end
+  end
 
   def set_segment
     @segment = current_user.enterprise.segments.find(params[:id])
