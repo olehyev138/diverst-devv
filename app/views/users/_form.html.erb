@@ -7,6 +7,8 @@
 <%= f.input :last_name %>
 <%= f.input :biography %>
 
+<%= f.input :time_zone %>
+                       
 <% if policy(@user).access_hidden_info? %>
   <h2>Hidden info</h2>
   <h4>Only D&I Management can see hidden fields</h4>
