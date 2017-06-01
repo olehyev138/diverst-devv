@@ -11,6 +11,8 @@ class ApplicationController < ActionController::Base
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
+  around_action :user_time_zone, if: :current_user
+
   protected
 
   def track_activity(model, activity_name, params={})
@@ -46,6 +48,10 @@ class ApplicationController < ActionController::Base
 
   def allow_iframe
     response.headers.delete "X-Frame-Options"
+  end
+
+  def user_time_zone(&block)
+    Time.use_zone(current_user.default_time_zone, &block)
   end
 
   private
