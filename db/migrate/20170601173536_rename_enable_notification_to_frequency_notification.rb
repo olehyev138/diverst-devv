@@ -17,7 +17,6 @@ class RenameEnableNotificationToFrequencyNotification < ActiveRecord::Migration
       .update_all(frequency_notification: MigrationUserGroup.frequency_notifications[:daily])
 
     remove_column :user_groups, :enable_notification
-    change_column_null :user_groups, :frequency_notification, from: true, to: false
   end
 
   def down

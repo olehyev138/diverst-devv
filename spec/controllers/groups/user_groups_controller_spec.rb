@@ -15,7 +15,7 @@ RSpec.describe Groups::UserGroupsController, type: :controller do
 
         it "updates the enable_notification of a user_group" do
           user_group.reload
-          expect(user_group.frequency_notification).to eq UserGroup.frequency_notifications[:real_time]
+          expect(user_group.frequency_notification).to eq "real_time"
         end
 
         it "return a sucessful response" do
