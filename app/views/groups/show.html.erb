@@ -138,15 +138,20 @@
 
       <% if @group.members.include? current_user %>
         <div class="card card--secondary">
-          <%= simple_form_for @user_group, method: :post do |f| %>
-          <%= f.hidden_field :enable_notification, value: 0 %>
-            <%= f.input :enable_notification, label: "Enable notifications?", input_html:
-              {
-                class: 'ajax-toggle',
-                'data-url': group_user_group_path(@group, @user_group)
-              }
-            %>
-          <% end %>
+          <div class="card__section">
+            <%= simple_form_for @user_group, method: :post do |f| %>
+              <%= f.input :frequency_notification,
+                collection: UserGroup.frequency_notifications.keys.map{ |f| [t("user_group.#{ f }"), f] },
+                label: "Frequency of notifications",
+                include_blank: false,
+                input_html:
+                  {
+                    class: 'ajax-toggle',
+                    'data-url': group_user_group_path(@group, @user_group)
+                  }
+              %>
+            <% end %>
+          </div>
         </div>
         <%= link_to "Leave this #{ c_t(:erg) }", group_group_member_path(@group, current_user), method: :delete, class: 'btn btn--tertiary error' %>
       <% end %>

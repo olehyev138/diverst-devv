@@ -20,6 +20,11 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  user_group:
+    real_time: Real Time
+    daily: Daily
+    weekly: Weekly
+    disabled: Disabled
   custom_text:
     erg: ERG
     program: Program

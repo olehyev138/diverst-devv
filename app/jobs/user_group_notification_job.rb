@@ -1,20 +1,20 @@
 class UserGroupNotificationJob < ActiveJob::Base
   queue_as :default
 
-  def perform
-    @messages, @news = {}, {}
+  def perform(frequency_notification)
     User.includes(user_groups: :group).find_in_batches(batch_size: 200) do |users|
       users.each do |user|
         groups = []
-        user.user_groups(enable_notification: true).each do |user_group|
+        user.user_groups.where(frequency_notification: UserGroup.frequency_notifications[frequency_notification]).each do |user_group|
+          frequency_range = get_frequency_range(user_group.frequency_notification)
           group = user_group.group
           groups << {
             group: user_group.group,
-            messages_count: @messages[group.id] || get_messages_count(group),
-            news_count: @news[group.id] || get_news_count(group)
+            messages_count: get_messages_count(group, frequency_range),
+            news_count: get_news_count(group, frequency_range)
           }
         end
-        if there_is_updates?(groups)
+        if have_updates?(groups)
           UserGroupMailer.notification(user, groups).deliver_now
         end
       end
@@ -22,19 +22,23 @@ class UserGroupNotificationJob < ActiveJob::Base
   end
 
   private
-  def get_messages_count(group)
-    @messages[group.id] = GroupMessage.where(group: group, updated_at: yesterday).count
+
+  def get_frequency_range(frequency)
+    case frequency
+    when "weekly" then Date.yesterday.beginning_of_week..Date.yesterday.end_of_week
+    else Date.yesterday.beginning_of_day..Date.yesterday.end_of_day
+    end
   end
 
-  def get_news_count(group)
-    @news[group.id] = NewsLink.where(group: group, updated_at: yesterday).count
+  def get_messages_count(group, frequency_range)
+    GroupMessage.where(group: group, updated_at: frequency_range).count
   end
 
-  def yesterday
-    Date.yesterday.beginning_of_day..Date.yesterday.end_of_day
+  def get_news_count(group, frequency_range)
+    NewsLink.where(group: group, updated_at: frequency_range).count
   end
 
-  def there_is_updates?(groups)
+  def have_updates?(groups)
     groups.any?{ |g| g[:messages_count] > 0 || g[:news_count] > 0 }
   end
 end
