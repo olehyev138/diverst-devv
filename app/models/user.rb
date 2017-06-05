@@ -107,7 +107,9 @@ class User < ActiveRecord::Base
   end
 
   def default_time_zone
-    time_zone || enterprise.default_time_zone
+    return time_zone if time_zone.present?
+
+    enterprise.default_time_zone
   end
 
   def name_with_status
