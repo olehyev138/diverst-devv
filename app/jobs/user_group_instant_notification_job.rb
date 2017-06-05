@@ -5,7 +5,7 @@ class UserGroupInstantNotificationJob < ActiveJob::Base
     User
       .joins(user_groups: :group)
       .where(groups: { id: group.id })
-      .where(user_groups: { frequency_notification: UserGroup.frequency_notifications[:real_time] })
+      .where(user_groups: { notifications_frequency: UserGroup.notifications_frequencies[:real_time] })
       .find_in_batches(batch_size: 200).each do |users|
         users.each do |user|
           groups = [{ group: group, messages_count: messages_count, news_count: news_count }]

@@ -8,7 +8,7 @@ RSpec.describe UserGroupInstantNotificationJob, type: :job do
 
   context "when user accept to receive real time notifications" do
     let!(:user_group){
-      create(:user_group, group: group, user: user, frequency_notification: UserGroup.frequency_notifications[:real_time])
+      create(:user_group, group: group, user: user, notifications_frequency: UserGroup.notifications_frequencies[:real_time])
     }
 
     it "send an email of notification to members of group with real_time setting" do
@@ -23,7 +23,7 @@ RSpec.describe UserGroupInstantNotificationJob, type: :job do
 
   context "when user does not accept to receive real time notifications" do
     let!(:user_group){
-      create(:user_group, group: group, user: user, frequency_notification: UserGroup.frequency_notifications[:disabled])
+      create(:user_group, group: group, user: user, notifications_frequency: UserGroup.notifications_frequencies[:disabled])
     }
 
     it "send an email of notification to members of group with real_time setting" do

@@ -2,19 +2,19 @@ class RenameEnableNotificationToFrequencyNotification < ActiveRecord::Migration
   class MigrationUserGroup < ActiveRecord::Base
     self.table_name = :user_groups
 
-    enum frequency_notification: [:real_time, :daily, :weekly, :disabled]
+    enum notifications_frequency: [:real_time, :daily, :weekly, :disabled]
   end
 
   def up
-    add_column :user_groups, :frequency_notification, :integer
+    add_column :user_groups, :notifications_frequency, :integer, default: 0
 
     MigrationUserGroup
       .where(enable_notification: false)
-      .update_all(frequency_notification: MigrationUserGroup.frequency_notifications[:disabled])
+      .update_all(notifications_frequency: MigrationUserGroup.notifications_frequencies[:disabled])
 
     MigrationUserGroup
       .where(enable_notification: true)
-      .update_all(frequency_notification: MigrationUserGroup.frequency_notifications[:daily])
+      .update_all(notifications_frequency: MigrationUserGroup.notifications_frequencies[:daily])
 
     remove_column :user_groups, :enable_notification
   end
@@ -23,13 +23,13 @@ class RenameEnableNotificationToFrequencyNotification < ActiveRecord::Migration
     add_column :user_groups, :enable_notification, :boolean
 
     MigrationUserGroup
-      .where(frequency_notification: MigrationUserGroup.frequency_notifications[:disabled])
+      .where(notifications_frequency: MigrationUserGroup.notifications_frequencies[:disabled])
       .update_all(enable_notification: false)
 
     MigrationUserGroup
-      .where.not(frequency_notification: MigrationUserGroup.frequency_notifications[:disabled])
+      .where.not(notifications_frequency: MigrationUserGroup.notifications_frequencies[:disabled])
       .update_all(enable_notification: true)
 
-    remove_column :user_groups, :frequency_notification
+    remove_column :user_groups, :notifications_frequency
   end
 end

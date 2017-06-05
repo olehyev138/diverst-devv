@@ -15,7 +15,7 @@ RSpec.describe UserGroupNotificationJob, type: :job do
     end
 
     context "when there is new messages or news" do
-      let!(:user_group){ create(:user_group, user: user, group: group, frequency_notification: UserGroup.frequency_notifications[:daily]) }
+      let!(:user_group){ create(:user_group, user: user, group: group, notifications_frequency: UserGroup.notifications_frequencies[:daily]) }
       let!(:group_message){ create(:group_message, group: group, updated_at: Date.yesterday) }
       let!(:another_group_message){ create(:group_message, group: group, updated_at: Date.today) }
       let!(:news_link){ create(:news_link, group: group, updated_at: Date.yesterday) }
@@ -44,7 +44,7 @@ RSpec.describe UserGroupNotificationJob, type: :job do
     end
 
     context "and there is new messages or news" do
-      let!(:user_group){ create(:user_group, user: user, group: group, frequency_notification: UserGroup.frequency_notifications[:weekly]) }
+      let!(:user_group){ create(:user_group, user: user, group: group, notifications_frequency: UserGroup.notifications_frequencies[:weekly]) }
       let!(:group_message){ create(:group_message, group: group, updated_at: Date.today - 8.days) }
       let!(:another_group_message){ create(:group_message, group: group, updated_at: Date.today) }
       let!(:news_link){ create(:news_link, group: group, updated_at: Date.today - 8.days) }

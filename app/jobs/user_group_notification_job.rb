@@ -1,12 +1,12 @@
 class UserGroupNotificationJob < ActiveJob::Base
   queue_as :default
 
-  def perform(frequency_notification)
+  def perform(notifications_frequency)
     User.includes(user_groups: :group).find_in_batches(batch_size: 200) do |users|
       users.each do |user|
         groups = []
-        user.user_groups.where(frequency_notification: UserGroup.frequency_notifications[frequency_notification]).each do |user_group|
-          frequency_range = get_frequency_range(user_group.frequency_notification)
+        user.user_groups.notifications_status(notifications_frequency).each do |user_group|
+          frequency_range = get_frequency_range(user_group.notifications_frequency)
           group = user_group.group
           groups << {
             group: user_group.group,

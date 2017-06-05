@@ -21,6 +21,6 @@ class Groups::UserGroupsController < ApplicationController
   end
 
   def user_group_params
-    params.require(:user_group).permit(:frequency_notification)
+    params.require(:user_group).permit(:notifications_frequency)
   end
 end
