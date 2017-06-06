@@ -6,9 +6,12 @@ class Users::SessionsController < Devise::SessionsController
   def new
     if session[:saml_for_enterprise].present?
       enterprise_id = session[:saml_for_enterprise]
-      redirect_to sso_enterprise_saml_index_url(enterprise_id: enterprise_id)
 
-      return
+      enterprise = Enterprise.find_by_id( enterprise_id )
+      if enterprise&.has_enabled_saml
+        redirect_to sso_enterprise_saml_index_url(enterprise_id: enterprise_id)
+        return
+      end
     end
 
     super
