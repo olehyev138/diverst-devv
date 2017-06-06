@@ -3,6 +3,8 @@ class ApplicationController < ActionController::Base
   include PublicActivity::StoreController
   include ApplicationHelper
 
+  before_action :set_persist_login_param
+
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
@@ -14,6 +16,12 @@ class ApplicationController < ActionController::Base
   around_action :user_time_zone, if: :current_user
 
   protected
+
+  def set_persist_login_param
+    if params[:saml_for_enterprise].present?
+      session[:saml_for_enterprise] = params[:saml_for_enterprise]
+    end
+  end
 
   def track_activity(model, activity_name, params={})
     model.create_activity activity_name,
