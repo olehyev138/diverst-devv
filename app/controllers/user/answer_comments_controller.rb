@@ -1,4 +1,6 @@
 class User::AnswerCommentsController < ApplicationController
+  include Rewardable
+
   before_action :authenticate_user!
   before_action :set_answer
 
@@ -8,7 +10,7 @@ class User::AnswerCommentsController < ApplicationController
     @comment = @answer.comments.new(comment_params)
     @comment.author = current_user
     @comment.save && user_rewarder("campaign_comment").add_points(@comment)
-    flash[:reward] = "Your comment was created. Now you have #{ current_user.credits } points"
+    flash_reward "Your comment was created. Now you have #{ current_user.credits } points"
 
     redirect_to [:user, @answer.question]
   end

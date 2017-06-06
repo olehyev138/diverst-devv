@@ -1,4 +1,6 @@
 class Groups::NewsLinksController < ApplicationController
+  include Rewardable
+
   before_action :authenticate_user!
 
   before_action :set_group, except: [:url_info]
@@ -24,7 +26,7 @@ class Groups::NewsLinksController < ApplicationController
     @comment.author = current_user
 
     @comment.save && user_rewarder("news_comment").add_points(@comment)
-    flash[:reward] = "Your comment was created. Now you have #{ current_user.credits } points"
+    flash_reward "Your comment was created. Now you have #{ current_user.credits } points"
 
     redirect_to action: :comments
   end
@@ -35,7 +37,7 @@ class Groups::NewsLinksController < ApplicationController
 
     if @news_link.save
       user_rewarder("news_post").add_points(@news_link)
-      flash[:reward] = "Your news was created. Now you have #{ current_user.credits } points"
+      flash_reward "Your news was created. Now you have #{ current_user.credits } points"
       redirect_to action: :index
     else
       flash[:alert] = "Your news was not created. Please fix the errors"
