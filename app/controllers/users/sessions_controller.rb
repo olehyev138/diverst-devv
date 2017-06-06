@@ -4,8 +4,8 @@ class Users::SessionsController < Devise::SessionsController
   after_filter :after_login, :only => :create
 
   def new
-    if params[:saml_for_enterprise]
-      enterprise_id = params[:saml_for_enterprise]
+    if session[:saml_for_enterprise].present?
+      enterprise_id = session[:saml_for_enterprise]
       redirect_to sso_enterprise_saml_index_url(enterprise_id: enterprise_id)
 
       return
