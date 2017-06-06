@@ -6,8 +6,6 @@ module Rewardable
   end
 
   def flash_reward(message)
-    if ENV['REWARDS_ENABLED']
-      flash[:reward] = message
-    end
+    flash[:reward] = message if ENV['REWARDS_ENABLED']
   end
 end
