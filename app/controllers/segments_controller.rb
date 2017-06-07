@@ -95,6 +95,7 @@ class SegmentsController < ApplicationController
       .require(:segment)
       .permit(
         :name,
+        :active_users_filter,
         rules_attributes: [
           :id,
           :_destroy,

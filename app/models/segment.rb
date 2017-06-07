@@ -1,4 +1,12 @@
 class Segment < ActiveRecord::Base
+  extend Enumerize
+
+  enumerize :active_users_filter, default: :both_active_and_inactive, in: [
+    :both_active_and_inactive,
+    :only_active,
+    :only_inactive
+  ]
+
   belongs_to :enterprise
   belongs_to :owner, class_name: "User"
   has_many :rules, class_name: 'SegmentRule'
@@ -18,6 +26,17 @@ class Segment < ActiveRecord::Base
   accepts_nested_attributes_for :rules, reject_if: :all_blank, allow_destroy: true
 
   after_commit :update_indexes
+
+  def general_rules_followed_by?(user)
+    case active_users_filter
+    when 'only_active'
+      return user.active?
+    when 'only_inactive'
+      return !user.active?
+    else
+      return true
+    end
+  end
 
   def update_indexes
     CacheSegmentMembersJob.perform_later self
