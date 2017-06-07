@@ -1,4 +1,6 @@
 class Groups::AttendancesController < ApplicationController
+  include Rewardable
+
   before_action :set_group
   before_action :set_event
   before_action :set_attendance, only: [:create, :destroy]
@@ -13,7 +15,7 @@ class Groups::AttendancesController < ApplicationController
     return head(204) if @attendance
     @event.initiative_users.create(user: current_user)
     user_rewarder("attend_event").add_points(@event)
-    flash[:reward] = "Now you have #{ current_user.credits } points"
+    flash_reward "Now you have #{ current_user.credits } points"
     render "partials/flash_messages.js"
   end
 

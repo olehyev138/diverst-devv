@@ -12,6 +12,7 @@ services:
       DATABASE_URL: mysql2://root:root@mysql:3306
       REDIS_URL: redis://redis:6379/0
       ELASTICSEARCH_URL: elasticsearch
+      REWARDS_ENABLED: "true"
     links:
       - mysql
       - redis

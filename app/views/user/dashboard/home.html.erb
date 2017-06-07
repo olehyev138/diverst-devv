@@ -76,11 +76,7 @@
           <h4>Top Performers this week</h4>
           <ol>
             <% current_user.enterprise.users.top_participants(10).each do |member| %>
-              <% if member == current_user %>
-                <li><strong><%= member.name_with_status %> (<%= member.participation_score_7days %>)</strong></li>
-              <% else %>
-                <li><%= link_to member.name_with_status, member %> (<%= member.participation_score_7days %>)</li>
-              <% end %>
+              <li><%= user_performance_label(member) %></li>
             <% end %>
           </ol>
         </div>
@@ -88,11 +84,7 @@
           <h4>Top <%= c_t(:erg).pluralize %> this week</h4>
           <ol>
             <% current_user.enterprise.groups.top_participants(10).each do |group| %>
-              <% if group == @group %>
-                <li><strong><%= group.name %> (<%= group.participation_score_7days %>)</strong></li>
-              <% else %>
-                <li><%= link_to group.name, group %> (<%= group.participation_score_7days %>)</li>
-              <% end %>
+              <li><%= group_performance_label(group) %></li>
             <% end %>
           </ol>
         </div>

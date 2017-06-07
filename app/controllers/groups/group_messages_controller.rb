@@ -1,4 +1,6 @@
 class Groups::GroupMessagesController < ApplicationController
+  include Rewardable
+
   before_action :authenticate_user!
   before_action :set_group
   before_action :set_message, only: [:show, :destroy]
@@ -25,7 +27,7 @@ class Groups::GroupMessagesController < ApplicationController
 
     if @message.save
       user_rewarder("message_post").add_points(@message)
-      flash[:reward] = "Your message was created. Now you have #{ current_user.credits } points"
+      flash_reward "Your message was created. Now you have #{ current_user.credits } points"
       redirect_to action: :index
     else
       flash[:alert] = "Your message was not created. Please fix the errors"
@@ -49,7 +51,7 @@ class Groups::GroupMessagesController < ApplicationController
 
     @message.comments << @comment
     user_rewarder("message_comment").add_points(@comment)
-    flash[:reward] = "Your comment was created. Now you have #{ current_user.credits } points"
+    flash_reward "Your comment was created. Now you have #{ current_user.credits } points"
 
     redirect_to group_group_message_path(@group, @message)
   end

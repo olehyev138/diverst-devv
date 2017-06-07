@@ -1,4 +1,6 @@
 class User::AnswersController < ApplicationController
+  include Rewardable
+
   before_action :authenticate_user!
   before_action :set_question, except: [:vote]
   before_action :set_answer, only: [:vote]
@@ -17,7 +19,7 @@ class User::AnswersController < ApplicationController
     end
     user_rewarder("campaign_vote").add_points(@vote)
 
-    flash[:reward] = "Now you have #{ current_user.credits } points"
+    flash_reward "Now you have #{ current_user.credits } points"
     render "partials/flash_messages.js"
   end
 
@@ -25,7 +27,7 @@ class User::AnswersController < ApplicationController
     @answer = @question.answers.new(answer_params)
     @answer.author = current_user
     @answer.save && user_rewarder("campaign_answer").add_points(@answer)
-    flash[:reward] = "Your answer was created. Now you have #{ current_user.credits } points"
+    flash_reward "Your answer was created. Now you have #{ current_user.credits } points"
 
     redirect_to [:user, @campaign, @question]
   end
