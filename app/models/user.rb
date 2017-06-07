@@ -240,6 +240,10 @@ class User < ActiveRecord::Base
   def is_part_of_segment?(segment)
     part_of_segment = true
 
+    if !segment.general_rules_followed_by?(self)
+      return false
+    end
+
     segment.rules.each do |rule|
       unless rule.followed_by?(self)
         part_of_segment = false
