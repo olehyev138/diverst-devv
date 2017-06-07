@@ -32,6 +32,8 @@ class MetricsDashboard < ActiveRecord::Base
 
   # Defines which fields will be usable when creating graphs
   def graphable_fields(admin)
-    admin.enterprise.graph_fields
+    admin.enterprise.graph_fields.select do |field|
+      field.type != 'TextField'
+    end
   end
 end
