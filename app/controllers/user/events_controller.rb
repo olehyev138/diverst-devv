@@ -19,12 +19,6 @@ class User::EventsController < ApplicationController
     render 'shared/calendar/calendar_view'
   end
 
-  def calendar_data
-    @events = current_user.enterprise.initiatives.ransack(params[:q]).result
-
-    render 'shared/calendar/events', format: :json
-  end
-
   #Return calendar data for onboarding screen
   #No current user, use token for authentication
   def onboarding_calendar_data

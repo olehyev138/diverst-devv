@@ -107,7 +107,9 @@ class User < ActiveRecord::Base
   end
 
   def default_time_zone
-    time_zone || enterprise.default_time_zone
+    return time_zone if time_zone.present?
+
+    enterprise.default_time_zone
   end
 
   def name_with_status
@@ -237,6 +239,10 @@ class User < ActiveRecord::Base
   # Checks if the user is part of the specified segment
   def is_part_of_segment?(segment)
     part_of_segment = true
+
+    if !segment.general_rules_followed_by?(self)
+      return false
+    end
 
     segment.rules.each do |rule|
       unless rule.followed_by?(self)

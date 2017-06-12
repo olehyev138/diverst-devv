@@ -59,7 +59,9 @@ class Enterprise < ActiveRecord::Base
   end
 
   def default_time_zone
-    time_zone || 'UTC'
+    return time_zone if time_zone.present?
+
+    'UTC'
   end
 
   def iframe_calendar_token

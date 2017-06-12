@@ -1,4 +1,6 @@
 class PollResponsesController < ApplicationController
+  include Rewardable
+
   before_action :authenticate_user!, only: [:new, :create, :thank_you]
   before_action :set_poll
   before_action :set_response, only: [:edit, :update, :destroy, :show]
@@ -26,7 +28,7 @@ class PollResponsesController < ApplicationController
 
     if @response.save
       user_rewarder("survey_response").add_points(@response)
-      flash[:reward] = "Now you have #{ current_user.credits } points"
+      flash_reward "Now you have #{ current_user.credits } points"
       redirect_to action: :thank_you, poll_id: @poll.id, id: @response.id
     else
       render :new

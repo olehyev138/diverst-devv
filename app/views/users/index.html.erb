@@ -33,7 +33,7 @@
             <% @users.invitation_not_accepted.each do |user| %>
               <tr>
                 <td><%= link_to user.email, user_path(user) %></td>
-                <td class="text-right"><%= link_to "Revoke invitation", user_path(user), method: :delete, class: "error" %></td>
+                <td class="text-right"><%= link_to "Revoke invitation", user_path(user), method: :delete, class: "error", data: { confirm: "Are you sure?" } %></td>
               </tr>
             <% end %>
           </tbody>
@@ -67,7 +67,7 @@
                 <td><%= user.email %></td>
                 <td>
                   <%= link_to "Details", user_path(user) %>
-                  <%= link_to "Delete", user_path(user), method: :delete, class: "error" %>
+                  <%= link_to "Delete", user_path(user), method: :delete, class: "error", data: { confirm: "Are you sure?" } %>
                 </td>
               </tr>
             <% end %>

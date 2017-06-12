@@ -3,6 +3,7 @@ class BudgetMailer < ApplicationMailer
     @receiver = receiver
     @budget = budget
     @group = budget.subject
+    @enterprise_id = @group.enterprise.id
     @approve_url = group_budget_url(@group, @budget)
 
     mail(to: @receiver.email, subject: subject(@group.name))

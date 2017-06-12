@@ -7,12 +7,12 @@ Hello <%= @user.name %>, you have updates in your <%= @custom_text.erg_text.plur
 
   <% if group[:messages_count].to_i > 0 %>
     <br/>
-    <%= link_to pluralize(group[:messages_count], 'new message'), group_group_messages_url(group[:group].try(:id)) %>
+    <%= link_to pluralize(group[:messages_count], 'new message'), group_group_messages_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id ) %>
   <% end %>
 
   <% if group[:news_count].to_i > 0 %>
     <br/>
-    <%= link_to "#{ group[:news_count] } news", group_news_links_url(group[:group].try(:id)) %>.
+    <%= link_to "#{ group[:news_count] } news", group_news_links_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id) %>.
   <% end %>
   <br/>
 <% end %>

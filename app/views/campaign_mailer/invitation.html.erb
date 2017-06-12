@@ -2,4 +2,4 @@ You have been invited to join the following Collaborate campaign: <strong><%= @i
 
 <br/>
 
-<p><%= link_to "Join now", user_campaign_questions_url(@invitation.campaign) %></p>
+<p><%= link_to "Join now", user_campaign_questions_url(@invitation.campaign), saml_for_enterprise: @enterprise_id %></p>

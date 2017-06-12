@@ -27,7 +27,7 @@ class GroupMailer < ApplicationMailer
         'name' => group.name,
         'description' => group.description
       },
-      'accept_link' => join_user_group_url(group)
+      'accept_link' => join_user_group_url(group) + "?saml_for_enterprise=#{group.enterprise.id}"
     })
 
     content_template = html_template(group.enterprise, INVITATION_SLUG)
