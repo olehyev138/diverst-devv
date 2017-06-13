@@ -7,7 +7,14 @@
     <div class="card__section">
       <h3>Successful imports</h3>
       <p>
-        <%= pluralize(@importer.successful_rows.count, 'users') %> out of the submitted <%= @importer.table.count %> have been successfully imported. Each new user will soon receive an invitation email asking them to complete their profile<% if !current_user.enterprise.has_enabled_saml? %> and choose a password<% end %>.
+        <%= pluralize(@importer.successful_rows.count, 'users') %> out of the submitted <%= @importer.table.count %> have been successfully imported.
+
+        <% if current_user.enterprise.has_enabled_onboarding_email %>
+          Each new user will soon receive an invitation email asking them to complete their profile<% if !current_user.enterprise.has_enabled_saml? %> and choose a password<% end %>.
+        <% else %>
+          Due to enterprise settings, new users will not receive invitation emails.
+        <% end %>
+
       </p>
 
       <h3>Unsuccessful imports</h3>
