@@ -32,7 +32,9 @@
             <div class="card__section">
 
               <h4>Your Events</h4>
-              <%= link_to "Calendar", calendar_user_events_path, class: "  card__action" %>
+              <%= link_to calendar_user_events_path, class: "  card__action" do %>
+                <%= inline_svg('icons/calendar.svg', class: "icon card__icon") %>Events Calendar
+              <% end %>
 
               <% @upcoming_events.each do |event| %>
                 <%= render "shared/flippable/event", event: event %>
