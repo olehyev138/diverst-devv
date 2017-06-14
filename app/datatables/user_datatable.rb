@@ -23,7 +23,8 @@ class UserDatatable < AjaxDatatablesRails::Base
         record.first_name,
         record.last_name,
         record.email,
-        "#{link_to('Details', user_path(record))} - #{link_to('Remove', user_path(record), class: 'error', method: :delete)}"
+        "#{link_to('Details', user_path(record))} - \
+        #{link_to('Remove', user_path(record), class: 'error', data: { confirm: "Are you sure?" }, method: :delete)}"
       ]
     end
   end
