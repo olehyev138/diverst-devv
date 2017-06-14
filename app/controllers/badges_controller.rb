@@ -14,10 +14,10 @@ class BadgesController < ApplicationController
     authorize @enterprise, :update?
     @badge = @enterprise.badges.new(badge_params)
     if @badge.save
-      flash[:notice] = "Your badge was created"
+      flash[:notice] = "Your #{ c_t(:badge) } was created"
       redirect_to rewards_path
     else
-      flash[:alert] = "Your badge was not created. Please fix the errors"
+      flash[:alert] = "Your #{ c_t(:badge) } was not created. Please fix the errors"
       render :new
     end
   end
@@ -30,10 +30,10 @@ class BadgesController < ApplicationController
   def update
     authorize @enterprise, :update?
     if @badge.update(badge_params)
-      flash[:notice] = "Your badge was updated"
+      flash[:notice] = "Your #{ c_t(:badge) } was updated"
       redirect_to rewards_path
     else
-      flash[:alert] = "Your badge was not updated. Please fix the errors"
+      flash[:alert] = "Your #{ c_t(:badge) } was not updated. Please fix the errors"
       render :edit
     end
   end
@@ -41,7 +41,7 @@ class BadgesController < ApplicationController
   def destroy
     authorize @enterprise, :update?
     @badge.destroy
-    flash[:notice] = "Your badge was deleted"
+    flash[:notice] = "Your #{ c_t(:badge) } was deleted"
     redirect_to rewards_path
   end
 
