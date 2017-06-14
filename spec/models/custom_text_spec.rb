@@ -42,4 +42,22 @@ RSpec.describe CustomText, type: :model do
       end
     end
   end
+
+  describe "#badge_text" do
+    context "when badge is nil" do
+      let(:custom_text){ build_stubbed(:custom_text, badge: nil)}
+
+      it "returns the default text" do
+        expect(custom_text.badge_text).to eq "Badge"
+      end
+    end
+
+    context "when badge is present" do
+      let(:custom_text){ build_stubbed(:custom_text, badge: "New Badge")}
+
+      it "returns the badge text" do
+        expect(custom_text.badge_text).to eq "New Badge"
+      end
+    end
+  end
 end

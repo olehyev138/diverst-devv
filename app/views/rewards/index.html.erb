@@ -24,8 +24,8 @@
 
 <div class="content__main">
   <div class="content__header">
-    <h1>Badges</h1>
-    <%= link_to "New badge", new_badge_path, class: "btn btn--primary" %>
+    <h1><%= c_t(:badge).pluralize %></h1>
+    <%= link_to "New #{ c_t(:badge) }", new_badge_path, class: "btn btn--primary" %>
   </div>
   <div class="card">
     <div class="card__section">

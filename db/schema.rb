@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170607121743) do
+ActiveRecord::Schema.define(version: 20170614130629) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -232,6 +232,7 @@ ActiveRecord::Schema.define(version: 20170607121743) do
     t.text    "program",       limit: 65535
     t.text    "structure",     limit: 65535
     t.text    "outcome",       limit: 65535
+    t.text    "badge",         limit: 65535
   end
 
   add_index "custom_texts", ["enterprise_id"], name: "index_custom_texts_on_enterprise_id", using: :btree
