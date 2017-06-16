@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170607121743) do
+ActiveRecord::Schema.define(version: 20170616175913) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -937,6 +937,9 @@ ActiveRecord::Schema.define(version: 20170607121743) do
     t.integer  "points",                      limit: 4,     default: 0,       null: false
     t.integer  "credits",                     limit: 4,     default: 0,       null: false
     t.string   "time_zone",                   limit: 255
+    t.integer  "failed_attempts",             limit: 4,     default: 0,       null: false
+    t.string   "unlock_token",                limit: 255
+    t.datetime "locked_at"
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree
@@ -945,6 +948,7 @@ ActiveRecord::Schema.define(version: 20170607121743) do
   add_index "users", ["invitations_count"], name: "index_users_on_invitations_count", using: :btree
   add_index "users", ["invited_by_id"], name: "index_users_on_invited_by_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
 
   create_table "users_segments", force: :cascade do |t|
     t.integer "user_id",    limit: 4
