@@ -98,7 +98,7 @@ class User < ActiveRecord::Base
   scope :for_segments, -> (segments) { joins(:segments).where('segments.id' => segments.map(&:id)).distinct if segments.any? }
   scope :for_groups, -> (groups) { joins(:groups).where('groups.id' => groups.map(&:id)).distinct if groups.any? }
   scope :answered_poll, -> (poll) { joins(:poll_responses).where(poll_responses: { poll_id: poll.id }) }
-  scope :top_participants, -> (n) { order(participation_score_7days: :desc).limit(n) }
+  scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
   scope :not_owners, -> { where(owner: false) }
   scope :es_index_for_enterprise, -> (enterprise) { where(enterprise: enterprise) }
 
@@ -252,19 +252,6 @@ class User < ActiveRecord::Base
     end
 
     part_of_segment
-  end
-
-  # Get a score indicating the user's participation in the platform
-  def participation_score(from:, to: Time.current)
-    score = 0
-
-    score += 5 * poll_responses.where('created_at > ?', from).where('created_at <= ?', to).count
-    score += 5 * answers.where('created_at > ?', from).where('created_at <= ?', to).count
-    score += 3 * enterprise.answer_upvotes.where(answer: answers).where('answers.created_at > ?', from).where('answers.created_at <= ?', to).count
-    score += 3 * answer_comments.where('created_at > ?', from).where('created_at <= ?', to).count
-    score += 1 * answer_upvotes.where('created_at > ?', from).where('created_at <= ?', to).count # 1 point per upvote given
-
-    score
   end
 
   # Sends a push notification to all of the user's devices

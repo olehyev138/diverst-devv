@@ -67,7 +67,7 @@ class Group < ActiveRecord::Base
   before_destroy :handle_deletion
   after_commit :update_all_elasticsearch_members
 
-  scope :top_participants, -> (n) { order(participation_score_7days: :desc).limit(n) }
+  scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
 
   accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
@@ -98,20 +98,6 @@ class Group < ActiveRecord::Base
     else
       0
     end
-  end
-
-  def participation_score(from:, to: Time.current)
-    score = 0
-
-    score += answers.where('answers.created_at > ?', from).where('answers.created_at < ?', to).count * 5
-    score += answer_upvotes.where('answer_upvotes.created_at > ?', from).where('answer_upvotes.created_at < ?', to).count * 1
-    score += poll_responses.where('poll_responses.created_at > ?', from).where('poll_responses.created_at < ?', to).count * 5
-    score += events.where('created_at > ?', from).where('created_at < ?', to).count * 15
-    score += messages.where('created_at > ?', from).where('created_at < ?', to).count * 10
-    score += news_links.where('created_at > ?', from).where('created_at < ?', to).count * 10
-    score += resources.where('created_at > ?', from).where('created_at < ?', to).count * 10
-
-    score
   end
 
   def active_members

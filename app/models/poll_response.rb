@@ -30,4 +30,8 @@ class PollResponse < ActiveRecord::Base
       record_id: user.id
     )
   end
+
+  def group
+    poll.try(:initiative).try(:group)
+  end
 end

@@ -113,8 +113,8 @@
           <h4 class="card__title"><%= inline_svg('icons/trophy.svg', class: "icon card__icon") %>Leaderboards</h4>
           <h5>Top Performers this week</h5>
           <ol>
-            <% @group.members.top_participants(10).each do |member| %>
-              <li><%= user_performance_label(member) %></li>
+            <% @group.user_groups.top_participants(10).each do |user_group| %>
+              <li><%= user_group_performance_label(user_group) %></li>
             <% end %>
           </ol>
         </div>

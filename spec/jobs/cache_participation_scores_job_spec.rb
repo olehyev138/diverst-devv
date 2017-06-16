@@ -1,29 +1,31 @@
 require 'rails_helper'
 
-RSpec.describe CacheParticipationScoresJob, type: :job do
-  let(:enterprise) { create(:enterprise, has_enabled_saml: true) }
+RSpec.describe ResetWeeklyRewardsJob, type: :job do
+  let!(:user) { create(:user, total_weekly_points: 25) }
+  let!(:group) { create(:group, total_weekly_points: 25) }
+  let!(:user_group) { create(:User_group, total_weekly_points: 25) }
 
-  let!(:user) { create(:user, enterprise: enterprise) }
-  let!(:group) { create(:group, enterprise: enterprise) }
-
-  before do
-    allow_any_instance_of(User).to receive(:participation_score).and_return(10)
-    allow_any_instance_of(Group).to receive(:participation_score).and_return(10)
-  end
-
-  it 'updates user scores' do
+  it 'reset users weekly rewards' do
     Sidekiq::Testing.inline! do
-      worker = CacheParticipationScoresJob.new
+      worker = ResetWeeklyRewardsJob.new
       worker.perform
-      expect(User.first.participation_score_7days).to eq 10
+      expect(user.total_weekly_points).to eq 0
     end
   end
 
-  it 'updates group scores' do
+  it 'reset groups weekly rewards' do
     Sidekiq::Testing.inline! do
-      worker = CacheParticipationScoresJob.new
+      worker = ResetWeeklyRewardsJob.new
       worker.perform
-      expect(Group.first.participation_score_7days).to eq 10
+      expect(group.total_weekly_points).to eq 0
+    end
+  end
+
+  it 'reset user_groups weekly rewards' do
+    Sidekiq::Testing.inline! do
+      worker = ResetWeeklyRewardsJob.new
+      worker.perform
+      expect(user_group.total_weekly_points).to eq 0
     end
   end
 end

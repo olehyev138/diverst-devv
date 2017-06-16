@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170607121743) do
+ActiveRecord::Schema.define(version: 20170616130814) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -232,6 +232,7 @@ ActiveRecord::Schema.define(version: 20170607121743) do
     t.text    "program",       limit: 65535
     t.text    "structure",     limit: 65535
     t.text    "outcome",       limit: 65535
+    t.text    "badge",         limit: 65535
   end
 
   add_index "custom_texts", ["enterprise_id"], name: "index_custom_texts_on_enterprise_id", using: :btree
@@ -495,6 +496,7 @@ ActiveRecord::Schema.define(version: 20170607121743) do
     t.integer  "banner_file_size",          limit: 4
     t.datetime "banner_updated_at"
     t.string   "calendar_color",            limit: 255
+    t.integer  "total_weekly_points",       limit: 4,                             default: 0
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
@@ -865,6 +867,7 @@ ActiveRecord::Schema.define(version: 20170607121743) do
     t.datetime "updated_at"
     t.boolean  "accepted_member",               default: false
     t.boolean  "enable_notification",           default: true
+    t.integer  "total_weekly_points", limit: 4, default: 0
   end
 
   create_table "user_reward_actions", force: :cascade do |t|
@@ -937,6 +940,7 @@ ActiveRecord::Schema.define(version: 20170607121743) do
     t.integer  "points",                      limit: 4,     default: 0,       null: false
     t.integer  "credits",                     limit: 4,     default: 0,       null: false
     t.string   "time_zone",                   limit: 255
+    t.integer  "total_weekly_points",         limit: 4,     default: 0
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree
