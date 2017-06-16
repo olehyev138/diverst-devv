@@ -5,7 +5,7 @@ RSpec.describe Rewards::Points::Manager do
     let(:user){ create(:user, points: 5, credits: 10, total_weekly_points: 20) }
     let(:reward_action){ create(:reward_action, enterprise: user.enterprise, points: 40) }
     let(:group){ create(:group, total_weekly_points: 15) }
-    let(:user_group){ create(:user_group, total_weekly_points: 25) }
+    let!(:user_group){ create(:user_group, user: user, group: group, total_weekly_points: 25) }
     let(:initiative){ create(:initiative, owner_group: group) }
 
     context "when action exists on enterprise" do
@@ -92,10 +92,10 @@ RSpec.describe Rewards::Points::Manager do
   end
 
   describe "#remove_points" do
-    let(:user){ create(:user, points: 5, credits: 10, total_weekly_points: 20) }
+    let(:user){ create(:user, points: 5, credits: 10, total_weekly_points: 50) }
     let(:reward_action){ create(:reward_action, enterprise: user.enterprise, points: 40) }
-    let(:group){ create(:group, total_weekly_points: 15) }
-    let(:user_group){ create(:user_group, total_weekly_points: 25) }
+    let(:group){ create(:group, total_weekly_points: 60) }
+    let!(:user_group){ create(:user_group, user: user, group: group, total_weekly_points: 70) }
     let(:initiative){ create(:initiative, owner_group: group) }
 
     context "when action exists on enterprise" do
@@ -147,27 +147,27 @@ RSpec.describe Rewards::Points::Manager do
       end
 
       it "remove reward_action points from total of points of a user in the current week" do
-        manager.add_points(initiative)
+        manager.remove_points(initiative)
         user.reload
 
-        # 40 - 20 = 20
-        expect(user.total_weekly_points).to eq  20
+        # 50 - 40 = 10
+        expect(user.total_weekly_points).to eq 10
       end
 
       it "remove reward_action points from total of points of a group in the current week" do
-        manager.add_points(initiative)
+        manager.remove_points(initiative)
         group.reload
 
-        # 40 - 15 = 25
-        expect(group.total_weekly_points).to eq  25
+        # 60 - 40 = 20
+        expect(group.total_weekly_points).to eq  20
       end
 
       it "remove reward_action points from total of points of a user_group in the current week" do
-        manager.add_points(initiative)
+        manager.remove_points(initiative)
         user_group.reload
 
-        # 40 - 25 = 15
-        expect(user_group.total_weekly_points).to eq  15
+        # 70 - 40 = 30
+        expect(user_group.total_weekly_points).to eq  30
       end
     end
 

@@ -16,7 +16,7 @@ RSpec.describe UserGroup do
       let(:third){ create(:user_group, total_weekly_points: 10) }
       let(:second){ create(:user_group, total_weekly_points: 20) }
 
-      it { expect(UserGroup.top_participants).to eq [first, second, third] }
+      it { expect(UserGroup.top_participants(3)).to eq [first, second, third] }
     end
   end
 end
