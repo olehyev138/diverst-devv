@@ -1,4 +1,6 @@
 class UserDatatable < AjaxDatatablesRails::Base
+  include ERB::Util
+
   def_delegator :@view, :link_to
   def_delegator :@view, :user_path
 
@@ -20,9 +22,9 @@ class UserDatatable < AjaxDatatablesRails::Base
   def data
     records.map do |record|
       [
-        record.first_name,
-        record.last_name,
-        record.email,
+        html_escape(record.first_name),
+        html_escape(record.last_name),
+        html_escape(record.email),
         "#{link_to('Details', user_path(record))} - \
         #{link_to('Remove', user_path(record), class: 'error', data: { confirm: "Are you sure?" }, method: :delete)}"
       ]
