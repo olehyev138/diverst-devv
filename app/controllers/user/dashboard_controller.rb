@@ -16,4 +16,8 @@ class User::DashboardController < ApplicationController
     @rewards = @enterprise.rewards.order(points: :asc)
     @badges = @enterprise.badges.order(points: :asc)
   end
+
+  def social
+
+  end
 end

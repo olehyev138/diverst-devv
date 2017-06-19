@@ -294,6 +294,8 @@ Rails.application.routes.draw do
       get 'rewards', to: 'dashboard#rewards'
       get 'bias', to: 'dashboard#bias'
 
+      get 'social', to: 'dashboard#social'
+
       resources :news_links
       resources :messages
       resources :events do
