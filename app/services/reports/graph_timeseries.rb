@@ -1,7 +1,8 @@
 class Reports::GraphTimeseries
   def initialize(graph)
     @graph = graph
-    @graph_content = @graph.field.highcharts_timeseries(segments: @graph.collection.segments)
+    @graph_content = @graph.field
+                           .highcharts_timeseries(segments: @graph.collection.segments, groups: @graph.collection.groups)
   end
 
   def get_header

@@ -13,11 +13,7 @@ class MetricsDashboard < ActiveRecord::Base
 
   # Returns a query to the list of users targeted by the dashboard
   def target
-    if segments.empty?
-      enterprise.users
-    else
-      enterprise.users.for_segments(segments)
-    end
+    enterprise.users.for_segments(segments).for_groups(groups)
   end
 
   def graphs_population
