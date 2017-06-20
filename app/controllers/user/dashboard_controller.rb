@@ -18,6 +18,6 @@ class User::DashboardController < ApplicationController
   end
 
   def social
-
+    @posts = current_user.social_network_posts
   end
 end
