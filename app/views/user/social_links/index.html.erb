@@ -7,7 +7,7 @@
   <div class="card">
     <% @posts.each do |post| %>
       <div class="card__section">
-        <%= raw post.embed_code %>
+        <%= render 'card', post: post %>
       </div>
     <% end %>
   </div>
