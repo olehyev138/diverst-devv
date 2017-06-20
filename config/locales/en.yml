@@ -30,6 +30,7 @@ en:
     program: Program
     structure: Structure
     outcome: Outcome
+    badge: Badge
 
   time:
     formats:
