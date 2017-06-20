@@ -859,12 +859,12 @@ ActiveRecord::Schema.define(version: 20170616175913) do
   end
 
   create_table "user_groups", force: :cascade do |t|
-    t.integer  "user_id",             limit: 4
-    t.integer  "group_id",            limit: 4
+    t.integer  "user_id",                 limit: 4
+    t.integer  "group_id",                limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "accepted_member",               default: false
-    t.boolean  "enable_notification",           default: true
+    t.boolean  "accepted_member",                   default: false
+    t.integer  "notifications_frequency", limit: 4
   end
 
   create_table "user_reward_actions", force: :cascade do |t|
