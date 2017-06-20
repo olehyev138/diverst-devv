@@ -35,7 +35,7 @@ class User < ActiveRecord::Base
   has_many :message_comments, class_name: 'GroupMessageComment', foreign_key: :author_id
   has_many :events, through: :groups
 
-  has_many :social_network_posts, foreign_key: :author_id, dependent: :destroy
+  has_many :social_links, foreign_key: :author_id, dependent: :destroy
 
   has_many :initiative_users
   has_many :initiatives, through: :initiative_users, source: :initiative

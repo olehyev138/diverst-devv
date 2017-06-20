@@ -1,4 +1,6 @@
-class SocialNetworkPost < ActiveRecord::Base
+class SocialLink < ActiveRecord::Base
+  self.table_name = 'social_network_posts'
+
   validate :correct_url?
 
   before_create :populate_embed_code
@@ -13,6 +15,7 @@ class SocialNetworkPost < ActiveRecord::Base
   end
 
   def populate_embed_code
+    byebug
     self.embed_code = SocialMedia::Importer.url_to_embed url
   end
 end

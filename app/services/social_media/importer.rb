@@ -7,10 +7,6 @@ class SocialMedia::Importer
     OEmbed::Providers.register_all
     resource = OEmbed::Providers.get(url)
 
-    unless resource.success
-      return url
-    end
-
     case resource.type
     when 'rich', 'video'
       resource.html
@@ -23,6 +19,7 @@ class SocialMedia::Importer
   end
 
   def self.valid_url?(url)
-    OEmbed::Providers.find(url).present?
+    true
+    #OEmbed::Providers.find(url).present?
   end
 end
