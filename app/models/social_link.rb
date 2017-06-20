@@ -15,7 +15,6 @@ class SocialLink < ActiveRecord::Base
   end
 
   def populate_embed_code
-    byebug
     self.embed_code = SocialMedia::Importer.url_to_embed url
   end
 end
