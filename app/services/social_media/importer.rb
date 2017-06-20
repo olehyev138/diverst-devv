@@ -7,7 +7,19 @@ class SocialMedia::Importer
     OEmbed::Providers.register_all
     resource = OEmbed::Providers.get(url)
 
-    resource.html
+    unless resource.success
+      return url
+    end
+
+    case resource.type
+    when 'rich', 'video'
+      resource.html
+    when 'photo'
+      "<img src='#{resource.url}'>"
+    else
+      url
+    end
+
   end
 
   def self.valid_url?(url)
