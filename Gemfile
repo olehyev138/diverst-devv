@@ -70,6 +70,8 @@ gem 'public_activity', '~> 1.5'
 
 gem 'rollbar', '~> 2.14.1'
 
+gem 'ruby-oembed', '~> 0.12.0'
+
 group :development, :test do
   gem 'spring', '~> 1.6.2' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'guard-livereload', '~> 2.4', require: false
