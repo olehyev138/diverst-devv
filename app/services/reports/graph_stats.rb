@@ -3,7 +3,8 @@ class Reports::GraphStats
     @graph = graph
     @graph_content = @graph.field.highcharts_stats(
                       aggr_field: @graph.aggregation,
-                      segments: @graph.collection.segments
+                      segments: @graph.collection.segments,
+                      groups: @graph.collection.groups
                      )
   end
 
