@@ -4,7 +4,7 @@ class User::SocialLinksController < ApplicationController
   layout 'user'
 
   def index
-    @posts = current_user.social_links
+    @posts = current_user.social_links.order(created_at: :desc)
   end
 
   def new
