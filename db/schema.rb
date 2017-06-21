@@ -12,7 +12,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 20170620074627) do
-
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
     t.string   "trackable_type", limit: 255
@@ -232,6 +231,7 @@ ActiveRecord::Schema.define(version: 20170620074627) do
     t.text    "program",       limit: 65535
     t.text    "structure",     limit: 65535
     t.text    "outcome",       limit: 65535
+    t.text    "badge",         limit: 65535
   end
 
   add_index "custom_texts", ["enterprise_id"], name: "index_custom_texts_on_enterprise_id", using: :btree
@@ -867,12 +867,12 @@ ActiveRecord::Schema.define(version: 20170620074627) do
   end
 
   create_table "user_groups", force: :cascade do |t|
-    t.integer  "user_id",             limit: 4
-    t.integer  "group_id",            limit: 4
+    t.integer  "user_id",                 limit: 4
+    t.integer  "group_id",                limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "accepted_member",               default: false
-    t.boolean  "enable_notification",           default: true
+    t.boolean  "accepted_member",                   default: false
+    t.integer  "notifications_frequency", limit: 4
   end
 
   create_table "user_reward_actions", force: :cascade do |t|
