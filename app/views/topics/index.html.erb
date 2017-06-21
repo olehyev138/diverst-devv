@@ -11,7 +11,7 @@
           <div class="flex-row__cell flex-row__cell--grow"><%= link_to topic.statement, topic_path(topic) %> - <%= pluralize topic.feedbacks.count, "feedback" %></div>
           <div class="flex-row__cell link-group">
             <%= link_to "Edit", edit_topic_path(topic), class: "muted" %>
-            <%= link_to "Delete", topic_path(topic), method: :delete, class: "error" %>
+            <%= link_to "Delete", topic_path(topic), method: :delete, class: "error", data: { confirm: "Are you sure?" } %>
           </div>
         </div>
       </div>

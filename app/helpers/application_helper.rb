@@ -94,7 +94,8 @@ module ApplicationHelper
 
   def c_t(type)
     @custom_text ||= current_user.enterprise.custom_text rescue CustomText.new
-    @custom_text.send("#{ type }_text")
+
+    h @custom_text.send("#{ type }_text")
   end
 
   private

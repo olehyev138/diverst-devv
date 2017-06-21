@@ -48,8 +48,14 @@
               <h4 class="card__title"><%= inline_svg('icons/calendar.svg', class: "icon card__icon") %>Upcoming Events</h4>
               <%= link_to "View all", group_events_path(@group), class: "card__action" %>
 
-              <% @upcoming_events.each do |event| %>
-                <%= render "shared/flippable/event", event: event %>
+              <% if @upcoming_events.empty? %>
+                <div class="mtlarge text-center">
+                  You have not joined any events yet.
+                </div>
+              <% else %>
+                <% @upcoming_events.each do |event| %>
+                  <%= render "shared/flippable/event", event: event %>
+                <% end %>
               <% end %>
 
             </div>
@@ -130,15 +136,20 @@
 
       <% if @group.members.include? current_user %>
         <div class="card card--secondary">
-          <%= simple_form_for @user_group, method: :post do |f| %>
-          <%= f.hidden_field :enable_notification, value: 0 %>
-            <%= f.input :enable_notification, label: "Enable notifications?", input_html:
-              {
-                class: 'ajax-toggle',
-                'data-url': group_user_group_path(@group, @user_group)
-              }
-            %>
-          <% end %>
+          <div class="card__section">
+            <%= simple_form_for @user_group, method: :post do |f| %>
+              <%= f.input :notifications_frequency,
+                collection: UserGroup.notifications_frequencies.keys.map{ |f| [t("user_group.#{ f }"), f] },
+                label: "Frequency of notifications",
+                include_blank: false,
+                input_html:
+                  {
+                    class: 'ajax-toggle',
+                    'data-url': group_user_group_path(@group, @user_group)
+                  }
+              %>
+            <% end %>
+          </div>
         </div>
         <%= link_to "Leave this #{ c_t(:erg) }", group_group_member_path(@group, current_user), method: :delete, class: 'btn btn--tertiary error' %>
       <% end %>

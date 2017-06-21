@@ -11,8 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170607121743) do
-
+ActiveRecord::Schema.define(version: 20170620074627) do
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
     t.string   "trackable_type", limit: 255
@@ -232,6 +231,7 @@ ActiveRecord::Schema.define(version: 20170607121743) do
     t.text    "program",       limit: 65535
     t.text    "structure",     limit: 65535
     t.text    "outcome",       limit: 65535
+    t.text    "badge",         limit: 65535
   end
 
   add_index "custom_texts", ["enterprise_id"], name: "index_custom_texts_on_enterprise_id", using: :btree
@@ -821,6 +821,14 @@ ActiveRecord::Schema.define(version: 20170607121743) do
     t.string   "active_users_filter", limit: 255
   end
 
+  create_table "social_network_posts", force: :cascade do |t|
+    t.integer  "author_id",  limit: 4
+    t.text     "embed_code", limit: 65535
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.string   "url",        limit: 255,   null: false
+  end
+
   create_table "survey_managers", force: :cascade do |t|
     t.integer "survey_id", limit: 4
     t.integer "user_id",   limit: 4
@@ -859,12 +867,12 @@ ActiveRecord::Schema.define(version: 20170607121743) do
   end
 
   create_table "user_groups", force: :cascade do |t|
-    t.integer  "user_id",             limit: 4
-    t.integer  "group_id",            limit: 4
+    t.integer  "user_id",                 limit: 4
+    t.integer  "group_id",                limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "accepted_member",               default: false
-    t.boolean  "enable_notification",           default: true
+    t.boolean  "accepted_member",                   default: false
+    t.integer  "notifications_frequency", limit: 4
   end
 
   create_table "user_reward_actions", force: :cascade do |t|
@@ -937,6 +945,9 @@ ActiveRecord::Schema.define(version: 20170607121743) do
     t.integer  "points",                      limit: 4,     default: 0,       null: false
     t.integer  "credits",                     limit: 4,     default: 0,       null: false
     t.string   "time_zone",                   limit: 255
+    t.integer  "failed_attempts",             limit: 4,     default: 0,       null: false
+    t.string   "unlock_token",                limit: 255
+    t.datetime "locked_at"
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree
@@ -945,6 +956,7 @@ ActiveRecord::Schema.define(version: 20170607121743) do
   add_index "users", ["invitations_count"], name: "index_users_on_invitations_count", using: :btree
   add_index "users", ["invited_by_id"], name: "index_users_on_invited_by_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
 
   create_table "users_segments", force: :cascade do |t|
     t.integer "user_id",    limit: 4

@@ -27,6 +27,7 @@ class Groups::GroupMessagesController < ApplicationController
 
     if @message.save
       user_rewarder("message_post").add_points(@message)
+      UserGroupInstantNotificationJob.perform_later(@group, messages_count: 1)
       flash_reward "Your message was created. Now you have #{ current_user.credits } points"
       redirect_to action: :index
     else

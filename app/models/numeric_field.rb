@@ -128,7 +128,7 @@ class NumericField < Field
     Enterprise.first.search_users(search_hash)
   end
 
-  def highcharts_stats(aggr_field: nil, segments: container.enterprise.segments.all)
+  def highcharts_stats(aggr_field: nil, segments: container.enterprise.segments.all, groups:)
     data = elastic_stats(aggr_field: aggr_field, segments: segments)
 
     if aggr_field # If there IS an aggregation
