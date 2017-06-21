@@ -19,4 +19,30 @@ RSpec.describe Campaign, type: :model do
     it { expect(campaign).to have_many(:campaigns_managers) }
     it { expect(campaign).to have_many(:managers).through(:campaigns_managers) }
   end
+
+  describe "#send_invitation_emails" do
+    context "when campaign is published" do
+      let!(:campaign){ create(:campaign, status: Campaign.statuses[:published]) }
+      let!(:invitation_sent){ create(:campaign_invitation, campaign: campaign, email_sent: true) }
+      let!(:invitation_not_sent){ create(:campaign_invitation, campaign: campaign, email_sent: false) }
+
+      it "send an email for invitations that didn't receive an email yet" do
+        mailer = double("CampaignMailer")
+        expect(CampaignMailer).to receive(:invitation).once.with(invitation_not_sent){ mailer }
+        expect(mailer).to receive(:deliver_later)
+
+        campaign.send_invitation_emails
+      end
+    end
+
+    context "when campaign is draft" do
+      let(:campaign){ create(:campaign, status: Campaign.statuses[:draft]) }
+      let!(:invitation_not_sent){ create(:campaign_invitation, campaign: campaign) }
+
+      it "do not send any email" do
+        expect(CampaignMailer).to_not receive(:invitation)
+        campaign.send_invitation_emails
+      end
+    end
+  end
 end
