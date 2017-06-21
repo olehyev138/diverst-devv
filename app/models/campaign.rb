@@ -1,6 +1,8 @@
 class Campaign < ActiveRecord::Base
   include PublicActivity::Common
 
+  enum status: [:published, :draft]
+
   belongs_to :enterprise
   belongs_to :owner, class_name: "User"
   has_many :questions

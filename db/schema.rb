@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170620074627) do
+ActiveRecord::Schema.define(version: 20170621133306) do
+
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
     t.string   "trackable_type", limit: 255
@@ -171,8 +172,8 @@ ActiveRecord::Schema.define(version: 20170620074627) do
     t.datetime "end"
     t.integer  "nb_invites",          limit: 4
     t.integer  "enterprise_id",       limit: 4
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
     t.string   "image_file_name",     limit: 255
     t.string   "image_content_type",  limit: 255
     t.integer  "image_file_size",     limit: 4
@@ -182,6 +183,7 @@ ActiveRecord::Schema.define(version: 20170620074627) do
     t.integer  "banner_file_size",    limit: 4
     t.datetime "banner_updated_at"
     t.integer  "owner_id",            limit: 4
+    t.integer  "status",              limit: 4,     default: 0
   end
 
   create_table "campaigns_groups", force: :cascade do |t|
@@ -495,6 +497,7 @@ ActiveRecord::Schema.define(version: 20170620074627) do
     t.integer  "banner_file_size",          limit: 4
     t.datetime "banner_updated_at"
     t.string   "calendar_color",            limit: 255
+    t.integer  "total_weekly_points",       limit: 4,                             default: 0
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
@@ -872,7 +875,8 @@ ActiveRecord::Schema.define(version: 20170620074627) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "accepted_member",                   default: false
-    t.integer  "notifications_frequency", limit: 4
+    t.integer  "total_weekly_points",     limit: 4, default: 0
+    t.integer  "notifications_frequency", limit: 4, default: 0
   end
 
   create_table "user_reward_actions", force: :cascade do |t|
@@ -945,6 +949,7 @@ ActiveRecord::Schema.define(version: 20170620074627) do
     t.integer  "points",                      limit: 4,     default: 0,       null: false
     t.integer  "credits",                     limit: 4,     default: 0,       null: false
     t.string   "time_zone",                   limit: 255
+    t.integer  "total_weekly_points",         limit: 4,     default: 0
     t.integer  "failed_attempts",             limit: 4,     default: 0,       null: false
     t.string   "unlock_token",                limit: 255
     t.datetime "locked_at"
