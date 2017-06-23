@@ -1,11 +1,48 @@
 <div class="content__header">
-  <h1>Members</h1>
+  <h1>Members(<%= @total_members %>)</h1>
   <% if policy(@group).manage_members? %>
     <%= link_to "+ Add members", new_group_group_member_path(@group), class: "btn btn--primary" %>
   <% end %>
 </div>
 
 <div class="content__main">
+  <%= search_form_for @q, url: group_group_members_path(@group), builder: SimpleForm::FormBuilder do |f| %>
+    <div class="card">
+      <div class="card__section card__section--border calendar-filters">
+        <div class="row">
+          <div class="col sm-5">
+            <%= f.input :users_segments_segment_id_in,
+                  as: :select,
+                  collection: @segments,
+                  input_html: { class: "select2", multiple: true },
+                  label: "Filter by Segment",
+                  required: false
+            %>
+          </div>
+          <div class="col sm-5">
+            <div class="col sm-6">
+              <%= f.input :user_groups_created_at_gteq,
+                    as: :date_picker,
+                    label: "Users joined group from",
+                    required: false
+              %>
+            </div>
+            <div class="col sm-6">
+              <%= f.input :user_groups_created_at_lteq,
+                    as: :date_picker,
+                    label: "Users joined group to",
+                    required: false
+              %>
+            </div>
+          </div>
+          <div class="col sm-1" style="padding-top: 15px;">
+            <%= f.button :submit, value: "Filter" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
   <div class="card">
     <% if @members.empty? %>
       <div class="card__section">
@@ -17,7 +54,7 @@
           <table
             class="table--has-border data-table"
             data-no-sortable="1"
-            data-source="<%= group_group_members_path(format: :json) %>">
+            data-source="<%= group_group_members_path(@group, q: params[:q], format: :json) %>">
             <thead>
               <th>Name</th>
               <th>Actions</th>
