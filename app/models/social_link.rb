@@ -5,13 +5,15 @@ class SocialLink < ActiveRecord::Base
 
   before_create :populate_embed_code
 
-  belongs_to :author, class_name: 'User'
+  belongs_to :author, class_name: 'User', required: true
 
 
   protected
 
   def correct_url?
-    SocialMedia::Importer.valid_url? url
+    unless SocialMedia::Importer.valid_url? url
+      errors.add(:url, "is not a valid url for supported services")
+    end
   end
 
   def populate_embed_code
