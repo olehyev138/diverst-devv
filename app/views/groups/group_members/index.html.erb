@@ -53,10 +53,11 @@
         <% if @members.any? %>
           <table
             class="table--has-border data-table"
-            data-no-sortable="1"
+            data-no-sortable="2"
             data-source="<%= group_group_members_path(@group, q: params[:q], format: :json) %>">
             <thead>
               <th>Name</th>
+              <th>Active</th>
               <th>Actions</th>
             </thead>
             <tbody>
