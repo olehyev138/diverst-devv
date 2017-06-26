@@ -1,4 +1,51 @@
 <% content_for :secondary_nav do %>
+<div class="menu menu--mobile">
+  <button
+    class="m-hamburger"
+    aria-label="Menu"
+    aria-controls="navigation"
+    data-jq-dropdown="#navigation">
+    <span>Menu</span>
+  </button>
+  <nav id="navigation" class="jq-dropdown jq-dropdown-tip">
+    <ul class="jq-dropdown-menu">
+      <li>
+        <%= active_link_to "Users", users_path if policy(User).index? %>
+      </li>
+      <li>
+        <%= active_link_to "SSO", edit_auth_enterprise_path(current_user.enterprise) %>
+      </li>
+      <li>
+        <%= active_link_to "Permissions", policy_groups_path %>
+      </li>
+      <li>
+        <%= active_link_to "Fields", edit_fields_enterprise_path(current_user.enterprise) if policy(current_user.enterprise).edit_fields? %>
+      </li>
+      <li>
+        <%= active_link_to "Texts", edit_custom_text_path(current_user.enterprise.custom_text) %>
+      </li>
+      <li>
+        <%= active_link_to "Branding", edit_branding_enterprise_path(current_user.enterprise) if policy(current_user.enterprise).edit_fields? %>
+      </li>
+      <li>
+        <%= active_link_to "Integrations", integrations_path, class: "secondary-header__tab" %>
+      </li>
+      <% if ENV['REWARDS_ENABLED'] %>
+        <li>
+          <%= active_link_to "DCI", rewards_path, class: "secondary-header__tab" %>
+        </li>
+      <% end %>
+      <li>
+        <%= active_link_to "Budgeting", edit_budgeting_enterprise_path(current_user.enterprise), class: "secondary-header__tab" %>
+      </li>
+      <li>
+        <%= active_link_to "Logs", logs_path, class: "secondary-header__tab" %>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<div class="menu menu--desktop">
   <%= active_link_to "Users", users_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(User).index? %>
   <%= active_link_to "SSO", edit_auth_enterprise_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <%= active_link_to "Permissions", policy_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
@@ -11,6 +58,7 @@
   <% end %>
   <%= active_link_to "Budgeting", edit_budgeting_enterprise_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <%= active_link_to "Logs", logs_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+</div>
 <% end %>
 
 <%= render template: "layouts/dashboard" %>

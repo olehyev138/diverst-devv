@@ -16,4 +16,7 @@
   %>
 
   <%= f.input :position_name, input_html: { class: "sortable-focus" } %>
+
+  <%= f.hidden_field :visible, value: 0 %>
+  <%= f.input :visible, label: "Show on leaders board" %>
 </div>
