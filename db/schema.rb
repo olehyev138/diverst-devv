@@ -12,6 +12,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 20170620074627) do
+
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
     t.string   "trackable_type", limit: 255
@@ -872,7 +873,7 @@ ActiveRecord::Schema.define(version: 20170620074627) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "accepted_member",                   default: false
-    t.integer  "notifications_frequency", limit: 4
+    t.integer  "notifications_frequency", limit: 4, default: 0
   end
 
   create_table "user_reward_actions", force: :cascade do |t|
