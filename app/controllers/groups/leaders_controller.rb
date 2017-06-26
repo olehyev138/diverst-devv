@@ -33,6 +33,6 @@ class Groups::LeadersController < ApplicationController
   end
 
   def group_params
-    params.require(:group).permit(group_leaders_attributes: [:id, :user_id, :position_name, :_destroy])
+    params.require(:group).permit(group_leaders_attributes: [:id, :user_id, :position_name, :_destroy, :visible])
   end
 end
