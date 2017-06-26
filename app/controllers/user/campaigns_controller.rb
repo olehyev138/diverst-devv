@@ -5,7 +5,7 @@ class User::CampaignsController < ApplicationController
   layout 'user'
 
   def index
-    @campaigns = current_user.campaigns.order(created_at: :desc)
+    @campaigns = current_user.campaigns.published.order(created_at: :desc)
   end
 
   def show
@@ -30,7 +30,7 @@ class User::CampaignsController < ApplicationController
   protected
 
   def set_campaign
-    @campaign = current_user.enterprise.campaigns.find(params[:id])
+    @campaign = current_user.enterprise.campaigns.published.find(params[:id])
   end
 
   def campaign_params

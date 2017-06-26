@@ -120,6 +120,7 @@ class CampaignsController < ApplicationController
         :nb_invites,
         :image,
         :banner,
+        :status,
         group_ids: [],
         segment_ids: [],
         manager_ids: [],
