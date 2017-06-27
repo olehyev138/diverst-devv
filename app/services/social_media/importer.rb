@@ -4,8 +4,11 @@ class SocialMedia::Importer
   def self.url_to_embed(url)
     return nil unless self.valid_url? url
 
-    OEmbed::Providers.register_all
-    resource = OEmbed::Providers.get(url)
+    register_providers
+
+    resource = fetch_resource(url)
+
+    return nil unless resource
 
     case resource.type
     when 'rich', 'video'
@@ -15,11 +18,26 @@ class SocialMedia::Importer
     else
       url
     end
-
   end
 
   def self.valid_url?(url)
-    true
-    #OEmbed::Providers.find(url).present?
+    register_providers
+    resource = fetch_resource(url)
+
+    !!resource
+  end
+
+  protected
+
+  def self.register_providers
+    OEmbed::Providers.register_all
+  end
+
+  def self.fetch_resource(url)
+    begin
+      resource = OEmbed::Providers.get(url)
+    rescue
+      return nil
+    end
   end
 end

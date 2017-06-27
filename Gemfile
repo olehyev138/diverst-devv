@@ -10,7 +10,7 @@ gem 'jquery-rails', '~> 4.1', '>= 4.1.1'
 gem 'turbolinks', '~> 2.5', '>= 2.5.3'
 gem 'sdoc', '~> 0.4.0', group: :doc # bundle exec rake doc:rails generates the API under doc/api.
 
-gem 'nokogiri', '>= 1.7.1' # need to specify this explicitly, old version has exploit
+gem 'nokogiri', '>= 1.7.2' # need to specify this explicitly, old version has exploit
 
 gem 'puma', '~> 3.1' # Better web server than WEBRick
 gem 'figaro', '~> 1.1', '>= 1.1.1' # Inject ENV from application.yml
