@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe UserGroupInstantNotificationJob, type: :job do
   include ActiveJob::TestHelper
 
-  let!(:user){ create(:user) }
-  let!(:group){ create(:group, members: [user]) }
+  let(:user){ create(:user) }
+  let(:group){ create(:group) }
 
   context "when user accept to receive real time notifications" do
     let!(:user_group){
@@ -16,7 +16,6 @@ RSpec.describe UserGroupInstantNotificationJob, type: :job do
       expect(UserGroupMailer).to receive(:notification)
         .with(user, [{ group: group, messages_count: 1, news_count: 0 }]){ mailer }
       expect(mailer).to receive(:deliver_now)
-
       subject.perform(group, messages_count: 1)
     end
   end
