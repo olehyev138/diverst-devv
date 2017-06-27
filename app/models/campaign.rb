@@ -1,6 +1,8 @@
 class Campaign < ActiveRecord::Base
   include PublicActivity::Common
 
+  enum status: [:published, :draft]
+
   belongs_to :enterprise
   belongs_to :owner, class_name: "User"
   has_many :questions
@@ -38,8 +40,10 @@ class Campaign < ActiveRecord::Base
   end
 
   def send_invitation_emails
-    invitations.where(email_sent: false).find_each do |invitation|
-      CampaignMailer.invitation(invitation).deliver_later
+    if published?
+      invitations.where(email_sent: false).find_each do |invitation|
+        CampaignMailer.invitation(invitation).deliver_later
+      end
     end
   end
 

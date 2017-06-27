@@ -29,6 +29,8 @@
 //= require urijs
 //= require jscolor/jscolor
 //= require flip
+//= require jquery-dropdown/jquery.dropdown.min
+//= require hamburger_menu
 //= require_tree .
 
 var Utility = (function() {
