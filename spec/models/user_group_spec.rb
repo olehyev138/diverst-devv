@@ -8,7 +8,7 @@ RSpec.describe UserGroup do
     it { expect(user_group).to belong_to(:group) }
   end
 
-  describe "when scoping by top_participants" do
+  describe "when scoping" do
     let(:user_group){ build_stubbed(:user_group) }
 
     context "top_participants" do
@@ -17,16 +17,17 @@ RSpec.describe UserGroup do
       let(:second){ create(:user_group, total_weekly_points: 20) }
 
       it { expect(UserGroup.top_participants(3)).to eq [first, second, third] }
-    it { expect(user_group).to define_enum_for(:notifications_frequency).with([:real_time, :daily, :weekly, :disabled]) }
-  end
+      it { expect(user_group).to define_enum_for(:notifications_frequency).with([:real_time, :daily, :weekly, :disabled]) }
+    end
 
-  describe "when scoping by notifications_status" do
-    let!(:real_time){ create(:user_group, notifications_frequency: UserGroup.notifications_frequencies[:real_time]) }
-    let!(:disabled){ create(:user_group, notifications_frequency: UserGroup.notifications_frequencies[:disabled]) }
-    let!(:daily){ create(:user_group, notifications_frequency: UserGroup.notifications_frequencies[:daily]) }
+    context "notifications_status" do
+      let!(:real_time){ create(:user_group, notifications_frequency: UserGroup.notifications_frequencies[:real_time]) }
+      let!(:disabled){ create(:user_group, notifications_frequency: UserGroup.notifications_frequencies[:disabled]) }
+      let!(:daily){ create(:user_group, notifications_frequency: UserGroup.notifications_frequencies[:daily]) }
 
-    it "returns user_group with specific notifications_frequency" do
-      expect(UserGroup.notifications_status("real_time")).to eq [real_time]
+      it "returns user_group with specific notifications_frequency" do
+        expect(UserGroup.notifications_status("real_time")).to eq [real_time]
+      end
     end
   end
 end
