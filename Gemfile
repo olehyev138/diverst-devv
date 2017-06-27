@@ -61,6 +61,7 @@ gem 'daemons', '~> 1.2', '>= 1.2.3' # For capistrano-clockwork
 gem 'icalendar', '~> 2.3' # For exporting events to your calendar
 gem 'simple_form_fancy_uploads', github: "TeamDiverst/simple_form_fancy_uploads", branch: "paperclip_version"
 gem 'ransack', '~> 1.8', '>= 1.8.2' # For search forms
+gem 'ckeditor', '~> 4.2', '>= 4.2.3'
 
 gem 'mailgun_rails', '~> 0.8.0'
 gem 'enumerize', '~> 2.0'

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount Ckeditor::Engine => '/ckeditor'
   require 'sidekiq/web'
 
   Sidekiq::Web.use Rack::Auth::Basic do |username, password|
