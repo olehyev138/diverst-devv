@@ -10,7 +10,8 @@ Rails.application.routes.draw do
 
   devise_for :users, controllers: {
     invitations: 'users/invitations',
-    sessions: 'users/sessions'
+    sessions: 'users/sessions',
+    passwords: 'users/passwords'
   }
 
   get 'omniauth/:provider/callback', to: 'omni_auth#callback'
@@ -293,6 +294,7 @@ Rails.application.routes.draw do
       get 'rewards', to: 'dashboard#rewards'
       get 'bias', to: 'dashboard#bias'
 
+      resources :social_links
       resources :news_links
       resources :messages
       resources :events do

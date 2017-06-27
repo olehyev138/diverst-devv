@@ -1,0 +1,11 @@
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <%= simple_form_for @social_link, url: user_social_links_path do |f| %>
+        <%= f.input :url, label: "URL", input_html: { autofocus: true } %>
+
+        <%= f.button :submit %>
+      <% end %>
+    </div>
+  </div>
+</div>

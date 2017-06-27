@@ -20,7 +20,7 @@
                 <%= link_to 'Show user', user_path(member)%>
                 <% if policy(@group).manage_members? %>
                   <%= link_to 'Accept Member', accept_pending_group_group_member_path(@group, member), method: :post %>
-                  <%= link_to 'Remove From Group', remove_member_group_group_member_path(@group, member), method: :delete %>
+                  <%= link_to 'Remove From Group', remove_member_group_group_member_path(@group, member), method: :delete, data: { confirm: "Are you sure?" } %>
                 <% end %>
               </td>
             </tr>

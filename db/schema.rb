@@ -11,8 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170616130814) do
-
+ActiveRecord::Schema.define(version: 20170623120015) do
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
     t.string   "trackable_type", limit: 255
@@ -172,8 +171,8 @@ ActiveRecord::Schema.define(version: 20170616130814) do
     t.datetime "end"
     t.integer  "nb_invites",          limit: 4
     t.integer  "enterprise_id",       limit: 4
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
     t.string   "image_file_name",     limit: 255
     t.string   "image_content_type",  limit: 255
     t.integer  "image_file_size",     limit: 4
@@ -183,6 +182,7 @@ ActiveRecord::Schema.define(version: 20170616130814) do
     t.integer  "banner_file_size",    limit: 4
     t.datetime "banner_updated_at"
     t.integer  "owner_id",            limit: 4
+    t.integer  "status",              limit: 4,     default: 0
   end
 
   create_table "campaigns_groups", force: :cascade do |t|
@@ -431,8 +431,9 @@ ActiveRecord::Schema.define(version: 20170616130814) do
     t.integer  "group_id",      limit: 4
     t.integer  "user_id",       limit: 4
     t.string   "position_name", limit: 255
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.boolean  "visible",                   default: true
   end
 
   create_table "group_message_comments", force: :cascade do |t|
@@ -823,6 +824,14 @@ ActiveRecord::Schema.define(version: 20170616130814) do
     t.string   "active_users_filter", limit: 255
   end
 
+  create_table "social_network_posts", force: :cascade do |t|
+    t.integer  "author_id",  limit: 4
+    t.text     "embed_code", limit: 65535
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.string   "url",        limit: 255,   null: false
+  end
+
   create_table "survey_managers", force: :cascade do |t|
     t.integer "survey_id", limit: 4
     t.integer "user_id",   limit: 4
@@ -861,13 +870,13 @@ ActiveRecord::Schema.define(version: 20170616130814) do
   end
 
   create_table "user_groups", force: :cascade do |t|
-    t.integer  "user_id",             limit: 4
-    t.integer  "group_id",            limit: 4
+    t.integer  "user_id",                 limit: 4
+    t.integer  "group_id",                limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "accepted_member",               default: false
-    t.boolean  "enable_notification",           default: true
-    t.integer  "total_weekly_points", limit: 4, default: 0
+    t.boolean  "accepted_member",                   default: false
+    t.integer  "total_weekly_points",     limit: 4, default: 0
+    t.integer  "notifications_frequency", limit: 4, default: 0
   end
 
   create_table "user_reward_actions", force: :cascade do |t|
@@ -941,6 +950,9 @@ ActiveRecord::Schema.define(version: 20170616130814) do
     t.integer  "credits",                     limit: 4,     default: 0,       null: false
     t.string   "time_zone",                   limit: 255
     t.integer  "total_weekly_points",         limit: 4,     default: 0
+    t.integer  "failed_attempts",             limit: 4,     default: 0,       null: false
+    t.string   "unlock_token",                limit: 255
+    t.datetime "locked_at"
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree
@@ -949,6 +961,7 @@ ActiveRecord::Schema.define(version: 20170616130814) do
   add_index "users", ["invitations_count"], name: "index_users_on_invitations_count", using: :btree
   add_index "users", ["invited_by_id"], name: "index_users_on_invited_by_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
 
   create_table "users_segments", force: :cascade do |t|
     t.integer "user_id",    limit: 4

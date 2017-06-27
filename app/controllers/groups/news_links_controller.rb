@@ -37,6 +37,7 @@ class Groups::NewsLinksController < ApplicationController
 
     if @news_link.save
       user_rewarder("news_post").add_points(@news_link)
+      UserGroupInstantNotificationJob.perform_later(@group, news_count: 1)
       flash_reward "Your news was created. Now you have #{ current_user.credits } points"
       redirect_to action: :index
     else

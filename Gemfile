@@ -10,7 +10,7 @@ gem 'jquery-rails', '~> 4.1', '>= 4.1.1'
 gem 'turbolinks', '~> 2.5', '>= 2.5.3'
 gem 'sdoc', '~> 0.4.0', group: :doc # bundle exec rake doc:rails generates the API under doc/api.
 
-gem 'nokogiri', '>= 1.7.1' # need to specify this explicitly, old version has exploit
+gem 'nokogiri', '>= 1.7.2' # need to specify this explicitly, old version has exploit
 
 gem 'puma', '~> 3.1' # Better web server than WEBRick
 gem 'figaro', '~> 1.1', '>= 1.1.1' # Inject ENV from application.yml
@@ -69,6 +69,8 @@ gem 'jbuilder', '~> 2.6'
 gem 'public_activity', '~> 1.5'
 
 gem 'rollbar', '~> 2.14.1'
+
+gem 'ruby-oembed', '~> 0.12.0'
 
 group :development, :test do
   gem 'spring', '~> 1.6.2' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring

@@ -16,6 +16,7 @@
             <th>Start date</th>
             <th># of invitations</th>
             <th>Nb of questions</th>
+            <th>Status</th>
             <th>Options</th>
           </thead>
           <tbody>
@@ -26,10 +27,11 @@
                 <td><%= campaign.start.to_s :reversed_slashes %></td>
                 <td><%= campaign.invitations.count %></td>
                 <td><%= campaign.questions.count %></td>
-                  <td>
-                    <%= link_to "Edit", edit_campaign_path(campaign) if policy(campaign).edit? %> -
-                    <%= link_to "Delete", campaign_path(campaign), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(campaign).destroy? %>
-                  </td>
+                <td><%= campaign.status.capitalize %></td>
+                <td>
+                  <%= link_to "Edit", edit_campaign_path(campaign) if policy(campaign).edit? %> -
+                  <%= link_to "Delete", campaign_path(campaign), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(campaign).destroy? %>
+                </td>
               </tr>
             <% end %>
           </tbody>

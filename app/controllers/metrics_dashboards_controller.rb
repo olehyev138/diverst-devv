@@ -88,7 +88,8 @@ class MetricsDashboardsController < ApplicationController
       .require(:metrics_dashboard)
       .permit(
         :name,
-        segment_ids: []
+        segment_ids: [],
+        group_ids: []
       )
   end
 end

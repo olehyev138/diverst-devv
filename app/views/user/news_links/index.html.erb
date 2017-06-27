@@ -35,7 +35,7 @@
                 <% if policy(news_link).edit? %>
                   <div class="flex-row__cell link-group">
                     <%= link_to "Edit", edit_group_news_link_path(news_link.group, news_link) %>
-                    <%= link_to "Delete", group_news_link_path(news_link.group, news_link), method: :delete, class: "error" %>
+                    <%= link_to "Delete", group_news_link_path(news_link.group, news_link), method: :delete, class: "error", data: { confirm: "Are you sure?" } %>
                   </div>
                 <% end %>
               </div>

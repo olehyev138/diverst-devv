@@ -1,0 +1,14 @@
+<div class="content__header">
+  <h1>My Social Media Posts</h1>
+  <%= link_to "Add", new_user_social_link_path, class: "btn btn--primary" %>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <% @posts.each do |post| %>
+      <div class="card__section">
+        <%= render 'card', post: post %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -8,7 +8,6 @@ services:
     ports:
       - 3000:3000
     environment:
-      RAILS_ENV: development
       DATABASE_URL: mysql2://root:root@mysql:3306
       REDIS_URL: redis://redis:6379/0
       ELASTICSEARCH_URL: elasticsearch
@@ -17,6 +16,7 @@ services:
       - mysql
       - redis
       - elasticsearch
+      - sidekiq
   mysql:
     image: mysql
     ports:
@@ -52,7 +52,6 @@ services:
     volumes:
       - .:/diverst
     environment:
-      RAILS_ENV: development
       DATABASE_URL: mysql2://root:root@mysql:3306
       REDIS_URL: redis://redis:6379/0
       ELASTICSEARCH_URL: elasticsearch
