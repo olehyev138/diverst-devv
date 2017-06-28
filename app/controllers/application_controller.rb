@@ -15,6 +15,11 @@ class ApplicationController < ActionController::Base
 
   around_action :user_time_zone, if: :current_user
 
+  def c_t(type)
+    @custom_text ||= current_user.enterprise.custom_text rescue CustomText.new
+    @custom_text.send("#{ type }_text")
+  end
+
   protected
 
   def set_persist_login_param

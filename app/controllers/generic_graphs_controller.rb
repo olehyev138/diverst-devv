@@ -15,13 +15,13 @@ class GenericGraphsController < ApplicationController
               data: data
             }],
             categories: categories,
-            xAxisTitle: 'ERG'
+            xAxisTitle: "#{ c_t(:erg) }"
           },
           hasAggregation: false
         }
       }
       format.csv {
-        strategy = Reports::GraphStatsGeneric.new(title: 'Number of users ERG', categories: categories, data: data)
+        strategy = Reports::GraphStatsGeneric.new(title: "Number of users #{ c_t(:erg) }", categories: categories, data: data)
         report = Reports::Generator.new(strategy)
         send_data report.to_csv, filename: "graph_group_population.csv"
       }
@@ -72,14 +72,14 @@ class GenericGraphsController < ApplicationController
               data: data
             }],
             categories: categories,
-            xAxisTitle: 'ERG',
+            xAxisTitle: "#{ c_t(:erg) }",
             yAxisTitle: 'Nb of events'
           },
           hasAggregation: false
         }
       }
       format.csv {
-        strategy = Reports::GraphStatsGeneric.new(title: 'Number of events created ERG', categories: categories, data: data)
+        strategy = Reports::GraphStatsGeneric.new(title: "Number of events created #{ c_t(:erg) }", categories: categories, data: data)
         report = Reports::Generator.new(strategy)
         send_data report.to_csv, filename: "graph_events_created.csv"
       }
@@ -110,7 +110,7 @@ class GenericGraphsController < ApplicationController
         }
       }
       format.csv {
-        strategy = Reports::GraphStatsGeneric.new(title: 'Number of messages sent ERG', categories: categories, data: data)
+        strategy = Reports::GraphStatsGeneric.new(title: "Number of messages sent #{ c_t(:erg) }", categories: categories, data: data)
         report = Reports::Generator.new(strategy)
         send_data report.to_csv, filename: "graph_messages_sent.csv"
       }
