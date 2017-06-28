@@ -6,6 +6,6 @@ module GroupsHelper
       else
         link_to group.name, group
       end
-    label += " (#{ group.participation_score_7days })" if ENV['REWARDS_ENABLED']
+    label += " (#{ group.total_weekly_points })" if ENV['REWARDS_ENABLED']
   end
 end
