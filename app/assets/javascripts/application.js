@@ -31,6 +31,7 @@
 //= require flip
 //= require jquery-dropdown/jquery.dropdown.min
 //= require hamburger_menu
+//= require ckeditor/init
 //= require_tree .
 
 var Utility = (function() {

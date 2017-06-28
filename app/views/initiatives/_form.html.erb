@@ -36,7 +36,10 @@
       </div>
 
       <div class="card__section card__section--border">
-        <%= f.input :description, label: "Give it a short (or long) <strong>description</strong>".html_safe %>
+        <%= f.input :description,
+            label: "Give it a short (or long) <strong>description</strong>".html_safe,
+            as: :ckeditor
+        %>
       </div>
 
       <div class="card__section card__section--border">

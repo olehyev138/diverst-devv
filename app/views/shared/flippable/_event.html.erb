@@ -7,7 +7,7 @@
       <div class="flex-row flex-row--middle">
         <div class="flex-row__cell flex-row__cell--grow">
           <span class="highlight"><%= event.title %></span><br>
-          <small><%= truncate(event.description, length: 90) %></small><br>
+          <small><%= truncate(event.description.html_safe, length: 90) %></small><br>
           <small class="muted"><%= event.start.to_s :slashes %></small>
         </div>
         <div class="flex-row__cell">
