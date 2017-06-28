@@ -81,10 +81,10 @@ class GroupsController < ApplicationController
     if @group.save
       track_activity(@group, :create)
 
-      flash[:notice] = "Your ERG was created"
+      flash[:notice] = "Your #{ c_t(:erg) } was created"
       redirect_to action: :index
     else
-      flash[:alert] = "Your ERG was not created. Please fix the errors"
+      flash[:alert] = "Your #{ c_t(:erg) } was not created. Please fix the errors"
       render :new
     end
   end
@@ -99,10 +99,10 @@ class GroupsController < ApplicationController
     if @group.update(group_params)
       track_activity(@group, :update)
 
-      flash[:notice] = "Your ERG was updated"
+      flash[:notice] = "Your #{ c_t(:erg) } was updated"
       redirect_to :back
     else
-      flash[:alert] = "Your ERG was not updated. Please fix the errors"
+      flash[:alert] = "Your #{ c_t(:erg) } was not updated. Please fix the errors"
       render :edit
     end
   end
@@ -116,10 +116,10 @@ class GroupsController < ApplicationController
 
     track_activity(@group, :destroy)
     if @group.destroy
-      flash[:notice] = "Your ERG was deleted"
+      flash[:notice] = "Your #{ c_t(:erg) } was deleted"
       redirect_to action: :index
     else
-      flash[:alert] = "Your ERG was not deleted. Please fix the errors"
+      flash[:alert] = "Your #{ c_t(:erg) } was not deleted. Please fix the errors"
       redirect_to :back
     end
   end

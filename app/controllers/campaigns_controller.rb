@@ -73,7 +73,7 @@ class CampaignsController < ApplicationController
       format.csv {
         flatten_data = data[:series].map{ |d| d[:data] }.flatten
         strategy = Reports::GraphStatsGeneric.new(
-          title: 'Contributions per ERG',
+          title: "Contributions per #{ c_t(:erg) }",
           categories: flatten_data.map{ |d| d[:name] }.uniq,
           data: flatten_data.map{ |d| d[:y] }
         )

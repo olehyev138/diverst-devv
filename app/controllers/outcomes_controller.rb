@@ -22,10 +22,10 @@ class OutcomesController < ApplicationController
     @outcome.owner = current_user
 
     if @outcome.save
-      flash[:notice] = "Your outcome was created"
+      flash[:notice] = "Your #{ c_t(:outcome) } was created"
       redirect_to action: :index
     else
-      flash[:alert] = "Your outcome was not created. Please fix the errors"
+      flash[:alert] = "Your #{ c_t(:outcome) } was not created. Please fix the errors"
       render :new
     end
   end
@@ -37,10 +37,10 @@ class OutcomesController < ApplicationController
   def update
     authorize @outcome
     if @outcome.update(outcome_params)
-      flash[:notice] = "Your outcome was updated"
+      flash[:notice] = "Your #{ c_t(:outcome) } was updated"
       redirect_to @outcome
     else
-      flash[:alert] = "Your outcome was not updated. Please fix the errors"
+      flash[:alert] = "Your #{ c_t(:outcome) } was not updated. Please fix the errors"
       render :edit
     end
   end

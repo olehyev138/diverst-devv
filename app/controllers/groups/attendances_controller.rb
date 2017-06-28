@@ -39,7 +39,7 @@ class Groups::AttendancesController < ApplicationController
           data: erg_population
         }],
         categories: @event.own_group.enterprise.groups.map(&:name),
-        xAxisTitle: 'ERG'
+        xAxisTitle: "#{ c_t(:erg) }"
       },
       hasAggregation: false
     }

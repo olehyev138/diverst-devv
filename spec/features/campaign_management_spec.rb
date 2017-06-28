@@ -29,7 +29,7 @@ RSpec.feature 'Campaign management' do
     find('.campaign_questions_title').set('First question')
     find('.campaign_questions_description').set("That's a cool question")
 
-    find('input[type="submit"][value="Create Campaign"]').trigger('click')
+    find('button[type="submit"][value="published"]').trigger('click')
 
     expect(page.find('table').all('tr')[1]).to have_content campaign[:title]
   end
