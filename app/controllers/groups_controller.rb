@@ -231,6 +231,7 @@ class GroupsController < ApplicationController
         :members_visibility,
         :messages_visibility,
         :calendar_color,
+        :active,
         manager_ids: [],
         member_ids: [],
         invitation_segment_ids: [],

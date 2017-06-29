@@ -2,6 +2,9 @@
   <%= simple_form_for @group do |f| %>
     <div class="card">
       <div class="card__section card__section--border">
+        <%= f.hidden_field :active, value: 0 %>
+        <%= f.input :active, label: 'Allow users to join' %>
+
         <%= f.input :pending_users, input_html: { autofocus: true } %>
         <%= f.input :members_visibility %>
         <%= f.input :messages_visibility %>
