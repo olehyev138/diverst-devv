@@ -100,9 +100,13 @@
       <% end %>
 
       <% if !@group.members.include? current_user %>
-        <%= simple_form_for :user, url: group_group_members_path(@group), method: :post do |f| %>
-          <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
-          <%= f.submit "Join this #{ c_t(:erg) }", class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
+        <% if @group.active? %>
+          <%= simple_form_for :user, url: group_group_members_path(@group), method: :post do |f| %>
+            <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
+            <%= f.submit "Join this #{ c_t(:erg) }", class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
+          <% end %>
+        <% else %>
+          Coming soon!
         <% end %>
       <% end %>
 

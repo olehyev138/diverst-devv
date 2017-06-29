@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170627170413) do
+ActiveRecord::Schema.define(version: 20170629132317) do
+
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
     t.string   "trackable_type", limit: 255
@@ -128,20 +129,6 @@ ActiveRecord::Schema.define(version: 20170627170413) do
   create_table "biases_to_groups", force: :cascade do |t|
     t.integer "group_id", limit: 4
     t.integer "bias_id",  limit: 4
-  end
-
-  create_table "bootsy_image_galleries", force: :cascade do |t|
-    t.integer  "bootsy_resource_id",   limit: 4
-    t.string   "bootsy_resource_type", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "bootsy_images", force: :cascade do |t|
-    t.string   "image_file",       limit: 255
-    t.integer  "image_gallery_id", limit: 4
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "budget_items", force: :cascade do |t|
@@ -499,8 +486,8 @@ ActiveRecord::Schema.define(version: 20170627170413) do
     t.integer  "enterprise_id",             limit: 4
     t.string   "name",                      limit: 255
     t.text     "description",               limit: 65535
-    t.datetime "created_at",                                                                    null: false
-    t.datetime "updated_at",                                                                    null: false
+    t.datetime "created_at",                                                                     null: false
+    t.datetime "updated_at",                                                                     null: false
     t.string   "logo_file_name",            limit: 255
     t.string   "logo_content_type",         limit: 255
     t.integer  "logo_file_size",            limit: 4
@@ -526,6 +513,7 @@ ActiveRecord::Schema.define(version: 20170627170413) do
     t.datetime "banner_updated_at"
     t.string   "calendar_color",            limit: 255
     t.integer  "total_weekly_points",       limit: 4,                             default: 0
+    t.boolean  "active",                                                          default: true
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
