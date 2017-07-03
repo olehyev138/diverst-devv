@@ -7,6 +7,8 @@ class LogsController < ApplicationController
 
   def index
     authorize :log, :index?
+
+    @activities_page = @activities.page(params[:page])
   end
 
   protected
@@ -19,6 +21,5 @@ class LogsController < ApplicationController
     @activities = PublicActivity::Activity.includes(:owner, :trackable)
                                           .where(recipient: @enterprise)
                                           .order(created_at: :desc)
-                                          .limit(200)
   end
 end

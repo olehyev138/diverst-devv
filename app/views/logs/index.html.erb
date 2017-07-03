@@ -4,6 +4,7 @@
 
 <div class="content__main">
   <div class="card">
-    <%= render_activities(@activities) %>
+    <%= render_activities(@activities_page) %>
+    <%= paginate @activities_page %>
   </div>
 </div>
