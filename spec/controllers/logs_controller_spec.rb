@@ -32,18 +32,43 @@ RSpec.describe LogsController, type: :controller do
       }
       login_user_from_let
 
-      before { get_index }
+      context 'html output' do
+        before { get_index }
 
-      it 'returns success' do
-        expect(response).to be_success
+        it 'returns success' do
+          expect(response).to be_success
+        end
+
+        describe 'enterprise' do
+          it 'only shows records from current enterprise' do
+            activities = assigns(:activities)
+
+            expect(activities).to include activity1
+            expect(activities).to_not include activity2
+          end
+        end
       end
 
-      describe 'enterprise' do
-        it 'only shows records from current enterprise' do
-          activities = assigns(:activities)
+      context 'csv output' do
+        before { get :index, :format => :csv }
 
-          expect(activities).to include activity1
-          expect(activities).to_not include activity2
+        it 'renders a csv file' do
+          content_type = response.headers["Content-Type"]
+          expect(content_type).to eq "text/csv"
+        end
+
+        it 'renders correct number of rows in csv file' do
+          body = response.body.split("\n")
+
+          # One row plus header
+          expect(body.count).to eq 2
+        end
+
+        it 'creates csv file with correct name' do
+          filename_header = response.headers["Content-Disposition"]
+
+          expect(filename_header).to include enterprise1.name
+          expect(filename_header).to include Date.today.to_s
         end
       end
     end

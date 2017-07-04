@@ -1,9 +1,15 @@
 <div class="content__header">
   <h1>Logs</h1>
+  <div class="flex-row flex-row--middle">
+    <div class="flex-row__cell">
+      <%= link_to "Export CSV", logs_path(format: :csv), class: "btn btn--secondary" %>
+    </div>
+  </div>
 </div>
 
 <div class="content__main">
   <div class="card">
-    <%= render_activities(@activities) %>
+    <%= render_activities(@activities_page) %>
+    <%= paginate @activities_page %>
   </div>
 </div>
