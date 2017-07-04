@@ -27,6 +27,8 @@ module Diverst
     Dir[File.join(Rails.root, 'lib', 'core_ext', '*.rb')].each { |l| require l }
     Dir[File.join(Rails.root, 'lib', '*.rb')].each { |l| require l }
 
+    config.autoload_paths << Rails.root.join('app/models/csv_export')
+
     config.assets.paths << Rails.root.join('vendor', 'assets', 'bower_components') # Bower
     config.assets.paths << Rails.root.join('tmp', 'themes') # Custom themes
 

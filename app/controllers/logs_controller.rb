@@ -9,6 +9,12 @@ class LogsController < ApplicationController
     authorize :log, :index?
 
     @activities_page = @activities.page(params[:page])
+
+    respond_to do |format|
+      format.html
+      #For CSV logs, we send ALL the activities
+      format.csv { send_data LogCsv.build(@activities), filename: log_file_name }
+    end
   end
 
   protected
@@ -21,5 +27,9 @@ class LogsController < ApplicationController
     @activities = PublicActivity::Activity.includes(:owner, :trackable)
                                           .where(recipient: @enterprise)
                                           .order(created_at: :desc)
+  end
+
+  def log_file_name
+    "logs-#{@enterprise.name}-#{Date.today}.csv"
   end
 end
