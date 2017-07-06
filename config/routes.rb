@@ -114,6 +114,8 @@ Rails.application.routes.draw do
         post 'create_comment'
       end
       resources :leaders, only: [:index, :new, :create]
+
+      resources :questions, only: [:index]
     end
 
     scope module: :groups do
