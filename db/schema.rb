@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170629132317) do
+ActiveRecord::Schema.define(version: 20170706155241) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -407,14 +407,15 @@ ActiveRecord::Schema.define(version: 20170629132317) do
     t.boolean  "match_exclude"
     t.boolean  "match_polarity"
     t.float    "match_weight",       limit: 24
-    t.datetime "created_at",                                       null: false
-    t.datetime "updated_at",                                       null: false
+    t.datetime "created_at",                                           null: false
+    t.datetime "updated_at",                                           null: false
     t.boolean  "alternative_layout",               default: false
     t.boolean  "private",                          default: false
     t.integer  "container_id",       limit: 4
     t.string   "container_type",     limit: 255
     t.boolean  "elasticsearch_only",               default: false
     t.boolean  "required",                         default: false
+    t.string   "field_type",         limit: 255,   default: "regular"
   end
 
   add_index "fields", ["container_type", "container_id"], name: "index_fields_on_container_type_and_container_id", using: :btree
@@ -890,9 +891,10 @@ ActiveRecord::Schema.define(version: 20170629132317) do
     t.integer  "group_id",                limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "accepted_member",                   default: false
-    t.integer  "total_weekly_points",     limit: 4, default: 0
-    t.integer  "notifications_frequency", limit: 4, default: 0
+    t.boolean  "accepted_member",                       default: false
+    t.integer  "notifications_frequency", limit: 4,     default: 0
+    t.integer  "total_weekly_points",     limit: 4,     default: 0
+    t.text     "data",                    limit: 65535
   end
 
   create_table "user_reward_actions", force: :cascade do |t|
@@ -965,10 +967,10 @@ ActiveRecord::Schema.define(version: 20170629132317) do
     t.integer  "points",                      limit: 4,     default: 0,       null: false
     t.integer  "credits",                     limit: 4,     default: 0,       null: false
     t.string   "time_zone",                   limit: 255
-    t.integer  "total_weekly_points",         limit: 4,     default: 0
     t.integer  "failed_attempts",             limit: 4,     default: 0,       null: false
     t.string   "unlock_token",                limit: 255
     t.datetime "locked_at"
+    t.integer  "total_weekly_points",         limit: 4,     default: 0
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree

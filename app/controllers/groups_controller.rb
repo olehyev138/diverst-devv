@@ -258,6 +258,18 @@ class GroupsController < ApplicationController
           :max,
           :options_text,
           :alternative_layout
+        ],
+        survey_fields_attributes: [
+          :id,
+          :title,
+          :_destroy,
+          :show_on_vcard,
+          :saml_attribute,
+          :type,
+          :min,
+          :max,
+          :options_text,
+          :alternative_layout
         ]
       )
   end

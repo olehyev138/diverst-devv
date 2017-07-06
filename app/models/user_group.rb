@@ -1,4 +1,6 @@
 class UserGroup < ActiveRecord::Base
+  include ContainsFields
+
   belongs_to :user
   belongs_to :group
 
@@ -9,4 +11,8 @@ class UserGroup < ActiveRecord::Base
   scope :notifications_status, ->(frequency) {
     where(notifications_frequency: UserGroup.notifications_frequencies[frequency])
   }
+
+  def string_for_field(field)
+    field.string_value info[field]
+  end
 end

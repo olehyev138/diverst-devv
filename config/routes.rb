@@ -36,6 +36,10 @@ Rails.application.routes.draw do
   end
 
   resources :users do
+    member do
+      get 'group_surveys'
+    end
+
     collection do
       get 'export_csv'
       get 'import_csv'
@@ -114,6 +118,13 @@ Rails.application.routes.draw do
         post 'create_comment'
       end
       resources :leaders, only: [:index, :new, :create]
+
+      resources :questions, only: [:index] do
+        collection do
+          get 'survey'
+          post 'submit_survey'
+        end
+      end
     end
 
     scope module: :groups do

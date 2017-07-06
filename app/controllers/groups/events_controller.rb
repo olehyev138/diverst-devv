@@ -17,13 +17,13 @@ class Groups::EventsController < ApplicationController
                           .of_segments(current_user.segments.pluck(:id))
                           .includes(:owner_group)
                           .where('start >= ?', params[:start])
-                          .where('start <= ?', params[:end])
+                          .where('end <= ?', params[:end])
 
     participating_events = @group.participating_initiatives
                               .of_segments(current_user.segments.pluck(:id))
                               .includes(:owner_group)
                               .where('start >= ?', params[:start])
-                              .where('start <= ?', params[:end])
+                              .where('end <= ?', params[:end])
 
     @events = own_events + participating_events
 

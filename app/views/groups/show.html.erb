@@ -97,6 +97,7 @@
     <div class="col col--stacked sm-12 md-3">
       <% if @current_user.pending_group_member?(@group.id) %>
         Please wait for group administrators to process your membership request.
+        Take a survey below in order to speed up approvement process.
       <% end %>
 
       <% if !@group.members.include? current_user %>
@@ -108,6 +109,8 @@
         <% else %>
           Coming soon!
         <% end %>
+      <% else %>
+        <%= link_to "Take a survey", survey_group_questions_path(@group), class: "btn btn--secondary" %>
       <% end %>
 
       <div class="card card--secondary">
@@ -155,6 +158,7 @@
             <% end %>
           </div>
         </div>
+
         <%= link_to "Leave this #{ c_t(:erg) }", group_group_member_path(@group, current_user), method: :delete, class: 'btn btn--tertiary error' %>
       <% end %>
     </div>
