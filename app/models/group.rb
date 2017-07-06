@@ -49,7 +49,14 @@ class Group < ActiveRecord::Base
   has_many :pillars, through: :outcomes
   has_many :initiatives, through: :pillars
   has_many :updates, class_name: "GroupUpdate", dependent: :destroy
-  has_many :fields, as: :container, dependent: :destroy
+
+  has_many :fields, -> { where field_type: "regular"},
+              as: :container,
+              dependent: :destroy
+  has_many :survey_fields, -> { where field_type: "group_survey"},
+              class_name: 'Field',
+              as: :container,
+              dependent: :destroy
 
   has_many :group_leaders
   has_many :leaders, through: :group_leaders, source: :user
@@ -71,6 +78,7 @@ class Group < ActiveRecord::Base
 
   accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
 
   def managers

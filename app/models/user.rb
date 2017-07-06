@@ -132,6 +132,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def has_answered_group_surveys?
+    true
+  end
+
   #Return true if user is a leader of at least 1 group
   def erg_leader?
     g = groups.includes(:leaders).select do |group|

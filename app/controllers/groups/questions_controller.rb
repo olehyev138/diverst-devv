@@ -14,10 +14,9 @@ class Groups::QuestionsController < ApplicationController
   end
 
   def submit_survey
-
     if @user_group.present?
       #set flash message
-      @user_group.info.merge(fields: @group.fields, form_data: params['custom-fields'])
+      @user_group.info.merge(fields: @group.survey_fields, form_data: params['custom-fields'])
 
       if @user_group.save
         flash[:notice] = "Your response was saved"

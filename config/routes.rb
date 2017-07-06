@@ -36,6 +36,10 @@ Rails.application.routes.draw do
   end
 
   resources :users do
+    member do
+      get 'group_surveys'
+    end
+
     collection do
       get 'export_csv'
       get 'import_csv'

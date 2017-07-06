@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:edit, :update, :destroy, :show]
-  after_action :verify_authorized, except: [:edit_profile]
+  before_action :set_user, only: [:edit, :update, :destroy, :show, :group_surveys]
+  after_action :verify_authorized, except: [:edit_profile, :group_surveys]
 
   layout :resolve_layout
 
@@ -20,6 +20,12 @@ class UsersController < ApplicationController
 
   def show
     authorize @user
+  end
+
+  def group_surveys
+    manageable_group_ids = current_user.manageable_groups.map{ |mg| mg.id}
+
+    @user_groups = @user.user_groups.where(group_id: manageable_group_ids)
   end
 
   #For admins. Dedicated to editing any user's info

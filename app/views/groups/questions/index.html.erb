@@ -2,18 +2,18 @@
   <div class="content__main">
     <div class="card">
       <div id="fields">
-        <%= f.simple_fields_for :fields do |field| %>
-          <%= render 'field_fields', f: field %>
+        <%= f.simple_fields_for :survey_fields do |field| %>
+          <%= render 'survey_field_fields', f: field %>
         <% end %>
       </div>
 
       <div class="link">
         <div class="card__section card__section--border">
-          <%= link_to_add_association "Add text field", f, :fields, wrap_object: Proc.new { TextField.new } %> |
-          <%= link_to_add_association "Add select field", f, :fields, wrap_object: Proc.new { SelectField.new } %> |
-          <%= link_to_add_association "Add checkbox field", f, :fields, wrap_object: Proc.new { CheckboxField.new } %> |
-          <%= link_to_add_association "Add numeric field", f, :fields, wrap_object: Proc.new { NumericField.new } %> |
-          <%= link_to_add_association "Add date field", f, :fields, wrap_object: Proc.new { DateField.new } %>
+          <%= link_to_add_association "Add text field", f, :survey_fields, wrap_object: Proc.new { TextField.new } %> |
+          <%= link_to_add_association "Add select field", f, :survey_fields, wrap_object: Proc.new { SelectField.new } %> |
+          <%= link_to_add_association "Add checkbox field", f, :survey_fields, wrap_object: Proc.new { CheckboxField.new } %> |
+          <%= link_to_add_association "Add numeric field", f, :survey_fields, wrap_object: Proc.new { NumericField.new } %> |
+          <%= link_to_add_association "Add date field", f, :survey_fields, wrap_object: Proc.new { DateField.new } %>
         </div>
       </div>
     </div>

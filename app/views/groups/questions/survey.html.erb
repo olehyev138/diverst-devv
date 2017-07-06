@@ -7,7 +7,7 @@
   <div class="card">
     <div class="card__section">
       <%= simple_form_for [@group], url: submit_survey_group_questions_path(@group), method: :post do |f| %>
-        <% @group.fields.each do |cf| %>
+        <% @group.survey_fields.each do |cf| %>
           <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: @user_group %>
         <% end %>
 
