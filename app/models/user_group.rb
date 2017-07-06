@@ -1,4 +1,6 @@
 class UserGroup < ActiveRecord::Base
+  include ContainsFields
+
   belongs_to :user
   belongs_to :group
 

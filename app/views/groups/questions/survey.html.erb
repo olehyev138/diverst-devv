@@ -1,0 +1,18 @@
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      Please take a moment to answer some questions. Your responses will only be visible to group leaders.
+    </div>
+  </div>
+  <div class="card">
+    <div class="card__section">
+      <%= simple_form_for [@group], url: submit_survey_group_questions_path(@group), method: :post do |f| %>
+        <% @group.fields.each do |cf| %>
+          <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: @user_group %>
+        <% end %>
+
+        <%= f.button :submit, class: 'btn--secondary btn--large btn--full', value: "Submit response" %>
+      <% end %>
+    </div>
+  </div>
+</div>

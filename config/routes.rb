@@ -115,7 +115,12 @@ Rails.application.routes.draw do
       end
       resources :leaders, only: [:index, :new, :create]
 
-      resources :questions, only: [:index]
+      resources :questions, only: [:index] do
+        collection do
+          get 'survey'
+          post 'submit_survey'
+        end
+      end
     end
 
     scope module: :groups do
