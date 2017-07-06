@@ -110,10 +110,6 @@
         <% end %>
       <% end %>
 
-      <div class="flex-row__cell">
-        <%= link_to "Take a survey", survey_group_questions_path(@group), class: "btn btn--secondary" %>
-      </div>
-
       <div class="card card--secondary">
         <%= render('leader', leader: @group.lead_manager, position: "#{ c_t(:erg) } Leader") if @group.lead_manager %>
 
@@ -159,6 +155,9 @@
             <% end %>
           </div>
         </div>
+
+        <%= link_to "Take a survey", survey_group_questions_path(@group), class: "btn btn--secondary" %>
+
         <%= link_to "Leave this #{ c_t(:erg) }", group_group_member_path(@group, current_user), method: :delete, class: 'btn btn--tertiary error' %>
       <% end %>
     </div>

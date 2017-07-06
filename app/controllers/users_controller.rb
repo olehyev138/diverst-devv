@@ -26,6 +26,7 @@ class UsersController < ApplicationController
     manageable_group_ids = current_user.manageable_groups.map{ |mg| mg.id}
 
     @user_groups = @user.user_groups.where(group_id: manageable_group_ids)
+                                    .where.not(data: nil)
   end
 
   #For admins. Dedicated to editing any user's info
