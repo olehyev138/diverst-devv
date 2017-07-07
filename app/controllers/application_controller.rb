@@ -79,11 +79,11 @@ class ApplicationController < ActionController::Base
     if ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID']
       enterprise = Enterprise.find_by_id ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID']
 
-      return new_user_session_path unless enterprise.present
-
-      sso_enterprise_saml_index_path(enterprise)
-    else
-      new_user_session_path
+      if enterprise.present? && enterprise.has_enabled_saml?
+        return sso_enterprise_saml_index_path(enterprise)
+      end
     end
+
+    new_user_session_path
   end
 end
