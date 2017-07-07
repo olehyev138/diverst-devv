@@ -1,8 +1,17 @@
 <div class="content__header">
   <h1>User details</h1>
-  <% if policy(@user).update? %>
-    <%= link_to "Edit User", edit_user_path(@user), class: "btn btn--primary" %>
-  <% end %>
+  <div class="flex-row flex-row--middle">
+    <% if policy(@user).update? %>
+      <div class="flex-row__cell">
+        <%= link_to "Edit User", edit_user_path(@user), class: "btn btn--primary" %>
+      </div>
+    <% end %>
+    <% if  @user.has_answered_group_surveys? %>
+      <div class="flex-row__cell">
+        <%= link_to "Group Survey Responses", group_surveys_user_path(@user), class: "btn btn--secondary" %>
+      </div>
+    <% end %>
+  </div>
 </div>
 
 <div class="content__main">
