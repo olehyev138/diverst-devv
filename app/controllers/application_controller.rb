@@ -65,13 +65,33 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def authenticate_user!
+    if user_signed_in?
+      super
+    else
+      redirect_to unauth_user_redirect_destination
+    end
+  end
+
   def user_not_authorized
     flash[:alert] = "You are not authorized to perform this action."
 
     if !current_user
-      redirect_to new_user_session_path
+      redirect_to unauth_user_redirect_destination
     else
       redirect_to(request.referrer || default_path)
     end
+  end
+
+  def unauth_user_redirect_destination
+    if ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID']
+      enterprise = Enterprise.find_by_id ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID']
+
+      if enterprise.present? && enterprise.has_enabled_saml?
+        return sso_enterprise_saml_index_path(enterprise)
+      end
+    end
+
+    new_user_session_path
   end
 end
