@@ -65,6 +65,14 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def authenticate_user!
+    if user_signed_in?
+      super
+    else
+      redirect_to unauth_user_redirect_destination
+    end
+  end
+
   def user_not_authorized
     flash[:alert] = "You are not authorized to perform this action."
 
