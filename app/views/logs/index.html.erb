@@ -8,6 +8,43 @@
 </div>
 
 <div class="content__main">
+  <%= search_form_for @q, url: logs_path, builder: SimpleForm::FormBuilder do |f| %>
+    <div class="card">
+      <div class="card__section card__section--border calendar-filters">
+        <div class="row">
+          <div class="col sm-5">
+            <%= f.input :trackable_id_in,
+                  as: :select,
+                  collection: @groups,
+                  input_html: { class: "select2", multiple: true },
+                  label: "Filter by group",
+                  required: false
+            %>
+          </div>
+          <div class="col sm-5">
+            <div class="col sm-6">
+              <%= f.input :created_at_gteq,
+                    as: :date_picker,
+                    label: "Logs from",
+                    required: false
+              %>
+            </div>
+            <div class="col sm-6">
+              <%= f.input :created_at_lteq,
+                    as: :date_picker,
+                    label: "Logs to",
+                    required: false
+              %>
+            </div>
+          </div>
+          <div class="col sm-1" style="padding-top: 15px;">
+            <%= f.button :submit, value: "Filter" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
   <div class="card">
     <%= render_activities(@activities_page) %>
     <%= paginate @activities_page %>
