@@ -133,7 +133,23 @@ class User < ActiveRecord::Base
   end
 
   def has_answered_group_surveys?
-    true
+    groups_with_answered_surveys = user_groups.where.not(data: nil)
+
+    if groups_with_answered_surveys.count > 0
+      return true
+    else
+      return false
+    end
+  end
+
+  def has_answered_group_survey?(group)
+    user_group = user_groups.find_by_group_id(group.id)
+
+    if user_group.present? && user_group.data.present?
+      return true
+    else
+      return false
+    end
   end
 
   #Return true if user is a leader of at least 1 group
