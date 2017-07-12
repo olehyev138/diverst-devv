@@ -1,4 +1,5 @@
 class GraphsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_collection, except: [:data, :show, :edit, :update, :destroy, :export_csv]
   before_action :set_graph, except: [:index, :new, :create]
 

@@ -1,4 +1,5 @@
 class Initiatives::ExpensesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_group
   before_action :set_initiative
   before_action :set_expense, only: [:edit, :update, :destroy, :show]

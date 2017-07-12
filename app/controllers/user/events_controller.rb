@@ -1,4 +1,5 @@
 class User::EventsController < ApplicationController
+  before_action :authenticate_user!, except: [:onboarding_calendar_data]
   before_action :set_event, only: [:show]
 
   layout 'user'

@@ -1,4 +1,5 @@
 class Groups::GroupMembersController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_group
   before_action :set_member, only: [:edit, :update, :destroy,:accept_pending, :remove_member]
   after_action :verify_authorized
