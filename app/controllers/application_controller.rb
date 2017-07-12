@@ -65,7 +65,7 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def authenticate_user!
+  def authenticate_user!(opts={})
     if user_signed_in?
       super
     else
