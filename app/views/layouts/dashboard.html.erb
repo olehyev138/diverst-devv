@@ -20,7 +20,7 @@
       </div>
       <div class="flex-row__cell">
         <%= link_to "Employee dashboard", user_root_path, class: "white" %> &nbsp;|&nbsp;
-        <%= current_user.name %>
+        <%= link_to current_user.name, user_user_path(current_user), class: "white" %>
       </div>
     </div>
   </header>
