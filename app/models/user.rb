@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
 
   # Include default devise modules.
   devise :database_authenticatable, :invitable, :lockable,
-    :recoverable, :rememberable, :trackable, :validatable, :async
+    :recoverable, :rememberable, :trackable, :validatable, :async, :timeoutable
 
   include DeviseTokenAuth::Concerns::User
   include Elasticsearch::Model
