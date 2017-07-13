@@ -8,7 +8,12 @@ class LogsController < ApplicationController
   def index
     authorize :log, :index?
 
-    @activities_page = @activities.page(params[:page])
+    @groups = @enterprise.groups
+    @q = PublicActivity::Activity.ransack(params[:q])
+    @activities = Finders::Logs.new(@activities)
+                                .filter_by_groups(params[:q]&.delete(:trackable_id_in).to_a)
+                                .logs
+    @activities_page = @activities.ransack(params[:q]).result.page(params[:page])
 
     respond_to do |format|
       format.html
