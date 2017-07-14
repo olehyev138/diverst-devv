@@ -11,7 +11,7 @@
           <div class="card__section row">
             <%= f.simple_fields_for :reward_actions do |r| %>
               <div class="col md-6 mb10">
-                <%= r.input :points, label: r.object.label, input_html: { placeholder: "100 points" } %>
+                <%= r.input :points, label: r.object.label, input_html: { placeholder: "0" } %>
               </div>
             <% end %>
           </div>
