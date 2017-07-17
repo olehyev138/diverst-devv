@@ -13,14 +13,12 @@ class Groups::EventsController < ApplicationController
   end
 
   def calendar_data
-    own_events = @group.initiatives
-                          .of_segments(current_user.segments.pluck(:id))
+    own_events = @group.initiatives#.of_segments(current_user.segments.pluck(:id))
                           .includes(:owner_group)
                           .where('start >= ?', params[:start])
                           .where('end <= ?', params[:end])
 
-    participating_events = @group.participating_initiatives
-                              .of_segments(current_user.segments.pluck(:id))
+    participating_events = @group.participating_initiatives#.of_segments(current_user.segments.pluck(:id))
                               .includes(:owner_group)
                               .where('start >= ?', params[:start])
                               .where('end <= ?', params[:end])
