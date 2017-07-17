@@ -49,7 +49,13 @@ class Groups::GroupMembersController < ApplicationController
 
     if @group_member.save
       flash[:notice] = "The member was created"
-      redirect_to :back
+
+      # If group has survey questions - redirect user to answer them
+      if @group.survey_fields.present?
+        redirect_to survey_group_questions_path(@group)
+      else
+        redirect_to :back
+      end
     else
       flash[:notice] = "The member was not created. Please fix the errors"
       render :new

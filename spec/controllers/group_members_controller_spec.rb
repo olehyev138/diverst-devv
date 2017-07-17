@@ -195,6 +195,58 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
     end
   end
 
+  describe 'POST #create' do
+    let(:user) { create :user }
+    let!(:group) { create :group, enterprise: user.enterprise }
+
+
+    def post_create(group_id=nil, params= {})
+      post :create, group_id: group_id, user: params
+    end
+
+    before do
+      request.env["HTTP_REFERER"] = group_path(group)
+    end
+
+    context 'with logged in user' do
+      login_user_from_let
+
+      context 'with correct params' do
+        describe 'new member' do
+          before { post_create(group.id, {user_id: user.id} ) }
+
+          it 'is being added' do
+            expect(group.reload.members).to include user
+          end
+        end
+
+        context 'with onboarding survey questions' do
+          before do
+            group.survey_fields << FactoryGirl.build(:field, field_type: 'group_survey')
+            group.save!
+
+            post_create(group.id, {user_id: user.id})
+          end
+
+          it 'redirects user to onboarding survey' do
+            expect(response).to redirect_to survey_group_questions_path(group)
+          end
+        end
+
+        context 'without onboarding survey questions' do
+          before { post_create(group.id, {user_id: user.id}) }
+
+          it 'redirects user back to user page' do
+            expect(response).to redirect_to group_path(group)
+          end
+        end
+      end
+    end
+
+    context 'without logged in user' do
+    end
+  end
+
   describe 'POST #add_members' do
     def post_add_members(group_id=nil, ids = [])
       post :add_members, group_id: group_id, group: { member_ids: ids }
