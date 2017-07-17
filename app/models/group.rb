@@ -110,7 +110,7 @@ class Group < ActiveRecord::Base
 
   def active_members
     if pending_users.enabled?
-      filter_by_membership true
+      filter_by_membership(true).active
     else
       members.active
     end
@@ -118,7 +118,7 @@ class Group < ActiveRecord::Base
 
   def pending_members
     if pending_users.enabled?
-      filter_by_membership false
+      filter_by_membership(false).active
     else
       members.none
     end
