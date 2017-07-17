@@ -1,5 +1,5 @@
 <div class="content__header">
-  <h1>Members(<%= @total_members %>)</h1>
+  <h1>Members (<%= @total_members %>)</h1>
   <% if policy(@group).manage_members? %>
     <%= link_to "+ Add members", new_group_group_member_path(@group), class: "btn btn--primary" %>
   <% end %>
