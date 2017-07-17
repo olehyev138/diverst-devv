@@ -14,12 +14,15 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
         let(:group) { FactoryGirl.create(:group, enterprise: user.enterprise, pending_users: 'enabled')}
         let(:active_user) { FactoryGirl.create(:user, enterprise: user.enterprise) }
         let(:pending_user) { FactoryGirl.create(:user, enterprise: user.enterprise) }
+        let(:inactive_user) { FactoryGirl.create(:user, enterprise: user.enterprise, active: false) }
 
         before do
           group.members << active_user
           group.members << pending_user
+          group.members << inactive_user
 
           group.accept_user_to_group(active_user.id)
+          group.accept_user_to_group(inactive_user.id)
         end
 
         before { get_index(group.to_param) }
@@ -41,6 +44,10 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
 
           it 'does not include pending members' do
             expect(@members).to_not include( pending_user )
+          end
+
+          it 'does not include users that have inactive accounts' do
+            expect(@members).to_not include( inactive_user )
           end
         end
       end
@@ -66,9 +73,11 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
 
         let!(:pending_user) { FactoryGirl.create(:user, enterprise: user.enterprise) }
         let!(:active_user) { FactoryGirl.create(:user, enterprise: user.enterprise) }
+        let(:inactive_user) { FactoryGirl.create(:user, enterprise: user.enterprise, active: false) }
 
         before do
           group.members << pending_user
+          group.members << inactive_user
 
           group.members << active_user
           group.accept_user_to_group(active_user.id)
@@ -89,6 +98,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
 
           expect(pending_members).to include pending_user
           expect(pending_members).to_not include active_user
+          expect(pending_members).to_not include inactive_user
         end
       end
     end
