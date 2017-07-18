@@ -20,7 +20,7 @@ function initializeDatePicker(field, format, showTime) {
     field: field,
     showTime: showTime,
     format: format,
-    autoClose: false,
+    autoClose: true,
     incrementMinuteBy: 15,
     use24hour: false,
     yearRange: [new Date().getFullYear(), new Date().getFullYear() + 2],
