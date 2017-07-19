@@ -83,7 +83,7 @@
         <div class="card__section">
           <h4>Top Performers this week</h4>
           <ol>
-            <% current_user.enterprise.users.top_participants(10).each do |member| %>
+            <% current_user.enterprise.users.active.top_participants(10).each do |member| %>
               <li><%= user_performance_label(member) %></li>
             <% end %>
           </ol>
