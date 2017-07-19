@@ -1,6 +1,6 @@
 $(document).on('ready page:load', function(){
   $('.date_picker_input').each(function(i, field){
-    initializeDatePicker(field, $(field).attr('placeholder') || 'MM/DD/YYYY', false);
+    initializeDatePicker(field, $(field).attr('placeholder') || 'YYYY-MM-DD', false);
   });
 
   $('.content__main').on('cocoon:after-insert', function(e, insertedItem) {
@@ -10,7 +10,7 @@ $(document).on('ready page:load', function(){
   });
 
   $('.date_time_picker_input').each(function(i, field){
-    initializeDatePicker(field, 'MM/DD/YYYY HH:mm', true);
+    initializeDatePicker(field, 'YYYY-MM-DD HH:mm', true);
   });
 
 });
