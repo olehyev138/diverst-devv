@@ -305,6 +305,8 @@ Rails.application.routes.draw do
 
       get 'rewards', to: 'dashboard#rewards'
       get 'bias', to: 'dashboard#bias'
+      get 'preferences/edit', to: 'user_groups#edit'
+      patch 'preferences/update', to: 'user_groups#update'
 
       resources :social_links
       resources :news_links

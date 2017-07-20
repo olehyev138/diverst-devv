@@ -1,0 +1,31 @@
+<div class="content__header">
+  <h1>Preferences</h1>
+</div>
+
+<div class="content__main">
+  <div class="row row--equal-height">
+    <div class="col sm-12 md-6">
+      <div class="card">
+        <div class="card__section">
+          <p class="field__hint">
+            Frequency of notifications
+          </p>
+          <%= simple_form_for :user_group, url: user_preferences_update_path, method: :patch do |f| %>
+            <% @user_groups.each do |user_group| %>
+              <%= f.input :notifications_frequency,
+                    collection: UserGroup.notifications_frequencies.keys.map{ |f| [t("user_group.#{ f }"), f] },
+                    selected: user_group.notifications_frequency,
+                    label: user_group.group.name,
+                    include_blank: false,
+                    input_html: {
+                      name: "user_groups[#{user_group.id}][notifications_frequency]"
+                    }
+              %>
+            <% end %>
+            <%= f.button :submit, "Update Preferences" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

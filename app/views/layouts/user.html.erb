@@ -70,6 +70,9 @@
             </li>
           <% end %>
           <li>
+            <%= active_link_to "Preferences", user_preferences_edit_path %>
+          </li>
+          <li>
             <%= link_to "Log out", destroy_user_session_path, method: :delete %>
           </li>
         </ul>
@@ -91,6 +94,7 @@
       <% if current_user.enterprise.bias_module_enabled %>
         <%= active_link_to "Bias", new_bias_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <% end %>
+      <%= active_link_to "Preferences", user_preferences_edit_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
 
       <%= link_to "Log out", destroy_user_session_path, method: :delete, class: "secondary-header__tab" %>
     </div>

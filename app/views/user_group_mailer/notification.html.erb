@@ -16,3 +16,5 @@ Hello <%= @user.name %>, you have updates in your <%= @custom_text.erg_text.plur
   <% end %>
   <br/>
 <% end %>
+<br/>
+You can change your notifications preferences <%= link_to "here", user_preferences_edit_url(saml_for_enterprise: @user.enterprise.id) %>
