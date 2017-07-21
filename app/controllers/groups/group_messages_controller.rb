@@ -3,7 +3,7 @@ class Groups::GroupMessagesController < ApplicationController
 
   before_action :authenticate_user!
   before_action :set_group
-  before_action :set_message, only: [:show, :destroy]
+  before_action :set_message, only: [:show, :destroy, :edit, :update]
 
   layout 'erg'
 
@@ -21,6 +21,10 @@ class Groups::GroupMessagesController < ApplicationController
     @message = @group.messages.new
   end
 
+  def edit
+    authorize @message, :update?
+  end
+
   def create
     @message = @group.messages.new(message_params)
     @message.owner = current_user
@@ -33,6 +37,15 @@ class Groups::GroupMessagesController < ApplicationController
     else
       flash[:alert] = "Your message was not created. Please fix the errors"
       render :new
+    end
+  end
+
+  def update
+    authorize @message, :update?
+    if @message.update(message_params)
+      redirect_to action: :index
+    else
+      render :edit
     end
   end
 

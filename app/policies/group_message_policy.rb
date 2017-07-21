@@ -7,9 +7,17 @@ class GroupMessagePolicy < ApplicationPolicy
     @policy_group.group_messages_create?
   end
 
+  def update?
+    return true if is_owner?
+  end
+
   def destroy?
-    return true if @record.owner == @user
+    return true if is_owner?
 
     @policy_group.group_messages_manage
+  end
+
+  def is_owner?
+    @record.owner == @user
   end
 end
