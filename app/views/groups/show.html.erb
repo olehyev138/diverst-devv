@@ -112,8 +112,6 @@
             <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
             <%= f.submit "Join this #{ c_t(:erg) }", class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
           <% end %>
-        <% else %>
-          Coming soon!
         <% end %>
       <% else %>
         <%= link_to "Member Preferences", survey_group_questions_path(@group), class: "btn btn--primary" unless current_user.has_answered_group_survey? @group %>
