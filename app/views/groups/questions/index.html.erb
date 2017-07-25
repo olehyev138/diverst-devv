@@ -1,5 +1,5 @@
-<%= simple_form_for @group do |f| %>
-  <div class="content__main">
+<div class="content__main">
+  <%= simple_form_for @group do |f| %>
     <div class="card">
       <div id="fields">
         <%= f.simple_fields_for :survey_fields do |field| %>
@@ -19,5 +19,5 @@
     </div>
 
     <%= f.button :submit %>
-  </div>
-<% end %>
+  <% end %>
+</div>
