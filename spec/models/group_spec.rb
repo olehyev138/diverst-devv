@@ -59,6 +59,10 @@ RSpec.describe Group do
     end
   end
 
+  describe '#questions_csv' do
+    it 'should be implemented'
+  end
+
   describe 'members fetching by type' do
     let(:enterprise) { create :enterprise }
     let!(:group) { create :group, enterprise: enterprise }

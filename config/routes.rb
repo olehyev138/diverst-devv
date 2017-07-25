@@ -123,6 +123,7 @@ Rails.application.routes.draw do
         collection do
           get 'survey'
           post 'submit_survey'
+          get 'export_csv'
         end
       end
     end
