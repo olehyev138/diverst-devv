@@ -27,7 +27,7 @@ class Groups::QuestionsController < ApplicationController
       if @user_group.save
         flash[:notice] = "Your response was saved"
       else
-        lash[:alert] = "Your response was not saved"
+        flash[:alert] = "Your response was not saved"
       end
     end
 
