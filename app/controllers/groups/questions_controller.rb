@@ -8,6 +8,8 @@ class Groups::QuestionsController < ApplicationController
 
   def index
     authorize @group, :update?
+
+    @answers_count = @group.user_groups.with_answered_survey.count
   end
 
   def survey
@@ -25,11 +27,17 @@ class Groups::QuestionsController < ApplicationController
       if @user_group.save
         flash[:notice] = "Your response was saved"
       else
-        lash[:alert] = "Your response was not saved"
+        flash[:alert] = "Your response was not saved"
       end
     end
 
     redirect_to @group
+  end
+
+  def export_csv
+    respond_to do |format|
+      format.csv { send_data @group.survey_answers_csv,  filename: csv_file_name }
+    end
   end
 
   protected
@@ -40,5 +48,9 @@ class Groups::QuestionsController < ApplicationController
 
   def set_user_group
     @user_group = UserGroup.where(group: @group).where(user: current_user).first
+  end
+
+  def csv_file_name
+    "#{@group.name}-membership_preferances-#{Date.today}.csv"
   end
 end

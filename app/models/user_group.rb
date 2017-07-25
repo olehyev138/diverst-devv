@@ -12,6 +12,8 @@ class UserGroup < ActiveRecord::Base
     where(notifications_frequency: UserGroup.notifications_frequencies[frequency])
   }
 
+  scope :with_answered_survey, -> { where.not(data: nil) }
+
   def string_for_field(field)
     field.string_value info[field]
   end
