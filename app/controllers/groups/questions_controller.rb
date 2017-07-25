@@ -8,6 +8,8 @@ class Groups::QuestionsController < ApplicationController
 
   def index
     authorize @group, :update?
+
+    @answers_count = @group.user_groups.with_answered_survey.count
   end
 
   def survey
