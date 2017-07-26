@@ -21,28 +21,7 @@
     </div>
   </div>
   <h3>Invitations sent</h3>
-  <div class="card">
-    <div class="card__section">
-      <% if @users.invitation_not_accepted.any? %>
-        <table class="table--has-border" id="invited-users-table">
-          <thead>
-            <th>Email</th>
-            <th></th>
-          </thead>
-          <tbody>
-            <% @users.invitation_not_accepted.each do |user| %>
-              <tr>
-                <td><%= link_to user.email, user_path(user) %></td>
-                <td class="text-right"><%= link_to "Revoke invitation", user_path(user), method: :delete, class: "error", data: { confirm: "Are you sure?" } %></td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      <% else %>
-        <p>No invitation is currently awaiting response. Users you <%= link_to "manually invite", new_user_invitation_path %> will be shown here until they accept their invitation.</p>
-      <% end %>
-    </div>
-  </div>
+  <%= render "invitations_table", source: sent_invitations_users_path(format: :json) %>
 
   <h3>Manually added</h3>
   <%= render "table", source: users_path(format: :json) %>

@@ -46,6 +46,7 @@ Rails.application.routes.draw do
       get 'sample_csv'
       post 'parse_csv'
       get 'date_histogram'
+      get 'sent_invitations'
     end
   end
 
