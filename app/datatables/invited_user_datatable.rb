@@ -1,0 +1,36 @@
+class InvitedUserDatatable < AjaxDatatablesRails::Base
+  include ERB::Util
+
+  def_delegator :@view, :link_to
+  def_delegator :@view, :user_path
+
+  def initialize(view_context, users)
+    super(view_context)
+    @users = users
+  end
+
+  def sortable_columns
+    @sortable_columns ||= ['User.email']
+  end
+
+  def searchable_columns
+    @searchable_columns ||= ['User.email']
+  end
+
+  private
+
+  def data
+    records.map do |record|
+      [
+        html_escape(record.email),
+        "#{link_to "Revoke invitation", user_path(record), method: :delete, class: "error", data: { confirm: "Are you sure?" }}"
+      ]
+    end
+  end
+
+  def get_raw_records
+    @users
+  end
+
+  # ==== Insert 'presenter'-like methods below if necessary
+end
