@@ -24,6 +24,15 @@ class UsersController < ApplicationController
     end
   end
 
+  def saml_logins
+    authorize User, :index?
+    @users = policy_scope(User).where(auth_source: "saml").where(search_params)
+
+    respond_to do |format|
+      format.json { render json: UserDatatable.new(view_context, @users) }
+    end
+  end
+
   def new
     authorize User
   end

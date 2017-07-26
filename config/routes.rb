@@ -47,6 +47,7 @@ Rails.application.routes.draw do
       post 'parse_csv'
       get 'date_histogram'
       get 'sent_invitations'
+      get 'saml_logins'
     end
   end
 
