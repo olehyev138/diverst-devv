@@ -129,7 +129,7 @@ RSpec.describe BudgetsController, type: :controller do
         end
 
         it 'redirects to correct path' do
-          expect(response).to redirect_to edit_annual_budget_group_budgets_path(group.enterprise)
+          expect(response).to redirect_to edit_annual_budget_group_budgets_path(group)
         end
 
         describe 'public activity' do
