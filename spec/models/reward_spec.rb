@@ -5,7 +5,7 @@ RSpec.describe Reward do
     let(:reward){ build_stubbed(:reward) }
 
     it{ expect(reward).to validate_presence_of(:enterprise) }
-    it{ expect(reward).to validate_numericality_of(:points).only_integer }
+    it{ expect(reward).to validate_numericality_of(:points).is_greater_than_or_equal_to(0).only_integer }
     it{ expect(reward).to validate_presence_of(:points) }
     it{ expect(reward).to validate_presence_of(:label) }
     it{ expect(reward).to validate_presence_of(:responsible) }
