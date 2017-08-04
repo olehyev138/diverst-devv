@@ -2,6 +2,8 @@ class Field < ActiveRecord::Base
   belongs_to :container, polymorphic: true
   has_many :yammer_field_mappings, foreign_key: :diverst_field_id, dependent: :delete_all
 
+  validates :title, presence: true
+
   # The typical field value flow would look like this:
   #   FORM (input string)
   #   1. process_field_value
