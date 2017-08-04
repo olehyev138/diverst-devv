@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   include ApplicationHelper
 
   before_action :set_persist_login_param
+  before_action :set_previous_url, :unless => :devise_controller?
 
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
@@ -28,6 +29,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def set_previous_url
+    session[:previous_url] = request.url
+  end
+
   def track_activity(model, activity_name, params={})
     model.create_activity activity_name,
                 owner: current_user,
@@ -40,7 +45,7 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    return user_root_path
+    session[:previous_url] || user_root_path
   end
 
   def after_sign_out_path_for(resource)
