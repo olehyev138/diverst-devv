@@ -37,6 +37,39 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
     end
   end
 
+  describe 'PATCH#update' do
+    context "when user is not the owner of message" do
+      let!(:group_message){ create(:group_message, group: group, subject: "Test") }
+      before(:each) do
+        patch :update, group_id: group.id, id: group_message.id, group_message: { subject: 'Test2' }
+      end
+
+      it "does not update the message" do
+        group_message.reload
+        expect(group_message.subject).to eq 'Test'
+      end
+    end
+
+    context "when user is owner of message" do
+      let!(:group_message){ create(:group_message, group: group, subject: "Test", owner: user) }
+
+      context "with correct attributes" do
+        before(:each) do
+          patch :update, group_id: group.id, id: group_message.id, group_message: { subject: 'Test2' }
+        end
+
+        it "updates the message" do
+          group_message.reload
+          expect(group_message.subject).to eq 'Test2'
+        end
+
+        it "redirect to index action" do
+          expect(response).to redirect_to action: :index
+        end
+      end
+    end
+  end
+
   describe 'DELETE#destroy' do
     let!(:group_message){ create(:group_message, group: group) }
     let!(:reward_action){ create(:reward_action, enterprise: user.enterprise, key: "message_post", points: 90) }

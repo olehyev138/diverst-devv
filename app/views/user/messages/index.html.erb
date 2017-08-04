@@ -35,6 +35,7 @@
                 </div>
                 <% if policy(message).destroy? %>
                   <div class="flex-row__cell link-group">
+                    <%= link_to "Edit", edit_group_group_message_path(message.group, message) if policy(message).update? %>
                     <%= link_to "Delete", group_group_message_path(message.group, message), method: :delete, class: "error", data: { confirm: "Are you sure?" } %>
                   </div>
                 <% end %>
