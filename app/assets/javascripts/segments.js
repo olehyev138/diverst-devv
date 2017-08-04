@@ -141,10 +141,12 @@ $(document).on('ready page:load', function(){
     valueField.select2({ width: '100%' });
   }
 
-  function applyChangesOfTextField(valueField, selectedValues){
+  function applyChangesOfTextField(valueField, selectedValues) {
     valueField.removeAttr('disabled').val("");
     valueField.pikaday('destroy');
-    valueField.attr('name', valueField.attr('name')+'[]');
+    if(valueField.attr('name') && valueField.attr('name').substr(-2) !== "[]") {
+      valueField.attr('name', valueField.attr('name')+'[]');
+    }
     valueField.val(selectedValues);
   }
 });
