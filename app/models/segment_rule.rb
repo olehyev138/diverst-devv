@@ -4,6 +4,7 @@ class SegmentRule < ActiveRecord::Base
 
   validates :segment, presence: true
   validates :field, presence: true
+  #TODO validate that operator is in @@operators
   validates :operator, presence: true
   validates :values, presence: true
 

@@ -22,6 +22,7 @@ class InitiativesController < ApplicationController
     @initiative = Initiative.new(initiative_params)
     @initiative.owner = current_user
     @initiative.owner_group = @group
+    #bTODO add event to @group.own_initiatives
 
     if @initiative.save
       flash[:notice] = "Your event was created"
