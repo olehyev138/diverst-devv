@@ -25,6 +25,7 @@ class SamlController < ApplicationController
       nameid = response.nameid
       attrs = response.attributes
 
+#Todo search only @enterprise for users
       unless user = User.find_by_email(nameid)
         user = User.new(auth_source: 'saml', enterprise: @enterprise)
 

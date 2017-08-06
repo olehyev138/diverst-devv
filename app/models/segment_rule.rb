@@ -2,6 +2,12 @@ class SegmentRule < ActiveRecord::Base
   belongs_to :segment
   belongs_to :field
 
+  validates :segment, presence: true
+  validates :field, presence: true
+  #TODO validate that operator is in @@operators
+  validates :operator, presence: true
+  validates :values, presence: true
+
   @@operators = {
     equals: 0,
     greater_than: 1,
