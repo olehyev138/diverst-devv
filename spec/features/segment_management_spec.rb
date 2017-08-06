@@ -10,20 +10,20 @@ RSpec.feature 'Segment management' do
     user.enterprise.fields << create(:enterprise_field, container: user.enterprise)
   end
 
-  # scenario 'user creates a new segment', :js do
-  #   segment = {
-  #     name: 'My awesome segment'
-  #   }
+  scenario 'user creates a new segment', :js do
+    segment = {
+      name: 'My awesome segment'
+    }
 
-  #   visit new_segment_path
-  #   fill_in 'segment_name', with: segment[:name]
-  #   click_on "Add a criterion"
-  #   select user.enterprise.fields.last.title, from: page.find('.custom-field select')[:id]
-  #   select 'equals', from: page.find('.operator select')[:id]
-  #   fill_in page.find('.value-text input')[:id], with: '10'
-  #   click_on 'Create Segment'
-  #   expect(page).to have_content segment[:name]
-  # end
+    visit new_segment_path
+    fill_in 'segment_name', with: segment[:name]
+    click_on "Add a criterion"
+    select user.enterprise.fields.last.title, from: page.find('.custom-field select')[:id]
+    select 'equals', from: page.find('.operator select')[:id]
+    fill_in page.find('.value-text input')[:id], with: '10'
+    click_on 'Create Segment'
+    expect(page).to have_content segment[:name]
+  end
 
   scenario 'user deletes a segment' do
     visit segments_path
