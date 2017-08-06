@@ -22,7 +22,6 @@ RSpec.feature 'Segment management' do
     select 'equals', from: page.find('.operator select')[:id]
     fill_in page.find('.value-text input')[:id], with: '10'
     click_on 'Create Segment'
-
     expect(page).to have_content segment[:name]
   end
 
