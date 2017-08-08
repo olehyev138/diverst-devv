@@ -16,6 +16,8 @@ class Groups::NewsLinksController < ApplicationController
     @news_link = @group.news_links.new
   end
 
+  def edit ; end
+
   def comments
     @comments = @news_link.comments.includes(:author)
     @new_comment = NewsLinkComment.new

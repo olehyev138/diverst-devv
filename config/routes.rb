@@ -151,7 +151,7 @@ Rails.application.routes.draw do
 
       resources :user_groups, only: :update
 
-      resources :news_links, except: [:show, :edit] do
+      resources :news_links, except: [:show] do
         member do
           get 'comments'
           post 'create_comment'

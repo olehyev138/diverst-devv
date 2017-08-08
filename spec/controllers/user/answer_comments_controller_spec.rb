@@ -11,7 +11,7 @@ RSpec.describe User::AnswerCommentsController, type: :controller do
     it "rewards a user with points of this action" do
       expect(user.points).to eq 0
 
-      post :create, answer_id: answer, answer_comment: { content: "" }
+      post :create, answer_id: answer, answer_comment: { content: "comment" }
 
       user.reload
       expect(user.points).to eq 50
