@@ -12,9 +12,9 @@ class SamlController < ApplicationController
       render action: :no_settings
       return
     end
-
     request = OneLogin::RubySaml::Authrequest.new
-    redirect_to(request.create(settings))
+    #TODO validate that relay state is url within diverst
+    redirect_to(request.create(settings, RelayState: params['RelayState']))
   end
 
   def acs
@@ -38,7 +38,8 @@ class SamlController < ApplicationController
 
       sign_in user
 
-      redirect_to controller: 'user/dashboard', action: :home
+      session[:previous_url] = params['RelayState']
+      redirect_to after_sign_in_path_for(current_user)
     else
       logger.info "Response Invalid. Errors: #{response.errors}"
       @errors = response.errors
