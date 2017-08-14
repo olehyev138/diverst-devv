@@ -45,7 +45,13 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    session[:previous_url] || user_root_path
+    prev_url = session[:previous_url]
+
+    if prev_url && (prev_url != root_url)
+      prev_url
+    else
+      user_root_path
+    end
   end
 
   def after_sign_out_path_for(resource)
