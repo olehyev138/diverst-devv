@@ -4,12 +4,82 @@ RSpec.describe User do
   describe "when validating" do
     let(:user) { create(:user) }
 
+    it { expect(user).to validate_presence_of(:first_name) }
+    it { expect(user).to validate_presence_of(:last_name) }
     it { expect(user).to validate_presence_of(:points) }
     it { expect(user).to validate_numericality_of(:points).only_integer }
     it { expect(user).to validate_presence_of(:credits) }
     it { expect(user).to validate_numericality_of(:credits).only_integer }
     it { expect(user).to have_many(:user_reward_actions) }
     it { expect(user).to have_many(:reward_actions).through(:user_reward_actions) }
+    it { expect(user).to have_attached_file(:avatar) }
+
+    context 'presence of fields' do
+      let(:user){ build(:user, enterprise: enterprise) }
+      let!(:mandatory_field){ create(:field, title: "Test", required: true) }
+
+      context 'with mandatory fields not filled' do
+        let!(:enterprise){ create(:enterprise, fields: [mandatory_field]) }
+
+        it "should have an error on user" do
+          user.info[mandatory_field] = ""
+          user.valid?
+
+          expect(user.errors.messages).to eq({ test: ["can't be blank"] })
+        end
+      end
+
+      context 'with mandatory fields filled' do
+        let!(:enterprise){ create(:enterprise, fields: [mandatory_field]) }
+
+        it "should be valid" do
+          user.info[mandatory_field] = Faker::Lorem.paragraph(2)
+
+          expect(user).to be_valid
+        end
+      end
+    end
+  end
+
+  describe 'when describing callbacks' do
+    let!(:user){ create(:user) }
+
+    it "should index user on elasticsearch after create" do
+      user = build(:user)
+      TestAfterCommit.with_commits(true) do
+        expect(IndexElasticsearchJob).to receive(:perform_later).with(
+          model_name: 'User',
+          operation: 'index',
+          index: User.es_index_name(enterprise: user.enterprise),
+          record_id: User.last.id + 1
+        )
+        user.save
+      end
+    end
+
+    it "should reindex user on elasticsearch after update" do
+      TestAfterCommit.with_commits(true) do
+        expect(IndexElasticsearchJob).to receive(:perform_later).with(
+          model_name: 'User',
+          operation: 'update',
+          index: User.es_index_name(enterprise: user.enterprise),
+          record_id: user.id
+        )
+        user.update(first_name: 'test')
+      end
+    end
+
+    it "should remove user from elasticsearch after destroy" do
+      TestAfterCommit.with_commits(true) do
+        expect(IndexElasticsearchJob).to receive(:perform_later).with(
+          model_name: 'User',
+          operation: 'delete',
+          index: User.es_index_name(enterprise: user.enterprise),
+          record_id: user.id
+        )
+        user.destroy
+      end
+    end
   end
 
   describe 'scopes' do
@@ -105,77 +175,6 @@ RSpec.describe User do
     end
   end
 
-  describe 'when validating' do
-    context 'presence of fields' do
-      let(:user){ build(:user, enterprise: enterprise) }
-      let!(:mandatory_field){ create(:field, title: "Test", required: true) }
-
-      context 'with mandatory fields not filled' do
-        let!(:enterprise){ create(:enterprise, fields: [mandatory_field]) }
-
-        it "should have an error on user" do
-          user.info[mandatory_field] = ""
-          user.valid?
-
-          expect(user.errors.messages).to eq({ test: ["can't be blank"] })
-        end
-      end
-
-      context 'with mandatory fields filled' do
-        let!(:enterprise){ create(:enterprise, fields: [mandatory_field]) }
-
-        it "should be valid" do
-          user.info[mandatory_field] = Faker::Lorem.paragraph(2)
-
-          expect(user).to be_valid
-        end
-      end
-    end
-    # describe 'saml password behaviour' do
-    #   let(:user) { build :user, enterprise: ent, password: '', password_confirmation: '' }
-
-    #   context 'with saml enabled' do
-    #     let(:ent) { create :enterprise, has_enabled_saml: true }
-
-    #     it 'do not require password' do
-    #       expect(user).to be_valid
-    #     end
-    #   end
-
-    #   context 'with saml disabled' do
-    #     let(:ent) { create :enterprise, has_enabled_saml: false }
-
-    #     it 'requires password' do
-    #       expect(user).to be_invalid
-    #     end
-
-    #     it 'requires password confirmation to be equal to password' do
-    #       user.password = 'randompassword'
-
-    #       expect(user).to be_invalid
-    #     end
-    #   end
-    # end
-
-    # describe 'first name' do
-    #   let(:user) { build :user, first_name: '' }
-
-    #   it 'is invalid without first name' do
-    #     expect(user).to_not be_valid
-    #   end
-    # end
-
-    # describe 'last name' do
-    #   let(:user) { build :user, last_name: '' }
-
-    #   it 'is invalid without last name' do
-    #     expect(user).to_not be_valid
-    #   end
-    # end
-  end
-
-  it { is_expected.to have_attached_file(:avatar) }
-
   describe "#name" do
     let(:user){ build_stubbed(:user, first_name: "John", last_name: "Doe") }
 
@@ -241,6 +240,50 @@ RSpec.describe User do
         it 'returns false' do
           expect(subject).to eq false
         end
+      end
+    end
+  end
+
+  describe 'elasticsearch methods' do
+    it '.es_index_name' do
+      enterprise = build_stubbed(:enterprise)
+      expect(User.es_index_name(enterprise: enterprise)).to eq "#{ enterprise.id }_users"
+    end
+
+    context '#as_indexed_json' do
+      let!(:enterprise) do
+        enterprise = create(:enterprise)
+        enterprise.fields = [create(:field)]
+        enterprise
+      end
+
+      let!(:user) do
+        user = build(:user, enterprise: enterprise)
+        user.info.merge(fields: user.enterprise.fields, form_data: { user.enterprise.fields.first.id => "No" })
+        user
+      end
+
+      let!(:poll) { create(:poll, fields: [create(:field)]) }
+
+      let!(:poll_response) do
+        poll_response = build(:poll_response, user: user, poll: poll)
+        poll_response.info.merge(fields: poll.fields, form_data: { poll.fields.first.id => "Yes" })
+        poll_response.save
+        poll_response
+      end
+
+      let!(:user_group) { create(:user_group, user: user) }
+      let!(:user_segment) { create(:users_segment, user: user) }
+
+      it 'return data of user to be indexed by elasticsearch' do
+        data = {
+          "#{ user.enterprise.fields.first.id }" => "No",
+          poll.fields.first.id => "Yes",
+          groups: [user_group.group_id],
+          segments: [user_segment.segment_id]
+        }
+
+        expect(user.as_indexed_json['combined_info']).to eq(data)
       end
     end
   end

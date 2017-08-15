@@ -1,6 +1,10 @@
 class Field < ActiveRecord::Base
+  include Indexable
+
   belongs_to :container, polymorphic: true
   has_many :yammer_field_mappings, foreign_key: :diverst_field_id, dependent: :delete_all
+
+  after_commit on: [:update, :destroy] { update_elasticsearch_all_indexes(self.enterprise) }
 
   # The typical field value flow would look like this:
   #   FORM (input string)

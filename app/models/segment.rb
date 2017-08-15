@@ -1,5 +1,6 @@
 class Segment < ActiveRecord::Base
   extend Enumerize
+  include Indexable
 
   enumerize :active_users_filter, default: :both_active_and_inactive, in: [
     :both_active_and_inactive,
@@ -40,7 +41,7 @@ class Segment < ActiveRecord::Base
 
   def update_indexes
     CacheSegmentMembersJob.perform_later self
-    RebuildElasticsearchIndexJob.perform_now(model_name: 'User', enterprise: enterprise)
+    update_elasticsearch_all_indexes(enterprise)
   end
 
   def self.update_all_members

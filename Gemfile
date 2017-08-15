@@ -98,6 +98,7 @@ end
 group :test do
   gem 'rspec_junit_formatter', '~> 0.2.3'
   gem 'simplecov', '~> 0.13.0'
+  gem 'test_after_commit'
 end
 
 group :development do

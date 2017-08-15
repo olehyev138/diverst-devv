@@ -18,4 +18,28 @@ RSpec.describe Field do
       end
     end
   end
+
+  describe 'when describing callbacks' do
+    let!(:field){ create(:field, container: create(:enterprise)) }
+
+    it "should reindex users on elasticsearch after update" do
+      TestAfterCommit.with_commits(true) do
+        expect(RebuildElasticsearchIndexJob).to receive(:perform_later).with(
+          model_name: 'User',
+          enterprise: field.enterprise
+        )
+        field.update(title: 'Field')
+      end
+    end
+
+    it "should reindex users on elasticsearch after destroy" do
+      TestAfterCommit.with_commits(true) do
+        expect(RebuildElasticsearchIndexJob).to receive(:perform_later).with(
+          model_name: 'User',
+          enterprise: field.enterprise
+        )
+        field.destroy
+      end
+    end
+  end
 end
