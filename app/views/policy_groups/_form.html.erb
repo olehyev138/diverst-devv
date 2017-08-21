@@ -9,7 +9,7 @@
         <%= f.input :name, label: false, input_html: { autofocus: true } %>
       </div>
       <div class="card__section card__section--border">
-        <p class="field__hint">Should this <strong>permission group</strong> be default for new users in the <strong><%= @policy_group.enterprise.name %></strong>?</p>
+        <p class="field__hint">Should this <strong>permission group</strong> be default for new users in <strong><%= @policy_group.enterprise.name %></strong>?</p>
         <%= f.hidden_field :default_for_enterprise, value: 0 %>
         <%= f.input :default_for_enterprise, label: 'Use as default' %>
       </div>

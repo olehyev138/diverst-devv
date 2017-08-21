@@ -70,6 +70,13 @@ class Initiative < ActiveRecord::Base
     owner_group || pillar.outcome.group
   end
 
+  #need to trunc several special characters here
+  def description
+    d = self[:description]
+
+    d.gsub '<p>&nbsp;</p>', ''
+  end
+
   def budget_status
     budget.try(:status_title) || "Not attached"
   end
