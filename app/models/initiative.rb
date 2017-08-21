@@ -72,11 +72,15 @@ class Initiative < ActiveRecord::Base
 
   #need to trunc several special characters here
   def description
+    return '' if self[:description].nil?
+
     d = self[:description]
 
     d.gsub! '<p>', ''
     d.gsub! '</p>', ''
     d.gsub! '&nbsp', ''
+
+    d
   end
 
   def budget_status
