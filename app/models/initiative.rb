@@ -74,7 +74,9 @@ class Initiative < ActiveRecord::Base
   def description
     d = self[:description]
 
-    d.gsub '<p>&nbsp;</p>', ''
+    d.gsub! '<p>', ''
+    d.gsub! '</p>', ''
+    d.gsub! '&nbsp', ''
   end
 
   def budget_status
