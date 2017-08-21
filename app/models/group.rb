@@ -192,9 +192,9 @@ class Group < ActiveRecord::Base
       user_groups.with_answered_survey.includes(:user).order(created_at: :desc).each do |user_group|
         user_group_row = [
           user_group.user.id,
+          user_group.user.email,
           user_group.user.first_name,
-          user_group.user.last_name,
-          user_group.user.email
+          user_group.user.last_name
         ]
 
         survey_fields.each do |field|
