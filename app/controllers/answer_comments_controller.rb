@@ -10,7 +10,7 @@ class AnswerCommentsController < ApplicationController
   protected
 
   def set_comment_and_answer
-    @comment = current_user.answer_comments.find(params[:id])
+    @comment = current_user.enterprise.answer_comments.find(params[:id])
     @answer = @comment.answer
   end
 
