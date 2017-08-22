@@ -196,7 +196,7 @@ RSpec.describe BudgetsController, type: :controller do
     context 'with logged user' do
       login_user_from_let
 
-      before { post :approve, group_id: budget.subject.id, budget_id: budget.subject.id}
+      before { post :approve, group_id: budget.subject.id, budget_id: budget.id}
 
       it 'redirects to index' do
         expect(response).to redirect_to action: :index
@@ -208,7 +208,7 @@ RSpec.describe BudgetsController, type: :controller do
     context 'with logged user' do
       login_user_from_let
 
-      before { post :decline, group_id: budget.subject.id, budget_id: budget.subject.id}
+      before { post :decline, group_id: budget.subject.id, budget_id: budget.id}
 
       it 'redirects to index' do
         expect(response).to redirect_to action: :index

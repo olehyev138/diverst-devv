@@ -71,7 +71,7 @@ RSpec.describe CampaignsController, type: :controller do
             end
             
             it "doesn't get the campaign" do
-                expect{ get :show, id: 9999999}.to raise_error ActiveRecord::RecordNotFound
+                expect{ get :show, id: -1}.to raise_error ActiveRecord::RecordNotFound
             end
         end
     end
@@ -86,7 +86,7 @@ RSpec.describe CampaignsController, type: :controller do
             end
             
             it "doesn't get the campaign" do
-                expect{ get :edit, id: 9999999}.to raise_error ActiveRecord::RecordNotFound
+                expect{ get :edit, id: -1}.to raise_error ActiveRecord::RecordNotFound
             end
         end
     end
@@ -128,7 +128,7 @@ RSpec.describe CampaignsController, type: :controller do
             end
             
             it "doesn't get the contributions_per_erg" do
-                expect{ get :contributions_per_erg, id: 9999999}.to raise_error ActiveRecord::RecordNotFound
+                expect{ get :contributions_per_erg, id: -1}.to raise_error ActiveRecord::RecordNotFound
             end
         end
     end
@@ -146,7 +146,7 @@ RSpec.describe CampaignsController, type: :controller do
             end
             
             it "doesn't get the top_performers" do
-                expect{ get :top_performers, id: 9999999}.to raise_error ActiveRecord::RecordNotFound
+                expect{ get :top_performers, id: -1}.to raise_error ActiveRecord::RecordNotFound
             end
         end
     end
