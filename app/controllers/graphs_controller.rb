@@ -21,6 +21,7 @@ class GraphsController < ApplicationController
     end
   end
 
+  # missing a template
   def index
     @graphs = @collection.graphs
   end
