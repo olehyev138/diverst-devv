@@ -68,7 +68,7 @@ RSpec.describe BadgesController, type: :controller do
       
       context "with invalid id" do
         it "returns error" do
-          expect{ get :edit, id: 9999999}.to raise_error ActiveRecord::RecordNotFound
+          expect{ get :edit, id: -1}.to raise_error ActiveRecord::RecordNotFound
         end
       end
     end
