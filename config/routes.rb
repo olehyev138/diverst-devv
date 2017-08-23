@@ -15,6 +15,8 @@ Rails.application.routes.draw do
     passwords: 'users/passwords'
   }
 
+  get 'users/invitation', to: 'users/invitations#index'
+
   get 'omniauth/:provider/callback', to: 'omni_auth#callback'
 
   namespace :users, defaults: { format: :json } do
