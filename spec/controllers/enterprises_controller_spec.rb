@@ -214,12 +214,48 @@ RSpec.describe EnterprisesController, type: :controller do
                     expect(response).to redirect_to action: :edit_branding
                 end
                 
-                it "adds theme" do
-                    puts enterprise.theme.inspect
+                it "flashes" do
+                    expect(flash[:notice])
+                end
+            end
+        end
+    end
+    
+    describe "GET#delete_attachment" do
+        before :each do
+            request.env["HTTP_REFERER"] = "back"
+        end
+        
+        describe "with logged in user" do
+            login_user_from_let
+            
+            context "with valid id" do
+                before(:each){ patch :delete_attachment, id: enterprise.id, enterprise: attributes_for(:enterprise, theme: {logo_file_name: "test"})}
+                
+                it "redirect_to back" do
+                    expect(response).to redirect_to "back"
                 end
                 
                 it "flashes" do
                     expect(flash[:notice])
+                end
+            end
+        end
+    end
+    
+    describe "GET#restore_default_branding" do
+        before :each do
+            request.env["HTTP_REFERER"] = "back"
+        end
+        
+        describe "with logged in user" do
+            login_user_from_let
+            
+            context "with valid id" do
+                before(:each){ patch :restore_default_branding, id: enterprise.id, enterprise: attributes_for(:enterprise, theme: {logo_file_name: "test"})}
+                
+                it "redirect_to back" do
+                    expect(response).to redirect_to "back"
                 end
             end
         end
