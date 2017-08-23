@@ -20,6 +20,10 @@ class ApplicationController < ActionController::Base
     @custom_text ||= current_user.enterprise.custom_text rescue CustomText.new
     @custom_text.send("#{ type }_text")
   end
+  
+  def routing_error
+    render :status => :forbidden, :json => {:message => "Invalid Route"}
+  end
 
   protected
 

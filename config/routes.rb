@@ -16,6 +16,13 @@ Rails.application.routes.draw do
   }
 
   get 'omniauth/:provider/callback', to: 'omni_auth#callback'
+  
+  namespace :api, defaults: { format: :json } do
+    namespace :v1 do
+      resources :users
+      resources :groups
+    end
+  end
 
   namespace :users, defaults: { format: :json } do
     mount_devise_token_auth_for 'User', at: 'auth/token'
@@ -395,6 +402,8 @@ Rails.application.routes.draw do
   resources :policy_groups
   resources :emails
   resources :custom_texts, only: [:edit, :update]
+  
+  match "*a", :to => "application#routing_error", :via => [:get, :post]
 
   root to: 'metrics_dashboards#index'
 end
