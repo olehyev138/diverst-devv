@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Answer, type: :model, :focus => true do
+RSpec.describe Answer, type: :model do
   describe 'when validating' do
     let(:answer) { build_stubbed(:answer) }
     
