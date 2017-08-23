@@ -24,11 +24,16 @@ class User::EventsController < ApplicationController
   def onboarding_calendar_data
     user = User.find_by_invitation_token(params[:invitation_token], true)
 
-    @events = user.enterprise.initiatives.where('start >= ?', params[:start])
-                                    .where('start <= ?', params[:end])
+    if user.present?
+      @events = user.enterprise.initiatives.where('start >= ?', params[:start])
+                                      .where('start <= ?', params[:end])
 
-    render 'shared/calendar/events', format: :json
+      render 'shared/calendar/events', format: :json
+    else
+      redirect_to user_root_path
+    end
   end
+
 
   protected
 
