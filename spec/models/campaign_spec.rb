@@ -18,6 +18,10 @@ RSpec.describe Campaign, type: :model do
     it { expect(campaign).to have_many(:users).through(:invitations) }
     it { expect(campaign).to have_many(:campaigns_managers) }
     it { expect(campaign).to have_many(:managers).through(:campaigns_managers) }
+    
+    it 'is valid' do
+      expect(campaign).to be_valid
+    end
   end
 
   describe "#send_invitation_emails" do
