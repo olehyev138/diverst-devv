@@ -44,7 +44,7 @@
           </li>
           <% if current_user.enterprise.collaborate_module_enabled %>
             <li>
-              <%= active_link_to "Innovate", user_campaigns_path %>
+              <%= active_link_to "Innovate", user_user_campaigns_path %>
             </li>
           <% end %>
           <li>
@@ -79,7 +79,7 @@
     <div class="menu menu--desktop">
       <%= link_to "Home", user_root_path, class: "secondary-header__tab" %>
       <% if current_user.enterprise.collaborate_module_enabled %>
-        <%= active_link_to "Innovate", user_campaigns_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+        <%= active_link_to "Innovate", user_user_campaigns_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <% end %>
       <%= active_link_to "News", user_news_links_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <%= active_link_to "Messages", user_messages_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>

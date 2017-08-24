@@ -13,13 +13,14 @@ class AnswersController < ApplicationController
 
   def destroy
     @answer.destroy
-    redirect_to :back
+    redirect_to @question
   end
 
   protected
 
   def set_answer
     @answer = current_user.enterprise.answers.find(params[:id])
+    @question = @answer.question
   end
 
   def answer_params

@@ -3,6 +3,16 @@ require 'rails_helper'
 RSpec.describe BadgesController, type: :controller do
   let(:enterprise){ create(:enterprise) }
   let(:user){ create(:user, enterprise: enterprise) }
+  
+  describe "POST#new" do
+    describe "with logged in user" do
+      login_user_from_let
+        it "returns success" do
+          post :new
+          expect(response).to be_success
+        end
+    end
+  end
 
   describe "POST#create" do
     describe "with logged in user" do
@@ -18,6 +28,10 @@ RSpec.describe BadgesController, type: :controller do
           post :create, badge: attributes_for(:badge_params)
           expect(response).to redirect_to rewards_path
         end
+        
+        it "flashes notice" do
+          expect(flash[:notice])
+        end
       end
 
       context "with invalid parameters" do
@@ -29,6 +43,32 @@ RSpec.describe BadgesController, type: :controller do
         it "renders action new" do
           post :create, badge: attributes_for(:badge_params, label: "")
           expect(response).to render_template :new
+        end
+        
+        it "flashes alert" do
+          expect(flash[:alert])
+        end
+      end
+    end
+  end
+  
+  describe "GET#edit" do
+    let(:badge){ create(:badge, enterprise: enterprise, points: 10) }
+
+    describe "with logged in user" do
+      login_user_from_let
+
+      context "with valid id" do
+        before(:each){ get :edit, id: badge.id}
+
+        it "returns success" do
+          expect(response).to be_success
+        end
+      end
+      
+      context "with invalid id" do
+        it "returns error" do
+          expect{ get :edit, id: -1}.to raise_error ActiveRecord::RecordNotFound
         end
       end
     end
@@ -51,6 +91,10 @@ RSpec.describe BadgesController, type: :controller do
         it "redirects to action index" do
           expect(response).to redirect_to rewards_path
         end
+        
+        it "flashes notice" do 
+          expect(flash[:notice])
+        end
       end
 
       context "with invalid parameters" do
@@ -63,6 +107,10 @@ RSpec.describe BadgesController, type: :controller do
 
         it "renders action edit" do
           expect(response).to render_template :edit
+        end
+        
+        it "flashes alert" do
+          expect(flash[:alert])
         end
       end
     end
@@ -80,6 +128,10 @@ RSpec.describe BadgesController, type: :controller do
       it "redirects to action index" do
         delete :destroy, id: badge.id
         expect(response).to redirect_to rewards_path
+      end
+      
+      it "flashes notice" do
+        expect(flash[:notice])
       end
     end
   end

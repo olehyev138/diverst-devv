@@ -222,14 +222,17 @@ class User < ActiveRecord::Base
     users = enterprise.users.select([:id, :data]).all
     enterprise.match_fields.each do |field|
       field_score = field.match_score_between(self, other_user, users)
-
       unless field_score.nil? || field_score.nan?
         weight_total += field.match_weight
         total_score += field.match_weight * field_score
       end
     end
 
-    total_score / weight_total
+    begin
+      total_score / weight_total
+    rescue ZeroDivisionError
+      0
+    end
   end
 
   def matches

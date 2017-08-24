@@ -1,11 +1,19 @@
 require 'rails_helper'
+require 'spec_helper'
 
-RSpec.describe User::CampaignsController, type: :controller do
+RSpec.describe "User::UserCampaignsController", type: :controller do
   let!(:published_campaign){ create(:campaign, status: Campaign.statuses[:published]) }
   let!(:draft_campaign){ create(:campaign, status: Campaign.statuses[:draft]) }
   let!(:user) { create :user, campaigns: [published_campaign, draft_campaign] }
 
+  def setup
+    @controller = User::UserCampaignsController.new
+  end
+  
+  before {setup}
+
   describe 'GET #index' do
+
     context 'with logged user' do
       login_user_from_let
 

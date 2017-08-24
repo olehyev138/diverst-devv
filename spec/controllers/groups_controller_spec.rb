@@ -1,6 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe GroupsController, type: :controller do
+
+  let(:enterprise){ create(:enterprise, cdo_name: "test") }
+  let(:user){ create(:user, enterprise: enterprise) }
+  let(:group){ create(:group, enterprise: enterprise) }
+  
   describe 'GET #index' do
     def get_index
       get :index
@@ -24,44 +29,139 @@ RSpec.describe GroupsController, type: :controller do
       end
     end
   end
-
-  describe 'GET #settings' do
-    let(:user) { create :user }
-    let(:group) { create :group, enterprise: user.enterprise }
-
-    def get_settings(group_id = -1)
-      get :settings, id: group_id
+  
+  describe 'GET#plan_overview' do
+    def get_plan_overview
+      get :plan_overview
     end
+    let!(:user) { create :user }
+    let!(:group) { create(:group, enterprise: user.enterprise) }
 
     context 'with logged user' do
+      let!(:foreign_group) { FactoryGirl.create :group }
+
       login_user_from_let
 
-      before { get_settings(group.id) }
+      before { get_plan_overview }
 
-      context 'with incorrect group' do
+      it 'return success' do
+        expect(response).to be_success
       end
 
-      context 'with group user can\'t manage' do
-      end
+      it 'shows groups from correct enterprise' do
+        groups = assigns(:groups)
 
-      context 'with group user can manage' do
-        let(:group) { create :group, enterprise: user.enterprise, owner: user }
-
-        it 'return success' do
-          expect(response).to be_success
-        end
+        expect(groups).to include group
+        expect(groups).to_not include foreign_group
       end
     end
 
     context 'without logged user' do
-      before { get_settings }
+      before { get_plan_overview }
 
       it 'return error' do
         expect(response).to_not be_success
       end
     end
   end
+  
+  describe 'GET #calendar' do
+    def get_calendar
+      get :calendar
+    end
 
+    context 'with logged user' do
+      login_user
+
+      before { get_calendar }
+
+      it 'return success' do
+        expect(response).to be_success
+      end
+    end
+
+    context 'without logged user' do
+      before { get_calendar }
+
+      it 'return error' do
+        expect(response).to_not be_success
+      end
+    end
+  end
+  
+  # MISSING TEMPLATE
+  # describe 'GET #calendar' do
+  #   def get_calendar_data
+  #     get :calendar_data
+  #   end
+
+  #   context 'with logged user' do
+  #     login_user
+
+  #     before { get_calendar_data }
+
+  #     it 'return success' do
+  #       expect(response).to be_success
+  #     end
+  #   end
+
+  #   context 'without logged user' do
+  #     before { get_calendar_data }
+
+  #     it 'return error' do
+  #       expect(response).to_not be_success
+  #     end
+  #   end
+  # end
+  
+  describe 'GET #new' do
+    def get_new
+      get :new
+    end
+
+    context 'with logged user' do
+      login_user
+
+      before { get_new }
+
+      it 'return success' do
+        expect(response).to be_success
+      end
+    end
+
+    context 'without logged user' do
+      before { get_new }
+
+      it 'return error' do
+        expect(response).to_not be_success
+      end
+    end
+  end
+  
+  describe 'GET #show' do
+    def get_show
+      get :show, :id => group.id
+    end
+
+    context 'with logged user' do
+      login_user_from_let
+
+      before { get_show }
+
+      it 'return success' do
+        expect(response).to be_success
+      end
+    end
+
+    context 'without logged user' do
+      before { get_show }
+
+      it 'return error' do
+        expect(response).to_not be_success
+      end
+    end
+  end
+  
   describe 'POST #create' do
     def post_create(params={a: 1})
       post :create, group: params
@@ -148,6 +248,30 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
+  describe 'GET #edit' do
+    def get_edit
+      get :edit, :id => group.id
+    end
+
+    context 'with logged user' do
+      login_user_from_let
+
+      before { get_edit }
+
+      it 'return success' do
+        expect(response).to be_success
+      end
+    end
+
+    context 'without logged user' do
+      before { get_edit }
+
+      it 'return error' do
+        expect(response).to_not be_success
+      end
+    end
+  end
+
   describe 'PATCH #update' do
     def patch_update( group_id = -1, params = {})
       patch :update, id: group_id, group: params
@@ -226,6 +350,43 @@ RSpec.describe GroupsController, type: :controller do
       end
     end
   end
+  
+  describe 'GET #settings' do
+    let(:user) { create :user }
+    let(:group) { create :group, enterprise: user.enterprise }
+
+    def get_settings(group_id = -1)
+      get :settings, id: group_id
+    end
+
+    context 'with logged user' do
+      login_user_from_let
+
+      before { get_settings(group.id) }
+
+      context 'with incorrect group' do
+      end
+
+      context 'with group user can\'t manage' do
+      end
+
+      context 'with group user can manage' do
+        let(:group) { create :group, enterprise: user.enterprise, owner: user }
+
+        it 'return success' do
+          expect(response).to be_success
+        end
+      end
+    end
+
+    context 'without logged user' do
+      before { get_settings }
+
+      it 'return error' do
+        expect(response).to_not be_success
+      end
+    end
+  end
 
   describe 'DELETE #destroy' do
     def delete_destroy(group_id = -1)
@@ -288,35 +449,174 @@ RSpec.describe GroupsController, type: :controller do
       end
     end
   end
-
-  describe 'GET#plan_overview' do
-    def get_plan_overview
-      get :plan_overview
+  
+  describe 'GET #metrics' do
+    def get_metrics
+      get :metrics, :id => group.id
     end
-    let!(:user) { create :user }
-    let!(:group) { create(:group, enterprise: user.enterprise) }
 
     context 'with logged user' do
-      let!(:foreign_group) { FactoryGirl.create :group }
-
       login_user_from_let
 
-      before { get_plan_overview }
+      before { get_metrics }
 
       it 'return success' do
         expect(response).to be_success
       end
+    end
 
-      it 'shows groups from correct enterprise' do
-        groups = assigns(:groups)
+    context 'without logged user' do
+      before { get_metrics }
 
-        expect(groups).to include group
-        expect(groups).to_not include foreign_group
+      it 'return error' do
+        expect(response).to_not be_success
+      end
+    end
+  end
+  
+  describe 'GET #import_csv' do
+    def get_import_csv
+      get :import_csv, :id => group.id
+    end
+
+    context 'with logged user' do
+      login_user_from_let
+
+      before { get_import_csv }
+
+      it 'return success' do
+        expect(response).to be_success
       end
     end
 
     context 'without logged user' do
-      before { get_plan_overview }
+      before { get_import_csv }
+
+      it 'return error' do
+        expect(response).to_not be_success
+      end
+    end
+  end
+  
+  describe 'GET #sample_csv' do
+    def get_sample_csv
+      get :sample_csv, :id => group.id
+    end
+
+    context 'with logged user' do
+      login_user_from_let
+
+      before { get_sample_csv }
+
+      it 'return success' do
+        expect(response).to be_success
+      end
+    end
+
+    context 'without logged user' do
+      before { get_sample_csv }
+
+      it 'return error' do
+        expect(response).to_not be_success
+      end
+    end
+  end
+  
+  describe 'GET #parse_csv' do
+    
+    def get_parse_csv
+      file = fixture_file_upload('files/test.csv', 'text/csv')
+      get :parse_csv, :id => group.id, :file => file
+    end
+
+    context 'with logged user' do
+      login_user_from_let
+
+      before { get_parse_csv }
+
+      it 'return success' do
+        expect(response).to be_success
+      end
+    end
+
+    context 'without logged user' do
+      before { get_parse_csv }
+
+      it 'return error' do
+        expect(response).to_not be_success
+      end
+    end
+  end
+  
+  describe 'GET #export_csv' do
+    
+    def get_export_csv
+      get :export_csv, :id => group.id
+    end
+
+    context 'with logged user' do
+      login_user_from_let
+
+      before { get_export_csv }
+
+      it 'return success' do
+        expect(response).to be_success
+      end
+    end
+
+    context 'without logged user' do
+      before { get_export_csv }
+
+      it 'return error' do
+        expect(response).to_not be_success
+      end
+    end
+  end
+  
+  describe 'GET #edit_fields' do
+    
+    def get_edit_fields
+      get :edit_fields, :id => group.id
+    end
+
+    context 'with logged user' do
+      login_user_from_let
+
+      before { get_edit_fields }
+
+      it 'return success' do
+        expect(response).to be_success
+      end
+    end
+
+    context 'without logged user' do
+      before { get_edit_fields }
+
+      it 'return error' do
+        expect(response).to_not be_success
+      end
+    end
+  end
+  
+  describe 'GET #delete_attachment' do
+    
+    def get_delete_attachment
+      request.env["HTTP_REFERER"] = "back"
+      get :delete_attachment, :id => group.id
+    end
+
+    context 'with logged user' do
+      login_user_from_let
+
+      before { get_delete_attachment }
+
+      it 'return success' do
+        expect(response).to redirect_to "back"
+      end
+    end
+
+    context 'without logged user' do
+      before { get_delete_attachment }
 
       it 'return error' do
         expect(response).to_not be_success

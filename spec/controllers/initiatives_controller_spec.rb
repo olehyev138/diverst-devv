@@ -3,7 +3,10 @@ require 'rails_helper'
 RSpec.describe InitiativesController, type: :controller do
   let(:user) { create :user }
   let!(:group) { create :group, enterprise: user.enterprise }
-
+  let(:initiative) { create :initiative, owner_group_id: group.id}
+  let(:outcome) {create :outcome, group_id: group.id}
+  
+  
   describe 'GET #index' do
     def get_index(group_id = -1)
       get :index, group_id: group_id
@@ -27,7 +30,6 @@ RSpec.describe InitiativesController, type: :controller do
       end
     end
   end
-
 
   describe 'GET #new' do
     def get_new(group_id = -1)
@@ -62,9 +64,30 @@ RSpec.describe InitiativesController, type: :controller do
       end
     end
   end
-
-  describe 'GET #show' do
-    it 'does not have a route'
+  
+  describe "POST#create" do
+    describe "with logged in user" do
+      login_user_from_let
+      
+      context 'with correct params' do
+        let(:initiative) { FactoryGirl.attributes_for(:initiative) }
+    
+        it 'redirects to correct action' do
+            post :create, :group_id => group.id, initiative: initiative
+            expect(response).to redirect_to action: :index
+        end
+    
+        it 'creates new initiative' do
+            expect{
+            post :create, :group_id => group.id, initiative: initiative
+            }.to change(Initiative,:count).by(1)
+        end
+        
+        it "flashes" do
+            expect(flash[:notice])
+        end
+      end
+    end
   end
 
   describe 'GET #edit' do
