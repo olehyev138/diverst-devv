@@ -65,13 +65,13 @@ class Api::V1::ApiController < ActionController::Base
         
         # want to downcase in case email is sent with a character capitalized
         user = User.find_by_email(email.downcase)
-        return error if user.nil?
+        return error "Not Found", 401 if user.nil?
         
-        return error if not user.valid_password?(password)
+        return error "Unauthorized", 401 if not user.valid_password?(password)
     end
     
-    def error(e = nil)
-        render :status => 400, :json => e.present? ? e : bad_request
+    def error(e = nil, status = nil)
+        render :status => status.present? ? status : 400, :json => e.present? ? e : bad_request
     end
     
     def bad_request
