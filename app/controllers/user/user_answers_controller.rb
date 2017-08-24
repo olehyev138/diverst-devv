@@ -1,4 +1,4 @@
-class User::AnswersController < ApplicationController
+class User::UserAnswersController < ApplicationController
   include Rewardable
 
   before_action :authenticate_user!
