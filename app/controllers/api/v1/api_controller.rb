@@ -1,11 +1,18 @@
 class Api::V1::ApiController < ActionController::Base
     
-    before_action :authenticate
+    before_action :verify_authentication
+    
     
     rescue_from ActionController::RoutingError do |e|
+        error e
     end
     
     rescue_from ActionView::MissingTemplate do |e|
+        error "bad render"
+    end
+    
+    rescue_from ActiveRecord::RecordNotFound do |e|
+        error e
     end
     
     # check if the request has permission to access
@@ -21,12 +28,53 @@ class Api::V1::ApiController < ActionController::Base
     # 422 - Unprocessable Entity
     # 500 - Internal Server Error
     
-    def authenticate
-        # we can authenticate in several ways
-        # options can be API Key along with checking if
-        # they are an enterprise
+    # users will authenticate with basic authentication
+    # username
+    # password
+    
+    attr_accessor :current_user
+    
+    def verify_authentication
+        # verify headers/authorization is present?
+        if request.authorization.present?
+            # get the auth string and then the username and password
+            string = request.authorization
+            array = string.split(" ")
+            
+            credentials = Base64.decode64(array.second).split(":")
+            
+            return authentication(credentials.first, credentials.second)
+        elsif request.headers["HTTP_AUTHORIZATION"].present?
+            # get the auth string and then the username and password
+            string = request.headers["HTTP_AUTHORIZATION"]
+            array = string.split(" ")
+            
+            credentials = Base64.decode64(array.second).split(":")
+            
+            return authentication(credentials.first, credentials.second)
+        end
+        return error
+    end
+    
+    # pass email and password so we can check if the user
+    # exists in our system
+    
+    def authentication(email, password)
+        return error if email.nil?
+        return error if password.nil?
         
-        # we can also implement API rate limits to limit
-        # the number of calls an
+        # want to downcase in case email is sent with a character capitalized
+        user = User.find_by_email(email.downcase)
+        return error if user.nil?
+        
+        return error if not user.valid_password?(password)
+    end
+    
+    def error(e = nil)
+        render :status => 400, :json => e.present? ? e : bad_request
+    end
+    
+    def bad_request
+        {:message => :bad_request}
     end
 end
