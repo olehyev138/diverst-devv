@@ -7,7 +7,6 @@ RSpec.describe SegmentRule, type: :model do
     it{ expect(segment_rule).to belong_to(:field) }
 
     it { is_expected.to validate_presence_of(:operator) }
-    it { is_expected.to validate_presence_of(:segment) }
     it { is_expected.to validate_presence_of(:field) }
     it { is_expected.to validate_presence_of(:values) }
   end
