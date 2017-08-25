@@ -46,7 +46,7 @@ class Field < ActiveRecord::Base
   end
 
   def numeric?
-    type == "NumericField"
+    type == "NumericField" || type == "DateField"
   end
 
   def format_value_name(value)
