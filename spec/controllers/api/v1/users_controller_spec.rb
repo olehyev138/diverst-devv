@@ -64,7 +64,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         
         describe "GET#show" do
             it "gets the user" do
-                get :show, :id => 1
+                get :show, :id => user.id
                 expect(response).to be_success
                 expect(response.status).to be(200)
             end
@@ -72,7 +72,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         
         describe "POST#create" do
             it "creates the user" do
-                post :create
+                post :create, :user => {:email => "test@gmail.com", :password => "password", :first_name => "Mike", :last_name => "Smith"}
                 expect(response).to be_success
                 expect(response.status).to be(201)
             end
@@ -80,7 +80,8 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         
         describe "PATCH#update" do
             it "updates the user" do
-                patch :update, :id => 1
+                patch :update, :id => user.id, :user => {:first_name => "Mike"} 
+                
                 expect(response).to be_success
                 expect(response.status).to be(200)
             end
@@ -88,7 +89,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         
         describe "DELETE#destroy" do
             it "deletes the user" do
-                delete :destroy, :id => 1
+                delete :destroy, :id => user.id
                 expect(response).to be_success
                 expect(response.status).to be(204)
             end

@@ -1,10 +1,18 @@
 class Api::V1::ApiController < ActionController::Base
+    include Pundit
     
     before_action :verify_authentication
     
+    rescue_from Pundit::NotAuthorizedError do |e|
+        error e.message
+    end
+    
+    rescue_from ActionController::ParameterMissing do |e|
+        error e.message
+    end
     
     rescue_from ActionController::RoutingError do |e|
-        error e
+        error e.message
     end
     
     rescue_from ActionView::MissingTemplate do |e|
@@ -12,7 +20,11 @@ class Api::V1::ApiController < ActionController::Base
     end
     
     rescue_from ActiveRecord::RecordNotFound do |e|
-        error e
+        error e.message
+    end
+    
+    rescue_from ActionController::UrlGenerationError do |e|
+        error e.message
     end
     
     # check if the request has permission to access
@@ -68,10 +80,13 @@ class Api::V1::ApiController < ActionController::Base
         return error "Not Found", 401 if user.nil?
         
         return error "Unauthorized", 401 if not user.valid_password?(password)
+        
+        # set the user
+        self.current_user = user
     end
     
     def error(e = nil, status = nil)
-        render :status => status.present? ? status : 400, :json => e.present? ? e : bad_request
+        render :status => status.present? ? status : 400, :json => {message: e.present? ? e : bad_request}
     end
     
     def bad_request
