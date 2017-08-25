@@ -1,4 +1,8 @@
 class NumericField < Field
+  def elasticsearch_field
+    "combined_info.#{id}.raw"
+  end
+
   def string_value(value)
     return '-' if value.nil?
     value
@@ -67,28 +71,26 @@ class NumericField < Field
 
     ranges = []
     nb_buckets.times do |i|
-      range = {}
+      from = min + i * bucket_size
+      to = i == nb_buckets-1 ? max + 1 : from + bucket_size
 
-      range[:from] = min + i * bucket_size
-      range[:to] = range[:from] + bucket_size
-
-      ranges << range
+      ranges << { from: from, to: to }
     end
 
     ranges
   end
 
-  def elastic_stats(aggr_field: nil, segments: container.enterprise.segments.all)
+  def elastic_stats(segments:, groups:)
     # Dynamically calculate bucket sizes
-    stats = Enterprise.first.search_users(size: 0, aggs: { global_stats: { stats: { field: "combined_info.#{id}" } } })
+    stats = enterprise.search_users(size: 0, aggs: { global_stats: { stats: { field: "combined_info.#{id}" } } })
 
-    min = stats['aggregations']['global_stats']['min']
-    max = stats['aggregations']['global_stats']['max']
+    min = stats['aggregations']['global_stats']['min'] || 0
+    max = stats['aggregations']['global_stats']['max'] || 0
 
     buckets = get_buckets_for_range(nb_buckets: 5, min: min, max: max)
 
     # Craft the aggregation query depending on if we have a field to aggregate on or not
-    range_agg = {
+    aggs = {
       ranges: {
         range: {
           field: "combined_info.#{id}",
@@ -97,68 +99,47 @@ class NumericField < Field
       }
     }
 
-    aggs = if aggr_field.nil?
-      range_agg
-    else
-      {
-        aggregation: {
-          terms: {
-            field: "combined_info.#{aggr_field.id}.raw"
-          },
-          aggs: range_agg
-        }
-      }
-    end
-
     search_hash = {
       size: 0,
       aggs: aggs
     }
 
     # Filter the query by segments if there are any specified
+    terms = []
     if !segments.nil? && !segments.empty?
-      search_hash['query'] = {
+      terms << {
         terms: {
           'combined_info.segments' => segments.ids
         }
       }
     end
 
-    # Execute the elasticsearch query
-    Enterprise.first.search_users(search_hash)
-  end
-
-  def highcharts_stats(aggr_field: nil, segments: container.enterprise.segments.all, groups:)
-    data = elastic_stats(aggr_field: aggr_field, segments: segments)
-
-    if aggr_field # If there IS an aggregation
-      series = data['aggregations']['aggregation']['buckets'].map do |aggr_bucket|
-        {
-          name: aggr_bucket['key'],
-          data: aggr_bucket['ranges']['buckets'].map { |range_bucket| range_bucket['doc_count'] }
+    if !groups.nil? && !groups.empty?
+      terms << {
+        terms: {
+          'combined_info.groups' => groups.ids
         }
-      end
-
-      ranges = data['aggregations']['aggregation']['buckets'][0]['ranges']['buckets'].map { |range_bucket| range_bucket['key'].gsub(/\.0/, '') }
-
-      return {
-        series: series,
-        categories: ranges,
-        xAxisTitle: title
-      }
-    else # If there ISN'T an aggregation
-      series = [{
-        name: title,
-        data: data['aggregations']['ranges']['buckets'].map { |range_bucket| range_bucket['doc_count'] }
-      }]
-
-      ranges = data['aggregations']['ranges']['buckets'].map { |range_bucket| range_bucket['key'].gsub(/\.0/, '') }
-
-      return {
-        series: series,
-        categories: ranges,
-        xAxisTitle: title
       }
     end
+    search_hash['query'] = { bool: { filter: terms} }
+    # Execute the elasticsearch query
+    enterprise.search_users(search_hash)
+  end
+
+  def highcharts_stats(aggr_field: nil, segments: [], groups: [])
+    data = elastic_stats(segments: segments, groups: groups)
+
+    series = [{
+      name: title,
+      data: data['aggregations']['ranges']['buckets'].map { |range_bucket| range_bucket['doc_count'] }
+    }]
+
+    ranges = data['aggregations']['ranges']['buckets'].map { |range_bucket| range_bucket['key'].gsub(/\.0/, '') }
+
+    return {
+      series: series,
+      categories: ranges,
+      xAxisTitle: title
+    }
   end
 end

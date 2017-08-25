@@ -67,7 +67,7 @@ module Optionnable
     )
   end
 
-  def elastic_timeseries(segments: container.enterprise.segments.all, groups:)
+  def elastic_timeseries(segments: , groups:)
     aggs = es_term_aggregation(
       aggs: {
         date_histogram: {
@@ -258,7 +258,7 @@ module Optionnable
     end
   end
 
-  def highcharts_timeseries(segments:, groups:)
+  def highcharts_timeseries(segments: [], groups: [])
     data = elastic_timeseries(segments: segments, groups: groups)
     series = data['aggregations']['terms']['buckets'].map do |term_bucket|
       time_buckets = term_bucket['date_histogram']['buckets']
