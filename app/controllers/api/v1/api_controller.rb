@@ -27,6 +27,10 @@ class Api::V1::ApiController < ActionController::Base
         error e.message
     end
     
+    rescue_from StandardError do |e|
+        error e.message
+    end
+    
     # check if the request has permission to access
     # the API
     

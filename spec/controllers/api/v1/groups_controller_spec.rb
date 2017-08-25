@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe Api::V1::GroupsController, type: :controller do
     let(:enterprise){ create(:enterprise) }
     let(:user){ create(:user, enterprise: enterprise, password: "password") }
+    let(:group){ create(:group, enterprise: enterprise) }
     
     context "without authentication" do
     
@@ -62,14 +63,14 @@ RSpec.describe Api::V1::GroupsController, type: :controller do
         
         describe "GET#show" do
             it "gets the group" do
-                get :show, :id => 1
+                get :show, :id => group.id
                 expect(response).to be_success
             end
         end
         
         describe "POST#create" do
             it "creates the group" do
-                post :create
+                post :create, :group => {:name => "created"}
                 expect(response).to be_success
                 expect(response.status).to be(201)
             end
@@ -77,7 +78,7 @@ RSpec.describe Api::V1::GroupsController, type: :controller do
         
         describe "PATCH#update" do
             it "updates the group" do
-                patch :update, :id => 1
+                patch :update, :id => group.id, :group => {:name => "updated"}
                 expect(response).to be_success
                 expect(response.status).to be(200)
             end
@@ -85,7 +86,7 @@ RSpec.describe Api::V1::GroupsController, type: :controller do
         
         describe "DELETE#destroy" do
             it "deletes the group" do
-                delete :destroy, :id => 1
+                delete :destroy, :id => group.id
                 expect(response).to be_success
                 expect(response.status).to be(204)
             end
