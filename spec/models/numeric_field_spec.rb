@@ -1,10 +1,9 @@
 require 'rails_helper'
-require "#{ Rails.root }/spec/concerns/optionnable_spec"
 
 RSpec.describe NumericField, type: :model do
   context "when getting data" do
     let!(:field_one) { NumericField.create(attributes_for(:numeric_field)) }
-    let!(:field_two) { SelectField.create(attributes_for(:select_field)) }
+    let!(:field_two) { NumericField.create(attributes_for(:select_field)) }
 
     let!(:enterprise) { create(:enterprise) }
 
