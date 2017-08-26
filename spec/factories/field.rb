@@ -26,6 +26,14 @@ FactoryGirl.define do
       type 'DateField'
     end
 
+    factory :segments_field do
+      type 'SegmentsField'
+    end
+
+    factory :groups_field do
+      type 'GroupsField'
+    end
+
     match_exclude true
     match_polarity true
     match_weight 1
