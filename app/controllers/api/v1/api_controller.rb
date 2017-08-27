@@ -55,21 +55,25 @@ class Api::V1::ApiController < ActionController::Base
         if request.authorization.present?
             # get the auth string and then the username and password
             string = request.authorization
-            array = string.split(" ")
-            
-            credentials = Base64.decode64(array.second).split(":")
-            
-            return authentication(credentials.first, credentials.second)
+            return process_headers(string)
         elsif request.headers["HTTP_AUTHORIZATION"].present?
             # get the auth string and then the username and password
             string = request.headers["HTTP_AUTHORIZATION"]
-            array = string.split(" ")
-            
-            credentials = Base64.decode64(array.second).split(":")
-            
-            return authentication(credentials.first, credentials.second)
+            return process_headers(string)
+        elsif params["headers"].present? and params["headers"].present?
+            # get the auth string and then the username and password
+            string = params["headers"]["HTTP_AUTHORIZATION"]
+            return process_headers(string)
         end
         return error
+    end
+    
+    def process_headers(string)
+        array = string.split(" ")
+            
+        credentials = Base64.decode64(array.second).split(":")
+            
+        return authentication(credentials.first, credentials.second)
     end
     
     # pass email and password so we can check if the user
@@ -94,6 +98,6 @@ class Api::V1::ApiController < ActionController::Base
     end
     
     def bad_request
-        {:message => :bad_request}
+        :bad_request
     end
 end
