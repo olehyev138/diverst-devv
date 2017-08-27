@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe PollsController, type: :controller, :focus => true do
+RSpec.describe PollsController, type: :controller do
     let(:user){ create(:user) }
     let(:poll){ create(:poll, status: 0, enterprise: user.enterprise, groups: []) }
     login_user_from_let
