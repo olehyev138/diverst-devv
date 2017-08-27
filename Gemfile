@@ -121,6 +121,7 @@ group :development do
   # gem 'stackprof'
   gem 'letter_opener'
   gem 'letter_opener_web', '~> 1.3', '>= 1.3.1'
+  gem 'rufo'
 end
 
 group :production do
