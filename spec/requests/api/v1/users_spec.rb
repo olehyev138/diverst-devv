@@ -21,6 +21,11 @@ RSpec.describe "User", :type => :request do
         post "/api/v1/users", :user => new_user, headers: headers
         expect(response).to have_http_status(201)
     end
+    
+    it "updates a user" do
+        patch "/api/v1/users/#{user.id}", :user => {:first_name => "updated"}, headers: headers
+        expect(response).to have_http_status(:ok)
+    end
 
     it "deletes a user" do
         delete "/api/v1/users/#{user.id}", headers: headers
