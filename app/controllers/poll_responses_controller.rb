@@ -8,6 +8,7 @@ class PollResponsesController < ApplicationController
 
   layout 'guest'
 
+  # MISSING TEMPLATE
   def index
     @responses = @poll.responses
   end
