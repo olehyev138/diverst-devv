@@ -141,4 +141,13 @@ RSpec.describe PollsController, type: :controller do
             end
         end
     end
+    
+    describe "GET#export_csv" do
+        context "with logged user" do
+            it "gets a csv file" do
+                get :export_csv, id: poll.id
+                expect(response).to be_success
+            end
+        end
+    end
 end
