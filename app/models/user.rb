@@ -68,6 +68,7 @@ class User < ActiveRecord::Base
   # validates_confirmation_of :password, if: Proc.new { |a| a.enterprise.has_enabled_saml? && a.password.present? }
 
   before_validation :generate_password_if_saml
+  before_save :assign_policy_group, if: Proc.new { |user| user[:policy_group_id].nil? }
   after_create :assign_firebase_token
 
   after_commit on: [:create] do
@@ -123,13 +124,10 @@ class User < ActiveRecord::Base
     Badge.where("points <= ?", points).order(points: :asc)
   end
 
-  #bTODO test this
   def policy_group
-    if self[:policy_group_id]
-      PolicyGroup.find_by_id( self[:policy_group_id] )
-    else
-      PolicyGroup.default_group(enterprise.id)
-    end
+    assign_policy_group if self[:policy_group_id].nil?
+
+    PolicyGroup.find_by_id( self[:policy_group_id] )
   end
 
   def has_answered_group_surveys?
@@ -433,5 +431,13 @@ class User < ActiveRecord::Base
   # Generate a random password if the user is using SAML
   def generate_password_if_saml
     self.password = self.password_confirmation = SecureRandom.urlsafe_base64 if auth_source == 'saml' && new_record?
+  end
+
+  def assign_policy_group
+    current_policy_group = PolicyGroup.find_by_id( self[:policy_group_id] )
+
+    if current_policy_group.nil?
+      self[:policy_group_id] = PolicyGroup.default_group(enterprise.id)&.id
+    end
   end
 end
