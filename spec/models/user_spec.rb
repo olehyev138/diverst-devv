@@ -202,6 +202,45 @@ RSpec.describe User do
     end
   end
 
+  describe 'policy group' do
+    let!(:enterprise) { create :enterprise}
+
+    context 'when creating user' do
+      context 'with policy group' do
+        let!(:policy_group) { create :policy_group, enterprise: enterprise, default_for_enterprise: true }
+        let(:other_policy_group)  { create :policy_group, enterprise: enterprise, default_for_enterprise: false }
+
+        let!(:user) { build :user, enterprise: enterprise, policy_group: other_policy_group }
+
+        before { user.save! }
+
+        it 'keeps policy group' do
+          expect(user.reload.policy_group).to eq other_policy_group
+        end
+
+        it 'changes policy group users count' do
+          expect(other_policy_group.reload.users).to include(user)
+        end
+      end
+
+      context 'without policy group' do
+        let!(:policy_group) { create :policy_group, enterprise: enterprise }
+
+        let!(:user) { build :user, enterprise: enterprise, policy_group: nil }
+
+        before { user.save! }
+
+        it 'sets policy group to default in enterprise' do
+          expect(user.reload.policy_group).to eq policy_group
+        end
+
+        it 'changes policy group users count' do
+          expect(policy_group.reload.users).to include(user)
+        end
+      end
+    end
+  end
+
   describe 'group surveys' do
     let(:user) { create(:user) }
     let(:group) { create(:group, enterprise: user.enterprise) }
