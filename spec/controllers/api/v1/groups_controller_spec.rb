@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::GroupsController, type: :controller do
     let(:enterprise){ create(:enterprise) }
-    let(:user){ create(:user, enterprise: enterprise, password: "password") }
+    let(:user){ create(:user, enterprise: enterprise, password: "password", first_name: "MICHAEL") }
     let(:group){ create(:group, enterprise: enterprise) }
     
     context "without authentication" do
