@@ -108,52 +108,52 @@ RSpec.describe EnterprisesController, type: :controller do
     
     # CAN'T FIGURE OUT HOW TO PASS TEST
     
-    # describe "GET#bias" do
+    describe "GET#bias", :skip => true do
         
-    #     describe "with logged in user" do
-    #         login_user_from_let
+        describe "with logged in user" do
+            login_user_from_let
             
-    #         context "with valid id" do
-    #             before(:each){ get :bias, id: enterprise.id}
+            context "with valid id" do
+                before(:each){ get :bias, id: enterprise.id}
                 
-    #             it "returns success" do
-    #                 expect(response).to be_success
-    #             end
-    #         end
-    #     end
-    # end
+                it "returns success" do
+                    expect(response).to be_success
+                end
+            end
+        end
+    end
     
     # CONTROLLER IS MISSING A TEMPLATE
     
-    # describe "GET#edit_cdo" do
-    #     describe "with logged in user" do
-    #         login_user_from_let
+    describe "GET#edit_cdo", :skip => true do
+        describe "with logged in user" do
+            login_user_from_let
             
-    #         context "with valid id" do
-    #             before(:each){ get :edit_cdo, id: enterprise.id}
+            context "with valid id" do
+                before(:each){ get :edit_cdo, id: enterprise.id}
                 
-    #             it "returns success" do
-    #                 expect(response).to be_success
-    #             end
-    #         end
-    #     end
-    # end
+                it "returns success" do
+                    expect(response).to be_success
+                end
+            end
+        end
+    end
     
     # CONTROLLER IS MISSING A TEMPLATE
     
-    # describe "GET#edit_mobile_fields" do
-    #     describe "with logged in user" do
-    #         login_user_from_let
+    describe "GET#edit_mobile_fields", :skip => true do
+        describe "with logged in user" do
+            login_user_from_let
             
-    #         context "with valid id" do
-    #             before(:each){ get :edit_mobile_fields, id: enterprise.id}
+            context "with valid id" do
+                before(:each){ get :edit_mobile_fields, id: enterprise.id}
                 
-    #             it "returns success" do
-    #                 expect(response).to be_success
-    #             end
-    #         end
-    #     end
-    # end
+                it "returns success" do
+                    expect(response).to be_success
+                end
+            end
+        end
+    end
     
     describe "GET#edit_auth" do
         
@@ -187,20 +187,20 @@ RSpec.describe EnterprisesController, type: :controller do
     
     # CONTROLLER IS MISSING A TEMPLATE
     
-    # describe "GET#edit_algo" do
+    describe "GET#edit_algo", :skip => true do
         
-    #     describe "with logged in user" do
-    #         login_user_from_let
+        describe "with logged in user" do
+            login_user_from_let
             
-    #         context "with valid id" do
-    #             before(:each){ get :edit_algo, id: enterprise.id}
+            context "with valid id" do
+                before(:each){ get :edit_algo, id: enterprise.id}
                 
-    #             it "returns success" do
-    #                 expect(response).to be_success
-    #             end
-    #         end
-    #     end
-    # end
+                it "returns success" do
+                    expect(response).to be_success
+                end
+            end
+        end
+    end
     
     describe "GET#update_branding" do
         
