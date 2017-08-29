@@ -41,8 +41,8 @@ class PolicyGroup < ActiveRecord::Base
   # Helper method. There should be only one default group at every moment.
   # This method only deducated to ensuring this
   def self.all_default_groups(enterprise_id)
-    default_groups = all_groups_of_enterprise(enterprise_id)
-                      .where(default_for_enterprise: true)
+    all_groups_of_enterprise(enterprise_id)
+        .where(default_for_enterprise: true)
   end
 
   def self.all_groups_of_enterprise(enterprise_id)

@@ -14,6 +14,7 @@ class UsersController < ApplicationController
     end
   end
 
+  # MISSING HTML TEMPLATE
   def sent_invitations
     authorize User, :index?
     @users = policy_scope(User).invitation_not_accepted.where(search_params)
@@ -32,7 +33,8 @@ class UsersController < ApplicationController
       format.json { render json: UserDatatable.new(view_context, @users) }
     end
   end
-
+  
+  # MISSING HTML TEMPLATE
   def new
     authorize User
   end
