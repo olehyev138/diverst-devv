@@ -12,6 +12,7 @@ class Groups::EventsController < ApplicationController
     @ongoing_events = @group.initiatives.ongoing + @group.participating_initiatives.ongoing
   end
 
+  # MISSING TEMPLATE
   def calendar_data
     own_events = @group.initiatives#.of_segments(current_user.segments.pluck(:id))
                           .includes(:owner_group)
