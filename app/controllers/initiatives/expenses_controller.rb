@@ -54,6 +54,7 @@ class Initiatives::ExpensesController < ApplicationController
     end
   end
 
+  # MISSING TEMPLATE
   def show
     authorize @expense
   end
