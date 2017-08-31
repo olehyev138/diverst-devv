@@ -27,7 +27,7 @@ class Groups::AttendancesController < ApplicationController
   end
 
   def erg_graph
-    erg_population = @event.own_group.enterprise.groups.map do |group|
+    erg_population = @event.owner_group.enterprise.groups.map do |group|
       @event.attendees.joins(:user_groups).where('user_groups.group_id': group.id).count
     end
 
@@ -46,7 +46,7 @@ class Groups::AttendancesController < ApplicationController
   end
 
   def segment_graph
-    segment_population = @event.own_group.enterprise.segments.map do |segment|
+    segment_population = @event.owner_group.enterprise.segments.map do |segment|
       @event.attendees.joins(:users_segments).where('users_segments.segment_id': segment.id).count
     end
 
@@ -58,7 +58,7 @@ class Groups::AttendancesController < ApplicationController
           data: segment_population
         }],
         categories: @event.group.enterprise.segments.map(&:name),
-        xAxisTitle: 'Segment'
+        xAxisTitle: c_t(:segment)
       },
       hasAggregation: false
     }

@@ -42,13 +42,13 @@ class GenericGraphsController < ApplicationController
               data: data
             }],
             categories: categories,
-            xAxisTitle: 'Segment'
+            xAxisTitle: c_t(:segment)
           },
           hasAggregation: false
         }
       }
       format.csv {
-        strategy = Reports::GraphStatsGeneric.new(title: 'Number of users by segment', categories: categories, data: data)
+        strategy = Reports::GraphStatsGeneric.new(title: "Number of users by #{ c_t(:badge) }", categories: categories, data: data)
         report = Reports::Generator.new(strategy)
         send_data report.to_csv, filename: "graph_segment_population.csv"
       }

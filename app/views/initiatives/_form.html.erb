@@ -58,7 +58,7 @@
         <%= f.association :segments,
               collection: @segments,
               input_html: { class: "select2" },
-              label: "Choose the <strong>segments</strong> you want to target".html_safe %>
+              label: "Choose the <strong>#{ c_t(:segment).pluralize }</strong> you want to target".html_safe %>
       </div>
 
       <div class="row">
