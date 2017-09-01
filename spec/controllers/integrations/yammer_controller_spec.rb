@@ -11,4 +11,10 @@ RSpec.describe Integrations::YammerController, type: :controller do
         end
     end
     
+    describe 'GET#callback', :skip => "Unsure on how to test" do
+        it "redirects" do
+            get :callback, code: "FAKECODE"
+        end
+    end
+    
 end

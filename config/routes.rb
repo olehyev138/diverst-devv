@@ -249,8 +249,10 @@ Rails.application.routes.draw do
         get 'answer_popularities'
       end
     end
-
-    resources :graphs, only: [:new, :create]
+    
+    scope module: 'polls' do
+      resources :graphs, only: [:new, :create]
+    end
   end
 
   resources :fields do
@@ -384,7 +386,7 @@ Rails.application.routes.draw do
   end
 
   resources :metrics_dashboards do
-    resources :graphs, shallow: true do
+    resources :graphs do
       member do
         get 'data'
         get 'export_csv'
