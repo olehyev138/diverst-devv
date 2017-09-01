@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Integrations::YammerController, type: :controller, :focus => true do
+RSpec.describe Integrations::YammerController, type: :controller do
     
     let(:user) { create :user }
     
