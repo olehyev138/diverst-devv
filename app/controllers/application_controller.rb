@@ -13,7 +13,12 @@ class ApplicationController < ActionController::Base
   helper_method :events_to_json
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
-
+  
+  # not sure if we should do this
+  rescue_from ActionController::UnknownFormat do |e|
+    render :status => 400, :json => {error: e.message}
+  end
+  
   around_action :user_time_zone, if: :current_user
 
   def c_t(type)
