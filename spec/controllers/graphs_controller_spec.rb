@@ -18,11 +18,6 @@ RSpec.describe GraphsController, type: :controller do
                 get :new, :metrics_dashboard_id => metrics_dashboard.id
                 expect(response).to be_success
             end
-            
-            it "returns success" do
-                get :new, :poll_id => poll.id
-                expect(response).to be_success
-            end
         end
     end
     
@@ -45,43 +40,26 @@ RSpec.describe GraphsController, type: :controller do
                     expect(flash[:notice])
                 end
             end
-            
-            context "when poll" do
-                before {post :create, :poll_id => poll.id, :graph => {field_id: 1}}
-                
-                it "returns success" do
-                    expect(response).to redirect_to poll
-                end
-                
-                it 'creates new graph' do
-                    expect(Graph.count).to eq(1)
-                end
-                
-                it "flashes" do
-                    expect(flash[:notice])
-                end
-            end
         end
     end
     
-    # missing a template
-    # describe "GET#index" do
-    #     describe "with logged in user" do
-    #         login_user_from_let
+    describe "GET#index", :skip => "Missing a template" do
+        describe "with logged in user" do
+            login_user_from_let
             
-    #         it "returns success" do
-    #             get :index, :metrics_dashboard_id => metrics_dashboard.id
-    #             expect(response).to be_success
-    #         end
-    #     end
-    # end
+            it "returns success" do
+                get :index, :metrics_dashboard_id => metrics_dashboard.id
+                expect(response).to be_success
+            end
+        end
+    end
     
     describe "PATCH#update" do
         describe "with logged in user" do
             login_user_from_let
             
             context "when metrics_graph" do
-                before {patch :update, :id => metrics_graph.id, :graph => {field_id: field1.id}}
+                before {patch :update, :metrics_dashboard_id => metrics_dashboard.id, :id => metrics_graph.id, :graph => {field_id: field1.id}}
                 
                 it "returns success" do
                     expect(response).to redirect_to metrics_dashboard
@@ -90,23 +68,6 @@ RSpec.describe GraphsController, type: :controller do
                 it 'updates the graph' do
                     metrics_graph.reload
                     expect(metrics_graph.field_id).to eq(field1.id)
-                end
-                
-                it "flashes" do
-                    expect(flash[:notice])
-                end
-            end
-            
-            context "when poll" do
-                before {patch :update, :id => poll_graph.id, :graph => {field_id: field2.id}}
-                
-                it "returns success" do
-                    expect(response).to redirect_to poll
-                end
-                
-                it 'updates the graph' do
-                    poll_graph.reload
-                    expect(poll_graph.field_id).to eq(field2.id)
                 end
                 
                 it "flashes" do
@@ -123,15 +84,7 @@ RSpec.describe GraphsController, type: :controller do
             before {request.env["HTTP_REFERER"] = "back"}
             
             context "when metrics_graph" do
-                before {delete :destroy, :id => metrics_graph.id}
-                
-                it "returns success" do
-                    expect(response).to redirect_to "back"
-                end
-            end
-            
-            context "when poll" do
-                before {delete :destroy, :id => poll_graph.id}
+                before {delete :destroy, :metrics_dashboard_id => metrics_dashboard.id, :id => metrics_graph.id}
                 
                 it "returns success" do
                     expect(response).to redirect_to "back"
@@ -140,38 +93,35 @@ RSpec.describe GraphsController, type: :controller do
         end
     end
     
-    
-    # need to figure out how to work with elastisearch
-    # describe "GET#data" do
-    #     describe "with logged in user" do
-    #         login_user_from_let
+    describe "GET#data", :skip => "need to figure out how to work with elastisearch" do
+        describe "with logged in user" do
+            login_user_from_let
             
-    #         it "returns success" do
-    #             #get :data, :id => metrics_graph.id
-    #             #expect(response).to be_success
-    #         end
+            it "returns success" do
+                #get :data, :id => metrics_graph.id
+                #expect(response).to be_success
+            end
             
-    #         it "returns success" do
-    #             #get :data, :id => poll_graph.id
-    #             #expect(response).to be_success
-    #         end
-    #     end
-    # end
-    
-    # need to figure out how to work with elastisearch
-    # describe "GET#export_csv" do
-    #     describe "with logged in user" do
-    #         login_user_from_let
+            it "returns success" do
+                #get :data, :id => poll_graph.id
+                #expect(response).to be_success
+            end
+        end
+    end
+
+    describe "GET#export_csv", :skip => "need to figure out how to work with elastisearch" do
+        describe "with logged in user" do
+            login_user_from_let
             
-    #         it "returns success" do
-    #             get :export_csv, :id => metrics_graph.id
-    #             expect(response).to be_success
-    #         end
+            it "returns success" do
+                get :export_csv, :id => metrics_graph.id
+                expect(response).to be_success
+            end
             
-    #         it "returns success" do
-    #             get :export_csv, :id => poll_graph.id
-    #             expect(response).to be_success
-    #         end
-    #     end
-    # end
+            it "returns success" do
+                get :export_csv, :id => poll_graph.id
+                expect(response).to be_success
+            end
+        end
+    end
 end
