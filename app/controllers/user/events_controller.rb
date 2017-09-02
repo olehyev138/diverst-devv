@@ -23,7 +23,6 @@ class User::EventsController < ApplicationController
   #No current user, use token for authentication
   def onboarding_calendar_data
     user = User.find_by_invitation_token(params[:invitation_token], true)
-
     @events = user.enterprise.initiatives.where('start >= ?', params[:start])
                                     .where('start <= ?', params[:end])
 
