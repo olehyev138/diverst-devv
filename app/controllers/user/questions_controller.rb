@@ -19,7 +19,7 @@ class User::QuestionsController < ApplicationController
   protected
 
   def set_campaign
-    @campaign = current_user.enterprise.campaigns.find(params[:campaign_id])
+    @campaign = current_user.enterprise.campaigns.find(params[:user_campaign_id])
   end
 
   def set_question
