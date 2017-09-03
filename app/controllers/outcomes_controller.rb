@@ -8,7 +8,8 @@ class OutcomesController < ApplicationController
   def index
     authorize Outcome
   end
-
+  
+  # MISSING TEMPLATE
   def new
     authorize Outcome
     @outcome = Outcome.new
@@ -17,9 +18,11 @@ class OutcomesController < ApplicationController
   def create
     authorize Outcome
     @outcome = Outcome.new(outcome_params)
-    @outcome.enterprise = current_user.enterprise
-    @outcome.estimated_funding *= 100
-    @outcome.owner = current_user
+    
+    # don't think this belongs here
+    #@outcome.enterprise = current_user.enterprise
+    #@outcome.estimated_funding *= 100
+    #@outcome.owner = current_user
 
     if @outcome.save
       flash[:notice] = "Your #{ c_t(:outcome) } was created"
@@ -38,7 +41,7 @@ class OutcomesController < ApplicationController
     authorize @outcome
     if @outcome.update(outcome_params)
       flash[:notice] = "Your #{ c_t(:outcome) } was updated"
-      redirect_to @outcome
+      redirect_to action: :index
     else
       flash[:alert] = "Your #{ c_t(:outcome) } was not updated. Please fix the errors"
       render :edit
@@ -58,14 +61,15 @@ class OutcomesController < ApplicationController
   end
 
   def set_outcome
-    @outcome = current_user.enterprise.outcomes.find(params[:id])
+    @outcome = @group.outcomes.find(params[:id])
   end
 
   def outcome_params
     params
       .require(:outcome)
       .permit(
-
+        :name,
+        :group_id
       )
   end
 end

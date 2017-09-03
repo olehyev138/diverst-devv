@@ -237,8 +237,10 @@ Rails.application.routes.draw do
         get 'answer_popularities'
       end
     end
-
-    resources :graphs, only: [:new, :create]
+    
+    scope module: 'polls' do
+      resources :graphs, only: [:new, :create]
+    end
   end
 
   resources :fields do
@@ -323,11 +325,10 @@ Rails.application.routes.draw do
 
       resources :resources
 
-      resources :campaigns, shallow: true do
+      resources :user_campaigns, shallow: true do
         resources :questions, shallow: true do
-          resources :answers, shallow: true do
-            resources :answer_comments, shallow: true, path: 'comments'
-
+          resources :user_answers, shallow: true do
+            resources :user_answer_comments, shallow: true, path: 'comments'
             member do
               put 'vote'
             end
@@ -373,7 +374,7 @@ Rails.application.routes.draw do
   end
 
   resources :metrics_dashboards do
-    resources :graphs, shallow: true do
+    resources :graphs do
       member do
         get 'data'
         get 'export_csv'

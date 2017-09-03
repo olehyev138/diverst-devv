@@ -1,16 +1,17 @@
 class AnswerCommentsController < ApplicationController
   # before_action :authenticate_admin!
-  before_action :set_comment
+  before_action :set_comment_and_answer
 
   def destroy
     @comment.destroy
-    redirect_to :back
+    redirect_to @answer
   end
 
   protected
 
-  def set_comment
+  def set_comment_and_answer
     @comment = current_user.enterprise.answer_comments.find(params[:id])
+    @answer = @comment.answer
   end
 
   def comment_params

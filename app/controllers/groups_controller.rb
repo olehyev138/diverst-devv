@@ -32,6 +32,7 @@ class GroupsController < ApplicationController
     render 'shared/calendar/calendar_view'
   end
 
+  # missing a template
   def calendar_data
     #To allow logged users see embedded calendars of other enterprises, we check for token first
     if params[:token]

@@ -5,6 +5,18 @@ RSpec.describe BudgetsController, type: :controller do
   let!(:group) { FactoryGirl.create(:group, enterprise: user.enterprise) }
   let!(:budget) { FactoryGirl.create(:approved_budget, subject: group) }
 
+  describe 'GET#index' do
+    context 'with logged user' do
+      login_user_from_let
+
+      before { get :index, group_id: budget.subject.id}
+
+      it 'return success' do
+        expect(response).to be_success
+      end
+    end
+  end
+
   describe 'GET#show' do
     context 'with logged user' do
       login_user_from_let
@@ -175,6 +187,30 @@ RSpec.describe BudgetsController, type: :controller do
 
       it 'redirects to index action' do
         delete :destroy, group_id: budget.subject.id, id: budget.id
+        expect(response).to redirect_to action: :index
+      end
+    end
+  end
+  
+  describe 'POST#approve' do
+    context 'with logged user' do
+      login_user_from_let
+
+      before { post :approve, group_id: budget.subject.id, budget_id: budget.id}
+
+      it 'redirects to index' do
+        expect(response).to redirect_to action: :index
+      end
+    end
+  end
+  
+  describe 'POST#decline' do
+    context 'with logged user' do
+      login_user_from_let
+
+      before { post :decline, group_id: budget.subject.id, budget_id: budget.id}
+
+      it 'redirects to index' do
         expect(response).to redirect_to action: :index
       end
     end

@@ -3,7 +3,10 @@ require 'rails_helper'
 RSpec.describe InitiativesController, type: :controller do
   let(:user) { create :user }
   let!(:group) { create :group, enterprise: user.enterprise }
-
+  let(:outcome) {create :outcome, group_id: group.id}
+  let(:pillar) { create :pillar, outcome_id: outcome.id}
+  let(:initiative) { create :initiative, pillar: pillar, owner_group: group}
+  
   describe 'GET #index' do
     def get_index(group_id = -1)
       get :index, group_id: group_id
@@ -27,7 +30,6 @@ RSpec.describe InitiativesController, type: :controller do
       end
     end
   end
-
 
   describe 'GET #new' do
     def get_new(group_id = -1)
@@ -62,9 +64,29 @@ RSpec.describe InitiativesController, type: :controller do
       end
     end
   end
-
+  
   describe 'GET #show' do
-    it 'does not have a route'
+    def get_show
+      get :show, :group_id => group.id, :id => initiative.id
+    end
+
+    context 'with logged user' do
+      login_user_from_let
+
+      before { get_show }
+
+      it 'return success' do
+        expect(response).to be_success
+      end
+    end
+
+    context 'without logged user' do
+      before { get_show }
+
+      it 'return error' do
+        expect(response).to_not be_success
+      end
+    end
   end
 
   describe 'GET #edit' do

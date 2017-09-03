@@ -34,10 +34,12 @@ class EnterprisesController < ApplicationController
     authorize @enterprise, :update?
   end
 
+  # not sure if this is supposed to be here
   def edit_cdo
     authorize @enterprise, :update?
   end
-
+  
+  # missing a template
   def edit_mobile_fields
     authorize @enterprise
   end
@@ -51,7 +53,8 @@ class EnterprisesController < ApplicationController
 
     set_theme
   end
-
+  
+  # missing template
   def edit_algo
     authorize @enterprise, :edit?
   end

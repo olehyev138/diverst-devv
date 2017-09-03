@@ -1,6 +1,34 @@
 require 'rails_helper'
 
 RSpec.describe MetricsDashboardsController, type: :controller do
+  let(:enterprise) {create :enterprise}
+  let (:user) {create :user, :enterprise => enterprise}
+  let(:metrics_dashboard){create :metrics_dashboard, :enterprise => enterprise}
+
+  describe 'GET #new' do
+    def get_new
+      get :new
+    end
+
+    context 'with logged user' do
+      login_user
+
+      before { get_new }
+
+      it 'return success' do
+        expect(response).to be_success
+      end
+    end
+
+    context 'without logged user' do
+      before { get_new }
+
+      it 'return error' do
+        expect(response).to_not be_success
+      end
+    end
+  end
+  
   describe 'GET #index' do
     def get_index
       get :index
@@ -24,8 +52,6 @@ RSpec.describe MetricsDashboardsController, type: :controller do
       end
     end
   end
-
-
 
   describe 'POST #create' do
     def post_create(params={a: 1})
@@ -104,6 +130,54 @@ RSpec.describe MetricsDashboardsController, type: :controller do
 
     context 'without logged in user' do
       before { post_create }
+
+      it 'return error' do
+        expect(response).to_not be_success
+      end
+    end
+  end
+  
+  describe 'GET #show' do
+    def get_show
+      get :show, :id => metrics_dashboard.id
+    end
+
+    context 'with logged user' do
+      login_user_from_let
+
+      before { get_show }
+
+      it 'redirect' do
+        expect(response.status).to eq(302)
+      end
+    end
+
+    context 'without logged user' do
+      before { get_show }
+
+      it 'return error' do
+        expect(response).to_not be_success
+      end
+    end
+  end
+  
+  describe 'GET #edit' do
+    def get_edit
+      get :edit, :id => metrics_dashboard.id
+    end
+
+    context 'with logged user' do
+      login_user_from_let
+
+      before { get_edit }
+
+      it 'redirect' do
+        expect(response.status).to eq(302)
+      end
+    end
+
+    context 'without logged user' do
+      before { get_edit }
 
       it 'return error' do
         expect(response).to_not be_success

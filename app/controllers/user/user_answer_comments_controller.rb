@@ -1,4 +1,4 @@
-class User::AnswerCommentsController < ApplicationController
+class User::UserAnswerCommentsController < ApplicationController
   include Rewardable
 
   before_action :authenticate_user!
@@ -18,7 +18,7 @@ class User::AnswerCommentsController < ApplicationController
   protected
 
   def set_answer
-    @answer = Answer.find(params[:answer_id])
+    @answer = Answer.find(params[:user_answer_id])
     return head 403 if @answer.question.campaign.users.where(id: current_user.id).count < 1
   end
 

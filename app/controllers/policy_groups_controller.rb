@@ -44,7 +44,6 @@ class PolicyGroupsController < ApplicationController
 
   def destroy
     authorize PolicyGroup
-
     @policy_group.destroy
     redirect_to action: :index
   end

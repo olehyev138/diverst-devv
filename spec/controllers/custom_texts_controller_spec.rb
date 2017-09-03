@@ -32,6 +32,10 @@ RSpec.describe CustomTextsController, type: :controller do
         it "renders edit action" do
           expect(response).to render_template :edit
         end
+        
+        it "flashes notice" do
+          expect(flash[:notice])
+        end
       end
     end
   end

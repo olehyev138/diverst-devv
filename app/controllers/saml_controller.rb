@@ -9,6 +9,7 @@ class SamlController < ApplicationController
   def sso
     settings = @enterprise.saml_settings
     if settings.nil?
+      # missing template
       render action: :no_settings
       return
     end
@@ -25,7 +26,7 @@ class SamlController < ApplicationController
       nameid = response.nameid
       attrs = response.attributes
 
-#Todo search only @enterprise for users
+      #Todo search only @enterprise for users
       unless user = User.find_by_email(nameid)
         user = User.new(auth_source: 'saml', enterprise: @enterprise)
 

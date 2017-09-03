@@ -1,4 +1,4 @@
-class User::CampaignsController < ApplicationController
+class User::UserCampaignsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_campaign, only: [:edit, :update, :destroy, :show]
 
