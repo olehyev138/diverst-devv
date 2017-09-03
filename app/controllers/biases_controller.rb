@@ -1,4 +1,5 @@
 class BiasesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_bias, only: [:edit, :update, :destroy, :show]
 
   layout :resolve_layout

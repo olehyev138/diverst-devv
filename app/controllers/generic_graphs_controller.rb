@@ -1,6 +1,8 @@
 class GenericGraphsController < ApplicationController
   include ActionView::Helpers::JavaScriptHelper
 
+  before_action :authenticate_user!
+
   def group_population
     data = current_user.enterprise.groups.map { |g| g.members.active.count }
     categories = current_user.enterprise.groups.map{ |g| j g.name }

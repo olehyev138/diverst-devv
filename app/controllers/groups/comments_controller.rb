@@ -1,6 +1,7 @@
 class Groups::CommentsController < ApplicationController
   include Rewardable
 
+  before_action :authenticate_user!
   before_action :set_group
   before_action :set_event
   before_action :set_comment, only: [:edit, :update, :show]
