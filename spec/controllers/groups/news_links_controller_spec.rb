@@ -64,7 +64,7 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
     it "rewards a user with points of this action" do
       expect(user.points).to eq 0
 
-      post :create_comment, group_id: group.id, id: news_link, news_link_comment: attributes_for(:news_link)
+      post :create_comment, group_id: group.id, id: news_link, news_link_comment: attributes_for(:news_link_comment)
 
       user.reload
       expect(user.points).to eq 35
