@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170706155241) do
+ActiveRecord::Schema.define(version: 20170831204349) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -242,12 +242,16 @@ ActiveRecord::Schema.define(version: 20170706155241) do
   add_index "ckeditor_assets", ["type"], name: "index_ckeditor_assets_on_type", using: :btree
 
   create_table "custom_texts", force: :cascade do |t|
-    t.text    "erg",           limit: 65535
-    t.integer "enterprise_id", limit: 4
-    t.text    "program",       limit: 65535
-    t.text    "structure",     limit: 65535
-    t.text    "outcome",       limit: 65535
-    t.text    "badge",         limit: 65535
+    t.text    "erg",               limit: 65535
+    t.integer "enterprise_id",     limit: 4
+    t.text    "program",           limit: 65535
+    t.text    "structure",         limit: 65535
+    t.text    "outcome",           limit: 65535
+    t.text    "badge",             limit: 65535
+    t.text    "segment",           limit: 65535
+    t.text    "dci_full_title",    limit: 65535
+    t.text    "dci_abbreviation",  limit: 65535
+    t.text    "member_preference", limit: 65535
   end
 
   add_index "custom_texts", ["enterprise_id"], name: "index_custom_texts_on_enterprise_id", using: :btree

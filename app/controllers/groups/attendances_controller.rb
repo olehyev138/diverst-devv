@@ -59,7 +59,7 @@ class Groups::AttendancesController < ApplicationController
           data: segment_population
         }],
         categories: @event.group.enterprise.segments.map(&:name),
-        xAxisTitle: 'Segment'
+        xAxisTitle: c_t(:segment)
       },
       hasAggregation: false
     }
