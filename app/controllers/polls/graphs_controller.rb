@@ -1,6 +1,13 @@
 class Polls::GraphsController < ApplicationController
+<<<<<<< HEAD
   before_action :set_poll
   
+=======
+  before_action :authenticate_user!
+  before_action :set_poll, except: [:data, :show, :edit, :update, :destroy]
+  before_action :set_graph, except: [:index, :new, :create]
+
+>>>>>>> 788b5bdb694d972254ad5739a8ed38aa494f3d2e
   layout 'global_settings'
 
   def new

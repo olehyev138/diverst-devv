@@ -1,4 +1,5 @@
 class Groups::UpdatesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_group
   before_action :set_update, only: [:edit, :update, :destroy, :show]
   after_action :verify_authorized

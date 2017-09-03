@@ -30,4 +30,34 @@ RSpec.describe UserGroup do
       end
     end
   end
+
+  describe 'when describing callbacks' do
+    let!(:user){ create(:user) }
+
+    it "should reindex user on elasticsearch after create" do
+      user_group = build(:user_group, user:  user)
+      TestAfterCommit.with_commits(true) do
+        expect(IndexElasticsearchJob).to receive(:perform_later).with(
+          model_name: 'User',
+          operation: 'update',
+          index: User.es_index_name(enterprise: user_group.user.enterprise),
+          record_id: user_group.user.id
+        )
+        user_group.save
+      end
+    end
+
+    it "should reindex user on elasticsearch after destroy" do
+      user_group = create(:user_group, user:  user)
+      TestAfterCommit.with_commits(true) do
+        expect(IndexElasticsearchJob).to receive(:perform_later).with(
+          model_name: 'User',
+          operation: 'update',
+          index: User.es_index_name(enterprise: user_group.user.enterprise),
+          record_id: user_group.user.id
+        )
+        user_group.destroy
+      end
+    end
+  end
 end

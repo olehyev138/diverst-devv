@@ -98,6 +98,8 @@ end
 group :test do
   gem 'rspec_junit_formatter', '~> 0.2.3'
   gem 'simplecov', '~> 0.13.0'
+  gem 'test_after_commit', '~> 1.1'
+  gem 'elasticsearch-extensions', '~> 0.0.26'
 end
 
 group :development do

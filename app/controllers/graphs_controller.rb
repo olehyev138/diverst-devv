@@ -1,5 +1,7 @@
 class GraphsController < ApplicationController
-  before_action :set_collection, except: [:data, :update]
+  before_action :authenticate_user!
+  before_action :set_collection, except: [:data, :show, :edit, :update, :destroy, :export_csv]
+
   before_action :set_graph, except: [:index, :new, :create]
 
   layout 'dashboard'
@@ -8,7 +10,7 @@ class GraphsController < ApplicationController
     @graph = @collection.graphs.new
     @graph.range_from = 1.year.ago
   end
-  
+
   def create
     @graph = @collection.graphs.new(graph_params)
 

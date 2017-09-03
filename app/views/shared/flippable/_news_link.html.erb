@@ -1,20 +1,18 @@
-<%= link_to news_link.url, class: "block block-section", target: "_blank" do %>
-  <div class="<%= "flippable" if news_link.picture.present? %>">
-    <div class="front">
-      <%= image_tag news_link.picture.expiring_url(3600), width: '100%' if news_link.picture.present? %>
-    </div>
-    <div class="back">
-      <div class="flex-row flex-row--middle">
-        <div class="flex-row__cell flex-row__cell--grow">
-          <span class="highlight"><%= news_link.title %></span><br>
-          <small><%= truncate(news_link.description, length: 90) %></small><br>
-          <small class="muted"><%= news_link.created_at.to_s :slashes %></small>
-        </div>
-        <div class="flex-row__cell">
-          <span class="icon icon--chevron-right"></span>
-        </div>
+<div class="<%= "flippable" if news_link.picture.present? %>">
+  <div class="front">
+    <%= image_tag news_link.picture.expiring_url(3600), width: '100%' if news_link.picture.present? %>
+  </div>
+  <div class="back">
+    <div class="flex-row flex-row--middle">
+      <div class="flex-row__cell flex-row__cell--grow">
+        <span class="highlight"><%= news_link.title %></span><br>
+        <small><%= truncate(news_link.description, length: 90) %></small><br>
+        <small class="muted"><%= news_link.created_at.to_s :slashes %></small>
+      </div>
+      <div class="flex-row__cell">
+        <span class="icon icon--chevron-right"></span>
       </div>
     </div>
   </div>
-  <div class="card__section--description"><%= news_link.title if news_link.picture.present? %></div>
-<% end %>
+</div>
+<div class="card__section--description"><%= news_link.title if news_link.picture.present? %></div>

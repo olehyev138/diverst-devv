@@ -3,6 +3,10 @@ class Users::InvitationsController < Devise::InvitationsController
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :ensure_policy, only: [:new]
 
+  def index
+    redirect_to user_root_path
+  end
+
   protected
 
   def resolve_layout

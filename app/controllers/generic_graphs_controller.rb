@@ -1,9 +1,11 @@
 class GenericGraphsController < ApplicationController
-  include ERB::Util
+  include ActionView::Helpers::JavaScriptHelper
+
+  before_action :authenticate_user!
 
   def group_population
     data = current_user.enterprise.groups.map { |g| g.members.active.count }
-    categories = current_user.enterprise.groups.map{ |g| html_escape g.name }
+    categories = current_user.enterprise.groups.map{ |g| j g.name }
 
     respond_to do |format|
       format.json {
@@ -30,7 +32,7 @@ class GenericGraphsController < ApplicationController
 
   def segment_population
     data = current_user.enterprise.segments.map { |s| s.members.active.count }
-    categories = current_user.enterprise.segments.map{ |s| html_escape s.name }
+    categories = current_user.enterprise.segments.map{ |s| j s.name }
 
     respond_to do |format|
       format.json {
@@ -60,7 +62,7 @@ class GenericGraphsController < ApplicationController
       g.initiatives.joins(:owner)
         .where('initiatives.created_at > ? AND users.active = ?', 1.month.ago, true).count
     end
-    categories = current_user.enterprise.groups.map{ |g| html_escape g.name }
+    categories = current_user.enterprise.groups.map{ |g| j g.name }
 
     respond_to do |format|
       format.json{
@@ -91,7 +93,7 @@ class GenericGraphsController < ApplicationController
       g.messages.joins(:owner)
         .where('group_messages.created_at > ? AND users.active = ?', 1.month.ago, true).count
     end
-    categories = current_user.enterprise.groups.map{ |g| html_escape g.name }
+    categories = current_user.enterprise.groups.map{ |g| j g.name }
 
     respond_to do |format|
       format.json {
