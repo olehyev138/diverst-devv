@@ -9,6 +9,7 @@ require 'devise.rb'
 require 'capybara/rails'
 require 'capybara/poltergeist'
 require 'sidekiq/testing'
+require 'elasticsearch/extensions/test/cluster'
 
 require 'support/controller_macros.rb'
 require 'support/referrer_helpers.rb'
@@ -105,6 +106,18 @@ RSpec.configure do |config|
     config.integrate do |with|
       with.test_framework :rspec
       with.library :rails
+    end
+  end
+
+  config.before :all, elasticsearch: true do
+    unless Elasticsearch::Extensions::Test::Cluster.running?(on: 9250, command: ENV['ELASTICSEARCH_PATH'])
+      Elasticsearch::Extensions::Test::Cluster.start(port: 9250, nodes: 1, timeout: 120, command: ENV['ELASTICSEARCH_PATH'])
+    end
+  end
+
+  config.after :each, elasticsearch: true do
+    ActiveRecord::Base.descendants.each do |model|
+      model.__elasticsearch__.delete_index!(index: "_all") if model.respond_to?(:__elasticsearch__)
     end
   end
 end

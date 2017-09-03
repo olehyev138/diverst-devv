@@ -1,6 +1,10 @@
 class Field < ActiveRecord::Base
+  include Indexable
+
   belongs_to :container, polymorphic: true
   has_many :yammer_field_mappings, foreign_key: :diverst_field_id, dependent: :delete_all
+
+  after_commit on: [:update, :destroy] { update_elasticsearch_all_indexes(self.enterprise) }
 
   validates :title, presence: true
 
@@ -44,7 +48,7 @@ class Field < ActiveRecord::Base
   end
 
   def numeric?
-    type == "NumericField"
+    type == "NumericField" || type == "DateField"
   end
 
   def format_value_name(value)

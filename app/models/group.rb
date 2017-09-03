@@ -1,5 +1,6 @@
 class Group < ActiveRecord::Base
   include PublicActivity::Common
+  include Indexable
 
   extend Enumerize
 
@@ -8,30 +9,31 @@ class Group < ActiveRecord::Base
     :enabled
   ]
 
-  enumerize :members_visibility, default: :managers_only, in:[
+  enumerize :members_visibility, default: :managers_only, in: [
     :global,
     :group,
     :managers_only
   ]
 
-  enumerize :messages_visibility, default: :managers_only, in:[
+  enumerize :messages_visibility, default: :managers_only, in: [
     :global,
     :group,
     :managers_only
   ]
+
+  belongs_to :enterprise
+  belongs_to :lead_manager, class_name: "User"
+  belongs_to :owner, class_name: "User"
 
   has_many :user_groups, dependent: :destroy
-  has_many :members, through: :user_groups, class_name: 'User', source: :user, after_remove: :update_elasticsearch_member
-  belongs_to :enterprise
+  has_many :members, through: :user_groups, class_name: 'User', source: :user
   has_many :groups_polls
   has_many :polls, through: :groups_polls
   has_many :poll_responses, through: :polls, source: :responses
   has_many :events
-
   has_many :own_initiatives, class_name: 'Initiative', foreign_key: 'owner_group_id'
   has_many :initiative_participating_groups
   has_many :participating_initiatives, through: :initiative_participating_groups, source: :initiative
-
   has_many :budgets, as: :subject
   has_many :messages, class_name: 'GroupMessage'
   has_many :news_links
@@ -43,13 +45,10 @@ class Group < ActiveRecord::Base
   has_many :questions, through: :campaigns
   has_many :answers, through: :questions
   has_many :answer_upvotes, through: :answers, source: :votes
-  belongs_to :lead_manager, class_name: "User"
-  belongs_to :owner, class_name: "User"
   has_many :outcomes
   has_many :pillars, through: :outcomes
   has_many :initiatives, through: :pillars
   has_many :updates, class_name: "GroupUpdate", dependent: :destroy
-
   has_many :fields, -> { where field_type: "regular"},
               as: :container,
               dependent: :destroy
@@ -57,7 +56,6 @@ class Group < ActiveRecord::Base
               class_name: 'Field',
               as: :container,
               dependent: :destroy
-
   has_many :group_leaders
   has_many :leaders, through: :group_leaders, source: :user
 
@@ -71,8 +69,7 @@ class Group < ActiveRecord::Base
 
   before_save :send_invitation_emails, if: :send_invitations?
   before_save :create_yammer_group, if: :should_create_yammer_group?
-  before_destroy :handle_deletion
-  after_commit :update_all_elasticsearch_members
+  after_commit on: [:destroy] { update_elasticsearch_all_indexes(enterprise) }
 
   scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
 
@@ -240,27 +237,6 @@ class Group < ActiveRecord::Base
     yammer_create_group? &&
       !yammer_group_created &&
       !enterprise.yammer_token.nil?
-  end
-
-  # This method only exists because it's used in a callback
-  def update_elasticsearch_member(member)
-    member.__elasticsearch__.update_document
-  end
-
-  # Update members in elastic_search
-  def update_all_elasticsearch_members
-    members.includes(:poll_responses).each do |member|
-      update_elasticsearch_member(member)
-    end
-  end
-
-  def handle_deletion
-    old_members = members.ids
-
-    # Update members in elastic_search
-    User.where(id: old_members).find_each do |member|
-      update_elasticsearch_member(member)
-    end
   end
 
   def self.avg_members_per_group(enterprise:)

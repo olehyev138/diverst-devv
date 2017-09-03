@@ -1,15 +1,14 @@
 class User < ActiveRecord::Base
-  include PublicActivity::Common
-
-  @@fb_token_generator = Firebase::FirebaseTokenGenerator.new(ENV['FIREBASE_SECRET'].to_s)
-
-  # Include default devise modules.
   devise :database_authenticatable, :invitable, :lockable,
-    :recoverable, :rememberable, :trackable, :validatable, :async, :timeoutable
+  :recoverable, :rememberable, :trackable, :validatable, :async, :timeoutable
 
+  include PublicActivity::Common
   include DeviseTokenAuth::Concerns::User
   include Elasticsearch::Model
   include ContainsFields
+  include Indexable
+
+  @@fb_token_generator = Firebase::FirebaseTokenGenerator.new(ENV['FIREBASE_SECRET'].to_s)
 
   scope :active, -> { where(active: true) }
   scope :inactive, -> { where(active: false) }
@@ -34,14 +33,11 @@ class User < ActiveRecord::Base
   has_many :messages, through: :groups
   has_many :message_comments, class_name: 'GroupMessageComment', foreign_key: :author_id
   has_many :events, through: :groups
-
   has_many :social_links, foreign_key: :author_id, dependent: :destroy
-
   has_many :initiative_users
   has_many :initiatives, through: :initiative_users, source: :initiative
   has_many :initiative_invitees
   has_many :invited_initiatives, through: :initiative_invitees, source: :initiative
-
   has_many :event_attendances
   has_many :attending_events, through: :event_attendances, source: :event
   has_many :event_invitees
@@ -49,10 +45,8 @@ class User < ActiveRecord::Base
   has_many :managed_groups, foreign_key: :manager_id, class_name: 'Group'
   has_many :samples
   has_many :biases, class_name: "Bias"
-
   has_many :group_leaders
   has_many :leading_groups, through: :group_leaders, source: :group
-
   has_many :user_reward_actions
   has_many :reward_actions, through: :user_reward_actions
 
@@ -64,39 +58,14 @@ class User < ActiveRecord::Base
   validates :points, numericality: { only_integer: true }, presence: true
   validates :credits, numericality: { only_integer: true }, presence: true
   validate :validate_presence_fields
-  # validates :password, presence: true, unless: Proc.new { |a| a.enterprise.has_enabled_saml? }
-  # validates_confirmation_of :password, if: Proc.new { |a| a.enterprise.has_enabled_saml? && a.password.present? }
 
   before_validation :generate_password_if_saml
   before_save :assign_policy_group, if: Proc.new { |user| user[:policy_group_id].nil? }
   after_create :assign_firebase_token
 
-  after_commit on: [:create] do
-    IndexElasticsearchJob.perform_later(
-      model_name: 'User',
-      operation: 'index',
-      index: User.es_index_name(enterprise: self.enterprise),
-      record_id: id
-    )
-  end
-
-  after_commit on: [:update] do
-    IndexElasticsearchJob.perform_later(
-      model_name: 'User',
-      operation: 'update',
-      index: User.es_index_name(enterprise: self.enterprise),
-      record_id: id
-    )
-  end
-
-  after_commit on: [:destroy] do
-    IndexElasticsearchJob.perform_later(
-      model_name: 'User',
-      operation: 'delete',
-      index: User.es_index_name(enterprise: self.enterprise),
-      record_id: id
-    )
-  end
+  after_commit on: [:create] { update_elasticsearch_index(self, self.enterprise, 'index') }
+  after_commit on: [:update] { update_elasticsearch_index(self, self.enterprise, 'update') }
+  after_commit on: [:destroy] { update_elasticsearch_index(self, self.enterprise, 'delete') }
 
   scope :for_segments, -> (segments) { joins(:segments).where('segments.id' => segments.map(&:id)).distinct if segments.any? }
   scope :for_groups, -> (groups) { joins(:groups).where('groups.id' => groups.map(&:id)).distinct if groups.any? }
@@ -290,41 +259,6 @@ class User < ActiveRecord::Base
     save
   end
 
-  # Returns the index name to be used in Elasticsearch to store this enterprise's users
-  def self.es_index_name(enterprise:)
-    "#{enterprise.id}_users"
-  end
-
-  # Add the combined info from both the user's fields and his/her poll answers to ES
-  def as_indexed_json(*)
-    as_json(except: [:data],
-            methods: [:combined_info])
-  end
-
-  # Custom ES mapping that creates an unanalyzed version of all string fields for exact-match term queries
-  def self.custom_mapping
-    {
-      user: {
-        dynamic_templates: [{
-          string_template: {
-            type: 'string',
-            mapping: {
-              fields: {
-                raw: {
-                  type: 'string',
-                  index: 'not_analyzed'
-                }
-              }
-            },
-            match_mapping_type: 'string',
-            match: '*'
-          }
-        }],
-        properties: {}
-      }
-    }
-  end
-
   # Updates this user's match scores with all other enterprise users
   def update_match_scores
     enterprise.users.where.not(id: id).each do |other_user|
@@ -360,22 +294,6 @@ class User < ActiveRecord::Base
   def info_hash
     return {} if data.nil?
     JSON.parse data
-  end
-
-  # Returns a hash of all the user's fields combined with all their poll fields
-  def combined_info
-    combined_hash = {}
-
-    polls_hash = poll_responses.map(&:info).reduce({}) { |a, e| a.merge(e) } # Get a hash of all the combined poll response answers for this user
-    groups_hash = { groups: groups.ids }
-    segments_hash = { segments: segments.ids }
-
-    # Merge all the hashes to the main info hash
-    # We use info_hash instead of just info because Hash#merge accesses uses [], which is overriden in FieldData
-    info_hash
-      .merge(polls_hash)
-      .merge(groups_hash)
-      .merge(segments_hash)
   end
 
   # Export a CSV with the specified users
@@ -416,6 +334,53 @@ class User < ActiveRecord::Base
 
   def active_for_authentication?
     super && active?
+  end
+
+  # Elasticsearch methods
+
+  # Returns the index name to be used in Elasticsearch to store this enterprise's users
+  def self.es_index_name(enterprise:)
+    "#{ enterprise.id }_users"
+  end
+
+  # Add the combined info from both the user's fields and his/her poll answers to ES
+  def as_indexed_json(*)
+    as_json(except: [:data], methods: [:combined_info])
+  end
+
+  # Returns a hash of all the user's fields combined with all their poll fields
+  def combined_info
+    polls_hash = poll_responses.map(&:info).reduce({}) { |a, e| a.merge(e) } # Get a hash of all the combined poll response answers for this user
+    groups_hash = { groups: groups.ids }
+    segments_hash = { segments: segments.ids }
+
+    # Merge all the hashes to the main info hash
+    # We use info_hash instead of just info because Hash#merge accesses uses [], which is overriden in FieldData
+    info_hash.merge(polls_hash).merge(groups_hash).merge(segments_hash)
+  end
+
+  # Custom ES mapping that creates an unanalyzed version of all string fields for exact-match term queries
+  def self.custom_mapping
+    {
+      user: {
+        dynamic_templates: [{
+          string_template: {
+            type: 'string',
+            mapping: {
+              fields: {
+                raw: {
+                  type: 'string',
+                  index: 'not_analyzed'
+                }
+              }
+            },
+            match_mapping_type: 'string',
+            match: '*'
+          }
+        }],
+        properties: {}
+      }
+    }
   end
 
   private

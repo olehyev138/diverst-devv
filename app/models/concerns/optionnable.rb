@@ -41,7 +41,7 @@ module Optionnable
     answer_counts_formatted
   end
 
-  def elastic_stats(aggr_field: nil, segments: container.enterprise.segments.all, groups:)
+  def elastic_stats(aggr_field: nil, segments:, groups:)
     # Craft the aggregation query depending on if we have a field to aggregate on or not
     aggs = if aggr_field.nil?
       es_term_aggregation
@@ -67,7 +67,7 @@ module Optionnable
     )
   end
 
-  def elastic_timeseries(segments: container.enterprise.segments.all, groups:)
+  def elastic_timeseries(segments: , groups:)
     aggs = es_term_aggregation(
       aggs: {
         date_histogram: {
@@ -125,7 +125,7 @@ module Optionnable
       }
     end
 
-    search_hash['query'] = { bool: { should: terms} }
+    search_hash['query'] = { bool: { filter: terms} }
     # Execute the elasticsearch query
     Elasticsearch::Model.client.search(
       index: index,
@@ -135,7 +135,7 @@ module Optionnable
   end
 
   # Get highcharts-usable stats from the field by querying elasticsearch and formatting its response
-  def highcharts_stats(aggr_field: nil, segments: container.enterprise.segments.all, groups: [])
+  def highcharts_stats(aggr_field: nil, segments: [], groups: [])
     data = elastic_stats(aggr_field: aggr_field, segments: segments, groups: groups)
 
     if aggr_field # If there is an aggregation
@@ -258,7 +258,7 @@ module Optionnable
     end
   end
 
-  def highcharts_timeseries(segments:, groups:)
+  def highcharts_timeseries(segments: [], groups: [])
     data = elastic_timeseries(segments: segments, groups: groups)
     series = data['aggregations']['terms']['buckets'].map do |term_bucket|
       time_buckets = term_bucket['date_histogram']['buckets']

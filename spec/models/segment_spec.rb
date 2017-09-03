@@ -20,4 +20,39 @@ RSpec.describe Segment, type: :model do
     it{ expect(segment).to have_many(:initiative_segments) }
     it{ expect(segment).to have_many(:initiatives).through(:initiative_segments) }
   end
+
+  describe 'when describing callbacks' do
+    it "should reindex users on elasticsearch after create" do
+      segment = build(:segment)
+      TestAfterCommit.with_commits(true) do
+        expect(RebuildElasticsearchIndexJob).to receive(:perform_later).with(
+          model_name: 'User',
+          enterprise: segment.enterprise
+        )
+        segment.save
+      end
+    end
+
+    it "should reindex users on elasticsearch after update" do
+      segment = create(:segment)
+      TestAfterCommit.with_commits(true) do
+        expect(RebuildElasticsearchIndexJob).to receive(:perform_later).with(
+          model_name: 'User',
+          enterprise: segment.enterprise
+        )
+        segment.update(name: 'new segment')
+      end
+    end
+
+    it "should reindex users on elasticsearch after destroy" do
+      segment = create(:segment)
+      TestAfterCommit.with_commits(true) do
+        expect(RebuildElasticsearchIndexJob).to receive(:perform_later).with(
+          model_name: 'User',
+          enterprise: segment.enterprise
+        )
+        segment.destroy
+      end
+    end
+  end
 end
