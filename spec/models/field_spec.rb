@@ -1,6 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe Field do
+  describe "when validating" do
+    let(:field){ build_stubbed(:field) }
+
+    it { expect(field).to validate_presence_of(:title) }
+  end
+
   describe ".numeric?" do
     context "when field is Numeric" do
       let(:numeric_field){ build_stubbed(:numeric_field) }

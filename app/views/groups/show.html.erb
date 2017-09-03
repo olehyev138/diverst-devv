@@ -70,9 +70,14 @@
               <%= link_to "View all", group_news_links_path(@group), class: "card__action" %>
 
               <% @news_links.each do |news_link| %>
-                <%= render "shared/flippable/news_link", news_link: news_link %>
+                <% unless news_link.url.blank? %>
+                  <%= link_to news_link.url, class: "block block-section", target: "_blank" do %>
+                    <%= render "shared/flippable/news_link", news_link: news_link %>
+                  <% end %>
+                <% else %>
+                  <%= render "shared/flippable/news_link", news_link: news_link %>
+                <% end %>
               <% end %>
-
             </div>
           </div>
         </div>

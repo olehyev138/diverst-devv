@@ -1,4 +1,5 @@
 class PollsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_poll, only: [:edit, :update, :destroy, :show, :export_csv]
   after_action :verify_authorized
 

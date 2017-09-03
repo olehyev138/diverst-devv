@@ -6,7 +6,7 @@
 # server 'example.com', user: 'deploy', roles: %w{app db web}, my_property: :my_value
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
 # server 'db.example.com', user: 'deploy', roles: %w{db}
-server '52.6.17.51', user: 'newdeploy', roles: %w(web app db)
+server '34.200.27.56', user: 'newdeploy', roles: %w(web app db)
 
 # role-based syntax
 # ==================
@@ -31,7 +31,7 @@ server '52.6.17.51', user: 'newdeploy', roles: %w(web app db)
 set :branch, 'develop'
 set :rails_env, :production
 
-set :rollbar_env, "symantec"
+set :rollbar_env, "pwc"
 
 
 # Custom SSH Options

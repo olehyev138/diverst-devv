@@ -21,6 +21,10 @@ class SegmentRule < ActiveRecord::Base
     @@operators
   end
 
+  def values
+    self[:values].blank? ? "[]" : self[:values]
+  end
+
   def self.operator_text(id)
     operators.select { |_, v| v == id }.keys[0].to_s.tr('_', ' ')
   end

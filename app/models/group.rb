@@ -184,12 +184,14 @@ class Group < ActiveRecord::Base
 
   def survey_answers_csv
     CSV.generate do |csv|
-      csv << ['user_id', 'user_email'].concat(survey_fields.map(&:title))
+      csv << ['user_id', 'user_email', 'user_first_name', 'user_last_name'].concat(survey_fields.map(&:title))
 
       user_groups.with_answered_survey.includes(:user).order(created_at: :desc).each do |user_group|
         user_group_row = [
           user_group.user.id,
-          user_group.user.email
+          user_group.user.email,
+          user_group.user.first_name,
+          user_group.user.last_name
         ]
 
         survey_fields.each do |field|

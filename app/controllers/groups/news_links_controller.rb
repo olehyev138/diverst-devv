@@ -16,6 +16,8 @@ class Groups::NewsLinksController < ApplicationController
     @news_link = @group.news_links.new
   end
 
+  def edit ; end
+
   def comments
     @comments = @news_link.comments.includes(:author)
     @new_comment = NewsLinkComment.new
@@ -25,8 +27,12 @@ class Groups::NewsLinksController < ApplicationController
     @comment = @news_link.comments.new(news_link_comment_params)
     @comment.author = current_user
 
-    @comment.save && user_rewarder("news_comment").add_points(@comment)
-    flash_reward "Your comment was created. Now you have #{ current_user.credits } points"
+    if @comment.save
+      user_rewarder("news_comment").add_points(@comment)
+      flash_reward "Your comment was created. Now you have #{ current_user.credits } points"
+    else
+      flash[:alert] = "Your comment was not created. Please fix the errors"
+    end
 
     redirect_to action: :comments
   end

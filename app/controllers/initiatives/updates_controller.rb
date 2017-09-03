@@ -1,4 +1,5 @@
 class Initiatives::UpdatesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_group
   before_action :set_initiative
   before_action :set_update, only: [:edit, :update, :destroy, :show, :export_csv]

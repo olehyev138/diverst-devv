@@ -6,6 +6,8 @@ class Field < ActiveRecord::Base
 
   after_commit on: [:update, :destroy] { update_elasticsearch_all_indexes(self.enterprise) }
 
+  validates :title, presence: true
+
   # The typical field value flow would look like this:
   #   FORM (input string)
   #   1. process_field_value

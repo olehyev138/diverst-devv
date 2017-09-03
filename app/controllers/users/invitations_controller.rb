@@ -3,6 +3,10 @@ class Users::InvitationsController < Devise::InvitationsController
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :ensure_policy, only: [:new]
 
+  def index
+    redirect_to user_root_path
+  end
+
   protected
 
   def resolve_layout
@@ -19,12 +23,17 @@ class Users::InvitationsController < Devise::InvitationsController
   # Before the vCard is sent out (right after invitation)
   def invite_resource
     resource_class.invite!(invite_params, current_inviter) do |invitable|
-      invitable.skip_invitation = !current_user.enterprise.has_enabled_onboarding_email
+      invitable.skip_invitation = !current_inviter.enterprise.has_enabled_onboarding_email
       invitable.enterprise = current_inviter.enterprise
       invitable.info.merge(fields: invitable.enterprise.fields, form_data: params['custom-fields'])
       invitable.auth_source = 'manual'
       invitable.save
     end
+  end
+
+  def after_invite_path_for(resource)
+    flash[:notice] = "Invitation has been sent"
+    users_path
   end
 
   # After the vCard is filled out and submitted

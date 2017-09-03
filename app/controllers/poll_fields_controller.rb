@@ -1,4 +1,5 @@
 class PollFieldsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_field, only: [:answer_popularities, :show]
   before_action :set_poll
 

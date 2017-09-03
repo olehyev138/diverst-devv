@@ -1,4 +1,5 @@
 class EnterprisesController < ApplicationController
+  before_action :authenticate_user!, except: [:calendar]
   before_action :set_enterprise, except: [:index, :new, :create, :calendar]
   after_action :verify_authorized, except: :calendar
   after_action :allow_iframe, only: [:calendar]
