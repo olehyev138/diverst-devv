@@ -2,11 +2,7 @@ require 'rails_helper'
 
 RSpec.describe InitiativeDecorator do
 
-    let(:user) { create :user }
-    let!(:group) { create :group, enterprise: user.enterprise }
-    let(:outcome) {create :outcome, group_id: group.id}
-    let(:pillar) { create :pillar, outcome_id: outcome.id}
-    let(:initiative) { create :initiative, pillar: pillar, owner_group: group}
+    let(:initiative) { create :initiative}
 
     describe "#progress_percentage" do
         it "returns nil" do
