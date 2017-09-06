@@ -61,7 +61,7 @@ class Group < ActiveRecord::Base
   has_many :group_leaders
   has_many :leaders, through: :group_leaders, source: :user
 
-  has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
+  has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: "private"
   validates_attachment_content_type :logo, content_type: %r{\Aimage\/.*\Z}
 
   has_attached_file :banner
