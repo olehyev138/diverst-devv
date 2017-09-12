@@ -57,6 +57,7 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
       end
 
       it "and id is invalid then raises RecordNotFound exception" do
+        bypass_rescue
         expect{ get :show, group_id: group.id, initiative_id: initiative.id, id: 0 }
           .to raise_error(ActiveRecord::RecordNotFound)
       end
@@ -74,6 +75,7 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
       end
 
       it "and id is invalid then raises RecordNotFound exception" do
+        bypass_rescue
         expect{ get :edit, group_id: group.id, initiative_id: initiative.id, id: 0 }
           .to raise_error(ActiveRecord::RecordNotFound)
       end
@@ -96,6 +98,7 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
 
       context "and id is invalid" do
         it "then raises RecordNotFound exception" do
+          bypass_rescue
           expect{ patch :update, group_id: group.id, initiative_id: initiative.id, id: 0 }
             .to raise_error(ActiveRecord::RecordNotFound)
         end
@@ -114,6 +117,7 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
       end
 
       it "and id is invalid then raises RecordNotFound exception" do
+        bypass_rescue
         expect{ delete :destroy, group_id: group.id, initiative_id: initiative.id, id: 0 }
           .to raise_error(ActiveRecord::RecordNotFound)
       end

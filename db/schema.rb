@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170706155241) do
+ActiveRecord::Schema.define(version: 20170911131812) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -256,12 +256,16 @@ ActiveRecord::Schema.define(version: 20170706155241) do
   add_index "ckeditor_assets", ["type"], name: "index_ckeditor_assets_on_type", using: :btree
 
   create_table "custom_texts", force: :cascade do |t|
-    t.text    "erg",           limit: 65535
-    t.integer "enterprise_id", limit: 4
-    t.text    "program",       limit: 65535
-    t.text    "structure",     limit: 65535
-    t.text    "outcome",       limit: 65535
-    t.text    "badge",         limit: 65535
+    t.text    "erg",               limit: 65535
+    t.integer "enterprise_id",     limit: 4
+    t.text    "program",           limit: 65535
+    t.text    "structure",         limit: 65535
+    t.text    "outcome",           limit: 65535
+    t.text    "badge",             limit: 65535
+    t.text    "segment",           limit: 65535
+    t.text    "dci_full_title",    limit: 65535
+    t.text    "dci_abbreviation",  limit: 65535
+    t.text    "member_preference", limit: 65535
   end
 
   add_index "custom_texts", ["enterprise_id"], name: "index_custom_texts_on_enterprise_id", using: :btree
@@ -662,12 +666,34 @@ ActiveRecord::Schema.define(version: 20170706155241) do
     t.datetime "updated_at",              null: false
   end
 
+  create_table "news_feed_links", force: :cascade do |t|
+    t.integer  "news_feed_id", limit: 4
+    t.boolean  "approved",                 default: false
+    t.integer  "link_id",      limit: 4
+    t.string   "link_type",    limit: 255
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+  end
+
+  create_table "news_feeds", force: :cascade do |t|
+    t.integer  "group_id",   limit: 4
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
   create_table "news_link_comments", force: :cascade do |t|
     t.text     "content",      limit: 65535
     t.integer  "author_id",    limit: 4
     t.integer  "news_link_id", limit: 4
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
+  end
+
+  create_table "news_link_segments", force: :cascade do |t|
+    t.integer  "news_link_id", limit: 4
+    t.integer  "segment_id",   limit: 4
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   create_table "news_links", force: :cascade do |t|
@@ -855,12 +881,20 @@ ActiveRecord::Schema.define(version: 20170706155241) do
     t.string   "active_users_filter", limit: 255
   end
 
+  create_table "social_link_segments", force: :cascade do |t|
+    t.integer  "social_link_id", limit: 4
+    t.integer  "segment_id",     limit: 4
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
   create_table "social_network_posts", force: :cascade do |t|
     t.integer  "author_id",  limit: 4
     t.text     "embed_code", limit: 65535
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
     t.string   "url",        limit: 255,   null: false
+    t.integer  "group_id",   limit: 4
   end
 
   create_table "survey_managers", force: :cascade do |t|

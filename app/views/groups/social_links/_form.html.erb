@@ -1,0 +1,12 @@
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <%= simple_form_for @social_link, url: group_social_links_path do |f| %>
+        <%= f.input :url, label: "URL", input_html: { autofocus: true } %>
+        <%= f.association :segments, collection: @group.enterprise.segments, input_html: { class: "select2" } %>
+        
+        <%= f.button :submit %>
+      <% end %>
+    </div>
+  </div>
+</div>
