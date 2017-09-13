@@ -1,8 +1,16 @@
 <div class="content__header">
   <h1>Posts<%= link_to '/Pending', pending_group_posts_path(@group) if policy(@group).erg_leader_permissions? %></h1>
-  <%= link_to "+ Create News link", new_group_news_link_path, class: "btn btn--primary" if policy(NewsLink).new? %>
-  <%= link_to "+ Create Message", new_group_group_message_path, class: "btn btn--primary" if policy(GroupMessage).new? %>
-  <%= link_to "+ Create Social link", new_group_social_link_path, class: "btn btn--primary" if policy(SocialLink).new? %>
+  <div class="flex-row flex-row--middle">
+    <div class="flex-row__cell">
+      <%= link_to "+ Create News link", new_group_news_link_path, class: "btn btn--primary" if policy(NewsLink).new? %>
+    </div>
+    <div class="flex-row__cell">
+      <%= link_to "+ Create Message", new_group_group_message_path, class: "btn btn--primary" if policy(GroupMessage).new? %>
+    </div>
+    <div class="flex-row__cell">
+      <%= link_to "+ Create Social link", new_group_social_link_path, class: "btn btn--primary" if policy(SocialLink).new? %>
+    </div>
+  </div>
 </div>
 
 <div class="content__main">
