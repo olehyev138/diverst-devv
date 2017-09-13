@@ -93,6 +93,7 @@ group :development, :test do
   gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
   gem 'timecop', '~> 0.8.1'
   gem 'byebug' # Debugger
+  gem 'pundit-matchers', '~> 1.3.1'
 end
 
 group :test do

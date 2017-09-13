@@ -50,6 +50,7 @@ Rails.application.routes.draw do
   resources :users do
     member do
       get 'group_surveys'
+      put 'resend_invitation'
     end
 
     collection do

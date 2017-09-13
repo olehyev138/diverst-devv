@@ -10,8 +10,6 @@ class ApplicationController < ActionController::Base
     # For APIs, you may want to use :null_session instead.
     protect_from_forgery with: :exception
 
-    helper_method :events_to_json
-
     rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
     rescue_from ActionController::UnknownFormat do |e|
@@ -32,6 +30,11 @@ class ApplicationController < ActionController::Base
         flash[:alert] = e.message
         redirect_to(request.referrer || default_path)
     end
+    
+    rescue_from ActionController::ParameterMissing do |e|
+        flash[:alert] = e.message
+        redirect_to(request.referrer || default_path)
+    end
 
     around_action :user_time_zone, if: :current_user
 
@@ -41,7 +44,12 @@ class ApplicationController < ActionController::Base
     end
 
     def routing_error
-        render :status => :forbidden, :json => {:message => "Invalid Route"}
+        if user_signed_in?
+            flash[:alert] = "Invalid Route"
+            redirect_to(request.referrer || default_path)
+        else
+            render :status => :forbidden, :json => {:message => "Invalid Route"}
+        end
     end
 
     protected

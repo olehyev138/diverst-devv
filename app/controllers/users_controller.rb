@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:edit, :update, :destroy, :show, :group_surveys]
+  before_action :set_user, only: [:edit, :update, :destroy, :resend_invitation, :show, :group_surveys]
   after_action :verify_authorized, except: [:edit_profile, :group_surveys]
 
   layout :resolve_layout
@@ -73,6 +73,13 @@ class UsersController < ApplicationController
   def destroy
     authorize @user
     @user.destroy
+    redirect_to :back
+  end
+  
+  def resend_invitation
+    authorize @user
+    @user.invite! # => reset invitation status and send invitation again
+    flash[:notice] = "Invitation Re-Sent!"
     redirect_to :back
   end
 
