@@ -29,7 +29,7 @@ server '52.6.17.51', user: 'newdeploy', roles: %w(web app db)
 # Feel free to add new variables to customise your setup.
 
 set :branch, 'staging'
-set :rails_env, :staging
+set :rails_env, :production
 
 set :rollbar_env, "staging"
 
