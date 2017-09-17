@@ -75,6 +75,8 @@ gem 'ruby-oembed', '~> 0.12.0'
 
 gem 'julia_builder', '~> 0.2.0'
 
+gem 'sanitize_email', '~> 1.2.2'
+
 group :development, :test do
   gem 'spring', '~> 1.6.2' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'guard-livereload', '~> 2.4', require: false
