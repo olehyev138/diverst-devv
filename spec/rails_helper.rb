@@ -110,8 +110,8 @@ RSpec.configure do |config|
   end
 
   config.before :all, elasticsearch: true do
-    unless Elasticsearch::Extensions::Test::Cluster.running?(on: 9250, command: ENV['ELASTICSEARCH_PATH'])
-      Elasticsearch::Extensions::Test::Cluster.start(port: 9250, nodes: 1, timeout: 120, command: ENV['ELASTICSEARCH_PATH'])
+    unless Elasticsearch::Extensions::Test::Cluster.running?(on: 9200, command: ENV['ELASTICSEARCH_PATH'])
+      Elasticsearch::Extensions::Test::Cluster.start(port: 9200, nodes: 1, timeout: 120, command: ENV['ELASTICSEARCH_PATH'])
     end
   end
 
