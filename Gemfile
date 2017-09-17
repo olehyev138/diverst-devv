@@ -128,7 +128,7 @@ group :development do
   gem 'rufo'
 end
 
-group :production do
+group :staging, :production do
   gem 'syslogger', '~> 1.6.0' # Log to syslog, which is then sent to Loggly
   gem 'lograge', '~> 0.3'
   gem 'newrelic_rpm'
