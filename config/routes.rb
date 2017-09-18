@@ -271,6 +271,7 @@ Rails.application.routes.draw do
   end
 
   resources :segments do
+    resources :sub_segments
     member do
       get 'export_csv'
     end
