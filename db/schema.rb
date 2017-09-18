@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170911131812) do
+ActiveRecord::Schema.define(version: 20170913233328) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -872,6 +872,16 @@ ActiveRecord::Schema.define(version: 20170911131812) do
     t.datetime "updated_at",             null: false
   end
 
+  create_table "segmentations", force: :cascade do |t|
+    t.integer  "parent_id",  limit: 4
+    t.integer  "child_id",   limit: 4
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "segmentations", ["child_id"], name: "fk_rails_9a097e6024", using: :btree
+  add_index "segmentations", ["parent_id", "child_id"], name: "index_segmentations_on_parent_id_and_child_id", unique: true, using: :btree
+
   create_table "segments", force: :cascade do |t|
     t.integer  "enterprise_id",       limit: 4
     t.string   "name",                limit: 255
@@ -1050,6 +1060,7 @@ ActiveRecord::Schema.define(version: 20170911131812) do
   add_foreign_key "reward_actions", "enterprises"
   add_foreign_key "rewards", "enterprises"
   add_foreign_key "rewards", "users", column: "responsible_id"
+  add_foreign_key "segmentations", "segments", column: "child_id"
   add_foreign_key "user_reward_actions", "reward_actions"
   add_foreign_key "user_reward_actions", "users"
   add_foreign_key "user_rewards", "rewards"
