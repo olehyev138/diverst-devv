@@ -35,8 +35,8 @@ gem 'bower-rails', '~> 0.10.0' # Bower integration with Rails
 gem 'clockwork', '~> 1.2' # Schedule recurring jobs
 gem 'pismo', '~> 0.7.4' # Extracts metadata from an URL
 gem 'active_link_to', '~> 1.0', '>= 1.0.3' # Automatically add an active class to current nav link
-gem 'paperclip', '~> 4.3' # Handle attachments for models and forms
-gem 'aws-sdk', '< 2.0' # The official AWS SDK
+gem 'paperclip', '~> 5.1.0'# Handle attachments for models and forms
+gem 'aws-sdk', '~> 3.0.1'# The official AWS SDK
 gem 'kaminari', '~> 0.16.3' # Pagination
 gem 'jquery-datatables-rails', '~> 3.3' # Datatables
 gem 'ajax-datatables-rails', '~> 0.3.1' # Adds AJAX routes for datatables queries
@@ -59,7 +59,7 @@ gem 'pundit', '~> 1.1' # Authorization
 gem 'draper', '~> 2.1' # Decorators for views
 gem 'daemons', '~> 1.2', '>= 1.2.3' # For capistrano-clockwork
 gem 'icalendar', '~> 2.3' # For exporting events to your calendar
-gem 'simple_form_fancy_uploads', github: "TeamDiverst/simple_form_fancy_uploads", branch: "paperclip_version"
+gem 'simple_form_fancy_uploads', git: "https://github.com/TeamDiverst/simple_form_fancy_uploads.git", branch: "paperclip_version"
 gem 'ransack', '~> 1.8', '>= 1.8.2' # For search forms
 gem 'ckeditor', '~> 4.2', '>= 4.2.3'
 
@@ -122,6 +122,7 @@ group :development do
   gem 'letter_opener'
   gem 'letter_opener_web', '~> 1.3', '>= 1.3.1'
   gem 'rufo'
+  gem 'bundler-audit'
 end
 
 group :production do

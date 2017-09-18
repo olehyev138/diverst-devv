@@ -8,7 +8,7 @@ class Answer < ActiveRecord::Base
     has_many :comments, class_name: 'AnswerComment'
     has_many :expenses, class_name: "AnswerExpense"
 
-    has_attached_file :supporting_document, s3_permissions: :private
+    has_attached_file :supporting_document, s3_permissions: "private"
     do_not_validate_attachment_file_type :supporting_document
 
     accepts_nested_attributes_for :expenses, reject_if: :all_blank, allow_destroy: true
