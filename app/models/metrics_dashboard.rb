@@ -9,7 +9,8 @@ class MetricsDashboard < ActiveRecord::Base
   has_many :groups_metrics_dashboards
   has_many :groups, through: :groups_metrics_dashboards
 
-  validates_presence_of :name
+  validates_presence_of :name, :message => "Metrics Dashboard name is required"
+  validates_presence_of :groups, :message => "Please select a group"
 
   # Returns a query to the list of users targeted by the dashboard
   def target
