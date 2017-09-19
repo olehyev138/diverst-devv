@@ -6,7 +6,6 @@ RSpec.describe MetricsDashboard, :type => :model do
     describe 'validations' do
         it{ expect(subject).to validate_presence_of(:name).with_message("Metrics Dashboard name is required") }
         it{ expect(subject).to validate_presence_of(:groups).with_message("Please select a group") }
-        
     end
 
     describe '#percentage_of_total' do

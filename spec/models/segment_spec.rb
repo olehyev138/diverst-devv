@@ -19,6 +19,8 @@ RSpec.describe Segment, type: :model do
         it{ expect(segment).to have_many(:groups).through(:invitation_segments_groups).inverse_of(:invitation_segments) }
         it{ expect(segment).to have_many(:initiative_segments) }
         it{ expect(segment).to have_many(:initiatives).through(:initiative_segments) }
+        
+        it{ expect(segment).to validate_presence_of(:name)}
     end
     
     describe "associations" do
