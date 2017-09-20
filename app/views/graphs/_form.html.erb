@@ -4,16 +4,16 @@
       <div class="card__section card__section--border">
         <%= f.association :field,
               label: "Choose the <strong>field</strong> that the graph will represent".html_safe,
-              collection: f.object.collection.graphable_fields(current_user).map{ |field| [field.title, field.id, { class: field.type.underscore }] },
+              collection: f.object.collection.graphable_fields(current_user).map{ |field| [field.title, field.id, { class: "numeric-field-#{ field.numeric? }" }] },
               include_blank: false,
-              input_html: { class: "poll-graph-field", autofocus: true }
+              input_html: { class: "graph-field", autofocus: true }
         %>
       </div>
 
-      <div class="card__section card__section--border">
+      <div class="card__section card__section--border graph-aggregation-field">
         <%= f.association :aggregation,
               label: "Choose a field to <strong>aggregate</strong> the data on (optional)".html_safe,
-              collection: f.object.collection.graphable_fields(current_user) %>
+              collection: f.object.collection.graphable_fields(current_user).reject{ |f| f.numeric? } %>
       </div>
 
       <div class="card__section card__section--border">

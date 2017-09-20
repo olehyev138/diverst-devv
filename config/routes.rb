@@ -15,6 +15,8 @@ Rails.application.routes.draw do
     passwords: 'users/passwords'
   }
 
+  get 'users/invitation', to: 'users/invitations#index'
+
   get 'omniauth/:provider/callback', to: 'omni_auth#callback'
   
   namespace :api, defaults: { format: :json } do
@@ -150,7 +152,7 @@ Rails.application.routes.draw do
           get 'segment_graph'
         end
 
-        resources :comments
+        resources :comments, only: [:create]
 
         collection do
           get 'calendar_view'
@@ -164,7 +166,7 @@ Rails.application.routes.draw do
 
       resources :user_groups, only: :update
 
-      resources :news_links do
+      resources :news_links, except: [:show] do
         member do
           get 'comments'
           post 'create_comment'
@@ -256,7 +258,7 @@ Rails.application.routes.draw do
         get 'answer_popularities'
       end
     end
-    
+
     scope module: 'polls' do
       resources :graphs, only: [:new, :create]
     end
@@ -299,7 +301,7 @@ Rails.application.routes.draw do
   resources :campaigns do
     resources :questions, shallow: true do
       resources :answers, shallow: true do
-        resources :answer_comments, path: 'comments', shallow: true
+        resources :answer_comments, only: [:destroy], path: 'comments', shallow: true
 
         member do
           get 'breakdown'

@@ -5,7 +5,7 @@ RSpec.describe Badge, type: :model do
     let(:badge) { build_stubbed(:badge) }
 
     it { expect(badge).to validate_presence_of(:label) }
-    it { expect(badge).to validate_numericality_of(:points).only_integer }
+    it { expect(badge).to validate_numericality_of(:points).is_greater_than_or_equal_to(0).only_integer }
     it { expect(badge).to validate_presence_of(:points) }
     it { expect(badge).to validate_presence_of(:enterprise) }
     it { expect(badge).to have_attached_file(:image) }

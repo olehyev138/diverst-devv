@@ -28,10 +28,10 @@ server '52.6.17.51', user: 'newdeploy', roles: %w(web app db)
 # http://capistranorb.com/documentation/getting-started/configuration/
 # Feel free to add new variables to customise your setup.
 
-set :branch, 'develop'
+set :branch, 'staging'
 set :rails_env, :production
 
-set :rollbar_env, "symantec"
+set :rollbar_env, "staging"
 
 
 # Custom SSH Options

@@ -1,4 +1,5 @@
 class Groups::FieldsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_group
   before_action :set_field, only: [:time_series]
   after_action :verify_authorized

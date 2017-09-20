@@ -6,9 +6,17 @@ class Graph < ActiveRecord::Base
   delegate :title, to: :field
 
   def data
+    segments = collection.segments || field.container.enterprise.segments.all
+    groups = collection.groups
+    graph_data =
+      if time_series
+        field.highcharts_timeseries(segments: segments, groups: groups)
+      else
+        field.highcharts_stats(aggr_field: aggregation, segments: segments, groups: groups)
+      end
     {
       type: field.type,
-      highcharts: time_series ? field.highcharts_timeseries(segments: collection.segments, groups: collection.groups) : field.highcharts_stats(aggr_field: aggregation, segments: collection.segments, groups: collection.groups),
+      highcharts: graph_data,
       hasAggregation: has_aggregation?,
       time_series: time_series,
       title: title
