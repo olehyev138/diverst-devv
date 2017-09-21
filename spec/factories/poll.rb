@@ -4,6 +4,7 @@ FactoryGirl.define do
     description { Faker::Lorem.sentence }
     nb_invitations 10
     enterprise
+    association :owner, factory: :user
 
     factory :poll_with_responses do
       transient do
