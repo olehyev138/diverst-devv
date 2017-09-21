@@ -13,13 +13,14 @@ class CampaignsController < ApplicationController
   def new
     authorize Campaign
     @campaign = current_user.enterprise.campaigns.new
+    @campaign.start = Date.today + 1
+    @campaign.end = @campaign.start + 7.days
   end
 
   def create
     authorize Campaign
     @campaign = current_user.enterprise.campaigns.new(campaign_params)
     @campaign.owner = current_user
-
     if @campaign.save
       track_activity(@campaign, :create)
       flash[:notice] = "Your campaign was created"

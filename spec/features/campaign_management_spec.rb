@@ -9,20 +9,24 @@ RSpec.feature 'Campaign management' do
   end
 
   scenario 'user creates a new campaign', :js do
+    create(:group, :enterprise => user.enterprise, :name => "Group #1")
+    
     campaign = {
       title: 'My Campaign',
       description: 'Look at that sweet campaign!',
-      start_time: Time.zone.local(2015, 11, 10, 12, 30),
-      end_time: Time.zone.local(2015, 11, 15, 12, 30)
+      start_time: Date.today + 1,
+      end_time: Date.today + 7,
+      group_ids: [create(:group).id]
     }
 
     visit new_campaign_path
-
+    
     fill_in 'campaign_title', with: campaign[:title]
     fill_in 'campaign_description', with: campaign[:description]
     fill_in 'campaign_start', with: campaign[:start_time]
     fill_in 'campaign_end', with: campaign[:end_time]
-
+    select 'Group #1', from: 'campaign_group_ids'
+    
     # We used 'trigger' instead of 'click_on' because Capybara raises an error when
     # we try to click on this button in a page that we have a datetime_picker input
     find('.add_fields', text: 'Add question').trigger('click')

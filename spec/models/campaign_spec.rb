@@ -18,7 +18,13 @@ RSpec.describe Campaign, type: :model do
         it { expect(campaign).to have_many(:users).through(:invitations) }
         it { expect(campaign).to have_many(:campaigns_managers) }
         it { expect(campaign).to have_many(:managers).through(:campaigns_managers) }
-
+            
+        it{ expect(campaign).to validate_presence_of(:title) }    
+        it{ expect(campaign).to validate_presence_of(:description) }
+        it{ expect(campaign).to validate_presence_of(:start) }
+        it{ expect(campaign).to validate_presence_of(:end) }
+        it{ expect(campaign).to validate_presence_of(:groups).with_message("Please select at least 1 group") }
+        
         it 'is valid' do
             expect(campaign).to be_valid
         end

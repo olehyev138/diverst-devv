@@ -35,7 +35,7 @@ RSpec.describe QuestionsController, type: :controller do
     
     describe "POST#create" do
         context "with logged user" do
-            before{ post :create, campaign_id: campaign.id, question: {title: "Title"}}
+            before{ post :create, campaign_id: campaign.id, question: {title: "Title", description: "description"}}
             it "redirects" do
                 expect(response).to redirect_to action: :index
             end

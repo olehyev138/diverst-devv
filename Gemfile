@@ -74,6 +74,8 @@ gem 'rollbar', '~> 2.14.1'
 gem 'ruby-oembed', '~> 0.12.0'
 
 gem 'julia_builder', '~> 0.2.0'
+gem 'date_validator', '~> 0.9.0'
+gem "thor", "0.19.1"# Expected string default value for '--decorator'; got true (boolean) - setting version removes this message
 
 group :development, :test do
   gem 'spring', '~> 1.6.2' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
