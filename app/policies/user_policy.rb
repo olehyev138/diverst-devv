@@ -15,6 +15,10 @@ class UserPolicy < ApplicationPolicy
   def destroy?
     @policy_group.global_settings_manage?
   end
+  
+  def resend_invitation?
+    @policy_group.global_settings_manage?
+  end
 
   def access_hidden_info?
     return true if @record == @user

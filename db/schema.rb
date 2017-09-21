@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170831204349) do
+ActiveRecord::Schema.define(version: 20170913233328) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -129,6 +129,20 @@ ActiveRecord::Schema.define(version: 20170831204349) do
   create_table "biases_to_groups", force: :cascade do |t|
     t.integer "group_id", limit: 4
     t.integer "bias_id",  limit: 4
+  end
+
+  create_table "bootsy_image_galleries", force: :cascade do |t|
+    t.integer  "bootsy_resource_id",   limit: 4
+    t.string   "bootsy_resource_type", limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "bootsy_images", force: :cascade do |t|
+    t.string   "image_file",       limit: 255
+    t.integer  "image_gallery_id", limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "budget_items", force: :cascade do |t|
@@ -652,12 +666,34 @@ ActiveRecord::Schema.define(version: 20170831204349) do
     t.datetime "updated_at",              null: false
   end
 
+  create_table "news_feed_links", force: :cascade do |t|
+    t.integer  "news_feed_id", limit: 4
+    t.boolean  "approved",                 default: false
+    t.integer  "link_id",      limit: 4
+    t.string   "link_type",    limit: 255
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+  end
+
+  create_table "news_feeds", force: :cascade do |t|
+    t.integer  "group_id",   limit: 4
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
   create_table "news_link_comments", force: :cascade do |t|
     t.text     "content",      limit: 65535
     t.integer  "author_id",    limit: 4
     t.integer  "news_link_id", limit: 4
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
+  end
+
+  create_table "news_link_segments", force: :cascade do |t|
+    t.integer  "news_link_id", limit: 4
+    t.integer  "segment_id",   limit: 4
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   create_table "news_links", force: :cascade do |t|
@@ -836,6 +872,16 @@ ActiveRecord::Schema.define(version: 20170831204349) do
     t.datetime "updated_at",             null: false
   end
 
+  create_table "segmentations", force: :cascade do |t|
+    t.integer  "parent_id",  limit: 4
+    t.integer  "child_id",   limit: 4
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "segmentations", ["child_id"], name: "fk_rails_9a097e6024", using: :btree
+  add_index "segmentations", ["parent_id", "child_id"], name: "index_segmentations_on_parent_id_and_child_id", unique: true, using: :btree
+
   create_table "segments", force: :cascade do |t|
     t.integer  "enterprise_id",       limit: 4
     t.string   "name",                limit: 255
@@ -845,12 +891,20 @@ ActiveRecord::Schema.define(version: 20170831204349) do
     t.string   "active_users_filter", limit: 255
   end
 
+  create_table "social_link_segments", force: :cascade do |t|
+    t.integer  "social_link_id", limit: 4
+    t.integer  "segment_id",     limit: 4
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
   create_table "social_network_posts", force: :cascade do |t|
     t.integer  "author_id",  limit: 4
     t.text     "embed_code", limit: 65535
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
     t.string   "url",        limit: 255,   null: false
+    t.integer  "group_id",   limit: 4
   end
 
   create_table "survey_managers", force: :cascade do |t|
@@ -896,8 +950,8 @@ ActiveRecord::Schema.define(version: 20170831204349) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "accepted_member",                       default: false
-    t.integer  "notifications_frequency", limit: 4,     default: 0
     t.integer  "total_weekly_points",     limit: 4,     default: 0
+    t.integer  "notifications_frequency", limit: 4,     default: 0
     t.text     "data",                    limit: 65535
   end
 
@@ -1006,6 +1060,7 @@ ActiveRecord::Schema.define(version: 20170831204349) do
   add_foreign_key "reward_actions", "enterprises"
   add_foreign_key "rewards", "enterprises"
   add_foreign_key "rewards", "users", column: "responsible_id"
+  add_foreign_key "segmentations", "segments", column: "child_id"
   add_foreign_key "user_reward_actions", "reward_actions"
   add_foreign_key "user_reward_actions", "users"
   add_foreign_key "user_rewards", "rewards"

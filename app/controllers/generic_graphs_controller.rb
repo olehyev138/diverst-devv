@@ -31,8 +31,21 @@ class GenericGraphsController < ApplicationController
   end
 
   def segment_population
-    data = current_user.enterprise.segments.map { |s| s.members.active.count }
-    categories = current_user.enterprise.segments.map{ |s| j s.name }
+    data = current_user.enterprise.segments.map { |s| 
+      {
+        y: s.members.active.count,
+        name: s.name,
+        drilldown: s.name
+      } 
+    }
+    drilldowns = current_user.enterprise.segments.includes(:sub_segments).map { |s| 
+        {
+          name: s.name,
+          id: s.name,
+          data: s.sub_segments.map {|sub| [sub.name, sub.members.active.count]}
+        }
+    }
+    categories = current_user.enterprise.segments.map{ |s| html_escape s.name }
 
     respond_to do |format|
       format.json {
@@ -40,9 +53,11 @@ class GenericGraphsController < ApplicationController
           type: 'bar',
           highcharts: {
             series: [{
-              title: 'Number of users',
+              name: 'Number of users',
+              colorByPoint: true,
               data: data
             }],
+            drilldowns: drilldowns,
             categories: categories,
             xAxisTitle: c_t(:segment)
           },

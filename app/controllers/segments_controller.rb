@@ -1,5 +1,4 @@
 class SegmentsController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_segment, only: [:edit, :update, :destroy, :show, :export_csv]
   skip_before_action :verify_authenticity_token, only: [:create]
   after_action :verify_authorized
@@ -35,7 +34,8 @@ class SegmentsController < ApplicationController
     @groups = current_user.enterprise.groups
 
     @group = @groups.find_by_id(params[:group_id])
-
+    @segments = @segment.sub_segments
+    
     if @group.present?
       @members = segment_members_of_group(@segment, @group)
     else
@@ -88,7 +88,7 @@ class SegmentsController < ApplicationController
   end
 
   def set_segment
-    @segment = current_user.enterprise.segments.find(params[:id])
+    @segment = Segment.find(params[:id])#current_user.enterprise.segments.find(params[:id])
   end
 
   def segment_params

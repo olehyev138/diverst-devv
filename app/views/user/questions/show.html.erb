@@ -1,7 +1,7 @@
 <div class="content__header">
   <h1>
-    <%= link_to "My Campaigns", user_campaigns_path %> /
-    <%= link_to @question.campaign.title, user_campaign_questions_path(@question.campaign) %> /
+    <%= link_to "My Campaigns", user_user_campaign_path %> /
+    <%= link_to @question.campaign.title, user_user_campaign_questions_path(@question.campaign) %> /
     <%= @question.title.truncate(60) %>
   </h1>
 </div>
@@ -76,7 +76,7 @@
   <div class="card">
     <div class="card__section">
     <% if @question.solved_at.nil? %>
-      <%= simple_form_for [:user, @campaign, @question, @question.answers.new] do |f| %>
+      <%= simple_form_for [@question, @question.answers.new] do |f| %>
         <%= f.input :content, label: "<h3>Write an answer</h3>".html_safe, placeholder: "Type an answer here..." %>
         <%= f.button :submit, value: "Submit" %>
       <% end %>
