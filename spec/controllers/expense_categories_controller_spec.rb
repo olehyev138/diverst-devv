@@ -72,7 +72,7 @@ RSpec.describe ExpenseCategoriesController, type: :controller do
             login_user_from_let
             
             context "with valid parameters" do
-                before(:each){ patch :update, id: expense_category.id, expense_category: attributes_for(:expense_category, name: "updated") }
+                before(:each){ patch :update, id: expense_category.id, expense_category: {name: "updated"} }
                 
                 it "updates the expense_category" do
                     expense_category.reload
@@ -89,15 +89,10 @@ RSpec.describe ExpenseCategoriesController, type: :controller do
             end
             
             context "with invalid parameters" do
-                before(:each){ patch :update, id: expense_category.id, expense_category: attributes_for(:expense_category, name: "") }
-                
-                it "does not update the expense_category" do
-                    expense_category.reload
-                    expect(expense_category.name).to eq ""
-                end
+                before(:each){ patch :update, id: expense_category.id, expense_category: {name: nil} }
                 
                 it "renders action edit" do
-                    expect(response.status).to eq(302)
+                    expect(response).to render_template :edit
                 end
                 
                 it "flashes alert" do

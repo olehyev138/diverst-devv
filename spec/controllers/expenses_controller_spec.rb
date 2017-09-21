@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe ExpensesController, type: :controller do
     let(:enterprise){ create(:enterprise, cdo_name: "test") }
     let(:user){ create(:user, enterprise: enterprise) }
+    let(:category){create(:expense_category)}
     let(:expense){create(:expense, enterprise: enterprise)}
     
     describe "GET#index" do
@@ -32,7 +33,7 @@ RSpec.describe ExpensesController, type: :controller do
             login_user_from_let
             
             context 'with correct params' do
-                let(:expense) { FactoryGirl.attributes_for(:expense) }
+                let(:expense) { FactoryGirl.attributes_for(:expense, :category_id => category.id )}
             
                 it 'redirects to correct action' do
                     post :create, expense: expense
@@ -90,13 +91,8 @@ RSpec.describe ExpensesController, type: :controller do
             context "with invalid parameters" do
                 before(:each){ patch :update, id: expense.id, expense: attributes_for(:expense, name: "") }
                 
-                it "does not update the expense" do
-                    expense.reload
-                    expect(expense.name).to eq ""
-                end
-                
                 it "renders action edit" do
-                    expect(response.status).to eq(302)
+                    expect(response).to render_template :edit
                 end
                 
                 it "flashes alert" do

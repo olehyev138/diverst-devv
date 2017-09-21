@@ -22,6 +22,7 @@ class ExpensesController < ApplicationController
       flash[:notice] = "Your expense was created"
       redirect_to action: :index
     else
+      puts @expense.errors.full_messages.first
       flash[:alert] = "Your expense was not created. Please fix the errors"
       render :new
     end
