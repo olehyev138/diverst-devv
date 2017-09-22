@@ -11,7 +11,7 @@ class EnterprisesController < ApplicationController
 
   def update
     authorize @enterprise
-
+    
     if @enterprise.update_attributes(enterprise_params)
       flash[:notice] = "Your enterprise was updated"
       redirect_to :back
