@@ -1,5 +1,5 @@
 class SegmentsController < ApplicationController
-  before_action :set_segment, only: [:edit, :update, :destroy, :show, :export_csv, :new_sub_segment]
+  before_action :set_segment, only: [:edit, :update, :destroy, :show, :export_csv]
   skip_before_action :verify_authenticity_token, only: [:create]
   after_action :verify_authorized
 
@@ -7,7 +7,7 @@ class SegmentsController < ApplicationController
 
   def index
     authorize Segment
-    @segments = policy_scope(Segment)
+    @segments = policy_scope(Segment).includes(:members)
   end
 
   def new
@@ -34,7 +34,7 @@ class SegmentsController < ApplicationController
     @groups = current_user.enterprise.groups
 
     @group = @groups.find_by_id(params[:group_id])
-    @segments = @segment.sub_segments
+    @segments = @segment.sub_segments.includes(:members)
     
     if @group.present?
       @members = segment_members_of_group(@segment, @group)
