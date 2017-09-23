@@ -37,9 +37,9 @@ class SegmentsController < ApplicationController
     @segments = @segment.sub_segments.includes(:members)
     
     if @group.present?
-      @members = segment_members_of_group(@segment, @group)
+      @members = segment_members_of_group(@segment, @group).uniq
     else
-      @members = @segment.members
+      @members = @segment.members.uniq
     end
   end
 
