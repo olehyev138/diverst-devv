@@ -195,7 +195,7 @@ class GroupsController < ApplicationController
       redirect_to :back
     else
       flash[:alert] = "Group attachment was not removed. Please fix the errors"
-      render :back
+      redirect_to :back
     end
   end
 
