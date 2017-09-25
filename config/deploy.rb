@@ -1,4 +1,4 @@
-lock '3.8.2'
+lock '3.9.1'
 
 set :application, 'diverst'
 set :repo_url, 'git@github.com:TeamDiverst/diverst-development.git'
