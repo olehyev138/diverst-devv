@@ -33,6 +33,8 @@ class Segment < ActiveRecord::Base
 
     after_commit :update_indexes
 
+    validates_presence_of :enterprise
+
     def general_rules_followed_by?(user)
         case active_users_filter
         when 'only_active'
