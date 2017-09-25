@@ -52,6 +52,7 @@ Rails.application.routes.draw do
   resources :users do
     member do
       get 'group_surveys'
+      put 'resend_invitation'
     end
 
     collection do
@@ -134,7 +135,7 @@ Rails.application.routes.draw do
         post 'create_comment'
       end
       resources :leaders, only: [:index, :new, :create]
-
+      resources :social_links
       resources :questions, only: [:index] do
         collection do
           get 'survey'
@@ -169,6 +170,12 @@ Rails.application.routes.draw do
         member do
           get 'comments'
           post 'create_comment'
+        end
+      end
+      resources :posts, :only => [:index] do
+        collection do
+          get 'pending'
+          post 'approve'
         end
       end
       resources :resources

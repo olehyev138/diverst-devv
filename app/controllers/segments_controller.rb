@@ -1,5 +1,4 @@
 class SegmentsController < ApplicationController
-  before_action :authenticate_user!
   before_action :set_segment, only: [:edit, :update, :destroy, :show, :export_csv]
   skip_before_action :verify_authenticity_token, only: [:create]
   after_action :verify_authorized

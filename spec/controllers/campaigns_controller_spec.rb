@@ -55,6 +55,7 @@ RSpec.describe CampaignsController, type: :controller do
             
             context 'with incorrect params' do
                 it 'raises an error' do
+                    bypass_rescue
                     expect{ post :create, campaign: {}}.to raise_error ActionController::ParameterMissing
                 end
             end
@@ -71,6 +72,7 @@ RSpec.describe CampaignsController, type: :controller do
             end
             
             it "doesn't get the campaign" do
+                bypass_rescue
                 expect{ get :show, id: -1}.to raise_error ActiveRecord::RecordNotFound
             end
         end
@@ -86,6 +88,7 @@ RSpec.describe CampaignsController, type: :controller do
             end
             
             it "doesn't get the campaign" do
+                bypass_rescue
                 expect{ get :edit, id: -1}.to raise_error ActiveRecord::RecordNotFound
             end
         end
@@ -128,6 +131,7 @@ RSpec.describe CampaignsController, type: :controller do
             end
             
             it "doesn't get the contributions_per_erg" do
+                bypass_rescue
                 expect{ get :contributions_per_erg, id: -1}.to raise_error ActiveRecord::RecordNotFound
             end
         end
@@ -146,6 +150,7 @@ RSpec.describe CampaignsController, type: :controller do
             end
             
             it "doesn't get the top_performers" do
+                bypass_rescue
                 expect{ get :top_performers, id: -1}.to raise_error ActiveRecord::RecordNotFound
             end
         end

@@ -68,6 +68,7 @@ RSpec.describe BadgesController, type: :controller do
       
       context "with invalid id" do
         it "returns error" do
+          bypass_rescue
           expect{ get :edit, id: -1}.to raise_error ActiveRecord::RecordNotFound
         end
       end
