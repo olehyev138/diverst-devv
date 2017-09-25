@@ -33,6 +33,8 @@ class Segment < ActiveRecord::Base
     accepts_nested_attributes_for :rules, reject_if: :all_blank, allow_destroy: true
 
     after_commit :update_indexes
+    
+    before_destroy :remove_parent_segment
 
     #validates_presence_of :enterprise
 
@@ -57,5 +59,10 @@ class Segment < ActiveRecord::Base
         Segment.all.find_each do |segment|
             CacheSegmentMembersJob.perform_later segment
         end
+    end
+    
+    def remove_parent_segment
+        return if self.parent_segment.nil?
+        self.parent_segment.destroy
     end
 end
