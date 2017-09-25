@@ -1,0 +1,5 @@
+<div>
+    <%= link_to 'Delete', user_social_link_path(social_link.id),method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(social_link).destroy? %>
+    <%= link_to "Approve", approve_group_posts_path(:group_id => @group.id, :link_id => social_link.news_feed_link.id), method: :post if policy(@group).erg_leader_permissions? and !social_link.news_feed_link.approved? %>
+    <%= raw social_link.embed_code %>
+</div>

@@ -8,7 +8,7 @@
     <% end %>
     <% if  @user.has_answered_group_surveys? %>
       <div class="flex-row__cell">
-        <%= link_to "Member Preferences", group_surveys_user_path(@user), class: "btn btn--secondary" %>
+        <%= link_to c_t(:member_preference).pluralize, group_surveys_user_path(@user), class: "btn btn--secondary" %>
       </div>
     <% end %>
   </div>

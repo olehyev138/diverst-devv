@@ -1,6 +1,7 @@
 class Groups::AttendancesController < ApplicationController
   include Rewardable
 
+  before_action :authenticate_user!
   before_action :set_group
   before_action :set_event
   before_action :set_attendance, only: [:create, :destroy]
@@ -58,7 +59,7 @@ class Groups::AttendancesController < ApplicationController
           data: segment_population
         }],
         categories: @event.group.enterprise.segments.map(&:name),
-        xAxisTitle: 'Segment'
+        xAxisTitle: c_t(:segment)
       },
       hasAggregation: false
     }

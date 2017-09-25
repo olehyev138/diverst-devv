@@ -1,4 +1,5 @@
 class Initiatives::ResourcesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_group
   include IsResources
 

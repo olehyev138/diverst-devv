@@ -1,28 +1,49 @@
 require 'rails_helper'
 
-RSpec.describe UserPolicy do
+RSpec.describe UserPolicy, :type => :policy do
+    let(:policy_group){ create(:policy_group, :global_settings_manage => false)}
+    let(:user){ create(:user, :policy_group => policy_group) }
+    let(:no_access) { create(:user) }
+    
+    subject { described_class }
 
-  let(:user) { User.new }
+    permissions :show? do
+        it "allows access" do
+            expect(subject).to permit(user, user)
+        end
+        
+        it "doesn't allow access" do
+            expect(subject).to_not permit(user, no_access)
+        end
+    end
+    
+    permissions :resend_invitation? do
+        it "doesn't allow access" do
+            expect(subject).to_not permit(user, user)
+        end
+        
+        it "doesn't allow access" do
+            expect(subject).to_not permit(user, no_access)
+        end
+    end
 
-  subject { described_class }
+    permissions :update? do
+        it "allows access" do
+            expect(subject).to permit(user, user)
+        end
+        
+        it "doesn't allow access" do
+            expect(subject).to_not permit(user, no_access)
+        end
+    end
 
-  permissions ".scope" do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
-
-  permissions :show? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
-
-  permissions :create? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
-
-  permissions :update? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
-
-  permissions :destroy? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
+    permissions :destroy? do
+        it "doesn't allow access" do
+            expect(subject).to_not permit(user, user)
+        end
+        
+        it "doesn't allow access" do
+            expect(subject).to_not permit(user, no_access)
+        end
+    end
 end

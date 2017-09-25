@@ -1,4 +1,5 @@
 class BadgesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_enterprise
   before_action :set_badge, only: [:edit, :update, :destroy]
   after_action :verify_authorized

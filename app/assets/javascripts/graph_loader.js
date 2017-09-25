@@ -37,17 +37,17 @@ $(document).on('ready page:load', function() {
     });
   });
 
-  $('.poll-graph-field').each(function() {
+  $('.graph-field').each(function() {
     changeGraphTypeVisibility($(this));
   });
 
-  $('.poll-graph-field').on('change', function() {
+  $('.graph-field').on('change', function() {
     changeGraphTypeVisibility($(this));
   });
 
   function changeGraphTypeVisibility(element) {
     var timeseriesElem = $('.js-graph-type-timeseries');
-    if($(element).find('option:selected').hasClass('numeric_field')) {
+    if($(element).find('option:selected').hasClass('numeric-field-true')) {
       var statsElem = $('.js-graph-type-stats');
 
       timeseriesElem.parent().find('.segmented-control__item--is-selected').removeClass('segmented-control__item--is-selected');
@@ -55,9 +55,13 @@ $(document).on('ready page:load', function() {
       $('.js-date-range').hide();
       statsElem.addClass('segmented-control__item--is-selected');
       statsElem.parent().find('input').val(statsElem.first().data('value'));
+
+      $('.graph-aggregation-field').hide();
     }
     else {
       timeseriesElem.show();
+
+      $('.graph-aggregation-field').show();
     }
   }
 });

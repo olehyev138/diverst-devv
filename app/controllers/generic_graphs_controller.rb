@@ -1,5 +1,7 @@
 class GenericGraphsController < ApplicationController
-  include ERB::Util
+  include ActionView::Helpers::JavaScriptHelper
+
+  before_action :authenticate_user!
 
   def group_population
     data = current_user.enterprise.groups.map { |g| 
@@ -62,13 +64,13 @@ class GenericGraphsController < ApplicationController
             }],
             drilldowns: drilldowns,
             categories: categories,
-            xAxisTitle: 'Segment'
+            xAxisTitle: c_t(:segment)
           },
           hasAggregation: false
         }
       }
       format.csv {
-        strategy = Reports::GraphStatsGeneric.new(title: 'Number of users by segment', categories: categories, data: data)
+        strategy = Reports::GraphStatsGeneric.new(title: "Number of users by #{ c_t(:badge) }", categories: categories, data: data)
         report = Reports::Generator.new(strategy)
         send_data report.to_csv, filename: "graph_segment_population.csv"
       }
@@ -83,7 +85,7 @@ class GenericGraphsController < ApplicationController
         name: g.name
       }
     end
-    categories = current_user.enterprise.groups.map{ |g| html_escape g.name }
+    categories = current_user.enterprise.groups.map{ |g| j g.name }
 
     respond_to do |format|
       format.json{
@@ -117,7 +119,7 @@ class GenericGraphsController < ApplicationController
         name: g.name
       }
     end
-    categories = current_user.enterprise.groups.map{ |g| html_escape g.name }
+    categories = current_user.enterprise.groups.map{ |g| j g.name }
 
     respond_to do |format|
       format.json {

@@ -16,7 +16,7 @@
           <strong><%= @general_metrics[:nb_ergs] %></strong>
         </div>
         <div class="flex-row__cell">
-          <small>Segments</small><br>
+          <small><%= c_t(:segment).pluralize %></small><br>
           <strong><%= @general_metrics[:nb_segments] %></strong>
         </div>
         <div class="flex-row__cell">
@@ -56,7 +56,7 @@
     <div class="col sm-12 md-6">
       <div class="card">
         <div class="card__section">
-          <h4>Segment population</h4>
+          <h4><%= c_t(:segment) %> population</h4>
           <div class="card__action">
             <%= link_to "Export CSV", segment_population_generic_graphs_path(format: :csv) %>
           </div>

@@ -1,4 +1,5 @@
 class ExpenseCategoriesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_expense_category, only: [:edit, :update, :destroy, :show, :export_csv]
   after_action :verify_authorized
 

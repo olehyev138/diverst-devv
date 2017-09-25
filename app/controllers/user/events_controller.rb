@@ -1,4 +1,5 @@
 class User::EventsController < ApplicationController
+  before_action :authenticate_user!, except: [:onboarding_calendar_data]
   before_action :set_event, only: [:show]
 
   layout 'user'
@@ -23,11 +24,17 @@ class User::EventsController < ApplicationController
   #No current user, use token for authentication
   def onboarding_calendar_data
     user = User.find_by_invitation_token(params[:invitation_token], true)
-    @events = user.enterprise.initiatives.where('start >= ?', params[:start])
-                                    .where('start <= ?', params[:end])
 
-    render 'shared/calendar/events', format: :json
+    if user.present?
+      @events = user.enterprise.initiatives.where('start >= ?', params[:start])
+                                      .where('start <= ?', params[:end])
+
+      render 'shared/calendar/events', format: :json
+    else
+      redirect_to user_root_path
+    end
   end
+
 
   protected
 

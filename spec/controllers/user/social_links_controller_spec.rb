@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe User::SocialLinksController, type: :controller do
     let(:user){ create(:user) }
+    let(:group){ create(:group) }
     
     login_user_from_let
     
