@@ -74,6 +74,7 @@ gem 'rollbar', '~> 2.14.1'
 gem 'ruby-oembed', '~> 0.12.0'
 
 gem 'julia_builder', '~> 0.2.0'
+gem 'thor', '0.19.1'
 
 gem 'sanitize_email', '~> 1.2.2'
 

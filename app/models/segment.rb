@@ -15,6 +15,7 @@ class Segment < ActiveRecord::Base
 
     belongs_to :enterprise
     belongs_to :owner, class_name: "User"
+    
     has_many :rules, class_name: 'SegmentRule'
     has_many :users_segments
     has_many :members, class_name: 'User', through: :users_segments, source: :user, dependent: :destroy
@@ -33,7 +34,7 @@ class Segment < ActiveRecord::Base
 
     after_commit :update_indexes
 
-    validates_presence_of :enterprise
+    #validates_presence_of :enterprise
 
     def general_rules_followed_by?(user)
         case active_users_filter

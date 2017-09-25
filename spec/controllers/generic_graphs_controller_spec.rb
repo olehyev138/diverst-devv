@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe GenericGraphsController, type: :controller do
+RSpec.describe GenericGraphsController, type: :controller, :skip => true do
     let(:enterprise){ create(:enterprise, cdo_name: "test") }
     let(:user){ create(:user, enterprise: enterprise) }
     let(:field){create(:field, type: "NumericField", container_id: enterprise.id, container_type: "Enterprise", elasticsearch_only: false)}

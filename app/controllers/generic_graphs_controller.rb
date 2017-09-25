@@ -10,7 +10,7 @@ class GenericGraphsController < ApplicationController
         name: g.name
       }
     }
-    categories = current_user.enterprise.groups.map{ |g| html_escape g.name }
+    categories = current_user.enterprise.groups.map{ |g| g.name }
 
     respond_to do |format|
       format.json {
@@ -50,7 +50,7 @@ class GenericGraphsController < ApplicationController
           data: s.sub_segments.map {|sub| [sub.name, sub.members.active.count]}
         }
     }
-    categories = current_user.enterprise.segments.map{ |s| html_escape s.name }
+    categories = current_user.enterprise.segments.map{ |s| s.name }
 
     respond_to do |format|
       format.json {
@@ -85,7 +85,7 @@ class GenericGraphsController < ApplicationController
         name: g.name
       }
     end
-    categories = current_user.enterprise.groups.map{ |g| j g.name }
+    categories = current_user.enterprise.groups.map{ |g| g.name }
 
     respond_to do |format|
       format.json{
@@ -119,7 +119,7 @@ class GenericGraphsController < ApplicationController
         name: g.name
       }
     end
-    categories = current_user.enterprise.groups.map{ |g| j g.name }
+    categories = current_user.enterprise.groups.map{ |g| g.name }
 
     respond_to do |format|
       format.json {

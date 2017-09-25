@@ -109,15 +109,15 @@ RSpec.configure do |config|
     end
   end
 
-  config.before :all, elasticsearch: true do
-    unless Elasticsearch::Extensions::Test::Cluster.running?(on: 9200, command: ENV['ELASTICSEARCH_PATH'])
-      Elasticsearch::Extensions::Test::Cluster.start(port: 9200, nodes: 1, timeout: 120, command: ENV['ELASTICSEARCH_PATH'])
-    end
-  end
+  # config.before :all, elasticsearch: true do
+  #   unless Elasticsearch::Extensions::Test::Cluster.running?(on: 9200, command: ENV['ELASTICSEARCH_PATH'])
+  #     Elasticsearch::Extensions::Test::Cluster.start(port: 9200, nodes: 1, timeout: 120, command: ENV['ELASTICSEARCH_PATH'])
+  #   end
+  # end
 
-  config.after :each, elasticsearch: true do
-    ActiveRecord::Base.descendants.each do |model|
-      model.__elasticsearch__.delete_index!(index: "_all") if model.respond_to?(:__elasticsearch__)
-    end
-  end
+  # config.after :each, elasticsearch: true do
+  #   ActiveRecord::Base.descendants.each do |model|
+  #     model.__elasticsearch__.delete_index!(index: "_all") if model.respond_to?(:__elasticsearch__)
+  #   end
+  # end
 end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CheckboxField, elasticsearch: true, type: :model do
+RSpec.describe CheckboxField, elasticsearch: true, type: :model, :skip => true do
   context "when getting data" do
     let!(:field_one) { CheckboxField.create(attributes_for(:checkbox_field)) }
     let!(:field_two) { CheckboxField.create(attributes_for(:checkbox_field, options_text: "Yes2\nNo2")) }
