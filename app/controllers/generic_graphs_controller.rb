@@ -4,8 +4,13 @@ class GenericGraphsController < ApplicationController
   before_action :authenticate_user!
 
   def group_population
-    data = current_user.enterprise.groups.map { |g| g.members.active.count }
-    categories = current_user.enterprise.groups.map{ |g| j g.name }
+    data = current_user.enterprise.groups.map { |g| 
+      {
+        y: g.members.active.count,
+        name: g.name
+      }
+    }
+    categories = current_user.enterprise.groups.map{ |g| html_escape g.name }
 
     respond_to do |format|
       format.json {
@@ -74,8 +79,11 @@ class GenericGraphsController < ApplicationController
 
   def events_created
     data = current_user.enterprise.groups.map do |g|
-      g.initiatives.joins(:owner)
-        .where('initiatives.created_at > ? AND users.active = ?', 1.month.ago, true).count
+      {
+        y: g.initiatives.joins(:owner)
+            .where('initiatives.created_at > ? AND users.active = ?', 1.month.ago, true).count,
+        name: g.name
+      }
     end
     categories = current_user.enterprise.groups.map{ |g| j g.name }
 
@@ -105,8 +113,11 @@ class GenericGraphsController < ApplicationController
 
   def messages_sent
     data = current_user.enterprise.groups.map do |g|
-      g.messages.joins(:owner)
-        .where('group_messages.created_at > ? AND users.active = ?', 1.month.ago, true).count
+      { 
+        y: g.messages.joins(:owner)
+          .where('group_messages.created_at > ? AND users.active = ?', 1.month.ago, true).count,
+        name: g.name
+      }
     end
     categories = current_user.enterprise.groups.map{ |g| j g.name }
 

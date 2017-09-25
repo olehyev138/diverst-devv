@@ -7,7 +7,7 @@ class SegmentsController < ApplicationController
 
   def index
     authorize Segment
-    @segments = policy_scope(Segment)
+    @segments = policy_scope(Segment).includes(:members)
   end
 
   def new
@@ -34,12 +34,12 @@ class SegmentsController < ApplicationController
     @groups = current_user.enterprise.groups
 
     @group = @groups.find_by_id(params[:group_id])
-    @segments = @segment.sub_segments
+    @segments = @segment.sub_segments.includes(:members)
     
     if @group.present?
-      @members = segment_members_of_group(@segment, @group)
+      @members = segment_members_of_group(@segment, @group).uniq
     else
-      @members = @segment.members
+      @members = @segment.members.uniq
     end
   end
 
