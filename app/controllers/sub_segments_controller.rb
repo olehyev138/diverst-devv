@@ -19,7 +19,7 @@ class SubSegmentsController < ApplicationController
             redirect_to @segment
         else
             flash[:alert] = "Your sub-segment was not created. Please fix the errors"
-            render :back
+            redirect_to :back
         end
     end
     
