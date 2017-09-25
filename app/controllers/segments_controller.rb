@@ -1,4 +1,5 @@
 class SegmentsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_segment, only: [:edit, :update, :destroy, :show, :export_csv]
   skip_before_action :verify_authenticity_token, only: [:create]
   after_action :verify_authorized
@@ -20,10 +21,10 @@ class SegmentsController < ApplicationController
     @segment = current_user.enterprise.segments.new(segment_params)
 
     if @segment.save
-      flash[:notice] = "Your segment was created"
+      flash[:notice] = "Your #{ c_t(:segment) } was created"
       redirect_to action: :index
     else
-      flash[:alert] = "Your segment was not created. Please fix the errors"
+      flash[:alert] = "Your #{ c_t(:segment) } was not created. Please fix the errors"
       render :edit
     end
   end
@@ -50,10 +51,10 @@ class SegmentsController < ApplicationController
   def update
     authorize @segment
     if @segment.update(segment_params)
-      flash[:notice] = "Your segment was updated"
+      flash[:notice] = "Your #{ c_t(:segment) } was updated"
       redirect_to @segment
     else
-      flash[:alert] = "Your segment was not updated. Please fix the errors"
+      flash[:alert] = "Your #{ c_t(:segment) } was not updated. Please fix the errors"
       render :edit
     end
   end

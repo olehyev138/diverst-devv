@@ -7,7 +7,7 @@ class Reward < ActiveRecord::Base
 
   validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
   validates :enterprise, presence: true
-  validates :points, numericality: { only_integer: true }, presence: true
+  validates :points, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, presence: true
   validates :label, presence: true
   validates :responsible, presence: true
   validate :responsible_user

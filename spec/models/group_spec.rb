@@ -9,6 +9,20 @@ RSpec.describe Group do
     it{ expect(group).to have_many(:leaders).through(:group_leaders) }
   end
 
+  describe 'when describing callbacks' do
+    let!(:group){ create(:group) }
+
+    it "should reindex users on elasticsearch after destroy" do
+      TestAfterCommit.with_commits(true) do
+        expect(RebuildElasticsearchIndexJob).to receive(:perform_later).with(
+          model_name: 'User',
+          enterprise: group.enterprise
+        )
+        group.destroy
+      end
+    end
+  end
+
   describe '#accept_user_to_group' do
     let!(:enterprise) { create(:enterprise) }
     let!(:user) { create(:user, enterprise: enterprise) }

@@ -1,6 +1,8 @@
 class Enterprises::ResourcesController < ApplicationController
   include IsResources
 
+  before_action :authenticate_user!
+
   layout 'erg_manager'
 
   protected

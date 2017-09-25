@@ -38,7 +38,7 @@
             <%= f.association :segments,
                   collection: @poll.enterprise.segments,
                   input_html: { class: "select2" },
-                  label: "Choose the <strong>segments</strong> you want to target within these #{ c_t(:erg).pluralize }".html_safe
+                  label: "Choose the <strong>#{ c_t(:segment).pluralize }</strong> you want to target within these #{ c_t(:erg).pluralize }".html_safe
             %>
           </div>
         </div>

@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_user, only: [:edit, :update, :destroy, :show, :group_surveys]
   after_action :verify_authorized, except: [:edit_profile, :group_surveys]
 

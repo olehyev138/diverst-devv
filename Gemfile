@@ -76,6 +76,8 @@ gem 'ruby-oembed', '~> 0.12.0'
 gem 'julia_builder', '~> 0.2.0'
 gem 'thor', '0.19.1'
 
+gem 'sanitize_email', '~> 1.2.2'
+
 group :development, :test do
   gem 'spring', '~> 1.6.2' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'guard-livereload', '~> 2.4', require: false
@@ -99,6 +101,8 @@ end
 group :test do
   gem 'rspec_junit_formatter', '~> 0.2.3'
   gem 'simplecov', '~> 0.13.0'
+  gem 'test_after_commit', '~> 1.1'
+  gem 'elasticsearch-extensions', '~> 0.0.26'
 end
 
 group :development do
@@ -125,7 +129,7 @@ group :development do
   gem 'rufo'
 end
 
-group :production do
+group :staging, :production do
   gem 'syslogger', '~> 1.6.0' # Log to syslog, which is then sent to Loggly
   gem 'lograge', '~> 0.3'
   gem 'newrelic_rpm'

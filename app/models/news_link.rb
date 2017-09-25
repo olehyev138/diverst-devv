@@ -3,6 +3,7 @@ class NewsLink < ActiveRecord::Base
   belongs_to :author, class_name: 'User'
 
   before_validation :smart_add_url_protocol
+  validates :url, presence: true
 
   has_many :comments, class_name: 'NewsLinkComment'
 
@@ -12,6 +13,11 @@ class NewsLink < ActiveRecord::Base
   protected
 
   def smart_add_url_protocol
-    self.url = "http://#{url}" unless url[%r{\Ahttp:\/\/}] || url[%r{\Ahttps:\/\/}]
+    return nil if url.blank?
+    self.url = "http://#{url}" unless have_protocol?
+  end
+
+  def have_protocol?
+    url[%r{\Ahttp:\/\/}] || url[%r{\Ahttps:\/\/}]
   end
 end

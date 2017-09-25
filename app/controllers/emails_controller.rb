@@ -1,4 +1,5 @@
 class EmailsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_email, only: [:edit, :update, :show]
 
   layout 'global_settings'
