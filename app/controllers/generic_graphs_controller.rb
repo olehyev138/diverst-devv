@@ -8,7 +8,7 @@ class GenericGraphsController < ApplicationController
         name: g.name
       }
     }
-    categories = current_user.enterprise.groups.map{ |g| html_escape g.name }
+    categories = current_user.enterprise.groups.map{ |g| g.name }
 
     respond_to do |format|
       format.json {
@@ -83,7 +83,7 @@ class GenericGraphsController < ApplicationController
         name: g.name
       }
     end
-    categories = current_user.enterprise.groups.map{ |g| html_escape g.name }
+    categories = current_user.enterprise.groups.map{ |g| g.name }
 
     respond_to do |format|
       format.json{
@@ -117,7 +117,7 @@ class GenericGraphsController < ApplicationController
         name: g.name
       }
     end
-    categories = current_user.enterprise.groups.map{ |g| html_escape g.name }
+    categories = current_user.enterprise.groups.map{ |g| g.name }
 
     respond_to do |format|
       format.json {
