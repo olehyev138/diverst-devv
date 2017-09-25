@@ -4,6 +4,6 @@ class User::NewsLinksController < ApplicationController
   layout 'user'
 
   def index
-    @news_links = current_user.news_links.includes(:author, :group).order(created_at: :desc)
+    @posts = NewsFeedLink.joins(:news_feed).includes(:link).where(:news_feeds => {:group_id => current_user.groups.pluck(:id)}, :approved => true)
   end
 end

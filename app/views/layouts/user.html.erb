@@ -51,9 +51,6 @@
             <%= active_link_to "News", user_news_links_path %>
           </li>
           <li>
-            <%= active_link_to "Messages", user_messages_path %>
-          </li>
-          <li>
             <%= active_link_to "Events", user_events_path %>
           </li>
           <li>
@@ -82,7 +79,6 @@
         <%= active_link_to "Innovate", user_user_campaigns_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <% end %>
       <%= active_link_to "News", user_news_links_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-      <%= active_link_to "Messages", user_messages_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <%= active_link_to "Events", user_events_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <%= active_link_to "Groups", user_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <% if ENV['REWARDS_ENABLED'] %>

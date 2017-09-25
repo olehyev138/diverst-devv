@@ -22,9 +22,9 @@
                   </div>
                   <% if policy(news_link).edit? %>
                     <div class="flex-row__cell link-group">
-                      <%= link_to "Approve", approve_group_posts_path(:group_id => @group.id, :link_id => news_link.news_feed_link.id), method: :post if policy(news_link.group).erg_leader_permissions? and !news_link.news_feed_link.approved? %>
-                      <%= link_to "Edit", edit_group_news_link_path(@group, news_link) %>
-                      <%= link_to "Delete", group_news_link_path(@group, news_link), method: :delete, class: "error", data: { confirm: "Are you sure?" } %>
+                      <%= link_to "Approve", approve_group_posts_path(:group_id => news_link.group.id, :link_id => news_link.news_feed_link.id), method: :post if policy(news_link.group).erg_leader_permissions? and !news_link.news_feed_link.approved? %>
+                      <%= link_to "Edit", edit_group_news_link_path(news_link.group, news_link) %>
+                      <%= link_to "Delete", group_news_link_path(news_link.group, news_link), method: :delete, class: "error", data: { confirm: "Are you sure?" } %>
                     </div>
                   <% end %>
                 </div>
