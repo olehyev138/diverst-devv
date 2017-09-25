@@ -76,7 +76,7 @@ RSpec.describe Group, :type => :model do
         end
     end
     
-    describe 'when describing callbacks' do
+    describe 'when describing callbacks', :skip => true do
         let!(:group){ create(:group) }
         
         it "should reindex users on elasticsearch after destroy" do
