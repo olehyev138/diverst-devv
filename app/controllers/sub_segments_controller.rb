@@ -13,6 +13,7 @@ class SubSegmentsController < ApplicationController
     def create
         authorize Segment
         @sub_segment = @segment.sub_segments.new(segment_params)
+        @sub_segment.enterprise_id = @segment.enterprise_id
         
         if @segment.save
             flash[:notice] = "Your sub-segment was created"
