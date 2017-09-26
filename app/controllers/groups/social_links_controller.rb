@@ -16,7 +16,7 @@ class Groups::SocialLinksController < ApplicationController
         @social_link.author = current_user
 
         if @social_link.save
-            redirect_to :back
+            redirect_to group_posts_path(@group)
         else
             flash[:alert] = "Your news was not created. Please fix the errors"
             render :edit
@@ -26,7 +26,7 @@ class Groups::SocialLinksController < ApplicationController
     def destroy
         @social_link.destroy
         flash[:notice] = "Your social link was removed."
-        redirect_to :back
+        redirect_to group_posts_path(@group)
     end
 
     protected

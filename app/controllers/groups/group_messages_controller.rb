@@ -33,7 +33,7 @@ class Groups::GroupMessagesController < ApplicationController
       user_rewarder("message_post").add_points(@message)
       UserGroupInstantNotificationJob.perform_later(@group, messages_count: 1)
       flash_reward "Your message was created. Now you have #{ current_user.credits } points"
-      redirect_to action: :index
+      redirect_to group_posts_path(@group)
     else
       flash[:alert] = "Your message was not created. Please fix the errors"
       render :new
@@ -43,7 +43,7 @@ class Groups::GroupMessagesController < ApplicationController
   def update
     authorize @message, :update?
     if @message.update(message_params)
-      redirect_to action: :index
+      redirect_to group_posts_path(@group)
     else
       render :edit
     end
@@ -54,7 +54,7 @@ class Groups::GroupMessagesController < ApplicationController
     @message.destroy
     flash[:notice] = "Your message was removed. Now you have #{ current_user.credits } points"
 
-    redirect_to :back
+    redirect_to group_posts_path(@group)
   end
 
   def create_comment

@@ -145,7 +145,7 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
         before { patch :update, group_id: group.id, id: news_link.id, news_link: {title: "updated"}}
 
         it "redirects" do
-            expect(response).to redirect_to action: :index
+            expect(response).to redirect_to group_posts_path(group)
         end
 
         it "flashes" do
