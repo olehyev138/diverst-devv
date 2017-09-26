@@ -94,7 +94,7 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
                 end
 
                 it "redirect to index action" do
-                    expect(response).to redirect_to action: :index
+                    expect(response).to redirect_to group_posts_path(group)
                 end
             end
         end

@@ -67,30 +67,19 @@
             <div class="card__section">
 
               <h4 class="card__title"><%= inline_svg('icons/news.svg', class: "icon card__icon") %>Latest News</h4>
-              <%= link_to "View all", group_news_links_path(@group), class: "card__action" %>
-
-              <% @news_links.each do |news_link| %>
-                <%= render "shared/flippable/news_link", news_link: news_link %>
+              <%= link_to "View all", group_posts_path(@group), class: "card__action" unless @posts.count < 1 %>
+              
+              <% if @posts.empty? %>
+                <p>No posts have been published yet.</p>
+              <% else %>
+                <% @posts.each do |news| %>
+                  <%= render "shared/flippable/news_link", news: news %>
+                <% end %>
               <% end %>
 
             </div>
           </div>
         </div>
-
-        <% if policy(@group).view_messages? %>
-        <div class="col sm-12 md-6">
-          <div class="card">
-            <div class="card__section">
-
-              <h4 class="card__title"><%= inline_svg('icons/chat.svg', class: "icon card__icon") %>Latest Messages</h4>
-              <%= link_to "View all", group_group_messages_path(@group), class: "card__action" %>
-
-              <%= render "shared/boxes/messages", messages: @messages %>
-
-            </div>
-          </div>
-        </div>
-        <% end %>
       </div>
     </div>
 
