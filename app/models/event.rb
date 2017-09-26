@@ -14,7 +14,7 @@ class Event < ActiveRecord::Base
   scope :upcoming, -> { where('start > ?', Time.current).order(start: :asc) }
   scope :ongoing, -> { where('start <= ?', Time.current).where('end >= ?', Time.current).order(start: :desc) }
 
-  has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
+  has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: "private"
   validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true

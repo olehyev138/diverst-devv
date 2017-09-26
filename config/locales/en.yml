@@ -31,6 +31,10 @@ en:
     structure: Structure
     outcome: Outcome
     badge: Badge
+    segment: Segment
+    dci_full_title: Diversity Culture Index
+    dci_abbreviation: DCI
+    member_preference: Member Preference
 
   time:
     formats:

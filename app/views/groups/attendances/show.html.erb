@@ -25,7 +25,7 @@
     <div class="col sm-12 md-6">
       <div class="card">
         <div class="card__section">
-          <h4>Attendance by segment</h4>
+          <h4>Attendance by <%= c_t(:segment) %></h4>
           <div
             data-url="<%= segment_graph_group_event_attendance_path(@group, @event) %>"
             class="graph">

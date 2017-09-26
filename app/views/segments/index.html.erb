@@ -1,43 +1,6 @@
 <div class="content__header">
-  <h1>Segments</h1>
-  <%= link_to "+ New Segment", new_segment_path, class: "btn btn--primary" if policy(Segment).new? %>
+  <h1><%= c_t(:segment).pluralize %></h1>
+  <%= link_to "+ New #{ c_t(:segment) }", new_segment_path, class: "btn btn--primary" if policy(Segment).new? %>
 </div>
 
-<div class="content__main">
-  <div class="card">
-    <div class="card__section">
-      <% if @segments.any? %>
-        <table class="table--has-border" id="segments-table">
-          <thead>
-            <th>Name</th>
-            <th># of members</th>
-            <th># of rules</th>
-            <th>Date created</th>
-            <th>Options</th>
-          </thead>
-          <tbody>
-            <% @segments.each do |segment| %>
-              <tr>
-                <td><%= link_to segment.name, segment_path(segment), class: "accent" %></td>
-                <td><%= segment.members.count %></td>
-                <td><%= segment.rules.count %></td>
-                <td><%= segment.created_at.to_s :reversed_slashes %></td>
-                <td><%= link_to "Edit", edit_segment_path(segment) if policy(segment).edit? %> - <%= link_to "Delete", segment_path(segment), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(segment).destroy? %></td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      <% else %>
-        <p>No segments have been created yet. <%= link_to "Create one", new_segment_path %> to start tracking logical groups that automatically update to changes in your workforce.</p>
-      <% end %>
-    </div>
-  </div>
-</div>
-
-<script>
-  $(document).ready(function() {
-    $('#segments-table').dataTable(Utility.mergeWithDTDefaults({
-      order: [[3, "desc"]]
-    }));
-  });
-</script>
+<%= render "table" %>

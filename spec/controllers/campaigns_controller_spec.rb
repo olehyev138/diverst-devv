@@ -55,6 +55,7 @@ RSpec.describe CampaignsController, type: :controller do
             
             context 'with incorrect params' do
                 it 'raises an error' do
+                    bypass_rescue
                     expect{ post :create, campaign: {}}.to raise_error ActionController::ParameterMissing
                 end
             end

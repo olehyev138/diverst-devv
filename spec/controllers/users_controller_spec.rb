@@ -79,6 +79,26 @@ RSpec.describe UsersController, type: :controller do
             expect(flash[:notice])
         end
     end
+    
+    describe "PATCH#resend_invitation" do
+        before :each do
+            request.env["HTTP_REFERER"] = "back"
+            patch :resend_invitation, :id => user.id
+        end
+        
+        it "redirects to back" do
+            expect(response).to redirect_to "back"
+        end
+
+        it "updates the user invitation_sent_at" do
+            user.reload
+            expect(user.invitation_sent_at.to_date).to eq(Date.today.to_date)
+        end
+
+        it "flashes" do
+            expect(flash[:notice])
+        end
+    end
 
     describe "delete#destroy" do
         before :each do

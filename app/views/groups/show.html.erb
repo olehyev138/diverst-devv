@@ -76,7 +76,6 @@
                   <%= render "shared/flippable/news_link", news: news %>
                 <% end %>
               <% end %>
-
             </div>
           </div>
         </div>
@@ -91,7 +90,7 @@
         <% else %>
           You can always
           <%= link_to 'edit', survey_group_questions_path(@group) %>
-          your member preferences
+          your <% c_t(:member_preference).pluralize %>
         <% end %>
       <% end %>
 
@@ -103,7 +102,7 @@
           <% end %>
         <% end %>
       <% else %>
-        <%= link_to "Member Preferences", survey_group_questions_path(@group), class: "btn btn--primary" unless current_user.has_answered_group_survey? @group %>
+        <%= link_to c_t(:member_preference).pluralize, survey_group_questions_path(@group), class: "btn btn--primary" unless current_user.has_answered_group_survey? @group %>
       <% end %>
 
       <div class="card card--secondary">

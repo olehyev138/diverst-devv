@@ -7,7 +7,7 @@ class SegmentsController < ApplicationController
 
   def index
     authorize Segment
-    @segments = policy_scope(Segment)
+    @segments = policy_scope(Segment).includes(:members, :parent_segment).where(:segmentations => {:id => nil})
   end
 
   def new
@@ -20,10 +20,10 @@ class SegmentsController < ApplicationController
     @segment = current_user.enterprise.segments.new(segment_params)
 
     if @segment.save
-      flash[:notice] = "Your segment was created"
+      flash[:notice] = "Your #{ c_t(:segment) } was created"
       redirect_to action: :index
     else
-      flash[:alert] = "Your segment was not created. Please fix the errors"
+      flash[:alert] = "Your #{ c_t(:segment) } was not created. Please fix the errors"
       render :edit
     end
   end
@@ -34,11 +34,12 @@ class SegmentsController < ApplicationController
     @groups = current_user.enterprise.groups
 
     @group = @groups.find_by_id(params[:group_id])
-
+    @segments = @segment.sub_segments.includes(:members)
+    
     if @group.present?
-      @members = segment_members_of_group(@segment, @group)
+      @members = segment_members_of_group(@segment, @group).uniq
     else
-      @members = @segment.members
+      @members = @segment.members.uniq
     end
   end
 
@@ -49,10 +50,10 @@ class SegmentsController < ApplicationController
   def update
     authorize @segment
     if @segment.update(segment_params)
-      flash[:notice] = "Your segment was updated"
+      flash[:notice] = "Your #{ c_t(:segment) } was updated"
       redirect_to @segment
     else
-      flash[:alert] = "Your segment was not updated. Please fix the errors"
+      flash[:alert] = "Your #{ c_t(:segment) } was not updated. Please fix the errors"
       render :edit
     end
   end
@@ -87,7 +88,7 @@ class SegmentsController < ApplicationController
   end
 
   def set_segment
-    @segment = current_user.enterprise.segments.find(params[:id])
+    @segment = Segment.find(params[:id])#current_user.enterprise.segments.find(params[:id])
   end
 
   def segment_params

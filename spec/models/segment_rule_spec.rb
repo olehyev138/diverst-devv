@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe SegmentRule, type: :model do
+RSpec.describe SegmentRule, type: :model, :skip => true do
   describe 'when validating' do
     let(:segment_rule){ build_stubbed(:segment_rule) }
 

@@ -1,5 +1,7 @@
-You have been invited to join the following Collaborate campaign: <strong><%= @invitation.campaign.title %></strong>
+Hello, <%= @invitation.user.name %>
+<br/>
+You are invited to join other members in the following online collaborative conversation in Diverst: <strong><%= @invitation.campaign.title %></strong>
 
 <br/>
 
-<p><%= link_to "Join now", user_campaign_questions_url(@invitation.campaign), saml_for_enterprise: @enterprise_id %></p>
+<p><%= link_to "Join now", user_user_campaign_questions_url(@invitation.campaign), saml_for_enterprise: @enterprise_id %> to provide feedback and offer your thoughts and suggestions.</p>

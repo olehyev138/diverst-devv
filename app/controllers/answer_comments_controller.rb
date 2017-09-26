@@ -1,5 +1,6 @@
 class AnswerCommentsController < ApplicationController
-  # before_action :authenticate_admin!
+  before_action :authenticate_user!
+
   before_action :set_comment_and_answer
 
   def destroy

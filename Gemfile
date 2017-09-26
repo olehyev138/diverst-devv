@@ -35,8 +35,8 @@ gem 'bower-rails', '~> 0.10.0' # Bower integration with Rails
 gem 'clockwork', '~> 1.2' # Schedule recurring jobs
 gem 'pismo', '~> 0.7.4' # Extracts metadata from an URL
 gem 'active_link_to', '~> 1.0', '>= 1.0.3' # Automatically add an active class to current nav link
-gem 'paperclip', '~> 4.3' # Handle attachments for models and forms
-gem 'aws-sdk', '< 2.0' # The official AWS SDK
+gem 'paperclip', '~> 4.3'# Handle attachments for models and forms
+gem 'aws-sdk', '< 2.0'# The official AWS SDK
 gem 'kaminari', '~> 0.16.3' # Pagination
 gem 'jquery-datatables-rails', '~> 3.3' # Datatables
 gem 'ajax-datatables-rails', '~> 0.3.1' # Adds AJAX routes for datatables queries
@@ -59,7 +59,7 @@ gem 'pundit', '~> 1.1' # Authorization
 gem 'draper', '~> 2.1' # Decorators for views
 gem 'daemons', '~> 1.2', '>= 1.2.3' # For capistrano-clockwork
 gem 'icalendar', '~> 2.3' # For exporting events to your calendar
-gem 'simple_form_fancy_uploads', github: "TeamDiverst/simple_form_fancy_uploads", branch: "paperclip_version"
+gem 'simple_form_fancy_uploads', git: "https://github.com/TeamDiverst/simple_form_fancy_uploads.git", branch: "paperclip_version"
 gem 'ransack', '~> 1.8', '>= 1.8.2' # For search forms
 gem 'ckeditor', '~> 4.2', '>= 4.2.3'
 
@@ -74,6 +74,9 @@ gem 'rollbar', '~> 2.14.1'
 gem 'ruby-oembed', '~> 0.12.0'
 
 gem 'julia_builder', '~> 0.2.0'
+gem 'thor', '0.19.1'
+
+gem 'sanitize_email', '~> 1.2.2'
 
 group :development, :test do
   gem 'spring', '~> 1.6.2' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
@@ -93,11 +96,14 @@ group :development, :test do
   gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
   gem 'timecop', '~> 0.8.1'
   gem 'byebug' # Debugger
+  gem 'pundit-matchers', '~> 1.3.1'
 end
 
 group :test do
   gem 'rspec_junit_formatter', '~> 0.2.3'
   gem 'simplecov', '~> 0.13.0'
+  gem 'test_after_commit', '~> 1.1'
+  gem 'elasticsearch-extensions', '~> 0.0.26'
 end
 
 group :development do
@@ -122,9 +128,10 @@ group :development do
   gem 'letter_opener'
   gem 'letter_opener_web', '~> 1.3', '>= 1.3.1'
   gem 'rufo'
+  gem 'bundler-audit'
 end
 
-group :production do
+group :staging, :production do
   gem 'syslogger', '~> 1.6.0' # Log to syslog, which is then sent to Loggly
   gem 'lograge', '~> 0.3'
   gem 'newrelic_rpm'
