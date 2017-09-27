@@ -9,5 +9,6 @@ FactoryGirl.define do
     invitation_accepted_at Time.current
     enterprise
     policy_group
+    provider "email"
   end
 end
