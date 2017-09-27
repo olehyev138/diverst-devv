@@ -6,7 +6,7 @@ class User::DashboardController < ApplicationController
   def home
     @enterprise = current_user.enterprise
     @upcoming_events = current_user.initiatives.upcoming.includes(:owner_group).limit(4) + current_user.invited_initiatives.upcoming.includes(:owner_group).limit(3)
-    @posts = NewsFeedLink.joins(:news_feed).includes(:link).where(:news_feeds => {:group_id => current_user.groups.pluck(:id)}, :approved => true)
+    @posts = NewsFeedLink.joins(:news_feed).includes(:link).where(:news_feeds => {:group_id => current_user.groups.pluck(:id)}, :approved => true).limit(5)
     @messages = current_user.messages.includes(:group, :owner).limit(3)
   end
 
