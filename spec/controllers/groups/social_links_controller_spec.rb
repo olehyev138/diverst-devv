@@ -24,7 +24,7 @@ RSpec.describe Groups::SocialLinksController, type: :controller do
 
     describe 'POST#create' do
         before :each do
-            post :create, group_id: group.id, social_link: attributes_for(:social_link)
+            post :create, group_id: group.id, social_link: attributes_for(:social_link, :url => "https://twitter.com/realDonaldTrump/status/912848241535971331")
         end
         
         it "redirect back" do

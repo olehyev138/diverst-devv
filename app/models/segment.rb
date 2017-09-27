@@ -52,7 +52,7 @@ class Segment < ActiveRecord::Base
     def update_indexes
         return if enterprise.nil?
         CacheSegmentMembersJob.perform_later self
-        RebuildElasticsearchIndexJob.perform_now(model_name: 'User', enterprise: enterprise)
+        RebuildElasticsearchIndexJob.perform_later(model_name: 'User', enterprise: enterprise)
     end
 
     def self.update_all_members
