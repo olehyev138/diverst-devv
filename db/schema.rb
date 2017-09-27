@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170913233328) do
+ActiveRecord::Schema.define(version: 20170927055118) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -989,9 +989,9 @@ ActiveRecord::Schema.define(version: 20170913233328) do
     t.integer  "enterprise_id",               limit: 4
     t.datetime "created_at",                                                  null: false
     t.datetime "updated_at",                                                  null: false
-    t.string   "email",                       limit: 255,   default: "",      null: false
+    t.string   "email",                       limit: 191,   default: "",      null: false
     t.string   "encrypted_password",          limit: 255,   default: ""
-    t.string   "reset_password_token",        limit: 255
+    t.string   "reset_password_token",        limit: 191
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.integer  "sign_in_count",               limit: 4,     default: 0,       null: false
@@ -999,7 +999,7 @@ ActiveRecord::Schema.define(version: 20170913233328) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip",          limit: 255
     t.string   "last_sign_in_ip",             limit: 255
-    t.string   "invitation_token",            limit: 255
+    t.string   "invitation_token",            limit: 191
     t.datetime "invitation_created_at"
     t.datetime "invitation_sent_at"
     t.datetime "invitation_accepted_at"
@@ -1027,7 +1027,7 @@ ActiveRecord::Schema.define(version: 20170913233328) do
     t.string   "time_zone",                   limit: 255
     t.integer  "total_weekly_points",         limit: 4,     default: 0
     t.integer  "failed_attempts",             limit: 4,     default: 0,       null: false
-    t.string   "unlock_token",                limit: 255
+    t.string   "unlock_token",                limit: 191
     t.datetime "locked_at"
   end
 
