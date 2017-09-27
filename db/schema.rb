@@ -11,17 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170927055118) do
+ActiveRecord::Schema.define(version: 20170927132203) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
-    t.string   "trackable_type", limit: 255
+    t.string   "trackable_type", limit: 191
     t.integer  "owner_id",       limit: 4
-    t.string   "owner_type",     limit: 255
+    t.string   "owner_type",     limit: 191
     t.string   "key",            limit: 255
     t.text     "parameters",     limit: 65535
     t.integer  "recipient_id",   limit: 4
-    t.string   "recipient_type", limit: 255
+    t.string   "recipient_type", limit: 191
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -71,9 +71,9 @@ ActiveRecord::Schema.define(version: 20170927055118) do
   create_table "badges", force: :cascade do |t|
     t.integer  "enterprise_id",      limit: 4,   null: false
     t.integer  "points",             limit: 4,   null: false
-    t.string   "label",              limit: 255, null: false
-    t.string   "image_file_name",    limit: 255, null: false
-    t.string   "image_content_type", limit: 255, null: false
+    t.string   "label",              limit: 255
+    t.string   "image_file_name",    limit: 255
+    t.string   "image_content_type", limit: 255
     t.integer  "image_file_size",    limit: 4,   null: false
     t.datetime "image_updated_at",               null: false
     t.datetime "created_at"
@@ -221,7 +221,7 @@ ActiveRecord::Schema.define(version: 20170927055118) do
     t.datetime "created_at",                                 null: false
     t.datetime "updated_at",                                 null: false
     t.integer  "container_id",   limit: 4
-    t.string   "container_type", limit: 255
+    t.string   "container_type", limit: 191
   end
 
   add_index "checklist_items", ["container_type", "container_id"], name: "index_checklist_items_on_container_type_and_container_id", using: :btree
@@ -242,7 +242,7 @@ ActiveRecord::Schema.define(version: 20170927055118) do
   end
 
   create_table "ckeditor_assets", force: :cascade do |t|
-    t.string   "data_file_name",    limit: 255, null: false
+    t.string   "data_file_name",    limit: 255
     t.string   "data_content_type", limit: 255
     t.integer  "data_file_size",    limit: 4
     t.string   "data_fingerprint",  limit: 255
@@ -425,15 +425,15 @@ ActiveRecord::Schema.define(version: 20170927055118) do
     t.boolean  "match_exclude"
     t.boolean  "match_polarity"
     t.float    "match_weight",       limit: 24
-    t.datetime "created_at",                                           null: false
-    t.datetime "updated_at",                                           null: false
+    t.datetime "created_at",                                       null: false
+    t.datetime "updated_at",                                       null: false
     t.boolean  "alternative_layout",               default: false
     t.boolean  "private",                          default: false
     t.integer  "container_id",       limit: 4
-    t.string   "container_type",     limit: 255
+    t.string   "container_type",     limit: 191
     t.boolean  "elasticsearch_only",               default: false
     t.boolean  "required",                         default: false
-    t.string   "field_type",         limit: 255,   default: "regular"
+    t.string   "field_type",         limit: 255
   end
 
   add_index "fields", ["container_type", "container_id"], name: "index_fields_on_container_type_and_container_id", using: :btree
@@ -444,7 +444,7 @@ ActiveRecord::Schema.define(version: 20170927055118) do
     t.datetime "created_at",                                     null: false
     t.datetime "updated_at",                                     null: false
     t.integer  "collection_id",      limit: 4
-    t.string   "collection_type",    limit: 255
+    t.string   "collection_type",    limit: 191
     t.string   "custom_field",       limit: 255
     t.string   "custom_aggregation", limit: 255
     t.boolean  "time_series",                    default: false
@@ -816,7 +816,7 @@ ActiveRecord::Schema.define(version: 20170927055118) do
   create_table "resources", force: :cascade do |t|
     t.string   "title",             limit: 255
     t.integer  "container_id",      limit: 4
-    t.string   "container_type",    limit: 255
+    t.string   "container_type",    limit: 191
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
     t.string   "file_file_name",    limit: 255
@@ -829,9 +829,9 @@ ActiveRecord::Schema.define(version: 20170927055118) do
   add_index "resources", ["container_type", "container_id"], name: "index_resources_on_container_type_and_container_id", using: :btree
 
   create_table "reward_actions", force: :cascade do |t|
-    t.string   "label",         limit: 255, null: false
+    t.string   "label",         limit: 255
     t.integer  "points",        limit: 4
-    t.string   "key",           limit: 255, null: false
+    t.string   "key",           limit: 255
     t.integer  "enterprise_id", limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -842,7 +842,7 @@ ActiveRecord::Schema.define(version: 20170927055118) do
   create_table "rewards", force: :cascade do |t|
     t.integer  "enterprise_id",        limit: 4,     null: false
     t.integer  "points",               limit: 4,     null: false
-    t.string   "label",                limit: 255,   null: false
+    t.string   "label",                limit: 255
     t.string   "picture_file_name",    limit: 255
     t.string   "picture_content_type", limit: 255
     t.integer  "picture_file_size",    limit: 4
@@ -903,7 +903,7 @@ ActiveRecord::Schema.define(version: 20170927055118) do
     t.text     "embed_code", limit: 65535
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
-    t.string   "url",        limit: 255,   null: false
+    t.string   "url",        limit: 255
     t.integer  "group_id",   limit: 4
   end
 
@@ -922,7 +922,7 @@ ActiveRecord::Schema.define(version: 20170927055118) do
     t.boolean  "default",                         default: false
     t.string   "secondary_color",     limit: 255
     t.boolean  "use_secondary_color",             default: false
-    t.string   "logo_redirect_url",   limit: 255, default: ""
+    t.string   "logo_redirect_url",   limit: 255
   end
 
   create_table "topic_feedbacks", force: :cascade do |t|
@@ -987,14 +987,14 @@ ActiveRecord::Schema.define(version: 20170927055118) do
     t.text     "data",                        limit: 65535
     t.string   "auth_source",                 limit: 255
     t.integer  "enterprise_id",               limit: 4
-    t.datetime "created_at",                                                  null: false
-    t.datetime "updated_at",                                                  null: false
-    t.string   "email",                       limit: 191,   default: "",      null: false
-    t.string   "encrypted_password",          limit: 255,   default: ""
+    t.datetime "created_at",                                               null: false
+    t.datetime "updated_at",                                               null: false
+    t.string   "email",                       limit: 191
+    t.string   "encrypted_password",          limit: 255
     t.string   "reset_password_token",        limit: 191
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",               limit: 4,     default: 0,       null: false
+    t.integer  "sign_in_count",               limit: 4,     default: 0,    null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip",          limit: 255
@@ -1007,8 +1007,8 @@ ActiveRecord::Schema.define(version: 20170927055118) do
     t.integer  "invited_by_id",               limit: 4
     t.string   "invited_by_type",             limit: 255
     t.integer  "invitations_count",           limit: 4,     default: 0
-    t.string   "provider",                    limit: 255,   default: "email", null: false
-    t.string   "uid",                         limit: 255,   default: "",      null: false
+    t.string   "provider",                    limit: 255
+    t.string   "uid",                         limit: 191
     t.text     "tokens",                      limit: 65535
     t.string   "firebase_token",              limit: 255
     t.datetime "firebase_token_generated_at"
@@ -1022,11 +1022,11 @@ ActiveRecord::Schema.define(version: 20170927055118) do
     t.integer  "policy_group_id",             limit: 4
     t.boolean  "active",                                    default: true
     t.text     "biography",                   limit: 65535
-    t.integer  "points",                      limit: 4,     default: 0,       null: false
-    t.integer  "credits",                     limit: 4,     default: 0,       null: false
+    t.integer  "points",                      limit: 4,     default: 0,    null: false
+    t.integer  "credits",                     limit: 4,     default: 0,    null: false
     t.string   "time_zone",                   limit: 255
     t.integer  "total_weekly_points",         limit: 4,     default: 0
-    t.integer  "failed_attempts",             limit: 4,     default: 0,       null: false
+    t.integer  "failed_attempts",             limit: 4,     default: 0,    null: false
     t.string   "unlock_token",                limit: 191
     t.datetime "locked_at"
   end
