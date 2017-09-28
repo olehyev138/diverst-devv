@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe BudgetMailer, type: :mailer, :skip => "Need to fix - written by gabriel" do
+RSpec.describe BudgetMailer, type: :mailer do
   describe '#approve_request' do
     let(:user) { create :user }
     let(:budget) { create :budget }
@@ -53,7 +53,7 @@ RSpec.describe BudgetMailer, type: :mailer, :skip => "Need to fix - written by g
     end
 
     it 'renders message info' do
-      expect(mail.body.encoded).to include("Hi John Doe! The budget for New group was approved by Fulano Ciclano")
+      expect(mail.body.encoded).to include("<html>\r\n  <body>\r\n    Hello, John Doe!\r\n<br/>\r\nYour budget New group has been approved by Fulano Ciclano\r\n  </body>\r\n</html>\r\n")
     end
   end
 
