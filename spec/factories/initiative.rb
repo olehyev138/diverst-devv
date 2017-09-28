@@ -8,7 +8,7 @@ FactoryGirl.define do
     f.estimated_funding { 0 }
     f.owner_group { FactoryGirl.create(:group) }
     f.pillar { owner_group.try(:pillars).try(:first) }
-
+    f.owner {FactoryGirl.create(:user)}
     trait :with_budget_item do
       budget_item { FactoryGirl.create(:budget_item) }
       owner_group { budget_item.budget.subject }
