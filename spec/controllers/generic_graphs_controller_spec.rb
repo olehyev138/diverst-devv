@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe GenericGraphsController, type: :controller, :skip => true do
+RSpec.describe GenericGraphsController, type: :controller do
     let(:enterprise){ create(:enterprise, cdo_name: "test") }
     let(:user){ create(:user, enterprise: enterprise) }
     let(:field){create(:field, type: "NumericField", container_id: enterprise.id, container_type: "Enterprise", elasticsearch_only: false)}
@@ -62,7 +62,7 @@ RSpec.describe GenericGraphsController, type: :controller, :skip => true do
                 end
                 
                 it "returns correct data" do
-                    expect(response.body).to eq("Number of users by segment\n")
+                    expect(response.body).to eq("Number of users by Badge\n")
                 end
             end
         end
