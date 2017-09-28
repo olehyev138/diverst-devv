@@ -10,37 +10,7 @@ RSpec.describe PolicyGroupPolicy, :type => :policy do
     
     subject { described_class }
 
-    permissions :show? do
-        it "allows access" do
-            expect(subject).to permit(user, policy_group)
-        end
-
-        it "doesn't allow access" do
-            expect(subject).to_not permit(no_access, policy_group_2)
-        end
-    end
-
-    permissions :create? do
-        it "allows access" do
-            expect(subject).to permit(user, policy_group)
-        end
-
-        it "doesn't allow access" do
-            expect(subject).to_not permit(no_access, policy_group_2)
-        end
-    end
-
-    permissions :update? do
-        it "allows access" do
-            expect(subject).to permit(user, policy_group)
-        end
-
-        it "doesn't allow access" do
-            expect(subject).to_not permit(no_access, policy_group_2)
-        end
-    end
-
-    permissions :destroy? do
+    permissions :show?, :create?, :update?, :destroy? do
         it "allows access" do
             expect(subject).to permit(user, policy_group)
         end
