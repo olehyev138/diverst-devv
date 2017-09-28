@@ -1,5 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe Outcome, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+    
+    describe 'when validating' do
+        let(:outcome) { build_stubbed(:outcome) }
+        
+        it { expect(outcome).to belong_to(:group) }
+        
+        it { expect(outcome).to have_many(:pillars) }
+    end
+    
+    describe 'default_scope' do
+        let(:outcome) { create(:outcome) }
+            
+        it "gets the outcome" do    
+            expect(Outcome.all).to eq [outcome]
+        end
+    end
 end
