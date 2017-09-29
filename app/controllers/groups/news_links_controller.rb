@@ -45,7 +45,7 @@ class Groups::NewsLinksController < ApplicationController
       user_rewarder("news_post").add_points(@news_link)
       UserGroupInstantNotificationJob.perform_later(@group, news_count: 1)
       flash_reward "Your news was created. Now you have #{ current_user.credits } points"
-      redirect_to action: :index
+      redirect_to group_posts_path(@group)
     else
       flash[:alert] = "Your news was not created. Please fix the errors"
       render :edit
@@ -55,7 +55,7 @@ class Groups::NewsLinksController < ApplicationController
   def update
     if @news_link.update(news_link_params)
       flash[:notice] = "Your news was updated"
-      redirect_to action: :index
+      redirect_to group_posts_path(@group)
     else
       flash[:alert] = "Your news was not updated. Please fix the errors"
       render :edit
@@ -66,7 +66,7 @@ class Groups::NewsLinksController < ApplicationController
     user_rewarder("news_post").remove_points(@news_link)
     @news_link.destroy
     flash[:notice] = "Your news was removed. Now you have #{ current_user.credits } points"
-    redirect_to action: :index
+    redirect_to group_posts_path(@group)
   end
 
   # this is not a route found in config/routes.rb

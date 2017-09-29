@@ -54,6 +54,12 @@
   </div>
 </div>
 
+<div class="content__header">
+  <h1>Sub-Segments</h1>
+  <%= link_to "+ New Sub-Segment", new_segment_sub_segment_path(@segment), class: "btn btn--primary" if policy(Segment).new? %>
+</div>
+
+<%= render "table" %>
 
 <script>
   $(document).on('page:change', function() {

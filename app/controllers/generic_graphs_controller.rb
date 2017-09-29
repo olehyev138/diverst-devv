@@ -4,8 +4,13 @@ class GenericGraphsController < ApplicationController
   before_action :authenticate_user!
 
   def group_population
-    data = current_user.enterprise.groups.map { |g| g.members.active.count }
-    categories = current_user.enterprise.groups.map{ |g| j g.name }
+    data = current_user.enterprise.groups.map { |g| 
+      {
+        y: g.members.active.count,
+        name: g.name
+      }
+    }
+    categories = current_user.enterprise.groups.map{ |g| g.name }
 
     respond_to do |format|
       format.json {
@@ -31,8 +36,23 @@ class GenericGraphsController < ApplicationController
   end
 
   def segment_population
-    data = current_user.enterprise.segments.map { |s| s.members.active.count }
-    categories = current_user.enterprise.segments.map{ |s| j s.name }
+    segments = current_user.enterprise.segments.includes(:parent).where(:segmentations => {:parent_id => nil})
+    
+    data = segments.map { |s| 
+      {
+        y: s.members.active.count,
+        name: s.name,
+        drilldown: s.name
+      } 
+    }
+    drilldowns = segments.includes(:sub_segments).map { |s| 
+        {
+          name: s.name,
+          id: s.name,
+          data: s.sub_segments.map {|sub| [sub.name, sub.members.active.count]}
+        }
+    }
+    categories = segments.map{ |s| s.name }
 
     respond_to do |format|
       format.json {
@@ -40,9 +60,11 @@ class GenericGraphsController < ApplicationController
           type: 'bar',
           highcharts: {
             series: [{
-              title: 'Number of users',
+              name: 'Number of users',
+              colorByPoint: true,
               data: data
             }],
+            drilldowns: drilldowns,
             categories: categories,
             xAxisTitle: c_t(:segment)
           },
@@ -59,10 +81,13 @@ class GenericGraphsController < ApplicationController
 
   def events_created
     data = current_user.enterprise.groups.map do |g|
-      g.initiatives.joins(:owner)
-        .where('initiatives.created_at > ? AND users.active = ?', 1.month.ago, true).count
+      {
+        y: g.initiatives.joins(:owner)
+            .where('initiatives.created_at > ? AND users.active = ?', 1.month.ago, true).count,
+        name: g.name
+      }
     end
-    categories = current_user.enterprise.groups.map{ |g| j g.name }
+    categories = current_user.enterprise.groups.map{ |g| g.name }
 
     respond_to do |format|
       format.json{
@@ -90,10 +115,13 @@ class GenericGraphsController < ApplicationController
 
   def messages_sent
     data = current_user.enterprise.groups.map do |g|
-      g.messages.joins(:owner)
-        .where('group_messages.created_at > ? AND users.active = ?', 1.month.ago, true).count
+      { 
+        y: g.messages.joins(:owner)
+          .where('group_messages.created_at > ? AND users.active = ?', 1.month.ago, true).count,
+        name: g.name
+      }
     end
-    categories = current_user.enterprise.groups.map{ |g| j g.name }
+    categories = current_user.enterprise.groups.map{ |g| g.name }
 
     respond_to do |format|
       format.json {

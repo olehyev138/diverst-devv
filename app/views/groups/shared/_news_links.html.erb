@@ -1,0 +1,33 @@
+<div class="card__section card__section--border">
+            <div class="row">
+              <div class="col sm-1">
+                <%= news_link_picture(news_link) %>
+              </div>
+              <div class="col sm-11">
+                <div class="flex-row flex-row--middle">
+                  <div class="flex-row__cell flex-row__cell--grow">
+                    <h4><%= news_link.title %></h4>
+                    <p>
+                      <%= news_link.description %>
+                      <br>
+                      <%= link_to news_link.url, news_link.url %>
+                      <br>
+                      <% if news_link.author.present? %>
+                        <span class="muted">Posted by <%=  news_link.author.name_with_status %></span>
+                      <% end %>
+                      <br>
+                      <%= link_to "Comments(#{news_link.comments.count})", comments_group_news_link_path(news_link.group,news_link)
+                       %>
+                    </p>
+                  </div>
+                  <% if policy(news_link).edit? %>
+                    <div class="flex-row__cell link-group">
+                      <%= link_to "Approve", approve_group_posts_path(:group_id => news_link.group.id, :link_id => news_link.news_feed_link.id), method: :post if policy(news_link.group).erg_leader_permissions? and !news_link.news_feed_link.approved? %>
+                      <%= link_to "Edit", edit_group_news_link_path(news_link.group, news_link) %>
+                      <%= link_to "Delete", group_news_link_path(news_link.group, news_link), method: :delete, class: "error", data: { confirm: "Are you sure?" } %>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>

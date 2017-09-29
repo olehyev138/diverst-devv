@@ -36,7 +36,8 @@ class Graph {
   renderBarChart() {
     this.$element.highcharts({
       chart: {
-        type: 'bar',
+        type: 'column',
+        inverted: true,
         style: {
           fontFamily: 'Helvetica Neue, sans-serif'
         }
@@ -45,10 +46,7 @@ class Graph {
         text: ''
       },
       xAxis: {
-        categories: this.data.highcharts.categories,
-        title: {
-          text: this.data.highcharts.xAxisTitle
-        }
+        type: 'category'
       },
       yAxis: {
         min: 0,
@@ -59,7 +57,11 @@ class Graph {
       },
       plotOptions: {
         series: {
-          stacking: 'normal'
+          stacking: 'normal',
+          borderWidth: 0,
+          dataLabels: {
+              enabled: true
+          }
         }
       },
       tooltip: {
@@ -74,7 +76,16 @@ class Graph {
       credits: {
         enabled: false
       },
-      colors: [this.chartsColor, '#F15E57', '#FE6D4B', '#9FD661', '#40D0AD', '#48C0EB', '#5A9AEF', '#EE85C1']
+      colors: [this.chartsColor, '#F15E57', '#FE6D4B', '#9FD661', '#40D0AD', '#48C0EB', '#5A9AEF', '#EE85C1'],
+      drilldown: {
+        series: this.data.highcharts.drilldowns,
+        activeAxisLabelStyle: {
+          textDecoration: 'none'
+        },
+        activeDataLabelStyle: {
+          color: 'white'
+        }
+      }
     });
   }
 

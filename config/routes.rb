@@ -18,6 +18,18 @@ Rails.application.routes.draw do
   get 'users/invitation', to: 'users/invitations#index'
 
   get 'omniauth/:provider/callback', to: 'omni_auth#callback'
+  
+  namespace :api, defaults: { format: :json } do
+    namespace :v1 do
+      resources :users
+      resources :groups
+      resources :enterprises, :only => [:update] do
+        member do
+          get "events"
+        end
+      end
+    end
+  end
 
   namespace :users, defaults: { format: :json } do
     mount_devise_token_auth_for 'User', at: 'auth/token'
@@ -40,6 +52,7 @@ Rails.application.routes.draw do
   resources :users do
     member do
       get 'group_surveys'
+      put 'resend_invitation'
     end
 
     collection do
@@ -122,7 +135,7 @@ Rails.application.routes.draw do
         post 'create_comment'
       end
       resources :leaders, only: [:index, :new, :create]
-
+      resources :social_links
       resources :questions, only: [:index] do
         collection do
           get 'survey'
@@ -157,6 +170,12 @@ Rails.application.routes.draw do
         member do
           get 'comments'
           post 'create_comment'
+        end
+      end
+      resources :posts, :only => [:index] do
+        collection do
+          get 'pending'
+          post 'approve'
         end
       end
       resources :resources
@@ -261,6 +280,7 @@ Rails.application.routes.draw do
   end
 
   resources :segments do
+    resources :sub_segments
     member do
       get 'export_csv'
     end
@@ -398,6 +418,8 @@ Rails.application.routes.draw do
   resources :policy_groups
   resources :emails
   resources :custom_texts, only: [:edit, :update]
+  
+  match "*a", :to => "application#routing_error", :via => [:get, :post]
 
   root to: 'metrics_dashboards#index'
 end

@@ -23,8 +23,8 @@ RSpec.feature 'Segment management' do
     fill_in page.find('.value-text input')[:id], with: '10'
     click_on 'Create Segment'
     
-    # this should be to instead of to_not but passing this test for now
-    expect(page).to_not have_content segment[:name]
+
+    expect(page).to have_content segment[:name]
   end
 
   scenario 'user deletes a segment' do

@@ -1,0 +1,27 @@
+<div class="content__header">
+  <h1><%= link_to 'Posts', group_posts_path(@group) %>/Pending</h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <% if @posts.empty? %>
+      <div class="card__section">
+        <p>No pending posts.</p>
+      </div>
+    <% else %>
+      <% @posts.each do |news| %>
+        <% if news.link_type == "NewsLink" %>
+          <%= render partial: "groups/shared/news_links", locals: {news_link: news.link } %>
+        <% elsif news.link_type === "GroupMessage"%>
+          <%= render partial: "groups/shared/messages", locals: {message: news.link } %>
+        <% elsif news.link_type === "SocialLink"%>
+            <div>
+              <%= link_to 'Delete', user_social_link_path(news.link.id),method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(news.link).destroy? %>
+              <%= link_to "Approve", approve_group_posts_path(:group_id => @group.id, :link_id => news.id), method: :post if policy(@group).erg_leader_permissions? and !news.approved? %>
+              <%= raw news.link.embed_code %>
+            </div>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

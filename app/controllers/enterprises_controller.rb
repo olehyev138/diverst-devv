@@ -86,7 +86,7 @@ class EnterprisesController < ApplicationController
       redirect_to :back
     else
       flash[:alert] = "Enterprise attachment was not removed. Please fix the errors"
-      render :back
+      redirect_to :back
     end
   end
 

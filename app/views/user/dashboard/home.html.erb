@@ -55,29 +55,17 @@
             <div class="card__section">
 
               <h4>Latest News</h4>
-              <%= link_to "View all", user_news_links_path, class: "card__action" %>
+              <%= link_to "View all", user_news_links_path, class: "card__action" unless @posts.count < 1 %>
 
-              <% @news_links.each do |news_link| %>
-                <% unless news_link.url.blank? %>
-                  <%= link_to news_link.url, class: "block block-section", target: "_blank" do %>
-                    <%= render "shared/flippable/news_link", news_link: news_link %>
-                  <% end %>
-                <% else %>
-                  <%= render "shared/flippable/news_link", news_link: news_link %>
+              <% if @posts.empty? %>
+                <div class="mtlarge text-center">
+                  No posts have been published yet.
+                </div>
+              <% else %>
+                <% @posts.each do |news| %>
+                  <%= render "shared/flippable/news_link", news: news %>
                 <% end %>
               <% end %>
-            </div>
-          </div>
-        </div>
-
-        <div class="col sm-12 md-6">
-          <div class="card">
-            <div class="card__section">
-
-              <h4>Latest Messages</h4>
-              <%= link_to "View all", user_messages_path, class: "card__action" %>
-
-              <%= render "shared/boxes/messages", messages: @messages %>
             </div>
           </div>
         </div>

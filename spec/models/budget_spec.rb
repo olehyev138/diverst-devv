@@ -49,33 +49,36 @@ RSpec.describe Budget, type: :model do
 
     describe 'approver notification on creation' do
         let(:user) { create :user }
-        let(:budget) { build :budget }
+        let(:budget) { build :budget}
 
         before do
             allow(budget).to receive(:send_approval_request)
-
-            budget.save
+            allow(budget).to receive(:send_approval_notification)
+            allow(budget).to receive(:send_denial_notification)
         end
 
         context 'on budget creation' do
-            context 'with approver_id' do
-                let(:budget) { build :budget, approver_id: user.id }
-
+            context 'when is_approved is true' do
                 it 'sends email request' do
-                    expect(budget).to have_received(:send_approval_request)
+                    budget.is_approved = true
+                    budget.save
+                    expect(budget).to have_received(:send_approval_notification)
                 end
             end
 
-            context 'without approver_id' do
+            context 'is_approved is false' do
                 it 'does not send email request' do
-                    expect(budget).to_not have_received(:send_approval_request)
+                    budget.is_approved = false
+                    budget.save
+                    expect(budget).to have_received(:send_denial_notification)
                 end
             end
         end
 
         context 'on budget update' do
             it 'does not send email request' do
-                expect(budget).to_not have_received(:send_approval_request)
+                budget.save
+                expect(budget).to have_received(:send_approval_request)
             end
         end
     end
