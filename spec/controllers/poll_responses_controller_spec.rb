@@ -6,7 +6,7 @@ RSpec.describe PollResponsesController, type: :controller do
     let(:poll_response){ create :poll_response, poll: poll}
     login_user_from_let
     
-    describe "GET#index", :skip => true do
+    describe "GET#index", :skip => "MISSING TEMPLATE" do
         context "with logged user" do
             it "gets the index" do
                 get :index, poll_id: poll.id
@@ -51,7 +51,7 @@ RSpec.describe PollResponsesController, type: :controller do
         end
     end
     
-    describe "PATCH#update", :skip => true do
+    describe "PATCH#update" do
         context "with logged user" do
             context "with valid params" do
                 before {patch :update, poll_id: poll.id, id: poll_response.id, poll_response: {anonymous: false}}

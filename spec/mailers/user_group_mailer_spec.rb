@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe UserGroupMailer, type: :mailer, :skip => "Need to fix - written by gabriel" do
+RSpec.describe UserGroupMailer, type: :mailer do
   let!(:user){ create(:user) }
   let!(:groups){ [{ group: create(:group), messages_count: 2, news_count: 0 }] }
 
@@ -24,7 +24,7 @@ RSpec.describe UserGroupMailer, type: :mailer, :skip => "Need to fix - written b
     end
 
     it 'shows a message to user' do
-      expect(mail.body.encoded).to include("Hello #{ user.name }, you have updates in your ERGs.")
+      expect(mail.body.encoded).to include("html>\r\n  <body>\r\n    Hello #{ user.name }, a new item has been posted to a Diversity and Inclu")
     end
 
     it 'shows a message with number of comments in group' do

@@ -38,7 +38,7 @@ class PollResponsesController < ApplicationController
 
   def update
     if @response.update(poll_response_params)
-      redirect_to @response
+      redirect_to @poll
     else
       render :edit
     end

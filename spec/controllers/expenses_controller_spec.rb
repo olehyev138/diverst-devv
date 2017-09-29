@@ -1,10 +1,11 @@
 require 'rails_helper'
 
-RSpec.describe ExpensesController, type: :controller, :skip => "Need to fix - written by gabriel" do
+RSpec.describe ExpensesController, type: :controller do
     let(:enterprise){ create(:enterprise, cdo_name: "test") }
     let(:user){ create(:user, enterprise: enterprise) }
     let(:expense){create(:expense, enterprise: enterprise)}
-
+    let(:expense_category_1) {create(:expense_category, expense: expense)}
+    
     describe "GET#index" do
         describe "with logged in user" do
             login_user_from_let
@@ -32,7 +33,8 @@ RSpec.describe ExpensesController, type: :controller, :skip => "Need to fix - wr
             login_user_from_let
 
             context 'with correct params' do
-                let(:expense) { FactoryGirl.attributes_for(:expense) }
+                let(:expense_category_2) {create(:expense_category)}
+                let(:expense) { FactoryGirl.attributes_for(:expense, :category_id => expense_category_2.id)}
 
                 it 'redirects to correct action' do
                     post :create, expense: expense
@@ -96,7 +98,7 @@ RSpec.describe ExpensesController, type: :controller, :skip => "Need to fix - wr
                 end
 
                 it "renders action edit" do
-                    expect(response.status).to eq(302)
+                    expect(response).to render_template :edit
                 end
 
                 it "flashes alert" do

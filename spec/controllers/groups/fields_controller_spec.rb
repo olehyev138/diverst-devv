@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Groups::FieldsController, type: :controller do
     let(:user) { create :user }
-    let(:group){ create(:group, enterprise: user.enterprise) }
-    let(:field){create(:field, type: "NumericField", container_id: group.id, container_type: "Group", elasticsearch_only: false)}
+    let!(:group){ create(:group, enterprise: user.enterprise) }
+    let!(:field){create(:field, type: "NumericField", container: group, field_type: "regular")}
     
     login_user_from_let
     
