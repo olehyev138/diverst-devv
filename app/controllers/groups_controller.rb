@@ -67,7 +67,7 @@ class GroupsController < ApplicationController
         authorize @group
 
         @upcoming_events = @group.initiatives.upcoming.limit(3) + @group.participating_initiatives.upcoming.limit(3)
-        @news_links = @group.news_links.limit(3).order(created_at: :desc)
+        @posts = @group.news_feed_links.includes(:link).approved.order(created_at: :desc).limit(5)
         @user_groups = @group.user_groups.order(created_at: :desc).includes(:user).limit(8)
         @messages = @group.messages.includes(:owner).limit(3)
         @user_group = @group.user_groups.find_by(user: current_user)

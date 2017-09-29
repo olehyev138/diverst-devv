@@ -21,6 +21,10 @@ class SegmentRule < ActiveRecord::Base
     @@operators
   end
 
+  def values
+    self[:values].blank? ? "[]" : self[:values]
+  end
+
   def self.operator_text(id)
     operators.select { |_, v| v == id }.keys[0].to_s.tr('_', ' ')
   end
@@ -30,6 +34,8 @@ class SegmentRule < ActiveRecord::Base
   end
 
   def followed_by?(user)
+    return true if field.nil?
+
     field.validates_rule_for_user?(rule: self, user: user)
   end
 

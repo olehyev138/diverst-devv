@@ -93,6 +93,17 @@ class Group < ActiveRecord::Base
     def managers
         leaders.to_a << owner
     end
+    
+    def news_feed
+        if NewsFeed.where(:group_id => id).count > 0
+            return NewsFeed.find_by_group_id(id)
+        else
+            feed = NewsFeed.new
+            feed.group_id = id
+            feed.save
+            return feed
+        end
+    end
 
     def calendar_color
         self[:calendar_color] || enterprise.try(:theme).try(:primary_color) || 'cccccc'

@@ -45,7 +45,7 @@
             <%= active_link_to "Events", group_events_path(@group) %>
           </li>
             <li>
-              <%= active_link_to "News Feed", group_posts_path(@group) %>
+              <%= active_link_to "News Feed (#{@group.news_feed_links.includes(:link).not_approved.count})", group_posts_path(@group) %>
             </li>
           <li>
             <%= active_link_to "Resources", group_resources_path(@group) %>
@@ -74,7 +74,7 @@
       <% end %>
       <%= active_link_to "Events", group_events_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <%= active_link_to "Resources", group_resources_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-      <%= active_link_to "News Feed", group_posts_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+      <%= active_link_to "News Feed (#{@group.news_feed_links.includes(:link).not_approved.count})", group_posts_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <% if policy(@group).update? %>
           <%= active_link_to "Leaders", group_leaders_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
           <%= active_link_to "Questions", group_questions_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>

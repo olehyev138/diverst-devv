@@ -42,7 +42,7 @@ RSpec.describe InitiativeDecorator do
             initiative.estimated_funding = 1000
             # create expenses
             4.times do
-                initiative.expenses.create(:amount => 125)
+                initiative.expenses.create!(:amount => 125, :owner => initiative.owner)
             end
             decorated_initiative = initiative.decorate
             expect(decorated_initiative.budget_percentage).to eq(50.0)

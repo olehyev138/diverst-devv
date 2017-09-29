@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Groups::NewsLinksController, type: :controller do
     let(:user) { create :user }
     let(:group){ create(:group, enterprise: user.enterprise) }
-    
+
     login_user_from_let
 
     describe 'GET #index' do
@@ -39,12 +39,12 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
             end
         end
     end
-    
+
     describe 'GET #new' do
         def get_new(group_id)
             get :new, group_id: group_id
         end
-        
+
         context 'with logged user' do
             login_user_from_let
 
@@ -63,14 +63,14 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
             end
         end
     end
-    
+
     describe 'GET #comments' do
         let!(:news_link) { create(:news_link, group: group) }
-        
+
         def get_comments(group_id)
             get :comments, group_id: group_id, id: news_link.id
         end
-        
+
         context 'with logged user' do
             login_user_from_let
 
@@ -115,7 +115,7 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
         it "rewards a user with points of this action" do
             expect(user.points).to eq 0
 
-            post :create_comment, group_id: group.id, id: news_link, news_link_comment: attributes_for(:news_link)
+            post :create_comment, group_id: group.id, id: news_link, news_link_comment: attributes_for(:news_link_comment)
 
             user.reload
             expect(user.points).to eq 35
@@ -138,31 +138,31 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
             expect(user.points).to eq 0
         end
     end
-    
+
     describe 'PATCH#update' do
         let!(:news_link){ create(:news_link, group: group) }
-        
+
         before { patch :update, group_id: group.id, id: news_link.id, news_link: {title: "updated"}}
-        
+
         it "redirects" do
-            expect(response).to redirect_to action: :index
+            expect(response).to redirect_to group_posts_path(group)
         end
-        
+
         it "flashes" do
             expect(flash[:notice])
         end
-        
+
         it "updates the link" do
             news_link.reload
             expect(news_link.title).to eq("updated")
         end
     end
-    
+
     describe 'GET#url_info' do
         def get_url_info(group_id)
             get :url_info, group_id: group_id
         end
-        
+
         context 'with logged user', :skip => "Not a route found in config/routes.rb" do
             login_user_from_let
 

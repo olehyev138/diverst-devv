@@ -16,6 +16,8 @@ class Groups::NewsLinksController < ApplicationController
     @news_link = @group.news_links.new
   end
 
+  def edit ; end
+
   def comments
     @comments = @news_link.comments.includes(:author)
     @new_comment = NewsLinkComment.new
@@ -25,8 +27,12 @@ class Groups::NewsLinksController < ApplicationController
     @comment = @news_link.comments.new(news_link_comment_params)
     @comment.author = current_user
 
-    @comment.save && user_rewarder("news_comment").add_points(@comment)
-    flash_reward "Your comment was created. Now you have #{ current_user.credits } points"
+    if @comment.save
+      user_rewarder("news_comment").add_points(@comment)
+      flash_reward "Your comment was created. Now you have #{ current_user.credits } points"
+    else
+      flash[:alert] = "Your comment was not created. Please fix the errors"
+    end
 
     redirect_to action: :comments
   end
@@ -39,7 +45,7 @@ class Groups::NewsLinksController < ApplicationController
       user_rewarder("news_post").add_points(@news_link)
       UserGroupInstantNotificationJob.perform_later(@group, news_count: 1)
       flash_reward "Your news was created. Now you have #{ current_user.credits } points"
-      redirect_to action: :index
+      redirect_to group_posts_path(@group)
     else
       flash[:alert] = "Your news was not created. Please fix the errors"
       render :edit
@@ -49,7 +55,7 @@ class Groups::NewsLinksController < ApplicationController
   def update
     if @news_link.update(news_link_params)
       flash[:notice] = "Your news was updated"
-      redirect_to action: :index
+      redirect_to group_posts_path(@group)
     else
       flash[:alert] = "Your news was not updated. Please fix the errors"
       render :edit
@@ -60,7 +66,7 @@ class Groups::NewsLinksController < ApplicationController
     user_rewarder("news_post").remove_points(@news_link)
     @news_link.destroy
     flash[:notice] = "Your news was removed. Now you have #{ current_user.credits } points"
-    redirect_to action: :index
+    redirect_to group_posts_path(@group)
   end
 
   # this is not a route found in config/routes.rb

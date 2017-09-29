@@ -8,6 +8,6 @@ RSpec.describe SegmentRule, type: :model do
 
     it { is_expected.to validate_presence_of(:operator) }
     it { is_expected.to validate_presence_of(:field) }
-    it { is_expected.to validate_presence_of(:values) }
+    #it { is_expected.to validate_presence_of(:values) }
   end
 end

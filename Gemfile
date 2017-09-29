@@ -35,8 +35,8 @@ gem 'bower-rails', '~> 0.10.0' # Bower integration with Rails
 gem 'clockwork', '~> 1.2' # Schedule recurring jobs
 gem 'pismo', '~> 0.7.4' # Extracts metadata from an URL
 gem 'active_link_to', '~> 1.0', '>= 1.0.3' # Automatically add an active class to current nav link
-gem 'paperclip', '~> 5.1.0'# Handle attachments for models and forms
-gem 'aws-sdk', '~> 3.0.1'# The official AWS SDK
+gem 'paperclip', '~> 4.3'# Handle attachments for models and forms
+gem 'aws-sdk', '< 2.0'# The official AWS SDK
 gem 'kaminari', '~> 0.16.3' # Pagination
 gem 'jquery-datatables-rails', '~> 3.3' # Datatables
 gem 'ajax-datatables-rails', '~> 0.3.1' # Adds AJAX routes for datatables queries
@@ -76,6 +76,7 @@ gem 'ruby-oembed', '~> 0.12.0'
 gem 'julia_builder', '~> 0.2.0'
 gem 'date_validator', '~> 0.9.0'
 gem "thor", "0.19.1"# Expected string default value for '--decorator'; got true (boolean) - setting version removes this message
+gem 'sanitize_email', '~> 1.2.2'
 
 group :development, :test do
   gem 'spring', '~> 1.6.2' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
@@ -101,6 +102,8 @@ end
 group :test do
   gem 'rspec_junit_formatter', '~> 0.2.3'
   gem 'simplecov', '~> 0.13.0'
+  gem 'test_after_commit', '~> 1.1'
+  gem 'elasticsearch-extensions', '~> 0.0.26'
 end
 
 group :development do
@@ -128,7 +131,7 @@ group :development do
   gem 'bundler-audit'
 end
 
-group :production do
+group :staging, :production do
   gem 'syslogger', '~> 1.6.0' # Log to syslog, which is then sent to Loggly
   gem 'lograge', '~> 0.3'
   gem 'newrelic_rpm'

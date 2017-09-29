@@ -24,12 +24,11 @@ RSpec.describe Groups::SocialLinksController, type: :controller do
 
     describe 'POST#create' do
         before :each do
-            request.env["HTTP_REFERER"] = "back"
-            post :create, group_id: group.id, social_link: attributes_for(:social_link)
+            post :create, group_id: group.id, social_link: attributes_for(:social_link, :url => "https://twitter.com/realDonaldTrump/status/912848241535971331")
         end
         
         it "redirect back" do
-            expect(response).to redirect_to "back"
+            expect(response).to redirect_to group_posts_path(group)
         end
     end
 
@@ -37,12 +36,11 @@ RSpec.describe Groups::SocialLinksController, type: :controller do
         let!(:social_link){ create(:social_link, group: group) }
         
         before :each do
-            request.env["HTTP_REFERER"] = "back"
             delete :destroy, group_id: group.id, id: social_link.id
         end
         
         it "redirects back" do
-            expect(response).to redirect_to "back"
+            expect(response).to redirect_to group_posts_path(group)
         end
     end
 end

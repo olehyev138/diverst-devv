@@ -13,7 +13,7 @@ RSpec.describe Groups::CommentsController, type: :controller do
     it "rewards a user with points of this action" do
       expect(user.points).to eq 0
 
-      post :create, group_id: group.id, event_id: initiative.id, initiative_comment: { content: "" }
+      post :create, group_id: group.id, event_id: initiative.id, initiative_comment: { content: "comment" }
 
       user.reload
       expect(user.points).to eq 80

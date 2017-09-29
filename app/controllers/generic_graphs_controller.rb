@@ -1,9 +1,16 @@
 class GenericGraphsController < ApplicationController
-  include ERB::Util
+  include ActionView::Helpers::JavaScriptHelper
+
+  before_action :authenticate_user!
 
   def group_population
-    data = current_user.enterprise.groups.map { |g| g.members.active.count }
-    categories = current_user.enterprise.groups.map{ |g| html_escape g.name }
+    data = current_user.enterprise.groups.map { |g| 
+      {
+        y: g.members.active.count,
+        name: g.name
+      }
+    }
+    categories = current_user.enterprise.groups.map{ |g| g.name }
 
     respond_to do |format|
       format.json {
@@ -29,21 +36,23 @@ class GenericGraphsController < ApplicationController
   end
 
   def segment_population
-    data = current_user.enterprise.segments.map { |s| 
+    segments = current_user.enterprise.segments.includes(:parent).where(:segmentations => {:parent_id => nil})
+    
+    data = segments.map { |s| 
       {
         y: s.members.active.count,
         name: s.name,
         drilldown: s.name
       } 
     }
-    drilldowns = current_user.enterprise.segments.includes(:sub_segments).map { |s| 
+    drilldowns = segments.includes(:sub_segments).map { |s| 
         {
           name: s.name,
           id: s.name,
           data: s.sub_segments.map {|sub| [sub.name, sub.members.active.count]}
         }
     }
-    categories = current_user.enterprise.segments.map{ |s| html_escape s.name }
+    categories = segments.map{ |s| s.name }
 
     respond_to do |format|
       format.json {
@@ -57,13 +66,13 @@ class GenericGraphsController < ApplicationController
             }],
             drilldowns: drilldowns,
             categories: categories,
-            xAxisTitle: 'Segment'
+            xAxisTitle: c_t(:segment)
           },
           hasAggregation: false
         }
       }
       format.csv {
-        strategy = Reports::GraphStatsGeneric.new(title: 'Number of users by segment', categories: categories, data: data)
+        strategy = Reports::GraphStatsGeneric.new(title: "Number of users by #{ c_t(:badge) }", categories: categories, data: data)
         report = Reports::Generator.new(strategy)
         send_data report.to_csv, filename: "graph_segment_population.csv"
       }
@@ -72,10 +81,13 @@ class GenericGraphsController < ApplicationController
 
   def events_created
     data = current_user.enterprise.groups.map do |g|
-      g.initiatives.joins(:owner)
-        .where('initiatives.created_at > ? AND users.active = ?', 1.month.ago, true).count
+      {
+        y: g.initiatives.joins(:owner)
+            .where('initiatives.created_at > ? AND users.active = ?', 1.month.ago, true).count,
+        name: g.name
+      }
     end
-    categories = current_user.enterprise.groups.map{ |g| html_escape g.name }
+    categories = current_user.enterprise.groups.map{ |g| g.name }
 
     respond_to do |format|
       format.json{
@@ -103,10 +115,13 @@ class GenericGraphsController < ApplicationController
 
   def messages_sent
     data = current_user.enterprise.groups.map do |g|
-      g.messages.joins(:owner)
-        .where('group_messages.created_at > ? AND users.active = ?', 1.month.ago, true).count
+      { 
+        y: g.messages.joins(:owner)
+          .where('group_messages.created_at > ? AND users.active = ?', 1.month.ago, true).count,
+        name: g.name
+      }
     end
-    categories = current_user.enterprise.groups.map{ |g| html_escape g.name }
+    categories = current_user.enterprise.groups.map{ |g| g.name }
 
     respond_to do |format|
       format.json {

@@ -23,7 +23,7 @@ RSpec.feature 'An ERG dashboard' do
     expect(page).to have_content group.initiatives.last.name
   end
 
-  scenario 'shows the latest news' do
+  scenario 'shows the latest news', :skip => "We changed to news feed" do
     create_list(:news_link, 5, group: group)
 
     visit group_path(group)
@@ -31,7 +31,7 @@ RSpec.feature 'An ERG dashboard' do
     expect(page).to have_content group.news_links.last.title
   end
 
-  scenario 'shows the latest messages' do
+  scenario 'shows the latest messages', :skip => "We changed to news feed" do
     create_list(:group_message, 5, group: group)
 
     visit group_path(group)
@@ -75,7 +75,7 @@ RSpec.feature 'An ERG dashboard' do
     end
   end
 
-  context 'in the messages section' do
+  context 'in the messages section', :skip => "We changed to news feed" do
     scenario 'shows the existing messages' do
       message = create(:group_message, group: group)
 

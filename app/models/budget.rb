@@ -15,7 +15,7 @@ class Budget < ActiveRecord::Base
 
   #scope :with_available_funds, -> { where('available_amount > 0')}
 
-  after_create :send_approval_request, if: Proc.new { |budget| budget.approver_id.present? }
+  after_save :send_email_notification
 
   def requested_amount
     budget_items.sum(:estimated_amount)
@@ -60,9 +60,30 @@ class Budget < ActiveRecord::Base
     select_items << [ group.title_with_leftover_amount, BudgetItem::LEFTOVER_BUDGET_ITEM_ID ]
   end
 
+  private
+
+  def send_email_notification
+    case is_approved
+    when nil # it was just created
+      send_approval_request
+    when true # it was accepted
+      send_approval_notification
+    when false # it was declined
+      send_denial_notification
+    end
+  end
+
   def send_approval_request
     return unless approver.present?
 
     BudgetMailer.approve_request(self, approver).deliver_later
+  end
+
+  def send_approval_notification
+    BudgetMailer.budget_approved(self).deliver_later
+  end
+
+  def send_denial_notification
+    BudgetMailer.budget_declined(self).deliver_later
   end
 end

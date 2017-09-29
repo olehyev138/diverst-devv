@@ -62,7 +62,7 @@ RSpec.describe GenericGraphsController, type: :controller do
                 end
                 
                 it "returns correct data" do
-                    expect(response.body).to eq("Number of users by segment\n")
+                    expect(response.body).to eq("Number of users by Badge\n")
                 end
             end
         end

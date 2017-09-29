@@ -1,20 +1,42 @@
-<%= link_to news_link.url, class: "block block-section", target: "_blank" do %>
-  <div class="<%= "flippable" if news_link.picture.present? %>">
-    <div class="front">
-      <%= image_tag news_link.picture.expiring_url(3600), width: '100%' if news_link.picture.present? %>
-    </div>
-    <div class="back">
-      <div class="flex-row flex-row--middle">
-        <div class="flex-row__cell flex-row__cell--grow">
-          <span class="highlight"><%= news_link.title %></span><br>
-          <small><%= truncate(news_link.description, length: 90) %></small><br>
-          <small class="muted"><%= news_link.created_at.to_s :slashes %></small>
+<% if news.link_type == "NewsLink" %>
+    <%= link_to news.link.url, class: "block block-section", target: "_blank" do %>
+      <div class="<%= "flippable" if news.link.picture.present? %>">
+        <div class="front">
+          <%= image_tag news.link.picture.expiring_url(3600), width: '100%' if news.link.picture.present? %>
         </div>
-        <div class="flex-row__cell">
-          <span class="icon icon--chevron-right"></span>
+        <div class="back">
+          <div class="flex-row flex-row--middle">
+            <div class="flex-row__cell flex-row__cell--grow">
+              <span class="highlight"><%= news.link.title %></span><br>
+              <small><%= truncate(news.link.description, length: 90) %></small><br>
+              <small class="muted"><%= news.link.created_at.to_s :slashes %></small>
+            </div>
+            <div class="flex-row__cell">
+              <span class="icon icon--chevron-right"></span>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-  <div class="card__section--description"><%= news_link.title if news_link.picture.present? %></div>
+      <div class="card__section--description"><%= news.link.title if news.link.picture.present? %></div>
+  <% end %>
+<% elsif news.link_type === "GroupMessage"%>
+  <% message = GroupMessage.includes(:owner, :group).find(news.link.id) %>
+  <%= link_to group_group_message_path(message.group, message), class: "block block-section" do %>
+        <div class="flex-row flex-row--middle">
+          <div class="flex-row__cell flex-row__cell--grow">
+            <span class="highlight"><%= message.subject %></span><br>
+            <small><%= truncate(message.content, length: 90) %></small><br>
+            <small class="muted"><%= message.created_at.to_s :slashes %>
+              <% if message.owner.present? %>
+                by <%= message.owner.name_with_status %>
+              <% end %>
+            </small>
+          </div>
+          <div class="flex-row__cell">
+            <span class="icon icon--chevron-right"></span>
+          </div>
+        </div>
+  <% end %>
+<% elsif news.link_type === "SocialLink"%>
+  <%= raw news.link.embed_code %>
 <% end %>

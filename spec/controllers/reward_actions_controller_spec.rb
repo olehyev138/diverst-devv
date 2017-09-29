@@ -23,7 +23,7 @@ RSpec.describe RewardActionsController, type: :controller do
         end
 
         it 'redirects to back page' do
-          expect(response).to redirect_to "index"
+          expect(response).to redirect_to rewards_path
         end
       end
 

@@ -22,7 +22,7 @@ class Graph {
   }
 
   attachToElement() {
-    if (this.data.type === "NumericField" || this.data.type === "bar")
+    if (this.data.type === "NumericField" || this.data.type === "DateField" || this.data.type === "bar")
       this.renderBarChart()
     else if (this.data.type === "CheckboxField" || this.data.type === "SelectField" || this.data.type === "GroupsField"  || this.data.type === "SegmentsField")
       if (this.data.hasAggregation)

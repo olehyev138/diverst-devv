@@ -1,6 +1,6 @@
 <div class="content__header">
-  <h1>Segments</h1>
-  <%= link_to "+ New Segment", new_segment_path, class: "btn btn--primary" if policy(Segment).new? %>
+  <h1><%= c_t(:segment).pluralize %></h1>
+  <%= link_to "+ New #{ c_t(:segment) }", new_segment_path, class: "btn btn--primary" if policy(Segment).new? %>
 </div>
 
 <%= render "table" %>

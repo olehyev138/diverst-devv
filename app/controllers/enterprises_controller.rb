@@ -1,4 +1,5 @@
 class EnterprisesController < ApplicationController
+  before_action :authenticate_user!, except: [:calendar]
   before_action :set_enterprise, except: [:index, :new, :create, :calendar]
   after_action :verify_authorized, except: :calendar
   after_action :allow_iframe, only: [:calendar]
@@ -85,7 +86,7 @@ class EnterprisesController < ApplicationController
       redirect_to :back
     else
       flash[:alert] = "Enterprise attachment was not removed. Please fix the errors"
-      render :back
+      redirect_to :back
     end
   end
 

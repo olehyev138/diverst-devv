@@ -1,7 +1,8 @@
 FactoryGirl.define do
     factory :expense do
-        association :enterprise, factory: :enterprise
+        association :enterprise
         association :category, factory: :expense_category
-        name {Faker::Name.name}
+        name { Faker::Lorem.sentence(3) }
+        price 1000
     end
 end

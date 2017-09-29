@@ -24,7 +24,7 @@ RSpec.describe UserGroupMailer, type: :mailer do
     end
 
     it 'shows a message to user' do
-      expect(mail.body.encoded).to include("Hello #{ user.name }, you have updates in your ERGs.")
+      expect(mail.body.encoded).to include("html>\r\n  <body>\r\n    Hello #{ user.name }, a new item has been posted to a Diversity and Inclu")
     end
 
     it 'shows a message with number of comments in group' do

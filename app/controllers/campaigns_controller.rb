@@ -1,4 +1,5 @@
 class CampaignsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_campaign, only: [:edit, :update, :destroy, :show,
     :contributions_per_erg, :top_performers]
   after_action :verify_authorized

@@ -15,6 +15,7 @@ class Segment < ActiveRecord::Base
 
     belongs_to :enterprise
     belongs_to :owner, class_name: "User"
+    
     has_many :rules, class_name: 'SegmentRule'
     has_many :users_segments
     has_many :members, class_name: 'User', through: :users_segments, source: :user, dependent: :destroy
@@ -34,6 +35,10 @@ class Segment < ActiveRecord::Base
     accepts_nested_attributes_for :rules, reject_if: :all_blank, allow_destroy: true
     
     after_commit :update_indexes
+    
+    before_destroy :remove_parent_segment
+
+    #validates_presence_of :enterprise
 
     def general_rules_followed_by?(user)
         case active_users_filter
@@ -49,12 +54,17 @@ class Segment < ActiveRecord::Base
     def update_indexes
         return if enterprise.nil?
         CacheSegmentMembersJob.perform_later self
-        RebuildElasticsearchIndexJob.perform_now(model_name: 'User', enterprise: enterprise)
+        RebuildElasticsearchIndexJob.perform_later(model_name: 'User', enterprise: enterprise)
     end
 
     def self.update_all_members
         Segment.all.find_each do |segment|
             CacheSegmentMembersJob.perform_later segment
         end
+    end
+    
+    def remove_parent_segment
+        return if self.parent_segment.nil?
+        self.parent_segment.destroy
     end
 end
