@@ -11,7 +11,7 @@ RSpec.describe GroupMessagePolicy, :type => :policy do
     
     subject { described_class }
 
-    permissions :create?, :update?, :destroy? do
+    permissions :index?, :create?, :update?, :destroy? do
         it "allows access" do
             expect(subject).to permit(user, group_message)
         end
