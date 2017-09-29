@@ -34,6 +34,8 @@ class SegmentRule < ActiveRecord::Base
   end
 
   def followed_by?(user)
+    return true if field.nil?
+
     field.validates_rule_for_user?(rule: self, user: user)
   end
 
