@@ -1,10 +1,11 @@
 class Event < ActiveRecord::Base
+
+    belongs_to :group
+    belongs_to :owner, :class_name => "User"
     
     has_many :budgets, as: :subject
     has_many :events_segments
     has_many :segments, through: :events_segments
-    belongs_to :group
-    belongs_to :owner, :class_name => "User"
     has_many :event_attendances
     has_many :attendees, through: :event_attendances, source: :user
     has_many :event_invitees
