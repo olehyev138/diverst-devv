@@ -51,9 +51,11 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
     describe "GET#show" do
         context "with logged user" do
             login_user_from_let
-            let(:resource){ create(:resource, container_type: "Initiative", container_id: initiative.id) }
-
+            
             it "and id is valid then assign the searched Resource to @resource" do
+                post :create, group_id: group.id, initiative_id: initiative.id,
+                                      resource: {file: Rack::Test::UploadedFile.new(Rails.root + 'spec/fixtures/files/verizon_logo.png', 'image/png'), title: Faker::Lorem.sentence(3)}
+                resource = Resource.last
                 get :show, group_id: group.id, initiative_id: initiative.id, id: resource.id
                 expect(response.stream.to_path).to eq resource.file.path
             end
