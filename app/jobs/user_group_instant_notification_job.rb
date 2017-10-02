@@ -2,6 +2,7 @@ class UserGroupInstantNotificationJob < ActiveJob::Base
   queue_as :default
 
   def perform(group, messages_count: 0, news_count: 0)
+    puts "O"
     User
       .joins(user_groups: :group)
       .where(groups: { id: group.id })

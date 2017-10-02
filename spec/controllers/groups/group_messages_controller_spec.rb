@@ -46,11 +46,6 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
             user.reload
             expect(user.points).to eq 20
         end
-
-        it "send group notification to users" do
-            expect(UserGroupInstantNotificationJob).to receive(:perform_later).with(group, messages_count: 1)
-            post :create, group_id: group.id, group_message: attributes_for(:group_message)
-        end
     end
 
     describe 'POST#create_comment' do

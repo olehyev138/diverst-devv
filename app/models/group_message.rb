@@ -13,8 +13,10 @@ class GroupMessage < ActiveRecord::Base
     validates :content,     presence: true
     validates :owner_id,    presence: true
     
+    alias_attribute :author, :owner
+
     before_create :build_default_link
-    after_create :send_emails
+    #after_create :send_emails
 
     def users
         if segments.empty?
