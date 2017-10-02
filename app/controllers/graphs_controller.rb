@@ -18,7 +18,6 @@ class GraphsController < ApplicationController
       flash[:notice] = "Your graph was created"
       redirect_to @collection
     else
-      puts @graph.errors.full_messages.first
       flash[:alert] = "Your graph was not created. Please fix the errors"
       render :new
     end
