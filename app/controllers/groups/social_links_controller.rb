@@ -18,8 +18,8 @@ class Groups::SocialLinksController < ApplicationController
         if @social_link.save
             redirect_to group_posts_path(@group)
         else
-            flash[:alert] = "Your news was not created. Please fix the errors"
-            render :edit
+            flash[:alert] = "Your social link was not created. Please fix the errors"
+            redirect_to :back
         end
     end
 
