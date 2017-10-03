@@ -60,7 +60,7 @@ RSpec.describe MetricsDashboardsController, type: :controller do
 
     context 'with logged in user' do
       let(:user) { create :user }
-      let(:md_params) { attributes_for :metrics_dashboard, enterprise: user.enterprise }
+      let(:md_params) { attributes_for :metrics_dashboard, enterprise: user.enterprise, group_ids: [create(:group).id] }
 
       login_user_from_let
 

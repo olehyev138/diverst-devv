@@ -101,11 +101,6 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
             user.reload
             expect(user.points).to eq 30
         end
-
-        it "send group notification to users" do
-            expect(UserGroupInstantNotificationJob).to receive(:perform_later).with(group, news_count: 1)
-            post :create, group_id: group.id, news_link: attributes_for(:news_link)
-        end
     end
 
     describe 'POST#create_comment' do

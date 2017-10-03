@@ -1,28 +1,25 @@
 require 'rails_helper'
 
-RSpec.describe SegmentPolicy do
+RSpec.describe SegmentPolicy, :type => :policy do
 
-  let(:user) { User.new }
+    let(:policy_group){ create(:policy_group, :global_settings_manage => true)}
+    let(:enterprise) {create(:enterprise, :policy_groups => [policy_group])}
+    let(:user){ create(:user, :enterprise => enterprise) }
+    let(:policy_group_2){ create(:policy_group, :segments_index => false, :segments_create => false, :segments_manage => false)}
+    let(:enterprise_2) {create(:enterprise, :policy_groups => [policy_group], :scope_module_enabled => false)}
+    let(:no_access) { create(:user, :enterprise => enterprise_2, :policy_group => policy_group_2) }
+    let(:segment){ create(:segment, enterprise: enterprise) }
+    
+    subject { described_class }
 
-  subject { described_class }
+    permissions :index?, :create?, :update?, :destroy? do
+                  
+        it "allows access" do
+            expect(subject).to permit(user, segment)
+        end
 
-  permissions ".scope" do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
-
-  permissions :show? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
-
-  permissions :create? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
-
-  permissions :update? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
-
-  permissions :destroy? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
+        it "doesn't allow access" do
+            expect(subject).to_not permit(no_access, segment)
+        end
+    end
 end

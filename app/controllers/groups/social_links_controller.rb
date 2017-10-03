@@ -1,5 +1,6 @@
 class Groups::SocialLinksController < ApplicationController
-
+    include Rewardable
+    
     before_action :authenticate_user!
 
     before_action :set_group
@@ -16,10 +17,12 @@ class Groups::SocialLinksController < ApplicationController
         @social_link.author = current_user
 
         if @social_link.save
+            user_rewarder("social_media_posts").add_points(@social_link)
+            flash_reward "Your social_link was created. Now you have #{ current_user.credits } points"
             redirect_to group_posts_path(@group)
         else
-            flash[:alert] = "Your news was not created. Please fix the errors"
-            render :edit
+            flash[:alert] = "Your social link was not created. Please fix the errors"
+            redirect_to :back
         end
     end
 

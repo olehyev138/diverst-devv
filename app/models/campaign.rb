@@ -24,7 +24,19 @@ class Campaign < ActiveRecord::Base
 
     has_attached_file :banner, styles: { medium: '1200x1200>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: "private"
     validates_attachment_content_type :banner, content_type: %r{\Aimage\/.*\Z}
-
+    
+    validates :title,       presence: true
+    validates :description, presence: true
+    validates :start,       presence: true
+    validates :end,         presence: true
+    validates :groups,      presence: {:message => "Please select at least 1 group"}
+    
+    validates :start,
+        date: { after: Proc.new { Date.today }, message: 'must be after today' },
+        on: [:create, :update]
+        
+    validates :end, date: {after: :start, message: 'must be after start'}, on: [:create, :update]    
+    
     after_create :create_invites, :send_invitation_emails
 
     scope :ongoing, -> { where('start < :current_time AND end > :current_time', current_time: Time.current) }

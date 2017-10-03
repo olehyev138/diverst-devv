@@ -26,7 +26,7 @@ RSpec.describe GraphsController, type: :controller do
             login_user_from_let
             
             context "when metrics_dashboard" do
-                before {post :create, :metrics_dashboard_id => metrics_dashboard.id, :graph => {field_id: 1}}
+                before {post :create, :metrics_dashboard_id => metrics_dashboard.id, :graph => {field_id: field1.id}}
                 
                 it "returns success" do
                     expect(response).to redirect_to metrics_dashboard

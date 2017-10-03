@@ -20,7 +20,6 @@ class User::SocialLinksController < ApplicationController
       flash[:notice] = "Your link was created"
       redirect_to action: :index
     else
-      puts @social_link.errors.full_messages.first
       flash[:alert] = "Your link was not created. Please fix the errors"
       render :new
     end

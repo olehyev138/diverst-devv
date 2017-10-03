@@ -4,7 +4,7 @@ FactoryGirl.define do
     description { Faker::Lorem.sentence }
     location { Faker::Address.city }
     max_attendees 15
-
+    association :owner, factory: :user
     association :group, factory: :group_with_users
   end
 end

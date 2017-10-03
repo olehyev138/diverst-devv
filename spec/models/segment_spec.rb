@@ -19,6 +19,8 @@ RSpec.describe Segment, type: :model do
         it{ expect(segment).to have_many(:groups).through(:invitation_segments_groups).inverse_of(:invitation_segments) }
         it{ expect(segment).to have_many(:initiative_segments) }
         it{ expect(segment).to have_many(:initiatives).through(:initiative_segments) }
+        
+        it{ expect(segment).to validate_presence_of(:name)}
     end
 
     describe "associations" do
@@ -38,7 +40,7 @@ RSpec.describe Segment, type: :model do
         end
     end
 
-    describe 'when describing callbacks', :skip => "Need to fix - written by Gabriel" do
+    describe 'when describing callbacks' do
         it "should reindex users on elasticsearch after create" do
             segment = build(:segment)
             TestAfterCommit.with_commits(true) do

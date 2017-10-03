@@ -37,12 +37,16 @@ RSpec.describe CampaignsController, type: :controller do
             context 'with correct params' do
                 let(:campaign_params) { FactoryGirl.attributes_for(:campaign) }
                 
+                before :each do
+                    campaign_params.merge!({group_ids: [create(:group).id]})
+                end
+                
                 it 'redirects to correct action' do
                     post :create, campaign: campaign_params
                     expect(response).to redirect_to action: :index
                 end
                 
-                it 'creates new budget' do
+                it 'creates new campaign' do
                     expect{
                     post :create, campaign: campaign_params
                     }.to change(Campaign,:count).by(1)

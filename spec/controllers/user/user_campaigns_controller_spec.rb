@@ -3,9 +3,10 @@ require 'spec_helper'
 
 RSpec.describe "User::UserCampaignsController", type: :controller do
     let!(:user) { create :user}
-    let!(:published_campaign){ create(:campaign, status: Campaign.statuses[:published], enterprise: user.enterprise) }
-    let!(:draft_campaign){ create(:campaign, status: Campaign.statuses[:draft], enterprise: user.enterprise) }
-
+    let!(:published_campaign){ create(:campaign, status: Campaign.statuses[:published], enterprise: user.enterprise, owner: user) }
+    let!(:draft_campaign){ create(:campaign, status: Campaign.statuses[:draft], enterprise: user.enterprise, owner: user) }
+    let!(:campaign_invitation) { create(:campaign_invitation, :campaign => published_campaign, :user => user)}
+    
     def setup
         @controller = User::UserCampaignsController.new
     end

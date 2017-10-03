@@ -23,7 +23,7 @@
           </tbody>
         </table>
       <% else %>
-        <p>No segments have been created yet. <%= link_to "Create one", new_segment_path %> to start tracking logical groups that automatically update to changes in your workforce.</p>
+        <p>No sub-<%= c_t(:segment).downcase.pluralize %> have been created yet. <%= link_to "Create one", new_segment_path %> to start tracking logical groups that automatically update to changes in your workforce.</p>
       <% end %>
     </div>
   </div>

@@ -4,7 +4,8 @@ RSpec.describe Polls::GraphsController, type: :controller do
     
     let(:user) { create :user }
     let(:poll){ create(:poll, enterprise: user.enterprise) }
-
+    let(:field){create(:field, type: "NumericField")}
+    
     login_user_from_let
     
     describe 'GET#new' do
@@ -16,7 +17,7 @@ RSpec.describe Polls::GraphsController, type: :controller do
     
     describe 'POST#create' do
         it "redirects" do
-            post :create, poll_id: poll.id, graph: {field_id: 1}
+            post :create, poll_id: poll.id, graph: {field_id: field.id}
             expect(response).to redirect_to(poll)
         end
     end

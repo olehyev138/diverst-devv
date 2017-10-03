@@ -260,7 +260,13 @@ Rails.application.routes.draw do
     end
 
     scope module: 'polls' do
-      resources :graphs, only: [:new, :create]
+      resources :graphs, only: [:new, :create, :edit]
+    end
+  end
+  
+  resources :graphs do
+    member do
+      get "data"
     end
   end
 

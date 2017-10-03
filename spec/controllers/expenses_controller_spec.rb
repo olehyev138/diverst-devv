@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe ExpensesController, type: :controller do
     let(:enterprise){ create(:enterprise, cdo_name: "test") }
     let(:user){ create(:user, enterprise: enterprise) }
+    let(:category){create(:expense_category)}
     let(:expense){create(:expense, enterprise: enterprise)}
     let(:expense_category_1) {create(:expense_category, expense: expense)}
     
@@ -33,9 +34,8 @@ RSpec.describe ExpensesController, type: :controller do
             login_user_from_let
 
             context 'with correct params' do
-                let(:expense_category_2) {create(:expense_category)}
-                let(:expense) { FactoryGirl.attributes_for(:expense, :category_id => expense_category_2.id)}
-
+                let(:expense) { FactoryGirl.attributes_for(:expense, :category_id => category.id )}
+            
                 it 'redirects to correct action' do
                     post :create, expense: expense
                     expect(response).to redirect_to action: :index

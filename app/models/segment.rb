@@ -29,9 +29,11 @@ class Segment < ActiveRecord::Base
     has_many :groups, inverse_of: :invitation_segments, through: :invitation_segments_groups
     has_many :initiative_segments
     has_many :initiatives, through: :initiative_segments
-
+    
+    validates_presence_of :name
+    
     accepts_nested_attributes_for :rules, reject_if: :all_blank, allow_destroy: true
-
+    
     after_commit :update_indexes
     
     before_destroy :remove_parent_segment

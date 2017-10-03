@@ -10,10 +10,14 @@ class SocialLink < ActiveRecord::Base
     
     validates :author_id,       presence: true
 
-    before_create :populate_embed_code, :build_default_link
+    before_create :populate_embed_code, :build_default_link, :add_trailing_slash
     
     belongs_to :author, class_name: 'User', required: true
     belongs_to :group
+    
+    def url_safe
+        CGI.escape(url)
+    end
 
     protected
 
@@ -21,6 +25,10 @@ class SocialLink < ActiveRecord::Base
         unless SocialMedia::Importer.valid_url? url
             errors.add(:url, "is not a valid url for supported services")
         end
+    end
+    
+    def add_trailing_slash
+        self.url = File.join(self.url, "")
     end
 
     def populate_embed_code

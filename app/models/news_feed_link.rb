@@ -8,4 +8,21 @@ class NewsFeedLink < ActiveRecord::Base
     validates :news_feed_id,    presence: true
     validates :link_id,         presence: true
     validates :link_type,       presence: true
+    
+    after_create :approve_link
+    
+    # checks if link can automatically be approved
+    # links are automatically approved if author is a
+    # group leader
+    def approve_link
+        if GroupPolicy.new(link.author, link.group).erg_leader_permissions?
+            self.approved = true
+            self.save!
+            # send mailer if group message
+            if link_type === "GroupMessage"
+                link.send_emails
+            end
+            UserGroupInstantNotificationJob.perform_later(link.group, news_count: 1)
+        end
+    end
 end
