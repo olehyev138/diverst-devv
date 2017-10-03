@@ -38,7 +38,7 @@ class Segment < ActiveRecord::Base
     
     before_destroy :remove_parent_segment
 
-    #validates_presence_of :enterprise
+    validates_presence_of :enterprise
 
     def general_rules_followed_by?(user)
         case active_users_filter
@@ -52,7 +52,6 @@ class Segment < ActiveRecord::Base
     end
 
     def update_indexes
-        return if enterprise.nil?
         CacheSegmentMembersJob.perform_later self
         RebuildElasticsearchIndexJob.perform_later(model_name: 'User', enterprise: enterprise)
     end
