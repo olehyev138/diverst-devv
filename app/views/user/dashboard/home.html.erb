@@ -75,7 +75,7 @@
     <div class="col sm-12 md-3">
       <div class="card card--secondary">
         <div class="card__section">
-          <h4>Top Performers this week</h4>
+          <h4>Most Active this week</h4>
           <ol>
             <% current_user.enterprise.users.active.top_participants(10).each do |member| %>
               <li><%= user_performance_label(member) %></li>
