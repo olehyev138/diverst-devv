@@ -60,11 +60,12 @@
                 </div>
               <% end %>
 
-              <%= simple_form_for [:user, answer, answer.comments.new] do |f| %>
+              <%= simple_form_for [:user, :user, answer, :user, answer.comments.new] do |f| %>
                 <%= f.input :content,
                       label: false,
                       placeholder: "Enter a comment...",
                       input_html: { rows: 2, class: "comment__input submit-on-return" } %>
+                <%= f.button :submit, value: "Submit" %>
               <% end %>
             </div>
           </div>
@@ -76,7 +77,7 @@
   <div class="card">
     <div class="card__section">
     <% if @question.solved_at.nil? %>
-      <%= simple_form_for [@question, @question.answers.new] do |f| %>
+      <%= simple_form_for [:user, @question, :user, @answer] do |f| %>
         <%= f.input :content, label: "<h3>Write an answer</h3>".html_safe, placeholder: "Type an answer here..." %>
         <%= f.button :submit, value: "Submit" %>
       <% end %>

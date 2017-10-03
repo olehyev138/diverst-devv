@@ -1,5 +1,5 @@
 class Answer < ActiveRecord::Base
-    belongs_to :campaign
+
     belongs_to :question, inverse_of: :answers
     belongs_to :author, class_name: 'User', inverse_of: :answers
 
@@ -12,6 +12,10 @@ class Answer < ActiveRecord::Base
     do_not_validate_attachment_file_type :supporting_document
 
     accepts_nested_attributes_for :expenses, reject_if: :all_blank, allow_destroy: true
+
+    validates :question, presence: true
+    validates :author, presence: true
+    validates :content, presence: true
 
     def supporting_document_extension
         File.extname(supporting_document_file_name)[1..-1].downcase

@@ -14,6 +14,7 @@ class User::QuestionsController < ApplicationController
       .includes(:author, comments: :author)
       .order(chosen: :desc)
       .order(upvote_count: :desc)
+    @answer = @question.answers.new
   end
 
   protected
