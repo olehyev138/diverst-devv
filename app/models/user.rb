@@ -10,8 +10,8 @@ class User < ActiveRecord::Base
 
     @@fb_token_generator = Firebase::FirebaseTokenGenerator.new(ENV['FIREBASE_SECRET'].to_s)
 
-    scope :active, -> { where(active: true) }
-    scope :inactive, -> { where(active: false) }
+    scope :active, -> { where(active: true).distinct }
+    scope :inactive, -> { where(active: false).distinct }
 
     belongs_to :enterprise, inverse_of: :users
     belongs_to :policy_group
