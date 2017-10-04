@@ -26,7 +26,7 @@
                 <td><%= poll.responses.count %></td>
                 <td><%= poll.created_at.to_s :reversed_slashes %></td>
                 <td>
-                  <%= link_to "Link", new_poll_poll_response_path(poll) %>
+                  <%= link_to "Link", new_poll_poll_response_path(poll), target: '_blank' %>
                   -
                   <%= link_to "Edit", edit_poll_path(poll) if policy(poll).edit? %>
                   -
