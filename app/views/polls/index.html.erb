@@ -25,7 +25,12 @@
                 <td><%= poll.fields.count %></td>
                 <td><%= poll.responses.count %></td>
                 <td><%= poll.created_at.to_s :reversed_slashes %></td>
-                <td><%= link_to "Edit", edit_poll_path(poll) if policy(poll).edit? %> - <%= link_to "Delete", poll_path(poll), method: :delete, class: "error", data: { confirm: "Are you sure?" }  if policy(poll).destroy? %></td>
+                <td>
+                  <%= link_to "Link", new_poll_poll_response_path(poll) %>
+                  -
+                  <%= link_to "Edit", edit_poll_path(poll) if policy(poll).edit? %>
+                  -
+                  <%= link_to "Delete", poll_path(poll), method: :delete, class: "error", data: { confirm: "Are you sure?" }  if policy(poll).destroy? %></td>
                 <td><%= poll.decorate.status %></td>
               </tr>
             <% end %>
