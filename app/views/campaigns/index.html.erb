@@ -29,6 +29,7 @@
                 <td><%= campaign.questions.count %></td>
                 <td><%= campaign.status.capitalize %></td>
                 <td>
+                  <%= link_to "Link", user_user_campaign_questions_path(campaign)  %> -
                   <%= link_to "Edit", edit_campaign_path(campaign) if policy(campaign).edit? %> -
                   <%= link_to "Delete", campaign_path(campaign), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(campaign).destroy? %>
                 </td>
