@@ -4,8 +4,8 @@ class NewsLink < ActiveRecord::Base
 
     has_one :news_feed_link, :as => :link, :dependent => :destroy
     
-    has_many :news_link_segments
-    has_many :segments, through: :news_link_segments
+    has_many :news_link_segments, :dependent => :destroy
+    has_many :segments, through: :news_link_segments, :before_remove => :remove_segment_association
     
     before_validation :smart_add_url_protocol
 
@@ -22,6 +22,12 @@ class NewsLink < ActiveRecord::Base
     validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
     
     before_create :build_default_link
+    
+    # call back to delete news link segment associations
+    def remove_segment_association(segment)
+        news_link_segment = self.news_link_segments.where(:segment_id => segment.id).first
+        news_link_segment.news_feed_link_segment.destroy
+    end
     
     protected
 

@@ -48,4 +48,37 @@ RSpec.describe SocialLink, type: :model do
             end
         end
     end
+    
+    describe "#after_create" do
+        it "calls callbacks and creates attributes/association" do
+            social_link = build(:social_link)
+            social_link.save
+            
+            expect(social_link.embed_code).to_not be(nil)
+            expect(social_link.news_feed_link).to_not be(nil)
+            expect(social_link.url[-1]).to eq("/")
+        end
+    end
+    
+    describe "#remove_segment_association" do
+        it "removes segment association" do
+            social_link = create(:social_link)
+            segment = create(:segment)
+            
+            social_link.segment_ids = [segment.id]
+            social_link.save
+            
+            expect(social_link.segments.length).to eq(1)
+            expect(social_link.social_link_segments.length).to eq(1)
+            
+            social_link_segment = social_link.social_link_segments.where(:segment_id => segment.id).first
+            
+            expect(social_link_segment.news_feed_link_segment).to_not be(nil)
+            
+            social_link.remove_segment_association(segment)
+            
+            expect(social_link_segment.news_feed_link_segment).to_not be(nil)
+            
+        end
+    end
 end

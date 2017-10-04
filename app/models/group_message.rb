@@ -1,6 +1,6 @@
 class GroupMessage < ActiveRecord::Base
     has_many :group_messages_segments
-    has_many :segments, through: :group_messages_segments
+    has_many :segments, through: :group_messages_segments, :before_remove => :remove_segment_association
     has_many :comments, class_name: 'GroupMessageComment', foreign_key: :message_id
 
     belongs_to :owner, class_name: 'User'
@@ -16,7 +16,6 @@ class GroupMessage < ActiveRecord::Base
     alias_attribute :author, :owner
 
     before_create :build_default_link
-    #after_create :send_emails
 
     def users
         if segments.empty?
@@ -41,6 +40,12 @@ class GroupMessage < ActiveRecord::Base
         GroupMailer.group_message(self).deliver_later
     end
 
+    # call back to delete news link segment associations
+    def remove_segment_association(segment)
+        group_messages_segment = self.group_messages_segments.where(:segment_id => segment.id).first
+        group_messages_segment.news_feed_link_segment.destroy
+    end
+    
     private
 
     def build_default_link

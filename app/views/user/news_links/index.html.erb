@@ -21,3 +21,9 @@
     <% end %>
   </div>
 </div>
+
+<% unless @posts.count === @count%>
+  <div class="flex-row__cell text-center">
+    <%= link_to "Load More", user_news_links_path(:page => @page + 1), class: "btn btn--primary" %>
+  </div>
+<% end %>
