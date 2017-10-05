@@ -76,22 +76,24 @@ RSpec.describe Group, :type => :model do
         end
     end
     
-    describe 'when describing callbacks', :skip => true do
+    describe 'when describing callbacks' do
         let!(:group){ create(:group) }
         
         it "should reindex users on elasticsearch after destroy" do
             TestAfterCommit.with_commits(true) do
-                expect(RebuildElasticsearchIndexJob).to receive(:perform_later).with(
-                    model_name: 'User',
-                    enterprise: group.enterprise
-                )
+                expect(group).to receive(:update_all_elasticsearch_members)
                 group.destroy
             end
         end
     end
 
-    describe '#questions_csv' do
-        it 'should be implemented'
+    describe '#survey_answers_csv' do
+        let!(:group){ create(:group) }
+        
+        it "returns a csv file" do
+            csv = group.survey_answers_csv    
+            expect(csv).to eq("user_id,user_email,user_first_name,user_last_name\n")
+        end
     end
 
     describe 'members fetching by type' do

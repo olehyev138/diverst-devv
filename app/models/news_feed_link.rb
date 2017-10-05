@@ -2,8 +2,12 @@ class NewsFeedLink < ActiveRecord::Base
     belongs_to :news_feed
     belongs_to :link, :polymorphic => true
     
-    scope :approved, -> { where(approved: true )}
-    scope :not_approved, -> { where(approved: false )}
+    has_one :news_feed_link_segment
+    
+    delegate :group, :to => :news_feed
+
+    scope :approved,        -> { where(approved: true )}
+    scope :not_approved,    -> { where(approved: false )}
     
     validates :news_feed_id,    presence: true
     validates :link_id,         presence: true

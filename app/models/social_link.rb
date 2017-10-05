@@ -4,7 +4,7 @@ class SocialLink < ActiveRecord::Base
     has_one :news_feed_link, :as => :link, :dependent => :destroy
     
     has_many :social_link_segments
-    has_many :segments, through: :social_link_segments
+    has_many :segments, through: :social_link_segments, :before_remove => :remove_segment_association
     
     validate :correct_url?
     
@@ -17,6 +17,12 @@ class SocialLink < ActiveRecord::Base
     
     def url_safe
         CGI.escape(url)
+    end
+    
+    # call back to delete news link segment associations
+    def remove_segment_association(segment)
+        social_link_segment = self.social_link_segments.where(:segment_id => segment.id).first
+        social_link_segment.news_feed_link_segment.destroy
     end
 
     protected

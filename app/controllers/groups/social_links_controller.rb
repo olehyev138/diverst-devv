@@ -7,12 +7,17 @@ class Groups::SocialLinksController < ApplicationController
     before_action :set_social_link, only: [:destroy]
 
     layout 'erg'
+    
+    def index
+        @posts = @group.social_links
+    end
 
     def new
         @social_link = @group.social_links.new
     end
 
     def create
+        
         @social_link = @group.social_links.new(social_link_params)
         @social_link.author = current_user
 
@@ -46,7 +51,8 @@ class Groups::SocialLinksController < ApplicationController
         params
             .require(:social_link)
             .permit(
-                :url
+                :url,
+                segment_ids: []
             )
     end
 end

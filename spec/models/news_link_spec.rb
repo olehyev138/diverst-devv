@@ -26,4 +26,26 @@ RSpec.describe NewsLink, type: :model do
             expect(news_link.news_feed_link).to_not be_nil
         end
     end
+    
+    describe "#remove_segment_association" do
+        it "removes segment association" do
+            news_link = create(:news_link)
+            segment = create(:segment)
+            
+            news_link.segment_ids = [segment.id]
+            news_link.save
+            
+            expect(news_link.segments.length).to eq(1)
+            expect(news_link.news_link_segments.length).to eq(1)
+            
+            news_link_segment = news_link.news_link_segments.where(:segment_id => segment.id).first
+            
+            expect(news_link_segment.news_feed_link_segment).to_not be(nil)
+            
+            news_link.remove_segment_association(segment)
+            
+            expect(news_link_segment.news_feed_link_segment).to_not be(nil)
+            
+        end
+    end
 end
