@@ -67,11 +67,14 @@ class Groups::EventsController < ApplicationController
 
   def export_ics
     cal = Icalendar::Calendar.new
+
+    description = ActionController::Base.helpers.strip_tags(@event.description)
+
     cal.event do |e|
       e.dtstart     = @event.start
       e.dtend       = @event.end
       e.summary     = @event.title
-      e.description = @event.description
+      e.description = description
       e.ip_class    = "PRIVATE"
     end
 
