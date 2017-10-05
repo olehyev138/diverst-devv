@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170927132203) do
+ActiveRecord::Schema.define(version: 20171003231149) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -664,6 +664,15 @@ ActiveRecord::Schema.define(version: 20170927132203) do
     t.integer  "index",         limit: 4
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
+  end
+
+  create_table "news_feed_link_segments", force: :cascade do |t|
+    t.integer  "news_feed_link_id", limit: 4
+    t.integer  "segment_id",        limit: 4
+    t.integer  "link_segment_id",   limit: 4
+    t.string   "link_segment_type", limit: 191
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
   end
 
   create_table "news_feed_links", force: :cascade do |t|

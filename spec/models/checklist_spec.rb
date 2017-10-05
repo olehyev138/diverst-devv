@@ -1,5 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe Checklist, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+    describe 'validations' do
+        let(:checklist) { FactoryGirl.build_stubbed(:checklist) }
+
+        it { expect(checklist).to belong_to(:subject) }
+        it { expect(checklist).to belong_to(:author) }
+        
+        it { expect(checklist).to have_many(:items) }
+    end
 end

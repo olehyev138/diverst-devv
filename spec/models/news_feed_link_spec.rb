@@ -10,5 +10,18 @@ RSpec.describe NewsFeedLink, type: :model do
         
         it { expect(news_feed_link).to belong_to(:news_feed) }
         it { expect(news_feed_link).to belong_to(:link) }
+        
+        it { expect(news_feed_link).to have_one(:news_feed_link_segment) }
+    end
+    
+    describe "#approve_link" do
+        it "approves the link" do
+            allow(UserGroupInstantNotificationJob).to receive(:perform_later)
+            
+            news_feed_link = build(:news_feed_link)
+            news_feed_link.save
+            
+            expect(UserGroupInstantNotificationJob).to have_received(:perform_later).at_least(:once)
+        end
     end
 end

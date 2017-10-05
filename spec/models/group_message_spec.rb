@@ -37,4 +37,26 @@ RSpec.describe GroupMessage, type: :model do
             expect(group_message.news_feed_link).to_not be_nil
         end
     end
+    
+    describe "#remove_segment_association" do
+        it "removes segment association" do
+            group_message = create(:group_message)
+            segment = create(:segment)
+            
+            group_message.segment_ids = [segment.id]
+            group_message.save
+            
+            expect(group_message.segments.length).to eq(1)
+            expect(group_message.group_messages_segments.length).to eq(1)
+            
+            group_messages_segment = group_message.group_messages_segments.where(:segment_id => segment.id).first
+            
+            expect(group_messages_segment.news_feed_link_segment).to_not be(nil)
+            
+            group_message.remove_segment_association(segment)
+            
+            expect(group_messages_segment.news_feed_link_segment).to_not be(nil)
+            
+        end
+    end
 end

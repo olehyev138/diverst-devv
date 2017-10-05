@@ -67,10 +67,25 @@ class GroupsController < ApplicationController
         authorize @group
 
         @upcoming_events = @group.initiatives.upcoming.limit(3) + @group.participating_initiatives.upcoming.limit(3)
-        @posts = @group.news_feed_links.includes(:link).approved.order(created_at: :desc).limit(5)
         @user_groups = @group.user_groups.order(created_at: :desc).includes(:user).limit(8)
         @messages = @group.messages.includes(:owner).limit(3)
         @user_group = @group.user_groups.find_by(user: current_user)
+        
+        if policy(@group).erg_leader_permissions?
+            @posts = @group.news_feed_links
+                            .includes(:link)
+                            .approved
+                            .order(created_at: :desc)
+                            .limit(5)
+        else
+            @posts = @group.news_feed_links
+                        .includes(:link)
+                        .approved
+                        .joins(joins)
+                        .where(where, current_user.segments.pluck(:id))
+                        .order(created_at: :desc)
+                        .limit(5)
+        end
     end
 
     def create
@@ -199,6 +214,14 @@ class GroupsController < ApplicationController
     end
 
     protected
+    
+    def where
+        "news_feed_link_segments.segment_id IS NULL OR news_feed_link_segments.segment_id IN (?)"
+    end
+    
+    def joins
+        "LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id"
+    end
 
     def resolve_layout
         case action_name
