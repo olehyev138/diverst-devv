@@ -8,7 +8,9 @@
       <%= link_to "+ Create Message", new_group_group_message_path, class: "btn btn--primary" if policy(GroupMessage).new? %>
     </div>
     <div class="flex-row__cell">
-      <%= link_to "+ Create Social link", new_group_social_link_path, class: "btn btn--primary" if policy(SocialLink).new? %>
+      <% if ENV['ENABLE_SOCIAL_MEDIA'] %>
+        <%= link_to "+ Create Social link", new_group_social_link_path, class: "btn btn--primary" if policy(SocialLink).new? %>
+      <% end %>
     </div>
   </div>
 </div>
