@@ -21,7 +21,7 @@ RSpec.describe InitiativeDecorator do
             initiative.start = 7.days.ago
             initiative.end = Date.today + 7.days
             decorated_initiative = initiative.decorate
-            expect(decorated_initiative.progress_percentage).to be > 50
+            expect(decorated_initiative.progress_percentage).to be > 45
         end
     end
     
