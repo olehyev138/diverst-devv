@@ -77,7 +77,9 @@ module NumericOptionnable
         }
       }
     end
-    search_hash['query'] = { bool: { filter: terms} }
+
+    search_hash['query'] = {filtered: { filter: { bool: {should: terms }} } }
+    
     # Execute the elasticsearch query
     enterprise.search_users(search_hash)
   end
