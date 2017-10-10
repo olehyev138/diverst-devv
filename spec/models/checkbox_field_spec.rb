@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CheckboxField, elasticsearch: true, type: :model, :skip => true do
+RSpec.describe CheckboxField, elasticsearch: true, type: :model do
   context "when getting data" do
     let!(:field_one) { CheckboxField.create(attributes_for(:checkbox_field)) }
     let!(:field_two) { CheckboxField.create(attributes_for(:checkbox_field, options_text: "Yes2\nNo2")) }
@@ -77,8 +77,8 @@ RSpec.describe CheckboxField, elasticsearch: true, type: :model, :skip => true d
       it "returns all users with selected field, aggregated by field and have segments and filters" do
         data = field_one.highcharts_stats(aggr_field: field_two, segments: Segment.where(id: segment_two), groups: Group.where(id: group))
         expect(data).to eq({
-          series: [{ name: "No2", data: [1, 1] }, { name: "Yes2", data: [0, 0] }],
-          categories: ["No", "Yes"],
+          series: [{ name: "No2", data: [2, 1] }, { name: "Yes2", data: [2, 1] }],
+          categories: ["Yes", "No"],
           xAxisTitle: field_one.title
         })
       end
