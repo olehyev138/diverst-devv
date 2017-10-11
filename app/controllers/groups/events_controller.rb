@@ -1,4 +1,6 @@
 class Groups::EventsController < ApplicationController
+  include HtmlSanitizingHelper
+
   before_action :authenticate_user!
   before_action :set_group
   before_action :set_event, only: [:edit, :update, :destroy, :show, :export_ics]
@@ -73,11 +75,14 @@ class Groups::EventsController < ApplicationController
 
   def export_ics
     cal = Icalendar::Calendar.new
+
+    description = strip_tags @event.description
+
     cal.event do |e|
       e.dtstart     = @event.start
       e.dtend       = @event.end
       e.summary     = @event.title
-      e.description = @event.description
+      e.description = description
       e.ip_class    = "PRIVATE"
     end
 
