@@ -6,13 +6,28 @@ class UserGroupNotificationJob < ActiveJob::Base
       users.each do |user|
         groups = []
         user.user_groups.notifications_status(notifications_frequency).each do |user_group|
-          frequency_range = get_frequency_range(user_group.notifications_frequency)
           group = user_group.group
-          groups << {
-            group: user_group.group,
-            messages_count: get_messages_count(group, frequency_range),
-            news_count: get_news_count(group, frequency_range)
-          }
+          # check if pending_users is enabled for the group
+          # we automatically add the group if not
+          if !group.pending_users.enabled?
+            frequency_range = get_frequency_range(user_group.notifications_frequency)
+            groups << {
+              group: user_group.group,
+              messages_count: get_messages_count(group, frequency_range),
+              news_count: get_news_count(group, frequency_range)
+            }
+          else
+            # pending_users is enabled and we need to check if user
+            # is not a pending member
+            if user_group.accepted_member?
+              frequency_range = get_frequency_range(user_group.notifications_frequency)
+              groups << {
+                group: user_group.group,
+                messages_count: get_messages_count(group, frequency_range),
+                news_count: get_news_count(group, frequency_range)
+              }
+            end
+          end
         end
         if have_updates?(groups)
           UserGroupMailer.notification(user, groups).deliver_now

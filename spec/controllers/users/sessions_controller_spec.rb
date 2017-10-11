@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Users::SessionsController, type: :controller do
-    let(:user){ create(:user) }
+    let(:enterprise) { create(:enterprise, :has_enabled_saml => true)}
+    let(:user){ create(:user, :enterprise => enterprise) }
 
     before :each do
         session[:saml_for_enterprise] = user.enterprise.id
@@ -9,9 +10,15 @@ RSpec.describe Users::SessionsController, type: :controller do
     end
     
     describe "GET#new" do
-        before {get :new}
+        it "redirect_to sso_enterprise_saml_index_url" do
+            get :new
+            expect(response).to redirect_to sso_enterprise_saml_index_url(enterprise_id: enterprise.id)
+        end
         
-        it "renders success" do
+        it "redirect_to sso_enterprise_saml_index_url" do
+            enterprise.has_enabled_saml = false
+            enterprise.save!
+            get :new
             expect(response).to be_success
         end
     end
