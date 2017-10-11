@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe RebuildElasticsearchIndexJob, type: :job, :skip => "Need to fix - written by gabriel" do
+RSpec.describe RebuildElasticsearchIndexJob, type: :job do
   let!(:enterprise) { create(:enterprise) }
   let!(:user_one) { create(:user, enterprise: enterprise) }
   let!(:user_two) { create(:user, enterprise: enterprise) }
