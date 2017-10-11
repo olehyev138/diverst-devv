@@ -267,6 +267,7 @@ Rails.application.routes.draw do
   resources :graphs do
     member do
       get "data"
+      get "export_csv"
     end
   end
 

@@ -5,8 +5,8 @@ RSpec.describe GraphsController, type: :controller do
     let(:user){ create(:user, enterprise: enterprise) }
     let(:metrics_dashboard){create(:metrics_dashboard, enterprise_id: enterprise.id)}
     let(:poll){create(:poll, enterprise_id: enterprise.id)}
-    let(:field1){create(:field, type: "NumericField")}
-    let(:field2){create(:field, type: "NumericField")}
+    let(:field1){create(:field, type: "NumericField", container: poll)}
+    let(:field2){create(:field, type: "NumericField", container: poll)}
     let(:metrics_graph){create(:graph, collection: metrics_dashboard, field: field1)}
     let(:poll_graph){create(:graph, collection: poll, field: field2)}
     
@@ -93,23 +93,30 @@ RSpec.describe GraphsController, type: :controller do
         end
     end
     
-    describe "GET#data", :skip => "need to figure out how to work with elastisearch" do
+    describe "GET#data" do
+        
+        before {User.__elasticsearch__.create_index!(index: User.es_index_name(enterprise: enterprise))}
+        after {User.__elasticsearch__.delete_index!(index: User.es_index_name(enterprise: enterprise))}
+        
         describe "with logged in user" do
             login_user_from_let
             
             it "returns success" do
-                #get :data, :id => metrics_graph.id
-                #expect(response).to be_success
+                get :data, :id => metrics_graph.id
+                expect(response).to be_success
             end
             
             it "returns success" do
-                #get :data, :id => poll_graph.id
-                #expect(response).to be_success
+                get :data, :id => poll_graph.id
+                expect(response).to be_success
             end
         end
     end
 
-    describe "GET#export_csv", :skip => "need to figure out how to work with elastisearch" do
+    describe "GET#export_csv" do
+        before {User.__elasticsearch__.create_index!(index: User.es_index_name(enterprise: enterprise))}
+        after {User.__elasticsearch__.delete_index!(index: User.es_index_name(enterprise: enterprise))}
+        
         describe "with logged in user" do
             login_user_from_let
             
