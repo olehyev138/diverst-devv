@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe SelectField, elasticsearch: true, type: :model do
+RSpec.describe SelectField, type: :model do
   context "when getting data" do
     let!(:field_one) { SelectField.create(attributes_for(:select_field)) }
     let!(:field_two) { SelectField.create(attributes_for(:select_field, options_text: "Yes2\nNo2")) }

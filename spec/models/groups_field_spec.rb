@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe GroupsField, elasticsearch: true, type: :model do
+RSpec.describe GroupsField, type: :model do
   context "when getting data" do
     let!(:field_one) { GroupsField.create(attributes_for(:groups_field)) }
     let!(:field_two) { SelectField.create(attributes_for(:select_field)) }

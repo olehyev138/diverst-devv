@@ -10,6 +10,7 @@ dependencies:
     - "public/assets"
 test:
   pre:
+    - ln -s /etc/elasticsearch/ /usr/share/elasticsearch/config
     - bundle exec rake assets:precompile assets:clean:
        environment:
         RAILS_GROUPS: assets

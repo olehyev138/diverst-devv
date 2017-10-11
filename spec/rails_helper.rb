@@ -118,9 +118,6 @@ RSpec.configure do |config|
   end
 
   config.after :each, elasticsearch: true do
-    # ActiveRecord::Base.descendants.each do |model|
-    #   model.__elasticsearch__.delete_index!(index: "_all") if model.respond_to?(:__elasticsearch__)
-    # end
     Elasticsearch::Extensions::Test::Cluster.stop(port: 9201) if Elasticsearch::Extensions::Test::Cluster.running?(on: 9201, command: ENV['ELASTICSEARCH_PATH'] || "/usr/share/elasticsearch/bin/elasticsearch")
   end
 end

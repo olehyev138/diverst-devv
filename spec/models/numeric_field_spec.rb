@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe NumericField, elasticsearch: true, type: :model do
+RSpec.describe NumericField, type: :model do
   context "when getting data" do
     let!(:field_one) { NumericField.create(attributes_for(:numeric_field)) }
     let!(:field_two) { NumericField.create(attributes_for(:numeric_field)) }

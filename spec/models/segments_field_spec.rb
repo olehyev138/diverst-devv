@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe SegmentsField, elasticsearch: true, type: :model do
+RSpec.describe SegmentsField, type: :model do
   context "when getting data" do
     let!(:field_one) { SegmentsField.create(attributes_for(:segments_field)) }
     let!(:field_two) { SelectField.create(attributes_for(:select_field)) }
