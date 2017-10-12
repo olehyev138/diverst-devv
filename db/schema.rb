@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171003231149) do
+ActiveRecord::Schema.define(version: 20171012120425) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -129,20 +129,6 @@ ActiveRecord::Schema.define(version: 20171003231149) do
   create_table "biases_to_groups", force: :cascade do |t|
     t.integer "group_id", limit: 4
     t.integer "bias_id",  limit: 4
-  end
-
-  create_table "bootsy_image_galleries", force: :cascade do |t|
-    t.integer  "bootsy_resource_id",   limit: 4
-    t.string   "bootsy_resource_type", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "bootsy_images", force: :cascade do |t|
-    t.string   "image_file",       limit: 255
-    t.integer  "image_gallery_id", limit: 4
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "budget_items", force: :cascade do |t|
@@ -959,8 +945,8 @@ ActiveRecord::Schema.define(version: 20171003231149) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "accepted_member",                       default: false
+    t.integer  "notifications_frequency", limit: 4,     default: 2
     t.integer  "total_weekly_points",     limit: 4,     default: 0
-    t.integer  "notifications_frequency", limit: 4,     default: 0
     t.text     "data",                    limit: 65535
   end
 
@@ -1017,7 +1003,7 @@ ActiveRecord::Schema.define(version: 20171003231149) do
     t.string   "invited_by_type",             limit: 255
     t.integer  "invitations_count",           limit: 4,     default: 0
     t.string   "provider",                    limit: 255
-    t.string   "uid",                         limit: 191
+    t.string   "uid",                         limit: 255
     t.text     "tokens",                      limit: 65535
     t.string   "firebase_token",              limit: 255
     t.datetime "firebase_token_generated_at"
@@ -1034,10 +1020,10 @@ ActiveRecord::Schema.define(version: 20171003231149) do
     t.integer  "points",                      limit: 4,     default: 0,    null: false
     t.integer  "credits",                     limit: 4,     default: 0,    null: false
     t.string   "time_zone",                   limit: 255
-    t.integer  "total_weekly_points",         limit: 4,     default: 0
     t.integer  "failed_attempts",             limit: 4,     default: 0,    null: false
     t.string   "unlock_token",                limit: 191
     t.datetime "locked_at"
+    t.integer  "total_weekly_points",         limit: 4,     default: 0
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree
