@@ -1,8 +1,12 @@
 Hello <%= @user.name %>, a new item has been posted to a Diversity and Inclusion group you are a member of.  Select the link(s) below to access Diverst and review the item(s)<br/>
 
 <% @groups.each do |group| %>
-  <% if (group[:messages_count].to_i > 0) || (group[:news_count].to_i > 0) %>
+  <% if (group[:events_count ].to_i > 0 || group[:messages_count].to_i > 0) || (group[:news_count].to_i > 0) %>
     <strong><%= @custom_text.erg_text %> <%= group[:group].name %></strong>
+  <% end %>
+
+  <% if group[:events_count ].to_i > 0 %>
+    <%= link_to pluralize(group[:events_count], 'new event'), group_events_path(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id ) %>
   <% end %>
 
   <% if group[:messages_count].to_i > 0 %>
