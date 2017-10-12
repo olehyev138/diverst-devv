@@ -1,5 +1,6 @@
 enterprise = Enterprise.create(
-name: 'REPLACE_ME 2'
+name: 'REPLACE_ME 2',
+cdo_name: 'REPLACE_ME 2'
 )
 
 enterprise.theme = Theme.new(primary_color: '#cccccc')
