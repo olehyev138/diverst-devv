@@ -16,12 +16,13 @@ RSpec.describe NewsFeedLink, type: :model do
     
     describe "#approve_link" do
         it "approves the link" do
-            allow(UserGroupInstantNotificationJob).to receive(:perform_later)
+            allow(UserGroupNotificationJob).to receive(:perform_later)
             
             news_feed_link = build(:news_feed_link)
             news_feed_link.save
             
-            expect(UserGroupInstantNotificationJob).to have_received(:perform_later).at_least(:once)
+            expect(news_feed_link.approved).to eq(true)
+            expect(UserGroupNotificationJob).to have_received(:perform_later).at_least(:once)
         end
     end
 end

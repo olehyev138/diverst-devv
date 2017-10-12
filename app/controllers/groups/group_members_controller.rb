@@ -47,7 +47,8 @@ class Groups::GroupMembersController < ApplicationController
   def create
     authorize current_user, :join_or_leave_groups?
     @group_member = @group.user_groups.new(group_member_params)
-
+    @group_member.accepted_member = @group.pending_users.disabled?
+    
     if @group_member.save
       flash[:notice] = "The member was created"
 

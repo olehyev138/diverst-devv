@@ -10,7 +10,7 @@ class SamlController < ApplicationController
     settings = @enterprise.saml_settings
     if settings.nil?
       # missing template
-      render action: :no_settings
+      redirect_to :back
       return
     end
     request = OneLogin::RubySaml::Authrequest.new

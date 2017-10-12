@@ -1,8 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe SamlController, type: :controller do
-    let(:enterprise){ create(:enterprise, cdo_name: "test") }
-  
+    let(:enterprise){ create(:enterprise, cdo_name: "test", idp_sso_target_url: "http://example.com")}
+    let(:user) {create(:user, enterprise: enterprise)}
+    
     describe "GET#index" do
         it "gets the attrs" do
             get :index, enterprise_id: enterprise.id
@@ -11,20 +12,29 @@ RSpec.describe SamlController, type: :controller do
     end
     
     describe "GET#sso" do
-        it "renders no settings", :skip => "Missing template" do
+        it "renders no settings" do
             allow_any_instance_of(Enterprise).to receive(:saml_settings).and_return(nil)
+            request.env["HTTP_REFERER"] = "back"
+            
             get :sso, enterprise_id: enterprise.id
-            expect(response).to redirect_to action: :no_settings
+            expect(response).to redirect_to "back"
         end
         
-        it "renders no settings", :skip => "Unsure on how to test" do
+        it "redirects to idp_sso_target_url" do
             get :sso, enterprise_id: enterprise.id
+            
+            expect(response.code).to eq("302")
+            expect(response.location).to include("http://example.com?SAMLRequest=")
         end
     end
     
-    describe "POST#acs", :skip => "Unsure on how to test" do
+    describe "POST#acs" do
         it "gets acs" do
-            get :acs, enterprise_id: enterprise.id
+            saml = OpenStruct.new({:is_valid? => true, :nameid => user.email, :attributes => {}})
+            allow(OneLogin::RubySaml::Response).to receive(:new).and_return(saml)
+            
+            get :acs, enterprise_id: enterprise.id, SAMLResponse: "test"
+            expect(response).to redirect_to user_root_path
         end
     end
     

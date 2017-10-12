@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe NumericField, elasticsearch: true, type: :model, :skip => "Need to fix - written by gabriel" do
+RSpec.describe NumericField, type: :model do
   context "when getting data" do
     let!(:field_one) { NumericField.create(attributes_for(:numeric_field)) }
     let!(:field_two) { NumericField.create(attributes_for(:numeric_field)) }
@@ -72,7 +72,7 @@ RSpec.describe NumericField, elasticsearch: true, type: :model, :skip => "Need t
       it "returns all users with selected field, aggregated by field and have segments and filters" do
         data = field_one.highcharts_stats(segments: Segment.where(id: segment_two), groups: Group.where(id: group))
         expect(data).to eq({
-          series: [{ name: field_one.title, data: [0, 0, 1, 0, 1] }],
+          series: [{ name: field_one.title, data: [2, 0, 1, 0, 1] }],
           categories: ["10-20", "20-30", "30-40", "40-50", "50-61"],
           xAxisTitle: field_one.title
         })

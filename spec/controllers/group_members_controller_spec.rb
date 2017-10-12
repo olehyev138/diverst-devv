@@ -52,10 +52,34 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
         end
       end
 
-      context 'with incorect group'
+      context 'with incorrect group id' do
+
+        it 'return error' do
+          get_index(-1)
+          expect(response).to_not be_success
+        end
+        
+        it 'raises ActiveRecord::RecordNotFound' do
+          bypass_rescue
+          expect{get_index(-1)}.to raise_error ActiveRecord::RecordNotFound
+        end
+        
+        it 'flashes' do
+          get_index(-1)
+          expect(flash[:alert]).to eq("Couldn't find Group with 'id'=-1 [WHERE `groups`.`enterprise_id` = ?]")
+        end
+      end
     end
 
     context 'without logged in user' do
+      before{get_index(-1)}
+      it 'return error' do
+        expect(response).to_not be_success
+      end
+      
+      it 'redirects' do
+        expect(response).to redirect_to new_user_session_path
+      end
     end
   end
 
@@ -139,10 +163,36 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
       end
 
       context 'with incorrect params' do
+        let(:pending_user) { FactoryGirl.create(:user, enterprise: enterprise) }
+
+        before { group.members << pending_user }
+
+        it 'return error' do
+          post_accept_pending(-1, pending_user.id)
+          expect(response).to_not be_success
+        end
+        
+        it 'raises ActiveRecord::RecordNotFound' do
+          bypass_rescue
+          expect{post_accept_pending(-1, pending_user.id)}.to raise_error ActiveRecord::RecordNotFound
+        end
+        
+        it 'flashes' do
+          post_accept_pending(-1, pending_user.id)
+          expect(flash[:alert]).to eq("Couldn't find Group with 'id'=-1 [WHERE `groups`.`enterprise_id` = ?]")
+        end
       end
     end
 
     context 'without logged in user' do
+      before{post_accept_pending(-1, -1)}
+      it 'return error' do
+        expect(response).to_not be_success
+      end
+      
+      it 'redirects' do
+        expect(response).to redirect_to new_user_session_path
+      end
     end
   end
 
@@ -176,9 +226,9 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
       end
 
       context 'without group id' do
-        before { get_new }
+        before { get_new(-1) }
 
-        xit 'returns error' do
+        it 'returns error' do
           expect(response).to_not be_success
         end
       end
@@ -189,8 +239,12 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
 
       before { get_new(group.to_param) }
 
-      xit 'return error' do
+      it 'return error' do
         expect(response).to_not be_success
+      end
+      
+      it 'redirects' do
+        expect(response).to redirect_to new_user_session_path
       end
     end
   end
@@ -313,17 +367,17 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
           end
         end
       end
-
-      context 'with incorrect group id' do
-        context 'without group id' do
-        end
-
-        context 'with incorrect group id' do
-        end
-      end
     end
 
     context 'without logged in user' do
+      before{post_add_members(-1, [])}
+      it 'return error' do
+        expect(response).to_not be_success
+      end
+      
+      it 'redirects' do
+        expect(response).to redirect_to new_user_session_path
+      end
     end
   end
 
@@ -356,9 +410,27 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
       end
     end
 
-    context 'without logged in user'
+    context 'without logged in user' do
 
-    it 'check if permission check for deletion is correct'
+      let(:user) { FactoryGirl.create(:user) }
+      
+      context 'with correct group id' do
+        let(:group) { FactoryGirl.create(:group, enterprise: user.enterprise)}
+        let(:new_member) { FactoryGirl.create(:user, enterprise: user.enterprise)}
+
+        before do
+          group.members << new_member
+        end
+
+        it 'removes user from group' do
+          expect(group.members).to include new_member
+
+          delete_destroy(group.to_param, new_member)
+
+          expect(response).to_not be_success
+        end
+      end
+    end
   end
 
   describe 'DELETE destroy' do

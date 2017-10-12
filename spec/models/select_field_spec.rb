@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe SelectField, elasticsearch: true, type: :model, :skip => "Need to fix - written by gabriel" do
+RSpec.describe SelectField, type: :model do
   context "when getting data" do
     let!(:field_one) { SelectField.create(attributes_for(:select_field)) }
     let!(:field_two) { SelectField.create(attributes_for(:select_field, options_text: "Yes2\nNo2")) }
@@ -77,7 +77,7 @@ RSpec.describe SelectField, elasticsearch: true, type: :model, :skip => "Need to
       it "returns all users with selected field, aggregated by field and have segments and filters" do
         data = field_one.highcharts_stats(aggr_field: field_two, segments: Segment.where(id: segment_two), groups: Group.where(id: group))
         expect(data).to eq({
-          series: [{ name: "No2", data: [1, 0] }, { name: "Yes2", data: [0, 0] }],
+          series: [{ name: "No2", data: [2, 0] }, { name: "Yes2", data: [0, 1] }],
           categories: ["Yes", "No"],
           xAxisTitle: field_one.title
         })

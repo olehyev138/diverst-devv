@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe IndexElasticsearchJob, elasticsearch: true, type: :job, :skip => true do
+RSpec.describe IndexElasticsearchJob, type: :job do
   let!(:user) { create(:user) }
   let!(:index_name) { User.es_index_name(enterprise: user.enterprise) }
 
