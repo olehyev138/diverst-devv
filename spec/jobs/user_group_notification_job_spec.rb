@@ -44,13 +44,15 @@ RSpec.describe UserGroupNotificationJob, type: :job do
     end
 
     context "and there is new messages or news" do
-      let!(:user_group){ create(:user_group, user: user, group: group, notifications_frequency: UserGroup.notifications_frequencies[:weekly]) }
-      let!(:group_message){ create(:group_message, group: group, updated_at: Date.today - 2.days, owner: user) }
-      let!(:another_group_message){ create(:group_message, group: group, updated_at: Date.today, owner: user) }
-      let!(:news_link){ create(:news_link, group: group, updated_at: Date.today - 2.days, author: user) }
-      let!(:another_news_link){ create(:news_link, group: group, updated_at: Date.today, author: user) }
+      Timecop.freeze(Date.today.next_week(:monday)) do
+        let!(:user_group){ create(:user_group, user: user, group: group, notifications_frequency: UserGroup.notifications_frequencies[:weekly]) }
+        let!(:group_message){ create(:group_message, group: group, updated_at: Date.today, owner: user) }
+        let!(:another_group_message){ create(:group_message, group: group, updated_at: Date.today.next_week(:monday), owner: user) }
+        let!(:news_link){ create(:news_link, group: group, updated_at: Date.today, author: user) }
+        let!(:another_news_link){ create(:news_link, group: group, updated_at: Date.today.next_week(:monday), author: user) }
+      end
 
-      it "sends an email of notification to user", :skip => true do
+      it "sends an email of notification to user" do
         Timecop.freeze(Date.today.next_week(:monday)) do
           mailer = double("mailer")
           expect(UserGroupMailer).to receive(:notification)
