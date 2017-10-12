@@ -25,9 +25,13 @@ RSpec.describe Groups::PostsController, type: :controller do
     
     describe 'PATCH #approve' do
         before :each do
-            allow(UserGroupInstantNotificationJob).to receive(:perform_later).and_call_original
-            request.env["HTTP_REFERER"] = "back"
-            patch :approve, group_id: group.id, link_id: news_link.news_feed_link.id
+            # ensure the job is performed and that
+            # we don't receive any errors
+            perform_enqueued_jobs do
+                allow(UserGroupInstantNotificationJob).to receive(:perform_later).and_call_original
+                request.env["HTTP_REFERER"] = "back"
+                patch :approve, group_id: group.id, link_id: news_link.news_feed_link.id
+            end
         end
         
         it 'return success' do
