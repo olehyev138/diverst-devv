@@ -123,6 +123,12 @@ RSpec.describe Groups::LeadersController, type: :controller do
           post_create(group.to_param, leader_attrs)
           expect(response).to redirect_to action: :index
         end
+        
+        it 'sets attributes' do
+          post_create(group.to_param, leader_attrs)
+          leader = group.group_leaders.first
+          expect(leader.notifications_enabled).to eq(false)
+        end
       end
 
       context 'with incorrect params' do
