@@ -87,7 +87,7 @@ RSpec.describe GroupsField, type: :model do
       end
     end
 
-    context "and have aggregation, segments and groups", :skip => "Failing in CircleCI" do
+    context "and have aggregation, segments and groups" do
       it "returns all users with selected field, aggregated by field and have segments and filters" do
         data = field_one.highcharts_stats(aggr_field: field_two, segments: Segment.where(id: segment_one), groups: Group.where(id: group_one))
         expect(data).to eq({
