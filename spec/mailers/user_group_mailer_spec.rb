@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe UserGroupMailer, type: :mailer do
   let!(:user){ create(:user) }
-  let!(:groups){ [{ group: create(:group), messages_count: 2, news_count: 0 }] }
+  let!(:groups){ [{ group: create(:group), events_count: 2, messages_count: 2, news_count: 0 }] }
 
   let!(:mail) { described_class.notification(user, groups).deliver_now }
 
