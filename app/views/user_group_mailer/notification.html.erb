@@ -12,7 +12,7 @@ Hello <%= @user.name %>, a new item has been posted to a Diversity and Inclusion
 
   <% if group[:news_count].to_i > 0 %>
     <br/>
-    <%= link_to "#{ group[:news_count] } news items", group_news_links_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id) %>.
+    <%= link_to "#{ group[:news_count] } news item(s)", group_news_links_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id) %>.
   <% end %>
   <br/>
 <% end %>
