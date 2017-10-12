@@ -13,6 +13,7 @@ class UserGroupNotificationJob < ActiveJob::Base
             frequency_range = get_frequency_range(user_group.notifications_frequency)
             groups << {
               group: user_group.group,
+              events_count: get_events_count(group, frequency_range),
               messages_count: get_messages_count(group, frequency_range),
               news_count: get_news_count(group, frequency_range)
             }
@@ -23,6 +24,7 @@ class UserGroupNotificationJob < ActiveJob::Base
               frequency_range = get_frequency_range(user_group.notifications_frequency)
               groups << {
                 group: user_group.group,
+                events_count: get_events_count(group, frequency_range),
                 messages_count: get_messages_count(group, frequency_range),
                 news_count: get_news_count(group, frequency_range)
               }
@@ -45,6 +47,10 @@ class UserGroupNotificationJob < ActiveJob::Base
     end
   end
 
+  def get_events_count(group, frequency_range)
+    Initiative.where(owner_group: group, updated_at: frequency_range).count
+  end
+
   def get_messages_count(group, frequency_range)
     GroupMessage.where(group: group, updated_at: frequency_range).count
   end
@@ -54,6 +60,6 @@ class UserGroupNotificationJob < ActiveJob::Base
   end
 
   def have_updates?(groups)
-    groups.any?{ |g| g[:messages_count] > 0 || g[:news_count] > 0 }
+    groups.any?{ |g| g[:events_count] || g[:messages_count] > 0 || g[:news_count] > 0 }
   end
 end
