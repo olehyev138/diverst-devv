@@ -26,7 +26,7 @@ class NewsFeedLink < ActiveRecord::Base
             if link_type === "GroupMessage"
                 link.send_emails
             end
-            UserGroupInstantNotificationJob.perform_later(link.group, news_count: 1)
+            UserGroupNotificationJob.perform_later(link.group, news_count: 1)
         end
     end
 end

@@ -125,7 +125,8 @@ module Optionnable
       }
     end
 
-    search_hash['query'] = { bool: { filter: terms} }
+    search_hash['query'] = {filtered: { filter: { bool: {should: terms }} } }
+    
     # Execute the elasticsearch query
     Elasticsearch::Model.client.search(
       index: index,

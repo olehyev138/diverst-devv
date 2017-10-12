@@ -335,6 +335,11 @@ class User < ActiveRecord::Base
         group = self.enterprise.groups.find(group_id)
         group.active_members.exists? self.id
     end
+    
+    # groups where user is an accepted member
+    def active_groups
+        groups.joins(:user_groups).where(:user_groups => {:user => self, :accepted_member => true})
+    end
 
     def active_for_authentication?
         super && active?

@@ -23,7 +23,7 @@ RSpec.describe Groups::PostsController, type: :controller do
     
     describe 'PATCH #approve' do
         before :each do
-            allow(UserGroupInstantNotificationJob).to receive(:perform_later)
+            allow(UserGroupNotificationJob).to receive(:perform_later)
             request.env["HTTP_REFERER"] = "back"
             patch :approve, group_id: group.id, link_id: news_link.news_feed_link.id
         end
@@ -34,7 +34,7 @@ RSpec.describe Groups::PostsController, type: :controller do
         
         
         it "send group notification to users" do
-            expect(UserGroupInstantNotificationJob).to have_received(:perform_later).with(group, news_count: 1).at_least(:once)
+            expect(UserGroupNotificationJob).to have_received(:perform_later).with(group, news_count: 1).at_least(:once)
         end
     end
 end

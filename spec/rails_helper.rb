@@ -1,5 +1,7 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV['RAILS_ENV'] ||= 'test'
+ENV["TEST_CLUSTER_NODES"] = "1"
+
 require File.expand_path('../../config/environment', __FILE__)
 # Prevent database truncation if the environment is production
 abort('The Rails environment is running in production mode!') if Rails.env.production?
@@ -109,15 +111,13 @@ RSpec.configure do |config|
     end
   end
 
-  # config.before :all, elasticsearch: true do
-  #   unless Elasticsearch::Extensions::Test::Cluster.running?(on: 9200, command: ENV['ELASTICSEARCH_PATH'])
-  #     Elasticsearch::Extensions::Test::Cluster.start(port: 9200, nodes: 1, timeout: 120, command: ENV['ELASTICSEARCH_PATH'])
-  #   end
-  # end
+  config.before :all, elasticsearch: true do
+    unless Elasticsearch::Extensions::Test::Cluster.running?(on: 9201, command: ENV['ELASTICSEARCH_PATH'] || "/usr/share/elasticsearch/bin/elasticsearch")
+      Elasticsearch::Extensions::Test::Cluster.start(port: 9201, nodes: 1, timeout: 60, command: ENV['ELASTICSEARCH_PATH'] || "/usr/share/elasticsearch/bin/elasticsearch")
+    end
+  end
 
-  # config.after :each, elasticsearch: true do
-  #   ActiveRecord::Base.descendants.each do |model|
-  #     model.__elasticsearch__.delete_index!(index: "_all") if model.respond_to?(:__elasticsearch__)
-  #   end
-  # end
+  config.after :each, elasticsearch: true do
+    Elasticsearch::Extensions::Test::Cluster.stop(port: 9201) if Elasticsearch::Extensions::Test::Cluster.running?(on: 9201, command: ENV['ELASTICSEARCH_PATH'] || "/usr/share/elasticsearch/bin/elasticsearch")
+  end
 end

@@ -8,13 +8,12 @@ class Users::SessionsController < Devise::SessionsController
             enterprise_id = session[:saml_for_enterprise]
 
             enterprise = Enterprise.find_by_id(enterprise_id)
-            # i don't see where has_enabled_saml is defined
+
             if enterprise&.has_enabled_saml
                 redirect_to sso_enterprise_saml_index_url(enterprise_id: enterprise_id)
                 return
             end
         end
-
         super
     end
 

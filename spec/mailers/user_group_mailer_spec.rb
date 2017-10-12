@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe UserGroupMailer, type: :mailer do
   let!(:user){ create(:user) }
-  let!(:groups){ [{ group: create(:group), messages_count: 2, news_count: 0 }] }
+  let!(:groups){ [{ group: create(:group), events_count: 2, messages_count: 2, news_count: 0 }] }
 
   let!(:mail) { described_class.notification(user, groups).deliver_now }
 
@@ -25,6 +25,10 @@ RSpec.describe UserGroupMailer, type: :mailer do
 
     it 'shows a message to user' do
       expect(mail.body.encoded).to include("html>\r\n  <body>\r\n    Hello #{ user.name }, a new item has been posted to a Diversity and Inclu")
+    end
+
+    it 'shows a message with number of events in group' do
+      expect(mail.body.encoded).to include("2 new events")
     end
 
     it 'shows a message with number of comments in group' do

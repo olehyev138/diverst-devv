@@ -92,7 +92,7 @@ RSpec.describe UsersController, type: :controller do
 
         it "updates the user invitation_sent_at" do
             user.reload
-            expect(user.invitation_sent_at.to_date).to eq(Date.today.to_date)
+            expect(user.invitation_sent_at.in_time_zone("UTC").wday).to eq(Time.now.in_time_zone("UTC").wday)
         end
 
         it "flashes" do

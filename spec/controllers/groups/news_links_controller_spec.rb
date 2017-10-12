@@ -4,15 +4,13 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
     let(:user) { create :user }
     let(:group){ create(:group, enterprise: user.enterprise) }
 
-    login_user_from_let
-
     describe 'GET #index' do
         def get_index(group_id)
             get :index, group_id: group_id
         end
 
         let!(:news_link) { create(:news_link, group: group) }
-        let!(:foregin_news_link) { create(:news_link) }
+        let!(:foreign_news_link) { create(:news_link) }
 
         context 'with logged user' do
             login_user_from_let
@@ -27,15 +25,15 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
                 news_links = assigns(:news_links)
 
                 expect(news_links).to include news_link
-                expect(news_links).to_not include foregin_news_link
+                expect(news_links).to_not include foreign_news_link
             end
         end
 
         context 'without logged user' do
             before { get_index(group.to_param) }
 
-            xit 'return error' do
-                expect(response).to redirect_to action: :index
+            it 'redirect_to new_user_session' do
+                expect(response).to redirect_to :new_user_session
             end
         end
     end
@@ -58,8 +56,8 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
         context 'without logged user' do
             before { get_new(group.to_param) }
 
-            xit 'return error' do
-                expect(response).to redirect_to action: :index
+            it 'redirect_to new_user_session' do
+                expect(response).to redirect_to :new_user_session
             end
         end
     end
@@ -84,13 +82,16 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
         context 'without logged user' do
             before { get_comments(group.to_param) }
 
-            xit 'return error' do
-                expect(response).to redirect_to action: :index
+            it 'redirect_to new_user_session' do
+                expect(response).to redirect_to :new_user_session
             end
         end
     end
 
     describe 'POST#create' do
+        
+        login_user_from_let
+        
         let!(:reward_action){ create(:reward_action, enterprise: user.enterprise, key: "news_post", points: 30) }
 
         it "rewards a user with points of this action" do
@@ -104,6 +105,8 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
     end
 
     describe 'POST#create_comment' do
+        login_user_from_let
+        
         let!(:news_link){ create(:news_link, group: group) }
         let!(:reward_action){ create(:reward_action, enterprise: user.enterprise, key: "news_comment", points: 35) }
 
@@ -118,6 +121,8 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
     end
 
     describe 'DELETE#destroy' do
+        login_user_from_let
+        
         let!(:news_link){ create(:news_link, group: group) }
         let!(:reward_action){ create(:reward_action, enterprise: user.enterprise, key: "news_post", points: 90) }
         before :each do
@@ -135,6 +140,8 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
     end
 
     describe 'PATCH#update' do
+        login_user_from_let
+        
         let!(:news_link){ create(:news_link, group: group) }
 
         before { patch :update, group_id: group.id, id: news_link.id, news_link: {title: "updated"}}
@@ -150,30 +157,6 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
         it "updates the link" do
             news_link.reload
             expect(news_link.title).to eq("updated")
-        end
-    end
-
-    describe 'GET#url_info' do
-        def get_url_info(group_id)
-            get :url_info, group_id: group_id
-        end
-
-        context 'with logged user', :skip => "Not a route found in config/routes.rb" do
-            login_user_from_let
-
-            before { get_url_info(group.to_param) }
-
-            it 'return success' do
-                expect(response).to be_success
-            end
-        end
-
-        context 'without logged user' do
-            before { get_url_info(group.to_param) }
-
-            xit 'return error' do
-                expect(response).to redirect_to action: :index
-            end
         end
     end
 end

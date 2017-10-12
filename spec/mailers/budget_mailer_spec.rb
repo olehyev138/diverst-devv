@@ -78,7 +78,7 @@ RSpec.describe BudgetMailer, type: :mailer do
     end
 
     it 'renders message info' do
-      expect(mail.body.encoded).to include("Your budget request for the New group was declined by Fulano Ciclano. Please contact Fulano Ciclano to find out why it was declined")
+      expect(mail.body.encoded).to include("Your budget request for the New group has been denied by Fulano Ciclano. Please contact Fulano Ciclano to find out why it was declined")
     end
   end
 end

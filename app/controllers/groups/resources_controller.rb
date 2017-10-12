@@ -4,6 +4,15 @@ class Groups::ResourcesController < ApplicationController
   before_action :authenticate_user!
 
   layout 'erg'
+  
+  def index
+    if policy(@group).erg_leader_permissions? or @group.active_members.include? current_user
+      super
+    else
+        @resources = []
+        render '/index'
+    end
+  end
 
   protected
 

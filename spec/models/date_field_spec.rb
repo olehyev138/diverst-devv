@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe DateField, elasticsearch: true, type: :model, :skip => "Need to fix - written by gabriel" do
+RSpec.describe DateField, type: :model do
   context "when getting data" do
     let!(:field_one) { DateField.create(attributes_for(:date_field)) }
     let!(:field_two) { DateField.create(attributes_for(:date_field)) }
@@ -90,7 +90,7 @@ RSpec.describe DateField, elasticsearch: true, type: :model, :skip => "Need to f
       it "returns all users with selected field, aggregated by field and have segments and filters" do
         data = field_one.highcharts_stats(segments: Segment.where(id: segment_two), groups: Group.where(id: group))
         expect(data).to eq({
-          series: [{ name: field_one.title, data: [0, 1, 0, 0, 1] }],
+          series: [{ name: field_one.title, data: [1, 1, 0, 1, 1] }],
           categories: [
             "#{ Date.today.strftime("%m/%d/%Y") }-#{ (Date.today + 3.days).strftime("%m/%d/%Y") }",
             "#{ (Date.today + 3.days).strftime("%m/%d/%Y") }-#{ (Date.today + 6.days).strftime("%m/%d/%Y") }",

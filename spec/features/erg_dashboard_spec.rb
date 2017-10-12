@@ -23,7 +23,7 @@ RSpec.feature 'An ERG dashboard' do
     expect(page).to have_content group.initiatives.last.name
   end
 
-  scenario 'shows the latest news', :skip => "We changed to news feed" do
+  scenario 'shows the latest news' do
     create_list(:news_link, 5, group: group)
 
     visit group_path(group)
@@ -31,7 +31,7 @@ RSpec.feature 'An ERG dashboard' do
     expect(page).to have_content group.news_links.last.title
   end
 
-  scenario 'shows the latest messages', :skip => "We changed to news feed" do
+  scenario 'shows the latest messages' do
     create_list(:group_message, 5, group: group)
 
     visit group_path(group)
@@ -75,7 +75,7 @@ RSpec.feature 'An ERG dashboard' do
     end
   end
 
-  context 'in the messages section', :skip => "We changed to news feed" do
+  context 'in the messages section' do
     scenario 'shows the existing messages' do
       message = create(:group_message, group: group)
 
@@ -102,17 +102,35 @@ RSpec.feature 'An ERG dashboard' do
   end
 
   context 'in the events section' do
+    scenario 'does not show the upcoming events' do
+      initiative = create(:initiative, owner_group: group, start: 1.day.from_now, end: 1.day.from_now + 2.hours)
+      
+      visit group_events_path(group)
+
+      expect(page).to_not have_content initiative.name
+    end
+    
     scenario 'shows the upcoming events' do
       initiative = create(:initiative, owner_group: group, start: 1.day.from_now, end: 1.day.from_now + 2.hours)
-
+      create(:user_group, group: group, user: user, accepted_member: true)
+      
       visit group_events_path(group)
 
       expect(page).to have_content initiative.name
     end
 
-    scenario 'shows the past events' do
+    scenario 'does not show the past events' do
       initiative = create(:initiative, owner_group: group, start: 1.day.ago, end: 1.day.ago + 2.hours)
 
+      visit group_events_path(group)
+
+      expect(page).to_not have_content initiative.name
+    end
+    
+    scenario 'shows the past events' do
+      initiative = create(:initiative, owner_group: group, start: 1.day.ago, end: 1.day.ago + 2.hours)
+      create(:user_group, group: group, user: user, accepted_member: true)
+      
       visit group_events_path(group)
 
       expect(page).to have_content initiative.name
