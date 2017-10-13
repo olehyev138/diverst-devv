@@ -10,7 +10,7 @@ dependencies:
     - "public/assets"
 test:
   pre:
-    - bin/rake db:migrate RAILS_ENV=test
+    - bundle exec rake db:migrate
     - sudo ln -s /etc/elasticsearch/ /usr/share/elasticsearch/config
     - bundle exec rake assets:precompile assets:clean:
        environment:
