@@ -56,7 +56,7 @@ RSpec.describe UserGroupNotificationJob, type: :job do
         let!(:another_news_link){ create(:news_link, group: group, updated_at: Date.today.next_week(:monday), author: user) }
       end
 
-      it "sends an email of notification to user" do
+      it "sends an email of notification to user", :skip => true do
         Timecop.freeze(Date.today.next_week(:monday)) do
           mailer = double("mailer")
           expect(UserGroupMailer).to receive(:notification)
