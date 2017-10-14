@@ -22,7 +22,14 @@ class NewsLink < ActiveRecord::Base
     validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
     
     before_create :build_default_link
-    
+
+    scope :of_segments, ->(segment_ids) {
+      nl_condtions = ["news_link_segments.segment_id IS NULL"]
+      nl_condtions << "news_link_segments.segment_id IN (#{ segment_ids.join(",") })" unless segment_ids.empty?
+      joins("LEFT JOIN news_link_segments ON news_link_segments.news_link_id = news_links.id")
+      .where(nl_condtions.join(" OR "))
+    }
+
     # call back to delete news link segment associations
     def remove_segment_association(segment)
         news_link_segment = self.news_link_segments.where(:segment_id => segment.id).first
