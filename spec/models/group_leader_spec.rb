@@ -8,4 +8,16 @@ RSpec.describe GroupLeader, type: :model do
     it{ expect(group_leader).to belong_to(:user) }
     it{ expect(group_leader).to belong_to(:group) }
   end
+  
+  describe 'notifications_enabled_status'do
+    it 'returns Off' do
+      group_leader = create(:group_leader)
+      expect(group_leader.notifications_enabled_status).to eq("Off")
+    end
+    
+    it 'returns On' do
+      group_leader = create(:group_leader, :notifications_enabled => true)
+      expect(group_leader.notifications_enabled_status).to eq("On")
+    end
+  end
 end
