@@ -6,7 +6,7 @@ Hello <%= @user.name %>, a new item has been posted to a Diversity and Inclusion
   <% end %>
 
   <% if group[:events_count ].to_i > 0 %>
-    <%= link_to pluralize(group[:events_count], 'new event'), group_events_path(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id ) %>
+    <%= link_to pluralize(group[:events_count], 'new event'), group_events_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id ) %>
   <% end %>
 
   <% if group[:messages_count].to_i > 0 %>

@@ -47,11 +47,6 @@ class Groups::PostsController < ApplicationController
         @link.approved = true
         if not @link.save
             flash[:alert] = "Link not approved"
-        else
-            # send mailer if group message
-            if @link.link_type === "GroupMessage"
-                @link.link.send_emails
-            end
         end
         redirect_to :back
     end
