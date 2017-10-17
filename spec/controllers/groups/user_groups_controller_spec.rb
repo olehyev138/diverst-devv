@@ -10,12 +10,12 @@ RSpec.describe Groups::UserGroupsController, type: :controller do
 
       context "when exists the user_group" do
         before(:each) do
-          patch :update, group_id: group.id, id: user_group.id, user_group: { notifications_frequency: "real_time" }
+          patch :update, group_id: group.id, id: user_group.id, user_group: { notifications_frequency: "hourly" }
         end
 
         it "updates the enable_notification of a user_group" do
           user_group.reload
-          expect(user_group.notifications_frequency).to eq "real_time"
+          expect(user_group.notifications_frequency).to eq "hourly"
         end
 
         it "return a sucessful response" do

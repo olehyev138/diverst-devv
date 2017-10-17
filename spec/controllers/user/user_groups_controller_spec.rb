@@ -21,14 +21,14 @@ RSpec.describe User::UserGroupsController, type: :controller do
 
             before(:each) do
                 patch :update, user_groups: {
-                                   "#{user_group_one.id}": { notifications_frequency: "real_time" },
+                                   "#{user_group_one.id}": { notifications_frequency: "hourly" },
                                    "#{user_group_two.id}": { notifications_frequency: "daily" }
                                }
             end
 
             it "updates the notifications_frequency of user_groups" do
                 user_group_one.reload
-                expect(user_group_one.notifications_frequency).to eq "real_time"
+                expect(user_group_one.notifications_frequency).to eq "hourly"
                 user_group_two.reload
                 expect(user_group_two.notifications_frequency).to eq "daily"
             end
