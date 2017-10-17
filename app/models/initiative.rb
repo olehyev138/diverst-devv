@@ -10,6 +10,8 @@ class Initiative < ActiveRecord::Base
   has_many :expenses, dependent: :destroy, class_name: "InitiativeExpense"
 
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
+    
+  validates :end, date: {after: :start, message: 'must be after start'}, on: [:create, :update]  
 
   #Ported from Event
 # todo: check events controller views and forms to work

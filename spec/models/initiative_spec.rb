@@ -155,4 +155,12 @@ RSpec.describe Initiative, type: :model do
       end
     end
   end
+  
+  describe "start/end" do
+    it "validates end" do
+      initiative = build(:initiative, :start => Date.tomorrow, :end => Date.today)
+      expect(initiative.valid?).to eq(false)
+      expect(initiative.errors.full_messages.first).to eq("End must be after start")
+    end
+  end
 end
