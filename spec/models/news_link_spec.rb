@@ -18,7 +18,24 @@ RSpec.describe NewsLink, type: :model do
         it { expect(news_link).to have_many(:comments) }
         it { expect(news_link).to have_one(:news_feed_link)}
     end
-    
+
+    describe ".of_segments" do
+      let(:author){ create(:user) }
+
+      let(:segment1) { create :segment, enterprise: author.enterprise}
+      let(:segment2) { create :segment, enterprise: author.enterprise}
+
+      let!(:news_link_without_segment){ create(:news_link, author_id: author.id, segments: []) }
+      let!(:news_link_with_segment){ create(:news_link, author_id: author.id, segments: [segment1]) }
+      let!(:news_link_with_another_segment){
+        create(:news_link, author_id: author.id, segments: [segment2])
+      }
+
+      it "returns initiatives that has specific segments or does not have any segment" do
+        expect(NewsLink.of_segments([segment1.id])).to match_array([news_link_without_segment, news_link_with_segment])
+      end
+    end
+
     describe "#news_feed_link" do
         it "has default news_feed_link" do
             user = create(:user)

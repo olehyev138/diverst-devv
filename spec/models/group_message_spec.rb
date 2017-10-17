@@ -18,7 +18,25 @@ RSpec.describe GroupMessage, type: :model do
         it { expect(group_message).to have_many(:comments) }
         it { expect(group_message).to have_one(:news_feed_link)}
     end
-    
+
+    describe ".of_segments" do
+      let(:owner){ create(:user) }
+      let(:group){ create(:group, enterprise: owner.enterprise) }
+
+      let(:segment1) { create :segment, enterprise: owner.enterprise}
+      let(:segment2) { create :segment, enterprise: owner.enterprise}
+
+      let!(:group_message_without_segment){ create(:group_message, owner_id: owner.id, segments: []) }
+      let!(:group_message_with_segment){ create(:group_message, owner_id: owner.id, segments: [segment1]) }
+      let!(:group_message_with_another_segment){
+        create(:group_message, owner_id: owner.id, segments: [segment2])
+      }
+
+      it "returns initiatives that has specific segments or does not have any segment" do
+        expect(GroupMessage.of_segments([segment1.id])).to match_array([group_message_without_segment, group_message_with_segment])
+      end
+    end
+
     describe '#owner_name' do
         let(:user) { create :user }
         let!(:message) { create :group_message, owner: user }

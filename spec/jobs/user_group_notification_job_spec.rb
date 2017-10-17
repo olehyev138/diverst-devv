@@ -15,15 +15,15 @@ RSpec.describe UserGroupNotificationJob, type: :job do
     end
 
     context "when there is new messages or news" do
-        let(:yesterday) { Date.today - 1.day }
-        let(:today) { Date.today }
+      let(:yesterday) { Date.today - 1.day }
+      let(:today) { Date.today }
 
-        let!(:user_group){ create(:user_group, user: user, group: group, notifications_frequency: UserGroup.notifications_frequencies[:daily]) }
-        let!(:group_message){ create(:group_message, group: group, updated_at: yesterday, owner: user) }
-        let!(:another_group_message){ create(:group_message, group: group, updated_at: today, owner: user) }
-        let!(:group_event) { create(:initiative, owner_group: group, updated_at: yesterday, owner: user) }
-        let!(:news_link){ create(:news_link, group: group, updated_at: yesterday, author: user) }
-        let!(:another_news_link){ create(:news_link, group: group, updated_at: today, author: user) }
+      let!(:user_group){ create(:user_group, user: user, group: group, notifications_frequency: UserGroup.notifications_frequencies[:daily]) }
+      let!(:group_message){ create(:group_message, group: group, updated_at: yesterday, owner: user) }
+      let!(:another_group_message){ create(:group_message, group: group, updated_at: today, owner: user) }
+      let!(:group_event) { create(:initiative, owner_group: group, updated_at: yesterday, owner: user) }
+      let!(:news_link){ create(:news_link, group: group, updated_at: yesterday, author: user) }
+      let!(:another_news_link){ create(:news_link, group: group, updated_at: today, author: user) }
 
       it "sends an email of notification to user" do
         Timecop.freeze(Date.today) do
