@@ -41,7 +41,7 @@ RSpec.describe Event, :type => :model do
     end
 
     describe 'scopes' do
-        let(:past_event) { create(:event, start: Time.zone.local(2015, 11, 9, 12, 30), end: Time.zone.local(2015, 11, 9, 2, 30)) }
+        let(:past_event) { create(:event, start: Time.zone.local(2015, 11, 9, 12, 30), end: Time.zone.local(2015, 11, 9, 22, 30)) }
         let(:ongoing_event) { create(:event, start: Time.zone.local(2015, 11, 10, 12, 30), end: Time.zone.local(2015, 11, 10, 13, 30)) }
         let(:upcoming_event) { create(:event, start: Time.zone.local(2015, 11, 11, 12, 30), end: Time.zone.local(2015, 11, 11, 13, 30)) }
 
@@ -66,6 +66,14 @@ RSpec.describe Event, :type => :model do
             it 'only include the upcoming event' do
                 expect(Event.upcoming).to eq [upcoming_event]
             end
+        end
+    end
+    
+    describe "start/end" do
+        it "validates end" do
+            event = build(:event, :end => Date.tomorrow)
+            expect(event.valid?).to eq(false)
+            expect(event.errors.full_messages.first).to eq("End must be after start")
         end
     end
 end

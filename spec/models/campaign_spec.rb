@@ -92,4 +92,12 @@ RSpec.describe Campaign, type: :model do
             end
         end
     end
+    
+    describe "start/end" do
+        it "validates end" do
+            campaign = build(:campaign, :end => Date.tomorrow)
+            expect(campaign.valid?).to eq(false)
+            expect(campaign.errors.full_messages.first).to eq("End must be after start")
+        end
+    end
 end
