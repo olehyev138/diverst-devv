@@ -13,7 +13,7 @@ RSpec.describe NewsFeedLink, type: :model do
         it { expect(news_feed_link).to belong_to(:news_feed) }
         it { expect(news_feed_link).to belong_to(:link) }
         
-        it { expect(news_feed_link).to have_one(:news_feed_link_segment) }
+        it { expect(news_feed_link).to have_many(:news_feed_link_segments) }
     end
     
     describe "#approve_link" do

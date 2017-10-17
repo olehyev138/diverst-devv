@@ -52,7 +52,7 @@ class Groups::PostsController < ApplicationController
             if @link.link_type === "GroupMessage"
                 @link.link.send_emails
             end
-            UserGroupInstantNotificationJob.perform_later(@group, news_count: 1)
+            UserGroupInstantNotificationJob.perform_later(@group, link: @link.link, link_type: @link.link_type)
         end
         redirect_to :back
     end

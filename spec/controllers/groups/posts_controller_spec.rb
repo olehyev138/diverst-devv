@@ -39,7 +39,7 @@ RSpec.describe Groups::PostsController, type: :controller do
         end
 
         it "send group notification to users" do
-            expect(UserGroupInstantNotificationJob).to have_received(:perform_later).with(group, news_count: 1).at_least(:once)
+            expect(UserGroupInstantNotificationJob).to have_received(:perform_later).with(group, link: news_link, link_type: news_link.news_feed_link.link_type).at_least(:once)
         end
     end
 end
