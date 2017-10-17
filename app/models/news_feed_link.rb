@@ -23,7 +23,6 @@ class NewsFeedLink < ActiveRecord::Base
         if GroupPolicy.new(link.author, link.group).erg_leader_permissions?
             self.approved = true
             self.save!
-            UserGroupInstantNotificationJob.perform_later(link.group, link: link, link_type: link_type)
         end
     end
 end

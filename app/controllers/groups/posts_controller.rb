@@ -47,8 +47,6 @@ class Groups::PostsController < ApplicationController
         @link.approved = true
         if not @link.save
             flash[:alert] = "Link not approved"
-        else
-            UserGroupInstantNotificationJob.perform_later(@group, link: @link.link, link_type: @link.link_type)
         end
         redirect_to :back
     end

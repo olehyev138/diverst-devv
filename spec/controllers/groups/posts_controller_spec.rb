@@ -28,7 +28,6 @@ RSpec.describe Groups::PostsController, type: :controller do
             # ensure the job is performed and that
             # we don't receive any errors
             perform_enqueued_jobs do
-                allow(UserGroupInstantNotificationJob).to receive(:perform_later).and_call_original
                 request.env["HTTP_REFERER"] = "back"
                 patch :approve, group_id: group.id, link_id: news_link.news_feed_link.id
             end
@@ -36,10 +35,6 @@ RSpec.describe Groups::PostsController, type: :controller do
         
         it 'return success' do
             expect(response).to redirect_to "back"
-        end
-
-        it "send group notification to users" do
-            expect(UserGroupInstantNotificationJob).to have_received(:perform_later).with(group, link: news_link, link_type: news_link.news_feed_link.link_type).at_least(:once)
         end
     end
 end

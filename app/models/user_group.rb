@@ -5,7 +5,7 @@ class UserGroup < ActiveRecord::Base
   belongs_to :user
   belongs_to :group
 
-  enum notifications_frequency: [:real_time, :daily, :weekly, :disabled]
+  enum notifications_frequency: [:hourly, :daily, :weekly, :disabled]
 
   scope :top_participants, ->(n) { order(total_weekly_points: :desc).limit(n) }
   scope :notifications_status, ->(frequency) {

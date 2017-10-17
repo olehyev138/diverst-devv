@@ -17,16 +17,16 @@ RSpec.describe UserGroup do
       let(:second){ create(:user_group, total_weekly_points: 20) }
 
       it { expect(UserGroup.top_participants(3)).to eq [first, second, third] }
-      it { expect(user_group).to define_enum_for(:notifications_frequency).with([:real_time, :daily, :weekly, :disabled]) }
+      it { expect(user_group).to define_enum_for(:notifications_frequency).with([:hourly, :daily, :weekly, :disabled]) }
     end
 
     context "notifications_status" do
-      let!(:real_time){ create(:user_group, notifications_frequency: UserGroup.notifications_frequencies[:real_time]) }
+      let!(:hourly){ create(:user_group, notifications_frequency: UserGroup.notifications_frequencies[:hourly]) }
       let!(:disabled){ create(:user_group, notifications_frequency: UserGroup.notifications_frequencies[:disabled]) }
       let!(:daily){ create(:user_group, notifications_frequency: UserGroup.notifications_frequencies[:daily]) }
 
       it "returns user_group with specific notifications_frequency" do
-        expect(UserGroup.notifications_status("real_time")).to eq [real_time]
+        expect(UserGroup.notifications_status("hourly")).to eq [hourly]
       end
     end
   end
