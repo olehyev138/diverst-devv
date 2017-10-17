@@ -23,10 +23,6 @@ class NewsFeedLink < ActiveRecord::Base
         if GroupPolicy.new(link.author, link.group).erg_leader_permissions?
             self.approved = true
             self.save!
-            # send mailer if group message
-            if link_type === "GroupMessage"
-                link.send_emails
-            end
             UserGroupInstantNotificationJob.perform_later(link.group, link: link, link_type: link_type)
         end
     end
