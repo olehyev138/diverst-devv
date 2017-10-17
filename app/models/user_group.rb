@@ -12,6 +12,8 @@ class UserGroup < ActiveRecord::Base
     where(notifications_frequency: UserGroup.notifications_frequencies[frequency])
   }
   scope :active, -> { joins(:user).where(users: { active: true }) }
+
+  scope :accepted_users, -> { active.joins(:group).where("groups.pending_users = 'disabled' OR (groups.pending_users = 'enabled' AND accepted_member=true)") }
   scope :with_answered_survey, -> { where.not(data: nil) }
 
   after_commit on: [:create] { update_elasticsearch_index(user, user.enterprise, 'update') }
