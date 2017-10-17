@@ -48,10 +48,6 @@ class Groups::PostsController < ApplicationController
         if not @link.save
             flash[:alert] = "Link not approved"
         else
-            # send mailer if group message
-            if @link.link_type === "GroupMessage"
-                @link.link.send_emails
-            end
             UserGroupInstantNotificationJob.perform_later(@group, link: @link.link, link_type: @link.link_type)
         end
         redirect_to :back
