@@ -42,6 +42,7 @@ class UserGroupNotificationJob < ActiveJob::Base
 
   def get_frequency_range(frequency)
     case frequency
+    when "hourly" then 1.hour.ago..Time.now
     when "weekly" then Date.yesterday.beginning_of_week..Date.yesterday.end_of_week
     else Date.yesterday.beginning_of_day..Date.yesterday.end_of_day
     end

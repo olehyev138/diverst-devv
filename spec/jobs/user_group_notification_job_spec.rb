@@ -5,6 +5,38 @@ RSpec.describe UserGroupNotificationJob, type: :job do
 
   let!(:user){ create(:user) }
   let!(:group){ create(:group, pending_users: "disabled") }
+  
+  context "with hourly frequency" do
+    context "when there is no messages or news" do
+      it "does no send an email of notification to user" do
+        expect(UserGroupMailer).to_not receive(:notification)
+        subject.perform('hourly')
+      end
+    end
+
+    context "when there is new messages or news" do
+      let(:previous_hour) { 1.hour.ago }
+      let(:next_hour) { Time.now }
+
+      let!(:user_group){ create(:user_group, user: user, group: group, notifications_frequency: UserGroup.notifications_frequencies[:hourly]) }
+      let!(:group_message){ create(:group_message, group: group, updated_at: previous_hour, owner: user) }
+      let!(:another_group_message){ create(:group_message, group: group, updated_at: next_hour, owner: user) }
+      let!(:group_event) { create(:initiative, owner_group: group, updated_at: previous_hour, owner: user) }
+      let!(:another_group_event) { create(:initiative, owner_group: group, updated_at: next_hour, owner: user) }
+      let!(:news_link){ create(:news_link, group: group, updated_at: previous_hour, author: user) }
+      let!(:another_news_link){ create(:news_link, group: group, updated_at: next_hour, author: user) }
+
+      it "sends an email of notification to user" do
+        Timecop.freeze(Time.now + 30.minutes) do
+          mailer = double("mailer")
+          expect(UserGroupMailer).to receive(:notification)
+            .with(user, [{ group: group, events_count: 1, messages_count: 1, news_count: 1 }]){ mailer }
+          expect(mailer).to receive(:deliver_now)
+          subject.perform('hourly')
+        end
+      end
+    end
+  end
 
   context "with daily frequency" do
     context "when there is no messages or news" do
