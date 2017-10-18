@@ -2,10 +2,11 @@ class NewsFeedLink < ActiveRecord::Base
     belongs_to :news_feed
     belongs_to :link, :polymorphic => true
     
-    has_one :news_feed_link_segment
+    has_many :news_feed_link_segments
     
-    delegate :group, :to => :news_feed
-
+    delegate :group,    :to => :news_feed
+    delegate :segment,  :to => :news_feed_link_segment, :allow_nil => true
+    
     scope :approved,        -> { where(approved: true )}
     scope :not_approved,    -> { where(approved: false )}
     
@@ -22,11 +23,6 @@ class NewsFeedLink < ActiveRecord::Base
         if GroupPolicy.new(link.author, link.group).erg_leader_permissions?
             self.approved = true
             self.save!
-            # send mailer if group message
-            if link_type === "GroupMessage"
-                link.send_emails
-            end
-            UserGroupInstantNotificationJob.perform_later(link.group, news_count: 1)
         end
     end
 end

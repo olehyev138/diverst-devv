@@ -5,8 +5,8 @@ RSpec.describe SendPollNotificationJob, type: :job do
   let!(:group){ create(:group, enterprise: enterprise) }
   let!(:outcome){ create(:outcome, group: group) }
   let!(:pillar){ create(:pillar, outcome: outcome) }
-  let!(:ended_initiative){ create(:initiative, owner_group_id: group.id, pillar: pillar, end: Date.yesterday) }
-  let!(:not_ended_initiative){ create(:initiative, owner_group_id: group.id, pillar: pillar, end: Date.today + 1.day) }
+  let!(:ended_initiative){ create(:initiative, owner_group_id: group.id, pillar: pillar, start: 2.days.ago, end: Date.yesterday) }
+  let!(:not_ended_initiative){ create(:initiative, owner_group_id: group.id, pillar: pillar, start: 2.days.ago, end: Date.today + 1.day) }
   let!(:poll_one){ create(:poll, status: "published", email_sent: false, enterprise: enterprise, initiative: ended_initiative) }
   let!(:poll_two){ create(:poll, status: "published", email_sent: true, enterprise: enterprise, initiative: ended_initiative) }
   let!(:poll_three){ create(:poll, status: "published", email_sent: false, enterprise: enterprise, initiative: not_ended_initiative) }

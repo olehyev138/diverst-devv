@@ -17,6 +17,13 @@ class GroupMessage < ActiveRecord::Base
 
     before_create :build_default_link
 
+    scope :of_segments, ->(segment_ids) {
+      gm_condtions = ["group_messages_segments.segment_id IS NULL"]
+      gm_condtions << "group_messages_segments.segment_id IN (#{ segment_ids.join(",") })" unless segment_ids.empty?
+      joins("LEFT JOIN group_messages_segments ON group_messages_segments.group_message_id = group_messages.id")
+      .where(gm_condtions.join(" OR "))
+    }
+
     def users
         if segments.empty?
             group.members
