@@ -15,6 +15,13 @@ class SocialLink < ActiveRecord::Base
     belongs_to :author, class_name: 'User', required: true
     belongs_to :group
     
+    scope :of_segments, ->(segment_ids) {
+      gm_condtions = ["social_link_segments.segment_id IS NULL"]
+      gm_condtions << "social_link_segments.segment_id IN (#{ segment_ids.join(",") })" unless segment_ids.empty?
+      joins("LEFT JOIN social_link_segments ON social_link_segments.social_link_id = social_network_posts.id")
+      .where(gm_condtions.join(" OR "))
+    }
+    
     def url_safe
         CGI.escape(url)
     end

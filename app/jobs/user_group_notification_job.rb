@@ -12,7 +12,8 @@ class UserGroupNotificationJob < ActiveJob::Base
             group: user_group.group,
             events_count: get_events_count(user, group, frequency_range),
             messages_count: get_messages_count(user, group, frequency_range),
-            news_count: get_news_count(user, group, frequency_range)
+            news_count: get_news_count(user, group, frequency_range),
+            social_links_count: get_social_count(user, group, frequency_range)
           }
         end
         if have_updates?(groups)
@@ -52,10 +53,15 @@ class UserGroupNotificationJob < ActiveJob::Base
     NewsLink.where(group: group, updated_at: frequency_range)
     .of_segments(user_segment_ids(user))
     .count
-    #TODO take Social links into account here
+  end
+  
+  def get_social_count(user, group, frequency_range)
+    SocialLink.where(group: group, updated_at: frequency_range)
+    .of_segments(user_segment_ids(user))
+    .count
   end
 
   def have_updates?(groups)
-    groups.any?{ |g| g[:events_count] || g[:messages_count] > 0 || g[:news_count] > 0 }
+    groups.any?{ |g| g[:events_count] || g[:messages_count] > 0 || g[:news_count] > 0 || g[:social_links_count] > 0 }
   end
 end
