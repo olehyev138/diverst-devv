@@ -36,6 +36,21 @@ RSpec.describe SamlController, type: :controller do
             get :acs, enterprise_id: enterprise.id, SAMLResponse: "test"
             expect(response).to redirect_to user_root_path
         end
+        
+        it "gets acs and create user" do
+            saml = OpenStruct.new({:is_valid? => true, :nameid => "test@gmail.com", :attributes => {}})
+            allow(OneLogin::RubySaml::Response).to receive(:new).and_return(saml)
+            
+            get :acs, enterprise_id: enterprise.id, SAMLResponse: "test"
+            expect(response).to redirect_to user_root_path
+            expect(User.last.email).to eq("test@gmail.com")
+        end
+        
+        it "returns an error" do
+            saml = OpenStruct.new({:is_valid? => false, :nameid => "test@gmail.com", :attributes => {}})
+            allow(OneLogin::RubySaml::Response).to receive(:new).and_return(saml)
+            expect(response).to be_success
+        end
     end
     
     describe "GET#metadata" do
@@ -46,8 +61,26 @@ RSpec.describe SamlController, type: :controller do
     end
     
     describe "GET#logout" do
-        it "gets SAMLRequest logout", :skip => "Unsure on how to test" do
-            get :logout, enterprise_id: enterprise.id, SAMLRequest: ""
+        it "gets SAMLRequest logout and returns an error" do
+            saml = OneLogin::RubySaml::SloLogoutresponse.new
+            allow(OneLogin::RubySaml::SloLogoutresponse).to receive(:new).and_return(saml)
+            allow(saml).to receive(:create).and_return("logout")
+            
+            get :logout, enterprise_id: enterprise.id, SAMLRequest: "test", RelayState: "Test"
+            expect(response).to be_success
+        end
+        
+        it "gets SAMLRequest logout" do
+            saml = OpenStruct.new({:is_valid? => true, :create => true})
+            allow(OneLogin::RubySaml::SloLogoutresponse).to receive(:new).and_return(saml)
+            allow(saml).to receive(:create).and_return("logout")
+            
+            get :logout, enterprise_id: enterprise.id, SAMLRequest: "test", RelayState: "Test"
+            expect(response).to be_success
+        end
+        
+        it "gets SAMLResponse logout" do
+            get :logout, enterprise_id: enterprise.id, SAMLResponse: "test"
             expect(response).to be_success
         end
         
