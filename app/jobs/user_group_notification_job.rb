@@ -62,6 +62,6 @@ class UserGroupNotificationJob < ActiveJob::Base
   end
 
   def have_updates?(groups)
-    groups.any?{ |g| g[:events_count] > 0 || g[:messages_count] > 0 || g[:news_count] > 0 }
+    groups.any?{ |g| g[:events_count] > 0 || g[:messages_count] > 0 || g[:news_count] > 0 || g[:social_links_count] > 0}
   end
 end
