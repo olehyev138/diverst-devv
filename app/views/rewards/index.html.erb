@@ -1,9 +1,14 @@
 <div class="content__main">
   <div class="content__header">
     <h1>Actions</h1>
+    <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise) do |f| %>
+      <%= f.hidden_field :enable_rewards, value: 0 %>
+      <%= f.input :enable_rewards, id: 'enable_rewards', label: 'Enable Rewards' %>
+      <%= f.button :submit, "Save" %>
+    <% end %>
   </div>
-
-  <div class="content__main">
+  <% if @enterprise.enable_rewards? %>
+    <div class="content__main">
     You need to specify how many <strong>points</strong> users will earn for each action
 
     <%= simple_form_for @enterprise, :url => reward_actions_path, method: :patch do |f| %>
@@ -11,7 +16,7 @@
           <div class="card__section row">
             <%= f.simple_fields_for :reward_actions do |r| %>
               <div class="col md-6 mb10">
-                <%= r.input :points, label: r.object.label, input_html: { placeholder: "0" } %>
+                <%= r.input :points, label: r.object.label, input_html: { placeholder: "0", min: '0' } %>
               </div>
             <% end %>
           </div>
@@ -20,81 +25,84 @@
 
     <% end %>
   </div>
+  <% end %>
 </div>
-
-<div class="content__main">
-  <div class="content__header">
-    <h1><%= c_t(:badge).pluralize %></h1>
-    <%= link_to "New #{ c_t(:badge) }", new_badge_path, class: "btn btn--primary" %>
-  </div>
-  <div class="card">
-    <div class="card__section">
-      <% if @badges.try("empty?") %>
-        <p>There are no badges yet. <%= link_to "Create one", new_badge_path %>.</p>
-      <% else %>
-        <table class="table--has-border">
-          <thead>
-            <th></th>
-            <th>Label</th>
-            <th>Points</th>
-          </thead>
-          <tbody>
-            <% @badges.to_a.each do |badge| %>
-              <tr>
-                <td class="icon-column">
-                  <a href="<%= badge.image.expiring_url(3600) %>" class="icon icon--bg icon--large" style="background-image: url(<%= badge.image.expiring_url(3600) %>)"></a>
-                </td>
-                <td><%= badge.label %></td>
-                <td><%= badge.points %></td>
-                <td>
-                  <%= link_to "Edit", edit_badge_path(badge) %> -
-                  <%= link_to "Delete", badge_path(badge), method: :delete, class: "error", data: { confirm: "Are you sure?" } %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      <% end %>
+<% if @enterprise.enable_rewards? %>
+  <div class="content__main">
+    <div class="content__header">
+      <h1><%= c_t(:badge).pluralize %></h1>
+      <%= link_to "New #{ c_t(:badge) }", new_badge_path, class: "btn btn--primary" %>
+    </div>
+    <div class="card">
+      <div class="card__section">
+        <% if @badges.try("empty?") %>
+          <p>There are no badges yet. <%= link_to "Create one", new_badge_path %>.</p>
+        <% else %>
+          <table class="table--has-border">
+            <thead>
+              <th></th>
+              <th>Label</th>
+              <th>Points</th>
+            </thead>
+            <tbody>
+              <% @badges.to_a.each do |badge| %>
+                <tr>
+                  <td class="icon-column">
+                    <a href="<%= badge.image.expiring_url(3600) %>" class="icon icon--bg icon--large" style="background-image: url(<%= badge.image.expiring_url(3600) %>)"></a>
+                  </td>
+                  <td><%= badge.label %></td>
+                  <td><%= badge.points %></td>
+                  <td>
+                    <%= link_to "Edit", edit_badge_path(badge) %> -
+                    <%= link_to "Delete", badge_path(badge), method: :delete, class: "error", data: { confirm: "Are you sure?" } %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% end %>
+      </div>
     </div>
   </div>
-</div>
-
-<div class="content__main">
-  <div class="content__header">
-    <h1>Prizes</h1>
-    <%= link_to "New prize", new_reward_path, class: "btn btn--primary" %>
-  </div>
-  <div class="card">
-    <div class="card__section">
-      <% if @rewards.try("empty?") %>
-        <p>There are no prizes yet. <%= link_to "Create one", new_reward_path %>.</p>
-      <% else %>
-        <table class="table--has-border">
-          <thead>
-            <th></th>
-            <th>Label</th>
-            <th>Points</th>
-            <th>Responsible</th>
-            <th>Options</th>
-          </thead>
-          <tbody>
-            <% @rewards.to_a.each do |reward| %>
-              <tr>
-                <td class="icon-column">
-                  <a href="<%= reward.picture.expiring_url(3600) %>" class="icon icon--bg icon--large" style="background-image: url(<%= reward.picture.expiring_url(3600) %>)"></a>
-                </td>
-                <td><%= reward.label %></td>
-                <td><%= reward.points %></td>
-                <td><%= reward.responsible.name %></td>
-                <td>
-                  <%= link_to "Edit", edit_reward_path(reward) %> -
-                  <%= link_to "Delete", reward_path(reward), method: :delete, class: "error", data: { confirm: "Are you sure?" } %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      <% end %>
+  
+  <div class="content__main">
+    <div class="content__header">
+      <h1>Prizes</h1>
+      <%= link_to "New prize", new_reward_path, class: "btn btn--primary" %>
+    </div>
+    <div class="card">
+      <div class="card__section">
+        <% if @rewards.try("empty?") %>
+          <p>There are no prizes yet. <%= link_to "Create one", new_reward_path %>.</p>
+        <% else %>
+          <table class="table--has-border">
+            <thead>
+              <th></th>
+              <th>Label</th>
+              <th>Points</th>
+              <th>Responsible</th>
+              <th>Options</th>
+            </thead>
+            <tbody>
+              <% @rewards.to_a.each do |reward| %>
+                <tr>
+                  <td class="icon-column">
+                    <a href="<%= reward.picture.expiring_url(3600) %>" class="icon icon--bg icon--large" style="background-image: url(<%= reward.picture.expiring_url(3600) %>)"></a>
+                  </td>
+                  <td><%= reward.label %></td>
+                  <td><%= reward.points %></td>
+                  <td><%= reward.responsible.name %></td>
+                  <td>
+                    <%= link_to "Edit", edit_reward_path(reward) %> -
+                    <%= link_to "Delete", reward_path(reward), method: :delete, class: "error", data: { confirm: "Are you sure?" } %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% end %>
+      </div>
     </div>
   </div>
-</div>
+
+<% end %>
