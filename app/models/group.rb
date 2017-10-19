@@ -155,7 +155,7 @@ class Group < ActiveRecord::Base
     end
 
     def self.create_events
-        Group.all.find_each do |group|
+        Group.find_each do |group|
             (20 - group.id).times do
                 group.events << Event.create(title: 'Test Event', start: 2.days.from_now, end: 2.days.from_now + 2.hours, description: 'This is a placeholder event.')
             end

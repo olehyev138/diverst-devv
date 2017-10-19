@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Group, :type => :model do
+    
     describe 'validations' do
         let(:group) { FactoryGirl.build_stubbed(:group) }
 
@@ -213,6 +214,22 @@ RSpec.describe Group, :type => :model do
             create(:budget_item, :budget => budget, :estimated_amount => 1000)
             
             expect(group.approved_budget).to be > 0
+        end
+    end
+    
+    describe '#news_feed' do
+        it "returns news_feed" do
+            group = create(:group)
+            expect(group.news_feed).to_not be(nil)
+        end
+        
+        it "returns news_feed event after destroy" do
+            group = create(:group)
+            
+            expect(group.news_feed).to_not be(nil)
+            group.news_feed.destroy
+            
+            expect(group.news_feed).to_not be(nil)
         end
     end
 end
