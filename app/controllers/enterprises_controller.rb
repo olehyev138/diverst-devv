@@ -130,6 +130,7 @@ class EnterprisesController < ApplicationController
     params
       .require(:enterprise)
       .permit(
+        :enable_rewards,
         :has_enabled_saml,
         :has_enabled_onboarding_email,
         :idp_entity_id,

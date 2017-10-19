@@ -114,7 +114,8 @@
       </div>
 
       <div class="card card--secondary">
-        <div class="card__section">
+        <% if current_user.enterprise.enable_rewards? %>
+          <div class="card__section">
           <h4 class="card__title"><%= inline_svg('icons/trophy.svg', class: "icon card__icon") %>Leaderboards</h4>
           <h5>Most Active this week</h5>
           <ol>
@@ -123,6 +124,7 @@
             <% end %>
           </ol>
         </div>
+        <% end %>
         <div class="card__section">
           <h5>Top <%= c_t(:erg).pluralize %> this week</h5>
           <ol>

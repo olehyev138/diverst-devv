@@ -6,6 +6,6 @@ module Rewardable
   end
 
   def flash_reward(message)
-    flash[:reward] = message if ENV['REWARDS_ENABLED']
+    flash[:reward] = message if current_user.enterprise.enable_rewards?
   end
 end
