@@ -25,12 +25,14 @@ RSpec.describe UserGroupNotificationJob, type: :job do
       let!(:another_group_event) { create(:initiative, owner_group: group, updated_at: next_hour, owner: user) }
       let!(:news_link){ create(:news_link, group: group, updated_at: previous_hour, author: user) }
       let!(:another_news_link){ create(:news_link, group: group, updated_at: next_hour, author: user) }
-
+      let!(:social_link){ create(:social_link, group: group, updated_at: previous_hour, author: user) }
+      let!(:another_social_link){ create(:social_link, group: group, updated_at: next_hour, author: user) }
+      
       it "sends an email of notification to user" do
         Timecop.freeze(Time.now + 30.minutes) do
           mailer = double("mailer")
           expect(UserGroupMailer).to receive(:notification)
-            .with(user, [{ group: group, events_count: 1, messages_count: 1, news_count: 1 }]){ mailer }
+            .with(user, [{ group: group, events_count: 1, messages_count: 1, news_count: 1, social_links_count: 1 }]){ mailer }
           expect(mailer).to receive(:deliver_now)
           subject.perform('hourly')
         end
@@ -56,12 +58,14 @@ RSpec.describe UserGroupNotificationJob, type: :job do
       let!(:group_event) { create(:initiative, owner_group: group, updated_at: yesterday, owner: user) }
       let!(:news_link){ create(:news_link, group: group, updated_at: yesterday, author: user) }
       let!(:another_news_link){ create(:news_link, group: group, updated_at: today, author: user) }
-
+      let!(:social_link){ create(:social_link, group: group, updated_at: yesterday, author: user) }
+      let!(:another_social_link){ create(:social_link, group: group, updated_at: today, author: user) }
+      
       it "sends an email of notification to user" do
         Timecop.freeze(Date.today) do
           mailer = double("mailer")
           expect(UserGroupMailer).to receive(:notification)
-            .with(user, [{ group: group, events_count: 1, messages_count: 1, news_count: 1 }]){ mailer }
+            .with(user, [{ group: group, events_count: 1, messages_count: 1, news_count: 1, social_links_count: 1 }]){ mailer }
           expect(mailer).to receive(:deliver_now)
           subject.perform('daily')
         end
