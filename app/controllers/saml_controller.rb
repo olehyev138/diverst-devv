@@ -125,7 +125,7 @@ class SamlController < ApplicationController
     unless logout_request.is_valid?
       error_msg = "IdP initiated LogoutRequest was not valid!. Errors: #{logout_request.errors}"
       logger.error error_msg
-      render inline: error_msg
+      return render inline: error_msg
     end
     logger.info "IdP initiated Logout for #{logout_request.nameid}"
 
