@@ -84,22 +84,25 @@ RSpec.describe UserGroupNotificationJob, type: :job do
     end
 
     context "and there is new messages or news" do
-      Timecop.freeze(Date.today.next_week(:monday)) do
-        let!(:user_group){ create(:user_group, user: user, group: group, notifications_frequency: UserGroup.notifications_frequencies[:weekly]) }
-        let!(:group_message){ create(:group_message, group: group, updated_at: Date.today, owner: user) }
-        let!(:another_group_message){ create(:group_message, group: group, updated_at: Date.today.next_week(:monday), owner: user) }
-        let!(:news_link){ create(:news_link, group: group, updated_at: Date.today, author: user) }
-        let!(:another_news_link){ create(:news_link, group: group, updated_at: Date.today.next_week(:monday), author: user) }
-      end
+      let(:week_ago) { 6.days.ago }
+      let(:today) { Date.today }
 
-      it "sends an email of notification to user", :skip => true do
-        Timecop.freeze(Date.today.next_week(:monday)) do
-          mailer = double("mailer")
-          expect(UserGroupMailer).to receive(:notification)
-            .with(user, [{ group: group, messages_count: 1, news_count: 1 }]){ mailer }
-          expect(mailer).to receive(:deliver_now)
-          subject.perform('weekly')
-        end
+      let!(:user_group){ create(:user_group, user: user, group: group, notifications_frequency: UserGroup.notifications_frequencies[:weekly]) }
+      let!(:group_message){ create(:group_message, group: group, updated_at: week_ago, owner: user) }
+      let!(:another_group_message){ create(:group_message, group: group, updated_at: today, owner: user) }
+      let!(:group_event) { create(:initiative, owner_group: group, updated_at: week_ago, owner: user) }
+      let!(:another_group_event) { create(:initiative, owner_group: group, updated_at: today, owner: user) }
+      let!(:news_link){ create(:news_link, group: group, updated_at: week_ago, author: user) }
+      let!(:another_news_link){ create(:news_link, group: group, updated_at: today, author: user) }
+      let!(:social_link){ create(:social_link, group: group, updated_at: week_ago, author: user) }
+      let!(:another_social_link){ create(:social_link, group: group, updated_at: today, author: user) }
+
+      it "sends an email of notification to user" do
+        mailer = double("mailer")
+        expect(UserGroupMailer).to receive(:notification)
+          .with(user, [{ group: group, events_count: 1, messages_count: 1, news_count: 1, social_links_count: 1 }]){ mailer }
+        expect(mailer).to receive(:deliver_now)
+        subject.perform('weekly')
       end
     end
   end
