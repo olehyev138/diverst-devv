@@ -229,11 +229,12 @@ class GroupsController < ApplicationController
     
     def base_show
         @upcoming_events = @group.initiatives.upcoming.limit(3) + @group.participating_initiatives.upcoming.limit(3)
-        @user_groups = @group.user_groups.order(created_at: :desc).includes(:user).limit(8)
         @messages = @group.messages.includes(:owner).limit(3)
         @user_group = @group.user_groups.find_by(user: current_user)
         @leaders = @group.group_leaders.visible
-        @user_groups = @group.user_groups.includes(:user).active
+
+        @members = @group.active_members.order(created_at: :desc).limit(8)
+
         @top_user_group_participants = @group.user_groups.active.top_participants(10).includes(:user)
         @top_group_participants = @group.enterprise.groups.top_participants(10)
     end

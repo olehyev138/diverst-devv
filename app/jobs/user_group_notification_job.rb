@@ -5,7 +5,7 @@ class UserGroupNotificationJob < ActiveJob::Base
     User.includes(user_groups: :group).find_in_batches(batch_size: 200) do |users|
       users.each do |user|
         groups = []
-        user.user_groups.accepted_users.notifications_status(notifications_frequency).each do |user_group|
+        user.user_groups.accepted_users.active.notifications_status(notifications_frequency).each do |user_group|
           group = user_group.group
           frequency_range = get_frequency_range(user_group.notifications_frequency)
           groups << {
