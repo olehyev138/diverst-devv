@@ -233,11 +233,7 @@ class GroupsController < ApplicationController
         @user_group = @group.user_groups.find_by(user: current_user)
         @leaders = @group.group_leaders.visible
 
-        user_groups = @group.user_groups
-                        .active
-                        .accepted_users
-                        .order(created_at: :desc).limit(8)
-        @members = user_groups.map { |ug| ug.user }
+        @members = @group.active_members.order(created_at: :desc).limit(8)
 
         @top_user_group_participants = @group.user_groups.active.top_participants(10).includes(:user)
         @top_group_participants = @group.enterprise.groups.top_participants(10)
