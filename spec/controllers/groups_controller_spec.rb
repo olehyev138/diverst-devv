@@ -151,6 +151,53 @@ RSpec.describe GroupsController, type: :controller do
       it 'return success' do
         expect(response).to be_success
       end
+
+      describe 'members list' do
+        let(:group){ create(:group, enterprise: enterprise, pending_users: 'enabled') }
+
+        let(:active_user) { create :user, enterprise: group.enterprise }
+        let(:inactive_user) { create :user, enterprise: group.enterprise, active: false }
+        let(:pending_user) { create :user, enterprise: group.enterprise }
+
+        let!(:active_user_user_group) {
+          create :user_group,
+            user: active_user,
+            group: group,
+            accepted_member: true
+        }
+
+        let!(:inactive_user_user_group) {
+          create :user_group,
+            user: inactive_user,
+            group: group,
+            accepted_member: true
+        }
+
+        let!(:pending_user_user_group) {
+          create :user_group,
+            user: pending_user,
+            group: group,
+            accepted_member: false
+        }
+
+        def members
+          assigns[:members]
+        end
+
+        before { get_show }
+
+        it 'shows active users' do
+          expect(members).to include active_user
+        end
+
+        it 'does not show pending users' do
+          expect(members).to_not include pending_user
+        end
+
+        it 'does not show inactive users' do
+          expect(members).to_not include inactive_user
+        end
+      end
     end
 
     context 'without logged user' do

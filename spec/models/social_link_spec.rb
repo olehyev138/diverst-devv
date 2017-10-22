@@ -81,4 +81,117 @@ RSpec.describe SocialLink, type: :model do
             
         end
     end
+    
+    describe ".of_segments" do
+        it "returns 0 social links" do
+            user = create(:user)
+            social_link_1 = create(:social_link)
+            social_link_2 = create(:social_link)
+            segment = create(:segment)
+
+            social_link_1.segment_ids = [segment.id]
+            social_link_1.save
+            
+            social_link_2.segment_ids = [segment.id]
+            social_link_2.save
+            
+            expect(user.segments.length).to eq(0)
+            
+            expect(SocialLink.of_segments(user.segments.pluck(:id)).count).to eq(0)
+        end
+        
+        it "returns 1 social link" do
+            user = create(:user)
+            social_link = create(:social_link, :author => user)
+            segment = create(:segment)
+            
+            expect(social_link.segments.length).to eq(0)
+            expect(social_link.social_link_segments.length).to eq(0)
+            
+            social_link.segment_ids = [segment.id]
+            social_link.save
+            
+            expect(social_link.segments.length).to eq(1)
+            expect(social_link.social_link_segments.length).to eq(1)
+            
+            expect(user.segments.length).to eq(0)
+            
+            user.segments << segment
+            
+            expect(user.segments.length).to eq(1)
+            
+            expect(SocialLink.of_segments(user.segments.pluck(:id)).count).to eq(1)
+        end
+        
+        it "returns 1 social link when user is member of group" do
+            user = create(:user)
+            group = create(:group)
+            social_link = create(:social_link, :author => user, :group => group)
+            segment = create(:segment)
+            
+            expect(social_link.segments.length).to eq(0)
+            expect(social_link.social_link_segments.length).to eq(0)
+            
+            social_link.segment_ids = [segment.id]
+            social_link.save
+            
+            expect(social_link.segments.length).to eq(1)
+            expect(social_link.social_link_segments.length).to eq(1)
+            
+            expect(user.segments.length).to eq(0)
+            
+            user.segments << segment
+            
+            expect(user.segments.length).to eq(1)
+            
+            user.groups << group
+            
+            expect(user.groups.length).to eq(1)
+            
+            expect(SocialLink.where(group: group).of_segments(user.segments.pluck(:id)).count).to eq(1)
+        end
+        
+        it "returns 0 social link even when user is member of group" do
+            user = create(:user)
+            group = create(:group)
+            social_link = create(:social_link, :author => user, :group => group)
+            segment = create(:segment)
+            
+            expect(social_link.segments.length).to eq(0)
+            expect(social_link.social_link_segments.length).to eq(0)
+            
+            social_link.segment_ids = [segment.id]
+            social_link.save
+            
+            expect(social_link.segments.length).to eq(1)
+            expect(social_link.social_link_segments.length).to eq(1)
+            
+            expect(user.segments.length).to eq(0)
+            
+            user.groups << group
+            
+            expect(user.groups.length).to eq(1)
+            
+            expect(SocialLink.where(group: group).of_segments(user.segments.pluck(:id)).count).to eq(0)
+        end
+        
+        it "returns 2 social links" do
+            user = create(:user)
+            social_link_1 = create(:social_link, :author => user)
+            social_link_2 = create(:social_link, :author => user)
+            segment = create(:segment)
+
+            social_link_1.segment_ids = [segment.id]
+            social_link_1.save
+            
+            social_link_2.segment_ids = [segment.id]
+            social_link_2.save
+            
+            user.segments << segment
+            
+            expect(user.segments.length).to eq(1)
+            
+            expect(SocialLink.of_segments(user.segments.pluck(:id)).count).to eq(2)
+        end
+    end
 end
