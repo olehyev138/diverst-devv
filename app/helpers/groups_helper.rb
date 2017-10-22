@@ -7,5 +7,7 @@ module GroupsHelper
         link_to group.name, group
       end
     label += " (#{ group.total_weekly_points })" if group.enterprise.enable_rewards?
+
+    label
   end
 end
