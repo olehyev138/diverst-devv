@@ -8,7 +8,7 @@
   <% end %>
   <% if @group.description.present? %>
     <div class="content__header mtmedium">
-      <p style="flex: 1 1 0;"><%= @group.description %></p>
+      <p style="flex: 1 1 0;"><%= @group.description.gsub(/\n/, '<br/>').html_safe %></p>
       <div class="flex-row flex-row--middle">
         <div class="flex-row__cell">
         </div>
