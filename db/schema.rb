@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171012120425) do
+ActiveRecord::Schema.define(version: 20171019015108) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -331,8 +331,9 @@ ActiveRecord::Schema.define(version: 20171012120425) do
     t.string   "xml_sso_config_content_type",  limit: 191
     t.integer  "xml_sso_config_file_size",     limit: 4
     t.datetime "xml_sso_config_updated_at"
-    t.string   "iframe_calendar_token",        limit: 191
-    t.string   "time_zone",                    limit: 191
+    t.string   "iframe_calendar_token",        limit: 255
+    t.string   "time_zone",                    limit: 255
+    t.boolean  "enable_rewards",                             default: false
   end
 
   create_table "event_attendances", force: :cascade do |t|

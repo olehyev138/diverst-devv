@@ -7,7 +7,7 @@ class GroupLeaderNotificationsJob < ActiveJob::Base
     # check if group has pending members
     return if count < 1
     # get the leaders
-    leaders = group.leaders.joins(:group_leaders).where(:group_leaders => {:notifications_enabled => true})
+    leaders = group.leaders.joins(:group_leaders).where(:group_leaders => {:notifications_enabled => true}).distinct
     # send an email to group leaders with notifications enabled
     leaders.each do |leader|
       GroupLeaderNotificationMailer.notification(group, leader, count).deliver_now

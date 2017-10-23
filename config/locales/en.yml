@@ -21,6 +21,7 @@
 
 en:
   user_group:
+    hourly: Hourly
     real_time: Real Time
     daily: Daily
     weekly: Weekly
