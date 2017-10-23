@@ -407,7 +407,6 @@ GEM
       multi_json (~> 1.8)
     hashie (3.5.6)
     highline (1.7.8)
-    hirb (0.7.3)
     houston (2.2.4)
       commander (~> 4.4)
       json
@@ -794,7 +793,6 @@ DEPENDENCIES
   fog (~> 1.37)
   gcm (~> 0.1.1)
   guard-livereload (~> 2.4)
-  hirb
   houston (~> 2.2, >= 2.2.3)
   httparty (~> 0.13)
   icalendar (~> 2.3)

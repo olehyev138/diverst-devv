@@ -331,8 +331,8 @@ ActiveRecord::Schema.define(version: 20171019015108) do
     t.string   "xml_sso_config_content_type",  limit: 191
     t.integer  "xml_sso_config_file_size",     limit: 4
     t.datetime "xml_sso_config_updated_at"
-    t.string   "iframe_calendar_token",        limit: 255
-    t.string   "time_zone",                    limit: 255
+    t.string   "iframe_calendar_token",        limit: 191
+    t.string   "time_zone",                    limit: 191
     t.boolean  "enable_rewards",                             default: false
   end
 
