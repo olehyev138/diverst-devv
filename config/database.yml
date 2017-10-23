@@ -4,10 +4,12 @@ default: &default
   pool: <%= ENV["DB_POOL"] || ENV["MAX_THREADS"] || 20 %>
   encoding: utf8mb4
   collation: utf8mb4_bin
+  password: ilovebarca18
 
 development:
   <<: *default
   database: diverst_development
+
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
