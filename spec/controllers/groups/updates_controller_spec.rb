@@ -89,7 +89,7 @@ RSpec.describe Groups::UpdatesController, type: :controller do
                     patch :update, group_id: group.id, id: group_update.id, group_update: { created_at: "2017-01-01" }
                 end
 
-                it "updates the group_update", focus: true do
+                it "updates the group_update" do
                     #This is failing since introdusing timezones
                     group_update.reload
                     expect(group_update.created_at).to eq Date.parse("2017-01-01")
