@@ -21,7 +21,9 @@ RSpec.describe GroupsController, type: :controller do
       end
 
       #Derek
-      it 'correctly sets groups'
+      it 'correctly sets groups' do 
+        expect(group.enterprise).to eq enterprise 
+      end
     end
 
     context 'without logged user' do
@@ -94,15 +96,34 @@ RSpec.describe GroupsController, type: :controller do
 
   #Derek
   describe 'GET #calendar_data' do
+    def get_calendar_data(initiative_participating_groups_id_in, initiative_segments_segement_id_in, params={})
+      get :calendar_data, params, q: { initiative_participating_groups_group_id_in: initiative_participating_groups_id_in, initiative_segments_segement_id_in: initiative_segments_segement_id_in }, format: :json
+    end
+
+    let(:enterprise) { create :enterprise }
+    let(:initiative) { create :initiative }
+    let(:group) { create :group, enterprise_id: enterprise.id }
+    let(:event) { create :event, group_id: group.id }
+    let(:initiative_group) { create :initiative_group, group_id: group.id, initiative_id: initiative.id }
+    let(:initiative_segment) { create :initiative_segment, initiative_id: initiative.id }
+
     context 'with logged in user' do
-      it 'returns success'
-      it 'fetches correct events'
+      login_user   
+
+      before { get_calendar_data(initiative_group.id, initiative_segment.id, params={token: "uniquetoken1234"}) }
+
+      it 'fetches correct events' do 
+        expect(event.group_id).to eq group.id
+      end
     end
 
     context 'without logged in user' do
-      context 'with correct token code' do
-        it 'returns success'
-        it 'fetches correct events'
+      context 'with correct token code' do        
+        before { get_calendar_data(initiative_group.id, initiative_segment.id, params={ token: "uniquetoken1234" }) }
+
+        it 'fetches correct events' do 
+          expect(event.group_id).to eq group.id
+        end
       end
 
       context 'with incorrect token code' do
@@ -110,7 +131,9 @@ RSpec.describe GroupsController, type: :controller do
       end
 
       context 'without token code' do
-        it 'returns error'
+        it 'should raise Pundit::NotAuthorizedError' do 
+          expect{ get_calendar_data(initiative_group.id, initiative_segment.id) }.to raise_error(Pundit::NotAuthorizedError)
+        end
       end
     end
   end
