@@ -10,9 +10,13 @@ RSpec.describe BiasesController, type: :controller do
         describe "with logged in user" do
             login_user_from_let
             
-            it "gets the biases" do
+            it "return success" do
                 get :index
                 expect(response).to be_success
+            end
+
+            it "get the biases" do 
+                
             end
         end
     end
