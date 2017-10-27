@@ -100,7 +100,7 @@ RSpec.describe GroupsController, type: :controller do
       get :calendar_data, params, q: { initiative_participating_groups_group_id_in: initiative_participating_groups_id_in, initiative_segments_segement_id_in: initiative_segments_segement_id_in }, format: :json
     end
 
-    let(:enterprise) { create :enterprise }
+    
     let(:initiative) { create :initiative }
     let(:group) { create :group, enterprise_id: enterprise.id }
     let(:event) { create :event, group_id: group.id }
@@ -108,9 +108,10 @@ RSpec.describe GroupsController, type: :controller do
     let(:initiative_segment) { create :initiative_segment, initiative_id: initiative.id }
 
     context 'with logged in user' do
+      let!(:enterprise) { create :enterprise }  
       login_user   
 
-      before { get_calendar_data(initiative_group.id, initiative_segment.id, params={token: "uniquetoken1234"}) }
+      before { get_calendar_data(initiative_group.id, initiative_segment.id, params={token: 'uniquetoken1234'}) }
 
       it 'fetches correct events' do 
         expect(event.group_id).to eq group.id
@@ -118,8 +119,11 @@ RSpec.describe GroupsController, type: :controller do
     end
 
     context 'without logged in user' do
-      context 'with correct token code' do        
-        before { get_calendar_data(initiative_group.id, initiative_segment.id, params={ token: "uniquetoken1234" }) }
+      context 'with correct token code' do 
+        let!(:enterprise) { create :enterprise, iframe_calendar_token: 'uniquetoken1234' }      
+        let!(:user) { create :user, enterprise: enterprise }
+        
+        before { get_calendar_data(initiative_group.id, initiative_segment.id, params={token: 'uniquetoken1234'}) }
 
         it 'fetches correct events' do 
           expect(event.group_id).to eq group.id
@@ -127,13 +131,17 @@ RSpec.describe GroupsController, type: :controller do
       end
 
       context 'with incorrect token code' do
-        it 'returns error'
+        let!(:enterprise) { create :enterprise, iframe_calendar_token: 'uniquetoken1234' }
+        
+        it 'returns error' do 
+          expect{ get_calendar_data(initiative_group.id, initiative_segment.id, params={ token: 'incorrect token' }) }.to raise_error(Pundit::NotAuthorizedError)
+        end
       end
 
       context 'without token code' do
         it 'should raise Pundit::NotAuthorizedError' do 
-          expect{ get_calendar_data(initiative_group.id, initiative_segment.id) }.to raise_error(Pundit::NotAuthorizedError)
-        end
+        expect{ get_calendar_data(initiative_group.id, initiative_segment.id) }.to raise_error(Pundit::NotAuthorizedError)
+         end
       end
     end
   end
