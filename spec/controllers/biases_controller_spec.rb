@@ -3,31 +3,67 @@ require 'rails_helper'
 RSpec.describe BiasesController, type: :controller do
     let(:enterprise){ create(:enterprise) }
     let(:user){ create(:user, enterprise: enterprise) }
-    let(:group){ create(:group, enterprise: enterprise) }
+    let(:group){ create(:group, enterprise: enterprise, user: user) }
     let(:bias){ create(:bias) }
     
     describe "GET#index" do
-        describe "with logged in user" do
+        context "with logged in user" do
             login_user_from_let
+
+            before { get :index }
             
             it "return success" do
-                get :index
                 expect(response).to be_success
             end
 
             it "get the biases" do 
-                
+               2.times { FactoryGirl.create :bias, user: user }
+
+               expect(user.enterprise.biases.count).to eq 2
             end
+        end
+
+        context "without logged in user" do 
+           before { get :index }
+
+           it "redirects user to users/sign_in path " do 
+                expect(response).to redirect_to new_user_session_path
+           end
+
+          it "respond with http status" do 
+              expect(response).to have_http_status(302)
+          end
         end
     end
     
     describe "GET#new" do
-        describe "with logged in user" do
+        context "with logged in user" do
             login_user_from_let
             
-            it "gets the biases" do
-                get :new
+            before { get :new }
+
+            it "return success" do
                 expect(response).to be_success
+            end
+
+            it "returns a new biase object for new template" do 
+                expect(assigns[:bias]).to be_a_new(Bias)
+            end
+
+            it "renders new template" do 
+                expect(response).to render_template :new
+            end
+        end
+
+        context "without logged in user" do 
+            before { get :new }
+
+            it "redirects user to users/sign_in path " do 
+                expect(response).to redirect_to new_user_session_path
+            end
+
+            it "respond with http status" do 
+              expect(response).to have_http_status(302)
             end
         end
     end
@@ -58,6 +94,64 @@ RSpec.describe BiasesController, type: :controller do
                     expect(flash[:notice])
                 end
             end
+
+            # this test fails because there's no validation for the Bias.rb
+            xcontext "with incorrect params" do 
+                invalid_params = { description: nil, severity: 1 }
+
+                before { post :create, bias: invalid_params }
+
+                it "respond with flash alert" do 
+                    expect(flash[:alert]).to eq "Bias was not reported. Please fix the errors"
+                end
+
+                it "renders new template" do 
+                    expect(response).to render_template :new
+                end
+            end
+        end
+
+        context "without logged in user" do 
+            let(:bias_params) { FactoryGirl.attributes_for(:bias) }
+
+            before { post :create, bias: bias_params }
+
+            it "redirect user to users/sign_in path " do 
+                expect(response).to redirect_to new_user_session_path
+            end
+
+            it "respond with http status" do 
+              expect(response).to have_http_status(302)
+            end
         end
     end
+
+    # biases_controller has @group nil causing this test to fail
+    xdescribe "PATCH/PUT #update" do 
+        context "with logged in user" do 
+            login_user_from_let
+
+            context "successfully update Bias report" do 
+                before do 
+                    patch :update, id: bias.id, bias: { description: "updated version of description" } 
+                end
+
+                it "should return updated description" do 
+                    expect(bias.description).to eq "updated version of description" 
+                end
+
+                it "displays flash notice" do 
+                    expect(flash[:notice]).to eq "Bias report was updated"
+                end
+
+                it "redirects to action: :index" do 
+                    expect(response).to redirect_to(action: :index)
+                end
+
+                it "responds with status code" do 
+                    expect(response).to have_http_status(200)
+                end
+            end
+        end
+    end   
 end
