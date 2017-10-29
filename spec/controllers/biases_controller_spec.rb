@@ -127,6 +127,7 @@ RSpec.describe BiasesController, type: :controller do
     end
 
     # biases_controller has @group nil causing this test to fail
+    # the protected method set_bias requires @bias to be set from @group.biases.find(params[:id])
     xdescribe "PATCH/PUT #update" do 
         context "with logged in user" do 
             login_user_from_let
@@ -148,10 +149,60 @@ RSpec.describe BiasesController, type: :controller do
                     expect(response).to redirect_to(action: :index)
                 end
 
-                it "responds with status code" do 
+                it "responds with status code of 200" do 
                     expect(response).to have_http_status(200)
                 end
             end
+
+            context "Bias report not updated" do 
+                before do 
+                    patch :update, id: bias.id, bias: { description: 4 }
+                end
+
+                it "displays a flash alert" do 
+                    expect(flash[:alert]).to eq "Bias report was not updated. Please fix the error"
+                end
+
+                it "render edit template" do 
+                    expect(response).to render_template :edit
+                end
+
+                it "responds with status code of 44(unprocessable identity" do 
+                    expect(response).to have_http_status(422)
+                end
+            end
         end
-    end   
+
+        context "without logged in user" do 
+            let(:bias_params) { FactoryGirl.attributes_for(:bias) }
+
+            before do 
+                patch :update, id: bias.id, bias: { description: "updated version of description" } 
+            end
+
+            it "redirect user to users/sign_in path " do 
+                expect(response).to redirect_to new_user_session_path
+            end
+
+            it "respond with http status" do 
+              expect(response).to have_http_status(302)
+            end
+        end
+    end 
+
+    # biases_controller has @group nil causing this test to fail
+    # the protected method set_bias requires @bias to be set from @group.biases.find(params[:id])
+    xdescribe "DELETE #destroy" do 
+        context "with user logged in" do 
+            login_user_from_let
+
+            it "deletes bias successfully" do 
+                expect{ delete :destroy, id: bias.id }.to change(Bias, :count).by(-1)
+            end
+
+            it "should redirect to index action after bias is successfully deleted" do 
+                expect{ delete :destroy, id: bias.id }.to redirect_to(action: :index)
+            end
+        end
+    end  
 end
