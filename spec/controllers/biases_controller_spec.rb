@@ -4,7 +4,7 @@ RSpec.describe BiasesController, type: :controller do
     let(:enterprise){ create(:enterprise) }
     let(:user){ create(:user, enterprise: enterprise) }
     let(:group){ create(:group, enterprise: enterprise, user: user) }
-    let(:bias){ create(:bias) }
+    let!(:bias){ create(:bias, user: user) }
     
     describe "GET#index" do
         context "with logged in user" do
@@ -19,7 +19,7 @@ RSpec.describe BiasesController, type: :controller do
             it "get the biases" do 
                2.times { FactoryGirl.create :bias, user: user }
 
-               expect(user.enterprise.biases.count).to eq 2
+               expect(user.enterprise.biases.count).to eq 3
             end
         end
 
@@ -95,8 +95,7 @@ RSpec.describe BiasesController, type: :controller do
                 end
             end
 
-            # this test fails because there's no validation for the Bias.rb
-            xcontext "with incorrect params" do 
+            context "with incorrect params" do 
                 invalid_params = { description: nil, severity: 1 }
 
                 before { post :create, bias: invalid_params }
@@ -128,7 +127,7 @@ RSpec.describe BiasesController, type: :controller do
 
     # biases_controller has @group nil causing this test to fail
     # the protected method set_bias requires @bias to be set from @group.biases.find(params[:id])
-    xdescribe "PATCH/PUT #update" do 
+    describe "PATCH/PUT #update" do 
         context "with logged in user" do 
             login_user_from_let
 
@@ -151,26 +150,26 @@ RSpec.describe BiasesController, type: :controller do
                 end
 
                 it "responds with status code of 200" do 
-                    expect(response).to have_http_status(200)
+                    expect(response).to have_http_status(302)
                 end
             end
 
             context "Bias report not updated" do 
                 before do 
-                    patch :update, id: bias.id, bias: { description: 4 }
+                    patch :update, id: bias.id, bias: { description: nil }
                     bias.reload
                 end
 
                 it "displays a flash alert" do 
-                    expect(flash[:alert]).to eq "Bias report was not updated. Please fix the error"
+                    expect(flash[:alert]).to eq "Bias report was not updated. Please fix the errors"
                 end
 
                 it "render edit template" do 
                     expect(response).to render_template :edit
                 end
 
-                it "responds with status code of 44(unprocessable identity" do 
-                    expect(response).to have_http_status(422)
+                it "responds with status code of 200 for a successful render" do 
+                    expect(response).to have_http_status(200)
                 end
             end
         end
@@ -195,7 +194,7 @@ RSpec.describe BiasesController, type: :controller do
 
     # biases_controller has @group nil causing this test to fail
     # the protected method set_bias requires @bias to be set from @group.biases.find(params[:id])
-    xdescribe "DELETE #destroy" do 
+    describe "DELETE #destroy" do 
         context "with user logged in" do 
             login_user_from_let
 
@@ -204,7 +203,9 @@ RSpec.describe BiasesController, type: :controller do
             end
 
             it "should redirect to index action after bias is successfully deleted" do 
-                expect{ delete :destroy, id: bias.id }.to redirect_to(action: :index)
+                delete :destroy, id: bias.id
+                
+                expect(response).to redirect_to action: :index
             end
         end
 
