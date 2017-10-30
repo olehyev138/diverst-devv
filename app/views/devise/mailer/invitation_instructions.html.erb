@@ -14,7 +14,7 @@
 <% if @resource.enterprise.privacy_statement.present? %>
   <%= simple_format @resource.enterprise.privacy_statement %>
 <% else %>
-  Diverst regards your data as highly confidential. Only authorized administrators can view this data.. Your data will never be shared with anyone or anything other than these select individuals.
+  <%= render 'users/default_privacy_statement' %>
 <% end %>
 </p>
 

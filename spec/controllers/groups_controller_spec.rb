@@ -19,6 +19,9 @@ RSpec.describe GroupsController, type: :controller do
       it 'return success' do
         expect(response).to be_success
       end
+
+      #Derek
+      it 'correctly sets groups'
     end
 
     context 'without logged user' do
@@ -88,7 +91,30 @@ RSpec.describe GroupsController, type: :controller do
       end
     end
   end
-  
+
+  #Derek
+  describe 'GET #calendar_data' do
+    context 'with logged in user' do
+      it 'returns success'
+      it 'fetches correct events'
+    end
+
+    context 'without logged in user' do
+      context 'with correct token code' do
+        it 'returns success'
+        it 'fetches correct events'
+      end
+
+      context 'with incorrect token code' do
+        it 'returns error'
+      end
+
+      context 'without token code' do
+        it 'returns error'
+      end
+    end
+  end
+
   # MISSING TEMPLATE
   # describe 'GET #calendar' do
   #   def get_calendar_data
@@ -197,6 +223,10 @@ RSpec.describe GroupsController, type: :controller do
         it 'does not show inactive users' do
           expect(members).to_not include inactive_user
         end
+      end
+
+      describe 'group description' do
+        it 'allows line breaks'
       end
     end
 
