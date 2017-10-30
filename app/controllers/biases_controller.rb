@@ -60,7 +60,6 @@ class BiasesController < ApplicationController
   end
 
   def set_bias
-    @group = current_user.enterprise.groups.find(params[:group_id])
     @bias = @group.biases.find(params[:id])
   end
 
