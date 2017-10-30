@@ -135,6 +135,7 @@ RSpec.describe BiasesController, type: :controller do
             context "successfully update Bias report" do 
                 before do 
                     patch :update, id: bias.id, bias: { description: "updated version of description" } 
+                    bias.reload
                 end
 
                 it "should return updated description" do 
@@ -157,6 +158,7 @@ RSpec.describe BiasesController, type: :controller do
             context "Bias report not updated" do 
                 before do 
                     patch :update, id: bias.id, bias: { description: 4 }
+                    bias.reload
                 end
 
                 it "displays a flash alert" do 
@@ -178,6 +180,7 @@ RSpec.describe BiasesController, type: :controller do
 
             before do 
                 patch :update, id: bias.id, bias: { description: "updated version of description" } 
+                bias.reload
             end
 
             it "redirect user to users/sign_in path " do 
@@ -202,6 +205,19 @@ RSpec.describe BiasesController, type: :controller do
 
             it "should redirect to index action after bias is successfully deleted" do 
                 expect{ delete :destroy, id: bias.id }.to redirect_to(action: :index)
+            end
+        end
+
+        context "without logged in user" do 
+
+            before { delete :destroy, id: bias.id }
+
+            it "redirect user to users/sign_in path " do 
+                expect(response).to redirect_to new_user_session_path
+            end
+
+            it "respond with http status" do 
+              expect(response).to have_http_status(302)
             end
         end
     end  
