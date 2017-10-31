@@ -339,6 +339,7 @@ Rails.application.routes.draw do
 
       get 'rewards', to: 'dashboard#rewards'
       get 'bias', to: 'dashboard#bias'
+      get 'privacy_statement', to: 'dashboard#privacy_statement'
       get 'preferences/edit', to: 'user_groups#edit'
       patch 'preferences/update', to: 'user_groups#update'
 
