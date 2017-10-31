@@ -125,8 +125,7 @@ RSpec.describe BiasesController, type: :controller do
         end
     end
 
-    # biases_controller has @group nil causing this test to fail
-    # the protected method set_bias requires @bias to be set from @group.biases.find(params[:id])
+
     describe "PATCH/PUT #update" do 
         context "with logged in user" do 
             login_user_from_let
@@ -192,8 +191,6 @@ RSpec.describe BiasesController, type: :controller do
         end
     end 
 
-    # biases_controller has @group nil causing this test to fail
-    # the protected method set_bias requires @bias to be set from @group.biases.find(params[:id])
     describe "DELETE #destroy" do 
         context "with user logged in" do 
             login_user_from_let
@@ -204,7 +201,7 @@ RSpec.describe BiasesController, type: :controller do
 
             it "should redirect to index action after bias is successfully deleted" do 
                 delete :destroy, id: bias.id
-                
+
                 expect(response).to redirect_to action: :index
             end
         end
