@@ -63,6 +63,12 @@
                     </small>
                   </p>
                 </div>
+                <% if current_user === comment.author %>
+                  <div class="flex-row__cell link-group">
+                    <%= link_to "Edit", edit_group_news_link_news_link_comment_path(:group_id => @group.id, :news_link_id => @news_link.id, :id => comment.id), method: :get %>
+                    <%= link_to "Delete", group_news_link_news_link_comment_path(:group_id => @group.id, :news_link_id => @news_link.id, :id => comment.id), method: :delete %>
+                  </div>
+                <% end %>
               </div>
             </div>
           </div>

@@ -133,6 +133,7 @@ Rails.application.routes.draw do
       end
       resources :group_messages, path: 'messages' do
         post 'create_comment'
+        resources :group_message_comment
       end
       resources :leaders, only: [:index, :new, :create]
       resources :social_links
@@ -168,9 +169,10 @@ Rails.application.routes.draw do
 
       resources :news_links, except: [:show] do
         member do
-          get 'comments'
-          post 'create_comment'
+          get   'comments'
+          post  'create_comment'
         end
+        resources :news_link_comment
       end
       resources :posts, :only => [:index] do
         collection do
