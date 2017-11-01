@@ -11,6 +11,11 @@ RSpec.describe BadgesController, type: :controller do
           post :new
           expect(response).to be_success
         end
+
+        it "returns a new badge object" do 
+          post :new
+          expect(assigns[:badge]).to be_a_new(Badge)
+        end
     end
   end
 
@@ -63,6 +68,14 @@ RSpec.describe BadgesController, type: :controller do
 
         it "returns success" do
           expect(response).to be_success
+        end
+
+        it "render edit template" do 
+          expect(response).to render_template :edit    
+        end
+
+        it "should return valid @badge object for edit form" do 
+          expect(assigns[:badge]).to be_valid
         end
       end
       
