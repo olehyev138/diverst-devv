@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe DateField, type: :model do
+RSpec.describe DateField, type: :model, :skip => true do
   context "when getting data" do
     let!(:field_one) { DateField.create(attributes_for(:date_field)) }
     let!(:field_two) { DateField.create(attributes_for(:date_field)) }
