@@ -13,7 +13,8 @@ class UserGroupNotificationJob < ActiveJob::Base
             events_count: get_events_count(user, group, frequency_range),
             messages_count: get_messages_count(user, group, frequency_range),
             news_count: get_news_count(user, group, frequency_range),
-            social_links_count: get_social_count(user, group, frequency_range)
+            social_links_count: get_social_count(user, group, frequency_range),
+            participating_events_count: get_participating_events_count(user, group, frequency_range)
           }
         end
         if have_updates?(groups)
@@ -60,8 +61,20 @@ class UserGroupNotificationJob < ActiveJob::Base
     .of_segments(user_segment_ids(user))
     .count
   end
+  
+  def get_participating_events_count(user, group, frequency_range)
+    Initiative.joins(:initiative_participating_groups).where(updated_at: frequency_range).where(initiative_participating_groups: {group: group})
+    .of_segments(user_segment_ids(user))
+    .count
+  end
 
   def have_updates?(groups)
-    groups.any?{ |g| g[:events_count] > 0 || g[:messages_count] > 0 || g[:news_count] > 0 || g[:social_links_count] > 0}
+    groups.any?{ |g| 
+      g[:events_count] > 0 ||
+      g[:messages_count] > 0 || 
+      g[:news_count] > 0 || 
+      g[:social_links_count] > 0 ||
+      g[:participating_events_count] > 0
+    }
   end
 end
