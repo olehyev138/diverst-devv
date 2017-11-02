@@ -1,14 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe BadgesController, type: :controller do
+  
+   include ApplicationHelper
+
   let(:enterprise){ create(:enterprise) }
   let(:user){ create(:user, enterprise: enterprise) }
   
-  def c_t(type)
-    @custom_text ||= current_user.enterprise.custom_text rescue CustomText.new
-    @custom_text.send("#{type}_text")
-  end
-
   describe "POST#new" do
     describe "with logged in user" do
       login_user_from_let
@@ -195,7 +193,7 @@ RSpec.describe BadgesController, type: :controller do
 
   describe "DELETE#destroy" do
     let!(:badge){ create(:badge, enterprise: enterprise) }
-    
+
     describe "with logged in user" do
       login_user_from_let
 
