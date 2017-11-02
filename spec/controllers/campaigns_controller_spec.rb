@@ -56,8 +56,8 @@ RSpec.describe CampaignsController, type: :controller do
                 expect(response).to render_template :new 
             end
 
-            it "campaign duration should be 7 days" do 
-                expect(assigns[:campaign].end.day.days).to eq 7.days
+            it "campaign duration should be 7 days from compaign start date" do 
+                expect(assigns[:campaign].end.day - assigns[:campaign].start.day).to eq 7
             end
         end
 
@@ -96,8 +96,9 @@ RSpec.describe CampaignsController, type: :controller do
                     }.to change(Campaign,:count).by(1)
                 end
                 
-                it "flashes" do
-                    expect(flash[:notice])
+                it "it returns a notice flash message" do
+                    post :create, campaign: campaign_params
+                    expect(flash[:notice]).to eq "Your campaign was created"
                 end
             end
             
@@ -151,10 +152,23 @@ RSpec.describe CampaignsController, type: :controller do
                     expect(assigns[:campaign]).to eq campaign
                 end
 
-                it "returns a list of questions" do 
-                    2.times { create :questions, campaign: campaign }
+                it "returns a list of questions that belong to campaign" do 
+                    2.times { create :question, campaign: campaign }
 
-                    expect(assigns[:questions]).to eq Question.all
+                    expect(assigns[:questions]).to eq campaign.questions
+                end
+
+                it "returns campaign question in desc order by created_at" do 
+                    question1 = FactoryGirl.create :question, campaign: campaign 
+                    question2 = FactoryGirl.create :question, campaign: campaign
+
+                    expect(assigns[:questions]).to eq [question1, question2]
+                end
+
+                it "returns only 10 questions per page" do 
+                    12.times { create :question, campaign: campaign }
+
+                    expect(assigns[:questions].count).to eq 10
                 end
             end
             
@@ -189,6 +203,11 @@ RSpec.describe CampaignsController, type: :controller do
                 get :edit, id: campaign.id
                 expect(response).to be_success
             end
+
+            it "renders edit template" do 
+                get :edit, id: campaign.id
+                expect(response).to render_template :edit 
+            end
             
             it "doesn't get the campaign" do
                 bypass_rescue
@@ -199,25 +218,78 @@ RSpec.describe CampaignsController, type: :controller do
     
     describe "PATCH#update" do
         describe "with logged in user" do
-            login_user_from_let
-            
-            it "updates the campaign" do
-                patch :update, id: campaign.id,  campaign: attributes_for(:campaign, title: "updated")
-                campaign.reload
-                expect(campaign.title).to eq("updated")
+            context "successfully" do 
+                login_user_from_let
+              
+                before { patch :update, id: campaign.id,  campaign: attributes_for(:campaign, title: "updated") }
+
+                it "updates the campaign" do
+                    campaign.reload
+                    expect(campaign.title).to eq("updated")
+                end
+
+                it "returns a flash notice message" do 
+                  expect(flash[:notice]).to eq "Your campaign was updated"
+                end
+
+                it "redirects to index action" do 
+                    expect(response).to redirect_to action: :index
+                end
             end
+
+            context "unsuccessfully" do 
+                login_user_from_let 
+
+                before { patch :update, id: campaign.id, campaign: attributes_for(:campaign, title: nil) }
+
+                it "renders an alert flash message" do 
+                    expect(flash[:alert]).to eq "Your campaign was not updated. Please fix the errors"
+                end
+
+                it "renders edit template" do 
+                    expect(response).to render_template :edit
+                end
+            end
+        end
+
+        describe "without user logged in" do 
+            before { patch :update, id: campaign.id,  campaign: attributes_for(:campaign, title: "updated") }    
+
+            it "redirect user to users/sign_in path " do 
+                expect(response).to redirect_to new_user_session_path
+            end
+
+            it 'returns status code of 302' do
+                expect(response).to have_http_status(302)
+            end  
         end
     end
 
     describe "DELETE#destroy" do
-        describe "with logged in user" do
+        context "with logged in user" do
 
             login_user_from_let
             
-            it "destroy the campaign" do
+            it "destroys campaign" do 
+                expect{ delete :destroy, id: campaign.id }.to change(Campaign, :count).by(-1)
+            end
+
+            it "redirects to index" do
                 delete :destroy, id: campaign.id
                 expect(response).to redirect_to action: :index
             end
+        end
+
+        context "without user logged in" do 
+            before { delete :destroy, id: campaign.id }
+            
+           it "redirect user to users/sign_in path " do 
+                expect(response).to redirect_to new_user_session_path
+            end
+
+            it 'returns status code of 302' do
+                expect(response).to have_http_status(302)
+            end 
         end
     end
     
@@ -227,16 +299,32 @@ RSpec.describe CampaignsController, type: :controller do
             
             it "gets the contributions_per_erg with json" do
                 get :contributions_per_erg, id: campaign.id, format: :json
+
+                expect(response.content_type).to eq "application/json"
             end
             
             it "gets the contributions_per_erg with csv" do
                 get :contributions_per_erg, id: campaign.id, format: :csv
+
+                expect(response.content_type).to eq "text/csv"
             end
             
             it "doesn't get the contributions_per_erg" do
                 bypass_rescue
                 expect{ get :contributions_per_erg, id: -1}.to raise_error ActiveRecord::RecordNotFound
             end
+        end
+
+        context "without user logged in" do 
+            before { delete :destroy, id: campaign.id }
+            
+           it "redirect user to users/sign_in path " do 
+                expect(response).to redirect_to new_user_session_path
+            end
+
+            it 'returns status code of 302' do
+                expect(response).to have_http_status(302)
+            end 
         end
     end
     
@@ -246,15 +334,31 @@ RSpec.describe CampaignsController, type: :controller do
             
             it "gets the top_performers with json" do
                 get :top_performers, id: campaign.id, format: :json
+
+                expect(response.content_type).to eq "application/json"
             end
             
             it "gets the top_performers with csv" do
                 get :top_performers, id: campaign.id, format: :csv
+
+                expect(response.content_type).to eq "text/csv"
             end
             
             it "doesn't get the top_performers" do
                 bypass_rescue
                 expect{ get :top_performers, id: -1}.to raise_error ActiveRecord::RecordNotFound
+            end
+        end
+
+        context "without user logged in" do
+           before { get :top_performers, id: campaign.id, format: :json } 
+
+            it "redirect user to users/sign_in path " do 
+                expect(response).to redirect_to new_user_session_path
+            end
+
+            it 'returns status code of 302' do
+                expect(response).to have_http_status(302)
             end
         end
     end
