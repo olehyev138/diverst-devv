@@ -90,8 +90,9 @@ RSpec.describe BiasesController, type: :controller do
                     }.to change(Bias,:count).by(1)
                 end
                 
-                it "flashes notice" do
-                    expect(flash[:notice])
+                it "respond with flash notice message" do
+                    post :create, bias: bias_params
+                    expect(flash[:notice]).to eq "Bias was reported"
                 end
             end
 

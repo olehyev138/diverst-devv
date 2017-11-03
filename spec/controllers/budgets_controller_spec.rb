@@ -86,8 +86,12 @@ RSpec.describe BudgetsController, type: :controller do
     context 'without logged user' do
       before { get_edit_annual_budget }
 
-      it 'return error' do
-        expect(response).to_not be_success
+      it "redirects user to users/sign_in path " do 
+        expect(response).to redirect_to new_user_session_path
+      end
+
+      it "respond with http status" do 
+        expect(response).to have_http_status(302)
       end
     end
   end

@@ -1,5 +1,6 @@
 class CustomText < ActiveRecord::Base
   belongs_to :enterprise
+  # validates :erg, presence: true
 
   def self.keys
     @keys ||= I18n.t(".")[:custom_text].keys

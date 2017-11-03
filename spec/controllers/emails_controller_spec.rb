@@ -4,18 +4,22 @@ RSpec.describe EmailsController, type: :controller do
     let(:enterprise){ create(:enterprise) }
     let(:user){ create(:user, enterprise: enterprise) }
     
-    describe "GET#index" do
-        describe "with logged in user" do
-            let(:answer){ create(:answer, author_id: user.id, question: question) }
-            login_user_from_let
-            
-            it "gets the email" do
-                get :index
-                expect(response).to be_success
-            end
+    describe "GET#index" do 
+        context "with logged in user" do 
+          login_user_from_let
+
+          before { get :index }
+
+          it "render index template" do 
+              expect(response).to eq render_template :index
+          end
+
+          it "return enterprise of current user" do 
+              expect(assigns[:enterprise]).to user.enterpise
+          end
         end
     end
-    
+     
     describe "PATCH#update" do
         let(:email){ create(:email, enterprise: enterprise) }
         
