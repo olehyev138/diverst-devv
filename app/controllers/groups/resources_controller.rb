@@ -2,14 +2,18 @@ class Groups::ResourcesController < ApplicationController
   include IsResources
 
   before_action :authenticate_user!
-
+  before_filter :prepend_view_paths, :only => [:index]
+  
   layout 'erg'
   
   def index
     if policy(@group).erg_leader_permissions? or @group.active_members.include? current_user
-      super
+      @group_resources = @container.resources
+      @national_resources = @container.enterprise.resources.where(:resource_type => "national")
+      render '/index'
     else
-        @resources = []
+        @group_resources = []
+        @national_resources = @container.enterprise.resources.where(:resource_type => "national")
         render '/index'
     end
   end
@@ -22,5 +26,9 @@ class Groups::ResourcesController < ApplicationController
 
   def set_container_path
     @container_path = [@group]
+  end
+  
+  def prepend_view_paths
+    prepend_view_path 'app/views/groups/resources'
   end
 end

@@ -25,7 +25,6 @@ module IsResources
 
     def create
         @resource = @container.resources.new(resource_params)
-
         if @resource.save
             redirect_to action: :index
         else
@@ -60,7 +59,9 @@ module IsResources
             .require(:resource)
             .permit(
                 :title,
-                :file
+                :file,
+                :resource_type,
+                :url
             )
     end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171019015108) do
+ActiveRecord::Schema.define(version: 20171102034003) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -821,6 +821,8 @@ ActiveRecord::Schema.define(version: 20171019015108) do
     t.integer  "file_file_size",    limit: 4
     t.datetime "file_updated_at"
     t.integer  "owner_id",          limit: 4
+    t.string   "resource_type",     limit: 191
+    t.string   "url",               limit: 191
   end
 
   add_index "resources", ["container_type", "container_id"], name: "index_resources_on_container_type_and_container_id", using: :btree

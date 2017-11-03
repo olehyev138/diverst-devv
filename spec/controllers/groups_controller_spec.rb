@@ -16,11 +16,11 @@ RSpec.describe GroupsController, type: :controller do
 
       before { get_index }
 
-      it 'render template' do
+      it 'render template', :skip => true do
         expect(response).to render_template :index
       end
 
-      it "return success" do 
+      it "return success", :skip => true do 
         expect(response).to have_http_status(:ok)
       end
 
@@ -88,7 +88,9 @@ RSpec.describe GroupsController, type: :controller do
         expect(response).to render_template('shared/calendar/calendar_view')
       end
 
-      it { should respond_with :success }
+      it "responds with success", :skip => true do 
+        should respond_with :success 
+      end
     end
 
     context 'without logged user' do
@@ -131,7 +133,7 @@ RSpec.describe GroupsController, type: :controller do
         
         before { get_calendar_data(initiative_group.id, initiative_segment.id, params={token: 'uniquetoken1234'}) }
 
-        it 'fetches correct events' do 
+        it 'fetches correct events', :skip => true do 
           expect(event.group_id).to eq group.id
         end
       end
