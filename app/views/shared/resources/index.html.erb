@@ -1,6 +1,13 @@
 <div class="content__header">
-  <h1>Resources</h1>
-  <%= link_to "+ Add resource", polymorphic_path(@container_path + [:resource], action: "new"), class: "btn btn--primary" if policy(Resource).new? %>
+  <h1><%= @container.name %></h1>
+  <div class="flex-row flex-row--middle">
+    <div class="flex-row__cell">
+      <%= link_to "Edit Folder", polymorphic_path(@container_path, action: "edit"), class: "btn btn--primary" if policy(@container).edit? %>
+    </div>
+    <div class="flex-row__cell">
+      <%= link_to "+ Add resource", polymorphic_path(@container_path + [:resource], action: "new"), class: "btn btn--primary" if policy(Resource).new? %>
+    </div>
+  </div>
 </div>
 
 <%= render 'shared/resources/table' %>
