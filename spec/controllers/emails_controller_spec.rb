@@ -39,7 +39,7 @@ RSpec.describe EmailsController, type: :controller do
     end
      
     describe "PATCH#update" do
-        let(:email){ create(:email, enterprise: enterprise) }
+        let(:email) { create(:email, enterprise: enterprise) }
         
         describe "with logged in user" do
             login_user_from_let
