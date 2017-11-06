@@ -3,18 +3,38 @@ require 'rails_helper'
 RSpec.describe CampaignsController, type: :controller do
     let(:enterprise){ create(:enterprise) }
     let(:user){ create(:user, enterprise: enterprise) }
-    let(:campaign){ create(:campaign, enterprise: enterprise) }
+    let!(:campaign){ create(:campaign, enterprise: enterprise) }
     
     
     describe 'GET#index' do
         context 'with logged user' do
             login_user_from_let
             
-            before { get :index}
+            before { get :index }
             
             it 'return success' do
                 expect(response).to be_success
             end
+
+            it "returns a list of campaigns" do 
+                expect(assigns[:campaigns].count).to eq 1
+            end
+
+            it "renders index template" do 
+                expect(response).to render_template :index
+            end
+        end
+
+        context 'without logged user' do
+          before { get :index }
+
+          it "redirect user to users/sign_in path " do 
+            expect(response).to redirect_to new_user_session_path
+          end
+
+          it 'returns status code of 302' do
+            expect(response).to have_http_status(302)
+          end
         end
     end
     
@@ -27,20 +47,44 @@ RSpec.describe CampaignsController, type: :controller do
             it 'return success' do
                 expect(response).to be_success
             end
+
+            it "returns a new campaign object" do 
+                expect(assigns[:campaign]).to be_a_new(Campaign)
+            end
+
+            it "render new template" do 
+                expect(response).to render_template :new 
+            end
+
+            it "campaign duration should be 7 days", :skip => true do 
+                expect(assigns[:campaign].end.day.days).to eq 7.days
+            end
+        end
+
+        context "without logged user" do 
+            before { get :new }
+
+            it "redirect user to users/sign_in path " do 
+                expect(response).to redirect_to new_user_session_path
+            end
+
+            it 'returns status code of 302' do
+                expect(response).to have_http_status(302)
+            end
         end
     end
     
     describe 'POST#create' do
         context 'with logged user' do
             login_user_from_let
+
+            let(:campaign_params) { FactoryGirl.attributes_for(:campaign) }
+
+            before :each do
+                campaign_params.merge!({group_ids: [create(:group).id]})
+            end
             
-            context 'with correct params' do
-                let(:campaign_params) { FactoryGirl.attributes_for(:campaign) }
-                
-                before :each do
-                    campaign_params.merge!({group_ids: [create(:group).id]})
-                end
-                
+            context 'with correct params' do                
                 it 'redirects to correct action' do
                     post :create, campaign: campaign_params
                     expect(response).to redirect_to action: :index
@@ -62,24 +106,79 @@ RSpec.describe CampaignsController, type: :controller do
                     bypass_rescue
                     expect{ post :create, campaign: {}}.to raise_error ActionController::ParameterMissing
                 end
+
+                it "renders new template" do 
+                    post :create, campaign: { title: nil }
+
+                    expect(response).to render_template :new
+                end
+
+                it "renders a flash alert" do 
+                    post :create, campaign: { title: nil }
+
+                    expect(flash[:alert]).to eq "Your campaign was not created. Please fix the errors"
+                end
+            end
+        end
+
+        context "without logged user" do 
+            let(:campaign_params) { FactoryGirl.attributes_for(:campaign) }
+
+            before {  post :create, campaign: campaign_params }
+
+            it "redirect user to users/sign_in path " do 
+                expect(response).to redirect_to new_user_session_path
+            end
+
+            it 'returns status code of 302' do
+                expect(response).to have_http_status(302)
             end
         end
     end
     
     describe "GET#show" do
-        describe "with logged in user" do
+        context "with logged in user" do
             login_user_from_let
             
-            it "gets the campaign" do
-                get :show, id: campaign.id
-                expect(response).to be_success
+            context "successfully" do 
+                before { get :show, id: campaign.id }
+
+                it "returns success" do                    
+                    expect(response).to be_success
+                end                
+
+                it "get the campaign" do 
+                    expect(assigns[:campaign]).to eq campaign
+                end
+
+                it "returns a list of questions", :skip => true do 
+                    2.times { create :questions, campaign: campaign }
+
+                    expect(assigns[:questions]).to eq Question.all
+                end
             end
             
-            it "doesn't get the campaign" do
-                bypass_rescue
-                expect{ get :show, id: -1}.to raise_error ActiveRecord::RecordNotFound
+
+            context "unsuccessfully" do             
+                it "doesn't get the campaign" do
+                    bypass_rescue
+                    expect{ get :show, id: -1}.to raise_error ActiveRecord::RecordNotFound
+                end
             end
         end
+
+        context "without logged user" do 
+            before { get :show, id: campaign.id }
+
+            it "redirect user to users/sign_in path " do 
+                expect(response).to redirect_to new_user_session_path
+            end
+
+            it 'returns status code of 302' do
+                expect(response).to have_http_status(302)
+            end
+        end
+
     end
     
     describe "GET#edit" do
