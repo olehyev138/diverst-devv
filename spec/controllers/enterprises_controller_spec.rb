@@ -293,6 +293,10 @@ RSpec.describe EnterprisesController, type: :controller do
                 it "returns a valid enterprise object" do 
                     expect(assigns[:enterprise]).to be_valid
                 end
+
+                it "returns a new theme object from set_theme" do 
+                    expect(assigns[:theme]).to be_a_new(Theme)
+                end
             end
         end
 
@@ -344,8 +348,12 @@ RSpec.describe EnterprisesController, type: :controller do
             login_user_from_let
             
             context "with valid attributes" do
-                before { patch :update_branding, id: enterprise.id, enterprise: attributes_for(:enterprise, theme: { logo_file_name: "updated test" }) }
+                before { patch :update_branding, id: enterprise.id, enterprise: attributes_for(:enterprise, theme: { primary_color: "#ff0000" }) }
                 
+                it "returns a valid theme object from set_theme" do 
+                    expect(assigns[:theme]).to be_a_new(Theme)
+                end
+
                 it "redirect_to edit_branding" do
                     expect(response).to redirect_to action: :edit_branding
                 end
@@ -354,15 +362,39 @@ RSpec.describe EnterprisesController, type: :controller do
                     expect(flash[:notice]).to eq "Enterprise branding was updated"
                 end
 
-                xit "update was successful" do 
+                it "update was successful" do 
                     enterprise.reload 
-                    expect(assigns[:enterprise].theme.logo_file_name).to eq "updated test"
+                    expect(enterprise.theme.primary_color).to eq "#ff0000"
                 end
+            end
+
+            context "with invalid attributes" do 
+                before { patch :update_branding, id: enterprise.id, enterprise: attributes_for(:enterprise, theme: { primary_color: "red" }) }
+
+                it "flashes an alert message" do 
+                    expect(flash[:alert]).to eq "Enterprise branding was not updated. Please fix the errors"
+                end
+
+                it "render edit_branding template" do 
+                    expect(response).to render_template :edit_branding
+                end
+            end
+        end
+
+        describe "without a logged in user" do 
+            before { patch :update_branding, id: enterprise.id, enterprise: attributes_for(:enterprise, theme: { primary_color: "#ff0000" }) }
+
+            it "redirect user to users/sign_in path " do 
+                expect(response).to redirect_to new_user_session_path
+            end
+
+            it 'returns status code of 302' do
+                expect(response).to have_http_status(302)
             end
         end
     end
     
-    describe "GET#delete_attachment" do
+    describe "PATCH#delete_attachment" do
         before :each do
             request.env["HTTP_REFERER"] = "back"
         end
@@ -370,33 +402,57 @@ RSpec.describe EnterprisesController, type: :controller do
         describe "with logged in user" do
             login_user_from_let
             
-            context "with valid id" do
-                before(:each){ patch :delete_attachment, id: enterprise.id, enterprise: attributes_for(:enterprise, theme: {logo_file_name: "test"})}
+            context "with valid attributes" do
+                before { patch :delete_attachment, id: enterprise.id, enterprise: attributes_for(:enterprise, theme: { primary_color: "#ff0000"}) }
                 
                 it "redirect_to back" do
                     expect(response).to redirect_to "back"
                 end
                 
-                it "flashes" do
-                    expect(flash[:notice])
+                it "flashes a notice message" do
+                    expect(flash[:notice]).to eq "Enterprise attachment was removed"
                 end
+            end
+
+            context "with invalid attributes" do
+                before { patch :delete_attachment, id: enterprise.id, enterprise: attributes_for(:enterprise, theme: { primary_color: "red"})}  
+
+                it "flashes an alert message" do 
+                    expect(flash[:alert]).to eq "Enterprise attachment was not removed. Please fix the errors"
+                end  
+            end 
+        end
+
+        describe "without a logged in user" do 
+            before { patch :delete_attachment, id: enterprise.id, enterprise: attributes_for(:enterprise, theme: { primary_color: "#ff0000" }) }
+
+            it "redirect user to users/sign_in path " do 
+                expect(response).to redirect_to new_user_session_path
+            end
+
+            it 'returns status code of 302' do
+                expect(response).to have_http_status(302)
             end
         end
     end
     
     describe "GET#restore_default_branding" do
-        before :each do
+        before do
             request.env["HTTP_REFERER"] = "back"
         end
         
         describe "with logged in user" do
             login_user_from_let
             
-            context "with valid id" do
-                before(:each){ patch :restore_default_branding, id: enterprise.id, enterprise: attributes_for(:enterprise, theme: {logo_file_name: "test"})}
+            context "with valid attributes" do
+                before { patch :restore_default_branding, id: enterprise.id, enterprise: attributes_for(:enterprise, theme: {logo_file_name: "test"})}
                 
                 it "redirect_to back" do
                     expect(response).to redirect_to "back"
+                end
+
+                it "returns a valid enterprise objec" do 
+                    expect(assigns[:enterprise]).to be_valid
                 end
             end
         end
