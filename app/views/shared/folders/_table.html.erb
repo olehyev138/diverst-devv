@@ -12,7 +12,7 @@
         <tbody>
           <% @resources.each do |resource| %>
             <tr>
-              <% if resource.url.nil? || resource.url.empty? %>
+              <% if resource.url.nil? %>
                 <td class="icon-column">
                   <a href="<%= resource.file.expiring_url(3600) %>" class="icon icon--bg icon--large" style="background-image: url(<%= thumbnail_for_resource(resource) %>)"></a>
                 </td>
@@ -25,8 +25,8 @@
               <% end %>
               <td><%= resource.created_at.to_s :reversed_slashes %></td>
               <td>
-                <%= link_to "Edit", polymorphic_path(@container_path + [resource], action: "edit") if policy(resource).edit? %> -
-                <%= link_to "Delete", @container_path + [resource], method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(resource).destroy? %>
+                <%= link_to "Edit", polymorphic_path(@container_path + [resource], action: "edit") if policy(resource).edit? and policy(resource.container).edit? %> -
+                <%= link_to "Delete", @container_path + [resource], method: :delete, class: "error", data: { confirm: "Are you sure?" } and policy(resource.container).destroy? %>
               </td>
             </tr>
           <% end %>
