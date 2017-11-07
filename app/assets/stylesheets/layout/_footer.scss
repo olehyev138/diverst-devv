@@ -1,12 +1,12 @@
 .dv-footer { 
-	position: fixed;
+	position: relative;
 	bottom: 0px;
 	width: 100%;
-	text-align: center;
+	padding-left: 40%;
 	padding-bottom: 10px;
 	font-size: 11px;
 	background: #7B77C9;
 	color: white;
-	clear: both;
+	height: 20px;
 }
 
