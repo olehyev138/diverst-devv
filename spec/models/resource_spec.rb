@@ -6,6 +6,7 @@ RSpec.describe Resource, :type => :model do
         let(:resource){ build_stubbed(:resource) }
         
         it{ expect(resource).to validate_presence_of(:title)}
+        it{ expect(resource).to validate_presence_of(:file)}
     end
     
     
