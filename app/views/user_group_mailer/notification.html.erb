@@ -23,6 +23,11 @@ Hello <%= @user.name %>, a new item has been posted to a Diversity and Inclusion
     <br/>
     <%= link_to "#{ group[:social_links_count] } news item(s)", group_social_links_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id) %>.
   <% end %>
+  
+  <% if group[:participating_events_count].to_i > 0 %>
+    <br/>
+    <%= link_to pluralize(group[:participating_events_count], 'new event'), group_events_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id) %>.
+  <% end %>
   <br/>
 <% end %>
 <br/>
