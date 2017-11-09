@@ -7,7 +7,7 @@
     <div class="col sm-12">
     <% if @enterprise.home_message.present? %>
       <div class="content__header mtmedium">
-        <p style="flex: 1 1 0;"><%= @enterprise.home_message %></p>
+        <p style="flex: 1 1 0;"><%= allow_newlines @enterprise.home_message %></p>
         <div class="flex-row flex-row--middle">
           <div class="flex-row__cell">
           </div>
@@ -92,6 +92,11 @@
         </div>
       </div>
     </div>
+  </div>
 
+  <div class="row">
+     <div class="col sm-12 md-9">
+        <%= link_to 'Privacy Statement', user_privacy_statement_path %>
+     </div>
   </div>
 </div>

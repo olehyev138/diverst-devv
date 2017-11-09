@@ -9,6 +9,9 @@ class Enterprise < ActiveRecord::Base
     has_many :groups, inverse_of: :enterprise
     has_many :events, through: :groups
     has_many :initiatives, through: :groups
+    has_many :folders, as: :container
+    has_many :folder_shares, as: :container
+    has_many :shared_folders, through: :folder_shares, source: 'folder'
     has_many :polls, inverse_of: :enterprise
     has_many :mobile_fields, inverse_of: :enterprise
     has_many :metrics_dashboards, inverse_of: :enterprise
@@ -44,7 +47,7 @@ class Enterprise < ActiveRecord::Base
     before_create :create_elasticsearch_only_fields
 
     validates :idp_sso_target_url, url: { allow_blank: true }
-    validates :cdo_name,    presence: true
+    validates :cdo_name, :name, presence: true
     
     has_attached_file :cdo_picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: "private"
     validates_attachment_content_type :cdo_picture, content_type: %r{\Aimage\/.*\Z}

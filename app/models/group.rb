@@ -46,6 +46,9 @@ class Group < ActiveRecord::Base
     has_many :invitation_segments_groups
     has_many :invitation_segments, class_name: 'Segment', through: :invitation_segments_groups
     has_many :resources, as: :container
+    has_many :folders, as: :container
+    has_many :folder_shares, as: :container
+    has_many :shared_folders, through: :folder_shares, source: 'folder'
     has_many :campaigns_groups
     has_many :campaigns, through: :campaigns_groups
     has_many :questions, through: :campaigns
@@ -155,7 +158,7 @@ class Group < ActiveRecord::Base
     end
 
     def self.create_events
-        Group.all.find_each do |group|
+        Group.find_each do |group|
             (20 - group.id).times do
                 group.events << Event.create(title: 'Test Event', start: 2.days.from_now, end: 2.days.from_now + 2.hours, description: 'This is a placeholder event.')
             end

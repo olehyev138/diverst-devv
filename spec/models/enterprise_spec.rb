@@ -8,7 +8,10 @@ RSpec.describe Enterprise, type: :model do
         it { expect(enterprise).to have_many(:rewards) }
         it { expect(enterprise).to have_many(:reward_actions) }
         it { expect(enterprise).to have_many(:badges) }
-
+        it { expect(enterprise).to have_many(:folders) }
+        it { expect(enterprise).to have_many(:folder_shares) }
+        it { expect(enterprise).to have_many(:shared_folders) }
+        
         it{ expect(enterprise).to have_one(:custom_text) }
     end
 

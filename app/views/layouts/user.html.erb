@@ -56,7 +56,7 @@
           <li>
             <%= active_link_to "Groups", user_groups_path %>
           </li>
-          <% if ENV['REWARDS_ENABLED'] %>
+          <% if current_user.enterprise.enable_rewards? %>
             <li>
               <%= active_link_to "#{ c_t(:dci_abbreviation) } Points", user_rewards_path %>
             </li>
@@ -81,7 +81,7 @@
       <%= active_link_to "News", user_news_links_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <%= active_link_to "Events", user_events_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <%= active_link_to "Groups", user_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-      <% if ENV['REWARDS_ENABLED'] %>
+      <% if current_user.enterprise.enable_rewards? %>
         <%= active_link_to "#{ c_t(:dci_abbreviation) } Points", user_rewards_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <% end %>
       <% if current_user.enterprise.bias_module_enabled %>
@@ -97,6 +97,7 @@
 
       <%= yield %>
     </div>
+    <%= render 'partials/footer' %>
   </div>
 </body>
 </html>

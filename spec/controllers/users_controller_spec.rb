@@ -143,8 +143,8 @@ RSpec.describe UsersController, type: :controller do
             expect(response).to be_success
         end
     end
-    
-    describe "GET#date_histogram", :skip => "Elastisearch error" do
+
+    describe "GET#date_histogram", :skip => true do
         it "returns success" do
             get :date_histogram, :format => :csv
             expect(response).to be_success

@@ -11,12 +11,17 @@ Hello <%= @user.name %>, a new item has been posted to a Diversity and Inclusion
 
   <% if group[:messages_count].to_i > 0 %>
     <br/>
-    <%= link_to pluralize(group[:messages_count], 'new message'), group_group_messages_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id ) %>
+    <%= link_to pluralize(group[:messages_count], 'new message'), group_posts_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id ) %>
   <% end %>
 
   <% if group[:news_count].to_i > 0 %>
     <br/>
-    <%= link_to "#{ group[:news_count] } news item(s)", group_news_links_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id) %>.
+    <%= link_to "#{ group[:news_count] } news item(s)", group_posts_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id) %>.
+  <% end %>
+  
+  <% if group[:social_links_count].to_i > 0 %>
+    <br/>
+    <%= link_to "#{ group[:social_links_count] } news item(s)", group_social_links_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id) %>.
   <% end %>
   <br/>
 <% end %>

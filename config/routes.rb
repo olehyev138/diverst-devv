@@ -97,8 +97,13 @@ Rails.application.routes.draw do
       patch 'delete_attachment'
       get 'calendar'
     end
-
+    
     scope module: :enterprises do
+      resources :folders do
+        scope module: :folder do
+          resources :resources
+        end
+      end
       resources :resources
       resources :events, only: [] do
         collection do
@@ -133,6 +138,7 @@ Rails.application.routes.draw do
       end
       resources :group_messages, path: 'messages' do
         post 'create_comment'
+        resources :group_message_comment
       end
       resources :leaders, only: [:index, :new, :create]
       resources :social_links
@@ -168,9 +174,10 @@ Rails.application.routes.draw do
 
       resources :news_links, except: [:show] do
         member do
-          get 'comments'
-          post 'create_comment'
+          get   'comments'
+          post  'create_comment'
         end
+        resources :news_link_comment
       end
       resources :posts, :only => [:index] do
         collection do
@@ -178,6 +185,13 @@ Rails.application.routes.draw do
           post 'approve'
         end
       end
+      
+      resources :folders do
+        scope module: :folder do
+          resources :resources
+        end
+      end
+      
       resources :resources
       resources :fields do
         member do
@@ -339,6 +353,7 @@ Rails.application.routes.draw do
 
       get 'rewards', to: 'dashboard#rewards'
       get 'bias', to: 'dashboard#bias'
+      get 'privacy_statement', to: 'dashboard#privacy_statement'
       get 'preferences/edit', to: 'user_groups#edit'
       patch 'preferences/update', to: 'user_groups#update'
 

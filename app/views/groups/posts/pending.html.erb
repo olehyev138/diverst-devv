@@ -1,5 +1,8 @@
 <div class="content__header">
-  <h1><%= link_to 'Posts', group_posts_path(@group) %>/Pending</h1>
+    <%= link_to group_posts_path(@group) do %>
+      <button class="btn btn--primary">Posts</button>
+    <% end %>
+  <h1>/Pending</h1>
 </div>
 
 <div class="content__main">

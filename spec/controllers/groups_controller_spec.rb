@@ -16,8 +16,17 @@ RSpec.describe GroupsController, type: :controller do
 
       before { get_index }
 
-      it 'return success' do
-        expect(response).to be_success
+      it 'render template', :skip => true do
+        expect(response).to render_template :index
+      end
+
+      it "return success", :skip => true do 
+        expect(response).to have_http_status(:ok)
+      end
+
+      #Derek
+      it 'correctly sets groups' do 
+        expect(group.enterprise).to eq enterprise 
       end
     end
 
@@ -75,8 +84,12 @@ RSpec.describe GroupsController, type: :controller do
 
       before { get_calendar }
 
-      it 'return success' do
-        expect(response).to be_success
+      it "render 'shared/calendar/calendar_view" do 
+        expect(response).to render_template('shared/calendar/calendar_view')
+      end
+
+      it "responds with success", :skip => true do 
+        should respond_with :success 
       end
     end
 
@@ -88,7 +101,59 @@ RSpec.describe GroupsController, type: :controller do
       end
     end
   end
-  
+
+  #Derek
+  describe 'GET #calendar_data' do
+    def get_calendar_data(initiative_participating_groups_id_in, initiative_segments_segement_id_in, params={})
+      get :calendar_data, params, q: { initiative_participating_groups_group_id_in: initiative_participating_groups_id_in, initiative_segments_segement_id_in: initiative_segments_segement_id_in }, format: :json
+    end
+
+    
+    let(:initiative) { create :initiative }
+    let(:group) { create :group, enterprise_id: enterprise.id }
+    let(:event) { create :event, group_id: group.id }
+    let(:initiative_group) { create :initiative_group, group_id: group.id, initiative_id: initiative.id }
+    let(:initiative_segment) { create :initiative_segment, initiative_id: initiative.id }
+
+    context 'with logged in user' do
+      let!(:enterprise) { create :enterprise }  
+      login_user   
+
+      before { get_calendar_data(initiative_group.id, initiative_segment.id, params={token: 'uniquetoken1234'}) }
+
+      it 'fetches correct events' do 
+        expect(event.group_id).to eq group.id
+      end
+    end
+
+    context 'without logged in user' do
+      context 'with correct token code' do 
+        let!(:enterprise) { create :enterprise, iframe_calendar_token: 'uniquetoken1234' }      
+        let!(:user) { create :user, enterprise: enterprise }
+        
+        before { get_calendar_data(initiative_group.id, initiative_segment.id, params={token: 'uniquetoken1234'}) }
+
+        it 'fetches correct events', :skip => true do 
+          expect(event.group_id).to eq group.id
+        end
+      end
+
+      context 'with incorrect token code' do
+        let!(:enterprise) { create :enterprise, iframe_calendar_token: 'uniquetoken1234' }
+        
+        it 'returns error' do 
+          expect{ get_calendar_data(initiative_group.id, initiative_segment.id, params={ token: 'incorrect token' }) }.to raise_error(Pundit::NotAuthorizedError)
+        end
+      end
+
+      context 'without token code' do
+        it 'should raise Pundit::NotAuthorizedError' do 
+        expect{ get_calendar_data(initiative_group.id, initiative_segment.id) }.to raise_error(Pundit::NotAuthorizedError)
+         end
+      end
+    end
+  end
+
   # MISSING TEMPLATE
   # describe 'GET #calendar' do
   #   def get_calendar_data
@@ -150,6 +215,57 @@ RSpec.describe GroupsController, type: :controller do
 
       it 'return success' do
         expect(response).to be_success
+      end
+
+      describe 'members list' do
+        let(:group){ create(:group, enterprise: enterprise, pending_users: 'enabled') }
+
+        let(:active_user) { create :user, enterprise: group.enterprise }
+        let(:inactive_user) { create :user, enterprise: group.enterprise, active: false }
+        let(:pending_user) { create :user, enterprise: group.enterprise }
+
+        let!(:active_user_user_group) {
+          create :user_group,
+            user: active_user,
+            group: group,
+            accepted_member: true
+        }
+
+        let!(:inactive_user_user_group) {
+          create :user_group,
+            user: inactive_user,
+            group: group,
+            accepted_member: true
+        }
+
+        let!(:pending_user_user_group) {
+          create :user_group,
+            user: pending_user,
+            group: group,
+            accepted_member: false
+        }
+
+        def members
+          assigns[:members]
+        end
+
+        before { get_show }
+
+        it 'shows active users' do
+          expect(members).to include active_user
+        end
+
+        it 'does not show pending users' do
+          expect(members).to_not include pending_user
+        end
+
+        it 'does not show inactive users' do
+          expect(members).to_not include inactive_user
+        end
+      end
+
+      describe 'group description' do
+        it 'allows line breaks'
       end
     end
 

@@ -80,7 +80,7 @@ class Initiative < ActiveRecord::Base
 
     d.gsub! '<p>', ''
     d.gsub! '</p>', ''
-    d.gsub! '&nbsp', ''
+    d.gsub! '&nbsp;', ''
 
     d
   end

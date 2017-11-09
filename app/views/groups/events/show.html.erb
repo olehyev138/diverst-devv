@@ -13,6 +13,10 @@
     <div class="flex-row__cell">
       <%= link_to "Export attendees", attendees_group_initiative_path(@group, @event, format: :csv), class: "btn btn--primary" if policy(@event).edit? %>
     </div>
+
+    <div class="flex-row__cell">
+       <a href="#" class="btn btn--primary js-join-event" data-joined="<%= current_user.initiatives.include? @event %>"><%= current_user.initiatives.include?(@event) ? "Leave event" : "Join event" %></a>
+    </div>
   </div>
 </div>
 
@@ -44,8 +48,6 @@
       </div>
     </div>
   </div>
-
-  <a href="#" class="btn btn--primary js-join-event" data-joined="<%= current_user.initiatives.include? @event %>"><%= current_user.initiatives.include?(@event) ? "Leave event" : "Join event" %></a>
 </div>
 
 <div class="content__header" style="margin-top: 30px;">

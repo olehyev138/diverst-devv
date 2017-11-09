@@ -8,6 +8,9 @@
       <% end %>
       <div class="flex-row__cell flex-row__cell--grow">
         <span class="highlight"><%= event.name %></span><br>
+        <% if event.group != @group %>
+          <strong><small>Hosted By: <%= event.group.name %></small></strong><br>
+        <% end %>
         <small><%= event.description&.html_safe %></small><br>
         <small class="muted"><%= event.start.to_s :slashes %></small>
       </div>
