@@ -40,9 +40,7 @@ RSpec.describe AnswersController, type: :controller do
         describe "without logged user" do
             before { patch :update, id: answer.id,  answer: attributes_for(:answer, content: "updated") }
 
-            it "redirect user to users/sign_in path " do
-                expect(response).to redirect_to new_user_session_path
-            end
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
@@ -70,9 +68,7 @@ RSpec.describe AnswersController, type: :controller do
             before { delete :destroy, id: answer.id }
 
 
-            it "redirect user to users/sign_in path " do
-                expect(response).to redirect_to new_user_session_path
-            end
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 end

@@ -28,9 +28,7 @@ RSpec.describe BadgesController, type: :controller do
     describe "without logged in user" do
       before { post :new }
 
-      it "redirect user to users/sign_in path " do
-        expect(response).to redirect_to new_user_session_path
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
 
@@ -79,9 +77,7 @@ RSpec.describe BadgesController, type: :controller do
     describe "without a logged in user" do
       before { post :create, badge: attributes_for(:badge_params, label: "") }
 
-      it "redirect user to users/sign_in path " do
-        expect(response).to redirect_to new_user_session_path
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
 
@@ -118,9 +114,7 @@ RSpec.describe BadgesController, type: :controller do
     describe "without a logged in user" do
       before { get :edit, id: badge.id }
 
-      it "redirect user to users/sign_in path " do
-        expect(response).to redirect_to new_user_session_path
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
 
@@ -168,9 +162,7 @@ RSpec.describe BadgesController, type: :controller do
     describe "with user not logged in" do
       before { patch :update, id: badge.id, badge: attributes_for(:badge, points: 10) }
 
-      it "redirect user to users/sign_in path " do
-        expect(response).to redirect_to new_user_session_path
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
 
   end
@@ -199,9 +191,7 @@ RSpec.describe BadgesController, type: :controller do
     describe "with a user not logged in" do
       before { delete :destroy, id: badge.id }
 
-      it "redirect user to users/sign_in path " do
-        expect(response).to redirect_to new_user_session_path
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
 end

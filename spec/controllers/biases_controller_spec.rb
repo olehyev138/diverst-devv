@@ -26,9 +26,7 @@ RSpec.describe BiasesController, type: :controller do
         context "without logged in user" do
            before { get :index }
 
-           it "redirects user to users/sign_in path " do
-                expect(response).to redirect_to new_user_session_path
-           end
+           it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
@@ -54,9 +52,7 @@ RSpec.describe BiasesController, type: :controller do
         context "without logged in user" do
             before { get :new }
 
-            it "redirects user to users/sign_in path " do
-                expect(response).to redirect_to new_user_session_path
-            end
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
@@ -108,9 +104,7 @@ RSpec.describe BiasesController, type: :controller do
 
             before { post :create, bias: bias_params }
 
-            it "redirect user to users/sign_in path " do
-                expect(response).to redirect_to new_user_session_path
-            end
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
@@ -170,9 +164,7 @@ RSpec.describe BiasesController, type: :controller do
                 bias.reload
             end
 
-            it "redirect user to users/sign_in path " do
-                expect(response).to redirect_to new_user_session_path
-            end
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
@@ -195,9 +187,7 @@ RSpec.describe BiasesController, type: :controller do
 
             before { delete :destroy, id: bias.id }
 
-            it "redirect user to users/sign_in path " do
-                expect(response).to redirect_to new_user_session_path
-            end
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 end

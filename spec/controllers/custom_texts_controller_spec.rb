@@ -15,7 +15,7 @@ RSpec.describe CustomTextsController, type: :controller do
         expect(assigns(:custom_text)).to eq custom_text
       end
 
-      it "renders edit template" do 
+      it "renders edit template" do
         expect(response).to render_template :edit
       end
     end
@@ -23,13 +23,7 @@ RSpec.describe CustomTextsController, type: :controller do
     context 'without logged user' do
       before { get :edit, id: custom_text }
 
-      it "redirect user to users/sign_in path " do 
-        expect(response).to redirect_to new_user_session_path
-      end
-
-      it 'returns status code of 302' do
-        expect(response).to have_http_status(302)
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
 
@@ -50,32 +44,26 @@ RSpec.describe CustomTextsController, type: :controller do
         it "renders edit action" do
           expect(response).to render_template :edit
         end
-        
+
         it "flashes a notice message" do
           expect(flash[:notice]).to eq "Your texts were updated"
         end
       end
 
       # this context fails because CustomText model has no validation
-      context "with invalid params" do 
+      context "with invalid params" do
         before { patch :update, id: custom_text, custom_text: { erg: nil } }
 
-        it "flashes an alert message", skip: "this context fails because CustomText model has no validation" do 
+        it "flashes an alert message", skip: "this context fails because CustomText model has no validation" do
           expect(flash[:alert]).to eq "Your texts were not updated. Please fix the errors"
         end
       end
     end
-    
-    context "without logged in user" do 
+
+    context "without logged in user" do
         before { patch :update, id: custom_text, custom_text: { erg: "ERG 2" } }
 
-        it "redirect user to users/sign_in path " do 
-          expect(response).to redirect_to new_user_session_path
-        end
-
-        it 'returns status code of 302' do
-          expect(response).to have_http_status(302)
-        end  
+        it_behaves_like "redirect user to users/sign_in path"
     end
   end
 end

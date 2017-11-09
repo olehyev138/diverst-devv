@@ -23,9 +23,7 @@ RSpec.describe BudgetsController, type: :controller do
     context "without logged user" do
       before { get :index, group_id: budget.subject.id }
 
-      it "redirects user to users/sign_in path " do
-        expect(response).to redirect_to new_user_session_path
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
 
@@ -47,9 +45,7 @@ RSpec.describe BudgetsController, type: :controller do
     context 'without logged user' do
       before { get :show, group_id: budget.subject.id, id: budget.id }
 
-      it "redirects user to users/sign_in path " do
-        expect(response).to redirect_to new_user_session_path
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
 
@@ -74,9 +70,7 @@ RSpec.describe BudgetsController, type: :controller do
     context 'without logged user' do
       before { get_edit_annual_budget }
 
-      it "redirects user to users/sign_in path " do
-        expect(response).to redirect_to new_user_session_path
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
 
@@ -105,9 +99,7 @@ RSpec.describe BudgetsController, type: :controller do
     context 'without logged user' do
       before { get :new, group_id: group.id }
 
-      it "redirect user to users/sign_in path " do
-        expect(response).to redirect_to new_user_session_path
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
 
@@ -135,9 +127,7 @@ RSpec.describe BudgetsController, type: :controller do
     context 'without logged user' do
       before { post :create, group_id: group.id, budget: {} }
 
-      it "redirect user to users/sign_in path " do
-        expect(response).to redirect_to new_user_session_path
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
 
@@ -195,9 +185,7 @@ RSpec.describe BudgetsController, type: :controller do
     context 'without logged user' do
       before { post_update_annual_budget(group.id, {annual_budget: new_annual_budget}) }
 
-      it "redirect user to users/sign_in path " do
-        expect(response).to redirect_to new_user_session_path
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
 
@@ -218,9 +206,7 @@ RSpec.describe BudgetsController, type: :controller do
      context "without a logged in user" do
         before {  delete :destroy, group_id: budget.subject.id, id: budget.id }
 
-        it "redirect user to users/sign_in path " do
-          expect(response).to redirect_to new_user_session_path
-        end
+        it_behaves_like "redirect user to users/sign_in path"
       end
   end
 
@@ -245,9 +231,7 @@ RSpec.describe BudgetsController, type: :controller do
     context "without a logged in user" do
       before { post :approve, group_id: budget.subject.id, budget_id: budget.id}
 
-      it "redirect user to users/sign_in path " do
-         expect(response).to redirect_to new_user_session_path
-       end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
 
@@ -275,9 +259,7 @@ RSpec.describe BudgetsController, type: :controller do
         BudgetManager.new(budget).decline(user)
       end
 
-      it "redirect user to users/sign_in path " do
-         expect(response).to redirect_to new_user_session_path
-       end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
 end

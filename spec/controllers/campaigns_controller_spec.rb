@@ -28,9 +28,7 @@ RSpec.describe CampaignsController, type: :controller do
         context 'without logged user' do
           before { get :index }
 
-          it "redirect user to users/sign_in path " do
-            expect(response).to redirect_to new_user_session_path
-          end
+          it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
@@ -61,9 +59,7 @@ RSpec.describe CampaignsController, type: :controller do
         context "without logged user" do
             before { get :new }
 
-            it "redirect user to users/sign_in path " do
-                expect(response).to redirect_to new_user_session_path
-            end
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
@@ -120,9 +116,7 @@ RSpec.describe CampaignsController, type: :controller do
 
             before {  post :create, campaign: campaign_params }
 
-            it "redirect user to users/sign_in path " do
-                expect(response).to redirect_to new_user_session_path
-            end
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
@@ -173,9 +167,7 @@ RSpec.describe CampaignsController, type: :controller do
         context "without logged user" do
             before { get :show, id: campaign.id }
 
-            it "redirect user to users/sign_in path " do
-                expect(response).to redirect_to new_user_session_path
-            end
+            it_behaves_like "redirect user to users/sign_in path"
         end
 
     end
@@ -240,9 +232,7 @@ RSpec.describe CampaignsController, type: :controller do
         describe "without user logged in" do
             before { patch :update, id: campaign.id,  campaign: attributes_for(:campaign, title: "updated") }
 
-            it "redirect user to users/sign_in path " do
-                expect(response).to redirect_to new_user_session_path
-            end
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
@@ -264,9 +254,7 @@ RSpec.describe CampaignsController, type: :controller do
         context "without user logged in" do
             before { delete :destroy, id: campaign.id }
 
-           it "redirect user to users/sign_in path " do
-                expect(response).to redirect_to new_user_session_path
-            end
+           it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
@@ -295,9 +283,7 @@ RSpec.describe CampaignsController, type: :controller do
         context "without user logged in" do
             before { delete :destroy, id: campaign.id }
 
-           it "redirect user to users/sign_in path " do
-                expect(response).to redirect_to new_user_session_path
-            end
+           it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
@@ -326,9 +312,7 @@ RSpec.describe CampaignsController, type: :controller do
         context "without user logged in" do
            before { get :top_performers, id: campaign.id, format: :json }
 
-            it "redirect user to users/sign_in path " do
-                expect(response).to redirect_to new_user_session_path
-            end
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 end

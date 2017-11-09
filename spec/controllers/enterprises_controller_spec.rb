@@ -43,9 +43,7 @@ RSpec.describe EnterprisesController, type: :controller do
         describe "without a logged in user" do
             before { get :edit, id: enterprise.id }
 
-            it "redirect user to users/sign_in path " do
-                expect(response).to redirect_to new_user_session_path
-            end
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
@@ -95,9 +93,7 @@ RSpec.describe EnterprisesController, type: :controller do
         describe "without a logged in user" do
            before { patch :update, id: enterprise.id, enterprise: attributes_for(:enterprise, cdo_name: "updated") }
 
-            it "redirect user to users/sign_in path " do
-                expect(response).to redirect_to new_user_session_path
-            end
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
@@ -122,9 +118,7 @@ RSpec.describe EnterprisesController, type: :controller do
         describe "without a logged in user" do
             before { get :edit_fields, id: enterprise.id }
 
-            it "redirect user to users/sign_in path " do
-                expect(response).to redirect_to new_user_session_path
-            end
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
@@ -149,9 +143,7 @@ RSpec.describe EnterprisesController, type: :controller do
         describe "without a logged in user" do
             before { get :edit_budgeting, id: enterprise.id }
 
-            it "redirect user to users/sign_in path " do
-                expect(response).to redirect_to new_user_session_path
-            end
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
@@ -176,9 +168,7 @@ RSpec.describe EnterprisesController, type: :controller do
         describe "without a logged in user" do
             before { get :bias, id: enterprise.id }
 
-            it "redirect user to users/sign_in path " do
-                expect(response).to redirect_to new_user_session_path
-            end
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
@@ -216,9 +206,7 @@ RSpec.describe EnterprisesController, type: :controller do
         describe "without a logged in user" do
              before { get :edit_mobile_fields, id: enterprise.id }
 
-            it "redirect user to users/sign_in path " do
-                expect(response).to redirect_to new_user_session_path
-            end
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
@@ -243,13 +231,7 @@ RSpec.describe EnterprisesController, type: :controller do
         describe "without a logged in user" do
             before { get :edit_auth, id: enterprise.id}
 
-            it "redirect user to users/sign_in path " do
-                expect(response).to redirect_to new_user_session_path
-            end
-
-            it 'returns status code of 302' do
-                expect(response).to have_http_status(302)
-            end
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
@@ -278,9 +260,7 @@ RSpec.describe EnterprisesController, type: :controller do
         describe "without a logged in user" do
             before { get :edit_branding, id: enterprise.id }
 
-            it "redirect user to users/sign_in path " do
-                expect(response).to redirect_to new_user_session_path
-            end
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
@@ -303,9 +283,7 @@ RSpec.describe EnterprisesController, type: :controller do
         describe "without a logged in user" do
             before { get :edit_algo, id: enterprise.id }
 
-            it "redirect user to users/sign_in path " do
-                expect(response).to redirect_to new_user_session_path
-            end
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
@@ -351,9 +329,7 @@ RSpec.describe EnterprisesController, type: :controller do
         describe "without a logged in user" do
             before { patch :update_branding, id: enterprise.id, enterprise: attributes_for(:enterprise, theme: { primary_color: "#ff0000" }) }
 
-            it "redirect user to users/sign_in path " do
-                expect(response).to redirect_to new_user_session_path
-            end
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
@@ -389,9 +365,7 @@ RSpec.describe EnterprisesController, type: :controller do
         describe "without a logged in user" do
             before { patch :delete_attachment, id: enterprise.id, enterprise: attributes_for(:enterprise, theme: { primary_color: "#ff0000" }) }
 
-            it "redirect user to users/sign_in path " do
-                expect(response).to redirect_to new_user_session_path
-            end
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
