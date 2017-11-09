@@ -6,10 +6,26 @@
     </div>
   </div>
 </div>
-<div id="calendar" data-calendar-data-url="<%= calendar_data_group_events_path(@group) %>"></div>
 
-<script>
-  $(document).ready(function(){
-    applyFullCalendar();
-  }); //endof document.ready
-</script>
+<%= search_form_for @q, url: @q_form_submit_path, builder: SimpleForm::FormBuilder do |f| %>
+    <div class="card">
+      <div class="card__section card__section--border calendar-filters">
+        <div class="row">
+          <div class="col sm-5">
+            <%= f.input :initiative_segments_segment_id_in,
+                  as: :select,
+                  collection: @segments,
+                  input_html: { class: "select2", multiple: true },
+                  label: "Filter by #{ c_t(:segment) }",
+                  required: false
+            %>
+          </div>
+          <div class="col sm-1" style="padding-top: 15px;">
+            <%= f.button :submit, value: "Filter" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+<div id="calendar" data-calendar-data-url="<%= calendar_data_group_events_path(@group, q: params[:q]) %>"></div>
