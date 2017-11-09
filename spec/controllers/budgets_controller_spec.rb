@@ -15,20 +15,16 @@ RSpec.describe BudgetsController, type: :controller do
         expect(response).to be_success
       end
 
-      it "renders index template" do 
+      it "renders index template" do
         expect(response).to render_template(:index)
       end
     end
 
-    context "without logged user" do 
+    context "without logged user" do
       before { get :index, group_id: budget.subject.id }
 
-      it "redirects user to users/sign_in path " do 
+      it "redirects user to users/sign_in path " do
         expect(response).to redirect_to new_user_session_path
-      end
-
-      it "respond with http status" do 
-        expect(response).to have_http_status(302)
       end
     end
   end
@@ -43,7 +39,7 @@ RSpec.describe BudgetsController, type: :controller do
         expect(response).to be_success
       end
 
-      it "render show template" do 
+      it "render show template" do
         expect(response).to render_template :show
       end
     end
@@ -51,16 +47,8 @@ RSpec.describe BudgetsController, type: :controller do
     context 'without logged user' do
       before { get :show, group_id: budget.subject.id, id: budget.id }
 
-      it 'return error' do
-        expect(response).to_not be_success
-      end
-
-      it "redirects user to users/sign_in path " do 
+      it "redirects user to users/sign_in path " do
         expect(response).to redirect_to new_user_session_path
-      end
-
-      it "respond with http status" do 
-        expect(response).to have_http_status(302)
       end
     end
   end
@@ -86,12 +74,8 @@ RSpec.describe BudgetsController, type: :controller do
     context 'without logged user' do
       before { get_edit_annual_budget }
 
-      it "redirects user to users/sign_in path " do 
+      it "redirects user to users/sign_in path " do
         expect(response).to redirect_to new_user_session_path
-      end
-
-      it "respond with http status" do 
-        expect(response).to have_http_status(302)
       end
     end
   end
@@ -109,11 +93,11 @@ RSpec.describe BudgetsController, type: :controller do
         expect(response).to be_success
       end
 
-      it "return a new Budget object" do 
+      it "return a new Budget object" do
         expect(assigns[:budget]).to be_a_new(Budget)
-      end  
+      end
 
-      it "render new template" do 
+      it "render new template" do
         expect(response).to render_template :new
       end
     end
@@ -121,12 +105,8 @@ RSpec.describe BudgetsController, type: :controller do
     context 'without logged user' do
       before { get :new, group_id: group.id }
 
-      it "redirect user to users/sign_in path " do 
+      it "redirect user to users/sign_in path " do
         expect(response).to redirect_to new_user_session_path
-      end
-
-      it 'returns status code of 302' do
-        expect(response).to have_http_status(302)
       end
     end
   end
@@ -155,12 +135,8 @@ RSpec.describe BudgetsController, type: :controller do
     context 'without logged user' do
       before { post :create, group_id: group.id, budget: {} }
 
-      it "redirect user to users/sign_in path " do 
+      it "redirect user to users/sign_in path " do
         expect(response).to redirect_to new_user_session_path
-      end
-
-      it 'returns status code of 302' do
-        expect(response).to have_http_status(302)
       end
     end
   end
@@ -219,12 +195,8 @@ RSpec.describe BudgetsController, type: :controller do
     context 'without logged user' do
       before { post_update_annual_budget(group.id, {annual_budget: new_annual_budget}) }
 
-      it "redirect user to users/sign_in path " do 
+      it "redirect user to users/sign_in path " do
         expect(response).to redirect_to new_user_session_path
-      end
-
-      it 'returns status code of 302' do
-        expect(response).to have_http_status(302)
       end
     end
   end
@@ -245,22 +217,18 @@ RSpec.describe BudgetsController, type: :controller do
 
      context "without a logged in user" do
         before {  delete :destroy, group_id: budget.subject.id, id: budget.id }
-        
-        it "redirect user to users/sign_in path " do 
-          expect(response).to redirect_to new_user_session_path
-        end
 
-        it 'returns status code of 302' do
-          expect(response).to have_http_status(302)
+        it "redirect user to users/sign_in path " do
+          expect(response).to redirect_to new_user_session_path
         end
       end
   end
-  
+
   describe 'POST#approve' do
     context 'with logged user' do
       login_user_from_let
 
-      before do 
+      before do
         post :approve, group_id: budget.subject.id, budget_id: budget.id
         BudgetManager.new(budget).approve(user)
       end
@@ -269,29 +237,25 @@ RSpec.describe BudgetsController, type: :controller do
         expect(response).to redirect_to action: :index
       end
 
-      it "budget is declined" do 
-        expect(budget.is_approved).to eq true 
+      it "budget is declined" do
+        expect(budget.is_approved).to eq true
       end
     end
 
     context "without a logged in user" do
       before { post :approve, group_id: budget.subject.id, budget_id: budget.id}
-        
-      it "redirect user to users/sign_in path " do 
+
+      it "redirect user to users/sign_in path " do
          expect(response).to redirect_to new_user_session_path
        end
-
-      it 'returns status code of 302' do
-        expect(response).to have_http_status(302)
-      end
     end
   end
-  
+
   describe 'POST#decline' do
     context 'with logged user' do
       login_user_from_let
 
-      before do 
+      before do
         post :decline, group_id: budget.subject.id, budget_id: budget.id
         BudgetManager.new(budget).decline(user)
       end
@@ -300,24 +264,20 @@ RSpec.describe BudgetsController, type: :controller do
         expect(response).to redirect_to action: :index
       end
 
-      it "budget is declined" do 
-        expect(budget.is_approved).to eq false 
+      it "budget is declined" do
+        expect(budget.is_approved).to eq false
       end
     end
 
-    context "without a logged in user" do 
-      before do 
+    context "without a logged in user" do
+      before do
         post :decline, group_id: budget.subject.id, budget_id: budget.id
         BudgetManager.new(budget).decline(user)
       end
-        
-      it "redirect user to users/sign_in path " do 
+
+      it "redirect user to users/sign_in path " do
          expect(response).to redirect_to new_user_session_path
        end
-
-      it 'returns status code of 302' do
-        expect(response).to have_http_status(302)
-      end
     end
   end
 end

@@ -5,7 +5,7 @@ FactoryGirl.define do
     use_custom_templates true
     custom_html_template '<strong>Hey there</strong>'
     custom_txt_template 'Hey there'
-    subject "email subject"
+    subject { Faker::Lorem.sentence }
 
     enterprise
 
