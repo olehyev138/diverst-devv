@@ -72,26 +72,28 @@
       </div>
     </div>
 
-    <div class="col sm-12 md-3">
-      <div class="card card--secondary">
-        <div class="card__section">
-          <h4>Most Active this week</h4>
-          <ol>
-            <% current_user.enterprise.users.active.top_participants(10).each do |member| %>
-              <li><%= user_performance_label(member) %></li>
-            <% end %>
-          </ol>
-        </div>
-        <div class="card__section">
-          <h4>Top <%= c_t(:erg).pluralize %> this week</h4>
-          <ol>
-            <% current_user.enterprise.groups.top_participants(10).each do |group| %>
-              <li><%= group_performance_label(group) %></li>
-            <% end %>
-          </ol>
+    <% if current_user.enterprise.enable_rewards? %>
+      <div class="col sm-12 md-3">
+        <div class="card card--secondary">
+          <div class="card__section">
+            <h4>Most Active this week</h4>
+            <ol>
+              <% current_user.enterprise.users.active.top_participants(10).each do |member| %>
+                <li><%= user_performance_label(member) %></li>
+              <% end %>
+            </ol>
+          </div>
+          <div class="card__section">
+            <h4>Top <%= c_t(:erg).pluralize %> this week</h4>
+            <ol>
+              <% current_user.enterprise.groups.top_participants(10).each do |group| %>
+                <li><%= group_performance_label(group) %></li>
+              <% end %>
+            </ol>
+          </div>
         </div>
       </div>
-    </div>
+    <% end %>
   </div>
 
   <div class="row">
