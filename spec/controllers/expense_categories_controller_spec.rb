@@ -176,13 +176,13 @@ RSpec.describe ExpenseCategoriesController, type: :controller do
                 expect(response).to redirect_to action: :index
             end
 
-            it "destroy the expense_category" do 
+            it "destroy the expense_category" do
                 expense_category
                 expect{ delete :destroy, id: expense_category.id }.to change(ExpenseCategory, :count).by(-1)
             end
         end
 
-        context "without logged in user" do 
+        context "without logged in user" do
             before { delete :destroy, id: expense_category.id }
 
             it_behaves_like "redirect user to users/sign_in path"
