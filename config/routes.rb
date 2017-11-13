@@ -97,8 +97,13 @@ Rails.application.routes.draw do
       patch 'delete_attachment'
       get 'calendar'
     end
-
+    
     scope module: :enterprises do
+      resources :folders do
+        scope module: :folder do
+          resources :resources
+        end
+      end
       resources :resources
       resources :events, only: [] do
         collection do
@@ -180,6 +185,13 @@ Rails.application.routes.draw do
           post 'approve'
         end
       end
+      
+      resources :folders do
+        scope module: :folder do
+          resources :resources
+        end
+      end
+      
       resources :resources
       resources :fields do
         member do

@@ -1,0 +1,23 @@
+<div class="content__main">
+  <%= simple_form_for @container_path + [@folder] do |f| %>
+
+    <div class="card">
+      <div class="card__section card__section--border">
+        <%= f.input :name,
+              label: "Give this folder a name!".html_safe,
+              input_html: { autofocus: true } %>
+      </div>
+      
+      <% if @folder.container_type === "Enterprise" %>
+        <div class="card__section card__section--border">
+          <%= f.label :groups do %>
+            <p>Share this folder with your <%= c_t(:erg).pluralize %></p>
+          <% end %>
+          <%= f.association :groups, collection: current_user.enterprise.groups, label: false, input_html: { class: "select2" } %>
+        </div>
+      <% end %>
+    </div>
+    
+    <%= f.button :submit %>
+  <% end %>
+</div>

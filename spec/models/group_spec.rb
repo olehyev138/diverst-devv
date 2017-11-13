@@ -23,6 +23,9 @@ RSpec.describe Group, :type => :model do
         it { expect(group).to have_many(:messages) }
         it { expect(group).to have_many(:news_links) }
         it { expect(group).to have_many(:social_links) }
+        it { expect(group).to have_many(:folders) }
+        it { expect(group).to have_many(:folder_shares) }
+        it { expect(group).to have_many(:shared_folders) }
         
         it { expect(group).to have_one(:news_feed)}
     end
