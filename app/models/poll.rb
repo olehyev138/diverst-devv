@@ -51,10 +51,19 @@ class Poll < ActiveRecord::Base
 
     def responses_csv
         CSV.generate do |csv|
-            csv << ['id'].concat(fields.map(&:title))
+            csv << ['user_id', 'user_email', 'user_name'].concat(fields.map(&:title))
 
             responses.order(created_at: :desc).each do |response|
-                response_column = [response.id]
+                if response.user.present?
+                  user_id = response.user.id
+                  user_email = response.user.email
+                  user_name = response.user.name
+                else
+                  user_id = ''
+                  user_email = ''
+                  user_name = 'Deleted User'
+                end
+                response_column = [user_id, user_email, user_name]
 
                 fields.each do |field|
                     response_column << field.csv_value(response.info[field])
