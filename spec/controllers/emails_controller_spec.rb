@@ -20,14 +20,12 @@ RSpec.describe EmailsController, type: :controller do
 
           it "returns emails belonging to enterprise" do
               2.times { FactoryGirl.create(:email, enterprise: enterprise) }
-
-              expect(enterprise.emails.count).to eq 2
+              expect(assigns[:enterprise].emails.count).to eq 2
           end
         end
 
         context "without a logged in user" do
             before { get :index }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
@@ -71,7 +69,6 @@ RSpec.describe EmailsController, type: :controller do
 
         describe "without a logged in user" do
           before { patch :update, id: email.id, email: {subject: "updated"} }
-
           it_behaves_like "redirect user to users/sign_in path"
         end
     end

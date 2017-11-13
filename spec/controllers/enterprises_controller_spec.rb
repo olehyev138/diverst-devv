@@ -6,7 +6,6 @@ RSpec.describe EnterprisesController, type: :controller do
     let(:group){ create(:group, enterprise: enterprise) }
 
     describe "GET#calendar" do
-
         it "allows view to be embed on iframe" do
             get :calendar, id: enterprise.id
             expect(response.headers).to_not include("X-Frame-Options")
@@ -22,8 +21,8 @@ RSpec.describe EnterprisesController, type: :controller do
         end
     end
 
-    describe "GET#edit" do
 
+    describe "GET#edit" do
         describe "with logged in user" do
             login_user_from_let
 
@@ -42,10 +41,10 @@ RSpec.describe EnterprisesController, type: :controller do
 
         describe "without a logged in user" do
             before { get :edit, id: enterprise.id }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe "PATCH#update" do
         describe "with logged in user" do
@@ -97,8 +96,8 @@ RSpec.describe EnterprisesController, type: :controller do
         end
     end
 
-    describe "GET#edit_fields" do
 
+    describe "GET#edit_fields" do
         describe "with logged in user" do
             login_user_from_let
 
@@ -117,13 +116,11 @@ RSpec.describe EnterprisesController, type: :controller do
 
         describe "without a logged in user" do
             before { get :edit_fields, id: enterprise.id }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
     describe "GET#edit_budgeting" do
-
         describe "with logged in user" do
             login_user_from_let
 
@@ -142,7 +139,6 @@ RSpec.describe EnterprisesController, type: :controller do
 
         describe "without a logged in user" do
             before { get :edit_budgeting, id: enterprise.id }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
@@ -150,7 +146,6 @@ RSpec.describe EnterprisesController, type: :controller do
     # CAN'T FIGURE OUT HOW TO PASS TEST
 
     describe "GET#bias" do
-
         describe "with logged in user" do
             login_user_from_let
 
@@ -167,7 +162,6 @@ RSpec.describe EnterprisesController, type: :controller do
 
         describe "without a logged in user" do
             before { get :bias, id: enterprise.id }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
@@ -205,13 +199,12 @@ RSpec.describe EnterprisesController, type: :controller do
 
         describe "without a logged in user" do
              before { get :edit_mobile_fields, id: enterprise.id }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
-    describe "GET#edit_auth" do
 
+    describe "GET#edit_auth" do
         describe "with logged in user" do
             login_user_from_let
 
@@ -229,14 +222,13 @@ RSpec.describe EnterprisesController, type: :controller do
         end
 
         describe "without a logged in user" do
-            before { get :edit_auth, id: enterprise.id}
-
+            before { get :edit_auth, id: enterprise.id }
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
-    describe "GET#edit_branding" do
 
+    describe "GET#edit_branding" do
         describe "with logged in user" do
             login_user_from_let
 
@@ -259,7 +251,6 @@ RSpec.describe EnterprisesController, type: :controller do
 
         describe "without a logged in user" do
             before { get :edit_branding, id: enterprise.id }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
@@ -267,7 +258,6 @@ RSpec.describe EnterprisesController, type: :controller do
     # CONTROLLER IS MISSING A TEMPLATE
 
     describe "GET#edit_algo", skip: "test fails because of Missing template layouts/handshake..." do
-
         describe "with logged in user" do
             login_user_from_let
 
@@ -282,13 +272,12 @@ RSpec.describe EnterprisesController, type: :controller do
 
         describe "without a logged in user" do
             before { get :edit_algo, id: enterprise.id }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
-    describe "GET#update_branding" do
 
+    describe "GET#update_branding" do
         describe "with logged in user" do
             login_user_from_let
 
@@ -333,6 +322,7 @@ RSpec.describe EnterprisesController, type: :controller do
         end
     end
 
+
     describe "PATCH#delete_attachment", skip: "skip tests for now" do
         before :each do
             request.env["HTTP_REFERER"] = "back"
@@ -364,10 +354,10 @@ RSpec.describe EnterprisesController, type: :controller do
 
         describe "without a logged in user" do
             before { patch :delete_attachment, id: enterprise.id, enterprise: attributes_for(:enterprise, theme: { primary_color: "#ff0000" }) }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe "GET#restore_default_branding" do
         before do
@@ -388,6 +378,11 @@ RSpec.describe EnterprisesController, type: :controller do
                     expect(assigns[:enterprise]).to be_valid
                 end
             end
+        end
+
+        describe "without a logged in user" do 
+            before { patch :restore_default_branding, id: enterprise.id, enterprise: attributes_for(:enterprise, theme: {logo_file_name: "test"})}
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 end

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe BadgesController, type: :controller do
 
-   include ApplicationHelper
+  include ApplicationHelper
 
   let(:enterprise){ create(:enterprise) }
   let(:user){ create(:user, enterprise: enterprise) }
@@ -32,13 +32,13 @@ RSpec.describe BadgesController, type: :controller do
     end
   end
 
+
   describe "POST#create" do
     describe "with logged in user" do
 
       login_user_from_let
 
       context "with valid parameters" do
-
         it "creates a new badge" do
           expect{ post :create, badge: attributes_for(:badge_params) }
             .to change(enterprise.badges, :count).by(1)
@@ -51,7 +51,6 @@ RSpec.describe BadgesController, type: :controller do
 
         it "render a notice flash message" do
           post :create, badge: attributes_for(:badge_params)
-
           expect(flash[:notice]).to eq "Your #{c_t(:badge)} was created"
         end
       end
@@ -80,6 +79,7 @@ RSpec.describe BadgesController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
+
 
   describe "GET#edit" do
     let(:badge){ create(:badge, enterprise: enterprise, points: 10) }
@@ -117,6 +117,7 @@ RSpec.describe BadgesController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
+
 
   describe "PATCH#update" do
     let(:badge){ create(:badge, enterprise: enterprise, points: 10) }
@@ -164,8 +165,8 @@ RSpec.describe BadgesController, type: :controller do
 
       it_behaves_like "redirect user to users/sign_in path"
     end
-
   end
+  
 
   describe "DELETE#destroy" do
     let!(:badge){ create(:badge, enterprise: enterprise) }

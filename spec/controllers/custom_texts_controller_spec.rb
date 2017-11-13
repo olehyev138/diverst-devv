@@ -22,7 +22,6 @@ RSpec.describe CustomTextsController, type: :controller do
 
     context 'without logged user' do
       before { get :edit, id: custom_text }
-
       it_behaves_like "redirect user to users/sign_in path"
     end
   end

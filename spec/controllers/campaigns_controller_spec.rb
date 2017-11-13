@@ -12,10 +12,6 @@ RSpec.describe CampaignsController, type: :controller do
 
             before { get :index }
 
-            it 'return success' do
-                expect(response).to be_success
-            end
-
             it "returns a list of campaigns" do
                 expect(assigns[:campaigns].count).to eq 1
             end
@@ -32,15 +28,12 @@ RSpec.describe CampaignsController, type: :controller do
         end
     end
 
+
     describe 'GET#new' do
         context 'with logged user' do
             login_user_from_let
 
             before { get :new }
-
-            it 'return success' do
-                expect(response).to be_success
-            end
 
             it "returns a new campaign object" do
                 expect(assigns[:campaign]).to be_a_new(Campaign)
@@ -58,7 +51,6 @@ RSpec.describe CampaignsController, type: :controller do
 
         context "without logged user" do
             before { get :new }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
@@ -99,13 +91,11 @@ RSpec.describe CampaignsController, type: :controller do
 
                 it "renders new template" do
                     post :create, campaign: { title: nil }
-
                     expect(response).to render_template :new
                 end
 
                 it "renders a flash alert" do
                     post :create, campaign: { title: nil }
-
                     expect(flash[:alert]).to eq "Your campaign was not created. Please fix the errors"
                 end
             end
@@ -114,11 +104,11 @@ RSpec.describe CampaignsController, type: :controller do
         context "without logged user" do
             let(:campaign_params) { FactoryGirl.attributes_for(:campaign) }
 
-            before {  post :create, campaign: campaign_params }
-
+            before { post :create, campaign: campaign_params }
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe "GET#show" do
         context "with logged in user" do
@@ -127,17 +117,12 @@ RSpec.describe CampaignsController, type: :controller do
             context "successfully" do
                 before { get :show, id: campaign.id }
 
-                it "returns success" do
-                    expect(response).to be_success
-                end
-
                 it "get the campaign" do
                     expect(assigns[:campaign]).to eq campaign
                 end
 
                 it "returns a list of questions" do
                     2.times { create(:question, campaign: campaign) }
-
                     expect(campaign.questions.count).to eq 2
                 end
 
@@ -149,12 +134,10 @@ RSpec.describe CampaignsController, type: :controller do
                 end
 
                 it "returns only 10 questions per page" do
-                    12.times { create :question, campaign: campaign }
-
+                    11.times { create :question, campaign: campaign }
                     expect(assigns[:questions].count).to eq 10
                 end
             end
-
 
             context "unsuccessfully" do
                 it "doesn't get the campaign" do
@@ -166,10 +149,8 @@ RSpec.describe CampaignsController, type: :controller do
 
         context "without logged user" do
             before { get :show, id: campaign.id }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
-
     end
 
     describe "GET#edit" do
@@ -178,7 +159,7 @@ RSpec.describe CampaignsController, type: :controller do
 
             it "gets the campaign" do
                 get :edit, id: campaign.id
-                expect(response).to be_success
+                expect(assigns[:campaign]).to eq campaign
             end
 
             it "renders edit template" do
@@ -253,7 +234,6 @@ RSpec.describe CampaignsController, type: :controller do
 
         context "without user logged in" do
             before { delete :destroy, id: campaign.id }
-
            it_behaves_like "redirect user to users/sign_in path"
         end
     end
@@ -293,13 +273,11 @@ RSpec.describe CampaignsController, type: :controller do
 
             it "gets the top_performers with json" do
                 get :top_performers, id: campaign.id, format: :json
-
                 expect(response.content_type).to eq "application/json"
             end
 
             it "gets the top_performers with csv" do
                 get :top_performers, id: campaign.id, format: :csv
-
                 expect(response.content_type).to eq "text/csv"
             end
 
@@ -311,7 +289,6 @@ RSpec.describe CampaignsController, type: :controller do
 
         context "without user logged in" do
            before { get :top_performers, id: campaign.id, format: :json }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end

@@ -30,6 +30,7 @@ RSpec.describe BiasesController, type: :controller do
         end
     end
 
+
     describe "GET#new" do
         context "with logged in user" do
             login_user_from_let
@@ -55,6 +56,7 @@ RSpec.describe BiasesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe 'POST#create' do
         context 'with logged user' do
@@ -130,10 +132,6 @@ RSpec.describe BiasesController, type: :controller do
                 it "redirects to action: :index" do
                     expect(response).to redirect_to(action: :index)
                 end
-
-                it "responds with status code of 200" do
-                    expect(response).to have_http_status(302)
-                end
             end
 
             context "Bias report not updated" do
@@ -167,6 +165,7 @@ RSpec.describe BiasesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+    
 
     describe "DELETE #destroy" do
         context "with user logged in" do

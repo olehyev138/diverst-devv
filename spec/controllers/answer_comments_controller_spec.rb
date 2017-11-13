@@ -22,5 +22,12 @@ RSpec.describe AnswerCommentsController, type: :controller do
                 expect(response).to redirect_to(assigns(:answer))
             end
         end
+
+        describe "without a logged in user" do 
+            let!(:answer_comment){ create(:answer_comment, answer: answer, author_id: user.id) }
+            before { delete :destroy, id: answer_comment.id }
+
+            it_behaves_like "redirect user to users/sign_in path"
+        end
     end
 end

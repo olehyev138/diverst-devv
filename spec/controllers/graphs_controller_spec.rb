@@ -197,15 +197,31 @@ RSpec.describe GraphsController, type: :controller do
         describe "with logged in user" do
             login_user_from_let
 
-            it "returns success" do
+            it "returns response in csv format for metrics_graph" do
                 get :export_csv, :id => metrics_graph.id
-                expect(response).to be_success
+                expect(response.content_type).to eq "text/csv"
+            end
+
+            it "returns response in csv format for poll_graph" do
+                get :export_csv, :id => poll_graph.id
+                expect(response.content_type).to eq "text/csv"
             end
 
             it "returns success" do
                 get :export_csv, :id => poll_graph.id
                 expect(response).to be_success
             end
+
+            it "returns success" do
+                get :export_csv, :id => metrics_graph.id
+                expect(response).to be_success
+            end
+        end
+
+        describe "without a logged in user" do
+            before { get :export_csv, :id => metrics_graph.id }
+
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 end
