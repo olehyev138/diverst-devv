@@ -28,7 +28,7 @@ class Groups::GroupMembersController < ApplicationController
     authorize @group, :manage_members?
 
     @group.accept_user_to_group(@member)
-    track_activity(@member, :accept_pending)
+    track_activity(@member, :accept_pending, params = { group: @group})
 
     redirect_to action: :pending
   end

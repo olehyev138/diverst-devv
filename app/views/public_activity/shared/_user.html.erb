@@ -1,0 +1,6 @@
+<%# if activity.trackable %>
+  <%= image_tag activity.trackable.avatar.expiring_url(3600, :thumb), width: '20px'%>
+  <%= link_to activity.trackable.first_name, user_user_path(activity.trackable) %>
+<%# else %>
+  <!-- Deleted user -->
+<%# end %>
