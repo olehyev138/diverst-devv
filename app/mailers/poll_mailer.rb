@@ -5,7 +5,7 @@ class PollMailer < ApplicationMailer
 
     if @poll.groups.any?
       group_names = @poll.groups.map{ |g| g.name}.join(', ')
-      subject += "(for members of #{group_names})"
+      subject += " for members of #{group_names}"
     end
 
     mail(to: user.email, subject: subject)
