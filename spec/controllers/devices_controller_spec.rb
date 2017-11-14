@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe DevicesController, type: :controller do
     let(:user){ create(:user) }
-    
+
     describe "GET#index" do
         describe "with logged in user" do
 

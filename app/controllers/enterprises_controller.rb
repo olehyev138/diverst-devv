@@ -12,7 +12,7 @@ class EnterprisesController < ApplicationController
 
   def update
     authorize @enterprise
-    
+
     if @enterprise.update_attributes(enterprise_params)
       flash[:notice] = "Your enterprise was updated"
       redirect_to :back
@@ -39,7 +39,7 @@ class EnterprisesController < ApplicationController
   def edit_cdo
     authorize @enterprise, :update?
   end
-  
+
   # missing a template
   def edit_mobile_fields
     authorize @enterprise
@@ -54,7 +54,7 @@ class EnterprisesController < ApplicationController
 
     set_theme
   end
-  
+
   # missing template
   def edit_algo
     authorize @enterprise, :edit?

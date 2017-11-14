@@ -47,7 +47,7 @@ class Enterprise < ActiveRecord::Base
     before_create :create_elasticsearch_only_fields
 
     validates :idp_sso_target_url, url: { allow_blank: true }
-    validates :cdo_name,    presence: true
+    validates :cdo_name, :name, presence: true
     
     has_attached_file :cdo_picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: "private"
     validates_attachment_content_type :cdo_picture, content_type: %r{\Aimage\/.*\Z}

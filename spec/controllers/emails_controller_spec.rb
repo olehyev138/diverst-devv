@@ -1,43 +1,75 @@
 require 'rails_helper'
 
 RSpec.describe EmailsController, type: :controller do
-    let(:enterprise){ create(:enterprise) }
-    let(:user){ create(:user, enterprise: enterprise) }
-    
+    let(:enterprise) { create(:enterprise) }
+    let(:user) { create(:user, enterprise: enterprise) }
+
     describe "GET#index" do
-        describe "with logged in user" do
-            let(:answer){ create(:answer, author_id: user.id, question: question) }
-            login_user_from_let
-            
-            it "gets the email" do
-                get :index
-                expect(response).to be_success
-            end
+        context "with logged in user" do
+          login_user_from_let
+
+          before { get :index }
+
+          it "render index template" do
+              expect(response).to render_template :index
+          end
+
+          it "return enterprise of current user" do
+              expect(assigns[:enterprise]).to eq user.enterprise
+          end
+
+          it "returns emails belonging to enterprise" do
+              2.times { FactoryGirl.create(:email, enterprise: enterprise) }
+              expect(assigns[:enterprise].emails.count).to eq 2
+          end
+        end
+
+        context "without a logged in user" do
+            before { get :index }
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
-    
+
     describe "PATCH#update" do
-        let(:email){ create(:email, enterprise: enterprise) }
-        
+        let(:email) { create(:email, enterprise: enterprise) }
+
         describe "with logged in user" do
             login_user_from_let
-            
+
             context "with valid parameters" do
-                before(:each){ patch :update, id: email.id, email: {subject: "updated"}}
-                
+                before { patch :update, id: email.id, email: { subject: "updated" } }
+
                 it "updates the email" do
                     email.reload
                     expect(email.subject).to eq "updated"
                 end
-                
+
                 it "redirects to action index" do
                     expect(response).to redirect_to action: :index
                 end
-                
-                it "flashes notice" do 
-                    expect(flash[:notice])
+
+                it "flashes a notice message" do
+                    expect(flash[:notice]).to eq "Your email was updated"
                 end
             end
+
+            context "with invalid parameters" do
+               before { patch :update, id: email.id, email: { subject: nil } }
+
+              it "flashes an alert message" do
+                  email.reload
+                  expect(flash[:alert]).to eq "Your email was not updated. Please fix the errors"
+              end
+
+              it "renders edit template" do
+                  expect(response).to render_template :edit
+              end
+            end
+        end
+
+        describe "without a logged in user" do
+          before { patch :update, id: email.id, email: {subject: "updated"} }
+          it_behaves_like "redirect user to users/sign_in path"
         end
     end
 end
