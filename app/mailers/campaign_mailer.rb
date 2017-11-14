@@ -5,7 +5,7 @@ class CampaignMailer < ApplicationMailer
 
     group_names = 'us'
     if inv.campaign.groups.any?
-      group_names = @inv.campaign.groups.map{ |g| g.name}.join(', ')
+      group_names = inv.campaign.groups.map{ |g| g.name}.join(', ')
     end
 
     subject =  "You are invited to join #{group_names} in an online conversation in Diverst. "
