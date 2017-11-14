@@ -21,7 +21,10 @@ class CampaignsController < ApplicationController
   def create
     authorize Campaign
     @campaign = current_user.enterprise.campaigns.new(campaign_params)
+    #TODO Remove. Hack to make question validation pass
+    @campaign.questions.each { |q| q.campaign = @campaign }
     @campaign.owner = current_user
+
     if @campaign.save
       track_activity(@campaign, :create)
       flash[:notice] = "Your campaign was created"
