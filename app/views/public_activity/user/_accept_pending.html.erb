@@ -1,5 +1,5 @@
 <div class="card__section">
   <%= render 'public_activity/shared/owner', activity: activity %>
-  approved pending member(<%= link_to activity.trackable.first_name, user_user_path(activity.trackable) %>)
+  approved pending member(<%= link_to activity.trackable.first_name, user_user_path(activity.trackable) %>) to <%= activity.recipient.name %>
   (<%= activity.created_at.to_s :datetime %>)
 </div>
