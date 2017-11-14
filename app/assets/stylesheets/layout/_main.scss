@@ -24,6 +24,7 @@
   width: 100%;
   margin: 0 auto;
   max-width: 1240px;
+  min-height: calc(100vh - 130px - 20px);
 
   @include mq(medium) {
     padding: $spacing-large;

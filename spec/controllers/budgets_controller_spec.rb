@@ -9,29 +9,24 @@ RSpec.describe BudgetsController, type: :controller do
     context 'with logged user' do
       login_user_from_let
 
-      before { get :index, group_id: budget.subject.id}
-
-      it 'return success' do
-        expect(response).to be_success
-      end
-
-      it "renders index template" do 
-        expect(response).to render_template(:index)
-      end
-    end
-
-    context "without logged user" do 
       before { get :index, group_id: budget.subject.id }
 
-      it "redirects user to users/sign_in path " do 
-        expect(response).to redirect_to new_user_session_path
+      it "renders index template" do
+        expect(response).to render_template(:index)
       end
 
-      it "respond with http status" do 
-        expect(response).to have_http_status(302)
+      it "returns a valid group object" do
+        expect(assigns[:group]).to be_valid
       end
     end
+
+    context "without logged user" do
+      before { get :index, group_id: budget.subject.id }
+
+      it_behaves_like "redirect user to users/sign_in path"
+    end
   end
+
 
   describe 'GET#show' do
     context 'with logged user' do
@@ -39,31 +34,22 @@ RSpec.describe BudgetsController, type: :controller do
 
       before { get :show, group_id: budget.subject.id, id: budget.id }
 
-      it 'return success' do
-        expect(response).to be_success
+      it "render show template" do
+        expect(response).to render_template :show
       end
 
-      it "render show template" do 
-        expect(response).to render_template :show
+      it "returns a valid group object" do
+        expect(assigns[:group]).to be_valid
       end
     end
 
     context 'without logged user' do
       before { get :show, group_id: budget.subject.id, id: budget.id }
 
-      it 'return error' do
-        expect(response).to_not be_success
-      end
-
-      it "redirects user to users/sign_in path " do 
-        expect(response).to redirect_to new_user_session_path
-      end
-
-      it "respond with http status" do 
-        expect(response).to have_http_status(302)
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
+
 
   describe 'GET#edit_annual_budget' do
     let(:user) { create :user }
@@ -78,19 +64,22 @@ RSpec.describe BudgetsController, type: :controller do
 
       before { get_edit_annual_budget(group.id) }
 
-      it 'return success' do
-        expect(response).to be_success
+      it 'returns group.enterprise object' do
+        expect(assigns[:group].enterprise).to eq group.enterprise
+      end
+
+      it "renders edit_annual_budget template" do
+        expect(response).to render_template :edit_annual_budget
       end
     end
 
     context 'without logged user' do
       before { get_edit_annual_budget }
 
-      it 'return error' do
-        expect(response).to_not be_success
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
+
 
   describe 'GET#new' do
     let!(:user) { FactoryGirl.create(:user) }
@@ -101,15 +90,15 @@ RSpec.describe BudgetsController, type: :controller do
 
       before { get :new, group_id: group.id }
 
-      it 'return success' do
-        expect(response).to be_success
+      it "returns a valid group object" do
+        expect(assigns[:group]).to be_valid
       end
 
-      it "return a new Budget object" do 
+      it "return a new Budget object" do
         expect(assigns[:budget]).to be_a_new(Budget)
-      end  
+      end
 
-      it "render new template" do 
+      it "render new template" do
         expect(response).to render_template :new
       end
     end
@@ -117,15 +106,10 @@ RSpec.describe BudgetsController, type: :controller do
     context 'without logged user' do
       before { get :new, group_id: group.id }
 
-      it "redirect user to users/sign_in path " do 
-        expect(response).to redirect_to new_user_session_path
-      end
-
-      it 'returns status code of 302' do
-        expect(response).to have_http_status(302)
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
+
 
   describe 'POST#create' do
     context 'with logged user' do
@@ -134,9 +118,13 @@ RSpec.describe BudgetsController, type: :controller do
       context 'with correct params' do
         let(:budget_params) { FactoryGirl.attributes_for(:budget) }
 
+        it "returns a valid group object" do
+          post :create, group_id: group.id, budget: budget_params
+          expect(assigns[:group]).to be_valid
+        end
+
         it 'redirects to correct action' do
           post :create, group_id: group.id, budget: budget_params
-
           expect(response).to redirect_to action: :index
         end
 
@@ -145,19 +133,18 @@ RSpec.describe BudgetsController, type: :controller do
             post :create, group_id: group.id, budget: budget_params
           }.to change(Budget,:count).by(1)
         end
+
+        it "flashes a notice message" do
+          post :create, group_id: group.id, budget: budget_params
+          expect(flash[:notice]).to eq "Your budget was created"
+        end
       end
     end
 
     context 'without logged user' do
       before { post :create, group_id: group.id, budget: {} }
 
-      it "redirect user to users/sign_in path " do 
-        expect(response).to redirect_to new_user_session_path
-      end
-
-      it 'returns status code of 302' do
-        expect(response).to have_http_status(302)
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
 
@@ -178,6 +165,10 @@ RSpec.describe BudgetsController, type: :controller do
       context 'with correct parsms' do
         before do
           post_update_annual_budget(group.id, {annual_budget: new_annual_budget})
+        end
+
+        it "returns a valid enterprise object" do
+          expect(assigns[:group].enterprise).to be_valid
         end
 
         it 'updates group annual budget' do
@@ -215,19 +206,18 @@ RSpec.describe BudgetsController, type: :controller do
     context 'without logged user' do
       before { post_update_annual_budget(group.id, {annual_budget: new_annual_budget}) }
 
-      it "redirect user to users/sign_in path " do 
-        expect(response).to redirect_to new_user_session_path
-      end
-
-      it 'returns status code of 302' do
-        expect(response).to have_http_status(302)
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
 
   describe 'DELETE#destroy' do
     context 'with logged user' do
       login_user_from_let
+
+      it "returns a valid group object" do
+        delete :destroy, group_id: budget.subject.id, id: budget.id
+        expect(assigns[:group]).to be_valid
+      end
 
       it 'removes a budget' do
         expect{ delete :destroy, group_id: budget.subject.id, id: budget.id }.to change(Budget, :count).by(-1)
@@ -241,79 +231,69 @@ RSpec.describe BudgetsController, type: :controller do
 
      context "without a logged in user" do
         before {  delete :destroy, group_id: budget.subject.id, id: budget.id }
-        
-        it "redirect user to users/sign_in path " do 
-          expect(response).to redirect_to new_user_session_path
-        end
 
-        it 'returns status code of 302' do
-          expect(response).to have_http_status(302)
-        end
+        it_behaves_like "redirect user to users/sign_in path"
       end
   end
-  
+
   describe 'POST#approve' do
     context 'with logged user' do
       login_user_from_let
 
-      before do 
+      before do
         post :approve, group_id: budget.subject.id, budget_id: budget.id
         BudgetManager.new(budget).approve(user)
+      end
+
+      it "returns a valid group object" do
+        expect(assigns[:budget]).to be_valid
       end
 
       it 'redirects to index' do
         expect(response).to redirect_to action: :index
       end
 
-      it "budget is declined" do 
-        expect(budget.is_approved).to eq true 
+      it "budget is approved" do
+        expect(budget.is_approved).to eq true
       end
     end
 
     context "without a logged in user" do
       before { post :approve, group_id: budget.subject.id, budget_id: budget.id}
-        
-      it "redirect user to users/sign_in path " do 
-         expect(response).to redirect_to new_user_session_path
-       end
 
-      it 'returns status code of 302' do
-        expect(response).to have_http_status(302)
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
-  
+
   describe 'POST#decline' do
     context 'with logged user' do
       login_user_from_let
 
-      before do 
+      before do
         post :decline, group_id: budget.subject.id, budget_id: budget.id
         BudgetManager.new(budget).decline(user)
+      end
+
+      it "returns a valid group object" do
+        expect(assigns[:budget]).to be_valid
       end
 
       it 'redirects to index' do
         expect(response).to redirect_to action: :index
       end
 
-      it "budget is declined" do 
-        expect(budget.is_approved).to eq false 
+      it "budget is declined" do
+        expect(budget.is_approved).to eq false
       end
     end
 
-    context "without a logged in user" do 
-      before do 
+    context "without a logged in user" do
+      before do
         post :decline, group_id: budget.subject.id, budget_id: budget.id
         BudgetManager.new(budget).decline(user)
       end
-        
-      it "redirect user to users/sign_in path " do 
-         expect(response).to redirect_to new_user_session_path
-       end
 
-      it 'returns status code of 302' do
-        expect(response).to have_http_status(302)
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
 end
