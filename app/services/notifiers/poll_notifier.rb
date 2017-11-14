@@ -26,8 +26,7 @@ class Notifiers::PollNotifier
   def targeted_users
     users = @poll.targeted_users
     users = filter_by_initiative(users) if @initiative
-
-    users.select { |u| u.active? }
+    users
   end
 
   def filter_by_initiative(users)

@@ -41,7 +41,8 @@ class Poll < ActiveRecord::Base
         target = enterprise.users
         target = target.for_segments(segments) unless segments.empty?
         target = target.for_groups(groups) unless groups.empty?
-        target
+
+        target.select {|u| u.active? }
     end
 
     # Defines which fields will be usable when creating graphs
