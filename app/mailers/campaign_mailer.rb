@@ -4,7 +4,7 @@ class CampaignMailer < ApplicationMailer
     @enterprise_id = @invitation.user.enterprise.id
 
     group_names = 'us'
-    if @inv.campaign.groups.any?
+    if inv.campaign.groups.any?
       group_names = @inv.campaign.groups.map{ |g| g.name}.join(', ')
     end
 
