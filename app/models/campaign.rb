@@ -44,8 +44,13 @@ class Campaign < ActiveRecord::Base
     def create_invites
         return if enterprise.nil?
 
-        invites = enterprise.users.for_groups(groups).map do |user_to_invite|
-            CampaignInvitation.new(campaign: self, user: user_to_invite)
+        invites = []
+        groups.each do |group|
+          group.active_members.each do |user|
+            #TODO account for segments here
+            #TODO only notify each user once
+            invites << CampaignInvitation.new(campaign: self, user: user)
+          end
         end
 
         CampaignInvitation.import invites
