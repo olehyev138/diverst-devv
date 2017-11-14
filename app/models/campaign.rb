@@ -49,6 +49,7 @@ class Campaign < ActiveRecord::Base
           group.active_members.each do |user|
             #TODO account for segments here
             #TODO only notify each user once
+            #TODO move to background job
             invites << CampaignInvitation.new(campaign: self, user: user)
           end
         end
