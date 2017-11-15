@@ -79,7 +79,7 @@ class Group < ActiveRecord::Base
     validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
 
     validates :name, presence: true
-    
+
     before_create :build_default_news_feed
     before_save :send_invitation_emails, if: :send_invitations?
     before_save :create_yammer_group, if: :should_create_yammer_group?
@@ -96,7 +96,7 @@ class Group < ActiveRecord::Base
     def managers
         leaders.to_a << owner
     end
-    
+
     def news_feed
         if NewsFeed.where(:group_id => id).count > 0
             return NewsFeed.find_by_group_id(id)
@@ -290,7 +290,7 @@ class Group < ActiveRecord::Base
         return nil if group_sizes.length == 0
         group_sizes.sum / group_sizes.length
     end
-    
+
     def build_default_news_feed
         build_news_feed
         true

@@ -10,7 +10,7 @@ class Poll < ActiveRecord::Base
     has_many :segments, inverse_of: :polls, through: :polls_segments
     has_many :groups_polls
     has_many :groups, inverse_of: :polls, through: :groups_polls
-    
+
     belongs_to :enterprise, inverse_of: :polls
     belongs_to :owner, class_name: "User"
     belongs_to :initiative
@@ -25,7 +25,7 @@ class Poll < ActiveRecord::Base
     validates :enterprise,  presence: true
     validates :owner,       presence: true
     #validates :groups,      presence: {:message => "Please choose at least 1 group"}
-    
+
     validate :validate_groups_enterprise
     validate :validate_initiative_enterprise
     validate :validate_segments_enterprise
