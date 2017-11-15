@@ -42,27 +42,45 @@ class Campaign < ActiveRecord::Base
     scope :ongoing, -> { where('start < :current_time AND end > :current_time', current_time: Time.current) }
 
     def create_invites
-        return if enterprise.nil?
+      return if enterprise.nil?
 
-        invites = []
-        groups.each do |group|
-          group.active_members.each do |user|
-            #TODO account for segments here
-            #TODO only notify each user once
-            #TODO move to background job
-            invites << CampaignInvitation.new(campaign: self, user: user)
-          end
-        end
+      invites = []
 
-        CampaignInvitation.import invites
+      targeted_users.each do |u|
+        invites << CampaignInvitation.new(campaign: self, user: u)
+      end
+
+      CampaignInvitation.import invites
     end
 
-    def send_invitation_emails
-        if published?
-            invitations.where(email_sent: false).find_each do |invitation|
-                CampaignMailer.invitation(invitation).deliver_later
-            end
+    # Returns the list of users who meet the participation criteria for the poll
+    def targeted_users
+      if groups.any?
+        target = []
+        groups.each do |group|
+          target << group.active_members
         end
+
+        target.flatten!
+        target_ids = target.map{|u| u.id}
+
+        target = User.where(id: target_ids)
+      else
+        target = enterprise.users.active
+      end
+
+      target = target.for_segments(segments) unless segments.empty?
+
+      target.uniq{|u| u.id}
+    end
+
+
+    def send_invitation_emails
+      if published?
+        invitations.where(email_sent: false).find_each do |invitation|
+          CampaignMailer.invitation(invitation).deliver_later
+        end
+      end
     end
 
     def contributions_per_erg
