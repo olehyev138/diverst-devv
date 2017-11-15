@@ -14,6 +14,9 @@
       <div class="card__section card__section--border">
         <%= f.input :url, label: "URL", input_html: { autofocus: true } %>
       </div>
+      <div class="card__section card__section--border">
+        <%= f.association :tags, input_html: { class: 'multiple-input', multiple: "multiple" }, collection: @resource.tags, label: "Tags" %>
+      </div>
     </div>
     <%= f.hidden_field :resource_type %>
     <%= f.button :submit %>
