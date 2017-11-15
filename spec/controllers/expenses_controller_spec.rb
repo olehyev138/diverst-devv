@@ -1,69 +1,127 @@
 require 'rails_helper'
 
 RSpec.describe ExpensesController, type: :controller do
-    let(:enterprise){ create(:enterprise, cdo_name: "test") }
-    let(:user){ create(:user, enterprise: enterprise) }
-    let(:category){create(:expense_category)}
-    let(:expense){create(:expense, enterprise: enterprise)}
+    let(:enterprise) { create(:enterprise, cdo_name: "test") }
+    let(:user) { create(:user, enterprise: enterprise) }
+    let(:category) {create(:expense_category)}
+    let(:expense) {create(:expense, enterprise: enterprise)}
     let(:expense_category_1) {create(:expense_category, expense: expense)}
-    
-    describe "GET#index" do
-        describe "with logged in user" do
-            login_user_from_let
 
-            it "returns success" do
-                get :index
-                expect(response).to be_success
+    describe "GET#index" do
+        context "with logged in user" do
+            login_user_from_let
+            before { get :index }
+
+            it "returns 3 expense objects" do
+                expense
+                2.times { create(:expense, enterprise: enterprise) }
+                expect(assigns[:expenses].count).to eq 3
+            end
+
+            it "render index template" do
+                expect(response).to render_template :index
             end
         end
+
+        context "without a logged in user" do
+            before { get :index }
+
+            it_behaves_like "redirect user to users/sign_in path"
+        end
     end
+
 
     describe "GET#new" do
-        describe "with logged in user" do
+        context "with logged in user" do
             login_user_from_let
+            before { get :new }
 
-            it "returns success" do
-                get :new
-                expect(response).to be_success
+            it "returns a new expense object" do 
+                expect(assigns[:expense]).to be_a_new(Expense)
+            end
+
+            it "renders a new template" do 
+                expect(response).to render_template :new
             end
         end
+
+        context "without a logged in user" do 
+            before { get :new }
+
+            it_behaves_like "redirect user to users/sign_in path"
+        end
     end
+
 
     describe "POST#create" do
         describe "with logged in user" do
             login_user_from_let
 
             context 'with correct params' do
-                let(:expense) { FactoryGirl.attributes_for(:expense, :category_id => category.id )}
-            
+                let(:valid_expense_attributes) { FactoryGirl.attributes_for(:expense, :category_id => category.id )}
+
                 it 'redirects to correct action' do
-                    post :create, expense: expense
+                    post :create, expense: valid_expense_attributes
                     expect(response).to redirect_to action: :index
                 end
 
                 it 'creates new expense' do
                     expect{
-                    post :create, expense: expense
+                    post :create, expense: valid_expense_attributes
                     }.to change(Expense,:count).by(1)
                 end
 
-                it "flashes" do
-                    expect(flash[:notice])
+                it "flashes a notice message" do
+                    post :create, expense: valid_expense_attributes
+                    expect(flash[:notice]).to eq "Your expense was created"
+                end
+            end
+
+            context "with invalid params" do 
+                let(:invalid_expense_attributes) { FactoryGirl.attributes_for(:expense, name: nil) }
+
+                before { post :create, expense: invalid_expense_attributes }
+
+                it "flashes an alert message" do 
+                    expect(flash[:alert]).to eq "Your expense was not created. Please fix the errors"
+                end
+
+                it "renders new template" do 
+                    expect(response).to render_template :new
                 end
             end
         end
-    end
 
-    describe "GET#edit" do
-        describe "with logged in user" do
-            login_user_from_let
+        describe "without a logged in user" do 
+            let(:valid_expense_attributes) { FactoryGirl.attributes_for(:expense, :category_id => category.id )}
+            before { post :create, expense: valid_expense_attributes }
 
-            it "returns success" do
-                get :edit, :id => expense.id
-                expect(response).to be_success
-            end
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
+
+    describe "GET#edit" do
+        context "with logged in user" do
+            login_user_from_let
+            before { get :edit, :id => expense.id }
+
+            it "returns a valid expense object" do 
+                expect(assigns[:expense]).to be_valid
+            end
+
+            it "renders an edit template" do 
+                expect(response).to render_template :edit
+            end
+        end
+
+        context "without a logged in user" do 
+            before { get :edit, :id => expense.id }
+
+            it_behaves_like "redirect user to users/sign_in path"
+        end
+    end
+
 
     describe "PATCH#update" do
         describe "with logged in user" do
@@ -84,13 +142,13 @@ RSpec.describe ExpensesController, type: :controller do
                     expect(response).to redirect_to action: :index
                 end
 
-                it "flashes notice" do
-                    expect(flash[:notice])
+                it "flashes a notice message" do
+                    expect(flash[:notice]).to eq "Your expense was updated"
                 end
             end
 
             context "with invalid parameters" do
-                before(:each){ patch :update, id: expense.id, expense: attributes_for(:expense, name: "") }
+                before { patch :update, id: expense.id, expense: attributes_for(:expense, name: "") }
 
                 it "does not update the expense" do
                     expense.reload
@@ -101,22 +159,40 @@ RSpec.describe ExpensesController, type: :controller do
                     expect(response).to render_template :edit
                 end
 
-                it "flashes alert" do
-                    expect(flash[:alert])
+                it "flashes an alert message" do
+                    expect(flash[:alert]).to eq "Your expense was not updated. Please fix the errors"
                 end
             end
         end
+
+        describe "wtihout a logged in user" do 
+            before { patch :update, id: expense.id, expense: attributes_for(:expense, name: "updated") }
+
+            it_behaves_like "redirect user to users/sign_in path"
+        end
+
     end
 
     describe "DELETE#destroy" do
-        describe "with logged in user" do
+        context "with logged in user" do
 
             login_user_from_let
 
-            it "destroy the expense" do
+            it "redirects to action: :index" do
                 delete :destroy, id: expense.id
                 expect(response).to redirect_to action: :index
             end
+
+            it "destroys expense" do
+                expense
+                expect{ delete :destroy, id: expense.id }.to change(Expense, :count).by(-1)
+            end
+        end
+
+        context "without logged in user" do
+            before { delete :destroy, id: expense.id }
+
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 end

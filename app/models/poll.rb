@@ -38,10 +38,23 @@ class Poll < ActiveRecord::Base
 
     # Returns the list of users who meet the participation criteria for the poll
     def targeted_users
-        target = enterprise.users
-        target = target.for_segments(segments) unless segments.empty?
-        target = target.for_groups(groups) unless groups.empty?
-        target
+      if groups.any?
+        target = []
+        groups.each do |group|
+          target << group.active_members
+        end
+
+        target.flatten!
+        target_ids = target.map{|u| u.id}
+
+        target = User.where(id: target_ids)
+      else
+        target = enterprise.users.active
+      end
+
+      target = target.for_segments(segments) unless segments.empty?
+
+      target.uniq{|u| u.id}
     end
 
     # Defines which fields will be usable when creating graphs
@@ -51,10 +64,19 @@ class Poll < ActiveRecord::Base
 
     def responses_csv
         CSV.generate do |csv|
-            csv << ['id'].concat(fields.map(&:title))
+            csv << ['user_id', 'user_email', 'user_name'].concat(fields.map(&:title))
 
             responses.order(created_at: :desc).each do |response|
-                response_column = [response.id]
+                if response.user.present?
+                  user_id = response.user.id
+                  user_email = response.user.email
+                  user_name = response.user.name
+                else
+                  user_id = ''
+                  user_email = ''
+                  user_name = 'Deleted User'
+                end
+                response_column = [user_id, user_email, user_name]
 
                 fields.each do |field|
                     response_column << field.csv_value(response.info[field])

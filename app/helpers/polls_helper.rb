@@ -20,6 +20,12 @@ module PollsHelper
   end
 
   def respondent_name(response)
-    response.anonymous? ? "Anonymous User" : response.user.name_with_status
+    return "Anonymous User" if response.anonymous?
+
+    if response.user.present?
+      response.user.name_with_status
+    else
+      'Deleted User'
+    end
   end
 end

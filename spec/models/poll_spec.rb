@@ -144,21 +144,35 @@ RSpec.describe Poll, type: :model do
 
         context "with segments" do
             let!(:user_in_segment){ create(:user, enterprise: poll.enterprise) }
+            let!(:user_not_in_segment){ create(:user, enterprise: poll.enterprise) }
             let!(:segment){ create(:segment, members: [user_in_segment]) }
             before(:each){ poll.update(segments: [segment]) }
 
             it "returns users that are in segments of poll segments" do
-                expect(poll.targeted_users).to eq [user_in_segment]
+                expect(poll.targeted_users).to include user_in_segment
+                expect(poll.targeted_users).to_not include user_not_in_segment
             end
         end
 
         context "with groups" do
             let!(:user_in_group){ create(:user, enterprise: poll.enterprise) }
-            let!(:group){ create(:group, members: [user_in_group]) }
+            let!(:pending_user_in_group) { create(:user, enterprise: poll.enterprise) }
+            let!(:group){ create(:group, members: [user_in_group, pending_user_in_group]) }
+
+            before {
+              #add and accept members here. check they work
+              group.update(pending_users: 'enabled')
+
+              group.members << user_in_group
+              group.members << pending_user_in_group
+
+              group.accept_user_to_group(user_in_group.id)
+            }
             before(:each){ poll.update(groups: [group]) }
 
             it "returns users that are in groups of poll groups" do
-                expect(poll.targeted_users).to eq [user_in_group]
+              expect(poll.targeted_users).to include user_in_group
+              expect(poll.targeted_users).to_not include pending_user_in_group
             end
         end
     end

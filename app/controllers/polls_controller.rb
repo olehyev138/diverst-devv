@@ -38,8 +38,6 @@ class PollsController < ApplicationController
     @responses = @poll.responses
       .includes(:user)
       .order(created_at: :desc)
-      .page(params[:response_page])
-      .per(5)
   end
 
   def edit

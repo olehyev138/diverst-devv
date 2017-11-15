@@ -28,6 +28,7 @@ class Groups::GroupMembersController < ApplicationController
     authorize @group, :manage_members?
 
     @group.accept_user_to_group(@member)
+    track_activity(@member, :accept_pending, params = { group: @group})
 
     redirect_to action: :pending
   end
@@ -48,7 +49,7 @@ class Groups::GroupMembersController < ApplicationController
     authorize current_user, :join_or_leave_groups?
     @group_member = @group.user_groups.new(group_member_params)
     @group_member.accepted_member = @group.pending_users.disabled?
-    
+
     if @group_member.save
       flash[:notice] = "The member was created"
 
