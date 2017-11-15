@@ -38,19 +38,23 @@ class Poll < ActiveRecord::Base
 
     # Returns the list of users who meet the participation criteria for the poll
     def targeted_users
-      if groups.empty? # take all enterprise users
-        target = enterprise.users.select {|u| u.active? }
-      else #only take active group users
+      if groups.any?
+        target = []
         groups.each do |group|
           target << group.active_members
         end
 
         target.flatten!
+        target_ids = target.map{|u| u.id}
+
+        target = User.where(id: target_ids)
+      else
+        target = enterprise.users.active
       end
 
       target = target.for_segments(segments) unless segments.empty?
 
-      target
+      target.uniq{|u| u.id}
     end
 
     # Defines which fields will be usable when creating graphs
