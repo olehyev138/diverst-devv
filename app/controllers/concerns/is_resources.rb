@@ -26,6 +26,7 @@ module IsResources
     def create
         @resource = @container.resources.new(resource_params)
         if @resource.save
+            @resource.tag_tokens = params[:resource][:tag_ids]
             redirect_to action: :index
         else
             render '/edit'
@@ -41,6 +42,7 @@ module IsResources
 
     def update
         if @resource.update(resource_params)
+            @resource.tag_tokens = params[:resource][:tag_ids]
             redirect_to action: :index
         else
             render '/edit'
