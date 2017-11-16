@@ -15,13 +15,13 @@ ActiveRecord::Schema.define(version: 20171115003354) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
-    t.string   "trackable_type", limit: 191
+    t.string   "trackable_type", limit: 255
     t.integer  "owner_id",       limit: 4
-    t.string   "owner_type",     limit: 191
+    t.string   "owner_type",     limit: 255
     t.string   "key",            limit: 255
     t.text     "parameters",     limit: 65535
     t.integer  "recipient_id",   limit: 4
-    t.string   "recipient_type", limit: 191
+    t.string   "recipient_type", limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -207,7 +207,7 @@ ActiveRecord::Schema.define(version: 20171115003354) do
     t.datetime "created_at",                                 null: false
     t.datetime "updated_at",                                 null: false
     t.integer  "container_id",   limit: 4
-    t.string   "container_type", limit: 191
+    t.string   "container_type", limit: 255
   end
 
   add_index "checklist_items", ["container_type", "container_id"], name: "index_checklist_items_on_container_type_and_container_id", using: :btree
@@ -417,7 +417,7 @@ ActiveRecord::Schema.define(version: 20171115003354) do
     t.boolean  "alternative_layout",               default: false
     t.boolean  "private",                          default: false
     t.integer  "container_id",       limit: 4
-    t.string   "container_type",     limit: 191
+    t.string   "container_type",     limit: 255
     t.boolean  "elasticsearch_only",               default: false
     t.boolean  "required",                         default: false
     t.string   "field_type",         limit: 255
@@ -427,7 +427,7 @@ ActiveRecord::Schema.define(version: 20171115003354) do
 
   create_table "folder_shares", force: :cascade do |t|
     t.integer  "container_id",   limit: 4
-    t.string   "container_type", limit: 191
+    t.string   "container_type", limit: 255
     t.integer  "folder_id",      limit: 4
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
@@ -437,8 +437,8 @@ ActiveRecord::Schema.define(version: 20171115003354) do
 
   create_table "folders", force: :cascade do |t|
     t.integer  "container_id",   limit: 4
-    t.string   "container_type", limit: 191
-    t.string   "name",           limit: 191
+    t.string   "container_type", limit: 255
+    t.string   "name",           limit: 255
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
   end
@@ -451,7 +451,7 @@ ActiveRecord::Schema.define(version: 20171115003354) do
     t.datetime "created_at",                                     null: false
     t.datetime "updated_at",                                     null: false
     t.integer  "collection_id",      limit: 4
-    t.string   "collection_type",    limit: 191
+    t.string   "collection_type",    limit: 255
     t.string   "custom_field",       limit: 255
     t.string   "custom_aggregation", limit: 255
     t.boolean  "time_series",                    default: false
@@ -678,7 +678,7 @@ ActiveRecord::Schema.define(version: 20171115003354) do
     t.integer  "news_feed_link_id", limit: 4
     t.integer  "segment_id",        limit: 4
     t.integer  "link_segment_id",   limit: 4
-    t.string   "link_segment_type", limit: 191
+    t.string   "link_segment_type", limit: 255
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
   end
@@ -833,7 +833,7 @@ ActiveRecord::Schema.define(version: 20171115003354) do
   create_table "resources", force: :cascade do |t|
     t.string   "title",             limit: 255
     t.integer  "container_id",      limit: 4
-    t.string   "container_type",    limit: 191
+    t.string   "container_type",    limit: 255
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
     t.string   "file_file_name",    limit: 255
@@ -841,8 +841,8 @@ ActiveRecord::Schema.define(version: 20171115003354) do
     t.integer  "file_file_size",    limit: 4
     t.datetime "file_updated_at"
     t.integer  "owner_id",          limit: 4
-    t.string   "resource_type",     limit: 191
-    t.string   "url",               limit: 191
+    t.string   "resource_type",     limit: 255
+    t.string   "url",               limit: 255
   end
 
   add_index "resources", ["container_type", "container_id"], name: "index_resources_on_container_type_and_container_id", using: :btree
@@ -933,8 +933,8 @@ ActiveRecord::Schema.define(version: 20171115003354) do
 
   create_table "tags", force: :cascade do |t|
     t.integer  "taggable_id",   limit: 4
-    t.string   "taggable_type", limit: 191
-    t.string   "name",          limit: 191, null: false
+    t.string   "taggable_type", limit: 255
+    t.string   "name",          limit: 255, null: false
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
   end
@@ -1016,9 +1016,9 @@ ActiveRecord::Schema.define(version: 20171115003354) do
     t.integer  "enterprise_id",               limit: 4
     t.datetime "created_at",                                               null: false
     t.datetime "updated_at",                                               null: false
-    t.string   "email",                       limit: 191
+    t.string   "email",                       limit: 255
     t.string   "encrypted_password",          limit: 255
-    t.string   "reset_password_token",        limit: 191
+    t.string   "reset_password_token",        limit: 255
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.integer  "sign_in_count",               limit: 4,     default: 0,    null: false
@@ -1026,7 +1026,7 @@ ActiveRecord::Schema.define(version: 20171115003354) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip",          limit: 255
     t.string   "last_sign_in_ip",             limit: 255
-    t.string   "invitation_token",            limit: 191
+    t.string   "invitation_token",            limit: 255
     t.datetime "invitation_created_at"
     t.datetime "invitation_sent_at"
     t.datetime "invitation_accepted_at"
@@ -1052,10 +1052,10 @@ ActiveRecord::Schema.define(version: 20171115003354) do
     t.integer  "points",                      limit: 4,     default: 0,    null: false
     t.integer  "credits",                     limit: 4,     default: 0,    null: false
     t.string   "time_zone",                   limit: 255
-    t.integer  "failed_attempts",             limit: 4,     default: 0,    null: false
-    t.string   "unlock_token",                limit: 191
-    t.datetime "locked_at"
     t.integer  "total_weekly_points",         limit: 4,     default: 0
+    t.integer  "failed_attempts",             limit: 4,     default: 0,    null: false
+    t.string   "unlock_token",                limit: 255
+    t.datetime "locked_at"
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree
