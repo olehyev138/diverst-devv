@@ -7,6 +7,21 @@
         <%= f.input :logo, as: :attachment_preview %>
         <%= f.association :invitation_segments, collection: @group.enterprise.segments, input_html: { class: "select2"}, wrapper_html: { style: "display: none;" } %>
       </div>
+      
+      <div class="card__section card__section--border">
+        <%= f.association :parent,
+              collection: @group.enterprise.groups,
+              input_html: { class: "select2" },
+              :include_blank => "None",
+              label: "Parent-#{ c_t(:erg).titleize}" %>
+      </div>
+      
+      <div class="card__section card__section--border">
+        <%= f.association :children,
+              collection: @group.enterprise.groups,
+              input_html: { class: "select2" },
+              label: "Sub-#{ c_t(:erg).titleize.pluralize}" %>
+      </div>
 
       <% if !@group.enterprise.yammer_token.nil? %>
         <div class="card__section card__section--border">

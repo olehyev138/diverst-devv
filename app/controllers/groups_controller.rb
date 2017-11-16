@@ -279,7 +279,9 @@ class GroupsController < ApplicationController
                 :messages_visibility,
                 :calendar_color,
                 :active,
+                :parent_id,
                 manager_ids: [],
+                child_ids: [],
                 member_ids: [],
                 invitation_segment_ids: [],
                 outcomes_attributes: [
