@@ -134,6 +134,32 @@
           </div>
         </div>
       <% end %>
+      
+      <div class="card card--secondary">
+        <div class="card__section">
+          Parent-<%= c_t(:erg).titleize %><br>
+          
+          <% if @group.parent.present? %>
+            <%= link_to @group.parent.name, @group.parent %><br>
+          <% else %>
+            None
+          <% end %>
+        </div>
+      </div>
+      
+      <div class="card card--secondary">
+        <div class="card__section">
+          Sub-<%= c_t(:erg).titleize.pluralize %><br>
+          
+          <% if @group.children.count > 0 %>
+            <% @group.children.each do |child| %>
+              <%= link_to child.name, child %><br>
+            <% end %>
+          <% else %>
+            None
+          <% end %>
+        </div>
+      </div>
 
       <% if @group.active_members.include? current_user %>
         <div class="card card--secondary">

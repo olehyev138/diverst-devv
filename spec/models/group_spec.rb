@@ -235,4 +235,33 @@ RSpec.describe Group, :type => :model do
             expect(group.news_feed).to_not be(nil)
         end
     end
+    
+    describe '#parent' do
+        it "returns nil" do
+            group = create(:group)
+            expect(group.parent).to be(nil)
+        end
+        
+        it "returns parent" do
+            group_1 = create(:group)
+            group_2 = create(:group, :parent => group_1)
+            
+            expect(group_2.parent).to_not be(nil)
+            expect(group_2.parent).to eq(group_1)
+        end
+    end
+    
+    describe '#children' do
+        it "returns empty array" do
+            group = create(:group)
+            expect(group.children.length).to eq(0)
+        end
+        
+        it "returns 1 child" do
+            group_1 = create(:group)
+            group_2 = create(:group, :parent => group_1)
+            
+            expect(group_1.children).to include(group_2)
+        end
+    end
 end
