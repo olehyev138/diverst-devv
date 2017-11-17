@@ -22,7 +22,7 @@
               <% else %>
                 <td></td>
                 <td><%= link_to resource.title, resource.url, target: '_blank' %></td>
-                <td><%= resource.expiring_url? ? "#{link_to resource.url, resource.url, target: '_blank'}".html_safe : "N/A" %></td>
+                <td><%= link_to resource.url, resource.url, target: '_blank' %></td>
               <% end %>
               <td><%= resource.created_at.to_s :reversed_slashes %></td>
               <td><%= resource.container.groups.map(&:name).join(", ") %></td>
