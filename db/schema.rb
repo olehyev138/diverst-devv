@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171115003354) do
+ActiveRecord::Schema.define(version: 20171116005530) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -541,6 +541,7 @@ ActiveRecord::Schema.define(version: 20171115003354) do
     t.string   "calendar_color",            limit: 255
     t.integer  "total_weekly_points",       limit: 4,                             default: 0
     t.boolean  "active",                                                          default: true
+    t.integer  "parent_id",                 limit: 4
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
