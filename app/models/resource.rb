@@ -31,6 +31,10 @@ class Resource < ActiveRecord::Base
         ''
     end
 
+    def expiration_time
+        EXPIRATION_TIME
+    end
+
 
     protected
 

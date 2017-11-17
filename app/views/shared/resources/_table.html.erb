@@ -15,9 +15,9 @@
             <tr>
               <% if resource.url.nil? || resource.url.empty? %>
                 <td class="icon-column">
-                  <a href="<%= resource.file.expiring_url(Resource::EXPIRATION_TIME) %>" class="icon icon--bg icon--large" style="background-image: url(<%= thumbnail_for_resource(resource) %>)"></a>
+                  <a href="<%= resource.file.expiring_url(resource.expiration_time) %>" class="icon icon--bg icon--large" style="background-image: url(<%= thumbnail_for_resource(resource) %>)"></a>
                 </td>
-                <td><%= link_to resource.title, resource.file.expiring_url(Resource::EXPIRATION_TIME), target: '_blank' %></td>
+                <td><%= link_to resource.title, resource.file.expiring_url(resource.expiration_time), target: '_blank' %></td>
                 <td>N/A</td>
               <% else %>
                 <td></td>
