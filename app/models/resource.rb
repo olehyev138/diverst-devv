@@ -31,9 +31,6 @@ class Resource < ActiveRecord::Base
         ''
     end
 
-    def expiring_url?
-        EXPIRATION_TIME > self.file_updated_at.day ? true : false
-    end
 
     protected
 
