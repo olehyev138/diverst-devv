@@ -282,30 +282,9 @@ class Group < ActiveRecord::Base
   def handle_deletion
     old_members = members.ids
 
-<<<<<<< HEAD
-    def handle_deletion
-        old_members = members.ids
-
-        # Update members in elastic_search
-        User.where(id: old_members).find_each do |member|
-            update_elasticsearch_member(member)
-        end
-    end
-
-    def self.avg_members_per_group(enterprise:)
-        group_sizes = UserGroup.where(group: enterprise.groups).group(:group).count.values
-        return nil if group_sizes.length == 0
-        group_sizes.sum / group_sizes.length
-    end
-
-    def build_default_news_feed
-        build_news_feed
-        true
-=======
     # Update members in elastic_search
     User.where(id: old_members).find_each do |member|
       update_elasticsearch_member(member)
->>>>>>> 56d6bbcd534e80daee74045e9bce796b3b96a20a
     end
   end
 
