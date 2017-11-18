@@ -1,22 +1,22 @@
 require 'rails_helper'
 
 RSpec.describe Group, :type => :model do
-    
+
     describe 'validations' do
         let(:group) { FactoryGirl.build_stubbed(:group) }
 
         it{ expect(group).to validate_presence_of(:name) }
-        
+
         it { expect(group).to belong_to(:enterprise) }
         it { expect(group).to belong_to(:lead_manager) }
         it { expect(group).to belong_to(:owner) }
-        
+
         it{ expect(group).to have_many(:leaders).through(:group_leaders) }
         it{ expect(group).to have_many(:members).through(:user_groups) }
         it{ expect(group).to have_many(:polls).through(:groups_polls) }
         it{ expect(group).to have_many(:poll_responses).through(:polls) }
         it{ expect(group).to have_many(:poll_responses).through(:polls) }
-        
+
         it { expect(group).to have_many(:events) }
         it { expect(group).to have_many(:own_initiatives) }
         it { expect(group).to have_many(:budgets) }
@@ -26,7 +26,7 @@ RSpec.describe Group, :type => :model do
         it { expect(group).to have_many(:folders) }
         it { expect(group).to have_many(:folder_shares) }
         it { expect(group).to have_many(:shared_folders) }
-        
+
         it { expect(group).to have_one(:news_feed)}
     end
 
@@ -79,10 +79,10 @@ RSpec.describe Group, :type => :model do
             end
         end
     end
-    
+
     describe 'when describing callbacks' do
         let!(:group){ create(:group) }
-        
+
         it "should reindex users on elasticsearch after destroy" do
             TestAfterCommit.with_commits(true) do
                 expect(group).to receive(:update_all_elasticsearch_members)
@@ -93,9 +93,9 @@ RSpec.describe Group, :type => :model do
 
     describe '#survey_answers_csv' do
         let!(:group){ create(:group) }
-        
+
         it "returns a csv file" do
-            csv = group.survey_answers_csv    
+            csv = group.survey_answers_csv
             expect(csv).to eq("user_id,user_email,user_first_name,user_last_name\n")
         end
     end
@@ -162,40 +162,40 @@ RSpec.describe Group, :type => :model do
             end
         end
     end
-    
+
     describe '#managers' do
         it "returns an array with nil" do
             group = create(:group)
             expect(group.managers.length).to eq(1)
             expect(group.managers[0]).to be_nil
         end
-        
+
         it "returns an array with user" do
             user = create(:user)
             group = create(:group, :owner => user)
-    
+
             expect(group.managers.length).to eq(1)
             expect(group.managers[0]).to be(user)
         end
-        
+
         it "returns an array with owner and leaders" do
             user = create(:user)
             group = create(:group, :owner => user)
-            
+
             2.times do
                 create(:group_leader, :group => group, :user => user)
             end
-            
+
             expect(group.managers.length).to eq(3)
         end
     end
-    
+
     describe '#calendar_color' do
         it "returns cccccc" do
             group = create(:group)
             expect(group.calendar_color).to eq("cccccc")
         end
-        
+
         it "returns theme primary_color" do
             theme = create(:theme)
             enterprise = create(:enterprise, :theme => theme)
@@ -203,64 +203,64 @@ RSpec.describe Group, :type => :model do
             expect(group.calendar_color).to eq(enterprise.theme.primary_color)
         end
     end
-    
+
     describe '#approved_budget' do
         it "returns 0" do
             group = create(:group)
             expect(group.approved_budget).to eq(0)
         end
-        
+
         it "returns 0" do
             group = create(:group)
-            
+
             budget = create(:budget, :subject => group, :is_approved => true)
             create(:budget_item, :budget => budget, :estimated_amount => 1000)
-            
+
             expect(group.approved_budget).to be > 0
         end
     end
-    
+
     describe '#news_feed' do
         it "returns news_feed" do
             group = create(:group)
             expect(group.news_feed).to_not be(nil)
         end
-        
+
         it "returns news_feed event after destroy" do
             group = create(:group)
-            
+
             expect(group.news_feed).to_not be(nil)
             group.news_feed.destroy
-            
+
             expect(group.news_feed).to_not be(nil)
         end
     end
-    
+
     describe '#parent' do
         it "returns nil" do
             group = create(:group)
             expect(group.parent).to be(nil)
         end
-        
+
         it "returns parent" do
             group_1 = create(:group)
             group_2 = create(:group, :parent => group_1)
-            
+
             expect(group_2.parent).to_not be(nil)
             expect(group_2.parent).to eq(group_1)
         end
     end
-    
+
     describe '#children' do
         it "returns empty array" do
             group = create(:group)
             expect(group.children.length).to eq(0)
         end
-        
+
         it "returns 1 child" do
             group_1 = create(:group)
             group_2 = create(:group, :parent => group_1)
-            
+
             expect(group_1.children).to include(group_2)
         end
     end
