@@ -21,7 +21,7 @@ RSpec.describe InitiativesController, type: :controller do
         expect(response).to render_template :index
       end
 
-      it "display group outcomes" do 
+      it "display group outcomes" do
         expect(assigns[:outcomes]).to eq [outcome]
       end
     end
@@ -76,32 +76,32 @@ RSpec.describe InitiativesController, type: :controller do
       let!(:update_3) { FactoryGirl.create :initiative_update, initiative: initiative }
 
       before do
-        get_show 
+        get_show
       end
 
       it 'returns 3 group updates' do
         expect(assigns[:updates].count).to eq 3
       end
 
-      context "returns group updates belonging to the right initiative" do 
-        it "for first update" do 
+      context "returns group updates belonging to the right initiative" do
+        it "for first update" do
           expect(update_1.initiative).to eq initiative
         end
 
-        it "for second update" do 
+        it "for second update" do
           expect(update_2.initiative).to eq initiative
         end
 
-        it "for last update" do 
+        it "for last update" do
           expect(update_3.initiative).to eq initiative
         end
       end
 
-      it "returns updates in descending order of created_at" do 
+      it "returns updates in descending order of created_at" do
         expect(assigns[:updates]).to eq [update_3, update_2, update_1]
       end
 
-      it "render template show" do 
+      it "render template show" do
         expect(response).to render_template :show
       end
     end
@@ -135,7 +135,7 @@ RSpec.describe InitiativesController, type: :controller do
         expect(response).to render_template :edit
       end
 
-      it "returns a valid initiative object" do 
+      it "returns a valid initiative object" do
         expect(assigns[:initiative]).to be_valid
       end
 
@@ -183,7 +183,7 @@ RSpec.describe InitiativesController, type: :controller do
       end
     end
 
-    context "without a logged in user" do 
+    context "without a logged in user" do
       before { get :attendees, group_id: group.id, id: initiative.id }
       it_behaves_like "redirect user to users/sign_in path"
     end
@@ -259,7 +259,7 @@ RSpec.describe InitiativesController, type: :controller do
             expect(response).to redirect_to action: :index
           end
 
-          it "flashes a notice message" do 
+          it "flashes a notice message" do
             post_create(group.id, initiative_attrs)
             expect(flash[:notice]).to eq "Your event was created"
           end
@@ -281,7 +281,7 @@ RSpec.describe InitiativesController, type: :controller do
             expect(assigns(:segments)).to eq user.enterprise.segments
           end
 
-          it "flashes an alert message" do 
+          it "flashes an alert message" do
             post_create(group.id, initiative: {})
             expect(flash[:alert]).to eq "Your event was not created. Please fix the errors"
           end
@@ -321,7 +321,7 @@ RSpec.describe InitiativesController, type: :controller do
             expect(updated_initiative.end).to be_within(1).of initiative_attrs[:end]
           end
 
-          it "flashes a notice messgae" do 
+          it "flashes a notice messgae" do
             patch_update(group.id, initiative.id, initiative_attrs)
             expect(flash[:notice]).to eq "Your event was updated"
           end
@@ -380,7 +380,7 @@ RSpec.describe InitiativesController, type: :controller do
             expect(assigns(:segments)).to eq user.enterprise.segments
           end
 
-          it "flashes an alert message" do 
+          it "flashes an alert message" do
             expect(flash[:alert]).to eq "Your event was not updated. Please fix the errors"
           end
         end
@@ -472,7 +472,7 @@ RSpec.describe InitiativesController, type: :controller do
         end
       end
 
-      context "without a logged in user" do 
+      context "without a logged in user" do
         before { post_finish_expenses(group.id, initiative.id) }
         it_behaves_like "redirect user to users/sign_in path"
       end
