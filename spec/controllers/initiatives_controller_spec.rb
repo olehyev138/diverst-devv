@@ -6,7 +6,7 @@ RSpec.describe InitiativesController, type: :controller do
   let(:outcome) {create :outcome, group_id: group.id}
   let(:pillar) { create :pillar, outcome_id: outcome.id}
   let(:initiative) { create :initiative, pillar: pillar, owner_group: group}
-  
+
   describe 'GET #index' do
     def get_index(group_id = -1)
       get :index, group_id: group_id
@@ -64,7 +64,7 @@ RSpec.describe InitiativesController, type: :controller do
       end
     end
   end
-  
+
   describe 'GET #show' do
     def get_show
       get :show, :group_id => group.id, :id => initiative.id
