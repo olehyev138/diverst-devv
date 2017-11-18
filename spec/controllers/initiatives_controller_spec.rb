@@ -17,19 +17,22 @@ RSpec.describe InitiativesController, type: :controller do
 
       before { get_index(group.id) }
 
-      it 'return success' do
-        expect(response).to be_success
+      it 'render index template' do
+        expect(response).to render_template :index
+      end
+
+      it "display group outcomes" do 
+        expect(assigns[:outcomes]).to eq [outcome]
       end
     end
 
     context 'without logged user' do
       before { get_index(group.id) }
 
-      it 'return error' do
-        expect(response).to_not be_success
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
+
 
   describe 'GET #new' do
     def get_new(group_id = -1)
@@ -40,10 +43,6 @@ RSpec.describe InitiativesController, type: :controller do
       login_user_from_let
 
       before { get_new(group.id) }
-
-      it 'return success' do
-        expect(response).to be_success
-      end
 
       it 'assigns new group' do
         new_initiative = assigns(:initiative)
@@ -59,11 +58,10 @@ RSpec.describe InitiativesController, type: :controller do
     context 'without logged user' do
       before { get_new(group.id) }
 
-      it 'return error' do
-        expect(response).to_not be_success
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
+
 
   describe 'GET #show' do
     def get_show
@@ -73,21 +71,48 @@ RSpec.describe InitiativesController, type: :controller do
     context 'with logged user' do
       login_user_from_let
 
-      before { get_show }
+      let!(:update_1) { FactoryGirl.create :initiative_update, initiative: initiative }
+      let!(:update_2) { FactoryGirl.create :initiative_update, initiative: initiative }
+      let!(:update_3) { FactoryGirl.create :initiative_update, initiative: initiative }
 
-      it 'return success' do
-        expect(response).to be_success
+      before do
+        get_show 
+      end
+
+      it 'returns 3 group updates' do
+        expect(assigns[:updates].count).to eq 3
+      end
+
+      context "returns group updates belonging to the right initiative" do 
+        it "for first update" do 
+          expect(update_1.initiative).to eq initiative
+        end
+
+        it "for second update" do 
+          expect(update_2.initiative).to eq initiative
+        end
+
+        it "for last update" do 
+          expect(update_3.initiative).to eq initiative
+        end
+      end
+
+      it "returns updates in descending order of created_at" do 
+        expect(assigns[:updates]).to eq [update_3, update_2, update_1]
+      end
+
+      it "render template show" do 
+        expect(response).to render_template :show
       end
     end
 
     context 'without logged user' do
       before { get_show }
 
-      it 'return error' do
-        expect(response).to_not be_success
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
+
 
   describe 'GET #edit' do
     let!(:group) { create :group, :with_outcomes, enterprise: user.enterprise }
@@ -106,13 +131,16 @@ RSpec.describe InitiativesController, type: :controller do
 
       before { get_edit(group.id, initiative.id) }
 
-      it 'return success' do
-        expect(response).to be_success
+      it 'render edit template' do
+        expect(response).to render_template :edit
+      end
+
+      it "returns a valid initiative object" do 
+        expect(assigns[:initiative]).to be_valid
       end
 
       it 'sets initiative' do
         assigned_initiative = assigns(:initiative)
-
         expect(assigned_initiative).to eq initiative
       end
 
@@ -124,11 +152,10 @@ RSpec.describe InitiativesController, type: :controller do
     context 'without logged user' do
       before { get_edit(group.id, initiative.id) }
 
-      it 'return error' do
-        expect(response).to_not be_success
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
+
 
   describe "GET#attendees" do
     let!(:group) { create :group, :with_outcomes, enterprise: user.enterprise }
@@ -155,7 +182,13 @@ RSpec.describe InitiativesController, type: :controller do
         expect(body).to eq "#{ attendee.first_name },#{ attendee.last_name },#{ attendee.email },#{ attendee.biography },#{attendee.active}"
       end
     end
+
+    context "without a logged in user" do 
+      before { get :attendees, group_id: group.id, id: initiative.id }
+      it_behaves_like "redirect user to users/sign_in path"
+    end
   end
+
 
   describe 'non-GET' do
     let!(:group) { create :group, :with_outcomes, enterprise: user.enterprise }
@@ -195,7 +228,6 @@ RSpec.describe InitiativesController, type: :controller do
 
           it 'assigns segments of enterprise' do
             post_create(group.id, initiative_attrs)
-
             expect(assigns(:segments)).to eq user.enterprise.segments
           end
 
@@ -226,6 +258,11 @@ RSpec.describe InitiativesController, type: :controller do
 
             expect(response).to redirect_to action: :index
           end
+
+          it "flashes a notice message" do 
+            post_create(group.id, initiative_attrs)
+            expect(flash[:notice]).to eq "Your event was created"
+          end
         end
 
         context 'with incorrect params' do
@@ -241,8 +278,12 @@ RSpec.describe InitiativesController, type: :controller do
 
           it 'assigns segments of enterprise' do
             post_create(group.id, initiative: {})
-
             expect(assigns(:segments)).to eq user.enterprise.segments
+          end
+
+          it "flashes an alert message" do 
+            post_create(group.id, initiative: {})
+            expect(flash[:alert]).to eq "Your event was not created. Please fix the errors"
           end
         end
       end
@@ -250,11 +291,10 @@ RSpec.describe InitiativesController, type: :controller do
       context 'without logged in user' do
         before { post_create(group.id) }
 
-        it 'return error' do
-          expect(response).to_not be_success
-        end
+        it_behaves_like "redirect user to users/sign_in path"
       end
     end
+
 
     describe 'PATCH #update' do
       def patch_update(group_id = -1, id= -1, params = {})
@@ -281,9 +321,13 @@ RSpec.describe InitiativesController, type: :controller do
             expect(updated_initiative.end).to be_within(1).of initiative_attrs[:end]
           end
 
+          it "flashes a notice messgae" do 
+            patch_update(group.id, initiative.id, initiative_attrs)
+            expect(flash[:notice]).to eq "Your event was updated"
+          end
+
           it 'assigns segments of enterprise' do
             patch_update(group.id, initiative.id, initiative_attrs)
-
             expect(assigns(:segments)).to eq user.enterprise.segments
           end
 
@@ -311,7 +355,6 @@ RSpec.describe InitiativesController, type: :controller do
 
           it 'redirects to correct page' do
             patch_update(group.id, initiative.id, initiative_attrs)
-
             expect(response).to redirect_to [group, :initiatives]
           end
         end
@@ -336,17 +379,20 @@ RSpec.describe InitiativesController, type: :controller do
           it 'assigns segments of enterprise' do
             expect(assigns(:segments)).to eq user.enterprise.segments
           end
+
+          it "flashes an alert message" do 
+            expect(flash[:alert]).to eq "Your event was not updated. Please fix the errors"
+          end
         end
       end
 
       context 'without logged in user' do
         before { patch_update(group.id) }
 
-        it 'return error' do
-          expect(response).to_not be_success
-        end
+        it_behaves_like "redirect user to users/sign_in path"
       end
     end
+
 
     describe 'DELETE #destroy' do
       def delete_destroy(group_id=-1, id=-1)
@@ -389,7 +435,6 @@ RSpec.describe InitiativesController, type: :controller do
 
           it 'redirects to correct action' do
             delete_destroy(group.id, initiative.id)
-
             expect(response).to redirect_to action: :index
           end
         end
@@ -397,12 +442,10 @@ RSpec.describe InitiativesController, type: :controller do
 
       context 'without logged in user' do
         before { delete_destroy(group.id) }
-
-        it 'return error' do
-          expect(response).to_not be_success
-        end
+        it_behaves_like "redirect user to users/sign_in path"
       end
     end
+
 
     describe 'POST #finish_expenses' do
       def post_finish_expenses(group_id = -1, id= -1)
@@ -427,6 +470,11 @@ RSpec.describe InitiativesController, type: :controller do
             expect(response).to redirect_to action: :index
           end
         end
+      end
+
+      context "without a logged in user" do 
+        before { post_finish_expenses(group.id, initiative.id) }
+        it_behaves_like "redirect user to users/sign_in path"
       end
     end
   end
