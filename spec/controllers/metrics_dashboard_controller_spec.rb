@@ -28,7 +28,7 @@ RSpec.describe MetricsDashboardsController, type: :controller do
       end
     end
   end
-  
+
   describe 'GET #index' do
     def get_index
       get :index
@@ -136,7 +136,7 @@ RSpec.describe MetricsDashboardsController, type: :controller do
       end
     end
   end
-  
+
   describe 'GET #show' do
     def get_show
       get :show, :id => metrics_dashboard.id
@@ -160,7 +160,7 @@ RSpec.describe MetricsDashboardsController, type: :controller do
       end
     end
   end
-  
+
   describe 'GET #edit' do
     def get_edit
       get :edit, :id => metrics_dashboard.id
