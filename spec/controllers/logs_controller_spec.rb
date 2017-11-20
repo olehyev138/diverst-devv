@@ -39,6 +39,10 @@ RSpec.describe LogsController, type: :controller do
           expect(response).to be_success
         end
 
+        it "return html format" do 
+          expect(response.content_type).to eq "text/html"
+        end
+
         describe 'enterprise' do
           it 'only shows records from current enterprise' do
             activities = assigns(:activities)
@@ -75,10 +79,7 @@ RSpec.describe LogsController, type: :controller do
 
     context 'without logged user' do
       before { get_index }
-
-      it 'returns error' do
-        expect(response).to_not be_success
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
 end
