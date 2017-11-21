@@ -1,11 +1,11 @@
 class PolicyGroup < ActiveRecord::Base
-    
+
     has_many :users
     belongs_to :enterprise
-    
+
     validates :name,        presence: true
     validates :enterprise,  presence: true
-    
+
     accepts_nested_attributes_for :users
 
     before_save :remove_default_from_other_groups, if: :default_group?
