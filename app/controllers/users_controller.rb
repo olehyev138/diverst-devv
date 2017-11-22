@@ -33,7 +33,7 @@ class UsersController < ApplicationController
       format.json { render json: UserDatatable.new(view_context, @users) }
     end
   end
-  
+
   # MISSING HTML TEMPLATE
   def new
     authorize User
@@ -75,7 +75,7 @@ class UsersController < ApplicationController
     @user.destroy
     redirect_to :back
   end
-  
+
   def resend_invitation
     authorize @user
     @user.invite! # => reset invitation status and send invitation again

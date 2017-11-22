@@ -5,4 +5,5 @@ class Outcome < ActiveRecord::Base
     default_scope { includes(:group) }
     
     accepts_nested_attributes_for :pillars, reject_if: :all_blank, allow_destroy: true
+    validates :name, presence: true
 end

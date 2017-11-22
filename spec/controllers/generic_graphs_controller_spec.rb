@@ -170,7 +170,6 @@ RSpec.describe GenericGraphsController, type: :controller do
             end
 
             context "when format is csv" do
-
                 before { get :messages_sent, format: :csv }
 
                 it "returns csv format" do
