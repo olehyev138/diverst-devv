@@ -18,6 +18,9 @@
     <div class="flex-row__cell">
       <%= link_to "New Graph", new_metrics_dashboard_graph_path(@metrics_dashboard), class: "btn btn--primary" %>
     </div>
+    <div class="flex-row__cell">
+      <%= link_to "Share", metrics_dashboard_shared_dashboard_path(@metrics_dashboard, token: @token) %>
+    </div>
   </div>
 </div>
 

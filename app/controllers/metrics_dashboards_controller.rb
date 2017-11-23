@@ -1,7 +1,7 @@
 class MetricsDashboardsController < ApplicationController
   before_action :authenticate_user!
-  after_action :verify_authorized
-  before_action :set_metrics_dashboard, except: [:index, :new, :create]
+  after_action :verify_authorized, except: [:shared_dashboard]
+  before_action :set_metrics_dashboard, except: [:index, :new, :create, :shared_dashboard]
 
   layout 'erg_manager'
 
@@ -46,6 +46,17 @@ class MetricsDashboardsController < ApplicationController
     authorize @metrics_dashboard
     @graphs = @metrics_dashboard.graphs.includes(:field, :aggregation)
     @token = @metrics_dashboard.shareable_token
+  end
+
+  def shared_dashboard
+    @metrics_dashboard = nil
+    if params[:token]
+      @metrics_dashboard = MetricsDashboard.find_by_shareable_token(params[:token])
+    end
+
+    not_found! if @metrics_dashboard.nil?
+
+    render layout: 'guest'
   end
 
   def edit

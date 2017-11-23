@@ -418,6 +418,8 @@ Rails.application.routes.draw do
   end
 
   resources :metrics_dashboards do
+    get 'shared_dashboard'
+
     resources :graphs do
       member do
         get 'data'
