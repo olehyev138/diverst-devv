@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171116005530) do
+ActiveRecord::Schema.define(version: 20171123150310) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -542,6 +542,11 @@ ActiveRecord::Schema.define(version: 20171116005530) do
     t.integer  "total_weekly_points",       limit: 4,                             default: 0
     t.boolean  "active",                                                          default: true
     t.integer  "parent_id",                 limit: 4
+    t.string   "image_file_name",           limit: 191
+    t.string   "image_content_type",        limit: 191
+    t.integer  "image_file_size",           limit: 4
+    t.datetime "image_updated_at"
+    t.text     "sponsor_message",           limit: 65535
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
