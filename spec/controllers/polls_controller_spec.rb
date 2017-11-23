@@ -125,6 +125,8 @@ RSpec.describe PollsController, type: :controller do
     
     describe "GET#edit" do
         context "with logged user" do
+            login_user_from_let
+            
             it "edit a poll" do
                 get :edit, id: poll.id
                 expect(response).to be_success
@@ -134,6 +136,8 @@ RSpec.describe PollsController, type: :controller do
 
     describe "PATCH#update" do
         context "with logged user" do
+            login_user_from_let
+
             let(:poll){ create(:poll, status: 0, enterprise: user.enterprise, groups: []) }
             let(:group){ create(:group, enterprise: user.enterprise) }
             enable_public_activity
@@ -185,6 +189,8 @@ RSpec.describe PollsController, type: :controller do
     
     describe "DELETE#destroy" do
         context "with logged user" do
+            login_user_from_let
+
             it "deletes a poll" do
                 delete :destroy, id: poll.id
                 expect(response).to redirect_to action: :index
@@ -194,6 +200,8 @@ RSpec.describe PollsController, type: :controller do
     
     describe "GET#export_csv" do
         context "with logged user" do
+            login_user_from_let
+
             it "gets a csv file" do
                 get :export_csv, id: poll.id
                 expect(response).to be_success
