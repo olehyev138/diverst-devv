@@ -118,9 +118,7 @@ RSpec.describe PollsController, type: :controller do
             login_user_from_let
             before { get :show, id: poll.id }
 
-            it "display graphs of a particular poll" do 
-                # expect(assigns[:poll].graphs).to eq 
-                byebug
+           xit "display graphs of a particular poll" do 
             end
         end
     end
