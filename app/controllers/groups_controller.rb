@@ -279,6 +279,7 @@ class GroupsController < ApplicationController
                 :messages_visibility,
                 :calendar_color,
                 :active,
+                :sponsor_name,
                 :sponsor_image,
                 :sponsor_message,
                 :parent_id,

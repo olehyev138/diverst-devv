@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171123165528) do
+ActiveRecord::Schema.define(version: 20171124144836) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -547,6 +547,7 @@ ActiveRecord::Schema.define(version: 20171123165528) do
     t.string   "sponsor_image_content_type", limit: 191
     t.integer  "sponsor_image_file_size",    limit: 4
     t.datetime "sponsor_image_updated_at"
+    t.string   "sponsor_name",               limit: 191
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
