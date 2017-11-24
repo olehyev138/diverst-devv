@@ -85,7 +85,7 @@ class Group < ActiveRecord::Base
   validates_attachment_content_type :sponsor_image, content_type: /\Aimage\/.*\z/
 
   validates :name, presence: true
-
+  validate :sponsor_detail_consistency
 
   before_create :build_default_news_feed
   before_save :send_invitation_emails, if: :send_invitations?
@@ -240,6 +240,10 @@ class Group < ActiveRecord::Base
   end
 
   private
+
+  def sponsor_detail_consistency
+      errors.add(:sponsor_name, "sponsor name can not be blank") if sponsor_message.present? && sponsor_name.blank?
+  end
 
   def filter_by_membership(membership_status)
     members.references(:user_groups).where('user_groups.accepted_member=?', membership_status)

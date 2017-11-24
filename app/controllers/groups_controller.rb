@@ -130,7 +130,7 @@ class GroupsController < ApplicationController
             redirect_to :back
         else
             flash[:alert] = "Your #{c_t(:erg)} was not updated. Please fix the errors"
-            render :edit
+            render :settings
         end
     end
 
