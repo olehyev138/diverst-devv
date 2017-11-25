@@ -12,15 +12,15 @@ RSpec.describe GroupsController, type: :controller do
     end
 
     context 'with logged user' do
-      login_user
+      login_user_from_let
 
       before { get_index }
 
-      it 'render template', :skip => true do
+      it 'render template' do
         expect(response).to render_template :index
       end
 
-      it "return success", :skip => true do
+      it "return success" do
         expect(response).to have_http_status(:ok)
       end
 
@@ -39,6 +39,7 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
+
   describe 'GET#plan_overview' do
     def get_plan_overview
       get :plan_overview
@@ -53,8 +54,8 @@ RSpec.describe GroupsController, type: :controller do
 
       before { get_plan_overview }
 
-      it 'return success' do
-        expect(response).to be_success
+      it 'render plan_overview template' do
+        expect(response).to render_template :plan_overview
       end
 
       it 'shows groups from correct enterprise' do
@@ -74,13 +75,14 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
+
   describe 'GET #calendar' do
     def get_calendar
       get :calendar
     end
 
     context 'with logged user' do
-      login_user
+      login_user_from_let
 
       before { get_calendar }
 
@@ -88,7 +90,7 @@ RSpec.describe GroupsController, type: :controller do
         expect(response).to render_template('shared/calendar/calendar_view')
       end
 
-      it "responds with success", :skip => true do
+      it "responds with success" do
         should respond_with :success
       end
     end
@@ -117,7 +119,7 @@ RSpec.describe GroupsController, type: :controller do
 
     context 'with logged in user' do
       let!(:enterprise) { create :enterprise }
-      login_user
+      login_user_from_let
 
       before { get_calendar_data(initiative_group.id, initiative_segment.id, params={token: 'uniquetoken1234'}) }
 
@@ -133,7 +135,7 @@ RSpec.describe GroupsController, type: :controller do
 
         before { get_calendar_data(initiative_group.id, initiative_segment.id, params={token: 'uniquetoken1234'}) }
 
-        it 'fetches correct events', :skip => true do
+        it 'fetches correct events', skip: "Missing Template"  do
           expect(event.group_id).to eq group.id
         end
       end
@@ -453,7 +455,7 @@ RSpec.describe GroupsController, type: :controller do
         end
 
         it 'renders edit view' do
-          expect(response).to render_template :edit
+          expect(response).to render_template :settings
         end
       end
     end

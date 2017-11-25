@@ -130,7 +130,7 @@ class GroupsController < ApplicationController
             redirect_to :back
         else
             flash[:alert] = "Your #{c_t(:erg)} was not updated. Please fix the errors"
-            render :edit
+            render :settings
         end
     end
 
@@ -279,6 +279,10 @@ class GroupsController < ApplicationController
                 :messages_visibility,
                 :calendar_color,
                 :active,
+                :sponsor_name,
+                :sponsor_title,
+                :sponsor_image,
+                :sponsor_message,
                 :parent_id,
                 manager_ids: [],
                 child_ids: [],
