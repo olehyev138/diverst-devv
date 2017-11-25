@@ -83,6 +83,15 @@
     </div>
 
     <div class="col col--stacked sm-12 md-3">
+      <div class="card card--secondary">
+        <div class="card__section">
+        <%= image_tag @group.sponsor_image.url(:thumb), style: 'max-width: 100px; max-height:90px; border-radius: 80px;' %> <%= truncate(@group.sponsor_name, length: 10) %>
+        <p style="font-style: italic;">(<%= @group.sponsor_title %>)</p>
+        <% unless @group.sponsor_message.empty? %>
+          <p style="font-style: italic; padding-top: 10px; padding-left: 10px;">"<%= truncate(@group.sponsor_message, length: 200) %>"</p>
+        <% end %>  
+        </div>
+      </div>
       <% if @current_user.pending_group_member?(@group.id) %>
         * Please wait for group administrators to process your membership request.
         <% if !current_user.has_answered_group_survey? @group %>
