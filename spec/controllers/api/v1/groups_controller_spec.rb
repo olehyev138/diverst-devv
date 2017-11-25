@@ -70,7 +70,7 @@ RSpec.describe Api::V1::GroupsController, type: :controller do
         
         describe "POST#create" do
             it "creates the group" do
-                post :create, { :group => FactoryGirl.attributes_for(:group) 
+                post :create, { :group => FactoryGirl.attributes_for(:group) }
                 expect(response.status).to eq 201
             end
         end
