@@ -280,6 +280,7 @@ class GroupsController < ApplicationController
                 :calendar_color,
                 :active,
                 :sponsor_name,
+                :sponsor_title,
                 :sponsor_image,
                 :sponsor_message,
                 :parent_id,

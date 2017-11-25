@@ -242,7 +242,16 @@ class Group < ActiveRecord::Base
   private
 
   def sponsor_detail_consistency
-      errors.add(:sponsor_name, "sponsor name can not be blank") if sponsor_message.present? && sponsor_name.blank?
+    errors.add(:sponsor_name, "sponsor name can not be blank")  if sponsor_name_is_absent
+    errors.add(:sponsor_title, "sponsor title can not be blank") if sponsor_title_is_absent
+  end
+
+  def sponsor_name_is_absent
+    (sponsor_message.present? && sponsor_name.blank?) || sponsor_name.blank?
+  end
+
+  def sponsor_title_is_absent
+    (sponsor_name.present? && sponsor_title.blank?) || sponsor_title.blank? 
   end
 
   def filter_by_membership(membership_status)
