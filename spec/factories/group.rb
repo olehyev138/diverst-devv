@@ -1,6 +1,8 @@
 FactoryGirl.define do
   factory :group do
     name { Faker::Lorem.sentence(3) }
+    sponsor_name { Faker::Name.name }
+    sponsor_title { Faker::Name.title }
     enterprise
 
     factory :group_with_users do
