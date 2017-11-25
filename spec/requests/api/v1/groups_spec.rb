@@ -18,7 +18,7 @@ RSpec.describe "Group", :type => :request do
     end
 
     it "creates a group" do
-        post "/api/v1/groups", :group => {:name => "created"}, headers: headers
+        post "/api/v1/groups", :group => FactoryGirl.attributes_for(:group), headers: headers
         expect(response).to have_http_status(201)
     end
     
