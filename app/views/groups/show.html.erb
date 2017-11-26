@@ -88,7 +88,7 @@
         <% if @group.sponsor_image.present? %>
           <%= image_tag @group.sponsor_image.url(:thumb), style: 'max-width: 100px; max-height:90px; border-radius: 80px;' %> 
         <% else %>
-          <%= image_tag("missing_user.png", size: "90x80") %>
+          <%= image_tag("missing_user.png", size: "70x70") %>
         <% end %>
         <p><%= truncate(@group.sponsor_name, length: 10) %></p>
         <p style="font-style: italic;"><%= @group.sponsor_title.present? ? @group.sponsor_title : nil %></p>
