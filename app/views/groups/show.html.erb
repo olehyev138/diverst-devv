@@ -87,7 +87,7 @@
         <div class="card__section">
         <%= image_tag @group.sponsor_image.url(:thumb), style: 'max-width: 100px; max-height:90px; border-radius: 80px;' %> <%= truncate(@group.sponsor_name, length: 10) %>
         <p style="font-style: italic;">(<%= @group.sponsor_title %>)</p>
-        <% unless @group.sponsor_message.empty? %>
+        <% if @group.sponsor_message.present? %>
           <p style="font-style: italic; padding-top: 10px; padding-left: 10px;">"<%= truncate(@group.sponsor_message, length: 200) %>"</p>
         <% end %>  
         </div>
