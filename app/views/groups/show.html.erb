@@ -83,6 +83,7 @@
     </div>
 
     <div class="col col--stacked sm-12 md-3">
+    <% if @group.sponsor_name.present? %>
       <div class="card card--secondary">
         <div class="card__section">
         <% if @group.sponsor_image.present? %>
@@ -90,13 +91,14 @@
         <% else %>
           <%= image_tag("missing_user.png", size: "70x70") %>
         <% end %>
-        <p><%= truncate(@group.sponsor_name, length: 10) %></p>
-        <p style="font-style: italic;"><%= @group.sponsor_title.present? ? @group.sponsor_title : nil %></p>
+        <p style="font-style: italic;"><%= @group.sponsor_name %> <br>
+        <%= @group.sponsor_title.present? ? @group.sponsor_title : nil %></p>
         <% if @group.sponsor_message.present? %>
           <p style="font-style: italic; padding-top: 10px; padding-left: 10px;"><%= truncate(@group.sponsor_message, length: 200) %></p>
         <% end %>  
         </div>
       </div>
+      <% end %>
       <% if @current_user.pending_group_member?(@group.id) %>
         * Please wait for group administrators to process your membership request.
         <% if !current_user.has_answered_group_survey? @group %>
