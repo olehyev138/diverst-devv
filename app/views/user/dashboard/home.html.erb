@@ -73,7 +73,7 @@
     </div>
 
     <div class="col col--stacked sm-12 md-3">
-    <% card_display?(@enterprise, "cdo_name") do %>
+    <% show_sponsor_card?(@enterprise, "cdo_name") do %>
      <div class="card card--secondary">
       <div class="card__section">
         <%= @enterprise.cdo_picture.present? ? image_tag(@enterprise.cdo_picture.url(:thumb), style: 'max-width: 100px; max-height:90px; border-radius: 80px;') : image_tag("missing_user.png", size: "70x70") %>
