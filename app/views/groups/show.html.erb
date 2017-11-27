@@ -15,7 +15,7 @@
       </div>
     </div>
   <% end %>
-  
+
   <div class="row row--equal-height">
     <div class="col sm-12 md-9">
       <div class="row row--equal-height">
@@ -61,14 +61,10 @@
     </div>
 
     <div class="col col--stacked sm-12 md-3">
-    <% if @group.sponsor_name.present? %>
+    <% card_display?(@group, "sponsor_name") do %>
       <div class="card card--secondary">
         <div class="card__section">
-        <% if @group.sponsor_image.present? %>
-          <%= image_tag @group.sponsor_image.url(:thumb), style: 'max-width: 100px; max-height:90px; border-radius: 80px;' %> 
-        <% else %>
-          <%= image_tag("missing_user.png", size: "70x70") %>
-        <% end %>
+          <%= @group.sponsor_image.present? ? image_tag(@group.sponsor_image.url(:thumb), style: 'max-width: 100px; max-height:90px; border-radius: 80px;') : image_tag("missing_user.png", size: "70x70") %> 
         <p style="font-style: italic;"><%= @group.sponsor_name %> <br>
         <%= @group.sponsor_title.present? ? @group.sponsor_title : nil %></p>
         <% if @group.sponsor_message.present? %>

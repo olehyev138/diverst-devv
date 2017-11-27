@@ -73,18 +73,16 @@
     </div>
 
     <div class="col col--stacked sm-12 md-3">
+    <% card_display?(@enterprise, "cdo_name") do %>
      <div class="card card--secondary">
       <div class="card__section">
-      <% if @enterprise.cdo_picture.present? %>
-        <%= image_tag @enterprise.cdo_picture.url(:thumb), style: 'max-width: 100px; max-height:90px; border-radius: 80px;' %>
-        <% else %>
-          <%= image_tag("missing_user.png", size: "70x70") %>
-      <% end %>
+        <%= @enterprise.cdo_picture.present? ? image_tag(@enterprise.cdo_picture.url(:thumb), style: 'max-width: 100px; max-height:90px; border-radius: 80px;') : image_tag("missing_user.png", size: "70x70") %>
       <p style="font-style: italic;"><%= @enterprise.cdo_name %><br>
       <%= @enterprise.cdo_title %></p>
       <p style="font-style: italic;"><%= truncate(@enterprise.cdo_message_email, length: 200) %></p>
       </div> 
     </div>
+    <% end %>
   </div>
 
     <% if current_user.enterprise.enable_rewards? %>
