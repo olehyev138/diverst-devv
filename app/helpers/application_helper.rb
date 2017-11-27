@@ -98,6 +98,12 @@ module ApplicationHelper
     @custom_text.send("#{ type }_text")
   end
 
+  def show_sponsor_card?(object, m)
+    if object.public_send(m.to_sym).present?
+      yield 
+    end
+  end
+
   private
 
   def default_enterprise_for_styling

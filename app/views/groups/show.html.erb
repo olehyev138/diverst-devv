@@ -15,31 +15,27 @@
       </div>
     </div>
   <% end %>
+
   <div class="row row--equal-height">
     <div class="col sm-12 md-9">
       <div class="row row--equal-height">
-        <% if policy(@group).view_members? %>
         <div class="col sm-12 md-6">
           <div class="card">
             <div class="card__section">
-              <h4 class="card__title"><%= inline_svg('icons/manage.svg', class: "icon card__icon") %></span>Newest Members</h4>
-              <%= link_to "View all", group_group_members_path(@group), class: "card__action" %>
 
-              <% @members.each do |member| %>
-                <div class="row mb10">
-                    <div class="col sm-3 md-2">
-                      <%= image_tag(member.avatar.expiring_url(3600), size: "40") %>
-                    </div>
-                    <div class="col sm-9 md-10">
-                      <%= link_to member.name_with_status, member %><br>
-                      <%= time_ago_in_words(member.created_at) %> ago
-                    </div>
-                </div>
+              <h4 class="card__title"><%= inline_svg('icons/news.svg', class: "icon card__icon") %>Latest News</h4>
+              <%= link_to "View all", group_posts_path(@group), class: "card__action" unless @posts.count < 1 %>
+
+              <% if @posts.empty? %>
+                <p>No posts have been published yet.</p>
+              <% else %>
+                <% @posts.each do |news| %>
+                  <%= render "shared/flippable/news_link", news: news %>
+                <% end %>
               <% end %>
             </div>
           </div>
         </div>
-        <% end %>
 
         <div class="col sm-12 md-6">
           <div class="card">
@@ -61,37 +57,22 @@
             </div>
           </div>
         </div>
-
-        <div class="col sm-12 md-6">
-          <div class="card">
-            <div class="card__section">
-
-              <h4 class="card__title"><%= inline_svg('icons/news.svg', class: "icon card__icon") %>Latest News</h4>
-              <%= link_to "View all", group_posts_path(@group), class: "card__action" unless @posts.count < 1 %>
-
-              <% if @posts.empty? %>
-                <p>No posts have been published yet.</p>
-              <% else %>
-                <% @posts.each do |news| %>
-                  <%= render "shared/flippable/news_link", news: news %>
-                <% end %>
-              <% end %>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
 
     <div class="col col--stacked sm-12 md-3">
+    <% show_sponsor_card?(@group, "sponsor_name") do %>
       <div class="card card--secondary">
         <div class="card__section">
-        <%= image_tag @group.sponsor_image.url(:thumb), style: 'max-width: 100px; max-height:90px; border-radius: 80px;' %> <%= truncate(@group.sponsor_name, length: 10) %>
-        <p style="font-style: italic;">(<%= @group.sponsor_title %>)</p>
-        <% unless @group.sponsor_message.empty? %>
-          <p style="font-style: italic; padding-top: 10px; padding-left: 10px;">"<%= truncate(@group.sponsor_message, length: 200) %>"</p>
+          <%= @group.sponsor_image.present? ? image_tag(@group.sponsor_image.url(:thumb), style: 'max-width: 100px; max-height:90px; border-radius: 80px;') : image_tag("missing_user.png", size: "70x70") %> 
+        <p style="font-style: italic;"><%= @group.sponsor_name %> <br>
+        <%= @group.sponsor_title.present? ? @group.sponsor_title : nil %></p>
+        <% if @group.sponsor_message.present? %>
+          <p style="font-style: italic; padding-top: 10px; padding-left: 10px;"><%= truncate(@group.sponsor_message, length: 200) %></p>
         <% end %>  
         </div>
       </div>
+      <% end %>
       <% if @current_user.pending_group_member?(@group.id) %>
         * Please wait for group administrators to process your membership request.
         <% if !current_user.has_answered_group_survey? @group %>
