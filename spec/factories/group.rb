@@ -4,6 +4,7 @@ FactoryGirl.define do
     sponsor_name { Faker::Name.name }
     sponsor_title { Faker::Name.title }
     sponsor_message ""
+    sponsor_media { File.new("#{Rails.root}/spec/support/fixtures/files/verizon_logo.png") }
     enterprise
 
     factory :group_with_users do
