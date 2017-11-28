@@ -82,7 +82,7 @@ class Group < ActiveRecord::Base
   validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
 
   has_attached_file :sponsor_media, s3: :permissions
-  validates_with AttachmentPresenceValidator, attributes: :sponsor_media
+  # validates_with AttachmentPresenceValidator, attributes: :sponsor_media
   do_not_validate_attachment_file_type :sponsor_media
 
   validates :name, presence: true

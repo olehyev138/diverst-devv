@@ -61,7 +61,7 @@ class Enterprise < ActiveRecord::Base
     validates_attachment_content_type :xml_sso_config, content_type: 'text/xml'
 
     has_attached_file :sponsor_media, s3: :permissions
-    validates_with AttachmentPresenceValidator, attributes: :sponsor_media
+    # validates_with AttachmentPresenceValidator, attributes: :sponsor_media
     do_not_validate_attachment_file_type :sponsor_media
 
 
