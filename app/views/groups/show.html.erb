@@ -66,13 +66,11 @@
         <div class="card__section">
         <% if @group.sponsor_media.present? %>
           <% show_sponsor_image?(@group, "sponsor_media_content_type") do %>
-          <%= image_tag(@group.sponsor_media.url, style: 'max-width: 100px; max-height:90px; border-radius: 80px;') %><br>
-          <%= link_to @group.company_video_url, @group.company_video_url, target: "_blank" %>
+          <%= image_tag(@group.sponsor_media.url, style: 'max-width: 100px; max-height:90px; border-radius: 80px;') %>
         <% end %>
 
           <% show_sponsor_video?(@group, "sponsor_media_content_type") do %>
-            <%= link_to(video_tag(@group.sponsor_media, controls: true, size: "200x200"), video_path(@group.sponsor_media.url, controls: true)) %> <br>
-            <%= link_to @group.company_video_url, @group.company_video_url, target: "_blank" %>
+            <%= link_to(video_tag(@group.sponsor_media, controls: true, size: "200x200"), video_path(@group.sponsor_media.url, controls: true)) %> 
           <% end %>
         <% else %>
           <%= image_tag("missing_user.png", size: "70x70") %>
@@ -80,6 +78,7 @@
           <p style="font-style: italic;"><%= @group.sponsor_name %> 
         <br>
         <%= @group.sponsor_title.present? ? @group.sponsor_title : nil %></p>
+        <%= link_to @group.company_video_url, @group.company_video_url, target: "_blank" %>
         <% if @group.sponsor_message.present? %>
           <p style="font-style: italic; padding-top: 10px; padding-left: 10px;"><%= truncate(@group.sponsor_message, length: 200) %></p>
         <% end %>  

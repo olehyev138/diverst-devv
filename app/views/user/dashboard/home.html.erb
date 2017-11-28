@@ -76,9 +76,20 @@
     <% show_sponsor_card?(@enterprise, "cdo_name") do %>
      <div class="card card--secondary">
       <div class="card__section">
-        <%= @enterprise.cdo_picture.present? ? image_tag(@enterprise.cdo_picture.url(:thumb), style: 'max-width: 100px; max-height:90px; border-radius: 80px;') : image_tag("missing_user.png", size: "70x70") %>
+        <% if @enterprise.sponsor_media.present? %>
+          <% show_sponsor_image?(@enterprise, "sponsor_media_content_type") do %>
+          <%= image_tag(@enterprise.sponsor_media.url, style: 'max-width: 100px; max-height:90px; border-radius: 80px;') %>
+          <% end %>
+        <% else %>
+          <%= image_tag("missing_user.png", size: "70x70") %>
+        <% end %>  
+
+        <% show_sponsor_video?(@enterprise, "sponsor_media_content_type") do %>
+          <%= link_to(video_tag(@enterprise.sponsor_media, controls: true, size: "200x200"), video_path(@enterprise.sponsor_media.url, controls: true)) %> 
+        <% end %>
       <p style="font-style: italic;"><%= @enterprise.cdo_name %><br>
       <%= @enterprise.cdo_title %></p>
+      <p><%= link_to @enterprise.company_video_url, @enterprise.company_video_url, target: "_blank" %></p>
       <p style="font-style: italic;"><%= truncate(@enterprise.cdo_message_email, length: 200) %></p>
       </div> 
     </div>
