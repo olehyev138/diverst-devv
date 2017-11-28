@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171116005530) do
+ActiveRecord::Schema.define(version: 20171124231813) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -510,38 +510,45 @@ ActiveRecord::Schema.define(version: 20171116005530) do
   end
 
   create_table "groups", force: :cascade do |t|
-    t.integer  "enterprise_id",             limit: 4
-    t.string   "name",                      limit: 191
-    t.text     "description",               limit: 65535
-    t.datetime "created_at",                                                                     null: false
-    t.datetime "updated_at",                                                                     null: false
-    t.string   "logo_file_name",            limit: 191
-    t.string   "logo_content_type",         limit: 191
-    t.integer  "logo_file_size",            limit: 4
+    t.integer  "enterprise_id",              limit: 4
+    t.string   "name",                       limit: 191
+    t.text     "description",                limit: 65535
+    t.datetime "created_at",                                                                      null: false
+    t.datetime "updated_at",                                                                      null: false
+    t.string   "logo_file_name",             limit: 191
+    t.string   "logo_content_type",          limit: 191
+    t.integer  "logo_file_size",             limit: 4
     t.datetime "logo_updated_at"
     t.boolean  "send_invitations"
-    t.integer  "participation_score_7days", limit: 4
+    t.integer  "participation_score_7days",  limit: 4
     t.boolean  "yammer_create_group"
     t.boolean  "yammer_group_created"
-    t.string   "yammer_group_name",         limit: 191
+    t.string   "yammer_group_name",          limit: 191
     t.boolean  "yammer_sync_users"
-    t.integer  "yammer_id",                 limit: 4
-    t.integer  "manager_id",                limit: 4
-    t.integer  "owner_id",                  limit: 4
-    t.integer  "lead_manager_id",           limit: 4
-    t.string   "pending_users",             limit: 191
-    t.string   "members_visibility",        limit: 191
-    t.string   "messages_visibility",       limit: 191
-    t.decimal  "annual_budget",                           precision: 8, scale: 2
-    t.decimal  "leftover_money",                          precision: 8, scale: 2, default: 0.0
-    t.string   "banner_file_name",          limit: 191
-    t.string   "banner_content_type",       limit: 191
-    t.integer  "banner_file_size",          limit: 4
+    t.integer  "yammer_id",                  limit: 4
+    t.integer  "manager_id",                 limit: 4
+    t.integer  "owner_id",                   limit: 4
+    t.integer  "lead_manager_id",            limit: 4
+    t.string   "pending_users",              limit: 191
+    t.string   "members_visibility",         limit: 191
+    t.string   "messages_visibility",        limit: 191
+    t.decimal  "annual_budget",                            precision: 8, scale: 2
+    t.decimal  "leftover_money",                           precision: 8, scale: 2, default: 0.0
+    t.string   "banner_file_name",           limit: 191
+    t.string   "banner_content_type",        limit: 191
+    t.integer  "banner_file_size",           limit: 4
     t.datetime "banner_updated_at"
-    t.string   "calendar_color",            limit: 191
-    t.integer  "total_weekly_points",       limit: 4,                             default: 0
-    t.boolean  "active",                                                          default: true
-    t.integer  "parent_id",                 limit: 4
+    t.string   "calendar_color",             limit: 191
+    t.integer  "total_weekly_points",        limit: 4,                             default: 0
+    t.boolean  "active",                                                           default: true
+    t.integer  "parent_id",                  limit: 4
+    t.text     "sponsor_message",            limit: 65535
+    t.string   "sponsor_image_file_name",    limit: 191
+    t.string   "sponsor_image_content_type", limit: 191
+    t.integer  "sponsor_image_file_size",    limit: 4
+    t.datetime "sponsor_image_updated_at"
+    t.string   "sponsor_name",               limit: 191
+    t.string   "sponsor_title",              limit: 191
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|

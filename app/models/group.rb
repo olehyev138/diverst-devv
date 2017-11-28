@@ -81,6 +81,9 @@ class Group < ActiveRecord::Base
   has_attached_file :banner
   validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
 
+  has_attached_file :sponsor_image, styles: { medium: "150x150>", thumb: "100x80>" }, default_url: "/images/:style/missing.png"
+  validates_attachment_content_type :sponsor_image, content_type: /\Aimage\/.*\z/
+
   validates :name, presence: true
 
   before_create :build_default_news_feed

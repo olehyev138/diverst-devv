@@ -36,6 +36,12 @@ RSpec.describe SocialMedia::Importer do
 
         it_behaves_like 'does fetch oembed'
       end
+
+      context 'with linkedin' do
+        let(:url) { 'https://www.linkedin.com/company/microsoft/' }
+
+        it_behaves_like 'does fetch oembed'
+      end
     end
 
     context 'with incorrect url' do
@@ -57,7 +63,7 @@ RSpec.describe SocialMedia::Importer do
         it_behaves_like 'does not fetch oembed'
       end
 
-      context 'with url from service we do not support' do
+      context 'with url from service we do not support', skip: 'we actually allow all those services' do
         let(:url) { 'http://coub.com/view/v9z7c' }
 
         it_behaves_like 'does not fetch oembed'
@@ -98,6 +104,12 @@ RSpec.describe SocialMedia::Importer do
 
         it_behaves_like 'valid url'
       end
+
+      context 'with linkedin' do
+        let(:url) { 'https://www.linkedin.com/company/microsoft/' }
+
+        it_behaves_like 'valid url'
+      end
     end
 
     context 'with invalid url' do
@@ -119,7 +131,7 @@ RSpec.describe SocialMedia::Importer do
         it_behaves_like 'invalid url'
       end
 
-      context 'with url from service we do not support' do
+      context 'with url from service we do not support', skip: 'we actually support coub' do
         let(:url) { 'http://coub.com/view/v9z7c' }
 
         it_behaves_like 'invalid url'

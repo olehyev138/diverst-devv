@@ -34,6 +34,7 @@
 //= require flip
 //= require jquery-dropdown/jquery.dropdown.min
 //= require hamburger_menu
+//= require embedly-jquery
 //= require ckeditor/init
 //= require_tree .
 

@@ -2,6 +2,7 @@ FactoryGirl.define do
   factory :poll do
     title { Faker::Lorem.sentence(3) }
     description { Faker::Lorem.sentence }
+    email_sent false
     nb_invitations 10
     enterprise
     association :owner, factory: :user
