@@ -66,11 +66,13 @@
         <div class="card__section">
         <% if @group.sponsor_media.present? %>
           <% show_sponsor_image?(@group, "sponsor_media_content_type") do %>
-            <%= image_tag(@group.sponsor_media.url(:thumb), style: 'max-width: 100px; max-height:90px; border-radius: 80px;') %>
-          <% end %>
+          <%= image_tag(@group.sponsor_media.url, style: 'max-width: 100px; max-height:90px; border-radius: 80px;') %><br>
+          <%= link_to @group.company_video_url, @group.company_video_url, target: "_blank" %>
+        <% end %>
 
           <% show_sponsor_video?(@group, "sponsor_media_content_type") do %>
-            <%= link_to(video_tag(@group.sponsor_media, controls: true, size: "200x200"), video_path(@group.sponsor_media.url, controls: true)) %>
+            <%= link_to(video_tag(@group.sponsor_media, controls: true, size: "200x200"), video_path(@group.sponsor_media.url, controls: true)) %> <br>
+            <%= link_to @group.company_video_url, @group.company_video_url, target: "_blank" %>
           <% end %>
         <% else %>
           <%= image_tag("missing_user.png", size: "70x70") %>
