@@ -104,6 +104,18 @@ module ApplicationHelper
     end
   end
 
+  def show_sponsor_image?(object, m)
+    if %r{\Aimage\/.*\Z}.match(object.public_send(m.to_sym))
+      yield
+    end
+  end
+
+  def show_sponsor_video?(object, m)
+    if %r{\Avideo\/.*\Z}.match(object.public_send(m.to_sym))
+      yield
+    end
+  end
+
   private
 
   def default_enterprise_for_styling

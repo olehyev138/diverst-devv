@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171124231813) do
+ActiveRecord::Schema.define(version: 20171128124325) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -334,6 +334,7 @@ ActiveRecord::Schema.define(version: 20171124231813) do
     t.string   "iframe_calendar_token",        limit: 191
     t.string   "time_zone",                    limit: 191
     t.boolean  "enable_rewards",                             default: false
+    t.string   "company_video_url",            limit: 191
   end
 
   create_table "event_attendances", force: :cascade do |t|
@@ -549,6 +550,11 @@ ActiveRecord::Schema.define(version: 20171124231813) do
     t.datetime "sponsor_image_updated_at"
     t.string   "sponsor_name",               limit: 191
     t.string   "sponsor_title",              limit: 191
+    t.string   "sponsor_media_file_name",    limit: 191
+    t.string   "sponsor_media_content_type", limit: 191
+    t.integer  "sponsor_media_file_size",    limit: 4
+    t.datetime "sponsor_media_updated_at"
+    t.string   "company_video_url",          limit: 191
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|

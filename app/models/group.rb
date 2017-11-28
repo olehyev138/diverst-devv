@@ -81,8 +81,9 @@ class Group < ActiveRecord::Base
   has_attached_file :banner
   validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
 
-  has_attached_file :sponsor_image, styles: { medium: "150x150>", thumb: "100x80>" }, default_url: "/images/:style/missing.png"
-  validates_attachment_content_type :sponsor_image, content_type: /\Aimage\/.*\z/
+  has_attached_file :sponsor_media, styles: { medium: '300x300>', thumb: '100x100>' }
+  validates_with AttachmentPresenceValidator, attributes: :sponsor_media
+  do_not_validate_attachment_file_type :sponsor_media
 
   validates :name, presence: true
 
