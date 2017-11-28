@@ -2,10 +2,17 @@
   <h1>Folders</h1>
   <%= link_to "+ Add folder", polymorphic_path(@container_path + [:folder], action: "new"), class: "btn btn--primary" if policy(Folder).new? %>
 </div>
-
-<% @folders.each do |folder| %>
-  <h4><%= folder.name %>&nbsp;<%= link_to "Delete", @container_path + [folder], method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(folder).destroy? %></h4>
-  <a href="<%= polymorphic_path(@container_path + [folder] + [:resources]) %>">
-    <%= inline_svg('icons/folder.svg', size: '100px*100px') %>
-  </a>
-<% end %>
+  <div class="container-fluid">
+    <div class="row">
+      <% @folders.each_with_index  do |folder, index| %>
+        
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+          <h4><%= folder.name %>&nbsp;<%= link_to "Delete", @container_path + [folder], method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(folder).destroy? %></h4>
+          <a href="<%= polymorphic_path(@container_path + [folder] + [:resources]) %>">
+            <%= inline_svg('icons/folder.svg', size: '100px*100px') %>
+          </a>
+        </div>
+      
+      <% end %>
+    </div>
+  </div>
