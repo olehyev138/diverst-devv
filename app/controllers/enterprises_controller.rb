@@ -146,6 +146,8 @@ class EnterprisesController < ApplicationController
         :cdo_name,
         :cdo_title,
         :cdo_picture,
+        :sponsor_media,
+        :company_video_url,
         :banner,
         :home_message,
         :xml_sso_config,

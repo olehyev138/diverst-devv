@@ -45,11 +45,13 @@ class Enterprise < ActiveRecord::Base
     accepts_nested_attributes_for :reward_actions, reject_if: :all_blank, allow_destroy: true
 
     before_create :create_elasticsearch_only_fields
+    before_validation :smart_add_url_protocol
+
 
     validates :idp_sso_target_url, url: { allow_blank: true }
     validates :cdo_name, :name, presence: true
 
-    has_attached_file :cdo_picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: "private"
+    has_attached_file :cdo_picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
     validates_attachment_content_type :cdo_picture, content_type: %r{\Aimage\/.*\Z}
 
     has_attached_file :banner
@@ -57,6 +59,10 @@ class Enterprise < ActiveRecord::Base
 
     has_attached_file :xml_sso_config
     validates_attachment_content_type :xml_sso_config, content_type: 'text/xml'
+
+    has_attached_file :sponsor_media, s3: :permissions
+    do_not_validate_attachment_file_type :sponsor_media
+
 
     def custom_text
         super || create_custom_text
@@ -164,6 +170,19 @@ class Enterprise < ActiveRecord::Base
 
         mapped_fields
     end
+
+
+    protected 
+
+    def smart_add_url_protocol
+        return nil if company_video_url.blank?
+        self.company_video_url = "http://#{company_video_url}" unless have_protocol?
+    end
+
+    def have_protocol?
+        company_video_url[%r{\Ahttp:\/\/}] || company_video_url[%r{\Ahttps:\/\/}]
+    end
+
 
     private
 

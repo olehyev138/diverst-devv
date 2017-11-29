@@ -81,8 +81,8 @@ class Group < ActiveRecord::Base
   has_attached_file :banner
   validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
 
-  has_attached_file :sponsor_image, styles: { medium: "150x150>", thumb: "100x80>" }, default_url: "/images/:style/missing.png"
-  validates_attachment_content_type :sponsor_image, content_type: /\Aimage\/.*\z/
+  has_attached_file :sponsor_media, s3: :permissions
+  do_not_validate_attachment_file_type :sponsor_media
 
   validates :name, presence: true
 
@@ -91,6 +91,7 @@ class Group < ActiveRecord::Base
   before_save :create_yammer_group, if: :should_create_yammer_group?
   before_destroy :handle_deletion
   after_commit :update_all_elasticsearch_members
+  before_validation :smart_add_url_protocol
 
   scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
 
@@ -237,6 +238,21 @@ class Group < ActiveRecord::Base
   def title_with_leftover_amount
     "Create event from #{name} leftover ($#{leftover_money})"
   end
+
+
+
+  protected 
+
+  def smart_add_url_protocol
+    return nil if company_video_url.blank?
+    self.company_video_url = "http://#{company_video_url}" unless have_protocol?
+  end
+
+  def have_protocol?
+    company_video_url[%r{\Ahttp:\/\/}] || company_video_url[%r{\Ahttps:\/\/}]
+  end
+
+
 
   private
 
