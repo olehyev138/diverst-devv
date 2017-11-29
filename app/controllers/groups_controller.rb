@@ -12,7 +12,7 @@ class GroupsController < ApplicationController
 
     def index
         authorize Group
-        @groups = current_user.enterprise.groups
+        @groups = current_user.enterprise.groups.includes(:children).where(:parent_id => nil)
     end
 
     def plan_overview
