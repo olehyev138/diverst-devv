@@ -6,7 +6,7 @@ FactoryGirl.define do
     sponsor_title { Faker::Name.title }
     sponsor_message ""
     # sponsor_media Rack::Test::UploadedFile.new SPONSOR_MEDIA
-    company_video_url { Faker::Internet.url }
+    # company_video_url { Faker::Internet.url }
     enterprise
 
     factory :group_with_users do
