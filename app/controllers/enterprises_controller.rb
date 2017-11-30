@@ -147,6 +147,7 @@ class EnterprisesController < ApplicationController
         :cdo_title,
         :cdo_picture,
         :sponsor_media,
+        :onboarding_sponsor_media,
         :company_video_url,
         :banner,
         :home_message,

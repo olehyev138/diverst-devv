@@ -63,6 +63,9 @@ class Enterprise < ActiveRecord::Base
     has_attached_file :sponsor_media, s3: :permissions
     do_not_validate_attachment_file_type :sponsor_media
 
+    has_attached_file :onboarding_sponsor_media, s3: :permissions
+    do_not_validate_attachment_file_type :onboarding_sponsor_media
+
 
     def custom_text
         super || create_custom_text
