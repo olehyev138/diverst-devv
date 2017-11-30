@@ -19,10 +19,6 @@ RSpec.describe UsersController, type: :controller do
             get :index, :id => user.id
             expect(response.content_type).to eq "text/html"
         end
-
-        xit "returns a new UserDatatable object" do 
-            get :index, :id => user.id
-        end
     end
 
     describe "GET#sent_invitations" do
