@@ -17,7 +17,7 @@
       <% if @enterprise.banner.present? %>
         <div class="row enterprise-banner">
           <div class="col sm-12">
-            <%= image_tag @enterprise.banner.url, style: 'min-width: 100%;' %>
+            <%= image_tag @enterprise.banner.url, style: 'max-width: 100%;' %>
           </div>
         </div>
       <% end %>
@@ -72,6 +72,29 @@
       </div>
     </div>
 
+    <div class="col col--stacked sm-12 md-3">
+    <% show_sponsor_card?(@enterprise, "cdo_name") do %>
+     <div class="card card--secondary">
+      <div class="card__section">
+        <% if @enterprise.sponsor_media.present? %>
+          <% show_sponsor_image?(@enterprise, "sponsor_media_content_type") do %>
+          <%= image_tag(@enterprise.sponsor_media.url, style: 'max-width: 100px; max-height:90px; border-radius: 80px;') %>
+          <% end %>
+        <% else %>
+          <%= image_tag("missing_user.png", size: "70x70") %>
+        <% end %>  
+
+        <% show_sponsor_video?(@enterprise, "sponsor_media_content_type") do %>
+          <%= link_to(video_tag(@enterprise.sponsor_media, controls: true, size: "200x200"), video_path(@enterprise.sponsor_media.url, controls: true)) %> 
+        <% end %>
+      <p style="font-style: italic;"><%= @enterprise.cdo_name %><br>
+      <%= @enterprise.cdo_title %></p>
+      <p style="font-style: italic;"><%= truncate(@enterprise.cdo_message_email, length: 200) %></p>
+      </div> 
+    </div>
+    <% end %>
+  </div>
+
     <% if current_user.enterprise.enable_rewards? %>
       <div class="col sm-12 md-3">
         <div class="card card--secondary">
@@ -95,6 +118,8 @@
       </div>
     <% end %>
   </div>
+
+
 
   <div class="row">
      <div class="col sm-12 md-9">

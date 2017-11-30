@@ -11,15 +11,15 @@ RSpec.describe GroupDecorator do
             decorated_group = group.decorate
             expect(decorated_group.spendings_percentage).to eq(0)
         end
-        
+
         it "returns 100" do
             group.annual_budget = 0
             group.save
-            
+
             decorated_group = group.decorate
             expect(decorated_group.spendings_percentage).to eq(100)
         end
-        
+
         it "returns 25.0" do
             budget.budget_items.each do |item|
                 item.estimated_amount = 10
@@ -27,7 +27,7 @@ RSpec.describe GroupDecorator do
             end
             group.annual_budget = 120
             group.save
-            
+
             decorated_group = group.decorate
             expect(decorated_group.spendings_percentage).to eq(25.0)
         end

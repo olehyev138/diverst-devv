@@ -1,0 +1,63 @@
+<div class="content__header">
+  <h1>Close Budgets</h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <table class="table--has-border" id="groups">
+        <tbody>
+          <% @groups.each do |group| %>
+            <%= simple_form_for group, url: update_annual_budget_group_budgets_path(group), method: 'post', class: '.form-inline' do |f| %>
+              <tr>
+                  <td>
+                      <% if group.children.count > 0 %>
+                        <a href="#" class="nested_plus" id="<%= group.id%>">
+                          <%= inline_svg('icons/plus.svg', size: '25px*25px') %>
+                        </a>
+                        <a href="#" class="nested_minus" id="<%= group.id%>" style="display:none;">
+                          <%= inline_svg('icons/minus.svg', size: '25px*25px') %>
+                        </a>
+                      <% end %>
+                  </td>
+                  <td><%= group.name %></td>
+                  <td><%= f.input :annual_budget, :label => "Leftover Money", :input_html => { :value => group.leftover_money }%></td>
+                  <td><%= f.input :leftover_money, :as => :hidden, :input_html => { :value => 0 } %></td>
+                  <td> <%= f.button :submit, "Carry Over" %></td>
+                  <td><%= f.submit "Reset Budget", formaction: update_annual_budget_group_budgets_path(group_id: group.id, group: {annual_budget: 0, leftover_money: 0}), class: "btn btn--primary" %></td>
+              </tr>
+                <% group.children.each do |child| %>
+                  <%= simple_form_for child, url: update_annual_budget_group_budgets_path(child), method: 'post', class: '.form-inline' do |f| %>
+                    <tr class="children_<%= group.id%>" style="display:none;">
+                      <td></td>
+                      <td><%= child.name %></td>
+                      <td><%= f.input :annual_budget, :label => "Leftover Money", :input_html => { :value => child.leftover_money }%></td>
+                      <td><%= f.input :leftover_money, :as => :hidden, :input_html => { :value => 0 } %></td>
+                      <td> <%= f.button :submit, "Carry Over" %></td>
+                      <td><%= f.submit "Reset Budget", formaction: update_annual_budget_group_budgets_path(group_id: child.id, group: {annual_budget: 0, leftover_money: 0}), class: "btn btn--primary" %></td>
+                    </tr>
+                  <% end %>
+                <% end %>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  $('a.nested_plus').click(function(e){
+    var id = $(this).attr('id');
+    $('tr.children_' + id).show();
+    $(this).siblings('a.nested_minus').show();
+    $(this).hide();
+  }); //endof click
+  
+  $('a.nested_minus').click(function(e){
+    var id = $(this).attr('id');
+    $('tr.children_' + id).hide();
+    $(this).siblings('a.nested_plus').show();
+    $(this).hide();
+  }); //endof click
+</script>

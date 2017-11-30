@@ -8,6 +8,12 @@ class GroupPolicy < ApplicationPolicy
 
         @user.erg_leader?
     end
+    
+    def close_budgets?
+        return true if index?
+
+        @user.erg_leader?
+    end
 
     def metrics?
         update?
@@ -65,7 +71,7 @@ class GroupPolicy < ApplicationPolicy
     end
 
     def erg_leader_permissions?
-        update? || @record.leaders.include?(@user)
+        update? || @record.leaders.include?(@user) || parent_group_permissions?
     end
 
     def budgets?
@@ -90,6 +96,11 @@ class GroupPolicy < ApplicationPolicy
 
     def decline_budget?
         @policy_group.budget_approval?
+    end
+    
+    def parent_group_permissions?
+        return false if @record.parent.nil?
+        return ::GroupPolicy.new(@user, @record.parent).erg_leader_permissions?
     end
 
     def destroy?

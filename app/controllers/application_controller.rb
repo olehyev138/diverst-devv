@@ -30,7 +30,7 @@ class ApplicationController < ActionController::Base
         flash[:alert] = e.message
         redirect_to(request.referrer || default_path)
     end
-    
+
     rescue_from ActionController::ParameterMissing do |e|
         flash[:alert] = e.message
         redirect_to(request.referrer || default_path)
@@ -78,7 +78,7 @@ class ApplicationController < ActionController::Base
 
     def after_sign_in_path_for(resource)
         prev_url = session[:previous_url]
-        
+
         # This ensures unauthorized users are not accessing main page, which is admin only
         # This also ensures we don't get stuck with invitation as our previous url. Otherwise it redirects to non-existent page
         if prev_url && (prev_url != root_url) && (!prev_url.include? 'invitation')

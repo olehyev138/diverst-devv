@@ -5,28 +5,28 @@ RSpec.describe GroupsController, type: :controller do
   let(:enterprise){ create(:enterprise, cdo_name: "test") }
   let(:user){ create(:user, enterprise: enterprise) }
   let(:group){ create(:group, enterprise: enterprise) }
-  
+
   describe 'GET #index' do
     def get_index
       get :index
     end
 
     context 'with logged user' do
-      login_user
+      login_user_from_let
 
       before { get_index }
 
-      it 'render template', :skip => true do
+      it 'render template' do
         expect(response).to render_template :index
       end
 
-      it "return success", :skip => true do 
+      it "return success" do
         expect(response).to have_http_status(:ok)
       end
 
       #Derek
-      it 'correctly sets groups' do 
-        expect(group.enterprise).to eq enterprise 
+      it 'correctly sets groups' do
+        expect(group.enterprise).to eq enterprise
       end
     end
 
@@ -38,7 +38,8 @@ RSpec.describe GroupsController, type: :controller do
       end
     end
   end
-  
+
+
   describe 'GET#plan_overview' do
     def get_plan_overview
       get :plan_overview
@@ -53,8 +54,8 @@ RSpec.describe GroupsController, type: :controller do
 
       before { get_plan_overview }
 
-      it 'return success' do
-        expect(response).to be_success
+      it 'render plan_overview template' do
+        expect(response).to render_template :plan_overview
       end
 
       it 'shows groups from correct enterprise' do
@@ -73,23 +74,24 @@ RSpec.describe GroupsController, type: :controller do
       end
     end
   end
-  
+
+
   describe 'GET #calendar' do
     def get_calendar
       get :calendar
     end
 
     context 'with logged user' do
-      login_user
+      login_user_from_let
 
       before { get_calendar }
 
-      it "render 'shared/calendar/calendar_view" do 
+      it "render 'shared/calendar/calendar_view" do
         expect(response).to render_template('shared/calendar/calendar_view')
       end
 
-      it "responds with success", :skip => true do 
-        should respond_with :success 
+      it "responds with success" do
+        should respond_with :success
       end
     end
 
@@ -108,7 +110,7 @@ RSpec.describe GroupsController, type: :controller do
       get :calendar_data, params, q: { initiative_participating_groups_group_id_in: initiative_participating_groups_id_in, initiative_segments_segement_id_in: initiative_segments_segement_id_in }, format: :json
     end
 
-    
+
     let(:initiative) { create :initiative }
     let(:group) { create :group, enterprise_id: enterprise.id }
     let(:event) { create :event, group_id: group.id }
@@ -116,38 +118,38 @@ RSpec.describe GroupsController, type: :controller do
     let(:initiative_segment) { create :initiative_segment, initiative_id: initiative.id }
 
     context 'with logged in user' do
-      let!(:enterprise) { create :enterprise }  
-      login_user   
+      let!(:enterprise) { create :enterprise }
+      login_user_from_let
 
       before { get_calendar_data(initiative_group.id, initiative_segment.id, params={token: 'uniquetoken1234'}) }
 
-      it 'fetches correct events' do 
+      it 'fetches correct events' do
         expect(event.group_id).to eq group.id
       end
     end
 
     context 'without logged in user' do
-      context 'with correct token code' do 
-        let!(:enterprise) { create :enterprise, iframe_calendar_token: 'uniquetoken1234' }      
+      context 'with correct token code' do
+        let!(:enterprise) { create :enterprise, iframe_calendar_token: 'uniquetoken1234' }
         let!(:user) { create :user, enterprise: enterprise }
-        
+
         before { get_calendar_data(initiative_group.id, initiative_segment.id, params={token: 'uniquetoken1234'}) }
 
-        it 'fetches correct events', :skip => true do 
+        it 'fetches correct events', skip: "Missing Template"  do
           expect(event.group_id).to eq group.id
         end
       end
 
       context 'with incorrect token code' do
         let!(:enterprise) { create :enterprise, iframe_calendar_token: 'uniquetoken1234' }
-        
-        it 'returns error' do 
+
+        it 'returns error' do
           expect{ get_calendar_data(initiative_group.id, initiative_segment.id, params={ token: 'incorrect token' }) }.to raise_error(Pundit::NotAuthorizedError)
         end
       end
 
       context 'without token code' do
-        it 'should raise Pundit::NotAuthorizedError' do 
+        it 'should raise Pundit::NotAuthorizedError' do
         expect{ get_calendar_data(initiative_group.id, initiative_segment.id) }.to raise_error(Pundit::NotAuthorizedError)
          end
       end
@@ -178,7 +180,7 @@ RSpec.describe GroupsController, type: :controller do
   #     end
   #   end
   # end
-  
+
   describe 'GET #new' do
     def get_new
       get :new
@@ -202,7 +204,7 @@ RSpec.describe GroupsController, type: :controller do
       end
     end
   end
-  
+
   describe 'GET #show' do
     def get_show
       get :show, :id => group.id
@@ -277,7 +279,7 @@ RSpec.describe GroupsController, type: :controller do
       end
     end
   end
-  
+
   describe 'POST #create' do
     def post_create(params={a: 1})
       post :create, group: params
@@ -453,7 +455,7 @@ RSpec.describe GroupsController, type: :controller do
         end
 
         it 'renders edit view' do
-          expect(response).to render_template :edit
+          expect(response).to render_template :settings
         end
       end
     end
@@ -466,7 +468,7 @@ RSpec.describe GroupsController, type: :controller do
       end
     end
   end
-  
+
   describe 'GET #settings' do
     let(:user) { create :user }
     let(:group) { create :group, enterprise: user.enterprise }
@@ -565,7 +567,7 @@ RSpec.describe GroupsController, type: :controller do
       end
     end
   end
-  
+
   describe 'GET #metrics' do
     def get_metrics
       get :metrics, :id => group.id
@@ -589,7 +591,7 @@ RSpec.describe GroupsController, type: :controller do
       end
     end
   end
-  
+
   describe 'GET #import_csv' do
     def get_import_csv
       get :import_csv, :id => group.id
@@ -613,7 +615,7 @@ RSpec.describe GroupsController, type: :controller do
       end
     end
   end
-  
+
   describe 'GET #sample_csv' do
     def get_sample_csv
       get :sample_csv, :id => group.id
@@ -637,9 +639,9 @@ RSpec.describe GroupsController, type: :controller do
       end
     end
   end
-  
+
   describe 'GET #parse_csv' do
-    
+
     def get_parse_csv
       file = fixture_file_upload('files/test.csv', 'text/csv')
       get :parse_csv, :id => group.id, :file => file
@@ -663,9 +665,9 @@ RSpec.describe GroupsController, type: :controller do
       end
     end
   end
-  
+
   describe 'GET #export_csv' do
-    
+
     def get_export_csv
       get :export_csv, :id => group.id
     end
@@ -688,9 +690,9 @@ RSpec.describe GroupsController, type: :controller do
       end
     end
   end
-  
+
   describe 'GET #edit_fields' do
-    
+
     def get_edit_fields
       get :edit_fields, :id => group.id
     end
@@ -713,9 +715,9 @@ RSpec.describe GroupsController, type: :controller do
       end
     end
   end
-  
+
   describe 'GET #delete_attachment' do
-    
+
     def get_delete_attachment
       request.env["HTTP_REFERER"] = "back"
       get :delete_attachment, :id => group.id

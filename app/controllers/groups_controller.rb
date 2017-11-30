@@ -1,7 +1,7 @@
 class GroupsController < ApplicationController
     before_action :authenticate_user!, except: [:calendar_data]
     before_action :set_group, except: [:index, :new, :create, :plan_overview,
-                                       :calendar, :calendar_data]
+                                       :calendar, :calendar_data, :close_budgets]
 
     skip_before_action :verify_authenticity_token, only: [:create, :calendar_data]
     after_action :verify_authorized, except: [:calendar_data]
@@ -12,12 +12,17 @@ class GroupsController < ApplicationController
 
     def index
         authorize Group
-        @groups = current_user.enterprise.groups
+        @groups = current_user.enterprise.groups.includes(:children).where(:parent_id => nil)
     end
 
     def plan_overview
         authorize Group
         @groups = current_user.enterprise.groups.includes(:initiatives)
+    end
+    
+    def close_budgets
+        authorize Group
+        @groups = current_user.enterprise.groups.includes(:children).where(:parent_id => nil)
     end
 
     # calendar for all of the groups
@@ -65,10 +70,10 @@ class GroupsController < ApplicationController
 
     def show
         authorize @group
-        
+
         if policy(@group).erg_leader_permissions?
             base_show
-            
+
             @posts = @group.news_feed_links
                             .includes(:link)
                             .approved
@@ -77,7 +82,7 @@ class GroupsController < ApplicationController
         else
             if @group.active_members.include? current_user
                 base_show
-                
+
                 @posts = @group.news_feed_links
                             .includes(:link)
                             .approved
@@ -85,7 +90,7 @@ class GroupsController < ApplicationController
                             .where(where, current_user.segments.pluck(:id))
                             .order(created_at: :desc)
                             .limit(5)
-                
+
             else
                 @upcoming_events = []
                 @user_groups = []
@@ -130,7 +135,7 @@ class GroupsController < ApplicationController
             redirect_to :back
         else
             flash[:alert] = "Your #{c_t(:erg)} was not updated. Please fix the errors"
-            render :edit
+            render :settings
         end
     end
 
@@ -226,7 +231,7 @@ class GroupsController < ApplicationController
     end
 
     protected
-    
+
     def base_show
         @upcoming_events = @group.initiatives.upcoming.limit(3) + @group.participating_initiatives.upcoming.limit(3)
         @messages = @group.messages.includes(:owner).limit(3)
@@ -238,11 +243,11 @@ class GroupsController < ApplicationController
         @top_user_group_participants = @group.user_groups.active.top_participants(10).includes(:user)
         @top_group_participants = @group.enterprise.groups.top_participants(10)
     end
-    
+
     def where
         "news_feed_link_segments.segment_id IS NULL OR news_feed_link_segments.segment_id IN (?)"
     end
-    
+
     def joins
         "LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id"
     end
@@ -279,7 +284,15 @@ class GroupsController < ApplicationController
                 :messages_visibility,
                 :calendar_color,
                 :active,
+                :sponsor_name,
+                :sponsor_title,
+                :sponsor_image,
+                :sponsor_media,
+                :sponsor_message,
+                :company_video_url,
+                :parent_id,
                 manager_ids: [],
+                child_ids: [],
                 member_ids: [],
                 invitation_segment_ids: [],
                 outcomes_attributes: [

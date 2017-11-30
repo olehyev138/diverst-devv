@@ -20,7 +20,7 @@ class CustomTextsController < ApplicationController
   end
 
   protected
-  
+
   def set_custom_text
     @custom_text = current_user.enterprise.custom_text
   end

@@ -34,6 +34,8 @@
           <p><%= @event.time_string %></p>
           <h4>Location</h4>
           <p><%= @event.location %></p>
+          <h4>Co-hosted/Participating Groups</h4>
+          <p><%= @group.initiative_participating_groups.map(&:name).join(", ") %></p>
         </div>
         <div class="col sm-4">
           <h4>Attendees (<%= @event.attendees.count %>)</h4>
