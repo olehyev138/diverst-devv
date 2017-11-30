@@ -85,7 +85,7 @@
         <% end %>  
 
         <% show_sponsor_video?(@enterprise, "sponsor_media_content_type") do %>
-          <%= link_to(video_tag(@enterprise.sponsor_media, controls: true, size: "200x200"), video_path(@enterprise.sponsor_media.expiring_url(3600), controls: true)) %>
+          <%= link_to(video_tag(@enterprise.sponsor_media, controls: true, size: "200x200"), video_path(@enterprise.sponsor_media.expiring_url(36000), controls: true)) %>
         <% end %>
       <p style="font-style: italic;"><%= @enterprise.cdo_name %><br>
       <%= @enterprise.cdo_title %></p>
