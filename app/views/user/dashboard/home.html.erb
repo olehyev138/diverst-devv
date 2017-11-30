@@ -17,7 +17,7 @@
       <% if @enterprise.banner.present? %>
         <div class="row enterprise-banner">
           <div class="col sm-12">
-            <%= image_tag @enterprise.banner.url, style: 'max-width: 100%;' %>
+            <%= image_tag @enterprise.banner.expiring_url(3600), style: 'max-width: 100%;' %>
           </div>
         </div>
       <% end %>
@@ -78,14 +78,14 @@
       <div class="card__section">
         <% if @enterprise.sponsor_media.present? %>
           <% show_sponsor_image?(@enterprise, "sponsor_media_content_type") do %>
-          <%= image_tag(@enterprise.sponsor_media.url, style: 'max-width: 100px; max-height:90px; border-radius: 80px;') %>
+          <%= image_tag(@enterprise.sponsor_media.expiring_url(3600), style: 'max-width: 100px; max-height:90px; border-radius: 80px;') %>
           <% end %>
         <% else %>
           <%= image_tag("missing_user.png", size: "70x70") %>
         <% end %>  
 
         <% show_sponsor_video?(@enterprise, "sponsor_media_content_type") do %>
-          <%= link_to(video_tag(@enterprise.sponsor_media, controls: true, size: "200x200"), video_path(@enterprise.sponsor_media.url, controls: true)) %> 
+          <%= link_to(video_tag(@enterprise.sponsor_media, controls: true, size: "200x200"), video_path(@enterprise.sponsor_media.expiring_url(3600), controls: true)) %>
         <% end %>
       <p style="font-style: italic;"><%= @enterprise.cdo_name %><br>
       <%= @enterprise.cdo_title %></p>
