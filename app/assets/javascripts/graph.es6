@@ -58,10 +58,7 @@ class Graph {
       plotOptions: {
         series: {
           stacking: 'normal',
-          borderWidth: 0,
-          dataLabels: {
-              enabled: true
-          }
+          borderWidth: 0
         }
       },
       tooltip: {
