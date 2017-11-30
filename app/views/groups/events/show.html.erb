@@ -35,11 +35,7 @@
           <h4>Location</h4>
           <p><%= @event.location %></p>
           <h4>Co-hosted/Participating Groups</h4>
-<<<<<<< HEAD
-          <p><%= @event.initiative_participating_groups.map(&:name).join(", ") %></p>
-=======
           <p><%= @event.participating_groups.map(&:name).join(", ") %></p>
->>>>>>> 637459e1e215915b82f8cf9643d9310731d0cd3e
         </div>
         <div class="col sm-4">
           <h4>Attendees (<%= @event.attendees.count %>)</h4>
