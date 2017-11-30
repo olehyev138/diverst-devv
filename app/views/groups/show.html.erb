@@ -79,7 +79,6 @@
           <p style="font-style: italic;"><%= @group.sponsor_name %> 
         <br>
         <%= @group.sponsor_title.present? ? @group.sponsor_title : nil %></p>
-        <%= link_to "Corporate Video", @group.company_video_url, target: "_blank", class: "btn btn--primary" %>
         <% if @group.sponsor_message.present? %>
           <p style="font-style: italic; padding-top: 10px; padding-left: 10px;"><%= truncate(@group.sponsor_message, length: 200) %></p>
         <% end %>  

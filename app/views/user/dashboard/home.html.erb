@@ -89,7 +89,6 @@
         <% end %>
       <p style="font-style: italic;"><%= @enterprise.cdo_name %><br>
       <%= @enterprise.cdo_title %></p>
-      <p><%= link_to "Corporate Video", @enterprise.company_video_url, target: "_blank", class: "btn btn--primary" %></p>
       <p style="font-style: italic;"><%= truncate(@enterprise.cdo_message_email, length: 200) %></p>
       </div> 
     </div>
