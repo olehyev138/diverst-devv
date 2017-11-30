@@ -74,7 +74,7 @@
 
 
           <% show_sponsor_video?(@group, "sponsor_media_content_type") do %>
-            <%= link_to(video_tag(@group.sponsor_media, controls: true, size: "200x200"), video_path(@group.sponsor_media.expiring_url(36000), controls: true)) %>
+             <%= video_tag(@group.sponsor_media.expiring_url(36000), controls: true, size: "200x200") %>
           <% end %>
           <p style="font-style: italic;"><%= @group.sponsor_name %> 
         <br>
