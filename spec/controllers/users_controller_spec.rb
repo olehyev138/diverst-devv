@@ -24,6 +24,18 @@ RSpec.describe UsersController, type: :controller do
             get :index, :id => user.id , format: :json
             expect(response.content_type).to eq "application/json"
         end
+
+        it "returns 2 UserDatatable objects in json" do 
+            create(:user, enterprise: enterprise) 
+            get :index, :id => user.id, format: :json
+            json_response = JSON.parse(response.body, symbolize_names: true)
+            expect(json_response[:recordsTotal]).to eq 2
+        end
+
+        it "returns users" do 
+            get :index, :id => user.id
+            expect(assigns[:users]).to eq [user]
+        end
     end
 
     describe "GET#sent_invitations" do
