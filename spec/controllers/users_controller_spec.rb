@@ -21,7 +21,7 @@ RSpec.describe UsersController, type: :controller do
         end
 
         it "returns a json response" do 
-            get :index, :id => user.id 
+            get :index, :id => user.id , format: :json
             expect(response.content_type).to eq "application/json"
         end
     end
