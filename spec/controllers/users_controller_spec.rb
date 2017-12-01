@@ -43,11 +43,6 @@ RSpec.describe UsersController, type: :controller do
             get :sent_invitations, :format => :json
             expect(response).to be_success
         end
-
-        it "returns success", :skip => "Missing template" do
-            get :sent_invitations, :format => :html
-            expect(response).to be_success
-        end
     end
 
     describe "GET#saml_logins" do
