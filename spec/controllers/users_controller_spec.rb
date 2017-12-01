@@ -19,6 +19,11 @@ RSpec.describe UsersController, type: :controller do
             get :index, :id => user.id
             expect(response.content_type).to eq "text/html"
         end
+
+        it "returns a json response" do 
+            get :index, :id => user.id 
+            expect(response.content_type).to eq "application/json"
+        end
     end
 
     describe "GET#sent_invitations" do
