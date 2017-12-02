@@ -45,6 +45,14 @@
         <div class="card__section">
           <h2>Privacy Statement:</h2>
           <% if resource.enterprise.privacy_statement.present? %>
+<<<<<<< HEAD
+=======
+            <% if resource.enterprise.privacy_statement.length > 500 %>
+            <div id="privacy_statement" style="overflow-y: scroll; height: 200px;">
+              <%= resource.enterprise.privacy_statement %>
+            </div>
+            <% else %>
+>>>>>>> 1d1d49fb... Add scrollable privacy statement to invitation page
             <%= resource.enterprise.privacy_statement %>
           <% else %>
             Diverst regards your data as highly confidential. Only authorized administrators can view this data.. Your data will never be shared with anyone or anything other than these select individuals.
