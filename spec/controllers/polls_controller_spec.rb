@@ -21,7 +21,10 @@ RSpec.describe PollsController, type: :controller do
         end
 
         context "without a logged in user" do 
-            before { get :index }
+            before do 
+              poll
+              get :index 
+            end
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
