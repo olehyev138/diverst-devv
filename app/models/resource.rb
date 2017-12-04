@@ -1,5 +1,5 @@
 class Resource < ActiveRecord::Base
-    EXPIRATION_TIME = 15552000
+    EXPIRATION_TIME = 6.months
 
     belongs_to :container, polymorphic: true
     belongs_to :owner, class_name: "User"
