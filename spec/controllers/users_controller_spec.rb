@@ -38,19 +38,35 @@ RSpec.describe UsersController, type: :controller do
         end
     end
 
+
     describe "GET#sent_invitations" do
-        it "returns success" do
-            get :sent_invitations, :format => :json
-            expect(response).to be_success
+        it "returns a json response" do 
+            get :sent_invitations, :format => :json 
+            expect(response.content_type).to eq "application/json"
         end
     end
+
 
     describe "GET#saml_logins" do
         it "returns success" do
             get :saml_logins, :format => :json
             expect(response).to be_success
         end
+
+        it "returns users" do
+            create(:user, enterprise: enterprise, auth_source: "saml")
+            get :saml_logins
+            expect(assigns[:users].count).to eq 1
+        end
+
+         it "returns a new UserDatatable object in json" do 
+            create(:user, enterprise: enterprise, auth_source: "saml") 
+            get :saml_logins, :format => :json
+            json_response = JSON.parse(response.body, symbolize_names: true)
+            expect(json_response[:recordsTotal]).to eq 1
+        end
     end
+
 
     describe "GET#new", :skip => "Missing template" do
         it "returns success" do
@@ -59,10 +75,19 @@ RSpec.describe UsersController, type: :controller do
         end
     end
 
+
     describe "GET#show" do
+        before { get :show, :id => user.id  }
         it "returns success" do
-            get :show, :id => user.id
             expect(response).to be_success
+        end
+
+        it "render show template" do 
+            expect(response).to render_template :show 
+        end
+
+        it "returns a valid user" do 
+            expect(assigns[:user]).to be_valid
         end
     end
 
