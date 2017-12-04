@@ -20,11 +20,6 @@ class TopicFeedbacksController < ApplicationController
     end
   end
 
-  def destroy
-    @feedback.destroy
-    redirect_to :back
-  end
-
   def update
     if @feedback.update(admin_feedback_params)
       head :ok
@@ -32,6 +27,12 @@ class TopicFeedbacksController < ApplicationController
       head :internal_server_error
     end
   end
+
+  def destroy
+    @feedback.destroy
+    redirect_to :back
+  end
+
 
   protected
 
