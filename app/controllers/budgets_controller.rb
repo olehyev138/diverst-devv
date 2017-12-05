@@ -105,7 +105,6 @@ class BudgetsController < ApplicationController
   end
 
   def annual_budget_params
-    Logger.new("#{Rails.root}/log/my.log").info(params)
     params
       .require(:group)
       .permit(
