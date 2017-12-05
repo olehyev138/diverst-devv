@@ -77,6 +77,7 @@ RSpec.describe SegmentsController, type: :controller do
         end
 
         it "return members if group is absent" do
+            allow_any_instance_of(Group).to receive(:present?).and_return(nil)
             segment.members << user
             get :show, :id => segment.id
             expect(segment.members.count).to eq 1
