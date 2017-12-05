@@ -89,3 +89,8 @@ hr {
   margin: $spacing-medium 0;
   background-color: $diverst-border;
 }
+
+.scrollable_box {
+  overflow-y: scroll; 
+  height: 200px;
+}

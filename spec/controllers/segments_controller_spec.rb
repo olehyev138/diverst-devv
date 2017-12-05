@@ -5,7 +5,7 @@ RSpec.describe SegmentsController, type: :controller do
 
     let(:enterprise) { create(:enterprise, cdo_name: "test") }
     let(:user) { create(:user, enterprise: enterprise) }
-    let(:segment) { create(:segment, enterprise: enterprise) }
+    let!(:segment) { create(:segment, enterprise: enterprise) }
 
     login_user_from_let
 
@@ -16,7 +16,6 @@ RSpec.describe SegmentsController, type: :controller do
         end
 
         it "returns list of segments" do
-            segment
             get :index
             expect(assigns[:segments]).to eq [segment]
         end
@@ -131,7 +130,6 @@ RSpec.describe SegmentsController, type: :controller do
 
     describe "DELETE#destroy" do
         it "deletes segment" do
-            segment
             expect{ delete :destroy, :id => segment.id }.to change(Segment, :count).by(-1)
         end
 
