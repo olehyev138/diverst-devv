@@ -1,8 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe PollsController, type: :controller do
-    let(:user){ create(:user) }
-    let!(:poll){ create(:poll, status: 0, enterprise: user.enterprise, groups: []) }
+    let(:user) { create(:user) }
+    let!(:poll) { create(:poll, status: 0, enterprise: user.enterprise, groups: []) }
+    let!(:graph1) { create(:graph, aggregation: create(:field)) }
+    let!(:graph2) { create(:graph, aggregation: nil) }
+
 
 
     describe "GET#index" do
@@ -115,9 +118,22 @@ RSpec.describe PollsController, type: :controller do
     describe "GET#show" do
         context "with logged user" do
             login_user_from_let
+            
             before { get :show, id: poll.id }
 
-           xit "display graphs of a particular poll" do
+            it "sets a valid poll object" do 
+                expect(assigns[:poll]).to be_valid
+            end
+
+            it "display graphs of a particular poll" do
+                graph2.update(field_id: nil, aggregation_id: nil)
+                poll.graphs << graph1
+                poll.graphs << graph2
+                expect(assigns[:poll].graphs.includes(:field, :aggregation)).to eq graph1
+            end
+
+            it "render show template" do 
+                expect(response).to render_template :show
             end
         end
     end
