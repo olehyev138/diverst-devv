@@ -1,7 +1,0 @@
-I, [2017-12-01T07:14:15.003798 #6282]  INFO -- : {"group"=>{"annual_budget"=>"159"}, "group_id"=>"24", "controller"=>"budgets", "action"=>"update_annual_budget"}
-I, [2017-12-01T07:14:15.282827 #6282]  INFO -- : {"group"=>{"annual_budget"=>"161"}, "group_id"=>"25", "controller"=>"budgets", "action"=>"update_annual_budget"}
-I, [2017-12-01T07:14:15.472995 #6282]  INFO -- : {"group"=>{"annual_budget"=>"115"}, "group_id"=>"26", "controller"=>"budgets", "action"=>"update_annual_budget"}
-I, [2017-12-01T07:14:15.844344 #6282]  INFO -- : {"group"=>{"annual_budget"=>"164"}, "group_id"=>"27", "controller"=>"budgets", "action"=>"update_annual_budget"}
-I, [2017-12-01T07:14:15.869253 #6282]  INFO -- : {"group"=>{"annual_budget"=>"164"}, "group_id"=>"27", "controller"=>"budgets", "action"=>"update_annual_budget"}
-I, [2017-12-01T07:14:16.260593 #6282]  INFO -- : {"group"=>{"annual_budget"=>"139"}, "group_id"=>"28", "controller"=>"budgets", "action"=>"update_annual_budget"}
-I, [2017-12-01T07:14:16.272548 #6282]  INFO -- : {"group"=>{"annual_budget"=>"139"}, "group_id"=>"28", "controller"=>"budgets", "action"=>"update_annual_budget"}
