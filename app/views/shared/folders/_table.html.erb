@@ -1,3 +1,4 @@
+
 <div class="content__main">
   <div class="card">
     <div class="card__section">
@@ -14,9 +15,9 @@
             <tr>
               <% if resource.url.nil? %>
                 <td class="icon-column">
-                  <a href="<%= resource.file.expiring_url(3600) %>" class="icon icon--bg icon--large" style="background-image: url(<%= thumbnail_for_resource(resource) %>)"></a>
+                  <a href="<%= resource.file.expiring_url(resource.expiration_time) %>" class="icon icon--bg icon--large" style="background-image: url(<%= thumbnail_for_resource(resource) %>)"></a>
                 </td>
-                <td><%= link_to resource.title, resource.file.expiring_url(3600), target: '_blank' %></td>
+                <td><%= link_to resource.title, resource.file.expiring_url(resource.expiration_time), target: '_blank' %></td>
                 <td>N/A</td>
               <% else %>
                 <td></td>

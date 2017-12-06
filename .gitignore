@@ -6,8 +6,6 @@
 /db/*.sqlite3-journal
 
 # All logfiles and tempfiles
-/log/*
-!/log/.keep
 /tmp
 
 # Application configuration

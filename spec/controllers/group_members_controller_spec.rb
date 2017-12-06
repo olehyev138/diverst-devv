@@ -58,12 +58,12 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
           get_index(-1)
           expect(response).to_not be_success
         end
-        
+
         it 'raises ActiveRecord::RecordNotFound' do
           bypass_rescue
           expect{get_index(-1)}.to raise_error ActiveRecord::RecordNotFound
         end
-        
+
         it 'flashes' do
           get_index(-1)
           expect(flash[:alert]).to eq("Couldn't find Group with 'id'=-1 [WHERE `groups`.`enterprise_id` = ?]")
@@ -76,7 +76,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
       it 'return error' do
         expect(response).to_not be_success
       end
-      
+
       it 'redirects' do
         expect(response).to redirect_to new_user_session_path
       end
@@ -171,12 +171,12 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
           post_accept_pending(-1, pending_user.id)
           expect(response).to_not be_success
         end
-        
+
         it 'raises ActiveRecord::RecordNotFound' do
           bypass_rescue
           expect{post_accept_pending(-1, pending_user.id)}.to raise_error ActiveRecord::RecordNotFound
         end
-        
+
         it 'flashes' do
           post_accept_pending(-1, pending_user.id)
           expect(flash[:alert]).to eq("Couldn't find Group with 'id'=-1 [WHERE `groups`.`enterprise_id` = ?]")
@@ -189,7 +189,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
       it 'return error' do
         expect(response).to_not be_success
       end
-      
+
       it 'redirects' do
         expect(response).to redirect_to new_user_session_path
       end
@@ -242,7 +242,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
       it 'return error' do
         expect(response).to_not be_success
       end
-      
+
       it 'redirects' do
         expect(response).to redirect_to new_user_session_path
       end
@@ -374,7 +374,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
       it 'return error' do
         expect(response).to_not be_success
       end
-      
+
       it 'redirects' do
         expect(response).to redirect_to new_user_session_path
       end
@@ -413,7 +413,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
     context 'without logged in user' do
 
       let(:user) { FactoryGirl.create(:user) }
-      
+
       context 'with correct group id' do
         let(:group) { FactoryGirl.create(:group, enterprise: user.enterprise)}
         let(:new_member) { FactoryGirl.create(:user, enterprise: user.enterprise)}

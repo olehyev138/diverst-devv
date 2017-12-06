@@ -4,10 +4,18 @@ class GenericGraphsController < ApplicationController
     before_action :authenticate_user!
 
     def group_population
-        data = current_user.enterprise.groups.map { |g|
+        data = current_user.enterprise.groups.where(:parent_id => nil).map { |g|
             {
                 y: g.members.active.count,
-                name: g.name
+                name: g.name,
+                drilldown: g.name
+            }
+        }
+        drilldowns = current_user.enterprise.groups.includes(:children).where(:parent_id => nil).map { |g|
+            {
+                name: g.name,
+                id: g.name,
+                data: g.children.map {|child| [child.name, child.members.active.count]}
             }
         }
         categories = current_user.enterprise.groups.map{ |g| g.name }
@@ -21,6 +29,7 @@ class GenericGraphsController < ApplicationController
                                    title: 'Number of users',
                                    data: data
                                }],
+                               drilldowns: drilldowns,
                                categories: categories,
                                xAxisTitle: "#{c_t(:erg)}"
                            },
