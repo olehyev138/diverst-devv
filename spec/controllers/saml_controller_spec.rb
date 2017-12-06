@@ -7,7 +7,6 @@ RSpec.describe SamlController, type: :controller do
     describe "GET#index" do
         it "render index template" do
             get :index, enterprise_id: enterprise.id
-            byebug
             expect(response).to render_template :index
         end
     end
