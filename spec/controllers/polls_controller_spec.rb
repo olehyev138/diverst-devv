@@ -118,10 +118,10 @@ RSpec.describe PollsController, type: :controller do
     describe "GET#show" do
         context "with logged user" do
             login_user_from_let
-            
+
             before { get :show, id: poll.id }
 
-            it "sets a valid poll object" do 
+            it "sets a valid poll object" do
                 expect(assigns[:poll]).to be_valid
             end
 
@@ -132,35 +132,55 @@ RSpec.describe PollsController, type: :controller do
                 expect(assigns[:poll].graphs.includes(:field, :aggregation)).to eq [graph1]
             end
 
-            it "render show template" do 
+            it "returns poll responses in a decreasing order of created_at" do 
+                response1 = create(:poll_response, poll: poll, user: user) 
+                response2 = create(:poll_response, poll: poll, user: user, created_at: DateTime.now + 1.minute, updated_at: DateTime.now + 1.minute) 
+                expect(assigns[:responses]).to eq [response2, response1]
+            end
+
+            it "render show template" do
                 expect(response).to render_template :show
             end
         end
+
+        context "without a logged in user" do
+            before { get :show, id: poll.id }
+            it_behaves_like "redirect user to users/sign_in path"
+        end
     end
+
 
     describe "GET#edit" do
         context "with logged user" do
             login_user_from_let
+            before { get :edit, id: poll.id }
 
-            it "edit a poll" do
-                get :edit, id: poll.id
-                expect(response).to be_success
+            it "set a valid poll object" do 
+                expect(assigns[:poll]).to be_valid
             end
+
+            it "render edit template" do
+                expect(response).to render_template :edit
+            end
+        end
+
+        context "without a logged in user" do
+            before { get :edit, id: poll.id }
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
+
     describe "PATCH#update" do
-        context "with logged user" do
+        let(:poll){ create(:poll, status: 0, enterprise: user.enterprise, groups: []) }
+        let(:group){ create(:group, enterprise: user.enterprise) }
+        enable_public_activity
+
+        describe "with logged user" do
             login_user_from_let
 
-            let(:poll){ create(:poll, status: 0, enterprise: user.enterprise, groups: []) }
-            let(:group){ create(:group, enterprise: user.enterprise) }
-            enable_public_activity
-
             context "with valid params" do
-                before(:each) do
-                    patch :update, id: poll.id, poll: { group_ids: [group.id] }
-                end
+                before { patch :update, id: poll.id, poll: { group_ids: [group.id] } }
 
                 it "updates the poll" do
                     poll.reload
@@ -179,6 +199,10 @@ RSpec.describe PollsController, type: :controller do
                                                                                                     :count).by(1)
                 end
 
+                it "flashes a notice message" do 
+                    expect(flash[:notice]).to eq "Your survey was updated"
+                end
+
                 it "redirects to the updated poll" do
                     expect(response).to redirect_to(poll)
                 end
@@ -195,32 +219,61 @@ RSpec.describe PollsController, type: :controller do
                     expect(poll.groups).to eq []
                 end
 
+                it "flashes an alert message" do 
+                    expect(flash[:alert]).to eq "Your survey was not updated. Please fix the errors"
+                end
+
                 it "renders the edit action" do
                     expect(response).to render_template :edit
                 end
             end
+        end
+
+        describe "without a logged in user" do 
+            before { patch :update, id: poll.id, poll: { group_ids: [group.id] } }
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
     describe "DELETE#destroy" do
         context "with logged user" do
             login_user_from_let
+            enable_public_activity
 
             it "deletes a poll" do
-                delete :destroy, id: poll.id
+                expect{delete :destroy, id: poll.id}.to change(Poll, :count).by(-1)
+            end
+
+            it "redirect to index action" do 
+                delete :destroy, id: poll.id 
                 expect(response).to redirect_to action: :index
             end
+
+            it "tracks delete activity" do 
+                expect{ delete :destroy, id: poll.id }.to change(PublicActivity::Activity.all, :count).by(1)
+            end
+        end
+
+        context "without a logged in user" do
+            before { delete :destroy, id: poll.id }
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe "GET#export_csv" do
         context "with logged user" do
             login_user_from_let
 
-            it "gets a csv file" do
+            it "gets  response csv file" do
                 get :export_csv, id: poll.id
-                expect(response).to be_success
+                expect(response.body).to include "user_id,user_email,user_name\n"
             end
+        end
+
+        context "without a logged in user" do
+            before { get :export_csv, id: poll.id }
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 end
