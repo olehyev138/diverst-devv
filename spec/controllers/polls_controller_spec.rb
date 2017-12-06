@@ -129,7 +129,7 @@ RSpec.describe PollsController, type: :controller do
                 graph2.update(field_id: nil, aggregation_id: nil)
                 poll.graphs << graph1
                 poll.graphs << graph2
-                expect(assigns[:poll].graphs.includes(:field, :aggregation)).to eq graph1
+                expect(assigns[:poll].graphs.includes(:field, :aggregation)).to eq [graph1]
             end
 
             it "render show template" do 
