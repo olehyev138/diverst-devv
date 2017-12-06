@@ -46,7 +46,7 @@
           <h2>Privacy Statement:</h2>
           <% if resource.enterprise.privacy_statement.present? %>
             <% if resource.enterprise.privacy_statement.length > 500 %>
-            <div id="privacy_statement" style="overflow-y: scroll; height: 200px;">
+            <div id="privacy_statement" class="scrollable_box">
               <%= resource.enterprise.privacy_statement %>
             </div>
             <% else %>
