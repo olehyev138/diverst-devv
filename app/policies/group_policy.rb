@@ -8,6 +8,12 @@ class GroupPolicy < ApplicationPolicy
 
         @user.erg_leader?
     end
+    
+    def close_budgets?
+        return true if index?
+
+        @user.erg_leader?
+    end
 
     def metrics?
         update?

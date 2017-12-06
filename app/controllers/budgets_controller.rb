@@ -70,7 +70,7 @@ class BudgetsController < ApplicationController
     if @group.update(annual_budget_params)
       track_activity(@group, :annual_budget_update)
       flash[:notice] = "Your budget was updated"
-      redirect_to edit_annual_budget_group_budgets_path(@group)
+      redirect_to :back
     else
       flash[:alert] = "Your budget was not updated. Please fix the errors"
       redirect_to :back
@@ -108,7 +108,8 @@ class BudgetsController < ApplicationController
     params
       .require(:group)
       .permit(
-        :annual_budget
+        :annual_budget,
+        :leftover_money
       )
   end
 end

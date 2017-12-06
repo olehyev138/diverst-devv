@@ -81,17 +81,17 @@ class Group < ActiveRecord::Base
   has_attached_file :banner
   validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
 
-  has_attached_file :sponsor_image, styles: { medium: "150x150>", thumb: "100x80>" }, default_url: "/images/:style/missing.png"
-  validates_attachment_content_type :sponsor_image, content_type: /\Aimage\/.*\z/
+  has_attached_file :sponsor_media, s3_permissions: :private
+  do_not_validate_attachment_file_type :sponsor_media
 
   validates :name, presence: true
-  validate :sponsor_detail_consistency
 
   before_create :build_default_news_feed
   before_save :send_invitation_emails, if: :send_invitations?
   before_save :create_yammer_group, if: :should_create_yammer_group?
   before_destroy :handle_deletion
   after_commit :update_all_elasticsearch_members
+  before_validation :smart_add_url_protocol
 
   scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
 
@@ -239,20 +239,22 @@ class Group < ActiveRecord::Base
     "Create event from #{name} leftover ($#{leftover_money})"
   end
 
+
+
+  protected 
+
+  def smart_add_url_protocol
+    return nil if company_video_url.blank?
+    self.company_video_url = "http://#{company_video_url}" unless have_protocol?
+  end
+
+  def have_protocol?
+    company_video_url[%r{\Ahttp:\/\/}] || company_video_url[%r{\Ahttps:\/\/}]
+  end
+
+
+
   private
-
-  def sponsor_detail_consistency
-    errors.add(:sponsor_name, "sponsor name can not be blank")  if sponsor_name_is_absent
-    errors.add(:sponsor_title, "sponsor title can not be blank") if sponsor_title_is_absent
-  end
-
-  def sponsor_name_is_absent
-    (sponsor_message.present? && sponsor_name.blank?) || sponsor_name.blank?
-  end
-
-  def sponsor_title_is_absent
-    (sponsor_name.present? && sponsor_title.blank?) || sponsor_title.blank? 
-  end
 
   def filter_by_membership(membership_status)
     members.references(:user_groups).where('user_groups.accepted_member=?', membership_status)

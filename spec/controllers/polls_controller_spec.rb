@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe PollsController, type: :controller do
     let(:user){ create(:user) }
-    let(:poll){ create(:poll, status: 0, enterprise: user.enterprise, groups: []) }
-    
+    let!(:poll){ create(:poll, status: 0, enterprise: user.enterprise, groups: []) }
+
 
     describe "GET#index" do
         context "with logged user" do
@@ -14,34 +14,33 @@ RSpec.describe PollsController, type: :controller do
                 expect(response).to render_template :index
             end
 
-            it "displays all polls" do 
-                poll
+            it "displays all polls" do
                 expect(assigns[:polls].count).to eq 1
             end
         end
 
-        context "without a logged in user" do 
+        context "without a logged in user" do
             before { get :index }
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
-    
+
     describe "GET#new" do
         context "with logged user" do
-            login_user_from_let 
+            login_user_from_let
             before { get :new }
 
-            it "renders new template" do 
+            it "renders new template" do
                 expect(response).to render_template :new
             end
 
-            it "returns a new poll object" do 
+            it "returns a new poll object" do
                 expect(assigns[:poll]).to be_a_new(Poll)
             end
         end
 
-        context "without a logged in user" do 
+        context "without a logged in user" do
             before { get :new }
             it_behaves_like "redirect user to users/sign_in path"
         end
@@ -75,13 +74,13 @@ RSpec.describe PollsController, type: :controller do
                     expect(response).to redirect_to action: :index
                 end
 
-                it "flashes a notice message" do 
+                it "flashes a notice message" do
                     post :create, poll: poll
                     expect(flash[:notice]).to eq "Your survey was created"
                 end
 
-                it "send email" do 
-                    post :create, poll: poll 
+                it "send email" do
+                    post :create, poll: poll
                     expect(assigns[:poll].email_sent).to eq true
                 end
             end
@@ -98,35 +97,35 @@ RSpec.describe PollsController, type: :controller do
                     expect(response).to render_template :new
                 end
 
-                it "flashes an alert message" do 
-                    post :create, poll: poll 
+                it "flashes an alert message" do
+                    post :create, poll: poll
                     expect(flash[:alert]).to eq "Your survey was not created. Please fix the errors"
                 end
             end
         end
 
-        context "without a logged in user" do 
+        context "without a logged in user" do
             before { post :create, poll: poll }
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
 
-    
+
     describe "GET#show" do
         context "with logged user" do
             login_user_from_let
             before { get :show, id: poll.id }
 
-           xit "display graphs of a particular poll" do 
+           xit "display graphs of a particular poll" do
             end
         end
     end
-    
+
     describe "GET#edit" do
         context "with logged user" do
             login_user_from_let
-            
+
             it "edit a poll" do
                 get :edit, id: poll.id
                 expect(response).to be_success
@@ -186,7 +185,7 @@ RSpec.describe PollsController, type: :controller do
             end
         end
     end
-    
+
     describe "DELETE#destroy" do
         context "with logged user" do
             login_user_from_let
@@ -197,7 +196,7 @@ RSpec.describe PollsController, type: :controller do
             end
         end
     end
-    
+
     describe "GET#export_csv" do
         context "with logged user" do
             login_user_from_let

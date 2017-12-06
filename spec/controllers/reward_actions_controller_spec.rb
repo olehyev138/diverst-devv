@@ -10,7 +10,7 @@ RSpec.describe RewardActionsController, type: :controller do
       login_user_from_let
 
       context 'with correct params' do
-        before :each do
+        before do
           request.env["HTTP_REFERER"] = "index"
           patch :update, enterprise: {
             reward_actions_attributes: { "0" => { "id" => reward_action.id, "points" => 20 } }
@@ -20,6 +20,10 @@ RSpec.describe RewardActionsController, type: :controller do
         it 'updates reward_actions of an enterprise' do
           reward_action.reload
           expect(reward_action.points).to eq 20
+        end
+
+        it "flashes a notice message" do 
+          expect(flash[:notice]).to eq "Your reward actions were updated"
         end
 
         it 'redirects to back page' do
@@ -39,10 +43,21 @@ RSpec.describe RewardActionsController, type: :controller do
           expect(reward_action.points).to eq 10
         end
 
+        it "flashes an alert message" do 
+          expect(flash[:alert]).to eq "Your reward actions were not updated. Please fix the errors"
+        end
+
         it 'render edit template' do
           expect(response).to render_template "rewards/index"
         end
       end
+    end
+
+    context "without a logged in user" do 
+      before {  patch :update, enterprise: {
+            reward_actions_attributes: { "0" => { "id" => reward_action.id, "points" => 20 } }
+          } }
+       it_behaves_like "redirect user to users/sign_in path"
     end
   end
 end

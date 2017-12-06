@@ -11,6 +11,7 @@ module Folders
 
     def index
         @folders = @container.folders + @container.shared_folders
+        @folders.sort_by!{ |f| f.name.downcase }
         render '/index'
     end
 

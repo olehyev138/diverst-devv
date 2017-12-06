@@ -1,7 +1,7 @@
 class GroupsController < ApplicationController
     before_action :authenticate_user!, except: [:calendar_data]
     before_action :set_group, except: [:index, :new, :create, :plan_overview,
-                                       :calendar, :calendar_data]
+                                       :calendar, :calendar_data, :close_budgets]
 
     skip_before_action :verify_authenticity_token, only: [:create, :calendar_data]
     after_action :verify_authorized, except: [:calendar_data]
@@ -12,12 +12,17 @@ class GroupsController < ApplicationController
 
     def index
         authorize Group
-        @groups = current_user.enterprise.groups
+        @groups = current_user.enterprise.groups.includes(:children).where(:parent_id => nil)
     end
 
     def plan_overview
         authorize Group
         @groups = current_user.enterprise.groups.includes(:initiatives)
+    end
+    
+    def close_budgets
+        authorize Group
+        @groups = current_user.enterprise.groups.includes(:children).where(:parent_id => nil)
     end
 
     # calendar for all of the groups
@@ -282,7 +287,9 @@ class GroupsController < ApplicationController
                 :sponsor_name,
                 :sponsor_title,
                 :sponsor_image,
+                :sponsor_media,
                 :sponsor_message,
+                :company_video_url,
                 :parent_id,
                 manager_ids: [],
                 child_ids: [],

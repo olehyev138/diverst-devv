@@ -150,6 +150,7 @@ RSpec.describe BudgetsController, type: :controller do
 
   describe 'POST #update_annual_budget' do
     def post_update_annual_budget(group_id = -1, params = {})
+      request.env["HTTP_REFERER"] = "back"
       post :update_annual_budget, group_id: group_id, group: params
     end
 
@@ -176,7 +177,7 @@ RSpec.describe BudgetsController, type: :controller do
         end
 
         it 'redirects to correct path' do
-          expect(response).to redirect_to edit_annual_budget_group_budgets_path(group)
+          expect(response).to redirect_to "back"
         end
 
         describe 'public activity' do
