@@ -4,7 +4,7 @@ class Graph {
     this.$element = $element;
     this.data = {};
 
-    this.brandingColor = BRANDING_COLOR || $('.primary-header').css('background-color')
+    this.brandingColor = BRANDING_COLOR || $('.primary-header').css('background-color') || '#7B77C9'
     this.chartsColor = CHARTS_COLOR || this.brandingColor
 
     this.updateData(this.dataUrl);
