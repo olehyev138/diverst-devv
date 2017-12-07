@@ -50,7 +50,7 @@ RSpec.describe User::DashboardController, type: :controller do
       login_user_from_let
 
       it "render rewards template" do 
-        before { get :rewards }
+        get :rewards 
         expect(response).to render_template :rewards
       end
 
