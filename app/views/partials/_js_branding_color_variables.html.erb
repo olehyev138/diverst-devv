@@ -2,5 +2,8 @@
 <% if current_user %>
   var BRANDING_COLOR = '<%= current_user.enterprise.theme.try(:branding_color) %>';
   var CHARTS_COLOR = '<%= current_user.enterprise.theme.try(:charts_color) %>';
+<% else %>
+  var BRANDING_COLOR = '#7B77C9';
+  var CHARTS_COLOR = '#7B77C9';
 <% end %>
 </script>
