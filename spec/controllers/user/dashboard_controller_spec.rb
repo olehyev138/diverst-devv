@@ -54,7 +54,7 @@ RSpec.describe User::DashboardController, type: :controller do
         expect(response).to render_template :rewards
       end
 
-      describe 'reward action' do 
+      describe 'rewards' do 
         let!(:enterprise) { create(:enterprise) }
         let!(:user) { create(:user, enterprise: enterprise)}
         let!(:reward_action1) { create(:reward_action, enterprise: enterprise, points: 22) }
