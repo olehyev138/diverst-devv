@@ -1,8 +1,7 @@
 class MetricsDashboardsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:shared_dashboard]
   after_action :verify_authorized, except: [:shared_dashboard]
   before_action :set_metrics_dashboard, except: [:index, :new, :create, :shared_dashboard]
-
   layout 'erg_manager'
 
   def new
@@ -55,6 +54,8 @@ class MetricsDashboardsController < ApplicationController
     end
 
     not_found! if @metrics_dashboard.nil?
+
+    @graphs = @metrics_dashboard.graphs.includes(:field, :aggregation)
 
     render layout: 'guest'
   end
