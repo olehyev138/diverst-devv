@@ -23,7 +23,6 @@ RSpec.describe BudgetMailer, type: :mailer do
 
     it 'assigns @name' do
       escaped_name = Rack::Utils.escape_html user.name
-      byebug
       expect(mail.body.encoded).to include(escaped_name)
     end
 
