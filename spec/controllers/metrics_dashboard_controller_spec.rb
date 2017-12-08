@@ -11,15 +11,15 @@ RSpec.describe MetricsDashboardsController, type: :controller do
     end
 
     context 'with logged user' do
-      login_user
+      login_user_from_let
 
       before { get_new }
 
-      it "renders new template" do 
+      it "renders new template" do
         expect(response).to render_template :new
       end
 
-      it "return new metric dashboard object", skip: "fails because of an inexplicable reason" do 
+      it "return new metric dashboard object" do
         expect(assigns[:metrics_dashboard]).to be_a_new(MetricsDashboard)
       end
     end
@@ -37,21 +37,21 @@ RSpec.describe MetricsDashboardsController, type: :controller do
     end
 
     context 'with logged user' do
-      login_user
+      login_user_from_let
 
       before { get_index }
 
-      it "return metrics" do 
+      it "return metrics" do
         2.times { create :metrics_dashboard, :enterprise => enterprise }
         metrics_dashboard
         expect(MetricsDashboard.all.count).to eq 3
       end
 
-      it "render index template", skip: "fails because of an inexplicable reason" do 
+      it "render index template" do
         expect(response).to render_template :index
       end
 
-      it "return enterprise belonging to current_user" do 
+      it "return enterprise belonging to current_user" do
         expect(enterprise.users).to include user
       end
     end
@@ -81,12 +81,12 @@ RSpec.describe MetricsDashboardsController, type: :controller do
           }.to change(MetricsDashboard, :count).by(1)
         end
 
-        it "flashes a notice message" do 
+        it "flashes a notice message" do
           post_create(md_params)
           expect(flash[:notice]).to eq "Your dashboard was created"
         end
 
-        it "redirect to just created metrics dashboard" do 
+        it "redirect to just created metrics dashboard" do
           post_create(md_params)
           expect(response).to redirect_to MetricsDashboard.last
         end
@@ -139,7 +139,7 @@ RSpec.describe MetricsDashboardsController, type: :controller do
           expect(response).to render_template :new
         end
 
-        it "flashes an alert message" do 
+        it "flashes an alert message" do
           post_create
           expect(flash[:alert]).to eq "Your dashboard was not created. Please fix the errors"
         end
@@ -166,16 +166,23 @@ RSpec.describe MetricsDashboardsController, type: :controller do
     end
 
     context 'with logged user' do
-      login_user
+      login_user_from_let
 
-      before { get_show }
+      before {
+        metrics_dashboard.shareable_token #Touch token, so it is initialized
+        get_show
+      }
 
-       it "returns set metrics dashboard", skip: "fails because of an inexplicable reason" do 
+       it "returns set metrics dashboard" do
         expect(assigns[:metrics_dashboard]).to eq metrics_dashboard
       end
 
-      it "render show template", skip: "fails because of an inexplicable reason" do 
+      it "render show template" do
         expect(response).to render_template :show
+      end
+
+      it 'sets correct shareable token', focus: true do
+        expect(assigns[:token]).to eq metrics_dashboard.shareable_token
       end
     end
 
@@ -196,7 +203,7 @@ RSpec.describe MetricsDashboardsController, type: :controller do
 
       before { get_edit }
 
-      it "render edit template", skip: "fails because of an inexplicable reason" do 
+      it "render edit template" do
         expect(response).to render_template :edit
       end
     end
@@ -257,13 +264,13 @@ RSpec.describe MetricsDashboardsController, type: :controller do
           expect(response).to redirect_to action: :index
         end
 
-        it "flashes a notice message" do 
+        it "flashes a notice message" do
           patch_update(metrics_dashboard.id, new_md_params)
           expect(flash[:notice]).to eq "Your dashboard was updated"
         end
       end
 
-      context "incorrect params" do 
+      context "incorrect params" do
         login_user_from_let
         let(:invalid_md_params) { { name: "" } }
 
@@ -272,7 +279,7 @@ RSpec.describe MetricsDashboardsController, type: :controller do
           expect(response).to render_template :edit
         end
 
-        it "flashes a notice message" do 
+        it "flashes a notice message" do
           patch_update(metrics_dashboard.id, invalid_md_params)
           expect(flash[:alert]).to eq "Your dashboard was not updated. Please fix the errors"
         end
