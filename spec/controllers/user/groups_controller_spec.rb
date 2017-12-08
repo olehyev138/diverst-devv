@@ -30,7 +30,7 @@ RSpec.describe User::GroupsController, type: :controller do
     describe 'GET #join' do
         describe "when user is logged in" do 
             login_user_from_let
-            before { get :join, id: group.id }
+            before { get :join, { id: group.id } }
 
             it "join group" do 
                 expect(assigns[:group].members).to eq [user]
@@ -38,7 +38,7 @@ RSpec.describe User::GroupsController, type: :controller do
         end
 
         describe "when user is not logged in" do 
-            before { get :join, id: group.id }
+            before { get :join, { id: group.id } }
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
