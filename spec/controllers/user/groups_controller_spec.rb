@@ -1,28 +1,49 @@
 require 'rails_helper'
 
-RSpec.describe "User::GroupsController", type: :controller do
-    let(:user) { create :user}
-    let(:group){ create(:group, enterprise: user.enterprise) }
+RSpec.describe User::GroupsController, type: :controller do
+    let!(:user) { create :user}
+    let!(:group){ create(:group, enterprise: user.enterprise) }
+
     
-    def setup
-        @controller = User::GroupsController.new
-    end
-    
-    before {setup}
-    
-    login_user_from_let
-    
+
     describe 'GET #index' do
-        it "returns success" do
-            get :index
-            expect(response).to be_success
+        describe "when user is logged in" do 
+            login_user_from_let
+            before { get :index }
+
+            it "render index template" do
+                expect(response).to render_template :index
+            end
+
+            it "return current user's enterprise groups" do 
+                expect(assigns[:current_user].enterprise.groups).to eq [group]
+            end
+        end
+
+        describe "when user is not logged in" do 
+            before { get :index }
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
-    
+
+
     describe 'GET #join' do
-        it "returns success" do
-            get :join, id: group.id
-            expect(response).to be_success
+        describe "when user is logged in" do 
+            login_user_from_let
+            before { get :join, id: group.id }
+
+            it "returns success" do
+                expect(response).to be_success
+            end
+
+            it "join group" do 
+                expect(assigns[:group].members).to eq [user]
+            end
+        end
+
+        describe "when user is not logged in" do 
+            before { get :join, id: group.id }
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 end
