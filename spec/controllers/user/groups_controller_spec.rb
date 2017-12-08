@@ -32,10 +32,6 @@ RSpec.describe User::GroupsController, type: :controller do
             login_user_from_let
             before { get :join, id: group.id }
 
-            it "returns success" do
-                expect(response).to be_success
-            end
-
             it "join group" do 
                 expect(assigns[:group].members).to eq [user]
             end
