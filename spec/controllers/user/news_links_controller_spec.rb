@@ -1,20 +1,25 @@
 require 'rails_helper'
 
-RSpec.describe "User::NewsLinksController", type: :controller do
+RSpec.describe User::NewsLinksController, type: :controller do
     let(:user) { create :user}
-    
-    def setup
-        @controller = User::NewsLinksController.new
-    end
-    
-    before {setup}
-    
-    login_user_from_let
-    
+
     describe 'GET #index' do
-        it "returns success" do
-            get :index
-            expect(response).to be_success
-        end
+       describe  "when user is logged in" do 
+         login_user_from_let
+
+         before { get :index }
+
+         it "renders index template" do 
+            expect(response).to render_template :index
+         end
+
+         it "debug" do 
+         end
+       end
+
+       describe "when user is not logged in" do
+         before { get :index }
+         it_behaves_like "redirect user to users/sign_in path"
+       end
     end
 end
