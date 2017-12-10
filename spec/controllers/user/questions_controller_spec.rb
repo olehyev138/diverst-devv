@@ -20,6 +20,10 @@ RSpec.describe "User::QuestionsController", type: :controller do
             login_user_from_let
             before { get :index, user_campaign_id: campaign.id }
 
+            it "return success" do
+                expect(response).to be_success
+            end
+
             it "render index template" do
                 expect(response).to render_template :index
             end
@@ -40,6 +44,10 @@ RSpec.describe "User::QuestionsController", type: :controller do
         describe "when user is logged in" do
            login_user_from_let
            before { get :show, id: question1.id }
+
+            it "return success" do
+                expect(response).to be_success
+            end
 
             it "render show template" do
                 expect(response).to render_template :show
