@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe User::QuestionsController, type: :controller do
-    let(:user) { create :user}
-    let(:campaign) { create(:campaign, enterprise: user.enterprise, owner: user) }
+    let!(:user) { create :user}
+    let!(:campaign) { create(:campaign, enterprise: user.enterprise, owner: user) }
 	let!(:question1) { create(:question, campaign: campaign, created_at: Time.current, updated_at: Time.current) }
     let!(:question2) { create(:question, campaign: campaign, created_at: Time.current + 1.days, updated_at: Time.current + 1.days) }
     let!(:answer1) { create(:answer, question: question1, author: user, upvote_count: 4) }
