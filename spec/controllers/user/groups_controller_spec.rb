@@ -1,6 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe User::GroupsController, type: :controller do
+RSpec.describe "User::GroupsController", type: :controller do
+    before { @controller = User::GroupsController.new }
+
     let!(:user) { create :user}
     let!(:group) { create(:group, enterprise: user.enterprise, owner: user) }
 
