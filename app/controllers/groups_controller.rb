@@ -189,7 +189,7 @@ class GroupsController < ApplicationController
         @table.each_with_index do |row, row_index|
             email = row[0]
             user = User.where(email: email).first
-
+            
             if user
                 @group.members << user unless @group.members.include? user
 
@@ -226,7 +226,7 @@ class GroupsController < ApplicationController
             redirect_to :back
         else
             flash[:alert] = "Group attachment was not removed. Please fix the errors"
-            render :back
+            redirect_to :back
         end
     end
 
