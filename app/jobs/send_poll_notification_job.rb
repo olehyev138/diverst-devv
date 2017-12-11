@@ -3,6 +3,7 @@ class SendPollNotificationJob < ActiveJob::Base
 
   def perform
     Poll.joins(:initiative)
+      .published
       .where(email_sent: false)
       .where('initiatives.end <= ?', Date.today)
       .each do |poll|

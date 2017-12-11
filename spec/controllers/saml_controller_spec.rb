@@ -5,11 +5,12 @@ RSpec.describe SamlController, type: :controller do
     let(:user) {create(:user, enterprise: enterprise)}
     
     describe "GET#index" do
-        it "gets the attrs" do
+        it "render index template" do
             get :index, enterprise_id: enterprise.id
-            expect(response).to be_success
+            expect(response).to render_template :index
         end
     end
+
     
     describe "GET#sso" do
         it "renders no settings" do

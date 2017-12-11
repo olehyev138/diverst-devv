@@ -42,11 +42,6 @@ RSpec.describe CampaignsController, type: :controller do
             it "render new template" do
                 expect(response).to render_template :new
             end
-
-
-            it "campaign duration should be 7 days", skip: "the difference between start and day is 23?" do
-                expect(assigns[:campaign].end.day - assigns[:campaign].start.day).to eq 7
-            end
         end
 
         context "without logged user" do
