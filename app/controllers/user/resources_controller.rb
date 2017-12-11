@@ -8,7 +8,11 @@ class User::ResourcesController < ApplicationController
   protected
 
   def set_container
-    @group = @container = current_user.enterprise if current_user
+    if current_user
+      @group = @container = current_user.enterprise
+    else
+      redirect_to new_user_session_path
+    end
   end
 
   def set_container_path
