@@ -7,9 +7,4 @@ class GroupDecorator < Draper::Decorator
 
     (group.spent_budget || 0) / group.annual_budget * 100
   end
-  
-  def annual_budget
-    return group.annual_budget if group.annual_budget.present?
-    return 0.0
-  end
 end
