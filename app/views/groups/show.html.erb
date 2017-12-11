@@ -68,7 +68,7 @@
           <% show_sponsor_image?(@group, "sponsor_media_content_type") do %>
           <%= image_tag(@group.sponsor_media.expiring_url(3600), style: 'max-width: 100px; max-height:90px; border-radius: 80px;') %>
           <% end %>
-        <% else %>  
+        <% else %>
           <%= image_tag("missing_user.png", size: "70x70") %>
         <% end %>
 
@@ -76,12 +76,12 @@
           <% show_sponsor_video?(@group, "sponsor_media_content_type") do %>
              <%= video_tag(@group.sponsor_media.expiring_url(36000), controls: true, size: "200x200") %>
           <% end %>
-          <p style="font-style: italic;"><%= @group.sponsor_name %> 
+          <p style="font-style: italic;"><%= @group.sponsor_name %>
         <br>
         <%= @group.sponsor_title.present? ? @group.sponsor_title : nil %></p>
         <% if @group.sponsor_message.present? %>
           <p style="font-style: italic; padding-top: 10px; padding-left: 10px;"><%= truncate(@group.sponsor_message, length: 200) %></p>
-        <% end %>  
+        <% end %>
         </div>
       </div>
       <% end %>
@@ -92,7 +92,7 @@
         <% else %>
           You can always
           <%= link_to 'edit', survey_group_questions_path(@group) %>
-          your <% c_t(:member_preference).pluralize %>
+          your <% c_t(:member_preference) %>
         <% end %>
       <% end %>
 
@@ -104,7 +104,7 @@
           <% end %>
         <% end %>
       <% else %>
-        <%= link_to c_t(:member_preference).pluralize, survey_group_questions_path(@group), class: "btn btn--primary" unless current_user.has_answered_group_survey? @group %>
+        <%= link_to c_t(:member_preference), survey_group_questions_path(@group), class: "btn btn--primary" unless current_user.has_answered_group_survey? @group %>
       <% end %>
 
       <div class="card card--secondary">
@@ -136,7 +136,7 @@
           </div>
         </div>
       <% end %>
-      
+
       <% if @group.parent.present? %>
         <div class="card card--secondary">
           <div class="card__section">
@@ -145,7 +145,7 @@
           </div>
         </div>
       <% end %>
-      
+
        <% if @group.children.count > 0 %>
         <div class="card card--secondary">
           <div class="card__section">

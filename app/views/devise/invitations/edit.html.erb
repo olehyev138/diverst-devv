@@ -45,7 +45,13 @@
         <div class="card__section">
           <h2>Privacy Statement:</h2>
           <% if resource.enterprise.privacy_statement.present? %>
+            <% if resource.enterprise.privacy_statement.length > 500 %>
+            <div id="privacy_statement" class="scrollable_box">
+              <%= resource.enterprise.privacy_statement %>
+            </div>
+            <% else %>
             <%= resource.enterprise.privacy_statement %>
+            <% end %>
           <% else %>
             Diverst regards your data as highly confidential. Only authorized administrators can view this data.. Your data will never be shared with anyone or anything other than these select individuals.
           <% end %>

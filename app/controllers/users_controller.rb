@@ -18,7 +18,7 @@ class UsersController < ApplicationController
   def sent_invitations
     authorize User, :index?
     @users = policy_scope(User).invitation_not_accepted.where(search_params)
-
+    
     respond_to do |format|
       format.html
       format.json { render json: InvitedUserDatatable.new(view_context, @users) }

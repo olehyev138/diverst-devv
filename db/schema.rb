@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(version: 20171130143338) do
     t.string   "trackable_type", limit: 191
     t.integer  "owner_id",       limit: 4
     t.string   "owner_type",     limit: 191
-    t.string   "key",            limit: 255
+    t.string   "key",            limit: 191
     t.text     "parameters",     limit: 65535
     t.integer  "recipient_id",   limit: 4
     t.string   "recipient_type", limit: 191
@@ -676,11 +676,12 @@ ActiveRecord::Schema.define(version: 20171130143338) do
   end
 
   create_table "metrics_dashboards", force: :cascade do |t|
-    t.integer  "enterprise_id", limit: 4
-    t.string   "name",          limit: 191
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-    t.integer  "owner_id",      limit: 4
+    t.integer  "enterprise_id",   limit: 4
+    t.string   "name",            limit: 191
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.integer  "owner_id",        limit: 4
+    t.string   "shareable_token", limit: 191
   end
 
   create_table "metrics_dashboards_segments", force: :cascade do |t|
@@ -805,6 +806,8 @@ ActiveRecord::Schema.define(version: 20171130143338) do
     t.boolean  "initiatives_index",                       default: false
     t.boolean  "initiatives_create",                      default: false
     t.boolean  "initiatives_manage",                      default: false
+    t.boolean  "initiatives"
+    t.boolean  "initia1tives_manage",                     default: false
     t.boolean  "default_for_enterprise",                  default: false
     t.boolean  "admin_pages_view",                        default: false
     t.boolean  "budget_approval",                         default: false
