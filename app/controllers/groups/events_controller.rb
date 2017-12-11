@@ -74,12 +74,15 @@ class Groups::EventsController < ApplicationController
 
   def export_ics
     cal = Icalendar::Calendar.new
+    cal.timezone do |t|
+      t.tzid = current_user.default_time_zone
+    end
 
     description = strip_tags @event.description
 
     cal.event do |e|
-      e.dtstart     = @event.start
-      e.dtend       = @event.end
+      e.dtstart     = Icalendar::Values::DateTime.new @event.start, 'tzid' => current_user.default_time_zone
+      e.dtend       = Icalendar::Values::DateTime.new @event.end, 'tzid' => current_user.default_time_zone
       e.summary     = @event.title
       e.description = description
       e.ip_class    = "PRIVATE"
