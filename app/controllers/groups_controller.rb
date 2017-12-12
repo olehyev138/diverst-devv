@@ -258,7 +258,7 @@ class GroupsController < ApplicationController
             'erg'
         when 'metrics'
             'plan'
-        when 'edit_fields', 'plan_overview'
+        when 'edit_fields', 'plan_overview', 'close_budgets'
             'plan'
         else
             'erg_manager'
