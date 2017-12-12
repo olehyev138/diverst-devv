@@ -8,11 +8,9 @@ class User::ResourcesController < ApplicationController
   protected
 
   def set_container
-    if current_user
       @group = @container = current_user.enterprise
-    else
-      redirect_to new_user_session_path
-    end
+    rescue
+      user_not_authorized
   end
 
   def set_container_path
