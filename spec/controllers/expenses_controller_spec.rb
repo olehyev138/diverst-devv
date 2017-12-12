@@ -30,7 +30,6 @@ RSpec.describe ExpensesController, type: :controller do
         end
     end
 
-
     describe "GET#new" do
         context "with logged in user" do
             login_user_from_let
@@ -51,7 +50,6 @@ RSpec.describe ExpensesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "POST#create" do
         describe "with logged in user" do
@@ -100,7 +98,6 @@ RSpec.describe ExpensesController, type: :controller do
         end
     end
 
-
     describe "GET#edit" do
         context "with logged in user" do
             login_user_from_let
@@ -121,7 +118,6 @@ RSpec.describe ExpensesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "PATCH#update" do
         describe "with logged in user" do
@@ -170,7 +166,6 @@ RSpec.describe ExpensesController, type: :controller do
 
             it_behaves_like "redirect user to users/sign_in path"
         end
-
     end
 
     describe "DELETE#destroy" do
