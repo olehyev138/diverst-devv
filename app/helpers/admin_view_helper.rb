@@ -14,7 +14,7 @@ module AdminViewHelper
 
   def active_plan_link?
     return true if controller_name == 'groups' &&
-      ['edit_fields', 'plan_overview', 'metrics', 'budgets', 'request_budget', 'view_budget'].include?(action_name)
+      ['edit_fields', 'plan_overview', 'metrics', 'budgets', 'request_budget', 'view_budget', 'close_budgets'].include?(action_name)
 
     return true if params[:controller] == 'initiatives/resources'
 
