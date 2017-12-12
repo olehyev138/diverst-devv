@@ -68,6 +68,6 @@ module IsResources
     end
 
     def set_resource
-        @resource = @container.resources.find(params[:id])
+        @resource = @container.resources.find(params[:id]) if @container
     end
 end
