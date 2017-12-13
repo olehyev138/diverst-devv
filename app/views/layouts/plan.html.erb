@@ -26,6 +26,9 @@
           <%= active_link_to "Updates", group_updates_path(@group ||  current_user.manageable_groups.first) %>
         </li>
       <% end %>
+      <li>
+        <%= active_link_to "Close Out Budgets", close_budgets_groups_path %>
+      </li>
     </ul>
   </nav>
 </div>
@@ -37,6 +40,7 @@
     <%= active_link_to c_t(:structure), group_outcomes_path(@group ||  current_user.manageable_groups.first), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
     <%= active_link_to "Updates", group_updates_path(@group ||  current_user.manageable_groups.first), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <% end %>
+  <%= active_link_to "Close Out Budgets", close_budgets_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
 </div>
 <% end %>
 
