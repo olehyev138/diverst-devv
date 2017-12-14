@@ -5,7 +5,7 @@ RSpec.describe RewardsController, type: :controller do
     let!(:user) { create(:user, enterprise: enterprise) }
     let(:reward) { create(:reward, enterprise: enterprise, points: 10) }
     let(:badge) { create(:badge, enterprise: enterprise) }
-    
+
     describe "GET#index" do
         context "with logged in user" do
             login_user_from_let
@@ -16,23 +16,23 @@ RSpec.describe RewardsController, type: :controller do
                 expect(assigns[:rewards].count).to eq enterprise.rewards.count
             end
 
-            it "gets the badges" do 
-                enterprise 
+            it "gets the badges" do
+                enterprise
                 expect(assigns[:badges].count).to eq enterprise.badges.count
             end
 
-            it "renders index template" do 
+            it "renders index template" do
                 expect(response).to render_template :index
             end
         end
 
-        context "without a logged in user" do 
+        context "without a logged in user" do
             before { get :index }
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
-    
+
     describe "GET#new" do
         context "with logged in user" do
             login_user_from_let
@@ -42,16 +42,16 @@ RSpec.describe RewardsController, type: :controller do
                 expect(response).to render_template :new
             end
 
-            it "returns a valid enterprise object" do 
+            it "returns a valid enterprise object" do
                 expect(assigns[:enterprise]).to be_valid
             end
 
-            it "returns a new reward object" do 
+            it "returns a new reward object" do
                 expect(assigns[:reward]).to be_a_new(Reward)
             end
         end
 
-        context "without a logged in user" do 
+        context "without a logged in user" do
             before { get :new }
             it_behaves_like "redirect user to users/sign_in path"
         end
@@ -67,7 +67,7 @@ RSpec.describe RewardsController, type: :controller do
                     expect{ post :create, reward: attributes_for(:reward).merge(responsible_id: user.id) }.to change(enterprise.rewards, :count).by(1)
                 end
 
-                it "flashes a notice message" do 
+                it "flashes a notice message" do
                     post :create, reward: attributes_for(:reward).merge(responsible_id: user.id)
                     expect(flash[:notice]).to eq "Your prize was created"
                 end
@@ -88,14 +88,14 @@ RSpec.describe RewardsController, type: :controller do
                     expect(response).to render_template :new
                 end
 
-                it "flashes an alert message" do 
+                it "flashes an alert message" do
                     post :create, reward: attributes_for(:reward, label: "")
                     expect(flash[:alert]).to eq "Your prize was not created. Please fix the errors"
                 end
             end
         end
 
-        describe "without a logged in user" do 
+        describe "without a logged in user" do
             before { post :create, reward: attributes_for(:reward).merge(responsible_id: user.id) }
             it_behaves_like "redirect user to users/sign_in path"
         end
@@ -111,20 +111,20 @@ RSpec.describe RewardsController, type: :controller do
                 expect(response).to render_template :edit
             end
 
-            it "returns a valid enterprise object" do 
+            it "returns a valid enterprise object" do
                 expect(assigns[:enterprise]).to be_valid
             end
 
-            it "returns a valid reward object" do 
+            it "returns a valid reward object" do
                 expect(assigns[:reward]).to be_valid
             end
 
-            it "returns reward object belonging to enterprise" do 
+            it "returns reward object belonging to enterprise" do
                 expect(assigns[:reward].enterprise).to eq enterprise
             end
         end
 
-        describe "without a logged in user" do 
+        describe "without a logged in user" do
             before { get :edit, :id => reward.id }
             it_behaves_like "redirect user to users/sign_in path"
         end
@@ -149,7 +149,7 @@ RSpec.describe RewardsController, type: :controller do
                     expect(response).to redirect_to(action: :index)
                 end
 
-                it "flashes a notice message" do 
+                it "flashes a notice message" do
                     expect(flash[:notice]).to eq "Your prize was updated"
                 end
             end
@@ -166,13 +166,13 @@ RSpec.describe RewardsController, type: :controller do
                     expect(response).to render_template :edit
                 end
 
-                it "flashes an alert message" do 
+                it "flashes an alert message" do
                     expect(flash[:alert]).to eq "Your prize was not updated. Please fix the errors"
                 end
             end
         end
 
-        describe "without a logged in user" do 
+        describe "without a logged in user" do
             before { patch :update, id: reward.id, reward: attributes_for(:reward, points: "") }
             it_behaves_like "redirect user to users/sign_in path"
         end
@@ -193,13 +193,13 @@ RSpec.describe RewardsController, type: :controller do
                 expect(response).to redirect_to(action: :index)
             end
 
-            it "flahses a notice message" do 
-                delete :destroy, id: reward.id 
+            it "flahses a notice message" do
+                delete :destroy, id: reward.id
                 expect(flash[:notice]).to eq "Your prize was deleted"
             end
         end
 
-        describe "without a logged in user" do 
+        describe "without a logged in user" do
             before { delete :destroy, id: reward.id }
             it_behaves_like "redirect user to users/sign_in path"
         end

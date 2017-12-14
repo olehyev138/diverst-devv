@@ -5,7 +5,7 @@ RSpec.describe User::DashboardController, type: :controller do
 
 
   describe 'GET #home' do
-    describe "when user is logged in" do 
+    describe "when user is logged in" do
       login_user_from_let
 
       it "renders home template" do
@@ -39,22 +39,22 @@ RSpec.describe User::DashboardController, type: :controller do
       end
     end
 
-    describe "users not logged in" do 
+    describe "users not logged in" do
       before { get :home }
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
 
-  describe 'GET#rewards' do 
-    describe 'when user is logged in' do 
+  describe 'GET#rewards' do
+    describe 'when user is logged in' do
       login_user_from_let
 
-      it "render rewards template" do 
-        get :rewards 
+      it "render rewards template" do
+        get :rewards
         expect(response).to render_template :rewards
       end
 
-      describe 'rewards' do 
+      describe 'rewards' do
         let!(:enterprise) { create(:enterprise) }
         let!(:user) { create(:user, enterprise: enterprise)}
         let!(:reward_action1) { create(:reward_action, enterprise: enterprise, points: 22) }
@@ -67,22 +67,22 @@ RSpec.describe User::DashboardController, type: :controller do
         before { get :rewards }
         subject { assigns[:reward_actions] }
 
-        it "return reward actions for an enterprise in ascending order of points" do 
+        it "return reward actions for an enterprise in ascending order of points" do
           expect(subject).to eq [reward_action2, reward_action1]
         end
 
-        it "return rewards for an enterprise in ascending order of points" do 
+        it "return rewards for an enterprise in ascending order of points" do
           expect(assigns[:rewards]).to eq [reward2, reward1]
         end
 
-        it "returns badges for an enterprise in ascending order of points" do 
+        it "returns badges for an enterprise in ascending order of points" do
           expect(assigns[:badges]).to eq [badge2, badge1]
         end
- 
+
       end
     end
 
-    describe "when user is not logged in" do 
+    describe "when user is not logged in" do
       before { get :rewards }
       it_behaves_like "redirect user to users/sign_in path"
     end
