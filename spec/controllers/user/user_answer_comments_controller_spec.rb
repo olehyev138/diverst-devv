@@ -4,8 +4,6 @@ require 'spec_helper'
 RSpec.describe "User::UserAnswerCommentsController", type: :controller do
   let(:user) { create :user }
 
-  login_user_from_let
-
   def setup
     @controller = User::UserAnswerCommentsController.new
   end
@@ -13,16 +11,34 @@ RSpec.describe "User::UserAnswerCommentsController", type: :controller do
   before {setup}
 
   describe 'POST#create' do
-    let(:answer){ create(:answer, question: create(:question, campaign: create(:campaign, users: [user]))) }
-    let!(:reward_action){ create(:reward_action, enterprise: user.enterprise, key: "campaign_comment", points: 50) }
+    describe "when user is logged in" do
+      login_user_from_let
 
-    it "rewards a user with points of this action" do
-      expect(user.points).to eq 0
+      context "successfully create comment" do 
+        let(:answer){ create(:answer, question: create(:question, campaign: create(:campaign, users: [user]))) }
+        let!(:reward_action){ create(:reward_action, enterprise: user.enterprise, key: "campaign_comment", points: 50) }
 
-      post :create, user_answer_id: answer.id, answer_comment: { content: "blah" }
+        it "sets comments author to current user" do
+          post :create, user_answer_id: answer.id, answer_comment: { content: "blah" }
+          expect(assigns[:comment].author).to eq user
+        end
 
-      user.reload
-      expect(user.points).to eq 50
+        it "rewards a user with points of this action" do
+          expect(user.points).to eq 0
+
+          post :create, user_answer_id: answer.id, answer_comment: { content: "blah" }
+
+          user.reload
+          expect(user.points).to eq 50
+        end
+
+        it "flashes a reward message" do
+          post :create, user_answer_id: answer.id, answer_comment: { content: "blah" }
+          allow(user.enterprise).to receive(:enable_rewards).and_return(true)
+          user.reload
+          expect(flash[:reward]).to eq "Your comment was created. Now you have #{user.credits} points"
+        end
+      end
     end
   end
 end
