@@ -31,13 +31,6 @@ RSpec.describe "User::UserAnswerCommentsController", type: :controller do
           user.reload
           expect(user.points).to eq 50
         end
-
-        it "flashes a reward message" do
-          post :create, user_answer_id: answer.id, answer_comment: { content: "blah" }
-          allow(user.enterprise).to receive(:enable_rewards).and_return(true)
-          user.reload
-          expect(flash[:reward]).to eq "Your comment was created. Now you have #{user.credits} points"
-        end
       end
     end
   end
