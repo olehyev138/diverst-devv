@@ -90,7 +90,7 @@ class Group < ActiveRecord::Base
   before_save :send_invitation_emails, if: :send_invitations?
   before_save :create_yammer_group, if: :should_create_yammer_group?
   before_destroy :handle_deletion
-  #after_commit :update_all_elasticsearch_members
+  after_commit :update_all_elasticsearch_members
   before_validation :smart_add_url_protocol
 
   scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
