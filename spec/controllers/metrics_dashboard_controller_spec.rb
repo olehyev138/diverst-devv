@@ -181,7 +181,7 @@ RSpec.describe MetricsDashboardsController, type: :controller do
         expect(response).to render_template :show
       end
 
-      it 'sets correct shareable token', focus: true do
+      it 'sets correct shareable token' do
         expect(assigns[:token]).to eq metrics_dashboard.shareable_token
       end
     end
