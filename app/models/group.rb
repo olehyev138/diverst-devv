@@ -124,18 +124,12 @@ class Group < ActiveRecord::Base
   end
 
   def available_budget
-    #(budgets.map{ |b| b.available_amount || 0 } ).reduce(0, :+)
     return 0 unless annual_budget
-
-    annual_budget - approved_budget + leftover_money
+    annual_budget - (approved_budget + spent_budget)
   end
 
   def spent_budget
-    if annual_budget
-      annual_budget - available_budget
-    else
-      0
-    end
+    (initiatives.map{ |i| i.current_expences_sum || 0 } ).reduce(0, :+)
   end
 
   def active_members
