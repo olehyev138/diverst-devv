@@ -17,7 +17,7 @@
       <% if @enterprise.banner.present? %>
         <div class="row enterprise-banner">
           <div class="col sm-12">
-            <%= image_tag @enterprise.banner.expiring_url(3600), style: 'max-width: 100%;' %>
+            <%= image_tag @enterprise.banner.expiring_url(3600), style: 'width: 100%; max-width: 100%;' %>
           </div>
         </div>
       <% end %>
