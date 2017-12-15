@@ -178,11 +178,6 @@ RSpec.describe GraphsController, type: :controller do
                 expect(assigns[:graph]).to eq poll_graph
             end
         end
-
-        describe "without a logged in user", skip: 'action needs to be reworked to accept enterprise_token instead of current_user' do
-            before { get :data, :id => metrics_graph.id, format: :json }
-            it_behaves_like "redirect user to users/sign_in path"
-        end
     end
 
     describe "GET#export_csv" do
@@ -211,11 +206,6 @@ RSpec.describe GraphsController, type: :controller do
                 get :export_csv, :id => metrics_graph.id
                 expect(response).to be_success
             end
-        end
-
-        describe "without a logged in user", skip: 'needs to be reworked to accept enterprise token instead of current_user' do
-            before { get :export_csv, :id => metrics_graph.id }
-            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 end
