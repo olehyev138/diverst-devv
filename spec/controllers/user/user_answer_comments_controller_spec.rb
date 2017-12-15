@@ -42,6 +42,11 @@ RSpec.describe "User::UserAnswerCommentsController", type: :controller do
           user.reload
           expect(flash[:reward]).to eq "Your comment was created. Now you have #{user.credits} points"
         end
+
+        it "redirects to question" do 
+          post :create, user_answer_id: answer.id, answer_comment: { content: "blah" }
+          expect(response).to redirect_to [:user, answer.question]
+        end
       end
 
       context "comment create failed" do
@@ -50,11 +55,11 @@ RSpec.describe "User::UserAnswerCommentsController", type: :controller do
         it "flashes an alert message" do 
           expect(flash[:alert]).to eq "Your comment was not created. Please fix the errors"
         end
-      end
 
-      it "redirects to question" do 
-        post :create, user_answer_id: answer.id, answer_comment: { content: "blah" }
-        expect(response).to redirect_to [:user, answer.question]
+        it "redirects to question" do 
+          post :create, user_answer_id: answer.id, answer_comment: { content: nil }
+          expect(response).to redirect_to [:user, answer.question]
+        end
       end
     end
 
