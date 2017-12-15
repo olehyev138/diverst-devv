@@ -18,12 +18,7 @@ RSpec.describe "User::UserAnswerCommentsController", type: :controller do
     describe "when user is logged in" do
       login_user_from_let
 
-      context "successfully create comment" do 
-        it "sets comments author to current user" do
-          post :create, user_answer_id: answer.id, answer_comment: { content: "blah" }
-          expect(assigns[:comment].author).to eq user
-        end
-
+      context "successfully create comment" do
         it "rewards a user with points of this action" do
           expect(user.points).to eq 0
 
@@ -33,7 +28,7 @@ RSpec.describe "User::UserAnswerCommentsController", type: :controller do
           expect(user.points).to eq 50
         end
 
-        it "create comment object" do 
+        it "create comment object" do
           expect{ post :create, user_answer_id: answer.id, answer_comment: { content: "blah" } }.to change(AnswerComment, :count).by(1)
         end
 
@@ -43,7 +38,7 @@ RSpec.describe "User::UserAnswerCommentsController", type: :controller do
           expect(flash[:reward]).to eq "Your comment was created. Now you have #{user.credits} points"
         end
 
-        it "redirects to question" do 
+        it "redirects to question" do
           post :create, user_answer_id: answer.id, answer_comment: { content: "blah" }
           expect(response).to redirect_to [:user, answer.question]
         end
@@ -52,18 +47,18 @@ RSpec.describe "User::UserAnswerCommentsController", type: :controller do
       context "comment create failed" do
         before { post :create, user_answer_id: answer.id, answer_comment: { content: nil } }
 
-        it "flashes an alert message" do 
+        it "flashes an alert message" do
           expect(flash[:alert]).to eq "Your comment was not created. Please fix the errors"
         end
 
-        it "redirects to question" do 
+        it "redirects to question" do
           post :create, user_answer_id: answer.id, answer_comment: { content: nil }
           expect(response).to redirect_to [:user, answer.question]
         end
       end
     end
 
-    describe "when users is not logged in" do 
+    describe "when users is not logged in" do
       before { post :create, user_answer_id: answer.id, answer_comment: { content: "blah" } }
       it_behaves_like "redirect user to users/sign_in path"
     end
