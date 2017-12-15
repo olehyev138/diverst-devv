@@ -140,6 +140,10 @@ RSpec.describe GraphsController, type: :controller do
                     metrics_graph
                     expect{ subject }.to change(Graph, :count).by(-1)
                 end
+
+                it "raise error ActiveRecord exception" do 
+                    expect{Graph.find(metrics_dashboard.id)}.to raise_error ActiveRecord::RecordNotFound
+                end
             end
         end
 
