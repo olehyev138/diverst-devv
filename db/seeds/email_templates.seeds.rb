@@ -3,9 +3,10 @@ after :enterprise do
 
   # ERG invitation
 
-  email = enterprise.emails.create(
+  email = enterprise.emails.create!(
     name: 'ERG invitation',
-    slug: 'group_invitation'
+    slug: 'group_invitation',
+    subject: 'Group Invitation'
   )
 
   email.variables.create(
@@ -29,9 +30,10 @@ after :enterprise do
 
   # Group message
 
-  email = enterprise.emails.create(
+  email = enterprise.emails.create!(
     name: 'ERG message',
-    slug: 'group_message'
+    slug: 'group_message',
+    subject: 'Group Message'
   )
 
   email.variables.create(
