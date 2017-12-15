@@ -26,7 +26,6 @@ RSpec.describe GraphsController, type: :controller do
 
         describe "without a logged in user" do
             before { get :new, :metrics_dashboard_id => metrics_dashboard.id }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
@@ -67,7 +66,6 @@ RSpec.describe GraphsController, type: :controller do
 
         describe "without a logged in user" do
             before { post :create, :metrics_dashboard_id => metrics_dashboard.id, :graph => { field_id: field1.id } }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
@@ -121,7 +119,6 @@ RSpec.describe GraphsController, type: :controller do
 
         describe "without logged in user" do
             before { patch :update, :metrics_dashboard_id => metrics_dashboard.id, :id => metrics_graph.id, :graph => { field_id: field1.id } }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
@@ -148,7 +145,6 @@ RSpec.describe GraphsController, type: :controller do
 
         describe "without a logged in user" do
             before { delete :destroy, :metrics_dashboard_id => metrics_dashboard.id, :id => metrics_graph.id }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
@@ -185,7 +181,6 @@ RSpec.describe GraphsController, type: :controller do
 
         describe "without a logged in user", skip: 'action needs to be reworked to accept enterprise_token instead of current_user' do
             before { get :data, :id => metrics_graph.id, format: :json }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
@@ -220,7 +215,6 @@ RSpec.describe GraphsController, type: :controller do
 
         describe "without a logged in user", skip: 'needs to be reworked to accept enterprise token instead of current_user' do
             before { get :export_csv, :id => metrics_graph.id }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
