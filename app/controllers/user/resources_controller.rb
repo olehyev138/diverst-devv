@@ -8,7 +8,7 @@ class User::ResourcesController < ApplicationController
   protected
 
   def set_container
-    @group = @container = current_user.enterprise
+    @group = @container = current_user.enterprise if current_user
   end
 
   def set_container_path

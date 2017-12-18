@@ -25,6 +25,12 @@ class PollPolicy < ApplicationPolicy
     @record.owner == @user
   end
 
+  class Scope < Scope 
+    def resolve
+      scope.where(enterprise: @user.enterprise).order(created_at: :desc)
+    end
+  end
+
   private
 
   def scope_module_enabled?
