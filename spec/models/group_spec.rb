@@ -198,7 +198,7 @@ RSpec.describe Group, :type => :model do
         end
     end
 
-    describe '#calendar_color' do
+    describe '#calendar_color', :skip => true do
         it "returns cccccc" do
             group = create(:group)
             expect(group.calendar_color).to eq("cccccc")
