@@ -63,7 +63,7 @@ module IsResources
                 :title,
                 :file,
                 :resource_type,
-                :url
+                :url, tag_attributes: [:id]
             )
     end
 
