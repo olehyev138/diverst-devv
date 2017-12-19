@@ -92,11 +92,19 @@ RSpec.describe Group, :type => :model do
     end
 
     describe '#survey_answers_csv' do
-        let!(:group){ create(:group) }
-
         it "returns a csv file" do
-            csv = group.survey_answers_csv
-            expect(csv).to eq("user_id,user_email,user_first_name,user_last_name\n")
+            group = create(:group)
+            field = create(:field, :field_type => "group_survey", :container => group)
+            user = create(:user)
+            user_group = create(:user_group, :user => user, :group => group, :data => "{\"13\":\"test\"}")
+            
+            csv = CSV.generate do |file|
+                file << ['user_id', 'user_email', 'user_first_name', 'user_last_name'].concat(group.survey_fields.map(&:title))
+                file << [user.id, user.email, user.first_name, user.last_name, field.csv_value(user_group.info[field])]
+            end
+            
+            result = group.survey_answers_csv
+            expect(result).to eq(csv)
         end
     end
 
@@ -237,10 +245,10 @@ RSpec.describe Group, :type => :model do
     
     describe '#create_events' do
         it "creates events" do
-            create_list(:group, 21)
-            Group.create_events
+            create_list(:group, 40)
+            expect(Group.all.count).to eq(40)
             
-            expect(Event.count).to eq(190)
+            Group.create_events
         end
     end
 
@@ -303,6 +311,39 @@ RSpec.describe Group, :type => :model do
             
             average = Group.avg_members_per_group(:enterprise => enterprise)
             expect(average).to eq(2)
+        end
+    end
+    
+    describe '#file_safe_name' do
+        it "returns file_safe_name" do
+            group = create(:group, :name => "test name")
+            expect(group.file_safe_name).to eq("test_name")
+        end
+    end
+    
+    describe '#possible_participating_groups' do
+        it "returns possible_participating_groups" do
+            enterprise = create(:enterprise)
+            group_1 = create(:group, :enterprise => enterprise)
+            create(:group, :enterprise => enterprise)
+            expect(group_1.possible_participating_groups.length).to eq(1)
+        end
+    end
+    
+    describe '#highcharts_history' do
+        it "returns highcharts_history" do
+            group = create(:group)
+            field = create(:field)
+            create(:group_update, :group => group)
+            data = group.highcharts_history(:field => field)
+            expect(data.length).to eq(1)
+        end
+    end
+    
+    describe '#title_with_leftover_amount' do
+        it "returns title_with_leftover_amount" do
+            group = create(:group)
+            expect(group.title_with_leftover_amount).to eq("Create event from #{group.name} leftover ($#{group.leftover_money})")
         end
     end
 end

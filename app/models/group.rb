@@ -223,7 +223,7 @@ class Group < ActiveRecord::Base
         survey_fields.each do |field|
           user_group_row << field.csv_value(user_group.info[field])
         end
-
+        
         csv << user_group_row
       end
     end
