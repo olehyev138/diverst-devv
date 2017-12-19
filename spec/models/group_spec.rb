@@ -219,6 +219,30 @@ RSpec.describe Group, :type => :model do
             expect(group.approved_budget).to be > 0
         end
     end
+    
+    describe '#available_budget' do
+        it "returns 0" do
+            group = create(:group)
+            expect(group.available_budget).to eq(0)
+        end
+
+        it "returns available budget" do
+            group = create(:group, :annual_budget => 10000)
+
+            budget = create(:budget, :subject => group, :is_approved => true)
+            create(:budget_item, :budget => budget, :estimated_amount => 1000)
+            expect(group.available_budget).to eq(group.annual_budget - group.approved_budget)
+        end
+    end
+    
+    describe '#create_events' do
+        it "creates events" do
+            create_list(:group, 21)
+            Group.create_events
+            
+            expect(Event.count).to eq(190)
+        end
+    end
 
     describe '#news_feed' do
         it "returns news_feed" do
@@ -262,6 +286,23 @@ RSpec.describe Group, :type => :model do
             group_2 = create(:group, :parent => group_1)
 
             expect(group_1.children).to include(group_2)
+        end
+    end
+    
+    describe '#avg_members_per_group' do
+        it "returns 2" do
+            enterprise = create(:enterprise)
+            user_1 = create(:user, :enterprise => enterprise)
+            user_2 = create(:user, :enterprise => enterprise)
+            group_1 = create(:group, :enterprise => enterprise)
+            group_2 = create(:group, :enterprise => enterprise)
+            create(:user_group, :user => user_1, :group => group_1)
+            create(:user_group, :user => user_2, :group => group_1)
+            create(:user_group, :user => user_1, :group => group_2)
+            create(:user_group, :user => user_2, :group => group_2)
+            
+            average = Group.avg_members_per_group(:enterprise => enterprise)
+            expect(average).to eq(2)
         end
     end
 end
