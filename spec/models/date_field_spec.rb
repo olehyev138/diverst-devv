@@ -1,6 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe DateField, type: :model, :skip => true do
+RSpec.describe DateField, type: :model do
+  
   context "when getting data" do
     let!(:field_one) { DateField.create(attributes_for(:date_field)) }
     let!(:field_two) { DateField.create(attributes_for(:date_field)) }
@@ -101,6 +102,52 @@ RSpec.describe DateField, type: :model, :skip => true do
           xAxisTitle: field_one.title
         })
       end
+    end
+  end
+  
+  describe "#string_value" do
+    it "returns nil" do
+      value = DateField.new.string_value(nil)
+      expect(value).to eq('-')
+    end
+  end
+  
+  describe "#process_field_value" do
+    it "returns nil" do
+      value = DateField.new.process_field_value("")
+      expect(value).to be(nil)
+    end
+    
+    it "returns formatted date" do
+      date = "2017-11-01"
+      value = DateField.new.process_field_value(date)
+      expect(value).to eq(Time.strptime(date, '%F'))
+    end
+  end
+
+  describe "#deserialize_value" do
+    it "returns nil" do
+      value = DateField.new.deserialize_value(nil)
+      expect(value).to be(nil)
+    end
+    
+    it "returns date" do
+      date = DateTime.now
+      value = DateField.new.deserialize_value(date)
+      expect(value).to eq(Time.at(date))
+    end
+  end
+  
+  describe "#csv_value" do
+    it "returns nil" do
+      value = DateField.new.csv_value(nil)
+      expect(value).to eq('')
+    end
+    
+    it "returns date" do
+      date = DateTime.now
+      value = DateField.new.csv_value(date)
+      expect(value).to eq(date.strftime('%F'))
     end
   end
 end
