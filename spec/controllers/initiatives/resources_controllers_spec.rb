@@ -67,6 +67,12 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
                                       resource: attributes_for(:resource)
                     }.to change(Resource.where(container_type: "Initiative"), :count).by(1)
                 end
+
+                it "redirects to action index" do 
+                    post :create, group_id: group.id, initiative_id: initiative.id, id: resource.id,
+                                      resource: attributes_for(:resource)
+                    expect(response).to redirect_to(action: :index)
+                end
             end
 
             context "with invalid attributes" do
