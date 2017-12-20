@@ -63,14 +63,12 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
             context "and id is valid" do
                 it "and valid attributes creates a new Resource" do
                     expect{
-                        post :create, group_id: group.id, initiative_id: initiative.id, id: resource.id,
-                                      resource: attributes_for(:resource)
-                    }.to change(Resource.where(container_type: "Initiative"), :count).by(1)
+                        post :create, group_id: group.id, initiative_id: initiative.id, resource: attributes_for(:resource)
+                    }.to change(Resource, :count).by(1)
                 end
 
-                it "redirects to action index" do 
-                    post :create, group_id: group.id, initiative_id: initiative.id, id: resource.id,
-                                      resource: attributes_for(:resource)
+                it "redirects to action index" do
+                    post :create, group_id: group.id, initiative_id: initiative.id, resource: attributes_for(:resource)
                     expect(response).to redirect_to(action: :index)
                 end
             end
@@ -119,16 +117,29 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
                 expect{ get :show, group_id: group.id, initiative_id: initiative.id, id: 0 }.to raise_error(ActiveRecord::RecordNotFound)
             end
         end
+
+        context "with a user not logged in" do
+            let!(:resource){ create(:resource, container_type: "Initiative", container_id: initiative.id) }
+            before { get :show, group_id: group.id, initiative_id: initiative.id, id: resource.id }
+            it_behaves_like "redirect user to users/sign_in path"
+        end
     end
 
+
     describe "GET#edit" do
+        let(:resource){ create(:resource, container_type: "Initiative", container_id: initiative.id) }
+
         context "with logged user" do
             login_user_from_let
-            let(:resource){ create(:resource, container_type: "Initiative", container_id: initiative.id) }
 
             it "and id is valid then assign the searched Resource to @resource" do
                 get :edit, group_id: group.id, initiative_id: initiative.id, id: resource.id
-                expect(assigns(:resource)).to eq resource
+                expect(assigns(:resource)).to be_valid
+            end
+
+            it 'renders edit template' do 
+                get :edit, group_id: group.id, initiative_id: initiative.id, id: resource.id
+                expect(response).to render_template :edit
             end
 
             it "and id is invalid then raises RecordNotFound exception" do
@@ -136,12 +147,19 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
                 expect{ get :edit, group_id: group.id, initiative_id: initiative.id, id: 0 }.to raise_error(ActiveRecord::RecordNotFound)
             end
         end
+
+        context 'without a logged in user' do 
+            before { get :edit, group_id: group.id, initiative_id: initiative.id, id: resource.id }
+            it_behaves_like "redirect user to users/sign_in path"
+        end
     end
 
+
     describe "PATCH#update" do
-        context "with logged user" do
+        let(:resource){ create(:resource, title: "Resource", container_type: "Initiative", container_id: initiative.id) }
+
+        describe "with logged user" do
             login_user_from_let
-            let(:resource){ create(:resource, title: "Resource", container_type: "Initiative", container_id: initiative.id) }
 
             context "and id is valid" do
                 it "and valid attributes then updates the Resource" do
@@ -150,30 +168,60 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
                     resource.reload
                     expect(resource.title).to eq "Resource 2"
                 end
+
+                it 'redirects to action index' do 
+                    patch :update, group_id: group.id, initiative_id: initiative.id, id: resource.id,
+                                   resource: attributes_for(:resource, title: "Resource 2")
+                    expect(response).to redirect_to action: :index
+                end
             end
 
-            context "and id is invalid" do
-                it "then raises RecordNotFound exception" do
+            context "with invalid attributes" do
+                it "then raises RecordNotFound exception when id is invalid" do
                     bypass_rescue
                     expect{ patch :update, group_id: group.id, initiative_id: initiative.id, id: 0 }.to raise_error(ActiveRecord::RecordNotFound)
                 end
+
+                it 'renders edit template' do 
+                    patch :update, group_id: group.id, initiative_id: initiative.id, id: resource.id,
+                                   resource: attributes_for(:resource, title: nil)
+                    expect(response).to render_template :edit
+                end
             end
+        end
+
+        describe "without a logged in user" do
+            before {  patch :update, group_id: group.id, initiative_id: initiative.id, id: resource.id,
+                                   resource: attributes_for(:resource, title: "Resource 2") }
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
+
     describe "DELET#destroy" do
+        let(:resource){ create(:resource, container_type: "Initiative", container_id: initiative.id) }
+
         context "with logged user" do
             login_user_from_let
-            let(:resource){ create(:resource, container_type: "Initiative", container_id: initiative.id) }
 
             it "and id is valid then destroy the Resource" do
                 expect{ delete :destroy, group_id: group.id, initiative_id: initiative.id, id: resource.id }.to change(Resource.where(id: resource), :count).by(-1)
+            end
+
+            it 'redirect to action index' do
+                delete :destroy, group_id: group.id, initiative_id: initiative.id, id: resource.id
+                expect(response).to redirect_to(action: :index)
             end
 
             it "and id is invalid then raises RecordNotFound exception" do
                 bypass_rescue
                 expect{ delete :destroy, group_id: group.id, initiative_id: initiative.id, id: 0 }.to raise_error(ActiveRecord::RecordNotFound)
             end
+        end
+
+        context 'without a logged in user' do 
+            before { delete :destroy, group_id: group.id, initiative_id: initiative.id, id: resource.id }
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 end
