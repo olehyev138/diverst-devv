@@ -8,9 +8,9 @@ class User::ResourcesController < ApplicationController
   protected
 
   def set_container
-      @group = @container = current_user.enterprise
-    rescue
-      user_not_authorized
+    @group = @container = current_user.enterprise
+  rescue
+    user_not_authorized
   end
 
   def set_container_path

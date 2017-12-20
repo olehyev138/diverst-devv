@@ -129,10 +129,13 @@ RSpec.describe UsersController, type: :controller do
 
     describe "PATCH#update" do
         context "for a successful update" do 
-            before { patch :update, :id => user.id, :user => {:first_name => "updated"} }
+            before { 
+                request.env["HTTP_REFERER"] = "back"
+                patch :update, :id => user.id, :user => {:first_name => "updated"} 
+            }
 
             it "redirects to user" do
-                expect(response).to redirect_to(user)
+                expect(response).to redirect_to "back"
             end
 
             it "updates the user" do
