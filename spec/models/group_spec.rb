@@ -245,8 +245,8 @@ RSpec.describe Group, :type => :model do
     
     describe '#create_events' do
         it "creates events" do
-            create_list(:group, 40)
-            expect(Group.all.count).to eq(40)
+            create_list(:group, 21)
+            expect(Group.all.count).to eq(21)
             
             Group.create_events
         end
@@ -344,6 +344,24 @@ RSpec.describe Group, :type => :model do
         it "returns title_with_leftover_amount" do
             group = create(:group)
             expect(group.title_with_leftover_amount).to eq("Create event from #{group.name} leftover ($#{group.leftover_money})")
+        end
+    end
+    
+    describe '#sync_yammer_users' do
+        it "subscribe yammer users to group" do
+            yammer = double("YammerClient")
+            allow(YammerClient).to receive(:new).and_return(yammer)
+            allow(yammer).to receive(:user_with_email).and_return({"id" => 1, "yammer_token" => nil})
+            allow(yammer).to receive(:token_for_user).and_return({"token" => "token"})
+            allow(yammer).to receive(:subscribe_to_group)
+            
+            group = create(:group)
+            user = create(:user)
+            create(:user_group, :user => user, :group => group)
+            
+            group.sync_yammer_users
+            
+            expect(yammer).to have_received(:subscribe_to_group)
         end
     end
 end
