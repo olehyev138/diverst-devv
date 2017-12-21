@@ -2,9 +2,29 @@ require 'rails_helper'
 
 RSpec.describe Groups::SocialLinksController, type: :controller do
     let(:user) { create :user }
-    let(:group){ create(:group, enterprise: user.enterprise) }
+    let(:group) { create(:group, enterprise: user.enterprise) }
+    let!(:social_link) { create(:social_link, author: user, group: group) }
+
+
+    describe 'GET#index' do
+        before do 
+            allow(SocialMedia::Importer).to receive(:valid_url?).and_return(true)
+        end
+        context 'with logged in user' do 
+            login_user_from_let
+            before { get :index, group_id: group.id }
+
+            it 'returns social links belonging to group object' do 
+                byebug
+            end
+
+            it 'renders index template' do
+                expect(response).to render_template :index
+            end
+        end
+
+    end
     
-    login_user_from_let
 
     describe 'GET #new' do
         def get_new(group_id)
@@ -13,12 +33,21 @@ RSpec.describe Groups::SocialLinksController, type: :controller do
         
         context 'with logged user' do
             login_user_from_let
-
             before { get_new(group.to_param) }
 
-            it 'return success' do
-                expect(response).to be_success
+
+            it 'render new template' do
+                expect(response).to render_template :new
             end
+
+            it 'return new group social link object' do
+                expect(assigns[:social_link]).to be_a_new(SocialLink) 
+            end
+        end
+
+        context 'with user not logged in' do 
+            before { get_new(group.to_param) }
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
