@@ -25,6 +25,7 @@ RSpec.describe RewardMailer, type: :mailer do
     end
 
     it 'shows a message to user' do
+      byebug
       expect(mail.body.encoded).to include("The user #{ user.name } redeemed the prize #{ reward.label }. Please contact him.")
     end
   end
