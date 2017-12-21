@@ -32,7 +32,10 @@
             <div class="flex-row__cell">
               <%= link_to group_path(child) do %><%= image_tag child.logo.expiring_url(3600, :thumb), class: "avatar" %><% end %>
             </div>
-            <div class="flex-row__cell flex-row__cell--grow"><%= link_to "#{child.name}", group_path(child), class: "accent" %> - <%= pluralize child.active_members.count, "member" %></div>
+            <div class="flex-row__cell flex-row__cell--grow">
+              <span class="field__label"><%= "Sub-#{ c_t(:erg) } for #{group.name}" %></span>
+              <span><%= link_to "#{child.name}", group_path(child), class: "accent" %> - <%= pluralize child.active_members.count, "member" %></span>
+              </div>
             <div class="flex-row__cell link-group">
               <%= link_to "Export", export_csv_group_path(child), class: "muted" if policy(child).edit? %>
               <%= link_to "Import", import_csv_group_path(child), class: "muted" if policy(child).edit? %>

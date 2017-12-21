@@ -1,13 +1,31 @@
 <div class="content__main">
+
   <%= simple_form_for @group, url: update_annual_budget_group_budgets_path(@group), method: 'post' do |f| %>
+    
     <div class="card">
-      <div class="card__section card__section--border">
+      
+      <div class="card__section">
         <%= f.input :annual_budget,
               label: "Enter the amount of money <strong>#{ link_to @group.name, group_path(@group) } can spend annually</strong>".html_safe,
               input_html: { autofocus: true } %>
       </div>
+      
+      <div class="card__section field decimal optional group_annual_budget">
+        <label class="field__label">Leftover Money</label>
+        <div class="field__input-wrapper">
+          <%= number_to_currency( @group.leftover_money) || 'Not set' %>
+        </div>
+      </div>
+      
+      <div class="card__section field decimal optional group_annual_budget">
+        <label class="field__label">Approved Budget</label>
+        <div class="field__input-wrapper">
+          <%= number_to_currency( @group.approved_budget) || 'Not set' %>
+        </div>
+      </div>
+      
     </div>
 
-    <%= f.button :submit %>
+    <%= f.button :submit, "Set Annual Budget" %>
   <% end %>
 </div>
