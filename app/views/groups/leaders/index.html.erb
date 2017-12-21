@@ -23,7 +23,7 @@
             <tbody>
               <% @group_leaders.each do |group_leader| %>
                 <tr>
-                  <td><%= group_leader.user.name_with_status %></td>
+                  <td><%= link_to group_leader.user.name_with_status, user_path(group_leader.user) %></td>
                   <td><%= group_leader.position_name %></td>
                   <td><%= group_leader.notifications_enabled_status %></td>
                 </tr>
