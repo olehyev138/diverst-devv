@@ -68,11 +68,6 @@ module IsResources
     end
 
     def set_resource
-        if @container
-          @resource = @container.resources.find(params[:id])
-        else
-          flash[:alert] = "Container set to nil"
-          redirect_to :back
-        end
+        @resource = @container.resources.find(params[:id]) if @container
     end
 end
