@@ -71,9 +71,9 @@ RSpec.describe InitiativesController, type: :controller do
     context 'with logged user' do
       login_user_from_let
 
-      let!(:update_1) { FactoryGirl.create :initiative_update, initiative: initiative }
-      let!(:update_2) { FactoryGirl.create :initiative_update, initiative: initiative }
-      let!(:update_3) { FactoryGirl.create :initiative_update, initiative: initiative }
+      let!(:update_1) { create(:initiative_update, initiative: initiative, created_at: Time.now - 1.days) }
+      let!(:update_2) { create(:initiative_update, initiative: initiative, created_at: Time.now - 8.hours) }
+      let!(:update_3) { create(:initiative_update, initiative: initiative, created_at: Time.now) }
 
       before do
         get_show
