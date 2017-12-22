@@ -98,7 +98,7 @@ RSpec.describe InitiativesController, type: :controller do
       end
 
       it "returns updates in descending order of created_at" do
-        expect(assigns[:updates]).to eq [update_3, update_2, update_1]
+        expect(assigns[:updates]).to eq [update_1, update_2, update_3]
       end
 
       it "render template show" do
