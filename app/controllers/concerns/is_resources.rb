@@ -69,5 +69,7 @@ module IsResources
 
     def set_resource
         @resource = @container.resources.find(params[:id])
+    rescue NoMethodError
+        user_not_authorized
     end
 end
