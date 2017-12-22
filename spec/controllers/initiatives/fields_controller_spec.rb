@@ -27,11 +27,6 @@ RSpec.describe Initiatives::FieldsController, type: :controller do
                 get :time_series, group_id: group.id, initiative_id: initiative.id, id: field.id, format: :csv 
                 expect(response.content_type).to eq 'text/csv'
             end
-
-            it "debug" do 
-                get :time_series, group_id: group.id, initiative_id: initiative.id, id: field.id, format: :csv
-                byebug
-            end
         end
 
         describe 'without a logged in user' do
