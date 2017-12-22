@@ -242,15 +242,6 @@ RSpec.describe Group, :type => :model do
             expect(group.available_budget).to eq(group.annual_budget - group.approved_budget)
         end
     end
-    
-    describe '#create_events' do
-        it "creates events" do
-            create_list(:group, 21)
-            expect(Group.all.count).to eq(21)
-            
-            Group.create_events
-        end
-    end
 
     describe '#news_feed' do
         it "returns news_feed" do

@@ -158,14 +158,6 @@ class Group < ActiveRecord::Base
     self.enterprise.groups.select { |g| g.id != group_id }
   end
 
-  def self.create_events
-    Group.find_each do |group|
-      (20 - group.id).times do
-        group.events << Event.create!(title: 'Test Event', start: 2.days.from_now, end: 2.days.from_now + 2.hours, description: 'This is a placeholder event.')
-      end
-    end
-  end
-
   def sync_yammer_users
     yammer = YammerClient.new(enterprise.yammer_token)
 
@@ -233,8 +225,6 @@ class Group < ActiveRecord::Base
     "Create event from #{name} leftover ($#{leftover_money})"
   end
 
-
-
   protected 
 
   def smart_add_url_protocol
@@ -245,8 +235,6 @@ class Group < ActiveRecord::Base
   def have_protocol?
     company_video_url[%r{\Ahttp:\/\/}] || company_video_url[%r{\Ahttps:\/\/}]
   end
-
-
 
   private
 
