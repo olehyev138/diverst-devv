@@ -78,8 +78,7 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
                    invalid_attributes = attributes_for(:resource)
                    invalid_attributes[:title] = nil
 
-                   expect{post :create, group_id: group.id, initiative_id: initiative.id, id: resource.id,
-                   resource: invalid_attributes}.to change(Resource.where(container_type: "Initiative"), :count).by(0)
+                   expect{post :create, group_id: group.id, initiative_id: initiative.id, resource: invalid_attributes}.to change(Resource.where(container_type: "Initiative"), :count).by(0)
                 end
 
                 it "renders edit template" do
