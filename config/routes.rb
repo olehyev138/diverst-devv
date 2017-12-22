@@ -122,6 +122,8 @@ Rails.application.routes.draw do
       collection do
         get 'edit_annual_budget'
         post 'update_annual_budget'
+        post 'reset_annual_budget'
+        post 'carry_over_annual_budget'
       end
     end
 
