@@ -16,11 +16,11 @@ Hello <%= @user.name %>, a new item has been posted to a Diversity and Inclusion
   <% if group[:news_count].to_i > 0 %>
     <p><%= link_to "#{ group[:news_count] } news item(s)", group_posts_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id) %>.</p>
   <% end %>
-  
+
   <% if group[:social_links_count].to_i > 0 %>
     <p><%= link_to "#{ group[:social_links_count] } news item(s)", group_social_links_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id) %>.</p>
   <% end %>
-  
+
   <% if group[:participating_events_count].to_i > 0 %>
     <p><%= link_to pluralize(group[:participating_events_count], 'new participating event'), group_events_url(group[:group].try(:id), saml_for_enterprise: @user.enterprise.id) %>.</p>
   <% end %>
