@@ -24,7 +24,7 @@ RSpec.describe GroupsController, type: :controller do
         expect(response).to have_http_status(:ok)
       end
 
-      #Derek
+
       it 'correctly sets groups' do
         expect(group.enterprise).to eq enterprise
       end
@@ -156,31 +156,7 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-  # MISSING TEMPLATE
-  # describe 'GET #calendar' do
-  #   def get_calendar_data
-  #     get :calendar_data
-  #   end
-
-  #   context 'with logged user' do
-  #     login_user
-
-  #     before { get_calendar_data }
-
-  #     it 'return success' do
-  #       expect(response).to be_success
-  #     end
-  #   end
-
-  #   context 'without logged user' do
-  #     before { get_calendar_data }
-
-  #     it 'return error' do
-  #       expect(response).to_not be_success
-  #     end
-  #   end
-  # end
-
+  
   describe 'GET #new' do
     def get_new
       get :new
