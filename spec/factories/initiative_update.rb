@@ -3,7 +3,7 @@ FactoryGirl.define do
     	association :owner, factory: :user
     	association :initiative
     	comments { Faker::Lorem.sentence }
-    	data { Faker::Lorem.sentence }
     	report_date { Faker::Date.forward(2) }
+    	data {}
     end
 end
