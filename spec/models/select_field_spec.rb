@@ -183,4 +183,18 @@ RSpec.describe SelectField, type: :model do
       expect(match_score_between).to eq(0.5)
     end
   end
+  
+  describe "#answer_popularities" do
+    it "returns the count for each poll option" do
+      enterprise = create(:enterprise)
+      user = create(:user)
+      poll = create(:poll, :enterprise => enterprise, :owner => user)
+      select_field = SelectField.new(:type => "SelectField", :title => "What is 1 + 1?", :options_text => "1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n7", :container => poll)
+      select_field.save!
+      create(:poll_response, :poll => poll, :user => user, :data => "{\"#{select_field.id}\":[\"4\"]}")
+            
+      answer_popularities = select_field.answer_popularities(entries: poll.responses)
+      expect(answer_popularities).to eq([{:answer => "1", :count => 0}, {:answer => "2", :count => 0}, {:answer => "3", :count => 0}, {:answer => "4", :count => 1}, {:answer => "5", :count => 0}, {:answer => "6", :count => 0}, {:answer => "7", :count => 0}])
+    end
+  end
 end
