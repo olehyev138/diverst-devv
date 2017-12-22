@@ -6,7 +6,10 @@ RSpec.describe Resource, :type => :model do
     let(:resource){ build_stubbed(:resource) }
     
     it{ expect(resource).to validate_presence_of(:title)}
-    it{ expect(resource).to validate_presence_of(:file)}
+    it{ expect(resource).to have_attached_file(:file)}
+
+    #do we want to validate presence of file in resource model? if so then i will uncomment this code
+    # it{ expect(resource).to validate_attachment_presence(:file)}
     
     it{ expect(resource).to have_many(:tags)}
   end
