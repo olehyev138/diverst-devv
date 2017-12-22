@@ -55,7 +55,7 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
 
 
     describe "POST#create" do
-        let!(:resource){ create(:resource, container_type: "Initiative", container_id: initiative.id) }
+        let!(:resource) { create(:resource, container_type: "Initiative", container_id: initiative.id) }
 
         describe "with logged user" do
             login_user_from_let
@@ -64,7 +64,7 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
                 it "and valid attributes creates a new Resource" do
                     expect{
                         post :create, group_id: group.id, initiative_id: initiative.id, resource: attributes_for(:resource)
-                    }.to change(Resource, :count).by(1)
+                    }.to change(Resource.where(container_type: "Initiative"), :count).by(1)
                 end
 
                 it "redirects to action index" do
