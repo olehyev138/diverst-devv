@@ -4,5 +4,6 @@ FactoryGirl.define do
     	association :initiative
     	comments { Faker::Lorem.sentence }
     	report_date { Faker::Date.forward(2) }
+    	data {}
     end
 end
