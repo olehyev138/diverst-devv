@@ -165,7 +165,7 @@ RSpec.describe Groups::UpdatesController, type: :controller do
             end
         end
 
-         describe 'when user is not logged in' do
+        describe 'when user is not logged in' do
             before {delete :destroy, group_id: group.id, id: group_update.id}
             it_behaves_like "redirect user to users/sign_in path"
         end
@@ -214,6 +214,11 @@ RSpec.describe Groups::UpdatesController, type: :controller do
                     expect(response).to render_template :edit
                 end
             end
+        end
+
+        describe 'when user is not logged in' do
+            before { patch :update, group_id: group.id, id: group_update.id, group_update: { created_at: "2017-01-01" } }
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 end
