@@ -3,19 +3,20 @@ require 'rails_helper'
 RSpec.describe Groups::SocialLinksController, type: :controller do
     let(:user) { create :user }
     let(:group) { create(:group, enterprise: user.enterprise) }
-    let!(:social_link) { create(:social_link, author: user, group: group) }
 
 
     describe 'GET#index' do
         before do
-            allow(SocialMedia::Importer).to receive(:valid_url?).and_return(true)
+            allow(SocialMedia::Importer).to receive(:valid_url?).with("https://www.instagram.com/p/tsxp1hhQTG/").and_return(true)
         end
+        let!(:social_links) { create_list(:social_link, 2, author: user, group: group) }
+
         context 'with logged in user' do
             login_user_from_let
             before { get :index, group_id: group.id }
 
             it 'returns social links belonging to group object' do
-                byebug
+                expect(assigns[:group].social_links).to eq social_links
             end
 
             it 'renders index template' do
@@ -23,6 +24,10 @@ RSpec.describe Groups::SocialLinksController, type: :controller do
             end
         end
 
+        context 'with user not logged in' do 
+            before { get :index, group_id: group.id }
+            it_behaves_like "redirect user to users/sign_in path"
+        end
     end
 
 
@@ -51,6 +56,7 @@ RSpec.describe Groups::SocialLinksController, type: :controller do
         end
     end
 
+
     describe 'POST#create' do
         before :each do
             post :create, group_id: group.id, social_link: attributes_for(:social_link, :url => "https://twitter.com/realDonaldTrump/status/912848241535971331")
@@ -58,6 +64,10 @@ RSpec.describe Groups::SocialLinksController, type: :controller do
 
         it "redirect back" do
             expect(response).to redirect_to group_posts_path(group)
+        end
+
+        it 'debug' do 
+            byebug
         end
     end
 
