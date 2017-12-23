@@ -7,6 +7,7 @@ class BudgetsController < ApplicationController
 
   def index
     authorize @group, :budgets?
+    @budgets = @group.budgets.order("id DESC")
   end
 
   def show
