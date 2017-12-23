@@ -42,9 +42,6 @@ class GroupPolicy < ApplicationPolicy
         when 'managers_only'
             #Only users with ability to manipulate members(admins) can see other memberxs
             return manage_members?
-        else
-            #At this point we know that something went wrong, but lets just deny access
-            return false
         end
     end
 
@@ -60,9 +57,6 @@ class GroupPolicy < ApplicationPolicy
         when 'managers_only'
             #Only users with ability to manipulate messages(admins) can see other memberxs
             return manage_members?
-        else
-            #At this point we know that something went wrong, but lets just deny access
-            return false
         end
     end
 
