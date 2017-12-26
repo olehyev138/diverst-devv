@@ -163,4 +163,74 @@ RSpec.describe Initiative, type: :model do
       expect(initiative.errors.full_messages.first).to eq("End must be after start")
     end
   end
+  
+  describe "#expenses_status" do
+    it "returns Expenses in progress" do
+      initiative = create(:initiative)
+      expect(initiative.expenses_status).to eq("Expenses in progress")
+    end
+    
+    it "returns Expenses in progress" do
+      initiative = create(:initiative, :finished_expenses => true)
+      expect(initiative.expenses_status).to eq("Expenses finished")
+    end
+  end
+  
+  describe "#approved?" do
+    it "returns false" do
+      budget = create(:budget, :is_approved => true)
+      budget_item = create(:budget_item, :budget => budget)
+      initiative = create(:initiative, :budget_item_id => budget_item.id)
+      
+      expect(initiative.approved?).to eq(false)
+    end
+    
+    it "returns true" do
+      budget = create(:budget)
+      budget_item = create(:budget_item, :budget => budget)
+      initiative = create(:initiative, :budget_item_id => budget_item.id)
+      
+      expect(initiative.approved?).to eq(true)
+    end
+    it "returns true" do
+      initiative = create(:initiative)
+      expect(initiative.approved?).to eq(true)
+    end
+  end
+  
+  describe "#leftover" do
+    it "returns 0" do
+      initiative = create(:initiative)
+      expect(initiative.leftover).to eq(0)
+    end
+  end
+  
+  describe "#time_string" do
+    it "returns day and start/end time" do
+      initiative = create(:initiative, :start => Date.today, :end => Date.today + 1.hour)
+      expect(initiative.time_string).to eq("#{initiative.start.to_s :dateonly} from #{initiative.start.to_s :ampmtime} to #{initiative.end.to_s :ampmtime}")
+    end
+  end
+  
+  describe "#highcharts_history" do
+    it "returns data" do
+      initiative = create(:initiative, :start => Date.today, :end => Date.today + 1.hour)
+      field = create(:field)
+      create(:initiative_field, :initiative => initiative, :field => field)
+      create(:initiative_update, :initiative => initiative)
+      
+      data = initiative.highcharts_history(field: field)
+      expect(data.empty?).to be(false)
+    end
+  end
+  
+  describe "#expenses_highcharts_history" do
+    it "returns data" do
+      initiative = create(:initiative, :start => Date.today, :end => Date.today + 1.hour)
+      create_list(:initiative_expense, 5, :initiative => initiative)
+      
+      data = initiative.expenses_highcharts_history
+      expect(data.empty?).to be(false)
+    end
+  end
 end
