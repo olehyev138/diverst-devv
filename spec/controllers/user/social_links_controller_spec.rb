@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe User::SocialLinksController, type: :controller do
     let(:user){ create(:user) }
     let(:group){ create(:group) }
+    let(:social_link) {create(:social_link)}
     
     login_user_from_let
     
@@ -34,7 +35,7 @@ RSpec.describe User::SocialLinksController, type: :controller do
         end
         
         context "when valid params" do
-            before {post :create, social_link: {url: "http://www.youtube.com/watch?v=2BYXBC8WQ5k"}}
+            before {post :create, social_link: {url: social_link.url}}
             
             it "redirects to index" do
                 expect(response).to redirect_to action: :index
@@ -45,7 +46,7 @@ RSpec.describe User::SocialLinksController, type: :controller do
             end
             
             it "creates the link" do
-                expect(SocialLink.count).to eq(1)
+                expect(SocialLink.count).to eq(2)
             end
         end
     end

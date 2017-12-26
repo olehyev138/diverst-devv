@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe GroupsController, type: :controller do
-
+  
   let(:enterprise){ create(:enterprise, cdo_name: "test") }
-  let(:user){ create(:user, enterprise: enterprise) }
+  let(:user){ create(:user, enterprise: enterprise, email: "test@gmail.com") }
   let(:group){ create(:group, enterprise: enterprise) }
 
   describe 'GET #index' do
@@ -39,6 +39,21 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
+  describe 'GET #close_budgets' do
+    def get_show
+      get :close_budgets, :id => group.id
+    end
+
+    context 'with logged user' do
+      login_user_from_let
+
+      before { get_show }
+
+      it 'return success' do
+        expect(response).to be_success
+      end
+    end
+  end
 
   describe 'GET#plan_overview' do
     def get_plan_overview
@@ -75,7 +90,6 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #calendar' do
     def get_calendar
       get :calendar
@@ -110,7 +124,6 @@ RSpec.describe GroupsController, type: :controller do
       get :calendar_data, params, q: { initiative_participating_groups_group_id_in: initiative_participating_groups_id_in, initiative_segments_segement_id_in: initiative_segments_segement_id_in }, format: :json
     end
 
-
     let(:initiative) { create :initiative }
     let(:group) { create :group, enterprise_id: enterprise.id }
     let(:event) { create :event, group_id: group.id }
@@ -129,16 +142,6 @@ RSpec.describe GroupsController, type: :controller do
     end
 
     context 'without logged in user' do
-      context 'with correct token code' do
-        let!(:enterprise) { create :enterprise, iframe_calendar_token: 'uniquetoken1234' }
-        let!(:user) { create :user, enterprise: enterprise }
-
-        before { get_calendar_data(initiative_group.id, initiative_segment.id, params={token: 'uniquetoken1234'}) }
-
-        it 'fetches correct events', skip: "Missing Template"  do
-          expect(event.group_id).to eq group.id
-        end
-      end
 
       context 'with incorrect token code' do
         let!(:enterprise) { create :enterprise, iframe_calendar_token: 'uniquetoken1234' }
@@ -155,31 +158,6 @@ RSpec.describe GroupsController, type: :controller do
       end
     end
   end
-
-  # MISSING TEMPLATE
-  # describe 'GET #calendar' do
-  #   def get_calendar_data
-  #     get :calendar_data
-  #   end
-
-  #   context 'with logged user' do
-  #     login_user
-
-  #     before { get_calendar_data }
-
-  #     it 'return success' do
-  #       expect(response).to be_success
-  #     end
-  #   end
-
-  #   context 'without logged user' do
-  #     before { get_calendar_data }
-
-  #     it 'return error' do
-  #       expect(response).to_not be_success
-  #     end
-  #   end
-  # end
 
   describe 'GET #new' do
     def get_new
@@ -265,9 +243,34 @@ RSpec.describe GroupsController, type: :controller do
           expect(members).to_not include inactive_user
         end
       end
+    end
+    
+    context 'with logged regular user group member' do
+      
+      let(:policy_group){ create(:policy_group, :global_settings_manage => true, :groups_manage => false)}
+      let(:user){ create(:user, :enterprise => enterprise, :policy_group => policy_group) }
+      let!(:user_group){ create(:user_group, :group => group, :user => user, :accepted_member => true)}
+      
+      login_user_from_let
 
-      describe 'group description' do
-        it 'allows line breaks'
+      before { get_show }
+
+      it 'return success' do
+        expect(response).to be_success
+      end
+    end
+    
+    context 'with logged regular user non-group member' do
+      
+      let(:policy_group){ create(:policy_group, :global_settings_manage => true, :groups_manage => false)}
+      let(:user){ create(:user, :enterprise => enterprise, :policy_group => policy_group) }
+      
+      login_user_from_let
+
+      before { get_show }
+
+      it 'return success' do
+        expect(response).to be_success
       end
     end
 
@@ -508,6 +511,7 @@ RSpec.describe GroupsController, type: :controller do
 
   describe 'DELETE #destroy' do
     def delete_destroy(group_id = -1)
+      request.env["HTTP_REFERER"] = "back"
       delete :destroy, id: group_id
     end
 
@@ -551,6 +555,14 @@ RSpec.describe GroupsController, type: :controller do
               include_examples'correct public activity'
             end
           end
+      end
+      
+      context 'when not saving' do
+        before {allow_any_instance_of(Group).to receive(:destroy).and_return(false)}
+        it 'redirects back' do
+          delete_destroy(group.id)
+          expect(response).to redirect_to  "back"
+        end
       end
     end
 
@@ -617,6 +629,9 @@ RSpec.describe GroupsController, type: :controller do
   end
 
   describe 'GET #sample_csv' do
+    let(:user){ create(:user, enterprise: enterprise) }
+    let!(:user_group){ create(:user_group, user: user, group: group) }
+  
     def get_sample_csv
       get :sample_csv, :id => group.id
     end
@@ -651,6 +666,19 @@ RSpec.describe GroupsController, type: :controller do
       login_user_from_let
 
       before { get_parse_csv }
+
+      it 'return success' do
+        expect(response).to be_success
+      end
+    end
+    
+    context 'with logged user and users in file' do
+      login_user_from_let
+
+      before do
+        file = fixture_file_upload('files/test_2.csv', 'text/csv')
+        get :parse_csv, :id => group.id, :file => file
+      end
 
       it 'return success' do
         expect(response).to be_success
@@ -730,6 +758,24 @@ RSpec.describe GroupsController, type: :controller do
 
       it 'return success' do
         expect(response).to redirect_to "back"
+      end
+    end
+    
+    context 'with logged user and non-destroy' do
+      login_user_from_let
+
+      before do
+        allow_any_instance_of(Group).to receive(:save).and_return(false)
+        request.env["HTTP_REFERER"] = "back"
+        get_delete_attachment
+      end
+
+      it 'renders back' do
+        expect(response).to redirect_to "back"
+      end
+      
+      it 'flashes' do
+        expect(flash[:alert]).to eq "Group attachment was not removed. Please fix the errors"
       end
     end
 
