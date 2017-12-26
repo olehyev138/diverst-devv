@@ -84,7 +84,8 @@ class Group < ActiveRecord::Base
   has_attached_file :sponsor_media, s3_permissions: :private
   do_not_validate_attachment_file_type :sponsor_media
 
-  validates :name, presence: true
+  validates :name, :contact_email, presence: true
+  validates_format_of :contact_email, with: Devise.email_regexp
 
   before_create :build_default_news_feed
   before_save :send_invitation_emails, if: :send_invitations?
