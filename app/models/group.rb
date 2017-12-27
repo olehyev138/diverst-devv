@@ -86,6 +86,8 @@ class Group < ActiveRecord::Base
 
   validates :name, presence: true
 
+  validate :valid_yammer_group_link?
+
   before_create :build_default_news_feed
   before_save :send_invitation_emails, if: :send_invitations?
   before_save :create_yammer_group, if: :should_create_yammer_group?
@@ -113,6 +115,25 @@ class Group < ActiveRecord::Base
       feed.save
       return feed
     end
+  end
+
+  def valid_yammer_group_link?
+    if yammer_group_link && !yammer_group_id
+      errors.add(:yammer_group_link, 'this is not a yammer group link')
+      return false
+    end
+
+    return true
+  end
+
+  def yammer_group_id
+    return nil if yammer_group_link.nil?
+    eq_sign_position = yammer_group_link.rindex('=')
+    return nil if eq_sign_position.nil?
+
+    group_id = yammer_group_link[(eq_sign_position+1)..yammer_group_link.length]
+
+    group_id.to_i
   end
 
   def calendar_color
