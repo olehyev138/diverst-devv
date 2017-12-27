@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171130143338) do
+ActiveRecord::Schema.define(version: 20171227021131) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -445,11 +445,13 @@ ActiveRecord::Schema.define(version: 20171130143338) do
   add_index "folder_shares", ["container_type", "container_id"], name: "index_folder_shares_on_container_type_and_container_id", using: :btree
 
   create_table "folders", force: :cascade do |t|
-    t.integer  "container_id",   limit: 4
-    t.string   "container_type", limit: 191
-    t.string   "name",           limit: 191
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.integer  "container_id",       limit: 4
+    t.string   "container_type",     limit: 191
+    t.string   "name",               limit: 191
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
+    t.boolean  "password_protected",             default: false
+    t.string   "password_digest",    limit: 191
   end
 
   add_index "folders", ["container_type", "container_id"], name: "index_folders_on_container_type_and_container_id", using: :btree
