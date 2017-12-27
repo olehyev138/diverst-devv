@@ -38,7 +38,7 @@ class GroupPolicy < ApplicationPolicy
             return true
         when 'group'
             #Only active group members can see other members
-            @record.active_members.exists? @user
+            @record.active_members.exists? @user.id
         when 'managers_only'
             #Only users with ability to manipulate members(admins) can see other memberxs
             return manage_members?
@@ -53,7 +53,7 @@ class GroupPolicy < ApplicationPolicy
             return true
         when 'group'
             #Only active group messages can see other messages
-            @record.active_members.exists? @user
+            @record.active_members.exists? @user.id
         when 'managers_only'
             #Only users with ability to manipulate messages(admins) can see other memberxs
             return manage_members?
