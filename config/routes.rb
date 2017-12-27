@@ -100,6 +100,7 @@ Rails.application.routes.draw do
     
     scope module: :enterprises do
       resources :folders do
+        post 'authenticate'
         scope module: :folder do
           resources :resources
         end
@@ -189,6 +190,9 @@ Rails.application.routes.draw do
       end
       
       resources :folders do
+        member do
+          post 'authenticate'
+        end
         scope module: :folder do
           resources :resources
         end
