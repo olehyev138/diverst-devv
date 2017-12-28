@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171227021131) do
+ActiveRecord::Schema.define(version: 20171228133035) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -730,6 +730,16 @@ ActiveRecord::Schema.define(version: 20171227021131) do
     t.integer  "news_link_id", limit: 4
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
+  end
+
+  create_table "news_link_photos", force: :cascade do |t|
+    t.string   "file_file_name",    limit: 191
+    t.string   "file_content_type", limit: 191
+    t.integer  "file_file_size",    limit: 4
+    t.datetime "file_updated_at"
+    t.integer  "news_link_id",      limit: 4
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
   end
 
   create_table "news_link_segments", force: :cascade do |t|

@@ -93,14 +93,24 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
         login_user_from_let
         
         let!(:reward_action){ create(:reward_action, enterprise: user.enterprise, key: "news_post", points: 30) }
-
+        
         it "rewards a user with points of this action" do
             expect(user.points).to eq 0
-
-            post :create, group_id: group.id, news_link: attributes_for(:news_link)
-
+        end
+        
+        before{post :create, group_id: group.id, news_link: {title: "Test", url: "https://www.msn.com", description: "Test", photos_attributes: [{file: Rack::Test::UploadedFile.new(Rails.root + 'spec/fixtures/files/verizon_logo.png', 'image/png')}]}}
+        
+        it "rewards a user with points of this action" do
             user.reload
             expect(user.points).to eq 30
+        end
+        
+        it "creates the news link" do
+            expect(NewsLink.count).to eq(1)
+        end
+        
+        it "creates the news link photo" do
+            expect(NewsLinkPhoto.count).to eq(1)
         end
     end
 
@@ -143,20 +153,42 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
         login_user_from_let
         
         let!(:news_link){ create(:news_link, group: group) }
-
-        before { patch :update, group_id: group.id, id: news_link.id, news_link: {title: "updated"}}
-
-        it "redirects" do
-            expect(response).to redirect_to group_posts_path(group)
+        let!(:news_link_photo){ create(:news_link_photo, news_link: news_link, file: Rack::Test::UploadedFile.new(Rails.root + 'spec/fixtures/files/verizon_logo.png', 'image/png')) }
+        
+        context "when updating without changes to photos" do
+            before { patch :update, group_id: group.id, id: news_link.id, news_link: {title: "updated"}}
+    
+            it "redirects" do
+                expect(response).to redirect_to group_posts_path(group)
+            end
+    
+            it "flashes" do
+                expect(flash[:notice])
+            end
+    
+            it "updates the link" do
+                news_link.reload
+                expect(news_link.title).to eq("updated")
+                expect(news_link.photos.count).to eq(1)
+            end
         end
-
-        it "flashes" do
-            expect(flash[:notice])
-        end
-
-        it "updates the link" do
-            news_link.reload
-            expect(news_link.title).to eq("updated")
+        
+        context "when updating with changes to photos" do
+            before { patch :update, group_id: group.id, id: news_link.id, news_link: {title: "updated", photos_attributes: [{"_destroy"=> "1", "id" => news_link_photo.id}]}}
+    
+            it "redirects" do
+                expect(response).to redirect_to group_posts_path(group)
+            end
+    
+            it "flashes" do
+                expect(flash[:notice])
+            end
+    
+            it "updates the link and deletes the photo" do
+                news_link.reload
+                expect(news_link.title).to eq("updated")
+                expect(news_link.photos.count).to eq(0)
+            end
         end
     end
 end
