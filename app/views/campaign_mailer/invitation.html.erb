@@ -1,7 +1,6 @@
 Hello, <%= @invitation.user.name %>
 <br/>
-You are invited to join other members in the following online collaborative conversation in Diverst: <strong><%= @invitation.campaign.title %></strong>
-
+You are invited to join <%= @invitation.campaign.groups.map(&:name).join(" ,") %> conversation in Diverst!
 <br/>
 
 <p><%= link_to "Join now", user_user_campaign_questions_url(@invitation.campaign), saml_for_enterprise: @enterprise_id %> to provide feedback and offer your thoughts and suggestions.</p>
