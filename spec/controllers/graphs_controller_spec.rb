@@ -26,7 +26,6 @@ RSpec.describe GraphsController, type: :controller do
 
         describe "without a logged in user" do
             before { get :new, :metrics_dashboard_id => metrics_dashboard.id }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
