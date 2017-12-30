@@ -14,9 +14,16 @@ RSpec.describe Groups::EventsController, type: :controller do
         end
     end
     
-    describe 'GET#calendar_data', :skip => "Missing Template" do
+    describe 'GET#calendar_data' do
         it "gets the events" do
-            get :calendar_data, group_id: group.id
+            get :calendar_data, group_id: group.id, format: :json
+            expect(response).to be_success
+        end
+    end
+    
+    describe 'GET#calendar_view' do
+        it "renders the calendar_view" do
+            get :calendar_view, group_id: group.id
             expect(response).to be_success
         end
     end
