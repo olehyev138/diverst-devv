@@ -442,7 +442,11 @@ Rails.application.routes.draw do
     resources :leads
   end
 
-  resources :policy_groups
+  resources :policy_groups do
+    member do
+      post 'add_users'
+    end
+  end
   resources :emails
   resources :custom_texts, only: [:edit, :update]
   
