@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171130143338) do
+ActiveRecord::Schema.define(version: 20171230231341) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -34,8 +34,9 @@ ActiveRecord::Schema.define(version: 20171130143338) do
     t.text     "content",    limit: 65535
     t.integer  "author_id",  limit: 4
     t.integer  "answer_id",  limit: 4
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.boolean  "approved",                 default: true
   end
 
   create_table "answer_expenses", force: :cascade do |t|
@@ -343,6 +344,7 @@ ActiveRecord::Schema.define(version: 20171130143338) do
     t.string   "onboarding_sponsor_media_content_type", limit: 191
     t.integer  "onboarding_sponsor_media_file_size",    limit: 4
     t.datetime "onboarding_sponsor_media_updated_at"
+    t.boolean  "enable_pending_comments",                             default: false
   end
 
   create_table "event_attendances", force: :cascade do |t|
@@ -356,6 +358,7 @@ ActiveRecord::Schema.define(version: 20171130143338) do
     t.integer "event_id", limit: 4
     t.integer "user_id",  limit: 4
     t.text    "content",  limit: 65535
+    t.boolean "approved",               default: true
   end
 
   create_table "event_fields", force: :cascade do |t|
@@ -445,11 +448,13 @@ ActiveRecord::Schema.define(version: 20171130143338) do
   add_index "folder_shares", ["container_type", "container_id"], name: "index_folder_shares_on_container_type_and_container_id", using: :btree
 
   create_table "folders", force: :cascade do |t|
-    t.integer  "container_id",   limit: 4
-    t.string   "container_type", limit: 191
-    t.string   "name",           limit: 191
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.integer  "container_id",       limit: 4
+    t.string   "container_type",     limit: 191
+    t.string   "name",               limit: 191
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
+    t.boolean  "password_protected",             default: false
+    t.string   "password_digest",    limit: 191
   end
 
   add_index "folders", ["container_type", "container_id"], name: "index_folders_on_container_type_and_container_id", using: :btree
@@ -491,8 +496,9 @@ ActiveRecord::Schema.define(version: 20171130143338) do
     t.text     "content",    limit: 65535
     t.integer  "author_id",  limit: 4
     t.integer  "message_id", limit: 4
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.boolean  "approved",                 default: true
   end
 
   create_table "group_messages", force: :cascade do |t|
@@ -534,6 +540,7 @@ ActiveRecord::Schema.define(version: 20171130143338) do
     t.boolean  "yammer_group_created"
     t.string   "yammer_group_name",          limit: 191
     t.boolean  "yammer_sync_users"
+    t.string   "yammer_group_link",          limit: 191
     t.integer  "yammer_id",                  limit: 4
     t.integer  "manager_id",                 limit: 4
     t.integer  "owner_id",                   limit: 4
@@ -579,6 +586,7 @@ ActiveRecord::Schema.define(version: 20171130143338) do
     t.integer "initiative_id", limit: 4
     t.integer "user_id",       limit: 4
     t.text    "content",       limit: 65535
+    t.boolean "approved",                    default: true
   end
 
   create_table "initiative_expenses", force: :cascade do |t|
@@ -725,8 +733,19 @@ ActiveRecord::Schema.define(version: 20171130143338) do
     t.text     "content",      limit: 65535
     t.integer  "author_id",    limit: 4
     t.integer  "news_link_id", limit: 4
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+    t.boolean  "approved",                   default: true
+  end
+
+  create_table "news_link_photos", force: :cascade do |t|
+    t.string   "file_file_name",    limit: 191
+    t.string   "file_content_type", limit: 191
+    t.integer  "file_file_size",    limit: 4
+    t.datetime "file_updated_at"
+    t.integer  "news_link_id",      limit: 4
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
   end
 
   create_table "news_link_segments", force: :cascade do |t|
