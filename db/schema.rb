@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171130143338) do
+ActiveRecord::Schema.define(version: 20171226132610) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -534,6 +534,7 @@ ActiveRecord::Schema.define(version: 20171130143338) do
     t.boolean  "yammer_group_created"
     t.string   "yammer_group_name",          limit: 191
     t.boolean  "yammer_sync_users"
+    t.string   "yammer_group_link",          limit: 191
     t.integer  "yammer_id",                  limit: 4
     t.integer  "manager_id",                 limit: 4
     t.integer  "owner_id",                   limit: 4
@@ -563,6 +564,7 @@ ActiveRecord::Schema.define(version: 20171130143338) do
     t.integer  "sponsor_media_file_size",    limit: 4
     t.datetime "sponsor_media_updated_at"
     t.string   "company_video_url",          limit: 191
+    t.string   "contact_email",              limit: 191
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
