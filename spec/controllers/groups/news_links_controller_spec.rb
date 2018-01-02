@@ -174,9 +174,9 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
 
         describe 'with user logged in' do
             login_user_from_let
-            context 'with valid attributes' do 
+            context 'with valid attributes' do
 
-                it 'create a new NewsLink object' do 
+                it 'create a new NewsLink object' do
                     expect{post :create, group_id: group.id, news_link: attributes_for(:news_link)}
                     .to change(NewsLink, :count).by(1)
                 end
@@ -190,13 +190,13 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
                     expect(user.points).to eq 30
                 end
 
-                it 'flashes a reward message' do 
+                it 'flashes a reward message' do
                     post :create, group_id: group.id, news_link: attributes_for(:news_link)
                     user.reload
                     expect(flash[:reward]).to eq "Your news was created. Now you have #{user.credits} points"
                 end
 
-                it 'redirects to group_posts_path' do 
+                it 'redirects to group_posts_path' do
                     post :create, group_id: group.id, news_link: attributes_for(:news_link)
                     expect(response).to redirect_to group_posts_path(group)
                 end
@@ -206,17 +206,17 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
                 invalid_link_attributes = FactoryGirl.attributes_for(:news_link)
                 let!(:invalid_link_attributes) { invalid_link_attributes[:title] = nil }
 
-                it 'does not create a news link object' do 
+                it 'does not create a news link object' do
                     expect{post :create, group_id: group.id, news_link: invalid_link_attributes}
                     .to change(NewsLink, :count).by(0)
                 end
 
-                it 'flashes an alert message' do 
+                it 'flashes an alert message' do
                     post :create, group_id: group.id, news_link: invalid_link_attributes
                     expect(flash[:alert]).to eq 'Your news was not created. Please fix the errors'
                 end
 
-                it 'renders edit template' do 
+                it 'renders edit template' do
                     post :create, group_id: group.id, news_link: invalid_link_attributes
                     expect(response).to render_template :edit
                 end
@@ -254,15 +254,15 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
                 end
             end
 
-            context 'with invalid attributes' do 
+            context 'with invalid attributes' do
                 let!(:news_link){ create(:news_link, group: group) }
                 before { patch :update, group_id: group.id, id: news_link.id, news_link: {title: nil}}
 
-                it 'flashes an alert message' do 
+                it 'flashes an alert message' do
                     expect(flash[:alert]).to eq 'Your news was not updated. Please fix the errors'
                 end
 
-                it 'renders an edit template' do 
+                it 'renders an edit template' do
                     expect(response).to render_template :edit
                 end
             end
@@ -292,7 +292,7 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
                 expect(user.points).to eq 0
             end
 
-            it 'deletes news link object' do 
+            it 'deletes news link object' do
                 expect {delete :destroy, group_id: group.id, id: news_link.id}
                 .to change(NewsLink, :count).by(-1)
             end
@@ -303,7 +303,7 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
                 expect(flash[:notice]).to eq "Your news was removed. Now you have #{user.credits} points"
             end
 
-            it 'redirects to group_posts_path' do 
+            it 'redirects to group_posts_path' do
                 delete :destroy, group_id: group.id, id: news_link.id
                 expect(response).to redirect_to group_posts_path(group)
             end
