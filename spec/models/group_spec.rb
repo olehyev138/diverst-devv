@@ -92,11 +92,19 @@ RSpec.describe Group, :type => :model do
     end
 
     describe '#survey_answers_csv' do
-        let!(:group){ create(:group) }
-
         it "returns a csv file" do
-            csv = group.survey_answers_csv
-            expect(csv).to eq("user_id,user_email,user_first_name,user_last_name\n")
+            group = create(:group)
+            field = create(:field, :field_type => "group_survey", :container => group)
+            user = create(:user)
+            user_group = create(:user_group, :user => user, :group => group, :data => "{\"13\":\"test\"}")
+            
+            csv = CSV.generate do |file|
+                file << ['user_id', 'user_email', 'user_first_name', 'user_last_name'].concat(group.survey_fields.map(&:title))
+                file << [user.id, user.email, user.first_name, user.last_name, field.csv_value(user_group.info[field])]
+            end
+            
+            result = group.survey_answers_csv
+            expect(result).to eq(csv)
         end
     end
 
@@ -190,7 +198,7 @@ RSpec.describe Group, :type => :model do
         end
     end
 
-    describe '#calendar_color' do
+    describe '#calendar_color', :skip => true do
         it "returns cccccc" do
             group = create(:group)
             expect(group.calendar_color).to eq("cccccc")
@@ -217,6 +225,21 @@ RSpec.describe Group, :type => :model do
             create(:budget_item, :budget => budget, :estimated_amount => 1000)
 
             expect(group.approved_budget).to be > 0
+        end
+    end
+    
+    describe '#available_budget' do
+        it "returns 0" do
+            group = create(:group)
+            expect(group.available_budget).to eq(0)
+        end
+
+        it "returns available budget" do
+            group = create(:group, :annual_budget => 10000)
+
+            budget = create(:budget, :subject => group, :is_approved => true)
+            create(:budget_item, :budget => budget, :estimated_amount => 1000)
+            expect(group.available_budget).to eq(group.annual_budget - group.approved_budget)
         end
     end
 
@@ -262,6 +285,74 @@ RSpec.describe Group, :type => :model do
             group_2 = create(:group, :parent => group_1)
 
             expect(group_1.children).to include(group_2)
+        end
+    end
+    
+    describe '#avg_members_per_group' do
+        it "returns 2" do
+            enterprise = create(:enterprise)
+            user_1 = create(:user, :enterprise => enterprise)
+            user_2 = create(:user, :enterprise => enterprise)
+            group_1 = create(:group, :enterprise => enterprise)
+            group_2 = create(:group, :enterprise => enterprise)
+            create(:user_group, :user => user_1, :group => group_1)
+            create(:user_group, :user => user_2, :group => group_1)
+            create(:user_group, :user => user_1, :group => group_2)
+            create(:user_group, :user => user_2, :group => group_2)
+            
+            average = Group.avg_members_per_group(:enterprise => enterprise)
+            expect(average).to eq(2)
+        end
+    end
+    
+    describe '#file_safe_name' do
+        it "returns file_safe_name" do
+            group = create(:group, :name => "test name")
+            expect(group.file_safe_name).to eq("test_name")
+        end
+    end
+    
+    describe '#possible_participating_groups' do
+        it "returns possible_participating_groups" do
+            enterprise = create(:enterprise)
+            group_1 = create(:group, :enterprise => enterprise)
+            create(:group, :enterprise => enterprise)
+            expect(group_1.possible_participating_groups.length).to eq(1)
+        end
+    end
+    
+    describe '#highcharts_history' do
+        it "returns highcharts_history" do
+            group = create(:group)
+            field = create(:field)
+            create(:group_update, :group => group)
+            data = group.highcharts_history(:field => field)
+            expect(data.length).to eq(1)
+        end
+    end
+    
+    describe '#title_with_leftover_amount' do
+        it "returns title_with_leftover_amount" do
+            group = create(:group)
+            expect(group.title_with_leftover_amount).to eq("Create event from #{group.name} leftover ($#{group.leftover_money})")
+        end
+    end
+    
+    describe '#sync_yammer_users' do
+        it "subscribe yammer users to group" do
+            yammer = double("YammerClient")
+            allow(YammerClient).to receive(:new).and_return(yammer)
+            allow(yammer).to receive(:user_with_email).and_return({"id" => 1, "yammer_token" => nil})
+            allow(yammer).to receive(:token_for_user).and_return({"token" => "token"})
+            allow(yammer).to receive(:subscribe_to_group)
+            
+            group = create(:group)
+            user = create(:user)
+            create(:user_group, :user => user, :group => group)
+            
+            group.sync_yammer_users
+            
+            expect(yammer).to have_received(:subscribe_to_group)
         end
     end
 end

@@ -55,7 +55,7 @@ class DateField < Field
   def validates_rule_for_user?(rule:, user:)
     rule_date = Date.parse(rule.values_array[0])
     user_date = user.info[rule.field]
-
+    
     case rule.operator
     when SegmentRule.operators[:equals]
       user_date == rule_date
