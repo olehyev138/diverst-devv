@@ -5,16 +5,16 @@ RSpec.describe Initiatives::UpdatesController, type: :controller do
     let(:group){ create(:group, enterprise: user.enterprise) }
     let(:initiative){ initiative_of_group(group) }
     let(:initiative_update) {create :initiative_update, initiative: initiative}
-    
+
     login_user_from_let
-    
+
     describe 'GET#index' do
         it "gets the updates" do
             get :index, group_id: group.id, initiative_id: initiative.id
             expect(response).to be_success
         end
     end
-    
+
     describe 'GET#new' do
         it "gets a new update" do
             get :new, group_id: group.id, initiative_id: initiative.id
@@ -69,14 +69,14 @@ RSpec.describe Initiatives::UpdatesController, type: :controller do
             end
         end
     end
-    
+
     describe 'GET#show' do
         it "gets an update" do
             get :show, group_id: group.id, initiative_id: initiative.id, id: initiative_update.id
             expect(response).to be_success
         end
     end
-    
+
     describe 'PATCH#update' do
         
         context "when successful" do
@@ -111,15 +111,15 @@ RSpec.describe Initiatives::UpdatesController, type: :controller do
             end
         end
     end
-    
+
     describe 'DELETE#destroy' do
-        
+
         before {delete :destroy, group_id: group.id, initiative_id: initiative.id, id: initiative_update.id}
-        
+
         it "redirects" do
             expect(response).to redirect_to action: :index
         end
-        
+
         it "deletes the initiative_update" do
             expect(InitiativeUpdate.where(:id => initiative_update.id).count).to eq(0)
         end
