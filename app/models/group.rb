@@ -86,6 +86,8 @@ class Group < ActiveRecord::Base
 
   validates :name, presence: true
 
+  validate :valid_yammer_group_link?
+
   before_create :build_default_news_feed
   before_save :send_invitation_emails, if: :send_invitations?
   before_save :create_yammer_group, if: :should_create_yammer_group?
@@ -113,6 +115,25 @@ class Group < ActiveRecord::Base
       feed.save
       return feed
     end
+  end
+
+  def valid_yammer_group_link?
+    if yammer_group_link && !yammer_group_id
+      errors.add(:yammer_group_link, 'this is not a yammer group link')
+      return false
+    end
+
+    return true
+  end
+
+  def yammer_group_id
+    return nil if yammer_group_link.nil?
+    eq_sign_position = yammer_group_link.rindex('=')
+    return nil if eq_sign_position.nil?
+
+    group_id = yammer_group_link[(eq_sign_position+1)..yammer_group_link.length]
+
+    group_id.to_i
   end
 
   def calendar_color
@@ -156,14 +177,6 @@ class Group < ActiveRecord::Base
     # return groups list without current group
     group_id = self.id
     self.enterprise.groups.select { |g| g.id != group_id }
-  end
-
-  def self.create_events
-    Group.find_each do |group|
-      (20 - group.id).times do
-        group.events << Event.create(title: 'Test Event', start: 2.days.from_now, end: 2.days.from_now + 2.hours, description: 'This is a placeholder event.')
-      end
-    end
   end
 
   def sync_yammer_users
@@ -223,7 +236,7 @@ class Group < ActiveRecord::Base
         survey_fields.each do |field|
           user_group_row << field.csv_value(user_group.info[field])
         end
-
+        
         csv << user_group_row
       end
     end
@@ -232,8 +245,6 @@ class Group < ActiveRecord::Base
   def title_with_leftover_amount
     "Create event from #{name} leftover ($#{leftover_money})"
   end
-
-
 
   protected 
 
@@ -245,8 +256,6 @@ class Group < ActiveRecord::Base
   def have_protocol?
     company_video_url[%r{\Ahttp:\/\/}] || company_video_url[%r{\Ahttps:\/\/}]
   end
-
-
 
   private
 

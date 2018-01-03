@@ -28,9 +28,8 @@ class NumericField < Field
 
     high_delta = values.max - values.min
     delta = (e1_value - e2_value).abs
-    score = delta.to_f / high_delta
 
-    score
+    return delta.to_f / high_delta
   end
 
   def validates_rule_for_user?(rule:, user:)
