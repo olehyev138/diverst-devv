@@ -6,8 +6,6 @@ RSpec.describe Initiatives::UpdatesController, type: :controller do
     let(:initiative) { initiative_of_group(group) }
     let(:initiative_update) { create :initiative_update, initiative: initiative, report_date: Time.now + 1.days }
 
-
-
     describe 'GET#index' do
         describe "when user is logged in" do
             login_user_from_let
@@ -29,7 +27,6 @@ RSpec.describe Initiatives::UpdatesController, type: :controller do
         end
     end
 
-
     describe 'GET#new' do
         describe "when user is logged in" do
             login_user_from_let
@@ -49,7 +46,6 @@ RSpec.describe Initiatives::UpdatesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'POST#create' do
         describe "when user is logged in" do
@@ -84,7 +80,6 @@ RSpec.describe Initiatives::UpdatesController, type: :controller do
         end
     end
 
-
     describe 'GET#show' do
         describe "when user is logged in" do
             login_user_from_let
@@ -104,7 +99,6 @@ RSpec.describe Initiatives::UpdatesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'PATCH#update' do
         describe "when user is logged in" do
