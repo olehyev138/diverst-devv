@@ -211,5 +211,10 @@ RSpec.describe GraphsController, type: :controller do
                 expect(response).to be_success
             end
         end
+      
+        describe "without a logged in user", skip: 'needs to be reworked to accept enterprise token instead of current_user' do
+            before { get :export_csv, :id => metrics_graph.id }
+            it_behaves_like "redirect user to users/sign_in path"
+        end
     end
 end
