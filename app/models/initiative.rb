@@ -103,10 +103,9 @@ class Initiative < ActiveRecord::Base
 
   def pending?
     # If there is no budget for event then it needs no money and no approval
-    return false if budgets.empty?
-
-    # Check if there are anu budget that is not yet approved
-    budgets.any? { |budget| ! budget.is_approved }
+    return false if budget.nil?
+    # Check if budget is approved
+    budget.is_approved
   end
 
   def finish_expenses!
