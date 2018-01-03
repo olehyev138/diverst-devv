@@ -109,6 +109,7 @@ RSpec.describe Groups::SocialLinksController, type: :controller do
             end
         end
 
+
         describe "with a user not logged in" do
             before { post :create, group_id: group.id, social_link: attributes_for(:social_link, :url => "https://twitter.com/realDonaldTrump/status/912848241535971331") }
             it_behaves_like "redirect user to users/sign_in path"

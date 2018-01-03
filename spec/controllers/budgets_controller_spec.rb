@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe BudgetsController, type: :controller do
   let!(:user) { FactoryGirl.create(:user) }
-  let!(:group) { FactoryGirl.create(:group, enterprise: user.enterprise) }
+  let!(:group) { FactoryGirl.create(:group, enterprise: user.enterprise, :annual_budget => 100000) }
   let!(:budget) { FactoryGirl.create(:approved_budget, subject: group) }
 
   describe 'GET#index' do
@@ -27,7 +27,6 @@ RSpec.describe BudgetsController, type: :controller do
     end
   end
 
-
   describe 'GET#show' do
     context 'with logged user' do
       login_user_from_let
@@ -49,7 +48,6 @@ RSpec.describe BudgetsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'GET#edit_annual_budget' do
     let(:user) { create :user }
@@ -80,7 +78,6 @@ RSpec.describe BudgetsController, type: :controller do
     end
   end
 
-
   describe 'GET#new' do
     let!(:user) { FactoryGirl.create(:user) }
     let!(:group) { FactoryGirl.create(:group, enterprise: user.enterprise) }
@@ -110,7 +107,6 @@ RSpec.describe BudgetsController, type: :controller do
     end
   end
 
-
   describe 'POST#create' do
     context 'with logged user' do
       login_user_from_let
@@ -137,6 +133,19 @@ RSpec.describe BudgetsController, type: :controller do
         it "flashes a notice message" do
           post :create, group_id: group.id, budget: budget_params
           expect(flash[:notice]).to eq "Your budget was created"
+        end
+      end
+      
+      context 'with invalid params' do
+        it "flashes a notice message" do
+          post :create, group_id: group.id, budget: {}
+          expect(flash[:alert]).to eq "param is missing or the value is empty: budget"
+        end
+        
+        it "flashes a notice message" do
+          allow_any_instance_of(Group).to receive(:save).and_return(false)
+          post :create, group_id: group.id, budget: {subject: nil}
+          expect(flash[:alert]).to eq "Your budget was not created. Please fix the errors"
         end
       end
     end
@@ -202,6 +211,21 @@ RSpec.describe BudgetsController, type: :controller do
           end
         end
       end
+      
+      context 'with invalid update' do
+        before do
+          allow_any_instance_of(Group).to receive(:update).and_return(false)
+          post_update_annual_budget(group.id, {annual_budget: new_annual_budget})
+        end
+
+        it 'redirects to correct path' do
+          expect(response).to redirect_to "back"
+        end
+        
+        it 'flashes' do
+          expect(flash[:alert]).to eq "Your budget was not updated. Please fix the errors"
+        end
+      end
     end
 
     context 'without logged user' do
@@ -210,24 +234,112 @@ RSpec.describe BudgetsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
+  
+  describe 'put#reset_annual_budget' do
+    context 'with logged user' do
+      login_user_from_let
+        context "with valid update"do
+          
+          before {
+            request.env["HTTP_REFERER"] = "back"
+            put :reset_annual_budget, group_id: budget.subject.id, id: budget.id
+          }
+          
+          it 'flashes' do
+            expect(flash[:notice]).to eq "Your budget was updated"
+          end
+    
+          it 'redirects to back' do
+            expect(response).to redirect_to "back"
+          end
+        end
+        
+        context "with invalid update" do
+          
+          before {
+            allow_any_instance_of(Group).to receive(:update).and_return(false)
+            request.env["HTTP_REFERER"] = "back"
+            put :reset_annual_budget, group_id: budget.subject.id, id: budget.id
+          }
+          
+          it 'flashes' do
+            expect(flash[:alert]).to eq "Your budget was not updated. Please fix the errors"
+          end
+    
+          it 'redirects to back' do
+            expect(response).to redirect_to "back"
+          end
+        end
+    end
+  end
+  
+  describe 'put#carry_over_annual_budget' do
+    context 'with logged user' do
+      login_user_from_let
+        context "with valid update"do
+          
+          before {
+            request.env["HTTP_REFERER"] = "back"
+            put :carry_over_annual_budget, group_id: budget.subject.id, id: budget.id
+          }
+          
+          it 'flashes' do
+            expect(flash[:notice]).to eq "Your budget was updated"
+          end
+    
+          it 'redirects to back' do
+            expect(response).to redirect_to "back"
+          end
+        end
+        
+        context "with invalid update" do
+          
+          before {
+            allow_any_instance_of(Group).to receive(:update).and_return(false)
+            request.env["HTTP_REFERER"] = "back"
+            put :carry_over_annual_budget, group_id: budget.subject.id, id: budget.id
+          }
+          
+          it 'flashes' do
+            expect(flash[:alert]).to eq "Your budget was not updated. Please fix the errors"
+          end
+    
+          it 'redirects to back' do
+            expect(response).to redirect_to "back"
+          end
+        end
+    end
+  end
 
   describe 'DELETE#destroy' do
     context 'with logged user' do
       login_user_from_let
-
-      it "returns a valid group object" do
-        delete :destroy, group_id: budget.subject.id, id: budget.id
-        expect(assigns[:group]).to be_valid
-      end
-
-      it 'removes a budget' do
-        expect{ delete :destroy, group_id: budget.subject.id, id: budget.id }.to change(Budget, :count).by(-1)
-      end
-
-      it 'redirects to index action' do
-        delete :destroy, group_id: budget.subject.id, id: budget.id
-        expect(response).to redirect_to action: :index
-      end
+        context "with valid destroy" do
+          it 'removes a budget' do
+            expect{ delete :destroy, group_id: budget.subject.id, id: budget.id }.to change(Budget, :count).by(-1)
+          end
+    
+          it 'redirects to index action' do
+            delete :destroy, group_id: budget.subject.id, id: budget.id
+            expect(response).to redirect_to action: :index
+          end
+        end
+        
+        context "with invalid destroy" do
+          before {
+            request.env["HTTP_REFERER"] = "back"
+            allow_any_instance_of(Budget).to receive(:destroy).and_return(false)
+            delete :destroy, group_id: budget.subject.id, id: budget.id
+          }
+          
+          it 'flashes an alert' do
+            expect(flash[:alert]).to eq "Your budget was not deleted. Please fix the errors"
+          end
+    
+          it 'redirects to index action' do
+            expect(response).to redirect_to "back"
+          end
+        end
     end
 
      context "without a logged in user" do
