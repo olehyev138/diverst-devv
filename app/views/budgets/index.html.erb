@@ -6,7 +6,7 @@
 <div class="content__main">
   <div class="card">
     <div class="card__section">
-      <% if @group.budgets.any? %>
+      <% if @budgets.any? %>
         <table class="table--has-border">
           <thead>
             <th>Requested amount</th>
@@ -18,7 +18,7 @@
             <th></th>
           </thead>
           <tbody>
-            <% @group.budgets.each do |budget| %>
+            <% @budgets.each do |budget| %>
               <tr>
                 <td>
                   <%= number_to_currency budget.requested_amount %>

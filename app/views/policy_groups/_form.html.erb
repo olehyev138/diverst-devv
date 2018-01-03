@@ -156,17 +156,51 @@
         </div>
       </div>
       <div class="card__section card__section--border">
-        <%= f.label :user_ids do %>
+        
           <% if @policy_group.new_record? %>
             <p>Choose the <strong>users</strong> that will initially be part of this group</p>
+            
+             <%= f.association :users, collection: @policy_group.enterprise.users, label: false, input_html: { class: "select2" } %>
+             
           <% else %>
+          
             <p>You can edit <strong>users</strong> that are part of this group</p>
+            
+            <table class="table--has-border" id="policy-group-users">
+              <thead>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Add/Remove</th>
+              </thead>
+              <tbody>
+                <% @policy_group.enterprise.users.each do |user| %>
+                  <tr>
+                    <td><%= user.name %></td>
+                    <td><%= user.email %></td>
+                    <td>
+                      <%= link_to "Add", user_path(user, {:user => {:policy_group_id => @policy_group.id}}), method: :put if !@policy_group.users.include?(user) %>
+                      <%= link_to "Remove", user_path(user, {:user => {:policy_group_id => -1}}), method: :put if @policy_group.users.include?(user) %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+            
           <% end %>
-        <% end %>
-        <%= f.association :users, collection: @policy_group.enterprise.users, label: false, input_html: { class: "select2" } %>
+  
       </div>
     </div>
 
     <%= f.button :submit %>
   <% end %>
 </div>
+
+<script>
+  $(document).on('page:change', function() {
+    $(document).off('page:change');
+
+    $('#policy-group-users').dataTable(Utility.mergeWithDTDefaults({
+      order: [[0  , "asc"]]
+    }));
+  });
+</script>

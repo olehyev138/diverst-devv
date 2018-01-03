@@ -4,8 +4,6 @@ class DevicesController < ApplicationController
   before_action :set_device, only: [:update, :test_notif]
   serialization_scope :current_user
 
-  APN = Houston::Client.development
-
   def index
     @devices = current_user.devices
     render json: @devices
@@ -33,13 +31,15 @@ class DevicesController < ApplicationController
     if device.destroy
       head :no_content
     else
-      render json: @device.errors, status: 500
+      render json: device.errors, status: 500
     end
   end
 
   def test_notif
-    if @device.platform == 'apple'
-      APN.certificate = ENV['APN_CERT']
+    apn = Houston::Client.development
+    if @device.platform === 'apple'
+
+      apn.certificate = ENV['APN_CERT']
 
       # An example of the token sent back when a device registers for notifications
       token = @device.token
@@ -55,19 +55,20 @@ class DevicesController < ApplicationController
       notification.custom_data = { foo: 'bar' }
 
       # And... sent! That's all it takes.
-      APN.push(notification)
+      apn.push(notification)
 
       if notification.error
         render json: { message: notification.error }, status: 500
       else
         head :no_content
       end
-    elsif @device.platform == 'android'
+    elsif @device.platform === 'android'
       gcm = GCM.new(ENV['GCM_KEY'])
 
       registration_ids = [@device.token] # an array of one or more client registration IDs
       options = { data: { score: '123' }, collapse_key: 'updated_score' }
       gcm.send(registration_ids, options)
+      head :no_content
     end
   end
 

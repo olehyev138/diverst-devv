@@ -1,4 +1,6 @@
 class Device < ActiveRecord::Base
+  belongs_to :user
+  
   @@platform = {
     web: 0,
     ios: 1,
