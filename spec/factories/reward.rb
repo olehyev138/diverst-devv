@@ -2,7 +2,8 @@ FactoryGirl.define do
   factory :reward do
     association :enterprise
     points 100
-    label { Faker::Lorem.word + "reward" }
+    label { Faker::Lorem.word + " reward" }
+
 
     picture_file_name { 'reward.png' }
     picture_content_type { 'image/png' }
