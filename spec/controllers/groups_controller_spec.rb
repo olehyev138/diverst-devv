@@ -24,7 +24,7 @@ RSpec.describe GroupsController, type: :controller do
         expect(response).to have_http_status(:ok)
       end
 
-      #Derek
+
       it 'correctly sets groups' do
         expect(group.enterprise).to eq enterprise
       end
