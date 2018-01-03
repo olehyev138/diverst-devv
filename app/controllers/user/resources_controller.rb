@@ -8,7 +8,7 @@ class User::ResourcesController < ApplicationController
   protected
 
   def set_container
-    @group = @container = current_user.enterprise if current_user
+    current_user ? (@group = @container = current_user.enterprise) : user_not_authorized
   end
 
   def set_container_path
