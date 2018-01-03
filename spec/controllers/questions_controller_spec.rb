@@ -33,7 +33,6 @@ RSpec.describe QuestionsController, type: :controller do
         end
     end
 
-
     describe "GET#new" do
         context "with logged user" do
             login_user_from_let
@@ -58,7 +57,6 @@ RSpec.describe QuestionsController, type: :controller do
         end
     end
 
-
     describe "GET#show" do
         context "with logged user" do
             login_user_from_let
@@ -79,23 +77,44 @@ RSpec.describe QuestionsController, type: :controller do
         end
     end
 
-
     describe "POST#create" do
         context "with logged user" do
             login_user_from_let
-            before{ post :create, campaign_id: campaign.id, question: {title: "Title", description: "description"}}
-
-            it "redirects" do
-                expect(response).to redirect_to action: :index
+            
+            context "when successful" do
+                before{ post :create, campaign_id: campaign.id, question: {title: "Title", description: "description"}}
+    
+                it "redirects" do
+                    expect(response).to redirect_to action: :index
+                end
+    
+                it "creates the question" do
+                    campaign.reload
+                    expect(campaign.questions.count).to eq(1)
+                end
+    
+                it "flashes a notice message" do
+                    expect(flash[:notice]).to eq "Your question was created"
+                end
             end
-
-            it "creates the question" do
-                campaign.reload
-                expect(campaign.questions.count).to eq(1)
-            end
-
-            it "flashes a notice message" do
-                expect(flash[:notice]).to eq "Your question was created"
+            context "when unsuccessful" do
+                before{ 
+                    allow_any_instance_of(Question).to receive(:save).and_return(false)
+                    post :create, campaign_id: campaign.id, question: {title: "Title", description: "description"}
+                }
+    
+                it "renders new" do
+                    expect(response).to render_template :new
+                end
+    
+                it "does not create the question" do
+                    campaign.reload
+                    expect(campaign.questions.count).to eq(0)
+                end
+    
+                it "flashes an alert message" do
+                    expect(flash[:alert]).to eq "Your question was not created. Please fix the errors"
+                end
             end
         end
 
@@ -134,19 +153,40 @@ RSpec.describe QuestionsController, type: :controller do
     describe "PATCH#update" do
         context "with logged user" do
             login_user_from_let
-            before {patch :update, id: question.id, question: {title: "updated"}}
-
-            it "redirects to the question" do
-                expect(response).to redirect_to(question)
+            context "when successful" do
+                before {patch :update, id: question.id, question: {title: "updated"}}
+    
+                it "redirects to the question" do
+                    expect(response).to redirect_to(question)
+                end
+    
+                it "redirects to the question" do
+                    question.reload
+                    expect(question.title).to eq("updated")
+                end
+    
+                it "flashes" do
+                    expect(flash[:notice])
+                end
             end
-
-            it "redirects to the question" do
-                question.reload
-                expect(question.title).to eq("updated")
-            end
-
-            it "flashes" do
-                expect(flash[:notice])
+            context "when unsuccessful" do
+                before {
+                    allow_any_instance_of(Question).to receive(:save).and_return(false)
+                    patch :update, id: question.id, question: {title: "updated"}
+                }
+    
+                it "redirects to the question" do
+                    expect(response).to render_template :edit
+                end
+    
+                it "does not update the question" do
+                    question.reload
+                    expect(question.title).to_not eq("updated")
+                end
+    
+                it "flashes an alert" do
+                    expect(flash[:alert]).to eq("Your question was not updated. Please fix the errors")
+                end
             end
         end
 
@@ -155,7 +195,6 @@ RSpec.describe QuestionsController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "DELETE#destroy" do
         context "with logged user" do
