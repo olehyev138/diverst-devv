@@ -8,28 +8,28 @@ RSpec.describe User::NewsLinksController, type: :controller do
     let!(:news_feed_links) { create_list(:news_feed_link, 12, news_feed: news_feeds.first) }
     let!(:segment) { create(:segment, owner: user) }
     let!(:news_feed_link_segments) { create_list(:news_feed_link_segment, 12, news_feed_link: news_feed_links.first, segment: segment) }
- 
-    before do 
-        user.groups = groups 
+
+    before do
+        user.groups = groups
         user.segments << segment
     end
 
-    
+
     describe 'GET #index' do
-       describe  "when user is logged in" do 
+       describe  "when user is logged in" do
          login_user_from_let
 
          before { get :index }
 
-         it "renders index template" do 
+         it "renders index template" do
             expect(response).to render_template :index
          end
 
-         it "return posts limited to 5" do 
+         it "return posts limited to 5" do
             expect(assigns[:posts].count).to eq 5
          end
 
-         it "assert @count to be greater than limited(5)" do 
+         it "assert @count to be greater than limited(5)" do
             expect(assigns[:count]).to be > assigns[:posts].count
          end
        end
