@@ -55,6 +55,11 @@
               <% end %>
 
             </div>
+            <% if @group.yammer_group_id.present? %>
+              <div class="card__section">
+                <%= render 'yammer' %>
+              </div>
+            <% end %>
           </div>
         </div>
       </div>
