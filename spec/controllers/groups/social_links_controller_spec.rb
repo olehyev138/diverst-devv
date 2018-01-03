@@ -8,7 +8,7 @@ RSpec.describe Groups::SocialLinksController, type: :controller do
 
     describe 'GET#index' do
         before do
-            allow(SocialMedia::Importer).to receive(:valid_url?).with("https://www.instagram.com/p/tsxp1hhQTG/").and_return(true)
+            allow(SocialMedia::Importer).to receive(:valid_url?).with("https://twitter.com/CNN/status/942881446821355520").and_return(true)
         end
         let!(:social_links) { create_list(:social_link, 2, author: user, group: group) }
 
