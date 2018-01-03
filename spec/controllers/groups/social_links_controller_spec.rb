@@ -25,7 +25,7 @@ RSpec.describe Groups::SocialLinksController, type: :controller do
             end
         end
 
-        context 'with user not logged in' do 
+        context 'with user not logged in' do
             before { get :index, group_id: group.id }
             it_behaves_like "redirect user to users/sign_in path"
         end
@@ -65,7 +65,7 @@ RSpec.describe Groups::SocialLinksController, type: :controller do
 
             context 'with valid params' do
 
-                it 'creates a social link object' do 
+                it 'creates a social link object' do
                     expect{post :create, group_id: group.id, social_link: attributes_for(:social_link, :url => "https://twitter.com/realDonaldTrump/status/912848241535971331")}
                     .to change(SocialLink, :count).by(1)
                 end
@@ -92,7 +92,7 @@ RSpec.describe Groups::SocialLinksController, type: :controller do
             context 'with invalid params' do
                 before { request.env["HTTP_REFERER"] = "back" }
 
-                it 'does not create social link object' do 
+                it 'does not create social link object' do
                     expect{post :create, group_id: group.id, social_link: attributes_for(:social_link, :url => "https://example.com/912848")}
                     .to change(SocialLink, :count).by(0)
                 end
@@ -121,11 +121,11 @@ RSpec.describe Groups::SocialLinksController, type: :controller do
             login_user_from_let
             let!(:social_link){ create(:social_link, group: group, url: "https://twitter.com/realDonaldTrump/status/912848241535971331") }
 
-            it 'destroys social link object' do 
+            it 'destroys social link object' do
                 expect{delete :destroy, group_id: group.id, id: social_link.id}.to change(SocialLink, :count).by(-1)
             end
 
-            it 'flashes notice message' do 
+            it 'flashes notice message' do
                 delete :destroy, group_id: group.id, id: social_link.id
                 expect(flash[:notice]).to eq "Your social link was removed."
             end
