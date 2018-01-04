@@ -278,6 +278,7 @@ class GroupsController < ApplicationController
                 :banner,
                 :yammer_create_group,
                 :yammer_sync_users,
+                :yammer_group_link,
                 :pending_users,
                 :members_visibility,
                 :messages_visibility,

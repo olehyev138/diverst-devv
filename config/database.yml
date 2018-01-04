@@ -7,7 +7,6 @@ default: &default
   password: <%= ENV['MYSQL_PASSWORD'] %>
 
 
-
 development:
   <<: *default
   database: diverst_development

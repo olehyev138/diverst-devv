@@ -534,6 +534,7 @@ ActiveRecord::Schema.define(version: 20171226132610) do
     t.boolean  "yammer_group_created"
     t.string   "yammer_group_name",          limit: 191
     t.boolean  "yammer_sync_users"
+    t.string   "yammer_group_link",          limit: 191
     t.integer  "yammer_id",                  limit: 4
     t.integer  "manager_id",                 limit: 4
     t.integer  "owner_id",                   limit: 4
