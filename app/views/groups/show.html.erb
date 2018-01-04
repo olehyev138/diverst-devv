@@ -19,6 +19,7 @@
   <div class="row row--equal-height">
     <div class="col sm-12 md-9">
       <div class="row row--equal-height">
+      <% if policy(@group).view_latest_news? %>
         <div class="col sm-12 md-6">
           <div class="card">
             <div class="card__section">
@@ -36,7 +37,9 @@
             </div>
           </div>
         </div>
+      <% end %>  
 
+      <% if policy(@group).view_upcoming_events? %>
         <div class="col sm-12 md-6">
           <div class="card">
             <div class="card__section">
@@ -62,6 +65,7 @@
             <% end %>
           </div>
         </div>
+      <% end %>  
       </div>
     </div>
 
