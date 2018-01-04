@@ -8,6 +8,8 @@
         <%= f.input :pending_users, input_html: { autofocus: true } %>
         <%= f.input :members_visibility %>
         <%= f.input :messages_visibility %>
+        <%= f.input :latest_news_visibility %>
+        <%= f.input :upcoming_events_visibility %>
         <%= f.label :banner, label: "Banner", input_html: { class: "field__label" } %>
         <% if @group.banner? %>
           <div class="flex-row__cell fright">

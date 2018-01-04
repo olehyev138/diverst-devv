@@ -20,6 +20,18 @@ class Group < ActiveRecord::Base
                                     :managers_only
                                   ]
 
+enumerize :latest_news_visibility, default: :leaders_only, in:[
+                                    :public,
+                                    :group,
+                                    :leaders_only
+                                  ]
+
+enumerize :upcoming_events_visibility, default: :leaders_only, in:[
+                                    :public,
+                                    :group,
+                                    :leaders_only
+                                  ]
+
   belongs_to :enterprise
   belongs_to :lead_manager, class_name: "User"
   belongs_to :owner, class_name: "User"
