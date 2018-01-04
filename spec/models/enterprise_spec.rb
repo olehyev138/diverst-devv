@@ -14,6 +14,34 @@ RSpec.describe Enterprise, type: :model do
         
         it{ expect(enterprise).to have_one(:custom_text) }
     end
+    
+    describe "#company_video_url" do
+        it "saves the url" do
+            enterprise = create(:enterprise, :company_video_url => "https://www.youtube.com/watch?v=Y2VF8tmLFHw")
+            expect(enterprise.company_video_url).to_not be(nil)
+        end
+    end
+    
+    describe "#update_matches" do
+        it "calls GenerateEnterpriseMatchesJob" do
+            enterprise = create(:enterprise)
+            allow(GenerateEnterpriseMatchesJob).to receive(:perform_later)
+            
+            enterprise.update_matches
+            expect(GenerateEnterpriseMatchesJob).to have_received(:perform_later)
+        end
+    end
+    
+    describe "#update_match_scores" do
+        it "calls CalculateMatchScoreJob" do
+            enterprise = create(:enterprise)
+            create_list(:user, 2, :enterprise => enterprise)
+            allow(CalculateMatchScoreJob).to receive(:perform_later)
+            
+            enterprise.update_match_scores
+            expect(CalculateMatchScoreJob).to have_received(:perform_later).at_least(:once)
+        end
+    end
 
     describe "#custom_text" do
         context "when enterprise does not have a custom_text" do

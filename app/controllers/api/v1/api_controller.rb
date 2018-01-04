@@ -19,10 +19,6 @@ class Api::V1::ApiController < ActionController::Base
         error e.message
     end
     
-    rescue_from ActionView::MissingTemplate do |e|
-        error "bad render"
-    end
-    
     rescue_from ActiveRecord::RecordNotFound do |e|
         error e.message
     end
@@ -31,7 +27,7 @@ class Api::V1::ApiController < ActionController::Base
         error e.message
     end
     
-    rescue_from StandardError do |e|
+    rescue_from BadRequestException do |e|
         error e.message
     end
     

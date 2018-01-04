@@ -48,13 +48,4 @@ class Initiatives::FieldsController < ApplicationController
   def set_field
     @field = @initiative.fields.find(params[:id])
   end
-
-  def field_params
-    params
-      .require(:initiative_field)
-      .permit(
-        :description,
-        :amount
-      )
-  end
 end
