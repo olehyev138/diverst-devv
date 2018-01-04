@@ -11,8 +11,10 @@ class NewsLink < ActiveRecord::Base
 
     validates :url, presence: true
 
-    has_many :comments, class_name: 'NewsLinkComment'
-
+    has_many :comments, class_name: 'NewsLinkComment', dependent: :destroy
+    has_many :photos, class_name: 'NewsLinkPhoto', dependent: :destroy
+    accepts_nested_attributes_for :photos, :allow_destroy => true
+    
     validates :group_id,        presence: true
     validates :title,           presence: true
     validates :description,     presence: true

@@ -96,15 +96,14 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   has_attached_file :sponsor_media, s3_permissions: :private
   do_not_validate_attachment_file_type :sponsor_media
 
-  validates :name, :contact_email, presence: true
-  validates_format_of :contact_email, with: Devise.email_regexp
+  validates :name, presence: true
+  validates_format_of :contact_email, with: Devise.email_regexp, allow_blank: true
 
   validate :valid_yammer_group_link?
 
   before_create :build_default_news_feed
   before_save :send_invitation_emails, if: :send_invitations?
   before_save :create_yammer_group, if: :should_create_yammer_group?
-  before_destroy :handle_deletion
   after_commit :update_all_elasticsearch_members
   before_validation :smart_add_url_protocol
 
@@ -310,15 +309,6 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   # Update members in elastic_search
   def update_all_elasticsearch_members
     members.includes(:poll_responses).each do |member|
-      update_elasticsearch_member(member)
-    end
-  end
-
-  def handle_deletion
-    old_members = members.ids
-
-    # Update members in elastic_search
-    User.where(id: old_members).find_each do |member|
       update_elasticsearch_member(member)
     end
   end

@@ -74,4 +74,71 @@ RSpec.describe Segment, type: :model do
             end
         end
     end
+    
+    describe "#general_rules_followed_by" do
+        context "when only_active" do
+            it "returns true" do
+                user = create(:user, :active => true)
+                segment = create(:segment, :active_users_filter => "only_active")
+                
+                expect(segment.general_rules_followed_by?(user)).to be(true)
+            end
+            
+            it "returns false" do
+                user = create(:user, :active => true)
+                segment = create(:segment, :active_users_filter => "only_active")
+                
+                expect(segment.general_rules_followed_by?(user)).to be(true)
+            end
+        end
+        context "when only_inactive" do
+            it "returns false" do
+                user = create(:user, :active => true)
+                segment = create(:segment, :active_users_filter => "only_inactive")
+                
+                expect(segment.general_rules_followed_by?(user)).to be(false)
+            end
+            
+            it "returns true" do
+                user = create(:user, :active => false)
+                segment = create(:segment, :active_users_filter => "only_inactive")
+                
+                expect(segment.general_rules_followed_by?(user)).to be(true)
+            end
+        end
+        context "when nil" do
+            it "returns true" do
+                user = create(:user, :active => true)
+                segment = create(:segment, :active_users_filter => nil)
+                
+                expect(segment.general_rules_followed_by?(user)).to be(true)
+            end
+        end
+    end
+    
+    describe "#update_all_members" do
+        it "calls CacheSegmentMembersJob" do
+            expect(CacheSegmentMembersJob).to receive(:perform_later).at_least(:once)
+            create(:segment)
+            
+            Segment.update_all_members
+        end
+    end
+    
+    describe "#remove_parent_segment" do
+        it "removes the parent segmentation" do
+            parent = create(:segment)
+            child = create(:segment)
+            segmentation = create(:segmentation, :child => child, :parent => parent)
+            
+            # make sure parent segment exists
+            expect(child.parent_segment.present?).to be(true)
+            
+            # delete the child
+            child.destroy
+            
+            expect(parent.present?).to be(true)
+            expect{segmentation.reload}.to raise_error ActiveRecord::RecordNotFound
+        end
+    end
 end
