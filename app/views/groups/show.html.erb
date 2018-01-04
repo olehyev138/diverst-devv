@@ -146,6 +146,15 @@
         </div>
       <% end %>
 
+
+      <% if @group.contact_email %>
+        <%= mail_to @group.contact_email do %>
+          <button class="btn btn--primary" style="margin-bottom: 24px; width: 100%;">
+            Contact Group Leader
+          </button>
+        <% end %>
+      <% end %> 
+
       <% if @group.parent.present? %>
         <div class="card card--secondary">
           <div class="card__section">
