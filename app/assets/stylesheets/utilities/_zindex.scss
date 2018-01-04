@@ -3,10 +3,9 @@
 $z-index: (
   tooltip           : 999,
   primary-header    : 989,
-  secondary-header  : 997,
+  secondary-header  : 994,
   nav               : 996,
-  card__action      : 995,
-  content           : 994
+  card__action      : 995
 );
 
 @function z-index($key) {

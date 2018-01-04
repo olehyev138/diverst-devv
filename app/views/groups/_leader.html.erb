@@ -6,9 +6,11 @@
     <%= link_to image_tag('linkedin.png'), leader.linkedin_profile_url, target: '_blank', class: 'inline-block fright' if leader.linkedin_profile_url %>
   </h4>
   <div style="overflow: auto; clear: both;">
-    <%= image_tag(leader.avatar.expiring_url(3600), class: "avatar avatar--round", style: "float: left; margin-right: 1em;") %>
+    <%= link_to image_tag(leader.avatar.expiring_url(3600), class: "avatar avatar--round", style: "float: left; margin-right: 1em;"), user_path(leader), remote: true %>
     <div style="float: left;">
       <strong><%= leader.name_with_status %></strong><br>
     </div>
   </div>
 </div>
+
+<%= render "shared/modal/form" %>

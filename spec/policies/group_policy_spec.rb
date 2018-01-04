@@ -17,7 +17,7 @@ RSpec.describe GroupPolicy, :type => :policy do
     
         permissions :index?, :plan_overview?, :metrics?, :create? , :update?, :view_members?,
                     :manage_members?, :erg_leader_permissions?, :budgets?, :view_budget?, :request_budget?,
-                    :submit_budget?, :approve_budget? do
+                    :submit_budget?, :approve_budget?, :decline_budget?, :destroy? do
                       
             it "allows access" do
                 expect(subject).to permit(user, group)
@@ -25,6 +25,66 @@ RSpec.describe GroupPolicy, :type => :policy do
     
             it "doesn't allow access" do
                 expect(subject).to_not permit(no_access, group)
+            end
+        end
+        
+        permissions :view_members? do
+            context "global" do
+                it "allows access" do
+                    group.members_visibility = "global"
+                    group.save!
+                    
+                    expect(subject).to permit(user, group)
+                end
+            end
+            
+            context "group" do
+                it "allows access" do
+                    create(:user_group, :user => user, :group => group, :accepted_member => true)
+                    group.members_visibility = "group"
+                    group.save!
+                    
+                    expect(subject).to permit(user, group)
+                end
+            end
+            
+            context "managers_only" do
+                it "allows access" do
+                    group.members_visibility = "managers_only"
+                    group.save!
+                    
+                    expect(subject).to permit(user, group)
+                end
+            end
+        end
+        
+        permissions :view_messages? do
+            context "global" do
+                it "allows access" do
+                    group.messages_visibility = "global"
+                    group.save!
+                    
+                    expect(subject).to permit(user, group)
+                end
+            end
+            
+            context "group" do
+                it "allows access" do
+                    create(:user_group, :user => user, :group => group, :accepted_member => true)
+                    group.messages_visibility = "group"
+                    group.save!
+                    
+                    expect(subject).to permit(user, group)
+                end
+            end
+            
+            context "managers_only" do
+                it "allows access" do
+                    group.messages_visibility = "managers_only"
+                    group.save!
+                    
+                    expect(subject).to permit(user, group)
+                end
             end
         end
     end
@@ -54,6 +114,19 @@ RSpec.describe GroupPolicy, :type => :policy do
             it "allows access for child group" do
                 group.children << group_2
                 expect(subject).to permit(user, group_2)
+            end
+        end
+    end
+    
+    context "when user is erg_leader" do
+    
+        permissions :close_budgets? do
+                      
+            it "does not allow access" do
+                policy_group.groups_index = false
+                policy_group.save!
+                
+                expect(subject).to_not permit(user, group)
             end
         end
     end

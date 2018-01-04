@@ -6,11 +6,7 @@ class Device < ActiveRecord::Base
     ios: 1,
     android: 2
   }.freeze
-
-  def self.platform
-    @@status
-  end
-
+  
   def notify(message, data)
     if platform == 'apple'
       SendAppleNotificationJob.perform_later(token, message, data)

@@ -37,14 +37,32 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
 
     describe 'POST#create' do
         let!(:reward_action){ create(:reward_action, enterprise: user.enterprise, key: "message_post", points: 20) }
-
-        it "rewards a user with points of this action" do
-            expect(user.points).to eq 0
-
-            post :create, group_id: group.id, group_message: attributes_for(:group_message)
-
-            user.reload
-            expect(user.points).to eq 20
+        
+        context "when successful" do
+            it "rewards a user with points of this action" do
+                expect(user.points).to eq 0
+    
+                post :create, group_id: group.id, group_message: attributes_for(:group_message)
+    
+                user.reload
+                expect(user.points).to eq 20
+            end
+        end
+        
+        context "when unsuccessful" do
+            before {
+                allow_any_instance_of(GroupMessage).to receive(:save).and_return(false)
+                post :create, group_id: group.id, group_message: attributes_for(:group_message)
+            }
+            it "does not reward a user with points of this action" do
+                expect(user.points).to eq 0
+            end
+            it "flashes" do
+                expect(flash[:alert]).to eq("Your message was not created. Please fix the errors")
+            end
+            it "renders new" do
+                expect(response).to render_template :new
+            end
         end
     end
 
@@ -93,6 +111,23 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
                 end
             end
         end
+        
+        context "when unsuccessful" do
+            before {
+                allow_any_instance_of(GroupMessage).to receive(:update).and_return(false)
+                patch :update, group_id: group.id, id: group_message.id, group_message: { subject: 'Test3' }
+            }
+            it "does not update the message" do
+                group_message.reload
+                expect(group_message.subject).to_not eq 'Test3'
+            end
+            it "flashes" do
+                expect(flash[:alert]).to eq("Your message was not updated. Please fix the errors")
+            end
+            it "renders edit" do
+                expect(response).to render_template :edit
+            end
+        end
     end
 
     describe 'DELETE#destroy' do
@@ -114,20 +149,41 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
     end
     
     describe 'POST#create_comment' do
-        
-        before {post :create_comment, group_id: group.id, group_message_id: group_message.id, group_message_comment: {content: "content"}}
-        
-        it "redirects" do
-            expect(response).to redirect_to group_group_message_path(group, group_message)
+        context "when successful" do
+            before {post :create_comment, group_id: group.id, group_message_id: group_message.id, group_message_comment: {content: "content"}}
+            
+            it "redirects" do
+                expect(response).to redirect_to group_group_message_path(group, group_message)
+            end
+            
+            it "flashes" do
+                expect(flash[:reward])
+            end
+            
+            it "creates the comment" do
+                group_message.reload
+                expect(group_message.comments.count).to eq(1)
+            end
         end
         
-        it "flashes" do
-            expect(flash[:reward])
-        end
-        
-        it "creates the comment" do
-            group_message.reload
-            expect(group_message.comments.count).to eq(1)
+        context "when unsuccessful" do
+            before {
+                allow_any_instance_of(GroupMessageComment).to receive(:save).and_return(false)
+                post :create_comment, group_id: group.id, group_message_id: group_message.id, group_message_comment: {content: "content"}
+            }
+            
+            it "redirects" do
+                expect(response).to redirect_to group_group_message_path(group, group_message)
+            end
+            
+            it "flashes" do
+                expect(flash[:alert]).to eq("Comment not saved. Please fix errors")
+            end
+            
+            it "does not create the comment" do
+                group_message.reload
+                expect(group_message.comments.count).to eq(0)
+            end
         end
     end
 end
