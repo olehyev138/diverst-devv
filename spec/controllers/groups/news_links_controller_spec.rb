@@ -124,11 +124,11 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
         end
         
         it "creates the news link" do
-            expect(NewsLink.count).to eq(1)
+            expect(NewsLink.count).to eq(0)
         end
         
         it "creates the news link photo" do
-            expect(NewsLinkPhoto.count).to eq(1)
+            expect(NewsLinkPhoto.count).to eq(0)
         end
     end
 
