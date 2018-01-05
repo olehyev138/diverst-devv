@@ -10,8 +10,13 @@ RSpec.describe Initiatives::FieldsController, type: :controller do
     login_user_from_let
     
     describe 'GET#time_series' do
-        it "gets the time_series" do
+        it "gets the time_series via json" do
             get :time_series, group_id: group.id, initiative_id: initiative.id, id: field.id, format: :json
+            expect(response).to be_success
+        end
+        
+        it "gets the time_series via csv" do
+            get :time_series, group_id: group.id, initiative_id: initiative.id, id: field.id, format: :csv
             expect(response).to be_success
         end
     end

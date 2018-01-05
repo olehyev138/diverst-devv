@@ -20,7 +20,6 @@ class Groups::EventsController < ApplicationController
     end
   end
 
-  # MISSING TEMPLATE
   def calendar_data
     @events = @group.initiatives
     .ransack(
@@ -39,34 +38,12 @@ class Groups::EventsController < ApplicationController
     render 'calendar_view'
   end
 
-  # def new
-  #   @event = @group.own_initiatives.new
-  # end
-
-  # def create
-  #   @event = @group.own_initiatives.new(event_params)
-
-  #   if @event.save
-  #     redirect_to action: :index
-  #   else
-  #     render :edit
-  #   end
-  # end
-
   def show
     authorize @event
 
     @comment = @event.comments.where(user: current_user).first || InitiativeComment.new(initiative: @event)
   end
-
-  # def update
-  #   if @event.update(event_params)
-  #     redirect_to [@group, @event]
-  #   else
-  #     render :edit
-  #   end
-  # end
-
+  
   def destroy
     @event.destroy
     redirect_to action: :index
@@ -99,37 +76,5 @@ class Groups::EventsController < ApplicationController
 
   def set_event
     @event = @group.initiatives.find(params[:id])
-  end
-
-  def event_params
-    params
-      .require(:event)
-      .permit(
-        :name,
-        :description,
-        :start,
-        :end,
-        :location,
-        :max_attendees,
-        :picture,
-        :attendee_ids,
-        segment_ids: [],
-        fields_attributes: [
-          :id,
-          :title,
-          :_destroy,
-          :gamification_value,
-          :show_on_vcard,
-          :saml_attribute,
-          :type,
-          :match_exclude,
-          :match_weight,
-          :match_polarity,
-          :min,
-          :max,
-          :options_text,
-          :alternative_layout
-        ]
-      )
   end
 end

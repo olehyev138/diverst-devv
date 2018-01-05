@@ -3,6 +3,7 @@ class Initiatives::ResourcesController < ApplicationController
   before_action :set_group
   include IsResources
 
+
   layout 'plan'
 
   protected

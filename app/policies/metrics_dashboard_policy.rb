@@ -21,7 +21,7 @@ class MetricsDashboardPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      scope.where(owner: user)
+      scope.where(owner: user).order(created_at: :desc)
     end
   end
 end
