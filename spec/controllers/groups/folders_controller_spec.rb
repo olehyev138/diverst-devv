@@ -5,7 +5,7 @@ RSpec.describe Groups::FoldersController, type: :controller do
     let(:user){ create(:user, enterprise: enterprise) }
     let(:group){ create(:group, enterprise: user.enterprise) }
     let(:user_group){ create(:user_group, group: group, user: user) }
-    let!(:folder){ create(:folder, :container => group) }
+    let!(:folder){ create(:folder, :container => group, :password_protected => true, :password => "password") }
 
     login_user_from_let
 
@@ -36,7 +36,40 @@ RSpec.describe Groups::FoldersController, type: :controller do
             expect(assigns[:folder].container_type).to eq("Group")
         end
     end
-
+    
+    describe "POST#authenticate" do
+        context "valid params" do
+            before {post :authenticate, id: folder.id, group_id: group.id, folder: {password: "password"}}
+            
+            it "redirects" do
+                expect(response).to redirect_to [group, folder, :resources]
+            end
+        end
+        
+        context "invalid params" do
+            before :each do
+                request.env["HTTP_REFERER"] = "back"
+                post :authenticate, id: folder.id, group_id: group.id, folder: {password: "folder"}
+            end
+            
+            it "redirect_to index" do
+                expect(response).to redirect_to "back"
+            end
+            
+            it "flashes" do
+                expect(flash[:alert]).to eq "Invalid Password"
+            end
+        end
+    end
+    
+    describe "GET#show" do
+        before {xhr :get, :show, group_id: group.id, id: folder.id, format: :js}
+        
+        it "returns success" do
+            expect(response).to be_success
+        end
+    end
+    
     describe "GET#edit" do
         it "returns success" do
             get :edit, :id => folder.id, group_id: group.id

@@ -2,25 +2,32 @@
   <h1>Folders</h1>
   <%= link_to "+ Add folder", polymorphic_path(@container_path + [:folder], action: "new"), class: "btn btn--primary" if policy(Folder).new? %>
 </div>
-  <div class="container-fluid">
-    <% if @folders.empty? %>
-    <div class="card">
-      <div class="card__section">
-        <p>No folders have been created yet.</p>
-      </div>
+<div class="container-fluid">
+  <% if @folders.empty? %>
+  <div class="card">
+    <div class="card__section">
+      <p>No folders have been created yet.</p>
     </div>
-    <% else %>
-      <div class="row">
-      <% @folders.each_with_index  do |folder, index| %>
-        
-        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-          <h4><%= folder.name %>&nbsp;<%= link_to "Delete", @container_path + [folder], method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(folder).destroy? %></h4>
-          <a href="<%= polymorphic_path(@container_path + [folder] + [:resources]) %>">
-            <%= inline_svg('icons/folder.svg', size: '100px*100px') %>
-          </a>
-        </div>
+  </div>
+  <% else %>
+    <div class="row">
+    <% @folders.each_with_index  do |folder, index| %>
       
-      <% end %>
-    </div>
+      <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+        <h4>
+          <%= folder.name %>&nbsp;
+          <% if folder.password_protected %>
+            <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+          <% end %>
+          &nbsp;<%= link_to "Delete", @container_path + [folder], method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(folder).destroy? %>
+        </h4>
+        <%= link_to inline_svg('icons/folder.svg', size: '100px*100px'), polymorphic_path(@container_path + [folder] + [:resources]) if !folder.password_protected %>
+        <%= link_to inline_svg('icons/folder.svg', size: '100px*100px'), @container_path + [folder], method: :get, remote: true if folder.password_protected %>
+      </div>
+    
     <% end %>
   </div>
+  <% end %>
+</div>
+
+<%= render "shared/modal/form" %>

@@ -26,7 +26,6 @@ RSpec.describe PolicyGroupsController, type: :controller do
         end
     end
 
-
     describe 'GET #new' do
         context 'with logged user' do
             login_user_from_let
@@ -47,7 +46,6 @@ RSpec.describe PolicyGroupsController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'POST #create' do
         context 'with logged user' do
@@ -94,7 +92,6 @@ RSpec.describe PolicyGroupsController, type: :controller do
         end
     end
 
-
     describe 'PATCH #update' do
         context 'with logged user' do
             context "with correct params" do
@@ -113,6 +110,36 @@ RSpec.describe PolicyGroupsController, type: :controller do
 
                 it 'flashes a notice message' do
                     expect(flash[:notice]).to eq "Your policy group was updated"
+                end
+            end
+            
+            context "when adding users" do
+                
+                login_user_from_let
+
+                before { 
+                    user_1 = create(:user, :enterprise => enterprise)
+                    user_2 = create(:user, :enterprise => enterprise)
+                    patch :update, :id => policy_group.id, :policy_group => {:name => "updated", :new_users => ["", user_1.id, user_2.id]}, :commit => "Add User(s)"
+                    
+                }
+
+                it 'redirect_to' do
+                    expect(response).to redirect_to action: :index
+                end
+
+                it 'updates the policy_group' do
+                    policy_group.reload
+                    expect(policy_group.name).to eq("updated")
+                end
+
+                it 'flashes a notice message' do
+                    expect(flash[:notice]).to eq "Your policy group was updated"
+                end
+                
+                it 'adds the users' do
+                    policy_group.reload
+                    expect(policy_group.users.length).to eq(2)
                 end
             end
 
@@ -135,7 +162,6 @@ RSpec.describe PolicyGroupsController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'DELETE #destroy' do
         context 'with logged user' do

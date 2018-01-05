@@ -77,4 +77,31 @@ RSpec.describe GroupMessage, type: :model do
             
         end
     end
+    
+    describe '#users' do
+        let(:user) { create :user }
+        let(:group) { create :group, :enterprise => user.enterprise }
+        let!(:user_group) { create :user_group, :group => group, :user => user }
+        let!(:group_message) { create :group_message, owner: user, :group => group }
+        
+        it 'returns 1 user' do
+            expect(group_message.users.count).to eq(1)
+        end
+        
+        it 'returns no user' do
+            segment = create(:segment)
+            create(:group_messages_segment, :segment => segment, :group_message => group_message)
+            
+            expect(group_message.users.count).to eq(0)
+        end
+    end
+    
+    describe '#send_emails' do
+        let(:group_message) { create :group_message }
+        
+        it 'calls GroupMailer' do
+            expect(GroupMailer).to receive(:group_message).and_call_original
+            group_message.send_emails
+        end
+    end
 end
