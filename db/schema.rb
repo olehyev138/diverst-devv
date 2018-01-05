@@ -34,9 +34,9 @@ ActiveRecord::Schema.define(version: 20171230231341) do
     t.text     "content",    limit: 65535
     t.integer  "author_id",  limit: 4
     t.integer  "answer_id",  limit: 4
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
-    t.boolean  "approved",                 default: true
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.boolean  "approved",                 default: false
   end
 
   create_table "answer_expenses", force: :cascade do |t|
@@ -358,7 +358,7 @@ ActiveRecord::Schema.define(version: 20171230231341) do
     t.integer "event_id", limit: 4
     t.integer "user_id",  limit: 4
     t.text    "content",  limit: 65535
-    t.boolean "approved",               default: true
+    t.boolean "approved",               default: false
   end
 
   create_table "event_fields", force: :cascade do |t|
@@ -483,22 +483,23 @@ ActiveRecord::Schema.define(version: 20171230231341) do
   end
 
   create_table "group_leaders", force: :cascade do |t|
-    t.integer  "group_id",              limit: 4
-    t.integer  "user_id",               limit: 4
-    t.string   "position_name",         limit: 191
-    t.datetime "created_at",                                        null: false
-    t.datetime "updated_at",                                        null: false
-    t.boolean  "visible",                           default: true
-    t.boolean  "notifications_enabled",             default: false
+    t.integer  "group_id",                               limit: 4
+    t.integer  "user_id",                                limit: 4
+    t.string   "position_name",                          limit: 191
+    t.datetime "created_at",                                                         null: false
+    t.datetime "updated_at",                                                         null: false
+    t.boolean  "visible",                                            default: true
+    t.boolean  "notifications_enabled",                              default: false
+    t.boolean  "pending_comments_notifications_enabled",             default: false
   end
 
   create_table "group_message_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
     t.integer  "author_id",  limit: 4
     t.integer  "message_id", limit: 4
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
-    t.boolean  "approved",                 default: true
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.boolean  "approved",                 default: false
   end
 
   create_table "group_messages", force: :cascade do |t|
@@ -586,7 +587,7 @@ ActiveRecord::Schema.define(version: 20171230231341) do
     t.integer "initiative_id", limit: 4
     t.integer "user_id",       limit: 4
     t.text    "content",       limit: 65535
-    t.boolean "approved",                    default: true
+    t.boolean "approved",                    default: false
   end
 
   create_table "initiative_expenses", force: :cascade do |t|
@@ -733,9 +734,9 @@ ActiveRecord::Schema.define(version: 20171230231341) do
     t.text     "content",      limit: 65535
     t.integer  "author_id",    limit: 4
     t.integer  "news_link_id", limit: 4
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
-    t.boolean  "approved",                   default: true
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+    t.boolean  "approved",                   default: false
   end
 
   create_table "news_link_photos", force: :cascade do |t|

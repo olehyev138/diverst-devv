@@ -89,6 +89,7 @@ Rails.application.routes.draw do
       get 'edit_fields'
       get 'edit_mobile_fields'
       get 'edit_branding'
+      get 'edit_pending_comments'
       get 'edit_algo'
       get 'theme'
       patch 'update_branding'
@@ -325,7 +326,7 @@ Rails.application.routes.draw do
   resources :campaigns do
     resources :questions, shallow: true do
       resources :answers, shallow: true do
-        resources :answer_comments, only: [:destroy], path: 'comments', shallow: true
+        resources :answer_comments, only: [:update, :destroy], path: 'comments', shallow: true
 
         member do
           get 'breakdown'

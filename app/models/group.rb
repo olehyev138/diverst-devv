@@ -41,7 +41,9 @@ class Group < ActiveRecord::Base
 
   has_many :budgets, as: :subject
   has_many :messages, class_name: 'GroupMessage'
+  has_many :message_comments, through: :messages, class_name: 'GroupMessageComment', source: :comments
   has_many :news_links, dependent: :destroy
+  has_many :news_link_comments, through: :news_links, class_name: 'NewsLinkComment', source: :comments
   has_many :social_links, dependent: :destroy
   has_many :invitation_segments_groups
   has_many :invitation_segments, class_name: 'Segment', through: :invitation_segments_groups
@@ -54,6 +56,7 @@ class Group < ActiveRecord::Base
   has_many :questions, through: :campaigns
   has_many :answers, through: :questions
   has_many :answer_upvotes, through: :answers, source: :votes
+  has_many :answer_comments, through: :answers, class_name: 'AnswerComment', source: :comments
   belongs_to :lead_manager, class_name: "User"
   belongs_to :owner, class_name: "User"
   has_many :outcomes
@@ -96,7 +99,7 @@ class Group < ActiveRecord::Base
   before_validation :smart_add_url_protocol
 
   scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
-
+  
   accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
@@ -244,6 +247,10 @@ class Group < ActiveRecord::Base
 
   def title_with_leftover_amount
     "Create event from #{name} leftover ($#{leftover_money})"
+  end
+  
+  def pending_comments_count
+    message_comments.unapproved.count + news_link_comments.unapproved.count + answer_comments.unapproved.count
   end
 
   protected 

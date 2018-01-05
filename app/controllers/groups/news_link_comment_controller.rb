@@ -40,7 +40,8 @@ class Groups::NewsLinkCommentController < ApplicationController
     params
         .require(:news_link_comment)
         .permit(
-            :content
+            :content,
+            :approved
         )
   end
 end
