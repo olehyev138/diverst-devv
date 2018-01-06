@@ -65,17 +65,17 @@ RSpec.describe Initiatives::ExpensesController, type: :controller do
         end
     end
 
-    
+
     describe 'POST#create' do
         login_user_from_let
 
-        context 'with valid attributes' do 
-            it 'creates the initiative_expense object' do 
+        context 'with valid attributes' do
+            it 'creates the initiative_expense object' do
                 expect{post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: {amount: 10, description: "description"}}
                 .to change(InitiativeExpense, :count).by(1)
             end
 
-            it 'flashes a notice message' do 
+            it 'flashes a notice message' do
                 post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: {amount: 10, description: "description"}
                 expect(flash[:notice]).to eq "Your expense was created"
             end
@@ -91,24 +91,24 @@ RSpec.describe Initiatives::ExpensesController, type: :controller do
             end
         end
 
-        context 'with invalid attributes' do 
-            it 'does not create initiative_expense object' do 
+        context 'with invalid attributes' do
+            it 'does not create initiative_expense object' do
                 expect{post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: {amount: nil, description: "description"}}
                 .to change(InitiativeExpense, :count).by(0)
             end
 
-            it 'flashes an alert message' do 
+            it 'flashes an alert message' do
                 post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: {amount: nil, description: "description"}
                 expect(flash[:alert]).to eq 'Your expense was not created. Please fix the errors'
             end
 
-            it 'renders new template' do 
+            it 'renders new template' do
                 post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: {amount: nil, description: "description"}
                 expect(response).to render_template :new
             end
         end
     end
-    
+
     describe 'GET#time_series' do
         context 'with user logged in' do
             login_user_from_let
@@ -136,7 +136,7 @@ RSpec.describe Initiatives::ExpensesController, type: :controller do
             end
         end
     end
-    
+
 
     describe 'GET#edit' do
         context 'with user logged in' do
