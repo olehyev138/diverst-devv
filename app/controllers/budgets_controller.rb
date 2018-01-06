@@ -7,6 +7,7 @@ class BudgetsController < ApplicationController
 
   def index
     authorize @group, :budgets?
+    @budgets = @group.budgets.order("id DESC")
   end
 
   def show
@@ -78,14 +79,12 @@ class BudgetsController < ApplicationController
     end
   end
 
-
   def carry_over_annual_budget
     authorize @group.enterprise, :update?
     
     leftover = @group.leftover_money + @group.annual_budget
     
     if @group.update({:annual_budget => leftover, :leftover_money => 0})
-      Logger.new("#{Rails.root}/log/my.log").info(@group.annual_budget)
       @group.budgets.update_all(:is_approved => false)
       track_activity(@group, :annual_budget_update)
       flash[:notice] = "Your budget was updated"
@@ -95,7 +94,6 @@ class BudgetsController < ApplicationController
       redirect_to :back
     end
   end
-
 
   def update_annual_budget
     authorize @group.enterprise, :update?

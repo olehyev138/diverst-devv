@@ -33,5 +33,10 @@ RSpec.describe Initiatives::FieldsController, type: :controller do
             before { get :time_series, group_id: group.id, initiative_id: initiative.id, id: field.id, format: :json }
             it_behaves_like "redirect user to users/sign_in path"
         end
+        
+        it "gets the time_series via csv" do
+            get :time_series, group_id: group.id, initiative_id: initiative.id, id: field.id, format: :csv
+            expect(response).to be_success
+        end
     end
 end

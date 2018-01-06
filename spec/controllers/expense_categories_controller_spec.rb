@@ -25,7 +25,6 @@ RSpec.describe ExpenseCategoriesController, type: :controller do
 
         context "without logged in user" do
             before { get :index }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
