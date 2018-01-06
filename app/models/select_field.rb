@@ -19,7 +19,7 @@ class SelectField < Field
     users.each do |user|
       if user.info[self] && user.info[self][0]
         nb_users_answered += 1
-        nb_users_chose += 1 if user.info[self][0] == value
+        nb_users_chose += 1 if user.info[self][0] === value
       end
     end
 
@@ -58,10 +58,10 @@ class SelectField < Field
     # Total score
     (size_score + contrast_score).to_f / 2
   end
-
+  
   def validates_rule_for_user?(rule:, user:)
     return false if user.info[rule.field].nil?
-
+    
     field_value = user.info[rule.field][0]
 
     case rule.operator
@@ -71,4 +71,5 @@ class SelectField < Field
       !rule.values_array.include?(field_value)
     end
   end
+  
 end

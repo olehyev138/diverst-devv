@@ -1,10 +1,9 @@
 class SendAppleNotificationJob < ActiveJob::Base
   queue_as :default
 
-  APN = Houston::Client.development
-
   def perform(device_token, message, data)
-    APN.certificate = ENV['APN_CERT']
+    apn = Houston::Client.development
+    apn.certificate = ENV['APN_CERT']
 
     # Create a notification that alerts a message to the user, plays a sound, and sets the badge on the app
     notification = Houston::Notification.new(device: device_token)
@@ -16,6 +15,6 @@ class SendAppleNotificationJob < ActiveJob::Base
     notification.custom_data = data
 
     # And... sent! That's all it takes.
-    APN.push(notification)
+    apn.push(notification)
   end
 end
