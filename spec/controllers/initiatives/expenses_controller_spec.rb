@@ -122,6 +122,11 @@ RSpec.describe Initiatives::ExpensesController, type: :controller do
                 get :time_series, group_id: group.id, initiative_id: initiative.id, format: :csv
                 expect(response.content_type).to eq 'text/csv'
             end
+
+            it "returns csv filename as 'expenses.csv'" do 
+                get :time_series, group_id: group.id, initiative_id: initiative.id, format: :csv
+                expect(response.headers["Content-Disposition"]).to include "filename=\"expenses.csv\""
+            end
         end
 
         context 'with user not logged in' do
