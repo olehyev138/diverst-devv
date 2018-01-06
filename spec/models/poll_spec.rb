@@ -176,4 +176,36 @@ RSpec.describe Poll, type: :model do
             end
         end
     end
+    
+    describe "#graphs_population" do
+        it "returns the graphs_population" do
+            enterprise = create(:enterprise)
+            user = create(:user)
+            poll = create(:poll, :enterprise => enterprise, :owner => user)
+            select_field = SelectField.new(:type => "SelectField", :title => "What is 1 + 1?", :options_text => "1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n7", :container => poll)
+            select_field.save!
+            create(:poll_response, :poll => poll, :user => user, :data => "{\"#{select_field.id}\":[\"4\"]}")
+            
+            users = poll.graphs_population
+            expect(users.count).to eq(1)
+        end
+    end
+    
+    describe "#responses_csv" do
+        it "returns the responses_csv" do
+            enterprise = create(:enterprise)
+            user_1 = create(:user)
+            user_2 = create(:user)
+            poll = create(:poll, :enterprise => enterprise, :owner => user_1)
+
+            select_field = poll.fields.new(:type => "SelectField", :title => "What is 1 + 1?", :options_text => "1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n7")
+            select_field.save!
+            
+            create(:poll_response, :poll => poll, :user => user_1, :data => "{\"#{select_field.id}\":[\"4\"]}")
+            create(:poll_response, :poll => poll, :user => user_2, :data => "{\"#{select_field.id}\":[\"4\"]}")
+            user_2.destroy
+            
+            expect(poll.responses_csv).to eq("user_id,user_email,user_name,What is 1 + 1?\n#{user_1.id},#{user_1.email},#{user_1.name},4\n\"\",\"\",Deleted User,4\n")
+        end
+    end
 end

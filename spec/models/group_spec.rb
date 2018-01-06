@@ -355,4 +355,79 @@ RSpec.describe Group, :type => :model do
             expect(yammer).to have_received(:subscribe_to_group)
         end
     end
+    
+    describe '#valid_yammer_group_link?' do
+        it "has a valid link" do
+            group = build(:group, :yammer_group_link => "https://www.yammer.com/test.com/#/threads/inGroup?type=in_group&feedId=1234567")
+            expect(group.valid_yammer_group_link?).to be(true)
+        end
+        
+        it "does not have a valid link" do
+            group = build(:group, :yammer_group_link => "https://www.yammer.com/test.com/#/threads/inGroup?type")
+            expect(group.valid_yammer_group_link?).to be(false)
+            expect(group.errors.full_messages.length).to eq(1)
+            expect(group.errors.full_messages.first).to eq("Yammer group link this is not a yammer group link")
+        end
+    end
+    
+    describe "#company_video_url" do
+        it "saves the url" do
+            group = create(:group, :company_video_url => "https://www.youtube.com/watch?v=Y2VF8tmLFHw")
+            expect(group.company_video_url).to_not be(nil)
+        end
+    end
+    
+    describe "#create_yammer_group" do
+        it "creates the group in yammer and syncs the members" do
+            yammer = double("YammerClient")
+            allow(YammerClient).to receive(:new).and_return(yammer)
+            allow(yammer).to receive(:create_group).and_return({"id" => 1})
+            allow(SyncYammerGroupJob).to receive(:perform_later)
+            
+            enterprise = create(:enterprise, :yammer_token => "token")
+            group = create(:group, :enterprise => enterprise, :yammer_create_group => true, :yammer_group_created => false)
+            
+            expect(yammer).to have_received(:create_group)
+            expect(group.yammer_group_created).to be(true)
+            expect(group.yammer_id).to eq(1)
+            expect(SyncYammerGroupJob).to have_received(:perform_later)
+        end
+    end
+    
+    describe "#send_invitation_emails" do
+        it "calls GroupMailer" do
+            allow(GroupMailer).to receive(:delay).and_return(GroupMailer)
+            allow(GroupMailer).to receive(:invitation)
+            
+            group = create(:group)
+            segment = create(:segment)
+            create(:invitation_segments_group, :group => group, :invitation_segment => segment)
+            
+            # make sure group has invitation_segments
+            group.reload
+            expect(group.invitation_segments.count).to eq(1)
+            
+            # change the value
+            group.send_invitations = true
+            group.save!
+            
+            expect(GroupMailer).to have_received(:invitation)
+            expect(group.send_invitations).to be(false)
+            expect(group.invitation_segments.count).to eq(0)
+        end
+    end
+    
+    describe "#update_all_elasticsearch_members" do
+        it "updates the users in elasticsearch" do
+            group = create(:group)
+            user = create(:user)
+            create(:user_group, :group => group, :user => user)
+            allow(group).to receive(:update_elasticsearch_member).and_call_original
+            
+            group.name = "testing elasticsearch"
+            group.save!
+            
+            expect(group).to have_received(:update_elasticsearch_member)
+        end
+    end
 end
