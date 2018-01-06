@@ -26,14 +26,14 @@ class User::UserAnswersController < ApplicationController
     def create
         @answer = @question.answers.new(answer_params)
         @answer.author = current_user
-        
+
         if @answer.save
             user_rewarder("campaign_answer").add_points(@answer)
             flash_reward "Your answer was created. Now you have #{current_user.credits} points"
         else
             flash[:alert] = "Your answer was not created. Please fix the errors"
         end
-        
+
         redirect_to [:user, @campaign, @question]
     end
 

@@ -2,9 +2,15 @@ require 'rails_helper'
 
 RSpec.describe GenericGraphsController, type: :controller do
     let(:enterprise) { create(:enterprise, cdo_name: "test") }
-    let(:user) { create(:user, enterprise: enterprise) }
-    let(:field) { create(:field, type: "NumericField", container_id: enterprise.id, container_type: "Enterprise", elasticsearch_only: false) }
-
+    let(:user) { create(:user, enterprise: enterprise, active: true) }
+    let!(:field) { create(:field, type: "NumericField", container_id: enterprise.id, container_type: "Enterprise", elasticsearch_only: false) }
+    let!(:group) {create(:group, :enterprise => enterprise, :parent_id => nil)}
+    let!(:child) {create(:group, :enterprise => enterprise, :parent_id => group.id)}
+    let!(:user_group) {create(:user_group, :accepted_member => true, :user => user, :group => group )}
+    let!(:segment_1) {create(:segment, :enterprise => enterprise)}
+    let!(:segment_2) {create(:segment, :enterprise => enterprise)}
+    let!(:segmentation) {create(:segmentation, :parent => segment_1, :child => segment_2)}
+    
     describe "GET#group_population" do
         describe "with logged in user" do
             login_user_from_let
@@ -69,8 +75,8 @@ RSpec.describe GenericGraphsController, type: :controller do
                     expect(data["type"]).to eq("bar")
                     expect(data["highcharts"]["series"][0]["name"]).to eq("Number of users")
                     expect(data["highcharts"]["series"][0]["colorByPoint"]).to eq(true)
-                    expect(data["highcharts"]["series"][0]["data"].length).to eq(0)
-                    expect(data["highcharts"]["drilldowns"].length).to eq(0)
+                    expect(data["highcharts"]["series"][0]["data"].length).to eq(1)
+                    expect(data["highcharts"]["drilldowns"].length).to eq(1)
                     expect(data["highcharts"]["xAxisTitle"]).to eq("Segment")
                     expect(data["hasAggregation"]).to eq(false)
                 end
@@ -85,10 +91,6 @@ RSpec.describe GenericGraphsController, type: :controller do
 
                 it "returns success" do
                     expect(response).to be_success
-                end
-
-                it "returns correct data" do
-                    expect(response.body).to eq("Number of users by Badge\n")
                 end
             end
         end

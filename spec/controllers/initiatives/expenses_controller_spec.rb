@@ -65,14 +65,78 @@ RSpec.describe Initiatives::ExpensesController, type: :controller do
         end
     end
 
+    
+    describe 'POST#create' do
+        login_user_from_let
 
-    describe 'GET#show', :skip => "Missing template" do
-        it "show an expense" do
-            get :show, group_id: group.id, initiative_id: initiative.id, id: initiative_expense.id
-            expect(response).to be_success
+        context 'with valid attributes' do 
+            it 'creates the initiative_expense object' do 
+                expect{post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: {amount: 10, description: "description"}}
+                .to change(InitiativeExpense, :count).by(1)
+            end
+
+            it 'flashes a notice message' do 
+                post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: {amount: 10, description: "description"}
+                expect(flash[:notice]).to eq "Your expense was created"
+            end
+
+            it "redirects to action index" do
+                post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: {amount: 10, description: "description"}
+                expect(response).to redirect_to action: :index
+            end
+
+            it "redirects to new" do
+                post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: {amount: nil, description: nil}
+                expect(response).to render_template :new
+            end
+        end
+
+        context 'with invalid attributes' do 
+            it 'does not create initiative_expense object' do 
+                expect{post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: {amount: nil, description: "description"}}
+                .to change(InitiativeExpense, :count).by(0)
+            end
+
+            it 'flashes an alert message' do 
+                post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: {amount: nil, description: "description"}
+                expect(flash[:alert]).to eq 'Your expense was not created. Please fix the errors'
+            end
+
+            it 'renders new template' do 
+                post :create, group_id: group.id, initiative_id: initiative.id, initiative_expense: {amount: nil, description: "description"}
+                expect(response).to render_template :new
+            end
         end
     end
+    
+    describe 'GET#time_series' do
+        context 'with user logged in' do
+            login_user_from_let
 
+            it "gets the time_series in json format" do
+                get :time_series, group_id: group.id, initiative_id: initiative.id, format: :json
+                expect(response.content_type).to eq 'application/json'
+            end
+
+            it "gets the time_series in csv format" do
+                get :time_series, group_id: group.id, initiative_id: initiative.id, format: :csv
+                expect(response.content_type).to eq 'text/csv'
+            end
+        end
+
+        context 'with user not logged in' do
+            context 'gets the time_series in json format' do
+                before { get :time_series, group_id: group.id, initiative_id: initiative.id, format: :json }
+                it_behaves_like "redirect user to users/sign_in path"
+            end
+
+            context 'the time_series in csv format' do
+                before { get :time_series, group_id: group.id, initiative_id: initiative.id, format: :csv }
+                it_behaves_like "redirect user to users/sign_in path"
+            end
+        end
+    end
+    
 
     describe 'GET#edit' do
         context 'with user logged in' do

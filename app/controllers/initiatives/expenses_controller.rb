@@ -21,7 +21,6 @@ class Initiatives::ExpensesController < ApplicationController
     authorize InitiativeExpense
     @expense = @initiative.expenses.new(expense_params)
     @expense.owner = current_user
-
     if @expense.save
       flash[:notice] = "Your expense was created"
       redirect_to action: :index

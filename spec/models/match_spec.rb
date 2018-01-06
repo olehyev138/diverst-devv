@@ -33,6 +33,27 @@ RSpec.describe Match, type: :model do
       
       expect(match.user1_status).to eq(0)
     end
+    
+    it "sets the status for user2 to 0" do
+      user1 = create(:user)
+      user2 = create(:user)
+      topic = create(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
+      
+      match = create(:match, :user1 => user1, :user2 => user2, :topic => topic)
+      match.set_status(user: user2, status: "accepted")
+      
+      expect(match.user2_status).to eq(0)
+    end
+    
+    it "fails" do
+      user1 = create(:user)
+      user2 = create(:user)
+      user3 = create(:user)
+      topic = create(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
+      
+      match = create(:match, :user1 => user1, :user2 => user2, :topic => topic)
+      expect{match.set_status(user: user3, status: "accepted")}.to raise_error Exception
+    end
   end
   
   describe "set_rating" do
@@ -201,6 +222,113 @@ RSpec.describe Match, type: :model do
   describe "expiration_time" do
     it "returns hash" do
       expect(Match.expiration_time).to eq(2.weeks)
+    end
+  end
+  
+  describe "soon_expired" do
+    it "returns 1 item" do
+      user_1 = create(:user)
+      user_2 = create(:user)
+      create(:match, :archived => false, :both_accepted_at => 10.days.ago, :user1 => user_1, :user2 => user_2, :user1_status => 1, :user2_status => 1)
+
+      expect(Match.soon_expired.count).to eq(1)
+    end
+  end
+  
+  describe "expired" do
+    it "returns 1 item" do
+      user_1 = create(:user)
+      user_2 = create(:user)
+      create(:match, :archived => false, :both_accepted_at => 15.days.ago, :user1 => user_1, :user2 => user_2, :user1_status => 1, :user2_status => 1)
+
+      expect(Match.expired.count).to eq(1)
+    end
+  end
+  
+  describe "both_accepted_notification" do
+    it "sends notification to users" do
+      allow_any_instance_of(User).to receive(:notify)
+      
+      user_1 = create(:user)
+      user_2 = create(:user)
+      match = create(:match, :archived => false, :both_accepted_at => 15.days.ago, :user1 => user_1, :user2 => user_2, :user1_status => 1, :user2_status => 1)
+      match.both_accepted_notification
+      
+      expect(user_2).to have_received(:notify).with("You have been matched with #{match.other(user_2).first_name}. Start a conversation now!", type: 'new_match', id: match.id)
+    end
+  end
+  
+  describe "expires_soon_notification" do
+    it "sends notification to users" do
+      allow_any_instance_of(User).to receive(:notify)
+      
+      user_1 = create(:user)
+      user_2 = create(:user)
+      match = create(:match, :archived => false, :both_accepted_at => 15.days.ago, :user1 => user_1, :user2 => user_2, :user1_status => 1, :user2_status => 1)
+      match.expires_soon_notification
+      
+      expect(user_2).to have_received(:notify).with("Your conversation with #{match.other(user_2).first_name} will soon expire. Would you like to save him/her?", type: 'match_expires_soon', id: match.id)
+    end
+  end
+  
+  describe "left_notification" do
+    it "sends notification to users" do
+      allow_any_instance_of(User).to receive(:notify)
+      
+      user_1 = create(:user)
+      user_2 = create(:user)
+      match = create(:match, :archived => false, :both_accepted_at => 15.days.ago, :user1 => user_1, :user2 => user_2, :user1_status => 1, :user2_status => 1)
+      match.left_notification
+      
+      expect(user_2).to have_received(:notify).with("Bummer! #{match.other(user_2).first_name} has left the conversation. Meet new people in you organisation here!", type: 'match_left', id: match.id)
+    end
+  end
+  
+  describe "conversation_state?" do
+    it "returns true" do
+      user_1 = create(:user)
+      user_2 = create(:user)
+      match = create(:match, :archived => false, :both_accepted_at => 15.days.ago, :user1 => user_1, :user2 => user_2, :user1_status => 1, :user2_status => 1)
+      
+      expect(match.conversation_state?).to be(true)
+    end
+  end
+  
+  describe "expires_soon_for?" do
+    it "returns false" do
+      user_1 = create(:user)
+      user_2 = create(:user)
+      match = create(:match, :archived => false, :both_accepted_at => 15.days.ago, :user1 => user_1, :user2 => user_2, :user1_status => 1, :user2_status => 1)
+      
+      expect(match.expires_soon_for?(user: user_1)).to be(false)
+    end
+    
+    it "returns true" do
+      user_1 = create(:user)
+      user_2 = create(:user)
+      match = create(:match, :archived => false, :both_accepted_at => 10.days.ago, :user1 => user_1, :user2 => user_2, :user1_status => 1, :user2_status => 1)
+      
+      expect(match.expires_soon_for?(user: user_1)).to be(true)
+    end
+  end
+  
+  describe "expiration_date" do
+    it "returns date" do
+      user_1 = create(:user)
+      user_2 = create(:user)
+      match = create(:match, :archived => false, :both_accepted_at => 15.days.ago, :user1 => user_1, :user2 => user_2, :user1_status => 1, :user2_status => 1)
+
+      expect(match.expiration_date).to eq(match.both_accepted_at + Match.expiration_time)
+    end
+  end
+  
+  describe "saved?" do
+    it "returns true" do
+      user_1 = create(:user)
+      user_2 = create(:user)
+      match = create(:match, :user1 => user_1, :user2 => user_2, :user1_status => 3, :user2_status => 3)
+      
+      expect(match.saved?).to be(true)
     end
   end
 end
