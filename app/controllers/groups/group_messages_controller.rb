@@ -44,6 +44,7 @@ class Groups::GroupMessagesController < ApplicationController
         if @message.update(message_params)
             redirect_to group_posts_path(@group)
         else
+            flash[:alert] = "Your message was not updated. Please fix the errors"
             render :edit
         end
     end

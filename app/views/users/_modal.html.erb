@@ -1,0 +1,22 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title text-center"><%= @user.first_name %> <%= @user.last_name %></h4>
+</div>
+<div class="modal-body">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <h3 class="text-left">Biography</h3>
+      </div>
+    </div>
+    <div class="row" style="margin-top:15px;">
+      <div class="col-xs-12">
+        <% if @user.biography.length > 0 %>
+        <p><%= @user.biography %></p>
+        <% else %>
+          <p>No biography information for <%= @user.first_name %> <%= @user.last_name %></p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

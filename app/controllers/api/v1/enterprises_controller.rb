@@ -23,7 +23,7 @@ class Api::V1::EnterprisesController < Api::V1::ApiController
         # get the enterprise
         enterprise = Enterprise.find(params[:id])
         # authorize
-        raise StandardError.new "Unauthorized" if self.current_user.enterprise.id != enterprise.id
+        raise BadRequestException.new "Unauthorized" if self.current_user.enterprise.id != enterprise.id
         # return the enterprise
         return enterprise
     end
