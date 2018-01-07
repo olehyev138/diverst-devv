@@ -246,41 +246,55 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
 
 
     describe 'POST#add_members' do
-        login_user_from_let
+        context 'when user is logged in' do 
+            login_user_from_let
 
-        let(:user_group2) {create(:user_group, group_id: group.id, user_id: add.id)}
+            let(:user_group2) {create(:user_group, group_id: group.id, user_id: add.id)}
 
-        before :each do
-            user_group.save
-            user_group2.save
-            post :add_members, group_id: group.id, group: {member_ids: [add.id]}
+            before do
+                user_group.save
+                user_group2.save
+                post :add_members, group_id: group.id, group: {member_ids: [add.id]}
+            end
+
+            it "redirects" do
+                expect(response).to redirect_to action: 'index'
+            end
+
+            it "creates the users" do
+                group.reload
+                expect(group.members.count).to eq(2)
+            end
         end
 
-        it "redirects" do
-            expect(response).to redirect_to action: 'index'
-        end
-
-        it "creates the users" do
-            group.reload
-            expect(group.members.count).to eq(2)
+        context 'when user is not logged in' do 
+            before { post :add_members, group_id: group.id, user_id: add.id }
+            it_behaves_like 'redirect user to users/sign_in path'
         end
     end
 
     describe 'DELETE#remove_member' do
-        login_user_from_let
+        context 'when user is logged in' do 
+            login_user_from_let
 
-        before :each do
-            user_group.save
-            delete :remove_member, group_id: group.id, id: user.id
+            before do
+                user_group.save
+                delete :remove_member, group_id: group.id, id: user.id
+            end
+
+            it "redirects" do
+                expect(response).to redirect_to action: 'index'
+            end
+
+            it "removes the user" do
+                group.reload
+                expect(group.members.count).to eq(0)
+            end
         end
 
-        it "redirects" do
-            expect(response).to redirect_to action: 'index'
-        end
-
-        it "removes the user" do
-            group.reload
-            expect(group.members.count).to eq(0)
+        context 'when user is not logged in' do 
+            before { delete :remove_member, group_id: group.id, id: user.id }
+            it_behaves_like 'redirect user to users/sign_in path'
         end
     end
 end
