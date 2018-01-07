@@ -59,16 +59,16 @@ RSpec.describe Groups::FoldersController, type: :controller do
                 let(:other_user) { create(:user) }
                 let(:other_group) { create(:group, enterprise: other_user.enterprise) }
 
-                before do 
+                before do
                     sign_in(other_user)
                     get :index, group_id: other_group.id
                 end
 
-                it 'returns empty folder' do 
+                it 'returns empty folder' do
                     expect(assigns[:folders]).to eq []
                 end
 
-                it 'render index template' do 
+                it 'render index template' do
                     expect(response).to render_template :index
                 end
             end
@@ -90,7 +90,7 @@ RSpec.describe Groups::FoldersController, type: :controller do
                 expect(assigns[:folder]).to be_valid
             end
 
-            it 'set container as valid group object' do 
+            it 'set container as valid group object' do
                 expect(assigns[:container]).to eq group
                 expect(assigns[:container]).to be_valid
             end
@@ -145,7 +145,7 @@ RSpec.describe Groups::FoldersController, type: :controller do
                 expect(response).to render_template :edit
             end
 
-            it 'returns a valid folder object' do 
+            it 'returns a valid folder object' do
                 expect(assigns[:folder]).to be_valid
             end
         end
@@ -249,7 +249,7 @@ RSpec.describe Groups::FoldersController, type: :controller do
             end
         end
 
-        context 'when user is not logged in' do 
+        context 'when user is not logged in' do
             before {delete :destroy, :id => folder.id, group_id: group.id}
             it_behaves_like "redirect user to users/sign_in path"
         end
