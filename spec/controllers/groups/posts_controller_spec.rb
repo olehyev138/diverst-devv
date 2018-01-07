@@ -71,14 +71,14 @@ RSpec.describe Groups::PostsController, type: :controller do
                     expect(assigns[:count]).to eq 0
                 end
 
-                it 'returns posts as an empty array' do 
-                    get :index, group_id: other_group.id 
+                it 'returns posts as an empty array' do
+                    get :index, group_id: other_group.id
                     expect(assigns[:posts]).to eq []
                 end
             end
         end
 
-        describe "without a logged in user" do 
+        describe "without a logged in user" do
             before { get :index, group_id: group.id }
             it_behaves_like "redirect user to users/sign_in path"
         end
@@ -92,22 +92,22 @@ RSpec.describe Groups::PostsController, type: :controller do
             let!(:news_link4) { create(:news_link, :group => group) }
             let!(:unapproved_news_feed_link) { create(:news_feed_link, link: news_link4, news_feed: news_feed, approved: true, created_at: Time.now - 4.hours) }
 
-            before do 
+            before do
                 unapproved_news_feed_link.update(approved: false)
                 group.news_feed_links << unapproved_news_feed_link
-                get :pending, group_id: group.id 
+                get :pending, group_id: group.id
             end
 
             it 'render template' do
                 expect(response).to render_template :pending
             end
 
-            it 'return unapproved posts' do 
+            it 'return unapproved posts' do
                 expect(assigns[:posts]).to eq [unapproved_news_feed_link]
             end
         end
 
-        context 'when user is not logged in' do 
+        context 'when user is not logged in' do
             before { get :pending, group_id: group.id }
             it_behaves_like "redirect user to users/sign_in path"
         end
@@ -115,7 +115,7 @@ RSpec.describe Groups::PostsController, type: :controller do
 
     describe 'PATCH #approve' do
 
-        context 'when user is logged in' do 
+        context 'when user is logged in' do
             login_user_from_let
 
             before do
@@ -132,7 +132,7 @@ RSpec.describe Groups::PostsController, type: :controller do
           end
         end
 
-        context 'when user is not logged in' do 
+        context 'when user is not logged in' do
             before { patch :approve, group_id: group.id, link_id: news_link1.news_feed_link.id}
             it_behaves_like "redirect user to users/sign_in path"
         end
