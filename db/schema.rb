@@ -11,12 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(version: 20171226132610) do
 
-=======
 ActiveRecord::Schema.define(version: 20171228133035) do
->>>>>>> 411b321c582a822580a4415c648ab6f93eb2bbd9
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
     t.string   "trackable_type", limit: 191
