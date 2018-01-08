@@ -76,10 +76,16 @@ RSpec.describe SegmentsController, type: :controller do
         end
 
         it "return members if group is absent" do
-            allow_any_instance_of(Group).to receive(:present?).and_return(nil)
             segment.members << user
             get :show, :id => segment.id
-            expect(segment.members.count).to eq 1
+            expect(assigns[:members].count).to eq(1)
+        end
+        
+        it "return members if group is present" do
+            segment.members << user
+            group = create(:group, :enterprise => enterprise)
+            get :show, :id => segment.id, :group_id => group.id
+            expect(assigns[:members].count).to eq(0)
         end
     end
 
@@ -144,6 +150,12 @@ RSpec.describe SegmentsController, type: :controller do
     describe "GET#export_csv" do
         it "returns success" do
             get :export_csv, :id => segment.id, format: :csv
+            expect(response.content_type).to eq "text/csv"
+        end
+        
+        it "returns success with group_id in params" do
+            group = create(:group, :enterprise => enterprise)
+            get :export_csv, :id => segment.id, format: :csv, :group_id => group.id
             expect(response.content_type).to eq "text/csv"
         end
     end

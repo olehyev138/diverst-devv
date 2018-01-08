@@ -17,9 +17,9 @@ class SelectField < Field
     nb_users_answered = 0
 
     users.each do |user|
-      if user.info[self] && user.info[self]
+      if user.info[self] && user.info[self][0]
         nb_users_answered += 1
-        nb_users_chose += 1 if user.info[self] === value
+        nb_users_chose += 1 if user.info[self][0] === value
       end
     end
 
@@ -33,8 +33,8 @@ class SelectField < Field
     # Returns nil if we don't have all the user info necessary to get a score
     return nil unless e1.info[self] && e2.info[self]
 
-    e1_value = e1.info[self]
-    e2_value = e2.info[self]
+    e1_value = e1.info[self][0]
+    e2_value = e2.info[self][0]
 
     e1_popularity = popularity_for_value(e1_value, users)
     e2_popularity = popularity_for_value(e2_value, users)
@@ -61,7 +61,7 @@ class SelectField < Field
   
   def validates_rule_for_user?(rule:, user:)
     return false if user.info[rule.field].nil?
-
+    
     field_value = user.info[rule.field][0]
 
     case rule.operator
