@@ -4,7 +4,6 @@ RSpec.describe Groups::QuestionsController, type: :controller do
     let(:user) { create :user }
     let(:group){ create(:group, enterprise: user.enterprise) }
 
-
     describe 'GET#index' do
         let!(:user_groups_with_answered_survey) { create_list(:user_group, 3, user: user, group: group, data: Faker::Lorem.sentence) }
         let!(:user_group_without_answered_survey) { create_list(:user_group, 2, user: user, group: group) }
@@ -31,7 +30,6 @@ RSpec.describe Groups::QuestionsController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'GET#survey' do
         describe 'user with logged in' do
@@ -65,7 +63,6 @@ RSpec.describe Groups::QuestionsController, type: :controller do
         end
     end
 
-
     describe 'POST#submit_survey' do
         describe 'user logged in' do
             login_user_from_let
@@ -89,7 +86,6 @@ RSpec.describe Groups::QuestionsController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'GET#export_csv' do
         describe 'user logged in' do 

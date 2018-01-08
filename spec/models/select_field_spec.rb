@@ -155,7 +155,7 @@ RSpec.describe SelectField, type: :model do
       enterprise = create(:enterprise)
       select_field = SelectField.new(:type => "SelectField", :title => "Gender", :options_text => "Male\nFemale", :container => enterprise)
       select_field.save!
-      user = create(:user, :data => "{\"#{select_field.id}\":\"Female\"}")
+      user = create(:user, :data => "{\"#{select_field.id}\":[\"Female\"]}")
       popularity = select_field.popularity_for_value("Female", [user])
       expect(popularity).to eq(1)
     end
@@ -164,8 +164,8 @@ RSpec.describe SelectField, type: :model do
       enterprise = create(:enterprise)
       select_field = SelectField.new(:type => "SelectField", :title => "Gender", :options_text => "Male\nFemale", :container => enterprise)
       select_field.save!
-      user_1 = create(:user, :data => "{\"#{select_field.id}\":\"Female\"}")
-      user_2 = create(:user, :data => "{\"#{select_field.id}\":\"Male\"}")
+      user_1 = create(:user, :data => "{\"#{select_field.id}\":[\"Female\"]}")
+      user_2 = create(:user, :data => "{\"#{select_field.id}\":[\"Male\"]}")
       popularity = select_field.popularity_for_value("Female", [user_1, user_2])
       expect(popularity).to eq(0.5)
     end
@@ -176,9 +176,9 @@ RSpec.describe SelectField, type: :model do
       enterprise = create(:enterprise)
       select_field = SelectField.new(:type => "SelectField", :title => "Gender", :options_text => "Male\nFemale", :container => enterprise)
       select_field.save!
-      user_1 = create(:user, :data => "{\"#{select_field.id}\":\"Female\"}", :enterprise => enterprise)
-      user_2 = create(:user, :data => "{\"#{select_field.id}\":\"Male\"}", :enterprise => enterprise)
-      create_list(:user, 8, :data => "{\"#{select_field.id}\":\"Male\"}", :enterprise => enterprise)
+      user_1 = create(:user, :data => "{\"#{select_field.id}\":[\"Female\"]}", :enterprise => enterprise)
+      user_2 = create(:user, :data => "{\"#{select_field.id}\":[\"Male\"]}", :enterprise => enterprise)
+      create_list(:user, 8, :data => "{\"#{select_field.id}\":[\"Male\"]}", :enterprise => enterprise)
       match_score_between = select_field.match_score_between(user_1, user_2, [user_1, user_2])
       expect(match_score_between).to eq(0.5)
     end
