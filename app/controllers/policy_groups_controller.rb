@@ -1,6 +1,6 @@
 class PolicyGroupsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_policy_group, only: [:edit, :update, :destroy]
+  before_action :set_policy_group, only: [:edit, :update, :destroy, :add_users]
 
   layout 'global_settings'
 
@@ -32,6 +32,10 @@ class PolicyGroupsController < ApplicationController
 
   def update
     authorize PolicyGroup
+    
+    if params[:commit] === "Add User(s)"
+      add_users
+    end
 
     if @policy_group.update(policy_group_params)
       flash[:notice] = "Your policy group was updated"
@@ -46,6 +50,10 @@ class PolicyGroupsController < ApplicationController
     authorize PolicyGroup
     @policy_group.destroy
     redirect_to action: :index
+  end
+  
+  def add_users
+    @policy_group.user_ids = @policy_group.user_ids + params[:policy_group][:new_users]
   end
 
   protected

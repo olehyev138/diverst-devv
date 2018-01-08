@@ -97,6 +97,7 @@ class Groups::NewsLinksController < ApplicationController
                 :title,
                 :description,
                 :picture,
+                :photos_attributes => [:file, :_destroy, :id],
                 :segment_ids => []
             )
     end
