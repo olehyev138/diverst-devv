@@ -28,7 +28,7 @@ RSpec.describe Groups::EventsController, type: :controller do
             login_user_from_let
             before do
                 initiative
-                get :calendar_data, group_id: group.id, format: :json 
+                get :calendar_data, group_id: group.id, format: :json
             end
 
             it "returns json format" do
@@ -39,7 +39,7 @@ RSpec.describe Groups::EventsController, type: :controller do
                 expect(assigns[:events]).to eq [initiative]
             end
 
-            it 'render shared/calendar/events' do 
+            it 'render shared/calendar/events' do
                 expect(response).to render_template('shared/calendar/events')
             end
         end
@@ -61,11 +61,11 @@ RSpec.describe Groups::EventsController, type: :controller do
                 expect(response).to render_template("groups/events/calendar_view")
             end
 
-            it 'sets q_form_submit_path' do 
+            it 'sets q_form_submit_path' do
                 expect(assigns[:q_form_submit_path]).to eq calendar_view_group_events_path
             end
 
-            it 'returns segments belonging to user.enterprise' do 
+            it 'returns segments belonging to user.enterprise' do
                 expect(assigns[:segments]).to eq segments
             end
         end
@@ -87,7 +87,7 @@ RSpec.describe Groups::EventsController, type: :controller do
                 expect(response).to render_template :show
             end
 
-            it 'sets a valid event object' do 
+            it 'sets a valid event object' do
                 expect(assigns[:event]).to be_valid
             end
 
@@ -134,11 +134,11 @@ RSpec.describe Groups::EventsController, type: :controller do
             login_user_from_let
             before { get :export_ics, group_id: group.id, :id => initiative.id }
 
-            it 'returns calendar format' do 
+            it 'returns calendar format' do
                 expect(response.headers["Content-Type"]).to eq 'text/calendar'
             end
 
-            it 'return parameterized title for event' do 
+            it 'return parameterized title for event' do
                 expect(response.headers["Content-Disposition"]).to include initiative.title.parameterize + ".ics"
             end
         end
