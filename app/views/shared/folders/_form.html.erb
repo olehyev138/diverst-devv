@@ -17,18 +17,14 @@
               label: "Password",
               input_html: {value: f.object.password} %>
               </div>
-      </div>
-      
       <% if @folder.container_type === "Enterprise" %>
-          <%= f.label :groups do %>
-            <p>Share this folder with your <%= c_t(:erg).pluralize %></p>
-          <% end %>
-          <%= f.association :groups, collection: current_user.enterprise.groups, label: false, input_html: { class: "select2" } %>
+          <%= f.association :groups, collection: current_user.enterprise.groups, label: "Share this folder with your #{c_t(:erg).pluralize}", input_html: { class: "select2" } %>
       <% end %>
-    </div>
-    
     <%= f.button :submit %>
+    </div>
+  </div>
   <% end %>
+  
 </div>
 
 <script>
