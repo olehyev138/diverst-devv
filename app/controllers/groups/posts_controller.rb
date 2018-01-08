@@ -3,7 +3,7 @@ class Groups::PostsController < ApplicationController
     before_action :set_group
     before_action :set_page,    :only => [:index, :pending]
     before_action :set_link,    :only => [:approve]
-    
+
     layout 'erg'
 
     def index
@@ -12,7 +12,7 @@ class Groups::PostsController < ApplicationController
                                 .includes(:link)
                                 .order(created_at: :desc)
                                 .count
-                                
+
                 @posts = base_query
                                 .includes(:link)
                                 .order(created_at: :desc)
@@ -25,7 +25,7 @@ class Groups::PostsController < ApplicationController
                             .where(where, current_user.segments.pluck(:id))
                             .order(created_at: :desc)
                             .count
-                                
+
                 @posts = base_query
                             .includes(:link)
                             .joins(joins)
@@ -38,11 +38,11 @@ class Groups::PostsController < ApplicationController
             end
         end
     end
-    
+
     def pending
         @posts = @group.news_feed_links.includes(:link).not_approved.order(created_at: :desc)
     end
-    
+
     def approve
         @link.approved = true
         if not @link.save
@@ -52,11 +52,11 @@ class Groups::PostsController < ApplicationController
     end
 
     protected
-    
+
     def where
         "news_feed_link_segments.segment_id IS NULL OR news_feed_link_segments.segment_id IN (?)"
     end
-    
+
     def joins
         "LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id"
     end
@@ -64,17 +64,17 @@ class Groups::PostsController < ApplicationController
     def set_group
         @group = current_user.enterprise.groups.find(params[:group_id])
     end
-    
+
     def set_page
         @limit = 5
         @page = params[:page].present? ? params[:page].to_i : 1
         @limit *= @page
     end
-    
+
     def set_link
         @link = @group.news_feed_links.find(params[:link_id])
     end
-    
+
     def base_query
         @group.news_feed_links.approved
     end
