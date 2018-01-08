@@ -28,6 +28,64 @@ RSpec.describe Group, :type => :model do
         it { expect(group).to have_many(:shared_folders) }
 
         it { expect(group).to have_one(:news_feed)}
+
+        describe '#valid_yammer_group_link?' do
+          context 'with valid yammer group link' do
+            let(:link) { 'https://www.yammer.com/diverst.com/#/threads/inGroup?type=in_group&feedId=6830281' }
+
+            before { group.yammer_group_link = link }
+
+            it 'is returns true' do
+              expect(group).to be_valid
+            end
+          end
+
+          context 'with invalid yammer group link' do
+            let(:link) { 'https://google.com' }
+
+            before { group.yammer_group_link = link }
+
+            it 'returns false' do
+              expect(group).to_not be_valid
+            end
+          end
+        end
+    end
+
+    describe '#yammer_group_id' do
+      let(:group) { FactoryGirl.build_stubbed(:group) }
+
+      subject { group.yammer_group_id }
+
+      context 'with link' do
+        context 'with correct link' do
+          let(:link) { 'https://www.yammer.com/diverst.com/#/threads/inGroup?type=in_group&feedId=6830281' }
+
+          before { group.yammer_group_link = link }
+          it 'returns correct group id' do
+            expect(subject).to eq 6830281
+          end
+        end
+
+        context 'with incorrect link' do
+          let(:link) { 'https://google.com' }
+
+          before { group.yammer_group_link = link }
+
+          it 'returns nil' do
+            expect(subject).to be_nil
+          end
+        end
+      end
+
+      context 'without yammer link' do
+        let(:link) { nil }
+        before { group.yammer_group_link = link }
+
+        it 'returns nil' do
+          expect(subject).to be_nil
+        end
+      end
     end
 
     describe '#accept_user_to_group' do
