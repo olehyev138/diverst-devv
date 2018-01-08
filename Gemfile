@@ -105,6 +105,7 @@ group :test do
   gem 'test_after_commit', '~> 1.1'
   gem 'elasticsearch-extensions', '~> 0.0.26'
   gem 'clockwork-test', '~> 0.2.0'
+  gem 'webmock', '~> 3.1.1'
 end
 
 group :development do
