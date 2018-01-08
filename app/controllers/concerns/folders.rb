@@ -8,11 +8,24 @@ module Folders
 
         prepend_view_path 'app/views/shared/folders'
     end
+    
+    def authenticate
+        if @folder.valid_password?(params[:folder][:password])
+            redirect_to [@container, @folder, :resources]
+        else
+            flash[:alert] = "Invalid Password"
+            redirect_to :back
+        end
+    end
 
     def index
         @folders = @container.folders + @container.shared_folders
         @folders.sort_by!{ |f| f.name.downcase }
         render '/index'
+    end
+    
+    def show
+        render "/show"
     end
 
     def new
@@ -53,6 +66,8 @@ module Folders
             .require(:folder)
             .permit(
                 :name,
+                :password_protected,
+                :password,
                 :group_ids => []
             )
     end

@@ -6,6 +6,7 @@ default: &default
   collation: utf8mb4_bin
 
 
+
 development:
   <<: *default
   database: diverst_development

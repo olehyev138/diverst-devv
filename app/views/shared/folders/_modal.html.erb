@@ -1,0 +1,19 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title text-center"><%= @folder.name %></h4>
+</div>
+<div class="modal-body">
+  <div class="container-fluid">
+    <div class="row">
+      <%= simple_form_for @folder, :url => polymorphic_path([@container, @folder], :action => :authenticate), :method => :post do |f| %>
+      
+        <%= f.input :password,
+              type: "password",
+              label: "This folder is password protected. Please enter the password to access the resources.",
+              input_html: { autofocus: true, class: "form-control" } %>
+    
+        <%= f.button :submit, "Authenticate" %>
+      <% end %>
+    </div>
+  </div>
+</div>

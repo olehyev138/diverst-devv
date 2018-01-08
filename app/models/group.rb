@@ -91,7 +91,6 @@ class Group < ActiveRecord::Base
   before_create :build_default_news_feed
   before_save :send_invitation_emails, if: :send_invitations?
   before_save :create_yammer_group, if: :should_create_yammer_group?
-  before_destroy :handle_deletion
   after_commit :update_all_elasticsearch_members
   before_validation :smart_add_url_protocol
 
@@ -118,7 +117,7 @@ class Group < ActiveRecord::Base
   end
 
   def valid_yammer_group_link?
-    if yammer_group_link && !yammer_group_id
+    if yammer_group_link.present? && !yammer_group_id
       errors.add(:yammer_group_link, 'this is not a yammer group link')
       return false
     end
@@ -297,15 +296,6 @@ class Group < ActiveRecord::Base
   # Update members in elastic_search
   def update_all_elasticsearch_members
     members.includes(:poll_responses).each do |member|
-      update_elasticsearch_member(member)
-    end
-  end
-
-  def handle_deletion
-    old_members = members.ids
-
-    # Update members in elastic_search
-    User.where(id: old_members).find_each do |member|
       update_elasticsearch_member(member)
     end
   end
