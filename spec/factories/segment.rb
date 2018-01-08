@@ -2,6 +2,7 @@ FactoryGirl.define do
   factory :segment do
     name { Faker::Lorem.sentence(3) }
     enterprise
+    owner
 
     factory :segment_with_users do
       transient do
