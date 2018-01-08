@@ -91,8 +91,7 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
         end
 
         describe "with a user not logged in" do
-            before { post :create, group_id: group.id, initiative_id: initiative.id, id: resource.id,
-                                      resource: attributes_for(:resource) }
+            before { post :create, group_id: group.id, initiative_id: initiative.id, resource: attributes_for(:resource) }
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
