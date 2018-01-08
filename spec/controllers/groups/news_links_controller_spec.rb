@@ -122,14 +122,6 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
                 expect(flash[:alert]).to eq "Your news was not created. Please fix the errors"
             end
         end
-        
-        it "creates the news link" do
-            expect(NewsLink.count).to eq(1)
-        end
-        
-        it "creates the news link photo" do
-            expect(NewsLinkPhoto.count).to eq(1)
-        end
     end
 
     describe 'POST#create_comment' do
