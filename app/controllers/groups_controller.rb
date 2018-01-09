@@ -235,7 +235,7 @@ class GroupsController < ApplicationController
         @upcoming_events = @group.initiatives.upcoming.limit(3) + @group.participating_initiatives.upcoming.limit(3)
         @messages = @group.messages.includes(:owner).limit(3)
         @user_group = @group.user_groups.find_by(user: current_user)
-        @leaders = @group.group_leaders.visible
+        @leaders = @group.group_leaders.includes(:user).visible
 
         @members = @group.active_members.order(created_at: :desc).limit(8)
 

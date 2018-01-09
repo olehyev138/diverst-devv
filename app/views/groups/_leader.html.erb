@@ -6,11 +6,25 @@
     <%= link_to image_tag('linkedin.png'), leader.linkedin_profile_url, target: '_blank', class: 'inline-block fright' if leader.linkedin_profile_url %>
   </h4>
   <div style="overflow: auto; clear: both;">
-    <%= link_to image_tag(leader.avatar.expiring_url(3600), class: "avatar avatar--round", style: "float: left; margin-right: 1em;"), user_path(leader), remote: true %>
+    <%= image_tag(leader.avatar.expiring_url(3600), class: "avatar avatar--round info", id: leader.id, style: "float: left; margin-right: 1em;") %>
     <div style="float: left;">
       <strong><%= leader.name_with_status %></strong><br>
     </div>
+    <div class="biography_<%= leader.id %>" style="display:none;">
+      <div class="row">
+        <div class="col-xs-12">
+          <a href="" class="remove" id="<%= leader.id %>"><span class="glyphicon glyphicon-remove pull-right"></span></a>
+        </div>
+      </div>
+      <div class="row" style="margin-top:15px;">
+        <div class="col-xs-12">
+          <% if leader.biography and leader.biography.length > 0 %>
+          <p><%= leader.biography %></p>
+          <% else %>
+            <p>No biography information for <%= leader.first_name %> <%= leader.last_name %></p>
+          <% end %>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
-
-<%= render "shared/modal/form" %>

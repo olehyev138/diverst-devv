@@ -6,7 +6,8 @@ class NewsLink < ActiveRecord::Base
     
     has_many :news_link_segments, :dependent => :destroy
     has_many :segments, through: :news_link_segments, :before_remove => :remove_segment_association
-    
+    has_many :news_link_photos,  dependent: :destroy
+
     before_validation :smart_add_url_protocol
 
     validates :url, presence: true

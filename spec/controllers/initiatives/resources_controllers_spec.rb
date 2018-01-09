@@ -84,7 +84,8 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
                 it "renders edit template" do
                    invalid_attributes = attributes_for(:resource)
                    invalid_attributes[:title] = nil
-                   post :create, group_id: group.id, initiative_id: initiative.id, resource: invalid_attributes
+                   post :create, group_id: group.id, initiative_id: initiative.id, id: resource.id,
+                   resource: invalid_attributes
                    expect(response).to render_template :edit
                 end
             end
