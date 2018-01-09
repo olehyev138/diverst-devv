@@ -40,7 +40,7 @@ class GroupPolicy < ApplicationPolicy
             #Only active group members can see other members
             @record.active_members.exists? @user.id
         when 'managers_only'
-            #Only users with ability to manipulate members(admins) can see other memberxs
+            #Only users with ability to manipulate members(admins) can see other members
             return manage_members?
         end
     end
@@ -59,6 +59,42 @@ class GroupPolicy < ApplicationPolicy
             return manage_members?
         end
     end
+
+    def view_latest_news?
+        #Ablility to view latest news depends on settings level
+        case @record.latest_news_visibility
+        when 'public'
+            #Everyone can see latest news
+            return true 
+        when 'group'
+            #Only active group members can see other members
+            @record.active_members.exists? @user
+        when 'leaders_only'
+            #Only users with ability to manipulate members(admins) can see other memberxs
+            return manage_members?
+        else
+            return false 
+        end
+    end
+
+
+    def view_upcoming_events?
+        #Ablility to upcoming events depends on settings level
+        case @record.upcoming_events_visibility
+        when 'public'
+            #Everyone can upcoming events
+            return true 
+        when 'group'
+            #Only active group members can see other members
+            @record.active_members.exists? @user
+        when 'leaders_only'
+            #Only users with ability to manipulate members(admins) can see other memberxs
+            return manage_members?
+        else
+            return false 
+        end
+    end
+
 
     def manage_members?
         update?
