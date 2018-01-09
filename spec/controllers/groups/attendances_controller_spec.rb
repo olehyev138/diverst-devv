@@ -4,6 +4,7 @@ RSpec.describe Groups::AttendancesController, type: :controller do
     let(:user) { create :user }
     let(:group){ create(:group, enterprise: user.enterprise) }
     let(:initiative){ initiative_of_group(group) }
+    let!(:segment_1) {create(:segment, :enterprise => user.enterprise)}
     
     login_user_from_let
     
