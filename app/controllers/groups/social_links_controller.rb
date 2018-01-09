@@ -1,13 +1,13 @@
 class Groups::SocialLinksController < ApplicationController
     include Rewardable
-    
+
     before_action :authenticate_user!
 
     before_action :set_group
     before_action :set_social_link, only: [:destroy]
 
     layout 'erg'
-    
+
     def index
         @posts = @group.social_links
     end
@@ -17,7 +17,7 @@ class Groups::SocialLinksController < ApplicationController
     end
 
     def create
-        
+
         @social_link = @group.social_links.new(social_link_params)
         @social_link.author = current_user
 

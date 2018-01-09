@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(version: 20171230231341) do
     t.string   "trackable_type", limit: 191
     t.integer  "owner_id",       limit: 4
     t.string   "owner_type",     limit: 191
-    t.string   "key",            limit: 255
+    t.string   "key",            limit: 191
     t.text     "parameters",     limit: 65535
     t.integer  "recipient_id",   limit: 4
     t.string   "recipient_type", limit: 191

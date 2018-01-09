@@ -11,7 +11,7 @@
     </div>
     <div class="row" style="margin-top:15px;">
       <div class="col-xs-12">
-        <% if @user.biography.length > 0 %>
+        <% if @user.biography and @user.biography.length > 0 %>
         <p><%= @user.biography %></p>
         <% else %>
           <p>No biography information for <%= @user.first_name %> <%= @user.last_name %></p>
