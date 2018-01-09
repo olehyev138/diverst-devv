@@ -3,9 +3,9 @@ class Groups::ResourcesController < ApplicationController
 
   before_action :authenticate_user!
   before_filter :prepend_view_paths, :only => [:index]
-  
+
   layout 'erg'
-  
+
   def index
     if policy(@group).erg_leader_permissions? or @group.active_members.include? current_user
       @group_resources = @container.resources
@@ -21,13 +21,13 @@ class Groups::ResourcesController < ApplicationController
   protected
 
   def set_container
-    @group = @container = current_user.enterprise.groups.find(params[:group_id])
+    current_user ? @group = @container = current_user.enterprise.groups.find(params[:group_id]) : user_not_authorized
   end
 
   def set_container_path
     @container_path = [@group]
   end
-  
+
   def prepend_view_paths
     prepend_view_path 'app/views/groups/resources'
   end
