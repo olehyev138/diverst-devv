@@ -185,3 +185,17 @@
     </div>
   </div>
 </div>
+
+<script>
+  $('img.info').click(function(e){
+    e.preventDefault();
+    var id = $(this).attr('id');
+    $('div.biography_' + id).show();
+  }); //endof click
+  
+  $('a.remove').click(function(e){
+    e.preventDefault();
+    var id = $(this).attr('id');
+    $('div.biography_' + id).hide();
+  }); //endof click
+</script>

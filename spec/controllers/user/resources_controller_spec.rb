@@ -85,7 +85,7 @@ RSpec.describe User::ResourcesController, type: :controller do
                     expect(response).to redirect_to action: :index
                 end
 
-                it "creates the resouce" do
+                it "creates the resource" do
                     expect{post :create, enterprise_id: enterprise.id, resource: {title: "resource", file: test_file}}
                     .to change(Resource, :count).by(1)
                 end
@@ -162,7 +162,7 @@ RSpec.describe User::ResourcesController, type: :controller do
                     expect(response).to render_template(:edit)
                 end
 
-                it "doesn't update the resouce" do
+                it "doesn't update the resource" do
                     resource.reload
                     expect(resource.title).to_not be(nil)
                 end
