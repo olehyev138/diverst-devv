@@ -20,6 +20,12 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  login: 
+    title: "Log in"
+    email: "Email"
+    password: "Password"
+    remember_me: "Remember Me"
+    forgot_password: "Forgot Your Password?"
   user_group:
     hourly: Hourly
     real_time: Real Time
@@ -36,7 +42,6 @@ en:
     dci_full_title: Diversity Culture Index
     dci_abbreviation: DCI
     member_preference: Member Preference
-
   time:
     formats:
       default: "%l:%M %p"
