@@ -18,5 +18,11 @@ RSpec.describe Groups::CommentsController, type: :controller do
       user.reload
       expect(user.points).to eq 80
     end
+    
+    it "flashes alert" do
+      allow_any_instance_of(InitiativeComment).to receive(:save).and_return(false)
+      post :create, group_id: group.id, event_id: initiative.id, initiative_comment: { content: "comment" }
+      expect(flash[:alert]).to eq "Your comment was not created. Please fix the errors"
+    end
   end
 end
