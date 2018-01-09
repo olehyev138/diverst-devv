@@ -4,8 +4,8 @@ RSpec.describe Groups::GroupMessageCommentController, type: :controller do
   let(:user) { create :user }
   let(:group){ create(:group, enterprise: user.enterprise) }
   let(:group_message){ create(:group_message, group: group, subject: "Test", owner: user) }
-  let(:group_message_comment){ create(:group_message_comment, message: group_message) }
-
+  let(:group_message_comment){ create(:group_message_comment, message: group_message, approved: false) }
+  
   login_user_from_let
 
   describe 'GET#edit' do
@@ -17,12 +17,13 @@ RSpec.describe Groups::GroupMessageCommentController, type: :controller do
 
   describe 'PATCH#update' do
     before(:each) do
-      patch :update, group_id: group.id, group_message_id: group_message.id, id: group_message_comment.id, group_message_comment: {content: "updated"}
+      patch :update, group_id: group.id, group_message_id: group_message.id, id: group_message_comment.id, group_message_comment: {content: "updated", approved: true}
     end
 
     it "updates the comment" do
       group_message_comment.reload
       expect(group_message_comment.content).to eq "updated"
+      expect(group_message_comment.approved).to be true
     end
 
     it "redirect to message" do

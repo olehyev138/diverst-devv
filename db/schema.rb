@@ -11,14 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+ActiveRecord::Schema.define(version: 20171230231341) do
 
-ActiveRecord::Schema.define(version: 20171228133035) do
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
     t.string   "trackable_type", limit: 191
     t.integer  "owner_id",       limit: 4
     t.string   "owner_type",     limit: 191
-    t.string   "key",            limit: 255
+    t.string   "key",            limit: 191
     t.text     "parameters",     limit: 65535
     t.integer  "recipient_id",   limit: 4
     t.string   "recipient_type", limit: 191
@@ -34,9 +34,9 @@ ActiveRecord::Schema.define(version: 20171228133035) do
     t.text     "content",    limit: 65535
     t.integer  "author_id",  limit: 4
     t.integer  "answer_id",  limit: 4
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
-    t.boolean  "approved",                 default: true
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.boolean  "approved",                 default: false
   end
 
   create_table "answer_expenses", force: :cascade do |t|
@@ -358,7 +358,6 @@ ActiveRecord::Schema.define(version: 20171228133035) do
     t.integer "event_id", limit: 4
     t.integer "user_id",  limit: 4
     t.text    "content",  limit: 65535
-    t.boolean "approved",               default: true
   end
 
   create_table "event_fields", force: :cascade do |t|
@@ -496,9 +495,9 @@ ActiveRecord::Schema.define(version: 20171228133035) do
     t.text     "content",    limit: 65535
     t.integer  "author_id",  limit: 4
     t.integer  "message_id", limit: 4
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
-    t.boolean  "approved",                 default: true
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.boolean  "approved",                 default: false
   end
 
   create_table "group_messages", force: :cascade do |t|
@@ -570,7 +569,6 @@ ActiveRecord::Schema.define(version: 20171228133035) do
     t.integer  "sponsor_media_file_size",    limit: 4
     t.datetime "sponsor_media_updated_at"
     t.string   "company_video_url",          limit: 191
-    t.string   "contact_email",              limit: 191
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
@@ -587,7 +585,6 @@ ActiveRecord::Schema.define(version: 20171228133035) do
     t.integer "initiative_id", limit: 4
     t.integer "user_id",       limit: 4
     t.text    "content",       limit: 65535
-    t.boolean "approved",                    default: true
   end
 
   create_table "initiative_expenses", force: :cascade do |t|
@@ -734,19 +731,9 @@ ActiveRecord::Schema.define(version: 20171228133035) do
     t.text     "content",      limit: 65535
     t.integer  "author_id",    limit: 4
     t.integer  "news_link_id", limit: 4
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
-    t.boolean  "approved",                   default: true
-  end
-
-  create_table "news_link_photos", force: :cascade do |t|
-    t.string   "file_file_name",    limit: 191
-    t.string   "file_content_type", limit: 191
-    t.integer  "file_file_size",    limit: 4
-    t.datetime "file_updated_at"
-    t.integer  "news_link_id",      limit: 4
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+    t.boolean  "approved",                   default: false
   end
 
   create_table "news_link_photos", force: :cascade do |t|

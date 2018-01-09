@@ -4,7 +4,7 @@ RSpec.describe Groups::NewsLinkCommentController, type: :controller do
   let(:user) { create :user }
   let(:group){ create(:group, enterprise: user.enterprise) }
   let(:news_link){ create(:news_link, group: group, author: user) }
-  let(:news_link_comment){ create(:news_link_comment, news_link: news_link) }
+  let(:news_link_comment){ create(:news_link_comment, news_link: news_link, approved: false) }
   
   login_user_from_let
 
@@ -17,12 +17,13 @@ RSpec.describe Groups::NewsLinkCommentController, type: :controller do
 
   describe 'PATCH#update' do
     before(:each) do
-      patch :update, group_id: group.id, news_link_id: news_link.id, id: news_link_comment.id, news_link_comment: {content: "updated"}
+      patch :update, group_id: group.id, news_link_id: news_link.id, id: news_link_comment.id, news_link_comment: {content: "updated", approved: true}
     end
 
     it "updates the comment" do
       news_link_comment.reload
       expect(news_link_comment.content).to eq "updated"
+      expect(news_link_comment.approved).to be true
     end
 
     it "redirect to message" do
