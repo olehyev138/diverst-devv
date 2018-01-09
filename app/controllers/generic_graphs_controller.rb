@@ -89,13 +89,24 @@ class GenericGraphsController < ApplicationController
     end
 
     def events_created
-        data = current_user.enterprise.groups.map do |g|
+        data = current_user.enterprise.groups.where(:parent_id => nil).map do |g|
             {
                 y: g.initiatives.joins(:owner)
                     .where('initiatives.created_at > ? AND users.active = ?', 1.month.ago, true).count,
-                name: g.name
+                name: g.name,
+                drilldown: g.name
             }
         end
+        
+        drilldowns = current_user.enterprise.groups.includes(:children).where(:parent_id => nil).map { |g|
+            {
+                name: g.name,
+                id: g.name,
+                data: g.children.map {|child| [child.name, child.initiatives.joins(:owner)
+                    .where('initiatives.created_at > ? AND users.active = ?', 1.month.ago, true).count]}
+            }
+        }
+        
         categories = current_user.enterprise.groups.map{ |g| g.name }
 
         respond_to do |format|
@@ -107,6 +118,7 @@ class GenericGraphsController < ApplicationController
                                    title: 'Events created',
                                    data: data
                                }],
+                               drilldowns: drilldowns,
                                categories: categories,
                                xAxisTitle: "#{c_t(:erg)}",
                                yAxisTitle: 'Nb of events'
@@ -123,13 +135,24 @@ class GenericGraphsController < ApplicationController
     end
 
     def messages_sent
-        data = current_user.enterprise.groups.map do |g|
+        data = current_user.enterprise.groups.where(:parent_id => nil).map do |g|
             {
                 y: g.messages.joins(:owner)
                     .where('group_messages.created_at > ? AND users.active = ?', 1.month.ago, true).count,
-                name: g.name
+                name: g.name,
+                drilldown: g.name
             }
         end
+        
+        drilldowns = current_user.enterprise.groups.includes(:children).where(:parent_id => nil).map { |g|
+            {
+                name: g.name,
+                id: g.name,
+                data: g.children.map {|child| [child.name, child.messages.joins(:owner)
+                    .where('group_messages.created_at > ? AND users.active = ?', 1.month.ago, true).count]}
+            }
+        }
+        
         categories = current_user.enterprise.groups.map{ |g| g.name }
 
         respond_to do |format|
@@ -141,6 +164,7 @@ class GenericGraphsController < ApplicationController
                                    title: 'Messages sent',
                                    data: data
                                }],
+                               drilldowns: drilldowns,
                                categories: categories,
                                xAxisTitle: 'ERG',
                                yAxisTitle: 'Nb of messages'
