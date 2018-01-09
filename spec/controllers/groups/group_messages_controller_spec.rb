@@ -3,8 +3,9 @@ require 'rails_helper'
 RSpec.describe Groups::GroupMessagesController, type: :controller do
     let(:user) { create :user }
     let(:group){ create(:group, enterprise: user.enterprise) }
-    let(:group_message){ create(:group_message, group: group, subject: "Test", owner: user, created_at: Time.now) }
+    let(:group_message){ create(:group_message, group: group, subject: "Test", owner: user) }
 
+    login_user_from_let
 
     describe 'GET#index' do
         context 'when user is looged in' do
@@ -30,8 +31,7 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
-
+  
     describe 'GET#show' do
         context 'when user is logged in' do
             login_user_from_let
@@ -57,7 +57,6 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
         end
     end
 
-
     describe 'GET#new' do
         context 'when user is logged in' do
             login_user_from_let
@@ -72,21 +71,39 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
                 expect(assigns[:message].group).to eq group
             end
         end
+    end
 
-        context 'when users is not logged in' do
-            before { get :new, group_id: group.id }
-            it_behaves_like "redirect user to users/sign_in path"
+    describe 'GET#edit' do
+        it "edits group message" do
+            get :edit, group_id: group.id, id: group_message.id
+            expect(response).to be_success
         end
     end
 
+    describe 'POST#create' do
+        let!(:reward_action){ create(:reward_action, enterprise: user.enterprise, key: "message_post", points: 20) }
 
-    describe 'GET#edit' do
-        context 'when users is logged in' do
-            login_user_from_let
-            before { get :edit, group_id: group.id, id: group_message.id }
+        context "when successful" do
+            it "rewards a user with points of this action" do
+                expect(user.points).to eq 0
 
-            it "renders edit template" do
-                expect(response).to render_template :edit
+                post :create, group_id: group.id, group_message: attributes_for(:group_message)
+
+                user.reload
+                expect(user.points).to eq 20
+            end
+        end
+
+        context "when unsuccessful" do
+            before {
+                allow_any_instance_of(GroupMessage).to receive(:save).and_return(false)
+                post :create, group_id: group.id, group_message: attributes_for(:group_message)
+            }
+            it "does not reward a user with points of this action" do
+                expect(user.points).to eq 0
+            end
+            it "flashes" do
+                expect(flash[:alert]).to eq("Your message was not created. Please fix the errors")
             end
 
             it 'returns valid message object' do
@@ -210,9 +227,21 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
             end
         end
 
-        describe 'when user is not logged in' do
-            before { patch :update, group_id: group.id, id: group_message.id, group_message: { subject: 'Test2' } }
-            it_behaves_like "redirect user to users/sign_in path"
+        context "when unsuccessful" do
+            before {
+                allow_any_instance_of(GroupMessage).to receive(:update).and_return(false)
+                patch :update, group_id: group.id, id: group_message.id, group_message: { subject: 'Test3' }
+            }
+            it "does not update the message" do
+                group_message.reload
+                expect(group_message.subject).to_not eq 'Test3'
+            end
+            it "flashes" do
+                expect(flash[:alert]).to eq("Your message was not updated. Please fix the errors")
+            end
+            it "renders edit" do
+                expect(response).to render_template :edit
+            end
         end
     end
 
@@ -259,40 +288,41 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
         end
     end
 
-
     describe 'POST#create_comment' do
-        describe 'when user is logged in' do
-            let!(:group_message){ create(:group_message, group: group) }
-             let!(:reward_action){ create(:reward_action, enterprise: user.enterprise, key: "message_comment", points: 25) }
-            login_user_from_let
+        context "when successful" do
+            before {post :create_comment, group_id: group.id, group_message_id: group_message.id, group_message_comment: {content: "content"}}
 
-            context 'with valid attributes' do
+            it "redirects" do
+                expect(response).to redirect_to group_group_message_path(group, group_message)
+            end
 
-                it 'creates and saves a comment object' do
-                    expect{post :create_comment, group_id: group.id, group_message_id: group_message.id, group_message_comment: attributes_for(:group_message)}
-                    .to change(GroupMessageComment, :count).by(1)
-                end
+            it "flashes" do
+                expect(flash[:reward])
+            end
 
-                it "rewards a user with points of this action" do
-                    expect(user.points).to eq 0
+            it "creates the comment" do
+                group_message.reload
+                expect(group_message.comments.count).to eq(1)
+            end
+        end
 
-                    post :create_comment, group_id: group.id, group_message_id: group_message.id, group_message_comment: attributes_for(:group_message)
+        context "when unsuccessful" do
+            before {
+                allow_any_instance_of(GroupMessageComment).to receive(:save).and_return(false)
+                post :create_comment, group_id: group.id, group_message_id: group_message.id, group_message_comment: {content: "content"}
+            }
 
-                    user.reload
-                    expect(user.points).to eq 25
-                end
+            it "redirects" do
+                expect(response).to redirect_to group_group_message_path(group, group_message)
+            end
 
-                it 'flashes a reward message' do
-                    user.enterprise.update(enable_rewards: true)
-                    post :create_comment, group_id: group.id, group_message_id: group_message.id, group_message_comment: attributes_for(:group_message)
-                    user.reload
-                    expect(flash[:reward]).to eq "Your comment was created. Now you have #{user.credits} points"
-                end
+            it "flashes" do
+                expect(flash[:alert]).to eq("Comment not saved. Please fix errors")
+            end
 
-                it 'redirect to group_group_message_path' do
-                    post :create_comment, group_id: group.id, group_message_id: group_message.id, group_message_comment: attributes_for(:group_message)
-                    expect(response).to redirect_to [group, group_message]
-                end
+            it "does not create the comment" do
+                group_message.reload
+                expect(group_message.comments.count).to eq(0)
             end
 
             context 'with invalid attributes' do
