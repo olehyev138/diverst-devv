@@ -113,8 +113,8 @@ RSpec.describe Groups::PostsController, type: :controller do
         end
     end
 
-    describe 'PATCH #approve' do
 
+    describe 'PATCH #approve' do
         context 'when user is logged in' do
             login_user_from_let
 
