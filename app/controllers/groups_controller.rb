@@ -29,7 +29,7 @@ class GroupsController < ApplicationController
     def calendar
         authorize Group, :index?
         enterprise = current_user.enterprise
-        @groups = enterprise.groups
+        @groups = enterprise.groups.where(:parent_id => nil)
         @segments = enterprise.segments
         @q_form_submit_path = calendar_groups_path
         @q = Initiative.ransack(params[:q])
@@ -47,8 +47,8 @@ class GroupsController < ApplicationController
         end
 
         not_found! if enterprise.nil?
-
-        @events = enterprise.initiatives
+        
+        @events = enterprise.initiatives.includes(:initiative_participating_groups).where(:groups => {:parent_id => nil})
             .ransack(
                 initiative_participating_groups_group_id_in: params[:q]&.dig(:initiative_participating_groups_group_id_in),
                 outcome_group_id_in: params[:q]&.dig(:initiative_participating_groups_group_id_in),
@@ -59,7 +59,19 @@ class GroupsController < ApplicationController
                 initiative_segments_segment_id_in: params[:q]&.dig(:initiative_segments_segment_id_in)
             )
             .result
-
+            
+        @events += enterprise.initiatives.includes(:initiative_participating_groups).where.not(:groups => {:parent_id => nil})
+            .ransack(
+                initiative_participating_groups_group_id_in: Group.where(:parent_id => params[:q]&.dig(:initiative_participating_groups_group_id_in)).pluck(:id),
+                outcome_group_id_in: Group.where(:parent_id => params[:q]&.dig(:initiative_participating_groups_group_id_in)).pluck(:id),
+                m: 'or'
+            )
+            .result
+            .ransack(
+                initiative_segments_segment_id_in: params[:q]&.dig(:initiative_segments_segment_id_in)
+            )
+            .result
+            
         render 'shared/calendar/events', format: :json
     end
 
