@@ -100,7 +100,27 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
 
     describe 'POST#create' do
         login_user_from_let
+        
+        context "when unsuccessful" do
+            before :each do
+                allow_any_instance_of(UserGroup).to receive(:save).and_return(false)
+                post :create, group_id: group.id, user: {user_id: add.id}
+            end
 
+            it "redirects" do
+                expect(response).to render_template :new
+            end
+
+            it "flashes" do
+                expect(flash[:alert])
+            end
+
+            it "doesn't create the user" do
+                group.reload
+                expect(group.members.count).to eq(0)
+            end
+        end
+        
         context "before creating" do
             it "makes sure group count is 1" do
                 user_group.save
