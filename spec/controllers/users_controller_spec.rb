@@ -40,7 +40,10 @@ RSpec.describe UsersController, type: :controller do
 
 
     describe "GET#sent_invitations" do
-        it "returns a json response" do 
+        it "returns a json response" do
+            user = create(:user, :enterprise => enterprise)
+            user.invite!
+            
             get :sent_invitations, :format => :json 
             expect(response.content_type).to eq "application/json"
         end
