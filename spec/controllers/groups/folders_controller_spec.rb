@@ -19,6 +19,25 @@ RSpec.describe Groups::FoldersController, type: :controller do
         it "assigns the folders" do
             expect(assigns[:folders]).to eq([folder])
         end
+        
+        context "when user is not admin and group member" do
+            let(:policy_group){create(:policy_group, :groups_manage => false)}
+            let(:user) { create :user, :policy_group => policy_group}
+            let(:group) { create(:group, enterprise: user.enterprise) }
+            let(:news_link) { create(:news_link, :group => group)}
+
+            login_user_from_let
+
+            before{get :index, group_id: group.id}
+
+            it 'return success' do
+                expect(response).to be_success
+            end
+
+            it "assigns folders to empty array" do
+                expect(assigns[:folders]).to eq []
+            end
+        end
     end
 
     describe "GET#new" do
