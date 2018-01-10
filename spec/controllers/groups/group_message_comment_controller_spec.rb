@@ -16,18 +16,41 @@ RSpec.describe Groups::GroupMessageCommentController, type: :controller do
   end
 
   describe 'PATCH#update' do
-    before(:each) do
-      patch :update, group_id: group.id, group_message_id: group_message.id, id: group_message_comment.id, group_message_comment: {content: "updated", approved: true}
+    context "when successful" do
+      before(:each) do
+        patch :update, group_id: group.id, group_message_id: group_message.id, id: group_message_comment.id, group_message_comment: {content: "updated", approved: true}
+      end
+  
+      it "updates the comment" do
+        group_message_comment.reload
+        expect(group_message_comment.content).to eq "updated"
+        expect(group_message_comment.approved).to be true
+      end
+  
+      it "redirect to message" do
+        expect(response).to redirect_to group_group_message_url(:id => group_message.id, :group_id => group.id)
+      end
     end
-
-    it "updates the comment" do
-      group_message_comment.reload
-      expect(group_message_comment.content).to eq "updated"
-      expect(group_message_comment.approved).to be true
-    end
-
-    it "redirect to message" do
-      expect(response).to redirect_to group_group_message_url(:id => group_message.id, :group_id => group.id)
+    
+    context "when unsuccessful" do
+      before{
+        allow_any_instance_of(GroupMessageComment).to receive(:update).and_return(false)
+        patch :update, group_id: group.id, group_message_id: group_message.id, id: group_message_comment.id, group_message_comment: {content: "updated", approved: true}
+      }
+  
+      it "does not updates the comment" do
+        group_message_comment.reload
+        expect(group_message_comment.content).to_not eq "updated"
+        expect(group_message_comment.approved).to_not be true
+      end
+  
+      it "renders edit" do
+        expect(response).to render_template :edit
+      end
+      
+      it "flashes" do
+        expect(flash[:alert]).to eq "Your comment was not updated. Please fix the errors"
+      end
     end
   end
 
