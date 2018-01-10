@@ -70,7 +70,7 @@ class SegmentsController < ApplicationController
         if group = current_user.enterprise.groups.find_by_id(params[:group_id])
             users_ids = segment_members_of_group(@segment, group).map { |user| user.id }
 
-            users = User.where(id: [users_ids])
+            users = User.where(id: users_ids)
         else
             users = @segment.members
         end
