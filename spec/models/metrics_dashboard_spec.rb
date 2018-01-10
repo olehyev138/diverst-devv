@@ -35,6 +35,10 @@ RSpec.describe MetricsDashboard, :type => :model do
         it 'returns all users if no segments or groups are specified' do
             expect(subject.target.all).to eq subject.enterprise.users.all
         end
+        
+        it 'calls target' do
+            expect(subject.graphs_population.all).to eq subject.enterprise.users.all
+        end
     end
 
     describe '#shareable_token' do
