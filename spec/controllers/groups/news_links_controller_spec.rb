@@ -220,13 +220,13 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
                     post :create, group_id: group.id, news_link: invalid_link_attributes
                     expect(response).to render_template :edit
                 end
-
             end
         end
 
         describe 'without logged user' do
             before { post :create, group_id: group.id, news_link: attributes_for(:news_link) }
             it_behaves_like "redirect user to users/sign_in path"
+
         end
     end
 

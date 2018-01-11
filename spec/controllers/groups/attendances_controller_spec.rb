@@ -7,21 +7,21 @@ RSpec.describe Groups::AttendancesController, type: :controller do
     let!(:segment_1) {create(:segment, :enterprise => user.enterprise)}
     
     login_user_from_let
-    
+
     describe 'GET#show' do
         it "gets the attendees" do
             get :show, group_id: group.id, event_id: initiative.id
             expect(response).to be_success
         end
     end
-    
+
     describe 'GET#erg_graph' do
         it "gets the graph" do
             get :erg_graph, group_id: group.id, event_id: initiative.id
             expect(response).to be_success
         end
     end
-    
+
     describe 'GET#segment_graph' do
         it "gets the graph" do
             get :segment_graph, group_id: group.id, event_id: initiative.id
