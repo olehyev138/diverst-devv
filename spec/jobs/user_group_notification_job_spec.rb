@@ -251,7 +251,11 @@ RSpec.describe UserGroupNotificationJob, type: :job do
       end
     end
 
-    context "and there is new messages or news" do
+    context "and there is new messages or news and notifications_date is Monday" do
+      before {
+        allow(Date).to receive(:today).and_return(Date.today.monday)
+      }
+      
       let(:week_ago) { 6.days.ago }
       let(:today) { Date.today }
 
@@ -344,6 +348,37 @@ RSpec.describe UserGroupNotificationJob, type: :job do
           expect(mailer).to_not receive(:deliver_now)
           subject.perform('weekly')
         end
+      end
+    end
+    
+    context "and there is new messages or news and notifications_date is Sunday" do
+      before {
+        allow(Date).to receive(:today).and_return(Date.today.monday)
+      }
+      
+      let(:week_ago) { 6.days.ago }
+      let(:today) { Date.today }
+
+      let!(:user_group){ create(:user_group, user: user, group: group, notifications_frequency: UserGroup.notifications_frequencies[:weekly], notifications_date: UserGroup.notifications_dates[:sunday]) }
+      let!(:group_message){ create(:group_message, group: group, updated_at: week_ago, owner: user) }
+      let!(:another_group_message){ create(:group_message, group: group, updated_at: today, owner: user) }
+      let!(:group_event) { create(:initiative, owner_group: group, updated_at: week_ago, owner: user) }
+      let!(:another_group_event) { create(:initiative, owner_group: group, updated_at: today, owner: user) }
+      let!(:third_group_event) { create(:initiative, owner_group: second_group, updated_at: week_ago, owner: user) }
+      let!(:fourth_group_event) { create(:initiative, owner_group: second_group, updated_at: today, owner: user) }
+      let!(:initiative_participating_group) { create(:initiative_participating_group, initiative: third_group_event, group: group) }
+      let!(:second_initiative_participating_group) { create(:initiative_participating_group, initiative: fourth_group_event, group: group) }
+      let!(:news_link){ create(:news_link, group: group, updated_at: week_ago, author: user) }
+      let!(:another_news_link){ create(:news_link, group: group, updated_at: today, author: user) }
+      let!(:social_link){ create(:social_link, group: group, updated_at: week_ago, author: user) }
+      let!(:another_social_link){ create(:social_link, group: group, updated_at: today, author: user) }
+
+      it "does not send an email of notification to user because default notifications_date is Monday" do
+        mailer = double("mailer")
+        expect(UserGroupMailer).to_not receive(:notification)
+          .with(user, [{ group: group, events_count: 1, messages_count: 1, news_count: 1, social_links_count: 1, participating_events_count: 1 }]){ mailer }
+        expect(mailer).to_not receive(:deliver_now)
+        subject.perform('weekly')
       end
     end
   end

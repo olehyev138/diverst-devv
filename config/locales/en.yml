@@ -26,6 +26,13 @@ en:
     daily: Daily
     weekly: Weekly
     disabled: Opt Out
+    sunday: "Sunday"
+    monday: "Monday"
+    tuesday: "Tuesday"
+    wednesday: "Wednesday"
+    thursday: "Thursday"
+    friday: "Friday"
+    saturday: "Saturday"
   custom_text:
     erg: ERG
     program: Program

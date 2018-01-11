@@ -13,7 +13,7 @@ RSpec.describe Groups::UserGroupsController, type: :controller do
           login_user_from_let
 
           context 'with valid attributes' do
-            before { patch :update, group_id: group.id, id: user_group.id, user_group: { notifications_frequency: "hourly" }, format: :json }
+            before { patch :update, group_id: group.id, id: user_group.id, user_group: { notifications_frequency: "weekly", notifications_date: "monday" }, format: :json }
 
             it 'returns response in json' do
               expect(response.content_type).to eq 'application/json'
@@ -21,7 +21,8 @@ RSpec.describe Groups::UserGroupsController, type: :controller do
 
             it 'updates the enable_notification of a user_group' do
               user_group.reload
-              expect(assigns[:user_group].notifications_frequency).to eq 'hourly'
+              expect(assigns[:user_group].notifications_frequency).to eq 'weekly'
+              expect(assigns[:user_group].notifications_date).to eq 'monday'
             end
 
             it 'return a sucessful response' do
