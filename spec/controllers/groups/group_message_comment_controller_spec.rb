@@ -6,8 +6,6 @@ RSpec.describe Groups::GroupMessageCommentController, type: :controller do
   let(:group_message){ create(:group_message, group: group, subject: "Test", owner: user) }
   let(:group_message_comment){ create(:group_message_comment, message: group_message, approved: false) }
   
-  login_user_from_let
-
   describe 'GET#edit' do
     context 'when user is logged in' do
       login_user_from_let
@@ -31,6 +29,8 @@ RSpec.describe Groups::GroupMessageCommentController, type: :controller do
 
   describe 'PATCH#update' do
     context 'with valid attributes' do
+      login_user_from_let
+      
       before do
         patch :update, group_id: group.id, group_message_id: group_message.id, id: group_message_comment.id, group_message_comment: {content: "updated"}
       end
@@ -50,6 +50,7 @@ RSpec.describe Groups::GroupMessageCommentController, type: :controller do
     end
 
     context 'with invalid attributes' do
+      login_user_from_let
       before do
         patch :update, group_id: group.id, group_message_id: group_message.id, id: group_message_comment.id, group_message_comment: {content: nil}
       end

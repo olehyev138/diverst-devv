@@ -176,9 +176,9 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
     end
 
     describe 'POST#create' do
-        login_user_from_let
-        
         context "when unsuccessful" do
+            login_user_from_let
+            
             before :each do
                 allow_any_instance_of(UserGroup).to receive(:save).and_return(false)
                 post :create, group_id: group.id, user: {user_id: add.id}
@@ -194,11 +194,13 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
 
             it "doesn't create the user" do
                 group.reload
-                expect(group.members.count).to eq(0)
+                expect(group.members.count).to eq(1)
             end
         end
         
         context "before creating" do
+            login_user_from_let
+            
             it "makes sure group count is 1" do
                 user_group.save
                 expect(group.members.count).to eq(1)
@@ -249,7 +251,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             end
         end 
 
-        describe 'when user is not logged in' do
+        context 'when user is not logged in' do
             before { post :create, group_id: group.id, user: {user_id: add.id} }
             it_behaves_like "redirect user to users/sign_in path"
         end
