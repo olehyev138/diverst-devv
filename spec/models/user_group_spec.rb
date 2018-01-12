@@ -128,4 +128,13 @@ RSpec.describe UserGroup do
       expect(user_group.notifications_date).to eq("saturday")
     end
   end
+  
+  describe "#string_for_field" do
+    it "returns the string field" do
+      select_field = SelectField.new(:type => "SelectField", :title => "Gender", :options_text => "Male\nFemale")
+      select_field.save!
+      user_group = create(:user_group, :data => "{\"#{select_field.id}\":[\"Female\"]}")
+      expect(user_group.string_for_field(select_field)).to eq("Female")
+    end
+  end
 end

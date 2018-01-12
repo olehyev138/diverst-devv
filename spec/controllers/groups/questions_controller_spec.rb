@@ -67,17 +67,34 @@ RSpec.describe Groups::QuestionsController, type: :controller do
         describe 'user logged in' do
             login_user_from_let
             let!(:user_groups_with_answered_survey) { create_list(:user_group, 3, user: user, group: group) }
-
-            before do
-                patch :submit_survey, group_id: group.id, "custom-fields": {}
+            
+            context "when successful" do
+                before do
+                    patch :submit_survey, group_id: group.id, "custom-fields": {}
+                end
+    
+                it "redirects" do
+                    expect(response).to redirect_to(group)
+                end
+    
+                it "flashes" do
+                    expect(flash[:notice]).to eq("Your response was saved")
+                end
             end
-
-            it "redirects" do
-                expect(response).to redirect_to(group)
-            end
-
-            it "flashes" do
-                expect(flash[:notice]).to eq("Your response was saved")
+            
+            context "when unsuccessful" do
+                before do
+                    allow_any_instance_of(UserGroup).to receive(:save).and_return(false)
+                    patch :submit_survey, group_id: group.id, "custom-fields": {}
+                end
+                
+                it "redirects" do
+                    expect(response).to redirect_to(group)
+                end
+    
+                it "flashes" do
+                    expect(flash[:alert]).to eq("Your response was not saved")
+                end
             end
         end
 

@@ -10,4 +10,11 @@ RSpec.describe NewsLinkComment, type: :model do
     it { expect(news_link_comment).to validate_presence_of(:news_link) }
     it { expect(news_link_comment).to validate_presence_of(:content) }
   end
+  
+  describe "#unapproved" do
+    it "returns the news_link_comments that have not been approved" do
+      create_list(:news_link_comment, 2, :approved => false)
+      expect(NewsLinkComment.unapproved.count).to eq(2)
+    end
+  end
 end

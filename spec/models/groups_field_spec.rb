@@ -126,4 +126,11 @@ RSpec.describe GroupsField, type: :model do
       end
     end
   end
+  
+  describe "#format_value_name" do
+    it "returns Deleted ERG" do
+      groups_field = GroupsField.create(attributes_for(:groups_field))
+      expect(groups_field.format_value_name(1)).to eq("Deleted ERG")
+    end
+  end
 end
