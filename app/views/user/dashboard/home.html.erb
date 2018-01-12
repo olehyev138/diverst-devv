@@ -89,7 +89,9 @@
         <% end %>
       <p style="font-style: italic;"><%= @enterprise.cdo_name %><br>
       <%= @enterprise.cdo_title %></p>
-      <p style="font-style: italic;"><%= truncate(@enterprise.cdo_message_email, length: 200) %></p>
+      <% if policy(@enterprise).sponsor_message_visibility? %>
+        <p style="font-style: italic;"><%= truncate(@enterprise.cdo_message_email, length: 200) %></p>
+      <% end %>  
       </div> 
     </div>
     <% end %>
