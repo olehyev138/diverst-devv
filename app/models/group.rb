@@ -20,6 +20,18 @@ class Group < ActiveRecord::Base
                                     :managers_only
                                   ]
 
+enumerize :latest_news_visibility, default: :leaders_only, in:[
+                                    :public,
+                                    :group,
+                                    :leaders_only
+                                  ]
+
+enumerize :upcoming_events_visibility, default: :leaders_only, in:[
+                                    :public,
+                                    :group,
+                                    :leaders_only
+                                  ]
+
   belongs_to :enterprise
   belongs_to :lead_manager, class_name: "User"
   belongs_to :owner, class_name: "User"
@@ -85,6 +97,7 @@ class Group < ActiveRecord::Base
   do_not_validate_attachment_file_type :sponsor_media
 
   validates :name, presence: true
+  validates_format_of :contact_email, with: Devise.email_regexp, allow_blank: true
 
   validate :valid_yammer_group_link?
 
@@ -117,7 +130,7 @@ class Group < ActiveRecord::Base
   end
 
   def valid_yammer_group_link?
-    if yammer_group_link && !yammer_group_id
+    if yammer_group_link.present? && !yammer_group_id
       errors.add(:yammer_group_link, 'this is not a yammer group link')
       return false
     end

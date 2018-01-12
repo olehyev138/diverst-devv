@@ -7,7 +7,7 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
 
 
     describe 'GET#index' do
-        context 'when user is looged in' do
+        context 'when user is logged in' do
             login_user_from_let
             let(:group_message1) { create(:group_message, group: group, subject: "Test", owner: user, created_at: Time.now - 2.hours) }
             before { get :index, group_id: group.id }

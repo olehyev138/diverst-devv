@@ -100,7 +100,9 @@ Rails.application.routes.draw do
     
     scope module: :enterprises do
       resources :folders do
-        post 'authenticate'
+        member do
+          post 'authenticate'
+        end
         scope module: :folder do
           resources :resources
         end
@@ -178,6 +180,7 @@ Rails.application.routes.draw do
       resources :news_links, except: [:show] do
         member do
           get   'comments'
+          get   'news_link_photos'
           post  'create_comment'
         end
         resources :news_link_comment
