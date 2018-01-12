@@ -222,21 +222,10 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
                 end
             end
         end
-<<<<<<< HEAD
-        
-        it "creates the news link" do
-            expect(NewsLink.count).to eq(0)
-        end
-        
-        it "creates the news link photo" do
-            expect(NewsLinkPhoto.count).to eq(0)
-=======
 
         describe 'without logged user' do
             before { post :create, group_id: group.id, news_link: attributes_for(:news_link) }
             it_behaves_like "redirect user to users/sign_in path"
-
->>>>>>> 47bf161afc67773acadef4840d2cde4008103345
         end
     end
 
