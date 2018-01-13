@@ -29,7 +29,7 @@ RSpec.describe Groups::Folder::ResourcesController, type: :controller do
             end
 
             it "returns resources that belong to container" do
-                expect(assigns[:resources].where(container_id: group.id)).to eq [resource]
+                expect(assigns[:resources].where(container_id: assigns[:container].id)).to eq [resource]
             end
         end
 
@@ -126,20 +126,20 @@ RSpec.describe Groups::Folder::ResourcesController, type: :controller do
 
 
     describe "GET#show" do
-        context 'user is logged in' do 
+        context 'user is logged in' do
             login_user_from_let
             before { get :show, :id => resource.id, folder_id: folder.id, group_id: group.id }
 
-            it 'returns file in csv format' do 
+            it 'returns file in csv format' do
                 expect(response.content_type).to eq 'text/csv'
             end
 
-            it "filename should be 'test.csv'" do 
+            it "filename should be 'test.csv'" do
                 expect(response.headers["Content-Disposition"]).to include 'test.csv'
             end
         end
 
-        context 'when user is not logged in' do 
+        context 'when user is not logged in' do
             before { get :show, :id => resource.id, folder_id: folder.id, group_id: group.id }
             it_behaves_like "redirect user to users/sign_in path"
         end
@@ -161,7 +161,7 @@ RSpec.describe Groups::Folder::ResourcesController, type: :controller do
                     expect(response).to redirect_to action: :index
                 end
 
-                it "updates the resouce" do
+                it "updates the resource" do
                     resource.reload
                     expect(resource.title).to eq("updated")
                 end
@@ -206,7 +206,7 @@ RSpec.describe Groups::Folder::ResourcesController, type: :controller do
             end
         end
 
-        context 'when user is not logged in' do 
+        context 'when user is not logged in' do
             before {delete :destroy, :id => resource.id, group_id: group.id, folder_id: folder.id}
             it_behaves_like "redirect user to users/sign_in path"
         end
