@@ -97,14 +97,14 @@ RSpec.describe TopicFeedbacksController, type: :controller do
             end
         end
 
-        describe 'when user is not logged in' do 
+        describe 'when user is not logged in' do
             before { patch :update, :topic_id => topic.id, :id => topic_feedback.id, :topic_feedback => {:content => "updated"} }
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
     describe "DELETE#destroy" do
-        context 'when user is logged in' do 
+        context 'when user is logged in' do
             login_user_from_let
 
             before { request.env["HTTP_REFERER"] = "back" }
@@ -120,7 +120,7 @@ RSpec.describe TopicFeedbacksController, type: :controller do
             end
         end
 
-        context 'when user is not logged in' do 
+        context 'when user is not logged in' do
             before do
                 request.env["HTTP_REFERER"] = "back"
                 delete :destroy, :topic_id => topic.id, :id => topic_feedback.id
