@@ -69,46 +69,63 @@ RSpec.describe TopicFeedbacksController, type: :controller do
     end
 
     describe "PATCH#update" do
-        login_user_from_let
-        context "successfully" do
-            before { patch :update, :topic_id => topic.id, :id => topic_feedback.id, :topic_feedback => {:content => "updated"} }
+        describe 'when user is logged in' do
+            login_user_from_let
 
-            it "redirects" do
-                expect(response).to have_http_status(:ok)
+            context "successfully" do
+                before { patch :update, :topic_id => topic.id, :id => topic_feedback.id, :topic_feedback => {:content => "updated"} }
+
+                it "returns http_status :ok" do
+                    expect(response).to have_http_status(:ok)
+                end
+
+                it "updates the feedback" do
+                    topic_feedback.reload
+                    expect(topic_feedback.content).to eq("updated")
+                end
             end
 
-            it "updates the feedback" do
-                topic_feedback.reload
-                expect(topic_feedback.content).to eq("updated")
+            context "unsuccessfully" do
+                before {
+                    allow_any_instance_of(TopicFeedback).to receive(:update).and_return false
+                    patch :update, :topic_id => topic.id, :id => topic_feedback.id, :topic_feedback => {:content => "updated"}
+                }
+
+                it "has an error" do
+                    expect(response).to have_http_status(:internal_server_error)
+                end
             end
         end
 
-        context "unsuccessfully" do
-            before {
-                allow_any_instance_of(TopicFeedback).to receive(:update).and_return false
-                patch :update, :topic_id => topic.id, :id => topic_feedback.id, :topic_feedback => {:content => "updated"}
-            }
-
-            it "has an error" do
-                expect(response).to have_http_status(:internal_server_error)
-            end
+        describe 'when user is not logged in' do 
+            before { patch :update, :topic_id => topic.id, :id => topic_feedback.id, :topic_feedback => {:content => "updated"} }
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
     describe "DELETE#destroy" do
-        login_user_from_let
+        context 'when user is logged in' do 
+            login_user_from_let
 
-        before do
-            request.env["HTTP_REFERER"] = "back"
-            delete :destroy, :topic_id => topic.id, :id => topic_feedback.id
+            before { request.env["HTTP_REFERER"] = "back" }
+
+            it "redirects to previous page" do
+                delete :destroy, :topic_id => topic.id, :id => topic_feedback.id
+                expect(response).to redirect_to "back"
+            end
+
+            it "deletes the feedback" do
+                expect{delete :destroy, :topic_id => topic.id, :id => topic_feedback.id}
+                .to change(TopicFeedback, :count).by(-1)
+            end
         end
 
-        it "redirects" do
-            expect(response).to redirect_to "back"
-        end
-
-        it "deletes the feedback" do
-            expect(TopicFeedback.where(:id => topic_feedback.id).count).to eq(0)
+        context 'when user is not logged in' do 
+            before do
+                request.env["HTTP_REFERER"] = "back"
+                delete :destroy, :topic_id => topic.id, :id => topic_feedback.id
+            end
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 end
