@@ -69,7 +69,7 @@ class QuestionsController < ApplicationController
   protected
 
   def set_campaign
-    @campaign = current_user.enterprise.campaigns.find(params[:campaign_id])
+    current_user ? @campaign = current_user.enterprise.campaigns.find(params[:campaign_id]) : user_not_authorized
   end
 
   def set_question
