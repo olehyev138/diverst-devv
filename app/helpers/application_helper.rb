@@ -116,6 +116,13 @@ module ApplicationHelper
     end
   end
 
+  #for RSpec test of protected method in segment_controller.rb
+  def segment_members_of_group(segment, group)
+    segment.members.includes(:groups).select do |user|
+      user.groups.include? group
+    end
+  end
+
   private
 
   def default_enterprise_for_styling
