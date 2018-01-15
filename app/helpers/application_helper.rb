@@ -100,7 +100,7 @@ module ApplicationHelper
 
   def show_sponsor_card?(object, m)
     if object.public_send(m.to_sym).present?
-      yield 
+      yield
     end
   end
 
