@@ -112,16 +112,16 @@ RSpec.describe PolicyGroupsController, type: :controller do
                     expect(flash[:notice]).to eq "Your policy group was updated"
                 end
             end
-            
+
             context "when adding users" do
-                
+
                 login_user_from_let
 
-                before { 
+                before {
                     user_1 = create(:user, :enterprise => enterprise)
                     user_2 = create(:user, :enterprise => enterprise)
                     patch :update, :id => policy_group.id, :policy_group => {:name => "updated", :new_users => ["", user_1.id, user_2.id]}, :commit => "Add User(s)"
-                    
+
                 }
 
                 it 'redirect_to' do
@@ -136,7 +136,7 @@ RSpec.describe PolicyGroupsController, type: :controller do
                 it 'flashes a notice message' do
                     expect(flash[:notice]).to eq "Your policy group was updated"
                 end
-                
+
                 it 'adds the users' do
                     policy_group.reload
                     expect(policy_group.users.length).to eq(2)
