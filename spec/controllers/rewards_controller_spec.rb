@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe RewardsController, type: :controller do
     let!(:enterprise) { create(:enterprise) }
     let!(:user) { create(:user, enterprise: enterprise) }
-    let(:reward) { create(:reward, enterprise: enterprise, points: 10) }
-    let(:badge) { create(:badge, enterprise: enterprise) }
+    let!(:reward) { create(:reward, enterprise: enterprise, points: 10) }
+    let!(:badge) { create(:badge, enterprise: enterprise) }
 
     describe "GET#index" do
         context "with logged in user" do
@@ -13,16 +13,19 @@ RSpec.describe RewardsController, type: :controller do
             before { get :index }
 
             it "gets the rewards" do
-                expect(assigns[:rewards].count).to eq enterprise.rewards.count
+                expect(assigns[:rewards]).to eq [reward]
             end
 
             it "gets the badges" do
-                enterprise
-                expect(assigns[:badges].count).to eq enterprise.badges.count
+                expect(assigns[:badges]).to eq [badge]
             end
 
             it "renders index template" do
                 expect(response).to render_template :index
+            end
+
+            it 'sets a valid enterprise object' do
+                expect(assigns[:enterprise]).to be_valid
             end
         end
 
