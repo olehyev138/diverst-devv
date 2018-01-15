@@ -18,7 +18,7 @@ RSpec.describe PollsController, type: :controller do
             end
 
             it "displays all polls" do
-                expect(assigns[:polls].count).to eq 1
+                expect(assigns[:polls]).to eq [poll]
             end
         end
 
@@ -51,7 +51,7 @@ RSpec.describe PollsController, type: :controller do
 
 
     describe "POST#create" do
-        context "with logged user" do
+        describe "with logged user" do
             login_user_from_let
 
             context "with valid params" do
@@ -107,7 +107,7 @@ RSpec.describe PollsController, type: :controller do
             end
         end
 
-        context "without a logged in user" do
+        describe "without a logged in user" do
             before { post :create, poll: poll }
             it_behaves_like "redirect user to users/sign_in path"
         end
@@ -119,17 +119,18 @@ RSpec.describe PollsController, type: :controller do
         context "with logged user" do
             login_user_from_let
 
-            before { get :show, id: poll.id }
+            before do 
+                poll.graphs << graph1
+                poll.graphs << graph2
+                get :show, id: poll.id
+            end
 
             it "sets a valid poll object" do
                 expect(assigns[:poll]).to be_valid
             end
 
             it "display graphs of a particular poll" do
-                graph2.update(field_id: nil, aggregation_id: nil)
-                poll.graphs << graph1
-                poll.graphs << graph2
-                expect(assigns[:poll].graphs.includes(:field, :aggregation)).to eq [graph1]
+                expect(assigns[:graphs]).to eq [graph1, graph2]
             end
 
             it "returns poll responses in a decreasing order of created_at" do 
@@ -235,6 +236,7 @@ RSpec.describe PollsController, type: :controller do
         end
     end
 
+
     describe "DELETE#destroy" do
         context "with logged user" do
             login_user_from_let
@@ -264,10 +266,14 @@ RSpec.describe PollsController, type: :controller do
     describe "GET#export_csv" do
         context "with logged user" do
             login_user_from_let
+            before { get :export_csv, id: poll.id }
 
-            it "gets  response csv file" do
-                get :export_csv, id: poll.id
-                expect(response.body).to include "user_id,user_email,user_name\n"
+            it "gets response in csv format" do
+                expect(response.content_type).to eq 'text/csv'
+            end
+
+            it 'response includes poll_title as part of csv filename' do 
+                expect(response.headers["Content-Disposition"]).to include "#{poll.title}_responses.csv"
             end
         end
 
