@@ -5,6 +5,7 @@ RSpec.describe PolicyGroupsController, type: :controller do
     let(:user) { create :user, enterprise: enterprise}
     let!(:policy_group) { create :policy_group, enterprise: enterprise }
 
+
     describe 'GET #index' do
         context 'with logged user' do
             login_user_from_let
@@ -12,7 +13,7 @@ RSpec.describe PolicyGroupsController, type: :controller do
             before { get :index }
 
             it "returns enterprise policy groups" do
-                expect(assigns[:policy_groups].count).to eq 1
+                expect(assigns[:policy_groups]).to eq [policy_group]
             end
 
             it "render index template" do
@@ -25,6 +26,7 @@ RSpec.describe PolicyGroupsController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe 'GET #new' do
         context 'with logged user' do
@@ -47,26 +49,25 @@ RSpec.describe PolicyGroupsController, type: :controller do
         end
     end
 
+
     describe 'POST #create' do
-        context 'with logged user' do
+        describe 'with logged user' do
             context "with correct params" do
                 login_user_from_let
 
-                before { post :create, :policy_group => {:name => "name"}}
 
                 it 'redirect_to' do
+                    post :create, :policy_group => {:name => "name"}
                     expect(response).to redirect_to action: :index
                 end
 
                 it 'changes the policy_group count' do
-                    expect(PolicyGroup.count).to eq(3)
-                end
-
-                it 'creates the policy_group' do
-                    expect(PolicyGroup.last.name).to eq("name")
+                    expect{post :create, :policy_group => {:name => "name"}}
+                    .to change(PolicyGroup, :count).by(1)
                 end
 
                 it 'flashes a notice message' do
+                    post :create, :policy_group => {:name => "name"}
                     expect(flash[:notice]).to eq "Your policy group was created"
                 end
             end
@@ -74,23 +75,29 @@ RSpec.describe PolicyGroupsController, type: :controller do
             context "with incorrect params" do
                 login_user_from_let
 
-                before {  post :create, :policy_group => { :name => nil }}
+                it 'does not create a policy_group object' do
+                    expect{post :create, :policy_group => { :name => nil }}
+                    .to change(PolicyGroup, :count).by(0)
+                end
 
                 it "flashes an alert message" do
+                    post :create, :policy_group => { :name => nil }
                     expect(flash[:alert]).to eq "Your policy group was not created. Please fix the errors"
                 end
 
                 it "render new template" do
+                    post :create, :policy_group => { :name => nil }
                     expect(response).to render_template :new
                 end
             end
         end
 
-        context "without a logged in user" do
+        describe "without a logged in user" do
             before { post :create, :policy_group => { :name => "name" } }
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe 'PATCH #update' do
         context 'with logged user' do
@@ -112,17 +119,16 @@ RSpec.describe PolicyGroupsController, type: :controller do
                     expect(flash[:notice]).to eq "Your policy group was updated"
                 end
             end
-            
+
             context "when adding users" do
-                
+
                 login_user_from_let
 
-                before { 
+                before do
                     user_1 = create(:user, :enterprise => enterprise)
                     user_2 = create(:user, :enterprise => enterprise)
                     patch :update, :id => policy_group.id, :policy_group => {:name => "updated", :new_users => ["", user_1.id, user_2.id]}, :commit => "Add User(s)"
-                    
-                }
+                end
 
                 it 'redirect_to' do
                     expect(response).to redirect_to action: :index
@@ -136,7 +142,7 @@ RSpec.describe PolicyGroupsController, type: :controller do
                 it 'flashes a notice message' do
                     expect(flash[:notice]).to eq "Your policy group was updated"
                 end
-                
+
                 it 'adds the users' do
                     policy_group.reload
                     expect(policy_group.users.length).to eq(2)
@@ -163,6 +169,7 @@ RSpec.describe PolicyGroupsController, type: :controller do
         end
     end
 
+
     describe 'DELETE #destroy' do
         context 'with logged user' do
             login_user_from_let
@@ -172,8 +179,12 @@ RSpec.describe PolicyGroupsController, type: :controller do
                 expect(response).to redirect_to action: :index
             end
 
-            it "destroys policy_group object", skip: "destroy object fails" do
-                expect{delete :destroy, :id => policy_group.id}.to change(PolicyGroup, :count).by(-1)
+            context 'before hook to ensure other policy_group is set as default before policy_group object is destroyed' do
+                let!(:policy_group1) { create(:policy_group, enterprise: enterprise) }
+
+                it "destroys policy_group object" do
+                    expect{delete :destroy, :id => policy_group.id}.to change(PolicyGroup, :count).by(-1)
+                end
             end
         end
 
