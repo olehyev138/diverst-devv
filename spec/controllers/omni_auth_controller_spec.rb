@@ -6,7 +6,7 @@ RSpec.describe OmniAuthController, type: :controller do
 
     describe 'GET #callback' do
         login_user_from_let
-        
+
         it "redirects to user path" do
             request.env["omniauth.auth"] = {
                 "info" => {
