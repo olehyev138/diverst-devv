@@ -10,9 +10,9 @@ RSpec.describe Groups::CommentsController, type: :controller do
     describe 'when user is logged in' do
       login_user_from_let
       let!(:reward_action){ create(:reward_action, enterprise: user.enterprise, key: "feedback_on_event", points: 80) }
-
       before do 
         request.env["HTTP_REFERER"] = "back" 
+        user.enterprise.update(enable_rewards: true)
       end
 
       context 'with valid attributes' do
@@ -60,7 +60,7 @@ RSpec.describe Groups::CommentsController, type: :controller do
         end
       end
     end
-    
+
     describe 'when user is not logged in' do 
       before { post :create, group_id: group.id, event_id: initiative.id, initiative_comment: { content: "comment" } }
       it_behaves_like "redirect user to users/sign_in path"
