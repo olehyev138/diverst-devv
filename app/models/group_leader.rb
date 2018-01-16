@@ -7,7 +7,7 @@ class GroupLeader < ActiveRecord::Base
   validates_presence_of :user
 
   scope :visible, ->{ where(visible: true) }
-  
+
   def notifications_enabled_status
     if notifications_enabled?
       "On"
