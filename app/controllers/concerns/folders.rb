@@ -8,7 +8,7 @@ module Folders
 
         prepend_view_path 'app/views/shared/folders'
     end
-    
+
     def authenticate
         if @folder.valid_password?(params[:folder][:password])
             redirect_to [@container, @folder, :resources]
@@ -23,7 +23,7 @@ module Folders
         @folders.sort_by!{ |f| f.name.downcase }
         render '/index'
     end
-    
+
     def show
         render "/show"
     end
