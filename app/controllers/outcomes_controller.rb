@@ -30,7 +30,7 @@ class OutcomesController < ApplicationController
       redirect_to action: :index
     else
       flash[:alert] = "Your #{ c_t(:outcome) } was not created. Please fix the errors"
-      render :new
+      render :new #new template does not exist
     end
   end
 
@@ -45,7 +45,7 @@ class OutcomesController < ApplicationController
       redirect_to action: :index
     else
       flash[:alert] = "Your #{ c_t(:outcome) } was not updated. Please fix the errors"
-      render :edit
+      render :edit #edit template exist. however, form partial does not
     end
   end
 
@@ -58,7 +58,11 @@ class OutcomesController < ApplicationController
   protected
 
   def set_group
-    @group = current_user.enterprise.groups.includes(outcomes: :pillars).find(params[:group_id])
+    if current_user
+      @group = current_user.enterprise.groups.includes(outcomes: :pillars).find(params[:group_id])
+    else 
+      user_not_authorized
+    end
   end
 
   def set_outcome
