@@ -17,7 +17,11 @@ class Groups::FoldersController < ApplicationController
   protected
 
   def set_container
-    @group = @container = current_user.enterprise.groups.find(params[:group_id])
+    if current_user
+      @group = @container = current_user.enterprise.groups.find(params[:group_id])
+    else
+      user_not_authorized
+    end
   end
 
   def set_container_path

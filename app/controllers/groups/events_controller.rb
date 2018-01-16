@@ -34,7 +34,7 @@ class Groups::EventsController < ApplicationController
     @segments = current_user.enterprise.segments
     @q_form_submit_path = calendar_view_group_events_path
     @q = Initiative.ransack(params[:q])
-    
+
     render 'calendar_view'
   end
 
@@ -43,7 +43,7 @@ class Groups::EventsController < ApplicationController
 
     @comment = @event.comments.where(user: current_user).first || InitiativeComment.new(initiative: @event)
   end
-  
+
   def destroy
     @event.destroy
     redirect_to action: :index
