@@ -89,7 +89,7 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
                 expect(response).to render_template :edit
             end
 
-            it 'returns valid message object' do
+            it 'returns a valid message object' do
                 expect(assigns[:message]).to be_valid
             end
         end
@@ -162,6 +162,7 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
         end
     end
 
+
     describe 'PATCH#update' do
         describe 'when user is logged in' do
             login_user_from_let
@@ -215,6 +216,7 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe 'DELETE#destroy' do
         let!(:group_message){ create(:group_message, group: group) }
