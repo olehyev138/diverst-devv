@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe MetricsDashboardsController, type: :controller do
   let(:enterprise) { create :enterprise }
   let (:user) { create :user, :enterprise => enterprise }
-  let(:metrics_dashboard) { create :metrics_dashboard, :enterprise => enterprise }
+  let(:metrics_dashboard) { create :metrics_dashboard, :enterprise => enterprise, owner: user }
 
   describe 'GET #new' do
     def get_new
@@ -39,12 +39,22 @@ RSpec.describe MetricsDashboardsController, type: :controller do
     context 'with logged user' do
       login_user_from_let
 
-      before { get_index }
+      before do
+        metrics_dashboard
+        create_list(:group, 2, enterprise: user.enterprise)
+        create_list(:segment, 3, enterprise: user.enterprise)
+        create_list(:resource, 4, container: user.enterprise)
+        create_list(:poll, 2, enterprise: user.enterprise)
+        get_index
+      end
+
+      it 'returns correct data for general_metrics' do
+        expect(assigns[:general_metrics])
+        .to eq ({:nb_users=>1, :nb_ergs=>2, :nb_segments=>3, :nb_resources=>4, :nb_polls=>2, :nb_ongoing_campaigns=>0, :average_nb_members_per_group=>nil})
+      end
 
       it "return metrics" do
-        2.times { create :metrics_dashboard, :enterprise => enterprise }
-        metrics_dashboard
-        expect(MetricsDashboard.all.count).to eq 3
+        expect(assigns[:dashboards]).to eq [metrics_dashboard]
       end
 
       it "render index template" do
@@ -68,7 +78,7 @@ RSpec.describe MetricsDashboardsController, type: :controller do
       post :create, metrics_dashboard: params
     end
 
-    context 'with logged in user' do
+    describe 'with logged in user' do
       let(:user) { create :user }
       let(:md_params) { attributes_for :metrics_dashboard, enterprise: user.enterprise, group_ids: [create(:group).id] }
 
@@ -153,7 +163,7 @@ RSpec.describe MetricsDashboardsController, type: :controller do
       end
     end
 
-    context 'without logged in user' do
+    describe 'without logged in user' do
       before { post_create }
       it_behaves_like "redirect user to users/sign_in path"
     end
@@ -168,10 +178,11 @@ RSpec.describe MetricsDashboardsController, type: :controller do
     context 'with logged user' do
       login_user_from_let
 
-      before {
+      before do
+        create_list(:graph, 2, collection: metrics_dashboard)
         metrics_dashboard.shareable_token #Touch token, so it is initialized
         get_show
-      }
+      end
 
        it "returns set metrics dashboard" do
         expect(assigns[:metrics_dashboard]).to eq metrics_dashboard
@@ -183,6 +194,11 @@ RSpec.describe MetricsDashboardsController, type: :controller do
 
       it 'sets correct shareable token' do
         expect(assigns[:token]).to eq metrics_dashboard.shareable_token
+      end
+
+      it 'return 2 graphs objects that belong to metrics_dashboard object' do
+        expect(assigns[:graphs].count).to eq 2
+        expect(assigns[:graphs]).to eq metrics_dashboard.graphs.includes(:field, :aggregation)
       end
     end
 
