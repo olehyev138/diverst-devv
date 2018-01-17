@@ -12,13 +12,17 @@ class User::UserGroupsController < ApplicationController
     end
 
     def update
+        has_error = false
         params[:user_groups].each do |id, parameters|
             user_group = UserGroup.find(id)
             unless user_group.update(user_group_params(parameters))
                 flash[:alert] = "Your preferences were not updated. Please fix the errors"
                 redirect_to action: :edit
+                has_error = true
+                break
             end
         end
+        return if has_error
         flash[:notice] = "Your preferences were updated"
         redirect_to action: :edit
     end

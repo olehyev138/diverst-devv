@@ -5,4 +5,13 @@ RSpec.describe NewsLinkPhoto, type: :model do
     let(:news_link_photo) { build_stubbed(:news_link_photo) }
     it { expect(news_link_photo).to belong_to(:news_link) }
   end
+  
+  describe "#group" do
+    it "returns the group the news_link belongs to" do
+      group = create(:group)
+      news_link = create(:news_link, :group => group)
+      news_link_photo = create(:news_link_photo, :news_link => news_link)
+      expect(news_link_photo.group.id).to eq(group.id)
+    end
+  end
 end

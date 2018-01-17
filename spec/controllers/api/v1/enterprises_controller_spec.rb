@@ -42,6 +42,12 @@ RSpec.describe Api::V1::EnterprisesController, type: :controller do
                 expect(response).to be_success
                 expect(response.status).to be(200)
             end
+            it "renders 422" do
+                allow_any_instance_of(Enterprise).to receive(:update_attributes).and_return(false)
+                patch :update, :id => enterprise.id, :enterprise => {:cdo_name => "updated"}
+                expect(response).to_not be_success
+                expect(response.status).to be(422)
+            end
         end
     end
 end

@@ -36,6 +36,9 @@
       <li>
         <%= active_link_to "Logs", logs_path, class: "secondary-header__tab" %>
       </li>
+      <li>
+        <%= active_link_to "Pending Comments", edit_pending_comments_enterprise_path(current_user.enterprise) if policy(current_user.enterprise).edit_fields? %>
+      </li>
     </ul>
   </nav>
 </div>
@@ -50,6 +53,7 @@
   <%= active_link_to "Integrations", integrations_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <%= active_link_to c_t(:dci_abbreviation), rewards_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <%= active_link_to "Logs", logs_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to "Posts", edit_pending_comments_enterprise_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(current_user.enterprise).edit_fields? %>
 </div>
 <% end %>
 

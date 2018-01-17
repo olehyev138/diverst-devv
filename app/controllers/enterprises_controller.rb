@@ -54,6 +54,10 @@ class EnterprisesController < ApplicationController
 
     set_theme
   end
+  
+  def edit_pending_comments
+    authorize @enterprise
+  end
 
   # missing template
   def edit_algo
@@ -130,6 +134,7 @@ class EnterprisesController < ApplicationController
     params
       .require(:enterprise)
       .permit(
+        :enable_pending_comments,
         :enable_rewards,
         :has_enabled_saml,
         :has_enabled_onboarding_email,
