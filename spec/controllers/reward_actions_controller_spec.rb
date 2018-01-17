@@ -22,7 +22,7 @@ RSpec.describe RewardActionsController, type: :controller do
           expect(reward_action.points).to eq 20
         end
 
-        it "flashes a notice message" do 
+        it "flashes a notice message" do
           expect(flash[:notice]).to eq "Your reward actions were updated"
         end
 
@@ -43,7 +43,7 @@ RSpec.describe RewardActionsController, type: :controller do
           expect(reward_action.points).to eq 10
         end
 
-        it "flashes an alert message" do 
+        it "flashes an alert message" do
           expect(flash[:alert]).to eq "Your reward actions were not updated. Please fix the errors"
         end
 
@@ -53,7 +53,7 @@ RSpec.describe RewardActionsController, type: :controller do
       end
     end
 
-    context "without a logged in user" do 
+    context "without a logged in user" do
       before {  patch :update, enterprise: {
             reward_actions_attributes: { "0" => { "id" => reward_action.id, "points" => 20 } }
           } }
