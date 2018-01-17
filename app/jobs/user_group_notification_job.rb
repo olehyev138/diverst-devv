@@ -6,6 +6,9 @@ class UserGroupNotificationJob < ActiveJob::Base
       users.each do |user|
         groups = []
         user.user_groups.accepted_users.active.notifications_status(notifications_frequency).each do |user_group|
+          # check if notifications_frequency is weekly and check current date is equal to
+          # selected user_group
+          next unless can_send_email?(notifications_frequency, user_group)
           group = user_group.group
           frequency_range = get_frequency_range(user_group.notifications_frequency)
           groups << {
@@ -21,6 +24,20 @@ class UserGroupNotificationJob < ActiveJob::Base
           UserGroupMailer.notification(user, groups).deliver_now
         end
       end
+    end
+  end
+
+  # checks if frequency is weekly and 
+  def can_send_email?(frequency, user_group)
+    return true if frequency != "weekly"
+    case user_group.notifications_date
+    when "sunday" then Date.today.sunday?
+    when "monday" then Date.today.monday?
+    when "tuesday" then Date.today.tuesday?
+    when "wednesday" then Date.today.wednesday?
+    when "thursday" then Date.today.thursday?
+    when "friday" then Date.today.friday?
+    when "saturday" then Date.today.saturday?
     end
   end
 

@@ -6,7 +6,8 @@ class UserGroup < ActiveRecord::Base
   belongs_to :group
 
   enum notifications_frequency: [:hourly, :daily, :weekly, :disabled]
-
+  enum notifications_date: [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]
+  
   scope :top_participants, ->(n) { order(total_weekly_points: :desc).limit(n) }
   scope :notifications_status, ->(frequency) {
     where(notifications_frequency: UserGroup.notifications_frequencies[frequency])

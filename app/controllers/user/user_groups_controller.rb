@@ -30,6 +30,6 @@ class User::UserGroupsController < ApplicationController
     private
 
     def user_group_params(parameters)
-        parameters.permit(:notifications_frequency)
+        parameters.permit(:notifications_frequency, :notifications_date)
     end
 end
