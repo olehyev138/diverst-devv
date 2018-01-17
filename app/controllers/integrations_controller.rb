@@ -18,6 +18,8 @@ class IntegrationsController < ApplicationController
     case action_name
     when 'calendar'
       'iframe'
+    else
+      'global_settings'
     end
   end
 
