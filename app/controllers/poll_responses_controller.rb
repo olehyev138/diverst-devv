@@ -40,7 +40,7 @@ class PollResponsesController < ApplicationController
     if @response.update(poll_response_params)
       redirect_to @poll
     else
-      render :edit
+      render :edit #edit template does not exist
     end
   end
 
