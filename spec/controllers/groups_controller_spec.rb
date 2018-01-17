@@ -662,6 +662,23 @@ RSpec.describe GroupsController, type: :controller do
       get :parse_csv, :id => group.id, :file => file
     end
 
+    context 'with logged user and no file' do
+      login_user_from_let
+
+      before { 
+        request.env["HTTP_REFERER"] = "back"
+        get :parse_csv, :id => group.id
+      }
+
+      it 'redirects back' do
+        expect(response).to redirect_to "back"
+      end
+      
+      it "flashes an alert message" do
+        expect(flash[:alert]).to eq "CSV file is required"
+      end
+    end
+
     context 'with logged user' do
       login_user_from_let
 
