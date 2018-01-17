@@ -21,8 +21,8 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
                 expect(assigns(:resources)).to eq [resource]
             end
 
-            it "render index template" do 
-                expect(response).to render_template :index 
+            it "render index template" do
+                expect(response).to render_template :index
             end
         end
 
@@ -42,7 +42,7 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
                 expect(assigns(:resource)).to be_a_new(Resource)
             end
 
-            it "renders new template" do 
+            it "renders new template" do
                 expect(response).to render_template :new
             end
         end
@@ -84,7 +84,9 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
                 it "renders edit template" do
                    invalid_attributes = attributes_for(:resource)
                    invalid_attributes[:title] = nil
-                   post :create, group_id: group.id, initiative_id: initiative.id, resource: invalid_attributes
+                   post :create, group_id: group.id, initiative_id: initiative.id, id: resource.id,
+                   resource: invalid_attributes
+
                    expect(response).to render_template :edit
                 end
             end
@@ -135,7 +137,7 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
                 expect(assigns(:resource)).to be_valid
             end
 
-            it 'renders edit template' do 
+            it 'renders edit template' do
                 get :edit, group_id: group.id, initiative_id: initiative.id, id: resource.id
                 expect(response).to render_template :edit
             end
@@ -146,7 +148,7 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
             end
         end
 
-        context 'without a logged in user' do 
+        context 'without a logged in user' do
             before { get :edit, group_id: group.id, initiative_id: initiative.id, id: resource.id }
             it_behaves_like "redirect user to users/sign_in path"
         end
@@ -167,7 +169,7 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
                     expect(resource.title).to eq "Resource 2"
                 end
 
-                it 'redirects to action index' do 
+                it 'redirects to action index' do
                     patch :update, group_id: group.id, initiative_id: initiative.id, id: resource.id,
                                    resource: attributes_for(:resource, title: "Resource 2")
                     expect(response).to redirect_to action: :index
@@ -180,7 +182,7 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
                     expect{ patch :update, group_id: group.id, initiative_id: initiative.id, id: 0 }.to raise_error(ActiveRecord::RecordNotFound)
                 end
 
-                it 'renders edit template' do 
+                it 'renders edit template' do
                     patch :update, group_id: group.id, initiative_id: initiative.id, id: resource.id,
                                    resource: attributes_for(:resource, title: nil)
                     expect(response).to render_template :edit
@@ -217,7 +219,7 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
             end
         end
 
-        context 'without a logged in user' do 
+        context 'without a logged in user' do
             before { delete :destroy, group_id: group.id, initiative_id: initiative.id, id: resource.id }
             it_behaves_like "redirect user to users/sign_in path"
         end

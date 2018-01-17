@@ -226,7 +226,6 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
         describe 'without logged user' do
             before { post :create, group_id: group.id, news_link: attributes_for(:news_link) }
             it_behaves_like "redirect user to users/sign_in path"
-
         end
     end
 
