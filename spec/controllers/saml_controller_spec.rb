@@ -5,9 +5,14 @@ RSpec.describe SamlController, type: :controller do
     let(:user) {create(:user, enterprise: enterprise)}
     
     describe "GET#index" do
+        before { get :index, enterprise_id: enterprise.id }
+
         it "render index template" do
-            get :index, enterprise_id: enterprise.id
             expect(response).to render_template :index
+        end
+
+        it 'sets a valid enterprise object' do
+            expect(assigns[:enterprise]).to be_valid
         end
     end
 
@@ -27,7 +32,13 @@ RSpec.describe SamlController, type: :controller do
             expect(response.code).to eq("302")
             expect(response.location).to include("http://example.com?SAMLRequest=")
         end
+
+        it 'sets a valid enterprise object' do
+            get :sso, enterprise_id: enterprise.id
+            expect(assigns[:enterprise]).to be_valid
+        end
     end
+
     
     describe "POST#acs" do
         it "gets acs" do
@@ -55,13 +66,20 @@ RSpec.describe SamlController, type: :controller do
             expect(response).to render_template :fail
         end
     end
+
     
     describe "GET#metadata" do
+        before { get :metadata, enterprise_id: enterprise.id  }
+
         it "gets metadata" do
-            get :metadata, enterprise_id: enterprise.id
             expect(response).to be_success
         end
+
+        it 'sets a valid enterprise object' do
+            expect(assigns[:enterprise]).to be_valid
+        end
     end
+
     
     describe "GET#logout" do
         it "gets SAMLRequest logout and returns an error" do
@@ -113,6 +131,11 @@ RSpec.describe SamlController, type: :controller do
         it "gets regular logout" do
             get :logout, enterprise_id: enterprise.id
             expect(response).to be_success
+        end
+
+        it 'sets a valid enterprise object' do
+            get :logout, enterprise_id: enterprise.id
+            expect(assigns[:enterprise]).to be_valid
         end
     end
 end

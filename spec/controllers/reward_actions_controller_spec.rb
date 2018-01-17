@@ -32,7 +32,7 @@ RSpec.describe RewardActionsController, type: :controller do
       end
 
       context 'with incorrect params' do
-        before :each do
+        before do
           patch :update, enterprise: {
             reward_actions_attributes: { "0" => { "id" => reward_action.id, "points" => "abc" } }
           }

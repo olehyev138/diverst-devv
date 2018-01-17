@@ -5,7 +5,6 @@ RSpec.describe Enterprises::ResourcesController, type: :controller do
     let(:user){ create(:user, enterprise: enterprise) }
     let!(:admin_resource){ create(:resource, title: "title", container: enterprise, file: fixture_file_upload('files/test.csv', 'text/csv'), resource_type: "admin") }
     let!(:national_resource){ create(:resource, title: "title", container: enterprise, file: fixture_file_upload('files/test.csv', 'text/csv'), resource_type: "national") }
-
     login_user_from_let
 
     describe "GET#index" do
@@ -41,12 +40,25 @@ RSpec.describe Enterprises::ResourcesController, type: :controller do
     end
 
     describe "GET#edit" do
-        it "returns success" do
-            get :edit, :id => admin_resource.id, enterprise_id: enterprise.id
-            expect(response).to be_success
+        context 'when user is logged in' do
+            login_user_from_let
+            before { get :edit, :id => admin_resource.id, enterprise_id: enterprise.id }
+
+            it "render edit template" do
+                expect(response).to render_template :edit
+            end
+
+            it 'sets a valid container object' do
+                expect(assigns[:container]).to be_valid
+            end
+        end
+
+        context 'when user is not logged in' do
+            before { get :edit, :id => admin_resource.id, enterprise_id: enterprise.id }
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
+  
     describe "POST#create" do
         context "invalid params" do
             before {post :create, enterprise_id: enterprise.id, resource: {title: "resource"}}
@@ -77,12 +89,25 @@ RSpec.describe Enterprises::ResourcesController, type: :controller do
     end
 
     describe "GET#show" do
-        it "returns success" do
-            get :show, :id => admin_resource.id, enterprise_id: enterprise.id
-            expect(response).to be_success
+        context 'when user is logged in' do
+            login_user_from_let
+            before { get :show, :id => admin_resource.id, enterprise_id: enterprise.id }
+
+            it "returns data in csv format" do
+                expect(response.content_type).to eq 'text/csv'
+            end
+
+            it "filename should be 'test.csv'" do
+                expect(response.headers["Content-Disposition"]).to include 'test.csv'
+            end
+        end
+
+        context 'when user is not logged in' do
+            before { get :show, :id => admin_resource.id, enterprise_id: enterprise.id }
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
+  
     describe "PATCH#update" do
         context "invalid params" do
             before {patch :update, enterprise_id: enterprise.id, id: admin_resource.id, resource: {title: nil, file: nil}}

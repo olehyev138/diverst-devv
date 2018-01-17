@@ -4,7 +4,7 @@ RSpec.describe SubSegmentsController, type: :controller do
     let(:enterprise){ create(:enterprise, cdo_name: "test") }
     let(:user){ create(:user, enterprise: enterprise) }
     let(:segment){ create(:segment, enterprise: enterprise) }
-    
+
     login_user_from_let
 
      describe "GET#new" do
@@ -14,14 +14,14 @@ RSpec.describe SubSegmentsController, type: :controller do
             expect(assigns[:sub_segment]).to be_a_new(Segment)
         end
 
-        it "render new template" do 
+        it "render new template" do
             expect(response).to render_template :new
         end
     end
 
-    
+
     describe "POST#create" do
-        context "successfully" do 
+        context "successfully" do
             before { post :create, :segment_id => segment.id, :segment => {:name => "test"} }
 
             it "redirects" do
@@ -48,17 +48,17 @@ RSpec.describe SubSegmentsController, type: :controller do
             end
         end
 
-        context "unsuccessfully" do 
+        context "unsuccessfully" do
              before do
                 request.env["HTTP_REFERER"] = "back"
-                 post :create, :segment_id => segment.id, :segment => {:name => nil} 
+                 post :create, :segment_id => segment.id, :segment => {:name => nil}
              end
 
-             it "flashes an alert message" do 
+             it "flashes an alert message" do
                 expect(flash[:alert]).to eq "Your sub-segment was not created. Please fix the errors"
              end
 
-             it "reddirect to back" do 
+             it "reddirect to back" do
                 expect(response).to redirect_to "back"
              end
         end
