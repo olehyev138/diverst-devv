@@ -11,14 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180104150641) do
+ActiveRecord::Schema.define(version: 20180112101440) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
     t.string   "trackable_type", limit: 191
     t.integer  "owner_id",       limit: 4
     t.string   "owner_type",     limit: 191
-    t.string   "key",            limit: 191
+    t.string   "key",            limit: 255
     t.text     "parameters",     limit: 65535
     t.integer  "recipient_id",   limit: 4
     t.string   "recipient_type", limit: 191
@@ -345,6 +345,7 @@ ActiveRecord::Schema.define(version: 20180104150641) do
     t.integer  "onboarding_sponsor_media_file_size",    limit: 4
     t.datetime "onboarding_sponsor_media_updated_at"
     t.boolean  "enable_pending_comments",                             default: false
+    t.boolean  "disable_sponsor_message",                             default: false
   end
 
   create_table "event_attendances", force: :cascade do |t|
@@ -1023,6 +1024,7 @@ ActiveRecord::Schema.define(version: 20180104150641) do
     t.integer  "notifications_frequency", limit: 4,     default: 2
     t.integer  "total_weekly_points",     limit: 4,     default: 0
     t.text     "data",                    limit: 65535
+    t.integer  "notifications_date",      limit: 4,     default: 1
   end
 
   create_table "user_reward_actions", force: :cascade do |t|

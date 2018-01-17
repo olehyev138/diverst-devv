@@ -20,10 +20,10 @@ RSpec.describe QuestionsController, type: :controller do
 
             it "list campaign questions in descending order by created_at" do
                 question
-                question1 = create(:question, campaign: campaign)
-                question2  = create(:question, campaign: campaign)
+                question1 = create(:question, campaign: campaign, created_at: Time.now - 5.hours, updated_at: Time.now - 5.hours)
+                question2  = create(:question, campaign: campaign, created_at: Time.now - 2.hours, updated_at: Time.now - 2.hours)
 
-                expect(assigns[:campaign].questions).to eq [question, question1, question2]
+                expect(assigns[:questions]).to eq [question, question2, question1]
             end
         end
 
@@ -32,6 +32,7 @@ RSpec.describe QuestionsController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe "GET#new" do
         context "with logged user" do
@@ -57,8 +58,11 @@ RSpec.describe QuestionsController, type: :controller do
         end
     end
 
+
     describe "GET#show" do
         context "with logged user" do
+            let!(:answer1) { create(:answer, question: question, upvote_count: 2) }
+            let!(:answer2) { create(:answer, question: question, upvote_count: 5) }
             login_user_from_let
             before { get :show, id: question.id }
 
@@ -69,6 +73,10 @@ RSpec.describe QuestionsController, type: :controller do
             it "returns a valid campaign object" do
                 expect(assigns[:question].campaign).to be_valid
             end
+
+            it 'return answers belonging to a question in descending order of upvote_count' do
+                expect(assigns[:answers]).to eq [answer2, answer1]
+            end
         end
 
         context "without a logged in user" do
@@ -77,42 +85,43 @@ RSpec.describe QuestionsController, type: :controller do
         end
     end
 
+
     describe "POST#create" do
         context "with logged user" do
             login_user_from_let
-            
+
             context "when successful" do
-                before{ post :create, campaign_id: campaign.id, question: {title: "Title", description: "description"}}
-    
-                it "redirects" do
+                it "redirects to index action" do
+                    post :create, campaign_id: campaign.id, question: {title: "Title", description: "description"}
                     expect(response).to redirect_to action: :index
                 end
-    
-                it "creates the question" do
+
+                it "creates the question object" do
                     campaign.reload
-                    expect(campaign.questions.count).to eq(1)
+                    expect{post :create, campaign_id: campaign.id, question: {title: "Title", description: "description"}}
+                    .to change(Question, :count).by(1)
                 end
-    
+
                 it "flashes a notice message" do
+                    post :create, campaign_id: campaign.id, question: {title: "Title", description: "description"}
                     expect(flash[:notice]).to eq "Your question was created"
                 end
             end
+
             context "when unsuccessful" do
-                before{ 
-                    allow_any_instance_of(Question).to receive(:save).and_return(false)
-                    post :create, campaign_id: campaign.id, question: {title: "Title", description: "description"}
-                }
-    
                 it "renders new" do
+                    post :create, campaign_id: campaign.id, question: {title: nil, description: "description"}
                     expect(response).to render_template :new
                 end
-    
-                it "does not create the question" do
+
+                it "does not create the question object" do
                     campaign.reload
-                    expect(campaign.questions.count).to eq(0)
+                    expect{post :create, campaign_id: campaign.id, question: {title: nil, description: "description"}}
+                    .to change(Question, :count).by(0)
                 end
-    
+
                 it "flashes an alert message" do
+                    post :create, campaign_id: campaign.id, question: {title: nil, description: "description"}
                     expect(flash[:alert]).to eq "Your question was not created. Please fix the errors"
                 end
             end
@@ -124,23 +133,45 @@ RSpec.describe QuestionsController, type: :controller do
         end
     end
 
+
     describe "PATCH#reopen" do
         context "with logged user" do
             login_user_from_let
-            it "gets the show page" do
+            before do
                 request.env["HTTP_REFERER"] = "back"
                 patch :reopen, id: question.id
+            end
+
+            it "gets the show page" do
                 expect(response).to redirect_to "back"
             end
+
+            it 'reopens the question' do
+                expect(assigns[:question].solved_at).to be_nil
+            end
+        end
+
+        context 'without a logged in user' do
+            before do
+                request.env["HTTP_REFERER"] = "back"
+                patch :reopen, id: question.id
+            end
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe "GET#edit" do
         context "with logged user" do
             login_user_from_let
+            before { get :edit, id: question.id }
+
             it "gets the edit page" do
-                get :edit, id: question.id
-                expect(response).to be_success
+                expect(response).to render_template :edit
+            end
+
+            it 'returns a valid question object' do
+                expect(assigns[:question]).to be_valid
             end
         end
 
@@ -150,67 +181,67 @@ RSpec.describe QuestionsController, type: :controller do
         end
     end
 
+
     describe "PATCH#update" do
-        context "with logged user" do
+        describe "with logged user" do
             login_user_from_let
+
             context "when successful" do
                 before {patch :update, id: question.id, question: {title: "updated"}}
-    
+
                 it "redirects to the question" do
                     expect(response).to redirect_to(question)
                 end
-    
-                it "redirects to the question" do
+
+                it "updates question title" do
                     question.reload
                     expect(question.title).to eq("updated")
                 end
-    
-                it "flashes" do
-                    expect(flash[:notice])
+
+                it "flashes a notice message" do
+                    expect(flash[:notice]).to eq 'Your question was updated'
                 end
             end
             context "when unsuccessful" do
-                before {
-                    allow_any_instance_of(Question).to receive(:save).and_return(false)
-                    patch :update, id: question.id, question: {title: "updated"}
-                }
-    
+                before { patch :update, id: question.id, question: {title: nil} }
+
                 it "redirects to the question" do
                     expect(response).to render_template :edit
                 end
-    
+
                 it "does not update the question" do
                     question.reload
                     expect(question.title).to_not eq("updated")
                 end
-    
-                it "flashes an alert" do
+
+                it "flashes an alert message" do
                     expect(flash[:alert]).to eq("Your question was not updated. Please fix the errors")
                 end
             end
         end
 
-        context "without a logged in user" do
+        describe "without a logged in user" do
             before { patch :update, id: question.id, question: {title: "updated"} }
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
+
     describe "DELETE#destroy" do
         context "with logged user" do
             login_user_from_let
 
-            before do
-                request.env["HTTP_REFERER"] = "back"
-                delete :destroy, id: question.id
-            end
+            before { request.env["HTTP_REFERER"] = "back" }
 
-            it "redirects" do
+            it "redirects to previous page" do
+                delete :destroy, id: question.id
                 expect(response).to redirect_to "back"
             end
 
             it "deletes the question" do
-                expect(Question.where(:id => question.id).count).to eq(0)
+                question
+                expect{delete :destroy, id: question.id}
+                .to change(Question, :count).by(-1)
             end
         end
 
