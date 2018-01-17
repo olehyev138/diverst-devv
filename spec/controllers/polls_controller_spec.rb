@@ -4,7 +4,7 @@ RSpec.describe PollsController, type: :controller do
     let(:user) { create(:user) }
     let!(:poll) { create(:poll, status: 0, enterprise: user.enterprise, groups: []) }
     let!(:graph1) { create(:graph, aggregation: create(:field)) }
-    let!(:graph2) { create(:graph, aggregation: nil) }
+    let!(:graph2) { create(:graph, aggregation: create(:field)) }
 
 
 
@@ -133,9 +133,10 @@ RSpec.describe PollsController, type: :controller do
                 expect(assigns[:graphs]).to eq [graph1, graph2]
             end
 
-            it "returns poll responses in a decreasing order of created_at" do 
-                response1 = create(:poll_response, poll: poll, user: user) 
-                response2 = create(:poll_response, poll: poll, user: user, created_at: DateTime.now + 1.minute, updated_at: DateTime.now + 1.minute) 
+
+            it "returns poll responses in a decreasing order of created_at" do
+                response1 = create(:poll_response, poll: poll, user: user)
+                response2 = create(:poll_response, poll: poll, user: user, created_at: DateTime.now + 1.minute, updated_at: DateTime.now + 1.minute)
                 expect(assigns[:responses]).to eq [response2, response1]
             end
 
@@ -156,7 +157,7 @@ RSpec.describe PollsController, type: :controller do
             login_user_from_let
             before { get :edit, id: poll.id }
 
-            it "set a valid poll object" do 
+            it "set a valid poll object" do
                 expect(assigns[:poll]).to be_valid
             end
 
@@ -200,7 +201,7 @@ RSpec.describe PollsController, type: :controller do
                                                                                                     :count).by(1)
                 end
 
-                it "flashes a notice message" do 
+                it "flashes a notice message" do
                     expect(flash[:notice]).to eq "Your survey was updated"
                 end
 
@@ -220,7 +221,7 @@ RSpec.describe PollsController, type: :controller do
                     expect(poll.groups).to eq []
                 end
 
-                it "flashes an alert message" do 
+                it "flashes an alert message" do
                     expect(flash[:alert]).to eq "Your survey was not updated. Please fix the errors"
                 end
 
@@ -230,7 +231,7 @@ RSpec.describe PollsController, type: :controller do
             end
         end
 
-        describe "without a logged in user" do 
+        describe "without a logged in user" do
             before { patch :update, id: poll.id, poll: { group_ids: [group.id] } }
             it_behaves_like "redirect user to users/sign_in path"
         end
@@ -246,12 +247,12 @@ RSpec.describe PollsController, type: :controller do
                 expect{delete :destroy, id: poll.id}.to change(Poll, :count).by(-1)
             end
 
-            it "redirect to index action" do 
-                delete :destroy, id: poll.id 
+            it "redirect to index action" do
+                delete :destroy, id: poll.id
                 expect(response).to redirect_to action: :index
             end
 
-            it "tracks delete activity" do 
+            it "tracks delete activity" do
                 expect{ delete :destroy, id: poll.id }.to change(PublicActivity::Activity.all, :count).by(1)
             end
         end
@@ -267,13 +268,17 @@ RSpec.describe PollsController, type: :controller do
         context "with logged user" do
             login_user_from_let
             before { get :export_csv, id: poll.id }
-
+          
             it "gets response in csv format" do
                 expect(response.content_type).to eq 'text/csv'
             end
 
             it 'response includes poll_title as part of csv filename' do 
                 expect(response.headers["Content-Disposition"]).to include "#{poll.title}_responses.csv"
+            end
+
+            it 'returns file in csv format' do
+                expect(response.content_type).to eq 'text/csv'
             end
         end
 

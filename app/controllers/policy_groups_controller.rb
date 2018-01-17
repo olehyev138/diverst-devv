@@ -32,7 +32,7 @@ class PolicyGroupsController < ApplicationController
 
   def update
     authorize PolicyGroup
-    
+
     if params[:commit] === "Add User(s)"
       add_users
     end
@@ -51,7 +51,7 @@ class PolicyGroupsController < ApplicationController
     @policy_group.destroy
     redirect_to action: :index
   end
-  
+
   def add_users
     @policy_group.user_ids = @policy_group.user_ids + params[:policy_group][:new_users]
   end
@@ -59,7 +59,11 @@ class PolicyGroupsController < ApplicationController
   protected
 
   def set_policy_group
-    @policy_group = current_user.enterprise.policy_groups.find(params[:id])
+    if current_user
+      @policy_group = current_user.enterprise.policy_groups.find(params[:id])
+    else
+      user_not_authorized
+    end
   end
 
   def policy_group_params

@@ -8,6 +8,7 @@ RSpec.describe OutcomesController, type: :controller do
     let!(:group) { create :group, enterprise: user.enterprise }
     let!(:outcome) {create :outcome, group_id: group.id}
 
+
     describe 'GET #index' do
         def get_index(group_id = -1)
             get :index, group_id: group_id
@@ -21,6 +22,10 @@ RSpec.describe OutcomesController, type: :controller do
             it "render index template" do
                 expect(response).to render_template :index
             end
+
+            it 'sets a valid group object' do 
+                expect(assigns[:group]).to be_valid
+            end
         end
 
         context "with non-logged in user" do
@@ -30,38 +35,8 @@ RSpec.describe OutcomesController, type: :controller do
     end
 
 
-    describe 'GET #new', skip: "missing template" do
-        def get_new(group_id = -1)
-            get :new, group_id: group_id
-        end
-
-        context 'with logged user' do
-            login_user_from_let
-
-            before { get_new(group.id) }
-
-            it "returns a new Outcome object" do
-                expect(assigns[:outcome]).to be_a_new(Outcome)
-            end
-        end
-    end
-
-
-    describe 'GET #edit', skip: "missing template" do
-        def get_edit(group_id = -1)
-            get :edit, group_id: group_id, :id => outcome.id
-        end
-
-        context 'with logged user' do
-            login_user_from_let
-
-            before { get_edit(group.id) }
-
-            it 'return success' do
-                expect(response).to be_success
-            end
-        end
-    end
+    #NOTE: MISSING  TEMPLATE for new action
+    #NOTE: TEMPLATE exists for edit action. However, form partial is missing
 
 
     describe 'POST #create' do
@@ -69,67 +44,67 @@ RSpec.describe OutcomesController, type: :controller do
             post :create, group_id: group_id, :outcome => {:name => "created", :group_id => group.id}
         end
 
-        context 'with logged user' do
+        describe 'with logged user' do
             login_user_from_let
 
-            before { post_create(group.id) }
+            context 'with valid params' do
 
-            it 'redirects to index' do
-                expect(response).to redirect_to action: :index
-            end
+                it 'redirects to index' do
+                    post_create(group.id)
+                    expect(response).to redirect_to action: :index
+                end
 
-            it 'creates the outcome' do
-                expect(Outcome.count).to eq(2)
-            end
+                it 'creates the outcome' do
+                    expect{post_create(group.id)}.to change(Outcome, :count).by(1)
+                end
 
-            it 'flashes a notice message' do
-                expect(flash[:notice]).to eq "Your #{ c_t(:outcome) } was created"
+                it 'flashes a notice message' do
+                    post_create(group.id)
+                    expect(flash[:notice]).to eq "Your #{ c_t(:outcome) } was created"
+                end
             end
         end
 
-        context "incorrect params", skip: "missing template" do
-            login_user_from_let
-            before {post :create, group_id: group.id, :outcome => {:name => "", :group_id => group.id}}
 
-            it "flashes an alert message" do
-                expect(flash[:alert]).to eq "Your #{ c_t(:outcome) } was not created. Please fix the errors"
-            end
-
-            it "render new template" do
-                expect(response).to render_template :new
-            end
-        end
-
-        context "without logged in user" do
+        describe "without logged in user" do
             before { post :create, group_id: group.id, :outcome => {:name => "created", :group_id => group.id} }
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe 'PATCH #update' do
         def patch_update(group_id = -1)
             patch :update, group_id: group_id, :id => outcome.id, :outcome => {:name => "updated"}
         end
 
-        context 'with logged user' do
+        describe 'with logged user' do
             login_user_from_let
 
-            before { patch_update(group.id) }
+            context 'with valid params' do
+                before { patch_update(group.id) }
 
-            it 'redirects to index' do
-                expect(response).to redirect_to action: :index
-            end
+                it 'redirects to index' do
+                    expect(response).to redirect_to action: :index
+                end
 
-            it 'updates the outcome' do
-                outcome.reload
-                expect(outcome.name).to eq("updated")
-            end
+                it 'updates the outcome' do
+                    outcome.reload
+                    expect(outcome.name).to eq("updated")
+                end
 
-            it 'flashes' do
-                expect(flash[:notice])
+                it 'flashes a notice message' do
+                    expect(flash[:notice]).to eq "Your #{ c_t(:outcome) } was updated"
+                end
             end
         end
+
+        describe "without logged in user" do
+            before { patch_update(group.id) }
+            it_behaves_like "redirect user to users/sign_in path"
+        end
     end
+
 
     describe 'DELETE #destroy' do
         def delete_destroy(group_id = -1)
@@ -147,6 +122,11 @@ RSpec.describe OutcomesController, type: :controller do
             it "destroys outcome" do
                 expect{ delete_destroy(group.id) }.to change(Outcome, :count).by(-1)
             end
+        end
+
+        context 'without logged user' do 
+            before { delete_destroy(group.id) }
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 end

@@ -5,16 +5,8 @@ RSpec.describe PollResponsesController, type: :controller do
     let(:poll){ create(:poll) }
     let(:poll_response){ create :poll_response, poll: poll}
 
-    describe "GET#index", :skip => "MISSING TEMPLATE" do
-        context "with logged user" do
-            login_user_from_let
-
-            it "gets the index" do
-                get :index, poll_id: poll.id
-                expect(response).to be_success
-            end
-        end
-    end
+    #NOTE: index method in corresponding controller has no template to render.
+    #A test for index method will result in ActionView::MissingTemplate
 
 
     describe "GET#new" do
@@ -39,13 +31,13 @@ RSpec.describe PollResponsesController, type: :controller do
 
 
     describe "POST#create" do
-        context "with logged user" do
+        let!(:poll_response) { attributes_for(:poll_response) }
+        let!(:reward_action) { create(:reward_action, enterprise: user.enterprise, key: "survey_response", points: 40) }
+
+        describe "with logged user" do
             login_user_from_let
 
             context "with valid params" do
-                let!(:poll_response) { attributes_for(:poll_response) }
-                let!(:reward_action) { create(:reward_action, enterprise: user.enterprise, key: "survey_response", points: 40) }
-
                 it "creates a new poll_response" do
                     expect{ post :create, poll_id: poll.id, poll_response: poll_response }.to change(PollResponse.where(poll: poll, user: user), :count).by(1)
                 end
@@ -59,18 +51,33 @@ RSpec.describe PollResponsesController, type: :controller do
                     expect(user.points).to eq 40
                 end
 
+                it 'flashes a reward message' do
+                    user.enterprise.update(enable_rewards: true)
+                    post :create, poll_id: poll.id, poll_response: poll_response
+                    user.reload
+                    expect(flash[:reward]).to eq "Now you have #{user.credits} points"
+                end
+
                 it "redirects to new action" do
                     post :create, poll_id: poll.id, poll_response: poll_response
                     expect(response).to redirect_to action: :thank_you, id: PollResponse.last
                 end
             end
+
+            context 'when saving a response object fails' do
+                before do
+                    allow_any_instance_of(PollResponse).to receive(:save).and_return(false)
+                    post :create, poll_id: poll.id, poll_response: poll_response
+                end
+
+                it 'render new template' do
+                    expect(response).to render_template :new
+                end
+            end
         end
 
-        context "without a logged in user" do
-            let!(:poll_response) { attributes_for(:poll_response) }
-            let!(:reward_action) { create(:reward_action, enterprise: user.enterprise, key: "survey_response", points: 40) }
+        describe "without a logged in user" do
             before { post :create, poll_id: poll.id, poll_response: poll_response }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
@@ -90,6 +97,7 @@ RSpec.describe PollResponsesController, type: :controller do
             end
         end
     end
+
 
     describe "GET#thank_you" do
         context "with logged in user" do

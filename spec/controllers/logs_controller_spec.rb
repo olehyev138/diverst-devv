@@ -39,7 +39,7 @@ RSpec.describe LogsController, type: :controller do
           expect(response).to be_success
         end
 
-        it "return html format" do 
+        it "return html format" do
           expect(response.content_type).to eq "text/html"
         end
 
