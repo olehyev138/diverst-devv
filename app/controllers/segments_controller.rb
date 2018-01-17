@@ -88,7 +88,7 @@ class SegmentsController < ApplicationController
     end
 
     def set_segment
-        @segment = current_user.enterprise.segments.find(params[:id])
+        current_user ? @segment = current_user.enterprise.segments.find(params[:id]) : user_not_authorized
     end
 
     def segment_params

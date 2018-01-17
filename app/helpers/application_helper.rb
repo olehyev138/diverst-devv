@@ -100,7 +100,7 @@ module ApplicationHelper
 
   def show_sponsor_card?(object, m)
     if object.public_send(m.to_sym).present?
-      yield 
+      yield
     end
   end
 
@@ -113,6 +113,13 @@ module ApplicationHelper
   def show_sponsor_video?(object, m)
     if %r{\Avideo\/.*\Z}.match(object.public_send(m.to_sym))
       yield
+    end
+  end
+
+  #for RSpec test of protected method in segment_controller.rb
+  def segment_members_of_group(segment, group)
+    segment.members.includes(:groups).select do |user|
+      user.groups.include? group
     end
   end
 
