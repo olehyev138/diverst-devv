@@ -5,39 +5,57 @@ RSpec.describe Enterprises::ResourcesController, type: :controller do
     let(:user){ create(:user, enterprise: enterprise) }
     let!(:admin_resource){ create(:resource, title: "title", container: enterprise, file: fixture_file_upload('files/test.csv', 'text/csv'), resource_type: "admin") }
     let!(:national_resource){ create(:resource, title: "title", container: enterprise, file: fixture_file_upload('files/test.csv', 'text/csv'), resource_type: "national") }
-    login_user_from_let
+
 
     describe "GET#index" do
-        before {get :index, enterprise_id: enterprise.id}
+        context 'when user is logged' do
+            login_user_from_let
+            before {get :index, enterprise_id: enterprise.id}
 
-        it "returns success" do
-            expect(response).to be_success
+            it "render index template" do
+                expect(response).to render_template :index
+            end
+
+            it "assigns the admin_resources" do
+                expect(assigns[:admin_resources]).to eq([admin_resource])
+            end
+
+            it "assigns the national_resources" do
+                expect(assigns[:national_resources]).to eq([national_resource])
+            end
         end
 
-        it "assigns the admin_resources" do
-            expect(assigns[:admin_resources]).to eq([admin_resource])
-        end
-
-        it "assigns the national_resources" do
-            expect(assigns[:national_resources]).to eq([national_resource])
+        context 'when user is not logged in' do
+            before { get :index, enterprise_id: enterprise.id }
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe "GET#new" do
-        before {get :new, enterprise_id: enterprise.id, resource_type: "admin"}
+        context 'when user is logged in' do
+            login_user_from_let
+            before {get :new, enterprise_id: enterprise.id, resource_type: "admin"}
 
-        it "returns success" do
-            expect(response).to be_success
+            it "render new template" do
+                expect(response).to render_template :new
+            end
+
+            it "assigns new resource" do
+                expect(assigns[:resource]).to be_a_new(Resource)
+            end
+
+            it "sets resource_type" do
+                expect(assigns[:resource].resource_type).to eq("admin")
+            end
         end
 
-        it "assigns new resource" do
-            expect(assigns[:resource]).to be_a_new(Resource)
-        end
-
-        it "sets resource_type" do
-            expect(assigns[:resource].resource_type).to eq("admin")
+        context 'when user is not logged in' do
+            before { get :new, enterprise_id: enterprise.id, resource_type: "admin" }
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe "GET#edit" do
         context 'when user is logged in' do
@@ -58,35 +76,45 @@ RSpec.describe Enterprises::ResourcesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-  
-    describe "POST#create" do
-        context "invalid params" do
-            before {post :create, enterprise_id: enterprise.id, resource: {title: "resource"}}
 
-            it "returns edit" do
-                expect(response).to render_template(:edit)
+
+    describe "POST#create" do
+        let!(:file) { fixture_file_upload('files/test.csv', 'text/csv') }
+
+        describe 'when user is logged in' do
+            login_user_from_let
+
+            context "valid params" do
+                it "redirect_to index" do
+                    post :create, enterprise_id: enterprise.id, resource: {title: "resource", file: file}
+                    expect(response).to redirect_to action: :index
+                end
+
+                it "creates the resource" do
+                    expect{post :create, enterprise_id: enterprise.id, resource: {title: "resource", file: file}}
+                    .to change(Resource, :count).by(1)
+                end
             end
 
-            it "doesn't create the resource" do
-                expect(Resource.count).to eq(2)
+            context "invalid params" do
+                it "render edit template" do
+                    post :create, enterprise_id: enterprise.id, resource: {title: "resource"}
+                    expect(response).to render_template(:edit)
+                end
+
+                it "doesn't create the resource" do
+                    expect{post :create, enterprise_id: enterprise.id, resource: {title: "resource"}}
+                    .to change(Resource, :count).by(0)
+                end
             end
         end
 
-        context "valid params" do
-            before :each do
-                file = fixture_file_upload('files/test.csv', 'text/csv')
-                post :create, enterprise_id: enterprise.id, resource: {title: "resource", file: file}
-            end
-
-            it "redirect_to index" do
-                expect(response).to redirect_to action: :index
-            end
-
-            it "creates the resouce" do
-                expect(Resource.count).to eq(3)
-            end
+        describe 'when user is not logged in' do
+            before { post :create, enterprise_id: enterprise.id, resource: {title: "resource"} }
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe "GET#show" do
         context 'when user is logged in' do
@@ -107,47 +135,70 @@ RSpec.describe Enterprises::ResourcesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-  
-    describe "PATCH#update" do
-        context "invalid params" do
-            before {patch :update, enterprise_id: enterprise.id, id: admin_resource.id, resource: {title: nil, file: nil}}
 
-            it "returns edit" do
-                expect(response).to render_template(:edit)
+
+    describe "PATCH#update" do
+        let!(:file) { fixture_file_upload('files/test.csv', 'text/csv') }
+
+        describe 'when user is logged in' do
+            login_user_from_let
+
+            context "valid params" do
+                before do
+                    patch :update, enterprise_id: enterprise.id, id: admin_resource.id, resource: {title: "updated", file: file}
+                end
+
+                it "redirect_to index" do
+                    expect(response).to redirect_to action: :index
+                end
+
+                it "updates the resource" do
+                    admin_resource.reload
+                    expect(admin_resource.title).to eq("updated")
+                end
             end
 
-            it "doesn't update the resouce" do
-                admin_resource.reload
-                expect(admin_resource.title).to_not be(nil)
+            context "invalid params" do
+                before {patch :update, enterprise_id: enterprise.id, id: admin_resource.id, resource: {title: nil, file: nil}}
+
+                it "returns edit" do
+                    expect(response).to render_template(:edit)
+                end
+
+                it "doesn't update the resource" do
+                    admin_resource.reload
+                    expect(admin_resource.title).to_not be(nil)
+                end
             end
         end
 
-        context "valid params" do
-            before :each do
-                file = fixture_file_upload('files/test.csv', 'text/csv')
+        describe 'when user is not logged in' do
+            before do
                 patch :update, enterprise_id: enterprise.id, id: admin_resource.id, resource: {title: "updated", file: file}
             end
-
-            it "redirect_to index" do
-                expect(response).to redirect_to action: :index
-            end
-
-            it "updates the resouce" do
-                admin_resource.reload
-                expect(admin_resource.title).to eq("updated")
-            end
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
-    describe "DELETE#destroy" do
-        before {delete :destroy, :id => admin_resource.id, enterprise_id: enterprise.id}
 
-        it "returns success" do
-            expect(response).to redirect_to action: :index
+    describe "DELETE#destroy" do
+        context 'when user is logged in' do
+            login_user_from_let
+
+            it "redirect to index action" do
+                delete :destroy, :id => admin_resource.id, enterprise_id: enterprise.id
+                expect(response).to redirect_to action: :index
+            end
+
+            it "deletes the resources" do
+                expect{delete :destroy, :id => admin_resource.id, enterprise_id: enterprise.id}
+                .to change(Resource.where(:id => admin_resource.id), :count).by(-1)
+            end
         end
 
-        it "deletes the resources" do
-            expect(Resource.where(:id => admin_resource.id).count).to eq(0)
+        context 'when user is not logged in' do
+            before { delete :destroy, :id => admin_resource.id, enterprise_id: enterprise.id }
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 end
