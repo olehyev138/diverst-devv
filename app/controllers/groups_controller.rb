@@ -19,7 +19,7 @@ class GroupsController < ApplicationController
         authorize Group
         @groups = current_user.enterprise.groups.includes(:initiatives)
     end
-    
+
     def close_budgets
         authorize Group
         @groups = current_user.enterprise.groups.includes(:children).where(:parent_id => nil)
@@ -47,7 +47,7 @@ class GroupsController < ApplicationController
         end
 
         not_found! if enterprise.nil?
-        
+
         @events = enterprise.initiatives.includes(:initiative_participating_groups).where(:groups => {:parent_id => nil})
             .ransack(
                 initiative_participating_groups_group_id_in: params[:q]&.dig(:initiative_participating_groups_group_id_in),
@@ -59,7 +59,7 @@ class GroupsController < ApplicationController
                 initiative_segments_segment_id_in: params[:q]&.dig(:initiative_segments_segment_id_in)
             )
             .result
-            
+
         @events += enterprise.initiatives.includes(:initiative_participating_groups).where.not(:groups => {:parent_id => nil})
             .ransack(
                 initiative_participating_groups_group_id_in: Group.where(:parent_id => params[:q]&.dig(:initiative_participating_groups_group_id_in)).pluck(:id),
@@ -71,8 +71,8 @@ class GroupsController < ApplicationController
                 initiative_segments_segment_id_in: params[:q]&.dig(:initiative_segments_segment_id_in)
             )
             .result
-            
-        render 'shared/calendar/events', format: :json
+
+        render 'shared/calendar/events', formats: :json
     end
 
     def new
