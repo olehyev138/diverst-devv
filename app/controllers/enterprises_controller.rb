@@ -18,7 +18,7 @@ class EnterprisesController < ApplicationController
       redirect_to :back
     else
       flash[:alert] = "Your enterprise was not updated. Please fix the errors"
-      render params['source']
+      redirect_to :back
     end
   end
 
