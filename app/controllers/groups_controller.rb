@@ -193,6 +193,12 @@ class GroupsController < ApplicationController
 
     def parse_csv
         authorize @group, :edit?
+        
+        if params[:file].nil?
+            flash[:alert] = "CSV file is required"
+            redirect_to :back
+            return
+        end
 
         @table = CSV.table params[:file].tempfile
         @failed_rows = []

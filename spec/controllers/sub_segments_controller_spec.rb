@@ -50,7 +50,7 @@ RSpec.describe SubSegmentsController, type: :controller do
 
         context "unsuccessfully" do
              before do
-                request.env["HTTP_REFERER"] = "back"
+                 request.env["HTTP_REFERER"] = "back"
                  post :create, :segment_id => segment.id, :segment => {:name => nil}
              end
 
@@ -58,7 +58,7 @@ RSpec.describe SubSegmentsController, type: :controller do
                 expect(flash[:alert]).to eq "Your sub-segment was not created. Please fix the errors"
              end
 
-             it "reddirect to back" do
+             it "redirect to back" do
                 expect(response).to redirect_to "back"
              end
         end
