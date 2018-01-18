@@ -13,14 +13,37 @@ RSpec.describe GraphsController, type: :controller do
     describe "GET#new" do
         describe "with logged in user" do
             login_user_from_let
-            before { get :new, :metrics_dashboard_id => metrics_dashboard.id }
 
-            it "returns a new graph object" do
-                expect(assigns[:graph]).to be_a_new(Graph)
+            context 'when metrics_dashboard_id is available in params' do
+                before { get :new, :metrics_dashboard_id => metrics_dashboard.id }
+
+                it 'sets collection object to be metrics_dashboard' do
+                    expect(assigns[:collection]).to eq metrics_dashboard
+                end
+
+                it "returns a new graph object" do
+                    expect(assigns[:graph]).to be_a_new(Graph)
+                end
+
+                it "render template" do
+                    expect(response).to render_template :new
+                end
             end
 
-            it "render template" do
-                expect(response).to render_template :new
+            context 'when poll_id is available in params' do
+                before { get :new, poll_id: poll.id }
+
+                it 'sets collection object to be poll' do
+                    expect(assigns[:collection]).to eq poll
+                end
+
+                it "returns a new graph object" do
+                    expect(assigns[:graph]).to be_a_new(Graph)
+                end
+
+                it "render template" do
+                    expect(response).to render_template :new
+                end
             end
         end
 
@@ -30,40 +53,76 @@ RSpec.describe GraphsController, type: :controller do
         end
     end
 
+
     describe "POST#create" do
         describe "with logged in user" do
             login_user_from_let
 
-            context "with valid field id" do
-                it "redirect to @collection" do
-                    post :create, :metrics_dashboard_id => metrics_dashboard.id, :graph => {field_id: field1.id}
-                    expect(response).to redirect_to metrics_dashboard
+            describe 'when metrics_dashboard_id is available in params' do 
+                context "with valid field id" do
+                    it "redirect to @collection" do
+                        post :create, :metrics_dashboard_id => metrics_dashboard.id, :graph => {field_id: field1.id}
+                        expect(response).to redirect_to metrics_dashboard
+                    end
+
+                    it 'creates new graph' do
+                        expect{
+                            post :create, :metrics_dashboard_id => metrics_dashboard.id, :graph => { field_id: field1.id } }.to change(Graph, :count).by(1)
+                    end
+
+                    it "flashes a notice message" do
+                        post :create, :metrics_dashboard_id => metrics_dashboard.id, :graph => { field_id: field1.id }
+                        expect(flash[:notice]).to eq "Your graph was created"
+                    end
                 end
 
-                it 'creates new graph' do
-                    expect{
-                        post :create, :metrics_dashboard_id => metrics_dashboard.id, :graph => { field_id: field1.id } }.to change(Graph, :count).by(1)
-                end
+                context "with field id as nil" do
+                    before { post :create, :metrics_dashboard_id => metrics_dashboard.id, :graph => { field_id: nil } }
 
-                it "flashes a notice message" do
-                    post :create, :metrics_dashboard_id => metrics_dashboard.id, :graph => { field_id: field1.id }
-                    expect(flash[:notice]).to eq "Your graph was created"
+                    it "flashes an alert message" do
+                        expect(flash[:alert]).to eq "Your graph was not created. Please fix the errors"
+                    end
+
+                    it "render a new template" do
+                        expect(response).to render_template :new
+                    end
                 end
             end
 
-            context "with field id as nil" do
-                before { post :create, :metrics_dashboard_id => metrics_dashboard.id, :graph => { field_id: nil } }
+            describe 'when poll_id is available in params' do 
+                context "with valid field id" do
+                    it "redirect to @collection" do
+                        post :create, :poll_id => poll.id, :graph => {field_id: field1.id}
+                        expect(response).to redirect_to poll
+                    end
 
-                it "flashes an alert message" do
-                    expect(flash[:alert]).to eq "Your graph was not created. Please fix the errors"
+                    it 'creates new graph' do
+                        expect{
+                        post :create, :poll_id => poll.id, :graph => {field_id: field1.id} }.to change(Graph, :count).by(1)
+                    end
+
+                    it "flashes a notice message" do
+                        post :create, :poll_id => poll.id, :graph => {field_id: field1.id}
+                        expect(flash[:notice]).to eq "Your graph was created"
+                    end
                 end
 
-                it "render a new template" do
-                    expect(response).to render_template :new
+                context "with field id as nil" do
+                    before { post :create, :poll_id => poll.id, :graph => {field_id: nil} }
+
+                    it "flashes an alert message" do
+                        expect(flash[:alert]).to eq "Your graph was not created. Please fix the errors"
+                    end
+
+                    it "render a new template" do
+                        expect(response).to render_template :new
+                    end
                 end
             end
         end
 
+       
+    
         describe "without a logged in user" do
             before { post :create, :metrics_dashboard_id => metrics_dashboard.id, :graph => { field_id: field1.id } }
             it_behaves_like "redirect user to users/sign_in path"
@@ -71,16 +130,7 @@ RSpec.describe GraphsController, type: :controller do
     end
 
 
-    describe "GET#index", :skip => "Missing a template" do
-        describe "with logged in user" do
-            login_user_from_let
-
-            it "returns success" do
-                get :index, :metrics_dashboard_id => metrics_dashboard.id
-                expect(response).to be_success
-            end
-        end
-    end
+    #MISSING TEMPLATE for index action
 
 
     describe "PATCH#update" do
@@ -141,7 +191,7 @@ RSpec.describe GraphsController, type: :controller do
                     expect{ subject }.to change(Graph, :count).by(-1)
                 end
 
-                it "raise error ActiveRecord exception" do 
+                it "raise error ActiveRecord exception" do
                     expect{Graph.find(metrics_dashboard.id)}.to raise_error ActiveRecord::RecordNotFound
                 end
             end
@@ -152,6 +202,7 @@ RSpec.describe GraphsController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe "GET#data" do
 
@@ -184,6 +235,7 @@ RSpec.describe GraphsController, type: :controller do
         end
     end
 
+
     describe "GET#export_csv" do
         before { User.__elasticsearch__.create_index!(index: User.es_index_name(enterprise: enterprise)) }
         after { User.__elasticsearch__.delete_index!(index: User.es_index_name(enterprise: enterprise)) }
@@ -211,7 +263,7 @@ RSpec.describe GraphsController, type: :controller do
                 expect(response).to be_success
             end
         end
-      
+
         describe "without a logged in user", skip: 'needs to be reworked to accept enterprise token instead of current_user' do
             before { get :export_csv, :id => metrics_graph.id }
             it_behaves_like "redirect user to users/sign_in path"
