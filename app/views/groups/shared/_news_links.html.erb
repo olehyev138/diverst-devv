@@ -7,7 +7,7 @@
           <div class="carousel-inner" role="listbox">
             <% news_link.photos.each_with_index do |photo, index| %>
               <div class="item <%= 'active' if index == 0 %>">
-                <%= link_to image_tag(photo.file.url, :alt => "News Item Photo"), news_link_photos_group_news_link_path(news_link.group, news_link), method: :get, remote: true %>
+                <%= link_to image_tag(photo.file.expiring_url(3600), :alt => "News Item Photo"), news_link_photos_group_news_link_path(news_link.group, news_link), method: :get, remote: true %>
               </div>
             <% end %>
           </div>
