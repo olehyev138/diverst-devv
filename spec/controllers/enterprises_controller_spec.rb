@@ -119,6 +119,29 @@ RSpec.describe EnterprisesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+    
+    describe "GET#edit_pending_comments" do
+        describe "with logged in user" do
+            login_user_from_let
+
+            context "with valid id" do
+                before { get :edit_pending_comments, id: enterprise.id }
+
+                it "renders edit_pending_comments template" do
+                    expect(response).to render_template :edit_pending_comments
+                end
+
+                it "returns a valid enterprise object" do
+                    expect(assigns[:enterprise]).to be_valid
+                end
+            end
+        end
+
+        describe "without a logged in user" do
+            before { get :edit_pending_comments, id: enterprise.id }
+            it_behaves_like "redirect user to users/sign_in path"
+        end
+    end
 
     describe "GET#edit_budgeting" do
         describe "with logged in user" do

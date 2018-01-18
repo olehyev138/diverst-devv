@@ -3,8 +3,9 @@ require 'rails_helper'
 RSpec.describe BiasesController, type: :controller do
     let(:enterprise){ create(:enterprise) }
     let(:user){ create(:user, enterprise: enterprise) }
-    let(:group){ create(:group, enterprise: enterprise, user: user) }
-    let!(:bias){ create(:bias, user: user) }
+    let(:group){ create(:group, enterprise: enterprise) }
+    let(:group2){ create(:group, enterprise: enterprise) }
+    let!(:bias){ create(:bias, user: user, groups_from: [group], groups_to: [group2]) }
 
     describe "GET#index" do
         context "with logged in user" do
@@ -29,7 +30,6 @@ RSpec.describe BiasesController, type: :controller do
            it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "GET#new" do
         context "with logged in user" do
@@ -56,7 +56,6 @@ RSpec.describe BiasesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'POST#create' do
         context 'with logged user' do
@@ -109,7 +108,6 @@ RSpec.describe BiasesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "PATCH/PUT #update" do
         context "with logged in user" do
@@ -165,7 +163,6 @@ RSpec.describe BiasesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-    
 
     describe "DELETE #destroy" do
         context "with user logged in" do

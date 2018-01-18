@@ -119,7 +119,7 @@ RSpec.describe PollsController, type: :controller do
         context "with logged user" do
             login_user_from_let
 
-            before do
+            before do 
                 poll.graphs << graph1
                 poll.graphs << graph2
                 get :show, id: poll.id
@@ -129,7 +129,7 @@ RSpec.describe PollsController, type: :controller do
                 expect(assigns[:poll]).to be_valid
             end
 
-            it 'displays graphs of a particular poll' do
+            it "display graphs of a particular poll" do
                 expect(assigns[:graphs]).to eq [graph1, graph2]
             end
 
@@ -268,9 +268,13 @@ RSpec.describe PollsController, type: :controller do
         context "with logged user" do
             login_user_from_let
             before { get :export_csv, id: poll.id }
+          
+            it "gets response in csv format" do
+                expect(response.content_type).to eq 'text/csv'
+            end
 
-            it "gets response csv file" do
-                expect(response.body).to include "user_id,user_email,user_name\n"
+            it 'response includes poll_title as part of csv filename' do 
+                expect(response.headers["Content-Disposition"]).to include "#{poll.title}_responses.csv"
             end
 
             it 'returns file in csv format' do

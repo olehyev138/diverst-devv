@@ -6,8 +6,6 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
     let(:group) { create(:group, enterprise: user.enterprise) }
     let!(:user_group) {create(:user_group, group_id: group.id, user_id: user.id)}
 
-
-
     describe 'GET#index' do
         context 'with user logged in' do
             let!(:user_group1) {create(:user_group, group_id: group.id, user_id: add.id)}
@@ -51,7 +49,6 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
         end
     end
 
-
     describe 'GET#pending' do
         context 'when user is logged in' do
             let!(:user1) { create(:user) }
@@ -80,7 +77,6 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'POST#accept_pending' do
         describe "with logged in user" do
@@ -124,7 +120,6 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
         end
     end
 
-
     describe 'GET#new' do
         context 'when user is logged in' do 
             login_user_from_let
@@ -144,7 +139,6 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'DELETE#destroy' do
         describe 'when user is logged in' do 
@@ -181,16 +175,35 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
         end
     end
 
-
     describe 'POST#create' do
-        describe 'when user is logged in' do
+        context "when unsuccessful" do
             login_user_from_let
+            
+            before :each do
+                allow_any_instance_of(UserGroup).to receive(:save).and_return(false)
+                post :create, group_id: group.id, user: {user_id: add.id}
+            end
 
-            context "before creating" do
-                it "makes sure group count is 1" do
-                    user_group.save
-                    expect(group.members.count).to eq(1)
-                end
+            it "redirects" do
+                expect(response).to render_template :new
+            end
+
+            it "flashes" do
+                expect(flash[:alert])
+            end
+
+            it "doesn't create the user" do
+                group.reload
+                expect(group.members.count).to eq(1)
+            end
+        end
+        
+        context "before creating" do
+            login_user_from_let
+            
+            it "makes sure group count is 1" do
+                user_group.save
+                expect(group.members.count).to eq(1)
             end
 
             context "when creating with survey fields" do
@@ -238,12 +251,11 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             end
         end 
 
-        describe 'when user is not logged in' do
+        context 'when user is not logged in' do
             before { post :create, group_id: group.id, user: {user_id: add.id} }
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'POST#add_members' do
         context 'when user is logged in' do 

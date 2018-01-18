@@ -5,7 +5,6 @@ RSpec.describe UsersController, type: :controller do
     let(:user) { create(:user, enterprise: enterprise) }
     let(:policy_group) { create(:policy_group, enterprise: enterprise, default_for_enterprise: true)}
 
-
     before{ policy_group.save }
 
     describe "GET#index" do
@@ -46,7 +45,6 @@ RSpec.describe UsersController, type: :controller do
         end
     end
 
-
     describe "GET#sent_invitations" do
         context 'when user is logged in' do
             login_user_from_let
@@ -62,7 +60,6 @@ RSpec.describe UsersController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "GET#saml_logins" do
         context 'when user is logged in' do
@@ -95,7 +92,6 @@ RSpec.describe UsersController, type: :controller do
 
     #NOTE: Missing Template for new method
 
-
     describe "GET#show" do
         context 'when user is logged in' do
             login_user_from_let
@@ -116,7 +112,6 @@ RSpec.describe UsersController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "GET#group_surveys" do
         context 'when user is logged in' do
@@ -149,7 +144,6 @@ RSpec.describe UsersController, type: :controller do
         end
     end
 
-
     describe "GET#edit" do
         context 'when user is logged in' do
             login_user_from_let
@@ -170,7 +164,6 @@ RSpec.describe UsersController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "PATCH#update" do
         describe 'when user is logged in' do
@@ -218,7 +211,6 @@ RSpec.describe UsersController, type: :controller do
         end
     end
 
-
     describe "delete#destroy" do
         context 'when user is logged in' do
             login_user_from_let
@@ -245,7 +237,6 @@ RSpec.describe UsersController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "PATCH#resend_invitation" do
         context 'when user is logged in' do
@@ -279,7 +270,6 @@ RSpec.describe UsersController, type: :controller do
         end
     end
 
-
     describe "GET#sample_csv" do
         context 'when user is logged in' do
             login_user_from_let
@@ -300,7 +290,6 @@ RSpec.describe UsersController, type: :controller do
         end
     end
 
-
     describe "GET#import_csv" do
         context 'when user is logged in' do
             login_user_from_let
@@ -316,7 +305,6 @@ RSpec.describe UsersController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "GET#parse_csv" do
         let!(:file) { fixture_file_upload('files/test.csv', 'text/csv') }
@@ -335,7 +323,6 @@ RSpec.describe UsersController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "GET#export_csv" do
         context 'when user is logged in' do
@@ -356,7 +343,6 @@ RSpec.describe UsersController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "GET#date_histogram", skip: "inconsistent test results" do
         context 'user is logged in' do 

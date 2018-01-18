@@ -4,7 +4,7 @@ RSpec.describe Groups::AttendancesController, type: :controller do
     let(:user) { create :user }
     let(:group){ create(:group, enterprise: user.enterprise) }
     let(:initiative){ initiative_of_group(group) }
-
+    let!(:segment_1) {create(:segment, :enterprise => user.enterprise)}
 
     describe 'GET#show' do
         context 'when user is logged in' do
@@ -37,7 +37,6 @@ RSpec.describe Groups::AttendancesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'POST#create' do
         describe 'when user is logged in' do
@@ -95,7 +94,6 @@ RSpec.describe Groups::AttendancesController, type: :controller do
         end
     end
 
-
     describe 'DELETE#destroy' do
         context 'when user is logged in' do
             login_user_from_let
@@ -131,7 +129,6 @@ RSpec.describe Groups::AttendancesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'GET#erg_graph' do
         context 'when user is logged in' do
@@ -176,7 +173,6 @@ RSpec.describe Groups::AttendancesController, type: :controller do
         end
     end
 
-
     describe 'GET#segment_graph' do
         context 'when user is logged in' do
             let!(:user1) { create(:user) }
@@ -195,7 +191,7 @@ RSpec.describe Groups::AttendancesController, type: :controller do
 
              it 'returns data in json' do
                 json_response = JSON.parse(response.body, symbolize_names: true)
-                expect(json_response[:highcharts][:series][0][:data]).to eq [1, 1]
+                expect(json_response[:highcharts][:series][0][:data]).to eq [0, 1, 1]
             end
 
             it "returns name of title as 'Number of attendees' in json" do

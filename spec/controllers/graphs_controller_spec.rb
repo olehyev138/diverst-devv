@@ -7,7 +7,9 @@ RSpec.describe GraphsController, type: :controller do
     let(:poll) { create(:poll, enterprise_id: enterprise.id) }
     let(:field1) { create(:field, type: "NumericField", container: poll) }
     let(:field2) { create(:field, type: "NumericField", container: poll) }
+    let(:field3) { create(:field, type: "CheckboxField", container: poll) }
     let(:metrics_graph) { create(:graph, collection: metrics_dashboard, field: field1) }
+    let(:metrics_graph2) { create(:graph, collection: metrics_dashboard, field: field3, time_series: true) }
     let(:poll_graph) { create(:graph, collection: poll, field: field2) }
 
     describe "GET#new" do
@@ -129,9 +131,7 @@ RSpec.describe GraphsController, type: :controller do
         end
     end
 
-
     #MISSING TEMPLATE for index action
-
 
     describe "PATCH#update" do
         describe "with logged in user" do
@@ -173,7 +173,6 @@ RSpec.describe GraphsController, type: :controller do
         end
     end
 
-
     describe "DELETE#destroy" do
         describe "with logged in user" do
 
@@ -214,6 +213,11 @@ RSpec.describe GraphsController, type: :controller do
 
             it "returns json format" do
                 get :data, :id => metrics_graph.id, format: :json
+                expect(response.content_type).to eq "application/json"
+            end
+            
+            it "returns json format when time_series is true" do
+                get :data, :id => metrics_graph2.id, format: :json
                 expect(response.content_type).to eq "application/json"
             end
 

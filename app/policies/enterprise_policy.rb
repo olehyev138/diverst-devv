@@ -26,6 +26,10 @@ class EnterprisePolicy < ApplicationPolicy
   def edit_branding?
     update_branding?
   end
+  
+  def edit_pending_comments?
+    update?
+  end
 
   def restore_default_branding?
     update_branding?
