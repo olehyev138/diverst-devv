@@ -77,6 +77,24 @@
   }
 }
 
+.block-section-news {
+  padding: $spacing-medium 0;
+  border-bottom: 1px solid $diverst-border;
+
+  &:only-child {
+    padding: 0;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+    border-bottom: none;
+  }
+
+  small {
+    color: $diverst-grey;
+  }
+}
+
 .collapsed {
   height: 0;
   overflow: hidden;
