@@ -57,14 +57,36 @@ RSpec.describe Clockwork, :type => :clock do
     expect(Clockwork::Test.block_for(job).call).to eq perform
   end
   
-  it "runs the job GroupLeaderNotificationsJob" do
+  it "runs the job GroupLeaderMemberNotificationsJob" do
     job = "Send daily notifications of pending users to group leaders"
-    perform = GroupLeaderNotificationsJob.perform_later
+    perform = GroupLeaderMemberNotificationsJob.perform_later
     
-    allow(GroupLeaderNotificationsJob).to receive(:perform_later).and_return(perform)
+    allow(GroupLeaderMemberNotificationsJob).to receive(:perform_later).and_return(perform)
     
     expect(Clockwork::Test.ran_job?(job)).to be_truthy
     expect(Clockwork::Test.times_run(job)).to eq 1
-    expect(Clockwork::Test.block_for(job).call).to eq Group.where(:pending_users => "enabled").find_each { |group| GroupLeaderNotificationsJob.perform_later(group) }
+    expect(Clockwork::Test.block_for(job).call).to eq Group.where(:pending_users => "enabled").find_each { |group| GroupLeaderMemberNotificationsJob.perform_later(group) }
+  end
+  
+  it "runs the job GroupLeaderCommentNotificationsJob" do
+    job = "Send daily notifications of pending comments to group leaders"
+    perform = GroupLeaderCommentNotificationsJob.perform_later
+    
+    allow(GroupLeaderCommentNotificationsJob).to receive(:perform_later).and_return(perform)
+    
+    expect(Clockwork::Test.ran_job?(job)).to be_truthy
+    expect(Clockwork::Test.times_run(job)).to eq 1
+    expect(Clockwork::Test.block_for(job).call).to eq Group.find_each { |group| GroupLeaderCommentNotificationsJob.perform_later(group) }
+  end
+  
+  it "runs the job GroupLeaderPostNotificationsJob" do
+    job = "Send daily notifications of pending posts to group leaders"
+    perform = GroupLeaderPostNotificationsJob.perform_later
+    
+    allow(GroupLeaderPostNotificationsJob).to receive(:perform_later).and_return(perform)
+    
+    expect(Clockwork::Test.ran_job?(job)).to be_truthy
+    expect(Clockwork::Test.times_run(job)).to eq 1
+    expect(Clockwork::Test.block_for(job).call).to eq Group.find_each { |group| GroupLeaderPostNotificationsJob.perform_later(group) }
   end
 end

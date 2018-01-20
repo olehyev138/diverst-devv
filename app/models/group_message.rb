@@ -23,6 +23,8 @@ class GroupMessage < ActiveRecord::Base
       joins("LEFT JOIN group_messages_segments ON group_messages_segments.group_message_id = group_messages.id")
       .where(gm_condtions.join(" OR "))
     }
+    
+    scope :unapproved, -> {joins(:news_feed_link).where(:news_feed_links => {:approved => false})}
 
     def users
         if segments.empty?

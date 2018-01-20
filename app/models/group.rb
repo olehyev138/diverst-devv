@@ -264,6 +264,10 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   def pending_comments_count
     message_comments.unapproved.count + news_link_comments.unapproved.count + answer_comments.unapproved.count
   end
+  
+  def pending_posts_count
+    news_links.unapproved.count + messages.unapproved.count + social_links.unapproved.count
+  end
 
   protected 
 
