@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180112101440) do
+ActiveRecord::Schema.define(version: 20180118201836) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -483,13 +483,15 @@ ActiveRecord::Schema.define(version: 20180112101440) do
   end
 
   create_table "group_leaders", force: :cascade do |t|
-    t.integer  "group_id",              limit: 4
-    t.integer  "user_id",               limit: 4
-    t.string   "position_name",         limit: 191
-    t.datetime "created_at",                                        null: false
-    t.datetime "updated_at",                                        null: false
-    t.boolean  "visible",                           default: true
-    t.boolean  "notifications_enabled",             default: false
+    t.integer  "group_id",                               limit: 4
+    t.integer  "user_id",                                limit: 4
+    t.string   "position_name",                          limit: 191
+    t.datetime "created_at",                                                         null: false
+    t.datetime "updated_at",                                                         null: false
+    t.boolean  "visible",                                            default: true
+    t.boolean  "pending_member_notifications_enabled",               default: false
+    t.boolean  "pending_comments_notifications_enabled",             default: false
+    t.boolean  "pending_posts_notifications_enabled",                default: false
   end
 
   create_table "group_message_comments", force: :cascade do |t|

@@ -32,6 +32,8 @@ class NewsLink < ActiveRecord::Base
       joins("LEFT JOIN news_link_segments ON news_link_segments.news_link_id = news_links.id")
       .where(nl_condtions.join(" OR "))
     }
+    
+    scope :unapproved, -> {joins(:news_feed_link).where(:news_feed_links => {:approved => false})}
 
     # call back to delete news link segment associations
     def remove_segment_association(segment)

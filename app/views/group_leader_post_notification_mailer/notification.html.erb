@@ -1,0 +1,7 @@
+Hello, <%= @leader.name %>
+<br/>
+Your <%= @group.name %> has <%= @count %> pending post(s). Click below to view them and accept/deny group posts.
+
+<br/>
+
+<p><%= link_to "View Pending Posts", group_posts_url(@group) %></p>
