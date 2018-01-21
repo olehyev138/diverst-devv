@@ -126,4 +126,13 @@ RSpec.describe PolicyGroup, type: :model do
             end
         end
     end
+    
+    describe "#allow_deletion?" do
+        it "returns true" do
+            enterprise = create(:enterprise)
+            create(:policy_group, :enterprise => enterprise, :default_for_enterprise => true)
+            policy_group = create(:policy_group, :enterprise => enterprise, :default_for_enterprise => false)
+            expect(policy_group.allow_deletion?).to be(true)
+        end
+    end
 end

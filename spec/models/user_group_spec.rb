@@ -97,4 +97,44 @@ RSpec.describe UserGroup do
       end
     end
   end
+  
+  describe "#notifications_date" do
+    it "returns sunday" do
+      user_group = create(:user_group, :notifications_date => 0)
+      expect(user_group.notifications_date).to eq("sunday")
+    end
+    it "returns default monday" do
+      user_group = create(:user_group)
+      expect(user_group.notifications_date).to eq("monday")
+    end
+    it "returns tuesday" do
+      user_group = create(:user_group, :notifications_date => 2)
+      expect(user_group.notifications_date).to eq("tuesday")
+    end
+    it "returns wednesday" do
+      user_group = create(:user_group, :notifications_date => 3)
+      expect(user_group.notifications_date).to eq("wednesday")
+    end
+    it "returns thursday" do
+      user_group = create(:user_group, :notifications_date => 4)
+      expect(user_group.notifications_date).to eq("thursday")
+    end
+    it "returns friday" do
+      user_group = create(:user_group, :notifications_date => 5)
+      expect(user_group.notifications_date).to eq("friday")
+    end
+    it "returns saturday" do
+      user_group = create(:user_group, :notifications_date => 6)
+      expect(user_group.notifications_date).to eq("saturday")
+    end
+  end
+  
+  describe "#string_for_field" do
+    it "returns the string field" do
+      select_field = SelectField.new(:type => "SelectField", :title => "Gender", :options_text => "Male\nFemale")
+      select_field.save!
+      user_group = create(:user_group, :data => "{\"#{select_field.id}\":[\"Female\"]}")
+      expect(user_group.string_for_field(select_field)).to eq("Female")
+    end
+  end
 end

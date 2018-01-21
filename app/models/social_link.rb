@@ -21,6 +21,8 @@ class SocialLink < ActiveRecord::Base
       joins("LEFT JOIN social_link_segments ON social_link_segments.social_link_id = social_network_posts.id")
       .where(gm_condtions.join(" OR "))
     }
+    
+    scope :unapproved, -> {joins(:news_feed_link).where(:news_feed_links => {:approved => false})}
 
     def url_safe
         CGI.escape(url)

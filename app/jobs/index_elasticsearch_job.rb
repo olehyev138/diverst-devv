@@ -10,10 +10,12 @@ class IndexElasticsearchJob < ActiveJob::Base
 
     case operation
       when 'index'
-        record = model.find(record_id)
+        record = model.find_by_id(record_id)
+        return if record.nil?
         record.__elasticsearch__.index_document(index: index)
       when 'update'
-        record = model.find(record_id)
+        record = model.find_by_id(record_id)
+        return if record.nil?
         record.__elasticsearch__.update_document(index: index)
       when 'delete'
         Client.delete index: index, id: record_id, type: model_name.downcase

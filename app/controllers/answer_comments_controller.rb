@@ -2,6 +2,16 @@ class AnswerCommentsController < ApplicationController
   before_action :authenticate_user!
 
   before_action :set_comment_and_answer
+  
+  def update
+    if @comment.update(comment_params)
+        flash[:notice] = "The comment was updated"
+        redirect_to :back
+    else
+        flash[:alert] = "The comment was not updated"
+        redirect_to :back
+    end
+  end
 
   def destroy
     @comment.destroy
@@ -19,7 +29,8 @@ class AnswerCommentsController < ApplicationController
     params
       .require(:answer_comment)
       .permit(
-        :content
+        :content,
+        :approved
       )
   end
 end

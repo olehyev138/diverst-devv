@@ -51,13 +51,17 @@
               <p><%= answer.content %></p>
 
               <% answer.comments.each do |comment| %>
-                <div class="comment">
-                  <p>
-                    <%= comment.content %> &mdash;
-                    <span class="accent"><%= comment.author.name_with_status %></span>
-                    <span class="muted"><%= time_ago_in_words(comment.created_at) %> ago</span>
-                  </p>
-                </div>
+                <%# only show comment if its been approved OR pending comments are not enabled OR if user is an erg leader %>
+                <% if (comment.approved or !current_user.enterprise.enable_pending_comments) or (current_user.policy_group.campaigns_manage?) %>
+                  <div class="comment">
+                    <p>
+                      <%= comment.content %> &mdash;
+                      <span class="accent"><%= comment.author.name_with_status %></span>
+                      <span class="muted"><%= time_ago_in_words(comment.created_at) %> ago</span>
+                      <span class="pull-right"><%= link_to "Approve", answer_comment_path(comment, answer_comment: {approved: true}), method: :put if !comment.approved? and current_user.enterprise.enable_pending_comments? and current_user.policy_group.campaigns_manage? %></span>
+                    </p>
+                  </div>
+                <% end %>
               <% end %>
 
               <%= simple_form_for [:user, :user, answer, :user, answer.comments.new] do |f| %>

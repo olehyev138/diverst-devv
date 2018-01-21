@@ -1,7 +1,6 @@
 class User::EventsController < ApplicationController
   before_action :authenticate_user!, except: [:onboarding_calendar_data]
-  before_action :set_event, only: [:show]
-
+  
   layout 'user'
 
   def index
@@ -33,12 +32,5 @@ class User::EventsController < ApplicationController
     else
       redirect_to user_root_path
     end
-  end
-
-
-  protected
-
-  def set_event
-    @event = current_user.initiatives.find(params[:id])
   end
 end

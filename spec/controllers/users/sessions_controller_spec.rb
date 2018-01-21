@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Users::SessionsController, type: :controller do
     let(:enterprise) { create(:enterprise, :has_enabled_saml => true)}
-    let(:user){ create(:user, :enterprise => enterprise) }
+    let(:user){ create(:user, :password => "password", :enterprise => enterprise) }
 
     before :each do
         session[:saml_for_enterprise] = user.enterprise.id
@@ -20,6 +20,22 @@ RSpec.describe Users::SessionsController, type: :controller do
             enterprise.save!
             get :new
             expect(response).to be_success
+        end
+    end
+    
+    describe "POST#create" do
+        it "flashes invalid credentials" do
+            post :create
+            expect(flash[:alert]).to eq "Invalid email or password."
+        end
+        
+        it "signs user in" do
+            expect_any_instance_of(User).to receive(:create_activity)
+            enterprise.has_enabled_saml = false
+            enterprise.save!
+            
+            post :create, user: { email: user.email, password: "password" }
+            expect(flash[:notice]).to eq "Signed in successfully."
         end
     end
 end

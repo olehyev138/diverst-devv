@@ -60,6 +60,13 @@ RSpec.describe SocialLink, type: :model do
         end
     end
     
+    describe "#url_safe" do
+        it "returns" do
+            social_link = create(:social_link)
+            expect(social_link.url_safe).to eq(CGI.escape(social_link.url))
+        end
+    end
+    
     describe "#remove_segment_association" do
         it "removes segment association" do
             social_link = create(:social_link)

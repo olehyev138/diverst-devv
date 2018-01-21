@@ -7,156 +7,296 @@ RSpec.describe SegmentsController, type: :controller do
     let(:user) { create(:user, enterprise: enterprise) }
     let!(:segment) { create(:segment, enterprise: enterprise) }
 
-    login_user_from_let
 
     describe "GET#index" do
-        it "render index template" do
-            get :index
-            expect(response).to render_template :index
+        context 'when user is logged in' do
+            login_user_from_let
+            before { get :index }
+
+            it "render index template" do
+                expect(response).to render_template :index
+            end
+
+            it "returns list of segments" do
+                expect(assigns[:segments]).to eq [segment]
+            end
         end
 
-        it "returns list of segments" do
-            get :index
-            expect(assigns[:segments]).to eq [segment]
+        context 'when user is not logged in' do
+            before { get :index }
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
 
     describe "GET#new" do
-        it "render new template" do
-            get :new
-            expect(response).to render_template :new
+        context 'when user is logged in' do
+            login_user_from_let
+            before { get :new }
+
+            it "render new template" do
+                expect(response).to render_template :new
+            end
+
+            it "returns new segement object" do
+                expect(assigns[:segment]).to be_a_new(Segment)
+            end
         end
 
-        it "returns new segement object" do
-            get :new
-            expect(assigns[:segment]).to be_a_new(Segment)
+        context 'when user is not logged in' do
+            before { get :new }
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
 
     describe "POST#create" do
-        context "successfully create" do
-            let!(:segment_attributes) { FactoryGirl.attributes_for(:segment) }
+        describe 'when user is logged in' do
+            login_user_from_let
 
-            it "redirects" do
-                post :create, :segment => segment_attributes
-                expect(response).to redirect_to action: :index
+            context "successfully create" do
+                let!(:segment_attributes) { FactoryGirl.attributes_for(:segment) }
+
+                it "redirects" do
+                    post :create, :segment => segment_attributes
+                    expect(response).to redirect_to action: :index
+                end
+
+                it "creates segment" do
+                    expect{ post :create, :segment => segment_attributes }.to change(Segment, :count).by(1)
+                end
+
+                it "flashes a notice message" do
+                    post :create, :segment => segment_attributes
+                    expect(flash[:notice]).to eq "Your #{c_t(:segment)} was created"
+                end
             end
 
-            it "creates segment" do
-               expect{ post :create, :segment => segment_attributes }.to change(Segment, :count).by(1)
-            end
+            context "unsuccessful create" do
+                let!(:invalid_segment_attributes) { { name: nil } }
+                before { post :create, :segment => invalid_segment_attributes }
 
-            it "flashes a notice message" do
-                post :create, :segment => segment_attributes
-                expect(flash[:notice]).to eq "Your #{c_t(:segment)} was created"
+                it "flashes an alert message" do
+                    expect(flash[:alert]).to eq "Your #{c_t(:segment)} was not created. Please fix the errors"
+                end
+
+                it "renders edit template" do
+                    expect(response).to render_template :edit
+                end
             end
         end
 
-        context "unsuccessful create" do
-            let!(:invalid_segment_attributes) { { name: nil } }
-            before { post :create, :segment => invalid_segment_attributes }
-
-            it "flashes an alert message" do
-                expect(flash[:alert]).to eq "Your #{c_t(:segment)} was not created. Please fix the errors"
-            end
-
-            it "renders edit template" do
-                expect(response).to render_template :edit
-            end
+        describe 'when user is not logged in' do
+            let!(:segment_attributes) { FactoryGirl.attributes_for(:segment) }
+            before { post :create, :segment => segment_attributes }
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
 
     describe "GET#show" do
-        it "render show template" do
-            get :show, :id => segment.id
-            expect(response).to render_template :show
+        describe 'when user is logged in' do
+            let!(:groups) { create_list(:group, 2, enterprise: enterprise) }
+            let!(:user1) { create(:user) }
+            let!(:user2) { create(:user) }
+            let!(:user3) { create(:user) }
+            let!(:users_segment1) { create(:users_segment, segment: segment, user: user1) }
+            let!(:users_segment2) { create(:users_segment, segment: segment, user: user2) }
+            let!(:users_segment3) { create(:users_segment, segment: segment, user: user3) }
+            let!(:user_group1) { create(:user_group, group: groups.last, user: user1) }
+            let!(:user_group2) { create(:user_group, group: groups.last, user: user2) }
+            login_user_from_let
+
+
+            context 'when group is present' do
+                before do
+                    segment.sub_segments << create_list(:segment, 2, enterprise: enterprise, owner: user)
+                    get :show, :id => segment.id, group_id: groups.last.id
+                end
+
+                it 'render show template' do
+                    expect(response).to render_template :show
+                end
+
+                it 'return group from group_id' do
+                    expect(assigns[:group]).to eq groups.last
+                end
+
+                it 'returns 2 segment_members_of_group' do
+                    expect(assigns[:members].count).to eq 2
+                end
+
+                it 'return groups that belong to user.enterprise' do
+                    expect(assigns[:groups]).to eq groups
+                end
+
+                it 'return 2 sub_segments of segment' do
+                    expect(assigns[:segments]).to eq segment.sub_segments
+                end
+            end
+
+            context 'when group is not present' do
+                before { get :show, :id => segment.id }
+
+                it 'returns 3 uniq members of a segment' do
+                    expect(assigns[:members].count).to eq 3
+                end
+            end
         end
 
-        it "return members if group is absent" do
-            segment.members << user
-            get :show, :id => segment.id
-            expect(assigns[:members].count).to eq(1)
-        end
-        
-        it "return members if group is present" do
-            segment.members << user
-            group = create(:group, :enterprise => enterprise)
-            get :show, :id => segment.id, :group_id => group.id
-            expect(assigns[:members].count).to eq(0)
+        describe 'when user is not logged in' do
+            before { get :show, :id => segment.id }
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
 
     describe "GET#edit" do
-        it "render edit template" do
-            get :edit, :id => segment.id
-            expect(response).to render_template :edit
+        context 'when user is logged in' do
+            login_user_from_let
+            before { get :edit, :id => segment.id }
+
+            it "render edit template" do
+                expect(response).to render_template :edit
+            end
+
+            it "returns a valid segment" do
+                expect(assigns[:segment]).to be_valid
+            end
         end
 
-        it "returns a valid segment" do 
-            get :edit, :id => segment.id 
-            expect(assigns[:segment]).to be_valid
+        context 'when user is not logged in' do
+            before { get :edit, :id => segment.id }
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
 
     describe "PATCH#update" do
-        context "successfully" do 
-            before { patch :update, :id => segment.id, :segment => {:name => "updated"} }
+        describe 'when user is logged in' do
+            login_user_from_let
 
-            it "redirects" do
-                expect(response).to redirect_to(segment)
+            context "successfully" do
+                before { patch :update, :id => segment.id, :segment => {:name => "updated"} }
+
+                it "redirects to segment show page" do
+                    expect(response).to redirect_to(segment)
+                end
+
+                it "updates a segment" do
+                    segment.reload
+                    expect(segment.name).to eq("updated")
+                end
+
+                it "flashes a notice message" do
+                    expect(flash[:notice]).to eq "Your #{c_t(:segment)} was updated"
+                end
             end
 
-            it "creates segment" do
-                segment.reload
-                expect(segment.name).to eq("updated")
-            end
+            context "unsuccessfully" do
+                before { patch :update, :id => segment.id, :segment => {:name => nil} }
 
-            it "flashes a notice message" do
-                expect(flash[:notice]).to eq "Your #{c_t(:segment)} was updated"
+                it "flashes an alert message" do
+                    expect(flash[:alert]).to eq "Your #{c_t(:segment)} was not updated. Please fix the errors"
+                end
+
+                it "render edit template" do
+                    expect(response).to render_template :edit
+                end
             end
         end
 
-        context "unsuccessfully" do 
-            before { patch :update, :id => segment.id, :segment => {:name => nil} }
-
-            it "flashes an alert message" do
-                expect(flash[:alert]).to eq "Your #{c_t(:segment)} was not updated. Please fix the errors"
-            end
-
-            it "render edit template" do 
-                expect(response).to render_template :edit
-            end
+        describe 'when user is not logged in' do
+            before { patch :update, :id => segment.id, :segment => { :name => "updated" } }
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
 
     describe "DELETE#destroy" do
-        it "deletes segment" do
-            expect{ delete :destroy, :id => segment.id }.to change(Segment, :count).by(-1)
+        context 'when user is logged in' do
+            login_user_from_let
+
+            it "deletes segment" do
+                expect{ delete :destroy, :id => segment.id }.to change(Segment, :count).by(-1)
+            end
+
+            it "redirect to action index" do
+                delete :destroy, :id => segment.id
+                expect(response).to redirect_to action: :index
+            end
         end
 
-        it "redirect to action index" do
-            delete :destroy, :id => segment.id
-            expect(response).to redirect_to action: :index
+        context 'when user is not logged in' do
+            before { delete :destroy, :id => segment.id }
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
 
     describe "GET#export_csv" do
-        it "returns success" do
-            get :export_csv, :id => segment.id, format: :csv
-            expect(response.content_type).to eq "text/csv"
+        context 'when user is logged in' do
+            login_user_from_let
+
+            it 'sets a valid segment object' do
+                get :export_csv, :id => segment.id, format: :csv
+                expect(assigns[:segment]).to be_valid
+            end
+
+            it "returns data in csv format" do
+                get :export_csv, :id => segment.id, format: :csv
+                expect(response.content_type).to eq "text/csv"
+            end
+
+            context "when group_id is present in params" do
+                let!(:group) { create(:group, :enterprise => enterprise) }
+                let!(:user1) { create(:user) }
+                let!(:user2) { create(:user) }
+                let!(:user3) { create(:user) }
+                let!(:users_segment1) { create(:users_segment, segment: segment, user: user1) }
+                let!(:users_segment2) { create(:users_segment, segment: segment, user: user2) }
+                let!(:users_segment3) { create(:users_segment, segment: segment, user: user3) }
+                let!(:user_group1) { create(:user_group, group: group, user: user1) }
+                let!(:user_group2) { create(:user_group, group: group, user: user2) }
+
+
+                before { get :export_csv, :id => segment.id, format: :csv, :group_id => group.id }
+
+                it 'find by id group object passed as group_id in params' do
+                    expect(assigns[:current_user].enterprise.groups.find_by_id(controller.params[:group_id])).to eq group
+                end
+
+                it 'returns users' do
+                    users_ids = segment_members_of_group(segment, group) #helper method in ApplicationHelper
+                    users = User.where(id: [users_ids])
+                    expect(users.count).to eq 2
+                end
+
+                it 'returns filename of segment in csv format' do
+                    expect(response.headers["Content-Disposition"]).to include "#{assigns[:segment].name}.csv"
+                end
+            end
+
+            context 'when group_id is not present in params' do
+                let!(:user1) { create(:user) }
+                let!(:user2) { create(:user) }
+                let!(:user3) { create(:user) }
+                let!(:users_segment1) { create(:users_segment, segment: segment, user: user1) }
+                let!(:users_segment2) { create(:users_segment, segment: segment, user: user2) }
+                let!(:users_segment3) { create(:users_segment, segment: segment, user: user3) }
+
+                before { get :export_csv, :id => segment.id, format: :csv }
+
+                it 'members of segment' do
+                    users = assigns[:segment].members
+                    expect(users.count).to eq 3
+                end
+            end
         end
-        
-        it "returns success with group_id in params" do
-            group = create(:group, :enterprise => enterprise)
-            get :export_csv, :id => segment.id, format: :csv, :group_id => group.id
-            expect(response.content_type).to eq "text/csv"
+
+        context 'when user is not logged in' do
+            before { get :export_csv, :id => segment.id, format: :csv }
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 end

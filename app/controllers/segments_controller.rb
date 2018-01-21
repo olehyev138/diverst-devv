@@ -70,7 +70,7 @@ class SegmentsController < ApplicationController
         if group = current_user.enterprise.groups.find_by_id(params[:group_id])
             users_ids = segment_members_of_group(@segment, group).map { |user| user.id }
 
-            users = User.where(id: [users_ids])
+            users = User.where(id: users_ids)
         else
             users = @segment.members
         end
@@ -88,7 +88,7 @@ class SegmentsController < ApplicationController
     end
 
     def set_segment
-        @segment = current_user.enterprise.segments.find(params[:id])
+        current_user ? @segment = current_user.enterprise.segments.find(params[:id]) : user_not_authorized
     end
 
     def segment_params

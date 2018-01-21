@@ -414,6 +414,47 @@ RSpec.describe Group, :type => :model do
         end
     end
     
+    describe '#pending_comments_count' do
+        it "returns 0" do
+            group = create(:group)
+            expect(group.pending_comments_count).to eq(0)
+        end
+        
+        it "returns 1" do
+            group = create(:group)
+            group_message = create(:group_message, :group => group)
+            create(:group_message_comment, :message => group_message, :approved => false)
+            expect(group.pending_comments_count).to eq(1)
+        end
+        
+        it "returns 2" do
+            group = create(:group)
+            group_message = create(:group_message, :group => group)
+            create(:group_message_comment, :message => group_message, :approved => false)
+            news_link = create(:news_link, :group => group)
+            create(:news_link_comment, :news_link => news_link, :approved => false)
+            expect(group.pending_comments_count).to eq(2)
+        end
+        
+        it "returns 3" do
+            group = create(:group)
+            # group message
+            group_message = create(:group_message, :group => group)
+            create(:group_message_comment, :message => group_message, :approved => false)
+            # news link
+            news_link = create(:news_link, :group => group)
+            create(:news_link_comment, :news_link => news_link, :approved => false)
+            # campaign
+            campaign = create(:campaign)
+            create(:campaigns_group, :group => group, :campaign => campaign)
+            question = create(:question, campaign: campaign)
+            answer = create(:answer, question: question)
+            create(:answer_comment, answer: answer, approved: false)
+            
+            expect(group.pending_comments_count).to eq(3)
+        end
+    end
+    
     describe '#valid_yammer_group_link?' do
         it "has a valid link" do
             group = build(:group, :yammer_group_link => "https://www.yammer.com/test.com/#/threads/inGroup?type=in_group&feedId=1234567")
