@@ -3,11 +3,9 @@ require 'rails_helper'
 RSpec.describe Groups::FoldersController, type: :controller do
     let(:enterprise){ create(:enterprise, cdo_name: "test") }
     let(:user){ create(:user, enterprise: enterprise) }
-
     let(:group){ create(:group, enterprise: user.enterprise) }
     let(:user_group){ create(:user_group, group: group, user: user) }
     let!(:folder){ create(:folder, :container => group, :password_protected => true, :password => "password") }
-
 
     describe "POST#authenticate" do
         login_user_from_let
@@ -34,7 +32,6 @@ RSpec.describe Groups::FoldersController, type: :controller do
             end
         end
     end
-
 
     describe "GET#index" do
         describe 'when user is logged in' do
@@ -80,7 +77,6 @@ RSpec.describe Groups::FoldersController, type: :controller do
         end
     end
 
-
     describe "GET#show" do
         context 'with user logged in' do
             login_user_from_let
@@ -110,7 +106,6 @@ RSpec.describe Groups::FoldersController, type: :controller do
         end
     end
 
-
     describe "GET#new" do
         context 'when user is logged in' do
             login_user_from_let
@@ -135,7 +130,6 @@ RSpec.describe Groups::FoldersController, type: :controller do
         end
     end
 
-
     describe "GET#edit" do
         context 'when user is logged in' do
             login_user_from_let
@@ -155,7 +149,6 @@ RSpec.describe Groups::FoldersController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "POST#create" do
         describe 'when user is logged in' do
@@ -193,7 +186,6 @@ RSpec.describe Groups::FoldersController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "PATCH#update" do
         describe 'when user is logged in' do
@@ -233,7 +225,6 @@ RSpec.describe Groups::FoldersController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "DELETE#destroy" do
         context 'when user is logged in' do

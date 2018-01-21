@@ -5,4 +5,6 @@ class AnswerComment < ActiveRecord::Base
   validates :author, presence: true
   validates :answer, presence: true
   validates :content, presence: true
+  
+  scope :unapproved, -> {where(:approved => false)}
 end

@@ -106,7 +106,7 @@ RSpec.describe Groups::LeadersController, type: :controller do
         it 'sets attributes' do
           post_create(group.to_param, leader_attrs)
           leader = group.group_leaders.first
-          expect(leader.notifications_enabled).to eq(false)
+          expect(leader.pending_member_notifications_enabled).to eq(false)
         end
       end
 

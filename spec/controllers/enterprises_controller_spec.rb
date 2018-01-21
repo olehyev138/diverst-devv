@@ -6,6 +6,23 @@ RSpec.describe EnterprisesController, type: :controller do
     let(:group){ create(:group, enterprise: enterprise) }
 
 
+    describe "GET#calendar" do
+        it "allows view to be embed on iframe" do
+            get :calendar, id: enterprise.id
+            expect(response.headers).to_not include("X-Frame-Options")
+        end
+
+        it "assigns enterprise to @enterprise" do
+            get :calendar, id: enterprise.id
+            expect(assigns(:enterprise)).to eq enterprise
+        end
+
+        it "expect no layout" do
+            expect(response).to render_template(layout: false)
+        end
+    end
+
+
     describe "GET#edit" do
         describe "with logged in user" do
             login_user_from_let
@@ -29,7 +46,6 @@ RSpec.describe EnterprisesController, type: :controller do
         end
     end
 
-
     describe "PATCH#update" do
         describe "with logged in user" do
             before { request.env["HTTP_REFERER"] = "back" }
@@ -52,8 +68,11 @@ RSpec.describe EnterprisesController, type: :controller do
                 end
             end
 
-            context "with invalid parameters", skip: "render params['source'] causes ActionView::MissingTemplate" do
-                before { patch :update, id: enterprise.id, enterprise: { cdo_name: "" } }
+            context "with invalid parameters" do
+                before { 
+                    request.env["HTTP_REFERER"] = "back"
+                    patch :update, id: enterprise.id, enterprise: { cdo_name: "" } 
+                }
 
                 it "does not update the enterprise" do
                     enterprise.reload
@@ -61,7 +80,7 @@ RSpec.describe EnterprisesController, type: :controller do
                 end
 
                 it "renders action edit" do
-                    expect(response.status).to eq(302)
+                    expect(response).to redirect_to "back"
                 end
 
                 it "flashes an alert message" do
@@ -75,7 +94,6 @@ RSpec.describe EnterprisesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "GET#edit_fields" do
         describe "with logged in user" do
@@ -96,6 +114,29 @@ RSpec.describe EnterprisesController, type: :controller do
 
         describe "without a logged in user" do
             before { get :edit_fields, id: enterprise.id }
+            it_behaves_like "redirect user to users/sign_in path"
+        end
+    end
+    
+    describe "GET#edit_pending_comments" do
+        describe "with logged in user" do
+            login_user_from_let
+
+            context "with valid id" do
+                before { get :edit_pending_comments, id: enterprise.id }
+
+                it "renders edit_pending_comments template" do
+                    expect(response).to render_template :edit_pending_comments
+                end
+
+                it "returns a valid enterprise object" do
+                    expect(assigns[:enterprise]).to be_valid
+                end
+            end
+        end
+
+        describe "without a logged in user" do
+            before { get :edit_pending_comments, id: enterprise.id }
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
@@ -189,7 +230,6 @@ RSpec.describe EnterprisesController, type: :controller do
         end
     end
 
-
     describe "GET#edit_auth" do
         describe "with logged in user" do
             login_user_from_let
@@ -212,7 +252,6 @@ RSpec.describe EnterprisesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "GET#edit_branding" do
         describe "with logged in user" do
@@ -275,7 +314,6 @@ RSpec.describe EnterprisesController, type: :controller do
         end
     end
 
-
     describe "GET#update_branding" do
         describe "with logged in user" do
             login_user_from_let
@@ -323,7 +361,7 @@ RSpec.describe EnterprisesController, type: :controller do
 
     describe "PATCH#delete_attachment" do
         before { request.env["HTTP_REFERER"] = "back" }
-
+      
         describe "with logged in user" do
             login_user_from_let
 
@@ -356,7 +394,6 @@ RSpec.describe EnterprisesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "GET#restore_default_branding" do
         before { request.env["HTTP_REFERER"] = "back" }

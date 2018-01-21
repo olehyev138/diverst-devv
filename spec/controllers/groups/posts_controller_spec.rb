@@ -23,7 +23,7 @@ RSpec.describe Groups::PostsController, type: :controller do
             end
 
             context 'policy(@group).erg_leader_permissions? returns true' do
-                let!(:group_leader) { create(:group_leader, user: user, group: group, visible: true, notifications_enabled: false) }
+                let!(:group_leader) { create(:group_leader, user: user, group: group, visible: true, pending_member_notifications_enabled: false) }
 
                 it 'return count 3' do
                     get :index, group_id: group.id
