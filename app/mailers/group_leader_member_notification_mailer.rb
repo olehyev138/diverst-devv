@@ -1,4 +1,4 @@
-class GroupLeaderNotificationMailer < ApplicationMailer
+class GroupLeaderMemberNotificationMailer < ApplicationMailer
     
   def notification(group, leader, count)
     @group = group

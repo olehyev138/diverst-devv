@@ -23,7 +23,7 @@ RSpec.describe OutcomesController, type: :controller do
                 expect(response).to render_template :index
             end
 
-            it 'sets a valid group object' do 
+            it 'sets a valid group object' do
                 expect(assigns[:group]).to be_valid
             end
         end
@@ -124,7 +124,7 @@ RSpec.describe OutcomesController, type: :controller do
             end
         end
 
-        context 'without logged user' do 
+        context 'without logged user' do
             before { delete_destroy(group.id) }
             it_behaves_like "redirect user to users/sign_in path"
         end

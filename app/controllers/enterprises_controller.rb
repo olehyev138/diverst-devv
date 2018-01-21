@@ -18,7 +18,7 @@ class EnterprisesController < ApplicationController
       redirect_to :back
     else
       flash[:alert] = "Your enterprise was not updated. Please fix the errors"
-      render params['source']
+      redirect_to :back
     end
   end
 
@@ -53,6 +53,10 @@ class EnterprisesController < ApplicationController
     authorize @enterprise
 
     set_theme
+  end
+  
+  def edit_pending_comments
+    authorize @enterprise
   end
 
   # missing template
@@ -130,6 +134,7 @@ class EnterprisesController < ApplicationController
     params
       .require(:enterprise)
       .permit(
+        :enable_pending_comments,
         :enable_rewards,
         :has_enabled_saml,
         :has_enabled_onboarding_email,

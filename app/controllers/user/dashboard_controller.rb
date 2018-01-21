@@ -26,7 +26,7 @@ class User::DashboardController < ApplicationController
   end
 
   def posts
-    posts = NewsFeedLink.joins(:news_feed)
+    NewsFeedLink.joins(:news_feed)
               .joins(joins)
               .includes(:link)
               .where(:news_feeds => {:group_id => current_user.active_groups.pluck(:id)}, :approved => true)

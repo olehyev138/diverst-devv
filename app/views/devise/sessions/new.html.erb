@@ -1,13 +1,13 @@
-<h2>Log in</h2>
+<h2><%= t('login.title') %></h2>
 <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <%= f.input :email, autofocus: true %>
-  <%= f.input :password, autocomplete: "off" %>
+  <%= f.input :email, label: t('login.email'), autofocus: true %>
+  <%= f.input :password, label: t('login.password'), autocomplete: "off" %>
 
   <% if devise_mapping.rememberable? -%>
-    <%= f.input :remember_me, as: :boolean, wrapper: :boolean_checkbox %>
+    <%= f.input :remember_me, label: t('login.remember_me'), as: :boolean, wrapper: :boolean_checkbox %>
   <% end -%>
 
-  <%= f.button :submit, value: "Log in" %>
+  <%= f.button :submit, value: t('login.title') %>
 <% end %>
 
 <% content_for :links do %>
