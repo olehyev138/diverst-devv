@@ -86,7 +86,7 @@ RSpec.describe CampaignsController, type: :controller do
 
                 it "renders a flash alert" do
                     post :create, campaign: { title: nil }
-                    expect(flasvh[:alert]).to eq "Your campaign was not created. Please fix the errors"
+                    expect(flash[:alert]).to eq "Your campaign was not created. Please fix the errors"
                 end
             end
         end
