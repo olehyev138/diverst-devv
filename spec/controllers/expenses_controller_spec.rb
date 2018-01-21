@@ -7,6 +7,7 @@ RSpec.describe ExpensesController, type: :controller do
     let(:expense) {create(:expense, enterprise: enterprise)}
     let(:expense_category_1) {create(:expense_category, expense: expense)}
 
+
     describe "GET#index" do
         context "with logged in user" do
             login_user_from_let
@@ -25,10 +26,10 @@ RSpec.describe ExpensesController, type: :controller do
 
         context "without a logged in user" do
             before { get :index }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe "GET#new" do
         context "with logged in user" do
@@ -46,10 +47,10 @@ RSpec.describe ExpensesController, type: :controller do
 
         context "without a logged in user" do 
             before { get :new }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe "POST#create" do
         describe "with logged in user" do
@@ -93,10 +94,10 @@ RSpec.describe ExpensesController, type: :controller do
         describe "without a logged in user" do 
             let(:valid_expense_attributes) { FactoryGirl.attributes_for(:expense, :category_id => category.id )}
             before { post :create, expense: valid_expense_attributes }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe "GET#edit" do
         context "with logged in user" do
@@ -112,22 +113,20 @@ RSpec.describe ExpensesController, type: :controller do
             end
         end
 
-        context "without a logged in user" do 
+        context "without a logged in user" do
             before { get :edit, :id => expense.id }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
+
     describe "PATCH#update" do
         describe "with logged in user" do
-            before :each do
-                request.env["HTTP_REFERER"] = "back"
-            end
+            before { request.env["HTTP_REFERER"] = "back" }
             login_user_from_let
 
             context "with valid parameters" do
-                before(:each){ patch :update, id: expense.id, expense: attributes_for(:expense, name: "updated") }
+                before { patch :update, id: expense.id, expense: attributes_for(:expense, name: "updated") }
 
                 it "updates the expense" do
                     expense.reload
@@ -163,14 +162,13 @@ RSpec.describe ExpensesController, type: :controller do
 
         describe "wtihout a logged in user" do 
             before { patch :update, id: expense.id, expense: attributes_for(:expense, name: "updated") }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
+
     describe "DELETE#destroy" do
         context "with logged in user" do
-
             login_user_from_let
 
             it "redirects to action: :index" do
@@ -186,7 +184,6 @@ RSpec.describe ExpensesController, type: :controller do
 
         context "without logged in user" do
             before { delete :destroy, id: expense.id }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end

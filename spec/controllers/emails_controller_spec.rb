@@ -4,10 +4,10 @@ RSpec.describe EmailsController, type: :controller do
     let(:enterprise) { create(:enterprise) }
     let(:user) { create(:user, enterprise: enterprise) }
 
+
     describe "GET#index" do
         context "with logged in user" do
           login_user_from_let
-
           before { get :index }
 
           it "render index template" do
@@ -29,6 +29,7 @@ RSpec.describe EmailsController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe "PATCH#update" do
         let(:email) { create(:email, enterprise: enterprise) }

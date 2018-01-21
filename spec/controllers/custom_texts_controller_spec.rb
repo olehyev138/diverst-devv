@@ -26,6 +26,7 @@ RSpec.describe CustomTextsController, type: :controller do
     end
   end
 
+
   describe "PATCH#update" do
     let(:custom_text) { create(:custom_text, erg: "ERG", enterprise: enterprise) }
 
@@ -61,7 +62,6 @@ RSpec.describe CustomTextsController, type: :controller do
 
     context "without logged in user" do
         before { patch :update, id: custom_text, custom_text: { erg: "ERG 2" } }
-
         it_behaves_like "redirect user to users/sign_in path"
     end
   end

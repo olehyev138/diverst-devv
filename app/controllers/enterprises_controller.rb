@@ -40,7 +40,7 @@ class EnterprisesController < ApplicationController
     authorize @enterprise, :update?
   end
 
-  # missing a template
+  # missing a template layout called handshake
   def edit_mobile_fields
     authorize @enterprise
   end
