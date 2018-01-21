@@ -53,7 +53,7 @@ RSpec.describe CampaignsController, type: :controller do
             login_user_from_let
             let(:campaign_params) { FactoryGirl.attributes_for(:campaign) }
             before { campaign_params.merge!({group_ids: [create(:group).id]})}
-    
+
 
             context 'with correct params' do
                 it 'redirects to correct action' do
