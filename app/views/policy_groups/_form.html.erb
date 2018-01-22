@@ -156,17 +156,60 @@
         </div>
       </div>
       <div class="card__section card__section--border">
-        <%= f.label :user_ids do %>
+        
           <% if @policy_group.new_record? %>
             <p>Choose the <strong>users</strong> that will initially be part of this group</p>
+            
+             <%= f.association :users, collection: @policy_group.enterprise.users, label: false, input_html: { class: "select2" } %>
+             
           <% else %>
+            
+            <p>Add users not part of this group</p>
+
+            <%= simple_form_for @policy_group, :url => add_users_policy_group_path(@policy_group), method: 'post' do |form| %>
+              <%= form.input :new_users, collection: @policy_group.enterprise.users - @policy_group.users, :label => false, input_html: { class: "select2", multiple: true } %>
+              <% if @policy_group.enterprise.users.count - @policy_group.users.count > 0 %>
+                <%= form.button :submit, "Add User(s)" %>
+              <% end %>
+            <% end %>
+          
+          
             <p>You can edit <strong>users</strong> that are part of this group</p>
+            
+            <table class="table--has-border" id="policy-group-users">
+              <thead>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Remove</th>
+              </thead>
+              <tbody>
+                <% @policy_group.users.each do |user| %>
+                  <tr>
+                    <td><%= user.name %></td>
+                    <td><%= user.email %></td>
+                    <td>
+                      <%= link_to "Remove", user_path(user, {:user => {:policy_group_id => -1}}), method: :put if @policy_group.users.include?(user) %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+            
           <% end %>
-        <% end %>
-        <%= f.association :users, collection: @policy_group.enterprise.users, label: false, input_html: { class: "select2" } %>
+  
       </div>
     </div>
 
     <%= f.button :submit %>
   <% end %>
 </div>
+
+<script>
+  $(document).on('page:change', function() {
+    $(document).off('page:change');
+
+    $('#policy-group-users').dataTable(Utility.mergeWithDTDefaults({
+      order: [[0  , "asc"]]
+    }));
+  });
+</script>

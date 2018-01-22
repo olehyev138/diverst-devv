@@ -63,7 +63,7 @@ class UsersController < ApplicationController
 
     if @user.save
       flash[:notice] = "Your user was updated"
-      redirect_to @user
+      redirect_to :back
     else
       flash[:alert] = "Your user was not updated. Please fix the errors"
       render :edit
@@ -146,7 +146,7 @@ class UsersController < ApplicationController
   end
 
   def set_user
-    @user = current_user.enterprise.users.find(params[:id])
+    current_user ? @user = current_user.enterprise.users.find(params[:id]) : user_not_authorized
   end
 
   def user_params
@@ -156,7 +156,8 @@ class UsersController < ApplicationController
       :first_name,
       :last_name,
       :biography,
-      :active
+      :active,
+      :policy_group_id
     )
   end
 

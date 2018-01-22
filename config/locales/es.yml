@@ -1,0 +1,7 @@
+es:
+  login: 
+    title: "Iniciar Sesión"
+    email: "Correo Electrónico"
+    password: "Contraseña"
+    remember_me: "Recuérdame"
+    forgot_password: "¿Olvidaste tu contraseña?"

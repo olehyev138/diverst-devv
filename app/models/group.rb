@@ -20,6 +20,18 @@ class Group < ActiveRecord::Base
                                     :managers_only
                                   ]
 
+enumerize :latest_news_visibility, default: :leaders_only, in:[
+                                    :public,
+                                    :group,
+                                    :leaders_only
+                                  ]
+
+enumerize :upcoming_events_visibility, default: :leaders_only, in:[
+                                    :public,
+                                    :group,
+                                    :leaders_only
+                                  ]
+
   belongs_to :enterprise
   belongs_to :lead_manager, class_name: "User"
   belongs_to :owner, class_name: "User"
@@ -41,7 +53,9 @@ class Group < ActiveRecord::Base
 
   has_many :budgets, as: :subject
   has_many :messages, class_name: 'GroupMessage'
+  has_many :message_comments, through: :messages, class_name: 'GroupMessageComment', source: :comments
   has_many :news_links, dependent: :destroy
+  has_many :news_link_comments, through: :news_links, class_name: 'NewsLinkComment', source: :comments
   has_many :social_links, dependent: :destroy
   has_many :invitation_segments_groups
   has_many :invitation_segments, class_name: 'Segment', through: :invitation_segments_groups
@@ -54,6 +68,7 @@ class Group < ActiveRecord::Base
   has_many :questions, through: :campaigns
   has_many :answers, through: :questions
   has_many :answer_upvotes, through: :answers, source: :votes
+  has_many :answer_comments, through: :answers, class_name: 'AnswerComment', source: :comments
   belongs_to :lead_manager, class_name: "User"
   belongs_to :owner, class_name: "User"
   has_many :outcomes
@@ -85,16 +100,18 @@ class Group < ActiveRecord::Base
   do_not_validate_attachment_file_type :sponsor_media
 
   validates :name, presence: true
+  validates_format_of :contact_email, with: Devise.email_regexp, allow_blank: true
+
+  validate :valid_yammer_group_link?
 
   before_create :build_default_news_feed
   before_save :send_invitation_emails, if: :send_invitations?
   before_save :create_yammer_group, if: :should_create_yammer_group?
-  before_destroy :handle_deletion
   after_commit :update_all_elasticsearch_members
   before_validation :smart_add_url_protocol
 
   scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
-
+  
   accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
@@ -115,6 +132,25 @@ class Group < ActiveRecord::Base
     end
   end
 
+  def valid_yammer_group_link?
+    if yammer_group_link.present? && !yammer_group_id
+      errors.add(:yammer_group_link, 'this is not a yammer group link')
+      return false
+    end
+
+    return true
+  end
+
+  def yammer_group_id
+    return nil if yammer_group_link.nil?
+    eq_sign_position = yammer_group_link.rindex('=')
+    return nil if eq_sign_position.nil?
+
+    group_id = yammer_group_link[(eq_sign_position+1)..yammer_group_link.length]
+
+    group_id.to_i
+  end
+
   def calendar_color
     self[:calendar_color] || enterprise.try(:theme).try(:primary_color) || 'cccccc'
   end
@@ -124,18 +160,12 @@ class Group < ActiveRecord::Base
   end
 
   def available_budget
-    #(budgets.map{ |b| b.available_amount || 0 } ).reduce(0, :+)
     return 0 unless annual_budget
-
-    annual_budget - approved_budget + leftover_money
+    annual_budget - (approved_budget + spent_budget)
   end
 
   def spent_budget
-    if annual_budget
-      annual_budget - available_budget
-    else
-      0
-    end
+    (initiatives.map{ |i| i.current_expences_sum || 0 } ).reduce(0, :+)
   end
 
   def active_members
@@ -162,14 +192,6 @@ class Group < ActiveRecord::Base
     # return groups list without current group
     group_id = self.id
     self.enterprise.groups.select { |g| g.id != group_id }
-  end
-
-  def self.create_events
-    Group.find_each do |group|
-      (20 - group.id).times do
-        group.events << Event.create(title: 'Test Event', start: 2.days.from_now, end: 2.days.from_now + 2.hours, description: 'This is a placeholder event.')
-      end
-    end
   end
 
   def sync_yammer_users
@@ -229,7 +251,7 @@ class Group < ActiveRecord::Base
         survey_fields.each do |field|
           user_group_row << field.csv_value(user_group.info[field])
         end
-
+        
         csv << user_group_row
       end
     end
@@ -238,8 +260,14 @@ class Group < ActiveRecord::Base
   def title_with_leftover_amount
     "Create event from #{name} leftover ($#{leftover_money})"
   end
-
-
+  
+  def pending_comments_count
+    message_comments.unapproved.count + news_link_comments.unapproved.count + answer_comments.unapproved.count
+  end
+  
+  def pending_posts_count
+    news_links.unapproved.count + messages.unapproved.count + social_links.unapproved.count
+  end
 
   protected 
 
@@ -251,8 +279,6 @@ class Group < ActiveRecord::Base
   def have_protocol?
     company_video_url[%r{\Ahttp:\/\/}] || company_video_url[%r{\Ahttps:\/\/}]
   end
-
-
 
   private
 
@@ -294,15 +320,6 @@ class Group < ActiveRecord::Base
   # Update members in elastic_search
   def update_all_elasticsearch_members
     members.includes(:poll_responses).each do |member|
-      update_elasticsearch_member(member)
-    end
-  end
-
-  def handle_deletion
-    old_members = members.ids
-
-    # Update members in elastic_search
-    User.where(id: old_members).find_each do |member|
       update_elasticsearch_member(member)
     end
   end

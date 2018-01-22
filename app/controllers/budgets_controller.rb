@@ -7,6 +7,7 @@ class BudgetsController < ApplicationController
 
   def index
     authorize @group, :budgets?
+    @budgets = @group.budgets.order("id DESC")
   end
 
   def show
@@ -62,6 +63,36 @@ class BudgetsController < ApplicationController
 
   def edit_annual_budget
     authorize @group.enterprise, :update?
+  end
+
+  def reset_annual_budget
+    authorize @group.enterprise, :update?
+
+    if @group.update({:annual_budget => 0, :leftover_money => 0})
+      @group.budgets.update_all(:is_approved => false)
+      track_activity(@group, :annual_budget_update)
+      flash[:notice] = "Your budget was updated"
+      redirect_to :back
+    else
+      flash[:alert] = "Your budget was not updated. Please fix the errors"
+      redirect_to :back
+    end
+  end
+
+  def carry_over_annual_budget
+    authorize @group.enterprise, :update?
+    
+    leftover = @group.leftover_money + @group.annual_budget
+    
+    if @group.update({:annual_budget => leftover, :leftover_money => 0})
+      @group.budgets.update_all(:is_approved => false)
+      track_activity(@group, :annual_budget_update)
+      flash[:notice] = "Your budget was updated"
+      redirect_to :back
+    else
+      flash[:alert] = "Your budget was not updated. Please fix the errors"
+      redirect_to :back
+    end
   end
 
   def update_annual_budget

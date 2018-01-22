@@ -4,7 +4,7 @@ class Groups::NewsLinksController < ApplicationController
     before_action :authenticate_user!
 
     before_action :set_group, except: [:url_info]
-    before_action :set_news_link, only: [:comments, :create_comment, :edit, :update, :destroy]
+    before_action :set_news_link, only: [:comments, :create_comment, :edit, :update, :destroy, :news_link_photos]
 
     layout 'erg'
 
@@ -78,6 +78,10 @@ class Groups::NewsLinksController < ApplicationController
                    description: page.lede
                }
     end
+    
+    def news_link_photos
+        @photos = @news_link.photos
+    end
 
     protected
 
@@ -97,6 +101,7 @@ class Groups::NewsLinksController < ApplicationController
                 :title,
                 :description,
                 :picture,
+                :photos_attributes => [:file, :_destroy, :id],
                 :segment_ids => []
             )
     end

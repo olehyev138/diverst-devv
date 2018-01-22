@@ -20,7 +20,7 @@ class ConversationsController < ApplicationController
 
   def opt_in
     return render json: { message: "You've already rejected this match" }, status: 400 if @match.status_for(current_user) == Match.status[:rejected]
-    return render json: { message: 'Rating must be from 1 to 5' }, status: 400 unless !params[:rating].nil? && params[:rating].between?(1, 5)
+    return render json: { message: 'Rating must be from 1 to 5' }, status: 400 unless !params[:rating].nil? && params[:rating].to_i.between?(1, 5)
     return render json: { message: 'Rating is already set' }, status: 400 if params[:rating] && !@match.rating_for(current_user).nil?
 
     @match.set_status(user: current_user, status: Match.status[:saved])
@@ -29,12 +29,12 @@ class ConversationsController < ApplicationController
     if @match.save
       render nothing: true, status: 200
     else
-      render @match.errors
+      render :json => @match.errors, status: 422
     end
   end
 
   def leave
-    return render json: { message: 'Rating must be from 1 to 5' }, status: 400 if params[:rating] && !params[:rating].between?(1, 5)
+    return render json: { message: 'Rating must be from 1 to 5' }, status: 400 if params[:rating] && !params[:rating].to_i.between?(1, 5)
     return render json: { message: 'Rating is already set' }, status: 400 if params[:rating] && !@match.rating_for(current_user).nil?
 
     @match.set_status(user: current_user, status: Match.status[:left])
@@ -43,7 +43,7 @@ class ConversationsController < ApplicationController
     if @match.save
       render nothing: true, status: 200
     else
-      render @match.errors
+      render :json => @match.errors, status: 422
     end
   end
 

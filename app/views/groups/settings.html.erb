@@ -8,6 +8,8 @@
         <%= f.input :pending_users, input_html: { autofocus: true } %>
         <%= f.input :members_visibility %>
         <%= f.input :messages_visibility %>
+        <%= f.input :latest_news_visibility %>
+        <%= f.input :upcoming_events_visibility %>
         <%= f.label :banner, label: "Banner", input_html: { class: "field__label" } %>
         <% if @group.banner? %>
           <div class="flex-row__cell fright">
@@ -19,9 +21,12 @@
         <h3>Sponsor Details</h3>
         <p>NOTE: Sponsor details are optional. However, if you wish to fill in this part, at least the sponsor name must be entered.</p>
         <%= f.input :sponsor_name %>
+        <%= f.input :contact_email, placeholder: "eg, mattdamon@enterprise.com" %>
         <%= f.input :sponsor_title, placeholder: "eg, VP Diversity & Inclusion" %>
         <%= f.input :sponsor_media, as: :file, label: "Upload sponsor image or video", input_html: { class: "field__label" } %>
         <%= f.input :sponsor_message %>
+
+        <%= f.input :yammer_group_link %>
       </div>
     </div>
 

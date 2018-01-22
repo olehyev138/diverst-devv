@@ -19,7 +19,7 @@ class GroupsController < ApplicationController
         authorize Group
         @groups = current_user.enterprise.groups.includes(:initiatives)
     end
-    
+
     def close_budgets
         authorize Group
         @groups = current_user.enterprise.groups.includes(:children).where(:parent_id => nil)
@@ -29,7 +29,7 @@ class GroupsController < ApplicationController
     def calendar
         authorize Group, :index?
         enterprise = current_user.enterprise
-        @groups = enterprise.groups
+        @groups = enterprise.groups.where(:parent_id => nil)
         @segments = enterprise.segments
         @q_form_submit_path = calendar_groups_path
         @q = Initiative.ransack(params[:q])
@@ -48,7 +48,7 @@ class GroupsController < ApplicationController
 
         not_found! if enterprise.nil?
 
-        @events = enterprise.initiatives
+        @events = enterprise.initiatives.includes(:initiative_participating_groups).where(:groups => {:parent_id => nil})
             .ransack(
                 initiative_participating_groups_group_id_in: params[:q]&.dig(:initiative_participating_groups_group_id_in),
                 outcome_group_id_in: params[:q]&.dig(:initiative_participating_groups_group_id_in),
@@ -60,7 +60,19 @@ class GroupsController < ApplicationController
             )
             .result
 
-        render 'shared/calendar/events', format: :json
+        @events += enterprise.initiatives.includes(:initiative_participating_groups).where.not(:groups => {:parent_id => nil})
+            .ransack(
+                initiative_participating_groups_group_id_in: Group.where(:parent_id => params[:q]&.dig(:initiative_participating_groups_group_id_in)).pluck(:id),
+                outcome_group_id_in: Group.where(:parent_id => params[:q]&.dig(:initiative_participating_groups_group_id_in)).pluck(:id),
+                m: 'or'
+            )
+            .result
+            .ransack(
+                initiative_segments_segment_id_in: params[:q]&.dig(:initiative_segments_segment_id_in)
+            )
+            .result
+
+        render 'shared/calendar/events', formats: :json
     end
 
     def new
@@ -181,6 +193,12 @@ class GroupsController < ApplicationController
 
     def parse_csv
         authorize @group, :edit?
+        
+        if params[:file].nil?
+            flash[:alert] = "CSV file is required"
+            redirect_to :back
+            return
+        end
 
         @table = CSV.table params[:file].tempfile
         @failed_rows = []
@@ -189,7 +207,6 @@ class GroupsController < ApplicationController
         @table.each_with_index do |row, row_index|
             email = row[0]
             user = User.where(email: email).first
-
             if user
                 @group.members << user unless @group.members.include? user
 
@@ -226,7 +243,7 @@ class GroupsController < ApplicationController
             redirect_to :back
         else
             flash[:alert] = "Group attachment was not removed. Please fix the errors"
-            render :back
+            redirect_to :back
         end
     end
 
@@ -236,7 +253,7 @@ class GroupsController < ApplicationController
         @upcoming_events = @group.initiatives.upcoming.limit(3) + @group.participating_initiatives.upcoming.limit(3)
         @messages = @group.messages.includes(:owner).limit(3)
         @user_group = @group.user_groups.find_by(user: current_user)
-        @leaders = @group.group_leaders.visible
+        @leaders = @group.group_leaders.includes(:user).visible
 
         @members = @group.active_members.order(created_at: :desc).limit(8)
 
@@ -279,12 +296,16 @@ class GroupsController < ApplicationController
                 :banner,
                 :yammer_create_group,
                 :yammer_sync_users,
+                :yammer_group_link,
                 :pending_users,
                 :members_visibility,
                 :messages_visibility,
+                :latest_news_visibility,
+                :upcoming_events_visibility,
                 :calendar_color,
                 :active,
                 :sponsor_name,
+                :contact_email,
                 :sponsor_title,
                 :sponsor_image,
                 :sponsor_media,

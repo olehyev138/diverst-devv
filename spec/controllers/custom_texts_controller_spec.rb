@@ -51,9 +51,12 @@ RSpec.describe CustomTextsController, type: :controller do
 
       # this context fails because CustomText model has no validation
       context "with invalid params" do
-        before { patch :update, id: custom_text, custom_text: { erg: nil } }
+        before {
+          allow_any_instance_of(CustomText).to receive(:update).and_return(false)
+          patch :update, id: custom_text, custom_text: { erg: nil }
+        }
 
-        it "flashes an alert message", skip: "this context fails because CustomText model has no validation" do
+        it "flashes an alert message" do
           expect(flash[:alert]).to eq "Your texts were not updated. Please fix the errors"
         end
       end

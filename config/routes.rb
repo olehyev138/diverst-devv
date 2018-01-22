@@ -89,6 +89,7 @@ Rails.application.routes.draw do
       get 'edit_fields'
       get 'edit_mobile_fields'
       get 'edit_branding'
+      get 'edit_pending_comments'
       get 'edit_algo'
       get 'theme'
       patch 'update_branding'
@@ -100,6 +101,9 @@ Rails.application.routes.draw do
     
     scope module: :enterprises do
       resources :folders do
+        member do
+          post 'authenticate'
+        end
         scope module: :folder do
           resources :resources
         end
@@ -122,6 +126,8 @@ Rails.application.routes.draw do
       collection do
         get 'edit_annual_budget'
         post 'update_annual_budget'
+        post 'reset_annual_budget'
+        post 'carry_over_annual_budget'
       end
     end
 
@@ -175,6 +181,7 @@ Rails.application.routes.draw do
       resources :news_links, except: [:show] do
         member do
           get   'comments'
+          get   'news_link_photos'
           post  'create_comment'
         end
         resources :news_link_comment
@@ -187,6 +194,9 @@ Rails.application.routes.draw do
       end
       
       resources :folders do
+        member do
+          post 'authenticate'
+        end
         scope module: :folder do
           resources :resources
         end
@@ -323,7 +333,7 @@ Rails.application.routes.draw do
   resources :campaigns do
     resources :questions, shallow: true do
       resources :answers, shallow: true do
-        resources :answer_comments, only: [:destroy], path: 'comments', shallow: true
+        resources :answer_comments, only: [:update, :destroy], path: 'comments', shallow: true
 
         member do
           get 'breakdown'
@@ -440,7 +450,11 @@ Rails.application.routes.draw do
     resources :leads
   end
 
-  resources :policy_groups
+  resources :policy_groups do
+    member do
+      post 'add_users'
+    end
+  end
   resources :emails
   resources :custom_texts, only: [:edit, :update]
   

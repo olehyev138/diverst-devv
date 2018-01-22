@@ -16,7 +16,8 @@ class TopicFeedbacksController < ApplicationController
     if @feedback.save
       redirect_to action: :thank_you
     else
-      render :edit
+      # there is no edit template
+      redirect_to :back
     end
   end
 
@@ -37,7 +38,7 @@ class TopicFeedbacksController < ApplicationController
   protected
 
   def set_topic
-    @topic = (current_user || current_user).enterprise.topics.find(params[:topic_id])
+    current_user ? @topic = current_user.enterprise.topics.find(params[:topic_id]) : user_not_authorized
   end
 
   def set_feedback

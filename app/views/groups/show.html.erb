@@ -19,6 +19,7 @@
   <div class="row row--equal-height">
     <div class="col sm-12 md-9">
       <div class="row row--equal-height">
+      <% if policy(@group).view_latest_news? %>
         <div class="col sm-12 md-6">
           <div class="card">
             <div class="card__section">
@@ -36,7 +37,9 @@
             </div>
           </div>
         </div>
+      <% end %>  
 
+      <% if policy(@group).view_upcoming_events? %>
         <div class="col sm-12 md-6">
           <div class="card">
             <div class="card__section">
@@ -55,8 +58,14 @@
               <% end %>
 
             </div>
+            <% if @group.yammer_group_id.present? %>
+              <div class="card__section">
+                <%= render 'yammer' %>
+              </div>
+            <% end %>
           </div>
         </div>
+      <% end %>  
       </div>
     </div>
 
@@ -66,7 +75,7 @@
         <div class="card__section">
         <% if @group.sponsor_media.present? %>
           <% show_sponsor_image?(@group, "sponsor_media_content_type") do %>
-          <%= image_tag(@group.sponsor_media.expiring_url(3600), style: 'max-width: 100px; max-height:90px; border-radius: 80px;') %>
+          <%= image_tag(@group.sponsor_media.expiring_url(3600), style: 'max-width: 100px; max-height:90px; border-radius: 80px; cursor: pointer;') %>
           <% end %>
         <% else %>
           <%= image_tag("missing_user.png", size: "70x70") %>
@@ -88,7 +97,7 @@
       <% if @current_user.pending_group_member?(@group.id) %>
         * Please wait for group administrators to process your membership request.
         <% if !current_user.has_answered_group_survey? @group %>
-          Take a survey below in order to speed up approvement process.
+          Take a survey below in order to speed up approval process.
         <% else %>
           You can always
           <%= link_to 'edit', survey_group_questions_path(@group) %>
@@ -137,6 +146,15 @@
         </div>
       <% end %>
 
+
+      <% if @group.contact_email %>
+        <%= mail_to @group.contact_email do %>
+          <button class="btn btn--primary" style="margin-bottom: 24px; width: 100%;">
+            Contact Group Leader
+          </button>
+        <% end %>
+      <% end %> 
+
       <% if @group.parent.present? %>
         <div class="card card--secondary">
           <div class="card__section">
@@ -160,18 +178,31 @@
       <% if @group.active_members.include? current_user %>
         <div class="card card--secondary">
           <div class="card__section">
-            <%= simple_form_for @user_group, method: :post do |f| %>
+            <%= simple_form_for @user_group, method: :post, html: {id: "user_group" } do |f| %>
               <%= f.input :notifications_frequency,
                 collection: UserGroup.notifications_frequencies.keys.map{ |f| [t("user_group.#{ f }"), f] },
                 label: "Frequency of notifications",
                 include_blank: false,
                 input_html:
                   {
-                    class: 'ajax-toggle',
+                    class: 'ajax-toggle-1',
                     'data-url': group_user_group_path(@group, @user_group)
                   }
               %>
-            <% end %>
+              </br>
+              <div class="notifications_date">
+                <%= f.input :notifications_date,
+                  collection: UserGroup.notifications_dates.keys.map{ |f| [t("user_group.#{ f }"), f] },
+                  label: "Date of notifications",
+                  include_blank: false,
+                  input_html:
+                    {
+                      class: 'ajax-toggle-2',
+                      'data-url': group_user_group_path(@group, @user_group)
+                    }
+                %>
+              </div>
+             <% end %>
           </div>
         </div>
 
@@ -180,3 +211,17 @@
     </div>
   </div>
 </div>
+
+<script>
+  $('img.info').click(function(e){
+    e.preventDefault();
+    var id = $(this).attr('id');
+    $('div.biography_' + id).show();
+  }); //endof click
+  
+  $('a.remove').click(function(e){
+    e.preventDefault();
+    var id = $(this).attr('id');
+    $('div.biography_' + id).hide();
+  }); //endof click
+</script>

@@ -6,13 +6,16 @@ class NewsLink < ActiveRecord::Base
     
     has_many :news_link_segments, :dependent => :destroy
     has_many :segments, through: :news_link_segments, :before_remove => :remove_segment_association
-    
+    has_many :news_link_photos,  dependent: :destroy
+
     before_validation :smart_add_url_protocol
 
     validates :url, presence: true
 
-    has_many :comments, class_name: 'NewsLinkComment'
-
+    has_many :comments, class_name: 'NewsLinkComment', dependent: :destroy
+    has_many :photos, class_name: 'NewsLinkPhoto', dependent: :destroy
+    accepts_nested_attributes_for :photos, :allow_destroy => true
+    
     validates :group_id,        presence: true
     validates :title,           presence: true
     validates :description,     presence: true
@@ -29,6 +32,8 @@ class NewsLink < ActiveRecord::Base
       joins("LEFT JOIN news_link_segments ON news_link_segments.news_link_id = news_links.id")
       .where(nl_condtions.join(" OR "))
     }
+    
+    scope :unapproved, -> {joins(:news_feed_link).where(:news_feed_links => {:approved => false})}
 
     # call back to delete news link segment associations
     def remove_segment_association(segment)

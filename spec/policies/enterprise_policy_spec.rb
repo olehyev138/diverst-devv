@@ -10,7 +10,7 @@ RSpec.describe EnterprisePolicy, :type => :policy do
     
     subject { described_class }
 
-    permissions :edit_auth?, :edit_fields?, :edit_mobile_fields?, :update_branding?, :edit_branding?, :restore_default_branding? do
+    permissions :edit_auth?, :edit_fields?, :edit_mobile_fields?, :update_branding?, :edit_branding?, :restore_default_branding?, :edit_pending_comments? do
         it "allows access" do
             expect(subject).to permit(user, enterprise)
         end

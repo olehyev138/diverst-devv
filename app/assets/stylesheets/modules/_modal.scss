@@ -1,22 +1,13 @@
 // General
-
 .modal,
 .modal__container {
   backface-visibility: hidden;
 }
 
 // Modal
-
 .modal {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  opacity: 0;
-  visibility: hidden;
   overflow: auto;
-  padding: $spacing-medium 0;
+  padding: 0!important;
   text-align: center;
   -webkit-overflow-scrolling: touch;
   @include z-index(modal);
@@ -24,10 +15,17 @@
 
   &:after {
     content: "";
-    height: 100%;
+    float: none;
     display: inline-block;
     vertical-align: middle;
+    margin: -4px;
   }
+}
+
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
 }
 
 .modal--is-open {
@@ -37,14 +35,13 @@
 
 
 // modal container
-
 .modal__container {
   position: relative;
   display: inline-block;
   vertical-align: middle;
   width: calc(100% - #{$spacing-x-large});
   max-width: 448px;
-  text-align: center;  
+  text-align: center;
   background: $diverst-white;
   border-radius: $border-radius;
   opacity: 0;
@@ -73,7 +70,6 @@
 
   .btn--link {
     margin-top: $spacing-medium; // Temporary fix
-
     @include mq(medium) {
       margin-top: $spacing-large;
     }
@@ -82,7 +78,6 @@
 
 
 // Modal anatomy
-
 .modal__header {
   position: relative;
   padding: $spacing-large;
@@ -100,7 +95,8 @@
     height: 280px;
   }
 
-  h1, p {
+  h1,
+  p {
     color: $diverst-white;
   }
 }
@@ -125,7 +121,6 @@
 
 
 // Modal close
-
 .modal__close {
   position: absolute;
   display: block;
@@ -143,7 +138,6 @@
 
 
 // Modal backdrop
-
 .modal__backdrop {
   position: fixed;
   width: 100%;

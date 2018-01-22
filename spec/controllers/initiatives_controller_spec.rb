@@ -14,7 +14,6 @@ RSpec.describe InitiativesController, type: :controller do
 
     context 'with logged user' do
       login_user_from_let
-
       before { get_index(group.id) }
 
       it 'render index template' do
@@ -28,7 +27,6 @@ RSpec.describe InitiativesController, type: :controller do
 
     context 'without logged user' do
       before { get_index(group.id) }
-
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
@@ -41,13 +39,10 @@ RSpec.describe InitiativesController, type: :controller do
 
     context 'with logged user' do
       login_user_from_let
-
       before { get_new(group.id) }
 
       it 'assigns new group' do
-        new_initiative = assigns(:initiative)
-
-        expect(new_initiative).to be_new_record
+        expect(assigns(:initiative)).to be_new_record
       end
 
       it 'assigns segments of enterprise' do
@@ -57,7 +52,6 @@ RSpec.describe InitiativesController, type: :controller do
 
     context 'without logged user' do
       before { get_new(group.id) }
-
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
@@ -71,9 +65,9 @@ RSpec.describe InitiativesController, type: :controller do
     context 'with logged user' do
       login_user_from_let
 
-      let!(:update_1) { FactoryGirl.create :initiative_update, initiative: initiative }
-      let!(:update_2) { FactoryGirl.create :initiative_update, initiative: initiative }
-      let!(:update_3) { FactoryGirl.create :initiative_update, initiative: initiative }
+      let!(:update_1) { create(:initiative_update, initiative: initiative, created_at: Time.now - 1.days) }
+      let!(:update_2) { create(:initiative_update, initiative: initiative, created_at: Time.now - 8.hours) }
+      let!(:update_3) { create(:initiative_update, initiative: initiative, created_at: Time.now) }
 
       before do
         get_show
@@ -97,8 +91,11 @@ RSpec.describe InitiativesController, type: :controller do
         end
       end
 
-      it "returns updates in descending order of created_at" do
-        expect(assigns[:updates]).to eq [update_3, update_2, update_1]
+      it "returns updates in ascending order of created_at, and at a limit of 3" do
+        create_list(:initiative_update, 2, initiative: initiative) #create 2 more to make a total of 5 updates
+        expect(assigns[:updates]).to eq [update_1, update_2, update_3]
+        expect(InitiativeUpdate.count).to eq 5
+        expect(assigns[:updates].count).to eq 3
       end
 
       it "render template show" do
@@ -108,19 +105,18 @@ RSpec.describe InitiativesController, type: :controller do
 
     context 'without logged user' do
       before { get_show }
-
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
 
 
   describe 'GET #edit' do
+    before { pillar }
     let!(:group) { create :group, :with_outcomes, enterprise: user.enterprise }
-
-    let!(:initiative) { create :initiative, owner_group: group }
+    let!(:initiative) { create :initiative, owner_group: group, pillar: pillar }
 
     #TODO this is bad. We need to associate group with initiatives directly
-    before { group.outcomes.first.pillars.first.initiatives << initiative }
+    # before { group.outcomes.first.pillars.first.initiatives << initiative }
 
     def get_edit(group_id = -1, initiative_id = -1)
       get :edit, group_id: group_id, id: initiative_id
@@ -128,7 +124,6 @@ RSpec.describe InitiativesController, type: :controller do
 
     context 'with logged user' do
       login_user_from_let
-
       before { get_edit(group.id, initiative.id) }
 
       it 'render edit template' do
@@ -140,8 +135,7 @@ RSpec.describe InitiativesController, type: :controller do
       end
 
       it 'sets initiative' do
-        assigned_initiative = assigns(:initiative)
-        expect(assigned_initiative).to eq initiative
+        expect(assigns(:initiative)).to eq initiative
       end
 
       it 'assigns segments of enterprise' do
@@ -151,7 +145,6 @@ RSpec.describe InitiativesController, type: :controller do
 
     context 'without logged user' do
       before { get_edit(group.id, initiative.id) }
-
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
@@ -164,22 +157,17 @@ RSpec.describe InitiativesController, type: :controller do
 
     context 'with logged in user' do
       login_user_from_let
-      before(:each) do
-        initiative.update(attendees: [attendee])
-      end
+      before { initiative.update(attendees: [attendee]) }
+
 
       it "render a csv file" do
         get :attendees, group_id: group.id, id: initiative.id
-
-        content_type = response.headers["Content-Type"]
-        expect(content_type).to eq "text/csv"
+        expect(response.headers["Content-Type"]).to eq "text/csv"
       end
 
       it "render a csv with attendees of an initiative" do
         get :attendees, group_id: group.id, id: initiative.id
-
-        body = response.body.split("\n")[1]
-        expect(body).to eq "#{ attendee.first_name },#{ attendee.last_name },#{ attendee.email },#{ attendee.biography },#{attendee.active}"
+        expect(response.body.split("\n")[1]).to eq "#{ attendee.first_name },#{ attendee.last_name },#{ attendee.email },#{ attendee.biography },#{attendee.active}"
       end
     end
 
@@ -255,7 +243,6 @@ RSpec.describe InitiativesController, type: :controller do
 
           it 'redirects to correct page' do
             post_create(group.id, initiative_attrs)
-
             expect(response).to redirect_to action: :index
           end
 
@@ -290,7 +277,6 @@ RSpec.describe InitiativesController, type: :controller do
 
       context 'without logged in user' do
         before { post_create(group.id) }
-
         it_behaves_like "redirect user to users/sign_in path"
       end
     end
@@ -388,7 +374,6 @@ RSpec.describe InitiativesController, type: :controller do
 
       context 'without logged in user' do
         before { patch_update(group.id) }
-
         it_behaves_like "redirect user to users/sign_in path"
       end
     end

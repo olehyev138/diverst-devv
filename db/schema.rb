@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171130143338) do
+ActiveRecord::Schema.define(version: 20180118201836) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -34,8 +34,9 @@ ActiveRecord::Schema.define(version: 20171130143338) do
     t.text     "content",    limit: 65535
     t.integer  "author_id",  limit: 4
     t.integer  "answer_id",  limit: 4
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.boolean  "approved",                 default: false
   end
 
   create_table "answer_expenses", force: :cascade do |t|
@@ -343,6 +344,8 @@ ActiveRecord::Schema.define(version: 20171130143338) do
     t.string   "onboarding_sponsor_media_content_type", limit: 191
     t.integer  "onboarding_sponsor_media_file_size",    limit: 4
     t.datetime "onboarding_sponsor_media_updated_at"
+    t.boolean  "enable_pending_comments",                             default: false
+    t.boolean  "disable_sponsor_message",                             default: false
   end
 
   create_table "event_attendances", force: :cascade do |t|
@@ -445,11 +448,13 @@ ActiveRecord::Schema.define(version: 20171130143338) do
   add_index "folder_shares", ["container_type", "container_id"], name: "index_folder_shares_on_container_type_and_container_id", using: :btree
 
   create_table "folders", force: :cascade do |t|
-    t.integer  "container_id",   limit: 4
-    t.string   "container_type", limit: 191
-    t.string   "name",           limit: 191
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.integer  "container_id",       limit: 4
+    t.string   "container_type",     limit: 191
+    t.string   "name",               limit: 191
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
+    t.boolean  "password_protected",             default: false
+    t.string   "password_digest",    limit: 191
   end
 
   add_index "folders", ["container_type", "container_id"], name: "index_folders_on_container_type_and_container_id", using: :btree
@@ -478,21 +483,24 @@ ActiveRecord::Schema.define(version: 20171130143338) do
   end
 
   create_table "group_leaders", force: :cascade do |t|
-    t.integer  "group_id",              limit: 4
-    t.integer  "user_id",               limit: 4
-    t.string   "position_name",         limit: 191
-    t.datetime "created_at",                                        null: false
-    t.datetime "updated_at",                                        null: false
-    t.boolean  "visible",                           default: true
-    t.boolean  "notifications_enabled",             default: false
+    t.integer  "group_id",                               limit: 4
+    t.integer  "user_id",                                limit: 4
+    t.string   "position_name",                          limit: 191
+    t.datetime "created_at",                                                         null: false
+    t.datetime "updated_at",                                                         null: false
+    t.boolean  "visible",                                            default: true
+    t.boolean  "pending_member_notifications_enabled",               default: false
+    t.boolean  "pending_comments_notifications_enabled",             default: false
+    t.boolean  "pending_posts_notifications_enabled",                default: false
   end
 
   create_table "group_message_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
     t.integer  "author_id",  limit: 4
     t.integer  "message_id", limit: 4
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.boolean  "approved",                 default: false
   end
 
   create_table "group_messages", force: :cascade do |t|
@@ -534,6 +542,7 @@ ActiveRecord::Schema.define(version: 20171130143338) do
     t.boolean  "yammer_group_created"
     t.string   "yammer_group_name",          limit: 191
     t.boolean  "yammer_sync_users"
+    t.string   "yammer_group_link",          limit: 191
     t.integer  "yammer_id",                  limit: 4
     t.integer  "manager_id",                 limit: 4
     t.integer  "owner_id",                   limit: 4
@@ -563,6 +572,9 @@ ActiveRecord::Schema.define(version: 20171130143338) do
     t.integer  "sponsor_media_file_size",    limit: 4
     t.datetime "sponsor_media_updated_at"
     t.string   "company_video_url",          limit: 191
+    t.string   "contact_email",              limit: 191
+    t.string   "latest_news_visibility",     limit: 191
+    t.string   "upcoming_events_visibility", limit: 191
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
@@ -725,8 +737,19 @@ ActiveRecord::Schema.define(version: 20171130143338) do
     t.text     "content",      limit: 65535
     t.integer  "author_id",    limit: 4
     t.integer  "news_link_id", limit: 4
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+    t.boolean  "approved",                   default: false
+  end
+
+  create_table "news_link_photos", force: :cascade do |t|
+    t.string   "file_file_name",    limit: 191
+    t.string   "file_content_type", limit: 191
+    t.integer  "file_file_size",    limit: 4
+    t.datetime "file_updated_at"
+    t.integer  "news_link_id",      limit: 4
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
   end
 
   create_table "news_link_segments", force: :cascade do |t|
@@ -1003,6 +1026,7 @@ ActiveRecord::Schema.define(version: 20171130143338) do
     t.integer  "notifications_frequency", limit: 4,     default: 2
     t.integer  "total_weekly_points",     limit: 4,     default: 0
     t.text     "data",                    limit: 65535
+    t.integer  "notifications_date",      limit: 4,     default: 1
   end
 
   create_table "user_reward_actions", force: :cascade do |t|

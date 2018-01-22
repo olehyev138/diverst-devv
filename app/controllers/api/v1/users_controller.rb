@@ -37,13 +37,7 @@ class Api::V1::UsersController < Api::V1::ApiController
         find_and_authorize(params, :destroy?).destroy
         head :no_content
     end
-    
-    # enterprise routes
-    
-    def enterprise
-        render :json => self.current_user.enterprise
-    end
-    
+
     private
     
     def find_and_authorize(params, action)
