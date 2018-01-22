@@ -40,7 +40,7 @@ RSpec.describe EnterprisesController, type: :controller do
 
                 it "updates the enterprise" do
                     enterprise.reload
-                    expect(enterprise.cdo_name).to eq "updated"
+                    expect(assigns[:enterprise].cdo_name).to eq "updated"
                 end
 
                 it "redirects to action index" do
