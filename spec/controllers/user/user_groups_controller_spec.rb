@@ -80,5 +80,15 @@ RSpec.describe User::UserGroupsController, type: :controller do
                 end
             end
         end
+
+        describe 'with a user not logged in' do 
+            before do
+                patch :update, user_groups: {
+                 "#{user_group_one.id}": { notifications_frequency: "weekly", notifications_date: "monday" },
+                 "#{user_group_two.id}": { notifications_frequency: "daily" }
+             }
+            end
+            it_behaves_like "redirect user to users/sign_in path"
+        end
     end
 end
