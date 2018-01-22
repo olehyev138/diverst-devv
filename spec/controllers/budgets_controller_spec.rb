@@ -203,7 +203,7 @@ RSpec.describe BudgetsController, type: :controller do
             expect{ delete :destroy, group_id: budget.subject.id, id: budget.id }.to change(Budget, :count).by(-1)
           end
 
-          it 'flashes a notice message' do 
+          it 'flashes a notice message' do
             delete :destroy, group_id: budget.subject.id, id: budget.id
             expect(flash[:notice]).to eq 'Your budget was deleted'
           end
@@ -277,12 +277,12 @@ RSpec.describe BudgetsController, type: :controller do
             put :reset_annual_budget, group_id: budget.subject.id, id: budget.id
           }
 
-          it 'set annual_budget and leftover_money to zero' do 
+          it 'set annual_budget and leftover_money to zero' do
             expect(assigns[:group].annual_budget).to eq 0
             expect(assigns[:group].leftover_money).to eq 0
           end
 
-          it "sets 'is_approved' attribute to false for all budgets belonging to group" do 
+          it "sets 'is_approved' attribute to false for all budgets belonging to group" do
             expect(assigns[:group].budgets).to all(have_attributes(:is_approved => false))
           end
 
@@ -306,7 +306,7 @@ RSpec.describe BudgetsController, type: :controller do
 
               include_examples'correct public activity'
             end
-          end          
+          end
 
           it 'flashes a notice message' do
             expect(flash[:notice]).to eq "Your budget was updated"
@@ -346,12 +346,12 @@ RSpec.describe BudgetsController, type: :controller do
             put :carry_over_annual_budget, group_id: budget.subject.id, id: budget.id
           }
 
-          it 'set leftover_money to and zero annual_budget to 100000' do 
+          it 'set leftover_money to and zero annual_budget to 100000' do
             expect(assigns[:group].annual_budget).to eq 100000
             expect(assigns[:group].leftover_money).to eq 0
           end
 
-          it "sets 'is_approved' attribute to false for all budgets belonging to group" do 
+          it "sets 'is_approved' attribute to false for all budgets belonging to group" do
             expect(assigns[:group].budgets).to all(have_attributes(:is_approved => false))
           end
 
@@ -459,7 +459,7 @@ RSpec.describe BudgetsController, type: :controller do
           end
         end
 
-        it 'flashes a notice message' do 
+        it 'flashes a notice message' do
           expect(flash[:notice]).to eq 'Your budget was updated'
         end
       end
