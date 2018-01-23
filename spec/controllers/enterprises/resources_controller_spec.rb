@@ -23,10 +23,6 @@ RSpec.describe Enterprises::ResourcesController, type: :controller do
             it "assigns the national_resources" do
                 expect(assigns[:national_resources]).to eq([national_resource])
             end
-
-            it 'debug' do 
-                byebug
-            end
         end
 
         context 'when user is not logged in' do
