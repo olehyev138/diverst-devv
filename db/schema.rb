@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180118201836) do
+ActiveRecord::Schema.define(version: 20180124164805) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -344,8 +344,8 @@ ActiveRecord::Schema.define(version: 20180118201836) do
     t.string   "onboarding_sponsor_media_content_type", limit: 191
     t.integer  "onboarding_sponsor_media_file_size",    limit: 4
     t.datetime "onboarding_sponsor_media_updated_at"
-    t.boolean  "enable_pending_comments",                             default: false
     t.boolean  "disable_sponsor_message",                             default: false
+    t.boolean  "enable_pending_comments",                             default: false
   end
 
   create_table "event_attendances", force: :cascade do |t|
@@ -492,6 +492,7 @@ ActiveRecord::Schema.define(version: 20180118201836) do
     t.boolean  "pending_member_notifications_enabled",               default: false
     t.boolean  "pending_comments_notifications_enabled",             default: false
     t.boolean  "pending_posts_notifications_enabled",                default: false
+    t.boolean  "set_contact_email",                                  default: false
   end
 
   create_table "group_message_comments", force: :cascade do |t|
