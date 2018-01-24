@@ -29,9 +29,7 @@ class LogsController < ApplicationController
   end
 
   def set_activities
-    @activities = PublicActivity::Activity.includes(:owner, :trackable)
-                                          .where(recipient: @enterprise)
-                                          .order(created_at: :desc)
+    @activities = PublicActivity::Activity.includes(:owner, :trackable).where(recipient: @enterprise).order(created_at: :desc)
   end
 
   def log_file_name
