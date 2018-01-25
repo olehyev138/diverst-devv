@@ -5,7 +5,8 @@ RSpec.describe Groups::GroupMessageCommentController, type: :controller do
   let(:group){ create(:group, enterprise: user.enterprise) }
   let(:group_message){ create(:group_message, group: group, subject: "Test", owner: user) }
   let(:group_message_comment){ create(:group_message_comment, message: group_message, approved: false) }
-  
+
+
   describe 'GET#edit' do
     context 'when user is logged in' do
       login_user_from_let
@@ -27,17 +28,18 @@ RSpec.describe Groups::GroupMessageCommentController, type: :controller do
     end
   end
 
+
   describe 'PATCH#update' do
     context 'with valid attributes' do
       login_user_from_let
-      
+
       before do
         patch :update, group_id: group.id, group_message_id: group_message.id, id: group_message_comment.id, group_message_comment: {content: "updated"}
       end
 
       it "updates the comment" do
         group_message_comment.reload
-        expect(group_message_comment.content).to eq "updated"
+        expect(assigns[:comment].content).to eq "updated"
       end
 
       it 'flashes a notice message' do
@@ -63,12 +65,13 @@ RSpec.describe Groups::GroupMessageCommentController, type: :controller do
         expect(response).to render_template :edit
       end
     end
-  
+
     context 'when user is not logged in' do
       before { patch :update, group_id: group.id, group_message_id: group_message.id, id: group_message_comment.id, group_message_comment: {content: "updated"} }
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
+
 
   describe 'DELETE#destroy' do
     context 'when user is logged in' do

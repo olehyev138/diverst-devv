@@ -22,7 +22,7 @@ class EmailsController < ApplicationController
   protected
 
   def set_email
-    @email = current_user.enterprise.emails.find(params[:id])
+   current_user ? @email = current_user.enterprise.emails.find(params[:id]) : user_not_authorized
   end
 
   def email_params

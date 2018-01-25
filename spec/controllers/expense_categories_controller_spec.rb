@@ -33,7 +33,6 @@ RSpec.describe ExpenseCategoriesController, type: :controller do
     describe "GET#new" do
         context "with logged in user" do
             login_user_from_let
-
             before { get :new }
 
             it "returns a new expense category object" do
@@ -47,7 +46,6 @@ RSpec.describe ExpenseCategoriesController, type: :controller do
 
         context "without a logged in user" do
             before { get :new }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
@@ -94,7 +92,6 @@ RSpec.describe ExpenseCategoriesController, type: :controller do
         describe "without a logged in user" do
             let(:valid_expense_category_attributes) { FactoryGirl.attributes_for(:expense_category) }
             before { post :create, expense_category: valid_expense_category_attributes }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
@@ -116,16 +113,14 @@ RSpec.describe ExpenseCategoriesController, type: :controller do
 
         context "without a logged in user" do
             before { get :edit, :id => expense_category.id }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
+
     describe "PATCH#update" do
         describe "with logged in user" do
-            before :each do
-                request.env["HTTP_REFERER"] = "back"
-            end
+            before { request.env["HTTP_REFERER"] = "back" }
             login_user_from_let
 
             context "with valid parameters" do
@@ -160,14 +155,13 @@ RSpec.describe ExpenseCategoriesController, type: :controller do
 
         describe "without a logged in user" do
             before { patch :update, id: expense_category.id, expense_category: { name: "updated" } }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
+
     describe "DELETE#destroy" do
         context "with logged in user" do
-
             login_user_from_let
 
             it "redirect to action: :index" do
@@ -183,7 +177,6 @@ RSpec.describe ExpenseCategoriesController, type: :controller do
 
         context "without logged in user" do
             before { delete :destroy, id: expense_category.id }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end

@@ -344,8 +344,8 @@ ActiveRecord::Schema.define(version: 20180118201836) do
     t.string   "onboarding_sponsor_media_content_type", limit: 191
     t.integer  "onboarding_sponsor_media_file_size",    limit: 4
     t.datetime "onboarding_sponsor_media_updated_at"
-    t.boolean  "enable_pending_comments",                             default: false
     t.boolean  "disable_sponsor_message",                             default: false
+    t.boolean  "enable_pending_comments",                             default: false
   end
 
   create_table "event_attendances", force: :cascade do |t|

@@ -10,8 +10,8 @@ RSpec.describe Groups::CommentsController, type: :controller do
     describe 'when user is logged in' do
       login_user_from_let
       let!(:reward_action){ create(:reward_action, enterprise: user.enterprise, key: "feedback_on_event", points: 80) }
-      before do 
-        request.env["HTTP_REFERER"] = "back" 
+      before do
+        request.env["HTTP_REFERER"] = "back"
         user.enterprise.update(enable_rewards: true)
       end
 
@@ -21,7 +21,7 @@ RSpec.describe Groups::CommentsController, type: :controller do
           .to change(InitiativeComment, :count).by(1)
         end
 
-        it 'flashes a reward message' do 
+        it 'flashes a reward message' do
           post :create, group_id: group.id, event_id: initiative.id, initiative_comment: { content: "comment" }
           user.reload
           expect(flash[:reward]).to eq "Your comment was created. Now you have #{ user.credits } points"
@@ -37,31 +37,31 @@ RSpec.describe Groups::CommentsController, type: :controller do
           expect(user.points).to eq 80
         end
 
-        it 'redirects to previous page' do 
+        it 'redirects to previous page' do
           post :create, group_id: group.id, event_id: initiative.id, initiative_comment: { content: "comment" }
           expect(response).to redirect_to "back"
         end
       end
 
       context 'with invalid attributes' do
-        it 'does not save comment object' do 
+        it 'does not save comment object' do
           expect{post :create, group_id: group.id, event_id: initiative.id, initiative_comment: { content: nil }}
           .to change(InitiativeComment, :count).by(0)
         end
 
-        it 'flashes an alert message' do 
+        it 'flashes an alert message' do
           post :create, group_id: group.id, event_id: initiative.id, initiative_comment: { content: nil }
           expect(flash[:alert]).to eq 'Your comment was not created. Please fix the errors'
         end
 
-        it 'redirects to previous page' do 
+        it 'redirects to previous page' do
           post :create, group_id: group.id, event_id: initiative.id, initiative_comment: { content: nil }
           expect(response).to redirect_to "back"
         end
       end
     end
 
-    describe 'when user is not logged in' do 
+    describe 'when user is not logged in' do
       before { post :create, group_id: group.id, event_id: initiative.id, initiative_comment: { content: "comment" } }
       it_behaves_like "redirect user to users/sign_in path"
     end

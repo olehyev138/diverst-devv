@@ -8,9 +8,20 @@ RSpec.describe Enterprises::EventsController, type: :controller do
     let!(:pillar){ create(:pillar, outcome: outcome) }
     let!(:initiative){ create(:initiative, owner_group_id: group.id, pillar: pillar) }
 
+
+
     it "assigns events of an enterprise to @events" do
       get :public_calendar_data, enterprise_id: enterprise.id, format: :json
       expect(assigns(:events)).to eq [initiative]
+    end
+
+    it 'returns correct calendar data in json' do 
+      get :public_calendar_data, enterprise_id: enterprise.id, format: :json
+      json_response = JSON.parse(response.body, symbolize_names: true)
+
+      expect(json_response[0][:title]).to eq initiative.title
+      expect(json_response[0][:start].to_datetime).to eq initiative.start
+      expect(json_response[0][:end].to_datetime).to eq initiative.end
     end
 
     it 'renders events partial' do

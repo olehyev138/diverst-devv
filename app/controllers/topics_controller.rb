@@ -40,7 +40,7 @@ class TopicsController < ApplicationController
   protected
 
   def set_topic
-    @topic = current_user.enterprise.topics.find(params[:id])
+    current_user ? @topic = current_user.enterprise.topics.find(params[:id]) : user_not_authorized
   end
 
   def topic_params

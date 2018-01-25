@@ -2,7 +2,7 @@ class AnswerCommentsController < ApplicationController
   before_action :authenticate_user!
 
   before_action :set_comment_and_answer
-  
+
   def update
     if @comment.update(comment_params)
         flash[:notice] = "The comment was updated"
@@ -21,8 +21,12 @@ class AnswerCommentsController < ApplicationController
   protected
 
   def set_comment_and_answer
-    @comment = current_user.enterprise.answer_comments.find(params[:id])
-    @answer = @comment.answer
+    if current_user
+      @comment = current_user.enterprise.answer_comments.find(params[:id])
+      @answer = @comment.answer
+    else
+      user_not_authorized
+    end
   end
 
   def comment_params
