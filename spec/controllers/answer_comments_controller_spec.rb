@@ -31,6 +31,7 @@ RSpec.describe AnswerCommentsController, type: :controller do
                     expect(flash[:notice]).to eq "The comment was updated"
                 end
             end
+
             context "when successful" do
                 before {
                     request.env["HTTP_REFERER"] = "back"
