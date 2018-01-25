@@ -305,6 +305,7 @@ class GroupsController < ApplicationController
                 :calendar_color,
                 :active,
                 :sponsor_name,
+                :contact_email,
                 :sponsor_title,
                 :sponsor_image,
                 :sponsor_media,
