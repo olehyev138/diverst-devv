@@ -89,7 +89,7 @@ class InitiativesController < ApplicationController
   protected
 
   def set_group
-    @group = current_user.enterprise.groups.find(params[:group_id])
+    current_user ? @group = current_user.enterprise.groups.find(params[:group_id]) : user_not_authorized
   end
 
   def set_initiative
@@ -97,7 +97,7 @@ class InitiativesController < ApplicationController
   end
 
   def set_segments
-    @segments = current_user.enterprise.segments
+    current_user ? @segments = current_user.enterprise.segments : user_not_authorized
   end
 
   def initiative_params

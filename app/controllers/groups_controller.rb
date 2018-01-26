@@ -283,7 +283,7 @@ class GroupsController < ApplicationController
     end
 
     def set_group
-        @group = current_user.enterprise.groups.find(params[:id])
+       current_user ? @group = current_user.enterprise.groups.find(params[:id]) : user_not_authorized
     end
 
     def group_params
@@ -305,6 +305,7 @@ class GroupsController < ApplicationController
                 :calendar_color,
                 :active,
                 :sponsor_name,
+                :contact_email,
                 :sponsor_title,
                 :sponsor_image,
                 :sponsor_media,
