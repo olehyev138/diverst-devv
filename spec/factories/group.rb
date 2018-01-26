@@ -4,6 +4,7 @@ FactoryGirl.define do
     sponsor_name { Faker::Name.name }
     sponsor_title { Faker::Name.title }
     sponsor_message ""
+    contact_email nil
     enterprise
 
     factory :group_with_users do
