@@ -12,7 +12,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 20180126223726) do
-
+  
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
     t.string   "trackable_type", limit: 191
@@ -492,7 +492,6 @@ ActiveRecord::Schema.define(version: 20180126223726) do
     t.boolean  "pending_member_notifications_enabled",               default: false
     t.boolean  "pending_comments_notifications_enabled",             default: false
     t.boolean  "pending_posts_notifications_enabled",                default: false
-    t.boolean  "set_email_as_group_contact",                         default: false
   end
 
   create_table "group_message_comments", force: :cascade do |t|

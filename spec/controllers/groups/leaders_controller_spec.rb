@@ -93,7 +93,7 @@ RSpec.describe Groups::LeadersController, type: :controller do
           }.to change(group.group_leaders, :count).by(1)
         end
 
-        it 'flashes a notice message' do
+        it 'flashes a notice message' do 
            post_create(group.to_param, leader_attrs)
            expect(flash[:notice]).to eq 'Leaders were updated'
         end
@@ -102,59 +102,16 @@ RSpec.describe Groups::LeadersController, type: :controller do
           post_create(group.to_param, leader_attrs)
           expect(response).to redirect_to action: :index
         end
-
+        
         it 'sets attributes' do
           post_create(group.to_param, leader_attrs)
           leader = group.group_leaders.first
           expect(leader.pending_member_notifications_enabled).to eq(false)
         end
-
-        context 'when more than one group_leader object is set as group contact' do
-          let!(:another_group_leader) { create(:group_leader, group: group, set_email_as_group_contact: true) }
-          let!(:leader_attrs) { attributes_for :group_leader, user_id: leader_user.to_param, set_email_as_group_contact: true }
-
-          it 'flash an alert message' do
-            post_create(group.to_param, leader_attrs)
-            expect(flash[:alert]).to eq "You can choose ONLY ONE email as contact of #{group.name}"
-          end
-
-          it 'renders new message' do 
-            post_create(group.to_param, leader_attrs)
-            expect(response).to render_template :new
-          end
-        end
-
-        context 'when no group leader is set as group contact' do 
-          it 'flash a notice message' do 
-            post_create(group.to_param, leader_attrs)
-            expect(flash[:notice]).to eq "Leaders were updated"
-          end
-
-          it 'redirect to action index' do 
-            post_create(group.to_param, leader_attrs)
-            expect(response).to redirect_to action: :index
-          end
-        end
-
-        context 'when ONLY ONE group leader is set as group contact' do
-          let!(:leader_attrs) { attributes_for :group_leader, user_id: leader_user.to_param, set_email_as_group_contact: true }
-
-          it 'flash a notice message' do
-            post_create(group.to_param, leader_attrs)
-            group_leader = group.group_leaders.find_by(set_email_as_group_contact: true).user
-            expect(flash[:notice]).to eq "Leaders were updated. #{group_leader.email} set as group contact for #{group.name}"
-          end
-
-          it 'redirect to action index' do 
-            post_create(group.to_param, leader_attrs)
-            expect(response).to redirect_to action: :index
-          end
-        end
       end
 
       context 'with incorrect params' do
         let(:leader_attrs){ attributes_for :group_leader, position_name: "", user_id: leader_user.to_param }
-
         it 'does not save the new leader' do
           expect{ post_create(group.to_param, leader_attrs) }
             .to_not change(group.group_leaders, :count)
@@ -165,7 +122,7 @@ RSpec.describe Groups::LeadersController, type: :controller do
           expect(response).to render_template :new
         end
 
-        it 'flashes an alert message' do
+        it 'flashes an alert message' do 
           post_create(group.to_param, leader_attrs)
           expect(flash[:alert]).to eq 'Leaders were not updated. Please fix the errors'
         end
