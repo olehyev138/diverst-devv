@@ -176,6 +176,10 @@ class Initiative < ActiveRecord::Base
   def funded_by_leftover?
     self.budget_item_id == BudgetItem::LEFTOVER_BUDGET_ITEM_ID
   end
+  
+  def group_ids
+    participating_groups.pluck(:id) + [group.id]
+  end
 
   protected
 
