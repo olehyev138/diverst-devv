@@ -20,22 +20,18 @@ RSpec.describe AnswerCommentsController, type: :controller do
 
                 it "update the comment" do
                     answer_comment.reload
-                    expect(assigns[:comment].approved).to be(true)
-                end
-
-                it 'returns answer that belongs to comment' do 
-                    expect(assigns[:answer]).to eq answer_comment.answer
+                    expect(answer_comment.approved).to be(true)
                 end
 
                 it "redirects back" do
                     expect(response).to redirect_to "back"
                 end
 
-                it "flashes a notice message" do
+                it "flashes" do
                     expect(flash[:notice]).to eq "The comment was updated"
                 end
             end
-          
+
             context "when successful" do
                 before {
                     request.env["HTTP_REFERER"] = "back"
@@ -45,14 +41,14 @@ RSpec.describe AnswerCommentsController, type: :controller do
 
                 it "doesn't update the comment" do
                     answer_comment.reload
-                    expect(assigns[:comment].approved).to_not be(true)
+                    expect(answer_comment.approved).to_not be(true)
                 end
 
                 it "redirects back" do
                     expect(response).to redirect_to "back"
                 end
 
-                it "flashes an alert message" do
+                it "flashes" do
                     expect(flash[:alert]).to eq "The comment was not updated"
                 end
             end
@@ -77,6 +73,7 @@ RSpec.describe AnswerCommentsController, type: :controller do
 
             it "redirects to @answer" do
                 delete :destroy, id: answer_comment.id
+
                 expect(response).to redirect_to(assigns(:answer))
             end
         end
