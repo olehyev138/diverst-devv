@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180118201836) do
+ActiveRecord::Schema.define(version: 20180126122818) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -344,8 +344,8 @@ ActiveRecord::Schema.define(version: 20180118201836) do
     t.string   "onboarding_sponsor_media_content_type", limit: 191
     t.integer  "onboarding_sponsor_media_file_size",    limit: 4
     t.datetime "onboarding_sponsor_media_updated_at"
-    t.boolean  "disable_sponsor_message",                             default: false
     t.boolean  "enable_pending_comments",                             default: false
+    t.boolean  "disable_sponsor_message",                             default: false
   end
 
   create_table "event_attendances", force: :cascade do |t|
@@ -492,6 +492,7 @@ ActiveRecord::Schema.define(version: 20180118201836) do
     t.boolean  "pending_member_notifications_enabled",               default: false
     t.boolean  "pending_comments_notifications_enabled",             default: false
     t.boolean  "pending_posts_notifications_enabled",                default: false
+    t.boolean  "set_email_as_group_contact",                         default: false
   end
 
   create_table "group_message_comments", force: :cascade do |t|
@@ -932,9 +933,9 @@ ActiveRecord::Schema.define(version: 20180118201836) do
     t.integer  "segment_id", limit: 4
     t.integer  "field_id",   limit: 4
     t.integer  "operator",   limit: 4
-    t.string   "values",     limit: 191
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.text     "values",     limit: 65535
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   create_table "segmentations", force: :cascade do |t|
