@@ -492,6 +492,7 @@ ActiveRecord::Schema.define(version: 20180126223726) do
     t.boolean  "pending_member_notifications_enabled",               default: false
     t.boolean  "pending_comments_notifications_enabled",             default: false
     t.boolean  "pending_posts_notifications_enabled",                default: false
+    t.boolean  "set_email_as_group_contact",                         default: false
   end
 
   create_table "group_message_comments", force: :cascade do |t|
