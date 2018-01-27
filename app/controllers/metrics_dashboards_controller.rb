@@ -48,7 +48,6 @@ class MetricsDashboardsController < ApplicationController
   end
 
   def shared_dashboard
-    @metrics_dashboard = nil
     if params[:token]
       @metrics_dashboard = MetricsDashboard.find_by_shareable_token(params[:token])
     end

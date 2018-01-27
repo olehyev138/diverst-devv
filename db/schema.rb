@@ -933,9 +933,9 @@ ActiveRecord::Schema.define(version: 20180126223726) do
     t.integer  "segment_id", limit: 4
     t.integer  "field_id",   limit: 4
     t.integer  "operator",   limit: 4
-    t.string   "values",     limit: 191
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.text     "values",     limit: 65535
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   create_table "segmentations", force: :cascade do |t|
