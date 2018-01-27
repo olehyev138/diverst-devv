@@ -7,4 +7,5 @@ class GroupLeader < ActiveRecord::Base
   validates_presence_of :user
 
   scope :visible, ->{ where(visible: true) }
+  # validates_uniqueness_of :group_contact, scope: :group_id, conditions: -> { where(group_contact: true) }
 end
