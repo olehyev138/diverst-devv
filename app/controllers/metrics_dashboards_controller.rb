@@ -93,7 +93,7 @@ class MetricsDashboardsController < ApplicationController
   protected
 
   def set_metrics_dashboard
-    @metrics_dashboard = current_user.enterprise.metrics_dashboards.find(params[:id])
+    current_user ? @metrics_dashboard = current_user.enterprise.metrics_dashboards.find(params[:id]) : user_not_authorized
   end
 
   def metrics_dashboard_params

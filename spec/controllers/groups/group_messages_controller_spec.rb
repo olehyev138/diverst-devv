@@ -162,6 +162,7 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
         end
     end
 
+
     describe 'PATCH#update' do
         describe 'when user is logged in' do
             login_user_from_let
@@ -203,6 +204,11 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
 
                     before { patch :update, group_id: group.id, id: group_message.id, group_message: invalid_attributes }
 
+
+                    it 'flashes an alert message' do 
+                        expect(flash[:alert]).to eq "Your message was not updated. Please fix the errors"
+                    end
+
                     it 'renders edit template' do
                         expect(response).to render_template :edit
                     end
@@ -215,6 +221,7 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe 'DELETE#destroy' do
         let!(:group_message){ create(:group_message, group: group) }
@@ -302,6 +309,11 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
                 it 'flashes an alert message' do
                     post :create_comment, group_id: group.id, group_message_id: group_message.id, group_message_comment: invalid_attributes
                     expect(flash[:alert]).to eq "Comment not saved. Please fix errors"
+                end
+
+                it 'redirect to group_group_message_path' do
+                    post :create_comment, group_id: group.id, group_message_id: group_message.id, group_message_comment: invalid_attributes
+                    expect(response).to redirect_to [group, group_message]
                 end
             end
         end

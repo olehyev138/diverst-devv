@@ -17,7 +17,7 @@ class Groups::UserGroupsController < ApplicationController
   end
 
   def set_user_group
-    @user_group = current_user.user_groups.find(params[:id])
+    current_user ? @user_group = current_user.user_groups.find(params[:id]) : user_not_authorized
   end
 
   def user_group_params

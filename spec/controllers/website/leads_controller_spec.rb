@@ -13,5 +13,9 @@ RSpec.describe Website::LeadsController, type: :controller do
         	filtered_params = {"name"=>"test", "visitor_info"=>{"city"=>"test"}, "format"=>"json", "controller"=>"website/leads", "action"=>"create"}
         	expect(request.filtered_parameters).to eq filtered_params
         end
+
+        it 'returns https response status code to be 201' do
+            expect(response).to have_http_status 201
+        end
     end
 end

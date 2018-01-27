@@ -55,7 +55,7 @@ RSpec.describe User::UsersController, type: :controller do
 
         it 'updates fields of user' do
           user.reload
-          expect(user.first_name).to eq 'New name'
+          expect(assigns[:user].first_name).to eq 'New name'
         end
 
         it "flashes a notice message" do
