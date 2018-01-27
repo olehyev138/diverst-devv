@@ -109,7 +109,6 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   before_save :create_yammer_group, if: :should_create_yammer_group?
   after_commit :update_all_elasticsearch_members
   before_validation :smart_add_url_protocol
-  # before_save :set_group_leader_as_group_contact
 
   scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
   
@@ -271,11 +270,6 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   end
 
   protected
-
-  # def set_group_leader_as_group_contact
-  #   group_leader = group_leaders.find_by(group_contact: true)&.user
-  #   self.contact_email = group_leader&.email
-  # end
 
   def smart_add_url_protocol
     return nil if company_video_url.blank?

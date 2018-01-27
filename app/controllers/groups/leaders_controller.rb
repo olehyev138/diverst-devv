@@ -18,7 +18,7 @@ class Groups::LeadersController < ApplicationController
   def create
     authorize @group, :update?
     if @group.update(group_params)
-      
+      set_group_leader_email_as_group_contact
     else
       flash[:alert] = "Leaders were not updated. Please fix the errors"
       render :new

@@ -4,8 +4,8 @@ FactoryGirl.define do
     group
     position_name { Faker::Company.profession }
 
-    trait :group_contact do 
-    	group_contact false
+    trait :default_group_contact do 
+    	default_group_contact false
     end
   end
 end
