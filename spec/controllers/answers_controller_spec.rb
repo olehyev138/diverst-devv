@@ -17,7 +17,7 @@ RSpec.describe AnswersController, type: :controller do
 
                 it "updates the answer" do
                     answer.reload
-                    expect(answer.content).to eq("updated")
+                    expect(assigns[:answer].content).to eq("updated")
                 end
 
                 it "render @answer in json format" do
@@ -39,35 +39,28 @@ RSpec.describe AnswersController, type: :controller do
 
         describe "without logged user" do
             before { patch :update, id: answer.id,  answer: attributes_for(:answer, content: "updated") }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
     describe "DELETE#destroy" do
-        let(:answer){ create(:answer, author_id: user.id, question: question) }
+        let!(:answer){ create(:answer, author_id: user.id, question: question) }
 
         context "with logged in user" do
             login_user_from_let
 
             it "destroy the answer" do
-                delete :destroy, id: answer.id
-                user.reload
-
-                expect(user.answers.count).to eq (0)
+                expect{delete :destroy, id: answer.id}.to change(Answer, :count).by(-1)
             end
 
             it "redirect to @question" do
                 delete :destroy, id: answer.id
-
                 expect(response).to redirect_to(assigns(:question))
             end
         end
 
         context "without a logged in user" do
             before { delete :destroy, id: answer.id }
-
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
