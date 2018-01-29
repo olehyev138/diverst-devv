@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe GroupLeader, type: :model do
+  
   describe 'when validating' do
     let(:group_leader) { build_stubbed(:group_leader) }
 
