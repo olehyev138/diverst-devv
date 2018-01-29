@@ -31,7 +31,7 @@ class Groups::LeadersController < ApplicationController
   def set_group
     current_user ? @group = current_user.enterprise.groups.find(params[:group_id]) : user_not_authorized
   end
-  
+
   def group_params
     params.require(:group).permit(group_leaders_attributes: [:id, :user_id, :position_name, :_destroy, :visible, :pending_member_notifications_enabled, :pending_comments_notifications_enabled, :pending_posts_notifications_enabled, :default_group_contact])
   end

@@ -93,7 +93,7 @@ RSpec.describe Groups::LeadersController, type: :controller do
           }.to change(group.group_leaders, :count).by(1)
         end
 
-        it 'flashes a notice message' do 
+        it 'flashes a notice message' do
            post_create(group.to_param, leader_attrs)
            expect(flash[:notice]).to eq 'Leaders were updated'
         end
@@ -102,7 +102,7 @@ RSpec.describe Groups::LeadersController, type: :controller do
           post_create(group.to_param, leader_attrs)
           expect(response).to redirect_to action: :index
         end
-        
+
         it 'sets attributes' do
           post_create(group.to_param, leader_attrs)
           leader = group.group_leaders.first
@@ -112,6 +112,7 @@ RSpec.describe Groups::LeadersController, type: :controller do
 
       context 'with incorrect params' do
         let(:leader_attrs){ attributes_for :group_leader, position_name: "", user_id: leader_user.to_param }
+
         it 'does not save the new leader' do
           expect{ post_create(group.to_param, leader_attrs) }
             .to_not change(group.group_leaders, :count)
@@ -122,7 +123,7 @@ RSpec.describe Groups::LeadersController, type: :controller do
           expect(response).to render_template :new
         end
 
-        it 'flashes an alert message' do 
+        it 'flashes an alert message' do
           post_create(group.to_param, leader_attrs)
           expect(flash[:alert]).to eq 'Leaders were not updated. Please fix the errors'
         end
