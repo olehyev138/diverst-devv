@@ -548,7 +548,7 @@ RSpec.describe Group, :type => :model do
             group_leader = group.group_leaders.find_by(default_group_contact: true)&.user
             group.save!
 
-            expect(group.contact_email).to eq group_leader&.email
+            expect(group.contact_email).to eq nil
         end
     end
 end
