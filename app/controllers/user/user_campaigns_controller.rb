@@ -19,7 +19,7 @@ class User::UserCampaignsController < ApplicationController
             redirect_to @campaign
         else
             flash[:alert] = "Your campaign was not updated. Please fix the errors"
-            render :edit
+            render :edit #NOTE: edit template does not work
         end
     end
 
@@ -31,7 +31,11 @@ class User::UserCampaignsController < ApplicationController
     protected
 
     def set_campaign
-        @campaign = current_user.enterprise.campaigns.published.find(params[:id])
+        if current_user
+          @campaign = current_user.enterprise.campaigns.published.find(params[:id])
+        else
+          user_not_authorized
+        end
     end
 
     def campaign_params

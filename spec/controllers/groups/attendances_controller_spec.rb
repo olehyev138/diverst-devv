@@ -38,6 +38,7 @@ RSpec.describe Groups::AttendancesController, type: :controller do
         end
     end
 
+
     describe 'POST#create' do
         describe 'when user is logged in' do
             let(:attendee1) { create(:initiative_user, initiative: initiative, user: user) }
@@ -94,12 +95,13 @@ RSpec.describe Groups::AttendancesController, type: :controller do
         end
     end
 
+
     describe 'DELETE#destroy' do
         context 'when user is logged in' do
             login_user_from_let
 
             let!(:reward_action){ create(:reward_action, enterprise: user.enterprise, key: "attend_event", points: 90) }
-            before :each do
+            before do
                 create(:initiative_user, initiative: initiative, user: user)
                 Rewards::Points::Manager.new(user, reward_action.key).add_points(initiative)
             end
@@ -129,6 +131,7 @@ RSpec.describe Groups::AttendancesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe 'GET#erg_graph' do
         context 'when user is logged in' do

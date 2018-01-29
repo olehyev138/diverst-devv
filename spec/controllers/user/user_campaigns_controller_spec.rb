@@ -15,12 +15,14 @@ RSpec.describe "User::UserCampaignsController", type: :controller do
 
     describe 'GET #index' do
         context 'with logged user' do
+            let!(:published_campaign1) { create(:campaign, status: Campaign.statuses[:published], enterprise: user.enterprise, owner: user, created_at: Time.now - 1.hours, updated_at: Time.now - 1.hours) }
+            let!(:campaign_invitation1) { create(:campaign_invitation, :campaign => published_campaign1, :user => user)}            
             login_user_from_let
 
             before { get :index }
 
             it 'assign to campaigns only published campaigns' do
-                expect(assigns(:campaigns)).to match_array [published_campaign]
+                expect(assigns(:campaigns)).to match_array [published_campaign, published_campaign1]
             end
 
             it 'render index template' do
@@ -34,17 +36,7 @@ RSpec.describe "User::UserCampaignsController", type: :controller do
         end
     end
 
-    describe 'GET #show', :skip => "Missing Template" do
-        context 'with logged user' do
-            login_user_from_let
-
-            before {get :show, id: published_campaign.id}
-
-            it 'returns success' do
-                expect(response).to be_success
-            end
-        end
-    end
+    #MISSING TEMPLATE for show action
 
     describe 'PATCH #update' do
         describe 'with logged user' do
@@ -53,29 +45,17 @@ RSpec.describe "User::UserCampaignsController", type: :controller do
             context "successful update" do 
                 before { patch :update, id: published_campaign.id, campaign: {title: "test"} }
 
-                it 'redirects' do
+                it 'redirects to campaign' do
                     expect(response).to redirect_to(published_campaign)
                 end
 
-                it 'flashes' do
+                it 'flashes a notice message' do
                     expect(flash[:notice]).to eq("Your campaign was updated")
                 end
 
-                it 'updates' do
+                it 'updates the campaign' do
                     published_campaign.reload
-                    expect(published_campaign.title).to eq("test")
-                end
-            end
-
-            context "unsucessful update", skip: "Missing Template" do 
-                before { patch :update, id: published_campaign.id, campaign: {title: nil } }
-
-                it "flashes an alert message" do 
-                    expect(flash[:alert]).to eq "Your campaign was not updated. Please fix the errors"
-                end
-
-                it "render edit template" do 
-                    expect(response).to render_template :edit
+                    expect(assigns[:campaign].title).to eq("test")
                 end
             end
         end
@@ -86,18 +66,19 @@ RSpec.describe "User::UserCampaignsController", type: :controller do
         end
     end
 
+
     describe 'DELETE #destroy' do
         context 'with logged user' do
             login_user_from_let
 
-            before { delete :destroy, id: published_campaign.id }
-
-            it 'redirects' do
+            it 'redirects to index action' do
+                delete :destroy, id: published_campaign.id
                 expect(response).to redirect_to action: :index
             end
 
-            it 'deletes' do
-                expect(Campaign.where(:id => published_campaign.id).count).to eq(0)
+            it 'deletes campaign object' do
+                expect{delete :destroy, id: published_campaign.id}
+                .to change(Campaign, :count).by(-1)
             end
         end
 

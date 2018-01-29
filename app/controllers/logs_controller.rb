@@ -25,13 +25,11 @@ class LogsController < ApplicationController
   protected
 
   def set_enterprise
-    @enterprise = current_user.enterprise
+    current_user ? @enterprise = current_user.enterprise : user_not_authorized
   end
 
   def set_activities
-    @activities = PublicActivity::Activity.includes(:owner, :trackable)
-                                          .where(recipient: @enterprise)
-                                          .order(created_at: :desc)
+    @activities = PublicActivity::Activity.includes(:owner, :trackable).where(recipient: @enterprise).order(created_at: :desc)
   end
 
   def log_file_name

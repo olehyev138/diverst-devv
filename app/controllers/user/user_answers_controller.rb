@@ -40,7 +40,7 @@ class User::UserAnswersController < ApplicationController
     protected
 
     def set_question
-        @question = current_user.enterprise.questions.find(params[:question_id])
+        current_user ? @question = current_user.enterprise.questions.find(params[:question_id]) : user_not_authorized
     end
 
     def set_answer

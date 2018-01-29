@@ -111,7 +111,11 @@ class CampaignsController < ApplicationController
   protected
 
   def set_campaign
-    @campaign = current_user.enterprise.campaigns.find(params[:id])
+    if current_user
+      @campaign = current_user.enterprise.campaigns.find(params[:id])
+    else
+      user_not_authorized
+    end
   end
 
   def campaign_params

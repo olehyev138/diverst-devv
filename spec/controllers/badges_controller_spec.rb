@@ -12,10 +12,6 @@ RSpec.describe BadgesController, type: :controller do
       login_user_from_let
       before { post :new }
 
-        it "returns success" do
-          expect(response).to be_success
-        end
-
         it "returns a new badge object" do
           expect(assigns[:badge]).to be_a_new(Badge)
         end
@@ -27,7 +23,6 @@ RSpec.describe BadgesController, type: :controller do
 
     describe "without logged in user" do
       before { post :new }
-
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
@@ -35,7 +30,6 @@ RSpec.describe BadgesController, type: :controller do
 
   describe "POST#create" do
     describe "with logged in user" do
-
       login_user_from_let
 
       context "with valid parameters" do
@@ -75,7 +69,6 @@ RSpec.describe BadgesController, type: :controller do
 
     describe "without a logged in user" do
       before { post :create, badge: attributes_for(:badge_params, label: "") }
-
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
@@ -88,11 +81,7 @@ RSpec.describe BadgesController, type: :controller do
       login_user_from_let
 
       context "with valid id" do
-        before(:each){ get :edit, id: badge.id}
-
-        it "returns success" do
-          expect(response).to be_success
-        end
+        before { get :edit, id: badge.id}
 
         it "render edit template" do
           expect(response).to render_template :edit
@@ -113,14 +102,13 @@ RSpec.describe BadgesController, type: :controller do
 
     describe "without a logged in user" do
       before { get :edit, id: badge.id }
-
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
 
 
   describe "PATCH#update" do
-    let(:badge){ create(:badge, enterprise: enterprise, points: 10) }
+    let!(:badge){ create(:badge, enterprise: enterprise, points: 10) }
 
     describe "with logged in user" do
       login_user_from_let
@@ -130,7 +118,7 @@ RSpec.describe BadgesController, type: :controller do
 
         it "updates the badge" do
           badge.reload
-          expect(badge.points).to eq 20
+          expect(assigns[:badge].points).to eq 20
         end
 
         it "redirects to action index" do
@@ -143,11 +131,14 @@ RSpec.describe BadgesController, type: :controller do
       end
 
       context "with invalid parameters" do
-        before { patch :update, id: badge.id, badge: attributes_for(:badge, points: "") }
+        before do 
+          allow_any_instance_of(Badge).to receive(:update).and_return(false)
+          patch :update, id: badge.id, badge: attributes_for(:badge, points: "")
+        end
 
         it "does not update the badge" do
           badge.reload
-          expect(badge.points).to eq 10
+          expect(assigns[:badge].points).to eq 10
         end
 
         it "renders action edit" do
@@ -162,11 +153,10 @@ RSpec.describe BadgesController, type: :controller do
 
     describe "with user not logged in" do
       before { patch :update, id: badge.id, badge: attributes_for(:badge, points: 10) }
-
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-  
+
 
   describe "DELETE#destroy" do
     let!(:badge){ create(:badge, enterprise: enterprise) }
@@ -191,7 +181,6 @@ RSpec.describe BadgesController, type: :controller do
 
     describe "with a user not logged in" do
       before { delete :destroy, id: badge.id }
-
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
