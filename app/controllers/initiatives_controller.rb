@@ -113,6 +113,7 @@ class InitiativesController < ApplicationController
         :location,
         :picture,
         :budget_item_id,
+        :estimated_funding,
         participating_group_ids: [],
         segment_ids: [],
         fields_attributes: [
