@@ -25,7 +25,7 @@
               <%= f.input :notifications_date,
                 collection: UserGroup.notifications_dates.keys.map{ |f| [t("user_group.#{ f }"), f] },
                 selected: user_group.notifications_date,
-                label: "Date of notifications",
+                label: "Day of notifications",
                 include_blank: false,
                 input_html: {
                   name: "user_groups[#{user_group.id}][notifications_date]"

@@ -193,7 +193,7 @@
               <div class="notifications_date">
                 <%= f.input :notifications_date,
                   collection: UserGroup.notifications_dates.keys.map{ |f| [t("user_group.#{ f }"), f] },
-                  label: "Date of notifications",
+                  label: "Day of notifications",
                   include_blank: false,
                   input_html:
                     {
@@ -206,7 +206,7 @@
           </div>
         </div>
 
-        <%= link_to "Leave this #{ c_t(:erg) }", group_group_member_path(@group, current_user), method: :delete, class: 'btn btn--tertiary error' %>
+        <%= link_to "Leave this #{ c_t(:erg) }", group_group_member_path(@group, current_user), method: :delete, class: 'btn btn--tertiary error', style: 'font-size: 12px;' %>
       <% end %>
     </div>
   </div>

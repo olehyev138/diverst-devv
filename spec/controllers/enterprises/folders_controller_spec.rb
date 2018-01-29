@@ -40,10 +40,12 @@ RSpec.describe Enterprises::FoldersController, type: :controller do
             before {get :index, enterprise_id: enterprise.id}
 
             it "render template index" do
-                expect(response).to render_template :index 
+                expect(response).to render_template :index
             end
 
-            it "returns 3 folders in total" do
+            it "returns 3 folders in total; 1 folder + 2 shared folders" do
+                expect(assigns[:container].folders.count).to eq 1
+                expect(assigns[:container].shared_folders.count).to eq 2
                 expect(assigns[:folders].count).to eq 3
             end
 
@@ -53,7 +55,7 @@ RSpec.describe Enterprises::FoldersController, type: :controller do
             end
         end
 
-        context 'when user is not logged in' do 
+        context 'when user is not logged in' do
             before { get :index, enterprise_id: enterprise.id }
             it_behaves_like "redirect user to users/sign_in path"
         end
@@ -78,7 +80,7 @@ RSpec.describe Enterprises::FoldersController, type: :controller do
             end
         end
 
-        context 'when user is not logged in' do 
+        context 'when user is not logged in' do
             before { get :new, enterprise_id: enterprise.id }
             it_behaves_like "redirect user to users/sign_in path"
         end
@@ -100,12 +102,12 @@ RSpec.describe Enterprises::FoldersController, type: :controller do
             end
 
             it "sets a valid folder object of container type 'Enterprise'" do
-                expect(assigns[:folder].container_type).to eq "Enterprise" 
+                expect(assigns[:folder].container_type).to eq "Enterprise"
                 expect(assigns[:folder]).to be_valid
             end
         end
 
-        context 'when user is logged in' do 
+        context 'when user is logged in' do
             before { get :edit, :id => folder.id, enterprise_id: enterprise.id }
             it_behaves_like "redirect user to users/sign_in path"
         end
@@ -141,7 +143,7 @@ RSpec.describe Enterprises::FoldersController, type: :controller do
             end
         end
 
-        describe 'when user is not logged in' do 
+        describe 'when user is not logged in' do
             before { post :create, enterprise_id: enterprise.id, folder: {name: "folder"} }
             it_behaves_like "redirect user to users/sign_in path"
         end
@@ -180,7 +182,7 @@ RSpec.describe Enterprises::FoldersController, type: :controller do
             end
         end
 
-        describe 'when user is not logged in' do 
+        describe 'when user is not logged in' do
             before { patch :update, enterprise_id: enterprise.id, id: folder.id, folder: {name: "updated"} }
             it_behaves_like "redirect user to users/sign_in path"
         end
@@ -202,7 +204,7 @@ RSpec.describe Enterprises::FoldersController, type: :controller do
             end
         end
 
-        context 'when user is not logged in' do 
+        context 'when user is not logged in' do
             before {delete :destroy, :id => folder.id, enterprise_id: enterprise.id}
             it_behaves_like "redirect user to users/sign_in path"
         end

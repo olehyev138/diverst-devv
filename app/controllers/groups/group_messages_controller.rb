@@ -76,7 +76,7 @@ class Groups::GroupMessagesController < ApplicationController
     protected
 
     def set_group
-        @group = current_user.enterprise.groups.find(params[:group_id])
+        current_user ? @group = current_user.enterprise.groups.find(params[:group_id]) : user_not_authorized
     end
 
     def set_message

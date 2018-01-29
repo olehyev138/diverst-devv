@@ -19,8 +19,8 @@
               <%= link_to "Hide Sub-#{ c_t(:erg).pluralize }", "#", class: "nested_hide", id: group.id, style: "display:none;" %>
             <% end %>
             
-            <%= link_to "Export", export_csv_group_path(group), class: "muted" if policy(group).edit? %>
-            <%= link_to "Import", import_csv_group_path(group), class: "muted" if policy(group).edit? %>
+            <%= link_to "Export", export_csv_group_path(group), class: "muted", role: "button", 'aria-label': "Export" if policy(group).edit? %>
+            <%= link_to "Import", import_csv_group_path(group), class: "muted", role: "button", 'aria-label': "Import" if policy(group).edit? %>
             <%= link_to "Edit", edit_group_path(group), class: "muted" if policy(group).edit? %>
             <%= link_to "Delete", group_path(group), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(group).destroy? %>
           </div>
@@ -39,8 +39,8 @@
               <span><%= link_to "#{child.name}", group_path(child), class: "accent" %> - <%= pluralize child.active_members.count, "member" %></span>
               </div>
             <div class="flex-row__cell link-group">
-              <%= link_to "Export", export_csv_group_path(child), class: "muted" if policy(child).edit? %>
-              <%= link_to "Import", import_csv_group_path(child), class: "muted" if policy(child).edit? %>
+              <%= link_to "Export", export_csv_group_path(child), class: "muted", role: "button", 'aria-label': "Export" if policy(child).edit? %>
+              <%= link_to "Import", import_csv_group_path(child), class: "muted", role: "button", 'aria-label': "Import" if policy(child).edit? %>
               <%= link_to "Edit", edit_group_path(child), class: "muted" if policy(child).edit? %>
               <%= link_to "Delete", group_path(child), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(child).destroy? %>
             </div>

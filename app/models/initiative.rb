@@ -176,6 +176,10 @@ class Initiative < ActiveRecord::Base
   def funded_by_leftover?
     self.budget_item_id == BudgetItem::LEFTOVER_BUDGET_ITEM_ID
   end
+  
+  def group_ids
+    participating_groups.pluck(:id) + [group.id]
+  end
 
   protected
 
@@ -219,17 +223,28 @@ class Initiative < ActiveRecord::Base
 
   def allocate_budget_funds
     if budget_item.present?
-      self.estimated_funding = budget_item.available_amount
-      budget_item.available_amount = 0
-      budget_item.is_done = true
+      # If user tries to allocate all the money from the budget
+      # mark this budget item as used up
+      if self.estimated_funding >= budget_item.available_amount
+        self.estimated_funding = budget_item.available_amount
+        budget_item.available_amount = 0
+        budget_item.is_done = true
+      else
+        #otherwise just substruct
+        budget_item.available_amount -= self.estimated_funding
+      end
 
       budget_item.save
     elsif funded_by_leftover?
-      self.estimated_funding = owner_group.leftover_money
-      owner_group.leftover_money = 0
+      if self.estimated_funding >= owner_group.leftover_money
+        self.estimated_funding = owner_group.leftover_money
+      else
+        owner_group.leftover_money -= self.estimated_funding
+      end
 
       owner_group.save
     else
+      #Else there is no source for money, so set funding to zero
       self.estimated_funding = 0
     end
   end

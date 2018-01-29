@@ -283,7 +283,7 @@ class GroupsController < ApplicationController
     end
 
     def set_group
-        @group = current_user.enterprise.groups.find(params[:id])
+       current_user ? @group = current_user.enterprise.groups.find(params[:id]) : user_not_authorized
     end
 
     def group_params

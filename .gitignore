@@ -46,3 +46,6 @@ cookbooks/
 
 # Simplecov files
 /coverage
+
+#log
+/log

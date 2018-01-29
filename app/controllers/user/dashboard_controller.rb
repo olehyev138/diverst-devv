@@ -22,7 +22,7 @@ class User::DashboardController < ApplicationController
   private
 
   def set_enterprise
-    @enterprise = current_user.enterprise
+    current_user ? @enterprise = current_user.enterprise : user_not_authorized
   end
 
   def posts
