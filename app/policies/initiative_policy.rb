@@ -7,9 +7,7 @@ class InitiativePolicy < ApplicationPolicy
   end
 
   def show?
-    return true if @user.erg_leader?
-    return true if @policy_group.initiatives_manage?
-    return true if !(@record.group_ids && @user.groups.pluck(:id)).empty?
+    index?
   end
 
   def create?
@@ -30,6 +28,15 @@ class InitiativePolicy < ApplicationPolicy
     return true if @record.segments.empty?
     return false if (@user.segments & @record.segments).empty?
     true
+  end
+
+  def join_leave_button_visibility?
+    @past_events = @record.group.initiatives.past
+    (@past_events.include? @record) ? false : true
+  end
+
+  def add_calendar_visibility?
+    join_leave_button_visibility?
   end
 
   class Scope < Scope
