@@ -529,4 +529,26 @@ RSpec.describe Group, :type => :model do
             expect(group).to have_received(:update_elasticsearch_member)
         end
     end
+
+    describe '#set_default_group_contact' do 
+        it 'updates contact email if group leader is default_group_contact' do 
+            group = create(:group)
+            user = create(:user)
+            group_leader = create(:group_leader, :group => group, :user => user, :default_group_contact => true)
+            group_leader = group.group_leaders.find_by(default_group_contact: true)&.user
+            group.save!
+
+            expect(group.contact_email).to eq group_leader&.email
+        end
+
+        it 'sets contact email to nil if group leader is not set.' do 
+            group = create(:group)
+            user = create(:user)
+            create(:group_leader, :group => group, :user => user, :default_group_contact => false)
+            group_leader = group.group_leaders.find_by(default_group_contact: true)&.user
+            group.save!
+
+            expect(group.contact_email).to eq nil
+        end
+    end
 end
