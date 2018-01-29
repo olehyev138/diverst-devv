@@ -110,17 +110,23 @@ RSpec.describe Groups::LeadersController, type: :controller do
         end
 
         context 'when more than one group_leader object is set as group contact' do
-          let!(:another_group_leader) { create(:group_leader, group: group, set_email_as_group_contact: true) }
-          let!(:leader_attrs) { attributes_for :group_leader, user_id: leader_user.to_param, set_email_as_group_contact: true }
+          let!(:another_group_leader) { create(:group_leader, group: group, default_group_contact: true) }
+          let!(:leader_attrs) { attributes_for :group_leader, user_id: leader_user.to_param, default_group_contact: true }
 
           it 'flash an alert message' do
             post_create(group.to_param, leader_attrs)
-            expect(flash[:alert]).to eq "You can choose ONLY ONE email as contact of #{group.name}"
+            expect(flash[:notice]).to eq "Leaders were updated"
           end
 
-          it 'renders new message' do 
+          it 'redirect to action index' do 
             post_create(group.to_param, leader_attrs)
-            expect(response).to render_template :new
+            expect(response).to redirect_to action: :index
+          end
+
+          xit 'picks the first group leader with default_group_contact attribute set to true' do 
+            post_create(group.to_param, leader_attrs)
+            group_leader = assigns[:group].group_leaders.find_by(default_group_contact: true).user
+            expect(assigns[:group].contact_email).to eq group_leader.email
           end
         end
 
@@ -137,12 +143,12 @@ RSpec.describe Groups::LeadersController, type: :controller do
         end
 
         context 'when ONLY ONE group leader is set as group contact' do
-          let!(:leader_attrs) { attributes_for :group_leader, user_id: leader_user.to_param, set_email_as_group_contact: true }
+          let!(:leader_attrs) { attributes_for :group_leader, user_id: leader_user.to_param, default_group_contact: true }
 
           it 'flash a notice message' do
             post_create(group.to_param, leader_attrs)
-            group_leader = group.group_leaders.find_by(set_email_as_group_contact: true).user
-            expect(flash[:notice]).to eq "Leaders were updated. #{group_leader.email} set as group contact for #{group.name}"
+            group_leader = group.group_leaders.find_by(default_group_contact: true).user
+            expect(flash[:notice]).to eq "Leaders were updated"
           end
 
           it 'redirect to action index' do 
