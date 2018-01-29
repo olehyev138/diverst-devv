@@ -18,9 +18,7 @@ class Groups::LeadersController < ApplicationController
   def create
     authorize @group, :update?
     if @group.update(group_params)
-      group_leader = @group.group_leaders.find_by(default_group_contact: true)&.user
-      flash[:notice] = "Leaders were updated" if @group.contact_email.nil?
-      flash[:notice] = "Leaders were updated. #{group_leader&.email} set as group contact for #{@group.name}" unless @group.contact_email.nil?
+      flash[:notice] = "Leaders were updated"
       redirect_to action: :index
     else
       flash[:alert] = "Leaders were not updated. Please fix the errors"
