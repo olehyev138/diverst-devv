@@ -119,7 +119,7 @@ RSpec.describe Initiative, type: :model do
       end
 
       context 'with correct budget item' do
-        let!(:initiative) { FactoryGirl.create(:initiative, :with_budget_item) }
+        let!(:initiative) { FactoryGirl.create(:initiative, :with_budget_item, :estimated_funding => 1000) }
 
         context 'with enough budget money' do
           let!(:estimated_funding) { initiative.estimated_funding }
