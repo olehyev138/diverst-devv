@@ -109,7 +109,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   before_save :create_yammer_group, if: :should_create_yammer_group?
   after_commit :update_all_elasticsearch_members
   before_validation :smart_add_url_protocol
-  before_save :set_default_group_contact
+  after_save :set_default_group_contact
 
   scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
   
@@ -287,6 +287,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   def set_default_group_contact
     group_leader = group_leaders.find_by(default_group_contact: true)&.user
     self.contact_email = group_leader&.email
+    # byebug
   end
 
   def filter_by_membership(membership_status)
