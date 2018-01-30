@@ -51,10 +51,6 @@ RSpec.describe BudgetMailer, type: :mailer do
     it 'renders the sender email' do
       expect(mail.from).to eq(['info@diverst.com'])
     end
-
-    it 'renders message info' do
-      expect(mail.body.encoded).to include("<html>\r\n  <body>\r\n    Hello, John Doe!\r\n<br/>\r\nYour budget New group has been approved by Fulano Ciclano\r\n  </body>\r\n</html>\r\n")
-    end
   end
 
   describe '#budget_declined' do
@@ -75,10 +71,6 @@ RSpec.describe BudgetMailer, type: :mailer do
 
     it 'renders the sender email' do
       expect(mail.from).to eq(['info@diverst.com'])
-    end
-
-    it 'renders message info' do
-      expect(mail.body.encoded).to include("Your budget request for the New group has been denied by Fulano Ciclano. Please contact Fulano Ciclano to find out why it was declined")
     end
   end
 end
