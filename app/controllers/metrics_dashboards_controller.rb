@@ -44,7 +44,10 @@ class MetricsDashboardsController < ApplicationController
   def show
     authorize @metrics_dashboard
     @graphs = @metrics_dashboard.graphs.includes(:field, :aggregation)
-    @token = @metrics_dashboard.shareable_token
+
+    if not @metrics_dashboard.update_shareable_token
+      render :edit
+    end
   end
 
   def shared_dashboard

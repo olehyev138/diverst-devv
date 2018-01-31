@@ -45,8 +45,17 @@ RSpec.describe MetricsDashboard, :type => :model do
       let!(:metrics_dashboard) { create :metrics_dashboard }
 
       context 'with no shareable_token' do
+        it 'has nil token' do
+          expect(metrics_dashboard.shareable_token).to be(nil)
+        end
+        
         it 'creates new shareable token' do
-          expect(metrics_dashboard.shareable_token).to be_a String
+          expect(metrics_dashboard.update_shareable_token).to be(true)
+        end
+        
+        it 'returns false' do
+          metrics_dashboard.groups.destroy_all
+          expect(metrics_dashboard.update_shareable_token).to be(false)
         end
       end
 
