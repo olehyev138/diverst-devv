@@ -133,6 +133,7 @@ class BudgetsController < ApplicationController
           :title,
           :estimated_amount,
           :estimated_date,
+          :is_private,
           :is_done,
           :_destroy
         ]
