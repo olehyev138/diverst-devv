@@ -52,8 +52,14 @@
                   You have not joined any events yet.
                 </div>
               <% else %>
-                <% @upcoming_events.each do |event| %>
-                  <%= render "shared/flippable/event", event: event %>
+                <% if policy(@group).events_filter %>
+                  <% @upcoming_events.each do |event| %>
+                    <%= render "shared/flippable/event", event: event %>
+                  <% end %>
+                <% else %>
+                <div class="mtlarge text-center">
+                  You are not a member of this group yet.
+                </div>  
                 <% end %>
               <% end %>
 

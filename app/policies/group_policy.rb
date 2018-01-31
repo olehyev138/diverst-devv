@@ -95,24 +95,6 @@ class GroupPolicy < ApplicationPolicy
         end
     end
 
-   def empty_events_filter
-        case @record.upcoming_events_visibility
-        when 'public'
-            #Everyone can upcoming events
-            return true
-        when 'group'
-            @upcoming_events = @record.initiatives.upcoming.limit(3) + @record.participating_initiatives.upcoming.limit(3)
-            # for nom-members(guest) and when upcoming events are empty
-            return true if !(@record.members.include? @user) && @upcoming_events.empty?
-            # for nom-members(guest) and when upcoming events are not empty
-            return true if !(@record.members.include? @user) && !(@upcoming_events.empty?)
-        when 'leaders_only'
-            #Only users with ability to manipulate members(admins) can see upcoming events
-            return manage_members?
-        else
-            return false 
-        end
-   end
 
    def events_filter
        case @record.upcoming_events_visibility
