@@ -68,7 +68,7 @@ class GroupPolicy < ApplicationPolicy
             return true 
         when 'group'
             #Only active group members and guests(non-members) can see latest news
-            (@record.active_members.exists? @user) || !(@record.members.include? @user)
+            (@record.active_members.exists? @user) || !(@record.members.include? @user) || (@record.pending_members.include? @user)
         when 'leaders_only'
             #Only users with ability to manipulate members(admins) can see latest news
             return manage_members?
@@ -86,7 +86,7 @@ class GroupPolicy < ApplicationPolicy
             return true 
         when 'group'
             #Only active group members can see upcoming events
-            (@record.active_members.exists? @user) || !(@record.members.include? @user)
+            (@record.active_members.exists? @user) || !(@record.members.include? @user) || (@record.pending_members.include? @user)  
         when 'leaders_only'
             #Only users with ability to manipulate members(admins) can see upcoming events
             return manage_members?
@@ -103,8 +103,8 @@ class GroupPolicy < ApplicationPolicy
             return true
         when 'group'
             @upcoming_events = @record.initiatives.upcoming.limit(3) + @record.participating_initiatives.upcoming.limit(3)
-            # for members and when upcoming events are not empty
-            return true if (@record.members.include? @user) && @upcoming_events
+            # for members(who are not pending members) and when upcoming events are not empty
+            return true if (@record.members.include? @user) && !(@record.pending_members.include? @user) && @upcoming_events
         when 'leaders_only'
             #Only users with ability to manipulate members(admins) can see upcoming events
             return manage_members?

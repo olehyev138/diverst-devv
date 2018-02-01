@@ -14,9 +14,9 @@ class Groups::EventsController < ApplicationController
       @past_events = @group.initiatives.past + @group.participating_initiatives.past
       @ongoing_events = @group.initiatives.ongoing + @group.participating_initiatives.ongoing
     else
-      @upcoming_events = []
+      @upcoming_events = @group.initiatives.upcoming + @group.participating_initiatives.upcoming
       @past_events = @group.initiatives.past + @group.participating_initiatives.past
-      @ongoing_events = []
+      @ongoing_events = @group.initiatives.ongoing + @group.participating_initiatives.ongoing
     end
   end
 
