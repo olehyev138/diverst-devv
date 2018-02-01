@@ -8,12 +8,6 @@ RSpec.feature 'An ERG dashboard' do
     login_as(user, scope: :user)
   end
 
-  scenario 'shows the newest members', skip: "Fails because it is removed from ERG dashboard view" do
-    visit group_path(group)
-
-    expect(page).to have_content group.members.last.name
-  end
-
   scenario 'shows the upcoming events' do
     initiative = create :initiative, owner_group: group, start: 2.days.from_now
     group.outcomes.first.pillars.first.initiatives << initiative
@@ -104,7 +98,6 @@ RSpec.feature 'An ERG dashboard' do
 
   context 'in the events section' do
     scenario 'does not show the upcoming events if user is a guest' do
-      group.members.delete(user)
       initiative = create(:initiative, owner_group: group, start: 1.day.from_now, end: 1.day.from_now + 2.hours)
       
       visit group_events_path(group)
