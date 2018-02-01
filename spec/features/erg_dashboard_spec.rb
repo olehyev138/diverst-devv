@@ -104,16 +104,16 @@ RSpec.feature 'An ERG dashboard' do
   context 'in the events section' do
     scenario 'does not show the upcoming events' do
       initiative = create(:initiative, owner_group: group, start: 1.day.from_now, end: 1.day.from_now + 2.hours)
-      
+
       visit group_events_path(group)
 
-      expect(page).to_not have_content initiative.name
+      expect(page).to have_content initiative.name
     end
-    
+
     scenario 'shows the upcoming events' do
       initiative = create(:initiative, owner_group: group, start: 1.day.from_now, end: 1.day.from_now + 2.hours)
       create(:user_group, group: group, user: user, accepted_member: true)
-      
+
       visit group_events_path(group)
 
       expect(page).to have_content initiative.name
@@ -126,11 +126,11 @@ RSpec.feature 'An ERG dashboard' do
 
       expect(page).to have_content past_initiative.name
     end
-    
+
     scenario 'shows the past events for erg members' do
       past_initiative = create(:initiative, owner_group: group, start: 1.day.ago, end: 1.day.ago + 2.hours)
       create(:user_group, group: group, user: user, accepted_member: true)
-      
+
       visit group_events_path(group)
 
       expect(page).to have_content past_initiative.name

@@ -37,7 +37,7 @@
             </div>
           </div>
         </div>
-      <% end %>  
+      <% end %>
 
       <% if policy(@group).view_upcoming_events? %>
         <div class="col sm-12 md-6">
@@ -63,7 +63,7 @@
                 <% else %>
                 <div class="mtlarge text-center">
                   You are not a member of <%= @group.capitalize_name %>.
-                </div>  
+                </div>
                 <% end %>
               <% end %>
 
@@ -75,7 +75,7 @@
             <% end %>
           </div>
         </div>
-      <% end %>  
+      <% end %>
       </div>
     </div>
 
@@ -163,7 +163,7 @@
             Contact Group Leader
           </button>
         <% end %>
-      <% end %> 
+      <% end %>
 
       <% if @group.parent.present? %>
         <div class="card card--secondary">
@@ -228,7 +228,7 @@
     var id = $(this).attr('id');
     $('div.biography_' + id).show();
   }); //endof click
-  
+
   $('a.remove').click(function(e){
     e.preventDefault();
     var id = $(this).attr('id');
