@@ -56,7 +56,7 @@
                 <% end %>
                 </div>
               <% else %>
-                <% if policy(@group).events_filter %>
+                <% if policy(@group).is_a_member? %>
                   <% @upcoming_events.each do |event| %>
                     <%= render "shared/flippable/event", event: event %>
                   <% end %>
