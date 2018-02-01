@@ -35,7 +35,7 @@ class GroupPolicy < ApplicationPolicy
     end
 
     def is_active_member?
-        @record.active_members.exists? @user
+        @record.active_members.include? @user
     end
 
     def is_a_guest?
