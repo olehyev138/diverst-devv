@@ -117,6 +117,10 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
 
+  def capitalize_name
+    name.split.map(&:capitalize).join(' ')
+  end
+
   def set_default_group_contact
     group_leader = group_leaders.find_by(default_group_contact: true)&.user
     self.update(contact_email: group_leader&.email)
