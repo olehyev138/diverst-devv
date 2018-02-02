@@ -97,12 +97,12 @@ RSpec.feature 'An ERG dashboard' do
   end
 
   context 'in the events section' do
-    scenario 'does not show the upcoming events if user is a guest' do
+    scenario 'shows the upcoming events if user is a guest' do
       initiative = create(:initiative, owner_group: group, start: 1.day.from_now, end: 1.day.from_now + 2.hours)
       
       visit group_events_path(group)
 
-      expect(page).to_not have_content initiative.name
+      expect(page).to have_content initiative.name
     end
     
     scenario 'shows the upcoming events' do
