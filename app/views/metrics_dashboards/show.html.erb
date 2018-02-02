@@ -18,32 +18,14 @@
     <div class="flex-row__cell">
       <%= link_to "New Graph", new_metrics_dashboard_graph_path(@metrics_dashboard), class: "btn btn--primary" %>
     </div>
+    <div class="flex-row__cell">
+      <%= link_to "Share", metrics_dashboard_shared_dashboard_path(@metrics_dashboard, token: @token) %>
+    </div>
   </div>
 </div>
 
 <div class="content__main">
-  <div class="row row--equal-height">
-    <% @graphs.each do |graph| %>
-      <div class="col sm-12 md-6">
-        <div class="card">
-          <div class="card__section">
-            <div class="card__action">
-              <%= link_to "Edit", edit_graph_path(graph) %> -
-              <%= link_to "Export CSV", export_csv_graph_path(graph) %> -
-              <%= link_to "Remove", graph_path(graph), method: :delete, class: "error" %>
-            </div>
-            <h4 class="no-margin"><%= graph.title %></h4>
-            <% if !graph.aggregation.nil? %><small><%= aggregation_text(graph) %></small><% end %>
-            <div
-              class="graph"
-              data-url="<%= data_graph_path(graph) %>"
-              data-time-series="<%= graph.time_series %>">
-            </div>
-          </div>
-        </div>
-      </div>
-    <% end %>
-  </div>
+  <%= render 'graphs' %>
 </div>
 
 <script>

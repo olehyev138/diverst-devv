@@ -1,4 +1,5 @@
 class ExpenseCategoriesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_expense_category, only: [:edit, :update, :destroy, :show, :export_csv]
   after_action :verify_authorized
 
@@ -51,7 +52,11 @@ class ExpenseCategoriesController < ApplicationController
   protected
 
   def set_expense_category
-    @expense_category = current_user.enterprise.expense_categories.find(params[:id])
+    if current_user
+      @expense_category = current_user.enterprise.expense_categories.find(params[:id])
+    else
+      user_not_authorized
+    end
   end
 
   def expense_params

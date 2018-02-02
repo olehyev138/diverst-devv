@@ -1,4 +1,5 @@
 class QuestionsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_campaign, only: [:index, :new, :create]
   before_action :set_question, only: [:edit, :update, :destroy, :show, :reopen]
   after_action :verify_authorized
@@ -68,7 +69,7 @@ class QuestionsController < ApplicationController
   protected
 
   def set_campaign
-    @campaign = current_user.enterprise.campaigns.find(params[:campaign_id])
+    current_user ? @campaign = current_user.enterprise.campaigns.find(params[:campaign_id]) : user_not_authorized
   end
 
   def set_question

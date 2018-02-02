@@ -1,8 +1,7 @@
 class MetricsDashboardsController < ApplicationController
-  before_action :authenticate_user!
-  after_action :verify_authorized
-  before_action :set_metrics_dashboard, except: [:index, :new, :create]
-
+  before_action :authenticate_user!, except: [:shared_dashboard]
+  after_action :verify_authorized, except: [:shared_dashboard]
+  before_action :set_metrics_dashboard, except: [:index, :new, :create, :shared_dashboard]
   layout 'erg_manager'
 
   def new
@@ -44,8 +43,20 @@ class MetricsDashboardsController < ApplicationController
 
   def show
     authorize @metrics_dashboard
+    @graphs = @metrics_dashboard.graphs.includes(:field, :aggregation)
+    @token = @metrics_dashboard.shareable_token
+  end
+
+  def shared_dashboard
+    if params[:token]
+      @metrics_dashboard = MetricsDashboard.find_by_shareable_token(params[:token])
+    end
+
+    not_found! if @metrics_dashboard.nil?
 
     @graphs = @metrics_dashboard.graphs.includes(:field, :aggregation)
+
+    render layout: 'guest'
   end
 
   def edit
@@ -73,6 +84,7 @@ class MetricsDashboardsController < ApplicationController
     redirect_to action: :index
   end
 
+  # no route for this action
   def data
     render json: @metrics_dashboard.data
   end
@@ -80,7 +92,7 @@ class MetricsDashboardsController < ApplicationController
   protected
 
   def set_metrics_dashboard
-    @metrics_dashboard = current_user.enterprise.metrics_dashboards.find(params[:id])
+    current_user ? @metrics_dashboard = current_user.enterprise.metrics_dashboards.find(params[:id]) : user_not_authorized
   end
 
   def metrics_dashboard_params
@@ -88,7 +100,8 @@ class MetricsDashboardsController < ApplicationController
       .require(:metrics_dashboard)
       .permit(
         :name,
-        segment_ids: []
+        segment_ids: [],
+        group_ids: []
       )
   end
 end

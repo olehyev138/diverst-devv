@@ -1,4 +1,5 @@
 class AnswersController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_answer
 
   layout 'collaborate'
@@ -13,13 +14,18 @@ class AnswersController < ApplicationController
 
   def destroy
     @answer.destroy
-    redirect_to :back
+    redirect_to @question
   end
 
   protected
 
   def set_answer
-    @answer = current_user.enterprise.answers.find(params[:id])
+    if current_user
+      @answer = current_user.enterprise.answers.find(params[:id])
+      @question = @answer.question
+    else
+      user_not_authorized
+    end
   end
 
   def answer_params

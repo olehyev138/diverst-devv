@@ -17,7 +17,12 @@ class Importers::Users
       user = parse_from_csv_row(row)
       new_user = user.new_record? ? true : false
       if user.save
-        user.invite!(@manager) if new_user
+        if new_user
+          user.invite!(@manager) do |u|
+            u.skip_invitation = !@manager.enterprise.has_enabled_onboarding_email
+          end
+        end
+
         @successful_rows << row
       else
         @failed_rows << {

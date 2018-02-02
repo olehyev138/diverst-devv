@@ -1,0 +1,13 @@
+<div class="flex-row__cell link-group">
+    
+    <% if social_link.url.include?("facebook") %>
+        <iframe src="https://www.facebook.com/plugins/post.php?href=<%= social_link.url_safe %>&width=500&show_text=true&height=290&appId" width="500" height="290" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+    <% elsif social_link.url.include?("instagram") %>
+        <iframe width="320" height="440" src="<%= social_link.url %>embed" frameborder="0"></iframe>
+    <% else %>
+        <%= raw social_link.embed_code %>
+    <% end %>
+    
+    <%= link_to 'Delete', group_social_link_path(social_link.group, social_link.id),method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(social_link).destroy? %>
+    <%= link_to "Approve", approve_group_posts_path(:group_id => social_link.group.id, :link_id => social_link.news_feed_link.id), method: :post if policy(social_link.group).erg_leader_permissions? and !social_link.news_feed_link.approved? %>
+</div>

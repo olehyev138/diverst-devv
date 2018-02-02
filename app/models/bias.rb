@@ -10,4 +10,6 @@ class Bias < ActiveRecord::Base
   has_and_belongs_to_many :departments_to, join_table: 'biases_to_departments', class_name: 'Department'
 
   self.table_name = 'biases'
+
+  validates :description, presence: true
 end

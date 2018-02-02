@@ -14,12 +14,15 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
         let(:group) { FactoryGirl.create(:group, enterprise: user.enterprise, pending_users: 'enabled')}
         let(:active_user) { FactoryGirl.create(:user, enterprise: user.enterprise) }
         let(:pending_user) { FactoryGirl.create(:user, enterprise: user.enterprise) }
+        let(:inactive_user) { FactoryGirl.create(:user, enterprise: user.enterprise, active: false) }
 
         before do
           group.members << active_user
           group.members << pending_user
+          group.members << inactive_user
 
           group.accept_user_to_group(active_user.id)
+          group.accept_user_to_group(inactive_user.id)
         end
 
         before { get_index(group.to_param) }
@@ -42,13 +45,41 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
           it 'does not include pending members' do
             expect(@members).to_not include( pending_user )
           end
+
+          it 'does not include users that have inactive accounts' do
+            expect(@members).to_not include( inactive_user )
+          end
         end
       end
 
-      context 'with incorect group'
+      context 'with incorrect group id' do
+
+        it 'return error' do
+          get_index(-1)
+          expect(response).to_not be_success
+        end
+
+        it 'raises ActiveRecord::RecordNotFound' do
+          bypass_rescue
+          expect{get_index(-1)}.to raise_error ActiveRecord::RecordNotFound
+        end
+
+        it 'flashes' do
+          get_index(-1)
+          expect(flash[:alert]).to eq("Couldn't find Group with 'id'=-1 [WHERE `groups`.`enterprise_id` = ?]")
+        end
+      end
     end
 
     context 'without logged in user' do
+      before{get_index(-1)}
+      it 'return error' do
+        expect(response).to_not be_success
+      end
+
+      it 'redirects' do
+        expect(response).to redirect_to new_user_session_path
+      end
     end
   end
 
@@ -66,9 +97,11 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
 
         let!(:pending_user) { FactoryGirl.create(:user, enterprise: user.enterprise) }
         let!(:active_user) { FactoryGirl.create(:user, enterprise: user.enterprise) }
+        let(:inactive_user) { FactoryGirl.create(:user, enterprise: user.enterprise, active: false) }
 
         before do
           group.members << pending_user
+          group.members << inactive_user
 
           group.members << active_user
           group.accept_user_to_group(active_user.id)
@@ -89,6 +122,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
 
           expect(pending_members).to include pending_user
           expect(pending_members).to_not include active_user
+          expect(pending_members).to_not include inactive_user
         end
       end
     end
@@ -129,10 +163,36 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
       end
 
       context 'with incorrect params' do
+        let(:pending_user) { FactoryGirl.create(:user, enterprise: enterprise) }
+
+        before { group.members << pending_user }
+
+        it 'return error' do
+          post_accept_pending(-1, pending_user.id)
+          expect(response).to_not be_success
+        end
+
+        it 'raises ActiveRecord::RecordNotFound' do
+          bypass_rescue
+          expect{post_accept_pending(-1, pending_user.id)}.to raise_error ActiveRecord::RecordNotFound
+        end
+
+        it 'flashes' do
+          post_accept_pending(-1, pending_user.id)
+          expect(flash[:alert]).to eq("Couldn't find Group with 'id'=-1 [WHERE `groups`.`enterprise_id` = ?]")
+        end
       end
     end
 
     context 'without logged in user' do
+      before{post_accept_pending(-1, -1)}
+      it 'return error' do
+        expect(response).to_not be_success
+      end
+
+      it 'redirects' do
+        expect(response).to redirect_to new_user_session_path
+      end
     end
   end
 
@@ -166,9 +226,9 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
       end
 
       context 'without group id' do
-        before { get_new }
+        before { get_new(-1) }
 
-        xit 'returns error' do
+        it 'returns error' do
           expect(response).to_not be_success
         end
       end
@@ -179,9 +239,65 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
 
       before { get_new(group.to_param) }
 
-      xit 'return error' do
+      it 'return error' do
         expect(response).to_not be_success
       end
+
+      it 'redirects' do
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+  end
+
+  describe 'POST #create' do
+    let(:user) { create :user }
+    let!(:group) { create :group, enterprise: user.enterprise }
+
+
+    def post_create(group_id=nil, params= {})
+      post :create, group_id: group_id, user: params
+    end
+
+    before do
+      request.env["HTTP_REFERER"] = group_path(group)
+    end
+
+    context 'with logged in user' do
+      login_user_from_let
+
+      context 'with correct params' do
+        describe 'new member' do
+          before { post_create(group.id, {user_id: user.id} ) }
+
+          it 'is being added' do
+            expect(group.reload.members).to include user
+          end
+        end
+
+        context 'with onboarding survey questions' do
+          before do
+            group.survey_fields << FactoryGirl.build(:field, field_type: 'group_survey')
+            group.save!
+
+            post_create(group.id, {user_id: user.id})
+          end
+
+          it 'redirects user to onboarding survey' do
+            expect(response).to redirect_to survey_group_questions_path(group)
+          end
+        end
+
+        context 'without onboarding survey questions' do
+          before { post_create(group.id, {user_id: user.id}) }
+
+          it 'redirects user back to user page' do
+            expect(response).to redirect_to group_path(group)
+          end
+        end
+      end
+    end
+
+    context 'without logged in user' do
     end
   end
 
@@ -251,17 +367,17 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
           end
         end
       end
-
-      context 'with incorrect group id' do
-        context 'without group id' do
-        end
-
-        context 'with incorrect group id' do
-        end
-      end
     end
 
     context 'without logged in user' do
+      before{post_add_members(-1, [])}
+      it 'return error' do
+        expect(response).to_not be_success
+      end
+
+      it 'redirects' do
+        expect(response).to redirect_to new_user_session_path
+      end
     end
   end
 
@@ -294,9 +410,27 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
       end
     end
 
-    context 'without logged in user'
+    context 'without logged in user' do
 
-    it 'check if permission check for deletion is correct'
+      let(:user) { FactoryGirl.create(:user) }
+
+      context 'with correct group id' do
+        let(:group) { FactoryGirl.create(:group, enterprise: user.enterprise)}
+        let(:new_member) { FactoryGirl.create(:user, enterprise: user.enterprise)}
+
+        before do
+          group.members << new_member
+        end
+
+        it 'removes user from group' do
+          expect(group.members).to include new_member
+
+          delete_destroy(group.to_param, new_member)
+
+          expect(response).to_not be_success
+        end
+      end
+    end
   end
 
   describe 'DELETE destroy' do

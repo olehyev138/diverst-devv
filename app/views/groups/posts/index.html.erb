@@ -1,0 +1,50 @@
+<div class="content__header">
+   <% if policy(@group).erg_leader_permissions? %>
+   <h1>Posts/
+     <%= link_to pending_group_posts_path(@group) do %>
+     <button class="btn btn--primary">
+       Pending
+     </button>
+     <% end %>
+   </h1>
+   <% end %>
+  <div class="flex-row flex-row--middle">
+    <div class="flex-row__cell">
+      <%= link_to "+ Create News link", new_group_news_link_path, class: "btn btn--primary" if policy(NewsLink).new? %>
+    </div>
+    <div class="flex-row__cell">
+      <%= link_to "+ Create Message", new_group_group_message_path, class: "btn btn--primary" if policy(GroupMessage).new? %>
+    </div>
+    <div class="flex-row__cell">
+      <% if ENV['ENABLE_SOCIAL_MEDIA'] %>
+        <%= link_to "+ Create Social link", new_group_social_link_path, class: "btn btn--primary" if policy(SocialLink).new? %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <% if @posts.empty? %>
+      <div class="card__section">
+        <p>No posts have been published yet.</p>
+      </div>
+    <% else %>
+      <% @posts.each do |news| %>
+        <% if news.link_type == "NewsLink" %>
+          <%= render partial: "groups/shared/news_links", locals: {news_link: NewsLink.includes(:group, :author).find(news.link.id) } %>
+        <% elsif news.link_type === "GroupMessage"%>
+          <%= render partial: "groups/shared/messages", locals: {message: GroupMessage.includes(:owner, :group).find(news.link.id) } %>
+        <% elsif news.link_type === "SocialLink"%>
+          <%= render partial: "groups/shared/social_links", locals: {social_link: SocialLink.includes(:group).find(news.link.id) } %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<% unless @posts.count === @count%>
+  <div class="flex-row__cell text-center">
+    <%= link_to "Load More", group_posts_path(:page => @page + 1), class: "btn btn--primary" %>
+  </div>
+<% end %>

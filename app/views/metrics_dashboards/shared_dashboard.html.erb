@@ -1,0 +1,10 @@
+<div class="content__header">
+  <h1>General</h1>
+  <div class="flex-row flex-row--middle">
+    <p class="no-margin flex-row__cell"><%= @metrics_dashboard.target.count %> users (<%= @metrics_dashboard.percentage_of_total %>% of total)</p>
+  </div>
+</div>
+
+<div class="content__main">
+  <%= render 'graphs' %>
+</div>

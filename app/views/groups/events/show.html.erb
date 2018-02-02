@@ -13,6 +13,10 @@
     <div class="flex-row__cell">
       <%= link_to "Export attendees", attendees_group_initiative_path(@group, @event, format: :csv), class: "btn btn--primary" if policy(@event).edit? %>
     </div>
+
+    <div class="flex-row__cell">
+       <a href="#" class="btn btn--primary js-join-event" data-joined="<%= current_user.initiatives.include? @event %>"><%= current_user.initiatives.include?(@event) ? "Leave event" : "Join event" %></a>
+    </div>
   </div>
 </div>
 
@@ -25,11 +29,16 @@
             <div style="background-image: url(<%= @event.picture.expiring_url(3600) %>);" class="card__section--image-preview"></div>
           <% end %>
           <h4>Description</h4>
-          <p><%= @event.description %></p>
+          <p><%= @event.description&.html_safe %></p>
           <h4>Date &amp; time</h4>
-          <p><%= @event.time_string %></p>
+          <p>
+            <%= @event.time_string %>
+            <%= "(#{current_user.default_time_zone} timezone)"%>
+          </p>
           <h4>Location</h4>
           <p><%= @event.location %></p>
+          <h4>Co-hosted/Participating Groups</h4>
+          <p><%= @event.participating_groups.map(&:name).join(", ") %></p>
         </div>
         <div class="col sm-4">
           <h4>Attendees (<%= @event.attendees.count %>)</h4>
@@ -44,8 +53,6 @@
       </div>
     </div>
   </div>
-
-  <a href="#" class="btn btn--primary js-join-event" data-joined="<%= current_user.initiatives.include? @event %>"><%= current_user.initiatives.include?(@event) ? "Leave event" : "Join event" %></a>
 </div>
 
 <div class="content__header" style="margin-top: 30px;">

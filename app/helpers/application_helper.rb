@@ -94,7 +94,33 @@ module ApplicationHelper
 
   def c_t(type)
     @custom_text ||= current_user.enterprise.custom_text rescue CustomText.new
+
     @custom_text.send("#{ type }_text")
+  end
+
+  def show_sponsor_card?(object, m)
+    if object.public_send(m.to_sym).present?
+      yield
+    end
+  end
+
+  def show_sponsor_image?(object, m)
+    if %r{\Aimage\/.*\Z}.match(object.public_send(m.to_sym))
+      yield
+    end
+  end
+
+  def show_sponsor_video?(object, m)
+    if %r{\Avideo\/.*\Z}.match(object.public_send(m.to_sym))
+      yield
+    end
+  end
+
+  #for RSpec test of protected method in segment_controller.rb
+  def segment_members_of_group(segment, group)
+    segment.members.includes(:groups).select do |user|
+      user.groups.include? group
+    end
   end
 
   private

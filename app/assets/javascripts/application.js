@@ -11,6 +11,7 @@
 // about supported directives.
 //
 //= require jquery
+//= require bootstrap
 //= require jquery_ujs
 //= require dataTables/jquery.dataTables
 //= require turbolinks
@@ -18,6 +19,8 @@
 //= require select2
 //= require highcharts
 //= require highcharts/highcharts-more
+//= require highcharts/modules/data
+//= require highcharts/modules/drilldown
 //= require sparklines
 //= require rangeslider.js/dist/rangeslider
 //= require Sortable
@@ -29,6 +32,10 @@
 //= require urijs
 //= require jscolor/jscolor
 //= require flip
+//= require jquery-dropdown/jquery.dropdown.min
+//= require hamburger_menu
+//= require embedly-jquery
+//= require ckeditor/init
 //= require_tree .
 
 var Utility = (function() {

@@ -11,15 +11,63 @@
           <div class="flex-row__cell">
             <%= link_to group_path(group) do %><%= image_tag group.logo.expiring_url(3600, :thumb), class: "avatar" %><% end %>
           </div>
-          <div class="flex-row__cell flex-row__cell--grow"><%= link_to "#{group.name}", group_path(group), class: "accent" %> - <%= pluralize group.members.count, "member" %></div>
+          <div class="flex-row__cell flex-row__cell--grow"><%= link_to "#{group.name}", group_path(group), class: "accent" %> - <%= pluralize group.active_members.count, "member" %></div>
           <div class="flex-row__cell link-group">
-            <%= link_to "Export", export_csv_group_path(group), class: "muted" if policy(group).edit? %>
-            <%= link_to "Import", import_csv_group_path(group), class: "muted" if policy(group).edit? %>
+            
+            <% if group.children.count > 0 %>
+              <%= link_to "Show Sub-#{ c_t(:erg).pluralize }", "#", class: "nested_show", id: group.id%>
+              <%= link_to "Hide Sub-#{ c_t(:erg).pluralize }", "#", class: "nested_hide", id: group.id, style: "display:none;" %>
+            <% end %>
+            
+            <%= link_to "Export", export_csv_group_path(group), class: "muted", role: "button", 'aria-label': "Export" if policy(group).edit? %>
+            <%= link_to "Import", import_csv_group_path(group), class: "muted", role: "button", 'aria-label': "Import" if policy(group).edit? %>
             <%= link_to "Edit", edit_group_path(group), class: "muted" if policy(group).edit? %>
-            <%= link_to "Delete", group_path(group), method: :delete, class: "error" if policy(group).destroy? %>
+            <%= link_to "Delete", group_path(group), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(group).destroy? %>
           </div>
         </div>
+        
+        <span class="field__label children_<%= group.id%>" style="display:none; margin-top: 10px;"><%= "Sub-#{ c_t(:erg).pluralize } for #{group.name}" %></span>
+        
+      <% group.children.each do |child| %>
+        <div class="children_<%= group.id%>" style="display:none; position: relative; top: 10px;">
+          <div class="flex-row flex-row--middle" style="margin-bottom: 10px;">
+            <div class="flex-row__cell"></div>
+            <div class="flex-row__cell">
+              <%= link_to group_path(child) do %><%= image_tag child.logo.expiring_url(3600, :thumb), class: "avatar" %><% end %>
+            </div>
+            <div class="flex-row__cell flex-row__cell--grow">
+              <span><%= link_to "#{child.name}", group_path(child), class: "accent" %> - <%= pluralize child.active_members.count, "member" %></span>
+              </div>
+            <div class="flex-row__cell link-group">
+              <%= link_to "Export", export_csv_group_path(child), class: "muted", role: "button", 'aria-label': "Export" if policy(child).edit? %>
+              <%= link_to "Import", import_csv_group_path(child), class: "muted", role: "button", 'aria-label': "Import" if policy(child).edit? %>
+              <%= link_to "Edit", edit_group_path(child), class: "muted" if policy(child).edit? %>
+              <%= link_to "Delete", group_path(child), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(child).destroy? %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+        
       </div>
     <% end %>
   </div>
 </div>
+
+<script>
+  $('a.nested_show').click(function(e){
+    var id = $(this).attr('id');
+    $('div.children_' + id).show();
+    $('span.children_' + id).show();
+    
+    $(this).siblings('a.nested_hide').show();
+    $(this).hide();
+  }); //endof click
+  
+  $('a.nested_hide').click(function(e){
+    var id = $(this).attr('id');
+    $('div.children_' + id).hide();
+    $('span.children_' + id).hide();
+    $(this).siblings('a.nested_show').show();
+    $(this).hide();
+  }); //endof click
+</script>

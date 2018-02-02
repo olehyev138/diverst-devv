@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="flex-row__cell">
-      <%= link_to "Export members", export_csv_segment_path(@segment), class: "btn btn--secondary" %>
+      <%= link_to "Export targeted members", export_csv_segment_path(@segment, group_id: @group&.id), class: "btn btn--secondary" %>
     </div>
   </div>
 </div>
@@ -22,7 +22,7 @@
 <div class="content__main">
   <ul>
     <% @segment.rules.each do |rule| %>
-      <li><%= rule.field.title %> <%= SegmentRule.operator_text(rule.operator) %> <%= JSON.parse(rule.values).join(', ') %></li>
+      <li><%= rule.field&.title || 'Associated field no longer exists!' %> <%= SegmentRule.operator_text(rule.operator) %> <%= JSON.parse(rule.values).join(', ') %></li>
     <% end %>
   </ul>
 
@@ -54,6 +54,12 @@
   </div>
 </div>
 
+<div class="content__header">
+  <h1>Sub-<%= c_t(:segment).pluralize %></h1>
+  <%= link_to "+ New Sub-#{ c_t(:segment)}", new_segment_sub_segment_path(@segment), class: "btn btn--primary" if policy(Segment).new? %>
+</div>
+
+<%= render "table" %>
 
 <script>
   $(document).on('page:change', function() {

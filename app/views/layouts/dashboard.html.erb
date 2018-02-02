@@ -20,7 +20,7 @@
       </div>
       <div class="flex-row__cell">
         <%= link_to "Employee dashboard", user_root_path, class: "white" %> &nbsp;|&nbsp;
-        <%= current_user.name %>
+        <%= link_to current_user.name, user_user_path(current_user), class: "white" %>
       </div>
     </div>
   </header>
@@ -35,11 +35,21 @@
           <% end %>
         </li>
       <% end %>
+      <% if current_user.enterprise.plan_module_enabled %>
+        <% if default_group = policy_scope(Group).first %>
+          <li class="nav__item">
+            <%= active_link_to plan_overview_groups_path, class: "nav__link", class_active: "nav__link--is-selected", active: active_plan_link? do %>
+              <%= inline_svg('icons/plan.svg', class: "icon nav__icon") %>
+              <span class="nav__text">Plan</span>
+            <% end %>
+          </li>
+        <% end %>
+      <% end %>
       <% if policy(Campaign).index? %>
         <li class="nav__item">
           <%= active_link_to campaigns_path, class: "nav__link", class_active: "nav__link--is-selected", active: active_engage_link? do %>
             <%= inline_svg('icons/collaborate.svg', class: "icon nav__icon") %>
-            <span class="nav__text">Engage</span>
+            <span class="nav__text">Innovate</span>
           <% end %>
         </li>
       <% end %>
@@ -58,16 +68,6 @@
             <span class="nav__text">Bias</span>
           <% end %>
         </li>
-      <% end %>
-      <% if current_user.enterprise.plan_module_enabled %>
-        <% if default_group = policy_scope(Group).first %>
-          <li class="nav__item">
-            <%= active_link_to plan_overview_groups_path, class: "nav__link", class_active: "nav__link--is-selected", active: active_plan_link? do %>
-              <%= inline_svg('icons/plan.svg', class: "icon nav__icon") %>
-              <span class="nav__text">Plan</span>
-            <% end %>
-          </li>
-        <% end %>
       <% end %>
     </ul>
     <ul class="nav__list nav__list--secondary">
@@ -97,8 +97,8 @@
 
       <%= yield %>
     </div>
+    <%= render 'partials/footer' %>
   </div>
-
   <%= yield :page_scripts %>
 
 </body>

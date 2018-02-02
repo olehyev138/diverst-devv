@@ -1,33 +1,15 @@
 class PollResponse < ActiveRecord::Base
   include ContainsFields
+  include Indexable
 
   belongs_to :poll
   belongs_to :user
 
-  after_commit on: [:create] do
-    IndexElasticsearchJob.perform_later(
-      model_name: 'User',
-      operation: 'index',
-      index: User.es_index_name(enterprise: poll.enterprise),
-      record_id: user.id
-    )
-  end
+  after_commit on: [:create] { update_elasticsearch_index(user, poll.enterprise, 'index') }
+  after_commit on: [:update] { update_elasticsearch_index(user, poll.enterprise, 'update') }
+  after_commit on: [:destroy] { update_elasticsearch_index(user, poll.enterprise, 'delete') }
 
-  after_commit on: [:update] do
-    IndexElasticsearchJob.perform_later(
-      model_name: 'User',
-      operation: 'update',
-      index: User.es_index_name(enterprise: poll.enterprise),
-      record_id: user.id
-    )
-  end
-
-  after_commit on: [:destroy] do
-    IndexElasticsearchJob.perform_later(
-      model_name: 'User',
-      operation: 'delete',
-      index: User.es_index_name(enterprise: poll.enterprise),
-      record_id: user.id
-    )
+  def group
+    poll.try(:initiative).try(:group)
   end
 end

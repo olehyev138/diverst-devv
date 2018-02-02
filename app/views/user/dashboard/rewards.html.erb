@@ -1,5 +1,5 @@
 <div class="content__header">
-  <h1>Diversity Culture Index (DCI)</h1>
+  <h1><%= c_t(:dci_full_title) %> (<%= c_t(:dci_abbreviation) %>)</h1>
 </div>
 
 <div class="content__main">
@@ -31,12 +31,12 @@
       <div class="card">
         <div class="card__section">
 
-          <h3>List of Badges</h3>
+          <h3>List of <%= c_t(:badge).pluralize %></h3>
 
           <table class="table--has-border" id="campaigns-table">
             <thead>
               <th></th>
-              <th>Badge</th>
+              <th><%= c_t(:badge) %></th>
               <th>Points</th>
             </thead>
             <tbody>
@@ -58,7 +58,7 @@
 
   <div class="card">
     <div class="card__section">
-      <h3>Catalogue</h3>
+      <h3>Rewards</h3>
 
       <% @rewards.each_slice(3) do |rewards_batch| %>
         <div class="row row--spacing-bottom">

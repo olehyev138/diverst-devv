@@ -7,6 +7,7 @@ class BudgetsController < ApplicationController
 
   def index
     authorize @group, :budgets?
+    @budgets = @group.budgets.order("id DESC")
   end
 
   def show
@@ -64,13 +65,43 @@ class BudgetsController < ApplicationController
     authorize @group.enterprise, :update?
   end
 
+  def reset_annual_budget
+    authorize @group.enterprise, :update?
+
+    if @group.update({:annual_budget => 0, :leftover_money => 0})
+      @group.budgets.update_all(:is_approved => false)
+      track_activity(@group, :annual_budget_update)
+      flash[:notice] = "Your budget was updated"
+      redirect_to :back
+    else
+      flash[:alert] = "Your budget was not updated. Please fix the errors"
+      redirect_to :back
+    end
+  end
+
+  def carry_over_annual_budget
+    authorize @group.enterprise, :update?
+    
+    leftover = @group.leftover_money + @group.annual_budget
+    
+    if @group.update({:annual_budget => leftover, :leftover_money => 0})
+      @group.budgets.update_all(:is_approved => false)
+      track_activity(@group, :annual_budget_update)
+      flash[:notice] = "Your budget was updated"
+      redirect_to :back
+    else
+      flash[:alert] = "Your budget was not updated. Please fix the errors"
+      redirect_to :back
+    end
+  end
+
   def update_annual_budget
     authorize @group.enterprise, :update?
 
     if @group.update(annual_budget_params)
       track_activity(@group, :annual_budget_update)
       flash[:notice] = "Your budget was updated"
-      redirect_to edit_annual_budget_group_budgets_path(@group.enterprise)
+      redirect_to :back
     else
       flash[:alert] = "Your budget was not updated. Please fix the errors"
       redirect_to :back
@@ -78,8 +109,13 @@ class BudgetsController < ApplicationController
   end
 
   private
+  
   def set_group
-    @group = current_user.enterprise.groups.find(params[:group_id])
+    if current_user
+      @group = current_user.enterprise.groups.find(params[:group_id])
+    else 
+      user_not_authorized
+    end
   end
 
   def set_budget
@@ -107,7 +143,8 @@ class BudgetsController < ApplicationController
     params
       .require(:group)
       .permit(
-        :annual_budget
+        :annual_budget,
+        :leftover_money
       )
   end
 end

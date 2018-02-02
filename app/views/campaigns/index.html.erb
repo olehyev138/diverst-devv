@@ -1,5 +1,5 @@
 <div class="content__header">
-  <h1>Campaigns</h1>
+  <h1>Innovate Campaigns</h1>
   <%= link_to "New campaign", new_campaign_path, class: "btn btn--primary" if policy(Campaign).new? %>
 </div>
 
@@ -7,7 +7,7 @@
   <div class="card">
     <div class="card__section">
       <% if @campaigns.empty? %>
-        <p>There are no campaigns yet. <%= link_to "Create one", new_campaign_path %> and start solving problems with your team's diverse opinions.</p>
+        <p>There are no campaigns yet. <%= link_to "Create one", new_campaign_path %> and start collaborate with your team's diverse opinions.</p>
       <% else %>
         <table class="table--has-border" id="campaigns-table">
           <thead>
@@ -16,6 +16,7 @@
             <th>Start date</th>
             <th># of invitations</th>
             <th>Nb of questions</th>
+            <th>Status</th>
             <th>Options</th>
           </thead>
           <tbody>
@@ -26,10 +27,14 @@
                 <td><%= campaign.start.to_s :reversed_slashes %></td>
                 <td><%= campaign.invitations.count %></td>
                 <td><%= campaign.questions.count %></td>
-                  <td>
-                    <%= link_to "Edit", edit_campaign_path(campaign) if policy(campaign).edit? %> -
-                    <%= link_to "Delete", campaign_path(campaign), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(campaign).destroy? %>
-                  </td>
+                <td><%= campaign.status.capitalize %></td>
+                <td>
+                  <% if campaign.published? %>
+                    <%= link_to "Link", user_user_campaign_questions_path(campaign), target: '_blank'  %> -
+                  <% end %>
+                  <%= link_to "Edit", edit_campaign_path(campaign) if policy(campaign).edit? %> -
+                  <%= link_to "Delete", campaign_path(campaign), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(campaign).destroy? %>
+                </td>
               </tr>
             <% end %>
           </tbody>

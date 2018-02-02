@@ -14,15 +14,16 @@ class User::QuestionsController < ApplicationController
       .includes(:author, comments: :author)
       .order(chosen: :desc)
       .order(upvote_count: :desc)
+    @answer = @question.answers.new
   end
 
   protected
 
   def set_campaign
-    @campaign = current_user.enterprise.campaigns.find(params[:campaign_id])
+    current_user ? @campaign = current_user.enterprise.campaigns.find(params[:user_campaign_id]) : user_not_authorized
   end
 
   def set_question
-    @question = current_user.enterprise.questions.find(params[:id])
+    current_user ? @question = current_user.enterprise.questions.find(params[:id]) : user_not_authorized
   end
 end

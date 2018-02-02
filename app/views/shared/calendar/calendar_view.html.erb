@@ -17,7 +17,7 @@
                   as: :select,
                   collection: @segments,
                   input_html: { class: "select2", multiple: true },
-                  label: "Filter by Segment",
+                  label: "Filter by #{ c_t(:segment) }",
                   required: false
             %>
           </div>
@@ -45,4 +45,4 @@
 
 <br/>
 
-<div id="calendar" data-calendar-data-url="<%= calendar_data_groups_path(params) %>"></div>
+<div id="calendar" data-calendar-data-url="<%= calendar_data_groups_path(token: params[:token], q: params[:q]) %>"></div>

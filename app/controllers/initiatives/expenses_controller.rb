@@ -1,4 +1,5 @@
 class Initiatives::ExpensesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_group
   before_action :set_initiative
   before_action :set_expense, only: [:edit, :update, :destroy, :show]
@@ -20,7 +21,6 @@ class Initiatives::ExpensesController < ApplicationController
     authorize InitiativeExpense
     @expense = @initiative.expenses.new(expense_params)
     @expense.owner = current_user
-
     if @expense.save
       flash[:notice] = "Your expense was created"
       redirect_to action: :index
@@ -54,6 +54,7 @@ class Initiatives::ExpensesController < ApplicationController
     end
   end
 
+  # MISSING TEMPLATE
   def show
     authorize @expense
   end
@@ -82,7 +83,7 @@ class Initiatives::ExpensesController < ApplicationController
   protected
 
   def set_group
-    @group = current_user.enterprise.groups.find(params[:group_id])
+    current_user ? @group = current_user.enterprise.groups.find(params[:group_id]) : user_not_authorized
   end
 
   def set_initiative

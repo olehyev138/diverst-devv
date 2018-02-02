@@ -1,7 +1,9 @@
 class TopicsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_topic, only: [:edit, :update, :destroy, :show]
 
-  layout 'handshake'
+  layout 'handshake' 
+  #NOTE: this layout does not exist in views/layout. This controller does not have a corresponding spec file
 
   def index
     @topics = current_user.enterprise.topics
@@ -38,7 +40,7 @@ class TopicsController < ApplicationController
   protected
 
   def set_topic
-    @topic = current_user.enterprise.topics.find(params[:id])
+    current_user ? @topic = current_user.enterprise.topics.find(params[:id]) : user_not_authorized
   end
 
   def topic_params

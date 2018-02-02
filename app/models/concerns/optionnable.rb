@@ -41,7 +41,7 @@ module Optionnable
     answer_counts_formatted
   end
 
-  def elastic_stats(aggr_field: nil, segments: container.enterprise.segments.all)
+  def elastic_stats(aggr_field: nil, segments:, groups:)
     # Craft the aggregation query depending on if we have a field to aggregate on or not
     aggs = if aggr_field.nil?
       es_term_aggregation
@@ -60,13 +60,14 @@ module Optionnable
     execute_elasticsearch_query(
       index: User.es_index_name(enterprise: container.class == Enterprise ? container : container.enterprise),
       segments: segments,
+      groups: groups,
       search_hash: {
         aggs: aggs
       }
     )
   end
 
-  def elastic_timeseries(segments: container.enterprise.segments.all)
+  def elastic_timeseries(segments: , groups:)
     aggs = es_term_aggregation(
       aggs: {
         date_histogram: {
@@ -83,6 +84,7 @@ module Optionnable
     execute_elasticsearch_query(
       index: User.es_index_name(enterprise: container.enterprise),
       segments: segments,
+      groups: groups,
       search_hash: {
         aggs: aggs
       }
@@ -104,16 +106,27 @@ module Optionnable
     term_query
   end
 
-  def execute_elasticsearch_query(segments:, search_hash:, index:)
+  def execute_elasticsearch_query(segments:, groups:, search_hash:, index:)
     # Filter the query by segments if there are any specified
+    terms = []
     if !segments.nil? && !segments.empty?
-      search_hash['query'] = {
+      terms << {
         terms: {
           'combined_info.segments' => segments.ids
         }
       }
     end
 
+    if !groups.nil? && !groups.empty?
+      terms << {
+        terms: {
+          'combined_info.groups' => groups.ids
+        }
+      }
+    end
+
+    search_hash['query'] = {filtered: { filter: { bool: {should: terms }} } }
+    
     # Execute the elasticsearch query
     Elasticsearch::Model.client.search(
       index: index,
@@ -123,8 +136,8 @@ module Optionnable
   end
 
   # Get highcharts-usable stats from the field by querying elasticsearch and formatting its response
-  def highcharts_stats(aggr_field: nil, segments: container.enterprise.segments.all)
-    data = elastic_stats(aggr_field: aggr_field, segments: segments)
+  def highcharts_stats(aggr_field: nil, segments: [], groups: [])
+    data = elastic_stats(aggr_field: aggr_field, segments: segments, groups: groups)
 
     if aggr_field # If there is an aggregation
       at_least_one_bucket_has_other = false
@@ -246,8 +259,8 @@ module Optionnable
     end
   end
 
-  def highcharts_timeseries(segments:)
-    data = elastic_timeseries(segments: segments)
+  def highcharts_timeseries(segments: [], groups: [])
+    data = elastic_timeseries(segments: segments, groups: groups)
     series = data['aggregations']['terms']['buckets'].map do |term_bucket|
       time_buckets = term_bucket['date_histogram']['buckets']
 

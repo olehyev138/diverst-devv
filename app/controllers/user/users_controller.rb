@@ -39,7 +39,8 @@ class User::UsersController < ApplicationController
       :email,
       :first_name,
       :last_name,
-      :biography
+      :biography,
+      :time_zone
     )
   end
 end

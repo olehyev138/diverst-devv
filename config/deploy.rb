@@ -1,4 +1,4 @@
-lock '3.7.2'
+lock '3.9.1'
 
 set :application, 'diverst'
 set :repo_url, 'git@github.com:TeamDiverst/diverst-development.git'
@@ -30,6 +30,7 @@ set :sidekiq_processes, 1
 set :clockwork_file, "clock.rb"
 
 set :rollbar_token, ENV["ROLLBAR_ACCESS_TOKEN"]
+set :rollbar_env, ENV["ROLLBAR_ENV"]
 set :rollbar_role, Proc.new { :app }
 
 namespace :deploy do

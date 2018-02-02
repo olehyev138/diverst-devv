@@ -1,0 +1,32 @@
+<div class="content__header">
+  <h1>Innovate With Us </h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <% if @campaigns.empty? %>
+      <div class="card__section">
+        <p>You are not part of a campaign yet. When you are invited to one, it will show up here.</p>
+      </div>
+    <% else %>
+      <% @campaigns.each do |campaign| %>
+        <%= link_to user_user_campaign_questions_path(campaign), class: "block block-section" do %>
+          <div class="card__section card__section--border">
+            <div class="flex-row flex-row--middle">
+              <div class="flex-row__cell">
+                <%= image_tag campaign.image.expiring_url(3600, :thumb), class: "avatar avatar--large" %>
+              </div>
+              <div class="flex-row__cell flex-row__cell--grow">
+                <h2><%= campaign.title %></h2>
+                <p><%= campaign.description %></p>
+              </div>
+              <div class="flex-row__cell">
+                <span class="icon icon--chevron-right"></span>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

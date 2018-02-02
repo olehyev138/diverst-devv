@@ -4,25 +4,44 @@ class Group < ActiveRecord::Base
   extend Enumerize
 
   enumerize :pending_users, default: :disabled,  in: [
-    :disabled,
-    :enabled
-  ]
+                              :disabled,
+                              :enabled
+                            ]
 
   enumerize :members_visibility, default: :managers_only, in:[
-    :global,
-    :group,
-    :managers_only
-  ]
+                                   :global,
+                                   :group,
+                                   :managers_only
+                                 ]
 
   enumerize :messages_visibility, default: :managers_only, in:[
-    :global,
-    :group,
-    :managers_only
-  ]
+                                    :global,
+                                    :group,
+                                    :managers_only
+                                  ]
+
+enumerize :latest_news_visibility, default: :leaders_only, in:[
+                                    :public,
+                                    :group,
+                                    :leaders_only
+                                  ]
+
+enumerize :upcoming_events_visibility, default: :leaders_only, in:[
+                                    :public,
+                                    :group,
+                                    :leaders_only
+                                  ]
+
+  belongs_to :enterprise
+  belongs_to :lead_manager, class_name: "User"
+  belongs_to :owner, class_name: "User"
+
+  has_one :news_feed, dependent: :destroy
+
+  delegate :news_feed_links, :to => :news_feed
 
   has_many :user_groups, dependent: :destroy
   has_many :members, through: :user_groups, class_name: 'User', source: :user, after_remove: :update_elasticsearch_member
-  belongs_to :enterprise
   has_many :groups_polls
   has_many :polls, through: :groups_polls
   has_many :poll_responses, through: :polls, source: :responses
@@ -34,47 +53,102 @@ class Group < ActiveRecord::Base
 
   has_many :budgets, as: :subject
   has_many :messages, class_name: 'GroupMessage'
-  has_many :news_links
+  has_many :message_comments, through: :messages, class_name: 'GroupMessageComment', source: :comments
+  has_many :news_links, dependent: :destroy
+  has_many :news_link_comments, through: :news_links, class_name: 'NewsLinkComment', source: :comments
+  has_many :social_links, dependent: :destroy
   has_many :invitation_segments_groups
   has_many :invitation_segments, class_name: 'Segment', through: :invitation_segments_groups
   has_many :resources, as: :container
+  has_many :folders, as: :container
+  has_many :folder_shares, as: :container
+  has_many :shared_folders, through: :folder_shares, source: 'folder'
   has_many :campaigns_groups
   has_many :campaigns, through: :campaigns_groups
   has_many :questions, through: :campaigns
   has_many :answers, through: :questions
   has_many :answer_upvotes, through: :answers, source: :votes
+  has_many :answer_comments, through: :answers, class_name: 'AnswerComment', source: :comments
   belongs_to :lead_manager, class_name: "User"
   belongs_to :owner, class_name: "User"
   has_many :outcomes
   has_many :pillars, through: :outcomes
   has_many :initiatives, through: :pillars
   has_many :updates, class_name: "GroupUpdate", dependent: :destroy
-  has_many :fields, as: :container, dependent: :destroy
+
+  has_many :fields, -> { where field_type: "regular"},
+           as: :container,
+           dependent: :destroy
+  has_many :survey_fields, -> { where field_type: "group_survey"},
+           class_name: 'Field',
+           as: :container,
+           dependent: :destroy
 
   has_many :group_leaders
   has_many :leaders, through: :group_leaders, source: :user
 
+  has_many  :children, class_name: "Group", foreign_key: :parent_id
+  belongs_to :parent, class_name: "Group", foreign_key: :parent_id
+  
   has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
   validates_attachment_content_type :logo, content_type: %r{\Aimage\/.*\Z}
 
   has_attached_file :banner
   validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
 
-  validates :name, presence: true
+  has_attached_file :sponsor_media, s3_permissions: :private
+  do_not_validate_attachment_file_type :sponsor_media
 
+  validates :name, presence: true
+  validates_format_of :contact_email, with: Devise.email_regexp, allow_blank: true
+
+  validate :valid_yammer_group_link?
+
+  before_create :build_default_news_feed
   before_save :send_invitation_emails, if: :send_invitations?
   before_save :create_yammer_group, if: :should_create_yammer_group?
-  before_destroy :handle_deletion
   after_commit :update_all_elasticsearch_members
+  before_validation :smart_add_url_protocol
 
-  scope :top_participants, -> (n) { order(participation_score_7days: :desc).limit(n) }
-
+  scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
+  
   accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
 
   def managers
     leaders.to_a << owner
+  end
+
+  def news_feed
+    if NewsFeed.where(:group_id => id).count > 0
+      return NewsFeed.find_by_group_id(id)
+    else
+      feed = NewsFeed.new
+      feed.group_id = id
+      feed.save
+      return feed
+    end
+  end
+
+  def valid_yammer_group_link?
+    if yammer_group_link.present? && !yammer_group_id
+      errors.add(:yammer_group_link, 'this is not a yammer group link')
+      return false
+    end
+
+    return true
+  end
+
+  def yammer_group_id
+    return nil if yammer_group_link.nil?
+    eq_sign_position = yammer_group_link.rindex('=')
+    return nil if eq_sign_position.nil?
+
+    group_id = yammer_group_link[(eq_sign_position+1)..yammer_group_link.length]
+
+    group_id.to_i
   end
 
   def calendar_color
@@ -82,41 +156,21 @@ class Group < ActiveRecord::Base
   end
 
   def approved_budget
-    (budgets.approved.map{ |b| b.requested_amount || 0 } ).reduce(0, :+)
+    (budgets.approved.map{ |b| b.requested_amount || 0 }).reduce(0, :+)
   end
 
   def available_budget
-    #(budgets.map{ |b| b.available_amount || 0 } ).reduce(0, :+)
     return 0 unless annual_budget
-
-    annual_budget - approved_budget + leftover_money
+    annual_budget - (approved_budget + spent_budget)
   end
 
   def spent_budget
-    if annual_budget
-      annual_budget - available_budget
-    else
-      0
-    end
-  end
-
-  def participation_score(from:, to: Time.current)
-    score = 0
-
-    score += answers.where('answers.created_at > ?', from).where('answers.created_at < ?', to).count * 5
-    score += answer_upvotes.where('answer_upvotes.created_at > ?', from).where('answer_upvotes.created_at < ?', to).count * 1
-    score += poll_responses.where('poll_responses.created_at > ?', from).where('poll_responses.created_at < ?', to).count * 5
-    score += events.where('created_at > ?', from).where('created_at < ?', to).count * 15
-    score += messages.where('created_at > ?', from).where('created_at < ?', to).count * 10
-    score += news_links.where('created_at > ?', from).where('created_at < ?', to).count * 10
-    score += resources.where('created_at > ?', from).where('created_at < ?', to).count * 10
-
-    score
+    (initiatives.map{ |i| i.current_expences_sum || 0 } ).reduce(0, :+)
   end
 
   def active_members
     if pending_users.enabled?
-      filter_by_membership true
+      filter_by_membership(true).active
     else
       members.active
     end
@@ -124,7 +178,7 @@ class Group < ActiveRecord::Base
 
   def pending_members
     if pending_users.enabled?
-      filter_by_membership false
+      filter_by_membership(false).active
     else
       members.none
     end
@@ -138,14 +192,6 @@ class Group < ActiveRecord::Base
     # return groups list without current group
     group_id = self.id
     self.enterprise.groups.select { |g| g.id != group_id }
-  end
-
-  def self.create_events
-    Group.all.find_each do |group|
-      (20 - group.id).times do
-        group.events << Event.create(title: 'Test Event', start: 2.days.from_now, end: 2.days.from_now + 2.hours, description: 'This is a placeholder event.')
-      end
-    end
   end
 
   def sync_yammer_users
@@ -170,17 +216,16 @@ class Group < ActiveRecord::Base
 
   def highcharts_history(field:, from: 1.year.ago, to: Time.current)
     self.updates
-    .where('created_at >= ?', from)
-    .where('created_at <= ?', to)
-    .order(created_at: :asc)
-    .map do |update|
+        .where('created_at >= ?', from)
+        .where('created_at <= ?', to)
+        .order(created_at: :asc)
+        .map do |update|
       [
-        update.created_at.to_i * 1000, # We multiply by 1000 to get milliseconds for highcharts
-        update.info[field]
-      ]
+              update.created_at.to_i * 1000, # We multiply by 1000 to get milliseconds for highcharts
+              update.info[field]
+            ]
     end
   end
-
 
   #Users who enters group have accepted flag set to false
   #This sets flag to true
@@ -191,8 +236,48 @@ class Group < ActiveRecord::Base
     user_group.update(accepted_member: true)
   end
 
+  def survey_answers_csv
+    CSV.generate do |csv|
+      csv << ['user_id', 'user_email', 'user_first_name', 'user_last_name'].concat(survey_fields.map(&:title))
+
+      user_groups.with_answered_survey.includes(:user).order(created_at: :desc).each do |user_group|
+        user_group_row = [
+          user_group.user.id,
+          user_group.user.email,
+          user_group.user.first_name,
+          user_group.user.last_name
+        ]
+
+        survey_fields.each do |field|
+          user_group_row << field.csv_value(user_group.info[field])
+        end
+        
+        csv << user_group_row
+      end
+    end
+  end
+
   def title_with_leftover_amount
     "Create event from #{name} leftover ($#{leftover_money})"
+  end
+  
+  def pending_comments_count
+    message_comments.unapproved.count + news_link_comments.unapproved.count + answer_comments.unapproved.count
+  end
+  
+  def pending_posts_count
+    news_links.unapproved.count + messages.unapproved.count + social_links.unapproved.count
+  end
+
+  protected 
+
+  def smart_add_url_protocol
+    return nil if company_video_url.blank?
+    self.company_video_url = "http://#{company_video_url}" unless have_protocol?
+  end
+
+  def have_protocol?
+    company_video_url[%r{\Ahttp:\/\/}] || company_video_url[%r{\Ahttps:\/\/}]
   end
 
   private
@@ -239,18 +324,14 @@ class Group < ActiveRecord::Base
     end
   end
 
-  def handle_deletion
-    old_members = members.ids
-
-    # Update members in elastic_search
-    User.where(id: old_members).find_each do |member|
-      update_elasticsearch_member(member)
-    end
-  end
-
   def self.avg_members_per_group(enterprise:)
     group_sizes = UserGroup.where(group: enterprise.groups).group(:group).count.values
     return nil if group_sizes.length == 0
     group_sizes.sum / group_sizes.length
+  end
+
+  def build_default_news_feed
+    build_news_feed
+    true
   end
 end

@@ -1,4 +1,7 @@
 class Groups::CommentsController < ApplicationController
+  include Rewardable
+
+  before_action :authenticate_user!
   before_action :set_group
   before_action :set_event
   before_action :set_comment, only: [:edit, :update, :show]
@@ -8,8 +11,12 @@ class Groups::CommentsController < ApplicationController
   def create
     @comment = @event.comments.new(comment_params)
     @comment.user = current_user
-    @comment.save && user_rewarder("feedback_on_event").add_points(@comment)
-    flash[:reward] = "Now you have #{ current_user.credits } points"
+    if @comment.save
+      user_rewarder("feedback_on_event").add_points(@comment)
+      flash_reward "Your comment was created. Now you have #{ current_user.credits } points"
+    else
+      flash[:alert] = "Your comment was not created. Please fix the errors"
+    end
 
     redirect_to :back
   end
@@ -17,7 +24,7 @@ class Groups::CommentsController < ApplicationController
   protected
 
   def set_group
-    @group = current_user.enterprise.groups.find(params[:group_id])
+    current_user ? @group = current_user.enterprise.groups.find(params[:group_id]) : user_not_authorized
   end
 
   def set_event

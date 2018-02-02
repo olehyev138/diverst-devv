@@ -1,4 +1,5 @@
 class RewardsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_enterprise
   before_action :set_reward, only: [:edit, :update, :destroy]
   after_action :verify_authorized
@@ -53,7 +54,7 @@ class RewardsController < ApplicationController
 
   private
   def set_enterprise
-    @enterprise = current_user.enterprise
+    current_user ? @enterprise = current_user.enterprise : user_not_authorized
   end
 
   def set_reward

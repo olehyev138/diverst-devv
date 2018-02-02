@@ -7,7 +7,7 @@
     <div class="col sm-12">
     <% if @enterprise.home_message.present? %>
       <div class="content__header mtmedium">
-        <p style="flex: 1 1 0;"><%= @enterprise.home_message %></p>
+        <p style="flex: 1 1 0;"><%= allow_newlines @enterprise.home_message %></p>
         <div class="flex-row flex-row--middle">
           <div class="flex-row__cell">
           </div>
@@ -17,7 +17,7 @@
       <% if @enterprise.banner.present? %>
         <div class="row enterprise-banner">
           <div class="col sm-12">
-            <%= image_tag @enterprise.banner.url, style: 'min-width: 100%;' %>
+            <%= image_tag @enterprise.banner.expiring_url(3600), style: 'width: 100%; max-width: 100%;' %>
           </div>
         </div>
       <% end %>
@@ -32,10 +32,18 @@
             <div class="card__section">
 
               <h4>Your Events</h4>
-              <%= link_to "Calendar", calendar_user_events_path, class: "  card__action" %>
+              <%= link_to calendar_user_events_path, class: "  card__action" do %>
+                <%= inline_svg('icons/calendar.svg', class: "icon card__icon") %>Events Calendar
+              <% end %>
 
-              <% @upcoming_events.each do |event| %>
-                <%= render "shared/flippable/event", event: event %>
+              <% if @upcoming_events.empty? %>
+                <div class="mtlarge text-center">
+                  You have not joined any events yet.
+                </div>
+              <% else %>
+                <% @upcoming_events.each do |event| %>
+                  <%= render "shared/flippable/event", event: event %>
+                <% end %>
               <% end %>
 
             </div>
@@ -47,57 +55,75 @@
             <div class="card__section">
 
               <h4>Latest News</h4>
-              <%= link_to "View all", user_news_links_path, class: "card__action" %>
+              <%= link_to "View all", user_news_links_path, class: "card__action" unless @posts.count < 1 %>
 
-              <% @news_links.each do |news_link| %>
-                <%= render "shared/flippable/news_link", news_link: news_link %>
+              <% if @posts.empty? %>
+                <div class="mtlarge text-center">
+                  No posts have been published yet.
+                </div>
+              <% else %>
+                <% @posts.each do |news| %>
+                  <%= render "shared/flippable/news_link", news: news %>
+                <% end %>
               <% end %>
-            </div>
-          </div>
-        </div>
-
-        <div class="col sm-12 md-6">
-          <div class="card">
-            <div class="card__section">
-
-              <h4>Latest Messages</h4>
-              <%= link_to "View all", user_messages_path, class: "card__action" %>
-
-              <%= render "shared/boxes/messages", messages: @messages %>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="col sm-12 md-3">
-      <div class="card card--secondary">
-        <div class="card__section">
-          <h4>Top Performers this week</h4>
-          <ol>
-            <% current_user.enterprise.users.top_participants(10).each do |member| %>
-              <% if member == current_user %>
-                <li><strong><%= member.name_with_status %> (<%= member.participation_score_7days %>)</strong></li>
-              <% else %>
-                <li><%= link_to member.name_with_status, member %> (<%= member.participation_score_7days %>)</li>
-              <% end %>
-            <% end %>
-          </ol>
-        </div>
-        <div class="card__section">
-          <h4>Top <%= c_t(:erg).pluralize %> this week</h4>
-          <ol>
-            <% current_user.enterprise.groups.top_participants(10).each do |group| %>
-              <% if group == @group %>
-                <li><strong><%= group.name %> (<%= group.participation_score_7days %>)</strong></li>
-              <% else %>
-                <li><%= link_to group.name, group %> (<%= group.participation_score_7days %>)</li>
-              <% end %>
-            <% end %>
-          </ol>
-        </div>
-      </div>
-    </div>
+    <div class="col col--stacked sm-12 md-3">
+    <% show_sponsor_card?(@enterprise, "cdo_name") do %>
+     <div class="card card--secondary">
+      <div class="card__section">
+        <% if @enterprise.sponsor_media.present? %>
+          <% show_sponsor_image?(@enterprise, "sponsor_media_content_type") do %>
+          <%= image_tag(@enterprise.sponsor_media.expiring_url(3600), style: 'max-width: 100px; max-height:90px; border-radius: 80px;') %>
+          <% end %>
+        <% else %>
+          <%= image_tag("missing_user.png", size: "70x70") %>
+        <% end %>  
 
+        <% show_sponsor_video?(@enterprise, "sponsor_media_content_type") do %>
+          <%= video_tag(@enterprise.sponsor_media.expiring_url(36000), controls: true, size: "200x200") %>
+        <% end %>
+      <p style="font-style: italic;"><%= @enterprise.cdo_name %><br>
+      <%= @enterprise.cdo_title %></p>
+      <% if policy(@enterprise).sponsor_message_visibility? %>
+        <p style="font-style: italic;"><%= truncate(@enterprise.cdo_message_email, length: 200) %></p>
+      <% end %>  
+      </div> 
+    </div>
+    <% end %>
+
+    <% if current_user.enterprise.enable_rewards? %>
+        <div class="card card--secondary">
+          <div class="card__section">
+            <h4>Most Active this week</h4>
+            <ol>
+              <% current_user.enterprise.users.active.top_participants(10).each do |member| %>
+                <li><%= user_performance_label(member) %></li>
+              <% end %>
+            </ol>
+          </div>
+          <div class="card__section">
+            <h4>Top <%= c_t(:erg).pluralize %> this week</h4>
+            <ol>
+              <% current_user.enterprise.groups.top_participants(10).each do |group| %>
+                <li><%= group_performance_label(group) %></li>
+              <% end %>
+            </ol>
+          </div>
+        </div>
+    <% end %>
+  </div>
+  </div>
+
+
+
+  <div class="row">
+     <div class="col sm-12 md-9">
+        <%= link_to 'Privacy Statement', user_privacy_statement_path %>
+     </div>
   </div>
 </div>

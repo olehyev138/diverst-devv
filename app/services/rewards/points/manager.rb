@@ -8,14 +8,16 @@ class Rewards::Points::Manager
   def add_points(entity)
     if @user && @reward_action
       add_points_to_user(entity)
-      update_points
+      add_points_to_weekly_cache(entity)
+      update_user_points
     end
   end
 
   def remove_points(entity)
     if @user && @reward_action
       remove_points_from_user(entity)
-      update_points
+      remove_points_from_weekly_cache(entity)
+      update_user_points
     end
   end
 
@@ -49,8 +51,33 @@ class Rewards::Points::Manager
     )
   end
 
-  def update_points
-    @user.update(points: @reporting.user_points)
-    @user.update(credits: @reporting.user_credits)
+  def update_user_points
+    @user.update(points: @reporting.user_points, credits: @reporting.user_credits)
+  end
+
+  def add_points_to_weekly_cache(entity)
+    add_weekly_points(@user)
+    group = entity.try(:group)
+    add_weekly_points(group) if group
+    user_group = UserGroup.find_by(user: @user, group: group)
+    add_weekly_points(user_group) if user_group
+  end
+
+  def remove_points_from_weekly_cache(entity)
+    remove_weekly_points(@user)
+    group = entity.try(:group)
+    remove_weekly_points(group) if group
+    user_group = UserGroup.find_by(user: @user, group: group)
+    remove_weekly_points(user_group) if user_group
+  end
+
+  def add_weekly_points(obj)
+    obj.update(total_weekly_points: obj.total_weekly_points + @reward_action.points.to_i)
+  end
+
+  def remove_weekly_points(obj)
+    points = obj.total_weekly_points - @reward_action.points.to_i
+    points = points > 0 ? points : 0
+    obj.update(total_weekly_points: points)
   end
 end

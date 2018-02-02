@@ -1,4 +1,5 @@
 class BiasesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_bias, only: [:edit, :update, :destroy, :show]
 
   layout :resolve_layout
@@ -59,7 +60,7 @@ class BiasesController < ApplicationController
   end
 
   def set_bias
-    @bias = @group.biases.find(params[:id])
+    @bias = current_user.enterprise.biases.find(params[:id])
   end
 
   def bias_params

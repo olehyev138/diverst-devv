@@ -1,5 +1,7 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV['RAILS_ENV'] ||= 'test'
+ENV["TEST_CLUSTER_NODES"] = "1"
+
 require File.expand_path('../../config/environment', __FILE__)
 # Prevent database truncation if the environment is production
 abort('The Rails environment is running in production mode!') if Rails.env.production?
@@ -9,15 +11,19 @@ require 'devise.rb'
 require 'capybara/rails'
 require 'capybara/poltergeist'
 require 'sidekiq/testing'
+require 'elasticsearch/extensions/test/cluster'
 
 require 'support/controller_macros.rb'
 require 'support/referrer_helpers.rb'
 
 require 'public_activity/testing'
 PublicActivity.enabled = false
+WebMock.allow_net_connect!
 
 require 'simplecov'
-SimpleCov.start
+SimpleCov.start do
+  add_filter "spec"
+end
 
 Capybara.javascript_driver = :poltergeist
 Capybara.asset_host = 'http://localhost:3000'
@@ -106,5 +112,15 @@ RSpec.configure do |config|
       with.test_framework :rspec
       with.library :rails
     end
+  end
+
+  config.before :all, elasticsearch: true do
+    unless Elasticsearch::Extensions::Test::Cluster.running?(on: 9201, command: ENV['ELASTICSEARCH_PATH'] || "/usr/share/elasticsearch/bin/elasticsearch")
+      Elasticsearch::Extensions::Test::Cluster.start(port: 9201, nodes: 1, timeout: 60, command: ENV['ELASTICSEARCH_PATH'] || "/usr/share/elasticsearch/bin/elasticsearch")
+    end
+  end
+
+  config.after :each, elasticsearch: true do
+    Elasticsearch::Extensions::Test::Cluster.stop(port: 9201) if Elasticsearch::Extensions::Test::Cluster.running?(on: 9201, command: ENV['ELASTICSEARCH_PATH'] || "/usr/share/elasticsearch/bin/elasticsearch")
   end
 end

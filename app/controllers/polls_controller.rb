@@ -1,4 +1,5 @@
 class PollsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_poll, only: [:edit, :update, :destroy, :show, :export_csv]
   after_action :verify_authorized
 
@@ -37,8 +38,6 @@ class PollsController < ApplicationController
     @responses = @poll.responses
       .includes(:user)
       .order(created_at: :desc)
-      .page(params[:response_page])
-      .per(5)
   end
 
   def edit
@@ -74,7 +73,7 @@ class PollsController < ApplicationController
   protected
 
   def set_poll
-    @poll = current_user.enterprise.polls.find(params[:id])
+    current_user ? @poll = current_user.enterprise.polls.find(params[:id]) : user_not_authorized
   end
 
   def poll_params

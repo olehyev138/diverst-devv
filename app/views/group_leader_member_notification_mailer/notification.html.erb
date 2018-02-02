@@ -1,0 +1,7 @@
+Hello, <%= @leader.name %>
+<br/>
+Your <%= @group.name %> has <%= @count %> pending member(s). Click below to view them and accept/deny group membership.
+
+<br/>
+
+<p><%= link_to "View Pending Members", pending_group_group_members_url(@group) %></p>

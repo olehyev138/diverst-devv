@@ -1,4 +1,5 @@
 class Initiatives::FieldsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_group
   before_action :set_initiative
   before_action :set_field
@@ -37,7 +38,7 @@ class Initiatives::FieldsController < ApplicationController
   protected
 
   def set_group
-    @group = current_user.enterprise.groups.find(params[:group_id])
+    current_user ? @group = current_user.enterprise.groups.find(params[:group_id]) : user_not_authorized
   end
 
   def set_initiative
@@ -46,14 +47,5 @@ class Initiatives::FieldsController < ApplicationController
 
   def set_field
     @field = @initiative.fields.find(params[:id])
-  end
-
-  def field_params
-    params
-      .require(:initiative_field)
-      .permit(
-        :description,
-        :amount
-      )
   end
 end

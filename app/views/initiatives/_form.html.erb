@@ -22,6 +22,29 @@
             %>
           </div>
         </div>
+        <div class="col sm-6">
+          <div class="card__section card__section--border">
+            <% if @initiative.new_record?  #only show it for event creation form %>
+              <%= f.input :estimated_funding, label: "Specify amount to deduct from budget" %>
+              <script>
+                $(document).ready(function(){
+                  $('#initiative_budget_item_id').change(function(){
+                    var $selected_option = $(this).find('option:selected');
+                    var text = $selected_option.text();
+
+                    // Try to parse it and determine available amount of money
+                    var regExp = /\(([^)]+)\)/;
+                    var dollar_value = regExp.exec(text)[1];
+
+                    var value = parseInt( dollar_value.substr(1));
+
+                    $('#initiative_estimated_funding').val(value);
+                  });
+                })
+              </script>
+            <% end %>
+          </div>
+        </div>
       </div>
 
       <div class="card__section card__section--border">
@@ -36,11 +59,17 @@
       </div>
 
       <div class="card__section card__section--border">
-        <%= f.input :description, label: "Give it a short (or long) <strong>description</strong>".html_safe %>
+        <%= f.input :description,
+            label: "Give it a short (or long) <strong>description</strong>".html_safe,
+            as: :ckeditor
+        %>
       </div>
 
       <div class="card__section card__section--border">
-        <p class="field__hint">Define a <strong>start</strong> and <strong>end</strong> time</p>
+        <p class="field__hint">
+          Define a <strong>start</strong> and <strong>end</strong> time.
+          <%= "(#{current_user.default_time_zone} timezone)" %>
+        </p>
         <div class="row">
           <div class="col sm-6">
             <%= f.input :start, as: :date_time_picker, label: "Start time" %>
@@ -55,7 +84,7 @@
         <%= f.association :segments,
               collection: @segments,
               input_html: { class: "select2" },
-              label: "Choose the <strong>segments</strong> you want to target".html_safe %>
+              label: "Choose the <strong>#{ c_t(:segment).pluralize }</strong> you want to target".html_safe %>
       </div>
 
       <div class="row">
@@ -96,7 +125,7 @@
 
     <div class="card">
       <div class="card__section card__section--border">
-        <p>Define the <strong>TODO</strong> items associated with event.</p>
+        <p>Define the <strong>To Do</strong> items associated with event.</p>
       </div>
       <div id="fields">
         <%= f.simple_fields_for :checklist_items do |item_form| %>
@@ -106,7 +135,7 @@
 
       <div class="link">
         <div class="card__section card__section--border">
-          <%= link_to_add_association "+Add TODO item", f, :checklist_items, partial: 'checklists/item' %>
+          <%= link_to_add_association "+Add To Do item", f, :checklist_items, partial: 'checklists/item' %>
         </div>
       </div>
     </div>

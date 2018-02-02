@@ -1,9 +1,14 @@
 class EnterprisesController < ApplicationController
+  before_action :authenticate_user!, except: [:calendar]
   before_action :set_enterprise, except: [:index, :new, :create, :calendar]
   after_action :verify_authorized, except: :calendar
   after_action :allow_iframe, only: [:calendar]
 
   layout :resolve_layout
+
+  def edit
+    authorize @enterprise, :update?
+  end
 
   def update
     authorize @enterprise
@@ -13,7 +18,7 @@ class EnterprisesController < ApplicationController
       redirect_to :back
     else
       flash[:alert] = "Your enterprise was not updated. Please fix the errors"
-      render params['source']
+      redirect_to :back
     end
   end
 
@@ -30,10 +35,12 @@ class EnterprisesController < ApplicationController
     authorize @enterprise, :update?
   end
 
+  # not sure if this is supposed to be here
   def edit_cdo
     authorize @enterprise, :update?
   end
 
+  # missing a template layout called handshake
   def edit_mobile_fields
     authorize @enterprise
   end
@@ -47,7 +54,12 @@ class EnterprisesController < ApplicationController
 
     set_theme
   end
+  
+  def edit_pending_comments
+    authorize @enterprise
+  end
 
+  # missing template
   def edit_algo
     authorize @enterprise, :edit?
   end
@@ -78,7 +90,7 @@ class EnterprisesController < ApplicationController
       redirect_to :back
     else
       flash[:alert] = "Enterprise attachment was not removed. Please fix the errors"
-      render :back
+      redirect_to :back
     end
   end
 
@@ -107,7 +119,7 @@ class EnterprisesController < ApplicationController
   end
 
   def set_enterprise
-    @enterprise = current_user.enterprise
+    current_user ? @enterprise = current_user.enterprise : user_not_authorized
   end
 
   def set_theme
@@ -122,6 +134,8 @@ class EnterprisesController < ApplicationController
     params
       .require(:enterprise)
       .permit(
+        :enable_pending_comments,
+        :enable_rewards,
         :has_enabled_saml,
         :has_enabled_onboarding_email,
         :idp_entity_id,
@@ -137,9 +151,14 @@ class EnterprisesController < ApplicationController
         :cdo_name,
         :cdo_title,
         :cdo_picture,
+        :sponsor_media,
+        :onboarding_sponsor_media,
+        :disable_sponsor_message,
+        :company_video_url,
         :banner,
         :home_message,
         :xml_sso_config,
+        :time_zone,
         theme: [
           :id,
           :primary_color,

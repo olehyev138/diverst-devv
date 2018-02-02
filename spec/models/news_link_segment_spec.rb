@@ -1,0 +1,23 @@
+require 'rails_helper'
+
+RSpec.describe NewsLinkSegment, type: :model do
+    
+    describe 'validations' do
+        let(:news_link_segment) { FactoryGirl.build_stubbed(:news_link_segment) }
+
+        it{ expect(news_link_segment).to validate_presence_of(:news_link_id).on(:save) }
+        it{ expect(news_link_segment).to validate_presence_of(:segment_id).on(:save) }
+        
+        it { expect(news_link_segment).to belong_to(:news_link) }
+        it { expect(news_link_segment).to belong_to(:segment) }
+        
+        it { expect(news_link_segment).to have_one(:news_feed_link_segment) }
+    end
+    
+    describe "#news_feed_link_segment" do
+        it "has default news_feed_link_segment" do
+            news_link_segment = create(:news_link_segment)
+            expect(news_link_segment.news_feed_link_segment).to_not be_nil
+        end
+    end
+end

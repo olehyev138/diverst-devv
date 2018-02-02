@@ -6,8 +6,16 @@
         <%= f.input :title %>
         <%= f.input :description %>
 
-        <%= f.input :picture, as: :attachment_preview %>
-
+        <%= f.association :segments, collection: @group.enterprise.segments, input_html: { class: "select2" } %>
+        
+        <%= f.simple_fields_for :photos do |p| %>
+          <%= render "photo_fields", f: p %>
+        <% end %>
+                
+        <span><%= link_to_add_association "Add a photo", f, :photos %></span>
+        </br>
+        </br>
+        
         <%= f.button :submit %>
       <% end %>
     </div>
@@ -23,7 +31,7 @@
 
   var autoFillInfo = function() {
     if (!hasTouchedTitleOrDescription) {
-      $.get('/news_links/url_info?url=' + $url.val(), function(data) {
+      $.get('/groups/news_links/url_info?url=' + $url.val(), function(data) {
         $title.val(data.title);
         $description.val(data.description);
       });

@@ -1,5 +1,5 @@
 class Sample < ActiveRecord::Base
-  belongs_to :user
+  belongs_to :user, :dependent => :destroy
 
   include ContainsFields
   include Elasticsearch::Model
@@ -30,7 +30,9 @@ class Sample < ActiveRecord::Base
       record_id: id
     )
   end
-
+  
+  validates :user_id,   presence: true
+  
   scope :es_index_for_enterprise, -> (enterprise) { joins(:user).where(users: { enterprise_id: enterprise.id }) }
 
   # Returns the index name to be used in Elasticsearch to store this enterprise's users

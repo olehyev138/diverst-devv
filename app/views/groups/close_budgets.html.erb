@@ -1,0 +1,88 @@
+<div class="content__header">
+  <h1>Budgeting info</h1>
+</div>
+
+<div class="row">
+  <div class="card">
+    <div class="card__section">
+      <table class="table--has-border">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Group Name</th>
+            <td>Annual Budget</td>
+            <td>Leftover Money</td>
+            <td>Approved Budget</td>
+            <td>Actions</td>
+          </tr>
+        </thead>
+        <tbody>
+          <% if current_user.enterprise.groups.count == 0 %>
+            There are no groups yet. Start by <%= link_to 'creating', new_group_path %> one.
+          <% end %>
+
+          <% @groups.each do |group| %>
+            <tr>
+                <td>
+                  <% if group.children.count > 0 %>
+                    <a href="#" class="nested_plus" id="<%= group.id%>">
+                      <%= inline_svg('icons/plus.svg', size: '25px*25px') %>
+                    </a>
+                    <a href="#" class="nested_minus" id="<%= group.id%>" style="display:none;">
+                      <%= inline_svg('icons/minus.svg', size: '25px*25px') %>
+                    </a>
+                  <% end %>
+                </td>
+              <td><%= link_to group.name, group_path(group) %></td>
+              <td><%= number_to_currency(group.annual_budget) || 'Not set' %></td>
+              <td><%= number_to_currency(group.leftover_money) || 'Not set' %></td>
+              <td>
+                <%= number_to_currency(group.approved_budget) || 'Not set' %>
+              </td>
+              <td>
+                <%= link_to 'Edit', edit_annual_budget_group_budgets_path(group) %> - 
+                <%= link_to "Carry Over", carry_over_annual_budget_group_budgets_path(group), method: 'post'%> - 
+                <%= link_to "Reset Budget", reset_annual_budget_group_budgets_path(group), method: 'post' %>
+              </td>
+            </tr>
+            
+            <% group.children.each do |child| %>
+              <tr class="children_<%= group.id%>" style="display:none;">
+                <td></td>
+                <td><%= link_to child.name, group_path(child) %></td>
+                <td><%= number_to_currency( child.annual_budget) || 'Not set' %></td>
+                <td><%= number_to_currency( child.leftover_money) || 'Not set' %></td>
+                <td>
+                  <%= number_to_currency( child.approved_budget) || 'Not set' %>
+                </td>
+                <td>
+                  <%= link_to 'Edit', edit_annual_budget_group_budgets_path(child) %> - 
+                  <%= link_to "Carry Over", carry_over_annual_budget_group_budgets_path(child), method: 'post' %> - 
+                  <%= link_to "Reset Budget", reset_annual_budget_group_budgets_path(child), method: 'post' %>
+                </td>
+              </tr>
+            <% end %>
+            
+            
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  $('a.nested_plus').click(function(e){
+    var id = $(this).attr('id');
+    $('tr.children_' + id).show();
+    $(this).siblings('a.nested_minus').show();
+    $(this).hide();
+  }); //endof click
+  
+  $('a.nested_minus').click(function(e){
+    var id = $(this).attr('id');
+    $('tr.children_' + id).hide();
+    $(this).siblings('a.nested_plus').show();
+    $(this).hide();
+  }); //endof click
+</script>

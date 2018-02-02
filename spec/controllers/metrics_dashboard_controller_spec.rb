@@ -1,30 +1,76 @@
 require 'rails_helper'
 
 RSpec.describe MetricsDashboardsController, type: :controller do
+  let(:enterprise) { create :enterprise }
+  let (:user) { create :user, :enterprise => enterprise }
+  let(:metrics_dashboard) { create :metrics_dashboard, :enterprise => enterprise, owner: user }
+
+  describe 'GET #new' do
+    def get_new
+      get :new
+    end
+
+    context 'with logged user' do
+      login_user_from_let
+
+      before { get_new }
+
+      it "renders new template" do
+        expect(response).to render_template :new
+      end
+
+      it "return new metric dashboard object" do
+        expect(assigns[:metrics_dashboard]).to be_a_new(MetricsDashboard)
+      end
+    end
+
+    context 'without logged user' do
+      before { get_new }
+      it_behaves_like "redirect user to users/sign_in path"
+    end
+  end
+
+
   describe 'GET #index' do
     def get_index
       get :index
     end
 
     context 'with logged user' do
-      login_user
+      login_user_from_let
 
-      before { get_index }
+      before do
+        metrics_dashboard
+        create_list(:group, 2, enterprise: user.enterprise)
+        create_list(:segment, 3, enterprise: user.enterprise)
+        create_list(:resource, 4, container: user.enterprise)
+        create_list(:poll, 2, enterprise: user.enterprise)
+        get_index
+      end
 
-      it 'return success' do
-        expect(response).to be_success
+      it 'returns correct data for general_metrics' do
+        expect(assigns[:general_metrics])
+        .to eq ({:nb_users=>1, :nb_ergs=>2, :nb_segments=>3, :nb_resources=>4, :nb_polls=>2, :nb_ongoing_campaigns=>0, :average_nb_members_per_group=>nil})
+      end
+
+      it "return metrics" do
+        expect(assigns[:dashboards]).to eq [metrics_dashboard]
+      end
+
+      it "render index template" do
+        expect(response).to render_template :index
+      end
+
+      it "return enterprise belonging to current_user" do
+        expect(enterprise.users).to include user
       end
     end
 
     context 'without logged user' do
       before { get_index }
-
-      it 'return error' do
-        expect(response).to_not be_success
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
 
   describe 'POST #create' do
@@ -32,9 +78,9 @@ RSpec.describe MetricsDashboardsController, type: :controller do
       post :create, metrics_dashboard: params
     end
 
-    context 'with logged in user' do
+    describe 'with logged in user' do
       let(:user) { create :user }
-      let(:md_params) { attributes_for :metrics_dashboard, enterprise: user.enterprise }
+      let(:md_params) { attributes_for :metrics_dashboard, enterprise: user.enterprise, group_ids: [create(:group).id] }
 
       login_user_from_let
 
@@ -43,6 +89,16 @@ RSpec.describe MetricsDashboardsController, type: :controller do
           expect{
             post_create(md_params)
           }.to change(MetricsDashboard, :count).by(1)
+        end
+
+        it "flashes a notice message" do
+          post_create(md_params)
+          expect(flash[:notice]).to eq "Your dashboard was created"
+        end
+
+        it "redirect to just created metrics dashboard" do
+          post_create(md_params)
+          expect(response).to redirect_to MetricsDashboard.last
         end
 
         it 'creates correct dashboard' do
@@ -93,6 +149,11 @@ RSpec.describe MetricsDashboardsController, type: :controller do
           expect(response).to render_template :new
         end
 
+        it "flashes an alert message" do
+          post_create
+          expect(flash[:alert]).to eq "Your dashboard was not created. Please fix the errors"
+        end
+
         it 'shows error' do
           post_create
           metrics_dashboard = assigns(:metrics_dashboard)
@@ -102,14 +163,73 @@ RSpec.describe MetricsDashboardsController, type: :controller do
       end
     end
 
-    context 'without logged in user' do
+    describe 'without logged in user' do
       before { post_create }
-
-      it 'return error' do
-        expect(response).to_not be_success
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
+
+
+  describe 'GET #show' do
+    def get_show
+      get :show, :id => metrics_dashboard.id
+    end
+
+    context 'with logged user' do
+      login_user_from_let
+
+      before do
+        create_list(:graph, 2, collection: metrics_dashboard)
+        metrics_dashboard.shareable_token #Touch token, so it is initialized
+        get_show
+      end
+
+       it "returns set metrics dashboard" do
+        expect(assigns[:metrics_dashboard]).to eq metrics_dashboard
+      end
+
+      it "render show template" do
+        expect(response).to render_template :show
+      end
+
+      it 'sets correct shareable token' do
+        expect(assigns[:token]).to eq metrics_dashboard.shareable_token
+      end
+
+      it 'return 2 graphs objects that belong to metrics_dashboard object' do
+        expect(assigns[:graphs].count).to eq 2
+        expect(assigns[:graphs]).to eq metrics_dashboard.graphs.includes(:field, :aggregation)
+      end
+    end
+
+    context 'without logged user' do
+      before { get_show }
+      it_behaves_like "redirect user to users/sign_in path"
+    end
+  end
+
+
+  describe 'GET #edit' do
+    def get_edit
+      get :edit, :id => metrics_dashboard.id
+    end
+
+    context 'with logged user' do
+      login_user_from_let
+
+      before { get_edit }
+
+      it "render edit template" do
+        expect(response).to render_template :edit
+      end
+    end
+
+    context 'without logged user' do
+      before { get_edit }
+      it_behaves_like "redirect user to users/sign_in path"
+    end
+  end
+
 
   describe 'PATCH #update' do
     def patch_update( id = -1, params = {})
@@ -157,20 +277,37 @@ RSpec.describe MetricsDashboardsController, type: :controller do
 
         it 'redirects to correct page' do
           patch_update(metrics_dashboard.id, new_md_params)
-
           expect(response).to redirect_to action: :index
+        end
+
+        it "flashes a notice message" do
+          patch_update(metrics_dashboard.id, new_md_params)
+          expect(flash[:notice]).to eq "Your dashboard was updated"
+        end
+      end
+
+      context "incorrect params" do
+        login_user_from_let
+        let(:invalid_md_params) { { name: "" } }
+
+        it 'redirects to correct page' do
+          patch_update(metrics_dashboard.id, invalid_md_params)
+          expect(response).to render_template :edit
+        end
+
+        it "flashes a notice message" do
+          patch_update(metrics_dashboard.id, invalid_md_params)
+          expect(flash[:alert]).to eq "Your dashboard was not updated. Please fix the errors"
         end
       end
     end
 
     context 'without logged in user' do
       before { patch_update(metrics_dashboard.id, name: 'blah') }
-
-      it 'return error' do
-        expect(response).to_not be_success
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
+
 
   describe 'DELETE #destroy' do
     def delete_destroy(id = -1)
@@ -192,7 +329,6 @@ RSpec.describe MetricsDashboardsController, type: :controller do
 
         it 'redirects to correct action' do
           delete_destroy(metrics_dashboard.id)
-
           expect(response).to redirect_to  action: :index
         end
 
@@ -230,6 +366,11 @@ RSpec.describe MetricsDashboardsController, type: :controller do
         expect {
           delete_destroy(metrics_dashboard.id)
         }.to_not change(MetricsDashboard, :count)
+      end
+
+      context "redirect unlogged in user" do
+        before { delete_destroy(metrics_dashboard.id) }
+        it_behaves_like "redirect user to users/sign_in path"
       end
     end
   end

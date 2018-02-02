@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe UserGroupMailer, type: :mailer do
   let!(:user){ create(:user) }
-  let!(:groups){ [{ group: create(:group), messages_count: 2, news_count: 0 }] }
+  let!(:groups){ [{ group: create(:group), events_count: 2, messages_count: 2, news_count: 0 }] }
 
   let!(:mail) { described_class.notification(user, groups).deliver_now }
 
@@ -21,10 +21,6 @@ RSpec.describe UserGroupMailer, type: :mailer do
 
     it 'renders the sender email' do
       expect(mail.from).to eq(['info@diverst.com'])
-    end
-
-    it 'shows a message to user' do
-      expect(mail.body.encoded).to include("Hello #{ user.name }, you have updates in your ERGs.")
     end
 
     it 'shows a message with number of comments in group' do

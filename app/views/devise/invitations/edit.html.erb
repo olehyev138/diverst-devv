@@ -21,7 +21,11 @@
 
           <div class="row">
             <div class="col sm-6 md-3 lg-5">
+            <% if resource.enterprise.onboarding_sponsor_media.present? %>
+              <%= video_tag(resource.enterprise.onboarding_sponsor_media.expiring_url(36000), controls: true, size: "200x200") %>
+            <% else %>
               <%= image_tag resource.enterprise.cdo_picture.expiring_url(3600), class: "block", style: "width: 100%; background-size: cover; background-position: bottom center;" %>
+            <% end %>  
             </div>
             <div class="col sm-6 md-3 lg-7">
               <h3><%= resource.enterprise.cdo_name %>, <%= resource.enterprise.cdo_title %></h3>
@@ -41,9 +45,15 @@
         <div class="card__section">
           <h2>Privacy Statement:</h2>
           <% if resource.enterprise.privacy_statement.present? %>
+            <% if resource.enterprise.privacy_statement.length > 500 %>
+            <div id="privacy_statement" class="scrollable_box">
+              <%= resource.enterprise.privacy_statement %>
+            </div>
+            <% else %>
             <%= resource.enterprise.privacy_statement %>
+            <% end %>
           <% else %>
-            Diverst uses a double factor authentication protocol and regards your data as highly confidential. Only authorized administrators can view this data.. Your data will never be shared with anyone or anything other than these select individuals.
+            Diverst regards your data as highly confidential. Only authorized administrators can view this data.. Your data will never be shared with anyone or anything other than these select individuals.
           <% end %>
         </div>
       </div>

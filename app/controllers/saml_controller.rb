@@ -9,12 +9,13 @@ class SamlController < ApplicationController
   def sso
     settings = @enterprise.saml_settings
     if settings.nil?
-      render action: :no_settings
+      # missing template
+      redirect_to :back
       return
     end
-
     request = OneLogin::RubySaml::Authrequest.new
-    redirect_to(request.create(settings))
+    #TODO validate that relay state is url within diverst
+    redirect_to(request.create(settings, RelayState: params['RelayState']))
   end
 
   def acs
@@ -25,6 +26,7 @@ class SamlController < ApplicationController
       nameid = response.nameid
       attrs = response.attributes
 
+      #Todo search only @enterprise for users
       unless user = User.find_by_email(nameid)
         user = User.new(auth_source: 'saml', enterprise: @enterprise)
 
@@ -38,7 +40,8 @@ class SamlController < ApplicationController
 
       sign_in user
 
-      redirect_to controller: 'user/dashboard', action: :home
+      session[:previous_url] = params['RelayState']
+      redirect_to after_sign_in_path_for(current_user)
     else
       logger.info "Response Invalid. Errors: #{response.errors}"
       @errors = response.errors
@@ -122,7 +125,7 @@ class SamlController < ApplicationController
     unless logout_request.is_valid?
       error_msg = "IdP initiated LogoutRequest was not valid!. Errors: #{logout_request.errors}"
       logger.error error_msg
-      render inline: error_msg
+      return render inline: error_msg
     end
     logger.info "IdP initiated Logout for #{logout_request.nameid}"
 

@@ -25,7 +25,7 @@ RSpec.feature 'user visits the metrics section' do
   end
 
   scenario 'they can edit a metrics dashboard' do
-    create(:metrics_dashboard, enterprise: user.enterprise, owner: user, name: "Test Dashboard")
+    create(:metrics_dashboard, enterprise: user.enterprise, owner: user, name: "Test Dashboard",  groups: [create(:group, enterprise: user.enterprise)])
 
     visit metrics_dashboards_path
     click_on 'Edit'

@@ -1,4 +1,5 @@
 class OutcomesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_group
   before_action :set_outcome, only: [:edit, :update, :destroy, :show]
   after_action :verify_authorized
@@ -8,7 +9,8 @@ class OutcomesController < ApplicationController
   def index
     authorize Outcome
   end
-
+  
+  # MISSING TEMPLATE
   def new
     authorize Outcome
     @outcome = Outcome.new
@@ -17,16 +19,18 @@ class OutcomesController < ApplicationController
   def create
     authorize Outcome
     @outcome = Outcome.new(outcome_params)
-    @outcome.enterprise = current_user.enterprise
-    @outcome.estimated_funding *= 100
-    @outcome.owner = current_user
+    
+    # don't think this belongs here
+    #@outcome.enterprise = current_user.enterprise
+    #@outcome.estimated_funding *= 100
+    #@outcome.owner = current_user
 
     if @outcome.save
-      flash[:notice] = "Your outcome was created"
+      flash[:notice] = "Your #{ c_t(:outcome) } was created"
       redirect_to action: :index
     else
-      flash[:alert] = "Your outcome was not created. Please fix the errors"
-      render :new
+      flash[:alert] = "Your #{ c_t(:outcome) } was not created. Please fix the errors"
+      render :new #new template does not exist
     end
   end
 
@@ -37,11 +41,11 @@ class OutcomesController < ApplicationController
   def update
     authorize @outcome
     if @outcome.update(outcome_params)
-      flash[:notice] = "Your outcome was updated"
-      redirect_to @outcome
+      flash[:notice] = "Your #{ c_t(:outcome) } was updated"
+      redirect_to action: :index
     else
-      flash[:alert] = "Your outcome was not updated. Please fix the errors"
-      render :edit
+      flash[:alert] = "Your #{ c_t(:outcome) } was not updated. Please fix the errors"
+      render :edit #edit template exist. however, form partial does not
     end
   end
 
@@ -54,18 +58,23 @@ class OutcomesController < ApplicationController
   protected
 
   def set_group
-    @group = current_user.enterprise.groups.includes(outcomes: :pillars).find(params[:group_id])
+    if current_user
+      @group = current_user.enterprise.groups.includes(outcomes: :pillars).find(params[:group_id])
+    else 
+      user_not_authorized
+    end
   end
 
   def set_outcome
-    @outcome = current_user.enterprise.outcomes.find(params[:id])
+    @outcome = @group.outcomes.find(params[:id])
   end
 
   def outcome_params
     params
       .require(:outcome)
       .permit(
-
+        :name,
+        :group_id
       )
   end
 end

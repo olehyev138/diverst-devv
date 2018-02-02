@@ -48,8 +48,8 @@ RSpec.configure do |config|
   # to individual examples or groups you care about by tagging them with
   # `:focus` metadata. When nothing is tagged with `:focus`, all examples
   # get run.
-  # config.filter_run :focus
-  # config.run_all_when_everything_filtered = true
+  config.filter_run :focus => true unless ENV['CI']
+  config.run_all_when_everything_filtered = true
 
   # Allows RSpec to persist some state between runs in order to support
   # the `--only-failures` and `--next-failure` CLI options. We recommend
@@ -91,4 +91,11 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 
   config.include Paperclip::Shoulda::Matchers
+
+  # https://stackoverflow.com/questions/3175591/rails3-warning-toplevel-constant-applicationcontroller-referenced-by?rq=1
+  config.before(:each) do
+    Dir[File.expand_path("app/controllers/user/*.rb")].each do |file|
+      require file
+    end
+  end
 end

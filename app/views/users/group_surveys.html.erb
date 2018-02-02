@@ -1,0 +1,13 @@
+<div class="card">
+  <% @user_groups.each do |user_group| %>
+    <div class="card__section card__section--border">
+      <h3>Answers for <%= "#{c_t(:erg)} #{user_group.group.name}" %></h3>
+    <% user_group.group.survey_fields.each do |field| %>
+      <div class="card__section card__section--border">
+        <label><strong><%= field.title %></strong></label>
+        <p><%= user_group.string_for_field(field) %></p>
+      </div>
+    <% end %>
+    </div>
+  <% end %>
+</div>

@@ -1,4 +1,5 @@
 class Groups::FieldsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_group
   before_action :set_field, only: [:time_series]
   after_action :verify_authorized
@@ -37,7 +38,7 @@ class Groups::FieldsController < ApplicationController
   protected
 
   def set_group
-    @group = current_user.enterprise.groups.find(params[:group_id])
+    current_user ? @group = current_user.enterprise.groups.find(params[:group_id]) : user_not_authorized
   end
 
   def set_field

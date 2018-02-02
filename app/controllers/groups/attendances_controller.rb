@@ -1,4 +1,7 @@
 class Groups::AttendancesController < ApplicationController
+  include Rewardable
+
+  before_action :authenticate_user!
   before_action :set_group
   before_action :set_event
   before_action :set_attendance, only: [:create, :destroy]
@@ -13,7 +16,7 @@ class Groups::AttendancesController < ApplicationController
     return head(204) if @attendance
     @event.initiative_users.create(user: current_user)
     user_rewarder("attend_event").add_points(@event)
-    flash[:reward] = "Now you have #{ current_user.credits } points"
+    flash_reward "Now you have #{ current_user.credits } points"
     render "partials/flash_messages.js"
   end
 
@@ -25,7 +28,7 @@ class Groups::AttendancesController < ApplicationController
   end
 
   def erg_graph
-    erg_population = @event.own_group.enterprise.groups.map do |group|
+    erg_population = @event.owner_group.enterprise.groups.map do |group|
       @event.attendees.joins(:user_groups).where('user_groups.group_id': group.id).count
     end
 
@@ -36,15 +39,15 @@ class Groups::AttendancesController < ApplicationController
           title: 'Number of attendees',
           data: erg_population
         }],
-        categories: @event.own_group.enterprise.groups.map(&:name),
-        xAxisTitle: 'ERG'
+        categories: @event.owner_group.enterprise.groups.map(&:name),
+        xAxisTitle: "#{ c_t(:erg) }"
       },
       hasAggregation: false
     }
   end
 
   def segment_graph
-    segment_population = @event.own_group.enterprise.segments.map do |segment|
+    segment_population = @event.owner_group.enterprise.segments.map do |segment|
       @event.attendees.joins(:users_segments).where('users_segments.segment_id': segment.id).count
     end
 
@@ -56,7 +59,7 @@ class Groups::AttendancesController < ApplicationController
           data: segment_population
         }],
         categories: @event.group.enterprise.segments.map(&:name),
-        xAxisTitle: 'Segment'
+        xAxisTitle: c_t(:segment)
       },
       hasAggregation: false
     }
@@ -65,7 +68,7 @@ class Groups::AttendancesController < ApplicationController
   protected
 
   def set_group
-    @group = current_user.enterprise.groups.find(params[:group_id])
+    current_user ? @group = current_user.enterprise.groups.find(params[:group_id]) : user_not_authorized
   end
 
   def set_event

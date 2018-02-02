@@ -1,5 +1,8 @@
 class DateField < Field
-  include Optionnable
+  include NumericOptionnable
+
+  after_initialize :set_options_array
+  attr_accessor :options
 
   DEFAULT_DATE_FORMAT = '%F' # The ISO 8601 date format (%Y-%m-%d)
 
@@ -52,7 +55,7 @@ class DateField < Field
   def validates_rule_for_user?(rule:, user:)
     rule_date = Date.parse(rule.values_array[0])
     user_date = user.info[rule.field]
-
+    
     case rule.operator
     when SegmentRule.operators[:equals]
       user_date == rule_date
@@ -63,5 +66,25 @@ class DateField < Field
     when SegmentRule.operators[:is_not]
       user_date != rule_date
     end
+  end
+
+  def get_buckets_for_range(nb_buckets:, min:, max:)
+    delta = max - min
+    bucket_size = (delta / nb_buckets).floor
+
+    ranges = []
+    nb_buckets.times do |i|
+      from = min + i * bucket_size
+      to = i == nb_buckets-1 ? max + 1 : from + bucket_size
+
+      ranges << { key: "#{ Time.at(from).strftime('%m/%d/%Y') }-#{ Time.at(to).strftime('%m/%d/%Y') }", from: from, to: to }
+    end
+
+    ranges
+  end
+
+  def set_options_array
+    return self.options = [] if options_text.nil?
+    self.options = options_text.lines.map(&:chomp)
   end
 end

@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:edit, :update, :destroy, :show]
-  after_action :verify_authorized, except: [:edit_profile]
+  before_action :set_user, only: [:edit, :update, :destroy, :resend_invitation, :show, :group_surveys]
+  after_action :verify_authorized, except: [:edit_profile, :group_surveys]
 
   layout :resolve_layout
 
@@ -14,12 +14,40 @@ class UsersController < ApplicationController
     end
   end
 
+  # MISSING HTML TEMPLATE
+  def sent_invitations
+    authorize User, :index?
+    @users = policy_scope(User).invitation_not_accepted.where(search_params)
+    
+    respond_to do |format|
+      format.html
+      format.json { render json: InvitedUserDatatable.new(view_context, @users) }
+    end
+  end
+
+  def saml_logins
+    authorize User, :index?
+    @users = policy_scope(User).where(auth_source: "saml").where(search_params)
+
+    respond_to do |format|
+      format.json { render json: UserDatatable.new(view_context, @users) }
+    end
+  end
+
+  # MISSING HTML TEMPLATE
   def new
     authorize User
   end
 
   def show
     authorize @user
+  end
+
+  def group_surveys
+    manageable_group_ids = current_user.manageable_groups.map{ |mg| mg.id}
+
+    @user_groups = @user.user_groups.where(group_id: manageable_group_ids)
+                                    .where.not(data: nil)
   end
 
   #For admins. Dedicated to editing any user's info
@@ -35,7 +63,7 @@ class UsersController < ApplicationController
 
     if @user.save
       flash[:notice] = "Your user was updated"
-      redirect_to @user
+      redirect_to :back
     else
       flash[:alert] = "Your user was not updated. Please fix the errors"
       render :edit
@@ -45,6 +73,13 @@ class UsersController < ApplicationController
   def destroy
     authorize @user
     @user.destroy
+    redirect_to :back
+  end
+
+  def resend_invitation
+    authorize @user
+    @user.invite! # => reset invitation status and send invitation again
+    flash[:notice] = "Invitation Re-Sent!"
     redirect_to :back
   end
 
@@ -111,7 +146,7 @@ class UsersController < ApplicationController
   end
 
   def set_user
-    @user = current_user.enterprise.users.find(params[:id])
+    current_user ? @user = current_user.enterprise.users.find(params[:id]) : user_not_authorized
   end
 
   def user_params
@@ -121,7 +156,8 @@ class UsersController < ApplicationController
       :first_name,
       :last_name,
       :biography,
-      :active
+      :active,
+      :policy_group_id
     )
   end
 

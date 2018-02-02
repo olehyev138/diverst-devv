@@ -1,4 +1,6 @@
 class PollResponsesController < ApplicationController
+  include Rewardable
+
   before_action :authenticate_user!, only: [:new, :create, :thank_you]
   before_action :set_poll
   before_action :set_response, only: [:edit, :update, :destroy, :show]
@@ -6,6 +8,7 @@ class PollResponsesController < ApplicationController
 
   layout 'guest'
 
+  # MISSING TEMPLATE
   def index
     @responses = @poll.responses
   end
@@ -26,7 +29,7 @@ class PollResponsesController < ApplicationController
 
     if @response.save
       user_rewarder("survey_response").add_points(@response)
-      flash[:reward] = "Now you have #{ current_user.credits } points"
+      flash_reward "Now you have #{ current_user.credits } points"
       redirect_to action: :thank_you, poll_id: @poll.id, id: @response.id
     else
       render :new
@@ -35,9 +38,9 @@ class PollResponsesController < ApplicationController
 
   def update
     if @response.update(poll_response_params)
-      redirect_to @response
+      redirect_to @poll
     else
-      render :edit
+      render :edit #edit template does not exist
     end
   end
 

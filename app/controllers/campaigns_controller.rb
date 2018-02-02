@@ -1,4 +1,5 @@
 class CampaignsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_campaign, only: [:edit, :update, :destroy, :show,
     :contributions_per_erg, :top_performers]
   after_action :verify_authorized
@@ -13,11 +14,15 @@ class CampaignsController < ApplicationController
   def new
     authorize Campaign
     @campaign = current_user.enterprise.campaigns.new
+    @campaign.start = Date.today + 1
+    @campaign.end = @campaign.start + 7.days
   end
 
   def create
     authorize Campaign
     @campaign = current_user.enterprise.campaigns.new(campaign_params)
+    #TODO Remove. Hack to make question validation pass
+    @campaign.questions.each { |q| q.campaign = @campaign }
     @campaign.owner = current_user
 
     if @campaign.save
@@ -73,7 +78,7 @@ class CampaignsController < ApplicationController
       format.csv {
         flatten_data = data[:series].map{ |d| d[:data] }.flatten
         strategy = Reports::GraphStatsGeneric.new(
-          title: 'Contributions per ERG',
+          title: "Contributions per #{ c_t(:erg) }",
           categories: flatten_data.map{ |d| d[:name] }.uniq,
           data: flatten_data.map{ |d| d[:y] }
         )
@@ -106,7 +111,11 @@ class CampaignsController < ApplicationController
   protected
 
   def set_campaign
-    @campaign = current_user.enterprise.campaigns.find(params[:id])
+    if current_user
+      @campaign = current_user.enterprise.campaigns.find(params[:id])
+    else
+      user_not_authorized
+    end
   end
 
   def campaign_params
@@ -120,6 +129,7 @@ class CampaignsController < ApplicationController
         :nb_invites,
         :image,
         :banner,
+        :status,
         group_ids: [],
         segment_ids: [],
         manager_ids: [],

@@ -1,7 +1,7 @@
 <div class="content__header">
   <h1>
-    <%= link_to "My Campaigns", user_campaigns_path %> /
-    <%= link_to @question.campaign.title, user_campaign_questions_path(@question.campaign) %> /
+    <%= link_to "My Campaigns", user_user_campaign_path %> /
+    <%= link_to @question.campaign.title, user_user_campaign_questions_path(@question.campaign) %> /
     <%= @question.title.truncate(60) %>
   </h1>
 </div>
@@ -23,7 +23,7 @@
       <p><%= @question.description %></p>
       <div class="flex-row flex-row--middle">
         <small class="flex-row__cell">Submitted <%= time_ago_in_words(@question.created_at) %> ago</small>
-        <small class="flex-row__cell highlight"><%= pluralize(@answers.count, 'answers') %> </small>
+        <small class="flex-row__cell highlight"><%= pluralize(@answers.count, 'answer') %> </small>
       </div>
     </div>
     <% @answers.each do |answer| %>
@@ -51,20 +51,25 @@
               <p><%= answer.content %></p>
 
               <% answer.comments.each do |comment| %>
-                <div class="comment">
-                  <p>
-                    <%= comment.content %> &mdash;
-                    <span class="accent"><%= comment.author.name_with_status %></span>
-                    <span class="muted"><%= time_ago_in_words(comment.created_at) %> ago</span>
-                  </p>
-                </div>
+                <%# only show comment if its been approved OR pending comments are not enabled OR if user is an erg leader %>
+                <% if (comment.approved or !current_user.enterprise.enable_pending_comments) or (current_user.policy_group.campaigns_manage?) %>
+                  <div class="comment">
+                    <p>
+                      <%= comment.content %> &mdash;
+                      <span class="accent"><%= comment.author.name_with_status %></span>
+                      <span class="muted"><%= time_ago_in_words(comment.created_at) %> ago</span>
+                      <span class="pull-right"><%= link_to "Approve", answer_comment_path(comment, answer_comment: {approved: true}), method: :put if !comment.approved? and current_user.enterprise.enable_pending_comments? and current_user.policy_group.campaigns_manage? %></span>
+                    </p>
+                  </div>
+                <% end %>
               <% end %>
 
-              <%= simple_form_for [:user, answer, answer.comments.new] do |f| %>
+              <%= simple_form_for [:user, :user, answer, :user, answer.comments.new] do |f| %>
                 <%= f.input :content,
                       label: false,
                       placeholder: "Enter a comment...",
                       input_html: { rows: 2, class: "comment__input submit-on-return" } %>
+                <%= f.button :submit, value: "Submit" %>
               <% end %>
             </div>
           </div>
@@ -76,7 +81,7 @@
   <div class="card">
     <div class="card__section">
     <% if @question.solved_at.nil? %>
-      <%= simple_form_for [:user, @campaign, @question, @question.answers.new] do |f| %>
+      <%= simple_form_for [:user, @question, :user, @answer] do |f| %>
         <%= f.input :content, label: "<h3>Write an answer</h3>".html_safe, placeholder: "Type an answer here..." %>
         <%= f.button :submit, value: "Submit" %>
       <% end %>

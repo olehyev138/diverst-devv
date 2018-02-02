@@ -1,9 +1,40 @@
 <% content_for :secondary_nav do %>
-  <%= active_link_to "Metrics", metrics_dashboards_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['metrics_dashboards'], []] if policy(MetricsDashboard).index? %>
-  <%= active_link_to c_t(:erg).pluralize, groups_path, :active => :exact, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Group).index? %>
-  <%= active_link_to "Segments", segments_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Segment).index? %>
-  <%= active_link_to "Resources", enterprise_resources_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-  <%= active_link_to "Calendar", calendar_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <div class="menu menu--mobile">
+    <button
+      class="m-hamburger"
+      aria-label="Menu"
+      aria-controls="navigation"
+      data-jq-dropdown="#navigation">
+      <span>Menu</span>
+    </button>
+    <nav id="navigation" class="jq-dropdown jq-dropdown-tip">
+      <ul class="jq-dropdown-menu">
+        <li>
+          <%= active_link_to "Metrics", metrics_dashboards_path if policy(MetricsDashboard).index? %>
+        </li>
+        <li>
+          <%= active_link_to c_t(:erg).pluralize, groups_path, :active => :exact if policy(Group).index? %>
+        </li>
+        <li>
+          <%= active_link_to c_t(:segment).pluralize, segments_path if policy(Segment).index? %>
+        </li>
+        <li>
+          <%= active_link_to "Resources", enterprise_folders_path(current_user.enterprise) %>
+        </li>
+        <li>
+          <%= active_link_to "Calendar", calendar_groups_path %>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="menu menu--desktop">
+    <%= active_link_to "Metrics", metrics_dashboards_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['metrics_dashboards'], []] if policy(MetricsDashboard).index? %>
+    <%= active_link_to c_t(:erg).pluralize, groups_path, :active => :exact, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Group).index? %>
+    <%= active_link_to c_t(:segment).pluralize, segments_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Segment).index? %>
+    <%= active_link_to "Resources", enterprise_folders_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+    <%= active_link_to "Calendar", calendar_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  </div>
 <% end %>
 
 <%= render template: "layouts/dashboard" %>

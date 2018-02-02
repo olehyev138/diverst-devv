@@ -17,8 +17,8 @@ RSpec.describe Groups::LeadersController, type: :controller do
 
         before { get_index(group.to_param) }
 
-        it 'returns success' do
-          expect(response).to be_success
+        it 'render index template' do
+          expect(response).to render_template :index
         end
 
         it 'assigns correct leaders' do
@@ -28,26 +28,15 @@ RSpec.describe Groups::LeadersController, type: :controller do
           expect(leaders).to_not include(other_leader.user)
         end
       end
-
-      context 'with incorrect group' do
-        before { get_index }
-
-        xit 'returns error' do
-          expect(response).to_not be_success
-        end
-      end
     end
 
     context 'without logged in user' do
       let(:group) { create(:group) }
-
       before { get_index(group.to_param) }
-
-      it 'returns error' do
-        expect(response).to_not be_success
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
+
 
   describe 'GET #new' do
     def get_new(group_id = nil)
@@ -72,31 +61,16 @@ RSpec.describe Groups::LeadersController, type: :controller do
         it 'renders correct template' do
           expect(response).to render_template(:new)
         end
-
-        it 'returns success' do
-          expect(response).to be_success
-        end
-      end
-
-      context 'without group id' do
-        before { get_new }
-
-        xit 'returns error' do
-          expect(response).to_not be_success
-        end
       end
     end
 
     context 'without logged in user' do
       let(:group) { create(:group) }
-
       before { get_new(group.to_param) }
-
-      xit 'return error' do
-        expect(response).to_not be_success
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
+
 
   describe 'POST #create' do
     def post_create(group_id=-1, params={a: 1})
@@ -119,9 +93,20 @@ RSpec.describe Groups::LeadersController, type: :controller do
           }.to change(group.group_leaders, :count).by(1)
         end
 
+        it 'flashes a notice message' do 
+           post_create(group.to_param, leader_attrs)
+           expect(flash[:notice]).to eq 'Leaders were updated'
+        end
+
         it 'redirects to correct action' do
           post_create(group.to_param, leader_attrs)
           expect(response).to redirect_to action: :index
+        end
+        
+        it 'sets attributes' do
+          post_create(group.to_param, leader_attrs)
+          leader = group.group_leaders.first
+          expect(leader.pending_member_notifications_enabled).to eq(false)
         end
       end
 
@@ -136,15 +121,17 @@ RSpec.describe Groups::LeadersController, type: :controller do
           post_create(group.to_param, leader_attrs)
           expect(response).to render_template :new
         end
+
+        it 'flashes an alert message' do 
+          post_create(group.to_param, leader_attrs)
+          expect(flash[:alert]).to eq 'Leaders were not updated. Please fix the errors'
+        end
       end
     end
 
     context 'without logged in user' do
       before { post_create }
-
-      it 'return error' do
-        expect(response).to_not be_success
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
 end

@@ -30,7 +30,7 @@
         <%= f.association :segments,
               collection: @campaign.enterprise.segments,
               input_html: { class: "select2" },
-              label: "Choose the <strong>segments</strong> you want to target within these #{ c_t(:erg) .pluralize }".html_safe %>
+              label: "Choose the <strong>#{ c_t(:segment).pluralize }</strong> you want to target within these #{ c_t(:erg) .pluralize }".html_safe %>
       </div>
 
       <div class="card__section card__section--border">
@@ -76,6 +76,7 @@
       </div>
     <% end %>
 
-    <%= f.button :submit %>
+    <%= button_tag "Save and publish", value: "published", name: "campaign[status]", class: "btn btn--primary" %>
+    <%= button_tag "Save as draft", value: "draft", name: "campaign[status]", class: "btn btn--secondary" %>
   <% end %>
 </div>

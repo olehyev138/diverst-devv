@@ -16,4 +16,5 @@ class SegmentPolicy < ApplicationPolicy
     return true if @policy_group.segments_manage?
     @record.owner == @user
   end
+
 end

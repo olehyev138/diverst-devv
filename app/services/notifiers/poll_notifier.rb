@@ -15,7 +15,7 @@ class Notifiers::PollNotifier
 
   private
   def should_notify?
-    !@poll.email_sent && @poll.published? && initiative_ended_up?
+    (!@poll.email_sent) && @poll.published? && initiative_ended_up?
   end
 
   def initiative_ended_up?

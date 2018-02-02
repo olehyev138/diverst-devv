@@ -9,15 +9,21 @@ class MetricsDashboard < ActiveRecord::Base
   has_many :groups_metrics_dashboards
   has_many :groups, through: :groups_metrics_dashboards
 
-  validates_presence_of :name
+  validates_presence_of :name, :message => "Metrics Dashboard name is required"
+  validates_presence_of :groups, :message => "Please select a group"
+
+  def shareable_token
+    unless self[:shareable_token]
+      self.update(shareable_token: SecureRandom.urlsafe_base64)
+    end
+
+    self[:shareable_token]
+  end
+
 
   # Returns a query to the list of users targeted by the dashboard
   def target
-    if segments.empty?
-      enterprise.users
-    else
-      enterprise.users.for_segments(segments)
-    end
+    enterprise.users.for_segments(segments).for_groups(groups)
   end
 
   def graphs_population
@@ -32,6 +38,8 @@ class MetricsDashboard < ActiveRecord::Base
 
   # Defines which fields will be usable when creating graphs
   def graphable_fields(admin)
-    admin.enterprise.graph_fields
+    admin.enterprise.graph_fields.select do |field|
+      field.type != 'TextField'
+    end
   end
 end

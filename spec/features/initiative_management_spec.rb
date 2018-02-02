@@ -19,6 +19,7 @@ RSpec.feature 'Initiative management' do
   }
 
   before do
+    create(:user_group, group: group, user: user, accepted_member: true)
     login_as(user, scope: :user)
   end
 

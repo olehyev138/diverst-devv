@@ -1,5 +1,7 @@
 class GraphsController < ApplicationController
+  before_action :authenticate_user!, except: [:data, :export_csv] #TODO vulnerability - check current_user or enterprise token to be present
   before_action :set_collection, except: [:data, :show, :edit, :update, :destroy, :export_csv]
+
   before_action :set_graph, except: [:index, :new, :create]
 
   layout 'dashboard'
@@ -21,6 +23,7 @@ class GraphsController < ApplicationController
     end
   end
 
+  # missing a template
   def index
     @graphs = @collection.graphs
   end
