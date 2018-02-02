@@ -11,7 +11,7 @@
 </div>
 
 <div class="content__main">
-<% if policy(@group).is_a_member? %>
+<% if policy(@group).view_upcoming_events? %>
   <% unless @ongoing_events.empty? %>
     <h3>Ongoing events</h3>
     <div class="card">

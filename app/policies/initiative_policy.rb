@@ -51,9 +51,14 @@ class InitiativePolicy < ApplicationPolicy
     is_a_guest? && (@upcoming_events.include? @record)
   end
 
+  def user_is_guest_and_event_is_onging?
+    @ongoing_events = @record.group.initiatives.ongoing 
+    is_a_guest? && (@ongoing_events.include? @record)
+  end
+
   def join_leave_button_visibility?
     @past_events = @record.group.initiatives.past
-    ((@past_events.include? @record) || user_is_guest_and_event_is_upcoming?) ? false : true
+    ((@past_events.include? @record) || user_is_guest_and_event_is_upcoming? || user_is_guest_and_event_is_onging?) ? false : true
   end
 
 
