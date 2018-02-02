@@ -37,7 +37,7 @@
             </div>
           </div>
         </div>
-      <% end %>  
+      <% end %>
 
       <% if policy(@group).view_upcoming_events? %>
         <div class="col sm-12 md-6">
@@ -49,11 +49,21 @@
 
               <% if @upcoming_events.empty? %>
                 <div class="mtlarge text-center">
+                <% if @group.members.include? current_user %>
                   You have not joined any events yet.
+                <% else %>
+                  You are not a member of <%= @group.capitalize_name %>
+                <% end %>
                 </div>
               <% else %>
-                <% @upcoming_events.each do |event| %>
-                  <%= render "shared/flippable/event", event: event %>
+                <% if policy(@group).is_a_member? %>
+                  <% @upcoming_events.each do |event| %>
+                    <%= render "shared/flippable/event", event: event %>
+                  <% end %>
+                <% else %>
+                <div class="mtlarge text-center">
+                  You are not a member of <%= @group.capitalize_name %>.
+                </div>
                 <% end %>
               <% end %>
 
@@ -65,7 +75,7 @@
             <% end %>
           </div>
         </div>
-      <% end %>  
+      <% end %>
       </div>
     </div>
 
@@ -153,7 +163,7 @@
             Contact Group Leader
           </button>
         <% end %>
-      <% end %> 
+      <% end %>
 
       <% if @group.parent.present? %>
         <div class="card card--secondary">
@@ -218,7 +228,7 @@
     var id = $(this).attr('id');
     $('div.biography_' + id).show();
   }); //endof click
-  
+
   $('a.remove').click(function(e){
     e.preventDefault();
     var id = $(this).attr('id');

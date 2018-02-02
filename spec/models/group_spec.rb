@@ -155,12 +155,12 @@ RSpec.describe Group, :type => :model do
             field = create(:field, :field_type => "group_survey", :container => group)
             user = create(:user)
             user_group = create(:user_group, :user => user, :group => group, :data => "{\"13\":\"test\"}")
-            
+
             csv = CSV.generate do |file|
                 file << ['user_id', 'user_email', 'user_first_name', 'user_last_name'].concat(group.survey_fields.map(&:title))
                 file << [user.id, user.email, user.first_name, user.last_name, field.csv_value(user_group.info[field])]
             end
-            
+
             result = group.survey_answers_csv
             expect(result).to eq(csv)
         end
@@ -285,7 +285,7 @@ RSpec.describe Group, :type => :model do
             expect(group.approved_budget).to be > 0
         end
     end
-    
+
     describe '#available_budget' do
         it "returns 0" do
             group = create(:group)
@@ -345,7 +345,7 @@ RSpec.describe Group, :type => :model do
             expect(group_1.children).to include(group_2)
         end
     end
-    
+
     describe '#avg_members_per_group' do
         it "returns 2" do
             enterprise = create(:enterprise)
@@ -357,19 +357,19 @@ RSpec.describe Group, :type => :model do
             create(:user_group, :user => user_2, :group => group_1)
             create(:user_group, :user => user_1, :group => group_2)
             create(:user_group, :user => user_2, :group => group_2)
-            
+
             average = Group.avg_members_per_group(:enterprise => enterprise)
             expect(average).to eq(2)
         end
     end
-    
+
     describe '#file_safe_name' do
         it "returns file_safe_name" do
             group = create(:group, :name => "test name")
             expect(group.file_safe_name).to eq("test_name")
         end
     end
-    
+
     describe '#possible_participating_groups' do
         it "returns possible_participating_groups" do
             enterprise = create(:enterprise)
@@ -378,7 +378,7 @@ RSpec.describe Group, :type => :model do
             expect(group_1.possible_participating_groups.length).to eq(1)
         end
     end
-    
+
     describe '#highcharts_history' do
         it "returns highcharts_history" do
             group = create(:group)
@@ -388,14 +388,14 @@ RSpec.describe Group, :type => :model do
             expect(data.length).to eq(1)
         end
     end
-    
+
     describe '#title_with_leftover_amount' do
         it "returns title_with_leftover_amount" do
             group = create(:group)
             expect(group.title_with_leftover_amount).to eq("Create event from #{group.name} leftover ($#{group.leftover_money})")
         end
     end
-    
+
     describe '#sync_yammer_users' do
         it "subscribe yammer users to group" do
             yammer = double("YammerClient")
@@ -403,30 +403,30 @@ RSpec.describe Group, :type => :model do
             allow(yammer).to receive(:user_with_email).and_return({"id" => 1, "yammer_token" => nil})
             allow(yammer).to receive(:token_for_user).and_return({"token" => "token"})
             allow(yammer).to receive(:subscribe_to_group)
-            
+
             group = create(:group)
             user = create(:user)
             create(:user_group, :user => user, :group => group)
-            
+
             group.sync_yammer_users
-            
+
             expect(yammer).to have_received(:subscribe_to_group)
         end
     end
-    
+
     describe '#pending_comments_count' do
         it "returns 0" do
             group = create(:group)
             expect(group.pending_comments_count).to eq(0)
         end
-        
+
         it "returns 1" do
             group = create(:group)
             group_message = create(:group_message, :group => group)
             create(:group_message_comment, :message => group_message, :approved => false)
             expect(group.pending_comments_count).to eq(1)
         end
-        
+
         it "returns 2" do
             group = create(:group)
             group_message = create(:group_message, :group => group)
@@ -435,7 +435,7 @@ RSpec.describe Group, :type => :model do
             create(:news_link_comment, :news_link => news_link, :approved => false)
             expect(group.pending_comments_count).to eq(2)
         end
-        
+
         it "returns 3" do
             group = create(:group)
             # group message
@@ -450,17 +450,17 @@ RSpec.describe Group, :type => :model do
             question = create(:question, campaign: campaign)
             answer = create(:answer, question: question)
             create(:answer_comment, answer: answer, approved: false)
-            
+
             expect(group.pending_comments_count).to eq(3)
         end
     end
-    
+
     describe '#valid_yammer_group_link?' do
         it "has a valid link" do
             group = build(:group, :yammer_group_link => "https://www.yammer.com/test.com/#/threads/inGroup?type=in_group&feedId=1234567")
             expect(group.valid_yammer_group_link?).to be(true)
         end
-        
+
         it "does not have a valid link" do
             group = build(:group, :yammer_group_link => "https://www.yammer.com/test.com/#/threads/inGroup?type")
             expect(group.valid_yammer_group_link?).to be(false)
@@ -468,65 +468,88 @@ RSpec.describe Group, :type => :model do
             expect(group.errors.full_messages.first).to eq("Yammer group link this is not a yammer group link")
         end
     end
-    
+
     describe "#company_video_url" do
         it "saves the url" do
             group = create(:group, :company_video_url => "https://www.youtube.com/watch?v=Y2VF8tmLFHw")
             expect(group.company_video_url).to_not be(nil)
         end
     end
-    
+
     describe "#create_yammer_group" do
         it "creates the group in yammer and syncs the members" do
             yammer = double("YammerClient")
             allow(YammerClient).to receive(:new).and_return(yammer)
             allow(yammer).to receive(:create_group).and_return({"id" => 1})
             allow(SyncYammerGroupJob).to receive(:perform_later)
-            
+
             enterprise = create(:enterprise, :yammer_token => "token")
             group = create(:group, :enterprise => enterprise, :yammer_create_group => true, :yammer_group_created => false)
-            
+
             expect(yammer).to have_received(:create_group)
             expect(group.yammer_group_created).to be(true)
             expect(group.yammer_id).to eq(1)
             expect(SyncYammerGroupJob).to have_received(:perform_later)
         end
     end
-    
+
     describe "#send_invitation_emails" do
         it "calls GroupMailer" do
             allow(GroupMailer).to receive(:delay).and_return(GroupMailer)
             allow(GroupMailer).to receive(:invitation)
-            
+
             group = create(:group)
             segment = create(:segment)
             create(:invitation_segments_group, :group => group, :invitation_segment => segment)
-            
+
             # make sure group has invitation_segments
             group.reload
             expect(group.invitation_segments.count).to eq(1)
-            
+
             # change the value
             group.send_invitations = true
             group.save!
-            
+
             expect(GroupMailer).to have_received(:invitation)
             expect(group.send_invitations).to be(false)
             expect(group.invitation_segments.count).to eq(0)
         end
     end
-    
+
     describe "#update_all_elasticsearch_members" do
         it "updates the users in elasticsearch" do
             group = create(:group)
             user = create(:user)
             create(:user_group, :group => group, :user => user)
             allow(group).to receive(:update_elasticsearch_member).and_call_original
-            
+
             group.name = "testing elasticsearch"
             group.save!
-            
+
             expect(group).to have_received(:update_elasticsearch_member)
+        end
+    end
+
+    describe '#set_default_group_contact' do
+        it 'updates contact email if group leader is default_group_contact' do
+            group = create(:group)
+            user = create(:user)
+            group_leader = create(:group_leader, :group => group, :user => user, :default_group_contact => true)
+            group_leader = group.group_leaders.find_by(default_group_contact: true)&.user
+            group.set_default_group_contact
+        
+
+            expect(group.contact_email).to eq group_leader&.email
+        end
+
+        it 'sets contact email to nil if group leader is not set.' do
+            group = create(:group)
+            user = create(:user)
+            create(:group_leader, :group => group, :user => user, :default_group_contact => false)
+            group_leader = group.group_leaders.find_by(default_group_contact: true)&.user
+            group.set_default_group_contact
+
+            expect(group.contact_email).to eq nil
         end
     end
 end

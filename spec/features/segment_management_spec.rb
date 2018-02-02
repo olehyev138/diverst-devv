@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'Segment management', :focus => true do
+RSpec.feature 'Segment management' do
 
   let(:user) { create(:user) }
   let!(:segment) { create(:segment_with_rules, enterprise: user.enterprise) }

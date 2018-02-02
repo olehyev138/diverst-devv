@@ -30,6 +30,22 @@ class GroupPolicy < ApplicationPolicy
         @record.managers.include?(user)
     end
 
+    def is_a_member?
+       @record.members.include? @user
+    end
+
+    def is_active_member?
+        @record.active_members.include? @user
+    end
+
+    def is_a_guest?
+        !is_a_member?
+    end
+
+    def is_a_pending_member?
+        @record.pending_members.include? @user
+    end
+
     def view_members?
         #Ability to view members depends on settings level
         case @record.members_visibility
@@ -38,7 +54,7 @@ class GroupPolicy < ApplicationPolicy
             return true
         when 'group'
             #Only active group members can see other members
-            @record.active_members.exists? @user.id
+            is_active_member?
         when 'managers_only'
             #Only users with ability to manipulate members(admins) can see other members
             return manage_members?
@@ -53,12 +69,13 @@ class GroupPolicy < ApplicationPolicy
             return true
         when 'group'
             #Only active group messages can see other messages
-            @record.active_members.exists? @user.id
+            is_active_member?
         when 'managers_only'
             #Only users with ability to manipulate messages(admins) can see other memberxs
             return manage_members?
         end
     end
+
 
     def view_latest_news?
         #Ablility to view latest news depends on settings level
@@ -67,10 +84,10 @@ class GroupPolicy < ApplicationPolicy
             #Everyone can see latest news
             return true 
         when 'group'
-            #Only active group members can see other members
-            @record.active_members.exists? @user
+            #Only active group members and guests(non-members) can see latest news
+            is_active_member? || is_a_guest? || is_a_pending_member?
         when 'leaders_only'
-            #Only users with ability to manipulate members(admins) can see other memberxs
+            #Only users with ability to manipulate members(admins) can see latest news
             return manage_members?
         else
             return false 
@@ -85,15 +102,33 @@ class GroupPolicy < ApplicationPolicy
             #Everyone can upcoming events
             return true 
         when 'group'
-            #Only active group members can see other members
-            @record.active_members.exists? @user
+            #Only active group members can see upcoming events
+            is_active_member? || is_a_guest? || is_a_pending_member?  
         when 'leaders_only'
-            #Only users with ability to manipulate members(admins) can see other memberxs
+            #Only users with ability to manipulate members(admins) can see upcoming events
             return manage_members?
         else
             return false 
         end
     end
+
+
+   def events_filter
+       case @record.upcoming_events_visibility
+        when 'public'
+            #Everyone can upcoming events
+            return true
+        when 'group'
+            @upcoming_events = @record.initiatives.upcoming.limit(3) + @record.participating_initiatives.upcoming.limit(3)
+            # for members(who are not pending members) and when upcoming events are not empty
+            return true if is_a_member? && !is_a_pending_member? && @upcoming_events
+        when 'leaders_only'
+            #Only users with ability to manipulate members(admins) can see upcoming events
+            return manage_members?
+        else
+            return false 
+        end
+   end
 
 
     def manage_members?

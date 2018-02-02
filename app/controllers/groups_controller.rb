@@ -112,7 +112,13 @@ class GroupsController < ApplicationController
                 @user_groups = []
                 @top_user_group_participants = []
                 @top_group_participants = []
-                @posts = []
+                @posts = @group.news_feed_links
+                            .includes(:link)
+                            .approved
+                            .joins(joins)
+                            .where(where, current_user.segments.pluck(:id))
+                            .order(created_at: :desc)
+                            .limit(5)
             end
         end
     end
