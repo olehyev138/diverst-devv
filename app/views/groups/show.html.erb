@@ -47,7 +47,7 @@
 
               <% if @upcoming_events.empty? %>
                 <div class="mtlarge text-center">
-                <% if @group.members.include? current_user %>
+                <% if policy(@group).is_a_member? %>
                   You have not joined any events yet.
                 <% else %>
                   You are not a member of <%= @group.capitalize_name %>
