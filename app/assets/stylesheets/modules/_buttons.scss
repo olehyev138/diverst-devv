@@ -56,6 +56,10 @@
   @include button($diverst-black);
 }
 
+.btn--secondary:hover { 
+  color: $diverst-grey-light;
+}
+
 .btn--tertiary {
   @include button($diverst-grey-light);
 }
