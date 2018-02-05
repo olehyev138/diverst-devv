@@ -25,6 +25,13 @@ RSpec.describe Campaign, type: :model do
         it{ expect(campaign).to validate_presence_of(:end) }
         it{ expect(campaign).to validate_presence_of(:groups).with_message("Please select at least 1 group") }
         
+        describe 'paperclip validation' do
+            paperclip_attributes = [:image, :banner]
+            paperclip_attributes.each do |paperclip_attribute|
+                it { should have_attached_file(paperclip_attribute) }
+                it { should validate_attachment_content_type(paperclip_attribute) }
+            end
+        end
         it 'is valid' do
             expect(campaign).to be_valid
         end
