@@ -11,7 +11,7 @@ RSpec.describe AnswerComment, type: :model do
     it { expect(answer_comment).to validate_presence_of(:content) }
   end
   
-  describe "#unapproved" do
+  describe ".unapproved" do
     it "returns the answer_comments that have not been approved" do
       create_list(:answer_comment, 2, :approved => false)
       expect(AnswerComment.unapproved.count).to eq(2)
