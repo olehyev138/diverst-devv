@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Budget, type: :model do
-    
+
     describe 'when validating' do
         let(:budget) { FactoryGirl.build_stubbed(:budget) }
         let(:approved_budget) { FactoryGirl.build :approved_budget }
@@ -112,16 +112,16 @@ RSpec.describe Budget, type: :model do
 
     describe "status_title" do
         let(:budget) { FactoryGirl.build_stubbed(:budget) }
-        
+
         it "returns Pending" do
             expect(budget.status_title).to eq("Pending")
         end
-        
+
         it "returns Approved" do
             budget.is_approved = true
             expect(budget.status_title).to eq("Approved")
         end
-        
+
         it "returns Declined" do
             budget.is_approved = false
             expect(budget.status_title).to eq("Declined")
