@@ -22,7 +22,8 @@ class ApplicationController < ActionController::Base
     end
 
     rescue_from ActiveRecord::RecordNotFound do |e|
-        flash[:alert] = e.message
+        flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
+        flash[:alert] = e.message if Rails.env.development?
         redirect_to(request.referrer || default_path)
     end
 
