@@ -164,7 +164,12 @@ Rails.application.routes.draw do
           get 'segment_graph'
         end
 
-        resources :comments, only: [:create]
+        resources :comments, only: [:create, :destroy] do 
+          member do 
+            patch 'approve'
+            patch 'disapprove'
+          end
+        end
 
         collection do
           get 'calendar_view'

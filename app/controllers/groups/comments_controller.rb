@@ -4,7 +4,7 @@ class Groups::CommentsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
   before_action :set_event
-  before_action :set_comment, only: [:edit, :update, :show]
+  before_action :set_comment, only: [:approve, :destroy]
 
   layout 'erg'
 
@@ -21,6 +21,15 @@ class Groups::CommentsController < ApplicationController
     redirect_to :back
   end
 
+  def approve
+  end
+
+  def disapprove
+  end
+
+  def destroy
+  end
+
   protected
 
   def set_group
@@ -29,6 +38,10 @@ class Groups::CommentsController < ApplicationController
 
   def set_event
     @event = @group.initiatives.find(params[:event_id])
+  end
+
+  def set_comment
+    @comment = @event.comments.find(params[:id])
   end
 
   def comment_params
