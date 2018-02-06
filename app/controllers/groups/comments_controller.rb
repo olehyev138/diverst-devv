@@ -22,12 +22,21 @@ class Groups::CommentsController < ApplicationController
   end
 
   def approve
+    @comment.update(approved: true)
+    flash[:notice] = "You just approved a comment"
+    redirect_to :back
   end
 
   def disapprove
+    @comment.update(approved: false)
+    flash[:notice] = "You just disapproved a comment"
+    redirect_to :back
   end
 
   def destroy
+    @comment.destroy 
+    flash[:notice] = "You just deleted a comment"
+    redirect_to :back
   end
 
   protected
