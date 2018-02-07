@@ -63,9 +63,9 @@
                   </p>
                 </div>
                 <div class="flex-row__cell link-group">
-                  <%= link_to "Approve", group_group_message_group_message_comment_path(:group_id => @group.id, :group_message_id => @message.id, :id => comment.id, group_message_comment: {approved: true}), method: :put if !comment.approved? and current_user.enterprise.enable_pending_comments? and policy(@message.group).erg_leader_permissions? %>
-                  <%= link_to "Edit", edit_group_group_message_group_message_comment_path(:group_id => @group.id, :group_message_id => @message.id, :id => comment.id), method: :get if current_user === comment.author %>
-                  <%= link_to "Delete", group_group_message_group_message_comment_path(:group_id => @group.id, :group_message_id => @message.id, :id => comment.id), method: :delete if current_user === comment.author %>
+                  <%= link_to "Approve", group_group_message_group_message_comment_path(:group_id => @group.id, :group_message_id => @message.id, :id => comment.id, group_message_comment: {approved: true}), method: :put, class: "btn btn--primary" if !comment.approved? and current_user.enterprise.enable_pending_comments? and policy(@message.group).erg_leader_permissions? %>
+                  <%= link_to "Edit", edit_group_group_message_group_message_comment_path(:group_id => @group.id, :group_message_id => @message.id, :id => comment.id), method: :get, class: "btn btn--secondary" if current_user === comment.author %>
+                  <%= link_to "Delete", group_group_message_group_message_comment_path(:group_id => @group.id, :group_message_id => @message.id, :id => comment.id), method: :delete, class: "btn btn--danger" if current_user === comment.author %>
                 </div>
               </div>
             </div>

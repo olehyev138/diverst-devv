@@ -66,9 +66,9 @@
                   </p>
                 </div>
                 <div class="flex-row__cell link-group">
-                  <%= link_to "Approve", group_news_link_news_link_comment_path(:group_id => @group.id, :news_link_id => @news_link.id, :id => comment.id, news_link_comment: {approved: true}), method: :put if !comment.approved? and current_user.enterprise.enable_pending_comments? and policy(@news_link.group).erg_leader_permissions? %>
-                  <%= link_to "Edit", edit_group_news_link_news_link_comment_path(:group_id => @group.id, :news_link_id => @news_link.id, :id => comment.id), method: :get if current_user === comment.author %>
-                  <%= link_to "Delete", group_news_link_news_link_comment_path(:group_id => @group.id, :news_link_id => @news_link.id, :id => comment.id), method: :delete if current_user === comment.author %>
+                  <%= link_to "Approve", group_news_link_news_link_comment_path(:group_id => @group.id, :news_link_id => @news_link.id, :id => comment.id, news_link_comment: {approved: true}), method: :put, class: "btn btn--primary" if !comment.approved? and current_user.enterprise.enable_pending_comments? and policy(@news_link.group).erg_leader_permissions? %>
+                  <%= link_to "Edit", edit_group_news_link_news_link_comment_path(:group_id => @group.id, :news_link_id => @news_link.id, :id => comment.id), method: :get, class: "btn btn--secondary" if current_user === comment.author %>
+                  <%= link_to "Delete", group_news_link_news_link_comment_path(:group_id => @group.id, :news_link_id => @news_link.id, :id => comment.id), method: :delete, class: "btn btn--danger" if current_user === comment.author %>
                 </div>
               </div>
             </div>

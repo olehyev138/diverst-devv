@@ -64,6 +64,10 @@
   @include button($diverst-grey-light);
 }
 
+.btn--danger { 
+  @include button($diverst-red);
+}
+
 .btn--large {
   font-size: 14px;
   padding: 24px 28px;

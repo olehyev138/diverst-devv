@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   get 'users/invitation', to: 'users/invitations#index'
 
   get 'omniauth/:provider/callback', to: 'omni_auth#callback'
-  
+
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
       resources :users
@@ -98,7 +98,7 @@ Rails.application.routes.draw do
       patch 'delete_attachment'
       get 'calendar'
     end
-    
+
     scope module: :enterprises do
       resources :folders do
         member do
@@ -164,7 +164,12 @@ Rails.application.routes.draw do
           get 'segment_graph'
         end
 
-        resources :comments, only: [:create]
+        resources :comments, only: [:create, :destroy], shallow: true do
+          member do
+            patch 'approve'
+            patch 'disapprove'
+          end
+        end
 
         collection do
           get 'calendar_view'
@@ -192,7 +197,7 @@ Rails.application.routes.draw do
           post 'approve'
         end
       end
-      
+
       resources :folders do
         member do
           post 'authenticate'
@@ -201,7 +206,7 @@ Rails.application.routes.draw do
           resources :resources
         end
       end
-      
+
       resources :resources
       resources :fields do
         member do
@@ -288,7 +293,7 @@ Rails.application.routes.draw do
       resources :graphs, only: [:new, :create, :edit]
     end
   end
-  
+
   resources :graphs do
     member do
       get "data"
@@ -457,7 +462,7 @@ Rails.application.routes.draw do
   end
   resources :emails
   resources :custom_texts, only: [:edit, :update]
-  
+
   match "*a", :to => "application#routing_error", :via => [:get, :post]
 
   root to: 'metrics_dashboards#index'
