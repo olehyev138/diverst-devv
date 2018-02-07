@@ -7,6 +7,7 @@ class NewsLinkComment < ActiveRecord::Base
   validates :content, presence: true
   
   scope :unapproved, -> {where(:approved => false)}
+  scope :approved, ->{ where(:approved => true) }
 
   def group
     news_link.group

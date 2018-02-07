@@ -18,16 +18,16 @@
                     <i>by <%= message.owner.name_with_status %></i>
                   <% end %>
                   <br>
-                  <%= link_to "Comments(#{message.comments.count})", group_group_message_path(message.group, message)
+                  <%= link_to "Comments(#{message.comments.approved.count})", group_group_message_path(message.group, message)
                   %>
                   </p>
                 </div>
 
                 <% if policy(message).destroy? %>
                   <div class="flex-row__cell link-group">
-                    <%= link_to "Approve", approve_group_posts_path(:group_id => message.group.id, :link_id => message.news_feed_link.id), method: :post if policy(message.group).erg_leader_permissions? and !message.news_feed_link.approved? %>
-                    <%= link_to "Edit", edit_group_group_message_path(message.group, message) if policy(message).update? %>
-                    <%= link_to "Delete", group_group_message_path(message.group, message), method: :delete, class: "error", data: { confirm: "Are you sure?" } %>
+                    <%= link_to "Approve", approve_group_posts_path(:group_id => message.group.id, :link_id => message.news_feed_link.id), method: :post, class: "btn btn--primary" if policy(message.group).erg_leader_permissions? and !message.news_feed_link.approved? %>
+                    <%= link_to "Edit", edit_group_group_message_path(message.group, message), class: "btn btn--secondary" if policy(message).update? %>
+                    <%= link_to "Delete", group_group_message_path(message.group, message), method: :delete, class: "btn btn--danger", data: { confirm: "Are you sure?" } %>
                   </div>
                 <% end %>
               </div>
