@@ -5,7 +5,7 @@
   </h1>
   <div class="flex-row">
     <div class="flex-row__cell">
-      <%= link_to "Delete event", group_initiative_path(@group, @event), method: :delete, class: "btn btn--secondary",  data: { confirm: "Are you sure?" } if policy(@event).destroy? %>
+      <%= link_to "Delete event", group_initiative_path(@group, @event), method: :delete, class: "btn btn--danger",  data: { confirm: "Are you sure?" } if policy(@event).destroy? %>
     </div>
     <div class="flex-row__cell">
       <%= link_to "Edit event", edit_group_initiative_path(@group, @event), class: "btn btn--primary" if policy(@event).edit? %>

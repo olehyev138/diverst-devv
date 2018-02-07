@@ -1,16 +1,17 @@
 <div class="content__section">
   <div class="card">
     <div class="card__section">
-      <p style="font-style: italic;"><%= comment.content %></p>
-      <% if comment.user == current_user %>
-      <p>You left this comment</p>
+    <% if comment.user == current_user %>
+      <h3>You said: </h3>
       <% else %>
-      <p>   by <%= comment.user.name %>
+      <h3><%= comment.user.name %>
         <% if comment.user.erg_leader? %>
           (Group Leader)
-        <% end %>
-      </p>
+        <% end %> said:
+      </h3>
       <% end %>
+      <p style="font-style: italic;"><%= comment.content %></p>
+      <p><%= time_ago_in_words(comment.updated_at) %> ago</p>
       <% if policy(comment).erg_leader? %>
       <%= link_to "Approve", approve_comment_url(comment), method: :patch, class: "btn btn--primary" unless comment.approved? %>
       <%= link_to "Disapprove", disapprove_comment_url(comment), method: :patch, class: "btn btn--secondary" unless comment.disapproved? %>
