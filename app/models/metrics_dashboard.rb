@@ -23,7 +23,7 @@ class MetricsDashboard < ActiveRecord::Base
 
   # Returns a query to the list of users targeted by the dashboard
   def target
-    enterprise.users.for_segments(segments).for_groups(groups)
+    enterprise.users.for_segments(segments).for_groups(groups).active
   end
 
   def graphs_population

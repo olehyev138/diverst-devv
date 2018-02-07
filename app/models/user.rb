@@ -76,7 +76,8 @@ class User < ActiveRecord::Base
     scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
     scope :not_owners, -> { where(owner: false) }
     scope :es_index_for_enterprise, -> (enterprise) { where(enterprise: enterprise) }
-
+    scope :active, -> {where(active: true)}
+    
     def name
         "#{first_name} #{last_name}"
     end
