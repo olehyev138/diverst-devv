@@ -4,7 +4,7 @@ FactoryGirl.define do
     association :initiative
     association :user
 
-    trait :approved do 
+    trait :approved do
     	approved false
     end
   end
