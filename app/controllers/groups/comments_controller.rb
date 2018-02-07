@@ -24,7 +24,7 @@ class Groups::CommentsController < ApplicationController
 
   def approve
     authorize @comment, :approve?
-    
+
     @comment.update(approved: true)
     flash[:notice] = "You just approved a comment"
     redirect_to :back
@@ -41,7 +41,7 @@ class Groups::CommentsController < ApplicationController
   def destroy
     authorize @comment, :destroy?
 
-    @comment.destroy 
+    @comment.destroy
     flash[:notice] = "You just deleted a comment"
     redirect_to :back
   end
