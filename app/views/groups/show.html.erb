@@ -231,4 +231,11 @@
     var id = $(this).attr('id');
     $('div.biography_' + id).hide();
   }); //endof click
+
+  //force facebook embed to have correct width
+  $(document).ready(function(){
+    var width = <%= SocialMedia::Importer::MEDIA_MAX_WIDTH %>
+
+    $('iframe[src*=facebook]').width(width)
+  });
 </script>
