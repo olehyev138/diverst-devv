@@ -30,7 +30,7 @@ class GenericGraphsController < ApplicationController
                                    data: data
                                }],
                                drilldowns: drilldowns,
-                               categories: categories,
+                               #categories: categories, <- for some reason this is causing drilldowns to not appear
                                xAxisTitle: "#{c_t(:erg)}"
                            },
                            hasAggregation: false
@@ -118,7 +118,7 @@ class GenericGraphsController < ApplicationController
                                    data: data
                                }],
                                drilldowns: drilldowns,
-                               categories: categories,
+                               #categories: categories,
                                xAxisTitle: "#{c_t(:erg)}",
                                yAxisTitle: 'Nb of events'
                            },
@@ -164,7 +164,7 @@ class GenericGraphsController < ApplicationController
                                    data: data
                                }],
                                drilldowns: drilldowns,
-                               categories: categories,
+                               #categories: categories,
                                xAxisTitle: 'ERG',
                                yAxisTitle: 'Nb of messages'
                            },
