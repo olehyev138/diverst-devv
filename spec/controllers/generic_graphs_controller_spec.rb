@@ -106,7 +106,6 @@ RSpec.describe GenericGraphsController, type: :controller do
                     data = JSON.parse(response.body)
                     expect(data["type"]).to eq("bar")
                     expect(data["highcharts"]["series"][0]["name"]).to eq("Number of users")
-                    expect(data["highcharts"]["series"][0]["colorByPoint"]).to eq(true)
                     expect(data["highcharts"]["series"][0]["data"].length).to eq(1)
                     expect(data["highcharts"]["drilldowns"].length).to eq(1)
                     expect(data["highcharts"]["xAxisTitle"]).to eq("Segment")

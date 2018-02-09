@@ -70,11 +70,10 @@ class GenericGraphsController < ApplicationController
                            highcharts: {
                                series: [{
                                    name: 'Number of users',
-                                   colorByPoint: true,
                                    data: data
                                }],
                                drilldowns: drilldowns,
-                               categories: categories,
+                               #categories: categories, <- for some reason this is causing drilldowns to not appear
                                xAxisTitle: c_t(:segment)
                            },
                            hasAggregation: false
