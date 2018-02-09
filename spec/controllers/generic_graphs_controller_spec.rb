@@ -11,7 +11,6 @@ RSpec.describe GenericGraphsController, type: :controller do
     let!(:segment_2) {create(:segment, :enterprise => enterprise)}
     let!(:segmentation) {create(:segmentation, :parent => segment_1, :child => segment_2)}
 
-
     describe "GET#group_population" do
         describe "with logged in user" do
             login_user_from_let
@@ -43,7 +42,7 @@ RSpec.describe GenericGraphsController, type: :controller do
                     end
 
                     it 'returns correct information on categories' do
-                        expect(json_response[:highcharts][:categories]).to eq [group.name, child.name]
+                        expect(json_response[:highcharts][:categories]).to eq [group.name]
                     end
 
                     it 'return xAxisTitle to be ERG' do
@@ -85,7 +84,6 @@ RSpec.describe GenericGraphsController, type: :controller do
             end
         end
     end
-
 
     describe "GET#segment_population" do
         describe "with logged in user" do
@@ -143,7 +141,6 @@ RSpec.describe GenericGraphsController, type: :controller do
         end
     end
 
-
     describe "GET#events_created" do
         describe "with logged in user" do
             login_user_from_let
@@ -175,7 +172,7 @@ RSpec.describe GenericGraphsController, type: :controller do
                     end
 
                     it 'returns correct information on categories' do
-                        expect(json_response[:highcharts][:categories]).to eq [group.name, child.name]
+                        expect(json_response[:highcharts][:categories]).to eq [group.name]
                     end
 
                     it 'return xAxisTitle to be ERG' do
@@ -223,7 +220,6 @@ RSpec.describe GenericGraphsController, type: :controller do
         end
     end
 
-
     describe "GET#messages_sent" do
         describe "with logged in user" do
             login_user_from_let
@@ -255,7 +251,7 @@ RSpec.describe GenericGraphsController, type: :controller do
                     end
 
                     it 'returns correct information on categories' do
-                        expect(json_response[:highcharts][:categories]).to eq [group.name, child.name]
+                        expect(json_response[:highcharts][:categories]).to eq [group.name]
                     end
 
                     it 'return xAxisTitle to be ERG' do
