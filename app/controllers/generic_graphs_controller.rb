@@ -18,7 +18,7 @@ class GenericGraphsController < ApplicationController
                 data: g.children.map {|child| [child.name, child.members.active.count]}
             }
         }
-        categories = current_user.enterprise.groups.where(:parent_id => nil).map{ |g| g.name }
+        categories = current_user.enterprise.groups.map{ |g| g.name }
 
         respond_to do |format|
             format.json {
@@ -107,7 +107,7 @@ class GenericGraphsController < ApplicationController
             }
         }
         
-        categories = current_user.enterprise.groups.where(:parent_id => nil).map{ |g| g.name }
+        categories = current_user.enterprise.groups.map{ |g| g.name }
 
         respond_to do |format|
             format.json{
@@ -153,7 +153,7 @@ class GenericGraphsController < ApplicationController
             }
         }
         
-        categories = current_user.enterprise.groups.where(:parent_id => nil).map{ |g| g.name }
+        categories = current_user.enterprise.groups.map{ |g| g.name }
 
         respond_to do |format|
             format.json {
