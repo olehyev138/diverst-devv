@@ -104,7 +104,7 @@ class GroupsController < ApplicationController
                             .limit(5)
 
             else
-                @upcoming_events = []
+                @upcoming_events = @group.initiatives.upcoming.limit(3) + @group.participating_initiatives.upcoming.limit(3)
                 @user_groups = []
                 @messages = []
                 @user_group = []

@@ -12,7 +12,7 @@ class GroupMessage < ActiveRecord::Base
     validates :subject,     presence: true
     validates :content,     presence: true
     validates :owner_id,    presence: true
-    
+
     alias_attribute :author, :owner
 
     before_create :build_default_link
@@ -23,8 +23,9 @@ class GroupMessage < ActiveRecord::Base
       joins("LEFT JOIN group_messages_segments ON group_messages_segments.group_message_id = group_messages.id")
       .where(gm_condtions.join(" OR "))
     }
-    
+
     scope :unapproved, -> {joins(:news_feed_link).where(:news_feed_links => {:approved => false})}
+    scope :approved, -> {joins(:news_feed_link).where(:news_feed_links => {:approved => true})}
 
     def users
         if segments.empty?
@@ -54,7 +55,7 @@ class GroupMessage < ActiveRecord::Base
         group_messages_segment = self.group_messages_segments.where(:segment_id => segment.id).first
         group_messages_segment.news_feed_link_segment.destroy
     end
-    
+
     private
 
     def build_default_link

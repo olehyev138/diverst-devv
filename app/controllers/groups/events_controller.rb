@@ -41,7 +41,9 @@ class Groups::EventsController < ApplicationController
   def show
     authorize @event
 
-    @comment = @event.comments.where(user: current_user).first || InitiativeComment.new(initiative: @event)
+    @all_comments = @event.comments
+    @approved_comments = @event.comments.approved
+    @comment = InitiativeComment.new(initiative: @event)
   end
 
   def destroy

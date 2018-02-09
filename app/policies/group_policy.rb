@@ -8,7 +8,7 @@ class GroupPolicy < ApplicationPolicy
 
         @user.erg_leader?
     end
-    
+
     def close_budgets?
         return true if index?
 
@@ -30,8 +30,12 @@ class GroupPolicy < ApplicationPolicy
         @record.managers.include?(user)
     end
 
+    def is_admin?
+        @user.policy_group.admin_pages_view?
+    end
+
     def is_a_member?
-       @record.members.include? @user
+       (@record.members.include? @user) || is_a_pending_member?
     end
 
     def is_active_member?
@@ -82,7 +86,7 @@ class GroupPolicy < ApplicationPolicy
         case @record.latest_news_visibility
         when 'public'
             #Everyone can see latest news
-            return true 
+            return true
         when 'group'
             #Only active group members and guests(non-members) can see latest news
             is_active_member? || is_a_guest? || is_a_pending_member?
@@ -90,7 +94,7 @@ class GroupPolicy < ApplicationPolicy
             #Only users with ability to manipulate members(admins) can see latest news
             return manage_members?
         else
-            return false 
+            return false
         end
     end
 
@@ -100,16 +104,20 @@ class GroupPolicy < ApplicationPolicy
         case @record.upcoming_events_visibility
         when 'public'
             #Everyone can upcoming events
-            return true 
+            return true
         when 'group'
-            #Only active group members can see upcoming events
-            is_active_member? || is_a_guest? || is_a_pending_member?  
+            #depends on group membership
+            is_active_member? || is_a_member? || is_admin?
         when 'leaders_only'
             #Only users with ability to manipulate members(admins) can see upcoming events
             return manage_members?
         else
-            return false 
+            return false
         end
+    end
+
+    def view_upcoming_and_ongoing_events?
+        view_upcoming_events?
     end
 
 
@@ -126,7 +134,7 @@ class GroupPolicy < ApplicationPolicy
             #Only users with ability to manipulate members(admins) can see upcoming events
             return manage_members?
         else
-            return false 
+            return false
         end
    end
 
@@ -162,7 +170,7 @@ class GroupPolicy < ApplicationPolicy
     def decline_budget?
         @policy_group.budget_approval?
     end
-    
+
     def parent_group_permissions?
         return false if @record.parent.nil?
         return ::GroupPolicy.new(@user, @record.parent).erg_leader_permissions?

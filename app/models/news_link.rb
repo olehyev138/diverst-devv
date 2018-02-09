@@ -34,6 +34,7 @@ class NewsLink < ActiveRecord::Base
     }
     
     scope :unapproved, -> {joins(:news_feed_link).where(:news_feed_links => {:approved => false})}
+    scope :approved, -> {joins(:news_feed_link).where(:news_feed_links => {:approved => true})}
 
     # call back to delete news link segment associations
     def remove_segment_association(segment)
