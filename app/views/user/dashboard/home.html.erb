@@ -67,6 +67,14 @@
                 <% end %>
               <% end %>
             </div>
+            <script>
+              //force facebook embed to have correct width
+              $(document).ready(function(){
+                var width = <%= SocialMedia::Importer::MEDIA_MAX_WIDTH %>
+
+                $('iframe[src*=facebook]').width(width)
+              });
+            </script>
           </div>
         </div>
       </div>

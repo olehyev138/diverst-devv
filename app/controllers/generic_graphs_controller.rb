@@ -18,7 +18,7 @@ class GenericGraphsController < ApplicationController
                 data: g.children.map {|child| [child.name, child.members.active.count]}
             }
         }
-        categories = current_user.enterprise.groups.map{ |g| g.name }
+        categories = current_user.enterprise.groups.where(:parent_id => nil).map{ |g| g.name }
 
         respond_to do |format|
             format.json {
@@ -30,7 +30,7 @@ class GenericGraphsController < ApplicationController
                                    data: data
                                }],
                                drilldowns: drilldowns,
-                               categories: categories,
+                               #categories: categories, <- for some reason this is causing drilldowns to not appear
                                xAxisTitle: "#{c_t(:erg)}"
                            },
                            hasAggregation: false
@@ -70,11 +70,10 @@ class GenericGraphsController < ApplicationController
                            highcharts: {
                                series: [{
                                    name: 'Number of users',
-                                   colorByPoint: true,
                                    data: data
                                }],
                                drilldowns: drilldowns,
-                               categories: categories,
+                               #categories: categories, <- for some reason this is causing drilldowns to not appear
                                xAxisTitle: c_t(:segment)
                            },
                            hasAggregation: false
@@ -107,7 +106,7 @@ class GenericGraphsController < ApplicationController
             }
         }
         
-        categories = current_user.enterprise.groups.map{ |g| g.name }
+        categories = current_user.enterprise.groups.where(:parent_id => nil).map{ |g| g.name }
 
         respond_to do |format|
             format.json{
@@ -119,7 +118,7 @@ class GenericGraphsController < ApplicationController
                                    data: data
                                }],
                                drilldowns: drilldowns,
-                               categories: categories,
+                               #categories: categories,
                                xAxisTitle: "#{c_t(:erg)}",
                                yAxisTitle: 'Nb of events'
                            },
@@ -153,7 +152,7 @@ class GenericGraphsController < ApplicationController
             }
         }
         
-        categories = current_user.enterprise.groups.map{ |g| g.name }
+        categories = current_user.enterprise.groups.where(:parent_id => nil).map{ |g| g.name }
 
         respond_to do |format|
             format.json {
@@ -165,7 +164,7 @@ class GenericGraphsController < ApplicationController
                                    data: data
                                }],
                                drilldowns: drilldowns,
-                               categories: categories,
+                               #categories: categories,
                                xAxisTitle: 'ERG',
                                yAxisTitle: 'Nb of messages'
                            },

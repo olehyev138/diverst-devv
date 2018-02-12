@@ -1,6 +1,12 @@
 require 'oembed'
 
 class SocialMedia::Importer
+  MEDIA_MAX_WIDTH=380
+
+  DEFAULT_MEDIA_OPTIONS={
+    maxwidth: MEDIA_MAX_WIDTH
+  }
+
   def self.url_to_embed(url)
     return nil unless self.valid_url? url
 
@@ -39,9 +45,9 @@ class SocialMedia::Importer
     OEmbed::Providers.register OEmbed::Providers::Embedly, OEmbed::Providers::Noembed
   end
 
-  def self.fetch_resource(url)
+  def self.fetch_resource(url, options={})
     begin
-      resource = OEmbed::Providers.get(url)
+      resource = OEmbed::Providers.get(url, DEFAULT_MEDIA_OPTIONS.merge(options) )
     rescue
       return nil
     end
