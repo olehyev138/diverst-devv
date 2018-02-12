@@ -41,7 +41,7 @@ RSpec.describe GenericGraphsController, type: :controller do
                         expect(json_response[:highcharts][:series][0][:data][0][:name]).to eq group.name
                     end
 
-                    it 'returns correct information on categories' do
+                    it 'returns correct information on categories', skip: "corresponding code has been commented out" do
                         expect(json_response[:highcharts][:categories]).to eq [group.name]
                     end
 
@@ -171,7 +171,7 @@ RSpec.describe GenericGraphsController, type: :controller do
                         expect(json_response[:highcharts][:series][0][:data][0][:name]).to eq group.name
                     end
 
-                    it 'returns correct information on categories' do
+                    it 'returns correct information on categories', skip: "corresponding code has been commented out" do
                         expect(json_response[:highcharts][:categories]).to eq [group.name]
                     end
 
@@ -250,7 +250,7 @@ RSpec.describe GenericGraphsController, type: :controller do
                         expect(json_response[:highcharts][:series][0][:data][0][:name]).to eq group.name
                     end
 
-                    it 'returns correct information on categories' do
+                    it 'returns correct information on categories', skip: "corresponding code has been commented out" do
                         expect(json_response[:highcharts][:categories]).to eq [group.name]
                     end
 
