@@ -104,7 +104,7 @@ RSpec.describe UserGroup do
       expect(user_group.notifications_date).to eq("sunday")
     end
     it "returns default monday" do
-      user_group = create(:user_group)
+      user_group = create(:user_group, :notifications_date => 1)
       expect(user_group.notifications_date).to eq("monday")
     end
     it "returns tuesday" do
@@ -119,8 +119,8 @@ RSpec.describe UserGroup do
       user_group = create(:user_group, :notifications_date => 4)
       expect(user_group.notifications_date).to eq("thursday")
     end
-    it "returns friday" do
-      user_group = create(:user_group, :notifications_date => 5)
+    it "returns default friday" do
+      user_group = create(:user_group)
       expect(user_group.notifications_date).to eq("friday")
     end
     it "returns saturday" do
@@ -135,13 +135,6 @@ RSpec.describe UserGroup do
       select_field.save!
       user_group = create(:user_group, :data => "{\"#{select_field.id}\":[\"Female\"]}")
       expect(user_group.string_for_field(select_field)).to eq("Female")
-    end
-  end
-  
-  describe "default_weekly_date" do
-    it "sets default weekly notification date to friday" do
-      user_group = create(:user_group)
-      expect(user_group.notifications_date).to eq("friday")
     end
   end
 end
