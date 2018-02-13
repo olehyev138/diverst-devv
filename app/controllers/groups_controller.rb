@@ -108,7 +108,7 @@ class GroupsController < ApplicationController
                 @user_groups = []
                 @messages = []
                 @user_group = []
-                @leaders = []
+                @leaders = @group.group_leaders.includes(:user).visible
                 @user_groups = []
                 @top_user_group_participants = []
                 @top_group_participants = []
