@@ -11,7 +11,7 @@ class User::EventsController < ApplicationController
 
   def calendar
     enterprise = current_user.enterprise
-    @groups = enterprise.groups
+    @groups = enterprise.groups.where(:parent_id => nil)
     @segments = enterprise.segments
     @q_form_submit_path = calendar_user_events_path
     @q = Initiative.ransack(params[:q])
