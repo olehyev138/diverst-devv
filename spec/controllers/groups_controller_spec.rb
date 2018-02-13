@@ -47,7 +47,6 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #close_budgets' do
     context 'with logged user' do
       login_user_from_let
@@ -83,7 +82,6 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET#plan_overview' do
     let!(:user) { create :user }
     let!(:group) { create(:group, enterprise: user.enterprise) }
@@ -111,13 +109,14 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #calendar' do
     context 'with logged user' do
       login_user_from_let
 
       before do
         create_list(:group, 2, enterprise: enterprise)
+        # create the sub groups to ensure only parent groups are shown
+        group.children.create!([{enterprise: enterprise, name: "test1"}, {enterprise: enterprise, name: "test2"}])
         create_list(:segment, 3, enterprise: enterprise)
         get :calendar
       end
@@ -126,7 +125,7 @@ RSpec.describe GroupsController, type: :controller do
       end
 
       it 'returns 2 groups belonging to enterprise' do
-        expect(assigns[:groups].count).to eq 2
+        expect(assigns[:groups].count).to eq 3
       end
 
       it 'returns 3 segments belonging to enterprise' do
