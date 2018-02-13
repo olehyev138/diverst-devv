@@ -137,4 +137,11 @@ RSpec.describe UserGroup do
       expect(user_group.string_for_field(select_field)).to eq("Female")
     end
   end
+  
+  describe "default_weekly_date" do
+    it "sets default weekly notification date to friday" do
+      user_group = create(:user_group)
+      expect(user_group.notifications_date).to eq("friday")
+    end
+  end
 end
