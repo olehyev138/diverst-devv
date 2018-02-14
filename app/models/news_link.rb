@@ -10,8 +10,6 @@ class NewsLink < ActiveRecord::Base
 
     before_validation :smart_add_url_protocol
 
-    validates :url, presence: true
-
     has_many :comments, class_name: 'NewsLinkComment', dependent: :destroy
     has_many :photos, class_name: 'NewsLinkPhoto', dependent: :destroy
     accepts_nested_attributes_for :photos, :allow_destroy => true

@@ -10,7 +10,7 @@
    <% end %>
   <div class="flex-row flex-row--middle">
     <div class="flex-row__cell">
-      <%= link_to "+ Create News link", new_group_news_link_path, class: "btn btn--primary" if policy(NewsLink).new? %>
+      <%= link_to "+ Create News", new_group_news_link_path, class: "btn btn--primary" if policy(NewsLink).new? %>
     </div>
     <div class="flex-row__cell">
       <%= link_to "+ Create Message", new_group_group_message_path, class: "btn btn--primary" if policy(GroupMessage).new? %>
