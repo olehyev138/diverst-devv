@@ -119,6 +119,8 @@ Rails.application.routes.draw do
 
   get 'integrations', to: 'integrations#index'
 
+  resources :group_categories
+
   resources :groups do
     resources :budgets, only: [:index, :show, :new, :create, :destroy] do
       post 'approve'

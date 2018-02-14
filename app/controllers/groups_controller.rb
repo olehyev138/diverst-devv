@@ -132,7 +132,12 @@ class GroupsController < ApplicationController
         if @group.save
             track_activity(@group, :create)
             flash[:notice] = "Your #{c_t(:erg)} was created"
-            redirect_to action: :index
+
+            if @group.is_a_sub_erg?
+              redirect_to new_group_category_url(group_id: @group.id)
+            else
+              redirect_to action: :index
+          end
         else
             flash[:alert] = "Your #{c_t(:erg)} was not created. Please fix the errors"
             render :new

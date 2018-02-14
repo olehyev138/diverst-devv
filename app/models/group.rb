@@ -89,6 +89,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
 
   has_many  :children, class_name: "Group", foreign_key: :parent_id
   belongs_to :parent, class_name: "Group", foreign_key: :parent_id
+  belongs_to :sub_group_category
   
   has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
   validates_attachment_content_type :logo, content_type: %r{\Aimage\/.*\Z}
@@ -116,6 +117,10 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
+
+  def is_a_sub_erg?
+    return true if !parent_id.nil?
+  end
 
   def capitalize_name
     name.split.map(&:capitalize).join(' ')
