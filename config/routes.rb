@@ -120,6 +120,7 @@ Rails.application.routes.draw do
   get 'integrations', to: 'integrations#index'
 
   resources :group_categories
+  post 'group_categories/update_all_groups', to: 'group_categories#update_all_groups', as: :update_all_groups
 
   resources :groups do
     resources :budgets, only: [:index, :show, :new, :create, :destroy] do

@@ -1,12 +1,13 @@
 class GroupCategoriesController < ApplicationController
   before_action :authenticate_user!
-  after_action :verify_authorized
+  after_action :verify_authorized, except: [:update_all_groups]
 
   layout :resolve_layout
 
   def index
     authorize Group
-    @parent = Group.find(params[:parent_id])
+    @parent = Group.find(params[:parent_id].to_i)
+    @group = Group.find(params[:group_id].to_i)
     @categories = GroupCategory.all
   end
 
@@ -28,7 +29,7 @@ class GroupCategoriesController < ApplicationController
 
     if @category_type.save
       flash[:notice] = "you just created a category named #{@category_type.name}"
-      redirect_to group_categories_url(parent_id: @group.parent_id)
+      redirect_to group_categories_url(parent_id: @group.parent_id, group_id: @group.id)
     else
       flash[:alert] = "something went wrong. Please check errors."
       render :new
@@ -38,10 +39,19 @@ class GroupCategoriesController < ApplicationController
   def edit
   end
 
-  def update
-  end
+  # def update
+  # end
 
   def destroy
+  end
+
+  def update_all_groups
+    params[:children].each do |child|
+      next if Group.find(child[0].to_i).group_category_id == child[1][:group_category_id].to_i
+      Group.find(child[0].to_i).update(group_category_id: child[1][:group_category_id].to_i, group_category_type_id: GroupCategory.find(child[1][:group_category_id].to_i).group_category_type_id)
+    end
+    flash[:notice] = "Categorization successful"
+    redirect_to :back
   end
 
 

@@ -1,16 +1,20 @@
 <div class="content__main">
-  <% @parent.children.each do |child| %>
-    <%= simple_form_for child, :url => group_categories_url(child), method: :patch do |f| %>
+<h1>Categories of Sub-<%= c_t(:erg).titleize.pluralize %> of <%= @parent.name %></h1>
+    <%= form_tag update_all_groups_url, method: :post do %>
 	<div class="card">
 	  <div class="card__section row">
+	  <% @parent.children.each do |child| %>
+	  <%= simple_fields_for 'children[]', child do |c| %>
 		  <div class="col md-6 mb10">
-			<%= f.association :group_category, 
-             collection: @categories, 
-             :include_blank => "None" %>
+            <%= c.association :group_category, collection: @categories, :include_blank => "None",label: "#{child.name}" %>
 		  </div>
+		  <% end %>
+		  <% end %>
 	  </div>
 	</div>
-	<%= f.button :submit, "Save Categories" %>
+	<%= submit_tag "Save Categories", class: "btn btn--primary" %>
 	<% end %>
-  <% end %>
+	<br>
+	<%= link_to "Go Here To Create a New Category", new_group_category_url(group_id: @group), class: "btn btn--primary" %>
 </div>
+

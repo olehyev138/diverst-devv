@@ -3,4 +3,8 @@ class GroupCategory < ActiveRecord::Base
   belongs_to :group_category_type
 
   validates :name, presence: true
+
+  def to_s
+  	name
+  end
 end

@@ -171,7 +171,7 @@
         </div>
       <% end %>
 
-       <% if @group.children.count > 0 %>
+      <% if @group.children.count <= 5 %>
         <div class="card card--secondary">
           <div class="card__section">
             Sub-<%= c_t(:erg).titleize.pluralize %><br>
@@ -180,6 +180,25 @@
             <% end %>
           </div>
         </div>
+      <% else %>
+      <% if !@group.group_category_type.nil? %>
+       <div class="card card--secondary">
+          <div class="card__section">
+            Sub-<%= c_t(:erg).titleize.pluralize %><br>
+            Categories by <%= @group.group_category_type %>
+            <% @group.group_category_type.group_categories.each do |category| %>
+            <div class="dropdown">
+              <span><%= link_to category, "#" %></span>
+              <div class="dropdown-content">
+                <% category.groups.each do |sub_erg| %>
+                  <p><%= link_to sub_erg.capitalize_name, group_url(sub_erg) %></p>
+                <% end %>
+              </div>
+            </div>
+            <% end %>
+          </div>
+        </div>
+        <% end %>
       <% end %>
 
       <% if @group.active_members.include? current_user %>

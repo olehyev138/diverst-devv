@@ -130,14 +130,22 @@ class GroupsController < ApplicationController
         @group = current_user.enterprise.groups.new(group_params)
         @group.owner = current_user
 
+        @group.group_category_type_id = @group.group_category&.group_category_type_id
+
         if @group.save
             track_activity(@group, :create)
             flash[:notice] = "Your #{c_t(:erg)} was created"
 
-            if @group.has_parent_with_5_or_more_sub_ergs?
-              redirect_to new_group_category_url(group_id: @group.id)
-            else
-              redirect_to action: :index
+            if @group.is_parent_erg? #for parent erg
+                redirect_to groups_url
+            else #for sub-ergs
+                if @group.has_parent_with_5_or_more_sub_ergs_and_no_categorization?
+                    redirect_to new_group_category_url(group_id: @group.id)
+                elsif @group.has_parent_with_5_or_less_sub_ergs_and_no_categorization?
+                    redirect_to groups_url
+                else
+                  redirect_to group_categories_url(parent_id: @group.parent_id, group_id: @group.id)
+                end
             end
         else
             flash[:alert] = "Your #{c_t(:erg)} was not created. Please fix the errors"
@@ -326,6 +334,7 @@ class GroupsController < ApplicationController
                 :company_video_url,
                 :parent_id,
                 :group_category_id,
+                :group_category_type_id,
                 manager_ids: [],
                 child_ids: [],
                 member_ids: [],
