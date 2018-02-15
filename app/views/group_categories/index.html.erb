@@ -1,0 +1,16 @@
+<div class="content__main">
+  <% @parent.children.each do |child| %>
+    <%= simple_form_for child, :url => group_categories_url(child), method: :patch do |f| %>
+	<div class="card">
+	  <div class="card__section row">
+		  <div class="col md-6 mb10">
+			<%= f.association :group_category, 
+             collection: @categories, 
+             :include_blank => "None" %>
+		  </div>
+	  </div>
+	</div>
+	<%= f.button :submit, "Save Categories" %>
+	<% end %>
+  <% end %>
+</div>

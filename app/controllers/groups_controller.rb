@@ -78,6 +78,7 @@ class GroupsController < ApplicationController
     def new
         authorize Group
         @group = current_user.enterprise.groups.new
+        @categories = GroupCategory.all
     end
 
     def show
@@ -133,11 +134,11 @@ class GroupsController < ApplicationController
             track_activity(@group, :create)
             flash[:notice] = "Your #{c_t(:erg)} was created"
 
-            if @group.is_a_sub_erg?
+            if @group.has_parent_with_5_or_more_sub_ergs?
               redirect_to new_group_category_url(group_id: @group.id)
             else
               redirect_to action: :index
-          end
+            end
         else
             flash[:alert] = "Your #{c_t(:erg)} was not created. Please fix the errors"
             render :new
@@ -146,6 +147,7 @@ class GroupsController < ApplicationController
 
     def edit
         authorize @group
+        @categories = GroupCategory.all
     end
 
     def update
@@ -323,6 +325,7 @@ class GroupsController < ApplicationController
                 :sponsor_message,
                 :company_video_url,
                 :parent_id,
+                :group_category_id,
                 manager_ids: [],
                 child_ids: [],
                 member_ids: [],

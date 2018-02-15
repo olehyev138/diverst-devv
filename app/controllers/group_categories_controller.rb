@@ -4,9 +4,10 @@ class GroupCategoriesController < ApplicationController
 
   layout :resolve_layout
 
-  helper ApplicationHelper
-
   def index
+    authorize Group
+    @parent = Group.find(params[:parent_id])
+    @categories = GroupCategory.all
   end
 
   def show
@@ -14,10 +15,24 @@ class GroupCategoriesController < ApplicationController
 
   def new
   	authorize Group
-  	@group = Group.find(params[:group_id].to_i)
+    @group = Group.find(params[:group_id].to_i)
+
+    @group_category_type = GroupCategoryType.new
   end
 
   def create
+    authorize Group
+    @group = Group.find(params[:group_category_type][:group_id].to_i)
+    @category_type = GroupCategoryType.new(category_type_params)
+
+
+    if @category_type.save
+      flash[:notice] = "you just created a category named #{@category_type.name}"
+      redirect_to group_categories_url(parent_id: @group.parent_id)
+    else
+      flash[:alert] = "something went wrong. Please check errors."
+      render :new
+    end
   end
 
   def edit
@@ -45,11 +60,8 @@ class GroupCategoriesController < ApplicationController
   	end
   end
 
-  def set_group
-  	current_user ? @group = current_user.enterprise.groups.find(params[:id]) : user_not_authorized
+  def category_type_params
+    params.require(:group_category_type)
+      .permit(:name, :category_names)
   end
-
-  def group_category_params
-        params.require(:group_category).permit(:name)
-    end
 end

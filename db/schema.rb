@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180213235415) do
+ActiveRecord::Schema.define(version: 20180214194137) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -477,7 +477,14 @@ ActiveRecord::Schema.define(version: 20180213235415) do
   add_index "graphs", ["collection_type", "collection_id"], name: "index_graphs_on_collection_type_and_collection_id", using: :btree
 
   create_table "group_categories", force: :cascade do |t|
-    t.string   "type",       limit: 191
+    t.string   "name",                   limit: 191
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.integer  "group_category_type_id", limit: 4
+  end
+
+  create_table "group_category_types", force: :cascade do |t|
+    t.string   "name",       limit: 191
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
   end
@@ -583,6 +590,7 @@ ActiveRecord::Schema.define(version: 20180213235415) do
     t.string   "contact_email",              limit: 191
     t.string   "latest_news_visibility",     limit: 191
     t.string   "upcoming_events_visibility", limit: 191
+    t.integer  "group_category_id",          limit: 4
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
@@ -981,12 +989,6 @@ ActiveRecord::Schema.define(version: 20180213235415) do
     t.datetime "updated_at",               null: false
     t.string   "url",        limit: 191
     t.integer  "group_id",   limit: 4
-  end
-
-  create_table "sub_group_categories", force: :cascade do |t|
-    t.string   "name",       limit: 191
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
   end
 
   create_table "survey_managers", force: :cascade do |t|

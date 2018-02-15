@@ -1,8 +1,6 @@
 class GroupCategory < ActiveRecord::Base
-  has_many :sub_group_categories, dependent: :destroy
+  has_many :groups
+  belongs_to :group_category_type
 
-  validates :type, presence: true
-
-  def sub_categories
-  end
+  validates :name, presence: true
 end

@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :sub_group_category do
+  factory :group_category_type do
     name "MyString"
   end
 end
