@@ -91,7 +91,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   belongs_to :parent, class_name: "Group", foreign_key: :parent_id
   belongs_to :group_category
   belongs_to :group_category_type
-  
+
   has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
   validates_attachment_content_type :logo, content_type: %r{\Aimage\/.*\Z}
 
@@ -113,7 +113,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   before_validation :smart_add_url_protocol
 
   scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
-  
+
   accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
@@ -124,11 +124,11 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   end
 
   def has_parent_with_5_or_more_sub_ergs_and_no_categorization?
-    return true if !self.parent_id.nil? && self.parent.children.count > 5 && self.parent.group_category_type_id.nil?
+    return true if self.parent && (self.parent.children.count > 5) && self.parent.group_category_type_id.nil?
   end
 
   def has_parent_with_5_or_less_sub_ergs_and_no_categorization?
-    return true if !self.parent_id.nil? && self.parent.children.count < 5 && self.parent.group_category_type_id.nil?
+    return true if self.parent && self.parent.children.count < 5 && self.parent.group_category_type_id.nil?
   end
 
   def capitalize_name
@@ -274,7 +274,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
         survey_fields.each do |field|
           user_group_row << field.csv_value(user_group.info[field])
         end
-        
+
         csv << user_group_row
       end
     end
@@ -283,11 +283,11 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   def title_with_leftover_amount
     "Create event from #{name} leftover ($#{leftover_money})"
   end
-  
+
   def pending_comments_count
     message_comments.unapproved.count + news_link_comments.unapproved.count + answer_comments.unapproved.count
   end
-  
+
   def pending_posts_count
     news_links.unapproved.count + messages.unapproved.count + social_links.unapproved.count
   end

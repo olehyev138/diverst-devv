@@ -36,12 +36,6 @@ class GroupCategoriesController < ApplicationController
     end
   end
 
-  def edit
-  end
-
-  # def update
-  # end
-
   def destroy
   end
 
@@ -50,6 +44,10 @@ class GroupCategoriesController < ApplicationController
       next if Group.find(child[0].to_i).group_category_id == child[1][:group_category_id].to_i
       Group.find(child[0].to_i).update(group_category_id: child[1][:group_category_id].to_i, group_category_type_id: GroupCategory.find(child[1][:group_category_id].to_i).group_category_type_id)
     end
+
+    # find parent group and update with association with group category type
+    @parent = Group.find(params[:children].first[0].to_i).parent 
+    @parent.update(group_category_type_id: @parent.children.first.group_category_type_id)
     flash[:notice] = "Categorization successful"
     redirect_to :back
   end
