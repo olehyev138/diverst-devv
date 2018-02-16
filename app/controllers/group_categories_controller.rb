@@ -11,9 +11,6 @@ class GroupCategoriesController < ApplicationController
     @categories = GroupCategory.all
   end
 
-  def show
-  end
-
   def new
   	authorize Group
     @group = Group.find(params[:group_id].to_i)
@@ -24,19 +21,16 @@ class GroupCategoriesController < ApplicationController
   def create
     authorize Group
     @group = Group.find(params[:group_category_type][:group_id].to_i)
-    @category_type = GroupCategoryType.new(category_type_params)
+    @group_category_type = GroupCategoryType.new(category_type_params)
 
 
-    if @category_type.save
-      flash[:notice] = "you just created a category named #{@category_type.name}"
+    if @group_category_type.save
+      flash[:notice] = "you just created a category named #{@group_category_type.name}"
       redirect_to group_categories_url(parent_id: @group.parent_id, group_id: @group.id)
     else
       flash[:alert] = "something went wrong. Please check errors."
       render :new
     end
-  end
-
-  def destroy
   end
 
   def update_all_groups
