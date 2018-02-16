@@ -190,7 +190,7 @@
             <div class="dropdown">
               <span><%= link_to category, "#" %></span>
               <div class="dropdown-content">
-                <% category.groups.each do |sub_erg| %>
+                <% category.groups.where(parent_id: @group).each do |sub_erg| %>
                   <p><%= link_to sub_erg.capitalize_name, group_url(sub_erg) %></p>
                 <% end %>
               </div>
