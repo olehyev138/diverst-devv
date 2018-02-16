@@ -48,6 +48,7 @@ class GroupCategoriesController < ApplicationController
     # find parent group and update with association with group category type
     @parent = Group.find(params[:children].first[0].to_i).parent 
     @parent.update(group_category_type_id: @parent.children.first.group_category_type_id)
+
     flash[:notice] = "Categorization successful"
     redirect_to :back
   end
