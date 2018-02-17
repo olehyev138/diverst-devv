@@ -1,5 +1,10 @@
 <div class="content__main">
-<h1><%= @group.parent.capitalize_name %> has <%= pluralize(@group.parent.children.count, "sub-erg") %>. You can go ahead and categorize them.</h1>
+<h1>
+<% if @group.is_parent_erg_with_sub_ergs_more_than_5? %>
+  <%= @group.capitalize_name %> has <%= pluralize(@group.children.count, "sub-erg") %>. You can go ahead and categorize them.</h1>
+<% elsif has_parent_with_5_or_more_sub_ergs_and_no_categorization? %>
+  <%= @group.parent.capitalize_name %> has <%= pluralize(@group.parent.children.count, "sub-erg") %>. You can go ahead and categorize them.</h1>
+<% end %>  
   <%= simple_form_for group_category_type, url: group_categories_url, method: :post do |f| %>
   <div class="card">
     <div class="card__section">

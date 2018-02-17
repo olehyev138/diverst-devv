@@ -119,8 +119,12 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
 
-  def is_parent_erg?
-    self.parent_id.nil?
+  def is_parent_erg_with_sub_ergs_less_than_5?
+    self.parent_id.nil? && self.children.count < 5
+  end
+
+  def is_parent_erg_with_sub_ergs_more_than_5?
+    self.parent_id.nil? && self.children.count > 5
   end
 
   def has_parent_with_5_or_more_sub_ergs_and_no_categorization?
