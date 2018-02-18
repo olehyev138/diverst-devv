@@ -3,6 +3,9 @@
   <%= link_to "New #{ c_t(:erg) }", new_group_path, class: "btn btn--primary" if policy(Group).new? %>
 </div>
 
+<p><%= link_to "Create Categories for ERGs", new_group_category_url, class: "btn btn--primary" %>
+<%= link_to "View All Categories", view_all_group_categories_url, class: "btn btn--primary" %></p>
+
 <div class="content__main">
   <div class="card">
     <% @groups.each do |group| %>
@@ -13,21 +16,23 @@
           </div>
           <div class="flex-row__cell flex-row__cell--grow"><%= link_to "#{group.name}", group_path(group), class: "accent" %> - <%= pluralize group.active_members.count, "member" %></div>
           <div class="flex-row__cell link-group">
-            
+
             <% if group.children.count > 0 %>
               <%= link_to "Show Sub-#{ c_t(:erg).pluralize }", "#", class: "nested_show", id: group.id%>
               <%= link_to "Hide Sub-#{ c_t(:erg).pluralize }", "#", class: "nested_hide", id: group.id, style: "display:none;" %>
+              <%= link_to "Categorize Sub-Ergs", group_categories_url(parent_id: group.id) %>
             <% end %>
-            
+
+
             <%= link_to "Export", export_csv_group_path(group), class: "muted", role: "button", 'aria-label': "Export" if policy(group).edit? %>
             <%= link_to "Import", import_csv_group_path(group), class: "muted", role: "button", 'aria-label': "Import" if policy(group).edit? %>
             <%= link_to "Edit", edit_group_path(group), class: "muted" if policy(group).edit? %>
             <%= link_to "Delete", group_path(group), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(group).destroy? %>
           </div>
         </div>
-        
+
         <span class="field__label children_<%= group.id%>" style="display:none; margin-top: 10px;"><%= "Sub-#{ c_t(:erg).pluralize } for #{group.name}" %></span>
-        
+
       <% group.children.each do |child| %>
         <div class="children_<%= group.id%>" style="display:none; position: relative; top: 10px;">
           <div class="flex-row flex-row--middle" style="margin-bottom: 10px;">
@@ -47,7 +52,7 @@
           </div>
         </div>
       <% end %>
-        
+
       </div>
     <% end %>
   </div>
@@ -58,11 +63,11 @@
     var id = $(this).attr('id');
     $('div.children_' + id).show();
     $('span.children_' + id).show();
-    
+
     $(this).siblings('a.nested_hide').show();
     $(this).hide();
   }); //endof click
-  
+
   $('a.nested_hide').click(function(e){
     var id = $(this).attr('id');
     $('div.children_' + id).hide();

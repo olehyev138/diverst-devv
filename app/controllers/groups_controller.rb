@@ -135,20 +135,7 @@ class GroupsController < ApplicationController
         if @group.save
             track_activity(@group, :create)
             flash[:notice] = "Your #{c_t(:erg)} was created"
-
-            if @group.is_parent_erg_with_sub_ergs_less_than_5? #for parent erg
-                redirect_to groups_url
-            elsif @group.is_parent_erg_with_sub_ergs_more_than_5?
-                redirect_to new_group_category_url(group_id: @group.id)
-            else #for sub-ergs
-                if @group.has_parent_with_5_or_more_sub_ergs_and_no_categorization?
-                    redirect_to new_group_category_url(group_id: @group.id)
-                elsif @group.has_parent_with_5_or_less_sub_ergs_and_no_categorization?
-                    redirect_to groups_url
-                else
-                  redirect_to group_categories_url(parent_id: @group.parent_id, group_id: @group.id)
-                end
-            end
+            redirect_to groups_url
         else
             flash[:alert] = "Your #{c_t(:erg)} was not created. Please fix the errors"
             render :new

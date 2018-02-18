@@ -119,7 +119,11 @@ Rails.application.routes.draw do
 
   get 'integrations', to: 'integrations#index'
 
-  resources :group_categories
+  resources :group_categories do 
+    collection do 
+      get 'view_all'
+    end
+  end
   post 'group_categories/update_all_groups', to: 'group_categories#update_all_groups', as: :update_all_groups
 
   resources :groups do
