@@ -1,6 +1,7 @@
 class GroupCategoryType < ActiveRecord::Base
   has_many :group_categories, dependent: :destroy
   has_many :groups
+  belongs_to :enterprise
 
   validates :name, presence: true
   attr_accessor :category_names

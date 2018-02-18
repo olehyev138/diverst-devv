@@ -35,6 +35,7 @@ class Enterprise < ActiveRecord::Base
     has_many :rewards
     has_many :reward_actions
     has_many :badges
+    has_many :group_category_types
 
     has_one :custom_text
 

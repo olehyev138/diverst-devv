@@ -18,6 +18,7 @@ class GroupCategoriesController < ApplicationController
   def create
     authorize Group
     @group_category_type = GroupCategoryType.new(category_type_params)
+    @group_category_type.enterprise_id = current_user.enterprise.id
 
 
     if @group_category_type.save
@@ -36,7 +37,7 @@ class GroupCategoriesController < ApplicationController
     end
 
     flash[:notice] = "Categorization successful"
-    redirect_to groups_url
+    redirect_to :back
   end
 
   def view_all
@@ -61,6 +62,6 @@ class GroupCategoriesController < ApplicationController
 
   def category_type_params
     params.require(:group_category_type)
-      .permit(:name, :category_names)
+      .permit(:name, :enterprise_id, :category_names)
   end
 end
