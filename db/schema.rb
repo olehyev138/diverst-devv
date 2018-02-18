@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180214165705) do
+ActiveRecord::Schema.define(version: 20180218170810) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -476,6 +476,19 @@ ActiveRecord::Schema.define(version: 20180214165705) do
 
   add_index "graphs", ["collection_type", "collection_id"], name: "index_graphs_on_collection_type_and_collection_id", using: :btree
 
+  create_table "group_categories", force: :cascade do |t|
+    t.string   "name",                   limit: 191
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.integer  "group_category_type_id", limit: 4
+  end
+
+  create_table "group_category_types", force: :cascade do |t|
+    t.string   "name",       limit: 191
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
   create_table "group_fields", force: :cascade do |t|
     t.integer  "group_id",   limit: 4
     t.integer  "field_id",   limit: 4
@@ -532,8 +545,8 @@ ActiveRecord::Schema.define(version: 20180214165705) do
     t.integer  "enterprise_id",              limit: 4
     t.string   "name",                       limit: 191
     t.text     "description",                limit: 65535
-    t.datetime "created_at",                                                                      null: false
-    t.datetime "updated_at",                                                                      null: false
+    t.datetime "created_at",                                                                       null: false
+    t.datetime "updated_at",                                                                       null: false
     t.string   "logo_file_name",             limit: 191
     t.string   "logo_content_type",          limit: 191
     t.integer  "logo_file_size",             limit: 4
@@ -577,6 +590,10 @@ ActiveRecord::Schema.define(version: 20180214165705) do
     t.string   "contact_email",              limit: 191
     t.string   "latest_news_visibility",     limit: 191
     t.string   "upcoming_events_visibility", limit: 191
+    t.text     "mission_statement",          limit: 65535
+    t.integer  "group_category_id",          limit: 4
+    t.integer  "group_category_type_id",     limit: 4
+    t.boolean  "private",                                                          default: false
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
@@ -587,6 +604,18 @@ ActiveRecord::Schema.define(version: 20180214165705) do
   create_table "groups_polls", force: :cascade do |t|
     t.integer "group_id", limit: 4
     t.integer "poll_id",  limit: 4
+  end
+
+  create_table "home_page_templates", force: :cascade do |t|
+    t.integer  "group_id",       limit: 4
+    t.boolean  "newest_members",           default: true
+    t.boolean  "top_performers",           default: true
+    t.boolean  "latest_news",              default: true
+    t.boolean  "latest_events",            default: true
+    t.boolean  "questionnaire",            default: true
+    t.boolean  "leaders_board",            default: true
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
   end
 
   create_table "initiative_comments", force: :cascade do |t|
