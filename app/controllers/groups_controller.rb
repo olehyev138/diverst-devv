@@ -303,6 +303,7 @@ class GroupsController < ApplicationController
                 :name,
                 :description,
                 :logo,
+                :private,
                 :banner,
                 :yammer_create_group,
                 :yammer_sync_users,
