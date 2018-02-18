@@ -110,7 +110,10 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   after_commit :update_all_elasticsearch_members
   before_validation :smart_add_url_protocol
 
-  scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
+  scope :top_participants,  -> (n) { order(total_weekly_points: :desc).limit(n) }
+  # Active Record already has a defined a class method with the name private so we use is_private.
+  scope :is_private,        -> {where(:private => true)}
+  scope :non_private,       -> {where(:private => false)}
   
   accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true

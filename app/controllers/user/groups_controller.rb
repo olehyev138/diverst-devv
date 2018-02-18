@@ -4,7 +4,7 @@ class User::GroupsController < ApplicationController
     layout 'user'
 
     def index
-        @groups = current_user.enterprise.groups
+        @groups = current_user.enterprise.groups.non_private
     end
 
     def join

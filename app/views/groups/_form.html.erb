@@ -4,6 +4,8 @@
       <div class="card__section card__section--border">
         <%= f.input :name, input_html: { autofocus: true } %>
         <%= f.input :description %>
+        <%= f.hidden_field :private, value: 0 %>
+        <%= f.input :private, label: 'Set as private' %>
         <%= f.input :logo, as: :attachment_preview %>
         <%= f.association :invitation_segments, collection: @group.enterprise.segments, input_html: { class: "select2"}, wrapper_html: { style: "display: none;" } %>
       </div>
