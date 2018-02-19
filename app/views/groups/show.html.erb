@@ -188,14 +188,15 @@
             <ol>
             <% @group.group_category_type.group_categories.each do |category| %>
             <li>
-            <div class="dropdown">
-              <%= link_to category, "#" %>(<%= category.groups.where(parent_id: @group).count %>)
-              <div class="dropdown-content">
+              <%= link_to category, "#", class: "nested_show", id: category.id %>
+              <%= link_to "hide #{category}", "#", class: "nested_hide", id: category.id, style: "display:none;" %>(<%= category.groups.where(parent_id: @group).count %>)
+
                 <% category.groups.where(parent_id: @group).each do |sub_erg| %>
-                  <p><%= link_to sub_erg.capitalize_name, group_url(sub_erg) %></p>
+                <div class="children_<%= category.id %>" style="display:none; position: relative; top: 10px;">
+                  <ol><%= link_to sub_erg.capitalize_name, group_url(sub_erg) %></ol>
+                  <br>
+                </div>  
                 <% end %>
-              </div>
-            </div>
             </li>
             <% end %>
             </ol>
@@ -241,6 +242,21 @@
 </div>
 
 <script>
+$('a.nested_show').click(function(e){
+    var id = $(this).attr('id');
+    $('div.children_' + id).show();
+
+    $(this).siblings('a.nested_hide').show();
+    $(this).hide();
+  }); //endof click
+
+  $('a.nested_hide').click(function(e){
+    var id = $(this).attr('id');
+    $('div.children_' + id).hide();
+    $(this).siblings('a.nested_show').show();
+    $(this).hide();
+  }); //endof click
+
   $('img.info').click(function(e){
     e.preventDefault();
     var id = $(this).attr('id');
