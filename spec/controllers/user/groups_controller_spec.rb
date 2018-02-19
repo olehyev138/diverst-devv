@@ -5,37 +5,25 @@ RSpec.describe "User::GroupsController", type: :controller do
 
     let!(:user) { create :user}
     let!(:group) { create(:group, enterprise: user.enterprise, owner: user) }
+    
+    before {
+        group.children << Group.create!(:name => "child", :enterprise => group.enterprise)
+    }
 
     describe 'GET #index' do
         describe "when user is logged in" do 
             login_user_from_let
             
-            context "when group is not private" do
+            context "when group has no parents" do
                 before { get :index }
                 
                 it "render index template" do
                     expect(response).to render_template :index
                 end
     
-                it "return 1 of the current user's enterprise non private groups" do 
+                it "return 1 of the current user's enterprise groups" do 
                     expect(assigns[:groups]).to eq [group]
                 
-                end
-            end
-            
-            context "when group is private" do
-                before { 
-                    group.private = true
-                    group.save!
-                    get :index 
-                }
-                
-                it "render index template" do
-                    expect(response).to render_template :index
-                end
-    
-                it "return 0 of the current user's enterprise non private groups" do 
-                    expect(assigns[:groups]).to eq []
                 end
             end
         end
