@@ -6,6 +6,8 @@ class GroupCategoryType < ActiveRecord::Base
   validates :name, presence: true
   attr_accessor :category_names
 
+  after_create :create_association_with_enterprise
+
   def category_names=(names)
   	@category_names = names
   	names.split(',').each do |name|
@@ -15,5 +17,9 @@ class GroupCategoryType < ActiveRecord::Base
 
   def to_s 
   	name
+  end
+
+  def create_association_with_enterprise
+  	self.group_categories.update_all(enterprise_id: self.enterprise_id)
   end
 end

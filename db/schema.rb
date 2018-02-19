@@ -481,6 +481,7 @@ ActiveRecord::Schema.define(version: 20180218234816) do
     t.datetime "created_at",                         null: false
     t.datetime "updated_at",                         null: false
     t.integer  "group_category_type_id", limit: 4
+    t.integer  "enterprise_id",          limit: 4
   end
 
   create_table "group_category_types", force: :cascade do |t|

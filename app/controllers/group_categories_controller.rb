@@ -41,7 +41,8 @@ class GroupCategoriesController < ApplicationController
   end
 
   def view_all
-    @category_types = GroupCategoryType.all
+    @categories = current_user.enterprise.group_categories
+    @category_types = current_user.enterprise.group_category_types
   end
 
 
