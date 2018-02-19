@@ -22,6 +22,7 @@ class GroupsController < ApplicationController
 
     def close_budgets
         authorize Group
+        user_not_authorized if not current_user.policy_group.annual_budget_manage?
         @groups = current_user.enterprise.groups.includes(:children).where(:parent_id => nil)
     end
 
