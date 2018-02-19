@@ -120,7 +120,9 @@
           <% end %>
         <% end %>
       <% else %>
-        <%= link_to c_t(:member_preference), survey_group_questions_path(@group), class: "btn btn--primary" unless current_user.has_answered_group_survey? @group %>
+        <% if @group.survey_fields.present? && !current_user.has_answered_group_survey?(@group) %>
+            <%= link_to c_t(:member_preference), survey_group_questions_path(@group), class: "btn btn--primary" %>
+        <% end %>
       <% end %>
 
       <div class="card card--secondary">
