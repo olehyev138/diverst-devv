@@ -5,12 +5,16 @@ RSpec.describe "User::GroupsController", type: :controller do
 
     let!(:user) { create :user}
     let!(:group) { create(:group, enterprise: user.enterprise, owner: user) }
+    
+    before {
+        group.children << Group.create!(:name => "child", :enterprise => group.enterprise)
+    }
 
     describe 'GET #index' do
         describe "when user is logged in" do 
             login_user_from_let
             
-            context "when group is not private" do
+            context "when group is not private and has no parents" do
                 before { get :index }
                 
                 it "render index template" do
@@ -23,7 +27,7 @@ RSpec.describe "User::GroupsController", type: :controller do
                 end
             end
             
-            context "when group is private" do
+            context "when group is private and has no parents" do
                 before { 
                     group.private = true
                     group.save!

@@ -143,7 +143,6 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #calendar_data' do
     def get_calendar_data(initiative_participating_groups_id_in, initiative_segments_segement_id_in, params={})
       get :calendar_data, params, q: { initiative_participating_groups_group_id_in: initiative_participating_groups_id_in, initiative_segments_segement_id_in: initiative_segments_segement_id_in }, format: :json
@@ -210,7 +209,6 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #new' do
     context 'with logged user' do
       login_user_from_let
@@ -232,7 +230,6 @@ RSpec.describe GroupsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'GET #show' do
     context 'with logged user' do
@@ -375,7 +372,6 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'POST #create' do
     def post_create(params={a: 1})
       post :create, group: params
@@ -469,7 +465,6 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #edit' do
     context 'with logged user' do
       login_user_from_let
@@ -489,7 +484,6 @@ RSpec.describe GroupsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'PATCH #update' do
     def patch_update( group_id = -1, params = {})
@@ -576,7 +570,6 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #settings' do
     let(:user) { create :user }
     let(:group) { create :group, enterprise: user.enterprise }
@@ -604,7 +597,6 @@ RSpec.describe GroupsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'DELETE #destroy' do
     def delete_destroy(group_id = -1)
@@ -679,7 +671,6 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #metrics' do
     context 'with logged user' do
       let!(:updates) { create_list(:group_update, 3, owner: user, group: group) }
@@ -705,7 +696,6 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #import_csv' do
     context 'with logged user' do
       login_user_from_let
@@ -725,7 +715,6 @@ RSpec.describe GroupsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'GET #sample_csv' do
     let(:user){ create(:user, enterprise: enterprise) }
@@ -750,7 +739,6 @@ RSpec.describe GroupsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'GET #parse_csv' do
     let!(:file) { fixture_file_upload('files/test.csv', 'text/csv') }
@@ -792,7 +780,6 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #export_csv' do
     context 'with logged user' do
       login_user_from_let
@@ -817,7 +804,6 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #edit_fields' do  
     context 'with logged user' do
       login_user_from_let
@@ -837,7 +823,6 @@ RSpec.describe GroupsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'GET #delete_attachment' do
 
