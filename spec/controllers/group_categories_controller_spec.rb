@@ -106,6 +106,7 @@ RSpec.describe GroupCategoriesController, type: :controller do
 
 	describe "GET#view_all" do 
 		login_user_from_let
+		before { get :view_all }
 
 		it 'renders view all page' do 
 			expect(response).to render_template :view_all
