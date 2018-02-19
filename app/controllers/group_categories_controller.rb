@@ -1,5 +1,6 @@
 class GroupCategoriesController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_category, only: [:edit, :update]
   after_action :verify_authorized, except: [:update_all_groups, :view_all]
 
   layout :resolve_layout
@@ -27,6 +28,21 @@ class GroupCategoriesController < ApplicationController
     else
       flash[:alert] = "something went wrong. Please check errors."
       render :new
+    end
+  end
+
+  def edit
+    authorize Group
+  end
+
+  def update
+    authorize Group
+    if @category.update(category_params)
+      flash[:notice] = "update category name"
+      redirect_to view_all_group_categories_url
+    else 
+      flash[:alert] = "something went wrong. please fix errors"
+      render 'edit'
     end
   end
 
@@ -64,5 +80,13 @@ class GroupCategoriesController < ApplicationController
   def category_type_params
     params.require(:group_category_type)
       .permit(:name, :enterprise_id, :category_names)
+  end
+
+  def category_params
+    params.require(:group_category).permit(:name)
+  end
+
+  def set_category
+    @category = current_user.enterprise.group_categories.find(params[:id])
   end
 end
