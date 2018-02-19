@@ -58,5 +58,7 @@ FactoryGirl.define do
 
     groups_budgets_request true
     groups_budgets_index true
+    
+    annual_budget_manage true
   end
 end

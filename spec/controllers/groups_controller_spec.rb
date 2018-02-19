@@ -50,28 +50,41 @@ RSpec.describe GroupsController, type: :controller do
   describe 'GET #close_budgets' do
     context 'with logged user' do
       login_user_from_let
-
-      it 'render close_budgets template' do
-        get :close_budgets, :id => group.id
-        expect(response).to render_template :close_budgets
+      
+      context "with correct permissions" do
+        it 'render close_budgets template' do
+          get :close_budgets, :id => group.id
+          expect(response).to render_template :close_budgets
+        end
+  
+        context 'where groups have children' do
+          let!(:group1) { create(:group, enterprise: enterprise) }
+          let!(:groups) { create_list(:group, 2, enterprise: enterprise) }
+          before do
+            group
+            groups.each { |group| group.children << group }
+          end
+  
+          it 'total number of groups should be 4' do
+            get :close_budgets, :id => group.id
+            expect(Group.all.count).to eq 4
+          end
+  
+          it 'return 2 groups with children' do
+            get :close_budgets, :id => group.id
+            expect(assigns[:groups].count).to eq 2
+          end
+        end
       end
-
-      context 'where groups have children' do
-        let!(:group1) { create(:group, enterprise: enterprise) }
-        let!(:groups) { create_list(:group, 2, enterprise: enterprise) }
-        before do
-          group
-          groups.each { |group| group.children << group }
-        end
-
-        it 'total number of groups should be 4' do
+      
+      context "with incorrect permissions" do
+        it 'render close_budgets template' do
+          policy_group = user.policy_group
+          policy_group.annual_budget_manage = false
+          policy_group.save!
+          
           get :close_budgets, :id => group.id
-          expect(Group.all.count).to eq 4
-        end
-
-        it 'return 2 groups with children' do
-          get :close_budgets, :id => group.id
-          expect(assigns[:groups].count).to eq 2
+          expect(response).to_not render_template :close_budgets
         end
       end
     end
