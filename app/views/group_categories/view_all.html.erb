@@ -8,8 +8,11 @@
 		<% @category_types.each do |category_type| %>
 		<div class="card__section card__section--border">
 			<div class="flex-row flex-row--middle">
-				<div class="flex-row__cell">
+				<div class="flex-row__cell flex-row__cell--grow">
 					<h1 class="btn btn--primary"><span style="font-weight: bold;"><%= category_type %></span></h1>
+				</div>
+				<div class="flex-row__cell flex-row__cell--grow">
+				<%= link_to "Edit category type", [:edit, category_type] %>
 				</div>
 			</div> 
 		</div>
@@ -20,7 +23,7 @@
 					<%= link_to "#{category}" + "(#{category.groups.count})", "#", class: "nested_show", id: category.id %>
 					<%= link_to " hide groups under #{category}", "#", class: "nested_hide", id: category.id, style: "display:none;" %>
 				</div>
-				<div class="flex-row__cell link-group">
+				<div class="flex-row__cell flex-row__cell--grow">
 				<%= link_to "Edit name of category", [:edit, category] %>
 				</div>
 			</div>

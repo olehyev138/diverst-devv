@@ -1,2 +1,13 @@
-<h1>GroupCategoryTypes#edit</h1>
-<p>Find me in app/views/group_category_types/edit.html.erb</p>
+<div class="content__main">
+	<h1>Edit Category Type</h1>
+	
+	<%= simple_form_for @category_type, url: group_category_type_url(@category_type), method: :patch do |f| %>
+	<div class="card">
+		<div class="card__section">
+			<label>Type of Category</label>
+			<%= f.input :name, label: false %>
+			<%= f.button :submit, 'update category type' %>
+		</div>
+	</div>
+	<% end %>
+</div>
