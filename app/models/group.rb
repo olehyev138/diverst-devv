@@ -122,8 +122,8 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
 
-  def is_parent_with_more_than_5_ergs_with_no_categorization?
-    self.parent.nil? && self.children.count > 5 && self.group_category_id.nil?
+  def is_parent_with_more_than_5_ergs?
+    self.parent.nil? && self.children.count > 5
   end
 
   def capitalize_name

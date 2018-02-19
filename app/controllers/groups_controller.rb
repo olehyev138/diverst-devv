@@ -136,11 +136,10 @@ class GroupsController < ApplicationController
             track_activity(@group, :create)
 
             # check if parent erg, and parent erg with more than 5 ergs, and not categorized, redirect to update all groups
-            if @group.is_parent_with_more_than_5_ergs_with_no_categorization?
+            if @group.is_parent_with_more_than_5_ergs?
               flash[:notice] = "Your #{c_t(:erg)} was created"
               redirect_to group_categories_url(parent_id: @group.id)
             else
-              # check if sub-erg, and not categorized, redirect to groups url
               flash[:notice] = "Your #{c_t(:erg)} was created"
               redirect_to groups_url
             end
@@ -161,7 +160,7 @@ class GroupsController < ApplicationController
         if @group.update(group_params)
             track_activity(@group, :update)
 
-            if @group.is_parent_with_more_than_5_ergs_with_no_categorization?
+            if @group.is_parent_with_more_than_5_ergs?
               flash[:notice] = "Your #{c_t(:erg)} was updated"
               redirect_to group_categories_url(parent_id: @group.id)
             else

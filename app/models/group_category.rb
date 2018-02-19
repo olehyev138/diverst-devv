@@ -5,6 +5,6 @@ class GroupCategory < ActiveRecord::Base
   validates :name, presence: true
 
   def to_s
-  	name
+  	name 
   end
 end
