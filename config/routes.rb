@@ -1,4 +1,12 @@
 Rails.application.routes.draw do
+  get 'group_category_types/index'
+
+  get 'group_category_types/show'
+
+  get 'group_category_types/new'
+
+  get 'group_category_types/edit'
+
   mount Ckeditor::Engine => '/ckeditor'
   require 'sidekiq/web'
 
@@ -125,6 +133,8 @@ Rails.application.routes.draw do
     end
   end
   post 'group_categories/update_all_groups', to: 'group_categories#update_all_groups', as: :update_all_groups
+
+  resources :group_category_types
 
   resources :groups do
     resources :budgets, only: [:index, :show, :new, :create, :destroy] do

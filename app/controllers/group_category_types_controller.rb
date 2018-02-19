@@ -1,4 +1,4 @@
-class GroupCategoriesController < ApplicationController
+class GroupCategoryTypesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_category, only: [:edit, :update]
   after_action :verify_authorized, except: [:update_all_groups, :view_all]

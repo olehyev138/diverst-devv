@@ -134,6 +134,9 @@ class GroupsController < ApplicationController
 
         if @group.save
             track_activity(@group, :create)
+
+            # check if parent erg, and parent erg with more than 5 ergs, and not categorized, redirect to update all groups
+            # check if sub-erg, and not categorized, redirect to groups url
             flash[:notice] = "Your #{c_t(:erg)} was created"
             redirect_to groups_url
         else
