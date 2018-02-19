@@ -40,5 +40,14 @@ module Diverst
     config.action_dispatch.rescue_responses["Pundit::NotAuthorizedError"] = :forbidden
 
     ActionMailer::Base.delivery_method = :smtp
+    
+    # Cross Domain Request
+    config.middleware.insert_before 0, "Rack::Cors" do
+      allow do
+        origins '*'
+        resource '*', :headers => :any, :methods => [:get, :post, :put, :delete, :options]
+        resource '/assets/*', headers: :any, methods: [:get]
+      end
+    end
   end
 end
