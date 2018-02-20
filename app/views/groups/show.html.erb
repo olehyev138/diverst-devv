@@ -182,7 +182,7 @@
         </div>
       <% else %>
       <% if @group.group_category_type.nil? %>
-      <div class="card card--secondary">
+        <div class="card card--secondary">
           <div class="card__section">
             Sub-<%= c_t(:erg).titleize.pluralize %>(<%= @group.children.count %>)<br>
             <% @group.children.limit(5).each do |child| %>
@@ -197,7 +197,7 @@
             </div>
             <% end %>
           </div>
-      </div>
+        </div>
       <% else %>
        <div class="card card--secondary">
           <div class="card__section">
@@ -219,8 +219,8 @@
             <% end %>
             </ol>
           </div>
-          <% end %>
         </div>
+      <% end %>
       <% end %>
 
       <% if @group.active_members.include? current_user %>
