@@ -30,8 +30,8 @@ module Diverst
 
     config.autoload_paths << Rails.root.join('app/models/csv_export')
 
-    config.assets.paths << Rails.root.join('vendor', 'assets', 'bower_components') # Bower
-    config.assets.paths << Rails.root.join('tmp', 'themes') # Custom themes
+    config.assets.paths   << Rails.root.join('vendor', 'assets', 'bower_components') # Bower
+    config.assets.paths   << Rails.root.join('tmp', 'themes') # Custom themes
 
     config.active_job.queue_adapter = :sidekiq
 
@@ -40,14 +40,5 @@ module Diverst
     config.action_dispatch.rescue_responses["Pundit::NotAuthorizedError"] = :forbidden
 
     ActionMailer::Base.delivery_method = :smtp
-    
-    # Cross Domain Request
-    config.middleware.insert_before 0, "Rack::Cors" do
-      allow do
-        origins '*'
-        resource '*', :headers => :any, :methods => [:get, :post, :put, :delete, :options]
-        resource '/assets/*', headers: :any, methods: [:get]
-      end
-    end
   end
 end
