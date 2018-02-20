@@ -181,6 +181,24 @@
           </div>
         </div>
       <% else %>
+      <% if @group.group_category_type.nil? %>
+      <div class="card card--secondary">
+          <div class="card__section">
+            Sub-<%= c_t(:erg).titleize.pluralize %>(<%= @group.children.count %>)<br>
+            <% @group.children.limit(5).each do |child| %>
+              <%= link_to child.name, child %><br>
+            <% end %>
+            <%= link_to "View #{@group.children.count - 5} More", "#", class: "sub_ergs", id: @group.id %>
+            <%= link_to "Hide Sub-Ergs", "#", class: " hide_sub_ergs", id: @group.id, style: "display:none;" %>
+            
+            <% @group.children.last(@group.children.count - 5).each do |sub_erg| %>
+            <div class="remaining_children_<%= @group.id %>" style="display:none; position: relative; top: 10px;">
+              <ol><%= link_to sub_erg.capitalize_name, group_url(sub_erg) %></ol>
+            </div>
+            <% end %>
+          </div>
+      </div>
+      <% else %>
        <div class="card card--secondary">
           <div class="card__section">
             Sub-<%= c_t(:erg).titleize.pluralize %>(<%= @group.children.count %>)<br>
@@ -201,6 +219,7 @@
             <% end %>
             </ol>
           </div>
+          <% end %>
         </div>
       <% end %>
 
@@ -242,6 +261,21 @@
 </div>
 
 <script>
+$('a.sub_ergs').click(function(e){
+    var id = $(this).attr('id');
+    $('div.remaining_children_' + id).show();
+
+    $(this).siblings('a.hide_sub_ergs').show();
+    $(this).hide();
+  }); //endof click
+
+  $('a.hide_sub_ergs').click(function(e){
+    var id = $(this).attr('id');
+    $('div.remaining_children_' + id).hide();
+    $(this).siblings('a.sub_ergs').show();
+    $(this).hide();
+  }); //endof click
+
 $('a.nested_show').click(function(e){
     var id = $(this).attr('id');
     $('div.children_' + id).show();
