@@ -4,17 +4,17 @@ RSpec.describe "User::GroupsController", type: :controller do
     before { @controller = User::GroupsController.new }
 
     let!(:user) { create :user}
-    let!(:group) { create(:group, enterprise: user.enterprise, owner: user) }
+    let!(:group) { create(:group, enterprise: user.enterprise, owner: user, private: true) }
     
     before {
         group.children << Group.create!(:name => "child", :enterprise => group.enterprise)
     }
 
-    describe 'GET #index' do
+    fdescribe 'GET #index' do
         describe "when user is logged in" do 
             login_user_from_let
             
-            context "when group has no parents" do
+            context "when group has no parents and is private" do
                 before { get :index }
                 
                 it "render index template" do
