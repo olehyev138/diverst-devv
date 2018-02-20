@@ -32,14 +32,6 @@ RSpec.describe Group, :type => :model do
 
         it { expect(group).to have_one(:news_feed)}
 
-        describe '#is_parent_with_more_than_5_ergs?' do 
-            let!(:parent_erg) { create(:group, parent_id: nil) }
-            let!(:sub_ergs) { create_list(:group, 6, parent_id: parent_erg.id)}
-
-            it 'return true if parent has more than 5 sub ergs' do 
-                expect(parent_erg.is_parent_with_more_than_5_ergs?).to eq true
-            end
-        end
 
         describe '#valid_yammer_group_link?' do
           context 'with valid yammer group link' do

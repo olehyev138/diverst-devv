@@ -23,6 +23,14 @@ class GroupPolicy < ApplicationPolicy
         @policy_group.groups_create?
     end
 
+    def update_all_groups?
+      create?
+    end
+
+    def view_all?
+      create?
+    end
+
     def update?
         return true if @policy_group.groups_manage?
         return true if @record.owner == @user
