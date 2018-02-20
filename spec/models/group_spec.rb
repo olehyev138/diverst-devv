@@ -10,6 +10,8 @@ RSpec.describe Group, :type => :model do
         it { expect(group).to belong_to(:enterprise) }
         it { expect(group).to belong_to(:lead_manager) }
         it { expect(group).to belong_to(:owner) }
+        it { expect(group).to belong_to(:group_category)}
+        it { expect(group).to belong_to(:group_category_type)}
 
         it{ expect(group).to have_many(:leaders).through(:group_leaders) }
         it{ expect(group).to have_many(:members).through(:user_groups) }
@@ -27,7 +29,17 @@ RSpec.describe Group, :type => :model do
         it { expect(group).to have_many(:folder_shares) }
         it { expect(group).to have_many(:shared_folders) }
 
+
         it { expect(group).to have_one(:news_feed)}
+
+        describe '#is_parent_with_more_than_5_ergs?' do 
+            let!(:parent_erg) { create(:group, parent_id: nil) }
+            let!(:sub_ergs) { create_list(:group, 6, parent_id: parent_erg.id)}
+
+            it 'return true if parent has more than 5 sub ergs' do 
+                expect(parent_erg.is_parent_with_more_than_5_ergs?).to eq true
+            end
+        end
 
         describe '#valid_yammer_group_link?' do
           context 'with valid yammer group link' do

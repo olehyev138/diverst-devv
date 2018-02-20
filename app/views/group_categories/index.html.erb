@@ -1,5 +1,8 @@
 <div class="content__main">
-<h1>Categories of Sub-<%= c_t(:erg).titleize.pluralize %> of <%= @parent.name %></h1>
+<h1>Categorize Sub-<%= c_t(:erg).titleize.pluralize %> of <%= @parent.name %></h1>
+<% if @categories.empty? %>
+<p><%= link_to "Create Categories for Sub-#{c_t(:erg).titleize.pluralize}", new_group_category_url, class: "btn btn--primary" %></p>
+<% else %>
     <%= form_tag update_all_groups_url, method: :post do %>
 	<div class="card">
 	  <div class="card__section row">
@@ -15,6 +18,7 @@
 	<%= submit_tag "Save Categories", class: "btn btn--primary" %>
 	<% end %>
 	<br>
-	<%#= link_to "Go Here To Create a New Category", new_group_category_url(group_id: @group), class: "btn btn--primary" %>
+    <p><%= link_to "Create Additional Categories", new_group_category_url, class: "btn btn--primary" %></p>
+<% end %>
 </div>
 
