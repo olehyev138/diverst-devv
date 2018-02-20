@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180218170810) do
+ActiveRecord::Schema.define(version: 20180219134756) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -982,6 +982,7 @@ ActiveRecord::Schema.define(version: 20180218170810) do
     t.boolean  "admin_pages_view",                        default: false
     t.boolean  "budget_approval",                         default: false
     t.boolean  "logs_view",                               default: false
+    t.boolean  "annual_budget_manage",                    default: false
   end
 
   create_table "poll_responses", force: :cascade do |t|

@@ -12,7 +12,7 @@ class GroupsController < ApplicationController
 
     def index
         authorize Group
-        @groups = current_user.enterprise.groups.includes(:children).where(:parent_id => nil)
+        @groups = current_user.enterprise.groups.includes(:children).all_parents
     end
 
     def plan_overview
@@ -22,14 +22,15 @@ class GroupsController < ApplicationController
 
     def close_budgets
         authorize Group
-        @groups = current_user.enterprise.groups.includes(:children).where(:parent_id => nil)
+        user_not_authorized if not current_user.policy_group.annual_budget_manage?
+        @groups = current_user.enterprise.groups.includes(:children).all_parents
     end
 
     # calendar for all of the groups
     def calendar
         authorize Group, :index?
         enterprise = current_user.enterprise
-        @groups = enterprise.groups.where(:parent_id => nil)
+        @groups = enterprise.groups.all_parents
         @segments = enterprise.segments
         @q_form_submit_path = calendar_groups_path
         @q = Initiative.ransack(params[:q])
