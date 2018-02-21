@@ -47,32 +47,44 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #close_budgets' do
     context 'with logged user' do
       login_user_from_let
-
-      it 'render close_budgets template' do
-        get :close_budgets, :id => group.id
-        expect(response).to render_template :close_budgets
+      
+      context "with correct permissions" do
+        it 'render close_budgets template' do
+          get :close_budgets, :id => group.id
+          expect(response).to render_template :close_budgets
+        end
+  
+        context 'where groups have children' do
+          let!(:group1) { create(:group, enterprise: enterprise) }
+          let!(:groups) { create_list(:group, 2, enterprise: enterprise) }
+          before do
+            group
+            groups.each { |group| group.children << group }
+          end
+  
+          it 'total number of groups should be 4' do
+            get :close_budgets, :id => group.id
+            expect(Group.all.count).to eq 4
+          end
+  
+          it 'return 2 groups with children' do
+            get :close_budgets, :id => group.id
+            expect(assigns[:groups].count).to eq 2
+          end
+        end
       end
-
-      context 'where groups have children' do
-        let!(:group1) { create(:group, enterprise: enterprise) }
-        let!(:groups) { create_list(:group, 2, enterprise: enterprise) }
-        before do
-          group
-          groups.each { |group| group.children << group }
-        end
-
-        it 'total number of groups should be 4' do
+      
+      context "with incorrect permissions" do
+        it 'render close_budgets template' do
+          policy_group = user.policy_group
+          policy_group.annual_budget_manage = false
+          policy_group.save!
+          
           get :close_budgets, :id => group.id
-          expect(Group.all.count).to eq 4
-        end
-
-        it 'return 2 groups with children' do
-          get :close_budgets, :id => group.id
-          expect(assigns[:groups].count).to eq 2
+          expect(response).to_not render_template :close_budgets
         end
       end
     end
@@ -82,7 +94,6 @@ RSpec.describe GroupsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'GET#plan_overview' do
     let!(:user) { create :user }
@@ -111,13 +122,14 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #calendar' do
     context 'with logged user' do
       login_user_from_let
 
       before do
         create_list(:group, 2, enterprise: enterprise)
+        # create the sub groups to ensure only parent groups are shown
+        group.children.create!([{enterprise: enterprise, name: "test1"}, {enterprise: enterprise, name: "test2"}])
         create_list(:segment, 3, enterprise: enterprise)
         get :calendar
       end
@@ -126,7 +138,7 @@ RSpec.describe GroupsController, type: :controller do
       end
 
       it 'returns 2 groups belonging to enterprise' do
-        expect(assigns[:groups].count).to eq 2
+        expect(assigns[:groups].count).to eq 3
       end
 
       it 'returns 3 segments belonging to enterprise' do
@@ -143,7 +155,6 @@ RSpec.describe GroupsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'GET #calendar_data' do
     def get_calendar_data(initiative_participating_groups_id_in, initiative_segments_segement_id_in, params={})
@@ -211,7 +222,6 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #new' do
     context 'with logged user' do
       login_user_from_let
@@ -233,7 +243,6 @@ RSpec.describe GroupsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'GET #show' do
     context 'with logged user' do
@@ -376,7 +385,6 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'POST #create' do
     def post_create(params={a: 1})
       post :create, group: params
@@ -470,7 +478,6 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #edit' do
     context 'with logged user' do
       login_user_from_let
@@ -490,7 +497,6 @@ RSpec.describe GroupsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'PATCH #update' do
     def patch_update( group_id = -1, params = {})
@@ -577,7 +583,6 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #settings' do
     let(:user) { create :user }
     let(:group) { create :group, enterprise: user.enterprise }
@@ -605,7 +610,6 @@ RSpec.describe GroupsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'DELETE #destroy' do
     def delete_destroy(group_id = -1)
@@ -680,7 +684,6 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #metrics' do
     context 'with logged user' do
       let!(:updates) { create_list(:group_update, 3, owner: user, group: group) }
@@ -706,7 +709,6 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #import_csv' do
     context 'with logged user' do
       login_user_from_let
@@ -726,7 +728,6 @@ RSpec.describe GroupsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'GET #sample_csv' do
     let(:user){ create(:user, enterprise: enterprise) }
@@ -751,7 +752,6 @@ RSpec.describe GroupsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'GET #parse_csv' do
     let!(:file) { fixture_file_upload('files/test.csv', 'text/csv') }
@@ -793,7 +793,6 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #export_csv' do
     context 'with logged user' do
       login_user_from_let
@@ -818,7 +817,6 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #edit_fields' do  
     context 'with logged user' do
       login_user_from_let
@@ -838,7 +836,6 @@ RSpec.describe GroupsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'GET #delete_attachment' do
 
