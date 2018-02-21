@@ -193,12 +193,14 @@
           <div class="card__section">
             Sub-<%= c_t(:erg).titleize.pluralize %>(<%= @group.children.count %>)
 
+            <% if policy(@group).erg_leader_permissions? %>
             <div class="dropdown">
               <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
               <div class="dropdown-content">
                 <p>Create Categories for Sub-<%= c_t(:erg).titleize.pluralize %> <%= link_to "Here", group_categories_url(parent_id: @group.id) %></p>
               </div>
             </div>
+            <% end %>
             <br>
             <% @group.children.limit(5).each do |child| %>
               <%= link_to child.name, child %><br>
