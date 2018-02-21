@@ -319,6 +319,7 @@ class GroupsController < ApplicationController
                 :sponsor_media,
                 :sponsor_message,
                 :company_video_url,
+                :short_description,
                 :parent_id,
                 manager_ids: [],
                 child_ids: [],
