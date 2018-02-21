@@ -1,0 +1,24 @@
+<div class="content__main">
+<h1>Categorize Sub-<%= c_t(:erg).titleize.pluralize %> of <%= @parent.name %></h1>
+<% if @categories.empty? %>
+<p><%= link_to "Create Categories for Sub-#{c_t(:erg).titleize.pluralize}", new_group_category_url, class: "btn btn--primary" %></p>
+<% else %>
+    <%= form_tag update_all_sub_groups_url, method: :post do %>
+	<div class="card">
+	  <div class="card__section row">
+	  <% @parent.children.each do |child| %>
+	  <%= simple_fields_for 'children[]', child do |c| %>
+		  <div class="col md-6 mb10">
+            <%= c.association :group_category, collection: @categories, :include_blank => "None",label: "#{child.name}" %>
+		  </div>
+		  <% end %>
+		  <% end %>
+	  </div>
+	</div>
+	<%= submit_tag "Save Categories", class: "btn btn--primary" %>
+	<% end %>
+	<br>
+    <p><%= link_to "Create Additional Categories", new_group_category_url, class: "btn btn--primary" %></p>
+<% end %>
+</div>
+

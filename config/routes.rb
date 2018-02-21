@@ -119,6 +119,15 @@ Rails.application.routes.draw do
 
   get 'integrations', to: 'integrations#index'
 
+  resources :group_category_types, only: [:edit, :update]
+
+  resources :group_categories do 
+    collection do 
+      get 'view_all'
+    end
+  end
+  post 'group_categories/update_all_sub_groups', to: 'group_categories#update_all_sub_groups', as: :update_all_sub_groups
+
   resources :groups do
     resources :budgets, only: [:index, :show, :new, :create, :destroy] do
       post 'approve'

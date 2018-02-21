@@ -89,7 +89,9 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
 
   has_many  :children, class_name: "Group", foreign_key: :parent_id
   belongs_to :parent, class_name: "Group", foreign_key: :parent_id
-  
+  belongs_to :group_category
+  belongs_to :group_category_type
+
   has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
   validates_attachment_content_type :logo, content_type: %r{\Aimage\/.*\Z}
 
@@ -122,6 +124,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
+
 
   def capitalize_name
     name.split.map(&:capitalize).join(' ')
@@ -266,7 +269,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
         survey_fields.each do |field|
           user_group_row << field.csv_value(user_group.info[field])
         end
-        
+
         csv << user_group_row
       end
     end
@@ -275,11 +278,11 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   def title_with_leftover_amount
     "Create event from #{name} leftover ($#{leftover_money})"
   end
-  
+
   def pending_comments_count
     message_comments.unapproved.count + news_link_comments.unapproved.count + answer_comments.unapproved.count
   end
-  
+
   def pending_posts_count
     news_links.unapproved.count + messages.unapproved.count + social_links.unapproved.count
   end

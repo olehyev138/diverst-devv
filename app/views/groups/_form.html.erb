@@ -18,7 +18,12 @@
               :include_blank => "None",
               label: "Parent-#{ c_t(:erg).titleize}" %>
       </div>
-      
+
+      <div class="card__section card__section--border">
+        <%= f.association :group_category, 
+             collection: @categories, 
+             :include_blank => "None" %>
+      </div>
       <div class="card__section card__section--border">
         <%= f.association :children,
               collection: @group.enterprise.groups,
