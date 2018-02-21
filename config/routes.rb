@@ -126,7 +126,7 @@ Rails.application.routes.draw do
       get 'view_all'
     end
   end
-  post 'group_categories/update_all_groups', to: 'group_categories#update_all_groups', as: :update_all_groups
+  post 'group_categories/update_all_sub_groups', to: 'group_categories#update_all_sub_groups', as: :update_all_sub_groups
 
   resources :groups do
     resources :budgets, only: [:index, :show, :new, :create, :destroy] do

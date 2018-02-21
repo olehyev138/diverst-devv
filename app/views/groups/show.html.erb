@@ -189,7 +189,7 @@
             <div class="dropdown">
               <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
               <div class="dropdown-content">
-                <p>Create Categories for Sub-Ergs <%= link_to "Here", group_categories_url(parent_id: @group.id) %></p>
+                <p>Create Categories for Sub-<%= c_t(:erg).titleize.pluralize %> <%= link_to "Here", group_categories_url(parent_id: @group.id) %></p>
               </div>
             </div>
             <br>
@@ -197,7 +197,7 @@
               <%= link_to child.name, child %><br>
             <% end %>
             <%= link_to "View #{@group.children.count - 5} More", "#", class: "sub_ergs", id: @group.id %>
-            <%= link_to "Hide Sub-Ergs", "#", class: " hide_sub_ergs", id: @group.id, style: "display:none;" %>
+            <%= link_to "Hide Sub-#{ c_t(:erg).pluralize }", "#", class: " hide_sub_ergs", id: @group.id, style: "display:none;" %>
 
             <% @group.children.last(@group.children.count - 5).each do |sub_erg| %>
             <div class="remaining_children_<%= @group.id %>" style="display:none; position: relative; top: 10px;">
@@ -215,7 +215,7 @@
             <% @group.group_category_type.group_categories.each do |category| %>
             <li>
               <%= link_to category, "#", class: "nested_show", id: category.id %>
-              <%= link_to "hide #{category}", "#", class: "nested_hide", id: category.id, style: "display:none;" %>(<%= category.groups.where(parent_id: @group).count %>)
+              <%= link_to "hide Sub-#{c_t(:erg).titleize.pluralize} under #{category}", "#", class: "nested_hide", id: category.id, style: "display:none;" %>(<%= category.groups.where(parent_id: @group).count %>)
 
                 <% category.groups.where(parent_id: @group).each do |sub_erg| %>
                 <div class="children_<%= category.id %>" style="display:none; position: relative; top: 10px;">

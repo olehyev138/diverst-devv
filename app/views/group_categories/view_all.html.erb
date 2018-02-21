@@ -22,7 +22,7 @@
 			<div class="flex-row flex-row--middle">
 				<div class="flex-row__cell flex-row__cell--grow">
 					<%= link_to "#{category}" + "(#{category.groups.count})", "#", class: "nested_show", id: category.id %>
-					<%= link_to " hide groups under #{category}", "#", class: "nested_hide", id: category.id, style: "display:none;" %>
+					<%= link_to " hide Sub-#{c_t(:erg).titleize.pluralize} under #{category}", "#", class: "nested_hide", id: category.id, style: "display:none;" %>
 				</div>
 				<div class="flex-row__cell flex-row__cell--grow">
 				<%= link_to "Edit name of category", [:edit, category] %>

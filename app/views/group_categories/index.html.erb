@@ -3,7 +3,7 @@
 <% if @categories.empty? %>
 <p><%= link_to "Create Categories for Sub-#{c_t(:erg).titleize.pluralize}", new_group_category_url, class: "btn btn--primary" %></p>
 <% else %>
-    <%= form_tag update_all_groups_url, method: :post do %>
+    <%= form_tag update_all_sub_groups_url, method: :post do %>
 	<div class="card">
 	  <div class="card__section row">
 	  <% @parent.children.each do |child| %>

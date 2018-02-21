@@ -153,14 +153,8 @@ class GroupsController < ApplicationController
 
         if @group.update(group_params)
             track_activity(@group, :update)
-
-            if @group.is_parent_with_more_than_5_ergs?
-              flash[:notice] = "Your #{c_t(:erg)} was updated"
-              redirect_to group_categories_url(parent_id: @group.id)
-            else
-              flash[:notice] = "Your #{c_t(:erg)} was updated"
-              redirect_to :back
-            end
+            flash[:notice] = "Your #{c_t(:erg)} was updated"
+            redirect_to :back
         else
             flash[:alert] = "Your #{c_t(:erg)} was not updated. Please fix the errors"
             render :settings
