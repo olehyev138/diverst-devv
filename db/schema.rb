@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180219134756) do
+ActiveRecord::Schema.define(version: 20180221144009) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -481,12 +481,14 @@ ActiveRecord::Schema.define(version: 20180219134756) do
     t.datetime "created_at",                         null: false
     t.datetime "updated_at",                         null: false
     t.integer  "group_category_type_id", limit: 4
+    t.integer  "enterprise_id",          limit: 4
   end
 
   create_table "group_category_types", force: :cascade do |t|
-    t.string   "name",       limit: 191
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.string   "name",          limit: 191
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.integer  "enterprise_id", limit: 4
   end
 
   create_table "group_fields", force: :cascade do |t|
@@ -590,10 +592,10 @@ ActiveRecord::Schema.define(version: 20180219134756) do
     t.string   "contact_email",              limit: 191
     t.string   "latest_news_visibility",     limit: 191
     t.string   "upcoming_events_visibility", limit: 191
-    t.text     "mission_statement",          limit: 65535
     t.integer  "group_category_id",          limit: 4
     t.integer  "group_category_type_id",     limit: 4
     t.boolean  "private",                                                          default: false
+    t.text     "short_description",          limit: 65535
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
@@ -604,18 +606,6 @@ ActiveRecord::Schema.define(version: 20180219134756) do
   create_table "groups_polls", force: :cascade do |t|
     t.integer "group_id", limit: 4
     t.integer "poll_id",  limit: 4
-  end
-
-  create_table "home_page_templates", force: :cascade do |t|
-    t.integer  "group_id",       limit: 4
-    t.boolean  "newest_members",           default: true
-    t.boolean  "top_performers",           default: true
-    t.boolean  "latest_news",              default: true
-    t.boolean  "latest_events",            default: true
-    t.boolean  "questionnaire",            default: true
-    t.boolean  "leaders_board",            default: true
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
   end
 
   create_table "initiative_comments", force: :cascade do |t|
@@ -719,121 +709,6 @@ ActiveRecord::Schema.define(version: 20180219134756) do
     t.integer  "user1_rating",        limit: 4
     t.integer  "user2_rating",        limit: 4
     t.datetime "both_accepted_at"
-  end
-
-  create_table "mentee_interests", force: :cascade do |t|
-    t.integer  "mentee_id",              limit: 4
-    t.integer  "mentorship_interest_id", limit: 4
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
-  end
-
-  create_table "mentee_ratings", force: :cascade do |t|
-    t.integer  "mentee_id",                 limit: 4
-    t.integer  "mentorship_session_id",     limit: 4
-    t.integer  "overall_rating",            limit: 4,                     null: false
-    t.integer  "overall_competency_rating", limit: 4,                     null: false
-    t.integer  "advancement_rating",        limit: 4,                     null: false
-    t.integer  "participation_rating",      limit: 4,                     null: false
-    t.boolean  "okrs_acheived",                           default: false
-    t.text     "comments",                  limit: 65535
-    t.datetime "created_at",                                              null: false
-    t.datetime "updated_at",                                              null: false
-  end
-
-  create_table "mentee_sessions", force: :cascade do |t|
-    t.integer  "mentee_id",             limit: 4
-    t.integer  "mentorship_session_id", limit: 4
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
-  end
-
-  create_table "mentees", force: :cascade do |t|
-    t.text     "description", limit: 65535
-    t.integer  "user_id",     limit: 4
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-  end
-
-  add_index "mentees", ["user_id"], name: "index_mentees_on_user_id", using: :btree
-
-  create_table "mentor_availability", force: :cascade do |t|
-    t.integer  "mentor_id",   limit: 4
-    t.datetime "start",                     null: false
-    t.datetime "end",                       null: false
-    t.text     "description", limit: 65535
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-  end
-
-  add_index "mentor_availability", ["mentor_id"], name: "index_mentor_availability_on_mentor_id", using: :btree
-
-  create_table "mentor_interests", force: :cascade do |t|
-    t.integer  "mentor_id",              limit: 4
-    t.integer  "mentorship_interest_id", limit: 4
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
-  end
-
-  create_table "mentor_ratings", force: :cascade do |t|
-    t.integer  "mentor_id",             limit: 4
-    t.integer  "mentorship_session_id", limit: 4
-    t.integer  "overall_rating",        limit: 4,                     null: false
-    t.integer  "valuable_rating",       limit: 4,                     null: false
-    t.boolean  "okrs_acheived",                       default: false
-    t.text     "comments",              limit: 65535
-    t.datetime "created_at",                                          null: false
-    t.datetime "updated_at",                                          null: false
-  end
-
-  create_table "mentor_sessions", force: :cascade do |t|
-    t.integer  "mentor_id",             limit: 4
-    t.integer  "mentorship_session_id", limit: 4
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
-  end
-
-  create_table "mentors", force: :cascade do |t|
-    t.text     "description", limit: 65535
-    t.integer  "user_id",     limit: 4
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-  end
-
-  add_index "mentors", ["user_id"], name: "index_mentors_on_user_id", using: :btree
-
-  create_table "mentorship_interests", force: :cascade do |t|
-    t.string   "name",        limit: 191,   null: false
-    t.text     "description", limit: 65535
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-  end
-
-  create_table "mentorship_session_materials", force: :cascade do |t|
-    t.integer  "mentorship_session_id", limit: 4
-    t.string   "name",                  limit: 191
-    t.string   "file_file_name",        limit: 191
-    t.string   "file_content_type",     limit: 191
-    t.integer  "file_file_size",        limit: 4
-    t.datetime "file_updated_at"
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
-  end
-
-  create_table "mentorship_sessions", force: :cascade do |t|
-    t.datetime "start",                    null: false
-    t.datetime "end",                      null: false
-    t.string   "link",       limit: 191
-    t.text     "comments",   limit: 65535
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
-  end
-
-  create_table "mentorship_types", force: :cascade do |t|
-    t.string   "name",        limit: 191,   null: false
-    t.text     "description", limit: 65535
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
   end
 
   create_table "metrics_dashboards", force: :cascade do |t|
@@ -1280,9 +1155,6 @@ ActiveRecord::Schema.define(version: 20180219134756) do
   add_foreign_key "budgets", "users", column: "approver_id"
   add_foreign_key "budgets", "users", column: "requester_id"
   add_foreign_key "custom_texts", "enterprises"
-  add_foreign_key "mentees", "users"
-  add_foreign_key "mentor_availability", "mentors"
-  add_foreign_key "mentors", "users"
   add_foreign_key "polls", "initiatives"
   add_foreign_key "reward_actions", "enterprises"
   add_foreign_key "rewards", "enterprises"

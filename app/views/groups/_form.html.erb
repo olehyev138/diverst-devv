@@ -3,6 +3,7 @@
     <div class="card">
       <div class="card__section card__section--border">
         <%= f.input :name, input_html: { autofocus: true } %>
+        <%= f.input :short_description %>
         <%= f.input :description %>
         <%= f.hidden_field :private, value: 0 %>
         <%= f.input :private, label: 'Set as private' %>
