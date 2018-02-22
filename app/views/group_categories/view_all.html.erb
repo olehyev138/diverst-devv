@@ -11,9 +11,10 @@
 			<div class="flex-row flex-row--middle">
 				<div class="flex-row__cell flex-row__cell--grow">
 					<h1 class="btn btn--primary"><span style="font-weight: bold;"><%= category_type %></span></h1>
+					<%= link_to "+", "#" %>
 				</div>
 				<div class="flex-row__cell flex-row__cell--grow">
-				<%= link_to "Edit category type", [:edit, category_type] %>
+				<%= link_to "Edit", [:edit, category_type] %>
 				</div>
 			</div> 
 		</div>
@@ -25,7 +26,7 @@
 					<%= link_to " hide Sub-#{c_t(:erg).titleize.pluralize} under #{category}", "#", class: "nested_hide", id: category.id, style: "display:none;" %>
 				</div>
 				<div class="flex-row__cell flex-row__cell--grow">
-				<%= link_to "Edit name of category", [:edit, category] %>
+				<%= link_to "Edit", [:edit, category] %>
 				</div>
 			</div>
 			<% category.groups.each do |group| %>

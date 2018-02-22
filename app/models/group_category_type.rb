@@ -10,7 +10,7 @@ class GroupCategoryType < ActiveRecord::Base
 
   def category_names=(names)
   	@category_names = names
-  	names.split(',').each do |name|
+  	names.split(', ').each do |name|
       self.group_categories << GroupCategory.find_or_create_by(name: name)
   	end
   end
