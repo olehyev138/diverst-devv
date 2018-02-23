@@ -1,14 +1,14 @@
 <div class="content__main">
-	<h1>Create Categories for Your ERGs</h1>
+	<h1>Create <%= "Sub-#{c_t(:erg).titleize}" %> Categories</h1>
 	
 	<%= simple_form_for group_category_type, url: group_categories_url, method: :post do |f| %>
 	<div class="card">
 		<div class="card__section">
-			<label>Type of Category</label>
-			<%= f.input :name, label: false, placeholder: 'Region' %>
-			<label>Input categories(please input your categories with comma separating them)</label>
-			<%= f.input :category_names, label: false, placeholder: 'eg. Norther Region,Southern Region,Eastern Region' %>
-			<%= f.button :submit, 'create categories' %>
+			<label>Category Name</label>
+			<%= f.input :name, label: false %>
+			<label>Enter category labels separated by a comma</label>
+			<%= f.input :category_names, label: false, placeholder: 'eg. North, South, East, West' %>
+			<%= f.button :submit, 'Save' %>
 		</div>
 	</div>
 	<% end %>

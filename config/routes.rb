@@ -119,7 +119,12 @@ Rails.application.routes.draw do
 
   get 'integrations', to: 'integrations#index'
 
-  resources :group_category_types, only: [:edit, :update]
+  resources :group_category_types, only: [:edit, :update, :destroy] do 
+    member do 
+      get 'add_category'
+      post 'update_with_new_category'
+    end
+  end
 
   resources :group_categories do 
     collection do 

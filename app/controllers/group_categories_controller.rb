@@ -1,26 +1,27 @@
 class GroupCategoriesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_category, only: [:edit, :update]
+  before_action :set_category, only: [:edit, :update, :destroy]
   after_action :verify_authorized
 
   layout :resolve_layout
 
   def index
     authorize Group
+
     @parent = Group.find(params[:parent_id].to_i)
     @categories = current_user.enterprise.group_categories
   end
 
   def new
   	authorize Group
-    @group_category_type = GroupCategoryType.new
+
+    @group_category_type = current_user.enterprise.group_category_types.new
   end
 
   def create
     authorize Group
-    @group_category_type = GroupCategoryType.new(category_type_params)
-    @group_category_type.enterprise_id = current_user.enterprise.id
 
+    @group_category_type = current_user.enterprise.group_category_types.new(category_type_params)
 
     if @group_category_type.save
       flash[:notice] = "you just created a category named #{@group_category_type.name}"
@@ -38,13 +39,22 @@ class GroupCategoriesController < ApplicationController
 
   def update
     authorize Group
+
     if @category.update(category_params)
       flash[:notice] = "update category name"
       redirect_to view_all_group_categories_url
-    else 
+    else
       flash[:alert] = "something went wrong. please fix errors"
       render 'edit'
     end
+  end
+
+  def destroy
+    authorize Group
+
+    @category.destroy
+    flash[:notice] = "Category successfully removed."
+    redirect_to :back
   end
 
   def update_all_sub_groups
@@ -62,7 +72,7 @@ class GroupCategoriesController < ApplicationController
     params[:children].each do |child|
       next if Group.find(child[0].to_i).group_category_id == child[1][:group_category_id].to_i
       Group.find(child[0].to_i).update(
-        group_category_id: child[1][:group_category_id].to_i, 
+        group_category_id: child[1][:group_category_id].to_i,
         group_category_type_id: @group_category_id.nil? ? nil : GroupCategory.find(@group_category_id).group_category_type_id
  )
     end
