@@ -13,14 +13,14 @@ class GroupCategoriesController < ApplicationController
 
   def new
   	authorize Group
-    @group_category_type = GroupCategoryType.new
+    @group_category_type = current_user.enterprise.group_category_types.new
   end
 
   def create
     authorize Group
-    @group_category_type = GroupCategoryType.new(category_type_params)
-    @group_category_type.enterprise_id = current_user.enterprise.id
-
+    # @group_category_type = GroupCategoryType.new(category_type_params)
+    # @group_category_type.enterprise_id = current_user.enterprise.id
+    @group_category_type = current_user.enterprise.group_category_types.new(category_type_params)
 
     if @group_category_type.save
       flash[:notice] = "you just created a category named #{@group_category_type.name}"

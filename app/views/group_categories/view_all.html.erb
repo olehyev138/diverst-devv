@@ -15,6 +15,7 @@
 				</div>
 				<div class="flex-row__cell flex-row__cell--grow">
 				<%= link_to "Edit", [:edit, category_type] %>
+				<%= link_to "Delete", [category_type], method: :delete, data: {confirm: "NOTE that all associated categories will also be deleted!!!"} %>
 				</div>
 			</div> 
 		</div>

@@ -1,7 +1,7 @@
 class GroupCategoryTypesController < ApplicationController
   before_action :authenticate_user!
   after_action :verify_authorized
-  before_action :set_category_type, only: [:edit, :update, :add_category, :update_with_new_category]
+  before_action :set_category_type, only: [:edit, :update, :add_category, :update_with_new_category, :destroy]
 
   layout :resolve_layout
 
@@ -20,6 +20,14 @@ class GroupCategoryTypesController < ApplicationController
       flash[:alert] = "something went wrong. please fix errors"
       render 'edit'
     end
+  end
+
+  def destroy
+    authorize Group
+
+    @category_type.destroy
+    flash[:notice] = "Successfully deleted categories"
+    redirect_to :back
   end
 
   def add_category
