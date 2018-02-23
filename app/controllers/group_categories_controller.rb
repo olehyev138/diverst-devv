@@ -7,19 +7,20 @@ class GroupCategoriesController < ApplicationController
 
   def index
     authorize Group
+
     @parent = Group.find(params[:parent_id].to_i)
     @categories = current_user.enterprise.group_categories
   end
 
   def new
   	authorize Group
+
     @group_category_type = current_user.enterprise.group_category_types.new
   end
 
   def create
     authorize Group
-    # @group_category_type = GroupCategoryType.new(category_type_params)
-    # @group_category_type.enterprise_id = current_user.enterprise.id
+
     @group_category_type = current_user.enterprise.group_category_types.new(category_type_params)
 
     if @group_category_type.save
@@ -38,6 +39,7 @@ class GroupCategoriesController < ApplicationController
 
   def update
     authorize Group
+
     if @category.update(category_params)
       flash[:notice] = "update category name"
       redirect_to view_all_group_categories_url
