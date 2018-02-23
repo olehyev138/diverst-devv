@@ -71,4 +71,44 @@ RSpec.describe GroupCategoryTypesController, type: :controller do
 			expect(assigns[:category_type]).to be_valid
 		end
 	end
+
+	describe "POST#update_with_new_category" do 
+		login_user_from_let
+
+		context 'with valid params' do 
+		    it 'updated category type' do
+			   post :update_with_new_category, id: group_category_type.id, group_category_type: { name: "updated name", category_names: "red, yellow, blue, green" }
+			   expect(assigns[:category_type].name).to eq "updated name"
+			end
+
+			it '4 new category objects are associated with category type object' do
+				expect{post :update_with_new_category, id: group_category_type.id,
+			 	group_category_type: { name: "updated name", category_names: "red, yellow, blue, green"}}
+			 	.to change(group_category_type.group_categories, :count).by(4)
+			end
+
+			it 'flashes a notice message' do
+				post :update_with_new_category, id: group_category_type.id, group_category_type: { name: "updated name", category_names: "red, yellow, blue, green"}
+				expect(flash[:notice]).to eq "you successfully added categories to #{assigns[:category_type].name}"
+			end
+
+			it 'redirects to view all page' do 
+				post :update_with_new_category, id: group_category_type.id, group_category_type: { name: "updated name", category_names: "red, yellow, blue, green"}
+				expect(response).to redirect_to view_all_group_categories_url
+			end
+	    end
+
+	    context 'with invalid params' do
+
+	    	it 'does not add extra categories' do
+	    	    expect{post :update_with_new_category, id: group_category_type.id, group_category_type: { name: nil, category_names: "red, yellow, blue, green" }}
+	    	    .to change(group_category_type.group_categories, :count).by(0)
+	    	end
+
+	    	it 'renders add_category template' do 
+	    		post :update_with_new_category, id: group_category_type.id, group_category_type: { name: nil, category_names: "red, yellow, blue, green"}
+	    	    expect(response).to render_template :add_category
+	    	end
+	    end
+	end
 end

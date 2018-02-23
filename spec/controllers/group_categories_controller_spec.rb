@@ -43,6 +43,13 @@ RSpec.describe GroupCategoriesController, type: :controller do
 		login_user_from_let
 
 		context 'if group_category_type object is saved' do
+
+			it 'add 4 extra categories to category type' do 
+				expect{post :create, group_category_type: {name: "Color Codes", enterprise_id: enterprise.id, 
+					category_names: "red, blue, yellow, green"} }
+					.to change(GroupCategory, :count).by(4)
+			end
+
 			it 'creates a category type' do
 				expect{post :create, group_category_type: FactoryGirl.attributes_for(:group_category_type)}
 				.to change(GroupCategoryType, :count).by(1)
