@@ -170,8 +170,8 @@
           </div>
         </div>
       <% end %>
-
-      <% if @group.children.count <= 5 %>
+      <% if @group.children.count == 0 %>
+      <% elsif @group.children.count <= 5 %>
         <div class="card card--secondary">
           <div class="card__section">
             Sub-<%= c_t(:erg).titleize.pluralize %>(<%= @group.children.count %>)<br>
