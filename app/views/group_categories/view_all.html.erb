@@ -11,7 +11,7 @@
 			<div class="flex-row flex-row--middle">
 				<div class="flex-row__cell flex-row__cell--grow">
 					<h1 class="btn btn--primary"><span style="font-weight: bold;"><%= category_type %></span></h1>
-					<%= link_to "+", "#" %>
+					<%= link_to "+", add_category_group_category_type_url(category_type) %>
 				</div>
 				<div class="flex-row__cell flex-row__cell--grow">
 				<%= link_to "Edit", [:edit, category_type] %>
