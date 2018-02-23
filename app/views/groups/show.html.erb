@@ -6,17 +6,12 @@
       </div>
     </div>
   <% end %>
- 
+
     <div class="content__header mtmedium">
-      <p style="flex: 1 1 0;">
-      <% if @group.short_description.present? %>
-        <%= allow_newlines @group.short_description %>
-      <% else %>
-        <%= allow_newlines @group.description if @group.description %>
-      <% end %>
-      </p>
       <div class="flex-row flex-row--middle">
         <div class="flex-row__cell">
+        <p style="flex: 1 1 0;"><%= allow_newlines @group.short_description if @group.short_description.present? %></p>
+      <p style="flex: 1 1 0;"><%= allow_newlines @group.description if @group.description.present? %></p>
         </div>
       </div>
     </div>
