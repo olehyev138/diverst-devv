@@ -23,10 +23,11 @@
 			<div class="flex-row flex-row--middle">
 				<div class="flex-row__cell flex-row__cell--grow">
 					<%= link_to "#{category}" + "(#{category.groups.count})", "#", class: "nested_show", id: category.id %>
-					<%= link_to " hide Sub-#{c_t(:erg).titleize.pluralize} under #{category}", "#", class: "nested_hide", id: category.id, style: "display:none;" %>
+					<%= link_to "#{category}" + "(#{category.groups.count})", "#", class: "nested_hide", id: category.id, style: "display:none;" %>
 				</div>
 				<div class="flex-row__cell flex-row__cell--grow">
 				<%= link_to "Edit", [:edit, category] %>
+				<%= link_to "Delete", [category], method: :delete, data: {confirm: "Are you sure you want to delete #{category} category?"} %>
 				</div>
 			</div>
 			<% category.groups.each do |group| %>

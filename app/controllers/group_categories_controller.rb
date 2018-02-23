@@ -1,6 +1,6 @@
 class GroupCategoriesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_category, only: [:edit, :update]
+  before_action :set_category, only: [:edit, :update, :destroy]
   after_action :verify_authorized
 
   layout :resolve_layout
@@ -41,10 +41,18 @@ class GroupCategoriesController < ApplicationController
     if @category.update(category_params)
       flash[:notice] = "update category name"
       redirect_to view_all_group_categories_url
-    else 
+    else
       flash[:alert] = "something went wrong. please fix errors"
       render 'edit'
     end
+  end
+
+  def destroy
+    authorize Group
+
+    @category.destroy
+    flash[:notice] = "Category successfully removed."
+    redirect_to :back
   end
 
   def update_all_sub_groups
@@ -62,7 +70,7 @@ class GroupCategoriesController < ApplicationController
     params[:children].each do |child|
       next if Group.find(child[0].to_i).group_category_id == child[1][:group_category_id].to_i
       Group.find(child[0].to_i).update(
-        group_category_id: child[1][:group_category_id].to_i, 
+        group_category_id: child[1][:group_category_id].to_i,
         group_category_type_id: @group_category_id.nil? ? nil : GroupCategory.find(@group_category_id).group_category_type_id
  )
     end

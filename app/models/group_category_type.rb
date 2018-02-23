@@ -6,7 +6,7 @@ class GroupCategoryType < ActiveRecord::Base
   validates :name, presence: true
   attr_accessor :category_names
 
-  after_create :create_association_with_enterprise
+  after_validation :create_association_with_enterprise, on: [:create, :update]
 
   def category_names=(names)
   	@category_names = names
