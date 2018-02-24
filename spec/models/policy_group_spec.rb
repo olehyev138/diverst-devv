@@ -1,14 +1,22 @@
 require 'rails_helper'
 
 RSpec.describe PolicyGroup, type: :model do
-    
+
+    describe 'test associations' do 
+        let(:policy_group) { build(:policy_group) }
+
+        it{ expect(policy_group).to have_many(:users) }
+        it{ expect(policy_group).to belong_to(:enterprise)}
+        it{ expect(policy_group).to accept_nested_attributes_for(:users)}
+    end
+
     describe 'validations' do
         let(:policy_group) { FactoryGirl.build_stubbed(:policy_group) }
 
         it{ expect(policy_group).to validate_presence_of(:name) }
         it{ expect(policy_group).to validate_presence_of(:enterprise) }
     end
-    
+
     describe '.default_group' do
         context 'within single enterprise' do
             let!(:enterprise) { FactoryGirl.create(:enterprise) }
@@ -126,7 +134,7 @@ RSpec.describe PolicyGroup, type: :model do
             end
         end
     end
-    
+
     describe "#allow_deletion?" do
         it "returns true" do
             enterprise = create(:enterprise)
