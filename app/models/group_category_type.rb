@@ -15,7 +15,7 @@ class GroupCategoryType < ActiveRecord::Base
   	end
   end
 
-  def to_s 
+  def to_s
   	name
   end
 
