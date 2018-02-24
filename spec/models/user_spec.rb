@@ -4,15 +4,63 @@ RSpec.describe User do
   describe "when validating" do
     let(:user) { create(:user) }
 
-    it { expect(user).to validate_presence_of(:first_name) }
-    it { expect(user).to validate_presence_of(:last_name) }
-    it { expect(user).to validate_presence_of(:points) }
-    it { expect(user).to validate_numericality_of(:points).only_integer }
-    it { expect(user).to validate_presence_of(:credits) }
-    it { expect(user).to validate_numericality_of(:credits).only_integer }
-    it { expect(user).to have_many(:user_reward_actions) }
-    it { expect(user).to have_many(:reward_actions).through(:user_reward_actions) }
-    it { expect(user).to have_attached_file(:avatar) }
+    context 'test validations' do 
+      it { expect(user).to validate_presence_of(:first_name) }
+      it { expect(user).to validate_presence_of(:last_name) }
+      it { expect(user).to validate_presence_of(:points) }
+      it { expect(user).to validate_numericality_of(:points).only_integer }
+      it { expect(user).to validate_presence_of(:credits) }
+      it { expect(user).to validate_numericality_of(:credits).only_integer }
+    end
+
+    context 'test' do
+      context 'belongs_to associations' do 
+        it { expect(user).to belong_to(:enterprise) }
+        it { expect(user).to belong_to(:policy_group) }
+      end
+
+      context 'has_many associations' do 
+        it { expect(user).to have_many(:devices) }
+        it { expect(user).to have_many(:users_segments) }
+        it { expect(user).to have_many(:segments).through(:users_segments) }
+        it { expect(user).to have_many(:groups).through(:user_groups) }
+        it { expect(user).to have_many(:user_groups).dependent(:destroy) }
+        it { expect(user).to have_many(:topic_feedbacks) }
+        it { expect(user).to have_many(:poll_responses) }
+        it { expect(user).to have_many(:answers).inverse_of(:author).with_foreign_key(:author_id) }
+        it { expect(user).to have_many(:answer_upvotes).with_foreign_key(:author_id) }
+        it { expect(user).to have_many(:answer_comments).with_foreign_key(:author_id)}
+        it { expect(user).to have_many(:invitations).class_name('CampaignInvitation') }
+        it { expect(user).to have_many(:campaigns).through(:invitations) }
+        it { expect(user).to have_many(:news_links).through(:groups)}
+        it { expect(user).to have_many(:own_news_links).class_name('NewsLink').with_foreign_key(:author_id) }
+        it { expect(user).to have_many(:messages).through(:groups) }
+        it { expect(user).to have_many(:message_comments).class_name('GroupMessageComment').with_foreign_key(:author_id) }
+        it { expect(user).to have_many(:events).through(:groups) }
+        it { expect(user).to have_many(:social_links).with_foreign_key(:author_id).dependent(:destroy) }
+        it { expect(user).to have_many(:initiative_users) }
+        it { expect(user).to have_many(:initiatives).through(:initiative_users).source(:initiative) }
+        it { expect(user).to have_many(:initiative_invitees) }
+        it { expect(user).to have_many(:invited_initiatives).through(:initiative_invitees).source(:initiative) }
+        it { expect(user).to have_many(:event_attendances) }
+        it { expect(user).to have_many(:attending_events).through(:event_attendances).source(:event) }
+        it { expect(user).to have_many(:event_invitees) }
+        it { expect(user).to have_many(:invited_events).through(:event_invitees).source(:event) }
+        it { expect(user).to have_many(:managed_groups).with_foreign_key(:manager_id).class_name('Group') }
+        it { expect(user).to have_many(:samples) }
+        it { expect(user).to have_many(:biases).class_name('Bias') }
+        it { expect(user).to have_many(:group_leaders) }
+        it { expect(user).to have_many(:leading_groups).through(:group_leaders).source(:group) }
+        it { expect(user).to have_many(:user_reward_actions) }
+        it { expect(user).to have_many(:reward_actions).through(:user_reward_actions) }
+      end
+      
+      context 'validate paperclip' do 
+        it { expect(user).to have_attached_file(:avatar) }
+        it { expect(user).to validate_attachment_content_type(:avatar) }
+      end
+    end
+
 
     context 'presence of fields' do
       let(:user){ build(:user, enterprise: enterprise) }
