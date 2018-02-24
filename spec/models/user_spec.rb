@@ -4,7 +4,7 @@ RSpec.describe User do
   describe "when validating" do
     let(:user) { create(:user) }
 
-    context 'test validations' do 
+    context 'test validations' do
       it { expect(user).to validate_presence_of(:first_name) }
       it { expect(user).to validate_presence_of(:last_name) }
       it { expect(user).to validate_presence_of(:points) }
@@ -14,12 +14,12 @@ RSpec.describe User do
     end
 
     context 'test' do
-      context 'belongs_to associations' do 
+      context 'belongs_to associations' do
         it { expect(user).to belong_to(:enterprise) }
         it { expect(user).to belong_to(:policy_group) }
       end
 
-      context 'has_many associations' do 
+      context 'has_many associations' do
         it { expect(user).to have_many(:devices) }
         it { expect(user).to have_many(:users_segments) }
         it { expect(user).to have_many(:segments).through(:users_segments) }
@@ -54,8 +54,8 @@ RSpec.describe User do
         it { expect(user).to have_many(:user_reward_actions) }
         it { expect(user).to have_many(:reward_actions).through(:user_reward_actions) }
       end
-      
-      context 'validate paperclip' do 
+
+      context 'validate paperclip' do
         it { expect(user).to have_attached_file(:avatar) }
         it { expect(user).to validate_attachment_content_type(:avatar) }
       end
