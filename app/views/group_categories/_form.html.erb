@@ -1,6 +1,9 @@
+<div class="content__header">
+	<h1>Create A Category</h1>
+	<%= link_to "View All Categories", view_all_group_categories_url, class: "btn btn--primary" %>
+</div>
+
 <div class="content__main">
-	<h1>Create <%= "Sub-#{c_t(:erg).titleize}" %> Categories</h1>
-	
 	<%= simple_form_for group_category_type, url: group_categories_url, method: :post do |f| %>
 	<div class="card">
 		<div class="card__section">

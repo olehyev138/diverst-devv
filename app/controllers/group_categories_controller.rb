@@ -72,7 +72,7 @@ class GroupCategoriesController < ApplicationController
     params[:children].each do |child|
       next if Group.find(child[0].to_i).group_category_id == child[1][:group_category_id].to_i
       Group.find(child[0].to_i).update(
-        group_category_id: child[1][:group_category_id].to_i,
+        group_category_id: child[1][:group_category_id].to_i.zero? ? nil : child[1][:group_category_id].to_i,
         group_category_type_id: @group_category_id.nil? ? nil : GroupCategory.find(@group_category_id).group_category_type_id
  )
     end

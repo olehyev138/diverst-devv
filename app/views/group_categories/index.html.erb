@@ -1,5 +1,9 @@
+<div class="content__header">
+  <h1>Label Sub-<%= "#{ c_t(:erg).pluralize }" %> of <%= @parent.name %></h1>
+  <%= link_to "View All Categories", view_all_group_categories_url, class: "btn btn--primary" %>
+</div>
+
 <div class="content__main">
-<h1>Label Sub-<%= "#{ c_t(:erg).pluralize }" %> of <%= @parent.name %></h1>
 <% if @categories.empty? %>
 <p><%= link_to "Create Sub-#{c_t(:erg).titleize} Categories", new_group_category_url, class: "btn btn--primary" %></p>
 <% else %>
@@ -15,7 +19,7 @@
 		  <% end %>
 	  </div>
 	</div>
-	<%= submit_tag "Create Categories", class: "btn btn--primary" %> <%= link_to "View All Categories", view_all_group_categories_url, class: "btn btn--primary" %>
+	<%= submit_tag "Save", class: "btn btn--primary" %>
 	<% end %>
 	<br>
 <% end %>
