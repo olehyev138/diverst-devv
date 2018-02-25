@@ -27,7 +27,7 @@ class GroupCategoriesController < ApplicationController
       flash[:notice] = "you just created a category named #{@group_category_type.name}"
       redirect_to groups_url
     else
-      flash[:alert] = "something went wrong. Please check errors."
+      flash.now[:alert] = "something went wrong. Please check errors."
       render :new
     end
   end
@@ -44,7 +44,7 @@ class GroupCategoriesController < ApplicationController
       flash[:notice] = "update category name"
       redirect_to view_all_group_categories_url
     else
-      flash[:alert] = "something went wrong. please fix errors"
+      flash.now[:alert] = "something went wrong. please fix errors"
       render 'edit'
     end
   end
