@@ -4,8 +4,13 @@ RSpec.describe NewsLinkPhoto, type: :model do
   describe 'when validating' do
     let(:news_link_photo) { build_stubbed(:news_link_photo) }
     it { expect(news_link_photo).to belong_to(:news_link) }
+    it { expect(news_link_photo).to validate_presence_of(:news_link).on(:update) }
+    it { expect(news_link_photo).to have_attached_file(:file) }
+    it { expect(news_link_photo).to validate_attachment_content_type(:file)
+      .allowing('image/png', 'image/gif', 'image/jpeg', 'image/jpg')
+      .rejecting('text/xml', 'text/plain') }
   end
-  
+
   describe "#group" do
     it "returns the group the news_link belongs to" do
       group = create(:group)
