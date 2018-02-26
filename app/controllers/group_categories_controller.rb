@@ -25,7 +25,7 @@ class GroupCategoriesController < ApplicationController
     @parent = Group.find(params[:group_category_type][:parent_id].to_i) if !params[:group_category_type][:parent_id].to_i.zero?
 
     if @group_category_type.save
-      flash[:notice] = "you just created a category named #{@group_category_type.name}"
+      flash[:notice] = "You just created a category named #{@group_category_type.name}"
 
       if @parent
         redirect_to group_categories_url(parent_id: @parent.id)
@@ -33,7 +33,7 @@ class GroupCategoriesController < ApplicationController
         redirect_to groups_url
       end
     else
-      flash.now[:alert] = "something went wrong. Please check errors."
+      flash.now[:alert] = "Something went wrong. Please check errors."
       render :new
     end
   end
@@ -47,10 +47,10 @@ class GroupCategoriesController < ApplicationController
     authorize Group
 
     if @category.update(category_params)
-      flash[:notice] = "update category name"
+      flash[:notice] = "Update category name"
       redirect_to view_all_group_categories_url
     else
-      flash.now[:alert] = "something went wrong. please fix errors"
+      flash.now[:alert] = "Something went wrong. please fix errors"
       render 'edit'
     end
   end
