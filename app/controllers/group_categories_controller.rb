@@ -22,12 +22,12 @@ class GroupCategoriesController < ApplicationController
     authorize Group
 
     @group_category_type = current_user.enterprise.group_category_types.new(category_type_params)
-    @parent = Group.find(params[:group_category_type][:parent_id].to_i) if !params[:group_category_type][:parent_id].to_i.zero? 
-    
+    @parent = Group.find(params[:group_category_type][:parent_id].to_i) if !params[:group_category_type][:parent_id].to_i.zero?
+
     if @group_category_type.save
       flash[:notice] = "you just created a category named #{@group_category_type.name}"
 
-      if @parent 
+      if @parent
         redirect_to group_categories_url(parent_id: @parent.id)
       else
         redirect_to groups_url
