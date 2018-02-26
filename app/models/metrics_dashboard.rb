@@ -11,7 +11,7 @@ class MetricsDashboard < ActiveRecord::Base
 
   validates_presence_of :name, :message => "Metrics Dashboard name is required"
   validates_presence_of :groups, :message => "Please select a group"
-  
+
   def update_shareable_token
     if shareable_token.nil?
       self.shareable_token = SecureRandom.urlsafe_base64
