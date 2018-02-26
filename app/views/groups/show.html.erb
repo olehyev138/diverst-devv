@@ -6,15 +6,15 @@
       </div>
     </div>
   <% end %>
-  <% if @group.description.present? %>
+
     <div class="content__header mtmedium">
-      <p style="flex: 1 1 0;"><%= allow_newlines @group.description %></p>
       <div class="flex-row flex-row--middle">
         <div class="flex-row__cell">
+        <p style="flex: 1 1 0;"><%= allow_newlines @group.short_description if @group.short_description.present? %></p>
+      <p style="flex: 1 1 0;"><%= allow_newlines @group.description if @group.description.present? %></p>
         </div>
       </div>
     </div>
-  <% end %>
 
   <div class="row row--equal-height">
     <div class="col sm-12 md-9">
@@ -120,7 +120,9 @@
           <% end %>
         <% end %>
       <% else %>
-        <%= link_to c_t(:member_preference), survey_group_questions_path(@group), class: "btn btn--primary" unless current_user.has_answered_group_survey? @group %>
+        <% if @group.survey_fields.present? && !current_user.has_answered_group_survey?(@group) %>
+            <%= link_to c_t(:member_preference), survey_group_questions_path(@group), class: "btn btn--primary" %>
+        <% end %>
       <% end %>
 
       <div class="card card--secondary">

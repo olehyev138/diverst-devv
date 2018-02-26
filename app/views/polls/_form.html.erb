@@ -64,6 +64,6 @@
     </div>
 
     <%= button_tag "Save and publish", value: "published", name: "poll[status]", class: "btn btn--primary" %>
-    <%= button_tag "Save as draft", value: "draft", name: "poll[status]", class: "btn btn--secondary" %>
+    <%= button_tag "Save as draft", value: "draft", name: "poll[status]", class: "btn btn--secondary" unless f.object.published? %>
   <% end %>
 </div>
