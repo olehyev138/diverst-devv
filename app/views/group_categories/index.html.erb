@@ -1,7 +1,28 @@
+<div class="content__header">
+  <h1>Label Sub-ERG</h1>
+  <%= link_to "View All Categories", view_all_group_categories_url, class: "btn btn--primary" %>
+</div>
+
+
 <div class="content__main">
-<h1>Label Sub-<%= "#{ c_t(:erg).pluralize }" %> of <%= @parent.name %></h1>
-<% if @categories.empty? %>
-<p><%= link_to "Create Sub-#{c_t(:erg).titleize} Categories", new_group_category_url, class: "btn btn--primary" %></p>
+<div class="flex-row__cell flex-row__cell--grow">
+	<div class="field__input-wrapper" style="width: 450px;">
+		<span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
+		<select class="field__input field__input--right-add-on" id="js-group-select">
+			<% current_user.enterprise.groups.where(parent_id: nil).each do |parent| %>
+			<%= link_to group_categories_url(parent_id: parent.id) do %>
+			<option value="<%= parent.id %>"<%= " selected disabled" if parent == @parent %>><%= parent.name %></option>
+			<% end %>
+			<% end %>
+		</select>
+	</div>
+</div>
+<br>
+<br>
+
+
+<% if @parent.children.empty? %>
+<dh2>No Sub-<%= "#{ c_t(:erg).pluralize }" %> available.</h2>
 <% else %>
     <%= form_tag update_all_sub_groups_url, method: :post do %>
 	<div class="card">
@@ -15,9 +36,18 @@
 		  <% end %>
 	  </div>
 	</div>
-	<%= submit_tag "Create Categories", class: "btn btn--primary" %> <%= link_to "View All Categories", view_all_group_categories_url, class: "btn btn--primary" %>
+	<%= submit_tag "Save", class: "btn btn--primary" %>
 	<% end %>
 	<br>
 <% end %>
 </div>
 
+<script>
+  $(document).on('page:change', function() {
+    $(document).off('page:change');
+
+    $('#js-group-select').change(function() {
+      location = "/group_categories?parent_id=" + $(this).find(":selected").val();
+    });
+  });
+</script>
