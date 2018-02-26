@@ -4,20 +4,6 @@
 </div>
 
 <div class="content__main">
-<div class="flex-row__cell flex-row__cell--grow">
-	<div class="field__input-wrapper" style="width: 450px;">
-		<span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
-		<select class="field__input field__input--right-add-on" id="js-group-select">
-			<% current_user.enterprise.groups.where(parent_id: nil).each do |parent| %>
-			<%= link_to group_categories_url(parent_id: parent.id) do %>
-			<option value="<%= parent.id %>"<%= " selected disabled" if parent == @parent %>><%= parent.name %></option>
-			<% end %>
-			<% end %>
-		</select>
-	</div>
-</div>
-<br>
-<br>
 	<%= simple_form_for group_category_type, url: group_categories_url, method: :post do |f| %>
 	<div class="card">
 		<div class="card__section">
@@ -31,13 +17,3 @@
 	</div>
 	<% end %>
 </div>
-
-<script>
-  $(document).on('page:change', function() {
-    $(document).off('page:change');
-
-    $('#js-group-select').change(function() {
-      location = "/group_categories?parent_id=" + $(this).find(":selected").val();
-    });
-  });
-</script>
