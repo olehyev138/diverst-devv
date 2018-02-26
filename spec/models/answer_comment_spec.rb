@@ -1,4 +1,4 @@
-erequire 'rails_helper'
+require 'rails_helper'
 
 RSpec.describe AnswerComment, type: :model do
   describe 'when validating' do
