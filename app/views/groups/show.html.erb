@@ -229,6 +229,9 @@
             </li>
             <% end %>
             </ol>
+              <% @group.children.where(group_category_id: nil).each do |sub_erg_with_no_category| %>
+                <%= link_to sub_erg_with_no_category.capitalize_name, group_url(sub_erg_with_no_category) %>
+              <% end %>
           </div>
         </div>
       <% end %>
