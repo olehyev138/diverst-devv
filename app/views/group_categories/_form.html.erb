@@ -11,6 +11,7 @@
 			<%= f.input :name, label: false %>
 			<label>Enter category labels separated by a comma</label>
 			<%= f.input :category_names, label: false, placeholder: 'eg. North, South, East, West' %>
+			<%= f.hidden_field :parent_id, value: @parent.id  if @parent%>
 			<%= f.button :submit, 'Save' %>
 		</div>
 	</div>
