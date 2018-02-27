@@ -16,7 +16,7 @@ class GroupCategoryTypesController < ApplicationController
     if @category_type.update(category_type_params)
       flash[:notice] = "Update category type name"
       redirect_to view_all_group_categories_url
-    else 
+    else
       flash[:alert] = "Something went wrong. please fix errors"
       render 'edit'
     end
