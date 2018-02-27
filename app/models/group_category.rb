@@ -3,8 +3,9 @@ class GroupCategory < ActiveRecord::Base
   belongs_to :group_category_type
 
   validates :name, presence: true
+  validates :name, uniqueness: true
 
   def to_s
-  	name 
+  	name
   end
 end
