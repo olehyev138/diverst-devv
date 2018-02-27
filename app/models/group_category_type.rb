@@ -4,6 +4,7 @@ class GroupCategoryType < ActiveRecord::Base
   belongs_to :enterprise
 
   validates :name, presence: true
+  validates :name, uniqueness: true
   attr_accessor :category_names
 
   after_save :create_association_with_enterprise, on: [:create, :update]
@@ -15,7 +16,7 @@ class GroupCategoryType < ActiveRecord::Base
   	end
   end
 
-  def to_s 
+  def to_s
   	name
   end
 

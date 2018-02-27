@@ -29,7 +29,7 @@ RSpec.describe UserGroup do
         expect(UserGroup.notifications_status("hourly")).to eq [hourly]
       end
     end
-    
+
     describe ".accepted_users" do
       let!(:hourly){ create(:user_group, notifications_frequency: UserGroup.notifications_frequencies[:hourly]) }
       let!(:disabled){ create(:user_group, notifications_frequency: UserGroup.notifications_frequencies[:disabled]) }
@@ -38,24 +38,24 @@ RSpec.describe UserGroup do
       let(:enterprise) { create :enterprise }
       let(:user1) { create :user, enterprise: enterprise }
       let(:user2) { create :user, enterprise: enterprise }
-      
+
       let(:group) { create :group, enterprise: enterprise }
-      
+
       let(:user_group1) { create :user_group, user: user1, group: group, accepted_member: true }
       let(:user_group2) { create :user_group, user: user2, group: group, accepted_member: false }
 
       context 'with pending users enabled' do
         before { group.update(pending_users: 'enabled') }
-        
+
         it 'returns only accepted member' do
           expect(group.user_groups.accepted_users).to include user_group1
           expect(group.user_groups.accepted_users).to_not include user_group2
         end
       end
-      
+
       context 'with pending users disabled' do
         before { group.update(pending_users: 'disabled') }
-        
+
         it 'returns all members' do
           expect(group.user_groups.accepted_users).to include user_group1
           expect(group.user_groups.accepted_users).to include user_group2
@@ -97,7 +97,7 @@ RSpec.describe UserGroup do
       end
     end
   end
-  
+
   describe "#notifications_date" do
     it "returns sunday" do
       user_group = create(:user_group, :notifications_date => 0)
@@ -128,7 +128,7 @@ RSpec.describe UserGroup do
       expect(user_group.notifications_date).to eq("saturday")
     end
   end
-  
+
   describe "#string_for_field" do
     it "returns the string field" do
       select_field = SelectField.new(:type => "SelectField", :title => "Gender", :options_text => "Male\nFemale")

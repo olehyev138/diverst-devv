@@ -9,13 +9,13 @@ class Segment < ActiveRecord::Base
 
     has_one :parent_segment, class_name: "Segmentation", foreign_key: :child_id
     has_one :parent, class_name: 'Segment', through: :parent_segment, source: :parent
-    
+
     has_many :children, class_name: "Segmentation", foreign_key: :parent_id
     has_many :sub_segments, class_name: 'Segment', through: :children, source: :child, dependent: :destroy
 
     belongs_to :enterprise
     belongs_to :owner, class_name: "User"
-    
+
     has_many :rules, class_name: 'SegmentRule'
     has_many :users_segments
     has_many :members, class_name: 'User', through: :users_segments, source: :user, dependent: :destroy
@@ -29,13 +29,13 @@ class Segment < ActiveRecord::Base
     has_many :groups, inverse_of: :invitation_segments, through: :invitation_segments_groups
     has_many :initiative_segments
     has_many :initiatives, through: :initiative_segments
-    
+
     validates_presence_of :name
-    
+
     accepts_nested_attributes_for :rules, reject_if: :all_blank, allow_destroy: true
-    
+
     after_commit :update_indexes
-    
+
     before_destroy :remove_parent_segment
 
     validates_presence_of :enterprise
@@ -61,7 +61,7 @@ class Segment < ActiveRecord::Base
             CacheSegmentMembersJob.perform_later segment
         end
     end
-    
+
     def remove_parent_segment
         return if self.parent_segment.nil?
         self.parent_segment.destroy

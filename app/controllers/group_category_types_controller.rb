@@ -14,10 +14,10 @@ class GroupCategoryTypesController < ApplicationController
   def update
     authorize Group
     if @category_type.update(category_type_params)
-      flash[:notice] = "update category type name"
+      flash[:notice] = "Update category type name"
       redirect_to view_all_group_categories_url
-    else 
-      flash[:alert] = "something went wrong. please fix errors"
+    else
+      flash[:alert] = "Something went wrong. please fix errors"
       render 'edit'
     end
   end
@@ -38,10 +38,10 @@ class GroupCategoryTypesController < ApplicationController
     authorize Group
 
     if @category_type.update(category_type_params)
-      flash[:notice] = "you successfully added categories to #{@category_type.name}"
+      flash[:notice] = "You successfully added categories to #{@category_type.name}"
       redirect_to view_all_group_categories_url
     else
-      flash[:alert] = "something went wrong. Please check errors."
+      flash[:alert] = "Something went wrong. Please check errors."
       render :add_category
     end
   end
