@@ -27,7 +27,7 @@ RSpec.describe GroupCategoryTypesController, type: :controller do
 		  before { patch :update, id: group_category_type.id, group_category_type: { name: "updated group category type 2" }  }
 
 		  it 'flashes a notice message' do
-		  	expect(flash[:notice]).to eq "update category type name"
+		  	expect(flash[:notice]).to eq "Update category type name"
 		  end
 
 		  it 'redirects to view_all_group_categories_url' do
@@ -59,23 +59,23 @@ RSpec.describe GroupCategoryTypesController, type: :controller do
 		end
 	end
 
-	describe "GET#add_category" do 
+	describe "GET#add_category" do
 		login_user_from_let
 		before {get :add_category, id: group_category_type.id }
 
-		it 'renders add_category template' do 
+		it 'renders add_category template' do
 			expect(response).to render_template :add_category
 		end
 
-		it 'returns a valid group category type object' do 
+		it 'returns a valid group category type object' do
 			expect(assigns[:category_type]).to be_valid
 		end
 	end
 
-	describe "POST#update_with_new_category" do 
+	describe "POST#update_with_new_category" do
 		login_user_from_let
 
-		context 'with valid params' do 
+		context 'with valid params' do
 		    it 'updated category type' do
 			   post :update_with_new_category, id: group_category_type.id, group_category_type: { name: "updated name", category_names: "red, yellow, blue, green" }
 			   expect(assigns[:category_type].name).to eq "updated name"
@@ -89,10 +89,10 @@ RSpec.describe GroupCategoryTypesController, type: :controller do
 
 			it 'flashes a notice message' do
 				post :update_with_new_category, id: group_category_type.id, group_category_type: { name: "updated name", category_names: "red, yellow, blue, green"}
-				expect(flash[:notice]).to eq "you successfully added categories to #{assigns[:category_type].name}"
+				expect(flash[:notice]).to eq "You successfully added categories to #{assigns[:category_type].name}"
 			end
 
-			it 'redirects to view all page' do 
+			it 'redirects to view all page' do
 				post :update_with_new_category, id: group_category_type.id, group_category_type: { name: "updated name", category_names: "red, yellow, blue, green"}
 				expect(response).to redirect_to view_all_group_categories_url
 			end
@@ -105,7 +105,7 @@ RSpec.describe GroupCategoryTypesController, type: :controller do
 	    	    .to change(group_category_type.group_categories, :count).by(0)
 	    	end
 
-	    	it 'renders add_category template' do 
+	    	it 'renders add_category template' do
 	    		post :update_with_new_category, id: group_category_type.id, group_category_type: { name: nil, category_names: "red, yellow, blue, green"}
 	    	    expect(response).to render_template :add_category
 	    	end

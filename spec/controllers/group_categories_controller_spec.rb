@@ -44,24 +44,27 @@ RSpec.describe GroupCategoriesController, type: :controller do
 
 		context 'if group_category_type object is saved' do
 
-			it 'add 4 extra categories to category type' do 
-				expect{post :create, group_category_type: {name: "Color Codes", enterprise_id: enterprise.id, 
+			it 'add 4 extra categories to category type' do
+				expect{post :create, group_category_type: {name: "Color Codes.", enterprise_id: enterprise.id, 
 					category_names: "red, blue, yellow, green"} }
 					.to change(GroupCategory, :count).by(4)
 			end
 
 			it 'creates a category type' do
-				expect{post :create, group_category_type: FactoryGirl.attributes_for(:group_category_type)}
+				expect{post :create, group_category_type: {name: "Color Codes.", enterprise_id: enterprise.id, 
+					category_names: "red, blue, yellow, green"}}
 				.to change(GroupCategoryType, :count).by(1)
 			end
 
 			it 'flashes a notice' do
-				post :create, group_category_type: FactoryGirl.attributes_for(:group_category_type)
-				expect(flash[:notice]).to eq "you just created a category named #{GroupCategoryType.last}"
+				post :create, group_category_type: {name: "Color Codes.", enterprise_id: enterprise.id, 
+					category_names: "red, blue, yellow, green"}
+				expect(flash[:notice]).to eq "You just created a category named #{GroupCategoryType.last}"
 			end
 
 			it 'redirects to groups_url' do
-				post :create, group_category_type: FactoryGirl.attributes_for(:group_category_type)
+				post :create, group_category_type: {name: "Color Codes.", enterprise_id: enterprise.id, 
+					category_names: "red, blue, yellow, green"}
 				redirect_to groups_url
 			end
 		end
@@ -69,7 +72,7 @@ RSpec.describe GroupCategoriesController, type: :controller do
 		context 'if group_category_type object fails to save' do
 			it 'flashes an alert message' do
 				post :create, group_category_type: {name: nil}
-				expect(flash[:alert]).to eq "something went wrong. Please check errors."
+				expect(flash[:alert]).to eq "Something went wrong. Please check errors."
 		    end
 
 		    it 'render new template' do
@@ -99,7 +102,7 @@ RSpec.describe GroupCategoriesController, type: :controller do
 		  before { patch :update, id: group_category2.id, group_category: { name: "updated group category2" }  }
 
 		  it 'flashes a notice message' do
-		  	expect(flash[:notice]).to eq "update category name"
+		  	expect(flash[:notice]).to eq "Update category name"
 		  end
 
 		  it 'redirects to view_all_group_categories_url' do
@@ -166,7 +169,8 @@ RSpec.describe GroupCategoriesController, type: :controller do
 
 	describe "GET#view_all" do
 		login_user_from_let
-		let!(:category_types) { create_list(:group_category_type, 3, enterprise_id: enterprise.id) }
+		let!(:category_types) { create(:group_category_type, name: "Provinces",
+		 enterprise_id: enterprise.id, category_names: "Northern, Southern, Eastern, Central, Western") }
 		before { get :view_all }
 
 		it 'renders view all page' do
@@ -174,11 +178,11 @@ RSpec.describe GroupCategoriesController, type: :controller do
 		end
 
 		it 'returns categories of an enterprise' do
-			expect(assigns[:categories].count).to eq 2
+			expect(assigns[:categories].count).to eq 7
 		end
 
 		it 'returns 3 category types' do
-			expect(assigns[:category_types].count).to eq 4
+			expect(assigns[:category_types].count).to eq 2
 		end
 	end
 end
