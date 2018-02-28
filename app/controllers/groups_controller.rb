@@ -151,6 +151,8 @@ class GroupsController < ApplicationController
     def update
         authorize @group
 
+        @group.group_category_type_id = @group.group_category&.group_category_type_id
+
         if @group.update(group_params)
             track_activity(@group, :update)
             flash[:notice] = "Your #{c_t(:erg)} was updated"
@@ -203,7 +205,7 @@ class GroupsController < ApplicationController
 
     def parse_csv
         authorize @group, :edit?
-        
+
         if params[:file].nil?
             flash[:alert] = "CSV file is required"
             redirect_to :back

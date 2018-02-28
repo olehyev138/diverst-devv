@@ -111,6 +111,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   before_save :create_yammer_group, if: :should_create_yammer_group?
   after_commit :update_all_elasticsearch_members
   before_validation :smart_add_url_protocol
+  before_save :set_group_category_type_for_parent_if_sub_erg, on: [:create, :update]
 
   scope :top_participants,  -> (n) { order(total_weekly_points: :desc).limit(n) }
   # Active Record already has a defined a class method with the name private so we use is_private.
@@ -119,12 +120,20 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   # parents/children
   scope :all_parents,     -> {where(:parent_id => nil)}
   scope :all_children,    -> {where.not(:parent_id => nil)}
-  
+
   accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
 
+
+  def is_sub_group?
+    return true if parent
+  end
+
+  def is_parent_group?
+    return true if parent.nil?
+  end
 
   def capitalize_name
     name.split.map(&:capitalize).join(' ')
@@ -300,6 +309,12 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
 
 
   private
+
+  def set_group_category_type_for_parent_if_sub_erg
+    if self.is_sub_group?
+      self.parent.update(group_category_type_id: self.group_category_type_id)
+    end
+  end
 
   def filter_by_membership(membership_status)
     members.references(:user_groups).where('user_groups.accepted_member=?', membership_status)
