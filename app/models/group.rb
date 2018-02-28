@@ -128,7 +128,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
 
 
   def is_sub_group?
-    return true if parent
+    return true if parent.present?
   end
 
   def is_parent_group?

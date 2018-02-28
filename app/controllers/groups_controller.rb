@@ -131,8 +131,8 @@ class GroupsController < ApplicationController
         @group = current_user.enterprise.groups.new(group_params)
         @group.owner = current_user
 
-        if !group_params[:group_category_id].to_i.zero?
-          @group.group_category_type_id = GroupCategory.find(params[:group][:group_category_id].to_i).group_category_type_id
+        if group_params[:group_category_id].present?
+          @group.group_category_type_id = GroupCategory.find_by(id: group_params[:group_category_id])&.group_category_type_id
         else
             @group.group_category_type_id = nil
         end
@@ -155,9 +155,9 @@ class GroupsController < ApplicationController
     def update
         authorize @group
 
-        if !group_params[:group_category_id].to_i.zero?
-          @group.group_category_type_id = GroupCategory.find(params[:group][:group_category_id].to_i).group_category_type_id
-        else 
+        if group_params[:group_category_id].present?
+          @group.group_category_type_id = GroupCategory.find_by(id: params[:group][:group_category_id])&.group_category_type_id
+        else
             @group.group_category_type_id = nil
         end
 
