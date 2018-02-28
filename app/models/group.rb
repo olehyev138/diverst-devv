@@ -312,7 +312,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
 
   def set_group_category_type_for_parent_if_sub_erg
     if self.is_sub_group?
-      self.parent.update(group_category_type_id: self.group_category_type_id)
+      self.parent.update(group_category_type_id: self.group_category_type_id) unless self.group_category_type_id.nil?
     end
   end
 

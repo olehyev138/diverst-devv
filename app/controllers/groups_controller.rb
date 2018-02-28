@@ -84,7 +84,7 @@ class GroupsController < ApplicationController
 
     def show
         authorize @group
-
+        
         if policy(@group).erg_leader_permissions?
             base_show
 
@@ -131,7 +131,11 @@ class GroupsController < ApplicationController
         @group = current_user.enterprise.groups.new(group_params)
         @group.owner = current_user
 
-        @group.group_category_type_id = @group.group_category&.group_category_type_id
+        if !params[:group][:group_category_id].to_i.zero?
+          @group.group_category_type_id = GroupCategory.find(params[:group][:group_category_id].to_i).group_category_type_id
+        else
+            @group.group_category_type_id = nil
+        end
 
         if @group.save
             track_activity(@group, :create)
@@ -151,7 +155,11 @@ class GroupsController < ApplicationController
     def update
         authorize @group
 
-        @group.group_category_type_id = @group.group_category&.group_category_type_id
+        if !params[:group][:group_category_id].to_i.zero?
+          @group.group_category_type_id = GroupCategory.find(params[:group][:group_category_id].to_i).group_category_type_id
+        else 
+            @group.group_category_type_id = nil
+        end
 
         if @group.update(group_params)
             track_activity(@group, :update)
@@ -260,6 +268,7 @@ class GroupsController < ApplicationController
     end
 
     protected
+
 
     def base_show
         @upcoming_events = @group.initiatives.upcoming.limit(3) + @group.participating_initiatives.upcoming.limit(3)
