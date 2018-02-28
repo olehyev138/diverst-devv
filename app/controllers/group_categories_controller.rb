@@ -30,7 +30,7 @@ class GroupCategoriesController < ApplicationController
       if @parent
         redirect_to group_categories_url(parent_id: @parent.id)
       else
-        redirect_to groups_url
+        redirect_to view_all_group_categories_url
       end
     else
       flash.now[:alert] = "Something went wrong. Please check errors."
