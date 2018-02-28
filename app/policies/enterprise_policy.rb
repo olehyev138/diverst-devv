@@ -6,7 +6,7 @@ class EnterprisePolicy < ApplicationPolicy
   # Edit pages
 
   def edit_auth?
-    @policy_group.global_settings_manage?
+    @policy_group.sso_manage?
   end
 
   def edit_fields?

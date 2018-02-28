@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180221144009) do
+ActiveRecord::Schema.define(version: 20180222185221) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -509,6 +509,7 @@ ActiveRecord::Schema.define(version: 20180221144009) do
     t.boolean  "pending_comments_notifications_enabled",             default: false
     t.boolean  "pending_posts_notifications_enabled",                default: false
     t.boolean  "default_group_contact",                              default: false
+    t.string   "role",                                   limit: 191
   end
 
   create_table "group_message_comments", force: :cascade do |t|
@@ -812,8 +813,10 @@ ActiveRecord::Schema.define(version: 20180221144009) do
     t.datetime "updated_at",                    null: false
   end
 
-  create_table "policy_groups", force: :cascade do |t|
-    t.string   "name",                        limit: 191
+  create_table "policy_group_templates", force: :cascade do |t|
+    t.string   "name",                        limit: 191,                 null: false
+    t.boolean  "default",                                 default: false
+    t.integer  "user_role_id",                limit: 4
     t.integer  "enterprise_id",               limit: 4
     t.boolean  "campaigns_index",                         default: false
     t.boolean  "campaigns_create",                        default: false
@@ -834,6 +837,7 @@ ActiveRecord::Schema.define(version: 20180221144009) do
     t.boolean  "groups_members_manage",                   default: false
     t.boolean  "groups_budgets_index",                    default: false
     t.boolean  "groups_budgets_request",                  default: false
+    t.boolean  "groups_budgets_approve",                  default: false
     t.boolean  "metrics_dashboards_index",                default: false
     t.boolean  "metrics_dashboards_create",               default: false
     t.boolean  "news_links_index",                        default: false
@@ -848,16 +852,73 @@ ActiveRecord::Schema.define(version: 20180221144009) do
     t.boolean  "users_index",                             default: false
     t.boolean  "users_manage",                            default: false
     t.boolean  "global_settings_manage",                  default: false
-    t.datetime "created_at",                                              null: false
-    t.datetime "updated_at",                                              null: false
     t.boolean  "initiatives_index",                       default: false
     t.boolean  "initiatives_create",                      default: false
     t.boolean  "initiatives_manage",                      default: false
-    t.boolean  "default_for_enterprise",                  default: false
     t.boolean  "admin_pages_view",                        default: false
-    t.boolean  "budget_approval",                         default: false
     t.boolean  "logs_view",                               default: false
     t.boolean  "annual_budget_manage",                    default: false
+    t.boolean  "sso_manage",                              default: false
+    t.boolean  "permissions_manage",                      default: false
+    t.boolean  "group_leader_manage",                     default: false
+    t.boolean  "global_calendar",                         default: false
+    t.boolean  "manage_posts",                            default: false
+    t.boolean  "diversity_manage",                        default: false
+    t.datetime "created_at",                                              null: false
+    t.datetime "updated_at",                                              null: false
+  end
+
+  create_table "policy_groups", force: :cascade do |t|
+    t.boolean  "campaigns_index",                       default: false
+    t.boolean  "campaigns_create",                      default: false
+    t.boolean  "campaigns_manage",                      default: false
+    t.boolean  "polls_index",                           default: false
+    t.boolean  "polls_create",                          default: false
+    t.boolean  "polls_manage",                          default: false
+    t.boolean  "events_index",                          default: false
+    t.boolean  "events_create",                         default: false
+    t.boolean  "events_manage",                         default: false
+    t.boolean  "group_messages_index",                  default: false
+    t.boolean  "group_messages_create",                 default: false
+    t.boolean  "group_messages_manage",                 default: false
+    t.boolean  "groups_index",                          default: false
+    t.boolean  "groups_create",                         default: false
+    t.boolean  "groups_manage",                         default: false
+    t.boolean  "groups_members_index",                  default: false
+    t.boolean  "groups_members_manage",                 default: false
+    t.boolean  "groups_budgets_index",                  default: false
+    t.boolean  "groups_budgets_request",                default: false
+    t.boolean  "metrics_dashboards_index",              default: false
+    t.boolean  "metrics_dashboards_create",             default: false
+    t.boolean  "news_links_index",                      default: false
+    t.boolean  "news_links_create",                     default: false
+    t.boolean  "news_links_manage",                     default: false
+    t.boolean  "enterprise_resources_index",            default: false
+    t.boolean  "enterprise_resources_create",           default: false
+    t.boolean  "enterprise_resources_manage",           default: false
+    t.boolean  "segments_index",                        default: false
+    t.boolean  "segments_create",                       default: false
+    t.boolean  "segments_manage",                       default: false
+    t.boolean  "users_index",                           default: false
+    t.boolean  "users_manage",                          default: false
+    t.boolean  "global_settings_manage",                default: false
+    t.datetime "created_at",                                            null: false
+    t.datetime "updated_at",                                            null: false
+    t.boolean  "initiatives_index",                     default: false
+    t.boolean  "initiatives_create",                    default: false
+    t.boolean  "initiatives_manage",                    default: false
+    t.boolean  "admin_pages_view",                      default: false
+    t.boolean  "budget_approval",                       default: false
+    t.boolean  "logs_view",                             default: false
+    t.boolean  "annual_budget_manage",                  default: false
+    t.boolean  "sso_manage",                            default: false
+    t.boolean  "permissions_manage",                    default: false
+    t.boolean  "diversity_manage",                      default: false
+    t.boolean  "manage_posts",                          default: false
+    t.boolean  "group_leader_manage",                   default: false
+    t.boolean  "global_calendar",                       default: false
+    t.boolean  "groups_budgets_approve",                default: true
+    t.integer  "user_id",                     limit: 4
   end
 
   create_table "poll_responses", force: :cascade do |t|
@@ -1080,6 +1141,17 @@ ActiveRecord::Schema.define(version: 20180221144009) do
   add_index "user_rewards", ["reward_id"], name: "index_user_rewards_on_reward_id", using: :btree
   add_index "user_rewards", ["user_id"], name: "index_user_rewards_on_user_id", using: :btree
 
+  create_table "user_roles", force: :cascade do |t|
+    t.integer  "enterprise_id", limit: 4
+    t.boolean  "default",                   default: false
+    t.string   "name",          limit: 191
+    t.string   "role_type",     limit: 191
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+  end
+
+  add_index "user_roles", ["enterprise_id"], name: "index_user_roles_on_enterprise_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "first_name",                  limit: 191
     t.string   "last_name",                   limit: 191
@@ -1118,7 +1190,6 @@ ActiveRecord::Schema.define(version: 20180221144009) do
     t.string   "avatar_content_type",         limit: 191
     t.integer  "avatar_file_size",            limit: 4
     t.datetime "avatar_updated_at"
-    t.integer  "policy_group_id",             limit: 4
     t.boolean  "active",                                    default: true
     t.text     "biography",                   limit: 65535
     t.integer  "points",                      limit: 4,     default: 0,    null: false
@@ -1128,6 +1199,7 @@ ActiveRecord::Schema.define(version: 20180221144009) do
     t.integer  "failed_attempts",             limit: 4,     default: 0,    null: false
     t.string   "unlock_token",                limit: 191
     t.datetime "locked_at"
+    t.string   "role",                        limit: 191,                  null: false
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree
@@ -1164,4 +1236,5 @@ ActiveRecord::Schema.define(version: 20180221144009) do
   add_foreign_key "user_reward_actions", "users"
   add_foreign_key "user_rewards", "rewards"
   add_foreign_key "user_rewards", "users"
+  add_foreign_key "user_roles", "enterprises"
 end

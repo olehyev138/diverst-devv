@@ -12,7 +12,7 @@
           <%= f.input :email %>
           <%= f.input :first_name %>
           <%= f.input :last_name %>
-
+          <%= f.input :role, :collection => current_user.enterprise.user_roles.user_type, :label_method => :name, :value_method => :name, :label => "Role" ,:include_blank => false %>
           <% current_user.enterprise.fields.each do |cf| %>
             <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: resource %>
           <% end %>

@@ -17,18 +17,17 @@ class GroupsController < ApplicationController
 
     def plan_overview
         authorize Group
-        @groups = current_user.enterprise.groups.includes(:initiatives)
+        @groups = policy_scope(Group)
     end
 
     def close_budgets
         authorize Group
-        user_not_authorized if not current_user.policy_group.annual_budget_manage?
-        @groups = current_user.enterprise.groups.includes(:children).all_parents
+        @groups = policy_scope(Group).includes(:children).all_parents
     end
 
     # calendar for all of the groups
     def calendar
-        authorize Group, :index?
+        authorize Group
         enterprise = current_user.enterprise
         @groups = enterprise.groups.all_parents
         @segments = enterprise.segments

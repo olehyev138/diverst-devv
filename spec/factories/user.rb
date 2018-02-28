@@ -8,7 +8,7 @@ FactoryGirl.define do
     invitation_sent_at Time.current
     invitation_accepted_at Time.current
     enterprise
-    policy_group
+    role "admin"
     provider "email"
   end
 end

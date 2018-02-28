@@ -26,12 +26,13 @@ class Enterprise < ActiveRecord::Base
     has_many :yammer_field_mappings
     has_many :emails
     belongs_to :theme
-    has_many :policy_groups
+
     has_many :expenses
     has_many :expense_categories
     has_many :biases, through: :users, class_name: "Bias"
     has_many :departments
-
+    has_many :user_roles
+    has_many :policy_group_templates
     has_many :rewards
     has_many :reward_actions
     has_many :badges
@@ -149,10 +150,6 @@ class Enterprise < ActiveRecord::Base
     # Necessary to be implement a graph container
     def enterprise
         self
-    end
-
-    def default_policy_group
-        PolicyGroup.default_group(self.id)
     end
 
     def sso_fields_to_enterprise_fields(sso_attrs)

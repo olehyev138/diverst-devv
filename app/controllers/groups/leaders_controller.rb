@@ -6,22 +6,23 @@ class Groups::LeadersController < ApplicationController
   layout 'erg'
 
   def index
-    authorize @group, :update?
+    authorize @group, :leaders?
 
     @group_leaders = @group.group_leaders
   end
 
   def new
-    authorize @group, :update?
+    authorize @group, :leaders?
   end
 
   def create
-    authorize @group, :update?
+    authorize @group, :leaders?
     if @group.update(group_params)
       @group.set_default_group_contact
       flash[:notice] = "Leaders were updated"
       redirect_to action: :index
     else
+      puts @group.errors.full_messages.first
       flash[:alert] = "Leaders were not updated. Please fix the errors"
       render :new
     end
@@ -34,6 +35,6 @@ class Groups::LeadersController < ApplicationController
   end
 
   def group_params
-    params.require(:group).permit(group_leaders_attributes: [:id, :user_id, :position_name, :_destroy, :visible, :pending_member_notifications_enabled, :pending_comments_notifications_enabled, :pending_posts_notifications_enabled, :default_group_contact])
+    params.require(:group).permit(group_leaders_attributes: [:id, :user_id, :position_name, :role, :_destroy, :visible, :pending_member_notifications_enabled, :pending_comments_notifications_enabled, :pending_posts_notifications_enabled, :default_group_contact])
   end
 end
