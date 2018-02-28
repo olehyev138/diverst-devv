@@ -84,7 +84,7 @@ class GroupsController < ApplicationController
 
     def show
         authorize @group
-        
+
         if policy(@group).erg_leader_permissions?
             base_show
 
@@ -154,7 +154,7 @@ class GroupsController < ApplicationController
 
     def update
         authorize @group
-
+        
         if !params[:group][:group_category_id].to_i.zero?
           @group.group_category_type_id = GroupCategory.find(params[:group][:group_category_id].to_i).group_category_type_id
         else 

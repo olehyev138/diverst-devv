@@ -223,7 +223,7 @@
             Sub-<%= c_t(:erg).titleize.pluralize %>(<%= @group.children.count %>)<br>
             <ol>
             <% @group.group_category_type.group_categories.each do |category| %>
-            <% unless category.groups.count.zero? %>
+            <% unless category.groups.where(parent_id: @group).count.zero? %>
             <li>
               <%= link_to category, "#", class: "nested_show", id: category.id %>
               <%= link_to category, "#", class: "nested_hide", id: category.id, style: "display:none;" %>(<%= category.groups.where(parent_id: @group).count %>)
