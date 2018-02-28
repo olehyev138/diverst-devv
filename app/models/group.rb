@@ -111,7 +111,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   before_save :create_yammer_group, if: :should_create_yammer_group?
   after_commit :update_all_elasticsearch_members
   before_validation :smart_add_url_protocol
-  before_save :set_group_category_type_for_parent_if_sub_erg, on: [:create, :update]
+  after_save :set_group_category_type_for_parent_if_sub_erg, on: [:create, :update]
 
   scope :top_participants,  -> (n) { order(total_weekly_points: :desc).limit(n) }
   # Active Record already has a defined a class method with the name private so we use is_private.
