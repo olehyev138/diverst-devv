@@ -6,7 +6,7 @@ class ApplicationPolicy
 
     @user = user
     @record = record
-    @policy_group = @user.policy_group || @user.enterprise.default_policy_group
+    @policy_group = @user.policy_group
   end
 
   def index?

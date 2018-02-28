@@ -1,66 +1,62 @@
-class PolicyGroupsController < ApplicationController
+class PolicyGroupTemplatesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_policy_group, only: [:edit, :update, :destroy, :add_users]
+  before_action :set_policy_group_template, only: [:edit, :update, :destroy]
 
   layout 'global_settings'
 
   def index
-    authorize PolicyGroup
+    authorize PolicyGroupTemplate
 
-    @policy_groups = current_user.enterprise.policy_groups
+    @policy_group_templates = current_user.enterprise.policy_group_templates
   end
 
   def new
-    authorize PolicyGroup
+    authorize PolicyGroupTemplate
 
-    @policy_group = current_user.enterprise.policy_groups.new
+    @policy_group_template = current_user.enterprise.policy_group_templates.new
+  end
+  
+  def edit
+    authorize PolicyGroupTemplate
   end
 
   def create
-    authorize PolicyGroup
+    authorize PolicyGroupTemplate
 
-    @policy_group = current_user.enterprise.policy_groups.new(policy_group_params)
+    @policy_group_template = current_user.enterprise.policy_group_templates.new(policy_group_params)
 
-    if @policy_group.save
-      flash[:notice] = "Your policy group was created"
+    if @policy_group_template.save
+      flash[:notice] = "Your policy group template was created"
       redirect_to action: :index
     else
-      flash[:alert] = "Your policy group was not created. Please fix the errors"
+      flash[:alert] = "Your policy group template was not created. Please fix the errors"
       render :new
     end
   end
 
   def update
-    authorize PolicyGroup
+    authorize PolicyGroupTemplate
 
-    if params[:commit] === "Add User(s)"
-      add_users
-    end
-
-    if @policy_group.update(policy_group_params)
-      flash[:notice] = "Your policy group was updated"
+    if @policy_group_template.update(policy_group_params)
+      flash[:notice] = "Your policy group template was updated"
       redirect_to action: :index
     else
-      flash[:alert] = "Your policy group was not updated. Please fix the errors"
+      flash[:alert] = "Your policy group template was not updated. Please fix the errors"
       render :edit
     end
   end
 
   def destroy
-    authorize PolicyGroup
-    @policy_group.destroy
+    authorize PolicyGroupTemplate
+    @policy_group_template.destroy
     redirect_to action: :index
-  end
-
-  def add_users
-    @policy_group.user_ids = @policy_group.user_ids + params[:policy_group][:new_users]
   end
 
   protected
 
-  def set_policy_group
+  def set_policy_group_template
     if current_user
-      @policy_group = current_user.enterprise.policy_groups.find(params[:id])
+      @policy_group_template = current_user.enterprise.policy_group_templates.find(params[:id])
     else
       user_not_authorized
     end
@@ -68,12 +64,10 @@ class PolicyGroupsController < ApplicationController
 
   def policy_group_params
     params
-      .require(:policy_group)
+      .require(:policy_group_template)
       .permit(
         :name,
-        :default_for_enterprise,
         :admin_pages_view,
-
         :campaigns_index,
         :campaigns_create,
         :campaigns_manage,
@@ -112,8 +106,13 @@ class PolicyGroupsController < ApplicationController
         :logs_view,
         :groups_budgets_index,
         :groups_budgets_request,
+        :groups_budgets_approve,
         :annual_budget_manage,
-        user_ids: []
+        :group_leader_manage,
+        :sso_manage,
+        :permissions_manage,
+        :diversity_manage,
+        :manage_posts
       )
   end
 end

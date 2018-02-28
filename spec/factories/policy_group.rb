@@ -1,8 +1,6 @@
 FactoryGirl.define do
   factory :policy_group do
-    name { Faker::Lorem.sentence(3) }
-    enterprise
-
+    association :user, factory: :user
     campaigns_index true
     campaigns_create true
     campaigns_manage true
@@ -48,8 +46,6 @@ FactoryGirl.define do
     initiatives_manage true
 
     global_settings_manage true
-
-    default_for_enterprise false
     admin_pages_view true
 
     budget_approval true

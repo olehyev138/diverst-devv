@@ -7,9 +7,11 @@
     <div class="flex-row__cell">
       <%= link_to "Import CSV", import_csv_users_path, class: "btn btn--secondary", role: "button", 'aria-label': "Import CSV" %>
     </div>
-    <div class="flex-row__cell">
-      <%= link_to "Add a user", new_user_invitation_path, class: "btn btn--primary" %>
-    </div>
+    <% if policy(User).create? %>
+      <div class="flex-row__cell">
+        <%= link_to "Add a user", new_user_invitation_path, class: "btn btn--primary" %>
+      </div>
+    <% end %>
   </div>
 </div>
 
@@ -17,7 +19,7 @@
   <div class="card">
     <div class="card__section">
       <h2>Permission group for new users</h2>
-      New users will be assigned to <strong><%= current_user.enterprise.default_policy_group.name %></strong> permission group. You can change this in <%= link_to 'permission groups settings', policy_groups_path %>.
+      New users will be assigned to a policy group corresponding to their user role.
     </div>
   </div>
   <h3>Invitations sent</h3>

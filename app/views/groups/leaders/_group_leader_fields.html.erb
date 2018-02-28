@@ -16,7 +16,7 @@
   %>
 
   <%= f.input :position_name, input_html: { class: "sortable-focus" } %>
-
+  <%= f.input :role, :collection => current_user.enterprise.user_roles.group_type, :label_method => :name, :value_method => :name, :label => "Group Role" ,:include_blank => false %>
   <%= f.hidden_field :visible, value: 0 %>
   <%= f.input :visible, label: "Show as leader" %>
   <%= f.hidden_field :pending_member_notifications_enabled, value: 0 %>
@@ -29,5 +29,5 @@
   <%= f.input :pending_posts_notifications_enabled, label: "Receive daily notifications about pending posts" %>
 
   <%= f.hidden_field :default_group_contact, value: 0 %>
-  <%= f.input :default_group_contact, label: "set email as contact of group" %>
+  <%= f.input :default_group_contact, label: "Set email as contact of group" %>
 </div>

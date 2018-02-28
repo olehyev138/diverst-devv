@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
     scope :inactive, -> { where(active: false).distinct }
 
     belongs_to :enterprise, inverse_of: :users
-    belongs_to :policy_group
+    has_one :policy_group
 
     has_many :devices
     has_many :users_segments
@@ -55,6 +55,7 @@ class User < ActiveRecord::Base
 
     validates :first_name, presence: true
     validates :last_name, presence: true
+    validates :role, presence: true
     validates :points, numericality: { only_integer: true }, presence: true
     validates :credits, numericality: { only_integer: true }, presence: true
     validate :validate_presence_fields
@@ -63,9 +64,13 @@ class User < ActiveRecord::Base
     before_validation :set_provider
     before_validation :set_uid
 
-    before_save :assign_policy_group, if: Proc.new { |user| user[:policy_group_id].nil? }
     after_create :assign_firebase_token
-
+    after_create :set_default_policy_group
+    
+    after_save  :set_default_policy_group
+    
+    accepts_nested_attributes_for :policy_group
+    
     after_commit on: [:create] { update_elasticsearch_index(self, self.enterprise, 'index') }
     after_commit on: [:update] { update_elasticsearch_index(self, self.enterprise, 'update') }
     after_commit on: [:destroy] { update_elasticsearch_index(self, self.enterprise, 'delete') }
@@ -96,11 +101,15 @@ class User < ActiveRecord::Base
     def badges
         Badge.where("points <= ?", points).order(points: :asc)
     end
-
-    def policy_group
-        assign_policy_group if self[:policy_group_id].nil?
-
-        PolicyGroup.find_by_id(self[:policy_group_id])
+    
+    def set_default_policy_group
+        template = enterprise.policy_group_templates.joins(:user_role).where(:user_roles => {:name => role}).first
+        attributes = template.create_new_policy
+        if policy_group.nil?
+            create_policy_group(attributes)
+        else
+            policy_group.update_attributes(attributes)
+        end
     end
 
     def has_answered_group_surveys?
@@ -263,6 +272,10 @@ class User < ActiveRecord::Base
         self.firebase_token_generated_at = Time.current
         save
     end
+    
+    def admin?
+        role === "user"
+    end
 
     # Updates this user's match scores with all other enterprise users
     def update_match_scores
@@ -422,13 +435,5 @@ class User < ActiveRecord::Base
     # Generate a random password if the user is using SAML
     def generate_password_if_saml
         self.password = self.password_confirmation = SecureRandom.urlsafe_base64 if auth_source == 'saml' && new_record?
-    end
-
-    def assign_policy_group
-        current_policy_group = PolicyGroup.find_by_id(self[:policy_group_id])
-
-        if current_policy_group.nil?
-            self[:policy_group_id] = PolicyGroup.default_group(enterprise.id)&.id
-        end
     end
 end

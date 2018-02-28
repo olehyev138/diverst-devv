@@ -1,0 +1,33 @@
+<div class="content__header">
+  <h1>Permissions Templates</h1>
+  <%= link_to "New permissions template", new_policy_group_template_path, class: "btn btn--primary" if policy(PolicyGroupTemplate).new? %>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <table class="table--has-border" id="policy-groups-templates-table">
+        <thead>
+          <th>Name</th>
+        </thead>
+        <tbody>
+          <% @policy_group_templates.each do |policy_group_template| %>
+            <tr>
+              <td><%= link_to policy_group_template.name, edit_policy_group_template_path(policy_group_template) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).on('page:change', function() {
+    $(document).off('page:change');
+
+    $('#policy-groups-templates-table').dataTable(Utility.mergeWithDTDefaults({
+      order: [[2, "desc"]]
+    }));
+  });
+</script>

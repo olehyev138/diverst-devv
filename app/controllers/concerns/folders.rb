@@ -19,25 +19,30 @@ module Folders
     end
 
     def index
+        authorize_action
         @folders = @container.folders + @container.shared_folders
         @folders.sort_by!{ |f| f.name.downcase }
         render '/index'
     end
 
     def show
+        authorize_action
         render "/show"
     end
 
     def new
+        authorize_action
         @folder = @container.folders.new
         render '/new'
     end
 
     def edit
+        authorize_action
         render '/edit'
     end
 
     def create
+        authorize_action
         @folder = @container.folders.new(folder_params)
         if @folder.save
             redirect_to action: :index
@@ -47,6 +52,7 @@ module Folders
     end
 
     def update
+        authorize_action
         if @folder.update(folder_params)
             redirect_to action: :index
         else
@@ -55,6 +61,7 @@ module Folders
     end
 
     def destroy
+        authorize_action
         @folder.destroy
         redirect_to action: :index
     end
@@ -74,5 +81,8 @@ module Folders
 
     def set_folder
         @folder = @container.folders.find_by_id(params[:id]) || @container.shared_folders.find_by_id(params[:id])
+    end
+    
+    def authorize_action
     end
 end

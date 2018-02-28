@@ -36,7 +36,7 @@
         </li>
       <% end %>
       <% if current_user.enterprise.plan_module_enabled %>
-        <% if default_group = policy_scope(Group).first %>
+        <% if current_user.policy_group.groups_budgets_index? %>
           <li class="nav__item">
             <%= active_link_to plan_overview_groups_path, class: "nav__link", class_active: "nav__link--is-selected", active: active_plan_link? do %>
               <%= inline_svg('icons/plan.svg', class: "icon nav__icon") %>
