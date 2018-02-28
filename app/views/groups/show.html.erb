@@ -6,15 +6,15 @@
       </div>
     </div>
   <% end %>
-  <% if @group.description.present? %>
+
     <div class="content__header mtmedium">
-      <p style="flex: 1 1 0;"><%= allow_newlines @group.description %></p>
       <div class="flex-row flex-row--middle">
         <div class="flex-row__cell">
+        <p style="flex: 1 1 0;"><%= allow_newlines @group.short_description if @group.short_description.present? %></p>
+      <p style="flex: 1 1 0;"><%= allow_newlines @group.description if @group.description.present? %></p>
         </div>
       </div>
     </div>
-  <% end %>
 
   <div class="row row--equal-height">
     <div class="col sm-12 md-9">
@@ -172,16 +172,69 @@
           </div>
         </div>
       <% end %>
-
-       <% if @group.children.count > 0 %>
+      <% if @group.children.count == 0 %>
+      <% elsif @group.children.count <= 5 %>
         <div class="card card--secondary">
           <div class="card__section">
-            Sub-<%= c_t(:erg).titleize.pluralize %><br>
+            Sub-<%= c_t(:erg).titleize.pluralize %>(<%= @group.children.count %>)<br>
             <% @group.children.each do |child| %>
               <%= link_to child.name, child %><br>
             <% end %>
           </div>
         </div>
+      <% else %>
+      <% if @group.group_category_type.nil? %>
+        <div class="card card--secondary">
+          <div class="card__section">
+            Sub-<%= c_t(:erg).titleize.pluralize %>(<%= @group.children.count %>)
+
+            <% if policy(@group).erg_leader_permissions? %>
+            <div class="dropdown">
+              <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+              <div class="dropdown-content">
+                <p>Create Categories for Sub-<%= c_t(:erg).titleize.pluralize %> <%= link_to "Here", group_categories_url(parent_id: @group.id) %></p>
+              </div>
+            </div>
+            <% end %>
+            <br>
+            <% @group.children.limit(5).each do |child| %>
+              <%= link_to child.name, child %><br>
+            <% end %>
+            <%= link_to "View #{@group.children.count - 5} More", "#", class: "sub_ergs", id: @group.id %>
+            <%= link_to "View #{@group.children.count - 5} More", "#", class: " hide_sub_ergs", id: @group.id, style: "display:none;" %>
+
+            <% @group.children.last(@group.children.count - 5).each do |sub_erg| %>
+            <div class="remaining_children_<%= @group.id %>" style="display:none; position: relative; top: 10px;">
+              <ol><%= link_to sub_erg.capitalize_name, group_url(sub_erg) %></ol>
+            </div>
+            <% end %>
+          </div>
+        </div>
+      <% else %>
+       <div class="card card--secondary">
+          <div class="card__section">
+            Sub-<%= c_t(:erg).titleize.pluralize %>(<%= @group.children.count %>)<br>
+            <ol>
+            <% @group.group_category_type.group_categories.each do |category| %>
+            <li>
+              <%= link_to category, "#", class: "nested_show", id: category.id %>
+              <%= link_to category, "#", class: "nested_hide", id: category.id, style: "display:none;" %>(<%= category.groups.where(parent_id: @group).count %>)
+
+                <% category.groups.where(parent_id: @group).each do |sub_erg| %>
+                <div class="children_<%= category.id %>" style="display:none; position: relative; top: 10px;">
+                  <ol><%= link_to sub_erg.capitalize_name, group_url(sub_erg) %></ol>
+                  <br>
+                </div>
+                <% end %>
+            </li>
+            <% end %>
+            </ol>
+              <% @group.children.where(group_category_id: nil).each do |sub_erg_with_no_category| %>
+                <%= link_to sub_erg_with_no_category.capitalize_name, group_url(sub_erg_with_no_category) %>
+              <% end %>
+          </div>
+        </div>
+      <% end %>
       <% end %>
 
       <% if @group.active_members.include? current_user %>
@@ -222,6 +275,36 @@
 </div>
 
 <script>
+$('a.sub_ergs').click(function(e){
+    var id = $(this).attr('id');
+    $('div.remaining_children_' + id).show();
+
+    $(this).siblings('a.hide_sub_ergs').show();
+    $(this).hide();
+  }); //endof click
+
+  $('a.hide_sub_ergs').click(function(e){
+    var id = $(this).attr('id');
+    $('div.remaining_children_' + id).hide();
+    $(this).siblings('a.sub_ergs').show();
+    $(this).hide();
+  }); //endof click
+
+$('a.nested_show').click(function(e){
+    var id = $(this).attr('id');
+    $('div.children_' + id).show();
+
+    $(this).siblings('a.nested_hide').show();
+    $(this).hide();
+  }); //endof click
+
+  $('a.nested_hide').click(function(e){
+    var id = $(this).attr('id');
+    $('div.children_' + id).hide();
+    $(this).siblings('a.nested_show').show();
+    $(this).hide();
+  }); //endof click
+
   $('img.info').click(function(e){
     e.preventDefault();
     var id = $(this).attr('id');

@@ -23,6 +23,23 @@ class GroupPolicy < ApplicationPolicy
         @policy_group.groups_create?
     end
 
+    def update_all_sub_groups?
+        create?
+    end
+
+    # move these to separate policies
+    def view_all?
+        create?
+    end
+
+    def add_category?
+        create?
+    end
+
+    def update_with_new_category?
+        create?
+    end
+
     def update?
         return true if @policy_group.groups_manage?
         return true if @record.owner == @user

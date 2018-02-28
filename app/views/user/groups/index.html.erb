@@ -17,7 +17,11 @@
               </div>
               <div class="flex-row__cell flex-row__cell--grow">
                 <h4><%= group.name %></h4>
-                <p><%= group.description %></p>
+                <% if group.short_description.present? %>
+                <p><%= group.short_description %></p>
+                <% else %>
+                <p><%= group.description if group.description %></p>
+                <% end %>
               </div>
             </div>
           <% end %>

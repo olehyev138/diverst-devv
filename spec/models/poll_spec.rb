@@ -4,26 +4,34 @@ RSpec.describe Poll, type: :model do
     describe "when validating" do
         let(:poll){ build_stubbed(:poll) }
 
-        it{ expect(poll).to validate_presence_of(:status) }
-        
-        it{ expect(poll).to belong_to(:enterprise) }
-        it{ expect(poll).to belong_to(:owner) }
-        it{ expect(poll).to belong_to(:initiative) }
-        
-        it{ expect(poll).to have_many(:segments).through(:polls_segments) }
-        it{ expect(poll).to have_many(:groups).through(:groups_polls) }
-        
-        it { expect(poll).to have_many(:fields) }
-        it { expect(poll).to have_many(:responses) }
-        it { expect(poll).to have_many(:graphs) }
-        it { expect(poll).to have_many(:polls_segments) }
-        it { expect(poll).to have_many(:groups_polls) }
+        context 'test associations' do
+            it{ expect(poll).to validate_presence_of(:status) }
 
-        it{ expect(poll).to validate_presence_of(:title) }
-        it{ expect(poll).to validate_presence_of(:description) }
-        it{ expect(poll).to validate_presence_of(:status) }
-        it{ expect(poll).to validate_presence_of(:enterprise) }
-        it{ expect(poll).to validate_presence_of(:owner) }
+            it{ expect(poll).to belong_to(:enterprise).inverse_of(:polls) }
+            it{ expect(poll).to belong_to(:owner).class_name('User') }
+            it{ expect(poll).to belong_to(:initiative) }
+
+            it{ expect(poll).to have_many(:segments).inverse_of(:polls).through(:polls_segments) }
+            it{ expect(poll).to have_many(:groups).through(:groups_polls) }
+
+            it { expect(poll).to have_many(:fields) }
+            it { expect(poll).to have_many(:responses).class_name('PollResponse').inverse_of(:poll) }
+            it { expect(poll).to have_many(:graphs) }
+            it { expect(poll).to have_many(:polls_segments) }
+            it { expect(poll).to have_many(:groups_polls) }
+            it { expect(poll).to have_many(:groups).inverse_of(:polls).through(:groups_polls)}
+            it{ expect(poll).to accept_nested_attributes_for(:fields).allow_destroy(true)}
+        end
+
+        context 'test validation' do 
+            it{ expect(poll).to validate_presence_of(:title) }
+            it{ expect(poll).to validate_presence_of(:description) }
+            it{ expect(poll).to validate_presence_of(:status) }
+            it{ expect(poll).to validate_presence_of(:enterprise) }
+            it{ expect(poll).to validate_presence_of(:owner) }
+        end
+
+        it{ expect(poll).to define_enum_for(:status).with([:published, :draft])}
 
         context "enterprise_id of groups" do
             let(:poll){ create(:poll) }
@@ -176,7 +184,7 @@ RSpec.describe Poll, type: :model do
             end
         end
     end
-    
+
     describe "#graphs_population" do
         it "returns the graphs_population" do
             enterprise = create(:enterprise)
@@ -185,12 +193,12 @@ RSpec.describe Poll, type: :model do
             select_field = SelectField.new(:type => "SelectField", :title => "What is 1 + 1?", :options_text => "1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n7", :container => poll)
             select_field.save!
             create(:poll_response, :poll => poll, :user => user, :data => "{\"#{select_field.id}\":[\"4\"]}")
-            
+
             users = poll.graphs_population
             expect(users.count).to eq(1)
         end
     end
-    
+
     describe "#responses_csv" do
         it "returns the responses_csv" do
             enterprise = create(:enterprise)
@@ -200,11 +208,11 @@ RSpec.describe Poll, type: :model do
 
             select_field = poll.fields.new(:type => "SelectField", :title => "What is 1 + 1?", :options_text => "1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n7")
             select_field.save!
-            
+
             create(:poll_response, :poll => poll, :user => user_1, :data => "{\"#{select_field.id}\":[\"4\"]}")
             create(:poll_response, :poll => poll, :user => user_2, :data => "{\"#{select_field.id}\":[\"4\"]}")
             user_2.destroy
-            
+
             expect(poll.responses_csv).to eq("user_id,user_email,user_name,What is 1 + 1?\n#{user_1.id},#{user_1.email},#{user_1.name},4\n\"\",\"\",Deleted User,4\n")
         end
     end

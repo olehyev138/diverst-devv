@@ -1,5 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe YammerFieldMapping, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+   let(:yammer_field_mapping) { create(:yammer_field_mapping) }
+
+   describe 'associations' do
+     it { expect(yammer_field_mapping).to belong_to(:enterprise) }
+     it { expect(yammer_field_mapping).to belong_to(:diverst_field)}
+   end
 end

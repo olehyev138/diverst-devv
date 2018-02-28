@@ -1,5 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Pillar, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let!(:pillar) { build(:pillar) }
+
+  it { expect(pillar).to belong_to(:outcome) }
+  it { expect(pillar).to have_many(:initiatives).dependent(:destroy) }
 end

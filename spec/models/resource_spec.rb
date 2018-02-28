@@ -2,6 +2,15 @@ require 'rails_helper'
 
 RSpec.describe Resource, :type => :model do
 
+  describe 'test associations' do 
+    let(:resource) { build(:resource) }
+
+    it { expect(resource).to belong_to(:container) }
+    it { expect(resource).to belong_to(:owner).class_name('User') }
+    it { expect(resource).to have_many(:tags).dependent(:destroy) }
+    it { expect(resource).to accept_nested_attributes_for(:tags) }
+  end
+
   describe 'when validating' do
     let(:resource){ build_stubbed(:resource) }
 
@@ -10,8 +19,6 @@ RSpec.describe Resource, :type => :model do
 
     #do we want to validate presence of file in resource model? if so then i will uncomment this code
     # it{ expect(resource).to validate_attachment_presence(:file)}
-
-    it{ expect(resource).to have_many(:tags)}
   end
 
   describe '#extension' do
