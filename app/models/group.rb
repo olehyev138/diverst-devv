@@ -111,6 +111,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   before_save :create_yammer_group, if: :should_create_yammer_group?
   after_commit :update_all_elasticsearch_members
   before_validation :smart_add_url_protocol
+  validate :perform_check_for_consistency_in_category
 
   scope :top_participants,  -> (n) { order(total_weekly_points: :desc).limit(n) }
   # Active Record already has a defined a class method with the name private so we use is_private.
@@ -119,7 +120,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   # parents/children
   scope :all_parents,     -> {where(:parent_id => nil)}
   scope :all_children,    -> {where.not(:parent_id => nil)}
-  
+
   accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
@@ -300,6 +301,17 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
 
 
   private
+
+  def perform_check_for_consistency_in_category
+    if self.parent.present?
+      group_category_type = self.group_category.group_category_type if self.group_category
+      if self.group_category && self.parent.group_category_type
+        if group_category_type != self.parent.group_category_type
+          errors.add(:group_category, "wrong label for #{self.parent.group_category_type.name}")
+        end
+      end
+    end
+  end
 
   def filter_by_membership(membership_status)
     members.references(:user_groups).where('user_groups.accepted_member=?', membership_status)

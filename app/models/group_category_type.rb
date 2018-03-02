@@ -26,6 +26,7 @@ class GroupCategoryType < ActiveRecord::Base
   end
 
   def check_uniqueness_of_category_names(category_names)
+    byebug
     if self.group_categories.map(&:name).include? category_names
       errors.add(:category_names, 'this label already exists for this category.')
     end
