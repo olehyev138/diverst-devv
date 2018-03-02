@@ -24,11 +24,4 @@ class GroupCategoryType < ActiveRecord::Base
   def create_association_with_enterprise
   	self.group_categories.update_all(enterprise_id: self.enterprise_id) if !self.enterprise_id.nil?
   end
-
-  def check_uniqueness_of_category_names(category_names)
-    byebug
-    if self.group_categories.map(&:name).include? category_names
-      errors.add(:category_names, 'this label already exists for this category.')
-    end
-  end
 end
