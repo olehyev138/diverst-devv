@@ -103,6 +103,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
 
   validates :name, presence: true
   validates_format_of :contact_email, with: Devise.email_regexp, allow_blank: true
+  validate :perform_check_for_consistency_in_category, on: [:create, :update]
 
   validate :valid_yammer_group_link?
 
@@ -111,7 +112,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   before_save :create_yammer_group, if: :should_create_yammer_group?
   after_commit :update_all_elasticsearch_members
   before_validation :smart_add_url_protocol
-  validate :perform_check_for_consistency_in_category
+  after_save :set_group_category_type_for_parent_if_sub_erg, on: [:create, :update]
 
   scope :top_participants,  -> (n) { order(total_weekly_points: :desc).limit(n) }
   # Active Record already has a defined a class method with the name private so we use is_private.
@@ -126,6 +127,10 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
 
+
+  def is_sub_group?
+    parent.present?
+  end
 
   def capitalize_name
     name.split.map(&:capitalize).join(' ')
@@ -310,6 +315,12 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
           errors.add(:group_category, "wrong label for #{self.parent.group_category_type.name}")
         end
       end
+    end
+  end
+
+  def set_group_category_type_for_parent_if_sub_erg
+    if self.is_sub_group?
+      self.parent.update(group_category_type_id: self.group_category_type_id) unless self.group_category_type_id.nil?
     end
   end
 

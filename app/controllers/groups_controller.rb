@@ -131,7 +131,11 @@ class GroupsController < ApplicationController
         @group = current_user.enterprise.groups.new(group_params)
         @group.owner = current_user
 
-        @group.group_category_type_id = @group.group_category&.group_category_type_id
+        if group_params[:group_category_id].present?
+          @group.group_category_type_id = GroupCategory.find_by(id: group_params[:group_category_id])&.group_category_type_id
+        else
+            @group.group_category_type_id = nil
+        end
 
         if @group.save
             track_activity(@group, :create)
@@ -151,6 +155,12 @@ class GroupsController < ApplicationController
 
     def update
         authorize @group
+
+        if group_params[:group_category_id].present?
+          @group.group_category_type_id = GroupCategory.find_by(id: params[:group][:group_category_id])&.group_category_type_id
+        else
+            @group.group_category_type_id = nil
+        end
 
         if @group.update(group_params)
             track_activity(@group, :update)
@@ -210,7 +220,7 @@ class GroupsController < ApplicationController
 
     def parse_csv
         authorize @group, :edit?
-        
+
         if params[:file].nil?
             flash[:alert] = "CSV file is required"
             redirect_to :back
@@ -265,6 +275,7 @@ class GroupsController < ApplicationController
     end
 
     protected
+
 
     def base_show
         @upcoming_events = @group.initiatives.upcoming.limit(3) + @group.participating_initiatives.upcoming.limit(3)
