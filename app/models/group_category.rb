@@ -1,6 +1,6 @@
 class GroupCategory < ActiveRecord::Base
   #NOTE: on user-interface, this entity is references as label
-  has_many :groups
+  has_many :groups, dependent: :nullify
   belongs_to :group_category_type
 
   validates :name, presence: true

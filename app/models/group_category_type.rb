@@ -1,7 +1,7 @@
 class GroupCategoryType < ActiveRecord::Base
   #NOTE: on user-interface, this entity is referenced as category
   has_many :group_categories, dependent: :delete_all
-  has_many :groups
+  has_many :groups, dependent: :nullify
   belongs_to :enterprise
 
   validates :name, presence: true
