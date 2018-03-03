@@ -142,7 +142,7 @@ class GroupsController < ApplicationController
             flash[:notice] = "Your #{c_t(:erg)} was created"
             redirect_to groups_url
         else
-            flash[:alert] = "Your #{c_t(:erg)} was not created. Please fix the errors"
+            flash.now[:alert] = "Your #{c_t(:erg)} was not created. Please fix the errors"
             @categories = current_user.enterprise.group_categories
             render :new
         end
@@ -167,7 +167,7 @@ class GroupsController < ApplicationController
             flash[:notice] = "Your #{c_t(:erg)} was updated"
             redirect_to [:edit, @group]
         else
-            flash[:alert] = "Your #{c_t(:erg)} was not updated. Please fix the errors"
+            flash.now[:alert] = "Your #{c_t(:erg)} was not updated. Please fix the errors"
 
             if request.referer == edit_group_url(@group) || request.referer == group_url(@group)
               @categories = current_user.enterprise.group_categories
