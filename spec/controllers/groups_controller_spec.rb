@@ -553,7 +553,7 @@ RSpec.describe GroupsController, type: :controller do
         it 'redirects to correct page' do
           patch_update(group.id, group_attrs)
 
-          expect(response).to redirect_to default_referrer
+          expect(response).to redirect_to [:edit, group]
         end
       end
 
@@ -574,6 +574,30 @@ RSpec.describe GroupsController, type: :controller do
         it 'renders settings template' do
           expect(response).to render_template :settings
         end
+      end
+    end
+
+    describe 'with label of different category type' do
+      login_user_from_let
+      let!(:group_category_type) { create(:group_category_type, name: "category type 1", enterprise_id: user.enterprise.id) }
+      let!(:group_category_type2) { create(:group_category_type, name: "category type 2", enterprise_id: user.enterprise.id) }
+      let!(:group_category1) { create(:group_category, name: "category 1", enterprise_id: user.enterprise.id, group_category_type_id: group_category_type.id) }
+      let!(:group_category2) { create(:group_category, name: "category 2", enterprise_id: user.enterprise.id, group_category_type_id: group_category_type2.id) }
+      let!(:parent) { create(:group, enterprise: user.enterprise, parent_id: nil, group_category_type_id: group_category_type.id, group_category_id: nil) }
+      let!(:group1) { create(:group, enterprise: user.enterprise, parent: parent, group_category_id: group_category1.id,
+        group_category_type_id: parent.group_category_type_id) }
+
+      before do
+        request.env["HTTP_REFERER"] = "http://test.host/groups/#{group1.id}"
+        patch_update(group1.id, { group_category_id: group_category2.id })
+      end
+
+      it "contains error message'wrong label for category type 1'" do
+        expect(assigns[:group].errors.full_messages).to include "Group category wrong label for category type 1"
+      end
+
+      it 'renders edit template' do
+        expect(response).to render_template :edit
       end
     end
 
