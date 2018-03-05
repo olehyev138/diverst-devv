@@ -27,13 +27,13 @@ after :enterprise do
   # create default enterprise user roles
   enterprise.user_roles.create!(
     [
-      {:name => "admin", :role_type => "user"},
-      {:name => "diversity_manager", :role_type => "user"},
-      {:name => "national_manager", :role_type => "user"},
-      {:name => "group_leader", :role_type => "group"},
-      {:name => "group_treasurer", :role_type => "group"},
-      {:name => "group_content_creator", :role_type => "group"},
-      {:name => "user", :role_type => "user"}
+      {:role_name => "admin", :role_type => "user"},
+      {:role_name => "diversity_manager", :role_type => "user"},
+      {:role_name => "national_manager", :role_type => "user"},
+      {:role_name => "group_leader", :role_type => "group"},
+      {:role_name => "group_treasurer", :role_type => "group"},
+      {:role_name => "group_content_creator", :role_type => "group"},
+      {:role_name => "user", :role_type => "user"}
     ]
   )
 
