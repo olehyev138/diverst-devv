@@ -107,29 +107,28 @@ class UpdatePermissionsWorkflow < ActiveRecord::Migration
     remove_column  :users, :policy_group_id, :integer
     
     # get the enterprise
-    enterprise = Enterprise.last
-    return if enterprise.nil?
-
-    # create default enterprise user roles
-    enterprise.user_roles.create!(
-      [
-        {:role_name => "admin",                 :role_type => "admin"},
-        {:role_name => "diversity_manager",     :role_type => "admin"},
-        {:role_name => "national_manager",      :role_type => "admin"},
-        {:role_name => "group_leader",          :role_type => "group"},
-        {:role_name => "group_treasurer",       :role_type => "group"},
-        {:role_name => "group_content_creator", :role_type => "group"},
-        {:role_name => "user",                  :role_type => "user", :default => true}
-      ]
-    )
-    
-    # set everyone to have basic permissions to ensure proper migration
-    # set basic user role for all users
-    enterprise.users.update_all(:role => "user")
-    
-    # create basic policy group for each user
-    enterprise.users.find_each do |user|
-      user.set_default_policy_group
+    Enterprise.find_each do |enterprise|
+      # create default enterprise user roles
+      enterprise.user_roles.create!(
+        [
+          {:role_name => "admin",                 :role_type => "admin"},
+          {:role_name => "diversity_manager",     :role_type => "admin"},
+          {:role_name => "national_manager",      :role_type => "admin"},
+          {:role_name => "group_leader",          :role_type => "group"},
+          {:role_name => "group_treasurer",       :role_type => "group"},
+          {:role_name => "group_content_creator", :role_type => "group"},
+          {:role_name => "user",                  :role_type => "user", :default => true}
+        ]
+      )
+      
+      # set everyone to have basic permissions to ensure proper migration
+      # set basic user role for all users
+      enterprise.users.update_all(:role => "user")
+      
+      # create basic policy group for each user
+      enterprise.users.find_each do |user|
+        user.set_default_policy_group
+      end
     end
   end
   
