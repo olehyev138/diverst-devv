@@ -54,7 +54,7 @@ class EnterprisesController < ApplicationController
 
     set_theme
   end
-  
+
   def edit_pending_comments
     authorize @enterprise
   end

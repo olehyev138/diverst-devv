@@ -103,6 +103,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
 
   validates :name, presence: true
   validates_format_of :contact_email, with: Devise.email_regexp, allow_blank: true
+  validate :perform_check_for_consistency_in_category, on: [:create, :update]
 
   validate :valid_yammer_group_link?
 
@@ -305,6 +306,17 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
 
 
   private
+
+  def perform_check_for_consistency_in_category
+    if self.parent.present?
+      group_category_type = self.group_category.group_category_type if self.group_category
+      if self.group_category && self.parent.group_category_type
+        if group_category_type != self.parent.group_category_type
+          errors.add(:group_category, "wrong label for #{self.parent.group_category_type.name}")
+        end
+      end
+    end
+  end
 
   def set_group_category_type_for_parent_if_sub_erg
     if self.is_sub_group?

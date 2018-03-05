@@ -4,6 +4,9 @@
 </div>
 
 <div class="content__main">
+  <% if @category_types.empty? %>
+  No Categories Available.
+  <% else %>
 	<div class="card">
 		<% @category_types.each do |category_type| %>
 		<div class="card__section card__section--border">
@@ -49,6 +52,7 @@
 		<% end %>
 		<% end %>
 	</div>
+	<% end %>
 </div>
 
 
