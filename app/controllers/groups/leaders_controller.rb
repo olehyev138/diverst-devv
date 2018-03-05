@@ -22,7 +22,6 @@ class Groups::LeadersController < ApplicationController
       flash[:notice] = "Leaders were updated"
       redirect_to action: :index
     else
-      puts @group.errors.full_messages.first
       flash[:alert] = "Leaders were not updated. Please fix the errors"
       render :new
     end

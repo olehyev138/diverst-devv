@@ -133,7 +133,7 @@ class UsersController < ApplicationController
   def resolve_layout
     case action_name
     when 'show'
-      if current_user.policy_group.admin_pages_view
+      if global_settings_path
         'global_settings'
       else
         'user'
@@ -159,6 +159,7 @@ class UsersController < ApplicationController
       :active,
       :time_zone,
       :role,
+      :custom_policy_group,
       policy_group_attributes: [
         :id,
         :admin_pages_view,
@@ -192,7 +193,6 @@ class UsersController < ApplicationController
         :segments_manage,
         :users_index,
         :users_manage,
-        :global_settings_manage,
         :initiatives_index,
         :initiatives_create,
         :initiatives_manage,
@@ -205,7 +205,8 @@ class UsersController < ApplicationController
         :permissions_manage,
         :group_leader_manage,
         :diversity_manage,
-        :manage_posts
+        :manage_posts,
+        :branding_manage
       ]
     )
   end

@@ -48,7 +48,8 @@ Rails.application.routes.draw do
       post 'test_notif'
     end
   end
-
+  
+  resources :user_roles
   resources :users do
     member do
       get 'group_surveys'

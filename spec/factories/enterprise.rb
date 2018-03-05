@@ -6,7 +6,8 @@ FactoryGirl.define do
     theme nil
     
     after(:create) do |enterprise|
-      FactoryGirl.create_list(:user_role, 1, enterprise: enterprise)
+      create(:user_role, role_name: "user",        role_type: "user", enterprise: enterprise)
+      create(:user_role, role_name: "group_leader", role_type: "group", enterprise: enterprise)
     end
   end
 end

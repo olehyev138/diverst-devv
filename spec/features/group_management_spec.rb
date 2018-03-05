@@ -2,10 +2,10 @@ require 'rails_helper'
 
 RSpec.feature 'Group management' do
 
-  let(:user) { create(:user) }
+  let!(:user) { create(:user) }
 
   before do
-    login_as(user, scope: :user)
+    login_as(user, scope: :user, :run_callbacks => false)
   end
 
   scenario 'user creates a new group' do

@@ -18,7 +18,7 @@
         <% end %>
       </div>
       <div class="flex-row__cell">
-        <% if root_admin_path && current_user.policy_group.admin_pages_view %>
+        <% if root_admin_path %>
           <%= link_to "Admin Dashboard", root_admin_path, class: "white" %>
         &nbsp;|&nbsp;
         <% end %>

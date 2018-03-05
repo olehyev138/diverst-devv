@@ -7,17 +7,17 @@ class Groups::UpdatesController < ApplicationController
   layout 'plan'
 
   def index
-    authorize current_user.policy_group.groups_manage?
+    authorize @group, :update?
     @updates = @group.updates
   end
 
   def new
-    authorize current_user.policy_group.groups_manage?
+    authorize Group
     @update = @group.updates.new
   end
 
   def create
-    authorize current_user.policy_group.groups_manage?
+    authorize Group
     @update = @group.updates.new(update_params.merge({ owner_id: current_user.id }))
     @update.info.merge(fields: @group.fields, form_data: params['custom-fields'])
 
@@ -31,15 +31,15 @@ class Groups::UpdatesController < ApplicationController
   end
 
   def show
-    authorize current_user.policy_group.groups_manage?
+    authorize @group
   end
 
   def edit
-    authorize current_user.policy_group.groups_manage?
+    authorize Group
   end
 
   def update
-    authorize current_user.policy_group.groups_manage?
+    authorize Group
     @update.info.merge(fields: @group.fields, form_data: params['custom-fields'])
 
     if @update.update(update_params)
@@ -52,7 +52,7 @@ class Groups::UpdatesController < ApplicationController
   end
 
   def destroy
-    authorize current_user.policy_group.groups_manage?
+    authorize Group
     @update.destroy
     redirect_to action: :index
   end

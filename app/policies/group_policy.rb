@@ -3,6 +3,10 @@ class GroupPolicy < ApplicationPolicy
         @policy_group.groups_index?
     end
     
+    def new?
+        @policy_group.groups_manage?
+    end
+    
     def leaders?
         return true if @policy_group.groups_manage?
         @policy_group.group_leader_manage?
@@ -53,7 +57,7 @@ class GroupPolicy < ApplicationPolicy
     end
 
     def is_admin?
-        @user.policy_group.admin_pages_view?
+        @user.is_admin?
     end
 
     def is_a_member?
@@ -158,7 +162,7 @@ class GroupPolicy < ApplicationPolicy
     end
 
     def manage_members?
-        update?
+        @policy_group.groups_members_index?
     end
 
     def erg_leader_permissions?

@@ -851,13 +851,12 @@ ActiveRecord::Schema.define(version: 20180222185221) do
     t.boolean  "segments_manage",                         default: false
     t.boolean  "users_index",                             default: false
     t.boolean  "users_manage",                            default: false
-    t.boolean  "global_settings_manage",                  default: false
     t.boolean  "initiatives_index",                       default: false
     t.boolean  "initiatives_create",                      default: false
     t.boolean  "initiatives_manage",                      default: false
-    t.boolean  "admin_pages_view",                        default: false
     t.boolean  "logs_view",                               default: false
     t.boolean  "annual_budget_manage",                    default: false
+    t.boolean  "branding_manage",                         default: false
     t.boolean  "sso_manage",                              default: false
     t.boolean  "permissions_manage",                      default: false
     t.boolean  "group_leader_manage",                     default: false
@@ -901,23 +900,24 @@ ActiveRecord::Schema.define(version: 20180222185221) do
     t.boolean  "segments_manage",                       default: false
     t.boolean  "users_index",                           default: false
     t.boolean  "users_manage",                          default: false
-    t.boolean  "global_settings_manage",                default: false
     t.datetime "created_at",                                            null: false
     t.datetime "updated_at",                                            null: false
     t.boolean  "initiatives_index",                     default: false
     t.boolean  "initiatives_create",                    default: false
     t.boolean  "initiatives_manage",                    default: false
-    t.boolean  "admin_pages_view",                      default: false
     t.boolean  "budget_approval",                       default: false
     t.boolean  "logs_view",                             default: false
     t.boolean  "annual_budget_manage",                  default: false
+    t.boolean  "expenses_index",                        default: false
+    t.boolean  "expenses_manage",                       default: false
     t.boolean  "sso_manage",                            default: false
     t.boolean  "permissions_manage",                    default: false
     t.boolean  "diversity_manage",                      default: false
     t.boolean  "manage_posts",                          default: false
     t.boolean  "group_leader_manage",                   default: false
     t.boolean  "global_calendar",                       default: false
-    t.boolean  "groups_budgets_approve",                default: true
+    t.boolean  "groups_budgets_approve",                default: false
+    t.boolean  "branding_manage",                       default: false
     t.integer  "user_id",                     limit: 4
   end
 
@@ -1144,10 +1144,10 @@ ActiveRecord::Schema.define(version: 20180222185221) do
   create_table "user_roles", force: :cascade do |t|
     t.integer  "enterprise_id", limit: 4
     t.boolean  "default",                   default: false
-    t.string   "name",          limit: 191
-    t.string   "role_type",     limit: 191
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
+    t.string   "role_name",     limit: 191
+    t.string   "role_type",     limit: 191, default: "non_admin"
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
   end
 
   add_index "user_roles", ["enterprise_id"], name: "index_user_roles_on_enterprise_id", using: :btree
@@ -1158,14 +1158,14 @@ ActiveRecord::Schema.define(version: 20180222185221) do
     t.text     "data",                        limit: 65535
     t.string   "auth_source",                 limit: 191
     t.integer  "enterprise_id",               limit: 4
-    t.datetime "created_at",                                               null: false
-    t.datetime "updated_at",                                               null: false
+    t.datetime "created_at",                                                 null: false
+    t.datetime "updated_at",                                                 null: false
     t.string   "email",                       limit: 191
     t.string   "encrypted_password",          limit: 191
     t.string   "reset_password_token",        limit: 191
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",               limit: 4,     default: 0,    null: false
+    t.integer  "sign_in_count",               limit: 4,     default: 0,      null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip",          limit: 191
@@ -1192,14 +1192,15 @@ ActiveRecord::Schema.define(version: 20180222185221) do
     t.datetime "avatar_updated_at"
     t.boolean  "active",                                    default: true
     t.text     "biography",                   limit: 65535
-    t.integer  "points",                      limit: 4,     default: 0,    null: false
-    t.integer  "credits",                     limit: 4,     default: 0,    null: false
+    t.integer  "points",                      limit: 4,     default: 0,      null: false
+    t.integer  "credits",                     limit: 4,     default: 0,      null: false
     t.string   "time_zone",                   limit: 191
     t.integer  "total_weekly_points",         limit: 4,     default: 0
-    t.integer  "failed_attempts",             limit: 4,     default: 0,    null: false
+    t.integer  "failed_attempts",             limit: 4,     default: 0,      null: false
     t.string   "unlock_token",                limit: 191
     t.datetime "locked_at"
-    t.string   "role",                        limit: 191,                  null: false
+    t.string   "role",                        limit: 191,   default: "user", null: false
+    t.boolean  "custom_policy_group",                       default: false,  null: false
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree

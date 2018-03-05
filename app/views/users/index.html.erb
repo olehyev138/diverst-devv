@@ -22,6 +22,18 @@
       New users will be assigned to a policy group corresponding to their user role.
     </div>
   </div>
+  
+  <div class="row row--spacing-bottom">
+    <div class="col-xs-6">
+      <h3 class="text-left">User Roles</h3>
+    </div>
+    <div class="col-xs-6 text-right">
+      <%= link_to "New User Role", new_user_role_path, class: "btn btn--primary pull-right" if policy(UserRole).new? %>
+    </div>
+    </div>
+  </div>
+  <%= render "roles" %>
+  
   <h3>Invitations sent</h3>
   <%= render "invitations_table", source: sent_invitations_users_path(format: :json) %>
 

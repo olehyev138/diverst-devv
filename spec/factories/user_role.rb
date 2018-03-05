@@ -1,8 +1,8 @@
 FactoryGirl.define do
   factory :user_role do
-    association :enterprise, factory: :enterprise
+    enterprise
     default false
-    name "admin"
+    role_name "admin"
     role_type "user"
   end
 end

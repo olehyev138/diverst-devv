@@ -10,7 +10,7 @@
   <nav id="navigation" class="jq-dropdown jq-dropdown-tip">
     <ul class="jq-dropdown-menu">
       <li>
-        <%= active_link_to "Overview", plan_overview_groups_path %>
+        <%= active_link_to "Overview", plan_overview_groups_path if current_user.policy_group.groups_budgets_index? %>
       </li>
       <% if @group || policy_scope(Group).present? %>
         <% if policy(Initiative).index? %>
@@ -39,7 +39,7 @@
   </nav>
 </div>
 <div class="menu menu--desktop">
-  <%= active_link_to "Overview", plan_overview_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to "Overview", plan_overview_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.groups_budgets_index? %>
   <% if @group || policy_scope(Group).present? %>
     <%= active_link_to "Events", group_initiatives_path(@group || policy_scope(Group).first), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['initiatives'], ['index']] if policy(Initiative).index?  %>
     <%= active_link_to "KPI", metrics_group_path(@group || policy_scope(Group).first), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.groups_manage? %>

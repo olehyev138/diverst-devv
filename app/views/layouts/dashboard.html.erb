@@ -36,9 +36,9 @@
         </li>
       <% end %>
       <% if current_user.enterprise.plan_module_enabled %>
-        <% if current_user.policy_group.groups_budgets_index? %>
+        <% if manage_erg_budgets_path %>
           <li class="nav__item">
-            <%= active_link_to plan_overview_groups_path, class: "nav__link", class_active: "nav__link--is-selected", active: active_plan_link? do %>
+            <%= active_link_to manage_erg_budgets_path, class: "nav__link", class_active: "nav__link--is-selected", active: active_plan_link? do %>
               <%= inline_svg('icons/plan.svg', class: "icon nav__icon") %>
               <span class="nav__text">Plan</span>
             <% end %>
@@ -71,9 +71,9 @@
       <% end %>
     </ul>
     <ul class="nav__list nav__list--secondary">
-      <% if GlobalSettingsPolicy.new(current_user).update? %>
+      <% if global_settings_path %>
         <li class="nav__item">
-          <%= active_link_to users_path, class: "nav__link", class_active: "nav__link--is-selected", active: active_global_settings_link? do %>
+          <%= active_link_to global_settings_path, class: "nav__link", class_active: "nav__link--is-selected", active: active_global_settings_link? do %>
             <span class="nav__text">Global Settings</span>
           <% end %>
         </li>

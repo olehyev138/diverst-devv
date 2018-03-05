@@ -1,6 +1,5 @@
 FactoryGirl.define do
   factory :policy_group do
-    association :user, factory: :user
     campaigns_index true
     campaigns_create true
     campaigns_manage true
@@ -45,9 +44,6 @@ FactoryGirl.define do
     initiatives_create true
     initiatives_manage true
 
-    global_settings_manage true
-    admin_pages_view true
-
     budget_approval true
 
     logs_view true
@@ -56,5 +52,10 @@ FactoryGirl.define do
     groups_budgets_index true
     
     annual_budget_manage true
+    branding_manage true
+    diversity_manage true
+    sso_manage true
+    manage_posts true
+    global_calendar true
   end
 end

@@ -23,7 +23,7 @@ class PolicyGroupTemplatesController < ApplicationController
   def create
     authorize PolicyGroupTemplate
 
-    @policy_group_template = current_user.enterprise.policy_group_templates.new(policy_group_params)
+    @policy_group_template = current_user.enterprise.policy_group_templates.new(policy_group_template_params)
 
     if @policy_group_template.save
       flash[:notice] = "Your policy group template was created"
@@ -37,7 +37,7 @@ class PolicyGroupTemplatesController < ApplicationController
   def update
     authorize PolicyGroupTemplate
 
-    if @policy_group_template.update(policy_group_params)
+    if @policy_group_template.update(policy_group_template_params)
       flash[:notice] = "Your policy group template was updated"
       redirect_to action: :index
     else
@@ -62,12 +62,11 @@ class PolicyGroupTemplatesController < ApplicationController
     end
   end
 
-  def policy_group_params
+  def policy_group_template_params
     params
       .require(:policy_group_template)
       .permit(
         :name,
-        :admin_pages_view,
         :campaigns_index,
         :campaigns_create,
         :campaigns_manage,
@@ -98,7 +97,6 @@ class PolicyGroupTemplatesController < ApplicationController
         :segments_manage,
         :users_index,
         :users_manage,
-        :global_settings_manage,
         :initiatives_index,
         :initiatives_create,
         :initiatives_manage,
@@ -112,7 +110,8 @@ class PolicyGroupTemplatesController < ApplicationController
         :sso_manage,
         :permissions_manage,
         :diversity_manage,
-        :manage_posts
+        :manage_posts,
+        :branding_manage
       )
   end
 end

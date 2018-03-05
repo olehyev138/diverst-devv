@@ -12,7 +12,7 @@ class GroupsController < ApplicationController
 
     def index
         authorize Group
-        @groups = current_user.enterprise.groups.includes(:children).all_parents
+        @groups = policy_scope(Group).includes(:children).all_parents
     end
 
     def plan_overview

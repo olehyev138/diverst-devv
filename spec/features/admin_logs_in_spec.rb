@@ -13,7 +13,7 @@ RSpec.feature 'User logs in' do
   scenario 'they get redirected to the metrics dashboard on successful login' do
     user = create(:user)
 
-    login_as(user, scope: :user)
+    login_as(user, scope: :user, :run_callbacks => false)
     visit root_path
 
     expect(page).to have_content 'General metrics'

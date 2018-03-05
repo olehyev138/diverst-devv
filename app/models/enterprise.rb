@@ -15,6 +15,7 @@ class Enterprise < ActiveRecord::Base
     has_many :polls, inverse_of: :enterprise
     has_many :mobile_fields, inverse_of: :enterprise
     has_many :metrics_dashboards, inverse_of: :enterprise
+    has_many :user_roles, inverse_of: :enterprise
     has_many :graphs, through: :metrics_dashboards
     has_many :poll_graphs, through: :polls, source: :graphs
     has_many :campaigns
@@ -40,7 +41,7 @@ class Enterprise < ActiveRecord::Base
     has_many :group_category_types
 
     has_one :custom_text
-
+    
     accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
     accepts_nested_attributes_for :mobile_fields, reject_if: :all_blank, allow_destroy: true
     accepts_nested_attributes_for :yammer_field_mappings, reject_if: :all_blank, allow_destroy: true
@@ -78,6 +79,10 @@ class Enterprise < ActiveRecord::Base
         return time_zone if time_zone.present?
 
         'UTC'
+    end
+    
+    def default_user_role
+        user_roles.where(:default => true).first.role_name
     end
 
     def iframe_calendar_token

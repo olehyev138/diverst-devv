@@ -1,7 +1,7 @@
 class PolicyGroupTemplate < ActiveRecord::Base
     
     # associations
-    belongs_to :user_role
+    belongs_to :user_role, inverse_of: :policy_group_template
     belongs_to :enterprise
     
     # validations
@@ -18,6 +18,15 @@ class PolicyGroupTemplate < ActiveRecord::Base
     
     def create_new_policy
         return attributes.except("id", "name", "enterprise_id", "role", "default", "created_at", "updated_at", "user_role_id")
+    end
+    
+    after_save :update_user_roles
+    
+    # finds users in the enterprise
+    def update_user_roles
+        enterprise.users.where(:role => user_role.role_name).find_each do |user|
+            user.set_default_policy_group
+        end
     end
 
 end
