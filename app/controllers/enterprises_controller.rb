@@ -12,7 +12,7 @@ class EnterprisesController < ApplicationController
 
   def update
     authorize @enterprise
-
+    
     if @enterprise.update_attributes(enterprise_params)
       flash[:notice] = "Your enterprise was updated"
       redirect_to :back
@@ -54,7 +54,7 @@ class EnterprisesController < ApplicationController
 
     set_theme
   end
-  
+
   def edit_pending_comments
     authorize @enterprise, :manage_posts?
   end

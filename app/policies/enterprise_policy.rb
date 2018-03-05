@@ -33,7 +33,7 @@ class EnterprisePolicy < ApplicationPolicy
   def edit_branding?
     update_branding?
   end
-  
+
   def edit_pending_comments?
     @policy_group.manage_posts?
   end

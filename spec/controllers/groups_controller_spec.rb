@@ -50,13 +50,13 @@ RSpec.describe GroupsController, type: :controller do
   describe 'GET #close_budgets' do
     context 'with logged user' do
       login_user_from_let
-      
+
       context "with correct permissions" do
         it 'render close_budgets template' do
           get :close_budgets, :id => group.id
           expect(response).to render_template :close_budgets
         end
-  
+
         context 'where groups have children' do
           let!(:group1) { create(:group, enterprise: enterprise) }
           let!(:groups) { create_list(:group, 2, enterprise: enterprise) }
@@ -64,25 +64,25 @@ RSpec.describe GroupsController, type: :controller do
             group
             groups.each { |group| group.children << group }
           end
-  
+
           it 'total number of groups should be 4' do
             get :close_budgets, :id => group.id
             expect(Group.all.count).to eq 4
           end
-  
+
           it 'return 2 groups with children' do
             get :close_budgets, :id => group.id
             expect(assigns[:groups].count).to eq 2
           end
         end
       end
-      
+
       context "with incorrect permissions" do
         it 'render close_budgets template' do
           policy_group = user.policy_group
           policy_group.annual_budget_manage = false
           policy_group.save!
-          
+
           get :close_budgets, :id => group.id
           expect(response).to_not render_template :close_budgets
         end
@@ -176,24 +176,24 @@ RSpec.describe GroupsController, type: :controller do
         login_user_from_let
 
         it 'returns enterprise via iframe_calendar_token' do
-          get_calendar_data(initiative_group.id, initiative_segment.id, params={token: 'uniquetoken1234'}) 
+          get_calendar_data(initiative_group.id, initiative_segment.id, params={token: 'uniquetoken1234'})
           expect(Enterprise.find_by_iframe_calendar_token(controller.params[:token])).to eq enterprise
         end
       end
 
-      context 'when params[:token] is absent' do 
+      context 'when params[:token] is absent' do
         let!(:enterprise) { create :enterprise, iframe_calendar_token: 'uniquetoken1234' }
         let!(:enterprise1) { create :enterprise }
         let!(:user) { create :user, enterprise: enterprise1 }
         login_user_from_let
 
-        it 'returns enterprise of current_user' do 
+        it 'returns enterprise of current_user' do
           get_calendar_data(initiative_group.id, initiative_segment.id)
           expect(assigns[:current_user]&.enterprise).to eq enterprise1
         end
       end
 
-      context 'renders' do 
+      context 'renders' do
         let!(:enterprise) { create :enterprise, iframe_calendar_token: 'uniquetoken1234' }
         let!(:user) { create :user, enterprise: enterprise }
         login_user_from_let
@@ -232,7 +232,7 @@ RSpec.describe GroupsController, type: :controller do
         expect(response).to render_template :new
       end
 
-      it "returns a new group object that belongs to current_user's enterprise" do 
+      it "returns a new group object that belongs to current_user's enterprise" do
         expect(assigns[:group].enterprise).to eq assigns[:current_user].enterprise
         expect(assigns[:group]).to be_a_new(Group)
       end
@@ -451,8 +451,8 @@ RSpec.describe GroupsController, type: :controller do
             .to_not change(Group, :count)
         end
 
-        it 'flashes an alert message' do 
-          post_create 
+        it 'flashes an alert message' do
+          post_create
           expect(flash[:alert]).to eq "Your #{c_t(:erg)} was not created. Please fix the errors"
         end
 
@@ -481,11 +481,11 @@ RSpec.describe GroupsController, type: :controller do
       login_user_from_let
       before { get :edit, :id => group.id }
 
-      it 'render edit template' do 
-        expect(response).to render_template :edit 
+      it 'render edit template' do
+        expect(response).to render_template :edit
       end
 
-      it 'assigns a valid group object' do 
+      it 'assigns a valid group object' do
         expect(assigns[:group]).to be_valid
       end
     end
@@ -551,7 +551,7 @@ RSpec.describe GroupsController, type: :controller do
         it 'redirects to correct page' do
           patch_update(group.id, group_attrs)
 
-          expect(response).to redirect_to default_referrer
+          expect(response).to redirect_to [:edit, group]
         end
       end
 
@@ -565,13 +565,37 @@ RSpec.describe GroupsController, type: :controller do
           expect(updated_group.description).to eq group.description
         end
 
-        it 'flashes an alert message' do 
+        it 'flashes an alert message' do
           expect(flash[:alert]).to eq "Your #{c_t(:erg)} was not updated. Please fix the errors"
         end
 
         it 'renders settings template' do
           expect(response).to render_template :settings
         end
+      end
+    end
+
+    describe 'with label of different category type' do
+      login_user_from_let
+      let!(:group_category_type) { create(:group_category_type, name: "category type 1", enterprise_id: user.enterprise.id) }
+      let!(:group_category_type2) { create(:group_category_type, name: "category type 2", enterprise_id: user.enterprise.id) }
+      let!(:group_category1) { create(:group_category, name: "category 1", enterprise_id: user.enterprise.id, group_category_type_id: group_category_type.id) }
+      let!(:group_category2) { create(:group_category, name: "category 2", enterprise_id: user.enterprise.id, group_category_type_id: group_category_type2.id) }
+      let!(:parent) { create(:group, enterprise: user.enterprise, parent_id: nil, group_category_type_id: group_category_type.id, group_category_id: nil) }
+      let!(:group1) { create(:group, enterprise: user.enterprise, parent: parent, group_category_id: group_category1.id,
+        group_category_type_id: parent.group_category_type_id) }
+
+      before do
+        request.env["HTTP_REFERER"] = "http://test.host/groups/#{group1.id}"
+        patch_update(group1.id, { group_category_id: group_category2.id })
+      end
+
+      it "contains error message'wrong label for category type 1'" do
+        expect(assigns[:group].errors.full_messages).to include "Group category wrong label for category type 1"
+      end
+
+      it 'renders edit template' do
+        expect(response).to render_template :edit
       end
     end
 
@@ -594,11 +618,11 @@ RSpec.describe GroupsController, type: :controller do
 
       before { get_settings(group.id) }
 
-      it 'assigns a valid group object' do 
+      it 'assigns a valid group object' do
         expect(assigns[:group]).to be_valid
       end
 
-      it 'renders setting template' do 
+      it 'renders setting template' do
         expect(response).to render_template :settings
       end
     end
@@ -628,7 +652,7 @@ RSpec.describe GroupsController, type: :controller do
           }.to change(Group, :count).by(-1)
         end
 
-        it 'flashes a notice message' do 
+        it 'flashes a notice message' do
           delete_destroy(group.id)
           expect(flash[:notice]).to eq "Your #{c_t(:erg)} was deleted"
         end
@@ -664,7 +688,7 @@ RSpec.describe GroupsController, type: :controller do
       context 'when not saving' do
         before {allow_any_instance_of(Group).to receive(:destroy).and_return(false)}
 
-        it 'flashes an alert message' do 
+        it 'flashes an alert message' do
           delete_destroy(group.id)
           expect(flash[:alert]).to eq "Your #{c_t(:erg)} was not deleted. Please fix the errors"
         end
@@ -692,11 +716,11 @@ RSpec.describe GroupsController, type: :controller do
         expect(response).to render_template :metrics
       end
 
-      it 'assigns a valid group object' do 
+      it 'assigns a valid group object' do
         expect(assigns[:group]).to be_valid
       end
 
-      it 'return 3 updates belonging to group object' do 
+      it 'return 3 updates belonging to group object' do
         expect(assigns[:updates].count).to eq 3
       end
     end
@@ -712,11 +736,11 @@ RSpec.describe GroupsController, type: :controller do
       login_user_from_let
       before { get :import_csv, :id => group.id }
 
-      it 'render import_csv template' do 
+      it 'render import_csv template' do
         expect(response).to render_template :import_csv
       end
 
-      it 'assigns a valid group object' do 
+      it 'assigns a valid group object' do
         expect(assigns[:group]).to be_valid
       end
     end
@@ -739,7 +763,7 @@ RSpec.describe GroupsController, type: :controller do
         expect(response.content_type).to eq 'text/csv'
       end
 
-      it "csv filename is 'erg_import_example.csv" do 
+      it "csv filename is 'erg_import_example.csv" do
         expect(response.headers["Content-Disposition"]).to include 'erg_import_example.csv'
       end
     end
@@ -756,7 +780,7 @@ RSpec.describe GroupsController, type: :controller do
     context 'with logged user and no file' do
       login_user_from_let
 
-      before { 
+      before {
         request.env["HTTP_REFERER"] = "back"
         get :parse_csv, :id => group.id
       }
@@ -764,7 +788,7 @@ RSpec.describe GroupsController, type: :controller do
       it 'redirects back' do
         expect(response).to redirect_to "back"
       end
-      
+
       it "flashes an alert message" do
         expect(flash[:alert]).to eq "CSV file is required"
       end
@@ -778,7 +802,7 @@ RSpec.describe GroupsController, type: :controller do
         expect(response).to render_template :parse_csv
       end
 
-      it 'assigns a valid group object' do 
+      it 'assigns a valid group object' do
         expect(assigns[:group]).to be_valid
       end
     end
@@ -814,7 +838,7 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-  describe 'GET #edit_fields' do  
+  describe 'GET #edit_fields' do
     context 'with logged user' do
       login_user_from_let
       before { get :edit_fields, :id => group.id }
@@ -845,7 +869,7 @@ RSpec.describe GroupsController, type: :controller do
       login_user_from_let
       before { get_delete_attachment }
 
-      it 'flashes a notice message' do 
+      it 'flashes a notice message' do
         expect(flash[:notice]).to eq "Group attachment was removed"
       end
 

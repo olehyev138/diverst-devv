@@ -534,35 +534,13 @@ RSpec.describe Group, :type => :model do
         end
     end
 
-    describe '#set_default_group_contact' do
-        it 'updates contact email if group leader is default_group_contact' do
-            group = create(:group)
-            user = create(:user)
-            group_leader = create(:group_leader, :group => group, :user => user, :default_group_contact => true)
-            group_leader = group.group_leaders.find_by(default_group_contact: true)&.user
-            group.set_default_group_contact
-        
 
-            expect(group.contact_email).to eq group_leader&.email
-        end
-
-        it 'sets contact email to nil if group leader is not set.' do
-            group = create(:group)
-            user = create(:user)
-            create(:group_leader, :group => group, :user => user, :default_group_contact => false)
-            group_leader = group.group_leaders.find_by(default_group_contact: true)&.user
-            group.set_default_group_contact
-
-            expect(group.contact_email).to eq nil
-        end
-    end
-    
     describe "#private scopes" do
         it "should return correct group counts" do
             enterprise = create(:enterprise)
             create_list(:group, 5, :private => true, :enterprise => enterprise)
             create_list(:group, 3, :private => false, :enterprise => enterprise)
-            
+
             expect(enterprise.groups.count).to eq(8)
             expect(enterprise.groups.is_private.count).to eq(5)
             expect(enterprise.groups.non_private.count).to eq(3)

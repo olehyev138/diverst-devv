@@ -18,7 +18,6 @@ class Groups::LeadersController < ApplicationController
   def create
     authorize @group, :leaders?
     if @group.update(group_params)
-      @group.set_default_group_contact
       flash[:notice] = "Leaders were updated"
       redirect_to action: :index
     else

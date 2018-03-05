@@ -36,7 +36,7 @@ class GroupCategoryTypesController < ApplicationController
 
   def update_with_new_category
     authorize Group
-
+    
     if @category_type.update(category_type_params)
       flash[:notice] = "You successfully added categories to #{@category_type.name}"
       redirect_to view_all_group_categories_url
