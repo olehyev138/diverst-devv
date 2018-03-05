@@ -135,9 +135,9 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
     name.split.map(&:capitalize).join(' ')
   end
 
-  def set_default_group_contact
+  def contact_email
     group_leader = group_leaders.find_by(default_group_contact: true)&.user
-    self.update(contact_email: group_leader&.email)
+    group_leader&.email
   end
 
   def managers
