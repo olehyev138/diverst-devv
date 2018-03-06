@@ -3,9 +3,6 @@ require 'rails_helper'
 RSpec.describe UsersController, type: :controller do
     let(:enterprise) { create(:enterprise, cdo_name: "test") }
     let(:user) { create(:user, enterprise: enterprise) }
-    let(:policy_group) { create(:policy_group, enterprise: enterprise, default_for_enterprise: true)}
-
-    before{ policy_group.save }
 
     describe "GET#index" do
         context 'when user is logged in' do

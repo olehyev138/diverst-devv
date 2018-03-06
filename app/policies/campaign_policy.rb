@@ -4,6 +4,11 @@ class CampaignPolicy < ApplicationPolicy
 
     @policy_group.campaigns_index?
   end
+  
+  def new?
+    return false unless collaborate_module_enabled?
+    @policy_group.campaigns_create?
+  end
 
   def create?
     return false unless collaborate_module_enabled?

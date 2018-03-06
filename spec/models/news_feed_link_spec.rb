@@ -15,15 +15,20 @@ RSpec.describe NewsFeedLink, type: :model do
 
         it { expect(news_feed_link).to have_many(:news_feed_link_segments) }
         it { expect(news_feed_link).to delegate_method(:group).to(:news_feed) }
-        # it { expect(news_feed_link).to delegate_method(:segment).to(:news_feed_link_segment) }
     end
 
     describe "#approve_link" do
         it "approves the link" do
             # ensure the job is performed and that
             # we don't receive any errors
+            author = create(:user)
+            author.policy_group.groups_manage = true
+            author.policy_group.save!
+            
+            link = create(:news_link, :author => author)
+            
             perform_enqueued_jobs do
-                news_feed_link = build(:news_feed_link)
+                news_feed_link = build(:news_feed_link, :link => link)
                 news_feed_link.save
 
                 expect(news_feed_link.approved).to eq(true)

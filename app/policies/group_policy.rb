@@ -2,17 +2,26 @@ class GroupPolicy < ApplicationPolicy
     def index?
         @policy_group.groups_index?
     end
+    
+    def new?
+        @policy_group.groups_manage?
+    end
+    
+    def leaders?
+        return true if @policy_group.groups_manage?
+        @policy_group.group_leader_manage?
+    end
 
     def plan_overview?
-        return true if index?
-
-        @user.erg_leader?
+        @policy_group.groups_budgets_index?
+    end
+    
+    def calendar?
+        @policy_group.global_calendar?
     end
 
     def close_budgets?
-        return true if index?
-
-        @user.erg_leader?
+        @policy_group.annual_budget_manage?
     end
 
     def metrics?
@@ -48,7 +57,7 @@ class GroupPolicy < ApplicationPolicy
     end
 
     def is_admin?
-        @user.policy_group.admin_pages_view?
+        @user.is_admin?
     end
 
     def is_a_member?
@@ -97,7 +106,6 @@ class GroupPolicy < ApplicationPolicy
         end
     end
 
-
     def view_latest_news?
         #Ablility to view latest news depends on settings level
         case @record.latest_news_visibility
@@ -114,7 +122,6 @@ class GroupPolicy < ApplicationPolicy
             return false
         end
     end
-
 
     def view_upcoming_events?
         #Ablility to upcoming events depends on settings level
@@ -137,8 +144,7 @@ class GroupPolicy < ApplicationPolicy
         view_upcoming_events?
     end
 
-
-   def events_filter
+    def events_filter
        case @record.upcoming_events_visibility
         when 'public'
             #Everyone can upcoming events
@@ -153,11 +159,10 @@ class GroupPolicy < ApplicationPolicy
         else
             return false
         end
-   end
-
+    end
 
     def manage_members?
-        update?
+        @policy_group.groups_members_index?
     end
 
     def erg_leader_permissions?
@@ -196,5 +201,15 @@ class GroupPolicy < ApplicationPolicy
     def destroy?
         return true if @policy_group.groups_manage?
         @record.owner == @user
+    end
+    
+    class Scope < Scope
+        def resolve
+            if !user.erg_leader?
+                scope.includes(:parent, :leaders, :owner, :initiatives)
+            else
+                scope.joins(:group_leaders).where(:group_leaders => {:user_id => user.id})
+            end
+        end
     end
 end

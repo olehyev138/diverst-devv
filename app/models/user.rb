@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
     scope :inactive, -> { where(active: false).distinct }
 
     belongs_to :enterprise, inverse_of: :users
-    belongs_to :policy_group
+    has_one :policy_group, :dependent => :destroy, inverse_of: :user
 
     has_many :devices
     has_many :users_segments
@@ -55,17 +55,24 @@ class User < ActiveRecord::Base
 
     validates :first_name, presence: true
     validates :last_name, presence: true
+    validates :role, presence: true
     validates :points, numericality: { only_integer: true }, presence: true
     validates :credits, numericality: { only_integer: true }, presence: true
     validate :validate_presence_fields
+    validate :group_leader_role
+    validate :policy_group
 
     before_validation :generate_password_if_saml
     before_validation :set_provider
     before_validation :set_uid
 
-    before_save :assign_policy_group, if: Proc.new { |user| user[:policy_group_id].nil? }
     after_create :assign_firebase_token
-
+    after_create :set_default_policy_group
+    
+    after_save  :set_default_policy_group
+    
+    accepts_nested_attributes_for :policy_group
+    
     after_commit on: [:create] { update_elasticsearch_index(self, self.enterprise, 'index') }
     after_commit on: [:update] { update_elasticsearch_index(self, self.enterprise, 'update') }
     after_commit on: [:destroy] { update_elasticsearch_index(self, self.enterprise, 'delete') }
@@ -80,6 +87,13 @@ class User < ActiveRecord::Base
 
     def name
         "#{first_name} #{last_name}"
+    end
+    
+    def group_leader_role
+        if UserRole.where(:role_name => role, :role_type => "group").count > 0 && 
+            GroupLeader.where(:user_id => id).count < 1
+            errors.add(:role, 'User is not a group leader')
+        end
     end
 
     def default_time_zone
@@ -96,11 +110,21 @@ class User < ActiveRecord::Base
     def badges
         Badge.where("points <= ?", points).order(points: :asc)
     end
-
-    def policy_group
-        assign_policy_group if self[:policy_group_id].nil?
-
-        PolicyGroup.find_by_id(self[:policy_group_id])
+    
+    def set_default_policy_group
+        template = enterprise.policy_group_templates.joins(:user_role).where(:user_roles => {:role_name => role}).first
+        attributes = template.create_new_policy
+        if policy_group.nil?
+            create_policy_group(attributes)
+        else
+            # we don't update custom_policy_groups
+            return if custom_policy_group
+            policy_group.update_attributes(attributes)
+        end
+    end
+    
+    def admin?
+        UserRole.where(:role_name => role, :role_type => "admin").count > 0
     end
 
     def has_answered_group_surveys?
@@ -422,13 +446,5 @@ class User < ActiveRecord::Base
     # Generate a random password if the user is using SAML
     def generate_password_if_saml
         self.password = self.password_confirmation = SecureRandom.urlsafe_base64 if auth_source == 'saml' && new_record?
-    end
-
-    def assign_policy_group
-        current_policy_group = PolicyGroup.find_by_id(self[:policy_group_id])
-
-        if current_policy_group.nil?
-            self[:policy_group_id] = PolicyGroup.default_group(enterprise.id)&.id
-        end
     end
 end

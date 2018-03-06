@@ -16,7 +16,6 @@ RSpec.describe User do
     context 'test' do
       context 'belongs_to associations' do
         it { expect(user).to belong_to(:enterprise) }
-        it { expect(user).to belong_to(:policy_group) }
       end
 
       context 'has_many associations' do
@@ -60,7 +59,6 @@ RSpec.describe User do
         it { expect(user).to validate_attachment_content_type(:avatar) }
       end
     end
-
 
     context 'presence of fields' do
       let(:user){ build(:user, enterprise: enterprise) }
@@ -163,7 +161,7 @@ RSpec.describe User do
     context 'when user is a leader of an erg' do
       before  do
         group.members << user
-        group.group_leaders << GroupLeader.new(group: group, user: user, position_name: 'blah')
+        group.group_leaders << GroupLeader.new(group: group, user: user, position_name: 'blah', role: "group_leader")
       end
 
       it 'returns true' do
@@ -245,45 +243,6 @@ RSpec.describe User do
 
       it "return the full name of user with status" do
         expect(user.name_with_status).to eq "John Doe (inactive)"
-      end
-    end
-  end
-
-  describe 'policy group' do
-    let!(:enterprise) { create :enterprise}
-
-    context 'when creating user' do
-      context 'with policy group' do
-        let!(:policy_group) { create :policy_group, enterprise: enterprise, default_for_enterprise: true }
-        let(:other_policy_group)  { create :policy_group, enterprise: enterprise, default_for_enterprise: false }
-
-        let!(:user) { build :user, enterprise: enterprise, policy_group: other_policy_group }
-
-        before { user.save! }
-
-        it 'keeps policy group' do
-          expect(user.reload.policy_group).to eq other_policy_group
-        end
-
-        it 'changes policy group users count' do
-          expect(other_policy_group.reload.users).to include(user)
-        end
-      end
-
-      context 'without policy group' do
-        let!(:policy_group) { create :policy_group, enterprise: enterprise }
-
-        let!(:user) { build :user, enterprise: enterprise, policy_group: nil }
-
-        before { user.save! }
-
-        it 'sets policy group to default in enterprise' do
-          expect(user.reload.policy_group).to eq policy_group
-        end
-
-        it 'changes policy group users count' do
-          expect(policy_group.reload.users).to include(user)
-        end
       end
     end
   end

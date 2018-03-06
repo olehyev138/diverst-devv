@@ -56,7 +56,7 @@ class EnterprisesController < ApplicationController
   end
 
   def edit_pending_comments
-    authorize @enterprise
+    authorize @enterprise, :manage_posts?
   end
 
   # missing template
