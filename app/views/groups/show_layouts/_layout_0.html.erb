@@ -1,11 +1,5 @@
 <div class="content__main">
-  <% if @group.banner.present? %>
-    <div class="row">
-      <div class="col sm-12">
-        <%= image_tag @group.banner.url, style: 'width: 100%; max-width: 100%;' %>
-      </div>
-    </div>
-  <% end %>
+  <%= render 'groups/show_layouts/blocks/banner' %>
   <% if @group.description.present? %>
     <div class="content__header mtmedium">
       <p style="flex: 1 1 0;"><%= allow_newlines @group.description %></p>
