@@ -3,10 +3,21 @@
   <%= simple_form_for @group do |f| %>
     <div class="card">
       <div class="card__section card__section--border">
-        <p class="field__hint">
-          <%= f.label :layout, label: "Select one of predefined layouts" %>
-        </p>
-        <%= f.input :layout, include_blank: false, label: false, input_html: { autofocus: true } %>
+        <%= f.input :layout, as: :hidden %>
+
+        <% Group.layout.values.each do |layout_value| %>
+          <div class="media-object" data-layout_id="<%= layout_value %>">
+            <div class="flex-row">
+              <div class="flex-row__cell">
+                <%= image_tag @group.logo.expiring_url(3600, :thumb) %>
+              </div>
+              <div class="flex-row__cell flex-row__cell--grow">
+                <h4><%= Group::LAYOUTS_INFO[layout_value] %></h4>
+                <p><%= Group::LAYOUTS_INFO[layout_value] %></p>
+              </div>
+            </div>
+          </div>
+        <% end %>
       </div>
     </div>
 
@@ -15,3 +26,22 @@
   <% end %>
 </div>
 
+<script>
+  $('.media-object').click(function() {
+    $('.media-object').removeClass('media-object--selected');
+
+    $(this).addClass('media-object--selected');
+
+    var new_layout_id = $(this).data('layout_id')
+
+    $('#group_layout').val(new_layout_id);
+  });
+
+  $(document).ready(function(){
+    var current_layout_id = $('input#group_layout').val();
+
+    var $layout_card = $('*[data-layout_id="' + current_layout_id + '"]');
+
+    $layout_card.click();
+  });
+</script>

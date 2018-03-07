@@ -8,6 +8,11 @@ class Group < ActiveRecord::Base
                               :layout_1
                             ]
 
+  LAYOUTS_INFO = {
+    'layout_0' => 'Default layout. Has all the modules',
+    'layout_1' => 'Same as default, but without top performers and most active groups panel'
+  }
+
   enumerize :pending_users, default: :disabled,  in: [
                               :disabled,
                               :enabled
