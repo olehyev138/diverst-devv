@@ -178,6 +178,10 @@ class GroupsController < ApplicationController
         end
     end
 
+    def layouts
+        authorize @group, :update?
+    end
+
     def settings
         authorize @group, :update?
     end
@@ -341,6 +345,7 @@ class GroupsController < ApplicationController
                 :sponsor_message,
                 :company_video_url,
                 :short_description,
+                :layout,
                 :parent_id,
                 :group_category_id,
                 :group_category_type_id,

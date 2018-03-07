@@ -3,6 +3,11 @@ class Group < ActiveRecord::Base
 
   extend Enumerize
 
+  enumerize :layout, default: :layout_0, in: [
+                              :layout_0,
+                              :layout_1
+                            ]
+
   enumerize :pending_users, default: :disabled,  in: [
                               :disabled,
                               :enabled
