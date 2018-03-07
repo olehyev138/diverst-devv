@@ -142,7 +142,8 @@ class GroupsController < ApplicationController
             flash[:notice] = "Your #{c_t(:erg)} was created"
             redirect_to groups_url
         else
-            flash[:alert] = "Your #{c_t(:erg)} was not created. Please fix the errors"
+            flash.now[:alert] = "Your #{c_t(:erg)} was not created. Please fix the errors"
+            @categories = current_user.enterprise.group_categories
             render :new
         end
     end
@@ -164,11 +165,21 @@ class GroupsController < ApplicationController
         if @group.update(group_params)
             track_activity(@group, :update)
             flash[:notice] = "Your #{c_t(:erg)} was updated"
-            redirect_to :back
+            redirect_to [:edit, @group]
         else
-            flash[:alert] = "Your #{c_t(:erg)} was not updated. Please fix the errors"
-            render :settings
+            flash.now[:alert] = "Your #{c_t(:erg)} was not updated. Please fix the errors"
+
+            if request.referer == edit_group_url(@group) || request.referer == group_url(@group)
+              @categories = current_user.enterprise.group_categories
+              render :edit
+            else
+              render :settings
+            end
         end
+    end
+
+    def layouts
+        authorize @group, :update?
     end
 
     def settings
@@ -334,6 +345,7 @@ class GroupsController < ApplicationController
                 :sponsor_message,
                 :company_video_url,
                 :short_description,
+                :layout,
                 :parent_id,
                 :group_category_id,
                 :group_category_type_id,

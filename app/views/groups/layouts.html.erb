@@ -1,0 +1,17 @@
+<div class="content__main">
+  <h2>Select layout for <strong><%= @group.name %></strong></h2>
+  <%= simple_form_for @group do |f| %>
+    <div class="card">
+      <div class="card__section card__section--border">
+        <p class="field__hint">
+          <%= f.label :layout, label: "Select one of predefined layouts" %>
+        </p>
+        <%= f.input :layout, include_blank: false, label: false, input_html: { autofocus: true } %>
+      </div>
+    </div>
+
+    <%= f.button :submit %>
+
+  <% end %>
+</div>
+

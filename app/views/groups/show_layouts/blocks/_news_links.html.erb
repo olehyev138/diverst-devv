@@ -1,0 +1,20 @@
+<h4 class="card__title"><%= inline_svg('icons/news.svg', class: "icon card__icon") %>Latest News</h4>
+<%= link_to "View all", group_posts_path(@group), class: "card__action" unless @posts.count < 1 %>
+<% if policy(@group).view_latest_news? %>
+  <% if @posts.empty? %>
+    <p>No posts have been published yet.</p>
+  <% else %>
+    <% @posts.each do |news| %>
+      <%= render "shared/flippable/news_link", news: news %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<script>
+  //force facebook embed to have correct width
+  $(document).ready(function(){
+    var width = <%= SocialMedia::Importer::MEDIA_MAX_WIDTH %>
+
+    $('iframe[src*=facebook]').width(width)
+  });
+</script>

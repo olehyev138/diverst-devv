@@ -1,0 +1,64 @@
+<div class="content__main">
+  <%= render 'groups/show_layouts/blocks/banner' %>
+  <%= render 'groups/show_layouts/blocks/group_description' %>
+
+  <div class="row row--equal-height">
+    <div class="col sm-12 md-9">
+      <div class="row row--equal-height">
+        <div class="col sm-12 md-6">
+          <div class="card">
+            <div class="card__section">
+              <%= render 'groups/show_layouts/blocks/news_links' %>
+            </div>
+          </div>
+        </div>
+
+        <div class="col sm-12 md-6">
+          <div class="card">
+            <div class="card__section">
+              <h4 class="card__title"><%= inline_svg('icons/calendar.svg', class: "icon card__icon") %>Upcoming Events</h4>
+              <%= render 'groups/show_layouts/blocks/events' %>
+            </div>
+              <%= render 'groups/show_layouts/blocks/yammer' %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col col--stacked sm-12 md-3">
+      <%= render 'groups/show_layouts/blocks/sponsor' %>
+
+      <%= render 'groups/show_layouts/blocks/join_button_and_member_preferences' %>
+
+      <div class="card card--secondary">
+        <%= render 'groups/show_layouts/blocks/leaders' %>
+      </div>
+
+      <%= render 'groups/show_layouts/blocks/most_active_users_and_groups' %>
+
+      <%= render 'groups/show_layouts/blocks/contact_email' %>
+
+      <%= render 'groups/show_layouts/blocks/group_parent' %>
+
+      <%= render 'groups/show_layouts/blocks/group_children' %>
+
+      <%= render 'groups/show_layouts/blocks/notifications_settings' %>
+
+      <%= render 'groups/show_layouts/blocks/leave_erg_button' %>
+    </div>
+  </div>
+</div>
+
+<script>
+  $('img.info').click(function(e){
+    e.preventDefault();
+    var id = $(this).attr('id');
+    $('div.biography_' + id).show();
+  }); //endof click
+
+  $('a.remove').click(function(e){
+    e.preventDefault();
+    var id = $(this).attr('id');
+    $('div.biography_' + id).hide();
+  }); //endof click
+</script>
