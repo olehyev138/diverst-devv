@@ -1,6 +1,6 @@
 class AddPriorityToUserRoles < ActiveRecord::Migration
   def up
-    add_column :user_roles, :priority, :integer, :unique => true, :null => false, :auto_increment => true
+    add_column :user_roles, :priority, :integer, :null => false, :auto_increment => true
     
     # update all user_roles and set the priorities
     Enterprise.find_each do |enterprise|
