@@ -8,7 +8,7 @@ FactoryGirl.define do
     invitation_sent_at Time.current
     invitation_accepted_at Time.current
     enterprise
-    role "user"
+    role "admin"
     provider "email"
 
     after(:create) do |user|

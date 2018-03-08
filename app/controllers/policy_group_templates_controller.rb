@@ -1,39 +1,18 @@
 class PolicyGroupTemplatesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_policy_group_template, only: [:edit, :update, :destroy]
+  before_action :set_policy_group_template, only: [:edit, :update]
 
   layout 'global_settings'
 
   def index
     authorize PolicyGroupTemplate
-
     @policy_group_templates = current_user.enterprise.policy_group_templates
-  end
-
-  def new
-    authorize PolicyGroupTemplate
-
-    @policy_group_template = current_user.enterprise.policy_group_templates.new
   end
   
   def edit
     authorize PolicyGroupTemplate
   end
-
-  def create
-    authorize PolicyGroupTemplate
-
-    @policy_group_template = current_user.enterprise.policy_group_templates.new(policy_group_template_params)
-
-    if @policy_group_template.save
-      flash[:notice] = "Your policy group template was created"
-      redirect_to action: :index
-    else
-      flash[:alert] = "Your policy group template was not created. Please fix the errors"
-      render :new
-    end
-  end
-
+  
   def update
     authorize PolicyGroupTemplate
 
@@ -44,12 +23,6 @@ class PolicyGroupTemplatesController < ApplicationController
       flash[:alert] = "Your policy group template was not updated. Please fix the errors"
       render :edit
     end
-  end
-
-  def destroy
-    authorize PolicyGroupTemplate
-    @policy_group_template.destroy
-    redirect_to action: :index
   end
 
   protected
@@ -66,7 +39,6 @@ class PolicyGroupTemplatesController < ApplicationController
     params
       .require(:policy_group_template)
       .permit(
-        :name,
         :campaigns_index,
         :campaigns_create,
         :campaigns_manage,

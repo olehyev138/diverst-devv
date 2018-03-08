@@ -1,17 +1,13 @@
 class UserRolesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_policy_group_template, only: [:edit, :update, :destroy]
+  before_action :set_user_role, only: [:edit, :update, :destroy]
 
   layout 'global_settings'
-
-  def index
-    authorize UserRole
-    @user_roles = current_user.enterprise.user_roles
-  end
 
   def new
     authorize UserRole
     @user_role = current_user.enterprise.user_roles.new
+    @user_role.role_name = ""
   end
   
   def edit
@@ -35,7 +31,7 @@ class UserRolesController < ApplicationController
   def update
     authorize UserRole
 
-    if @policy_group_template.update(policy_group_template_params)
+    if @user_role.update(user_role_params)
       flash[:notice] = "Your user role was updated"
       redirect_to users_url
     else
@@ -43,10 +39,18 @@ class UserRolesController < ApplicationController
       render :edit
     end
   end
+  
+  def destroy
+    authorize @user_role
+    if not @user_role.destroy
+      flash[:alert] = @user_role.errors.full_messages.first
+    end
+    redirect_to :back
+  end
 
   protected
 
-  def set_policy_group_template
+  def set_user_role
     if current_user
       @user_role = current_user.enterprise.user_roles.find(params[:id])
     else
@@ -59,7 +63,8 @@ class UserRolesController < ApplicationController
       .require(:user_role)
       .permit(
         :role_name,
-        :role_type
+        :role_type,
+        :priority
       )
   end
 end

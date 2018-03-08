@@ -57,5 +57,6 @@ FactoryGirl.define do
     sso_manage true
     manage_posts true
     global_calendar true
+    permissions_manage true
   end
 end
