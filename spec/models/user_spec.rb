@@ -333,4 +333,131 @@ RSpec.describe User do
       end
     end
   end
+  
+  describe "#set_group_role" do
+    context "when user is an existing group_leader but current role is admin and user tries to set role to role with lower priority" do
+      it "sets the users role to the group_leader_role with higher priority" do
+        group_leader_user = create(:user, :role => "user")
+        create(:user_role, :enterprise => group_leader_user.enterprise, :role_name => "group_treasurer", :role_type => "group", :priority => 2)
+        group_1 = create(:group, :enterprise => group_leader_user.enterprise)
+        group_2 = create(:group, :enterprise => group_leader_user.enterprise)
+        
+        create(:user_group, :group => group_1, :user => group_leader_user)
+        create(:user_group, :group => group_2, :user => group_leader_user)
+        create(:group_leader, :group => group_1, :role => "group_leader", :user => group_leader_user)
+        create(:group_leader, :group => group_2, :role => "group_treasurer", :user => group_leader_user)
+        
+        expect(group_leader_user.role).to eq("group_leader")
+        
+        # we give the user admin permissions
+        group_leader_user.role = "admin"
+        group_leader_user.save!
+        
+        # verify the role
+        expect(group_leader_user.role).to eq("admin")
+        
+        # we set the user role to a group role wit lower priority
+        group_leader_user.role = "group_treasurer"
+        group_leader_user.save!
+        
+        # verify that the user's role is set to the role with higher priority
+        expect(group_leader_user.role).to eq("group_leader")
+      end
+    end
+  end
+  
+  describe "#group_leader_role" do
+    it "raises an User is not a group leader error" do
+      user = create(:user)
+      user.role = "group_leader"
+      user.save
+      
+      expect(user.errors.full_messages.first).to eq("Role User is not a group leader")
+    end
+    
+    it "raises a Cannot change group_leader roles manually error" do
+      user = create(:user, :role => "user")
+      create(:user_role, :enterprise => user.enterprise, :role_name => "group_treasurer", :role_type => "group", :priority => 2)
+      
+      group_1 = create(:group, :enterprise => user.enterprise)
+      create(:user_group, :group => group_1, :user => user)
+      create(:group_leader, :group => group_1, :user => user, :role => "group_leader")
+      
+      group_2 = create(:group, :enterprise => user.enterprise)
+      create(:user_group, :group => group_2, :user => user)
+      create(:group_leader, :group => group_2, :user => user, :role => "group_treasurer")
+      
+      user.role = "group_treasurer"
+      user.save
+      
+      expect(user.errors.full_messages.first).to eq("Role Cannot change group_leader roles manually")
+    end
+    
+    it "raises a Cannot change group_leader roles manually error" do
+      user = create(:user, :role => "user")
+      create(:user_role, :enterprise => user.enterprise, :role_name => "group_treasurer", :role_type => "group", :priority => 2)
+      
+      group_1 = create(:group, :enterprise => user.enterprise)
+      create(:user_group, :group => group_1, :user => user)
+      create(:group_leader, :group => group_1, :user => user, :role => "group_leader")
+      
+      group_2 = create(:group, :enterprise => user.enterprise)
+      create(:user_group, :group => group_2, :user => user)
+      create(:group_leader, :group => group_2, :user => user, :role => "group_treasurer")
+      
+      user.role = "group_treasurer"
+      user.save
+      
+      expect(user.errors.full_messages.first).to eq("Role Cannot change group_leader roles manually")
+    end
+    
+    it "raises an User does not have that role in any group error" do
+      user = create(:user)
+      create(:user_role, :enterprise => user.enterprise, :role_name => "group_treasurer", :role_type => "group", :priority => 2)
+      
+      group_1 = create(:group, :enterprise => user.enterprise)
+      create(:user_group, :group => group_1, :user => user)
+      create(:group_leader, :group => group_1, :user => user, :role => "group_leader")
+      
+      user.role = "group_treasurer"
+      user.save
+      
+      expect(user.errors.full_messages.first).to eq("Role User does not have that role in any group")
+    end
+    
+    it "raises a Cannot change from group role to role with lower priority error" do
+      user = create(:user, :role => "user")
+      
+      group_1 = create(:group, :enterprise => user.enterprise)
+      create(:user_group, :group => group_1, :user => user)
+      create(:group_leader, :group => group_1, :user => user, :role => "group_leader")
+      
+      expect(user.role).to eq("group_leader")
+      
+      user.role = "user"
+      user.save
+      
+      expect(user.errors.full_messages.first).to eq("Role Cannot change from group role to role with lower priority")
+    end
+    
+    it "raises a Cannot change from group role to role with lower priority error" do
+      user = create(:user)
+      
+      group_1 = create(:group, :enterprise => user.enterprise)
+      create(:user_group, :group => group_1, :user => user)
+      create(:group_leader, :group => group_1, :user => user, :role => "group_leader")
+      
+      user.role = "user"
+      user.save
+      
+      expect(user.errors.full_messages.first).to eq("Role Cannot change from role to role with lower priority while user is still a group leader")
+    end
+  end
+  
+  describe "#admin?" do
+    it "returns true" do
+      user = create(:user)
+      expect(user.admin?).to be(true)
+    end
+  end
 end

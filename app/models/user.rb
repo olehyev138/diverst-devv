@@ -66,11 +66,11 @@ class User < ActiveRecord::Base
     before_validation :set_provider
     before_validation :set_uid
 
+    after_validation    :set_group_role
     after_create :assign_firebase_token
     after_create :set_default_policy_group
     
-    after_save  :set_default_policy_group
-    
+    after_save  :set_default_policy_group, if: :role_changed?
     accepts_nested_attributes_for :policy_group
     
     after_commit on: [:create] { update_elasticsearch_index(self, self.enterprise, 'index') }
@@ -89,10 +89,47 @@ class User < ActiveRecord::Base
         "#{first_name} #{last_name}"
     end
     
+    def set_group_role
+        # check if user is group leader and ensure role is correct
+        if erg_leader? and enterprise.user_roles.where(:role_name => role, :role_type => "group").count > 0
+            # get all the distinct group_leader roles
+            group_leader_roles = GroupLeader.joins(:group => :enterprise).where(:groups => {:enterprise_id => enterprise.id}, :user_id => id).distinct.pluck(:role)
+            # set the user role to the role with the highest priority
+            self.role = enterprise.user_roles.where(:role_name => group_leader_roles).order(:priority).first.role_name
+        end
+    end
+    
     def group_leader_role
-        if UserRole.where(:role_name => role, :role_type => "group").count > 0 && 
-            GroupLeader.where(:user_id => id).count < 1
+        # make sure a user's role cannot be set to group_leader without being a group_leader first
+        if enterprise.user_roles.where(:role_name => role, :role_type => "group").count > 0 && !erg_leader?
             errors.add(:role, 'User is not a group leader')
+        
+        # make sure a user's role is never changed from one group leader type to another
+        elsif enterprise.user_roles.where(:role_name => role_was, :role_type => "group").count > 0 &&
+                enterprise.user_roles.where(:role_name => role, :role_type => "group").count > 0
+            errors.add(:role, 'Cannot change group_leader roles manually')
+         
+        # ensure user cannot go from non_group role to a group role that they don't have   
+        elsif enterprise.user_roles.where(:role_name => role, :role_type => "group").count > 0 &&
+                GroupLeader.joins(:group => :enterprise).where(:groups => {:enterprise_id => enterprise.id}, :role => role, :user_id => id).count < 1
+            errors.add(:role, 'User does not have that role in any group')
+            
+        # make sure if a user is a group leader that the role is never set to a non_group_leader role with
+        # lower priority ex: admin with group_leader role cannot be switched to a basic user but a group_leader 
+        # can have their role switch to a super admin
+        elsif enterprise.user_roles.where(:role_name => role_was, :role_type => "group").count > 0 && 
+                enterprise.user_roles.where(:role_name => role, :role_type => "user").count > 0 &&
+                enterprise.user_roles.where(:role_name => role).where("priority > ?", enterprise.user_roles.where(:role_name => role_was).first.priority).count > 0
+            errors.add(:role, 'Cannot change from group role to role with lower priority')
+            
+        # make sure if a user is a group leader that the role is never set to a non_group_leader role with
+        # lower priority ex: group_leader role cannot be switched to a basic user but a group_leader can have their
+        # role switch to a super admin - UserRole.where(:role_name => role_was).first.priority
+        elsif enterprise.user_roles.where(:role_name => role_was).where.not(:role_type => "group").count > 0 && 
+                enterprise.user_roles.where(:role_name => role).where.not(:role_type => "group").count > 0 && 
+                GroupLeader.joins(:group => :enterprise).where(:groups => {:enterprise_id => enterprise.id}, :user_id => id).count > 0 &&
+                enterprise.user_roles.where(:role_name => role).where("priority > ?", enterprise.user_roles.where(:role_name => group_leaders.roles).order("priority DESC").first.priority).count > 0
+            errors.add(:role, 'Cannot change from role to role with lower priority while user is still a group leader')
         end
     end
 
@@ -124,7 +161,7 @@ class User < ActiveRecord::Base
     end
     
     def admin?
-        UserRole.where(:role_name => role, :role_type => "admin").count > 0
+        enterprise.user_roles.where(:role_name => role, :role_type => "admin").count > 0
     end
 
     def has_answered_group_surveys?

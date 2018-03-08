@@ -7,6 +7,10 @@ class GroupPolicy < ApplicationPolicy
         @policy_group.groups_manage?
     end
     
+    def show?
+        index?
+    end
+    
     def leaders?
         return true if @policy_group.groups_manage?
         @policy_group.group_leader_manage?

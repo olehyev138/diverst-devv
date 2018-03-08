@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180222185221) do
+ActiveRecord::Schema.define(version: 20180306143311) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -1148,6 +1148,7 @@ ActiveRecord::Schema.define(version: 20180222185221) do
     t.string   "role_type",     limit: 191, default: "non_admin"
     t.datetime "created_at",                                      null: false
     t.datetime "updated_at",                                      null: false
+    t.integer  "priority",      limit: 4,                         null: false
   end
 
   add_index "user_roles", ["enterprise_id"], name: "index_user_roles_on_enterprise_id", using: :btree

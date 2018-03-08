@@ -1,7 +1,7 @@
 class PolicyGroupTemplate < ActiveRecord::Base
     
     # associations
-    belongs_to :user_role, inverse_of: :policy_group_template
+    belongs_to :user_role, inverse_of: :policy_group_template, dependent: :destroy
     belongs_to :enterprise
     
     # validations
