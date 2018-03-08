@@ -323,7 +323,9 @@ class GroupsController < ApplicationController
             .require(:group)
             .permit(
                 :name,
+                :short_description,
                 :description,
+                :home_message,
                 :logo,
                 :private,
                 :banner,
@@ -344,7 +346,6 @@ class GroupsController < ApplicationController
                 :sponsor_media,
                 :sponsor_message,
                 :company_video_url,
-                :short_description,
                 :layout,
                 :parent_id,
                 :group_category_id,
