@@ -26,6 +26,11 @@ SimpleCov.start do
 end
 
 Capybara.javascript_driver = :poltergeist
+# https://stackoverflow.com/questions/25673890/poltergeist-throws-js-errors-when-js-errors-false
+Capybara.register_driver :poltergeist do |app|
+  Capybara::Poltergeist::Driver.new(app, {js_errors: false})
+end
+
 Capybara.asset_host = 'http://localhost:3000'
 
 # Devise test helpers

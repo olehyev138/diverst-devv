@@ -1,16 +1,16 @@
 <div class="content__header">
    <% if policy(@group).erg_leader_permissions? %>
-   <h1>Posts/
+   <h1>Posts(<%= @group.news_feed_links.includes(:link).approved.count %>)/
      <%= link_to pending_group_posts_path(@group) do %>
      <button class="btn btn--primary">
-       Pending
+       Pending(<%= @group.news_feed_links.includes(:link).not_approved.count %>)
      </button>
      <% end %>
    </h1>
    <% end %>
   <div class="flex-row flex-row--middle">
     <div class="flex-row__cell">
-      <%= link_to "+ Create News link", new_group_news_link_path, class: "btn btn--primary" if policy(NewsLink).new? %>
+      <%= link_to "+ Create News", new_group_news_link_path, class: "btn btn--primary" if policy(NewsLink).new? %>
     </div>
     <div class="flex-row__cell">
       <%= link_to "+ Create Message", new_group_group_message_path, class: "btn btn--primary" if policy(GroupMessage).new? %>

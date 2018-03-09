@@ -2,31 +2,12 @@
   <div class="row">
     <div class="col sm-2">
       <% if news_link.photos.count > 0 %>
-        <div id="news_link_carousel" class="carousel slide" data-ride="carousel">
-          <!-- Wrapper for slides -->
-          <div class="carousel-inner" role="listbox">
-            <% news_link.photos.each_with_index do |photo, index| %>
-              <div class="item <%= 'active' if index == 0 %>">
-                <%= link_to image_tag(photo.file.url, :alt => "News Item Photo"), news_link_photos_group_news_link_path(news_link.group, news_link), method: :get, remote: true %>
-              </div>
-            <% end %>
-          </div>
-      
-          <!-- Controls -->
-          <a class="left carousel-control" href="#news_link_carousel" role="button" data-slide="prev">
-            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-          </a>
-          <a class="right carousel-control" href="#news_link_carousel" role="button" data-slide="next">
-            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-          </a>
-      </div>
+        <%= render partial: "shared/carousel/template", locals: {news_link: news_link } %>
       <% else %>
         <%= news_link_picture(news_link) %>
       <% end %>
     </div>
-    
+
     <div class="col sm-10">
       <div class="flex-row flex-row--middle">
         <div class="flex-row__cell flex-row__cell--grow">
@@ -40,26 +21,20 @@
               <span class="muted">Posted by <%=  news_link.author.name_with_status %></span>
             <% end %>
             <br>
-            <%= link_to "Comments(#{news_link.comments.count})", comments_group_news_link_path(news_link.group,news_link)
+            <%= link_to "Comments(#{news_link.comments.approved.count})", comments_group_news_link_path(news_link.group,news_link)
              %>
           </p>
         </div>
         <% if policy(news_link).edit? %>
           <div class="flex-row__cell link-group">
-            <%= link_to "Approve", approve_group_posts_path(:group_id => news_link.group.id, :link_id => news_link.news_feed_link.id), method: :post if policy(news_link.group).erg_leader_permissions? and !news_link.news_feed_link.approved? %>
-            <%= link_to "Edit", edit_group_news_link_path(news_link.group, news_link) %>
-            <%= link_to "Delete", group_news_link_path(news_link.group, news_link), method: :delete, class: "error", data: { confirm: "Are you sure?" } %>
+            <%= link_to "Approve", approve_group_posts_path(:group_id => news_link.group.id, :link_id => news_link.news_feed_link.id), method: :post, class: "btn btn--primary" if policy(news_link.group).erg_leader_permissions? and !news_link.news_feed_link.approved? %>
+            <%= link_to "Edit", edit_group_news_link_path(news_link.group, news_link), class: "btn btn--secondary" %>
+            <%= link_to "Delete", group_news_link_path(news_link.group, news_link), method: :delete, class: "btn btn--danger", data: { confirm: "Are you sure?" } %>
           </div>
         <% end %>
       </div>
     </div>
   </div>
 </div>
-
-<script>
-  $('.carousel').carousel({
-    interval: false
-  })
-</script>
 
 <%= render "groups/news_links/modal/form" %>

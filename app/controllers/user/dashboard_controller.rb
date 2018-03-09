@@ -22,11 +22,11 @@ class User::DashboardController < ApplicationController
   private
 
   def set_enterprise
-    @enterprise = current_user.enterprise
+    current_user ? @enterprise = current_user.enterprise : user_not_authorized
   end
 
   def posts
-    posts = NewsFeedLink.joins(:news_feed)
+    NewsFeedLink.joins(:news_feed)
               .joins(joins)
               .includes(:link)
               .where(:news_feeds => {:group_id => current_user.active_groups.pluck(:id)}, :approved => true)

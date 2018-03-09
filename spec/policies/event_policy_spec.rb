@@ -11,7 +11,7 @@ RSpec.describe EventPolicy, :type => :policy do
     
     subject { described_class }
 
-    permissions :create?, :update?, :destroy? do
+    permissions :create?, :update?, :destroy?, :index? do
         it "allows access" do
             expect(subject).to permit(user, event)
         end

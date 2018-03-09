@@ -112,6 +112,7 @@ class PolicyGroupsController < ApplicationController
         :logs_view,
         :groups_budgets_index,
         :groups_budgets_request,
+        :annual_budget_manage,
         user_ids: []
       )
   end

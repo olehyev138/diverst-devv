@@ -44,11 +44,13 @@ class MetricsDashboardsController < ApplicationController
   def show
     authorize @metrics_dashboard
     @graphs = @metrics_dashboard.graphs.includes(:field, :aggregation)
-    @token = @metrics_dashboard.shareable_token
+
+    if not @metrics_dashboard.update_shareable_token
+      render :edit
+    end
   end
 
   def shared_dashboard
-    @metrics_dashboard = nil
     if params[:token]
       @metrics_dashboard = MetricsDashboard.find_by_shareable_token(params[:token])
     end
@@ -93,7 +95,7 @@ class MetricsDashboardsController < ApplicationController
   protected
 
   def set_metrics_dashboard
-    @metrics_dashboard = current_user.enterprise.metrics_dashboards.find(params[:id])
+    current_user ? @metrics_dashboard = current_user.enterprise.metrics_dashboards.find(params[:id]) : user_not_authorized
   end
 
   def metrics_dashboard_params

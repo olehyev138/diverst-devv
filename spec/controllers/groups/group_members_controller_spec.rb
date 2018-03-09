@@ -2,10 +2,9 @@ require 'rails_helper'
 
 RSpec.describe Groups::GroupMembersController, type: :controller do
     let(:user) { create :user }
-    let(:add) { create :user }
+    let(:add) { create :user, enterprise: user.enterprise }
     let(:group) { create(:group, enterprise: user.enterprise) }
     let!(:user_group) {create(:user_group, group_id: group.id, user_id: user.id)}
-
 
 
     describe 'GET#index' do
@@ -158,18 +157,17 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             end
 
             context "when removing" do
-                before do
-                    user_group.save
-                    delete :destroy, group_id: group.id, id: user.id
-                end
+                before { user_group.save }
 
-                it "redirects" do
+                it "redirects to group_path" do
+                    delete :destroy, group_id: group.id, id: user.id
                     expect(response).to redirect_to group_path(group)
                 end
 
                 it "removes the user" do
                     group.reload
-                    expect(group.members.count).to eq(0)
+                    expect{delete :destroy, group_id: group.id, id: user.id}
+                    .to change(group.members, :count).by(-1)
                 end
             end
         end
@@ -181,16 +179,38 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
         end
     end
 
-
+ 
     describe 'POST#create' do
-        describe 'when user is logged in' do
+        context "when unsuccessful" do
+            login_user_from_let
+            
+            before do
+                allow_any_instance_of(UserGroup).to receive(:save).and_return(false)
+            end
+
+            it "renders new template" do
+                post :create, group_id: group.id, user: {user_id: add.id}
+                expect(response).to render_template :new
+            end
+
+            it "flashes an alert message" do
+                post :create, group_id: group.id, user: {user_id: add.id}
+                expect(flash[:alert])
+            end
+
+            it "doesn't create the user" do
+                group.reload
+                expect{post :create, group_id: group.id, user: {user_id: add.id}}
+                .to change(group.members, :count).by(0)
+            end
+        end
+
+        context "before creating" do
             login_user_from_let
 
-            context "before creating" do
-                it "makes sure group count is 1" do
-                    user_group.save
-                    expect(group.members.count).to eq(1)
-                end
+            it "makes sure group count is 1" do
+                user_group.save
+                expect(group.members.count).to eq(1)
             end
 
             context "when creating with survey fields" do
@@ -199,20 +219,22 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
                 before do
                     user_group.save
                     field.save
-                    post :create, group_id: group.id, user: {user_id: add.id}
                 end
 
                 it "redirects to survey group questions path" do
+                    post :create, group_id: group.id, user: {user_id: add.id}
                     expect(response).to redirect_to survey_group_questions_path(group)
                 end
 
                 it "flashes a notice message" do
+                    post :create, group_id: group.id, user: {user_id: add.id}
                     expect(flash[:notice]).to eq 'The member was created'
                 end
 
                 it "creates the user" do
                     group.reload
-                    expect(group.members.count).to eq(2)
+                    expect{post :create, group_id: group.id, user: {user_id: add.id}}
+                    .to change(group.members, :count).by(1)
                 end
             end
 
@@ -220,25 +242,27 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
                 before do
                     user_group.save
                     request.env["HTTP_REFERER"] = "back"
-                    post :create, group_id: group.id, user: {user_id: add.id}
                 end
 
                 it "redirects to previous page" do
+                    post :create, group_id: group.id, user: {user_id: add.id}
                     expect(response).to redirect_to "back"
                 end
 
                 it "flashes a notice message" do
+                    post :create, group_id: group.id, user: {user_id: add.id}
                     expect(flash[:notice]).to eq "The member was created"
                 end
 
                 it "creates the user" do
                     group.reload
-                    expect(group.members.count).to eq(2)
+                    expect{post :create, group_id: group.id, user: {user_id: add.id}}
+                    .to change(group.members, :count).by(1)
                 end
             end
         end 
 
-        describe 'when user is not logged in' do
+        context 'when user is not logged in' do
             before { post :create, group_id: group.id, user: {user_id: add.id} }
             it_behaves_like "redirect user to users/sign_in path"
         end
@@ -248,22 +272,17 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
     describe 'POST#add_members' do
         context 'when user is logged in' do 
             login_user_from_let
-
             let(:user_group2) {create(:user_group, group_id: group.id, user_id: add.id)}
 
-            before do
-                user_group.save
-                user_group2.save
-                post :add_members, group_id: group.id, group: {member_ids: [add.id]}
-            end
 
-            it "redirects" do
+            it "redirects to index action" do
+                post :add_members, group_id: group.id, group: {member_ids: [add.id]}
                 expect(response).to redirect_to action: 'index'
             end
 
             it "creates the users" do
-                group.reload
-                expect(group.members.count).to eq(2)
+                expect{post :add_members, group_id: group.id, group: {member_ids: [add.id]}}
+                .to change(group.members, :count).by(1)
             end
         end
 
@@ -273,22 +292,21 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
         end
     end
 
+
     describe 'DELETE#remove_member' do
         context 'when user is logged in' do 
             login_user_from_let
+            before { user_group.save }
 
-            before do
-                user_group.save
+            it "redirects to index action" do
                 delete :remove_member, group_id: group.id, id: user.id
-            end
-
-            it "redirects" do
                 expect(response).to redirect_to action: 'index'
             end
 
             it "removes the user" do
                 group.reload
-                expect(group.members.count).to eq(0)
+                expect{delete :remove_member, group_id: group.id, id: user.id}
+                .to change(group.members, :count).by(-1)
             end
         end
 

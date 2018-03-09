@@ -1,4 +1,14 @@
 module ApplicationHelper
+  def current_user_has_no_comments?(comments)
+    comment = comments.find_by(user_id: current_user.id)
+    yield if comment.nil?
+  end
+
+  def current_user_has_pending_comments?(comments)
+    comment = comments.find_by(user_id: current_user.id, approved: false)
+    yield if comment && !current_user.erg_leader?
+  end
+  
   def back_to_diverst_path
     groups_path # TODO
   end

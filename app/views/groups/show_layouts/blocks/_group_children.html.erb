@@ -1,0 +1,10 @@
+<% if @group.children.count > 0 %>
+<div class="card card--secondary">
+  <div class="card__section">
+    Sub-<%= c_t(:erg).titleize.pluralize %><br>
+    <% @group.children.each do |child| %>
+      <%= link_to child.name, child %><br>
+    <% end %>
+  </div>
+</div>
+<% end %>

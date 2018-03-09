@@ -9,11 +9,10 @@ RSpec.describe CampaignsController, type: :controller do
     describe 'GET#index' do
         context 'with logged user' do
             login_user_from_let
-
             before { get :index }
 
             it "returns a list of campaigns" do
-                expect(assigns[:campaigns].count).to eq 1
+                expect(assigns[:campaigns]).to eq [campaign]
             end
 
             it "renders index template" do
@@ -22,9 +21,8 @@ RSpec.describe CampaignsController, type: :controller do
         end
 
         context 'without logged user' do
-          before { get :index }
-
-          it_behaves_like "redirect user to users/sign_in path"
+            before { get :index }
+            it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
@@ -32,7 +30,6 @@ RSpec.describe CampaignsController, type: :controller do
     describe 'GET#new' do
         context 'with logged user' do
             login_user_from_let
-
             before { get :new }
 
             it "returns a new campaign object" do
@@ -50,15 +47,13 @@ RSpec.describe CampaignsController, type: :controller do
         end
     end
 
+
     describe 'POST#create' do
         context 'with logged user' do
             login_user_from_let
-
             let(:campaign_params) { FactoryGirl.attributes_for(:campaign) }
+            before { campaign_params.merge!({group_ids: [create(:group).id]})}
 
-            before :each do
-                campaign_params.merge!({group_ids: [create(:group).id]})
-            end
 
             context 'with correct params' do
                 it 'redirects to correct action' do
@@ -98,7 +93,6 @@ RSpec.describe CampaignsController, type: :controller do
 
         context "without logged user" do
             let(:campaign_params) { FactoryGirl.attributes_for(:campaign) }
-
             before { post :create, campaign: campaign_params }
             it_behaves_like "redirect user to users/sign_in path"
         end
@@ -148,6 +142,7 @@ RSpec.describe CampaignsController, type: :controller do
         end
     end
 
+
     describe "GET#edit" do
         describe "with logged in user" do
             login_user_from_let
@@ -168,6 +163,7 @@ RSpec.describe CampaignsController, type: :controller do
             end
         end
     end
+
 
     describe "PATCH#update" do
         describe "with logged in user" do
@@ -192,7 +188,6 @@ RSpec.describe CampaignsController, type: :controller do
 
             context "unsuccessfully" do
                 login_user_from_let
-
                 before { patch :update, id: campaign.id, campaign: attributes_for(:campaign, title: nil) }
 
                 it "renders an alert flash message" do
@@ -207,10 +202,10 @@ RSpec.describe CampaignsController, type: :controller do
 
         describe "without user logged in" do
             before { patch :update, id: campaign.id,  campaign: attributes_for(:campaign, title: "updated") }
-
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe "DELETE#destroy" do
         context "with logged in user" do

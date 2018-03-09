@@ -1,0 +1,13 @@
+<div class="content__main">
+	<h1>Add Labels To <span style="font-weight: bold;"><%= @category_type %></span></h1>
+
+	<%= simple_form_for @category_type, url: update_with_new_category_group_category_type_url(@category_type), method: :post do |f| %>
+	<div class="card">
+		<div class="card__section">
+			<label>Enter category labels separated by a comma</label>
+			<%= f.input :category_names, label: false, placeholder: 'eg. North, South, East, West' %>
+			<%= f.button :submit, 'Save' %>
+		</div>
+	</div>
+	<% end %>
+</div>

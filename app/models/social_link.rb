@@ -22,6 +22,8 @@ class SocialLink < ActiveRecord::Base
       .where(gm_condtions.join(" OR "))
     }
 
+    scope :unapproved, -> {joins(:news_feed_link).where(:news_feed_links => {:approved => false})}
+
     def url_safe
         CGI.escape(url)
     end

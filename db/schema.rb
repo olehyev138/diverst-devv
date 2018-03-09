@@ -11,8 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+ActiveRecord::Schema.define(version: 20180308131719) do
 
-ActiveRecord::Schema.define(version: 20180104150641) do
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
     t.string   "trackable_type", limit: 191
@@ -34,8 +34,9 @@ ActiveRecord::Schema.define(version: 20180104150641) do
     t.text     "content",    limit: 65535
     t.integer  "author_id",  limit: 4
     t.integer  "answer_id",  limit: 4
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.boolean  "approved",                 default: false
   end
 
   create_table "answer_expenses", force: :cascade do |t|
@@ -135,6 +136,7 @@ ActiveRecord::Schema.define(version: 20180104150641) do
     t.integer  "budget_id",        limit: 4
     t.string   "title",            limit: 191
     t.date     "estimated_date"
+    t.boolean  "is_private",                                           default: false
     t.boolean  "is_done",                                              default: false
     t.datetime "created_at",                                                           null: false
     t.datetime "updated_at",                                                           null: false
@@ -343,6 +345,8 @@ ActiveRecord::Schema.define(version: 20180104150641) do
     t.string   "onboarding_sponsor_media_content_type", limit: 191
     t.integer  "onboarding_sponsor_media_file_size",    limit: 4
     t.datetime "onboarding_sponsor_media_updated_at"
+    t.boolean  "enable_pending_comments",                             default: false
+    t.boolean  "disable_sponsor_message",                             default: false
   end
 
   create_table "event_attendances", force: :cascade do |t|
@@ -472,6 +476,21 @@ ActiveRecord::Schema.define(version: 20180104150641) do
 
   add_index "graphs", ["collection_type", "collection_id"], name: "index_graphs_on_collection_type_and_collection_id", using: :btree
 
+  create_table "group_categories", force: :cascade do |t|
+    t.string   "name",                   limit: 191
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.integer  "group_category_type_id", limit: 4
+    t.integer  "enterprise_id",          limit: 4
+  end
+
+  create_table "group_category_types", force: :cascade do |t|
+    t.string   "name",          limit: 191
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.integer  "enterprise_id", limit: 4
+  end
+
   create_table "group_fields", force: :cascade do |t|
     t.integer  "group_id",   limit: 4
     t.integer  "field_id",   limit: 4
@@ -480,21 +499,25 @@ ActiveRecord::Schema.define(version: 20180104150641) do
   end
 
   create_table "group_leaders", force: :cascade do |t|
-    t.integer  "group_id",              limit: 4
-    t.integer  "user_id",               limit: 4
-    t.string   "position_name",         limit: 191
-    t.datetime "created_at",                                        null: false
-    t.datetime "updated_at",                                        null: false
-    t.boolean  "visible",                           default: true
-    t.boolean  "notifications_enabled",             default: false
+    t.integer  "group_id",                               limit: 4
+    t.integer  "user_id",                                limit: 4
+    t.string   "position_name",                          limit: 191
+    t.datetime "created_at",                                                         null: false
+    t.datetime "updated_at",                                                         null: false
+    t.boolean  "visible",                                            default: true
+    t.boolean  "pending_member_notifications_enabled",               default: false
+    t.boolean  "pending_comments_notifications_enabled",             default: false
+    t.boolean  "pending_posts_notifications_enabled",                default: false
+    t.boolean  "default_group_contact",                              default: false
   end
 
   create_table "group_message_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
     t.integer  "author_id",  limit: 4
     t.integer  "message_id", limit: 4
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.boolean  "approved",                 default: false
   end
 
   create_table "group_messages", force: :cascade do |t|
@@ -524,8 +547,8 @@ ActiveRecord::Schema.define(version: 20180104150641) do
     t.integer  "enterprise_id",              limit: 4
     t.string   "name",                       limit: 191
     t.text     "description",                limit: 65535
-    t.datetime "created_at",                                                                      null: false
-    t.datetime "updated_at",                                                                      null: false
+    t.datetime "created_at",                                                                       null: false
+    t.datetime "updated_at",                                                                       null: false
     t.string   "logo_file_name",             limit: 191
     t.string   "logo_content_type",          limit: 191
     t.integer  "logo_file_size",             limit: 4
@@ -569,6 +592,12 @@ ActiveRecord::Schema.define(version: 20180104150641) do
     t.string   "contact_email",              limit: 191
     t.string   "latest_news_visibility",     limit: 191
     t.string   "upcoming_events_visibility", limit: 191
+    t.boolean  "private",                                                          default: false
+    t.integer  "group_category_id",          limit: 4
+    t.integer  "group_category_type_id",     limit: 4
+    t.text     "short_description",          limit: 65535
+    t.string   "layout",                     limit: 191
+    t.text     "home_message",               limit: 65535
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
@@ -582,9 +611,12 @@ ActiveRecord::Schema.define(version: 20180104150641) do
   end
 
   create_table "initiative_comments", force: :cascade do |t|
-    t.integer "initiative_id", limit: 4
-    t.integer "user_id",       limit: 4
-    t.text    "content",       limit: 65535
+    t.integer  "initiative_id", limit: 4
+    t.integer  "user_id",       limit: 4
+    t.text     "content",       limit: 65535
+    t.boolean  "approved",                    default: false
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
   end
 
   create_table "initiative_expenses", force: :cascade do |t|
@@ -731,8 +763,9 @@ ActiveRecord::Schema.define(version: 20180104150641) do
     t.text     "content",      limit: 65535
     t.integer  "author_id",    limit: 4
     t.integer  "news_link_id", limit: 4
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+    t.boolean  "approved",                   default: false
   end
 
   create_table "news_link_photos", force: :cascade do |t|
@@ -754,11 +787,11 @@ ActiveRecord::Schema.define(version: 20180104150641) do
 
   create_table "news_links", force: :cascade do |t|
     t.string   "title",                limit: 191
-    t.string   "description",          limit: 191
+    t.text     "description",          limit: 65535
     t.string   "url",                  limit: 191
     t.integer  "group_id",             limit: 4
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
     t.string   "picture_file_name",    limit: 191
     t.string   "picture_content_type", limit: 191
     t.integer  "picture_file_size",    limit: 4
@@ -826,6 +859,7 @@ ActiveRecord::Schema.define(version: 20180104150641) do
     t.boolean  "admin_pages_view",                        default: false
     t.boolean  "budget_approval",                         default: false
     t.boolean  "logs_view",                               default: false
+    t.boolean  "annual_budget_manage",                    default: false
   end
 
   create_table "poll_responses", force: :cascade do |t|
@@ -925,9 +959,9 @@ ActiveRecord::Schema.define(version: 20180104150641) do
     t.integer  "segment_id", limit: 4
     t.integer  "field_id",   limit: 4
     t.integer  "operator",   limit: 4
-    t.string   "values",     limit: 191
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.text     "values",     limit: 65535
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   create_table "segmentations", force: :cascade do |t|
@@ -1019,6 +1053,7 @@ ActiveRecord::Schema.define(version: 20180104150641) do
     t.integer  "notifications_frequency", limit: 4,     default: 2
     t.integer  "total_weekly_points",     limit: 4,     default: 0
     t.text     "data",                    limit: 65535
+    t.integer  "notifications_date",      limit: 4,     default: 5
   end
 
   create_table "user_reward_actions", force: :cascade do |t|

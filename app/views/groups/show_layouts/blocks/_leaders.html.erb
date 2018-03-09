@@ -1,0 +1,5 @@
+<%= render('leader', leader: @group.lead_manager, position: "#{ c_t(:erg) } Leader") if @group.lead_manager %>
+
+<% @leaders.each do |group_leader| %>
+  <%= render('leader', leader: group_leader.user, position: group_leader.position_name ) %>
+<% end %>

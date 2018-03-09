@@ -7,7 +7,7 @@
     <h1 style="margin-bottom: 5px;">
       <%= @user.name %>
       <% @user.badges.each do |badge| %>
-        <%= image_tag badge.image.url, class: "badge badge--small" %>
+        <%= image_tag badge.image.expiring_url(3600), class: "icon icon--bg icon--large" %>
       <% end %>
     </h1>
     <%= link_to 'Connect with LinkedIn', '/omniauth/linkedin', class: "btn btn--secondary" unless @user.linkedin_profile_url %>
