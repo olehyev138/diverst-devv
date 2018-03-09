@@ -48,6 +48,8 @@
             <% end %>
             <%= link_to "View #{@event.attendees.count - 10} more...", group_event_attendance_path(@group, @event) if @event.attendees.count > 10 %>
           </p>
+          <%= link_to "Add to Google Calendar", GoogleCalendar.build_link(@event), target: :_blank %>
+          <br>
           <%= link_to "Add to calendar", export_ics_group_event_path(@group, @event) %>
         </div>
       </div>
