@@ -1,6 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe PollResponse do
+
+  describe 'test associations' do
+    let!(:poll_response) { build(:poll_response) }
+
+    it { expect(poll_response).to belong_to(:poll) }
+    it { expect(poll_response).to belong_to(:user) }
+  end
+
   describe 'when describing callbacks' do
     it "should index user on elasticsearch after create" do
       poll_response = build(:poll_response)

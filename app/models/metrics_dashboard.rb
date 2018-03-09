@@ -12,18 +12,18 @@ class MetricsDashboard < ActiveRecord::Base
   validates_presence_of :name, :message => "Metrics Dashboard name is required"
   validates_presence_of :groups, :message => "Please select a group"
 
-  def shareable_token
-    unless self[:shareable_token]
-      self.update(shareable_token: SecureRandom.urlsafe_base64)
+  def update_shareable_token
+    if shareable_token.nil?
+      self.shareable_token = SecureRandom.urlsafe_base64
+      return self.save
+    else
+      return shareable_token
     end
-
-    self[:shareable_token]
   end
-
 
   # Returns a query to the list of users targeted by the dashboard
   def target
-    enterprise.users.for_segments(segments).for_groups(groups)
+    enterprise.users.for_segments(segments).for_groups(groups).active
   end
 
   def graphs_population

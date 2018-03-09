@@ -73,13 +73,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
 
     context 'without logged in user' do
       before{get_index(-1)}
-      it 'return error' do
-        expect(response).to_not be_success
-      end
-
-      it 'redirects' do
-        expect(response).to redirect_to new_user_session_path
-      end
+      it_behaves_like "redirect user to users/sign_in path"
     end
   end
 

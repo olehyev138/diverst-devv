@@ -18,12 +18,11 @@
   font-style: normal;
 }
 
+@function remote-icon-url($path) { @return unquote("url(//#{$domain}" + image-path($path) + ")"); } // We explicitly specify the domain because if we don't, the browser tries to load the images from S3's domain (for themes)
+
 /* Override Bootstrap 3 font locations */
 @font-face { 
   font-family: 'Glyphicons Halflings';
-  src: url('bootstrap/fonts/glyphicons-halflings-regular.eot');
-  src: url('bootstrap/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'),
-  url('bootstrap/fonts/glyphicons-halflings-regular.woff') format('woff'),
-  url('bootstrap/fonts/glyphicons-halflings-regular.ttf') format('truetype'),
-  url('bootstrap/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+  src: remote-icon-url('glyphicons-halflings-regular.eot');
+  src: remote-icon-url('glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), remote-icon-url('glyphicons-halflings-regular.woff') format('woff'), remote-icon-url('glyphicons-halflings-regular.ttf') format('truetype'), remote-icon-url('glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
 }

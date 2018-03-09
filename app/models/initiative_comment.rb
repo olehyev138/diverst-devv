@@ -9,4 +9,12 @@ class InitiativeComment < ActiveRecord::Base
   def group
     initiative.group
   end
+
+  def disapproved?
+  	!approved?
+  end
+
+  def self.approved 
+    where(approved: true)
+  end
 end

@@ -11,6 +11,7 @@
 </div>
 
 <div class="content__main">
+<% if policy(@group).view_upcoming_and_ongoing_events? %>
   <% unless @ongoing_events.empty? %>
     <h3>Ongoing events</h3>
     <div class="card">
@@ -28,6 +29,7 @@
       <% end %>
     </div>
   <% end %>
+<% end %>  
 
   <h3>Past events</h3>
   <div class="card">

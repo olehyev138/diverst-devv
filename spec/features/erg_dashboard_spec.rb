@@ -8,15 +8,10 @@ RSpec.feature 'An ERG dashboard' do
     login_as(user, scope: :user)
   end
 
-  scenario 'shows the newest members', skip: "Fails because it is removed from ERG dashboard view" do
-    visit group_path(group)
-
-    expect(page).to have_content group.members.last.name
-  end
-
   scenario 'shows the upcoming events' do
     initiative = create :initiative, owner_group: group, start: 2.days.from_now
     group.outcomes.first.pillars.first.initiatives << initiative
+    group.members << user
 
     visit group_path(group)
 
@@ -102,12 +97,12 @@ RSpec.feature 'An ERG dashboard' do
   end
 
   context 'in the events section' do
-    scenario 'does not show the upcoming events' do
+    scenario 'shows the upcoming events if user is a guest' do
       initiative = create(:initiative, owner_group: group, start: 1.day.from_now, end: 1.day.from_now + 2.hours)
       
       visit group_events_path(group)
 
-      expect(page).to_not have_content initiative.name
+      expect(page).to have_content initiative.name
     end
     
     scenario 'shows the upcoming events' do
@@ -119,21 +114,21 @@ RSpec.feature 'An ERG dashboard' do
       expect(page).to have_content initiative.name
     end
 
-    scenario 'does not show the past events' do
-      initiative = create(:initiative, owner_group: group, start: 1.day.ago, end: 1.day.ago + 2.hours)
+    scenario 'show the past events for guest(non-erg members)' do
+      past_initiative = create(:initiative, owner_group: group, start: 1.day.ago, end: 1.day.ago + 2.hours)
 
       visit group_events_path(group)
 
-      expect(page).to_not have_content initiative.name
+      expect(page).to have_content past_initiative.name
     end
     
-    scenario 'shows the past events' do
-      initiative = create(:initiative, owner_group: group, start: 1.day.ago, end: 1.day.ago + 2.hours)
+    scenario 'shows the past events for erg members' do
+      past_initiative = create(:initiative, owner_group: group, start: 1.day.ago, end: 1.day.ago + 2.hours)
       create(:user_group, group: group, user: user, accepted_member: true)
       
       visit group_events_path(group)
 
-      expect(page).to have_content initiative.name
+      expect(page).to have_content past_initiative.name
     end
   end
 end

@@ -12,24 +12,25 @@ class GroupsController < ApplicationController
 
     def index
         authorize Group
-        @groups = current_user.enterprise.groups.includes(:children).where(:parent_id => nil)
+        @groups = current_user.enterprise.groups.includes(:children).all_parents
     end
 
     def plan_overview
         authorize Group
         @groups = current_user.enterprise.groups.includes(:initiatives)
     end
-    
+
     def close_budgets
         authorize Group
-        @groups = current_user.enterprise.groups.includes(:children).where(:parent_id => nil)
+        user_not_authorized if not current_user.policy_group.annual_budget_manage?
+        @groups = current_user.enterprise.groups.includes(:children).all_parents
     end
 
     # calendar for all of the groups
     def calendar
         authorize Group, :index?
         enterprise = current_user.enterprise
-        @groups = enterprise.groups.where(:parent_id => nil)
+        @groups = enterprise.groups.all_parents
         @segments = enterprise.segments
         @q_form_submit_path = calendar_groups_path
         @q = Initiative.ransack(params[:q])
@@ -47,7 +48,7 @@ class GroupsController < ApplicationController
         end
 
         not_found! if enterprise.nil?
-        
+
         @events = enterprise.initiatives.includes(:initiative_participating_groups).where(:groups => {:parent_id => nil})
             .ransack(
                 initiative_participating_groups_group_id_in: params[:q]&.dig(:initiative_participating_groups_group_id_in),
@@ -59,7 +60,7 @@ class GroupsController < ApplicationController
                 initiative_segments_segment_id_in: params[:q]&.dig(:initiative_segments_segment_id_in)
             )
             .result
-            
+
         @events += enterprise.initiatives.includes(:initiative_participating_groups).where.not(:groups => {:parent_id => nil})
             .ransack(
                 initiative_participating_groups_group_id_in: Group.where(:parent_id => params[:q]&.dig(:initiative_participating_groups_group_id_in)).pluck(:id),
@@ -71,13 +72,14 @@ class GroupsController < ApplicationController
                 initiative_segments_segment_id_in: params[:q]&.dig(:initiative_segments_segment_id_in)
             )
             .result
-            
-        render 'shared/calendar/events', format: :json
+
+        render 'shared/calendar/events', formats: :json
     end
 
     def new
         authorize Group
         @group = current_user.enterprise.groups.new
+        @categories = current_user.enterprise.group_categories
     end
 
     def show
@@ -104,15 +106,21 @@ class GroupsController < ApplicationController
                             .limit(5)
 
             else
-                @upcoming_events = []
+                @upcoming_events = @group.initiatives.upcoming.limit(3) + @group.participating_initiatives.upcoming.limit(3)
                 @user_groups = []
                 @messages = []
                 @user_group = []
-                @leaders = []
+                @leaders = @group.group_leaders.includes(:user).visible
                 @user_groups = []
                 @top_user_group_participants = []
                 @top_group_participants = []
-                @posts = []
+                @posts = @group.news_feed_links
+                            .includes(:link)
+                            .approved
+                            .joins(joins)
+                            .where(where, current_user.segments.pluck(:id))
+                            .order(created_at: :desc)
+                            .limit(5)
             end
         end
     end
@@ -123,32 +131,55 @@ class GroupsController < ApplicationController
         @group = current_user.enterprise.groups.new(group_params)
         @group.owner = current_user
 
+        if group_params[:group_category_id].present?
+          @group.group_category_type_id = GroupCategory.find_by(id: group_params[:group_category_id])&.group_category_type_id
+        else
+            @group.group_category_type_id = nil
+        end
+
         if @group.save
             track_activity(@group, :create)
             flash[:notice] = "Your #{c_t(:erg)} was created"
-            redirect_to action: :index
+            redirect_to groups_url
         else
-            flash[:alert] = "Your #{c_t(:erg)} was not created. Please fix the errors"
+            flash.now[:alert] = "Your #{c_t(:erg)} was not created. Please fix the errors"
+            @categories = current_user.enterprise.group_categories
             render :new
         end
     end
 
     def edit
         authorize @group
+        @categories = current_user.enterprise.group_categories
     end
 
     def update
         authorize @group
 
+        if group_params[:group_category_id].present?
+          @group.group_category_type_id = GroupCategory.find_by(id: params[:group][:group_category_id])&.group_category_type_id
+        else
+            @group.group_category_type_id = nil
+        end
+
         if @group.update(group_params)
             track_activity(@group, :update)
-
             flash[:notice] = "Your #{c_t(:erg)} was updated"
-            redirect_to :back
+            redirect_to [:edit, @group]
         else
-            flash[:alert] = "Your #{c_t(:erg)} was not updated. Please fix the errors"
-            render :settings
+            flash.now[:alert] = "Your #{c_t(:erg)} was not updated. Please fix the errors"
+
+            if request.referer == edit_group_url(@group) || request.referer == group_url(@group)
+              @categories = current_user.enterprise.group_categories
+              render :edit
+            else
+              render :settings
+            end
         end
+    end
+
+    def layouts
+        authorize @group, :update?
     end
 
     def settings
@@ -193,6 +224,12 @@ class GroupsController < ApplicationController
 
     def parse_csv
         authorize @group, :edit?
+
+        if params[:file].nil?
+            flash[:alert] = "CSV file is required"
+            redirect_to :back
+            return
+        end
 
         @table = CSV.table params[:file].tempfile
         @failed_rows = []
@@ -243,6 +280,7 @@ class GroupsController < ApplicationController
 
     protected
 
+
     def base_show
         @upcoming_events = @group.initiatives.upcoming.limit(3) + @group.participating_initiatives.upcoming.limit(3)
         @messages = @group.messages.includes(:owner).limit(3)
@@ -277,7 +315,7 @@ class GroupsController < ApplicationController
     end
 
     def set_group
-        @group = current_user.enterprise.groups.find(params[:id])
+       current_user ? @group = current_user.enterprise.groups.find(params[:id]) : user_not_authorized
     end
 
     def group_params
@@ -285,8 +323,11 @@ class GroupsController < ApplicationController
             .require(:group)
             .permit(
                 :name,
+                :short_description,
                 :description,
+                :home_message,
                 :logo,
+                :private,
                 :banner,
                 :yammer_create_group,
                 :yammer_sync_users,
@@ -305,7 +346,10 @@ class GroupsController < ApplicationController
                 :sponsor_media,
                 :sponsor_message,
                 :company_video_url,
+                :layout,
                 :parent_id,
+                :group_category_id,
+                :group_category_type_id,
                 manager_ids: [],
                 child_ids: [],
                 member_ids: [],

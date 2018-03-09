@@ -18,6 +18,7 @@ class Groups::LeadersController < ApplicationController
   def create
     authorize @group, :update?
     if @group.update(group_params)
+      @group.set_default_group_contact
       flash[:notice] = "Leaders were updated"
       redirect_to action: :index
     else
@@ -29,10 +30,10 @@ class Groups::LeadersController < ApplicationController
   protected
 
   def set_group
-    @group = current_user.enterprise.groups.find(params[:group_id])
+    current_user ? @group = current_user.enterprise.groups.find(params[:group_id]) : user_not_authorized
   end
 
   def group_params
-    params.require(:group).permit(group_leaders_attributes: [:id, :user_id, :position_name, :_destroy, :visible, :notifications_enabled])
+    params.require(:group).permit(group_leaders_attributes: [:id, :user_id, :position_name, :_destroy, :visible, :pending_member_notifications_enabled, :pending_comments_notifications_enabled, :pending_posts_notifications_enabled, :default_group_contact])
   end
 end

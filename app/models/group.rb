@@ -3,6 +3,16 @@ class Group < ActiveRecord::Base
 
   extend Enumerize
 
+  enumerize :layout, default: :layout_0, in: [
+                              :layout_0,
+                              :layout_1
+                            ]
+
+  LAYOUTS_INFO = {
+    'layout_0' => 'Default layout',
+    'layout_1' => 'Layout without leader boards for Most Active Members'
+  }
+
   enumerize :pending_users, default: :disabled,  in: [
                               :disabled,
                               :enabled
@@ -53,7 +63,9 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
 
   has_many :budgets, as: :subject
   has_many :messages, class_name: 'GroupMessage'
+  has_many :message_comments, through: :messages, class_name: 'GroupMessageComment', source: :comments
   has_many :news_links, dependent: :destroy
+  has_many :news_link_comments, through: :news_links, class_name: 'NewsLinkComment', source: :comments
   has_many :social_links, dependent: :destroy
   has_many :invitation_segments_groups
   has_many :invitation_segments, class_name: 'Segment', through: :invitation_segments_groups
@@ -66,6 +78,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   has_many :questions, through: :campaigns
   has_many :answers, through: :questions
   has_many :answer_upvotes, through: :answers, source: :votes
+  has_many :answer_comments, through: :answers, class_name: 'AnswerComment', source: :comments
   belongs_to :lead_manager, class_name: "User"
   belongs_to :owner, class_name: "User"
   has_many :outcomes
@@ -86,7 +99,9 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
 
   has_many  :children, class_name: "Group", foreign_key: :parent_id
   belongs_to :parent, class_name: "Group", foreign_key: :parent_id
-  
+  belongs_to :group_category
+  belongs_to :group_category_type
+
   has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
   validates_attachment_content_type :logo, content_type: %r{\Aimage\/.*\Z}
 
@@ -98,6 +113,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
 
   validates :name, presence: true
   validates_format_of :contact_email, with: Devise.email_regexp, allow_blank: true
+  validate :perform_check_for_consistency_in_category, on: [:create, :update]
 
   validate :valid_yammer_group_link?
 
@@ -106,13 +122,34 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   before_save :create_yammer_group, if: :should_create_yammer_group?
   after_commit :update_all_elasticsearch_members
   before_validation :smart_add_url_protocol
+  after_save :set_group_category_type_for_parent_if_sub_erg, on: [:create, :update]
 
-  scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
+  scope :top_participants,  -> (n) { order(total_weekly_points: :desc).limit(n) }
+  # Active Record already has a defined a class method with the name private so we use is_private.
+  scope :is_private,        -> {where(:private => true)}
+  scope :non_private,       -> {where(:private => false)}
+  # parents/children
+  scope :all_parents,     -> {where(:parent_id => nil)}
+  scope :all_children,    -> {where.not(:parent_id => nil)}
 
   accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
+
+
+  def is_sub_group?
+    parent.present?
+  end
+
+  def capitalize_name
+    name.split.map(&:capitalize).join(' ')
+  end
+
+  def set_default_group_contact
+    group_leader = group_leaders.find_by(default_group_contact: true)&.user
+    self.update(contact_email: group_leader&.email)
+  end
 
   def managers
     leaders.to_a << owner
@@ -248,7 +285,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
         survey_fields.each do |field|
           user_group_row << field.csv_value(user_group.info[field])
         end
-        
+
         csv << user_group_row
       end
     end
@@ -258,7 +295,15 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
     "Create event from #{name} leftover ($#{leftover_money})"
   end
 
-  protected 
+  def pending_comments_count
+    message_comments.unapproved.count + news_link_comments.unapproved.count + answer_comments.unapproved.count
+  end
+
+  def pending_posts_count
+    news_links.unapproved.count + messages.unapproved.count + social_links.unapproved.count
+  end
+
+  protected
 
   def smart_add_url_protocol
     return nil if company_video_url.blank?
@@ -269,7 +314,25 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
     company_video_url[%r{\Ahttp:\/\/}] || company_video_url[%r{\Ahttps:\/\/}]
   end
 
+
   private
+
+  def perform_check_for_consistency_in_category
+    if self.parent.present?
+      group_category_type = self.group_category.group_category_type if self.group_category
+      if self.group_category && self.parent.group_category_type
+        if group_category_type != self.parent.group_category_type
+          errors.add(:group_category, "wrong label for #{self.parent.group_category_type.name}")
+        end
+      end
+    end
+  end
+
+  def set_group_category_type_for_parent_if_sub_erg
+    if self.is_sub_group?
+      self.parent.update(group_category_type_id: self.group_category_type_id) unless self.group_category_type_id.nil?
+    end
+  end
 
   def filter_by_membership(membership_status)
     members.references(:user_groups).where('user_groups.accepted_member=?', membership_status)

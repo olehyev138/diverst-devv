@@ -6,7 +6,6 @@ RSpec.describe Api::V1::GroupsController, type: :controller do
     let(:group){ create(:group, enterprise: enterprise) }
     
     context "without authentication" do
-    
         describe "GET#index" do
             it "gets the groups" do
                 get :index
@@ -73,6 +72,11 @@ RSpec.describe Api::V1::GroupsController, type: :controller do
                 post :create, { :group => FactoryGirl.attributes_for(:group) }
                 expect(response.status).to eq 201
             end
+            it "returns 422" do
+                allow_any_instance_of(Group).to receive(:save).and_return(false)
+                post :create, { :group => FactoryGirl.attributes_for(:group) }
+                expect(response.status).to eq 422
+            end
         end
         
         describe "PATCH#update" do
@@ -80,6 +84,11 @@ RSpec.describe Api::V1::GroupsController, type: :controller do
                 patch :update, :id => group.id, :group => {:name => "updated"}
                 expect(response).to be_success
                 expect(response.status).to be(200)
+            end
+            it "returns 422" do
+                allow_any_instance_of(Group).to receive(:update_attributes).and_return(false)
+                patch :update, :id => group.id, :group => {:name => "updated"}
+                expect(response.status).to be(422)
             end
         end
         

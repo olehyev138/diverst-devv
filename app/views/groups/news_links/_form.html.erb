@@ -31,7 +31,7 @@
 
   var autoFillInfo = function() {
     if (!hasTouchedTitleOrDescription) {
-      $.get('/news_links/url_info?url=' + $url.val(), function(data) {
+      $.get('/groups/news_links/url_info?url=' + $url.val(), function(data) {
         $title.val(data.title);
         $description.val(data.description);
       });

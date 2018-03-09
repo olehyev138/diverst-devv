@@ -121,14 +121,14 @@ RSpec.describe PolicyGroupsController, type: :controller do
             end
 
             context "when adding users" do
-
                 login_user_from_let
 
-                before do
+                before {
                     user_1 = create(:user, :enterprise => enterprise)
                     user_2 = create(:user, :enterprise => enterprise)
                     patch :update, :id => policy_group.id, :policy_group => {:name => "updated", :new_users => ["", user_1.id, user_2.id]}, :commit => "Add User(s)"
-                end
+
+                }
 
                 it 'redirect_to' do
                     expect(response).to redirect_to action: :index

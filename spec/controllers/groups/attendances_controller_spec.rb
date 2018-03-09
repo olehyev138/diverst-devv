@@ -4,7 +4,7 @@ RSpec.describe Groups::AttendancesController, type: :controller do
     let(:user) { create :user }
     let(:group){ create(:group, enterprise: user.enterprise) }
     let(:initiative){ initiative_of_group(group) }
-
+    let!(:segment_1) {create(:segment, :enterprise => user.enterprise)}
 
     describe 'GET#show' do
         context 'when user is logged in' do
@@ -101,7 +101,7 @@ RSpec.describe Groups::AttendancesController, type: :controller do
             login_user_from_let
 
             let!(:reward_action){ create(:reward_action, enterprise: user.enterprise, key: "attend_event", points: 90) }
-            before :each do
+            before do
                 create(:initiative_user, initiative: initiative, user: user)
                 Rewards::Points::Manager.new(user, reward_action.key).add_points(initiative)
             end
@@ -176,7 +176,6 @@ RSpec.describe Groups::AttendancesController, type: :controller do
         end
     end
 
-
     describe 'GET#segment_graph' do
         context 'when user is logged in' do
             let!(:user1) { create(:user) }
@@ -195,7 +194,7 @@ RSpec.describe Groups::AttendancesController, type: :controller do
 
              it 'returns data in json' do
                 json_response = JSON.parse(response.body, symbolize_names: true)
-                expect(json_response[:highcharts][:series][0][:data]).to eq [1, 1]
+                expect(json_response[:highcharts][:series][0][:data]).to eq [0, 1, 1]
             end
 
             it "returns name of title as 'Number of attendees' in json" do

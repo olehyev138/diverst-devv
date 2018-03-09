@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe GroupLeaderNotificationMailer, type: :mailer do
+RSpec.describe GroupLeaderPostNotificationMailer, type: :mailer do
   
   let!(:leader){ create(:user) }
   let!(:group){ create(:group, :pending_users => "enabled") }
@@ -15,7 +15,7 @@ RSpec.describe GroupLeaderNotificationMailer, type: :mailer do
     end
 
     it 'renders the subject' do
-      expect(mail.subject).to eq "1 Pending Member(s) for #{group.name.titleize}"
+      expect(mail.subject).to eq "1 Pending Post(s) for #{group.name.titleize}"
     end
 
     it 'renders the receiver email' do
@@ -26,8 +26,8 @@ RSpec.describe GroupLeaderNotificationMailer, type: :mailer do
       expect(mail.from).to eq(['info@diverst.com'])
     end
 
-    it 'shows a message with number of pending members in group' do
-      expect(mail.body.encoded).to include("#{group.name} has 1 pending member")
+    it 'shows a message with number of pending posts in group' do
+      expect(mail.body.encoded).to include("#{group.name} has 1 pending post")
     end
   end
 end

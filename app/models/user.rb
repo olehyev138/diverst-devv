@@ -76,6 +76,7 @@ class User < ActiveRecord::Base
     scope :top_participants, -> (n) { order(total_weekly_points: :desc).limit(n) }
     scope :not_owners, -> { where(owner: false) }
     scope :es_index_for_enterprise, -> (enterprise) { where(enterprise: enterprise) }
+    scope :active, -> {where(active: true)}
 
     def name
         "#{first_name} #{last_name}"
@@ -335,7 +336,7 @@ class User < ActiveRecord::Base
         group = self.enterprise.groups.find(group_id)
         group.active_members.exists? self.id
     end
-    
+
     # groups where user is an accepted member
     def active_groups
         groups.joins(:user_groups).where(:user_groups => {:user => self, :accepted_member => true})
@@ -391,7 +392,7 @@ class User < ActiveRecord::Base
             }
         }
     end
-    
+
     def set_provider
         self.provider = "email" if uid.nil?
     end

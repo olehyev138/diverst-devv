@@ -4,21 +4,21 @@ class GenericGraphsController < ApplicationController
     before_action :authenticate_user!
 
     def group_population
-        data = current_user.enterprise.groups.where(:parent_id => nil).map { |g|
+        data = current_user.enterprise.groups.all_parents.map { |g|
             {
                 y: g.members.active.count,
                 name: g.name,
                 drilldown: g.name
             }
         }
-        drilldowns = current_user.enterprise.groups.includes(:children).where(:parent_id => nil).map { |g|
+        drilldowns = current_user.enterprise.groups.includes(:children).all_parents.map { |g|
             {
                 name: g.name,
                 id: g.name,
                 data: g.children.map {|child| [child.name, child.members.active.count]}
             }
         }
-        categories = current_user.enterprise.groups.map{ |g| g.name }
+        categories = current_user.enterprise.groups.all_parents.map{ |g| g.name }
 
         respond_to do |format|
             format.json {
@@ -30,7 +30,7 @@ class GenericGraphsController < ApplicationController
                                    data: data
                                }],
                                drilldowns: drilldowns,
-                               categories: categories,
+                               #categories: categories, <- for some reason this is causing drilldowns to not appear
                                xAxisTitle: "#{c_t(:erg)}"
                            },
                            hasAggregation: false
@@ -70,11 +70,10 @@ class GenericGraphsController < ApplicationController
                            highcharts: {
                                series: [{
                                    name: 'Number of users',
-                                   colorByPoint: true,
                                    data: data
                                }],
                                drilldowns: drilldowns,
-                               categories: categories,
+                               #categories: categories, <- for some reason this is causing drilldowns to not appear
                                xAxisTitle: c_t(:segment)
                            },
                            hasAggregation: false
@@ -89,7 +88,7 @@ class GenericGraphsController < ApplicationController
     end
 
     def events_created
-        data = current_user.enterprise.groups.where(:parent_id => nil).map do |g|
+        data = current_user.enterprise.groups.all_parents.map do |g|
             {
                 y: g.initiatives.joins(:owner)
                     .where('initiatives.created_at > ? AND users.active = ?', 1.month.ago, true).count,
@@ -98,7 +97,7 @@ class GenericGraphsController < ApplicationController
             }
         end
         
-        drilldowns = current_user.enterprise.groups.includes(:children).where(:parent_id => nil).map { |g|
+        drilldowns = current_user.enterprise.groups.includes(:children).all_parents.map { |g|
             {
                 name: g.name,
                 id: g.name,
@@ -107,7 +106,7 @@ class GenericGraphsController < ApplicationController
             }
         }
         
-        categories = current_user.enterprise.groups.map{ |g| g.name }
+        categories = current_user.enterprise.groups.all_parents.map{ |g| g.name }
 
         respond_to do |format|
             format.json{
@@ -119,7 +118,7 @@ class GenericGraphsController < ApplicationController
                                    data: data
                                }],
                                drilldowns: drilldowns,
-                               categories: categories,
+                               #categories: categories,
                                xAxisTitle: "#{c_t(:erg)}",
                                yAxisTitle: 'Nb of events'
                            },
@@ -135,7 +134,7 @@ class GenericGraphsController < ApplicationController
     end
 
     def messages_sent
-        data = current_user.enterprise.groups.where(:parent_id => nil).map do |g|
+        data = current_user.enterprise.groups.all_parents.map do |g|
             {
                 y: g.messages.joins(:owner)
                     .where('group_messages.created_at > ? AND users.active = ?', 1.month.ago, true).count,
@@ -144,7 +143,7 @@ class GenericGraphsController < ApplicationController
             }
         end
         
-        drilldowns = current_user.enterprise.groups.includes(:children).where(:parent_id => nil).map { |g|
+        drilldowns = current_user.enterprise.groups.includes(:children).all_parents.map { |g|
             {
                 name: g.name,
                 id: g.name,
@@ -153,7 +152,7 @@ class GenericGraphsController < ApplicationController
             }
         }
         
-        categories = current_user.enterprise.groups.map{ |g| g.name }
+        categories = current_user.enterprise.groups.all_parents.map{ |g| g.name }
 
         respond_to do |format|
             format.json {
@@ -165,7 +164,7 @@ class GenericGraphsController < ApplicationController
                                    data: data
                                }],
                                drilldowns: drilldowns,
-                               categories: categories,
+                               #categories: categories,
                                xAxisTitle: 'ERG',
                                yAxisTitle: 'Nb of messages'
                            },

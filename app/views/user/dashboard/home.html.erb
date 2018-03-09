@@ -31,7 +31,7 @@
           <div class="card">
             <div class="card__section">
 
-              <h4>Your Events</h4>
+              <h4>Events You've Joined</h4>
               <%= link_to calendar_user_events_path, class: "  card__action" do %>
                 <%= inline_svg('icons/calendar.svg', class: "icon card__icon") %>Events Calendar
               <% end %>
@@ -67,6 +67,14 @@
                 <% end %>
               <% end %>
             </div>
+            <script>
+              //force facebook embed to have correct width
+              $(document).ready(function(){
+                var width = <%= SocialMedia::Importer::MEDIA_MAX_WIDTH %>
+
+                $('iframe[src*=facebook]').width(width)
+              });
+            </script>
           </div>
         </div>
       </div>
@@ -109,7 +117,7 @@
           <div class="card__section">
             <h4>Top <%= c_t(:erg).pluralize %> this week</h4>
             <ol>
-              <% current_user.enterprise.groups.top_participants(10).each do |group| %>
+              <% current_user.enterprise.groups.non_private.top_participants(10).each do |group| %>
                 <li><%= group_performance_label(group) %></li>
               <% end %>
             </ol>

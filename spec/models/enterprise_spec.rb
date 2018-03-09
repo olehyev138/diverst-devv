@@ -11,6 +11,8 @@ RSpec.describe Enterprise, type: :model do
         it { expect(enterprise).to have_many(:folders) }
         it { expect(enterprise).to have_many(:folder_shares) }
         it { expect(enterprise).to have_many(:shared_folders) }
+        it { expect(enterprise).to have_many(:group_categories) }
+        it { expect(enterprise).to have_many(:group_category_types) }
         
         it{ expect(enterprise).to have_one(:custom_text) }
     end

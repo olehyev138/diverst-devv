@@ -6,7 +6,7 @@ RSpec.describe Campaign, type: :model do
 
         it { expect(campaign).to define_enum_for(:status).with([:published, :draft]) }
         it { expect(campaign).to belong_to(:enterprise) }
-        it { expect(campaign).to belong_to(:owner) }
+        it { expect(campaign).to belong_to(:owner).class_name('User') }
         it { expect(campaign).to have_many(:questions) }
         it { expect(campaign).to have_many(:answers).through(:questions) }
         it { expect(campaign).to have_many(:answer_comments).through(:questions) }
@@ -14,51 +14,60 @@ RSpec.describe Campaign, type: :model do
         it { expect(campaign).to have_many(:groups).through(:campaigns_groups) }
         it { expect(campaign).to have_many(:campaigns_segments) }
         it { expect(campaign).to have_many(:segments).through(:campaigns_segments) }
-        it { expect(campaign).to have_many(:invitations) }
+        it { expect(campaign).to have_many(:invitations).class_name('CampaignInvitation') }
         it { expect(campaign).to have_many(:users).through(:invitations) }
         it { expect(campaign).to have_many(:campaigns_managers) }
         it { expect(campaign).to have_many(:managers).through(:campaigns_managers) }
-            
-        it{ expect(campaign).to validate_presence_of(:title) }    
+
+        it { expect(campaign).to accept_nested_attributes_for(:questions).allow_destroy(true) }
+
+        it{ expect(campaign).to validate_presence_of(:title) }
         it{ expect(campaign).to validate_presence_of(:description) }
         it{ expect(campaign).to validate_presence_of(:start) }
         it{ expect(campaign).to validate_presence_of(:end) }
         it{ expect(campaign).to validate_presence_of(:groups).with_message("Please select at least 1 group") }
-        
+
+        describe 'paperclip validation' do
+            paperclip_attributes = [:image, :banner]
+            paperclip_attributes.each do |paperclip_attribute|
+                it { should have_attached_file(paperclip_attribute) }
+                it { should validate_attachment_content_type(paperclip_attribute) }
+            end
+        end
         it 'is valid' do
             expect(campaign).to be_valid
         end
     end
-    
+
     describe "#create_invites" do
         it "does not import" do
             campaign = create :campaign
             allow(CampaignInvitation).to receive(:import)
-            
+
             campaign.enterprise = nil
             campaign.save
             campaign.create_invites
-            
+
             expect(CampaignInvitation).to_not have_received(:import)
         end
-        
+
         it "does import" do
             enterprise = create :enterprise
             campaign = create :campaign, enterprise: enterprise
             allow(CampaignInvitation).to receive(:import)
 
             campaign.create_invites
-            
+
             expect(CampaignInvitation).to have_received(:import)
         end
     end
-    
+
     describe "#progression" do
         it "returns 0" do
             campaign = create :campaign
             expect(campaign.progression).to eq(0)
         end
-        
+
         it "returns 50.0" do
             campaign = create :campaign
             create_list :question, 5, campaign: campaign
@@ -92,7 +101,7 @@ RSpec.describe Campaign, type: :model do
             end
         end
     end
-    
+
     describe "start/end" do
         it "validates end" do
             campaign = build(:campaign, :end => Date.tomorrow)

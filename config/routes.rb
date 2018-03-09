@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   get 'users/invitation', to: 'users/invitations#index'
 
   get 'omniauth/:provider/callback', to: 'omni_auth#callback'
-  
+
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
       resources :users
@@ -89,6 +89,7 @@ Rails.application.routes.draw do
       get 'edit_fields'
       get 'edit_mobile_fields'
       get 'edit_branding'
+      get 'edit_pending_comments'
       get 'edit_algo'
       get 'theme'
       patch 'update_branding'
@@ -97,7 +98,7 @@ Rails.application.routes.draw do
       patch 'delete_attachment'
       get 'calendar'
     end
-    
+
     scope module: :enterprises do
       resources :folders do
         member do
@@ -117,6 +118,20 @@ Rails.application.routes.draw do
   end
 
   get 'integrations', to: 'integrations#index'
+
+  resources :group_category_types, only: [:edit, :update, :destroy] do 
+    member do 
+      get 'add_category'
+      post 'update_with_new_category'
+    end
+  end
+
+  resources :group_categories do 
+    collection do 
+      get 'view_all'
+    end
+  end
+  post 'group_categories/update_all_sub_groups', to: 'group_categories#update_all_sub_groups', as: :update_all_sub_groups
 
   resources :groups do
     resources :budgets, only: [:index, :show, :new, :create, :destroy] do
@@ -163,7 +178,12 @@ Rails.application.routes.draw do
           get 'segment_graph'
         end
 
-        resources :comments, only: [:create]
+        resources :comments, only: [:create, :destroy], shallow: true do
+          member do
+            patch 'approve'
+            patch 'disapprove'
+          end
+        end
 
         collection do
           get 'calendar_view'
@@ -191,7 +211,7 @@ Rails.application.routes.draw do
           post 'approve'
         end
       end
-      
+
       resources :folders do
         member do
           post 'authenticate'
@@ -200,7 +220,7 @@ Rails.application.routes.draw do
           resources :resources
         end
       end
-      
+
       resources :resources
       resources :fields do
         member do
@@ -242,6 +262,7 @@ Rails.application.routes.draw do
 
     member do
       get 'settings'
+      get 'layouts'
 
       get 'export_csv'
       get 'import_csv'
@@ -287,7 +308,7 @@ Rails.application.routes.draw do
       resources :graphs, only: [:new, :create, :edit]
     end
   end
-  
+
   resources :graphs do
     member do
       get "data"
@@ -332,7 +353,7 @@ Rails.application.routes.draw do
   resources :campaigns do
     resources :questions, shallow: true do
       resources :answers, shallow: true do
-        resources :answer_comments, only: [:destroy], path: 'comments', shallow: true
+        resources :answer_comments, only: [:update, :destroy], path: 'comments', shallow: true
 
         member do
           get 'breakdown'
@@ -456,7 +477,7 @@ Rails.application.routes.draw do
   end
   resources :emails
   resources :custom_texts, only: [:edit, :update]
-  
+
   match "*a", :to => "application#routing_error", :via => [:get, :post]
 
   root to: 'metrics_dashboards#index'

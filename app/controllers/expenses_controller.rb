@@ -51,7 +51,7 @@ class ExpensesController < ApplicationController
     protected
 
     def set_expense
-        @expense = current_user.enterprise.expenses.find(params[:id])
+        current_user ? @expense = current_user.enterprise.expenses.find(params[:id]) : user_not_authorized
     end
 
     def expense_params

@@ -20,6 +20,8 @@
               <th>Name</th>
               <th>Position</th>
               <th>Receive daily notifications about pending members</th>
+              <th>Receive daily notifications about pending comments</th>
+              <th>Receive daily notifications about pending posts</th>
             </thead>
             <tbody>
               <% @group_leaders.each do |group_leader| %>
@@ -27,7 +29,9 @@
                   <td><%= link_to image_tag(group_leader.user.avatar.expiring_url(3600), class: "avatar avatar--round", style: "float: left; margin-right: 1em;"), user_path(group_leader.user), remote: true %></td>
                   <td><%= link_to group_leader.user.name_with_status, user_path(group_leader.user) %></td>
                   <td><%= group_leader.position_name %></td>
-                  <td><%= group_leader.notifications_enabled_status %></td>
+                  <td><%= GroupLeaderDecorator.decorate(group_leader).enabled_status(group_leader.pending_member_notifications_enabled) %></td>
+                  <td><%= GroupLeaderDecorator.decorate(group_leader).enabled_status(group_leader.pending_comments_notifications_enabled) %></td>
+                  <td><%= GroupLeaderDecorator.decorate(group_leader).enabled_status(group_leader.pending_posts_notifications_enabled) %></td>
                 </tr>
               <% end %>
             </tbody>

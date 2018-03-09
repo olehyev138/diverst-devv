@@ -10,4 +10,11 @@ RSpec.describe GroupMessageComment, type: :model do
     it { expect(group_message_comment).to validate_presence_of(:message) }
     it { expect(group_message_comment).to validate_presence_of(:content) }
   end
+  
+  describe "#unapproved" do
+    it "returns the group_message_comments that have not been approved" do
+      create_list(:group_message_comment, 2, :approved => false)
+      expect(GroupMessageComment.unapproved.count).to eq(2)
+    end
+  end
 end
