@@ -5,7 +5,7 @@
   </h1>
   <div class="flex-row">
     <div class="flex-row__cell">
-      <%= link_to "Delete event", group_initiative_path(@group, @event), method: :delete, class: "btn btn--danger",  data: { confirm: "Are you sure?" } if policy(@event).destroy? %>
+      <%= link_to "Delete event", group_initiative_path(@group, @event), method: :delete, class: "btn btn--secondary",  data: { confirm: "Are you sure?" } if policy(@event).destroy? %>
     </div>
     <div class="flex-row__cell">
       <%= link_to "Edit event", edit_group_initiative_path(@group, @event), class: "btn btn--primary" if policy(@event).edit? %>
@@ -15,9 +15,7 @@
     </div>
 
     <div class="flex-row__cell">
-    <% if policy(@event).join_leave_button_visibility? %>
        <a href="#" class="btn btn--primary js-join-event" data-joined="<%= current_user.initiatives.include? @event %>"><%= current_user.initiatives.include?(@event) ? "Leave event" : "Join event" %></a>
-    <% end %>
     </div>
   </div>
 </div>
@@ -50,52 +48,39 @@
             <% end %>
             <%= link_to "View #{@event.attendees.count - 10} more...", group_event_attendance_path(@group, @event) if @event.attendees.count > 10 %>
           </p>
-          <% if policy(@event).add_calendar_visibility? %>
-          <%= link_to "Add to Google Calendar", GoogleCalendar.build_link(@event), target: :_blank %>
-            <br>
-            <%= link_to "Add to calendar", export_ics_group_event_path(@group, @event) %>
-          <% end %>
+          <%= link_to "Add to calendar", export_ics_group_event_path(@group, @event) %>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-
-<% if current_user.erg_leader? %>
 <div class="content__header" style="margin-top: 30px;">
-  <h1><%= pluralize(@all_comments.count, "comment") %></h1>
+  <h1>Comments</h1>
 </div>
 
-  <% if @all_comments.any? %>
-    <% @all_comments.each do |comment| %>
-      <%= render 'event_comment', comment: comment %>
-    <% end %>
-  <% end %>
-<% else %>
-<div class="content__header" style="margin-top: 30px;">
-  <h1><%= pluralize(@approved_comments.count, "comment") %></h1>
-</div>
-
-  <% if @approved_comments.any? %>
-    <% @approved_comments.each do |comment| %>
-      <%= render 'event_comment', comment: comment %>
-    <% end %>
-  <% end %>
-<% end %>
-
-<% current_user_has_no_comments?(@all_comments) do %>
-  <%= render 'event_comment_form', group: @group, event: @event, comment: @comment %>
-<% end %>
-
-<% current_user_has_pending_comments?(@all_comments) do %>
-<div class="content__section">
-  <div class="card">
-    <div class="card__section">
-      <p>NOTE: You have a comment pending approval.</p>
-    </div> 
+<% if @comment.persisted? %>
+  <div class="content__section">
+    <div class="card">
+      <div class="card__section">
+        <p>You left the following comment:</p>
+        <p style="font-style: italic;"><%= @comment.content %></p>
+        <p>Thank you for your feedback.</p>
+      </div>
+    </div>
   </div>
-</div>
+<% else %>
+  <div class="content__section">
+    <div class="card">
+      <div class="card__section">
+        <%= simple_form_for [@group, @event, @comment], url: group_event_comments_path(@group.id, @event.id) do |f| %>
+          <%= f.input :content,
+                label: "Tell us about what you learned during this event, what you liked / disliked, etc." %>
+          <%= f.button :submit, value: "Submit" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
 <% end %>
 
 <script>
