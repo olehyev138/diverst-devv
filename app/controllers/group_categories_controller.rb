@@ -77,7 +77,7 @@ class GroupCategoriesController < ApplicationController
     # update sub groups with chosen group_category_id and group_category_type_id
     params[:children].each do |child|
       next if Group.find(child[0]).group_category_id == child[1][:group_category_id].to_i
-      Group.find(child[0]).update(
+      Group.find(child[0]).update(skip_label_consistency_check: true,
         group_category_id: child[1][:group_category_id].to_i.zero? ? nil : child[1][:group_category_id].to_i,
         group_category_type_id: @group_category_id.nil? ? nil : GroupCategory.find(@group_category_id).group_category_type_id
  )
