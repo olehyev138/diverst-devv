@@ -124,7 +124,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   before_validation :smart_add_url_protocol
   attr_accessor :skip_label_consistency_check
   validate :perform_check_for_consistency_in_category, on: [:create, :update], unless: :skip_label_consistency_check
- 
+
 
   scope :top_participants,  -> (n) { order(total_weekly_points: :desc).limit(n) }
   # Active Record already has a defined a class method with the name private so we use is_private.
