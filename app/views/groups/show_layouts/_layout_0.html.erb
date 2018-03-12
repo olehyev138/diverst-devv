@@ -51,44 +51,4 @@
   </div>
 </div>
 
-<script>
-$('a.sub_ergs').click(function(e){
-    var id = $(this).attr('id');
-    $('div.remaining_children_' + id).show();
-    $(this).siblings('a.hide_sub_ergs').show();
-    $(this).hide();
-  }); //endof click
-
-  $('a.hide_sub_ergs').click(function(e){
-    var id = $(this).attr('id');
-    $('div.remaining_children_' + id).hide();
-    $(this).siblings('a.sub_ergs').show();
-    $(this).hide();
-  }); //endof click
-
-$('a.nested_show').click(function(e){
-    var id = $(this).attr('id');
-    $('div.children_' + id).show();
-    $(this).siblings('a.nested_hide').show();
-    $(this).hide();
-  }); //endof click
-
-  $('a.nested_hide').click(function(e){
-    var id = $(this).attr('id');
-    $('div.children_' + id).hide();
-    $(this).siblings('a.nested_show').show();
-    $(this).hide();
-  }); //endof click
-
-  $('img.info').click(function(e){
-    e.preventDefault();
-    var id = $(this).attr('id');
-    $('div.biography_' + id).show();
-  }); //endof click
-
-  $('a.remove').click(function(e){
-    e.preventDefault();
-    var id = $(this).attr('id');
-    $('div.biography_' + id).hide();
-  }); //endof click
-</script>
+<%= render partial: 'groups/show_layouts/blocks/sub_ergs_category.js.erb' %>
