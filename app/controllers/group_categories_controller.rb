@@ -66,9 +66,7 @@ class GroupCategoriesController < ApplicationController
   def update_all_sub_groups
     authorize Group
 
-      # how do i check consistency of labels here?
-      # 1. Allow categorization if all labels == "none"; give this status a different flash message
-    if params[:children].all? { |child| child[1][:group_category_id] == "" }
+    if all_incoming_labels_are_none?
 
       categorize_sub_groups
       flash[:notice] = "Nothing happened"
@@ -118,6 +116,10 @@ class GroupCategoriesController < ApplicationController
       # find parent group and update with association with group category type
       @parent = Group.find(params[:children].first[0])&.parent
       @parent.update(group_category_type_id: @parent.children.first.group_category_type_id) if @parent
+  end
+
+  def all_incoming_labels_are_none?
+    params[:children].all? { |child| child[1][:group_category_id] == "" }
   end
 
   def resolve_layout
