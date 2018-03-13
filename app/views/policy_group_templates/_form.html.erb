@@ -14,6 +14,11 @@
             <%= f.hidden_field :annual_budget_manage, value: 0 %>
             <%= f.input :annual_budget_manage, label: 'Manage Annual Budgets' %>
           </div>
+          <div class="col md-6">
+            <p class="field__hint">Should members of this group be able to view the global calendar?</p>
+            <%= f.hidden_field :global_calendar, value: 0 %>
+            <%= f.input :global_calendar, label: 'View Global Calendar' %>
+          </div>
         </div>
       </div>
       
