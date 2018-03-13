@@ -67,11 +67,11 @@ class GroupCategoriesController < ApplicationController
     authorize Group
 
     if all_incoming_labels_are_none?
-
       categorize_sub_groups
-      flash[:notice] = "Nothing happened"
+      flash[:notice] = "No labels were set"
       redirect_to :back
     else
+      # byebug
       # 2. If at least one label != none;
       # a. check each label's category type, all labels MUST BE OF ONE CATEGORY TYPE; if not, reject due to inconsistent
       # labels coming as params.
