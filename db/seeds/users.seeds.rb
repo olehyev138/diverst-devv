@@ -33,7 +33,7 @@ after :enterprise do
       {:role_name => "group_leader", :role_type => "group", :priority => 3},
       {:role_name => "group_treasurer", :role_type => "group", :priority => 4},
       {:role_name => "group_content_creator", :role_type => "group", :priority => 5},
-      {:role_name => "user", :role_type => "user", :priority => 6}
+      {:role_name => "user", :role_type => "user", :priority => 6, :default => true}
     ]
   )
 
