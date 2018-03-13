@@ -5,7 +5,7 @@
   <% if policy(@group).is_a_member? %>
     You have not joined any events yet.
   <% else %>
-    You are not a member of <%= @group.capitalize_name %>
+    You are not a member of <%= @group.name %>
   <% end %>
   </div>
 <% else %>
@@ -15,7 +15,7 @@
     <% end %>
   <% else %>
   <div class="mtlarge text-center">
-    You are not a member of <%= @group.capitalize_name %>.
+    You are not a member of <%= @group.name %>.
   </div>
   <% end %>
 <% end %>
