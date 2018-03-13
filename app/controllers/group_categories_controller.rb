@@ -71,7 +71,6 @@ class GroupCategoriesController < ApplicationController
       categorize_sub_groups
       flash[:notice] = "Nothing happened"
       redirect_to :back
-
     else
       # 2. If at least one label != none;
       # a. check each label's category type, all labels MUST BE OF ONE CATEGORY TYPE; if not, reject due to inconsistent
@@ -79,8 +78,7 @@ class GroupCategoriesController < ApplicationController
       # b. if a. passes, i.e all labels are of ONE category type, allow categorization. The assumption here is that
       #  the user wants a new category type submitting labels consistent with each other
 
-     categorize_sub_groups
-
+      categorize_sub_groups
       flash[:notice] = "Categorization successful"
       redirect_to :back
     end
