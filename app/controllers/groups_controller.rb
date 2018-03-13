@@ -12,17 +12,17 @@ class GroupsController < ApplicationController
 
     def index
         authorize Group
-        @groups = policy_scope(Group).includes(:children).all_parents
+        @groups = GroupPolicy::Scope.new(current_user, Group, :groups_manage).resolve.includes(:children).all_parents
     end
 
     def plan_overview
         authorize Group
-        @groups = policy_scope(Group)
+        @groups = GroupPolicy::Scope.new(current_user, Group, :groups_budgets_index).resolve
     end
 
     def close_budgets
         authorize Group
-        @groups = policy_scope(Group).includes(:children).all_parents
+        @groups = GroupPolicy::Scope.new(current_user, Group, :mana).resolve.includes(:children).all_parents
     end
 
     # calendar for all of the groups

@@ -4,6 +4,10 @@ class GroupPolicy < ApplicationPolicy
     end
     
     def new?
+        manage?
+    end
+    
+    def manage?
         @policy_group.groups_manage?
     end
     
@@ -208,11 +212,19 @@ class GroupPolicy < ApplicationPolicy
     end
     
     class Scope < Scope
+        attr_reader :user, :scope, :permission
+
+        def initialize(user, scope, permission)
+          @user  = user
+          @scope = scope
+          @permission = permission
+        end
+    
         def resolve
-            if !user.erg_leader?
+            if UserRole.where(:role_name => user.role, :role_type => "group").count > 0
+                scope.joins(:group_leaders).where(:group_leaders => {:user_id => user.id, permission.to_sym => true})
+            else 
                 scope.includes(:parent, :leaders, :owner, :initiatives)
-            else
-                scope.joins(:group_leaders).where(:group_leaders => {:user_id => user.id})
             end
         end
     end
