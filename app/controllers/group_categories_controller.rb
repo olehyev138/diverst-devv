@@ -68,19 +68,17 @@ class GroupCategoriesController < ApplicationController
 
     if all_incoming_labels_are_none?
       categorize_sub_groups
-      flash[:notice] = "No labels were set"
+      flash[:notice] = "No labels were submitted"
       redirect_to :back
     else
-      # byebug
-      # 2. If at least one label != none;
-      # a. check each label's category type, all labels MUST BE OF ONE CATEGORY TYPE; if not, reject due to inconsistent
-      # labels coming as params.
-      # b. if a. passes, i.e all labels are of ONE category type, allow categorization. The assumption here is that
-      #  the user wants a new category type submitting labels consistent with each other
-
-      categorize_sub_groups
-      flash[:notice] = "Categorization successful"
-      redirect_to :back
+      if all_labels_are_of_the_same_category_type?
+        categorize_sub_groups
+        flash[:notice] = "Categorization successful"
+        redirect_to :back
+      else
+        flash[:alert] = "Categorization failed due labels of different category type"
+        redirect_to :back
+      end
     end
   end
 
@@ -92,6 +90,19 @@ class GroupCategoriesController < ApplicationController
 
 
   private
+
+  def all_labels_are_of_the_same_category_type?
+    params[:children].any? do |child|
+      if child[1][:group_category_id] != ""
+          @group_category_id = child[1][:group_category_id].to_i
+           break;
+      end
+    end
+
+    params[:children].all? do |child|
+      GroupCategory.find(child[1][:group_category_id]).group_category_type_id == GroupCategory.find(@group_category_id).group_category_type_id
+    end
+  end
 
   def categorize_sub_groups
      # check params to avoid update of Group object with 0 value
