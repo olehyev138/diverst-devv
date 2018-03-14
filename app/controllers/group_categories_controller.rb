@@ -71,7 +71,7 @@ class GroupCategoriesController < ApplicationController
       flash[:notice] = "No labels were submitted"
       redirect_to :back
     else
-      if all_labels_are_of_the_same_category_type? || at_least_one_label_is_blank?
+      if all_labels_are_of_the_same_category_type? || at_least_one_label_is_blank_and_other_labels_of_same_category_type?
         categorize_sub_groups
         flash[:notice] = "Categorization successful"
         redirect_to :back
@@ -95,9 +95,24 @@ class GroupCategoriesController < ApplicationController
     params[:children].any? { |child| child[1][:group_category_id] == "" }
   end
 
+  def other_labels_not_blank_and_same_category_type?
+    array_of_non_blank_labels = []
+    params[:children].each do |child|
+      next if child[1][:group_category_id] == ""
+      array_of_non_blank_labels << child[1][:group_category_id]
+    end
+
+    array_of_non_blank_labels.all? { |group_category_id| GroupCategory.find(group_category_id)
+      .group_category_type_id == GroupCategory.find(array_of_non_blank_labels[0]).group_category_type_id  }
+  end
+
+  def at_least_one_label_is_blank_and_other_labels_of_same_category_type?
+    at_least_one_label_is_blank? && other_labels_not_blank_and_same_category_type?
+  end
+
 
   def all_labels_are_of_the_same_category_type?
-    params[:children].any? do |child|
+    params[:children].each do |child|
       if child[1][:group_category_id] != ""
           @group_category_id = child[1][:group_category_id].to_i
            break;
@@ -112,7 +127,7 @@ class GroupCategoriesController < ApplicationController
 
   def categorize_sub_groups
      # check params to avoid update of Group object with 0 value
-    params[:children].any? do |child|
+    params[:children].each do |child|
         if child[1][:group_category_id] != ""
           @group_category_id = child[1][:group_category_id].to_i
            break;
