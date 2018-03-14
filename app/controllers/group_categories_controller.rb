@@ -71,7 +71,7 @@ class GroupCategoriesController < ApplicationController
       flash[:notice] = "No labels were submitted"
       redirect_to :back
     else
-      if all_labels_are_of_the_same_category_type?
+      if all_labels_are_of_the_same_category_type? || at_least_one_label_is_blank?
         categorize_sub_groups
         flash[:notice] = "Categorization successful"
         redirect_to :back
@@ -91,6 +91,11 @@ class GroupCategoriesController < ApplicationController
 
   private
 
+  def at_least_one_label_is_blank?
+    params[:children].any? { |child| child[1][:group_category_id] == "" }
+  end
+
+
   def all_labels_are_of_the_same_category_type?
     params[:children].any? do |child|
       if child[1][:group_category_id] != ""
@@ -100,7 +105,8 @@ class GroupCategoriesController < ApplicationController
     end
 
     params[:children].all? do |child|
-      GroupCategory.find(child[1][:group_category_id]).group_category_type_id == GroupCategory.find(@group_category_id).group_category_type_id
+      GroupCategory.find(child[1][:group_category_id])
+      .group_category_type_id == GroupCategory.find(@group_category_id).group_category_type_id if child[1][:group_category_id].present?
     end
   end
 
@@ -124,7 +130,7 @@ class GroupCategoriesController < ApplicationController
 
       # find parent group and update with association with group category type
       @parent = Group.find(params[:children].first[0])&.parent
-      @parent.update(group_category_type_id: @parent.children.first.group_category_type_id) if @parent
+      @parent.update(group_category_type_id: GroupCategory.find_by(id: @group_category_id)&.group_category_type_id) if @parent
   end
 
   def all_incoming_labels_are_none?
