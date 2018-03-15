@@ -76,7 +76,7 @@ class GroupCategoriesController < ApplicationController
         flash[:notice] = "Categorization successful"
         redirect_to :back
       else
-        flash[:alert] = "Categorization failed due labels of different category type"
+        flash[:alert] = "Categorization failed because you submitted labels of different category type"
         redirect_to :back
       end
     end
