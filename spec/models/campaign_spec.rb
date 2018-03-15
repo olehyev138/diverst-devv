@@ -116,7 +116,7 @@ RSpec.describe Campaign, type: :model do
             end
         end
 
-        context '#top_performers' do 
+        context '#top_performers' do
             it 'return correct data' do
                 expect(campaign.top_performers[:categories])
                 .to eq [group2_users.last.name, group2_users.first.name, group1_users.last.name, group1_users.first.name]

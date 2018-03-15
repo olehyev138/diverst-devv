@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Budget, type: :model do
 
     describe 'when validating' do
-        let(:budget) { FactoryGirl.build_stubbed(:budget) }
+        let(:budget) { FactoryGirl.build(:budget) }
         let(:approved_budget) { FactoryGirl.build :approved_budget }
 
         it { expect(budget).to validate_presence_of(:subject) }
@@ -13,7 +13,7 @@ RSpec.describe Budget, type: :model do
         it { expect(budget).to have_many(:checklists) }
         it { expect(budget).to have_many(:budget_items) }
 
-        it { expect(budget).to have_nested_attributes_for(:budget_items).allow_destroy(true) }
+        it { expect(budget).to accept_nested_attributes_for(:budget_items).allow_destroy(true) }
     end
 
     describe 'amounts' do
