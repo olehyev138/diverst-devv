@@ -6,7 +6,7 @@ RSpec.describe Checklist, type: :model do
 
         it { expect(checklist).to belong_to(:subject) }
         it { expect(checklist).to belong_to(:author) }
-        
+
         it { expect(checklist).to have_many(:items) }
     end
 end
