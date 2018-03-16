@@ -24,7 +24,7 @@ class PolicyGroupTemplate < ActiveRecord::Base
     
     # finds users/group_leaders in the enterprise
     def update_user_roles
-        PolicyGroupTemplateUpdate.perform_now(self)
+        PolicyGroupTemplateUpdateJob.perform_now(self)
     end
 
 end

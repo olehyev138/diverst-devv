@@ -1,4 +1,4 @@
-class PolicyGroupTemplateUpdate < ActiveJob::Base
+class PolicyGroupTemplateUpdateJob < ActiveJob::Base
     queue_as :default
 
     def perform(template)

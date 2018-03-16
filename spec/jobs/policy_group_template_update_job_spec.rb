@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe PolicyGroupTemplateUpdate, type: :job do
+RSpec.describe PolicyGroupTemplateUpdateJob, type: :job do
   let!(:user) { create(:user) }
 
   it 'calls set_default_policy_group on the user' do
