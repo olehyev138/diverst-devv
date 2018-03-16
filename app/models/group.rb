@@ -113,7 +113,6 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
 
   validates :name, presence: true
   validates_format_of :contact_email, with: Devise.email_regexp, allow_blank: true
-  validate :perform_check_for_consistency_in_category, on: [:create, :update]
 
   validate :valid_yammer_group_link?
 
