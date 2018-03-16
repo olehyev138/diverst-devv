@@ -290,7 +290,7 @@ class GroupsController < ApplicationController
         @members = @group.active_members.order(created_at: :desc).limit(8)
 
         @top_user_group_participants = @group.user_groups.active.top_participants(10).includes(:user)
-        @top_group_participants = @group.enterprise.groups.top_participants(10)
+        @top_group_participants = @group.enterprise.groups.non_private.top_participants(10)
     end
 
     def where
