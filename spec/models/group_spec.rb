@@ -444,7 +444,6 @@ RSpec.describe Group, :type => :model do
             field = create(:field)
             create(:group_update, :group => group)
             data = group.highcharts_history(:field => field)
-            byebug
             expect(data.length).to eq(1)
         end
     end
