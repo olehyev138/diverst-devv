@@ -5,7 +5,7 @@ class GroupMessageComment < ActiveRecord::Base
   validates :author, presence: true
   validates :message, presence: true
   validates :content, presence: true
-  
+
   scope :unapproved, -> {where(:approved => false)}
   scope :approved, -> {where(:approved => true)}
 

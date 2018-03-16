@@ -25,10 +25,10 @@ RSpec.describe GroupCategoryType, type: :model do
     end
   end
 
-  context 'test after_save callback' do 
+  context 'test after_save callback' do
     let!(:group_category_type) { build(:group_category_type) }
 
-    it "run #create_association_with_enterprise callback" do 
+    it "run #create_association_with_enterprise callback" do
       expect(group_category_type).to receive(:create_association_with_enterprise)
       group_category_type.save
     end
