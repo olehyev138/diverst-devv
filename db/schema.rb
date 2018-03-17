@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180306143311) do
+ActiveRecord::Schema.define(version: 20180317112435) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -456,6 +456,7 @@ ActiveRecord::Schema.define(version: 20180306143311) do
     t.datetime "updated_at",                                     null: false
     t.boolean  "password_protected",             default: false
     t.string   "password_digest",    limit: 191
+    t.integer  "parent_id",          limit: 4
   end
 
   add_index "folders", ["container_type", "container_id"], name: "index_folders_on_container_type_and_container_id", using: :btree
@@ -510,6 +511,9 @@ ActiveRecord::Schema.define(version: 20180306143311) do
     t.boolean  "pending_posts_notifications_enabled",                default: false
     t.boolean  "default_group_contact",                              default: false
     t.string   "role",                                   limit: 191
+    t.boolean  "groups_budgets_index",                               default: false, null: false
+    t.boolean  "initiatives_manage",                                 default: false, null: false
+    t.boolean  "groups_manage",                                      default: false, null: false
   end
 
   create_table "group_message_comments", force: :cascade do |t|
