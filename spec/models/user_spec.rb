@@ -194,7 +194,7 @@ RSpec.describe User do
     let!(:inactive_user) { create :user, enterprise: enterprise, active: false }
 
     describe '#active' do
-      it 'only returnes active users' do
+      it 'only returns active users' do
         active_users = enterprise.users.active
 
         expect(active_users).to include active_user

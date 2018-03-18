@@ -11,8 +11,8 @@ RSpec.describe InitiativeUpdate, type: :model do
 	describe 'test instance methods' do
 		let!(:initiative) { create(:initiative) }
 		let!(:update) { create(:initiative_update, initiative_id: initiative.id, created_at: DateTime.now) }
-		let!(:previous_update) { create(:initiative_update, initiative_id: initiative.id, created_at: DateTime.now - 2.days) }
-		let!(:next_update) { create(:initiative_update, initiative_id: initiative.id, created_at: DateTime.now + 2.days) }
+		let!(:previous_update) { create(:initiative_update, initiative_id: initiative.id, created_at: DateTime.now - 2.hours) }
+		let!(:next_update) { create(:initiative_update, initiative_id: initiative.id, created_at: DateTime.now + 2.hours) }
 
 		context '#next' do
 			it 'return the next update in chronological order' do
