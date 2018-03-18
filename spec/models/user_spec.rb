@@ -63,7 +63,7 @@ RSpec.describe User do
 
     describe 'test callbacks' do
       let!(:new_enterprise) { create(:enterprise) }
-      let!(:new_user) { build(:user, enterprise: new_enterprise) }
+      let!(:new_user) { build(:user, enterprise: new_enterprise, policy_group_id: nil) }
 
       describe 'before_validation callbacks' do
         context '#generate_password_if_saml' do
@@ -102,15 +102,15 @@ RSpec.describe User do
         end
       end
 
-      describe 'before_save callbacks' do 
-        context '#assign_policy_group' do 
-          it 'should be called before user object is created' do 
-            expect(new_user).to receive(:assign_policy_group)
+      describe 'before_save callbacks' do
+        context '#assign_policy_group' do
+          it 'should be called before user object is created' do
+            expect(new_user[:policy_group_id]).to eq PolicyGroup.default_group(new_enterprise.id)
             new_user.save
           end
         end
 
-        context '#assign_firebase_token' do 
+        context '#assign_firebase_token' do
           it 'should be called after user object is created' do
             new_user.run_callbacks :create
             expect(new_user.firebase_token.present?).to eq true
