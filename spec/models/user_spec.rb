@@ -210,6 +210,35 @@ RSpec.describe User do
         expect(inactive_users).to_not include active_user
       end
     end
+
+    describe '#for_segments' do
+      let!(:segment) { create(:segment, enterprise_id: enterprise.id) }
+      let!(:user_segment) { create(:users_segment, user_id: active_user.id, segment_id: segment.id) }
+
+      it 'returns users with segments' do
+        segments = active_user.segments
+        expect(enterprise.users.for_segments(segments)).to eq [active_user]
+      end
+    end
+
+    describe '#for_groups' do
+      let!(:group) { create(:group, enterprise_id: enterprise.id) }
+      let!(:user_group) { create(:user_group, user_id: active_user.id, group_id: group.id) }
+
+      it 'returns users with groups' do
+        groups = active_user.groups
+        expect(enterprise.users.for_groups(groups)).to eq [active_user]
+      end
+    end
+
+    describe '#answered_poll' do
+      let!(:poll) { create(:poll, enterprise_id: enterprise.id) }
+      let!(:response) { create(:poll_response, user_id: active_user.id, poll_id: poll.id) }
+
+      it 'returns users with answered polls' do
+        expect(enterprise.users.answered_poll(poll)).to eq [active_user]
+      end
+    end
   end
 
   describe '#erg_leader?' do
