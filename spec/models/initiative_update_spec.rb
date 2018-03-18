@@ -8,8 +8,8 @@ RSpec.describe InitiativeUpdate, type: :model do
 
 	describe 'test instance methods' do
 		let!(:initiative) { create(:initiative) }
-		let!(:update) { create(:initiative_update, initiative_id: initiative.id) }
-		let!(:previous_update) { create(:initiative_update, initiative_id: initiative.id, created_at: DateTime.now - 1.days) }
+		let!(:update) { create(:initiative_update, initiative_id: initiative.id, created_at: DateTime.now) }
+		let!(:previous_update) { create(:initiative_update, initiative_id: initiative.id, created_at: DateTime.now - 2.days) }
 		let!(:next_update) { create(:initiative_update, initiative_id: initiative.id, created_at: DateTime.now + 2.days) }
 
 		context '#next' do
