@@ -57,7 +57,65 @@ RSpec.describe User do
 
       context 'validate paperclip' do
         it { expect(user).to have_attached_file(:avatar) }
-        it { expect(user).to validate_attachment_content_type(:avatar) }
+        it { expect(user).to validate_attachment_content_type(:avatar).allowing('image/png', 'image/gif').rejecting('text/plain', 'text/xml' ) }
+      end
+    end
+
+    describe 'test callbacks' do
+      let!(:new_enterprise) { create(:enterprise) }
+      let!(:new_user) { build(:user, enterprise: new_enterprise) }
+
+      describe 'before_validation callbacks' do
+        context '#generate_password_if_saml' do
+          it 'should be called before validation is triggered' do
+            expect(new_user).to receive(:generate_password_if_saml)
+            new_user.valid?
+          end
+
+          it 'set valid password on before_validation callback for a new user object' do
+            expect(new_user.valid_password?(new_user.password)).to eq true
+            new_user.valid?
+          end
+        end
+
+        context '#set_provider' do
+          it 'should be called before validation is triggered' do
+            expect(new_user).to receive(:set_provider)
+            new_user.valid?
+          end
+
+          it 'sets provider on before_validation callback for a new user object' do
+            expect(new_user.provider.present?).to be true
+          end
+        end
+
+        context '#set_uid' do
+          it 'should be called before validation is triggered' do
+            expect(new_user).to receive(:set_uid)
+            new_user.valid?
+          end
+
+          it 'sets uid on before_validation callback for a new user object' do
+            new_user.send(:set_uid)
+            expect(new_user.present?).to eq true
+          end
+        end
+      end
+
+      describe 'before_save callbacks' do 
+        context '#assign_policy_group' do 
+          it 'should be called before user object is created' do 
+            expect(new_user).to receive(:assign_policy_group)
+            new_user.save
+          end
+        end
+
+        context '#assign_firebase_token' do 
+          it 'should be called after user object is created' do
+            new_user.run_callbacks :create
+            expect(new_user.firebase_token.present?).to eq true
+          end
+        end
       end
     end
 
