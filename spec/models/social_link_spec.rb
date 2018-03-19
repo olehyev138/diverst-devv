@@ -11,9 +11,12 @@ RSpec.describe SocialLink, type: :model do
 
         it{ expect(social_link).to validate_presence_of(:author_id) }
 
-        it{ expect(social_link).to have_many(:segments).through(:social_link_segments) }
+        it { expect(social_link).to have_many(:segments).through(:social_link_segments) }
+        it { expect(social_link).to have_many(:social_link_segments) }
+        it { expect(social_link).to have_one(:news_feed_link).dependent(:destroy) }
+        it { expect(social_link).to belong_to(:author).class_name('User') }
+        it { expect(social_link).to belong_to(:group) }
 
-        it { expect(social_link).to have_one(:news_feed_link)}
 
         describe 'url population' do
             let(:social_link) { build :social_link, :without_embed_code}
@@ -49,7 +52,30 @@ RSpec.describe SocialLink, type: :model do
         end
     end
 
-    describe "#after_create" do
+
+    describe 'test callbacks' do
+        let!(:social_link) { build(:social_link) }
+
+        context 'before_create callbacks' do
+            it 'calls #populate_embed_code before social_link object is created' do
+                expect(social_link).to receive(:populate_embed_code)
+                social_link.save
+            end
+
+            it 'calls #build_default_link before social_link object is created' do
+                expect(social_link).to receive(:build_default_link)
+                social_link.save
+            end
+
+            it 'calls #add_trailing_slash before social_link object is created' do
+                expect(social_link).to receive(:add_trailing_slash)
+                social_link.save
+            end
+        end
+    end
+
+
+    describe "#after_create" do #NOTE: after_create callback doesn't exist in social_link.rb
         it "calls callbacks and creates attributes/association" do
             social_link = build(:social_link)
             social_link.save

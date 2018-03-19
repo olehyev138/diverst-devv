@@ -19,10 +19,10 @@ RSpec.describe GroupMessagesSegment, type: :model do
         end
     end
 
-    describe 'test before_create callback' do 
+    describe 'test before_create callback' do
         let!(:group_messages_segment) { build(:group_messages_segment) }
 
-        it 'run build_default_link_segment before object creation' do 
+        it 'run build_default_link_segment before object creation' do
             expect(group_messages_segment).to receive(:build_default_link_segment)
             group_messages_segment.save
         end
