@@ -10,4 +10,32 @@ RSpec.describe InitiativeComment, type: :model do
     it { expect(initiative_comment).to validate_presence_of(:initiative) }
     it { expect(initiative_comment).to validate_presence_of(:content) }
   end
+
+  describe 'test instance and class methods' do
+  	context '#group' do
+  	  let!(:group) { create(:group) }
+  	  let!(:initiative) { create(:initiative, owner_group_id: group.id) }
+  	  let!(:initiative_comment) { create(:initiative_comment, initiative_id: initiative.id) }
+
+  	  it 'returns group belonging to initiative' do
+  		expect(initiative_comment.group).to eq group
+  	  end
+  	end
+
+  	context '#disapproved?' do
+  		let!(:initiative_comment) { create(:initiative_comment, approved: false) }
+
+  		it 'returns approved initiative comment' do
+  			expect(initiative_comment.disapproved?).to eq true
+  		end
+  	end
+
+  	context '.approved' do 
+  		let!(:initiative_comments) { create_list(:initiative_comment, 3, approved: true) }
+
+  		it 'returns 3 approved initiative_comments' do
+  			expect(initiative_comments.count).to eq 3
+  		end
+  	end
+  end
 end

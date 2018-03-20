@@ -6,7 +6,7 @@
         <%= f.input :title %>
         <%= f.input :description %>
 
-        <%= f.association :segments, collection: @group.enterprise.segments, input_html: { class: "select2" } %>
+        <%= f.association :segments, label: "#{c_t(:segment).pluralize}", collection: @group.enterprise.segments, input_html: { class: "select2" } %>
         
         <%= f.simple_fields_for :photos do |p| %>
           <%= render "photo_fields", f: p %>

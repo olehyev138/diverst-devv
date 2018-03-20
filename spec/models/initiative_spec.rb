@@ -65,10 +65,10 @@ RSpec.describe Initiative, type: :model do
     end
   end
 
-  describe 'test callbacks' do 
+  describe 'test callbacks' do
     let!(:new_initiative) { build(:initiative) }
 
-    it '#allocate_budget_funds' do 
+    it '#allocate_budget_funds' do
       expect(new_initiative).to receive(:allocate_budget_funds)
       new_initiative.save
     end

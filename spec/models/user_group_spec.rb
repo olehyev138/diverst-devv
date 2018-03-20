@@ -18,6 +18,7 @@ RSpec.describe UserGroup do
 
       it { expect(UserGroup.top_participants(3)).to eq [first, second, third] }
       it { expect(user_group).to define_enum_for(:notifications_frequency).with([:hourly, :daily, :weekly, :disabled]) }
+      it { expect(user_group).to define_enum_for(:notifications_date).with([:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]) }
     end
 
     context "notifications_status" do

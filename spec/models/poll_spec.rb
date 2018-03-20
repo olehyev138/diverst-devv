@@ -5,7 +5,6 @@ RSpec.describe Poll, type: :model do
         let(:poll){ build_stubbed(:poll) }
 
         context 'test associations' do
-            it{ expect(poll).to validate_presence_of(:status) }
 
             it{ expect(poll).to belong_to(:enterprise).inverse_of(:polls) }
             it{ expect(poll).to belong_to(:owner).class_name('User') }
@@ -23,12 +22,10 @@ RSpec.describe Poll, type: :model do
             it{ expect(poll).to accept_nested_attributes_for(:fields).allow_destroy(true)}
         end
 
-        context 'test validation' do 
-            it{ expect(poll).to validate_presence_of(:title) }
-            it{ expect(poll).to validate_presence_of(:description) }
-            it{ expect(poll).to validate_presence_of(:status) }
-            it{ expect(poll).to validate_presence_of(:enterprise) }
-            it{ expect(poll).to validate_presence_of(:owner) }
+        context 'test validation' do
+            [:title, :description, :status, :enterprise, :owner].each do |attribute|
+                it{ expect(poll).to validate_presence_of(attribute) }
+            end
         end
 
         it{ expect(poll).to define_enum_for(:status).with([:published, :draft])}
@@ -130,6 +127,17 @@ RSpec.describe Poll, type: :model do
                     poll.valid?
                     expect(poll.errors.messages).to have_key(:associated_objects)
                 end
+            end
+        end
+    end
+
+    describe 'test callbacks' do
+        let!(:poll) { build(:poll) }
+
+        context 'after_create' do
+            it '#create_default_graphs should be called after create' do
+                expect(poll).to receive(:create_default_graphs)
+                poll.run_callbacks(:create)
             end
         end
     end
