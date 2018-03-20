@@ -604,7 +604,6 @@ RSpec.describe Group, :type => :model do
             user = create(:user)
             group_leader = create(:group_leader, :group => group, :user => user, :default_group_contact => true)
             group_leader = group.group_leaders.find_by(default_group_contact: true)&.user
-            group.set_default_group_contact
         
 
             expect(group.contact_email).to eq group_leader&.email
@@ -615,7 +614,6 @@ RSpec.describe Group, :type => :model do
             user = create(:user)
             create(:group_leader, :group => group, :user => user, :default_group_contact => false)
             group_leader = group.group_leaders.find_by(default_group_contact: true)&.user
-            group.set_default_group_contact
 
             expect(group.contact_email).to eq nil
         end
