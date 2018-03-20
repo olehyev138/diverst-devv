@@ -5,6 +5,7 @@ RSpec.describe SegmentRule, type: :model do
     let(:segment_rule){ build_stubbed(:segment_rule) }
 
     it{ expect(segment_rule).to belong_to(:field) }
+    it{ expect(segment_rule).to belong_to(:segment) }
 
     it { is_expected.to validate_presence_of(:operator) }
     it { is_expected.to validate_presence_of(:field) }
@@ -21,6 +22,68 @@ RSpec.describe SegmentRule, type: :model do
       segment_rule.save!
 
       expect(segment_rule.valid?).to be(true)
+    end
+  end
+
+  describe 'test class methods' do
+    context '.operatores should return data of frozen hash' do
+      it 'equals: 0' do
+        expect(described_class.operators[:equals]).to eq 0
+      end
+
+      it 'greater_than: 1' do
+        expect(described_class.operators[:greater_than]).to eq 1
+      end
+
+      it 'lesser_than: 2' do
+        expect(described_class.operators[:lesser_than]).to eq 2
+      end
+
+      it 'is_not: 3' do
+        expect(described_class.operators[:is_not]).to eq 3
+      end
+
+      it 'contains_any_of: 4' do
+        expect(described_class.operators[:contains_any_of]).to eq 4
+      end
+
+      it 'contains_all_of: 5' do
+        expect(described_class.operators[:contains_all_of]).to eq 5
+      end
+
+      it 'does_not_contain: 6' do
+        expect(described_class.operators[:does_not_contain]).to eq 6
+      end
+    end
+
+    context '.operator_text(id) returns stringified keys of the operator hash' do
+      it "returns 'equals' when id is 0" do
+        expect(described_class.operator_text(0)).to eq 'equals'
+      end
+
+      it "returns 'greater than' when id is 1" do
+        expect(described_class.operator_text(1)).to eq 'greater than'
+      end
+
+      it "returns 'lesser than' when id is 2" do
+        expect(described_class.operator_text(2)).to eq 'lesser than'
+      end
+
+      it "returns 'is not' when id is 3" do
+        expect(described_class.operator_text(3)).to eq 'is not'
+      end
+
+      it "returns 'contains any of' when id is 4" do
+        expect(described_class.operator_text(4)).to eq 'contains any of'
+      end
+
+      it "returns 'contains all of' when id is 5" do
+        expect(described_class.operator_text(5)).to eq 'contains all of'
+      end
+
+      it "returns 'does not contain' when id is 6" do
+        expect(described_class.operator_text(6)).to eq 'does not contain'
+      end
     end
   end
 end

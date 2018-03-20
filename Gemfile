@@ -71,7 +71,7 @@ gem 'public_activity', '~> 1.5'
 
 gem 'rollbar', '~> 2.14.1'
 
-gem 'ruby-oembed', git: 'https://github.com/TeamDiverst/ruby-oembed.git'
+gem 'ruby-oembed', '~> 0.12', git: 'https://github.com/TeamDiverst/ruby-oembed.git'
 
 gem 'julia_builder', '~> 0.2.0'
 gem 'date_validator', '~> 0.9.0'
