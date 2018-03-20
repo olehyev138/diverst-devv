@@ -845,7 +845,11 @@ DEPENDENCIES
   rollbar (~> 2.14.1)
   rspec-rails (~> 3.0)
   rspec_junit_formatter (~> 0.2.3)
+<<<<<<< HEAD
   ruby-oembed!
+=======
+  ruby-oembed (~> 0.12)!
+>>>>>>> d1fcd7675c38ecd9871e58814645b06ed6af6d2f
   ruby-saml (>= 1.7.0)
   rufo
   sanitize_email (~> 1.2.2)

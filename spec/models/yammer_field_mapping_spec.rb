@@ -5,6 +5,6 @@ RSpec.describe YammerFieldMapping, type: :model do
 
    describe 'associations' do
      it { expect(yammer_field_mapping).to belong_to(:enterprise) }
-     it { expect(yammer_field_mapping).to belong_to(:diverst_field)}
+     it { expect(yammer_field_mapping).to belong_to(:diverst_field).class_name('Field') }
    end
 end
