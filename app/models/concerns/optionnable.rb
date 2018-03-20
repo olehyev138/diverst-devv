@@ -143,10 +143,14 @@ module Optionnable
       at_least_one_bucket_has_other = false
 
       options = data['aggregations']['aggregation']['buckets'].map { |aggr_bucket|
-        aggr_bucket['terms']['buckets'].map do |option_bucket|
-          option_bucket['key']
-        end
+        aggr_bucket['terms']['buckets'].map {|option_bucket| option_bucket['key'] if groups.ids.include?(option_bucket['key']) }.compact
       }.flatten.uniq
+      
+      groups.ids.each do |id|
+        if not options.include?(id)
+          options.push(id)
+        end
+      end
 
       series = data['aggregations']['aggregation']['buckets'].map do |aggr_bucket|
         bucket_data = options.map do |option|
