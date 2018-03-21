@@ -60,7 +60,9 @@ RSpec.describe UserRole do
   end
   
   describe "#reset_user_roles" do
-    it "returns false when role is the default" do
+    it "performs the job" do
+      allow(ResetUserRoleJob).to receive(:perform_now).and_call_original
+      
       admin = create(:user)
       expect(admin.role).to eq("admin")
       
@@ -69,6 +71,9 @@ RSpec.describe UserRole do
       
       # remove the role
       user_role.destroy
+      
+      # ensure the job was called
+      expect(ResetUserRoleJob).to have_received(:perform_now)
       
       # ensure the admin's role is now the default
       admin.reload

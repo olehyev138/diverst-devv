@@ -42,11 +42,12 @@ class ApplicationPolicy
   end
 
   class Scope
-    attr_reader :user, :scope
+    attr_reader :user, :scope, :permission
 
-    def initialize(user, scope)
+    def initialize(user, scope, permission = nil)
       @user = user
       @scope = scope
+      @permission = permission
       @policy_group = @user.policy_group
     end
 

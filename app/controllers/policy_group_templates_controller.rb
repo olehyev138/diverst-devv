@@ -83,7 +83,8 @@ class PolicyGroupTemplatesController < ApplicationController
         :permissions_manage,
         :diversity_manage,
         :manage_posts,
-        :branding_manage
+        :branding_manage,
+        :global_calendar
       )
   end
 end

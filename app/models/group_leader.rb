@@ -10,8 +10,21 @@ class GroupLeader < ActiveRecord::Base
   scope :visible, ->{ where(visible: true) }
   scope :roles,   ->{ distinct.pluck(:role) }
   
+  after_validation   :set_admin_permissions
   after_save    :set_user_role
   after_destroy :update_permissions
+  
+  # we want to make sure the group_leader can access certain
+  # resources in the admin view
+  
+  def set_admin_permissions
+    # get the template that corresponds to the group_leader role
+    template = PolicyGroupTemplate.joins(:user_role).where(:user_roles => {:role_name => role}).first
+    # update the permissions for this group_leader
+    self.groups_budgets_index = template.groups_budgets_index
+    self.initiatives_manage = template.initiatives_manage
+    self.groups_manage = template.groups_manage
+  end
   
   # want to ensure that the user's role is set accordingly via priority
   # so we retrieve all the group_leader roles, sort by priority and

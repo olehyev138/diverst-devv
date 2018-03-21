@@ -28,6 +28,11 @@
           <%= p.hidden_field :annual_budget_manage, value: 0 %>
           <%= p.input :annual_budget_manage, label: 'Manage Annual Budgets' %>
         </div>
+        <div class="col md-6">
+          <p class="field__hint">Should this user be able to view the global calendar?</p>
+          <%= p.hidden_field :global_calendar, value: 0 %>
+          <%= p.input :global_calendar, label: 'View Global Calendar' %>
+        </div>
       </div>
     </div>
     

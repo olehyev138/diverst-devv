@@ -137,16 +137,29 @@ module Optionnable
 
   # Get highcharts-usable stats from the field by querying elasticsearch and formatting its response
   def highcharts_stats(aggr_field: nil, segments: [], groups: [])
+    
     data = elastic_stats(aggr_field: aggr_field, segments: segments, groups: groups)
 
     if aggr_field # If there is an aggregation
       at_least_one_bucket_has_other = false
 
       options = data['aggregations']['aggregation']['buckets'].map { |aggr_bucket|
-        aggr_bucket['terms']['buckets'].map do |option_bucket|
-          option_bucket['key']
+        if aggr_field.type === "GroupsField" and groups.length > 0
+          aggr_bucket['terms']['buckets'].map {|option_bucket| option_bucket['key'] if groups.ids.include?(option_bucket['key']) }.compact
+        else
+          aggr_bucket['terms']['buckets'].map do |option_bucket|
+            option_bucket['key']
+          end
         end
       }.flatten.uniq
+      
+      if aggr_field.type === "GroupsField" and groups.length > 0
+        groups.ids.each do |id|
+          if not options.include?(id)
+            options.push(id)
+          end
+        end
+      end
 
       series = data['aggregations']['aggregation']['buckets'].map do |aggr_bucket|
         bucket_data = options.map do |option|

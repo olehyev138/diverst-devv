@@ -13,7 +13,7 @@
           <%= active_link_to "Metrics", metrics_dashboards_path if policy(MetricsDashboard).index? %>
         </li>
         <li>
-          <%= active_link_to c_t(:erg).pluralize, groups_path, :active => :exact if policy(Group).index? %>
+          <%= active_link_to c_t(:erg).pluralize, groups_path, :active => :exact if policy(Group).manage? %>
         </li>
         <li>
           <%= active_link_to c_t(:segment).pluralize, segments_path if policy(Segment).index? %>
@@ -30,7 +30,7 @@
 
   <div class="menu menu--desktop">
     <%= active_link_to "Metrics", metrics_dashboards_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['metrics_dashboards'], []] if policy(MetricsDashboard).index? %>
-    <%= active_link_to c_t(:erg).pluralize, groups_path, :active => :exact, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Group).index? %>
+    <%= active_link_to c_t(:erg).pluralize, groups_path, :active => :exact, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Group).manage? %>
     <%= active_link_to c_t(:segment).pluralize, segments_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Segment).index? %>
     <%= active_link_to "Resources", enterprise_folders_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Resource).index? %>
     <%= active_link_to "Calendar", calendar_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.global_calendar? %>
