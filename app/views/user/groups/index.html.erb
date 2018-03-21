@@ -1,11 +1,11 @@
 <div class="content__header">
-  <h1><%= "#{c_t(:erg).pluralize.upcase}" %></h1>
+  <h1><%= "#{c_t(:erg).upcase.pluralize}" %></h1>
 </div>
 
 <div class="content__main">
   <div class="card">
     <div class="card__section">
-      <p>Here are the user <%= "#{c_t(:erg).pluralize.upcase}" %> we have at <%= current_user.enterprise.name %>. Click on any of them to explore their dashboard.</p>
+      <p>Here are the user <%= "#{c_t(:erg).upcase.pluralize}" %> we have at <%= current_user.enterprise.name %>. Click on any of them to explore their dashboard.</p>
     </div>
     <div class="card__section">
       <% @groups.each do |group| %>
