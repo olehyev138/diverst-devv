@@ -20,7 +20,7 @@ module Folders
 
     def index
         authorize_action
-        @folders = @container.folders + @container.shared_folders
+        @folders = @container.folders.only_parents + @container.shared_folders.only_parents
         @folders.sort_by!{ |f| f.name.downcase }
         render '/index'
     end
@@ -73,6 +73,7 @@ module Folders
             .require(:folder)
             .permit(
                 :name,
+                :parent_id,
                 :password_protected,
                 :password,
                 :group_ids => []
