@@ -20,20 +20,11 @@ class PolicyGroupTemplate < ActiveRecord::Base
         return attributes.except("id", "name", "enterprise_id", "role", "default", "created_at", "updated_at", "user_role_id")
     end
     
-    after_save :update_user_roles
+    after_update :update_user_roles
     
     # finds users/group_leaders in the enterprise
     def update_user_roles
-        enterprise.users.where(:role => user_role.role_name).find_each do |user|
-            user.set_default_policy_group
-        end
-        
-        GroupLeader.joins(:group => :enterprise).where(:groups => {:enterprise_id => enterprise.id}, :role => user_role.role_name).find_each do |leader|
-            leader.groups_budgets_index = groups_budgets_index
-            leader.initiatives_manage = initiatives_manage
-            leader.groups_manage = groups_manage
-            leader.save!(:validate => false)
-        end
+        PolicyGroupTemplateUpdateJob.perform_now(self)
     end
 
 end
