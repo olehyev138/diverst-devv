@@ -84,6 +84,7 @@ module ApplicationHelper
     return metrics_dashboards_path if policy(MetricsDashboard).index?
     return groups_path if policy(Group).index?
     return segments_path if policy(Segment).index?
+    return calendar_groups_path if current_user.policy_group.global_calendar?
     return enterprise_folders_path(current_user.enterprise) if policy(Resource).index?
     nil
   end

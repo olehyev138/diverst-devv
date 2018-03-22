@@ -69,10 +69,6 @@ class UserRole < ActiveRecord::Base
     end
     
     def reset_user_roles
-        enterprise.users.where(:role => role_name).find_each do |user|
-            default_role = enterprise.user_roles.default.role_name
-            user.role = default_role
-            user.save!
-        end
+        ResetUserRoleJob.perform_now(self)
     end
 end
