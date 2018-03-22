@@ -186,6 +186,32 @@ RSpec.feature 'Group management' do
       expect(page).to have_select('Group category', selected: 'Red')
     end
 
+    scenario 'categorize sub-erg with wrong label via edit form' do
+      sub_group1.update(group_category_id: blue.id, group_category_type_id: color_codes.id)
+      sub_group2.update(group_category_id: red.id, group_category_type_id: color_codes.id)
+      parent_group.update(group_category_type_id: color_codes.id)
+
+
+      visit groups_path
+
+      expect(page).to have_link parent_group.name
+      click_on 'Show Sub-ERGs'
+
+      visit edit_group_path(sub_group1)
+
+      expect(current_path).to eq edit_group_path(sub_group1)
+
+      expect(page).to have_field('Name', with: sub_group1.name)
+      expect(page).to have_select('Parent-Erg', selected: parent_group.name)
+      expect(page).to have_select('Group category', selected: 'Blue')
+
+      select 'Eastern Province', from: 'Group category'
+      click_on 'Update Group'
+
+      expect(page).to have_content 'Your ERG was not updated. Please fix the errors'
+      expect(page).to have_content 'wrong label for Color Codes'
+    end
+
     scenario 'mass categorization of sub-ergs' do
     end
   end
