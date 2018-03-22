@@ -165,54 +165,108 @@ RSpec.feature 'Group management' do
     let!(:central_province) { create(:group_category, name: 'Central Province', enterprise_id: user.enterprise_id,
       group_category_type_id: regions.id) }
 
-    scenario 'categorize sub-erg via edit form' do
-      visit groups_path
+    context 'via edit form' do
+      scenario 'categorize sub-erg' do
+        visit groups_path
 
-      expect(page).to have_link parent_group.name
-      click_on 'Show Sub-ERGs'
+        expect(page).to have_link parent_group.name
+        click_on 'Show Sub-ERGs'
 
-      visit edit_group_path(sub_group1)
+        visit edit_group_path(sub_group1)
 
-      expect(current_path).to eq edit_group_path(sub_group1)
+        expect(current_path).to eq edit_group_path(sub_group1)
 
-      expect(page).to have_field('Name', with: sub_group1.name)
-      expect(page).to have_select('Parent-Erg', selected: parent_group.name)
-      expect(page).to have_select('Group category', selected: nil) #NOTE: here, nil stands in for 'None'
+        expect(page).to have_field('Name', with: sub_group1.name)
+        expect(page).to have_select('Parent-Erg', selected: parent_group.name)
+        expect(page).to have_select('Group category', selected: nil) #NOTE: here, nil stands in for 'None'
 
-      select 'Red', from: 'Group category'
-      click_on 'Update Group'
+        select 'Red', from: 'Group category'
+        click_on 'Update Group'
 
-      expect(page).to have_content 'Your ERG was updated'
-      expect(page).to have_select('Group category', selected: 'Red')
+        expect(page).to have_content 'Your ERG was updated'
+        expect(page).to have_select('Group category', selected: 'Red')
+      end
+
+      scenario 'categorize sub-erg with wrong label' do
+        sub_group1.update(group_category_id: blue.id, group_category_type_id: color_codes.id)
+        sub_group2.update(group_category_id: red.id, group_category_type_id: color_codes.id)
+        parent_group.update(group_category_type_id: color_codes.id)
+
+
+        visit groups_path
+
+        expect(page).to have_link parent_group.name
+        click_on 'Show Sub-ERGs'
+
+        visit edit_group_path(sub_group1)
+
+        expect(current_path).to eq edit_group_path(sub_group1)
+
+        expect(page).to have_field('Name', with: sub_group1.name)
+        expect(page).to have_select('Parent-Erg', selected: parent_group.name)
+        expect(page).to have_select('Group category', selected: 'Blue')
+
+        select 'Eastern Province', from: 'Group category'
+        click_on 'Update Group'
+
+        expect(page).to have_content 'Your ERG was not updated. Please fix the errors'
+        expect(page).to have_content 'wrong label for Color Codes'
+      end
     end
 
-    scenario 'categorize sub-erg with wrong label via edit form' do
-      sub_group1.update(group_category_id: blue.id, group_category_type_id: color_codes.id)
-      sub_group2.update(group_category_id: red.id, group_category_type_id: color_codes.id)
-      parent_group.update(group_category_type_id: color_codes.id)
+    context 'categorization of multiple sub-ergs at once' do
+      before do
+        visit groups_path
 
+        expect(page).to have_link parent_group.name
+        expect(page).to have_link 'Categorize Sub-ERGs'
 
-      visit groups_path
+        click_on 'Categorize Sub-ERGs'
 
-      expect(page).to have_link parent_group.name
-      click_on 'Show Sub-ERGs'
+        expect(current_path).to eq group_categories_path
+        expect(page).to have_content 'Label Sub-ERG'
+        expect(page).to have_select(sub_group1.name, selected: nil)
+        expect(page).to have_select(sub_group2.name, selected: nil)
+      end
 
-      visit edit_group_path(sub_group1)
+      scenario 'when labels of the same category type are submitted' do
+        select 'Red', from: sub_group1.name
+        select 'Blue', from: sub_group2.name
 
-      expect(current_path).to eq edit_group_path(sub_group1)
+        click_on 'Save'
 
-      expect(page).to have_field('Name', with: sub_group1.name)
-      expect(page).to have_select('Parent-Erg', selected: parent_group.name)
-      expect(page).to have_select('Group category', selected: 'Blue')
+        expect(current_path).to eq group_categories_path
 
-      select 'Eastern Province', from: 'Group category'
-      click_on 'Update Group'
+        expect(page).to have_content 'Categorization successful'
+        expect(page).to have_select(sub_group1.name, selected: 'Red')
+        expect(page).to have_select(sub_group2.name, selected: 'Blue')
+      end
 
-      expect(page).to have_content 'Your ERG was not updated. Please fix the errors'
-      expect(page).to have_content 'wrong label for Color Codes'
-    end
+      scenario 'when no labels are submitted' do
+        select 'None', from: sub_group1.name
+        select 'None', from: sub_group2.name
 
-    scenario 'mass categorization of sub-ergs' do
+        click_on 'Save'
+
+        expect(current_path).to eq group_categories_path
+
+        expect(page).to have_content 'No labels were submitted'
+        expect(page).to have_select(sub_group1.name, selected: nil)
+        expect(page).to have_select(sub_group2.name, selected: nil)
+      end
+
+      scenario 'when labels submitted are of different type' do
+        select 'Red', from: sub_group1.name
+        select 'Central Province', from: sub_group2.name
+        
+        click_on 'Save'
+
+        expect(current_path).to eq group_categories_path
+
+        expect(page).to have_content 'Categorization failed because you submitted labels of different category type'
+        expect(page).to have_select(sub_group1.name, selected: nil)
+        expect(page).to have_select(sub_group2.name, selected: nil)
+      end
     end
   end
 end
