@@ -31,6 +31,8 @@ module Folders
 
     def new
         @folder = @container.folders.new
+        @folder.parent_id = params[:folder_id] 
+        @folder.password
         render '/new'
     end
 
@@ -41,7 +43,11 @@ module Folders
     def create
         @folder = @container.folders.new(folder_params)
         if @folder.save
-            redirect_to action: :index
+            if @folder.parent_id
+                redirect_to [@folder.parent.container, @folder.parent, :resources]
+            else
+                redirect_to action: :index
+            end
         else
             render '/edit'
         end
