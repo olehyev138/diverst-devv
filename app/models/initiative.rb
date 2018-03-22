@@ -142,8 +142,8 @@ class Initiative < ActiveRecord::Base
 
   def highcharts_history(field:, from: 1.year.ago, to: Time.current)
     self.updates
-    .where('created_at >= ?', from)
-    .where('created_at <= ?', to)
+    .where('report_date >= ?', from)
+    .where('report_date <= ?', to)
     .order(created_at: :asc)
     .map do |update|
       [
