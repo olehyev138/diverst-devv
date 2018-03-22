@@ -146,42 +146,47 @@ RSpec.feature 'Group management' do
   end
 
   context 'group categorization' do
-    let!(:parent_group) { create(:group, name: 'Parent Group', enterprise: user.enterprise) }
-    let!(:sub_group1) { create(:group, name: 'Sub Group ONE', parent_id: parent_group.id, enterprise: user.enterprise,
-     group_category_type_id: nil, group_category_id: nil) }
-    let!(:sub_group2) { create(:group, name: 'Sub Group TWO', parent_id: parent_group.id, enterprise: user.enterprise,
-     group_category_type_id: nil, group_category_id: nil) }
+    let!(:parent_group) { create(:group, name: 'Parent Group', enterprise_id: user.enterprise_id,
+      group_category_type_id: nil, group_category_id: nil) }
+    let!(:sub_group1) { create(:group, name: 'Sub Group ONE', parent_id: parent_group.id, enterprise_id: user.enterprise_id,
+      group_category_type_id: nil, group_category_id: nil) }
+    let!(:sub_group2) { create(:group, name: 'Sub Group TWO', parent_id: parent_group.id, enterprise_id: user.enterprise_id,
+      group_category_type_id: nil, group_category_id: nil) }
 
-    let!(:category_type) { create(:group_category_type, name: 'Color Codes', enterprise_id: user.enterprise.id) }
-    let!(:red) { create(:group_category, name: 'Red', group_category_type_id: category_type.id, enterprise_id: user.enterprise.id) }
-    let!(:blude) { create(:group_category, name: 'Blue', group_category_type_id: category_type.id, enterprise_id: user.enterprise.id) }
+    let!(:color_codes) { create(:group_category_type, name: 'Color Codes', enterprise_id: user.enterprise_id) }
+    let!(:red) { create(:group_category, name: 'Red', enterprise_id: user.enterprise_id,
+      group_category_type_id: color_codes.id) }
+    let!(:blue) { create(:group_category, name: 'Blue', enterprise_id: user.enterprise_id,
+      group_category_type_id: color_codes.id) }
 
+    let!(:regions) { create(:group_category_type, name: 'Regions', enterprise_id: user.enterprise_id) }
+    let!(:eastern_province) { create(:group_category, name: 'Eastern Province', enterprise_id: user.enterprise_id,
+      group_category_type_id: regions.id) }
+    let!(:central_province) { create(:group_category, name: 'Central Province', enterprise_id: user.enterprise_id,
+      group_category_type_id: regions.id) }
 
-    scenario 'categorize sub-erg via edit form' do
+    scenario 'categorize sub-erg with wrong label via edit form' do
       visit groups_path
 
-      expect(page).to have_content 'Categorize Sub-ERGs'
-
+      expect(page).to have_link parent_group.name
       click_on 'Show Sub-ERGs'
 
       visit edit_group_path(sub_group1)
 
       expect(current_path).to eq edit_group_path(sub_group1)
 
-      expect(page).to have_field('group_name', with: 'Sub Group ONE')
-      expect(page).to have_field('group_group_category_id') do
-        expect(page).to have_select('group_group_category_id', selected: 'None', options: ['None', 'Red', 'Blue'])
-        select 'Red', from: 'group_group_category_id'
-      end
+      expect(page).to have_field('Name', with: sub_group1.name)
+      expect(page).to have_select('Parent-Erg', selected: parent_group.name)
+      expect(page).to have_select('Group category', selected: nil) #NOTE: here, nil stands in for 'None'
 
+      select 'Red', from: 'Group category'
       click_on 'Update Group'
 
       expect(page).to have_content 'Your ERG was updated'
-      expect(current_url).to eq edit_group_url(sub_group1)
+      expect(page).to have_select('Group category', selected: 'Red')
+    end
 
-      expect(page).to have_field('group_group_category_id') do
-        expect(page).to have_select('group_group_category_id', selected: 'Red')
-      end
+    scenario 'mass categorization of sub-ergs' do
     end
   end
 end
