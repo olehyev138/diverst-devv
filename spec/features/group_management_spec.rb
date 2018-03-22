@@ -165,7 +165,7 @@ RSpec.feature 'Group management' do
     let!(:central_province) { create(:group_category, name: 'Central Province', enterprise_id: user.enterprise_id,
       group_category_type_id: regions.id) }
 
-    scenario 'categorize sub-erg with wrong label via edit form' do
+    scenario 'categorize sub-erg via edit form' do
       visit groups_path
 
       expect(page).to have_link parent_group.name
