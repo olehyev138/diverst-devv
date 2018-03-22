@@ -63,11 +63,7 @@ class GroupPolicy < ApplicationPolicy
 
         @record.managers.include?(user)
     end
-
-    def is_admin?
-        @user.is_admin?
-    end
-
+    
     def is_a_member?
        (@record.members.include? @user) || is_a_pending_member?
     end
@@ -139,7 +135,7 @@ class GroupPolicy < ApplicationPolicy
             return true
         when 'group'
             #depends on group membership
-            is_active_member? || is_a_member? || is_admin?
+            is_active_member? || is_a_member?
         when 'leaders_only'
             #Only users with ability to manipulate members(admins) can see upcoming events
             return manage_members?
