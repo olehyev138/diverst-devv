@@ -5,15 +5,13 @@
       <%= link_to "Edit Folder", polymorphic_path(@container_path, action: "edit"), class: "btn btn--primary" if policy(@container).edit? %>
     </div>
     <div class="flex-row__cell">
-      <%= link_to "+ Add folder", polymorphic_path([@container.container] + [:folder], action: "new"), class: "btn btn--primary" if policy(Folder).create? && @container.class.name === "Folder" %>
+      <%= link_to "+ Add folder", polymorphic_path([@container.container] + [:folder], folder_id: @container.id, action: "new"), class: "btn btn--primary" if policy(Folder).create? && @container.class.name === "Folder" %>
     </div>
     <div class="flex-row__cell">
       <%= link_to "+ Add resource", polymorphic_path(@container_path + [:resource], action: "new"), class: "btn btn--primary" if policy(Resource).new? %>
     </div>
   </div>
 </div>
-
-<%= render 'shared/resources/table' %>
 
 <% if @container.class.name === "Folder" %>
   
@@ -38,3 +36,5 @@
   <%= render "shared/modal/form" %>
 
 <% end %>
+
+<%= render 'shared/resources/table' %>

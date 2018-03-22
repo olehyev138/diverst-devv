@@ -109,7 +109,7 @@ RSpec.describe Groups::FoldersController, type: :controller do
     describe "GET#new" do
         context 'when user is logged in' do
             login_user_from_let
-            before {get :new, group_id: group.id}
+            before {get :new, group_id: group.id, folder_id: folder.id}
 
             it "render new template" do
                 expect(response).to render_template :new
@@ -117,6 +117,10 @@ RSpec.describe Groups::FoldersController, type: :controller do
 
             it "assigns new folder" do
                 expect(assigns[:folder]).to be_a_new(Folder)
+            end
+            
+            it "assigns a parent_id" do
+                expect(assigns[:folder].parent_id).to eq(folder.id)
             end
 
             it "sets container_type" do
@@ -159,6 +163,19 @@ RSpec.describe Groups::FoldersController, type: :controller do
                 it "redirect_to index" do
                     post :create, group_id: group.id, folder: { name: "folder" }
                     expect(response).to redirect_to action: :index
+                end
+
+                it "creates the folder" do
+                    expect{post :create, group_id: group.id, folder: { name: "folder" }}
+                    .to change(Folder, :count).by(1)
+                end
+            end
+            
+            context "valid params for nested" do
+
+                it "redirect_to folder's resources" do
+                    post :create, group_id: group.id, folder: { name: "folder", parent_id: folder.id }
+                    expect(response).to redirect_to [group, folder, :resources]
                 end
 
                 it "creates the folder" do

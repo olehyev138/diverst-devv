@@ -33,6 +33,8 @@ module Folders
     def new
         authorize_action
         @folder = @container.folders.new
+        @folder.parent_id = params[:folder_id] 
+        @folder.password
         render '/new'
     end
 
@@ -45,7 +47,11 @@ module Folders
         authorize_action
         @folder = @container.folders.new(folder_params)
         if @folder.save
-            redirect_to action: :index
+            if @folder.parent_id
+                redirect_to [@folder.parent.container, @folder.parent, :resources]
+            else
+                redirect_to action: :index
+            end
         else
             render '/edit'
         end
