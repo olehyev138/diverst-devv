@@ -97,21 +97,55 @@ RSpec.feature 'Group management' do
 
       click_on "Show Sub-ERGs"
 
-      expect(page).to have_css('.accent') do 
+      expect(page).to have_css('.accent') do
         expect(page).to have_content group1.name
         expect(page).to have_content group2.name
       end
     end
   end
 
-  scenario 'user deletes a group' do
-    group = create(:group, enterprise: user.enterprise)
+  context 'deleting a group' do
+    let!(:parent_group) { create(:group, name: "Parent Group", enterprise: user.enterprise) }
+    let!(:sub_group1) { create(:group, name: "Sub Group ONE", parent_id: parent_group.id, enterprise: user.enterprise) }
+    let!(:sub_group2) { create(:group, name: "Sub Group TWO", parent_id: parent_group.id, enterprise: user.enterprise) }
 
-    visit groups_path(group)
+    scenario 'delete parent group with sub-ergs' do
+      visit groups_path
 
-    click_on "Delete"
+      click_on 'Delete'
 
-    expect(page).not_to have_content group.name
+      expect(page).to have_content 'Your ERG was deleted'
+      expect(page).not_to have_content 'Parent Group'
+      expect(page).not_to have_content 'Sub Group ONE'
+      expect(page).not_to have_content 'Sub Group TWO'
+    end
+
+    scenario 'delete a sub-group' do
+      visit groups_path
+
+      click_on 'Show Sub-ERGs'
+
+      expect(page).to have_css('.accent') do
+        expect(page).to have_content sub_group1.name
+        expect(page).to have_content sub_group2.name
+      end
+
+      click_on 'Show Sub-ERGs'
+
+      expect(page).to have_css(".accent") do
+        click_on "Delete"
+      end
+
+      expect(page).to have_css('.accent') do
+        expect(page).not_to have_content sub_group1.name
+        expect(page).to have_content sub_group2.name
+      end
+
+      expect(page).to have_content parent_group.name
+    end
+  end
+
+  context 'group categorization' do
   end
 
 end
