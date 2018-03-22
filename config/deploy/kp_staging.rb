@@ -34,7 +34,7 @@ server '34.198.173.230', user: 'newdeploy', roles: %w(web app db)
 set :branch, 'develop'
 set :rails_env, :production
 
-set :rollbar_env, "kp"
+set :rollbar_env, "kp_staging"
 
 
 # Custom SSH Options
