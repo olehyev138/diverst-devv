@@ -70,17 +70,17 @@ RSpec.feature 'Group management' do
   context 'updating a group' do
     scenario 'user updates group with sub-ergs' do
       group = create(:group, name: 'Latest Group', enterprise: user.enterprise)
-      group1 = create(:group, name: "Group One", enterprise: user.enterprise)
-      group2 = create(:group, name: "Group Two", enterprise: user.enterprise)
+      group1 = create(:group, name: 'Group One', enterprise: user.enterprise)
+      group2 = create(:group, name: 'Group Two', enterprise: user.enterprise)
 
       visit edit_group_path(group)
 
       expect(page).to have_field('group_name', with: 'Latest Group')
 
-      fill_in 'group_name', with: "Parent Group"
+      fill_in 'group_name', with: 'Parent Group'
 
-      select group1.name, from: "group_child_ids"
-      select group2.name, from: "group_child_ids"
+      select group1.name, from: 'group_child_ids'
+      select group2.name, from: 'group_child_ids'
 
       click_on 'Update Group'
 
@@ -88,14 +88,14 @@ RSpec.feature 'Group management' do
 
       visit groups_path
 
-      expect(page).to have_content "Parent Group"
-      expect(page).not_to have_content "Group One"
-      expect(page).not_to have_content "Group Two"
+      expect(page).to have_content 'Parent Group'
+      expect(page).not_to have_content 'Group One'
+      expect(page).not_to have_content 'Group Two'
 
       expect(current_path).to eq groups_path
-      expect(page).to have_link "Show Sub-ERGs"
+      expect(page).to have_link 'Show Sub-ERGs'
 
-      click_on "Show Sub-ERGs"
+      click_on 'Show Sub-ERGs'
 
       expect(page).to have_css('.accent') do
         expect(page).to have_content group1.name
@@ -105,9 +105,9 @@ RSpec.feature 'Group management' do
   end
 
   context 'deleting a group' do
-    let!(:parent_group) { create(:group, name: "Parent Group", enterprise: user.enterprise) }
-    let!(:sub_group1) { create(:group, name: "Sub Group ONE", parent_id: parent_group.id, enterprise: user.enterprise) }
-    let!(:sub_group2) { create(:group, name: "Sub Group TWO", parent_id: parent_group.id, enterprise: user.enterprise) }
+    let!(:parent_group) { create(:group, name: 'Parent Group', enterprise: user.enterprise) }
+    let!(:sub_group1) { create(:group, name: 'Sub Group ONE', parent_id: parent_group.id, enterprise: user.enterprise) }
+    let!(:sub_group2) { create(:group, name: 'Sub Group TWO', parent_id: parent_group.id, enterprise: user.enterprise) }
 
     scenario 'delete parent group with sub-ergs' do
       visit groups_path
@@ -132,8 +132,8 @@ RSpec.feature 'Group management' do
 
       click_on 'Show Sub-ERGs'
 
-      expect(page).to have_css(".accent") do
-        click_on "Delete"
+      expect(page).to have_css('.accent') do
+        click_on 'Delete'
       end
 
       expect(page).to have_css('.accent') do
@@ -146,6 +146,42 @@ RSpec.feature 'Group management' do
   end
 
   context 'group categorization' do
-  end
+    let!(:parent_group) { create(:group, name: 'Parent Group', enterprise: user.enterprise) }
+    let!(:sub_group1) { create(:group, name: 'Sub Group ONE', parent_id: parent_group.id, enterprise: user.enterprise,
+     group_category_type_id: nil, group_category_id: nil) }
+    let!(:sub_group2) { create(:group, name: 'Sub Group TWO', parent_id: parent_group.id, enterprise: user.enterprise,
+     group_category_type_id: nil, group_category_id: nil) }
 
+    let!(:category_type) { create(:group_category_type, name: 'Color Codes', enterprise_id: user.enterprise.id) }
+    let!(:red) { create(:group_category, name: 'Red', group_category_type_id: category_type.id, enterprise_id: user.enterprise.id) }
+    let!(:blude) { create(:group_category, name: 'Blue', group_category_type_id: category_type.id, enterprise_id: user.enterprise.id) }
+
+
+    scenario 'categorize sub-erg via edit form' do
+      visit groups_path
+
+      expect(page).to have_content 'Categorize Sub-ERGs'
+
+      click_on 'Show Sub-ERGs'
+
+      visit edit_group_path(sub_group1)
+
+      expect(current_path).to eq edit_group_path(sub_group1)
+
+      expect(page).to have_field('group_name', with: 'Sub Group ONE')
+      expect(page).to have_field('group_group_category_id') do
+        expect(page).to have_select('group_group_category_id', selected: 'None', options: ['None', 'Red', 'Blue'])
+        select 'Red', from: 'group_group_category_id'
+      end
+
+      click_on 'Update Group'
+
+      expect(page).to have_content 'Your ERG was updated'
+      expect(current_url).to eq edit_group_url(sub_group1)
+
+      expect(page).to have_field('group_group_category_id') do
+        expect(page).to have_select('group_group_category_id', selected: 'Red')
+      end
+    end
+  end
 end
