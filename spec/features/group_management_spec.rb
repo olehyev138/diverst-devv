@@ -258,7 +258,7 @@ RSpec.feature 'Group management' do
       scenario 'when labels submitted are of different type' do
         select 'Red', from: sub_group1.name
         select 'Central Province', from: sub_group2.name
-        
+
         click_on 'Save'
 
         expect(current_path).to eq group_categories_path
