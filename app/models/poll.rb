@@ -17,6 +17,8 @@ class Poll < ActiveRecord::Base
 
     after_create :create_default_graphs
 
+    after_save :schedule_users_notification
+
     accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
 
     validates :title,       presence: true
@@ -30,6 +32,10 @@ class Poll < ActiveRecord::Base
     validate :validate_initiative_enterprise
     validate :validate_segments_enterprise
     validate :validate_associated_objects
+
+    def can_be_saved_as_draft?
+      self.new_record? || self.draft?
+    end
 
     # Returns the list of users who have answered the poll
     def graphs_population
@@ -118,5 +124,9 @@ class Poll < ActiveRecord::Base
         if (!groups.empty? || !segments.empty?) && !initiative.nil?
             errors.add(:associated_objects, "invalid configuration of poll")
         end
+    end
+
+    def schedule_users_notification
+      PollUsersNotifierJob.perform_later(self.id)
     end
 end

@@ -21,7 +21,6 @@ class PollsController < ApplicationController
     @poll.owner = current_user
 
     if @poll.save
-      Notifiers::PollNotifier.new(@poll).notify!
       track_activity(@poll, :create)
       flash[:notice] = "Your survey was created"
       redirect_to action: :index
@@ -47,7 +46,6 @@ class PollsController < ApplicationController
   def update
     authorize @poll
     if @poll.update(poll_params)
-      Notifiers::PollNotifier.new(@poll).notify!
       track_activity(@poll, :update)
       flash[:notice] = "Your survey was updated"
       redirect_to @poll
