@@ -118,8 +118,25 @@ RSpec.feature 'Group Categorization' do
 			expect(page).to have_content 'Update category type name'
 			expect(page).to have_content 'All Web Technologies'
 			expect(page).not_to have_content 'Web Frameworks'
+		end
 
+		scenario 'Update name of category(label)' do
+			elixir = create(:group_category, name: 'Elixir', group_category_type_id: web_frameworks.id, enterprise_id: user.enterprise_id )
 
+			visit edit_group_category_url(elixir)
+
+			expect(current_url).to eq edit_group_category_url(elixir)
+			expect(page).to have_content 'Change name of category'
+			expect(page).to have_field('group_category[name]', with: 'Elixir')
+
+			fill_in 'group_category[name]', with: 'Ruby'
+
+			click_on 'Update'
+
+			expect(current_url).to eq view_all_group_categories_url
+			expect(page).to have_content 'Update category name'
+			expect(page).to have_content 'Ruby'
+			expect(page).not_to have_content 'Elixir'
 		end
 	end
 end
