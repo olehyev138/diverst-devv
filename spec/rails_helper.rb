@@ -63,6 +63,7 @@ RSpec.configure do |config|
   config.include ReferrerHelpers, :type => :controller
   config.include CsvHelpers
   config.include ModelHelpers
+  config.include FeatureSpecRefactors
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
