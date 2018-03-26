@@ -8,7 +8,6 @@
           <%= news_link_picture(news_link) %>
         <% end %>
       </div>
-      <%#= link_to news_link.url, target: "_blank" do %>
         <div class="col-xs-8">
         <div class="flex-row flex-row--middle">
           <div class="flex-row__cell flex-row__cell--grow">
@@ -23,7 +22,6 @@
           </div>
         </div>
       </div>
-      <%# end %>
       <%= render "groups/news_links/modal/form" %>
     </div>
 <% elsif news.link_type === "GroupMessage"%>
