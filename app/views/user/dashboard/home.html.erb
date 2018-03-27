@@ -1,6 +1,13 @@
 <div class="content__main">
   <div class="row">
     <div class="col sm-12">
+    <% if @enterprise.banner.present? %>
+      <div class="row enterprise-banner">
+        <div class="col sm-12">
+          <%= image_tag @enterprise.banner.expiring_url(3600), style: 'width: 100%; max-width: 100%;' %>
+        </div>
+      </div>
+    <% end %>
     <% if @enterprise.home_message.present? %>
       <div class="content__header mtmedium">
         <p style="flex: 1 1 0;"><%= allow_newlines @enterprise.home_message %></p>
@@ -10,13 +17,6 @@
         </div>
       </div>
     <% end %>
-      <% if @enterprise.banner.present? %>
-        <div class="row enterprise-banner">
-          <div class="col sm-12">
-            <%= image_tag @enterprise.banner.expiring_url(3600), style: 'width: 100%; max-width: 100%;' %>
-          </div>
-        </div>
-      <% end %>
     </div>
   </div>
 
