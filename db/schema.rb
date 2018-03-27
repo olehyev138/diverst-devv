@@ -361,7 +361,6 @@ ActiveRecord::Schema.define(version: 20180520224540) do
     t.datetime "onboarding_sponsor_media_updated_at"
     t.boolean  "enable_pending_comments",                             default: false
     t.boolean  "disable_sponsor_message",                             default: false
-    t.boolean  "mentorship_module_enabled",                           default: false
   end
 
   create_table "event_attendances", force: :cascade do |t|
@@ -525,10 +524,6 @@ ActiveRecord::Schema.define(version: 20180520224540) do
     t.boolean  "pending_comments_notifications_enabled",             default: false
     t.boolean  "pending_posts_notifications_enabled",                default: false
     t.boolean  "default_group_contact",                              default: false
-    t.string   "role",                                   limit: 191
-    t.boolean  "groups_budgets_index",                               default: false, null: false
-    t.boolean  "initiatives_manage",                                 default: false, null: false
-    t.boolean  "groups_manage",                                      default: false, null: false
   end
 
   create_table "group_message_comments", force: :cascade do |t|
@@ -749,25 +744,22 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   end
 
   create_table "mentoring_interests", force: :cascade do |t|
-    t.integer  "enterprise_id", limit: 4
-    t.string   "name",          limit: 191, null: false
+    t.string   "name",       limit: 191, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "mentoring_request_interests", force: :cascade do |t|
-    t.integer  "mentoring_request_id",  limit: 4, null: false
-    t.integer  "mentoring_interest_id", limit: 4, null: false
+    t.integer  "mentoring_request_id",   limit: 4, null: false
+    t.integer  "mentorship_interest_id", limit: 4, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "mentoring_requests", force: :cascade do |t|
-    t.integer  "enterprise_id", limit: 4
-    t.string   "status",        limit: 191,   default: "pending", null: false
-    t.text     "notes",         limit: 65535
-    t.integer  "sender_id",     limit: 4,                         null: false
-    t.integer  "receiver_id",   limit: 4,                         null: false
+    t.string   "type",       limit: 191,   null: false
+    t.string   "status",     limit: 191,   null: false
+    t.text     "notes",      limit: 65535
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -780,21 +772,18 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   end
 
   create_table "mentoring_sessions", force: :cascade do |t|
-    t.integer  "enterprise_id", limit: 4
-    t.integer  "creator_id",    limit: 4,                           null: false
-    t.datetime "start",                                             null: false
-    t.datetime "end",                                               null: false
-    t.string   "format",        limit: 191,                         null: false
-    t.string   "link",          limit: 191
-    t.string   "status",        limit: 191,   default: "scheduled", null: false
-    t.text     "notes",         limit: 65535
+    t.datetime "start",                    null: false
+    t.datetime "end",                      null: false
+    t.string   "format",     limit: 191,   null: false
+    t.string   "link",       limit: 191,   null: false
+    t.string   "status",     limit: 191,   null: false
+    t.text     "notes",      limit: 65535, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "mentoring_types", force: :cascade do |t|
-    t.integer  "enterprise_id", limit: 4
-    t.string   "name",          limit: 191, null: false
+    t.string   "name",       limit: 191, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -807,25 +796,25 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   end
 
   create_table "mentorship_availabilities", force: :cascade do |t|
-    t.integer  "user_id",    limit: 4, null: false
-    t.datetime "start",                null: false
-    t.datetime "end",                  null: false
+    t.integer  "mentorship_id", limit: 4, null: false
+    t.datetime "start",                   null: false
+    t.datetime "end",                     null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "mentorship_availabilities", ["user_id"], name: "index_mentorship_availabilities_on_user_id", using: :btree
+  add_index "mentorship_availabilities", ["mentorship_id"], name: "index_mentorship_availabilities_on_mentorship_id", using: :btree
 
   create_table "mentorship_interests", force: :cascade do |t|
-    t.integer  "user_id",               limit: 4, null: false
-    t.integer  "mentoring_interest_id", limit: 4, null: false
+    t.integer  "mentorship_id",          limit: 4, null: false
+    t.integer  "mentorship_interest_id", limit: 4, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "mentorship_ratings", force: :cascade do |t|
     t.integer  "rating",               limit: 4,                     null: false
-    t.integer  "user_id",              limit: 4,                     null: false
+    t.integer  "mentorship_id",        limit: 4,                     null: false
     t.integer  "mentoring_session_id", limit: 4,                     null: false
     t.boolean  "okrs_achieved",                      default: false
     t.boolean  "valuable",                           default: false
@@ -834,20 +823,38 @@ ActiveRecord::Schema.define(version: 20180520224540) do
     t.datetime "updated_at"
   end
 
+  create_table "mentorship_requests", force: :cascade do |t|
+    t.integer  "mentorship_id",        limit: 4, null: false
+    t.integer  "mentoring_request_id", limit: 4, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "mentorship_sessions", force: :cascade do |t|
-    t.integer  "user_id",              limit: 4,                null: false
-    t.integer  "mentoring_session_id", limit: 4,                null: false
-    t.boolean  "attending",                      default: true
+    t.integer  "mentorship_id",         limit: 4,                 null: false
+    t.integer  "mentorship_session_id", limit: 4,                 null: false
+    t.boolean  "attending",                       default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "mentorship_types", force: :cascade do |t|
-    t.integer  "user_id",           limit: 4, null: false
+    t.integer  "mentorship_id",     limit: 4, null: false
     t.integer  "mentoring_type_id", limit: 4, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "mentorships", force: :cascade do |t|
+    t.integer  "user_id",     limit: 4,                     null: false
+    t.boolean  "mentor",                    default: false
+    t.boolean  "mentee",                    default: true
+    t.text     "description", limit: 65535
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "mentorships", ["user_id"], name: "index_mentorships_on_user_id", using: :btree
 
   create_table "metrics_dashboards", force: :cascade do |t|
     t.integer  "enterprise_id",   limit: 4
@@ -951,10 +958,8 @@ ActiveRecord::Schema.define(version: 20180520224540) do
     t.datetime "updated_at",                    null: false
   end
 
-  create_table "policy_group_templates", force: :cascade do |t|
-    t.string   "name",                        limit: 191,                 null: false
-    t.boolean  "default",                                 default: false
-    t.integer  "user_role_id",                limit: 4
+  create_table "policy_groups", force: :cascade do |t|
+    t.string   "name",                        limit: 191
     t.integer  "enterprise_id",               limit: 4
     t.boolean  "campaigns_index",                         default: false
     t.boolean  "campaigns_create",                        default: false
@@ -975,7 +980,6 @@ ActiveRecord::Schema.define(version: 20180520224540) do
     t.boolean  "groups_members_manage",                   default: false
     t.boolean  "groups_budgets_index",                    default: false
     t.boolean  "groups_budgets_request",                  default: false
-    t.boolean  "groups_budgets_approve",                  default: false
     t.boolean  "metrics_dashboards_index",                default: false
     t.boolean  "metrics_dashboards_create",               default: false
     t.boolean  "news_links_index",                        default: false
@@ -989,72 +993,17 @@ ActiveRecord::Schema.define(version: 20180520224540) do
     t.boolean  "segments_manage",                         default: false
     t.boolean  "users_index",                             default: false
     t.boolean  "users_manage",                            default: false
+    t.boolean  "global_settings_manage",                  default: false
+    t.datetime "created_at",                                              null: false
+    t.datetime "updated_at",                                              null: false
     t.boolean  "initiatives_index",                       default: false
     t.boolean  "initiatives_create",                      default: false
     t.boolean  "initiatives_manage",                      default: false
+    t.boolean  "default_for_enterprise",                  default: false
+    t.boolean  "admin_pages_view",                        default: false
+    t.boolean  "budget_approval",                         default: false
     t.boolean  "logs_view",                               default: false
     t.boolean  "annual_budget_manage",                    default: false
-    t.boolean  "branding_manage",                         default: false
-    t.boolean  "sso_manage",                              default: false
-    t.boolean  "permissions_manage",                      default: false
-    t.boolean  "group_leader_manage",                     default: false
-    t.boolean  "global_calendar",                         default: false
-    t.boolean  "manage_posts",                            default: false
-    t.boolean  "diversity_manage",                        default: false
-    t.datetime "created_at",                                              null: false
-    t.datetime "updated_at",                                              null: false
-  end
-
-  create_table "policy_groups", force: :cascade do |t|
-    t.boolean  "campaigns_index",                       default: false
-    t.boolean  "campaigns_create",                      default: false
-    t.boolean  "campaigns_manage",                      default: false
-    t.boolean  "polls_index",                           default: false
-    t.boolean  "polls_create",                          default: false
-    t.boolean  "polls_manage",                          default: false
-    t.boolean  "events_index",                          default: false
-    t.boolean  "events_create",                         default: false
-    t.boolean  "events_manage",                         default: false
-    t.boolean  "group_messages_index",                  default: false
-    t.boolean  "group_messages_create",                 default: false
-    t.boolean  "group_messages_manage",                 default: false
-    t.boolean  "groups_index",                          default: false
-    t.boolean  "groups_create",                         default: false
-    t.boolean  "groups_manage",                         default: false
-    t.boolean  "groups_members_index",                  default: false
-    t.boolean  "groups_members_manage",                 default: false
-    t.boolean  "groups_budgets_index",                  default: false
-    t.boolean  "groups_budgets_request",                default: false
-    t.boolean  "metrics_dashboards_index",              default: false
-    t.boolean  "metrics_dashboards_create",             default: false
-    t.boolean  "news_links_index",                      default: false
-    t.boolean  "news_links_create",                     default: false
-    t.boolean  "news_links_manage",                     default: false
-    t.boolean  "enterprise_resources_index",            default: false
-    t.boolean  "enterprise_resources_create",           default: false
-    t.boolean  "enterprise_resources_manage",           default: false
-    t.boolean  "segments_index",                        default: false
-    t.boolean  "segments_create",                       default: false
-    t.boolean  "segments_manage",                       default: false
-    t.boolean  "users_index",                           default: false
-    t.boolean  "users_manage",                          default: false
-    t.datetime "created_at",                                            null: false
-    t.datetime "updated_at",                                            null: false
-    t.boolean  "initiatives_index",                     default: false
-    t.boolean  "initiatives_create",                    default: false
-    t.boolean  "initiatives_manage",                    default: false
-    t.boolean  "budget_approval",                       default: false
-    t.boolean  "logs_view",                             default: false
-    t.boolean  "annual_budget_manage",                  default: false
-    t.boolean  "sso_manage",                            default: false
-    t.boolean  "permissions_manage",                    default: false
-    t.boolean  "diversity_manage",                      default: false
-    t.boolean  "manage_posts",                          default: false
-    t.boolean  "group_leader_manage",                   default: false
-    t.boolean  "global_calendar",                       default: false
-    t.boolean  "groups_budgets_approve",                default: false
-    t.boolean  "branding_manage",                       default: false
-    t.integer  "user_id",                     limit: 4
   end
 
   create_table "poll_responses", force: :cascade do |t|
@@ -1099,19 +1048,18 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   end
 
   create_table "resources", force: :cascade do |t|
-    t.string   "title",                limit: 191
-    t.integer  "container_id",         limit: 4
-    t.string   "container_type",       limit: 191
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
-    t.string   "file_file_name",       limit: 191
-    t.string   "file_content_type",    limit: 191
-    t.integer  "file_file_size",       limit: 4
+    t.string   "title",             limit: 191
+    t.integer  "container_id",      limit: 4
+    t.string   "container_type",    limit: 191
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.string   "file_file_name",    limit: 191
+    t.string   "file_content_type", limit: 191
+    t.integer  "file_file_size",    limit: 4
     t.datetime "file_updated_at"
-    t.integer  "owner_id",             limit: 4
-    t.string   "resource_type",        limit: 191
-    t.string   "url",                  limit: 191
-    t.integer  "mentoring_session_id", limit: 4
+    t.integer  "owner_id",          limit: 4
+    t.string   "resource_type",     limit: 191
+    t.string   "url",               limit: 191
   end
 
   add_index "resources", ["container_type", "container_id"], name: "index_resources_on_container_type_and_container_id", using: :btree
@@ -1278,32 +1226,20 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   add_index "user_rewards", ["reward_id"], name: "index_user_rewards_on_reward_id", using: :btree
   add_index "user_rewards", ["user_id"], name: "index_user_rewards_on_user_id", using: :btree
 
-  create_table "user_roles", force: :cascade do |t|
-    t.integer  "enterprise_id", limit: 4
-    t.boolean  "default",                   default: false
-    t.string   "role_name",     limit: 191
-    t.string   "role_type",     limit: 191, default: "non_admin"
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
-    t.integer  "priority",      limit: 4,                         null: false
-  end
-
-  add_index "user_roles", ["enterprise_id"], name: "index_user_roles_on_enterprise_id", using: :btree
-
   create_table "users", force: :cascade do |t|
     t.string   "first_name",                  limit: 191
     t.string   "last_name",                   limit: 191
     t.text     "data",                        limit: 65535
     t.string   "auth_source",                 limit: 191
     t.integer  "enterprise_id",               limit: 4
-    t.datetime "created_at",                                                 null: false
-    t.datetime "updated_at",                                                 null: false
+    t.datetime "created_at",                                               null: false
+    t.datetime "updated_at",                                               null: false
     t.string   "email",                       limit: 191
     t.string   "encrypted_password",          limit: 191
     t.string   "reset_password_token",        limit: 191
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",               limit: 4,     default: 0,      null: false
+    t.integer  "sign_in_count",               limit: 4,     default: 0,    null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip",          limit: 191
@@ -1328,20 +1264,16 @@ ActiveRecord::Schema.define(version: 20180520224540) do
     t.string   "avatar_content_type",         limit: 191
     t.integer  "avatar_file_size",            limit: 4
     t.datetime "avatar_updated_at"
+    t.integer  "policy_group_id",             limit: 4
     t.boolean  "active",                                    default: true
     t.text     "biography",                   limit: 65535
-    t.integer  "points",                      limit: 4,     default: 0,      null: false
-    t.integer  "credits",                     limit: 4,     default: 0,      null: false
+    t.integer  "points",                      limit: 4,     default: 0,    null: false
+    t.integer  "credits",                     limit: 4,     default: 0,    null: false
     t.string   "time_zone",                   limit: 191
     t.integer  "total_weekly_points",         limit: 4,     default: 0
-    t.integer  "failed_attempts",             limit: 4,     default: 0,      null: false
+    t.integer  "failed_attempts",             limit: 4,     default: 0,    null: false
     t.string   "unlock_token",                limit: 191
     t.datetime "locked_at"
-    t.string   "role",                        limit: 191,   default: "user", null: false
-    t.boolean  "custom_policy_group",                       default: false,  null: false
-    t.boolean  "mentee",                                    default: false
-    t.boolean  "mentor",                                    default: false
-    t.text     "mentorship_description",      limit: 65535
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree
@@ -1382,7 +1314,8 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   add_foreign_key "likes", "enterprises"
   add_foreign_key "likes", "news_feed_links"
   add_foreign_key "likes", "users"
-  add_foreign_key "mentorship_availabilities", "users"
+  add_foreign_key "mentorship_availabilities", "mentorships"
+  add_foreign_key "mentorships", "users"
   add_foreign_key "polls", "initiatives"
   add_foreign_key "reward_actions", "enterprises"
   add_foreign_key "rewards", "enterprises"
@@ -1392,5 +1325,4 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   add_foreign_key "user_reward_actions", "users"
   add_foreign_key "user_rewards", "rewards"
   add_foreign_key "user_rewards", "users"
-  add_foreign_key "user_roles", "enterprises"
 end

@@ -1,16 +1,27 @@
 class CreateMentorshipModule < ActiveRecord::Migration
   def change
-    # type determines whether mentor or mentee
+    # type determines whether user is interesting in mentorship
     create_table :mentorships do |t|
-      t.string      :type,        null: false       
       t.references  :user,        index: true, foreign_key: true, null: false
+      t.boolean     :mentor,      default: false
+      t.boolean     :mentee,      default: true
       t.text        :description
       t.timestamps
     end
     
-    create_table :mentoring_availabilites do |t|
-      t.references  :mentorship, index: true, foreign_key: true, null: false
-      t.datetime    :date, null: false
+    # connects mentors/mentees together - a mentee can have many mentors and
+    # a mentor can have many mentees - a user can be both mentor and mentee
+    
+    create_table :mentorings do |t|
+      t.references  :mentor
+      t.references  :mentee
+      t.timestamps
+    end
+    
+    create_table :mentorship_availabilities do |t|
+      t.references  :mentorship,  index: true, foreign_key: true, null: false
+      t.datetime    :start,       null: false
+      t.datetime    :end,         null: false
       t.timestamps
     end
     
@@ -22,7 +33,7 @@ class CreateMentorshipModule < ActiveRecord::Migration
     
     create_table :mentorship_types do |t|
       t.references  :mentorship,      null: false
-      t.references  :mentorship_type, null: false
+      t.references  :mentoring_type, null: false
       t.timestamps
     end
     
@@ -41,6 +52,7 @@ class CreateMentorshipModule < ActiveRecord::Migration
     create_table :mentoring_requests do |t|
       t.string      :type,    :null => false
       t.string      :status,  :null => false
+      t.text        :notes
       t.timestamps
     end
     
@@ -51,18 +63,18 @@ class CreateMentorshipModule < ActiveRecord::Migration
     end
     
     create_table :mentorship_requests do |t|
-      t.references  :mentorship,          null: false
-      t.references  :mentorship_request,  null: false
+      t.references  :mentorship,        null: false
+      t.references  :mentoring_request, null: false
       t.timestamps
     end
     
     create_table :mentoring_sessions do |t|
-      t.datetime    :start,     :null => false
-      t.datetime    :end,       :null => false
-      t.string      :format,    :null => false
-      t.string      :link,      :null => false
-      t.string      :status,    :null => false
-      t.text        :comments,  :null => false
+      t.datetime    :start,   :null => false
+      t.datetime    :end,     :null => false
+      t.string      :format,  :null => false
+      t.string      :link,    :null => false
+      t.string      :status,  :null => false
+      t.text        :notes,   :null => false
       t.timestamps
     end
     
@@ -70,13 +82,6 @@ class CreateMentorshipModule < ActiveRecord::Migration
       t.references  :mentorship,          null: false
       t.references  :mentorship_session,  null: false
       t.boolean     :attending,           default: false
-      t.timestamps
-    end
-    
-    create_table :mentoring_session_materials do |t|
-      t.references  :mentorship_session,  null: false
-      t.string      :name,                null: false
-      t.attachment  :file
       t.timestamps
     end
 
