@@ -8,17 +8,20 @@
           <%= news_link_picture(news_link) %>
         <% end %>
       </div>
-      <%= link_to news_link.url, target: "_blank" do %>
         <div class="col-xs-8">
         <div class="flex-row flex-row--middle">
           <div class="flex-row__cell flex-row__cell--grow">
-            <span class="underline_text"><%= news_link.title %></span><br>
+            <% if news_link.url.present? %>
+              <%= link_to news_link.title, news_link.url, class: "underline_text", target: :_blank %>
+            <% else %>
+              <%= news_link.title %>
+            <% end %>
+              <br>
             <small><%= truncate(news_link.description, length: 90) %></small><br>
             <small class="muted"><%= news_link.created_at.to_s :slashes %></small>
           </div>
         </div>
       </div>
-      <% end %>
       <%= render "groups/news_links/modal/form" %>
     </div>
 <% elsif news.link_type === "GroupMessage"%>

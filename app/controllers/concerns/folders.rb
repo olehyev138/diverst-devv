@@ -19,7 +19,8 @@ module Folders
     end
 
     def index
-        @folders = @container.folders + @container.shared_folders
+        authorize_action
+        @folders = @container.folders.only_parents + @container.shared_folders.only_parents
         @folders.sort_by!{ |f| f.name.downcase }
         render '/index'
     end
@@ -30,6 +31,8 @@ module Folders
 
     def new
         @folder = @container.folders.new
+        @folder.parent_id = params[:folder_id] 
+        @folder.password
         render '/new'
     end
 
@@ -40,7 +43,11 @@ module Folders
     def create
         @folder = @container.folders.new(folder_params)
         if @folder.save
-            redirect_to action: :index
+            if @folder.parent_id
+                redirect_to [@folder.parent.container, @folder.parent, :resources]
+            else
+                redirect_to action: :index
+            end
         else
             render '/edit'
         end
@@ -66,6 +73,7 @@ module Folders
             .require(:folder)
             .permit(
                 :name,
+                :parent_id,
                 :password_protected,
                 :password,
                 :group_ids => []
@@ -74,5 +82,8 @@ module Folders
 
     def set_folder
         @folder = @container.folders.find_by_id(params[:id]) || @container.shared_folders.find_by_id(params[:id])
+    end
+    
+    def authorize_action
     end
 end
