@@ -6,7 +6,7 @@
         <%= f.input :name,
               label: "Give this folder a name!".html_safe,
               input_html: { autofocus: true } %>
-
+        <%= f.association :parent, label: "Move to Folder", include_blank: true, input_html: { class: "select2" }, collection: @container.folders - [@folder] %>
         <%= f.hidden_field :password_protected, id: "password_protected_1", value: 0 %>
         <%= f.input :password_protected, name: "password_protected", id: "password_protected_2", label: "Password Protected?" %>
         

@@ -52,4 +52,46 @@ RSpec.describe Folder, type: :model do
             expect(folder.valid_password?("password")).to be(folder)
         end
     end
+    
+    describe '#parent' do
+        it "returns nil" do
+            folder = create(:folder)
+            expect(folder.parent).to be(nil)
+        end
+
+        it "returns parent" do
+            folder_1 = create(:folder)
+            folder_2 = create(:folder, :parent => folder_1)
+
+            expect(folder_2.parent).to_not be(nil)
+            expect(folder_2.parent).to eq(folder_1)
+        end
+    end
+
+    describe '#children' do
+        it "returns empty array" do
+            folder = create(:folder)
+            expect(folder.children.length).to eq(0)
+        end
+
+        it "returns 1 child" do
+            folder_1 = create(:folder)
+            folder_2 = create(:folder, :parent => folder_1)
+
+            expect(folder_1.children).to include(folder_2)
+        end
+    end
+    
+    describe '#only_parents' do
+        it "returns empty array" do
+            expect(Folder.only_parents.length).to eq(0)
+        end
+
+        it "returns 1 parent" do
+            folder_1 = create(:folder)
+            folder_2 = create(:folder, :parent => folder_1)
+
+            expect(Folder.only_parents.length).to eq(1)
+        end
+    end
 end
