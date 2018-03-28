@@ -45,7 +45,7 @@ RSpec.feature 'Resource management' do
 			expect(folder.password_protected?).to eq false
 		end
 
-		scenario 'and share folder with group' do
+		scenario 'and share new folder with group' do
 			fill_in 'folder[name]', with: 'Top Secret'
 			check 'Password Protected?'
 			fill_in 'folder[password]', with: 'password_1'
@@ -59,11 +59,98 @@ RSpec.feature 'Resource management' do
 			expect(page).not_to have_content 'Company Archives'
 			expect(page).not_to have_content 'Company Documents'
 		end
+
+		scenario 'move new folder into existing folder' do
+			fill_in 'folder[name]', with: 'Top Secret'
+			select folder_with_pp.name, from: 'folder[parent_id]'
+			check 'Password Protected?'
+			fill_in 'folder[password]', with: 'password_1'
+
+			click_on 'Create Folder'
+
+			folder = Folder.find_by(name: 'Top Secret')
+			expect(current_url).to eq enterprise_folder_resources_url(user.enterprise, folder_with_pp)
+
+			within('h1') do
+				expect(page).to have_content folder_with_pp.name
+			end
+
+			within('h4') do
+				expect(page).to have_content folder.name
+			end
+		end
 	end
 
+
 	context 'update existing folder' do
+		before do
+			visit enterprise_folder_resources_url(user.enterprise, folder_without_pp)
+		end
+
+		scenario 'by changing folder name' do
+			click_on 'Edit Folder'
+
+			within('h1') do
+				expect(page).to have_content 'Edit a folder'
+		    end
+			expect(page).to have_field('folder[name]', with: folder_without_pp.name)
+
+			fill_in 'folder[name]', with: 'Company Files'
+
+			click_on 'Update Folder'
+
+			expect(current_url).to eq enterprise_folders_url(user.enterprise)
+			expect(page).to have_content 'Company Files'
+			expect(page).not_to have_content 'Company Documents'
+		end
+
+		scenario 'by adding password protection to folder' do
+			click_on 'Edit Folder'
+
+			within('h1') do
+				expect(page).to have_content 'Edit a folder'
+		    end
+			expect(page).to have_field('folder[name]', with: folder_without_pp.name)
+
+			expect(folder_without_pp.password_protected?).to eq false
+
+			check 'Password Protected?'
+			fill_in 'folder[password]', with: 'password_one'
+
+			click_on 'Update'
+
+			folder_without_pp.reload
+			expect(current_url).to eq enterprise_folders_url(user.enterprise)
+			expect(folder_without_pp.password_protected?).to eq true
+		end
+
+		scenario 'and add another folder' do
+			click_on '+ Add folder'
+
+			expect(current_url).to eq new_enterprise_folder_url(user.enterprise, folder_id: folder_without_pp.id)
+			expect(page).to have_select('folder[parent_id]', selected: folder_without_pp.name)
+
+			fill_in 'folder[name]', with: 'Sub Folder 1'
+
+			click_on 'Create Folder'
+
+			sub_folder = Folder.find_by(name: 'Sub Folder 1')
+			expect(current_url).to eq enterprise_folder_resources_url(user.enterprise, folder_without_pp)
+
+			within('h1') do
+				expect(page).to have_content folder_without_pp.name
+			end
+
+			within('h4') do
+				expect(page).to have_content sub_folder.name
+			end
+		end
+
+		scenario 'and share folder with group'
 	end
 
 	context 'delete existing folder' do
+		scenario 'with password protection'
+		scenario 'without password protection'
 	end
 end
