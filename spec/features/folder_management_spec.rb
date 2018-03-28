@@ -92,7 +92,7 @@ RSpec.feature 'Resource management' do
 
 			within('h1') do
 				expect(page).to have_content 'Edit a folder'
-		    end
+			end
 			expect(page).to have_field('folder[name]', with: folder_without_pp.name)
 
 			fill_in 'folder[name]', with: 'Company Files'
@@ -109,7 +109,7 @@ RSpec.feature 'Resource management' do
 
 			within('h1') do
 				expect(page).to have_content 'Edit a folder'
-		    end
+			end
 			expect(page).to have_field('folder[name]', with: folder_without_pp.name)
 
 			expect(folder_without_pp.password_protected?).to eq false
@@ -146,11 +146,43 @@ RSpec.feature 'Resource management' do
 			end
 		end
 
-		scenario 'and share folder with group'
+		scenario 'and share folder with group' do
+			click_on 'Edit Folder'
+
+			expect(current_url).to eq edit_enterprise_folder_url(user.enterprise, folder_without_pp)
+			expect(page).to have_content 'Edit a folder'
+
+			select group.name, from: 'folder[group_ids][]'
+
+			click_on 'Update Folder'
+
+			visit group_folders_url(group)
+
+			expect(page).to have_content folder_without_pp.name
+		end
 	end
 
-	context 'delete existing folder' do
-		scenario 'with password protection'
-		scenario 'without password protection'
+	context 'delete existing' do
+		before { visit enterprise_folders_url(user.enterprise) }
+
+		scenario 'folder' do
+			expect(page).to have_content folder_without_pp.name
+
+			click_link 'Delete', href: "/enterprises/#{user.enterprise_id}/folders/#{folder_without_pp.id}"
+
+			expect(page).not_to have_content folder_without_pp.name
+		end
+
+		scenario 'sub folder' do
+			sub_folder = create(:folder, name: 'Sub Folder', parent_id: folder_without_pp.id, container: user.enterprise)
+
+			visit enterprise_folder_resources_url(user.enterprise, folder_without_pp)
+
+			expect(page).to have_content sub_folder.name
+
+			click_on 'Delete'
+
+			expect(page).not_to have_content sub_folder.name
+		end
 	end
 end
