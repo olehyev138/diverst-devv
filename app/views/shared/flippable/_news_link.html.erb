@@ -12,9 +12,9 @@
         <div class="flex-row flex-row--middle">
           <div class="flex-row__cell flex-row__cell--grow">
             <% if news_link.url.present? %>
-              <%= link_to news_link.title, news_link.url, class: "underline_text", target: :_blank %>
+              <%= link_to news_link.title, news_link.url, class: 'underline_text', target: :_blank %>
             <% else %>
-              <%= news_link.title %>
+              <%= link_to news_link.title, group_posts_url(news_link.group), class: 'underline_text' %>
             <% end %>
               <br>
             <small><%= truncate(news_link.description, length: 90) %></small><br>
