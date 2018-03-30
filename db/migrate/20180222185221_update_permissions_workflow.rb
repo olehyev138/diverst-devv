@@ -106,18 +106,20 @@ class UpdatePermissionsWorkflow < ActiveRecord::Migration
     
     remove_column  :users, :policy_group_id, :integer
     
+    add_column :user_roles, :priority, :integer, :null => false, :auto_increment => true
+    
     # get the enterprise
     Enterprise.find_each do |enterprise|
       # create default enterprise user roles
       enterprise.user_roles.create!(
         [
-          {:role_name => "admin",                 :role_type => "admin"},
-          {:role_name => "diversity_manager",     :role_type => "admin"},
-          {:role_name => "national_manager",      :role_type => "admin"},
-          {:role_name => "group_leader",          :role_type => "group"},
-          {:role_name => "group_treasurer",       :role_type => "group"},
-          {:role_name => "group_content_creator", :role_type => "group"},
-          {:role_name => "user",                  :role_type => "user", :default => true}
+          {:role_name => "admin",                 :role_type => "admin",  :priority => 0},
+          {:role_name => "diversity_manager",     :role_type => "admin",  :priority => 1},
+          {:role_name => "national_manager",      :role_type => "admin",  :priority => 2},
+          {:role_name => "group_leader",          :role_type => "group",  :priority => 3},
+          {:role_name => "group_treasurer",       :role_type => "group",  :priority => 4},
+          {:role_name => "group_content_creator", :role_type => "group",  :priority => 5},
+          {:role_name => "user",                  :role_type => "user",   :default => true, :priority => 6}
         ]
       )
       
