@@ -71,33 +71,68 @@ RSpec.feature 'Resource management' do
 		scenario 'without tags'
 	end
 
-	context 'update existing resource' do
+	context 'update and destroy' do
 		let!(:verizon_logo) { File.new('spec/fixtures/files/verizon_logo.png') }
-		let!(:resource_with_url) { create(:resource, title: 'Official Website of Naruto Shippuden',
-			container: folder_with_pp, file: verizon_logo, url: 'https://www.viz.com/naruto') }
-		let!(:resource_without_url) { create(:resource, title: 'Dragon Ball Z', container: folder_without_pp,
-			file: verizon_logo, url: '') }
+			let!(:resource_with_url) { create(:resource, title: 'Official Website of Naruto Shippuden',
+				container: folder_with_pp, file: verizon_logo, url: 'https://www.viz.com/naruto') }
+			let!(:resource_without_url) { create(:resource, title: 'Dragon Ball Z', container: folder_without_pp,
+				file: verizon_logo, url: '') }
 
-		scenario 'and move to a different folder' do
-			visit enterprise_folder_resources_url(user.enterprise, folder_without_pp)
-			expect(page).to have_content resource_without_url.title
+		context 'update existing resource' do
+			scenario 'and move to a different folder' do
+				visit enterprise_folder_resources_url(user.enterprise, folder_without_pp)
+				expect(page).to have_content resource_without_url.title
 
-			click_on 'Edit'
+				click_on 'Edit'
 
-			expect(current_url).to eq edit_enterprise_folder_resource_url(user.enterprise, folder_without_pp, resource_without_url)
-			expect(page).to have_content 'Edit a resource'
-			expect(page).to have_field('title', with: resource_without_url.title)
+				expect(current_url).to eq edit_enterprise_folder_resource_url(user.enterprise, folder_without_pp, resource_without_url)
+				expect(page).to have_content 'Edit a resource'
+				expect(page).to have_field('title', with: resource_without_url.title)
 
-			select folder_with_pp.name, from: 'resource[container_id]'
+				select folder_with_pp.name, from: 'resource[container_id]'
 
-			click_on 'Update Resource'
+				click_on 'Update Resource'
 
-			expect(current_url).to eq enterprise_folder_resources_url(user.enterprise, folder_without_pp)
-			expect(page).not_to have_content resource_without_url.title
+				expect(current_url).to eq enterprise_folder_resources_url(user.enterprise, folder_without_pp)
+				expect(page).not_to have_content resource_without_url.title
 
-			visit enterprise_folder_resources_url(user.enterprise, folder_with_pp)
+				visit enterprise_folder_resources_url(user.enterprise, folder_with_pp)
 
-			expect(page).to have_content resource_without_url.title
+				expect(page).to have_content resource_without_url.title
+			end
+
+			scenario 'with url' do
+				visit enterprise_folder_resources_url(user.enterprise, folder_without_pp)
+				expect(page).to have_content resource_without_url.title
+
+				click_on 'Edit'
+
+				expect(current_url).to eq edit_enterprise_folder_resource_url(user.enterprise, folder_without_pp, resource_without_url)
+				expect(page).to have_content 'Edit a resource'
+
+				fill_in 'resource[title]', with: 'FC BARCELONA Official Website'
+				fill_in 'resource[url]', with: 'https://www.fcbarcelona.com'
+
+				click_on 'Update Resource'
+
+				resource_without_url.reload
+				expect(current_url).to eq enterprise_folder_resources_url(user.enterprise, folder_without_pp)
+				expect(page).to have_content 'FC BARCELONA Official Website'
+				expect(page).to have_link 'Link'
+			end
+		end
+
+		context 'Delete existing resource' do
+			scenario 'from existing folder' do
+				visit enterprise_folder_resources_url(user.enterprise, folder_without_pp)
+
+				expect(page).to have_content resource_without_url.title
+
+				click_on 'Delete'
+
+				expect(current_url).to eq enterprise_folder_resources_url(user.enterprise, folder_without_pp)
+				expect(page).not_to have_content resource_without_url.title
+			end
 		end
 	end
 end
