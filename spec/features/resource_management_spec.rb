@@ -66,5 +66,38 @@ RSpec.feature 'Resource management' do
 			expect(page).not_to have_link 'Link'
 			expect(page).to have_content 'N/A'
 		end
+
+		scenario 'with tags'
+		scenario 'without tags'
+	end
+
+	context 'update existing resource' do
+		let!(:verizon_logo) { File.new('spec/fixtures/files/verizon_logo.png') }
+		let!(:resource_with_url) { create(:resource, title: 'Official Website of Naruto Shippuden',
+			container: folder_with_pp, file: verizon_logo, url: 'https://www.viz.com/naruto') }
+		let!(:resource_without_url) { create(:resource, title: 'Dragon Ball Z', container: folder_without_pp,
+			file: verizon_logo, url: '') }
+
+		scenario 'and move to a different folder' do
+			visit enterprise_folder_resources_url(user.enterprise, folder_without_pp)
+			expect(page).to have_content resource_without_url.title
+
+			click_on 'Edit'
+
+			expect(current_url).to eq edit_enterprise_folder_resource_url(user.enterprise, folder_without_pp, resource_without_url)
+			expect(page).to have_content 'Edit a resource'
+			expect(page).to have_field('title', with: resource_without_url.title)
+
+			select folder_with_pp.name, from: 'resource[container_id]'
+
+			click_on 'Update Resource'
+
+			expect(current_url).to eq enterprise_folder_resources_url(user.enterprise, folder_without_pp)
+			expect(page).not_to have_content resource_without_url.title
+
+			visit enterprise_folder_resources_url(user.enterprise, folder_with_pp)
+
+			expect(page).to have_content resource_without_url.title
+		end
 	end
 end
