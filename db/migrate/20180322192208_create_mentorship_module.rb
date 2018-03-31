@@ -45,7 +45,7 @@ class CreateMentorshipModule < ActiveRecord::Migration
     
     create_table :mentorship_interests do |t|
       t.references  :mentorship,          null: false
-      t.references  :mentorship_interest, null: false
+      t.references  :mentoring_interest,  null: false
       t.timestamps
     end
     
@@ -58,7 +58,7 @@ class CreateMentorshipModule < ActiveRecord::Migration
     
     create_table :mentoring_request_interests do |t|
       t.references  :mentoring_request,   null: false
-      t.references  :mentorship_interest, null: false
+      t.references  :mentoring_interest,  null: false
       t.timestamps
     end
     
@@ -80,7 +80,7 @@ class CreateMentorshipModule < ActiveRecord::Migration
     
     create_table :mentorship_sessions do |t|
       t.references  :mentorship,          null: false
-      t.references  :mentorship_session,  null: false
+      t.references  :mentoring_session,   null: false
       t.boolean     :attending,           default: false
       t.timestamps
     end

@@ -750,8 +750,8 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   end
 
   create_table "mentoring_request_interests", force: :cascade do |t|
-    t.integer  "mentoring_request_id",   limit: 4, null: false
-    t.integer  "mentorship_interest_id", limit: 4, null: false
+    t.integer  "mentoring_request_id",  limit: 4, null: false
+    t.integer  "mentoring_interest_id", limit: 4, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -806,8 +806,8 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   add_index "mentorship_availabilities", ["mentorship_id"], name: "index_mentorship_availabilities_on_mentorship_id", using: :btree
 
   create_table "mentorship_interests", force: :cascade do |t|
-    t.integer  "mentorship_id",          limit: 4, null: false
-    t.integer  "mentorship_interest_id", limit: 4, null: false
+    t.integer  "mentorship_id",         limit: 4, null: false
+    t.integer  "mentoring_interest_id", limit: 4, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -831,9 +831,9 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   end
 
   create_table "mentorship_sessions", force: :cascade do |t|
-    t.integer  "mentorship_id",         limit: 4,                 null: false
-    t.integer  "mentorship_session_id", limit: 4,                 null: false
-    t.boolean  "attending",                       default: false
+    t.integer  "mentorship_id",        limit: 4,                 null: false
+    t.integer  "mentoring_session_id", limit: 4,                 null: false
+    t.boolean  "attending",                      default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

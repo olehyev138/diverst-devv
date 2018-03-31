@@ -6,9 +6,18 @@ class Mentorship < ActiveRecord::Base
 	has_many :mentors,          class_name: "Mentoring", foreign_key: "mentee_id"
 	has_many :availabilities,   :class_name => "MentorshipAvailability"
 	has_many :mentorship_types
-    
+    has_many :mentorship_ratings
+        
+    # many to many
     has_many :mentorship_interests
     has_many :mentoring_interests, :through => :mentorship_interests
+    
+    has_many :mentorship_requests
+    has_many :mentoring_requests, :through => :mentorship_requests
+    
+    has_many :mentorship_sessions
+    has_many :mentoring_sessions, :through => :mentorship_sessions
+
     
     # validations
     validates :user,        presence: true
