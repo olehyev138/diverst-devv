@@ -72,16 +72,16 @@ class CreateMentorshipModule < ActiveRecord::Migration
       t.datetime    :start,   :null => false
       t.datetime    :end,     :null => false
       t.string      :format,  :null => false
-      t.string      :link,    :null => false
-      t.string      :status,  :null => false
-      t.text        :notes,   :null => false
+      t.string      :link,    :null => true
+      t.string      :status,  :null => false, :default => "scheduled"
+      t.text        :notes,   :null => true
       t.timestamps
     end
     
     create_table :mentorship_sessions do |t|
       t.references  :mentorship,          null: false
       t.references  :mentoring_session,   null: false
-      t.boolean     :attending,           default: false
+      t.boolean     :attending,           default: true
       t.timestamps
     end
 

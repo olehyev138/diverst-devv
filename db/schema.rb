@@ -772,12 +772,12 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   end
 
   create_table "mentoring_sessions", force: :cascade do |t|
-    t.datetime "start",                    null: false
-    t.datetime "end",                      null: false
-    t.string   "format",     limit: 191,   null: false
-    t.string   "link",       limit: 191,   null: false
-    t.string   "status",     limit: 191,   null: false
-    t.text     "notes",      limit: 65535, null: false
+    t.datetime "start",                                          null: false
+    t.datetime "end",                                            null: false
+    t.string   "format",     limit: 191,                         null: false
+    t.string   "link",       limit: 191
+    t.string   "status",     limit: 191,   default: "scheduled", null: false
+    t.text     "notes",      limit: 65535
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -831,9 +831,9 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   end
 
   create_table "mentorship_sessions", force: :cascade do |t|
-    t.integer  "mentorship_id",        limit: 4,                 null: false
-    t.integer  "mentoring_session_id", limit: 4,                 null: false
-    t.boolean  "attending",                      default: false
+    t.integer  "mentorship_id",        limit: 4,                null: false
+    t.integer  "mentoring_session_id", limit: 4,                null: false
+    t.boolean  "attending",                      default: true
     t.datetime "created_at"
     t.datetime "updated_at"
   end
