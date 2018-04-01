@@ -2,7 +2,7 @@ class BudgetMailer < ApplicationMailer
   def approve_request(budget, receiver)
     @receiver = receiver
     @budget = budget
-    @group = budget.subject
+    @group = budget.group
     @enterprise_id = @group.enterprise.id
     @approve_url = group_budget_url(@group, @budget)
 
@@ -11,12 +11,12 @@ class BudgetMailer < ApplicationMailer
 
   def budget_approved(budget)
     @budget = budget
-    mail(to: budget.requester.email, subject: "The budget for #{ budget.subject.name } was approved")
+    mail(to: budget.requester.email, subject: "The budget for #{ budget.group.name } was approved")
   end
 
   def budget_declined(budget)
     @budget = budget
-    mail(to: budget.requester.email, subject: "The budget for #{ budget.subject.name } was declined")
+    mail(to: budget.requester.email, subject: "The budget for #{ budget.group.name } was declined")
   end
 
   private

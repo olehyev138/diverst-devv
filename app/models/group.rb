@@ -51,7 +51,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   has_many :initiative_participating_groups
   has_many :participating_initiatives, through: :initiative_participating_groups, source: :initiative
 
-  has_many :budgets, as: :subject
+  has_many :budgets
   has_many :messages, class_name: 'GroupMessage'
   has_many :message_comments, through: :messages, class_name: 'GroupMessageComment', source: :comments
   has_many :news_links, dependent: :destroy

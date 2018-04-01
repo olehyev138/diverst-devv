@@ -283,7 +283,7 @@ RSpec.describe Group, :type => :model do
         it "returns 0" do
             group = create(:group)
 
-            budget = create(:budget, :subject => group, :is_approved => true)
+            budget = create(:budget, :group => group, :is_approved => true)
             create(:budget_item, :budget => budget, :estimated_amount => 1000)
 
             expect(group.approved_budget).to be > 0
@@ -299,7 +299,7 @@ RSpec.describe Group, :type => :model do
         it "returns available budget" do
             group = create(:group, :annual_budget => 10000)
 
-            budget = create(:budget, :subject => group, :is_approved => true)
+            budget = create(:budget, :group => group, :is_approved => true)
             create(:budget_item, :budget => budget, :estimated_amount => 1000)
             expect(group.available_budget).to eq(group.annual_budget - group.approved_budget)
         end

@@ -6,8 +6,8 @@ RSpec.describe Budget, type: :model do
         let(:budget) { FactoryGirl.build_stubbed(:budget) }
         let(:approved_budget) { FactoryGirl.build :approved_budget }
 
-        it { expect(budget).to validate_presence_of(:subject) }
-        it { expect(budget).to belong_to(:subject) }
+        it { expect(budget).to belong_to(:group) }
+        it { expect(budget).to belong_to(:event) }
         it { expect(budget).to belong_to(:approver).class_name("User").with_foreign_key("approver_id") }
         it { expect(budget).to belong_to(:requester).class_name("User").with_foreign_key("requester_id") }
         it { expect(budget).to have_many(:checklists) }
@@ -86,8 +86,8 @@ RSpec.describe Budget, type: :model do
     describe 'self.' do
         describe 'pre_approved_events' do
             let(:group) { FactoryGirl.create :group }
-            let!(:budget) { FactoryGirl.create :budget, subject: group }
-            let!(:approved_budget) { FactoryGirl.create :approved_budget, subject: group }
+            let!(:budget) { FactoryGirl.create :budget, group: group }
+            let!(:approved_budget) { FactoryGirl.create :approved_budget, group: group }
 
             subject { described_class.pre_approved_events(group) }
 
@@ -107,8 +107,8 @@ RSpec.describe Budget, type: :model do
 
         describe 'pre_approved_events_for_select' do
             let!(:group) { create(:group) }
-            let!(:related_budgets) { create_list(:budget, 3, subject: group, subject_type: group.class.to_s, is_approved: true) }
-            let!(:approved_budget) { FactoryGirl.create :approved_budget, subject: group }
+            let!(:related_budgets) { create_list(:budget, 3, group: group, is_approved: true) }
+            let!(:approved_budget) { FactoryGirl.create :approved_budget, group: group }
 
             subject { described_class }
 

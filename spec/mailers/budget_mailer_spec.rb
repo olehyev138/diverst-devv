@@ -4,7 +4,7 @@ RSpec.describe BudgetMailer, type: :mailer do
   describe '#approve_request' do
     let(:user) { create :user }
     let(:budget) { create :budget }
-    let(:group) { budget.subject }
+    let(:group) { budget.group }
     let(:view_budget_url) { group_budget_url(group, budget) }
 
     let(:mail) { described_class.approve_request(budget, user).deliver_now }
@@ -36,7 +36,7 @@ RSpec.describe BudgetMailer, type: :mailer do
     let(:approver){ create(:user, first_name: "Fulano", last_name: "Ciclano") }
     let(:requester){ create(:user, first_name: "John", last_name: "Doe") }
     let(:group){ create(:group, name: "New group") }
-    let(:budget) { create(:budget, requester: requester, approver: approver, subject: group) }
+    let(:budget) { create(:budget, requester: requester, approver: approver, group: group) }
 
     let(:mail) { described_class.budget_approved(budget).deliver_now }
 
@@ -57,7 +57,7 @@ RSpec.describe BudgetMailer, type: :mailer do
     let(:approver){ create(:user, first_name: "Fulano", last_name: "Ciclano") }
     let(:requester){ create(:user, first_name: "John", last_name: "Doe") }
     let(:group){ create(:group, name: "New group") }
-    let(:budget) { create(:budget, requester: requester, approver: approver, subject: group) }
+    let(:budget) { create(:budget, requester: requester, approver: approver, group: group) }
 
     let(:mail) { described_class.budget_declined(budget).deliver_now }
 

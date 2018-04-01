@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180317112435) do
+ActiveRecord::Schema.define(version: 20180324181536) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -145,14 +145,14 @@ ActiveRecord::Schema.define(version: 20180317112435) do
   end
 
   create_table "budgets", force: :cascade do |t|
-    t.integer  "subject_id",   limit: 4
-    t.string   "subject_type", limit: 191
     t.text     "description",  limit: 65535
     t.boolean  "is_approved"
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
     t.integer  "approver_id",  limit: 4
     t.integer  "requester_id", limit: 4
+    t.integer  "event_id",     limit: 4
+    t.integer  "group_id",     limit: 4
   end
 
   add_index "budgets", ["approver_id"], name: "fk_rails_a057b1443a", using: :btree
@@ -215,12 +215,12 @@ ActiveRecord::Schema.define(version: 20180317112435) do
   add_index "checklist_items", ["container_type", "container_id"], name: "index_checklist_items_on_container_type_and_container_id", using: :btree
 
   create_table "checklists", force: :cascade do |t|
-    t.integer  "subject_id",   limit: 4
-    t.string   "subject_type", limit: 191
-    t.string   "title",        limit: 191
-    t.integer  "author_id",    limit: 4
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.string   "title",         limit: 191
+    t.integer  "author_id",     limit: 4
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.integer  "budget_id",     limit: 4
+    t.integer  "initiative_id", limit: 4
   end
 
   create_table "cities", force: :cascade do |t|
@@ -1068,11 +1068,10 @@ ActiveRecord::Schema.define(version: 20180317112435) do
   end
 
   create_table "tags", force: :cascade do |t|
-    t.integer  "taggable_id",   limit: 4
-    t.string   "taggable_type", limit: 191
-    t.string   "name",          limit: 191, null: false
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.string   "name",        limit: 191, null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.integer  "resource_id", limit: 4
   end
 
   create_table "themes", force: :cascade do |t|

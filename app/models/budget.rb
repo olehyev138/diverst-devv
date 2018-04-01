@@ -1,13 +1,13 @@
 class Budget < ActiveRecord::Base
-  belongs_to :subject, polymorphic: true
+  
+  belongs_to :event
+  belongs_to :group
   belongs_to :approver, class_name: "User", foreign_key: "approver_id"
   belongs_to :requester, class_name: "User", foreign_key: "requester_id"
 
-  has_many :checklists, as: :subject
+  has_many :checklists
   has_many :budget_items
   accepts_nested_attributes_for :budget_items, reject_if: :all_blank, allow_destroy: true
-
-  validates :subject, presence: true
 
   scope :approved, -> { where(is_approved: true) }
   scope :not_approved, -> { where(is_approved: false )}
@@ -38,8 +38,7 @@ class Budget < ActiveRecord::Base
   end
 
   def self.pre_approved_events(group, user=nil)
-    related_budgets = self.where(subject_id: group.id)
-                          .where(subject_type: group.class.to_s)
+    related_budgets = self.where(group_id: group.id)
                           .approved
                           .includes(:budget_items)
 

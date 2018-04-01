@@ -21,7 +21,7 @@ class Initiative < ActiveRecord::Base
   belongs_to :budget_item
   has_one :budget, through: :budget_item
 
-  has_many :checklists, as: :subject
+  has_many :checklists
   has_many :resources, as: :container
 
   has_many :checklist_items, as: :container
@@ -194,7 +194,7 @@ class Initiative < ActiveRecord::Base
     return true if estimated_funding == 0
 
     if budget.present?
-      if budget.subject != group
+      if budget.group_id != group.id
         # make sure noone is trying to put incorrect budget value
         errors.add(:budget, 'You are providing wrong budget')
         return false

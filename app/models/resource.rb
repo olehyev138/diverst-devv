@@ -4,7 +4,7 @@ class Resource < ActiveRecord::Base
     belongs_to :container, polymorphic: true
     belongs_to :owner, class_name: "User"
 
-    has_many :tags, :as => :taggable, :dependent => :destroy
+    has_many :tags, :dependent => :destroy
     accepts_nested_attributes_for :tags
 
     has_attached_file :file, s3_permissions: "private"

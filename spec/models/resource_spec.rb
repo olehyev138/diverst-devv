@@ -74,7 +74,7 @@ RSpec.describe Resource, :type => :model do
 
     it "deletes tags" do
       resource = create(:resource)
-      create_list(:tag, 5, :taggable => resource)
+      create_list(:tag, 5, :resource => resource)
 
       resource.tag_tokens = []
 

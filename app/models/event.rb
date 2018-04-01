@@ -3,7 +3,7 @@ class Event < ActiveRecord::Base
     belongs_to :group
     belongs_to :owner, :class_name => "User"
     
-    has_many :budgets, as: :subject
+    has_many :budgets
     has_many :events_segments
     has_many :segments, through: :events_segments
     has_many :event_attendances
