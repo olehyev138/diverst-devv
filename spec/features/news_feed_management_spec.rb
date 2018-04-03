@@ -10,6 +10,9 @@ RSpec.feature 'News Feed Management' do
 		before { user.enterprise.update(enable_pending_comments: true) }
 
 		context 'Group Messages' do
+			let!(:existing_group_message) { create(:group_message, subject: 'An Old Group Message', group_id: group.id,
+				 owner_id: user.id) }
+
 			scenario 'when creating group messages' do
 				visit group_posts_url(group)
 
@@ -32,24 +35,33 @@ RSpec.feature 'News Feed Management' do
 			end
 
 			scenario 'when updating group message' do
-				group_message = create(:group_message, subject: 'First Group Message',
-					content: 'This is the first group message :)', group_id: group.id, owner_id: user.id)
-
 				visit group_posts_url(group)
 
-				expect(page).to have_content group_message.subject
+				expect(page).to have_content existing_group_message.subject
 
 				click_on 'Edit'
 
-				expect(current_url).to eq edit_group_group_message_url(group, group_message)
+				expect(current_url).to eq edit_group_group_message_url(group, existing_group_message)
 
 				fill_in 'group_message[subject]', with: 'Updated Group Message!!!'
 
 				click_on 'Update Group message'
 
 				expect(current_url).to eq group_posts_url(group)
-				expect(page).to_not have_content 'First Group Message'
+				expect(page).to_not have_content 'An Old Group Message'
 				expect(page).to have_content 'Updated Group Message!!!'
+			end
+
+			scenario 'when deleting group message' do
+				visit group_posts_url(group)
+
+				expect(page).to have_content existing_group_message.subject
+
+				click_on 'Delete'
+
+				expect(page).to have_content "Your message was removed. Now you have #{user.credits} points"
+				expect(current_url).to eq group_posts_url(group)
+				expect(page).not_to have_content 'An Old Group Message'
 			end
 		end
 	end
