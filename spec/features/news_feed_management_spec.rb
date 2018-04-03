@@ -64,6 +64,33 @@ RSpec.feature 'News Feed Management' do
 				expect(page).not_to have_content 'An Old Group Message'
 			end
 		end
+
+		context 'News Items' do
+			let!(:image) { File.new('spec/fixtures/files/verizon_logo.png') }
+			let!(:existing_news_item) { create(:news_link, title: 'An Old Group News Item',
+			 description: 'Brief description of News Item', group_id: group.id, picture: image, author_id: user.id) }
+
+			before { visit group_posts_path(group) }
+
+			scenario 'when creating news items with url', js: true do
+				expect(page).to have_link '+ Create News'
+
+				click_on '+ Create News'
+
+				expect(page).to have_content 'Add news'
+
+				fill_in 'news_link[url]', with: 'https://wwww.viz.com/naruto'
+				fill_in 'news_link[title]', with: 'Latest News'
+				fill_in 'news_link[description]', with: 'Naruto is the Seventh Hokage!!!'
+				click_on 'Add a photo'
+				attach_file('File', 'spec/fixtures/files/verizon_logo.png')
+
+				click_on 'Create News link'
+
+				expect(current_path).to eq group_posts_path(group)
+				expect(page).to have_content 'Latest News'
+			end
+		end
 	end
 
 	context 'when enteprise has pending comments disabled'
