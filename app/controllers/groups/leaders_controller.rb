@@ -6,17 +6,17 @@ class Groups::LeadersController < ApplicationController
   layout 'erg'
 
   def index
-    authorize @group, :update?
+    authorize @group, :leaders?
 
     @group_leaders = @group.group_leaders
   end
 
   def new
-    authorize @group, :update?
+    authorize @group, :leaders?
   end
 
   def create
-    authorize @group, :update?
+    authorize @group, :leaders?
     if @group.update(group_params)
       flash[:notice] = "Leaders were updated"
       redirect_to action: :index
@@ -33,6 +33,6 @@ class Groups::LeadersController < ApplicationController
   end
 
   def group_params
-    params.require(:group).permit(group_leaders_attributes: [:id, :user_id, :position_name, :_destroy, :visible, :pending_member_notifications_enabled, :pending_comments_notifications_enabled, :pending_posts_notifications_enabled, :default_group_contact])
+    params.require(:group).permit(group_leaders_attributes: [:id, :user_id, :position_name, :role, :_destroy, :visible, :pending_member_notifications_enabled, :pending_comments_notifications_enabled, :pending_posts_notifications_enabled, :default_group_contact])
   end
 end

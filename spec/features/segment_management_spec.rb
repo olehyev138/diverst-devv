@@ -6,7 +6,7 @@ RSpec.feature 'Segment management' do
   let!(:segment) { create(:segment_with_rules, enterprise: user.enterprise) }
 
   before do
-    login_as(user, scope: :user)
+    login_as(user, scope: :user, :run_callbacks => false)
     user.enterprise.fields << create(:enterprise_field, container: user.enterprise)
   end
 

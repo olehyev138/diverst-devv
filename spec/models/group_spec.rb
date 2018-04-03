@@ -653,13 +653,13 @@ RSpec.describe Group, :type => :model do
             expect(group.contact_email).to eq nil
         end
     end
-    
+
     describe "#private scopes" do
         it "should return correct group counts" do
             enterprise = create(:enterprise)
             create_list(:group, 5, :private => true, :enterprise => enterprise)
             create_list(:group, 3, :private => false, :enterprise => enterprise)
-            
+
             expect(enterprise.groups.count).to eq(8)
             expect(enterprise.groups.is_private.count).to eq(5)
             expect(enterprise.groups.non_private.count).to eq(3)

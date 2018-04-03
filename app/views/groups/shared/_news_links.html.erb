@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col sm-2">
       <% if news_link.photos.count > 0 %>
-        <%= render partial: "shared/carousel/template", locals: {news_link: news_link } %>
+        <%= render partial: "shared/carousel/template", locals: {news_link: news_link, size: "medium" } %>
       <% else %>
         <%= news_link_picture(news_link) %>
       <% end %>

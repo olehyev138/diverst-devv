@@ -2,16 +2,26 @@ require 'rails_helper'
 
 RSpec.describe GroupPolicy, :type => :policy do
     
-    let(:policy_group){ create(:policy_group, :global_settings_manage => true, :groups_manage => false)}
-    let(:enterprise) {create(:enterprise, :policy_groups => [policy_group])}
-    let(:user){ create(:user, :enterprise => enterprise, :policy_group => policy_group) }
-    let(:policy_group_2){ create(:policy_group, :groups_index => false, :groups_create => false, :groups_manage => false, :groups_budgets_index => false, :groups_budgets_request => false, :budget_approval => false)}
-    let(:no_access) { create(:user, :policy_group => policy_group_2) }
+    let(:user){ create(:user) }
+    let(:no_access) { create(:user) }
     let(:group){ create(:group, :owner => user)}
     let(:group_2){ create(:group)}
     let(:group_leader){ create(:group_leader, :user => user, :group => group, :position => "Supreme Leader")}
 
     subject { described_class }
+    
+    before {
+        no_access.policy_group.groups_index = false
+        no_access.policy_group.groups_create = false
+        no_access.policy_group.groups_manage = false
+        no_access.policy_group.groups_budgets_index = false
+        no_access.policy_group.annual_budget_manage = false
+        no_access.policy_group.groups_members_index = false
+        no_access.policy_group.groups_budgets_request = false
+        no_access.policy_group.budget_approval = false
+        no_access.policy_group.groups_manage = false
+        no_access.policy_group.save!
+    }
     
     context "when regular user" do
     
@@ -98,6 +108,8 @@ RSpec.describe GroupPolicy, :type => :policy do
             end
     
             it "doesn't allow access" do
+                user.policy_group.groups_manage = false
+                user.policy_group.save!
                 expect(subject).to_not permit(user, group_2)
             end
         end
@@ -123,8 +135,9 @@ RSpec.describe GroupPolicy, :type => :policy do
         permissions :close_budgets? do
                       
             it "does not allow access" do
-                policy_group.groups_index = false
-                policy_group.save!
+                user.policy_group.groups_index = false
+                user.policy_group.annual_budget_manage = false
+                user.policy_group.save!
                 
                 expect(subject).to_not permit(user, group)
             end

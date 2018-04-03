@@ -2,17 +2,34 @@ class GroupPolicy < ApplicationPolicy
     def index?
         @policy_group.groups_index?
     end
+    
+    def new?
+        manage?
+    end
+    
+    def manage?
+        @policy_group.groups_manage?
+    end
+    
+    def show?
+        index?
+    end
+    
+    def leaders?
+        return true if @policy_group.groups_manage?
+        @policy_group.group_leader_manage?
+    end
 
     def plan_overview?
-        return true if index?
-
-        @user.erg_leader?
+        @policy_group.groups_budgets_index?
+    end
+    
+    def calendar?
+        @policy_group.global_calendar?
     end
 
     def close_budgets?
-        return true if index?
-
-        @user.erg_leader?
+        @policy_group.annual_budget_manage?
     end
 
     def metrics?
@@ -46,11 +63,7 @@ class GroupPolicy < ApplicationPolicy
 
         @record.managers.include?(user)
     end
-
-    def is_admin?
-        @user.policy_group.admin_pages_view?
-    end
-
+    
     def is_a_member?
        (@record.members.include? @user) || is_a_pending_member?
     end
@@ -97,7 +110,6 @@ class GroupPolicy < ApplicationPolicy
         end
     end
 
-
     def view_latest_news?
         #Ablility to view latest news depends on settings level
         case @record.latest_news_visibility
@@ -115,7 +127,6 @@ class GroupPolicy < ApplicationPolicy
         end
     end
 
-
     def view_upcoming_events?
         #Ablility to upcoming events depends on settings level
         case @record.upcoming_events_visibility
@@ -124,7 +135,7 @@ class GroupPolicy < ApplicationPolicy
             return true
         when 'group'
             #depends on group membership
-            is_active_member? || is_a_member? || is_admin?
+            is_active_member? || is_a_member?
         when 'leaders_only'
             #Only users with ability to manipulate members(admins) can see upcoming events
             return manage_members?
@@ -137,8 +148,7 @@ class GroupPolicy < ApplicationPolicy
         view_upcoming_events?
     end
 
-
-   def events_filter
+    def events_filter
        case @record.upcoming_events_visibility
         when 'public'
             #Everyone can upcoming events
@@ -153,11 +163,10 @@ class GroupPolicy < ApplicationPolicy
         else
             return false
         end
-   end
-
+    end
 
     def manage_members?
-        update?
+        @policy_group.groups_members_index?
     end
 
     def erg_leader_permissions?
@@ -196,5 +205,23 @@ class GroupPolicy < ApplicationPolicy
     def destroy?
         return true if @policy_group.groups_manage?
         @record.owner == @user
+    end
+    
+    class Scope < Scope
+        attr_reader :user, :scope, :permission
+
+        def initialize(user, scope, permission)
+          @user  = user
+          @scope = scope
+          @permission = permission
+        end
+    
+        def resolve
+            if UserRole.where(:role_name => user.role, :role_type => "group").count > 0
+                scope.joins(:group_leaders).where(:group_leaders => {:user_id => user.id, permission.to_sym => true})
+            else 
+                scope.includes(:parent, :leaders, :owner, :initiatives)
+            end
+        end
     end
 end

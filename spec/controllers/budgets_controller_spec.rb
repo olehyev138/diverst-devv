@@ -5,7 +5,6 @@ RSpec.describe BudgetsController, type: :controller do
   let!(:group) { FactoryGirl.create(:group, enterprise: user.enterprise, :annual_budget => 100000) }
   let!(:budget) { FactoryGirl.create(:approved_budget, subject: group) }
 
-
   describe 'GET#index' do
     context 'with logged user' do
       let!(:budget1) { create(:approved_budget, subject: group) }
@@ -32,7 +31,6 @@ RSpec.describe BudgetsController, type: :controller do
     end
   end
 
-
   describe 'GET#show' do
     context 'with logged user' do
       login_user_from_let
@@ -52,7 +50,6 @@ RSpec.describe BudgetsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'GET#new' do
     let!(:user) { FactoryGirl.create(:user) }
@@ -81,7 +78,6 @@ RSpec.describe BudgetsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'POST#create' do
     context 'with logged user' do
@@ -132,7 +128,6 @@ RSpec.describe BudgetsController, type: :controller do
     end
   end
 
-
   describe 'POST#approve' do
     context 'with logged user' do
       login_user_from_let
@@ -160,7 +155,6 @@ RSpec.describe BudgetsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'POST#decline' do
     context 'with logged user' do
@@ -194,8 +188,7 @@ RSpec.describe BudgetsController, type: :controller do
     end
   end
 
-
- describe 'DELETE#destroy' do
+  describe 'DELETE#destroy' do
     context 'with logged user' do
       login_user_from_let
         context "with valid destroy" do
@@ -237,10 +230,15 @@ RSpec.describe BudgetsController, type: :controller do
       end
   end
 
-
   describe 'GET#edit_annual_budget' do
     let(:user) { create :user }
     let(:group) { create :group, enterprise: user.enterprise }
+    
+    before {
+      user.policy_group.groups_manage = true
+      user.policy_group.annual_budget_manage = true
+      user.policy_group.save!
+    }
 
     def get_edit_annual_budget(group_id=-1)
       get :edit_annual_budget, group_id: group_id
@@ -265,7 +263,6 @@ RSpec.describe BudgetsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'put#reset_annual_budget' do
     context 'with logged user' do
@@ -335,7 +332,6 @@ RSpec.describe BudgetsController, type: :controller do
     end
   end
 
-
   describe 'put#carry_over_annual_budget' do
     context 'with logged user' do
       login_user_from_let
@@ -403,7 +399,6 @@ RSpec.describe BudgetsController, type: :controller do
         end
     end
   end
-
 
   describe 'POST #update_annual_budget' do
     def post_update_annual_budget(group_id = -1, params = {})

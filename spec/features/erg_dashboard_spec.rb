@@ -5,7 +5,7 @@ RSpec.feature 'An ERG dashboard' do
   let(:group) { create(:group_with_users, :with_outcomes, users_count: 5, enterprise: user.enterprise) }
 
   before do
-    login_as(user, scope: :user)
+    login_as(user, scope: :user, :run_callbacks => false)
   end
 
   scenario 'shows the upcoming events' do
