@@ -757,9 +757,10 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   end
 
   create_table "mentoring_requests", force: :cascade do |t|
-    t.string   "type",       limit: 191,   null: false
-    t.string   "status",     limit: 191,   null: false
-    t.text     "notes",      limit: 65535
+    t.string   "status",      limit: 191,   null: false
+    t.text     "notes",       limit: 65535
+    t.integer  "sender_id",   limit: 4,     null: false
+    t.integer  "receiver_id", limit: 4,     null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -819,13 +820,6 @@ ActiveRecord::Schema.define(version: 20180520224540) do
     t.boolean  "okrs_achieved",                      default: false
     t.boolean  "valuable",                           default: false
     t.text     "comments",             limit: 65535,                 null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "mentorship_requests", force: :cascade do |t|
-    t.integer  "mentorship_id",        limit: 4, null: false
-    t.integer  "mentoring_request_id", limit: 4, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -50,9 +50,10 @@ class CreateMentorshipModule < ActiveRecord::Migration
     end
     
     create_table :mentoring_requests do |t|
-      t.string      :type,    :null => false
-      t.string      :status,  :null => false
+      t.string      :status,    :null => false
       t.text        :notes
+      t.references  :sender,    :null => false, :references => :courses
+      t.references  :receiver,  :null => false, :references => :courses
       t.timestamps
     end
     
@@ -61,13 +62,7 @@ class CreateMentorshipModule < ActiveRecord::Migration
       t.references  :mentoring_interest,  null: false
       t.timestamps
     end
-    
-    create_table :mentorship_requests do |t|
-      t.references  :mentorship,        null: false
-      t.references  :mentoring_request, null: false
-      t.timestamps
-    end
-    
+
     create_table :mentoring_sessions do |t|
       t.datetime    :start,   :null => false
       t.datetime    :end,     :null => false

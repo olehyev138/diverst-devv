@@ -18,6 +18,9 @@ class Mentorship < ActiveRecord::Base
     has_many :mentorship_sessions
     has_many :mentoring_sessions, :through => :mentorship_sessions
 
+    # mentorship_requests
+    has_many :mentorship_requests,  :foreign_key => "sender_id",     :class_name => "MentoringRequest"
+    has_many :mentorship_proposals, :foreign_key => "receiver_id",   :class_name => "MentoringRequest"
     
     # validations
     validates :user,        presence: true
