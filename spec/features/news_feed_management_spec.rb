@@ -110,6 +110,17 @@ RSpec.feature 'News Feed Management' do
 				expect(page).not_to have_content 'Naruto is the Seventh Hokage!!!'
 				expect(page).to have_content 'Naruto is the Seventh Hokage and is married to Hinata :)'
 			end
+
+			scenario 'when deleting news item with url', js: true do
+				expect(page).to have_content 'An Old Group News Item'
+				expect(page).to have_link 'Delete'
+
+				page.accept_confirm(with: 'Are you sure?') do
+					click_on 'Delete'
+				end
+
+				expect(page).not_to have_content 'An Old Group News Item'
+			end
 		end
 	end
 
