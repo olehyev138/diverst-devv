@@ -63,6 +63,35 @@ RSpec.feature 'News Feed Management' do
 				expect(current_path).to eq group_posts_path(group)
 				expect(page).not_to have_content 'An Old Group Message'
 			end
+
+			scenario 'when adding comments to existing Group Message' do
+				visit group_posts_path(group)
+
+				expect(page).to have_content existing_group_message.subject
+
+				click_on 'Comments(0)'
+
+				expect(current_path).to eq group_group_message_path(group, existing_group_message)
+
+				within('h1') do
+					expect(page).to have_content existing_group_message.subject
+				end
+
+
+				fill_in 'group_message_comment[content]', with: 'first comment'
+
+				click_on 'Post a comment'
+
+				expect(page).to have_content 'first comment'
+
+				click_on 'Approve'
+
+				expect(page).to have_content 'Your comment was updated'
+
+				visit group_posts_path(group)
+
+				expect(page).to have_link 'Comments(1)'
+			end
 		end
 
 		context 'News Items' do
