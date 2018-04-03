@@ -116,6 +116,8 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
 
   validate :valid_yammer_group_link?
 
+  validate :ensure_one_level_nesting
+
   before_create :build_default_news_feed
   before_save :send_invitation_emails, if: :send_invitations?
   before_save :create_yammer_group, if: :should_create_yammer_group?
@@ -317,6 +319,12 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
 
 
   private
+
+  def ensure_one_level_nesting
+    if parent.present? && children.present?
+      errors.add(:parent_id, "group can't have both parent and children")
+    end
+  end
 
   def perform_check_for_consistency_in_category
     if self.parent.present?

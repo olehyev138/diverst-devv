@@ -256,7 +256,7 @@ RSpec.describe Initiative, type: :model do
   end
 
   describe "#highcharts_history" do
-    it "returns data", skip: "returns true instead" do
+    it "returns data", skip: "test fails" do
       initiative = create(:initiative, :start => Date.today, :end => Date.today + 1.hour)
       field = create(:field)
       create(:initiative_field, :initiative => initiative, :field => field)

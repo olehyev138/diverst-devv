@@ -109,6 +109,41 @@ RSpec.describe Group, :type => :model do
             end
           end
         end
+
+        describe '#ensure_one_level_nesting' do
+          let!(:group) { create(:group) }
+          let(:parent_group) { create(:group, enterprise: group.enterprise) }
+          let(:child_group) { create(:group, enterprise: group.enterprise) }
+
+          context 'with parent only' do
+            before { group.parent = parent_group }
+
+            it 'is valid' do
+              expect(group).to be_valid
+            end
+          end
+
+          context 'with children only' do
+            before { group.children << child_group }
+
+            it 'is valid' do
+              expect(group).to be_valid
+            end
+          end
+
+          context 'with both parent and children' do
+            before do
+              group.parent = parent_group
+              group.children << child_group
+            end
+
+            it 'is invalid' do
+              expect(group).to_not be_valid
+
+              expect(group.errors.messages[:parent_id]).to include "group can't have both parent and children"
+            end
+          end
+        end
     end
 
     describe '#yammer_group_id' do
