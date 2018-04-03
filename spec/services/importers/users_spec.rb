@@ -40,6 +40,7 @@ RSpec.describe Importers::Users do
         "First name",
         "Last name",
         "Email",
+        "Active",
         job_field.title,
         gender_field.title,
         date_field.title,
@@ -51,6 +52,7 @@ RSpec.describe Importers::Users do
           user.first_name,
           user.last_name,
           user.email,
+          'false', #even with false Active field we expect true in created user
           "Developer",
           "Male",
           "1992-01-25",
@@ -73,6 +75,7 @@ RSpec.describe Importers::Users do
       expect(saved_user.first_name).to eq user.first_name
       expect(saved_user.last_name).to eq user.last_name
       expect(saved_user.email).to eq user.email
+      expect(saved_user.active?).to eq true
       expect(infos.fetch(job_field.id)).to eq "Developer"
       expect(infos.fetch(gender_field.id)).to eq ["Male"]
       expect(infos.fetch(date_field.id)).to eq Time.strptime("1992-01-25", '%F').to_i

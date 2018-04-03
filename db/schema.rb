@@ -11,14 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180317112435) do
+ActiveRecord::Schema.define(version: 20180319220412) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
     t.string   "trackable_type", limit: 191
     t.integer  "owner_id",       limit: 4
     t.string   "owner_type",     limit: 191
-    t.string   "key",            limit: 255
+    t.string   "key",            limit: 191
     t.text     "parameters",     limit: 65535
     t.integer  "recipient_id",   limit: 4
     t.string   "recipient_type", limit: 191
@@ -594,13 +594,14 @@ ActiveRecord::Schema.define(version: 20180317112435) do
     t.integer  "sponsor_media_file_size",    limit: 4
     t.datetime "sponsor_media_updated_at"
     t.string   "company_video_url",          limit: 191
-    t.string   "contact_email",              limit: 191
     t.string   "latest_news_visibility",     limit: 191
     t.string   "upcoming_events_visibility", limit: 191
     t.integer  "group_category_id",          limit: 4
     t.integer  "group_category_type_id",     limit: 4
     t.boolean  "private",                                                          default: false
     t.text     "short_description",          limit: 65535
+    t.string   "layout",                     limit: 191
+    t.text     "home_message",               limit: 65535
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
@@ -912,8 +913,6 @@ ActiveRecord::Schema.define(version: 20180317112435) do
     t.boolean  "budget_approval",                       default: false
     t.boolean  "logs_view",                             default: false
     t.boolean  "annual_budget_manage",                  default: false
-    t.boolean  "expenses_index",                        default: false
-    t.boolean  "expenses_manage",                       default: false
     t.boolean  "sso_manage",                            default: false
     t.boolean  "permissions_manage",                    default: false
     t.boolean  "diversity_manage",                      default: false

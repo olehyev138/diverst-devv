@@ -125,6 +125,10 @@ module ApplicationHelper
   end
 
   def show_sponsor_card?(object, m)
+    if object.is_a?(Enterprise) && object.disable_sponsor_message
+      return
+    end
+
     if object.public_send(m.to_sym).present?
       yield
     end

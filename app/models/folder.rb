@@ -1,7 +1,7 @@
 class Folder < ActiveRecord::Base
-  
+
   has_secure_password(validations: false)
-  
+
   # associations
   belongs_to  :container, polymorphic: true
   has_many    :resources, as: :container
@@ -24,11 +24,11 @@ class Folder < ActiveRecord::Base
   
   # callbacks
   before_save :set_password
-  
+
   def set_password
     self.password = nil if !password_protected?
   end
-  
+
   def valid_password?(user_password)
     return authenticate(user_password)
   end

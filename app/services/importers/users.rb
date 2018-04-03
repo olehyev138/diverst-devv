@@ -61,7 +61,7 @@ class Importers::Users
       last_name: row["last name"],
       email: row["email"],
       biography: row["biography"],
-      active: row["active"]
+      active: true #row["active"] # we decided to consider all imported users active
     }
   end
 end
