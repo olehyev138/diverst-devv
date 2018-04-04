@@ -78,7 +78,7 @@
 
             <h2>Choose your <%= c_t(:erg) %></h2>
 
-            <% resource.enterprise.groups.each do |group| %>
+            <% resource.enterprise.groups.all_parents.each do |group| %>
               <div class="media-object" data-group-id="<%= group.id %>">
                 <div class="flex-row">
                   <div class="flex-row__cell">

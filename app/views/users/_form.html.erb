@@ -2,7 +2,10 @@
       as: :attachment_preview,
       label: 'Profile Picture',
       input_html: { autofocus: true } %>
-<%= f.input :email %>
+<% if @is_admin_view %>
+  <%= f.input :email %>
+<% end %>
+
 <%= f.input :first_name %>
 <%= f.input :last_name %>
 <%= f.input :biography %>

@@ -322,7 +322,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
 
   def ensure_one_level_nesting
     if parent.present? && children.present?
-      errors.add(:parent_id, "group can't have both parent and children")
+      errors.add(:parent_id, "Group can't have both parent and children")
     end
   end
 
