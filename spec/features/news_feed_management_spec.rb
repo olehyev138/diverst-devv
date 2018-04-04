@@ -92,6 +92,44 @@ RSpec.feature 'News Feed Management' do
 
 				expect(page).to have_link 'Comments(1)'
 			end
+
+			scenario 'when editing comments to existing Group Message' do
+				existing_group_message_comment = create(:group_message_comment, content: 'An Old Group Message Comment',
+					author_id: user.id, message_id: existing_group_message.id, approved: true)
+
+				visit group_posts_path(group)
+
+				expect(page).to have_content existing_group_message.subject
+				expect(page).to have_link 'Comments(1)'
+
+				click_on 'Comments(1)'
+
+				expect(current_path).to eq group_group_message_path(group, existing_group_message)
+				within('.content__header h1') do
+					expect(page).to have_content existing_group_message.subject
+				end
+
+				within('.content__header h2') do
+					expect(page).to have_content 'Comments'
+				end
+
+				expect(page).to have_content existing_group_message_comment.content
+
+				click_on 'Edit'
+
+				expect(current_path).to eq edit_group_group_message_group_message_comment_path(group, existing_group_message, existing_group_message_comment)
+				expect(page).to have_content 'Edit Comment'
+				expect(page).to have_field('group_message_comment[content]', with: existing_group_message_comment.content)
+
+				fill_in 'group_message_comment[content]', with: 'This Message is brought to you by FC Barcelona'
+
+				click_on 'Save your comment'
+
+				expect(current_path).to eq group_group_message_path(group, existing_group_message)
+				expect(page).to have_content 'Your comment was updated'
+				expect(page).to have_content 'This Message is brought to you by FC Barcelona'
+				expect(page).not_to have_content 'An Old Group Message Comment'
+			end
 		end
 
 		context 'News Items' do
