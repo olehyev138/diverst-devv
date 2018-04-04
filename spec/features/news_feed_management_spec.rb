@@ -52,12 +52,14 @@ RSpec.feature 'News Feed Management' do
 				expect(page).to have_content 'Updated Group Message!!!'
 			end
 
-			scenario 'when deleting group message' do
+			scenario 'when deleting group message', js: true do
 				visit group_posts_path(group)
 
 				expect(page).to have_content existing_group_message.subject
 
-				click_on 'Delete'
+				page.accept_confirm(with: 'Are you sure?') do
+					click_on 'Delete'
+				end
 
 				expect(page).to have_content "Your message was removed. Now you have #{user.credits} points"
 				expect(current_path).to eq group_posts_path(group)
@@ -93,42 +95,55 @@ RSpec.feature 'News Feed Management' do
 				expect(page).to have_link 'Comments(1)'
 			end
 
-			scenario 'when editing comments to existing Group Message' do
-				existing_group_message_comment = create(:group_message_comment, content: 'An Old Group Message Comment',
-					author_id: user.id, message_id: existing_group_message.id, approved: true)
+			context 'for existing comments for existing Group Message' do
+				let!(:existing_group_message_comment) { create(:group_message_comment, content: 'An Old Group Message Comment',
+					author_id: user.id, message_id: existing_group_message.id, approved: true) }
 
-				visit group_posts_path(group)
+				scenario 'when editing comments to existing Group Message' do
+					visit group_posts_path(group)
 
-				expect(page).to have_content existing_group_message.subject
-				expect(page).to have_link 'Comments(1)'
-
-				click_on 'Comments(1)'
-
-				expect(current_path).to eq group_group_message_path(group, existing_group_message)
-				within('.content__header h1') do
 					expect(page).to have_content existing_group_message.subject
+					expect(page).to have_link 'Comments(1)'
+
+					click_on 'Comments(1)'
+
+					expect(current_path).to eq group_group_message_path(group, existing_group_message)
+					within('.content__header h1') do
+						expect(page).to have_content existing_group_message.subject
+					end
+
+					within('.content__header h2') do
+						expect(page).to have_content 'Comments'
+					end
+
+					expect(page).to have_content existing_group_message_comment.content
+
+					click_on 'Edit'
+
+					expect(current_path).to eq edit_group_group_message_group_message_comment_path(group, existing_group_message, existing_group_message_comment)
+					expect(page).to have_content 'Edit Comment'
+					expect(page).to have_field('group_message_comment[content]', with: existing_group_message_comment.content)
+
+					fill_in 'group_message_comment[content]', with: 'This Message is brought to you by FC Barcelona'
+
+					click_on 'Save your comment'
+
+					expect(current_path).to eq group_group_message_path(group, existing_group_message)
+					expect(page).to have_content 'Your comment was updated'
+					expect(page).to have_content 'This Message is brought to you by FC Barcelona'
+					expect(page).not_to have_content 'An Old Group Message Comment'
 				end
 
-				within('.content__header h2') do
-					expect(page).to have_content 'Comments'
+				scenario 'when deleting comments to existing Group Message', js: true do
+					visit group_group_message_path(group, existing_group_message)
+
+					expect(page).to have_content existing_group_message_comment.content
+					expect(page).to have_link 'Delete'
+
+					click_on 'Delete'
+
+					expect(page).not_to have_content 'An Old Group Message Comment'
 				end
-
-				expect(page).to have_content existing_group_message_comment.content
-
-				click_on 'Edit'
-
-				expect(current_path).to eq edit_group_group_message_group_message_comment_path(group, existing_group_message, existing_group_message_comment)
-				expect(page).to have_content 'Edit Comment'
-				expect(page).to have_field('group_message_comment[content]', with: existing_group_message_comment.content)
-
-				fill_in 'group_message_comment[content]', with: 'This Message is brought to you by FC Barcelona'
-
-				click_on 'Save your comment'
-
-				expect(current_path).to eq group_group_message_path(group, existing_group_message)
-				expect(page).to have_content 'Your comment was updated'
-				expect(page).to have_content 'This Message is brought to you by FC Barcelona'
-				expect(page).not_to have_content 'An Old Group Message Comment'
 			end
 		end
 
@@ -187,6 +202,36 @@ RSpec.feature 'News Feed Management' do
 				end
 
 				expect(page).not_to have_content 'An Old Group News Item'
+			end
+
+			scenario 'when adding comments to news link' do
+				expect(page).to have_content existing_news_item.title
+				expect(page).to have_link 'Comments(0)', href: "/groups/#{group.id}/news_links/#{existing_news_item.id}/comments"
+
+				click_link 'Comments(0)', href: "/groups/#{group.id}/news_links/#{existing_news_item.id}/comments"
+			
+				expect(current_path).to eq comments_group_news_link_path(group, existing_news_item)
+				within('.content__header h1') do
+					expect(page).to have_content 'News Discussion'
+				end
+
+				fill_in 'news_link_comment[content]', with: 'this news item is outdated!!!'
+
+				click_on 'Post a comment'
+
+				expect(page).to have_content 'this news item is outdated!!!'
+
+				click_on 'Approve'
+				expect(page).to have_content 'Your comment was updated'
+
+				visit group_posts_path(group)
+
+				expect(page).to have_link 'Comments(1)'
+			end
+
+			context 'for existing comments for existing news link' do
+				scenario 'when editing comments to news link'
+				scenario 'when deleting comments to news link'
 			end
 		end
 	end
