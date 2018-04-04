@@ -209,7 +209,6 @@ RSpec.feature 'News Feed Management' do
 				expect(page).to have_link 'Comments(0)', href: "/groups/#{group.id}/news_links/#{existing_news_item.id}/comments"
 
 				click_link 'Comments(0)', href: "/groups/#{group.id}/news_links/#{existing_news_item.id}/comments"
-			
 				expect(current_path).to eq comments_group_news_link_path(group, existing_news_item)
 				within('.content__header h1') do
 					expect(page).to have_content 'News Discussion'
@@ -222,6 +221,7 @@ RSpec.feature 'News Feed Management' do
 				expect(page).to have_content 'this news item is outdated!!!'
 
 				click_on 'Approve'
+
 				expect(page).to have_content 'Your comment was updated'
 
 				visit group_posts_path(group)
@@ -229,9 +229,42 @@ RSpec.feature 'News Feed Management' do
 				expect(page).to have_link 'Comments(1)'
 			end
 
-			context 'for existing comments for existing news link' do
-				scenario 'when editing comments to news link'
-				scenario 'when deleting comments to news link'
+			context 'for existing comments for existing News Link' do
+				let!(:image) { File.new('spec/fixtures/files/verizon_logo.png') }
+				let!(:existing_news_item) { create(:news_link, title: 'An Old Group News Item',
+					description: 'Brief description of News Item', group_id: group.id, picture: image, author_id: user.id) }
+				let!(:news_link_comment) { create(:news_link_comment, content: 'An Old News Link Comment', author_id: user.id, 
+					news_link_id: existing_news_item.id, approved: true) }
+
+				before { visit group_posts_path(group) }
+
+				scenario 'when editing comments for news link' do
+					expect(page).to have_content existing_news_item.title
+					expect(page).to have_link 'Comments(1)', href: "/groups/#{group.id}/news_links/#{existing_news_item.id}/comments"
+
+					click_link 'Comments(1)', href: "/groups/#{group.id}/news_links/#{existing_news_item.id}/comments"
+
+					within('.content__header h1') do
+						expect(page).to have_content 'News Discussion'
+					end
+
+					expect(page).to have_content news_link_comment.content
+
+					click_on 'Edit'
+
+					expect(current_path).to eq edit_group_news_link_news_link_comment_path(group, existing_news_item, news_link_comment)
+					expect(page).to have_content 'Edit Comment'
+					expect(page).to have_field('news_link_comment[content]', with: news_link_comment.content)
+
+					fill_in 'news_link_comment[content]', with: 'this comment just got updated!!!'
+
+					click_on 'Save your comment'
+
+					expect(current_path).to eq comments_group_news_link_path(group, existing_news_item)
+					expect(page).to have_content 'Your comment was updated'
+					expect(page).to have_content 'this comment just got updated!!!'
+					expect(page).not_to have_content 'An Old News Link Comment'
+				end
 			end
 		end
 	end
