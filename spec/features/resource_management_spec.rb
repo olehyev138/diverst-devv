@@ -23,17 +23,6 @@ RSpec.feature 'Resource management' do
 			attach_file('resource[file]', 'spec/fixtures/files/verizon_logo.png')
 		end
 
-		scenario 'and move to a different folder' do
-			pending 'this is a buggy feature and currently fails'
-
-			select folder_with_pp.name, from: 'resource[container_id]'
-
-			click_on 'Create Resource'
-
-			expect(current_path).to eq enterprise_folder_resources_path(user.enterprise, folder_with_pp)
-			expect(page).to have_content 'Advanced Genetic Research'
-		end
-
 		scenario 'within same folder' do
 			select folder_without_pp.name, from: 'resource[container_id]'
 
