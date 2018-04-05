@@ -13,7 +13,7 @@ RSpec.feature 'News Feed Management' do
 			let!(:existing_group_message) { create(:group_message, subject: 'An Old Group Message', group_id: group.id,
 				owner_id: user.id) }
 
-			scenario 'when creating group messages' do
+			scenario 'when creating group message' do
 				visit group_posts_path(group)
 
 				expect(page).to have_link '+ Create Message'
@@ -265,7 +265,34 @@ RSpec.feature 'News Feed Management' do
 					expect(page).to have_content 'this comment just got updated!!!'
 					expect(page).not_to have_content 'An Old News Link Comment'
 				end
+
+				scenario 'when deleting comments for news link', js: true do
+					click_link 'Comments(1)', href: "/groups/#{group.id}/news_links/#{existing_news_item.id}/comments"
+
+					expect(page).to have_content news_link_comment.content
+
+					click_link 'Delete', href: "/groups/#{group.id}/news_links/#{existing_news_item.id}/news_link_comment/#{news_link_comment.id}"
+
+					expect(page).not_to have_content news_link_comment.content
+				end
 			end
+		end
+
+		context 'Social Links' do
+			# Here I want you to test how our social-media posting feature works
+			# In order to see social media posting button, add
+			# ENABLE_SOCIAL_MEDIA: 'true'
+			# to your appication.yml
+			# and you'll be able to see social media creation button at user news page
+
+			# We currently support Youtube, Facebook, Twitter and Instagram
+			# For each of those, you need to create separate scenario
+			# In scenario, you go to new social media page, post link to social media
+			# Then you go to group news page end expect to find embeddable html for particular item
+			scenario 'posting YouTube'
+			scenario 'posting Twitter'
+			scenario 'posting Facebook'
+			scenario 'posting Instagram'
 		end
 	end
 
