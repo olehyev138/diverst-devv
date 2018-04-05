@@ -797,17 +797,17 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   end
 
   create_table "mentorship_availabilities", force: :cascade do |t|
-    t.integer  "mentorship_id", limit: 4, null: false
-    t.datetime "start",                   null: false
-    t.datetime "end",                     null: false
+    t.integer  "user_id",    limit: 4, null: false
+    t.datetime "start",                null: false
+    t.datetime "end",                  null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "mentorship_availabilities", ["mentorship_id"], name: "index_mentorship_availabilities_on_mentorship_id", using: :btree
+  add_index "mentorship_availabilities", ["user_id"], name: "index_mentorship_availabilities_on_user_id", using: :btree
 
   create_table "mentorship_interests", force: :cascade do |t|
-    t.integer  "mentorship_id",         limit: 4, null: false
+    t.integer  "user_id",               limit: 4, null: false
     t.integer  "mentoring_interest_id", limit: 4, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -815,7 +815,7 @@ ActiveRecord::Schema.define(version: 20180520224540) do
 
   create_table "mentorship_ratings", force: :cascade do |t|
     t.integer  "rating",               limit: 4,                     null: false
-    t.integer  "mentorship_id",        limit: 4,                     null: false
+    t.integer  "user_id",              limit: 4,                     null: false
     t.integer  "mentoring_session_id", limit: 4,                     null: false
     t.boolean  "okrs_achieved",                      default: false
     t.boolean  "valuable",                           default: false
@@ -825,7 +825,7 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   end
 
   create_table "mentorship_sessions", force: :cascade do |t|
-    t.integer  "mentorship_id",        limit: 4,                null: false
+    t.integer  "user_id",              limit: 4,                null: false
     t.integer  "mentoring_session_id", limit: 4,                null: false
     t.boolean  "attending",                      default: true
     t.datetime "created_at"
@@ -833,22 +833,11 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   end
 
   create_table "mentorship_types", force: :cascade do |t|
-    t.integer  "mentorship_id",     limit: 4, null: false
+    t.integer  "user_id",           limit: 4, null: false
     t.integer  "mentoring_type_id", limit: 4, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  create_table "mentorships", force: :cascade do |t|
-    t.integer  "user_id",     limit: 4,                     null: false
-    t.boolean  "mentor",                    default: false
-    t.boolean  "mentee",                    default: true
-    t.text     "description", limit: 65535
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "mentorships", ["user_id"], name: "index_mentorships_on_user_id", using: :btree
 
   create_table "metrics_dashboards", force: :cascade do |t|
     t.integer  "enterprise_id",   limit: 4
@@ -1226,14 +1215,14 @@ ActiveRecord::Schema.define(version: 20180520224540) do
     t.text     "data",                        limit: 65535
     t.string   "auth_source",                 limit: 191
     t.integer  "enterprise_id",               limit: 4
-    t.datetime "created_at",                                               null: false
-    t.datetime "updated_at",                                               null: false
+    t.datetime "created_at",                                                null: false
+    t.datetime "updated_at",                                                null: false
     t.string   "email",                       limit: 191
     t.string   "encrypted_password",          limit: 191
     t.string   "reset_password_token",        limit: 191
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",               limit: 4,     default: 0,    null: false
+    t.integer  "sign_in_count",               limit: 4,     default: 0,     null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip",          limit: 191
@@ -1261,13 +1250,15 @@ ActiveRecord::Schema.define(version: 20180520224540) do
     t.integer  "policy_group_id",             limit: 4
     t.boolean  "active",                                    default: true
     t.text     "biography",                   limit: 65535
-    t.integer  "points",                      limit: 4,     default: 0,    null: false
-    t.integer  "credits",                     limit: 4,     default: 0,    null: false
+    t.integer  "points",                      limit: 4,     default: 0,     null: false
+    t.integer  "credits",                     limit: 4,     default: 0,     null: false
     t.string   "time_zone",                   limit: 191
     t.integer  "total_weekly_points",         limit: 4,     default: 0
-    t.integer  "failed_attempts",             limit: 4,     default: 0,    null: false
+    t.integer  "failed_attempts",             limit: 4,     default: 0,     null: false
     t.string   "unlock_token",                limit: 191
     t.datetime "locked_at"
+    t.boolean  "mentee",                                    default: false
+    t.boolean  "mentor",                                    default: false
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree
@@ -1308,8 +1299,7 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   add_foreign_key "likes", "enterprises"
   add_foreign_key "likes", "news_feed_links"
   add_foreign_key "likes", "users"
-  add_foreign_key "mentorship_availabilities", "mentorships"
-  add_foreign_key "mentorships", "users"
+  add_foreign_key "mentorship_availabilities", "users"
   add_foreign_key "polls", "initiatives"
   add_foreign_key "reward_actions", "enterprises"
   add_foreign_key "rewards", "enterprises"

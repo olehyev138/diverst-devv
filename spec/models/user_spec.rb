@@ -461,4 +461,188 @@ RSpec.describe User do
       end
     end
   end
+  
+  describe "#set_group_role" do
+    context "when user is an existing group_leader but current role is admin and user tries to set role to role with lower priority" do
+      it "sets the users role to the group_leader_role with higher priority" do
+        group_leader_user = create(:user, :role => "user")
+        create(:user_role, :enterprise => group_leader_user.enterprise, :role_name => "group_treasurer", :role_type => "group", :priority => 2)
+        group_1 = create(:group, :enterprise => group_leader_user.enterprise)
+        group_2 = create(:group, :enterprise => group_leader_user.enterprise)
+        
+        create(:user_group, :group => group_1, :user => group_leader_user)
+        create(:user_group, :group => group_2, :user => group_leader_user)
+        create(:group_leader, :group => group_1, :role => "group_leader", :user => group_leader_user)
+        create(:group_leader, :group => group_2, :role => "group_treasurer", :user => group_leader_user)
+        
+        expect(group_leader_user.role).to eq("group_leader")
+        
+        # we give the user admin permissions
+        group_leader_user.role = "admin"
+        group_leader_user.save!
+        
+        # verify the role
+        expect(group_leader_user.role).to eq("admin")
+        
+        # we set the user role to a group role wit lower priority
+        group_leader_user.role = "group_treasurer"
+        group_leader_user.save!
+        
+        # verify that the user's role is set to the role with higher priority
+        expect(group_leader_user.role).to eq("group_leader")
+      end
+    end
+  end
+  
+  describe "#group_leader_role" do
+    it "raises an User is not a group leader error" do
+      user = create(:user)
+      user.role = "group_leader"
+      user.save
+      
+      expect(user.errors.full_messages.first).to eq("Role User is not a group leader")
+    end
+    
+    it "raises a Cannot change group_leader roles manually error" do
+      user = create(:user, :role => "user")
+      create(:user_role, :enterprise => user.enterprise, :role_name => "group_treasurer", :role_type => "group", :priority => 2)
+      
+      group_1 = create(:group, :enterprise => user.enterprise)
+      create(:user_group, :group => group_1, :user => user)
+      create(:group_leader, :group => group_1, :user => user, :role => "group_leader")
+      
+      group_2 = create(:group, :enterprise => user.enterprise)
+      create(:user_group, :group => group_2, :user => user)
+      create(:group_leader, :group => group_2, :user => user, :role => "group_treasurer")
+      
+      user.role = "group_treasurer"
+      user.save
+      
+      expect(user.errors.full_messages.first).to eq("Role Cannot change group_leader roles manually")
+    end
+    
+    it "raises a Cannot change group_leader roles manually error" do
+      user = create(:user, :role => "user")
+      create(:user_role, :enterprise => user.enterprise, :role_name => "group_treasurer", :role_type => "group", :priority => 2)
+      
+      group_1 = create(:group, :enterprise => user.enterprise)
+      create(:user_group, :group => group_1, :user => user)
+      create(:group_leader, :group => group_1, :user => user, :role => "group_leader")
+      
+      group_2 = create(:group, :enterprise => user.enterprise)
+      create(:user_group, :group => group_2, :user => user)
+      create(:group_leader, :group => group_2, :user => user, :role => "group_treasurer")
+      
+      user.role = "group_treasurer"
+      user.save
+      
+      expect(user.errors.full_messages.first).to eq("Role Cannot change group_leader roles manually")
+    end
+    
+    it "raises an User does not have that role in any group error" do
+      user = create(:user)
+      create(:user_role, :enterprise => user.enterprise, :role_name => "group_treasurer", :role_type => "group", :priority => 2)
+      
+      group_1 = create(:group, :enterprise => user.enterprise)
+      create(:user_group, :group => group_1, :user => user)
+      create(:group_leader, :group => group_1, :user => user, :role => "group_leader")
+      
+      user.role = "group_treasurer"
+      user.save
+      
+      expect(user.errors.full_messages.first).to eq("Role User does not have that role in any group")
+    end
+    
+    it "raises a Cannot change from group role to role with lower priority error" do
+      user = create(:user, :role => "user")
+      
+      group_1 = create(:group, :enterprise => user.enterprise)
+      create(:user_group, :group => group_1, :user => user)
+      create(:group_leader, :group => group_1, :user => user, :role => "group_leader")
+      
+      expect(user.role).to eq("group_leader")
+      
+      user.role = "user"
+      user.save
+      
+      expect(user.errors.full_messages.first).to eq("Role Cannot change from group role to role with lower priority")
+    end
+    
+    it "raises a Cannot change from group role to role with lower priority error" do
+      user = create(:user)
+      
+      group_1 = create(:group, :enterprise => user.enterprise)
+      create(:user_group, :group => group_1, :user => user)
+      create(:group_leader, :group => group_1, :user => user, :role => "group_leader")
+      
+      user.role = "user"
+      user.save
+      
+      expect(user.errors.full_messages.first).to eq("Role Cannot change from role to role with lower priority while user is still a group leader")
+    end
+  end
+  
+  describe "#admin?" do
+    it "returns true" do
+      user = create(:user)
+      expect(user.admin?).to be(true)
+    end
+  end
+  
+  describe "mentorship" do
+    it "goes through whole workflow" do
+      # create a user interested in being mentored
+      mentee = create(:user, :mentee => true)
+      
+      # the mentorship doesn't have any mentors/mentees/availability/
+      # mentorship_types/mentoring_interests
+      expect(mentee.mentors.count).to eq(0)
+      expect(mentee.mentees.count).to eq(0)
+      expect(mentee.availabilities.count).to eq(0)
+      expect(mentee.mentorship_types.count).to eq(0)
+      expect(mentee.mentoring_interests.count).to eq(0)
+      
+      # the mentorship doesn't have any pending sessions/requests/ratings
+      expect(mentee.mentorship_requests.count).to eq(0)
+      expect(mentee.mentorship_proposals.count).to eq(0)
+      expect(mentee.mentoring_sessions.count).to eq(0)
+      expect(mentee.mentorship_ratings.count).to eq(0)
+      
+      # sending a request for mentorship to a mentor
+      mentor = create(:user, :mentor => true)
+      mentorship_request = create(:mentoring_request, :sender => mentee, :receiver => mentor)
+      
+      # check the request
+      expect(mentorship_request.valid?).to be(true)
+      expect(mentorship_request.sender.id).to eq(mentee.id)
+      expect(mentorship_request.receiver.id).to eq(mentor.id)
+      
+      expect(mentee.mentorship_requests.count).to eq(1)
+      expect(mentee.mentorship_proposals.count).to eq(0)
+      
+      expect(mentor.mentorship_requests.count).to eq(0)
+      expect(mentor.mentorship_proposals.count).to eq(1)
+      
+      # schedule a session
+      mentoring_session = create(:mentoring_session, :user_ids => [mentor.id, mentee.id])
+      
+      # check the session
+      expect(mentoring_session.valid?).to be(true)
+      expect(mentoring_session.status).to eq("scheduled")
+      expect(mentoring_session.users.count).to eq(2)
+      
+      # leave some ratings
+      mentor_rating = build(:mentorship_rating, :user => mentor, :mentoring_session => mentoring_session)
+      mentee_rating = build(:mentorship_rating, :user => mentee, :mentoring_session => mentoring_session)
+      
+      mentor_rating.comments = "This is the best mentor ever"
+      mentee_rating.comments = "Mentee was a great listener"
+      
+      mentor_rating.save!
+      mentee_rating.save!
+      
+      expect(mentor_rating.rating).to eq(7)
+      expect(mentee_rating.rating).to eq(7)
+    end
+  end
 end

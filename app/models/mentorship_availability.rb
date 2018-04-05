@@ -1,9 +1,9 @@
 class MentorshipAvailability < ActiveRecord::Base
     # associations
-    belongs_to :mentorship
+    belongs_to :user
     
     # validations
-    validates :mentorship,  presence: true
-    validates :start,       presence: true
-    validates :end,         presence: true
+    validates :user,    presence: true
+    validates :start,   presence: true
+    validates :end,     presence: true
 end

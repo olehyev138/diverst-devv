@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :mentoring do
-    association :mentee, factory: :mentorship
-    association :mentor, factory: :mentorship
+    association :mentee, factory: :user
+    association :mentor, factory: :user
   end
 end

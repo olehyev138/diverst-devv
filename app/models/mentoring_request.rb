@@ -3,8 +3,8 @@ class MentoringRequest < ActiveRecord::Base
     has_many :mentoring_request_interests
     has_many :mentoring_interests, :through => :mentoring_request_interests
     
-    belongs_to :sender,     :class_name => "Mentorship"
-    belongs_to :receiver,   :class_name => "Mentorship"
+    belongs_to :sender,     :class_name => "User"
+    belongs_to :receiver,   :class_name => "User"
     
     # validations
     validates :status,      presence: true
