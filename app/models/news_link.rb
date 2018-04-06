@@ -40,6 +40,14 @@ class NewsLink < ActiveRecord::Base
         news_link_segment.news_feed_link_segment.destroy
     end
 
+    def comments_count
+        if group.enterprise.enable_pending_comments?
+            comments.approved.count
+        else
+            comments.count
+        end
+    end
+
     protected
 
     def smart_add_url_protocol

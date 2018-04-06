@@ -21,9 +21,7 @@
               <span class="muted">Posted by <%=  news_link.author.name_with_status %></span>
             <% end %>
             <br>
-            <%= link_to "Comments(#{news_link.comments.approved.count})", comments_group_news_link_path(news_link.group,news_link)
-             %>
-          </p>
+            <%= link_to "Comments(#{news_link.comments_count})", comments_group_news_link_path(news_link.group,news_link) %>
         </div>
         <% if policy(news_link).edit? %>
           <div class="flex-row__cell link-group">

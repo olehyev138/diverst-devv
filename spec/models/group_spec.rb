@@ -139,8 +139,7 @@ RSpec.describe Group, :type => :model do
 
             it 'is invalid' do
               expect(group).to_not be_valid
-
-              expect(group.errors.messages[:parent_id]).to include "group can't have both parent and children"
+              expect(group.errors.messages[:parent_id]).to include "Group can't have both parent and children"
             end
           end
         end
