@@ -287,8 +287,6 @@ RSpec.feature 'News Feed Management' do
 				owner_id: user.id) }
 
 			scenario 'when adding comments to existing Group Message without approval' do
-				pending 'this feature is pending merge to testing server'
-
 				visit group_posts_path(group)
 
 				expect(page).to have_content existing_group_message.subject
@@ -322,8 +320,6 @@ RSpec.feature 'News Feed Management' do
 			before { visit group_posts_path(group) }
 
 			scenario 'when adding comments to news link' do
-				pending 'this feature is pending merge to testing server'
-
 				expect(page).to have_content existing_news_item.title
 				expect(page).to have_link 'Comments(0)', href: "/groups/#{group.id}/news_links/#{existing_news_item.id}/comments"
 
