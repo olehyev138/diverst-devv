@@ -2,10 +2,15 @@ require 'rails_helper'
 
 RSpec.feature 'Group Leader Management' do
 	let!(:user) { create(:user, first_name: 'Aaron', last_name: 'Patterson') }
+	let!(:other_user) { create(:user, first_name: 'Yehuda', last_name: 'Katz') }
 	let!(:group) { create(:group, name: 'Group ONE', enterprise: user.enterprise) }
-	let!(:user_group) { create(:user_group, user_id: user.id, group_id: group.id) }
 
-	before { login_as(user, scope: :user) }
+	before do 
+		login_as(user, scope: :user) 
+		[user, other_user].each do |user|
+	    	create(:user_group, user_id: user.id, group_id: group.id)
+		end
+	end
 
 	context 'Manage Group Leaders' do
 		before do
@@ -41,7 +46,7 @@ RSpec.feature 'Group Leader Management' do
 			expect(page).to have_content 'Chief Software Architect'
 		end
 
-		scenario 'set email of group leader as group contact', js: true do
+		scenario 'set email of displayed group leader as group contact', js: true do
 			click_on 'Add a leader'
 
 			select user.name, from: page.find('.custom-user-select select')[:id]
@@ -52,6 +57,26 @@ RSpec.feature 'Group Leader Management' do
 
 			visit group_path(group)
 
+			expect(current_path).to eq group_path(group)
+			expect(page).to have_content 'Aaron Patterson'
+			expect(page).to have_content 'Chief Software Architect'
+			expect(page).to have_button 'Contact Group Leader'
+		end
+
+		scenario 'set any other group leader(who is not displayed) as group contact', js: true do
+			click_on 'Add a leader'
+
+			select other_user.name, from: page.find('.custom-user-select select')[:id]
+			fill_in page.find('.custom-position-field')[:id], with: 'Chief Software Architect'
+			page.find('.show-leader-field').click
+			page.find('.group-contact-field').click
+
+			click_on 'Save Leaders'
+
+			visit group_path(group)
+
+			expect(current_path).to eq group_path(group)
+			expect(page).not_to have_content other_user.name
 			expect(page).to have_button 'Contact Group Leader'
 		end
 	end
