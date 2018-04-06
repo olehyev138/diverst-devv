@@ -40,5 +40,19 @@ RSpec.feature 'Group Leader Management' do
 			expect(page).to have_link 'Aaron Patterson'
 			expect(page).to have_content 'Chief Software Architect'
 		end
+
+		scenario 'set email of group leader as group contact', js: true do
+			click_on 'Add a leader'
+
+			select user.name, from: page.find('.custom-user-select select')[:id]
+			fill_in page.find('.custom-position-field')[:id], with: 'Chief Software Architect'
+			page.find('.group-contact-field').click
+
+			click_on 'Save Leaders'
+
+			visit group_path(group)
+
+			expect(page).to have_button 'Contact Group Leader'
+		end
 	end
 end
