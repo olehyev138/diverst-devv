@@ -11,7 +11,7 @@
         <div class="col-xs-8">
         <div class="flex-row flex-row--middle">
           <div class="flex-row__cell flex-row__cell--grow">
-              <%= link_to news_link.title, group_posts_url(news_link.group), class: 'underline_text' %>
+              <%= link_to news_link.title, group_posts_url(news_link.group, anchor: "news_link_#{news_link.id}"), class: 'underline_text' %>
               <br>
             <small><%= truncate(news_link.description, length: 90) %></small><br>
             <small class="muted"><%= news_link.created_at.to_s :slashes %></small>
