@@ -66,7 +66,7 @@ RSpec.feature 'News Feed Management' do
 				expect(page).not_to have_content 'An Old Group Message'
 			end
 
-			scenario 'when adding comments to existing Group Message' do
+			scenario 'when adding comments to existing Group Message with approval' do
 				visit group_posts_path(group)
 
 				expect(page).to have_content existing_group_message.subject
@@ -277,24 +277,72 @@ RSpec.feature 'News Feed Management' do
 				end
 			end
 		end
-
-		context 'Social Links' do
-			# Here I want you to test how our social-media posting feature works
-			# In order to see social media posting button, add
-			# ENABLE_SOCIAL_MEDIA: 'true'
-			# to your appication.yml
-			# and you'll be able to see social media creation button at user news page
-
-			# We currently support Youtube, Facebook, Twitter and Instagram
-			# For each of those, you need to create separate scenario
-			# In scenario, you go to new social media page, post link to social media
-			# Then you go to group news page end expect to find embeddable html for particular item
-			scenario 'posting YouTube'
-			scenario 'posting Twitter'
-			scenario 'posting Facebook'
-			scenario 'posting Instagram'
-		end
 	end
 
-	context 'when enteprise has pending comments disabled'
+	context 'when enteprise has pending comments disabled' do
+		before { user.enterprise.update(enable_pending_comments: false) }
+
+		context 'Group Messages' do
+			let!(:existing_group_message) { create(:group_message, subject: 'An Old Group Message', group_id: group.id,
+				owner_id: user.id) }
+
+			scenario 'when adding comments to existing Group Message without approval' do
+				pending 'this feature is pending merge to testing server'
+
+				visit group_posts_path(group)
+
+				expect(page).to have_content existing_group_message.subject
+
+				click_on 'Comments(0)'
+
+				expect(current_path).to eq group_group_message_path(group, existing_group_message)
+
+				within('h1') do
+					expect(page).to have_content existing_group_message.subject
+				end
+
+
+				fill_in 'group_message_comment[content]', with: 'first comment'
+
+				click_on 'Post a comment'
+
+				expect(page).to have_content 'first comment'
+
+				visit group_posts_path(group)
+
+				expect(page).to have_link 'Comments(1)'
+			end
+		end
+
+		context 'News Items' do
+			let!(:image) { File.new('spec/fixtures/files/verizon_logo.png') }
+			let!(:existing_news_item) { create(:news_link, title: 'An Old Group News Item',
+				description: 'Brief description of News Item', group_id: group.id, picture: image, author_id: user.id) }
+
+			before { visit group_posts_path(group) }
+
+			scenario 'when adding comments to news link' do
+				pending 'this feature is pending merge to testing server'
+
+				expect(page).to have_content existing_news_item.title
+				expect(page).to have_link 'Comments(0)', href: "/groups/#{group.id}/news_links/#{existing_news_item.id}/comments"
+
+				click_link 'Comments(0)', href: "/groups/#{group.id}/news_links/#{existing_news_item.id}/comments"
+				expect(current_path).to eq comments_group_news_link_path(group, existing_news_item)
+				within('.content__header h1') do
+					expect(page).to have_content 'News Discussion'
+				end
+
+				fill_in 'news_link_comment[content]', with: 'this news item is outdated!!!'
+
+				click_on 'Post a comment'
+
+				expect(page).to have_content 'this news item is outdated!!!'
+
+				visit group_posts_path(group)
+
+				expect(page).to have_link 'Comments(1)'
+			end
+		end
+	end
 end
