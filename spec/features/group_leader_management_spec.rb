@@ -46,6 +46,32 @@ RSpec.feature 'Group Leader Management' do
 			expect(page).to have_content 'Chief Software Architect'
 		end
 
+		scenario 'add multiple group leaders and display them on home page', js: true do
+			click_on 'Add a leader'
+
+			select user.name, from: page.find('.custom-user-select select')[:id]
+			fill_in page.find('.custom-position-field')[:id], with: 'Chief Software Architect'
+			page.find('.group-contact-field').click
+
+			click_on 'Add a leader'
+
+			within all('.nested-fields')[1] do
+				select other_user.name, from: page.find('.custom-user-select select')[:id]
+				fill_in page.find('.custom-position-field')[:id], with: 'Senior Software Engineer'
+			end
+
+			click_on 'Save Leaders'
+
+			expect(page).to have_content 'Leaders were updated'
+
+			visit group_path(group)
+
+			expect(page).to have_content user.name
+			expect(page).to have_content 'Chief Software Architect'
+			expect(page).to have_content other_user.name
+			expect(page).to have_content 'Senior Software Engineer'
+		end
+
 		scenario 'set email of displayed group leader as group contact', js: true do
 			click_on 'Add a leader'
 
