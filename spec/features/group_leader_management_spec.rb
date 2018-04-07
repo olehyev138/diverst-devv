@@ -77,16 +77,16 @@ RSpec.feature 'Group Leader Management' do
 				[user, other_user].each do |user|
 					create(:group_leader, group_id: group.id, user_id: user.id)
 				end
-			end
 
-			scenario 'remove one group leader from list of group leaders', js: true do
 				visit group_leaders_path(group)
 
 				expect(page).to have_link user.name
 				expect(page).to have_link other_user.name
-
 				click_on 'Manage leaders'
 				sleep 1
+			end
+
+			scenario 'remove one group leader from list of group leaders', js: true do
 				within all('.nested-fields')[1] do
 					select_field = page.find('.custom-user-select select')[:id]
 					expect(page).to have_select(select_field, selected: other_user.name)
@@ -101,6 +101,21 @@ RSpec.feature 'Group Leader Management' do
 
 				expect(page).not_to have_content 'Yehuda Katz'
 				expect(page).to have_content user.name
+			end
+
+			scenario 'edit one of multiple group leaders', js: true do
+				within all('.nested-fields')[1] do
+					fill_in page.find('.custom-position-field')[:id], with: 'Lead Software Engineer'
+				end
+
+				click_on 'Save Leaders'
+
+				expect(page).to have_content 'Leaders were updated'
+
+				visit group_leaders_path(group)
+
+				expect(page).not_to have_content 'Senior Software Engineer'
+				expect(page).to have_content 'Lead Software Engineer'
 			end
 		end
 
