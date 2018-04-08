@@ -79,5 +79,25 @@ RSpec.feature 'Group Membership Management' do
 			expect(page).to have_content 'The member was created'
 			expect(page).not_to have_content pending_membership_message
 		end
+
+		context 'user joins a group' do
+			before do
+				create(:user_group, user_id: guest_user.id, group_id: group.id, accepted_member: false)
+				logout_user_in_session
+				user_logs_in_with_correct_credentials(admin_user)
+			end
+
+			scenario 'and admin removes user from group', js: true do
+				visit group_group_members_path(group)
+
+				expect(page).to have_content guest_user.name
+
+				page.accept_confirm(with: 'Are you sure?') do
+					click_link 'Remove From Group', href: "/groups/#{group.id}/members/#{guest_user.id}/remove_member"
+				end
+
+				expect(page).not_to have_content guest_user.name
+			end
+	    end
 	end
 end
