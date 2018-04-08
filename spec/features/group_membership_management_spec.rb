@@ -4,11 +4,9 @@ RSpec.feature 'Group Membership Management' do
 	let!(:enterprise) { create(:enterprise, name: 'The Enterprise') }
 	let!(:guest_user) { create(:user, enterprise_id: enterprise.id, policy_group: guest_user_policy_setup(enterprise),
 	 first_name: 'Aaron', last_name: 'Patterson') }
-	let!(:user) { create(:user, enterprise_id: enterprise.id, first_name: 'Yehuda', last_name: 'Katz',
+	let!(:admin_user) { create(:user, enterprise_id: enterprise.id, first_name: 'Yehuda', last_name: 'Katz',
 	 policy_group: admin_user_policy_setup(enterprise)) }
 	let!(:group) { create(:group, name: 'Group ONE', enterprise: enterprise) }
-
-	before { create(:user_group, user_id: user.id, group_id: group.id) }
 
 
 	context 'when group has enable pending users' do
@@ -29,6 +27,29 @@ RSpec.feature 'Group Membership Management' do
 
 			expect(page).to have_content 'The member was created'
 			expect(page).to have_content pending_membership_message
+		end
+
+		context 'when user joins a group' do
+			before do
+				create(:user_group, user_id: guest_user.id, group_id: group.id, accepted_member: false)
+				logout_user_in_session
+				user_logs_in_with_correct_credentials(admin_user)
+			end
+
+			scenario 'and is accepted by admin', js: true do
+				visit pending_group_group_members_path(group)
+
+				expect(page).to have_content guest_user.name
+
+				click_link 'Accept Member', href: "/groups/#{group.id}/members/#{guest_user.id}/accept_pending"
+
+				expect(page).not_to have_content guest_user.name
+
+				visit group_group_members_path(group)
+
+				expect(page).to have_content 'Members (1)'
+				expect(page).to have_content guest_user.first_name
+			end
 		end
 	end
 
