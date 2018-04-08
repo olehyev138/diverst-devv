@@ -1,12 +1,13 @@
 require 'rails_helper'
 
 RSpec.feature 'Group Leader Management' do
-	let!(:user) { create(:user, first_name: 'Aaron', last_name: 'Patterson') }
-	let!(:other_user) { create(:user, first_name: 'Yehuda', last_name: 'Katz') }
+	let!(:enterprise) { create(:enterprise, name: 'The Enterprise') }
+	let!(:user) { create(:user, enterprise_id: enterprise.id, first_name: 'Aaron', last_name: 'Patterson') }
+	let!(:other_user) { create(:user, enterprise_id: enterprise.id, first_name: 'Yehuda', last_name: 'Katz') }
 	let!(:group) { create(:group, name: 'Group ONE', enterprise: user.enterprise) }
 
-	before do 
-		login_as(user, scope: :user) 
+	before do
+		login_as(user, scope: :user)
 		[user, other_user].each do |user|
 	    	create(:user_group, user_id: user.id, group_id: group.id)
 		end
