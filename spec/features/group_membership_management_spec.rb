@@ -18,7 +18,7 @@ RSpec.feature 'Group Membership Management' do
 			login_as(guest_user, scope: :user)
 		end
 
-		scenario 'when user joins a group' do
+		scenario 'when a user joins a group' do
 			visit group_path(group)
 
 			expect(page).to have_button 'Join this ERG'
@@ -62,5 +62,22 @@ RSpec.feature 'Group Membership Management' do
 		end
 	end
 
-	context 'when pending users is disabled by group'
+	context 'when pending users is disabled by group' do
+		pending_membership_message = '* Please wait for group administrators to process your membership request.
+		Take a survey below in order to speed up approval process.'
+
+		before do
+			group.update(pending_users: 'disabled')
+			login_as(guest_user, scope: :user)
+		end
+
+		scenario 'when a user joins a group' do
+			visit group_path(group)
+
+			click_button 'Join this ERG'
+
+			expect(page).to have_content 'The member was created'
+			expect(page).not_to have_content pending_membership_message
+		end
+	end
 end
