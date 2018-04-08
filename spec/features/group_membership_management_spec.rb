@@ -34,13 +34,13 @@ RSpec.feature 'Group Membership Management' do
 				create(:user_group, user_id: guest_user.id, group_id: group.id, accepted_member: false)
 				logout_user_in_session
 				user_logs_in_with_correct_credentials(admin_user)
-			end
 
-			scenario 'and is accepted by admin', js: true do
 				visit pending_group_group_members_path(group)
 
 				expect(page).to have_content guest_user.name
+			end
 
+			scenario 'and is accepted by admin', js: true do
 				click_link 'Accept Member', href: "/groups/#{group.id}/members/#{guest_user.id}/accept_pending"
 
 				expect(page).not_to have_content guest_user.name
@@ -49,6 +49,15 @@ RSpec.feature 'Group Membership Management' do
 
 				expect(page).to have_content 'Members (1)'
 				expect(page).to have_content guest_user.first_name
+			end
+
+			scenario 'and is rejected by admin', js: true do
+				page.accept_confirm(wait: 'Are you sure?') do
+					click_link 'Remove From Group', "/groups/#{group.id}/members/#{guest_user.id}/remove_member"
+				end
+
+				expect(current_path).to eq group_group_members_path(group)
+				expect(page).not_to have_content guest_user.name
 			end
 		end
 	end

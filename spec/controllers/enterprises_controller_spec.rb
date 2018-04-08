@@ -241,9 +241,6 @@ RSpec.describe EnterprisesController, type: :controller do
                     before { enterprise.update(theme: create(:theme)) }
 
                     it 'returns a valid theme object from set_theme' do
-                        pending "Circle CI can't find 'public/assets directory. This directory is 
-                        currently in the gitignore file."
-
                         get :edit_branding, id: enterprise.id
                         expect(assigns[:enterprise].theme).to be_valid
                     end
@@ -287,30 +284,18 @@ RSpec.describe EnterprisesController, type: :controller do
                 before { patch :update_branding, id: enterprise.id, enterprise: attributes_for(:enterprise, theme: { primary_color: "#ff0000" }) }
 
                 it "returns a valid theme object from set_theme" do
-                    pending "Circle CI can't find 'public/assets directory. This directory is 
-                        currently in the gitignore file."
-
                     expect(assigns[:theme]).to be_a_new(Theme)
                 end
 
                 it "redirect_to edit_branding" do
-                    pending "Circle CI can't find 'public/assets directory. This directory is 
-                        currently in the gitignore file."
-
                     expect(response).to redirect_to action: :edit_branding
                 end
 
                 it "flashes a notice message" do
-                    pending "Circle CI can't find 'public/assets directory. This directory is 
-                        currently in the gitignore file."
-
                     expect(flash[:notice]).to eq "Enterprise branding was updated"
                 end
 
                 it "update was successful" do
-                    pending "Circle CI can't find 'public/assets directory. This directory is 
-                        currently in the gitignore file."
-                        
                     enterprise.reload
                     expect(enterprise.theme.primary_color).to eq "#ff0000"
                 end
