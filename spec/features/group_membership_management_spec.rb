@@ -99,5 +99,30 @@ RSpec.feature 'Group Membership Management' do
 				expect(page).not_to have_content guest_user.name
 			end
 	    end
+
+	    context 'admin adds a user to a group' do
+	    	before do
+	    		logout_user_in_session
+	    		user_logs_in_with_correct_credentials(admin_user)
+	    	end
+
+	    	scenario 'successfully', js: true do
+	    		visit group_group_members_path(group)
+
+	    		click_on '+ Add members'
+	    		sleep 1
+
+	    		expect(current_path).to eq new_group_group_member_path(group)
+	    		expect(page).to have_content "Add Members to #{group.name}"
+
+	    		select guest_user.name, from: 'group[member_ids][]'
+
+	    		click_on 'Update Group'
+
+	    		expect(current_path).to eq group_group_members_path(group)
+	    		expect(page).to have_content 'Members (1)'
+	    		expect(page).to have_content guest_user.name
+	    	end
+	    end
 	end
 end

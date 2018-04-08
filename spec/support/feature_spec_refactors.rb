@@ -3,8 +3,6 @@ module FeatureSpecRefactors
 		visit user_root_path
 
 		click_link 'Log out', match: :first
-
-		expect(page).to have_content 'Signed out successfully'
 	end
 
 	def user_logs_in_with_correct_credentials(user)
