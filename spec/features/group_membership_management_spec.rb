@@ -53,7 +53,7 @@ RSpec.feature 'Group Membership Management' do
 
 			scenario 'and is rejected by admin', js: true do
 				page.accept_confirm(wait: 'Are you sure?') do
-					click_link 'Remove From Group', "/groups/#{group.id}/members/#{guest_user.id}/remove_member"
+					click_link 'Remove From Group', href: "/groups/#{group.id}/members/#{guest_user.id}/remove_member"
 				end
 
 				expect(current_path).to eq group_group_members_path(group)
