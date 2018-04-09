@@ -19,7 +19,7 @@ RSpec.feature 'user visits the metrics section' do
     create(:metrics_dashboard, enterprise: user.enterprise, owner: user, name: "Test Dashboard")
 
     visit metrics_dashboards_path
-    
+
     page.accept_confirm(with: 'Are you sure?') do
       click_on 'Delete'
     end
