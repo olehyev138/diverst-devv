@@ -15,11 +15,14 @@ RSpec.feature 'user visits the metrics section' do
     expect(page).not_to have_content 'Test Dashboard'
   end
 
-  scenario 'they can delete a metrics dashboard' do
+  scenario 'they can delete a metrics dashboard', js: true do
     create(:metrics_dashboard, enterprise: user.enterprise, owner: user, name: "Test Dashboard")
 
     visit metrics_dashboards_path
-    click_on 'Delete'
+    
+    page.accept_confirm(with: 'Are you sure?') do
+      click_on 'Delete'
+    end
 
     expect(page).not_to have_content 'Test Dashboard'
   end
