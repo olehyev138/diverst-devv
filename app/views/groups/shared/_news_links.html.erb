@@ -13,7 +13,7 @@
         <div class="col sm-9">
           <h4><%= news_link.title %></h4>
           <p>
-            <%= news_link.description %>
+            <%= allow_newlines news_link.description %>
             <br>
             <%= link_to news_link.url, news_link.url %>
             <br>
