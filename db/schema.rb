@@ -204,15 +204,13 @@ ActiveRecord::Schema.define(version: 20180324181536) do
   end
 
   create_table "checklist_items", force: :cascade do |t|
-    t.string   "title",          limit: 191
-    t.boolean  "is_done",                    default: false
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
-    t.integer  "container_id",   limit: 4
-    t.string   "container_type", limit: 191
+    t.string   "title",         limit: 191
+    t.boolean  "is_done",                   default: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+    t.integer  "initiative_id", limit: 4
+    t.integer  "checklist_id",  limit: 4
   end
-
-  add_index "checklist_items", ["container_type", "container_id"], name: "index_checklist_items_on_container_type_and_container_id", using: :btree
 
   create_table "checklists", force: :cascade do |t|
     t.string   "title",         limit: 191

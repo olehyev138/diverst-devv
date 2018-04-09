@@ -24,7 +24,7 @@ class Initiative < ActiveRecord::Base
   has_many :checklists
   has_many :resources, as: :container
 
-  has_many :checklist_items, as: :container
+  has_many :checklist_items
   accepts_nested_attributes_for :checklist_items, reject_if: :all_blank, allow_destroy: true
 
   belongs_to :owner_group, class_name: 'Group'
