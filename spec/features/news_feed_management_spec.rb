@@ -140,7 +140,9 @@ RSpec.feature 'News Feed Management' do
 					expect(page).to have_content existing_group_message_comment.content
 					expect(page).to have_link 'Delete'
 
-					click_on 'Delete'
+					page.accept_confirm(with: 'Are you sure?') do
+						click_on 'Delete'
+					end
 
 					expect(page).not_to have_content 'An Old Group Message Comment'
 				end

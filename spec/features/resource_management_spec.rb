@@ -112,12 +112,14 @@ RSpec.feature 'Resource management' do
 		end
 
 		context 'Delete existing resource' do
-			scenario 'from existing folder' do
+			scenario 'from existing folder', js: true do
 				visit enterprise_folder_resources_path(user.enterprise, folder_without_pp)
 
 				expect(page).to have_content resource_without_url.title
 
-				click_on 'Delete'
+				page.accept_confirm(with: 'Are you sure?') do
+					click_on 'Delete'
+				end
 
 				expect(current_path).to eq enterprise_folder_resources_path(user.enterprise, folder_without_pp)
 				expect(page).not_to have_content resource_without_url.title
