@@ -273,8 +273,9 @@ RSpec.feature 'News Feed Management' do
 
 					expect(page).to have_content news_link_comment.content
 
-					click_link 'Delete', href: "/groups/#{group.id}/news_links/#{existing_news_item.id}/news_link_comment/#{news_link_comment.id}"
-
+					page.accept_confirm(with: 'Are you sure?') do
+						click_link 'Delete', href: "/groups/#{group.id}/news_links/#{existing_news_item.id}/news_link_comment/#{news_link_comment.id}"
+					end
 					expect(page).not_to have_content news_link_comment.content
 				end
 			end
