@@ -18,7 +18,7 @@
                     <i>by <%= message.owner.name_with_status %></i>
                   <% end %>
                   <br>
-                  <%= link_to "Comments(#{message.comments.approved.count})", group_group_message_path(message.group, message)
+                  <%= link_to "Comments(#{message.comments_count})", group_group_message_path(message.group, message)
                   %>
                   </p>
                 </div>

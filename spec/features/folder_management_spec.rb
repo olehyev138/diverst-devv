@@ -1,14 +1,15 @@
 require 'rails_helper'
 
-RSpec.feature 'Resource management' do
+RSpec.feature 'Folder management' do
 	let!(:user) { create(:user) }
-	let!(:folder_with_pp) { create(:folder, container: user.enterprise, name: "Company Archives", password_protected: true, password: "password_2") }
-	let!(:folder_without_pp) { create(:folder, container: user.enterprise, name: "Company Documents", password_protected: false) }
+	let!(:folder_with_pp) { create(:folder, container: user.enterprise, name: "Company Archives",
+	 password_protected: true, password: "password_2") }
+	let!(:folder_without_pp) { create(:folder, container: user.enterprise, name: "Company Documents",
+	 password_protected: false) }
 	let!(:group) { create(:group, name: "New Group", enterprise_id: user.enterprise_id ) }
 
-	before do
-		login_as(user, scope: :user)
-	end
+	before { login_as(user, scope: :user) }
+
 
 	context 'create a new folder' do
 		before do
