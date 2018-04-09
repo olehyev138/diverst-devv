@@ -163,10 +163,10 @@ RSpec.feature 'Folder management' do
 		end
 	end
 
-	context 'delete existing', js: true do
+	context 'delete existing' do
 		before { visit enterprise_folders_path(user.enterprise) }
 
-		scenario 'folder' do
+		scenario 'folder', js: true do
 			expect(page).to have_content folder_without_pp.name
 
 			page.accept_confirm(with: 'Are you sure?') do

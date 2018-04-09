@@ -50,7 +50,7 @@ RSpec.feature 'An ERG dashboard' do
     expect(group.members.ids).not_to include user.id
   end
 
-  context 'in sub-erg section',js: true do
+  context 'in sub-erg section' do
     let!(:category_type) { create(:group_category_type, name: "Color Code") }
     let!(:red_label) { create(:group_category, name: "Red", group_category_type_id: category_type.id) }
 
@@ -87,7 +87,7 @@ RSpec.feature 'An ERG dashboard' do
     end
   end
 
-  context 'in the members section', js: true do
+  context 'in the members section' do
     scenario 'shows members' do
       visit group_group_members_path(group)
 
