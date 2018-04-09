@@ -10,12 +10,12 @@ class Groups::PostsController < ApplicationController
         if policy(@group).erg_leader_permissions?
                 @count = base_query
                                 .includes(:link)
-                                .order(created_at: :desc)
+                                .order(is_pinned: :desc, created_at: :desc)
                                 .count
 
                 @posts = base_query
                                 .includes(:link)
-                                .order(created_at: :desc)
+                                .order(is_pinned: :desc, created_at: :desc)
                                 .limit(@limit)
         else
             if @group.active_members.include? current_user
@@ -23,14 +23,14 @@ class Groups::PostsController < ApplicationController
                             .includes(:link)
                             .joins(joins)
                             .where(where, current_user.segments.pluck(:id))
-                            .order(created_at: :desc)
+                            .order(is_pinned: :desc, created_at: :desc)
                             .count
 
                 @posts = base_query
                             .includes(:link)
                             .joins(joins)
                             .where(where, current_user.segments.pluck(:id))
-                            .order(created_at: :desc)
+                            .order(is_pinned: :desc, created_at: :desc)
                             .limit(@limit)
             else
                 @count = 0
