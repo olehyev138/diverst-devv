@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe GroupLeaderMemberNotificationMailer, type: :mailer do
   
   let!(:leader){ create(:user) }
-  let!(:group){ create(:group, :pending_users => "enabled") }
+  let!(:group){ create(:group, :pending_users => "enabled", :enterprise => leader.enterprise) }
   let!(:user_group) {create(:user_group, :group => group, :user => leader, :accepted_member => true)} 
-  let!(:group_leader){ create(:group_leader, :group => group, :user => leader) }
+  let!(:group_leader){ create(:group_leader, :group => group, :user => leader, :user_role => group.enterprise.user_roles.where(:role_name => "group_leader").first) }
 
   let!(:mail) { described_class.notification(group, leader, 1).deliver_now }
 

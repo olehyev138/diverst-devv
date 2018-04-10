@@ -217,7 +217,7 @@ class GroupPolicy < ApplicationPolicy
         end
     
         def resolve
-            if UserRole.where(:role_name => user.role, :role_type => "group").count > 0
+            if UserRole.where(:id => user.user_role_id, :role_type => "group").count > 0
                 scope.joins(:group_leaders).where(:group_leaders => {:user_id => user.id, permission.to_sym => true})
             else 
                 scope.includes(:parent, :leaders, :owner, :initiatives)

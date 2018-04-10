@@ -11,14 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180319220412) do
+ActiveRecord::Schema.define(version: 20180404172502) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
     t.string   "trackable_type", limit: 191
     t.integer  "owner_id",       limit: 4
     t.string   "owner_type",     limit: 191
-    t.string   "key",            limit: 191
+    t.string   "key",            limit: 255
     t.text     "parameters",     limit: 65535
     t.integer  "recipient_id",   limit: 4
     t.string   "recipient_type", limit: 191
@@ -510,10 +510,10 @@ ActiveRecord::Schema.define(version: 20180319220412) do
     t.boolean  "pending_comments_notifications_enabled",             default: false
     t.boolean  "pending_posts_notifications_enabled",                default: false
     t.boolean  "default_group_contact",                              default: false
-    t.string   "role",                                   limit: 191
     t.boolean  "groups_budgets_index",                               default: false, null: false
     t.boolean  "initiatives_manage",                                 default: false, null: false
     t.boolean  "groups_manage",                                      default: false, null: false
+    t.integer  "user_role_id",                           limit: 4
   end
 
   create_table "group_message_comments", force: :cascade do |t|
@@ -913,6 +913,8 @@ ActiveRecord::Schema.define(version: 20180319220412) do
     t.boolean  "budget_approval",                       default: false
     t.boolean  "logs_view",                             default: false
     t.boolean  "annual_budget_manage",                  default: false
+    t.boolean  "expenses_index",                        default: false
+    t.boolean  "expenses_manage",                       default: false
     t.boolean  "sso_manage",                            default: false
     t.boolean  "permissions_manage",                    default: false
     t.boolean  "diversity_manage",                      default: false
@@ -1162,14 +1164,14 @@ ActiveRecord::Schema.define(version: 20180319220412) do
     t.text     "data",                        limit: 65535
     t.string   "auth_source",                 limit: 191
     t.integer  "enterprise_id",               limit: 4
-    t.datetime "created_at",                                                 null: false
-    t.datetime "updated_at",                                                 null: false
+    t.datetime "created_at",                                                null: false
+    t.datetime "updated_at",                                                null: false
     t.string   "email",                       limit: 191
     t.string   "encrypted_password",          limit: 191
     t.string   "reset_password_token",        limit: 191
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",               limit: 4,     default: 0,      null: false
+    t.integer  "sign_in_count",               limit: 4,     default: 0,     null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip",          limit: 191
@@ -1196,15 +1198,15 @@ ActiveRecord::Schema.define(version: 20180319220412) do
     t.datetime "avatar_updated_at"
     t.boolean  "active",                                    default: true
     t.text     "biography",                   limit: 65535
-    t.integer  "points",                      limit: 4,     default: 0,      null: false
-    t.integer  "credits",                     limit: 4,     default: 0,      null: false
+    t.integer  "points",                      limit: 4,     default: 0,     null: false
+    t.integer  "credits",                     limit: 4,     default: 0,     null: false
     t.string   "time_zone",                   limit: 191
     t.integer  "total_weekly_points",         limit: 4,     default: 0
-    t.integer  "failed_attempts",             limit: 4,     default: 0,      null: false
+    t.integer  "failed_attempts",             limit: 4,     default: 0,     null: false
     t.string   "unlock_token",                limit: 191
     t.datetime "locked_at"
-    t.string   "role",                        limit: 191,   default: "user", null: false
-    t.boolean  "custom_policy_group",                       default: false,  null: false
+    t.boolean  "custom_policy_group",                       default: false, null: false
+    t.integer  "user_role_id",                limit: 4
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree

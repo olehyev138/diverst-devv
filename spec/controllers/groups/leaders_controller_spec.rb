@@ -12,8 +12,8 @@ RSpec.describe Groups::LeadersController, type: :controller do
 
       context 'with correct group' do
         let!(:group) { create(:group, enterprise: user.enterprise) }
-        let!(:group_leader) { create :group_leader, group: group }
-        let!(:other_leader) { create :group_leader }
+        let!(:group_leader) { create :group_leader, group: group, user: create(:user, enterprise: user.enterprise) }
+        let!(:other_leader) { create :group_leader, user: create(:user, enterprise: user.enterprise) }
 
         before { get_index(group.to_param) }
 
@@ -36,7 +36,6 @@ RSpec.describe Groups::LeadersController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'GET #new' do
     def get_new(group_id = nil)
@@ -71,7 +70,6 @@ RSpec.describe Groups::LeadersController, type: :controller do
     end
   end
 
-
   describe 'POST #create' do
     def post_create(group_id=-1, params={a: 1})
       post :create, group_id: group_id, group: { group_leaders_attributes: { "0": params } }
@@ -83,8 +81,8 @@ RSpec.describe Groups::LeadersController, type: :controller do
 
       let!(:group) { create :group, enterprise: user.enterprise }
 
-      let(:leader_user) { create :user }
-      let(:leader_attrs) { attributes_for :group_leader, user_id: leader_user.to_param }
+      let(:leader_user) { create :user, enterprise: user.enterprise }
+      let(:leader_attrs) { attributes_for :group_leader, user_id: leader_user.id, group: group, user_role_id: leader_user.enterprise.user_roles.where(:role_name => "group_leader").first }
 
       context 'with correct params' do
         it 'updates group leaders of a group' do
@@ -111,7 +109,7 @@ RSpec.describe Groups::LeadersController, type: :controller do
       end
 
       context 'with incorrect params' do
-        let(:leader_attrs){ attributes_for :group_leader, position_name: "", user_id: leader_user.to_param }
+        let(:leader_attrs){ attributes_for :group_leader, position_name: "", user_id: leader_user.to_param, user_role_id: leader_user.enterprise.user_roles.where(:role_name => "group_leader").first }
 
         it 'does not save the new leader' do
           expect{ post_create(group.to_param, leader_attrs) }
