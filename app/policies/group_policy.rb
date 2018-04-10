@@ -166,7 +166,7 @@ class GroupPolicy < ApplicationPolicy
     end
 
     def manage_members?
-        @policy_group.groups_members_index?
+        @policy_group.groups_members_manage?
     end
 
     def erg_leader_permissions?
