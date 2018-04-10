@@ -101,7 +101,7 @@ RSpec.feature 'Group Membership Management' do
 
 					expect(page).to have_content 'Members (2)'
 					expect(page).to have_content guest_user.name
-					expect(page).to have_content admin_user
+					expect(page).to have_content admin_user.name
 				end
 			end
 		end
