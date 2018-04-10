@@ -15,21 +15,6 @@ RSpec.feature 'user visits the metrics section' do
     expect(page).not_to have_content 'Test Dashboard'
   end
 
-  context 'metrics can be deleted' do
-    before do
-      create(:metrics_dashboard, enterprise: user.enterprise, owner: user, name: "Test Dashboard")
-
-      visit metrics_dashboards_path
-    end
-
-    scenario 'successfully', js: true do
-      page.accept_confirm(with: 'Are you sure?') do
-        click_on 'Delete'
-      end
-
-      expect(page).not_to have_content 'Test Dashboard'
-    end
-  end
 
   scenario 'they can edit a metrics dashboard' do
     create(:metrics_dashboard, enterprise: user.enterprise, owner: user, name: "Test Dashboard",  groups: [create(:group, enterprise: user.enterprise)])
@@ -55,5 +40,18 @@ RSpec.feature 'user visits the metrics section' do
     submit_form
 
     expect(page).to have_css '.graph'
+  end
+
+  context 'metrics can be deleted' do
+    let!(:test_dashboard) { create(:metrics_dashboard, enterprise: user.enterprise, owner: user, name: "Test Dashboard",  groups: [create(:group, enterprise: user.enterprise)]) }
+
+    before { visit metrics_dashboards_path }
+
+    scenario 'successfully' do
+
+      click_link 'Delete', href: metrics_dashboard_path(test_dashboard)
+
+      expect(page).not_to have_content 'Test Dashboard'
+    end
   end
 end
