@@ -104,6 +104,25 @@ RSpec.feature 'Group Membership Management' do
 					expect(page).to have_content admin_user.name
 				end
 			end
+
+			context 'time of membership based on when' do
+				let!(:time_of_invitation) { Time.now - 5.days }
+				before do
+					guest_user.update(invitation_created_at: time_of_invitation)
+					create(:user_group, user_id: guest_user.id, group_id: group.id)
+					logout_user_in_session
+					user_logs_in_with_correct_credentials(admin_user)
+					visit group_group_members_path(group)
+				end
+
+				scenario 'users joined group from', js: true do
+					fill_in 'q[user_groups_created_at_gteq]', with: format_date_time(time_of_invitation)
+
+					click_on 'Filter'
+
+					expect(page).to have_content guest_user.name
+				end
+			end
 		end
 	end
 

@@ -100,4 +100,8 @@ module FeatureSpecRefactors
 			initiatives_index: true,
 			initiatives_create: true)
 	end
+
+	def format_date_time(date_time)
+    	date_time.strftime("%Y-%m-%d %H:%m")
+  	end
 end

@@ -69,5 +69,4 @@ RSpec.feature 'Campaign management' do
       expect(page).to have_content('Edit')
     end
   end
-
 end
