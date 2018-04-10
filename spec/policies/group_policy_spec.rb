@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe GroupPolicy, :type => :policy do
+RSpec.describe GroupPolicy, :type => :policy, :focus => true do
     
     let(:user){ create(:user) }
     let(:no_access) { create(:user) }
@@ -25,8 +25,8 @@ RSpec.describe GroupPolicy, :type => :policy do
     
     context "when regular user" do
     
-        permissions :index?, :plan_overview?, :metrics?, :create? , :update?, :view_members?,
-                    :manage_members?, :erg_leader_permissions?, :budgets?, :view_budget?, :request_budget?,
+        permissions :index?, :plan_overview?, :metrics?, :create? , :update?, 
+                    :erg_leader_permissions?, :budgets?, :view_budget?, :request_budget?,
                     :submit_budget?, :approve_budget?, :decline_budget?, :destroy? do
                       
             it "allows access" do
