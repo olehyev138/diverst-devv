@@ -27,6 +27,15 @@ class GroupMessage < ActiveRecord::Base
     scope :unapproved, -> {joins(:news_feed_link).where(:news_feed_links => {:approved => false})}
     scope :approved, -> {joins(:news_feed_link).where(:news_feed_links => {:approved => true})}
 
+
+    def comments_count
+        if group.enterprise.enable_pending_comments?
+            comments.approved.count
+        else
+            comments.count
+        end
+    end
+
     def users
         if segments.empty?
             group.members
