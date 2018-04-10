@@ -60,6 +60,51 @@ RSpec.feature 'Group Membership Management' do
 				expect(page).not_to have_content guest_user.name
 			end
 		end
+
+		context 'when admin user filters members by' do
+			let!(:inactive_user) { create(:user, enterprise_id: enterprise.id, first_name: "Xavier", last_name: "Nora", active: false,
+			 policy_group: guest_user_policy_setup(enterprise)) }
+			let!(:ruby_core_segment) { create(:segment, enterprise_id: enterprise.id, name: 'Ruby Core Segment',
+				active_users_filter: 'only_inactive') }
+
+			before do
+				create(:user_group, user_id: inactive_user.id, group_id: group.id, accepted_member: true)
+				create(:users_segment, user_id: inactive_user.id, segment_id: ruby_core_segment.id)
+			end
+
+			context 'segment' do
+				before do
+					logout_user_in_session
+					user_logs_in_with_correct_credentials(admin_user)
+					visit group_group_members_path(group)
+				end
+
+				scenario 'inactive users only', js: true do
+					select 'Ruby Core Segment', from: 'q[users_segments_segment_id_in][]'
+
+					click_on 'Filter'
+
+					expect(page).to have_content 'Members (0)'
+					expect(page).not_to have_content inactive_user.name
+				end
+
+				scenario 'active users only', js: true do
+					ruby_core_segment.update(active_users_filter: 'only_active')
+					[guest_user, admin_user].each do |user|
+						create(:user_group, user_id: user.id, group_id: group.id)
+						create(:users_segment, user_id: user.id, segment_id: ruby_core_segment.id)
+					end
+
+					select 'Ruby Core Segment', from: 'q[users_segments_segment_id_in][]'
+
+					click_on 'Filter'
+
+					expect(page).to have_content 'Members (2)'
+					expect(page).to have_content guest_user.name
+					expect(page).to have_content admin_user
+				end
+			end
+		end
 	end
 
 	context 'when pending users is disabled by group' do
