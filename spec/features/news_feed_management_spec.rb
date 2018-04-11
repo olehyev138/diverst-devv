@@ -206,9 +206,10 @@ RSpec.feature 'News Feed Management' do
 
 			scenario 'when adding comments to news link' do
 				expect(page).to have_content existing_news_item.title
-				expect(page).to have_link 'Comments(0)', href: "/groups/#{group.id}/news_links/#{existing_news_item.id}/comments"
+				expect(page).to have_link 'Comments(0)', href:  comments_group_news_link_path(group, existing_news_item)
 
-				click_link 'Comments(0)', href: "/groups/#{group.id}/news_links/#{existing_news_item.id}/comments"
+				click_link 'Comments(0)', href:  comments_group_news_link_path(group, existing_news_item)
+
 				expect(current_path).to eq comments_group_news_link_path(group, existing_news_item)
 				within('.content__header h1') do
 					expect(page).to have_content 'News Discussion'
@@ -240,9 +241,9 @@ RSpec.feature 'News Feed Management' do
 
 				scenario 'when editing comments for news link' do
 					expect(page).to have_content existing_news_item.title
-					expect(page).to have_link 'Comments(1)', href: "/groups/#{group.id}/news_links/#{existing_news_item.id}/comments"
+					expect(page).to have_link 'Comments(1)', href:  comments_group_news_link_path(group, existing_news_item)
 
-					click_link 'Comments(1)', href: "/groups/#{group.id}/news_links/#{existing_news_item.id}/comments"
+					click_link 'Comments(1)', href:  comments_group_news_link_path(group, existing_news_item)
 
 					within('.content__header h1') do
 						expect(page).to have_content 'News Discussion'
@@ -267,11 +268,11 @@ RSpec.feature 'News Feed Management' do
 				end
 
 				scenario 'when deleting comments for news link', js: true do
-					click_link 'Comments(1)', href: "/groups/#{group.id}/news_links/#{existing_news_item.id}/comments"
+					click_link 'Comments(1)', href: comments_group_news_link_path(group, existing_news_item)
 
 					expect(page).to have_content news_link_comment.content
 
-					click_link 'Delete', href: "/groups/#{group.id}/news_links/#{existing_news_item.id}/news_link_comment/#{news_link_comment.id}"
+					click_link 'Delete', href: group_news_link_news_link_comment_path(group, existing_news_item, news_link_comment)
 
 					expect(page).not_to have_content news_link_comment.content
 				end
@@ -321,9 +322,9 @@ RSpec.feature 'News Feed Management' do
 
 			scenario 'when adding comments to news link' do
 				expect(page).to have_content existing_news_item.title
-				expect(page).to have_link 'Comments(0)', href: "/groups/#{group.id}/news_links/#{existing_news_item.id}/comments"
+				expect(page).to have_link 'Comments(0)', href: comments_group_news_link_path(group, existing_news_item)
 
-				click_link 'Comments(0)', href: "/groups/#{group.id}/news_links/#{existing_news_item.id}/comments"
+				click_link 'Comments(0)', href: comments_group_news_link_path(group, existing_news_item)
 				expect(current_path).to eq comments_group_news_link_path(group, existing_news_item)
 				within('.content__header h1') do
 					expect(page).to have_content 'News Discussion'

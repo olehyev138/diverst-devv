@@ -41,7 +41,7 @@ RSpec.feature 'Group Membership Management' do
 			end
 
 			scenario 'and is accepted by admin', js: true do
-				click_link 'Accept Member', href: "/groups/#{group.id}/members/#{guest_user.id}/accept_pending"
+				click_link 'Accept Member', href: accept_pending_group_group_member_path(group, guest_user)
 
 				expect(page).not_to have_content guest_user.name
 
@@ -53,7 +53,7 @@ RSpec.feature 'Group Membership Management' do
 
 			scenario 'and is rejected by admin', js: true do
 				page.accept_confirm(wait: 'Are you sure?') do
-					click_link 'Remove From Group', href: "/groups/#{group.id}/members/#{guest_user.id}/remove_member"
+					click_link 'Remove From Group', href: remove_member_group_group_member_path(group, guest_user)
 				end
 
 				expect(current_path).to eq group_group_members_path(group)
@@ -157,7 +157,7 @@ RSpec.feature 'Group Membership Management' do
 				expect(page).to have_content guest_user.name
 
 				page.accept_confirm(with: 'Are you sure?') do
-					click_link 'Remove From Group', href: "/groups/#{group.id}/members/#{guest_user.id}/remove_member"
+					click_link 'Remove From Group', href: remove_member_group_group_member_path(group, guest_user)
 				end
 
 				expect(page).not_to have_content guest_user.name

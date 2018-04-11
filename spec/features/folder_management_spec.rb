@@ -169,7 +169,7 @@ RSpec.feature 'Folder management' do
 		scenario 'folder' do
 			expect(page).to have_content folder_without_pp.name
 
-			click_link 'Delete', href: "/enterprises/#{user.enterprise_id}/folders/#{folder_without_pp.id}"
+			click_link 'Delete', href: enterprise_folder_path(user.enterprise, folder_without_pp)
 
 			expect(page).not_to have_content folder_without_pp.name
 		end
