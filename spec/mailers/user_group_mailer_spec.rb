@@ -26,6 +26,10 @@ RSpec.describe UserGroupMailer, type: :mailer do
     it 'shows a message with number of comments in group' do
       expect(mail.body.encoded).to include("2 new messages")
     end
+    
+    it 'includes the interpolated fields such as users name' do
+      expect(mail.body.encoded).to include(user.name)
+    end
 
     it 'does not shows a message with number of news when there is news' do
       expect(mail.body.encoded).to_not include("news")

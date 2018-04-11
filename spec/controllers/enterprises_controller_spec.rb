@@ -36,11 +36,12 @@ RSpec.describe EnterprisesController, type: :controller do
             login_user_from_let
 
             context "with valid parameters" do
-                before { patch :update, id: enterprise.id, enterprise: attributes_for(:enterprise, cdo_name: "updated") }
+                before { patch :update, id: enterprise.id, enterprise: attributes_for(:enterprise, cdo_name: "updated", user_group_mailer_notification_text: "Hello %{user_name}!!") }
 
                 it "updates the enterprise" do
                     enterprise.reload
                     expect(assigns[:enterprise].cdo_name).to eq "updated"
+                    expect(assigns[:enterprise].user_group_mailer_notification_text).to eq("Hello %{user_name}!!")
                 end
 
                 it "redirects to action index" do

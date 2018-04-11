@@ -167,4 +167,11 @@ RSpec.describe Enterprise, type: :model do
             expect(mapped_fields).to_not have_key 'department'
         end
     end
+    
+    describe "user_group_mailer_notification_text" do
+        it "is required" do
+            enterprise = build(:enterprise, :user_group_mailer_notification_text => nil)
+            expect(enterprise.valid?).to be(false)
+        end
+    end
 end

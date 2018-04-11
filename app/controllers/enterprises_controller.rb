@@ -159,6 +159,7 @@ class EnterprisesController < ApplicationController
         :home_message,
         :xml_sso_config,
         :time_zone,
+        :user_group_mailer_notification_text,
         theme: [
           :id,
           :primary_color,

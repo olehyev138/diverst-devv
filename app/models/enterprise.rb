@@ -47,11 +47,14 @@ class Enterprise < ActiveRecord::Base
     accepts_nested_attributes_for :reward_actions, reject_if: :all_blank, allow_destroy: true
 
     before_create :create_elasticsearch_only_fields
+    before_create :set_default_email_texts
     before_validation :smart_add_url_protocol
-
 
     validates :idp_sso_target_url, url: { allow_blank: true }
     validates :cdo_name, :name, presence: true
+    validates :user_group_mailer_notification_text, presence: true
+    
+    validate :interpolated_texts
 
     has_attached_file :cdo_picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
     validates_attachment_content_type :cdo_picture, content_type: %r{\Aimage\/.*\Z}
@@ -175,7 +178,16 @@ class Enterprise < ActiveRecord::Base
 
         mapped_fields
     end
+    
+    def set_default_email_texts
+        self.user_group_mailer_notification_text = "Hello %{user_name}, a new item has been posted to a Diversity and Inclusion group you are a member of.  Select the link(s) below to access Diverst and review the item(s)"
+    end
 
+    def interpolated_texts
+        if user_group_mailer_notification_text && !user_group_mailer_notification_text.include?("%{user_name}")
+            errors.add(:user_group_mailer_notification_text, 'Must include %{user_name}')
+        end
+    end
 
     protected 
 
@@ -187,7 +199,6 @@ class Enterprise < ActiveRecord::Base
     def have_protocol?
         company_video_url[%r{\Ahttp:\/\/}] || company_video_url[%r{\Ahttps:\/\/}]
     end
-
 
     private
 
