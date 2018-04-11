@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe GroupPolicy, :type => :policy, :focus => true do
+RSpec.describe GroupPolicy, :type => :policy do
     
     let(:user){ create(:user) }
     let(:no_access) { create(:user) }

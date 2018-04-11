@@ -113,7 +113,8 @@ class User < ActiveRecord::Base
         
         # make sure a user's role is never changed from one group leader type to another
         elsif enterprise.user_roles.where(:id => user_role_id_was, :role_type => "group").count > 0 &&
-                enterprise.user_roles.where(:id => user_role_id, :role_type => "group").count > 0
+                enterprise.user_roles.where(:id => user_role_id, :role_type => "group").count > 0 && 
+                user_role_id_was != user_role_id
             errors.add(:user_role_id, 'Cannot change group_leader roles manually')
          
         # ensure user cannot go from non_group role to a group role that they don't have   
