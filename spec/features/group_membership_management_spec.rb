@@ -2,10 +2,10 @@ require 'rails_helper'
 
 RSpec.feature 'Group Membership Management' do
 	let!(:enterprise) { create(:enterprise, name: 'The Enterprise') }
-	let!(:guest_user) { create(:user, enterprise_id: enterprise.id, policy_group: guest_user_policy_setup(enterprise),
+	let!(:guest_user) { create(:user, enterprise_id: enterprise.id, policy_group: create(:guest_user, enterprise: enterprise),
 	 first_name: 'Aaron', last_name: 'Patterson') }
 	let!(:admin_user) { create(:user, enterprise_id: enterprise.id, first_name: 'Yehuda', last_name: 'Katz',
-	 policy_group: admin_user_policy_setup(enterprise)) }
+	 policy_group: create(:policy_group, name: 'Admin User', enterprise: enterprise)) }
 	let!(:group) { create(:group, name: 'Group ONE', enterprise: enterprise) }
 
 
@@ -63,7 +63,7 @@ RSpec.feature 'Group Membership Management' do
 
 		context 'when admin user filters members by' do
 			let!(:inactive_user) { create(:user, enterprise_id: enterprise.id, first_name: "Xavier", last_name: "Nora", active: false,
-			 policy_group: guest_user_policy_setup(enterprise)) }
+			 policy_group: create(:guest_user, enterprise: enterprise)) }
 			let!(:ruby_core_segment) { create(:segment, enterprise_id: enterprise.id, name: 'Ruby Core Segment',
 				active_users_filter: 'only_inactive') }
 
