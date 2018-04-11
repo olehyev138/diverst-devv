@@ -21,7 +21,7 @@ RSpec.feature 'Segment management' do
     select user.enterprise.fields.last.title, from: page.find('.custom-field select')[:id]
     select 'equals', from: page.find('.operator select')[:id]
     click_on 'Create Segment'
-    
+
 
     expect(page).to have_content segment[:name]
   end

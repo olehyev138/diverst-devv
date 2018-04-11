@@ -76,7 +76,7 @@ RSpec.feature 'Group Categorization' do
 			expect(page).to have_content 'Web Frameworks'
 			expect(page).to have_link 'Rails'
 
-			click_link 'Delete', href: "/group_category_types/#{web_frameworks.id}"
+			click_link 'Delete', href: group_category_type_path(web_frameworks)
 
 			expect(page).to have_content 'Successfully deleted categories'
 
@@ -92,7 +92,7 @@ RSpec.feature 'Group Categorization' do
 			expect(page).to have_content 'Web Frameworks'
 			expect(page).to have_link 'Rails'
 
-			click_link 'Delete', href: "/group_categories/#{web_frameworks.group_categories.first.id}"
+			click_link 'Delete', href: group_category_path(web_frameworks.group_categories.first)
 
 			expect(page).to have_content 'Category successfully removed'
 			expect(page).not_to have_content 'Rails'

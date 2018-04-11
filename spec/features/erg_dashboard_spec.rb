@@ -34,29 +34,14 @@ RSpec.feature 'An ERG dashboard' do
     expect(page).to have_content group.messages.last.subject
   end
 
-  scenario 'allows to a non-member to opt in' do
-    visit group_path(group)
-    click_on 'Join this ERG'
-
-    expect(page).to have_content 'Leave this ERG'
-  end
-
-  scenario 'allows to a member to opt out', js: true do
-    group.members << user
-
-    visit group_path(group)
-    click_on 'Leave this ERG'
-
-    expect(group.members.ids).not_to include user.id
-  end
-
-  context 'in sub-erg section',js: true do
+  context 'in sub-erg section' do
     let!(:category_type) { create(:group_category_type, name: "Color Code") }
     let!(:red_label) { create(:group_category, name: "Red", group_category_type_id: category_type.id) }
 
-    scenario 'show categorized sub-ergs' do
+    scenario 'show categorized sub-ergs', js: true do
       group.update(group_category_type_id: category_type.id)
-      red_sub_groups = create_list(:group, 2, parent_id: group.id, group_category_type_id: category_type.id, group_category_id: red_label.id)
+      red_sub_groups = create_list(:group, 2, parent_id: group.id, group_category_type_id: category_type.id,
+       group_category_id: red_label.id, enterprise_id: user.enterprise.id)
 
       visit group_path(group)
       expect(page).to have_content red_label.name
@@ -74,7 +59,7 @@ RSpec.feature 'An ERG dashboard' do
       expect(page).to have_content sub_groups.last.name
     end
 
-    scenario 'list only 5 sub-ergs and drop down for more for uncategorized sub-ergs' do
+    scenario 'list only 5 sub-ergs and drop down for more for uncategorized sub-ergs', js: true do
       sub_groups = create_list(:group, 7, parent_id: group.id)
 
       visit group_path(group)
@@ -84,26 +69,6 @@ RSpec.feature 'An ERG dashboard' do
 
       page.find('.sub_ergs').click
       expect(page).to have_content sub_groups.last.name
-    end
-  end
-
-  context 'in the members section', js: true do
-    scenario 'shows members' do
-      visit group_group_members_path(group)
-
-      expect(page).to have_content group.members.last.name
-    end
-
-    scenario 'allows users to delete members', js: true do
-      member = create(:user, enterprise: user.enterprise, first_name: "Testing", last_name: "User")
-      group.members << member
-      group.accept_user_to_group(member.id)
-
-      visit group_group_members_path(group)
-      expect(page).to have_content member.name
-      page.find('.data-table td', text: member.name).find(:xpath, '..').find('a[data-method=delete]').click
-
-      expect(page).not_to have_content member.name
     end
   end
 
