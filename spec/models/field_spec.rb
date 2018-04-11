@@ -26,7 +26,7 @@ RSpec.describe Field do
   end
 
   describe 'when describing callbacks' do
-    let!(:field){ create(:field, container: create(:enterprise)) }
+    let!(:field){ create(:field, enterprise: create(:enterprise)) }
 
     it "should reindex users on elasticsearch after update" do
       TestAfterCommit.with_commits(true) do

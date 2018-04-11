@@ -646,7 +646,7 @@ RSpec.describe GroupsController, type: :controller do
       login_user_from_let
 
       context 'with correct params' do
-        it 'deletes initiative' do
+        it 'deletes group' do
           expect{
             delete_destroy(group.id)
           }.to change(Group, :count).by(-1)

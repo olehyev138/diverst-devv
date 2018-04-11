@@ -5,9 +5,9 @@ RSpec.describe GraphsController, type: :controller do
     let(:user) { create(:user, enterprise: enterprise) }
     let(:metrics_dashboard) { create(:metrics_dashboard, enterprise_id: enterprise.id) }
     let(:poll) { create(:poll, enterprise_id: enterprise.id) }
-    let(:field1) { create(:field, type: "NumericField", container: poll) }
-    let(:field2) { create(:field, type: "NumericField", container: poll) }
-    let(:field3) { create(:field, type: "CheckboxField", container: poll) }
+    let(:field1) { create(:field, type: "NumericField", poll: poll) }
+    let(:field2) { create(:field, type: "NumericField", poll: poll) }
+    let(:field3) { create(:field, type: "CheckboxField", poll: poll) }
     let(:metrics_graph) { create(:graph, collection: metrics_dashboard, field: field1) }
     let(:metrics_graph2) { create(:graph, collection: metrics_dashboard, field: field3, time_series: true) }
     let(:poll_graph) { create(:graph, collection: poll, field: field2) }

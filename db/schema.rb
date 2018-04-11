@@ -427,14 +427,15 @@ ActiveRecord::Schema.define(version: 20180324181536) do
     t.datetime "updated_at",                                       null: false
     t.boolean  "alternative_layout",               default: false
     t.boolean  "private",                          default: false
-    t.integer  "container_id",       limit: 4
-    t.string   "container_type",     limit: 191
     t.boolean  "elasticsearch_only",               default: false
     t.boolean  "required",                         default: false
     t.string   "field_type",         limit: 191
+    t.integer  "enterprise_id",      limit: 4
+    t.integer  "event_id",           limit: 4
+    t.integer  "group_id",           limit: 4
+    t.integer  "poll_id",            limit: 4
+    t.integer  "initiative_id",      limit: 4
   end
-
-  add_index "fields", ["container_type", "container_id"], name: "index_fields_on_container_type_and_container_id", using: :btree
 
   create_table "folder_shares", force: :cascade do |t|
     t.integer  "container_id",   limit: 4

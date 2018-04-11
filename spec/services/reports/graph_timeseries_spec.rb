@@ -6,7 +6,7 @@ RSpec.describe Reports::GraphTimeseries do
   before {
     perform_enqueued_jobs do
       enterprise = create(:enterprise)
-      select_field = SelectField.new(:type => "SelectField", :title => "Gender", :options_text => "Male\nFemale", :container => enterprise)
+      select_field = SelectField.new(:type => "SelectField", :title => "Gender", :options_text => "Male\nFemale", :enterprise => enterprise)
       select_field.save!
       
       segment = create(:segment, :enterprise => enterprise, :created_at => 1.day.ago)

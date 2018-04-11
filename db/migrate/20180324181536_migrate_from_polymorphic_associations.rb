@@ -16,6 +16,12 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     add_reference :checklist_items, :initiative
     add_reference :checklist_items, :checklist
     
+    add_reference :fields, :enterprise
+    add_reference :fields, :event
+    add_reference :fields, :group
+    add_reference :fields, :poll
+    add_reference :fields, :initiative
+    
     # migrate existing polymorphic associations to new structure
     Tag.where(:taggable_type => "Resource").update_all("resource_id = taggable_id")
     
@@ -31,11 +37,19 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     ChecklistItem.where(:container_type => "Initiative").update_all("initiative_id = container_id")
     ChecklistItem.where(:container_type => "Checklist").update_all("checklist_id = container_id")
     
+    # fields for enterprises, events, groups, polls, initiatives
+    Field.where(:container_type => "Enterprise").update_all("enterprise_id = container_id")
+    Field.where(:container_type => "Event").update_all("event_id = container_id")
+    Field.where(:container_type => "Group").update_all("group_id = container_id")
+    Field.where(:container_type => "Poll").update_all("poll_id = container_id")
+    Field.where(:container_type => "Initiative").update_all("initiative_id = container_id")
+    
     # remove polymorphic fields
     remove_reference :tags,             :taggable,    polymorphic: true
     remove_reference :budgets,          :subject,     polymorphic: true
     remove_reference :checklists,       :subject,     polymorphic: true
     remove_reference :checklist_items,  :container,   polymorphic: true
+    remove_reference :fields,           :container,   polymorphic: true
   end
   
   def down
@@ -43,6 +57,7 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     add_reference :budgets,         :subject,     polymorphic: true
     add_reference :checklists,      :subject,     polymorphic: true
     add_reference :checklist_items, :container,   polymorphic: true
+    add_reference :fields,          :container,   polymorphic: true
     
     # migrate foreign keys back to polymorphic associations
     Tag.where.not(:resource_id => nil).update_all("taggable_id = resource_id, taggable_type = 'Resource'")
@@ -59,6 +74,13 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     ChecklistItem.where.not(:initiative_id => nil).update_all("container_id = initiative_id, container_type = 'Initiative'")
     ChecklistItem.where.not(:checklist_id => nil).update_all("container_id = checklist_id, container_type = 'Checklist'")
     
+    # fields for enterprises, events, groups, polls, initiatives
+    Field.where.not(:enterprise_id => nil).update_all("container_id = enterprise_id, container_type = 'Enterprise'")
+    Field.where.not(:event_id => nil).update_all("container_id = event_id, container_type = 'Event'")
+    Field.where.not(:group_id => nil).update_all("container_id = group_id, container_type = 'Group'")
+    Field.where.not(:poll_id => nil).update_all("container_id = poll_id, container_type = 'Poll'")
+    Field.where.not(:initiative_id => nil).update_all("container_id = initiative_id, container_type = 'Initiative'")
+    
     remove_reference :tags,     :resource
     
     remove_reference :budgets,  :event
@@ -68,5 +90,12 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     remove_reference :checklists,  :initiative
     
     remove_reference :checklist_items,  :initiative
+    remove_reference :checklist_items,  :checklist
+    
+    remove_reference :fields,  :enterprise
+    remove_reference :fields,  :event
+    remove_reference :fields,  :group
+    remove_reference :fields,  :poll
+    remove_reference :fields,  :initiative
   end
 end

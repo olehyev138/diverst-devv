@@ -11,7 +11,7 @@ class Event < ActiveRecord::Base
     has_many :event_invitees
     has_many :invitees, through: :event_invitees, source: :user
     has_many :comments, class_name: "EventComment"
-    has_many :fields, as: :container
+    has_many :fields
 
     scope :past, -> { where('end < ?', Time.current).order(start: :desc) }
     scope :upcoming, -> { where('start > ?', Time.current).order(start: :asc) }

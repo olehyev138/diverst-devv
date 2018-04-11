@@ -156,7 +156,7 @@ RSpec.describe Group, :type => :model do
     describe '#survey_answers_csv' do
         it "returns a csv file" do
             group = create(:group)
-            field = create(:field, :field_type => "group_survey", :container => group)
+            field = create(:field, :field_type => "group_survey", :group => group)
             user = create(:user)
             user_group = create(:user_group, :user => user, :group => group, :data => "{\"13\":\"test\"}")
 

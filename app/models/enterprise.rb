@@ -2,8 +2,8 @@ class Enterprise < ActiveRecord::Base
     include ContainsResources
 
     has_many :users, inverse_of: :enterprise
-    has_many :graph_fields, as: :container, class_name: 'Field'
-    has_many :fields, -> { where elasticsearch_only: false }, as: :container
+    has_many :graph_fields, class_name: 'Field'
+    has_many :fields, -> { where elasticsearch_only: false }
     has_many :topics, inverse_of: :enterprise
     has_many :segments, inverse_of: :enterprise
     has_many :groups, inverse_of: :enterprise

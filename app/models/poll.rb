@@ -3,7 +3,7 @@ class Poll < ActiveRecord::Base
 
     enum status: [:published, :draft]
 
-    has_many :fields, as: :container
+    has_many :fields
     has_many :responses, class_name: 'PollResponse', inverse_of: :poll
     has_many :graphs, as: :collection
     has_many :polls_segments
