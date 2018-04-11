@@ -13,11 +13,11 @@ RSpec.feature 'Folder management' do
 
 	context 'create a new folder' do
 		before do
-			visit enterprise_folders_path(user.enterprise)
+			visit enterprise_folders_url(user.enterprise)
 			expect(page).to have_content 'Folders'
-			visit new_enterprise_folder_path(user.enterprise)
+			visit new_enterprise_folder_url(user.enterprise)
 
-			expect(current_path).to eq new_enterprise_folder_path(user.enterprise)
+			expect(current_url).to eq new_enterprise_folder_url(user.enterprise)
 			expect(page).to have_content 'Create a folder'
 		end
 
@@ -28,7 +28,7 @@ RSpec.feature 'Folder management' do
 
 			click_on 'Create Folder'
 
-			expect(current_path).to eq enterprise_folders_path(user.enterprise)
+			expect(current_url).to eq enterprise_folders_url(user.enterprise)
 			expect(page).to have_content  'Top Secret'
 			folder = Folder.find_by(name: 'Top Secret')
 			expect(folder.password_protected?).to eq true
@@ -40,7 +40,7 @@ RSpec.feature 'Folder management' do
 
 			click_on 'Create Folder'
 
-			expect(current_path).to eq enterprise_folders_path(user.enterprise)
+			expect(current_url).to eq enterprise_folders_url(user.enterprise)
 			expect(page).to have_content 'Top Secret'
 			folder = Folder.find_by(name: 'Top Secret')
 			expect(folder.password_protected?).to eq false
@@ -55,7 +55,7 @@ RSpec.feature 'Folder management' do
 
 			click_on 'Create Folder'
 
-			visit group_folders_path(group)
+			visit group_folders_url(group)
 			expect(page).to have_content 'Top Secret'
 			expect(page).not_to have_content 'Company Archives'
 			expect(page).not_to have_content 'Company Documents'
@@ -70,7 +70,7 @@ RSpec.feature 'Folder management' do
 			click_on 'Create Folder'
 
 			folder = Folder.find_by(name: 'Top Secret')
-			expect(current_path).to eq enterprise_folder_resources_path(user.enterprise, folder_with_pp)
+			expect(current_url).to eq enterprise_folder_resources_url(user.enterprise, folder_with_pp)
 
 			within('h1') do
 				expect(page).to have_content folder_with_pp.name
@@ -85,7 +85,7 @@ RSpec.feature 'Folder management' do
 
 	context 'update existing folder' do
 		before do
-			visit enterprise_folder_resources_path(user.enterprise, folder_without_pp)
+			visit enterprise_folder_resources_url(user.enterprise, folder_without_pp)
 		end
 
 		scenario 'by changing folder name' do
@@ -100,7 +100,7 @@ RSpec.feature 'Folder management' do
 
 			click_on 'Update Folder'
 
-			expect(current_path).to eq enterprise_folders_path(user.enterprise)
+			expect(current_url).to eq enterprise_folders_url(user.enterprise)
 			expect(page).to have_content 'Company Files'
 			expect(page).not_to have_content 'Company Documents'
 		end
@@ -121,7 +121,7 @@ RSpec.feature 'Folder management' do
 			click_on 'Update'
 
 			folder_without_pp.reload
-			expect(current_path).to eq enterprise_folders_path(user.enterprise)
+			expect(current_url).to eq enterprise_folders_url(user.enterprise)
 			expect(folder_without_pp.password_protected?).to eq true
 		end
 
@@ -136,7 +136,7 @@ RSpec.feature 'Folder management' do
 			click_on 'Create Folder'
 
 			sub_folder = Folder.find_by(name: 'Sub Folder 1')
-			expect(current_path).to eq enterprise_folder_resources_path(user.enterprise, folder_without_pp)
+			expect(current_url).to eq enterprise_folder_resources_url(user.enterprise, folder_without_pp)
 
 			within('h1') do
 				expect(page).to have_content folder_without_pp.name
@@ -150,41 +150,39 @@ RSpec.feature 'Folder management' do
 		scenario 'and share folder with group' do
 			click_on 'Edit Folder'
 
-			expect(current_path).to eq edit_enterprise_folder_path(user.enterprise, folder_without_pp)
+			expect(current_url).to eq edit_enterprise_folder_url(user.enterprise, folder_without_pp)
 			expect(page).to have_content 'Edit a folder'
 
 			select group.name, from: 'folder[group_ids][]'
 
 			click_on 'Update Folder'
 
-			visit group_folders_path(group)
+			visit group_folders_url(group)
 
 			expect(page).to have_content folder_without_pp.name
 		end
 	end
 
 	context 'delete existing' do
-		before { visit enterprise_folders_path(user.enterprise) }
+		before { visit enterprise_folders_url(user.enterprise) }
 
-		scenario 'folder', js: true do
+		scenario 'folder' do
 			expect(page).to have_content folder_without_pp.name
 
-			page.accept_confirm(with: 'Are you sure?') do
-				click_link 'Delete', href: "/enterprises/#{user.enterprise_id}/folders/#{folder_without_pp.id}"
-			end
+			click_link 'Delete', href: enterprise_folder_path(user.enterprise, folder_without_pp)
+
 			expect(page).not_to have_content folder_without_pp.name
 		end
 
-		scenario 'sub folder', js: true do
+		scenario 'sub folder' do
 			sub_folder = create(:folder, name: 'Sub Folder', parent_id: folder_without_pp.id, container: user.enterprise)
 
-			visit enterprise_folder_resources_path(user.enterprise, folder_without_pp)
+			visit enterprise_folder_resources_url(user.enterprise, folder_without_pp)
 
 			expect(page).to have_content sub_folder.name
 
-			page.accept_confirm(with: 'Are you sure?') do
-				click_on 'Delete'
-			end
+			click_on 'Delete'
+
 			expect(page).not_to have_content sub_folder.name
 		end
 	end

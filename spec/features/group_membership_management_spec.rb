@@ -2,10 +2,10 @@ require 'rails_helper'
 
 RSpec.feature 'Group Membership Management' do
 	let!(:enterprise) { create(:enterprise, name: 'The Enterprise') }
-	let!(:guest_user) { create(:user, enterprise_id: enterprise.id, policy_group: guest_user_policy_setup(enterprise),
+	let!(:guest_user) { create(:user, enterprise_id: enterprise.id, policy_group: create(:guest_user, enterprise: enterprise),
 	 first_name: 'Aaron', last_name: 'Patterson') }
 	let!(:admin_user) { create(:user, enterprise_id: enterprise.id, first_name: 'Yehuda', last_name: 'Katz',
-	 policy_group: admin_user_policy_setup(enterprise)) }
+	 policy_group: create(:policy_group, name: 'Admin User', enterprise: enterprise)) }
 	let!(:group) { create(:group, name: 'Group ONE', enterprise: enterprise) }
 
 
@@ -41,7 +41,7 @@ RSpec.feature 'Group Membership Management' do
 			end
 
 			scenario 'and is accepted by admin', js: true do
-				click_link 'Accept Member', href: "/groups/#{group.id}/members/#{guest_user.id}/accept_pending"
+				click_link 'Accept Member', href: accept_pending_group_group_member_path(group, guest_user)
 
 				expect(page).not_to have_content guest_user.name
 
@@ -53,11 +53,75 @@ RSpec.feature 'Group Membership Management' do
 
 			scenario 'and is rejected by admin', js: true do
 				page.accept_confirm(wait: 'Are you sure?') do
-					click_link 'Remove From Group', href: "/groups/#{group.id}/members/#{guest_user.id}/remove_member"
+					click_link 'Remove From Group', href: remove_member_group_group_member_path(group, guest_user)
 				end
 
 				expect(current_path).to eq group_group_members_path(group)
 				expect(page).not_to have_content guest_user.name
+			end
+		end
+
+		context 'when admin user filters members by' do
+			let!(:inactive_user) { create(:user, enterprise_id: enterprise.id, first_name: "Xavier", last_name: "Nora", active: false,
+			 policy_group: create(:guest_user, enterprise: enterprise)) }
+			let!(:ruby_core_segment) { create(:segment, enterprise_id: enterprise.id, name: 'Ruby Core Segment',
+				active_users_filter: 'only_inactive') }
+
+			before do
+				create(:user_group, user_id: inactive_user.id, group_id: group.id, accepted_member: true)
+				create(:users_segment, user_id: inactive_user.id, segment_id: ruby_core_segment.id)
+			end
+
+			context 'segment' do
+				before do
+					logout_user_in_session
+					user_logs_in_with_correct_credentials(admin_user)
+					visit group_group_members_path(group)
+				end
+
+				scenario 'inactive users only', js: true do
+					select 'Ruby Core Segment', from: 'q[users_segments_segment_id_in][]'
+
+					click_on 'Filter'
+
+					expect(page).to have_content 'Members (0)'
+					expect(page).not_to have_content inactive_user.name
+				end
+
+				scenario 'active users only', js: true do
+					ruby_core_segment.update(active_users_filter: 'only_active')
+					[guest_user, admin_user].each do |user|
+						create(:user_group, user_id: user.id, group_id: group.id)
+						create(:users_segment, user_id: user.id, segment_id: ruby_core_segment.id)
+					end
+
+					select 'Ruby Core Segment', from: 'q[users_segments_segment_id_in][]'
+
+					click_on 'Filter'
+
+					expect(page).to have_content 'Members (2)'
+					expect(page).to have_content guest_user.name
+					expect(page).to have_content admin_user.name
+				end
+			end
+
+			context 'time of membership based on when' do
+				let!(:time_of_invitation) { Time.now - 5.days }
+				before do
+					guest_user.update(invitation_created_at: time_of_invitation)
+					create(:user_group, user_id: guest_user.id, group_id: group.id)
+					logout_user_in_session
+					user_logs_in_with_correct_credentials(admin_user)
+					visit group_group_members_path(group)
+				end
+
+				scenario 'users joined group from', js: true do
+					fill_in 'q[user_groups_created_at_gteq]', with: format_date_time(time_of_invitation)
+
+					click_on 'Filter'
+
+					expect(page).to have_content guest_user.name
+				end
 			end
 		end
 	end
@@ -93,7 +157,7 @@ RSpec.feature 'Group Membership Management' do
 				expect(page).to have_content guest_user.name
 
 				page.accept_confirm(with: 'Are you sure?') do
-					click_link 'Remove From Group', href: "/groups/#{group.id}/members/#{guest_user.id}/remove_member"
+					click_link 'Remove From Group', href: remove_member_group_group_member_path(group, guest_user)
 				end
 
 				expect(page).not_to have_content guest_user.name
