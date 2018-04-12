@@ -230,4 +230,27 @@ RSpec.describe Enterprise, type: :model do
             expect(enterprise.valid?).to be(true)
         end
     end
+    
+    describe "poll_mailer_notification_text" do
+        it "is required" do
+            enterprise = build(:enterprise, :poll_mailer_notification_text => nil)
+            expect(enterprise.valid?).to be(false)
+            expect(enterprise.errors.full_messages.first).to eq("Poll mailer notification text can't be blank")
+            
+            enterprise.poll_mailer_notification_text = "wrong text"
+            expect(enterprise.valid?).to be(false)
+            expect(enterprise.errors.full_messages.first).to eq("Poll mailer notification text Must include %{user_name}, %{survey_name} and %{click_here}")
+            
+            enterprise.poll_mailer_notification_text = "Hello %{user_name},"
+            expect(enterprise.valid?).to be(false)
+            expect(enterprise.errors.full_messages.first).to eq("Poll mailer notification text Must include %{user_name}, %{survey_name} and %{click_here}")
+            
+            enterprise.poll_mailer_notification_text = "Hello %{user_name}, The following %{survey_name} have been invite to campaign"
+            expect(enterprise.valid?).to be(false)
+            expect(enterprise.errors.full_messages.first).to eq("Poll mailer notification text Must include %{user_name}, %{survey_name} and %{click_here}")
+            
+            enterprise.poll_mailer_notification_text = "Hello %{user_name}, The following %{survey_name} have been invite to campaign so %{click_here}"
+            expect(enterprise.valid?).to be(true)
+        end
+    end
 end
