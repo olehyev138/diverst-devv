@@ -58,6 +58,7 @@ class Enterprise < ActiveRecord::Base
     validates :poll_mailer_notification_text, presence: true
     validates :budget_approved_mailer_notification_text, presence: true
     validates :budget_declined_mailer_notification_text, presence: true
+    validates :group_leader_post_mailer_notification_text, presence: true
     
     validate :interpolated_texts
 
@@ -191,6 +192,7 @@ class Enterprise < ActiveRecord::Base
         self.poll_mailer_notification_text= "<p>Hello %{user_name},</p>\r\n\r\n<p>You are invited to participate in the following online in Diverst: %{survey_name}</p>\r\n\r\n<p>%{click_here} to provide feedback and offer your thoughts and suggestions.</p>\r\n"
         self.budget_approved_mailer_notification_text = "<p>Hello %{user_name},</p>\r\n\r\n<p>Your budget request for: %{budget_name}&nbsp;has been approved.</p>\r\n\r\n<p>%{click_here} to access your budget request.</p>\r\n"
         self.budget_declined_mailer_notification_text = "<p>Hello %{user_name},</p>\r\n\r\n<p>Your budget request for: %{budget_name}&nbsp;has been declined.</p>\r\n\r\n<p>%{click_here} to access your budget request.</p>\r\n"
+        self.group_leader_post_mailer_notification_text = "<p>Hello %{user_name},</p>\r\n\r\n<p>You have received a request to approve a posting for: %{group_name}.</p>\r\n\r\n<p>%{click_here} to provide approve/decline of this posting.</p>\r\n"
     end
 
     def interpolated_texts
@@ -206,6 +208,8 @@ class Enterprise < ActiveRecord::Base
             errors.add(:budget_approved_mailer_notification_text, 'Must include %{user_name}, %{budget_name} and %{click_here}')
         elsif budget_declined_mailer_notification_text && (!budget_declined_mailer_notification_text.include?("%{user_name}") || !budget_declined_mailer_notification_text.include?("%{budget_name}") || !budget_declined_mailer_notification_text.include?("%{click_here}"))
             errors.add(:budget_declined_mailer_notification_text, 'Must include %{user_name}, %{budget_name} and %{click_here}')
+        elsif group_leader_post_mailer_notification_text && (!group_leader_post_mailer_notification_text.include?("%{user_name}") || !group_leader_post_mailer_notification_text.include?("%{group_name}") || !group_leader_post_mailer_notification_text.include?("%{click_here}"))
+            errors.add(:group_leader_post_mailer_notification_text, 'Must include %{user_name}, %{group_name} and %{click_here}')
         end
     end
 

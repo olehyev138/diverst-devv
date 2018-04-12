@@ -353,6 +353,7 @@ ActiveRecord::Schema.define(version: 20180411135641) do
     t.text     "poll_mailer_notification_text",                   limit: 65535
     t.text     "budget_approved_mailer_notification_text",        limit: 65535
     t.text     "budget_declined_mailer_notification_text",        limit: 65535
+    t.text     "group_leader_post_mailer_notification_text",      limit: 65535
   end
 
   create_table "event_attendances", force: :cascade do |t|

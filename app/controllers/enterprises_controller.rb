@@ -165,6 +165,7 @@ class EnterprisesController < ApplicationController
         :poll_mailer_notification_text,
         :budget_approved_mailer_notification_text,
         :budget_declined_mailer_notification_text,
+        :group_leader_post_mailer_notification_text,
         theme: [
           :id,
           :primary_color,
