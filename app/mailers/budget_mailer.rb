@@ -13,6 +13,11 @@ class BudgetMailer < ApplicationMailer
 
   def budget_approved(budget)
     @budget = budget
+    @group = budget.subject
+    
+    url = group_budget_url(@group, @budget)
+    @mailer_text = @group.enterprise.budget_approved_mailer_notification_text  % { user_name: budget.requester.name, budget_name: @group.name, click_here: "<a saml_for_enterprise=\"#{@group.enterprise.id}\" href=\"#{url}\" target=\"_blank\">Click here</a>" }
+
     mail(to: budget.requester.email, subject: "The budget for #{ budget.subject.name } was approved")
   end
 

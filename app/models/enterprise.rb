@@ -56,6 +56,7 @@ class Enterprise < ActiveRecord::Base
     validates :campaign_mailer_notification_text, presence: true
     validates :approve_budget_request_mailer_notification_text, presence: true
     validates :poll_mailer_notification_text, presence: true
+    validates :budget_approved_mailer_notification_text, presence: true
     
     validate :interpolated_texts
 
@@ -187,6 +188,7 @@ class Enterprise < ActiveRecord::Base
         self.campaign_mailer_notification_text = "<p>Hello %{user_name},</p>\r\n\r\n<p>You are invited to join other members in the following online collaborative conversation in Diverst: %{campaign_name}</p>\r\n\r\n<p>%{join_now} to provide feedback and offer your thoughts and suggestions.</p>\r\n"
         self.approve_budget_request_mailer_notification_text = "<p>Hello %{user_name},</p>\r\n\r\n<p>You have received a request to approve a budget for: %{budget_name}</p>\r\n\r\n<p>%{click_here} to provide a review of the budget request.</p>\r\n"
         self.poll_mailer_notification_text= "<p>Hello %{user_name},</p>\r\n\r\n<p>You are invited to participate in the following online in Diverst: %{survey_name}</p>\r\n\r\n<p>%{click_here} to provide feedback and offer your thoughts and suggestions.</p>\r\n"
+        self.budget_approved_mailer_notification_text = "<p>Hello %{user_name},</p>\r\n\r\n<p>Your budget request for: %{budget_name}&nbsp;has been approved.</p>\r\n\r\n<p>%{click_here} to access your budget request.</p>\r\n"
     end
 
     def interpolated_texts
@@ -198,6 +200,8 @@ class Enterprise < ActiveRecord::Base
             errors.add(:approve_budget_request_mailer_notification_text, 'Must include %{user_name}, %{budget_name} and %{click_here}')
         elsif poll_mailer_notification_text && (!poll_mailer_notification_text.include?("%{user_name}") || !poll_mailer_notification_text.include?("%{survey_name}") || !poll_mailer_notification_text.include?("%{click_here}"))
             errors.add(:poll_mailer_notification_text, 'Must include %{user_name}, %{survey_name} and %{click_here}')
+        elsif budget_approved_mailer_notification_text && (!budget_approved_mailer_notification_text.include?("%{user_name}") || !budget_approved_mailer_notification_text.include?("%{budget_name}") || !budget_approved_mailer_notification_text.include?("%{click_here}"))
+            errors.add(:budget_approved_mailer_notification_text, 'Must include %{user_name}, %{budget_name} and %{click_here}')
         end
     end
 
