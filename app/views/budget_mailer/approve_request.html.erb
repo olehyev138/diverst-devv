@@ -1,7 +1,1 @@
-Hello <%= @receiver.name %>:
-<br/>
-You have received a request to approve a budget for <%= @group.name %>
-<br/>
-Please visit this link in order to review the request:
-<br/>
-<%= link_to @approve_url, @approve_url, saml_for_enterprise: @enterprise_id %>
+<%= @mailer_text %>

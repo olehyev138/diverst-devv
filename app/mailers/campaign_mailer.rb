@@ -11,7 +11,7 @@ class CampaignMailer < ApplicationMailer
     subject =  "You are invited to join #{group_names} in an online conversation in Diverst."
     
     url = user_user_campaign_questions_url(@invitation.campaign)
-    @mailer_text = @invitation.user.enterprise.campaign_mailer_notification_text  % { user_name: @invitation.user.name, group_names: group_names, join_now: "<a saml_for_enterprise=\"#{@enterprise_id}\" href=\"#{url}\" target=\"_blank\">Join Now</a>" }
+    @mailer_text = @invitation.user.enterprise.campaign_mailer_notification_text  % { user_name: @invitation.user.name, campaign_name: inv.campaign.title, join_now: "<a saml_for_enterprise=\"#{@enterprise_id}\" href=\"#{url}\" target=\"_blank\">Join Now</a>" }
 
     mail(to: inv.user.email, subject: subject)
 

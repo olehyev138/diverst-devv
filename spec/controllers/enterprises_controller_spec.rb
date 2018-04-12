@@ -36,13 +36,20 @@ RSpec.describe EnterprisesController, type: :controller do
             login_user_from_let
 
             context "with valid parameters" do
-                before { patch :update, id: enterprise.id, enterprise: attributes_for(:enterprise, cdo_name: "updated", user_group_mailer_notification_text: "Hello %{user_name}!!", campaign_mailer_notification_text: "Hello %{user_name}!! %{group_names} %{join_now}") }
+                attributes = FactoryGirl.attributes_for(:enterprise, 
+                                                cdo_name: "updated", 
+                                                user_group_mailer_notification_text: "Hello %{user_name}!!", 
+                                                campaign_mailer_notification_text: "Hello %{user_name}!! %{campaign_name} %{join_now}", 
+                                                approve_budget_request_mailer_notification_text: "Hello %{user_name}!! %{budget_name} %{click_here}"
+                                            )
+                before { patch :update, id: enterprise.id, enterprise: attributes }
 
                 it "updates the enterprise" do
                     enterprise.reload
                     expect(assigns[:enterprise].cdo_name).to eq "updated"
                     expect(assigns[:enterprise].user_group_mailer_notification_text).to eq("Hello %{user_name}!!")
-                    expect(assigns[:enterprise].campaign_mailer_notification_text).to eq("Hello %{user_name}!! %{group_names} %{join_now}")
+                    expect(assigns[:enterprise].campaign_mailer_notification_text).to eq("Hello %{user_name}!! %{campaign_name} %{join_now}")
+                    expect(assigns[:enterprise].approve_budget_request_mailer_notification_text).to eq("Hello %{user_name}!! %{budget_name} %{click_here}")
                 end
 
                 it "redirects to action index" do

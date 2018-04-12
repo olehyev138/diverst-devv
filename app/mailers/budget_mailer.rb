@@ -4,7 +4,9 @@ class BudgetMailer < ApplicationMailer
     @budget = budget
     @group = budget.subject
     @enterprise_id = @group.enterprise.id
-    @approve_url = group_budget_url(@group, @budget)
+
+    url = group_budget_url(@group, @budget)
+    @mailer_text = @group.enterprise.approve_budget_request_mailer_notification_text  % { user_name: receiver.name, budget_name: @group.name, click_here: "<a saml_for_enterprise=\"#{@enterprise_id}\" href=\"#{url}\" target=\"_blank\">Click here</a>" }
 
     mail(to: @receiver.email, subject: subject(@group.name))
   end

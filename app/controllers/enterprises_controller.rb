@@ -161,6 +161,7 @@ class EnterprisesController < ApplicationController
         :time_zone,
         :user_group_mailer_notification_text,
         :campaign_mailer_notification_text,
+        :approve_budget_request_mailer_notification_text,
         theme: [
           :id,
           :primary_color,

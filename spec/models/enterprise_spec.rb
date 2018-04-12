@@ -193,17 +193,40 @@ RSpec.describe Enterprise, type: :model do
             
             enterprise.campaign_mailer_notification_text = "wrong text"
             expect(enterprise.valid?).to be(false)
-            expect(enterprise.errors.full_messages.first).to eq("Campaign mailer notification text Must include %{user_name}, %{group_names} and %{join_now}")
+            expect(enterprise.errors.full_messages.first).to eq("Campaign mailer notification text Must include %{user_name}, %{campaign_name} and %{join_now}")
             
             enterprise.campaign_mailer_notification_text = "Hello %{user_name},"
             expect(enterprise.valid?).to be(false)
-            expect(enterprise.errors.full_messages.first).to eq("Campaign mailer notification text Must include %{user_name}, %{group_names} and %{join_now}")
+            expect(enterprise.errors.full_messages.first).to eq("Campaign mailer notification text Must include %{user_name}, %{campaign_name} and %{join_now}")
             
-            enterprise.campaign_mailer_notification_text = "Hello %{user_name}, The following %{group_names} have been invite to campaign"
+            enterprise.campaign_mailer_notification_text = "Hello %{user_name}, The following %{campaign_name} have been invite to campaign"
             expect(enterprise.valid?).to be(false)
-            expect(enterprise.errors.full_messages.first).to eq("Campaign mailer notification text Must include %{user_name}, %{group_names} and %{join_now}")
+            expect(enterprise.errors.full_messages.first).to eq("Campaign mailer notification text Must include %{user_name}, %{campaign_name} and %{join_now}")
             
-            enterprise.campaign_mailer_notification_text = "Hello %{user_name}, The following %{group_names} have been invite to campaign so %{join_now}"
+            enterprise.campaign_mailer_notification_text = "Hello %{user_name}, The following %{campaign_name} have been invite to campaign so %{join_now}"
+            expect(enterprise.valid?).to be(true)
+        end
+    end
+    
+    describe "approve_budget_request_mailer_notification_text" do
+        it "is required" do
+            enterprise = build(:enterprise, :approve_budget_request_mailer_notification_text => nil)
+            expect(enterprise.valid?).to be(false)
+            expect(enterprise.errors.full_messages.first).to eq("Approve budget request mailer notification text can't be blank")
+            
+            enterprise.approve_budget_request_mailer_notification_text = "wrong text"
+            expect(enterprise.valid?).to be(false)
+            expect(enterprise.errors.full_messages.first).to eq("Approve budget request mailer notification text Must include %{user_name}, %{budget_name} and %{click_here}")
+            
+            enterprise.approve_budget_request_mailer_notification_text = "Hello %{user_name},"
+            expect(enterprise.valid?).to be(false)
+            expect(enterprise.errors.full_messages.first).to eq("Approve budget request mailer notification text Must include %{user_name}, %{budget_name} and %{click_here}")
+            
+            enterprise.approve_budget_request_mailer_notification_text = "Hello %{user_name}, The following %{budget_name} have been invite to campaign"
+            expect(enterprise.valid?).to be(false)
+            expect(enterprise.errors.full_messages.first).to eq("Approve budget request mailer notification text Must include %{user_name}, %{budget_name} and %{click_here}")
+            
+            enterprise.approve_budget_request_mailer_notification_text = "Hello %{user_name}, The following %{budget_name} have been invite to campaign so %{click_here}"
             expect(enterprise.valid?).to be(true)
         end
     end
