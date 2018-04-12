@@ -113,3 +113,24 @@
     </div>
   </div>
 </div>
+
+<div class="content__header">
+  <h1>Edit Campaign Invitation Mailer Text</h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_branding') do |f| %>
+      
+        <div class="card__section card__section--border">
+          <%= f.input :campaign_mailer_notification_text,
+              as: :ckeditor
+          %>
+        </div>
+
+        <%= f.button :submit, "Save Campaign Invitation Mailer text" %>
+      <% end %>
+    </div>
+  </div>
+</div>

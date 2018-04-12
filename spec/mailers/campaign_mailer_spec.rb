@@ -18,6 +18,11 @@ RSpec.describe CampaignMailer, type: :mailer do
           it 'includes message' do
             expect(mail.subject).to include('You are invited to join')
           end
+          
+          it 'includes message in email body' do
+            expect(mail.body.encoded).to include(user.name)
+            expect(mail.body.encoded).to include("Join Now")
+          end
         end
 
         it 'renders the receiver email' do

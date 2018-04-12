@@ -172,6 +172,39 @@ RSpec.describe Enterprise, type: :model do
         it "is required" do
             enterprise = build(:enterprise, :user_group_mailer_notification_text => nil)
             expect(enterprise.valid?).to be(false)
+            expect(enterprise.errors.full_messages.first).to eq("User group mailer notification text can't be blank")
+            
+            # check for required user name
+            enterprise.user_group_mailer_notification_text = "wrong text"
+            expect(enterprise.valid?).to be(false)
+            expect(enterprise.errors.full_messages.first).to eq("User group mailer notification text Must include %{user_name}")
+            
+            # check for required user name
+            enterprise.user_group_mailer_notification_text = "%{user_name}"
+            expect(enterprise.valid?).to be(true)
+        end
+    end
+    
+    describe "campaign_mailer_notification_text" do
+        it "is required" do
+            enterprise = build(:enterprise, :campaign_mailer_notification_text => nil)
+            expect(enterprise.valid?).to be(false)
+            expect(enterprise.errors.full_messages.first).to eq("Campaign mailer notification text can't be blank")
+            
+            enterprise.campaign_mailer_notification_text = "wrong text"
+            expect(enterprise.valid?).to be(false)
+            expect(enterprise.errors.full_messages.first).to eq("Campaign mailer notification text Must include %{user_name}, %{group_names} and %{join_now}")
+            
+            enterprise.campaign_mailer_notification_text = "Hello %{user_name},"
+            expect(enterprise.valid?).to be(false)
+            expect(enterprise.errors.full_messages.first).to eq("Campaign mailer notification text Must include %{user_name}, %{group_names} and %{join_now}")
+            
+            enterprise.campaign_mailer_notification_text = "Hello %{user_name}, The following %{group_names} have been invite to campaign"
+            expect(enterprise.valid?).to be(false)
+            expect(enterprise.errors.full_messages.first).to eq("Campaign mailer notification text Must include %{user_name}, %{group_names} and %{join_now}")
+            
+            enterprise.campaign_mailer_notification_text = "Hello %{user_name}, The following %{group_names} have been invite to campaign so %{join_now}"
+            expect(enterprise.valid?).to be(true)
         end
     end
 end

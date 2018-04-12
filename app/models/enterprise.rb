@@ -53,6 +53,7 @@ class Enterprise < ActiveRecord::Base
     validates :idp_sso_target_url, url: { allow_blank: true }
     validates :cdo_name, :name, presence: true
     validates :user_group_mailer_notification_text, presence: true
+    validates :campaign_mailer_notification_text, presence: true
     
     validate :interpolated_texts
 
@@ -181,11 +182,14 @@ class Enterprise < ActiveRecord::Base
     
     def set_default_email_texts
         self.user_group_mailer_notification_text = "<p>Hello %{user_name},</p>\r\n\r\n<p>A new item has been posted to a Diversity and Inclusion group you are a member of. Select the link(s) below to access Diverst and review the item(s)</p>\r\n"
+        self.campaign_mailer_notification_text = "<p>Hello %{user_name},</p>\r\n\r\n<p>You are invited to join %{group_names} in an online conversation in Diverst!</p>\r\n\r\n<p>%{join_now} to provide feedback and offer your thoughts and suggestions.</p>\r\n"
     end
 
     def interpolated_texts
         if user_group_mailer_notification_text && !user_group_mailer_notification_text.include?("%{user_name}")
             errors.add(:user_group_mailer_notification_text, 'Must include %{user_name}')
+        elsif campaign_mailer_notification_text && (!campaign_mailer_notification_text.include?("%{user_name}") || !campaign_mailer_notification_text.include?("%{group_names}") || !campaign_mailer_notification_text.include?("%{join_now}"))
+            errors.add(:campaign_mailer_notification_text, 'Must include %{user_name}, %{group_names} and %{join_now}')
         end
     end
 

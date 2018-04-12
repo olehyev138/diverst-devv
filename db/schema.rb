@@ -348,6 +348,7 @@ ActiveRecord::Schema.define(version: 20180411135641) do
     t.boolean  "enable_pending_comments",                             default: false
     t.boolean  "disable_sponsor_message",                             default: false
     t.text     "user_group_mailer_notification_text",   limit: 65535
+    t.text     "campaign_mailer_notification_text",     limit: 65535
   end
 
   create_table "event_attendances", force: :cascade do |t|
