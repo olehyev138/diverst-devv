@@ -22,6 +22,9 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     add_reference :fields, :poll
     add_reference :fields, :initiative
     
+    add_reference :folders, :enterprise
+    add_reference :folders, :group
+    
     # migrate existing polymorphic associations to new structure
     Tag.where(:taggable_type => "Resource").update_all("resource_id = taggable_id")
     
@@ -44,12 +47,17 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     Field.where(:container_type => "Poll").update_all("poll_id = container_id")
     Field.where(:container_type => "Initiative").update_all("initiative_id = container_id")
     
+    # folders for enterprises and groups
+    Folder.where(:container_type => "Enterprise").update_all("enterprise_id = container_id")
+    Folder.where(:container_type => "Group").update_all("group_id = container_id")
+    
     # remove polymorphic fields
     remove_reference :tags,             :taggable,    polymorphic: true
     remove_reference :budgets,          :subject,     polymorphic: true
     remove_reference :checklists,       :subject,     polymorphic: true
     remove_reference :checklist_items,  :container,   polymorphic: true
     remove_reference :fields,           :container,   polymorphic: true
+    remove_reference :folders,          :container,   polymorphic: true
   end
   
   def down
@@ -58,6 +66,7 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     add_reference :checklists,      :subject,     polymorphic: true
     add_reference :checklist_items, :container,   polymorphic: true
     add_reference :fields,          :container,   polymorphic: true
+    add_reference :folders,         :container,   polymorphic: true
     
     # migrate foreign keys back to polymorphic associations
     Tag.where.not(:resource_id => nil).update_all("taggable_id = resource_id, taggable_type = 'Resource'")
@@ -81,6 +90,10 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     Field.where.not(:poll_id => nil).update_all("container_id = poll_id, container_type = 'Poll'")
     Field.where.not(:initiative_id => nil).update_all("container_id = initiative_id, container_type = 'Initiative'")
     
+    # fields for enterprises, events, groups, polls, initiatives
+    Folder.where.not(:enterprise_id => nil).update_all("container_id = enterprise_id, container_type = 'Enterprise'")
+    Folder.where.not(:group_id => nil).update_all("container_id = group_id, container_type = 'Group'")
+    
     remove_reference :tags,     :resource
     
     remove_reference :budgets,  :event
@@ -97,5 +110,8 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     remove_reference :fields,  :group
     remove_reference :fields,  :poll
     remove_reference :fields,  :initiative
+    
+    remove_reference :folders,  :enterprise
+    remove_reference :folders,  :group
   end
 end

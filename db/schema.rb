@@ -448,17 +448,15 @@ ActiveRecord::Schema.define(version: 20180324181536) do
   add_index "folder_shares", ["container_type", "container_id"], name: "index_folder_shares_on_container_type_and_container_id", using: :btree
 
   create_table "folders", force: :cascade do |t|
-    t.integer  "container_id",       limit: 4
-    t.string   "container_type",     limit: 191
     t.string   "name",               limit: 191
     t.datetime "created_at",                                     null: false
     t.datetime "updated_at",                                     null: false
     t.boolean  "password_protected",             default: false
     t.string   "password_digest",    limit: 191
     t.integer  "parent_id",          limit: 4
+    t.integer  "enterprise_id",      limit: 4
+    t.integer  "group_id",           limit: 4
   end
-
-  add_index "folders", ["container_type", "container_id"], name: "index_folders_on_container_type_and_container_id", using: :btree
 
   create_table "graphs", force: :cascade do |t|
     t.integer  "field_id",           limit: 4

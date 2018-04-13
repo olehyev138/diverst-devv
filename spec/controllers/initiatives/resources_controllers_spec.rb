@@ -32,7 +32,6 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
         end
     end
 
-
     describe "GET#new" do
         context "with logged user" do
             login_user_from_let
@@ -52,7 +51,6 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "POST#create" do
         let!(:resource) { create(:resource, container_type: "Initiative", container_id: initiative.id) }
@@ -99,7 +97,6 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
         end
     end
 
-
     describe "GET#show" do
         context "with logged user" do
             login_user_from_let
@@ -124,7 +121,6 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "GET#edit" do
         let(:resource){ create(:resource, container_type: "Initiative", container_id: initiative.id) }
@@ -153,7 +149,6 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "PATCH#update" do
         let(:resource){ create(:resource, title: "Resource", container_type: "Initiative", container_id: initiative.id) }
@@ -196,8 +191,7 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
-
+    
     describe "DELET#destroy" do
         let(:resource){ create(:resource, container_type: "Initiative", container_id: initiative.id) }
 

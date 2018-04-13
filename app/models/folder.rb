@@ -3,7 +3,9 @@ class Folder < ActiveRecord::Base
   has_secure_password(validations: false)
   
   # associations
-  belongs_to  :container, polymorphic: true
+  belongs_to  :enterprise
+  belongs_to  :group
+  
   has_many    :resources, as: :container
   has_many    :folder_shares
   has_many    :groups, through: :folder_shares, source: "container", source_type: 'Group'
@@ -13,9 +15,8 @@ class Folder < ActiveRecord::Base
 
   # validations
   validates :name, presence: true
-  validates :container, presence: true
-  validates :container, presence: true
-  validates_uniqueness_of :name, scope: [:container]
+  validates_uniqueness_of :name, scope: [:enterprise]
+  validates_uniqueness_of :name, scope: [:group]
   validates :password, :presence => true, :if => Proc.new { |folder| folder.password_protected? and !folder.password_digest}
   validates :password, :length => { :minimum => 6 }, :if => Proc.new { |folder| folder.password_protected? and folder.password.present?}
   

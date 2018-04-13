@@ -9,7 +9,7 @@ class Enterprise < ActiveRecord::Base
     has_many :groups, inverse_of: :enterprise
     has_many :events, through: :groups
     has_many :initiatives, through: :groups
-    has_many :folders, as: :container
+    has_many :folders
     has_many :folder_shares, as: :container
     has_many :shared_folders, through: :folder_shares, source: 'folder'
     has_many :polls, inverse_of: :enterprise
