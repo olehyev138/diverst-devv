@@ -5,7 +5,6 @@ RSpec.describe EnterprisesController, type: :controller do
     let(:user){ create(:user, enterprise: enterprise) }
     let(:group){ create(:group, enterprise: enterprise) }
 
-
     describe "GET#edit" do
         describe "with logged in user" do
             login_user_from_let
@@ -29,18 +28,34 @@ RSpec.describe EnterprisesController, type: :controller do
         end
     end
 
-
     describe "PATCH#update" do
         describe "with logged in user" do
             before { request.env["HTTP_REFERER"] = "back" }
             login_user_from_let
 
             context "with valid parameters" do
-                before { patch :update, id: enterprise.id, enterprise: attributes_for(:enterprise, cdo_name: "updated") }
+                attributes = FactoryGirl.attributes_for(:enterprise, 
+                                                cdo_name: "updated", 
+                                                user_group_mailer_notification_text: "Hello %{user_name}!!", 
+                                                campaign_mailer_notification_text: "Hello %{user_name}!! %{campaign_name} %{join_now}", 
+                                                approve_budget_request_mailer_notification_text: "Hello %{user_name}!! %{budget_name} %{click_here}",
+                                                poll_mailer_notification_text: "Hello %{user_name}!! %{survey_name} %{click_here}",
+                                                budget_approved_mailer_notification_text: "Hello %{user_name}!! %{budget_name} %{click_here}",
+                                                budget_declined_mailer_notification_text: "Hello %{user_name}!! %{budget_name} %{click_here}",
+                                                group_leader_post_mailer_notification_text: "Hello %{user_name}!! %{group_name} %{click_here}"
+                                            )
+                before { patch :update, id: enterprise.id, enterprise: attributes }
 
                 it "updates the enterprise" do
                     enterprise.reload
                     expect(assigns[:enterprise].cdo_name).to eq "updated"
+                    expect(assigns[:enterprise].user_group_mailer_notification_text).to eq("Hello %{user_name}!!")
+                    expect(assigns[:enterprise].campaign_mailer_notification_text).to eq("Hello %{user_name}!! %{campaign_name} %{join_now}")
+                    expect(assigns[:enterprise].approve_budget_request_mailer_notification_text).to eq("Hello %{user_name}!! %{budget_name} %{click_here}")
+                    expect(assigns[:enterprise].poll_mailer_notification_text).to eq("Hello %{user_name}!! %{survey_name} %{click_here}")
+                    expect(assigns[:enterprise].budget_approved_mailer_notification_text).to eq("Hello %{user_name}!! %{budget_name} %{click_here}")
+                    expect(assigns[:enterprise].budget_declined_mailer_notification_text).to eq("Hello %{user_name}!! %{budget_name} %{click_here}")
+                    expect(assigns[:enterprise].group_leader_post_mailer_notification_text).to eq("Hello %{user_name}!! %{group_name} %{click_here}")
                 end
 
                 it "redirects to action index" do
@@ -76,7 +91,6 @@ RSpec.describe EnterprisesController, type: :controller do
         end
     end
 
-
     describe "GET#edit_fields" do
         describe "with logged in user" do
             login_user_from_let
@@ -99,7 +113,6 @@ RSpec.describe EnterprisesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "GET#edit_budgeting" do
         describe "with logged in user" do
@@ -189,7 +202,6 @@ RSpec.describe EnterprisesController, type: :controller do
         end
     end
 
-
     describe "GET#edit_auth" do
         describe "with logged in user" do
             login_user_from_let
@@ -212,7 +224,6 @@ RSpec.describe EnterprisesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "GET#edit_branding" do
         describe "with logged in user" do
@@ -275,7 +286,6 @@ RSpec.describe EnterprisesController, type: :controller do
         end
     end
 
-
     describe "GET#update_branding" do
         describe "with logged in user" do
             login_user_from_let
@@ -320,7 +330,6 @@ RSpec.describe EnterprisesController, type: :controller do
         end
     end
 
-
     describe "PATCH#delete_attachment" do
         before { request.env["HTTP_REFERER"] = "back" }
 
@@ -357,7 +366,6 @@ RSpec.describe EnterprisesController, type: :controller do
         end
     end
 
-
     describe "GET#restore_default_branding" do
         before { request.env["HTTP_REFERER"] = "back" }
 
@@ -382,7 +390,6 @@ RSpec.describe EnterprisesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "GET#calendar" do
         it "allows view to be embed on iframe" do

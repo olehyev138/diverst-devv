@@ -51,6 +51,10 @@ RSpec.describe BudgetMailer, type: :mailer do
     it 'renders the sender email' do
       expect(mail.from).to eq(['info@diverst.com'])
     end
+    
+    it 'renders the mail body' do
+      expect(mail.body.encoded).to include "Your budget request for"
+    end
   end
 
   describe '#budget_declined' do
@@ -71,6 +75,10 @@ RSpec.describe BudgetMailer, type: :mailer do
 
     it 'renders the sender email' do
       expect(mail.from).to eq(['info@diverst.com'])
+    end
+    
+    it 'renders the mail body' do
+      expect(mail.body.encoded).to include "Your budget request for"
     end
   end
 end

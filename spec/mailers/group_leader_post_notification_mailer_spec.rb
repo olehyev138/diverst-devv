@@ -26,8 +26,8 @@ RSpec.describe GroupLeaderPostNotificationMailer, type: :mailer do
       expect(mail.from).to eq(['info@diverst.com'])
     end
 
-    it 'shows a message with number of pending posts in group' do
-      expect(mail.body.encoded).to include("#{group.name} has 1 pending post")
+    it 'shows a message regarding approving posts' do
+      expect(mail.body.encoded).to include("You have received a request to approve a posting")
     end
   end
 end
