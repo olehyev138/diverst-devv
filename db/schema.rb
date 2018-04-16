@@ -11,14 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180404172502) do
+ActiveRecord::Schema.define(version: 20180411135641) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
     t.string   "trackable_type", limit: 191
     t.integer  "owner_id",       limit: 4
     t.string   "owner_type",     limit: 191
-    t.string   "key",            limit: 255
+    t.string   "key",            limit: 191
     t.text     "parameters",     limit: 65535
     t.integer  "recipient_id",   limit: 4
     t.string   "recipient_type", limit: 191
@@ -254,6 +254,7 @@ ActiveRecord::Schema.define(version: 20180404172502) do
     t.text    "dci_full_title",    limit: 65535
     t.text    "dci_abbreviation",  limit: 65535
     t.text    "member_preference", limit: 65535
+    t.text    "parent",            limit: 65535
   end
 
   add_index "custom_texts", ["enterprise_id"], name: "index_custom_texts_on_enterprise_id", using: :btree
@@ -295,58 +296,65 @@ ActiveRecord::Schema.define(version: 20180404172502) do
   end
 
   create_table "enterprises", force: :cascade do |t|
-    t.string   "name",                                  limit: 191
-    t.string   "sp_entity_id",                          limit: 191
-    t.string   "idp_entity_id",                         limit: 191
-    t.string   "idp_sso_target_url",                    limit: 191
-    t.string   "idp_slo_target_url",                    limit: 191
-    t.text     "idp_cert",                              limit: 65535
-    t.string   "saml_first_name_mapping",               limit: 191
-    t.string   "saml_last_name_mapping",                limit: 191
+    t.string   "name",                                            limit: 191
+    t.string   "sp_entity_id",                                    limit: 191
+    t.string   "idp_entity_id",                                   limit: 191
+    t.string   "idp_sso_target_url",                              limit: 191
+    t.string   "idp_slo_target_url",                              limit: 191
+    t.text     "idp_cert",                                        limit: 65535
+    t.string   "saml_first_name_mapping",                         limit: 191
+    t.string   "saml_last_name_mapping",                          limit: 191
     t.boolean  "has_enabled_saml"
-    t.datetime "created_at",                                                          null: false
-    t.datetime "updated_at",                                                          null: false
-    t.string   "yammer_token",                          limit: 191
-    t.boolean  "yammer_import",                                       default: false
-    t.boolean  "yammer_group_sync",                                   default: false
-    t.integer  "theme_id",                              limit: 4
-    t.string   "cdo_name",                              limit: 191
-    t.string   "cdo_title",                             limit: 191
-    t.string   "cdo_picture_file_name",                 limit: 191
-    t.string   "cdo_picture_content_type",              limit: 191
-    t.integer  "cdo_picture_file_size",                 limit: 4
+    t.datetime "created_at",                                                                    null: false
+    t.datetime "updated_at",                                                                    null: false
+    t.string   "yammer_token",                                    limit: 191
+    t.boolean  "yammer_import",                                                 default: false
+    t.boolean  "yammer_group_sync",                                             default: false
+    t.integer  "theme_id",                                        limit: 4
+    t.string   "cdo_name",                                        limit: 191
+    t.string   "cdo_title",                                       limit: 191
+    t.string   "cdo_picture_file_name",                           limit: 191
+    t.string   "cdo_picture_content_type",                        limit: 191
+    t.integer  "cdo_picture_file_size",                           limit: 4
     t.datetime "cdo_picture_updated_at"
-    t.text     "cdo_message",                           limit: 65535
-    t.text     "cdo_message_email",                     limit: 65535
-    t.boolean  "collaborate_module_enabled",                          default: true,  null: false
-    t.boolean  "scope_module_enabled",                                default: true,  null: false
-    t.boolean  "bias_module_enabled",                                 default: false, null: false
-    t.boolean  "plan_module_enabled",                                 default: true,  null: false
-    t.string   "banner_file_name",                      limit: 191
-    t.string   "banner_content_type",                   limit: 191
-    t.integer  "banner_file_size",                      limit: 4
+    t.text     "cdo_message",                                     limit: 65535
+    t.text     "cdo_message_email",                               limit: 65535
+    t.boolean  "collaborate_module_enabled",                                    default: true,  null: false
+    t.boolean  "scope_module_enabled",                                          default: true,  null: false
+    t.boolean  "bias_module_enabled",                                           default: false, null: false
+    t.boolean  "plan_module_enabled",                                           default: true,  null: false
+    t.string   "banner_file_name",                                limit: 191
+    t.string   "banner_content_type",                             limit: 191
+    t.integer  "banner_file_size",                                limit: 4
     t.datetime "banner_updated_at"
-    t.text     "home_message",                          limit: 65535
-    t.text     "privacy_statement",                     limit: 65535
-    t.boolean  "has_enabled_onboarding_email",                        default: true
-    t.string   "xml_sso_config_file_name",              limit: 191
-    t.string   "xml_sso_config_content_type",           limit: 191
-    t.integer  "xml_sso_config_file_size",              limit: 4
+    t.text     "home_message",                                    limit: 65535
+    t.text     "privacy_statement",                               limit: 65535
+    t.boolean  "has_enabled_onboarding_email",                                  default: true
+    t.string   "xml_sso_config_file_name",                        limit: 191
+    t.string   "xml_sso_config_content_type",                     limit: 191
+    t.integer  "xml_sso_config_file_size",                        limit: 4
     t.datetime "xml_sso_config_updated_at"
-    t.string   "iframe_calendar_token",                 limit: 191
-    t.string   "time_zone",                             limit: 191
-    t.boolean  "enable_rewards",                                      default: false
-    t.string   "company_video_url",                     limit: 191
-    t.string   "sponsor_media_file_name",               limit: 191
-    t.string   "sponsor_media_content_type",            limit: 191
-    t.integer  "sponsor_media_file_size",               limit: 4
+    t.string   "iframe_calendar_token",                           limit: 191
+    t.string   "time_zone",                                       limit: 191
+    t.boolean  "enable_rewards",                                                default: false
+    t.string   "company_video_url",                               limit: 191
+    t.string   "sponsor_media_file_name",                         limit: 191
+    t.string   "sponsor_media_content_type",                      limit: 191
+    t.integer  "sponsor_media_file_size",                         limit: 4
     t.datetime "sponsor_media_updated_at"
-    t.string   "onboarding_sponsor_media_file_name",    limit: 191
-    t.string   "onboarding_sponsor_media_content_type", limit: 191
-    t.integer  "onboarding_sponsor_media_file_size",    limit: 4
+    t.string   "onboarding_sponsor_media_file_name",              limit: 191
+    t.string   "onboarding_sponsor_media_content_type",           limit: 191
+    t.integer  "onboarding_sponsor_media_file_size",              limit: 4
     t.datetime "onboarding_sponsor_media_updated_at"
-    t.boolean  "enable_pending_comments",                             default: false
-    t.boolean  "disable_sponsor_message",                             default: false
+    t.boolean  "enable_pending_comments",                                       default: false
+    t.boolean  "disable_sponsor_message",                                       default: false
+    t.text     "user_group_mailer_notification_text",             limit: 65535
+    t.text     "campaign_mailer_notification_text",               limit: 65535
+    t.text     "approve_budget_request_mailer_notification_text", limit: 65535
+    t.text     "poll_mailer_notification_text",                   limit: 65535
+    t.text     "budget_approved_mailer_notification_text",        limit: 65535
+    t.text     "budget_declined_mailer_notification_text",        limit: 65535
+    t.text     "group_leader_post_mailer_notification_text",      limit: 65535
   end
 
   create_table "event_attendances", force: :cascade do |t|
@@ -913,8 +921,6 @@ ActiveRecord::Schema.define(version: 20180404172502) do
     t.boolean  "budget_approval",                       default: false
     t.boolean  "logs_view",                             default: false
     t.boolean  "annual_budget_manage",                  default: false
-    t.boolean  "expenses_index",                        default: false
-    t.boolean  "expenses_manage",                       default: false
     t.boolean  "sso_manage",                            default: false
     t.boolean  "permissions_manage",                    default: false
     t.boolean  "diversity_manage",                      default: false

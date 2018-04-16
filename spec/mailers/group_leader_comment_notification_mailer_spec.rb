@@ -29,5 +29,9 @@ RSpec.describe GroupLeaderCommentNotificationMailer, type: :mailer do
     it 'shows a message with number of pending comments in group' do
       expect(mail.body.encoded).to include("#{group.name} has 1 pending comment")
     end
+    
+    it 'includes a link to the news feed' do
+      expect(mail.body.encoded).to include("groups/#{group.id}/posts")
+    end
   end
 end
