@@ -33,7 +33,7 @@ RSpec.describe Enterprises::FoldersController, type: :controller do
 
     describe "GET#index" do
         context 'when user is logged in' do
-            let!(:shared_folders) { create_list(:folder_share, 2, container: enterprise, folder: folder) }
+            let!(:shared_folders) { create_list(:folder_share, 2, enterprise: enterprise, folder: folder) }
             login_user_from_let
             before {get :index, enterprise_id: enterprise.id}
 
