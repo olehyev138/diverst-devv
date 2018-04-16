@@ -7,7 +7,7 @@ RSpec.describe Importers::Users do
   let(:languages_field){ CheckboxField.new(title: 'Spoken languages') }
   let(:years_field){ NumericField.new(title: 'Experience in your field (in years)') }
   let!(:enterprise){ create(:enterprise, fields: [job_field, gender_field, date_field, languages_field, years_field]) }
-  let!(:manager){ create(:user, enterprise: enterprise) }
+  let!(:manager){ create(:user, enterprise: enterprise, :user_role_id => enterprise.default_user_role) }
   let(:importer){ Importers::Users.new(file, manager) }
 
   context "when spreadsheet does not have mandaroty fields filled" do
@@ -101,7 +101,7 @@ RSpec.describe Importers::Users do
 
   context "when spreadsheet have email that already exists in database" do
     let!(:user) do
-      user = build(:user)
+      user = build(:user, :enterprise => enterprise, :user_role_id => enterprise.default_user_role)
       user.info[job_field] = "Developer"
       user.info[gender_field] = "Male"
       user.info[languages_field] = "English"

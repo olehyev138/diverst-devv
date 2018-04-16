@@ -340,7 +340,7 @@ RSpec.describe Group, :type => :model do
 
         it "returns an array with owner and leaders" do
             user = create(:user)
-            group = create(:group, :owner => user)
+            group = create(:group, :enterprise => user.enterprise, :owner => user)
 
             2.times do
                 create(:group_leader, :group => group, :user => user)
@@ -635,8 +635,8 @@ RSpec.describe Group, :type => :model do
 
     describe '#set_default_group_contact' do
         it 'updates contact email if group leader is default_group_contact' do
-            group = create(:group)
             user = create(:user)
+            group = create(:group, :enterprise => user.enterprise)
             group_leader = create(:group_leader, :group => group, :user => user, :default_group_contact => true)
             group_leader = group.group_leaders.find_by(default_group_contact: true)&.user
         
@@ -645,11 +645,10 @@ RSpec.describe Group, :type => :model do
         end
 
         it 'sets contact email to nil if group leader is not set.' do
-            group = create(:group)
             user = create(:user)
+            group = create(:group, :enterprise => user.enterprise)
             create(:group_leader, :group => group, :user => user, :default_group_contact => false)
-            group_leader = group.group_leaders.find_by(default_group_contact: true)&.user
-
+            
             expect(group.contact_email).to eq nil
         end
     end

@@ -33,6 +33,6 @@ class Groups::LeadersController < ApplicationController
   end
 
   def group_params
-    params.require(:group).permit(group_leaders_attributes: [:id, :user_id, :position_name, :role, :_destroy, :visible, :pending_member_notifications_enabled, :pending_comments_notifications_enabled, :pending_posts_notifications_enabled, :default_group_contact])
+    params.require(:group).permit(group_leaders_attributes: [:id, :user_id, :position_name, :user_role_id, :_destroy, :visible, :pending_member_notifications_enabled, :pending_comments_notifications_enabled, :pending_posts_notifications_enabled, :default_group_contact])
   end
 end

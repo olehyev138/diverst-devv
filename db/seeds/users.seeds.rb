@@ -25,15 +25,15 @@ after :enterprise do
   ]
 
   # create default enterprise user roles
-  enterprise.user_roles.create!(
+  user_roles = enterprise.user_roles.create!(
     [
-      {:role_name => "admin", :role_type => "user", :priority => 0},
-      {:role_name => "diversity_manager", :role_type => "user", :priority => 1},
-      {:role_name => "national_manager", :role_type => "user", :priority => 2},
-      {:role_name => "group_leader", :role_type => "group", :priority => 3},
-      {:role_name => "group_treasurer", :role_type => "group", :priority => 4},
-      {:role_name => "group_content_creator", :role_type => "group", :priority => 5},
-      {:role_name => "user", :role_type => "user", :priority => 6, :default => true}
+      {:role_name => "Admin", :role_type => "user", :priority => 0},
+      {:role_name => "Diversity Manager", :role_type => "user", :priority => 1},
+      {:role_name => "National Manager", :role_type => "user", :priority => 2},
+      {:role_name => "Group Leader", :role_type => "group", :priority => 3},
+      {:role_name => "Group Treasurer", :role_type => "group", :priority => 4},
+      {:role_name => "Group Content Creator", :role_type => "group", :priority => 5},
+      {:role_name => "User", :role_type => "user", :priority => 6, :default => true}
     ]
   )
 
@@ -44,7 +44,7 @@ after :enterprise do
         first_name: 'Tech',
         last_name: 'Admin',
         password: 'password',
-        role: "user",
+        user_role_id: user_roles.last.id,
         password_confirmation: 'password',
         invitation_accepted_at: Faker::Time.between(3.days.ago, Time.current)
       }

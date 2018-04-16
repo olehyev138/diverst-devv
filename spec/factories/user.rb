@@ -8,9 +8,8 @@ FactoryGirl.define do
     invitation_sent_at Time.current
     invitation_accepted_at Time.current
     enterprise
-    role "admin"
     provider "email"
-
+    user_role {enterprise.user_roles.where(:role_type => "admin").first}
     after(:create) do |user|
       user.policy_group = create(:policy_group)
     end
