@@ -177,7 +177,7 @@ RSpec.describe MetricsDashboardsController, type: :controller do
         login_user_from_let
   
         before do
-          create_list(:graph, 2, collection: metrics_dashboard)
+          create_list(:graph, 2, metrics_dashboard: metrics_dashboard)
           metrics_dashboard.shareable_token #Touch token, so it is initialized
           get_show
         end

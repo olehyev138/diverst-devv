@@ -3,7 +3,7 @@ class MetricsDashboard < ActiveRecord::Base
 
   belongs_to :enterprise, inverse_of: :metrics_dashboards
   belongs_to :owner, class_name: "User"
-  has_many :graphs, as: :collection
+  has_many :graphs
   has_many :metrics_dashboards_segments
   has_many :segments, through: :metrics_dashboards_segments
   has_many :groups_metrics_dashboards

@@ -18,8 +18,8 @@ RSpec.describe Reports::GraphTimeseries do
       group = create(:group, :enterprise => enterprise, :created_at => 1.day.ago)
       create(:user_group, :user => user, :group => group, :accepted_member => true, :created_at => 1.day.ago)
       
-      collection = create(:metrics_dashboard, :enterprise => enterprise, :segments => enterprise.segments, :groups => enterprise.groups)
-      @graph = create(:graph, :field => select_field, :collection => collection)
+      metrics_dashboard = create(:metrics_dashboard, :enterprise => enterprise, :segments => enterprise.segments, :groups => enterprise.groups)
+      @graph = create(:graph, :field => select_field, :metrics_dashboard => metrics_dashboard)
       
       User.__elasticsearch__.refresh_index!(index: User.es_index_name(enterprise: enterprise))
     end

@@ -28,6 +28,9 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     add_reference :folder_shares, :enterprise
     add_reference :folder_shares, :group
     
+    add_reference :graphs, :metrics_dashboard
+    add_reference :graphs, :poll
+    
     # migrate existing polymorphic associations to new structure
     Tag.where(:taggable_type => "Resource").update_all("resource_id = taggable_id")
     
@@ -58,6 +61,10 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     FolderShare.where(:container_type => "Enterprise").update_all("enterprise_id = container_id")
     FolderShare.where(:container_type => "Group").update_all("group_id = container_id")
     
+    # graphs for polls and metric_dashboards
+    Graph.where(:collection_type => "MetricsDashboard").update_all("metrics_dashboard_id = collection_id")
+    Graph.where(:collection_type => "Poll").update_all("poll_id = collection_id")
+    
     # remove polymorphic fields
     remove_reference :tags,             :taggable,    polymorphic: true
     remove_reference :budgets,          :subject,     polymorphic: true
@@ -66,6 +73,7 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     remove_reference :fields,           :container,   polymorphic: true
     remove_reference :folders,          :container,   polymorphic: true
     remove_reference :folder_shares,    :container,   polymorphic: true
+    remove_reference :graphs,           :collection,  polymorphic: true
   end
   
   def down
@@ -76,6 +84,7 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     add_reference :fields,          :container,   polymorphic: true
     add_reference :folders,         :container,   polymorphic: true
     add_reference :folder_shares,   :container,   polymorphic: true
+    add_reference :graphs,          :collection,  polymorphic: true
     
     # migrate foreign keys back to polymorphic associations
     Tag.where.not(:resource_id => nil).update_all("taggable_id = resource_id, taggable_type = 'Resource'")
@@ -107,6 +116,10 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     FolderShare.where.not(:enterprise_id => nil).update_all("container_id = enterprise_id, container_type = 'Enterprise'")
     FolderShare.where.not(:group_id => nil).update_all("container_id = group_id, container_type = 'Group'")
     
+    # graphs for polls and metric_dashboards
+    Graph.where.not(:metrics_dashboard_id => nil).update_all("collection_id = metrics_dashboard_id, collection_type = 'MetricsDashboard'")
+    Graph.where.not(:poll_id => nil).update_all("collection_id = poll_id, collection_type = 'Poll'")
+    
     remove_reference :tags,     :resource
     
     remove_reference :budgets,  :event
@@ -129,5 +142,8 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     
     remove_reference :folder_shares,  :enterprise
     remove_reference :folder_shares,  :group
+    
+    remove_reference :graphs,  :metrics_dashboard
+    remove_reference :graphs,  :poll
   end
 end

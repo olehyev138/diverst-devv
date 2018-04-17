@@ -457,20 +457,18 @@ ActiveRecord::Schema.define(version: 20180324181536) do
   end
 
   create_table "graphs", force: :cascade do |t|
-    t.integer  "field_id",           limit: 4
-    t.integer  "aggregation_id",     limit: 4
-    t.datetime "created_at",                                     null: false
-    t.datetime "updated_at",                                     null: false
-    t.integer  "collection_id",      limit: 4
-    t.string   "collection_type",    limit: 191
-    t.string   "custom_field",       limit: 191
-    t.string   "custom_aggregation", limit: 191
-    t.boolean  "time_series",                    default: false
+    t.integer  "field_id",             limit: 4
+    t.integer  "aggregation_id",       limit: 4
+    t.datetime "created_at",                                       null: false
+    t.datetime "updated_at",                                       null: false
+    t.string   "custom_field",         limit: 191
+    t.string   "custom_aggregation",   limit: 191
+    t.boolean  "time_series",                      default: false
     t.datetime "range_from"
     t.datetime "range_to"
+    t.integer  "metrics_dashboard_id", limit: 4
+    t.integer  "poll_id",              limit: 4
   end
-
-  add_index "graphs", ["collection_type", "collection_id"], name: "index_graphs_on_collection_type_and_collection_id", using: :btree
 
   create_table "group_categories", force: :cascade do |t|
     t.string   "name",                   limit: 191

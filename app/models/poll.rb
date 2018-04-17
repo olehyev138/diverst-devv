@@ -5,7 +5,7 @@ class Poll < ActiveRecord::Base
 
     has_many :fields
     has_many :responses, class_name: 'PollResponse', inverse_of: :poll
-    has_many :graphs, as: :collection
+    has_many :graphs
     has_many :polls_segments
     has_many :segments, inverse_of: :polls, through: :polls_segments
     has_many :groups_polls
