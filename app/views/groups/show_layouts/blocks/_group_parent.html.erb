@@ -1,7 +1,7 @@
 <% if @group.parent.present? %>
   <div class="card card--secondary">
     <div class="card__section">
-      Parent-<%= c_t(:erg).titleize %><br>
+      <%= c_t(:parent).titleize %>-<%= c_t(:erg).titleize %><br>
       <%= link_to @group.parent.name, @group.parent %><br>
     </div>
   </div>
