@@ -98,7 +98,7 @@ RSpec.describe UserRolesController, type: :controller do
             
             context "valid params" do
                 before do
-                    patch :update, id: user_role.id, user_role: {role_name: "test"}
+                    patch :update, id: user_role.id, user_role: {role_name: "TeSt"}
                 end
 
                 it "redirect_to index" do
@@ -107,7 +107,7 @@ RSpec.describe UserRolesController, type: :controller do
 
                 it "updates the user_role" do
                     user_role.reload
-                    expect(user_role.role_name).to eq("test")
+                    expect(user_role.role_name).to eq("TeSt")
                 end
             end
 
