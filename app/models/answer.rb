@@ -7,7 +7,8 @@ class Answer < ActiveRecord::Base
     has_many :voters, through: :votes, class_name: 'User', source: :user
     has_many :comments, class_name: 'AnswerComment'
     has_many :expenses, class_name: "AnswerExpense"
-
+    has_many :user_reward_actions
+    
     has_attached_file :supporting_document, s3_permissions: "private"
     do_not_validate_attachment_file_type :supporting_document
 

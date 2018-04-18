@@ -8,7 +8,8 @@ class Initiative < ActiveRecord::Base
   has_many :updates, class_name: "InitiativeUpdate", dependent: :destroy
   has_many :fields, dependent: :destroy
   has_many :expenses, dependent: :destroy, class_name: "InitiativeExpense"
-
+  has_many :user_reward_actions
+  
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
 
   validates :end, date: {after: :start, message: 'must be after start'}, on: [:create, :update]

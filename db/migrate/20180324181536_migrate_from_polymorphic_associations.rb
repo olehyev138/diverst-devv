@@ -31,6 +31,18 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     add_reference :graphs, :metrics_dashboard
     add_reference :graphs, :poll
     
+    add_reference :user_reward_actions, :initiative
+    add_reference :user_reward_actions, :initiative_comment
+    add_reference :user_reward_actions, :group_message
+    add_reference :user_reward_actions, :group_message_comment
+    add_reference :user_reward_actions, :news_link
+    add_reference :user_reward_actions, :news_link_comment
+    add_reference :user_reward_actions, :social_link
+    add_reference :user_reward_actions, :answer_comment
+    add_reference :user_reward_actions, :answer_upvote
+    add_reference :user_reward_actions, :answer
+    add_reference :user_reward_actions, :poll_response
+    
     # migrate existing polymorphic associations to new structure
     Tag.where(:taggable_type => "Resource").update_all("resource_id = taggable_id")
     
@@ -65,26 +77,41 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     Graph.where(:collection_type => "MetricsDashboard").update_all("metrics_dashboard_id = collection_id")
     Graph.where(:collection_type => "Poll").update_all("poll_id = collection_id")
     
+    # user_reward_actions for initiatives, etc
+    UserRewardAction.where(:entity_type => "MetricsDashboard").update_all("initiative_id = entity_id")
+    UserRewardAction.where(:entity_type => "InitiativeComment").update_all("initiative_comment_id = entity_id")
+    UserRewardAction.where(:entity_type => "GroupMessage").update_all("group_message_id = entity_id")
+    UserRewardAction.where(:entity_type => "GroupMessageComment").update_all("group_message_comment_id = entity_id")
+    UserRewardAction.where(:entity_type => "NewsLink").update_all("news_link_id = entity_id")
+    UserRewardAction.where(:entity_type => "NewsLinkComment").update_all("news_link_comment_id = entity_id")
+    UserRewardAction.where(:entity_type => "SocialLink").update_all("social_link_id = entity_id")
+    UserRewardAction.where(:entity_type => "AnswerComment").update_all("answer_comment_id = entity_id")
+    UserRewardAction.where(:entity_type => "AnswerUpvote").update_all("answer_upvote_id = entity_id")
+    UserRewardAction.where(:entity_type => "Answer").update_all("answer_id = entity_id")
+    UserRewardAction.where(:entity_type => "PollResponse").update_all("poll_response_id = entity_id")
+    
     # remove polymorphic fields
-    remove_reference :tags,             :taggable,    polymorphic: true
-    remove_reference :budgets,          :subject,     polymorphic: true
-    remove_reference :checklists,       :subject,     polymorphic: true
-    remove_reference :checklist_items,  :container,   polymorphic: true
-    remove_reference :fields,           :container,   polymorphic: true
-    remove_reference :folders,          :container,   polymorphic: true
-    remove_reference :folder_shares,    :container,   polymorphic: true
-    remove_reference :graphs,           :collection,  polymorphic: true
+    remove_reference :tags,                 :taggable,    polymorphic: true
+    remove_reference :budgets,              :subject,     polymorphic: true
+    remove_reference :checklists,           :subject,     polymorphic: true
+    remove_reference :checklist_items,      :container,   polymorphic: true
+    remove_reference :fields,               :container,   polymorphic: true
+    remove_reference :folders,              :container,   polymorphic: true
+    remove_reference :folder_shares,        :container,   polymorphic: true
+    remove_reference :graphs,               :collection,  polymorphic: true
+    remove_reference :user_reward_actions,  :entity,      polymorphic: true
   end
   
   def down
-    add_reference :tags,            :taggable,    polymorphic: true
-    add_reference :budgets,         :subject,     polymorphic: true
-    add_reference :checklists,      :subject,     polymorphic: true
-    add_reference :checklist_items, :container,   polymorphic: true
-    add_reference :fields,          :container,   polymorphic: true
-    add_reference :folders,         :container,   polymorphic: true
-    add_reference :folder_shares,   :container,   polymorphic: true
-    add_reference :graphs,          :collection,  polymorphic: true
+    add_reference :tags,                :taggable,    polymorphic: true
+    add_reference :budgets,             :subject,     polymorphic: true
+    add_reference :checklists,          :subject,     polymorphic: true
+    add_reference :checklist_items,     :container,   polymorphic: true
+    add_reference :fields,              :container,   polymorphic: true
+    add_reference :folders,             :container,   polymorphic: true
+    add_reference :folder_shares,       :container,   polymorphic: true
+    add_reference :graphs,              :collection,  polymorphic: true
+    add_reference :user_reward_actions, :entity,      polymorphic: true
     
     # migrate foreign keys back to polymorphic associations
     Tag.where.not(:resource_id => nil).update_all("taggable_id = resource_id, taggable_type = 'Resource'")
@@ -120,6 +147,19 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     Graph.where.not(:metrics_dashboard_id => nil).update_all("collection_id = metrics_dashboard_id, collection_type = 'MetricsDashboard'")
     Graph.where.not(:poll_id => nil).update_all("collection_id = poll_id, collection_type = 'Poll'")
     
+    # user_reward_actions
+    UserRewardAction.where.not(:initiative_id => nil).update_all("entity_id = initiative_id, entity_type = 'Initiative'")
+    UserRewardAction.where.not(:initiative_comment_id => nil).update_all("entity_id = initiative_comment_id, entity_type = 'InitiativeComment'")
+    UserRewardAction.where.not(:group_message_id => nil).update_all("entity_id = group_message_id, entity_type = 'GroupMessage'")
+    UserRewardAction.where.not(:group_message_comment_id => nil).update_all("entity_id = group_message_comment_id, entity_type = 'GroupMessageComment'")
+    UserRewardAction.where.not(:news_link_id => nil).update_all("entity_id = news_link_id, entity_type = 'NewsLink'")
+    UserRewardAction.where.not(:news_link_comment_id => nil).update_all("entity_id = news_link_comment_id, entity_type = 'NewsLinkComment'")
+    UserRewardAction.where.not(:social_link_id => nil).update_all("entity_id = social_link_id, entity_type = 'SocialLink'")
+    UserRewardAction.where.not(:answer_comment_id => nil).update_all("entity_id = answer_comment_id, entity_type = 'AnswerComment'")
+    UserRewardAction.where.not(:answer_upvote_id => nil).update_all("entity_id = answer_upvote_id, entity_type = 'AnswerUpvote'")
+    UserRewardAction.where.not(:answer_id => nil).update_all("entity_id = answer_id, entity_type = 'Answer'")
+    UserRewardAction.where.not(:poll_response_id => nil).update_all("entity_id = poll_response_id, entity_type = 'PollResponse'")
+    
     remove_reference :tags,     :resource
     
     remove_reference :budgets,  :event
@@ -145,5 +185,17 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     
     remove_reference :graphs,  :metrics_dashboard
     remove_reference :graphs,  :poll
+    
+    remove_reference :user_reward_actions, :initiative
+    remove_reference :user_reward_actions, :initiative_comment
+    remove_reference :user_reward_actions, :group_message
+    remove_reference :user_reward_actions, :group_message_comment
+    remove_reference :user_reward_actions, :news_link
+    remove_reference :user_reward_actions, :news_link_comment
+    remove_reference :user_reward_actions, :social_link
+    remove_reference :user_reward_actions, :answer_comment
+    remove_reference :user_reward_actions, :answer_upvote
+    remove_reference :user_reward_actions, :answer
+    remove_reference :user_reward_actions, :poll_response
   end
 end

@@ -1112,14 +1112,23 @@ ActiveRecord::Schema.define(version: 20180324181536) do
   end
 
   create_table "user_reward_actions", force: :cascade do |t|
-    t.integer  "user_id",          limit: 4,   null: false
-    t.integer  "reward_action_id", limit: 4,   null: false
-    t.integer  "entity_id",        limit: 4
-    t.string   "entity_type",      limit: 191
-    t.integer  "operation",        limit: 4,   null: false
-    t.integer  "points",           limit: 4,   null: false
+    t.integer  "user_id",                  limit: 4, null: false
+    t.integer  "reward_action_id",         limit: 4, null: false
+    t.integer  "operation",                limit: 4, null: false
+    t.integer  "points",                   limit: 4, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "initiative_id",            limit: 4
+    t.integer  "initiative_comment_id",    limit: 4
+    t.integer  "group_message_id",         limit: 4
+    t.integer  "group_message_comment_id", limit: 4
+    t.integer  "news_link_id",             limit: 4
+    t.integer  "news_link_comment_id",     limit: 4
+    t.integer  "social_link_id",           limit: 4
+    t.integer  "answer_comment_id",        limit: 4
+    t.integer  "answer_upvote_id",         limit: 4
+    t.integer  "answer_id",                limit: 4
+    t.integer  "poll_response_id",         limit: 4
   end
 
   add_index "user_reward_actions", ["operation"], name: "index_user_reward_actions_on_operation", using: :btree

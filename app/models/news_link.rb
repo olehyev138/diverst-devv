@@ -7,7 +7,8 @@ class NewsLink < ActiveRecord::Base
     has_many :news_link_segments, :dependent => :destroy
     has_many :segments, through: :news_link_segments, :before_remove => :remove_segment_association
     has_many :news_link_photos,  dependent: :destroy
-
+    has_many :user_reward_actions
+    
     before_validation :smart_add_url_protocol
 
     has_many :comments, class_name: 'NewsLinkComment', dependent: :destroy
