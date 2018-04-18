@@ -48,7 +48,7 @@ RSpec.feature 'Custom-field Management' do
 
 		context 'remove' do
 			before do
-				set_custom_text_fields_for_user_form
+				set_custom_text_fields
 				visit edit_fields_enterprise_path(enterprise)
 			end
 
@@ -65,7 +65,7 @@ RSpec.feature 'Custom-field Management' do
 
 		context 'edit' do
 			before do
-				set_custom_text_fields_for_user_form
+				set_custom_text_fields
 				visit edit_fields_enterprise_path(enterprise)
 			end
 
@@ -113,7 +113,6 @@ RSpec.feature 'Custom-field Management' do
 
 				visit edit_user_user_path(admin_user)
 
-
 				expect(page).to have_content('* Bio')
 			end
 		end
@@ -140,7 +139,10 @@ RSpec.feature 'Custom-field Management' do
 		end
 
 		context 'remove' do
-			before { set_custom_select_fields_for_user_form }
+			before do
+				set_custom_select_fields
+				visit edit_fields_enterprise_path(enterprise)
+			end
 
 			scenario 'custom select field from user', js: true do
 				expect(page).to have_content 'Gender'
@@ -154,7 +156,10 @@ RSpec.feature 'Custom-field Management' do
 		end
 
 		context 'edit' do
-			before { set_custom_select_fields_for_user_form }
+			before do
+				set_custom_select_fields
+				visit edit_fields_enterprise_path(enterprise)
+			end
 
 			scenario 'custom select field', js: true do
 				expect(page).to have_content 'Gender'
@@ -238,7 +243,10 @@ RSpec.feature 'Custom-field Management' do
 		end
 
 		context 'remove' do
-			before { set_custom_checkbox_fields_for_user_form }
+			before do
+				set_custom_checkbox_fields
+				visit edit_fields_enterprise_path(enterprise)
+			end
 
 			scenario 'custom checkbox field from user', js: true do
 				expect(page).to have_content 'Programming Language'
@@ -253,7 +261,8 @@ RSpec.feature 'Custom-field Management' do
 
 		context 'edit' do
 			before do
-			    set_custom_checkbox_fields_for_user_form
+			    set_custom_checkbox_fields
+			    visit edit_fields_enterprise_path(enterprise)
 			    click_on 'Edit'
 			end
 
@@ -279,7 +288,6 @@ RSpec.feature 'Custom-field Management' do
 				visit edit_user_user_path(admin_user)
 				id = CheckboxField.last.id
 
-				# expect(page).not_to have_unchecked_field('Ruby', type: 'checkbox')
 				expect(page.has_no_unchecked_field?('Ruby', type: 'checkbox')).to eq true
 				expect(page).to have_select("programming language_#{id}", with_options: ["Ruby", "Elixir", "C++", "JavaScript"])
 			end
@@ -335,7 +343,8 @@ RSpec.feature 'Custom-field Management' do
 
 		context 'edit' do
 			before do
-				set_custom_numeric_field_form_for_user
+				set_custom_numeric_fields
+				visit edit_fields_enterprise_path(enterprise)
 				click_on 'Edit'
 			end
 
@@ -385,6 +394,20 @@ RSpec.feature 'Custom-field Management' do
 
 				expect(page).to have_content '* Age-restrictions'
 			end
+		end
+	end
+
+	context 'DateField' do
+		scenario 'add custom date field to user profile form', js: true do
+			click_on 'Add date field'
+
+			expect_new_date_field_form
+
+			fill_in '* Title', with: 'Date of Birth'
+
+			click_on 'Save user fields'
+
+			expect(page).to have_content 'Date of Birth'
 		end
 	end
 end

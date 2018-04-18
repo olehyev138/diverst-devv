@@ -51,51 +51,28 @@ module FeatureSpecRefactors
 		click_on 'Send an invitation'
 	end
 
-	def set_custom_text_fields_for_user_form
+	def set_custom_text_fields
 		create(:field, title: 'BIO', container_id: enterprise.id,
 			container_type: 'Enterprise')
 	end
 
-	def set_custom_select_fields_for_user_form
-		visit edit_fields_enterprise_path(enterprise)
-
-		click_link 'Add select field'
-
-		expect(page).to have_field('* Title', with: 'New select field')
-
-		within all('.nested-fields')[0] do
-			fill_in '* Title', with: 'Gender'
-			fill_in 'Options (one per line)', with: "Male \nFemale"
-		end
-
-		click_on 'Save user fields'
+	def set_custom_select_fields
+		create(:select_field, title: 'Gender', options_text: "Male \r\nFemale", container_id: enterprise.id,
+			container_type: 'Enterprise')
 	end
 
-	def set_custom_checkbox_fields_for_user_form
-		visit edit_fields_enterprise_path(enterprise)
-
-		click_link 'Add checkbox field'
-
-		fill_in '* Title', with: 'Programming Language'
-		fill_in 'Options (one per line)', with: "Ruby\nElixir\nC++\nJavaScript"
-
-		click_on 'Save user fields'
-
-		expect(page).to have_content 'Programming Language'
+	def set_custom_checkbox_fields
+		create(:checkbox_field, title: 'Programming Language', options_text: "Ruby\r\nElixir\r\nC++\r\nJavaScript",
+			container_id: enterprise.id, container_type: 'Enterprise')
 	end
 
-	def set_custom_numeric_field_form_for_user
-		visit edit_fields_enterprise_path(enterprise)
+	def set_custom_numeric_fields
+		create(:numeric_field, title: 'Age-restrictions', min: 18, max: 98, container_id: enterprise.id,
+			container_type: 'Enterprise')
+	end
 
-		click_on 'Add numeric field'
-
-		fill_in '* Title', with: 'Age-restrictions'
-		fill_in 'Min', with: 18
-		fill_in 'Max', with: 98
-
-		click_on 'Save user fields'
-
-		expect(page).to have_content 'Age-restrictions'
+	def set_custom_date_fields
+		create(:date_field, title: 'Date of Birth', container_id: enterprise.id, container_type: 'Enterprise')
 	end
 
 	def expect_new_text_field_form
@@ -141,6 +118,16 @@ module FeatureSpecRefactors
 			expect(page).to have_unchecked_field('Hide from users', type: 'checkbox')
 			expect(page).to have_unchecked_field('Allow user to edit', type: 'checkbox')
 			expect(page).to have_unchecked_field('Set as mandatory', type: 'checkbox')
+			expect(page).to have_field('Saml attribute', with: '')
+		end
+	end
+
+	def expect_new_date_field_form
+		within('.nested-fields') do
+			expect(page).to have_field('* Title', with: 'New date field', type: 'text')
+			expect(page).to have_unchecked_field('Hide from users')
+			expect(page).to have_unchecked_field('Allow user to edit')
+			expect(page).to have_unchecked_field('Set as mandatory')
 			expect(page).to have_field('Saml attribute', with: '')
 		end
 	end

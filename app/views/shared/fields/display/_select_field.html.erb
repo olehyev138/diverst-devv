@@ -8,7 +8,7 @@
   <select class="field__input field__input--right-add-on" name="custom-fields[<%= cf.id %>]" id="<%= cf.title.downcase %>_<%= cf.id %>">
     <option disabled selected value> -- Select an option -- </option>
     <% cf.options.each do |option| %>
-      <option value="<%= option %>"<%= " selected=selected" if resource.info[cf] && resource.info[cf][0] == option %>><%= option %></option>
+      <option value="<%= option %>"<%= selected= "selected" if resource.info[cf] && resource.info[cf][0] == option %>><%= option %></option>
     <% end %>
   </select>
 </div>

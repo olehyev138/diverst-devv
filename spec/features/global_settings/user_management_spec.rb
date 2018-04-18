@@ -10,13 +10,9 @@ RSpec.feature 'User Management' do
 		visit users_path
 	end
 
-	context 'permissions group settings' do
-	end
 
 	context 'manage users' do
 		scenario 'add a user', js: true do
-			expect(page).to have_content 'Users'
-
 			click_on 'Add a user'
 
 			fill_user_invitation_form(with_custom_fields: false)
@@ -30,13 +26,11 @@ RSpec.feature 'User Management' do
 
 		context 'add a user' do
 			before do
-				set_custom_text_fields_for_user_form
+				set_custom_text_fields
 				visit edit_fields_enterprise_path(enterprise)
 			end
 
 			scenario 'with custom-fields', js: true do
-				expect(page).to have_content 'BIO'
-
 				visit users_path
 
 				click_on 'Add a user'
@@ -51,8 +45,6 @@ RSpec.feature 'User Management' do
 		end
 
 		scenario 'edit user', js: true do
-			expect(page).to have_content guest_user.first_name
-
 			click_link 'Detail', href: user_path(guest_user)
 
 			click_on 'Edit User'
@@ -68,8 +60,6 @@ RSpec.feature 'User Management' do
 		end
 
 		scenario 'remove user from enterprise', js: true do
-			expect(page).to have_content guest_user.first_name
-
 			page.accept_confirm(with: 'Are you sure?') do
 				click_link 'Remove', href: user_path(guest_user)
 			end
@@ -79,14 +69,11 @@ RSpec.feature 'User Management' do
 
 		context 'for an existing user' do
 			before do
-				set_custom_text_fields_for_user_form
+				set_custom_text_fields
 				visit edit_fields_enterprise_path(enterprise)
 			end
 
 			scenario 'revoke invitation', js: true do
-
-				expect(page).to have_content 'BIO'
-
 				visit users_path
 
 				click_on 'Add a user'
@@ -103,8 +90,6 @@ RSpec.feature 'User Management' do
 			end
 
 			scenario 're-send invitation', js: true do
-				expect(page).to have_content 'BIO'
-
 				visit users_path
 
 				click_on 'Add a user'
