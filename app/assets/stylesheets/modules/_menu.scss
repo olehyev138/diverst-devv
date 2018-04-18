@@ -1,11 +1,11 @@
 .menu {
   &.menu--mobile {
-    @media (min-width: 600px) {
+    @media (min-device-width: 600px) {
       display: none;
     }
   }
   &.menu--desktop {
-    @media (max-width: 600px) {
+    @media (max-device-width: 600px) {
       display: none;
     }
   }
@@ -25,4 +25,10 @@
       border-bottom: 0;
     }
   }
+}
+
+.m-hamburger {
+  height: 3.5em !important;
+  width: 3.5em !important;
+  padding: 0 !important;
 }
