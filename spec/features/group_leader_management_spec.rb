@@ -1,12 +1,13 @@
 require 'rails_helper'
 
 RSpec.feature 'Group Leader Management' do
-	let!(:user) { create(:user, first_name: 'Aaron', last_name: 'Patterson') }
-	let!(:other_user) { create(:user, first_name: 'Yehuda', last_name: 'Katz') }
+	let!(:enterprise) { create(:enterprise, name: 'The Enterprise') }
+	let!(:user) { create(:user, enterprise_id: enterprise.id, first_name: 'Aaron', last_name: 'Patterson') }
+	let!(:other_user) { create(:user, enterprise_id: enterprise.id, first_name: 'Yehuda', last_name: 'Katz') }
 	let!(:group) { create(:group, name: 'Group ONE', enterprise: user.enterprise) }
 
-	before do 
-		login_as(user, scope: :user) 
+	before do
+		login_as(user, scope: :user)
 		[user, other_user].each do |user|
 	    	create(:user_group, user_id: user.id, group_id: group.id)
 		end
@@ -38,12 +39,78 @@ RSpec.feature 'Group Leader Management' do
 			click_on 'Save Leaders'
 
 			expect(current_path).to eq group_leaders_path(group)
-			expect(page).to have_content 'Leaders were updated'
 			within('.content__header h1') do
 				expect(page).to have_content 'Group Leaders'
 			end
 			expect(page).to have_link 'Aaron Patterson'
 			expect(page).to have_content 'Chief Software Architect'
+		end
+
+		scenario 'add multiple group leaders and display them on home page', js: true do
+			click_on 'Add a leader'
+
+			select user.name, from: page.find('.custom-user-select select')[:id]
+			fill_in page.find('.custom-position-field')[:id], with: 'Chief Software Architect'
+			page.find('.group-contact-field').click
+
+			click_on 'Add a leader'
+
+			within all('.nested-fields')[1] do
+				select other_user.name, from: page.find('.custom-user-select select')[:id]
+				fill_in page.find('.custom-position-field')[:id], with: 'Senior Software Engineer'
+			end
+
+			click_on 'Save Leaders'
+
+			visit group_path(group)
+
+			expect(page).to have_content user.name
+			expect(page).to have_content 'Chief Software Architect'
+			expect(page).to have_content other_user.name
+			expect(page).to have_content 'Senior Software Engineer'
+		end
+
+		context 'for existing multiple group leaders' do
+			before do
+				[user, other_user].each do |user|
+					create(:group_leader, group_id: group.id, user_id: user.id)
+				end
+
+				visit group_leaders_path(group)
+
+				expect(page).to have_link user.name
+				expect(page).to have_link other_user.name
+				click_on 'Manage leaders'
+				sleep 1
+			end
+
+			scenario 'remove one group leader from list of group leaders', js: true do
+				within all('.nested-fields')[1] do
+					select_field = page.find('.custom-user-select select')[:id]
+					expect(page).to have_select(select_field, selected: other_user.name)
+					click_link 'Remove'
+				end
+
+				click_on 'Save Leaders'
+
+				visit group_leaders_path(group)
+
+				expect(page).not_to have_content 'Yehuda Katz'
+				expect(page).to have_content user.name
+			end
+
+			scenario 'edit one of multiple group leaders', js: true do
+				within all('.nested-fields')[1] do
+					fill_in page.find('.custom-position-field')[:id], with: 'Lead Software Engineer'
+				end
+
+				click_on 'Save Leaders'
+
+				visit group_leaders_path(group)
+
+				expect(page).not_to have_content 'Senior Software Engineer'
+				expect(page).to have_content 'Lead Software Engineer'
+			end
 		end
 
 		scenario 'set email of displayed group leader as group contact', js: true do

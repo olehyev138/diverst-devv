@@ -11,5 +11,14 @@ RSpec.describe PollMailer, type: :mailer do
     it 'renders the subject' do
       expect(mail.subject).to eq("You are Invited to participate in a '#{poll.title}' survey for members of #{group.name}")
     end
+    
+    it 'includes message' do
+      expect(mail.body.encoded).to include('You are invited to participate in the following online in Diverst')
+    end
+    
+    it 'includes message in email body' do
+      expect(mail.body.encoded).to include(user.name)
+      expect(mail.body.encoded).to include("Click here")
+    end
   end
 end

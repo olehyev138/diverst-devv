@@ -49,6 +49,7 @@ en:
     dci_full_title: Diversity Culture Index
     dci_abbreviation: DCI
     member_preference: Member Preference
+    parent: Parent
   time:
     formats:
       default: "%l:%M %p"

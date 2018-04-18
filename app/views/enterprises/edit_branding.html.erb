@@ -92,3 +92,150 @@
     </div>
   </div>
 </div>
+
+<div class="content__header">
+  <h1>Edit User Group Notification Mailer Text</h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_branding') do |f| %>
+      
+        <div class="card__section card__section--border">
+          <%= f.input :user_group_mailer_notification_text,
+              as: :ckeditor
+          %>
+        </div>
+
+        <%= f.button :submit, "Save User Group Mailer text" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="content__header">
+  <h1>Edit Campaign Invitation Mailer Text</h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_branding') do |f| %>
+      
+        <div class="card__section card__section--border">
+          <%= f.input :campaign_mailer_notification_text,
+              as: :ckeditor
+          %>
+        </div>
+
+        <%= f.button :submit, "Save Campaign Invitation Mailer text" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="content__header">
+  <h1>Edit Approve Budget Mailer Text</h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_branding') do |f| %>
+      
+        <div class="card__section card__section--border">
+          <%= f.input :approve_budget_request_mailer_notification_text,
+              as: :ckeditor
+          %>
+        </div>
+
+        <%= f.button :submit, "Save Approve Budget Mailer text" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="content__header">
+  <h1>Edit Survey Mailer Text</h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_branding') do |f| %>
+      
+        <div class="card__section card__section--border">
+          <%= f.input :poll_mailer_notification_text,
+              as: :ckeditor
+          %>
+        </div>
+
+        <%= f.button :submit, "Save Survey Mailer text" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="content__header">
+  <h1>Edit Budget Approved Mailer Text</h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_branding') do |f| %>
+      
+        <div class="card__section card__section--border">
+          <%= f.input :budget_approved_mailer_notification_text,
+              as: :ckeditor
+          %>
+        </div>
+
+        <%= f.button :submit, "Save Budget Approved Mailer text" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="content__header">
+  <h1>Edit Budget Declined Mailer Text</h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_branding') do |f| %>
+      
+        <div class="card__section card__section--border">
+          <%= f.input :budget_declined_mailer_notification_text,
+              as: :ckeditor
+          %>
+        </div>
+
+        <%= f.button :submit, "Save Budget Declined Mailer text" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="content__header">
+  <h1>Edit Group Leader Posts Mailer Text</h1>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_branding') do |f| %>
+      
+        <div class="card__section card__section--border">
+          <%= f.input :group_leader_post_mailer_notification_text,
+              as: :ckeditor
+          %>
+        </div>
+
+        <%= f.button :submit, "Save Group Leader Posts Mailer text" %>
+      <% end %>
+    </div>
+  </div>
+</div>
