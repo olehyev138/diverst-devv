@@ -18,10 +18,13 @@ class UpdateEmailConfiguration < ActiveRecord::Migration
       t.timestamps null: false
     end
     
+    add_reference :email_variables, :enterprise_email_variables
+    
     add_column :email_variables, :downcase,       :boolean, :default => false
     add_column :email_variables, :upcase,         :boolean, :default => false
     add_column :email_variables, :titleize,       :boolean, :default => false
     add_column :email_variables, :pluralize,      :boolean, :default => false
+    
     
     Email.reset_column_information
     EmailVariable.reset_column_information
