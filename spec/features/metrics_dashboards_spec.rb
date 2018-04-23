@@ -12,7 +12,7 @@ RSpec.feature 'user visits the metrics section' do
 
     visit metrics_dashboards_path
 
-    expect(page).not_to have_content 'Test Dashboard'
+    expect(page).to have_no_content 'Test Dashboard'
   end
 
 
@@ -51,7 +51,7 @@ RSpec.feature 'user visits the metrics section' do
 
       click_link 'Delete', href: metrics_dashboard_path(test_dashboard)
 
-      expect(page).not_to have_content 'Test Dashboard'
+      expect(page).to have_no_content 'Test Dashboard'
     end
   end
 end

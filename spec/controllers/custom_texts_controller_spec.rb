@@ -34,11 +34,12 @@ RSpec.describe CustomTextsController, type: :controller do
       login_user_from_let
 
       context "with valid params" do
-        before { patch :update, id: custom_text, custom_text: { erg: "ERG 2" } }
+        before { patch :update, id: custom_text, custom_text: { erg: "ERG 2", parent: "National" } }
 
         it "updates the custom_text" do
           custom_text.reload
           expect(custom_text.erg_text).to eq "ERG 2"
+          expect(custom_text.parent_text).to eq "National"
         end
 
         it "renders edit action" do

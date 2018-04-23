@@ -47,7 +47,7 @@ RSpec.feature 'Campaign management' do
     page.accept_confirm(with: 'Are you sure?') do
       click_on 'Delete'
     end
-    expect(page).not_to have_content(campaign.title)
+    expect(page).to have_no_content(campaign.title)
   end
 
   context 'Another user creates a campaign' do

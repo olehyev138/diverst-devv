@@ -55,7 +55,7 @@ RSpec.feature 'An ERG dashboard' do
 
       visit group_path(group)
 
-      expect(page).not_to have_content "Red"
+      expect(page).to have_no_content "Red"
       expect(page).to have_content sub_groups.last.name
     end
 
@@ -65,7 +65,7 @@ RSpec.feature 'An ERG dashboard' do
       visit group_path(group)
 
       expect(page).to have_content "View #{group.children.count - 5} More"
-      expect(page).not_to have_content sub_groups.last.name
+      expect(page).to have_no_content sub_groups.last.name
 
       page.find('.sub_ergs').click
       expect(page).to have_content sub_groups.last.name

@@ -39,7 +39,6 @@ RSpec.feature 'Group Leader Management' do
 			click_on 'Save Leaders'
 
 			expect(current_path).to eq group_leaders_path(group)
-			expect(page).to have_content 'Leaders were updated'
 			within('.content__header h1') do
 				expect(page).to have_content 'Group Leaders'
 			end
@@ -62,8 +61,6 @@ RSpec.feature 'Group Leader Management' do
 			end
 
 			click_on 'Save Leaders'
-
-			expect(page).to have_content 'Leaders were updated'
 
 			visit group_path(group)
 
@@ -96,11 +93,9 @@ RSpec.feature 'Group Leader Management' do
 
 				click_on 'Save Leaders'
 
-				expect(page).to have_content 'Leaders were updated'
-
 				visit group_leaders_path(group)
 
-				expect(page).not_to have_content 'Yehuda Katz'
+				expect(page).to have_no_content 'Yehuda Katz'
 				expect(page).to have_content user.name
 			end
 
@@ -111,11 +106,9 @@ RSpec.feature 'Group Leader Management' do
 
 				click_on 'Save Leaders'
 
-				expect(page).to have_content 'Leaders were updated'
-
 				visit group_leaders_path(group)
 
-				expect(page).not_to have_content 'Senior Software Engineer'
+				expect(page).to have_no_content 'Senior Software Engineer'
 				expect(page).to have_content 'Lead Software Engineer'
 			end
 		end
@@ -150,7 +143,7 @@ RSpec.feature 'Group Leader Management' do
 			visit group_path(group)
 
 			expect(current_path).to eq group_path(group)
-			expect(page).not_to have_content other_user.name
+			expect(page).to have_no_content other_user.name
 			expect(page).to have_button 'Contact Group Leader'
 		end
 	end

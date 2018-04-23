@@ -20,14 +20,15 @@ RSpec.feature 'Segment management' do
     click_on "Add a criterion"
     select user.enterprise.fields.last.title, from: page.find('.custom-field select')[:id]
     select 'equals', from: page.find('.operator select')[:id]
-    click_on 'Create Segment'
 
+    click_on 'Create Segment'
 
     expect(page).to have_content segment[:name]
   end
 
   scenario 'user deletes a segment' do
     visit segments_path
+
     click_on "Delete"
 
     expect(page).not_to have_content segment.name
@@ -42,5 +43,4 @@ RSpec.feature 'Segment management' do
       expect(page).to have_content JSON.parse(segment.rules.first.values)[0]
     end
   end
-
 end

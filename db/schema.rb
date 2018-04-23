@@ -254,6 +254,7 @@ ActiveRecord::Schema.define(version: 20180417155716) do
     t.text    "dci_full_title",    limit: 65535
     t.text    "dci_abbreviation",  limit: 65535
     t.text    "member_preference", limit: 65535
+    t.text    "parent",            limit: 65535
   end
 
   add_index "custom_texts", ["enterprise_id"], name: "index_custom_texts_on_enterprise_id", using: :btree
@@ -762,6 +763,7 @@ ActiveRecord::Schema.define(version: 20180417155716) do
     t.string   "link_type",    limit: 191
     t.datetime "created_at",                               null: false
     t.datetime "updated_at",                               null: false
+    t.boolean  "is_pinned",                default: false
   end
 
   create_table "news_feeds", force: :cascade do |t|

@@ -13,9 +13,11 @@
           <%= f.input :first_name %>
           <%= f.input :last_name %>
 
+          <div id="all-custom-fields">
           <% current_user.enterprise.fields.each do |cf| %>
             <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: resource %>
           <% end %>
+          </div>
 
           <p><%= f.button :submit, t("devise.invitations.new.submit_button") %></p>
         <% end -%>
