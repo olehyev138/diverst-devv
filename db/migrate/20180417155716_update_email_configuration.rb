@@ -1,29 +1,29 @@
 class UpdateEmailConfiguration < ActiveRecord::Migration
   def change
     # remove any existing emails, email variables
-    Email.destroy_all
-    EmailVariable.destroy_all
+    #Email.destroy_all
+    #EmailVariable.destroy_all
     
     # add columns
-    add_column :emails, :content,       :text,    :null => false
-    add_column :emails, :mailer_name,   :string,  :null => false
-    add_column :emails, :mailer_method, :string,  :null => false
-    add_column :emails, :template,      :string
-    add_column :emails, :description,   :string,  :null => false
+    #add_column :emails, :content,       :text,    :null => false
+    #add_column :emails, :mailer_name,   :string,  :null => false
+    #add_column :emails, :mailer_method, :string,  :null => false
+    #add_column :emails, :template,      :string
+    #add_column :emails, :description,   :string,  :null => false
     
-    create_table :enterprise_email_variables do |t|
-      t.references  :enterprise
-      t.string      :key
-      t.string      :description
-      t.timestamps null: false
-    end
+    #create_table :enterprise_email_variables do |t|
+      #t.references  :enterprise
+      #t.string      :key
+      #t.string      :description
+      #t.timestamps null: false
+    #end
     
     add_reference :email_variables, :enterprise_email_variables
     
-    add_column :email_variables, :downcase,       :boolean, :default => false
-    add_column :email_variables, :upcase,         :boolean, :default => false
-    add_column :email_variables, :titleize,       :boolean, :default => false
-    add_column :email_variables, :pluralize,      :boolean, :default => false
+    #add_column :email_variables, :downcase,       :boolean, :default => false
+    #add_column :email_variables, :upcase,         :boolean, :default => false
+    #add_column :email_variables, :titleize,       :boolean, :default => false
+    #add_column :email_variables, :pluralize,      :boolean, :default => false
     
     
     Email.reset_column_information
