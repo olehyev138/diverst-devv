@@ -25,6 +25,7 @@ class Enterprise < ActiveRecord::Base
     has_many :resources, as: :container
     has_many :yammer_field_mappings
     has_many :emails
+    has_many :email_variables, class_name: 'EnterpriseEmailVariable'
     belongs_to :theme
     has_many :policy_groups
     has_many :expenses
@@ -47,20 +48,10 @@ class Enterprise < ActiveRecord::Base
     accepts_nested_attributes_for :reward_actions, reject_if: :all_blank, allow_destroy: true
 
     before_create :create_elasticsearch_only_fields
-    before_create :set_default_email_texts
     before_validation :smart_add_url_protocol
 
     validates :idp_sso_target_url, url: { allow_blank: true }
     validates :cdo_name, :name, presence: true
-    validates :user_group_mailer_notification_text, presence: true
-    validates :campaign_mailer_notification_text, presence: true
-    validates :approve_budget_request_mailer_notification_text, presence: true
-    validates :poll_mailer_notification_text, presence: true
-    validates :budget_approved_mailer_notification_text, presence: true
-    validates :budget_declined_mailer_notification_text, presence: true
-    validates :group_leader_post_mailer_notification_text, presence: true
-    
-    validate :interpolated_texts
 
     has_attached_file :cdo_picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
     validates_attachment_content_type :cdo_picture, content_type: %r{\Aimage\/.*\Z}
@@ -183,34 +174,6 @@ class Enterprise < ActiveRecord::Base
         end
 
         mapped_fields
-    end
-    
-    def set_default_email_texts
-        self.user_group_mailer_notification_text = "<p>Hello %{user_name},</p>\r\n\r\n<p>A new item has been posted to a Diversity and Inclusion group you are a member of. Select the link(s) below to access Diverst and review the item(s)</p>\r\n"
-        self.campaign_mailer_notification_text = "<p>Hello %{user_name},</p>\r\n\r\n<p>You are invited to join other members in the following online collaborative conversation in Diverst: %{campaign_name}</p>\r\n\r\n<p>%{join_now} to provide feedback and offer your thoughts and suggestions.</p>\r\n"
-        self.approve_budget_request_mailer_notification_text = "<p>Hello %{user_name},</p>\r\n\r\n<p>You have received a request to approve a budget for: %{budget_name}</p>\r\n\r\n<p>%{click_here} to provide a review of the budget request.</p>\r\n"
-        self.poll_mailer_notification_text= "<p>Hello %{user_name},</p>\r\n\r\n<p>You are invited to participate in the following online in Diverst: %{survey_name}</p>\r\n\r\n<p>%{click_here} to provide feedback and offer your thoughts and suggestions.</p>\r\n"
-        self.budget_approved_mailer_notification_text = "<p>Hello %{user_name},</p>\r\n\r\n<p>Your budget request for: %{budget_name}&nbsp;has been approved.</p>\r\n\r\n<p>%{click_here} to access your budget request.</p>\r\n"
-        self.budget_declined_mailer_notification_text = "<p>Hello %{user_name},</p>\r\n\r\n<p>Your budget request for: %{budget_name}&nbsp;has been declined.</p>\r\n\r\n<p>%{click_here} to access your budget request.</p>\r\n"
-        self.group_leader_post_mailer_notification_text = "<p>Hello %{user_name},</p>\r\n\r\n<p>You have received a request to approve a posting for: %{group_name}.</p>\r\n\r\n<p>%{click_here} to provide approve/decline of this posting.</p>\r\n"
-    end
-
-    def interpolated_texts
-        if user_group_mailer_notification_text && !user_group_mailer_notification_text.include?("%{user_name}")
-            errors.add(:user_group_mailer_notification_text, 'Must include %{user_name}')
-        elsif campaign_mailer_notification_text && (!campaign_mailer_notification_text.include?("%{user_name}") || !campaign_mailer_notification_text.include?("%{campaign_name}") || !campaign_mailer_notification_text.include?("%{join_now}"))
-            errors.add(:campaign_mailer_notification_text, 'Must include %{user_name}, %{campaign_name} and %{join_now}')
-        elsif approve_budget_request_mailer_notification_text && (!approve_budget_request_mailer_notification_text.include?("%{user_name}") || !approve_budget_request_mailer_notification_text.include?("%{budget_name}") || !approve_budget_request_mailer_notification_text.include?("%{click_here}"))
-            errors.add(:approve_budget_request_mailer_notification_text, 'Must include %{user_name}, %{budget_name} and %{click_here}')
-        elsif poll_mailer_notification_text && (!poll_mailer_notification_text.include?("%{user_name}") || !poll_mailer_notification_text.include?("%{survey_name}") || !poll_mailer_notification_text.include?("%{click_here}"))
-            errors.add(:poll_mailer_notification_text, 'Must include %{user_name}, %{survey_name} and %{click_here}')
-        elsif budget_approved_mailer_notification_text && (!budget_approved_mailer_notification_text.include?("%{user_name}") || !budget_approved_mailer_notification_text.include?("%{budget_name}") || !budget_approved_mailer_notification_text.include?("%{click_here}"))
-            errors.add(:budget_approved_mailer_notification_text, 'Must include %{user_name}, %{budget_name} and %{click_here}')
-        elsif budget_declined_mailer_notification_text && (!budget_declined_mailer_notification_text.include?("%{user_name}") || !budget_declined_mailer_notification_text.include?("%{budget_name}") || !budget_declined_mailer_notification_text.include?("%{click_here}"))
-            errors.add(:budget_declined_mailer_notification_text, 'Must include %{user_name}, %{budget_name} and %{click_here}')
-        elsif group_leader_post_mailer_notification_text && (!group_leader_post_mailer_notification_text.include?("%{user_name}") || !group_leader_post_mailer_notification_text.include?("%{group_name}") || !group_leader_post_mailer_notification_text.include?("%{click_here}"))
-            errors.add(:group_leader_post_mailer_notification_text, 'Must include %{user_name}, %{group_name} and %{click_here}')
-        end
     end
 
     protected 

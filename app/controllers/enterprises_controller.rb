@@ -51,7 +51,7 @@ class EnterprisesController < ApplicationController
 
   def edit_branding
     authorize @enterprise
-
+    @emails = @enterprise.emails
     set_theme
   end
 

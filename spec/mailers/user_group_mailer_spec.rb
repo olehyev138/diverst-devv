@@ -2,6 +2,10 @@ require 'rails_helper'
 
 RSpec.describe UserGroupMailer, type: :mailer do
   let!(:user){ create(:user) }
+  let!(:custom_text) { create(:custom_text, :erg => "BRG", :enterprise => user.enterprise)}
+  let!(:email) { create(:email, :enterprise => user.enterprise, :mailer_name => "user_group_mailer", :mailer_method => "notification", :content => "<p>Hello %{user.name},</p>\r\n\r\n<p>A new item has been posted to a Diversity and Inclusion group you are a member of. Select the link(s) below to access Diverst and review the item(s)</p>\r\n", :subject => "You have updates in your %{custom_text.erg_text}")}
+  let!(:email_variable_1) { create(:email_variable, :email => email, :enterprise_email_variable => create(:enterprise_email_variable, :key => "user.name"))}
+  let!(:email_variable_2) { create(:email_variable, :email => email, :enterprise_email_variable => create(:enterprise_email_variable, :key => "custom_text.erg_text"), :pluralize => true)}
   let!(:groups){ [{ group: create(:group), events_count: 2, messages_count: 2, news_count: 0 }] }
 
   let!(:mail) { described_class.notification(user, groups).deliver_now }
@@ -12,7 +16,7 @@ RSpec.describe UserGroupMailer, type: :mailer do
     end
 
     it 'renders the subject' do
-      expect(mail.subject).to eq "You have updates in your ERGs"
+      expect(mail.subject).to eq "You have updates in your BRGs"
     end
 
     it 'renders the receiver email' do
