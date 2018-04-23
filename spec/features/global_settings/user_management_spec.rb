@@ -86,7 +86,7 @@ RSpec.feature 'User Management' do
 					click_link('Revoke invitation', href: user_path(user))
 				end
 
-				expect(page).not_to have_content 'derek@diverst.com'
+				expect(page).to have_no_content 'derek@diverst.com'
 			end
 
 			scenario 're-send invitation', js: true do

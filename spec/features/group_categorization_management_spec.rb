@@ -9,14 +9,10 @@ RSpec.feature 'Group Categorization' do
 
 	context 'group category creation' do
 		scenario 'creating a new group category' do
-			visit view_all_group_categories_url
-
-			expect(page).to have_content 'View All Categories'
-			expect(page).to have_link 'New Category'
+			visit view_all_group_categories_path
 
 			click_on 'New Category'
 
-			expect(current_url).to eq new_group_category_url
 			expect(page).to have_content 'Create A Category'
 
 			fill_in 'group_category_type[name]', with: 'Provinces'
@@ -25,7 +21,7 @@ RSpec.feature 'Group Categorization' do
 
 			click_on 'Save'
 
-			expect(current_url).to eq view_all_group_categories_url
+			expect(current_path).to eq view_all_group_categories_path
 			expect(page).to have_content "You just created a category named Provinces"
 
 			expect(page).to have_content 'Provinces'
@@ -39,12 +35,11 @@ RSpec.feature 'Group Categorization' do
 			ruby = create(:group_category, group_category_type_id: programming_languages.id,
 				enterprise_id: user.enterprise_id, name: 'Ruby')
 
-			visit view_all_group_categories_url
+			visit view_all_group_categories_path
 
 			expect(page).to have_content 'Programming Languages'
 			click_on '+'
 
-			expect(current_url).to eq add_category_group_category_type_url(programming_languages)
 			expect(page).to have_content 'Add Labels To Programming Languages'
 
 			fill_in 'group_category_type[category_names]', with: 'Elixir, Python, C++'
@@ -52,7 +47,6 @@ RSpec.feature 'Group Categorization' do
 			click_on 'Save'
 
 			expect(page).to have_content 'You successfully added categories to Programming Languages'
-			expect(current_url).to eq view_all_group_categories_url
 
 			expect(page).to have_link 'Elixir'
 			expect(page).to have_link 'C++'
@@ -71,7 +65,7 @@ RSpec.feature 'Group Categorization' do
 		end
 
 		scenario 'Deleting a group categories with existing categories' do
-			visit view_all_group_categories_url
+			visit view_all_group_categories_path
 
 			expect(page).to have_content 'Web Frameworks'
 			expect(page).to have_link 'Rails'
@@ -80,14 +74,14 @@ RSpec.feature 'Group Categorization' do
 
 			expect(page).to have_content 'Successfully deleted categories'
 
-			expect(page).not_to have_content 'Web Frameworks'
-			expect(page).not_to have_content 'Rails'
-			expect(page).not_to have_content 'Elixir'
-			expect(page).not_to have_content 'Django'
+			expect(page).to have_no_content 'Web Frameworks'
+			expect(page).to have_no_content 'Rails'
+			expect(page).to have_no_content 'Elixir'
+			expect(page).to have_no_content 'Django'
 		end
 
 		scenario 'Deleting a group category(label)' do
-			visit view_all_group_categories_url
+			visit view_all_group_categories_path
 
 			expect(page).to have_content 'Web Frameworks'
 			expect(page).to have_link 'Rails'
@@ -95,7 +89,7 @@ RSpec.feature 'Group Categorization' do
 			click_link 'Delete', href: group_category_path(web_frameworks.group_categories.first)
 
 			expect(page).to have_content 'Category successfully removed'
-			expect(page).not_to have_content 'Rails'
+			expect(page).to have_no_content 'Rails'
 		end
 	end
 
@@ -104,9 +98,8 @@ RSpec.feature 'Group Categorization' do
 			enterprise_id: user.enterprise_id ) }
 
 		scenario 'Update name of category type' do
-			visit edit_group_category_type_url(web_frameworks)
+			visit edit_group_category_type_path(web_frameworks)
 
-			expect(current_url).to eq edit_group_category_type_url(web_frameworks)
 			expect(page).to have_content 'Edit Category Type'
 			expect(page).to have_field('group_category_type[name]', with: 'Web Frameworks')
 
@@ -114,18 +107,16 @@ RSpec.feature 'Group Categorization' do
 
 			click_on 'Update'
 
-			expect(current_url).to eq view_all_group_categories_url
 			expect(page).to have_content 'Update category type name'
 			expect(page).to have_content 'All Web Technologies'
-			expect(page).not_to have_content 'Web Frameworks'
+			expect(page).to have_no_content 'Web Frameworks'
 		end
 
 		scenario 'Update name of category(label)' do
 			elixir = create(:group_category, name: 'Elixir', group_category_type_id: web_frameworks.id, enterprise_id: user.enterprise_id )
 
-			visit edit_group_category_url(elixir)
+			visit edit_group_category_path(elixir)
 
-			expect(current_url).to eq edit_group_category_url(elixir)
 			expect(page).to have_content 'Change name of category'
 			expect(page).to have_field('group_category[name]', with: 'Elixir')
 
@@ -133,10 +124,9 @@ RSpec.feature 'Group Categorization' do
 
 			click_on 'Update'
 
-			expect(current_url).to eq view_all_group_categories_url
 			expect(page).to have_content 'Update category name'
 			expect(page).to have_content 'Ruby'
-			expect(page).not_to have_content 'Elixir'
+			expect(page).to have_no_content 'Elixir'
 		end
 	end
 end

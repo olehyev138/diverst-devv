@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.feature 'Custom-field Management' do
 	let!(:enterprise) { create(:enterprise, time_zone: "UTC") }
 	let!(:admin_user) { create(:user, enterprise_id: enterprise.id, policy_group: create(:policy_group, enterprise: enterprise)) }
-	let!(:guest_user) { create(:user, enterprise_id: enterprise.id, policy_group: create(:guest_user, enterprise: enterprise)) }
 
 	before do
 		login_as(admin_user, scope: :user)
@@ -59,7 +58,7 @@ RSpec.feature 'Custom-field Management' do
 
 				click_on 'Save user fields'
 
-				expect(page.has_no_content?('BIO')).to eq true
+				expect(page).to have_no_content 'BIO'
 			end
 		end
 
@@ -85,7 +84,7 @@ RSpec.feature 'Custom-field Management' do
 				click_on 'Save user fields'
 
 				expect(page).to have_content 'Brief Self Description'
-				expect(page.has_no_content?('BIO')).to eq true
+				expect(page).to have_no_content 'BIO'
 			end
 
 			scenario 'custom text field by hiding from user profile', js: true do
@@ -97,11 +96,11 @@ RSpec.feature 'Custom-field Management' do
 
 				visit user_user_path(admin_user)
 
-				expect(page.has_no_content?('BIO')).to eq true
+				expect(page).to have_no_content 'BIO'
 
 				click_on 'Edit profile'
 
-				expect(page.has_no_content?('BIO')).to eq true
+				expect(page).to have_no_content 'BIO'
 			end
 
 			scenario 'custom text field by making it mandatory', js: true do
@@ -151,7 +150,7 @@ RSpec.feature 'Custom-field Management' do
 
 				click_on 'Save user fields'
 
-				expect(page.has_no_content?('Gender')).to eq true
+				expect(page).to have_no_content 'Gender'
 			end
 		end
 
@@ -172,7 +171,7 @@ RSpec.feature 'Custom-field Management' do
 				click_on 'Save user fields'
 
 				expect(page).to have_content 'Sex'
-				expect(page.has_no_content?('Gender')).to eq true
+				expect(page).to have_no_content 'Gender'
 			end
 
 			scenario 'custom select field by hiding it from user profile', js: true do
@@ -186,11 +185,11 @@ RSpec.feature 'Custom-field Management' do
 
 				visit user_user_path(admin_user)
 
-				expect(page.has_no_content?('Gender')).to eq true
+				expect(page).to have_no_content 'Gender'
 
 				click_on 'Edit profile'
 
-				expect(page.has_no_content?('Gender')).to eq true
+				expect(page).to have_no_content 'Gender'
 			end
 
 			scenario 'custom select field by adding an extra option to choose from', js: true do
@@ -255,7 +254,7 @@ RSpec.feature 'Custom-field Management' do
 
 				click_on 'Save user fields'
 
-				expect(page.has_no_content?('Programming Language')).to eq true
+				expect(page).to have_no_content 'Programming Language'
 			end
 		end
 
@@ -274,7 +273,7 @@ RSpec.feature 'Custom-field Management' do
 
 				click_on 'Save user fields'
 
-				expect(page.has_no_content?('Programming Language')).to eq true
+				expect(page).to have_no_content 'Programming Language'
 				expect(page).to have_content 'Software Tools'
 			end
 
@@ -288,7 +287,7 @@ RSpec.feature 'Custom-field Management' do
 				visit edit_user_user_path(admin_user)
 				id = CheckboxField.last.id
 
-				expect(page.has_no_unchecked_field?('Ruby', type: 'checkbox')).to eq true
+				expect(page).to have_no_unchecked_field 'Ruby', type: 'checkbox'
 				expect(page).to have_select("programming language_#{id}", with_options: ["Ruby", "Elixir", "C++", "JavaScript"])
 			end
 
@@ -309,8 +308,8 @@ RSpec.feature 'Custom-field Management' do
 
 				visit edit_user_user_path(admin_user)
 
-				expect(page.has_no_content?('Programming Language')).to eq true
-				expect(page.has_no_unchecked_field?('Ruby', type: 'checkbox')).to eq true
+				expect(page).to have_no_content 'Programming Language'
+				expect(page).to have_no_unchecked_field 'Ruby', type: 'checkbox'
 			end
 
 			scenario 'custom checkbox field by making it mandatory', js: true do
@@ -359,7 +358,7 @@ RSpec.feature 'Custom-field Management' do
 
 				click_on 'Save user fields'
 
-				expect(page.has_no_content?('Age-restrictions')).to eq true
+				expect(page).to have_no_content 'Age-restrictions'
 				expect(page).to have_content 'Age-Limits'
 			end
 
@@ -371,8 +370,8 @@ RSpec.feature 'Custom-field Management' do
 				visit edit_user_user_path(admin_user)
 
 				expect(page).to have_content 'Age-restrictions 58'
-				expect(page.has_no_field?('Min', type: 'number')).to eq true
-				expect(page.has_no_field?('Max', type: 'number')).to eq true
+				expect(page).to have_no_field 'Min', type: 'number'
+				expect(page).to have_no_field 'Max', type: 'number'
 			end
 
 			scenario 'custom numeric field to hide from users', js: true do
@@ -382,7 +381,7 @@ RSpec.feature 'Custom-field Management' do
 
 				visit edit_user_user_path(admin_user)
 
-				expect(page.has_no_content?('Age-restrictions')).to eq true
+				expect(page).to have_no_content 'Age-restrictions'
 			end
 
 			scenario 'custom numeric field by making it mandatory', js: true do
@@ -408,6 +407,49 @@ RSpec.feature 'Custom-field Management' do
 			click_on 'Save user fields'
 
 			expect(page).to have_content 'Date of Birth'
+		end
+
+		context 'edit' do
+			before do
+				set_custom_date_fields
+				visit edit_fields_enterprise_path(enterprise)
+				click_on 'Edit'
+			end
+
+			scenario 'custom date field', js: true do
+				expect(page).to have_field('* Title', with: 'Date of Birth')
+
+				fill_in '* Title', with: 'DOB'
+
+				click_on 'Save user fields'
+
+				expect(page).to have_content 'DOB'
+				expect(page).to have_no_content 'Date of Birth'
+			end
+
+			scenario 'custom date field by hiding from user profile', js: true do
+				page.find_field('Hide from users').trigger('click')
+
+				click_on 'Save user fields'
+
+				visit user_user_path(admin_user)
+
+				expect(page).to have_no_content 'Date of Birth'
+
+				visit edit_user_user_path(admin_user)
+
+				expect(page).to have_no_field '* Title', with: 'Date of Birth'
+			end
+
+			scenario 'custom date field by setting it as mandatory', js: true do
+				page.find_field('Set as mandatory').trigger('click')
+
+				click_on 'Save user fields'
+
+				visit edit_user_user_path(admin_user)
+
+				expect(page).to have_content '* Date of birth'
+			end
 		end
 	end
 end

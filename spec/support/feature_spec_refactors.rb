@@ -131,4 +131,17 @@ module FeatureSpecRefactors
 			expect(page).to have_field('Saml attribute', with: '')
 		end
 	end
+
+	def computed_style(selector, prop)
+		string = page.evaluate_script(
+			"window.getComputedStyle(document.querySelector('#{selector}')).#{prop}"
+			)
+		phrase = string[18..-1]
+		string.slice! phrase
+		string
+	end
+
+	def default_primary_color
+		"rgb(123, 119, 201)"
+	end
 end

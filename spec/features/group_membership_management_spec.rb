@@ -43,7 +43,7 @@ RSpec.feature 'Group Membership Management' do
 			scenario 'and is accepted by admin', js: true do
 				click_link 'Accept Member', href: accept_pending_group_group_member_path(group, guest_user)
 
-				expect(page).not_to have_content guest_user.name
+				expect(page).to have_no_content guest_user.name
 
 				visit group_group_members_path(group)
 
@@ -57,7 +57,7 @@ RSpec.feature 'Group Membership Management' do
 				end
 
 				expect(current_path).to eq group_group_members_path(group)
-				expect(page).not_to have_content guest_user.name
+				expect(page).to have_no_content guest_user.name
 			end
 		end
 
@@ -85,7 +85,7 @@ RSpec.feature 'Group Membership Management' do
 					click_on 'Filter'
 
 					expect(page).to have_content 'Members (0)'
-					expect(page).not_to have_content inactive_user.name
+					expect(page).to have_no_content inactive_user.name
 				end
 
 				scenario 'active users only', js: true do
@@ -141,7 +141,7 @@ RSpec.feature 'Group Membership Management' do
 			click_button 'Join this ERG'
 
 			expect(page).to have_content 'The member was created'
-			expect(page).not_to have_content pending_membership_message
+			expect(page).to have_no_content pending_membership_message
 		end
 
 		context 'user joins a group' do
@@ -160,7 +160,7 @@ RSpec.feature 'Group Membership Management' do
 					click_link 'Remove From Group', href: remove_member_group_group_member_path(group, guest_user)
 				end
 
-				expect(page).not_to have_content guest_user.name
+				expect(page).to have_no_content guest_user.name
 			end
 	    end
 
@@ -174,9 +174,7 @@ RSpec.feature 'Group Membership Management' do
 	    		visit group_group_members_path(group)
 
 	    		click_on '+ Add members'
-	    		sleep 1
 
-	    		expect(current_path).to eq new_group_group_member_path(group)
 	    		expect(page).to have_content "Add Members to #{group.name}"
 
 	    		select guest_user.name, from: 'group[member_ids][]'
