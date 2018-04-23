@@ -1,8 +1,6 @@
 FactoryGirl.define do
   factory :email_variable do
     email
-    key 'mysterious-variable'
-    description 'This is a mysterious variable!'
-    required false
+    enterprise_email_variable
   end
 end
