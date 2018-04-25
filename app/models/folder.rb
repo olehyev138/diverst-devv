@@ -6,7 +6,7 @@ class Folder < ActiveRecord::Base
   belongs_to  :enterprise
   belongs_to  :group
   
-  has_many    :resources, as: :container
+  has_many    :resources
   has_many    :folder_shares
   has_many    :groups, through: :folder_shares, source: "group"
 

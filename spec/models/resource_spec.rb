@@ -5,7 +5,10 @@ RSpec.describe Resource, :type => :model do
   describe 'test associations' do 
     let(:resource) { build(:resource) }
 
-    it { expect(resource).to belong_to(:container) }
+    it { expect(resource).to belong_to(:enterprise) }
+    it { expect(resource).to belong_to(:folder) }
+    it { expect(resource).to belong_to(:group) }
+    it { expect(resource).to belong_to(:initiative) }
     it { expect(resource).to belong_to(:owner).class_name('User') }
     it { expect(resource).to have_many(:tags).dependent(:destroy) }
     it { expect(resource).to accept_nested_attributes_for(:tags) }

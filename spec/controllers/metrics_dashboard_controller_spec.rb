@@ -42,7 +42,7 @@ RSpec.describe MetricsDashboardsController, type: :controller do
         metrics_dashboard
         create_list(:group, 2, enterprise: user.enterprise)
         create_list(:segment, 3, enterprise: user.enterprise)
-        create_list(:resource, 4, container: user.enterprise)
+        create_list(:resource, 4, enterprise: user.enterprise)
         create_list(:poll, 2, enterprise: user.enterprise)
         get_index
       end

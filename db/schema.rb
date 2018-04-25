@@ -961,8 +961,6 @@ ActiveRecord::Schema.define(version: 20180324181536) do
 
   create_table "resources", force: :cascade do |t|
     t.string   "title",             limit: 191
-    t.integer  "container_id",      limit: 4
-    t.string   "container_type",    limit: 191
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
     t.string   "file_file_name",    limit: 191
@@ -972,9 +970,11 @@ ActiveRecord::Schema.define(version: 20180324181536) do
     t.integer  "owner_id",          limit: 4
     t.string   "resource_type",     limit: 191
     t.string   "url",               limit: 191
+    t.integer  "enterprise_id",     limit: 4
+    t.integer  "folder_id",         limit: 4
+    t.integer  "group_id",          limit: 4
+    t.integer  "initiative_id",     limit: 4
   end
-
-  add_index "resources", ["container_type", "container_id"], name: "index_resources_on_container_type_and_container_id", using: :btree
 
   create_table "reward_actions", force: :cascade do |t|
     t.string   "label",         limit: 191

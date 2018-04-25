@@ -59,7 +59,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   has_many :social_links, dependent: :destroy
   has_many :invitation_segments_groups
   has_many :invitation_segments, class_name: 'Segment', through: :invitation_segments_groups
-  has_many :resources, as: :container
+  has_many :resources
   has_many :folders
   has_many :folder_shares
   has_many :shared_folders, through: :folder_shares, source: 'folder'

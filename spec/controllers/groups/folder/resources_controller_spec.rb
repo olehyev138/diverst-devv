@@ -6,7 +6,7 @@ RSpec.describe Groups::Folder::ResourcesController, type: :controller do
     let!(:group){ create(:group, enterprise: user.enterprise) }
     let!(:user_group){ create(:user_group, group: group, user: user) }
     let!(:folder){ create(:folder, :group => group) }
-    let!(:resource){ create(:resource, title: "title", container: folder, file: fixture_file_upload('files/test.csv', 'text/csv')) }
+    let!(:resource){ create(:resource, title: "title", folder: folder, file: fixture_file_upload('files/test.csv', 'text/csv')) }
 
     describe "GET#index" do
         context 'when user is logged in' do
@@ -28,7 +28,7 @@ RSpec.describe Groups::Folder::ResourcesController, type: :controller do
             end
 
             it "returns resources that belong to container" do
-                expect(assigns[:resources].where(container_id: assigns[:container].id)).to eq [resource]
+                expect(assigns[:resources].where(folder_id: assigns[:container].id)).to eq [resource]
             end
         end
 

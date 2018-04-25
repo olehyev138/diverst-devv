@@ -1,8 +1,8 @@
 class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
   def up
     # list of polymorphic associations
-    # budget, checklist, checklist_item, field, folder, folder_share, graph
-    # user_reward_actions, tag, resource, news_feed_link_segment, news_feed_link
+    # tags, budget, checklist, checklist_item, field, folder, folder_share, graph
+    # user_reward_actions, resource, news_feed_link_segment, news_feed_link
     
     # add foreign_keys to maintain relationships
     add_reference :tags, :resource
@@ -42,6 +42,11 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     add_reference :user_reward_actions, :answer_upvote
     add_reference :user_reward_actions, :answer
     add_reference :user_reward_actions, :poll_response
+    
+    add_reference :resources, :enterprise
+    add_reference :resources, :folder
+    add_reference :resources, :group
+    add_reference :resources, :initiative
     
     # migrate existing polymorphic associations to new structure
     Tag.where(:taggable_type => "Resource").update_all("resource_id = taggable_id")
@@ -90,6 +95,12 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     UserRewardAction.where(:entity_type => "Answer").update_all("answer_id = entity_id")
     UserRewardAction.where(:entity_type => "PollResponse").update_all("poll_response_id = entity_id")
     
+    # resources for enterprises, folders, initiatives, groups
+    Resource.where(:container_type => "Enterprise").update_all("enterprise_id = container_id")
+    Resource.where(:container_type => "Folder").update_all("folder_id = container_id")
+    Resource.where(:container_type => "Group").update_all("group_id = container_id")
+    Resource.where(:container_type => "Initiative").update_all("initiative_id = container_id")
+    
     # remove polymorphic fields
     remove_reference :tags,                 :taggable,    polymorphic: true
     remove_reference :budgets,              :subject,     polymorphic: true
@@ -100,6 +111,7 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     remove_reference :folder_shares,        :container,   polymorphic: true
     remove_reference :graphs,               :collection,  polymorphic: true
     remove_reference :user_reward_actions,  :entity,      polymorphic: true
+    remove_reference :resources,            :container,      polymorphic: true
   end
   
   def down
@@ -112,6 +124,7 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     add_reference :folder_shares,       :container,   polymorphic: true
     add_reference :graphs,              :collection,  polymorphic: true
     add_reference :user_reward_actions, :entity,      polymorphic: true
+    add_reference :resources,           :container,   polymorphic: true
     
     # migrate foreign keys back to polymorphic associations
     Tag.where.not(:resource_id => nil).update_all("taggable_id = resource_id, taggable_type = 'Resource'")
@@ -160,6 +173,11 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     UserRewardAction.where.not(:answer_id => nil).update_all("entity_id = answer_id, entity_type = 'Answer'")
     UserRewardAction.where.not(:poll_response_id => nil).update_all("entity_id = poll_response_id, entity_type = 'PollResponse'")
     
+    Resource.where.not(:enterprise_id => nil).update_all("container_id = enterprise_id, container_type = 'Enterprise'")
+    Resource.where.not(:folder_id => nil).update_all("container_id = folder_id, container_type = 'Folder'")
+    Resource.where.not(:group_id => nil).update_all("container_id = group_id, container_type = 'Group'")
+    Resource.where.not(:initiative_id => nil).update_all("container_id = initiative_id, container_type = 'Initiative'")
+    
     remove_reference :tags,     :resource
     
     remove_reference :budgets,  :event
@@ -197,5 +215,10 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     remove_reference :user_reward_actions, :answer_upvote
     remove_reference :user_reward_actions, :answer
     remove_reference :user_reward_actions, :poll_response
+    
+    remove_reference :resources, :enterprise
+    remove_reference :resources, :folder
+    remove_reference :resources, :group
+    remove_reference :resources, :initiative
   end
 end
