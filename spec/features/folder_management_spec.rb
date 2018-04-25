@@ -32,7 +32,6 @@ RSpec.feature 'Folder management' do
 			expect(page).to have_content  'Top Secret'
 			folder = Folder.find_by(name: 'Top Secret')
 			expect(folder.password_protected?).to eq true
-
 		end
 
 		scenario 'without password protection' do
@@ -50,15 +49,15 @@ RSpec.feature 'Folder management' do
 			fill_in 'folder[name]', with: 'Top Secret'
 			check 'Password Protected?'
 			fill_in 'folder[password]', with: 'password_1'
-
 			select group.name, from: 'folder[group_ids][]'
 
 			click_on 'Create Folder'
 
 			visit group_folders_url(group)
+
 			expect(page).to have_content 'Top Secret'
-			expect(page).not_to have_content 'Company Archives'
-			expect(page).not_to have_content 'Company Documents'
+			expect(page).to have_no_content 'Company Archives'
+			expect(page).to have_no_content 'Company Documents'
 		end
 
 		scenario 'move new folder into existing folder' do
@@ -102,7 +101,7 @@ RSpec.feature 'Folder management' do
 
 			expect(current_url).to eq enterprise_folders_url(user.enterprise)
 			expect(page).to have_content 'Company Files'
-			expect(page).not_to have_content 'Company Documents'
+			expect(page).to have_no_content 'Company Documents'
 		end
 
 		scenario 'by adding password protection to folder' do
@@ -171,7 +170,7 @@ RSpec.feature 'Folder management' do
 
 			click_link 'Delete', href: enterprise_folder_path(user.enterprise, folder_without_pp)
 
-			expect(page).not_to have_content folder_without_pp.name
+			expect(page).to have_no_content folder_without_pp.name
 		end
 
 		scenario 'sub folder' do
@@ -183,7 +182,7 @@ RSpec.feature 'Folder management' do
 
 			click_on 'Delete'
 
-			expect(page).not_to have_content sub_folder.name
+			expect(page).to have_no_content sub_folder.name
 		end
 	end
 end

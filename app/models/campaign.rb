@@ -74,6 +74,9 @@ class Campaign < ActiveRecord::Base
       target.uniq{|u| u.id}
     end
 
+    def link
+        "<a saml_for_enterprise=\"#{enterprise_id}\" href=\"#{Rails.application.routes.url_helpers.user_user_campaign_questions_url(self)}\" target=\"_blank\">Join Now</a>"
+    end
 
     def send_invitation_emails
       if published?

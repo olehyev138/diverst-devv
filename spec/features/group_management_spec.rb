@@ -59,7 +59,7 @@ RSpec.feature 'Group management' do
       select parent_group.name, from: 'group_parent_id'
 
       click_on 'Create Group'
-      expect(page).not_to have_content sub_group[:name]
+      expect(page).to have_no_content sub_group[:name]
 
       page.find('.nested_show').click
 
@@ -89,8 +89,8 @@ RSpec.feature 'Group management' do
       visit groups_path
 
       expect(page).to have_content 'Parent Group'
-      expect(page).not_to have_content 'Group One'
-      expect(page).not_to have_content 'Group Two'
+      expect(page).to have_no_content 'Group One'
+      expect(page).to have_no_content 'Group Two'
 
       expect(current_path).to eq groups_path
       expect(page).to have_link 'Show Sub-ERGs'
@@ -115,9 +115,9 @@ RSpec.feature 'Group management' do
       click_on 'Delete'
 
       expect(page).to have_content 'Your ERG was deleted'
-      expect(page).not_to have_content 'Parent Group'
-      expect(page).not_to have_content 'Sub Group ONE'
-      expect(page).not_to have_content 'Sub Group TWO'
+      expect(page).to have_no_content 'Parent Group'
+      expect(page).to have_no_content 'Sub Group ONE'
+      expect(page).to have_no_content 'Sub Group TWO'
     end
 
     scenario 'delete a sub-group' do
@@ -137,7 +137,7 @@ RSpec.feature 'Group management' do
       end
 
       expect(page).to have_css('.accent') do
-        expect(page).not_to have_content sub_group1.name
+        expect(page).to have_no_content sub_group1.name
         expect(page).to have_content sub_group2.name
       end
 
