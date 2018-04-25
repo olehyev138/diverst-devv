@@ -10,9 +10,8 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-
-ActiveRecord::Schema.define(version: 20180409194719) do
-
+#
+ActiveRecord::Schema.define(version: 20180417155716) do
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
     t.string   "trackable_type", limit: 191
@@ -254,6 +253,7 @@ ActiveRecord::Schema.define(version: 20180409194719) do
     t.text    "dci_full_title",    limit: 65535
     t.text    "dci_abbreviation",  limit: 65535
     t.text    "member_preference", limit: 65535
+    t.text    "parent",            limit: 65535
   end
 
   add_index "custom_texts", ["enterprise_id"], name: "index_custom_texts_on_enterprise_id", using: :btree
@@ -274,24 +274,36 @@ ActiveRecord::Schema.define(version: 20180409194719) do
   end
 
   create_table "email_variables", force: :cascade do |t|
-    t.integer  "email_id",    limit: 4
-    t.string   "key",         limit: 191
-    t.text     "description", limit: 65535
-    t.boolean  "required"
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.integer  "email_id",                      limit: 4
+    t.datetime "created_at",                                              null: false
+    t.datetime "updated_at",                                              null: false
+    t.integer  "enterprise_email_variable_id",  limit: 4
+    t.integer  "enterprise_email_variables_id", limit: 4
+    t.boolean  "downcase",                                default: false
+    t.boolean  "upcase",                                  default: false
+    t.boolean  "titleize",                                default: false
+    t.boolean  "pluralize",                               default: false
   end
 
   create_table "emails", force: :cascade do |t|
-    t.string   "name",                 limit: 191
-    t.string   "slug",                 limit: 191
-    t.boolean  "use_custom_templates"
-    t.text     "custom_html_template", limit: 65535
-    t.text     "custom_txt_template",  limit: 65535
-    t.integer  "enterprise_id",        limit: 4
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
-    t.string   "subject",              limit: 191
+    t.string   "name",          limit: 191
+    t.integer  "enterprise_id", limit: 4
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.string   "subject",       limit: 191
+    t.text     "content",       limit: 65535, null: false
+    t.string   "mailer_name",   limit: 191,   null: false
+    t.string   "mailer_method", limit: 191,   null: false
+    t.string   "template",      limit: 191
+    t.string   "description",   limit: 191,   null: false
+  end
+
+  create_table "enterprise_email_variables", force: :cascade do |t|
+    t.integer  "enterprise_id", limit: 4
+    t.string   "key",           limit: 191
+    t.string   "description",   limit: 191
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
   create_table "enterprises", force: :cascade do |t|

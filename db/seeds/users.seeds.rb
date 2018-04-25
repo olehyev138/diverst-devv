@@ -94,9 +94,9 @@ after :enterprise do
   )
 
   u2 = enterprise.users.create(
-    email: "andre@#{domain_name}",
-    first_name: 'André',
-    last_name: 'Laurin',
+    email: "gerlin+diverst2@diverst.com",
+    first_name: 'Gerlin',
+    last_name: 'Guillaume',
     password: 'password',
     password_confirmation: 'password',
     policy_group: policy_group,

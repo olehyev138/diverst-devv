@@ -70,11 +70,11 @@ RSpec.feature 'Resource management' do
 		context 'update existing resource' do
 			scenario 'and move to a different folder' do
 				visit enterprise_folder_resources_path(user.enterprise, folder_without_pp)
+
 				expect(page).to have_content resource_without_url.title
 
 				click_on 'Edit'
 
-				expect(current_path).to eq edit_enterprise_folder_resource_path(user.enterprise, folder_without_pp, resource_without_url)
 				expect(page).to have_content 'Edit a resource'
 				expect(page).to have_field('title', with: resource_without_url.title)
 
@@ -82,8 +82,7 @@ RSpec.feature 'Resource management' do
 
 				click_on 'Update Resource'
 
-				expect(current_path).to eq enterprise_folder_resources_path(user.enterprise, folder_without_pp)
-				expect(page).not_to have_content resource_without_url.title
+				expect(page).to have_no_content resource_without_url.title
 
 				visit enterprise_folder_resources_path(user.enterprise, folder_with_pp)
 
@@ -92,11 +91,11 @@ RSpec.feature 'Resource management' do
 
 			scenario 'with url' do
 				visit enterprise_folder_resources_path(user.enterprise, folder_without_pp)
+
 				expect(page).to have_content resource_without_url.title
 
 				click_on 'Edit'
 
-				expect(current_path).to eq edit_enterprise_folder_resource_path(user.enterprise, folder_without_pp, resource_without_url)
 				expect(page).to have_content 'Edit a resource'
 
 				fill_in 'resource[title]', with: 'FC BARCELONA Official Website'
@@ -105,22 +104,23 @@ RSpec.feature 'Resource management' do
 				click_on 'Update Resource'
 
 				resource_without_url.reload
-				expect(current_path).to eq enterprise_folder_resources_path(user.enterprise, folder_without_pp)
+
 				expect(page).to have_content 'FC BARCELONA Official Website'
 				expect(page).to have_link 'Link'
 			end
 		end
 
 		context 'Delete existing resource' do
-			scenario 'from existing folder' do
+			scenario 'from existing folder', js: true do
 				visit enterprise_folder_resources_path(user.enterprise, folder_without_pp)
 
 				expect(page).to have_content resource_without_url.title
 
-				click_on 'Delete'
+				page.accept_confirm(with: 'Are you sure?') do
+					click_on 'Delete'
+				end
 
-				expect(current_path).to eq enterprise_folder_resources_path(user.enterprise, folder_without_pp)
-				expect(page).not_to have_content resource_without_url.title
+				expect(page).to have_no_content resource_without_url.title
 			end
 		end
 	end

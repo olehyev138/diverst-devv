@@ -25,6 +25,7 @@ class Enterprise < ActiveRecord::Base
     has_many :resources, as: :container
     has_many :yammer_field_mappings
     has_many :emails
+    has_many :email_variables, class_name: 'EnterpriseEmailVariable'
     belongs_to :theme
     has_many :policy_groups
     has_many :expenses
@@ -48,7 +49,6 @@ class Enterprise < ActiveRecord::Base
 
     before_create :create_elasticsearch_only_fields
     before_validation :smart_add_url_protocol
-
 
     validates :idp_sso_target_url, url: { allow_blank: true }
     validates :cdo_name, :name, presence: true
@@ -212,7 +212,6 @@ class Enterprise < ActiveRecord::Base
     def have_protocol?
         company_video_url[%r{\Ahttp:\/\/}] || company_video_url[%r{\Ahttps:\/\/}]
     end
-
 
     private
 

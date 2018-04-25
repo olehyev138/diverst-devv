@@ -51,7 +51,7 @@ class EnterprisesController < ApplicationController
 
   def edit_branding
     authorize @enterprise
-
+    @emails = @enterprise.emails
     set_theme
   end
 
@@ -159,6 +159,13 @@ class EnterprisesController < ApplicationController
         :home_message,
         :xml_sso_config,
         :time_zone,
+        :user_group_mailer_notification_text,
+        :campaign_mailer_notification_text,
+        :approve_budget_request_mailer_notification_text,
+        :poll_mailer_notification_text,
+        :budget_approved_mailer_notification_text,
+        :budget_declined_mailer_notification_text,
+        :group_leader_post_mailer_notification_text,
         theme: [
           :id,
           :primary_color,

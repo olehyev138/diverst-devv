@@ -5,7 +5,7 @@ $(document).on('ready page:load', function() {
   }else{
     $('.notifications_date').hide();
   }
-    
+
   $('#user_group').bind('change', function() {
     var url = $(".ajax-toggle-1").data('url');
     var notifications_frequency = $(".ajax-toggle-1").val();
