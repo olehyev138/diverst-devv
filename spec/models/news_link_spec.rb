@@ -27,6 +27,15 @@ RSpec.describe NewsLink, type: :model do
             .rejecting('text/xml', 'text/plain') }
     end
 
+    describe 'test callbacks' do
+        let!(:news_link) { build(:news_link) }
+
+        it '#build_default_link' do
+          expect(news_link).to receive(:build_default_link)
+          news_link.save
+        end
+    end
+
     describe ".of_segments" do
       let(:author){ create(:user) }
 

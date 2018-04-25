@@ -13,16 +13,16 @@ RSpec.describe UserRole do
     end
   end
   
-  describe "#set_role_name" do
-    it "downcases the name and adds underscores" do
-      user_role = create(:user_role, :role_name => "GrOuP LeaDER")
-      expect(user_role.role_name).to eq("group_leader")
+  describe "#role_name" do
+    it "does not reformat thename" do
+      user_role = create(:user_role, :role_name => "Group Leader")
+      expect(user_role.role_name).to eq("Group Leader")
     end
   end
   
   describe "#policy_group_template" do
     it "creates the default policy_group_template" do
-      user_role = create(:user_role, :role_name => "GrOuP LeaDER")
+      user_role = create(:user_role, :role_name => "Group Leader")
       expect(user_role.policy_group_template).to_not be(nil)
     end
   end
@@ -63,8 +63,9 @@ RSpec.describe UserRole do
     it "performs the job" do
       allow(ResetUserRoleJob).to receive(:perform_now).and_call_original
       
-      admin = create(:user)
-      expect(admin.role).to eq("admin")
+      enterprise = create(:enterprise)
+      admin = create(:user, :enterprise => enterprise, :user_role => enterprise.user_roles.where(:role_name => "admin").first)
+      expect(admin.user_role.role_name).to eq("admin")
       
       user_role = admin.enterprise.user_roles.where.not(:default => true).first
       expect(user_role.can_destroy?).to be(true)
@@ -77,7 +78,7 @@ RSpec.describe UserRole do
       
       # ensure the admin's role is now the default
       admin.reload
-      expect(admin.role).to eq("user")
+      expect(admin.user_role.role_name).to eq("user")
     end
   end
 end

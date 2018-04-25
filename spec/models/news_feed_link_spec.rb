@@ -17,6 +17,15 @@ RSpec.describe NewsFeedLink, type: :model do
         it { expect(news_feed_link).to delegate_method(:group).to(:news_feed) }
     end
 
+    describe 'test callback' do 
+        let!(:news_feed_link) { build(:news_feed_link) }
+
+        it '#approve_link' do 
+            expect(news_feed_link).to receive(:approve_link)
+            news_feed_link.save
+        end
+    end
+
     describe "#approve_link" do
         it "approves the link" do
             # ensure the job is performed and that

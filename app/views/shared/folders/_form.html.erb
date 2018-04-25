@@ -9,32 +9,32 @@
         <%= f.association :parent, label: "Move to Folder", include_blank: true, input_html: { class: "select2" }, collection: @container.folders - [@folder] %>
         <%= f.hidden_field :password_protected, id: "password_protected_1", value: 0 %>
         <%= f.input :password_protected, name: "password_protected", id: "password_protected_2", label: "Password Protected?" %>
-        
+
           <%= f.input :password,
                 name: "password",
                 type: "password",
                 label: "Password",
                 input_html: {value: f.object.password} %>
-              
+
       <% if @folder.container_type === "Enterprise" %>
           <%= f.association :groups, collection: current_user.enterprise.groups, label: "Share this folder with your #{c_t(:erg).pluralize}", input_html: { class: "select2" } %>
       <% end %>
-      
+
       <%= f.button :submit %>
     </div>
   </div>
   <% end %>
-  
+
 </div>
 
 <script>
-  
+
   $(document).ready(function(){
     var value = $('#folder_password_protected').val();
     if ($('.simple_form :checkbox').is(':checked')) {
       $('.folder_password').show();
     }
-    
+
     $('.simple_form :checkbox').on('change', function(){
       if(this.checked){
         $('.folder_password').show();
@@ -44,5 +44,5 @@
       }
     });
   }); //endof document.ready
-      
+
 </script>

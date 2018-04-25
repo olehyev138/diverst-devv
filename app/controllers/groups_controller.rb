@@ -177,6 +177,10 @@ class GroupsController < ApplicationController
         end
     end
 
+    def layouts
+        authorize @group, :update?
+    end
+
     def settings
         authorize @group, :update?
     end
@@ -285,7 +289,7 @@ class GroupsController < ApplicationController
         @members = @group.active_members.order(created_at: :desc).limit(8)
 
         @top_user_group_participants = @group.user_groups.active.top_participants(10).includes(:user)
-        @top_group_participants = @group.enterprise.groups.top_participants(10)
+        @top_group_participants = @group.enterprise.groups.non_private.top_participants(10)
     end
 
     def where
@@ -318,7 +322,9 @@ class GroupsController < ApplicationController
             .require(:group)
             .permit(
                 :name,
+                :short_description,
                 :description,
+                :home_message,
                 :logo,
                 :private,
                 :banner,
@@ -339,7 +345,7 @@ class GroupsController < ApplicationController
                 :sponsor_media,
                 :sponsor_message,
                 :company_video_url,
-                :short_description,
+                :layout,
                 :parent_id,
                 :group_category_id,
                 :group_category_type_id,
