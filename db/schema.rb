@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180417155716) do
+ActiveRecord::Schema.define(version: 20180424205719) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -1157,6 +1157,16 @@ ActiveRecord::Schema.define(version: 20180417155716) do
   create_table "users_segments", force: :cascade do |t|
     t.integer "user_id",    limit: 4
     t.integer "segment_id", limit: 4
+  end
+
+  create_table "views", force: :cascade do |t|
+    t.integer  "user_id",          limit: 4,             null: false
+    t.integer  "group_message_id", limit: 4
+    t.integer  "news_link_id",     limit: 4
+    t.integer  "social_link_id",   limit: 4
+    t.integer  "view_count",       limit: 4, default: 0, null: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
   end
 
   create_table "yammer_field_mappings", force: :cascade do |t|
