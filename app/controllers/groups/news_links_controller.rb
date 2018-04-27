@@ -21,6 +21,8 @@ class Groups::NewsLinksController < ApplicationController
     def comments
         @comments = @news_link.comments.includes(:author)
         @new_comment = NewsLinkComment.new
+
+        View.increment_view(@news_link, current_user)
     end
 
     def create_comment
@@ -78,7 +80,7 @@ class Groups::NewsLinksController < ApplicationController
                    description: page.lede
                }
     end
-    
+
     def news_link_photos
         @photos = @news_link.photos
     end

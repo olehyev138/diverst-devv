@@ -1,5 +1,7 @@
 class View < ActiveRecord::Base
   belongs_to :group_message
+  belongs_to :news_link
+  belongs_to :social_link
 
   class << self
     def total_views
@@ -10,8 +12,8 @@ class View < ActiveRecord::Base
       View.all.count
     end
 
-    def increment_view(message, user)
-      view = message.views.find_or_create_by(user_id: user.id)
+    def increment_view(news_object, user)
+      view = news_object.views.find_or_create_by(user_id: user.id)
       view.view_count += 1
       view.save
     end

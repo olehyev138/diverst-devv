@@ -10,7 +10,7 @@
             <div class="col sm-11">
               <div class="flex-row flex-row--middle">
                 <div class="flex-row__cell flex-row__cell--grow">
-                  <h3><%= message.subject %> - <span class="muted" title="<%= message.created_at.to_s :datetime %>"><%= time_ago_in_words(message.created_at) %> ago (<%= message.created_at.to_formatted_s(:short) %>)</span></h3>
+                  <h3><%= message.subject %> - <span class="muted" title="<%= message.created_at.to_s :datetime %>"><%= time_ago_in_words(message.created_at) %> ago (<%= message.created_at.to_formatted_s(:short) %>) - <%= message.views.total_views %> views </span></h3>
                   <p>
                   <%= message.content %>
                   <% if message.owner.present? %>
