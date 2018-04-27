@@ -263,6 +263,7 @@ Rails.application.routes.draw do
 
     member do
       get 'settings'
+      get 'layouts'
 
       get 'export_csv'
       get 'import_csv'

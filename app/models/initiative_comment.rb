@@ -14,7 +14,7 @@ class InitiativeComment < ActiveRecord::Base
   	!approved?
   end
 
-  def self.approved 
+  def self.approved
     where(approved: true)
   end
 end

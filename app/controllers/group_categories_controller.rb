@@ -66,29 +66,20 @@ class GroupCategoriesController < ApplicationController
   def update_all_sub_groups
     authorize Group
 
-    # check params to avoid update of Group object with 0 value
-    params[:children].any? do |child|
-      if child[1][:group_category_id] != ""
-        @group_category_id = child[1][:group_category_id].to_i
-         break;
+    if all_incoming_labels_are_none?
+      categorize_sub_groups
+      flash[:notice] = "No labels were submitted"
+      redirect_to :back
+    else
+      if all_labels_are_of_the_same_category_type? || at_least_one_label_is_blank_and_other_labels_of_same_category_type?
+        categorize_sub_groups
+        flash[:notice] = "Categorization successful"
+        redirect_to :back
+      else
+        flash[:alert] = "Categorization failed because you submitted labels of different category type"
+        redirect_to :back
       end
     end
-
-    # update sub groups with chosen group_category_id and group_category_type_id
-    params[:children].each do |child|
-      next if Group.find(child[0]).group_category_id == child[1][:group_category_id].to_i
-      Group.find(child[0]).update(
-        group_category_id: child[1][:group_category_id].to_i.zero? ? nil : child[1][:group_category_id].to_i,
-        group_category_type_id: @group_category_id.nil? ? nil : GroupCategory.find(@group_category_id).group_category_type_id
- )
-    end
-
-    # find parent group and update with association with group category type
-    @parent = Group.find(params[:children].first[0])&.parent
-    @parent.update(group_category_type_id: @parent.children.first.group_category_type_id) if @parent
-
-    flash[:notice] = "Categorization successful"
-    redirect_to :back
   end
 
   def view_all
@@ -99,6 +90,67 @@ class GroupCategoriesController < ApplicationController
 
 
   private
+
+  def at_least_one_label_is_blank?
+    params[:children].any? { |child| child[1][:group_category_id] == "" }
+  end
+
+  def other_labels_not_blank_and_same_category_type?
+    array_of_non_blank_labels = []
+    params[:children].each do |child|
+      next if child[1][:group_category_id] == ""
+      array_of_non_blank_labels << child[1][:group_category_id]
+    end
+
+    array_of_non_blank_labels.all? { |group_category_id| GroupCategory.find(group_category_id)
+      .group_category_type_id == GroupCategory.find(array_of_non_blank_labels[0]).group_category_type_id  }
+  end
+
+  def at_least_one_label_is_blank_and_other_labels_of_same_category_type?
+    at_least_one_label_is_blank? && other_labels_not_blank_and_same_category_type?
+  end
+
+
+  def all_labels_are_of_the_same_category_type?
+    params[:children].each do |child|
+      if child[1][:group_category_id] != ""
+          @group_category_id = child[1][:group_category_id].to_i
+           break;
+      end
+    end
+
+    params[:children].all? do |child|
+      GroupCategory.find(child[1][:group_category_id])
+      .group_category_type_id == GroupCategory.find(@group_category_id).group_category_type_id if child[1][:group_category_id].present?
+    end
+  end
+
+  def categorize_sub_groups
+     # check params to avoid update of Group object with 0 value
+    params[:children].each do |child|
+        if child[1][:group_category_id] != ""
+          @group_category_id = child[1][:group_category_id].to_i
+           break;
+        end
+      end
+
+      # update sub groups with chosen group_category_id and group_category_type_id
+      params[:children].each do |child|
+        next if Group.find(child[0]).group_category_id == child[1][:group_category_id].to_i
+        Group.find(child[0]).update(skip_label_consistency_check: true,
+          group_category_id: child[1][:group_category_id].to_i.zero? ? nil : child[1][:group_category_id].to_i,
+          group_category_type_id: @group_category_id.nil? ? nil : GroupCategory.find(@group_category_id).group_category_type_id
+        )
+      end
+
+      # find parent group and update with association with group category type
+      @parent = Group.find(params[:children].first[0])&.parent
+      @parent.update(group_category_type_id: GroupCategory.find_by(id: @group_category_id)&.group_category_type_id) if @parent
+  end
+
+  def all_incoming_labels_are_none?
+    params[:children].all? { |child| child[1][:group_category_id] == "" }
+  end
 
   def resolve_layout
   	case action_name

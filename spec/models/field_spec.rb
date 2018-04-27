@@ -48,7 +48,7 @@ RSpec.describe Field do
       end
     end
   end
-  
+
   describe "#string_value" do
     it "Returns a well-formatted string representing the value. Used for display." do
       field = create(:field)

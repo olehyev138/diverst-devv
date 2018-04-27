@@ -23,7 +23,7 @@ RSpec.describe AnswerCommentsController, type: :controller do
                     expect(assigns[:comment].approved).to be(true)
                 end
 
-                it 'returns answer that belongs to comment' do 
+                it 'returns answer that belongs to comment' do
                     expect(assigns[:answer]).to eq answer_comment.answer
                 end
 
@@ -35,7 +35,7 @@ RSpec.describe AnswerCommentsController, type: :controller do
                     expect(flash[:notice]).to eq "The comment was updated"
                 end
             end
-          
+
             context "when successful" do
                 before {
                     request.env["HTTP_REFERER"] = "back"

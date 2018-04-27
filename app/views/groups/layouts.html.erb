@@ -1,0 +1,53 @@
+<div class="content__main">
+  <h2>Select a Layout for <strong><%= @group.name %></strong></h2>
+  <ul>
+    <li>Visual panel, Sponsor image/video and Sponsor message are added via <strong><%= c_t(:erg) %> Settings</strong></li>
+    <li>Short, Long descriptions and Additional Message board are added via <strong>Edit <%= c_t(:erg) %></strong></li>
+    <li><%= c_t(:erg) %> Leaders are added via <strong>Leaders</strong></li>
+    <li>Questionnaire button will only show if a survey is created via <strong>Insights</strong> </li>
+  </ul>
+
+  <%= simple_form_for @group do |f| %>
+    <div class="card">
+      <div class="card__section card__section--border">
+        <%= f.input :layout, as: :hidden %>
+
+        <% Group.layout.values.each do |layout_value| %>
+          <div class="media-object" data-layout_id="<%= layout_value %>">
+            <div class="flex-row">
+              <div class="flex-row__cell">
+                <%= image_tag @group.logo.expiring_url(3600, :thumb) %>
+              </div>
+              <div class="flex-row__cell flex-row__cell--grow">
+                <h4><%= Group::LAYOUTS_INFO[layout_value] %></h4>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <%= f.button :submit %>
+
+  <% end %>
+</div>
+
+<script>
+  $('.media-object').click(function() {
+    $('.media-object').removeClass('media-object--selected');
+
+    $(this).addClass('media-object--selected');
+
+    var new_layout_id = $(this).data('layout_id')
+
+    $('#group_layout').val(new_layout_id);
+  });
+
+  $(document).ready(function(){
+    var current_layout_id = $('input#group_layout').val();
+
+    var $layout_card = $('*[data-layout_id="' + current_layout_id + '"]');
+
+    $layout_card.click();
+  });
+</script>

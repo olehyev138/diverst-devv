@@ -1,0 +1,3 @@
+<% if @group.active_members.include? current_user %>
+  <%= link_to "Leave this #{ c_t(:erg) }", group_group_member_path(@group, current_user), method: :delete, class: 'btn btn--tertiary error', style: 'font-size: 12px;' %>
+<% end %>

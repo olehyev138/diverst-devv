@@ -83,7 +83,7 @@ class Enterprise < ActiveRecord::Base
     end
     
     def default_user_role
-        user_roles.where(:default => true).first.role_name
+        user_roles.where(:default => true).first.id
     end
 
     def iframe_calendar_token

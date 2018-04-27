@@ -4,10 +4,15 @@ RSpec.describe Segment, type: :model do
     describe 'when validating' do
         let(:segment){ build_stubbed(:segment) }
 
-        it { expect(segment).to have_one(:parent_segment).class_name('Segmentation').with_foreign_key(:child_id) }
-        it { expect(segment).to have_one(:parent).class_name('Segment').through(:parent_segment).source(:parent) }
+        it{ expect(segment).to have_one(:parent_segment).class_name('Segmentation').with_foreign_key(:child_id) }
+        it{ expect(segment).to have_one(:parent).class_name('Segment').through(:parent_segment).source(:parent) }
+
+        it{ expect(segment).to have_many(:children).class_name('Segmentation').with_foreign_key(:parent_id) }
+        it{ expect(segment).to have_many(:sub_segments).class_name('Segment').through(:children).source(:child).dependent(:destroy) }
+
         it{ expect(segment).to belong_to(:enterprise) }
         it{ expect(segment).to belong_to(:owner).class_name("User") }
+
         it{ expect(segment).to have_many(:rules).class_name("SegmentRule") }
         it{ expect(segment).to have_many(:users_segments) }
         it{ expect(segment).to have_many(:members).through(:users_segments).class_name("User").source(:user).dependent(:destroy) }
@@ -23,8 +28,19 @@ RSpec.describe Segment, type: :model do
         it{ expect(segment).to have_many(:initiatives).through(:initiative_segments) }
 
         it{ expect(segment).to validate_presence_of(:name)}
-        it { expect(segment).to validate_presence_of(:enterprise) }
-        it { expect(segment).to accept_nested_attributes_for(:rules).allow_destroy(true) }
+        it{ expect(segment).to validate_presence_of(:enterprise) }
+        it{ expect(segment).to accept_nested_attributes_for(:rules).allow_destroy(true) }
+    end
+
+    describe 'test callbacks' do
+        let!(:segment) { create(:segment) }
+
+        context 'before_destroy' do
+            it 'callback runs before segment object is destroyed' do
+                expect(segment).to receive(:remove_parent_segment)
+                segment.destroy
+            end
+        end
     end
 
     describe "associations" do

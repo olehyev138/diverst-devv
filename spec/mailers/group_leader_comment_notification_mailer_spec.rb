@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe GroupLeaderCommentNotificationMailer, type: :mailer do
   
   let!(:leader){ create(:user) }
-  let!(:group){ create(:group, :pending_users => "enabled") }
+  let!(:group){ create(:group, :enterprise => leader.enterprise, :pending_users => "enabled") }
   let!(:user_group) {create(:user_group, :group => group, :user => leader, :accepted_member => true)} 
   let!(:group_leader){ create(:group_leader, :group => group, :user => leader) }
 
@@ -28,6 +28,10 @@ RSpec.describe GroupLeaderCommentNotificationMailer, type: :mailer do
 
     it 'shows a message with number of pending comments in group' do
       expect(mail.body.encoded).to include("#{group.name} has 1 pending comment")
+    end
+    
+    it 'includes a link to the news feed' do
+      expect(mail.body.encoded).to include("groups/#{group.id}/posts")
     end
   end
 end
