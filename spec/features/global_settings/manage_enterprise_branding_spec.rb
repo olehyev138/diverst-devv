@@ -17,15 +17,15 @@ RSpec.feature 'Manage Enterprise Branding' do
 			scenario 'by editing default colors', js: true do
 				style = computed_style '.btn--primary', 'background'
 
-				expect(style).to eq default_primary_color  #the hex color equivalent is #7b77c9
+				expect(style).to have_default_primary_color #the hex color equivalent is #7b77c9
 
 				fill_in 'enterprise[theme][primary_color]', with: '#FFEE7F'
 
 				click_on 'Save branding'
 
 				style = computed_style '.btn--primary', 'background'
-				expect(style).not_to eq default_primary_color
-				expect(style).to eq "rgb(255, 238, 127)" #the hex color equivalent is #FFEE7F
+				expect(style).not_to eq have_default_primary_color
+				expect(style).to have_custom_color("rgb(255, 238, 127)") #the hex color equivalent is #FFEE7F
 			end
 		end
 
@@ -35,30 +35,30 @@ RSpec.feature 'Manage Enterprise Branding' do
 			click_on 'Save branding'
 
 			style = computed_style '.btn--primary', 'background'
-			expect(style).not_to eq default_primary_color
+			expect(style).not_to have_default_primary_color
 
 			click_on 'Restore to default'
 
 			style = computed_style '.btn--primary', 'background'
-			expect(style).to eq default_primary_color
+			expect(style).to have_default_primary_color
 		end
 
 		scenario 'upload image as custom logo' do
-			expect(page).to have_css('img[src*="logo.png"]')
+			expect(page).to have_default_logo
 
 			attach_file('enterprise[theme][logo]', 'spec/fixtures/files/verizon_logo.png')
 
 			click_on 'Save branding'
 
-			expect(page).to have_no_css('img[src*="/\Alogo.png\z/"]')
-			expect(page).to have_css('img[src*="verizon_logo.png"]')
+			expect(page).to have_no_default_logo
+			expect(page).to have_custom_logo("verizon_logo")
 		end
 	end
 
 	context 'Customize Home View' do
 		scenario 'by editing home banner and message' do
 			visit user_root_path
-			expect(page).to have_no_css('.enterprise-banner')
+			expect(page).to have_no_banner
 
 			visit edit_branding_enterprise_path(enterprise)
 
@@ -69,7 +69,7 @@ RSpec.feature 'Manage Enterprise Branding' do
 			visit user_root_path
 
 			within('.enterprise-banner') do
-				expect(page).to have_css('img[src*="verizon_logo.png"]')
+				expect(page).to have_banner "verizon_logo"
 			end
 			expect(page).to have_content 'Welcome to Verizon! Join any group to view recent and future events'
 		end
@@ -86,7 +86,7 @@ RSpec.feature 'Manage Enterprise Branding' do
 
 			visit group_event_path(group, event)
 
-			expect(page).to have_content 'Central America'
+			expect(page).to display_timezone 'Central America'
 		end
 	end
 
@@ -126,7 +126,7 @@ RSpec.feature 'Manage Enterprise Branding' do
 
 			visit edit_branding_enterprise_path(enterprise)
 
-			page.find_field('enterprise[disable_sponsor_message]').trigger('click')
+			disable_home_sponsor_message_button.trigger('click')
 
 			click_on 'Save sponsor info'
 
@@ -144,7 +144,7 @@ RSpec.feature 'Manage Enterprise Branding' do
 
 			visit user_root_path
 
-			expect(page).to have_css('img[src*="sponsor_image.jpg"]')
+			expect(page).to have_sponsor_image "sponsor_image"
 		end
 
 		scenario 'by uploading sponsor video', js: true do
@@ -154,7 +154,7 @@ RSpec.feature 'Manage Enterprise Branding' do
 
 			visit user_root_path
 
-			expect(page).to have_css('video[src*="sponsor_video.mp4"]')
+			expect(page).to have_sponsor_video "sponsor_video"
 		end
 	end
 end

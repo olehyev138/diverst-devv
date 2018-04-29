@@ -50,7 +50,7 @@ RSpec.describe MetricsDashboardsController, type: :controller do
 
       it 'returns correct data for general_metrics' do
         expect(assigns[:general_metrics])
-        .to eq ({:nb_users=>1, :nb_ergs=>2, :nb_segments=>3, :nb_resources=>4, :nb_groups_resources=>0, :nb_polls=>2, :nb_ongoing_campaigns=>0, :average_nb_members_per_group=>nil})
+        .to eq ({:nb_users=>1, :nb_ergs=>2, :nb_segments=>3, :nb_resources=>4,  :nb_groups_resources=>0, :nb_polls=>2, :nb_ongoing_campaigns=>0, :average_nb_members_per_group=>nil})
       end
 
       it "return metrics" do
