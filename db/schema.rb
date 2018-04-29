@@ -11,8 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180417155716) do
-
+ActiveRecord::Schema.define(version: 20180427143546) do
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
     t.string   "trackable_type", limit: 191
@@ -255,6 +254,7 @@ ActiveRecord::Schema.define(version: 20180417155716) do
     t.text    "dci_abbreviation",  limit: 65535
     t.text    "member_preference", limit: 65535
     t.text    "parent",            limit: 65535
+    t.text    "sub_erg",           limit: 65535
   end
 
   add_index "custom_texts", ["enterprise_id"], name: "index_custom_texts_on_enterprise_id", using: :btree

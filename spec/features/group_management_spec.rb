@@ -93,9 +93,8 @@ RSpec.feature 'Group management' do
       expect(page).to have_no_content 'Group Two'
 
       expect(current_path).to eq groups_path
-      expect(page).to have_link 'Show Sub-ERGs'
 
-      click_on 'Show Sub-ERGs'
+      click_on "Show #{c_t(:sub_erg)}"
 
       expect(page).to have_css('.accent') do
         expect(page).to have_content group1.name
@@ -123,14 +122,14 @@ RSpec.feature 'Group management' do
     scenario 'delete a sub-group' do
       visit groups_path
 
-      click_on 'Show Sub-ERGs'
+      click_on "Show #{c_t(:sub_erg)}"
 
       expect(page).to have_css('.accent') do
         expect(page).to have_content sub_group1.name
         expect(page).to have_content sub_group2.name
       end
 
-      click_on 'Show Sub-ERGs'
+      click_on "Show #{c_t(:sub_erg)}"
 
       expect(page).to have_css('.accent') do
         click_on 'Delete'
@@ -170,7 +169,8 @@ RSpec.feature 'Group management' do
         visit groups_path
 
         expect(page).to have_link parent_group.name
-        click_on 'Show Sub-ERGs'
+
+        click_on "Show #{c_t(:sub_erg)}"
 
         visit edit_group_path(sub_group1)
 
@@ -196,7 +196,8 @@ RSpec.feature 'Group management' do
         visit groups_path
 
         expect(page).to have_link parent_group.name
-        click_on 'Show Sub-ERGs'
+
+        click_on "Show #{c_t(:sub_erg)}"
 
         visit edit_group_path(sub_group1)
 
@@ -219,12 +220,11 @@ RSpec.feature 'Group management' do
         visit groups_path
 
         expect(page).to have_link parent_group.name
-        expect(page).to have_link 'Categorize Sub-ERGs'
 
-        click_on 'Categorize Sub-ERGs'
+        click_on "Categorize #{c_t(:sub_erg)}"
 
         expect(current_path).to eq group_categories_path
-        expect(page).to have_content 'Label Sub-ERG'
+        expect(page).to have_content "Label #{c_t(:sub_erg)}"
         expect(page).to have_select(sub_group1.name, selected: nil)
         expect(page).to have_select(sub_group2.name, selected: nil)
       end

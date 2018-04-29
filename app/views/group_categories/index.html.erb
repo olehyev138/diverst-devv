@@ -1,5 +1,5 @@
 <div class="content__header">
-  <h1>Label Sub-ERG</h1>
+  <h1>Label <%= c_t(:sub_erg) %></h1>
   <%= link_to "View All Categories", view_all_group_categories_url, class: "btn btn--primary" %>
 </div>
 
@@ -22,7 +22,7 @@
 
 
 <% if @parent.children.empty? %>
-<dh2>No Sub-<%= "#{ c_t(:erg).pluralize }" %> available.</h2>
+<dh2>No <%= c_t(:sub_erg) %> available.</h2>
 <% else %>
     <%= form_tag update_all_sub_groups_url, method: :post do %>
 	<div class="card">
