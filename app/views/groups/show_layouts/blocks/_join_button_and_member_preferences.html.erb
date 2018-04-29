@@ -2,6 +2,7 @@
   * Please wait for group administrators to process your membership request.
   <% if !current_user.has_answered_group_survey? @group %>
     Take a survey below in order to speed up approval process.
+     <%= link_to c_t(:member_preference), survey_group_questions_path(@group), class: "btn btn--primary" %>
   <% else %>
     You can always
     <%= link_to 'edit', survey_group_questions_path(@group) %>
