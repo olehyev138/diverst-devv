@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Sample, type: :model do
 
     describe 'validations' do
-        let(:sample) { FactoryGirl.build_stubbed(:sample) }
+        let(:sample) { build_stubbed(:sample) }
 
         it{ expect(sample).to validate_presence_of(:user_id) }
     end

@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe PolicyGroup, type: :model do
 
     describe 'test associations' do
-        let(:policy_group) { build(:policy_group) }
+        let(:policy_group) { build_stubbed(:policy_group) }
 
         it{ expect(policy_group).to have_many(:users) }
         it{ expect(policy_group).to belong_to(:enterprise)}
@@ -11,7 +11,7 @@ RSpec.describe PolicyGroup, type: :model do
     end
 
     describe 'validations' do
-        let(:policy_group) { FactoryGirl.build_stubbed(:policy_group) }
+        let(:policy_group) { build_stubbed(:policy_group) }
 
         it{ expect(policy_group).to validate_presence_of(:name) }
         it{ expect(policy_group).to validate_presence_of(:enterprise) }
@@ -19,9 +19,9 @@ RSpec.describe PolicyGroup, type: :model do
 
     describe '.default_group' do
         context 'within single enterprise' do
-            let!(:enterprise) { FactoryGirl.create(:enterprise) }
-            let!(:not_default_pg) { FactoryGirl.create(:policy_group, enterprise: enterprise) }
-            let!(:default_group) { FactoryGirl.create(:policy_group, enterprise: enterprise, default_for_enterprise: true) }
+            let!(:enterprise) { create(:enterprise) }
+            let!(:not_default_pg) { create(:policy_group, enterprise: enterprise) }
+            let!(:default_group) { create(:policy_group, enterprise: enterprise, default_for_enterprise: true) }
 
             it 'returns default group' do
                 expect(
@@ -31,10 +31,10 @@ RSpec.describe PolicyGroup, type: :model do
         end
 
         describe 'different enterprises' do
-            let!(:enterprise1) { FactoryGirl.create(:enterprise) }
-            let!(:enterprise2) { FactoryGirl.create(:enterprise) }
-            let!(:e1_policy_group) { FactoryGirl.create(:policy_group, enterprise: enterprise1, default_for_enterprise: true) }
-            let!(:e2_policy_group) { FactoryGirl.create(:policy_group, enterprise: enterprise2, default_for_enterprise: true) }
+            let!(:enterprise1) { create(:enterprise) }
+            let!(:enterprise2) { create(:enterprise) }
+            let!(:e1_policy_group) { create(:policy_group, enterprise: enterprise1, default_for_enterprise: true) }
+            let!(:e2_policy_group) { create(:policy_group, enterprise: enterprise2, default_for_enterprise: true) }
 
             it 'do not share default groups' do
                 expect(
@@ -49,17 +49,17 @@ RSpec.describe PolicyGroup, type: :model do
     end
 
     describe 'default group behaviour' do
-        let!(:enterprise) { FactoryGirl.create(:enterprise) }
+        let!(:enterprise) { create(:enterprise) }
 
         describe 'new group creation' do
             describe 'when creating not default group' do
                 let!(:new_group) {
-                    FactoryGirl.build(:policy_group, enterprise: enterprise)
+                    build(:policy_group, enterprise: enterprise)
                 }
 
                 context 'with existing default group' do
                     let!(:existing_group) {
-                        FactoryGirl.create(:policy_group,
+                        create(:policy_group,
                                            enterprise: enterprise,
                                            default_for_enterprise: true)
                     }
@@ -82,14 +82,14 @@ RSpec.describe PolicyGroup, type: :model do
 
             describe 'when creating default group' do
                 let!(:new_group) {
-                    FactoryGirl.build(:policy_group,
+                    build(:policy_group,
                                       enterprise: enterprise,
                                       default_for_enterprise: true)
                 }
 
                 context 'with existing default group' do
                     let!(:existing_group) {
-                        FactoryGirl.create(:policy_group,
+                        create(:policy_group,
                                            enterprise: enterprise,
                                            default_for_enterprise: true)
                     }
@@ -116,14 +116,14 @@ RSpec.describe PolicyGroup, type: :model do
         end
 
         describe 'default group deletion' do
-            let!(:default_pg) {
-                FactoryGirl.create(:policy_group,
+            let!(:default_pg) { 
+                create(:policy_group,
                                    enterprise: enterprise,
                                    default_for_enterprise: true)
             }
 
             let!(:not_default_pg) {
-                FactoryGirl.create(:policy_group,
+                create(:policy_group,
                                    enterprise: enterprise)
             }
 
@@ -138,8 +138,8 @@ RSpec.describe PolicyGroup, type: :model do
     describe "#allow_deletion?" do
         it "returns true" do
             enterprise = create(:enterprise)
-            create(:policy_group, :enterprise => enterprise, :default_for_enterprise => true)
-            policy_group = create(:policy_group, :enterprise => enterprise, :default_for_enterprise => false)
+            build(:policy_group, :enterprise => enterprise, :default_for_enterprise => true)
+            policy_group = build(:policy_group, :enterprise => enterprise, :default_for_enterprise => false)
             expect(policy_group.allow_deletion?).to be(true)
         end
     end
