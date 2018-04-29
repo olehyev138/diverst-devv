@@ -64,7 +64,7 @@ RSpec.feature 'User Management' do
 				click_link 'Remove', href: user_path(guest_user)
 			end
 
-			expect(page.has_no_content?(guest_user.first_name)).to eq true
+			expect(page).to have_no_content guest_user.first_name
 		end
 
 		context 'for an existing user' do
