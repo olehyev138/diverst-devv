@@ -176,6 +176,12 @@ class Enterprise < ActiveRecord::Base
         mapped_fields
     end
 
+    def resources_count
+      enterprise_resources_count + groups_resources_count
+    end
+
+    protected
+
     def enterprise_resources_count
       enterprise_folders = Folder.where(container_type: 'Enterprise')
                                  .where(container_id: self)
@@ -202,7 +208,6 @@ class Enterprise < ActiveRecord::Base
       count
     end
 
-    protected
 
     def smart_add_url_protocol
         return nil if company_video_url.blank?

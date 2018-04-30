@@ -31,10 +31,10 @@
       </div>
     <% else %>
       <% @posts.each do |news| %>
-        <% if news.is_pinned? %>
-          Unpin
+        <% if !news.is_pinned? %>
+          <%= link_to "Pin", pin_group_posts_path(:group_id => @group.id, :link_id => news.id), method: :patch if policy(@group).erg_leader_permissions? %>
         <% else %>
-          Pin
+          <%= link_to "Unpin", unpin_group_posts_path(:group_id => @group.id, :link_id => news.id), method: :patch if policy(@group).erg_leader_permissions? %>
         <% end %>
 
         <% if news.link_type == "NewsLink" %>

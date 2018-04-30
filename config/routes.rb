@@ -209,6 +209,8 @@ Rails.application.routes.draw do
         collection do
           get 'pending'
           post 'approve'
+          patch 'pin'
+          patch 'unpin'
         end
       end
 
