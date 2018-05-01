@@ -13,11 +13,11 @@
       </div>
     <% else %>
       <% @posts.each do |news| %>
-        <% if news.link_type == "NewsLink" %>
+        <% if news.news_link %>
           <%= render partial: "groups/shared/news_links", locals: {news_link: news.link } %>
-        <% elsif news.link_type === "GroupMessage"%>
+        <% elsif news.group_message %>
           <%= render partial: "groups/shared/messages", locals: {message: news.link } %>
-        <% elsif news.link_type === "SocialLink"%>
+        <% elsif news.social_link %>
             <div class="flex-row__cell link-group">
 
               <% if news.link.url.include?("facebook") %>

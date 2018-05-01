@@ -741,12 +741,13 @@ ActiveRecord::Schema.define(version: 20180324181536) do
   end
 
   create_table "news_feed_links", force: :cascade do |t|
-    t.integer  "news_feed_id", limit: 4
-    t.boolean  "approved",                 default: false
-    t.integer  "link_id",      limit: 4
-    t.string   "link_type",    limit: 191
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
+    t.integer  "news_feed_id",     limit: 4
+    t.boolean  "approved",                   default: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+    t.integer  "news_link_id",     limit: 4
+    t.integer  "group_message_id", limit: 4
+    t.integer  "social_link_id",   limit: 4
   end
 
   create_table "news_feeds", force: :cascade do |t|

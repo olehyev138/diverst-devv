@@ -1,7 +1,9 @@
 class NewsFeedLink < ActiveRecord::Base
     belongs_to :news_feed
-    belongs_to :link, :polymorphic => true
-
+    belongs_to :group_message
+    belongs_to :news_link
+    belongs_to :social_link
+    
     has_many :news_feed_link_segments
 
     delegate :group,    :to => :news_feed
@@ -11,8 +13,6 @@ class NewsFeedLink < ActiveRecord::Base
     scope :not_approved,    -> { where(approved: false )}
 
     validates :news_feed_id,    presence: true
-    validates :link_id,         presence: true
-    validates :link_type,       presence: true
 
     after_create :approve_link
 
@@ -24,5 +24,11 @@ class NewsFeedLink < ActiveRecord::Base
             self.approved = true
             self.save!
         end
+    end
+    
+    def link
+        return group_message if group_message
+        return news_link if news_link
+        return social_link if social_link
     end
 end

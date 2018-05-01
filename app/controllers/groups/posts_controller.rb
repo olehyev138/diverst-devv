@@ -9,25 +9,25 @@ class Groups::PostsController < ApplicationController
     def index
         if policy(@group).erg_leader_permissions?
                 @count = base_query
-                                .includes(:link)
+                                .includes(:news_link, :group_message, :social_link)
                                 .order(created_at: :desc)
                                 .count
 
                 @posts = base_query
-                                .includes(:link)
+                                .includes(:news_link, :group_message, :social_link)
                                 .order(created_at: :desc)
                                 .limit(@limit)
         else
             if @group.active_members.include? current_user
                 @count = base_query
-                            .includes(:link)
+                            .includes(:news_link, :group_message, :social_link)
                             .joins(joins)
                             .where(where, current_user.segments.pluck(:id))
                             .order(created_at: :desc)
                             .count
 
                 @posts = base_query
-                            .includes(:link)
+                            .includes(:news_link, :group_message, :social_link)
                             .joins(joins)
                             .where(where, current_user.segments.pluck(:id))
                             .order(created_at: :desc)
@@ -40,7 +40,7 @@ class Groups::PostsController < ApplicationController
     end
 
     def pending
-        @posts = @group.news_feed_links.includes(:link).not_approved.order(created_at: :desc)
+        @posts = @group.news_feed_links.includes(:news_link, :group_message, :social_link).not_approved.order(created_at: :desc)
     end
 
     def approve

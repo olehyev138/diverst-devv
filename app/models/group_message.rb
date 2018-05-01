@@ -7,7 +7,7 @@ class GroupMessage < ActiveRecord::Base
     belongs_to :owner, class_name: 'User'
     belongs_to :group
 
-    has_one :news_feed_link, :as => :link, :dependent => :destroy
+    has_one :news_feed_link, :dependent => :destroy
 
     validates :group_id,    presence: true
     validates :subject,     presence: true

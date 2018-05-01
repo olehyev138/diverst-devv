@@ -2,7 +2,7 @@ class NewsLink < ActiveRecord::Base
     belongs_to :group
     belongs_to :author, class_name: 'User'
 
-    has_one :news_feed_link, :as => :link, :dependent => :destroy
+    has_one :news_feed_link, :dependent => :destroy
 
     has_many :news_link_segments, :dependent => :destroy
     has_many :segments, through: :news_link_segments, :before_remove => :remove_segment_association

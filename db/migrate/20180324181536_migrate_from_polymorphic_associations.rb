@@ -48,6 +48,10 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     add_reference :resources, :group
     add_reference :resources, :initiative
     
+    add_reference :news_feed_links, :news_link
+    add_reference :news_feed_links, :group_message
+    add_reference :news_feed_links, :social_link
+    
     # migrate existing polymorphic associations to new structure
     Tag.where(:taggable_type => "Resource").update_all("resource_id = taggable_id")
     
@@ -101,6 +105,11 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     Resource.where(:container_type => "Group").update_all("group_id = container_id")
     Resource.where(:container_type => "Initiative").update_all("initiative_id = container_id")
     
+    # news_feed_link for news_links, group_messages, social_links
+    NewsFeedLink.where(:link_type => "NewsLink").update_all("news_link_id = link_id")
+    NewsFeedLink.where(:link_type => "GroupMessage").update_all("group_message_id = link_id")
+    NewsFeedLink.where(:link_type => "SocialLink").update_all("social_link_id = link_id")
+    
     # remove polymorphic fields
     remove_reference :tags,                 :taggable,    polymorphic: true
     remove_reference :budgets,              :subject,     polymorphic: true
@@ -111,7 +120,8 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     remove_reference :folder_shares,        :container,   polymorphic: true
     remove_reference :graphs,               :collection,  polymorphic: true
     remove_reference :user_reward_actions,  :entity,      polymorphic: true
-    remove_reference :resources,            :container,      polymorphic: true
+    remove_reference :resources,            :container,   polymorphic: true
+    remove_reference :news_feed_links,      :link,        polymorphic: true
   end
   
   def down
@@ -125,6 +135,7 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     add_reference :graphs,              :collection,  polymorphic: true
     add_reference :user_reward_actions, :entity,      polymorphic: true
     add_reference :resources,           :container,   polymorphic: true
+    add_reference :news_feed_links,     :link,        polymorphic: true
     
     # migrate foreign keys back to polymorphic associations
     Tag.where.not(:resource_id => nil).update_all("taggable_id = resource_id, taggable_type = 'Resource'")
@@ -173,10 +184,16 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     UserRewardAction.where.not(:answer_id => nil).update_all("entity_id = answer_id, entity_type = 'Answer'")
     UserRewardAction.where.not(:poll_response_id => nil).update_all("entity_id = poll_response_id, entity_type = 'PollResponse'")
     
+    # resources
     Resource.where.not(:enterprise_id => nil).update_all("container_id = enterprise_id, container_type = 'Enterprise'")
     Resource.where.not(:folder_id => nil).update_all("container_id = folder_id, container_type = 'Folder'")
     Resource.where.not(:group_id => nil).update_all("container_id = group_id, container_type = 'Group'")
     Resource.where.not(:initiative_id => nil).update_all("container_id = initiative_id, container_type = 'Initiative'")
+    
+    # news_feed_links
+    NewsFeedLink.where.not(:news_link_id => nil).update_all("link_id = news_link_id, link_type = 'NewsLink'")
+    NewsFeedLink.where.not(:group_message_id => nil).update_all("link_id = group_message_id, link_type = 'GroupMessage'")
+    NewsFeedLink.where.not(:social_link_id => nil).update_all("link_id = social_link_id, link_type = 'SocialLink'")
     
     remove_reference :tags,     :resource
     
@@ -220,5 +237,9 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     remove_reference :resources, :folder
     remove_reference :resources, :group
     remove_reference :resources, :initiative
+    
+    remove_reference :news_feed_links,  :news_link
+    remove_reference :news_feed_links,  :group_message
+    remove_reference :news_feed_links,  :social_link
   end
 end

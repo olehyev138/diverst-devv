@@ -319,12 +319,12 @@ RSpec.describe GroupsController, type: :controller do
         let!(:news_link4) { create(:news_link, :group => group)}
         let!(:news_link5) { create(:news_link, :group => group)}
         let!(:news_link6) { create(:news_link, :group => group)}
-        let!(:news_feed_link1) { create(:news_feed_link, link: news_link1, news_feed: news_feed, approved: true, created_at: Time.now - 5.hours, updated_at: Time.now - 5.hours) }
-        let!(:news_feed_link2) { create(:news_feed_link, link: news_link2, news_feed: news_feed, approved: true, created_at: Time.now - 4.hours, updated_at: Time.now - 4.hours) }
-        let!(:news_feed_link3) { create(:news_feed_link, link: news_link3, news_feed: news_feed, approved: true, created_at: Time.now - 3.hours, updated_at: Time.now - 3.hours) }
-        let!(:news_feed_link4) { create(:news_feed_link, link: news_link4, news_feed: news_feed, approved: true, created_at: Time.now - 2.hours, updated_at: Time.now - 2.hours) }
-        let!(:news_feed_link5) { create(:news_feed_link, link: news_link5, news_feed: news_feed, approved: true, created_at: Time.now - 1.hours, updated_at: Time.now - 1.hours) }
-        let!(:news_feed_link6) { create(:news_feed_link, link: news_link6, news_feed: news_feed, approved: true, created_at: Time.now, updated_at: Time.now) }
+        let!(:news_feed_link1) { create(:news_feed_link, news_link: news_link1, news_feed: news_feed, approved: true, created_at: Time.now - 5.hours, updated_at: Time.now - 5.hours) }
+        let!(:news_feed_link2) { create(:news_feed_link, news_link: news_link2, news_feed: news_feed, approved: true, created_at: Time.now - 4.hours, updated_at: Time.now - 4.hours) }
+        let!(:news_feed_link3) { create(:news_feed_link, news_link: news_link3, news_feed: news_feed, approved: true, created_at: Time.now - 3.hours, updated_at: Time.now - 3.hours) }
+        let!(:news_feed_link4) { create(:news_feed_link, news_link: news_link4, news_feed: news_feed, approved: true, created_at: Time.now - 2.hours, updated_at: Time.now - 2.hours) }
+        let!(:news_feed_link5) { create(:news_feed_link, news_link: news_link5, news_feed: news_feed, approved: true, created_at: Time.now - 1.hours, updated_at: Time.now - 1.hours) }
+        let!(:news_feed_link6) { create(:news_feed_link, news_link: news_link6, news_feed: news_feed, approved: true, created_at: Time.now, updated_at: Time.now) }
 
         login_user_from_let
         before { get :show, :id => group.id }
