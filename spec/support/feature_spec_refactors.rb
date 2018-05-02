@@ -4,12 +4,12 @@ module FeatureSpecRefactors
 			if Rails.env.test?
 				puts current_url
 				require 'pry-rails'; binding.pry
-      end
-      
-      def c_t(type)
-        @custom_text ||= current_user.enterprise.custom_text rescue CustomText.new
-        @custom_text.send("#{type}_text")
-      end
+			end
+		end
+
+		def c_t(type)
+			@custom_text ||= current_user.enterprise.custom_text rescue CustomText.new
+			@custom_text.send("#{type}_text")
 		end
 
 		def logout_user_in_session

@@ -121,7 +121,6 @@ RSpec.feature 'DCI Management' do
 			page.accept_confirm(wait: "Are you sure?") do
 				click_link 'Delete', href: reward_path(prize)
 			end
-
 			expect(page).to have_no_content 'Ultimate Prize'
 		end
 	end
