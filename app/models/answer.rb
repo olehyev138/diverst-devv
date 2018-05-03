@@ -3,10 +3,10 @@ class Answer < ActiveRecord::Base
     belongs_to :question, inverse_of: :answers
     belongs_to :author, class_name: 'User', inverse_of: :answers
 
-    has_many :votes, class_name: 'AnswerUpvote'
+    has_many :votes, class_name: 'AnswerUpvote', dependent: :destroy
     has_many :voters, through: :votes, class_name: 'User', source: :user
-    has_many :comments, class_name: 'AnswerComment'
-    has_many :expenses, class_name: "AnswerExpense"
+    has_many :comments, class_name: 'AnswerComment', dependent: :destroy
+    has_many :expenses, class_name: "AnswerExpense", dependent: :destroy
     has_many :user_reward_actions
     
     has_attached_file :supporting_document, s3_permissions: "private"

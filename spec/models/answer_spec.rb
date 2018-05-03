@@ -47,5 +47,21 @@ RSpec.describe Answer, type: :model do
             expect(answer.supporting_document_extension).to eq("")
         end
     end
+    
+    describe "#destroy_callbacks" do
+        it "removes the child objects" do
+            answer = create(:answer)
+            answer_upvote = create(:answer_upvote, :answer => answer)
+            answer_comment = create(:answer_comment, :answer => answer)
+            answer_expense = create(:answer_expense, :answer => answer)
+            
+            answer.destroy
+            
+            expect{Answer.find(answer.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{AnswerUpvote.find(answer_upvote.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{AnswerComment.find(answer_comment.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{AnswerExpense.find(answer_expense.id)}.to raise_error(ActiveRecord::RecordNotFound)
+        end
+    end
 
 end
