@@ -15,7 +15,7 @@
           <p>
             <%= allow_newlines news_link.description %>
             <br>
-            <%= link_to news_link.url, news_link.url %>
+            <%= link_to news_link.url, news_link.url, target: '_blank', 'data-trackable': news_link.news_feed_link.id %>
             <br>
             <% if news_link.author.present? %>
               <span class="muted">Posted by <%=  news_link.author.name_with_status %></span>
@@ -36,3 +36,12 @@
 </div>
 
 <%= render "groups/news_links/modal/form" %>
+
+<script>
+ $(function() {
+   $('a[data-trackable]').click(function() {
+     $.post('/views/track', { id: $(this).data('trackable') } );
+
+   });
+ });
+</script>
