@@ -1,0 +1,66 @@
+<div class="col-xs-8">
+  <div class="card">
+    <div class="card__section">
+      <h4>My Mentors</h4>
+      <% if @mentors.count > 0 %>
+        <table
+          class="table--has-border" id="mentors-table">
+          <thead>
+            <th>First Name</th>
+            <th>Last Type</th>
+            <th>Email</th>
+            <th></th>
+          </thead>
+          <tbody>
+              <% @mentors.each do |mentor| %>
+                <tr>
+                    <td><%= mentor.first_name %></td>
+                    <td><%= mentor.last_name %></td>
+                    <td><%= mentor.email %></td>
+                    <td><%= link_to('Schedule Session', new_mentoring_session_path ) %></td>
+                </tr>
+              <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <h4 class="text-center">You currently don't have any mentors. Find one below!</h4>
+      <% end %>
+    </div>
+    
+    <div class="card__section">
+      <% if current_user.enterprise.users.enterprise_mentors(current_user.id).count > 0 %>
+        <h4>Available Mentors</h4>
+        <div class="card">
+          <div class="card__section">
+            <table
+              class="table--has-border data-table"
+              data-no-sortable='3'
+              data-source="<%= mentorings_path(mentor: true, format: :json) %>">
+              <thead>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Email</th>
+                <th>Request</th>
+              </thead>
+              <tbody></tbody>
+            </table>
+          
+          </div>
+        </div>
+
+      <% else %>
+        <h4 class="text-center">There are currently no mentors available for <%= current_user.enterprise.name %></h4>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).on('page:change', function() {
+    $(document).off('page:change');
+
+    $('#mentors-table').dataTable(Utility.mergeWithDTDefaults({
+        order: [[2, "asc"]]
+    }));
+  });
+</script>

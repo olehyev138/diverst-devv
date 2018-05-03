@@ -1,0 +1,49 @@
+<div class="col-xs-8">
+  <% if @sessions.count > 0 %>
+    <div class="card">
+    <div class="card__section">
+        <h4>Leave feedback for past sessions</h4>
+        <% @sessions.each do |mentoring_session| %>
+          <div class="card__section card__section--border">
+            <%= link_to new_mentorship_rating_path(:mentoring_session_id => mentoring_session.id), class: "block block-section" do %>
+              <div class="flex-row flex-row--middle">
+                <div class="flex-row__cell flex-row__cell--grow">
+                  <small><%= mentoring_session.notes.html_safe %></small><br>
+                  <small class="muted"><%= mentoring_session.start.strftime("%m/%d/%Y %H:%M") %> - <%= mentoring_session.start.strftime("%m/%d/%Y %H:%M") %></small>
+                </div>
+                <div class="flex-row__cell">
+                  <span class="icon icon--chevron-right"></span>
+                </div>
+              </div>
+            <% end %>
+          </div>
+      <% end %>
+    </div>
+  </div>
+  <% end %>
+  <div class="card">
+    <div class="card__section">
+      <% if @ratings.count > 0 %>
+        <h4>Feedback for past sessions</h4>
+          <% @ratings.each do |rating| %>
+            <div class="card__section card__section--border">
+              <div class="flex-row flex-row--middle">
+                <div class="flex-row__cell flex-row__cell--grow">
+                  <small><%= rating.mentoring_session.notes.html_safe %></small><br>
+                  <small class="muted"><%= rating.mentoring_session.start.strftime("%m/%d/%Y %H:%M") %> - <%= rating.mentoring_session.start.strftime("%m/%d/%Y %H:%M") %></small>
+                </div>
+                <div class="flex-row__cell flex-row__cell--grow">
+                  <small><strong>OKRs Achieved? </strong><%= rating.okrs_achieved %></small><br>
+                  <small><strong>Session Rating: </strong><%= rating.rating %></small><br>
+                  <small><strong>Was the session valuable? </strong><%= rating.rating %></small><br>
+                  <small><strong>Attendees: </strong><%= rating.mentoring_session.users.map{|user| "#{user.first_name} #{user.last_name}"}.join(", ") %></small><br>
+                </div>
+              </div>
+            </div>
+        <% end %>
+      <% else %>
+        <h4 class="text-center">You currently don't have any feedback from previous mentorship sessions</h4>
+      <% end %>
+    </div>
+  </div>
+</div>

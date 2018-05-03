@@ -744,7 +744,8 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   end
 
   create_table "mentoring_interests", force: :cascade do |t|
-    t.string   "name",       limit: 191, null: false
+    t.integer  "enterprise_id", limit: 4
+    t.string   "name",          limit: 191, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -757,10 +758,11 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   end
 
   create_table "mentoring_requests", force: :cascade do |t|
-    t.string   "status",      limit: 191,   null: false
-    t.text     "notes",       limit: 65535
-    t.integer  "sender_id",   limit: 4,     null: false
-    t.integer  "receiver_id", limit: 4,     null: false
+    t.integer  "enterprise_id", limit: 4
+    t.string   "status",        limit: 191,   default: "pending", null: false
+    t.text     "notes",         limit: 65535
+    t.integer  "sender_id",     limit: 4,                         null: false
+    t.integer  "receiver_id",   limit: 4,                         null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -773,18 +775,21 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   end
 
   create_table "mentoring_sessions", force: :cascade do |t|
-    t.datetime "start",                                          null: false
-    t.datetime "end",                                            null: false
-    t.string   "format",     limit: 191,                         null: false
-    t.string   "link",       limit: 191
-    t.string   "status",     limit: 191,   default: "scheduled", null: false
-    t.text     "notes",      limit: 65535
+    t.integer  "enterprise_id", limit: 4
+    t.integer  "creator_id",    limit: 4,                           null: false
+    t.datetime "start",                                             null: false
+    t.datetime "end",                                               null: false
+    t.string   "format",        limit: 191,                         null: false
+    t.string   "link",          limit: 191
+    t.string   "status",        limit: 191,   default: "scheduled", null: false
+    t.text     "notes",         limit: 65535
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "mentoring_types", force: :cascade do |t|
-    t.string   "name",       limit: 191, null: false
+    t.integer  "enterprise_id", limit: 4
+    t.string   "name",          limit: 191, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -1031,18 +1036,19 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   end
 
   create_table "resources", force: :cascade do |t|
-    t.string   "title",             limit: 191
-    t.integer  "container_id",      limit: 4
-    t.string   "container_type",    limit: 191
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
-    t.string   "file_file_name",    limit: 191
-    t.string   "file_content_type", limit: 191
-    t.integer  "file_file_size",    limit: 4
+    t.string   "title",                limit: 191
+    t.integer  "container_id",         limit: 4
+    t.string   "container_type",       limit: 191
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.string   "file_file_name",       limit: 191
+    t.string   "file_content_type",    limit: 191
+    t.integer  "file_file_size",       limit: 4
     t.datetime "file_updated_at"
-    t.integer  "owner_id",          limit: 4
-    t.string   "resource_type",     limit: 191
-    t.string   "url",               limit: 191
+    t.integer  "owner_id",             limit: 4
+    t.string   "resource_type",        limit: 191
+    t.string   "url",                  limit: 191
+    t.integer  "mentoring_session_id", limit: 4
   end
 
   add_index "resources", ["container_type", "container_id"], name: "index_resources_on_container_type_and_container_id", using: :btree
@@ -1259,6 +1265,7 @@ ActiveRecord::Schema.define(version: 20180520224540) do
     t.datetime "locked_at"
     t.boolean  "mentee",                                    default: false
     t.boolean  "mentor",                                    default: false
+    t.text     "mentorship_description",      limit: 65535
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree
