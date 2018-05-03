@@ -140,4 +140,18 @@ RSpec.describe Budget, type: :model do
             expect(budget.status_title).to eq("Declined")
         end
     end
+    
+    describe "#destroy_callbacks" do
+        it "removes the child objects" do
+            budget = create(:budget)
+            checklist = create(:checklist, :budget => budget)
+            budget_item = create(:budget_item, :budget => budget)
+            
+            budget.destroy
+            
+            expect{Budget.find(budget.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Checklist.find(checklist.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{BudgetItem.find(budget_item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+        end
+    end
 end
