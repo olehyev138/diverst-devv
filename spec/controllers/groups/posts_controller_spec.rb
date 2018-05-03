@@ -44,7 +44,7 @@ RSpec.describe Groups::PostsController, type: :controller do
             let!(:news_link4) { create(:news_link, :group => group)}
             let!(:news_feed_link4) { create(:news_feed_link, news_link: news_link4, news_feed: news_feed, approved: true, created_at: Time.now - 3.hours) }
             let!(:news_link_segment) { create(:news_link_segment, segment: segment, news_link: news_link4) }
-            let!(:news_feed_link_segment) { create(:news_feed_link_segment, segment: segment, news_feed_link: news_feed_link4, link_segment: news_link_segment ) }
+            let!(:news_feed_link_segment) { create(:news_feed_link_segment, segment: segment, news_feed_link: news_feed_link4, news_link_segment: news_link_segment ) }
             let!(:user) { create :user }
             let!(:other_user) { create(:user) }
             let!(:other_group) { create(:group, enterprise: other_user.enterprise, owner: other_user) }

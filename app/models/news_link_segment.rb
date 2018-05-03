@@ -2,7 +2,7 @@ class NewsLinkSegment < ActiveRecord::Base
     belongs_to :news_link
     belongs_to :segment
 
-    has_one :news_feed_link_segment, :as => :link_segment, :dependent => :destroy
+    has_one :news_feed_link_segment, :dependent => :destroy
 
     validates :news_link_id,    presence: true, :on => :save
     validates :segment_id,      presence: true, :on => :save

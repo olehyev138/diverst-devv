@@ -732,22 +732,24 @@ ActiveRecord::Schema.define(version: 20180324181536) do
   end
 
   create_table "news_feed_link_segments", force: :cascade do |t|
-    t.integer  "news_feed_link_id", limit: 4
-    t.integer  "segment_id",        limit: 4
-    t.integer  "link_segment_id",   limit: 4
-    t.string   "link_segment_type", limit: 191
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.integer  "news_feed_link_id",         limit: 4
+    t.integer  "segment_id",                limit: 4
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.integer  "news_link_segment_id",      limit: 4
+    t.integer  "group_messages_segment_id", limit: 4
+    t.integer  "social_link_segment_id",    limit: 4
   end
 
   create_table "news_feed_links", force: :cascade do |t|
-    t.integer  "news_feed_id",     limit: 4
-    t.boolean  "approved",                   default: false
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
-    t.integer  "news_link_id",     limit: 4
-    t.integer  "group_message_id", limit: 4
-    t.integer  "social_link_id",   limit: 4
+    t.integer  "news_feed_id",      limit: 4
+    t.boolean  "approved",                      default: false
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
+    t.string   "link_segment_type", limit: 191
+    t.integer  "news_link_id",      limit: 4
+    t.integer  "group_message_id",  limit: 4
+    t.integer  "social_link_id",    limit: 4
   end
 
   create_table "news_feeds", force: :cascade do |t|

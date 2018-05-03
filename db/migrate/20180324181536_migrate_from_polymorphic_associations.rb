@@ -52,6 +52,10 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     add_reference :news_feed_links, :group_message
     add_reference :news_feed_links, :social_link
     
+    add_reference :news_feed_link_segments, :news_link_segment
+    add_reference :news_feed_link_segments, :group_messages_segment
+    add_reference :news_feed_link_segments, :social_link_segment
+    
     # migrate existing polymorphic associations to new structure
     Tag.where(:taggable_type => "Resource").update_all("resource_id = taggable_id")
     
@@ -110,32 +114,39 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     NewsFeedLink.where(:link_type => "GroupMessage").update_all("group_message_id = link_id")
     NewsFeedLink.where(:link_type => "SocialLink").update_all("social_link_id = link_id")
     
+    # news_feed_link_segment for news_link_segments, group_message_segments, social_link_segements
+    NewsFeedLinkSegment.where(:link_segment_type => "NewsLinkSegment").update_all("news_link_segment_id = link_segment_id")
+    NewsFeedLinkSegment.where(:link_segment_type => "GroupMessagesSegment").update_all("group_messages_segment_id = link_segment_id")
+    NewsFeedLinkSegment.where(:link_segment_type => "SocialLinkSegment").update_all("social_link_segment_id = link_segment_id")
+    
     # remove polymorphic fields
-    remove_reference :tags,                 :taggable,    polymorphic: true
-    remove_reference :budgets,              :subject,     polymorphic: true
-    remove_reference :checklists,           :subject,     polymorphic: true
-    remove_reference :checklist_items,      :container,   polymorphic: true
-    remove_reference :fields,               :container,   polymorphic: true
-    remove_reference :folders,              :container,   polymorphic: true
-    remove_reference :folder_shares,        :container,   polymorphic: true
-    remove_reference :graphs,               :collection,  polymorphic: true
-    remove_reference :user_reward_actions,  :entity,      polymorphic: true
-    remove_reference :resources,            :container,   polymorphic: true
-    remove_reference :news_feed_links,      :link,        polymorphic: true
+    remove_reference :tags,                     :taggable,      polymorphic: true
+    remove_reference :budgets,                  :subject,       polymorphic: true
+    remove_reference :checklists,               :subject,       polymorphic: true
+    remove_reference :checklist_items,          :container,     polymorphic: true
+    remove_reference :fields,                   :container,     polymorphic: true
+    remove_reference :folders,                  :container,     polymorphic: true
+    remove_reference :folder_shares,            :container,     polymorphic: true
+    remove_reference :graphs,                   :collection,    polymorphic: true
+    remove_reference :user_reward_actions,      :entity,        polymorphic: true
+    remove_reference :resources,                :container,     polymorphic: true
+    remove_reference :news_feed_links,          :link,          polymorphic: true
+    remove_reference :news_feed_link_segments,  :link_segment,  polymorphic: true
   end
   
   def down
-    add_reference :tags,                :taggable,    polymorphic: true
-    add_reference :budgets,             :subject,     polymorphic: true
-    add_reference :checklists,          :subject,     polymorphic: true
-    add_reference :checklist_items,     :container,   polymorphic: true
-    add_reference :fields,              :container,   polymorphic: true
-    add_reference :folders,             :container,   polymorphic: true
-    add_reference :folder_shares,       :container,   polymorphic: true
-    add_reference :graphs,              :collection,  polymorphic: true
-    add_reference :user_reward_actions, :entity,      polymorphic: true
-    add_reference :resources,           :container,   polymorphic: true
-    add_reference :news_feed_links,     :link,        polymorphic: true
+    add_reference :tags,                    :taggable,      polymorphic: true
+    add_reference :budgets,                 :subject,       polymorphic: true
+    add_reference :checklists,              :subject,       polymorphic: true
+    add_reference :checklist_items,         :container,     polymorphic: true
+    add_reference :fields,                  :container,     polymorphic: true
+    add_reference :folders,                 :container,     polymorphic: true
+    add_reference :folder_shares,           :container,     polymorphic: true
+    add_reference :graphs,                  :collection,    polymorphic: true
+    add_reference :user_reward_actions,     :entity,        polymorphic: true
+    add_reference :resources,               :container,     polymorphic: true
+    add_reference :news_feed_links,         :link,          polymorphic: true
+    add_reference :news_feed_link_segments, :link_segment,  polymorphic: true
     
     # migrate foreign keys back to polymorphic associations
     Tag.where.not(:resource_id => nil).update_all("taggable_id = resource_id, taggable_type = 'Resource'")
@@ -195,6 +206,12 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     NewsFeedLink.where.not(:group_message_id => nil).update_all("link_id = group_message_id, link_type = 'GroupMessage'")
     NewsFeedLink.where.not(:social_link_id => nil).update_all("link_id = social_link_id, link_type = 'SocialLink'")
     
+    # news_feed_link_segments
+    NewsFeedLinkSegment.where.not(:news_link_segment_id => nil).update_all("link_segment_id = news_link_segment_id, link_segment_type = 'NewsLinkSegment'")
+    NewsFeedLinkSegment.where.not(:group_messages_segment_id => nil).update_all("link_segment_id = group_messages_segment_id, link_segment_type = 'GroupMessagesSegment'")
+    NewsFeedLinkSegment.where.not(:social_link_segment_id => nil).update_all("link_segment_id = social_link_segment_id, link_segment_type = 'SocialLinkSegment'")
+    
+    
     remove_reference :tags,     :resource
     
     remove_reference :budgets,  :event
@@ -241,5 +258,9 @@ class MigrateFromPolymorphicAssociations < ActiveRecord::Migration
     remove_reference :news_feed_links,  :news_link
     remove_reference :news_feed_links,  :group_message
     remove_reference :news_feed_links,  :social_link
+    
+    remove_reference :news_feed_link_segments, :news_link_segment
+    remove_reference :news_feed_link_segments, :group_messages_segment
+    remove_reference :news_feed_link_segments, :social_link_segment
   end
 end
