@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180417155716) do
+ActiveRecord::Schema.define(version: 20180501152704) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -278,8 +278,8 @@ ActiveRecord::Schema.define(version: 20180417155716) do
     t.integer  "email_id",                      limit: 4
     t.datetime "created_at",                                              null: false
     t.datetime "updated_at",                                              null: false
-    t.integer  "enterprise_email_variable_id",  limit: 4
     t.integer  "enterprise_email_variables_id", limit: 4
+    t.integer  "enterprise_email_variable_id",  limit: 4
     t.boolean  "downcase",                                default: false
     t.boolean  "upcase",                                  default: false
     t.boolean  "titleize",                                default: false
@@ -748,6 +748,16 @@ ActiveRecord::Schema.define(version: 20180417155716) do
     t.datetime "updated_at",              null: false
   end
 
+  create_table "news_feed_likes", force: :cascade do |t|
+    t.integer  "news_feed_link_id", limit: 4
+    t.integer  "user_id",           limit: 4
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+  end
+
+  add_index "news_feed_likes", ["news_feed_link_id"], name: "index_news_feed_likes_on_news_feed_link_id", using: :btree
+  add_index "news_feed_likes", ["user_id"], name: "index_news_feed_likes_on_user_id", using: :btree
+
   create_table "news_feed_link_segments", force: :cascade do |t|
     t.integer  "news_feed_link_id", limit: 4
     t.integer  "segment_id",        limit: 4
@@ -1171,6 +1181,8 @@ ActiveRecord::Schema.define(version: 20180417155716) do
   add_foreign_key "budgets", "users", column: "approver_id"
   add_foreign_key "budgets", "users", column: "requester_id"
   add_foreign_key "custom_texts", "enterprises"
+  add_foreign_key "news_feed_likes", "news_feed_links"
+  add_foreign_key "news_feed_likes", "users"
   add_foreign_key "polls", "initiatives"
   add_foreign_key "reward_actions", "enterprises"
   add_foreign_key "rewards", "enterprises"
