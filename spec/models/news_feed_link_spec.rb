@@ -4,7 +4,7 @@ RSpec.describe NewsFeedLink, type: :model do
     include ActiveJob::TestHelper
 
     describe 'validations' do
-        let(:news_feed_link) { FactoryGirl.build_stubbed(:news_feed_link) }
+        let(:news_feed_link) { build_stubbed(:news_feed_link) }
 
         it{ expect(news_feed_link).to validate_presence_of(:news_feed_id) }
         it{ expect(news_feed_link).to validate_presence_of(:link_id) }
@@ -18,10 +18,10 @@ RSpec.describe NewsFeedLink, type: :model do
         # it { expect(news_feed_link).to delegate_method(:segment).to(:news_feed_link_segment) }
     end
 
-    describe 'test callback' do 
+    describe 'test callback' do
         let!(:news_feed_link) { build(:news_feed_link) }
 
-        it '#approve_link' do 
+        it '#approve_link' do
             expect(news_feed_link).to receive(:approve_link)
             news_feed_link.save
         end

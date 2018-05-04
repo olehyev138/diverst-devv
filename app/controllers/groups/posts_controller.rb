@@ -2,7 +2,7 @@ class Groups::PostsController < ApplicationController
     before_action :authenticate_user!
     before_action :set_group
     before_action :set_page,    :only => [:index, :pending]
-    before_action :set_link,    :only => [:approve]
+    before_action :set_link,    :only => [:approve, :pin, :unpin]
 
     layout 'erg'
 
@@ -49,6 +49,22 @@ class Groups::PostsController < ApplicationController
             flash[:alert] = "Link not approved"
         end
         redirect_to :back
+    end
+
+    def pin
+      @link.is_pinned = true
+      if !@link.save
+        flash[:alert] = "Link was not pinned"
+      end
+      redirect_to :back
+    end
+
+    def unpin
+      @link.is_pinned = false
+      if !@link.save
+        flash[:alert] = "Link was not unpinned"
+      end
+      redirect_to :back
     end
 
     protected

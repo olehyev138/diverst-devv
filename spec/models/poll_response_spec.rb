@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe PollResponse do
 
   describe 'test associations' do
-    let!(:poll_response) { build(:poll_response) }
+    let!(:poll_response) { build_stubbed(:poll_response) }
 
     it { expect(poll_response).to belong_to(:poll) }
     it { expect(poll_response).to belong_to(:user) }

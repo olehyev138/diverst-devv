@@ -11,8 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180424205719) do
-
+ActiveRecord::Schema.define(version: 20180427143546) do
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
     t.string   "trackable_type", limit: 191
@@ -255,6 +254,7 @@ ActiveRecord::Schema.define(version: 20180424205719) do
     t.text    "dci_abbreviation",  limit: 65535
     t.text    "member_preference", limit: 65535
     t.text    "parent",            limit: 65535
+    t.text    "sub_erg",           limit: 65535
   end
 
   add_index "custom_texts", ["enterprise_id"], name: "index_custom_texts_on_enterprise_id", using: :btree
@@ -275,15 +275,14 @@ ActiveRecord::Schema.define(version: 20180424205719) do
   end
 
   create_table "email_variables", force: :cascade do |t|
-    t.integer  "email_id",                      limit: 4
-    t.datetime "created_at",                                              null: false
-    t.datetime "updated_at",                                              null: false
-    t.integer  "enterprise_email_variable_id",  limit: 4
-    t.integer  "enterprise_email_variables_id", limit: 4
-    t.boolean  "downcase",                                default: false
-    t.boolean  "upcase",                                  default: false
-    t.boolean  "titleize",                                default: false
-    t.boolean  "pluralize",                               default: false
+    t.integer  "email_id",                     limit: 4
+    t.datetime "created_at",                                             null: false
+    t.datetime "updated_at",                                             null: false
+    t.integer  "enterprise_email_variable_id", limit: 4
+    t.boolean  "downcase",                               default: false
+    t.boolean  "upcase",                                 default: false
+    t.boolean  "titleize",                               default: false
+    t.boolean  "pluralize",                              default: false
   end
 
   create_table "emails", force: :cascade do |t|

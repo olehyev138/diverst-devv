@@ -3,13 +3,13 @@
 <% if @group.group_category_type.nil? %>
 <div class="card card--secondary">
 	<div class="card__section">
-		Sub-<%= c_t(:erg).titleize.pluralize %>(<%= @group.children.count %>)
+		<%= c_t(:sub_erg).pluralize %>(<%= @group.children.count %>)
 
 		<% if policy(@group).erg_leader_permissions? %>
 		<div class="dropdown">
 			<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
 			<div class="dropdown-content">
-				<p>Create Categories for Sub-<%= c_t(:erg).titleize.pluralize %> <%= link_to "Here", group_categories_url(parent_id: @group.id) %></p>
+				<p>Create Categories for <%= c_t(:sub_erg).pluralize %> <%= link_to "Here", group_categories_url(parent_id: @group.id) %></p>
 			</div>
 		</div>
 		<% end %>

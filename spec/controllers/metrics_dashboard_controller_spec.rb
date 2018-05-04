@@ -42,14 +42,15 @@ RSpec.describe MetricsDashboardsController, type: :controller do
         metrics_dashboard
         create_list(:group, 2, enterprise: user.enterprise)
         create_list(:segment, 3, enterprise: user.enterprise)
-        create_list(:resource, 4, container: user.enterprise)
+        folder = create(:folder, container_id: user.enterprise.id, container_type: "Enterprise")
+        create_list(:resource, 4, container: folder)
         create_list(:poll, 2, enterprise: user.enterprise)
         get_index
       end
 
       it 'returns correct data for general_metrics' do
         expect(assigns[:general_metrics])
-        .to eq ({:nb_users=>1, :nb_ergs=>2, :nb_segments=>3, :nb_resources=>4, :nb_polls=>2, :nb_ongoing_campaigns=>0, :average_nb_members_per_group=>nil})
+        .to eq ({:nb_users=>1, :nb_ergs=>2, :nb_segments=>3, :nb_resources=>4,  :nb_groups_resources=>0, :nb_polls=>2, :nb_ongoing_campaigns=>0, :average_nb_members_per_group=>nil})
       end
 
       it "return metrics" do
@@ -175,7 +176,7 @@ RSpec.describe MetricsDashboardsController, type: :controller do
     context 'with logged user' do
       context "with valid token" do
         login_user_from_let
-  
+
         before do
           create_list(:graph, 2, collection: metrics_dashboard)
           metrics_dashboard.shareable_token #Touch token, so it is initialized
