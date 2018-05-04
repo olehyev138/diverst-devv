@@ -2,9 +2,32 @@ require 'rails_helper'
 
 RSpec.describe Field do
   describe "when validating" do
-    let(:field){ build_stubbed(:field) }
+    let(:field){ build(:field, container: build(:enterprise)) }
+    let(:field1) { build(:field, container: build(:segments_field)) }
 
-    it { expect(field).to validate_presence_of(:title) }
+    context 'validate presence of title for field' do
+      it 'valid if title is present' do
+        field.title = "title"
+        expect(field).to be_valid
+      end
+
+      it 'invalid if title is absent' do
+        field.title = ""
+        expect(field).not_to be_valid
+      end
+    end
+
+    context 'validate presence of title for field1' do
+      it 'valid if title is present' do
+        field1.title = "title"
+        expect(field1).to be_valid
+      end
+
+      it 'valid if title is absent' do
+        field1.title = ""
+        expect(field1).not_to be_valid
+      end
+    end
   end
 
   describe ".numeric?" do

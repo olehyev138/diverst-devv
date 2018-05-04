@@ -13,9 +13,9 @@ RSpec.describe Match, type: :model do
 
   describe "update_score" do
     it "updates the score" do
-      user1 = create(:user)
-      user2 = create(:user)
-      topic = create(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
+      user1 = build(:user)
+      user2 = build(:user)
+      topic = build(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
 
       match = create(:match, :user1 => user1, :user2 => user2, :topic => topic)
       match.update_score
@@ -26,9 +26,9 @@ RSpec.describe Match, type: :model do
 
   describe "set_status" do
     it "sets the status for user1 to 0" do
-      user1 = create(:user)
-      user2 = create(:user)
-      topic = create(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
+      user1 = build(:user)
+      user2 = build(:user)
+      topic = build(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
 
       match = create(:match, :user1 => user1, :user2 => user2, :topic => topic)
       match.set_status(user: user1, status: "accepted")
@@ -37,9 +37,9 @@ RSpec.describe Match, type: :model do
     end
 
     it "sets the status for user2 to 0" do
-      user1 = create(:user)
-      user2 = create(:user)
-      topic = create(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
+      user1 = build(:user)
+      user2 = build(:user)
+      topic = build(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
 
       match = create(:match, :user1 => user1, :user2 => user2, :topic => topic)
       match.set_status(user: user2, status: "accepted")
@@ -48,10 +48,10 @@ RSpec.describe Match, type: :model do
     end
 
     it "fails" do
-      user1 = create(:user)
-      user2 = create(:user)
-      user3 = create(:user)
-      topic = create(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
+      user1 = build(:user)
+      user2 = build(:user)
+      user3 = build(:user)
+      topic = build(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
 
       match = create(:match, :user1 => user1, :user2 => user2, :topic => topic)
       expect{match.set_status(user: user3, status: "accepted")}.to raise_error Exception
@@ -60,9 +60,9 @@ RSpec.describe Match, type: :model do
 
   describe "set_rating" do
     it "sets the rating for user1 to 0" do
-      user1 = create(:user)
-      user2 = create(:user)
-      topic = create(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
+      user1 = build(:user)
+      user2 = build(:user)
+      topic = build(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
 
       match = create(:match, :user1 => user1, :user2 => user2, :topic => topic)
       match.set_rating(user: user1, rating: 0)
@@ -71,9 +71,9 @@ RSpec.describe Match, type: :model do
     end
 
     it "sets the rating for user2 to 1" do
-      user1 = create(:user)
-      user2 = create(:user)
-      topic = create(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
+      user1 = build(:user)
+      user2 = build(:user)
+      topic = build(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
 
       match = create(:match, :user1 => user1, :user2 => user2, :topic => topic)
       match.set_rating(user: user2, rating: 1)
@@ -82,10 +82,10 @@ RSpec.describe Match, type: :model do
     end
 
     it "raises error" do
-      user1 = create(:user)
-      user2 = create(:user)
-      user3 = create(:user)
-      topic = create(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
+      user1 = build(:user)
+      user2 = build(:user)
+      user3 = build(:user)
+      topic = build(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
 
       match = create(:match, :user1 => user1, :user2 => user2, :topic => topic)
 
@@ -96,9 +96,9 @@ RSpec.describe Match, type: :model do
 
   describe "status_for" do
     it "retrieves the status for user1" do
-      user1 = create(:user)
-      user2 = create(:user)
-      topic = create(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
+      user1 = build(:user)
+      user2 = build(:user)
+      topic = build(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
 
       match = create(:match, :user1 => user1, :user2 => user2, :topic => topic)
       match.status_for(user1)
@@ -107,9 +107,9 @@ RSpec.describe Match, type: :model do
     end
 
     it "retrieves the status for user2" do
-      user1 = create(:user)
-      user2 = create(:user)
-      topic = create(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
+      user1 = build(:user)
+      user2 = build(:user)
+      topic = build(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
 
       match = create(:match, :user1 => user1, :user2 => user2, :topic => topic)
 
@@ -117,10 +117,10 @@ RSpec.describe Match, type: :model do
     end
 
     it "raises error" do
-      user1 = create(:user)
-      user2 = create(:user)
-      user3 = create(:user)
-      topic = create(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
+      user1 = build(:user)
+      user2 = build(:user)
+      user3 = build(:user)
+      topic = build(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
 
       match = create(:match, :user1 => user1, :user2 => user2, :topic => topic)
       expect{match.status_for(user3)}.to raise_error Exception, "User not part of match"
@@ -129,9 +129,9 @@ RSpec.describe Match, type: :model do
 
   describe "rating_for" do
     it "retrieves the rating for user1" do
-      user1 = create(:user)
-      user2 = create(:user)
-      topic = create(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
+      user1 = build(:user)
+      user2 = build(:user)
+      topic = build(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
 
       match = create(:match, :user1 => user1, :user2 => user2, :topic => topic)
       match.set_rating(user: user1, rating: 0)
@@ -140,9 +140,9 @@ RSpec.describe Match, type: :model do
     end
 
     it "retrieves the rating for user2" do
-      user1 = create(:user)
-      user2 = create(:user)
-      topic = create(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
+      user1 = build(:user)
+      user2 = build(:user)
+      topic = build(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
 
       match = create(:match, :user1 => user1, :user2 => user2, :topic => topic)
       match.set_rating(user: user2, rating: 1)
@@ -151,10 +151,10 @@ RSpec.describe Match, type: :model do
     end
 
     it "raises error" do
-      user1 = create(:user)
-      user2 = create(:user)
-      user3 = create(:user)
-      topic = create(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
+      user1 = build(:user)
+      user2 = build(:user)
+      user3 = build(:user)
+      topic = build(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
 
       match = create(:match, :user1 => user1, :user2 => user2, :topic => topic)
       expect{match.rating_for(user3)}.to raise_error Exception, "User not part of match"
@@ -163,9 +163,9 @@ RSpec.describe Match, type: :model do
 
   describe "other" do
     it "retrieves user2" do
-      user1 = create(:user)
-      user2 = create(:user)
-      topic = create(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
+      user1 = build(:user)
+      user2 = build(:user)
+      topic = build(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
 
       match = create(:match, :user1 => user1, :user2 => user2, :topic => topic)
 
@@ -173,9 +173,9 @@ RSpec.describe Match, type: :model do
     end
 
     it "retrieves user1" do
-      user1 = create(:user)
-      user2 = create(:user)
-      topic = create(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
+      user1 = build(:user)
+      user2 = build(:user)
+      topic = build(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
 
       match = create(:match, :user1 => user1, :user2 => user2, :topic => topic)
 
@@ -183,10 +183,10 @@ RSpec.describe Match, type: :model do
     end
 
     it "raises error" do
-      user1 = create(:user)
-      user2 = create(:user)
-      user3 = create(:user)
-      topic = create(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
+      user1 = build(:user)
+      user2 = build(:user)
+      user3 = build(:user)
+      topic = build(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
 
       match = create(:match, :user1 => user1, :user2 => user2, :topic => topic)
       expect{match.other(user3)}.to raise_error Exception, "User not part of match"
@@ -195,9 +195,9 @@ RSpec.describe Match, type: :model do
 
   describe "both_accepted?" do
     it "returns true" do
-      user1 = create(:user)
-      user2 = create(:user)
-      topic = create(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
+      user1 = build(:user)
+      user2 = build(:user)
+      topic = build(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
 
       match = create(:match, :user1 => user1, :user2 => user2, :topic => topic, :user1_status => 1, :user2_status => 1)
 
@@ -205,9 +205,9 @@ RSpec.describe Match, type: :model do
     end
 
     it "returns false" do
-      user1 = create(:user)
-      user2 = create(:user)
-      topic = create(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
+      user1 =  build(:user)
+      user2 =  build(:user)
+      topic =  build(:topic, :user_id => user1.id, :enterprise => user1.enterprise)
 
       match = create(:match, :user1 => user1, :user2 => user2, :topic => topic, :user1_status => 1, :user2_status => 0)
 
@@ -229,8 +229,8 @@ RSpec.describe Match, type: :model do
 
   describe "soon_expired" do
     it "returns 1 item" do
-      user_1 = create(:user)
-      user_2 = create(:user)
+      user_1 = build(:user)
+      user_2 = build(:user)
       create(:match, :archived => false, :both_accepted_at => 10.days.ago, :user1 => user_1, :user2 => user_2, :user1_status => 1, :user2_status => 1)
 
       expect(Match.soon_expired.count).to eq(1)
@@ -239,8 +239,8 @@ RSpec.describe Match, type: :model do
 
   describe "expired" do
     it "returns 1 item" do
-      user_1 = create(:user)
-      user_2 = create(:user)
+      user_1 = build(:user)
+      user_2 = build(:user)
       create(:match, :archived => false, :both_accepted_at => 15.days.ago, :user1 => user_1, :user2 => user_2, :user1_status => 1, :user2_status => 1)
 
       expect(Match.expired.count).to eq(1)
@@ -251,8 +251,8 @@ RSpec.describe Match, type: :model do
     it "sends notification to users" do
       allow_any_instance_of(User).to receive(:notify)
 
-      user_1 = create(:user)
-      user_2 = create(:user)
+      user_1 = build(:user)
+      user_2 = build(:user)
       match = create(:match, :archived => false, :both_accepted_at => 15.days.ago, :user1 => user_1, :user2 => user_2, :user1_status => 1, :user2_status => 1)
       match.both_accepted_notification
 
@@ -264,8 +264,8 @@ RSpec.describe Match, type: :model do
     it "sends notification to users" do
       allow_any_instance_of(User).to receive(:notify)
 
-      user_1 = create(:user)
-      user_2 = create(:user)
+      user_1 = build(:user)
+      user_2 = build(:user)
       match = create(:match, :archived => false, :both_accepted_at => 15.days.ago, :user1 => user_1, :user2 => user_2, :user1_status => 1, :user2_status => 1)
       match.expires_soon_notification
 
@@ -277,8 +277,8 @@ RSpec.describe Match, type: :model do
     it "sends notification to users" do
       allow_any_instance_of(User).to receive(:notify)
 
-      user_1 = create(:user)
-      user_2 = create(:user)
+      user_1 = build(:user)
+      user_2 = build(:user)
       match = create(:match, :archived => false, :both_accepted_at => 15.days.ago, :user1 => user_1, :user2 => user_2, :user1_status => 1, :user2_status => 1)
       match.left_notification
 
@@ -288,8 +288,8 @@ RSpec.describe Match, type: :model do
 
   describe "conversation_state?" do
     it "returns true" do
-      user_1 = create(:user)
-      user_2 = create(:user)
+      user_1 = build(:user)
+      user_2 = build(:user)
       match = create(:match, :archived => false, :both_accepted_at => 15.days.ago, :user1 => user_1, :user2 => user_2, :user1_status => 1, :user2_status => 1)
 
       expect(match.conversation_state?).to be(true)
@@ -298,16 +298,16 @@ RSpec.describe Match, type: :model do
 
   describe "expires_soon_for?" do
     it "returns false" do
-      user_1 = create(:user)
-      user_2 = create(:user)
+      user_1 = build(:user)
+      user_2 = build(:user)
       match = create(:match, :archived => false, :both_accepted_at => 15.days.ago, :user1 => user_1, :user2 => user_2, :user1_status => 1, :user2_status => 1)
 
       expect(match.expires_soon_for?(user: user_1)).to be(false)
     end
 
     it "returns true" do
-      user_1 = create(:user)
-      user_2 = create(:user)
+      user_1 = build(:user)
+      user_2 = build(:user)
       match = create(:match, :archived => false, :both_accepted_at => 10.days.ago, :user1 => user_1, :user2 => user_2, :user1_status => 1, :user2_status => 1)
 
       expect(match.expires_soon_for?(user: user_1)).to be(true)
@@ -316,8 +316,8 @@ RSpec.describe Match, type: :model do
 
   describe "expiration_date" do
     it "returns date" do
-      user_1 = create(:user)
-      user_2 = create(:user)
+      user_1 = build(:user)
+      user_2 = build(:user)
       match = create(:match, :archived => false, :both_accepted_at => 15.days.ago, :user1 => user_1, :user2 => user_2, :user1_status => 1, :user2_status => 1)
 
       expect(match.expiration_date).to eq(match.both_accepted_at + Match.expiration_time)
@@ -326,8 +326,8 @@ RSpec.describe Match, type: :model do
 
   describe "saved?" do
     it "returns true" do
-      user_1 = create(:user)
-      user_2 = create(:user)
+      user_1 = build(:user)
+      user_2 = build(:user)
       match = create(:match, :user1 => user_1, :user2 => user_2, :user1_status => 3, :user2_status => 3)
 
       expect(match.saved?).to be(true)

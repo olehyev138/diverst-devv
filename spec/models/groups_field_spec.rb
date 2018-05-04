@@ -7,12 +7,12 @@ RSpec.describe GroupsField, type: :model do
 
     let!(:enterprise) { create(:enterprise) }
 
-    let!(:group_one) { create(:group, enterprise: enterprise) }
-    let!(:group_two) { create(:group, enterprise: enterprise) }
-    let!(:group_three) { create(:group, enterprise: enterprise) }
+    let!(:group_one) { build(:group, enterprise: enterprise) }
+    let!(:group_two) { build(:group, enterprise: enterprise) }
+    let!(:group_three) { build(:group, enterprise: enterprise) }
 
-    let!(:segment_one) { create(:segment, enterprise: enterprise) }
-    let!(:segment_two) { create(:segment, enterprise: enterprise) }
+    let!(:segment_one) { build(:segment, enterprise: enterprise) }
+    let!(:segment_two) { build(:segment, enterprise: enterprise) }
 
     let!(:user_one) { create(:user, enterprise: enterprise, groups: [group_one, group_two],
       segments: [segment_one], created_at: Date.yesterday) }
@@ -23,7 +23,7 @@ RSpec.describe GroupsField, type: :model do
     let!(:user_four) { create(:user, enterprise: enterprise, groups: [group_one, group_three],
       segments: [segment_one, segment_two], created_at: Date.today) }
 
-    before(:each) do
+    before do
       enterprise.fields = [field_one, field_two]
 
       user_one.info.merge(fields: [field_two], form_data: { field_two.id => "Yes" })

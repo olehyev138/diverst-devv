@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe Folder, type: :model do
 
     describe "when validating" do
-        let(:group) { create(:group) }
-        let(:folder){ create(:folder, :name => "test", :container => group) }
+        let(:group) { build_stubbed(:group) }
+        let(:folder){ build_stubbed(:folder, :name => "test", :container => group) }
 
         it { expect(folder).to have_many(:resources) }
         it { expect(folder).to have_many(:folder_shares) }
@@ -28,7 +28,7 @@ RSpec.describe Folder, type: :model do
 
     describe "#password" do
         it "doesnt create the password for the folder" do
-            folder = create(:folder)
+            folder = build_stubbed(:folder)
             expect(folder.password_digest).to be(nil)
         end
 
@@ -38,30 +38,30 @@ RSpec.describe Folder, type: :model do
         end
 
         it "saves the password for the folder when password_protected is true" do
-            folder = create(:folder, :password_protected => true, :password => "password", :password_confirmation => "password")
+            folder = build_stubbed(:folder, :password_protected => true, :password => "password", :password_confirmation => "password")
             expect(folder.password_digest).to_not be(nil)
         end
 
         it "saves the password for the folder when password_protected is true and doesn't validate the password" do
-            folder = create(:folder, :password_protected => true, :password => "password", :password_confirmation => "password")
+            folder = build_stubbed(:folder, :password_protected => true, :password => "password", :password_confirmation => "password")
             expect(folder.valid_password?("faksakdas")).to_not be(true)
         end
 
         it "saves the password for the folder when password_protected is true and validates the password" do
-            folder = create(:folder, :password_protected => true, :password => "password", :password_confirmation => "password")
+            folder = build_stubbed(:folder, :password_protected => true, :password => "password", :password_confirmation => "password")
             expect(folder.valid_password?("password")).to be(folder)
         end
     end
     
     describe '#parent' do
         it "returns nil" do
-            folder = create(:folder)
+            folder = build(:folder)
             expect(folder.parent).to be(nil)
         end
 
         it "returns parent" do
-            folder_1 = create(:folder)
-            folder_2 = create(:folder, :parent => folder_1)
+            folder_1 = build(:folder)
+            folder_2 = build(:folder, :parent => folder_1)
 
             expect(folder_2.parent).to_not be(nil)
             expect(folder_2.parent).to eq(folder_1)
@@ -70,7 +70,7 @@ RSpec.describe Folder, type: :model do
 
     describe '#children' do
         it "returns empty array" do
-            folder = create(:folder)
+            folder = build(:folder)
             expect(folder.children.length).to eq(0)
         end
 

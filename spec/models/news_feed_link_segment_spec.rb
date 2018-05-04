@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe NewsFeedLinkSegment, type: :model do
     describe 'validations' do
-        let(:news_feed_link_segment) { FactoryGirl.build_stubbed(:news_feed_link_segment) }
+        let(:news_feed_link_segment) { build_stubbed(:news_feed_link_segment) }
 
         it{ expect(news_feed_link_segment).to validate_presence_of(:news_feed_link) }
         it{ expect(news_feed_link_segment).to validate_presence_of(:segment) }

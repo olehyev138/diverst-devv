@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Resource, :type => :model do
 
   describe 'test associations' do
-    let(:resource) { build(:resource) }
+    let(:resource) { build_stubbed(:resource) }
 
     it { expect(resource).to belong_to(:container) }
     it { expect(resource).to belong_to(:owner).class_name('User') }
@@ -22,7 +22,7 @@ RSpec.describe Resource, :type => :model do
   end
 
   describe 'test callbacks' do
-      let(:resource) { build(:resource) }
+      let(:resource) { build_stubbed(:resource) }
 
     context 'before_validation' do
       it '#smart_add_url_protocol is called before validation' do
@@ -34,7 +34,7 @@ RSpec.describe Resource, :type => :model do
 
   describe '#extension' do
     it "returns the file's lowercase extension without the dot" do
-      resource = build(:resource)
+      resource = build_stubbed(:resource)
       expect(resource.file_extension).to eq 'csv'
     end
   end
@@ -96,7 +96,7 @@ RSpec.describe Resource, :type => :model do
 
   describe "#file_extension" do
     it "returns '' " do
-      resource = create(:resource, :file_file_name => nil, :file => nil)
+      resource = build(:resource, :file_file_name => nil, :file => nil)
       expect(resource.file_extension).to eq("")
     end
   end
