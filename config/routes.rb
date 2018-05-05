@@ -480,8 +480,7 @@ Rails.application.routes.draw do
   resources :emails
   resources :custom_texts, only: [:edit, :update]
 
-  resources :news_feed_likes, only: [:create, :unlike, :status]
-  match '/news_feed_likes/status' => 'news_feed_likes#status', :via => :get
+  resources :news_feed_likes, only: [:create, :unlike]
   match '/news_feed_likes/unlike' => 'news_feed_likes#unlike', :via => :delete
 
   match "*a", :to => "application#routing_error", :via => [:get, :post]
