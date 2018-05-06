@@ -1,7 +1,5 @@
 class View < ActiveRecord::Base
-  belongs_to :group_message
-  belongs_to :news_link
-  belongs_to :social_link
+  belongs_to :news_feed_link
 
   class << self
     def total_views

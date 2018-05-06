@@ -2,7 +2,6 @@ class GroupMessage < ActiveRecord::Base
     has_many :group_messages_segments
     has_many :segments, through: :group_messages_segments, :before_remove => :remove_segment_association
     has_many :comments, class_name: 'GroupMessageComment', foreign_key: :message_id
-    has_many :views
 
     belongs_to :owner, class_name: 'User'
     belongs_to :group
