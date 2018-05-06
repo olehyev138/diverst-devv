@@ -1,4 +1,6 @@
 class ViewDecorator < Draper::Decorator
+  require 'rails_helper'
+
   delegate_all
 
   # Define presentation-specific methods here. Helpers are accessed through
