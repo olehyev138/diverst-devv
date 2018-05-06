@@ -49,7 +49,8 @@ class User < ActiveRecord::Base
     has_many :leading_groups, through: :group_leaders, source: :group
     has_many :user_reward_actions
     has_many :reward_actions, through: :user_reward_actions
-
+    has_many :rewards, foreign_key: :responsible_id, :dependent => :destroy
+    
     has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: "private"
     validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
 

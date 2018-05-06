@@ -1,47 +1,46 @@
 class Enterprise < ActiveRecord::Base
     include ContainsResources
 
-    has_many :users, inverse_of: :enterprise
-    has_many :graph_fields, class_name: 'Field'
-    has_many :fields, -> { where elasticsearch_only: false }
-    has_many :topics, inverse_of: :enterprise
-    has_many :segments, inverse_of: :enterprise
-    has_many :groups, inverse_of: :enterprise
+    has_many :users, inverse_of: :enterprise, dependent: :destroy
+    has_many :graph_fields, class_name: 'Field', dependent: :destroy
+    has_many :fields, -> { where elasticsearch_only: false }, dependent: :destroy
+    has_many :topics, inverse_of: :enterprise, dependent: :destroy
+    has_many :segments, inverse_of: :enterprise, dependent: :destroy
+    has_many :groups, inverse_of: :enterprise, dependent: :destroy
     has_many :events, through: :groups
     has_many :initiatives, through: :groups
-    has_many :folders
-    has_many :folder_shares
+    has_many :folders, dependent: :destroy
+    has_many :folder_shares, dependent: :destroy
     has_many :shared_folders, through: :folder_shares, source: 'folder'
-    has_many :polls, inverse_of: :enterprise
-    has_many :mobile_fields, inverse_of: :enterprise
-    has_many :metrics_dashboards, inverse_of: :enterprise
-    has_many :user_roles, inverse_of: :enterprise
+    has_many :polls, inverse_of: :enterprise, dependent: :destroy
+    has_many :mobile_fields, inverse_of: :enterprise, dependent: :destroy
+    has_many :metrics_dashboards, inverse_of: :enterprise, dependent: :destroy
+    has_many :user_roles, inverse_of: :enterprise, dependent: :delete_all
     delegate :leaders, :to => :groups
     has_many :graphs, through: :metrics_dashboards
     has_many :poll_graphs, through: :polls, source: :graphs
-    has_many :campaigns
+    has_many :campaigns, dependent: :destroy
     has_many :questions, through: :campaigns
     has_many :answers, through: :questions
     has_many :answer_comments, through: :answers, source: :comments
     has_many :answer_upvotes, through: :answers, source: :votes
-    has_many :resources
-    has_many :yammer_field_mappings
-    has_many :emails
+    has_many :resources, dependent: :destroy
+    has_many :yammer_field_mappings, dependent: :destroy
+    has_many :emails, dependent: :destroy
     belongs_to :theme
 
-    has_many :expenses
-    has_many :expense_categories
+    has_many :expenses, dependent: :destroy
+    has_many :expense_categories, dependent: :destroy
     has_many :biases, through: :users, class_name: "Bias"
     has_many :departments
-    has_many :user_roles
-    has_many :policy_group_templates
-    has_many :rewards
-    has_many :reward_actions
-    has_many :badges
-    has_many :group_categories
-    has_many :group_category_types
+    has_many :policy_group_templates, dependent: :destroy
+    has_many :rewards, dependent: :destroy
+    has_many :reward_actions, dependent: :destroy
+    has_many :badges, dependent: :destroy
+    has_many :group_categories, dependent: :destroy
+    has_many :group_category_types, dependent: :destroy
 
-    has_one :custom_text
+    has_one :custom_text, dependent: :destroy
     
     accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
     accepts_nested_attributes_for :mobile_fields, reject_if: :all_blank, allow_destroy: true
@@ -51,7 +50,6 @@ class Enterprise < ActiveRecord::Base
 
     before_create :create_elasticsearch_only_fields
     before_validation :smart_add_url_protocol
-
 
     validates :idp_sso_target_url, url: { allow_blank: true }
     validates :cdo_name, :name, presence: true
@@ -70,7 +68,6 @@ class Enterprise < ActiveRecord::Base
 
     has_attached_file :onboarding_sponsor_media, s3_permissions: :private
     do_not_validate_attachment_file_type :onboarding_sponsor_media
-
 
     def custom_text
         super || create_custom_text
