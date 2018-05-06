@@ -56,6 +56,7 @@ module FeatureSpecRefactors
 			string.slice! phrase
 			string
 		end
+
 	end
 
 	module CustomMatchers
@@ -71,6 +72,12 @@ module FeatureSpecRefactors
 			eq color
 		end
 
+		[:custom_logo, :banner, :sponsor_image, :icon_image].each do |suffix|
+			define_method :"have_#{suffix}" do |image|
+				have_css("img[src*=#{image}]")
+			end
+		end
+
 		def have_default_logo
 			have_css('img[src*="logo.png"]')
 		end
@@ -79,20 +86,8 @@ module FeatureSpecRefactors
 			have_no_css('img[src*="/\Alogo.png\z/"]')
 		end
 
-		def have_custom_logo(image)
-			have_css("img[src*=#{image}]")
-		end
-
 		def have_no_banner
 			have_no_css('.enterprise-banner')
-		end
-
-		def have_banner(image)
-			have_css("img[src*=#{image}]")
-		end
-
-		def have_sponsor_image(image)
-			have_css("img[src*=#{image}]")
 		end
 
 		def have_sponsor_video(video)
@@ -105,6 +100,10 @@ module FeatureSpecRefactors
 
 		def disable_home_sponsor_message_button
 			page.find_field('enterprise[disable_sponsor_message]')
+		end
+
+		def have_flash_message(message)
+			have_content message
 		end
 	end
 
