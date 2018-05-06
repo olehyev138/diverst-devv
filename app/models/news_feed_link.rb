@@ -26,4 +26,19 @@ class NewsFeedLink < ActiveRecord::Base
             self.save!
         end
     end
+
+    # View Count methods
+    def increment_view(user)
+      view = views.find_or_create_by(user_id: user.id)
+      view.view_count += 1
+      view.save
+    end
+
+    def total_views
+      views.sum(:view_count)
+    end
+
+    def unique_views
+      views.all.count
+    end
 end

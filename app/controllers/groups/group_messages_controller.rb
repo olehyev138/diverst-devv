@@ -16,7 +16,7 @@ class Groups::GroupMessagesController < ApplicationController
 
         @new_comment = GroupMessageComment.new
 
-        View.increment_view(@message, current_user)
+        @message.increment_view(current_user)
     end
 
     def new
