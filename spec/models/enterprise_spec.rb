@@ -164,6 +164,7 @@ RSpec.describe Enterprise, type: :model do
             expect{ExpenseCategory.find(expense_category.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{UserRole.find(default_user_role.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{PolicyGroupTemplate.find(policy_group_template.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Resource.find(resource.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{Reward.find(reward.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{RewardAction.find(reward_action.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{Badge.find(badge.id)}.to raise_error(ActiveRecord::RecordNotFound)
