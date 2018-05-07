@@ -10,8 +10,6 @@ RSpec.describe View, type: :model do
   end
 
   describe 'associations' do
-    it { expect(view).to belong_to(:group_message) }
-    it { expect(view).to belong_to(:news_link) }
-    it { expect(view).to belong_to(:social_link) }
+    it { expect(view).to belong_to(:news_feed_link) }
   end
 end
