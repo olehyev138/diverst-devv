@@ -124,4 +124,10 @@ RSpec.feature 'DCI Management' do
 			expect(page).to have_no_content 'Ultimate Prize'
 		end
 	end
+
+
+	def c_t(type)
+				@custom_text ||= current_user.enterprise.custom_text rescue CustomText.new
+				@custom_text.send("#{type}_text")
+			end
 end

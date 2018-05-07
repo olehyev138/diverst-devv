@@ -50,7 +50,7 @@ RSpec.describe MetricsDashboardsController, type: :controller do
 
       it 'returns correct data for general_metrics' do
         expect(assigns[:general_metrics])
-        .to eq ({:nb_users=>1, :nb_ergs=>2, :nb_segments=>3, :nb_resources=>4,  :nb_groups_resources=>0, :nb_polls=>2, :nb_ongoing_campaigns=>0, :average_nb_members_per_group=>nil})
+        .to eq ({:nb_users=>1, :nb_ergs=>2, :nb_segments=>3, :nb_resources=>4, :nb_polls=>2, :nb_ongoing_campaigns=>0, :average_nb_members_per_group=>nil})
       end
 
       it "return metrics" do
@@ -182,35 +182,35 @@ RSpec.describe MetricsDashboardsController, type: :controller do
           metrics_dashboard.shareable_token #Touch token, so it is initialized
           get_show
         end
-  
+
          it "returns set metrics dashboard" do
           expect(assigns[:metrics_dashboard]).to eq metrics_dashboard
         end
-  
+
         it "render show template" do
           expect(response).to render_template :show
         end
-  
+
         it 'sets correct shareable token' do
           expect(assigns[:token]).to eq metrics_dashboard.shareable_token
         end
-  
+
         it 'return 2 graphs objects that belong to metrics_dashboard object' do
           expect(assigns[:graphs].count).to eq 2
           expect(assigns[:graphs]).to eq metrics_dashboard.graphs.includes(:field, :aggregation)
         end
       end
-      
+
       context "with no token" do
         login_user_from_let
-  
+
         before do
           metrics_dashboard.shareable_token = nil
           metrics_dashboard.save!
           metrics_dashboard.groups.destroy_all
           get_show
         end
-        
+
         it "render edit template" do
           expect(response).to render_template :edit
         end
