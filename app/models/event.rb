@@ -3,15 +3,15 @@ class Event < ActiveRecord::Base
     belongs_to :group
     belongs_to :owner, :class_name => "User"
     
-    has_many :budgets
-    has_many :events_segments
+    has_many :budgets, :dependent => :destroy
+    has_many :events_segments, :dependent => :destroy
     has_many :segments, through: :events_segments
-    has_many :event_attendances
+    has_many :event_attendances, :dependent => :destroy
     has_many :attendees, through: :event_attendances, source: :user
-    has_many :event_invitees
+    has_many :event_invitees, :dependent => :destroy
     has_many :invitees, through: :event_invitees, source: :user
-    has_many :comments, class_name: "EventComment"
-    has_many :fields
+    has_many :comments, class_name: "EventComment", :dependent => :destroy
+    has_many :fields, :dependent => :delete_all
 
     scope :past, -> { where('end < ?', Time.current).order(start: :desc) }
     scope :upcoming, -> { where('start > ?', Time.current).order(start: :asc) }

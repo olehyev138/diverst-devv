@@ -62,7 +62,7 @@ class Field < ActiveRecord::Base
 
   def enterprise
     return Enterprise.find_by_id(enterprise_id) if enterprise_id.present?
-    return event.enterprise if event_id.present?
+    return event.group.enterprise if event_id.present?
     return group.enterprise if group_id.present?
     return poll.enterprise if poll_id.present?
     return initiative.enterprise if initiative_id.present?
