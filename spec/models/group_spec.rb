@@ -534,7 +534,6 @@ RSpec.describe Group, :type => :model do
         end
     end
 
-
     describe "#private scopes" do
         it "should return correct group counts" do
             enterprise = create(:enterprise)
@@ -544,6 +543,55 @@ RSpec.describe Group, :type => :model do
             expect(enterprise.groups.count).to eq(8)
             expect(enterprise.groups.is_private.count).to eq(5)
             expect(enterprise.groups.non_private.count).to eq(3)
+        end
+    end
+    
+    describe "#destroy_callbacks" do
+        it "removes the child objects" do
+            group = create(:group)
+            news_feed = create(:news_feed, :group => group)
+            user_group = create(:user_group, :group => group)
+            groups_poll = create(:groups_poll, :group => group)
+            event = create(:event, :group => group)
+            initiative = create(:initiative, :owner_group_id => group.id)
+            budget = create(:budget, :group => group)
+            group_message = create(:group_message, :group => group)
+            news_link = create(:news_link, :group => group)
+            social_link = create(:social_link, :group => group)
+            invitation_segments_group = create(:invitation_segments_group, :group => group)
+            resource = create(:resource, :group => group)
+            folder = create(:folder, :group => group)
+            folder_share = create(:folder_share, :group => group)
+            campaigns_group = create(:campaigns_group, :group => group)
+            outcome = create(:outcome, :group => group)
+            group_update = create(:group_update, :group => group)
+            field = create(:field, :group => group, :field_type => "regular")
+            survey_field = create(:field, :group => group, :field_type => "group_survey")
+            group_leader = create(:group_leader, :group => group)
+            child = create(:group, :parent => group)
+            
+            group.destroy!
+            
+            expect{Group.find(group.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{NewsFeed.find(news_feed.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{UserGroup.find(user_group.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{GroupsPoll.find(groups_poll.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Event.find(event.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Budget.find(budget.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{GroupMessage.find(group_message.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{NewsLink.find(news_link.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{SocialLink.find(social_link.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{InvitationSegmentsGroup.find(invitation_segments_group.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Resource.find(resource.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Folder.find(folder.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{FolderShare.find(folder_share.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{CampaignsGroup.find(campaigns_group.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Outcome.find(outcome.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{GroupUpdate.find(group_update.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Field.find(field.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Field.find(survey_field.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{GroupLeader.find(group_leader.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Group.find(child.id)}.to raise_error(ActiveRecord::RecordNotFound)
         end
     end
 end
