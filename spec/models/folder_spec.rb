@@ -84,4 +84,20 @@ RSpec.describe Folder, type: :model do
             expect(Folder.only_parents.length).to eq(1)
         end
     end
+    
+    describe "#destroy_callbacks" do
+        it "removes the child objects" do
+            folder = create(:folder)
+            resource = create(:resource, :folder => folder)
+            folder_share = create(:folder_share, :folder => folder)
+            folder_child = create(:folder, :parent => folder)
+            
+            folder.destroy!
+            
+            expect{Folder.find(folder.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Resource.find(resource.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{FolderShare.find(folder_share.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Folder.find(folder_child.id)}.to raise_error(ActiveRecord::RecordNotFound)
+        end
+    end
 end

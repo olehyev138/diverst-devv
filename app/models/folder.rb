@@ -5,13 +5,12 @@ class Folder < ActiveRecord::Base
   # associations
   belongs_to  :enterprise
   belongs_to  :group
-  
-  has_many    :resources
-  has_many    :folder_shares
-  has_many    :groups, through: :folder_shares, source: "group"
-
-  has_many    :children, class_name: "Folder", foreign_key: :parent_id
   belongs_to  :parent,   class_name: "Folder", foreign_key: :parent_id
+  
+  has_many    :resources, :dependent => :destroy
+  has_many    :folder_shares, :dependent => :destroy
+  has_many    :groups, through: :folder_shares, source: "group"
+  has_many    :children, class_name: "Folder", foreign_key: :parent_id, :dependent => :destroy
 
   # validations
   validates :name, presence: true
