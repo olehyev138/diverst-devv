@@ -1173,6 +1173,15 @@ ActiveRecord::Schema.define(version: 20180509005323) do
     t.integer "segment_id", limit: 4
   end
 
+  create_table "views", force: :cascade do |t|
+    t.integer  "user_id",           limit: 4,             null: false
+    t.integer  "news_feed_link_id", limit: 4,             null: false
+    t.integer  "enterprise_id",     limit: 4
+    t.integer  "view_count",        limit: 4, default: 0, null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+  end
+
   create_table "yammer_field_mappings", force: :cascade do |t|
     t.integer  "enterprise_id",     limit: 4
     t.string   "yammer_field_name", limit: 191

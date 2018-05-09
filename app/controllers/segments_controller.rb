@@ -39,7 +39,7 @@ class SegmentsController < ApplicationController
         if @group.present?
             @members = segment_members_of_group(@segment, @group).uniq
         else
-            @members = @segment.members.uniq
+            @members = @segment.members.page(params[:page]).per(25).uniq
         end
     end
 
@@ -82,7 +82,7 @@ class SegmentsController < ApplicationController
     protected
 
     def segment_members_of_group(segment, group)
-        segment.members.includes(:groups).select do |user|
+        segment.members.page(params[:page]).per(25).includes(:groups).select do |user|
             user.groups.include? group
         end
     end

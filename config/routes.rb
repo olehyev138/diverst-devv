@@ -483,6 +483,10 @@ Rails.application.routes.draw do
   resources :likes, only: [:create, :unlike]
   match '/likes/unlike' => 'likes#unlike', :via => :delete
 
+  scope :views, controller: 'views' do
+    post 'track'
+  end
+
   match "*a", :to => "application#routing_error", :via => [:get, :post]
 
   root to: 'metrics_dashboards#index'
