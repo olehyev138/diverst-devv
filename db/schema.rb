@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180501152704) do
+ActiveRecord::Schema.define(version: 20180509005323) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -255,6 +255,7 @@ ActiveRecord::Schema.define(version: 20180501152704) do
     t.text    "dci_abbreviation",  limit: 65535
     t.text    "member_preference", limit: 65535
     t.text    "parent",            limit: 65535
+    t.text    "sub_erg",           limit: 65535
   end
 
   add_index "custom_texts", ["enterprise_id"], name: "index_custom_texts_on_enterprise_id", using: :btree
@@ -278,6 +279,7 @@ ActiveRecord::Schema.define(version: 20180501152704) do
     t.integer  "email_id",                      limit: 4
     t.datetime "created_at",                                              null: false
     t.datetime "updated_at",                                              null: false
+    t.integer  "enterprise_email_variables_id", limit: 4
     t.integer  "enterprise_email_variable_id",  limit: 4
     t.boolean  "downcase",                                default: false
     t.boolean  "upcase",                                  default: false
@@ -709,6 +711,19 @@ ActiveRecord::Schema.define(version: 20180501152704) do
     t.integer "group_id",   limit: 4
   end
 
+  create_table "likes", force: :cascade do |t|
+    t.integer  "news_feed_link_id", limit: 4
+    t.integer  "user_id",           limit: 4
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.integer  "enterprise_id",     limit: 4
+  end
+
+  add_index "likes", ["enterprise_id"], name: "index_likes_on_enterprise_id", using: :btree
+  add_index "likes", ["news_feed_link_id"], name: "index_likes_on_news_feed_link_id", using: :btree
+  add_index "likes", ["user_id", "news_feed_link_id", "enterprise_id"], name: "index_likes_on_user_id_and_news_feed_link_id_and_enterprise_id", unique: true, using: :btree
+  add_index "likes", ["user_id"], name: "index_likes_on_user_id", using: :btree
+
   create_table "matches", force: :cascade do |t|
     t.integer  "user1_id",            limit: 4
     t.integer  "user2_id",            limit: 4
@@ -746,16 +761,6 @@ ActiveRecord::Schema.define(version: 20180501152704) do
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
   end
-
-  create_table "news_feed_likes", force: :cascade do |t|
-    t.integer  "news_feed_link_id", limit: 4
-    t.integer  "user_id",           limit: 4
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-  end
-
-  add_index "news_feed_likes", ["news_feed_link_id"], name: "index_news_feed_likes_on_news_feed_link_id", using: :btree
-  add_index "news_feed_likes", ["user_id"], name: "index_news_feed_likes_on_user_id", using: :btree
 
   create_table "news_feed_link_segments", force: :cascade do |t|
     t.integer  "news_feed_link_id", limit: 4
@@ -1180,8 +1185,9 @@ ActiveRecord::Schema.define(version: 20180501152704) do
   add_foreign_key "budgets", "users", column: "approver_id"
   add_foreign_key "budgets", "users", column: "requester_id"
   add_foreign_key "custom_texts", "enterprises"
-  add_foreign_key "news_feed_likes", "news_feed_links"
-  add_foreign_key "news_feed_likes", "users"
+  add_foreign_key "likes", "enterprises"
+  add_foreign_key "likes", "news_feed_links"
+  add_foreign_key "likes", "users"
   add_foreign_key "polls", "initiatives"
   add_foreign_key "reward_actions", "enterprises"
   add_foreign_key "rewards", "enterprises"

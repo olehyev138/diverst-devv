@@ -1,28 +1,50 @@
 $(document).on('ready page:load', function()
 {
-  $('.like-btn').each(function()
+  $('.likeBtn').each(function()
   {
     var btn = $(this);
 
     btn.click(function()
     {
-      if (btn.data("isLiked"))
+      if (!btn.data("isLiked"))
       {
-        $.post('/news_feed_likes/unlike',
-              { _method: "delete", news_feed_link_id: btn.data("newsFeedLinkId") },
-              function(data){ toggleLikeSuccess(data, btn); }
+        $.post('/likes/',
+          { news_feed_link_id: btn.data("newsFeedLinkId") },
+          function(data){ likeSuccess(data, btn); }
         );
       }
       else
       {
-        $.post('/news_feed_likes/',
-              { news_feed_link_id: btn.data("newsFeedLinkId") },
-              function(data){ toggleLikeSuccess(data, btn); }
+        $.post('/likes/unlike',
+          { _method: "delete", news_feed_link_id: btn.data("newsFeedLinkId") },
+          function(data){ unlikeSuccess(data, btn); }
         );
       }
     });
   });
 });
+
+function likeSuccess(data, btn)
+{
+  if (data.like_success === true)
+  {
+    btn.data("isLiked", true);
+
+    setAsLikedImage(btn);
+    incrementLikeCount(btn.data("newsFeedLinkId"));
+  }
+}
+
+function unlikeSuccess(data, btn)
+{
+  if (data.unlike_success === true)
+  {
+    btn.data("isLiked", false);
+
+    setAsUnlikedImage(btn);
+    decrementLikeCount(btn.data("newsFeedLinkId"));
+  }
+}
 
 function toggleLikeSuccess(data, btn)
 {

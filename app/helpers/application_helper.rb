@@ -162,6 +162,6 @@ module ApplicationHelper
   end
 
   def is_post_liked?(news_feed_link_id)
-    NewsFeedLike.find_by(:user => current_user, :news_feed_link => news_feed_link_id).present?
+    Like.find_by(:user => current_user, :news_feed_link => news_feed_link_id).present?
   end
 end

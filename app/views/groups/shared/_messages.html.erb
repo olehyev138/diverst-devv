@@ -1,8 +1,7 @@
 <div class="card__section card__section--border">
   <div class="row">
     <div class="col sm-1 text-center">
-      <%= button_tag (image_tag image_path(is_post_liked?(message.news_feed_link.id) ? "icons/like-active.svg" : "icons/like.svg"), size: "48"), data: { news_feed_link_id: message.news_feed_link.id, is_liked: is_post_liked?(message.news_feed_link.id) }, class: "like-btn" if message.news_feed_link.approved? %>
-      <span class="likeCount" id="likeCount<%= message.news_feed_link.id %>"><%= message.news_feed_link.news_feed_likes.count %></span>
+      <%= render partial: "groups/shared/like_feature", locals: {news_feed_link: message.news_feed_link } %>
     </div>
     <div class="col sm-1">
       <% if message.owner.present? %>

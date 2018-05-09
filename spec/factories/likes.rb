@@ -1,6 +1,7 @@
 FactoryGirl.define do
-  factory :news_feed_like do
+  factory :like do
     news_feed_link
+    enterprise
     user
   end
 end
