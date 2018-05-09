@@ -1,9 +1,8 @@
 class LikesController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_like
 
   def create
-    @like = Like.find_by(:user => current_user, :news_feed_link => params[:news_feed_link_id], :enterprise => current_user.enterprise)
-
     if @like.blank?
       @like = Like.new
       @like.user = current_user
@@ -16,8 +15,6 @@ class LikesController < ApplicationController
   end
 
   def unlike
-    @like = Like.find_by(:user => current_user, :news_feed_link => params[:news_feed_link_id], :enterprise => current_user.enterprise)
-
     @like.destroy
 
     render json: { :unlike_success => @like.destroyed? }
@@ -28,5 +25,9 @@ class LikesController < ApplicationController
       params.require(:like).permit(
         :news_feed_link_id,
       )
+    end
+
+    def set_like
+      @like = Like.find_by(:user => current_user, :news_feed_link => params[:news_feed_link_id], :enterprise => current_user.enterprise)
     end
 end

@@ -27,7 +27,7 @@ RSpec.describe LikesController, type: :controller do
     context 'with logged out user' do
       it 'doesnt like the post' do
         expect{ post :create, news_feed_link_id: news_link.news_feed_link.id }
-          .to change(Like, :count).by(0)
+          .to_not change(Like, :count)
       end
     end
   end
