@@ -53,22 +53,6 @@ function unlikeSuccess(data, btn)
   btn.data("callComplete", true);
 }
 
-function toggleLikeSuccess(data, btn)
-{
-  btn.data("isLiked", data);
-
-  if (btn.data("isLiked"))
-  {
-    setAsLikedImage(btn);
-    incrementLikeCount(btn.data("newsFeedLinkId"));
-  }
-  else
-  {
-    setAsUnlikedImage(btn);
-    decrementLikeCount(btn.data("newsFeedLinkId"));
-  }
-}
-
 function setAsLikedImage(btn)
 {
   btn.children().attr("src", "<%= image_path("icons/like-active.svg") %>");
