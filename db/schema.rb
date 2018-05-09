@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180427143546) do
+ActiveRecord::Schema.define(version: 20180509005323) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -276,14 +276,15 @@ ActiveRecord::Schema.define(version: 20180427143546) do
   end
 
   create_table "email_variables", force: :cascade do |t|
-    t.integer  "email_id",                     limit: 4
-    t.datetime "created_at",                                             null: false
-    t.datetime "updated_at",                                             null: false
-    t.integer  "enterprise_email_variable_id", limit: 4
-    t.boolean  "downcase",                               default: false
-    t.boolean  "upcase",                                 default: false
-    t.boolean  "titleize",                               default: false
-    t.boolean  "pluralize",                              default: false
+    t.integer  "email_id",                      limit: 4
+    t.datetime "created_at",                                              null: false
+    t.datetime "updated_at",                                              null: false
+    t.integer  "enterprise_email_variables_id", limit: 4
+    t.integer  "enterprise_email_variable_id",  limit: 4
+    t.boolean  "downcase",                                default: false
+    t.boolean  "upcase",                                  default: false
+    t.boolean  "titleize",                                default: false
+    t.boolean  "pluralize",                               default: false
   end
 
   create_table "emails", force: :cascade do |t|
@@ -709,6 +710,19 @@ ActiveRecord::Schema.define(version: 20180427143546) do
     t.integer "segment_id", limit: 4
     t.integer "group_id",   limit: 4
   end
+
+  create_table "likes", force: :cascade do |t|
+    t.integer  "news_feed_link_id", limit: 4
+    t.integer  "user_id",           limit: 4
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.integer  "enterprise_id",     limit: 4
+  end
+
+  add_index "likes", ["enterprise_id"], name: "index_likes_on_enterprise_id", using: :btree
+  add_index "likes", ["news_feed_link_id"], name: "index_likes_on_news_feed_link_id", using: :btree
+  add_index "likes", ["user_id", "news_feed_link_id", "enterprise_id"], name: "index_likes_on_user_id_and_news_feed_link_id_and_enterprise_id", unique: true, using: :btree
+  add_index "likes", ["user_id"], name: "index_likes_on_user_id", using: :btree
 
   create_table "matches", force: :cascade do |t|
     t.integer  "user1_id",            limit: 4
@@ -1180,6 +1194,9 @@ ActiveRecord::Schema.define(version: 20180427143546) do
   add_foreign_key "budgets", "users", column: "approver_id"
   add_foreign_key "budgets", "users", column: "requester_id"
   add_foreign_key "custom_texts", "enterprises"
+  add_foreign_key "likes", "enterprises"
+  add_foreign_key "likes", "news_feed_links"
+  add_foreign_key "likes", "users"
   add_foreign_key "polls", "initiatives"
   add_foreign_key "reward_actions", "enterprises"
   add_foreign_key "rewards", "enterprises"

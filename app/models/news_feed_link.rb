@@ -3,6 +3,7 @@ class NewsFeedLink < ActiveRecord::Base
     belongs_to :link, :polymorphic => true
 
     has_many :news_feed_link_segments
+    has_many :likes, dependent: :destroy
     has_many :views, dependent: :destroy
 
     delegate :group,    :to => :news_feed

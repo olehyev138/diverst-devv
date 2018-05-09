@@ -480,6 +480,9 @@ Rails.application.routes.draw do
   resources :emails
   resources :custom_texts, only: [:edit, :update]
 
+  resources :likes, only: [:create, :unlike]
+  match '/likes/unlike' => 'likes#unlike', :via => :delete
+
   scope :views, controller: 'views' do
     post 'track'
   end
