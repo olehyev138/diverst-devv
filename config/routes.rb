@@ -119,15 +119,15 @@ Rails.application.routes.draw do
 
   get 'integrations', to: 'integrations#index'
 
-  resources :group_category_types, only: [:edit, :update, :destroy] do 
-    member do 
+  resources :group_category_types, only: [:edit, :update, :destroy] do
+    member do
       get 'add_category'
       post 'update_with_new_category'
     end
   end
 
-  resources :group_categories do 
-    collection do 
+  resources :group_categories do
+    collection do
       get 'view_all'
     end
   end
@@ -479,6 +479,13 @@ Rails.application.routes.draw do
   end
   resources :emails
   resources :custom_texts, only: [:edit, :update]
+
+  resources :likes, only: [:create, :unlike]
+  match '/likes/unlike' => 'likes#unlike', :via => :delete
+
+  scope :views, controller: 'views' do
+    post 'track'
+  end
 
   match "*a", :to => "application#routing_error", :via => [:get, :post]
 

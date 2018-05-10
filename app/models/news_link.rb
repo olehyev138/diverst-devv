@@ -4,6 +4,10 @@ class NewsLink < ActiveRecord::Base
 
     has_one :news_feed_link, :as => :link, :dependent => :destroy
 
+    delegate :increment_view, :to => :news_feed_link
+    delegate :total_views, :to => :news_feed_link
+    delegate :unique_views, :to => :news_feed_link
+
     has_many :news_link_segments, :dependent => :destroy
     has_many :segments, through: :news_link_segments, :before_remove => :remove_segment_association
     has_many :news_link_photos,  dependent: :destroy

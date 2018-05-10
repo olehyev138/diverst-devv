@@ -17,7 +17,7 @@
     </div>
     <div class="flex-row__cell">
       <% if ENV['ENABLE_SOCIAL_MEDIA'] %>
-        <%= link_to "+ Create Social link", new_group_social_link_path, class: "btn btn--primary" if policy(SocialLink).new? %>
+        <%= link_to "+ Create Social Link", new_group_social_link_path, class: "btn btn--primary" if policy(SocialLink).new? %>
       <% end %>
     </div>
   </div>

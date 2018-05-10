@@ -8,6 +8,10 @@ class GroupMessage < ActiveRecord::Base
 
     has_one :news_feed_link, :as => :link, :dependent => :destroy
 
+    delegate :increment_view, :to => :news_feed_link
+    delegate :total_views, :to => :news_feed_link
+    delegate :unique_views, :to => :news_feed_link
+
     validates :group_id,    presence: true
     validates :subject,     presence: true
     validates :content,     presence: true
