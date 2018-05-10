@@ -18,7 +18,7 @@ class Users::PasswordsController < Devise::PasswordsController
     else
       # Send reset password instructions
       self.resource = resource_class.send_reset_password_instructions(resource_params)
-      message = 'You will shortly receive password reset instructions to email'
+      message = 'You will recieve an email shortly'
     end
 
     yield resource if block_given?

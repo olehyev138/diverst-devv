@@ -23,12 +23,12 @@ RSpec.describe Users::PasswordsController, type: :controller do
 
     it 'flashes password reset message when user has accepted' do
       post :create, email: user.email
-      expect(flash[:notice]).to eq('You will shortly receive password reset instructions to email')
+      expect(flash[:notice]).to eq('You will recieve an email shortly')
     end
 
     it 'flashes password reset message when user doesnt exist' do
       post :create
-      expect(flash[:notice]).to eq('You will shortly receive password reset instructions to email')
+      expect(flash[:notice]).to eq('You will recieve an email shortly')
     end
   end
 end
