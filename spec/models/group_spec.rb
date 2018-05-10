@@ -577,6 +577,7 @@ RSpec.describe Group, :type => :model do
             expect{UserGroup.find(user_group.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{GroupsPoll.find(groups_poll.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{Event.find(event.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Initiative.find(initiative.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{Budget.find(budget.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{GroupMessage.find(group_message.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{NewsLink.find(news_link.id)}.to raise_error(ActiveRecord::RecordNotFound)
