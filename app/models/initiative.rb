@@ -6,7 +6,7 @@ class Initiative < ActiveRecord::Base
   belongs_to :pillar
   belongs_to :owner, class_name: "User"
   has_many :updates, class_name: "InitiativeUpdate", dependent: :destroy
-  has_many :fields, dependent: :destroy
+  has_many :fields, dependent: :delete_all
   has_many :expenses, dependent: :destroy, class_name: "InitiativeExpense"
   has_many :user_reward_actions
   
@@ -22,24 +22,24 @@ class Initiative < ActiveRecord::Base
   belongs_to :budget_item
   has_one :budget, through: :budget_item
 
-  has_many :checklists
-  has_many :resources
+  has_many :checklists, dependent: :destroy
+  has_many :resources, dependent: :destroy
 
-  has_many :checklist_items
+  has_many :checklist_items, dependent: :destroy
   accepts_nested_attributes_for :checklist_items, reject_if: :all_blank, allow_destroy: true
 
   belongs_to :owner_group, class_name: 'Group'
 
-  has_many :initiative_segments
+  has_many :initiative_segments, dependent: :destroy
   has_many :segments, through: :initiative_segments
-  has_many :initiative_participating_groups
+  has_many :initiative_participating_groups, dependent: :destroy
   has_many :participating_groups, through: :initiative_participating_groups, source: :group, class_name: 'Group'
 
-  has_many :initiative_invitees
+  has_many :initiative_invitees, dependent: :destroy
   has_many :invitees, through: :initiative_invitees, source: :user
-  has_many :comments, class_name: 'InitiativeComment'
+  has_many :comments, class_name: 'InitiativeComment', dependent: :destroy
 
-  has_many :initiative_users
+  has_many :initiative_users, dependent: :destroy
   has_many :attendees, through: :initiative_users, source: :user
 
   has_one :outcome, through: :pillar

@@ -233,4 +233,36 @@ RSpec.describe Initiative, type: :model do
       expect(data.empty?).to be(false)
     end
   end
+  
+  describe "#destroy_callbacks" do
+    it "removes the child objects" do
+      initiative = create(:initiative)
+      initiative_update = create(:initiative_update, :initiative => initiative)
+      field = create(:field, :initiative => initiative)
+      initiative_expense = create(:initiative_expense, :initiative => initiative)
+      checklist = create(:checklist, :initiative => initiative)
+      resource = create(:resource, :initiative => initiative)
+      checklist_item = create(:checklist_item, :initiative => initiative)
+      initiative_segment = create(:initiative_segment, :initiative => initiative)
+      initiative_participating_group = create(:initiative_participating_group, :initiative => initiative)
+      initiative_invitee = create(:initiative_invitee, :initiative => initiative)
+      initiative_comment = create(:initiative_comment, :initiative => initiative)
+      initiative_user = create(:initiative_user, :initiative => initiative)
+      
+      initiative.destroy!
+      
+      expect{Initiative.find(initiative.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{InitiativeUpdate.find(initiative_update.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{Field.find(field.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{InitiativeExpense.find(initiative_expense.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{Checklist.find(checklist.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{Resource.find(resource.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{ChecklistItem.find(checklist_item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{InitiativeSegment.find(initiative_segment.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{InitiativeParticipatingGroup.find(initiative_participating_group.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{InitiativeInvitee.find(initiative_invitee.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{InitiativeComment.find(initiative_comment.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{InitiativeUser.find(initiative_user.id)}.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
 end
