@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180509005323) do
+ActiveRecord::Schema.define(version: 20180514185252) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -276,15 +276,14 @@ ActiveRecord::Schema.define(version: 20180509005323) do
   end
 
   create_table "email_variables", force: :cascade do |t|
-    t.integer  "email_id",                      limit: 4
-    t.datetime "created_at",                                              null: false
-    t.datetime "updated_at",                                              null: false
-    t.integer  "enterprise_email_variables_id", limit: 4
-    t.integer  "enterprise_email_variable_id",  limit: 4
-    t.boolean  "downcase",                                default: false
-    t.boolean  "upcase",                                  default: false
-    t.boolean  "titleize",                                default: false
-    t.boolean  "pluralize",                               default: false
+    t.integer  "email_id",                     limit: 4
+    t.datetime "created_at",                                             null: false
+    t.datetime "updated_at",                                             null: false
+    t.integer  "enterprise_email_variable_id", limit: 4
+    t.boolean  "downcase",                               default: false
+    t.boolean  "upcase",                                 default: false
+    t.boolean  "titleize",                               default: false
+    t.boolean  "pluralize",                              default: false
   end
 
   create_table "emails", force: :cascade do |t|
@@ -785,6 +784,11 @@ ActiveRecord::Schema.define(version: 20180509005323) do
     t.integer  "group_id",   limit: 4
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
+  end
+
+  create_table "news_feeds_news_feed_links", force: :cascade do |t|
+    t.integer "news_feed_id",      limit: 4
+    t.integer "news_feed_link_id", limit: 4
   end
 
   create_table "news_link_comments", force: :cascade do |t|

@@ -6,6 +6,10 @@
         <%= f.input :content %>
         <%= f.association :segments, label: "#{c_t(:segment).pluralize}", collection: @group.enterprise.segments, input_html: { class: "select2" } %>
 
+        <%= f.simple_fields_for :news_feed_link do |n| %>
+          <%= n.association :shared_news_feeds, label: 'Share with other groups', input_html: { class: 'select2', multiple: 'multiple'  } %>
+        <% end %>
+
         <%= f.button :submit %>
       <% end %>
     </div>

@@ -17,6 +17,9 @@ class Groups::PostsController < ApplicationController
                                 .includes(:link)
                                 .order(is_pinned: :desc, created_at: :desc)
                                 .limit(@limit)
+
+                ## DEBUG
+                @posts = @group.news_feed.shared_news_feed_links
         else
             if @group.active_members.include? current_user
                 @count = base_query
@@ -32,9 +35,15 @@ class Groups::PostsController < ApplicationController
                             .where(where, current_user.segments.pluck(:id))
                             .order(is_pinned: :desc, created_at: :desc)
                             .limit(@limit)
+
+                ## DEBUG
+                @posts = @group.news_feed.shared_news_feed_links
             else
                 @count = 0
                 @posts = []
+
+                ## DEBUG
+                @posts = @group.news_feed.shared_news_feed_links
             end
         end
     end

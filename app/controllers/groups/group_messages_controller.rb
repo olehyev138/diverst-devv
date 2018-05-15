@@ -21,10 +21,12 @@ class Groups::GroupMessagesController < ApplicationController
 
     def new
         @message = @group.messages.new
+        @message.build_news_feed_link
     end
 
     def edit
         authorize @message, :update?
+        @message.build_news_feed_link
     end
 
     def create
@@ -91,7 +93,8 @@ class Groups::GroupMessagesController < ApplicationController
             .permit(
                 :subject,
                 :content,
-                segment_ids: []
+                segment_ids: [],
+                news_feed_link_attributes: { shared_news_feed_ids: [] }
             )
     end
 
