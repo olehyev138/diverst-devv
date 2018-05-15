@@ -480,6 +480,9 @@ Rails.application.routes.draw do
     get 'segment_population'
     get 'events_created'
     get 'messages_sent'
+    get 'mentorship'
+    get 'mentoring_sessions'
+    get 'mentoring_interests'
   end
 
   namespace :website do

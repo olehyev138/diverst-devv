@@ -13,7 +13,7 @@ class User < ActiveRecord::Base
     scope :active,              -> { where(active: true).distinct }
     scope :enterprise_mentors,  -> ( user_ids = []) { where(mentor: true).where.not(:id => user_ids) }
     scope :enterprise_mentees,  -> ( user_ids = []) { where(mentee: true).where.not(:id => user_ids) }
-    scope :mentors_and_mentees, -> { where(mentor: true, mentee: true).distinct }
+    scope :mentors_and_mentees, -> { where("mentor = true OR mentee = true").distinct }
     scope :inactive,            -> { where(active: false).distinct }
 
     belongs_to :enterprise, inverse_of: :users
@@ -103,7 +103,9 @@ class User < ActiveRecord::Base
     scope :not_owners, -> { where(owner: false) }
     scope :es_index_for_enterprise, -> (enterprise) { where(enterprise: enterprise) }
     scope :active, -> {where(active: true)}
-
+    scope :mentors, -> {where(mentor: true)}
+    scope :mentees, -> {where(mentee: true)}
+    
     def name
         "#{first_name} #{last_name}"
     end

@@ -178,4 +178,120 @@ class GenericGraphsController < ApplicationController
             }
         end
     end
+    
+    def mentorship
+        data = current_user.enterprise.groups.all_parents.map { |g|
+            {
+                y: g.members.active.mentors_and_mentees.count,
+                name: g.name,
+                drilldown: g.name
+            }
+        }
+        drilldowns = current_user.enterprise.groups.includes(:children).all_parents.map { |g|
+            {
+                name: g.name,
+                id: g.name,
+                data: g.children.map {|child| [child.name, child.active.mentors_and_mentees.active.count]}
+            }
+        }
+        categories = current_user.enterprise.groups.all_parents.map{ |g| g.name }
+
+        respond_to do |format|
+            format.json {
+                render json: {
+                           type: 'bar',
+                           highcharts: {
+                               series: [{
+                                   title: 'Number of mentors/mentees',
+                                   data: data
+                               }],
+                               drilldowns: drilldowns,
+                               #categories: categories, <- for some reason this is causing drilldowns to not appear
+                               xAxisTitle: "#{c_t(:erg)}"
+                           },
+                           hasAggregation: false
+                       }
+            }
+            format.csv {
+                strategy = Reports::GraphStatsGeneric.new(title: "Number of mentors/mentees #{c_t(:erg)}", categories: categories, data: data)
+                report = Reports::Generator.new(strategy)
+                send_data report.to_csv, filename: "graph_group_mentorship.csv"
+            }
+        end
+    end
+    
+    def mentoring_sessions
+        data = current_user.enterprise.groups.all_parents.map { |g|
+            {
+                y: g.members.active.mentors_and_mentees.joins(:mentoring_sessions).where("mentoring_sessions.created_at > ? ", 1.month.ago).count,
+                name: g.name,
+                drilldown: g.name
+            }
+        }
+        drilldowns = current_user.enterprise.groups.includes(:children).all_parents.map { |g|
+            {
+                name: g.name,
+                id: g.name,
+                data: g.children.map {|child| [child.name, child.members.active.mentors_and_mentees.joins(:mentoring_sessions).where("mentoring_sessions.created_at > #{1.month.ago}").count]}
+            }
+        }
+        categories = current_user.enterprise.groups.all_parents.map{ |g| g.name }
+
+        respond_to do |format|
+            format.json {
+                render json: {
+                           type: 'bar',
+                           highcharts: {
+                               series: [{
+                                   title: 'Number of mentoring sessions',
+                                   data: data
+                               }],
+                               drilldowns: drilldowns,
+                               #categories: categories, <- for some reason this is causing drilldowns to not appear
+                               xAxisTitle: "#{c_t(:erg)}"
+                           },
+                           hasAggregation: false
+                       }
+            }
+            format.csv {
+                strategy = Reports::GraphStatsGeneric.new(title: "Number of mentoring sessions #{c_t(:erg)}", categories: categories, data: data)
+                report = Reports::Generator.new(strategy)
+                send_data report.to_csv, filename: "graph_group_mentoring_sessions.csv"
+            }
+        end
+    end
+    
+    def mentoring_interests
+        data = current_user.enterprise.mentoring_interests.includes(:users).map { |mi|
+            {
+                y: mi.users.count,
+                name: mi.name,
+                drilldown: nil
+            }
+        }
+        categories = current_user.enterprise.mentoring_interests.map{ |mi| mi.name }
+
+        respond_to do |format|
+            format.json {
+                render json: {
+                           type: 'bar',
+                           highcharts: {
+                               series: [{
+                                   title: 'Number of mentoring sessions',
+                                   data: data
+                               }],
+                               drilldowns: [],
+                               #categories: categories, <- for some reason this is causing drilldowns to not appear
+                               xAxisTitle: "#{c_t(:erg)}"
+                           },
+                           hasAggregation: false
+                       }
+            }
+            format.csv {
+                strategy = Reports::GraphStatsGeneric.new(title: "Mentoring Interests}", categories: categories, data: data)
+                report = Reports::Generator.new(strategy)
+                send_data report.to_csv, filename: "mentoring_interests.csv"
+            }
+        end
+    end
 end
