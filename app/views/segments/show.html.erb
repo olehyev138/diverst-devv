@@ -26,7 +26,7 @@
     <% end %>
   </ul>
 
-  <%= render 'members_table' %>
+  <%= render 'members_table', source: segment_path(@segment, format: :json) %>
 </div>
 
 <div class="content__header">
