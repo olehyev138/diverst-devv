@@ -35,7 +35,9 @@ RSpec.feature 'Segment management' do
   end
 
   context 'user is viewing a segment\'s details' do
+    let!(:users) { create_list(:user, 3, enterprise_id: user.enterprise.id) }
     before do
+      segment.members << users
       visit segment_path(segment)
     end
 
