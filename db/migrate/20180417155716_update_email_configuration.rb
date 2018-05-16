@@ -122,7 +122,6 @@ class UpdateEmailConfiguration < ActiveRecord::Migration
           {:key => "group.name", :description => "Displays a group's name", :emails => emails},
           {:key => "group_name", :description => "Displays an array of group names", :emails => emails},
           {:key => "campaign.title", :description => "Displays a campaign's title", :emails => emails},
-          {:key => "group_name", :description => "Displays an array of group names", :emails => emails},
           {:key => "enterprise.id", :description => "Displays a enterprise's id", :emails => emails},
           {:key => "enterprise.name", :description => "Displays a enterprise's name", :emails => emails},
           {:key => "survey.title", :description => "Displays a survey's title", :emails => emails},
