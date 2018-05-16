@@ -255,6 +255,7 @@ ActiveRecord::Schema.define(version: 20180510135630) do
     t.text    "dci_abbreviation",  limit: 65535
     t.text    "member_preference", limit: 65535
     t.text    "parent",            limit: 65535
+    t.text    "sub_erg",           limit: 65535
   end
 
   add_index "custom_texts", ["enterprise_id"], name: "index_custom_texts_on_enterprise_id", using: :btree
