@@ -7,6 +7,8 @@ class Users::PasswordsController < Devise::PasswordsController
   # 2) Resend an invite email for invited but not accepted users
   #
 
+  include Onboard
+
   def create
     self.resource = resource_class.find_by(email: resource_params[:email])
     message = ''
@@ -25,12 +27,5 @@ class Users::PasswordsController < Devise::PasswordsController
 
     flash[:notice] = message
     respond_with({}, location: after_sending_reset_password_instructions_path_for(resource_name))
-  end
-
-  private
-
-  def resend_invite?
-    # Determine whether this user is in the system but has not yet accepted there invitation
-    self.resource != nil and self.resource.invitation_accepted_at == nil
   end
 end

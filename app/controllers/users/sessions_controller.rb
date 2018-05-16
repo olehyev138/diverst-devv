@@ -1,5 +1,6 @@
 class Users::SessionsController < Devise::SessionsController
   include PublicActivity::StoreController
+  include Onboard
 
   after_filter :after_login, :only => :create
 
@@ -20,7 +21,7 @@ class Users::SessionsController < Devise::SessionsController
   def create
     # Determine whether this user is in the system but has not yet accepted there invitation
     resource = resource_class.find_by(email: resource_params[:email])
-    if resource != nil and resource.invitation_accepted_at == nil
+    if resend_invite?
       flash[:alert] = 'You have a pending invitation. Please check your email to accept the invitation and sign in'
       respond_with resource, location: after_sign_in_path_for(resource)
     else
@@ -31,6 +32,6 @@ class Users::SessionsController < Devise::SessionsController
   private
 
   def after_login
-    track_activity(current_user, :login) if current_user != nil
+    track_activity(current_user, :login) if current_user.present?
   end
 end
