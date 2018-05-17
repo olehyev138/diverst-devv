@@ -21,7 +21,7 @@ RSpec.describe LikesController, type: :controller do
           post :create, news_feed_link_id: news_link.news_feed_link.id
 
           expect{ post :unlike, news_feed_link_id: news_link.news_feed_link.id }
-            .to_not change(Like, :count).by(-1)
+            .to change(Like, :count).by(-1)
         end
 
         it 'likes an answer' do
