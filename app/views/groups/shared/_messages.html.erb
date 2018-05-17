@@ -37,4 +37,11 @@
       <%= link_to "Comments(#{message.comments_count})", group_group_message_path(message.group, message), style: "margin-top: 30px;" %>
     </div>
   </div>
+  <% if shared_message.present? %>
+    <div class="row">
+      <div class="col sm-10 col--offset-2">
+        <p class="muted"><%= shared_message %></p>
+      </div>
+    </div>
+  <% end %>
 </div>
