@@ -20,8 +20,6 @@ class GroupMessage < ActiveRecord::Base
 
   alias_attribute :author, :owner
 
-  before_create :build_default_link
-
   scope :of_segments, ->(segment_ids) {
     gm_condtions = ["group_messages_segments.segment_id IS NULL"]
     gm_condtions << "group_messages_segments.segment_id IN (#{ segment_ids.join(",") })" unless segment_ids.empty?
@@ -68,13 +66,5 @@ class GroupMessage < ActiveRecord::Base
   def remove_segment_association(segment)
     group_messages_segment = self.group_messages_segments.where(:segment_id => segment.id).first
     group_messages_segment.news_feed_link_segment.destroy
-  end
-
-  private
-
-  def build_default_link
-    #build_news_feed_link(:news_feed_id => group.news_feed.id)
-    news_feed_link.news_feed_id = group.news_feed.id
-    true
   end
 end
