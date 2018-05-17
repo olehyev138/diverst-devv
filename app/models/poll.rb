@@ -3,12 +3,12 @@ class Poll < ActiveRecord::Base
 
     enum status: [:published, :draft]
 
-    has_many :fields
-    has_many :responses, class_name: 'PollResponse', inverse_of: :poll
-    has_many :graphs
-    has_many :polls_segments
+    has_many :fields, dependent: :destroy
+    has_many :responses, class_name: 'PollResponse', inverse_of: :poll, dependent: :destroy
+    has_many :graphs, dependent: :destroy
+    has_many :polls_segments, dependent: :destroy
     has_many :segments, inverse_of: :polls, through: :polls_segments
-    has_many :groups_polls
+    has_many :groups_polls, dependent: :destroy
     has_many :groups, inverse_of: :polls, through: :groups_polls
 
     belongs_to :enterprise, inverse_of: :polls
