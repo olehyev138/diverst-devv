@@ -13,11 +13,10 @@ class NewsFeedLink < ActiveRecord::Base
   scope :approved,        -> { where(approved: true )}
   scope :not_approved,    -> { where(approved: false )}
 
-  # DEBUG
-  #validates :news_feed_id,    presence: true
-  #validates :link_id,         presence: true
-  #validates :link_type,       presence: true
+  validates :news_feed_id,    presence: true
+  validates :link_type,       presence: true
 
+  before_save :check_link
   after_create :approve_link
 
   # checks if link can automatically be approved
@@ -27,6 +26,15 @@ class NewsFeedLink < ActiveRecord::Base
     if GroupPolicy.new(link.author, link.group).erg_leader_permissions?
       self.approved = true
       self.save!
+    end
+  end
+
+  # Validates that link is present
+  # Cant use normal validation since NewsFeedLink is saved first
+  def check_link
+    unless link
+      errors[:link] = 'cant be blank'
+      false
     end
   end
 
