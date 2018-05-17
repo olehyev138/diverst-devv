@@ -21,7 +21,7 @@ class Users::SessionsController < Devise::SessionsController
   def create
     # Determine whether this user is in the system but has not yet accepted there invitation
     resource = resource_class.find_by(email: resource_params[:email])
-    if resend_invite?
+    if resend_invite? resource
       flash[:alert] = 'You have a pending invitation. Please check your email to accept the invitation and sign in'
       respond_with resource, location: after_sign_in_path_for(resource)
     else

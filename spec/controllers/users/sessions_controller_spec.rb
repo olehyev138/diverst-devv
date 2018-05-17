@@ -32,7 +32,8 @@ RSpec.describe Users::SessionsController, type: :controller do
     it 'flashes message for users with pending invitation' do
       user.invitation_accepted_at = nil
       user.save
-      post :create, user: { email: user.email, password: "password" }
+
+      post :create, user: { email: user.email, password: 'password' }
       expect(flash[:alert]).to eq 'You have a pending invitation. Please check your email to accept the invitation and sign in'
     end
 

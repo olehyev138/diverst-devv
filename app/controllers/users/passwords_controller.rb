@@ -13,7 +13,7 @@ class Users::PasswordsController < Devise::PasswordsController
     self.resource = resource_class.find_by(email: resource_params[:email])
     message = ''
 
-    if resend_invite?
+    if resend_invite? self.resource
       # Resend invite
       resource_class.invite!(email: resource.email)
       message = 'You have a pending invitation. Please check your email to accept the invitation and sign in'
