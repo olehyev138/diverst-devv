@@ -34,9 +34,6 @@ class Groups::PostsController < ApplicationController
     else
       @count = 0
       @posts = []
-
-      ## DEBUG
-      @posts = @group.news_feed.shared_news_feed_links
     end
   end
 
