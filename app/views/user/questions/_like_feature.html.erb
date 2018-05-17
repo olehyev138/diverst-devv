@@ -1,0 +1,4 @@
+<div style="text-align: center; font-size: 0.7em;">
+  <%= button_tag (image_tag image_path(is_answer_liked?(answer.id) ? "icons/like-active.svg" : "icons/like.svg"), size: "36"), data: { answer_id: answer.id, is_liked: is_answer_liked?(answer.id) }, class: "likeBtn" %><br>
+  <span class="likeCount" id="likeCount<%= answer.id %>"><%= answer.likes.count %></span>
+</div>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180509005323) do
+ActiveRecord::Schema.define(version: 20180517203229) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -717,8 +717,10 @@ ActiveRecord::Schema.define(version: 20180509005323) do
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
     t.integer  "enterprise_id",     limit: 4
+    t.integer  "answer_id",         limit: 4
   end
 
+  add_index "likes", ["answer_id"], name: "index_likes_on_answer_id", using: :btree
   add_index "likes", ["enterprise_id"], name: "index_likes_on_enterprise_id", using: :btree
   add_index "likes", ["news_feed_link_id"], name: "index_likes_on_news_feed_link_id", using: :btree
   add_index "likes", ["user_id", "news_feed_link_id", "enterprise_id"], name: "index_likes_on_user_id_and_news_feed_link_id_and_enterprise_id", unique: true, using: :btree
@@ -1194,6 +1196,7 @@ ActiveRecord::Schema.define(version: 20180509005323) do
   add_foreign_key "budgets", "users", column: "approver_id"
   add_foreign_key "budgets", "users", column: "requester_id"
   add_foreign_key "custom_texts", "enterprises"
+  add_foreign_key "likes", "answers"
   add_foreign_key "likes", "enterprises"
   add_foreign_key "likes", "news_feed_links"
   add_foreign_key "likes", "users"
