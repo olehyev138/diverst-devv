@@ -3,6 +3,6 @@ module Onboard
 
   def resend_invite?(resource)
     # Determine whether this user is in the system but has not yet accepted there invitation
-    resource.present? and resource.invitation_accepted_at.nil?
+    resource.present? && resource.invitation_accepted_at.nil?
   end
 end
