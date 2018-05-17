@@ -1,9 +1,6 @@
 <div class="content__main">
   <div class="card">
     <div class="card__section">
-      <p>Here are the <%= "#{c_t(:erg).pluralize.upcase}" %> we have at <%= current_user.enterprise.name %>. Click on any of them to explore their dashboard.</p>
-    </div>
-    <div class="card__section">
       <% @groups.each do |group| %>
         <div class="media-object<%= " media-object--selected" if current_user.groups.include? group %>">
           <%= link_to group_path(group) do %>
