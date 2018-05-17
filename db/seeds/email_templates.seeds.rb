@@ -80,6 +80,17 @@ after :enterprise do
         :subject => "You are Invited to participate in a '%{survey.title}' survey", 
         :description => "Email that goes out to users invited to participate in a survey/poll",
         :template => ""
+      },
+      # group_leader_member_notification_mailer
+      {
+        :enterprise => enterprise,
+        :name => "Group Leader Member Notification Mailer", 
+        :mailer_name => "group_leader_member_notification_mailer",
+        :mailer_method => "notification",
+        :content => "<p>Hello %{user.name},</p>\r\n\r\n<p>%{group.name} has %{count} pending member(s). Click below to view them and accept/deny group membership.</p>\r\n\r\n<p>%{click_here} to view pending members.</p>\r\n", 
+        :subject => "%{count} Pending Member(s) for %{group.name}", 
+        :description => "Email that goes out to group leaders when there are pending group members",
+        :template => ""
       }
     ]
   )

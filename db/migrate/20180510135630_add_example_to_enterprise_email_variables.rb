@@ -11,12 +11,38 @@ class AddExampleToEnterpriseEmailVariables < ActiveRecord::Migration
     EnterpriseEmailVariable.where(:key => "survey.title").update_all(:example => "Weekly Survey")
     EnterpriseEmailVariable.where(:key => "click_here").update_all(:example => "<a href=\"https://www.diverst.com\" target=\"_blank\">Click here</a>")
     EnterpriseEmailVariable.where(:key => "custom_text.erg_text").update_all(:example => "Inclusion Network")
-    EnterpriseEmailVariable.where(:key => "user.name").update_all(:example => "John Smith") if EnterpriseEmailVariable.where(:key => "count").count > 0
+    EnterpriseEmailVariable.where(:key => "count").update_all(:example => "4") if EnterpriseEmailVariable.where(:key => "count").count > 0
     
     if EnterpriseEmailVariable.where(:key => "count").count < 1
       Enterprise.find_each do |enterprise|
         enterprise.email_variables.create!(:key => "count", :example => "4", :description => "Display a count of resources")
       end
     end
+    
+    Enterprise.find_each do |enterprise|
+      # create the default email for pending group notification
+      enterprise.emails.create!(
+        [
+          # group_leader_member_notification_mailer
+          {
+            :enterprise => enterprise,
+            :name => "Group Leader Member Notification Mailer", 
+            :mailer_name => "group_leader_member_notification_mailer",
+            :mailer_method => "notification",
+            :content => "<p>Hello %{user.name},</p>\r\n\r\n<p>%{group.name} has %{count} pending member(s). Click below to view them and accept/deny group membership.</p>\r\n\r\n<p>%{click_here} to view pending members.</p>\r\n", 
+            :subject => "%{count} Pending Member(s) for %{group.name}", 
+            :description => "Email that goes out to group leaders when there are pending group members",
+            :template => ""
+          }
+        ]
+      )
+      # get the email
+      email = enterprise.emails.last
+      
+      enterprise.email_variables.find_each do |variable|
+        variable.emails << email
+      end
+    end
+    
   end
 end

@@ -25,7 +25,6 @@ class UpdateEmailConfiguration < ActiveRecord::Migration
     add_column :email_variables, :titleize,       :boolean, :default => false
     add_column :email_variables, :pluralize,      :boolean, :default => false
     
-    
     Email.reset_column_information
     EmailVariable.reset_column_information
           
