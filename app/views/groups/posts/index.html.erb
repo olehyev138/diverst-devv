@@ -39,7 +39,7 @@
 
         <% shared_message = shared_message post %>
         <% if post.link_type == "NewsLink" %>
-          <%= render partial: "groups/shared/news_links", locals: {news_link: NewsLink.includes(:group, :author).find(news.link.id) } %>
+          <%= render partial: "groups/shared/news_links", locals: {news_link: NewsLink.includes(:group, :author).find(post.link.id) } %>
         <% elsif post.link_type === "GroupMessage"%>
           <%= render partial: "groups/shared/messages", locals: {message: GroupMessage.includes(:owner, :group).find(post.link.id), shared_message: shared_message } %>
         <% elsif post.link_type === "SocialLink"%>

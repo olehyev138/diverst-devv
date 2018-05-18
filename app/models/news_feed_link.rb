@@ -10,14 +10,43 @@ class NewsFeedLink < ActiveRecord::Base
   delegate :group,    :to => :news_feed
   delegate :segment,  :to => :news_feed_link_segment, :allow_nil => true
 
-  scope :approved,        -> { where(approved: true )}
-  scope :not_approved,    -> { where(approved: false )}
-
   validates :news_feed_id,    presence: true
   validates :link_type,       presence: true
 
   before_save :check_link
   after_create :approve_link
+
+  scope :approved,        -> { where(approved: true )}
+  scope :not_approved,    -> { where(approved: false )}
+
+  # Create array out of both associations, map it to ids and then where to generate a ActiveRecord::Relation
+  scope :links, -> (group) {
+    where(id: (group.news_feed_links + group.shared_news_feed_links).map(&:id))
+      .includes(:link, :news_feed)
+  }
+
+  scope :approved_links, -> (group) { links(group).approved }
+  scope :unapproved_links, -> (group) { links(group).not_approved }
+  scope :news_feed_order, -> { order(is_pinned: :desc, created_at: :desc) }
+  scope :segments, -> (user) {
+    joins(join_segments).where(filter_segments, user.segments.pluck(:id))
+  }
+
+  scope :leader_links_count, -> (group) { approved_links(group).count }
+  scope :user_links_count, -> (group, user) { approved_links(group).segments(user).count }
+  scope :leader_links, -> (group, limit) { approved_links(group).news_feed_order.limit(limit) }
+  scope :user_links, -> (group, user, limit) { approved_links(group).segments(user).news_feed_order.limit(limit) }
+
+  class << self
+    def join_segments
+      'LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id'
+    end
+
+    def filter_segments
+      'news_feed_link_segments.segment_id IS NULL OR news_feed_link_segments.segment_id IN (?)'
+    end
+  end
+
 
   # checks if link can automatically be approved
   # links are automatically approved if author is a
