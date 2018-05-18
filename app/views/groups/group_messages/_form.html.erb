@@ -4,10 +4,10 @@
       <%= simple_form_for [@group, @message] do |f| %>
         <%= f.input :subject, input_html: { autofocus: true } %>
         <%= f.input :content %>
-        <%= f.association :segments, label: "#{c_t(:segment).pluralize}", collection: @group.enterprise.segments, input_html: { class: "select2" } %>
 
         <!-- TODO: Make partial - pass locals -->
         <%= f.simple_fields_for :news_feed_link do |n| %>
+          <%= n.association :news_feed_link_segments, label: "#{c_t(:segment).pluralize}", collection: @group.enterprise.segments, input_html: { class: "select2" } %>
           <%= n.association :shared_news_feeds, label_method: lambda { |n| "#{n.group.name}" }, label: 'Share with other groups', input_html: { class: 'select2', multiple: 'multiple'  } %>
           <%= n.hidden_field :news_feed_id, value: @group.news_feed.id %>
         <% end %>
