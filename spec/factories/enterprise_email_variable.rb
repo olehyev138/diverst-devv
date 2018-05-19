@@ -3,5 +3,6 @@ FactoryGirl.define do
     enterprise
     key {"user.name"}
     description {"Display's a user's name"}
+    example {"John Smith"}
   end
 end

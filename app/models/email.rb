@@ -43,4 +43,21 @@ class Email < ActiveRecord::Base
     end
     return hash
   end
+  
+  def process_example(text)
+    return "" if text.nil?
+    replace = {}
+    # get the strings
+    strings = text.scan( /{([^}]*)}/).flatten
+    
+    # 
+    strings.each do |string|
+      variable = variables.joins(:enterprise_email_variable).where(:enterprise_email_variables => {:key => string}).first
+      next if variable.nil?
+
+      replace.merge!({"#{string}": variable.enterprise_email_variable.example})
+    end
+    
+    return text % replace
+  end
 end
