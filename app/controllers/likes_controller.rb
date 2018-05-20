@@ -12,7 +12,7 @@ class LikesController < ApplicationController
         @like.news_feed_link = NewsFeedLink.find(params[:news_feed_link_id])
       end
       @like.enterprise = current_user.enterprise
-      @like.save
+      @like.save!
     end
 
     render json: { :like_success => @like.present? }
@@ -25,18 +25,18 @@ class LikesController < ApplicationController
   end
 
   protected
+    def set_like
+      if params[:news_feed_link_id].blank?
+        @like = Like.find_by(:user => current_user, :answer_id => params[:answer_id], :enterprise => current_user.enterprise)
+      else
+        @like = Like.find_by(:user => current_user, :news_feed_link_id => params[:news_feed_link_id], :enterprise => current_user.enterprise)
+      end
+    end
+
     def like_params
       params.require(:like).permit(
         :news_feed_link_id,
         :answer_id
       )
-    end
-
-    def set_like
-      if params[:news_feed_link_id].blank?
-        @like = Like.find_by(:user => current_user, :answer => params[:answer_id], :enterprise => current_user.enterprise)
-      else
-        @like = Like.find_by(:user => current_user, :news_feed_link => params[:news_feed_link_id], :enterprise => current_user.enterprise)
-      end
     end
 end
