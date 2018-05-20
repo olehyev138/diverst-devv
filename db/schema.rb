@@ -276,15 +276,14 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   end
 
   create_table "email_variables", force: :cascade do |t|
-    t.integer  "email_id",                      limit: 4
-    t.datetime "created_at",                                              null: false
-    t.datetime "updated_at",                                              null: false
-    t.integer  "enterprise_email_variables_id", limit: 4
-    t.integer  "enterprise_email_variable_id",  limit: 4
-    t.boolean  "downcase",                                default: false
-    t.boolean  "upcase",                                  default: false
-    t.boolean  "titleize",                                default: false
-    t.boolean  "pluralize",                               default: false
+    t.integer  "email_id",                     limit: 4
+    t.datetime "created_at",                                             null: false
+    t.datetime "updated_at",                                             null: false
+    t.integer  "enterprise_email_variable_id", limit: 4
+    t.boolean  "downcase",                               default: false
+    t.boolean  "upcase",                                 default: false
+    t.boolean  "titleize",                               default: false
+    t.boolean  "pluralize",                              default: false
   end
 
   create_table "emails", force: :cascade do |t|
@@ -304,8 +303,9 @@ ActiveRecord::Schema.define(version: 20180520224540) do
     t.integer  "enterprise_id", limit: 4
     t.string   "key",           limit: 191
     t.string   "description",   limit: 191
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.text     "example",       limit: 65535
   end
 
   create_table "enterprises", force: :cascade do |t|
