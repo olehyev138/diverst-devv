@@ -80,6 +80,17 @@ after :enterprise do
         :subject => "You are Invited to participate in a '%{survey.title}' survey", 
         :description => "Email that goes out to users invited to participate in a survey/poll",
         :template => ""
+      },
+      # group_leader_member_notification_mailer
+      {
+        :enterprise => enterprise,
+        :name => "Group Leader Member Notification Mailer", 
+        :mailer_name => "group_leader_member_notification_mailer",
+        :mailer_method => "notification",
+        :content => "<p>Hello %{user.name},</p>\r\n\r\n<p>%{group.name} has %{count} pending member(s). Click below to view them and accept/deny group membership.</p>\r\n\r\n<p>%{click_here} to view pending members.</p>\r\n", 
+        :subject => "%{count} Pending Member(s) for %{group.name}", 
+        :description => "Email that goes out to group leaders when there are pending group members",
+        :template => ""
       }
     ]
   )
@@ -87,16 +98,16 @@ after :enterprise do
   # create variables for enterprise 
   enterprise.email_variables.create!(
     [
-      {:key => "user.name", :description => "Displays a user's name", :emails => emails},
-      {:key => "group.name", :description => "Displays a group's name", :emails => emails},
-      {:key => "group_name", :description => "Displays an array of group names", :emails => emails},
-      {:key => "campaign.title", :description => "Displays a campaign's title", :emails => emails},
-      {:key => "group_name", :description => "Displays an array of group names", :emails => emails},
-      {:key => "enterprise.id", :description => "Displays a enterprise's id", :emails => emails},
-      {:key => "enterprise.name", :description => "Displays a enterprise's name", :emails => emails},
-      {:key => "survey.title", :description => "Displays a survey's title", :emails => emails},
-      {:key => "click_here", :description => "Displays a link to a resource or resources", :emails => emails},
-      {:key => "custom_text.erg_text", :description => "Displays the enterprise's custom text for groups", :emails => emails}
+      {:key => "user.name", :description => "Displays a user's name", :emails => emails, :example => "John Smith"},
+      {:key => "group.name", :description => "Displays a group's name", :emails => emails, :example => "Women's Advisory Group"},
+      {:key => "group_names", :description => "Displays an array of group names", :emails => emails, :example => "Women's Advisory Group, African Affinity Group"},
+      {:key => "campaign.title", :description => "Displays a campaign's title", :emails => emails, :example => "Diversity Improvements"},
+      {:key => "enterprise.id", :description => "Displays a enterprise's id", :emails => emails, :example => "20"},
+      {:key => "enterprise.name", :description => "Displays a enterprise's name", :emails => emails, :example => "Microsoft"},
+      {:key => "survey.title", :description => "Displays a survey's title", :emails => emails, :example => "What do you think of our group banner?"},
+      {:key => "click_here", :description => "Displays a link to a resource or resources", :emails => emails, :example => "<a href=\"https://www.diverst.com\" target=\"_blank\">Click here</a>"},
+      {:key => "custom_text.erg_text", :description => "Displays the enterprise's custom text for groups", :emails => emails, :example => "ERG"},
+      {:key => "count", :description => "Displays a count", :emails => emails, :example => "4"}
     ]
   )
 end
