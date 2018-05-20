@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180517203229) do
+ActiveRecord::Schema.define(version: 20180520224540) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -723,6 +723,7 @@ ActiveRecord::Schema.define(version: 20180517203229) do
   add_index "likes", ["answer_id"], name: "index_likes_on_answer_id", using: :btree
   add_index "likes", ["enterprise_id"], name: "index_likes_on_enterprise_id", using: :btree
   add_index "likes", ["news_feed_link_id"], name: "index_likes_on_news_feed_link_id", using: :btree
+  add_index "likes", ["user_id", "answer_id", "enterprise_id"], name: "index_likes_on_user_id_and_answer_id_and_enterprise_id", unique: true, using: :btree
   add_index "likes", ["user_id", "news_feed_link_id", "enterprise_id"], name: "index_likes_on_user_id_and_news_feed_link_id_and_enterprise_id", unique: true, using: :btree
   add_index "likes", ["user_id"], name: "index_likes_on_user_id", using: :btree
 

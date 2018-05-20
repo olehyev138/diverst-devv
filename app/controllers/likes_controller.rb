@@ -15,7 +15,7 @@ class LikesController < ApplicationController
       @like.save!
     end
 
-    render json: { :like_success => @like.present? }
+    render json: { :like_success => @like.persisted? }
   end
 
   def unlike

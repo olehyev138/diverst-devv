@@ -8,14 +8,5 @@ class Like < ActiveRecord::Base
   validates :user_id, presence: true
 
   # Validate to make sure that a maximum of one like object exists for a post/answer, user, and enterprise
-  validates :news_feed_link_id, uniqueness: { scope: [:user_id, :enterprise_id] }, allow_blank: true
-  validates :answer_id, uniqueness: { scope: [:user_id, :enterprise_id] }, allow_blank: true
-
-  def has_answer?
-    :answer.present?
-  end
-
-  def has_news_feed_link?
-    :news_feed_link.present?
-  end
+  # * Moved to DB constraint to prevent race condition *
 end
