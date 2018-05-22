@@ -1,14 +1,31 @@
 class Users::PasswordsController < Devise::PasswordsController
+  # This was overwritten to:
+  # 1) Behave the same way for correct and incorrect emails
+  #    to prevent brute force username lookup
+  #    POST /resource/password
+  #
+  # 2) Resend an invite email for invited but not accepted users
+  #
 
-    # This was overwritten to behave the same way for correct and incorrect emails
-    # to prevent brute force username lookup
-    # POST /resource/password
+  include Onboard
 
-    def create
-        self.resource = resource_class.send_reset_password_instructions(resource_params)
-        yield resource if block_given?
+  def create
+    self.resource = resource_class.find_by(email: resource_params[:email])
+    message = ''
 
-        flash[:notice] = "You will shortly receive password reset instructions to email"
-        respond_with({}, location: after_sending_reset_password_instructions_path_for(resource_name))
+    if resend_invite? self.resource
+      # Resend invite
+      resource_class.invite!(email: resource.email)
+      message = 'You have a pending invitation. Please check your email to accept the invitation and sign in'
+    else
+      # Send reset password instructions
+      self.resource = resource_class.send_reset_password_instructions(resource_params)
+      message = 'You will recieve an email shortly'
     end
+
+    yield resource if block_given?
+
+    flash[:notice] = message
+    respond_with({}, location: after_sending_reset_password_instructions_path_for(resource_name))
+  end
 end
