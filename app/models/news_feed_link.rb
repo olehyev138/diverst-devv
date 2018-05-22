@@ -1,6 +1,7 @@
 class NewsFeedLink < ActiveRecord::Base
   belongs_to :news_feed
-  has_and_belongs_to_many :shared_news_feeds, class_name: 'NewsFeed', join_table: 'news_feeds_news_feed_links'
+  has_many :share_links
+  has_many :shared_news_feeds, through: :share_links, source: :news_feed
   belongs_to :link, :polymorphic => true
 
   has_many :news_feed_link_segments
