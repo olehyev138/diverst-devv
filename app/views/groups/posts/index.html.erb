@@ -37,11 +37,11 @@
           <%= link_to "Unpin", unpin_group_posts_path(:group_id => @group.id, :link_id => post.id), method: :patch if policy(@group).erg_leader_permissions? %>
         <% end %>
 
-        <% shared_message = shared_message post %>
+        <% share_message = shared_message post %>
         <% if post.link_type == "NewsLink" %>
           <%= render partial: "groups/shared/news_links", locals: {news_link: NewsLink.includes(:group, :author).find(post.link.id) } %>
         <% elsif post.link_type === "GroupMessage"%>
-          <%= render partial: "groups/shared/messages", locals: {message: GroupMessage.includes(:owner, :group).find(post.link.id), shared_message: shared_message } %>
+          <%= render partial: "groups/shared/messages", locals: {message: GroupMessage.includes(:owner, :group).find(post.link.id), share_message: share_message } %>
         <% elsif post.link_type === "SocialLink"%>
           <%= render partial: "groups/shared/social_links", locals: {social_link: SocialLink.includes(:group).find(post.link.id) } %>
         <% end %>
