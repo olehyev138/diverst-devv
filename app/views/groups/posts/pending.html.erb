@@ -2,7 +2,7 @@
     <%= link_to group_posts_path(@group) do %>
       <button class="btn btn--primary">Posts(<%= @group.news_feed_links.includes(:link).approved.count %>)</button>
     <% end %>
-  <h1>/Pending(<%= @group.news_feed_links.includes(:link).not_approved.count %>)</h1>
+    <h1>/Pending(<%= NewsFeedLink.unapproved_links(@group).count  %>)</h1>
 </div>
 
 <div class="content__main">
@@ -30,7 +30,7 @@
               <% end %>
 
               <%= link_to 'Delete', group_social_link_path(@group, news.link.id),method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(news.link).destroy? %>
-              <%= link_to "Approve", approve_group_posts_path(:group_id => @group.id, :link_id => news.id), method: :post if policy(@group).erg_leader_permissions? and !news.approved? %>
+              <%= link_to "Approve", approve_group_posts_path(:group_id => @group.id, :link_id => news.id), method: :post if policy(@group).erg_leader_permissions? and !news.approved?(@group) %>
             </div>
         <% end %>
       <% end %>

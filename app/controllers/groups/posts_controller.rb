@@ -20,7 +20,7 @@ class Groups::PostsController < ApplicationController
   end
 
   def pending
-    @posts = @group.news_feed_links.includes(:link).not_approved.order(created_at: :desc)
+    @posts = NewsFeedLink.unapproved_links(@group).order(created_at: :desc)
   end
 
   def approve
