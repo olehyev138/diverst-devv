@@ -6,6 +6,7 @@ RSpec.describe LikesController, type: :controller do
   let(:group) { create(:group, enterprise: user.enterprise) }
 
   let(:news_link) { create(:news_link, group: group, created_at: Time.now) }
+  let(:answer) { create(:answer) }
 
   describe 'POST#create' do
     context 'with logged in user' do
@@ -20,6 +21,18 @@ RSpec.describe LikesController, type: :controller do
           post :create, news_feed_link_id: news_link.news_feed_link.id
 
           expect{ post :unlike, news_feed_link_id: news_link.news_feed_link.id }
+            .to change(Like, :count).by(-1)
+        end
+
+        it 'likes an answer' do
+          expect{ post :create, answer_id: answer.id }
+            .to change(Like, :count).by(1)
+        end
+
+        it 'unlikes an answer' do
+          post :create, answer_id: answer.id
+
+          expect{ post :unlike, answer_id: answer.id }
             .to change(Like, :count).by(-1)
         end
     end
