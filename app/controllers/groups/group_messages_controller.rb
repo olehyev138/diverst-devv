@@ -94,7 +94,7 @@ class Groups::GroupMessagesController < ApplicationController
       .permit(
         :subject,
         :content,
-        news_feed_link_attributes: [ :news_feed_id, news_feed_link_segment_ids: [], shared_news_feed_ids: [] ]
+        news_feed_link_attributes: [ :news_feed_id, news_feed_link_segment_ids: [], news_feed_ids: [] ]
     )
   end
 

@@ -3,7 +3,7 @@
     <h1>Posts(<%= @count %>)/
       <%= link_to pending_group_posts_path(@group) do %>
         <button class="btn btn--primary">
-          Pending(<%= NewsFeedLink.unapproved_links(@group).count %>)
+          Pending(<%= NewsFeedLink.unapproved(@group).count %>)
         </button>
       <% end %>
     </h1>

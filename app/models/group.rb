@@ -49,7 +49,6 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   has_one :news_feed, dependent: :destroy
 
   delegate :news_feed_links, :to => :news_feed
-  delegate :shared_news_feed_links, :to => :news_feed
 
   has_many :user_groups, dependent: :destroy
   has_many :members, through: :user_groups, class_name: 'User', source: :user, after_remove: :update_elasticsearch_member

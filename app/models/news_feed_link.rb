@@ -1,42 +1,35 @@
 class NewsFeedLink < ActiveRecord::Base
-  belongs_to :news_feed
   has_many :share_links, dependent: :destroy
-  has_many :shared_news_feeds, through: :share_links, source: :news_feed
+  has_many :news_feeds, through: :share_links, source: :news_feed
+
   belongs_to :link, :polymorphic => true
 
   has_many :news_feed_link_segments
   has_many :likes, dependent: :destroy
   has_many :views, dependent: :destroy
 
-  delegate :group,    :to => :news_feed
   delegate :segment,  :to => :news_feed_link_segment, :allow_nil => true
 
   validates :news_feed_id,    presence: true
   validates :link_type,       presence: true
 
+  before_create :set_share_link
   before_save :check_link
   after_create :approve_link
 
-  scope :approved,     -> {
-    joins('LEFT OUTER JOIN share_links on share_links.news_feed_link_id = news_feed_links.id').
-      where('news_feed_links.approved = true AND (share_links.approved = true OR share_links.approved is NULL)')
-      .uniq
+  scope :approved,     -> (group) {
+    joins(:share_links)
+      .where('share_links.news_feed_id = (?)', group.news_feed.id)
+      .where('share_links.approved = true')
   }
 
-  scope :not_approved,     -> {
-    joins('LEFT OUTER JOIN share_links on share_links.news_feed_link_id = news_feed_links.id').
-      where('news_feed_links.approved = false OR share_links.approved = false')
-      .uniq
+  scope :unapproved,   -> (group) {
+    joins(:share_links).where('share_links.approved = false')
+      .where('share_links.news_feed_id = (?)', group.news_feed.id)
+      .where('share_links.approved = false')
   }
 
-  # Create array out of both associations, map it to ids and then where to generate a ActiveRecord::Relation
-  scope :links, -> (group) {
-    where(id: (group.news_feed_links + group.shared_news_feed_links).map(&:id))
-      .includes(:link, :news_feed)
-  }
-
-  scope :approved_links,      -> (group) { links(group).approved }
-  scope :unapproved_links,    -> (group) { links(group).not_approved }
+  scope :common_includes, -> { includes(:link) }
 
   scope :news_feed_order, -> { order(is_pinned: :desc, created_at: :desc) }
   scope :segments, -> (user) {
@@ -44,16 +37,24 @@ class NewsFeedLink < ActiveRecord::Base
     .where('news_feed_link_segments.segment_id IS NULL OR news_feed_link_segments.segment_id IN (?)', user.segments.pluck(:id))
   }
 
-  scope :leader_links_count,    -> (group) { approved_links(group).count }
-  scope :user_links_count,      -> (group, user) { approved_links(group).segments(user).count }
-  scope :leader_links,          -> (group, limit) { approved_links(group).news_feed_order.limit(limit) }
-  scope :user_links,            -> (group, user, limit) { approved_links(group).segments(user).news_feed_order.limit(limit) }
+  scope :leader_links,          -> (group, limit) { common_includes.approved(group).news_feed_order.limit(limit) }
+  scope :user_links,            -> (group, user, limit) { common_includes.approved(group).segments(user).news_feed_order.limit(limit) }
 
-  def approved?(group)
-    return self.approved if share_links.empty?
-    approved && share_links.find_by(news_feed: group.news_feed.id).approved
+  class << self
+    def joins_share_link(group)
+      'JOIN share_links on share_links.news_feed_link_id = news_feed_links.id'
+    end
+
+    def news_feed(group)
+      news_feeds.find(group.news_feed.id)
+    end
   end
 
+
+  def approved?(group)
+    share_link = share_links.find_by(news_feed: group.news_feed.id)
+    share_link.blank? ? self.approved : (approved && share_link.approved)
+  end
 
   # View Count methods
   def increment_view(user)
@@ -74,6 +75,12 @@ class NewsFeedLink < ActiveRecord::Base
   end
 
   private
+
+  # Callbacks
+
+  def set_share_link
+    share_links << ShareLink.new(news_feed_link_id: self.id, news_feed_id: link.group.news_feed.id)
+  end
 
   # Validates that link is present
   # Cant use normal validation since NewsFeedLink is saved first

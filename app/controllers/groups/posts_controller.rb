@@ -8,10 +8,10 @@ class Groups::PostsController < ApplicationController
 
   def index
     if policy(@group).erg_leader_permissions?
-      @count = NewsFeedLink.leader_links_count(@group)
+      @count = NewsFeedLink.approved(@group).count
       @posts = NewsFeedLink.leader_links(@group, @limit)
     elsif @group.active_members.include? current_user
-      @count = NewsFeedLink.user_links_count(@group, current_user)
+      @count = NewsFeedLink.approved(@group).segments(current_user).count
       @posts = NewsFeedLink.user_links(@group, current_user, @limit)
     else
       @count = 0
@@ -20,12 +20,14 @@ class Groups::PostsController < ApplicationController
   end
 
   def pending
-    @posts = NewsFeedLink.unapproved_links(@group).order(created_at: :desc)
+    @posts = NewsFeedLink.unapproved(@group).order(created_at: :desc)
   end
 
   def approve
-    @link.approved = true
-    if not @link.save
+    share_link = @link.share_links.find_by(news_feed: @group.news_feed.id)
+    share_link.approved = true
+
+    if not share_link.save
       flash[:alert] = "Link not approved"
     end
     redirect_to :back

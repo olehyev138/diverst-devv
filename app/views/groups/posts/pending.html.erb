@@ -1,8 +1,8 @@
 <div class="content__header">
     <%= link_to group_posts_path(@group) do %>
-      <button class="btn btn--primary">Posts(<%= @group.news_feed_links.includes(:link).approved.count %>)</button>
+      <button class="btn btn--primary">Posts(<%= NewsFeedLink.approved(@group).count  %>)</button>
     <% end %>
-    <h1>/Pending(<%= NewsFeedLink.unapproved_links(@group).count  %>)</h1>
+    <h1>/Pending(<%= NewsFeedLink.unapproved(@group).count  %>)</h1>
 </div>
 
 <div class="content__main">
