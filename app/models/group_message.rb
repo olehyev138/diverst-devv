@@ -67,4 +67,9 @@ class GroupMessage < ActiveRecord::Base
     group_messages_segment = self.group_messages_segments.where(:segment_id => segment.id).first
     group_messages_segment.news_feed_link_segment.destroy
   end
+
+  def unlink(group)
+    news_feed_link.share_link(group).destroy
+    self.destroy if news_feed_link.share_links.empty?
+  end
 end

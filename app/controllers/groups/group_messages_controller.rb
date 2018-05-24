@@ -26,7 +26,6 @@ class Groups::GroupMessagesController < ApplicationController
 
   def edit
     authorize @message, :update?
-    @message.build_news_feed_link
   end
 
   def create
@@ -56,9 +55,9 @@ class Groups::GroupMessagesController < ApplicationController
 
   def destroy
     user_rewarder("message_post").remove_points(@message)
-    @message.destroy
-    flash[:notice] = "Your message was removed. Now you have #{current_user.credits} points"
+    @message.unlink(@group)
 
+    flash[:notice] = "Your message was removed. Now you have #{current_user.credits} points"
     redirect_to group_posts_path(@group)
   end
 
@@ -85,7 +84,7 @@ class Groups::GroupMessagesController < ApplicationController
   end
 
   def set_message
-    @message = @group.messages.find(params[:id])
+    @message = @group.news_feed_links.find(params[:id]).link
   end
 
   def message_params
@@ -94,7 +93,7 @@ class Groups::GroupMessagesController < ApplicationController
       .permit(
         :subject,
         :content,
-        news_feed_link_attributes: [ :news_feed_id, news_feed_link_segment_ids: [], news_feed_ids: [] ]
+        news_feed_link_attributes: [ :id, :news_feed_id, news_feed_link_segment_ids: [], news_feed_ids: [] ]
     )
   end
 

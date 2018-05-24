@@ -24,11 +24,12 @@ class NewsFeedLink < ActiveRecord::Base
   }
 
   scope :unapproved,   -> (group) {
-    joins(:share_links).where('share_links.approved = false')
+    joins(:share_links)
       .where('share_links.news_feed_id = (?)', group.news_feed.id)
       .where('share_links.approved = false')
   }
 
+  # TODO: Fix this
   scope :common_includes, -> { includes(:link) }
 
   scope :news_feed_order, -> { order(is_pinned: :desc, created_at: :desc) }
@@ -40,19 +41,20 @@ class NewsFeedLink < ActiveRecord::Base
   scope :leader_links,          -> (group, limit) { common_includes.approved(group).news_feed_order.limit(limit) }
   scope :user_links,            -> (group, user, limit) { common_includes.approved(group).segments(user).news_feed_order.limit(limit) }
 
-  class << self
-    def joins_share_link(group)
-      'JOIN share_links on share_links.news_feed_link_id = news_feed_links.id'
-    end
-
-    def news_feed(group)
-      news_feeds.find(group.news_feed.id)
-    end
+  def news_feed(group)
+    news_feeds.find(group.news_feed.id)
   end
 
+  def share_link(group)
+    share_links.find_by(news_feed: group.news_feed.id)
+  end
+
+  def shared?(group)
+    link.group_id != group.id
+  end
 
   def approved?(group)
-    share_link = share_links.find_by(news_feed: group.news_feed.id)
+    share_link = share_link(group)
     share_link.blank? ? self.approved : (approved && share_link.approved)
   end
 
