@@ -8,8 +8,8 @@ class GroupMessagePolicy < ApplicationPolicy
   end
 
   def update?
-    return false if @record.news_feed_link.share_links.count > 1
     return true if is_owner?
+    return false if @record.news_feed_link.share_links.count > 1
 
     @policy_group.group_messages_manage
   end

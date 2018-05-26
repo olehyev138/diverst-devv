@@ -49,8 +49,16 @@ class NewsFeedLink < ActiveRecord::Base
     share_links.find_by(news_feed: group.news_feed.id)
   end
 
+  def posted_by_group
+    link.group
+  end
+
   def shared?(group)
     link.group_id != group.id
+  end
+
+  def shared?
+    share_links.count > 1
   end
 
   def approved?(group)
