@@ -13,14 +13,14 @@ $(document).on('ready page:load', function()
         if (!btn.data("isLiked"))
         {
           $.post('/likes/',
-            {news_feed_link_id: btn.data("newsFeedLinkId")},
+            {news_feed_link_id: btn.data("newsFeedLinkId"), answer_id: btn.data("answerId")},
             function (data) { likeSuccess(data, btn); }
           );
         }
         else
         {
           $.post('/likes/unlike',
-            {_method: "delete", news_feed_link_id: btn.data("newsFeedLinkId")},
+            {_method: "delete", news_feed_link_id: btn.data("newsFeedLinkId"), answer_id: btn.data("answerId")},
             function (data) { unlikeSuccess(data, btn); }
           );
         }
@@ -36,7 +36,7 @@ function likeSuccess(data, btn)
     btn.data("isLiked", true);
 
     setAsLikedImage(btn);
-    incrementLikeCount(btn.data("newsFeedLinkId"));
+    incrementLikeCount(btn.data("newsFeedLinkId") ? btn.data("newsFeedLinkId") : btn.data("answerId"));
   }
   btn.data("callComplete", true);
 }
@@ -48,7 +48,7 @@ function unlikeSuccess(data, btn)
     btn.data("isLiked", false);
 
     setAsUnlikedImage(btn);
-    decrementLikeCount(btn.data("newsFeedLinkId"));
+    decrementLikeCount(btn.data("newsFeedLinkId") ? btn.data("newsFeedLinkId") : btn.data("answerId"));
   }
   btn.data("callComplete", true);
 }
@@ -63,14 +63,14 @@ function setAsUnlikedImage(btn)
   btn.children().attr("src", "<%= image_path("icons/like.svg") %>");
 }
 
-function incrementLikeCount(news_feed_link_id)
+function incrementLikeCount(object_id)
 {
-  var likeCount = $("#likeCount" + news_feed_link_id)
+  var likeCount = $("#likeCount" + object_id)
   likeCount.text(parseInt(likeCount.text()) + 1);
 }
 
-function decrementLikeCount(news_feed_link_id)
+function decrementLikeCount(object_id)
 {
-  var likeCount = $("#likeCount" + news_feed_link_id)
+  var likeCount = $("#likeCount" + object_id)
   likeCount.text(parseInt(likeCount.text()) - 1);
 }

@@ -11,7 +11,7 @@ RSpec.describe GroupMemberDatatable do
             expect(table.sortable_columns).to eq(['User.first_name', 'User.active'])
         end
     end
-    
+
     describe "#searchable_columns" do
         it "returns the searchable_columns" do
             table = GroupMemberDatatable.new(nil, group, group.members)

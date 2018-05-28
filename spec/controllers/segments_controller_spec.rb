@@ -133,6 +133,10 @@ RSpec.describe SegmentsController, type: :controller do
                 it 'return 2 sub_segments of segment' do
                     expect(assigns[:segments]).to eq segment.sub_segments
                 end
+
+                it 'return members ids in numerical order' do
+                    expect(assigns[:members].map(&:id).each_cons(2).all? { |a, b| a <= b }).to eq true
+                end
             end
 
             context 'when group is not present' do
