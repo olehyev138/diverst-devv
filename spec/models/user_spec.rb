@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe User do
   describe "when validating" do
-    let(:user) { create(:user) }
+    let(:user) { build(:user) }
 
     context 'test validations' do
       it { expect(user).to validate_presence_of(:first_name) }
@@ -113,10 +113,10 @@ RSpec.describe User do
 
     context 'presence of fields' do
       let(:user){ build(:user, enterprise: enterprise) }
-      let!(:mandatory_field){ create(:field, title: "Test", required: true) }
+      let!(:mandatory_field){ build(:field, title: "Test", required: true) }
 
       context 'with mandatory fields not filled' do
-        let!(:enterprise){ create(:enterprise, fields: [mandatory_field]) }
+        let!(:enterprise){ build(:enterprise, fields: [mandatory_field]) }
 
         it "should have an error on user" do
           user.info[mandatory_field] = ""

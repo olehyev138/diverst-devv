@@ -4,6 +4,10 @@ class NewsLink < ActiveRecord::Base
 
     has_one :news_feed_link, :as => :link, :dependent => :destroy
 
+    delegate :increment_view, :to => :news_feed_link
+    delegate :total_views, :to => :news_feed_link
+    delegate :unique_views, :to => :news_feed_link
+
     has_many :news_link_segments, :dependent => :destroy
     has_many :segments, through: :news_link_segments, :before_remove => :remove_segment_association
     has_many :news_link_photos,  dependent: :destroy
@@ -38,6 +42,14 @@ class NewsLink < ActiveRecord::Base
     def remove_segment_association(segment)
         news_link_segment = self.news_link_segments.where(:segment_id => segment.id).first
         news_link_segment.news_feed_link_segment.destroy
+    end
+
+    def comments_count
+        if group.enterprise.enable_pending_comments?
+            comments.approved.count
+        else
+            comments.count
+        end
     end
 
     protected

@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe Event, :type => :model do
-    
+
     describe 'when validating' do
         let(:event) { FactoryGirl.build_stubbed(:event) }
 
         it { expect(event).to belong_to(:group) }
         it { expect(event).to belong_to(:owner)}
-        
+
         it { expect(event).to have_many(:events_segments) }
         it { expect(event).to have_many(:segments).through(:events_segments) }
         it { expect(event).to have_many(:event_attendances) }
@@ -17,7 +17,7 @@ RSpec.describe Event, :type => :model do
         it { expect(event).to have_many(:comments) }
         it { expect(event).to have_many(:fields) }
     end
-    
+
     describe '#time_string' do
         context 'when the event occurs on a single day' do
             it 'prints a well formatted time' do
@@ -68,7 +68,7 @@ RSpec.describe Event, :type => :model do
             end
         end
     end
-    
+
     describe "start/end" do
         it "validates end" do
             event = build(:event, :end => Date.tomorrow)

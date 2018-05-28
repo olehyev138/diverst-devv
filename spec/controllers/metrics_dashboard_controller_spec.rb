@@ -42,7 +42,8 @@ RSpec.describe MetricsDashboardsController, type: :controller do
         metrics_dashboard
         create_list(:group, 2, enterprise: user.enterprise)
         create_list(:segment, 3, enterprise: user.enterprise)
-        create_list(:resource, 4, container: user.enterprise)
+        folder = create(:folder, container_id: user.enterprise.id, container_type: "Enterprise")
+        create_list(:resource, 4, container: folder)
         create_list(:poll, 2, enterprise: user.enterprise)
         get_index
       end
@@ -96,7 +97,7 @@ RSpec.describe MetricsDashboardsController, type: :controller do
 
         it "redirect to just created metrics dashboard" do
           post_create(md_params)
-          expect(response).to redirect_to MetricsDashboard.last
+          expect(response).to redirect_to new_metrics_dashboard_graph_path(MetricsDashboard.last)
         end
 
         it 'creates correct dashboard' do
@@ -110,7 +111,7 @@ RSpec.describe MetricsDashboardsController, type: :controller do
 
         it 'redirects to correct action' do
           post_create(md_params)
-          expect(response).to redirect_to MetricsDashboard.last
+          expect(response).to redirect_to new_metrics_dashboard_graph_path(MetricsDashboard.last)
         end
 
         describe 'public activity' do
@@ -175,41 +176,41 @@ RSpec.describe MetricsDashboardsController, type: :controller do
     context 'with logged user' do
       context "with valid token" do
         login_user_from_let
-  
+
         before do
           create_list(:graph, 2, collection: metrics_dashboard)
           metrics_dashboard.shareable_token #Touch token, so it is initialized
           get_show
         end
-  
+
          it "returns set metrics dashboard" do
           expect(assigns[:metrics_dashboard]).to eq metrics_dashboard
         end
-  
+
         it "render show template" do
           expect(response).to render_template :show
         end
-  
+
         it 'sets correct shareable token' do
           expect(assigns[:token]).to eq metrics_dashboard.shareable_token
         end
-  
+
         it 'return 2 graphs objects that belong to metrics_dashboard object' do
           expect(assigns[:graphs].count).to eq 2
           expect(assigns[:graphs]).to eq metrics_dashboard.graphs.includes(:field, :aggregation)
         end
       end
-      
+
       context "with no token" do
         login_user_from_let
-  
+
         before do
           metrics_dashboard.shareable_token = nil
           metrics_dashboard.save!
           metrics_dashboard.groups.destroy_all
           get_show
         end
-        
+
         it "render edit template" do
           expect(response).to render_template :edit
         end

@@ -15,13 +15,13 @@
           <div class="flex-row__cell link-group">
 
             <% if group.children.count > 0 %>
-              <%= link_to "Show Sub-#{ c_t(:erg).pluralize }", "#", class: "nested_show", id: group.id%>
-              <%= link_to "Hide Sub-#{ c_t(:erg).pluralize }", "#", class: "nested_hide", id: group.id, style: "display:none;" %>
+              <%= link_to "Show #{ c_t(:sub_erg).pluralize }", "#", class: "nested_show", id: group.id%>
+              <%= link_to "Hide #{ c_t(:sub_erg).pluralize }", "#", class: "nested_hide", id: group.id, style: "display:none;" %>
 
               <% if current_user.enterprise.group_category_types.empty? %>
-                <%= link_to "Categorize Sub-#{ c_t(:erg).pluralize }", new_group_category_url(parent_id: group.id) %>
+                <%= link_to "Categorize #{ c_t(:sub_erg).pluralize }", new_group_category_url(parent_id: group.id) %>
               <% else %>
-                <%= link_to "Categorize Sub-#{ c_t(:erg).pluralize }", group_categories_url(parent_id: group.id) %>
+                <%= link_to "Categorize #{ c_t(:sub_erg).pluralize }", group_categories_url(parent_id: group.id) %>
               <% end %>
             <% end %>
 
@@ -33,7 +33,7 @@
           </div>
         </div>
 
-        <span class="field__label children_<%= group.id%>" style="display:none; margin-top: 10px;"><%= "Sub-#{ c_t(:erg).pluralize } for #{group.name}" %></span>
+        <span class="field__label children_<%= group.id%>" style="display:none; margin-top: 10px;"><%= "#{ c_t(:sub_erg).pluralize } for #{group.name}" %></span>
 
       <% group.children.each do |child| %>
         <div class="children_<%= group.id%>" style="display:none; position: relative; top: 10px;">

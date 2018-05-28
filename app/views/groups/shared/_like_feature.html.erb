@@ -1,0 +1,4 @@
+<div style="text-align: center;">
+  <%= button_tag (image_tag image_path(is_post_liked?(news_feed_link.id) ? "icons/like-active.svg" : "icons/like.svg"), size: "48"), data: { news_feed_link_id: news_feed_link.id, is_liked: is_post_liked?(news_feed_link.id) }, class: "likeBtn" if news_feed_link.approved? %><br>
+  <span class="likeCount" id="likeCount<%= news_feed_link.id %>"><%= news_feed_link.likes.count %></span>
+</div>

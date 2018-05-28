@@ -8,6 +8,10 @@ class GroupMessage < ActiveRecord::Base
 
     has_one :news_feed_link, :as => :link, :dependent => :destroy
 
+    delegate :increment_view, :to => :news_feed_link
+    delegate :total_views, :to => :news_feed_link
+    delegate :unique_views, :to => :news_feed_link
+
     validates :group_id,    presence: true
     validates :subject,     presence: true
     validates :content,     presence: true
@@ -26,6 +30,15 @@ class GroupMessage < ActiveRecord::Base
 
     scope :unapproved, -> {joins(:news_feed_link).where(:news_feed_links => {:approved => false})}
     scope :approved, -> {joins(:news_feed_link).where(:news_feed_links => {:approved => true})}
+
+
+    def comments_count
+        if group.enterprise.enable_pending_comments?
+            comments.approved.count
+        else
+            comments.count
+        end
+    end
 
     def users
         if segments.empty?

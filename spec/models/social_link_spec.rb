@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe SocialLink, type: :model do
 
     describe 'validation' do
-        let(:social_link) { FactoryGirl.build_stubbed(:social_link) }
+        let(:social_link) { build_stubbed(:social_link) }
 
         it 'has valid factory' do
             expect(social_link).to be_valid
@@ -95,7 +95,7 @@ RSpec.describe SocialLink, type: :model do
 
     describe "#remove_segment_association" do
         it "removes segment association" do
-            social_link = create(:social_link)
+            social_link = build(:social_link)
             segment = create(:segment)
 
             social_link.segment_ids = [segment.id]
@@ -118,8 +118,8 @@ RSpec.describe SocialLink, type: :model do
     describe ".of_segments" do
         it "returns 0 social links" do
             user = create(:user)
-            social_link_1 = create(:social_link)
-            social_link_2 = create(:social_link)
+            social_link_1 = build(:social_link)
+            social_link_2 = build(:social_link)
             segment = create(:segment)
 
             social_link_1.segment_ids = [segment.id]
@@ -135,7 +135,7 @@ RSpec.describe SocialLink, type: :model do
 
         it "returns 1 social link" do
             user = create(:user)
-            social_link = create(:social_link, :author => user)
+            social_link = build(:social_link, :author => user)
             segment = create(:segment)
 
             expect(social_link.segments.length).to eq(0)
@@ -159,7 +159,7 @@ RSpec.describe SocialLink, type: :model do
         it "returns 1 social link when user is member of group" do
             user = create(:user)
             group = create(:group)
-            social_link = create(:social_link, :author => user, :group => group)
+            social_link = build(:social_link, :author => user, :group => group)
             segment = create(:segment)
 
             expect(social_link.segments.length).to eq(0)
@@ -187,7 +187,7 @@ RSpec.describe SocialLink, type: :model do
         it "returns 0 social link even when user is member of group" do
             user = create(:user)
             group = create(:group)
-            social_link = create(:social_link, :author => user, :group => group)
+            social_link = build(:social_link, :author => user, :group => group)
             segment = create(:segment)
 
             expect(social_link.segments.length).to eq(0)
@@ -210,8 +210,8 @@ RSpec.describe SocialLink, type: :model do
 
         it "returns 2 social links" do
             user = create(:user)
-            social_link_1 = create(:social_link, :author => user)
-            social_link_2 = create(:social_link, :author => user)
+            social_link_1 = build(:social_link, :author => user)
+            social_link_2 = build(:social_link, :author => user)
             segment = create(:segment)
 
             social_link_1.segment_ids = [segment.id]

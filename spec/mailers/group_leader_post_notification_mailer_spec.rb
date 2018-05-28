@@ -6,7 +6,13 @@ RSpec.describe GroupLeaderPostNotificationMailer, type: :mailer do
   let!(:group){ create(:group, :enterprise => leader.enterprise, :pending_users => "enabled") }
   let!(:user_group) {create(:user_group, :group => group, :user => leader, :accepted_member => true)} 
   let!(:group_leader){ create(:group_leader, :group => group, :user => leader) }
-
+  let!(:custom_text) { create(:custom_text, :erg => "BRG", :enterprise => leader.enterprise)}
+  let!(:email) { create(:email, :enterprise => leader.enterprise, :mailer_name => "group_leader_post_notification_mailer", :mailer_method => "notification", :content => "<p>Hello %{user.name},</p>\r\n\r\n<p>You have received a request to approve a posting for: %{group.name}.</p>\r\n\r\n<p>%{click_here} to provide approve/decline of this posting.</p>\r\n", :subject => "%{count} Pending Post(s) for %{group.name}")}
+  let!(:email_variable_1) { create(:email_variable, :email => email, :enterprise_email_variable => create(:enterprise_email_variable, :key => "user.name"))}
+  let!(:email_variable_2) { create(:email_variable, :email => email, :enterprise_email_variable => create(:enterprise_email_variable, :key => "group.name"), :titleize => true)}
+  let!(:email_variable_3) { create(:email_variable, :email => email, :enterprise_email_variable => create(:enterprise_email_variable, :key => "count"))}
+  let!(:email_variable_4) { create(:email_variable, :email => email, :enterprise_email_variable => create(:enterprise_email_variable, :key => "click_here"))}
+    
   let!(:mail) { described_class.notification(group, leader, 1).deliver_now }
 
   describe '#notification' do
@@ -26,8 +32,8 @@ RSpec.describe GroupLeaderPostNotificationMailer, type: :mailer do
       expect(mail.from).to eq(['info@diverst.com'])
     end
 
-    it 'shows a message with number of pending posts in group' do
-      expect(mail.body.encoded).to include("#{group.name} has 1 pending post")
+    it 'shows a message regarding approving posts' do
+      expect(mail.body.encoded).to include("You have received a request to approve a posting")
     end
   end
 end

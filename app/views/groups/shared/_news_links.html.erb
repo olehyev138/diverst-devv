@@ -1,5 +1,8 @@
 <div class="card__section card__section--border">
   <div class="row">
+    <div class="col sm-1 text-center">
+      <%= render partial: "groups/shared/like_feature", locals: {news_feed_link: news_link.news_feed_link } %>
+    </div>
     <div class="col sm-2">
       <% if news_link.photos.count > 0 %>
         <%= render partial: "shared/carousel/template", locals: {news_link: news_link, size: "medium" } %>
@@ -7,34 +10,40 @@
         <%= news_link_picture(news_link) %>
       <% end %>
     </div>
-
-    <div class="col sm-10">
+    <div class="col sm-9" id="news_link_<%= news_link.id %>">
       <div class="flex-row flex-row--middle">
         <div class="flex-row__cell flex-row__cell--grow">
-          <h4><%= news_link.title %></h4>
+          <h4><%= news_link.title %> - <span class="muted"> <%= news_link.total_views %> views</span></h4>
           <p>
-            <%= news_link.description %>
+            <%= allow_newlines news_link.description %>
             <br>
-            <%= link_to news_link.url, news_link.url %>
+            <%= link_to news_link.url, news_link.url, target: '_blank', 'data-trackable': news_link.news_feed_link.id %>
             <br>
             <% if news_link.author.present? %>
               <span class="muted">Posted by <%=  news_link.author.name_with_status %></span>
             <% end %>
             <br>
-            <%= link_to "Comments(#{news_link.comments.approved.count})", comments_group_news_link_path(news_link.group,news_link)
-             %>
-          </p>
+            <%= link_to "Comments(#{news_link.comments_count})", comments_group_news_link_path(news_link.group,news_link) %>
         </div>
-        <% if policy(news_link).edit? %>
-          <div class="flex-row__cell link-group">
+        <div class="flex-row__cell link-group">
+          <% if policy(news_link).edit? %>
             <%= link_to "Approve", approve_group_posts_path(:group_id => news_link.group.id, :link_id => news_link.news_feed_link.id), method: :post, class: "btn btn--primary" if policy(news_link.group).erg_leader_permissions? and !news_link.news_feed_link.approved? %>
             <%= link_to "Edit", edit_group_news_link_path(news_link.group, news_link), class: "btn btn--secondary" %>
             <%= link_to "Delete", group_news_link_path(news_link.group, news_link), method: :delete, class: "btn btn--danger", data: { confirm: "Are you sure?" } %>
-          </div>
-        <% end %>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <%= render "groups/news_links/modal/form" %>
+
+<script>
+ $(function() {
+   $('a[data-trackable]').click(function() {
+     $.post('/views/track', { id: $(this).data('trackable') } );
+
+   });
+ });
+</script>

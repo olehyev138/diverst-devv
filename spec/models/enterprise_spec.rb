@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Enterprise, type: :model do
 
     describe "when validating" do
-        let(:enterprise){ create(:enterprise) }
+        let(:enterprise){ build_stubbed(:enterprise) }
 
         it { expect(enterprise).to have_many(:users).inverse_of(:enterprise) }
         it { expect(enterprise).to have_many(:graph_fields).class_name('Field') }
@@ -69,14 +69,14 @@ RSpec.describe Enterprise, type: :model do
 
     describe "#company_video_url" do
         it "saves the url" do
-            enterprise = create(:enterprise, :company_video_url => "https://www.youtube.com/watch?v=Y2VF8tmLFHw")
+            enterprise = build_stubbed(:enterprise, :company_video_url => "https://www.youtube.com/watch?v=Y2VF8tmLFHw")
             expect(enterprise.company_video_url).to_not be(nil)
         end
     end
 
     describe "#update_matches" do
         it "calls GenerateEnterpriseMatchesJob" do
-            enterprise = create(:enterprise)
+            enterprise = build_stubbed(:enterprise)
             allow(GenerateEnterpriseMatchesJob).to receive(:perform_later)
 
             enterprise.update_matches
@@ -97,7 +97,7 @@ RSpec.describe Enterprise, type: :model do
 
     describe "#custom_text" do
         context "when enterprise does not have a custom_text" do
-            let!(:enterprise){ create(:enterprise, custom_text: nil) }
+            let!(:enterprise){ build(:enterprise, custom_text: nil) }
 
             it "create a new custom_text" do
                 expect(enterprise.custom_text).to be_an_instance_of(CustomText)
@@ -105,8 +105,8 @@ RSpec.describe Enterprise, type: :model do
         end
 
         context "when enterprise have a custom_text" do
-            let!(:custom_text){ create(:custom_text) }
-            let!(:enterprise){ create(:enterprise, custom_text: custom_text) }
+            let!(:custom_text){ build_stubbed(:custom_text) }
+            let!(:enterprise){ build_stubbed(:enterprise, custom_text: custom_text) }
 
             it "return the custom_text" do
                 expect(enterprise.custom_text).to eq custom_text
@@ -117,12 +117,12 @@ RSpec.describe Enterprise, type: :model do
     describe "#default_time_zone" do
 
         it "returns UTC" do
-            enterprise = create(:enterprise, time_zone: nil)
+            enterprise = build_stubbed(:enterprise, time_zone: nil)
             expect(enterprise.default_time_zone).to eq "UTC"
         end
 
         it "returns EST" do
-            enterprise = create(:enterprise, time_zone: "EST")
+            enterprise = build_stubbed(:enterprise, time_zone: "EST")
             expect(enterprise.default_time_zone).to eq "EST"
         end
     end

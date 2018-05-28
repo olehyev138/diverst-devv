@@ -8,7 +8,7 @@ module ApplicationHelper
     comment = comments.find_by(user_id: current_user.id, approved: false)
     yield if comment && !current_user.erg_leader?
   end
-  
+
   def back_to_diverst_path
     groups_path # TODO
   end
@@ -175,5 +175,13 @@ module ApplicationHelper
     else
       image_path(default_logo_name)
     end
+  end
+
+  def is_post_liked?(news_feed_link_id)
+    Like.find_by(:user => current_user, :enterprise => current_user.enterprise, :news_feed_link => news_feed_link_id).present?
+  end
+
+  def is_answer_liked?(answer_id)
+    Like.find_by(:user => current_user, :enterprise => current_user.enterprise, :answer => answer_id).present?
   end
 end

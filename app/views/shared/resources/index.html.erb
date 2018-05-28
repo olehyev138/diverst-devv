@@ -14,10 +14,10 @@
 </div>
 
 <% if @container.class.name === "Folder" %>
-  
+
   <div class="row">
     <% @container.children.each_with_index  do |folder, index| %>
-      
+
       <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
         <h4>
           <%= folder.name %>&nbsp;
@@ -29,10 +29,10 @@
         <%= link_to inline_svg('icons/folder.svg', size: '100px*100px'), polymorphic_path([@container.container] + [folder] + [:resources]) if !folder.password_protected %>
         <%= link_to inline_svg('icons/folder.svg', size: '100px*100px'), [@container.container] + [folder], method: :get, remote: true if folder.password_protected %>
       </div>
-    
+
     <% end %>
   </div>
-  
+
   <%= render "shared/modal/form" %>
 
 <% end %>

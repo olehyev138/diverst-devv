@@ -1,11 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe EnterprisePolicy, :type => :policy do
-    
-    let(:enterprise) {create(:enterprise)}
+    let(:policy_group){ create(:policy_group, :global_settings_manage => true)}
+    let(:enterprise) {create(:enterprise, :policy_groups => [policy_group])}
     let(:user){ create(:user, :enterprise => enterprise) }
-    let(:no_access) { create(:user) }
-    
+    let(:policy_group_2){ create(:policy_group, :global_settings_manage => false)}
+    let(:no_access) { create(:user, :policy_group => policy_group_2) }
+
     subject { described_class }
     
     before {

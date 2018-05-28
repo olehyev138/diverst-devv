@@ -114,10 +114,8 @@
   <div class="card">
     <div class="card__section">
       <% if @dashboards.empty? %>
-        <p>There are no dashboards yet.
-          <% if policy(MetricsDashboard).new? %>
-            <span><%= link_to "Create one", new_metrics_dashboard_path %> to start getting valuable insight on your team's diversity.
-          <% end %>
+        <p>You have not created any dashboards yet. 
+          <%= link_to "Create one", new_metrics_dashboard_path %> to start getting valuable insight on your team's diversity.
         </p>
       <% else %>
         <table class="table--has-border" id="users-table">

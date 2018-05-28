@@ -11,8 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180411135641) do
-
+ActiveRecord::Schema.define(version: 20180520224540) do
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
     t.string   "trackable_type", limit: 191
@@ -255,6 +254,7 @@ ActiveRecord::Schema.define(version: 20180411135641) do
     t.text    "dci_abbreviation",  limit: 65535
     t.text    "member_preference", limit: 65535
     t.text    "parent",            limit: 65535
+    t.text    "sub_erg",           limit: 65535
   end
 
   add_index "custom_texts", ["enterprise_id"], name: "index_custom_texts_on_enterprise_id", using: :btree
@@ -275,24 +275,36 @@ ActiveRecord::Schema.define(version: 20180411135641) do
   end
 
   create_table "email_variables", force: :cascade do |t|
-    t.integer  "email_id",    limit: 4
-    t.string   "key",         limit: 191
-    t.text     "description", limit: 65535
-    t.boolean  "required"
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.integer  "email_id",                     limit: 4
+    t.datetime "created_at",                                             null: false
+    t.datetime "updated_at",                                             null: false
+    t.integer  "enterprise_email_variable_id", limit: 4
+    t.boolean  "downcase",                               default: false
+    t.boolean  "upcase",                                 default: false
+    t.boolean  "titleize",                               default: false
+    t.boolean  "pluralize",                              default: false
   end
 
   create_table "emails", force: :cascade do |t|
-    t.string   "name",                 limit: 191
-    t.string   "slug",                 limit: 191
-    t.boolean  "use_custom_templates"
-    t.text     "custom_html_template", limit: 65535
-    t.text     "custom_txt_template",  limit: 65535
-    t.integer  "enterprise_id",        limit: 4
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
-    t.string   "subject",              limit: 191
+    t.string   "name",          limit: 191
+    t.integer  "enterprise_id", limit: 4
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.string   "subject",       limit: 191
+    t.text     "content",       limit: 65535, null: false
+    t.string   "mailer_name",   limit: 191,   null: false
+    t.string   "mailer_method", limit: 191,   null: false
+    t.string   "template",      limit: 191
+    t.string   "description",   limit: 191,   null: false
+  end
+
+  create_table "enterprise_email_variables", force: :cascade do |t|
+    t.integer  "enterprise_id", limit: 4
+    t.string   "key",           limit: 191
+    t.string   "description",   limit: 191
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.text     "example",       limit: 65535
   end
 
   create_table "enterprises", force: :cascade do |t|
@@ -709,6 +721,22 @@ ActiveRecord::Schema.define(version: 20180411135641) do
     t.integer "group_id",   limit: 4
   end
 
+  create_table "likes", force: :cascade do |t|
+    t.integer  "news_feed_link_id", limit: 4
+    t.integer  "user_id",           limit: 4
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.integer  "enterprise_id",     limit: 4
+    t.integer  "answer_id",         limit: 4
+  end
+
+  add_index "likes", ["answer_id"], name: "index_likes_on_answer_id", using: :btree
+  add_index "likes", ["enterprise_id"], name: "index_likes_on_enterprise_id", using: :btree
+  add_index "likes", ["news_feed_link_id"], name: "index_likes_on_news_feed_link_id", using: :btree
+  add_index "likes", ["user_id", "answer_id", "enterprise_id"], name: "index_likes_on_user_id_and_answer_id_and_enterprise_id", unique: true, using: :btree
+  add_index "likes", ["user_id", "news_feed_link_id", "enterprise_id"], name: "index_likes_on_user_id_and_news_feed_link_id_and_enterprise_id", unique: true, using: :btree
+  add_index "likes", ["user_id"], name: "index_likes_on_user_id", using: :btree
+
   create_table "matches", force: :cascade do |t|
     t.integer  "user1_id",            limit: 4
     t.integer  "user2_id",            limit: 4
@@ -763,6 +791,7 @@ ActiveRecord::Schema.define(version: 20180411135641) do
     t.string   "link_type",    limit: 191
     t.datetime "created_at",                               null: false
     t.datetime "updated_at",                               null: false
+    t.boolean  "is_pinned",                default: false
   end
 
   create_table "news_feeds", force: :cascade do |t|
@@ -1228,6 +1257,15 @@ ActiveRecord::Schema.define(version: 20180411135641) do
     t.integer "segment_id", limit: 4
   end
 
+  create_table "views", force: :cascade do |t|
+    t.integer  "user_id",           limit: 4,             null: false
+    t.integer  "news_feed_link_id", limit: 4,             null: false
+    t.integer  "enterprise_id",     limit: 4
+    t.integer  "view_count",        limit: 4, default: 0, null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+  end
+
   create_table "yammer_field_mappings", force: :cascade do |t|
     t.integer  "enterprise_id",     limit: 4
     t.string   "yammer_field_name", limit: 191
@@ -1240,6 +1278,10 @@ ActiveRecord::Schema.define(version: 20180411135641) do
   add_foreign_key "budgets", "users", column: "approver_id"
   add_foreign_key "budgets", "users", column: "requester_id"
   add_foreign_key "custom_texts", "enterprises"
+  add_foreign_key "likes", "answers"
+  add_foreign_key "likes", "enterprises"
+  add_foreign_key "likes", "news_feed_links"
+  add_foreign_key "likes", "users"
   add_foreign_key "polls", "initiatives"
   add_foreign_key "reward_actions", "enterprises"
   add_foreign_key "rewards", "enterprises"

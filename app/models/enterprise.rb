@@ -27,6 +27,7 @@ class Enterprise < ActiveRecord::Base
     has_many :resources, as: :container
     has_many :yammer_field_mappings
     has_many :emails
+    has_many :email_variables, class_name: 'EnterpriseEmailVariable'
     belongs_to :theme
 
     has_many :expenses
@@ -51,7 +52,6 @@ class Enterprise < ActiveRecord::Base
 
     before_create :create_elasticsearch_only_fields
     before_validation :smart_add_url_protocol
-
 
     validates :idp_sso_target_url, url: { allow_blank: true }
     validates :cdo_name, :name, presence: true
@@ -179,8 +179,38 @@ class Enterprise < ActiveRecord::Base
         mapped_fields
     end
 
+    def resources_count
+      enterprise_resources_count + groups_resources_count
+    end
 
-    protected 
+    protected
+
+    def enterprise_resources_count
+      enterprise_folders = Folder.where(container_type: 'Enterprise')
+                                 .where(container_id: self)
+      count = 0
+
+      enterprise_folders.each do |f|
+        count += f.resources.count
+      end
+
+      count
+    end
+
+    def groups_resources_count
+      group_ids = self.groups.map{ |g| g.id }
+
+      enterprise_folders = Folder.where(container_type: 'Group')
+                                 .where(container_id: group_ids)
+      count = 0
+
+      enterprise_folders.each do |f|
+        count += f.resources.count
+      end
+
+      count
+    end
+
 
     def smart_add_url_protocol
         return nil if company_video_url.blank?
@@ -190,7 +220,6 @@ class Enterprise < ActiveRecord::Base
     def have_protocol?
         company_video_url[%r{\Ahttp:\/\/}] || company_video_url[%r{\Ahttps:\/\/}]
     end
-
 
     private
 

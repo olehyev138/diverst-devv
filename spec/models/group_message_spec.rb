@@ -31,15 +31,15 @@ RSpec.describe GroupMessage, type: :model do
 
     describe ".of_segments" do
       let(:owner){ create(:user) }
-      let(:group){ create(:group, enterprise: owner.enterprise) }
+      let(:group){ build(:group, enterprise: owner.enterprise) }
 
-      let(:segment1) { create :segment, enterprise: owner.enterprise}
-      let(:segment2) { create :segment, enterprise: owner.enterprise}
+      let(:segment1) { build :segment, enterprise: owner.enterprise}
+      let(:segment2) { build :segment, enterprise: owner.enterprise}
 
       let!(:group_message_without_segment){ create(:group_message, owner_id: owner.id, segments: []) }
       let!(:group_message_with_segment){ create(:group_message, owner_id: owner.id, segments: [segment1]) }
       let!(:group_message_with_another_segment){
-        create(:group_message, owner_id: owner.id, segments: [segment2])
+        build(:group_message, owner_id: owner.id, segments: [segment2])
       }
 
       it "returns initiatives that has specific segments or does not have any segment" do
@@ -48,8 +48,8 @@ RSpec.describe GroupMessage, type: :model do
     end
 
     describe '#owner_name' do
-        let(:user) { create :user }
-        let!(:message) { create :group_message, owner: user }
+        let(:user) { build_stubbed :user }
+        let!(:message) { build_stubbed :group_message, owner: user }
 
         subject { message.owner_name }
 
@@ -68,7 +68,7 @@ RSpec.describe GroupMessage, type: :model do
 
     describe "#remove_segment_association" do
         it "removes segment association" do
-            group_message = create(:group_message)
+            group_message = build(:group_message)
             segment = create(:segment)
 
             group_message.segment_ids = [segment.id]
@@ -90,16 +90,16 @@ RSpec.describe GroupMessage, type: :model do
 
     describe '#users' do
         let(:user) { create :user }
-        let(:group) { create :group, :enterprise => user.enterprise }
+        let(:group) { build :group, :enterprise => user.enterprise }
         let!(:user_group) { create :user_group, :group => group, :user => user }
-        let!(:group_message) { create :group_message, owner: user, :group => group }
+        let!(:group_message) { build :group_message, owner: user, :group => group }
 
         it 'returns 1 user' do
             expect(group_message.users.count).to eq(1)
         end
 
         it 'returns no user' do
-            segment = create(:segment)
+            segment = build(:segment)
             create(:group_messages_segment, :segment => segment, :group_message => group_message)
 
             expect(group_message.users.count).to eq(0)

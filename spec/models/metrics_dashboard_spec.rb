@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe MetricsDashboard, :type => :model do
-    subject { create(:metrics_dashboard) }
+    subject { build(:metrics_dashboard) }
 
     describe 'test associations' do
       it{ expect(subject).to belong_to(:enterprise).inverse_of(:metrics_dashboards) }
