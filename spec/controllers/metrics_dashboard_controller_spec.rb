@@ -97,7 +97,7 @@ RSpec.describe MetricsDashboardsController, type: :controller do
 
         it "redirect to just created metrics dashboard" do
           post_create(md_params)
-          expect(response).to redirect_to MetricsDashboard.last
+          expect(response).to redirect_to new_metrics_dashboard_graph_path(MetricsDashboard.last)
         end
 
         it 'creates correct dashboard' do
@@ -111,7 +111,7 @@ RSpec.describe MetricsDashboardsController, type: :controller do
 
         it 'redirects to correct action' do
           post_create(md_params)
-          expect(response).to redirect_to MetricsDashboard.last
+          expect(response).to redirect_to new_metrics_dashboard_graph_path(MetricsDashboard.last)
         end
 
         describe 'public activity' do

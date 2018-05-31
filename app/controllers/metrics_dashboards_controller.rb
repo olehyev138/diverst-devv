@@ -17,7 +17,7 @@ class MetricsDashboardsController < ApplicationController
     if @metrics_dashboard.save
       track_activity(@metrics_dashboard, :create)
       flash[:notice] = "Your dashboard was created"
-      redirect_to @metrics_dashboard
+      redirect_to new_metrics_dashboard_graph_path(@metrics_dashboard)
     else
       flash[:alert] = "Your dashboard was not created. Please fix the errors"
       render :new
