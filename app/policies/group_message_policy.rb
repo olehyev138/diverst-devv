@@ -11,10 +11,14 @@ class GroupMessagePolicy < ApplicationPolicy
     return true if is_owner?
     return false if @record.news_feed_link.share_links.count > 1
 
-    @policy_group.group_messages_manage
+    manage?
   end
 
   def destroy?
+    manage?
+  end
+
+  def manage?
     return true if is_owner?
 
     @policy_group.group_messages_manage
