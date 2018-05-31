@@ -34,6 +34,11 @@ class SocialLink < ActiveRecord::Base
         social_link_segment.news_feed_link_segment.destroy
     end
 
+    def unlink(group)
+      news_feed_link.share_link(group).destroy
+      self.destroy if news_feed_link.share_links.empty?
+    end
+
     protected
 
     def correct_url?

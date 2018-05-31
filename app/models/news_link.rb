@@ -52,6 +52,11 @@ class NewsLink < ActiveRecord::Base
         end
     end
 
+    def unlink(group)
+      news_feed_link.share_link(group).destroy
+      self.destroy if news_feed_link.share_links.empty?
+    end
+
     protected
 
     def smart_add_url_protocol
