@@ -1,7 +1,7 @@
 <div class="card__section card__section--border">
   <div class="row">
     <div class="col sm-1 text-center">
-      <%= render partial: "groups/shared/like_feature", locals: {news_feed_link: message.news_feed_link } %>
+      <%= render partial: "groups/shared/like_feature", locals: {news_feed_link: message.news_feed_link, group: @group } %>
     </div>
     <div class="col sm-1">
       <% if message.owner.present? %>

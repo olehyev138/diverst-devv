@@ -39,11 +39,11 @@
 
         <% share_message = shared_message post %>
         <% if post.link_type == "NewsLink" %>
-          <%= render partial: "groups/shared/news_links", locals: {news_link: NewsLink.includes(:group, :author).find(post.link.id) } %>
+          <%= render partial: "groups/shared/news_links", locals: {news_link: NewsLink.includes(:group, :author).find(post.link.id), group: @group } %>
         <% elsif post.link_type === "GroupMessage"%>
-          <%= render partial: "groups/shared/messages", locals: {message: GroupMessage.includes(:owner, :group).find(post.link.id), share_message: share_message } %>
+          <%= render partial: "groups/shared/messages", locals: {message: GroupMessage.includes(:owner, :group).find(post.link.id), group: @group, share_message: share_message } %>
         <% elsif post.link_type === "SocialLink"%>
-          <%= render partial: "groups/shared/social_links", locals: {social_link: SocialLink.includes(:group).find(post.link.id) } %>
+          <%= render partial: "groups/shared/social_links", locals: {social_link: SocialLink.includes(:group).find(post.link.id), group: @group } %>
         <% end %>
       <% end %>
     <% end %>

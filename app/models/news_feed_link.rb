@@ -57,7 +57,7 @@ class NewsFeedLink < ActiveRecord::Base
     link.group_id != group.id
   end
 
-  def shared?
+  def is_shared?
     share_links.count > 1
   end
 
