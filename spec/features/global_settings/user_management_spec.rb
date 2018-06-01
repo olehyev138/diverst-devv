@@ -8,7 +8,7 @@ RSpec.feature 'User Management' do
 	before do
 		enterprise.fields.destroy_all
 		
-		login_as(admin_user, scope: :user)
+		login_as(guest_user, scope: :user)
 		visit users_path
 	end
 
