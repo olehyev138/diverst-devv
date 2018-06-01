@@ -12,23 +12,22 @@ class GroupsController < ApplicationController
 
     def index
         authorize Group
-        @groups = current_user.enterprise.groups.includes(:children).all_parents
+        @groups = GroupPolicy::Scope.new(current_user, Group, :groups_manage).resolve.includes(:children).all_parents
     end
 
     def plan_overview
         authorize Group
-        @groups = current_user.enterprise.groups.includes(:initiatives)
+        @groups = GroupPolicy::Scope.new(current_user, Group, :groups_budgets_index).resolve
     end
 
     def close_budgets
         authorize Group
-        user_not_authorized if not current_user.policy_group.annual_budget_manage?
-        @groups = current_user.enterprise.groups.includes(:children).all_parents
+        @groups = GroupPolicy::Scope.new(current_user, Group, :mana).resolve.includes(:children).all_parents
     end
 
     # calendar for all of the groups
     def calendar
-        authorize Group, :index?
+        authorize Group
         enterprise = current_user.enterprise
         @groups = enterprise.groups.all_parents
         @segments = enterprise.segments

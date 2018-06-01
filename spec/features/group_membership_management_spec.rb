@@ -2,12 +2,9 @@ require 'rails_helper'
 
 RSpec.feature 'Group Membership Management' do
 	let!(:enterprise) { create(:enterprise, name: 'The Enterprise') }
-	let!(:guest_user) { create(:user, enterprise_id: enterprise.id, policy_group: create(:guest_user, enterprise: enterprise),
-	 first_name: 'Aaron', last_name: 'Patterson') }
-	let!(:admin_user) { create(:user, enterprise_id: enterprise.id, first_name: 'Yehuda', last_name: 'Katz',
-	 policy_group: create(:policy_group, name: 'Admin User', enterprise: enterprise)) }
+	let!(:guest_user) { create(:user, enterprise: enterprise)}
+	let!(:admin_user) { create(:user, enterprise: enterprise, first_name: 'Yehuda', last_name: 'Katz') }
 	let!(:group) { create(:group, name: 'Group ONE', enterprise: enterprise) }
-
 
 	context 'when group has enable pending users' do
 		pending_membership_message = '* Please wait for group administrators to process your membership request.
@@ -62,9 +59,8 @@ RSpec.feature 'Group Membership Management' do
 		end
 
 		context 'when admin user filters members by' do
-			let!(:inactive_user) { create(:user, enterprise_id: enterprise.id, first_name: "Xavier", last_name: "Nora", active: false,
-			 policy_group: create(:guest_user, enterprise: enterprise)) }
-			let!(:ruby_core_segment) { create(:segment, enterprise_id: enterprise.id, name: 'Ruby Core Segment',
+			let!(:inactive_user) { create(:user, enterprise: enterprise, first_name: "Xavier", last_name: "Nora", active: false) }
+			let!(:ruby_core_segment) { create(:segment, enterprise: enterprise, name: 'Ruby Core Segment',
 				active_users_filter: 'only_inactive') }
 
 			before do

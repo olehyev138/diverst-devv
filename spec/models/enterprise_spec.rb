@@ -30,7 +30,6 @@ RSpec.describe Enterprise, type: :model do
         it { expect(enterprise).to have_many(:yammer_field_mappings) }
         it { expect(enterprise).to have_many(:emails) }
         it { expect(enterprise).to belong_to(:theme) }
-        it { expect(enterprise).to have_many(:policy_groups) }
         it { expect(enterprise).to have_many(:expenses) }
         it { expect(enterprise).to have_many(:expense_categories) }
         it { expect(enterprise).to have_many(:biases).through(:users).class_name('Bias') }
