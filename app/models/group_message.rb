@@ -1,10 +1,10 @@
 class GroupMessage < ActiveRecord::Base
-  has_many :group_messages_segments
+  has_many :group_messages_segments, :dependent => :destroy
   has_many :segments, through: :group_messages_segments, :before_remove => :remove_segment_association
   has_many :comments, class_name: 'GroupMessageComment', foreign_key: :message_id
 
-  belongs_to :owner, class_name: 'User'
   belongs_to :group
+  belongs_to :owner, class_name: 'User'
 
   has_one :news_feed_link, :as => :link, :dependent => :destroy
   accepts_nested_attributes_for :news_feed_link

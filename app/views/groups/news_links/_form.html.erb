@@ -6,7 +6,7 @@
         <%= f.input :title %>
         <%= f.input :description %>
 
-        <%= f.association :segments, label: "#{c_t(:segment).pluralize}", collection: @group.enterprise.segments, input_html: { class: "select2" } %>
+        <!-- <%= f.association :segments, label: "#{c_t(:segment).pluralize}", collection: @group.enterprise.segments, input_html: { class: "select2" } %> -->
 
         <%= f.simple_fields_for :photos do |p| %>
           <%= render "photo_fields", f: p %>
@@ -15,6 +15,8 @@
         <span><%= link_to_add_association "Add a photo", f, :photos %></span>
         </br>
         </br>
+
+        <%= render partial: "groups/shared/post_sharing", locals: { form: f, group: @group } %>
 
         <%= f.button :submit %>
       <% end %>

@@ -1,0 +1,6 @@
+<!-- Partial for segments and post sharing for each of the post types -->
+<%= form.simple_fields_for :news_feed_link do |n| %>
+  <%= n.association :news_feed_link_segments, label: "#{c_t(:segment).pluralize}", collection: group.enterprise.segments, input_html: { class: "select2" } %>
+  <%= n.association :news_feeds, label_method: lambda { |n| "#{n.group.name}" }, label: 'Share with other groups', input_html: { class: 'select2', multiple: 'multiple'  } %>
+  <%= n.hidden_field :news_feed_id, value: group.news_feed.id %> <!-- Remove this with schema change & model validations -->
+<% end %>

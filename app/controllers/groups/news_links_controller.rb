@@ -2,7 +2,6 @@ class Groups::NewsLinksController < ApplicationController
     include Rewardable
 
     before_action :authenticate_user!
-
     before_action :set_group, except: [:url_info]
     before_action :set_news_link, only: [:comments, :create_comment, :edit, :update, :destroy, :news_link_photos]
 
@@ -14,6 +13,7 @@ class Groups::NewsLinksController < ApplicationController
 
     def new
         @news_link = @group.news_links.new
+        @news_link.build_news_feed_link
     end
 
     def edit; end
@@ -42,6 +42,7 @@ class Groups::NewsLinksController < ApplicationController
         @news_link = @group.news_links.new(news_link_params)
         @news_link.author = current_user
 
+        @news_link.news_feed_link.save
         if @news_link.save
             user_rewarder("news_post").add_points(@news_link)
             flash_reward "Your news was created. Now you have #{current_user.credits} points"
@@ -103,7 +104,7 @@ class Groups::NewsLinksController < ApplicationController
                 :description,
                 :picture,
                 :photos_attributes => [:file, :_destroy, :id],
-                :segment_ids => []
+                news_feed_link_attributes: [ :id, :news_feed_id, news_feed_link_segment_ids: [], news_feed_ids: [] ]
             )
     end
 
