@@ -99,4 +99,16 @@ RSpec.describe Resource, :type => :model do
       expect(resource.expiration_time).to eq(Resource::EXPIRATION_TIME)
     end
   end
+  
+  describe "#destroy_callbacks" do
+    it "removes the child objects" do
+      resource = create(:resource)
+      tag = create(:tag, :resource => resource)
+
+      resource.destroy
+
+      expect{Resource.find(resource.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{Tag.find(tag.id)}.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
 end
