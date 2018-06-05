@@ -15,7 +15,7 @@
       <% @posts.each do |news| %>
         <% share_message = shared_message news %>
         <% if news.link_type == "NewsLink" %>
-          <%= render partial: "groups/shared/news_links", locals: {news_link: news.link } %>
+          <%= render partial: "groups/shared/news_links", locals: {news_link: news.link, share_message: share_message } %>
         <% elsif news.link_type === "GroupMessage"%>
           <%= render partial: "groups/shared/messages", locals: {message: news.link, share_message: share_message  } %>
         <% elsif news.link_type === "SocialLink"%>

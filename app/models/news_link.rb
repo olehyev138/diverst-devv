@@ -26,8 +26,6 @@ class NewsLink < ActiveRecord::Base
     has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, s3_permissions: :private
     validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
 
-    before_create :build_default_link
-
     scope :of_segments, ->(segment_ids) {
       nl_condtions = ["news_link_segments.segment_id IS NULL"]
       nl_condtions << "news_link_segments.segment_id IN (#{ segment_ids.join(",") })" unless segment_ids.empty?
@@ -58,20 +56,12 @@ class NewsLink < ActiveRecord::Base
     end
 
     protected
+      def smart_add_url_protocol
+          return nil if url.blank?
+          self.url = "http://#{url}" unless have_protocol?
+      end
 
-    def smart_add_url_protocol
-        return nil if url.blank?
-        self.url = "http://#{url}" unless have_protocol?
-    end
-
-    def have_protocol?
-        url[%r{\Ahttp:\/\/}] || url[%r{\Ahttps:\/\/}]
-    end
-
-    private
-
-    def build_default_link
-        build_news_feed_link(:news_feed_id => group.news_feed.id)
-        true
-    end
+      def have_protocol?
+          url[%r{\Ahttp:\/\/}] || url[%r{\Ahttps:\/\/}]
+      end
 end

@@ -16,7 +16,9 @@ class Groups::NewsLinksController < ApplicationController
         @news_link.build_news_feed_link
     end
 
-    def edit; end
+    def edit
+        authorize @news_link, :update?
+    end
 
     def comments
         @comments = @news_link.comments.includes(:author)
@@ -54,6 +56,7 @@ class Groups::NewsLinksController < ApplicationController
     end
 
     def update
+        authorize @news_link, :update?
         if @news_link.update(news_link_params)
             flash[:notice] = "Your news was updated"
             redirect_to group_posts_path(@group)
@@ -65,7 +68,7 @@ class Groups::NewsLinksController < ApplicationController
 
     def destroy
         user_rewarder("news_post").remove_points(@news_link)
-        @news_link.destroy
+        @news_link.unlink(@group)
         flash[:notice] = "Your news was removed. Now you have #{current_user.credits} points"
         redirect_to group_posts_path(@group)
     end
@@ -92,7 +95,7 @@ class Groups::NewsLinksController < ApplicationController
     end
 
     def set_news_link
-        @news_link = @group.news_links.find(params[:id])
+        @news_link = @group.news_feed_links.find(params[:id]).link
     end
 
     def news_link_params
