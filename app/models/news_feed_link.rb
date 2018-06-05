@@ -3,8 +3,8 @@ class NewsFeedLink < ActiveRecord::Base
     belongs_to :group_message
     belongs_to :news_link
     belongs_to :social_link
-    
-    has_many :news_feed_link_segments
+
+    has_many :news_feed_link_segments, dependent: :destroy
 
     delegate :group,    :to => :news_feed
     delegate :segment,  :to => :news_feed_link_segment, :allow_nil => true
@@ -25,7 +25,7 @@ class NewsFeedLink < ActiveRecord::Base
             self.save!
         end
     end
-    
+
     def link
         return group_message if group_message
         return news_link if news_link

@@ -16,41 +16,41 @@ class User < ActiveRecord::Base
     belongs_to :enterprise, inverse_of: :users
     has_one :policy_group, :dependent => :destroy, inverse_of: :user
 
-    has_many :devices
-    has_many :users_segments
+    has_many :devices, dependent: :destroy
+    has_many :users_segments, dependent: :destroy
     has_many :segments, through: :users_segments
     has_many :user_groups, dependent: :destroy
     has_many :groups, through: :user_groups
-    has_many :topic_feedbacks
-    has_many :poll_responses
-    has_many :answers, inverse_of: :author, foreign_key: :author_id
-    has_many :answer_upvotes, foreign_key: :author_id
-    has_many :answer_comments, foreign_key: :author_id
-    has_many :invitations, class_name: 'CampaignInvitation'
+    has_many :topic_feedbacks, dependent: :destroy
+    has_many :poll_responses, dependent: :destroy
+    has_many :answers, inverse_of: :author, foreign_key: :author_id, dependent: :destroy
+    has_many :answer_upvotes, foreign_key: :author_id, dependent: :destroy
+    has_many :answer_comments, foreign_key: :author_id, dependent: :destroy
+    has_many :invitations, class_name: 'CampaignInvitation', dependent: :destroy
     has_many :campaigns, through: :invitations
     has_many :news_links, through: :groups
-    has_many :own_news_links, class_name: 'NewsLink', foreign_key: :author_id
+    has_many :own_news_links, class_name: 'NewsLink', foreign_key: :author_id, dependent: :destroy
     has_many :messages, through: :groups
-    has_many :message_comments, class_name: 'GroupMessageComment', foreign_key: :author_id
+    has_many :message_comments, class_name: 'GroupMessageComment', foreign_key: :author_id, dependent: :destroy
     has_many :events, through: :groups
     has_many :social_links, foreign_key: :author_id, dependent: :destroy
-    has_many :initiative_users
+    has_many :initiative_users, dependent: :destroy
     has_many :initiatives, through: :initiative_users, source: :initiative
-    has_many :initiative_invitees
+    has_many :initiative_invitees, dependent: :destroy
     has_many :invited_initiatives, through: :initiative_invitees, source: :initiative
-    has_many :event_attendances
+    has_many :event_attendances, dependent: :destroy
     has_many :attending_events, through: :event_attendances, source: :event
-    has_many :event_invitees
+    has_many :event_invitees, dependent: :destroy
     has_many :invited_events, through: :event_invitees, source: :event
     has_many :managed_groups, foreign_key: :manager_id, class_name: 'Group'
-    has_many :samples
+    has_many :samples, dependent: :destroy
     has_many :biases, class_name: "Bias"
     has_many :group_leaders
     has_many :leading_groups, through: :group_leaders, source: :group
-    has_many :user_reward_actions
+    has_many :user_reward_actions, dependent: :destroy
     has_many :reward_actions, through: :user_reward_actions
     has_many :rewards, foreign_key: :responsible_id, :dependent => :destroy
-    
+
     has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: "private"
     validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
 
@@ -70,10 +70,10 @@ class User < ActiveRecord::Base
     after_validation    :set_group_role
     after_create :assign_firebase_token
     after_create :set_default_policy_group
-    
+
     after_save  :set_default_policy_group, if: :role_changed?
     accepts_nested_attributes_for :policy_group
-    
+
     after_commit on: [:create] { update_elasticsearch_index(self, self.enterprise, 'index') }
     after_commit on: [:update] { update_elasticsearch_index(self, self.enterprise, 'update') }
     after_commit on: [:destroy] { update_elasticsearch_index(self, self.enterprise, 'delete') }
@@ -89,7 +89,7 @@ class User < ActiveRecord::Base
     def name
         "#{first_name} #{last_name}"
     end
-    
+
     def set_group_role
         # check if user is group leader and ensure role is correct
         if erg_leader? and enterprise.user_roles.where(:role_name => role, :role_type => "group").count > 0
@@ -99,35 +99,35 @@ class User < ActiveRecord::Base
             self.role = enterprise.user_roles.where(:role_name => group_leader_roles).order(:priority).first.role_name
         end
     end
-    
+
     def group_leader_role
         # make sure a user's role cannot be set to group_leader without being a group_leader first
         if enterprise.user_roles.where(:role_name => role, :role_type => "group").count > 0 && !erg_leader?
             errors.add(:role, 'User is not a group leader')
-        
+
         # make sure a user's role is never changed from one group leader type to another
         elsif enterprise.user_roles.where(:role_name => role_was, :role_type => "group").count > 0 &&
                 enterprise.user_roles.where(:role_name => role, :role_type => "group").count > 0
             errors.add(:role, 'Cannot change group_leader roles manually')
-         
-        # ensure user cannot go from non_group role to a group role that they don't have   
+
+        # ensure user cannot go from non_group role to a group role that they don't have
         elsif enterprise.user_roles.where(:role_name => role, :role_type => "group").count > 0 &&
                 GroupLeader.joins(:group => :enterprise).where(:groups => {:enterprise_id => enterprise.id}, :role => role, :user_id => id).count < 1
             errors.add(:role, 'User does not have that role in any group')
-            
+
         # make sure if a user is a group leader that the role is never set to a non_group_leader role with
-        # lower priority ex: admin with group_leader role cannot be switched to a basic user but a group_leader 
+        # lower priority ex: admin with group_leader role cannot be switched to a basic user but a group_leader
         # can have their role switch to a super admin
-        elsif enterprise.user_roles.where(:role_name => role_was, :role_type => "group").count > 0 && 
+        elsif enterprise.user_roles.where(:role_name => role_was, :role_type => "group").count > 0 &&
                 enterprise.user_roles.where(:role_name => role, :role_type => "user").count > 0 &&
                 enterprise.user_roles.where(:role_name => role).where("priority > ?", enterprise.user_roles.where(:role_name => role_was).first.priority).count > 0
             errors.add(:role, 'Cannot change from group role to role with lower priority')
-            
+
         # make sure if a user is a group leader that the role is never set to a non_group_leader role with
         # lower priority ex: group_leader role cannot be switched to a basic user but a group_leader can have their
         # role switch to a super admin - UserRole.where(:role_name => role_was).first.priority
-        elsif enterprise.user_roles.where(:role_name => role_was).where.not(:role_type => "group").count > 0 && 
-                enterprise.user_roles.where(:role_name => role).where.not(:role_type => "group").count > 0 && 
+        elsif enterprise.user_roles.where(:role_name => role_was).where.not(:role_type => "group").count > 0 &&
+                enterprise.user_roles.where(:role_name => role).where.not(:role_type => "group").count > 0 &&
                 GroupLeader.joins(:group => :enterprise).where(:groups => {:enterprise_id => enterprise.id}, :user_id => id).count > 0 &&
                 enterprise.user_roles.where(:role_name => role).where("priority > ?", enterprise.user_roles.where(:role_name => group_leaders.roles).order("priority DESC").first.priority).count > 0
             errors.add(:role, 'Cannot change from role to role with lower priority while user is still a group leader')
@@ -148,7 +148,7 @@ class User < ActiveRecord::Base
     def badges
         Badge.where("points <= ?", points).order(points: :asc)
     end
-    
+
     def set_default_policy_group
         template = enterprise.policy_group_templates.joins(:user_role).where(:user_roles => {:role_name => role}).first
         attributes = template.create_new_policy
@@ -160,7 +160,7 @@ class User < ActiveRecord::Base
             policy_group.update_attributes(attributes)
         end
     end
-    
+
     def admin?
         enterprise.user_roles.where(:role_name => role, :role_type => "admin").count > 0
     end

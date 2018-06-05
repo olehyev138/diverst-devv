@@ -4,8 +4,8 @@ class PollResponse < ActiveRecord::Base
 
   belongs_to :poll
   belongs_to :user
-  
-  has_many :user_reward_actions
+
+  has_many :user_reward_actions, dependent: :destroy
 
   after_commit on: [:create] { update_elasticsearch_index(user, poll.enterprise, 'index') }
   after_commit on: [:update] { update_elasticsearch_index(user, poll.enterprise, 'update') }

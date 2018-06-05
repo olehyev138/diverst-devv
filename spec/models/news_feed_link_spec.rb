@@ -12,7 +12,7 @@ RSpec.describe NewsFeedLink, type: :model do
         it { expect(news_feed_link).to belong_to(:news_link) }
         it { expect(news_feed_link).to belong_to(:group_message) }
         it { expect(news_feed_link).to belong_to(:social_link) }
-        
+
         it { expect(news_feed_link).to have_many(:news_feed_link_segments) }
         it { expect(news_feed_link).to delegate_method(:group).to(:news_feed) }
     end
@@ -24,9 +24,9 @@ RSpec.describe NewsFeedLink, type: :model do
             author = create(:user)
             author.policy_group.groups_manage = true
             author.policy_group.save!
-            
+
             link = create(:news_link, :author => author)
-            
+
             perform_enqueued_jobs do
                 news_feed_link = build(:news_feed_link, :news_link => link)
                 news_feed_link.save
@@ -34,5 +34,17 @@ RSpec.describe NewsFeedLink, type: :model do
                 expect(news_feed_link.approved).to eq(true)
             end
         end
+    end
+
+    describe "#destroy_callbacks" do
+      it "removes the child objects" do
+        news_feed_link = create(:news_feed_link)
+        segment = create(:news_feed_link_segment, :news_feed_link => news_feed_link)
+
+        news_feed_link.destroy
+
+        expect{NewsFeedLink.find(news_feed_link.id)}.to raise_error(ActiveRecord::RecordNotFound)
+        expect{NewsFeedLinkSegment.find(segment.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      end
     end
 end
