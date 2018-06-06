@@ -12,9 +12,6 @@ class Folder < ActiveRecord::Base
   has_many    :groups, through: :folder_shares, source: "group"
   has_many    :children, class_name: "Folder", foreign_key: :parent_id, :dependent => :destroy
 
-  has_many    :children, class_name: "Folder", foreign_key: :parent_id
-  belongs_to  :parent,   class_name: "Folder", foreign_key: :parent_id
-
   # validations
   validates :name, presence: true
   validates_uniqueness_of :name, scope: [:enterprise]

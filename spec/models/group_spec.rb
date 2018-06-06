@@ -50,7 +50,7 @@ RSpec.describe Group, :type => :model do
         it { expect(group).to have_many(:initiatives).through(:pillars) }
         it { expect(group).to have_many(:updates).class_name('GroupUpdate').dependent(:destroy) }
         it { expect(group).to have_many(:fields) }
-        it { expect(group).to have_many(:survey_fields).class_name('Field').dependent(:destroy) }
+        it { expect(group).to have_many(:survey_fields).class_name('Field').dependent(:delete_all) }
         it { expect(group).to have_many(:group_leaders) }
         it { expect(group).to have_many(:leaders).through(:group_leaders).source(:user) }
         it { expect(group).to have_many(:children).class_name('Group').with_foreign_key(:parent_id) }
@@ -686,7 +686,8 @@ RSpec.describe Group, :type => :model do
             group_update = create(:group_update, :group => group)
             field = create(:field, :group => group, :field_type => "regular")
             survey_field = create(:field, :group => group, :field_type => "group_survey")
-            group_leader = create(:group_leader, :group => group)
+            user = create(:user, :enterprise => group.enterprise)
+            group_leader = create(:group_leader, :group => group, :user => user)
             child = create(:group, :parent => group)
             
             group.destroy!

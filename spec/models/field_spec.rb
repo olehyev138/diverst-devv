@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Field do
   describe "when validating" do
-    let(:field){ build(:field, container: build(:enterprise)) }
-    let(:field1) { build(:field, container: build(:segments_field)) }
+    let(:field){ build(:field, enterprise: build(:enterprise)) }
+    let(:field1) { build(:field, enterprise: build(:enterprise)) }
 
     context 'validate presence of title for field' do
       it 'valid if title is present' do

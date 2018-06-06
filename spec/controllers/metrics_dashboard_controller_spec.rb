@@ -43,7 +43,7 @@ RSpec.describe MetricsDashboardsController, type: :controller do
         create_list(:group, 2, enterprise: user.enterprise)
         create_list(:segment, 3, enterprise: user.enterprise)
         create_list(:resource, 4, enterprise: user.enterprise)
-        folder = create(:folder, enterprise: user.enterprise.id)
+        folder = create(:folder, enterprise: user.enterprise)
         create_list(:resource, 4, folder: folder)
         create_list(:poll, 2, enterprise: user.enterprise)
         get_index

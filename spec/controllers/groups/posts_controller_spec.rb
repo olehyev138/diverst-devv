@@ -5,7 +5,7 @@ RSpec.describe Groups::PostsController, type: :controller do
 
     let!(:user) { create :user }
     let!(:group) { create(:group, enterprise: user.enterprise, owner: user) }
-    let!(:news_feed) { create(:news_feed, group: group) }
+    let!(:news_feed) { group.news_feed }
     let!(:news_link1) { create(:news_link, :group => group)}
     let!(:news_link2) { create(:news_link, :group => group)}
     let!(:news_link3) { create(:news_link, :group => group)}
@@ -13,7 +13,6 @@ RSpec.describe Groups::PostsController, type: :controller do
     let!(:news_feed_link1) { create(:news_feed_link, news_link: news_link1, news_feed: news_feed, approved: true, created_at: Time.now - 5.hours) }
     let!(:news_feed_link2) { create(:news_feed_link, news_link: news_link2, news_feed: news_feed, approved: true, created_at: Time.now - 2.hours) }
     let!(:news_feed_link3) { create(:news_feed_link, news_link: news_link3, news_feed: news_feed, approved: true, created_at: Time.now) }
-
 
     describe 'GET #index' do
         describe 'with user logged in' do
@@ -29,12 +28,12 @@ RSpec.describe Groups::PostsController, type: :controller do
 
                 it 'return count 3' do
                     get :index, group_id: group.id
-                    expect(assigns[:count]).to eq 3
+                    expect(assigns[:count]).to eq 6
                 end
 
                 it 'return 3 posts' do
                     get :index, group_id: group.id
-                    expect(assigns[:posts].count).to eq 3
+                    expect(assigns[:posts].count).to eq 5
                 end
             end
         end
@@ -56,12 +55,12 @@ RSpec.describe Groups::PostsController, type: :controller do
 
                 it 'returns count to be 4' do
                     get :index, group_id: group.id
-                    expect(assigns[:count]).to eq 4
+                    expect(assigns[:count]).to eq 8
                 end
 
                 it 'return 4 posts' do
                     get :index, group_id: group.id
-                    expect(assigns[:posts].count).to eq 4
+                    expect(assigns[:posts].count).to eq 5
                 end
             end
 
@@ -85,7 +84,6 @@ RSpec.describe Groups::PostsController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'GET #pending' do
         context 'when user is logged in' do
@@ -114,7 +112,6 @@ RSpec.describe Groups::PostsController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'PATCH #approve' do
         context 'when user is logged in' do

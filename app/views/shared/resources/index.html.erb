@@ -30,10 +30,10 @@
           <% if folder.password_protected %>
             <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
           <% end %>
-          &nbsp;<%= link_to "Delete", [@container.container] + [folder], method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(folder).destroy? %>
+          &nbsp;<%= link_to "Delete", [@container.enterprise || @container.group] + [folder], method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(folder).destroy? %>
         </h4>
-        <%= link_to inline_svg('icons/folder.svg', size: '100px*100px'), polymorphic_path([@container.container] + [folder] + [:resources]) if !folder.password_protected %>
-        <%= link_to inline_svg('icons/folder.svg', size: '100px*100px'), [@container.container] + [folder], method: :get, remote: true if folder.password_protected %>
+        <%= link_to inline_svg('icons/folder.svg', size: '100px*100px'), polymorphic_path([@container.enterprise || @container.group] + [folder] + [:resources]) if !folder.password_protected %>
+        <%= link_to inline_svg('icons/folder.svg', size: '100px*100px'), [@container.enterprise || @container.group] + [folder], method: :get, remote: true if folder.password_protected %>
       </div>
     
     <% end %>

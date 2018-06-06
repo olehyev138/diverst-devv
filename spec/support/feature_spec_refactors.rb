@@ -24,27 +24,24 @@ module FeatureSpecRefactors
 
 
 		def set_custom_text_fields
-			create(:field, title: 'BIO', container_id: enterprise.id,
-				container_type: 'Enterprise')
+			create(:field, title: 'BIO', enterprise_id: enterprise.id)
 		end
 
 		def set_custom_select_fields
-			create(:select_field, title: 'Gender', options_text: "Male \r\nFemale", container_id: enterprise.id,
-				container_type: 'Enterprise')
+			create(:select_field, title: 'Gender', options_text: "Male \r\nFemale", enterprise_id: enterprise.id)
 		end
 
 		def set_custom_checkbox_fields
 			create(:checkbox_field, title: 'Programming Language', options_text: "Ruby\r\nElixir\r\nC++\r\nJavaScript",
-				container_id: enterprise.id, container_type: 'Enterprise')
+				enterprise_id: enterprise.id)
 		end
 
 		def set_custom_numeric_fields
-			create(:numeric_field, title: 'Age-restrictions', min: 18, max: 98, container_id: enterprise.id,
-				container_type: 'Enterprise')
+			create(:numeric_field, title: 'Age-restrictions', min: 18, max: 98, enterprise_id: enterprise.id)
 		end
 
 		def set_custom_date_fields
-			create(:date_field, title: 'Date of Birth', container_id: enterprise.id, container_type: 'Enterprise')
+			create(:date_field, title: 'Date of Birth', enterprise_id: enterprise.id)
 		end
 
 
