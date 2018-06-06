@@ -27,6 +27,7 @@ class Enterprise < ActiveRecord::Base
     has_many :resources, dependent: :destroy
     has_many :yammer_field_mappings, dependent: :destroy
     has_many :emails, dependent: :destroy
+    has_many :email_variables, class_name: 'EnterpriseEmailVariable', dependent: :destroy
     belongs_to :theme
 
     has_many :expenses, dependent: :destroy
@@ -176,8 +177,38 @@ class Enterprise < ActiveRecord::Base
         mapped_fields
     end
 
+    def resources_count
+      enterprise_resources_count + groups_resources_count
+    end
 
-    protected 
+    protected
+
+    def enterprise_resources_count
+      enterprise_folders = Folder.where(container_type: 'Enterprise')
+                                 .where(container_id: self)
+      count = 0
+
+      enterprise_folders.each do |f|
+        count += f.resources.count
+      end
+
+      count
+    end
+
+    def groups_resources_count
+      group_ids = self.groups.map{ |g| g.id }
+
+      enterprise_folders = Folder.where(container_type: 'Group')
+                                 .where(container_id: group_ids)
+      count = 0
+
+      enterprise_folders.each do |f|
+        count += f.resources.count
+      end
+
+      count
+    end
+
 
     def smart_add_url_protocol
         return nil if company_video_url.blank?
@@ -187,7 +218,6 @@ class Enterprise < ActiveRecord::Base
     def have_protocol?
         company_video_url[%r{\Ahttp:\/\/}] || company_video_url[%r{\Ahttps:\/\/}]
     end
-
 
     private
 

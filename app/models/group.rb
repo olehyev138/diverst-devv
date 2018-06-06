@@ -3,6 +3,16 @@ class Group < ActiveRecord::Base
 
   extend Enumerize
 
+  enumerize :layout, default: :layout_0, in: [
+                              :layout_0,
+                              :layout_1
+                            ]
+
+  LAYOUTS_INFO = {
+    'layout_0' => 'Default layout',
+    'layout_1' => 'Layout without leader boards for Most Active Members'
+  }
+
   enumerize :pending_users, default: :disabled,  in: [
                               :disabled,
                               :enabled
@@ -101,16 +111,19 @@ class Group < ActiveRecord::Base
 
   validates :name, presence: true
   validates_format_of :contact_email, with: Devise.email_regexp, allow_blank: true
-  validate :perform_check_for_consistency_in_category, on: [:create, :update]
 
   validate :valid_yammer_group_link?
+
+  validate :ensure_one_level_nesting
 
   before_create :build_default_news_feed
   before_save :send_invitation_emails, if: :send_invitations?
   before_save :create_yammer_group, if: :should_create_yammer_group?
   after_commit :update_all_elasticsearch_members
   before_validation :smart_add_url_protocol
-  after_save :set_group_category_type_for_parent_if_sub_erg, on: [:create, :update]
+  attr_accessor :skip_label_consistency_check
+  validate :perform_check_for_consistency_in_category, on: [:create, :update], unless: :skip_label_consistency_check
+
 
   scope :top_participants,  -> (n) { order(total_weekly_points: :desc).limit(n) }
   # Active Record already has a defined a class method with the name private so we use is_private.
@@ -304,6 +317,12 @@ class Group < ActiveRecord::Base
 
 
   private
+
+  def ensure_one_level_nesting
+    if parent.present? && children.present?
+      errors.add(:parent_id, "Group can't have both parent and children")
+    end
+  end
 
   def perform_check_for_consistency_in_category
     if self.parent.present?

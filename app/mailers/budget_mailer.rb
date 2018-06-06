@@ -1,27 +1,52 @@
 class BudgetMailer < ApplicationMailer
   def approve_request(budget, receiver)
-    @receiver = receiver
+    @user = receiver
     @budget = budget
     @group = budget.group
-    @enterprise_id = @group.enterprise.id
-    @approve_url = group_budget_url(@group, @budget)
+    @enterprise = @user.enterprise
+    @custom_text = @enterprise.custom_text rescue CustomText.new
+    
+    set_defaults(@enterprise, method_name)
 
-    mail(to: @receiver.email, subject: subject(@group.name))
+    mail(to: @user.email, subject: @subject)
   end
 
   def budget_approved(budget)
     @budget = budget
-    mail(to: budget.requester.email, subject: "The budget for #{ budget.group.name } was approved")
+    @group = budget.group
+    @user = budget.requester
+    @enterprise = @user.enterprise
+    @custom_text = @enterprise.custom_text rescue CustomText.new
+    
+    set_defaults(@enterprise, method_name)
+    
+    mail(to: @user.email, subject: @subject)
   end
 
   def budget_declined(budget)
     @budget = budget
-    mail(to: budget.requester.email, subject: "The budget for #{ budget.group.name } was declined")
+    @group = budget.group
+    @enterprise = @group.enterprise
+    @user = budget.requester
+    @custom_text = @enterprise.custom_text rescue CustomText.new
+    
+    set_defaults(@enterprise, method_name)
+    
+    mail(to: @user.email, subject: @subject)
   end
-
-  private
-
-  def subject(group_name)
-    "You are asked to review budget for #{group_name} ERG group"
+  
+  def variables
+    {
+      :user => @user,
+      :group => @group,
+      :enterprise => @enterprise,
+      :budget => @budget,
+      :custom_text => @custom_text,
+      :click_here => "<a saml_for_enterprise=\"#{@enterprise.id}\" href=\"#{url}\" target=\"_blank\">Click here</a>",
+    }
+  end
+  
+  def url
+    group_budget_url(@group, @budget)
   end
 end

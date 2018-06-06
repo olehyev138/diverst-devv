@@ -59,7 +59,6 @@ class Budget < ActiveRecord::Base
     flattened_items
   end
 
-  #bTODO test this method
   def self.pre_approved_events_for_select(group, user=nil)
 
     budget_items = self.pre_approved_events(group, user)

@@ -90,7 +90,7 @@ class GroupsController < ApplicationController
             @posts = @group.news_feed_links
                             .includes(:news_link, :group_message, :social_link)
                             .approved
-                            .order(created_at: :desc)
+                            .order(is_pinned: :desc, created_at: :desc)
                             .limit(5)
         else
             if @group.active_members.include? current_user
@@ -101,7 +101,7 @@ class GroupsController < ApplicationController
                             .approved
                             .joins(joins)
                             .where(where, current_user.segments.pluck(:id))
-                            .order(created_at: :desc)
+                            .order(is_pinned: :desc, created_at: :desc)
                             .limit(5)
 
             else
@@ -118,7 +118,7 @@ class GroupsController < ApplicationController
                             .approved
                             .joins(joins)
                             .where(where, current_user.segments.pluck(:id))
-                            .order(created_at: :desc)
+                            .order(is_pinned: :desc, created_at: :desc)
                             .limit(5)
             end
         end
@@ -175,6 +175,10 @@ class GroupsController < ApplicationController
               render :settings
             end
         end
+    end
+
+    def layouts
+        authorize @group, :update?
     end
 
     def settings
@@ -285,7 +289,7 @@ class GroupsController < ApplicationController
         @members = @group.active_members.order(created_at: :desc).limit(8)
 
         @top_user_group_participants = @group.user_groups.active.top_participants(10).includes(:user)
-        @top_group_participants = @group.enterprise.groups.top_participants(10)
+        @top_group_participants = @group.enterprise.groups.non_private.top_participants(10)
     end
 
     def where
@@ -318,7 +322,9 @@ class GroupsController < ApplicationController
             .require(:group)
             .permit(
                 :name,
+                :short_description,
                 :description,
+                :home_message,
                 :logo,
                 :private,
                 :banner,
@@ -339,7 +345,7 @@ class GroupsController < ApplicationController
                 :sponsor_media,
                 :sponsor_message,
                 :company_video_url,
-                :short_description,
+                :layout,
                 :parent_id,
                 :group_category_id,
                 :group_category_type_id,

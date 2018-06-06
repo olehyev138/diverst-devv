@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Resource, :type => :model do
 
-  describe 'test associations' do 
-    let(:resource) { build(:resource) }
+  describe 'test associations' do
+    let(:resource) { build_stubbed(:resource) }
 
     it { expect(resource).to belong_to(:enterprise) }
     it { expect(resource).to belong_to(:folder) }
@@ -24,9 +24,20 @@ RSpec.describe Resource, :type => :model do
     # it{ expect(resource).to validate_attachment_presence(:file)}
   end
 
+  describe 'test callbacks' do
+      let(:resource) { build_stubbed(:resource) }
+
+    context 'before_validation' do
+      it '#smart_add_url_protocol is called before validation' do
+        expect(resource).to receive(:smart_add_url_protocol)
+        resource.valid?
+      end
+    end
+  end
+
   describe '#extension' do
     it "returns the file's lowercase extension without the dot" do
-      resource = build(:resource)
+      resource = build_stubbed(:resource)
       expect(resource.file_extension).to eq 'csv'
     end
   end
@@ -85,14 +96,14 @@ RSpec.describe Resource, :type => :model do
       expect(resource.tags.count).to eq(0)
     end
   end
-  
+
   describe "#file_extension" do
     it "returns '' " do
-      resource = create(:resource, :file_file_name => nil, :file => nil)
+      resource = build(:resource, :file_file_name => nil, :file => nil)
       expect(resource.file_extension).to eq("")
     end
   end
-  
+
   describe "#expiration_time" do
     it "returns the expiration_time " do
       resource = create(:resource)

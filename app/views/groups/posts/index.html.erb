@@ -17,7 +17,7 @@
     </div>
     <div class="flex-row__cell">
       <% if ENV['ENABLE_SOCIAL_MEDIA'] %>
-        <%= link_to "+ Create Social link", new_group_social_link_path, class: "btn btn--primary" if policy(SocialLink).new? %>
+        <%= link_to "+ Create Social Link", new_group_social_link_path, class: "btn btn--primary" if policy(SocialLink).new? %>
       <% end %>
     </div>
   </div>
@@ -31,6 +31,12 @@
       </div>
     <% else %>
       <% @posts.each do |news| %>
+        <% if !news.is_pinned? %>
+          <%= link_to "Pin", pin_group_posts_path(:group_id => @group.id, :link_id => news.id), method: :patch if policy(@group).erg_leader_permissions? %>
+        <% else %>
+          <%= link_to "Unpin", unpin_group_posts_path(:group_id => @group.id, :link_id => news.id), method: :patch if policy(@group).erg_leader_permissions? %>
+        <% end %>
+
         <% if news.news_link %>
           <%= render partial: "groups/shared/news_links", locals: {news_link: NewsLink.includes(:group, :author).find(news.link.id) } %>
         <% elsif news.group_message %>

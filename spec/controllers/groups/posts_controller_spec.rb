@@ -139,4 +139,54 @@ RSpec.describe Groups::PostsController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
+    describe 'PATCH #pin' do
+      context 'when user is logged in' do
+        login_user_from_let
+
+        before do
+          request.env["HTTP_REFERER"] = "back"
+          patch :pin, group_id: group.id, link_id: news_link1.news_feed_link.id
+        end
+
+        it 'marks newsitem as pinned' do
+          expect(news_link1.news_feed_link.reload.is_pinned?).to eq true
+        end
+
+        it 'redirect to back' do
+          expect(response).to redirect_to "back"
+        end
+      end
+
+      context 'when user is not logged in' do
+          before { patch :pin, group_id: group.id, link_id: news_link1.news_feed_link.id}
+          it_behaves_like "redirect user to users/sign_in path"
+      end
+    end
+
+    describe 'PATCH #unpin' do
+      before { news_link1.news_feed_link.update(is_pinned: true) }
+
+      context 'when user is logged in' do
+        login_user_from_let
+
+        before do
+          request.env["HTTP_REFERER"] = "back"
+          patch :unpin, group_id: group.id, link_id: news_link1.news_feed_link.id
+        end
+
+        it 'marks newsitem as pinned' do
+          expect(news_link1.news_feed_link.reload.is_pinned?).to eq false
+        end
+
+        it 'redirect to back' do
+          expect(response).to redirect_to "back"
+        end
+      end
+
+      context 'when user is not logged in' do
+          before { patch :unpin, group_id: group.id, link_id: news_link1.news_feed_link.id}
+          it_behaves_like "redirect user to users/sign_in path"
+      end
+    end
 end

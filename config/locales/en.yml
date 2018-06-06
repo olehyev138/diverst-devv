@@ -20,7 +20,7 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  login: 
+  login:
     title: "Log in"
     email: "Email"
     password: "Password"
@@ -49,6 +49,8 @@ en:
     dci_full_title: Diversity Culture Index
     dci_abbreviation: DCI
     member_preference: Member Preference
+    parent: Parent
+    sub_erg: Sub Erg
   time:
     formats:
       default: "%l:%M %p"

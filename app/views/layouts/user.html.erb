@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Diverst</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <%= stylesheet_link_tag default_enterprise_asset_url, media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
@@ -54,7 +55,7 @@
             <%= active_link_to "Events", user_events_path %>
           </li>
           <li>
-            <%= active_link_to "Groups", user_groups_path %>
+            <%= active_link_to "#{c_t(:erg).titleize.pluralize}", user_groups_path %>
           </li>
           <% if current_user.enterprise.enable_rewards? %>
             <li>
@@ -74,13 +75,13 @@
     </div>
 
     <div class="menu menu--desktop">
-      <%= link_to "Home", user_root_path, class: "secondary-header__tab" %>
+      <%= active_link_to "Home", user_root_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
       <% if current_user.enterprise.collaborate_module_enabled %>
         <%= active_link_to "Innovate", user_user_campaigns_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <% end %>
       <%= active_link_to "News", user_news_links_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <%= active_link_to "Events", user_events_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-      <%= active_link_to "Groups", user_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+      <%= active_link_to "#{c_t(:erg).titleize.pluralize}", user_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <% if current_user.enterprise.enable_rewards? %>
         <%= active_link_to "#{ c_t(:dci_abbreviation) } Points", user_rewards_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <% end %>

@@ -12,6 +12,12 @@ class Field < ActiveRecord::Base
   after_commit on: [:update, :destroy] { update_elasticsearch_all_indexes(self.enterprise) }
 
   validates :title, presence: true
+  validates :title, uniqueness: { scope: :container_id },
+  unless: Proc.new { |object| (object.type == "SegmentsField" || object.type == "GroupsField") }, if: :container_type_is_enterprise?
+
+  def container_type_is_enterprise?
+    container_type == "Enterprise"
+  end
 
   # The typical field value flow would look like this:
   #   FORM (input string)

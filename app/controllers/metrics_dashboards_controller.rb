@@ -17,7 +17,7 @@ class MetricsDashboardsController < ApplicationController
     if @metrics_dashboard.save
       track_activity(@metrics_dashboard, :create)
       flash[:notice] = "Your dashboard was created"
-      redirect_to @metrics_dashboard
+      redirect_to new_metrics_dashboard_graph_path(@metrics_dashboard)
     else
       flash[:alert] = "Your dashboard was not created. Please fix the errors"
       render :new
@@ -31,10 +31,10 @@ class MetricsDashboardsController < ApplicationController
 
     enterprise = current_user.enterprise
     @general_metrics = {
-      nb_users: enterprise.users.count,
+      nb_users: enterprise.users.active.count,
       nb_ergs: enterprise.groups.count,
       nb_segments: enterprise.segments.count,
-      nb_resources: enterprise.resources.count,
+      nb_resources: enterprise.resources_count,
       nb_polls: enterprise.polls.count,
       nb_ongoing_campaigns: enterprise.campaigns.ongoing.count,
       average_nb_members_per_group: Group.avg_members_per_group(enterprise: enterprise)

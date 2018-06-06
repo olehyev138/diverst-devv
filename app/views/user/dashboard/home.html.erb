@@ -1,10 +1,13 @@
-<div class="content__header">
-  <h1>Home</h1>
-</div>
-
 <div class="content__main">
   <div class="row">
     <div class="col sm-12">
+    <% if @enterprise.banner.present? %>
+      <div class="row enterprise-banner">
+        <div class="col sm-12">
+          <%= image_tag @enterprise.banner.expiring_url(3600), style: 'width: 100%; max-width: 100%;' %>
+        </div>
+      </div>
+    <% end %>
     <% if @enterprise.home_message.present? %>
       <div class="content__header mtmedium">
         <p style="flex: 1 1 0;"><%= allow_newlines @enterprise.home_message %></p>
@@ -14,13 +17,6 @@
         </div>
       </div>
     <% end %>
-      <% if @enterprise.banner.present? %>
-        <div class="row enterprise-banner">
-          <div class="col sm-12">
-            <%= image_tag @enterprise.banner.expiring_url(3600), style: 'width: 100%; max-width: 100%;' %>
-          </div>
-        </div>
-      <% end %>
     </div>
   </div>
 
@@ -90,7 +86,7 @@
           <% end %>
         <% else %>
           <%= image_tag("missing_user.png", size: "70x70") %>
-        <% end %>  
+        <% end %>
 
         <% show_sponsor_video?(@enterprise, "sponsor_media_content_type") do %>
           <%= video_tag(@enterprise.sponsor_media.expiring_url(36000), controls: true, size: "200x200") %>
@@ -98,9 +94,9 @@
       <p style="font-style: italic;"><%= @enterprise.cdo_name %><br>
       <%= @enterprise.cdo_title %></p>
       <% if policy(@enterprise).sponsor_message_visibility? %>
-        <p style="font-style: italic;"><%= truncate(@enterprise.cdo_message, length: 200) %></p>
-      <% end %>  
-      </div> 
+        <p style="font-style: italic;"><%= truncate(@enterprise.cdo_message_email, length: 200) %></p>
+      <% end %>
+      </div>
     </div>
     <% end %>
 

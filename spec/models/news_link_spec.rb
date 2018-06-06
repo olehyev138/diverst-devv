@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe NewsLink, type: :model do
 
     describe 'validations' do
-        let(:news_link) { FactoryGirl.build_stubbed(:news_link) }
+        let(:news_link) { build_stubbed(:news_link) }
 
         it{ expect(news_link).to validate_presence_of(:group_id) }
         it{ expect(news_link).to validate_presence_of(:title) }
@@ -27,11 +27,20 @@ RSpec.describe NewsLink, type: :model do
             .rejecting('text/xml', 'text/plain') }
     end
 
+    describe 'test callbacks' do
+        let!(:news_link) { build(:news_link) }
+
+        it '#build_default_link' do
+          expect(news_link).to receive(:build_default_link)
+          news_link.save
+        end
+    end
+
     describe ".of_segments" do
       let(:author){ create(:user) }
 
-      let(:segment1) { create :segment, enterprise: author.enterprise}
-      let(:segment2) { create :segment, enterprise: author.enterprise}
+      let(:segment1) { build :segment, enterprise: author.enterprise}
+      let(:segment2) { build :segment, enterprise: author.enterprise}
 
       let!(:news_link_without_segment){ create(:news_link, author_id: author.id, segments: []) }
       let!(:news_link_with_segment){ create(:news_link, author_id: author.id, segments: [segment1]) }

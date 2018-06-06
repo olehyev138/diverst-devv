@@ -7,7 +7,7 @@ RSpec.describe Checklist, type: :model do
         it { expect(checklist).to belong_to(:budget) }
         it { expect(checklist).to belong_to(:initiative) }
         it { expect(checklist).to belong_to(:author) }
-        
+
         it { expect(checklist).to have_many(:items) }
     end
     

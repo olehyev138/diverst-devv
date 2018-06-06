@@ -6,7 +6,7 @@ class UsersController < ApplicationController
 
   def index
     authorize User
-    @users = policy_scope(User).where(search_params)
+    @users = policy_scope(User).where(search_params).limit(25)
 
     respond_to do |format|
       format.html
@@ -18,7 +18,7 @@ class UsersController < ApplicationController
   def sent_invitations
     authorize User, :index?
     @users = policy_scope(User).invitation_not_accepted.where(search_params)
-    
+
     respond_to do |format|
       format.html
       format.json { render json: InvitedUserDatatable.new(view_context, @users) }
@@ -53,6 +53,7 @@ class UsersController < ApplicationController
   #For admins. Dedicated to editing any user's info
   def edit
     authorize @user
+    @is_admin_view = true
   end
 
   def update

@@ -10,7 +10,7 @@ gem 'jquery-rails', '~> 4.1', '>= 4.1.1'
 gem 'turbolinks', '~> 2.5', '>= 2.5.3'
 gem 'sdoc', '~> 0.4.0', group: :doc # bundle exec rake doc:rails generates the API under doc/api.
 
-gem 'nokogiri', '>= 1.7.2' # need to specify this explicitly, old version has exploit
+gem 'nokogiri', '~> 1.8.2' # need to specify this explicitly, old version has exploit
 
 gem 'puma', '~> 3.1' # Better web server than WEBRick
 gem 'figaro', '~> 1.1', '>= 1.1.1' # Inject ENV from application.yml
@@ -18,7 +18,7 @@ gem 'devise', '~> 3.5', '>= 3.5.6' # Authentication
 gem 'devise_invitable', '~> 1.5', '>= 1.5.5' # Invite system (admins invite normal users)
 gem 'simple_form', '~> 3.2', '>= 3.2.1' # Better forms
 gem 'cocoon', '~> 1.2', '>= 1.2.8' # Nested forms (deals with the JS for you)
-gem 'ruby-saml', '>= 1.3.0'
+gem 'ruby-saml', '>= 1.7.0'
 gem 'sidekiq', '< 5' # Background jobs
 gem 'devise-async', '~> 0.10.1' # Performs many devise tasks in the background using Sidekiq
 gem 'sinatra', '~> 1.4', '>= 1.4.7', require: nil # Required for sidekiq's dashboard
@@ -71,7 +71,7 @@ gem 'public_activity', '~> 1.5'
 
 gem 'rollbar', '~> 2.14.1'
 
-gem 'ruby-oembed', '~> 0.12.0'
+gem 'ruby-oembed', '~> 0.12', git: 'https://github.com/TeamDiverst/ruby-oembed.git'
 
 gem 'julia_builder', '~> 0.2.0'
 gem 'date_validator', '~> 0.9.0'

@@ -8,6 +8,7 @@ class Answer < ActiveRecord::Base
     has_many :comments, class_name: 'AnswerComment', dependent: :destroy
     has_many :expenses, class_name: "AnswerExpense", dependent: :destroy
     has_many :user_reward_actions
+    has_many :likes, dependent: :destroy
     
     has_attached_file :supporting_document, s3_permissions: "private"
     do_not_validate_attachment_file_type :supporting_document

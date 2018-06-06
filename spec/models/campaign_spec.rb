@@ -8,16 +8,16 @@ RSpec.describe Campaign, type: :model do
         it { expect(campaign).to belong_to(:enterprise) }
         it { expect(campaign).to belong_to(:owner).class_name('User') }
         it { expect(campaign).to have_many(:questions) }
-        it { expect(campaign).to have_many(:answers).through(:questions) }
-        it { expect(campaign).to have_many(:answer_comments).through(:questions) }
         it { expect(campaign).to have_many(:campaigns_groups) }
         it { expect(campaign).to have_many(:groups).through(:campaigns_groups) }
         it { expect(campaign).to have_many(:campaigns_segments) }
         it { expect(campaign).to have_many(:segments).through(:campaigns_segments) }
         it { expect(campaign).to have_many(:invitations).class_name('CampaignInvitation') }
         it { expect(campaign).to have_many(:users).through(:invitations) }
+        it { expect(campaign).to have_many(:answers).through(:questions) }
+        it { expect(campaign).to have_many(:answer_comments).through(:questions) }
         it { expect(campaign).to have_many(:campaigns_managers) }
-        it { expect(campaign).to have_many(:managers).through(:campaigns_managers) }
+        it { expect(campaign).to have_many(:managers).through(:campaigns_managers).source(:user) }
 
         it { expect(campaign).to accept_nested_attributes_for(:questions).allow_destroy(true) }
 
@@ -31,7 +31,8 @@ RSpec.describe Campaign, type: :model do
             paperclip_attributes = [:image, :banner]
             paperclip_attributes.each do |paperclip_attribute|
                 it { should have_attached_file(paperclip_attribute) }
-                it { should validate_attachment_content_type(paperclip_attribute) }
+                it { should validate_attachment_content_type(paperclip_attribute).allowing('image/png', 'image/gif').
+                rejecting('text/plain', 'text/xml') }
             end
         end
         it 'is valid' do
@@ -59,6 +60,67 @@ RSpec.describe Campaign, type: :model do
             campaign.create_invites
 
             expect(CampaignInvitation).to have_received(:import)
+        end
+    end
+
+    describe '#targeted_users' do
+        let!(:enterprise) { create(:enterprise) }
+        let!(:group1) { create(:group, enterprise: enterprise, pending_users: 'enabled') }
+        let!(:group2) { create(:group, enterprise: enterprise, pending_users: 'enabled') }
+        let!(:group1_users) { create_list(:user, 2, enterprise: enterprise, active: true) }
+        let!(:group2_users) { create_list(:user, 3, enterprise: enterprise, active: true) }
+        let!(:campaign) { create(:campaign, enterprise_id: enterprise.id, groups: [group1, group2]) }
+
+        before do
+            group1_users.each do |user|
+                create(:user_group, user: user, group: group1 )
+            end
+
+            group2_users.each do |user|
+                create(:user_group, user: user, group: group2)
+            end
+        end
+
+        it 'returns targeted users' do
+            expect(campaign.targeted_users).to eq group1_users + group2_users
+        end
+    end
+
+    describe 'instance methods #contributions_per_erg and #top_performers' do
+        let!(:enterprise) { create(:enterprise) }
+        let!(:group1) { create(:group, enterprise: enterprise, pending_users: 'enabled') }
+        let!(:group2) { create(:group, enterprise: enterprise, pending_users: 'enabled') }
+        let!(:group1_users) { create_list(:user, 2, enterprise: enterprise, active: true) }
+        let!(:group2_users) { create_list(:user, 3, enterprise: enterprise, active: true) }
+        let!(:campaign) { create(:campaign, enterprise_id: enterprise.id, groups: [group1, group2]) }
+        let!(:question) { create(:question, campaign_id: campaign.id) }
+        let!(:answer1) { create(:answer, author_id: group1_users.first.id, content: 'answer 1', question_id: question.id) }
+        let!(:answer2) { create(:answer, author_id: group1_users.last.id, content: 'answer 2', question_id: question.id) }
+        let!(:answer_comment1) { create(:answer_comment, author_id: group2_users.first.id, content: 'answer comment 1', answer_id: answer1.id) }
+        let!(:answer_comment2) { create(:answer_comment, author_id: group2_users.last.id, content: 'answer comment 2', answer_id: answer1.id) }
+
+        before do
+            group1_users.each do |user|
+                create(:user_group, user: user, group: group1 )
+            end
+
+            group2_users.each do |user|
+                create(:user_group, user: user, group: group2)
+            end
+        end
+
+        context '#contributions_per_erg' do
+            it 'return correct data' do
+                expect(campaign.contributions_per_erg[:series][0][:data])
+                .to eq [{:name=> group1.name, :y=>2}, {:name=> group2.name, :y=>2}]
+            end
+        end
+
+        context '#top_performers' do
+            it 'return correct data' do
+                expect(campaign.top_performers[:categories])
+                .to include(group2_users.last.name, group2_users.first.name, group1_users.last.name, group1_users.first.name)
+            end
         end
     end
 

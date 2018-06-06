@@ -15,6 +15,8 @@ class Groups::GroupMessagesController < ApplicationController
         @comments = @message.comments.includes(:author)
 
         @new_comment = GroupMessageComment.new
+
+        @message.increment_view(current_user)
     end
 
     def new

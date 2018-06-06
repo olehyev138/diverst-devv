@@ -21,6 +21,9 @@ class GroupCategoryType < ActiveRecord::Base
   	name
   end
 
+
+  private
+
   def create_association_with_enterprise
   	self.group_categories.update_all(enterprise_id: self.enterprise_id) if !self.enterprise_id.nil?
   end

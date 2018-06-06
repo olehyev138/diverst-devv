@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Question, type: :model do
 
     describe 'validations' do
-        let(:question) { FactoryGirl.build_stubbed(:question) }
+        let(:question) { build_stubbed(:question) }
 
         it{ expect(question).to validate_presence_of(:title) }
         it{ expect(question).to validate_presence_of(:description) }

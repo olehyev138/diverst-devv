@@ -5,7 +5,9 @@ class NewsFeedLink < ActiveRecord::Base
     belongs_to :social_link
 
     has_many :news_feed_link_segments, dependent: :destroy
-
+    has_many :likes, dependent: :destroy
+    has_many :views, dependent: :destroy
+    
     delegate :group,    :to => :news_feed
     delegate :segment,  :to => :news_feed_link_segment, :allow_nil => true
 
@@ -30,5 +32,23 @@ class NewsFeedLink < ActiveRecord::Base
         return group_message if group_message
         return news_link if news_link
         return social_link if social_link
+    end
+    
+    # View Count methods
+    def increment_view(user)
+      view = views.find_or_create_by(user_id: user.id) do |v|
+        v.enterprise_id = user.enterprise_id
+      end
+
+      view.view_count += 1
+      view.save
+    end
+
+    def total_views
+      views.sum(:view_count)
+    end
+
+    def unique_views
+      views.all.count
     end
 end

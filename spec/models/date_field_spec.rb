@@ -1,25 +1,25 @@
 require 'rails_helper'
 
 RSpec.describe DateField, type: :model do
-  
+
   context "when getting data" do
     let!(:field_one) { DateField.create(attributes_for(:date_field)) }
     let!(:field_two) { DateField.create(attributes_for(:date_field)) }
 
-    let!(:enterprise) { create(:enterprise) }
+    let!(:enterprise) { build(:enterprise) }
 
-    let!(:group) { create(:group, enterprise: enterprise) }
+    let!(:group) { build(:group, enterprise: enterprise) }
 
-    let!(:segment_one) { create(:segment, enterprise: enterprise) }
-    let!(:segment_two) { create(:segment, enterprise: enterprise) }
+    let!(:segment_one) { build(:segment, enterprise: enterprise) }
+    let!(:segment_two) { build(:segment, enterprise: enterprise) }
 
-    let!(:user_one) { create(:user, enterprise: enterprise, groups: [group],
+    let!(:user_one) { build(:user, enterprise: enterprise, groups: [group],
       segments: [segment_one], created_at: Date.yesterday) }
-    let!(:user_two) { create(:user, enterprise: enterprise, groups: [group],
+    let!(:user_two) { build(:user, enterprise: enterprise, groups: [group],
       segments: [segment_two], created_at: Date.yesterday) }
-    let!(:user_three) { create(:user, enterprise: enterprise,
+    let!(:user_three) { build(:user, enterprise: enterprise,
       segments: [segment_one, segment_two], created_at: Date.today) }
-    let!(:user_four) { create(:user, enterprise: enterprise, groups: [group],
+    let!(:user_four) { build(:user, enterprise: enterprise, groups: [group],
       segments: [segment_one, segment_two], created_at: Date.today) }
 
     before(:each) do
@@ -104,20 +104,20 @@ RSpec.describe DateField, type: :model do
       end
     end
   end
-  
+
   describe "#string_value" do
     it "returns nil" do
       value = DateField.new.string_value(nil)
       expect(value).to eq('-')
     end
   end
-  
+
   describe "#process_field_value" do
     it "returns nil" do
       value = DateField.new.process_field_value("")
       expect(value).to be(nil)
     end
-    
+
     it "returns formatted date" do
       date = "2017-11-01"
       value = DateField.new.process_field_value(date)
@@ -130,27 +130,27 @@ RSpec.describe DateField, type: :model do
       value = DateField.new.deserialize_value(nil)
       expect(value).to be(nil)
     end
-    
+
     it "returns date" do
       date = DateTime.now
       value = DateField.new.deserialize_value(date)
       expect(value).to eq(Time.at(date))
     end
   end
-  
+
   describe "#csv_value" do
     it "returns nil" do
       value = DateField.new.csv_value(nil)
       expect(value).to eq('')
     end
-    
+
     it "returns date" do
       date = DateTime.now
       value = DateField.new.csv_value(date)
       expect(value).to eq(date.strftime('%F'))
     end
   end
-  
+
   describe "#match_score_between" do
     it "returns nil" do
       enterprise = create(:enterprise)
@@ -163,7 +163,7 @@ RSpec.describe DateField, type: :model do
       expect(match_score_between).to eq(nil)
     end
   end
-  
+
   describe "#validates_rule_for_user" do
     it "returns true" do
       enterprise = create(:enterprise)
@@ -173,10 +173,10 @@ RSpec.describe DateField, type: :model do
       segment = create(:segment, :name => "Seniors", :enterprise => enterprise)
       segment_rule = create(:segment_rule, :segment_id => segment.id, :field_id => date_field.id, :operator => 1, :values => "[\"1968-02-03\"]")
       boolean = date_field.validates_rule_for_user?(rule: segment_rule, user: user_1)
-      
+
       expect(boolean).to be(true)
     end
-    
+
     it "returns false" do
       enterprise = create(:enterprise)
       date_field = DateField.new(:type => "DateField", :title => "Date of birth", :enterprise => enterprise)
@@ -185,10 +185,10 @@ RSpec.describe DateField, type: :model do
       segment = create(:segment, :name => "Seniors", :enterprise => enterprise)
       segment_rule = create(:segment_rule, :segment_id => segment.id, :field_id => date_field.id, :operator => 1, :values => "[\"1998-02-03\"]")
       boolean = date_field.validates_rule_for_user?(rule: segment_rule, user: user_1)
-      
+
       expect(boolean).to be(false)
     end
-    
+
     it "returns true" do
       enterprise = create(:enterprise)
       date_field = DateField.new(:type => "DateField", :title => "Date of birth", :enterprise => enterprise)
@@ -197,10 +197,10 @@ RSpec.describe DateField, type: :model do
       segment = create(:segment, :name => "Seniors", :enterprise => enterprise)
       segment_rule = create(:segment_rule, :segment_id => segment.id, :field_id => date_field.id, :operator => 0, :values => "[\"1968-02-03\"]")
       boolean = date_field.validates_rule_for_user?(rule: segment_rule, user: user_1)
-      
+
       expect(boolean).to be(true)
     end
-    
+
     it "returns false" do
       enterprise = create(:enterprise)
       date_field = DateField.new(:type => "DateField", :title => "Date of birth", :enterprise => enterprise)
@@ -209,10 +209,10 @@ RSpec.describe DateField, type: :model do
       segment = create(:segment, :name => "Seniors", :enterprise => enterprise)
       segment_rule = create(:segment_rule, :segment_id => segment.id, :field_id => date_field.id, :operator => 0, :values => "[\"1968-02-03\"]")
       boolean = date_field.validates_rule_for_user?(rule: segment_rule, user: user_1)
-      
+
       expect(boolean).to be(false)
     end
-    
+
     it "returns true" do
       enterprise = create(:enterprise)
       date_field = DateField.new(:type => "DateField", :title => "Date of birth", :enterprise => enterprise)
@@ -221,10 +221,10 @@ RSpec.describe DateField, type: :model do
       segment = create(:segment, :name => "Seniors", :enterprise => enterprise)
       segment_rule = create(:segment_rule, :segment_id => segment.id, :field_id => date_field.id, :operator => 2, :values => "[\"1968-02-03\"]")
       boolean = date_field.validates_rule_for_user?(rule: segment_rule, user: user_1)
-      
+
       expect(boolean).to be(true)
     end
-    
+
     it "returns false" do
       enterprise = create(:enterprise)
       date_field = DateField.new(:type => "DateField", :title => "Date of birth", :enterprise => enterprise)
@@ -233,10 +233,10 @@ RSpec.describe DateField, type: :model do
       segment = create(:segment, :name => "Seniors", :enterprise => enterprise)
       segment_rule = create(:segment_rule, :segment_id => segment.id, :field_id => date_field.id, :operator => 2, :values => "[\"1968-02-03\"]")
       boolean = date_field.validates_rule_for_user?(rule: segment_rule, user: user_1)
-      
+
       expect(boolean).to be(false)
     end
-    
+
     it "returns true" do
       enterprise = create(:enterprise)
       date_field = DateField.new(:type => "DateField", :title => "Date of birth", :enterprise => enterprise)
@@ -245,10 +245,10 @@ RSpec.describe DateField, type: :model do
       segment = create(:segment, :name => "Seniors", :enterprise => enterprise)
       segment_rule = create(:segment_rule, :segment_id => segment.id, :field_id => date_field.id, :operator => 3, :values => "[\"1968-02-03\"]")
       boolean = date_field.validates_rule_for_user?(rule: segment_rule, user: user_1)
-      
+
       expect(boolean).to be(true)
     end
-    
+
     it "returns false" do
       enterprise = create(:enterprise)
       date_field = DateField.new(:type => "DateField", :title => "Date of birth", :enterprise => enterprise)
@@ -257,9 +257,9 @@ RSpec.describe DateField, type: :model do
       segment = create(:segment, :name => "Seniors", :enterprise => enterprise)
       segment_rule = create(:segment_rule, :segment_id => segment.id, :field_id => date_field.id, :operator => 3, :values => "[\"1968-02-03\"]")
       boolean = date_field.validates_rule_for_user?(rule: segment_rule, user: user_1)
-      
+
       expect(boolean).to be(false)
     end
   end
-  
+
 end

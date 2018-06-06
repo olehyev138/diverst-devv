@@ -55,7 +55,10 @@
               <%= active_link_to "Leaders", group_leaders_path(@group) %>
             </li>
             <li>
-              <%= active_link_to "Insights", group_questions_path(@group) %> 
+              <%= active_link_to "Insights", group_questions_path(@group) %>
+            </li>
+            <li>
+              <%= active_link_to "Layouts", layouts_group_path(@group) %>
             </li>
             <li>
               <%= active_link_to "Settings", settings_group_path(@group) %>
@@ -78,7 +81,8 @@
       <% if policy(@group).leaders? %>
           <%= active_link_to "News Feed (#{@group.news_feed_links.includes(:link).approved.count})", group_posts_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
           <%= active_link_to "Leaders", group_leaders_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-          <%= active_link_to "Insights", group_questions_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %> 
+          <%= active_link_to "Insights", group_questions_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+          <%= active_link_to "Layouts", layouts_group_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
           <%= active_link_to "Settings", settings_group_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <% end %>
     </div>

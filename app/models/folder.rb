@@ -1,7 +1,7 @@
 class Folder < ActiveRecord::Base
-  
+
   has_secure_password(validations: false)
-  
+
   # associations
   belongs_to  :enterprise
   belongs_to  :group
@@ -12,6 +12,9 @@ class Folder < ActiveRecord::Base
   has_many    :groups, through: :folder_shares, source: "group"
   has_many    :children, class_name: "Folder", foreign_key: :parent_id, :dependent => :destroy
 
+  has_many    :children, class_name: "Folder", foreign_key: :parent_id
+  belongs_to  :parent,   class_name: "Folder", foreign_key: :parent_id
+
   # validations
   validates :name, presence: true
   validates_uniqueness_of :name, scope: [:enterprise]
@@ -21,14 +24,14 @@ class Folder < ActiveRecord::Base
   
   # scopes
   scope :only_parents, -> {where(:parent_id => nil)}
-  
+
   # callbacks
   before_save :set_password
-  
+
   def set_password
     self.password = nil if !password_protected?
   end
-  
+
   def valid_password?(user_password)
     return authenticate(user_password)
   end

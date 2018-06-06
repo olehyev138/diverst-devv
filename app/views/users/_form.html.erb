@@ -2,7 +2,10 @@
       as: :attachment_preview,
       label: 'Profile Picture',
       input_html: { autofocus: true } %>
-<%= f.input :email %>
+<% if @is_admin_view %>
+  <%= f.input :email %>
+<% end %>
+
 <%= f.input :first_name %>
 <%= f.input :last_name %>
 <%= f.input :biography %>
@@ -10,11 +13,11 @@
 <%= f.hidden_field :custom_policy_group, value: 0 %>
 <%= f.input :custom_policy_group, label: 'Custom Policy Group? - ' %>
 <%= f.input :time_zone %>
-                       
+
 <% if policy(@user).access_hidden_info? %>
   <h2>Hidden info</h2>
   <h4>Only D&I Management can see hidden fields</h4>
-  <% @user.enterprise.fields.each do |cf| %>
+  <% @user.enterprise.fields.where(private: false).each do |cf| %>
     <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: @user %>
   <% end %>
 <% end %>
