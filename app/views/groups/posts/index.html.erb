@@ -43,14 +43,14 @@
         <% elsif post.link_type === "GroupMessage"%>
           <%= render partial: "groups/shared/messages", locals: {message: GroupMessage.includes(:owner, :group).find(post.link.id), group: @group, share_message: share_message } %>
         <% elsif post.link_type === "SocialLink"%>
-          <%= render partial: "groups/shared/social_links", locals: {social_link: SocialLink.includes(:group).find(post.link.id), group: @group } %>
+          <%= render partial: "groups/shared/social_links", locals: {social_link: SocialLink.includes(:group).find(post.link.id), group: @group, share_message: share_message } %>
         <% end %>
       <% end %>
     <% end %>
   </div>
 </div>
 
-<% unless @posts.count === @count%>
+<% unless @posts.count === @count %>
   <div class="flex-row__cell text-center">
     <%= link_to "Load More", group_posts_path(:page => @page + 1), class: "btn btn--primary" %>
   </div>

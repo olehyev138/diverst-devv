@@ -1,4 +1,8 @@
 class SocialLinkPolicy < ApplicationPolicy
+  def index?
+    @policy_group.news_links_index?
+  end
+
   def create?
     @policy_group.news_links_create?
   end

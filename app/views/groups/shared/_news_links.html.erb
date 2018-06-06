@@ -24,7 +24,7 @@
             <% end %>
             <br>
             <%= link_to "Comments(#{news_link.comments_count})", comments_group_news_link_path(news_link.group,news_link) %><br>
-            <% if share_message.present? %>
+            <% if defined?(share_message) %>
             <span class="muted italics"><i><%= share_message %></i></span>
             <% end %>
         </div>

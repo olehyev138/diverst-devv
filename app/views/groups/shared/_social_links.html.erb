@@ -15,10 +15,17 @@
           <% end %>
         </div>
         <div class="flex-row__cell link-group">
-          <%= link_to "Approve", approve_group_posts_path(:group_id => social_link.group.id, :link_id => social_link.news_feed_link.id), method: :post, class: "btn btn--primary" if policy(social_link.group).erg_leader_permissions? and !social_link.news_feed_link.approved? %>
-          <%= link_to 'Delete', group_social_link_path(social_link.group, social_link.id),method: :delete, class: "btn btn--danger", data: { confirm: "Are you sure?" } if policy(social_link).destroy? %>
+          <%= link_to "Approve", approve_group_posts_path(:group_id => @group.id, :link_id => social_link.news_feed_link.id), method: :post, class: "btn btn--primary" if policy(social_link.group).erg_leader_permissions? and !social_link.news_feed_link.approved?(@group) %>
+          <%= link_to 'Delete', group_social_link_path(@group, social_link.id),method: :delete, class: "btn btn--danger", data: { confirm: "Are you sure?" } if policy(social_link).destroy? %>
         </div>
       </div>
     </div>
   </div>
+  <% if defined?(share_message) %>
+    <div class="row">
+      <div class="col sm-10 col--offset-2">
+        <p class="muted"><i><%= share_message %></i></p>
+      </div>
+    </div>
+  <% end %>
 </div>

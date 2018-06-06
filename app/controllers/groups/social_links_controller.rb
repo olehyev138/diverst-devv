@@ -2,7 +2,6 @@ class Groups::SocialLinksController < ApplicationController
     include Rewardable
 
     before_action :authenticate_user!
-
     before_action :set_group
     before_action :set_social_link, only: [:destroy]
 
@@ -14,13 +13,14 @@ class Groups::SocialLinksController < ApplicationController
 
     def new
         @social_link = @group.social_links.new
+        @social_link.build_news_feed_link
     end
 
     def create
-
         @social_link = @group.social_links.new(social_link_params)
         @social_link.author = current_user
 
+        @social_link.news_feed_link.save
         if @social_link.save
             user_rewarder("social_media_posts").add_points(@social_link)
             flash_reward "Your social_link was created. Now you have #{ current_user.credits } points"
@@ -32,8 +32,9 @@ class Groups::SocialLinksController < ApplicationController
     end
 
     def destroy
-        @social_link.destroy
-        flash[:notice] = "Your social link was removed."
+        user_rewarder("social_media_posts").remove_points(@social_link)
+        @social_link.unlink(@group)
+        flash[:notice] = "Your social link was removed. Now you have #{current_user.credits} points"
         redirect_to group_posts_path(@group)
     end
 
@@ -44,7 +45,7 @@ class Groups::SocialLinksController < ApplicationController
     end
 
     def set_social_link
-        @social_link = @group.social_links.find(params[:id])
+        @social_link = @group.social_links.find(params[:id]).link
     end
 
     def social_link_params
@@ -52,7 +53,7 @@ class Groups::SocialLinksController < ApplicationController
             .require(:social_link)
             .permit(
                 :url,
-                segment_ids: []
+                news_feed_link_attributes: [ :id, :news_feed_id, news_feed_link_segment_ids: [], news_feed_ids: [] ]
             )
     end
 end
