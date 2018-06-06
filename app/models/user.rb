@@ -45,7 +45,7 @@ class User < ActiveRecord::Base
     has_many :managed_groups, foreign_key: :manager_id, class_name: 'Group'
     has_many :samples, dependent: :destroy
     has_many :biases, class_name: "Bias"
-    has_many :group_leaders
+    has_many :group_leaders, :dependent => :destroy
     has_many :leading_groups, through: :group_leaders, source: :group
     has_many :user_reward_actions, dependent: :destroy
     has_many :reward_actions, through: :user_reward_actions

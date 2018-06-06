@@ -460,4 +460,55 @@ RSpec.describe User do
       expect(user.admin?).to be(true)
     end
   end
+  
+  describe "#destroy_callbacks" do
+    it "removes the child objects" do
+      user = create(:user)
+      device = create(:device, :user => user)
+      users_segment = create(:users_segment, :user => user)
+      user_group = create(:user_group, :user => user)
+      topic_feedback = create(:topic_feedback, :user => user)
+      poll_response = create(:poll_response, :user => user)
+      answer = create(:answer, :author => user)
+      answer_upvote = create(:answer_upvote, :author_id => user.id)
+      answer_comment = create(:answer_comment, :author_id => user.id)
+      campaign_invitation = create(:campaign_invitation, :user => user)
+      news_link = create(:news_link, :author_id => user.id)
+      group_message_comment = create(:group_message_comment, :author_id => user.id)
+      social_link = create(:social_link, :author_id => user.id)
+      initiative_user = create(:initiative_user, :user => user)
+      event_invitee = create(:event_invitee, :user => user)
+      initiative_invitee = create(:initiative_invitee, :user => user)
+      event_attendance = create(:event_attendance, :user => user)
+      #sample = create(:sample, :user => user)
+      group_leader = create(:group_leader, :user => user)
+      user_reward_action = create(:user_reward_action, :user => user)
+      #reward = create(:reward, :responsible_id => user.id)
+      
+      policy_group = user.policy_group
+      
+      user.destroy
+
+      expect{User.find(user.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{Device.find(device.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{PolicyGroup.find(policy_group.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{UsersSegment.find(users_segment.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{PollResponse.find(poll_response.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{Answer.find(answer.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{AnswerUpvote.find(answer_upvote.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{AnswerComment.find(answer_comment.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{CampaignInvitation.find(campaign_invitation.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{NewsLink.find(news_link.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{GroupMessageComment.find(group_message_comment.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{SocialLink.find(social_link.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{InitiativeUser.find(initiative_user.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{EventInvitee.find(event_invitee.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{InitiativeInvitee.find(initiative_invitee.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{EventAttendance.find(event_attendance.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      #expect{Sample.find(sample.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{GroupLeader.find(group_leader.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{UserRewardAction.find(user_reward_action.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      #expect{Reward.find(reward.id)}.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
 end
