@@ -7,7 +7,7 @@ RSpec.feature 'Segment management' do
 
   before do
     login_as(user, scope: :user, :run_callbacks => false)
-    user.enterprise.fields << create(:enterprise_field, container: user.enterprise)
+    user.enterprise.fields << create(:enterprise_field, enterprise: user.enterprise)
   end
 
   scenario 'user creates a new segment', :js do

@@ -145,14 +145,14 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   end
 
   create_table "budgets", force: :cascade do |t|
-    t.integer  "subject_id",   limit: 4
-    t.string   "subject_type", limit: 191
     t.text     "description",  limit: 65535
     t.boolean  "is_approved"
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
     t.integer  "approver_id",  limit: 4
     t.integer  "requester_id", limit: 4
+    t.integer  "event_id",     limit: 4
+    t.integer  "group_id",     limit: 4
   end
 
   add_index "budgets", ["approver_id"], name: "fk_rails_a057b1443a", using: :btree
@@ -204,23 +204,21 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   end
 
   create_table "checklist_items", force: :cascade do |t|
-    t.string   "title",          limit: 191
-    t.boolean  "is_done",                    default: false
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
-    t.integer  "container_id",   limit: 4
-    t.string   "container_type", limit: 191
+    t.string   "title",         limit: 191
+    t.boolean  "is_done",                   default: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+    t.integer  "initiative_id", limit: 4
+    t.integer  "checklist_id",  limit: 4
   end
 
-  add_index "checklist_items", ["container_type", "container_id"], name: "index_checklist_items_on_container_type_and_container_id", using: :btree
-
   create_table "checklists", force: :cascade do |t|
-    t.integer  "subject_id",   limit: 4
-    t.string   "subject_type", limit: 191
-    t.string   "title",        limit: 191
-    t.integer  "author_id",    limit: 4
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.string   "title",         limit: 191
+    t.integer  "author_id",     limit: 4
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.integer  "budget_id",     limit: 4
+    t.integer  "initiative_id", limit: 4
   end
 
   create_table "cities", force: :cascade do |t|
@@ -443,53 +441,48 @@ ActiveRecord::Schema.define(version: 20180520224540) do
     t.datetime "updated_at",                                       null: false
     t.boolean  "alternative_layout",               default: false
     t.boolean  "private",                          default: false
-    t.integer  "container_id",       limit: 4
-    t.string   "container_type",     limit: 191
     t.boolean  "elasticsearch_only",               default: false
     t.boolean  "required",                         default: false
     t.string   "field_type",         limit: 191
+    t.integer  "enterprise_id",      limit: 4
+    t.integer  "event_id",           limit: 4
+    t.integer  "group_id",           limit: 4
+    t.integer  "poll_id",            limit: 4
+    t.integer  "initiative_id",      limit: 4
   end
-
-  add_index "fields", ["container_type", "container_id"], name: "index_fields_on_container_type_and_container_id", using: :btree
 
   create_table "folder_shares", force: :cascade do |t|
-    t.integer  "container_id",   limit: 4
-    t.string   "container_type", limit: 191
-    t.integer  "folder_id",      limit: 4
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.integer  "folder_id",     limit: 4
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.integer  "enterprise_id", limit: 4
+    t.integer  "group_id",      limit: 4
   end
 
-  add_index "folder_shares", ["container_type", "container_id"], name: "index_folder_shares_on_container_type_and_container_id", using: :btree
-
   create_table "folders", force: :cascade do |t|
-    t.integer  "container_id",       limit: 4
-    t.string   "container_type",     limit: 191
     t.string   "name",               limit: 191
     t.datetime "created_at",                                     null: false
     t.datetime "updated_at",                                     null: false
     t.boolean  "password_protected",             default: false
     t.string   "password_digest",    limit: 191
     t.integer  "parent_id",          limit: 4
+    t.integer  "enterprise_id",      limit: 4
+    t.integer  "group_id",           limit: 4
   end
-
-  add_index "folders", ["container_type", "container_id"], name: "index_folders_on_container_type_and_container_id", using: :btree
 
   create_table "graphs", force: :cascade do |t|
-    t.integer  "field_id",           limit: 4
-    t.integer  "aggregation_id",     limit: 4
-    t.datetime "created_at",                                     null: false
-    t.datetime "updated_at",                                     null: false
-    t.integer  "collection_id",      limit: 4
-    t.string   "collection_type",    limit: 191
-    t.string   "custom_field",       limit: 191
-    t.string   "custom_aggregation", limit: 191
-    t.boolean  "time_series",                    default: false
+    t.integer  "field_id",             limit: 4
+    t.integer  "aggregation_id",       limit: 4
+    t.datetime "created_at",                                       null: false
+    t.datetime "updated_at",                                       null: false
+    t.string   "custom_field",         limit: 191
+    t.string   "custom_aggregation",   limit: 191
+    t.boolean  "time_series",                      default: false
     t.datetime "range_from"
     t.datetime "range_to"
+    t.integer  "metrics_dashboard_id", limit: 4
+    t.integer  "poll_id",              limit: 4
   end
-
-  add_index "graphs", ["collection_type", "collection_id"], name: "index_graphs_on_collection_type_and_collection_id", using: :btree
 
   create_table "group_categories", force: :cascade do |t|
     t.string   "name",                   limit: 191
@@ -770,19 +763,21 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   end
 
   create_table "news_feed_link_segments", force: :cascade do |t|
-    t.integer  "news_feed_link_id", limit: 4
-    t.integer  "segment_id",        limit: 4
-    t.integer  "link_segment_id",   limit: 4
-    t.string   "link_segment_type", limit: 191
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.integer  "news_feed_link_id",         limit: 4
+    t.integer  "segment_id",                limit: 4
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.integer  "news_link_segment_id",      limit: 4
+    t.integer  "group_messages_segment_id", limit: 4
+    t.integer  "social_link_segment_id",    limit: 4
   end
 
   create_table "news_feed_links", force: :cascade do |t|
-    t.integer  "news_feed_id", limit: 4
-    t.boolean  "approved",                 default: false
-    t.integer  "link_id",      limit: 4
-    t.string   "link_type",    limit: 191
+    t.integer  "news_feed_id",      limit: 4
+    t.boolean  "approved",                      default: false
+    t.integer  "news_link_id",      limit: 4
+    t.integer  "group_message_id",  limit: 4
+    t.integer  "social_link_id",    limit: 4
     t.datetime "created_at",                               null: false
     t.datetime "updated_at",                               null: false
     t.boolean  "is_pinned",                default: false
@@ -944,6 +939,8 @@ ActiveRecord::Schema.define(version: 20180520224540) do
     t.boolean  "budget_approval",                       default: false
     t.boolean  "logs_view",                             default: false
     t.boolean  "annual_budget_manage",                  default: false
+    t.boolean  "expenses_index",                        default: false
+    t.boolean  "expenses_manage",                       default: false
     t.boolean  "sso_manage",                            default: false
     t.boolean  "permissions_manage",                    default: false
     t.boolean  "diversity_manage",                      default: false
@@ -998,8 +995,6 @@ ActiveRecord::Schema.define(version: 20180520224540) do
 
   create_table "resources", force: :cascade do |t|
     t.string   "title",             limit: 191
-    t.integer  "container_id",      limit: 4
-    t.string   "container_type",    limit: 191
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
     t.string   "file_file_name",    limit: 191
@@ -1009,9 +1004,11 @@ ActiveRecord::Schema.define(version: 20180520224540) do
     t.integer  "owner_id",          limit: 4
     t.string   "resource_type",     limit: 191
     t.string   "url",               limit: 191
+    t.integer  "enterprise_id",     limit: 4
+    t.integer  "folder_id",         limit: 4
+    t.integer  "group_id",          limit: 4
+    t.integer  "initiative_id",     limit: 4
   end
-
-  add_index "resources", ["container_type", "container_id"], name: "index_resources_on_container_type_and_container_id", using: :btree
 
   create_table "reward_actions", force: :cascade do |t|
     t.string   "label",         limit: 191
@@ -1098,11 +1095,10 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   end
 
   create_table "tags", force: :cascade do |t|
-    t.integer  "taggable_id",   limit: 4
-    t.string   "taggable_type", limit: 191
-    t.string   "name",          limit: 191, null: false
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.string   "name",        limit: 191, null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.integer  "resource_id", limit: 4
   end
 
   create_table "themes", force: :cascade do |t|
@@ -1150,14 +1146,23 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   end
 
   create_table "user_reward_actions", force: :cascade do |t|
-    t.integer  "user_id",          limit: 4,   null: false
-    t.integer  "reward_action_id", limit: 4,   null: false
-    t.integer  "entity_id",        limit: 4
-    t.string   "entity_type",      limit: 191
-    t.integer  "operation",        limit: 4,   null: false
-    t.integer  "points",           limit: 4,   null: false
+    t.integer  "user_id",                  limit: 4, null: false
+    t.integer  "reward_action_id",         limit: 4, null: false
+    t.integer  "operation",                limit: 4, null: false
+    t.integer  "points",                   limit: 4, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "initiative_id",            limit: 4
+    t.integer  "initiative_comment_id",    limit: 4
+    t.integer  "group_message_id",         limit: 4
+    t.integer  "group_message_comment_id", limit: 4
+    t.integer  "news_link_id",             limit: 4
+    t.integer  "news_link_comment_id",     limit: 4
+    t.integer  "social_link_id",           limit: 4
+    t.integer  "answer_comment_id",        limit: 4
+    t.integer  "answer_upvote_id",         limit: 4
+    t.integer  "answer_id",                limit: 4
+    t.integer  "poll_response_id",         limit: 4
   end
 
   add_index "user_reward_actions", ["operation"], name: "index_user_reward_actions_on_operation", using: :btree
@@ -1193,14 +1198,14 @@ ActiveRecord::Schema.define(version: 20180520224540) do
     t.text     "data",                        limit: 65535
     t.string   "auth_source",                 limit: 191
     t.integer  "enterprise_id",               limit: 4
-    t.datetime "created_at",                                                null: false
-    t.datetime "updated_at",                                                null: false
+    t.datetime "created_at",                                                 null: false
+    t.datetime "updated_at",                                                 null: false
     t.string   "email",                       limit: 191
     t.string   "encrypted_password",          limit: 191
     t.string   "reset_password_token",        limit: 191
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",               limit: 4,     default: 0,     null: false
+    t.integer  "sign_in_count",               limit: 4,     default: 0,      null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip",          limit: 191

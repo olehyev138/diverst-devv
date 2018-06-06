@@ -82,4 +82,18 @@ RSpec.describe NewsLink, type: :model do
 
         end
     end
+
+    describe "#destroy_callbacks" do
+      it "removes the child objects" do
+        news_link = create(:news_link)
+        segment = create(:news_link_segment, :news_link => news_link)
+        photo = create(:news_link_photo, :news_link => news_link)
+
+        news_link.destroy
+
+        expect{NewsLink.find(news_link.id)}.to raise_error(ActiveRecord::RecordNotFound)
+        expect{NewsLinkSegment.find(segment.id)}.to raise_error(ActiveRecord::RecordNotFound)
+        expect{NewsLinkPhoto.find(photo.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
 end

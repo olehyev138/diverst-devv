@@ -31,6 +31,7 @@ RSpec.describe PolicyGroupTemplate, type: :model do
             expect(PolicyGroupTemplateUpdateJob).to have_received(:perform_now)
             
             # ensure the policy_group was updated
+
             expect(admin.policy_group.users_manage).to eq(false)
         end
         

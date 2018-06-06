@@ -5,8 +5,8 @@ RSpec.describe Groups::Folder::ResourcesController, type: :controller do
     let!(:user){ create(:user, enterprise: enterprise) }
     let!(:group){ create(:group, enterprise: user.enterprise) }
     let!(:user_group){ create(:user_group, group: group, user: user) }
-    let!(:folder){ create(:folder, :container => group) }
-    let!(:resource){ create(:resource, title: "title", container: folder, file: fixture_file_upload('files/test.csv', 'text/csv')) }
+    let!(:folder){ create(:folder, :group => group) }
+    let!(:resource){ create(:resource, title: "title", folder: folder, file: fixture_file_upload('files/test.csv', 'text/csv')) }
 
     describe "GET#index" do
         context 'when user is logged in' do
@@ -22,13 +22,13 @@ RSpec.describe Groups::Folder::ResourcesController, type: :controller do
                 expect(assigns[:group]).to be_valid
             end
 
-            it 'sets a valid container object which is group object' do
-                expect(assigns[:container].container_type).to eq 'Group'
-                expect(assigns[:container]).to be_valid
+            it 'sets a valid group object' do
+                expect(assigns[:group]).to eq group
+                expect(assigns[:group]).to be_valid
             end
 
             it "returns resources that belong to container" do
-                expect(assigns[:resources].where(container_id: assigns[:container].id)).to eq [resource]
+                expect(assigns[:resources].where(folder_id: assigns[:container].id)).to eq [resource]
             end
         end
 
@@ -67,9 +67,9 @@ RSpec.describe Groups::Folder::ResourcesController, type: :controller do
                 expect(response).to render_template :edit
             end
 
-            it 'sets a valid container object' do
-                expect(assigns[:container].container_type).to eq 'Group'
-                expect(assigns[:container]).to be_valid
+            it 'sets a valid group object' do
+                expect(assigns[:group]).to eq group
+                expect(assigns[:group]).to be_valid
             end
 
             it 'sets a valid resource object' do
