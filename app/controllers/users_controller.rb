@@ -159,7 +159,7 @@ class UsersController < ApplicationController
       :biography,
       :active,
       :time_zone,
-      :role,
+      :user_role_id,
       :custom_policy_group,
       policy_group_attributes: [
         :id,

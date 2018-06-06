@@ -189,7 +189,7 @@ module FeatureSpecRefactors
 			fill_in 'user[email]', with: 'derek@diverst.com'
 			fill_in 'user[first_name]', with: 'Derek'
 			fill_in 'user[last_name]', with: 'Owusu-Frimpong'
-
+			
 			if with_custom_fields
 				page.all('#all-custom-fields') do
 					fill_in 'BIO', with: 'I am a passionate ruby developer'

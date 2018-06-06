@@ -5,7 +5,7 @@ RSpec.describe CheckboxField, type: :model do
     let!(:field_one) { CheckboxField.create(attributes_for(:checkbox_field)) }
     let!(:field_two) { CheckboxField.create(attributes_for(:checkbox_field, options_text: "Yes2\nNo2")) }
 
-    let!(:enterprise) { build(:enterprise) }
+    let!(:enterprise) { create(:enterprise) }
 
     let!(:group) { build(:group, enterprise: enterprise) }
 

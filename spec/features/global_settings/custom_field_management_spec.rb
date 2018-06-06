@@ -2,17 +2,19 @@ require 'rails_helper'
 
 RSpec.feature 'Custom-field Management' do
 	let!(:enterprise) { create(:enterprise, time_zone: "UTC") }
-	let!(:admin_user) { create(:user, enterprise_id: enterprise.id, policy_group: create(:policy_group, enterprise: enterprise)) }
+	let!(:admin_user) { create(:user, enterprise: enterprise) }
 
 	before do
-		login_as(admin_user, scope: :user)
+		enterprise.fields.destroy_all
+		
+		login_as(admin_user)
 		visit edit_fields_enterprise_path(enterprise)
 	end
 
 	context 'TextField' do
 		scenario 'add custom text field without multiple lines(type: text)', js: true do
 			click_on 'Add text field'
-
+			
 			expect_new_text_field_form
 
 			fill_in '* Title', with: 'BIO'
@@ -117,7 +119,6 @@ RSpec.feature 'Custom-field Management' do
 		end
 	end
 
-
 	context 'SelectField' do
 		scenario 'add custom select field to user', js: true do
 			click_on 'Add select field'
@@ -218,7 +219,6 @@ RSpec.feature 'Custom-field Management' do
 			end
 		end
 	end
-
 
 	context 'CheckboxField' do
 		scenario 'add custom checkbox field to user', js: true do
@@ -323,7 +323,6 @@ RSpec.feature 'Custom-field Management' do
 			end
 		end
 	end
-
 
 	context 'NumericField' do
 		scenario 'add custom numeric field to user profile', js: true do

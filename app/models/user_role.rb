@@ -21,7 +21,6 @@ class UserRole < ActiveRecord::Base
     validates_uniqueness_of :default,               scope: [:enterprise], conditions: -> { where(default: true) }
     
     before_destroy  :can_destroy?, prepend: true
-    before_save     :set_role_name
     
     after_destroy   :reset_user_roles
     
@@ -36,12 +35,8 @@ class UserRole < ActiveRecord::Base
     
     before_create   :build_default_policy_group_template
     
-    def set_role_name
-        self.role_name = role_name.downcase.underscore.gsub(/\s/,'_')
-    end
-    
     def build_default_policy_group_template
-        build_policy_group_template(:name => "#{role_name.titleize} Policy Template", :enterprise => enterprise, :default => default)
+        build_policy_group_template(:name => "#{role_name} Policy Template", :enterprise => enterprise, :default => default)
         true
     end
     
@@ -60,7 +55,7 @@ class UserRole < ActiveRecord::Base
             errors[:base] << "Cannot destroy default user role"
             return false
         elsif role_type === "group"
-            if GroupLeader.joins(:group => :enterprise).where(:groups => {:enterprise_id => enterprise.id}, :role => role_name).count > 0
+            if GroupLeader.joins(:group => :enterprise).where(:groups => {:enterprise_id => enterprise.id}, :user_role_id => id).count > 0
                 errors[:base] << "Cannot delete because there are users with this group role."
                 return false
             end

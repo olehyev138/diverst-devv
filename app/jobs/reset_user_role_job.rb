@@ -3,10 +3,8 @@ class ResetUserRoleJob < ActiveJob::Base
 
     def perform(user_role)
         enterprise = user_role.enterprise
-    
-        enterprise.users.where(:role => user_role.role_name).find_each do |user|
-            default_role = enterprise.user_roles.default.role_name
-            user.role = default_role
+        enterprise.users.where(:user_role_id => user_role.id).find_each do |user|
+            user.user_role_id = enterprise.user_roles.default.id
             user.save!
         end
     end

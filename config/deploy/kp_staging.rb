@@ -31,7 +31,7 @@ server '34.198.173.230', user: 'newdeploy', roles: %w(web app db)
 # http://capistranorb.com/documentation/getting-started/configuration/
 # Feel free to add new variables to customise your setup.
 
-set :branch, 'develop'
+set :branch, 'kp_staging'
 set :rails_env, :production
 
 set :rollbar_env, "kp_staging"

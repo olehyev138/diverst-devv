@@ -9,9 +9,13 @@
 <%= f.input :first_name %>
 <%= f.input :last_name %>
 <%= f.input :biography %>
-<%= f.input :role, :collection => current_user.enterprise.user_roles, :label_method => lambda {|r| r.role_name.titleize}, :value_method => :role_name, :label => "Role" ,:include_blank => false %>
-<%= f.hidden_field :custom_policy_group, value: 0 %>
-<%= f.input :custom_policy_group, label: 'Custom Policy Group? - ' %>
+
+<% if current_user.policy_group.users_manage? || current_user.policy_group.permissions_manage? %>
+  <%= f.input :user_role_id, :collection => current_user.enterprise.user_roles, :label_method => lambda {|r| r.role_name.titleize}, :value_method => :id, :label => "Role" ,:include_blank => false %>
+  <%= f.hidden_field :custom_policy_group, value: 0 %>
+  <%= f.input :custom_policy_group, label: 'Custom Policy Group? - ' %>
+<% end %>
+
 <%= f.input :time_zone %>
 
 <% if policy(@user).access_hidden_info? %>
@@ -115,7 +119,7 @@
           <%= p.input :segments_manage, wrapper: :boolean_checkbox, label: "Manage all" %>
         </div>
         <div class="col md-3">
-          <h4>D & I settings</h4>
+          <h4>Diversity and Culture Index</h4>
           <%= p.hidden_field :diversity_manage, value: 0 %>
           <%= p.input :diversity_manage, wrapper: :boolean_checkbox, label: "Manage" %>
         </div>

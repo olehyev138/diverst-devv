@@ -167,9 +167,11 @@ RSpec.describe UsersController, type: :controller do
             login_user_from_let
 
             context "for a successful update" do
+                let(:new_user_role) {create(:user_role, :enterprise => user.enterprise, :role_name => "Test", :priority => 10, :role_type => "user")}
+
                 before do
                     request.env["HTTP_REFERER"] = "back"
-                    patch :update, :id => user.id, :user => {:first_name => "updated"}
+                    patch :update, :id => user.id, :user => {:first_name => "updated", :user_role_id => new_user_role.id}
                 end
 
                 it "redirects to user" do
@@ -179,6 +181,7 @@ RSpec.describe UsersController, type: :controller do
                 it "updates the user" do
                     user.reload
                     expect(user.first_name).to eq("updated")
+                    expect(user.user_role_id).to eq(new_user_role.id)
                 end
 
                 it "flashes a notice message" do

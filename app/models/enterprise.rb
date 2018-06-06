@@ -81,7 +81,7 @@ class Enterprise < ActiveRecord::Base
     end
     
     def default_user_role
-        user_roles.where(:default => true).first.role_name
+        user_roles.where(:default => true).first.id
     end
 
     def iframe_calendar_token
@@ -184,8 +184,7 @@ class Enterprise < ActiveRecord::Base
     protected
 
     def enterprise_resources_count
-      enterprise_folders = Folder.where(container_type: 'Enterprise')
-                                 .where(container_id: self)
+      enterprise_folders = Folder.where(enterprise_id: id)
       count = 0
 
       enterprise_folders.each do |f|
@@ -198,8 +197,7 @@ class Enterprise < ActiveRecord::Base
     def groups_resources_count
       group_ids = self.groups.map{ |g| g.id }
 
-      enterprise_folders = Folder.where(container_type: 'Group')
-                                 .where(container_id: group_ids)
+      enterprise_folders = Folder.where(group_id: group_ids)
       count = 0
 
       enterprise_folders.each do |f|

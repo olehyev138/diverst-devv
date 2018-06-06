@@ -5,7 +5,7 @@ RSpec.describe NumericField, type: :model do
     let!(:field_one) { NumericField.create(attributes_for(:numeric_field)) }
     let!(:field_two) { NumericField.create(attributes_for(:numeric_field)) }
 
-    let!(:enterprise) { build(:enterprise) }
+    let!(:enterprise) { create(:enterprise) }
 
     let!(:group) { build(:group, enterprise: enterprise) }
 

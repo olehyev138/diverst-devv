@@ -81,6 +81,7 @@ class Groups::NewsLinksController < ApplicationController
     end
 
     def news_link_photos
+        @resize = true
         @photos = @news_link.photos
     end
 

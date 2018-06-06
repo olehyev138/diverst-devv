@@ -61,8 +61,8 @@ RSpec.describe User do
     end
 
     describe 'test callbacks' do
-      let!(:new_enterprise) { build(:enterprise) }
-      let!(:new_user) { build(:user, enterprise: new_enterprise, policy_group_id: nil) }
+      let!(:new_enterprise) { create(:enterprise) }
+      let!(:new_user) { build(:user, enterprise: new_enterprise) }
 
       describe 'before_validation callbacks' do
         context '#generate_password_if_saml' do
@@ -102,13 +102,6 @@ RSpec.describe User do
       end
 
       describe 'before_save callbacks' do
-        context '#assign_policy_group' do
-          it 'should be called before user object is created' do
-            expect(new_user[:policy_group_id]).to eq PolicyGroup.default_group(new_enterprise.id)
-            new_user.save
-          end
-        end
-
         context '#assign_firebase_token' do
           it 'should be called after user object is created' do
             new_user.run_callbacks :create
@@ -123,7 +116,7 @@ RSpec.describe User do
       let!(:mandatory_field){ build(:field, title: "Test", required: true) }
 
       context 'with mandatory fields not filled' do
-        let!(:enterprise){ build(:enterprise, fields: [mandatory_field]) }
+        let!(:enterprise){ create(:enterprise, fields: [mandatory_field]) }
 
         it "should have an error on user" do
           user.info[mandatory_field] = ""
@@ -248,7 +241,7 @@ RSpec.describe User do
     context 'when user is a leader of an erg' do
       before  do
         group.members << user
-        group.group_leaders << GroupLeader.new(group: group, user: user, position_name: 'blah', role: "group_leader")
+        group.group_leaders << GroupLeader.new(group: group, user: user, position_name: 'blah', user_role: user.enterprise.user_roles.where(:role_name => "group_leader").first)
       end
 
       it 'returns true' do
@@ -424,31 +417,32 @@ RSpec.describe User do
   describe "#set_group_role" do
     context "when user is an existing group_leader but current role is admin and user tries to set role to role with lower priority" do
       it "sets the users role to the group_leader_role with higher priority" do
-        group_leader_user = create(:user, :role => "user")
+        enterprise = create(:enterprise)
+        group_leader_user = create(:user, :enterprise => enterprise, :user_role => enterprise.user_roles.where(:role_type => "user").first)
         create(:user_role, :enterprise => group_leader_user.enterprise, :role_name => "group_treasurer", :role_type => "group", :priority => 2)
         group_1 = create(:group, :enterprise => group_leader_user.enterprise)
         group_2 = create(:group, :enterprise => group_leader_user.enterprise)
         
         create(:user_group, :group => group_1, :user => group_leader_user)
         create(:user_group, :group => group_2, :user => group_leader_user)
-        create(:group_leader, :group => group_1, :role => "group_leader", :user => group_leader_user)
-        create(:group_leader, :group => group_2, :role => "group_treasurer", :user => group_leader_user)
+        create(:group_leader, :group => group_1, :user_role => enterprise.user_roles.where(:role_name => "group_leader").first, :user => group_leader_user)
+        create(:group_leader, :group => group_2, :user_role => enterprise.user_roles.where(:role_name => "group_treasurer").first, :user => group_leader_user)
         
-        expect(group_leader_user.role).to eq("group_leader")
+        expect(group_leader_user.user_role.role_name).to eq("group_leader")
         
         # we give the user admin permissions
-        group_leader_user.role = "admin"
+        group_leader_user.user_role_id = enterprise.user_roles.where(:role_type => "admin").first.id
         group_leader_user.save!
         
         # verify the role
-        expect(group_leader_user.role).to eq("admin")
+        expect(group_leader_user.user_role.role_name).to eq("admin")
         
         # we set the user role to a group role wit lower priority
-        group_leader_user.role = "group_treasurer"
+        group_leader_user.user_role_id = enterprise.user_roles.where(:role_name => "group_treasurer").first.id
         group_leader_user.save!
         
         # verify that the user's role is set to the role with higher priority
-        expect(group_leader_user.role).to eq("group_leader")
+        expect(group_leader_user.user_role.role_name).to eq("group_leader")
       end
     end
   end
@@ -456,46 +450,48 @@ RSpec.describe User do
   describe "#group_leader_role" do
     it "raises an User is not a group leader error" do
       user = create(:user)
-      user.role = "group_leader"
+      user.user_role = user.enterprise.user_roles.where(:role_name => "group_leader").first
       user.save
       
-      expect(user.errors.full_messages.first).to eq("Role User is not a group leader")
+      expect(user.errors.full_messages.first).to eq("User role User is not a group leader")
     end
     
     it "raises a Cannot change group_leader roles manually error" do
-      user = create(:user, :role => "user")
+      enterprise = create(:enterprise)
+      user = create(:user, :enterprise => enterprise, :user_role => enterprise.user_roles.where(:role_type => "user").first)
       create(:user_role, :enterprise => user.enterprise, :role_name => "group_treasurer", :role_type => "group", :priority => 2)
       
       group_1 = create(:group, :enterprise => user.enterprise)
       create(:user_group, :group => group_1, :user => user)
-      create(:group_leader, :group => group_1, :user => user, :role => "group_leader")
+      create(:group_leader, :group => group_1, :user => user, :user_role => enterprise.user_roles.where(:role_name => "group_leader").first)
       
       group_2 = create(:group, :enterprise => user.enterprise)
       create(:user_group, :group => group_2, :user => user)
-      create(:group_leader, :group => group_2, :user => user, :role => "group_treasurer")
+      create(:group_leader, :group => group_2, :user => user, :user_role => enterprise.user_roles.where(:role_name => "group_treasurer").first)
       
-      user.role = "group_treasurer"
+      user.user_role = enterprise.user_roles.where(:role_name => "group_treasurer").first
       user.save
       
-      expect(user.errors.full_messages.first).to eq("Role Cannot change group_leader roles manually")
+      expect(user.errors.full_messages.first).to eq("User role Cannot change group_leader roles manually")
     end
     
     it "raises a Cannot change group_leader roles manually error" do
-      user = create(:user, :role => "user")
-      create(:user_role, :enterprise => user.enterprise, :role_name => "group_treasurer", :role_type => "group", :priority => 2)
+      enterprise = create(:enterprise)
+      user = create(:user, :enterprise => enterprise, :user_role => enterprise.user_roles.where(:role_type => "user").first)
+      create(:user_role, :enterprise => enterprise, :role_name => "group_treasurer", :role_type => "group", :priority => 2)
       
       group_1 = create(:group, :enterprise => user.enterprise)
       create(:user_group, :group => group_1, :user => user)
-      create(:group_leader, :group => group_1, :user => user, :role => "group_leader")
+      create(:group_leader, :group => group_1, :user => user, :user_role => enterprise.user_roles.where(:role_name => "group_leader").first)
       
       group_2 = create(:group, :enterprise => user.enterprise)
       create(:user_group, :group => group_2, :user => user)
-      create(:group_leader, :group => group_2, :user => user, :role => "group_treasurer")
+      create(:group_leader, :group => group_2, :user => user, :user_role => enterprise.user_roles.where(:role_name => "group_treasurer").first)
       
-      user.role = "group_treasurer"
+      user.user_role = enterprise.user_roles.where(:role_name => "group_treasurer").first
       user.save
       
-      expect(user.errors.full_messages.first).to eq("Role Cannot change group_leader roles manually")
+      expect(user.errors.full_messages.first).to eq("User role Cannot change group_leader roles manually")
     end
     
     it "raises an User does not have that role in any group error" do
@@ -504,27 +500,28 @@ RSpec.describe User do
       
       group_1 = create(:group, :enterprise => user.enterprise)
       create(:user_group, :group => group_1, :user => user)
-      create(:group_leader, :group => group_1, :user => user, :role => "group_leader")
+      create(:group_leader, :group => group_1, :user => user, :user_role => user.enterprise.user_roles.where(:role_name => "group_leader").first)
       
-      user.role = "group_treasurer"
+      user.user_role = user.enterprise.user_roles.where(:role_name => "group_treasurer").first
       user.save
       
-      expect(user.errors.full_messages.first).to eq("Role User does not have that role in any group")
+      expect(user.errors.full_messages.first).to eq("User role User does not have that role in any group")
     end
     
     it "raises a Cannot change from group role to role with lower priority error" do
-      user = create(:user, :role => "user")
+      enterprise = create(:enterprise)
+      user = create(:user, :enterprise => enterprise, :user_role => enterprise.user_roles.where(:role_type => "user").first)
       
-      group_1 = create(:group, :enterprise => user.enterprise)
+      group_1 = create(:group, :enterprise => enterprise)
       create(:user_group, :group => group_1, :user => user)
-      create(:group_leader, :group => group_1, :user => user, :role => "group_leader")
+      create(:group_leader, :group => group_1, :user => user, :user_role => enterprise.user_roles.where(:role_name => "group_leader").first)
       
-      expect(user.role).to eq("group_leader")
+      expect(user.user_role.role_name).to eq("group_leader")
       
-      user.role = "user"
+      user.user_role = enterprise.user_roles.where(:role_name => "user").first
       user.save
       
-      expect(user.errors.full_messages.first).to eq("Role Cannot change from group role to role with lower priority")
+      expect(user.errors.full_messages.first).to eq("User role Cannot change from group role to role with lower priority")
     end
     
     it "raises a Cannot change from group role to role with lower priority error" do
@@ -532,12 +529,12 @@ RSpec.describe User do
       
       group_1 = create(:group, :enterprise => user.enterprise)
       create(:user_group, :group => group_1, :user => user)
-      create(:group_leader, :group => group_1, :user => user, :role => "group_leader")
+      create(:group_leader, :group => group_1, :user => user, :user_role => user.enterprise.user_roles.where(:role_name => "group_leader").first)
       
-      user.role = "user"
+      user.user_role = user.enterprise.user_roles.where(:role_name => "user").first
       user.save
       
-      expect(user.errors.full_messages.first).to eq("Role Cannot change from role to role with lower priority while user is still a group leader")
+      expect(user.errors.full_messages.first).to eq("User role Cannot change from role to role with lower priority while user is still a group leader")
     end
   end
   
