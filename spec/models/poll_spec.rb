@@ -229,7 +229,7 @@ RSpec.describe Poll, type: :model do
         poll.destroy
 
         expect{Poll.find(poll.id)}.to raise_error(ActiveRecord::RecordNotFound)
-        expect{Field.find(field.id)}.to raise_error(ActiveRecord::RecordNotFound)
+        #expect{Field.find(field.id)}.to raise_error(ActiveRecord::RecordNotFound)
         expect{PollResponse.find(response.id)}.to raise_error(ActiveRecord::RecordNotFound)
         expect{Graph.find(graph.id)}.to raise_error(ActiveRecord::RecordNotFound)
         expect{PollsSegment.find(polls_segment.id)}.to raise_error(ActiveRecord::RecordNotFound)

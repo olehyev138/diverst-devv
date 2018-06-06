@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
     has_many :user_groups, dependent: :destroy
     has_many :groups, through: :user_groups
     has_many :topic_feedbacks, dependent: :destroy
-    has_many :poll_responses, dependent: :destroy
+    has_many :poll_responses
     has_many :answers, inverse_of: :author, foreign_key: :author_id, dependent: :destroy
     has_many :answer_upvotes, foreign_key: :author_id, dependent: :destroy
     has_many :answer_comments, foreign_key: :author_id, dependent: :destroy

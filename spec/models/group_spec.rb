@@ -387,7 +387,7 @@ RSpec.describe Group, :type => :model do
         it "returns highcharts_history" do
             group = create(:group)
             field = create(:field)
-            create(:group_update, :group => group)
+            create(:group_update, :group => group, :created_at => 30.days.ago)
             data = group.highcharts_history(:field => field)
             expect(data.length).to eq(1)
         end
