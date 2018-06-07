@@ -20,7 +20,7 @@ RSpec.feature 'Initiative management' do
 
   before do
     create(:user_group, group: group, user: user, accepted_member: true)
-    login_as(user, scope: :user)
+    login_as(user, scope: :user, :run_callbacks => false)
   end
 
   context 'without budget' do
@@ -41,7 +41,7 @@ RSpec.feature 'Initiative management' do
   end
 
   context 'with budget item' do
-    let!(:budget) { create :approved_budget, subject: group }
+    let!(:budget) { create :approved_budget, group: group }
     let!(:budget_item) { budget.budget_items.first }
 
     before { visit new_group_initiative_path(group) }

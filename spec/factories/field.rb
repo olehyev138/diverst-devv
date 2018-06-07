@@ -39,11 +39,7 @@ FactoryGirl.define do
     match_weight 1
 
     factory :enterprise_field do
-      association :container, factory: :enterprise
-    end
-
-    factory :graph_field do
-      association :container, factory: :graph
+      association :enterprise, factory: :enterprise
     end
   end
 end

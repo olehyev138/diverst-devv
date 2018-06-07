@@ -214,7 +214,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             end
 
             context "when creating with survey fields" do
-                let(:field) {create(:field, field_type: "group_survey", type: "NumericField", container_id: group.id, container_type: "Group", elasticsearch_only: false)}
+                let(:field) {create(:field, field_type: "group_survey", type: "NumericField", group: group, elasticsearch_only: false)}
 
                 before do
                     user_group.save

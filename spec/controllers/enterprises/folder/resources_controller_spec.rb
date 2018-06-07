@@ -3,9 +3,8 @@ require 'rails_helper'
 RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
     let(:enterprise){ create(:enterprise, cdo_name: "test") }
     let(:user){ create(:user, enterprise: enterprise) }
-    let!(:folder){ create(:folder, :container => enterprise) }
-    let!(:resource){ create(:resource, title: "title", container: folder, file: fixture_file_upload('files/test.csv', 'text/csv')) }
-
+    let!(:folder){ create(:folder, :enterprise => enterprise) }
+    let!(:resource){ create(:resource, title: "title", folder: folder, file: fixture_file_upload('files/test.csv', 'text/csv')) }
 
     describe "GET#index" do
         context 'when user is logged in' do
@@ -20,9 +19,9 @@ RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
                 expect(assigns[:resources]).to eq([resource])
             end
 
-            it "assigns a valid container object of container_type 'Enterprise'" do
-                expect(assigns[:container].container_type).to eq 'Enterprise'
-                expect(assigns[:container]).to be_valid
+            it "assigns a valid enterprise object" do
+                expect(assigns[:enterprise]).to eq enterprise
+                expect(assigns[:enterprise]).to be_valid
             end
 
             it 'sets container path' do
@@ -35,7 +34,6 @@ RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "GET#new" do
         context 'when user is logged in' do
@@ -50,8 +48,8 @@ RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
                 expect(assigns[:resource]).to be_a_new(Resource)
             end
 
-             it "assigns a new container object of container_type 'Enterprise'" do
-                expect(assigns[:container].container_type).to eq 'Enterprise'
+             it "assigns a new enterprise object" do
+                expect(assigns[:enterprise]).to eq enterprise
             end
 
             it 'sets container path' do
@@ -65,7 +63,6 @@ RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
         end
     end
 
-
     describe "GET#edit" do
         context 'when user is logged in' do
             login_user_from_let
@@ -75,9 +72,9 @@ RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
                 expect(response).to render_template :edit
             end
 
-            it "assigns a valid container object of container_type 'Enterprise'" do
-                expect(assigns[:container].container_type).to eq 'Enterprise'
-                expect(assigns[:container]).to be_valid
+            it "assigns a valid enterprise object" do
+                expect(assigns[:enterprise]).to eq enterprise
+                expect(assigns[:enterprise]).to be_valid
             end
 
             it 'sets container path' do
@@ -90,7 +87,6 @@ RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "POST#create" do
         let!(:file) { fixture_file_upload('files/test.csv', 'text/csv') }
@@ -124,7 +120,6 @@ RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
         end
     end
 
-
     describe "GET#show" do
         context 'when user is logged in' do
             login_user_from_let
@@ -138,9 +133,9 @@ RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
                 expect(response.headers["Content-Disposition"]).to include 'test.csv'
             end
 
-            it "assigns a valid container object of container_type 'Enterprise'" do
-                expect(assigns[:container].container_type).to eq 'Enterprise'
-                expect(assigns[:container]).to be_valid
+            it "assigns a valid enterprise object" do
+                expect(assigns[:enterprise]).to eq enterprise
+                expect(assigns[:enterprise]).to be_valid
             end
 
             it 'sets container path' do
@@ -153,7 +148,6 @@ RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "PATCH#update" do
         let!(:file) { fixture_file_upload('files/test.csv', 'text/csv') }
@@ -195,7 +189,6 @@ RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "DELETE#destroy" do
         context 'when user is logged in' do
