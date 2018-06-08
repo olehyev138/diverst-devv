@@ -17,39 +17,40 @@ class User < ActiveRecord::Base
     belongs_to  :user_role
     has_one :policy_group, :dependent => :destroy, inverse_of: :user
 
-    has_many :devices
-    has_many :users_segments
+    has_many :devices, dependent: :destroy
+    has_many :users_segments, dependent: :destroy
     has_many :segments, through: :users_segments
     has_many :user_groups, dependent: :destroy
     has_many :groups, through: :user_groups
-    has_many :topic_feedbacks
+    has_many :topic_feedbacks, dependent: :destroy
     has_many :poll_responses
-    has_many :answers, inverse_of: :author, foreign_key: :author_id
-    has_many :answer_upvotes, foreign_key: :author_id
-    has_many :answer_comments, foreign_key: :author_id
-    has_many :invitations, class_name: 'CampaignInvitation'
+    has_many :answers, inverse_of: :author, foreign_key: :author_id, dependent: :destroy
+    has_many :answer_upvotes, foreign_key: :author_id, dependent: :destroy
+    has_many :answer_comments, foreign_key: :author_id, dependent: :destroy
+    has_many :invitations, class_name: 'CampaignInvitation', dependent: :destroy
     has_many :campaigns, through: :invitations
     has_many :news_links, through: :groups
-    has_many :own_news_links, class_name: 'NewsLink', foreign_key: :author_id
+    has_many :own_news_links, class_name: 'NewsLink', foreign_key: :author_id, dependent: :destroy
     has_many :messages, through: :groups
-    has_many :message_comments, class_name: 'GroupMessageComment', foreign_key: :author_id
+    has_many :message_comments, class_name: 'GroupMessageComment', foreign_key: :author_id, dependent: :destroy
     has_many :events, through: :groups
     has_many :social_links, foreign_key: :author_id, dependent: :destroy
-    has_many :initiative_users
+    has_many :initiative_users, dependent: :destroy
     has_many :initiatives, through: :initiative_users, source: :initiative
-    has_many :initiative_invitees
+    has_many :initiative_invitees, dependent: :destroy
     has_many :invited_initiatives, through: :initiative_invitees, source: :initiative
-    has_many :event_attendances
+    has_many :event_attendances, dependent: :destroy
     has_many :attending_events, through: :event_attendances, source: :event
-    has_many :event_invitees
+    has_many :event_invitees, dependent: :destroy
     has_many :invited_events, through: :event_invitees, source: :event
     has_many :managed_groups, foreign_key: :manager_id, class_name: 'Group'
-    has_many :samples
+    has_many :samples, dependent: :destroy
     has_many :biases, class_name: "Bias"
-    has_many :group_leaders
+    has_many :group_leaders, :dependent => :destroy
     has_many :leading_groups, through: :group_leaders, source: :group
-    has_many :user_reward_actions
+    has_many :user_reward_actions, dependent: :destroy
     has_many :reward_actions, through: :user_reward_actions
+    has_many :rewards, foreign_key: :responsible_id, :dependent => :destroy
     has_many :likes, dependent: :destroy
 
     has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: "private"
@@ -159,7 +160,6 @@ class User < ActiveRecord::Base
     
     def set_default_policy_group
         template = enterprise.policy_group_templates.joins(:user_role).where(:user_roles => {:id => user_role_id}).first
-
         attributes = template.create_new_policy
         if policy_group.nil?
             create_policy_group(attributes)

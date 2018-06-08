@@ -171,4 +171,24 @@ RSpec.describe Campaign, type: :model do
             expect(campaign.errors.full_messages.first).to eq("End must be after start")
         end
     end
+    
+    describe "#destroy_callbacks" do
+        it "removes the child objects" do
+            campaign = create(:campaign)
+            question = create(:question, :campaign => campaign)
+            campaigns_group = create(:campaigns_group, :campaign => campaign)
+            campaign_invitation = create(:campaign_invitation, :campaign => campaign)
+            campaigns_segment = create(:campaigns_segment, :campaign => campaign)
+            campaigns_manager = create(:campaigns_manager, :campaign => campaign)
+            
+            campaign.destroy
+            
+            expect{Campaign.find(campaign.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Question.find(question.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{CampaignsGroup.find(campaigns_group.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{CampaignInvitation.find(campaign_invitation.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{CampaignsSegment.find(campaigns_segment.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{CampaignsManager.find(campaigns_manager.id)}.to raise_error(ActiveRecord::RecordNotFound)
+        end
+    end
 end

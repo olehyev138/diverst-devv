@@ -2,7 +2,7 @@ class Email < ActiveRecord::Base
   # associations
   belongs_to :enterprise
   
-  has_many :variables, :class_name => "EmailVariable"
+  has_many :variables, :class_name => "EmailVariable", dependent: :destroy
   
   # validations
   validates :name, :subject, :content, :description, :mailer_name, :mailer_method, presence: true

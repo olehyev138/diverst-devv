@@ -122,8 +122,6 @@ FactoryGirl.define do
   end
 
   factory :guest_user, parent: :policy_group do
-    name 'Guest User'
-    enterprise
 
     campaigns_index false
     campaigns_create false
@@ -168,11 +166,6 @@ FactoryGirl.define do
     initiatives_index false
     initiatives_create false
     initiatives_manage false
-
-    global_settings_manage false
-
-    default_for_enterprise false
-    admin_pages_view false
 
     budget_approval false
 

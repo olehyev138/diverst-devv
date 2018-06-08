@@ -11,7 +11,7 @@ FactoryGirl.define do
     f.owner {FactoryGirl.create(:user)}
     trait :with_budget_item do
       budget_item { FactoryGirl.create(:budget_item) }
-      owner_group { budget_item.budget.subject }
+      owner_group { budget_item.budget.group }
       estimated_funding { rand(1..budget_item.available_amount ) }
     end
   end

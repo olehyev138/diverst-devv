@@ -48,7 +48,11 @@ module Folders
         @folder = @container.folders.new(folder_params)
         if @folder.save
             if @folder.parent_id
-                redirect_to [@folder.parent.container, @folder.parent, :resources]
+                if @folder.parent.group
+                    redirect_to [@folder.parent.group, @folder.parent, :resources]
+                else
+                    redirect_to [@folder.parent.enterprise, @folder.parent, :resources]
+                end
             else
                 redirect_to action: :index
             end

@@ -50,7 +50,7 @@ RSpec.describe Group, :type => :model do
         it { expect(group).to have_many(:initiatives).through(:pillars) }
         it { expect(group).to have_many(:updates).class_name('GroupUpdate').dependent(:destroy) }
         it { expect(group).to have_many(:fields) }
-        it { expect(group).to have_many(:survey_fields).class_name('Field').dependent(:destroy) }
+        it { expect(group).to have_many(:survey_fields).class_name('Field').dependent(:delete_all) }
         it { expect(group).to have_many(:group_leaders) }
         it { expect(group).to have_many(:leaders).through(:group_leaders).source(:user) }
         it { expect(group).to have_many(:children).class_name('Group').with_foreign_key(:parent_id) }
@@ -246,7 +246,7 @@ RSpec.describe Group, :type => :model do
     describe '#survey_answers_csv' do
         it "returns a csv file" do
             group = create(:group)
-            field = create(:field, :field_type => "group_survey", :container => group)
+            field = create(:field, :field_type => "group_survey", :group => group)
             user = create(:user)
             user_group = create(:user_group, :user => user, :group => group, :data => "{\"13\":\"test\"}")
 
@@ -373,7 +373,7 @@ RSpec.describe Group, :type => :model do
         it "returns 0" do
             group = create(:group)
 
-            budget = create(:budget, :subject => group, :is_approved => true)
+            budget = create(:budget, :group => group, :is_approved => true)
             create(:budget_item, :budget => budget, :estimated_amount => 1000)
 
             expect(group.approved_budget).to be > 0
@@ -389,7 +389,7 @@ RSpec.describe Group, :type => :model do
         it "returns available budget" do
             group = create(:group, :annual_budget => 10000)
 
-            budget = create(:budget, :subject => group, :is_approved => true)
+            budget = create(:budget, :group => group, :is_approved => true)
             create(:budget_item, :budget => budget, :estimated_amount => 1000)
             expect(group.available_budget).to eq(group.annual_budget - group.approved_budget)
         end
@@ -474,10 +474,10 @@ RSpec.describe Group, :type => :model do
     end
 
     describe '#highcharts_history' do
-        it "returns highcharts_history", skip: "test fails" do
-            group = build(:group)
-            field = build(:field)
-            create(:group_update, :group => group)
+        it "returns highcharts_history" do
+            group = create(:group)
+            field = create(:field)
+            create(:group_update, :group => group, :created_at => 30.days.ago)
             data = group.highcharts_history(:field => field)
             expect(data.length).to eq(1)
         end
@@ -664,6 +664,57 @@ RSpec.describe Group, :type => :model do
             expect(enterprise.groups.count).to eq(8)
             expect(enterprise.groups.is_private.count).to eq(5)
             expect(enterprise.groups.non_private.count).to eq(3)
+        end
+    end
+    
+    describe "#destroy_callbacks" do
+        it "removes the child objects" do
+            group = create(:group)
+            news_feed = create(:news_feed, :group => group)
+            user_group = create(:user_group, :group => group)
+            groups_poll = create(:groups_poll, :group => group)
+            event = create(:event, :group => group)
+            initiative = create(:initiative, :owner_group_id => group.id)
+            budget = create(:budget, :group => group)
+            group_message = create(:group_message, :group => group)
+            news_link = create(:news_link, :group => group)
+            social_link = create(:social_link, :group => group)
+            invitation_segments_group = create(:invitation_segments_group, :group => group)
+            resource = create(:resource, :group => group)
+            folder = create(:folder, :group => group)
+            folder_share = create(:folder_share, :group => group)
+            campaigns_group = create(:campaigns_group, :group => group)
+            outcome = create(:outcome, :group => group)
+            group_update = create(:group_update, :group => group)
+            field = create(:field, :group => group, :field_type => "regular")
+            survey_field = create(:field, :group => group, :field_type => "group_survey")
+            user = create(:user, :enterprise => group.enterprise)
+            group_leader = create(:group_leader, :group => group, :user => user)
+            child = create(:group, :parent => group)
+            
+            group.destroy!
+            
+            expect{Group.find(group.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{NewsFeed.find(news_feed.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{UserGroup.find(user_group.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{GroupsPoll.find(groups_poll.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Event.find(event.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Initiative.find(initiative.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Budget.find(budget.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{GroupMessage.find(group_message.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{NewsLink.find(news_link.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{SocialLink.find(social_link.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{InvitationSegmentsGroup.find(invitation_segments_group.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Resource.find(resource.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Folder.find(folder.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{FolderShare.find(folder_share.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{CampaignsGroup.find(campaigns_group.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Outcome.find(outcome.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{GroupUpdate.find(group_update.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Field.find(field.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Field.find(survey_field.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{GroupLeader.find(group_leader.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Group.find(child.id)}.to raise_error(ActiveRecord::RecordNotFound)
         end
     end
 end
