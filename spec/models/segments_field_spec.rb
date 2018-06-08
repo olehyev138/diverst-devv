@@ -5,7 +5,7 @@ RSpec.describe SegmentsField, type: :model do
     let!(:field_one) { SegmentsField.create(attributes_for(:segments_field)) }
     let!(:field_two) { SelectField.create(attributes_for(:select_field)) }
 
-    let!(:enterprise) { build(:enterprise) }
+    let!(:enterprise) { create(:enterprise) }
 
     let!(:group) { build(:group, enterprise: enterprise) }
 

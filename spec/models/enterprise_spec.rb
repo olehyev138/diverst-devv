@@ -30,7 +30,6 @@ RSpec.describe Enterprise, type: :model do
         it { expect(enterprise).to have_many(:yammer_field_mappings) }
         it { expect(enterprise).to have_many(:emails) }
         it { expect(enterprise).to belong_to(:theme) }
-        it { expect(enterprise).to have_many(:policy_groups) }
         it { expect(enterprise).to have_many(:expenses) }
         it { expect(enterprise).to have_many(:expense_categories) }
         it { expect(enterprise).to have_many(:biases).through(:users).class_name('Bias') }
@@ -165,6 +164,62 @@ RSpec.describe Enterprise, type: :model do
             expect(mapped_fields).to include(gender_field.id => saml_fields['gender'])
 
             expect(mapped_fields).to_not have_key 'department'
+        end
+    end
+    
+    describe "#destroy_callbacks" do
+        it "removes the child objects" do
+            enterprise = create(:enterprise)
+            user = create(:user, :enterprise => enterprise)
+            field = create(:field, :enterprise => enterprise)
+            topic = create(:topic, :enterprise => enterprise)
+            segment = create(:segment, :enterprise => enterprise)
+            group = create(:group, :enterprise => enterprise)
+            folder = create(:folder, :enterprise => enterprise)
+            folder_share = create(:folder_share, :enterprise => enterprise)
+            poll = create(:poll, :enterprise => enterprise)
+            mobile_field = create(:mobile_field, :enterprise => enterprise)
+            metrics_dashboard = create(:metrics_dashboard, :enterprise => enterprise)
+            campaign = create(:campaign, :enterprise => enterprise)
+            resource = create(:resource, :enterprise => enterprise)
+            yammer_field_mapping = create(:yammer_field_mapping, :enterprise => enterprise)
+            email = create(:email, :enterprise => enterprise)
+            expense = create(:expense, :enterprise => enterprise)
+            expense_category = create(:expense_category, :enterprise => enterprise)
+            default_user_role = enterprise.user_roles.where(:default => true).first
+            policy_group_template = default_user_role.policy_group_template
+            reward = create(:reward, :enterprise => enterprise, :responsible => user)
+            reward_action = create(:reward_action, :enterprise => enterprise)
+            badge = create(:badge, :enterprise => enterprise)
+            group_category = create(:group_category, :enterprise => enterprise)
+            group_category_type = create(:group_category_type, :enterprise => enterprise)
+            
+            enterprise.destroy!
+            
+            expect{Enterprise.find(enterprise.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{User.find(user.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Field.find(field.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Topic.find(topic.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Segment.find(segment.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Group.find(group.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Folder.find(folder.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{FolderShare.find(folder_share.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Poll.find(poll.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{MobileField.find(mobile_field.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{MetricsDashboard.find(metrics_dashboard.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Campaign.find(campaign.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{YammerFieldMapping.find(yammer_field_mapping.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Email.find(email.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Expense.find(expense.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{ExpenseCategory.find(expense_category.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{UserRole.find(default_user_role.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{PolicyGroupTemplate.find(policy_group_template.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Resource.find(resource.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Reward.find(reward.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{RewardAction.find(reward_action.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Badge.find(badge.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{GroupCategory.find(group_category.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{GroupCategoryType.find(group_category_type.id)}.to raise_error(ActiveRecord::RecordNotFound)
         end
     end
 end

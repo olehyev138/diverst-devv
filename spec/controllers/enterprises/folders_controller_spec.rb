@@ -3,8 +3,7 @@ require 'rails_helper'
 RSpec.describe Enterprises::FoldersController, type: :controller do
     let(:enterprise) { create(:enterprise, cdo_name: "test") }
     let(:user) { create(:user, enterprise: enterprise) }
-    let!(:folder) { create(:folder, :container => enterprise, :password_protected => true, :password => "password") }
-
+    let!(:folder) { create(:folder, :enterprise => enterprise, :password_protected => true, :password => "password") }
 
     describe "POST#authenticate" do
         login_user_from_let
@@ -32,10 +31,9 @@ RSpec.describe Enterprises::FoldersController, type: :controller do
         end
     end
 
-
     describe "GET#index" do
         context 'when user is logged in' do
-            let!(:shared_folders) { create_list(:folder_share, 2, container: enterprise, folder: folder) }
+            let!(:shared_folders) { create_list(:folder_share, 2, enterprise: enterprise, folder: folder) }
             login_user_from_let
             before {get :index, enterprise_id: enterprise.id}
 
@@ -44,14 +42,14 @@ RSpec.describe Enterprises::FoldersController, type: :controller do
             end
 
             it "returns 3 folders in total; 1 folder + 2 shared folders" do
-                expect(assigns[:container].folders.count).to eq 1
-                expect(assigns[:container].shared_folders.count).to eq 2
+                expect(assigns[:enterprise].folders.count).to eq 1
+                expect(assigns[:enterprise].shared_folders.count).to eq 2
                 expect(assigns[:folders].count).to eq 3
             end
 
-            it "sets a valid container object which is an Enterprise object" do
-                expect(assigns[:container]).to be_valid
-                expect(assigns[:container]).to eq enterprise
+            it "sets a valid enterprise id" do
+                expect(assigns[:enterprise]).to be_valid
+                expect(assigns[:enterprise]).to eq enterprise
             end
         end
 
@@ -60,7 +58,6 @@ RSpec.describe Enterprises::FoldersController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "GET#new" do
         context 'when user is logged in' do
@@ -75,8 +72,8 @@ RSpec.describe Enterprises::FoldersController, type: :controller do
                 expect(assigns[:folder]).to be_a_new(Folder)
             end
 
-            it "sets container_type" do
-                expect(assigns[:folder].container_type).to eq("Enterprise")
+            it "sets enterprise_id" do
+                expect(assigns[:folder].enterprise_id).to eq(enterprise.id)
             end
         end
 
@@ -85,7 +82,6 @@ RSpec.describe Enterprises::FoldersController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "GET#edit" do
         context 'when user is logged in' do
@@ -96,13 +92,12 @@ RSpec.describe Enterprises::FoldersController, type: :controller do
                 expect(response).to render_template :edit
             end
 
-            it 'sets a valid container object which is an Enterprise object' do
-                expect(assigns[:container]).to be_valid
-                expect(assigns[:container]).to eq enterprise
+            it 'sets a valid enterprise object which is an Enterprise object' do
+                expect(assigns[:enterprise]).to eq enterprise
             end
 
-            it "sets a valid folder object of container type 'Enterprise'" do
-                expect(assigns[:folder].container_type).to eq "Enterprise"
+            it "sets a valid folder object enterprise_id" do
+                expect(assigns[:folder].enterprise_id).to eq enterprise.id
                 expect(assigns[:folder]).to be_valid
             end
         end
@@ -112,7 +107,6 @@ RSpec.describe Enterprises::FoldersController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "POST#create" do
         describe 'when user is logged in' do
@@ -148,7 +142,6 @@ RSpec.describe Enterprises::FoldersController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "PATCH#update" do
         describe 'when user is logged in' do
@@ -187,7 +180,6 @@ RSpec.describe Enterprises::FoldersController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "DELETE#destroy" do
         context 'when users is logged in' do

@@ -2,14 +2,19 @@ require 'rails_helper'
 
 RSpec.describe GroupMessagePolicy, :type => :policy do
     
-    let(:policy_group){ create(:policy_group, :global_settings_manage => true)}
-    let(:enterprise) {create(:enterprise, :policy_groups => [policy_group])}
+    let(:enterprise) {create(:enterprise)}
     let(:user){ create(:user, :enterprise => enterprise) }
-    let(:policy_group_2){ create(:policy_group, :group_messages_manage => false, :group_messages_index => false, :group_messages_create => false)}
-    let(:no_access) { create(:user, :policy_group => policy_group_2) }
-    let(:group_message){ create(:group_message, :owner => user)}
+    let(:no_access) { create(:user) }
+    let!(:group_message){ create(:group_message, :owner => user)}
     
     subject { described_class }
+    
+    before {
+        no_access.policy_group.group_messages_index = false
+        no_access.policy_group.group_messages_create = false
+        no_access.policy_group.group_messages_manage = false
+        no_access.policy_group.save!
+    }
 
     permissions :index?, :create?, :update?, :destroy? do
         it "allows access" do

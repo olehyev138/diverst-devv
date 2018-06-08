@@ -13,16 +13,16 @@ RSpec.describe Rewards::Points::Manager do
 
       before :each do
         create(:user_reward_action, user: user, operation: "add", points: 50)
-        create(:user_reward_action, user: user, operation: "add", points: 50, entity: initiative)
-        create(:user_reward_action, user: user, operation: "add", points: 100, entity: initiative)
-        create(:user_reward_action, user: user, operation: "del", points: 50, entity: initiative)
+        create(:user_reward_action, user: user, operation: "add", points: 50, initiative: initiative)
+        create(:user_reward_action, user: user, operation: "add", points: 100, initiative: initiative)
+        create(:user_reward_action, user: user, operation: "del", points: 50, initiative: initiative)
         create(:user_reward, user: user, points: 150)
       end
 
       it "register the points earned by user" do
         expect{ manager.add_points(initiative) }.to change(
           UserRewardAction.where(user: user, operation: UserRewardAction.operations[:add],
-            entity: initiative, reward_action: reward_action, points: reward_action.points), :count
+            initiative: initiative, reward_action: reward_action, points: reward_action.points), :count
         ).by(1)
       end
 
@@ -105,16 +105,16 @@ RSpec.describe Rewards::Points::Manager do
         now = Time.now
 
         create(:user_reward_action, user: user, operation: "add", points: 50, created_at: now + 1.second)
-        create(:user_reward_action, user: user, reward_action: reward_action, operation: "add", points: 50, created_at: now + 2.seconds, entity: initiative)
-        create(:user_reward_action, user: user, reward_action: reward_action, operation: "add", points: 100, created_at: now + 3.seconds, entity: initiative)
-        create(:user_reward_action, user: user, operation: "del", points: 50, entity: initiative)
+        create(:user_reward_action, user: user, reward_action: reward_action, operation: "add", points: 50, created_at: now + 2.seconds, initiative: initiative)
+        create(:user_reward_action, user: user, reward_action: reward_action, operation: "add", points: 100, created_at: now + 3.seconds, initiative: initiative)
+        create(:user_reward_action, user: user, operation: "del", points: 50, initiative: initiative)
         create(:user_reward, user: user, points: 150)
       end
 
       it "register remove of points from the user" do
         expect{ manager.remove_points(initiative) }.to change(
           UserRewardAction.where(user: user, operation: UserRewardAction.operations[:del],
-            entity: initiative, reward_action: reward_action), :count
+            initiative: initiative, reward_action: reward_action), :count
         ).by(1)
       end
 

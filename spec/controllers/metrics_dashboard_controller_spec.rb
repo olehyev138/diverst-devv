@@ -42,8 +42,9 @@ RSpec.describe MetricsDashboardsController, type: :controller do
         metrics_dashboard
         create_list(:group, 2, enterprise: user.enterprise)
         create_list(:segment, 3, enterprise: user.enterprise)
-        folder = create(:folder, container_id: user.enterprise.id, container_type: "Enterprise")
-        create_list(:resource, 4, container: folder)
+        create_list(:resource, 4, enterprise: user.enterprise)
+        folder = create(:folder, enterprise: user.enterprise)
+        create_list(:resource, 4, folder: folder)
         create_list(:poll, 2, enterprise: user.enterprise)
         get_index
       end
@@ -178,7 +179,7 @@ RSpec.describe MetricsDashboardsController, type: :controller do
         login_user_from_let
 
         before do
-          create_list(:graph, 2, collection: metrics_dashboard)
+          create_list(:graph, 2, metrics_dashboard: metrics_dashboard)
           metrics_dashboard.shareable_token #Touch token, so it is initialized
           get_show
         end

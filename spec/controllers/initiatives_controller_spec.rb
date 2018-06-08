@@ -437,7 +437,7 @@ RSpec.describe InitiativesController, type: :controller do
         post :finish_expenses, group_id: group_id, id: id
       end
 
-      let(:budget) { create :approved_budget, subject: group }
+      let(:budget) { create :approved_budget, group: group }
       let(:budget_item) { budget.budget_items.first }
       let!(:initiative) { create :initiative, budget_item: budget_item, owner_group: group }
 

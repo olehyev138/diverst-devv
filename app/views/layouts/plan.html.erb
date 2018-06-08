@@ -10,21 +10,25 @@
   <nav id="navigation" class="jq-dropdown jq-dropdown-tip">
     <ul class="jq-dropdown-menu">
       <li>
-        <%= active_link_to "Overview", plan_overview_groups_path %>
+        <%= active_link_to "Overview", plan_overview_groups_path if current_user.policy_group.groups_budgets_index? %>
       </li>
-      <% if @group || current_user.manageable_groups.present? %>
-        <li>
-          <%= active_link_to "Events", group_initiatives_path(@group || current_user.manageable_groups.first) %>
-        </li>
-        <li>
-          <%= active_link_to "KPI", metrics_group_path(@group || current_user.manageable_groups.first) %>
-        </li>
-        <li>
-          <%= active_link_to c_t(:structure), group_outcomes_path(@group ||  current_user.manageable_groups.first) %>
-        </li>
-        <li>
-          <%= active_link_to "Updates", group_updates_path(@group ||  current_user.manageable_groups.first) %>
-        </li>
+      <% if @group || GroupPolicy::Scope.new(current_user, Group, :initiatives_manage).resolve.present? %>
+        <% if policy(Initiative).index? %>
+          <li>
+            <%= active_link_to "Events", group_initiatives_path(@group || GroupPolicy::Scope.new(current_user, Group, :initiatives_manage).resolve.first) %>
+          </li>
+        <% end %>
+        <% if current_user.policy_group.groups_manage? %>
+          <li>
+            <%= active_link_to "KPI", metrics_group_path(@group || GroupPolicy::Scope.new(current_user, Group, :groups_manage).resolve.first) %>
+          </li>
+          <li>
+            <%= active_link_to c_t(:structure), group_outcomes_path(@group ||  GroupPolicy::Scope.new(current_user, Group, :groups_manage).resolve.first) %>
+          </li>
+          <li>
+            <%= active_link_to "Updates", group_updates_path(@group ||  GroupPolicy::Scope.new(current_user, Group, :groups_manage).resolve.first) %>
+          </li>
+        <% end %>
       <% end %>
       <li>
         <% if current_user.policy_group.annual_budget_manage? %>
@@ -35,17 +39,16 @@
   </nav>
 </div>
 <div class="menu menu--desktop">
-  <%= active_link_to "Overview", plan_overview_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-  <% if @group || current_user.manageable_groups.present? %>
-    <%= active_link_to "Events", group_initiatives_path(@group || current_user.manageable_groups.first), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['initiatives'], ['index']] %>
-    <%= active_link_to "KPI", metrics_group_path(@group || current_user.manageable_groups.first), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-    <%= active_link_to c_t(:structure), group_outcomes_path(@group ||  current_user.manageable_groups.first), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-    <%= active_link_to "Updates", group_updates_path(@group ||  current_user.manageable_groups.first), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to "Overview", plan_overview_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.groups_budgets_index? %>
+  <% if @group || GroupPolicy::Scope.new(current_user, Group, :initiatives_manage).resolve.present? %>
+    <%= active_link_to "Events", group_initiatives_path(@group || GroupPolicy::Scope.new(current_user, Group, :initiatives_manage).resolve.first), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['initiatives'], ['index']] if policy(Initiative).index?  %>
+    <%= active_link_to "KPI", metrics_group_path(@group || GroupPolicy::Scope.new(current_user, Group, :groups_manage).resolve.first), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.groups_manage? %>
+    <%= active_link_to c_t(:structure), group_outcomes_path(@group ||  GroupPolicy::Scope.new(current_user, Group, :groups_manage).resolve.first), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.groups_manage? %>
+    <%= active_link_to "Updates", group_updates_path(@group ||  GroupPolicy::Scope.new(current_user, Group, :groups_manage).resolve.first), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.groups_manage? %>
   <% end %>
   <% if current_user.policy_group.annual_budget_manage? %>
     <%= active_link_to "Budgeting", close_budgets_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <% end %>
 </div>
 <% end %>
-
 <%= render template: "layouts/dashboard" %>
