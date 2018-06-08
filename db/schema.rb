@@ -773,14 +773,14 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   end
 
   create_table "news_feed_links", force: :cascade do |t|
-    t.integer  "news_feed_id",      limit: 4
-    t.boolean  "approved",                      default: false
-    t.integer  "news_link_id",      limit: 4
-    t.integer  "group_message_id",  limit: 4
-    t.integer  "social_link_id",    limit: 4
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
-    t.boolean  "is_pinned",                default: false
+    t.integer  "news_feed_id",     limit: 4
+    t.boolean  "approved",                   default: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+    t.integer  "news_link_id",     limit: 4
+    t.integer  "group_message_id", limit: 4
+    t.integer  "social_link_id",   limit: 4
+    t.boolean  "is_pinned",                  default: false
   end
 
   create_table "news_feeds", force: :cascade do |t|
@@ -939,8 +939,6 @@ ActiveRecord::Schema.define(version: 20180520224540) do
     t.boolean  "budget_approval",                       default: false
     t.boolean  "logs_view",                             default: false
     t.boolean  "annual_budget_manage",                  default: false
-    t.boolean  "expenses_index",                        default: false
-    t.boolean  "expenses_manage",                       default: false
     t.boolean  "sso_manage",                            default: false
     t.boolean  "permissions_manage",                    default: false
     t.boolean  "diversity_manage",                      default: false
@@ -1198,14 +1196,14 @@ ActiveRecord::Schema.define(version: 20180520224540) do
     t.text     "data",                        limit: 65535
     t.string   "auth_source",                 limit: 191
     t.integer  "enterprise_id",               limit: 4
-    t.datetime "created_at",                                                 null: false
-    t.datetime "updated_at",                                                 null: false
+    t.datetime "created_at",                                                null: false
+    t.datetime "updated_at",                                                null: false
     t.string   "email",                       limit: 191
     t.string   "encrypted_password",          limit: 191
     t.string   "reset_password_token",        limit: 191
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",               limit: 4,     default: 0,      null: false
+    t.integer  "sign_in_count",               limit: 4,     default: 0,     null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip",          limit: 191

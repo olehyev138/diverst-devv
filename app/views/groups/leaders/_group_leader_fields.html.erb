@@ -21,6 +21,7 @@
     <%= f.input :position_name, input_html: { class: "sortable-focus" } %>
   </div>
   <%= f.input :user_role_id, :collection => current_user.enterprise.user_roles.group_type, :label_method => :role_name, :value_method => :id, :label => "Group Role" ,:include_blank => false %>
+
   <%= f.hidden_field :visible, value: 0 %>
 
   <div class="show-leader-field">

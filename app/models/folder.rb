@@ -21,7 +21,7 @@ class Folder < ActiveRecord::Base
   
   # scopes
   scope :only_parents, -> {where(:parent_id => nil)}
-
+  
   # callbacks
   before_save :set_password
 
