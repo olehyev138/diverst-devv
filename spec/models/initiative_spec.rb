@@ -7,7 +7,7 @@ RSpec.describe Initiative, type: :model do
     it { expect(initiative).to belong_to(:pillar) }
     it { expect(initiative).to belong_to(:owner).class_name('User') }
     it { expect(initiative).to have_many(:updates).class_name('InitiativeUpdate').dependent(:destroy) }
-    it { expect(initiative).to have_many(:fields).dependent(:destroy) }
+    it { expect(initiative).to have_many(:fields).dependent(:delete_all) }
     it { expect(initiative).to have_many(:expenses).dependent(:destroy).class_name('InitiativeExpense') }
 
     it { expect(initiative).to accept_nested_attributes_for(:fields).allow_destroy(true) }
@@ -48,7 +48,7 @@ RSpec.describe Initiative, type: :model do
       let!(:user){ create(:user) }
 
       it "and have segments with enterprise not equal to owner's enterprise" do
-        segment = create(:segment)
+        segment = build(:segment)
         initiative = build(:initiative, owner_id: user.id, segments: [segment])
         initiative.valid?
 
@@ -57,7 +57,7 @@ RSpec.describe Initiative, type: :model do
       end
 
       it "and all segments with enterprise equal to owner's enterprise" do
-        segment = create(:segment, enterprise: user.enterprise)
+        segment = build(:segment, enterprise: user.enterprise)
         initiative = build(:initiative, owner_id: user.id, segments: [segment])
 
         expect(initiative).to be_valid
@@ -132,10 +132,10 @@ RSpec.describe Initiative, type: :model do
   end
 
   describe 'budgeting' do
-    let(:group) { FactoryGirl.create(:group) }
+    let(:group) { build(:group) }
 
     context 'without funds' do
-      let(:initiative) { FactoryGirl.build(:initiative, owner_group: group, estimated_funding: 0) }
+      let(:initiative) { build(:initiative, owner_group: group, estimated_funding: 0) }
 
       it 'is valid without budget' do
         expect(initiative).to be_valid
@@ -143,7 +143,7 @@ RSpec.describe Initiative, type: :model do
     end
 
     context 'with funds' do
-      let(:initiative) { FactoryGirl.build(:initiative, owner_group: group, estimated_funding: 100) }
+      let(:initiative) { build(:initiative, owner_group: group, estimated_funding: 100) }
 
       context 'without budget' do
         it 'is not valid' do
@@ -152,7 +152,7 @@ RSpec.describe Initiative, type: :model do
       end
 
       context 'with incorrect budget' do
-        let(:new_budget) { FactoryGirl.create(:budget) }
+        let(:new_budget) { build(:budget) }
 
         before { initiative.budget = new_budget }
 
@@ -162,13 +162,11 @@ RSpec.describe Initiative, type: :model do
       end
 
       context 'with correct budget item' do
-        let!(:initiative) { FactoryGirl.create(:initiative, :with_budget_item, :estimated_funding => 1000) }
+        let!(:initiative) { create(:initiative, :with_budget_item, :estimated_funding => 1000) }
 
         context 'with enough budget money' do
           let!(:estimated_funding) { initiative.estimated_funding }
           let!(:available_amount) { initiative.budget_item.available_amount }
-
-          before { initiative.save; initiative.reload }
 
           it 'saves initiative with correct funding' do
             expect(initiative).to_not be_new_record
@@ -209,19 +207,19 @@ RSpec.describe Initiative, type: :model do
 
   describe "#expenses_status" do
     it "returns Expenses in progress" do
-      initiative = create(:initiative)
+      initiative = build(:initiative)
       expect(initiative.expenses_status).to eq("Expenses in progress")
     end
 
     it "returns Expenses in progress" do
-      initiative = create(:initiative, :finished_expenses => true)
+      initiative = build(:initiative, :finished_expenses => true)
       expect(initiative.expenses_status).to eq("Expenses finished")
     end
   end
 
   describe "#approved?" do
     it "returns false" do
-      budget = create(:budget, :is_approved => true)
+      budget = build(:budget, :is_approved => true)
       budget_item = create(:budget_item, :budget => budget)
       initiative = create(:initiative, :budget_item_id => budget_item.id)
 
@@ -229,36 +227,37 @@ RSpec.describe Initiative, type: :model do
     end
 
     it "returns true" do
-      budget = create(:budget)
+      budget = build(:budget)
       budget_item = create(:budget_item, :budget => budget)
       initiative = create(:initiative, :budget_item_id => budget_item.id)
 
       expect(initiative.approved?).to eq(true)
     end
+
     it "returns true" do
-      initiative = create(:initiative)
+      initiative = build(:initiative)
       expect(initiative.approved?).to eq(true)
     end
   end
 
   describe "#leftover" do
     it "returns 0" do
-      initiative = create(:initiative)
+      initiative = build(:initiative)
       expect(initiative.leftover).to eq(0)
     end
   end
 
   describe "#time_string" do
     it "returns day and start/end time" do
-      initiative = create(:initiative, :start => Date.today, :end => Date.today + 1.hour)
+      initiative = build(:initiative, :start => Date.today, :end => Date.today + 1.hour)
       expect(initiative.time_string).to eq("#{initiative.start.to_s :dateonly} from #{initiative.start.to_s :ampmtime} to #{initiative.end.to_s :ampmtime}")
     end
   end
 
   describe "#highcharts_history" do
     it "returns data", skip: "test fails" do
-      initiative = create(:initiative, :start => Date.today, :end => Date.today + 1.hour)
-      field = create(:field)
+      initiative = build(:initiative, :start => Date.today, :end => Date.today + 1.hour)
+      field = build(:field)
       create(:initiative_field, :initiative => initiative, :field => field)
       create(:initiative_update, :initiative => initiative)
 
@@ -269,11 +268,43 @@ RSpec.describe Initiative, type: :model do
 
   describe "#expenses_highcharts_history" do
     it "returns data" do
-      initiative = create(:initiative, :start => Date.today, :end => Date.today + 1.hour)
+      initiative = build(:initiative, :start => Date.today, :end => Date.today + 1.hour)
       create_list(:initiative_expense, 5, :initiative => initiative)
 
       data = initiative.expenses_highcharts_history
       expect(data.empty?).to be(false)
+    end
+  end
+  
+  describe "#destroy_callbacks" do
+    it "removes the child objects" do
+      initiative = create(:initiative)
+      initiative_update = create(:initiative_update, :initiative => initiative)
+      field = create(:field, :initiative => initiative)
+      initiative_expense = create(:initiative_expense, :initiative => initiative)
+      checklist = create(:checklist, :initiative => initiative)
+      resource = create(:resource, :initiative => initiative)
+      checklist_item = create(:checklist_item, :initiative => initiative)
+      initiative_segment = create(:initiative_segment, :initiative => initiative)
+      initiative_participating_group = create(:initiative_participating_group, :initiative => initiative)
+      initiative_invitee = create(:initiative_invitee, :initiative => initiative)
+      initiative_comment = create(:initiative_comment, :initiative => initiative)
+      initiative_user = create(:initiative_user, :initiative => initiative)
+      
+      initiative.destroy!
+      
+      expect{Initiative.find(initiative.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{InitiativeUpdate.find(initiative_update.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{Field.find(field.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{InitiativeExpense.find(initiative_expense.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{Checklist.find(checklist.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{Resource.find(resource.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{ChecklistItem.find(checklist_item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{InitiativeSegment.find(initiative_segment.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{InitiativeParticipatingGroup.find(initiative_participating_group.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{InitiativeInvitee.find(initiative_invitee.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{InitiativeComment.find(initiative_comment.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{InitiativeUser.find(initiative_user.id)}.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 end

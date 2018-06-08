@@ -15,8 +15,8 @@
                 type: "password",
                 label: "Password",
                 input_html: {value: f.object.password} %>
-
-      <% if @folder.container_type === "Enterprise" %>
+              
+      <% if @folder.enterprise %>
           <%= f.association :groups, collection: current_user.enterprise.groups, label: "Share this folder with your #{c_t(:erg).pluralize}", input_html: { class: "select2" } %>
       <% end %>
 

@@ -5,7 +5,7 @@ RSpec.describe FolderPolicy, :type => :policy do
     let(:enterprise) {create(:enterprise)}
     let(:user){ create(:user, :enterprise => enterprise) }
     let(:no_access) { create(:user) }
-    let(:folder){ create(:folder, :container => enterprise)}
+    let(:folder){ create(:folder, :enterprise => enterprise)}
 
     subject { described_class }
     

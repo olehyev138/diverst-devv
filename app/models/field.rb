@@ -1,12 +1,23 @@
 class Field < ActiveRecord::Base
   include Indexable
 
-  belongs_to :container, polymorphic: true
+  belongs_to :enterprise
+  belongs_to :event
+  belongs_to :group
+  belongs_to :poll
+  belongs_to :initiative
+  
   has_many :yammer_field_mappings, foreign_key: :diverst_field_id, dependent: :delete_all
 
   after_commit on: [:update, :destroy] { update_elasticsearch_all_indexes(self.enterprise) }
 
   validates :title, presence: true
+  validates :title, uniqueness: { scope: :enterprise_id },
+  unless: Proc.new { |object| (object.type == "SegmentsField" || object.type == "GroupsField") }, if: :container_type_is_enterprise?
+
+  def container_type_is_enterprise?
+    enterprise_id.present?
+  end
 
   # The typical field value flow would look like this:
   #   FORM (input string)
@@ -56,7 +67,10 @@ class Field < ActiveRecord::Base
   end
 
   def enterprise
-    return container if container.is_a? Enterprise
-    container.enterprise
+    return Enterprise.find_by_id(enterprise_id) if enterprise_id.present?
+    return event.group.enterprise if event_id.present?
+    return group.enterprise if group_id.present?
+    return poll.enterprise if poll_id.present?
+    return initiative.enterprise if initiative_id.present?
   end
 end

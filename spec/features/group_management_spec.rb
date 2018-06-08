@@ -59,7 +59,7 @@ RSpec.feature 'Group management' do
       select parent_group.name, from: 'group_parent_id'
 
       click_on 'Create Group'
-      expect(page).not_to have_content sub_group[:name]
+      expect(page).to have_no_content sub_group[:name]
 
       page.find('.nested_show').click
 
@@ -89,13 +89,12 @@ RSpec.feature 'Group management' do
       visit groups_path
 
       expect(page).to have_content 'Parent Group'
-      expect(page).not_to have_content 'Group One'
-      expect(page).not_to have_content 'Group Two'
+      expect(page).to have_no_content 'Group One'
+      expect(page).to have_no_content 'Group Two'
 
       expect(current_path).to eq groups_path
-      expect(page).to have_link 'Show Sub-ERGs'
 
-      click_on 'Show Sub-ERGs'
+      click_on "Show #{c_t(:sub_erg)}"
 
       expect(page).to have_css('.accent') do
         expect(page).to have_content group1.name
@@ -115,29 +114,29 @@ RSpec.feature 'Group management' do
       click_on 'Delete'
 
       expect(page).to have_content 'Your ERG was deleted'
-      expect(page).not_to have_content 'Parent Group'
-      expect(page).not_to have_content 'Sub Group ONE'
-      expect(page).not_to have_content 'Sub Group TWO'
+      expect(page).to have_no_content 'Parent Group'
+      expect(page).to have_no_content 'Sub Group ONE'
+      expect(page).to have_no_content 'Sub Group TWO'
     end
 
     scenario 'delete a sub-group' do
       visit groups_path
 
-      click_on 'Show Sub-ERGs'
+      click_on "Show #{c_t(:sub_erg)}"
 
       expect(page).to have_css('.accent') do
         expect(page).to have_content sub_group1.name
         expect(page).to have_content sub_group2.name
       end
 
-      click_on 'Show Sub-ERGs'
+      click_on "Show #{c_t(:sub_erg)}"
 
       expect(page).to have_css('.accent') do
         click_on 'Delete'
       end
 
       expect(page).to have_css('.accent') do
-        expect(page).not_to have_content sub_group1.name
+        expect(page).to have_no_content sub_group1.name
         expect(page).to have_content sub_group2.name
       end
 
@@ -170,7 +169,8 @@ RSpec.feature 'Group management' do
         visit groups_path
 
         expect(page).to have_link parent_group.name
-        click_on 'Show Sub-ERGs'
+
+        click_on "Show #{c_t(:sub_erg)}"
 
         visit edit_group_path(sub_group1)
 
@@ -196,7 +196,8 @@ RSpec.feature 'Group management' do
         visit groups_path
 
         expect(page).to have_link parent_group.name
-        click_on 'Show Sub-ERGs'
+
+        click_on "Show #{c_t(:sub_erg)}"
 
         visit edit_group_path(sub_group1)
 
@@ -219,12 +220,11 @@ RSpec.feature 'Group management' do
         visit groups_path
 
         expect(page).to have_link parent_group.name
-        expect(page).to have_link 'Categorize Sub-ERGs'
 
-        click_on 'Categorize Sub-ERGs'
+        click_on "Categorize #{c_t(:sub_erg)}"
 
         expect(current_path).to eq group_categories_path
-        expect(page).to have_content 'Label Sub-ERG'
+        expect(page).to have_content "Label #{c_t(:sub_erg)}"
         expect(page).to have_select(sub_group1.name, selected: nil)
         expect(page).to have_select(sub_group2.name, selected: nil)
       end

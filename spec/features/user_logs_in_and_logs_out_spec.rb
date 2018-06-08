@@ -25,7 +25,7 @@ RSpec.feature 'User logs in/out ' do
       user_logs_in_with_correct_credentials(non_admin_user)
 
       expect(page).to have_content 'Signed in successfully'
-      expect(page).not_to have_content 'Admin Dashboard'
+      expect(page).to have_no_content 'Admin Dashboard'
     end
 
     scenario 'admin user see dashboard link' do

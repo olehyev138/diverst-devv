@@ -18,6 +18,18 @@ RSpec.describe GroupMessagesSegment, type: :model do
             expect(group_messages_segment.news_feed_link_segment).to_not be_nil
         end
     end
+    
+    describe "#destroy_callbacks" do
+        it "removes the child objects" do
+            group_messages_segment = create(:group_messages_segment)
+            news_feed_link_segment = group_messages_segment.news_feed_link_segment
+            
+            group_messages_segment.destroy!
+            
+            expect{GroupMessagesSegment.find(group_messages_segment.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{NewsFeedLinkSegment.find(news_feed_link_segment.id)}.to raise_error(ActiveRecord::RecordNotFound)
+        end
+    end
 
     describe 'test before_create callback' do
         let!(:group_messages_segment) { build(:group_messages_segment) }

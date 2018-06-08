@@ -38,8 +38,20 @@ class SegmentsController < ApplicationController
 
         if @group.present?
             @members = segment_members_of_group(@segment, @group).uniq
+            uniq_ids = @members.map(&:id)
+            uniq_members_of_segment = User.where(id: uniq_ids)
+            respond_to do |format|
+                format.html
+                format.json { render json: SegmentMemberDatatable.new(view_context, uniq_members_of_segment) }
+            end
         else
             @members = @segment.members.uniq
+            uniq_ids = @members.map(&:id)
+            uniq_members_of_segment = User.where(id: uniq_ids)
+            respond_to do |format|
+                format.html
+                format.json { render json: SegmentMemberDatatable.new(view_context, uniq_members_of_segment) }
+            end
         end
     end
 

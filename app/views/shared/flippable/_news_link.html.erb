@@ -1,4 +1,4 @@
-<% if news.link_type == "NewsLink" %>
+<% if news.news_link %>
   <% news_link = NewsLink.find(news.link.id) %>
   <div class="row block-section-news">
       <div class="col-xs-4">
@@ -11,7 +11,7 @@
         <div class="col-xs-8">
         <div class="flex-row flex-row--middle">
           <div class="flex-row__cell flex-row__cell--grow">
-              <%= link_to news_link.title, group_posts_url(news_link.group), class: 'underline_text' %>
+              <%= link_to news_link.title, group_posts_url(news_link.group, anchor: "news_link_#{news_link.id}"), class: 'underline_text' %>
               <br>
             <small><%= truncate(news_link.description, length: 90) %></small><br>
             <small class="muted"><%= news_link.created_at.to_s :slashes %></small>
@@ -20,7 +20,7 @@
       </div>
       <%= render "groups/news_links/modal/form" %>
     </div>
-<% elsif news.link_type === "GroupMessage"%>
+<% elsif news.group_message %>
   <% message = GroupMessage.includes(:owner, :group).find(news.link.id) %>
   <%= link_to group_group_message_path(message.group, message), class: "block block-section" do %>
         <div class="flex-row flex-row--middle">
@@ -38,7 +38,7 @@
           </div>
         </div>
   <% end %>
-<% elsif news.link_type === "SocialLink"%>
+<% elsif news.social_link %>
 
   <% if news.link.url.include?("facebook") %>
       <iframe src="https://www.facebook.com/plugins/post.php?href=<%= news.link.url_safe %>&width=500&show_text=true&height=290&appId" width="500" height="290" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>

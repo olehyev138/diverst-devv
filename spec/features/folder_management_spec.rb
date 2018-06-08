@@ -1,14 +1,15 @@
 require 'rails_helper'
 
-RSpec.feature 'Resource management' do
+RSpec.feature 'Folder management' do
 	let!(:user) { create(:user) }
-	let!(:folder_with_pp) { create(:folder, container: user.enterprise, name: "Company Archives", password_protected: true, password: "password_2") }
-	let!(:folder_without_pp) { create(:folder, container: user.enterprise, name: "Company Documents", password_protected: false) }
+	let!(:folder_with_pp) { create(:folder, enterprise: user.enterprise, name: "Company Archives",
+	 password_protected: true, password: "password_2") }
+	let!(:folder_without_pp) { create(:folder, enterprise: user.enterprise, name: "Company Documents",
+	 password_protected: false) }
 	let!(:group) { create(:group, name: "New Group", enterprise_id: user.enterprise_id ) }
 
-	before do
-		login_as(user, scope: :user)
-	end
+	before { login_as(user, scope: :user) }
+
 
 	context 'create a new folder' do
 		before do
@@ -31,7 +32,6 @@ RSpec.feature 'Resource management' do
 			expect(page).to have_content  'Top Secret'
 			folder = Folder.find_by(name: 'Top Secret')
 			expect(folder.password_protected?).to eq true
-
 		end
 
 		scenario 'without password protection' do
@@ -49,15 +49,15 @@ RSpec.feature 'Resource management' do
 			fill_in 'folder[name]', with: 'Top Secret'
 			check 'Password Protected?'
 			fill_in 'folder[password]', with: 'password_1'
-
 			select group.name, from: 'folder[group_ids][]'
 
 			click_on 'Create Folder'
 
 			visit group_folders_url(group)
+
 			expect(page).to have_content 'Top Secret'
-			expect(page).not_to have_content 'Company Archives'
-			expect(page).not_to have_content 'Company Documents'
+			expect(page).to have_no_content 'Company Archives'
+			expect(page).to have_no_content 'Company Documents'
 		end
 
 		scenario 'move new folder into existing folder' do
@@ -101,7 +101,7 @@ RSpec.feature 'Resource management' do
 
 			expect(current_url).to eq enterprise_folders_url(user.enterprise)
 			expect(page).to have_content 'Company Files'
-			expect(page).not_to have_content 'Company Documents'
+			expect(page).to have_no_content 'Company Documents'
 		end
 
 		scenario 'by adding password protection to folder' do
@@ -168,13 +168,13 @@ RSpec.feature 'Resource management' do
 		scenario 'folder' do
 			expect(page).to have_content folder_without_pp.name
 
-			click_link 'Delete', href: "/enterprises/#{user.enterprise_id}/folders/#{folder_without_pp.id}"
+			click_link 'Delete', href: enterprise_folder_path(user.enterprise, folder_without_pp)
 
-			expect(page).not_to have_content folder_without_pp.name
+			expect(page).to have_no_content folder_without_pp.name
 		end
 
 		scenario 'sub folder' do
-			sub_folder = create(:folder, name: 'Sub Folder', parent_id: folder_without_pp.id, container: user.enterprise)
+			sub_folder = create(:folder, name: 'Sub Folder', parent_id: folder_without_pp.id, enterprise: user.enterprise)
 
 			visit enterprise_folder_resources_url(user.enterprise, folder_without_pp)
 
@@ -182,7 +182,7 @@ RSpec.feature 'Resource management' do
 
 			click_on 'Delete'
 
-			expect(page).not_to have_content sub_folder.name
+			expect(page).to have_no_content sub_folder.name
 		end
 	end
 end

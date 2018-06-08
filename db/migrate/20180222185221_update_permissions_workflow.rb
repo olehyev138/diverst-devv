@@ -1,7 +1,6 @@
 class UpdatePermissionsWorkflow < ActiveRecord::Migration
   def up
     # add role to users
-    add_column :users, :role,                 :string,  :null => false, :default => "user"
     add_column :users, :custom_policy_group,  :boolean, :null => false, :default => false
     
     # create user_roles
@@ -13,6 +12,11 @@ class UpdatePermissionsWorkflow < ActiveRecord::Migration
       t.string :role_type,                  :null => true,  :default => "non_admin"
       t.timestamps                          null: false
     end
+    
+    # add user_role id to users and group leaders so we can maintain the same name
+    # and track the user role by ID
+    add_reference :users,         :user_role
+    add_reference :group_leaders, :user_role
     
     # create policy_group_templates
     create_table :policy_group_templates do |t|
@@ -97,8 +101,6 @@ class UpdatePermissionsWorkflow < ActiveRecord::Migration
     add_column :policy_groups, :branding_manage,        :boolean, :default => false
     add_column :policy_groups, :user_id,                :integer, :null => true
     
-    add_column :group_leaders, :role, :string, :null => true
-    
     # update policy_groups table
     change_table :policy_groups do |t|
       t.remove :name, :default_for_enterprise, :enterprise_id, :admin_pages_view, :global_settings_manage
@@ -108,35 +110,42 @@ class UpdatePermissionsWorkflow < ActiveRecord::Migration
     
     add_column :user_roles, :priority, :integer, :null => false, :auto_increment => true
     
-    # get the enterprise
+    # update the role id on users and group leaders
     Enterprise.find_each do |enterprise|
+      
       # create default enterprise user roles
       enterprise.user_roles.create!(
         [
-          {:role_name => "admin",                 :role_type => "admin",  :priority => 0},
-          {:role_name => "diversity_manager",     :role_type => "admin",  :priority => 1},
-          {:role_name => "national_manager",      :role_type => "admin",  :priority => 2},
-          {:role_name => "group_leader",          :role_type => "group",  :priority => 3},
-          {:role_name => "group_treasurer",       :role_type => "group",  :priority => 4},
-          {:role_name => "group_content_creator", :role_type => "group",  :priority => 5},
-          {:role_name => "user",                  :role_type => "user",   :default => true, :priority => 6}
+          {:role_name => "Admin",                 :role_type => "admin",  :priority => 0},
+          {:role_name => "Diversity Manager",     :role_type => "admin",  :priority => 1},
+          {:role_name => "National Manager",      :role_type => "admin",  :priority => 2},
+          {:role_name => "Group Leader",          :role_type => "group",  :priority => 3},
+          {:role_name => "Group Treasurer",       :role_type => "group",  :priority => 4},
+          {:role_name => "Group Content Creator", :role_type => "group",  :priority => 5},
+          {:role_name => "User",                  :role_type => "user",   :priority => 6, :default => true,}
         ]
       )
       
-      # set everyone to have basic permissions to ensure proper migration
-      # set basic user role for all users
-      enterprise.users.update_all(:role => "user")
-      
+      enterprise.users.update_all(:user_role_id => enterprise.default_user_role)
+         
       # create basic policy group for each user
       enterprise.users.find_each do |user|
         user.set_default_policy_group
       end
+         
+      group_leader_role_id = enterprise.user_roles.where(:role_type => "group").order(:priority).first.id
+         
+      GroupLeader.joins(:group)
+      .where(:groups => {:enterprise_id => enterprise.id})
+      .update_all(:user_role_id => group_leader_role_id)
     end
   end
   
   def down
     # remove columns that were added
-    remove_column :users, :role,                :string
+    remove_reference :users,            :user_role
+    remove_reference :group_leaders,    :user_role
+    
     remove_column :users, :custom_policy_group, :boolean
     
     remove_column :policy_groups, :sso_manage,              :boolean
@@ -148,8 +157,6 @@ class UpdatePermissionsWorkflow < ActiveRecord::Migration
     remove_column :policy_groups, :groups_budgets_approve,  :boolean
     remove_column :policy_groups, :user_id,                 :integer
     remove_column :policy_groups, :branding_manage,         :boolean
-    
-    remove_column :group_leaders, :role, :string
     
     # remove tables that were created
     drop_table :user_roles

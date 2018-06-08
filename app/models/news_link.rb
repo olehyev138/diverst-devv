@@ -2,12 +2,17 @@ class NewsLink < ActiveRecord::Base
     belongs_to :group
     belongs_to :author, class_name: 'User'
 
-    has_one :news_feed_link, :as => :link, :dependent => :destroy
+    has_one :news_feed_link, dependent: :destroy
 
-    has_many :news_link_segments, :dependent => :destroy
+    has_many :news_link_segments, dependent: :destroy
     has_many :segments, through: :news_link_segments, :before_remove => :remove_segment_association
     has_many :news_link_photos,  dependent: :destroy
+    has_many :user_reward_actions
 
+    delegate :increment_view, :to => :news_feed_link
+    delegate :total_views, :to => :news_feed_link
+    delegate :unique_views, :to => :news_feed_link
+    
     before_validation :smart_add_url_protocol
 
     has_many :comments, class_name: 'NewsLinkComment', dependent: :destroy
@@ -38,6 +43,14 @@ class NewsLink < ActiveRecord::Base
     def remove_segment_association(segment)
         news_link_segment = self.news_link_segments.where(:segment_id => segment.id).first
         news_link_segment.news_feed_link_segment.destroy
+    end
+
+    def comments_count
+        if group.enterprise.enable_pending_comments?
+            comments.approved.count
+        else
+            comments.count
+        end
     end
 
     protected

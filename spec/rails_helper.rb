@@ -27,8 +27,9 @@ end
 
 Capybara.javascript_driver = :poltergeist
 # https://stackoverflow.com/questions/25673890/poltergeist-throws-js-errors-when-js-errors-false
+# https://stackoverflow.com/questions/42766660/capybarapoltergeistmouseeventfailed-poltergeist-detected-another-element
 Capybara.register_driver :poltergeist do |app|
-  Capybara::Poltergeist::Driver.new(app, {js_errors: false})
+  Capybara::Poltergeist::Driver.new(app, {js_errors: false, window_size: [1600, 1200]})
 end
 
 Capybara.asset_host = 'http://localhost:3000'
@@ -63,7 +64,9 @@ RSpec.configure do |config|
   config.include ReferrerHelpers, :type => :controller
   config.include CsvHelpers
   config.include ModelHelpers
-  config.include FeatureSpecRefactors
+  config.include FeatureSpecRefactors::FormHelpers
+  config.include FeatureSpecRefactors::CustomHelpers
+  config.include FeatureSpecRefactors::CustomMatchers
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"

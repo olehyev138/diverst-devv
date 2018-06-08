@@ -3,8 +3,7 @@ require 'rails_helper'
 RSpec.describe User::ResourcesController, type: :controller do
     let!(:enterprise) { create(:enterprise, cdo_name: "test") }
     let!(:user) { create(:user, enterprise: enterprise) }
-    let!(:resource) { create(:resource, container: enterprise, file: fixture_file_upload('files/test.csv', 'text/csv')) }
-
+    let!(:resource) { create(:resource, enterprise: enterprise, file: fixture_file_upload('files/test.csv', 'text/csv')) }
 
     describe "GET#index" do
         context "when user is logged in" do
@@ -16,7 +15,7 @@ RSpec.describe User::ResourcesController, type: :controller do
             end
 
 
-            it "returns resources belonging to container" do
+            it "returns resources belonging to enterprise" do
                 expect(assigns[:container].resources).to eq [resource]
             end
         end
@@ -26,7 +25,6 @@ RSpec.describe User::ResourcesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "GET#new" do
         describe "when user is logged in" do
@@ -52,7 +50,6 @@ RSpec.describe User::ResourcesController, type: :controller do
         end
     end
 
-
     describe "GET#edit" do
         describe "when user is logged in" do
             login_user_from_let
@@ -72,7 +69,6 @@ RSpec.describe User::ResourcesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "POST#create" do
         describe "when user is logged in" do
@@ -112,7 +108,6 @@ RSpec.describe User::ResourcesController, type: :controller do
         end
     end
 
-
     describe "GET#show" do
         describe "when user is logged in" do
             login_user_from_let
@@ -132,7 +127,6 @@ RSpec.describe User::ResourcesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
          end
     end
-
 
     describe "PATCH#update" do
         describe "when user is logged in" do
@@ -175,7 +169,6 @@ RSpec.describe User::ResourcesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
          end
     end
-
 
     describe "DELETE#destroy" do
         describe "when user is logged in" do

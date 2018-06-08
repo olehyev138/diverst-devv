@@ -30,13 +30,13 @@ class Group < ActiveRecord::Base
                                     :managers_only
                                   ]
 
-enumerize :latest_news_visibility, default: :leaders_only, in:[
+  enumerize :latest_news_visibility, default: :leaders_only, in:[
                                     :public,
                                     :group,
                                     :leaders_only
                                   ]
 
-enumerize :upcoming_events_visibility, default: :leaders_only, in:[
+  enumerize :upcoming_events_visibility, default: :leaders_only, in:[
                                     :public,
                                     :group,
                                     :leaders_only
@@ -52,28 +52,28 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
 
   has_many :user_groups, dependent: :destroy
   has_many :members, through: :user_groups, class_name: 'User', source: :user, after_remove: :update_elasticsearch_member
-  has_many :groups_polls
+  has_many :groups_polls, dependent: :destroy
   has_many :polls, through: :groups_polls
   has_many :poll_responses, through: :polls, source: :responses
-  has_many :events
+  has_many :events, dependent: :destroy
 
-  has_many :own_initiatives, class_name: 'Initiative', foreign_key: 'owner_group_id'
+  has_many :own_initiatives, class_name: 'Initiative', foreign_key: 'owner_group_id', dependent: :destroy
   has_many :initiative_participating_groups
   has_many :participating_initiatives, through: :initiative_participating_groups, source: :initiative
 
-  has_many :budgets, as: :subject
-  has_many :messages, class_name: 'GroupMessage'
+  has_many :budgets, dependent: :destroy
+  has_many :messages, class_name: 'GroupMessage', dependent: :destroy
   has_many :message_comments, through: :messages, class_name: 'GroupMessageComment', source: :comments
   has_many :news_links, dependent: :destroy
   has_many :news_link_comments, through: :news_links, class_name: 'NewsLinkComment', source: :comments
   has_many :social_links, dependent: :destroy
-  has_many :invitation_segments_groups
+  has_many :invitation_segments_groups, dependent: :destroy
   has_many :invitation_segments, class_name: 'Segment', through: :invitation_segments_groups
-  has_many :resources, as: :container
-  has_many :folders, as: :container
-  has_many :folder_shares, as: :container
+  has_many :resources, dependent: :destroy
+  has_many :folders, dependent: :destroy
+  has_many :folder_shares, dependent: :destroy
   has_many :shared_folders, through: :folder_shares, source: 'folder'
-  has_many :campaigns_groups
+  has_many :campaigns_groups, dependent: :destroy
   has_many :campaigns, through: :campaigns_groups
   has_many :questions, through: :campaigns
   has_many :answers, through: :questions
@@ -81,23 +81,21 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   has_many :answer_comments, through: :answers, class_name: 'AnswerComment', source: :comments
   belongs_to :lead_manager, class_name: "User"
   belongs_to :owner, class_name: "User"
-  has_many :outcomes
+  has_many :outcomes, dependent: :destroy
   has_many :pillars, through: :outcomes
   has_many :initiatives, through: :pillars
   has_many :updates, class_name: "GroupUpdate", dependent: :destroy
 
   has_many :fields, -> { where field_type: "regular"},
-           as: :container,
-           dependent: :destroy
+           dependent: :delete_all
   has_many :survey_fields, -> { where field_type: "group_survey"},
            class_name: 'Field',
-           as: :container,
-           dependent: :destroy
+           dependent: :delete_all
 
-  has_many :group_leaders
+  has_many :group_leaders, dependent: :destroy
   has_many :leaders, through: :group_leaders, source: :user
 
-  has_many  :children, class_name: "Group", foreign_key: :parent_id
+  has_many  :children, class_name: "Group", foreign_key: :parent_id, dependent: :destroy
   belongs_to :parent, class_name: "Group", foreign_key: :parent_id
   belongs_to :group_category
   belongs_to :group_category_type
@@ -322,7 +320,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
 
   def ensure_one_level_nesting
     if parent.present? && children.present?
-      errors.add(:parent_id, "group can't have both parent and children")
+      errors.add(:parent_id, "Group can't have both parent and children")
     end
   end
 

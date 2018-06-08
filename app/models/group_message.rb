@@ -1,12 +1,17 @@
 class GroupMessage < ActiveRecord::Base
-    has_many :group_messages_segments
+    has_many :group_messages_segments, dependent: :destroy
     has_many :segments, through: :group_messages_segments, :before_remove => :remove_segment_association
-    has_many :comments, class_name: 'GroupMessageComment', foreign_key: :message_id
-
+    has_many :comments, class_name: 'GroupMessageComment', foreign_key: :message_id, dependent: :destroy
+    has_many :user_reward_actions
+    
     belongs_to :owner, class_name: 'User'
     belongs_to :group
 
-    has_one :news_feed_link, :as => :link, :dependent => :destroy
+    has_one :news_feed_link, :dependent => :destroy
+
+    delegate :increment_view, :to => :news_feed_link
+    delegate :total_views, :to => :news_feed_link
+    delegate :unique_views, :to => :news_feed_link
 
     validates :group_id,    presence: true
     validates :subject,     presence: true
@@ -26,6 +31,15 @@ class GroupMessage < ActiveRecord::Base
 
     scope :unapproved, -> {joins(:news_feed_link).where(:news_feed_links => {:approved => false})}
     scope :approved, -> {joins(:news_feed_link).where(:news_feed_links => {:approved => true})}
+
+
+    def comments_count
+        if group.enterprise.enable_pending_comments?
+            comments.approved.count
+        else
+            comments.count
+        end
+    end
 
     def users
         if segments.empty?

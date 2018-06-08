@@ -6,20 +6,20 @@ RSpec.describe DateField, type: :model do
     let!(:field_one) { DateField.create(attributes_for(:date_field)) }
     let!(:field_two) { DateField.create(attributes_for(:date_field)) }
 
-    let!(:enterprise) { create(:enterprise) }
+    let!(:enterprise) { build(:enterprise) }
 
-    let!(:group) { create(:group, enterprise: enterprise) }
+    let!(:group) { build(:group, enterprise: enterprise) }
 
-    let!(:segment_one) { create(:segment, enterprise: enterprise) }
-    let!(:segment_two) { create(:segment, enterprise: enterprise) }
+    let!(:segment_one) { build(:segment, enterprise: enterprise) }
+    let!(:segment_two) { build(:segment, enterprise: enterprise) }
 
-    let!(:user_one) { create(:user, enterprise: enterprise, groups: [group],
+    let!(:user_one) { build(:user, enterprise: enterprise, groups: [group],
       segments: [segment_one], created_at: Date.yesterday) }
-    let!(:user_two) { create(:user, enterprise: enterprise, groups: [group],
+    let!(:user_two) { build(:user, enterprise: enterprise, groups: [group],
       segments: [segment_two], created_at: Date.yesterday) }
-    let!(:user_three) { create(:user, enterprise: enterprise,
+    let!(:user_three) { build(:user, enterprise: enterprise,
       segments: [segment_one, segment_two], created_at: Date.today) }
-    let!(:user_four) { create(:user, enterprise: enterprise, groups: [group],
+    let!(:user_four) { build(:user, enterprise: enterprise, groups: [group],
       segments: [segment_one, segment_two], created_at: Date.today) }
 
     before(:each) do
@@ -154,7 +154,7 @@ RSpec.describe DateField, type: :model do
   describe "#match_score_between" do
     it "returns nil" do
       enterprise = create(:enterprise)
-      date_field = DateField.new(:type => "DateField", :title => "Date of birth", :container => enterprise)
+      date_field = DateField.new(:type => "DateField", :title => "Date of birth", :enterprise => enterprise)
       date_field.save!
       user_1 = create(:user, :data => "{\"#{date_field.id}\":-1641600}", :enterprise => enterprise)
       user_2 = create(:user, :data => "{\"#{date_field.id}\":-1641600}", :enterprise => enterprise)
@@ -167,7 +167,7 @@ RSpec.describe DateField, type: :model do
   describe "#validates_rule_for_user" do
     it "returns true" do
       enterprise = create(:enterprise)
-      date_field = DateField.new(:type => "DateField", :title => "Date of birth", :container => enterprise)
+      date_field = DateField.new(:type => "DateField", :title => "Date of birth", :enterprise => enterprise)
       date_field.save!
       user_1 = create(:user, :data => "{\"#{date_field.id}\":-1641600}", :enterprise => enterprise)
       segment = create(:segment, :name => "Seniors", :enterprise => enterprise)
@@ -179,7 +179,7 @@ RSpec.describe DateField, type: :model do
 
     it "returns false" do
       enterprise = create(:enterprise)
-      date_field = DateField.new(:type => "DateField", :title => "Date of birth", :container => enterprise)
+      date_field = DateField.new(:type => "DateField", :title => "Date of birth", :enterprise => enterprise)
       date_field.save!
       user_1 = create(:user, :data => "{\"#{date_field.id}\":-1641600}", :enterprise => enterprise)
       segment = create(:segment, :name => "Seniors", :enterprise => enterprise)
@@ -191,7 +191,7 @@ RSpec.describe DateField, type: :model do
 
     it "returns true" do
       enterprise = create(:enterprise)
-      date_field = DateField.new(:type => "DateField", :title => "Date of birth", :container => enterprise)
+      date_field = DateField.new(:type => "DateField", :title => "Date of birth", :enterprise => enterprise)
       date_field.save!
       user_1 = create(:user, :data => "{\"#{date_field.id}\":-60307200}", :enterprise => enterprise)
       segment = create(:segment, :name => "Seniors", :enterprise => enterprise)
@@ -203,7 +203,7 @@ RSpec.describe DateField, type: :model do
 
     it "returns false" do
       enterprise = create(:enterprise)
-      date_field = DateField.new(:type => "DateField", :title => "Date of birth", :container => enterprise)
+      date_field = DateField.new(:type => "DateField", :title => "Date of birth", :enterprise => enterprise)
       date_field.save!
       user_1 = create(:user, :data => "{\"#{date_field.id}\":-60220800}", :enterprise => enterprise)
       segment = create(:segment, :name => "Seniors", :enterprise => enterprise)
@@ -215,7 +215,7 @@ RSpec.describe DateField, type: :model do
 
     it "returns true" do
       enterprise = create(:enterprise)
-      date_field = DateField.new(:type => "DateField", :title => "Date of birth", :container => enterprise)
+      date_field = DateField.new(:type => "DateField", :title => "Date of birth", :enterprise => enterprise)
       date_field.save!
       user_1 = create(:user, :data => "{\"#{date_field.id}\":-691372800}", :enterprise => enterprise)
       segment = create(:segment, :name => "Seniors", :enterprise => enterprise)
@@ -227,7 +227,7 @@ RSpec.describe DateField, type: :model do
 
     it "returns false" do
       enterprise = create(:enterprise)
-      date_field = DateField.new(:type => "DateField", :title => "Date of birth", :container => enterprise)
+      date_field = DateField.new(:type => "DateField", :title => "Date of birth", :enterprise => enterprise)
       date_field.save!
       user_1 = create(:user, :data => "{\"#{date_field.id}\":886550400}", :enterprise => enterprise)
       segment = create(:segment, :name => "Seniors", :enterprise => enterprise)
@@ -239,7 +239,7 @@ RSpec.describe DateField, type: :model do
 
     it "returns true" do
       enterprise = create(:enterprise)
-      date_field = DateField.new(:type => "DateField", :title => "Date of birth", :container => enterprise)
+      date_field = DateField.new(:type => "DateField", :title => "Date of birth", :enterprise => enterprise)
       date_field.save!
       user_1 = create(:user, :data => "{\"#{date_field.id}\":886550400}", :enterprise => enterprise)
       segment = create(:segment, :name => "Seniors", :enterprise => enterprise)
@@ -251,7 +251,7 @@ RSpec.describe DateField, type: :model do
 
     it "returns false" do
       enterprise = create(:enterprise)
-      date_field = DateField.new(:type => "DateField", :title => "Date of birth", :container => enterprise)
+      date_field = DateField.new(:type => "DateField", :title => "Date of birth", :enterprise => enterprise)
       date_field.save!
       user_1 = create(:user, :data => "{\"#{date_field.id}\":-60307200}", :enterprise => enterprise)
       segment = create(:segment, :name => "Seniors", :enterprise => enterprise)

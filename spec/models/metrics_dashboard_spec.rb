@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe MetricsDashboard, :type => :model do
-    subject { create(:metrics_dashboard) }
+    subject { build(:metrics_dashboard) }
 
     describe 'test associations' do
       it{ expect(subject).to belong_to(:enterprise).inverse_of(:metrics_dashboards) }
@@ -78,6 +78,22 @@ RSpec.describe MetricsDashboard, :type => :model do
 
           expect(metrics_dashboard.shareable_token).to eq token
         end
+      end
+    end
+
+    describe "#destroy_callbacks" do
+      it "removes the child objects" do
+        metrics_dashboard = create(:metrics_dashboard)
+        graph = create(:graph, :metrics_dashboard => metrics_dashboard)
+        segment = create(:metrics_dashboards_segment, :metrics_dashboard => metrics_dashboard)
+        group = create(:groups_metrics_dashboard, :metrics_dashboard => metrics_dashboard)
+
+        metrics_dashboard.destroy
+
+        expect{MetricsDashboard.find(metrics_dashboard.id)}.to raise_error(ActiveRecord::RecordNotFound)
+        expect{Graph.find(graph.id)}.to raise_error(ActiveRecord::RecordNotFound)
+        expect{MetricsDashboardsSegment.find(segment.id)}.to raise_error(ActiveRecord::RecordNotFound)
+        expect{GroupsMetricsDashboard.find(group.id)}.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
 end

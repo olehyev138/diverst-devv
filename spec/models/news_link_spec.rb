@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe NewsLink, type: :model do
 
     describe 'validations' do
-        let(:news_link) { FactoryGirl.build_stubbed(:news_link) }
+        let(:news_link) { build_stubbed(:news_link) }
 
         it{ expect(news_link).to validate_presence_of(:group_id) }
         it{ expect(news_link).to validate_presence_of(:title) }
@@ -39,8 +39,8 @@ RSpec.describe NewsLink, type: :model do
     describe ".of_segments" do
       let(:author){ create(:user) }
 
-      let(:segment1) { create :segment, enterprise: author.enterprise}
-      let(:segment2) { create :segment, enterprise: author.enterprise}
+      let(:segment1) { build :segment, enterprise: author.enterprise}
+      let(:segment2) { build :segment, enterprise: author.enterprise}
 
       let!(:news_link_without_segment){ create(:news_link, author_id: author.id, segments: []) }
       let!(:news_link_with_segment){ create(:news_link, author_id: author.id, segments: [segment1]) }
@@ -81,5 +81,19 @@ RSpec.describe NewsLink, type: :model do
             expect(news_link_segment.news_feed_link_segment).to_not be(nil)
 
         end
+    end
+
+    describe "#destroy_callbacks" do
+      it "removes the child objects" do
+        news_link = create(:news_link)
+        segment = create(:news_link_segment, :news_link => news_link)
+        photo = create(:news_link_photo, :news_link => news_link)
+
+        news_link.destroy
+
+        expect{NewsLink.find(news_link.id)}.to raise_error(ActiveRecord::RecordNotFound)
+        expect{NewsLinkSegment.find(segment.id)}.to raise_error(ActiveRecord::RecordNotFound)
+        expect{NewsLinkPhoto.find(photo.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      end
     end
 end

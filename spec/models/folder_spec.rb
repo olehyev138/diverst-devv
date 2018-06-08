@@ -4,16 +4,15 @@ RSpec.describe Folder, type: :model do
 
     describe "when validating" do
         let(:group) { create(:group) }
-        let(:folder){ create(:folder, :name => "test", :container => group) }
+        let(:folder){ create(:folder, :name => "test", :group => group) }
 
         it { expect(folder).to have_many(:resources) }
         it { expect(folder).to have_many(:folder_shares) }
-        it { expect(folder).to have_many(:groups).through(:folder_shares).source('container') }
-
-        it{ expect(folder).to belong_to(:container) }
-
+        it { expect(folder).to have_many(:groups) }
+        
+        it{ expect(folder).to belong_to(:group) }
+        
         it { expect(folder).to validate_presence_of(:name) }
-        it { expect(folder).to validate_presence_of(:container) }
         #it { expect(folder).to validate_uniqueness_of(:name) } # <- revisit
     end
 
@@ -28,7 +27,7 @@ RSpec.describe Folder, type: :model do
 
     describe "#password" do
         it "doesnt create the password for the folder" do
-            folder = create(:folder)
+            folder = build_stubbed(:folder)
             expect(folder.password_digest).to be(nil)
         end
 
@@ -38,17 +37,17 @@ RSpec.describe Folder, type: :model do
         end
 
         it "saves the password for the folder when password_protected is true" do
-            folder = create(:folder, :password_protected => true, :password => "password", :password_confirmation => "password")
+            folder = build_stubbed(:folder, :password_protected => true, :password => "password", :password_confirmation => "password")
             expect(folder.password_digest).to_not be(nil)
         end
 
         it "saves the password for the folder when password_protected is true and doesn't validate the password" do
-            folder = create(:folder, :password_protected => true, :password => "password", :password_confirmation => "password")
+            folder = build_stubbed(:folder, :password_protected => true, :password => "password", :password_confirmation => "password")
             expect(folder.valid_password?("faksakdas")).to_not be(true)
         end
 
         it "saves the password for the folder when password_protected is true and validates the password" do
-            folder = create(:folder, :password_protected => true, :password => "password", :password_confirmation => "password")
+            folder = build_stubbed(:folder, :password_protected => true, :password => "password", :password_confirmation => "password")
             expect(folder.valid_password?("password")).to be(folder)
         end
     end
@@ -92,6 +91,22 @@ RSpec.describe Folder, type: :model do
             folder_2 = create(:folder, :parent => folder_1)
 
             expect(Folder.only_parents.length).to eq(1)
+        end
+    end
+    
+    describe "#destroy_callbacks" do
+        it "removes the child objects" do
+            folder = create(:folder)
+            resource = create(:resource, :folder => folder)
+            folder_share = create(:folder_share, :folder => folder)
+            folder_child = create(:folder, :parent => folder)
+            
+            folder.destroy!
+            
+            expect{Folder.find(folder.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Resource.find(resource.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{FolderShare.find(folder_share.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Folder.find(folder_child.id)}.to raise_error(ActiveRecord::RecordNotFound)
         end
     end
 end

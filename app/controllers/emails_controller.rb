@@ -8,6 +8,9 @@ class EmailsController < ApplicationController
     @enterprise = current_user.enterprise
     @emails = @enterprise.emails
   end
+  
+  def edit
+  end
 
   def update
     if @email.update(email_params)
@@ -29,9 +32,7 @@ class EmailsController < ApplicationController
     params
       .require(:email)
       .permit(
-        :use_custom_templates,
-        :custom_html_template,
-        :custom_txt_template,
+        :content,
         :subject
       )
   end

@@ -1,7 +1,1 @@
-Hello, <%= @budget.requester.name %>!
-<br/>
-<% if @budget.approver.present? %>
-    Your budget <%= @budget.subject.name %> has been approved by <%= @budget.approver.name %>
-<% else %>
-    Your budget <%= @budget.subject.name %> has been approved
-<% end %>
+<%= raw @mailer_text %>

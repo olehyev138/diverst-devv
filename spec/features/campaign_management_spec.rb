@@ -44,15 +44,16 @@ RSpec.feature 'Campaign management' do
     expect(page.find('table').all('tr')[1]).to have_content campaign[:title]
   end
 
-  scenario 'user deletes a campaign' do
+  scenario 'user deletes a campaign', js: true do
     campaign = create(:campaign, enterprise: user.enterprise, owner: user)
 
     visit campaigns_path
     expect(page).to have_content(campaign.title)
 
-    click_on 'Delete'
-
-    expect(page).not_to have_content(campaign.title)
+    page.accept_confirm(with: 'Are you sure?') do
+      click_on 'Delete'
+    end
+    expect(page).to have_no_content(campaign.title)
   end
 
   context 'Another user creates a campaign' do
@@ -75,5 +76,4 @@ RSpec.feature 'Campaign management' do
       expect(page).to have_content('Edit')
     end
   end
-
 end

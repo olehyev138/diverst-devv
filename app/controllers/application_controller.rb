@@ -89,7 +89,13 @@ class ApplicationController < ActionController::Base
     end
 
     def after_sign_out_path_for(resource)
-        return new_user_session_path
+      if ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID']
+        enterprise = Enterprise.find_by_id(ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID'])
+        if enterprise.present? && enterprise.has_enabled_saml
+          return sp_logout_request_path(enterprise, slo: '1')
+        end
+      end
+        new_user_session_path
     end
 
     def cors_allow_all

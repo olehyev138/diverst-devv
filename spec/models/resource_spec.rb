@@ -3,9 +3,12 @@ require 'rails_helper'
 RSpec.describe Resource, :type => :model do
 
   describe 'test associations' do
-    let(:resource) { build(:resource) }
+    let(:resource) { build_stubbed(:resource) }
 
-    it { expect(resource).to belong_to(:container) }
+    it { expect(resource).to belong_to(:enterprise) }
+    it { expect(resource).to belong_to(:folder) }
+    it { expect(resource).to belong_to(:group) }
+    it { expect(resource).to belong_to(:initiative) }
     it { expect(resource).to belong_to(:owner).class_name('User') }
     it { expect(resource).to have_many(:tags).dependent(:destroy) }
     it { expect(resource).to accept_nested_attributes_for(:tags) }
@@ -22,7 +25,7 @@ RSpec.describe Resource, :type => :model do
   end
 
   describe 'test callbacks' do
-      let(:resource) { build(:resource) }
+      let(:resource) { build_stubbed(:resource) }
 
     context 'before_validation' do
       it '#smart_add_url_protocol is called before validation' do
@@ -34,7 +37,7 @@ RSpec.describe Resource, :type => :model do
 
   describe '#extension' do
     it "returns the file's lowercase extension without the dot" do
-      resource = build(:resource)
+      resource = build_stubbed(:resource)
       expect(resource.file_extension).to eq 'csv'
     end
   end
@@ -85,7 +88,7 @@ RSpec.describe Resource, :type => :model do
 
     it "deletes tags" do
       resource = create(:resource)
-      create_list(:tag, 5, :taggable => resource)
+      create_list(:tag, 5, :resource => resource)
 
       resource.tag_tokens = []
 
@@ -96,7 +99,7 @@ RSpec.describe Resource, :type => :model do
 
   describe "#file_extension" do
     it "returns '' " do
-      resource = create(:resource, :file_file_name => nil, :file => nil)
+      resource = build(:resource, :file_file_name => nil, :file => nil)
       expect(resource.file_extension).to eq("")
     end
   end
@@ -105,6 +108,18 @@ RSpec.describe Resource, :type => :model do
     it "returns the expiration_time " do
       resource = create(:resource)
       expect(resource.expiration_time).to eq(Resource::EXPIRATION_TIME)
+    end
+  end
+  
+  describe "#destroy_callbacks" do
+    it "removes the child objects" do
+      resource = create(:resource)
+      tag = create(:tag, :resource => resource)
+
+      resource.destroy
+
+      expect{Resource.find(resource.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{Tag.find(tag.id)}.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 end

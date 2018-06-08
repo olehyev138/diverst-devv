@@ -88,20 +88,20 @@ class GroupsController < ApplicationController
             base_show
 
             @posts = @group.news_feed_links
-                            .includes(:link)
+                            .includes(:news_link, :group_message, :social_link)
                             .approved
-                            .order(created_at: :desc)
+                            .order(is_pinned: :desc, created_at: :desc)
                             .limit(5)
         else
             if @group.active_members.include? current_user
                 base_show
 
                 @posts = @group.news_feed_links
-                            .includes(:link)
+                            .includes(:news_link, :group_message, :social_link)
                             .approved
                             .joins(joins)
                             .where(where, current_user.segments.pluck(:id))
-                            .order(created_at: :desc)
+                            .order(is_pinned: :desc, created_at: :desc)
                             .limit(5)
 
             else
@@ -114,11 +114,11 @@ class GroupsController < ApplicationController
                 @top_user_group_participants = []
                 @top_group_participants = []
                 @posts = @group.news_feed_links
-                            .includes(:link)
+                            .includes(:news_link, :group_message, :social_link)
                             .approved
                             .joins(joins)
                             .where(where, current_user.segments.pluck(:id))
-                            .order(created_at: :desc)
+                            .order(is_pinned: :desc, created_at: :desc)
                             .limit(5)
             end
         end

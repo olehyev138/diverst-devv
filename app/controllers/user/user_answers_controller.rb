@@ -17,7 +17,8 @@ class User::UserAnswersController < ApplicationController
             @vote = AnswerUpvote.where(author_id: current_user.id, answer_id: @answer.id).first
             @vote.destroy if @vote
         end
-        user_rewarder("campaign_vote").add_points(@vote)
+
+        user_rewarder("campaign_vote").add_points(@vote) if @vote
 
         flash_reward "Now you have #{current_user.credits} points"
         render "partials/flash_messages.js"

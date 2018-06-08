@@ -7,7 +7,7 @@
       label: false,
       as: :fake,
       input_html: { name: "custom-fields[#{cf.id}]",
-      value: resource.info[cf] }
+      value: resource.info[cf], id: "#{cf.title.downcase}_#{cf.id}" }
   %>
 <% else # Textarea %>
   <div class="field">
@@ -17,7 +17,7 @@
     </label>
     <span class="error"><%= field_errors(resource, cf) %></span>
     <div class="field__input-wrapper">
-      <textarea name="custom-fields[<%= cf.id %>]" cols="30" rows="10" class="field__input"><%= resource.info[cf] %></textarea>
+      <textarea name="custom-fields[<%= cf.id %>]" id="<%= cf.title.downcase %>_<%= cf.id %>" cols="30" rows="10" class="field__input"><%= resource.info[cf] %></textarea>
     </div>
   </div>
 <% end %>

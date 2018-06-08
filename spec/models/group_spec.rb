@@ -50,7 +50,7 @@ RSpec.describe Group, :type => :model do
         it { expect(group).to have_many(:initiatives).through(:pillars) }
         it { expect(group).to have_many(:updates).class_name('GroupUpdate').dependent(:destroy) }
         it { expect(group).to have_many(:fields) }
-        it { expect(group).to have_many(:survey_fields).class_name('Field').dependent(:destroy) }
+        it { expect(group).to have_many(:survey_fields).class_name('Field').dependent(:delete_all) }
         it { expect(group).to have_many(:group_leaders) }
         it { expect(group).to have_many(:leaders).through(:group_leaders).source(:user) }
         it { expect(group).to have_many(:children).class_name('Group').with_foreign_key(:parent_id) }
@@ -111,9 +111,9 @@ RSpec.describe Group, :type => :model do
         end
 
         describe '#ensure_one_level_nesting' do
-          let!(:group) { create(:group) }
-          let(:parent_group) { create(:group, enterprise: group.enterprise) }
-          let(:child_group) { create(:group, enterprise: group.enterprise) }
+          let!(:group) { build(:group) }
+          let(:parent_group) { build(:group, enterprise: group.enterprise) }
+          let(:child_group) { build(:group, enterprise: group.enterprise) }
 
           context 'with parent only' do
             before { group.parent = parent_group }
@@ -140,7 +140,7 @@ RSpec.describe Group, :type => :model do
             it 'is invalid' do
               expect(group).to_not be_valid
 
-              expect(group.errors.messages[:parent_id]).to include "group can't have both parent and children"
+              expect(group.errors.messages[:parent_id]).to include "Group can't have both parent and children"
             end
           end
         end
@@ -246,7 +246,7 @@ RSpec.describe Group, :type => :model do
     describe '#survey_answers_csv' do
         it "returns a csv file" do
             group = create(:group)
-            field = create(:field, :field_type => "group_survey", :container => group)
+            field = create(:field, :field_type => "group_survey", :group => group)
             user = create(:user)
             user_group = create(:user_group, :user => user, :group => group, :data => "{\"13\":\"test\"}")
 
@@ -325,14 +325,14 @@ RSpec.describe Group, :type => :model do
 
     describe '#managers' do
         it "returns an array with nil" do
-            group = create(:group)
+            group = build(:group)
             expect(group.managers.length).to eq(1)
             expect(group.managers[0]).to be_nil
         end
 
         it "returns an array with user" do
-            user = create(:user)
-            group = create(:group, :owner => user)
+            user = build(:user)
+            group = build(:group, :owner => user)
 
             expect(group.managers.length).to eq(1)
             expect(group.managers[0]).to be(user)
@@ -350,30 +350,30 @@ RSpec.describe Group, :type => :model do
         end
     end
 
-    describe '#calendar_color', :skip => true do
+    describe '#calendar_color' do
         it "returns cccccc" do
-            group = create(:group)
+            group = build(:group)
             expect(group.calendar_color).to eq("cccccc")
         end
 
         it "returns theme primary_color" do
-            theme = create(:theme)
-            enterprise = create(:enterprise, :theme => theme)
-            group = create(:group, :enterprise => enterprise)
+            theme = build_stubbed(:theme)
+            enterprise = build_stubbed(:enterprise, :theme => theme)
+            group = build_stubbed(:group, :enterprise => enterprise)
             expect(group.calendar_color).to eq(enterprise.theme.primary_color)
         end
     end
 
     describe '#approved_budget' do
         it "returns 0" do
-            group = create(:group)
+            group = build(:group)
             expect(group.approved_budget).to eq(0)
         end
 
         it "returns 0" do
             group = create(:group)
 
-            budget = create(:budget, :subject => group, :is_approved => true)
+            budget = create(:budget, :group => group, :is_approved => true)
             create(:budget_item, :budget => budget, :estimated_amount => 1000)
 
             expect(group.approved_budget).to be > 0
@@ -382,14 +382,14 @@ RSpec.describe Group, :type => :model do
 
     describe '#available_budget' do
         it "returns 0" do
-            group = create(:group)
+            group = build(:group)
             expect(group.available_budget).to eq(0)
         end
 
         it "returns available budget" do
             group = create(:group, :annual_budget => 10000)
 
-            budget = create(:budget, :subject => group, :is_approved => true)
+            budget = create(:budget, :group => group, :is_approved => true)
             create(:budget_item, :budget => budget, :estimated_amount => 1000)
             expect(group.available_budget).to eq(group.annual_budget - group.approved_budget)
         end
@@ -413,13 +413,13 @@ RSpec.describe Group, :type => :model do
 
     describe '#parent' do
         it "returns nil" do
-            group = create(:group)
+            group = build(:group)
             expect(group.parent).to be(nil)
         end
 
         it "returns parent" do
-            group_1 = create(:group)
-            group_2 = create(:group, :parent => group_1)
+            group_1 = build(:group)
+            group_2 = build(:group, :parent => group_1)
 
             expect(group_2.parent).to_not be(nil)
             expect(group_2.parent).to eq(group_1)
@@ -428,7 +428,7 @@ RSpec.describe Group, :type => :model do
 
     describe '#children' do
         it "returns empty array" do
-            group = create(:group)
+            group = build(:group)
             expect(group.children.length).to eq(0)
         end
 
@@ -459,7 +459,7 @@ RSpec.describe Group, :type => :model do
 
     describe '#file_safe_name' do
         it "returns file_safe_name" do
-            group = create(:group, :name => "test name")
+            group = build(:group, :name => "test name")
             expect(group.file_safe_name).to eq("test_name")
         end
     end
@@ -477,7 +477,7 @@ RSpec.describe Group, :type => :model do
         it "returns highcharts_history" do
             group = create(:group)
             field = create(:field)
-            create(:group_update, :group => group)
+            create(:group_update, :group => group, :created_at => 30.days.ago)
             data = group.highcharts_history(:field => field)
             expect(data.length).to eq(1)
         end
@@ -485,7 +485,7 @@ RSpec.describe Group, :type => :model do
 
     describe '#title_with_leftover_amount' do
         it "returns title_with_leftover_amount" do
-            group = create(:group)
+            group = build(:group)
             expect(group.title_with_leftover_amount).to eq("Create event from #{group.name} leftover ($#{group.leftover_money})")
         end
     end
@@ -498,8 +498,8 @@ RSpec.describe Group, :type => :model do
             allow(yammer).to receive(:token_for_user).and_return({"token" => "token"})
             allow(yammer).to receive(:subscribe_to_group)
 
-            group = create(:group)
-            user = create(:user)
+            group = build(:group)
+            user = build(:user)
             create(:user_group, :user => user, :group => group)
 
             group.sync_yammer_users
@@ -510,22 +510,22 @@ RSpec.describe Group, :type => :model do
 
     describe '#pending_comments_count' do
         it "returns 0" do
-            group = create(:group)
+            group = build(:group)
             expect(group.pending_comments_count).to eq(0)
         end
 
         it "returns 1" do
             group = create(:group)
-            group_message = create(:group_message, :group => group)
+            group_message = build(:group_message, :group => group)
             create(:group_message_comment, :message => group_message, :approved => false)
             expect(group.pending_comments_count).to eq(1)
         end
 
         it "returns 2" do
             group = create(:group)
-            group_message = create(:group_message, :group => group)
+            group_message = build(:group_message, :group => group)
             create(:group_message_comment, :message => group_message, :approved => false)
-            news_link = create(:news_link, :group => group)
+            news_link = build(:news_link, :group => group)
             create(:news_link_comment, :news_link => news_link, :approved => false)
             expect(group.pending_comments_count).to eq(2)
         end
@@ -533,16 +533,16 @@ RSpec.describe Group, :type => :model do
         it "returns 3" do
             group = create(:group)
             # group message
-            group_message = create(:group_message, :group => group)
+            group_message = build(:group_message, :group => group)
             create(:group_message_comment, :message => group_message, :approved => false)
             # news link
-            news_link = create(:news_link, :group => group)
+            news_link = build(:news_link, :group => group)
             create(:news_link_comment, :news_link => news_link, :approved => false)
             # campaign
             campaign = create(:campaign)
             create(:campaigns_group, :group => group, :campaign => campaign)
-            question = create(:question, campaign: campaign)
-            answer = create(:answer, question: question)
+            question = build(:question, campaign: campaign)
+            answer = build(:answer, question: question)
             create(:answer_comment, answer: answer, approved: false)
 
             expect(group.pending_comments_count).to eq(3)
@@ -565,15 +565,15 @@ RSpec.describe Group, :type => :model do
 
     describe "#company_video_url" do
         it "saves the url" do
-            group = create(:group, :company_video_url => "https://www.youtube.com/watch?v=Y2VF8tmLFHw")
+            group = build(:group, :company_video_url => "https://www.youtube.com/watch?v=Y2VF8tmLFHw")
             expect(group.company_video_url).to_not be(nil)
         end
     end
 
-    describe '#build_default_news_feed' do 
+    describe '#build_default_news_feed' do
         let!(:new_group) { build(:group) }
 
-        it 'builds default news feed' do 
+        it 'builds default news feed' do
             expect(new_group).to receive(:build_default_news_feed)
             new_group.save
         end
@@ -586,7 +586,7 @@ RSpec.describe Group, :type => :model do
             allow(yammer).to receive(:create_group).and_return({"id" => 1})
             allow(SyncYammerGroupJob).to receive(:perform_later)
 
-            enterprise = create(:enterprise, :yammer_token => "token")
+            enterprise = build(:enterprise, :yammer_token => "token")
             group = create(:group, :enterprise => enterprise, :yammer_create_group => true, :yammer_group_created => false)
 
             expect(yammer).to have_received(:create_group)
@@ -601,8 +601,8 @@ RSpec.describe Group, :type => :model do
             allow(GroupMailer).to receive(:delay).and_return(GroupMailer)
             allow(GroupMailer).to receive(:invitation)
 
-            group = create(:group)
-            segment = create(:segment)
+            group = build(:group)
+            segment = build(:segment)
             create(:invitation_segments_group, :group => group, :invitation_segment => segment)
 
             # make sure group has invitation_segments
@@ -621,8 +621,8 @@ RSpec.describe Group, :type => :model do
 
     describe "#update_all_elasticsearch_members" do
         it "updates the users in elasticsearch" do
-            group = create(:group)
-            user = create(:user)
+            group = build(:group)
+            user = build(:user)
             create(:user_group, :group => group, :user => user)
             allow(group).to receive(:update_elasticsearch_member).and_call_original
 
@@ -637,9 +637,10 @@ RSpec.describe Group, :type => :model do
         it 'updates contact email if group leader is default_group_contact' do
             user = create(:user)
             group = create(:group, :enterprise => user.enterprise)
+
             group_leader = create(:group_leader, :group => group, :user => user, :default_group_contact => true)
             group_leader = group.group_leaders.find_by(default_group_contact: true)&.user
-        
+
 
             expect(group.contact_email).to eq group_leader&.email
         end
@@ -647,6 +648,7 @@ RSpec.describe Group, :type => :model do
         it 'sets contact email to nil if group leader is not set.' do
             user = create(:user)
             group = create(:group, :enterprise => user.enterprise)
+
             create(:group_leader, :group => group, :user => user, :default_group_contact => false)
             
             expect(group.contact_email).to eq nil
@@ -655,13 +657,64 @@ RSpec.describe Group, :type => :model do
 
     describe "#private scopes" do
         it "should return correct group counts" do
-            enterprise = create(:enterprise)
+            enterprise = build(:enterprise)
             create_list(:group, 5, :private => true, :enterprise => enterprise)
             create_list(:group, 3, :private => false, :enterprise => enterprise)
 
             expect(enterprise.groups.count).to eq(8)
             expect(enterprise.groups.is_private.count).to eq(5)
             expect(enterprise.groups.non_private.count).to eq(3)
+        end
+    end
+    
+    describe "#destroy_callbacks" do
+        it "removes the child objects" do
+            group = create(:group)
+            news_feed = create(:news_feed, :group => group)
+            user_group = create(:user_group, :group => group)
+            groups_poll = create(:groups_poll, :group => group)
+            event = create(:event, :group => group)
+            initiative = create(:initiative, :owner_group_id => group.id)
+            budget = create(:budget, :group => group)
+            group_message = create(:group_message, :group => group)
+            news_link = create(:news_link, :group => group)
+            social_link = create(:social_link, :group => group)
+            invitation_segments_group = create(:invitation_segments_group, :group => group)
+            resource = create(:resource, :group => group)
+            folder = create(:folder, :group => group)
+            folder_share = create(:folder_share, :group => group)
+            campaigns_group = create(:campaigns_group, :group => group)
+            outcome = create(:outcome, :group => group)
+            group_update = create(:group_update, :group => group)
+            field = create(:field, :group => group, :field_type => "regular")
+            survey_field = create(:field, :group => group, :field_type => "group_survey")
+            user = create(:user, :enterprise => group.enterprise)
+            group_leader = create(:group_leader, :group => group, :user => user)
+            child = create(:group, :parent => group)
+            
+            group.destroy!
+            
+            expect{Group.find(group.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{NewsFeed.find(news_feed.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{UserGroup.find(user_group.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{GroupsPoll.find(groups_poll.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Event.find(event.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Initiative.find(initiative.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Budget.find(budget.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{GroupMessage.find(group_message.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{NewsLink.find(news_link.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{SocialLink.find(social_link.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{InvitationSegmentsGroup.find(invitation_segments_group.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Resource.find(resource.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Folder.find(folder.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{FolderShare.find(folder_share.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{CampaignsGroup.find(campaigns_group.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Outcome.find(outcome.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{GroupUpdate.find(group_update.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Field.find(field.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Field.find(survey_field.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{GroupLeader.find(group_leader.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Group.find(child.id)}.to raise_error(ActiveRecord::RecordNotFound)
         end
     end
 end
