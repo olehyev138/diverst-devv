@@ -7,11 +7,9 @@
     <div class="flex-row__cell">
       <%= link_to "Import CSV", import_csv_users_path, class: "btn btn--secondary", role: "button", 'aria-label': "Import CSV" %>
     </div>
-    <% if policy(User).create? %>
-      <div class="flex-row__cell">
-        <%= link_to "Add a user", new_user_invitation_path, class: "btn btn--primary" %>
-      </div>
-    <% end %>
+    <div class="flex-row__cell">
+      <%= link_to "Add a user", new_user_invitation_path, class: "btn btn--primary" %>
+    </div>
   </div>
 </div>
 
@@ -19,21 +17,9 @@
   <div class="card">
     <div class="card__section">
       <h2>Permission group for new users</h2>
-      New users will be assigned to a policy group corresponding to their user role.
+      New users will be assigned to <strong><%= current_user.enterprise.default_policy_group.name %></strong> permission group. You can change this in <%= link_to 'permission groups settings', policy_groups_path %>.
     </div>
   </div>
-  
-  <div class="row row--spacing-bottom">
-    <div class="col-xs-6">
-      <h3 class="text-left">User Roles</h3>
-    </div>
-    <div class="col-xs-6 text-right">
-      <%= link_to "New User Role", new_user_role_path, class: "btn btn--primary pull-right" if policy(UserRole).new? %>
-    </div>
-    </div>
-  </div>
-  <%= render "roles" %>
-  
   <h3>Invitations sent</h3>
   <%= render "invitations_table", source: sent_invitations_users_path(format: :json) %>
 

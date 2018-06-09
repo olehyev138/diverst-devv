@@ -2,9 +2,9 @@ require 'rails_helper'
 
 RSpec.feature 'Group Leader Management' do
 	let!(:enterprise) { create(:enterprise, name: 'The Enterprise') }
-	let!(:user) { create(:user, enterprise: enterprise, first_name: 'Aaron', last_name: 'Patterson') }
-	let!(:other_user) { create(:user, enterprise: enterprise, first_name: 'Yehuda', last_name: 'Katz') }
-	let!(:group) { create(:group, name: 'Group ONE', enterprise: enterprise) }
+	let!(:user) { create(:user, enterprise_id: enterprise.id, first_name: 'Aaron', last_name: 'Patterson') }
+	let!(:other_user) { create(:user, enterprise_id: enterprise.id, first_name: 'Yehuda', last_name: 'Katz') }
+	let!(:group) { create(:group, name: 'Group ONE', enterprise: user.enterprise) }
 
 	before do
 		login_as(user, scope: :user)
@@ -73,7 +73,7 @@ RSpec.feature 'Group Leader Management' do
 		context 'for existing multiple group leaders' do
 			before do
 				[user, other_user].each do |user|
-					create(:group_leader, group: group, user: user)
+					create(:group_leader, group_id: group.id, user_id: user.id)
 				end
 
 				visit group_leaders_path(group)

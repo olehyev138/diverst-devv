@@ -6,6 +6,8 @@ RSpec.describe PollsController, type: :controller do
     let!(:graph1) { create(:graph, aggregation: create(:field)) }
     let!(:graph2) { create(:graph, aggregation: create(:field)) }
 
+
+
     describe "GET#index" do
         context "with logged user" do
             login_user_from_let
@@ -26,6 +28,7 @@ RSpec.describe PollsController, type: :controller do
         end
     end
 
+
     describe "GET#new" do
         context "with logged user" do
             login_user_from_let
@@ -45,6 +48,7 @@ RSpec.describe PollsController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe "POST#create" do
         describe "with logged user" do
@@ -109,6 +113,8 @@ RSpec.describe PollsController, type: :controller do
         end
     end
 
+
+
     describe "GET#show" do
         context "with logged user" do
             login_user_from_let
@@ -145,6 +151,7 @@ RSpec.describe PollsController, type: :controller do
         end
     end
 
+
     describe "GET#edit" do
         context "with logged user" do
             login_user_from_let
@@ -164,6 +171,7 @@ RSpec.describe PollsController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe "PATCH#update" do
         let(:poll){ create(:poll, status: 0, enterprise: user.enterprise, groups: []) }
@@ -229,6 +237,7 @@ RSpec.describe PollsController, type: :controller do
         end
     end
 
+
     describe "DELETE#destroy" do
         context "with logged user" do
             login_user_from_let
@@ -253,6 +262,7 @@ RSpec.describe PollsController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe "GET#export_csv" do
         context "with logged user" do

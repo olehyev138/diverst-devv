@@ -76,26 +76,4 @@ RSpec.describe Event, :type => :model do
             expect(event.errors.full_messages.first).to eq("End must be after start")
         end
     end
-    
-    describe "#destroy_callbacks" do
-        it "removes the child objects" do
-            event = create(:event)
-            budget = create(:budget, :event => event)
-            events_segment = create(:events_segment, :event => event)
-            event_attendance = create(:event_attendance, :event => event)
-            event_invitee = create(:event_invitee, :event => event)
-            event_comment = create(:event_comment, :event => event)
-            field = create(:field, :event => event)
-            
-            event.destroy!
-            
-            expect{Event.find(event.id)}.to raise_error(ActiveRecord::RecordNotFound)
-            expect{Budget.find(budget.id)}.to raise_error(ActiveRecord::RecordNotFound)
-            expect{EventsSegment.find(events_segment.id)}.to raise_error(ActiveRecord::RecordNotFound)
-            expect{EventAttendance.find(event_attendance.id)}.to raise_error(ActiveRecord::RecordNotFound)
-            expect{EventInvitee.find(event_invitee.id)}.to raise_error(ActiveRecord::RecordNotFound)
-            expect{EventComment.find(event_comment.id)}.to raise_error(ActiveRecord::RecordNotFound)
-            expect{Field.find(field.id)}.to raise_error(ActiveRecord::RecordNotFound)
-        end
-    end
 end

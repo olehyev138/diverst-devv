@@ -14,7 +14,7 @@ class User::NewsLinksController < ApplicationController
   def posts
     NewsFeedLink.joins(:news_feed)
           .joins(joins)
-          .includes(:news_link, :group_message, :social_link)
+          .includes(:link)
           .where(:news_feeds => {:group_id => current_user.groups.pluck(:id)}, :approved => true)
           .where(where, current_user.segments.pluck(:id))
           .order(created_at: :desc)

@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :folder do
     name {Faker::Name.name}
-    association :enterprise, factory: :enterprise
+    association :container, factory: :enterprise
   end
 end

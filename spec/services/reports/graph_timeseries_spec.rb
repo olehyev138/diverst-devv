@@ -6,7 +6,7 @@ RSpec.describe Reports::GraphTimeseries do
   before {
     perform_enqueued_jobs do
       enterprise = create(:enterprise)
-      select_field = SelectField.new(:type => "SelectField", :title => "Gender", :options_text => "Male\nFemale", :enterprise => enterprise)
+      select_field = SelectField.new(:type => "SelectField", :title => "Gender", :options_text => "Male\nFemale", :container => enterprise)
       select_field.save!
       
       segment = create(:segment, :enterprise => enterprise, :created_at => 1.day.ago)
@@ -18,8 +18,8 @@ RSpec.describe Reports::GraphTimeseries do
       group = create(:group, :enterprise => enterprise, :created_at => 1.day.ago)
       create(:user_group, :user => user, :group => group, :accepted_member => true, :created_at => 1.day.ago)
       
-      metrics_dashboard = create(:metrics_dashboard, :enterprise => enterprise, :segments => enterprise.segments, :groups => enterprise.groups)
-      @graph = create(:graph, :field => select_field, :metrics_dashboard => metrics_dashboard)
+      collection = create(:metrics_dashboard, :enterprise => enterprise, :segments => enterprise.segments, :groups => enterprise.groups)
+      @graph = create(:graph, :field => select_field, :collection => collection)
       
       User.__elasticsearch__.refresh_index!(index: User.es_index_name(enterprise: enterprise))
     end

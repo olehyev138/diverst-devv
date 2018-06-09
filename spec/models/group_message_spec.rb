@@ -114,18 +114,4 @@ RSpec.describe GroupMessage, type: :model do
             group_message.send_emails
         end
     end
-    
-    describe "#destroy_callbacks" do
-        it "removes the child objects" do
-            group_message = create(:group_message)
-            group_messages_segment = create(:group_messages_segment, :group_message => group_message)
-            group_message_comment = create(:group_message_comment, :message => group_message)
-            
-            group_message.destroy!
-            
-            expect{GroupMessage.find(group_message.id)}.to raise_error(ActiveRecord::RecordNotFound)
-            expect{GroupMessagesSegment.find(group_messages_segment.id)}.to raise_error(ActiveRecord::RecordNotFound)
-            expect{GroupMessageComment.find(group_message_comment.id)}.to raise_error(ActiveRecord::RecordNotFound)
-        end
-    end
 end

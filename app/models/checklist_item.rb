@@ -1,4 +1,3 @@
 class ChecklistItem < ActiveRecord::Base
-  belongs_to :initiative
-  belongs_to :checklist
+  belongs_to :container, polymorphic: true
 end

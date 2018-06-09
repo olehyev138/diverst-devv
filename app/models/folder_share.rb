@@ -1,10 +1,11 @@
 class FolderShare < ActiveRecord::Base
 
   # associations
-  belongs_to  :group
-  belongs_to  :enterprise
+  belongs_to  :container, polymorphic: true
   belongs_to  :folder
 
+  # validations
+  validates :container, presence: true
   validates :folder,    presence: true
 
 end

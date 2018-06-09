@@ -4,7 +4,7 @@ RSpec.feature 'user visits the metrics section' do
   let(:user) { create(:user) }
 
   before do
-    login_as(user, scope: :user, :run_callbacks => false)
+    login_as(user, scope: :user)
   end
 
   scenario 'they can\'t see metrics dashboards created by others' do
@@ -27,7 +27,7 @@ RSpec.feature 'user visits the metrics section' do
     expect(page).to have_content 'Allo'
   end
 
-  scenario 'they can add graphs to an existing metrics dashboard', :skip => true do
+  scenario 'they can add graphs to an existing metrics dashboard' do
     field1 = create(:field, type: 'CheckboxField', title: 'Field #1')
     field2 = create(:field, type: 'CheckboxField', title: 'Field #2')
     user.enterprise = create(:enterprise, fields: [field1, field2])

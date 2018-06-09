@@ -5,13 +5,9 @@ RSpec.describe UserPolicy, :type => :policy do
     subject { described_class }
     
     context "when global_settings_manage is false" do
-        let(:user){ create(:user) }
+        let(:policy_group){ create(:policy_group, :global_settings_manage => false)}
+        let(:user){ create(:user, :policy_group => policy_group) }
         let(:no_access) { create(:user) }
-        
-        before {
-            no_access.policy_group.users_manage = false
-            no_access.policy_group.save!
-        }
     
         permissions :show?, :update?, :access_hidden_info? do
             it "allows access" do
@@ -19,20 +15,16 @@ RSpec.describe UserPolicy, :type => :policy do
             end
             
             it "doesn't allow access" do
-                expect(subject).to_not permit(no_access, user)
+                expect(subject).to_not permit(user, no_access)
             end
         end
     end
     
     context "when global_settings_manage is true" do
-        let(:user){ create(:user) }
-        let(:no_access) { create(:user) }
-        
-        before {
-            no_access.policy_group.users_index = false
-            no_access.policy_group.users_manage = false
-            no_access.policy_group.save!
-        }
+        let(:policy_group_1){ create(:policy_group, :global_settings_manage => true)}
+        let(:policy_group_2){ create(:policy_group, :global_settings_manage => false)}
+        let(:user){ create(:user, :policy_group => policy_group_1) }
+        let(:no_access) { create(:user, :policy_group => policy_group_2) }
     
         permissions :index?, :create?, :resend_invitation?, :destroy? do
             it "allows access" do

@@ -6,8 +6,8 @@ RSpec.describe Budget, type: :model do
         let(:budget) { FactoryGirl.build(:budget) }
         let(:approved_budget) { FactoryGirl.build :approved_budget }
 
-        it { expect(budget).to belong_to(:group) }
-        it { expect(budget).to belong_to(:event) }
+        it { expect(budget).to validate_presence_of(:subject) }
+        it { expect(budget).to belong_to(:subject) }
         it { expect(budget).to belong_to(:approver).class_name("User").with_foreign_key("approver_id") }
         it { expect(budget).to belong_to(:requester).class_name("User").with_foreign_key("requester_id") }
         it { expect(budget).to have_many(:checklists) }
@@ -88,8 +88,8 @@ RSpec.describe Budget, type: :model do
     describe 'self.' do
         describe 'pre_approved_events' do
             let(:group) { FactoryGirl.create :group }
-            let!(:budget) { FactoryGirl.create :budget, group: group }
-            let!(:approved_budget) { FactoryGirl.create :approved_budget, group: group }
+            let!(:budget) { FactoryGirl.create :budget, subject: group }
+            let!(:approved_budget) { FactoryGirl.create :approved_budget, subject: group }
 
             subject { described_class.pre_approved_events(group) }
 
@@ -109,8 +109,8 @@ RSpec.describe Budget, type: :model do
 
         describe 'pre_approved_events_for_select' do
             let!(:group) { create(:group) }
-            let!(:related_budgets) { create_list(:budget, 3, group: group, is_approved: true) }
-            let!(:approved_budget) { FactoryGirl.create :approved_budget, group: group }
+            let!(:related_budgets) { create_list(:budget, 3, subject: group, subject_type: group.class.to_s, is_approved: true) }
+            let!(:approved_budget) { FactoryGirl.create :approved_budget, subject: group }
 
             subject { described_class }
 
@@ -140,20 +140,6 @@ RSpec.describe Budget, type: :model do
         it "returns Declined" do
             budget.is_approved = false
             expect(budget.status_title).to eq("Declined")
-        end
-    end
-    
-    describe "#destroy_callbacks" do
-        it "removes the child objects" do
-            budget = create(:budget)
-            checklist = create(:checklist, :budget => budget)
-            budget_item = create(:budget_item, :budget => budget)
-            
-            budget.destroy
-            
-            expect{Budget.find(budget.id)}.to raise_error(ActiveRecord::RecordNotFound)
-            expect{Checklist.find(checklist.id)}.to raise_error(ActiveRecord::RecordNotFound)
-            expect{BudgetItem.find(budget_item.id)}.to raise_error(ActiveRecord::RecordNotFound)
         end
     end
 end

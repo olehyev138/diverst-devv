@@ -5,6 +5,7 @@ RSpec.describe Groups::UpdatesController, type: :controller do
     let(:group){ create(:group, enterprise: user.enterprise) }
     let(:group_update) {create(:group_update, group: group)}
     
+    
     describe 'GET#index' do
         describe 'when user is logged in' do
             login_user_from_let
@@ -28,6 +29,7 @@ RSpec.describe Groups::UpdatesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
     
     describe 'GET#new' do
         describe 'when user is logged in' do
@@ -48,6 +50,7 @@ RSpec.describe Groups::UpdatesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
     
     describe 'GET#show' do
         describe 'when user is logged in' do
@@ -73,6 +76,7 @@ RSpec.describe Groups::UpdatesController, type: :controller do
         end
     end
 
+
     describe 'GET#edit' do
         describe 'when user is logged in' do
             login_user_from_let
@@ -96,6 +100,7 @@ RSpec.describe Groups::UpdatesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe "POST#create" do
         describe "with logged user" do
@@ -144,6 +149,7 @@ RSpec.describe Groups::UpdatesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
     
     describe 'DELETE#destroy' do
         describe 'when user is logged in' do 
@@ -164,6 +170,7 @@ RSpec.describe Groups::UpdatesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe "PATCH#update" do
         describe "with logged user" do

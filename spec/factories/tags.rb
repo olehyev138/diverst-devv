@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :tag do
-    association :resource, factory: :resource
+    association :taggable, factory: :resource
     name "label"
   end
 end

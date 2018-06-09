@@ -40,13 +40,15 @@ class Users::InvitationsController < Devise::InvitationsController
   def accept_resource
     resource = resource_class.accept_invitation!(update_resource_params)
     resource.info.merge(fields: resource.enterprise.fields, form_data: params['custom-fields'])
+    resource.policy_group = resource.enterprise.default_policy_group
+
     resource.save
     resource
   end
 
   def configure_permitted_parameters
     # Only add some parameters
-    devise_parameter_sanitizer.for(:invite).concat [:first_name, :last_name, :email, :role, group_ids: []]
+    devise_parameter_sanitizer.for(:invite).concat [:first_name, :last_name, :email, group_ids: []]
     devise_parameter_sanitizer.for(:accept_invitation).concat [:first_name, :last_name, group_ids: []]
   end
 

@@ -2,8 +2,7 @@ class Expense < ActiveRecord::Base
 
     belongs_to :enterprise
     belongs_to :category, class_name: "ExpenseCategory"
-    
-    has_many :answer_expenses, :dependent => :destroy
+    has_many :answer_expenses
 
     validates :name,        presence: true
     validates :enterprise,  presence: true

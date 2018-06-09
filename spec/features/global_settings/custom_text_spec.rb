@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.feature 'CustomText Management' do
 	let!(:enterprise) { create(:enterprise, time_zone: "UTC", enable_rewards: true) }
-	let!(:admin_user) { create(:user, enterprise: enterprise) }
+	let!(:admin_user) { create(:user, enterprise_id: enterprise.id, policy_group: create(:policy_group,
+		enterprise: enterprise)) }
 	let!(:group) { create(:group, enterprise_id: enterprise.id, pending_users: 'enabled') }
 
 	before do
@@ -126,7 +127,7 @@ RSpec.feature 'CustomText Management' do
 		end
 
 		scenario 'Member preference' do
-			create(:user_group, user: create(:user, enterprise: enterprise), group_id: group.id,
+			create(:user_group, user: create(:user, enterprise_id: enterprise.id), group_id: group.id,
 				accepted_member: false)
 
 			visit pending_group_group_members_path(group)

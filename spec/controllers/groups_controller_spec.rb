@@ -112,7 +112,7 @@ RSpec.describe GroupsController, type: :controller do
 
       it 'shows groups from correct enterprise' do
         expect(assigns(:groups)).to include group
-        #expect(assigns(:groups)).to_not include foreign_group
+        expect(assigns(:groups)).to_not include foreign_group
       end
     end
 
@@ -299,7 +299,8 @@ RSpec.describe GroupsController, type: :controller do
     end
 
     context 'with logged regular user group member' do
-      let(:user){ create(:user, :enterprise => enterprise) }
+      let(:policy_group){ create(:policy_group, :global_settings_manage => true, :groups_manage => false)}
+      let(:user){ create(:user, :enterprise => enterprise, :policy_group => policy_group) }
       let!(:user_group){ create(:user_group, :group => group, :user => user, :accepted_member => true)}
 
       login_user_from_let
@@ -319,12 +320,12 @@ RSpec.describe GroupsController, type: :controller do
         let!(:news_link4) { create(:news_link, :group => group)}
         let!(:news_link5) { create(:news_link, :group => group)}
         let!(:news_link6) { create(:news_link, :group => group)}
-        let!(:news_feed_link1) { create(:news_feed_link, news_link: news_link1, news_feed: news_feed, approved: true, created_at: Time.now - 5.hours, updated_at: Time.now - 5.hours) }
-        let!(:news_feed_link2) { create(:news_feed_link, news_link: news_link2, news_feed: news_feed, approved: true, created_at: Time.now - 4.hours, updated_at: Time.now - 4.hours) }
-        let!(:news_feed_link3) { create(:news_feed_link, news_link: news_link3, news_feed: news_feed, approved: true, created_at: Time.now - 3.hours, updated_at: Time.now - 3.hours) }
-        let!(:news_feed_link4) { create(:news_feed_link, news_link: news_link4, news_feed: news_feed, approved: true, created_at: Time.now - 2.hours, updated_at: Time.now - 2.hours) }
-        let!(:news_feed_link5) { create(:news_feed_link, news_link: news_link5, news_feed: news_feed, approved: true, created_at: Time.now - 1.hours, updated_at: Time.now - 1.hours) }
-        let!(:news_feed_link6) { create(:news_feed_link, news_link: news_link6, news_feed: news_feed, approved: true, created_at: Time.now, updated_at: Time.now) }
+        let!(:news_feed_link1) { create(:news_feed_link, link: news_link1, news_feed: news_feed, approved: true, created_at: Time.now - 5.hours, updated_at: Time.now - 5.hours) }
+        let!(:news_feed_link2) { create(:news_feed_link, link: news_link2, news_feed: news_feed, approved: true, created_at: Time.now - 4.hours, updated_at: Time.now - 4.hours) }
+        let!(:news_feed_link3) { create(:news_feed_link, link: news_link3, news_feed: news_feed, approved: true, created_at: Time.now - 3.hours, updated_at: Time.now - 3.hours) }
+        let!(:news_feed_link4) { create(:news_feed_link, link: news_link4, news_feed: news_feed, approved: true, created_at: Time.now - 2.hours, updated_at: Time.now - 2.hours) }
+        let!(:news_feed_link5) { create(:news_feed_link, link: news_link5, news_feed: news_feed, approved: true, created_at: Time.now - 1.hours, updated_at: Time.now - 1.hours) }
+        let!(:news_feed_link6) { create(:news_feed_link, link: news_link6, news_feed: news_feed, approved: true, created_at: Time.now, updated_at: Time.now) }
 
         login_user_from_let
         before { get :show, :id => group.id }
@@ -338,7 +339,7 @@ RSpec.describe GroupsController, type: :controller do
           let!(:segment) { create(:segment, enterprise: user.enterprise, owner: user) }
           let!(:users_segment) { create(:users_segment, user: user, segment: segment) }
           let!(:news_link_segment) { create(:news_link_segment, segment: segment, news_link: news_link1) }
-          let!(:news_feed_link_segment) { create(:news_feed_link_segment, segment: segment, news_feed_link: news_feed_link1, news_link_segment: news_link_segment) }
+          let!(:news_feed_link_segment) { create(:news_feed_link_segment, segment: segment, news_feed_link: news_feed_link1, link_segment: news_link_segment) }
           let!(:other_user) { create(:user) }
           let!(:other_group) { create(:group, enterprise: other_user.enterprise, owner: other_user) }
 
@@ -366,7 +367,8 @@ RSpec.describe GroupsController, type: :controller do
     end
 
     context 'with logged regular user non-group member' do
-      let(:user){ create(:user, :enterprise => enterprise) }
+      let(:policy_group){ create(:policy_group, :global_settings_manage => true, :groups_manage => false)}
+      let(:user){ create(:user, :enterprise => enterprise, :policy_group => policy_group) }
 
       login_user_from_let
 
@@ -646,7 +648,7 @@ RSpec.describe GroupsController, type: :controller do
       login_user_from_let
 
       context 'with correct params' do
-        it 'deletes group' do
+        it 'deletes initiative' do
           expect{
             delete_destroy(group.id)
           }.to change(Group, :count).by(-1)
@@ -754,6 +756,7 @@ RSpec.describe GroupsController, type: :controller do
   describe 'GET #sample_csv' do
     let(:user){ create(:user, enterprise: enterprise) }
     let!(:user_group){ create(:user_group, user: user, group: group) }
+
 
     context 'with logged user' do
       login_user_from_let

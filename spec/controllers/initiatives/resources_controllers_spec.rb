@@ -11,7 +11,7 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
     describe "GET#index" do
         context "with logged user" do
             login_user_from_let
-            let!(:resource){ create(:resource, initiative: initiative) }
+            let!(:resource){ create(:resource, container_type: "Initiative", container_id: initiative.id) }
             let!(:another_resource){ create(:resource) }
 
             before { get :index, group_id: group.id, initiative_id: initiative.id }
@@ -31,6 +31,7 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe "GET#new" do
         context "with logged user" do
@@ -52,8 +53,9 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
         end
     end
 
+
     describe "POST#create" do
-        let!(:resource) { create(:resource, initiative: initiative) }
+        let!(:resource) { create(:resource, container_type: "Initiative", container_id: initiative.id) }
 
         describe "with logged user" do
             login_user_from_let
@@ -62,7 +64,7 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
                 it "and valid attributes creates a new Resource" do
                     expect{
                         post :create, group_id: group.id, initiative_id: initiative.id, resource: attributes_for(:resource)
-                    }.to change(Resource.where(initiative: initiative), :count).by(1)
+                    }.to change(Resource.where(container_type: "Initiative"), :count).by(1)
                 end
 
                 it "redirects to action index" do
@@ -76,7 +78,7 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
                    invalid_attributes = attributes_for(:resource)
                    invalid_attributes[:title] = nil
 
-                   expect{post :create, group_id: group.id, initiative_id: initiative.id, resource: invalid_attributes}.to change(Resource.where(initiative: initiative), :count).by(0)
+                   expect{post :create, group_id: group.id, initiative_id: initiative.id, resource: invalid_attributes}.to change(Resource.where(container_type: "Initiative"), :count).by(0)
                 end
 
                 it "renders edit template" do
@@ -97,6 +99,7 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
         end
     end
 
+
     describe "GET#show" do
         context "with logged user" do
             login_user_from_let
@@ -116,14 +119,15 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
         end
 
         context "with a user not logged in" do
-            let!(:resource){ create(:resource, initiative: initiative) }
+            let!(:resource){ create(:resource, container_type: "Initiative", container_id: initiative.id) }
             before { get :show, group_id: group.id, initiative_id: initiative.id, id: resource.id }
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
+
     describe "GET#edit" do
-        let(:resource){ create(:resource, initiative: initiative) }
+        let(:resource){ create(:resource, container_type: "Initiative", container_id: initiative.id) }
 
         context "with logged user" do
             login_user_from_let
@@ -150,8 +154,9 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
         end
     end
 
+
     describe "PATCH#update" do
-        let(:resource){ create(:resource, title: "Resource", initiative: initiative) }
+        let(:resource){ create(:resource, title: "Resource", container_type: "Initiative", container_id: initiative.id) }
 
         describe "with logged user" do
             login_user_from_let
@@ -191,9 +196,10 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-    
+
+
     describe "DELET#destroy" do
-        let(:resource){ create(:resource, initiative: initiative) }
+        let(:resource){ create(:resource, container_type: "Initiative", container_id: initiative.id) }
 
         context "with logged user" do
             login_user_from_let

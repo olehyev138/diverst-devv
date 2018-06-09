@@ -4,7 +4,7 @@ RSpec.describe CacheSegmentMembersJob, type: :job do
 
   it 'removes the segment members' do
     enterprise = create(:enterprise)
-    select_field = create(:select_field, :type => "SelectField", :title => "Gender", :options_text => "Male\nFemale", :enterprise => enterprise)
+    select_field = create(:select_field, :type => "SelectField", :title => "Gender", :options_text => "Male\nFemale", :container => enterprise)
     
     segment = create(:segment, :enterprise => enterprise)
     create(:segment_rule, :segment => segment, :field => select_field, :operator => 4, :values => "[\"Female\"]")
@@ -23,7 +23,7 @@ RSpec.describe CacheSegmentMembersJob, type: :job do
   it 'adds the segment members' do
     enterprise = create(:enterprise)
 
-    select_field = SelectField.new(:type => "SelectField", :title => "Gender", :options_text => "Male\nFemale", :enterprise => enterprise)
+    select_field = SelectField.new(:type => "SelectField", :title => "Gender", :options_text => "Male\nFemale", :container => enterprise)
     select_field.save!
       
     segment = create(:segment, :enterprise => enterprise)

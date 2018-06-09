@@ -3,18 +3,8 @@ class UserRewardAction < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :reward_action
-  belongs_to :initiative
-  belongs_to :initiative_comment
-  belongs_to :group_message
-  belongs_to :group_message_comment
-  belongs_to :news_link
-  belongs_to :news_link_comment
-  belongs_to :social_link
-  belongs_to :answer_comment
-  belongs_to :answer_upvote
-  belongs_to :answer
-  belongs_to :poll_response
-    
+  belongs_to :entity, polymorphic: true
+
   validates :user, presence: true
   validates :reward_action, presence: true
   validates :operation, presence: true

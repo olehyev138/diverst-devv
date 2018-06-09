@@ -76,6 +76,7 @@ class ApplicationController < ActionController::Base
         fail ActionController::RoutingError.new('Not Found')
     end
 
+
     def after_sign_in_path_for(resource)
         prev_url = session[:previous_url]
 

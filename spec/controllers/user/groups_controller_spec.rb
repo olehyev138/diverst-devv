@@ -11,7 +11,7 @@ RSpec.describe "User::GroupsController", type: :controller do
     }
 
     describe 'GET #index' do
-        describe "when user is logged in" do 
+        describe "when user is logged in" do
             login_user_from_let
             
             context "when group has no parents and is private" do

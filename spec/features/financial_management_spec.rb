@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.feature 'Financial Management' do
 	let!(:enterprise) { create(:enterprise) }
-	let!(:admin_user) { create(:user, enterprise: enterprise)}
+	let!(:admin_user) { create(:user, enterprise_id: enterprise.id, policy_group: create(:policy_group,
+		enterprise_id: enterprise.id)) }
 	let!(:icon) { File.new('spec/fixtures/files/trophy_image.jpg') }
 	let!(:competition_category) { create(:expense_category, enterprise_id: enterprise.id, name: 'hackathon',
 		icon: icon) }

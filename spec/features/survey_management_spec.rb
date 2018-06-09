@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.feature 'Survey Management' do
 	let!(:enterprise) { create(:enterprise) }
-	let!(:admin_user) { create(:user, enterprise: enterprise) }
+	let!(:admin_user) { create(:user, enterprise_id: enterprise.id, policy_group: create(:policy_group,
+		enterprise_id: enterprise.id)) }
 	let!(:group) { create(:group, enterprise_id: enterprise.id) }
 
 	before do

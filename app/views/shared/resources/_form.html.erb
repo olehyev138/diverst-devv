@@ -6,8 +6,7 @@
         <%= f.input :title,
               label: "Start off by giving your resource a representative <strong>title</strong>".html_safe,
               input_html: { autofocus: true } %>
-        <%= f.association :folder, label: "Move to another Folder", include_blank: false, input_html: { class: "select2" }, collection: @resource.folder.group.folders if @resource.folder and @resource.folder.group %>
-        <%= f.association :folder, label: "Move to another Folder", include_blank: false, input_html: { class: "select2" }, collection: @resource.folder.enterprise.folders if @resource.folder and @resource.folder.enterprise %>
+        <%= f.association :container, label: "Move to another Folder", include_blank: false, input_html: { class: "select2" }, collection: @resource.container.container.folders if @resource.container_type === "Folder"%>
         <%= f.input :file, as: :attachment_preview, label: "Upload the <strong>file</strong> you want to share".html_safe %>
         <%= f.input :url, label: "URL" %>
         <%= f.association :tags, input_html: { class: 'multiple-input', multiple: "multiple" }, collection: @resource.tags, label: "Tags" %>
