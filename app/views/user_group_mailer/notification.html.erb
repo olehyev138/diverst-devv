@@ -2,7 +2,7 @@
 
 <% @groups.each do |group| %>
   <% if (group[:events_count ].to_i > 0 || group[:participating_events_count].to_i > 0 || group[:messages_count].to_i > 0) || (group[:news_count].to_i > 0) %>
-    <strong><%= @custom_text.erg_text %> <%= group[:group].name %></strong>
+    <strong><%= group[:group].name %></strong>
   <% end %>
 
   <% if group[:events_count ].to_i > 0 %>
