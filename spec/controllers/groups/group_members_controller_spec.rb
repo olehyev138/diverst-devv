@@ -6,6 +6,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
     let(:group) { create(:group, enterprise: user.enterprise) }
     let!(:user_group) {create(:user_group, group_id: group.id, user_id: user.id)}
 
+
     describe 'GET#index' do
         context 'with user logged in' do
             let!(:user_group1) {create(:user_group, group_id: group.id, user_id: add.id)}
@@ -49,6 +50,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
         end
     end
 
+
     describe 'GET#pending' do
         context 'when user is logged in' do
             let!(:user1) { create(:user) }
@@ -77,6 +79,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe 'POST#accept_pending' do
         describe "with logged in user" do
@@ -120,6 +123,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
         end
     end
 
+
     describe 'GET#new' do
         context 'when user is logged in' do 
             login_user_from_let
@@ -139,6 +143,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
 
     describe 'DELETE#destroy' do
         describe 'when user is logged in' do 
@@ -173,6 +178,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
  
     describe 'POST#create' do
         context "when unsuccessful" do
@@ -262,6 +268,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
         end
     end
 
+
     describe 'POST#add_members' do
         context 'when user is logged in' do 
             login_user_from_let
@@ -285,26 +292,21 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
         end
     end
 
+
     describe 'DELETE#remove_member' do
         context 'when user is logged in' do 
-            let!(:group_leader){create(:group_leader, user: user, group: group)}
-            
             login_user_from_let
-            before { 
-                user_group.save 
-                delete :remove_member, group_id: group.id, id: user.id
-            }
+            before { user_group.save }
 
             it "redirects to index action" do
+                delete :remove_member, group_id: group.id, id: user.id
                 expect(response).to redirect_to action: 'index'
             end
 
             it "removes the user" do
-                expect(UserGroup.where(:user_id => user.id, :group_id => group.id).count).to eq(0)
-            end
-            
-            it "deletes the leader" do
-                expect{GroupLeader.find(group_leader.id)}.to raise_error(ActiveRecord::RecordNotFound)
+                group.reload
+                expect{delete :remove_member, group_id: group.id, id: user.id}
+                .to change(group.members, :count).by(-1)
             end
         end
 
