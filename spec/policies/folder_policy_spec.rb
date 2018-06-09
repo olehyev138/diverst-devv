@@ -2,19 +2,14 @@ require 'rails_helper'
 
 RSpec.describe FolderPolicy, :type => :policy do
     
-    let(:enterprise) {create(:enterprise)}
+    let(:policy_group){ create(:policy_group, :global_settings_manage => true)}
+    let(:enterprise) {create(:enterprise, :policy_groups => [policy_group])}
     let(:user){ create(:user, :enterprise => enterprise) }
-    let(:no_access) { create(:user) }
-    let(:folder){ create(:folder, :enterprise => enterprise)}
+    let(:policy_group_2){ create(:policy_group, :enterprise_resources_index => false, :enterprise_resources_create => false, :enterprise_resources_manage => false)}
+    let(:no_access) { create(:user, :policy_group => policy_group_2) }
+    let(:folder){ create(:folder, :container => enterprise)}
 
     subject { described_class }
-    
-    before {
-        no_access.policy_group.enterprise_resources_index = false
-        no_access.policy_group.enterprise_resources_create = false 
-        no_access.policy_group.enterprise_resources_manage = false
-        no_access.policy_group.save!
-    }
     
     permissions :index?, :create? , :update?, :edit?, :update?, :destroy? do
                   

@@ -1,7 +1,8 @@
 FactoryGirl.define do
   factory :budget do
+    subject { FactoryGirl.create(:group) }
     description { Faker::Lorem.sentence }
-    association :group, factory: :group
+
     factory :approved_budget do
       after(:create) do |budget|
         budget.is_approved = true

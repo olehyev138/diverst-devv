@@ -23,12 +23,6 @@ RSpec.describe Poll, type: :model do
         end
 
         context 'test validation' do
-            it{ expect(poll).to validate_presence_of(:title) }
-            it{ expect(poll).to validate_presence_of(:description) }
-            it{ expect(poll).to validate_presence_of(:status) }
-            it{ expect(poll).to validate_presence_of(:enterprise) }
-            it{ expect(poll).to validate_presence_of(:owner) }
-            
             [:title, :description, :status, :enterprise, :owner].each do |attribute|
                 it{ expect(poll).to validate_presence_of(attribute) }
             end
@@ -204,7 +198,7 @@ RSpec.describe Poll, type: :model do
             enterprise = create(:enterprise)
             user = build(:user)
             poll = create(:poll, :enterprise => enterprise, :owner => user)
-            select_field = SelectField.new(:type => "SelectField", :title => "What is 1 + 1?", :options_text => "1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n7", :poll => poll)
+            select_field = SelectField.new(:type => "SelectField", :title => "What is 1 + 1?", :options_text => "1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n7", :container => poll)
             select_field.save!
             create(:poll_response, :poll => poll, :user => user, :data => "{\"#{select_field.id}\":[\"4\"]}")
 
@@ -229,25 +223,5 @@ RSpec.describe Poll, type: :model do
 
             expect(poll.responses_csv).to eq("user_id,user_email,user_name,What is 1 + 1?\n#{user_1.id},#{user_1.email},#{user_1.name},4\n\"\",\"\",Deleted User,4\n")
         end
-    end
-
-    describe "#destroy_callbacks" do
-      it "removes the child objects" do
-        poll = create(:poll)
-        field = create(:field, :poll => poll)
-        response = create(:poll_response, :poll => poll)
-        graph = create(:graph, :poll => poll)
-        polls_segment = create(:polls_segment, :poll => poll)
-        groups_poll = create(:groups_poll, :poll => poll)
-
-        poll.destroy
-
-        expect{Poll.find(poll.id)}.to raise_error(ActiveRecord::RecordNotFound)
-        #expect{Field.find(field.id)}.to raise_error(ActiveRecord::RecordNotFound)
-        expect{PollResponse.find(response.id)}.to raise_error(ActiveRecord::RecordNotFound)
-        expect{Graph.find(graph.id)}.to raise_error(ActiveRecord::RecordNotFound)
-        expect{PollsSegment.find(polls_segment.id)}.to raise_error(ActiveRecord::RecordNotFound)
-        expect{GroupsPoll.find(groups_poll.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      end
     end
 end

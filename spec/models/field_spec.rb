@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Field do
   describe "when validating" do
-    let(:field){ build(:field, enterprise: build(:enterprise)) }
-    let(:field1) { build(:field, enterprise: build(:enterprise)) }
+    let(:field){ build(:field, container: build(:enterprise)) }
+    let(:field1) { build(:field, container: build(:segments_field)) }
 
     context 'validate presence of title for field' do
       it 'valid if title is present' do
@@ -49,7 +49,7 @@ RSpec.describe Field do
   end
 
   describe 'when describing callbacks' do
-    let!(:field){ create(:field, enterprise: create(:enterprise)) }
+    let!(:field){ create(:field, container: create(:enterprise)) }
 
     it "should reindex users on elasticsearch after update" do
       TestAfterCommit.with_commits(true) do
@@ -76,18 +76,6 @@ RSpec.describe Field do
     it "Returns a well-formatted string representing the value. Used for display." do
       field = create(:field)
       expect(field.string_value("test")).to eq("test")
-    end
-  end
-  
-  describe "#destroy_callbacks" do
-    it "removes the child objects" do
-      field = create(:field)
-      yammer_field_mapping = create(:yammer_field_mapping, :diverst_field => field)
-      
-      field.destroy!
-      
-      expect{Field.find(field.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      expect{YammerFieldMapping.find(yammer_field_mapping.id)}.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 end

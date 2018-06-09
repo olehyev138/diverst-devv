@@ -6,7 +6,7 @@ class ApplicationPolicy
 
     @user = user
     @record = record
-    @policy_group = @user.policy_group
+    @policy_group = @user.policy_group || @user.enterprise.default_policy_group
   end
 
   def index?
@@ -42,12 +42,11 @@ class ApplicationPolicy
   end
 
   class Scope
-    attr_reader :user, :scope, :permission
+    attr_reader :user, :scope
 
-    def initialize(user, scope, permission = nil)
+    def initialize(user, scope)
       @user = user
       @scope = scope
-      @permission = permission
       @policy_group = @user.policy_group
     end
 

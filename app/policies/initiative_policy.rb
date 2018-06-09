@@ -1,6 +1,9 @@
 class InitiativePolicy < ApplicationPolicy
   def index?
-    @policy_group.initiatives_index?
+    return true if @policy_group.initiatives_index?
+
+    #return true if user is a leader of at least one group
+    @user.erg_leader?
   end
 
   def show?

@@ -227,20 +227,4 @@ RSpec.describe SocialLink, type: :model do
             expect(SocialLink.of_segments(user.segments.pluck(:id)).count).to eq(2)
         end
     end
-    
-    describe "#destroy_callbacks" do
-        it "removes the child objects" do
-          social_link = create(:social_link)
-          news_feed_link = social_link.news_feed_link
-          social_link_segment = create(:social_link_segment, :social_link => social_link)
-          user_reward_action = create(:user_reward_action, :social_link => social_link)
-    
-          social_link.destroy
-    
-          expect{SocialLink.find(social_link.id)}.to raise_error(ActiveRecord::RecordNotFound)
-          expect{NewsFeedLink.find(news_feed_link.id)}.to raise_error(ActiveRecord::RecordNotFound)
-          expect{SocialLinkSegment.find(social_link_segment.id)}.to raise_error(ActiveRecord::RecordNotFound)
-          expect{UserRewardAction.find(user_reward_action)}.to raise_error(ActiveRecord::RecordNotFound)
-        end
-    end
 end

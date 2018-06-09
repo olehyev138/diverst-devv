@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.feature 'Manage Enterprise Branding' do
 	let!(:enterprise) { create(:enterprise, theme: create(:theme, primary_color: '#7b77c9')) }
-	let!(:admin_user) { create(:user, enterprise: enterprise) }
+	let!(:admin_user) { create(:user, enterprise_id: enterprise.id, policy_group: create(:policy_group,
+		enterprise_id: enterprise.id)) }
 	let!(:group) { create(:group, enterprise_id: enterprise.id) }
 
 	before do

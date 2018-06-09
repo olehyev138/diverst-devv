@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :folder_share do
-    association :enterprise, factory: :enterprise
+    association :container, factory: :enterprise
     association :folder, factory: :folder
   end
 end

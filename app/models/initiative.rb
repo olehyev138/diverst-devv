@@ -6,10 +6,9 @@ class Initiative < ActiveRecord::Base
   belongs_to :pillar
   belongs_to :owner, class_name: "User"
   has_many :updates, class_name: "InitiativeUpdate", dependent: :destroy
-  has_many :fields, dependent: :delete_all
+  has_many :fields, as: :container, dependent: :destroy
   has_many :expenses, dependent: :destroy, class_name: "InitiativeExpense"
-  has_many :user_reward_actions
-  
+
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
 
   validates :end, date: {after: :start, message: 'must be after start'}, on: [:create, :update]
@@ -22,24 +21,24 @@ class Initiative < ActiveRecord::Base
   belongs_to :budget_item
   has_one :budget, through: :budget_item
 
-  has_many :checklists, dependent: :destroy
-  has_many :resources, dependent: :destroy
+  has_many :checklists, as: :subject
+  has_many :resources, as: :container
 
-  has_many :checklist_items, dependent: :destroy
+  has_many :checklist_items, as: :container
   accepts_nested_attributes_for :checklist_items, reject_if: :all_blank, allow_destroy: true
 
   belongs_to :owner_group, class_name: 'Group'
 
-  has_many :initiative_segments, dependent: :destroy
+  has_many :initiative_segments
   has_many :segments, through: :initiative_segments
-  has_many :initiative_participating_groups, dependent: :destroy
+  has_many :initiative_participating_groups
   has_many :participating_groups, through: :initiative_participating_groups, source: :group, class_name: 'Group'
 
-  has_many :initiative_invitees, dependent: :destroy
+  has_many :initiative_invitees
   has_many :invitees, through: :initiative_invitees, source: :user
-  has_many :comments, class_name: 'InitiativeComment', dependent: :destroy
+  has_many :comments, class_name: 'InitiativeComment'
 
-  has_many :initiative_users, dependent: :destroy
+  has_many :initiative_users
   has_many :attendees, through: :initiative_users, source: :user
 
   has_one :outcome, through: :pillar
@@ -195,7 +194,7 @@ class Initiative < ActiveRecord::Base
     return true if estimated_funding == 0
 
     if budget.present?
-      if budget.group_id != group.id
+      if budget.subject != group
         # make sure noone is trying to put incorrect budget value
         errors.add(:budget, 'You are providing wrong budget')
         return false

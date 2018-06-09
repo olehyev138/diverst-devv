@@ -24,24 +24,27 @@ module FeatureSpecRefactors
 
 
 		def set_custom_text_fields
-			create(:field, title: 'BIO', enterprise_id: enterprise.id)
+			create(:field, title: 'BIO', container_id: enterprise.id,
+				container_type: 'Enterprise')
 		end
 
 		def set_custom_select_fields
-			create(:select_field, title: 'Gender', options_text: "Male \r\nFemale", enterprise_id: enterprise.id)
+			create(:select_field, title: 'Gender', options_text: "Male \r\nFemale", container_id: enterprise.id,
+				container_type: 'Enterprise')
 		end
 
 		def set_custom_checkbox_fields
 			create(:checkbox_field, title: 'Programming Language', options_text: "Ruby\r\nElixir\r\nC++\r\nJavaScript",
-				enterprise_id: enterprise.id)
+				container_id: enterprise.id, container_type: 'Enterprise')
 		end
 
 		def set_custom_numeric_fields
-			create(:numeric_field, title: 'Age-restrictions', min: 18, max: 98, enterprise_id: enterprise.id)
+			create(:numeric_field, title: 'Age-restrictions', min: 18, max: 98, container_id: enterprise.id,
+				container_type: 'Enterprise')
 		end
 
 		def set_custom_date_fields
-			create(:date_field, title: 'Date of Birth', enterprise_id: enterprise.id)
+			create(:date_field, title: 'Date of Birth', container_id: enterprise.id, container_type: 'Enterprise')
 		end
 
 
@@ -186,7 +189,7 @@ module FeatureSpecRefactors
 			fill_in 'user[email]', with: 'derek@diverst.com'
 			fill_in 'user[first_name]', with: 'Derek'
 			fill_in 'user[last_name]', with: 'Owusu-Frimpong'
-			
+
 			if with_custom_fields
 				page.all('#all-custom-fields') do
 					fill_in 'BIO', with: 'I am a passionate ruby developer'

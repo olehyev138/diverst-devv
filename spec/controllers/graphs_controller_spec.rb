@@ -5,12 +5,12 @@ RSpec.describe GraphsController, type: :controller do
     let(:user) { create(:user, enterprise: enterprise) }
     let(:metrics_dashboard) { create(:metrics_dashboard, enterprise_id: enterprise.id) }
     let(:poll) { create(:poll, enterprise_id: enterprise.id) }
-    let(:field1) { create(:field, type: "NumericField", poll: poll) }
-    let(:field2) { create(:field, type: "NumericField", poll: poll) }
-    let(:field3) { create(:field, type: "CheckboxField", poll: poll) }
-    let(:metrics_graph) { create(:graph, metrics_dashboard: metrics_dashboard, field: field1) }
-    let(:metrics_graph2) { create(:graph, metrics_dashboard: metrics_dashboard, field: field3, time_series: true) }
-    let(:poll_graph) { create(:graph, poll: poll, field: field2) }
+    let(:field1) { create(:field, type: "NumericField", container: poll) }
+    let(:field2) { create(:field, type: "NumericField", container: poll) }
+    let(:field3) { create(:field, type: "CheckboxField", container: poll) }
+    let(:metrics_graph) { create(:graph, collection: metrics_dashboard, field: field1) }
+    let(:metrics_graph2) { create(:graph, collection: metrics_dashboard, field: field3, time_series: true) }
+    let(:poll_graph) { create(:graph, collection: poll, field: field2) }
 
     describe "GET#new" do
         describe "with logged in user" do
@@ -19,8 +19,8 @@ RSpec.describe GraphsController, type: :controller do
             context 'when metrics_dashboard_id is available in params' do
                 before { get :new, :metrics_dashboard_id => metrics_dashboard.id }
 
-                it 'sets metrics_dashboard object to be metrics_dashboard' do
-                    expect(assigns[:graph].metrics_dashboard_id).to eq metrics_dashboard.id
+                it 'sets collection object to be metrics_dashboard' do
+                    expect(assigns[:collection]).to eq metrics_dashboard
                 end
 
                 it "returns a new graph object" do
@@ -35,8 +35,8 @@ RSpec.describe GraphsController, type: :controller do
             context 'when poll_id is available in params' do
                 before { get :new, poll_id: poll.id }
 
-                it 'sets poll object to be poll' do
-                    expect(assigns[:graph].poll_id).to eq poll.id
+                it 'sets collection object to be poll' do
+                    expect(assigns[:collection]).to eq poll
                 end
 
                 it "returns a new graph object" do

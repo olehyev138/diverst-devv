@@ -6,8 +6,8 @@ RSpec.feature 'Segment management' do
   let!(:segment) { create(:segment_with_rules, enterprise: user.enterprise) }
 
   before do
-    login_as(user, scope: :user, :run_callbacks => false)
-    user.enterprise.fields << create(:enterprise_field, enterprise: user.enterprise)
+    login_as(user, scope: :user)
+    user.enterprise.fields << create(:enterprise_field, container: user.enterprise)
   end
 
   scenario 'user creates a new segment', :js do
@@ -35,7 +35,7 @@ RSpec.feature 'Segment management' do
   end
 
   context 'user is viewing a segment\'s details' do
-    let!(:users) { create_list(:user, 3, enterprise: user.enterprise) }
+    let!(:users) { create_list(:user, 3, enterprise_id: user.enterprise.id) }
     before do
       segment.members << users
       visit segment_path(segment)

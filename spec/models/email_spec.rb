@@ -1,22 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe Email do
+  it { expect(subject).to respond_to(:name) }
+
   it { expect(subject).to belong_to :enterprise }
   it { expect(subject).to have_many(:variables).class_name('EmailVariable') }
   it { expect(subject).to validate_presence_of(:name) }
   it { expect(subject).to validate_presence_of(:subject) }
-  
-  describe "#destroy_callbacks" do
-    it "removes the child objects" do
-        email = create(:email)
-        email_variable = create(:email_variable, :email => email)
-        
-        email.destroy
-        
-        expect{Email.find(email.id)}.to raise_error(ActiveRecord::RecordNotFound)
-        expect{EmailVariable.find(email_variable.id)}.to raise_error(ActiveRecord::RecordNotFound)
-    end
-  end
 
   describe "#workflow" do
     it "processes the email" do

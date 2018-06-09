@@ -1,33 +1,38 @@
 <div class="content__main">
-  <%= simple_form_for @policy_group_template do |f| %>
+  <%= simple_form_for @policy_group do |f| %>
 
     <div class="card">
       <div class="card__section card__section--border">
-        <label><strong>Name</strong></label>
-        <p><%= @policy_group_template.name %></p>
+        <p class="field__hint">
+          <%= f.label :name, label: "Start off by giving your <strong>permission group</strong> a name".html_safe %>
+        </p>
+        <%= f.input :name, label: false, input_html: { autofocus: true } %>
       </div>
-      
+      <div class="card__section card__section--border">
+        <p class="field__hint">Should this <strong>permission group</strong> be default for new users in <strong><%= @policy_group.enterprise.name %></strong>?</p>
+        <%= f.hidden_field :default_for_enterprise, value: 0 %>
+        <%= f.input :default_for_enterprise, label: 'Use as default' %>
+      </div>
       <div class="card__section card__section--border">
         <div class="row row--spacing-bottom">
+          <div class="col md-6">
+            <p class="field__hint">Should members of this group be able to access admin dashboard?</p>
+            <%= f.hidden_field :admin_pages_view, value: 0 %>
+            <%= f.input :admin_pages_view, label: 'Admin Dashboard' %>
+          </div>
           <div class="col md-6">
             <p class="field__hint">Should members of this group be able to manage annual budgets?</p>
             <%= f.hidden_field :annual_budget_manage, value: 0 %>
             <%= f.input :annual_budget_manage, label: 'Manage Annual Budgets' %>
           </div>
-          <div class="col md-6">
-            <p class="field__hint">Should members of this group be able to view the global calendar?</p>
-            <%= f.hidden_field :global_calendar, value: 0 %>
-            <%= f.input :global_calendar, label: 'View Global Calendar' %>
-          </div>
         </div>
       </div>
-      
-      <div class="card__section card__section--border">
+      <div class="card__section section--border">
         <div class="row row--spacing-bottom">
           <div class="col md-6">
             <p class="field__hint">Should members of this group be able to approve budgets?</p>
-            <%= f.hidden_field :groups_budgets_approve, value: 0 %>
-            <%= f.input :groups_budgets_approve, label: 'Budget Approval' %>
+            <%= f.hidden_field :budget_approval, value: 0 %>
+            <%= f.input :budget_approval, label: 'Budget Approval' %>
           </div>
           <div class="col md-6">
             <p class="field__hint">Should members of this group be able to view activity logs?</p>
@@ -36,22 +41,6 @@
           </div>
         </div>
       </div>
-      
-      <div class="card__section card__section--border">
-        <div class="row row--spacing-bottom">
-          <div class="col md-6">
-            <p class="field__hint">Should members of this group be able to manage permissions?</p>
-            <%= f.hidden_field :permissions_manage, value: 0 %>
-            <%= f.input :permissions_manage, label: 'Manage Permissions' %>
-          </div>
-          <div class="col md-6">
-            <p class="field__hint">Should members of this group be able to manage sso?</p>
-            <%= f.hidden_field :sso_manage, value: 0 %>
-            <%= f.input :sso_manage, label: 'Manage SSO' %>
-          </div>
-        </div>
-      </div>
-      
       <div class="card__section card__section--border">
         <h2>General</h2>
         <div class="row row--spacing-bottom">
@@ -92,7 +81,7 @@
             <%= f.input :enterprise_resources_manage, wrapper: :boolean_checkbox, label: "Manage all" %>
           </div>
         </div>
-        <div class="row row--spacing-bottom">
+        <div class="row">
           <div class="col md-3">
             <h4>Metrics dashboards</h4>
             <%= f.hidden_field :metrics_dashboards_index, value: 0 %>
@@ -102,46 +91,28 @@
           </div>
           <div class="col md-3">
             <h4><%= c_t(:segment).pluralize %></h4>
-            <%= f.hidden_field :segments_index, value: 0 %>
             <%= f.input :segments_index, wrapper: :boolean_checkbox, label: "View" %>
-            <%= f.hidden_field :segments_create, value: 0 %>
             <%= f.input :segments_create, wrapper: :boolean_checkbox, label: "Create" %>
-            <%= f.hidden_field :segments_manage, value: 0 %>
             <%= f.input :segments_manage, wrapper: :boolean_checkbox, label: "Manage all" %>
           </div>
           <div class="col md-3">
-            <h4>Diversity and Culture Index</h4>
-            <%= f.hidden_field :diversity_manage, value: 0 %>
-            <%= f.input :diversity_manage, wrapper: :boolean_checkbox, label: "Manage" %>
-          </div>
-          <div class="col md-3">
-            <h4>Users</h4>
-            <%= f.hidden_field :users_index, value: 0 %>
-            <%= f.input :users_index, wrapper: :boolean_checkbox, label: "View" %>
-            <%= f.hidden_field :users_manage, value: 0 %>
-            <%= f.input :users_manage, wrapper: :boolean_checkbox, label: "Manage" %>
-          </div>
-        </div>
-        <div class="row row--spacing-bottom">
-          <div class="col md-3">
-            <h4>Branding</h4>
-            <%= f.hidden_field :branding_manage, value: 0 %>
-            <%= f.input :branding_manage, wrapper: :boolean_checkbox, label: "Manage" %>
+            <h4>Global settings</h4>
+            <%= f.hidden_field :global_settings_manage, value: 0 %>
+            <%= f.input :global_settings_manage, wrapper: :boolean_checkbox, label: "Manage" %>
           </div>
         </div>
       </div>
-      
       <div class="card__section card__section--border">
         <h2><%= c_t(:erg) %> management</h2>
         <div class="row">
           <div class="col md-3">
             <h4>Events</h4>
-            <%= f.hidden_field :initiatives_index, value: 0 %>
-            <%= f.input :initiatives_index, wrapper: :boolean_checkbox, label: "View" %>
-            <%= f.hidden_field :initiatives_create, value: 0 %>
-            <%= f.input :initiatives_create, wrapper: :boolean_checkbox, label: "Create" %>
-            <%= f.hidden_field :initiatives_manage, value: 0 %>
-            <%= f.input :initiatives_manage, wrapper: :boolean_checkbox, label: "Manage all" %>
+            <%= f.hidden_field :events_index, value: 0 %>
+            <%= f.input :events_index, wrapper: :boolean_checkbox, label: "View" %>
+            <%= f.hidden_field :events_create, value: 0 %>
+            <%= f.input :events_create, wrapper: :boolean_checkbox, label: "Create" %>
+            <%= f.hidden_field :events_manage, value: 0 %>
+            <%= f.input :events_manage, wrapper: :boolean_checkbox, label: "Manage all" %>
           </div>
           <div class="col md-3">
             <h4>Messages</h4>
@@ -177,24 +148,80 @@
             <%= f.hidden_field :news_links_manage, value: 0 %>
             <%= f.input :news_links_manage, wrapper: :boolean_checkbox, label: "Manage all" %>
           </div>
-          
-          <div class="col md-3">
-            <h4>Leaders</h4>
-            <%= f.hidden_field :group_leader_manage, value: 0 %>
-            <%= f.input :group_leader_manage, wrapper: :boolean_checkbox, label: "Manage" %>
-          </div>
-          
-        <div class="col md-3">
-          <h4>Posts</h4>
-          <%= f.hidden_field :manage_posts, value: 0 %>
-          <%= f.input :manage_posts, wrapper: :boolean_checkbox, label: "Manage" %>
-        </div>
         </div>
       </div>
-      
+      <div class="card__section card__section--border">
+        <h2>Planning</h2>
+        <div class="row">
+          <div class="col md-3">
+            <h4>Events</h4>
+            <%= f.hidden_field :initiatives_index, value: 0 %>
+            <%= f.input :initiatives_index, wrapper: :boolean_checkbox, label: "View" %>
+            <%= f.hidden_field :initiatives_create, value: 0 %>
+            <%= f.input :initiatives_create, wrapper: :boolean_checkbox, label: "Create" %>
+            <%= f.hidden_field :initiatives_manage, value: 0 %>
+            <%= f.input :initiatives_manage, wrapper: :boolean_checkbox, label: "Manage all" %>
+          </div>
+        </div>
+      </div>
+      <% if @policy_group.new_record? %>
+        <div class="card__section card__section--border">
+          <p>Choose the <strong>users</strong> that will initially be part of this group</p>
+              
+          <%= f.association :users, collection: @policy_group.enterprise.users, label: false, input_html: { class: "select2" } %>
+        </div>
+      <% end %>
       <div class="card__section card__section--border">
         <%= f.button :submit %>        
       </div>
     </div>
   <% end %>
+  <%= simple_form_for @policy_group do |f| %>
+    <div class="card">
+      <div class="card__section card__section--border">
+        <% if !@policy_group.new_record? %>
+          <p>Add users not part of this policy group</p>
+  
+          <%= simple_form_for @policy_group, :url => add_users_policy_group_path(@policy_group), method: 'post' do |form| %>
+            <%= form.input :new_users, collection: @policy_group.enterprise.users - @policy_group.users, :label => false, input_html: { class: "select2", multiple: true } %>
+            <% if @policy_group.enterprise.users.count - @policy_group.users.count > 0 %>
+              <%= form.button :submit, "Add User(s)" %>
+            <% end %>
+          <% end %>
+        
+          <p>You can edit <strong>users</strong> that are part of this group</p>
+          
+          <table class="table--has-border" id="policy-group-users">
+            <thead>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Remove</th>
+            </thead>
+            <tbody>
+              <% @policy_group.users.each do |user| %>
+                <tr>
+                  <td><%= user.name %></td>
+                  <td><%= user.email %></td>
+                  <td>
+                    <%= link_to "Remove", user_path(user, {:user => {:policy_group_id => -1}}), method: :put if @policy_group.users.include?(user) %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+          
+        <% end %>
+      </div>
+    </div>
+  <% end %>
 </div>
+
+<script>
+  $(document).on('page:change', function() {
+    $(document).off('page:change');
+
+    $('#policy-group-users').dataTable(Utility.mergeWithDTDefaults({
+      order: [[0  , "asc"]]
+    }));
+  });
+</script>

@@ -3,16 +3,17 @@ require 'rails_helper'
 RSpec.describe Folder, type: :model do
 
     describe "when validating" do
-        let(:group) { create(:group) }
-        let(:folder){ create(:folder, :name => "test", :group => group) }
+        let(:group) { build_stubbed(:group) }
+        let(:folder){ build_stubbed(:folder, :name => "test", :container => group) }
 
         it { expect(folder).to have_many(:resources) }
         it { expect(folder).to have_many(:folder_shares) }
-        it { expect(folder).to have_many(:groups) }
-        
-        it{ expect(folder).to belong_to(:group) }
-        
+        it { expect(folder).to have_many(:groups).through(:folder_shares).source('container') }
+
+        it{ expect(folder).to belong_to(:container) }
+
         it { expect(folder).to validate_presence_of(:name) }
+        it { expect(folder).to validate_presence_of(:container) }
         #it { expect(folder).to validate_uniqueness_of(:name) } # <- revisit
     end
 
@@ -54,13 +55,13 @@ RSpec.describe Folder, type: :model do
     
     describe '#parent' do
         it "returns nil" do
-            folder = create(:folder)
+            folder = build(:folder)
             expect(folder.parent).to be(nil)
         end
 
         it "returns parent" do
-            folder_1 = create(:folder)
-            folder_2 = create(:folder, :parent => folder_1)
+            folder_1 = build(:folder)
+            folder_2 = build(:folder, :parent => folder_1)
 
             expect(folder_2.parent).to_not be(nil)
             expect(folder_2.parent).to eq(folder_1)
@@ -69,7 +70,7 @@ RSpec.describe Folder, type: :model do
 
     describe '#children' do
         it "returns empty array" do
-            folder = create(:folder)
+            folder = build(:folder)
             expect(folder.children.length).to eq(0)
         end
 
@@ -91,22 +92,6 @@ RSpec.describe Folder, type: :model do
             folder_2 = create(:folder, :parent => folder_1)
 
             expect(Folder.only_parents.length).to eq(1)
-        end
-    end
-    
-    describe "#destroy_callbacks" do
-        it "removes the child objects" do
-            folder = create(:folder)
-            resource = create(:resource, :folder => folder)
-            folder_share = create(:folder_share, :folder => folder)
-            folder_child = create(:folder, :parent => folder)
-            
-            folder.destroy!
-            
-            expect{Folder.find(folder.id)}.to raise_error(ActiveRecord::RecordNotFound)
-            expect{Resource.find(resource.id)}.to raise_error(ActiveRecord::RecordNotFound)
-            expect{FolderShare.find(folder_share.id)}.to raise_error(ActiveRecord::RecordNotFound)
-            expect{Folder.find(folder_child.id)}.to raise_error(ActiveRecord::RecordNotFound)
         end
     end
 end

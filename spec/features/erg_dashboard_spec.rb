@@ -5,7 +5,7 @@ RSpec.feature 'An ERG dashboard' do
   let(:group) { create(:group_with_users, :with_outcomes, users_count: 5, enterprise: user.enterprise) }
 
   before do
-    login_as(user, scope: :user, :run_callbacks => false)
+    login_as(user, scope: :user)
   end
 
   scenario 'shows the upcoming events' do
@@ -51,12 +51,12 @@ RSpec.feature 'An ERG dashboard' do
     end
 
     scenario 'show uncategorized sub-ergs as normal list' do
-      sub_group = create(:group, parent_id: group.id, :enterprise => user.enterprise)
+      sub_groups = create_list(:group, 2, parent_id: group.id)
 
       visit group_path(group)
 
-      expect(page).not_to have_content "Red"
-      expect(page).to have_content sub_group.name
+      expect(page).to have_no_content "Red"
+      expect(page).to have_content sub_groups.last.name
     end
 
     scenario 'list only 5 sub-ergs and drop down for more for uncategorized sub-ergs', js: true do

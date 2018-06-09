@@ -3,14 +3,15 @@ require 'rails_helper'
 RSpec.describe BudgetsController, type: :controller do
   let!(:user) { FactoryGirl.create(:user) }
   let!(:group) { FactoryGirl.create(:group, enterprise: user.enterprise, :annual_budget => 100000) }
-  let!(:budget) { FactoryGirl.create(:approved_budget, group: group) }
+  let!(:budget) { FactoryGirl.create(:approved_budget, subject: group) }
+
 
   describe 'GET#index' do
     context 'with logged user' do
-      let!(:budget1) { create(:approved_budget, group: group) }
-      let!(:budget2) { create(:approved_budget, group: group) }
+      let!(:budget1) { create(:approved_budget, subject: group) }
+      let!(:budget2) { create(:approved_budget, subject: group) }
       login_user_from_let
-      before { get :index, group_id: budget.group.id }
+      before { get :index, group_id: budget.subject.id }
 
       it "renders index template" do
         expect(response).to render_template(:index)
@@ -26,15 +27,16 @@ RSpec.describe BudgetsController, type: :controller do
     end
 
     context "without logged user" do
-      before { get :index, group_id: budget.group.id }
+      before { get :index, group_id: budget.subject.id }
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
 
+
   describe 'GET#show' do
     context 'with logged user' do
       login_user_from_let
-      before { get :show, group_id: budget.group.id, id: budget.id }
+      before { get :show, group_id: budget.subject.id, id: budget.id }
 
       it "render show template" do
         expect(response).to render_template :show
@@ -46,10 +48,11 @@ RSpec.describe BudgetsController, type: :controller do
     end
 
     context 'without logged user' do
-      before { get :show, group_id: budget.group.id, id: budget.id }
+      before { get :show, group_id: budget.subject.id, id: budget.id }
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
+
 
   describe 'GET#new' do
     let!(:user) { FactoryGirl.create(:user) }
@@ -78,6 +81,7 @@ RSpec.describe BudgetsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
+
 
   describe 'POST#create' do
     context 'with logged user' do
@@ -116,7 +120,7 @@ RSpec.describe BudgetsController, type: :controller do
 
         it "flashes a notice message" do
           allow_any_instance_of(Group).to receive(:save).and_return(false)
-          post :create, group_id: group.id, budget: {group: nil}
+          post :create, group_id: group.id, budget: {subject: nil}
           expect(flash[:alert]).to eq "Your budget was not created. Please fix the errors"
         end
       end
@@ -128,12 +132,13 @@ RSpec.describe BudgetsController, type: :controller do
     end
   end
 
+
   describe 'POST#approve' do
     context 'with logged user' do
       login_user_from_let
 
       before do
-        post :approve, group_id: budget.group.id, budget_id: budget.id
+        post :approve, group_id: budget.subject.id, budget_id: budget.id
         BudgetManager.new(budget).approve(user)
       end
 
@@ -151,17 +156,18 @@ RSpec.describe BudgetsController, type: :controller do
     end
 
     context "without a logged in user" do
-      before { post :approve, group_id: budget.group.id, budget_id: budget.id}
+      before { post :approve, group_id: budget.subject.id, budget_id: budget.id}
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
+
 
   describe 'POST#decline' do
     context 'with logged user' do
       login_user_from_let
 
       before do
-        post :decline, group_id: budget.group.id, budget_id: budget.id
+        post :decline, group_id: budget.subject.id, budget_id: budget.id
         BudgetManager.new(budget).decline(user)
       end
 
@@ -180,7 +186,7 @@ RSpec.describe BudgetsController, type: :controller do
 
     context "without a logged in user" do
       before do
-        post :decline, group_id: budget.group.id, budget_id: budget.id
+        post :decline, group_id: budget.subject.id, budget_id: budget.id
         BudgetManager.new(budget).decline(user)
       end
 
@@ -188,21 +194,22 @@ RSpec.describe BudgetsController, type: :controller do
     end
   end
 
-  describe 'DELETE#destroy' do
+
+ describe 'DELETE#destroy' do
     context 'with logged user' do
       login_user_from_let
         context "with valid destroy" do
           it 'removes a budget' do
-            expect{ delete :destroy, group_id: budget.group.id, id: budget.id }.to change(Budget, :count).by(-1)
+            expect{ delete :destroy, group_id: budget.subject.id, id: budget.id }.to change(Budget, :count).by(-1)
           end
 
           it 'flashes a notice message' do
-            delete :destroy, group_id: budget.group.id, id: budget.id
+            delete :destroy, group_id: budget.subject.id, id: budget.id
             expect(flash[:notice]).to eq 'Your budget was deleted'
           end
 
           it 'redirects to index action' do
-            delete :destroy, group_id: budget.group.id, id: budget.id
+            delete :destroy, group_id: budget.subject.id, id: budget.id
             expect(response).to redirect_to action: :index
           end
         end
@@ -211,7 +218,7 @@ RSpec.describe BudgetsController, type: :controller do
           before {
             request.env["HTTP_REFERER"] = "back"
             allow_any_instance_of(Budget).to receive(:destroy).and_return(false)
-            delete :destroy, group_id: budget.group.id, id: budget.id
+            delete :destroy, group_id: budget.subject.id, id: budget.id
           }
 
           it 'flashes an alert' do
@@ -225,20 +232,15 @@ RSpec.describe BudgetsController, type: :controller do
     end
 
      context "without a logged in user" do
-        before {  delete :destroy, group_id: budget.group.id, id: budget.id }
+        before {  delete :destroy, group_id: budget.subject.id, id: budget.id }
         it_behaves_like "redirect user to users/sign_in path"
       end
   end
 
+
   describe 'GET#edit_annual_budget' do
     let(:user) { create :user }
     let(:group) { create :group, enterprise: user.enterprise }
-    
-    before {
-      user.policy_group.groups_manage = true
-      user.policy_group.annual_budget_manage = true
-      user.policy_group.save!
-    }
 
     def get_edit_annual_budget(group_id=-1)
       get :edit_annual_budget, group_id: group_id
@@ -264,6 +266,7 @@ RSpec.describe BudgetsController, type: :controller do
     end
   end
 
+
   describe 'put#reset_annual_budget' do
     context 'with logged user' do
       login_user_from_let
@@ -271,7 +274,7 @@ RSpec.describe BudgetsController, type: :controller do
 
           before {
             request.env["HTTP_REFERER"] = "back"
-            put :reset_annual_budget, group_id: budget.group.id, id: budget.id
+            put :reset_annual_budget, group_id: budget.subject.id, id: budget.id
           }
 
           it 'set annual_budget and leftover_money to zero' do
@@ -288,7 +291,7 @@ RSpec.describe BudgetsController, type: :controller do
 
             it 'creates public activity record' do
               expect{
-                put :reset_annual_budget, group_id: budget.group.id, id: budget.id
+                put :reset_annual_budget, group_id: budget.subject.id, id: budget.id
                 }.to change(PublicActivity::Activity, :count).by(1)
             end
 
@@ -298,7 +301,7 @@ RSpec.describe BudgetsController, type: :controller do
               let(:key) { 'group.annual_budget_update' }
 
               before {
-                put :reset_annual_budget, group_id: budget.group.id, id: budget.id
+                put :reset_annual_budget, group_id: budget.subject.id, id: budget.id
               }
 
               include_examples'correct public activity'
@@ -318,7 +321,7 @@ RSpec.describe BudgetsController, type: :controller do
           before {
             allow_any_instance_of(Group).to receive(:update).and_return(false)
             request.env["HTTP_REFERER"] = "back"
-            put :reset_annual_budget, group_id: budget.group.id, id: budget.id
+            put :reset_annual_budget, group_id: budget.subject.id, id: budget.id
           }
 
           it 'flashes an alert message' do
@@ -332,6 +335,7 @@ RSpec.describe BudgetsController, type: :controller do
     end
   end
 
+
   describe 'put#carry_over_annual_budget' do
     context 'with logged user' do
       login_user_from_let
@@ -339,7 +343,7 @@ RSpec.describe BudgetsController, type: :controller do
 
           before {
             request.env["HTTP_REFERER"] = "back"
-            put :carry_over_annual_budget, group_id: budget.group.id, id: budget.id
+            put :carry_over_annual_budget, group_id: budget.subject.id, id: budget.id
           }
 
           it 'set leftover_money to and zero annual_budget to 100000' do
@@ -356,7 +360,7 @@ RSpec.describe BudgetsController, type: :controller do
 
             it 'creates public activity record' do
               expect{
-                put :carry_over_annual_budget, group_id: budget.group.id, id: budget.id
+                put :carry_over_annual_budget, group_id: budget.subject.id, id: budget.id
                 }.to change(PublicActivity::Activity, :count).by(1)
             end
 
@@ -366,7 +370,7 @@ RSpec.describe BudgetsController, type: :controller do
               let(:key) { 'group.annual_budget_update' }
 
               before {
-                put :carry_over_annual_budget, group_id: budget.group.id, id: budget.id
+                put :carry_over_annual_budget, group_id: budget.subject.id, id: budget.id
               }
 
               include_examples'correct public activity'
@@ -386,7 +390,7 @@ RSpec.describe BudgetsController, type: :controller do
           before {
             allow_any_instance_of(Group).to receive(:update).and_return(false)
             request.env["HTTP_REFERER"] = "back"
-            put :carry_over_annual_budget, group_id: budget.group.id, id: budget.id
+            put :carry_over_annual_budget, group_id: budget.subject.id, id: budget.id
           }
 
           it 'flashes an alert message' do
@@ -399,6 +403,7 @@ RSpec.describe BudgetsController, type: :controller do
         end
     end
   end
+
 
   describe 'POST #update_annual_budget' do
     def post_update_annual_budget(group_id = -1, params = {})

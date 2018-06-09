@@ -14,8 +14,4 @@ class Enterprises::FoldersController < ApplicationController
   def set_container_path
     @container_path = [@enterprise]
   end
-  
-  def authorize_action
-    authorize ::Folder
-  end
 end

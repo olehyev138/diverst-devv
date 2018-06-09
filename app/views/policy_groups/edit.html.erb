@@ -1,0 +1,16 @@
+<div class="content__header">
+  <div class="flex-row flex-row--middle full-width">
+    <div class="flex-row__cell flex-row__cell--grow">
+      <h1>Edit this permission group</h1>
+    </div>
+    <div class="flex-row__cell">
+      <% if @policy_group.allow_deletion? && policy(@policy_group).destroy? %>
+        <%= link_to "Delete", policy_group_path(@policy_group), method: :delete, class: "btn btn--secondary", data: { confirm: "Are you sure?" } %>
+      <% else %>
+        <%= link_to 'This permission group cannot be deleted', '#', class: 'btn btn--tertiary', title: 'Only non-default permission groups with no users can be deleted' %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<%= render "form" %>

@@ -1,7 +1,8 @@
 class Tag < ActiveRecord::Base
+    
+  belongs_to :taggable, :polymorphic => true
 
-  belongs_to :resource
-  
+  validates :taggable,  presence: true, on: :update
   validates :name,      presence: true
   
   def self.ids_from_tokens(list)

@@ -24,8 +24,8 @@ module AdminViewHelper
   def active_global_settings_link?
     return true if controller_name == 'groups' && [].include?(action_name)
     return true if controller_name == 'enterprises' &&
-      ['edit_auth', 'edit_fields', 'edit_branding', 'edit_budgeting', 'edit_pending_comments'].include?(action_name)
+      ['edit_auth', 'edit_fields', 'edit_branding', 'edit_budgeting'].include?(action_name)
 
-    ['users', 'integrations', 'policy_group_templates', 'emails', 'notifications', 'rewards', 'logs'].include? controller_name
+    ['users', 'integrations', 'policy_groups', 'emails', 'notifications'].include? controller_name
   end
 end

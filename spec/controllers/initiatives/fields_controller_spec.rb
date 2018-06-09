@@ -4,7 +4,7 @@ RSpec.describe Initiatives::FieldsController, type: :controller do
     let(:user) { create :user }
     let(:group){ create(:group, enterprise: user.enterprise) }
     let(:initiative){ initiative_of_group(group) }
-    let(:field) {create :field, initiative: initiative, elasticsearch_only: false}
+    let(:field) {create :field, container_id: initiative.id, container_type: "Initiative", elasticsearch_only: false}
     let(:initiative_field) {create :initiative_field, initiative: initiative, field: field}
 
 
