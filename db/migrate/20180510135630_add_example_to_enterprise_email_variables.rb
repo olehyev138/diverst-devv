@@ -2,6 +2,10 @@ class AddExampleToEnterpriseEmailVariables < ActiveRecord::Migration
   def change
     add_column :enterprise_email_variables, :example, :text
     
+    # for some reason rake db:migrate is saying the example column doesn't exist yet when running the
+    # queries below
+    EnterpriseEmailVariable.reset_column_information
+    
     EnterpriseEmailVariable.where(:key => "user.name").update_all(:example => "John Smith")
     EnterpriseEmailVariable.where(:key => "group.name").update_all(:example => "Women's Advisory Group")
     EnterpriseEmailVariable.where(:key => "group_names").update_all(:example => "Women's Advisory Group, African Affinity Association")
