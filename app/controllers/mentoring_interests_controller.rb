@@ -1,6 +1,6 @@
 class MentoringInterestsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_topic, only: [:edit, :update]
+  before_action :set_topic, only: [:edit, :update, :destroy]
     
   layout 'mentorship'
 
@@ -31,7 +31,7 @@ class MentoringInterestsController < ApplicationController
   
   def update
     authorize MentoringInterest
-
+    
     if @topic.update(topic_params)
       flash[:notice] = "The topic was updated"
       redirect_to action: :index
@@ -39,6 +39,11 @@ class MentoringInterestsController < ApplicationController
       flash[:alert] = "The topic was not updated. Please fix the errors"
       render :edit
     end
+  end
+  
+  def destroy
+    @topic.destroy
+    redirect_to :back
   end
   
   def set_topic

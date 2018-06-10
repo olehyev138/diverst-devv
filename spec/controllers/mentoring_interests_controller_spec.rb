@@ -81,44 +81,35 @@ RSpec.describe MentoringInterestsController, type: :controller do
     
     describe 'PUT #update' do
         describe "if user is present" do 
-            
+            let(:mentoring_interest){create(:mentoring_interest, :enterprise_id => user.enterprise.id)}
             login_user_from_let
+            
             before {
-                request.env["HTTP_REFERER"] = "back"
+                patch :update, :id => mentoring_interest.id, :mentoring_interest => {:name => "updated"}
             }
             
-            it "creates the request for the user as the mentor" do
-                mentoring_request = create(:mentoring_request, :sender => user, :receiver => mentor, :enterprise => user.enterprise)
-                patch :update, :id => mentoring_request.id
-                expect(flash[:notice]).to eq("Your request was approved")
+            it "creates the topic and flashes" do
+                expect(flash[:notice]).to eq("The topic was updated")
             end
             
-            it "creates the request for the user as the mentee" do
-                mentoring_request = create(:mentoring_request, :sender => mentor, :receiver => user, :enterprise => user.enterprise)
-                patch :update, :id => mentoring_request.id
-                expect(flash[:notice]).to eq("Your request was approved")
-            end
-            
-            it "redirects back" do
-                mentoring_request = create(:mentoring_request, :sender => user, :receiver => mentor, :enterprise => user.enterprise)
-                patch :update, :id => mentoring_request.id
-                expect(response).to redirect_to "back"
+            it "redirects to index" do
+                expect(response).to redirect_to action: :index
             end
         end
     end
     
     describe 'DELETE #destroy' do
         describe "if user is present" do 
-            
+            let(:mentoring_interest){create(:mentoring_interest, :enterprise_id => user.enterprise.id)}
             login_user_from_let
+            
             before {
                 request.env["HTTP_REFERER"] = "back"
+                delete :destroy, :id => mentoring_interest.id
             }
             
             it "destroys the request" do
-                mentoring_request = create(:mentoring_request, :sender => user, :receiver => mentor, :enterprise => user.enterprise)
-                delete :destroy, :id => mentoring_request.id
-                expect{MentoringRequest.find(mentoring_request.id)}.to raise_error ActiveRecord::RecordNotFound
+                expect{MentoringInterest.find(mentoring_interest.id)}.to raise_error ActiveRecord::RecordNotFound
             end
         end
     end
