@@ -4,14 +4,12 @@
     <div class="col-xs-8">
       <div class="card">
         <div class="card__section card__section--border">
-            <% if @mentoring_session.link.present? %>
-                <label><strong>Session has ended.</strong></label>
-                <%= link_to "Leave some feedback", user_news_links_path(:page => 2), class: "btn btn--primary" %>
-            <% end %>
-         </div>
+            <%= link_to "Edit", edit_mentoring_session_path(@mentoring_session)  %>
+        </div>
         <div class="card__section card__section--border">
             <label><strong>Starts</strong></label>
             <p><%= @mentoring_session.start.strftime("%m/%d/%Y %H:%M") %></p>
+            <%= link_to "START SESSION", start_mentoring_session_path(@mentoring_session), target: "_blank", class: "muted", role: "button", 'aria-label': "Start" %>
          </div>
         <div class="card__section card__section--border">
             <label><strong>Ends</strong></label>
@@ -55,7 +53,6 @@
                         <span>N/A</span>
                     <% else %>
                         <span><%= link_to resource.title, resource.url, target: '_blank' %></span>
-                        <span><%= link_to 'Link', resource.url, target: '_blank' %></span>
                     <% end %>
                 </p>
             <% end %>

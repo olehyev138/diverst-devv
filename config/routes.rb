@@ -460,8 +460,13 @@ Rails.application.routes.draw do
   end
   
   resources :mentorings
+  resources :mentoring_interests
   resources :mentoring_requests
-  resources :mentoring_sessions
+  resources :mentoring_sessions do
+    member do
+      get 'start'
+    end
+  end
   resources :mentorship_ratings
   
   resources :metrics_dashboards do

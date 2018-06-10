@@ -99,5 +99,7 @@ class CreateMentorshipModule < ActiveRecord::Migration
       t.text        :comments,          null: false
       t.timestamps
     end
+    
+    add_column :enterprises, :mentorship_module_enabled, :boolean, :default => false
   end
 end

@@ -1,7 +1,7 @@
 <div class="col-xs-8">
   <div class="card">
     <div class="card__section">
-      <%= simple_form_for @mentoring_session, :method => :post do |f| %>
+      <%= simple_form_for @mentoring_session do |f| %>
         <div class="card__section">
           <div class="row row--spacing-bottom">
             <div class="card__section card__section--border">
@@ -25,7 +25,7 @@
             <div class="col md-12">
               <p class="field__hint">Session format</p>
               <%= f.input :format,
-                  collection: ["Webex", "Zoom", "Google Hangouts", "In Person"],
+                  collection: ["Video", "In Person"],
                   input_html: { class: "select2" },
                   label: false %>
             </div>
