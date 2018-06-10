@@ -605,13 +605,14 @@ ActiveRecord::Schema.define(version: 20180520224540) do
     t.integer  "sponsor_media_file_size",    limit: 4
     t.datetime "sponsor_media_updated_at"
     t.string   "company_video_url",          limit: 191
-    t.string   "contact_email",              limit: 191
     t.string   "latest_news_visibility",     limit: 191
     t.string   "upcoming_events_visibility", limit: 191
     t.integer  "group_category_id",          limit: 4
     t.integer  "group_category_type_id",     limit: 4
     t.boolean  "private",                                                          default: false
     t.text     "short_description",          limit: 65535
+    t.string   "layout",                     limit: 191
+    t.text     "home_message",               limit: 65535
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
