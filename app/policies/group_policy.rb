@@ -88,7 +88,7 @@ class GroupPolicy < ApplicationPolicy
             return true
         when 'group'
             #Only active group members can see other members
-            is_active_member?
+            is_active_member? || manage_members?
         when 'managers_only'
             #Only users with ability to manipulate members(admins) can see other members
             return manage_members?
@@ -103,7 +103,7 @@ class GroupPolicy < ApplicationPolicy
             return true
         when 'group'
             #Only active group messages can see other messages
-            is_active_member?
+            is_active_member? || manage_members?
         when 'managers_only'
             #Only users with ability to manipulate messages(admins) can see other memberxs
             return manage_members?
@@ -118,7 +118,7 @@ class GroupPolicy < ApplicationPolicy
             return true
         when 'group'
             #Only active group members and guests(non-members) can see latest news
-            is_active_member? || is_a_guest? || is_a_pending_member?
+            is_active_member? || is_a_guest? || is_a_pending_member? || manage_members?
         when 'leaders_only'
             #Only users with ability to manipulate members(admins) can see latest news
             return manage_members?
@@ -135,7 +135,7 @@ class GroupPolicy < ApplicationPolicy
             return true
         when 'group'
             #depends on group membership
-            is_active_member? || is_a_member?
+            is_active_member? || is_a_member? || manage_members?
         when 'leaders_only'
             #Only users with ability to manipulate members(admins) can see upcoming events
             return manage_members?
@@ -156,7 +156,7 @@ class GroupPolicy < ApplicationPolicy
         when 'group'
             @upcoming_events = @record.initiatives.upcoming.limit(3) + @record.participating_initiatives.upcoming.limit(3)
             # for members(who are not pending members) and when upcoming events are not empty
-            return true if is_a_member? && !is_a_pending_member? && @upcoming_events
+            return true if is_a_member? && !is_a_pending_member? && @upcoming_events || manage_members?
         when 'leaders_only'
             #Only users with ability to manipulate members(admins) can see upcoming events
             return manage_members?
