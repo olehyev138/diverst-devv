@@ -22,7 +22,7 @@ class GroupsController < ApplicationController
 
     def close_budgets
         authorize Group
-        @groups = GroupPolicy::Scope.new(current_user, Group, :mana).resolve.includes(:children).all_parents
+        @groups = GroupPolicy::Scope.new(current_user, Group, :groups_budgets_index).resolve.includes(:children).all_parents
     end
 
     # calendar for all of the groups
