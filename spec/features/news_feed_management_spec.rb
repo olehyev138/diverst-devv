@@ -35,8 +35,10 @@ RSpec.feature 'News Feed Management' do
 				visit group_posts_path(group)
 
 				expect(page).to have_content existing_group_message.subject
-
-				click_on 'Edit'
+				
+				within find(".group-capybara") do
+					click_on 'Edit'
+				end
 
 				fill_in 'group_message[subject]', with: 'Updated Group Message!!!'
 
