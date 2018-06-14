@@ -1,14 +1,25 @@
 <div class="content__header">
   <h1><%= @container.name %></h1>
   <div class="flex-row flex-row--middle">
-    <div class="flex-row__cell">
+    <div class="flex-row__cell hidden-xs">
       <%= link_to "Edit Folder", polymorphic_path(@container_path, action: "edit"), class: "btn btn--primary" if policy(@container).edit? %>
     </div>
-    <div class="flex-row__cell">
+    <div class="flex-row__cell hidden-xs">
       <%= link_to "+ Add folder", polymorphic_path([@container.container] + [:folder], folder_id: @container.id, action: "new"), class: "btn btn--primary" if policy(Folder).create? && @container.class.name === "Folder" %>
     </div>
-    <div class="flex-row__cell">
+    <div class="flex-row__cell hidden-xs">
       <%= link_to "+ Add resource", polymorphic_path(@container_path + [:resource], action: "new"), class: "btn btn--primary" if policy(Resource).new? %>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row visible-xs text-center">
+      <div class="col-xs-12">
+        <div class="btn-group">
+          <%= link_to "Edit Folder", polymorphic_path(@container_path, action: "edit"), class: "btn btn-primary" if policy(@container).edit? %>
+          <%= link_to "+ Folder", polymorphic_path([@container.container] + [:folder], folder_id: @container.id, action: "new"), class: "btn btn-primary" if policy(Folder).create? && @container.class.name === "Folder" %>
+          <%= link_to "+ Resource", polymorphic_path(@container_path + [:resource], action: "new"), class: "btn btn-primary" if policy(Resource).new? %>
+        </div>
+      </div>
     </div>
   </div>
 </div>

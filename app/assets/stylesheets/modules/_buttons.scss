@@ -48,6 +48,34 @@
 
 // Variants
 
+.btn-primary {
+  background-color: $primary-color;
+}
+
+.btn-primary:hover {
+  color: black;
+  background-color: $primary-color;
+}
+
+.btn-primary {
+  background-color: $primary-color;
+}
+
+.btn-primary:hover {
+  color: black;
+  background-color: $primary-color;
+}
+
+.btn-secondary {
+  color: white;
+  background-color: $diverst-black;
+}
+
+.btn-secondary:hover {
+  color: white;
+  background-color: $diverst-black;
+}
+
 .btn--primary {
   @include button($primary-color);
 }

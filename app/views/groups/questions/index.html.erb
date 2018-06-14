@@ -1,10 +1,10 @@
 <div class="content__main">
   <div class="card">
     <div class="card__section row">
-      <div class="col sm-10" style="padding-top: 15px;">
+      <div class="col xs-10" style="padding-top: 15px;">
         <b><%= @answers_count %></b> members have already provided their preferences.
       </div>
-      <div class="col sm-2">
+      <div class="col sm-2 hidden-xs">
         <%= link_to "Export CSV", export_csv_group_questions_path(@group, format: :csv), class: "btn btn--secondary" %>
       </div>
     </div>
