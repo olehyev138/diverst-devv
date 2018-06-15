@@ -171,5 +171,55 @@ class UpdatePermissionsWorkflow < ActiveRecord::Migration
     add_column  :users, :policy_group_id, :integer
     
     add_reference :policy_groups, :enterprise
+    
+    # we need to reset everyone's permissions back to normal
+    Enterprise.find_each do |enterprise|
+      # create a new policy_group
+      policy_group = enterprise.policy_groups.new(:name => "SuperAdmins", :default_for_enterprise => true)
+      policy_group.admin_pages_view = true
+      policy_group.annual_budget_manage = true
+      policy_group.budget_approval = true
+      policy_group.campaigns_create = true
+      policy_group.campaigns_index = true
+      policy_group.campaigns_manage = true
+      policy_group.enterprise_resources_create = true
+      policy_group.enterprise_resources_index = true
+      policy_group.enterprise_resources_manage = true
+      policy_group.events_create = true
+      policy_group.events_index = true
+      policy_group.events_manage = true
+      policy_group.global_settings_manage = true
+      policy_group.group_messages_create = true
+      policy_group.group_messages_index = true
+      policy_group.group_messages_manage = true
+      policy_group.groups_budgets_index = true
+      policy_group.groups_budgets_request = true
+      policy_group.groups_create = true
+      policy_group.groups_index = true
+      policy_group.groups_manage = true
+      policy_group.groups_members_index = true
+      policy_group.groups_members_manage = true
+      policy_group.initiatives_create = true
+      policy_group.initiatives_index = true
+      policy_group.initiatives_manage = true
+      policy_group.logs_view = true
+      policy_group.metrics_dashboards_create = true
+      policy_group.metrics_dashboards_index = true
+      policy_group.news_links_create = true
+      policy_group.news_links_index = true
+      policy_group.news_links_manage = true
+      policy_group.polls_create = true
+      policy_group.polls_index = true
+      policy_group.polls_manage = true
+      policy_group.segments_create = true
+      policy_group.segments_index = true
+      policy_group.segments_manage = true
+      policy_group.users_index = true
+      policy_group.users_manage = true
+      policy_group.save
+      
+      # set all users to have the same policy_group
+      enterprise.users.update_all(:policy_group_id => policy_group.id)
+    end
   end
 end
