@@ -31,17 +31,10 @@
 </div>
 
 <% if @container.class.name === "Folder" %>
-<<<<<<< HEAD
   
   <div class="row">
     <% @container.children.each_with_index  do |folder, index| %>
       
-=======
-
-  <div class="row">
-    <% @container.children.each_with_index  do |folder, index| %>
-
->>>>>>> kp_staging
       <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
         <h4>
           <%= folder.name %>&nbsp;
@@ -53,17 +46,10 @@
         <%= link_to inline_svg('icons/folder.svg', size: '100px*100px'), polymorphic_path([@container.enterprise || @container.group] + [folder] + [:resources]) if !folder.password_protected %>
         <%= link_to inline_svg('icons/folder.svg', size: '100px*100px'), [@container.enterprise || @container.group] + [folder], method: :get, remote: true if folder.password_protected %>
       </div>
-<<<<<<< HEAD
     
     <% end %>
   </div>
   
-=======
-
-    <% end %>
-  </div>
-
->>>>>>> kp_staging
   <%= render "shared/modal/form" %>
 
 <% end %>
