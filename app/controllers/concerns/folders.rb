@@ -26,10 +26,12 @@ module Folders
     end
 
     def show
+        authorize_action
         render "/show"
     end
 
     def new
+        authorize_action
         @folder = @container.folders.new
         @folder.parent_id = params[:folder_id] 
         @folder.password
@@ -37,14 +39,20 @@ module Folders
     end
 
     def edit
+        authorize_action
         render '/edit'
     end
 
     def create
+        authorize_action
         @folder = @container.folders.new(folder_params)
         if @folder.save
             if @folder.parent_id
-                redirect_to [@folder.parent.container, @folder.parent, :resources]
+                if @folder.parent.group
+                    redirect_to [@folder.parent.group, @folder.parent, :resources]
+                else
+                    redirect_to [@folder.parent.enterprise, @folder.parent, :resources]
+                end
             else
                 redirect_to action: :index
             end
@@ -54,6 +62,7 @@ module Folders
     end
 
     def update
+        authorize_action
         if @folder.update(folder_params)
             redirect_to action: :index
         else
@@ -62,6 +71,7 @@ module Folders
     end
 
     def destroy
+        authorize_action
         @folder.destroy
         redirect_to action: :index
     end

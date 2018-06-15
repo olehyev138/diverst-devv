@@ -63,7 +63,7 @@ module IsResources
                 :title,
                 :file,
                 :resource_type,
-                :container_id,
+                :folder_id,
                 :url
             )
     end

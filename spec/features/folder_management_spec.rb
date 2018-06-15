@@ -2,9 +2,9 @@ require 'rails_helper'
 
 RSpec.feature 'Folder management' do
 	let!(:user) { create(:user) }
-	let!(:folder_with_pp) { create(:folder, container: user.enterprise, name: "Company Archives",
+	let!(:folder_with_pp) { create(:folder, enterprise: user.enterprise, name: "Company Archives",
 	 password_protected: true, password: "password_2") }
-	let!(:folder_without_pp) { create(:folder, container: user.enterprise, name: "Company Documents",
+	let!(:folder_without_pp) { create(:folder, enterprise: user.enterprise, name: "Company Documents",
 	 password_protected: false) }
 	let!(:group) { create(:group, name: "New Group", enterprise_id: user.enterprise_id ) }
 
@@ -181,7 +181,7 @@ RSpec.feature 'Folder management' do
 		end
 
 		scenario 'sub folder' do
-			sub_folder = create(:folder, name: 'Sub Folder', parent_id: folder_without_pp.id, container: user.enterprise)
+			sub_folder = create(:folder, name: 'Sub Folder', parent_id: folder_without_pp.id, enterprise: user.enterprise)
 
 			visit enterprise_folder_resources_url(user.enterprise, folder_without_pp)
 

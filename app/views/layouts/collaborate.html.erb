@@ -10,10 +10,10 @@
   <nav id="navigation" class="jq-dropdown jq-dropdown-tip">
     <ul class="jq-dropdown-menu">
       <li>
-        <%= active_link_to "Campaigns", campaigns_path %>
+        <%= active_link_to "Campaigns", campaigns_path if policy(Campaign).index? %>
       </li>
       <li>
-        <%= active_link_to "Financials", expenses_path %>
+        <%= active_link_to "Financials", expenses_path if policy(Campaign).index? %>
       </li>
       <% if manage_erg_root_path %>
         <li>

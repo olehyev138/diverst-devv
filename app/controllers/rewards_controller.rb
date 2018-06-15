@@ -7,18 +7,18 @@ class RewardsController < ApplicationController
   layout 'global_settings'
 
   def index
-    authorize @enterprise, :update?
+    authorize @enterprise, :diversity_manage?
     @rewards = @enterprise.rewards
     @badges = @enterprise.badges
   end
 
   def new
-    authorize @enterprise, :update?
+    authorize @enterprise, :diversity_manage?
     @reward = Reward.new
   end
 
   def create
-    authorize @enterprise, :update?
+    authorize @enterprise, :diversity_manage?
     @reward = @enterprise.rewards.new(reward_params)
     if @reward.save
       flash[:notice] = "Your prize was created"
@@ -30,12 +30,12 @@ class RewardsController < ApplicationController
   end
 
   def edit
-    authorize @enterprise, :update?
+    authorize @enterprise, :diversity_manage?
     @reward = @enterprise.rewards.find(params[:id])
   end
 
   def update
-    authorize @enterprise, :update?
+    authorize @enterprise, :diversity_manage?
     if @reward.update(reward_params)
       flash[:notice] = "Your prize was updated"
       redirect_to action: :index
@@ -46,7 +46,7 @@ class RewardsController < ApplicationController
   end
 
   def destroy
-    authorize @enterprise, :update?
+    authorize @enterprise, :diversity_manage?
     @reward.destroy
     flash[:notice] = "Your prize was deleted"
     redirect_to action: :index

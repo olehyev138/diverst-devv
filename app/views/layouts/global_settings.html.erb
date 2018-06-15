@@ -10,34 +10,34 @@
   <nav id="navigation" class="jq-dropdown jq-dropdown-tip">
     <ul class="jq-dropdown-menu">
       <li>
-        <%= active_link_to "Users", users_path if policy(User).index? %>
+        <%= active_link_to "Users", users_path if current_user.policy_group.users_index? %>
       </li>
       <li>
-        <%= active_link_to "SSO", edit_auth_enterprise_path(current_user.enterprise) %>
+        <%= active_link_to "SSO", edit_auth_enterprise_path(current_user.enterprise) if current_user.policy_group.sso_manage? %>
       </li>
       <li>
-        <%= active_link_to "Permissions", policy_groups_path %>
+        <%= active_link_to "Permissions", policy_group_templates_path if current_user.policy_group.permissions_manage? %>
       </li>
       <li>
         <%= active_link_to "Fields", edit_fields_enterprise_path(current_user.enterprise) if policy(current_user.enterprise).edit_fields? %>
       </li>
       <li>
-        <%= active_link_to "Texts", edit_custom_text_path(current_user.enterprise.custom_text) %>
+        <%= active_link_to "Texts", edit_custom_text_path(current_user.enterprise.custom_text) if policy(current_user.enterprise).edit_fields? %>
       </li>
       <li>
         <%= active_link_to "Branding", edit_branding_enterprise_path(current_user.enterprise) if policy(current_user.enterprise).edit_fields? %>
       </li>
       <li>
-        <%= active_link_to "Integrations", integrations_path, class: "secondary-header__tab" %>
+        <%= active_link_to "Integrations", integrations_path, class: "secondary-header__tab" if current_user.policy_group.sso_manage? %>
       </li>
       <li>
-        <%= active_link_to c_t(:dci_abbreviation), rewards_path, class: "secondary-header__tab" %>
+        <%= active_link_to c_t(:dci_abbreviation), rewards_path, class: "secondary-header__tab" if current_user.policy_group.diversity_manage? %>
       </li>
       <li>
-        <%= active_link_to "Logs", logs_path, class: "secondary-header__tab" %>
+        <%= active_link_to "Logs", logs_path, class: "secondary-header__tab" if current_user.policy_group.logs_view? %>
       </li>
       <li>
-        <%= active_link_to "Pending Comments", edit_pending_comments_enterprise_path(current_user.enterprise) if policy(current_user.enterprise).edit_fields? %>
+        <%= active_link_to "Pending Comments", edit_pending_comments_enterprise_path(current_user.enterprise) if current_user.policy_group.manage_posts? %>
       </li>
       <% if manage_erg_root_path %>
         <li>
@@ -60,16 +60,16 @@
 </div>
 
 <div class="menu menu--desktop">
-  <%= active_link_to "Users", users_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(User).index? %>
-  <%= active_link_to "SSO", edit_auth_enterprise_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-  <%= active_link_to "Permissions", policy_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to "Users", users_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.users_index? %>
+  <%= active_link_to "SSO", edit_auth_enterprise_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.sso_manage? %>
+  <%= active_link_to "Permissions", policy_group_templates_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.permissions_manage? %>
   <%= active_link_to "Fields", edit_fields_enterprise_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(current_user.enterprise).edit_fields? %>
-  <%= active_link_to "Texts", edit_custom_text_path(current_user.enterprise.custom_text), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to "Texts", edit_custom_text_path(current_user.enterprise.custom_text), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(current_user.enterprise).edit_fields? %>
   <%= active_link_to "Branding", edit_branding_enterprise_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(current_user.enterprise).edit_fields? %>
-  <%= active_link_to "Integrations", integrations_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-  <%= active_link_to c_t(:dci_abbreviation), rewards_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-  <%= active_link_to "Logs", logs_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-  <%= active_link_to "Posts", edit_pending_comments_enterprise_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(current_user.enterprise).edit_fields? %>
+  <%= active_link_to "Integrations", integrations_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.sso_manage? %>
+  <%= active_link_to c_t(:dci_abbreviation), rewards_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.diversity_manage? %>
+  <%= active_link_to "Logs", logs_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.logs_view? %>
+  <%= active_link_to "Posts", edit_pending_comments_enterprise_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.manage_posts? %>
 </div>
 <% end %>
 

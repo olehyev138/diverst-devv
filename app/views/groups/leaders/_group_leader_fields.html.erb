@@ -10,16 +10,17 @@
   </label>
   <div class="custom-user-select">
     <%= f.association :user,
-    collection: @group.members,
-    include_blank: true,
-    input_html: { class: "select2", autofocus: true },
-    label: false
+          collection: @group.members,
+          include_blank: true,
+          input_html: { class: "select2", autofocus: true },
+          label: false
     %>
   </div>
-
+  
   <div class="custom-position-field">
     <%= f.input :position_name, input_html: { class: "sortable-focus" } %>
   </div>
+  <%= f.input :user_role_id, :collection => current_user.enterprise.user_roles.group_type, :label_method => :role_name, :value_method => :id, :label => "Group Role" ,:include_blank => false %>
   <%= f.hidden_field :visible, value: 0 %>
 
   <div class="show-leader-field">
@@ -42,8 +43,12 @@
     <%= f.input :pending_posts_notifications_enabled, label: "Receive daily notifications about pending posts" %>
   </div>
   <%= f.hidden_field :default_group_contact, value: 0 %>
+<<<<<<< HEAD
+  <%= f.input :default_group_contact, label: "Set email as contact of group" %>
+=======
 
   <div class="group-contact-field">
     <%= f.input :default_group_contact, label: "set email as contact of group" %>
   </div>
+>>>>>>> develop
 </div>

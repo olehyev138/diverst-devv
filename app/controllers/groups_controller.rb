@@ -12,23 +12,22 @@ class GroupsController < ApplicationController
 
     def index
         authorize Group
-        @groups = current_user.enterprise.groups.includes(:children).all_parents
+        @groups = GroupPolicy::Scope.new(current_user, Group, :groups_manage).resolve.includes(:children).all_parents
     end
 
     def plan_overview
         authorize Group
-        @groups = current_user.enterprise.groups.includes(:initiatives)
+        @groups = GroupPolicy::Scope.new(current_user, Group, :groups_budgets_index).resolve
     end
 
     def close_budgets
         authorize Group
-        user_not_authorized if not current_user.policy_group.annual_budget_manage?
-        @groups = current_user.enterprise.groups.includes(:children).all_parents
+        @groups = GroupPolicy::Scope.new(current_user, Group, :mana).resolve.includes(:children).all_parents
     end
 
     # calendar for all of the groups
     def calendar
-        authorize Group, :index?
+        authorize Group
         enterprise = current_user.enterprise
         @groups = enterprise.groups.all_parents
         @segments = enterprise.segments
@@ -89,7 +88,7 @@ class GroupsController < ApplicationController
             base_show
 
             @posts = @group.news_feed_links
-                            .includes(:link)
+                            .includes(:news_link, :group_message, :social_link)
                             .approved
                             .order(is_pinned: :desc, created_at: :desc)
                             .limit(5)
@@ -98,7 +97,7 @@ class GroupsController < ApplicationController
                 base_show
 
                 @posts = @group.news_feed_links
-                            .includes(:link)
+                            .includes(:news_link, :group_message, :social_link)
                             .approved
                             .joins(joins)
                             .where(where, current_user.segments.pluck(:id))
@@ -115,7 +114,7 @@ class GroupsController < ApplicationController
                 @top_user_group_participants = []
                 @top_group_participants = []
                 @posts = @group.news_feed_links
-                            .includes(:link)
+                            .includes(:news_link, :group_message, :social_link)
                             .approved
                             .joins(joins)
                             .where(where, current_user.segments.pluck(:id))

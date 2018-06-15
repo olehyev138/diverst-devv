@@ -48,7 +48,8 @@ Rails.application.routes.draw do
       post 'test_notif'
     end
   end
-
+  
+  resources :user_roles
   resources :users do
     member do
       get 'group_surveys'
@@ -472,11 +473,7 @@ Rails.application.routes.draw do
     resources :leads
   end
 
-  resources :policy_groups do
-    member do
-      post 'add_users'
-    end
-  end
+  resources :policy_group_templates
   resources :emails
   resources :custom_texts, only: [:edit, :update]
 
