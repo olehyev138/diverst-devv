@@ -30,11 +30,25 @@
           </li>
         <% end %>
       <% end %>
-      <li>
         <% if current_user.policy_group.annual_budget_manage? %>
+              <li>
           <%= active_link_to "Budgeting", close_budgets_groups_path %>
+                </li>
         <% end %>
-      </li>
+      <% if manage_erg_root_path %>
+        <li>
+          <%= active_link_to "Manage #{c_t(:erg)}", manage_erg_root_path %>
+        </li>
+      <% end %>
+      <% if policy(Campaign).index? %>
+        <li><%= active_link_to "Innovate", campaigns_path %></li>
+      <% end %>
+      <% if policy(Poll).index? %>
+        <li><%= active_link_to "Include", polls_path %></li>
+      <% end %>
+      <% if global_settings_path %>
+        <li><%= active_link_to "Global Settings", global_settings_path %></li>
+      <% end %>
     </ul>
   </nav>
 </div>
