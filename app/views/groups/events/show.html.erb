@@ -3,19 +3,30 @@
     <%= link_to "Events", group_events_path(@group) %> /
     <%= @event.name %>
   </h1>
-  <div class="flex-row">
+  <div class="flex-row hidden-xs">
     <div class="flex-row__cell">
       <%= link_to "Delete event", group_initiative_path(@group, @event), method: :delete, class: "btn btn--secondary",  data: { confirm: "Are you sure?" } if policy(@event).destroy? %>
     </div>
     <div class="flex-row__cell">
       <%= link_to "Edit event", edit_group_initiative_path(@group, @event), class: "btn btn--primary" if policy(@event).edit? %>
     </div>
-    <div class="flex-row__cell">
+    <div class="flex-row__cell hidden-sm hidden-xs">
       <%= link_to "Export attendees", attendees_group_initiative_path(@group, @event, format: :csv), class: "btn btn--primary" if policy(@event).edit? %>
     </div>
 
     <div class="flex-row__cell">
        <a href="#" class="btn btn--primary js-join-event" data-joined="<%= current_user.initiatives.include? @event %>"><%= current_user.initiatives.include?(@event) ? "Leave event" : "Join event" %></a>
+    </div>
+  </div>
+  <div class="container-fluid visible-xs">
+    <div class="row">
+      <div class="col-xs-12 text-center">
+        <div class="btn-group">
+          <%= link_to "Delete", group_initiative_path(@group, @event), method: :delete, class: "btn btn-sm btn-secondary",  data: { confirm: "Are you sure?" } if policy(@event).destroy? %>
+          <%= link_to "Edit", edit_group_initiative_path(@group, @event), class: "btn btn-sm btn-primary" if policy(@event).edit? %>
+          <a href="#" class="btn btn-sm btn-primary js-join-event" data-joined="<%= current_user.initiatives.include? @event %>"><%= current_user.initiatives.include?(@event) ? "Leave" : "Join" %></a>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -24,7 +35,7 @@
   <div class="card">
     <div class="card__section">
       <div class="row">
-        <div class="col sm-8">
+        <div class="col-sm-8 col-xs-12">
           <% if @event.picture.exists? %>
             <div style="background-image: url(<%= @event.picture.expiring_url(3600) %>);" class="card__section--image-preview"></div>
           <% end %>
@@ -40,7 +51,7 @@
           <h4>Co-hosted/Participating Groups</h4>
           <p><%= @event.participating_groups.map(&:name).join(", ") %></p>
         </div>
-        <div class="col sm-4">
+        <div class="col-sm-4 col-xs-12">
           <h4>Attendees (<%= @event.attendees.count %>)</h4>
           <p>
             <% @event.attendees.limit(10).each do |attendee| %>

@@ -27,7 +27,7 @@
 .card__section {
   padding: $spacing-medium;
   position: relative;
-  overflow-wrap: break-word;
+  overflow-x: scroll;
 
   @include mq(medium) {
     padding: $spacing-large;
