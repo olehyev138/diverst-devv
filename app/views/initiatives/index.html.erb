@@ -9,7 +9,8 @@
       </select>
     </div>
     <div class="col-xs-4">
-      <%= link_to "New Event", new_group_initiative_path(@group), class: "btn btn--primary" if policy(Initiative).new? %>
+      <%= link_to "New Event", new_group_initiative_path(@group), class: "btn btn--primary btn-lg hidden-xs" if policy(Initiative).new? %>
+      <%= link_to "New", new_group_initiative_path(@group), class: "btn btn-primary btn-lg visible-xs" if policy(Initiative).new? %>
     </div>
   </div>
   <br>

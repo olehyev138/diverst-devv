@@ -11,7 +11,7 @@
       <%= link_to "Edit event", edit_group_initiative_path(@group, @event), class: "btn btn--primary" if policy(@event).edit? %>
     </div>
     <div class="flex-row__cell hidden-sm hidden-xs">
-      <%= link_to "Export attendees", attendees_group_initiative_path(@group, @event, format: :csv), class: "btn btn--primary" if policy(@event).edit? %>
+      <%= link_to "Export attendees", attendees_group_initiative_path(@group, @event, format: :csv), class: "btn btn--primary hidden-xs" if policy(@event).edit? %>
     </div>
 
     <div class="flex-row__cell">
@@ -59,9 +59,9 @@
             <% end %>
             <%= link_to "View #{@event.attendees.count - 10} more...", group_event_attendance_path(@group, @event) if @event.attendees.count > 10 %>
           </p>
-          <%= link_to "Add to Google Calendar", GoogleCalendar.build_link(@event), target: :_blank %>
+          <%= link_to "Add to Google Calendar", GoogleCalendar.build_link(@event), target: :_blank, class: "hidden-xs" %>
           <br>
-          <%= link_to "Add to calendar", export_ics_group_event_path(@group, @event) %>
+          <%= link_to "Add to calendar", export_ics_group_event_path(@group, @event), class: "hidden-xs" %>
         </div>
       </div>
     </div>
