@@ -88,6 +88,11 @@
   color: $diverst-grey-light;
 }
 
+.btn-tertiary {
+  color: black;
+  background-color: $diverst-grey-light;
+}
+
 .btn--tertiary {
   @include button($diverst-grey-light);
 }
