@@ -19,18 +19,34 @@
         <div class="flex-row flex-row--middle">
           <div class="flex-row__cell flex-row__cell--grow">
             <h4><%= news_link.title %> - <span class="muted"> <%= news_link.total_views %> views</span></h4>
-            <p>
-              <%= allow_newlines news_link.description %>
-              <br>
-              <%= link_to news_link.url, news_link.url, target: '_blank', 'data-trackable': news_link.news_feed_link.id %>
-              <br>
-              <% if news_link.author.present? %>
-                <span class="muted">Posted by <%=  news_link.author.name_with_status %></span>
-              <% end %>
-              <br>
-              <%= link_to "Comments(#{news_link.comments_count})", comments_group_news_link_path(news_link.group,news_link) %>
+            <div class="hidden-xs">
+                      <p>
+          <%= allow_newlines news_link.description %>
+          <br>
+          <%= link_to news_link.url, news_link.url, target: '_blank', 'data-trackable': news_link.news_feed_link.id %>
+          <br>
+          <% if news_link.author.present? %>
+            <span class="muted">Posted by <%=  news_link.author.name_with_status %></span>
+          <% end %>
+          <br>
+          <%= link_to "Comments(#{news_link.comments_count})", comments_group_news_link_path(news_link.group,news_link) %>
+            </div>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="row visible-xs">
+      <div class="col-xs-12">
+        <p>
+          <%= allow_newlines news_link.description %>
+          <br>
+          <%= link_to news_link.url, news_link.url, target: '_blank', 'data-trackable': news_link.news_feed_link.id %>
+          <br>
+          <% if news_link.author.present? %>
+            <span class="muted">Posted by <%=  news_link.author.name_with_status %></span>
+          <% end %>
+          <br>
+          <%= link_to "Comments(#{news_link.comments_count})", comments_group_news_link_path(news_link.group,news_link) %>
       </div>
     </div>
     <div class="row">

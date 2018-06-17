@@ -16,6 +16,10 @@ module ApplicationHelper
   def logo_url(enterprise = nil)
     enterprise_logo_or_default('diverst-logo.svg', enterprise)
   end
+  
+  def small_logo_url(enterprise = nil)
+    enterprise_logo_or_default('diverst-logo-mark.svg', enterprise)
+  end
 
   def login_logo(enterprise = nil)
     enterprise_logo_or_default('diverst-logo-purple.svg', enterprise)
