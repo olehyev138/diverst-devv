@@ -15,7 +15,8 @@
     <div class="flex-row flex-row--middle full-width">
       <div class="flex-row__cell flex-row__cell--grow">
         <%= link_to logo_destination do %>
-          <img class="primary-header__logo logo" src="<%= logo_url %>" alt="Home">
+          <img class="primary-header__logo logo hidden-xs" src="<%= logo_url %>" alt="Home">
+          <img class="primary-header__logo logo visible-xs" src="<%= small_logo_url %>" alt="Home">
         <% end %>
       </div>
       <div class="flex-row__cell">

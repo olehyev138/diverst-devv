@@ -5,7 +5,7 @@
         <b><%= @answers_count %></b> members have already provided their preferences.
       </div>
       <div class="col sm-2 hidden-xs">
-        <%= link_to "Export CSV", export_csv_group_questions_path(@group, format: :csv), class: "btn btn--secondary" %>
+        <%= link_to "Export CSV", export_csv_group_questions_path(@group, format: :csv), class: "btn btn--secondary hidden-xs" %>
       </div>
     </div>
   </div>
