@@ -122,7 +122,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   
   attr_accessor :skip_label_consistency_check
   validate :perform_check_for_consistency_in_category, on: [:create, :update], unless: :skip_label_consistency_check
-
+  validate :ensure_label_consistency_between_parent_and_sub_groups, on: :update
 
   scope :top_participants,  -> (n) { order(total_weekly_points: :desc).limit(n) }
   # Active Record already has a defined a class method with the name private so we use is_private.
@@ -331,6 +331,14 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
         if group_category_type != self.parent.group_category_type
           errors.add(:group_category, "wrong label for #{self.parent.group_category_type.name}")
         end
+      end
+    end
+  end
+
+  def ensure_label_consistency_between_parent_and_sub_groups
+    unless group_category.nil?
+      if children.any? { |sub_group| sub_group.group_category_type.name != group_category_type.name }
+        errors.add(:group_category_id, "chosen label inconsistent with labels of sub groups")
       end
     end
   end
