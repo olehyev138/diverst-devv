@@ -15,6 +15,22 @@
       <li>
         <%= active_link_to "Financials", expenses_path %>
       </li>
+      <% if manage_erg_root_path %>
+        <li>
+          <%= active_link_to "Manage #{c_t(:erg)}", manage_erg_root_path %>
+        </li>
+      <% end %>
+      <% if current_user.enterprise.plan_module_enabled %>
+        <% if default_group = policy_scope(Group).first %>
+          <li><%= active_link_to "Plan", plan_overview_groups_path %></li>
+        <% end %>
+      <% end %>
+      <% if policy(Poll).index? %>
+        <li><%= active_link_to "Include", polls_path %></li>
+      <% end %>
+      <% if GlobalSettingsPolicy.new(current_user).update? %>
+        <li><%= active_link_to "Global Settings", users_path %></li>
+      <% end %>
     </ul>
   </nav>
 </div>

@@ -1,4 +1,39 @@
-<div class="content__header">
+<div class="content__header visible-xs">
+    <div class="container-fluid visible-xs">
+    <div class="row">
+      <div class="col-xs-12">
+        <% if policy(@group).erg_leader_permissions? %>
+          <h2 class="text-center">
+            <span>
+              Posts 
+              <span class="label label-default"><%= @group.news_feed_links.includes(:link).approved.count %></span>
+              /
+               <%= link_to pending_group_posts_path(@group) do %>
+               <button class="btn btn-sm btn-primary">
+                 Pending (<%= @group.news_feed_links.includes(:link).not_approved.count %>)
+               </button>
+             <% end %>
+            </span>
+          </h2>
+        <% end %>
+      </div>
+    </div>
+    </br>
+    <div class="row">
+      <div class="col-xs-12 text-center">
+        <div class="btn-group">
+          <%= link_to "+ News", new_group_news_link_path, class: "btn btn-sm btn-primary" if policy(NewsLink).new? %>
+          <%= link_to "+ MSG", new_group_group_message_path, class: "btn btn-sm btn-primary" if policy(GroupMessage).new? %>
+          <% if ENV['ENABLE_SOCIAL_MEDIA'] %>
+            <%= link_to "+ Social", new_group_social_link_path, class: "btn btn-sm btn-primary" if policy(SocialLink).new? %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</div>
+<div class="content__header hidden-xs">
    <% if policy(@group).erg_leader_permissions? %>
    <h1>Posts(<%= @group.news_feed_links.includes(:link).approved.count %>)/
      <%= link_to pending_group_posts_path(@group) do %>
@@ -31,18 +66,14 @@
       </div>
     <% else %>
       <% @posts.each do |news| %>
-        <% if !news.is_pinned? %>
-          <%= link_to "Pin", pin_group_posts_path(:group_id => @group.id, :link_id => news.id), method: :patch if policy(@group).erg_leader_permissions? %>
-        <% else %>
-          <%= link_to "Unpin", unpin_group_posts_path(:group_id => @group.id, :link_id => news.id), method: :patch if policy(@group).erg_leader_permissions? %>
-        <% end %>
-
         <% if news.link_type == "NewsLink" %>
           <%= render partial: "groups/shared/news_links", locals: {news_link: NewsLink.includes(:group, :author).find(news.link.id) } %>
         <% elsif news.link_type === "GroupMessage"%>
           <%= render partial: "groups/shared/messages", locals: {message: GroupMessage.includes(:owner, :group).find(news.link.id) } %>
         <% elsif news.link_type === "SocialLink"%>
-          <%= render partial: "groups/shared/social_links", locals: {social_link: SocialLink.includes(:group).find(news.link.id) } %>
+          <% if ENV['ENABLE_SOCIAL_MEDIA'] %>
+            <%= render partial: "groups/shared/social_links", locals: {social_link: SocialLink.includes(:group).find(news.link.id) } %>
+          <% end %>
         <% end %>
       <% end %>
     <% end %>

@@ -39,6 +39,22 @@
       <li>
         <%= active_link_to "Pending Comments", edit_pending_comments_enterprise_path(current_user.enterprise) if policy(current_user.enterprise).edit_fields? %>
       </li>
+      <% if manage_erg_root_path %>
+        <li>
+          <%= active_link_to "Manage #{c_t(:erg)}", manage_erg_root_path %>
+        </li>
+      <% end %>
+      <% if current_user.enterprise.plan_module_enabled %>
+        <% if default_group = policy_scope(Group).first %>
+          <li><%= active_link_to "Plan", plan_overview_groups_path %></li>
+        <% end %>
+      <% end %>
+      <% if policy(Campaign).index? %>
+        <li><%= active_link_to "Innovate", campaigns_path %></li>
+      <% end %>
+      <% if policy(Poll).index? %>
+        <li><%= active_link_to "Include", polls_path %></li>
+      <% end %>
     </ul>
   </nav>
 </div>

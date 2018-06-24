@@ -12,7 +12,7 @@
 
   <header class="primary-header">
     <%= link_to user_root_path, class: "primary-header__back" do %>
-      Back to your dashboard
+      <span>Back <span class="hidden-sm hidden-xs"> to your dashboard</span></span>
     <% end %>
     <h2 class="primary-header__title"><%= @group.name %></h2>
   </header>
