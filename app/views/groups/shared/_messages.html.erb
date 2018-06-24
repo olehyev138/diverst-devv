@@ -1,8 +1,5 @@
 <div class="card__section card__section--border">
   <div class="row">
-    <div class="col sm-1 text-center">
-      <%= render partial: "groups/shared/like_feature", locals: {news_feed_link: message.news_feed_link } %>
-    </div>
     <div class="col sm-1">
       <% if message.owner.present? %>
         <%= image_tag message.owner.avatar.expiring_url(3600, :thumb), width: '100%' %>
@@ -10,17 +7,25 @@
         <%= image_tag '/assets/missing_user.png', width: '100%' %>
       <% end %>
     </div>
-    <div class="col sm-10">
+    <div class="col sm-11">
       <div class="flex-row flex-row--middle">
         <div class="flex-row__cell flex-row__cell--grow">
           <h3><%= message.subject %> - <span class="muted" title="<%= message.created_at.to_s :datetime %>"><%= time_ago_in_words(message.created_at) %> ago (<%= message.created_at.to_formatted_s(:short) %>) - <%= message.total_views %> views </span></h3>
-          <p>
+          <p class="postContent">
             <%= message.content %>
             <% if message.owner.present? %>
               <br>
               <i>by <%= message.owner.name_with_status %></i>
             <% end %>
           </p>
+          <div class="row">
+            <div class="col commentsLink">
+              <%= link_to "Comments(#{message.comments_count})", group_group_message_path(message.group, message) %>
+            </div>
+            <div class="col">
+              <%= render partial: "groups/shared/like_feature", locals: {news_feed_link: message.news_feed_link } %>
+            </div>
+          </div>
         </div>
         <div class="flex-row__cell link-group">
           <% if policy(message).destroy? %>
@@ -30,11 +35,6 @@
           <% end %>
         </div>
       </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col sm-10 col--offset-2">
-      <%= link_to "Comments(#{message.comments_count})", group_group_message_path(message.group, message), style: "margin-top: 30px;" %>
     </div>
   </div>
 </div>
