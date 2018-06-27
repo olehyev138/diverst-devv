@@ -9,7 +9,7 @@
               <div class="flex-row flex-row--middle">
                 <div class="flex-row__cell flex-row__cell--grow">
                   <small><%= mentoring_session.notes.html_safe %></small><br>
-                  <small class="muted"><%= mentoring_session.start.strftime("%m/%d/%Y %H:%M") %> - <%= mentoring_session.start.strftime("%m/%d/%Y %H:%M") %></small>
+                  <small class="muted"><%= mentoring_session.start.strftime("%m/%d/%Y %H:%M") %> - <%= mentoring_session.end.strftime("%m/%d/%Y %H:%M") %></small>
                 </div>
                 <div class="flex-row__cell">
                   <span class="icon icon--chevron-right"></span>

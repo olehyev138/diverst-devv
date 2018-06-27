@@ -5,5 +5,8 @@ class MentorshipSession < ActiveRecord::Base
 
     # validations
     validates :user,                presence: true
+    validates :role,                presence: true
     validates :mentoring_session,   presence: true, :on => :update
+    
+    validates_uniqueness_of :user, scope: [:mentoring_session]
 end

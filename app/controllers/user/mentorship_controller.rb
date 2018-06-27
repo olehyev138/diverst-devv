@@ -7,6 +7,14 @@ class User::MentorshipController < ApplicationController
     def index
     end
     
+    # allow user to edit mentorship
+    def edit
+    end
+    
+    # allow users to view profiles for other users
+    def show
+    end
+    
     def update
         authorize @user
         

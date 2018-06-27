@@ -21,13 +21,27 @@ class MentoringSession < ActiveRecord::Base
     validates :status,  presence: true
     validates :format,  presence: true
     
+    validates :start,   date: {after: Date.yesterday, message: 'must be today or in the future'}, on: [:create, :update]
+    validates :end,     date: {after: :start, message: 'must be after start'}, on: [:create, :update]
+    
     # scopes
-    scope :past,            -> { where("end < ?", Date.today) }
-    scope :upcoming,        -> { where("end > ?", Date.today)}
+    scope :past,            -> { where("end < ?", Time.now.utc) }
+    scope :upcoming,        -> { where("end > ?", Time.now.utc)}
     scope :no_ratings,      -> { includes(:mentorship_ratings).where(:mentorship_ratings => {:id => nil})}
     scope :with_ratings,    -> { includes(:mentorship_ratings).where.not(:mentorship_ratings => {:id => nil})}
     
+    before_create :set_room_name
+    
     def old_session?
         return self.end < Date.today
+    end
+    
+    def set_room_name
+        self.video_room_name = "#{enterprise.name}#{SecureRandom.hex(10)}"
+    end
+    
+    def can_start(user_id)
+        return false if access_token.present?
+        return mentorship_sessions.where(:user_id => user_id, :role => "presenter").count > 0 && Time.now.utc + 5.minutes > start.utc
     end
 end

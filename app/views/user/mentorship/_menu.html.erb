@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card__section">
       <h4 class="card__title"><%= inline_svg('icons/manage.svg', class: "icon card__icon") %>Mentorship</h4>
-      <%= active_link_to "Profile", user_mentorship_index_path %>
+      <%= active_link_to "Profile", edit_user_mentorship_path(:id => current_user.id) %>
       </br>
       <% if current_user.mentee? || current_user.mentor? %>
         <%= active_link_to "Mentors", mentors_user_mentorship_index_path %>

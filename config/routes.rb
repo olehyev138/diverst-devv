@@ -465,6 +465,7 @@ Rails.application.routes.draw do
   resources :mentoring_sessions do
     member do
       get 'start'
+      get 'join'
     end
   end
   resources :mentorship_ratings

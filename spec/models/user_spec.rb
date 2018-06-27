@@ -496,7 +496,7 @@ RSpec.describe User do
       expect(mentor.mentorship_proposals.count).to eq(1)
       
       # schedule a session
-      mentoring_session = create(:mentoring_session, :user_ids => [mentor.id, mentee.id])
+      mentoring_session = create(:mentoring_session, :mentorship_sessions_attributes => [{:user_id => mentor.id, :role => "presenter"}, {:user_id => mentee.id, :role => "attendee" }])
       
       # check the session
       expect(mentoring_session.valid?).to be(true)

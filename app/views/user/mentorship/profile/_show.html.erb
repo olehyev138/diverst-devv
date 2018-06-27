@@ -1,0 +1,78 @@
+<div class="col-xs-8">
+  <div class="card">
+    <div class="card__section">
+      <div class="row">
+        <div class="col-xs-2">
+          <%= image_tag(@user.avatar.expiring_url(3600), height: '100') %>
+        </div>
+        <div class="col-xs-10">
+          <h1 class="text-center"><%= @user.name %></h1>
+        </div>
+      </div>
+    </div>
+    <div class="card__section card__section--border">
+    <div class="row">
+      <div class="col-sm-6 col-xs-12">
+        <label><strong>Email</strong></label>
+        <p><%= @user.email %></p>
+      </div>
+            <div class="col-sm-6 col-xs-12">
+        <label><strong>Biography</strong></label>
+        <p><%= @user.biography %></p>
+      </div>
+    </div>
+  </div>
+    <div class="card__section card__section--border">
+    <div class="row">
+      <div class="col-sm-6 col-xs-12">
+    <label><strong>Time zone</strong></label>
+    <p><%= @user.default_time_zone %></p>
+      </div>
+            <div class="col-sm-6 col-xs-12">
+          <label><strong>Mentorship Goals</strong></label>
+          <p><%= @user.mentorship_description %></p>
+      </div>
+    </div>
+  </div>
+    <div class="card__section card__section--border">
+    <div class="row">
+      <div class="col-sm-6 col-xs-12">
+        <label><strong>Mentor</strong></label>
+        <p><%= UserDecorator.new(@user).mentoring_status(@user.mentor) %></p>
+      </div>
+            <div class="col-sm-6 col-xs-12">
+        <label><strong>Mentee</strong></label>
+        <p><%= UserDecorator.new(@user).mentoring_status(@user.mentee) %></p>
+      </div>
+    </div>
+    </div>
+    <div class="card__section card__section--border">
+      <div class="row">
+        <div class="col-sm-6 col-xs-12">
+          <label><strong>Areas of Mentorship Interest</strong></label>
+          <p>
+            <%= @user.mentoring_interests.pluck(:name).join(', ') %>
+          </p>
+        </div>
+        <div class="col-sm-6 col-xs-12">
+          <label><strong>Availability</strong></label>
+          <p>
+            <% @user.availabilities.each do |availability| %>
+              <span><%= availability.start.strftime("%m/%d/%Y %I:%M %p") %></span>
+            <% end %>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="card__section card__section--border">
+      <div class="row">
+        <div class="col-sm-6 col-xs-12">
+          <label><strong>LinkedIn Profile</strong></label>
+          <p>
+            <%= link_to image_tag('linkedin.png'), @user.linkedin_profile_url, target: '_blank' %>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

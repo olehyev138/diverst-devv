@@ -776,14 +776,16 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   end
 
   create_table "mentoring_sessions", force: :cascade do |t|
-    t.integer  "enterprise_id", limit: 4
-    t.integer  "creator_id",    limit: 4,                           null: false
-    t.datetime "start",                                             null: false
-    t.datetime "end",                                               null: false
-    t.string   "format",        limit: 191,                         null: false
-    t.string   "link",          limit: 191
-    t.string   "status",        limit: 191,   default: "scheduled", null: false
-    t.text     "notes",         limit: 65535
+    t.integer  "enterprise_id",   limit: 4
+    t.integer  "creator_id",      limit: 4,                           null: false
+    t.datetime "start",                                               null: false
+    t.datetime "end",                                                 null: false
+    t.string   "format",          limit: 191,                         null: false
+    t.string   "link",            limit: 191
+    t.text     "access_token",    limit: 65535
+    t.string   "video_room_name", limit: 191
+    t.string   "status",          limit: 191,   default: "scheduled", null: false
+    t.text     "notes",           limit: 65535
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -831,9 +833,10 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   end
 
   create_table "mentorship_sessions", force: :cascade do |t|
-    t.integer  "user_id",              limit: 4,                null: false
-    t.integer  "mentoring_session_id", limit: 4,                null: false
-    t.boolean  "attending",                      default: true
+    t.integer  "user_id",              limit: 4,                  null: false
+    t.string   "role",                 limit: 191,                null: false
+    t.integer  "mentoring_session_id", limit: 4,                  null: false
+    t.boolean  "attending",                        default: true
     t.datetime "created_at"
     t.datetime "updated_at"
   end

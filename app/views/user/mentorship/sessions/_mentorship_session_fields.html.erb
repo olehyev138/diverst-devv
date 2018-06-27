@@ -3,6 +3,10 @@
     x
   </br>
   <%= f.input :user_id, :collection => current_user.enterprise.users, :label_method => :email, :value_method => :id, :label => "User" ,:include_blank => false %>
+  <%= f.input :role,
+                  collection: ["presenter", "attendee"],
+                  input_html: { class: "select2" },
+                  label: false %>
   <%= f.hidden_field :attending, value: 0 %>
   <%= f.input :attending, label: "Attending?" %>
 </div>

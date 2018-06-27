@@ -9,7 +9,15 @@
         <div class="card__section card__section--border">
             <label><strong>Starts</strong></label>
             <p><%= @mentoring_session.start.strftime("%m/%d/%Y %H:%M") %></p>
-            <%= link_to "START SESSION", start_mentoring_session_path(@mentoring_session), target: "_blank", class: "muted", role: "button", 'aria-label': "Start" %>
+            <% # check if the start time of the session is within 5 minutes %>
+            <% if @mentoring_session.can_start(current_user.id) %>
+                <%= link_to "START SESSION", start_mentoring_session_path(@mentoring_session), target: "_blank", class: "muted", role: "button", 'aria-label': "Start" %>
+             <% end %>
+             
+            <% # check if users can join the link %>
+            <% if @mentoring_session.access_token %>
+                <%= link_to "JOIN SESSION", join_mentoring_session_path(@mentoring_session), target: "_blank", class: "muted", role: "button", 'aria-label': "Start" %>
+             <% end %>
          </div>
         <div class="card__section card__section--border">
             <label><strong>Ends</strong></label>

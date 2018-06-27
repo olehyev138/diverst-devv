@@ -6,5 +6,6 @@ FactoryGirl.define do
     f.status { "scheduled" }
     f.notes { Faker::Lorem.sentence }
     f.format {["in_person", "webx", "zoom", "video"].sample}
+    association :enterprise, factory: :enterprise
   end
 end

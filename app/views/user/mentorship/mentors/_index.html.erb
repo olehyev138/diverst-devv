@@ -6,16 +6,16 @@
         <table
           class="table--has-border" id="mentors-table">
           <thead>
-            <th>First Name</th>
-            <th>Last Type</th>
+            <th>Name</th>
             <th>Email</th>
             <th></th>
           </thead>
           <tbody>
               <% @mentors.each do |mentor| %>
                 <tr>
-                    <td><%= mentor.first_name %></td>
-                    <td><%= mentor.last_name %></td>
+                    <td>
+                      <%= active_link_to mentor.name, user_mentorship_path(:id => mentor.id) %>
+                    </td>
                     <td><%= mentor.email %></td>
                     <td><%= link_to('Schedule Session', new_mentoring_session_path ) %></td>
                 </tr>
@@ -34,11 +34,10 @@
           <div class="card__section">
             <table
               class="table--has-border data-table"
-              data-no-sortable='3'
+              data-no-sortable='1'
               data-source="<%= mentorings_path(mentor: true, format: :json) %>">
               <thead>
-                <th>First name</th>
-                <th>Last name</th>
+                <th>Name</th>
                 <th>Email</th>
                 <th>Request</th>
               </thead>

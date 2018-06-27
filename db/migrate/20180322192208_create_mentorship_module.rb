@@ -64,13 +64,15 @@ class CreateMentorshipModule < ActiveRecord::Migration
 
     create_table :mentoring_sessions do |t|
       t.references  :enterprise
-      t.references  :creator,     :null => false, :references => :users
-      t.datetime    :start,       :null => false
-      t.datetime    :end,         :null => false
-      t.string      :format,      :null => false
-      t.string      :link,        :null => true
-      t.string      :status,      :null => false, :default => "scheduled"
-      t.text        :notes,       :null => true
+      t.references  :creator,         :null => false, :references => :users
+      t.datetime    :start,           :null => false
+      t.datetime    :end,             :null => false
+      t.string      :format,          :null => false
+      t.string      :link,            :null => true
+      t.text        :access_token,    :null => true
+      t.string      :video_room_name, :null => true
+      t.string      :status,          :null => false, :default => "scheduled"
+      t.text        :notes,           :null => true
       t.timestamps
     end
     
@@ -79,6 +81,7 @@ class CreateMentorshipModule < ActiveRecord::Migration
     
     create_table :mentorship_sessions do |t|
       t.references  :user,                null: false
+      t.string      :role,                null: false
       t.references  :mentoring_session,   null: false
       t.boolean     :attending,           default: true
       t.timestamps

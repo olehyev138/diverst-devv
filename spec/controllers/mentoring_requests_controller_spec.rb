@@ -32,7 +32,8 @@ RSpec.describe MentoringRequestsController, type: :controller do
             it "flashes" do
                 allow_any_instance_of(MentoringRequest).to receive(:save).and_return(false)
                 post :create, :mentoring_request => {:sender_id => user.id, :receiver_id => mentor.id, :notes => "Please mentor me!"}
-                expect(flash[:alert]).to eq("Your request was not saved")
+                expect(flash[:alert]).to eq(nil)
+                expect(response).to render_template 'user/mentorship/mentors/new'
             end
         end
     end

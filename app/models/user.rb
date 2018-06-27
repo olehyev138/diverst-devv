@@ -106,6 +106,8 @@ class User < ActiveRecord::Base
     scope :mentors, -> {where(mentor: true)}
     scope :mentees, -> {where(mentee: true)}
     
+    accepts_nested_attributes_for :availabilities, :allow_destroy => true
+    
     def name
         "#{first_name} #{last_name}"
     end

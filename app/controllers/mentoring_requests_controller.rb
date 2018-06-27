@@ -14,7 +14,7 @@ class MentoringRequestsController < ApplicationController
     if @mentoring_request.save
       redirect_to mentees_user_mentorship_index_path
     else
-      flash[:alert] = "Your request was not saved"
+      flash[:alert] = @mentoring_request.errors.full_messages.first
       render 'user/mentorship/mentors/new'
     end
   end

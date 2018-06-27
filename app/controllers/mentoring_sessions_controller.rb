@@ -1,7 +1,8 @@
 class MentoringSessionsController < ApplicationController
-  before_action :set_mentoring_session, only: [:show, :edit, :update, :destroy, :start]
+  before_action :authenticate_user!
+  before_action :set_mentoring_session, only: [:show, :edit, :update, :destroy, :start, :join]
   
-  layout "user", :except => :start
+  layout "user", :except => [:start, :join]
   
   def new
     @mentoring_session = current_user.mentoring_sessions.new
@@ -31,11 +32,10 @@ class MentoringSessionsController < ApplicationController
   end
   
   def update
-    puts "!"
     if @mentoring_session.update(mentoring_session_params)
       redirect_to @mentoring_session
     else
-      render :edit
+      redirect_to action: :edit
     end
   end
   
@@ -45,12 +45,12 @@ class MentoringSessionsController < ApplicationController
   end
   
   def start
+    # check if user can start the session
     require 'twilio-ruby'
 
-    # Substitute your Twilio AccountSid and ApiKey details
-    account_sid = "AC090616aa60e65a1a2d92e56fab9a39f2"
-    api_key_sid = "SK4b53e31ff218f8aacbef23268e09359c"
-    api_key_secret = "c5AifbclJpBbOoEcwCu058HK8qSUSED8"
+    account_sid = ENV["TWILIO_ACCOUNT_SID"]
+    api_key_sid = ENV["TWILIO_API_KEY"]
+    api_key_secret = ENV["TWILIO_SECRET"]
     
     # Create an Access Token
     token = Twilio::JWT::AccessToken.new(
@@ -62,7 +62,37 @@ class MentoringSessionsController < ApplicationController
     
     # Grant access to Video
     grant = Twilio::JWT::AccessToken::VideoGrant.new
-    grant.room = 'mentorship'
+    grant.room = @mentoring_session.video_room_name
+    token.add_grant grant
+    
+    # Serialize the token as a JWT
+    @token = token.to_jwt
+    
+    @mentoring_session.access_token = @token
+    @mentoring_session.save!
+    
+    render 'user/mentorship/sessions/start'
+  end
+  
+  def join
+    # check if user has access to the session
+    require 'twilio-ruby'
+
+    account_sid = ENV["TWILIO_ACCOUNT_SID"]
+    api_key_sid = ENV["TWILIO_API_KEY"]
+    api_key_secret = ENV["TWILIO_SECRET"]
+    
+    # Create an Access Token
+    token = Twilio::JWT::AccessToken.new(
+      account_sid,
+      api_key_sid,
+      api_key_secret,
+      identity: current_user.email
+    )
+    
+    # Grant access to Video
+    grant = Twilio::JWT::AccessToken::VideoGrant.new
+    grant.room = @mentoring_session.video_room_name
     token.add_grant grant
     
     # Serialize the token as a JWT
@@ -89,6 +119,7 @@ class MentoringSessionsController < ApplicationController
       mentorship_sessions_attributes: [
         :id,
         :user_id,
+        :role,
         :attending,
         :_destroy
       ]

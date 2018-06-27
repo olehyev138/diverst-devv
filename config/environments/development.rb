@@ -14,11 +14,16 @@ Rails.application.configure do
   config.action_controller.perform_caching = false
 
   # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
-  config.action_mailer.delivery_method = :letter_opener
+  config.action_mailer.perform_deliveries = true
+
+  config.action_mailer.delivery_method = :mailgun
+  config.action_mailer.mailgun_settings = {
+    api_key: "key-44b6fa3611a1c284102b465fc58c8cf7",
+    domain: "mg.diverst.com"
+  }
 
   config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.default_url_options = { host: "localhost:3000" }
+  config.action_mailer.default_url_options = { host: "https://diverst-girgalicious.c9users.io" }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log

@@ -4,6 +4,9 @@
       <%= simple_form_for @user, url: user_mentorship_path(@user) do |f| %>
         <div class="card__section">
           <div class="row row--spacing-bottom">
+            <%= link_to 'Connect with LinkedIn', '/omniauth/linkedin', class: "btn btn--secondary" unless @user.linkedin_profile_url %>
+          </div>
+          <div class="row row--spacing-bottom">
             <div class="col md-6">
               <p class="field__hint">Are you interested in being a mentor?</p>
               <%= f.hidden_field :mentor, value: 0 %>
@@ -14,6 +17,18 @@
               <p class="field__hint">Are you interested in being mentored?</p>
               <%= f.hidden_field :mentee, value: 0 %>
               <%= f.input :mentee, label: false %>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card__section">
+          <div class="row row--spacing-bottom">
+            <div class="col-xs-12">
+                <%= f.simple_fields_for :availabilities do |availability| %>
+                  <%= render "user/mentorship/profile/availability_fields", f: availability %>
+                <% end %>
+        
+                <span><%= link_to_add_association "Add availability", f, :availabilities, partial: "user/mentorship/profile/availability_fields" %></span>
             </div>
           </div>
         </div>

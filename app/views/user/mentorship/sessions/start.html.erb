@@ -15,7 +15,7 @@
       }
     </style>
   </head>
-  <body onload="init()">
+  <body onload="init()" data-env="<%= Rails.env %>">
     <%= render 'partials/js_branding_color_variables' %>
   
     <header class="primary-header">
@@ -31,9 +31,15 @@
     <div class="row" style="overflow-x: scroll;">
       <div class="col-xs-8">
         <div class="row">
-          <ul class="list-inline">
-            <li><div id="local-media" style="height:200px; width: 200px;"></div></li>
-            <li><div id="remote-media" style="height:200px; width: 200px;"></div></li>
+          <ul class="list-inline text-center">
+            <li></li>
+            <li>
+              <div id="local-media" style="height:200px; width: 200px;"></div>
+            </li>
+            <li></li>
+            <li>
+              <div id="remote-media" style="height:200px; width: 200px;"></div>
+            </li>
           </ul>
         </div>
         <div class="row" style="position: relative; top: 75px;">
@@ -71,7 +77,8 @@
     var twilio = Twilio.Video;
     var dataTrack = new twilio.LocalDataTrack();
     var chatElement = document.getElementById('chat');
-    
+    var color = getRandomColor();
+    var localParticipant;
     var activeRoom;
     var previewTracks;
     var identity = '<%= current_user.email %>';
@@ -83,7 +90,8 @@
                 container.appendChild(track.attach());
           }else if (track.kind === 'data') {
             track.on('message', function(data) {
-                chat(data);
+                var response = JSON.parse(data);
+                chat(response.message, response.user, response.chatColor);
               });
           }
       });
@@ -116,24 +124,25 @@
     // from the room, if joined.
     window.addEventListener('beforeunload', leaveRoomIfJoined);
     
-    
-      twilio.createLocalTracks({
-  audio: false,
-  video: { width: 640 }
-}).then(localTracks => {
-  localTracks.push(dataTrack)
-  return twilio.connect(token, {
-    name: 'mentorship',
-    tracks: localTracks
-  });
-}).then(roomJoined, function(error) {
-                console.error('Unable to connect to Room: ' +  error.message);
-        });
+    twilio.createLocalTracks({
+      audio: false,
+      video: { width: 640 }
+      }).then(localTracks => {
+      localTracks.push(dataTrack)
+        return twilio.connect(token, {
+          name: '<% @mentoring_session.video_room_name %>',
+          tracks: localTracks
+      });
+      }).then(roomJoined, function(error) {
+          console.error('Unable to connect to Room: ' +  error.message);
+      });
         
     // Successfully connected!
     function roomJoined(room) {
       window.room = activeRoom = room;
-    
+      
+      localParticipant = room.localParticipant;
+      
       log("Joined as '" + identity + "'");
       
       // Attach LocalParticipant's Tracks, if not already attached.
@@ -141,7 +150,7 @@
       if (!previewContainer.querySelector('video')) {
         attachParticipantTracks(room.localParticipant, previewContainer);
       }
-    
+      
       // Attach the Tracks of the Room's Participants.
       room.participants.forEach(function(participant) {
         log("Already in Room: '" + participant.identity + "'");
@@ -152,6 +161,9 @@
       // When a Participant joins the Room, log the event.
       room.on('participantConnected', function(participant) {
         log("Joining: '" + participant.identity + "'");
+        
+        var previewContainer = document.getElementById('remote-media');
+        attachParticipantTracks(participant, previewContainer);
       });
     
       // When a Participant adds a Track, attach it to the DOM.
@@ -190,11 +202,20 @@
     
     // Activity log.
     function log(message) {
-      chatElement.innerHTML += '<p>&gt;&nbsp;' + message + '</p>';
+      chatElement.innerHTML += '<p style="text-transform: uppercase;"><strong>' + message + '</strong></p>';
     }
     
-    function chat(message){
-        chatElement.innerHTML += '<p>&gt;&nbsp;' + message + '</p>';
+    function getRandomColor() {
+      var letters = '0123456789ABCDEF';
+      var color = '#';
+      for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+    
+    function chat(message, email, chatColor){
+        chatElement.innerHTML += "<p>" + "<span style='color:" + chatColor + ";'>" + email + "</span>" + "<br>" + message + "</p>";
     }
     
     // Leave Room.
@@ -204,31 +225,46 @@
       }
     }
     
-    
-    function myFunc(eventObj) {
+    function sendMessage(eventObj) {
+        // get the chat message value
         var message = document.getElementById('message').value
-        dataTrack.send(message);
-        chat(message)
+        // send the message to other users
+        var object = JSON.stringify({message: message, user: "<%= current_user.email %>", chatColor: color});
+        
+        dataTrack.send(object);
+        // display the message for the current user
+        chat(message, "<%= current_user.email %>", color)
+        
+        // remove the message from the input
+        document.getElementById("message").value = "";
     }
     
-    var myElement = document.getElementById('send');
-    myElement.addEventListener('click', myFunc);
+    var chatInput = document.getElementById('send');
+    chatInput.addEventListener('click', sendMessage);
     
     function init() {
       // Initialize Firebase.
+      var firebase_key = "<%= ENV["FIREBASE_API_KEY"] %>";
+      var auth_domain = "<%= ENV["FIREBASE_AUTH_DOMAIN"] %>";
+      var domain_url = "<%= ENV["FIREBASE_DATABASE_URL"] %>";
+      var firebase_project_id = "<%= ENV["FIREBASE_PROJECT_ID"] %>";
+      var firebase_storage_bucket = "<%= ENV["FIREBASE_STORAGE_BUCKET"] %>";
+      var firebase_sender_id = "<%= ENV["FIREBASE_SENDER_ID"] %>";
+      
       var config = {
-        apiKey: "AIzaSyCqs-DbPqpTQ1m_bI-RWBfKd-u0hFsfgFU",
-        authDomain: "diverst-97301.firebaseapp.com",
-        databaseURL: "https://diverst-97301.firebaseio.com",
-        projectId: "diverst-97301",
-        storageBucket: "diverst-97301.appspot.com",
-        messagingSenderId: "719672182500"
+        apiKey: firebase_key,
+        authDomain: auth_domain,
+        databaseURL: domain_url,
+        projectId: firebase_project_id,
+        storageBucket: firebase_storage_bucket,
+        messagingSenderId: firebase_sender_id
       };
       firebase.initializeApp(config);
-
-      // Get Firebase Database reference.
-      var firepadRef = firebase.database().ref();
-
+      
+      // Get Firebase Database reference - set reference to an ID pointing to the session
+      var path = '<%= @mentoring_session.enterprise.name %>/mentoring_sessions/<%= Time.now.to_i %>/<%= @mentoring_session.id %>';
+      var firepadRef = firebase.database().ref(path);
+      
       // Create CodeMirror (with lineWrapping on).
       var codeMirror = CodeMirror(document.getElementById('firepad'), { lineWrapping: true });
 
