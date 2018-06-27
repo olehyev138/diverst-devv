@@ -46,7 +46,7 @@
         <div class="card__section">
           <h4><%= c_t(:erg) %> population</h4>
           <div class="card__action">
-            <%= link_to "Export CSV", group_population_generic_graphs_path(format: :csv) %>
+            <%= link_to "Export CSV", group_population_generic_graphs_path(format: :csv), class: "hidden-xs" %>
           </div>
           <div class="graph" data-url="<%= group_population_generic_graphs_path %>"></div>
         </div>
@@ -58,7 +58,7 @@
         <div class="card__section">
           <h4><%= c_t(:segment) %> population</h4>
           <div class="card__action">
-            <%= link_to "Export CSV", segment_population_generic_graphs_path(format: :csv) %>
+            <%= link_to "Export CSV", segment_population_generic_graphs_path(format: :csv), class: "hidden-xs" %>
           </div>
           <div class="graph" data-url="<%= segment_population_generic_graphs_path %>"></div>
         </div>
@@ -70,7 +70,7 @@
         <div class="card__section">
           <h4>Events created in the last 30 days</h4>
           <div class="card__action">
-            <%= link_to "Export CSV", events_created_generic_graphs_path(format: :csv) %>
+            <%= link_to "Export CSV", events_created_generic_graphs_path(format: :csv), class: "hidden-xs" %>
           </div>
           <div class="graph" data-url="<%= events_created_generic_graphs_path %>"></div>
         </div>
@@ -82,7 +82,7 @@
         <div class="card__section">
           <h4>Messages sent in the last 30 days</h4>
           <div class="card__action">
-            <%= link_to "Export CSV", messages_sent_generic_graphs_path(format: :csv) %>
+            <%= link_to "Export CSV", messages_sent_generic_graphs_path(format: :csv), class: "hidden-xs" %>
           </div>
           <div class="graph" data-url="<%= messages_sent_generic_graphs_path %>"></div>
         </div>
@@ -94,7 +94,7 @@
         <div class="card__section">
           <h4># of employees over time</h4>
           <div class="card__action">
-            <%= link_to "Export CSV", date_histogram_users_path(format: :csv) %>
+            <%= link_to "Export CSV", date_histogram_users_path(format: :csv), class: "hidden-xs" %>
           </div>
           <div class="graph" data-url="<%= date_histogram_users_path %>" data-date-histogram="true"></div>
         </div>

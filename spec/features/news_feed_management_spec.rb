@@ -35,8 +35,10 @@ RSpec.feature 'News Feed Management' do
 				visit group_posts_path(group)
 
 				expect(page).to have_content existing_group_message.subject
-
-				click_on 'Edit'
+				
+				within find(".group-capybara") do
+					click_on 'Edit'
+				end
 
 				fill_in 'group_message[subject]', with: 'Updated Group Message!!!'
 
@@ -192,9 +194,11 @@ RSpec.feature 'News Feed Management' do
 			scenario 'when adding comments to news link' do
 				expect(page).to have_content existing_news_item.title
 				expect(page).to have_link 'Comments(0)', href:  comments_group_news_link_path(group, existing_news_item)
-
-				click_link 'Comments(0)', href:  comments_group_news_link_path(group, existing_news_item)
-
+				
+				within('.flex-row__cell--grow') do
+					click_link 'Comments(0)', href:  comments_group_news_link_path(group, existing_news_item)
+				end
+				
 				within('.content__header h1') do
 					expect(page).to have_content 'News Discussion'
 				end
@@ -226,9 +230,11 @@ RSpec.feature 'News Feed Management' do
 				scenario 'when editing comments for news link' do
 					expect(page).to have_content existing_news_item.title
 					expect(page).to have_link 'Comments(1)', href:  comments_group_news_link_path(group, existing_news_item)
-
-					click_link 'Comments(1)', href:  comments_group_news_link_path(group, existing_news_item)
-
+					
+					within('.flex-row__cell--grow') do
+						click_link 'Comments(1)', href:  comments_group_news_link_path(group, existing_news_item)
+					end
+					
 					within('.content__header h1') do
 						expect(page).to have_content 'News Discussion'
 					end
@@ -302,9 +308,11 @@ RSpec.feature 'News Feed Management' do
 			scenario 'when adding comments to news link' do
 				expect(page).to have_content existing_news_item.title
 				expect(page).to have_link 'Comments(0)', href: comments_group_news_link_path(group, existing_news_item)
-
-				click_link 'Comments(0)', href: comments_group_news_link_path(group, existing_news_item)
-
+				
+				within('.flex-row__cell--grow') do
+					click_link 'Comments(0)', href: comments_group_news_link_path(group, existing_news_item)
+				end
+				
 				within('.content__header h1') do
 					expect(page).to have_content 'News Discussion'
 				end
