@@ -46,28 +46,37 @@ RSpec.describe MentoringSessionsController, type: :controller do
         end
     end
     
-    describe 'GET #start' do
-        describe "if user is present" do 
-            login_user_from_let
-            it "renders the template" do
-                mentoring_session = create(:mentoring_session)
-                mentoring_session.mentorship_sessions.create(:user => user, :mentoring_session => mentoring_session, :role => "presenter")
-                
-                get :start, :id => mentoring_session.id
-                expect(response).to render_template("user/mentorship/sessions/start")
+    context "when using twilio gem" do
+        before {
+            token = double("Twilio::JWT::AccessToken", :add_grant => {}, :to_jwt => true)
+            
+            allow(Twilio::JWT::AccessToken).to receive(:new).and_return(token)
+            allow(Twilio::JWT::AccessToken::VideoGrant).to receive(:new).and_return(OpenStruct.new({:room => true}))
+        }
+    
+        describe 'GET #start' do
+            describe "if user is present" do 
+                login_user_from_let
+                it "renders the template" do
+                    mentoring_session = create(:mentoring_session)
+                    mentoring_session.mentorship_sessions.create(:user => user, :mentoring_session => mentoring_session, :role => "presenter")
+                    
+                    get :start, :id => mentoring_session.id
+                    expect(response).to render_template("user/mentorship/sessions/start")
+                end
             end
         end
-    end
-    
-    describe 'GET #join' do
-        describe "if user is present" do 
-            login_user_from_let
-            it "renders the template" do
-                mentoring_session = create(:mentoring_session)
-                mentoring_session.mentorship_sessions.create(:user => user, :mentoring_session => mentoring_session, :role => "presenter")
-                
-                get :join, :id => mentoring_session.id
-                expect(response).to render_template("user/mentorship/sessions/start")
+        
+        describe 'GET #join' do
+            describe "if user is present" do 
+                login_user_from_let
+                it "renders the template" do
+                    mentoring_session = create(:mentoring_session)
+                    mentoring_session.mentorship_sessions.create(:user => user, :mentoring_session => mentoring_session, :role => "presenter")
+                    
+                    get :join, :id => mentoring_session.id
+                    expect(response).to render_template("user/mentorship/sessions/start")
+                end
             end
         end
     end
