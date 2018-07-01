@@ -1,0 +1,5 @@
+<p>Hello <%= @receiver.name %>!</p>
+
+<p><%= @sender.name %> has sent you a request for mentorship. You can accept/decline the request through the link below.</p>
+
+<p><%= link_to "Accept/Decline", requests_user_mentorship_index_url(saml_for_enterprise: @receiver.enterprise.id) %></p>

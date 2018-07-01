@@ -1,0 +1,82 @@
+<div class="col-xs-8">
+  <div class="card">
+    <div class="card__section">
+      <%= simple_form_for @mentorship_rating, :method => :post do |f| %>
+        <div class="card__section">
+          <div class="row row--spacing-bottom">
+            <%= f.input :mentoring_session_id, as: :hidden %>
+            
+            <p style="margin-top: 20px;">
+              <strong style="margin-bottom: 15px; display: inline-block;">On a scale of 1-10, how would you rate this session? <span class="js-bias-severity"></span></strong>
+              <span class="flex-row flex-row--middle">
+                <span class="flex-row__cell">
+                  1
+                </span>
+                <span class="flex-row__cell flex-row__cell--grow">
+                  <%= f.input_field :rating, as: :range, min: 1, max: 10, input_html: { class: 'js-bias-severity-1' } %>
+                </span>
+                <span class="flex-row__cell">
+                  10
+                </span>
+              </span>
+            </p>
+            
+            <%= f.input :okrs_achieved, label: "OKRs Achieved?", wrapper: :boolean_checkbox %>
+            
+            <p style="margin-top: 20px;">
+              <strong style="margin-bottom: 15px; display: inline-block;">On a scale of 1-10, how valuable did you find this session? <span class="js-bias-severity"></span></strong>
+              <span class="flex-row flex-row--middle">
+                <span class="flex-row__cell">
+                  1
+                </span>
+                <span class="flex-row__cell flex-row__cell--grow">
+                  <%= f.input_field :valuable, as: :range, min: 1, max: 10, input_html: { class: 'js-bias-severity-2' } %>
+                </span>
+                <span class="flex-row__cell">
+                  10
+                </span>
+              </span>
+            </p>
+            
+            <div class="col md-6">
+              <p class="field__hint">Please leave some comments</p>
+              <%= f.input :comments, label: false %>
+            </div>
+          </div>
+        </div>
+        <%= f.button :submit, "Submit Feedback" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  var $slider1 = $('input[type="range"]').eq(0);
+  var $slider2 = $('input[type="range"]').eq(1);
+  
+  $slider1.rangeslider({
+    polyfill: false,
+    rangeClass: 'range-slider',
+    fillClass: 'range-slider__line',
+    handleClass: 'range-slider__handle',
+    onInit: function() {
+      $('.js-bias-severity-1').text($slider1.val());
+    },
+    onSlide: function() {
+      $('.js-bias-severity-1').text($slider1.val());
+    }
+  });
+  
+  $slider2.rangeslider({
+    polyfill: false,
+    rangeClass: 'range-slider',
+    fillClass: 'range-slider__line',
+    handleClass: 'range-slider__handle',
+    onInit: function() {
+      $('.js-bias-severity-2').text($slider2.val());
+    },
+    onSlide: function() {
+      $('.js-bias-severity-2').text($slider2.val());
+    }
+  });
+</script>

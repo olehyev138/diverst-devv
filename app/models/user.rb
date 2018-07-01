@@ -10,12 +10,37 @@ class User < ActiveRecord::Base
 
     @@fb_token_generator = Firebase::FirebaseTokenGenerator.new(ENV['FIREBASE_SECRET'].to_s)
 
-    scope :active, -> { where(active: true).distinct }
-    scope :inactive, -> { where(active: false).distinct }
+    scope :active,              -> { where(active: true).distinct }
+    scope :enterprise_mentors,  -> ( user_ids = []) { where(mentor: true).where.not(:id => user_ids) }
+    scope :enterprise_mentees,  -> ( user_ids = []) { where(mentee: true).where.not(:id => user_ids) }
+    scope :mentors_and_mentees, -> { where("mentor = true OR mentee = true").distinct }
+    scope :inactive,            -> { where(active: false).distinct }
 
     belongs_to :enterprise, inverse_of: :users
     belongs_to :policy_group
+    
+    # mentorship
+    has_many :mentorships,       class_name: "Mentoring", foreign_key: "mentor_id"
+    has_many :mentees, through: :mentorships, class_name: 'User', source: :mentee
+    has_many :menteeships,       class_name: "Mentoring", foreign_key: "mentee_id"
+	has_many :mentors, through: :menteeships, class_name: 'User', source: :mentor
+	has_many :availabilities,   :class_name => "MentorshipAvailability"
+    has_many :mentorship_ratings
+        
+    # many to many
+    has_many :mentorship_interests
+    has_many :mentoring_interests, :through => :mentorship_interests
+    
+    has_many :mentorship_sessions
+    has_many :mentoring_sessions, :through => :mentorship_sessions
 
+	has_many :mentorship_types
+	has_many :mentoring_types, :through => :mentorship_types
+
+    # mentorship_requests
+    has_many :mentorship_requests,  :foreign_key => "sender_id",     :class_name => "MentoringRequest"
+    has_many :mentorship_proposals, :foreign_key => "receiver_id",   :class_name => "MentoringRequest"
+    
     has_many :devices
     has_many :users_segments
     has_many :segments, through: :users_segments
@@ -78,7 +103,11 @@ class User < ActiveRecord::Base
     scope :not_owners, -> { where(owner: false) }
     scope :es_index_for_enterprise, -> (enterprise) { where(enterprise: enterprise) }
     scope :active, -> {where(active: true)}
-
+    scope :mentors, -> {where(mentor: true)}
+    scope :mentees, -> {where(mentee: true)}
+    
+    accepts_nested_attributes_for :availabilities, :allow_destroy => true
+    
     def name
         "#{first_name} #{last_name}"
     end

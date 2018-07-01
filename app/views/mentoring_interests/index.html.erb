@@ -1,0 +1,25 @@
+<div class="content__header">
+  <h1>Mentoring Topics</h1>
+      <div class="col-xs-6 text-right">
+      <%= link_to "New Topic", new_mentoring_interest_path, class: "btn btn--primary pull-right" if policy(MentoringInterest).new? %>
+    </div>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <table class="table--has-border" id="policy-groups-templates-table">
+        <thead>
+          <th>Name</th>
+        </thead>
+        <tbody>
+          <% @topics.each do |topic| %>
+            <tr>
+              <td><%= link_to topic.name, edit_mentoring_interest_path(topic) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

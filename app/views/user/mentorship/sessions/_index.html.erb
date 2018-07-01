@@ -1,0 +1,26 @@
+<div class="col-xs-8">
+  <div class="card">
+    <div class="card__section">
+      <% if @sessions.count > 0 %>
+        <h4>Upcoming Sessions</h4>
+        <% @sessions.each do |mentoring_session| %>
+          <div class="card__section card__section--border">
+            <%= link_to mentoring_session_path(mentoring_session), class: "block block-section" do %>
+              <div class="flex-row flex-row--middle">
+                <div class="flex-row__cell flex-row__cell--grow">
+                  <small><%= mentoring_session.notes.html_safe %></small><br>
+                  <small class="muted"><%= mentoring_session.start.strftime("%m/%d/%Y %H:%M") %> - <%= mentoring_session.end.strftime("%m/%d/%Y %H:%M") %></small>
+                </div>
+                <div class="flex-row__cell">
+                  <span class="icon icon--chevron-right"></span>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      <% else %>
+        <h4 class="text-center">You currently don't have any sessions. Schedule one today!</h4>
+      <% end %>
+    </div>
+  </div>
+</div>
