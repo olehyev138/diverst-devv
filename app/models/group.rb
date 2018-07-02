@@ -5,12 +5,14 @@ class Group < ActiveRecord::Base
 
   enumerize :layout, default: :layout_0, in: [
                               :layout_0,
-                              :layout_1
+                              :layout_1,
+                              :layout_2
                             ]
 
   LAYOUTS_INFO = {
     'layout_0' => 'Default layout',
-    'layout_1' => 'Layout without leader boards for Most Active Members'
+    'layout_1' => 'Layout without leader boards for Most Active Members',
+    'layout_2' => 'Layout with sub-groups on top of group leaders'
   }
 
   enumerize :pending_users, default: :disabled,  in: [

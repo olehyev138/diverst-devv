@@ -54,3 +54,7 @@ en:
   time:
     formats:
       default: "%l:%M %p"
+  activerecord:
+    attributes:
+      mentoring_request:
+        sender: ""

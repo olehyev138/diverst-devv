@@ -70,6 +70,14 @@
           <% end %>
         </li>
       <% end %>
+      <% if current_user.enterprise.mentorship_module_enabled %>
+        <li class="nav__item">
+          <%= active_link_to mentoring_interests_path, class: "nav__link", class_active: "nav__link--is-selected" do %>
+            <%= inline_svg('icons/harmonize.svg', class: "icon nav__icon") %>
+            <span class="nav__text">Mentorship</span>
+          <% end %>
+        </li>
+      <% end %>
     </ul>
     <ul class="nav__list nav__list--secondary">
       <% if global_settings_path %>

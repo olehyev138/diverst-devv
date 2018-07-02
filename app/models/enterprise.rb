@@ -34,6 +34,13 @@ class Enterprise < ActiveRecord::Base
     has_many :expense_categories, dependent: :destroy
     has_many :biases, through: :users, class_name: "Bias"
     has_many :departments
+    
+    # mentorship
+    has_many :mentoring_interests, dependent: :destroy
+    has_many :mentoring_requests, dependent: :destroy
+    has_many :mentoring_sessions, dependent: :destroy
+    has_many :mentoring_types, dependent: :destroy
+    
     has_many :policy_group_templates, dependent: :destroy
     has_many :rewards, dependent: :destroy
     has_many :reward_actions, dependent: :destroy

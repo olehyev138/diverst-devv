@@ -7,7 +7,8 @@ class Resource < ActiveRecord::Base
     belongs_to :initiative
     belongs_to :group
     belongs_to :owner, class_name: "User"
-
+    belongs_to :mentoring_session
+    
     has_many :tags, dependent: :destroy
     accepts_nested_attributes_for :tags
 

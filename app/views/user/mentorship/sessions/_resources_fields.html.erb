@@ -1,0 +1,12 @@
+<div class="nested-fields">
+  <%= link_to_remove_association "Remove", f, class: "error" %>
+    x
+  </br>
+  <div class="card__section card__section--border">
+    <%= f.input :title,
+          label: "Start off by giving your resource a representative <strong>title</strong>".html_safe,
+          input_html: { autofocus: true } %>
+    <%= f.input :file, as: :attachment_preview, label: "Upload the <strong>file</strong> you want to share".html_safe %>
+    <%= f.input :url, label: "URL" %>
+  </div>
+</div>
