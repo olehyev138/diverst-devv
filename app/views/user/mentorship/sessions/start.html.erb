@@ -125,7 +125,7 @@
     window.addEventListener('beforeunload', leaveRoomIfJoined);
     
     twilio.createLocalTracks({
-      audio: false,
+      audio: true,
       video: { width: 640 }
       }).then(localTracks => {
       localTracks.push(dataTrack)
