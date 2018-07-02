@@ -191,7 +191,7 @@ class GenericGraphsController < ApplicationController
             {
                 name: g.name,
                 id: g.name,
-                data: g.children.map {|child| [child.name, child.active.mentors_and_mentees.active.count]}
+                data: g.children.map {|child| [child.name, child.members.active.mentors_and_mentees.active.count]}
             }
         }
         categories = current_user.enterprise.groups.all_parents.map{ |g| g.name }
@@ -221,6 +221,7 @@ class GenericGraphsController < ApplicationController
     end
     
     def mentoring_sessions
+
         data = current_user.enterprise.groups.all_parents.map { |g|
             {
                 y: g.members.active.mentors_and_mentees.joins(:mentoring_sessions).where("mentoring_sessions.created_at > ? ", 1.month.ago).count,
@@ -228,13 +229,15 @@ class GenericGraphsController < ApplicationController
                 drilldown: g.name
             }
         }
+
         drilldowns = current_user.enterprise.groups.includes(:children).all_parents.map { |g|
             {
                 name: g.name,
                 id: g.name,
-                data: g.children.map {|child| [child.name, child.members.active.mentors_and_mentees.joins(:mentoring_sessions).where("mentoring_sessions.created_at > #{1.month.ago}").count]}
+                data: g.children.map {|child| [child.name, child.members.active.mentors_and_mentees.joins(:mentoring_sessions).where("mentoring_sessions.created_at > ?", 1.month.ago).count]}
             }
         }
+
         categories = current_user.enterprise.groups.all_parents.map{ |g| g.name }
 
         respond_to do |format|
