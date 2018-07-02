@@ -95,6 +95,12 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+  
+  # Faker - clear random generator before each test, otherwise it will
+  # reach its max and throw an error
+  config.before(:each) do
+    Faker::UniqueGenerator.clear
+  end
 
   config.before(:suite) do
     DatabaseCleaner.clean_with(:deletion)

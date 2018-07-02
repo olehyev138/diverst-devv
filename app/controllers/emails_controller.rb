@@ -8,7 +8,7 @@ class EmailsController < ApplicationController
     @enterprise = current_user.enterprise
     @emails = @enterprise.emails
   end
-  
+
   def edit
   end
 

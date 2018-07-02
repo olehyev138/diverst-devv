@@ -1,0 +1,71 @@
+<div class="content__main">
+  <div class="row row--equal-height">
+    <%= render "user/mentorship/menu" %>
+    <div class="col-xs-8">
+      <div class="card">
+        <div class="card__section card__section--border">
+            <%= link_to "Edit", edit_mentoring_session_path(@mentoring_session)  %>
+        </div>
+        <div class="card__section card__section--border">
+            <label><strong>Starts</strong></label>
+            <p><%= @mentoring_session.start.strftime("%m/%d/%Y %H:%M") %></p>
+            <% # check if the start time of the session is within 5 minutes %>
+            <% if @mentoring_session.can_start(current_user.id) %>
+                <%= link_to "START SESSION", start_mentoring_session_path(@mentoring_session), target: "_blank", class: "muted", role: "button", 'aria-label': "Start" %>
+             <% end %>
+             
+            <% # check if users can join the link %>
+            <% if @mentoring_session.access_token %>
+                <%= link_to "JOIN SESSION", join_mentoring_session_path(@mentoring_session), target: "_blank", class: "muted", role: "button", 'aria-label': "Start" %>
+             <% end %>
+         </div>
+        <div class="card__section card__section--border">
+            <label><strong>Ends</strong></label>
+            <p><%= @mentoring_session.end.strftime("%m/%d/%Y %H:%M") %></p>
+         </div>
+        <div class="card__section card__section--border">
+            <label><strong>Attending</strong></label>
+            <% @mentoring_session.users.each do |user| %>
+                <p><%= user.first_name %> <%= user.last_name %> - <%= user.email %></p>
+            <% end %>
+         </div>
+        <div class="card__section card__section--border">
+            <label><strong>Format</strong></label>
+            <p><%= @mentoring_session.format %></p>
+         </div>
+        <div class="card__section card__section--border">
+            <label><strong>Status</strong></label>
+            <p><%= @mentoring_session.status.titleize %></p>
+         </div>
+        <div class="card__section card__section--border">
+            <label><strong>Link/URL</strong></label>
+            <% if @mentoring_session.link.present? %>
+                <p><%= @mentoring_session.link %></p>
+            <% else %>
+                <p>None</p>
+            <% end %>
+         </div>
+        <div class="card__section card__section--border">
+            <label><strong>Notes</strong></label>
+            <p><%= @mentoring_session.notes %></p>
+         </div>
+        <div class="card__section card__section--border">
+            <label><strong>Preparation Materials</strong></label>
+            <% @mentoring_session.resources.each do |resource| %>
+                <p>
+                    <% if resource.url.nil? || resource.url.empty? %>
+                        <span class="icon-column">
+                          <a href="<%= resource.file.expiring_url(resource.expiration_time) %>" class="icon icon--bg icon--large" style="background-image: url(<%= thumbnail_for_resource(resource) %>)"></a>
+                        </span>
+                        <span><%= link_to resource.title, resource.file.expiring_url(resource.expiration_time), target: '_blank' %></span>
+                        <span>N/A</span>
+                    <% else %>
+                        <span><%= link_to resource.title, resource.url, target: '_blank' %></span>
+                    <% end %>
+                </p>
+            <% end %>
+         </div>
+      </div>
+    </div>
+  </div>
+</div>

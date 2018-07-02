@@ -157,8 +157,6 @@ class GroupsController < ApplicationController
 
         if group_params[:group_category_id].present?
           @group.group_category_type_id = GroupCategory.find_by(id: params[:group][:group_category_id])&.group_category_type_id
-        else
-            @group.group_category_type_id = nil
         end
 
         if @group.update(group_params)

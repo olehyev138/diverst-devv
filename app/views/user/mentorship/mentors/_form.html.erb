@@ -1,0 +1,20 @@
+<div class="col-xs-8">
+  <div class="card">
+    <div class="card__section">
+      <%= simple_form_for @mentoring_request, :method => :post do |f| %>
+        <div class="card__section">
+          <div class="row row--spacing-bottom">
+            <%= f.input :sender_id, as: :hidden %>
+            <%= f.input :receiver_id, as: :hidden %>
+            
+            <div class="col md-6">
+              <p class="field__hint">Why do you want this person to mentor you?</p>
+              <%= f.input :notes, label: false %>
+            </div>
+          </div>
+        </div>
+        <%= f.button :submit, "Submit Request" %>
+      <% end %>
+    </div>
+  </div>
+</div>
