@@ -154,7 +154,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
 
             context 'when leaving parent group' do
                 let!(:sub_group) { create(:group, enterprise: user.enterprise, parent_id: group.id) }
-                let!(:group_leader) { create(:group_leader, user_id: user.id, group_id: group.id, :user_role_id => group_role.id) }
+                let!(:group_leader) { create(:group_leader, user_id: user.id, group_id: group.id) }
                 before do
                     UserGroup.create(user_id: user.id, group_id: sub_group.id, accepted_member: true)
                     delete :destroy, group_id: group.id, id: user.id
@@ -180,7 +180,8 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
- 
+
+
     describe 'POST#create' do
         context "when unsuccessful" do
             login_user_from_let
@@ -293,9 +294,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
     end
 
     describe 'DELETE#remove_member' do
-        context 'when user is logged in' do 
-            let!(:group_leader){create(:group_leader, user: user, group: group)}
-            
+        context 'when user is logged in' do
             login_user_from_let
             before { 
                 user_group.save 
