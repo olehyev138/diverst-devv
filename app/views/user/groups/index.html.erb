@@ -29,8 +29,8 @@
           <% if group.children.any? %>
           <div style="float: right;">
             <p>
-              <%= link_to "show #{c_t(:sub_erg).pluralize}", "#", class: "nested_show", id: group.id %>
-              <%= link_to "hide #{c_t(:sub_erg).pluralize}", "#", class: "nested_hide", id: group.id, style: 'display:none;' %>
+              <%= link_to "Show #{c_t(:sub_erg).pluralize}", "#", class: "nested_show", id: group.id %>
+              <%= link_to "Hide #{c_t(:sub_erg).pluralize}", "#", class: "nested_hide", id: group.id, style: 'display:none;' %>
             </p>
           </div>
           <% end %>

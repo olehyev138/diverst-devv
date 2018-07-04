@@ -1,5 +1,6 @@
 class Group < ActiveRecord::Base
   include PublicActivity::Common
+  extend CustomTextHelpers
 
   extend Enumerize
 
@@ -12,7 +13,7 @@ class Group < ActiveRecord::Base
   LAYOUTS_INFO = {
     'layout_0' => 'Default layout',
     'layout_1' => 'Layout without leader boards for Most Active Members',
-    'layout_2' => 'Layout with sub-groups on top of group leaders'
+    'layout_2' => "Layout with #{c_t(:sub_erg).pluralize} on top of group leaders"
   }
 
   enumerize :pending_users, default: :disabled,  in: [
