@@ -142,6 +142,9 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
 
+  def is_parent_group?
+    (parent.nil? && children.any?) || (parent.nil? && children.empty?)
+  end
 
   def is_sub_group?
     parent.present?
