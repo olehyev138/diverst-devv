@@ -19,17 +19,22 @@
         <div class="flex-row flex-row--middle">
           <div class="flex-row__cell flex-row__cell--grow">
             <h4><%= news_link.title %> - <span class="muted"> <%= news_link.total_views %> views</span></h4>
-            <div class="hidden-xs">
-                      <p>
-          <%= allow_newlines news_link.description %>
-          <br>
-          <%= link_to news_link.url, news_link.url, target: '_blank', 'data-trackable': news_link.news_feed_link.id %>
-          <br>
-          <% if news_link.author.present? %>
-            <span class="muted">Posted by <%=  news_link.author.name_with_status %></span>
-          <% end %>
-          <br>
-          <%= link_to "Comments(#{news_link.comments_count})", comments_group_news_link_path(news_link.group,news_link) %>
+            <p class="postContent">
+              <%= allow_newlines news_link.description %>
+              <br>
+              <%= link_to news_link.url, news_link.url, target: '_blank', 'data-trackable': news_link.news_feed_link.id %>
+              <br>
+              <% if news_link.author.present? %>
+                <span class="muted">Posted by <%=  news_link.author.name_with_status %></span>
+              <% end %>
+            </p>
+            <div class="row">
+              <div class="col commentsLink">
+                <%= link_to "Comments(#{news_link.comments_count})", comments_group_news_link_path(news_link.group, news_link) %>
+              </div>
+              <div class="col">
+                <%= render partial: "groups/shared/like_feature", locals: {news_feed_link: news_link.news_feed_link } %>
+              </div>
             </div>
           </div>
         </div>
@@ -50,10 +55,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-xs-2 pull-left">
-        <%= render partial: "groups/shared/like_feature", locals: {news_feed_link: news_link.news_feed_link } %>
-      </div>
-      <div class="col-xs-10">
+      <div class="col-xs-8">
         <span class="hidden-xs pull-right">
           <% if policy(news_link).edit? %>
             <%= link_to "Approve", approve_group_posts_path(:group_id => news_link.group.id, :link_id => news_link.news_feed_link.id), method: :post, class: "btn btn--primary" if policy(news_link.group).erg_leader_permissions? and !news_link.news_feed_link.approved? %>

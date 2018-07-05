@@ -55,12 +55,16 @@ function unlikeSuccess(data, btn)
 
 function setAsLikedImage(btn)
 {
-  btn.children().attr("src", "<%= image_path("icons/like-active.svg") %>");
+  $(btn).children('svg').attr('class', function(index, classNames) {
+    return classNames.replace('likeImg', 'likeImgFill');
+  });
 }
 
 function setAsUnlikedImage(btn)
 {
-  btn.children().attr("src", "<%= image_path("icons/like.svg") %>");
+  $(btn).children('svg').attr('class', function(index, classNames) {
+    return classNames.replace('likeImgFill', 'likeImg');
+  });
 }
 
 function incrementLikeCount(object_id)

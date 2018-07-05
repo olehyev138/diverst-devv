@@ -361,6 +361,7 @@ ActiveRecord::Schema.define(version: 20180620225618) do
     t.datetime "onboarding_sponsor_media_updated_at"
     t.boolean  "enable_pending_comments",                             default: false
     t.boolean  "disable_sponsor_message",                             default: false
+    t.boolean  "disable_likes",                                       default: false
     t.boolean  "mentorship_module_enabled",                           default: false
   end
 
