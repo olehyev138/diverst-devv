@@ -1,0 +1,24 @@
+<% content_for :secondary_nav do %>
+<div class="menu menu--mobile">
+  <button
+    class="m-hamburger"
+    aria-label="Menu"
+    aria-controls="navigation"
+    data-jq-dropdown="#navigation">
+    <span>Menu</span>
+  </button>
+  <nav id="navigation" class="jq-dropdown jq-dropdown-tip">
+    <ul class="jq-dropdown-menu">
+      <li>
+        <%= active_link_to "Topics", mentoring_interests_path %>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<div class="menu menu--desktop">
+  <%= active_link_to "Topics", mentoring_interests_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['campaigns', 'questions', 'answers'], []] %>
+</div>
+<% end %>
+
+<%= render template: "layouts/dashboard" %>

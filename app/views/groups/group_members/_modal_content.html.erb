@@ -1,0 +1,27 @@
+<div class="modal-header">
+  <h4 class="modal-title text-center">
+  <% if @group.parent.nil? && @group.children.any? %>
+  Do you want to join <%= c_t(:sub_erg).pluralize %> of <%= @group.name %>?
+  <% else %>
+  Do you want to join <%= @group.parent.name %>, a parent <%= c_t(:erg) %> of <%= @group.name %>?
+  <% end %>
+
+  </h4>
+</div>
+<div class="modal-body">
+  <div class="container-fluid">
+    <div class="row text-center">
+    <% if @group.parent.nil? && @group.children.any? %>
+     <%= link_to "YES", join_all_sub_groups_group_group_members_path(@group), class: 'btn btn--primary', method: :post %>
+     <%= link_to "NO", view_sub_groups_group_group_members_path, class: "btn btn--primary", remote: true %>
+     <% else %>
+     <%= simple_form_for :user, url: group_group_members_path(@group.parent), method: :post do |f| %>
+        <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
+        <%= f.submit "YES", class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
+      <%= link_to "NO", view_sub_groups_group_group_members_path, class: "btn btn--primary", style: "margin-bottom: 20px;", remote: true %>
+      <% end %>
+    <% end %>
+    </div>
+  </div>
+</div>
+

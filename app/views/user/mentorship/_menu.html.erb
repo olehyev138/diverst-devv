@@ -1,0 +1,25 @@
+<div class="col xs-4">
+  <div class="card">
+    <div class="card__section">
+      <h4 class="card__title"><%= inline_svg('icons/manage.svg', class: "icon card__icon") %>Mentorship</h4>
+      <%= active_link_to "Profile", edit_user_mentorship_path(:id => current_user.id) %>
+      </br>
+      <% if current_user.mentee? || current_user.mentor? %>
+        <%= active_link_to "Mentors", mentors_user_mentorship_index_path %>
+        </br>
+        <% #only show mentees if the user is a mentor %>
+        <% if current_user.mentor? %>
+          <%= active_link_to "Mentees", mentees_user_mentorship_index_path %>
+          </br>
+        <% end %>
+        <%= active_link_to "Requests", requests_user_mentorship_index_path %>
+        </br>
+        <% if current_user.mentees.count > 0 || current_user.mentors.count > 0 %>
+          <%= active_link_to "Upcoming Sessions", sessions_user_mentorship_index_path %>
+          </br>
+        <% end %>
+        <%= active_link_to "Session Feedback", ratings_user_mentorship_index_path %>
+      <% end %>
+    </div>
+  </div>
+</div>

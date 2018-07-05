@@ -1,0 +1,59 @@
+<div class="col-xs-8">
+  <div class="card">
+    <div class="card__section">
+      <%= simple_form_for @mentoring_session do |f| %>
+        <div class="card__section">
+          <div class="row row--spacing-bottom">
+            <div class="card__section card__section--border">
+              <p class="field__hint">Choose the session's start and end <strong>time</strong></p>
+              <%= f.input :start, as: :date_time_picker, label: "Start time" %>
+              <%= f.input :end, as: :date_time_picker, label: "End time" %>
+            </div>
+          </div>
+          
+          <div class="row row--spacing-bottom">
+            <div class="col md-12">
+              <p class="field__hint">Session topics</p>
+              <%= f.association :mentoring_interests,
+                  collection: current_user.enterprise.mentoring_interests,
+                  input_html: { class: "select2" },
+                  label: false %>
+            </div>
+          </div>
+          
+          <div class="row row--spacing-bottom">
+            <div class="col md-12">
+              <p class="field__hint">Session format</p>
+              <%= f.input :format,
+                  collection: ["Video", "In Person"],
+                  input_html: { class: "select2" },
+                  label: false %>
+            </div>
+          </div>
+          
+          <%= f.simple_fields_for :mentorship_sessions do |ms| %>
+            <%= render "user/mentorship/sessions/mentorship_session_fields", f: ms %>
+          <% end %>
+                  
+          <span><%= link_to_add_association  "+ Add a user - 2 are required", f, :mentorship_sessions, :partial => "user/mentorship/sessions/mentorship_session_fields" %></span>
+          </br>
+          
+          <%= f.simple_fields_for :resources do |resource| %>
+            <%= render "user/mentorship/sessions/resources_fields", f: resource %>
+          <% end %>
+                  
+          <span><%= link_to_add_association "+ Add a resource", f, :resources, :partial => "user/mentorship/sessions/resources_fields" %></span>
+          </br>
+          
+          <div class="row row--spacing-bottom">
+            <div class="col md-12">
+              <p class="field__hint">Add any notes</p>
+              <%= f.input :notes, label: false %>
+            </div>
+          </div>
+        </div>
+        <%= f.button :submit, "Submit Request" %>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -119,7 +119,6 @@ RSpec.describe User do
       end
     end
 
-
     context 'presence of fields' do
       let(:user){ build(:user, enterprise: enterprise) }
       let!(:mandatory_field){ build(:field, title: "Test", required: true) }
@@ -459,6 +458,63 @@ RSpec.describe User do
 
         expect(user.as_indexed_json['combined_info']).to eq(data)
       end
+    end
+  end
+  
+  describe "mentorship" do
+    it "goes through whole workflow" do
+      # create a user interested in being mentored
+      mentee = create(:user, :mentee => true)
+      
+      # the mentorship doesn't have any mentors/mentees/availability/
+      # mentorship_types/mentoring_interests
+      expect(mentee.mentors.count).to eq(0)
+      expect(mentee.mentees.count).to eq(0)
+      expect(mentee.availabilities.count).to eq(0)
+      expect(mentee.mentorship_types.count).to eq(0)
+      expect(mentee.mentoring_interests.count).to eq(0)
+      
+      # the mentorship doesn't have any pending sessions/requests/ratings
+      expect(mentee.mentorship_requests.count).to eq(0)
+      expect(mentee.mentorship_proposals.count).to eq(0)
+      expect(mentee.mentoring_sessions.count).to eq(0)
+      expect(mentee.mentorship_ratings.count).to eq(0)
+      
+      # sending a request for mentorship to a mentor
+      mentor = create(:user, :mentor => true)
+      mentorship_request = create(:mentoring_request, :sender => mentee, :receiver => mentor)
+      
+      # check the request
+      expect(mentorship_request.valid?).to be(true)
+      expect(mentorship_request.sender.id).to eq(mentee.id)
+      expect(mentorship_request.receiver.id).to eq(mentor.id)
+      
+      expect(mentee.mentorship_requests.count).to eq(1)
+      expect(mentee.mentorship_proposals.count).to eq(0)
+      
+      expect(mentor.mentorship_requests.count).to eq(0)
+      expect(mentor.mentorship_proposals.count).to eq(1)
+      
+      # schedule a session
+      mentoring_session = create(:mentoring_session, :mentorship_sessions_attributes => [{:user_id => mentor.id, :role => "presenter"}, {:user_id => mentee.id, :role => "attendee" }])
+      
+      # check the session
+      expect(mentoring_session.valid?).to be(true)
+      expect(mentoring_session.status).to eq("scheduled")
+      expect(mentoring_session.users.count).to eq(2)
+      
+      # leave some ratings
+      mentor_rating = build(:mentorship_rating, :user => mentor, :mentoring_session => mentoring_session)
+      mentee_rating = build(:mentorship_rating, :user => mentee, :mentoring_session => mentoring_session)
+      
+      mentor_rating.comments = "This is the best mentor ever"
+      mentee_rating.comments = "Mentee was a great listener"
+      
+      mentor_rating.save!
+      mentee_rating.save!
+      
+      expect(mentor_rating.rating).to eq(7)
+      expect(mentee_rating.rating).to eq(7)
     end
   end
 end

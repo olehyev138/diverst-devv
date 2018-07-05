@@ -77,9 +77,8 @@
 
 <script>
  $(function() {
-   $('a[data-trackable]').click(function() {
+   $('a[data-trackable]').on('mousedown', function() {
      $.post('/views/track', { id: $(this).data('trackable') } );
-
    });
  });
 </script>

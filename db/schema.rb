@@ -10,8 +10,7 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-
-ActiveRecord::Schema.define(version: 20180520224540) do
+ActiveRecord::Schema.define(version: 20180620225618) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -256,6 +255,7 @@ ActiveRecord::Schema.define(version: 20180520224540) do
     t.text    "member_preference", limit: 65535
     t.text    "parent",            limit: 65535
     t.text    "sub_erg",           limit: 65535
+    t.text    "privacy_statement", limit: 65535
   end
 
   add_index "custom_texts", ["enterprise_id"], name: "index_custom_texts_on_enterprise_id", using: :btree
@@ -362,6 +362,7 @@ ActiveRecord::Schema.define(version: 20180520224540) do
     t.boolean  "enable_pending_comments",                             default: false
     t.boolean  "disable_sponsor_message",                             default: false
     t.boolean  "disable_likes",                                       default: false
+    t.boolean  "mentorship_module_enabled",                           default: false
   end
 
   create_table "event_attendances", force: :cascade do |t|
@@ -744,6 +745,110 @@ ActiveRecord::Schema.define(version: 20180520224540) do
     t.datetime "both_accepted_at"
   end
 
+  create_table "mentoring_interests", force: :cascade do |t|
+    t.integer  "enterprise_id", limit: 4
+    t.string   "name",          limit: 191, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "mentoring_request_interests", force: :cascade do |t|
+    t.integer  "mentoring_request_id",  limit: 4, null: false
+    t.integer  "mentoring_interest_id", limit: 4, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "mentoring_requests", force: :cascade do |t|
+    t.integer  "enterprise_id", limit: 4
+    t.string   "status",        limit: 191,   default: "pending", null: false
+    t.text     "notes",         limit: 65535
+    t.integer  "sender_id",     limit: 4,                         null: false
+    t.integer  "receiver_id",   limit: 4,                         null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "mentoring_session_topics", force: :cascade do |t|
+    t.integer  "mentoring_interest_id", limit: 4, null: false
+    t.integer  "mentoring_session_id",  limit: 4, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "mentoring_sessions", force: :cascade do |t|
+    t.integer  "enterprise_id",   limit: 4
+    t.integer  "creator_id",      limit: 4,                           null: false
+    t.datetime "start",                                               null: false
+    t.datetime "end",                                                 null: false
+    t.string   "format",          limit: 191,                         null: false
+    t.string   "link",            limit: 191
+    t.text     "access_token",    limit: 65535
+    t.string   "video_room_name", limit: 191
+    t.string   "status",          limit: 191,   default: "scheduled", null: false
+    t.text     "notes",           limit: 65535
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "mentoring_types", force: :cascade do |t|
+    t.integer  "enterprise_id", limit: 4
+    t.string   "name",          limit: 191, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "mentorings", force: :cascade do |t|
+    t.integer  "mentor_id",  limit: 4
+    t.integer  "mentee_id",  limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "mentorship_availabilities", force: :cascade do |t|
+    t.integer  "user_id",    limit: 4, null: false
+    t.datetime "start",                null: false
+    t.datetime "end",                  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "mentorship_availabilities", ["user_id"], name: "index_mentorship_availabilities_on_user_id", using: :btree
+
+  create_table "mentorship_interests", force: :cascade do |t|
+    t.integer  "user_id",               limit: 4, null: false
+    t.integer  "mentoring_interest_id", limit: 4, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "mentorship_ratings", force: :cascade do |t|
+    t.integer  "rating",               limit: 4,                     null: false
+    t.integer  "user_id",              limit: 4,                     null: false
+    t.integer  "mentoring_session_id", limit: 4,                     null: false
+    t.boolean  "okrs_achieved",                      default: false
+    t.boolean  "valuable",                           default: false
+    t.text     "comments",             limit: 65535,                 null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "mentorship_sessions", force: :cascade do |t|
+    t.integer  "user_id",              limit: 4,                  null: false
+    t.string   "role",                 limit: 191,                null: false
+    t.integer  "mentoring_session_id", limit: 4,                  null: false
+    t.boolean  "attending",                        default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "mentorship_types", force: :cascade do |t|
+    t.integer  "user_id",           limit: 4, null: false
+    t.integer  "mentoring_type_id", limit: 4, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "metrics_dashboards", force: :cascade do |t|
     t.integer  "enterprise_id",   limit: 4
     t.string   "name",            limit: 191
@@ -936,18 +1041,19 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   end
 
   create_table "resources", force: :cascade do |t|
-    t.string   "title",             limit: 191
-    t.integer  "container_id",      limit: 4
-    t.string   "container_type",    limit: 191
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
-    t.string   "file_file_name",    limit: 191
-    t.string   "file_content_type", limit: 191
-    t.integer  "file_file_size",    limit: 4
+    t.string   "title",                limit: 191
+    t.integer  "container_id",         limit: 4
+    t.string   "container_type",       limit: 191
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.string   "file_file_name",       limit: 191
+    t.string   "file_content_type",    limit: 191
+    t.integer  "file_file_size",       limit: 4
     t.datetime "file_updated_at"
-    t.integer  "owner_id",          limit: 4
-    t.string   "resource_type",     limit: 191
-    t.string   "url",               limit: 191
+    t.integer  "owner_id",             limit: 4
+    t.string   "resource_type",        limit: 191
+    t.string   "url",                  limit: 191
+    t.integer  "mentoring_session_id", limit: 4
   end
 
   add_index "resources", ["container_type", "container_id"], name: "index_resources_on_container_type_and_container_id", using: :btree
@@ -1120,14 +1226,14 @@ ActiveRecord::Schema.define(version: 20180520224540) do
     t.text     "data",                        limit: 65535
     t.string   "auth_source",                 limit: 191
     t.integer  "enterprise_id",               limit: 4
-    t.datetime "created_at",                                               null: false
-    t.datetime "updated_at",                                               null: false
+    t.datetime "created_at",                                                null: false
+    t.datetime "updated_at",                                                null: false
     t.string   "email",                       limit: 191
     t.string   "encrypted_password",          limit: 191
     t.string   "reset_password_token",        limit: 191
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",               limit: 4,     default: 0,    null: false
+    t.integer  "sign_in_count",               limit: 4,     default: 0,     null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip",          limit: 191
@@ -1155,13 +1261,16 @@ ActiveRecord::Schema.define(version: 20180520224540) do
     t.integer  "policy_group_id",             limit: 4
     t.boolean  "active",                                    default: true
     t.text     "biography",                   limit: 65535
-    t.integer  "points",                      limit: 4,     default: 0,    null: false
-    t.integer  "credits",                     limit: 4,     default: 0,    null: false
+    t.integer  "points",                      limit: 4,     default: 0,     null: false
+    t.integer  "credits",                     limit: 4,     default: 0,     null: false
     t.string   "time_zone",                   limit: 191
     t.integer  "total_weekly_points",         limit: 4,     default: 0
-    t.integer  "failed_attempts",             limit: 4,     default: 0,    null: false
+    t.integer  "failed_attempts",             limit: 4,     default: 0,     null: false
     t.string   "unlock_token",                limit: 191
     t.datetime "locked_at"
+    t.boolean  "mentee",                                    default: false
+    t.boolean  "mentor",                                    default: false
+    t.text     "mentorship_description",      limit: 65535
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree
@@ -1202,6 +1311,7 @@ ActiveRecord::Schema.define(version: 20180520224540) do
   add_foreign_key "likes", "enterprises"
   add_foreign_key "likes", "news_feed_links"
   add_foreign_key "likes", "users"
+  add_foreign_key "mentorship_availabilities", "users"
   add_foreign_key "polls", "initiatives"
   add_foreign_key "reward_actions", "enterprises"
   add_foreign_key "rewards", "enterprises"
