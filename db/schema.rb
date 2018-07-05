@@ -10,8 +10,7 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-
-ActiveRecord::Schema.define(version: 20180606192823) do
+ActiveRecord::Schema.define(version: 20180620225618) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -256,6 +255,7 @@ ActiveRecord::Schema.define(version: 20180606192823) do
     t.text    "member_preference", limit: 65535
     t.text    "parent",            limit: 65535
     t.text    "sub_erg",           limit: 65535
+    t.text    "privacy_statement", limit: 65535
   end
 
   add_index "custom_texts", ["enterprise_id"], name: "index_custom_texts_on_enterprise_id", using: :btree
