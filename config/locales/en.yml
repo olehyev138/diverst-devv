@@ -51,6 +51,7 @@ en:
     member_preference: Member Preference
     parent: Parent
     sub_erg: Sub Erg
+    privacy_statement: Privacy Statement
   time:
     formats:
       default: "%l:%M %p"

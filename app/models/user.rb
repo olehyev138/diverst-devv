@@ -117,6 +117,14 @@ class User < ActiveRecord::Base
     
     accepts_nested_attributes_for :availabilities, :allow_destroy => true
     
+    def is_group_leader_of?(group)
+        group.group_leaders.where(user_id: self.id).any?
+    end
+
+    def is_member_of?(group)
+        group.user_groups.where(user_id: self.id).any?
+    end
+
     def name
         "#{first_name} #{last_name}"
     end
