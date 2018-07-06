@@ -15,6 +15,24 @@ class ApplicationController < ActionController::Base
     rescue_from ActionController::UnknownFormat do |e|
         render :status => 400, :json => {error: e.message}
     end
+    
+    rescue_from ActionView::MissingTemplate do |e|
+        flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
+        flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
+        redirect_to(request.referrer || default_path)
+    end
+    
+    rescue_from ActionView::Template::Error do |e|
+        flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
+        flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
+        redirect_to(request.referrer || default_path)
+    end
+    
+    rescue_from ActionController::BadRequest do |e|
+        flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
+        flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
+        redirect_to(request.referrer || default_path)
+    end
 
     rescue_from ActionController::RoutingError do |e|
         flash[:alert] = e.message
