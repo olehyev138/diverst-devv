@@ -15,7 +15,7 @@ class UserPolicy < ApplicationPolicy
   def destroy?
     @policy_group.users_manage?
   end
-  
+
   def resend_invitation?
     @policy_group.users_manage?
   end

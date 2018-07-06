@@ -9,22 +9,40 @@ RSpec.feature 'Group Membership Management' do
 	context 'when group has enable pending users' do
 		pending_membership_message = '* Please wait for group administrators to process your membership request.
 		Take a survey below in order to speed up approval process.'
+		let!(:sub_group) { create(:group, enterprise: enterprise, name: "Sub Group ONE", parent_id: group.id) }
 
 		before do
 			group.update(pending_users: 'enabled')
 			login_as(guest_user, scope: :user)
 		end
 
-		scenario 'when a user joins a group' do
+		scenario 'when a user joins a parent group with children', js: true do
 			visit group_path(group)
 
-			expect(page).to have_button 'Join this ERG'
+			click_button "Join this #{c_t(:erg)}"
 
-			click_on 'Join this ERG'
+			expect(page).to have_content "Do you want to join #{c_t(:sub_erg).pluralize} of #{group.name}?"
 
-			expect(page).to have_content 'The member was created'
-			expect(page).to have_content pending_membership_message
+			click_link "YES"
+
+			expect(page).to have_content "You've joined all #{c_t(:sub_erg).pluralize} of #{group.name}"
+
+			expect(page).to have_current_path survey_group_questions_path(group)
+			expect(sub_group.members).to include guest_user
 		end
+
+		scenario 'when a user joins a sub group, prompt option to join parent group', js: true do
+			visit group_path(sub_group)
+
+			click_button "Join this #{c_t(:erg)}"
+
+			expect(page).to have_content "Do you want to join #{group.name}, a parent #{c_t(:erg)} of #{sub_group.name}?"
+
+			click_button "YES"
+
+			expect(group.members).to include guest_user
+		end
+
 
 		context 'when user joins a group' do
 			before do
@@ -125,19 +143,63 @@ RSpec.feature 'Group Membership Management' do
 	context 'when pending users is disabled by group' do
 		pending_membership_message = '* Please wait for group administrators to process your membership request.
 		Take a survey below in order to speed up approval process.'
+		let!(:sub_group) { create(:group, enterprise: enterprise, name: "Sub Group ONE", parent_id: group.id) }
 
 		before do
 			group.update(pending_users: 'disabled')
 			login_as(guest_user, scope: :user)
 		end
 
-		scenario 'when a user joins a group' do
+		scenario 'when a user joins a parent group with children', js: true do
 			visit group_path(group)
 
-			click_button 'Join this ERG'
+			click_button "Join this #{c_t(:erg)}"
 
-			expect(page).to have_content 'The member was created'
-			expect(page).to have_no_content pending_membership_message
+			expect(page).to have_content "Do you want to join #{c_t(:sub_erg).pluralize} of #{group.name}?"
+
+			click_link "YES"
+
+			expect(page).to have_content "You've joined all #{c_t(:sub_erg).pluralize} of #{group.name}"
+			expect(page).to have_current_path survey_group_questions_path(group)
+			expect(sub_group.members).to include guest_user
+		end
+
+		scenario 'when a user joins a sub group, prompt option to join parent group', js: true do
+			visit group_path(sub_group)
+
+			click_button "Join this #{c_t(:erg)}"
+
+			expect(page).to have_content "Do you want to join #{group.name}, a parent #{c_t(:erg)} of #{sub_group.name}?"
+
+			click_button "YES"
+
+			expect(group.members).to include guest_user
+		end
+
+		context 'when a user leaves' do
+			let!(:sub_group) { create(:group, enterprise: enterprise, name: "Sub Group ONE", parent_id: group.id) }
+			let!(:group_membership)	{ create(:user_group, user_id: guest_user.id, group_id: group.id, accepted_member: true) }
+			let!(:sub_group_membership)	{ create(:user_group, user_id: guest_user.id, group_id: sub_group.id, accepted_member: true) }
+
+			scenario 'a parent group', js: true do
+				visit group_path(group)
+
+				click_link "Leave this #{c_t(:erg)}"
+
+				expect(page).to have_button "Join this #{c_t(:erg)}"
+				expect(group.members).not_to include guest_user
+				expect(sub_group.members).not_to include guest_user
+			end
+
+			scenario 'a sub group', js: true do
+				visit group_path(sub_group)
+
+				click_link "Leave this #{c_t(:erg)}"
+
+				expect(page).to have_button "Join this #{c_t(:erg)}"
+				expect(group.members).not_to include guest_user
+				expect(sub_group.members).not_to include guest_user
+			end
 		end
 
 		context 'user joins a group' do

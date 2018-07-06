@@ -11,7 +11,7 @@
       <div class="flex-row flex-row--middle">
         <div class="flex-row__cell flex-row__cell--grow">
           <h3><%= message.subject %> - <span class="muted" title="<%= message.created_at.to_s :datetime %>"><%= time_ago_in_words(message.created_at) %> ago (<%= message.created_at.to_formatted_s(:short) %>) - <%= message.total_views %> views </span></h3>
-          <p>
+          <p class="postContent">
             <%= message.content %>
             <% if message.owner.present? %>
               <br>
@@ -19,14 +19,19 @@
             <% end %>
             <%= link_to "Comments(#{message.comments_count})", group_group_message_path(message.group, message), style: "margin-top: 30px;" %>
           </p>
+          <div class="row">
+            <div class="col commentsLink">
+              <%= link_to "Comments(#{message.comments_count})", group_group_message_path(message.group, message) %>
+            </div>
+            <div class="col">
+              <%= render partial: "groups/shared/like_feature", locals: {news_feed_link: message.news_feed_link } %>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
   <div class="row">
-    <div class="col-xs-2 text-center">
-      <%= render partial: "groups/shared/like_feature", locals: {news_feed_link: message.news_feed_link } %>
-    </div>
     <div class="col-xs-8">
       <div class="hidden-xs pull-right">
         <% if policy(message).destroy? %>

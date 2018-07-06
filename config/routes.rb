@@ -152,12 +152,18 @@ Rails.application.routes.draw do
         collection do
           get 'pending'
           post 'add_members'
+          post 'join_all_sub_groups'
+          delete 'leave_all_sub_groups'
+          get 'view_sub_groups'
         end
         member do
           post 'accept_pending'
           delete 'remove_member'
+          post 'join_sub_group'
+          delete 'leave_sub_group'
         end
       end
+
       resources :group_messages, path: 'messages' do
         post 'create_comment'
         resources :group_message_comment

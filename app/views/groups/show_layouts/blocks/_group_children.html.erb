@@ -16,7 +16,11 @@
 		<br>
 		<% if @group.children.count >= 5 %>
 		<% @group.children.limit(5).each do |child| %>
-		<%= link_to child.name, child %><br>
+		<%= link_to child.name, child %><span class="muted" style="font-size: 14px;">(<% if current_user.is_member_of? child %>
+		  member
+		<% else %>
+		  not member
+		<% end %>)</span><br>
 		<% end %>
 
 		<%= link_to "View #{@group.children.count - 5} More", "#", class: "sub_ergs", id: @group.id %>
@@ -24,12 +28,24 @@
 
 		<% @group.children.last(@group.children.count - 5).each do |sub_erg| %>
 		<div class="remaining_children_<%= @group.id %>" style="display:none; position: relative; top: 10px;">
-			<ol><%= link_to sub_erg.name, group_url(sub_erg) %></ol>
+			<ol><%= link_to sub_erg.name, group_url(sub_erg) %>
+		<span class="muted" style="font-size: 14px;">(<% if current_user.is_member_of? sub_erg %>
+		  member
+		<% else %>
+		  not member
+		<% end %>)</span>
+			</ol>
 		</div>
 		<% end %>
 		<% else %>
 		<% @group.children.each do |child| %>
-		<%= link_to child.name, child %><br>
+		<%= link_to child.name, child %>
+		<span class="muted" style="font-size: 14px;">(<% if current_user.is_member_of? child %>
+		  member
+		<% else %>
+		  not member
+		<% end %>)</span>
+		<br>
 		<% end %>
 		<% end %>
 	</div>
