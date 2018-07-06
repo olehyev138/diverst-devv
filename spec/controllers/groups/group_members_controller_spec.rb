@@ -5,7 +5,8 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
     let(:add) { create :user, enterprise: user.enterprise }
     let(:group) { create(:group, enterprise: user.enterprise) }
     let!(:user_group) {create(:user_group, group_id: group.id, user_id: user.id)}
-
+    let!(:group_role) {user.enterprise.user_roles.group_type.first}
+    
     describe 'GET#index' do
         context 'with user logged in' do
             let!(:user_group1) {create(:user_group, group_id: group.id, user_id: add.id)}
@@ -151,10 +152,9 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
                 end
             end
 
-
             context 'when leaving parent group' do
                 let!(:sub_group) { create(:group, enterprise: user.enterprise, parent_id: group.id) }
-                let!(:group_leader) { create(:group_leader, user_id: user.id, group_id: group.id) }
+                let!(:group_leader) { create(:group_leader, user_id: user.id, group_id: group.id, :user_role_id => group_role.id) }
                 before do
                     UserGroup.create(user_id: user.id, group_id: sub_group.id, accepted_member: true)
                     delete :destroy, group_id: group.id, id: user.id
@@ -174,7 +174,6 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
                 end
             end
         end
-
 
         describe 'when user is not logged in' do
             before { delete :destroy, group_id: group.id, id: user.id }
