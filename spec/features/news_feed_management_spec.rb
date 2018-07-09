@@ -5,6 +5,14 @@ RSpec.feature 'News Feed Management' do
 	let!(:group) { create(:group, name: 'Group ONE', enterprise: user.enterprise) }
 
 	before { login_as(user, scope: :user) }
+	
+	def fill_in_ckeditor(locator, opts)
+	  content = opts.fetch(:with).to_json # convert to a safe javascript string
+	  page.execute_script <<-SCRIPT
+	    CKEDITOR.instances['#{locator}'].setData(#{content});
+	    $('textarea##{locator}').text(#{content});
+	  SCRIPT
+	end
 
 	context 'when enterprise has pending comments enabled' do
 		before { user.enterprise.update(enable_pending_comments: true) }
@@ -65,8 +73,10 @@ RSpec.feature 'News Feed Management' do
 				visit group_posts_path(group)
 
 				expect(page).to have_content existing_group_message.subject
-
-				click_on 'Comments(0)'
+				
+				within find('.commentsLink') do
+					click_on 'Comments(0)'
+				end
 
 				within('h1') do
 					expect(page).to have_content existing_group_message.subject
@@ -96,8 +106,10 @@ RSpec.feature 'News Feed Management' do
 
 					expect(page).to have_content existing_group_message.subject
 					expect(page).to have_link 'Comments(1)'
-
-					click_on 'Comments(1)'
+					
+					within find('.commentsLink') do
+						click_on 'Comments(1)'
+					end
 
 					within('.content__header h1') do
 						expect(page).to have_content existing_group_message.subject
@@ -152,7 +164,8 @@ RSpec.feature 'News Feed Management' do
 
 				fill_in 'news_link[url]', with: 'https://www.viz.com/naruto'
 				fill_in 'news_link[title]', with: 'Latest News'
-				fill_in 'news_link[description]', with: 'Naruto is the Seventh Hokage!!!'
+				fill_in_ckeditor 'news_link_description', :with => 'Naruto is the Seventh Hokage!!!'
+				
 				click_on 'Add a photo'
 				attach_file('File', 'spec/fixtures/files/verizon_logo.png')
 
@@ -167,10 +180,10 @@ RSpec.feature 'News Feed Management' do
 				visit edit_group_news_link_path(group, existing_news_item)
 
 				expect(page).to have_content 'Edit a news item'
-				expect(page).to have_field('news_link[description]', with: existing_news_item.description)
-
-				fill_in 'news_link[description]', with: 'Naruto is the Seventh Hokage and is married to Hinata :)'
-
+				
+				#expect(page).to have_field('news_link_description', with: existing_news_item.description)
+				fill_in_ckeditor 'news_link_description', :with => 'Naruto is the Seventh Hokage and is married to Hinata :)'
+				
 				click_on 'Add a photo'
 				attach_file('File', 'spec/fixtures/files/verizon_logo.png')
 
@@ -279,8 +292,10 @@ RSpec.feature 'News Feed Management' do
 				visit group_posts_path(group)
 
 				expect(page).to have_content existing_group_message.subject
-
-				click_on 'Comments(0)'
+				
+				within find('.commentsLink') do
+					click_on 'Comments(0)'
+				end
 
 				within('h1') do
 					expect(page).to have_content existing_group_message.subject
