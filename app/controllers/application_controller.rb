@@ -110,7 +110,7 @@ class ApplicationController < ActionController::Base
       if ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID']
         enterprise = Enterprise.find_by_id(ENV['SSO_LOGIN_DEFAULT_ENTERPRISE_ID'])
         if enterprise.present? && enterprise.has_enabled_saml
-          return sp_logout_request_path(enterprise, slo: '1')
+          return logout_enterprise_saml_index_path(enterprise, slo: '1')
         end
       end
         new_user_session_path
