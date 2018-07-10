@@ -10,7 +10,8 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-ActiveRecord::Schema.define(version: 20180620225618) do
+
+ActiveRecord::Schema.define(version: 20180710135701) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -152,6 +153,7 @@ ActiveRecord::Schema.define(version: 20180620225618) do
     t.datetime "updated_at",                 null: false
     t.integer  "approver_id",  limit: 4
     t.integer  "requester_id", limit: 4
+    t.text     "comments",     limit: 65535
   end
 
   add_index "budgets", ["approver_id"], name: "fk_rails_a057b1443a", using: :btree
