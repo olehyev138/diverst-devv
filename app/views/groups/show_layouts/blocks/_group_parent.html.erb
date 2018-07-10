@@ -3,7 +3,7 @@
     <div class="card__section">
       <%= c_t(:parent).titleize %>-<%= c_t(:erg).titleize %><br>
       <%= link_to @group.parent.name, @group.parent %>
-      (<% if current_user.is_member_of? @group %>
+      (<% if current_user.is_member_of? @group.parent %>
         member
       <% else %>
         not member
