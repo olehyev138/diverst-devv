@@ -25,7 +25,11 @@ RSpec.feature 'Group Membership Management' do
 
 			click_link "YES"
 
-			expect(page).to have_content "You've joined all #{c_t(:sub_erg).pluralize} of #{group.name}"
+			expect(page).to have_content sub_group.name
+			expect(page).to have_link 'Join'
+
+			click_link 'Join', href: join_sub_group_group_group_member_path(sub_group, guest_user)
+			click_on 'DONE'
 
 			expect(sub_group.members).to include guest_user
 		end
@@ -33,13 +37,14 @@ RSpec.feature 'Group Membership Management' do
 		scenario 'when a user joins a sub group, prompt option to join parent group', js: true do
 			visit group_path(sub_group)
 
-			click_button "Join this #{c_t(:erg)}"
+			click_button "Join this #{c_t(:sub_erg)}"
 
 			expect(page).to have_content "Thanks for joining the #{sub_group.name}! Do you also want to join the #{c_t(:erg)}?"
 
 			click_button "YES"
 
 			expect(group.members).to include guest_user
+			expect(sub_group.members).to include guest_user
 		end
 
 
@@ -158,14 +163,19 @@ RSpec.feature 'Group Membership Management' do
 
 			click_link "YES"
 
-			expect(page).to have_content "You've joined all #{c_t(:sub_erg).pluralize} of #{group.name}"
+			expect(page).to have_content sub_group.name
+			expect(page).to have_link 'Join'
+
+			click_link 'Join', href: join_sub_group_group_group_member_path(sub_group, guest_user)
+			click_on 'DONE'
+
 			expect(sub_group.members).to include guest_user
 		end
 
 		scenario 'when a user joins a sub group, prompt option to join parent group', js: true do
 			visit group_path(sub_group)
 
-			click_button "Join this #{c_t(:erg)}"
+			click_button "Join this #{c_t(:sub_erg)}"
 
 			expect(page).to have_content "Thanks for joining the #{sub_group.name}! Do you also want to join the #{c_t(:erg)}?"
 
@@ -192,9 +202,9 @@ RSpec.feature 'Group Membership Management' do
 			scenario 'a sub group', js: true do
 				visit group_path(sub_group)
 
-				click_link "Leave this #{c_t(:erg)}"
+				click_link "Leave this #{c_t(:sub_erg)}"
 
-				expect(page).to have_button "Join this #{c_t(:erg)}"
+				expect(page).to have_button "Join this #{c_t(:sub_erg)}"
 				expect(group.members).not_to include guest_user
 				expect(sub_group.members).not_to include guest_user
 			end

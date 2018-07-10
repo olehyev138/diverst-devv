@@ -75,7 +75,7 @@ RSpec.feature 'News Feed Management' do
 				expect(page).to have_content existing_group_message.subject
 
 				within('.commentsLink') do
-						click_on 'Comments(0)', group_group_message_path(group, existing_group_message)
+						click_link 'Comments(0)', href: group_group_message_path(group, existing_group_message)
 					end
 
 				within('h1') do
@@ -107,7 +107,7 @@ RSpec.feature 'News Feed Management' do
 					expect(page).to have_content existing_group_message.subject
 
 					within('.commentsLink') do
-						click_on 'Comments(1)', group_group_message_path(group, existing_group_message)
+						click_link 'Comments(1)', href: group_group_message_path(group, existing_group_message)
 					end
 
 					within('.content__header h1') do
@@ -163,6 +163,7 @@ RSpec.feature 'News Feed Management' do
 
 				fill_in 'news_link[url]', with: 'https://www.viz.com/naruto'
 				fill_in 'news_link[title]', with: 'Latest News'
+				fill_in 'news_link[description]', with: 'this is the latest news'
 
 				fill_in_ckeditor 'news_link_description', :with => 'Naruto is the Seventh Hokage!!!'
 
@@ -170,7 +171,6 @@ RSpec.feature 'News Feed Management' do
 				attach_file('File', 'spec/fixtures/files/verizon_logo.png')
 
 				click_on 'Create News link'
-
 				expect(page).to have_content 'Latest News'
 				news_link = NewsLink.find_by(title: 'Latest News')
 				expect(page).to have_link news_link.url
