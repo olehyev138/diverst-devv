@@ -52,7 +52,7 @@ class Groups::GroupMembersController < ApplicationController
     @group_member.accepted_member = @group.pending_users.disabled?
 
     if @group_member.save
-      flash[:notice] = "The member was created"
+      flash[:notice] = "You are now a member"
 
       # If group has survey questions - redirect user to answer them
       if @group.survey_fields.present?
@@ -62,7 +62,7 @@ class Groups::GroupMembersController < ApplicationController
         end
       else
         respond_to do |format|
-          format.html { redirect_to :back }
+          format.html { @group.is_sub_group? ? redirect_to(:back) : redirect_to(group_path(@group)) }
           format.js
         end
       end
@@ -109,7 +109,11 @@ class Groups::GroupMembersController < ApplicationController
     end
 
     flash[:notice] = "You've joined all #{c_t(:sub_erg).pluralize} of #{@group.name}"
-    redirect_to survey_group_questions_path(@group)
+    if @group.survey_fields.present?
+      redirect_to survey_group_questions_path(@group)
+    else
+      redirect_to group_path(@group)
+    end
   end
 
   def view_sub_groups

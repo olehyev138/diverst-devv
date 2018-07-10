@@ -1,25 +1,26 @@
 <div class="modal-header">
   <h4 class="modal-title text-center">
- Choose to join any <%= c_t(:sub_erg).pluralize %> of <%= @group.name %> <%= link_to "DONE", :back, class: "btn btn--primary btn--extra--small" %>
+ Choose to join any <%= c_t(:sub_erg).pluralize %>
   </h4>
 </div>
 <div class="modal-body">
   <div class="container-fluid">
     <div class="row text-center">
     <% @group.children.each do |sub_group| %>
-      <p><%= sub_group.name %><%= link_to join_sub_group_group_group_member_path(sub_group, current_user), class: "click_join", id: sub_group.id,  method: :post, remote: true do %>
+      <p style="text-align: left;"><%= sub_group.name %><%= link_to join_sub_group_group_group_member_path(sub_group, current_user), class: "click_join", id: sub_group.id,  method: :post, remote: true do %>
         <button class="btn btn--primary btn--extra--small">
-           join <%= c_t(:sub_erg) %>
+           Join
         </button>
         <% end %>
       <%= link_to leave_sub_group_group_group_member_path(sub_group, current_user), class: "click_leave", style: 'display:none;', id: sub_group.id,  method: :delete, remote: true do %>
         <button class="btn btn--primary btn--extra--small">
-          leave <%= c_t(:sub_erg) %>
+          Leave
         </button>
         <% end %>
       </p>
     <% end %>
     </div>
+    <%= link_to "DONE", :back, class: "btn btn--primary btn--extra--small", style: "float: right;" %>
   </div>
 </div>
 
