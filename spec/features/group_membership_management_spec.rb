@@ -21,13 +21,12 @@ RSpec.feature 'Group Membership Management' do
 
 			click_button "Join this #{c_t(:erg)}"
 
-			expect(page).to have_content "Do you want to join #{c_t(:sub_erg).pluralize} of #{group.name}?"
+			expect(page).to have_content "Thanks for joining the #{c_t(:erg)}! Do you also want to join a #{c_t(:sub_erg)}?"
 
 			click_link "YES"
 
 			expect(page).to have_content "You've joined all #{c_t(:sub_erg).pluralize} of #{group.name}"
 
-			expect(page).to have_current_path survey_group_questions_path(group)
 			expect(sub_group.members).to include guest_user
 		end
 
@@ -36,7 +35,7 @@ RSpec.feature 'Group Membership Management' do
 
 			click_button "Join this #{c_t(:erg)}"
 
-			expect(page).to have_content "Do you want to join #{group.name}, a parent #{c_t(:erg)} of #{sub_group.name}?"
+			expect(page).to have_content "Thanks for joining the #{sub_group.name}! Do you also want to join the #{c_t(:erg)}?"
 
 			click_button "YES"
 
@@ -155,12 +154,11 @@ RSpec.feature 'Group Membership Management' do
 
 			click_button "Join this #{c_t(:erg)}"
 
-			expect(page).to have_content "Do you want to join #{c_t(:sub_erg).pluralize} of #{group.name}?"
+			expect(page).to have_content "Thanks for joining the #{c_t(:erg)}! Do you also want to join a #{c_t(:sub_erg)}?"
 
 			click_link "YES"
 
 			expect(page).to have_content "You've joined all #{c_t(:sub_erg).pluralize} of #{group.name}"
-			expect(page).to have_current_path survey_group_questions_path(group)
 			expect(sub_group.members).to include guest_user
 		end
 
@@ -169,7 +167,7 @@ RSpec.feature 'Group Membership Management' do
 
 			click_button "Join this #{c_t(:erg)}"
 
-			expect(page).to have_content "Do you want to join #{group.name}, a parent #{c_t(:erg)} of #{sub_group.name}?"
+			expect(page).to have_content "Thanks for joining the #{sub_group.name}! Do you also want to join the #{c_t(:erg)}?"
 
 			click_button "YES"
 

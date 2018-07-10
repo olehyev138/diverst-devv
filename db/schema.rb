@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180606192823) do
+ActiveRecord::Schema.define(version: 20180706013941) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -612,6 +612,7 @@ ActiveRecord::Schema.define(version: 20180606192823) do
     t.text     "short_description",          limit: 65535
     t.string   "layout",                     limit: 191
     t.text     "home_message",               limit: 65535
+    t.boolean  "disable_sponsor_message",                                          default: false
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|

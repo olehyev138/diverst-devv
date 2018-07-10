@@ -9,12 +9,12 @@ class SubSegmentsController < ApplicationController
         authorize Segment
         @sub_segment = @segment.sub_segments.new
     end
-    
+
     def create
         authorize Segment
         @sub_segment = @segment.sub_segments.new(segment_params)
         @sub_segment.enterprise_id = @segment.enterprise_id
-        
+
         if @segment.save
             flash[:notice] = "Your sub-segment was created"
             redirect_to @segment
@@ -23,9 +23,9 @@ class SubSegmentsController < ApplicationController
             redirect_to :back
         end
     end
-    
+
     private
-    
+
     def segment_params
         params
             .require(:segment)
@@ -41,7 +41,7 @@ class SubSegmentsController < ApplicationController
                 ]
             )
     end
-    
+
     def set_segment
         @segment = Segment.find(params[:segment_id])
     end

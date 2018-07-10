@@ -2,7 +2,13 @@
   <div class="card card--secondary">
     <div class="card__section">
       <%= c_t(:parent).titleize %>-<%= c_t(:erg).titleize %><br>
-      <%= link_to @group.parent.name, @group.parent %><br>
+      <%= link_to @group.parent.name, @group.parent %>
+      (<% if current_user.is_member_of? @group %>
+        member
+      <% else %>
+        not member
+    <% end %>)
+      <br>
     </div>
   </div>
 <% end %>
