@@ -5,7 +5,7 @@ RSpec.feature 'News Feed Management' do
 	let!(:group) { create(:group, name: 'Group ONE', enterprise: user.enterprise) }
 
 	before { login_as(user, scope: :user) }
-	
+
 	def fill_in_ckeditor(locator, opts)
 	  content = opts.fetch(:with).to_json # convert to a safe javascript string
 	  page.execute_script <<-SCRIPT
@@ -43,7 +43,7 @@ RSpec.feature 'News Feed Management' do
 				visit group_posts_path(group)
 
 				expect(page).to have_content existing_group_message.subject
-				
+
 				within find(".group-capybara") do
 					click_on 'Edit'
 				end
@@ -73,10 +73,8 @@ RSpec.feature 'News Feed Management' do
 				visit group_posts_path(group)
 
 				expect(page).to have_content existing_group_message.subject
-				
-				within find('.commentsLink') do
-					click_on 'Comments(0)'
-				end
+
+				click_link 'Comments(0)', match: :first
 
 				within('h1') do
 					expect(page).to have_content existing_group_message.subject
@@ -106,10 +104,8 @@ RSpec.feature 'News Feed Management' do
 
 					expect(page).to have_content existing_group_message.subject
 					expect(page).to have_link 'Comments(1)'
-					
-					within find('.commentsLink') do
-						click_on 'Comments(1)'
-					end
+
+					click_link 'Comments(1)', match: :first
 
 					within('.content__header h1') do
 						expect(page).to have_content existing_group_message.subject
@@ -165,7 +161,7 @@ RSpec.feature 'News Feed Management' do
 				fill_in 'news_link[url]', with: 'https://www.viz.com/naruto'
 				fill_in 'news_link[title]', with: 'Latest News'
 				fill_in_ckeditor 'news_link_description', :with => 'Naruto is the Seventh Hokage!!!'
-				
+
 				click_on 'Add a photo'
 				attach_file('File', 'spec/fixtures/files/verizon_logo.png')
 
@@ -180,10 +176,10 @@ RSpec.feature 'News Feed Management' do
 				visit edit_group_news_link_path(group, existing_news_item)
 
 				expect(page).to have_content 'Edit a news item'
-				
+
 				#expect(page).to have_field('news_link_description', with: existing_news_item.description)
 				fill_in_ckeditor 'news_link_description', :with => 'Naruto is the Seventh Hokage and is married to Hinata :)'
-				
+
 				click_on 'Add a photo'
 				attach_file('File', 'spec/fixtures/files/verizon_logo.png')
 
@@ -207,11 +203,11 @@ RSpec.feature 'News Feed Management' do
 			scenario 'when adding comments to news link' do
 				expect(page).to have_content existing_news_item.title
 				expect(page).to have_link 'Comments(0)', href:  comments_group_news_link_path(group, existing_news_item)
-				
+
 				within('.flex-row__cell--grow') do
 					click_link 'Comments(0)', href:  comments_group_news_link_path(group, existing_news_item)
 				end
-				
+
 				within('.content__header h1') do
 					expect(page).to have_content 'News Discussion'
 				end
@@ -235,7 +231,7 @@ RSpec.feature 'News Feed Management' do
 				let!(:image) { File.new('spec/fixtures/files/verizon_logo.png') }
 				let!(:existing_news_item) { create(:news_link, title: 'An Old Group News Item',
 					description: 'Brief description of News Item', group_id: group.id, picture: image, author_id: user.id) }
-				let!(:news_link_comment) { create(:news_link_comment, content: 'An Old News Link Comment', author_id: user.id, 
+				let!(:news_link_comment) { create(:news_link_comment, content: 'An Old News Link Comment', author_id: user.id,
 					news_link_id: existing_news_item.id, approved: true) }
 
 				before { visit group_posts_path(group) }
@@ -243,11 +239,11 @@ RSpec.feature 'News Feed Management' do
 				scenario 'when editing comments for news link' do
 					expect(page).to have_content existing_news_item.title
 					expect(page).to have_link 'Comments(1)', href:  comments_group_news_link_path(group, existing_news_item)
-					
+
 					within('.flex-row__cell--grow') do
 						click_link 'Comments(1)', href:  comments_group_news_link_path(group, existing_news_item)
 					end
-					
+
 					within('.content__header h1') do
 						expect(page).to have_content 'News Discussion'
 					end
@@ -292,10 +288,8 @@ RSpec.feature 'News Feed Management' do
 				visit group_posts_path(group)
 
 				expect(page).to have_content existing_group_message.subject
-				
-				within find('.commentsLink') do
-					click_on 'Comments(0)'
-				end
+
+				click_link 'Comments(0)', match: :first
 
 				within('h1') do
 					expect(page).to have_content existing_group_message.subject
@@ -323,11 +317,11 @@ RSpec.feature 'News Feed Management' do
 			scenario 'when adding comments to news link' do
 				expect(page).to have_content existing_news_item.title
 				expect(page).to have_link 'Comments(0)', href: comments_group_news_link_path(group, existing_news_item)
-				
+
 				within('.flex-row__cell--grow') do
 					click_link 'Comments(0)', href: comments_group_news_link_path(group, existing_news_item)
 				end
-				
+
 				within('.content__header h1') do
 					expect(page).to have_content 'News Discussion'
 				end

@@ -10,7 +10,8 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-ActiveRecord::Schema.define(version: 20180620225618) do
+
+ActiveRecord::Schema.define(version: 20180706013941) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -361,8 +362,8 @@ ActiveRecord::Schema.define(version: 20180620225618) do
     t.datetime "onboarding_sponsor_media_updated_at"
     t.boolean  "enable_pending_comments",                             default: false
     t.boolean  "disable_sponsor_message",                             default: false
-    t.boolean  "disable_likes",                                       default: false
     t.boolean  "mentorship_module_enabled",                           default: false
+    t.boolean  "disable_likes",                                       default: false
   end
 
   create_table "event_attendances", force: :cascade do |t|
@@ -614,6 +615,7 @@ ActiveRecord::Schema.define(version: 20180620225618) do
     t.text     "short_description",          limit: 65535
     t.string   "layout",                     limit: 191
     t.text     "home_message",               limit: 65535
+    t.boolean  "disable_sponsor_message",                                          default: false
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
