@@ -18,7 +18,7 @@
             <div class="flex-row__cell flex-row__cell--grow">
               <h4><%= @news_link.title %></h4>
               <p>
-                <%= @news_link.description %>
+                <%= raw @news_link.description %>
                 <br>
                 <%= link_to @news_link.url, @news_link.url %>
               </p>

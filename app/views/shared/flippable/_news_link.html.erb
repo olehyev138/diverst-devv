@@ -13,7 +13,7 @@
           <div class="flex-row__cell flex-row__cell--grow">
               <%= link_to news_link.title, group_posts_url(news_link.group, anchor: "news_link_#{news_link.id}"), class: 'underline_text' %>
               <br>
-            <small><%= truncate(news_link.description, length: 90) %></small><br>
+            <small><%= raw truncate(news_link.description, length: 90) %></small><br>
             <small class="muted"><%= news_link.created_at.to_s :slashes %></small>
           </div>
         </div>
@@ -26,7 +26,7 @@
         <div class="flex-row flex-row--middle">
           <div class="flex-row__cell flex-row__cell--grow">
             <span class="highlight"><%= message.subject %></span><br>
-            <small><%= truncate(message.content, length: 90) %></small><br>
+            <small><%= raw truncate(message.content, length: 90) %></small><br>
             <small class="muted"><%= message.created_at.to_s :slashes %>
               <% if message.owner.present? %>
                 by <%= message.owner.name_with_status %>
