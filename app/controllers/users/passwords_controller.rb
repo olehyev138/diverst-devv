@@ -9,6 +9,18 @@ class Users::PasswordsController < Devise::PasswordsController
 
   include Onboard
 
+  # GET /resource/password/new
+  def new
+    self.resource = resource_class.new
+
+    if params[:setup]
+      render :setup
+    else
+      render :new
+    end
+  end
+
+
   def create
     self.resource = resource_class.find_by(email: resource_params[:email])
     message = ''
