@@ -28,7 +28,7 @@ class Users::PasswordsController < Devise::PasswordsController
     if resend_invite? self.resource
       # Resend invite
       resource_class.invite!(email: resource.email)
-      message = 'You have a pending invitation. Please check your email to accept the invitation and sign in'
+      message = 'You will recieve an email shortly. Please check your email to accept the invitation and sign in'
     else
       # Send reset password instructions
       self.resource = resource_class.send_reset_password_instructions(resource_params)
