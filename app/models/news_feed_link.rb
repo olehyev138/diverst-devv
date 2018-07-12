@@ -29,7 +29,6 @@ class NewsFeedLink < ActiveRecord::Base
       .where('share_links.approved = false')
   }
 
-  # TODO: Fix this
   scope :common_includes, -> { includes(:link) }
 
   scope :news_feed_order, -> { order(is_pinned: :desc, created_at: :desc) }
@@ -105,9 +104,11 @@ class NewsFeedLink < ActiveRecord::Base
   # links are automatically approved if author is a
   # group leader
   def approve_link
-    if GroupPolicy.new(link.author, link.group).erg_leader_permissions?
-      self.approved = true
-      self.save!
+    share_links.each do |share_link|
+      if GroupPolicy.new(link.author, share_link.group).erg_leader_permissions?
+        share_link.approved = true
+        share_link.save
+      end
     end
   end
 end

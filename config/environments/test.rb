@@ -57,10 +57,4 @@ Rails.application.configure do
 
   # Disable on-disk logging to accelerate tests
   config.logger = ActiveSupport::Logger.new(nil)
-
-  # Enable Bullet to track redundant DB queries
-  config.after_initialize do
-    Bullet.enable = true
-    Bullet.raise = true # Enabled to check for N+1 queries when running tests
-  end
 end

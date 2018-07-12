@@ -8,7 +8,7 @@ class Groups::NewsLinksController < ApplicationController
     layout 'erg'
 
     def index
-        @news_links = @group.news_links.includes(:author).order(created_at: :desc)
+        @news_links = @group.news_links.includes(:author).order(created_at: :desc).page(0)
     end
 
     def new
@@ -18,6 +18,53 @@ class Groups::NewsLinksController < ApplicationController
 
     def edit
         authorize @news_link, :update?
+    end
+
+    def create
+      @news_link = @group.news_links.new(news_link_params)
+      @news_link.author = current_user
+
+      # Set the original news feed ID
+      @news_link.news_feed_link.news_feed_id = @group.news_feed.id
+      @news_link.news_feed_link.save
+      if @news_link.save
+          user_rewarder("news_post").add_points(@news_link)
+          flash_reward "Your news was created. Now you have #{current_user.credits} points"
+          redirect_to group_posts_path(@group)
+      else
+          flash[:alert] = "Your news was not created. Please fix the errors"
+          render :edit
+      end
+    end
+
+    def update
+      authorize @news_link, :update?
+
+      # Add the original news_feed ID in news_feed_link (instead of accepting it as a param)
+      news_feed_id = @news_link.group.news_feed.id
+      @news_link.assign_attributes(news_link_params)
+      @news_link.news_feed_link.news_feed_id = news_feed_id
+
+      if @news_link.save
+        redirect_to group_posts_path(@group)
+      else
+        flash[:alert] = "Your news was not updated. Please fix the errors"
+        render :edit
+      end
+    end
+
+    def destroy
+        # If the post is deleted on the original group, delete it entirely
+        if @group == @news_link.group
+          user_rewarder("message_post").remove_points(@news_link)
+          @news_link.destroy
+          flash[:notice] = "Your news was removed. Now you have #{current_user.credits} points"
+        else
+          @news_link.unlink(@group)
+          flash[:notice] = "Your news was removed"
+        end
+
+        redirect_to group_posts_path(@group)
     end
 
     def comments
@@ -38,39 +85,6 @@ class Groups::NewsLinksController < ApplicationController
         end
 
         redirect_to action: :comments
-    end
-
-    def create
-        @news_link = @group.news_links.new(news_link_params)
-        @news_link.author = current_user
-
-        @news_link.news_feed_link.save
-        if @news_link.save
-            user_rewarder("news_post").add_points(@news_link)
-            flash_reward "Your news was created. Now you have #{current_user.credits} points"
-            redirect_to group_posts_path(@group)
-        else
-            flash[:alert] = "Your news was not created. Please fix the errors"
-            render :edit
-        end
-    end
-
-    def update
-        authorize @news_link, :update?
-        if @news_link.update(news_link_params)
-            flash[:notice] = "Your news was updated"
-            redirect_to group_posts_path(@group)
-        else
-            flash[:alert] = "Your news was not updated. Please fix the errors"
-            render :edit
-        end
-    end
-
-    def destroy
-        user_rewarder("news_post").remove_points(@news_link)
-        @news_link.unlink(@group)
-        flash[:notice] = "Your news was removed. Now you have #{current_user.credits} points"
-        redirect_to group_posts_path(@group)
     end
 
     # this is not a route found in config/routes.rb
@@ -95,7 +109,7 @@ class Groups::NewsLinksController < ApplicationController
     end
 
     def set_news_link
-        @news_link = @group.news_feed_links.find(params[:id]).link
+        @news_link = NewsLink.find(params[:id])
     end
 
     def news_link_params

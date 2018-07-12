@@ -23,10 +23,10 @@
           </p>
         </div>
         <div class="flex-row__cell link-group">
-          <% if policy(message).destroy? %>
-            <%= link_to "Approve", approve_group_posts_path(:group_id => @group.id, :link_id => message.news_feed_link.id), method: :post, class: "btn btn--primary" if policy(message.group).erg_leader_permissions? and !message.news_feed_link.approved?(@group) %>
+          <% if policy(message).destroy? || policy(message).edit? %>
+            <%= link_to "Approve", approve_group_posts_path(:group_id => @group.id, :link_id => message.news_feed_link.id), method: :post, class: "btn btn--primary" if policy(@group).erg_leader_permissions? and !message.news_feed_link.approved?(@group) %>
             <%= link_to "Edit", edit_group_group_message_path(message.group, message), class: "btn btn--secondary" if policy(message).update? %>
-            <%= link_to "Delete", group_group_message_path(@group, message.news_feed_link), method: :delete, class: "btn btn--danger", data: { confirm: "Are you sure?" } %>
+            <%= link_to "Delete", group_group_message_path(@group, message.id), method: :delete, class: "btn btn--danger", data: { confirm: "Are you sure?" } if policy(message).destroy? %>
           <% end %>
         </div>
       </div>

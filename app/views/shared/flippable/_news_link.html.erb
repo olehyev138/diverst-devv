@@ -1,5 +1,5 @@
 <% if news.link_type == "NewsLink" %>
-  <% news_link = NewsLink.find(news.link.id) %>
+  <% news_link = news.link %>
   <div class="row block-section-news">
       <div class="col-xs-4">
         <% if news_link.photos.count > 0 %>
@@ -21,7 +21,7 @@
       <%= render "groups/news_links/modal/form" %>
     </div>
 <% elsif news.link_type === "GroupMessage"%>
-  <% message = GroupMessage.includes(:owner, :group).find(news.link.id) %>
+  <% message = news.link %>
   <%= link_to group_group_message_path(message.group, message), class: "block block-section" do %>
         <div class="flex-row flex-row--middle">
           <div class="flex-row__cell flex-row__cell--grow">

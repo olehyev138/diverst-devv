@@ -8,7 +8,7 @@ class Groups::SocialLinksController < ApplicationController
     layout 'erg'
 
     def index
-        @posts = @group.social_links
+        @posts = @group.social_links.includes(:owner).order(created_at: :desc).page(0)
     end
 
     def new
@@ -20,6 +20,8 @@ class Groups::SocialLinksController < ApplicationController
         @social_link = @group.social_links.new(social_link_params)
         @social_link.author = current_user
 
+        # Set the original news feed ID
+        @social_link.news_feed_link.news_feed_id = @group.news_feed.id
         @social_link.news_feed_link.save
         if @social_link.save
             user_rewarder("social_media_posts").add_points(@social_link)
@@ -32,10 +34,16 @@ class Groups::SocialLinksController < ApplicationController
     end
 
     def destroy
-        user_rewarder("social_media_posts").remove_points(@social_link)
+      # If the post is deleted on the original group, delete it entirely
+      if @group == @social_link.group
+        user_rewarder("message_post").remove_points(@social_link)
+        @social_link.destroy
+      else
         @social_link.unlink(@group)
-        flash[:notice] = "Your social link was removed. Now you have #{current_user.credits} points"
-        redirect_to group_posts_path(@group)
+      end
+
+      flash[:notice] = "Your social link was removed. Now you have #{current_user.credits} points"
+      redirect_to group_posts_path(@group)
     end
 
     protected
@@ -45,7 +53,7 @@ class Groups::SocialLinksController < ApplicationController
     end
 
     def set_social_link
-        @social_link = @group.social_links.find(params[:id]).link
+        @social_link = SocialLink.find(params[:id])
     end
 
     def social_link_params
@@ -53,7 +61,7 @@ class Groups::SocialLinksController < ApplicationController
             .require(:social_link)
             .permit(
                 :url,
-                news_feed_link_attributes: [ :id, :news_feed_id, news_feed_link_segment_ids: [], news_feed_ids: [] ]
+                news_feed_link_attributes: [ news_feed_link_segment_ids: [], news_feed_ids: [] ]
             )
     end
 end

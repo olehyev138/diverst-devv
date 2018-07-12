@@ -32,6 +32,8 @@ class Groups::GroupMessagesController < ApplicationController
     @message = @group.messages.new(message_params)
     @message.owner = current_user
 
+    # Set the original news feed ID
+    @message.news_feed_link.news_feed_id = @group.news_feed.id
     @message.news_feed_link.save
     if @message.save
       user_rewarder("message_post").add_points(@message)
@@ -45,7 +47,13 @@ class Groups::GroupMessagesController < ApplicationController
 
   def update
     authorize @message, :update?
-    if @message.update(message_params)
+
+    # Add the original news_feed ID in news_feed_link (instead of accepting it as a param)
+    news_feed_id = @message.group.news_feed.id
+    @message.assign_attributes(message_params)
+    @message.news_feed_link.news_feed_id = news_feed_id
+
+    if @message.save
       redirect_to group_posts_path(@group)
     else
       flash[:alert] = "Your message was not updated. Please fix the errors"
@@ -54,16 +62,20 @@ class Groups::GroupMessagesController < ApplicationController
   end
 
   def destroy
-    user_rewarder("message_post").remove_points(@message)
-    @message.unlink(@group)
+    # If the post is deleted on the original group, delete it entirely
+    if @group == @message.group
+      user_rewarder("message_post").remove_points(@message)
+      @message.destroy
+    else
+      @message.unlink(@group)
+    end
 
     flash[:notice] = "Your message was removed. Now you have #{current_user.credits} points"
     redirect_to group_posts_path(@group)
   end
 
   def create_comment
-    @message = @group.messages.find(params[:group_message_id])
-
+    @message = GroupMessage.find(params[:group_message_id])
     @comment = @message.comments.new(message_comments_params)
     @comment.author = current_user
 
@@ -80,11 +92,13 @@ class Groups::GroupMessagesController < ApplicationController
   protected
 
   def set_group
+    # Sets the current group (note: not necessarily the same group as the message is in)
     current_user ? @group = current_user.enterprise.groups.find(params[:group_id]) : user_not_authorized
   end
 
   def set_message
-    @message = @group.news_feed_links.find(params[:id]).link
+    # Set the current message no matter what the group is
+    @message = GroupMessage.find(params[:id])
   end
 
   def message_params
@@ -93,7 +107,7 @@ class Groups::GroupMessagesController < ApplicationController
       .permit(
         :subject,
         :content,
-        news_feed_link_attributes: [ :id, :news_feed_id, news_feed_link_segment_ids: [], news_feed_ids: [] ]
+        news_feed_link_attributes: [ news_feed_link_segment_ids: [], news_feed_ids: [] ]
     )
   end
 
@@ -101,7 +115,7 @@ class Groups::GroupMessagesController < ApplicationController
     params
       .require(:group_message_comment)
       .permit(
-      :content
+        :content
     )
   end
 end
