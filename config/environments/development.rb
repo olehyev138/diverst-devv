@@ -57,8 +57,6 @@ Rails.application.configure do
   config.after_initialize do
     Bullet.enable = true
     Bullet.rails_logger = true
-    Bullet.add_footer = true
     Bullet.console = true
-    #Bullet.raise = true # Enabled to check for N+1 queries when running tests
   end
 end

@@ -31,14 +31,19 @@ class NewsFeedLink < ActiveRecord::Base
 
   scope :common_includes, -> { includes(:link) }
 
-  scope :news_feed_order, -> { order(is_pinned: :desc, created_at: :desc) }
+  scope :news_feed_order, -> (group) {
+    joins(:share_links)
+      .where('share_links.news_feed_id = (?)', group.news_feed.id)
+    .order('share_links.is_pinned DESC', created_at: :desc)
+  }
+
   scope :segments, -> (user) {
     joins('LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id')
     .where('news_feed_link_segments.segment_id IS NULL OR news_feed_link_segments.segment_id IN (?)', user.segments.pluck(:id))
   }
 
-  scope :leader_links,          -> (group, limit) { common_includes.approved(group).news_feed_order.limit(limit) }
-  scope :user_links,            -> (group, user, limit) { common_includes.approved(group).segments(user).news_feed_order.limit(limit) }
+  scope :leader_links,          -> (group, limit) { common_includes.approved(group).news_feed_order(group).limit(limit) }
+  scope :user_links,            -> (group, user, limit) { common_includes.approved(group).segments(user).news_feed_order(group).limit(limit) }
 
   def news_feed(group)
     news_feeds.find(group.news_feed.id)
@@ -61,8 +66,7 @@ class NewsFeedLink < ActiveRecord::Base
   end
 
   def approved?(group)
-    share_link = share_link(group)
-    share_link.blank? ? self.approved : (approved && share_link.approved)
+    share_link(group).approved
   end
 
   # View Count methods
@@ -81,6 +85,22 @@ class NewsFeedLink < ActiveRecord::Base
 
   def unique_views
     views.all.count
+  end
+
+  def pin(group)
+    share_link = share_link(group)
+    share_link.is_pinned = true
+    share_link.save!
+  end
+
+  def unpin(group)
+    share_link = share_link(group)
+    share_link.is_pinned = false
+    share_link.save!
+  end
+
+  def is_pinned?(group)
+    share_link(group).is_pinned?
   end
 
   private

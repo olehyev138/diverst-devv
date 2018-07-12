@@ -34,16 +34,14 @@ class Groups::PostsController < ApplicationController
   end
 
   def pin
-    @link.is_pinned = true
-    if !@link.save
+    if !@link.pin(@group)
       flash[:alert] = "Link was not pinned"
     end
     redirect_to :back
   end
 
   def unpin
-    @link.is_pinned = false
-    if !@link.save
+    if !@link.unpin(@group)
       flash[:alert] = "Link was not unpinned"
     end
     redirect_to :back

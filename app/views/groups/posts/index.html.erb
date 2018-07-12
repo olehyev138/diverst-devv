@@ -31,7 +31,7 @@
       </div>
     <% else %>
       <% @posts.each do |post| %>
-        <% if !post.is_pinned? %>
+        <% if !post.is_pinned?(@group) %>
           <%= link_to "Pin", pin_group_posts_path(:group_id => @group.id, :link_id => post.id), method: :patch if policy(@group).erg_leader_permissions? %>
         <% else %>
           <%= link_to "Unpin", unpin_group_posts_path(:group_id => @group.id, :link_id => post.id), method: :patch if policy(@group).erg_leader_permissions? %>
