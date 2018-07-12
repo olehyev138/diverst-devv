@@ -15,7 +15,8 @@
     <div class="flex-row flex-row--middle full-width">
       <div class="flex-row__cell flex-row__cell--grow">
         <%= link_to logo_destination do %>
-          <img class="primary-header__logo logo" src="<%= logo_url %>" alt="Home">
+          <img class="primary-header__logo logo hidden-xs" src="<%= logo_url %>" alt="Home">
+          <img class="primary-header__logo logo visible-xs" src="<%= small_logo_url %>" alt="Home">
         <% end %>
       </div>
       <div class="flex-row__cell">
@@ -66,6 +67,14 @@
           <%= active_link_to biases_path, class: "nav__link", class_active: "nav__link--is-selected" do %>
             <%= inline_svg('icons/meet.svg', class: "icon nav__icon") %>
             <span class="nav__text">Bias</span>
+          <% end %>
+        </li>
+      <% end %>
+      <% if current_user.enterprise.mentorship_module_enabled %>
+        <li class="nav__item">
+          <%= active_link_to mentoring_interests_path, class: "nav__link", class_active: "nav__link--is-selected" do %>
+            <%= inline_svg('icons/harmonize.svg', class: "icon nav__icon") %>
+            <span class="nav__text">Mentorship</span>
           <% end %>
         </li>
       <% end %>

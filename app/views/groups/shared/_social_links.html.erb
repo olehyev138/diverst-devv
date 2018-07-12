@@ -1,9 +1,6 @@
 <div class="card__section card__section--border">
   <div class="row">
-    <div class="col sm-1 text-center">
-      <%= render partial: "groups/shared/like_feature", locals: {news_feed_link: social_link.news_feed_link, group: @group } %>
-    </div>
-    <div class="col sm-11">
+    <div class="col-xs-12">
       <div class="flex-row flex-row--middle">
         <div class="flex-row__cell flex-row__cell--grow">
           <% if social_link.url.include?("facebook") %>
@@ -13,13 +10,20 @@
           <% else %>
             <%= raw social_link.embed_code %>
           <% end %>
+          <%= render partial: "groups/shared/like_feature", locals: {news_feed_link: social_link.news_feed_link } %>
         </div>
-        <div class="flex-row__cell link-group">
-          <% if policy(social_link).destroy? %>
-            <%= link_to "Approve", approve_group_posts_path(:group_id => @group.id, :link_id => social_link.news_feed_link.id), method: :post, class: "btn btn--primary" if policy(@group).erg_leader_permissions? and !social_link.news_feed_link.approved?(@group) %>
-            <%= link_to 'Delete', group_social_link_path(@group, social_link.id),method: :delete, class: "btn btn--danger", data: { confirm: "Are you sure?" } if policy(social_link).destroy? %>
-          <% end %>
-        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-8">
+      <span class="hidden-xs pull-right">
+        <%= link_to "Approve", approve_group_posts_path(:group_id => @group.id, :link_id => social_link.news_feed_link.id), method: :post, class: "btn btn--primary" if policy(@group).erg_leader_permissions? and !social_link.news_feed_link.approved?(@group) %>
+        <%= link_to 'Delete', group_social_link_path(@group, social_link.id),method: :delete, class: "btn btn--danger", data: { confirm: "Are you sure?" } if policy(social_link).destroy? %>
+      </span>
+      <div class="btn-group visible-xs pull-right">
+        <%= link_to "Approve", approve_group_posts_path(:group_id => @group.id, :link_id => social_link.news_feed_link.id), method: :post, class: "btn btn--primary" if policy(@group).erg_leader_permissions? and !social_link.news_feed_link.approved?(@group) %>
+        <%= link_to 'Delete', group_social_link_path(@group, social_link.id),method: :delete, class: "btn btn--danger", data: { confirm: "Are you sure?" } if policy(social_link).destroy? %>
       </div>
     </div>
   </div>

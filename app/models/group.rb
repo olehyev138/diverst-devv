@@ -1,17 +1,14 @@
 class Group < ActiveRecord::Base
   include PublicActivity::Common
+  include CustomTextHelpers
 
   extend Enumerize
 
   enumerize :layout, default: :layout_0, in: [
                               :layout_0,
-                              :layout_1
+                              :layout_1,
+                              :layout_2
                             ]
-
-  LAYOUTS_INFO = {
-    'layout_0' => 'Default layout',
-    'layout_1' => 'Layout without leader boards for Most Active Members'
-  }
 
   enumerize :pending_users, default: :disabled,  in: [
                               :disabled,
@@ -140,6 +137,18 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
 
+
+  def layout_values
+    {
+    'layout_0' => 'Default layout',
+    'layout_1' => 'Layout without leader boards for Most Active Members',
+    'layout_2' => "Layout with #{c_t(:sub_erg).pluralize} on top of group leaders"
+    }
+  end
+
+  def is_parent_group?
+    (parent.nil? && children.any?) || (parent.nil? && children.empty?)
+  end
 
   def is_sub_group?
     parent.present?

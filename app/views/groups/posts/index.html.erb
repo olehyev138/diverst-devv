@@ -1,13 +1,48 @@
-<div class="content__header">
-  <% if policy(@group).erg_leader_permissions? %>
-    <h1>Posts(<%= @count %>)/
-      <%= link_to pending_group_posts_path(@group) do %>
-        <button class="btn btn--primary">
-          Pending(<%= NewsFeedLink.unapproved(@group).count %>)
-        </button>
-      <% end %>
-    </h1>
-  <% end %>
+<div class="content__header visible-xs">
+    <div class="container-fluid visible-xs">
+    <div class="row">
+      <div class="col-xs-12">
+        <% if policy(@group).erg_leader_permissions? %>
+          <h2 class="text-center">
+            <span>
+              Posts
+              <span class="label label-default"><%= @group.news_feed_links.includes(:link).approved.count %></span>
+              /
+               <%= link_to pending_group_posts_path(@group) do %>
+               <button class="btn btn-sm btn-primary">
+                 Pending (<%= @group.news_feed_links.includes(:link).not_approved.count %>)
+               </button>
+             <% end %>
+            </span>
+          </h2>
+        <% end %>
+      </div>
+    </div>
+    </br>
+    <div class="row">
+      <div class="col-xs-12 text-center">
+        <div class="btn-group">
+          <%= link_to "+ News", new_group_news_link_path, class: "btn btn-sm btn-primary" if policy(NewsLink).new? %>
+          <%= link_to "+ MSG", new_group_group_message_path, class: "btn btn-sm btn-primary" if policy(GroupMessage).new? %>
+          <% if ENV['ENABLE_SOCIAL_MEDIA'] %>
+            <%= link_to "+ Social", new_group_social_link_path, class: "btn btn-sm btn-primary" if policy(SocialLink).new? %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div class="content__header hidden-xs">
+   <% if policy(@group).erg_leader_permissions? %>
+   <h1>Posts(<%= @group.news_feed_links.includes(:link).approved.count %>)/
+     <%= link_to pending_group_posts_path(@group) do %>
+     <button class="btn btn--primary">
+       Pending(<%= @group.news_feed_links.includes(:link).not_approved.count %>)
+     </button>
+     <% end %>
+   </h1>
+   <% end %>
   <div class="flex-row flex-row--middle">
     <div class="flex-row__cell">
       <%= link_to "+ Create News", new_group_news_link_path, class: "btn btn--primary" if policy(NewsLink).new? %>
@@ -39,11 +74,13 @@
 
         <% share_message = shared_message post %>
         <% if post.link_type == "NewsLink" %>
-          <%= render partial: "groups/shared/news_links", locals: {news_link: post.link, group: @group, share_message: share_message } %>
+          <%= render partial: "groups/shared/news_links", locals: {news_link: post.link.includes(:group, :author), group: @group, share_message: share_message } %>
         <% elsif post.link_type === "GroupMessage"%>
-          <%= render partial: "groups/shared/messages", locals: {message: post.link, group: @group, share_message: share_message } %>
+          <%= render partial: "groups/shared/messages", locals: {message: post.link.includes(:owner, :group), group: @group, share_message: share_message } %>
         <% elsif post.link_type === "SocialLink"%>
-          <%= render partial: "groups/shared/social_links", locals: {social_link: post.link, group: @group, share_message: share_message } %>
+          <% if ENV['ENABLE_SOCIAL_MEDIA'] %>
+            <%= render partial: "groups/shared/social_links", locals: {social_link: post.link.includes(:group), group: @group, share_message: share_message } %>
+          <% end %>
         <% end %>
       <% end %>
     <% end %>

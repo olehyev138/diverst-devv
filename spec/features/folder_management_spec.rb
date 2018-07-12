@@ -88,7 +88,10 @@ RSpec.feature 'Folder management' do
 		end
 
 		scenario 'by changing folder name' do
-			click_on 'Edit Folder'
+			
+			within find('.container-fluid') do
+				click_on 'Edit Folder'
+			end
 
 			within('h1') do
 				expect(page).to have_content 'Edit a folder'
@@ -105,7 +108,9 @@ RSpec.feature 'Folder management' do
 		end
 
 		scenario 'by adding password protection to folder' do
-			click_on 'Edit Folder'
+			within find('.container-fluid') do
+				click_on 'Edit Folder'
+			end
 
 			within('h1') do
 				expect(page).to have_content 'Edit a folder'
@@ -147,7 +152,9 @@ RSpec.feature 'Folder management' do
 		end
 
 		scenario 'and share folder with group' do
-			click_on 'Edit Folder'
+			within find('.container-fluid') do
+				click_on 'Edit Folder'
+			end
 
 			expect(current_url).to eq edit_enterprise_folder_url(user.enterprise, folder_without_pp)
 			expect(page).to have_content 'Edit a folder'

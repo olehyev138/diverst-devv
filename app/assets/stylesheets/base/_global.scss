@@ -91,7 +91,7 @@ hr {
 }
 
 .scrollable_box {
-  overflow-y: scroll; 
+  overflow-y: scroll;
   height: 200px;
 }
 
@@ -100,23 +100,12 @@ hr {
   color: $primary-color;
 }
 
+a.powered-by-firepad {
+display: none;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.firepad {
+  width: 700px;
+  height: 450px;
+  background-color: $primary-color;
+}

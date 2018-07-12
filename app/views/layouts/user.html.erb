@@ -15,7 +15,8 @@
     <div class="flex-row flex-row--middle full-width">
       <div class="flex-row__cell flex-row__cell--grow">
         <%= link_to logo_destination do %>
-          <img class="primary-header__logo logo" src="<%= logo_url %>" alt="Home">
+          <img class="primary-header__logo logo hidden-xs" src="<%= logo_url %>" alt="Home">
+          <img class="primary-header__logo logo visible-xs" src="<%= small_logo_url %>" alt="Home">
         <% end %>
       </div>
       <div class="flex-row__cell">
@@ -57,6 +58,11 @@
           <li>
             <%= active_link_to "#{c_t(:erg).titleize.pluralize}", user_groups_path %>
           </li>
+          <% if current_user.enterprise.mentorship_module_enabled %>
+            <li>
+              <%= active_link_to "Mentorship", edit_user_mentorship_path(:id => current_user.id) %>
+            </li>
+          <% end %>
           <% if current_user.enterprise.enable_rewards? %>
             <li>
               <%= active_link_to "#{ c_t(:dci_abbreviation) } Points", user_rewards_path %>
@@ -82,6 +88,9 @@
       <%= active_link_to "News", user_news_links_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <%= active_link_to "Events", user_events_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <%= active_link_to "#{c_t(:erg).titleize.pluralize}", user_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+      <% if current_user.enterprise.mentorship_module_enabled %>  
+        <%= active_link_to "Mentorship", edit_user_mentorship_path(:id => current_user.id), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+      <% end %>
       <% if current_user.enterprise.enable_rewards? %>
         <%= active_link_to "#{ c_t(:dci_abbreviation) } Points", user_rewards_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <% end %>

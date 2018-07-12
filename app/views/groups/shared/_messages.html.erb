@@ -1,40 +1,51 @@
 <div class="card__section card__section--border">
   <div class="row">
-    <div class="col sm-1 text-center">
-      <%= render partial: "groups/shared/like_feature", locals: {news_feed_link: message.news_feed_link, group: @group } %>
-    </div>
-    <div class="col sm-1">
+    <div class="col-xs-2">
       <% if message.owner.present? %>
         <%= image_tag message.owner.avatar.expiring_url(3600, :thumb), width: '100%' %>
       <% else %>
         <%= image_tag '/assets/missing_user.png', width: '100%' %>
       <% end %>
     </div>
-    <div class="col sm-10">
+    <div class="col-xs-10">
       <div class="flex-row flex-row--middle">
         <div class="flex-row__cell flex-row__cell--grow">
           <h3><%= message.subject %> - <span class="muted" title="<%= message.created_at.to_s :datetime %>"><%= time_ago_in_words(message.created_at) %> ago (<%= message.created_at.to_formatted_s(:short) %>) - <%= message.total_views %> views </span></h3>
-          <p>
-            <%= message.content %>
+          <p class="postContent">
+            <%= raw message.content %>
             <% if message.owner.present? %>
               <br>
               <i>by <%= message.owner.name_with_status %></i>
             <% end %>
           </p>
-        </div>
-        <div class="flex-row__cell link-group">
-          <% if policy(message).destroy? || policy(message).edit? %>
-            <%= link_to "Approve", approve_group_posts_path(:group_id => @group.id, :link_id => message.news_feed_link.id), method: :post, class: "btn btn--primary" if policy(@group).erg_leader_permissions? and !message.news_feed_link.approved?(@group) %>
-            <%= link_to "Edit", edit_group_group_message_path(message.group, message), class: "btn btn--secondary" if policy(message).update? %>
-            <%= link_to "Delete", group_group_message_path(@group, message.id), method: :delete, class: "btn btn--danger", data: { confirm: "Are you sure?" } if policy(message).destroy? %>
-          <% end %>
+          <div class="row">
+            <div class="col commentsLink">
+              <%= link_to "Comments(#{message.comments_count})", group_group_message_path(message.group, message) %>
+            </div>
+            <div class="col">
+              <%= render partial: "groups/shared/like_feature", locals: {news_feed_link: message.news_feed_link } %>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
   <div class="row">
-    <div class="col sm-10 col--offset-2">
-      <%= link_to "Comments(#{message.comments_count})", group_group_message_path(message.group, message), style: "margin-top: 30px;" %>
+    <div class="col-xs-8">
+      <div class="hidden-xs pull-right">
+        <% if policy(message).destroy? || policy(message).edit? %>
+          <%= link_to "Approve", approve_group_posts_path(:group_id => @group.id, :link_id => message.news_feed_link.id), method: :post, class: "btn btn--primary" if policy(@group).erg_leader_permissions? and !message.news_feed_link.approved?(@group) %>
+          <%= link_to "Edit", edit_group_group_message_path(message.group, message), class: "btn btn--secondary" if policy(message).update? %>
+          <%= link_to "Delete", group_group_message_path(@group, message.id), method: :delete, class: "btn btn--danger", data: { confirm: "Are you sure?" } if policy(message).destroy? %>
+        <% end %>
+      </div>
+      <div class="btn-group visible-xs pull-right group-capybara">
+        <% if policy(message).destroy? || policy(message).edit? %>
+          <%= link_to "Approve", approve_group_posts_path(:group_id => @group.id, :link_id => message.news_feed_link.id), method: :post, class: "btn btn--primary" if policy(@group).erg_leader_permissions? and !message.news_feed_link.approved?(@group) %>
+          <%= link_to "Edit", edit_group_group_message_path(message.group, message), class: "btn btn--secondary" if policy(message).update? %>
+          <%= link_to "Delete", group_group_message_path(@group, message.id), method: :delete, class: "btn btn--danger", data: { confirm: "Are you sure?" } if policy(message).destroy? %>
+        <% end %>
+      </div>
     </div>
   </div>
   <% if defined?(share_message) %>

@@ -41,7 +41,8 @@ class Groups::GroupMembersController < ApplicationController
   # Removes a member from the group
   def destroy
     authorize @member, :join_or_leave_groups?
-    @group.members.delete(@member)
+    @group.user_groups.find_by(user_id: @member.id).destroy
+    options_to_leave_sub_groups_or_parent_group_service
     redirect_to group_path(@group)
   end
 
@@ -51,17 +52,26 @@ class Groups::GroupMembersController < ApplicationController
     @group_member.accepted_member = @group.pending_users.disabled?
 
     if @group_member.save
-      flash[:notice] = "The member was created"
+      flash[:notice] = "You are now a member"
 
       # If group has survey questions - redirect user to answer them
       if @group.survey_fields.present?
-        redirect_to survey_group_questions_path(@group)
+        respond_to do |format|
+          format.html { redirect_to survey_group_questions_path(@group) }
+          format.js
+        end
       else
-        redirect_to :back
+        respond_to do |format|
+          format.html { @group.is_sub_group? ? redirect_to(:back) : redirect_to(group_path(@group)) }
+          format.js
+        end
       end
     else
       flash[:notice] = "The member was not created. Please fix the errors"
-      render :new
+        respond_to do |format|
+          format.html { render :new }
+          format.js
+        end
     end
   end
 
@@ -71,7 +81,7 @@ class Groups::GroupMembersController < ApplicationController
     add_members_params[:member_ids].each do |user_id|
       user = User.find_by_id(user_id)
 
-      # Only add association fif user exists and belongs to the same enterprise
+      # Only add association if user exists and belongs to the same enterprise
       next if (!user) || (user.enterprise != @group.enterprise)
       next if @group.members.include? user
 
@@ -83,9 +93,73 @@ class Groups::GroupMembersController < ApplicationController
 
   def remove_member
     authorize @group, :manage_members?
-    @group.members.delete(@member)
+
+    @group.members.destroy(@member)
     redirect_to action: :index
   end
+
+  def join_all_sub_groups
+    authorize current_user, :join_or_leave_groups?
+
+    @group.children.pluck(:id).each do |sub_group_id|
+      unless UserGroup.where(user_id: current_user.id, group_id: sub_group_id).any?
+        user_group = UserGroup.new(user_id: current_user.id, group_id: sub_group_id, accepted_member: @group.pending_users.disabled?)
+        user_group.save
+      end
+    end
+
+    flash[:notice] = "You've joined all #{c_t(:sub_erg).pluralize} of #{@group.name}"
+    if @group.survey_fields.present?
+      redirect_to survey_group_questions_path(@group)
+    else
+      redirect_to group_path(@group)
+    end
+  end
+
+  def view_sub_groups
+    authorize current_user, :join_or_leave_groups?
+    @sub_groups = @group.children
+
+    respond_to do |format|
+      format.html { redirect_to :back }
+      format.js
+    end
+  end
+
+  def join_sub_group
+    authorize current_user, :join_or_leave_groups?
+    if @group.user_groups.where(user_id: current_user.id).any?
+      respond_to do |format|
+        format.html { redirect_to :back }
+        format.js
+      end
+    else
+      @group_member = @group.user_groups.new(user_id: current_user.id)
+      @group_member.accepted_member = @group.pending_users.disabled?
+
+      if @group_member.save
+        respond_to do |format|
+          format.html { redirect_to :back }
+          format.js
+        end
+      else
+        respond_to do |format|
+          format.html { redirect_to :back }
+          format.js
+        end
+      end
+    end
+
+    def leave_sub_group
+      authorize current_user, :join_or_leave_groups?
+      @group.user_groups.find_by(user_id: current_user.id).destroy
+      respond_to do |format|
+        format.html { redirect_to :back }
+        format.js
+      end
+    end
+  end
+
 
   protected
 
@@ -107,5 +181,12 @@ class Groups::GroupMembersController < ApplicationController
     params.require(:group).permit(
       member_ids: []
     )
+  end
+
+
+  private
+
+  def options_to_leave_sub_groups_or_parent_group_service
+    GroupMembership::Options.new(@group, current_user).leave_sub_groups_or_parent_group
   end
 end

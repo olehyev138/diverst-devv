@@ -10,7 +10,7 @@
     <div class="card">
       <div class="card__section card__section--border calendar-filters">
         <div class="row">
-          <div class="col sm-5">
+          <div class="col xs-5">
             <%= f.input :users_segments_segment_id_in,
                   as: :select,
                   collection: @segments,
@@ -19,23 +19,21 @@
                   required: false
             %>
           </div>
-          <div class="col sm-5">
-            <div class="col sm-6">
-              <%= f.input :user_groups_created_at_gteq,
-                    as: :date_picker,
-                    label: "Users joined group from",
-                    required: false
-              %>
-            </div>
-            <div class="col sm-6">
-              <%= f.input :user_groups_created_at_lteq,
-                    as: :date_picker,
-                    label: "Users joined group to",
-                    required: false
-              %>
-            </div>
+          <div class="col xs-6">
+            <%= f.input :user_groups_created_at_gteq,
+                  as: :date_picker,
+                  label: "Users joined group from",
+                  required: false
+            %>
           </div>
-          <div class="col sm-1" style="padding-top: 15px;">
+          <div class="col xs-6">
+            <%= f.input :user_groups_created_at_lteq,
+                  as: :date_picker,
+                  label: "Users joined group to",
+                  required: false
+            %>
+          </div>
+          <div class="col xs-2" style="padding-top: 15px;">
             <%= f.button :submit, value: "Filter" %>
           </div>
         </div>

@@ -165,19 +165,6 @@ def settings
   authorize @group, :update?
 end
 
-def destroy
-  authorize @group
-
-  track_activity(@group, :destroy)
-  if @group.destroy
-    flash[:notice] = "Your #{c_t(:erg)} was deleted"
-    redirect_to action: :index
-  else
-    flash[:alert] = "Your #{c_t(:erg)} was not deleted. Please fix the errors"
-    redirect_to :back
-  end
-end
-
 def metrics
   authorize @group
   @updates = @group.updates
