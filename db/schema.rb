@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180710135701) do
+ActiveRecord::Schema.define(version: 20180713072839) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -29,38 +29,6 @@ ActiveRecord::Schema.define(version: 20180710135701) do
   add_index "activities", ["owner_id", "owner_type"], name: "index_activities_on_owner_id_and_owner_type", using: :btree
   add_index "activities", ["recipient_id", "recipient_type"], name: "index_activities_on_recipient_id_and_recipient_type", using: :btree
   add_index "activities", ["trackable_id", "trackable_type"], name: "index_activities_on_trackable_id_and_trackable_type", using: :btree
-
-  create_table "additional_enterprise_sponsors", force: :cascade do |t|
-    t.string   "sponsor_name",               limit: 191
-    t.string   "sponsor_title",              limit: 191
-    t.text     "sponsor_message",            limit: 65535
-    t.integer  "enterprise_id",              limit: 4
-    t.datetime "created_at",                                               null: false
-    t.datetime "updated_at",                                               null: false
-    t.string   "sponsor_image_file_name",    limit: 191
-    t.string   "sponsor_image_content_type", limit: 191
-    t.integer  "sponsor_image_file_size",    limit: 4
-    t.datetime "sponsor_image_updated_at"
-    t.boolean  "disable_sponsor_message",                  default: false
-  end
-
-  add_index "additional_enterprise_sponsors", ["enterprise_id"], name: "index_additional_enterprise_sponsors_on_enterprise_id", using: :btree
-
-  create_table "additional_group_sponsors", force: :cascade do |t|
-    t.string   "sponsor_name",               limit: 191
-    t.string   "sponsor_title",              limit: 191
-    t.text     "sponsor_message",            limit: 65535
-    t.integer  "group_id",                   limit: 4
-    t.datetime "created_at",                                               null: false
-    t.datetime "updated_at",                                               null: false
-    t.boolean  "disable_sponsor_message",                  default: false
-    t.string   "sponsor_image_file_name",    limit: 191
-    t.string   "sponsor_image_content_type", limit: 191
-    t.integer  "sponsor_image_file_size",    limit: 4
-    t.datetime "sponsor_image_updated_at"
-  end
-
-  add_index "additional_group_sponsors", ["group_id"], name: "index_additional_group_sponsors_on_group_id", using: :btree
 
   create_table "answer_comments", force: :cascade do |t|
     t.text     "content",    limit: 65535
@@ -648,7 +616,6 @@ ActiveRecord::Schema.define(version: 20180710135701) do
     t.text     "short_description",          limit: 65535
     t.string   "layout",                     limit: 191
     t.text     "home_message",               limit: 65535
-    t.boolean  "disable_sponsor_message",                                          default: false
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
@@ -1338,8 +1305,6 @@ ActiveRecord::Schema.define(version: 20180710135701) do
     t.datetime "updated_at",                    null: false
   end
 
-  add_foreign_key "additional_enterprise_sponsors", "enterprises"
-  add_foreign_key "additional_group_sponsors", "groups"
   add_foreign_key "badges", "enterprises"
   add_foreign_key "budgets", "users", column: "approver_id"
   add_foreign_key "budgets", "users", column: "requester_id"
