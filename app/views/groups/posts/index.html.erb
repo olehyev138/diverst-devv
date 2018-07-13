@@ -6,11 +6,11 @@
           <h2 class="text-center">
             <span>
               Posts
-              <span class="label label-default"><%= @group.news_feed_links.includes(:link).approved.count %></span>
+              <span class="label label-default"><%= @group.news_feed_links.includes(:link).approved(@group).count %></span>
               /
                <%= link_to pending_group_posts_path(@group) do %>
                <button class="btn btn-sm btn-primary">
-                 Pending (<%= @group.news_feed_links.includes(:link).not_approved.count %>)
+                 Pending (<%= @group.news_feed_links.includes(:link).unapproved(@group).count %>)
                </button>
              <% end %>
             </span>
@@ -35,10 +35,10 @@
 </div>
 <div class="content__header hidden-xs">
    <% if policy(@group).erg_leader_permissions? %>
-   <h1>Posts(<%= @group.news_feed_links.includes(:link).approved.count %>)/
+   <h1>Posts(<%= @group.news_feed_links.includes(:link).approved(@group).count %>)/
      <%= link_to pending_group_posts_path(@group) do %>
      <button class="btn btn--primary">
-       Pending(<%= @group.news_feed_links.includes(:link).not_approved.count %>)
+       Pending(<%= @group.news_feed_links.includes(:link).unapproved(@group).count %>)
      </button>
      <% end %>
    </h1>
