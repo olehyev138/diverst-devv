@@ -74,12 +74,12 @@
 
         <% share_message = shared_message post %>
         <% if post.link_type == "NewsLink" %>
-          <%= render partial: "groups/shared/news_links", locals: {news_link: post.link.includes(:group, :author), group: @group, share_message: share_message } %>
+          <%= render partial: "groups/shared/news_links", locals: {news_link: post.link, group: @group, share_message: share_message } %>
         <% elsif post.link_type === "GroupMessage"%>
-          <%= render partial: "groups/shared/messages", locals: {message: post.link.includes(:owner, :group), group: @group, share_message: share_message } %>
+          <%= render partial: "groups/shared/messages", locals: {message: post.link, group: @group, share_message: share_message } %>
         <% elsif post.link_type === "SocialLink"%>
           <% if ENV['ENABLE_SOCIAL_MEDIA'] %>
-            <%= render partial: "groups/shared/social_links", locals: {social_link: post.link.includes(:group), group: @group, share_message: share_message } %>
+            <%= render partial: "groups/shared/social_links", locals: {social_link: post.link, group: @group, share_message: share_message } %>
           <% end %>
         <% end %>
       <% end %>

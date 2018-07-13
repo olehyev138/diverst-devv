@@ -1,13 +1,6 @@
 <div class="card__section card__section--border">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-xs-2 pull-left">
-        <% if !news_link.news_feed_link.is_pinned? %>
-          <%= link_to "Pin", pin_group_posts_path(:group_id => news_link.group.id, :link_id => news_link.news_feed_link.id), method: :patch if policy(news_link.group).erg_leader_permissions? %>
-        <% else %>
-          <%= link_to "Unpin", unpin_group_posts_path(:group_id => news_link.group.id, :link_id => news_link.news_feed_link.id), method: :patch if policy(news_link.group).erg_leader_permissions? %>
-        <% end %>
-      </div>
       <div class="col-xs-2">
         <% if news_link.photos.count > 0 %>
           <%= render partial: "shared/carousel/template", locals: {news_link: news_link } %>
@@ -33,13 +26,15 @@
                 <%= link_to "Comments(#{news_link.comments_count})", comments_group_news_link_path(news_link.group, news_link) %>
               </div>
               <div class="col">
-                <%= render partial: "groups/shared/like_feature", locals: {news_feed_link: news_link.news_feed_link } %>
+                <%= render partial: "groups/shared/like_feature", locals: {news_feed_link: news_link.news_feed_link, group: @group } %>
               </div>
             </div>
             <% if defined?(share_message) %>
-            <div class="row">
-              <span class="muted italics"><i><%= share_message %></i></span>
-            </div>
+              <div class="row">
+                <div class="col">
+                  <p class="muted"><i><%= share_message %></i></p>
+                </div>
+              </div>
             <% end %>
           </div>
         </div>

@@ -10,7 +10,10 @@
           <% else %>
             <%= raw social_link.embed_code %>
           <% end %>
-          <%= render partial: "groups/shared/like_feature", locals: {news_feed_link: social_link.news_feed_link } %>
+          <%= render partial: "groups/shared/like_feature", locals: {news_feed_link: social_link.news_feed_link, group: @group } %>
+          <% if defined?(share_message) %>
+            <p class="muted"><i><%= share_message %></i></p>
+          <% end %>
         </div>
       </div>
     </div>
@@ -27,11 +30,4 @@
       </div>
     </div>
   </div>
-  <% if defined?(share_message) %>
-    <div class="row">
-      <div class="col sm-10 col--offset-2">
-        <p class="muted"><i><%= share_message %></i></p>
-      </div>
-    </div>
-  <% end %>
 </div>
