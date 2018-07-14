@@ -98,7 +98,8 @@ class Group < ActiveRecord::Base
   has_many :group_leaders, dependent: :destroy
   has_many :leaders, through: :group_leaders, source: :user
 
-  has_many  :children, class_name: "Group", foreign_key: :parent_id, dependent: :destroy
+  has_many :children, class_name: "Group", foreign_key: :parent_id, dependent: :destroy
+  has_many :sponsors, as: :sponsorable, dependent: :destroy
   belongs_to :parent, class_name: "Group", foreign_key: :parent_id
   belongs_to :group_category
   belongs_to :group_category_type
@@ -109,6 +110,7 @@ class Group < ActiveRecord::Base
   has_attached_file :banner
   validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
 
+  # delete this on next commit
   has_attached_file :sponsor_media, s3_permissions: :private
   do_not_validate_attachment_file_type :sponsor_media
 
@@ -140,6 +142,7 @@ class Group < ActiveRecord::Base
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
 
   def is_parent_group?
     (parent.nil? && children.any?) || (parent.nil? && children.empty?)
