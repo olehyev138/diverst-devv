@@ -1,0 +1,5 @@
+<!-- Partial for segments and post sharing for each of the post types -->
+<%= form.simple_fields_for :news_feed_link do |n| %>
+  <%= n.association :news_feed_link_segments, label: "#{c_t(:segment).pluralize}", collection: group.enterprise.segments, input_html: { class: 'select2', multiple: 'multiple' } %>
+  <%= n.association :news_feeds, label_method: lambda { |n| "#{n.group.name}" }, collection: NewsFeed.where(group: current_user.groups.where.not(id: group.id)), label: 'Share with other ' + "#{c_t(:erg).upcase.pluralize}", input_html: { class: 'select2', multiple: 'multiple' } %>
+<% end %>
