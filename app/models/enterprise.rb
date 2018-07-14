@@ -62,7 +62,6 @@ class Enterprise < ActiveRecord::Base
     before_validation :smart_add_url_protocol
 
     validates :idp_sso_target_url, url: { allow_blank: true }
-    validates :cdo_name, :name, presence: true
 
     has_attached_file :cdo_picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
     validates_attachment_content_type :cdo_picture, content_type: %r{\Aimage\/.*\Z}
@@ -72,10 +71,6 @@ class Enterprise < ActiveRecord::Base
 
     has_attached_file :xml_sso_config
     validates_attachment_content_type :xml_sso_config, content_type: 'text/xml'
-
-    # delete this on next commit
-    has_attached_file :sponsor_media, s3_permissions: :private
-    do_not_validate_attachment_file_type :sponsor_media
 
     has_attached_file :onboarding_sponsor_media, s3_permissions: :private
     do_not_validate_attachment_file_type :onboarding_sponsor_media

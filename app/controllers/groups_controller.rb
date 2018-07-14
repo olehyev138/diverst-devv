@@ -336,12 +336,8 @@ class GroupsController < ApplicationController
                 :upcoming_events_visibility,
                 :calendar_color,
                 :active,
-                :sponsor_name,
                 :contact_email,
-                :sponsor_title,
                 :sponsor_image,
-                :sponsor_media,
-                :sponsor_message,
                 :company_video_url,
                 :layout,
                 :parent_id,
@@ -386,6 +382,15 @@ class GroupsController < ApplicationController
                     :max,
                     :options_text,
                     :alternative_layout
+                ],
+                sponsors_attributes: [
+                    :id,
+                    :sponsor_name,
+                    :sponsor_title,
+                    :sponsor_message,
+                    :sponsor_media,
+                    :disable_sponsor_message,
+                    :_destroy
                 ]
             )
     end
