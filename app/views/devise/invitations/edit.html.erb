@@ -87,26 +87,26 @@
                   <div class="flex-row__cell flex-row__cell--grow">
                     <h4>
                       <%= group.name %>&nbsp;&nbsp;
-                      
+
                       <% if group.children.count > 0 %>
                         <a
                           class="btn btn-sm btn--primary nested_show"
                           style="cursor: pointer; margin-bottom: 20px;"
                         id="<%= group.id %>">Show Sub-<%= c_t(:erg).pluralize %></a>
-                        
+
                         <a
                           class="btn btn-sm btn--primary nested_hide"
                           style="cursor: pointer; margin-bottom: 20px; display:none;"
                         id="<%= group.id %>">Hide Sub-<%= c_t(:erg).pluralize %></a>
-                        
+
                       <% end %>
-                      
+
                     </h4>
                     <p><%= group.description %></p>
                   </div>
                 </div>
               </div>
-              
+
               <% group.children.each do |child| %>
                 <div class="children_<%= group.id%>" style="display:none;">
                   <div class="media-object">
@@ -122,7 +122,7 @@
                   </div>
                 </div>
                <% end %>
-               
+
             <% end %>
 
             <%= f.input :first_name, required: true %>
@@ -259,21 +259,21 @@
           ]
         }); //endof fullcalendar
       }
-      
+
       $('a.nested_show').click(function(e){
         var id = $(this).attr('id');
         $('div.children_' + id).show();
         $(this).siblings('a.nested_hide').show();
         $(this).hide();
       }); //endof click
-      
+
       $('a.nested_hide').click(function(e){
         var id = $(this).attr('id');
         $('div.children_' + id).hide();
         $(this).siblings('a.nested_show').show();
         $(this).hide();
       }); //endof click
-  
+
     </script>
   </div>
 
