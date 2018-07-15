@@ -20,10 +20,17 @@
         <%= f.input :calendar_color, input_html: { class: 'jscolor', autofocus: true } %>
         <h3>Sponsor Details</h3>
         <p>NOTE: Sponsor details are optional. However, if you wish to fill in this part, at least the sponsor name must be entered.</p>
-        <%= f.input :sponsor_name %>
-        <%= f.input :sponsor_title, placeholder: "eg, VP Diversity & Inclusion" %>
-        <%= f.input :sponsor_media, as: :file, label: "Upload sponsor image or video", input_html: { class: "field__label" } %>
-        <%= f.input :sponsor_message %>
+
+        <%= f.simple_fields_for :sponsors do |s| %>
+          <%= render 'sponsor_fields', f: s %>
+        <% end %>
+
+        <% unless @group.sponsors.count == 3 %>
+          <div class="group_sponsor_link">
+            <%= link_to_add_association "Add a group sponsor", f, :sponsors %>
+          </div>
+        <% end %>
+        
 
         <%= f.input :yammer_group_link %>
       </div>
@@ -32,3 +39,14 @@
     <%= f.button :submit %>
   <% end %>
 </div>
+
+<script>
+  $(document).ready(function() {
+   $(".group_sponsor_link").on('cocoon:before-insert', function() {
+    var group_sponsors_count = $('.nested-fields').length
+    if (group_sponsors_count == 3) {
+      $(this).hide();
+    }})
+ });
+
+</script>
