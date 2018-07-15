@@ -202,6 +202,15 @@ class EnterprisesController < ApplicationController
           :yammer_field_name,
           :diverst_field_id,
           :_destroy
+        ],
+        sponsors_attributes: [
+          :id,
+          :sponsor_name,
+          :sponsor_title,
+          :sponsor_message,
+          :sponsor_media,
+          :disable_sponsor_message,
+          :_destroy
         ]
       )
   end

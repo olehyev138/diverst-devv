@@ -78,15 +78,19 @@
   <div class="card">
     <div class="card__section">
       <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_branding') do |f| %>
-      <%= f.input :cdo_name, label: "Sponsor name", placeholder: "Jane Doe" %>
-      <%= f.input :cdo_title, label: "Sponsor title", placeholder: "VP Diversity & Inclusion" %>
-      <%= f.input :cdo_message_email, label: "Home page sponsor message" %>
-      <%= f.hidden_field :disable_sponsor_message, value: false %>
-      <%= f.input :disable_sponsor_message,
-      label: "disable sponsor message?",
-      input_html: { autofocus: true } %>
+
+      <%= f.simple_fields_for :sponsors do |s| %>
+        <%= render 'sponsor_fields', f: s %>
+      <% end %>
+
+
+      <% unless @enterprise.sponsors.count == 3 %>
+        <div class="enterprise_sponsor_link">
+          <%= link_to_add_association "Add an enterprise sponsor", f, :sponsors %>
+        </div>
+      <% end %>
+
       <%= f.input :cdo_message, label: "Onboarding sponsor message" %>
-      <%= f.input :sponsor_media, label: "Upload a sponsor image or video" %>
       <%= f.input :onboarding_sponsor_media, label: "Upload onboarding video" %>
 
         <%= f.input :privacy_statement %>
@@ -96,3 +100,14 @@
     </div>
   </div>
 </div>
+
+<script>
+  $(document).ready(function() {
+   $(".enterprise_sponsor_link").on('cocoon:before-insert', function() {
+    var enterprise_sponsors_count = $('.nested-fields').length
+    if (enterprise_sponsors_count == 3) {
+      $(this).hide();
+    }})
+ });
+
+</script>
