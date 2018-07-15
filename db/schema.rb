@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180715034558) do
+ActiveRecord::Schema.define(version: 20180715035222) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -326,14 +326,11 @@ ActiveRecord::Schema.define(version: 20180715034558) do
     t.boolean  "yammer_import",                                       default: false
     t.boolean  "yammer_group_sync",                                   default: false
     t.integer  "theme_id",                              limit: 4
-    t.string   "cdo_name",                              limit: 191
-    t.string   "cdo_title",                             limit: 191
     t.string   "cdo_picture_file_name",                 limit: 191
     t.string   "cdo_picture_content_type",              limit: 191
     t.integer  "cdo_picture_file_size",                 limit: 4
     t.datetime "cdo_picture_updated_at"
     t.text     "cdo_message",                           limit: 65535
-    t.text     "cdo_message_email",                     limit: 65535
     t.boolean  "collaborate_module_enabled",                          default: true,  null: false
     t.boolean  "scope_module_enabled",                                default: true,  null: false
     t.boolean  "bias_module_enabled",                                 default: false, null: false
@@ -353,16 +350,11 @@ ActiveRecord::Schema.define(version: 20180715034558) do
     t.string   "time_zone",                             limit: 191
     t.boolean  "enable_rewards",                                      default: false
     t.string   "company_video_url",                     limit: 191
-    t.string   "sponsor_media_file_name",               limit: 191
-    t.string   "sponsor_media_content_type",            limit: 191
-    t.integer  "sponsor_media_file_size",               limit: 4
-    t.datetime "sponsor_media_updated_at"
     t.string   "onboarding_sponsor_media_file_name",    limit: 191
     t.string   "onboarding_sponsor_media_content_type", limit: 191
     t.integer  "onboarding_sponsor_media_file_size",    limit: 4
     t.datetime "onboarding_sponsor_media_updated_at"
     t.boolean  "enable_pending_comments",                             default: false
-    t.boolean  "disable_sponsor_message",                             default: false
     t.boolean  "mentorship_module_enabled",                           default: false
     t.boolean  "disable_likes",                                       default: false
   end
@@ -596,17 +588,10 @@ ActiveRecord::Schema.define(version: 20180715034558) do
     t.integer  "total_weekly_points",        limit: 4,                             default: 0
     t.boolean  "active",                                                           default: true
     t.integer  "parent_id",                  limit: 4
-    t.text     "sponsor_message",            limit: 65535
     t.string   "sponsor_image_file_name",    limit: 191
     t.string   "sponsor_image_content_type", limit: 191
     t.integer  "sponsor_image_file_size",    limit: 4
     t.datetime "sponsor_image_updated_at"
-    t.string   "sponsor_name",               limit: 191
-    t.string   "sponsor_title",              limit: 191
-    t.string   "sponsor_media_file_name",    limit: 191
-    t.string   "sponsor_media_content_type", limit: 191
-    t.integer  "sponsor_media_file_size",    limit: 4
-    t.datetime "sponsor_media_updated_at"
     t.string   "company_video_url",          limit: 191
     t.string   "latest_news_visibility",     limit: 191
     t.string   "upcoming_events_visibility", limit: 191
