@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Groups::Folder::ResourcesController, type: :controller do
-    let!(:enterprise){ create(:enterprise, cdo_name: "test") }
+    let!(:enterprise){ create(:enterprise, name: "test") }
     let!(:user){ create(:user, enterprise: enterprise) }
     let!(:group){ create(:group, enterprise: user.enterprise) }
     let!(:user_group){ create(:user_group, group: group, user: user) }

@@ -18,7 +18,7 @@ RSpec.describe Users::PasswordsController, type: :controller do
       user.save
 
       post :create, user: { email: user.email }
-      expect(flash[:notice]).to eq('You have a pending invitation. Please check your email to accept the invitation and sign in')
+      expect(flash[:notice]).to eq('You will recieve an email shortly. Please check your email to accept the invitation and sign in')
     end
 
     it 'flashes password reset message when user invite isnt pending' do

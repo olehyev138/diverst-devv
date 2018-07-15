@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe GroupCategoryTypesController, type: :controller do
-	let!(:enterprise){ create(:enterprise, cdo_name: "test") }
+	let!(:enterprise){ create(:enterprise, name: "test") }
 	let!(:group_category_type) { create(:group_category_type, name: "category type 1", enterprise_id: enterprise.id) }
 	let!(:group_category1) { create(:group_category, name: "category 1", enterprise_id: enterprise.id, group_category_type_id: group_category_type.id) }
 	let!(:group_category2) { create(:group_category, name: "category 2", enterprise_id: enterprise.id, group_category_type_id: group_category_type.id) }

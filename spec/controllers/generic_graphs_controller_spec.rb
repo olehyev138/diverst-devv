@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe GenericGraphsController, type: :controller do
-    let(:enterprise) { create(:enterprise, cdo_name: "test") }
+    let(:enterprise) { create(:enterprise, name: "test") }
     let(:user) { create(:user, enterprise: enterprise, active: true) }
     let!(:field) { create(:field, type: "NumericField", enterprise: enterprise, elasticsearch_only: false) }
     let!(:group) {create(:group, :enterprise => enterprise, :parent_id => nil)}

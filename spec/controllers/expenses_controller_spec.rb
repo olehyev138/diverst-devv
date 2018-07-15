@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe ExpensesController, type: :controller do
-    let(:enterprise) { create(:enterprise, cdo_name: "test") }
+    let(:enterprise) { create(:enterprise, name: "test") }
     let(:user) { create(:user, enterprise: enterprise) }
     let(:category) {create(:expense_category)}
     let(:expense) {create(:expense, enterprise: enterprise)}
@@ -36,16 +36,16 @@ RSpec.describe ExpensesController, type: :controller do
             login_user_from_let
             before { get :new }
 
-            it "returns a new expense object" do 
+            it "returns a new expense object" do
                 expect(assigns[:expense]).to be_a_new(Expense)
             end
 
-            it "renders a new template" do 
+            it "renders a new template" do
                 expect(response).to render_template :new
             end
         end
 
-        context "without a logged in user" do 
+        context "without a logged in user" do
             before { get :new }
             it_behaves_like "redirect user to users/sign_in path"
         end
@@ -76,22 +76,22 @@ RSpec.describe ExpensesController, type: :controller do
                 end
             end
 
-            context "with invalid params" do 
+            context "with invalid params" do
                 let(:invalid_expense_attributes) { FactoryGirl.attributes_for(:expense, name: nil) }
 
                 before { post :create, expense: invalid_expense_attributes }
 
-                it "flashes an alert message" do 
+                it "flashes an alert message" do
                     expect(flash[:alert]).to eq "Your expense was not created. Please fix the errors"
                 end
 
-                it "renders new template" do 
+                it "renders new template" do
                     expect(response).to render_template :new
                 end
             end
         end
 
-        describe "without a logged in user" do 
+        describe "without a logged in user" do
             let(:valid_expense_attributes) { FactoryGirl.attributes_for(:expense, :category_id => category.id )}
             before { post :create, expense: valid_expense_attributes }
             it_behaves_like "redirect user to users/sign_in path"
@@ -104,11 +104,11 @@ RSpec.describe ExpensesController, type: :controller do
             login_user_from_let
             before { get :edit, :id => expense.id }
 
-            it "returns a valid expense object" do 
+            it "returns a valid expense object" do
                 expect(assigns[:expense]).to be_valid
             end
 
-            it "renders an edit template" do 
+            it "renders an edit template" do
                 expect(response).to render_template :edit
             end
         end
@@ -160,7 +160,7 @@ RSpec.describe ExpensesController, type: :controller do
             end
         end
 
-        describe "wtihout a logged in user" do 
+        describe "wtihout a logged in user" do
             before { patch :update, id: expense.id, expense: attributes_for(:expense, name: "updated") }
             it_behaves_like "redirect user to users/sign_in path"
         end

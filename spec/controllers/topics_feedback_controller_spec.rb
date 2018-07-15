@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe TopicFeedbacksController, type: :controller do
-    let!(:enterprise){ create(:enterprise, cdo_name: "test") }
+    let!(:enterprise){ create(:enterprise, name: "test") }
     let!(:user){ create(:user, enterprise: enterprise) }
     let!(:topic){ create(:topic, enterprise: enterprise) }
     let!(:topic_feedback){ create(:topic_feedback, topic: topic) }

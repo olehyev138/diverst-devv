@@ -368,6 +368,16 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
                     expect(flash[:notice]).to eq "You've joined all #{c_t(:sub_erg).pluralize} of #{assigns[:group].name}"
                 end
 
+                context 'when survey fields for group is present' do
+                    before { create(:field, type: 'TextField', field_type: 'group_survey', group_id: group.id) }
+                    it 'redirect to survey_group_questions_path' do
+                        post :join_all_sub_groups, group_id: group.id
+                        expect(response).to redirect_to survey_group_questions_path(group)
+                    end
+                end
+            end
+
+            context 'when survey fields for group is absent' do
                 it 'redirect to survey_group_questions_path' do
                     expect(response).to redirect_to survey_group_questions_path(group)
                 end
