@@ -3,8 +3,9 @@
     <div class="card__section">
       <%= simple_form_for @social_link, url: group_social_links_path do |f| %>
         <%= f.input :url, label: "URL", input_html: { autofocus: true } %>
-        <%= f.association :segments, collection: @group.enterprise.segments, input_html: { class: "select2" } %>
-        
+
+        <%= render partial: "groups/shared/post_sharing", locals: { form: f, group: @group } %>
+
         <%= f.button :submit %>
       <% end %>
     </div>
