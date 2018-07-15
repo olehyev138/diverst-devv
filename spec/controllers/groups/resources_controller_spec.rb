@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Groups::ResourcesController, type: :controller do
-    let(:enterprise){ create(:enterprise, cdo_name: "test") }
+    let(:enterprise){ create(:enterprise) }
     let(:user){ create(:user, enterprise: enterprise) }
     let!(:admin_resource){ create(:resource, title: "title", container: enterprise, file: fixture_file_upload('files/test.csv', 'text/csv'), resource_type: "admin") }
     let!(:national_resource){ create(:resource, title: "title", container: enterprise, file: fixture_file_upload('files/test.csv', 'text/csv'), resource_type: "national") }

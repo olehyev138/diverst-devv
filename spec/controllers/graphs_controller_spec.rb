@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe GraphsController, type: :controller do
-    let(:enterprise) { create(:enterprise, cdo_name: "test") }
+    let(:enterprise) { create(:enterprise) }
     let(:user) { create(:user, enterprise: enterprise) }
     let(:metrics_dashboard) { create(:metrics_dashboard, enterprise_id: enterprise.id) }
     let(:poll) { create(:poll, enterprise_id: enterprise.id) }
