@@ -17,16 +17,22 @@
               <br>
               <i>by <%= message.owner.name_with_status %></i>
             <% end %>
-            <%= link_to "Comments(#{message.comments_count})", group_group_message_path(message.group, message), style: "margin-top: 30px;" %>
           </p>
           <div class="row">
             <div class="col commentsLink">
               <%= link_to "Comments(#{message.comments_count})", group_group_message_path(message.group, message) %>
             </div>
             <div class="col">
-              <%= render partial: "groups/shared/like_feature", locals: {news_feed_link: message.news_feed_link } %>
+              <%= render partial: "groups/shared/like_feature", locals: {news_feed_link: message.news_feed_link, group: @group } %>
             </div>
           </div>
+          <% if defined?(share_message) %>
+            <div class="row">
+              <div class="col">
+                <p class="muted"><i><%= share_message %></i></p>
+              </div>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>
@@ -34,16 +40,18 @@
   <div class="row">
     <div class="col-xs-8">
       <div class="hidden-xs pull-right">
-        <% if policy(message).destroy? %>
-          <%= link_to "Approve", approve_group_posts_path(:group_id => message.group.id, :link_id => message.news_feed_link.id), method: :post, class: "btn btn--primary" if policy(message.group).erg_leader_permissions? and !message.news_feed_link.approved? %>
+        <% if policy(message).destroy? || policy(message).edit? %>
+          <%= link_to "Approve", approve_group_posts_path(:group_id => @group.id, :link_id => message.news_feed_link.id), method: :post, class: "btn btn--primary" if policy(@group).erg_leader_permissions? and !message.news_feed_link.approved?(@group) %>
           <%= link_to "Edit", edit_group_group_message_path(message.group, message), class: "btn btn--secondary" if policy(message).update? %>
-          <%= link_to "Delete", group_group_message_path(message.group, message), method: :delete, class: "btn btn--danger", data: { confirm: "Are you sure?" } %>
+          <%= link_to "Delete", group_group_message_path(@group, message.id), method: :delete, class: "btn btn--danger", data: { confirm: "Are you sure?" } if policy(message).destroy? %>
         <% end %>
       </div>
       <div class="btn-group visible-xs pull-right group-capybara">
-          <%= link_to "Approve", approve_group_posts_path(:group_id => message.group.id, :link_id => message.news_feed_link.id), method: :post, class: "btn btn-primary" if policy(message.group).erg_leader_permissions? and !message.news_feed_link.approved? %>
-          <%= link_to "Edit", edit_group_group_message_path(message.group, message), class: "btn btn-secondary" if policy(message).update? %>
-          <%= link_to "Delete", group_group_message_path(message.group, message), method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure?" } %>
+        <% if policy(message).destroy? || policy(message).edit? %>
+          <%= link_to "Approve", approve_group_posts_path(:group_id => @group.id, :link_id => message.news_feed_link.id), method: :post, class: "btn btn--primary" if policy(@group).erg_leader_permissions? and !message.news_feed_link.approved?(@group) %>
+          <%= link_to "Edit", edit_group_group_message_path(message.group, message), class: "btn btn--secondary" if policy(message).update? %>
+          <%= link_to "Delete", group_group_message_path(@group, message.id), method: :delete, class: "btn btn--danger", data: { confirm: "Are you sure?" } if policy(message).destroy? %>
+        <% end %>
       </div>
     </div>
   </div>
