@@ -84,6 +84,7 @@ class GroupsController < ApplicationController
 
   def show
     authorize @group
+    @group_sponsors = @group.sponsors
 
     if policy(@group).erg_leader_permissions?
       base_show
@@ -125,50 +126,6 @@ def create
     @categories = current_user.enterprise.group_categories
     render :new
   end
-end
-
-def show
-    authorize @group
-    @group_sponsors = @group.sponsors
-
-    if policy(@group).erg_leader_permissions?
-        base_show
-
-        @posts = @group.news_feed_links
-        .includes(:link)
-        .approved
-        .order(is_pinned: :desc, created_at: :desc)
-        .limit(5)
-    else
-        if @group.active_members.include? current_user
-            base_show
-
-            @posts = @group.news_feed_links
-            .includes(:link)
-            .approved
-            .joins(joins)
-            .where(where, current_user.segments.pluck(:id))
-            .order(is_pinned: :desc, created_at: :desc)
-            .limit(5)
-
-        else
-            @upcoming_events = @group.initiatives.upcoming.limit(3) + @group.participating_initiatives.upcoming.limit(3)
-            @user_groups = []
-            @messages = []
-            @user_group = []
-            @leaders = @group.group_leaders.includes(:user).visible
-            @user_groups = []
-            @top_user_group_participants = []
-            @top_group_participants = []
-            @posts = @group.news_feed_links
-            .includes(:link)
-            .approved
-            .joins(joins)
-            .where(where, current_user.segments.pluck(:id))
-            .order(is_pinned: :desc, created_at: :desc)
-            .limit(5)
-        end
-    end
 end
 
 def edit
