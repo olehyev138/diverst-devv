@@ -8,7 +8,7 @@ include Clockwork
 module Clockwork
     
     configure do |config|
-        config[:logger] = Logger.new("#{Rails.root}/log/clockwork.log")
+        #config[:logger] = Logger.new("#{Rails.root}/log/clockwork.log")
     end
     
     error_handler do |error|
