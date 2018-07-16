@@ -102,14 +102,3 @@
     </div>
   </div>
 </div>
-
-<script>
-  $(document).ready(function() {
-   $(".enterprise_sponsor_link").on('cocoon:before-insert', function() {
-    var enterprise_sponsors_count = $('.nested-fields').length
-    if (enterprise_sponsors_count == 3) {
-      $(this).hide();
-    }})
- });
-
-</script>
