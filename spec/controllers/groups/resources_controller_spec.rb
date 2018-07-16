@@ -150,17 +150,6 @@ RSpec.describe Groups::ResourcesController, type: :controller do
             it 'returns format in csv' do 
                 expect(response.content_type).to eq 'text/csv'
             end
-
-            
-            context "without file" do
-                login_user_from_let
-                let!(:group_resource) { create(:resource, title: "title", file: nil) }
-                before { get :show, :id => group_resource.id, group_id: group.id }
-    
-                it 'does something' do 
-                    expect(flash[:alert]).to eq "File/File Path does not exist"
-                end
-            end
         end
 
         describe 'with user not logged in' do

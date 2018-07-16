@@ -378,6 +378,11 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             end
 
             context 'when survey fields for group is absent' do
+                before do
+                    group.update(pending_users: 'enabled')
+                    post :join_all_sub_groups, group_id: group.id
+                end
+
                 it 'redirect to survey_group_questions_path' do
                     expect(response).to redirect_to survey_group_questions_path(group)
                 end

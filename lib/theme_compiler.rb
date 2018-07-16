@@ -56,6 +56,7 @@ class ThemeCompiler
         content_type: 'text/css'
       )
     else
+       FileUtils.mkdir_p(File.join(Rails.root, 'public', 'assets', 'themes')) unless File.directory?(File.join(Rails.root, 'public', 'assets', 'themes'))
       File.write(File.join(Rails.root, 'public', theme.asset_path(asset.digest)), compressed_body)
     end
 
