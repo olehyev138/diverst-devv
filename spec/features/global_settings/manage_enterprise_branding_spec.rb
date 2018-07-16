@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.feature 'Manage Enterprise Branding' do
-	let!(:enterprise) { create(:enterprise, theme: create(:theme, primary_color: '#7b77c9')) }
+	let!(:enterprise) { create(:enterprise) }
 	let!(:admin_user) { create(:user, enterprise_id: enterprise.id, policy_group: create(:policy_group,
 		enterprise_id: enterprise.id)) }
 	let!(:group) { create(:group, enterprise_id: enterprise.id) }
@@ -11,6 +11,7 @@ RSpec.feature 'Manage Enterprise Branding' do
 	end
 
 	context 'Branding management' do
+		let(:enterprise) { create(:enterprise, theme: create(:theme, primary_color: '#7b77c9')) }
 		before { visit edit_branding_enterprise_path(enterprise) }
 
 		context 'Customize branding' do
@@ -90,72 +91,51 @@ RSpec.feature 'Manage Enterprise Branding' do
 		end
 	end
 
-	# re-write this spec
-	xcontext 'Customize Program Sponsor Details' do
+	context 'Customize Program Sponsor Details' do
 		before { visit edit_branding_enterprise_path(enterprise) }
 
-		scenario 'by editing sponsor details with sponsor message enabled' do
-			fill_in 'enterprise[cdo_name]', with: 'Mark Zuckerberg'
-			fill_in 'enterprise[cdo_title]', with: 'CEO of Facebook'
-			fill_in 'enterprise[cdo_message_email]', with: 'Welcome to this Enterprise peeps:)!!'
-			fill_in 'enterprise[privacy_statement]', with: 'This is the enterprise privacy statement'
+		scenario 'by creating multiple sponsors', js: true do
+			expect(page).to have_link 'Add an enterprise sponsor'
+
+			click_on 'Add an enterprise sponsor'
+
+			fill_in 'Sponsor name', with: 'Bill Gates'
+			fill_in 'Sponsor title', with: 'CEO of Microsoft'
+			attach_file('Upload sponsor image or video', 'spec/fixtures/files/sponsor_image.jpg')
+			fill_in 'Home page sponsor message', with: 'Hi and welcome'
+
+			click_on 'Add an enterprise sponsor'
+
+			within all('.nested-fields')[1] do
+				fill_in 'Sponsor name', with: 'Mark Zuckerberg'
+			  fill_in 'Sponsor title', with: 'Founder & CEO of Facebook'
+			  attach_file('Upload sponsor image or video', 'spec/fixtures/files/sponsor_image.jpg')
+			  fill_in 'Home page sponsor message', with: 'Hi and welcome'
+			end
+
+			click_on 'Add an enterprise sponsor'
+
+			within all('.nested-fields')[2] do
+				fill_in 'Sponsor name', with: 'Elizabeth Holmes'
+			  fill_in 'Sponsor title', with: 'Founder & CEO of Theranos'
+			  attach_file('Upload sponsor image or video', 'spec/fixtures/files/sponsor_image.jpg')
+			  fill_in 'Home page sponsor message', with: 'Hi and welcome'
+			end
+
+			click_on 'Add an enterprise sponsor'
+
+			within all('.nested-fields')[3] do
+				fill_in 'Sponsor name', with: 'Elon Musk'
+			  fill_in 'Sponsor title', with: 'Founder & CEO of Telsa'
+			  attach_file('Upload sponsor image or video', 'spec/fixtures/files/sponsor_image.jpg')
+			  fill_in 'Home page sponsor message', with: 'Hi and welcome'
+			end
 
 			click_on 'Save sponsor info'
 
 			visit user_root_path
 
-			expect(page).to have_content 'Mark Zuckerberg'
-			expect(page).to have_content 'CEO of Facebook'
-			expect(page).to have_content 'Welcome to this Enterprise peeps:)!!'
-
-			visit user_privacy_statement_path
-
-			expect(page).to have_content 'This is the enterprise privacy statement'
-		end
-
-		scenario 'by editing sponsor details with sponsor message disabled', js: true do
-			enterprise.update(
-				cdo_name: 'Mark Zuckerberg',
-				cdo_title: 'CEO of Facebook',
-				cdo_message_email: 'Welcome to this Enterprise peeps:)!!'
-				)
-			visit user_root_path
-
-			expect(page).to have_content 'Mark Zuckerberg'
-			expect(page).to have_content 'CEO of Facebook'
-			expect(page).to have_content 'Welcome to this Enterprise peeps:)!!'
-
-			visit edit_branding_enterprise_path(enterprise)
-
-			disable_home_sponsor_message_button.trigger('click')
-
-			click_on 'Save sponsor info'
-
-			visit user_root_path
-
-			expect(page).to have_no_content 'Mark Zuckerberg'
-			expect(page).to have_no_content 'CEO of Facebook'
-			expect(page).to have_no_content 'Welcome to this Enterprise peeps:)!!'
-		end
-
-		scenario 'by uploading sponsor image' do
-			attach_file('enterprise[sponsor_media]', 'spec/fixtures/files/sponsor_image.jpg')
-
-			click_on 'Save sponsor info'
-
-			visit user_root_path
-
-			expect(page).to have_sponsor_image "sponsor_image"
-		end
-
-		scenario 'by uploading sponsor video', js: true do
-			attach_file('enterprise[sponsor_media]', 'spec/fixtures/video_file/sponsor_video.mp4')
-
-			click_on 'Save sponsor info'
-
-			visit user_root_path
-
-			expect(page).to have_sponsor_video "sponsor_video"
+			expect(page).to have_content 'Bill Gates'
 		end
 	end
 end

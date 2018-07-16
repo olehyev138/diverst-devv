@@ -25,11 +25,10 @@
           <%= render 'sponsor_fields', f: s %>
         <% end %>
 
-        <% unless @group.sponsors.count == 3 %>
-          <div class="group_sponsor_link">
-            <%= link_to_add_association "Add a group sponsor", f, :sponsors %>
-          </div>
-        <% end %>
+        
+        <div class="group_sponsor_link">
+          <%= link_to_add_association "Add a group sponsor", f, :sponsors %>
+        </div>
         
 
         <%= f.input :yammer_group_link %>
@@ -39,14 +38,3 @@
     <%= f.button :submit %>
   <% end %>
 </div>
-
-<script>
-  $(document).ready(function() {
-   $(".group_sponsor_link").on('cocoon:before-insert', function() {
-    var group_sponsors_count = $('.nested-fields').length
-    if (group_sponsors_count == 3) {
-      $(this).hide();
-    }})
- });
-
-</script>

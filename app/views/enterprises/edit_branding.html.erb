@@ -84,11 +84,10 @@
       <% end %>
 
 
-      <% unless @enterprise.sponsors.count == 3 %>
-        <div class="enterprise_sponsor_link">
-          <%= link_to_add_association "Add an enterprise sponsor", f, :sponsors %>
-        </div>
-      <% end %>
+      <div class="enterprise_sponsor_link">
+        <%= link_to_add_association "Add an enterprise sponsor", f, :sponsors %>
+      </div>
+
 
       <%= f.input :cdo_message, label: "Onboarding sponsor message" %>
       <%= f.input :onboarding_sponsor_media, label: "Upload onboarding video" %>
@@ -100,14 +99,3 @@
     </div>
   </div>
 </div>
-
-<script>
-  $(document).ready(function() {
-   $(".enterprise_sponsor_link").on('cocoon:before-insert', function() {
-    var enterprise_sponsors_count = $('.nested-fields').length
-    if (enterprise_sponsors_count == 3) {
-      $(this).hide();
-    }})
- });
-
-</script>
