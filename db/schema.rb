@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180713072839) do
+ActiveRecord::Schema.define(version: 20180710135701) do
+
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
     t.string   "trackable_type", limit: 191
@@ -242,6 +243,24 @@ ActiveRecord::Schema.define(version: 20180713072839) do
   end
 
   add_index "ckeditor_assets", ["type"], name: "index_ckeditor_assets_on_type", using: :btree
+
+  create_table "clockwork_database_events", force: :cascade do |t|
+    t.string   "name",                limit: 191,                 null: false
+    t.integer  "frequency_quantity",  limit: 4,   default: 1,     null: false
+    t.integer  "frequency_period_id", limit: 4,                   null: false
+    t.integer  "enterprise_id",       limit: 4,                   null: false
+    t.boolean  "disabled",                        default: false
+    t.string   "day",                 limit: 191
+    t.string   "at",                  limit: 191
+    t.string   "job_name",            limit: 191,                 null: false
+    t.string   "method_name",         limit: 191,                 null: false
+    t.string   "method_args",         limit: 191
+    t.string   "tz",                  limit: 191,                 null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "clockwork_database_events", ["frequency_period_id"], name: "index_clockwork_database_events_on_frequency_period_id", using: :btree
 
   create_table "custom_texts", force: :cascade do |t|
     t.text    "erg",               limit: 65535
@@ -478,6 +497,12 @@ ActiveRecord::Schema.define(version: 20180713072839) do
 
   add_index "folders", ["container_type", "container_id"], name: "index_folders_on_container_type_and_container_id", using: :btree
 
+  create_table "frequency_periods", force: :cascade do |t|
+    t.string   "name",       limit: 191, default: "daily", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "graphs", force: :cascade do |t|
     t.integer  "field_id",           limit: 4
     t.integer  "aggregation_id",     limit: 4
@@ -615,7 +640,6 @@ ActiveRecord::Schema.define(version: 20180713072839) do
     t.text     "short_description",          limit: 65535
     t.string   "layout",                     limit: 191
     t.text     "home_message",               limit: 65535
-    t.boolean  "disable_sponsor_message",                                          default: false
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
