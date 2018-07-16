@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180713072839) do
+ActiveRecord::Schema.define(version: 20180710135701) do
+
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
     t.string   "trackable_type", limit: 191
@@ -615,7 +616,6 @@ ActiveRecord::Schema.define(version: 20180713072839) do
     t.text     "short_description",          limit: 65535
     t.string   "layout",                     limit: 191
     t.text     "home_message",               limit: 65535
-    t.boolean  "disable_sponsor_message",                                          default: false
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
@@ -884,17 +884,18 @@ ActiveRecord::Schema.define(version: 20180713072839) do
 
   create_table "news_feed_links", force: :cascade do |t|
     t.integer  "news_feed_id", limit: 4
+    t.boolean  "approved",                 default: false
     t.integer  "link_id",      limit: 4
     t.string   "link_type",    limit: 191
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.boolean  "is_pinned",                default: false
   end
 
   create_table "news_feeds", force: :cascade do |t|
-    t.integer  "group_id",      limit: 4
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-    t.integer  "share_link_id", limit: 4
+    t.integer  "group_id",   limit: 4
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
   end
 
   create_table "news_link_comments", force: :cascade do |t|
@@ -1120,15 +1121,6 @@ ActiveRecord::Schema.define(version: 20180713072839) do
     t.datetime "updated_at",                      null: false
     t.integer  "owner_id",            limit: 4
     t.string   "active_users_filter", limit: 191
-  end
-
-  create_table "share_links", force: :cascade do |t|
-    t.integer  "news_feed_id",      limit: 4,                 null: false
-    t.integer  "news_feed_link_id", limit: 4,                 null: false
-    t.boolean  "approved",                    default: false, null: false
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
-    t.boolean  "is_pinned",                   default: false
   end
 
   create_table "social_link_segments", force: :cascade do |t|

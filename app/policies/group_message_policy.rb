@@ -9,16 +9,11 @@ class GroupMessagePolicy < ApplicationPolicy
 
   def update?
     return true if is_owner?
-    return false if @record.news_feed_link.share_links.count > 1
 
-    manage?
+    @policy_group.group_messages_manage
   end
 
   def destroy?
-    manage?
-  end
-
-  def manage?
     return true if is_owner?
 
     @policy_group.group_messages_manage
