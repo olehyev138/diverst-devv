@@ -1,8 +1,8 @@
 <div class="content__header">
     <%= link_to group_posts_path(@group) do %>
-      <button class="btn btn--primary">Posts(<%= NewsFeedLink.approved(@group).count  %>)</button>
+      <button class="btn btn--primary">Posts(<%= @group.news_feed_links.includes(:link).approved.count %>)</button>
     <% end %>
-    <h1>/Pending(<%= NewsFeedLink.unapproved(@group).count  %>)</h1>
+  <h1>/Pending(<%= @group.news_feed_links.includes(:link).not_approved.count %>)</h1>
 </div>
 
 <div class="content__main">
@@ -13,13 +13,24 @@
       </div>
     <% else %>
       <% @posts.each do |news| %>
-        <% share_message = shared_message news %>
         <% if news.link_type == "NewsLink" %>
-          <%= render partial: "groups/shared/news_links", locals: {news_link: news.link, share_message: share_message } %>
+          <%= render partial: "groups/shared/news_links", locals: {news_link: news.link } %>
         <% elsif news.link_type === "GroupMessage"%>
-          <%= render partial: "groups/shared/messages", locals: {message: news.link, share_message: share_message  } %>
+          <%= render partial: "groups/shared/messages", locals: {message: news.link } %>
         <% elsif news.link_type === "SocialLink"%>
-          <%= render partial: "groups/shared/social_links", locals: {social_link: news.link, share_message: share_message  } %>
+            <div class="flex-row__cell link-group">
+
+              <% if news.link.url.include?("facebook") %>
+                <iframe src="https://www.facebook.com/plugins/post.php?href=<%= news.link.url_safe %>&width=500&show_text=true&height=290&appId" width="500" height="290" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+              <% elsif news.link.url.include?("instagram") %>
+                <iframe width="320" height="440" src="<%= news.link.url %>embed" frameborder="0"></iframe>
+              <% else %>
+                  <%= raw news.link.embed_code %>
+              <% end %>
+              
+              <%= link_to 'Delete', group_social_link_path(@group, news.link.id),method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(news.link).destroy? %>
+              <%= link_to "Approve", approve_group_posts_path(:group_id => @group.id, :link_id => news.id), method: :post if policy(@group).erg_leader_permissions? and !news.approved? %>
+            </div>
         <% end %>
       <% end %>
     <% end %>
