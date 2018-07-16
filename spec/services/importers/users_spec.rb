@@ -34,6 +34,7 @@ RSpec.describe Importers::Users do
   end
 
   context "when spreadsheet have email that does not exists in database" do
+    let(:is_active_value) { [1, '1', true, 'true', 'TRUE', 'yes', 'YES', '', nil].sample }
     let(:user){ build(:user) }
     let(:file) do
       head = [
@@ -52,7 +53,7 @@ RSpec.describe Importers::Users do
           user.first_name,
           user.last_name,
           user.email,
-          'false', #even with false Active field we expect true in created user
+          is_active_value,
           "Developer",
           "Male",
           "1992-01-25",
@@ -100,6 +101,7 @@ RSpec.describe Importers::Users do
   end
 
   context "when spreadsheet have email that already exists in database" do
+    let(:is_active_false) { [false, 'false', 'FALSE', 'no', 'NO'].sample }
     let!(:user) do
       user = build(:user)
       user.info[job_field] = "Developer"
@@ -107,6 +109,7 @@ RSpec.describe Importers::Users do
       user.info[languages_field] = "English"
       user.info[date_field] = date_field.process_field_value "1992-01-25"
       user.info[years_field] = 20
+      user.active = true
       user.save!
       user
     end
@@ -116,6 +119,7 @@ RSpec.describe Importers::Users do
         "First name",
         "Last name",
         "Email",
+        "Active",
         job_field.title,
         gender_field.title,
         languages_field.title,
@@ -126,6 +130,7 @@ RSpec.describe Importers::Users do
           user.first_name,
           user.last_name,
           user.email,
+          is_active_false,
           "Designer",
           "Female",
           "Spanish",
@@ -147,6 +152,7 @@ RSpec.describe Importers::Users do
       expect(updated_user.first_name).to eq user.first_name
       expect(updated_user.last_name).to eq user.last_name
       expect(updated_user.email).to eq user.email
+      expect(updated_user.active).to eq false
       expect(infos.fetch(job_field.id)).to eq "Designer"
       expect(infos.fetch(gender_field.id)).to eq ["Female"]
       expect(infos.fetch(date_field.id)).to eq Time.strptime("1992-01-25", '%F').to_i
