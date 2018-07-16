@@ -13,7 +13,7 @@
     <%= link_to "Edit profile", edit_user_user_path, class: "btn btn--primary" %>
     <%= link_to c_t(:member_preference).pluralize, group_surveys_user_path(@user), class: "btn btn--primary" if @user.has_answered_group_surveys? %>
     <% if @user.linkedin_profile_url.present? %>
-      <%= link_to 'google.com' do %>
+      <%= link_to leader.linkedin_profile_url do %>
           <img src="/assets/linkedin-full.png" alt="LinkedIn profile link" style="height: 30px; margin-top: 12px;">
         <% end %>
     <% else %>
