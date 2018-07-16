@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ClockworkDatabaseEvent, type: :model do
+RSpec.describe ClockworkDatabaseEvent, type: :model, :focus => true do
     
     describe "validations" do
         let(:clockwork_database_event){ build_stubbed(:clockwork_database_event) }

@@ -15,6 +15,9 @@ class ClockworkDatabaseEvent < ActiveRecord::Base
     # we want to make sure the timezone is valid
     validates_inclusion_of :tz, :in => ActiveSupport::TimeZone.all.map(&:name)
     
+    # we want to make sure the timezone is valid
+    validates_inclusion_of :day, :in => Date::DAYNAMES.map(&:downcase), :if => Proc.new { |c| c.day.present? }
+    
     validate :valid_job
     
     before_save :downcase_attributes
