@@ -10,19 +10,20 @@ class GroupsController < ApplicationController
 
     helper ApplicationHelper
 
-    def index
+   def index
         authorize Group
-        @groups = GroupPolicy::Scope.new(current_user, Group, :groups_manage).resolve.includes(:children).all_parents
+        @groups = current_user.enterprise.groups.includes(:children).all_parents
     end
 
     def plan_overview
         authorize Group
-        @groups = GroupPolicy::Scope.new(current_user, Group, :groups_budgets_index).resolve
+        @groups = current_user.enterprise.groups.includes(:initiatives)
     end
 
     def close_budgets
         authorize Group
-        @groups = GroupPolicy::Scope.new(current_user, Group, :groups_budgets_index).resolve.includes(:children).all_parents
+        user_not_authorized if not current_user.policy_group.annual_budget_manage?
+        @groups = current_user.enterprise.groups.includes(:children).all_parents
     end
 
     # calendar for all of the groups

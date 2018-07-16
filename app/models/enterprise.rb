@@ -28,6 +28,7 @@ class Enterprise < ActiveRecord::Base
     has_many :email_variables, class_name: 'EnterpriseEmailVariable'
     belongs_to :theme
     has_many :policy_groups
+    has_many :clockwork_database_events
     has_many :expenses
     has_many :expense_categories
     has_many :biases, through: :users, class_name: "Bias"
