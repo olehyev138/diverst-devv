@@ -1,0 +1,53 @@
+<div class="content__main">
+  <%= render 'groups/show_layouts/blocks/banner' %>
+  <%= render 'groups/show_layouts/blocks/group_description' %>
+
+  <%= render 'groups/show_layouts/blocks/home_message' %>
+
+  <div class="row row--equal-height">
+    <div class="col sm-12 md-9">
+      <div class="row row--equal-height">
+        <div class="col sm-12 md-6">
+          <div class="card">
+            <div class="card__section">
+              <%= render 'groups/show_layouts/blocks/news_links' %>
+            </div>
+          </div>
+        </div>
+
+        <div class="col sm-12 md-6">
+          <div class="card">
+            <div class="card__section">
+              <h4 class="card__title"><%= inline_svg('icons/calendar.svg', class: "icon card__icon") %>Upcoming Events</h4>
+              <%= render 'groups/show_layouts/blocks/events' %>
+            </div>
+              <%= render 'groups/show_layouts/blocks/yammer' %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col col--stacked">
+      <%= render 'groups/show_layouts/blocks/sponsor' %>
+
+      <%= render 'groups/show_layouts/blocks/join_button_and_member_preferences' %>
+
+      <%= render 'groups/show_layouts/blocks/display_all_group_children' %>
+
+      <div class="card card--secondary">
+        <%= render 'groups/show_layouts/blocks/leaders' %>
+      </div>
+
+      <%= render 'groups/show_layouts/blocks/contact_email' %>
+
+      <%= render 'groups/show_layouts/blocks/group_parent' %>
+
+
+      <%= render 'groups/show_layouts/blocks/notifications_settings' %>
+
+      <%= render 'groups/show_layouts/blocks/leave_erg_button' %>
+    </div>
+  </div>
+</div>
+
+<%= render partial: 'groups/show_layouts/blocks/sub_ergs_category.js.erb' %>

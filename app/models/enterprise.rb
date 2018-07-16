@@ -39,6 +39,12 @@ class Enterprise < ActiveRecord::Base
     has_many :badges
     has_many :group_categories
     has_many :group_category_types
+    
+    # mentorship
+    has_many :mentoring_interests
+    has_many :mentoring_requests
+    has_many :mentoring_sessions
+    has_many :mentoring_types
 
     has_one :custom_text
 

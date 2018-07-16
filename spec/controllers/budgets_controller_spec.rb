@@ -5,7 +5,6 @@ RSpec.describe BudgetsController, type: :controller do
   let!(:group) { FactoryGirl.create(:group, enterprise: user.enterprise, :annual_budget => 100000) }
   let!(:budget) { FactoryGirl.create(:approved_budget, subject: group) }
 
-
   describe 'GET#index' do
     context 'with logged user' do
       let!(:budget1) { create(:approved_budget, subject: group) }
@@ -32,7 +31,6 @@ RSpec.describe BudgetsController, type: :controller do
     end
   end
 
-
   describe 'GET#show' do
     context 'with logged user' do
       login_user_from_let
@@ -52,7 +50,6 @@ RSpec.describe BudgetsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'GET#new' do
     let!(:user) { FactoryGirl.create(:user) }
@@ -81,7 +78,6 @@ RSpec.describe BudgetsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'POST#create' do
     context 'with logged user' do
@@ -132,14 +128,13 @@ RSpec.describe BudgetsController, type: :controller do
     end
   end
 
-
   describe 'POST#approve' do
     context 'with logged user' do
       login_user_from_let
 
       before do
-        post :approve, group_id: budget.subject.id, budget_id: budget.id
-        BudgetManager.new(budget).approve(user)
+        post :approve, group_id: budget.subject.id, budget_id: budget.id, budget: { comments: "here is a comment" }
+        budget.reload
       end
 
       it "returns a valid group object" do
@@ -153,6 +148,10 @@ RSpec.describe BudgetsController, type: :controller do
       it "budget is approved" do
         expect(budget.is_approved).to eq true
       end
+      
+      it "saves the comment" do
+        expect(budget.comments).to eq "here is a comment"
+      end
     end
 
     context "without a logged in user" do
@@ -161,14 +160,13 @@ RSpec.describe BudgetsController, type: :controller do
     end
   end
 
-
   describe 'POST#decline' do
     context 'with logged user' do
       login_user_from_let
 
       before do
-        post :decline, group_id: budget.subject.id, budget_id: budget.id
-        BudgetManager.new(budget).decline(user)
+        post :decline, group_id: budget.subject.id, budget_id: budget.id, budget: { comments: "here is a comment" }
+        budget.reload
       end
 
       it "returns a valid group object" do
@@ -182,6 +180,10 @@ RSpec.describe BudgetsController, type: :controller do
       it "budget is declined" do
         expect(budget.is_approved).to eq false
       end
+      
+      it "saves the comment" do
+        expect(budget.comments).to eq "here is a comment"
+      end
     end
 
     context "without a logged in user" do
@@ -194,8 +196,7 @@ RSpec.describe BudgetsController, type: :controller do
     end
   end
 
-
- describe 'DELETE#destroy' do
+  describe 'DELETE#destroy' do
     context 'with logged user' do
       login_user_from_let
         context "with valid destroy" do

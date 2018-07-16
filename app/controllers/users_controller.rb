@@ -163,6 +163,6 @@ class UsersController < ApplicationController
   end
 
   def search_params
-    params.permit(:active)
+    params.permit(:active, :mentor, :mentee)
   end
 end

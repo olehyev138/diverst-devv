@@ -1,0 +1,60 @@
+<div class="col-xs-8">
+  <div class="card">
+    <div class="card__section">
+      <% if @mentorship_requests.count > 0 %>
+        <table class="table--has-border">
+          <thead>
+            <th>Mentee</th>
+            <th>Status</th>
+            <th>Notes</th>
+            <th>Approve/Decline</th>
+          </thead>
+          <tbody>
+            <% @mentorship_requests.each do |mentorship_request| %>
+              <tr>
+                <td><%= mentorship_request.receiver.first_name %> <%= mentorship_request.receiver.last_name %></td>
+                <td><%= mentorship_request.status %></td>
+                <td><%= mentorship_request.notes %></td>
+                <td>
+                  <%= link_to "Approve", mentoring_request_path(mentorship_request), method: :put %>
+                  <%= link_to "Decline", mentoring_request_path(mentorship_request), method: :delete, class: "error" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <h4 class="text-center">You currently don't have pending mentorship requests</h4>
+      <% end %>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card__section">
+      <% if @mentorship_proposals.count > 0 %>
+      
+        <table class="table--has-border">
+          <thead>
+            <th>Mentor</th>
+            <th>Status</th>
+            <th>Cancel</th>
+          </thead>
+          <tbody>
+            <% @mentorship_proposals.each do |mentorship_proposal| %>
+              <tr>
+                <td><%= mentorship_proposal.sender.first_name %> <%= mentorship_proposal.sender.last_name %></td>
+                <td><%= mentorship_proposal.status %></td>
+                <td>
+                  <%= link_to "Cancel", mentoring_request_path(mentorship_proposal), method: :delete, class: "error" %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      
+      
+      <% else %>
+        <h4 class="text-center">You currently don't have pending mentorship proposals</h4>
+      <% end %>
+    </div>
+  </div>
+</div>

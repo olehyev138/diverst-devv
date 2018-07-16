@@ -100,6 +100,44 @@
         </div>
       </div>
     </div>
+    
+    <% if current_user.enterprise.mentorship_module_enabled %>
+      <div class="col sm-12 md-6">
+        <div class="card">
+          <div class="card__section">
+            <h4># of users interested in mentorship</h4>
+            <div class="card__action">
+              <%= link_to "Export CSV", mentorship_generic_graphs_path(format: :csv) %>
+            </div>
+            <div class="graph" data-url="<%= mentorship_generic_graphs_path %>"></div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="col sm-12 md-6">
+      <div class="card">
+        <div class="card__section">
+          <h4>Mentoring Sessions created in the last 30 days</h4>
+          <div class="card__action">
+            <%= link_to "Export CSV", mentoring_sessions_generic_graphs_path(format: :csv) %>
+          </div>
+          <div class="graph" data-url="<%= mentoring_sessions_generic_graphs_path %>"></div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="col sm-12 md-6">
+      <div class="card">
+        <div class="card__section">
+          <h4>Most Popular Mentoring Interests</h4>
+          <div class="card__action">
+            <%= link_to "Export CSV", mentoring_interests_generic_graphs_path(format: :csv) %>
+          </div>
+          <div class="graph" data-url="<%= mentoring_interests_generic_graphs_path %>"></div>
+        </div>
+      </div>
+    </div>
+    <% end %>
 
   </div>
 
@@ -114,7 +152,12 @@
   <div class="card">
     <div class="card__section">
       <% if @dashboards.empty? %>
-        <p>You have not created any dashboards yet. <%= link_to "Create one", new_metrics_dashboard_path %> to start getting valuable insight on your team's diversity.</p>
+        <p>There are no dashboards yet.
+          <% if policy(MetricsDashboard).new? %>
+            <span><%= link_to "Create one", new_metrics_dashboard_path %> to start getting valuable insight on your team's diversity.
+            </span>
+          <% end %>
+        </p>
       <% else %>
         <table class="table--has-border" id="users-table">
           <thead>

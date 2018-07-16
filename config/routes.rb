@@ -23,6 +23,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :users
       resources :groups
+      resources :join_me
       resources :enterprises, :only => [:update] do
         member do
           get "events"
@@ -150,12 +151,18 @@ Rails.application.routes.draw do
         collection do
           get 'pending'
           post 'add_members'
+          post 'join_all_sub_groups'
+          delete 'leave_all_sub_groups'
+          get 'view_sub_groups'
         end
         member do
           post 'accept_pending'
           delete 'remove_member'
+          post 'join_sub_group'
+          delete 'leave_sub_group'
         end
       end
+
       resources :group_messages, path: 'messages' do
         post 'create_comment'
         resources :group_message_comment
@@ -401,7 +408,15 @@ Rails.application.routes.draw do
       end
 
       resources :resources
-
+      resources :mentorship do
+        collection do
+          get "mentors"
+          get "mentees"
+          get "requests"
+          get "sessions"
+          get "ratings"
+        end
+      end
       resources :user_campaigns, shallow: true do
         resources :questions, shallow: true do
           resources :user_answers, shallow: true do
@@ -449,7 +464,18 @@ Rails.application.routes.draw do
       end
     end
   end
-
+  
+  resources :mentorings
+  resources :mentoring_interests
+  resources :mentoring_requests
+  resources :mentoring_sessions do
+    member do
+      get 'start'
+      get 'join'
+    end
+  end
+  resources :mentorship_ratings
+  
   resources :metrics_dashboards do
     get 'shared_dashboard'
 
@@ -466,6 +492,9 @@ Rails.application.routes.draw do
     get 'segment_population'
     get 'events_created'
     get 'messages_sent'
+    get 'mentorship'
+    get 'mentoring_sessions'
+    get 'mentoring_interests'
   end
 
   namespace :website do

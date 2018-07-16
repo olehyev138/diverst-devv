@@ -3,7 +3,8 @@ class Resource < ActiveRecord::Base
 
     belongs_to :container, polymorphic: true
     belongs_to :owner, class_name: "User"
-
+    belongs_to :mentoring_session
+    
     has_many :tags, :as => :taggable, :dependent => :destroy
     accepts_nested_attributes_for :tags
 
