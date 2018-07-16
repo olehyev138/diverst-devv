@@ -356,6 +356,15 @@ def group_params
       :max,
       :options_text,
       :alternative_layout
+    ],
+    sponsors_attributes: [
+      :id,
+      :sponsor_name,
+      :sponsor_title,
+      :sponsor_message,
+      :sponsor_media,
+      :disable_sponsor_message,
+      :_destroy
     ]
   )
 end

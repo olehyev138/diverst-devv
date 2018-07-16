@@ -94,7 +94,7 @@ RSpec.feature 'Manage Enterprise Branding' do
 	context 'Customize Program Sponsor Details' do
 		before { visit edit_branding_enterprise_path(enterprise) }
 
-		scenario 'by creating multiple sponsors', js: true do
+		scenario 'by creating multiple enterprise sponsors', js: true do
 			expect(page).to have_link 'Add an enterprise sponsor'
 
 			click_on 'Add an enterprise sponsor'
