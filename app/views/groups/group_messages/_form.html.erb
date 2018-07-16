@@ -3,8 +3,9 @@
     <div class="card__section">
       <%= simple_form_for [@group, @message] do |f| %>
         <%= f.input :subject, input_html: { autofocus: true } %>
-        <%= f.input :content, as: :ckeditor %>
-        <%= f.association :segments, label: "#{c_t(:segment).pluralize}", collection: @group.enterprise.segments, input_html: { class: "select2" } %>
+        <%= f.input :content %>
+
+        <%= render partial: "groups/shared/post_sharing", locals: { form: f, group: @group } %>
 
         <%= f.button :submit %>
       <% end %>
