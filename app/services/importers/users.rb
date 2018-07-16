@@ -61,7 +61,7 @@ class Importers::Users
       last_name: row["last name"],
       email: row["email"],
       biography: row["biography"],
-      active: process_active_column( row["active"] )
+      active: process_active_column( row["active"] ),
       user_role_id: @enterprise.default_user_role
     }
   end
