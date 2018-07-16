@@ -14,7 +14,7 @@
     <%= link_to c_t(:member_preference).pluralize, group_surveys_user_path(@user), class: "btn btn--primary" if @user.has_answered_group_surveys? %>
     <% if @user.linkedin_profile_url.present? %>
       <%= link_to 'google.com' do %>
-          <img src="/assets/linkedin-full.png" alt="LinkedIn profile link" style="height: 50px;">
+          <img src="/assets/linkedin-full.png" alt="LinkedIn profile link" style="height: 30px; margin-top: 12px;">
         <% end %>
     <% else %>
       <%= link_to 'Connect with LinkedIn', '/omniauth/linkedin', class: "btn btn--secondary" unless @user.linkedin_profile_url %>
