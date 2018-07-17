@@ -14,7 +14,7 @@
           <% end %>
         </div>
         <div class="col sm-11">
-          <p><%= @message.content %>
+          <p><%= raw @message.content %>
             <% if @message.owner.present? %>
               <br>
               <br>

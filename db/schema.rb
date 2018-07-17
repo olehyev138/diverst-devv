@@ -10,7 +10,8 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-ActiveRecord::Schema.define(version: 20180620225618) do
+
+ActiveRecord::Schema.define(version: 20180710135701) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -152,6 +153,7 @@ ActiveRecord::Schema.define(version: 20180620225618) do
     t.integer  "requester_id", limit: 4
     t.integer  "event_id",     limit: 4
     t.integer  "group_id",     limit: 4
+    t.text     "comments",     limit: 65535
   end
 
   add_index "budgets", ["approver_id"], name: "fk_rails_a057b1443a", using: :btree
@@ -239,6 +241,24 @@ ActiveRecord::Schema.define(version: 20180620225618) do
   end
 
   add_index "ckeditor_assets", ["type"], name: "index_ckeditor_assets_on_type", using: :btree
+
+  create_table "clockwork_database_events", force: :cascade do |t|
+    t.string   "name",                limit: 191,                 null: false
+    t.integer  "frequency_quantity",  limit: 4,   default: 1,     null: false
+    t.integer  "frequency_period_id", limit: 4,                   null: false
+    t.integer  "enterprise_id",       limit: 4,                   null: false
+    t.boolean  "disabled",                        default: false
+    t.string   "day",                 limit: 191
+    t.string   "at",                  limit: 191
+    t.string   "job_name",            limit: 191,                 null: false
+    t.string   "method_name",         limit: 191,                 null: false
+    t.string   "method_args",         limit: 191
+    t.string   "tz",                  limit: 191,                 null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "clockwork_database_events", ["frequency_period_id"], name: "index_clockwork_database_events_on_frequency_period_id", using: :btree
 
   create_table "custom_texts", force: :cascade do |t|
     t.text    "erg",               limit: 65535
@@ -359,8 +379,8 @@ ActiveRecord::Schema.define(version: 20180620225618) do
     t.datetime "onboarding_sponsor_media_updated_at"
     t.boolean  "enable_pending_comments",                             default: false
     t.boolean  "disable_sponsor_message",                             default: false
-    t.boolean  "disable_likes",                                       default: false
     t.boolean  "mentorship_module_enabled",                           default: false
+    t.boolean  "disable_likes",                                       default: false
   end
 
   create_table "event_attendances", force: :cascade do |t|
@@ -470,6 +490,12 @@ ActiveRecord::Schema.define(version: 20180620225618) do
     t.integer  "parent_id",          limit: 4
     t.integer  "enterprise_id",      limit: 4
     t.integer  "group_id",           limit: 4
+  end
+
+  create_table "frequency_periods", force: :cascade do |t|
+    t.string   "name",       limit: 191, default: "daily", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "graphs", force: :cascade do |t|

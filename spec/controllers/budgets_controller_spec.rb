@@ -133,8 +133,8 @@ RSpec.describe BudgetsController, type: :controller do
       login_user_from_let
 
       before do
-        post :approve, group_id: budget.group.id, budget_id: budget.id
-        BudgetManager.new(budget).approve(user)
+        post :approve, group_id: budget.group.id, budget_id: budget.id, budget: { comments: "here is a comment" }
+        budget.reload
       end
 
       it "returns a valid group object" do
@@ -147,6 +147,10 @@ RSpec.describe BudgetsController, type: :controller do
 
       it "budget is approved" do
         expect(budget.is_approved).to eq true
+      end
+      
+      it "saves the comment" do
+        expect(budget.comments).to eq "here is a comment"
       end
     end
 
@@ -161,8 +165,13 @@ RSpec.describe BudgetsController, type: :controller do
       login_user_from_let
 
       before do
+<<<<<<< HEAD
         post :decline, group_id: budget.group.id, budget_id: budget.id
         BudgetManager.new(budget).decline(user)
+=======
+        post :decline, group_id: budget.subject.id, budget_id: budget.id, budget: { comments: "here is a comment" }
+        budget.reload
+>>>>>>> develop
       end
 
       it "returns a valid group object" do
@@ -175,6 +184,10 @@ RSpec.describe BudgetsController, type: :controller do
 
       it "budget is declined" do
         expect(budget.is_approved).to eq false
+      end
+      
+      it "saves the comment" do
+        expect(budget.comments).to eq "here is a comment"
       end
     end
 

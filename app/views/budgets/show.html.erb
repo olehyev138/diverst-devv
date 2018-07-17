@@ -29,13 +29,33 @@
           <%= link_to_add_association "+Add Event", f, :budget_items, partial: 'budgets/item' %>
         </div>
       </div>
+      <% if policy(@budget).approve? && policy(@budget).decline? %>
+        <div class="card">
+          <div class="card__section">
+            <%= f.input :comments %>
+          </div>
+        </div>
+      <% else %>
+        <div class="card">
+          <div class="card__section card__section--border">
+            Comments
+          </div>
+          <div class="card__section">
+            <% if @budget.comments.present? && @budget.comments.length > 0 %>
+              <%= @budget.comments %>  
+            <% else %>
+              No comments left
+            <% end %>
+          </div>
+        </div>
+      <% end %>
     </div>
       <% if policy(@budget).approve? %>
         <%= f.button :submit, 'Approve Budget' %>
         <% #bTODO check if vulnerabilities %>
       <% end %>
       <% if policy(@budget).decline? %>
-        <%= link_to "Decline Budget", group_budget_decline_path(@group, @budget), method: :post %>
+        <%= f.button :submit, 'Decline Budget', formaction: group_budget_decline_path(@group, @budget) %>
       <% end %>
     </div>
   <% end %>

@@ -4,7 +4,7 @@
       <%= simple_form_for [@group, @news_link] do |f| %>
         <%= f.input :url, label: "URL", input_html: { autofocus: true } %>
         <%= f.input :title %>
-        <%= f.input :description %>
+        <%= f.input :description, as: :ckeditor %>
 
         <%= f.association :segments, label: "#{c_t(:segment).pluralize}", collection: @group.enterprise.segments, input_html: { class: "select2" } %>
 
