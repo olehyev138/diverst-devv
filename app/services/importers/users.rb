@@ -61,7 +61,13 @@ class Importers::Users
       last_name: row["last name"],
       email: row["email"],
       biography: row["biography"],
-      active: true #row["active"] # we decided to consider all imported users active
+      active: process_active_column( row["active"] ) # we decided to consider all imported users active
     }
+  end
+
+  def process_active_column(column_value)
+    truthy_values = [1, '1', true, 'true', 'TRUE', 'yes', 'YES', '', nil]
+
+    truthy_values.include? column_value
   end
 end
