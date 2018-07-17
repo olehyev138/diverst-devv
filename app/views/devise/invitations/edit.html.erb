@@ -43,7 +43,7 @@
 
       <div class="card">
         <div class="card__section">
-          <h2><%= resource.enterprise.custom_text.privacy_statement %></h2>
+          <h2><%= resource.enterprise.custom_text.privacy_statement %>:</h2>
           <% if resource.enterprise.privacy_statement.present? %>
             <% if resource.enterprise.privacy_statement.length > 500 %>
             <div id="privacy_statement" class="scrollable_box">

@@ -13,6 +13,11 @@
 <% content_for :links do %>
   <div class="text-center">
     <%= render "devise/shared/links" %>
+    <br>
+    <%= link_to "Activate account",
+          new_password_path(resource_name, setup: '1'),
+          class: "btn btn--tertiary",
+          style: 'margin-top: 5px;' %>
   </div>
 <% end %>
 
