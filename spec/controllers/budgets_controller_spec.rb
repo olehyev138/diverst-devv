@@ -165,13 +165,8 @@ RSpec.describe BudgetsController, type: :controller do
       login_user_from_let
 
       before do
-<<<<<<< HEAD
-        post :decline, group_id: budget.group.id, budget_id: budget.id
-        BudgetManager.new(budget).decline(user)
-=======
-        post :decline, group_id: budget.subject.id, budget_id: budget.id, budget: { comments: "here is a comment" }
+        post :decline, group_id: budget.group.id, budget_id: budget.id, budget: { comments: "here is a comment" }
         budget.reload
->>>>>>> develop
       end
 
       it "returns a valid group object" do
