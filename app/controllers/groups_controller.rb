@@ -84,6 +84,7 @@ class GroupsController < ApplicationController
 
     def show
         authorize @group
+        @group_sponsor = @group.sponsors
 
         if policy(@group).erg_leader_permissions?
             base_show

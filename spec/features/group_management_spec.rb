@@ -306,7 +306,7 @@ RSpec.feature 'Group management' do
 
       visit group_path(group)
 
-      expect(page).to have_content 'Bill Gates'
+      expect(group.sponsors.pluck(:sponsor_name).include? "Bill Gates").to eq true 
     end
   end
 end
