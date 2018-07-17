@@ -18,8 +18,6 @@ RSpec.feature 'Financial Management' do
 
 			click_on 'New Item'
 
-			expect(page).to have_content 'Create a new item'
-
 			fill_in 'expense[name]', with: 'In-house hackathon'
 			fill_in 'expense[price]', with: 20000
 			select competition_category.name, from: 'expense[category_id]'

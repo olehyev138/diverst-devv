@@ -178,7 +178,7 @@ RSpec.feature 'News Feed Management' do
 				expect(page).to have_content 'Edit a news item'
 
 				#expect(page).to have_field('news_link_description', with: existing_news_item.description)
-				fill_in_ckeditor 'news_link_description', :with => 'Naruto is the Seventh Hokage and is married to Hinata :)'
+				fill_in_ckeditor 'news_link_description', :with => 'Naruto is the Seventh Hokage and is married to Hinata.'
 
 				click_on 'Add a photo'
 				attach_file('File', 'spec/fixtures/files/verizon_logo.png')
@@ -186,7 +186,7 @@ RSpec.feature 'News Feed Management' do
 				click_on 'Update News link'
 
 				expect(page).to have_no_content 'Naruto is the Seventh Hokage!!!'
-				expect(page).to have_content 'Naruto is the Seventh Hokage and is married to Hinata :)'
+				expect(page).to have_content 'Naruto is the Seventh Hokage and is married to Hinata.'
 			end
 
 			scenario 'when deleting news item with url', js: true do
