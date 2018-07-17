@@ -10,7 +10,7 @@ class GroupsController < ApplicationController
 
     helper ApplicationHelper
 
-   def index
+    def index
         authorize Group
         @groups = current_user.enterprise.groups.includes(:children).all_parents
     end
@@ -28,7 +28,7 @@ class GroupsController < ApplicationController
 
     # calendar for all of the groups
     def calendar
-        authorize Group
+        authorize Group, :index?
         enterprise = current_user.enterprise
         @groups = enterprise.groups.all_parents
         @segments = enterprise.segments
@@ -84,13 +84,12 @@ class GroupsController < ApplicationController
 
     def show
         authorize @group
-        @group_sponsors = @group.sponsors
 
         if policy(@group).erg_leader_permissions?
             base_show
 
             @posts = @group.news_feed_links
-                            .includes(:news_link, :group_message, :social_link)
+                            .includes(:link)
                             .approved
                             .order(is_pinned: :desc, created_at: :desc)
                             .limit(5)
@@ -99,7 +98,7 @@ class GroupsController < ApplicationController
                 base_show
 
                 @posts = @group.news_feed_links
-                            .includes(:news_link, :group_message, :social_link)
+                            .includes(:link)
                             .approved
                             .joins(joins)
                             .where(where, current_user.segments.pluck(:id))
@@ -116,7 +115,7 @@ class GroupsController < ApplicationController
                 @top_user_group_participants = []
                 @top_group_participants = []
                 @posts = @group.news_feed_links
-                            .includes(:news_link, :group_message, :social_link)
+                            .includes(:link)
                             .approved
                             .joins(joins)
                             .where(where, current_user.segments.pluck(:id))
@@ -338,12 +337,6 @@ class GroupsController < ApplicationController
                 :upcoming_events_visibility,
                 :calendar_color,
                 :active,
-                :sponsor_name,
-                :contact_email,
-                :sponsor_title,
-                :sponsor_image,
-                :sponsor_media,
-                :sponsor_message,
                 :company_video_url,
                 :layout,
                 :parent_id,
@@ -390,13 +383,13 @@ class GroupsController < ApplicationController
                     :alternative_layout
                 ],
                 sponsors_attributes: [
-                    :id,
-                    :sponsor_name,
-                    :sponsor_title,
-                    :sponsor_message,
-                    :sponsor_media,
-                    :disable_sponsor_message,
-                    :_destroy
+                  :id,
+                  :sponsor_name,
+                  :sponsor_title,
+                  :sponsor_message,
+                  :sponsor_media,
+                  :disable_sponsor_message,
+                  :_destroy
                 ]
             )
     end
