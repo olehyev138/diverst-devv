@@ -154,7 +154,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
 
             context 'when leaving parent group' do
                 let!(:sub_group) { create(:group, enterprise: user.enterprise, parent_id: group.id) }
-                let!(:group_leader) { create(:group_leader, user_id: user.id, group_id: group.id) }
+                let!(:group_leader) { create(:group_leader, user_id: user.id, group_id: group.id, :user_role_id => group_role.id) }
                 before do
                     UserGroup.create(user_id: user.id, group_id: sub_group.id, accepted_member: true)
                     delete :destroy, group_id: group.id, id: user.id
@@ -295,6 +295,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
 
     describe 'DELETE#remove_member' do
         context 'when user is logged in' do
+            let!(:group_leader) { create(:group_leader, user_id: user.id, group_id: group.id, :user_role_id => group_role.id) }
             login_user_from_let
             before { 
                 user_group.save 
@@ -345,7 +346,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
                 end
 
                 context 'when survey fields for group is present' do
-                    before { create(:field, field_type: 'group_survey', container_id: group.id, container_type: 'Group') }
+                    before { create(:field, field_type: 'group_survey', group_id: group.id) }
                     it 'redirect to survey_group_questions_path' do
                         post :join_all_sub_groups, group_id: group.id
                         expect(response).to redirect_to survey_group_questions_path(group)
