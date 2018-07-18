@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe UserRolesController, type: :controller do
-    let!(:enterprise){ create(:enterprise, name: "test") }
+    let!(:enterprise){ create(:enterprise) }
     let!(:user){ create(:user, enterprise: enterprise) }
 
     describe "GET#new" do

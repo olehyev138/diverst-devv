@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe User::ResourcesController, type: :controller do
-    let!(:enterprise) { create(:enterprise, name: "test") }
+    let!(:enterprise) { create(:enterprise) }
     let!(:user) { create(:user, enterprise: enterprise) }
     let!(:resource) { create(:resource, enterprise: enterprise, file: fixture_file_upload('files/test.csv', 'text/csv')) }
 

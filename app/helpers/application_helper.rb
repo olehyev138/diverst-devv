@@ -129,14 +129,6 @@ module ApplicationHelper
   end
 
   def show_sponsor?(object)
-    if object.is_a?(Enterprise)
-      return
-    end
-
-    if object.is_a?(Group)
-      return
-    end
-
     ["sponsor_name"].each do |m|
       if object.respond_to? m.to_sym
         if object.public_send(m.to_sym).present?

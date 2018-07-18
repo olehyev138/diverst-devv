@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe SamlController, type: :controller do
-    let(:enterprise){ create(:enterprise, name: "test", idp_sso_target_url: "http://example.com")}
+    let(:enterprise){ create(:enterprise, idp_sso_target_url: "http://example.com")}
     let(:user) {create(:user, enterprise: enterprise)}
 
     describe "GET#index" do

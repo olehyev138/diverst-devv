@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe ExpenseCategoriesController, type: :controller do
-    let(:enterprise) { create(:enterprise, name: "test") }
+    let(:enterprise) { create(:enterprise) }
     let(:user) { create(:user, enterprise: enterprise) }
     let(:group) { create(:group, enterprise: enterprise) }
     let(:expense_category) { create(:expense_category, enterprise: enterprise) }
