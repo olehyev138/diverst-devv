@@ -1,6 +1,5 @@
 enterprise = Enterprise.create(
   name: "enterprise#{Enterprise.count + 1}",
-  cdo_name: "enterprise#{Enterprise.count + 1}",
   sp_entity_id: ( (0...8).map { (65 + rand(26)).chr }.join ), # Generate random string
   idp_entity_id: 'https://app.onelogin.com/saml/metadata/468755',
   idp_sso_target_url: 'https://v7.onelogin.com/trust/saml2/http-post/sso/468755',

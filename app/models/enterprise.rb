@@ -34,33 +34,34 @@ class Enterprise < ActiveRecord::Base
     has_many :expense_categories, dependent: :destroy
     has_many :biases, through: :users, class_name: "Bias"
     has_many :departments
-    
+
     # mentorship
     has_many :mentoring_interests, dependent: :destroy
     has_many :mentoring_requests, dependent: :destroy
     has_many :mentoring_sessions, dependent: :destroy
     has_many :mentoring_types, dependent: :destroy
-    
+
     has_many :policy_group_templates, dependent: :destroy
     has_many :rewards, dependent: :destroy
     has_many :reward_actions, dependent: :destroy
     has_many :badges, dependent: :destroy
     has_many :group_categories, dependent: :destroy
     has_many :group_category_types, dependent: :destroy
+    has_many :sponsors, as: :sponsorable, dependent: :destroy
 
     has_one :custom_text, dependent: :destroy
-    
+
     accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
     accepts_nested_attributes_for :mobile_fields, reject_if: :all_blank, allow_destroy: true
     accepts_nested_attributes_for :yammer_field_mappings, reject_if: :all_blank, allow_destroy: true
     accepts_nested_attributes_for :theme, reject_if: :all_blank, allow_destroy: true
     accepts_nested_attributes_for :reward_actions, reject_if: :all_blank, allow_destroy: true
+    accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
 
     before_create :create_elasticsearch_only_fields
     before_validation :smart_add_url_protocol
 
     validates :idp_sso_target_url, url: { allow_blank: true }
-    validates :cdo_name, :name, presence: true
 
     has_attached_file :cdo_picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
     validates_attachment_content_type :cdo_picture, content_type: %r{\Aimage\/.*\Z}
@@ -70,9 +71,6 @@ class Enterprise < ActiveRecord::Base
 
     has_attached_file :xml_sso_config
     validates_attachment_content_type :xml_sso_config, content_type: 'text/xml'
-
-    has_attached_file :sponsor_media, s3_permissions: :private
-    do_not_validate_attachment_file_type :sponsor_media
 
     has_attached_file :onboarding_sponsor_media, s3_permissions: :private
     do_not_validate_attachment_file_type :onboarding_sponsor_media
@@ -86,7 +84,7 @@ class Enterprise < ActiveRecord::Base
 
         'UTC'
     end
-    
+
     def default_user_role
         user_roles.where(:default => true).first.id
     end
