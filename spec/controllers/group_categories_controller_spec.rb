@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe GroupCategoriesController, type: :controller do
-	let!(:enterprise){ create(:enterprise, cdo_name: "test") }
+	let!(:enterprise){ create(:enterprise) }
 	let!(:parent) { create(:group, enterprise: enterprise) }
 	let!(:group) { create(:group, enterprise: enterprise, parent: parent) }
 	let!(:main_category) { create(:group_category_type, enterprise_id: enterprise.id) }

@@ -1,20 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe UserRolesController, type: :controller do
-    let!(:enterprise){ create(:enterprise, cdo_name: "test") }
+    let!(:enterprise){ create(:enterprise) }
     let!(:user){ create(:user, enterprise: enterprise) }
-    
+
     describe "GET#new" do
         context 'when user is logged in' do
             login_user_from_let
-            before { 
+            before {
                 get :new
             }
 
             it "render new template" do
                 expect(response).to render_template :new
             end
-            
+
             it 'sets a user_role object' do
                 expect(assigns[:user_role].role_name).to eq("")
             end
@@ -25,11 +25,11 @@ RSpec.describe UserRolesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-    
+
     describe "POST#create" do
         describe 'when user is logged in' do
             login_user_from_let
-            
+
             context "valid params" do
                 before do
                     patch :create, user_role: {role_name: "test", role_type: "group", priority: 3}
@@ -67,19 +67,19 @@ RSpec.describe UserRolesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-    
+
     describe "GET#edit" do
         context 'when user is logged in' do
             login_user_from_let
-            before { 
+            before {
                 user_role = enterprise.user_roles.last
-                get :edit, :id => user_role.id 
+                get :edit, :id => user_role.id
             }
 
             it "render edit template" do
                 expect(response).to render_template :edit
             end
-            
+
             it 'sets a valid user_role object' do
                 expect(assigns[:user_role]).to be_valid
             end
@@ -95,7 +95,7 @@ RSpec.describe UserRolesController, type: :controller do
         describe 'when user is logged in' do
             login_user_from_let
             let(:user_role) {enterprise.user_roles.last}
-            
+
             context "valid params" do
                 before do
                     patch :update, id: user_role.id, user_role: {role_name: "TeSt"}
@@ -135,7 +135,7 @@ RSpec.describe UserRolesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-    
+
     describe "DELETE#destroy" do
         describe 'when user is logged in' do
             login_user_from_let

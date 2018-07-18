@@ -69,22 +69,12 @@ RSpec.feature 'News Feed Management' do
 				expect(page).not_to have_content 'An Old Group Message'
 			end
 
-			scenario 'when adding comments to existing Group Message with approval' do
-				visit group_posts_path(group)
-
-				expect(page).to have_content existing_group_message.subject
-
-				within('.commentsLink') do
-						click_on 'Comments(0)', group_group_message_path(group, existing_group_message)
-					end
-
-				within('h1') do
-					expect(page).to have_content existing_group_message.subject
-				end
+			scenario 'when adding comments to existing Group Message with approval' do	
+				visit group_group_message_path(group, existing_group_message)
 
 				fill_in 'group_message_comment[content]', with: 'first comment'
 
-				click_on 'Post a comment'
+				click_button 'Post a comment'
 
 				expect(page).to have_content 'first comment'
 
@@ -158,8 +148,6 @@ RSpec.feature 'News Feed Management' do
 				expect(page).to have_link '+ Create News'
 
 				click_on '+ Create News'
-
-				expect(page).to have_content 'Add news'
 
 				fill_in 'news_link[url]', with: 'https://www.viz.com/naruto'
 				fill_in 'news_link[title]', with: 'Latest News'
@@ -288,7 +276,7 @@ RSpec.feature 'News Feed Management' do
 			let!(:existing_group_message) { create(:group_message, subject: 'An Old Group Message', group_id: group.id,
 				owner_id: user.id) }
 
-			scenario 'when adding comments to existing Group Message without approval' do
+			scenario 'when adding comments to existing Group Message without approval', js: true do
 				visit group_posts_path(group)
 
 				expect(page).to have_content existing_group_message.subject
