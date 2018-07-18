@@ -26,14 +26,14 @@ class User::DashboardController < ApplicationController
   end
 
   def posts
-    NewsFeedLink.joins(:news_feed)
-              .joins(joins)
-              .includes(:link)
-              .where(:news_feeds => {:group_id => current_user.active_groups.pluck(:id)}, :approved => true)
-              .where(where, current_user.segments.pluck(:id))
-              .order(created_at: :desc)
-              .distinct
-              .limit(5) #just to not fetch everything, we'll filter it later
+    NewsFeedLink
+      .joins(:news_feed).joins(joins)
+      .includes(:link)
+      .where(:news_feeds => {:group_id => current_user.active_groups.pluck(:id)}, :approved => true)
+      .where(where, current_user.segments.pluck(:id))
+      .order(created_at: :desc)
+      .distinct
+      .limit(5) #just to not fetch everything, we'll filter it later
   end
   
   def where

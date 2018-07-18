@@ -17,7 +17,8 @@ class NewsLink < ActiveRecord::Base
     has_many :comments, class_name: 'NewsLinkComment', dependent: :destroy
     has_many :photos, class_name: 'NewsLinkPhoto', dependent: :destroy
     accepts_nested_attributes_for :photos, :allow_destroy => true
-
+    accepts_nested_attributes_for :news_feed_link, :allow_destroy => true
+    
     validates :group_id,        presence: true
     validates :title,           presence: true
     validates :description,     presence: true
@@ -25,8 +26,8 @@ class NewsLink < ActiveRecord::Base
 
     has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, s3_permissions: :private
     validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
-
-    before_create :build_default_link
+    
+    after_create :build_default_link
 
     scope :of_segments, ->(segment_ids) {
       nl_condtions = ["news_link_segments.segment_id IS NULL"]
@@ -62,11 +63,9 @@ class NewsLink < ActiveRecord::Base
     def have_protocol?
         url[%r{\Ahttp:\/\/}] || url[%r{\Ahttps:\/\/}]
     end
-
-    private
-
+    
     def build_default_link
-        build_news_feed_link(:news_feed_id => group.news_feed.id)
-        true
+        return if news_feed_link.present?
+        create_news_feed_link(:news_feed_id => group.news_feed.id)
     end
 end

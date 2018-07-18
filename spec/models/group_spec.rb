@@ -570,15 +570,6 @@ RSpec.describe Group, :type => :model do
         end
     end
 
-    describe '#build_default_news_feed' do
-        let!(:new_group) { build(:group) }
-
-        it 'builds default news feed' do
-            expect(new_group).to receive(:build_default_news_feed)
-            new_group.save
-        end
-    end
-
     describe "#create_yammer_group" do
         it "creates the group in yammer and syncs the members" do
             yammer = double("YammerClient")

@@ -19,7 +19,7 @@ class GroupMessage < ActiveRecord::Base
 
     alias_attribute :author, :owner
 
-    before_create :build_default_link
+    after_create :build_default_link
 
     scope :of_segments, ->(segment_ids) {
       gm_condtions = ["group_messages_segments.segment_id IS NULL"]
@@ -72,7 +72,7 @@ class GroupMessage < ActiveRecord::Base
     private
 
     def build_default_link
-        build_news_feed_link(:news_feed_id => group.news_feed.id)
-        true
+        return if news_feed_link.present?
+        create_news_feed_link(:news_feed_id => group.news_feed.id)
     end
 end

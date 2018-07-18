@@ -14,6 +14,7 @@ class Groups::NewsLinksController < ApplicationController
 
     def new
         @news_link = @group.news_links.new
+        @news_link.build_news_feed_link(:news_feed_id => @group.news_feed.id)
     end
 
     def edit; end
@@ -103,6 +104,7 @@ class Groups::NewsLinksController < ApplicationController
                 :description,
                 :picture,
                 :photos_attributes => [:file, :_destroy, :id],
+                :news_feed_link_attributes => [:approved, :news_feed_id, :link, :shared_news_feed_ids => []],
                 :segment_ids => []
             )
     end
