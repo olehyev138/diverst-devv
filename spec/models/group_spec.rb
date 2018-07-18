@@ -60,7 +60,7 @@ RSpec.describe Group, :type => :model do
         it { expect(group).to belong_to(:group_category)}
         it { expect(group).to belong_to(:group_category_type)}
 
-        [:logo, :banner, :sponsor_media].each do |attribute|
+        [:logo, :banner].each do |attribute|
           it { expect(group).to have_attached_file(attribute) }
         end
 

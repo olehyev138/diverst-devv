@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe SegmentsController, type: :controller do
     include ApplicationHelper
 
-    let(:enterprise) { create(:enterprise, cdo_name: "test") }
+    let(:enterprise) { create(:enterprise) }
     let(:user) { create(:user, enterprise: enterprise) }
     let!(:segment) { create(:segment, enterprise: enterprise) }
 

@@ -94,6 +94,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
 
   has_many :group_leaders
   has_many :leaders, through: :group_leaders, source: :user
+  has_many :sponsors, as: :sponsorable, dependent: :destroy
 
   has_many  :children, class_name: "Group", foreign_key: :parent_id
   belongs_to :parent, class_name: "Group", foreign_key: :parent_id
@@ -105,9 +106,6 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
 
   has_attached_file :banner
   validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
-
-  has_attached_file :sponsor_media, s3_permissions: :private
-  do_not_validate_attachment_file_type :sponsor_media
 
   validates :name, presence: true
   validates_format_of :contact_email, with: Devise.email_regexp, allow_blank: true
@@ -138,6 +136,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
 
 
   def layout_values

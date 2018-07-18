@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe EnterprisesController, type: :controller do
-    let(:enterprise){ create(:enterprise, cdo_name: "test") }
+    let(:enterprise){ create(:enterprise) }
     let(:user){ create(:user, enterprise: enterprise) }
     let(:group){ create(:group, enterprise: enterprise) }
 
@@ -34,12 +34,12 @@ RSpec.describe EnterprisesController, type: :controller do
             login_user_from_let
 
             context "with valid parameters" do
-                attributes = FactoryGirl.attributes_for(:enterprise, cdo_name: "updated")
+                attributes = FactoryGirl.attributes_for(:enterprise, home_message: "updated")
                 before { patch :update, id: enterprise.id, enterprise: attributes }
 
                 it "updates the enterprise" do
                     enterprise.reload
-                    expect(assigns[:enterprise].cdo_name).to eq "updated"
+                    expect(assigns[:enterprise].home_message).to eq "updated"
                 end
 
                 it "redirects to action index" do
@@ -52,11 +52,11 @@ RSpec.describe EnterprisesController, type: :controller do
             end
 
             context "with invalid parameters", skip: "render params['source'] causes ActionView::MissingTemplate" do
-                before { patch :update, id: enterprise.id, enterprise: { cdo_name: "" } }
+                before { patch :update, id: enterprise.id, enterprise: { home_message: "" } }
 
                 it "does not update the enterprise" do
                     enterprise.reload
-                    expect(enterprise.cdo_name).to eq "test"
+                    expect(enterprise.home_message).to eq "test"
                 end
 
                 it "renders action edit" do
@@ -70,7 +70,7 @@ RSpec.describe EnterprisesController, type: :controller do
         end
 
         describe "without a logged in user" do
-           before { patch :update, id: enterprise.id, enterprise: attributes_for(:enterprise, cdo_name: "updated") }
+           before { patch :update, id: enterprise.id, enterprise: attributes_for(:enterprise, home_message: "updated") }
             it_behaves_like "redirect user to users/sign_in path"
         end
     end

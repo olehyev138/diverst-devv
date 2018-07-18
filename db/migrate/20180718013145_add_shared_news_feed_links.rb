@@ -6,6 +6,8 @@ class AddSharedNewsFeedLinks < ActiveRecord::Migration
       t.timestamps
     end
     
+    Group.reset_column_information
+    
     Group.includes(:news_feed).where(:news_feeds => {:id => nil}).find_each do |group|
       group.create_news_feed
     end

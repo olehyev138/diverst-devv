@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
-    let(:enterprise){ create(:enterprise, cdo_name: "test") }
+    let(:enterprise){ create(:enterprise) }
     let(:user){ create(:user, enterprise: enterprise) }
     let!(:folder){ create(:folder, :container => enterprise) }
     let!(:resource){ create(:resource, title: "title", container: folder, file: fixture_file_upload('files/test.csv', 'text/csv')) }
