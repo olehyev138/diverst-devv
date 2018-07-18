@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe GroupsController, type: :controller do
   include ApplicationHelper
 
-  let(:enterprise){ create(:enterprise, cdo_name: "test") }
+  let(:enterprise){ create(:enterprise) }
   let(:user){ create(:user, enterprise: enterprise, email: "test@gmail.com") }
   let(:group){ create(:group, enterprise: enterprise) }
 

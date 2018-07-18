@@ -3,6 +3,10 @@ class GroupPolicy < ApplicationPolicy
         @policy_group.groups_index?
     end
 
+    def calendar?
+        index?
+    end
+
     def plan_overview?
         return true if index?
 

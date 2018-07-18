@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Enterprises::FoldersController, type: :controller do
-    let(:enterprise) { create(:enterprise, cdo_name: "test") }
+    let(:enterprise) { create(:enterprise) }
     let(:user) { create(:user, enterprise: enterprise) }
     let!(:folder) { create(:folder, :container => enterprise, :password_protected => true, :password => "password") }
 
