@@ -16,7 +16,7 @@ class ReplaceEnterpriseAndGroupSponsorsWithOnePolymorphicSponsorModel < ActiveRe
     say "***enterprise sponsors created***"
     Group.all.each do |group|
       if group.sponsor_name.present? || (group.sponsor_message.present? && group.sponsor_title.present?)
-        group.sponsors.create(sponsor_name: group.sponsor_message,
+        group.sponsors.create(sponsor_name: group.sponsor_name,
           sponsor_title: group.sponsor_title,
           sponsor_message: group.sponsor_message,
           sponsor_media_file_name: group.sponsor_media_file_name,
