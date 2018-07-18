@@ -28,12 +28,18 @@
             <% end %>
             </div>
             <div class="col sm-6 md-3 lg-7">
-              <h3><%= resource.enterprise.cdo_name %>, <%= resource.enterprise.cdo_title %></h3>
+              <h3>
+                <% if resource.enterprise.sponsors.any? %>
+                  <%= resource.enterprise.sponsors.first.sponsor_name %>, <%= resource.enterprise.sponsors.first.sponsor_title %>
+                <% end %>
+                </h3>
 
-              <% if resource.enterprise.cdo_message.present? %>
-                <p> <%= simple_format resource.enterprise.cdo_message %> </p>
-              <% else %>
-                <p>Hi! This is <%= resource.enterprise.cdo_name %>. We know that diverse teams produce better results, but our diversity mission is important for another reason: we want everyone to be fairly represented and have the same opportunities.  Our new diversity platform provides just that – a place where you can collaborate on interesting problems and develop new insights together. Join us by selecting the <%= resource.enterprise.custom_text.erg %>(s) that best represent your interests.</p>
+              <% if resource.enterprise.sponsors.any? %>
+                <% if resource.enterprise.sponsors.first.sponsor_message.present? %>
+                  <p> <%= simple_format resource.enterprise.first.sponsors.sponsor_message %>   </p>
+                <% else %>
+                  <p>Hi! This is <%= resource.enterprise.sponsors.first.sponsor_name %>. We know that diverse teams produce better results, but our diversity mission is important for another reason: we want everyone to be fairly represented and have the same opportunities.  Our new diversity platform provides just that – a place where you can collaborate on interesting problems and develop new insights together. Join us by selecting the <%= resource.enterprise.custom_text.erg %>(s) that best represent your interests.</p>
+                  <% end %>
               <% end %>
             </div>
           </div>
@@ -87,26 +93,26 @@
                   <div class="flex-row__cell flex-row__cell--grow">
                     <h4>
                       <%= group.name %>&nbsp;&nbsp;
-                      
+
                       <% if group.children.count > 0 %>
                         <a
                           class="btn btn-sm btn--primary nested_show"
                           style="cursor: pointer; margin-bottom: 20px;"
                         id="<%= group.id %>">Show Sub-<%= c_t(:erg).pluralize %></a>
-                        
+
                         <a
                           class="btn btn-sm btn--primary nested_hide"
                           style="cursor: pointer; margin-bottom: 20px; display:none;"
                         id="<%= group.id %>">Hide Sub-<%= c_t(:erg).pluralize %></a>
-                        
+
                       <% end %>
-                      
+
                     </h4>
                     <p><%= group.description %></p>
                   </div>
                 </div>
               </div>
-              
+
               <% group.children.each do |child| %>
                 <div class="children_<%= group.id%>" style="display:none;">
                   <div class="media-object">
@@ -122,7 +128,7 @@
                   </div>
                 </div>
                <% end %>
-               
+
             <% end %>
 
             <%= f.input :first_name, required: true %>
@@ -259,21 +265,21 @@
           ]
         }); //endof fullcalendar
       }
-      
+
       $('a.nested_show').click(function(e){
         var id = $(this).attr('id');
         $('div.children_' + id).show();
         $(this).siblings('a.nested_hide').show();
         $(this).hide();
       }); //endof click
-      
+
       $('a.nested_hide').click(function(e){
         var id = $(this).attr('id');
         $('div.children_' + id).hide();
         $(this).siblings('a.nested_show').show();
         $(this).hide();
       }); //endof click
-  
+
     </script>
   </div>
 

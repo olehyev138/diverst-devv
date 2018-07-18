@@ -128,17 +128,17 @@ module ApplicationHelper
     @custom_text.send("#{ type }_text")
   end
 
-  def show_sponsor_card?(object, m)
-    if object.is_a?(Enterprise) && object.disable_sponsor_message
-      return
-    end
-
-    if object.public_send(m.to_sym).present?
-      yield
+  def show_sponsor?(object)
+    ["sponsor_name"].each do |m|
+      if object.respond_to? m.to_sym
+        if object.public_send(m.to_sym).present?
+          yield
+        end
+      end
     end
   end
 
-  def show_sponsor_image?(object, m)
+  def show_sponsor_media?(object, m)
     if %r{\Aimage\/.*\Z}.match(object.public_send(m.to_sym))
       yield
     end
