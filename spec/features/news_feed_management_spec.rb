@@ -66,7 +66,9 @@ RSpec.feature 'News Feed Management' do
 
 				expect(page).to have_content existing_group_message.subject
 
-				click_on 'Comments(0)'
+				within('.commentsLink') do
+						click_on 'Comments(0)', group_group_message_path(group, existing_group_message)
+					end
 
 				within('h1') do
 					expect(page).to have_content existing_group_message.subject
@@ -95,9 +97,10 @@ RSpec.feature 'News Feed Management' do
 					visit group_posts_path(group)
 
 					expect(page).to have_content existing_group_message.subject
-					expect(page).to have_link 'Comments(1)'
 
-					click_on 'Comments(1)'
+					within('.commentsLink') do
+						click_on 'Comments(1)', group_group_message_path(group, existing_group_message)
+					end
 
 					within('.content__header h1') do
 						expect(page).to have_content existing_group_message.subject
@@ -280,7 +283,9 @@ RSpec.feature 'News Feed Management' do
 
 				expect(page).to have_content existing_group_message.subject
 
-				click_on 'Comments(0)'
+				within('.commentsLink') do
+					click_link 'Comments(0)', href: group_group_message_path(group, existing_group_message)
+				end
 
 				within('h1') do
 					expect(page).to have_content existing_group_message.subject
