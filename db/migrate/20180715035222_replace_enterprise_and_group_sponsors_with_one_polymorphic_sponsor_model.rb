@@ -5,10 +5,7 @@ class ReplaceEnterpriseAndGroupSponsorsWithOnePolymorphicSponsorModel < ActiveRe
         enterprise.sponsors.create(sponsor_name: enterprise.cdo_name,
           sponsor_title: enterprise.cdo_title,
           sponsor_message: enterprise.cdo_message_email,
-          sponsor_media_file_name: enterprise.sponsor_media_file_name,
-          sponsor_media_content_type: enterprise.sponsor_media_content_type,
-          sponsor_media_file_size: enterprise.sponsor_media_file_size,
-          sponsor_media_updated_at: enterprise.sponsor_media_updated_at,
+          sponsor_media: enterprise.sponsor_media,
           disable_sponsor_message: enterprise.disable_sponsor_message,
           )
       end
@@ -19,10 +16,7 @@ class ReplaceEnterpriseAndGroupSponsorsWithOnePolymorphicSponsorModel < ActiveRe
         group.sponsors.create(sponsor_name: group.sponsor_name,
           sponsor_title: group.sponsor_title,
           sponsor_message: group.sponsor_message,
-          sponsor_media_file_name: group.sponsor_media_file_name,
-          sponsor_media_content_type: group.sponsor_media_content_type,
-          sponsor_media_file_size: group.sponsor_media_file_size,
-          sponsor_media_updated_at: group.sponsor_media_updated_at,
+          sponsor_media: group.sponsor_media,
           disable_sponsor_message: false)
       end
     end
