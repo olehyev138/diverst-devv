@@ -277,14 +277,14 @@ RSpec.feature 'Group management' do
     scenario 'by creating multiple group sponsors', js: true do
       expect(page).to have_link 'Add a group sponsor'
 
-      click_on 'Add a group sponsor'
+      click_on 'Add a sponsor'
 
       fill_in 'Sponsor name', with: 'Bill Gates'
       fill_in 'Sponsor title', with: 'CEO of Microsoft'
       attach_file('Upload sponsor image or video', 'spec/fixtures/files/sponsor_image.jpg')
       fill_in 'Sponsor message', with: 'Hi and welcome'
 
-      click_on 'Add a group sponsor'
+      click_on 'Add a sponsor'
 
       within all('.nested-fields')[1] do
         fill_in 'Sponsor name', with: 'Mark Zuckerberg'
@@ -293,7 +293,7 @@ RSpec.feature 'Group management' do
         fill_in 'Sponsor message', with: 'Hi and welcome'
       end
 
-      click_on 'Add a group sponsor'
+      click_on 'Add a sponsor'
 
       within all('.nested-fields')[2] do
         fill_in 'Sponsor name', with: 'Elizabeth Holmes'

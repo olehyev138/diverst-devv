@@ -97,7 +97,7 @@ RSpec.feature 'Manage Enterprise Branding' do
 		scenario 'by creating multiple enterprise sponsors', js: true do
 			expect(page).to have_link 'Add an enterprise sponsor'
 
-			click_on 'Add an enterprise sponsor'
+			click_on 'Add a sponsor'
 
 			fill_in 'Sponsor name', with: 'Bill Gates'
 			fill_in 'Sponsor title', with: 'CEO of Microsoft'
@@ -113,7 +113,7 @@ RSpec.feature 'Manage Enterprise Branding' do
 			  fill_in 'Home page sponsor message', with: 'Hi and welcome'
 			end
 
-			click_on 'Add an enterprise sponsor'
+			click_on 'Add a sponsor'
 
 			within all('.nested-fields')[2] do
 				fill_in 'Sponsor name', with: 'Elizabeth Holmes'
@@ -122,7 +122,7 @@ RSpec.feature 'Manage Enterprise Branding' do
 			  fill_in 'Home page sponsor message', with: 'Hi and welcome'
 			end
 
-			click_on 'Add an enterprise sponsor'
+			click_on 'Add a sponsor'
 
 			within all('.nested-fields')[3] do
 				fill_in 'Sponsor name', with: 'Elon Musk'
