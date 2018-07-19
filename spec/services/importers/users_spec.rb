@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Importers::Users do
+  
   let(:job_field){ TextField.new(title: 'Job title') }
   let(:gender_field){ SelectField.new(title: 'Gender') }
   let(:date_field){ DateField.new(title: 'Date of birth') }
@@ -9,6 +10,7 @@ RSpec.describe Importers::Users do
   let!(:enterprise){ create(:enterprise, fields: [job_field, gender_field, date_field, languages_field, years_field]) }
   let!(:manager){ create(:user, enterprise: enterprise, :user_role_id => enterprise.default_user_role) }
   let(:importer){ Importers::Users.new(file, manager) }
+  let(:admin_role) {enterprise.user_roles.where(:role_type => "admin").first}
 
   context "when spreadsheet does not have mandaroty fields filled" do
     let(:file) do
@@ -103,7 +105,7 @@ RSpec.describe Importers::Users do
   context "when spreadsheet have email that already exists in database" do
     let(:is_active_false) { [false, 'false', 'FALSE', 'no', 'NO'].sample }
     let!(:user) do
-      user = build(:user, :enterprise => enterprise, :user_role_id => enterprise.default_user_role)
+      user = build(:user, :enterprise => enterprise, :user_role_id => admin_role.id)
       user.info[job_field] = "Developer"
       user.info[gender_field] = "Male"
       user.info[languages_field] = "English"
@@ -158,6 +160,7 @@ RSpec.describe Importers::Users do
       expect(infos.fetch(date_field.id)).to eq Time.strptime("1992-01-25", '%F').to_i
       expect(infos.fetch(languages_field.id)).to eq ["Spanish"]
       expect(infos.fetch(years_field.id)).to eq 20
+      expect(updated_user.user_role.role_type).to eq(admin_role.role_type)
     end
 
     it "does not send an invite to created user" do

@@ -28,7 +28,7 @@
           </div>
           <% end %>
         </div>
-            
+
             <% group.children.each do |sub_group| %>
             <div class="children_<%= group.id %>" style="display:none; position: relative; top: 10px;">
               <div class="media-object<%= " media-object--selected" if sub_group.members.include? current_user %>" style="margin-bottom: 10px;">

@@ -2,7 +2,7 @@
   <h1>Events</h1>
   <div class="flex-row flex-row--middle">
     <div class="flex-row__cell">
-      <%= link_to "New Event", new_group_initiative_path(@group), class: "btn btn--primary" if policy(@group).erg_leader_permissions? %>
+     <%= link_to "New Event", new_group_initiative_path(@group), class: "btn btn--primary" if (policy(@group).erg_leader_permissions? || current_user.policy_group.initiatives_create?) %>
     </div>
     <div class="flex-row__cell">
       <%= link_to "Calendar view",   calendar_view_group_events_path(@group), class: "btn btn--secondary" %>
