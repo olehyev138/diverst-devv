@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe PolicyGroupTemplatesController, type: :controller do
-    let!(:enterprise){ create(:enterprise, cdo_name: "test") }
+    let!(:enterprise){ create(:enterprise) }
     let!(:user){ create(:user, enterprise: enterprise) }
 
     describe "GET#index" do
@@ -23,19 +23,19 @@ RSpec.describe PolicyGroupTemplatesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-    
+
     describe "GET#edit" do
         context 'when user is logged in' do
             login_user_from_let
-            before { 
+            before {
                 policy_group_template = enterprise.policy_group_templates.last
-                get :edit, :id => policy_group_template.id 
+                get :edit, :id => policy_group_template.id
             }
 
             it "render edit template" do
                 expect(response).to render_template :edit
             end
-            
+
             it 'sets a valid policy_group_template object' do
                 expect(assigns[:policy_group_template]).to be_valid
             end
@@ -51,7 +51,7 @@ RSpec.describe PolicyGroupTemplatesController, type: :controller do
         describe 'when user is logged in' do
             login_user_from_let
             let(:policy_group_template) {enterprise.policy_group_templates.last}
-            
+
             context "valid params" do
                 before do
                     patch :update, id: policy_group_template.id, policy_group_template: {campaigns_index: false}

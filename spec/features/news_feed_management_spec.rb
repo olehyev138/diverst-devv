@@ -35,7 +35,7 @@ RSpec.feature 'News Feed Management' do
 				visit group_posts_path(group)
 
 				expect(page).to have_content existing_group_message.subject
-				
+
 				within find(".group-capybara") do
 					click_on 'Edit'
 				end
@@ -62,21 +62,11 @@ RSpec.feature 'News Feed Management' do
 			end
 
 			scenario 'when adding comments to existing Group Message with approval' do
-				visit group_posts_path(group)
-
-				expect(page).to have_content existing_group_message.subject
-
-				within('.commentsLink') do
-						click_on 'Comments(0)', group_group_message_path(group, existing_group_message)
-					end
-
-				within('h1') do
-					expect(page).to have_content existing_group_message.subject
-				end
+				visit group_group_message_path(group, existing_group_message)
 
 				fill_in 'group_message_comment[content]', with: 'first comment'
 
-				click_on 'Post a comment'
+				click_button 'Post a comment'
 
 				expect(page).to have_content 'first comment'
 
@@ -151,8 +141,6 @@ RSpec.feature 'News Feed Management' do
 
 				click_on '+ Create News'
 
-				expect(page).to have_content 'Add news'
-
 				fill_in 'news_link[url]', with: 'https://www.viz.com/naruto'
 				fill_in 'news_link[title]', with: 'Latest News'
 				fill_in 'news_link[description]', with: 'Naruto is the Seventh Hokage!!!'
@@ -197,11 +185,11 @@ RSpec.feature 'News Feed Management' do
 			scenario 'when adding comments to news link' do
 				expect(page).to have_content existing_news_item.title
 				expect(page).to have_link 'Comments(0)', href:  comments_group_news_link_path(group, existing_news_item)
-				
+
 				within('.flex-row__cell--grow') do
 					click_link 'Comments(0)', href:  comments_group_news_link_path(group, existing_news_item)
 				end
-				
+
 				within('.content__header h1') do
 					expect(page).to have_content 'News Discussion'
 				end
@@ -225,7 +213,7 @@ RSpec.feature 'News Feed Management' do
 				let!(:image) { File.new('spec/fixtures/files/verizon_logo.png') }
 				let!(:existing_news_item) { create(:news_link, title: 'An Old Group News Item',
 					description: 'Brief description of News Item', group_id: group.id, picture: image, author_id: user.id) }
-				let!(:news_link_comment) { create(:news_link_comment, content: 'An Old News Link Comment', author_id: user.id, 
+				let!(:news_link_comment) { create(:news_link_comment, content: 'An Old News Link Comment', author_id: user.id,
 					news_link_id: existing_news_item.id, approved: true) }
 
 				before { visit group_posts_path(group) }
@@ -233,11 +221,11 @@ RSpec.feature 'News Feed Management' do
 				scenario 'when editing comments for news link' do
 					expect(page).to have_content existing_news_item.title
 					expect(page).to have_link 'Comments(1)', href:  comments_group_news_link_path(group, existing_news_item)
-					
+
 					within('.flex-row__cell--grow') do
 						click_link 'Comments(1)', href:  comments_group_news_link_path(group, existing_news_item)
 					end
-					
+
 					within('.content__header h1') do
 						expect(page).to have_content 'News Discussion'
 					end
@@ -278,7 +266,7 @@ RSpec.feature 'News Feed Management' do
 			let!(:existing_group_message) { create(:group_message, subject: 'An Old Group Message', group_id: group.id,
 				owner_id: user.id) }
 
-			scenario 'when adding comments to existing Group Message without approval' do
+			scenario 'when adding comments to existing Group Message without approval', js: true do
 				visit group_posts_path(group)
 
 				expect(page).to have_content existing_group_message.subject
@@ -313,11 +301,11 @@ RSpec.feature 'News Feed Management' do
 			scenario 'when adding comments to news link' do
 				expect(page).to have_content existing_news_item.title
 				expect(page).to have_link 'Comments(0)', href: comments_group_news_link_path(group, existing_news_item)
-				
+
 				within('.flex-row__cell--grow') do
 					click_link 'Comments(0)', href: comments_group_news_link_path(group, existing_news_item)
 				end
-				
+
 				within('.content__header h1') do
 					expect(page).to have_content 'News Discussion'
 				end
