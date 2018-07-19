@@ -85,12 +85,10 @@
       <% end %>
 
 
-      <% unless @enterprise.sponsors.count == 3 %>
-        <div class="enterprise_sponsor_link">
-          <%= link_to_add_association "Add an enterprise sponsor", f, :sponsors %>
-        </div>
-      <% end %>
-
+      <div class="enterprise_sponsor_link">
+        <%= link_to_add_association "Add a sponsor", f, :sponsors %>
+      </div>
+      <br>
 
       <%= f.input :cdo_message, label: "Onboarding sponsor message" %>
       <%= f.input :onboarding_sponsor_media, label: "Upload onboarding video" %>

@@ -25,13 +25,11 @@
           <%= render 'sponsor_fields', f: s %>
         <% end %>
 
-        <% unless @group.sponsors.count == 3 %>
-          <div class="group_sponsor_link">
-            <%= link_to_add_association "Add a group sponsor", f, :sponsors %>
-          </div>
-        <% end %>
-
-
+        <div class="group_sponsor_link">
+          <%= link_to_add_association "Add a sponsor", f, :sponsors %>
+        </div>
+        <br>
+        
         <%= f.input :yammer_group_link %>
       </div>
     </div>
