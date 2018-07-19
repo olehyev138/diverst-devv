@@ -89,23 +89,11 @@ class GroupsController < ApplicationController
         if policy(@group).erg_leader_permissions?
             base_show
 
-            @posts = @group.news_feed_links
-                            .includes(:link)
-                            .approved
-                            .order(is_pinned: :desc, created_at: :desc)
-                            .limit(5)
+            @posts = without_segments
         else
             if @group.active_members.include? current_user
                 base_show
-
-                @posts = @group.news_feed_links
-                            .includes(:link)
-                            .approved
-                            .joins(joins)
-                            .where(where, current_user.segments.pluck(:id))
-                            .order(is_pinned: :desc, created_at: :desc)
-                            .limit(5)
-
+                @posts = with_segments
             else
                 @upcoming_events = @group.initiatives.upcoming.limit(3) + @group.participating_initiatives.upcoming.limit(3)
                 @user_groups = []
@@ -115,13 +103,7 @@ class GroupsController < ApplicationController
                 @user_groups = []
                 @top_user_group_participants = []
                 @top_group_participants = []
-                @posts = @group.news_feed_links
-                            .includes(:link)
-                            .approved
-                            .joins(joins)
-                            .where(where, current_user.segments.pluck(:id))
-                            .order(is_pinned: :desc, created_at: :desc)
-                            .limit(5)
+                @posts = with_segments
             end
         end
     end
@@ -279,7 +261,6 @@ class GroupsController < ApplicationController
 
     protected
 
-
     def base_show
         @upcoming_events = @group.initiatives.upcoming.limit(3) + @group.participating_initiatives.upcoming.limit(3)
         @messages = @group.messages.includes(:owner).limit(3)
@@ -292,12 +273,23 @@ class GroupsController < ApplicationController
         @top_group_participants = @group.enterprise.groups.non_private.top_participants(10)
     end
 
-    def where
-        "news_feed_link_segments.segment_id IS NULL OR news_feed_link_segments.segment_id IN (?)"
+    def without_segments
+        NewsFeedLink.combined_news_links(@group.news_feed.id)
+                            .includes(:link)
+                            .order(is_pinned: :desc, created_at: :desc)
+                            .limit(5)
     end
 
-    def joins
-        "LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id"
+    def with_segments
+        segment_ids = current_user.segments.ids
+        if not segment_ids.empty?
+            NewsFeedLink
+                .combined_news_links_with_segments(@group.news_feed.id, current_user.segments.ids)
+                .order(is_pinned: :desc, created_at: :desc)
+                .limit(5)
+        else
+            return without_segments
+        end
     end
 
     def resolve_layout

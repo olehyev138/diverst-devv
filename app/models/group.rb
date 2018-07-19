@@ -45,8 +45,9 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
 
   has_one :news_feed, dependent: :destroy
 
-  delegate :news_feed_links, :to => :news_feed
-
+  delegate :news_feed_links,        :to => :news_feed
+  delegate :shared_news_feed_links, :to => :news_feed
+  
   has_many :user_groups, dependent: :destroy
   has_many :members, through: :user_groups, class_name: 'User', source: :user, after_remove: :update_elasticsearch_member
   has_many :groups_polls
@@ -113,11 +114,12 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
 
   validate :ensure_one_level_nesting
 
-  before_create :build_default_news_feed
   before_save :send_invitation_emails, if: :send_invitations?
   before_save :create_yammer_group, if: :should_create_yammer_group?
   after_commit :update_all_elasticsearch_members
   before_validation :smart_add_url_protocol
+  after_create :create_news_feed
+  
   attr_accessor :skip_label_consistency_check
   validate :perform_check_for_consistency_in_category, on: [:create, :update], unless: :skip_label_consistency_check
 
@@ -129,14 +131,13 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   # parents/children
   scope :all_parents,     -> {where(:parent_id => nil)}
   scope :all_children,    -> {where.not(:parent_id => nil)}
-
+  
   accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
-
-
+  
   def layout_values
     {
     'layout_0' => 'Default layout',
@@ -164,17 +165,6 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
 
   def managers
     leaders.to_a << owner
-  end
-
-  def news_feed
-    if NewsFeed.where(:group_id => id).count > 0
-      return NewsFeed.find_by_group_id(id)
-    else
-      feed = NewsFeed.new
-      feed.group_id = id
-      feed.save
-      return feed
-    end
   end
 
   def valid_yammer_group_link?
@@ -398,9 +388,5 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
     return nil if group_sizes.length == 0
     group_sizes.sum / group_sizes.length
   end
-
-  def build_default_news_feed
-    build_news_feed
-    true
-  end
+  
 end

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe ClockworkDatabaseEvent, type: :model do
-
+    
     describe "validations" do
         let(:clockwork_database_event){ build_stubbed(:clockwork_database_event) }
         it { expect(clockwork_database_event).to validate_presence_of(:name) }

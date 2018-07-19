@@ -4,7 +4,7 @@ after :users do
   groups_to_create = []
 
   nb_groups.times do |i|
-    g = enterprise.groups.new(
+    g = enterprise.groups.create(
       name: Faker::Commerce.color.capitalize,
       description: Faker::Lorem.sentence
     )

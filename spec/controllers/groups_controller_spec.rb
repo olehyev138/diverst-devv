@@ -313,7 +313,7 @@ RSpec.describe GroupsController, type: :controller do
 
       context 'when group has erg_leader_permissions' do
         let!(:group_leader) { create(:group_leader, user: user, group: group) }
-        let!(:news_feed) { create(:news_feed, group: group) }
+        let!(:news_feed) { group.news_feed }
         let!(:news_link1) { create(:news_link, :group => group)}
         let!(:news_link2) { create(:news_link, :group => group)}
         let!(:news_link3) { create(:news_link, :group => group)}
