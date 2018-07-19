@@ -1,8 +1,9 @@
 require 'rails_helper'
 
 RSpec.feature 'Manage Enterprise Branding' do
-	let!(:enterprise) { create(:enterprise, theme: create(:theme, primary_color: '#7b77c9')) }
-	let!(:admin_user) { create(:user, enterprise: enterprise) }
+	let!(:enterprise) { create(:enterprise) }
+	let!(:admin_user) { create(:user, enterprise_id: enterprise.id, policy_group: create(:policy_group,
+		enterprise_id: enterprise.id)) }
 	let!(:group) { create(:group, enterprise_id: enterprise.id) }
 
 	before do
@@ -10,6 +11,7 @@ RSpec.feature 'Manage Enterprise Branding' do
 	end
 
 	context 'Branding management' do
+		let(:enterprise) { create(:enterprise, theme: create(:theme, primary_color: '#7b77c9')) }
 		before { visit edit_branding_enterprise_path(enterprise) }
 
 		context 'Customize branding' do
@@ -95,7 +97,7 @@ RSpec.feature 'Manage Enterprise Branding' do
 		scenario 'by creating multiple enterprise sponsors', js: true do
 			expect(page).to have_link 'Add an enterprise sponsor'
 
-			click_on 'Add an enterprise sponsor'
+			click_on 'Add a sponsor'
 
 			fill_in 'Sponsor name', with: 'Bill Gates'
 			fill_in 'Sponsor title', with: 'CEO of Microsoft'
@@ -106,27 +108,27 @@ RSpec.feature 'Manage Enterprise Branding' do
 
 			within all('.nested-fields')[1] do
 				fill_in 'Sponsor name', with: 'Mark Zuckerberg'
-				fill_in 'Sponsor title', with: 'Founder & CEO of Facebook'
-				attach_file('Upload sponsor image or video', 'spec/fixtures/files/sponsor_image.jpg')
-				fill_in 'Home page sponsor message', with: 'Hi and welcome'
+			  fill_in 'Sponsor title', with: 'Founder & CEO of Facebook'
+			  attach_file('Upload sponsor image or video', 'spec/fixtures/files/sponsor_image.jpg')
+			  fill_in 'Home page sponsor message', with: 'Hi and welcome'
 			end
 
-			click_on 'Add an enterprise sponsor'
+			click_on 'Add a sponsor'
 
 			within all('.nested-fields')[2] do
 				fill_in 'Sponsor name', with: 'Elizabeth Holmes'
-				fill_in 'Sponsor title', with: 'Founder & CEO of Theranos'
-				attach_file('Upload sponsor image or video', 'spec/fixtures/files/sponsor_image.jpg')
-				fill_in 'Home page sponsor message', with: 'Hi and welcome'
+			  fill_in 'Sponsor title', with: 'Founder & CEO of Theranos'
+			  attach_file('Upload sponsor image or video', 'spec/fixtures/files/sponsor_image.jpg')
+			  fill_in 'Home page sponsor message', with: 'Hi and welcome'
 			end
 
-			click_on 'Add an enterprise sponsor'
+			click_on 'Add a sponsor'
 
 			within all('.nested-fields')[3] do
 				fill_in 'Sponsor name', with: 'Elon Musk'
-				fill_in 'Sponsor title', with: 'Founder & CEO of Telsa'
-				attach_file('Upload sponsor image or video', 'spec/fixtures/files/sponsor_image.jpg')
-				fill_in 'Home page sponsor message', with: 'Hi and welcome'
+			  fill_in 'Sponsor title', with: 'Founder & CEO of Telsa'
+			  attach_file('Upload sponsor image or video', 'spec/fixtures/files/sponsor_image.jpg')
+			  fill_in 'Home page sponsor message', with: 'Hi and welcome'
 			end
 
 			click_on 'Save sponsor info'
