@@ -27,10 +27,11 @@ class NewsFeedLink < ActiveRecord::Base
     # links are automatically approved if author is a
     # group leader
     def approve_link
-        if GroupPolicy.new(link.author, link.group).erg_leader_permissions?
-            self.approved = true
-            self.save!
-        end
+      return if link.nil?
+      if GroupPolicy.new(link.author, link.group).erg_leader_permissions?
+          self.approved = true
+          self.save!
+      end
     end
 
     # View Count methods

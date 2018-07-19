@@ -42,7 +42,7 @@ class Groups::NewsLinksController < ApplicationController
     def create
         @news_link = @group.news_links.new(news_link_params)
         @news_link.author = current_user
-
+        
         if @news_link.save
             user_rewarder("news_post").add_points(@news_link)
             flash_reward "Your news was created. Now you have #{current_user.credits} points"
