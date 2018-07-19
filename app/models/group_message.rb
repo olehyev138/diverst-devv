@@ -7,7 +7,10 @@ class GroupMessage < ActiveRecord::Base
     belongs_to :group
 
     has_one :news_feed_link, :as => :link, :dependent => :destroy
-
+    after_create :approve_link
+    
+    accepts_nested_attributes_for :news_feed_link, :allow_destroy => true
+    
     delegate :increment_view, :to => :news_feed_link
     delegate :total_views, :to => :news_feed_link
     delegate :unique_views, :to => :news_feed_link
@@ -31,6 +34,10 @@ class GroupMessage < ActiveRecord::Base
     scope :unapproved, -> {joins(:news_feed_link).where(:news_feed_links => {:approved => false})}
     scope :approved, -> {joins(:news_feed_link).where(:news_feed_links => {:approved => true})}
 
+    def approve_link
+        return if news_feed_link.nil?
+        news_feed_link.approve_link
+    end
 
     def comments_count
         if group.enterprise.enable_pending_comments?

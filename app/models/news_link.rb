@@ -28,7 +28,7 @@ class NewsLink < ActiveRecord::Base
     validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
     
     after_create :build_default_link
-
+    
     scope :of_segments, ->(segment_ids) {
       nl_condtions = ["news_link_segments.segment_id IS NULL"]
       nl_condtions << "news_link_segments.segment_id IN (#{ segment_ids.join(",") })" unless segment_ids.empty?
