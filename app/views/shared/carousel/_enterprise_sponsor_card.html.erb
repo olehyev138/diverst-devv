@@ -3,14 +3,14 @@
 <div class="card card--secondary">
   <% if enterprise_sponsors.count > 1 %>
   <span style="float: left;"><a href="#enterprise_sponsor_carousel_<%= random %>" role="button" data-slide="prev">
-        <%= inline_svg('icons/double-arrows-left.svg', class: "icon") %>
+        <%= inline_svg('icons/left-arrow.svg', class: "icon") %>
         <span class="sr-only">Previous</span>
       </a>
   </span>
 
   <span style="float: right;">
     <a href="#enterprise_sponsor_carousel_<%= random %>" role="button" data-slide="next">
-        <%= inline_svg('icons/double-arrows-right.svg', class: "icon") %>
+        <%= inline_svg('icons/right-arrow.svg', class: "icon") %>
         <span class="sr-only">Next</span>
       </a>
   </span>
@@ -44,8 +44,9 @@
   </div>
 </div>
 <% end %>
+
 <script>
   $('.carousel').carousel({
-    interval: 2000
+    interval: 5000
   })
 </script>
