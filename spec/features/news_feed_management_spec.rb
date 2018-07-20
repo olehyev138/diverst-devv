@@ -69,10 +69,17 @@ RSpec.feature 'News Feed Management' do
 				expect(page).not_to have_content 'An Old Group Message'
 			end
 
-
 			scenario 'when adding comments to existing Group Message with approval' do	
 				visit group_group_message_path(group, existing_group_message)
 
+				within('.commentsLink') do
+						click_link 'Comments(0)', href: group_group_message_path(group, existing_group_message)
+					end
+
+				within('h1') do
+					expect(page).to have_content existing_group_message.subject
+				end
+        
 				fill_in 'group_message_comment[content]', with: 'first comment'
 
 				click_button 'Post a comment'
