@@ -2,10 +2,10 @@ require 'rails_helper'
 
 RSpec.feature 'Group management' do
 
-  let!(:user) { create(:user) }
+  let(:user) { create(:user) }
 
   before do
-    login_as(user, scope: :user, :run_callbacks => false)
+    login_as(user, scope: :user)
   end
 
   context 'creating a group' do
@@ -275,16 +275,18 @@ RSpec.feature 'Group management' do
     before { visit settings_group_path(group) }
 
     scenario 'by creating multiple group sponsors', js: true do
-      expect(page).to have_link 'Add a group sponsor'
+      expect(page).to have_link 'Add a sponsor'
 
-      click_on 'Add a group sponsor'
+      click_on 'Add a sponsor'
 
-      fill_in 'Sponsor name', with: 'Bill Gates'
-      fill_in 'Sponsor title', with: 'CEO of Microsoft'
-      attach_file('Upload sponsor image or video', 'spec/fixtures/files/sponsor_image.jpg')
-      fill_in 'Sponsor message', with: 'Hi and welcome'
+      within all('.nested-fields')[0] do
+        fill_in 'Sponsor name', with: 'Bill Gates'
+        fill_in 'Sponsor title', with: 'CEO of Microsoft'
+        attach_file('Upload sponsor image or video', 'spec/fixtures/files/sponsor_image.jpg')
+        fill_in 'Sponsor message', with: 'Hi and welcome'
+      end
 
-      click_on 'Add a group sponsor'
+      click_on 'Add a sponsor'
 
       within all('.nested-fields')[1] do
         fill_in 'Sponsor name', with: 'Mark Zuckerberg'
@@ -293,7 +295,7 @@ RSpec.feature 'Group management' do
         fill_in 'Sponsor message', with: 'Hi and welcome'
       end
 
-      click_on 'Add a group sponsor'
+      click_on 'Add a sponsor'
 
       within all('.nested-fields')[2] do
         fill_in 'Sponsor name', with: 'Elizabeth Holmes'
@@ -306,7 +308,7 @@ RSpec.feature 'Group management' do
 
       visit group_path(group)
 
-      expect(page).to have_content 'Bill Gates'
+      expect(group.sponsors.count).to eq 3
     end
   end
 end
