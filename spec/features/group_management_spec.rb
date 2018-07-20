@@ -275,14 +275,16 @@ RSpec.feature 'Group management' do
     before { visit settings_group_path(group) }
 
     scenario 'by creating multiple group sponsors', js: true do
-      expect(page).to have_link 'Add a group sponsor'
+      expect(page).to have_link 'Add a sponsor'
 
       click_on 'Add a sponsor'
 
-      fill_in 'Sponsor name', with: 'Bill Gates'
-      fill_in 'Sponsor title', with: 'CEO of Microsoft'
-      attach_file('Upload sponsor image or video', 'spec/fixtures/files/sponsor_image.jpg')
-      fill_in 'Sponsor message', with: 'Hi and welcome'
+      within all('.nested-fields')[0] do
+        fill_in 'Sponsor name', with: 'Bill Gates'
+        fill_in 'Sponsor title', with: 'CEO of Microsoft'
+        attach_file('Upload sponsor image or video', 'spec/fixtures/files/sponsor_image.jpg')
+        fill_in 'Sponsor message', with: 'Hi and welcome'
+      end
 
       click_on 'Add a sponsor'
 
