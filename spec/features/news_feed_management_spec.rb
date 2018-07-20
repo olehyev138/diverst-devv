@@ -6,6 +6,14 @@ RSpec.feature 'News Feed Management' do
 
 	before { login_as(user, scope: :user) }
 
+	def fill_in_ckeditor(locator, opts)
+	  content = opts.fetch(:with).to_json # convert to a safe javascript string
+	  page.execute_script <<-SCRIPT
+	    CKEDITOR.instances['#{locator}'].setData(#{content});
+	    $('textarea##{locator}').text(#{content});
+	  SCRIPT
+	end
+
 	context 'when enterprise has pending comments enabled' do
 		before { user.enterprise.update(enable_pending_comments: true) }
 
@@ -61,7 +69,7 @@ RSpec.feature 'News Feed Management' do
 				expect(page).not_to have_content 'An Old Group Message'
 			end
 
-			scenario 'when adding comments to existing Group Message with approval' do
+			scenario 'when adding comments to existing Group Message with approval', js: true do	
 				visit group_group_message_path(group, existing_group_message)
 
 				fill_in 'group_message_comment[content]', with: 'first comment'
@@ -143,12 +151,14 @@ RSpec.feature 'News Feed Management' do
 
 				fill_in 'news_link[url]', with: 'https://www.viz.com/naruto'
 				fill_in 'news_link[title]', with: 'Latest News'
-				fill_in 'news_link[description]', with: 'Naruto is the Seventh Hokage!!!'
+				fill_in 'news_link[description]', with: 'this is the latest news'
+
+				fill_in_ckeditor 'news_link_description', :with => 'Naruto is the Seventh Hokage!!!'
+
 				click_on 'Add a photo'
 				attach_file('File', 'spec/fixtures/files/verizon_logo.png')
 
 				click_on 'Create News link'
-
 				expect(page).to have_content 'Latest News'
 				news_link = NewsLink.find_by(title: 'Latest News')
 				expect(page).to have_link news_link.url
@@ -158,15 +168,14 @@ RSpec.feature 'News Feed Management' do
 				visit edit_group_news_link_path(group, existing_news_item)
 
 				expect(page).to have_content 'Edit a news item'
-				expect(page).to have_field('news_link[description]', with: existing_news_item.description)
 
-				fill_in 'news_link[description]', with: 'Naruto is the Seventh Hokage and is married to Hinata :)'
+				#expect(page).to have_field('news_link_description', with: existing_news_item.description)
+				fill_in 'news_link_description', :with => 'Naruto is the Seventh Hokage and is married to Hinata :)'
 
 				click_on 'Add a photo'
 				attach_file('File', 'spec/fixtures/files/verizon_logo.png')
 
 				click_on 'Update News link'
-
 				expect(page).to have_no_content 'Naruto is the Seventh Hokage!!!'
 				expect(page).to have_content 'Naruto is the Seventh Hokage and is married to Hinata :)'
 			end

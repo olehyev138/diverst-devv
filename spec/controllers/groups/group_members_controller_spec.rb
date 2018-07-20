@@ -180,7 +180,8 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
- 
+
+
     describe 'POST#create' do
         context "when unsuccessful" do
             login_user_from_let
@@ -229,7 +230,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
 
                 it "flashes a notice message" do
                     post :create, group_id: group.id, user: {user_id: add.id}
-                    expect(flash[:notice]).to eq 'The member was created'
+                    expect(flash[:notice]).to eq 'You are now a member'
                 end
 
                 it "group membership increases by one" do
@@ -247,12 +248,12 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
 
                 it "redirects to previous page" do
                     post :create, group_id: group.id, user: {user_id: add.id}
-                    expect(response).to redirect_to "back"
+                    expect(response).to redirect_to group_path(group)
                 end
 
                 it "flashes a notice message" do
                     post :create, group_id: group.id, user: {user_id: add.id}
-                    expect(flash[:notice]).to eq "The member was created"
+                    expect(flash[:notice]).to eq "You are now a member"
                 end
 
                 it "creates the user" do
@@ -293,9 +294,8 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
     end
 
     describe 'DELETE#remove_member' do
-        context 'when user is logged in' do 
-            let!(:group_leader){create(:group_leader, user: user, group: group)}
-            
+        context 'when user is logged in' do
+            let!(:group_leader) { create(:group_leader, user_id: user.id, group_id: group.id, :user_role_id => group_role.id) }
             login_user_from_let
             before { 
                 user_group.save 
@@ -328,12 +328,11 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             let!(:sub_group2) { create(:group, enterprise: user.enterprise, parent_id: group.id) }
 
             context 'and group has pending users disabled' do
-                before do
-                    group.update(pending_users: 'disabled')
-                    post :join_all_sub_groups, group_id: group.id
-                end
+                before { group.update(pending_users: 'disabled') }
 
                 it 'automatically join sub groups and becomes a member of each' do
+                    post :join_all_sub_groups, group_id: group.id
+
                     sub_group1_member = UserGroup.find_by(group_id: sub_group1.id, user_id: assigns[:current_user].id)
                     sub_group2_member = UserGroup.find_by(group_id: sub_group2.id, user_id: assigns[:current_user].id)
 
@@ -342,34 +341,47 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
                 end
 
                 it 'display a notice message' do
+                    post :join_all_sub_groups, group_id: group.id
                     expect(flash[:notice]).to eq "You've joined all #{c_t(:sub_erg).pluralize} of #{assigns[:group].name}"
                 end
 
-                it 'redirect to survey_group_questions_path' do
-                    expect(response).to redirect_to survey_group_questions_path(group)
+                context 'when survey fields for group is present' do
+                    before { create(:field, field_type: 'group_survey', group_id: group.id) }
+                    it 'redirect to survey_group_questions_path' do
+                        post :join_all_sub_groups, group_id: group.id
+                        expect(response).to redirect_to survey_group_questions_path(group)
+                    end
+                end
+
+                context 'when survey fields for group is absent' do
+                    it 'redirect to survey_group_questions_path' do
+                        post :join_all_sub_groups, group_id: group.id
+                        expect(response).to redirect_to group_path(group)
+                    end
                 end
             end
 
             context 'and group has pending users enabled' do
-                before do
-                    group.update(pending_users: 'enabled')
-                    post :join_all_sub_groups, group_id: group.id
-                end
+                before { group.update(pending_users: 'enabled') }
 
                 it 'automatically join sub groups and is a pending member of each' do
+                    post :join_all_sub_groups, group_id: group.id
+
                     sub_group1_member = UserGroup.find_by(group_id: sub_group1.id, user_id: assigns[:current_user].id)
                     sub_group2_member = UserGroup.find_by(group_id: sub_group2.id, user_id: assigns[:current_user].id)
 
                     expect(sub_group1_member.accepted_member).to eq false
                     expect(sub_group2_member.accepted_member).to eq false
-                end
+                 end
 
                 it 'display a notice message' do
+                    post :join_all_sub_groups, group_id: group.id
                     expect(flash[:notice]).to eq "You've joined all #{c_t(:sub_erg).pluralize} of #{assigns[:group].name}"
                 end
 
                 context 'when survey fields for group is present' do
                     before { create(:field, type: 'TextField', field_type: 'group_survey', group_id: group.id) }
+                  
                     it 'redirect to survey_group_questions_path' do
                         post :join_all_sub_groups, group_id: group.id
                         expect(response).to redirect_to survey_group_questions_path(group)
@@ -384,7 +396,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
                 end
 
                 it 'redirect to survey_group_questions_path' do
-                    expect(response).to redirect_to survey_group_questions_path(group)
+                    expect(response).to redirect_to group_path(group)
                 end
             end
         end
