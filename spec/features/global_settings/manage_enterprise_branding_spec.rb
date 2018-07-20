@@ -104,7 +104,7 @@ RSpec.feature 'Manage Enterprise Branding' do
 			attach_file('Upload sponsor image or video', 'spec/fixtures/files/sponsor_image.jpg')
 			fill_in 'Home page sponsor message', with: 'Hi and welcome'
 
-			click_on 'Add an enterprise sponsor'
+			click_on 'Add a sponsor'
 
 			within all('.nested-fields')[1] do
 				fill_in 'Sponsor name', with: 'Mark Zuckerberg'
