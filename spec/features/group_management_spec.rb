@@ -275,7 +275,7 @@ RSpec.feature 'Group management' do
     before { visit settings_group_path(group) }
 
     scenario 'by creating multiple group sponsors', js: true do
-      expect(page).to have_link 'Add a group sponsor'
+      expect(page).to have_link 'Add a sponsor'
 
       click_on 'Add a sponsor'
 
