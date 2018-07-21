@@ -48,7 +48,7 @@ class ClockworkDatabaseEvent < ActiveRecord::Base
     # checks if the event should execute
     def if?
         return false if disabled?
-        return false if day && Date.today.in_time_zone(tz).strftime("%A").downcase != day
+        return false if day && Time.now.in_time_zone(tz).strftime("%A").downcase != day
         return false if at && Time.now.in_time_zone(tz).strftime('%H:%M') != at
         return true
     end
@@ -56,6 +56,13 @@ class ClockworkDatabaseEvent < ActiveRecord::Base
     # runs the actual event
     def run
         return unless if?
-        job_name.constantize.send method_name, method_args
+        job_name.constantize.send method_name, formatted_arguments
+    end
+    
+    def formatted_arguments
+        return if method_args.nil?
+        args = JSON.parse(method_args)
+        args.merge!(:enterprise_id => enterprise_id)
+        return args.symbolize_keys
     end
 end
