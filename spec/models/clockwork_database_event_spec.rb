@@ -36,14 +36,14 @@ RSpec.describe ClockworkDatabaseEvent, type: :model do
         end
 
         it "returns false when day is monday but current day is saturday" do
-            allow(Date).to receive(:today).and_return Date.new(2018,7,14)
+            allow(Time).to receive(:now).and_return Time.new(2018,7,14)
 
             clockwork_database_event = create(:clockwork_database_event, :disabled => false, :day => "monday")
             expect(clockwork_database_event.if?).to eq(false)
         end
 
         it "returns true when day is sunday and current day is sunday" do
-            allow(Date).to receive(:today).and_return Date.new(2018,7,15)
+            allow(Time).to receive(:now).and_return Time.new(2018,7,15, 5, 0, 0)
 
             clockwork_database_event = create(:clockwork_database_event, :disabled => false, :day => "sunday")
             expect(clockwork_database_event.if?).to eq(true)

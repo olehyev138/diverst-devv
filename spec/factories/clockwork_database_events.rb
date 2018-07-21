@@ -7,7 +7,7 @@ FactoryGirl.define do
     disabled {false}
     job_name {"UserGroupNotificationJob"}
     method_name {"perform_later"}
-    method_args {"hourly"}
+    method_args {"{\"notifications_frequency\":\"weekly\"}"}
     tz {"Eastern Time (US & Canada)"}
   end
 end
