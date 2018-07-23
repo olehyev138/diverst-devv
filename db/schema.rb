@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180723213137) do
+ActiveRecord::Schema.define(version: 20180723221837) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -961,7 +961,6 @@ ActiveRecord::Schema.define(version: 20180723213137) do
     t.boolean  "groups_members_manage",                   default: false
     t.boolean  "groups_budgets_index",                    default: false
     t.boolean  "groups_budgets_request",                  default: false
-    t.boolean  "groups_budgets_approve",                  default: false
     t.boolean  "metrics_dashboards_index",                default: false
     t.boolean  "metrics_dashboards_create",               default: false
     t.boolean  "news_links_index",                        default: false
@@ -1039,7 +1038,6 @@ ActiveRecord::Schema.define(version: 20180723213137) do
     t.boolean  "manage_posts",                          default: false
     t.boolean  "group_leader_manage",                   default: false
     t.boolean  "global_calendar",                       default: false
-    t.boolean  "groups_budgets_approve",                default: false
     t.boolean  "branding_manage",                       default: false
     t.integer  "user_id",                     limit: 4
   end
