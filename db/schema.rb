@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180715035222) do
+ActiveRecord::Schema.define(version: 20180723213137) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -145,14 +145,15 @@ ActiveRecord::Schema.define(version: 20180715035222) do
   end
 
   create_table "budgets", force: :cascade do |t|
-    t.text     "description",  limit: 65535
+    t.text     "description",           limit: 65535
     t.boolean  "is_approved"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-    t.integer  "approver_id",  limit: 4
-    t.integer  "requester_id", limit: 4
-    t.integer  "event_id",     limit: 4
-    t.integer  "group_id",     limit: 4
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.integer  "approver_id",           limit: 4
+    t.integer  "requester_id",          limit: 4
+    t.integer  "event_id",              limit: 4
+    t.integer  "group_id",              limit: 4
+    t.string   "budget_decline_reason", limit: 191
   end
 
   add_index "budgets", ["approver_id"], name: "fk_rails_a057b1443a", using: :btree
@@ -988,6 +989,7 @@ ActiveRecord::Schema.define(version: 20180715035222) do
     t.boolean  "diversity_manage",                        default: false
     t.datetime "created_at",                                              null: false
     t.datetime "updated_at",                                              null: false
+    t.boolean  "budget_approval",                         default: false
   end
 
   create_table "policy_groups", force: :cascade do |t|
