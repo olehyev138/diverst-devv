@@ -1,11 +1,11 @@
 <div class="modal-header">
   <h4 class="modal-title text-center">
   <% if @group.parent.nil? && @group.children.any? %>
-  Thanks for joining the <%= c_t(:erg) %>! <br>
+  Thanks for joining the <%= c_t(:parent) %>! <br>
   Do you also want to join a <%= c_t(:sub_erg) %>?
   <% else %>
   Thanks for joining the <%= @group.name %>! <br>
-  Do you also want to join the <%= c_t(:erg) %>?
+  Do you also want to join the <%= c_t(:parent) %>?
   <% end %>
 
   </h4>
