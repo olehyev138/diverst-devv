@@ -24,7 +24,7 @@ RSpec.feature 'Group Membership Management' do
 
 			click_button "Join this #{c_t(:erg)}"
 
-			expect(page).to have_content "Thanks for joining the #{c_t(:erg)}! Do you also want to join a #{c_t(:sub_erg)}?"
+			expect(page).to have_content "Thanks for joining the #{c_t(:parent)}! Do you also want to join a #{c_t(:sub_erg)}?"
 
 			click_link "YES"
 
@@ -42,7 +42,7 @@ RSpec.feature 'Group Membership Management' do
 
 			click_button "Join this #{c_t(:sub_erg)}"
 
-			expect(page).to have_content "Thanks for joining the #{sub_group.name}! Do you also want to join the #{c_t(:erg)}?"
+			expect(page).to have_content "Thanks for joining the #{sub_group.name}! Do you also want to join the #{c_t(:parent)}?"
 
 			click_button "YES"
 
@@ -163,7 +163,7 @@ RSpec.feature 'Group Membership Management' do
 
 			click_button "Join this #{c_t(:erg)}"
 
-			expect(page).to have_content "Thanks for joining the #{c_t(:erg)}! Do you also want to join a #{c_t(:sub_erg)}?"
+			expect(page).to have_content "Thanks for joining the #{c_t(:parent)}! Do you also want to join a #{c_t(:sub_erg)}?"
 
 			click_link "YES"
 
@@ -181,7 +181,7 @@ RSpec.feature 'Group Membership Management' do
 
 			click_button "Join this #{c_t(:sub_erg)}"
 
-			expect(page).to have_content "Thanks for joining the #{sub_group.name}! Do you also want to join the #{c_t(:erg)}?"
+			expect(page).to have_content "Thanks for joining the #{sub_group.name}! Do you also want to join the #{c_t(:parent)}?"
 
 			click_button "YES"
 
