@@ -20,7 +20,7 @@
           <div class="flex-row__cell flex-row__cell--grow">
             <h4><%= news_link.title %> - <span class="muted"> <%= news_link.total_views %> views</span></h4>
             <p class="postContent">
-              <%= allow_newlines raw news_link.description %>
+              <%= raw news_link.description %>
               <br>
               <%= link_to news_link.url, news_link.url, target: '_blank', 'data-trackable': news_link.news_feed_link.id %>
               <br>
@@ -43,7 +43,7 @@
     <div class="row visible-xs">
       <div class="col-xs-12">
         <p>
-          <%= allow_newlines raw news_link.description %>
+          <%= raw news_link.description %>
           <br>
           <%= link_to news_link.url, news_link.url, target: '_blank', 'data-trackable': news_link.news_feed_link.id %>
           <br>
