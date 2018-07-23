@@ -69,6 +69,10 @@ class Enterprise < ActiveRecord::Base
 
     has_attached_file :xml_sso_config
     validates_attachment_content_type :xml_sso_config, content_type: 'text/xml'
+    
+    # re-add to allow migration file to run
+    has_attached_file :sponsor_media, s3_permissions: :private
+    do_not_validate_attachment_file_type :sponsor_media
 
     has_attached_file :onboarding_sponsor_media, s3_permissions: :private
     do_not_validate_attachment_file_type :onboarding_sponsor_media

@@ -100,6 +100,10 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   belongs_to :parent, class_name: "Group", foreign_key: :parent_id
   belongs_to :group_category
   belongs_to :group_category_type
+  
+  # re-add to allow migration file to run
+  has_attached_file :sponsor_media, s3_permissions: :private
+  do_not_validate_attachment_file_type :sponsor_media
 
   has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
   validates_attachment_content_type :logo, content_type: %r{\Aimage\/.*\Z}
