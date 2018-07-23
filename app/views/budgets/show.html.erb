@@ -30,6 +30,7 @@
         </div>
       </div>
     </div>
+    <% if @budget.is_approved.nil? %>
       <% if policy(@budget).approve? %>
         <%= f.button :submit, 'Approve Budget' %>
         <% #bTODO check if vulnerabilities %>
@@ -37,6 +38,7 @@
       <% if policy(@budget).decline? %>
         <%= link_to "Decline Budget", group_budget_decline_path(@group, @budget), method: :post %>
       <% end %>
+    <% end %>
     </div>
   <% end %>
 </div>
