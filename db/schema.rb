@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180723230119) do
+ActiveRecord::Schema.define(version: 20180724141334) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -241,6 +241,16 @@ ActiveRecord::Schema.define(version: 20180723230119) do
   end
 
   add_index "ckeditor_assets", ["type"], name: "index_ckeditor_assets_on_type", using: :btree
+
+  create_table "csvfiles", force: :cascade do |t|
+    t.string   "import_file_file_name",    limit: 191
+    t.string   "import_file_content_type", limit: 191
+    t.integer  "import_file_file_size",    limit: 4
+    t.datetime "import_file_updated_at"
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.integer  "user_id",                  limit: 4,   null: false
+  end
 
   create_table "custom_texts", force: :cascade do |t|
     t.text    "erg",               limit: 65535
