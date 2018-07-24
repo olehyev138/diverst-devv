@@ -1,8 +1,10 @@
 class Importers::Users
+  DEFAULT_COLUMN_DELIMITER = ','
+
   attr_reader :table, :failed_rows, :successful_rows
 
   def initialize(file, manager)
-    @table = CSV.read file, headers: true, header_converters: lambda { |h|
+    @table = CSV.read file, col_sep: get_delimiter, headers: true, header_converters: lambda { |h|
       h.split.join(" ").downcase
     }
     @manager = manager
@@ -72,5 +74,14 @@ class Importers::Users
     truthy_values = [1, '1', true, 'true', 'TRUE', 'yes', 'YES', '', nil]
 
     truthy_values.include? column_value
+  end
+
+  def get_delimiter()
+    custom_delimiter = ENV['CSV_COLUMN_SEPARATOR']
+    if custom_delimiter.present?
+      custom_delimiter
+    else
+      DEFAULT_COLUMN_DELIMITER
+    end
   end
 end
