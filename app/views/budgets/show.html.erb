@@ -30,15 +30,48 @@
         </div>
       </div>
     </div>
+    <% if @budget.is_approved == false %>
+    <div class="card">
+      <div class="card__section card__section--border">
+        <b>This request was declined by <%= approver_name(@budget) %> for the following reason: </b>
+        <% if @budget.decline_reason.blank? %>
+        No Reason Provided
+        <% else %>
+        <i><%= @budget.decline_reason %></i>
+        <% end %>
+      </div>
+    </div>
+    <% end %>
     <% if @budget.is_approved.nil? %>
+    <div class="form">
       <% if policy(@budget).approve? %>
-        <%= f.button :submit, 'Approve Budget' %>
+        <%= f.button :submit, 'Approve Budget' %><br />
+        <br />
         <% #bTODO check if vulnerabilities %>
       <% end %>
       <% if policy(@budget).decline? %>
-        <%= link_to "Decline Budget", group_budget_decline_path(@group, @budget), method: :post %>
+          <div class="form-group">
+            <%= f.input :decline_reason, label: 'Reason (optional)', input_html: { id: 'decline_reason_input' } %>
+          </div>
+          <div class="form-group">
+            <button type="button" class="btn btn--secondary" onclick='declineBudget()'>Decline Budget</button>
+          </div>
       <% end %>
+    </div>
     <% end %>
     </div>
   <% end %>
 </div>
+
+<script>
+function declineBudget()
+{
+  $.ajax({
+    type: 'POST',
+    url: "<%= group_budget_decline_path(@group.id, @budget.id) %>",
+    data: { decline_reason: $('#decline_reason_input').val() }
+  }).done(function() {
+    window.location.href = "<%= group_budget_path(@group.id, @budget.id) %>";
+  });
+}
+</script>
