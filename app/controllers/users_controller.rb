@@ -96,14 +96,20 @@ class UsersController < ApplicationController
   def parse_csv
     authorize User, :new?
 
-    file = params[:file].tempfile
-    csv_file = CsvFile.new(import_file: file, user: current_user)
+    file = CsvFile.new( import_file: params[:file].tempfile, user: current_user)
 
-    #if csv_file.save
-      #calculate nb of records and time
-      #notify user
-    #else
-      #show error
+    @message = ''
+    @success = false
+    @email = ENV['CSV_UPLOAD_REPORT_EMAIL']
+
+    if file.save
+      @success = true
+      @message = '@success'
+    else
+      @success = false
+      @message = 'error'
+      @errors = file.errors.full_messages
+    end
   end
 
   def export_csv
