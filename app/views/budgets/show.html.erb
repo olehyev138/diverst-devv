@@ -33,12 +33,14 @@
     <% if @budget.is_approved == false %>
     <div class="card">
       <div class="card__section card__section--border">
-        <b>This request was declined by <%= approver_name(@budget) %> for the following reason: </b>
-        <% if @budget.decline_reason.blank? %>
-        No Reason Provided
-        <% else %>
-        <i><%= @budget.decline_reason %></i>
-        <% end %>
+        <strong>Reason why this request was declined</strong><br />
+        <div class="border-accent" style="margin-top: 8px;">
+          <% if @budget.decline_reason.blank? %>
+          No Reason Provided
+          <% else %>
+          <i><%= @budget.decline_reason %></i>
+          <% end %>
+        </div>
       </div>
     </div>
     <% end %>
@@ -51,13 +53,16 @@
         <% #bTODO check if vulnerabilities %>
       <% end %>
       <% if policy(@budget).decline? %>
-        <div class="col pull-right">
-          <button type="button" class="btn btn--secondary" onclick='declineBudget()'>Decline Budget</button>
-        </div>
-        <div class="col pull-right form-inline">
-          <div class="form-group">
-            <%= f.input :decline_reason, label: false, placeholder: 'Reason (optional)', class: 'form-control', input_html: { id: 'decline_reason_input' } %>
+        <div class="col form-inline">
+          <div class="hidden" id="decline_reason_input_wrapper" style="position: relative">
+            <%= f.input :decline_reason, label: 'Reason (optional)', input_html: { id: 'decline_reason_input', class: 'form-control', width: '250px' } %>
+            <button type="button" class="close" aria-label="Close" onclick="closeReason()" style="position: absolute; right: 0; top: 0;">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
+        </div>
+        <div class="col btn-padding" id="decline_wrapper">
+          <button type="button" class="accent" id="decline_button" onclick='declineClicked()'>Decline Budget</button>
         </div>
       <% end %>
     </div>
@@ -67,6 +72,31 @@
 </div>
 
 <script>
+var verify = false;
+
+function declineClicked()
+{
+  if (!verify) {
+    verify = true;
+    $('#decline_reason_input_wrapper').removeClass('hidden');
+    $('#decline_button').addClass('btn btn--danger');
+    $('#decline_wrapper').removeClass('btn-padding');
+    $('#decline_reason_input').focus();
+  } else {
+    declineBudget();
+  }
+}
+
+function closeReason()
+{
+  if (verify) {
+    verify = false;
+    $('#decline_reason_input_wrapper').addClass('hidden');
+    $('#decline_button').removeClass('btn btn--danger');
+    $('#decline_wrapper').addClass('btn-padding');
+  }
+}
+
 function declineBudget()
 {
   $.ajax({

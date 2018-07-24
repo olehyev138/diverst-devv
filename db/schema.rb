@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180723221838) do
+ActiveRecord::Schema.define(version: 20180723230119) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -153,6 +153,7 @@ ActiveRecord::Schema.define(version: 20180723221838) do
     t.integer  "requester_id",          limit: 4
     t.integer  "event_id",              limit: 4
     t.integer  "group_id",              limit: 4
+    t.string   "decline_reason",        limit: 191
   end
 
   add_index "budgets", ["approver_id"], name: "fk_rails_a057b1443a", using: :btree
