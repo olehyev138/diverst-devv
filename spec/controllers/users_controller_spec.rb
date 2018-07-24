@@ -307,7 +307,7 @@ RSpec.describe UsersController, type: :controller do
     end
 
     describe "GET#parse_csv" do
-        let!(:file) { fixture_file_upload('files/test.csv', 'text/csv') }
+        let!(:file) { fixture_file_upload('files/diverst_csv_import.csv', 'text/csv') }
 
         context 'when user is logged in' do
             login_user_from_let

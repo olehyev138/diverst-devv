@@ -57,11 +57,12 @@ class Importers::Users
 
   def user_attributes(row, user)
     id = user.present? ? user.user_role_id : @enterprise.default_user_role # default_user_role returns the ID of the default role
+
     return {
       first_name: row["first name"],
       last_name: row["last name"],
       email: row["email"],
-      biography: row["biography"],
+      biography: (row["biography"].present?) ? row["biography"] : user&.biography,
       active: process_active_column( row["active"] ),
       user_role_id: id
     }
