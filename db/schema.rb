@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180724132020) do
+ActiveRecord::Schema.define(version: 20180724141334) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -248,6 +248,7 @@ ActiveRecord::Schema.define(version: 20180724132020) do
     t.datetime "import_file_updated_at"
     t.datetime "created_at",                           null: false
     t.datetime "updated_at",                           null: false
+    t.integer  "user_id",                  limit: 4,   null: false
   end
 
   create_table "custom_texts", force: :cascade do |t|
