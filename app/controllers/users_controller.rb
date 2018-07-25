@@ -95,8 +95,21 @@ class UsersController < ApplicationController
 
   def parse_csv
     authorize User, :new?
-    @importer = Importers::Users.new(params[:file].tempfile, current_user)
-    @importer.import
+
+    file = CsvFile.new( import_file: params[:file].tempfile, user: current_user)
+
+    @message = ''
+    @success = false
+    @email = ENV['CSV_UPLOAD_REPORT_EMAIL']
+
+    if file.save
+      @success = true
+      @message = '@success'
+    else
+      @success = false
+      @message = 'error'
+      @errors = file.errors.full_messages
+    end
   end
 
   def export_csv
