@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ImportCSVFileJob, type: :job do
+RSpec.describe ImportCSVJob, type: :job do
 
   describe "#perform" do
   end
