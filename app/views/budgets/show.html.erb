@@ -3,11 +3,13 @@
 </div>
 
 <div class="content__main">
+  <% if (policy(@budget).approve? || policy(@budget).decline?) && @budget.is_approved.nil? %>
   <div class="card">
     <div class="card__section card__section--border">
       Manage Budget Request
     </div>
   </div>
+  <% end %>
   <div class="card">
     <div class="card__section card__section--border">
       <strong>Description</strong><br />
