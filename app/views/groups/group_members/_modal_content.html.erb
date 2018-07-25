@@ -1,11 +1,15 @@
 <div class="modal-header">
   <h4 class="modal-title text-center">
   <% if @group.parent.nil? && @group.children.any? %>
-  Thanks for joining the <%= c_t(:parent) %>! <br>
-  Do you also want to join a <%= c_t(:sub_erg) %>?
+    Thanks for joining the <%= c_t(:parent) %>! <br>
+    <% unless @group.children.all? { |child| current_user.is_member_of?(child) } %>
+      Do you also want to join a <%= c_t(:sub_erg) %>?
+    <% end %>
   <% else %>
-  Thanks for joining the <%= @group.name %>! <br>
-  Do you also want to join the <%= c_t(:parent) %>?
+    Thanks for joining <%= @group.name %>! <br>
+    <% unless current_user.is_member_of? @group.parent %>
+      Do you also want to join the <%= c_t(:parent) %>?
+    <% end %>
   <% end %>
 
   </h4>
@@ -14,13 +18,21 @@
   <div class="container-fluid">
     <div class="row text-center">
     <% if @group.parent.nil? && @group.children.any? %>
-     <%= link_to "YES", view_sub_groups_group_group_members_path, class: "btn btn--primary", remote: true %>
-     <%= link_to "NO", :back, class: "btn btn--primary" %>
+       <% if @group.children.all? { |child| current_user.is_member_of?(child) } %>
+         <%= link_to "OK", :back, class: "btn btn--primary", style: 'margin-bottom: 20px;' %> 
+       <% else %>   
+          <%= link_to "YES", view_sub_groups_group_group_members_path, class: "btn btn--primary", remote: true %>
+          <%= link_to "NO", :back, class: "btn btn--primary" %>
+      <% end %>
      <% else %>
-     <%= simple_form_for :user, url: group_group_members_path(@group.parent), method: :post do |f| %>
-        <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
-        <%= f.submit "YES", class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
-        <%= link_to "NO", :back, class: "btn btn--primary", style: "margin-bottom: 20px;" %>
+       <% if current_user.is_member_of? @group.parent %>
+         <%= link_to "OK", :back, class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
+       <% else %>
+         <%= simple_form_for :user, url: group_group_members_path(@group.parent), method: :post do |f| %>
+           <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
+           <%= f.submit "YES", class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
+           <%= link_to "NO", :back, class: "btn btn--primary", style: "margin-bottom: 20px;" %>
+         <% end %>
       <% end %>
     <% end %>
     </div>
