@@ -3,71 +3,108 @@
 </div>
 
 <div class="content__main">
-    <div class="card">
-      <div class="card__section card__section--border">
-        Edit and approve budget
+  <div class="card">
+    <div class="card__section card__section--border">
+      Manage Budget Request
+    </div>
+  </div>
+  <div class="card">
+    <div class="card__section card__section--border">
+      <strong>Description</strong><br />
+      <div class="border-accent" style="margin-top: 8px;">
+        <p>
+          <%= @budget.description %>
+        </p>
       </div>
     </div>
-  <%= simple_form_for @budget, url: group_budget_approve_path(@group, @budget), method: :post do |f| %>
-    <div class="card">
+  </div>
+  <div class="card">
+    <div class="card__section padding-bottom-0">
+      <strong>Events</strong>
+    </div>
+    <% if @budget.budget_items.empty? %>
       <div class="card__section">
-        <%= f.input :description, input_html: { autofocus: true } %>
+        <br />
+        <p>This budget request has no events.</p>
       </div>
-    </div>
-    <div class="card">
-      <div class="card__section card__section--border">
-        <p>You can specify list of <strong>events</strong> you plan to organize with this budget (optional).</p>
+    <% else %>
+      <div class="card__section card__section--border padding-top-0">
+        <table class="table--has-border">
+          <thead>
+            <th></th>
+            <th>Title</th>
+            <th>Requested Amount</th>
+            <th>Date</th>
+            <th>Private</th>
+          </thead>
+          <tbody>
+            <% @budget.budget_items.each do |budget_item| %>
+              <tr>
+                <td>
+                  <% if budget_item.is_done %>
+                    <span class="error">Used</span>
+                  <% else %>
+                    <span class="positive">Available</span>
+                  <% end %>
+                </td>
+                <td>
+                  <%= budget_item.title %>
+                </Td>
+                <td>
+                  <%= number_to_currency budget_item.estimated_amount %>
+                </td>
+                <td>
+                  <%= budget_item.estimated_date %>
+                </td>
+                <td>
+                  <%= boolean_to_yes_no budget_item.is_private %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
       </div>
-      <div id="fields">
-        <%= f.simple_fields_for :budget_items do |item_form| %>
-          <%= render 'budgets/item', f: item_form %>
-        <% end %>
-      </div>
-
-      <div class="link">
-        <div class="card__section card__section--border">
-          <%= link_to_add_association "+Add Event", f, :budget_items, partial: 'budgets/item' %>
-        </div>
-      </div>
-    </div>
-    <% if @budget.is_approved == false %>
+    <% end %>
+  </div>
+  <% if @budget.is_approved == false %>
     <div class="card">
       <div class="card__section card__section--border">
         <strong>Reason why this request was declined</strong><br />
         <div class="border-accent" style="margin-top: 8px;">
           <% if @budget.decline_reason.blank? %>
-          No Reason Provided
+            No Reason Provided
           <% else %>
-          <i><%= @budget.decline_reason %></i>
+            <i><%= @budget.decline_reason %></i>
           <% end %>
         </div>
       </div>
     </div>
-    <% end %>
+  <% end %>
+
+  <%= simple_form_for @budget, url: group_budget_approve_path(@group, @budget), method: :post do |f| %>
     <% if @budget.is_approved.nil? %>
-    <div class="row">
-      <% if policy(@budget).approve? %>
-        <div class="col">
-          <%= f.button :submit, 'Approve Budget' %>
+      <div class="card">
+        <div class="hidden card__section" id="decline_reason_input_wrapper" style="position: relative">
+          <%= f.input :decline_reason, label: 'Reason for declining budget request (Optional)', input_html: { id: 'decline_reason_input', class: 'form-control', width: '250px' } %>
+          <button type="button" class="close" aria-label="Close" onclick="closeReason()" style="position: absolute; right: 16px; top: 8px;">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-        <% #bTODO check if vulnerabilities %>
-      <% end %>
-      <% if policy(@budget).decline? %>
-        <div class="col form-inline">
-          <div class="hidden" id="decline_reason_input_wrapper" style="position: relative">
-            <%= f.input :decline_reason, label: 'Reason (optional)', input_html: { id: 'decline_reason_input', class: 'form-control', width: '250px' } %>
-            <button type="button" class="close" aria-label="Close" onclick="closeReason()" style="position: absolute; right: 0; top: 0;">
-              <span aria-hidden="true">&times;</span>
-            </button>
+      </div>
+      <div class="row">
+        <% if policy(@budget).approve? %>
+          <div class="col">
+            <%= f.button :submit, 'Approve Budget' %>
           </div>
-        </div>
-        <div class="col btn-padding" id="decline_wrapper">
-          <button type="button" class="accent" id="decline_button" onclick='declineClicked()'>Decline Budget</button>
-        </div>
-      <% end %>
-    </div>
+          <% #bTODO check if vulnerabilities %>
+        <% end %>
+        <% if policy(@budget).decline? %>
+          <div class="col btn-padding" id="decline_wrapper">
+            <button type="button" class="accent" id="decline_button" onclick='declineClicked()'>Decline Budget</button>
+          </div>
+        <% end %>
+      </div>
     <% end %>
-    </div>
   <% end %>
 </div>
 
