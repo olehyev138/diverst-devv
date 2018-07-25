@@ -307,14 +307,26 @@ RSpec.describe UsersController, type: :controller do
     end
 
     describe "GET#parse_csv" do
-        let!(:file) { fixture_file_upload('files/test.csv', 'text/csv') }
+        let!(:file) { fixture_file_upload('files/diverst_csv_import.csv', 'text/csv') }
 
         context 'when user is logged in' do
             login_user_from_let
-            before { get :parse_csv, :file => file }
 
-            it "renders parse_csv template" do
-                expect(response).to render_template :parse_csv
+            describe 'response' do
+                before { get :parse_csv, :file => file }
+                it "renders parse_csv template" do
+                    expect(response).to render_template :parse_csv
+                end
+            end
+
+            it 'creates new CsvFile' do
+                expect{ get :parse_csv, :file => file }
+                    .to change(CsvFile, :count)
+                    .by(1)
+            end
+
+            context 'with incorrect file' do
+                it 'does not create CSVFile'
             end
         end
 
