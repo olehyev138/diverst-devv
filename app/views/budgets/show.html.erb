@@ -118,7 +118,7 @@ function declineClicked()
   if (!verify) {
     verify = true;
     $('#decline_reason_input_wrapper').removeClass('hidden');
-    $('#decline_button').addClass('btn btn--danger');
+    $('#decline_button').addClass('btn btn--primary');
     $('#decline_wrapper').removeClass('btn-padding');
     $('#decline_reason_input').focus();
   } else {
@@ -131,7 +131,7 @@ function closeReason()
   if (verify) {
     verify = false;
     $('#decline_reason_input_wrapper').addClass('hidden');
-    $('#decline_button').removeClass('btn btn--danger');
+    $('#decline_button').removeClass('btn btn--primary');
     $('#decline_wrapper').addClass('btn-padding');
   }
 }
