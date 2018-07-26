@@ -1,18 +1,18 @@
 #
 # This file configures the New Relic Agent.  New Relic monitors Ruby, Java,
-# .NET, PHP, Python and Node applications with deep visibility and low
+# .NET, PHP, Python, Node, and Go applications with deep visibility and low
 # overhead.  For more information, visit www.newrelic.com.
 #
-# Generated September 02, 2015
+# Generated July 26, 2018
 #
-# This configuration file is custom generated for Volume7
+# This configuration file is custom generated for Diverst_1
 #
 # For full documentation of agent configuration options, please refer to
 # https://docs.newrelic.com/docs/agents/ruby-agent/installation-configuration/ruby-agent-configuration
 
 common: &default_settings
   # Required license key associated with your New Relic account.
-  license_key: 4a842c333622909c1f5e7ea4fd1f3e65e87c8199
+  license_key: 28c4fe90be93d8fcdd08b5b40c2d27aa1326403b
 
   # Your application name. Renaming here affects where data displays in New
   # Relic.  For more details, see https://docs.newrelic.com/docs/apm/new-relic-apm/maintenance/renaming-applications
@@ -31,7 +31,6 @@ common: &default_settings
 development:
   <<: *default_settings
   app_name: Diverst (Development)
-
   # NOTE: There is substantial overhead when running in developer mode.
   # Do not use for production or load testing.
   developer_mode: true
