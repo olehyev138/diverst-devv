@@ -1,0 +1,19 @@
+<div class="card">
+    <div class="card__section">
+      <% if @segments.any? %>
+        <table id="segments-table" class="table--has-border data-table" data-source="<%= source %>">
+          <thead>
+            <th>Name</th>
+            <th># of members</th>
+            <th># of rules</th>
+            <th>Date created</th>
+            <th>Options</th>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      <% else %>
+        <p>No user match search criteria.</p>
+      <% end %>
+    </div>
+  </div>

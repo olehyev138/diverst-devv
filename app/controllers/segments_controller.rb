@@ -7,7 +7,13 @@ class SegmentsController < ApplicationController
 
     def index
         authorize Segment
-        @segments = policy_scope(Segment).includes(:parent_segment).where(:segmentations => {:id => nil})
+        @segments = policy_scope(Segment).includes(:members, :parent_segment).where(:segmentations => {:id => nil})
+        @segments = @segments.uniq 
+
+        respond_to do |format|
+            format.html
+            format.json { render json: SegmentDatatable.new(view_context, @segments) }
+        end
     end
 
     def new
