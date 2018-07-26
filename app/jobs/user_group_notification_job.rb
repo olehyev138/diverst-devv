@@ -1,5 +1,5 @@
 class UserGroupNotificationJob < ActiveJob::Base
-  queue_as :default
+  queue_as :mailers
 
   def perform(notifications_frequency)
     User.includes(user_groups: :group).find_in_batches(batch_size: 200) do |users|

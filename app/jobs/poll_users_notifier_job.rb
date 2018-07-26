@@ -1,5 +1,5 @@
 class PollUsersNotifierJob < ActiveJob::Base
-  queue_as :default
+  queue_as :mailers
 
   def perform(poll_id)
     poll = Poll.find_by_id poll_id
