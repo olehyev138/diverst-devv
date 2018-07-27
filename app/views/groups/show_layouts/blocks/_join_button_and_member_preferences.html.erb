@@ -17,9 +17,14 @@
         <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
         <%= f.submit "Join this #{ c_t(:erg) }", class: "btn btn--primary", style: 'margin-bottom: 20px;' if @group.is_parent_group? %>
         <%= f.submit "Join this #{ c_t(:sub_erg) }", class: "btn btn--primary", style: 'margin-bottom: 20px;' if @group.is_sub_group? %>
-
       <% end %>
-    <% end %>
+      <% else %>
+        <%= simple_form_for :user, url: group_group_members_path(@group), method: :post do |f| %>
+          <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
+          <%= f.submit "Join this #{ c_t(:erg) }", class: "btn btn--primary", style: 'margin-bottom: 20px;' if @group.is_parent_group? %>
+          <%= f.submit "Join this #{ c_t(:sub_erg) }", class: "btn btn--primary", style: 'margin-bottom: 20px;' if @group.is_sub_group? %>
+        <% end %>
+      <% end %>
   <% end %>
 <% else %>
   <% if @group.survey_fields.present? && !current_user.has_answered_group_survey?(@group) %>
