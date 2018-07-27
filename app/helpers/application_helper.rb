@@ -190,10 +190,6 @@ module ApplicationHelper
   end
 
   def boolean_to_yes_no(boolean_value)
-    if boolean_value
-      "Yes"
-    else
-      "No"
-    end
+    boolean_value ? 'Yes' : 'No'
   end
 end

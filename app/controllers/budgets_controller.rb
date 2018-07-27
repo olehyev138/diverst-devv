@@ -132,7 +132,6 @@ class BudgetsController < ApplicationController
       .permit(
         :description,
         :approver_id,
-        :decline_reason,
         budget_items_attributes: [
           :id,
           :title,

@@ -1,6 +1,6 @@
 class BudgetPolicy < ApplicationPolicy
   def approve?
-    @policy_group.budget_approval == true
+    @policy_group.budget_approval?
   end
 
   def decline?
