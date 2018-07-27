@@ -30,10 +30,10 @@ class SegmentDatatable < AjaxDatatablesRails::Base
   end
 
   def generate_destroy_link(record)
-    # if policy(record).destroy?
+    if policy(record).destroy?
       link_to "Delete", segment_path(record), method: :delete, 
       class: "error", data: { confirm: "Are you sure?" }
-    # end
+    end
   end
 
   def data
