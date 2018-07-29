@@ -47,6 +47,18 @@ RSpec.feature 'Group Membership Management' do
 			expect(sub_group.members).to include guest_user
 		end
 
+		context 'when a user' do
+			let!(:parent_group) { create(:group, name: 'Group ONE', enterprise: enterprise, parent_id: nil) }
+
+			scenario 'joins a standard group(group with no parent or child)' do
+				visit group_path(parent_group)
+
+				click_button "Join this #{c_t(:erg)}"
+
+				expect(page).not_to have_button "Leave this #{c_t(:erg)}"
+			end
+		end
+
 
 		context 'when user joins a group' do
 			before do
@@ -182,6 +194,18 @@ RSpec.feature 'Group Membership Management' do
 			click_button "YES"
 
 			expect(group.members).to include guest_user
+		end
+
+		context 'when a user' do
+			let!(:parent_group) { create(:group, name: 'Group ONE', enterprise: enterprise, parent_id: nil) }
+
+			scenario 'joins a standard group(group with no parent or child)' do
+				visit group_path(parent_group)
+
+				click_button "Join this #{c_t(:erg)}"
+
+				expect(page).not_to have_button "Leave this #{c_t(:erg)}"
+			end
 		end
 
 		context 'when a user leaves' do
