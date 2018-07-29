@@ -151,11 +151,15 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   end
 
   def is_parent_group?
-    (parent.nil? && children.any?) || (parent.nil? && children.empty?)
+    (parent.nil? && children.any?)
   end
 
   def is_sub_group?
     parent.present?
+  end
+
+  def is_standard_group?
+    (parent.nil? && children.empty?)
   end
 
   def capitalize_name
