@@ -17,7 +17,6 @@
               <br>
               <i>by <%= message.owner.name_with_status %></i>
             <% end %>
-            <%= link_to "Comments(#{message.comments_count})", group_group_message_path(message.group, message), style: "margin-top: 30px;" %>
           </p>
           <div class="row">
             <div class="col commentsLink">
