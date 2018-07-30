@@ -16,35 +16,64 @@ RSpec.feature 'Group Membership Management' do
 			login_as(guest_user, scope: :user)
 		end
 
-		scenario 'when a user joins a parent group with children', js: true do
-			visit group_path(group)
+		context 'when a user joins a parent group with children, a modal pops up with option to join sub groups' do 
+			scenario 'and user chooses to join a sub group', js: true do
+				visit group_path(group)
 
-			click_button "Join this #{c_t(:erg)}"
+				click_button "Join this #{c_t(:erg)}"
 
-			expect(page).to have_content "Thanks for joining the #{c_t(:parent)}! Do you also want to join a #{c_t(:sub_erg)}?"
+				expect(page).to have_content "Thanks for joining the #{c_t(:parent)}! Do you also want to join a #{c_t(:sub_erg)}?"
 
-			click_link "YES"
+				click_link "YES"
 
-			expect(page).to have_content sub_group.name
-			expect(page).to have_link 'Join'
+				expect(page).to have_content sub_group.name
+				expect(page).to have_link 'Join'
 
-			click_link 'Join', href: join_sub_group_group_group_member_path(sub_group, guest_user)
-			click_on 'DONE'
+				click_link 'Join', href: join_sub_group_group_group_member_path(sub_group, guest_user)
+				click_on 'DONE'
 
-			expect(sub_group.members).to include guest_user
+				expect(page).to have_content "#{sub_group.name} ( member )"
+			end
+
+			scenario 'and user chooses not to join any sub group', js: true do
+				visit group_path(group)
+
+				click_button "Join this #{c_t(:erg)}"
+
+				expect(page).to have_content "Thanks for joining the #{c_t(:parent)}! Do you also want to join a #{c_t(:sub_erg)}?"
+
+				click_link "NO"
+
+				expect(page).to have_content "#{sub_group.name} ( not member )"
+			end
 		end
 
-		scenario 'when a user joins a sub group, prompt option to join parent group', js: true do
-			visit group_path(sub_group)
+		context 'when a user joins a sub group, a modal popus up with option to join parent group' do
+			scenario 'and chooses to join a parent group', js: true do
+				visit group_path(sub_group)
 
-			click_button "Join this #{c_t(:sub_erg)}"
+				click_button "Join this #{c_t(:sub_erg)}"
 
-			expect(page).to have_content "Thanks for joining the #{sub_group.name}! Do you also want to join the #{c_t(:parent)}?"
+				expect(page).to have_content "Thanks for joining the #{sub_group.name}! Do you also want to join the #{c_t(:parent)}?"
 
-			click_button "YES"
+				click_button "YES"
 
-			expect(group.members).to include guest_user
-			expect(sub_group.members).to include guest_user
+				expect(page).to have_current_path group_path(group)
+				expect(page).to have_content "#{sub_group.name} ( member )"
+			end
+
+			scenario 'and chooses not to join a parent group', js: true do
+				visit group_path(sub_group)
+
+				click_button "Join this #{c_t(:sub_erg)}"
+
+				expect(page).to have_content "Thanks for joining the #{sub_group.name}! Do you also want to join the #{c_t(:parent)}?"
+
+				click_link "NO"
+
+				expect(page).to have_current_path group_path(sub_group)
+				expect(page).to have_content "#{group.name} ( not member )"
+			end
 		end
 
 
