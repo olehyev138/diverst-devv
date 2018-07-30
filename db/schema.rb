@@ -970,7 +970,6 @@ ActiveRecord::Schema.define(version: 20180724141334) do
     t.boolean  "groups_members_manage",                   default: false
     t.boolean  "groups_budgets_index",                    default: false
     t.boolean  "groups_budgets_request",                  default: false
-    t.boolean  "groups_budgets_approve",                  default: false
     t.boolean  "metrics_dashboards_index",                default: false
     t.boolean  "metrics_dashboards_create",               default: false
     t.boolean  "news_links_index",                        default: false
@@ -998,6 +997,7 @@ ActiveRecord::Schema.define(version: 20180724141334) do
     t.boolean  "diversity_manage",                        default: false
     t.datetime "created_at",                                              null: false
     t.datetime "updated_at",                                              null: false
+    t.boolean  "budget_approval",                         default: false
   end
 
   create_table "policy_groups", force: :cascade do |t|
@@ -1047,7 +1047,6 @@ ActiveRecord::Schema.define(version: 20180724141334) do
     t.boolean  "manage_posts",                          default: false
     t.boolean  "group_leader_manage",                   default: false
     t.boolean  "global_calendar",                       default: false
-    t.boolean  "groups_budgets_approve",                default: false
     t.boolean  "branding_manage",                       default: false
     t.integer  "user_id",                     limit: 4
   end

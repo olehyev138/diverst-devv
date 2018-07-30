@@ -8,11 +8,11 @@ class PolicyGroupTemplatesController < ApplicationController
     authorize PolicyGroupTemplate
     @policy_group_templates = current_user.enterprise.policy_group_templates
   end
-  
+
   def edit
     authorize PolicyGroupTemplate
   end
-  
+
   def update
     authorize PolicyGroupTemplate
 
@@ -76,7 +76,7 @@ class PolicyGroupTemplatesController < ApplicationController
         :logs_view,
         :groups_budgets_index,
         :groups_budgets_request,
-        :groups_budgets_approve,
+        :budget_approval,
         :annual_budget_manage,
         :group_leader_manage,
         :sso_manage,
