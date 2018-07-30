@@ -19,8 +19,7 @@ RSpec.feature 'Group Membership Management' do
 		context 'when a user joins a parent group with children, a modal pops up with option to join sub groups' do 
 			scenario 'and user chooses to join a sub group', js: true do
 				visit group_path(group)
-
-				click_button "Join this #{c_t(:erg)}"
+			click_button "Join this #{c_t(:parent)}"
 
 				expect(page).to have_content "Thanks for joining the #{c_t(:parent)}! Do you also want to join a #{c_t(:sub_erg)}?"
 
@@ -73,6 +72,18 @@ RSpec.feature 'Group Membership Management' do
 
 				expect(page).to have_current_path group_path(sub_group)
 				expect(page).to have_content "#{group.name} ( not member )"
+			end
+		end
+
+		context 'when a user' do
+			let!(:parent_group) { create(:group, name: 'Group ONE', enterprise: enterprise, parent_id: nil) }
+
+			scenario 'joins a standard group(group with no parent or child)' do
+				visit group_path(parent_group)
+
+				click_button "Join this #{c_t(:erg)}"
+
+				expect(page).not_to have_button "Leave this #{c_t(:erg)}"
 			end
 		end
 
@@ -186,7 +197,7 @@ RSpec.feature 'Group Membership Management' do
 		scenario 'when a user joins a parent group with children', js: true do
 			visit group_path(group)
 
-			click_button "Join this #{c_t(:erg)}"
+			click_button "Join this #{c_t(:parent)}"
 
 			expect(page).to have_content "Thanks for joining the #{c_t(:parent)}! Do you also want to join a #{c_t(:sub_erg)}?"
 
@@ -213,6 +224,18 @@ RSpec.feature 'Group Membership Management' do
 			expect(group.members).to include guest_user
 		end
 
+		context 'when a user' do
+			let!(:parent_group) { create(:group, name: 'Parent Group', enterprise: enterprise, parent_id: nil) }
+
+			scenario 'joins a standard group(group with no parent or child)' do
+				visit group_path(parent_group)
+
+				click_button "Join this #{c_t(:erg)}"
+
+				expect(page).not_to have_button "Leave this #{c_t(:erg)}"
+			end
+		end
+
 		context 'when a user leaves' do
 			let!(:sub_group) { create(:group, enterprise: enterprise, name: "Sub Group ONE", parent_id: group.id) }
 			let!(:group_membership)	{ create(:user_group, user_id: guest_user.id, group_id: group.id, accepted_member: true) }
@@ -221,9 +244,9 @@ RSpec.feature 'Group Membership Management' do
 			scenario 'a parent group', js: true do
 				visit group_path(group)
 
-				click_link "Leave this #{c_t(:erg)}"
+				click_link "Leave this #{c_t(:parent)}"
 
-				expect(page).to have_button "Join this #{c_t(:erg)}"
+				expect(page).to have_button "Join this #{c_t(:parent)}"
 				expect(group.members).not_to include guest_user
 				expect(sub_group.members).not_to include guest_user
 			end

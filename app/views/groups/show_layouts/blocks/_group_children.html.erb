@@ -63,9 +63,16 @@
 				  	<%= link_to category, "#", class: "nested_show", id: category.id %>
 				  	<%= link_to category, "#", class: "nested_hide", id: category.id, style: "display:none;" %>(<%= category.groups.where(parent_id: @group).count %>)
 
-				  	<% category.groups.where(parent_id: @group).each do |sub_erg| %>
+				  	<% category.groups.where(parent_id: @group).each do |sub_group| %>
 				    	<div class="children_<%= category.id %>" style="display:none; position: relative; top: 10px;">
-					    	<ol><%= link_to sub_erg.name, group_url(sub_erg) %></ol>
+					    	<ol><%= link_to sub_group.name, group_url(sub_group) %>
+					    		<span class="muted" style="font-size: 14px;">
+					    			(<% if current_user.is_member_of? sub_group %>
+					    			member
+					    			<% else %>
+					    			not member
+					    			<% end %>)</span>
+					    	</ol>
 					  		<br>
 				    	</div>
 				  	<% end %>
@@ -73,8 +80,15 @@
 			  	<% end %>
 				<% end %>
 			</ol>
-			<% @group.children.where(group_category_id: nil).each do |sub_erg_with_no_category| %>
-		  	<%= link_to sub_erg_with_no_category.name, group_url(sub_erg_with_no_category) %><br>
+			<% @group.children.where(group_category_id: nil).each do |sub_group_with_no_category| %>
+		  	<%= link_to sub_group_with_no_category.name, group_url(sub_group_with_no_category) %>
+		  	<span class="muted" style="font-size: 14px;">
+		      		(<% if current_user.is_member_of? sub_group_with_no_category %>
+		        	member
+		        	<% else %>
+		        	not member
+		        	<% end %>)</span>
+		  	<br>
 			<% end %>
 		</div>
 	</div>
