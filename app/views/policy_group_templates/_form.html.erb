@@ -6,7 +6,7 @@
         <label><strong>Name</strong></label>
         <p><%= @policy_group_template.name %></p>
       </div>
-      
+
       <div class="card__section card__section--border">
         <div class="row row--spacing-bottom">
           <div class="col md-6">
@@ -21,13 +21,13 @@
           </div>
         </div>
       </div>
-      
+
       <div class="card__section card__section--border">
         <div class="row row--spacing-bottom">
           <div class="col md-6">
             <p class="field__hint">Should members of this group be able to approve budgets?</p>
-            <%= f.hidden_field :groups_budgets_approve, value: 0 %>
-            <%= f.input :groups_budgets_approve, label: 'Budget Approval' %>
+            <%= f.hidden_field :budget_approval, value: 0 %>
+            <%= f.input :budget_approval, label: 'Budget Approval' %>
           </div>
           <div class="col md-6">
             <p class="field__hint">Should members of this group be able to view activity logs?</p>
@@ -36,7 +36,7 @@
           </div>
         </div>
       </div>
-      
+
       <div class="card__section card__section--border">
         <div class="row row--spacing-bottom">
           <div class="col md-6">
@@ -51,7 +51,7 @@
           </div>
         </div>
       </div>
-      
+
       <div class="card__section card__section--border">
         <h2>General</h2>
         <div class="row row--spacing-bottom">
@@ -130,7 +130,7 @@
           </div>
         </div>
       </div>
-      
+
       <div class="card__section card__section--border">
         <h2><%= c_t(:erg) %> management</h2>
         <div class="row">
@@ -177,13 +177,13 @@
             <%= f.hidden_field :news_links_manage, value: 0 %>
             <%= f.input :news_links_manage, wrapper: :boolean_checkbox, label: "Manage all" %>
           </div>
-          
+
           <div class="col md-3">
             <h4>Leaders</h4>
             <%= f.hidden_field :group_leader_manage, value: 0 %>
             <%= f.input :group_leader_manage, wrapper: :boolean_checkbox, label: "Manage" %>
           </div>
-          
+
         <div class="col md-3">
           <h4>Posts</h4>
           <%= f.hidden_field :manage_posts, value: 0 %>
@@ -191,9 +191,9 @@
         </div>
         </div>
       </div>
-      
+
       <div class="card__section card__section--border">
-        <%= f.button :submit %>        
+        <%= f.button :submit %>
       </div>
     </div>
   <% end %>
