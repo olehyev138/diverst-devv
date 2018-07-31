@@ -45,7 +45,7 @@ class InitiativesController < ApplicationController
 
   def update
     authorize @initiative
-    if @initiative.update(initiative_params.except!(:budget_item_id))
+    if @initiative.update(initiative_params)
       flash[:notice] = "Your event was updated"
       track_activity(@initiative, :update)
       redirect_to [@group, :initiatives]

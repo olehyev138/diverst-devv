@@ -144,11 +144,15 @@ class Group < ActiveRecord::Base
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
 
   def is_parent_group?
-    (parent.nil? && children.any?) || (parent.nil? && children.empty?)
+    (parent.nil? && children.any?)
   end
 
   def is_sub_group?
     parent.present?
+  end
+
+  def is_standard_group?
+    (parent.nil? && children.empty?)
   end
 
   def capitalize_name
