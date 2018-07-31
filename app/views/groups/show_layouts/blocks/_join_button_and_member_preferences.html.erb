@@ -17,11 +17,16 @@
         <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
         <%= f.submit "Join this #{ c_t(:parent) }", class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
       <% end %>
-    <% elsif @group.is_sub_group? && current_user.is_not_member_of?(@group.parent) %>
+    <% elsif (@group.is_sub_group? && current_user.is_not_member_of?(@group.parent)) %>
       <%= simple_form_for :user, url: group_group_members_path(@group), method: :post, remote: true do |f| %>
         <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
         <%= f.submit "Join this #{ c_t(:sub_erg) }", class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
       <% end %>
+    <% elsif @group.is_sub_group? && current_user.is_member_of?(@group.parent) %>
+      <%= simple_form_for :user, url: group_group_members_path(@group), method: :post do |f| %>
+          <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
+          <%= f.submit "Join this #{ c_t(:sub_erg) }", class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
+        <% end %>
     <% elsif @group.is_standard_group? %>
         <%= simple_form_for :user, url: group_group_members_path(@group), method: :post do |f| %>
           <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
