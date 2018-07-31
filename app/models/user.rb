@@ -77,6 +77,7 @@ class User < ActiveRecord::Base
     has_many :reward_actions, through: :user_reward_actions
     has_many :rewards, foreign_key: :responsible_id, :dependent => :destroy
     has_many :likes, dependent: :destroy
+    has_many :csv_files
 
     has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: "private"
     validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
@@ -123,6 +124,10 @@ class User < ActiveRecord::Base
 
     def is_member_of?(group)
         group.user_groups.where(user_id: self.id).any?
+    end
+
+    def is_not_member_of?(group)
+        !is_member_of?(group)
     end
 
     def name

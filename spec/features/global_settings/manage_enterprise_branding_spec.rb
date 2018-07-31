@@ -1,16 +1,16 @@
 require 'rails_helper'
 
 RSpec.feature 'Manage Enterprise Branding' do
-	let!(:enterprise) { create(:enterprise, theme: create(:theme, primary_color: '#7b77c9')) }
-	let!(:admin_user) { create(:user, enterprise: enterprise) }
-	let!(:group) { create(:group, enterprise_id: enterprise.id) }
+	let!(:admin_user) { create(:user) }
+	let!(:group) { create(:group, enterprise: admin_user.enterprise) }
 
 	before do
 		login_as(admin_user, scope: :user)
 	end
 
 	context 'Branding management' do
-		before { visit edit_branding_enterprise_path(enterprise) }
+		let(:enterprise) { create(:enterprise, theme: create(:theme, primary_color: '#7b77c9')) }
+		before { visit edit_branding_enterprise_path(admin_user.enterprise) }
 
 		context 'Customize branding' do
 			scenario 'by editing default colors', js: true do
@@ -42,14 +42,11 @@ RSpec.feature 'Manage Enterprise Branding' do
 			expect(style).to have_default_primary_color
 		end
 
-		scenario 'upload image as custom logo' do
-			expect(page).to have_default_logo
+		scenario 'upload image as custom logo', js: true do
 
 			attach_file('enterprise[theme][logo]', 'spec/fixtures/files/verizon_logo.png')
-
 			click_on 'Save branding'
 
-			expect(page).to have_no_default_logo
 			expect(page).to have_custom_logo("verizon_logo")
 		end
 	end
@@ -59,7 +56,7 @@ RSpec.feature 'Manage Enterprise Branding' do
 			visit user_root_path
 			expect(page).to have_no_banner
 
-			visit edit_branding_enterprise_path(enterprise)
+			visit edit_branding_enterprise_path(admin_user.enterprise)
 
 			attach_file('enterprise[banner]', 'spec/fixtures/files/verizon_logo.png')
 			fill_in 'enterprise[home_message]', with: 'Welcome to Verizon! Join any group to view recent and future events'
@@ -77,7 +74,7 @@ RSpec.feature 'Manage Enterprise Branding' do
 			event = create(:initiative, start: Time.now, end: Time.now + 1.days, owner_group_id: group.id,
 			 owner: admin_user, pillar: create(:pillar, outcome: create(:outcome, name: 'First Outcome', group_id: group.id)))
 
-			visit edit_branding_enterprise_path(enterprise)
+			visit edit_branding_enterprise_path(admin_user.enterprise)
 
 			select '(GMT-06:00) Central America', from: 'enterprise[time_zone]'
 
@@ -90,70 +87,50 @@ RSpec.feature 'Manage Enterprise Branding' do
 	end
 
 	context 'Customize Program Sponsor Details' do
-		before { visit edit_branding_enterprise_path(enterprise) }
+		before { visit edit_branding_enterprise_path(admin_user.enterprise) }
 
-		scenario 'by editing sponsor details with sponsor message enabled' do
-			fill_in 'enterprise[cdo_name]', with: 'Mark Zuckerberg'
-			fill_in 'enterprise[cdo_title]', with: 'CEO of Facebook'
-			fill_in 'enterprise[cdo_message_email]', with: 'Welcome to this Enterprise peeps:)!!'
-			fill_in 'enterprise[privacy_statement]', with: 'This is the enterprise privacy statement'
+		scenario 'by creating multiple enterprise sponsors', js: true do
+			expect(page).to have_link 'Add a sponsor'
 
-			click_on 'Save sponsor info'
+			click_on 'Add a sponsor'
 
-			visit user_root_path
+			fill_in 'Sponsor name', with: 'Bill Gates'
+			fill_in 'Sponsor title', with: 'CEO of Microsoft'
+			attach_file('Upload sponsor image or video', 'spec/fixtures/files/sponsor_image.jpg')
+			fill_in 'Home page sponsor message', with: 'Hi and welcome'
 
-			expect(page).to have_content 'Mark Zuckerberg'
-			expect(page).to have_content 'CEO of Facebook'
-			expect(page).to have_content 'Welcome to this Enterprise peeps:)!!'
+			click_on 'Add a sponsor'
 
-			visit user_privacy_statement_path
+			within all('.nested-fields')[1] do
+				fill_in 'Sponsor name', with: 'Mark Zuckerberg'
+			  fill_in 'Sponsor title', with: 'Founder & CEO of Facebook'
+			  attach_file('Upload sponsor image or video', 'spec/fixtures/files/sponsor_image.jpg')
+			  fill_in 'Home page sponsor message', with: 'Hi and welcome'
+			end
 
-			expect(page).to have_content 'This is the enterprise privacy statement'
-		end
+			click_on 'Add a sponsor'
 
-		scenario 'by editing sponsor details with sponsor message disabled', js: true do
-			enterprise.update(
-				cdo_name: 'Mark Zuckerberg',
-				cdo_title: 'CEO of Facebook',
-				cdo_message_email: 'Welcome to this Enterprise peeps:)!!'
-				)
-			visit user_root_path
+			within all('.nested-fields')[2] do
+				fill_in 'Sponsor name', with: 'Elizabeth Holmes'
+			  fill_in 'Sponsor title', with: 'Founder & CEO of Theranos'
+			  attach_file('Upload sponsor image or video', 'spec/fixtures/files/sponsor_image.jpg')
+			  fill_in 'Home page sponsor message', with: 'Hi and welcome'
+			end
 
-			expect(page).to have_content 'Mark Zuckerberg'
-			expect(page).to have_content 'CEO of Facebook'
-			expect(page).to have_content 'Welcome to this Enterprise peeps:)!!'
+			click_on 'Add a sponsor'
 
-			visit edit_branding_enterprise_path(enterprise)
-
-			disable_home_sponsor_message_button.trigger('click')
-
-			click_on 'Save sponsor info'
-
-			visit user_root_path
-
-			expect(page).to have_no_content 'Mark Zuckerberg'
-			expect(page).to have_no_content 'CEO of Facebook'
-			expect(page).to have_no_content 'Welcome to this Enterprise peeps:)!!'
-		end
-
-		scenario 'by uploading sponsor image' do
-			attach_file('enterprise[sponsor_media]', 'spec/fixtures/files/sponsor_image.jpg')
+			within all('.nested-fields')[3] do
+				fill_in 'Sponsor name', with: 'Elon Musk'
+			  fill_in 'Sponsor title', with: 'Founder & CEO of Telsa'
+			  attach_file('Upload sponsor image or video', 'spec/fixtures/files/sponsor_image.jpg')
+			  fill_in 'Home page sponsor message', with: 'Hi and welcome'
+			end
 
 			click_on 'Save sponsor info'
 
 			visit user_root_path
 
-			expect(page).to have_sponsor_image "sponsor_image"
-		end
-
-		scenario 'by uploading sponsor video', js: true do
-			attach_file('enterprise[sponsor_media]', 'spec/fixtures/video_file/sponsor_video.mp4')
-
-			click_on 'Save sponsor info'
-
-			visit user_root_path
-
-			expect(page).to have_sponsor_video "sponsor_video"
+			expect(page).to have_content 'Bill Gates'
 		end
 	end
 end

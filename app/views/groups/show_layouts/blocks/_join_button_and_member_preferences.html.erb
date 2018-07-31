@@ -12,18 +12,21 @@
 
 <% if !@group.members.include? current_user %>
   <% if @group.active? %>
-    <% if (@group.parent.nil? && @group.children.any?) || (@group.parent.present? && !@group.parent.members.include?(current_user)) %>
+    <% if @group.is_parent_group? %>
       <%= simple_form_for :user, url: group_group_members_path(@group), method: :post, remote: true do |f| %>
         <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
-        <%= f.submit "Join this #{ c_t(:erg) }", class: "btn btn--primary", style: 'margin-bottom: 20px;' if @group.is_parent_group? %>
-        <%= f.submit "Join this #{ c_t(:sub_erg) }", class: "btn btn--primary", style: 'margin-bottom: 20px;' if @group.is_sub_group? %>
+        <%= f.submit "Join this #{ c_t(:parent) }", class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
       <% end %>
-    <% else %>
-      <%= simple_form_for :user, url: group_group_members_path(@group), method: :post do |f| %>
+    <% elsif @group.is_sub_group? && current_user.is_not_member_of?(@group.parent) %>
+      <%= simple_form_for :user, url: group_group_members_path(@group), method: :post, remote: true do |f| %>
         <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
-        <%= f.submit "Join this #{ c_t(:erg) }", class: "btn btn--primary", style: 'margin-bottom: 20px;' if @group.is_parent_group? %>
-        <%= f.submit "Join this #{ c_t(:sub_erg) }", class: "btn btn--primary", style: 'margin-bottom: 20px;' if @group.is_sub_group? %>
+        <%= f.submit "Join this #{ c_t(:sub_erg) }", class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
       <% end %>
+    <% elsif @group.is_standard_group? %>
+        <%= simple_form_for :user, url: group_group_members_path(@group), method: :post do |f| %>
+          <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
+          <%= f.submit "Join this #{ c_t(:erg) }", class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
+        <% end %>
     <% end %>
   <% end %>
 <% else %>

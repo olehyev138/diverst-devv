@@ -93,6 +93,7 @@ class Groups::GroupMembersController < ApplicationController
 
   def remove_member
     authorize @group, :manage_members?
+
     @group.members.destroy(@member)
     redirect_to action: :index
   end

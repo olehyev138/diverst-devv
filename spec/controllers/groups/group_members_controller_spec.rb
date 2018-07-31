@@ -180,7 +180,8 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
- 
+
+
     describe 'POST#create' do
         context "when unsuccessful" do
             login_user_from_let
@@ -293,9 +294,8 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
     end
 
     describe 'DELETE#remove_member' do
-        context 'when user is logged in' do 
-            let!(:group_leader){create(:group_leader, user: user, group: group)}
-            
+        context 'when user is logged in' do
+            let!(:group_leader) { create(:group_leader, user_id: user.id, group_id: group.id, :user_role_id => group_role.id) }
             login_user_from_let
             before { 
                 user_group.save 
@@ -346,7 +346,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
                 end
 
                 context 'when survey fields for group is present' do
-                    before { create(:field, field_type: 'group_survey', container_id: group.id, container_type: 'Group') }
+                    before { create(:field, field_type: 'group_survey', group_id: group.id) }
                     it 'redirect to survey_group_questions_path' do
                         post :join_all_sub_groups, group_id: group.id
                         expect(response).to redirect_to survey_group_questions_path(group)
@@ -380,7 +380,8 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
                 end
 
                 context 'when survey fields for group is present' do
-                    before { create(:field, type: 'TextField', field_type: 'group_survey', container_id: group.id, container_type: 'Group') }
+                    before { create(:field, type: 'TextField', field_type: 'group_survey', group_id: group.id) }
+                  
                     it 'redirect to survey_group_questions_path' do
                         post :join_all_sub_groups, group_id: group.id
                         expect(response).to redirect_to survey_group_questions_path(group)
@@ -389,8 +390,12 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             end
 
             context 'when survey fields for group is absent' do
-                it 'redirect to survey_group_questions_path' do
+                before do
+                    group.update(pending_users: 'enabled')
                     post :join_all_sub_groups, group_id: group.id
+                end
+
+                it 'redirect to survey_group_questions_path' do
                     expect(response).to redirect_to group_path(group)
                 end
             end

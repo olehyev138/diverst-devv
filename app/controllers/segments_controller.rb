@@ -7,7 +7,7 @@ class SegmentsController < ApplicationController
 
     def index
         authorize Segment
-        @segments = policy_scope(Segment).includes(:members, :parent_segment).where(:segmentations => {:id => nil})
+        @segments = policy_scope(Segment).includes(:parent_segment).where(:segmentations => {:id => nil})
     end
 
     def new

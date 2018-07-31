@@ -28,7 +28,7 @@
     </div>
 
     <div class="col col--stacked sm-12 md-3">
-      <%= render 'groups/show_layouts/blocks/sponsor' %>
+      <%= render partial: 'groups/show_layouts/blocks/sponsor', locals: { group_sponsors: @group_sponsors } %>
 
       <%= render 'groups/show_layouts/blocks/join_button_and_member_preferences' %>
 

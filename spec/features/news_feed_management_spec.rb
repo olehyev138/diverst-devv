@@ -69,20 +69,12 @@ RSpec.feature 'News Feed Management' do
 				expect(page).not_to have_content 'An Old Group Message'
 			end
 
-			scenario 'when adding comments to existing Group Message with approval' do
-				visit group_posts_path(group)
-
-				expect(page).to have_content existing_group_message.subject
-
-				click_link 'Comments(0)', match: :first
-
-				within('h1') do
-					expect(page).to have_content existing_group_message.subject
-				end
+			scenario 'when adding comments to existing Group Message with approval', js: true do	
+				visit group_group_message_path(group, existing_group_message)
 
 				fill_in 'group_message_comment[content]', with: 'first comment'
 
-				click_on 'Post a comment'
+				click_button 'Post a comment'
 
 				expect(page).to have_content 'first comment'
 
@@ -103,9 +95,10 @@ RSpec.feature 'News Feed Management' do
 					visit group_posts_path(group)
 
 					expect(page).to have_content existing_group_message.subject
-					expect(page).to have_link 'Comments(1)'
 
-					click_link 'Comments(1)', match: :first
+					within('.commentsLink') do
+						click_link 'Comments(1)', href: group_group_message_path(group, existing_group_message)
+					end
 
 					within('.content__header h1') do
 						expect(page).to have_content existing_group_message.subject
@@ -156,17 +149,16 @@ RSpec.feature 'News Feed Management' do
 
 				click_on '+ Create News'
 
-				expect(page).to have_content 'Add news'
-
 				fill_in 'news_link[url]', with: 'https://www.viz.com/naruto'
 				fill_in 'news_link[title]', with: 'Latest News'
+				fill_in 'news_link[description]', with: 'this is the latest news'
+
 				fill_in_ckeditor 'news_link_description', :with => 'Naruto is the Seventh Hokage!!!'
 
 				click_on 'Add a photo'
 				attach_file('File', 'spec/fixtures/files/verizon_logo.png')
 
 				click_on 'Create News link'
-
 				expect(page).to have_content 'Latest News'
 				news_link = NewsLink.find_by(title: 'Latest News')
 				expect(page).to have_link news_link.url
@@ -178,13 +170,12 @@ RSpec.feature 'News Feed Management' do
 				expect(page).to have_content 'Edit a news item'
 
 				#expect(page).to have_field('news_link_description', with: existing_news_item.description)
-				fill_in_ckeditor 'news_link_description', :with => 'Naruto is the Seventh Hokage and is married to Hinata :)'
+				fill_in 'news_link_description', :with => 'Naruto is the Seventh Hokage and is married to Hinata :)'
 
 				click_on 'Add a photo'
 				attach_file('File', 'spec/fixtures/files/verizon_logo.png')
 
 				click_on 'Update News link'
-
 				expect(page).to have_no_content 'Naruto is the Seventh Hokage!!!'
 				expect(page).to have_content 'Naruto is the Seventh Hokage and is married to Hinata :)'
 			end
@@ -284,12 +275,14 @@ RSpec.feature 'News Feed Management' do
 			let!(:existing_group_message) { create(:group_message, subject: 'An Old Group Message', group_id: group.id,
 				owner_id: user.id) }
 
-			scenario 'when adding comments to existing Group Message without approval' do
+			scenario 'when adding comments to existing Group Message without approval', js: true do
 				visit group_posts_path(group)
 
 				expect(page).to have_content existing_group_message.subject
 
-				click_link 'Comments(0)', match: :first
+				within('.commentsLink') do
+					click_link 'Comments(0)', href: group_group_message_path(group, existing_group_message)
+				end
 
 				within('h1') do
 					expect(page).to have_content existing_group_message.subject

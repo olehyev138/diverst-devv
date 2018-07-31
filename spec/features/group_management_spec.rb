@@ -2,10 +2,10 @@ require 'rails_helper'
 
 RSpec.feature 'Group management' do
 
-  let!(:user) { create(:user) }
+  let(:user) { create(:user) }
 
   before do
-    login_as(user, scope: :user, :run_callbacks => false)
+    login_as(user, scope: :user)
   end
 
   context 'creating a group' do
@@ -267,6 +267,48 @@ RSpec.feature 'Group management' do
         expect(page).to have_select(sub_group1.name, selected: nil)
         expect(page).to have_select(sub_group2.name, selected: nil)
       end
+    end
+  end
+
+  context 'Customize Group Sponsor Details' do
+    let!(:group) { create(:group, name: 'Latest Group', enterprise: user.enterprise) }
+    before { visit settings_group_path(group) }
+
+    scenario 'by creating multiple group sponsors', js: true do
+      expect(page).to have_link 'Add a sponsor'
+
+      click_on 'Add a sponsor'
+
+      within all('.nested-fields')[0] do
+        fill_in 'Sponsor name', with: 'Bill Gates'
+        fill_in 'Sponsor title', with: 'CEO of Microsoft'
+        attach_file('Upload sponsor image or video', 'spec/fixtures/files/sponsor_image.jpg')
+        fill_in 'Sponsor message', with: 'Hi and welcome'
+      end
+
+      click_on 'Add a sponsor'
+
+      within all('.nested-fields')[1] do
+        fill_in 'Sponsor name', with: 'Mark Zuckerberg'
+        fill_in 'Sponsor title', with: 'Founder & CEO of Facebook'
+        attach_file('Upload sponsor image or video', 'spec/fixtures/files/sponsor_image.jpg')
+        fill_in 'Sponsor message', with: 'Hi and welcome'
+      end
+
+      click_on 'Add a sponsor'
+
+      within all('.nested-fields')[2] do
+        fill_in 'Sponsor name', with: 'Elizabeth Holmes'
+        fill_in 'Sponsor title', with: 'Founder & CEO of Theranos'
+        attach_file('Upload sponsor image or video', 'spec/fixtures/files/sponsor_image.jpg')
+        fill_in 'Sponsor message', with: 'Hi and welcome'
+      end
+
+      click_on 'Update Group'
+
+      visit group_path(group)
+
+      expect(group.sponsors.count).to eq 3
     end
   end
 end

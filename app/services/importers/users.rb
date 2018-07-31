@@ -1,8 +1,10 @@
 class Importers::Users
+  DEFAULT_COLUMN_DELIMITER = ','
+
   attr_reader :table, :failed_rows, :successful_rows
 
   def initialize(file, manager)
-    @table = CSV.read file, headers: true, header_converters: lambda { |h|
+    @table = CSV.read file, col_sep: get_delimiter, headers: true, header_converters: lambda { |h|
       h.split.join(" ").downcase
     }
     @manager = manager
@@ -47,22 +49,24 @@ class Importers::Users
   def update_user(row)
     user = User.where(email: row["email"]).first
     return nil unless user
-    user.attributes = user_attributes(row)
+    user.attributes = user_attributes(row, user)
     user
   end
 
   def initialize_user(row)
-    @enterprise.users.new user_attributes(row)
+    @enterprise.users.new user_attributes(row, nil)
   end
 
-  def user_attributes(row)
-    {
+  def user_attributes(row, user)
+    id = user.present? ? user.user_role_id : @enterprise.default_user_role # default_user_role returns the ID of the default role
+
+    return {
       first_name: row["first name"],
       last_name: row["last name"],
       email: row["email"],
-      biography: row["biography"],
+      biography: (row["biography"].present?) ? row["biography"] : user&.biography,
       active: process_active_column( row["active"] ),
-      user_role_id: @enterprise.default_user_role
+      user_role_id: id
     }
   end
 
@@ -70,5 +74,14 @@ class Importers::Users
     truthy_values = [1, '1', true, 'true', 'TRUE', 'yes', 'YES', '', nil]
 
     truthy_values.include? column_value
+  end
+
+  def get_delimiter()
+    custom_delimiter = ENV['CSV_COLUMN_SEPARATOR']
+    if custom_delimiter.present?
+      custom_delimiter
+    else
+      DEFAULT_COLUMN_DELIMITER
+    end
   end
 end

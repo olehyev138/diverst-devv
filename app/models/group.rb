@@ -92,7 +92,8 @@ class Group < ActiveRecord::Base
   has_many :group_leaders, dependent: :destroy
   has_many :leaders, through: :group_leaders, source: :user
 
-  has_many  :children, class_name: "Group", foreign_key: :parent_id, dependent: :destroy
+  has_many :children, class_name: "Group", foreign_key: :parent_id, dependent: :destroy
+  has_many :sponsors, as: :sponsorable, dependent: :destroy
   belongs_to :parent, class_name: "Group", foreign_key: :parent_id
   belongs_to :group_category
   belongs_to :group_category_type
@@ -120,7 +121,7 @@ class Group < ActiveRecord::Base
   before_validation :smart_add_url_protocol
   attr_accessor :skip_label_consistency_check
   validate :perform_check_for_consistency_in_category, on: [:create, :update], unless: :skip_label_consistency_check
-
+  validate :ensure_label_consistency_between_parent_and_sub_groups, on: [:create, :update]
 
   scope :top_participants,  -> (n) { order(total_weekly_points: :desc).limit(n) }
   # Active Record already has a defined a class method with the name private so we use is_private.
@@ -134,6 +135,7 @@ class Group < ActiveRecord::Base
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
 
 
   def layout_values
@@ -145,11 +147,15 @@ class Group < ActiveRecord::Base
   end
 
   def is_parent_group?
-    (parent.nil? && children.any?) || (parent.nil? && children.empty?)
+    (parent.nil? && children.any?)
   end
 
   def is_sub_group?
     parent.present?
+  end
+
+  def is_standard_group?
+    (parent.nil? && children.empty?)
   end
 
   def capitalize_name
@@ -340,6 +346,14 @@ class Group < ActiveRecord::Base
         if group_category_type != self.parent.group_category_type
           errors.add(:group_category, "wrong label for #{self.parent.group_category_type.name}")
         end
+      end
+    end
+  end
+
+  def ensure_label_consistency_between_parent_and_sub_groups
+    unless group_category.nil?
+      if children.any? { |sub_group| sub_group.group_category_type.name != group_category_type.name }
+        errors.add(:group_category_id, "chosen label inconsistent with labels of sub groups")
       end
     end
   end
