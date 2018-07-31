@@ -145,7 +145,7 @@ ActiveRecord::Schema.define(version: 20180724141334) do
   end
 
   create_table "budgets", force: :cascade do |t|
-    t.text     "description",           limit: 65535
+    t.text     "description",  limit: 65535
     t.boolean  "is_approved"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false

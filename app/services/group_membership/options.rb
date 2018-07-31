@@ -5,9 +5,9 @@ class GroupMembership::Options
 	end
 
 	def leave_sub_groups_or_parent_group
-		if @group.parent.nil? && @group.children.any?
+		if @group.is_parent_group?
 			leave_all_sub_groups
-		else
+		elsif @group.is_sub_group?
 			leave_parent_group
 		end
 	end
@@ -21,8 +21,10 @@ class GroupMembership::Options
 	end
 
 	def leave_parent_group
-		if @group.parent.members.include? @user
-			UserGroup.find_by(user_id: @user.id, group_id: @group.parent.id).destroy
+		if @group.parent.present?
+			if @group.parent.members.include? @user
+				UserGroup.find_by(user_id: @user.id, group_id: @group.parent.id).destroy
+			end
 		end
 	end
 end

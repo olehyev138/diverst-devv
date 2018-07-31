@@ -826,7 +826,7 @@ DEPENDENCIES
   mailgun_rails (~> 0.8.0)
   meta_request
   mysql2 (~> 0.4.3)
-  newrelic_rpm
+  newrelic_rpm (~> 4.5.0)
   nokogiri (~> 1.8.2)
   oj (~> 2.14, >= 2.14.6)
   omniauth-linkedin-oauth2 (~> 0.1.5)

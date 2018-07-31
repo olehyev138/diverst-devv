@@ -26,10 +26,10 @@ RSpec.feature 'Segment management' do
     expect(page).to have_content segment[:name]
   end
 
-  scenario 'user deletes a segment' do
+  scenario 'user deletes a segment', js: true do
     visit segments_path
 
-    click_on "Delete"
+    click_link "Delete", href: segment_path(segment)
 
     expect(page).not_to have_content segment.name
   end
