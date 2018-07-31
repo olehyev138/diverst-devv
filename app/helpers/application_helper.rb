@@ -123,8 +123,11 @@ module ApplicationHelper
   end
 
   def c_t(type)
-    @custom_text ||= current_user.enterprise.custom_text rescue CustomText.new
-
+    if current_user
+      @custom_text ||= current_user.enterprise.custom_text rescue CustomText.new
+    elsif resource 
+      @custom_text ||= resource.enterprise.custom_text rescue CustomText.new
+    end
     @custom_text.send("#{ type }_text")
   end
 
