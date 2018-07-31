@@ -147,12 +147,13 @@ ActiveRecord::Schema.define(version: 20180724141334) do
   create_table "budgets", force: :cascade do |t|
     t.text     "description",  limit: 65535
     t.boolean  "is_approved"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-    t.integer  "approver_id",  limit: 4
-    t.integer  "requester_id", limit: 4
-    t.integer  "event_id",     limit: 4
-    t.integer  "group_id",     limit: 4
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.integer  "approver_id",           limit: 4
+    t.integer  "requester_id",          limit: 4
+    t.integer  "event_id",              limit: 4
+    t.integer  "group_id",              limit: 4
+    t.string   "decline_reason",        limit: 191
   end
 
   add_index "budgets", ["approver_id"], name: "fk_rails_a057b1443a", using: :btree
