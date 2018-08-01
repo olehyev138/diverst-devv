@@ -16,7 +16,7 @@ module ApplicationHelper
   def logo_url(enterprise = nil)
     enterprise_logo_or_default('diverst-logo.svg', enterprise)
   end
-  
+
   def small_logo_url(enterprise = nil)
     enterprise_logo_or_default('diverst-logo-mark.svg', enterprise)
   end
@@ -75,7 +75,7 @@ module ApplicationHelper
     return polls_path if policy(Poll).index?
     return global_settings_path
   end
-  
+
   def manage_erg_budgets_path
     return plan_overview_groups_path if current_user.policy_group.groups_budgets_index?
     return group_initiatives_path(@group || GroupPolicy::Scope.new(current_user, Group, :initiatives_manage).resolve.first) if policy(Initiative).index?
@@ -123,8 +123,11 @@ module ApplicationHelper
   end
 
   def c_t(type)
-    @custom_text ||= current_user.enterprise.custom_text rescue CustomText.new
-
+    if current_user
+      @custom_text ||= current_user.enterprise.custom_text rescue CustomText.new
+    elsif resource 
+      @custom_text ||= resource.enterprise.custom_text rescue CustomText.new
+    end
     @custom_text.send("#{ type }_text")
   end
 
@@ -195,5 +198,9 @@ module ApplicationHelper
 
   def is_answer_liked?(answer_id)
     Like.find_by(:user => current_user, :enterprise => current_user.enterprise, :answer => answer_id).present?
+  end
+
+  def boolean_to_yes_no(boolean_value)
+    boolean_value ? 'Yes' : 'No'
   end
 end

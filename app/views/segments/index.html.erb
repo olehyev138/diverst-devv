@@ -3,4 +3,4 @@
   <%= link_to "+ New #{ c_t(:segment) }", new_segment_path, class: "btn btn--primary" if policy(Segment).new? %>
 </div>
 
-<%= render "table" %>
+<%= render "segments", source: segments_path(format: :json) %>

@@ -7,6 +7,12 @@ module FeatureSpecRefactors
 			end
 		end
 
+		def segment_members_of_group(segment, group)
+			segment.members.includes(:groups).select do |user|
+				user.groups.include? group
+			end
+		end
+
 		def c_t(type)
 			@custom_text ||= current_user.enterprise.custom_text rescue CustomText.new
 			@custom_text.send("#{type}_text")

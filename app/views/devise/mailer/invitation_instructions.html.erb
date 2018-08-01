@@ -10,7 +10,7 @@
 <% end %>
 </p>
 
-<p>* <%= @resource.enterprise.custom_text.privacy_statement %>.
+<p>* <%= c_t(:privacy_statement) %>.
 <% if @resource.enterprise.privacy_statement.present? %>
   <%= simple_format @resource.enterprise.privacy_statement %>
 <% else %>

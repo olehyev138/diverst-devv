@@ -48,12 +48,12 @@ class BudgetsController < ApplicationController
   def decline
     authorize @budget, :decline?
 
-    if @budget.update(budget_params)
-      BudgetManager.new(@budget).decline(current_user)
-      redirect_to action: :index
-    else
-      redirect_to :back
-    end
+    @budget.decline_reason = params[:decline_reason]
+    @budget.save
+
+    BudgetManager.new(@budget).decline(current_user)
+
+    redirect_to action: :index
   end
 
   def destroy
@@ -87,9 +87,9 @@ class BudgetsController < ApplicationController
 
   def carry_over_annual_budget
     authorize @group.enterprise, :update?
-    
+
     leftover = @group.leftover_money + @group.annual_budget
-    
+
     if @group.update({:annual_budget => leftover, :leftover_money => 0})
       @group.budgets.update_all(:is_approved => false)
       track_activity(@group, :annual_budget_update)
@@ -115,11 +115,11 @@ class BudgetsController < ApplicationController
   end
 
   private
-  
+
   def set_group
     if current_user
       @group = current_user.enterprise.groups.find(params[:group_id])
-    else 
+    else
       user_not_authorized
     end
   end

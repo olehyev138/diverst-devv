@@ -1,0 +1,19 @@
+<div class="card">
+    <div class="card__section">
+      <% if @segments.any? %>
+        <table id="segments-table" class="table--has-border data-table" data-source="<%= source %>">
+          <thead>
+            <th>Name</th>
+            <th># of members</th>
+            <th># of rules</th>
+            <th>Date created</th>
+            <th>Options</th>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      <% else %>
+        <p>No sub-<%= c_t(:segment).downcase.pluralize %> have been created yet. <%= link_to "Create one", new_segment_path %> to start tracking logical groups that automatically update to changes in your workforce.</p>
+      <% end %>
+    </div>
+  </div>
