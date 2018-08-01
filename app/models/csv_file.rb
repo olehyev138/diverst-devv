@@ -9,9 +9,11 @@ class CsvFile < ActiveRecord::Base
   after_create :schedule_users_import
 
   def path_for_csv
-    File.exists?(self.import_file.path) ?
-                    self.import_file.path :
-                    self.import_file.expiring_url(3600000)
+    if File.exists?(self.import_file.path)
+      self.import_file.path
+    else
+      Paperclip.io_adapters.for(self.import_file).path
+    end
   end
 
   protected
