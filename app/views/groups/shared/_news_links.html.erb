@@ -20,22 +20,25 @@
           <div class="flex-row__cell flex-row__cell--grow">
             <h4><%= news_link.title %> - <span class="muted"> <%= news_link.total_views %> views</span></h4>
             <p class="postContent">
-              <%= allow_newlines raw news_link.description %>
-              <br>
-              <%= link_to news_link.url, news_link.url, target: '_blank', 'data-trackable': news_link.news_feed_link.id %>
-              <br>
+              <%= raw news_link.description %>
+              <% if news_link.url.present? %>
+                <p>
+                  <%= link_to news_link.url, news_link.url, target: '_blank', 'data-trackable': news_link.news_feed_link.id %>
+                </p>
+              <% end %>
               <% if news_link.author.present? %>
                 <span class="muted">Posted by <%=  news_link.author.name_with_status %></span>
               <% end %>
+
+              <div class="row">
+                <div class="col commentsLink">
+                  <%= link_to "Comments(#{news_link.comments_count})", comments_group_news_link_path(news_link.group, news_link) %>
+                </div>
+                <div class="col">
+                  <%= render partial: "groups/shared/like_feature", locals: {news_feed_link: news_link.news_feed_link } %>
+                </div>
+              </div>
             </p>
-            <div class="row">
-              <div class="col commentsLink">
-                <%= link_to "Comments(#{news_link.comments_count})", comments_group_news_link_path(news_link.group, news_link) %>
-              </div>
-              <div class="col">
-                <%= render partial: "groups/shared/like_feature", locals: {news_feed_link: news_link.news_feed_link } %>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -43,10 +46,12 @@
     <div class="row visible-xs">
       <div class="col-xs-12">
         <p>
-          <%= allow_newlines raw news_link.description %>
-          <br>
-          <%= link_to news_link.url, news_link.url, target: '_blank', 'data-trackable': news_link.news_feed_link.id %>
-          <br>
+          <%= raw news_link.description %>
+          <% if news_link.url.present? %>
+            <p>
+              <%= link_to news_link.url, news_link.url, target: '_blank', 'data-trackable': news_link.news_feed_link.id %>
+            </p>
+          <% end %>
           <% if news_link.author.present? %>
             <span class="muted">Posted by <%=  news_link.author.name_with_status %></span>
           <% end %>

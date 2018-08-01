@@ -1198,6 +1198,13 @@ ActiveRecord::Schema.define(version: 20180724141334) do
     t.string   "active_users_filter", limit: 191
   end
 
+  create_table "shared_news_feed_links", force: :cascade do |t|
+    t.integer  "news_feed_link_id", limit: 4, null: false
+    t.integer  "news_feed_id",      limit: 4, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "social_link_segments", force: :cascade do |t|
     t.integer  "social_link_id", limit: 4
     t.integer  "segment_id",     limit: 4

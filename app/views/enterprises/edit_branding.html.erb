@@ -79,7 +79,6 @@
     <div class="card__section">
       <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_branding') do |f| %>
 
-
       <%= f.simple_fields_for :sponsors do |s| %>
         <%= render 'sponsor_fields', f: s %>
       <% end %>

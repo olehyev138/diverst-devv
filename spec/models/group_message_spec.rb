@@ -68,7 +68,7 @@ RSpec.describe GroupMessage, type: :model do
 
     describe "#remove_segment_association" do
         it "removes segment association" do
-            group_message = build(:group_message)
+            group_message = create(:group_message)
             segment = create(:segment)
 
             group_message.segment_ids = [segment.id]

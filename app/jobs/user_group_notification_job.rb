@@ -1,8 +1,16 @@
 class UserGroupNotificationJob < ActiveJob::Base
   queue_as :mailers
 
-  def perform(notifications_frequency)
-    User.includes(user_groups: :group).find_in_batches(batch_size: 200) do |users|
+  def perform(args)
+    # check if parameters exist and are valid
+    raise BadRequestException.new "Params missing" if args.nil? || args.empty? || args.class != Hash
+    raise BadRequestException.new "Notifications Frequency missing" if args[:notifications_frequency].nil?
+    raise BadRequestException.new "Enterprise ID missing" if args[:enterprise_id].nil?
+    
+    notifications_frequency = args[:notifications_frequency]
+    enterprise_id = args[:enterprise_id]
+    
+    User.where(:enterprise_id => enterprise_id).includes(user_groups: :group).find_in_batches(batch_size: 200) do |users|
       users.each do |user|
         groups = []
         user.user_groups.accepted_users.active.notifications_status(notifications_frequency).each do |user_group|
