@@ -165,7 +165,7 @@ RSpec.describe BudgetsController, type: :controller do
       login_user_from_let
 
       before do
-        post :decline, group_id: budget.group.id, budget_id: budget.id, budget: { comments: "here is a comment" }
+        post :decline, group_id: budget.group.id, budget_id: budget.id
         budget.reload
       end
 
@@ -179,10 +179,6 @@ RSpec.describe BudgetsController, type: :controller do
 
       it "budget is declined" do
         expect(budget.is_approved).to eq false
-      end
-      
-      it "saves the comment" do
-        expect(budget.comments).to eq "here is a comment"
       end
     end
 
