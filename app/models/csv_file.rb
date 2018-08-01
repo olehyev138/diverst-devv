@@ -6,7 +6,7 @@ class CsvFile < ActiveRecord::Base
   has_attached_file :import_file, s3_permissions: "private"
   do_not_validate_attachment_file_type :import_file
 
-  after_create :schedule_users_import
+  after_commit :schedule_users_import, on: :create
 
   def path_for_csv
     if File.exists?(self.import_file.path)
