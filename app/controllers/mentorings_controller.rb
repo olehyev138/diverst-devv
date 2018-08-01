@@ -7,7 +7,7 @@ class MentoringsController < ApplicationController
     @users = current_user.enterprise.users.enterprise_mentees([current_user.id] + current_user.mentees.ids) if params[:mentee]
 
     respond_to do |format|
-      format.json { render json: MentoringDatatable.new(view_context, @users, current_user) }
+      format.json { render json: MentoringDatatable.new(view_context, @users, current_user, params[:mentor].present? ? true: false) }
     end
   end
 
