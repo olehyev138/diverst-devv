@@ -25,7 +25,7 @@ RSpec.describe User::MentorshipController, type: :controller do
                 end
 
                 it "redirects back" do
-                    expect(response).to redirect_to "back"
+                    expect(response).to redirect_to action: :mentors
                 end
 
                 it "updates the user" do
