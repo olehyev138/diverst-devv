@@ -54,7 +54,7 @@ class Initiative < ActiveRecord::Base
       .where(initiative_conditions.join(" OR "))
   }
 
-  before_create :allocate_budget_funds
+  before_save :allocate_budget_funds, on: [:create, :update]
 
   has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: "private"
   validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
@@ -230,6 +230,13 @@ class Initiative < ActiveRecord::Base
         self.estimated_funding = budget_item.available_amount
         budget_item.available_amount = 0
         budget_item.is_done = true
+      #if budget_item is not closed and not available_amount is not empty  
+      elsif !budget_item.is_done? && budget_item.available_amount > 0.0
+        # if initiative has not been previously assigned a budget item
+        if self.estimated_funding == 0.0
+          self.estimated_funding = budget_item.available_amount
+          budget_item.available_amount -= self.estimated_amount
+        end
       else
         #otherwise just substruct
         budget_item.available_amount -= self.estimated_funding
