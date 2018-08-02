@@ -44,9 +44,10 @@ RSpec.feature 'Initiative management' do
     let!(:budget) { create :approved_budget, group: group }
     let!(:budget_item) { budget.budget_items.first }
 
-    before { visit new_group_initiative_path(group) }
 
     scenario 'creating initiative with budget' do
+      visit new_group_initiative_path(group) 
+     
       allow_any_instance_of(Initiative).to receive(:estimated_funding).and_return(10000)
 
       fill_form( initiative_params )
@@ -60,6 +61,28 @@ RSpec.feature 'Initiative management' do
       expect(page).to have_content initiative_params[:name]
 
       check_initiative( initiative_params )
+
+      #check that budget is allocated
+      budget_item.reload
+      expect(budget_item.is_done).to eq true
+      expect(budget_item.available_amount).to eq 0
+    end
+
+    scenario 'updating initiative with budget' do
+      initiative = create(:initiative, owner_group: group)
+      budget = create(:approved_budget, group: group)
+      budget_item1 = budget.budget_items.first
+
+      visit edit_group_initiative_path(group, initiative)
+
+      select(budget_item1.title_with_amount, from: 'initiative_budget_item_id')
+
+      submit_form
+
+      #Expect new Initiative to be created
+      expect(page).to have_current_path group_initiatives_path( group )
+
+
 
       #check that budget is allocated
       budget_item.reload
