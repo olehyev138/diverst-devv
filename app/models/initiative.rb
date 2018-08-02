@@ -235,7 +235,7 @@ class Initiative < ActiveRecord::Base
         # if initiative has not been previously assigned a budget item
         if self.estimated_funding == 0.0
           self.estimated_funding = budget_item.available_amount
-          budget_item.available_amount -= self.estimated_amount
+          budget_item.available_amount -= self.budget_item.estimated_amount
         end
       else
         #otherwise just substruct
