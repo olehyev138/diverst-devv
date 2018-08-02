@@ -18,13 +18,14 @@
                   collection: Budget.pre_approved_events_for_select(@group, current_user),
                   include_blank: 'Create new free event ($0)',
                   label: "Attach a <strong>budget</strong> to the event.".html_safe,
-                  disabled: controller.action_name == "edit"
+
+                  disabled: @group.budgets.all? { |budget| budget.budget_items.empty? }
             %>
           </div>
         </div>
         <div class="col sm-6">
           <div class="card__section card__section--border">
-            <% if @initiative.new_record?  #only show it for event creation form %>
+            <% if @group.budgets.any? { |budget| budget.budget_items.any? } %>  <!-- only show it for event creation form -->
               <%= f.input :estimated_funding, label: "Specify amount to deduct from budget" %>
               <script>
                 $(document).ready(function(){

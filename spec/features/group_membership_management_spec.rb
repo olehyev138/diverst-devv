@@ -23,7 +23,7 @@ RSpec.feature 'Group Membership Management' do
 			scenario 'and is not a member of any child group', js: true do
 				visit group_path(group)
 
-        click_button "Join this #{c_t(:parent)}"
+                click_button "Join this #{c_t(:parent)}"
 
 				within('.modal-header') do
 					expect(page).to have_content "Thanks for joining the #{c_t(:parent)}! Do you also want to join a #{c_t(:sub_erg)}?"
@@ -44,7 +44,7 @@ RSpec.feature 'Group Membership Management' do
 				create(:user_group, user_id: guest_user.id, group_id: sub_group.id, accepted_member: false)
 				visit group_path(group)
 
-				click_button "Join this #{c_t(:erg)}"
+				click_button "Join this #{c_t(:parent)}"
 
 				within('.modal-content') do
 					expect(page).to have_content "Thanks for joining the #{c_t(:parent)}!"
