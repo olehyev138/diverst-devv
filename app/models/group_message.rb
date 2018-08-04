@@ -8,7 +8,10 @@ class GroupMessage < ActiveRecord::Base
     belongs_to :group
 
     has_one :news_feed_link, :dependent => :destroy
-
+    after_create :approve_link
+    
+    accepts_nested_attributes_for :news_feed_link, :allow_destroy => true
+    
     delegate :increment_view, :to => :news_feed_link
     delegate :total_views, :to => :news_feed_link
     delegate :unique_views, :to => :news_feed_link
@@ -20,7 +23,7 @@ class GroupMessage < ActiveRecord::Base
 
     alias_attribute :author, :owner
 
-    before_create :build_default_link
+    after_create :build_default_link
 
     scope :of_segments, ->(segment_ids) {
       gm_condtions = ["group_messages_segments.segment_id IS NULL"]
@@ -32,6 +35,10 @@ class GroupMessage < ActiveRecord::Base
     scope :unapproved, -> {joins(:news_feed_link).where(:news_feed_links => {:approved => false})}
     scope :approved, -> {joins(:news_feed_link).where(:news_feed_links => {:approved => true})}
 
+    def approve_link
+        return if news_feed_link.nil?
+        news_feed_link.approve_link
+    end
 
     def comments_count
         if group.enterprise.enable_pending_comments?
@@ -73,7 +80,7 @@ class GroupMessage < ActiveRecord::Base
     private
 
     def build_default_link
-        build_news_feed_link(:news_feed_id => group.news_feed.id)
-        true
+        return if news_feed_link.present?
+        create_news_feed_link(:news_feed_id => group.news_feed.id)
     end
 end

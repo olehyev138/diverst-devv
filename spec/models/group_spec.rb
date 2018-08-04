@@ -88,6 +88,20 @@ RSpec.describe Group, :type => :model do
           end
         end
 
+        describe '#ensure_label_consistency_between_parent_and_sub_groups' do
+          let!(:category_type1) { create(:group_category_type, name: "New Category1") }
+          let!(:categories_of_category_type1) { create_list(:group_category, 2, group_category_type_id: category_type1.id) }
+          let!(:category_type2) { create(:group_category_type, name: "New Category2") }
+          let!(:categories_of_category_type2) { create_list(:group_category, 2, group_category_type_id: category_type2.id) }
+          let!(:parent_group) { create(:group, parent_id: nil, group_category_id: nil, group_category_type_id: nil) }
+          let!(:sub_group) { create(:group, parent_id: parent_group.id, group_category_id: categories_of_category_type2.first.id, group_category_type_id: category_type2.id) }
+
+          it 'ensure label consistency between parent and sub groups' do
+            parent_group.update(group_category_id: categories_of_category_type1.first.id, group_category_type_id: category_type1.id)
+            expect(parent_group.errors.messages[:group_category_id]).to eq ["chosen label inconsistent with labels of sub groups"]
+          end
+        end
+
         describe '#valid_yammer_group_link?' do
           context 'with valid yammer group link' do
             let(:link) { 'https://www.yammer.com/diverst.com/#/threads/inGroup?type=in_group&feedId=6830281' }
@@ -567,15 +581,6 @@ RSpec.describe Group, :type => :model do
         it "saves the url" do
             group = build(:group, :company_video_url => "https://www.youtube.com/watch?v=Y2VF8tmLFHw")
             expect(group.company_video_url).to_not be(nil)
-        end
-    end
-
-    describe '#build_default_news_feed' do
-        let!(:new_group) { build(:group) }
-
-        it 'builds default news feed' do
-            expect(new_group).to receive(:build_default_news_feed)
-            new_group.save
         end
     end
 

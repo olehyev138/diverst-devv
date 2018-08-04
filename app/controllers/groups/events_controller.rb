@@ -26,6 +26,16 @@ class Groups::EventsController < ApplicationController
         initiative_segments_segment_id_in: params[:q]&.dig(:initiative_segments_segment_id_in)
     )
     .result
+    
+    @events += @group.participating_initiatives.upcoming.ransack(
+        initiative_segments_segment_id_in: params[:q]&.dig(:initiative_segments_segment_id_in)
+    )
+    .result
+    
+    @events += @group.participating_initiatives.ongoing    .ransack(
+        initiative_segments_segment_id_in: params[:q]&.dig(:initiative_segments_segment_id_in)
+    )
+    .result
 
     render 'shared/calendar/events', format: :json
   end

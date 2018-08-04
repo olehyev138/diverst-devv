@@ -12,12 +12,11 @@
         <div class="flex-row__cell flex-row__cell--grow">
           <h3><%= message.subject %> - <span class="muted" title="<%= message.created_at.to_s :datetime %>"><%= time_ago_in_words(message.created_at) %> ago (<%= message.created_at.to_formatted_s(:short) %>) - <%= message.total_views %> views </span></h3>
           <p class="postContent">
-            <%= message.content %>
+            <%= raw message.content %>
             <% if message.owner.present? %>
               <br>
               <i>by <%= message.owner.name_with_status %></i>
             <% end %>
-            <%= link_to "Comments(#{message.comments_count})", group_group_message_path(message.group, message), style: "margin-top: 30px;" %>
           </p>
           <div class="row">
             <div class="col commentsLink">

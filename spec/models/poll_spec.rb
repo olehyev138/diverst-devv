@@ -226,7 +226,9 @@ RSpec.describe Poll, type: :model do
             create(:poll_response, :poll => poll, :user => user_1, :data => "{\"#{select_field.id}\":[\"4\"]}")
             create(:poll_response, :poll => poll, :user => user_2, :data => "{\"#{select_field.id}\":[\"4\"]}")
             user_2.destroy
-
+            
+            poll.reload
+            
             expect(poll.responses_csv).to eq("user_id,user_email,user_name,What is 1 + 1?\n#{user_1.id},#{user_1.email},#{user_1.name},4\n\"\",\"\",Deleted User,4\n")
         end
     end

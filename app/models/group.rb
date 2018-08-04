@@ -1,6 +1,6 @@
 class Group < ActiveRecord::Base
   include PublicActivity::Common
-  extend CustomTextHelpers
+  include CustomTextHelpers
 
   extend Enumerize
 
@@ -9,12 +9,6 @@ class Group < ActiveRecord::Base
                               :layout_1,
                               :layout_2
                             ]
-
-  LAYOUTS_INFO = {
-    'layout_0' => 'Default layout',
-    'layout_1' => 'Layout without leader boards for Most Active Members',
-    'layout_2' => "Layout with #{c_t(:sub_erg).pluralize} on top of group leaders"
-  }
 
   enumerize :pending_users, default: :disabled,  in: [
                               :disabled,
@@ -51,8 +45,9 @@ class Group < ActiveRecord::Base
 
   has_one :news_feed, dependent: :destroy
 
-  delegate :news_feed_links, :to => :news_feed
-
+  delegate :news_feed_links,        :to => :news_feed
+  delegate :shared_news_feed_links, :to => :news_feed
+  
   has_many :user_groups, dependent: :destroy
   has_many :members, through: :user_groups, class_name: 'User', source: :user, after_remove: :update_elasticsearch_member
   has_many :groups_polls, dependent: :destroy
@@ -97,21 +92,23 @@ class Group < ActiveRecord::Base
 
   has_many :group_leaders, dependent: :destroy
   has_many :leaders, through: :group_leaders, source: :user
+  has_many :sponsors, as: :sponsorable, dependent: :destroy
 
   has_many :children, class_name: "Group", foreign_key: :parent_id, dependent: :destroy
   has_many :sponsors, as: :sponsorable, dependent: :destroy
   belongs_to :parent, class_name: "Group", foreign_key: :parent_id
   belongs_to :group_category
   belongs_to :group_category_type
+  
+  # re-add to allow migration file to run
+  has_attached_file :sponsor_media, s3_permissions: :private
+  do_not_validate_attachment_file_type :sponsor_media
 
   has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: :private
   validates_attachment_content_type :logo, content_type: %r{\Aimage\/.*\Z}
 
   has_attached_file :banner
   validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
-
-  has_attached_file :sponsor_media, s3_permissions: :private
-  do_not_validate_attachment_file_type :sponsor_media
 
   validates :name, presence: true
   validates_format_of :contact_email, with: Devise.email_regexp, allow_blank: true
@@ -120,11 +117,12 @@ class Group < ActiveRecord::Base
 
   validate :ensure_one_level_nesting
 
-  before_create :build_default_news_feed
   before_save :send_invitation_emails, if: :send_invitations?
   before_save :create_yammer_group, if: :should_create_yammer_group?
   after_commit :update_all_elasticsearch_members
   before_validation :smart_add_url_protocol
+  after_create :create_news_feed
+  
   attr_accessor :skip_label_consistency_check
   validate :perform_check_for_consistency_in_category, on: [:create, :update], unless: :skip_label_consistency_check
   validate :ensure_label_consistency_between_parent_and_sub_groups, on: [:create, :update]
@@ -136,12 +134,20 @@ class Group < ActiveRecord::Base
   # parents/children
   scope :all_parents,     -> {where(:parent_id => nil)}
   scope :all_children,    -> {where.not(:parent_id => nil)}
-
+  
   accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
+  
+  def layout_values
+    {
+    'layout_0' => 'Default layout',
+    'layout_1' => 'Layout without leader boards for Most Active Members',
+    'layout_2' => "Layout with #{c_t(:sub_erg).pluralize} on top of group leaders"
+    }
+  end
 
   def is_parent_group?
     (parent.nil? && children.any?)
@@ -166,17 +172,6 @@ class Group < ActiveRecord::Base
 
   def managers
     leaders.to_a << owner
-  end
-
-  def news_feed
-    if NewsFeed.where(:group_id => id).count > 0
-      return NewsFeed.find_by_group_id(id)
-    else
-      feed = NewsFeed.new
-      feed.group_id = id
-      feed.save
-      return feed
-    end
   end
 
   def valid_yammer_group_link?
@@ -408,9 +403,5 @@ class Group < ActiveRecord::Base
     return nil if group_sizes.length == 0
     group_sizes.sum / group_sizes.length
   end
-
-  def build_default_news_feed
-    build_news_feed
-    true
-  end
+  
 end
