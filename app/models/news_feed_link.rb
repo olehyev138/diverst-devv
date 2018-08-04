@@ -2,8 +2,8 @@ class NewsFeedLink < ActiveRecord::Base
     belongs_to :news_feed
     belongs_to :link, :polymorphic => true
 
-    has_many :news_feed_link_segments
-    has_many :shared_news_feed_links, :class_name => "SharedNewsFeedLink", source: :news_feed_link
+    has_many :news_feed_link_segments, dependent: :destroy
+    has_many :shared_news_feed_links, :class_name => "SharedNewsFeedLink", source: :news_feed_link, dependent: :destroy
     has_many :shared_news_feeds, :through => :shared_news_feed_links, source: :news_feed
     
     has_many :likes, dependent: :destroy
@@ -14,8 +14,9 @@ class NewsFeedLink < ActiveRecord::Base
 
     scope :approved,        -> { where(approved: true )}
     scope :not_approved,    -> { where(approved: false )}
-    scope :combined_news_links, -> (news_feed_id){includes(:link).joins("LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id WHERE shared_news_feed_links.news_feed_id = #{news_feed_id} OR news_feed_links.news_feed_id = #{news_feed_id} AND approved = 1").distinct}
-    scope :combined_news_links_with_segments, -> (news_feed_id, segment_ids){includes(:link).joins("LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id WHERE shared_news_feed_links.news_feed_id = #{news_feed_id} OR news_feed_links.news_feed_id = #{news_feed_id} AND approved = 1 OR news_feed_link_segments.segment_id IS NULL OR news_feed_link_segments.segment_id IN (#{ segment_ids.join(",") })").distinct}
+    scope :news_links,    -> { where(link_type: "NewsLink")}
+    scope :combined_news_links, -> (news_feed_id){joins("LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id WHERE shared_news_feed_links.news_feed_id = #{news_feed_id} OR news_feed_links.news_feed_id = #{news_feed_id} AND approved = 1").distinct}
+    scope :combined_news_links_with_segments, -> (news_feed_id, segment_ids){joins("LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id WHERE shared_news_feed_links.news_feed_id = #{news_feed_id} OR news_feed_links.news_feed_id = #{news_feed_id} AND approved = 1 OR news_feed_link_segments.segment_id IS NULL OR news_feed_link_segments.segment_id IN (#{ segment_ids.join(",") })").distinct}
 
     validates :news_feed_id,    presence: true
     validates :link_id,         presence: true, :on => :update

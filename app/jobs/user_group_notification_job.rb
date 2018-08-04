@@ -60,7 +60,7 @@ class UserGroupNotificationJob < ActiveJob::Base
   end
 
   def user_segment_ids(user)
-    user.segments.pluck(:id)
+    user.segments.ids
   end
 
   def get_events_count(user, group, frequency_range)
@@ -70,21 +70,58 @@ class UserGroupNotificationJob < ActiveJob::Base
   end
 
   def get_messages_count(user, group, frequency_range)
-    GroupMessage.where(group: group, updated_at: frequency_range)
-    .of_segments(user_segment_ids(user))
-    .count
+    segment_ids = user_segment_ids(user)
+    
+    if not segment_ids.empty?
+      news_feed_link_ids = NewsFeedLink.combined_news_links_with_segments(group.news_feed.id, segment_ids).ids
+      return GroupMessage.joins(:news_feed_link)
+            .where(:news_feed_links => {:id => news_feed_link_ids}, :updated_at => frequency_range)
+            .of_segments(user_segment_ids(user))
+            .count
+    else
+      news_feed_link_ids = NewsFeedLink.combined_news_links(group.news_feed.id).ids
+      return GroupMessage.joins(:news_feed_link)
+              .where(:news_feed_links => {:id => news_feed_link_ids}, :updated_at => frequency_range)
+              .of_segments(user_segment_ids(user))
+              .count
+    end
   end
 
   def get_news_count(user, group, frequency_range)
-    NewsLink.where(group: group, updated_at: frequency_range)
-    .of_segments(user_segment_ids(user))
-    .count
+    segment_ids = user_segment_ids(user)
+    
+    if not segment_ids.empty?
+      news_feed_link_ids = NewsFeedLink.combined_news_links_with_segments(group.news_feed.id, segment_ids).ids
+      return NewsLink.joins(:news_feed_link)
+            .where(:news_feed_links => {:id => news_feed_link_ids}, :updated_at => frequency_range)
+            .of_segments(user_segment_ids(user))
+            .count
+    else
+      news_feed_link_ids = NewsFeedLink.combined_news_links(group.news_feed.id).ids
+
+      return NewsLink.joins(:news_feed_link)
+              .where(:news_feed_links => {:id => news_feed_link_ids}, :updated_at => frequency_range)
+              .of_segments(user_segment_ids(user))
+              .count
+    end
   end
   
   def get_social_count(user, group, frequency_range)
-    SocialLink.where(group: group, updated_at: frequency_range)
-    .of_segments(user_segment_ids(user))
-    .count
+    segment_ids = user_segment_ids(user)
+    
+    if not segment_ids.empty?
+      news_feed_link_ids = NewsFeedLink.combined_news_links_with_segments(group.news_feed.id, segment_ids).ids
+      return SocialLink.joins(:news_feed_link)
+            .where(:news_feed_links => {:id => news_feed_link_ids}, :updated_at => frequency_range)
+            .of_segments(user_segment_ids(user))
+            .count
+    else
+      news_feed_link_ids = NewsFeedLink.combined_news_links(group.news_feed.id).ids
+      return SocialLink.joins(:news_feed_link)
+              .where(:news_feed_links => {:id => news_feed_link_ids}, :updated_at => frequency_range)
+              .of_segments(user_segment_ids(user))
+              .count
+    end
   end
   
   def get_participating_events_count(user, group, frequency_range)

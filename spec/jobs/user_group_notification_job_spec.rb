@@ -20,8 +20,8 @@ RSpec.describe UserGroupNotificationJob, type: :job do
       let(:next_hour) { Time.now }
 
       let!(:user_group){ create(:user_group, user: user, group: group, notifications_frequency: UserGroup.notifications_frequencies[:hourly]) }
-      let!(:group_message){ create(:group_message, group: group, updated_at: previous_hour, owner: user) }
-      let!(:another_group_message){ create(:group_message, group: group, updated_at: next_hour, owner: user) }
+      let!(:group_message){ create(:group_message, group: group, updated_at: previous_hour, owner: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
+      let!(:another_group_message){ create(:group_message, group: group, updated_at: next_hour, owner: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
 
       let!(:group_event) { create(:initiative, owner_group: group, updated_at: previous_hour, owner: user) }
       let!(:another_group_event) { create(:initiative, owner_group: group, updated_at: next_hour, owner: user) }
@@ -29,10 +29,10 @@ RSpec.describe UserGroupNotificationJob, type: :job do
       let!(:fourth_group_event) { create(:initiative, owner_group: second_group, updated_at: next_hour, owner: user) }
       let!(:initiative_participating_group) { create(:initiative_participating_group, initiative: third_group_event, group: group) }
       let!(:second_initiative_participating_group) { create(:initiative_participating_group, initiative: fourth_group_event, group: group) }
-      let!(:news_link){ create(:news_link, group: group, updated_at: previous_hour, author: user) }
-      let!(:another_news_link){ create(:news_link, group: group, updated_at: next_hour, author: user) }
-      let!(:social_link){ create(:social_link, group: group, updated_at: previous_hour, author: user) }
-      let!(:another_social_link){ create(:social_link, group: group, updated_at: next_hour, author: user) }
+      let!(:news_link){ create(:news_link, group: group, updated_at: previous_hour, author: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
+      let!(:another_news_link){ create(:news_link, group: group, updated_at: next_hour, author: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
+      let!(:social_link){ create(:social_link, group: group, updated_at: previous_hour, author: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
+      let!(:another_social_link){ create(:social_link, group: group, updated_at: next_hour, author: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
 
       it "sends an email of notification to user" do
         Timecop.freeze(Time.now + 30.minutes) do
@@ -50,18 +50,18 @@ RSpec.describe UserGroupNotificationJob, type: :job do
       let(:next_hour) { Time.now }
 
       let!(:user_group){ create(:user_group, user: user, group: group, notifications_frequency: UserGroup.notifications_frequencies[:hourly]) }
-      let!(:group_message){ create(:group_message, group: group, updated_at: previous_hour, owner: user) }
-      let!(:another_group_message){ create(:group_message, group: group, updated_at: next_hour, owner: user) }
+      let!(:group_message){ create(:group_message, group: group, updated_at: previous_hour, owner: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
+      let!(:another_group_message){ create(:group_message, group: group, updated_at: next_hour, owner: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
       let!(:group_event) { create(:initiative, owner_group: group, updated_at: previous_hour, owner: user) }
       let!(:another_group_event) { create(:initiative, owner_group: group, updated_at: next_hour, owner: user) }
       let!(:third_group_event) { create(:initiative, owner_group: second_group, updated_at: previous_hour, owner: user) }
       let!(:fourth_group_event) { create(:initiative, owner_group: second_group, updated_at: next_hour, owner: user) }
       let!(:initiative_participating_group) { create(:initiative_participating_group, initiative: third_group_event, group: group) }
       let!(:second_initiative_participating_group) { create(:initiative_participating_group, initiative: fourth_group_event, group: group) }
-      let!(:news_link){ create(:news_link, group: group, updated_at: previous_hour, author: user) }
-      let!(:another_news_link){ create(:news_link, group: group, updated_at: next_hour, author: user) }
-      let!(:social_link){ create(:social_link, group: group, updated_at: previous_hour, author: user) }
-      let!(:another_social_link){ create(:social_link, group: group, updated_at: next_hour, author: user) }
+      let!(:news_link){ create(:news_link, group: group, updated_at: previous_hour, author: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
+      let!(:another_news_link){ create(:news_link, group: group, updated_at: next_hour, author: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
+      let!(:social_link){ create(:social_link, group: group, updated_at: previous_hour, author: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
+      let!(:another_social_link){ create(:social_link, group: group, updated_at: next_hour, author: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
 
       it "sends an email of notification to user when user is in segment and items are not in segments" do
         segment = create(:segment, :groups => [group, second_group])
@@ -147,18 +147,18 @@ RSpec.describe UserGroupNotificationJob, type: :job do
       let(:today) { Date.today }
 
       let!(:user_group){ create(:user_group, user: user, group: group, notifications_frequency: UserGroup.notifications_frequencies[:daily]) }
-      let!(:group_message){ create(:group_message, group: group, updated_at: yesterday, owner: user) }
-      let!(:another_group_message){ create(:group_message, group: group, updated_at: today, owner: user) }
+      let!(:group_message){ create(:group_message, group: group, updated_at: yesterday, owner: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
+      let!(:another_group_message){ create(:group_message, group: group, updated_at: today, owner: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
       let!(:group_event) { create(:initiative, owner_group: group, updated_at: yesterday, owner: user) }
       let!(:another_group_event) { create(:initiative, owner_group: group, updated_at: today, owner: user) }
       let!(:third_group_event) { create(:initiative, owner_group: second_group, updated_at: yesterday, owner: user) }
       let!(:fourth_group_event) { create(:initiative, owner_group: second_group, updated_at: today, owner: user) }
       let!(:initiative_participating_group) { create(:initiative_participating_group, initiative: third_group_event, group: group) }
       let!(:second_initiative_participating_group) { create(:initiative_participating_group, initiative: fourth_group_event, group: group) }
-      let!(:news_link){ create(:news_link, group: group, updated_at: yesterday, author: user) }
-      let!(:another_news_link){ create(:news_link, group: group, updated_at: today, author: user) }
-      let!(:social_link){ create(:social_link, group: group, updated_at: yesterday, author: user) }
-      let!(:another_social_link){ create(:social_link, group: group, updated_at: today, author: user) }
+      let!(:news_link){ create(:news_link, group: group, updated_at: yesterday, author: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
+      let!(:another_news_link){ create(:news_link, group: group, updated_at: today, author: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
+      let!(:social_link){ create(:social_link, group: group, updated_at: yesterday, author: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
+      let!(:another_social_link){ create(:social_link, group: group, updated_at: today, author: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
 
       it "sends an email of notification to user" do
         Timecop.freeze(Date.today) do
@@ -239,6 +239,45 @@ RSpec.describe UserGroupNotificationJob, type: :job do
         end
       end
     end
+    
+    context "when there is new shared news" do
+      let(:yesterday) { Date.today - 1.day }
+      let(:today) { Date.today }
+
+      let!(:second_user) {create(:user, :enterprise => user.enterprise)}
+      let!(:third_group) {create(:group, :enterprise => second_user.enterprise)}
+      
+      let!(:user_group){ create(:user_group, user: user, group: group, notifications_frequency: UserGroup.notifications_frequencies[:daily]) }
+      let!(:second_user_group){ create(:user_group, user: second_user, group: second_group, notifications_frequency: UserGroup.notifications_frequencies[:disabled]) }
+      
+      let!(:group_message){ create(:group_message, group: third_group, updated_at: yesterday, owner: user, :news_feed_link_attributes => {:news_feed_id => third_group.news_feed.id}) }
+      let!(:another_group_message){ create(:group_message, group: third_group, updated_at: today, owner: user, :news_feed_link_attributes => {:news_feed_id => third_group.news_feed.id}) }
+      let!(:group_event) { create(:initiative, owner_group: third_group, updated_at: yesterday, owner: user) }
+      let!(:another_group_event) { create(:initiative, owner_group: third_group, updated_at: today, owner: user) }
+      let!(:third_group_event) { create(:initiative, owner_group: third_group, updated_at: yesterday, owner: user) }
+      let!(:fourth_group_event) { create(:initiative, owner_group: third_group, updated_at: today, owner: user) }
+      let!(:initiative_participating_group) { create(:initiative_participating_group, initiative: third_group_event, group: third_group) }
+      let!(:second_initiative_participating_group) { create(:initiative_participating_group, initiative: fourth_group_event, group: third_group) }
+      
+      # the news link item below showed count as a new item
+      let!(:news_link){ create(:news_link, group: third_group, updated_at: yesterday, author: user, :news_feed_link_attributes => {:news_feed_id => third_group.news_feed.id}) }
+      let!(:shared_news_feed_link){ create(:shared_news_feed_link, :news_feed => group.news_feed, :news_feed_link => news_link.news_feed_link) }
+      
+      let!(:another_news_link){ create(:news_link, group: third_group, updated_at: today, author: user, :news_feed_link_attributes => {:news_feed_id => third_group.news_feed.id}) }
+      let!(:social_link){ create(:social_link, group: third_group, updated_at: yesterday, author: user, :news_feed_link_attributes => {:news_feed_id => third_group.news_feed.id}) }
+      let!(:another_social_link){ create(:social_link, group: third_group, updated_at: today, author: user, :news_feed_link_attributes => {:news_feed_id => third_group.news_feed.id}) }
+
+      it "sends an email of notification to user" do
+
+        Timecop.freeze(Date.today) do
+          mailer = double("mailer")
+          expect(UserGroupMailer).to receive(:notification)
+            .with(user, [{ group: group, events_count: 0, messages_count: 0, news_count: 1, social_links_count: 0, participating_events_count: 0 }]){ mailer }
+          expect(mailer).to receive(:deliver_now)
+          subject.perform({:notifications_frequency => "daily", :enterprise_id => user.enterprise_id})
+        end
+      end
+    end
   end
 
   context "with weekly frequency" do
@@ -260,18 +299,18 @@ RSpec.describe UserGroupNotificationJob, type: :job do
       let(:today) { Date.today }
 
       let!(:user_group){ create(:user_group, user: user, group: group, notifications_frequency: UserGroup.notifications_frequencies[:weekly]) }
-      let!(:group_message){ create(:group_message, group: group, updated_at: week_ago, owner: user) }
-      let!(:another_group_message){ create(:group_message, group: group, updated_at: today, owner: user) }
+      let!(:group_message){ create(:group_message, group: group, updated_at: week_ago, owner: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
+      let!(:another_group_message){ create(:group_message, group: group, updated_at: today, owner: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
       let!(:group_event) { create(:initiative, owner_group: group, updated_at: week_ago, owner: user) }
       let!(:another_group_event) { create(:initiative, owner_group: group, updated_at: today, owner: user) }
       let!(:third_group_event) { create(:initiative, owner_group: second_group, updated_at: week_ago, owner: user) }
       let!(:fourth_group_event) { create(:initiative, owner_group: second_group, updated_at: today, owner: user) }
       let!(:initiative_participating_group) { create(:initiative_participating_group, initiative: third_group_event, group: group) }
       let!(:second_initiative_participating_group) { create(:initiative_participating_group, initiative: fourth_group_event, group: group) }
-      let!(:news_link){ create(:news_link, group: group, updated_at: week_ago, author: user) }
-      let!(:another_news_link){ create(:news_link, group: group, updated_at: today, author: user) }
-      let!(:social_link){ create(:social_link, group: group, updated_at: week_ago, author: user) }
-      let!(:another_social_link){ create(:social_link, group: group, updated_at: today, author: user) }
+      let!(:news_link){ create(:news_link, group: group, updated_at: week_ago, author: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
+      let!(:another_news_link){ create(:news_link, group: group, updated_at: today, author: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
+      let!(:social_link){ create(:social_link, group: group, updated_at: week_ago, author: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
+      let!(:another_social_link){ create(:social_link, group: group, updated_at: today, author: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
 
       it "sends an email of notification to user", skip: "inconsistent test result on Circle CI" do
         mailer = double("mailer")
@@ -360,18 +399,18 @@ RSpec.describe UserGroupNotificationJob, type: :job do
       let(:today) { Date.today }
 
       let!(:user_group){ create(:user_group, user: user, group: group, notifications_frequency: UserGroup.notifications_frequencies[:weekly], notifications_date: UserGroup.notifications_dates[:sunday]) }
-      let!(:group_message){ create(:group_message, group: group, updated_at: week_ago, owner: user) }
-      let!(:another_group_message){ create(:group_message, group: group, updated_at: today, owner: user) }
+      let!(:group_message){ create(:group_message, group: group, updated_at: week_ago, owner: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
+      let!(:another_group_message){ create(:group_message, group: group, updated_at: today, owner: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
       let!(:group_event) { create(:initiative, owner_group: group, updated_at: week_ago, owner: user) }
       let!(:another_group_event) { create(:initiative, owner_group: group, updated_at: today, owner: user) }
       let!(:third_group_event) { create(:initiative, owner_group: second_group, updated_at: week_ago, owner: user) }
       let!(:fourth_group_event) { create(:initiative, owner_group: second_group, updated_at: today, owner: user) }
       let!(:initiative_participating_group) { create(:initiative_participating_group, initiative: third_group_event, group: group) }
       let!(:second_initiative_participating_group) { create(:initiative_participating_group, initiative: fourth_group_event, group: group) }
-      let!(:news_link){ create(:news_link, group: group, updated_at: week_ago, author: user) }
-      let!(:another_news_link){ create(:news_link, group: group, updated_at: today, author: user) }
-      let!(:social_link){ create(:social_link, group: group, updated_at: week_ago, author: user) }
-      let!(:another_social_link){ create(:social_link, group: group, updated_at: today, author: user) }
+      let!(:news_link){ create(:news_link, group: group, updated_at: week_ago, author: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
+      let!(:another_news_link){ create(:news_link, group: group, updated_at: today, author: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
+      let!(:social_link){ create(:social_link, group: group, updated_at: week_ago, author: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
+      let!(:another_social_link){ create(:social_link, group: group, updated_at: today, author: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
 
       it "does not send an email of notification to user because default notifications_date is Monday" do
         mailer = double("mailer")
