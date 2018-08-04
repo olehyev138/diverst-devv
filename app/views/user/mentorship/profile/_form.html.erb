@@ -1,7 +1,7 @@
 <div class="col-xs-8">
   <div class="card">
     <div class="card__section">
-      <%= simple_form_for @user, url: user_mentorship_path(@user) do |f| %>
+      <%= simple_form_for @user, wrapper: :inline_form, html: { class: 'form-inline' }, url: user_mentorship_path(@user) do |f| %>
         <div class="card__section">
           <div class="row row--spacing-bottom">
             <%= link_to 'Connect with LinkedIn', '/omniauth/linkedin', class: "btn btn--secondary" unless @user.linkedin_profile_url %>
@@ -24,11 +24,13 @@
         <div class="card__section">
           <div class="row row--spacing-bottom">
             <div class="col-xs-12">
+              <div class="form-inline">
                 <%= f.simple_fields_for :availabilities do |availability| %>
                   <%= render "user/mentorship/profile/availability_fields", f: availability %>
                 <% end %>
         
                 <span><%= link_to_add_association "Add availability", f, :availabilities, partial: "user/mentorship/profile/availability_fields" %></span>
+              </div>
             </div>
           </div>
         </div>

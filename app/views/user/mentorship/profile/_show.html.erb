@@ -58,7 +58,8 @@
           <label><strong>Availability</strong></label>
           <p>
             <% @user.availabilities.each do |availability| %>
-              <span><%= availability.start.strftime("%m/%d/%Y %I:%M %p") %></span>
+              <span><%= availability.day.titleize %></span> <span><%= availability.start %></span> - <span><%= availability.end %></span>
+              <br>
             <% end %>
           </p>
         </div>
