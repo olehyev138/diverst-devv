@@ -284,7 +284,7 @@ class GroupsController < ApplicationController
         segment_ids = current_user.segments.ids
         if not segment_ids.empty?
             NewsFeedLink
-                .combined_news_links_with_segments(@group.news_feed.id, current_user.segments.ids)
+                .combined_news_links_with_segments(@group.news_feed.id, segment_ids)
                 .order(is_pinned: :desc, created_at: :desc)
                 .limit(5)
         else
