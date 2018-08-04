@@ -500,6 +500,8 @@ Rails.application.routes.draw do
   namespace :website do
     resources :leads
   end
+  
+  resources :shared_news_feed_links
 
   resources :policy_groups do
     member do

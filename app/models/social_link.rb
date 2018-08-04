@@ -5,7 +5,9 @@ class SocialLink < ActiveRecord::Base
 
     has_many :social_link_segments
     has_many :segments, through: :social_link_segments, :before_remove => :remove_segment_association
-
+    
+    accepts_nested_attributes_for :news_feed_link, :allow_destroy => true    
+    
     validate :correct_url?
 
     validates :author_id,       presence: true
