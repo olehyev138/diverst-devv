@@ -17,7 +17,7 @@ class MentoringDatatable < AjaxDatatablesRails::Base
   end
 
   def searchable_columns
-    @searchable_columns ||= ['User.first_name', 'User.email']
+    @searchable_columns ||= []
   end
 
   private
