@@ -69,26 +69,21 @@ RSpec.feature 'Initiative management' do
       expect(budget_item.available_amount).to eq 0
     end
 
-    scenario 'updating initiative with budget' do
+    scenario 'updating initiative with budget', js: true do
       initiative = create(:initiative, owner_group: group)
       budget = create(:approved_budget, group: group)
       budget_item1 = budget.budget_items.first
+      budget_item1.update(estimated_amount: 15000, available_amount: 15000)
 
       visit edit_group_initiative_path(group, initiative)
 
       select(budget_item1.title_with_amount, from: 'initiative_budget_item_id')
 
-      submit_form
+      click_on 'Submit'
 
-      #Expect new Initiative to be created
       expect(page).to have_current_path group_initiatives_path( group )
 
-
-
-      #check that budget is allocated
-      budget_item.reload
-      expect(budget_item.is_done).to eq true
-      expect(budget_item.available_amount).to eq 0
+      expect(page).to have_content "$#{initiative.estimated_funding.to_f}"
     end
   end
 
