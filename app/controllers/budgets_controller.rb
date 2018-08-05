@@ -37,10 +37,12 @@ class BudgetsController < ApplicationController
 
   def approve
     authorize @budget, :approve?
-
-    BudgetManager.new(@budget).approve(current_user)
-
-    redirect_to action: :index
+    if @budget.update(budget_params)
+      BudgetManager.new(@budget).approve(current_user)
+      redirect_to action: :index
+    else
+      redirect_to :back
+    end
   end
 
   def decline
@@ -131,6 +133,7 @@ class BudgetsController < ApplicationController
       .require(:budget)
       .permit(
         :description,
+        :comments,
         :approver_id,
         budget_items_attributes: [
           :id,

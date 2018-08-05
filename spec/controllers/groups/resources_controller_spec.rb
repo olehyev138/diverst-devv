@@ -134,21 +134,32 @@ RSpec.describe Groups::ResourcesController, type: :controller do
 
     describe "GET#show" do
         describe 'with user logged in' do
-            login_user_from_let
-            let!(:group_resource) { create(:resource, title: "title", group: group, file: fixture_file_upload('files/test.csv', 'text/csv')) }
-            before { get :show, :id => group_resource.id, group_id: group.id }
-
-
-            it 'returns a valid resource object' do 
-                expect(assigns[:resource]).to be_valid
+            context "with file" do
+                login_user_from_let
+                let!(:group_resource) { create(:resource, title: "title", group: group, file: fixture_file_upload('files/test.csv', 'text/csv')) }
+                before { get :show, :id => group_resource.id, group_id: group.id }
+    
+                it 'returns a valid resource object' do 
+                    expect(assigns[:resource]).to be_valid
+                end
+    
+                it "filename should be test.csv" do
+                    expect(response.headers["Content-Disposition"]).to include "test.csv"
+                end
+    
+                it 'returns format in csv' do 
+                    expect(response.content_type).to eq 'text/csv'
+                end
             end
-
-            it "filename should be test.csv" do
-                expect(response.headers["Content-Disposition"]).to include "test.csv"
-            end
-
-            it 'returns format in csv' do 
-                expect(response.content_type).to eq 'text/csv'
+            
+            context "without file" do
+                login_user_from_let
+                let!(:group_resource) { create(:resource, title: "title", group: group, file: nil) }
+                before { get :show, :id => group_resource.id, group_id: group.id }
+    
+                it 'does something' do 
+                    expect(flash[:alert]).to eq "File/File Path does not exist"
+                end
             end
         end
 

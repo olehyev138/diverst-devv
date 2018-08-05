@@ -28,18 +28,16 @@
             <% end %>
             </div>
             <div class="col sm-6 md-3 lg-7">
-              <h3>
-                <% if resource.enterprise.sponsors.any? %>
-                  <%= resource.enterprise.sponsors.first.sponsor_name %>, <%= resource.enterprise.sponsors.first.sponsor_title %>
-                <% end %>
-                </h3>
+              <% if resource.enterprise.sponsors.any? %>
+                <%= resource.enterprise.sponsors.first.sponsor_name %>, <%= resource.enterprise.sponsors.first.sponsor_title %>
+              <% end %>
 
               <% if resource.enterprise.sponsors.any? %>
                 <% if resource.enterprise.sponsors.first.sponsor_message.present? %>
                   <p> <%= simple_format resource.enterprise.first.sponsors.sponsor_message %>   </p>
                 <% else %>
                   <p>Hi! This is <%= resource.enterprise.sponsors.first.sponsor_name %>. We know that diverse teams produce better results, but our diversity mission is important for another reason: we want everyone to be fairly represented and have the same opportunities.  Our new diversity platform provides just that – a place where you can collaborate on interesting problems and develop new insights together. Join us by selecting the <%= resource.enterprise.custom_text.erg %>(s) that best represent your interests.</p>
-                  <% end %>
+                <% end %>
               <% end %>
             </div>
           </div>

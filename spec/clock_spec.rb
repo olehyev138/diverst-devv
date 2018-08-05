@@ -46,17 +46,6 @@ RSpec.describe Clockwork, :type => :clock do
     expect(Clockwork::Test.block_for(job).call).to eq perform
   end
   
-  it "runs the job UserGroupNotificationJob daily" do
-    job = "Send daily notifications of groups to users"
-    perform = UserGroupNotificationJob.perform_later
-    
-    allow(UserGroupNotificationJob).to receive(:perform_later).and_return(perform)
-    
-    expect(Clockwork::Test.ran_job?(job)).to be_truthy
-    expect(Clockwork::Test.times_run(job)).to eq 1
-    expect(Clockwork::Test.block_for(job).call).to eq perform
-  end
-  
   it "runs the job GroupLeaderMemberNotificationsJob" do
     job = "Send daily notifications of pending users to group leaders"
     perform = GroupLeaderMemberNotificationsJob.perform_later

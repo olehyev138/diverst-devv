@@ -21,6 +21,17 @@
         <h3>Sponsor Details</h3>
         <p>NOTE: Sponsor details are optional. However, if you wish to fill in this part, at least the sponsor name must be entered.</p>
 
+        <%= f.simple_fields_for :sponsors do |s| %>
+          <%= render 'sponsor_fields', f: s %>
+        <% end %>
+
+        
+        <div class="group_sponsor_link">
+          <%= link_to_add_association "Add a sponsor", f, :sponsors %>
+        </div>
+        <br>
+        
+
          <%= f.simple_fields_for :sponsors do |s| %>
           <%= render 'sponsor_fields', f: s %>
         <% end %>

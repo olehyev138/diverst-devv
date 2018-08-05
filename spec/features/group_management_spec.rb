@@ -277,7 +277,7 @@ RSpec.feature 'Group management' do
     scenario 'by creating multiple group sponsors', js: true do
       expect(page).to have_link 'Add a sponsor'
 
-      click_on 'Add a sponsor'
+      first('.group_sponsor_link').click_on 'Add a sponsor'
 
       within all('.nested-fields')[0] do
         fill_in 'Sponsor name', with: 'Bill Gates'
@@ -286,7 +286,7 @@ RSpec.feature 'Group management' do
         fill_in 'Sponsor message', with: 'Hi and welcome'
       end
 
-      click_on 'Add a sponsor'
+      first('.group_sponsor_link').click_on 'Add a sponsor'
 
       within all('.nested-fields')[1] do
         fill_in 'Sponsor name', with: 'Mark Zuckerberg'
@@ -295,7 +295,7 @@ RSpec.feature 'Group management' do
         fill_in 'Sponsor message', with: 'Hi and welcome'
       end
 
-      click_on 'Add a sponsor'
+      first('.group_sponsor_link').click_on 'Add a sponsor'
 
       within all('.nested-fields')[2] do
         fill_in 'Sponsor name', with: 'Elizabeth Holmes'
