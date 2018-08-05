@@ -93,6 +93,8 @@ RSpec.feature 'Initiative management' do
   end
 
   context 'with leftover money' do
+    let!(:budget) { create :approved_budget, group: group }
+    let!(:budget_item) { budget.budget_items.first }
     let(:leftover) { rand(100..1000) }
 
     before do

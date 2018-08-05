@@ -58,6 +58,7 @@ class InitiativesController < ApplicationController
   def finish_expenses
     authorize @initiative, :update?
 
+    @initiative.update skip_allocate_budget_funds: true
     @initiative.finish_expenses!
     redirect_to action: :index
   end
