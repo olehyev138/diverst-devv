@@ -1,7 +1,7 @@
 class Initiative < ActiveRecord::Base
   include PublicActivity::Common
 
-  attr_accessor :associated_budget_id
+  attr_accessor :associated_budget_id, :skip_allocate_budget_funds
 
   belongs_to :pillar
   belongs_to :owner, class_name: "User"
@@ -55,7 +55,7 @@ class Initiative < ActiveRecord::Base
       .where(initiative_conditions.join(" OR "))
   }
 
-  before_create :allocate_budget_funds
+  before_save { allocate_budget_funds unless skip_allocate_budget_funds }
 
   has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: "private"
   validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
@@ -223,13 +223,15 @@ class Initiative < ActiveRecord::Base
   end
 
   def allocate_budget_funds
+    self.estimated_funding = 0.0 if self.estimated_funding.nil?
+
     if budget_item.present?
       # If user tries to allocate all the money from the budget
       # mark this budget item as used up
-      if self.estimated_funding >= budget_item.available_amount
+      if self.estimated_funding == 0.0 || self.estimated_funding >= budget_item.available_amount
         self.estimated_funding = budget_item.available_amount
         budget_item.available_amount = 0
-        budget_item.is_done = true
+        budget_item.is_done = true 
       else
         #otherwise just substruct
         budget_item.available_amount -= self.estimated_funding

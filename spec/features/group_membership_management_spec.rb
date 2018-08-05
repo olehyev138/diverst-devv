@@ -37,7 +37,7 @@ RSpec.feature 'Group Membership Management' do
 			scenario 'and user chooses not to join any sub group', js: true do
 				visit group_path(group)
 
-				click_button "Join this #{c_t(:erg)}"
+				click_button "Join this #{c_t(:parent)}"
 
 				expect(page).to have_content "Thanks for joining the #{c_t(:parent)}! Do you also want to join a #{c_t(:sub_erg)}?"
 
