@@ -18,7 +18,8 @@ RSpec.describe ApplicationController, type: :controller do
             errors = [
         	    {:name => "ActionController::BadRequest", :status => 404},
         	    {:name => "ActionController::UnknownFormat", :status => 404},
-        	    {:name => "ActiveRecord::RecordNotFound", :status => 404}
+        	    {:name => "ActiveRecord::RecordNotFound", :status => 404},
+        	    {:name => "BadRequestException", :status => 404}
     	    ]
 	    
         	errors.each do |error|

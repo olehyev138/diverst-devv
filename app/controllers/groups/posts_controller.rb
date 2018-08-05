@@ -19,17 +19,9 @@ class Groups::PostsController < ApplicationController
                                 .limit(@limit)
         else
             if @group.active_members.include? current_user
-                @count = base_query
-                            .includes(:news_link, :group_message, :social_link)
-                            .joins(joins)
-                            .where(where, current_user.segments.pluck(:id))
-                            .order(is_pinned: :desc, created_at: :desc)
-                            .count
+                @count = base_query_with_segments.count
 
-                @posts = base_query
-                            .includes(:news_link, :group_message, :social_link)
-                            .joins(joins)
-                            .where(where, current_user.segments.pluck(:id))
+                @posts = base_query_with_segments
                             .order(is_pinned: :desc, created_at: :desc)
                             .limit(@limit)
             else
@@ -92,6 +84,18 @@ class Groups::PostsController < ApplicationController
     end
 
     def base_query
-        @group.news_feed_links.approved
+        NewsFeedLink.combined_news_links(@group.news_feed.id)
+    end
+    
+    def base_query_with_segments
+        segment_ids = current_user.segments.ids
+        if not segment_ids.empty?
+            NewsFeedLink
+                .combined_news_links_with_segments(@group.news_feed.id, current_user.segments.ids)
+                .order(is_pinned: :desc, created_at: :desc)
+                .limit(5)
+        else
+            return base_query
+        end
     end
 end

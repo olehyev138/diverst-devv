@@ -154,6 +154,7 @@ ActiveRecord::Schema.define(version: 20180724141334) do
     t.integer  "event_id",       limit: 4
     t.integer  "group_id",       limit: 4
     t.string   "decline_reason", limit: 191
+    t.text     "comments",       limit: 65535
   end
 
   add_index "budgets", ["approver_id"], name: "fk_rails_a057b1443a", using: :btree
@@ -241,6 +242,24 @@ ActiveRecord::Schema.define(version: 20180724141334) do
   end
 
   add_index "ckeditor_assets", ["type"], name: "index_ckeditor_assets_on_type", using: :btree
+
+  create_table "clockwork_database_events", force: :cascade do |t|
+    t.string   "name",                limit: 191,                 null: false
+    t.integer  "frequency_quantity",  limit: 4,   default: 1,     null: false
+    t.integer  "frequency_period_id", limit: 4,                   null: false
+    t.integer  "enterprise_id",       limit: 4,                   null: false
+    t.boolean  "disabled",                        default: false
+    t.string   "day",                 limit: 191
+    t.string   "at",                  limit: 191
+    t.string   "job_name",            limit: 191,                 null: false
+    t.string   "method_name",         limit: 191,                 null: false
+    t.string   "method_args",         limit: 191
+    t.string   "tz",                  limit: 191,                 null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "clockwork_database_events", ["frequency_period_id"], name: "index_clockwork_database_events_on_frequency_period_id", using: :btree
 
   create_table "csvfiles", force: :cascade do |t|
     t.string   "import_file_file_name",    limit: 191
@@ -474,6 +493,12 @@ ActiveRecord::Schema.define(version: 20180724141334) do
     t.integer  "parent_id",          limit: 4
     t.integer  "enterprise_id",      limit: 4
     t.integer  "group_id",           limit: 4
+  end
+
+  create_table "frequency_periods", force: :cascade do |t|
+    t.string   "name",       limit: 191, default: "daily", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "graphs", force: :cascade do |t|
@@ -1172,6 +1197,13 @@ ActiveRecord::Schema.define(version: 20180724141334) do
     t.datetime "updated_at",                      null: false
     t.integer  "owner_id",            limit: 4
     t.string   "active_users_filter", limit: 191
+  end
+
+  create_table "shared_news_feed_links", force: :cascade do |t|
+    t.integer  "news_feed_link_id", limit: 4, null: false
+    t.integer  "news_feed_id",      limit: 4, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "social_link_segments", force: :cascade do |t|

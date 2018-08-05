@@ -20,6 +20,10 @@ class GroupPolicy < ApplicationPolicy
         @policy_group.group_leader_manage?
     end
 
+    def calendar?
+        index?
+    end
+
     def plan_overview?
         @policy_group.groups_budgets_index?
     end
