@@ -23,7 +23,7 @@ RSpec.describe BudgetItem, type: :model do
     it 'requires estimated_amount to be a number' do
       budget_item.estimated_amount = "o"
       expect(budget_item).to_not be_valid
-      expect(budget_item.errors.full_messages.first).to eq("Estimated amount number of digits must not exceed 6s")
+      expect(budget_item.errors.full_messages.first).to eq("Estimated amount number of digits must not exceed 6")
     end
 
     it 'requires available_amount to be less_than_or_equal_to estimated_amount' do
