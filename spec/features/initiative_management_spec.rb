@@ -67,7 +67,7 @@ RSpec.feature 'Initiative management' do
       expect(budget_item.available_amount).to eq 0
     end
 
-    scenario 'updating initiative with budget', js: true do
+    scenario 'updating initiative with budget' do
       initiative = create(:initiative, owner_group: group)
       budget = create(:approved_budget, group: group)
       budget_item1 = budget.budget_items.first
@@ -82,6 +82,57 @@ RSpec.feature 'Initiative management' do
       expect(page).to have_current_path group_initiatives_path( group )
 
       expect(page).to have_content "$#{initiative.estimated_funding.to_f}"
+    end
+  end
+
+  context 'disable budget item field when budget for the event is closed' do
+    let!(:initiative1) { create(:initiative, owner_group: group) }
+    let!(:budget1) { create(:approved_budget, group: group) }
+
+    before do
+      budget_item1 = budget1.budget_items.first
+      initiative1.update(budget_item_id: budget_item1.id)
+      create(:initiative_expense, description: 'new expense', initiative_id: initiative1.id)
+    end
+
+    scenario 'on event edit form' do
+      visit group_initiative_expenses_path(group, initiative1)
+
+      click_on 'Finish Expenses'
+
+      visit edit_group_initiative_path(group, initiative1)
+
+      expect(page).to have_field 'budget for this event is closed', disabled: true  
+      expect(page).not_to have_field 'Specify amount to deduct from budget' 
+    end
+  end
+  
+  context 'without budget item' do
+    context 'creating initiative without any approved budget items' do
+      before { visit new_group_initiative_path(group) }
+
+      scenario "hide 'Specify amount to deduct from budget' field" do
+        expect(page).not_to have_field 'Specify amount to deduct from budget'
+      end
+
+      scenario 'disable budget item field' do
+        expect(page).to have_field 'Attach a budget to the event.', disabled: true
+      end
+    end
+
+    context 'updating initiative without any approved budget items' do
+      before do
+        initiative = create(:initiative, owner_group: group)
+        visit edit_group_initiative_path(group, initiative)
+      end
+
+      scenario "hide 'Specify amount to deduct from budget' field" do
+        expect(page).not_to have_field 'Specify amount to deduct from budget'
+      end
+
+      scenario 'disable budget item field' do
+        expect(page).to have_field 'Attach a budget to the event.', disabled: true
+      end
     end
   end
 
@@ -118,6 +169,7 @@ RSpec.feature 'Initiative management' do
       expect(Initiative.last.estimated_funding).to eq leftover
     end
   end
+
 
   def fill_form( initiative_params )
     fill_in 'initiative_name', with: initiative_params[:name]

@@ -12,6 +12,19 @@
       </div>
 
       <div id='budget_panel' class="card_section row">
+        <% if @initiative.finished_expenses? %>
+        <div class="col sm-6">
+          <div class="card__section card__section--border">
+            <%= f.input :budget_item_id,
+                  collection: Budget.pre_approved_events_for_select(@group, current_user),
+                  include_blank: "#{@initiative.budget_item.title} ($#{@initiative.budget_item.estimated_amount.to_f})",
+                  label: "<strong>budget</strong> for this event is closed".html_safe,
+                  # disable field if there are no budget_items for approved budgets
+                  disabled: true
+            %>
+          </div>
+        </div>
+        <% else %>
         <div class="col sm-6">
           <div class="card__section card__section--border">
             <%= f.input :budget_item_id,
@@ -46,6 +59,7 @@
             <% end %>
           </div>
         </div>
+        <% end %>
       </div>
 
       <div class="card__section card__section--border">
