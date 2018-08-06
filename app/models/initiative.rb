@@ -54,6 +54,7 @@ class Initiative < ActiveRecord::Base
       .where(initiative_conditions.join(" OR "))
   }
 
+  # we don't want to run this callback when finish_expenses! is triggered in initiatives_controller.rb, finish_expense action
   before_save { allocate_budget_funds unless skip_allocate_budget_funds }
 
   has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: "private"
@@ -196,6 +197,7 @@ class Initiative < ActiveRecord::Base
 
     if budget.present?
       if budget.subject != group
+
         # make sure noone is trying to put incorrect budget value
         errors.add(:budget, 'You are providing wrong budget')
         return false
@@ -228,7 +230,12 @@ class Initiative < ActiveRecord::Base
     if budget_item.present?
       # If user tries to allocate all the money from the budget
       # mark this budget item as used up
-      if self.estimated_funding == 0.0 || self.estimated_funding >= budget_item.available_amount
+      if self.finished_expenses?
+        errors.add(:budget_item_id, "sorry, can't choose another budget item")
+        return false
+      end
+
+      if (self.estimated_funding == 0.0 || self.estimated_funding >= budget_item.available_amount) 
         self.estimated_funding = budget_item.available_amount
         budget_item.available_amount = 0
 
