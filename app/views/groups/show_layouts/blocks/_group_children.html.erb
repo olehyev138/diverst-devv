@@ -15,39 +15,19 @@
 			<br>
 			<% if @group.children.count >= 5 %>
 		  	<% @group.children.limit(5).each do |child| %>
-		    	<%= link_to child.name, child %>
-		      	<span class="muted" style="font-size: 14px;">
-		      		(<% if current_user.is_member_of? child %>
-		        	member
-		        	<% else %>
-		        	not member
-		        	<% end %>)</span><br>
+		    	<%= link_to child.name, child %><br>
 		  	<% end %>
 		  	<%= link_to "View #{@group.children.count - 5} More", "#", class: "sub_ergs", id: @group.id %>
 		  	<%= link_to "View #{@group.children.count - 5} More", "#", class: " hide_sub_ergs", id: @group.id, style: "display:none;" %>
 
 		  	<% @group.children.last(@group.children.count - 5).each do |sub_erg| %>
 		  	<div class="remaining_children_<%= @group.id %>" style="display:none; position: relative; top: 10px;">
-			  	<ol><%= link_to sub_erg.name, group_url(sub_erg) %>
-		      	<span class="muted" style="font-size: 14px;">
-			    	(<% if current_user.is_member_of? sub_erg %>
-		      	member
-		      	<% else %>
-		      	not member
-		      	<% end %>)</span>
-			  	</ol>
+			  	<ol><%= link_to sub_erg.name, group_url(sub_erg) %></ol>
 		  	</div>
 		  	<% end %>
 			<% else %>
 		  	<% @group.children.each do |child| %>
-		    	<%= link_to child.name, child %>
-		      	<span class="muted" style="font-size: 14px;">
-		      		(<% if current_user.is_member_of? child %>
-		        	member
-		        	<% else %>
-		        	not member
-		        	<% end %>)</span>
-		        	<br>
+		    	<%= link_to child.name, child %><br>
 		  	<% end %>
 			<% end %>
 		</div>
@@ -65,14 +45,7 @@
 
 				  	<% category.groups.where(parent_id: @group).each do |sub_group| %>
 				    	<div class="children_<%= category.id %>" style="display:none; position: relative; top: 10px;">
-					    	<ol><%= link_to sub_group.name, group_url(sub_group) %>
-					    		<span class="muted" style="font-size: 14px;">
-					    			(<% if current_user.is_member_of? sub_group %>
-					    			member
-					    			<% else %>
-					    			not member
-					    			<% end %>)</span>
-					    	</ol>
+					    	<ol><%= link_to sub_group.name, group_url(sub_group) %></ol>
 					  		<br>
 				    	</div>
 				  	<% end %>
@@ -81,14 +54,7 @@
 				<% end %>
 			</ol>
 			<% @group.children.where(group_category_id: nil).each do |sub_group_with_no_category| %>
-		  	<%= link_to sub_group_with_no_category.name, group_url(sub_group_with_no_category) %>
-		  	<span class="muted" style="font-size: 14px;">
-		      		(<% if current_user.is_member_of? sub_group_with_no_category %>
-		        	member
-		        	<% else %>
-		        	not member
-		        	<% end %>)</span>
-		  	<br>
+		  	<%= link_to sub_group_with_no_category.name, group_url(sub_group_with_no_category) %><br>
 			<% end %>
 		</div>
 	</div>
