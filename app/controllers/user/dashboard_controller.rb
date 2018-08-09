@@ -27,10 +27,15 @@ class User::DashboardController < ApplicationController
   end
 
   def posts
+    # get the news_feed_ids
+    news_feed_ids = NewsFeed.where(:group_id => current_user.groups.ids).ids
+    
+    # get the news_feed_links
     NewsFeedLink
       .joins(:news_feed).joins(joins)
       .includes(:link)
-      .where(:news_feeds => {:group_id => current_user.active_groups.pluck(:id)}, :approved => true)
+      .where("news_feed_links.news_feed_id IN (?) OR shared_news_feed_links.news_feed_id IN (?)", news_feed_ids, news_feed_ids)
+      .where(:approved => true)
       .where(where, current_user.segments.pluck(:id))
       .order(created_at: :desc)
       .distinct
@@ -42,6 +47,6 @@ class User::DashboardController < ApplicationController
   end
   
   def joins
-    "LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id"
+    "LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id"
   end
 end

@@ -10,7 +10,6 @@ RSpec.feature 'User Management' do
 		visit users_path
 	end
 
-
 	context 'manage users' do
 		scenario 'add a user', js: true do
 			click_on 'Add a user'
@@ -22,7 +21,6 @@ RSpec.feature 'User Management' do
 			expect(page).to have_content 'Owusu-Frimpong'
 			expect(page).to have_content 'derek@diverst.com'
 		end
-
 
 		context 'add a user' do
 			before do

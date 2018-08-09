@@ -116,6 +116,10 @@ class User < ActiveRecord::Base
         group.user_groups.where(user_id: self.id).any?
     end
 
+    def is_not_member_of?(group)
+        !is_member_of?(group)
+    end
+
     def name
         "#{first_name} #{last_name}"
     end

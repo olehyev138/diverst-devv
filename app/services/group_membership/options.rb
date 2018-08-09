@@ -21,8 +21,10 @@ class GroupMembership::Options
 	end
 
 	def leave_parent_group
-		if @group.parent.members.include? @user
-			UserGroup.find_by(user_id: @user.id, group_id: @group.parent.id).destroy
+		if @group.parent.present?
+			if @group.parent.members.include? @user
+				UserGroup.find_by(user_id: @user.id, group_id: @group.parent.id).destroy
+			end
 		end
 	end
 end
