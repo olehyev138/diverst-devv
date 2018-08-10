@@ -104,8 +104,7 @@ class Groups::NewsLinksController < ApplicationController
                 :description,
                 :picture,
                 :photos_attributes => [:file, :_destroy, :id],
-                :news_feed_link_attributes => [:approved, :news_feed_id, :link, :shared_news_feed_ids => []],
-                :segment_ids => []
+                :news_feed_link_attributes => [:approved, :news_feed_id, :link, :shared_news_feed_ids => [], :segment_ids => []],
             )
     end
 
