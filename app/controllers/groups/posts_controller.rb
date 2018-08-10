@@ -16,9 +16,9 @@ class Groups::PostsController < ApplicationController
                                 .limit(@limit)
         else
             if @group.active_members.include? current_user
-                @count = NewsFeed.all_links(@group.news_feed.id, current_user.segment.ids).count
+                @count = NewsFeed.all_links(@group.news_feed.id, current_user.segments.ids).count
 
-                @posts = NewsFeed.all_links(@group.news_feed.id, current_user.segment.ids)
+                @posts = NewsFeed.all_links(@group.news_feed.id, current_user.segments.ids)
                             .order(is_pinned: :desc, created_at: :desc)
                             .limit(@limit)
             else
