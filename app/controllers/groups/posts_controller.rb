@@ -7,6 +7,7 @@ class Groups::PostsController < ApplicationController
     layout 'erg'
 
     def index
+        authorize @group, :view_latest_news?
         if policy(@group).erg_leader_permissions?
                 @count = NewsFeed.all_links_without_segments(@group.news_feed.id)
                                 .count
@@ -15,10 +16,14 @@ class Groups::PostsController < ApplicationController
                                 .order(is_pinned: :desc, created_at: :desc)
                                 .limit(@limit)
         else
-            if @group.active_members.include? current_user
-                @count = NewsFeed.all_links(@group.news_feed.id, current_user.segments.ids).count
+            if policy(@group).view_latest_news?
+                segment_ids = nil
+                if @group.active_members.include?(current_user)
+                  segment_ids = current_user.segments.ids
+                end
+                @count = NewsFeed.all_links(@group.news_feed.id, segment_ids).count
 
-                @posts = NewsFeed.all_links(@group.news_feed.id, current_user.segments.ids)
+                @posts = NewsFeed.all_links(@group.news_feed.id, segment_ids)
                             .order(is_pinned: :desc, created_at: :desc)
                             .limit(@limit)
             else

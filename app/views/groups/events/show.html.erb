@@ -45,7 +45,7 @@
             <%= "(#{current_user.default_time_zone} timezone)"%>
           </p>
           <h4>Description</h4>
-          <p><%= @event.description&.html_safe %></p>
+          <p><%= sanitize @event.description %></p>
           <h4>Location</h4>
           <p><%= @event.location %></p>
           <h4>Co-hosted/Participating Groups</h4>
