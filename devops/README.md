@@ -12,4 +12,8 @@
 
 3. To run setup on all servers, run:
 
-   ansible-playbook setup.yml
+    ansible-playbook setup.yml
+
+If an instance requires the SUDO pass, you can use:
+
+    ansible-playbook setup.yml --ask-become-pass
