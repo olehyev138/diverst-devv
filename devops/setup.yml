@@ -1,0 +1,14 @@
+---
+- hosts: all
+  roles:
+    - role: matic-insurance.hostname
+      fqdn_hostname: '{{ inventory_hostname }}'
+      tags: ['hostname']
+
+    - role: amaabca.loggly_tls
+      loggly:
+        refresh_unicorn: false
+        logrotate: false
+        application:
+          environment: 'env'
+      tags: ['logger']
