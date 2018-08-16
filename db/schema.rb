@@ -153,8 +153,8 @@ ActiveRecord::Schema.define(version: 20180724141334) do
     t.integer  "requester_id",   limit: 4
     t.integer  "event_id",       limit: 4
     t.integer  "group_id",       limit: 4
-    t.text     "comments",       limit: 65535
     t.string   "decline_reason", limit: 191
+    t.text     "comments",       limit: 65535
   end
 
   add_index "budgets", ["approver_id"], name: "fk_rails_a057b1443a", using: :btree
