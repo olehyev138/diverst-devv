@@ -48,14 +48,3 @@
     <%= f.button :submit %>
   <% end %>
 </div>
-
-<script>
-  $(document).ready(function() {
-   $(".group_sponsor_link").on('cocoon:before-insert', function() {
-    var group_sponsors_count = $('.nested-fields').length
-    if (group_sponsors_count == 3) {
-      $(this).hide();
-    }})
- });
-
-</script>
