@@ -23,7 +23,7 @@
               <%= sanitize news_link.description %>
               <% if news_link.url.present? %>
                 <p>
-                  <%= link_to news_link.url, news_link.url, target: '_blank', 'data-trackable': news_link.news_feed_link.id %>
+                  <%= link_to nil, news_link.url, target: '_blank', 'data-trackable': news_link.news_feed_link.id %>
                 </p>
               <% end %>
               <% if news_link.author.present? %>
@@ -49,7 +49,7 @@
           <%= raw news_link.description %>
           <% if news_link.url.present? %>
             <p>
-              <%= link_to news_link.url, news_link.url, target: '_blank', 'data-trackable': news_link.news_feed_link.id %>
+              <%= link_to nil, news_link.url, target: '_blank', 'data-trackable': news_link.news_feed_link.id %>
             </p>
           <% end %>
           <% if news_link.author.present? %>
@@ -91,9 +91,15 @@
 <%= render "groups/news_links/modal/form" %>
 
 <script>
- $(function() {
-   $('a[data-trackable]').on('mousedown', function() {
-     $.post('/views/track', { id: $(this).data('trackable') } );
-   });
- });
+$(document).ready(function() {
+  var clicked = false;
+  $('a[data-trackable]').click(function() {
+    if (!clicked)
+    {
+      clicked = true;
+      $.post('/views/track', { id: $(this).data('trackable') },
+         function (data) { clicked = false; } );
+    }
+  });
+});
 </script>
