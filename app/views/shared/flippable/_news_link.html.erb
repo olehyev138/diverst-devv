@@ -49,11 +49,3 @@
   <% end %>
 
 <% end %>
-
-<script>
-$(document).ready(function() {
-  $('a[data-trackable]').click(function() {
-      $.post('/views/track', { id: $(this).data('trackable') } );
-  });
-});
-</script>

@@ -89,17 +89,3 @@
 </div>
 
 <%= render "groups/news_links/modal/form" %>
-
-<script>
-$(document).ready(function() {
-  var clicked = false;
-  $('a[data-trackable]').click(function() {
-    if (!clicked)
-    {
-      clicked = true;
-      $.post('/views/track', { id: $(this).data('trackable') },
-         function (data) { clicked = false; } );
-    }
-  });
-});
-</script>
