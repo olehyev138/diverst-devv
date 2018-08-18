@@ -78,6 +78,7 @@ class Initiative < ActiveRecord::Base
 
     d = self[:description]
 
+    # Remove the trunc because we're allowing HTML and then sanitizing
     #d.gsub! '<p>', ''
     #d.gsub! '</p>', ''
     #d.gsub! '&nbsp;', ''
