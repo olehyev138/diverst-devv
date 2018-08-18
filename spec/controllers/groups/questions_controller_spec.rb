@@ -5,8 +5,9 @@ RSpec.describe Groups::QuestionsController, type: :controller do
     let(:group){ create(:group, enterprise: user.enterprise) }
 
     describe 'GET#index' do
-        let!(:user_groups_with_answered_survey) { create_list(:user_group, 3, user: user, group: group, data: Faker::Lorem.sentence) }
-        let!(:user_group_without_answered_survey) { create_list(:user_group, 2, user: user, group: group) }
+        let!(:user_group_answered) { create(:user_group, user: user, group: group, data: Faker::Lorem.sentence) }
+        let!(:user_groups_with_answered_survey) { create_list(:user_group, 2, group: group, data: Faker::Lorem.sentence) }
+        let!(:user_group_without_answered_survey) { create_list(:user_group, 2, group: group) }
 
         context 'with logged in user' do
             login_user_from_let
@@ -48,7 +49,8 @@ RSpec.describe Groups::QuestionsController, type: :controller do
             end
 
             context 'with user group' do
-                let!(:user_groups_with_answered_survey) { create_list(:user_group, 3, user: user, group: group, data: Faker::Lorem.sentence) }
+                let!(:user_group_answered) { create(:user_group, user: user, group: group, data: Faker::Lorem.sentence) }
+                let!(:user_groups_with_answered_survey) { create_list(:user_group, 2, group: group, data: Faker::Lorem.sentence) }
 
                 it "renders survey template" do
                    get :survey, group_id: group.id
@@ -66,7 +68,8 @@ RSpec.describe Groups::QuestionsController, type: :controller do
     describe 'POST#submit_survey' do
         describe 'user logged in' do
             login_user_from_let
-            let!(:user_groups_with_answered_survey) { create_list(:user_group, 3, user: user, group: group) }
+            let!(:user_group_answered) { create_list(:user_group, 1, user: user, group: group) }
+            let!(:user_groups_with_answered_survey) { create_list(:user_group, 2, group: group) }
 
             context "when successful" do
                 before do

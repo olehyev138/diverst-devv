@@ -179,9 +179,6 @@ RSpec.describe Poll, type: :model do
               #add and accept members here. check they work
               group.update(pending_users: 'enabled')
 
-              group.members << user_in_group
-              group.members << pending_user_in_group
-
               group.accept_user_to_group(user_in_group.id)
             }
             before(:each){ poll.update(groups: [group]) }

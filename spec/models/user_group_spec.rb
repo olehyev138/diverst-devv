@@ -6,6 +6,21 @@ RSpec.describe UserGroup do
 
     it { expect(user_group).to belong_to(:user) }
     it { expect(user_group).to belong_to(:group) }
+    
+    it "validates 1 user per group" do
+      group_member = create(:user)
+      group = create(:group)
+      group_member_1 = create(:user_group, :user => group_member, :group => group)
+      group_member_2 = build(:user_group, :user => group_member, :group => group)
+      
+      expect(group_member.valid?).to be(true)
+      expect(group.valid?).to be(true)
+      expect(group_member_1.valid?).to be(true)
+      
+      # ensure the user cannot be added as a member to the same group twice
+      expect(group_member_2.valid?).to be(false)
+      expect(group_member_2.errors.full_messages.first).to eq("User is already a member of this group")
+    end
   end
 
   describe "when scoping" do

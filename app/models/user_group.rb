@@ -2,8 +2,12 @@ class UserGroup < ActiveRecord::Base
   include ContainsFields
   include Indexable
 
+  # associations
   belongs_to :user
   belongs_to :group
+  
+  # validations
+  validates_uniqueness_of :user, scope: [:group], :message => "is already a member of this group"
 
   enum notifications_frequency: [:hourly, :daily, :weekly, :disabled]
   enum notifications_date: [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]
