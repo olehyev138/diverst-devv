@@ -49,3 +49,6 @@ cookbooks/
 
 #log
 /log
+
+#RubyMine files
+/.idea
