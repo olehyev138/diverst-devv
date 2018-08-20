@@ -78,9 +78,10 @@ class Initiative < ActiveRecord::Base
 
     d = self[:description]
 
-    d.gsub! '<p>', ''
-    d.gsub! '</p>', ''
-    d.gsub! '&nbsp;', ''
+    # Remove the trunc because we're allowing HTML and then sanitizing
+    #d.gsub! '<p>', ''
+    #d.gsub! '</p>', ''
+    #d.gsub! '&nbsp;', ''
 
     d
   end
@@ -176,7 +177,7 @@ class Initiative < ActiveRecord::Base
   def funded_by_leftover?
     self.budget_item_id == BudgetItem::LEFTOVER_BUDGET_ITEM_ID
   end
-  
+
   def group_ids
     participating_groups.pluck(:id) + [group.id]
   end

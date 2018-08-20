@@ -6,17 +6,17 @@ class NewsFeedLink < ActiveRecord::Base
     has_many :segments, through: :news_feed_link_segments
     has_many :shared_news_feed_links, :class_name => "SharedNewsFeedLink", source: :news_feed_link, dependent: :destroy
     has_many :shared_news_feeds, :through => :shared_news_feed_links, source: :news_feed
-    
+
     has_many :likes, dependent: :destroy
     has_many :views, dependent: :destroy
 
     delegate :group,    :to => :news_feed
     delegate :segment,  :to => :news_feed_link_segment, :allow_nil => true
 
-    scope :approved,        -> { where(approved: true )}
-    scope :not_approved,    -> { where(approved: false )}
-    scope :combined_news_links, -> (news_feed_id){joins("LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id").where("shared_news_feed_links.news_feed_id = #{news_feed_id} OR news_feed_links.news_feed_id = #{news_feed_id} AND news_feed_links.approved = 1").distinct}
-    
+    scope :approved,        -> { where(approved: true).order(created_at: :desc) }
+    scope :not_approved,    -> { where(approved: false).order(created_at: :desc) }
+    scope :combined_news_links, -> (news_feed_id){joins("LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id").where("shared_news_feed_links.news_feed_id = #{news_feed_id} OR news_feed_links.news_feed_id = #{news_feed_id} AND news_feed_links.approved = 1").distinct.order(created_at: :desc)}
+
     validates :news_feed_id,    presence: true
     validates :link_id,         presence: true, :on => :update
     validates :link_type,       presence: true, :on => :update
@@ -36,9 +36,7 @@ class NewsFeedLink < ActiveRecord::Base
 
     # View Count methods
     def increment_view(user)
-      view = views.find_or_create_by(user_id: user.id) do |v|
-        v.enterprise_id = user.enterprise_id
-      end
+      view = views.find_or_create_by(user_id: user.id, enterprise_id: user.enterprise_id)
 
       view.view_count += 1
       view.save
@@ -50,5 +48,14 @@ class NewsFeedLink < ActiveRecord::Base
 
     def unique_views
       views.all.count
+    end
+
+    def create_view_if_none(user)
+      unless views.find_by(user_id: user.id)
+        view = views.create(user_id: user.id, enterprise_id: user.enterprise_id)
+
+        view.view_count = 1
+        view.save
+      end
     end
 end

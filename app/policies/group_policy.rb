@@ -110,7 +110,7 @@ class GroupPolicy < ApplicationPolicy
             return true
         when 'group'
             #Only active group members and guests(non-members) can see latest news
-            is_active_member? || is_a_guest? || is_a_pending_member?
+            is_active_member? || is_a_pending_member?
         when 'leaders_only'
             #Only users with ability to manipulate members(admins) can see latest news
             return manage_members?
