@@ -163,7 +163,7 @@ class User < ActiveRecord::Base
          
         # ensure user cannot go from non_group role to a group role that they don't have   
         elsif enterprise.user_roles.where(:id => user_role_id, :role_type => "group").count > 0 &&
-                GroupLeader.joins(:group => :enterprise).where(:groups => {:enterprise_id => enterprise.id}, :user_role_id => user_role_id, :user_id => id).count < 1
+                GroupLeader.joins(:group => :enterprise).where(:groups => {:enterprise_id => enterprise_id}, :user_role_id => user_role_id, :user_id => id).count < 1
             errors.add(:user_role_id, 'User does not have that role in any group')
             
         # make sure if a user is a group leader that the role is never set to a non_group_leader role with
@@ -179,7 +179,7 @@ class User < ActiveRecord::Base
         # role switch to a super admin - UserRole.where(:role_name => role_was).first.priority
         elsif enterprise.user_roles.where(:id => user_role_id_was).where.not(:role_type => "group").count > 0 && 
                 enterprise.user_roles.where(:id => user_role_id).where.not(:role_type => "group").count > 0 && 
-                GroupLeader.joins(:group => :enterprise).where(:groups => {:enterprise_id => enterprise.id}, :user_id => id).count > 0 &&
+                GroupLeader.joins(:group => :enterprise).where(:groups => {:enterprise_id => enterprise_id}, :user_id => id).count > 0 &&
                 enterprise.user_roles.where(:id => user_role_id).where("priority > ?", enterprise.user_roles.where(:id => group_leaders.role_ids).order("priority DESC").first.priority).count > 0
             errors.add(:user_role_id, 'Cannot change from role to role with lower priority while user is still a group leader')
         end
@@ -238,11 +238,7 @@ class User < ActiveRecord::Base
 
     #Return true if user is a leader of at least 1 group
     def erg_leader?
-        g = groups.includes(:leaders).select do |group|
-            group.leaders.include? self
-        end
-
-        g.present?
+        group_leaders.count > 0
     end
 
     def manageable_groups
@@ -262,7 +258,7 @@ class User < ActiveRecord::Base
         saml_user_info = enterprise.sso_fields_to_enterprise_fields(_attrs)
 
         self.update_info(saml_user_info)
-        save!
+        save(:validate => false)
 
         self
     end
