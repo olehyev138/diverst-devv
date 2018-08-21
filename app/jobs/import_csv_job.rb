@@ -5,10 +5,9 @@ class ImportCSVJob < ActiveJob::Base
     file = CsvFile.find_by_id(file_id)
     return false unless file.present?
 
-
     @importer = Importers::Users.new(file.path_for_csv, file.user)
     @importer.import
-
+    
     CsvUploadMailer.result(
             @importer.successful_rows,
             @importer.failed_rows,
