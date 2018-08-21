@@ -47,7 +47,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
 
   delegate :news_feed_links,        :to => :news_feed
   delegate :shared_news_feed_links, :to => :news_feed
-  
+
   has_many :user_groups, dependent: :destroy
   has_many :members, through: :user_groups, class_name: 'User', source: :user, after_remove: :update_elasticsearch_member
   has_many :groups_polls
@@ -100,7 +100,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   belongs_to :parent, class_name: "Group", foreign_key: :parent_id
   belongs_to :group_category
   belongs_to :group_category_type
-  
+
   # re-add to allow migration file to run
   has_attached_file :sponsor_media, s3_permissions: :private
   do_not_validate_attachment_file_type :sponsor_media
@@ -123,7 +123,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   after_commit :update_all_elasticsearch_members
   before_validation :smart_add_url_protocol
   after_create :create_news_feed
-  
+
   attr_accessor :skip_label_consistency_check
   validate :perform_check_for_consistency_in_category, on: [:create, :update], unless: :skip_label_consistency_check
   validate :ensure_label_consistency_between_parent_and_sub_groups, on: [:create, :update]
@@ -135,13 +135,13 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   # parents/children
   scope :all_parents,     -> {where(:parent_id => nil)}
   scope :all_children,    -> {where.not(:parent_id => nil)}
-  
+
   accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
-  
+
   def layout_values
     {
     'layout_0' => 'Default layout',
@@ -228,7 +228,7 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   end
 
   def file_safe_name
-    name.gsub!(/[^0-9A-Za-z.\-]/, '_')
+    name.gsub(/[^0-9A-Za-z.\-]/, '_')
   end
 
   def possible_participating_groups
@@ -404,5 +404,5 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
     return nil if group_sizes.length == 0
     group_sizes.sum / group_sizes.length
   end
-  
+
 end
