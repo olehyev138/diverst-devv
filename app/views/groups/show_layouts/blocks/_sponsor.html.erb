@@ -25,9 +25,15 @@
             <div class="item <%= 'active' if index == 0 %>">
               <% show_sponsor?(group_sponsor) do %>
                 <% if group_sponsor.sponsor_media.present? %>
+                  
                   <% show_sponsor_media?(group_sponsor, "sponsor_media_content_type") do %>
                     <%= image_tag(group_sponsor.sponsor_media.expiring_url(3600), style: 'max-width: 100px; max-height:90px; border-radius: 80px; cursor: pointer;') %>
                   <% end %>
+                  
+                  <% show_sponsor_video?(group_sponsor, "sponsor_media_content_type") do %>
+                      <%= video_tag(group_sponsor.sponsor_media.expiring_url(3600), controls: true, size: "200x200") %>
+                  <% end %>
+                
                 <% else %>
                   <%= image_tag("missing_user.png", size: "70x70") %>
                 <% end %>
