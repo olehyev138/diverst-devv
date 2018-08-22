@@ -25,8 +25,6 @@ class PopulateMetricsDashboardJob < ActiveJob::Base
         
         enterprise.groups.find_each do |group|
             
-            group.outcomes.destroy_all
-            
             # create an outcome
             outcome = group.outcomes.create(:name => "Test_#{group.id}")
             next if outcome.id.nil?
@@ -48,8 +46,6 @@ class PopulateMetricsDashboardJob < ActiveJob::Base
         numbers = [3,2,5,1,7,10,9,5,11,4,1,5]
     
         enterprise.groups.find_each do |group|
-            
-            group.messages.destroy_all
             
             # create initiatives
             numbers.pop.times do
