@@ -4,7 +4,11 @@
       <%= simple_form_for @user, wrapper: :inline_form, html: { class: 'form-inline' }, url: user_mentorship_path(@user) do |f| %>
         <div class="card__section">
           <div class="row row--spacing-bottom">
-            <%= link_to 'Connect with LinkedIn', '/omniauth/linkedin', class: "btn btn--secondary" unless @user.linkedin_profile_url %>
+            <% if @user.linkedin_profile_url.blank? %>
+              <%= link_to '/omniauth/linkedin' do %>
+                <img class="img-responsive center-block" src="<%= image_path "Connect with LinkedIn.png" %>" alt="Home">
+              <% end %>
+            <% end %>
           </div>
           <div class="row row--spacing-bottom">
             <div class="col md-6">
@@ -17,6 +21,12 @@
               <p class="field__hint">Are you interested in being mentored?</p>
               <%= f.hidden_field :mentee, value: 0 %>
               <%= f.input :mentee, label: false %>
+            </div>
+          </div>
+          <div class="row row--spacing-bottom">
+            <div class="col-xs-12">
+              <p class="field__hint">Your default time_zone:</p>
+              <%= f.input :time_zone %>
             </div>
           </div>
         </div>
@@ -46,9 +56,9 @@
             </div>
           </div>
           <div class="row row--spacing-bottom">
-            <div class="col md-12">
-              <p class="field__hint">Please describe why</p>
-              <%= f.input :mentorship_description, label: false %>
+            <div class="col-xs-12">
+              <p class="field__hint">Please describe specifically why you want to be mentored:</p>
+              <%= f.input :mentorship_description, label: false, input_html: { class: "full-width" } %>
             </div>
           </div>
           <div class="row row--spacing-bottom">

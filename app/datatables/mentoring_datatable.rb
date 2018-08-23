@@ -29,13 +29,15 @@ class MentoringDatatable < AjaxDatatablesRails::Base
         [
           "#{link_to record.name, user_mentorship_path(:id => record.id) }",
           html_escape(record.email),
-          "#{link_to('Request', new_mentoring_request_path(:sender_id => @user.id, :receiver_id => record.id) )}",
+          record.mentoring_interests.pluck(:name).join(", "),
+          "#{link_to('Request', new_mentoring_request_path(:sender_id => record.id, :receiver_id => @user.id) )}",
         ]
       else
         [
           "#{link_to record.name, user_mentorship_path(:id => record.id) }",
           html_escape(record.email),
-          "#{link_to('Request', new_mentoring_request_path(:sender_id => record.id, :receiver_id => @user.id) )}"
+          record.mentoring_interests.pluck(:name).join(", "),
+          "#{link_to('Request', new_mentoring_request_path(:sender_id => @user.id, :receiver_id => record.id) )}"
         ]
       end
     end
