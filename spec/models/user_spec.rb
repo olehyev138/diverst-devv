@@ -119,6 +119,21 @@ RSpec.describe User do
       end
     end
 
+    describe 'before_destroy_callbacks' do
+      context '#check_lifespan_of_user' do
+        let!(:user1) { create :user }
+        let!(:user2) { create :user, created_at: 20.days.ago, updated_at: 20.days.ago }
+        
+        it 'deletes user younger than 14 days' do
+          expect{ user1.destroy }.to change(User, :count).by(-1)
+        end
+
+        it 'does not deletes user older than 14 days' do
+          expect{ user2.destroy }.to change(User, :count).by(0)
+        end
+      end
+    end
+
     context 'presence of fields' do
       let(:user){ build(:user, enterprise: enterprise) }
       let!(:mandatory_field){ build(:field, title: "Test", required: true) }

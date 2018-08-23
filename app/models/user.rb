@@ -88,6 +88,7 @@ class User < ActiveRecord::Base
     before_validation :generate_password_if_saml
     before_validation :set_provider
     before_validation :set_uid
+    before_destroy :check_lifespan_of_user
 
     before_save :assign_policy_group, if: Proc.new { |user| user[:policy_group_id].nil? }
     after_create :assign_firebase_token
@@ -444,6 +445,11 @@ class User < ActiveRecord::Base
     end
 
     private
+
+    def check_lifespan_of_user
+        # deletes users 13 days or younger
+        (DateTime.now.day - self.created_at.day) < 14
+    end
 
     def validate_presence_fields
         enterprise.try(:fields).to_a.each do |field|
