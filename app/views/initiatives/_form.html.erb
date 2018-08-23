@@ -72,10 +72,10 @@
         </p>
         <div class="row">
           <div class="col sm-6">
-            <%= f.input :start, as: :date_time_picker, label: "Start time" %>
+            <%= f.input :start, as: :date_time_picker, label: "Start time", input_html: { autocomplete: 'off' } %>
           </div>
           <div class="col sm-6">
-            <%= f.input :end, as: :date_time_picker, label: "End time" %>
+            <%= f.input :end, as: :date_time_picker, label: "End time", input_html: { autocomplete: 'off' } %>
           </div>
         </div>
       </div>
