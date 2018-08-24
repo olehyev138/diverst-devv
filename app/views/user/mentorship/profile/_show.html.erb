@@ -58,21 +58,24 @@
           <label><strong>Availability</strong></label>
           <p>
             <% @user.availabilities.each do |availability| %>
-              <span><%= availability.start.strftime("%m/%d/%Y %I:%M %p") %></span>
+              <span><%= availability.day.titleize %></span> <span><%= availability.start %></span> - <span><%= availability.end %></span>
+              <br>
             <% end %>
           </p>
         </div>
       </div>
     </div>
-    <div class="card__section card__section--border">
-      <div class="row">
-        <div class="col-sm-6 col-xs-12">
-          <label><strong>LinkedIn Profile</strong></label>
-          <p>
-            <%= link_to image_tag('linkedin.png'), @user.linkedin_profile_url, target: '_blank' %>
-          </p>
+    <% if not @user.linkedin_profile_url.blank? %>
+      <div class="card__section card__section--border">
+        <div class="row">
+          <div class="col-sm-6 col-xs-12">
+            <label><strong>LinkedIn Profile</strong></label>
+            <p>
+              <%= link_to image_tag('linkedin.png'), @user.linkedin_profile_url, target: '_blank' %>
+            </p>
+          </div>
         </div>
       </div>
-    </div>
+    <% end %>
   </div>
 </div>

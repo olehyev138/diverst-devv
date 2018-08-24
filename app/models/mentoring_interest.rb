@@ -5,4 +5,8 @@ class MentoringInterest < ActiveRecord::Base
     
     # validations
     validates :name,  presence: true
+    
+    # we downcase the name in order to allow for searching
+    before_save { |m| m.name = m.name.downcase }
+    
 end

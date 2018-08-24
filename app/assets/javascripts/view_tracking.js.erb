@@ -1,0 +1,14 @@
+$(document).on('ready page:load', function() {
+  $('a[data-trackable]').click(function(event) {
+      var link = $(this);
+      if ( link.attr("target") != "_blank" ) {
+        event.preventDefault();
+      }
+      $.post('/views/track', { id: link.data('trackable') },
+        function() {
+          if ( link.attr("target") != "_blank" ) {
+            window.location.href = link.attr("href");
+          }
+        });
+  });
+});

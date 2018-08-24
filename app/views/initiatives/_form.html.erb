@@ -1,5 +1,5 @@
 <div class="content__main">
-  <%= simple_form_for [@group, @initiative] do |f| %>
+  <%= simple_form_for [@group, @initiative], html: { class: "disable-enter-submit" } do |f| %>
 
     <div class="card">
       <div class="card__section card__section--border">
@@ -31,6 +31,7 @@
                   collection: Budget.pre_approved_events_for_select(@group, current_user),
                   include_blank: 'Create new free event ($0)',
                   label: "Attach a <strong>budget</strong> to the event.".html_safe,
+
                   # disable field if there are no budget_items for approved budgets
                   disabled: @group.budgets.approved.all? { |approved_budget| approved_budget.budget_items.empty? }
             %>
@@ -38,6 +39,7 @@
         </div>
         <div class="col sm-6">
           <div class="card__section card__section--border">
+
             <% if @group.budgets.approved.any? { |approved_budget| approved_budget.budget_items.any? } %> <!-- show it only when you have approved budget items for group-->
               <%= f.input :estimated_funding, label: "Specify amount to deduct from budget" %>
               <script>
@@ -87,10 +89,10 @@
         </p>
         <div class="row">
           <div class="col sm-6">
-            <%= f.input :start, as: :date_time_picker, label: "Start time" %>
+            <%= f.input :start, as: :date_time_picker, label: "Start time", input_html: { autocomplete: 'off' } %>
           </div>
           <div class="col sm-6">
-            <%= f.input :end, as: :date_time_picker, label: "End time" %>
+            <%= f.input :end, as: :date_time_picker, label: "End time", input_html: { autocomplete: 'off' } %>
           </div>
         </div>
       </div>

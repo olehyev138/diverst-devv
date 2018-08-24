@@ -21,7 +21,8 @@ class User::MentorshipController < ApplicationController
         @user.assign_attributes(user_params)
         if @user.save
             flash[:notice] = "Your user was updated"
-            redirect_to :back
+            # we redirect to mentors so the user can find a mentor
+            redirect_to action: :mentors
         else
             flash[:alert] = "Your user was not updated. Please fix the errors"
             redirect_to :back
@@ -53,7 +54,7 @@ class User::MentorshipController < ApplicationController
     protected
     
     def set_user
-        @user = current_user
+        @user = User.find_by_id(params[:id]) || current_user
     end
     
     def user_params
@@ -62,7 +63,8 @@ class User::MentorshipController < ApplicationController
             :mentee,
             :mentorship_description,
             mentoring_interest_ids: [],
-            mentoring_type_ids: []
+            mentoring_type_ids: [],
+            :availabilities_attributes => [:day, :start, :end, :_destroy, :id]
         )
     end
 end

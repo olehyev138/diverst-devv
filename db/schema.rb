@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180724141334) do
+ActiveRecord::Schema.define(version: 20180804155706) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -825,11 +825,12 @@ ActiveRecord::Schema.define(version: 20180724141334) do
   end
 
   create_table "mentorship_availabilities", force: :cascade do |t|
-    t.integer  "user_id",    limit: 4, null: false
-    t.datetime "start",                null: false
-    t.datetime "end",                  null: false
+    t.integer  "user_id",    limit: 4,                      null: false
+    t.string   "start",      limit: 191,                    null: false
+    t.string   "end",        limit: 191,                    null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "day",        limit: 191, default: "monday", null: false
   end
 
   add_index "mentorship_availabilities", ["user_id"], name: "index_mentorship_availabilities_on_user_id", using: :btree

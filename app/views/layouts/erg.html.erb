@@ -44,9 +44,11 @@
           <li>
             <%= active_link_to "Events", group_events_path(@group) %>
           </li>
+          <% if policy(@group).view_latest_news? %>
             <li>
-              <%= active_link_to "News Feed (#{NewsFeedLink.combined_news_links(@group.news_feed.id).count})", group_posts_path(@group) %>
+              <%= active_link_to "News Feed (#{NewsFeed.all_links_without_segments(@group.news_feed.id).count})", group_posts_path(@group) %>
             </li>
+          <% end %>
           <li>
             <%= active_link_to "Resources", group_folders_path(@group) %>
           </li>
@@ -77,9 +79,8 @@
       <% end %>
       <%= active_link_to "Events", group_events_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <%= active_link_to "Resources", group_folders_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-      <%= active_link_to "News Feed", group_posts_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if !policy(@group).update?%>
-      <% if policy(@group).leaders? %>
-          <%= active_link_to "News Feed (#{NewsFeedLink.combined_news_links(@group.news_feed.id).count})", group_posts_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+      <%= active_link_to "News Feed (#{NewsFeed.all_links_without_segments(@group.news_feed.id).count})", group_posts_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(@group).view_latest_news? %>
+      <% if policy(@group).update? %>
           <%= active_link_to "Leaders", group_leaders_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
           <%= active_link_to "Insights", group_questions_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
           <%= active_link_to "Layouts", layouts_group_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
