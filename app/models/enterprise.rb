@@ -50,7 +50,6 @@ class Enterprise < ActiveRecord::Base
     has_many :badges, dependent: :destroy
     has_many :group_categories, dependent: :destroy
     has_many :group_category_types, dependent: :destroy
-    has_many :sponsors, as: :sponsorable, dependent: :destroy
 
     has_one :custom_text, dependent: :destroy
 
