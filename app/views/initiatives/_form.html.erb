@@ -12,19 +12,35 @@
       </div>
 
       <div id='budget_panel' class="card_section row">
+        <% if @initiative.finished_expenses? %>
+        <div class="col sm-6">
+          <div class="card__section card__section--border">
+            <%= f.input :budget_item_id,
+                  collection: Budget.pre_approved_events_for_select(@group, current_user),
+                  include_blank: "#{@initiative.budget_item.title} ($#{@initiative.budget_item.estimated_amount.to_f})",
+                  label: "<strong>budget</strong> for this event is closed".html_safe,
+                  # disable field if there are no budget_items for approved budgets
+                  disabled: true
+            %>
+          </div>
+        </div>
+        <% else %>
         <div class="col sm-6">
           <div class="card__section card__section--border">
             <%= f.input :budget_item_id,
                   collection: Budget.pre_approved_events_for_select(@group, current_user),
                   include_blank: 'Create new free event ($0)',
                   label: "Attach a <strong>budget</strong> to the event.".html_safe,
-                  disabled: controller.action_name == "edit"
+
+                  # disable field if there are no budget_items for approved budgets
+                  disabled: @group.budgets.approved.all? { |approved_budget| approved_budget.budget_items.empty? }
             %>
           </div>
         </div>
         <div class="col sm-6">
           <div class="card__section card__section--border">
-            <% if @initiative.new_record?  #only show it for event creation form %>
+
+            <% if @group.budgets.approved.any? { |approved_budget| approved_budget.budget_items.any? } %> <!-- show it only when you have approved budget items for group-->
               <%= f.input :estimated_funding, label: "Specify amount to deduct from budget" %>
               <script>
                 $(document).ready(function(){
@@ -45,6 +61,7 @@
             <% end %>
           </div>
         </div>
+        <% end %>
       </div>
 
       <div class="card__section card__section--border">

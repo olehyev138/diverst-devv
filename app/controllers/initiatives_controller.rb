@@ -58,6 +58,10 @@ class InitiativesController < ApplicationController
   def finish_expenses
     authorize @initiative, :update?
 
+    # skip before_save :allocate_budget_funds because
+    # finish_expenses primary responsibility is to close off
+    # expenses and not to allocate_budget_funds
+    @initiative.skip_allocate_budget_funds = true
     @initiative.finish_expenses!
     redirect_to action: :index
   end
