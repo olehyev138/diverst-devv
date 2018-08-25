@@ -1,0 +1,5 @@
+---
+- include_role:
+    name: rossmcdonald.telegraf
+  vars:
+    telegraf_configuration_template: 'my-telegraf.conf.j2'

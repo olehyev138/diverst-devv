@@ -23,3 +23,6 @@
       monit_app_user: '{{ application_user }}'
       monit_app_run_prefix: '{{ application_run_prefix }}'
       tags: ['monit']
+
+    - role: metrics
+      tags: ['metrics']
