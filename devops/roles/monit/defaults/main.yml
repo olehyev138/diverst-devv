@@ -1,6 +1,36 @@
 ---
-monit_cli_password: 'ysDQkwLjLmwjzdhXum9pDzGbMaLUt6BSauPTW6F9nE4J6BGx'
+# Required:
+monit_app_prefix: 'unspecified'
+monit_app_root: 'unspecified/' # should end with a trailing slash /
+monit_app_user: 'unspecified'
+
+# Optional:
+monit_app_run_prefix:
+
+monit_puma_pid_path: 'shared/tmp/pids/puma.pid'
+monit_puma_pid_abspath: '{{ monit_app_root }}{{ monit_puma_pid_path }}'
+
+monit_puma_config_path: 'shared/config/puma.rb'
+monit_puma_config_abspath: '{{ monit_app_root }}{{ monit_puma_config_path }}'
+
+monit_puma_state_path: 'shared/tmp/pids/puma.state'
+monit_puma_state_abspath: '{{ monit_app_root }}{{ monit_puma_state_path }}'
+
+monit_puma_start_command: >-
+  /usr/bin/sudo -iu {{ monit_app_user }}
+  /bin/bash -c '
+  cd {{ monit_app_root }}current &&
+  {{ monit_app_run_prefix }} bundle exec
+  puma -C {{ monit_puma_config_abspath }} --daemon'
+
+monit_puma_stop_command: >-
+  /usr/bin/sudo -iu {{ monit_app_user }}
+  /bin/bash -c '
+  cd {{ monit_app_root }}current &&
+  {{ monit_app_run_prefix }} bundle exec
+  pumactl -S {{ monit_puma_state_abspath }} -F {{ monit_puma_config_abspath }} stop'
 
 # this doesn't work since monit is very strict about permissions,
 # and only root is able to run `monit status`
 monit_add_user_to_group:
+monit_cli_password: 'ysDQkwLjLmwjzdhXum9pDzGbMaLUt6BSauPTW6F9nE4J6BGx'

@@ -1,0 +1,7 @@
+# Monit configuration for Puma
+# Service name: {{ monit_app_prefix }}puma
+#
+check process {{ monit_app_prefix }}puma
+  with pidfile "{{ monit_puma_pid_abspath }}"
+  start program = "{{ monit_puma_start_command }}"
+  stop program = "{{ monit_puma_stop_command }}"

@@ -11,4 +11,5 @@ loggly:
 
 
 application_root: '/home/newdeploy/diverst'
-allow_monit_for_user: newdeploy
+application_user: newdeploy
+application_run_prefix: '~/.rvm/bin/rvm 2.3.0 do'

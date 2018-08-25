@@ -25,7 +25,16 @@
     append: yes
   when: monit_add_user_to_group != ""
 
+- name: Generate a config for Puma
+  template:
+    src: puma.conf.j2
+    dest: /etc/monit/conf.d/puma.conf
+    mode: 0600
+  notify:
+    - restart monit
+
 - name: Start monit service
   service:
     name: monit
     state: started
+    enabled: yes
