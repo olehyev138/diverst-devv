@@ -14,4 +14,3 @@ application_root: '/home/newdeploy/diverst'
 application_user: newdeploy
 application_run_prefix: '~/.rvm/bin/rvm 2.3.0 do'
 monit_puma_workers: 2
-monit_puma_memory_per_worker: '300 MB'

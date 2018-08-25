@@ -22,7 +22,8 @@ monit_cli_password: 'ysDQkwLjLmwjzdhXum9pDzGbMaLUt6BSauPTW6F9nE4J6BGx'
 monit_check_interval: 60
 
 monit_puma_workers: 0
-monit_puma_memory_per_worker: '300 MB'
+monit_puma_total_memory_percent: 30
+monit_puma_memory_per_worker: '{{ (monit_puma_total_memory_percent / (monit_puma_workers + 1)) | round | int }} %'
 monit_puma_memory_cycles: 5
 
 monit_puma_pid_path: 'shared/tmp/pids/puma.pid'
