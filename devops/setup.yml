@@ -1,6 +1,9 @@
 ---
 - hosts: all
   roles:
+    - role: update
+      tags: ['update']
+
     - role: matic-insurance.hostname
       fqdn_hostname: '{{ inventory_hostname }}'
       tags: ['hostname']
