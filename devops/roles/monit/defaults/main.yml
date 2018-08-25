@@ -7,6 +7,12 @@ monit_app_user: 'unspecified'
 # Optional:
 monit_app_run_prefix:
 
+# this doesn't work since monit is very strict about permissions,
+# and only root is able to run `monit status`
+monit_add_user_to_group:
+monit_cli_password: 'ysDQkwLjLmwjzdhXum9pDzGbMaLUt6BSauPTW6F9nE4J6BGx'
+monit_check_interval: 60
+
 monit_puma_workers: 0
 monit_puma_memory_per_worker: '300 MB'
 monit_puma_memory_cycles: 5
@@ -38,8 +44,28 @@ monit_puma_worker_pattern: 'puma: cluster worker %WID%:'
 monit_puma_stop_worker_command: >-
   /usr/bin/env pkill -f '{{ monit_puma_worker_pattern }}'
 
-# this doesn't work since monit is very strict about permissions,
-# and only root is able to run `monit status`
-monit_add_user_to_group:
-monit_cli_password: 'ysDQkwLjLmwjzdhXum9pDzGbMaLUt6BSauPTW6F9nE4J6BGx'
-monit_check_interval: 60
+monit_sidekiq_processes: 1
+
+monit_sidekiq_pid_path: 'shared/tmp/pids/sidekiq-%i%.pid'
+monit_sidekiq_pid_abspath: '{{ monit_app_root }}{{ monit_sidekiq_pid_path }}'
+monit_sidekiq_config_path: 'current/config/sidekiq.yml'
+monit_sidekiq_config_abspath: '{{ monit_app_root }}{{ monit_sidekiq_config_path }}'
+monit_sidekiq_exit_timeout: 30
+
+monit_sidekiq_memory_per_worker: '50 %'
+monit_sidekiq_memory_cycles: 5
+
+monit_sidekiq_start_command: >-
+  /usr/bin/sudo -iu {{ monit_app_user }}
+  /bin/bash -c
+  'cd {{ monit_app_root }}current &&
+  {{ monit_app_run_prefix }} bundle exec
+  sidekiq -i %i% -P {{ monit_sidekiq_pid_abspath }} -e production -L /dev/null
+  -C {{ monit_sidekiq_config_abspath }} -d'
+
+monit_sidekiq_stop_command: >-
+  /usr/bin/sudo -iu {{ monit_app_user }}
+  /bin/bash -c
+  'cd {{ monit_app_root }}current &&
+  {{ monit_app_run_prefix }} bundle exec
+  sidekiqctl stop {{ monit_sidekiq_pid_abspath }} {{ monit_sidekiq_exit_timeout }}'
