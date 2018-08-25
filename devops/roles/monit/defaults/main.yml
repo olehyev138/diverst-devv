@@ -1,0 +1,6 @@
+---
+monit_cli_password: 'ysDQkwLjLmwjzdhXum9pDzGbMaLUt6BSauPTW6F9nE4J6BGx'
+
+# this doesn't work since monit is very strict about permissions,
+# and only root is able to run `monit status`
+monit_add_user_to_group:

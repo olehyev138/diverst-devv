@@ -1,0 +1,31 @@
+---
+- name: Install monit package
+  apt:
+    name: monit
+
+- name: Generate monitrc
+  template:
+    src: monitrc.j2
+    dest: /etc/monit/monitrc
+    owner: root
+    mode: 0600
+  notify:
+    - restart monit
+
+- name: Create monit group
+  group:
+    name: monit
+    state: present
+  when: monit_add_user_to_group != ""
+
+- name: Add user to the monit group
+  user:
+    name: '{{ monit_add_user_to_group }}'
+    groups: monit
+    append: yes
+  when: monit_add_user_to_group != ""
+
+- name: Start monit service
+  service:
+    name: monit
+    state: started

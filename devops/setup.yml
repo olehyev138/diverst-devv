@@ -12,3 +12,7 @@
         application:
           environment: 'env'
       tags: ['logger']
+
+    - role: monit
+      monit_add_user_to_group: '{{ allow_monit_for_user | default(omit) }}'
+      tags: ['monit']
