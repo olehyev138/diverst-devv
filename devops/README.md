@@ -17,3 +17,7 @@
 If an instance requires the SUDO pass, you can use:
 
     ansible-playbook setup.yml --ask-become-pass
+
+If you want to run a specific task on a specific server, use:
+
+    ansible-playbook setup.yml -l staging -t monit --ask-become-pass

@@ -41,6 +41,14 @@
   notify:
     - restart monit
 
+- name: Generate a config for Clockwork
+  template:
+    src: clockwork.conf.j2
+    dest: /etc/monit/conf.d/clockwork.conf
+    mode: 0600
+  notify:
+    - restart monit
+
 - name: Start monit service
   service:
     name: monit
