@@ -43,3 +43,12 @@
     url: http://localhost:8086
     database: telegraf
     state: present
+
+- name: Add Linux host dashboard to Grafana
+  grafana_dashboard:
+    grafana_url: http://localhost:3000
+    grafana_password: '{{ grafana_admin_password }}'
+    path: '{{ role_path }}/files/linux_host.json'
+    slug: 'linux-host'
+    state: present
+  when: false
