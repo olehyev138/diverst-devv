@@ -8,6 +8,13 @@ resource "aws_security_group" "big_brother" {
     protocol    = "tcp"
     cidr_blocks = ["${data.aws_subnet.main.cidr_block}"]
   }
+
+  ingress {
+    from_port   = 3000
+    to_port     = 3000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 resource "aws_eip" "big_brother" {
