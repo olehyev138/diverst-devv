@@ -1,6 +1,13 @@
 resource "aws_security_group" "big_brother" {
   name        = "big_brother"
   description = "Security group for the BigBrother instance"
+
+  ingress {
+    from_port   = 8086
+    to_port     = 8086
+    protocol    = "tcp"
+    cidr_blocks = ["${data.aws_subnet.main.cidr_block}"]
+  }
 }
 
 resource "aws_eip" "big_brother" {
