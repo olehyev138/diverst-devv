@@ -24,3 +24,5 @@ metrics_secret_key: !vault |
   3337306139343632373434643266376561316136333536373066
 
 docker_group_member: 'ubuntu'
+
+influxdb_telegraf_db: 'telegraf'

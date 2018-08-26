@@ -14,9 +14,11 @@
 - include_role:
     name: rossmcdonald.telegraf
   vars:
-    telegraf_configuration_template: 'my-telegraf.conf.j2'
     telegraf_aws_tags: false
     telegraf_tags: '{{ my_ec2_tags.tags | combine(metrics_extra_tags) }}'
+    telegraf_influxdb_urls:
+      - '{{ metrics_influxdb_host }}'
+    telegraf_influxdb_database: '{{ metrics_influxdb_database }}'
     telegraf_plugins:
       - name: mem
       - name: system

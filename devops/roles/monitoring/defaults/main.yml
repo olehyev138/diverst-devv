@@ -1,0 +1,5 @@
+---
+influxdb_docker_image: 'influxdb:1.6'
+influxdb_container: 'influxdb'
+influxdb_volume_name: 'influxdb'
+influxdb_telegraf_db: 'telegraf'

@@ -1,0 +1,15 @@
+---
+- name: Run InfluxDB container
+  docker_container:
+    name:  '{{ influxdb_container }}'
+    image: '{{ influxdb_docker_image }}'
+    volumes:
+      - '{{ influxdb_volume_name }}:/var/lib/influxdb'
+    network_mode: 'host'
+
+- name: Install python influxdb
+  apt: name=python-influxdb state=present
+
+- name: Create InfluxDB database
+  influxdb_database:
+    database_name: "{{ influxdb_telegraf_db }}"
