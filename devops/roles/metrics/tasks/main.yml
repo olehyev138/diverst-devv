@@ -1,5 +1,11 @@
 ---
+- name: Gather EC2 facts
+  ec2_metadata_facts:
+
 - include_role:
     name: rossmcdonald.telegraf
   vars:
     telegraf_configuration_template: 'my-telegraf.conf.j2'
+    telegraf_aws_tags: false
+    telegraf_tags:
+      instance_id: '{{ ansible_ec2_instance_id }}'
