@@ -24,6 +24,7 @@
   with_items:
     - python-openssl
     - python-pyasn1
+    - python-boto
 
 - name: Update setuptools via pip
   pip: name=setuptools state=latest
@@ -31,6 +32,7 @@
 - name: Install python packages
   pip: name={{ item }} state=latest
   with_items:
+    - boto
     - pyopenssl
     - ndg-httpsclient
     - pyasn1

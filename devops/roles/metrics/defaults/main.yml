@@ -1,0 +1,3 @@
+---
+metrics_extra_tags:
+  InstanceID: '{{ ansible_ec2_instance_id }}'

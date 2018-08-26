@@ -2,13 +2,21 @@
 - name: Gather EC2 facts
   ec2_metadata_facts:
 
+- name: Retrieve all ec2 tags on the instance
+  ec2_tag:
+    region: '{{ ansible_ec2_placement_region }}'
+    resource: '{{ ansible_ec2_instance_id }}'
+    access_key: '{{ metrics_access_key }}'
+    secret_key: '{{ metrics_secret_key }}'
+    state: list
+  register: my_ec2_tags
+
 - include_role:
     name: rossmcdonald.telegraf
   vars:
     telegraf_configuration_template: 'my-telegraf.conf.j2'
     telegraf_aws_tags: false
-    telegraf_tags:
-      instance_id: '{{ ansible_ec2_instance_id }}'
+    telegraf_tags: '{{ my_ec2_tags.tags | combine(metrics_extra_tags) }}'
     telegraf_plugins:
       - name: mem
       - name: system
