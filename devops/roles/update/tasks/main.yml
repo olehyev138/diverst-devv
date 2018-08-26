@@ -29,9 +29,13 @@
 - name: Update setuptools via pip
   pip: name=setuptools state=latest
 
+- name: Forceably install python packages
+  pip: name=pip state=forcereinstall
+
 - name: Install python packages
   pip: name={{ item }} state=latest
   with_items:
+    - pip
     - boto
     - pyopenssl
     - ndg-httpsclient
