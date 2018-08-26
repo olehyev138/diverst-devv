@@ -84,57 +84,13 @@
 
 [outputs]
 
-# Configuration for influxdb server to send metrics to
-[[outputs.influxdb]]
-  # The full HTTP or UDP endpoint URL for your InfluxDB instance.
-  # Multiple urls can be specified but it is assumed that they are part of the same
-  # cluster, this means that only ONE of the urls will be written to each interval.
-  # urls = ["udp://localhost:8089"] # UDP endpoint example
-  urls = [ "{{ telegraf_influxdb_urls|join('","') }}" ] # required
-  # The target database for metrics (telegraf will create it if not exists)
-  database = "{{ telegraf_influxdb_database }}" # required
-  # Precision of writes, valid values are n, u, ms, s, m, and h
-  # note: using second precision greatly helps InfluxDB compression
-  precision = "{{ telegraf_influxdb_precision }}"
+[[outputs.cloudwatch]]
+ region = "{{ ansible_ec2_placement_region }}"
+ namespace = "InfluxData/Telegraf"
+ tagexclude = [ "host" ]
+ access_key = "{{ metrics_access_key }}"
+ secret_key = "{{ metrics_secret_key }}"
 
-  ## Retention policy to write to.
-  retention_policy = "{{ telegraf_influxdb_retention_policy }}"
-  ## Write consistency (clusters only), can be: "any", "one", "quorom", "all"
-  write_consistency = "{{ telegraf_influxdb_write_consistency }}"
-
-  # Connection timeout (for the connection with InfluxDB), formatted as a string.
-  # If not provided, will default to 0 (no timeout)
-  timeout = "{{ telegraf_influxdb_timeout }}"
-{% if telegraf_influxdb_username is defined and telegraf_influxdb_username != None %}
-  username = "{{ telegraf_influxdb_username }}"
-{% endif %}
-{% if telegraf_influxdb_password is defined and telegraf_influxdb_password != None %}
-  password = "{{ telegraf_influxdb_password }}"
-{% endif %}
-  # Set the user agent for HTTP POSTs (can be useful for log differentiation)
-{% if telegraf_influxdb_user_agent is defined and telegraf_influxdb_user_agent != None %}
-  user_agent = "{{ telegraf_influxdb_user_agent }}"
-{% endif %}
-  # Set UDP payload size, defaults to InfluxDB UDP Client default (512 bytes)
-{% if telegraf_influxdb_udp_payload is defined and telegraf_influxdb_udp_payload != None %}
-  udp_payload = {{ telegraf_influxdb_udp_payload }}
-{% endif %}
-
-  ## Optional SSL Config
-{% if telegraf_influxdb_ssl_ca is defined and telegraf_influxdb_ssl_ca != None %}
-  # ssl_ca = "{{ telegraf_influxdb_ssl_ca }}"
-{% endif %}
-{% if telegraf_influxdb_ssl_cert is defined and telegraf_influxdb_ssl_cert != None %}
-  # ssl_cert = "{{ telegraf_influxdb_ssl_cert }}"
-{% endif %}
-{% if telegraf_influxdb_ssl_key is defined and telegraf_influxdb_ssl_key != None %}
-  # ssl_key = "{{ telegraf_influxdb_ssl_key }}"
-{% endif %}
-
-  ## Use SSL but skip chain & host verification
-{% if telegraf_influxdb_insecure_skip_verify is defined and telegraf_influxdb_insecure_skip_verify != None %}
-  # insecure_skip_verify = telegraf_influxdb_insecure_skip_verify
-{% endif %}
 
 ###############################################################################
 #                                  PLUGINS                                    #
