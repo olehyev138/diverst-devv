@@ -1,5 +1,11 @@
 ---
 - hosts: all
+  gather_facts: no
+  pre_tasks:
+    - name: Ensure everything is installed
+      raw: apt-get install python-minimal aptitude -y
+
+- hosts: all
   roles:
     - role: update
       tags: ['update']
@@ -8,6 +14,10 @@
       fqdn_hostname: '{{ inventory_hostname }}'
       tags: ['hostname']
 
+    - role: geerlingguy.ntp
+
+- hosts: app
+  roles:
     - role: amaabca.loggly_tls
       loggly:
         refresh_unicorn: false
@@ -26,3 +36,7 @@
 
     - role: metrics
       tags: ['metrics']
+
+- hosts: bigbrother
+  roles:
+    - role: angstwad.docker_ubuntu
