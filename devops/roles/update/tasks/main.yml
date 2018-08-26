@@ -5,13 +5,32 @@
     update_cache: yes
     cache_valid_time: 86400 # one day
 
-- name: Add PPA with a newer python
-  apt_repository:
-    repo: 'ppa:jonathonf/python-2.7'
-    codename: trusty
-  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty'
-
 - name: Upgrade python2.7
   apt:
-    name: python
-    state: latest
+    name: '{{ item }}'
+    state: present
+  with_items:
+    - python
+    - python-urllib3
+    - python-pip
+    - python-dev
+    - libffi-dev
+    - libssl-dev
+
+- name: Remove distro python packages
+  apt:
+    name: '{{ item }}'
+    state: absent
+  with_items:
+    - python-openssl
+    - python-pyasn1
+
+- name: Update setuptools via pip
+  pip: name=setuptools state=latest
+
+- name: Install python packages
+  pip: name={{ item }} state=latest
+  with_items:
+    - pyopenssl
+    - ndg-httpsclient
+    - pyasn1
