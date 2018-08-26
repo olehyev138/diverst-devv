@@ -14,6 +14,7 @@ resource "aws_instance" "big_brother" {
 
   security_groups = [
     "${aws_security_group.ssh.name}",
+    "${aws_security_group.outbound.name}",
     "${aws_security_group.big_brother.name}"
   ]
 
