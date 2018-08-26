@@ -6,7 +6,14 @@ resource "aws_security_group" "big_brother" {
     from_port   = 8086
     to_port     = 8086
     protocol    = "tcp"
-    cidr_blocks = ["${data.aws_subnet.main.cidr_block}"]
+    cidr_blocks = ["${data.aws_subnet.1b_zone.cidr_block}"]
+  }
+
+  ingress {
+    from_port   = 8086
+    to_port     = 8086
+    protocol    = "tcp"
+    cidr_blocks = ["${data.aws_subnet.1d_zone.cidr_block}"]
   }
 
   ingress {
