@@ -1,11 +1,17 @@
 ---
 - name: Run InfluxDB container
   docker_container:
-    name:  '{{ influxdb_container }}'
+    name:  '{{ influxdb_container_name }}'
     image: '{{ influxdb_docker_image }}'
     volumes:
       - '{{ influxdb_volume_name }}:/var/lib/influxdb'
     network_mode: 'host'
+  register: influxdb_container
+
+- name: Wait for InfluxDB start
+  wait_for:
+    port: 8086
+  when: influxdb_container.changed
 
 - name: Install python influxdb
   apt: name=python-influxdb state=present
@@ -13,3 +19,27 @@
 - name: Create InfluxDB database
   influxdb_database:
     database_name: "{{ influxdb_telegraf_db }}"
+
+- name: Run Grafana container
+  docker_container:
+    name:  '{{ grafana_container_name }}'
+    image: '{{ grafana_docker_image }}'
+    network_mode: 'host'
+    env:
+      GF_SECURITY_ADMIN_PASSWORD: '{{ grafana_admin_password }}'
+  register: grafana_container
+
+- name: Wait for Grafana start
+  wait_for:
+    port: 3000
+  when: grafana_container.changed
+
+- name: Add InfluxDB source to Grafana
+  grafana_datasource:
+    name: Telegraf
+    grafana_url: http://localhost:3000
+    grafana_password: '{{ grafana_admin_password }}'
+    ds_type: influxdb
+    url: http://localhost:8086
+    database: telegraf
+    state: present
