@@ -287,6 +287,7 @@ Rails.application.routes.draw do
     collection do
       get 'plan_overview'
       get 'close_budgets'
+      get 'close_budgets_export_csv'
       get 'calendar'
       get 'calendar_data'
     end

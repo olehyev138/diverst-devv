@@ -1,7 +1,7 @@
 class GroupsController < ApplicationController
     before_action :authenticate_user!, except: [:calendar_data]
     before_action :set_group, except: [:index, :new, :create, :plan_overview,
-                                       :calendar, :calendar_data, :close_budgets]
+                                       :calendar, :calendar_data, :close_budgets, :close_budgets_export_csv]
 
     skip_before_action :verify_authenticity_token, only: [:create, :calendar_data]
     after_action :verify_authorized, except: [:calendar_data]
@@ -23,6 +23,20 @@ class GroupsController < ApplicationController
     def close_budgets
         authorize Group
         @groups = GroupPolicy::Scope.new(current_user, Group, :groups_budgets_index).resolve.includes(:children).all_parents
+    end
+
+    def close_budgets_export_csv
+      authorize Group, :close_budgets?
+      user_not_authorized if not current_user.policy_group.annual_budget_manage?
+
+      result =
+        CSV.generate do |csv|
+          csv << ['Group name', 'Annual budget', 'Leftover money', 'Approved budget']
+           current_user.enterprise.groups.includes(:children).all_parents.each do |group|
+            csv << [group.name, group.annual_budget, group.leftover_money, group.approved_budget]
+          end
+        end
+      send_data result, filename: 'global_budgets.csv'
     end
 
     # calendar for all of the groups
