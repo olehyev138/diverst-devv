@@ -78,6 +78,8 @@ gem 'date_validator', '~> 0.9.0'
 gem "thor", "0.19.1"# Expected string default value for '--decorator'; got true (boolean) - setting version removes this message
 gem 'sanitize_email', '~> 1.2.2'
 
+gem "rack-timeout"
+
 group :development, :test do
   gem 'spring', '~> 1.6.2' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'guard-livereload', '~> 2.4', require: false
