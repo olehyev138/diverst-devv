@@ -67,6 +67,19 @@ class BudgetsController < ApplicationController
     end
   end
 
+  def export_csv
+    authorize @group, :request_budget?
+
+    result =
+      CSV.generate do |csv|
+        csv << ['Requested amount', 'Available amount', 'Status', 'Requested at', '# of events', 'Description']
+         @group.budgets.order(created_at: :desc).each do |budget|
+          csv << [budget.requested_amount, budget.available_amount, budget.status_title, budget.created_at, budget.budget_items.count, budget.description]
+        end
+      end
+    send_data result, filename: @group.file_safe_name.downcase + '_budgets.csv'
+  end
+
   def edit_annual_budget
     authorize @group.enterprise, :update?
   end

@@ -140,6 +140,7 @@ Rails.application.routes.draw do
       post 'approve'
       post 'decline'
       collection do
+        get 'export_csv'
         get 'edit_annual_budget'
         post 'update_annual_budget'
         post 'reset_annual_budget'
