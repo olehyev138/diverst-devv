@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180724141334) do
+ActiveRecord::Schema.define(version: 20180827164235) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -1076,6 +1076,8 @@ ActiveRecord::Schema.define(version: 20180724141334) do
     t.boolean  "branding_manage",                       default: false
     t.integer  "user_id",                     limit: 4
   end
+
+  add_index "policy_groups", ["user_id"], name: "index_policy_groups_on_user_id", using: :btree
 
   create_table "poll_responses", force: :cascade do |t|
     t.integer  "poll_id",    limit: 4
