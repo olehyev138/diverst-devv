@@ -94,6 +94,26 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
+  describe "GET#close_budgets_export_csv" do
+    context 'when user is logged in' do
+      login_user_from_let
+      before { get :close_budgets_export_csv }
+
+      it "return data in csv format" do
+        expect(response.content_type).to eq 'text/csv'
+      end
+
+      it "filename should be 'global_budgets.csv'" do
+        expect(response.headers["Content-Disposition"]).to include 'global_budgets.csv'
+      end
+    end
+
+    context 'when user is not logged in' do
+      before { get :close_budgets_export_csv }
+      it_behaves_like "redirect user to users/sign_in path"
+    end
+  end
+
   describe 'GET#plan_overview' do
     let!(:user) { create :user }
     let!(:group) { create(:group, enterprise: user.enterprise) }
