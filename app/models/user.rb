@@ -213,7 +213,7 @@ class User < ActiveRecord::Base
     end
     
     def admin?
-        enterprise.user_roles.where(:id => user_role_id, :role_type => "admin").count > 0
+        return user_role.role_type === "admin"
     end
 
     def has_answered_group_surveys?
