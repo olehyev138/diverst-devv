@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180827164235) do
+ActiveRecord::Schema.define(version: 20180829154047) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -1088,6 +1088,8 @@ ActiveRecord::Schema.define(version: 20180827164235) do
     t.boolean  "anonymous",                default: false
   end
 
+  add_index "poll_responses", ["user_id"], name: "index_poll_responses_on_user_id", using: :btree
+
   create_table "polls", force: :cascade do |t|
     t.string   "title",          limit: 191
     t.text     "description",    limit: 65535
@@ -1410,6 +1412,8 @@ ActiveRecord::Schema.define(version: 20180827164235) do
     t.integer "user_id",    limit: 4
     t.integer "segment_id", limit: 4
   end
+
+  add_index "users_segments", ["user_id"], name: "index_users_segments_on_user_id", using: :btree
 
   create_table "views", force: :cascade do |t|
     t.integer  "user_id",           limit: 4,             null: false
