@@ -1,0 +1,22 @@
+---
+- hosts: all
+  roles:
+    - role: matic-insurance.hostname
+      fqdn_hostname: '{{ inventory_hostname }}'
+      tags: ['hostname']
+
+    - role: amaabca.loggly_tls
+      loggly:
+        refresh_unicorn: false
+        logrotate: false
+        application:
+          environment: 'env'
+      tags: ['logger']
+
+    - role: monit
+      monit_add_user_to_group: '{{ application_user }}'
+      monit_app_prefix: 'diverst-'
+      monit_app_root: '{{ application_root }}/'
+      monit_app_user: '{{ application_user }}'
+      monit_app_run_prefix: '{{ application_run_prefix }}'
+      tags: ['monit']
