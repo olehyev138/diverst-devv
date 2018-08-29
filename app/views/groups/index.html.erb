@@ -26,7 +26,7 @@
             <% end %>
 
 
-            <%= link_to "Export", export_csv_group_path(group), class: "muted hidden-xs", role: "button", 'aria-label': "Export" if policy(group).edit? %>
+            <%= link_to "Export", export_csv_group_path(group), class: "muted hidden-xs", role: "button", 'aria-label': "Export" if policy(group).edit? and current_user.admin? %>
             <%= link_to "Import", import_csv_group_path(group), class: "muted hidden-xs", role: "button", 'aria-label': "Import" if policy(group).edit? %>
             <%= link_to "Edit", edit_group_path(group), class: "muted" if policy(group).edit? %>
             <%= link_to "Delete", group_path(group), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(group).destroy? %>
