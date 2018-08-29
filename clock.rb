@@ -26,7 +26,7 @@ module Clockwork
     every(10.minutes, 'Sync Yammer users with Diverst users') { SyncYammerUsersJob.perform_later }
     
     every(30.minutes, 'Sync Yammer members') { Group.all.each { |group| SyncYammerGroupJob.perform_later(group) } }
-    every(30.minutes, 'Save employee data samples') { SaveUserDataSamplesJob.perform_later }
+    #every(30.minutes, 'Save employee data samples') { SaveUserDataSamplesJob.perform_later }
     
     every(1.hour, 'Update cached segment members') { Segment.update_all_members }
     
