@@ -45,7 +45,7 @@
         </li>
       <% end %>
       <% if current_user.enterprise.plan_module_enabled %>
-        <% if default_group = GroupPolicy::Scope.new(current_user, Group, :groups_manage).resolve.first %>
+        <% if default_group = GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_manage).resolve.first %>
           <li><%= active_link_to "Plan", plan_overview_groups_path %></li>
         <% end %>
       <% end %>
