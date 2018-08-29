@@ -62,6 +62,11 @@ class ApplicationController < ActionController::Base
         redirect_to(request.referrer || default_path)
     end
     
+    rescue_from ActiveRecord::ConnectionTimeoutError do |e|
+        flash[:alert] = e.message
+        redirect_to(request.referrer || default_path)
+    end
+    
     rescue_from Rack::Timeout::RequestTimeoutException do |e|
         flash[:alert] = e.message
         redirect_to(request.referrer || default_path)
