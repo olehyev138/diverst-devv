@@ -1,0 +1,10 @@
+---
+- fail: msg="This role requires 'loggly.token'"
+  when: loggly.token | trim == ''
+
+- include: logrotate.yml
+  when: loggly.logrotate
+
+- include: rsyslog.yml
+
+- include: loggly.yml
