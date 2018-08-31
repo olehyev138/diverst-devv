@@ -1,4 +1,28 @@
 ---
+- name: Add an apt key by id from a keyserver
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: F2EDC64DC5AEE1F6B9C621F0C8CAB6595FDFF622
+
+- name: Add debug symbols repo
+  apt_repository:
+    repo: deb http://ddebs.ubuntu.com {{ item }} main restricted universe multiverse
+    state: present
+  with_items:
+    - '{{ ansible_distribution_release }}'
+    - '{{ ansible_distribution_release }}-updates'
+    - '{{ ansible_distribution_release }}-proposed'
+
+- name: Install necessary dependencies
+  apt:
+    name: '{{ item }}'
+    state: present
+    update_cache: true
+  with_items:
+    - libmysqlclient20
+    - libmysqlclient20-dbgsym
+    - libmysqlclient-dev
+
 - name: Create an application folder
   file:
     path: '{{ application_root }}'
@@ -19,3 +43,9 @@
   template:
     src: 'puma.rb.j2'
     dest: '{{ application_root }}/shared/config/puma.rb'
+
+- name: Make bower visible to Capistrano
+  file:
+    src: '/usr/local/lib/npm/bin/bower'
+    dest: '/usr/local/bin/bower'
+    state: link
