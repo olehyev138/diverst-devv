@@ -1,0 +1,21 @@
+---
+- name: Create an application folder
+  file:
+    path: '{{ application_root }}'
+    state: directory
+    owner: '{{ application_user }}'
+
+- name: Render application.yml config
+  template:
+    src: '{{ application_yml }}'
+    dest: '{{ application_root }}/shared/config/application.yml'
+
+- name: Render database.yml
+  template:
+    src: 'database.yml.j2'
+    dest: '{{ application_root }}/shared/config/database.yml'
+
+- name: Render puma.rb
+  template:
+    src: 'puma.rb.j2'
+    dest: '{{ application_root }}/shared/config/puma.rb'

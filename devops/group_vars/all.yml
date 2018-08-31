@@ -9,8 +9,8 @@ loggly:
     63363938383232313830666665653964646533393562656234663039383239396430653535653636
     6138633739636366623331363661636438643633383137393839
 
-application_root: '/home/newdeploy/diverst'
-application_user: newdeploy
+application_root: '/var/www/diverst'
+application_user: ubuntu
 application_run_prefix: '~/.rvm/bin/rvm 2.3.0 do'
 monit_puma_workers: 2
 

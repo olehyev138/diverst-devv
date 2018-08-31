@@ -50,6 +50,9 @@
       metrics_influxdb_database: 'telegraf'
       tags: ['metrics']
 
+    - role: app
+      tags: ['app']
+
 - hosts: bigbrother
   roles:
     - role: angstwad.docker_ubuntu

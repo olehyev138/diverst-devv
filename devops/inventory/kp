@@ -15,3 +15,6 @@ kp_webserver
 
 [worker:children]
 kp_worker
+
+[old]
+kp.diverst.com

@@ -5,3 +5,4 @@
   name: rossmcdonald.telegraf
 - src: angstwad.docker_ubuntu
 - src: geerlingguy.ntp
+- src: rvm_io.ruby

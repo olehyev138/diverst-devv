@@ -1,0 +1,6 @@
+---
+dependencies:
+  - role: rvm_io.ruby
+    rvm1_rubies: ['ruby-2.3.0']
+    rvm1_user: '{{ application_user }}'
+    tags: ['ruby']
