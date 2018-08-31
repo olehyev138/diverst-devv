@@ -1,3 +1,27 @@
+resource "aws_security_group" "ssh" {
+  name        = "ssh"
+  description = "Allow incoming SSH traffic"
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_security_group" "outbound" {
+  name        = "outbound"
+  description = "Allow any outgoing traffic"
+
+  egress {
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
 resource "aws_security_group" "big_brother" {
   name        = "big_brother"
   description = "Security group for the BigBrother instance"
