@@ -49,3 +49,16 @@
     src: '/usr/local/lib/npm/bin/bower'
     dest: '/usr/local/bin/bower'
     state: link
+
+- name: Redirect 80 to 3000 port
+  iptables:
+    table: nat
+    chain: PREROUTING
+    in_interface: '{{ ansible_default_ipv4.interface }}'
+    protocol: tcp
+    match: tcp
+    destination_port: 80
+    jump: REDIRECT
+    to_ports: 3000
+  notify:
+    - persist iptables

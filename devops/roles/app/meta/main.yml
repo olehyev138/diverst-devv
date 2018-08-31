@@ -10,3 +10,5 @@ dependencies:
     nodejs_install_npm_user: '{{ application_user }}'
     nodejs_npm_global_packages:
       - name: bower
+
+  - role: chmduquesne.iptables-persistent

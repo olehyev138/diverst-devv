@@ -7,3 +7,4 @@
 - src: geerlingguy.ntp
 - src: rvm_io.ruby
 - src: geerlingguy.nodejs
+- src: chmduquesne.iptables-persistent
