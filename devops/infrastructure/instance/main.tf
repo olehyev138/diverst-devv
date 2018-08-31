@@ -57,3 +57,10 @@ resource "aws_instance" "worker" {
     volume_size = "${var.volume_size}"
   }
 }
+
+module "alarms" {
+  source = "../alarms"
+
+  alarm_actions = "${var.alarm_actions}"
+  instance_ids = "${concat(aws_instance.webserver.*.id, aws_instance.worker.*.id)}"
+}

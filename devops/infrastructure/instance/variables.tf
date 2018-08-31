@@ -28,3 +28,7 @@ variable "availability_zones" {
 
 variable "default_security_group" {}
 variable "webserver_security_group" {}
+
+variable "alarm_actions" {
+  type = "list"
+}
