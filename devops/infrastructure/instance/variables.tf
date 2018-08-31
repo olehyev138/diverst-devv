@@ -1,5 +1,6 @@
 variable "name" {}
 variable "key_name" {}
+
 variable "instance_type" {
   default = "t3.small"
 }
@@ -31,4 +32,9 @@ variable "webserver_security_group" {}
 
 variable "alarm_actions" {
   type = "list"
+}
+
+variable "db_size" {}
+variable "db_instance_type" {
+  default = "db.t3.micro"
 }

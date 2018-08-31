@@ -58,6 +58,15 @@ resource "aws_instance" "worker" {
   }
 }
 
+resource "aws_db_instance" "default" {
+  allocated_storage = "${var.db_size}"
+  instance_class = "${var.db_instance_type}"
+  engine = "mariadb"
+  skip_final_snapshot = false
+  publicly_accessible = true
+  enabled_cloudwatch_logs_exports = ["error", "slowquery"]
+}
+
 module "alarms" {
   source = "../alarms"
 

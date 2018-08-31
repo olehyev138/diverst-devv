@@ -61,6 +61,9 @@ module "staging" {
   default_security_group = "${aws_security_group.basic.name}"
   webserver_security_group = "${aws_security_group.webserver.name}"
 
+  db_size = 5
+  db_instance_type = "db.t2.micro"
+
   alarm_actions = ["${aws_sns_topic.server_outage.arn}"]
 }
 
@@ -73,6 +76,8 @@ module "kp" {
 
   webservers_count = 3
   workers_count = 1
+  db_size = 20
+  db_instance_type = "db.t2.small"
 
   default_security_group = "${aws_security_group.basic.name}"
   webserver_security_group = "${aws_security_group.webserver.name}"
