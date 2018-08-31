@@ -78,8 +78,8 @@ module ApplicationHelper
 
   def manage_erg_budgets_path
     return plan_overview_groups_path if current_user.policy_group.groups_budgets_index?
-    return group_initiatives_path(@group || GroupPolicy::Scope.new(current_user, Group, :initiatives_manage).resolve.first) if policy(Initiative).index?
-    return metrics_group_path(@group || GroupPolicy::Scope.new(current_user, Group, :groups_manage).first) if current_user.policy_group.groups_manage?
+    return group_initiatives_path(@group || GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :initiatives_manage).resolve.first) if policy(Initiative).index?
+    return metrics_group_path(@group || GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_manage).first) if current_user.policy_group.groups_manage?
     return close_budgets_groups_path if current_user.policy_group.annual_budget_manage?
     nil
   end
