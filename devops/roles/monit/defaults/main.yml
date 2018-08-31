@@ -21,6 +21,7 @@ monit_add_user_to_group:
 monit_cli_password: 'ysDQkwLjLmwjzdhXum9pDzGbMaLUt6BSauPTW6F9nE4J6BGx'
 monit_check_interval: 60
 
+monit_watch_puma: false
 monit_puma_workers: 0
 monit_puma_total_memory_percent: 30
 monit_puma_memory_per_worker: '{{ (monit_puma_total_memory_percent / (monit_puma_workers + 1)) | round | int }} %'
@@ -47,8 +48,8 @@ monit_puma_worker_pattern: 'puma: cluster worker %WID%:'
 monit_puma_stop_worker_command: >-
   /usr/bin/env pkill -f '{{ monit_puma_worker_pattern }}'
 
+monit_watch_sidekiq: false
 monit_sidekiq_processes: 1
-
 monit_sidekiq_pid_path: 'shared/tmp/pids/sidekiq-%i%.pid'
 monit_sidekiq_pid_abspath: '{{ monit_app_root }}{{ monit_sidekiq_pid_path }}'
 monit_sidekiq_config_path: 'current/config/sidekiq.yml'
@@ -67,6 +68,7 @@ monit_sidekiq_stop_command: >-
   {{ monit_app_run_as_user }} '{{ monit_app_run_env }}
   sidekiqctl stop {{ monit_sidekiq_pid_abspath }} {{ monit_sidekiq_exit_timeout }}'
 
+monit_watch_clockwork: false
 monit_clockwork_pid_dir: 'shared/tmp/pids'
 monit_clockwork_pid_path: '{{ monit_clockwork_pid_dir }}/clockworkd.clock.pid'
 monit_clockwork_log_dir: 'shared/log'

@@ -40,6 +40,9 @@
       monit_app_root: '{{ application_root }}/'
       monit_app_user: '{{ application_user }}'
       monit_app_run_prefix: '{{ application_run_prefix }}'
+      monit_watch_puma: '{{ "webserver" in group_names }}'
+      monit_watch_sidekiq: '{{ "worker" in group_names }}'
+      monit_watch_clockwork: '{{ "worker" in group_names }}'
       tags: ['monit']
 
     - role: metrics

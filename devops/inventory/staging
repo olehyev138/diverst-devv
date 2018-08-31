@@ -1,0 +1,17 @@
+[staging_webserver]
+staging.diverst.com
+staging-0.diverst.com
+
+[staging_worker]
+staging.diverst.com
+staging-0.diverst.com
+
+[staging:children]
+staging_webserver
+staging_worker
+
+[webserver:children]
+staging_webserver
+
+[worker:children]
+staging_worker
