@@ -14,3 +14,11 @@ To apply changes, use:
     terraform apply
 
 Don't forget to commit state after your changes
+
+
+### Things aren't controlled
+
+* SNS Topic for CloudWatch
+* ElasticSearch
+* ElastiCache
+* VPC
