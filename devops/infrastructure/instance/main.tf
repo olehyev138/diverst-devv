@@ -72,4 +72,5 @@ module "alarms" {
 
   alarm_actions = "${var.alarm_actions}"
   instance_ids = "${concat(aws_instance.webserver.*.id, aws_instance.worker.*.id)}"
+  db_instances = ["${aws_db_instance.default.identifier}"]
 }

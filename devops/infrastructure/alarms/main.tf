@@ -1,5 +1,11 @@
 variable "instance_ids" {
   type = "list"
+  default = []
+}
+
+variable "db_instances" {
+  type = "list"
+  default = []
 }
 
 variable "alarm_actions" {
@@ -60,6 +66,24 @@ resource "aws_cloudwatch_metric_alarm" "high_cpu" {
   alarm_actions = ["${var.alarm_actions}"]
 
   dimensions {
-    InstanceId = "${element(var.instance_ids, count.index)}"
+    InstanceId = "${var.instance_ids[count.index]}"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "db_high_cpu" {
+  count = "${length(var.db_instances)}"
+
+  alarm_name = "db-${var.db_instances[count.index]}-HighCPUUsage"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  period = "120"
+  evaluation_periods = "2"
+  metric_name = "CPUUtilization"
+  namespace = "AWS/RDS"
+  statistic = "Average"
+  threshold = "80"
+  alarm_actions = ["${var.alarm_actions}"]
+
+  dimensions {
+    DBInstanceIdentifier = "${var.db_instances[count.index]}"
   }
 }
