@@ -18,7 +18,3 @@ staging_worker
 
 [old]
 staging.diverst.com
-
-[staging:vars]
-application_yml=configs/staging/application.yml.j2
-application_instance=staging

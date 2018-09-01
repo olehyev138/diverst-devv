@@ -12,7 +12,7 @@ loggly:
 application_root: '/var/www/diverst'
 application_user: ubuntu
 application_run_prefix: '~/.rvm/bin/rvm 2.3.0 do'
-monit_puma_workers: 2
+application_webserver_processes: 2
 
 metrics_access_key: AKIAIT6VLD7BOI2G76IA
 metrics_secret_key: !vault |
@@ -27,3 +27,13 @@ metrics_secret_key: !vault |
 docker_group_member: 'ubuntu'
 
 influxdb_telegraf_db: 'telegraf'
+
+monit_add_user_to_group: '{{ application_user }}'
+monit_app_prefix: 'diverst-'
+monit_app_root: '{{ application_root }}/'
+monit_app_user: '{{ application_user }}'
+monit_app_run_prefix: '{{ application_run_prefix }}'
+monit_watch_puma: '{{ "webserver" in group_names }}'
+monit_watch_sidekiq: '{{ "worker" in group_names }}'
+monit_watch_clockwork: '{{ "worker" in group_names }}'
+monit_puma_workers: '{{ application_webserver_processes }}'
