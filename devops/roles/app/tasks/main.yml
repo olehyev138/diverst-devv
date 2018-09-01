@@ -22,12 +22,16 @@
     - libmysqlclient20
     - libmysqlclient20-dbgsym
     - libmysqlclient-dev
+    - imagemagick
 
-- name: Create an application folder
+- name: Create application folders
   file:
-    path: '{{ application_root }}'
+    path: '{{ item }}'
     state: directory
     owner: '{{ application_user }}'
+  with_items:
+    - '{{ application_root }}'
+    - '{{ application_root }}/shared/config'
 
 - name: Render application.yml config
   template:

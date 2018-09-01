@@ -22,3 +22,4 @@ Don't forget to commit state after your changes
 * ElasticSearch
 * ElastiCache
 * VPC
+* RDS config (slowquery)
