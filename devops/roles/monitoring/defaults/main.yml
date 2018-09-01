@@ -2,7 +2,6 @@
 influxdb_docker_image: 'influxdb:1.6'
 influxdb_container_name: 'influxdb'
 influxdb_volume_name: 'influxdb'
-influxdb_telegraf_db: 'telegraf'
 
 grafana_docker_image: 'grafana/grafana:latest'
 grafana_container_name: 'grafana'

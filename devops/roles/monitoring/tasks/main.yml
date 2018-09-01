@@ -16,9 +16,13 @@
 - name: Install python influxdb
   apt: name=python-influxdb state=present
 
-- name: Create InfluxDB database
+- name: Create InfluxDB databases
   influxdb_database:
-    database_name: "{{ influxdb_telegraf_db }}"
+    database_name: "{{ item }}"
+  with_items:
+    - '{{ metrics_influxdb_system_db }}'
+    - '{{ metrics_influxdb_rails_db }}'
+    - '{{ metrics_influxdb_sidekiq_db }}'
 
 - name: Run Grafana container
   docker_container:
@@ -36,13 +40,17 @@
 
 - name: Add InfluxDB source to Grafana
   grafana_datasource:
-    name: Telegraf
+    name: '{{ item | capitalize }}'
     grafana_url: http://localhost:3000
     grafana_password: '{{ grafana_admin_password }}'
     ds_type: influxdb
     url: http://localhost:8086
-    database: telegraf
+    database: '{{ item }}'
     state: present
+  with_items:
+    - '{{ metrics_influxdb_system_db }}'
+    - '{{ metrics_influxdb_rails_db }}'
+    - '{{ metrics_influxdb_sidekiq_db }}'
 
 - name: Add Linux host dashboard to Grafana
   grafana_dashboard:

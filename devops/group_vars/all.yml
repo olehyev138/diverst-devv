@@ -26,8 +26,6 @@ metrics_secret_key: !vault |
 
 docker_group_member: 'ubuntu'
 
-influxdb_telegraf_db: 'telegraf'
-
 monit_add_user_to_group: '{{ application_user }}'
 monit_app_prefix: 'diverst-'
 monit_app_root: '{{ application_root }}/'
@@ -37,3 +35,7 @@ monit_watch_puma: '{{ "webserver" in group_names }}'
 monit_watch_sidekiq: '{{ "worker" in group_names }}'
 monit_watch_clockwork: '{{ "worker" in group_names }}'
 monit_puma_workers: '{{ application_webserver_processes }}'
+
+metrics_influxdb_system_db: 'telegraf'
+metrics_influxdb_rails_db: 'rails'
+metrics_influxdb_sidekiq_db: 'sidekiq'

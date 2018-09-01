@@ -40,7 +40,6 @@
 
     - role: metrics
       metrics_influxdb_host: "http://{{ hostvars[groups['bigbrother'][0]]['ansible_default_ipv4']['address'] }}:8086"
-      metrics_influxdb_database: 'telegraf'
       tags: ['metrics']
 
     - role: app
