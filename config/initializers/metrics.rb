@@ -17,6 +17,8 @@
     config.influxdb_hosts    = hosts
     config.influxdb_port     = 8086
 
+    config.async = true
+
     config.application_name = hosts
   end
 
