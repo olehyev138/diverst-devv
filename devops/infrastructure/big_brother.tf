@@ -22,9 +22,40 @@ resource "aws_security_group" "outbound" {
   }
 }
 
+data "aws_subnet" "1a_zone" {
+  id = "subnet-6cc8a709"
+}
+
+data "aws_subnet" "1b_zone" {
+  id = "subnet-3b6c7110"
+}
+
+data "aws_subnet" "1c_zone" {
+  id = "subnet-c601c8b0"
+}
+
+data "aws_subnet" "1d_zone" {
+  id = "subnet-43a5461b"
+}
+
+data "aws_subnet" "1e_zone" {
+  id = "subnet-0c028731"
+}
+
+data "aws_subnet" "1f_zone" {
+  id = "subnet-65d45e69"
+}
+
 resource "aws_security_group" "big_brother" {
   name        = "big_brother"
   description = "Security group for the BigBrother instance"
+
+  ingress {
+    from_port   = 8086
+    to_port     = 8086
+    protocol    = "tcp"
+    cidr_blocks = ["${data.aws_subnet.1a_zone.cidr_block}"]
+  }
 
   ingress {
     from_port   = 8086
@@ -37,7 +68,28 @@ resource "aws_security_group" "big_brother" {
     from_port   = 8086
     to_port     = 8086
     protocol    = "tcp"
+    cidr_blocks = ["${data.aws_subnet.1c_zone.cidr_block}"]
+  }
+
+  ingress {
+    from_port   = 8086
+    to_port     = 8086
+    protocol    = "tcp"
     cidr_blocks = ["${data.aws_subnet.1d_zone.cidr_block}"]
+  }
+
+  ingress {
+    from_port   = 8086
+    to_port     = 8086
+    protocol    = "tcp"
+    cidr_blocks = ["${data.aws_subnet.1e_zone.cidr_block}"]
+  }
+
+  ingress {
+    from_port   = 8086
+    to_port     = 8086
+    protocol    = "tcp"
+    cidr_blocks = ["${data.aws_subnet.1f_zone.cidr_block}"]
   }
 
   ingress {

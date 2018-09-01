@@ -37,7 +37,7 @@ resource "aws_instance" "worker" {
   ami = "ami-04169656fea786776"
   instance_type = "${var.worker_instance_type}"
   key_name = "${var.key_name}"
-  availability_zone = "${element(var.availability_zones, count.index)}"
+  availability_zone = "${element(var.availability_zones, (count.index + var.webservers_count))}"
 
   security_groups = [
     "${var.default_security_group}"

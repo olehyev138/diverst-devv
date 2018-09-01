@@ -4,14 +4,6 @@ provider "aws" {
   secret_key = "${var.secret_key}"
 }
 
-data "aws_subnet" "1b_zone" {
-  id = "subnet-3b6c7110"
-}
-
-data "aws_subnet" "1d_zone" {
-  id = "subnet-43a5461b"
-}
-
 resource "aws_sns_topic" "server_outage" {
   name = "server-outages"
 }
