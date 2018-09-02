@@ -39,3 +39,5 @@ monit_puma_workers: '{{ application_webserver_processes }}'
 metrics_influxdb_system_db: 'telegraf'
 metrics_influxdb_rails_db: 'rails'
 metrics_influxdb_sidekiq_db: 'sidekiq'
+
+grafana_binding_port: 80

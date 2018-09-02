@@ -6,6 +6,7 @@
     volumes:
       - '{{ influxdb_volume_name }}:/var/lib/influxdb'
     network_mode: 'host'
+    restart_policy: always
   register: influxdb_container
 
 - name: Wait for InfluxDB start
@@ -28,20 +29,22 @@
   docker_container:
     name:  '{{ grafana_container_name }}'
     image: '{{ grafana_docker_image }}'
-    network_mode: 'host'
+    ports:
+      - '{{ grafana_binding_port }}:3000'
     env:
       GF_SECURITY_ADMIN_PASSWORD: '{{ grafana_admin_password }}'
+    restart_policy: always
   register: grafana_container
 
 - name: Wait for Grafana start
   wait_for:
-    port: 3000
+    port: '{{ grafana_binding_port }}'
   when: grafana_container.changed
 
 - name: Add InfluxDB source to Grafana
   grafana_datasource:
     name: '{{ item | capitalize }}'
-    grafana_url: http://localhost:3000
+    grafana_url: 'http://localhost:{{ grafana_binding_port }}'
     grafana_password: '{{ grafana_admin_password }}'
     ds_type: influxdb
     url: http://localhost:8086
@@ -54,7 +57,7 @@
 
 - name: Add Linux host dashboard to Grafana
   grafana_dashboard:
-    grafana_url: http://localhost:3000
+    grafana_url: 'http://localhost:{{ grafana_binding_port }}'
     grafana_password: '{{ grafana_admin_password }}'
     path: '{{ role_path }}/files/linux_host.json'
     slug: 'linux-host'
