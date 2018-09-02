@@ -68,3 +68,12 @@ resource "aws_instance" "big_brother" {
     volume_size = 100
   }
 }
+
+resource "cloudflare_record" "big_brother" {
+  domain = "${var.cloudflare_zone}"
+  name   = "bigbrother"
+  value  = "${aws_eip.big_brother.public_ip}"
+  type   = "A"
+  ttl    = 1
+  proxied = true
+}

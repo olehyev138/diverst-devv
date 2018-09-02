@@ -1,7 +1,12 @@
 provider "aws" {
   region = "us-east-1"
-  access_key = "${var.access_key}"
-  secret_key = "${var.secret_key}"
+  access_key = "${var.aws_access_key}"
+  secret_key = "${var.aws_secret_key}"
+}
+
+provider "cloudflare" {
+  email = "${var.cloudflare_email}"
+  token = "${var.cloudflare_token}"
 }
 
 resource "aws_sns_topic" "server_outage" {
@@ -75,4 +80,14 @@ module "kp" {
   webserver_security_group = "${aws_security_group.webserver.name}"
 
   alarm_actions = ["${aws_sns_topic.server_outage.arn}"]
+}
+
+resource "cloudflare_record" "staging" {
+  count = "${length(module.staging.webserver_ips)}"
+  domain = "${var.cloudflare_zone}"
+  name   = "staging"
+  value  = "${module.staging.webserver_ips[count.index]}"
+  type   = "A"
+  ttl    = 1
+  proxied = true
 }

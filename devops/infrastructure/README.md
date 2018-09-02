@@ -2,8 +2,10 @@ This is a terraform script describing current AWS infrastructure.
 
 In order to start, put AWS credentials into `secret.auto.tfvars` file:
 
-    access_key = "AWS_ACCESS_KEY_HERE"
-    secret_key = "AWS_SECRET_KEY_HERE"
+    aws_access_key = "AWS_ACCESS_KEY_HERE"
+    aws_secret_key = "AWS_SECRET_KEY_HERE"
+    cloudflare_email = "CLOUDFLARE_EMAIL_HERE"
+    cloudflare_token = "CLOUDFLARE_TOKEN_HERE"
 
 To see what actions our going to be done, use:
 
