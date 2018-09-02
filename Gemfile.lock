@@ -1,4 +1,13 @@
 GIT
+  remote: https://github.com/Kukunin/influxdb-rails.git
+  revision: 0b9c13e2b8d40fa5a443a258dd38ee3125995795
+  branch: tags_middleware
+  specs:
+    influxdb-rails (0.4.3)
+      influxdb (~> 0.5.0)
+      railties (> 3)
+
+GIT
   remote: https://github.com/TeamDiverst/ruby-oembed.git
   revision: 2fddf3f9190746e1aaba6cb3fa04dec6139e589f
   specs:
@@ -429,9 +438,6 @@ GEM
     icalendar (2.4.1)
     inflecto (0.0.2)
     influxdb (0.5.3)
-    influxdb-rails (0.4.3)
-      influxdb (~> 0.5.0)
-      railties (> 3)
     inline_svg (0.6.4)
       activesupport (>= 4.0.4)
       loofah (>= 2.0)
@@ -820,7 +826,7 @@ DEPENDENCIES
   houston (~> 2.2, >= 2.2.3)
   httparty (~> 0.13)
   icalendar (~> 2.3)
-  influxdb-rails
+  influxdb-rails!
   inline_svg (~> 0.6.2)
   jbuilder (~> 2.6)
   jquery-datatables-rails (~> 3.3)

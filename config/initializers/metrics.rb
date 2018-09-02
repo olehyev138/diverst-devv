@@ -19,7 +19,10 @@
 
     config.async = true
 
-    config.application_name = hosts
+    config.application_name = app_name
+    config.tags_middleware = lambda do |tags|
+      tags.merge(domain: ENV['DOMAIN'])
+    end
   end
 
   Sidekiq.configure_server do |config|
@@ -30,7 +33,7 @@
                 series_name: 'sidekiq_jobs',
                 retention_policy: nil,
                 start_events: true,
-                tags: { application: app_name, server: Socket.gethostname },
+                tags: { application: app_name, server: Socket.gethostname, domain: ENV['DOMAIN'] },
                 except: []
     end
   end
