@@ -47,7 +47,7 @@
     grafana_url: 'http://localhost:{{ grafana_binding_port }}'
     grafana_password: '{{ grafana_admin_password }}'
     ds_type: influxdb
-    url: http://localhost:8086
+    url: http://{{ ansible_default_ipv4.address }}:8086
     database: '{{ item }}'
     state: present
   with_items:
