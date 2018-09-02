@@ -77,3 +77,13 @@ resource "cloudflare_record" "big_brother" {
   ttl    = 1
   proxied = true
 }
+
+resource "cloudflare_page_rule" "big_brother_https" {
+  zone = "${var.cloudflare_zone}"
+  target = "bigbrother.${var.cloudflare_zone}/*"
+  priority = 1
+
+  actions = {
+    always_use_https = true
+  }
+}
