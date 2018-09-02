@@ -38,3 +38,13 @@ variable "db_size" {}
 variable "db_instance_type" {
   default = "db.t3.micro"
 }
+
+variable "elasticsearch_domain" {}
+variable "elasticsearch_version" {
+  default = "5.3"
+}
+
+variable "elasticsearch_whitelist_extra" {
+  type = "list"
+  default = []
+}

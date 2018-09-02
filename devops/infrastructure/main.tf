@@ -61,6 +61,9 @@ module "staging" {
   db_size = 5
   db_instance_type = "db.t2.micro"
 
+  elasticsearch_domain = "diverst-staging-sandbox"
+  elasticsearch_version = "2.3"
+
   alarm_actions = ["${aws_sns_topic.server_outage.arn}"]
 }
 
@@ -73,8 +76,13 @@ module "kp" {
 
   webservers_count = 3
   workers_count = 1
+
   db_size = 20
   db_instance_type = "db.t2.small"
+
+  elasticsearch_domain = "diverst-kp"
+  elasticsearch_version = "2.3"
+  elasticsearch_whitelist_extra = ["34.235.73.164"]
 
   default_security_group = "${aws_security_group.basic.name}"
   webserver_security_group = "${aws_security_group.webserver.name}"

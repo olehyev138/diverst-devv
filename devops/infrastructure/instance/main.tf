@@ -74,3 +74,39 @@ module "alarms" {
   instance_ids = "${concat(aws_instance.webserver.*.id, aws_instance.worker.*.id)}"
   db_instances = ["${aws_db_instance.default.identifier}"]
 }
+
+data "aws_region" "current" {}
+
+data "aws_caller_identity" "current" {}
+
+resource "aws_elasticsearch_domain" "default" {
+  domain_name           = "${var.elasticsearch_domain}"
+  elasticsearch_version = "${var.elasticsearch_version}"
+
+  access_policies = <<CONFIG
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "*"
+      },
+      "Action": [
+        "es:*"
+      ],
+      "Condition": {
+        "IpAddress": {
+          "aws:SourceIp": [
+            "${join("\",\"", concat(var.elasticsearch_whitelist_extra,
+                                    aws_eip.webserver.*.public_ip,
+                                    aws_instance.worker.*.public_ip))}"
+          ]
+        }
+      },
+      "Resource": "arn:aws:es:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:domain/${var.elasticsearch_domain}/*"
+    }
+  ]
+}
+CONFIG
+}
