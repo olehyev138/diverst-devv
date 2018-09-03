@@ -48,3 +48,5 @@ variable "elasticsearch_whitelist_extra" {
   type = "list"
   default = []
 }
+
+variable "cloudflare_zone" {}

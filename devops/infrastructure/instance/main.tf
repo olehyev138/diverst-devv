@@ -110,3 +110,13 @@ resource "aws_elasticsearch_domain" "default" {
 }
 CONFIG
 }
+
+resource "cloudflare_record" "default" {
+  count = "${var.webservers_count}"
+  domain = "${var.cloudflare_zone}"
+  name   = "${var.name}"
+  value = "${aws_eip.webserver.*.public_ip[count.index]}"
+  type   = "A"
+  ttl    = 1
+  proxied = true
+}

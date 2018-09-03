@@ -65,6 +65,7 @@ module "staging" {
   elasticsearch_version = "2.3"
 
   alarm_actions = ["${aws_sns_topic.server_outage.arn}"]
+  cloudflare_zone = "${var.cloudflare_zone}"
 }
 
 module "kp" {
@@ -88,24 +89,5 @@ module "kp" {
   webserver_security_group = "${aws_security_group.webserver.name}"
 
   alarm_actions = ["${aws_sns_topic.server_outage.arn}"]
-}
-
-resource "cloudflare_record" "kp" {
-  count = "${length(module.kp.webserver_ips)}"
-  domain = "${var.cloudflare_zone}"
-  name   = "kp"
-  value  = "${module.kp.webserver_ips[count.index]}"
-  type   = "A"
-  ttl    = 1
-  proxied = true
-}
-
-resource "cloudflare_record" "staging" {
-  count = "${length(module.staging.webserver_ips)}"
-  domain = "${var.cloudflare_zone}"
-  name   = "staging"
-  value  = "${module.staging.webserver_ips[count.index]}"
-  type   = "A"
-  ttl    = 1
-  proxied = true
+  cloudflare_zone = "${var.cloudflare_zone}"
 }
