@@ -22,8 +22,7 @@
     database_name: "{{ item }}"
   with_items:
     - '{{ metrics_influxdb_system_db }}'
-    - '{{ metrics_influxdb_rails_db }}'
-    - '{{ metrics_influxdb_sidekiq_db }}'
+    - '{{ metrics_influxdb_app_db }}'
 
 - name: Run Grafana container
   docker_container:
@@ -52,8 +51,7 @@
     state: present
   with_items:
     - '{{ metrics_influxdb_system_db }}'
-    - '{{ metrics_influxdb_rails_db }}'
-    - '{{ metrics_influxdb_sidekiq_db }}'
+    - '{{ metrics_influxdb_app_db }}'
 
 - name: Add Linux host dashboard to Grafana
   grafana_dashboard:
