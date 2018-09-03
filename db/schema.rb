@@ -1077,6 +1077,8 @@ ActiveRecord::Schema.define(version: 20180903122410) do
     t.integer  "user_id",                     limit: 4
   end
 
+  add_index "policy_groups", ["user_id"], name: "index_policy_groups_on_user_id", using: :btree
+
   create_table "poll_responses", force: :cascade do |t|
     t.integer  "poll_id",    limit: 4
     t.integer  "user_id",    limit: 4
@@ -1085,6 +1087,8 @@ ActiveRecord::Schema.define(version: 20180903122410) do
     t.datetime "updated_at",                               null: false
     t.boolean  "anonymous",                default: false
   end
+
+  add_index "poll_responses", ["user_id"], name: "index_poll_responses_on_user_id", using: :btree
 
   create_table "polls", force: :cascade do |t|
     t.string   "title",          limit: 191
@@ -1410,6 +1414,8 @@ ActiveRecord::Schema.define(version: 20180903122410) do
     t.integer "user_id",    limit: 4
     t.integer "segment_id", limit: 4
   end
+
+  add_index "users_segments", ["user_id"], name: "index_users_segments_on_user_id", using: :btree
 
   create_table "views", force: :cascade do |t|
     t.integer  "user_id",           limit: 4,             null: false

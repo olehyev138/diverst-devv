@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="flex-row__cell">
-      <%= link_to "Export targeted members", export_csv_segment_path(@segment, group_id: @group&.id), class: "btn btn--secondary hidden-xs" %>
+      <%= link_to "Export targeted members", export_csv_segment_path(@segment, group_id: @group&.id), class: "btn btn--secondary hidden-xs" if current_user.admin? %>
     </div>
   </div>
 </div>

@@ -13,7 +13,7 @@ class SegmentDatatable < AjaxDatatablesRails::Base
 
   def sortable_columns
     # Declare strings in this format: ModelName.column_name
-    @sortable_columns ||= ['Segment.name', 'Segment.members.uniq.count', 'Segment.rules.count', 'Segment.created_at.to_s']
+    @sortable_columns ||= ['Segment.name', 'Segment.rules.count', 'Segment.created_at.to_s']
   end
 
   def searchable_columns
