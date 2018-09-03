@@ -33,20 +33,15 @@
     - '{{ application_root }}'
     - '{{ application_root }}/shared/config'
 
-- name: Render application.yml config
+- name: Render configs
   template:
-    src: '{{ application_yml }}'
-    dest: '{{ application_root }}/shared/config/application.yml'
-
-- name: Render database.yml
-  template:
-    src: 'database.yml.j2'
-    dest: '{{ application_root }}/shared/config/database.yml'
-
-- name: Render puma.rb
-  template:
-    src: 'puma.rb.j2'
-    dest: '{{ application_root }}/shared/config/puma.rb'
+    src: '{{ item.src }}'
+    dest: '{{ application_root }}/shared/config/{{ item.filename }}'
+  with_items:
+    - {src: '{{ application_yml }}', filename: 'application.yml'}
+    - {src: 'database.yml.j2', filename: 'database.yml'}
+    - {src: 'sidekiq.yml.j2', filename: 'sidekiq.yml'}
+    - {src: 'puma.rb.j2', filename: 'puma.rb'}
 
 - name: Make bower visible to Capistrano
   file:

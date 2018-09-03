@@ -1,2 +1,3 @@
 ---
 application_webserver_processes: 1
+application_sidekiq_concurrency: 5

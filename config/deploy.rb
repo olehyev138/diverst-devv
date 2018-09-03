@@ -4,7 +4,7 @@ set :application, 'diverst'
 set :repo_url, 'git@github.com:TeamDiverst/diverst-development.git'
 set :deploy_to, '/home/newdeploy/diverst'
 set :pty, false
-set :linked_files, %w(config/application.yml config/database.yml config/puma.rb)
+set :linked_files, %w(config/application.yml config/database.yml config/puma.rb config/sidekiq.yml)
 set :linked_dirs, %w(log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads)
 set :keep_releases, 5
 set :rvm_type, :user
