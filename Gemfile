@@ -141,5 +141,6 @@ group :staging, :production do
   gem 'newrelic_rpm', '~> 4.5.0'
   gem 'influxdb-rails', git: 'https://github.com/Kukunin/influxdb-rails.git',
                         branch: 'tags_middleware' # Rails metrics to InfluxDB
-  gem 'sidekiq-influxdb' # Sidekiq metrics to InfluxDB
+  # Sidekiq metrics to InfluxDB
+  gem 'sidekiq-influxdb', git: 'https://github.com/Kukunin/sidekiq-influxdb'
 end
