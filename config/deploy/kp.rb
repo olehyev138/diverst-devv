@@ -9,7 +9,7 @@
 server '18.215.115.79', user: 'ubuntu', roles: %w(app)
 server '54.88.218.161', user: 'ubuntu', roles: %w(app)
 server '18.215.221.60', user: 'ubuntu', roles: %w(app)
-server '34.228.231.235', user: 'ubuntu', roles: %w(background clockwork)
+server '34.228.231.235', user: 'ubuntu', roles: %w(background clockwork db)
 
 set :deploy_to, '/var/www/diverst'
 
