@@ -33,7 +33,8 @@ class GroupsController < ApplicationController
         CSV.generate do |csv|
           csv << ['Group name', 'Annual budget', 'Leftover money', 'Approved budget']
            current_user.enterprise.groups.includes(:children).all_parents.each do |group|
-            csv << [group.name, group.annual_budget, group.leftover_money, group.approved_budget]
+             annual_budget = group.annual_budget.presence || "Not set"
+             csv << [group.name, annual_budget, group.leftover_money, group.approved_budget]
           end
         end
       send_data result, filename: 'global_budgets.csv'
