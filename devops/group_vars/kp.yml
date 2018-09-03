@@ -1,0 +1,3 @@
+---
+application_yml: configs/kp/application.yml.j2
+application_instance: kp

@@ -1,5 +1,5 @@
 ---
 application_yml: configs/staging/application.yml.j2
 application_instance: staging
-monit_sidekiq_memory_per_worker: 50%
-application_webserver_processes: 1
+monit_sidekiq_memory_per_worker: '45 %'
+monit_puma_total_memory_percent: 35

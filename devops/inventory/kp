@@ -1,9 +1,7 @@
 [kp_webserver]
-kp.diverst.com
 kp-webserver-[0:2].diverst.com
 
 [kp_worker]
-kp.diverst.com
 kp-worker-[0:0].diverst.com
 
 [kp:children]
@@ -15,6 +13,3 @@ kp_webserver
 
 [worker:children]
 kp_worker
-
-[old]
-kp.diverst.com

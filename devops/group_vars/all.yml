@@ -12,7 +12,7 @@ loggly:
 application_root: '/var/www/diverst'
 application_user: ubuntu
 application_run_prefix: '~/.rvm/bin/rvm 2.3.0 do'
-application_webserver_processes: 2
+application_webserver_processes: 1
 
 metrics_access_key: AKIAIT6VLD7BOI2G76IA
 metrics_secret_key: !vault |

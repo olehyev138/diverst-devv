@@ -22,8 +22,8 @@ monit_cli_password: 'ysDQkwLjLmwjzdhXum9pDzGbMaLUt6BSauPTW6F9nE4J6BGx'
 monit_check_interval: 60
 
 monit_watch_puma: false
-monit_puma_workers: 0
-monit_puma_total_memory_percent: 40
+monit_puma_workers: 1
+monit_puma_total_memory_percent: 80
 monit_puma_memory_per_worker: '{{ (monit_puma_total_memory_percent / (monit_puma_workers)) | round | int }} %'
 monit_puma_memory_cycles: 5
 
@@ -57,7 +57,7 @@ monit_sidekiq_config_path: 'current/config/sidekiq.yml'
 monit_sidekiq_config_abspath: '{{ monit_app_root }}{{ monit_sidekiq_config_path }}'
 monit_sidekiq_exit_timeout: 180
 
-monit_sidekiq_memory_per_worker: '50 %'
+monit_sidekiq_memory_per_worker: '80 %'
 monit_sidekiq_memory_cycles: 5
 
 monit_sidekiq_start_command: >-
