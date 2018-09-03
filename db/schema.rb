@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180724141334) do
+ActiveRecord::Schema.define(version: 20180903122410) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -1170,6 +1170,8 @@ ActiveRecord::Schema.define(version: 20180724141334) do
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
   end
+
+  add_index "samples", ["user_id"], name: "index_samples_on_user_id", using: :btree
 
   create_table "segment_rules", force: :cascade do |t|
     t.integer  "segment_id", limit: 4
