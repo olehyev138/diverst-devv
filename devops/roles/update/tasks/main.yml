@@ -5,6 +5,13 @@
     update_cache: yes
     cache_valid_time: 86400 # one day
 
+- name: Install service utils
+  apt:
+    name: '{{ item }}'
+    state: present
+  with_items:
+    - htop
+
 - name: Upgrade python2.7
   apt:
     name: '{{ item }}'
