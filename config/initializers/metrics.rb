@@ -4,6 +4,7 @@
   hosts = [ENV.fetch('INFLUXDB_HOST', 'localhost')]
   rails_database = ENV.fetch('INFLUXDB_RAILS_DB', 'rails')
   sidekiq_database = ENV.fetch('INFLUXDB_SIDEKIQ_DB', 'sidekiq')
+  instance = ENV.fetch('INSTANCE', 'unknown')
   app_name = [
     Rails.application.class.parent_name,
     Sidekiq.server? && 'Sidekiq'
@@ -21,7 +22,7 @@
 
     config.application_name = app_name
     config.tags_middleware = lambda do |tags|
-      tags.merge(domain: ENV['DOMAIN'])
+      tags.merge(domain: ENV['DOMAIN'], instance: instance)
     end
   end
 
@@ -33,7 +34,8 @@
                 series_name: 'sidekiq_jobs',
                 retention_policy: nil,
                 start_events: true,
-                tags: { application: app_name, server: Socket.gethostname, domain: ENV['DOMAIN'] },
+                tags: { application: app_name, server: Socket.gethostname,
+                        instance: instance, domain: ENV['DOMAIN'] },
                 except: []
     end
   end
