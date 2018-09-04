@@ -1,8 +1,8 @@
 <div class="card__section">
   <%= render 'public_activity/shared/owner', activity: activity %>
-  created a news item
+  updated a group message
   <% if activity.trackable %>
-    <%= link_to activity.trackable.title, comments_group_news_link_path(activity.trackable.group, activity.trackable) %>
+    <%= link_to activity.trackable.subject, group_group_message_path(activity.trackable.group, activity.trackable) %>
   <% else %>
     which has since been removed
   <% end %>

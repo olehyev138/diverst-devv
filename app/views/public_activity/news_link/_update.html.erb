@@ -2,7 +2,7 @@
   <%= render 'public_activity/shared/owner', activity: activity %>
   updated a news item
   <% if activity.trackable %>
-    <%= link_to activity.trackable.title, comments_group_news_link_path(activity.trackable, activity.trackable.group) %>
+    <%= link_to activity.trackable.title, comments_group_news_link_path(activity.trackable.group, activity.trackable) %>
   <% else %>
     which has since been removed
   <% end %>
