@@ -1,7 +1,7 @@
 # Save a sample of every user
 
 class SaveUserDataSamplesJob < ActiveJob::Base
-  queue_as :default
+  queue_as :low
 
   def perform
     User.find_each do |user|

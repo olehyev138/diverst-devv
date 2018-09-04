@@ -24,7 +24,7 @@
       delegate_to: "{{ item }}"
       delegate_facts: True
       with_items: "{{ groups['bigbrother'] }}"
-      tags: ['metrics']
+      tags: ['app', 'metrics']
   roles:
     - role: amaabca.loggly_tls
       loggly:
@@ -35,17 +35,15 @@
       tags: ['logger']
 
     - role: monit
-      monit_add_user_to_group: '{{ application_user }}'
-      monit_app_prefix: 'diverst-'
-      monit_app_root: '{{ application_root }}/'
-      monit_app_user: '{{ application_user }}'
-      monit_app_run_prefix: '{{ application_run_prefix }}'
+
       tags: ['monit']
 
     - role: metrics
       metrics_influxdb_host: "http://{{ hostvars[groups['bigbrother'][0]]['ansible_default_ipv4']['address'] }}:8086"
-      metrics_influxdb_database: 'telegraf'
       tags: ['metrics']
+
+    - role: app
+      tags: ['app']
 
 - hosts: bigbrother
   roles:

@@ -1,7 +1,4 @@
----
-:concurrency: 1
-production:
-  :concurrency: 5
+:concurrency: {{ application_sidekiq_concurrency }}
 :queues:
   - critical
   - mailers

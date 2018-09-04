@@ -30,6 +30,7 @@
     src: puma.conf.j2
     dest: /etc/monit/conf.d/puma.conf
     mode: 0600
+  when: monit_watch_puma
   notify:
     - restart monit
 
@@ -38,6 +39,7 @@
     src: sidekiq.conf.j2
     dest: /etc/monit/conf.d/sidekiq.conf
     mode: 0600
+  when: monit_watch_sidekiq
   notify:
     - restart monit
 
@@ -46,6 +48,7 @@
     src: clockwork.conf.j2
     dest: /etc/monit/conf.d/clockwork.conf
     mode: 0600
+  when: monit_watch_clockwork
   notify:
     - restart monit
 
