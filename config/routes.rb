@@ -140,6 +140,7 @@ Rails.application.routes.draw do
       post 'approve'
       post 'decline'
       collection do
+        get 'export_csv'
         get 'edit_annual_budget'
         post 'update_annual_budget'
         post 'reset_annual_budget'
@@ -286,6 +287,7 @@ Rails.application.routes.draw do
     collection do
       get 'plan_overview'
       get 'close_budgets'
+      get 'close_budgets_export_csv'
       get 'calendar'
       get 'calendar_data'
     end
