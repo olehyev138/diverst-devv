@@ -13,81 +13,98 @@ class ApplicationController < ActionController::Base
     rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
     rescue_from ActionController::UnknownFormat do |e|
+        Rails.logger.warn('UnknownFormat: ' + e.message)
         render :status => 400, :json => {error: e.message}
     end
     
     rescue_from ActionView::MissingTemplate do |e|
         flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
         flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
+        Rails.logger.warn('MissingTemplate: ' + e.message)
         redirect_to(request.referrer || default_path)
     end
     
     rescue_from ActionView::Template::Error do |e|
         flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
         flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
+        Rails.logger.warn('Template::Error: ' + e.message)
+        Rollbar.error(e)
         redirect_to(request.referrer || default_path)
     end
     
     rescue_from ActionController::BadRequest do |e|
         flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
         flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
+        Rails.logger.warn('BadRequest: ' + e.message)
         redirect_to(request.referrer || default_path)
     end
     
     rescue_from ActiveRecord::RecordInvalid do |e|
         flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
         flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
+        Rails.logger.warn('RecordInvalid: ' + e.message)
+        Rollbar.error(e)
         redirect_to(request.referrer || default_path)
     end
     
     rescue_from BadRequestException do |e|
         flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
         flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
+        Rails.logger.warn('BadRequestException: ' + e.message)
         redirect_to(request.referrer || default_path)
     end
 
     rescue_from ActionController::RoutingError do |e|
         flash[:alert] = e.message
+        Rails.logger.warn('RoutingError: ' + e.message)
         redirect_to(request.referrer || default_path)
     end
 
     rescue_from ActiveRecord::RecordNotFound do |e|
         flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
         flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
+        Rails.logger.warn('RecordNotFound: ' + e.message)
         redirect_to(request.referrer || default_path)
     end
 
     rescue_from ActiveRecord::StatementInvalid do |e|
         flash[:alert] = e.message
+        Rails.logger.warn('StatementInvalid: ' + e.message)
+        Rollbar.error(e)
         redirect_to(request.referrer || default_path)
     end
     
     rescue_from ActiveRecord::ConnectionTimeoutError do |e|
         flash[:alert] = e.message
+        Rails.logger.warn('ActiveRecord::ConnectionTimeoutError: ' + e.message)
         Rollbar.error(e)
         redirect_to(request.referrer || default_path)
     end
     
     rescue_from Rack::Timeout::RequestTimeoutException do |e|
         flash[:alert] = e.message
+        Rails.logger.warn('Rack::Timeout::RequestTimeoutException: ' + e.message)
         Rollbar.error(e)
         redirect_to(request.referrer || default_path)
     end
 
     rescue_from Rack::Timeout::RequestExpiryError do |e|
         flash[:alert] = e.message
+        Rails.logger.warn('Rack::Timeout::RequestExpiryError: ' + e.message)
         Rollbar.error(e)
         redirect_to(request.referrer || default_path)
     end
 
     rescue_from Rack::Timeout::RequestTimeoutError do |e|
         flash[:alert] = e.message
+        Rails.logger.warn('Rack::Timeout::RequestTimeoutError: ' + e.message)
         Rollbar.error(e)
         redirect_to(request.referrer || default_path)
     end
 
     rescue_from ActionController::ParameterMissing do |e|
         flash[:alert] = e.message
+        Rails.logger.warn('ParameterMissing: ' + e.message)
         redirect_to(request.referrer || default_path)
     end
 
