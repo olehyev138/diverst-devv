@@ -6,9 +6,9 @@
 # server 'example.com', user: 'deploy', roles: %w{app db web}, my_property: :my_value
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
 # server 'db.example.com', user: 'deploy', roles: %w{db}
-server '18.215.115.79', user: 'ubuntu', roles: %w(app)
-server '54.88.218.161', user: 'ubuntu', roles: %w(app)
-server '18.215.221.60', user: 'ubuntu', roles: %w(app)
+server '18.215.115.79', user: 'ubuntu', roles: %w(app web)
+server '54.88.218.161', user: 'ubuntu', roles: %w(app web)
+server '18.215.221.60', user: 'ubuntu', roles: %w(app web)
 server '34.228.231.235', user: 'ubuntu', roles: %w(background clockwork db)
 
 set :deploy_to, '/var/www/diverst'
