@@ -64,21 +64,25 @@ class ApplicationController < ActionController::Base
     
     rescue_from ActiveRecord::ConnectionTimeoutError do |e|
         flash[:alert] = e.message
+        Rollbar.error(e)
         redirect_to(request.referrer || default_path)
     end
     
     rescue_from Rack::Timeout::RequestTimeoutException do |e|
         flash[:alert] = e.message
+        Rollbar.error(e)
         redirect_to(request.referrer || default_path)
     end
 
     rescue_from Rack::Timeout::RequestExpiryError do |e|
         flash[:alert] = e.message
+        Rollbar.error(e)
         redirect_to(request.referrer || default_path)
     end
 
     rescue_from Rack::Timeout::RequestTimeoutError do |e|
         flash[:alert] = e.message
+        Rollbar.error(e)
         redirect_to(request.referrer || default_path)
     end
 
