@@ -1,4 +1,6 @@
 class NewsLink < ActiveRecord::Base
+    include PublicActivity::Common
+ 
     belongs_to :group
     belongs_to :author, class_name: 'User'
 
