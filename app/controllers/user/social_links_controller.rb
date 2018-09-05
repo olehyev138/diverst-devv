@@ -17,6 +17,7 @@ class User::SocialLinksController < ApplicationController
     @social_link = current_user.social_links.new(social_links_params)
 
     if @social_link.save
+      track_activity(@social_link, :create)
       flash[:notice] = "Your link was created"
       redirect_to action: :index
     else
@@ -28,6 +29,7 @@ class User::SocialLinksController < ApplicationController
   def destroy
     authorize @social_link
 
+    track_activity(@social_link, :destroy)
     if @social_link.destroy
       flash[:notice] = "Your social post was removed"
     else
