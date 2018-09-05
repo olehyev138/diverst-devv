@@ -448,7 +448,7 @@ class User < ActiveRecord::Base
 
     def check_lifespan_of_user
         # deletes users 13 days or younger
-        (DateTime.now.day - self.created_at.day) < 14
+        DateTime.now.days_ago(14) < self.created_at
     end
 
     def validate_presence_fields
