@@ -39,7 +39,14 @@ class Resource < ActiveRecord::Base
     def expiration_time
         EXPIRATION_TIME
     end
-
+    
+    def container
+        return enterprise if enterprise.present?
+        return folder if folder.present?
+        return initiative if initiative.present?
+        return group if group.present?
+        return mentoring_session if mentoring_session.present?
+    end
 
     protected
 
