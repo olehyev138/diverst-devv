@@ -42,7 +42,6 @@ class SegmentDatatable < AjaxDatatablesRails::Base
       destroy_link = generate_destroy_link(record)
       [
         "#{link_to(html_escape(record.name), segment_path(record))}",
-        html_escape(record.members.uniq.count),
         html_escape(record.rules.count),
         html_escape(record.created_at.to_s :reversed_slashes), 
         "#{edit_link} - #{destroy_link}"
