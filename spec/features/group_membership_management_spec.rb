@@ -49,7 +49,7 @@ RSpec.feature 'Group Membership Management' do
 					click_link "OK"
 				end
 
-				expect(page).to have_content pending_membership_message
+				expect(sub_group.members).not_to include guest_user
 			end
 		end
 
@@ -66,7 +66,7 @@ RSpec.feature 'Group Membership Management' do
 				click_button "YES"
 
 				expect(page).to have_current_path group_path(group)
-				expect(page).to have_content "#{sub_group.name} ( member )"
+				expect(group.members).to include guest_user
 			end
 
 			scenario 'and chooses not to join a parent group', js: true do
@@ -79,7 +79,7 @@ RSpec.feature 'Group Membership Management' do
 				click_link "NO"
 
 				expect(page).to have_current_path group_path(sub_group)
-				expect(page).to have_content "#{group.name} ( not member )"
+				expect(group.members).not_to include guest_user
 			end
 		end
 

@@ -79,6 +79,26 @@ RSpec.describe BudgetsController, type: :controller do
     end
   end
 
+  describe "GET#export_csv" do
+    context 'when user is logged in' do
+      login_user_from_let
+      before { get :export_csv, :group_id => group.id }
+
+      it "return data in csv format" do
+        expect(response.content_type).to eq 'text/csv'
+      end
+
+      it "filename should be group file safe name lowercase + '_budgets.csv'" do
+        expect(response.headers["Content-Disposition"]).to include (group.file_safe_name.downcase + '_budgets.csv')
+      end
+    end
+
+    context 'when user is not logged in' do
+      before { get :export_csv, :group_id => group.id }
+      it_behaves_like "redirect user to users/sign_in path"
+    end
+  end
+
   describe 'POST#create' do
     context 'with logged user' do
       login_user_from_let
@@ -148,7 +168,7 @@ RSpec.describe BudgetsController, type: :controller do
       it "budget is approved" do
         expect(budget.is_approved).to eq true
       end
-      
+
       it "saves the comment" do
         expect(budget.comments).to eq "here is a comment"
       end
@@ -237,7 +257,7 @@ RSpec.describe BudgetsController, type: :controller do
   describe 'GET#edit_annual_budget' do
     let(:user) { create :user }
     let(:group) { create :group, enterprise: user.enterprise }
-    
+
     before {
       user.policy_group.groups_manage = true
       user.policy_group.annual_budget_manage = true
