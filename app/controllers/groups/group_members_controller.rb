@@ -42,7 +42,6 @@ class Groups::GroupMembersController < ApplicationController
   def destroy
     authorize @member, :join_or_leave_groups?
     @group.user_groups.find_by(user_id: @member.id).destroy
-    options_to_leave_sub_groups_or_parent_group_service
     redirect_to group_path(@group)
   end
 
