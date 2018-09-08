@@ -162,7 +162,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
 
                 it 'leave all sub groups' do
                     expect(group.members).not_to include assigns[:current_user]
-                    expect(sub_group.members).not_to include assigns[:current_user]
+                    expect(sub_group.members).to include assigns[:current_user]
                 end
 
                 it 'delete all membership to sub groups joined previously' do

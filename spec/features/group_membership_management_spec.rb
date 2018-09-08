@@ -287,7 +287,7 @@ RSpec.feature 'Group Membership Management' do
 
 				expect(page).to have_button "Join this #{c_t(:parent)}"
 				expect(group.members).not_to include guest_user
-				expect(sub_group.members).not_to include guest_user
+				expect(sub_group.members).to include guest_user
 			end
 
 			scenario 'a sub group', js: true do
@@ -295,8 +295,7 @@ RSpec.feature 'Group Membership Management' do
 
 				click_link "Leave this #{c_t(:sub_erg)}"
 
-				expect(page).to have_button "Join this #{c_t(:sub_erg)}"
-				expect(group.members).not_to include guest_user
+				expect(group.members).to include guest_user
 				expect(sub_group.members).not_to include guest_user
 			end
 		end
