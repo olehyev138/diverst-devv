@@ -35,15 +35,6 @@
     <% @groups.each do |group| %>
       <span class="" style="color: <%= to_color group.calendar_color %>;">
         <%= group.name %>
-        <% if group.children.any? %>
-          [<% group.children.each do |sub_erg| %>
-            <i><%= sub_erg.name %></i>
-            <% unless sub_erg == group.children.last %>
-              -
-            <% end %>
-           <% end %>
-          ]
-        <% end %>
         <% unless group == @groups.last %>
           -
         <% end %>
