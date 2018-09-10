@@ -138,7 +138,7 @@ RSpec.describe GroupsController, type: :controller do
       end
 
       it 'returns 2 groups belonging to enterprise' do
-        expect(assigns[:groups].count).to eq 3
+        expect(assigns[:groups].count).to eq 5
       end
 
       it 'returns 3 segments belonging to enterprise' do
