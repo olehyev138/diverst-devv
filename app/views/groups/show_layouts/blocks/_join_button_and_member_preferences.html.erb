@@ -1,5 +1,7 @@
 <% if current_user.pending_group_member?(@group.id) || @group.members.include?(current_user) %>
-  * Please wait for group administrators to process your membership request.
+  <% if current_user.pending_group_member?(@group.id) %>
+    * Please wait for group administrators to process your membership request.
+  <% end %>
   <% if !current_user.has_answered_group_survey? @group %>
     Take a survey below in order to speed up approval process.
      <%= link_to c_t(:member_preference), survey_group_questions_path(@group), class: "btn btn--primary" %>
