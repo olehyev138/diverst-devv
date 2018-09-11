@@ -1,5 +1,10 @@
 <div class="content__header">
   <h1>Budgeting info</h1>
+  <div class="flex-row">
+    <div class="flex-row__cell">
+      <%= link_to "Export CSV", close_budgets_export_csv_groups_path, class: "btn btn--secondary hidden-xs", role: "button", 'aria-label': "Export CSV" %>
+    </div>
+  </div>
 </div>
 
 <div class="row">
@@ -40,12 +45,12 @@
                 <%= number_to_currency(group.approved_budget) || 'Not set' %>
               </td>
               <td>
-                <%= link_to 'Edit', edit_annual_budget_group_budgets_path(group) %> - 
-                <%= link_to "Carry Over", carry_over_annual_budget_group_budgets_path(group), method: 'post'%> - 
+                <%= link_to 'Edit', edit_annual_budget_group_budgets_path(group) %> -
+                <%= link_to "Carry Over", carry_over_annual_budget_group_budgets_path(group), method: 'post'%> -
                 <%= link_to "Reset Budget", reset_annual_budget_group_budgets_path(group), method: 'post' %>
               </td>
             </tr>
-            
+
             <% group.children.each do |child| %>
               <tr class="children_<%= group.id%>" style="display:none;">
                 <td></td>
@@ -56,14 +61,14 @@
                   <%= number_to_currency( child.approved_budget) || 'Not set' %>
                 </td>
                 <td>
-                  <%= link_to 'Edit', edit_annual_budget_group_budgets_path(child) %> - 
-                  <%= link_to "Carry Over", carry_over_annual_budget_group_budgets_path(child), method: 'post' %> - 
+                  <%= link_to 'Edit', edit_annual_budget_group_budgets_path(child) %> -
+                  <%= link_to "Carry Over", carry_over_annual_budget_group_budgets_path(child), method: 'post' %> -
                   <%= link_to "Reset Budget", reset_annual_budget_group_budgets_path(child), method: 'post' %>
                 </td>
               </tr>
             <% end %>
-            
-            
+
+
           <% end %>
         </tbody>
       </table>
@@ -78,7 +83,7 @@
     $(this).siblings('a.nested_minus').show();
     $(this).hide();
   }); //endof click
-  
+
   $('a.nested_minus').click(function(e){
     var id = $(this).attr('id');
     $('tr.children_' + id).hide();

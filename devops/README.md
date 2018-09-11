@@ -21,3 +21,7 @@ If an instance requires the SUDO pass, you can use:
 If you want to run a specific task on a specific server, use:
 
     ansible-playbook setup.yml -l staging -t monit --ask-become-pass
+
+If you want to edit an encrypted file, use `ansible-vault`:
+
+    ansible-vault edit configs/staging/application.yml.j2

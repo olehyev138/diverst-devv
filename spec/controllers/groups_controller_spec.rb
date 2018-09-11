@@ -5,6 +5,7 @@ RSpec.describe GroupsController, type: :controller do
   let(:enterprise){ create(:enterprise) }
   let(:user){ create(:user, enterprise: enterprise, email: "test@gmail.com") }
   let(:group){ create(:group, enterprise: enterprise) }
+  let(:different_group) { create(:group, enterprise: create(:enterprise)) }
 
   describe 'GET #index' do
     context 'with logged user' do
@@ -18,6 +19,15 @@ RSpec.describe GroupsController, type: :controller do
       it 'correctly sets groups' do
         get :index
         expect(group.enterprise).to eq enterprise
+      end
+
+      context "display groups belonging to current user enterprise" do
+        before { group; different_group }
+
+        it 'returns 1 group' do 
+          get :index
+          expect(assigns[:groups].count).to eq 1
+        end
       end
 
       context 'where groups have children' do
@@ -74,6 +84,15 @@ RSpec.describe GroupsController, type: :controller do
             expect(assigns[:groups].count).to eq 2
           end
         end
+
+        context "display groups belonging to current user enterprise" do
+          before { group; different_group }
+
+          it 'returns 1 group' do 
+            get :close_budgets, :id => group.id
+            expect(assigns[:groups].count).to eq 1
+          end
+        end        
       end
 
       context "with incorrect permissions" do
@@ -90,6 +109,26 @@ RSpec.describe GroupsController, type: :controller do
 
     context 'without logged user' do
       before { get :close_budgets, :id => group.id }
+      it_behaves_like "redirect user to users/sign_in path"
+    end
+  end
+
+  describe "GET#close_budgets_export_csv" do
+    context 'when user is logged in' do
+      login_user_from_let
+      before { get :close_budgets_export_csv }
+
+      it "return data in csv format" do
+        expect(response.content_type).to eq 'text/csv'
+      end
+
+      it "filename should be 'global_budgets.csv'" do
+        expect(response.headers["Content-Disposition"]).to include 'global_budgets.csv'
+      end
+    end
+
+    context 'when user is not logged in' do
+      before { get :close_budgets_export_csv }
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
@@ -112,6 +151,15 @@ RSpec.describe GroupsController, type: :controller do
       it 'shows groups from correct enterprise' do
         expect(assigns(:groups)).to include group
         #expect(assigns(:groups)).to_not include foreign_group
+      end
+
+      context "display groups belonging to current user enterprise" do
+        before { group; different_group }
+
+        it 'returns 1 group' do 
+          get :plan_overview
+          expect(assigns[:groups].count).to eq 1
+        end
       end
     end
 
