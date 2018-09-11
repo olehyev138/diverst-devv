@@ -46,7 +46,6 @@ RSpec.describe User do
         it { expect(user).to have_many(:event_invitees) }
         it { expect(user).to have_many(:invited_events).through(:event_invitees).source(:event) }
         it { expect(user).to have_many(:managed_groups).with_foreign_key(:manager_id).class_name('Group') }
-        it { expect(user).to have_many(:samples) }
         it { expect(user).to have_many(:biases).class_name('Bias') }
         it { expect(user).to have_many(:group_leaders) }
         it { expect(user).to have_many(:leading_groups).through(:group_leaders).source(:group) }
