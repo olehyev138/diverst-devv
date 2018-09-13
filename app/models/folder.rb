@@ -7,7 +7,8 @@ class Folder < ActiveRecord::Base
   has_many    :resources, as: :container
   has_many    :folder_shares
   has_many    :groups, through: :folder_shares, source: "container", source_type: 'Group'
-
+  has_many    :views, dependent: :destroy
+  
   has_many    :children, class_name: "Folder", foreign_key: :parent_id
   belongs_to  :parent,   class_name: "Folder", foreign_key: :parent_id
 

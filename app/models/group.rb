@@ -83,7 +83,8 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
   has_many :pillars, through: :outcomes
   has_many :initiatives, through: :pillars
   has_many :updates, class_name: "GroupUpdate", dependent: :destroy
-
+  has_many :views, dependent: :destroy
+  
   has_many :fields, -> { where field_type: "regular"},
            as: :container,
            dependent: :destroy
@@ -156,6 +157,10 @@ enumerize :upcoming_events_visibility, default: :leaders_only, in:[
 
   def is_sub_group?
     parent.present?
+  end
+  
+  def total_views
+    views.sum(:view_count)
   end
 
   def is_standard_group?
