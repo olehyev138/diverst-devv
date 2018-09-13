@@ -2,9 +2,9 @@ require 'rails_helper'
 
 RSpec.feature 'Group Membership Management' do
 	let!(:enterprise) { create(:enterprise, name: 'The Enterprise') }
-	let!(:guest_user) { create(:user, enterprise_id: enterprise.id, policy_group: create(:guest_user, enterprise: enterprise),
+	let!(:guest_user) { create(:user, enterprise: enterprise, policy_group: create(:guest_user, enterprise: enterprise),
 	 first_name: 'Aaron', last_name: 'Patterson') }
-	let!(:admin_user) { create(:user, enterprise_id: enterprise.id, first_name: 'Yehuda', last_name: 'Katz',
+	let!(:admin_user) { create(:user, enterprise: enterprise, first_name: 'Yehuda', last_name: 'Katz',
 	 policy_group: create(:policy_group, name: 'Admin User', enterprise: enterprise)) }
 	let!(:group) { create(:group, name: 'Group ONE', enterprise: enterprise) }
 
@@ -25,11 +25,10 @@ RSpec.feature 'Group Membership Management' do
 
                 click_button "Join this #{c_t(:parent)}"
 
-				within('.modal-header') do
+				within('.modal-content') do
 					expect(page).to have_content "Thanks for joining the #{c_t(:parent)}! Do you also want to join a #{c_t(:sub_erg)}?"
+					click_link "YES"
 				end
-
-				click_link "YES"
 
 				expect(page).to have_content sub_group.name
 				expect(page).to have_link 'Join'
@@ -196,11 +195,11 @@ RSpec.feature 'Group Membership Management' do
 
 			click_button "Join this #{c_t(:parent)}"
 
-			within('.modal-header') do
+			within('.modal-content') do
 				expect(page).to have_content "Thanks for joining the #{c_t(:parent)}! Do you also want to join a #{c_t(:sub_erg)}?"
+			    click_link "YES"
 			end
 
-			click_link "YES"
 
 			expect(page).to have_content sub_group.name
 			expect(page).to have_link 'Join'

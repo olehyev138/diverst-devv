@@ -172,16 +172,13 @@ RSpec.feature 'News Feed Management' do
 				expect(page).to have_link news_link.url
 			end
 
-			scenario 'when updating news item with url', js: true do
+			scenario 'when updating news item with url' do
 				visit edit_group_news_link_path(group, existing_news_item)
 
 				expect(page).to have_content 'Edit a news item'
 
 				#expect(page).to have_field('news_link_description', with: existing_news_item.description)
-				fill_in_ckeditor 'news_link_description', :with => 'Naruto is the Seventh Hokage and is married to Hinata.'
-
-				click_on 'Add a photo'
-				attach_file('File', 'spec/fixtures/files/verizon_logo.png')
+				fill_in 'news_link_description', :with => 'Naruto is the Seventh Hokage and is married to Hinata.'
 
 				click_on 'Update News link'
 
