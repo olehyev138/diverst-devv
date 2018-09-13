@@ -16,7 +16,8 @@ class ViewsController < ApplicationController
         :group_id,
         :user_id,
         :enterprise_id,
-        :folder_id
+        :folder_id,
+        :resource_id
         )
   end
 end
