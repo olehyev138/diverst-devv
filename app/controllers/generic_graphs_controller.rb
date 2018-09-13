@@ -297,4 +297,48 @@ class GenericGraphsController < ApplicationController
             }
         end
     end
+
+    def top_groups_by_views
+        data = current_user.enterprise.groups.all_parents.map do |g|
+            {
+                y: g.total_views,
+                name: g.name,
+                drilldown: g.name
+            }
+        end
+        
+        drilldowns = current_user.enterprise.groups.includes(:children).all_parents.map { |g|
+            {
+                name: g.name,
+                id: g.name,
+                data: g.children.map {|child| [child.name, child.total_views]}
+            }
+        }
+        
+        categories = current_user.enterprise.groups.all_parents.map{ |g| g.name }
+
+        respond_to do |format|
+            format.json {
+                render json: {
+                           type: 'bar',
+                           highcharts: {
+                               series: [{
+                                   title: "# of views per #{c_t(:erg)}",
+                                   data: data
+                               }],
+                               drilldowns: drilldowns,
+                               #categories: categories,
+                               xAxisTitle: "#{c_t(:erg)}",
+                               yAxisTitle: "# of views per #{c_t(:erg)}"
+                           },
+                           hasAggregation: false
+                       }
+            }
+            format.csv {
+                strategy = Reports::GraphStatsGeneric.new(title: "Number of view per #{c_t(:erg)}", categories: categories, data: data)
+                report = Reports::Generator.new(strategy)
+                send_data report.to_csv, filename: "views_per_#{c_t(:erg)}.csv"
+            }
+        end
+    end
 end

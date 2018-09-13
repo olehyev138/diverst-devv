@@ -670,4 +670,14 @@ RSpec.describe Group, :type => :model do
             expect(enterprise.groups.non_private.count).to eq(3)
         end
     end
+    
+    describe '#total_views' do
+        it "returns 0" do
+            group = create(:group)
+            create(:view, :group => group, :view_count => 4)
+            create(:view, :group => group, :view_count => 6)
+            
+            expect(group.total_views).to eq(10)
+        end
+    end
 end

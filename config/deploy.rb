@@ -35,17 +35,4 @@ set :rollbar_role, Proc.new { :app }
 
 namespace :deploy do
 
-  desc 'Recompile all enterprise themes'
-  task :recompile_themes, [:command] => 'deploy:set_rails_env' do |task, args|
-    on primary(:app) do
-      within current_path do
-        with :rails_env => fetch(:rails_env) do
-          rake 'themes:recompile'
-        end
-      end
-    end
-  end
-
-  after :finishing, "deploy:recompile_themes"
-
 end

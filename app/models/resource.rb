@@ -6,6 +6,7 @@ class Resource < ActiveRecord::Base
     belongs_to :mentoring_session
     
     has_many :tags, :as => :taggable, :dependent => :destroy
+    has_many :views, dependent: :destroy
     accepts_nested_attributes_for :tags
 
     has_attached_file :file, s3_permissions: "private"
