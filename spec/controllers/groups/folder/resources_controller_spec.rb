@@ -8,7 +8,6 @@ RSpec.describe Groups::Folder::ResourcesController, type: :controller do
     let!(:folder){ create(:folder, :container => group) }
     let!(:resource){ create(:resource, title: "title", container: folder, file: fixture_file_upload('files/test.csv', 'text/csv')) }
 
-
     describe "GET#index" do
         context 'when user is logged in' do
             login_user_from_let
@@ -30,6 +29,10 @@ RSpec.describe Groups::Folder::ResourcesController, type: :controller do
 
             it "returns resources that belong to container" do
                 expect(assigns[:resources].where(container_id: assigns[:container].id)).to eq [resource]
+            end
+            
+            it "increments the folder's total_views" do
+                expect(folder.total_views).to eq(1)
             end
         end
 

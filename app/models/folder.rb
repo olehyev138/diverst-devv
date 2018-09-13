@@ -33,5 +33,9 @@ class Folder < ActiveRecord::Base
   def valid_password?(user_password)
     return authenticate(user_password)
   end
+  
+  def total_views
+    views.sum(:view_count)
+  end
 
 end

@@ -341,4 +341,50 @@ class GenericGraphsController < ApplicationController
             }
         end
     end
+    
+    def top_folders_by_views
+        group_ids = current_user.enterprise.groups.ids
+        folders = Folder.where(:container_id => group_ids, :container_type => "Group").only_parents
+        data = folders.map do |f|
+            {
+                y: f.total_views,
+                name: f.name,
+                drilldown: f.name
+            }
+        end
+        
+        drilldowns = folders.map { |f|
+            {
+                name: f.name,
+                id: f.name,
+                data: f.children.map {|child| [child.name, child.total_views]}
+            }
+        }
+        
+        categories = folders.map{ |f| f.name }
+
+        respond_to do |format|
+            format.json {
+                render json: {
+                           type: 'bar',
+                           highcharts: {
+                               series: [{
+                                   title: "# of views per folder",
+                                   data: data
+                               }],
+                               drilldowns: drilldowns,
+                               #categories: categories,
+                               xAxisTitle: "Folder",
+                               yAxisTitle: "# of views per folder"
+                           },
+                           hasAggregation: false
+                       }
+            }
+            format.csv {
+                strategy = Reports::GraphStatsGeneric.new(title: "Number of view per folder", categories: categories, data: data)
+                report = Reports::Generator.new(strategy)
+                send_data report.to_csv, filename: "views_per_folder.csv"
+            }
+        end
+    end
 end

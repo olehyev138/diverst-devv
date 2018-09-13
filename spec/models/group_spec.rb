@@ -672,7 +672,7 @@ RSpec.describe Group, :type => :model do
     end
     
     describe '#total_views' do
-        it "returns 0" do
+        it "returns 10" do
             group = create(:group)
             create(:view, :group => group, :view_count => 4)
             create(:view, :group => group, :view_count => 6)

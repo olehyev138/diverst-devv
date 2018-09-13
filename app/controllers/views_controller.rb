@@ -15,7 +15,8 @@ class ViewsController < ApplicationController
         :news_feed_link_id,
         :group_id,
         :user_id,
-        :enterprise_id
+        :enterprise_id,
+        :folder_id
         )
   end
 end

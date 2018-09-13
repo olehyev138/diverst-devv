@@ -6,7 +6,6 @@ RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
     let!(:folder){ create(:folder, :container => enterprise) }
     let!(:resource){ create(:resource, title: "title", container: folder, file: fixture_file_upload('files/test.csv', 'text/csv')) }
 
-
     describe "GET#index" do
         context 'when user is logged in' do
             login_user_from_let
@@ -27,6 +26,10 @@ RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
 
             it 'sets container path' do
                 expect(assigns[:container_path]).to eq [enterprise, folder]
+            end
+            
+            it "increments the folder's total_views" do
+                expect(folder.total_views).to eq(1)
             end
         end
 

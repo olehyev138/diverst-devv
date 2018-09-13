@@ -534,28 +534,12 @@ RSpec.describe GenericGraphsController, type: :controller do
                         expect(json_response[:highcharts][:series][0][:title]).to eq "# of views per ERG"
                     end
 
-                    it 'returns a count active members of a group' do
-                        expect(json_response[:highcharts][:series][0][:data][0][:y]).to eq group.messages.joins(:owner).where('group_messages.created_at > ? AND users.active = ?', 1.month.ago, true).count
-                    end
-
-                    it 'returns name of group' do
-                        expect(json_response[:highcharts][:series][0][:data][0][:name]).to eq group.name
-                    end
-
-                    it 'returns correct information on categories', skip: "corresponding code has been commented out" do
-                        expect(json_response[:highcharts][:categories]).to eq [group.name]
-                    end
-
                     it 'return xAxisTitle to be ERG' do
                         expect(json_response[:highcharts][:xAxisTitle]).to eq 'ERG'
                     end
 
-                    it "return yAxisTitle to be 'Nb of events'" do
+                    it "return yAxisTitle to be 'Nb of views'" do
                         expect(json_response[:highcharts][:yAxisTitle]).to eq "# of views per ERG"
-                    end
-
-                    it 'has no aggregation' do
-                        expect(json_response[:hasAggregation]).to eq false
                     end
                 end
             end
@@ -571,7 +555,7 @@ RSpec.describe GenericGraphsController, type: :controller do
                     expect(response).to be_success
                 end
 
-                it "returns csv filename to be 'graph_messages_sent.csv'" do
+                it "returns csv filename to be 'views_per_ERG.csv'" do
                     expect(response.headers["Content-Disposition"]).to include 'views_per_ERG.csv'
                 end
             end
@@ -585,6 +569,64 @@ RSpec.describe GenericGraphsController, type: :controller do
 
              context "when format is json" do
                 before { get :top_groups_by_views, format: :csv }
+                it_behaves_like "redirect user to users/sign_in path"
+            end
+        end
+    end
+    
+    describe "GET#top_folders_by_views" do
+        describe "with logged in user" do
+            login_user_from_let
+
+            context "when format is json" do
+                before { get :top_folders_by_views, format: :json }
+
+                it "returns json format" do
+                    expect(response.content_type).to eq "application/json"
+                end
+
+                it "returns success" do
+                    expect(response).to be_success
+                end
+
+                context 'returns the correct json data' do
+                    let!(:json_response) { JSON.parse(response.body, symbolize_names: true) }
+
+                    it 'returns correct title' do
+                        expect(json_response[:highcharts][:series][0][:title]).to eq "# of views per folder"
+                    end
+
+                    it "return yAxisTitle to be 'Nb of events'" do
+                        expect(json_response[:highcharts][:yAxisTitle]).to eq "# of views per folder"
+                    end
+                end
+            end
+
+            context "when format is csv" do
+                before { get :top_folders_by_views, format: :csv }
+
+                it "returns csv format" do
+                    expect(response.content_type).to eq "text/csv"
+                end
+
+                it "returns success" do
+                    expect(response).to be_success
+                end
+
+                it "returns csv filename to be 'views_per_folder.csv'" do
+                    expect(response.headers["Content-Disposition"]).to include 'views_per_folder.csv'
+                end
+            end
+        end
+
+        describe "without a logged in user" do
+            context "when format is json" do
+                before { get :top_folders_by_views, format: :json }
+                it_behaves_like "redirect user to users/sign_in path"
+            end
+
+             context "when format is json" do
+                before { get :top_folders_by_views, format: :csv }
                 it_behaves_like "redirect user to users/sign_in path"
             end
         end
