@@ -52,7 +52,7 @@
           <li>
             <%= active_link_to "Resources", group_folders_path(@group) %>
           </li>
-          <% if policy(@group).update? %>
+          <% if policy(@group).leaders? %>
             <li>
               <%= active_link_to "Leaders", group_leaders_path(@group) %>
             </li>
