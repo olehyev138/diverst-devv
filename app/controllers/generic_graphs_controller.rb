@@ -424,4 +424,41 @@ class GenericGraphsController < ApplicationController
             }
         end
     end
+    
+    def top_news_by_views
+        news_feed_link_ids = NewsFeedLink.where(:news_feed_id => NewsFeed.where(:group_id => current_user.enterprise.groups.ids).ids).ids
+        news_links = NewsLink.select("news_links.title, SUM(views.view_count) view_count").joins(:news_feed_link, :news_feed_link => :views).where(:news_feed_links => {:id => news_feed_link_ids}).order("view_count DESC")
+        
+        data = news_links.map do |news_link|
+            {
+                y: news_link.view_count,
+                name: news_link.title
+            }
+        end
+        
+        categories = news_links.map{ |r| r.title }
+
+        respond_to do |format|
+            format.json {
+                render json: {
+                           type: 'bar',
+                           highcharts: {
+                               series: [{
+                                   title: "# of views per news link",
+                                   data: data
+                               }],
+                               #categories: categories,
+                               xAxisTitle: "Resource",
+                               yAxisTitle: "# of views per news link"
+                           },
+                           hasAggregation: false
+                       }
+            }
+            format.csv {
+                strategy = Reports::GraphStatsGeneric.new(title: "Number of view per news link", categories: categories, data: data)
+                report = Reports::Generator.new(strategy)
+                send_data report.to_csv, filename: "views_per_news_link.csv"
+            }
+        end
+    end
 end

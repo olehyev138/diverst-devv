@@ -689,4 +689,62 @@ RSpec.describe GenericGraphsController, type: :controller do
             end
         end
     end
+    
+    describe "GET#top_news_by_views" do
+        describe "with logged in user" do
+            login_user_from_let
+
+            context "when format is json" do
+                before { get :top_news_by_views, format: :json }
+
+                it "returns json format" do
+                    expect(response.content_type).to eq "application/json"
+                end
+
+                it "returns success" do
+                    expect(response).to be_success
+                end
+
+                context 'returns the correct json data' do
+                    let!(:json_response) { JSON.parse(response.body, symbolize_names: true) }
+
+                    it 'returns correct title' do
+                        expect(json_response[:highcharts][:series][0][:title]).to eq "# of views per news link"
+                    end
+
+                    it "return yAxisTitle to be 'Nb of events'" do
+                        expect(json_response[:highcharts][:yAxisTitle]).to eq "# of views per news link"
+                    end
+                end
+            end
+
+            context "when format is csv" do
+                before { get :top_news_by_views, format: :csv }
+
+                it "returns csv format" do
+                    expect(response.content_type).to eq "text/csv"
+                end
+
+                it "returns success" do
+                    expect(response).to be_success
+                end
+
+                it "returns csv filename to be 'views_per_news_link.csv'" do
+                    expect(response.headers["Content-Disposition"]).to include 'views_per_news_link.csv'
+                end
+            end
+        end
+
+        describe "without a logged in user" do
+            context "when format is json" do
+                before { get :top_news_by_views, format: :json }
+                it_behaves_like "redirect user to users/sign_in path"
+            end
+
+             context "when format is json" do
+                before { get :top_news_by_views, format: :csv }
+                it_behaves_like "redirect user to users/sign_in path"
+            end
+        end
+    end
 end
