@@ -87,6 +87,28 @@ RSpec.describe Groups::SocialLinksController, type: :controller do
                     user.reload
                     expect(flash[:reward]).to eq "Your social_link was created. Now you have #{ user.credits } points"
                 end
+
+                describe 'public activity' do
+                    enable_public_activity
+
+                    it 'creates public activity record' do
+                        expect{
+                        post :create, group_id: group.id, social_link: attributes_for(:social_link, :url => "https://twitter.com/realDonaldTrump/status/912848241535971331")
+                        }.to change(PublicActivity::Activity, :count).by(1)
+                    end
+
+                    describe 'activity record' do
+                        let(:model) { SocialLink.last }
+                        let(:owner) { user }
+                        let(:key) { 'social_link.create' }
+
+                        before {
+                            post :create, group_id: group.id, social_link: attributes_for(:social_link, :url => "https://twitter.com/realDonaldTrump/status/912848241535971331")
+                        }
+
+                        include_examples'correct public activity'
+                    end
+                end
             end
 
             context 'with invalid params' do
@@ -135,6 +157,28 @@ RSpec.describe Groups::SocialLinksController, type: :controller do
                 delete :destroy, group_id: group.id, id: social_link.id
                 expect(response).to redirect_to group_posts_path(group)
             end
+
+            describe 'public activity' do
+                    enable_public_activity
+
+                    it 'creates public activity record' do
+                        expect{
+                        delete :destroy, group_id: group.id, id: social_link.id
+                        }.to change(PublicActivity::Activity, :count).by(1)
+                    end
+
+                    describe 'activity record' do
+                        let(:model) { SocialLink.last }
+                        let(:owner) { user }
+                        let(:key) { 'social_link.destroy' }
+
+                        before {
+                            delete :destroy, group_id: group.id, id: social_link.id
+                        }
+
+                        include_examples'correct public activity'
+                    end
+                end
         end
     end
 end

@@ -11,7 +11,7 @@ class MentoringSessionSchedulerJob < ActiveJob::Base
             
             # send an email to the presenter/mentor and mentees/attendees
             mentoring_session.users.ids do |user_id|
-                MentorMailer.session_reminder(user_id, mentoring_session_id).deliver_now
+                MentorMailer.session_reminder(user_id, mentoring_session_id).deliver_later
             end
         end
     end

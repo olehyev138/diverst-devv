@@ -6,7 +6,7 @@
           <div class="card__action">
             <%= link_to "Edit", [:edit, @metrics_dashboard, graph] %> -
             <%= link_to "Export CSV", [:export_csv, @metrics_dashboard, graph], class: "hidden-xs" %> -
-            <%= link_to "Remove", metrics_dashboard_graph_path(@metrics_dashboard, graph), method: :destroy, class: "error", data: { confirm: "Are you sure?" } %>
+            <%= link_to "Remove", graph_path(graph.id), method: :delete, class: "error", data: { confirm: "Are you sure?" } %>
           </div>
           <h4 class="no-margin"><%= graph.title %></h4>
           <% if !graph.aggregation.nil? %><small><%= aggregation_text(graph) %></small><% end %>

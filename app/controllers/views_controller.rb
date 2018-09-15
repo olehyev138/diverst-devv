@@ -1,14 +1,23 @@
 class ViewsController < ApplicationController
+  
   def track
-    news_feed_link = NewsFeedLink.find(params[:id])
-    news_feed_link.increment_view(current_user)
+    view = View.find_or_create_by(view_params)
+    view.view_count += 1
+    view.save!
 
     render nothing: true
   end
-
-  private
-
-  def views_params
-    params.permit(:id)
+  
+  def view_params
+    params
+      .require(:view)
+      .permit(
+        :news_feed_link_id,
+        :group_id,
+        :user_id,
+        :enterprise_id,
+        :folder_id,
+        :resource_id
+        )
   end
 end

@@ -73,6 +73,7 @@ class Groups::EventsController < ApplicationController
       e.dtstart     = Icalendar::Values::DateTime.new @event.start, 'tzid' => current_user.default_time_zone
       e.dtend       = Icalendar::Values::DateTime.new @event.end, 'tzid' => current_user.default_time_zone
       e.summary     = @event.title
+      e.location    = @event.location
       e.description = description
       e.ip_class    = "PRIVATE"
     end

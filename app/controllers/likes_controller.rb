@@ -10,6 +10,7 @@ class LikesController < ApplicationController
         @like.answer = Answer.find(params[:answer_id])
       else
         @like.news_feed_link = NewsFeedLink.find(params[:news_feed_link_id])
+        @like.news_feed_link.create_view_if_none(current_user)
       end
       @like.enterprise = current_user.enterprise
       @like.save!

@@ -40,6 +40,7 @@
 //= require codemirror/lib/codemirror
 //= require firepad/dist/firepad.min
 //= require firebase/firebase
+//= require bootstrap-timepicker
 //= require_tree .
 
 var Utility = (function() {

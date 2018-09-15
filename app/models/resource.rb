@@ -10,6 +10,8 @@ class Resource < ActiveRecord::Base
     belongs_to :mentoring_session
     
     has_many :tags, dependent: :destroy
+    has_many :views, dependent: :destroy
+    
     accepts_nested_attributes_for :tags
 
     has_attached_file :file, s3_permissions: "private"
@@ -46,6 +48,10 @@ class Resource < ActiveRecord::Base
         return initiative if initiative.present?
         return group if group.present?
         return mentoring_session if mentoring_session.present?
+    end
+    
+    def total_views
+        views.sum(:view_count)
     end
 
     protected
