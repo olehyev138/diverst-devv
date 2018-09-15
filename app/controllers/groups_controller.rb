@@ -166,7 +166,11 @@ class GroupsController < ApplicationController
         if @group.update(group_params)
             track_activity(@group, :update)
             flash[:notice] = "Your #{c_t(:erg)} was updated"
-            redirect_to [:edit, @group]
+            if request.referer == settings_group_url(@group)
+                redirect_to @group
+            else
+                redirect_to [:edit, @group]
+            end
         else
             flash.now[:alert] = "Your #{c_t(:erg)} was not updated. Please fix the errors"
 

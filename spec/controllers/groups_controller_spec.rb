@@ -600,6 +600,13 @@ RSpec.describe GroupsController, type: :controller do
 
           expect(response).to redirect_to [:edit, group]
         end
+
+        it 'redirects to group homepage after updating group in group settings' do 
+          request.env['HTTP_REFERER'] = settings_group_url(group)
+          patch_update(group.id, group_attrs)
+
+          expect(response).to redirect_to group
+        end
       end
 
       context 'with incorrect params' do

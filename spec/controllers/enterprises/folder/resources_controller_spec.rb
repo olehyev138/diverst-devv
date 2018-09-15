@@ -27,6 +27,10 @@ RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
             it 'sets container path' do
                 expect(assigns[:container_path]).to eq [enterprise, folder]
             end
+            
+            it "increments the folder's total_views" do
+                expect(folder.total_views).to eq(1)
+            end
         end
 
         context 'when user is not logged in' do

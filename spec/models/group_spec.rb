@@ -672,6 +672,16 @@ RSpec.describe Group, :type => :model do
         end
     end
     
+    describe '#total_views' do
+        it "returns 10" do
+            group = create(:group)
+            create(:view, :group => group, :view_count => 4)
+            create(:view, :group => group, :view_count => 6)
+            
+            expect(group.total_views).to eq(10)
+        end
+    end
+    
     describe "#destroy_callbacks" do
         it "removes the child objects" do
             group = create(:group)

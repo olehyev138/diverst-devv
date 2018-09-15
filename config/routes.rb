@@ -498,6 +498,10 @@ Rails.application.routes.draw do
     get 'mentorship'
     get 'mentoring_sessions'
     get 'mentoring_interests'
+    get 'top_groups_by_views'
+    get 'top_folders_by_views'
+    get 'top_resources_by_views'
+    get 'top_news_by_views'
   end
 
   namespace :website do

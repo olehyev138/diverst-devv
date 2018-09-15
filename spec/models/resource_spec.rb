@@ -122,4 +122,14 @@ RSpec.describe Resource, :type => :model do
       expect{Tag.find(tag.id)}.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
+  
+  describe '#total_views' do
+    it "returns 10" do
+        resource = create(:resource)
+        create(:view, :resource => resource, :view_count => 4)
+        create(:view, :resource => resource, :view_count => 6)
+        
+        expect(resource.total_views).to eq(10)
+    end
+  end
 end

@@ -22,11 +22,10 @@ RSpec.feature 'Group Membership Management' do
 
                 click_button "Join this #{c_t(:parent)}"
 
-				within('.modal-header') do
+				within('.modal-content') do
 					expect(page).to have_content "Thanks for joining the #{c_t(:parent)}! Do you also want to join a #{c_t(:sub_erg)}?"
+					click_link "YES"
 				end
-
-				click_link "YES"
 
 				expect(page).to have_content sub_group.name
 				expect(page).to have_link 'Join'
@@ -219,11 +218,11 @@ RSpec.feature 'Group Membership Management' do
 
 			click_button "Join this #{c_t(:parent)}"
 
-			within('.modal-header') do
+			within('.modal-content') do
 				expect(page).to have_content "Thanks for joining the #{c_t(:parent)}! Do you also want to join a #{c_t(:sub_erg)}?"
+			    click_link "YES"
 			end
 
-			click_link "YES"
 
 			expect(page).to have_content sub_group.name
 			expect(page).to have_link 'Join'
