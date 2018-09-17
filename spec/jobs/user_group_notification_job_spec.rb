@@ -141,8 +141,8 @@ RSpec.describe UserGroupNotificationJob, type: :job do
     end
 
     context "when there is new messages or news" do
-      let(:yesterday) { Date.today - 1.day }
-      let(:today) { Date.today }
+      let(:yesterday) { (Date.today - 1.day).in_time_zone("UTC") }
+      let(:today) { (Date.today).in_time_zone("UTC") }
 
       let!(:user_group){ create(:user_group, user: user, group: group, notifications_frequency: UserGroup.notifications_frequencies[:daily]) }
       let!(:group_message){ create(:group_message, group: group, updated_at: yesterday, owner: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
@@ -172,13 +172,11 @@ RSpec.describe UserGroupNotificationJob, type: :job do
         segment = create(:segment, :groups => [group, second_group])
         create(:users_segment, :user => user, :segment => segment)
 
-        Timecop.freeze(Time.now + 30.minutes) do
-          mailer = double("mailer")
-          expect(UserGroupMailer).to receive(:notification)
-            .with(user, [{ group: group, events_count: 1, messages_count: 1, news_count: 1, social_links_count: 1, participating_events_count: 1 }]){ mailer }
-          expect(mailer).to receive(:deliver_now)
-          subject.perform({:notifications_frequency => "daily", :enterprise_id => user.enterprise_id})
-        end
+        mailer = double("mailer")
+        expect(UserGroupMailer).to receive(:notification)
+          .with(user, [{ group: group, events_count: 1, messages_count: 1, news_count: 1, social_links_count: 1, participating_events_count: 1 }]){ mailer }
+        expect(mailer).to receive(:deliver_now)
+        subject.perform({:notifications_frequency => "daily", :enterprise_id => user.enterprise_id})
       end
 
       it "sends an email of notification to user when user is in segment and items are in segment" do
@@ -189,13 +187,11 @@ RSpec.describe UserGroupNotificationJob, type: :job do
         create(:social_link_segment, :social_link => social_link, :segment => segment)
         create(:group_messages_segment, :group_message => group_message, :segment => segment)
 
-        Timecop.freeze(Time.now + 30.minutes) do
-          mailer = double("mailer")
-          expect(UserGroupMailer).to receive(:notification)
-            .with(user, [{ group: group, events_count: 1, messages_count: 1, news_count: 1, social_links_count: 1, participating_events_count: 1 }]){ mailer }
-          expect(mailer).to receive(:deliver_now)
-          subject.perform({:notifications_frequency => "daily", :enterprise_id => user.enterprise_id})
-        end
+        mailer = double("mailer")
+        expect(UserGroupMailer).to receive(:notification)
+          .with(user, [{ group: group, events_count: 1, messages_count: 1, news_count: 1, social_links_count: 1, participating_events_count: 1 }]){ mailer }
+        expect(mailer).to receive(:deliver_now)
+        subject.perform({:notifications_frequency => "daily", :enterprise_id => user.enterprise_id})
       end
 
       it "send an email of notification only for events to user when user is not in segment and items are in segment" do
@@ -207,14 +203,11 @@ RSpec.describe UserGroupNotificationJob, type: :job do
         create(:social_link_segment, :social_link => another_social_link, :segment => segment)
         create(:group_messages_segment, :group_message => group_message, :segment => segment)
         create(:group_messages_segment, :group_message => another_group_message, :segment => segment)
-
-        Timecop.freeze(Time.now + 30.minutes) do
-          mailer = double("mailer")
-          expect(UserGroupMailer).to receive(:notification)
-            .with(user, [{ group: group, events_count: 1, messages_count: 0, news_count: 0, social_links_count: 0, participating_events_count: 1 }]){ mailer }
-          expect(mailer).to receive(:deliver_now)
-          subject.perform({:notifications_frequency => "daily", :enterprise_id => user.enterprise_id})
-        end
+        mailer = double("mailer")
+        expect(UserGroupMailer).to receive(:notification)
+          .with(user, [{ group: group, events_count: 1, messages_count: 0, news_count: 0, social_links_count: 0, participating_events_count: 1 }]){ mailer }
+        expect(mailer).to receive(:deliver_now)
+        subject.perform({:notifications_frequency => "daily", :enterprise_id => user.enterprise_id})
       end
 
       it "does not send an email of notification only for events to user when user is not in segment and items are in segment" do
