@@ -83,7 +83,8 @@ class Group < ActiveRecord::Base
   has_many :pillars, through: :outcomes
   has_many :initiatives, through: :pillars
   has_many :updates, class_name: "GroupUpdate", dependent: :destroy
-
+  has_many :views, dependent: :destroy
+  
   has_many :fields, -> { where field_type: "regular"},
            dependent: :delete_all
   has_many :survey_fields, -> { where field_type: "group_survey"},
@@ -154,6 +155,10 @@ class Group < ActiveRecord::Base
 
   def is_sub_group?
     parent.present?
+  end
+  
+  def total_views
+    views.sum(:view_count)
   end
 
   def is_standard_group?

@@ -30,6 +30,10 @@ RSpec.describe Groups::Folder::ResourcesController, type: :controller do
             it "returns resources that belong to container" do
                 expect(assigns[:resources].where(folder_id: assigns[:container].id)).to eq [resource]
             end
+            
+            it "increments the folder's total_views" do
+                expect(folder.total_views).to eq(1)
+            end
         end
 
         context 'without logged user' do

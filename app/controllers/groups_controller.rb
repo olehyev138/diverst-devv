@@ -106,11 +106,12 @@ class GroupsController < ApplicationController
         if policy(@group).erg_leader_permissions?
             base_show
 
-            @posts = without_segments
+            @posts = NewsFeed.all_links_without_segments(@group.news_feed.id)
+                            .order(is_pinned: :desc, created_at: :desc)
+                            .limit(5)
         else
             if @group.active_members.include? current_user
                 base_show
-                @posts = with_segments
             else
                 @upcoming_events = @group.initiatives.upcoming.limit(3) + @group.participating_initiatives.upcoming.limit(3)
                 @user_groups = []
@@ -120,8 +121,10 @@ class GroupsController < ApplicationController
                 @user_groups = []
                 @top_user_group_participants = []
                 @top_group_participants = []
-                @posts = with_segments
             end
+            @posts = NewsFeed.all_links(@group.news_feed.id, current_user.segments.ids)
+                            .order(is_pinned: :desc, created_at: :desc)
+                            .limit(5)
         end
     end
 
@@ -163,7 +166,11 @@ class GroupsController < ApplicationController
         if @group.update(group_params)
             track_activity(@group, :update)
             flash[:notice] = "Your #{c_t(:erg)} was updated"
-            redirect_to [:edit, @group]
+            if request.referer == settings_group_url(@group)
+                redirect_to @group
+            else
+                redirect_to [:edit, @group]
+            end
         else
             flash.now[:alert] = "Your #{c_t(:erg)} was not updated. Please fix the errors"
 
@@ -288,25 +295,6 @@ class GroupsController < ApplicationController
 
         @top_user_group_participants = @group.user_groups.active.top_participants(10).includes(:user)
         @top_group_participants = @group.enterprise.groups.non_private.top_participants(10)
-    end
-
-    def without_segments
-        NewsFeedLink.combined_news_links(@group.news_feed.id)
-                            .includes(:news_link, :group_message, :social_link)
-                            .order(is_pinned: :desc, created_at: :desc)
-                            .limit(5)
-    end
-
-    def with_segments
-        segment_ids = current_user.segments.ids
-        if not segment_ids.empty?
-            NewsFeedLink
-                .combined_news_links_with_segments(@group.news_feed.id, current_user.segments.ids)
-                .order(is_pinned: :desc, created_at: :desc)
-                .limit(5)
-        else
-            return without_segments
-        end
     end
 
     def resolve_layout

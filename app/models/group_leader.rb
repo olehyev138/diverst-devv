@@ -45,7 +45,10 @@ class GroupLeader < ActiveRecord::Base
     
     leader_priority = user.enterprise.user_roles.where(:id => user_role_id).first.priority
     
-    if user.enterprise.user_roles.where(:id => user.user_role_id).where("priority > ?", leader_priority).count > 0
+    if user.enterprise.user_roles.where(:id => user.user_role_id).where("priority > ?", leader_priority).count > 0 ||
+      # user had a group leader role that they no longer have
+      (UserRole.where(:role_type => "group", :id => user.user_role_id).count > 0 && GroupLeader.where(:user_id => user_id, :user_role_id => user.user_role_id).count < 1)
+      
       # get all the distinct group_leader roles
       group_leader_role_ids = GroupLeader.joins(:group => :enterprise).where(:groups => {:enterprise_id => group.enterprise.id}, :user_id => user.id).distinct.pluck(:user_role_id)
       # set the user role to the role with the highest priority

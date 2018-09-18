@@ -30,6 +30,32 @@ RSpec.describe GroupLeader, type: :model do
       end
     end
     
+    context "when user is a basic user and role is elevated to group leader and then downgraded to another group leader role" do
+      it "sets the basic users role to group_leader" do
+        enterprise = create(:enterprise)
+        admin = create(:user, :user_role => enterprise.user_roles.where(:role_name => "admin").first, :enterprise => enterprise)
+        enterprise = admin.enterprise
+        basic_user = create(:user, :enterprise => enterprise, :user_role => enterprise.user_roles.where(:role_name => "user").first)
+        group = create(:group, :enterprise => enterprise)
+        
+        expect(basic_user.user_role.role_name).to eq("user")
+        group_leader = create(:group_leader, :user_role => enterprise.user_roles.where(:role_name => "group_leader").first, :user => basic_user, :group => group)
+        
+        # expect the user role to change
+        expect(basic_user.user_role.role_name).to eq("group_leader")
+        
+        # create another group role
+        group_treasurer = create(:user_role, :enterprise => enterprise, :role_type => "group", :role_name => "Group Treasurer", :priority => 2)
+        
+        group_leader.user_role_id = group_treasurer.id
+        group_leader.save
+        
+        basic_user.reload
+        
+        expect(basic_user.user_role.role_name).to eq("Group Treasurer")
+      end
+    end
+    
     context "when user has multiple group_leader roles but is removed as a group_leader with higher priority" do
       it "sets the group_leader role to group_treasurer" do
         enterprise = create(:enterprise)

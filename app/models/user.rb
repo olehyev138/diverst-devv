@@ -69,7 +69,6 @@ class User < ActiveRecord::Base
     has_many :event_invitees, dependent: :destroy
     has_many :invited_events, through: :event_invitees, source: :event
     has_many :managed_groups, foreign_key: :manager_id, class_name: 'Group'
-    has_many :samples, dependent: :destroy
     has_many :biases, class_name: "Bias"
     has_many :group_leaders, :dependent => :destroy
     has_many :leading_groups, through: :group_leaders, source: :group
@@ -94,6 +93,7 @@ class User < ActiveRecord::Base
     before_validation :generate_password_if_saml
     before_validation :set_provider
     before_validation :set_uid
+    before_destroy :check_lifespan_of_user
 
     after_validation    :set_group_role
     after_create :assign_firebase_token
@@ -511,6 +511,11 @@ class User < ActiveRecord::Base
     end
 
     private
+
+    def check_lifespan_of_user
+        # deletes users 13 days or younger
+        DateTime.now.days_ago(14) < self.created_at
+    end
 
     def validate_presence_fields
         enterprise.try(:fields).to_a.each do |field|

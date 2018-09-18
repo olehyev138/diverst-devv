@@ -44,9 +44,11 @@ RSpec.feature 'Initiative management' do
     let!(:budget) { create :approved_budget, group: group }
     let!(:budget_item) { budget.budget_items.first }
 
-    before { visit new_group_initiative_path(group) }
 
     scenario 'creating initiative with budget' do
+
+      visit new_group_initiative_path(group) 
+     
       allow_any_instance_of(Initiative).to receive(:estimated_funding).and_return(10000)
 
       fill_form( initiative_params )

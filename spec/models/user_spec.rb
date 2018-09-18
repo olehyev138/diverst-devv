@@ -46,7 +46,6 @@ RSpec.describe User do
         it { expect(user).to have_many(:event_invitees) }
         it { expect(user).to have_many(:invited_events).through(:event_invitees).source(:event) }
         it { expect(user).to have_many(:managed_groups).with_foreign_key(:manager_id).class_name('Group') }
-        it { expect(user).to have_many(:samples) }
         it { expect(user).to have_many(:biases).class_name('Bias') }
         it { expect(user).to have_many(:group_leaders) }
         it { expect(user).to have_many(:leading_groups).through(:group_leaders).source(:group) }
@@ -107,6 +106,21 @@ RSpec.describe User do
             new_user.run_callbacks :create
             expect(new_user.firebase_token.present?).to eq true
           end
+        end
+      end
+    end
+
+    describe 'before_destroy_callbacks' do
+      context '#check_lifespan_of_user' do
+        let!(:user1) { create :user }
+        let!(:user2) { create :user, created_at: 20.days.ago, updated_at: 20.days.ago }
+        
+        it 'deletes user younger than 14 days' do
+          expect{ user1.destroy }.to change(User, :count).by(-1)
+        end
+
+        it 'does not deletes user older than 14 days' do
+          expect{ user2.destroy }.to change(User, :count).by(0)
         end
       end
     end

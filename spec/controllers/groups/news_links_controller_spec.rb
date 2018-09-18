@@ -200,6 +200,28 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
                     post :create, group_id: group.id, news_link: attributes_for(:news_link)
                     expect(response).to redirect_to group_posts_path(group)
                 end
+
+                describe 'public activity' do
+                    enable_public_activity
+
+                    it 'creates public activity record' do
+                        expect{
+                        post :create, group_id: group.id, news_link: attributes_for(:news_link)
+                        }.to change(PublicActivity::Activity, :count).by(1)
+                    end
+
+                    describe 'activity record' do
+                        let(:model) { NewsLink.last }
+                        let(:owner) { user }
+                        let(:key) { 'news_link.create' }
+
+                        before {
+                            post :create, group_id: group.id, news_link: attributes_for(:news_link)
+                        }
+
+                        include_examples'correct public activity'
+                    end
+                end
             end
 
             context 'with invalid attributes' do
@@ -250,6 +272,28 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
                 it "updates the link" do
                     news_link.reload
                     expect(news_link.title).to eq("updated")
+                end
+
+                describe 'public activity' do
+                    enable_public_activity
+
+                    it 'creates public activity record' do
+                        expect{
+                        patch :update, group_id: group.id, id: news_link.id, news_link: {title: "updated"}
+                        }.to change(PublicActivity::Activity, :count).by(1)
+                    end
+
+                    describe 'activity record' do
+                        let(:model) { NewsLink.last }
+                        let(:owner) { user }
+                        let(:key) { 'news_link.update' }
+
+                        before {
+                            patch :update, group_id: group.id, id: news_link.id, news_link: {title: "updated"}
+                        }
+
+                        include_examples'correct public activity'
+                    end
                 end
             end
 
@@ -305,6 +349,28 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
             it 'redirects to group_posts_path' do
                 delete :destroy, group_id: group.id, id: news_link.id
                 expect(response).to redirect_to group_posts_path(group)
+            end
+
+            describe 'public activity' do
+                enable_public_activity
+
+                it 'creates public activity record' do
+                    expect{
+                      delete :destroy, group_id: group.id, id: news_link.id
+                    }.to change(PublicActivity::Activity, :count).by(1)
+                end
+
+                describe 'activity record' do
+                    let(:model) { NewsLink.last }
+                    let(:owner) { user }
+                    let(:key) { 'news_link.destroy' }
+
+                    before {
+                        delete :destroy, group_id: group.id, id: news_link.id
+                    }
+
+                    include_examples'correct public activity'
+                end
             end
         end
 

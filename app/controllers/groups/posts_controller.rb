@@ -7,21 +7,23 @@ class Groups::PostsController < ApplicationController
     layout 'erg'
 
     def index
+        authorize @group, :view_latest_news?
         if policy(@group).erg_leader_permissions?
-                @count = base_query
-                                .includes(:news_link, :group_message, :social_link)
-                                .order(created_at: :desc)
+                @count = NewsFeed.all_links_without_segments(@group.news_feed.id)
                                 .count
 
-                @posts = base_query
-                                .includes(:news_link, :group_message, :social_link)
-                                .order(created_at: :desc)
+                @posts = NewsFeed.all_links_without_segments(@group.news_feed.id)
+                                .order(is_pinned: :desc, created_at: :desc)
                                 .limit(@limit)
         else
-            if @group.active_members.include? current_user
-                @count = base_query_with_segments.count
+            if policy(@group).view_latest_news?
+                segment_ids = nil
+                if @group.active_members.include?(current_user)
+                  segment_ids = current_user.segments.ids
+                end
+                @count = NewsFeed.all_links(@group.news_feed.id, segment_ids).count
 
-                @posts = base_query_with_segments
+                @posts = NewsFeed.all_links(@group.news_feed.id, segment_ids)
                             .order(is_pinned: :desc, created_at: :desc)
                             .limit(@limit)
             else
@@ -61,14 +63,6 @@ class Groups::PostsController < ApplicationController
 
     protected
 
-    def where
-        "news_feed_link_segments.segment_id IS NULL OR news_feed_link_segments.segment_id IN (?)"
-    end
-
-    def joins
-        "LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id"
-    end
-
     def set_group
         @group = current_user.enterprise.groups.find(params[:group_id])
     end
@@ -81,21 +75,5 @@ class Groups::PostsController < ApplicationController
 
     def set_link
         @link = @group.news_feed_links.find(params[:link_id])
-    end
-
-    def base_query
-        NewsFeedLink.combined_news_links(@group.news_feed.id)
-    end
-    
-    def base_query_with_segments
-        segment_ids = current_user.segments.ids
-        if not segment_ids.empty?
-            NewsFeedLink
-                .combined_news_links_with_segments(@group.news_feed.id, current_user.segments.ids)
-                .order(is_pinned: :desc, created_at: :desc)
-                .limit(5)
-        else
-            return base_query
-        end
     end
 end

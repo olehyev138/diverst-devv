@@ -55,7 +55,6 @@ RSpec.describe GraphsController, type: :controller do
         end
     end
 
-
     describe "POST#create" do
         describe "with logged in user" do
             login_user_from_let
@@ -202,7 +201,6 @@ RSpec.describe GraphsController, type: :controller do
         end
     end
 
-
     describe "GET#data" do
 
         before { User.__elasticsearch__.create_index!(index: User.es_index_name(enterprise: enterprise)) }
@@ -238,7 +236,6 @@ RSpec.describe GraphsController, type: :controller do
             end
         end
     end
-
 
     describe "GET#export_csv" do
         before { User.__elasticsearch__.create_index!(index: User.es_index_name(enterprise: enterprise)) }

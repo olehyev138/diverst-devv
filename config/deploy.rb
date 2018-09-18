@@ -49,7 +49,7 @@ namespace :deploy do
       end
     end
   end
-
+  
   desc 'Recompile all enterprise themes'
   task :recompile_themes, [:command] => 'deploy:set_rails_env' do |task, args|
     on primary(:app) do
@@ -60,7 +60,7 @@ namespace :deploy do
       end
     end
   end
-
+  
   after :finishing, "deploy:recompile_themes"
 
 end

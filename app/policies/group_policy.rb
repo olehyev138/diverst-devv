@@ -153,7 +153,7 @@ class GroupPolicy < ApplicationPolicy
     end
 
     def events_filter
-       case @record.upcoming_events_visibility
+        case @record.upcoming_events_visibility
         when 'public'
             #Everyone can upcoming events
             return true

@@ -1,4 +1,6 @@
 class SocialLink < ActiveRecord::Base
+    include PublicActivity::Common
+
     self.table_name = 'social_network_posts'
 
     has_one :news_feed_link, dependent: :destroy
@@ -7,6 +9,8 @@ class SocialLink < ActiveRecord::Base
     has_many :segments, through: :social_link_segments, :before_remove => :remove_segment_association
     has_many :user_reward_actions, dependent: :destroy
 
+    accepts_nested_attributes_for :news_feed_link, :allow_destroy => true    
+    
     validate :correct_url?
 
     validates :author_id,       presence: true
