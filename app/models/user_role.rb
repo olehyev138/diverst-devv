@@ -64,6 +64,6 @@ class UserRole < ActiveRecord::Base
     end
     
     def reset_user_roles
-        ResetUserRoleJob.perform_now(self)
+        ResetUserRoleJob.perform_later(self)
     end
 end
