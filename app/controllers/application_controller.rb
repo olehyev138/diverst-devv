@@ -107,6 +107,11 @@ class ApplicationController < ActionController::Base
         Rails.logger.warn('ParameterMissing: ' + e.message)
         redirect_to(request.referrer || default_path)
     end
+    
+    rescue_from ActionController::InvalidAuthenticityToken do |e|
+        flash[:alert] = e.message
+        redirect_to(request.referrer || default_path)
+    end
 
     around_action :user_time_zone, if: :current_user
 
