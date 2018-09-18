@@ -158,6 +158,17 @@ class Groups::GroupMembersController < ApplicationController
         format.js
       end
     end
+
+    def export_group_members_csv
+      authorize @group, :manage_members?
+
+      # membership_list_csv = @group.membership_list_csv
+      # send_data membership_list_csv, filename: "#{@group.file_safe_name}_membership_list.csv"
+    end
+
+    def test_action
+      puts "what?!!!"
+    end
   end
 
 
