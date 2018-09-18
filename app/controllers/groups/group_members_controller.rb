@@ -67,10 +67,10 @@ class Groups::GroupMembersController < ApplicationController
       end
     else
       flash[:notice] = "The member was not created. Please fix the errors"
-        respond_to do |format|
-          format.html { render :new }
-          format.js
-        end
+      respond_to do |format|
+        format.html { render :new }
+        format.js
+      end
     end
   end
 
@@ -149,14 +149,22 @@ class Groups::GroupMembersController < ApplicationController
       end
     end
 
-    def leave_sub_group
-      authorize current_user, :join_or_leave_groups?
-      @group.user_groups.find_by(user_id: current_user.id).destroy
-      respond_to do |format|
-        format.html { redirect_to :back }
-        format.js
-      end
+  end
+
+  def leave_sub_group
+    authorize current_user, :join_or_leave_groups?
+    @group.user_groups.find_by(user_id: current_user.id).destroy
+    respond_to do |format|
+      format.html { redirect_to :back }
+      format.js
     end
+  end
+
+  def export_group_members_list_csv
+    authorize @group, :manage_members?
+
+    membership_list_csv = @group.membership_list_csv
+    send_data membership_list_csv, filename: "#{@group.file_safe_name}_membership_list.csv"
   end
 
 
@@ -173,13 +181,13 @@ class Groups::GroupMembersController < ApplicationController
   def group_member_params
     params.require(:user).permit(
       :user_id
-    )
+      )
   end
 
   def add_members_params
     params.require(:group).permit(
       member_ids: []
-    )
+      )
   end
 
 

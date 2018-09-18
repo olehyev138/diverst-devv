@@ -303,6 +303,23 @@ class Group < ActiveRecord::Base
     end
   end
 
+  def membership_list_csv
+    total_nb_of_members = active_members.count
+    CSV.generate do |csv|
+      csv << ["first_name", "last_name", "email_address"]
+
+      active_members.each do |member|
+        membership_list_row = [ member.first_name,
+                                member.last_name, 
+                                member.email
+                              ]                        
+        csv << membership_list_row
+      end
+
+      csv << ["total_nb_of_members(#{total_nb_of_members})"]
+    end
+  end
+
   def title_with_leftover_amount
     "Create event from #{name} leftover ($#{leftover_money})"
   end
