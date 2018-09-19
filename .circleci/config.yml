@@ -126,3 +126,46 @@ jobs:
         path: /tmp/circleci-artifacts
     - store_artifacts:
         path: /tmp/circleci-test-results
+  
+  #  build and test jobs go here
+  deploy:
+    working_directory: ~/TeamDiverst/diverst-development
+    shell: /bin/bash --login
+    docker:
+      - image: circleci/build-image:ubuntu-14.04-XXL-upstart-1189-5614f37
+        command: /sbin/init
+    steps:
+      - checkout
+      # Log the current branch
+      - run:
+          name: Show current branch
+          command: echo ${CIRCLE_BRANCH}
+      # Restore cache from the build job which contains the
+      # dist folder that needs to be deployed
+      # Restore the dependency cache
+      - restore_cache:
+          keys:
+          # This branch if available
+          - v1-dep-{{ .Branch }}-
+          # Default branch if not
+          - v1-dep-staging-
+          # Any branch if there are none on the default branch - this should be unnecessary if you have your default branch configured correctly
+          - v1-dep-
+      # This is based on your 1.0 configuration file or project settings
+      - run: gem install bundler
+      - run: bundle install
+      - run:
+          name: Deploy to AWS if tests pass and branch is Staging
+          command: bundle exec cap staging deploy
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
+      #- deploy:
+          #requires:
+            #- build
+          #filters:
+            #branches:
+              #only: staging
