@@ -316,7 +316,7 @@ class Group < ActiveRecord::Base
         csv << membership_list_row
       end
 
-      csv << ["total_nb_of_members(#{total_nb_of_members})"]
+      csv << ["total", nil, "#{total_nb_of_members}"]
     end
   end
 

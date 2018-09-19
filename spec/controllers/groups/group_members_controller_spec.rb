@@ -421,7 +421,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             end
 
             it 'should include total number of active members which should be 5' do 
-                expect(response.body).to include , "total_nb_of_members(5)"
+                expect(response.body).to include , "total, ,5"
             end
         end
     end
