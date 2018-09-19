@@ -153,6 +153,7 @@ jobs:
           - v1-dep-
       # This is based on your 1.0 configuration file or project settings
       - run: gem install bundler
+      - run: bundle install
       - run:
           name: Deploy to AWS if tests pass and branch is Staging
           command: bundle exec cap staging deploy
