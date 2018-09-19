@@ -138,15 +138,3 @@ jobs:
       - run:
           name: Deploy to AWS if tests pass and branch is Staging
           command: bundle exec cap staging deploy
-
-workflows:
-  version: 2
-  build-deploy:
-    jobs:
-      - build
-      - deploy:
-          requires:
-            - build
-          filters:
-            branches:
-              only: staging
