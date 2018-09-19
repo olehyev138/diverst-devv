@@ -59,7 +59,6 @@ module FeatureSpecRefactors
 			string.slice! phrase
 			string
 		end
-
 	end
 
 	module CustomMatchers

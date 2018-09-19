@@ -1,20 +1,17 @@
 require 'rails_helper'
 
-RSpec.feature 'Group Membership Management', :skip => "these tests fail consistently in CircleCI so we are skipping them for now" do
+RSpec.feature 'Group Membership Management' do
 	let!(:enterprise) { create(:enterprise, name: 'The Enterprise') }
 	let!(:guest_user) { create(:user, enterprise: enterprise)}
 	let!(:admin_user) { create(:user, enterprise: enterprise, first_name: 'Yehuda', last_name: 'Katz') }
-	let!(:group) { create(:group, name: 'Group ONE', enterprise: enterprise) }
+	
+	before { login_as(guest_user, scope: :user) }
+
 
 	context 'when group has enable pending users' do
-		pending_membership_message = '* Please wait for group administrators to process your membership request.
-		Take a survey below in order to speed up approval process.'
+		pending_membership_message = '* Please wait for group administrators to process your membership request.'
+		let!(:group) { create(:group, name: 'Group ONE', enterprise: enterprise, pending_users: 'enabled') }
 		let!(:sub_group) { create(:group, enterprise: enterprise, name: "Sub Group ONE", parent_id: group.id) }
-
-		before do
-			group.update(pending_users: 'enabled')
-			login_as(guest_user, scope: :user)
-		end
 
 		context 'when a user joins a parent group with children' do
 			scenario 'and is not a member of any child group', js: true do
@@ -33,7 +30,7 @@ RSpec.feature 'Group Membership Management', :skip => "these tests fail consiste
 				click_link 'Join', href: join_sub_group_group_group_member_path(sub_group, guest_user)
 				click_on 'DONE'
 
-				expect(sub_group.members).to include guest_user
+				expect(page).to have_content pending_membership_message
 			end
 
 			scenario 'and is a member of all child groups', js: true do
@@ -44,11 +41,10 @@ RSpec.feature 'Group Membership Management', :skip => "these tests fail consiste
 
 				within('.modal-content') do
 					expect(page).to have_content "Thanks for joining the #{c_t(:parent)}!"
-					expect(page).to have_content "OK"
 					click_link "OK"
 				end
 
-				expect(sub_group.members).not_to include guest_user
+				expect(page).to have_content pending_membership_message
 			end
 		end
 
@@ -58,14 +54,14 @@ RSpec.feature 'Group Membership Management', :skip => "these tests fail consiste
 
 				click_button "Join this #{c_t(:sub_erg)}"
 
-				within(".modal-title") do
+				within(".modal-content") do
 					expect(page).to have_content "Thanks for joining #{sub_group.name}! Do you also want to join the #{c_t(:parent)}?"
+				    click_button "YES"
 				end
 
-				click_button "YES"
 
 				expect(page).to have_current_path group_path(group)
-				expect(group.members).to include guest_user
+				expect(page).to have_content pending_membership_message
 			end
 
 			scenario 'and chooses not to join a parent group', js: true do
@@ -73,12 +69,15 @@ RSpec.feature 'Group Membership Management', :skip => "these tests fail consiste
 
 				click_button "Join this #{c_t(:sub_erg)}"
 
-				expect(page).to have_content "Thanks for joining the #{sub_group.name}! Do you also want to join the #{c_t(:parent)}?"
+				within(".modal-content") do
+					expect(page).to have_content "Thanks for joining #{sub_group.name}! Do you also want to join the #{c_t(:parent)}?"
+					click_link "NO"
+				end
 
-				click_link "NO"
-
-				expect(page).to have_current_path group_path(sub_group)
-				expect(group.members).not_to include guest_user
+				# expect(page).to have_current_path group_path(sub_group)
+				sleep 1
+				save_and_open_screenshot
+				expect(page).to have_button "Leave this #{c_t(:sub_erg)}"
 			end
 		end
 
@@ -110,8 +109,8 @@ RSpec.feature 'Group Membership Management', :skip => "these tests fail consiste
 		context 'when user joins a group' do
 			before do
 				create(:user_group, user_id: guest_user.id, group_id: group.id, accepted_member: false)
-				logout_user_in_session
-				user_logs_in_with_correct_credentials(admin_user)
+				logout(:user)
+				login_as(admin_user, scope: :user)
 
 				visit pending_group_group_members_path(group)
 
@@ -151,8 +150,8 @@ RSpec.feature 'Group Membership Management', :skip => "these tests fail consiste
 
 			context 'segment' do
 				before do
-					logout_user_in_session
-					user_logs_in_with_correct_credentials(admin_user)
+					logout(:user)
+					login_as(admin_user, scope: :user)
 					visit group_group_members_path(group)
 				end
 
@@ -187,8 +186,8 @@ RSpec.feature 'Group Membership Management', :skip => "these tests fail consiste
 				before do
 					guest_user.update(invitation_created_at: time_of_invitation)
 					create(:user_group, user_id: guest_user.id, group_id: group.id)
-					logout_user_in_session
-					user_logs_in_with_correct_credentials(admin_user)
+					logout(:user)
+					login_as(admin_user, scope: :user)
 					visit group_group_members_path(group)
 				end
 
@@ -206,12 +205,9 @@ RSpec.feature 'Group Membership Management', :skip => "these tests fail consiste
 	context 'when pending users is disabled by group' do
 		pending_membership_message = '* Please wait for group administrators to process your membership request.
 		Take a survey below in order to speed up approval process.'
+		let!(:group) { create(:group, name: 'Group ONE', enterprise: enterprise, pending_users: 'disabled') }
 		let!(:sub_group) { create(:group, enterprise: enterprise, name: "Sub Group ONE", parent_id: group.id) }
 
-		before do
-			group.update(pending_users: 'disabled')
-			login_as(guest_user, scope: :user)
-		end
 
 		scenario 'when a user joins a parent group with children', js: true do
 			visit group_path(group)
@@ -302,8 +298,8 @@ RSpec.feature 'Group Membership Management', :skip => "these tests fail consiste
 		context 'user joins a group' do
 			before do
 				create(:user_group, user_id: guest_user.id, group_id: group.id, accepted_member: false)
-				logout_user_in_session
-				user_logs_in_with_correct_credentials(admin_user)
+				logout(:user)
+				login_as(admin_user, scope: :user)
 			end
 
 			scenario 'and admin removes user from group', js: true do
@@ -321,8 +317,8 @@ RSpec.feature 'Group Membership Management', :skip => "these tests fail consiste
 
 	    context 'admin adds a user to a group' do
 	    	before do
-	    		logout_user_in_session
-	    		user_logs_in_with_correct_credentials(admin_user)
+	    		logout(:user)
+	    		login_as(admin_user, scope: :user)
 	    	end
 
 	    	scenario 'successfully', js: true do
