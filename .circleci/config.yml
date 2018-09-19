@@ -142,7 +142,7 @@ jobs:
       # Restore cache from the build job which contains the
       # dist folder that needs to be deployed
       - restore_cache:
-          key: v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
+          key: v1-dep-{{ .Branch }}-{{ epoch }}
       - run:
           name: Deploy to AWS if tests pass and branch is Staging
           command: bundle exec cap staging deploy
