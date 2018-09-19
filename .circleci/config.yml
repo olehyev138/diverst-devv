@@ -130,6 +130,7 @@ jobs:
   #  build and test jobs go here
   deploy:
     working_directory: ~/TeamDiverst/diverst-development
+    shell: /bin/bash --login
     docker:
       - image: circleci/build-image:ubuntu-14.04-XXL-upstart-1189-5614f37
         command: /sbin/init
