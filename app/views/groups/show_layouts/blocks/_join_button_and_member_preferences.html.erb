@@ -8,8 +8,8 @@
        <%= link_to c_t(:member_preference), survey_group_questions_path(@group), class: "btn btn--primary" %>
     <% else %>
       You can always
-      <%= link_to 'edit', survey_group_questions_path(@group) %>
-      your <% c_t(:member_preference) %>
+      edit
+      your <%= link_to c_t(:member_preference), survey_group_questions_path(@group), class: "btn btn--primary" %>
     <% end %>
   <% end %>
 <% end %>

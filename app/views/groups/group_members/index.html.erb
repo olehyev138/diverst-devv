@@ -1,7 +1,17 @@
 <div class="content__header">
   <h1>Members (<%= @members.count %>)</h1>
   <% if policy(@group).manage_members? %>
-    <%= link_to "+ Add members", new_group_group_member_path(@group), class: "btn btn--primary" %>
+    <div class="flex-row__cell">
+      <%= link_to "+ Add members", new_group_group_member_path(@group), class: "btn btn--primary" %>
+    </div>
+
+    <div class="flex-row__cell">
+      <%= link_to "export membership list", export_group_members_csv_group_group_members_path(@group), class: 'btn btn--primary' %>
+    </div>
+
+    <div class="flex-row__cell">
+      <%= link_to "test action", test_action_group_group_members_path(@group), class: 'btn btn--primary' %>
+    </div>
   <% end %>
 </div>
 
