@@ -401,4 +401,28 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             end
         end
     end
+
+    describe "GET#export_group_members_list_csv" do
+        context 'when user is logged in' do
+            let!(:active_members) { create_list(:user, 5, enterprise_id: user.enterprise.id, user_role_id: user.user_role_id, active: true) }
+            let!(:inactive_members) { create_list(:user, 5, enterprise_id: user.enterprise.id, user_role_id: user.user_role_id, active: false) }
+            login_user_from_let
+            before do
+                group.members << active_members
+                get :export_group_members_list_csv, group_id: group.id 
+            end
+
+            it "return data in csv format" do
+                expect(response.content_type).to eq 'text/csv'
+            end
+
+            it "filename should be '[group.name]_membership_list.csv'" do
+                expect(response.headers["Content-Disposition"]).to include "#{group.file_safe_name}_membership_list.csv"
+            end
+
+            it 'should include total number of active members which should be 5' do 
+                expect(response.body).to include , "total, ,5"
+            end
+        end
+    end
 end

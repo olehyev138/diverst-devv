@@ -156,8 +156,7 @@ Rails.application.routes.draw do
           post 'join_all_sub_groups'
           delete 'leave_all_sub_groups'
           get 'view_sub_groups'
-          get 'export_group_members_csv'
-          get 'test_action'
+          get 'export_group_members_list_csv'
         end
         member do
           post 'accept_pending'
