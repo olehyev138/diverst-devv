@@ -7,7 +7,7 @@ class PollMailer < ApplicationMailer
 
     set_defaults(@enterprise, method_name)
     
-    mail(to: @user.email, subject: @subject)
+    mail(from: @from_address, to: @user.email, subject: @subject)
   end
   
   def variables
