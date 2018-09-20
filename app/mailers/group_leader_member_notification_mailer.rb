@@ -9,7 +9,7 @@ class GroupLeaderMemberNotificationMailer < ApplicationMailer
 
     set_defaults(@enterprise, method_name)
     
-    mail(to: leader.email, subject: @subject)
+    mail(from: @from_address, to: leader.email, subject: @subject)
   end
   
   def variables
