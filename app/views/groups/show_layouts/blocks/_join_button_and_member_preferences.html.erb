@@ -1,6 +1,8 @@
 <% if current_user.pending_group_member?(@group.id) || @group.members.include?(current_user) %>
   <% if current_user.pending_group_member?(@group.id) %>
-    * Please wait for group administrators to process your membership request.
+    <p class="pending-message">
+      * Please wait for group administrators to process your membership request.
+    </p>
   <% end %>
   <% if @group.survey_fields.any? %>
     <% if !current_user.has_answered_group_survey? @group %>
@@ -8,8 +10,8 @@
        <%= link_to c_t(:member_preference), survey_group_questions_path(@group), class: "btn btn--primary" %>
     <% else %>
       You can always
-      <%= link_to 'edit', survey_group_questions_path(@group) %>
-      your <% c_t(:member_preference) %>
+      edit
+      your <%= link_to c_t(:member_preference), survey_group_questions_path(@group), class: "btn btn--primary" %>
     <% end %>
   <% end %>
 <% end %>

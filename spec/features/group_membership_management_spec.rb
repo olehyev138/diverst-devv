@@ -11,7 +11,7 @@ RSpec.feature 'Group Membership Management' do
 	context 'when group has enable pending users' do
 		pending_membership_message = '* Please wait for group administrators to process your membership request.'
 		let!(:group) { create(:group, name: 'Group ONE', enterprise: enterprise, pending_users: 'enabled') }
-		let!(:sub_group) { create(:group, enterprise: enterprise, name: "Sub Group ONE", parent_id: group.id) }
+		let!(:sub_group) { create(:group, enterprise: enterprise, name: "Sub Group ONE", parent_id: group.id, pending_users: 'enabled') }
 
 		context 'when a user joins a parent group with children' do
 			scenario 'and is not a member of any child group', js: true do
@@ -24,27 +24,30 @@ RSpec.feature 'Group Membership Management' do
 					click_link "YES"
 				end
 
-				expect(page).to have_content sub_group.name
-				expect(page).to have_link 'Join'
+				within('.modal-body') do
+					expect(page).to have_content sub_group.name
+					expect(page).to have_link 'Join'
+					click_link 'Join', href: join_sub_group_group_group_member_path(sub_group, guest_user)
+					click_on 'DONE'
+				end
 
-				click_link 'Join', href: join_sub_group_group_group_member_path(sub_group, guest_user)
-				click_on 'DONE'
-
-				expect(page).to have_content pending_membership_message
+				expect(page.find('.pending-message')).to have_content pending_membership_message
 			end
 
 			scenario 'and is a member of all child groups', js: true do
-				create(:user_group, user_id: guest_user.id, group_id: sub_group.id, accepted_member: false)
+				create(:user_group, user_id: guest_user.id, group_id: sub_group.id, accepted_member: true)
 				visit group_path(group)
 
-				click_button "Join this #{c_t(:parent)}"
-
-				within('.modal-content') do
-					expect(page).to have_content "Thanks for joining the #{c_t(:parent)}!"
-					click_link "OK"
+				using_wait_time 5 do
+					click_button "Join this #{c_t(:parent)}"
+					within('.modal-content') do
+						expect(page).to have_content "Thanks for joining the #{c_t(:parent)}!"
+						click_link "OK"
+					end
 				end
 
-				expect(page).to have_content pending_membership_message
+
+				expect(page.find('.pending-message')).to have_content pending_membership_message
 			end
 		end
 
@@ -52,16 +55,17 @@ RSpec.feature 'Group Membership Management' do
 			scenario 'and chooses to join a parent group', js: true do
 				visit group_path(sub_group)
 
-				click_button "Join this #{c_t(:sub_erg)}"
+				using_wait_time 5 do
+					click_button "Join this #{c_t(:sub_erg)}"
 
-				within(".modal-content") do
-					expect(page).to have_content "Thanks for joining #{sub_group.name}! Do you also want to join the #{c_t(:parent)}?"
-				    click_button "YES"
+					within(".modal-content") do
+						expect(page).to have_content "Thanks for joining #{sub_group.name}! Do you also want to join the #{c_t(:parent)}?"
+					    click_button "YES"
+					end
 				end
 
-
 				expect(page).to have_current_path group_path(group)
-				expect(page).to have_content pending_membership_message
+				expect(page.find('.pending-message')).to have_content pending_membership_message
 			end
 
 			scenario 'and chooses not to join a parent group', js: true do
@@ -74,10 +78,8 @@ RSpec.feature 'Group Membership Management' do
 					click_link "NO"
 				end
 
-				# expect(page).to have_current_path group_path(sub_group)
-				sleep 1
-				save_and_open_screenshot
-				expect(page).to have_button "Leave this #{c_t(:sub_erg)}"
+				expect(page).to have_current_path group_path(sub_group)
+				expect(page.find('.pending-message')).to have_content pending_membership_message
 			end
 		end
 
@@ -124,7 +126,7 @@ RSpec.feature 'Group Membership Management' do
 
 				visit group_group_members_path(group)
 
-				expect(page).to have_content 'Members (1)'
+				expect(page.find('.content__header h1')).to have_content 'Members (1)'
 				expect(page).to have_content guest_user.first_name
 			end
 
@@ -133,7 +135,7 @@ RSpec.feature 'Group Membership Management' do
 					click_link 'Remove From Group', href: remove_member_group_group_member_path(group, guest_user)
 				end
 
-				expect(current_path).to eq group_group_members_path(group)
+				expect(page).to have_current_path group_group_members_path(group)
 				expect(page).to have_no_content guest_user.name
 			end
 		end
@@ -160,7 +162,7 @@ RSpec.feature 'Group Membership Management' do
 
 					click_on 'Filter'
 
-					expect(page).to have_content 'Members (0)'
+					expect(page.find('.content__header h1')).to have_content 'Members (0)'
 					expect(page).to have_no_content inactive_user.name
 				end
 
@@ -175,7 +177,7 @@ RSpec.feature 'Group Membership Management' do
 
 					click_on 'Filter'
 
-					expect(page).to have_content 'Members (2)'
+					expect(page.find('.content__header h1')).to have_content 'Members (2)'
 					expect(page).to have_content guest_user.name
 					expect(page).to have_content admin_user.name
 				end
@@ -233,12 +235,14 @@ RSpec.feature 'Group Membership Management' do
 			create(:user_group, user_id: guest_user.id, group_id: sub_group.id, accepted_member: true)
 			visit group_path(group)
 
-			click_button "Join this #{c_t(:parent)}"
+			using_wait_time 5 do
+				click_button "Join this #{c_t(:parent)}"
 
-			within('.modal-content') do
-				expect(page).to have_content "Thanks for joining the #{c_t(:parent)}!"
-				expect(page).to have_content "OK"
-				click_link "OK"
+				within('.modal-content') do
+					expect(page).to have_content "Thanks for joining the #{c_t(:parent)}!"
+					expect(page).to have_content "OK"
+					click_link "OK"
+				end
 			end
 
 			expect(page).to have_link "Leave this #{c_t(:parent)}"
@@ -247,15 +251,17 @@ RSpec.feature 'Group Membership Management' do
 		scenario 'when a user joins a sub group, prompt option to join parent group', js: true do
 			visit group_path(sub_group)
 
-			click_button "Join this #{c_t(:sub_erg)}"
+			using_wait_time 5 do
+				click_button "Join this #{c_t(:sub_erg)}"
 
-			within('.modal-title') do
-				expect(page).to have_content "Thanks for joining #{sub_group.name}! Do you also want to join the #{c_t(:parent)}?"
+				within('.modal-content') do
+					expect(page).to have_content "Thanks for joining #{sub_group.name}! Do you also want to join the #{c_t(:parent)}?"
+					click_button "YES"
+				end
 			end
 
-			click_button "YES"
 
-			expect(group.members).to include guest_user
+			expect(page).to have_link "Leave this #{c_t(:parent)}"
 		end
 
 		context 'when a user' do
@@ -275,7 +281,7 @@ RSpec.feature 'Group Membership Management' do
 			let!(:group_membership)	{ create(:user_group, user_id: guest_user.id, group_id: group.id, accepted_member: true) }
 			let!(:sub_group_membership)	{ create(:user_group, user_id: guest_user.id, group_id: sub_group.id, accepted_member: true) }
 
-			scenario 'a parent group', js: true do
+			scenario 'a parent group' do
 				visit group_path(group)
 
 				click_link "Leave this #{c_t(:parent)}"
@@ -285,7 +291,7 @@ RSpec.feature 'Group Membership Management' do
 				expect(sub_group.members).to include guest_user
 			end
 
-			scenario 'a sub group', js: true do
+			scenario 'a sub group' do
 				visit group_path(sub_group)
 
 				click_link "Leave this #{c_t(:sub_erg)}"
@@ -332,8 +338,9 @@ RSpec.feature 'Group Membership Management' do
 
 	    		click_on 'Update Group'
 
-	    		expect(current_path).to eq group_group_members_path(group)
-	    		expect(page).to have_content 'Members (1)'
+
+	    		expect(page).to have_current_path group_group_members_path(group)
+	    		expect(page.find('.content__header h1')).to have_content 'Members (1)'
 	    		expect(page).to have_content guest_user.name
 	    	end
 	    end
