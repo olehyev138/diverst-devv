@@ -331,6 +331,16 @@ class Group < ActiveRecord::Base
   def pending_posts_count
     news_links.unapproved.count + messages.unapproved.count + social_links.unapproved.count
   end
+  
+  # This method only exists because it's used in a callback
+  def update_elasticsearch_member(member)
+    member.__elasticsearch__.update_document
+  end
+
+  # Update members in elastic_search
+  def update_all_elasticsearch_members
+    GroupUpdateJob.perform_later(id)
+  end
 
   protected
 
@@ -342,7 +352,6 @@ class Group < ActiveRecord::Base
   def have_protocol?
     company_video_url[%r{\Ahttp:\/\/}] || company_video_url[%r{\Ahttps:\/\/}]
   end
-
 
   private
 
@@ -405,18 +414,6 @@ class Group < ActiveRecord::Base
     yammer_create_group? &&
       !yammer_group_created &&
       !enterprise.yammer_token.nil?
-  end
-
-  # This method only exists because it's used in a callback
-  def update_elasticsearch_member(member)
-    member.__elasticsearch__.update_document
-  end
-
-  # Update members in elastic_search
-  def update_all_elasticsearch_members
-    members.includes(:poll_responses).each do |member|
-      update_elasticsearch_member(member)
-    end
   end
 
   def self.avg_members_per_group(enterprise:)
