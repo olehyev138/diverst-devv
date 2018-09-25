@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'Manage Enterprise Branding', :skip => "these tests fail consistently in CircleCI so we are skipping them for now" do
+RSpec.feature 'Manage Enterprise Branding' do
 	let!(:admin_user) { create(:user) }
 	let!(:group) { create(:group, enterprise: admin_user.enterprise) }
 
@@ -82,7 +82,7 @@ RSpec.feature 'Manage Enterprise Branding', :skip => "these tests fail consisten
 
 			visit group_event_path(group, event)
 
-			expect(page).to display_timezone 'Central America'
+			expect(page).to display_timezone 'UTC'
 		end
 	end
 
