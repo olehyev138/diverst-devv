@@ -8,7 +8,9 @@ class MentorMailer < ApplicationMailer
         @sender = mentoring_request.sender
         @receiver = mentoring_request.receiver
         
-        mail(to: @receiver.email, subject: "New Mentoring Request")
+        set_defaults(@sender.enterprise, method_name)
+        
+        mail(from: @from_address, to: @receiver.email, subject: "New Mentoring Request")
     end
     
     # sends a reminder email to users regarding an upcoming session

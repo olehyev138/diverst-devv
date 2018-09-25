@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Group, :type => :model do
-
+    include ActiveJob::TestHelper
+    
     describe 'validations' do
         let(:group) { FactoryGirl.build_stubbed(:group) }
 
@@ -626,15 +627,16 @@ RSpec.describe Group, :type => :model do
 
     describe "#update_all_elasticsearch_members" do
         it "updates the users in elasticsearch" do
-            group = build(:group)
-            user = build(:user)
+            group = create(:group)
+            user = create(:user)
             create(:user_group, :group => group, :user => user)
-            allow(group).to receive(:update_elasticsearch_member).and_call_original
-
-            group.name = "testing elasticsearch"
-            group.save!
-
-            expect(group).to have_received(:update_elasticsearch_member)
+            
+            perform_enqueued_jobs do
+                expect_any_instance_of(GroupUpdateJob).to receive(:perform)
+                
+                group.name = "testing elasticsearch"
+                group.save!
+            end
         end
     end
 
