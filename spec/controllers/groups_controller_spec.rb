@@ -607,6 +607,13 @@ RSpec.describe GroupsController, type: :controller do
 
           expect(response).to redirect_to group
         end
+
+        it 'stay on group outcomes url after updating plan structure' do 
+          request.env['HTTP_REFERER'] = group_outcomes_url(group)
+          patch_update(group.id, group_attrs)
+
+          expect(response).to redirect_to group_outcomes_url(group)
+        end
       end
 
       context 'with incorrect params' do
