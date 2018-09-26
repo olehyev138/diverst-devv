@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'News Feed Management', :skip => "these tests fail consistently in CircleCI so we are skipping them for now" do
+RSpec.feature 'News Feed Management' do
 	let!(:user) { create(:user) }
 	let!(:group) { create(:group, name: 'Group ONE', enterprise: user.enterprise) }
 
