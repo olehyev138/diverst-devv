@@ -86,7 +86,7 @@ class InitiativesController < ApplicationController
   def attendees
     authorize @initiative, :update?
 
-    send_data User.to_csv(users: @initiative.attendees, fields: current_user.enterprise.fields),
+    send_data User.basic_info_to_csv(users: @initiative.attendees),
       filename: "attendees.csv"
   end
 

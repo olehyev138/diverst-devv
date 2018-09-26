@@ -427,6 +427,19 @@ class User < ActiveRecord::Base
         end
     end
 
+    # Export a CSV with the specified users
+    def self.basic_info_to_csv(users:, nb_rows: nil)
+      CSV.generate do |csv|
+        csv << ['First name', 'Last name', 'Email']
+
+        users.order(created_at: :desc).limit(nb_rows).each do |user|
+            user_columns = [user.first_name, user.last_name, user.email]
+
+            csv << user_columns
+        end
+      end
+    end
+
     def group_member?(group_id)
         user_group = user_groups.where(group_id: group_id).first
         user_group.present?
