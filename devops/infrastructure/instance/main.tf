@@ -31,6 +31,11 @@ resource "aws_eip" "webserver" {
   instance = "${element(aws_instance.webserver.*.id, count.index)}"
 }
 
+resource "aws_eip" "worker" {
+  count = "${var.workers_count}"
+  instance = "${element(aws_instance.worker.*.id, count.index)}"
+}
+
 resource "aws_instance" "worker" {
   count = "${var.workers_count}"
 
@@ -100,7 +105,7 @@ resource "aws_elasticsearch_domain" "default" {
           "aws:SourceIp": [
             "${join("\",\"", concat(var.elasticsearch_whitelist_extra,
                                     aws_eip.webserver.*.public_ip,
-                                    aws_instance.worker.*.public_ip))}"
+                                    aws_eip.worker.*.public_ip))}"
           ]
         }
       },
