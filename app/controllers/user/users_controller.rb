@@ -10,6 +10,7 @@ class User::UsersController < ApplicationController
 
   def edit
     authorize @user
+    @user_groups = @user.user_groups.where(accepted_member: true)
   end
 
   def update
