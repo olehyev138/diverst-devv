@@ -144,7 +144,7 @@ RSpec.feature 'News Feed Management' do
 
 			before { visit group_posts_path(group) }
 
-			scenario 'when creating news items with url', js: true do
+			scenario 'when creating news items with url', js: true, :skip => true do
 				expect(page).to have_link '+ Create News'
 
 				click_on '+ Create News'

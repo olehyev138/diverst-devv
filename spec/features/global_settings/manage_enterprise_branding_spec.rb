@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.feature 'Manage Enterprise Branding' do
+	include ActiveJob::TestHelper
+	
 	let!(:admin_user) { create(:user) }
 	let!(:group) { create(:group, enterprise: admin_user.enterprise) }
 
@@ -19,35 +21,39 @@ RSpec.feature 'Manage Enterprise Branding' do
 				expect(style).to have_default_primary_color #the hex color equivalent is #7b77c9
 
 				fill_in 'enterprise[theme][primary_color]', with: '#FFEE7F'
-
-				click_on 'Save branding'
-
-				style = computed_style '.btn--primary', 'background'
-				expect(style).not_to eq have_default_primary_color
-				expect(style).to have_custom_color("rgb(255, 238, 127)") #the hex color equivalent is #FFEE7F
+				
+				perform_enqueued_jobs do
+					click_on 'Save branding'
+	
+					style = computed_style '.btn--primary', 'background'
+					expect(style).not_to eq have_default_primary_color
+					expect(style).to have_custom_color("rgb(255, 238, 127)") #the hex color equivalent is #FFEE7F
+				end
 			end
 		end
 
 		scenario 'restore default branding', js: true do
 			fill_in 'enterprise[theme][primary_color]', with: '#FFEE7F'
-
-			click_on 'Save branding'
-
-			style = computed_style '.btn--primary', 'background'
-			expect(style).not_to have_default_primary_color
-
-			click_on 'Restore to default'
-
-			style = computed_style '.btn--primary', 'background'
-			expect(style).to have_default_primary_color
+			perform_enqueued_jobs do
+				click_on 'Save branding'
+	
+				style = computed_style '.btn--primary', 'background'
+				expect(style).not_to have_default_primary_color
+	
+				click_on 'Restore to default'
+	
+				style = computed_style '.btn--primary', 'background'
+				expect(style).to have_default_primary_color
+			end
 		end
 
 		scenario 'upload image as custom logo', js: true do
-
-			attach_file('enterprise[theme][logo]', 'spec/fixtures/files/verizon_logo.png')
-			click_on 'Save branding'
-
-			expect(page).to have_custom_logo("verizon_logo")
+			perform_enqueued_jobs do
+				attach_file('enterprise[theme][logo]', 'spec/fixtures/files/verizon_logo.png')
+				click_on 'Save branding'
+	
+				expect(page).to have_custom_logo("verizon_logo")
+			end
 		end
 	end
 

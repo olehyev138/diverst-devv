@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe EnterprisesController, type: :controller do
+    include ActiveJob::TestHelper
+    
     let(:enterprise){ create(:enterprise) }
     let(:user){ create(:user, enterprise: enterprise) }
     let(:group){ create(:group, enterprise: enterprise) }
@@ -275,8 +277,12 @@ RSpec.describe EnterprisesController, type: :controller do
             login_user_from_let
 
             context "with valid attributes" do
-                before { patch :update_branding, id: enterprise.id, enterprise: attributes_for(:enterprise, theme: { primary_color: "#ff0000" }) }
-
+                before {
+                    perform_enqueued_jobs do
+                        patch :update_branding, id: enterprise.id, enterprise: attributes_for(:enterprise, theme: { primary_color: "#ff0000" })
+                    end
+                }
+                
                 it "returns a valid theme object from set_theme" do
                     expect(assigns[:theme]).to be_a_new(Theme)
                 end
