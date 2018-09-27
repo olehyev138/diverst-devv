@@ -167,7 +167,7 @@ RSpec.describe InitiativesController, type: :controller do
 
       it "render a csv with attendees of an initiative" do
         get :attendees, group_id: group.id, id: initiative.id
-        expect(response.body.split("\n")[1]).to eq "#{ attendee.first_name },#{ attendee.last_name },#{ attendee.email },#{ attendee.biography },#{attendee.active}"
+        expect(response.body.split("\n")[1]).to eq "#{ attendee.first_name },#{ attendee.last_name },#{ attendee.email }"
       end
     end
 

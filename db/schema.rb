@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180927092309) do
+ActiveRecord::Schema.define(version: 20180927163212) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -1293,15 +1293,13 @@ ActiveRecord::Schema.define(version: 20180927092309) do
   end
 
   create_table "user_groups", force: :cascade do |t|
-    t.integer  "user_id",                 limit: 4
-    t.integer  "group_id",                limit: 4
+    t.integer  "user_id",             limit: 4
+    t.integer  "group_id",            limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "accepted_member",                       default: false
-    t.integer  "notifications_frequency", limit: 4,     default: 2
-    t.integer  "total_weekly_points",     limit: 4,     default: 0
-    t.text     "data",                    limit: 65535
-    t.integer  "notifications_date",      limit: 4,     default: 5
+    t.boolean  "accepted_member",                   default: false
+    t.integer  "total_weekly_points", limit: 4,     default: 0
+    t.text     "data",                limit: 65535
   end
 
   create_table "user_reward_actions", force: :cascade do |t|

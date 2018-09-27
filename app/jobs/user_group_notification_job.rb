@@ -10,17 +10,30 @@ class UserGroupNotificationJob < ActiveJob::Base
     notifications_frequency = args[:notifications_frequency]
     enterprise_id = args[:enterprise_id]
     
-    User.where(:enterprise_id => enterprise_id).includes(user_groups: :group).find_in_batches(batch_size: 200) do |users|
+    User.where(:enterprise_id => enterprise_id).notifications_status(notifications_frequency).includes(user_groups: :group).find_in_batches(batch_size: 200) do |users|
       users.each do |user|
         groups = []
-        user.user_groups.accepted_users.active.notifications_status(notifications_frequency).each do |user_group|
-          # check if notifications_frequency is weekly and check current date is equal to
-          # selected user_group
-          next unless can_send_email?(notifications_frequency, user_group)
-          group = user_group.group
-          frequency_range = get_frequency_range(user_group.notifications_frequency)
+        # user.user_groups.accepted_users.active.each do |user_group|
+        #   # check if notifications_frequency is weekly and check current date is equal to
+        #   # selected user_group
+        #   next unless can_send_email?(notifications_frequency, user_group)
+        #   group = user_group.group
+        #   frequency_range = get_frequency_range(user_group.notifications_frequency)
+        #   groups << {
+        #     group: user_group.group,
+        #     events_count: get_events_count(user, group, frequency_range),
+        #     messages_count: get_messages_count(user, group, frequency_range),
+        #     news_count: get_news_count(user, group, frequency_range),
+        #     social_links_count: get_social_count(user, group, frequency_range),
+        #     participating_events_count: get_participating_events_count(user, group, frequency_range)
+        #   }
+        # end
+
+        next unless can_send_email?(notifications_frequency, user)
+        frequency_range = get_frequency_range(user.groups_notifications_frequency)
+        user.groups.each do |group|
           groups << {
-            group: user_group.group,
+            group: group,
             events_count: get_events_count(user, group, frequency_range),
             messages_count: get_messages_count(user, group, frequency_range),
             news_count: get_news_count(user, group, frequency_range),
@@ -28,6 +41,7 @@ class UserGroupNotificationJob < ActiveJob::Base
             participating_events_count: get_participating_events_count(user, group, frequency_range)
           }
         end
+
         if have_updates?(groups)
           UserGroupMailer.notification(user, groups).deliver_now
         end
@@ -36,9 +50,9 @@ class UserGroupNotificationJob < ActiveJob::Base
   end
 
   # checks if frequency is weekly and 
-  def can_send_email?(frequency, user_group)
+  def can_send_email?(frequency, user)
     return true if frequency != "weekly"
-    case user_group.notifications_date
+    case user.groups_notifications_date
     when "sunday" then Date.today.sunday?
     when "monday" then Date.today.monday?
     when "tuesday" then Date.today.tuesday?

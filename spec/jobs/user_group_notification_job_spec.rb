@@ -3,11 +3,12 @@ require 'rails_helper'
 RSpec.describe UserGroupNotificationJob, type: :job do
   include ActiveJob::TestHelper
 
-  let!(:user){ create(:user) }
   let!(:group){ create(:group, pending_users: "disabled") }
   let!(:second_group){ create(:group, pending_users: "disabled") }
 
   context "with hourly frequency" do
+    let!(:user){ create(:user, groups_notifications_frequency: User.groups_notifications_frequencies[:hourly]) }
+
     context "when there is no messages or news" do
       it "does no send an email of notification to user" do
         expect(UserGroupMailer).to_not receive(:notification)
@@ -19,7 +20,7 @@ RSpec.describe UserGroupNotificationJob, type: :job do
       let(:previous_hour) { 30.minutes.ago.in_time_zone("EST") }
       let(:next_hour) { 2.hours.ago.in_time_zone("EST") }
 
-      let!(:user_group){ create(:user_group, user: user, group: group, notifications_frequency: UserGroup.notifications_frequencies[:hourly]) }
+      let!(:user_group){ create(:user_group, user: user, group: group) }
       let!(:group_message){ create(:group_message, group: group, updated_at: previous_hour, owner: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
       let!(:another_group_message){ create(:group_message, group: group, updated_at: next_hour, owner: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
 
@@ -49,7 +50,7 @@ RSpec.describe UserGroupNotificationJob, type: :job do
       let(:previous_hour) { 30.minutes.ago.in_time_zone("UTC") }
       let(:next_hour) { 2.hours.ago.in_time_zone("UTC") }
 
-      let!(:user_group){ create(:user_group, user: user, group: group, notifications_frequency: UserGroup.notifications_frequencies[:hourly]) }
+      let!(:user_group){ create(:user_group, user: user, group: group) }
       let!(:group_message){ create(:group_message, group: group, updated_at: previous_hour, owner: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
       let!(:another_group_message){ create(:group_message, group: group, updated_at: next_hour, owner: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
       let!(:group_event) { create(:initiative, owner_group: group, updated_at: previous_hour, owner: user) }
@@ -133,6 +134,8 @@ RSpec.describe UserGroupNotificationJob, type: :job do
   end
 
   context "with daily frequency" do
+    let!(:user){ create(:user, groups_notifications_frequency: User.groups_notifications_frequencies[:daily]) }
+
     context "when there is no messages or news" do
       it "does no send an email of notification to user" do
         expect(UserGroupMailer).to_not receive(:notification)
@@ -144,7 +147,7 @@ RSpec.describe UserGroupNotificationJob, type: :job do
       let(:yesterday) { (Date.today - 1.day).in_time_zone("UTC") }
       let(:today) { (Date.today).in_time_zone("UTC") }
 
-      let!(:user_group){ create(:user_group, user: user, group: group, notifications_frequency: UserGroup.notifications_frequencies[:daily]) }
+      let!(:user_group){ create(:user_group, user: user, group: group) }
       let!(:group_message){ create(:group_message, group: group, updated_at: yesterday, owner: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
       let!(:another_group_message){ create(:group_message, group: group, updated_at: today, owner: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
       let!(:group_event) { create(:initiative, owner_group: group, updated_at: yesterday, owner: user) }
@@ -232,14 +235,15 @@ RSpec.describe UserGroupNotificationJob, type: :job do
     end
     
     context "when there is new shared news" do
+      let!(:user){ create(:user, groups_notifications_frequency: User.groups_notifications_frequencies[:daily]) }
       let(:yesterday) { Date.today - 1.day }
       let(:today) { Date.today }
 
-      let!(:second_user) {create(:user, :enterprise => user.enterprise)}
+      let!(:second_user) {create(:user, :enterprise => user.enterprise, groups_notifications_frequency: User.groups_notifications_frequencies[:disabled])}
       let!(:third_group) {create(:group, :enterprise => second_user.enterprise)}
       
-      let!(:user_group){ create(:user_group, user: user, group: group, notifications_frequency: UserGroup.notifications_frequencies[:daily]) }
-      let!(:second_user_group){ create(:user_group, user: second_user, group: second_group, notifications_frequency: UserGroup.notifications_frequencies[:disabled]) }
+      let!(:user_group){ create(:user_group, user: user, group: group) }
+      let!(:second_user_group){ create(:user_group, user: second_user, group: second_group) }
       
       let!(:group_message){ create(:group_message, group: third_group, updated_at: yesterday, owner: user, :news_feed_link_attributes => {:news_feed_id => third_group.news_feed.id}) }
       let!(:another_group_message){ create(:group_message, group: third_group, updated_at: today, owner: user, :news_feed_link_attributes => {:news_feed_id => third_group.news_feed.id}) }
@@ -272,6 +276,8 @@ RSpec.describe UserGroupNotificationJob, type: :job do
   end
 
   context "with weekly frequency" do
+    let!(:user){ create(:user, groups_notifications_frequency: User.groups_notifications_frequencies[:weekly]) }
+
     context "and there is no messages or news" do
       it "does no send an email of notification to user" do
         Timecop.freeze(Date.today.next_week(:monday)) do
@@ -289,7 +295,7 @@ RSpec.describe UserGroupNotificationJob, type: :job do
       let(:week_ago) { 6.days.ago }
       let(:today) { Date.today }
 
-      let!(:user_group){ create(:user_group, user: user, group: group, notifications_frequency: UserGroup.notifications_frequencies[:weekly]) }
+      let!(:user_group){ create(:user_group, user: user, group: group) }
       let!(:group_message){ create(:group_message, group: group, updated_at: week_ago, owner: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
       let!(:another_group_message){ create(:group_message, group: group, updated_at: today, owner: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
       let!(:group_event) { create(:initiative, owner_group: group, updated_at: week_ago, owner: user) }
@@ -389,7 +395,7 @@ RSpec.describe UserGroupNotificationJob, type: :job do
       let(:week_ago) { 6.days.ago }
       let(:today) { Date.today }
 
-      let!(:user_group){ create(:user_group, user: user, group: group, notifications_frequency: UserGroup.notifications_frequencies[:weekly], notifications_date: UserGroup.notifications_dates[:sunday]) }
+      let!(:user_group){ create(:user_group, user: user, group: group) }
       let!(:group_message){ create(:group_message, group: group, updated_at: week_ago, owner: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
       let!(:another_group_message){ create(:group_message, group: group, updated_at: today, owner: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
       let!(:group_event) { create(:initiative, owner_group: group, updated_at: week_ago, owner: user) }

@@ -13,11 +13,15 @@ class User < ActiveRecord::Base
     enum groups_notifications_frequency: [:hourly, :daily, :weekly, :disabled]
     enum groups_notifications_date: [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]
 
+    scope :notifications_status, ->(frequency) {
+        where(groups_notifications_frequency: User.groups_notifications_frequencies[frequency])
+    }
     scope :active,              -> { where(active: true).distinct }
     scope :enterprise_mentors,  -> ( user_ids = []) { where(mentor: true).where.not(:id => user_ids) }
     scope :enterprise_mentees,  -> ( user_ids = []) { where(mentee: true).where.not(:id => user_ids) }
     scope :mentors_and_mentees, -> { where("mentor = true OR mentee = true").distinct }
     scope :inactive,            -> { where(active: false).distinct }
+    
 
     belongs_to  :enterprise, inverse_of: :users
     belongs_to  :user_role

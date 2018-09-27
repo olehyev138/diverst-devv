@@ -4,6 +4,48 @@ RSpec.describe User do
   describe "when validating" do
     let(:user) { build(:user) }
 
+    it { expect(user).to define_enum_for(:groups_notifications_frequency).with([:hourly, :daily, :weekly, :disabled]) }
+    it { expect(user).to define_enum_for(:groups_notifications_date).with([:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]) }
+
+    context "notifications_status" do
+      let!(:user) { create(:user, groups_notifications_frequency: User.groups_notifications_frequencies[:hourly]) }
+
+      it "returns user with specific notifications_frequency" do
+        expect(User.notifications_status("hourly")).to eq [user]
+      end
+    end
+
+    describe "#notifications_date" do
+      it "returns sunday" do
+        user = create(:user, :groups_notifications_date => 0)
+        expect(user.groups_notifications_date).to eq("sunday")
+      end
+      it "returns default monday" do
+        user = create(:user, :groups_notifications_date => 1)
+        expect(user.groups_notifications_date).to eq("monday")
+      end
+      it "returns tuesday" do
+        user = create(:user, :groups_notifications_date => 2)
+        expect(user.groups_notifications_date).to eq("tuesday")
+      end
+      it "returns wednesday" do
+        user = create(:user, :groups_notifications_date => 3)
+        expect(user.groups_notifications_date).to eq("wednesday")
+      end
+      it "returns thursday" do
+        user = create(:user, :groups_notifications_date => 4)
+        expect(user.groups_notifications_date).to eq("thursday")
+      end
+      it "returns default friday" do
+        user = create(:user)
+        expect(user.groups_notifications_date).to eq("friday")
+      end
+      it "returns saturday" do
+        user = create(:user, :groups_notifications_date => 6)
+        expect(user.groups_notifications_date).to eq("saturday")
+      end
+    end
+
     context 'test validations' do
       it { expect(user).to validate_presence_of(:first_name) }
       it { expect(user).to validate_presence_of(:last_name) }

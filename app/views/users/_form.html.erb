@@ -29,7 +29,7 @@
 <h2>Groups Notifications Settings</h2>
 <div id='user_group_notifications'>
   <%= f.input :groups_notifications_frequency,
-          collection: UserGroup.notifications_frequencies.keys.map{ |f| [t("user_group.#{ f }"), f] },
+          collection: User.groups_notifications_frequencies.keys.map{ |f| [t("user.#{ f }"), f] },
           label: "Frequency of notifications",
           include_blank: false, 
           input_html: { class: 'groups_notifications_frequency' }
@@ -37,7 +37,7 @@
         %>
         <div class='notifications_date'>
           <%= f.input :groups_notifications_date,
-            collection: UserGroup.notifications_dates.keys.map{ |f| [t("user_group.#{ f }"), f] },
+            collection: User.groups_notifications_dates.keys.map{ |f| [t("user.#{ f }"), f] },
             label: "Day of notifications",
             include_blank: false, 
             input_html: { class: 'groups_notifications_date' }
