@@ -21,6 +21,7 @@
               <%= t.input :secondary_color, id: 'secondary_color', input_html: { class: 'jscolor' }, label: 'Charts color' %>
             </div>
           </div>
+          <%= f.hidden_field :id %>
           <%= t.input :logo, as: :attachment_preview %>
 
           <%= t.input :logo_redirect_url %>
