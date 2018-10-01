@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180920145751) do
+ActiveRecord::Schema.define(version: 20181001154000) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -1135,7 +1135,7 @@ ActiveRecord::Schema.define(version: 20180920145751) do
     t.datetime "file_updated_at"
     t.integer  "owner_id",             limit: 4
     t.string   "resource_type",        limit: 191
-    t.string   "url",                  limit: 191
+    t.string   "url",                  limit: 255
     t.integer  "mentoring_session_id", limit: 4
     t.integer  "enterprise_id",        limit: 4
     t.integer  "folder_id",            limit: 4

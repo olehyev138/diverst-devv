@@ -18,9 +18,10 @@ class Resource < ActiveRecord::Base
     validates_with AttachmentPresenceValidator, attributes: :file, :if => Proc.new { |r| r.url.blank? }
     do_not_validate_attachment_file_type :file
 
-    validates_presence_of :title
-    validates_presence_of :url, :if => Proc.new { |r| r.file.nil? && r.url.blank? }
-
+    validates_presence_of   :title
+    validates_presence_of   :url, :if => Proc.new { |r| r.file.nil? && r.url.blank? }
+    validates_length_of     :url, maximum: 255
+    
     before_validation :smart_add_url_protocol
 
     attr_reader :tag_tokens
