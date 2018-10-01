@@ -5,23 +5,21 @@
 <div class="content__main">
   <div class="card">
     <div class="card__section">
-      <% if @success %>
-        <h3>Successful</h3>
-        <p>
-          File is being processed.
-          <% if @email.present? %>
-            <b><%= "#{@email}" %></b> will receive an email once upload is done.
-          <% else %>
-            <b>Contact Diverst tech support to set up your report email</b>
-          <% end %>
-        </p>
-      <% else %>
-        <h3>Unsuccessful</h3>
-        There was an error trying to process file provided:
-        <br>
+      
+      <% if @successful_rows %>
+        <h3>Successful Rows</h3>
         <ul>
-          <% @errors.each do |e| %>
-            <li><%= e %></li>
+          <% @successful_rows.each do |row| %>
+            <li><%= row %></li>
+          <% end %>
+        </ul>
+      <% end %>
+      
+      <% if @failed_rows %>
+        <h3>Unsuccessful Rows</h3>
+        <ul>
+          <% @failed_rows.each do |row| %>
+            <li><%= row[:error] %> - <%= row[:row] %></li>
           <% end %>
         </ul>
       <% end %>
