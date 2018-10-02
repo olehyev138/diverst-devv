@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe InitiativesController, type: :controller, :focus => true do
+RSpec.describe InitiativesController, type: :controller do
   let(:user) { create :user }
   let!(:group) { create :group, enterprise: user.enterprise }
   let(:outcome) {create :outcome, group_id: group.id}
