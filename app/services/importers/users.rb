@@ -4,7 +4,7 @@ class Importers::Users
   attr_reader :table, :failed_rows, :successful_rows
 
   def initialize(file, manager)
-    @table = CSV.read file, col_sep: get_delimiter, headers: true, header_converters: lambda { |h|
+    @table = CSV.read file, col_sep: get_delimiter, :encoding => 'ISO-8859-1', headers: true, header_converters: lambda { |h|
       h.split.join(" ").downcase
     }
     @manager = manager
