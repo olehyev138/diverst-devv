@@ -25,7 +25,8 @@
             <div class="col md-12">
               <p class="field__hint">Session format</p>
               <%= f.input :format,
-                  collection: ["Video", "In Person"],
+                  include_blank: false,
+                  collection: ["Video"],
                   input_html: { class: "select2" },
                   label: false %>
             </div>
@@ -34,17 +35,18 @@
           <%= f.simple_fields_for :mentorship_sessions do |ms| %>
             <%= render "user/mentorship/sessions/mentorship_session_fields", f: ms %>
           <% end %>
-                  
-          <span><%= link_to_add_association  "+ Add a user - 2 are required", f, :mentorship_sessions, :partial => "user/mentorship/sessions/mentorship_session_fields" %></span>
+          
+          </br>   
+          <span><%= link_to_add_association  "+ Add a user", f, :mentorship_sessions, :partial => "user/mentorship/sessions/mentorship_session_fields" %></span>
           </br>
           
           <%= f.simple_fields_for :resources do |resource| %>
             <%= render "user/mentorship/sessions/resources_fields", f: resource %>
           <% end %>
-                  
-          <span><%= link_to_add_association "+ Add a resource", f, :resources, :partial => "user/mentorship/sessions/resources_fields" %></span>
           </br>
-          
+          <span><%= link_to_add_association "+ Add a document", f, :resources, :partial => "user/mentorship/sessions/resources_fields" %></span>
+          </br>
+          </br>
           <div class="row row--spacing-bottom">
             <div class="col md-12">
               <p class="field__hint">Add any notes</p>
@@ -52,7 +54,7 @@
             </div>
           </div>
         </div>
-        <%= f.button :submit, "Submit Request" %>
+        <%= f.button :submit, "Schedule/Update Session" %>
       <% end %>
     </div>
   </div>

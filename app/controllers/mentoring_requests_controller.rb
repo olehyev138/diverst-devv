@@ -4,7 +4,7 @@ class MentoringRequestsController < ApplicationController
   layout "user"
 
   def new
-    @mentoring_request = MentoringRequest.new(:sender_id => params[:sender_id], :receiver_id => params[:receiver_id])
+    @mentoring_request = MentoringRequest.new(:sender_id => params[:sender_id], :receiver_id => params[:receiver_id], :mentoring_type => params[:mentoring_type])
     render 'user/mentorship/mentors/new'
   end
 
@@ -12,7 +12,8 @@ class MentoringRequestsController < ApplicationController
     @mentoring_request = current_user.enterprise.mentoring_requests.new(mentoring_request_params)
     @mentoring_request.status = "pending"
     if @mentoring_request.save
-      redirect_to mentees_user_mentorship_index_path
+      flash[:alert] = "A request has been sent to #{@mentoring_request.receiver.email}"
+      redirect_to requests_user_mentorship_index_path
     else
       flash[:alert] = @mentoring_request.errors.full_messages.first
       render 'user/mentorship/mentors/new'
@@ -23,20 +24,29 @@ class MentoringRequestsController < ApplicationController
     authorize current_user
 
     # we either add the user as a mentor or mentee
-
-    if @mentoring_request.sender_id === current_user.id
-        current_user.mentorships.create!(:mentee_id => @mentoring_request.receiver_id, :mentor_id => current_user.id)
+    @mentoring_request.status = "accepted"
+    if @mentoring_request.save
+      if @mentoring_request.mentoring_type === "mentor"
+          Mentoring.create!(:mentee_id => @mentoring_request.sender_id, :mentor_id => @mentoring_request.receiver_id)
+      else
+          Mentoring.create!(:mentor_id => @mentoring_request.sender_id, :mentee_id => @mentoring_request.receiver_id)
+      end
+  
+      flash[:notice] = "Your request has been accepted"
+      # we then destroy the request
+      destroy
     else
-        current_user.mentorships.create!(:mentor_id => @mentoring_request.sender_id, :mentee_id => current_user.id)
+      flash[:notice] = @mentoring_request.errors.full_messages.first
+      redirect_to :back
     end
-
-
-    flash[:notice] = "Your request was approved"
-    # we then destroy the request
-    destroy
   end
 
   def destroy
+    if @mentoring_request.status != "accepted" && @mentoring_request.sender_id != current_user.id
+      @mentoring_request.notify_declined_request
+    elsif @mentoring_request.status === "accepted"
+      @mentoring_request.notify_accepted_request
+    end
     @mentoring_request.destroy
     redirect_to :back
   end
@@ -44,7 +54,7 @@ class MentoringRequestsController < ApplicationController
   private
 
   def mentoring_request_params
-    params.require(:mentoring_request).permit(:notes, :sender_id, :receiver_id)
+    params.require(:mentoring_request).permit(:notes, :sender_id, :receiver_id, :mentoring_type)
   end
 
   def set_mentoring_request

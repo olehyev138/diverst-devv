@@ -47,15 +47,15 @@ RSpec.describe MentoringRequestsController, type: :controller do
             }
             
             it "creates the request for the user as the mentor" do
-                mentoring_request = create(:mentoring_request, :sender => user, :receiver => mentor, :enterprise => user.enterprise)
+                mentoring_request = create(:mentoring_request, :mentoring_type => "mentor", :sender => user, :receiver => mentor, :enterprise => user.enterprise)
                 patch :update, :id => mentoring_request.id
-                expect(flash[:notice]).to eq("Your request was approved")
+                expect(flash[:notice]).to eq("Your request has been accepted")
             end
             
             it "creates the request for the user as the mentee" do
-                mentoring_request = create(:mentoring_request, :sender => mentor, :receiver => user, :enterprise => user.enterprise)
+                mentoring_request = create(:mentoring_request, :mentoring_type => "mentee", :sender => mentor, :receiver => user, :enterprise => user.enterprise)
                 patch :update, :id => mentoring_request.id
-                expect(flash[:notice]).to eq("Your request was approved")
+                expect(flash[:notice]).to eq("Your request has been accepted")
             end
             
             it "redirects back" do
@@ -75,7 +75,7 @@ RSpec.describe MentoringRequestsController, type: :controller do
             }
             
             it "destroys the request" do
-                mentoring_request = create(:mentoring_request, :sender => user, :receiver => mentor, :enterprise => user.enterprise)
+                mentoring_request = create(:mentoring_request, :status => "accepted", :sender => user, :receiver => mentor, :enterprise => user.enterprise)
                 delete :destroy, :id => mentoring_request.id
                 expect{MentoringRequest.find(mentoring_request.id)}.to raise_error ActiveRecord::RecordNotFound
             end

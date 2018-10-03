@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe User do
+  include ActiveJob::TestHelper
+  
   describe "when validating" do
     let(:user) { build(:user) }
 
@@ -504,11 +506,11 @@ RSpec.describe User do
       expect(mentorship_request.sender.id).to eq(mentee.id)
       expect(mentorship_request.receiver.id).to eq(mentor.id)
       
-      expect(mentee.mentorship_requests.count).to eq(1)
-      expect(mentee.mentorship_proposals.count).to eq(0)
+      expect(mentee.mentorship_requests.count).to eq(0)
+      expect(mentee.mentorship_proposals.count).to eq(1)
       
-      expect(mentor.mentorship_requests.count).to eq(0)
-      expect(mentor.mentorship_proposals.count).to eq(1)
+      expect(mentor.mentorship_requests.count).to eq(1)
+      expect(mentor.mentorship_proposals.count).to eq(0)
       
       # schedule a session
       mentoring_session = create(:mentoring_session, :mentorship_sessions_attributes => [{:user_id => mentor.id, :role => "presenter"}, {:user_id => mentee.id, :role => "attendee" }])
@@ -530,6 +532,40 @@ RSpec.describe User do
       
       expect(mentor_rating.rating).to eq(7)
       expect(mentee_rating.rating).to eq(7)
+    end
+  end
+  
+  describe "#add_to_default_mentor_group" do
+    it "adds the user to the default_mentor_group then removes the user" do
+      perform_enqueued_jobs do
+        enterprise = create(:enterprise)
+        user = create(:user, :enterprise => enterprise)
+        group = create(:group, :enterprise => enterprise, :default_mentor_group => true)
+
+        expect(user.mentor).to be(false)
+        expect(user.mentee).to be(false)
+        expect(group.members.count).to eq(0)
+        
+        user.mentee = true
+        user.save!
+        
+        expect(group.members.count).to eq(1)
+        
+        user.mentor = true
+        user.save!
+        
+        expect(group.members.count).to eq(1)
+        
+        user.mentee = false
+        user.save!
+        
+        expect(group.members.count).to eq(1)
+        
+        user.mentor = false
+        user.save!
+        
+        expect(group.members.count).to eq(0)
+      end
     end
   end
 end

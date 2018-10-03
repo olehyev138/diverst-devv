@@ -48,6 +48,9 @@ RSpec.describe MentoringSessionsController, type: :controller do
     
     context "when using twilio gem" do
         before {
+            ENV["TWILIO_ACCOUNT_SID"] = "TEST"
+            ENV["TWILIO_API_KEY"] = "TEST"
+            ENV["TWILIO_SECRET"] = "TEST"
             token = double("Twilio::JWT::AccessToken", :add_grant => {}, :to_jwt => true)
             
             allow(Twilio::JWT::AccessToken).to receive(:new).and_return(token)
@@ -113,6 +116,19 @@ RSpec.describe MentoringSessionsController, type: :controller do
                 allow_any_instance_of(MentoringSession).to receive(:save).and_return(false)
                 post :create, :mentoring_session => {:start => Date.today, :end => Date.tomorrow, :notes => "Please mentor me!", :format => "Webex"}
                 expect(flash[:alert]).to eq("Your session was not scheduled")
+            end
+        end
+    end
+    
+    describe 'GET #export_ics' do
+        describe "if user is present" do 
+            login_user_from_let
+            it "renders the template" do
+                mentoring_session = create(:mentoring_session)
+                mentoring_session.mentorship_sessions.create(:user => user, :mentoring_session => mentoring_session, :role => "presenter")
+                
+                get :export_ics, :id => mentoring_session.id
+                expect(response.headers["Content-Type"]).to eq 'text/calendar'
             end
         end
     end
