@@ -74,8 +74,8 @@ module Folders
 
     def destroy
         authorize_action
-        @folder.destroy
         track_activity(@folder, :destroy)
+        @folder.destroy
         redirect_to action: :index
     end
 
