@@ -12,6 +12,7 @@ RSpec.describe Resource, :type => :model do
     it { expect(resource).to belong_to(:owner).class_name('User') }
     it { expect(resource).to have_many(:tags).dependent(:destroy) }
     it { expect(resource).to accept_nested_attributes_for(:tags) }
+    it { expect(resource).to validate_length_of(:url)}
   end
 
   describe 'when validating' do
