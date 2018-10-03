@@ -38,8 +38,8 @@ class User::MentorshipController < ApplicationController
     end
     
     def requests
-        @mentorship_requests  =  @user.mentorship_requests
-        @mentorship_proposals =  @user.mentorship_proposals
+        @mentorship_proposals  =  @user.mentorship_proposals
+        @mentorship_requests =  @user.mentorship_requests
     end
     
     def sessions

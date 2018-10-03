@@ -38,8 +38,8 @@ class User < ActiveRecord::Base
 	has_many :mentoring_types, :through => :mentorship_types
 
     # mentorship_requests
-    has_many :mentorship_requests,  :foreign_key => "sender_id",     :class_name => "MentoringRequest"
-    has_many :mentorship_proposals, :foreign_key => "receiver_id",   :class_name => "MentoringRequest"
+    has_many :mentorship_proposals, :foreign_key => "sender_id",     :class_name => "MentoringRequest"
+    has_many :mentorship_requests,  :foreign_key => "receiver_id",   :class_name => "MentoringRequest"
     
     has_many :devices
     has_many :users_segments
@@ -92,7 +92,8 @@ class User < ActiveRecord::Base
 
     before_save :assign_policy_group, if: Proc.new { |user| user[:policy_group_id].nil? }
     after_create :assign_firebase_token
-
+    after_update :add_to_default_mentor_group
+    
     after_commit on: [:create] { update_elasticsearch_index(self, self.enterprise, 'index') }
     after_commit on: [:update] { update_elasticsearch_index(self, self.enterprise, 'update') }
     after_commit on: [:destroy] { update_elasticsearch_index(self, self.enterprise, 'delete') }
@@ -108,6 +109,12 @@ class User < ActiveRecord::Base
     scope :mentees, -> {where(mentee: true)}
     
     accepts_nested_attributes_for :availabilities, :allow_destroy => true
+    
+    def add_to_default_mentor_group
+        if mentor_changed? || mentee_changed?
+            DefaultMentorGroupMemberUpdateJob.perform_later(id)
+        end
+    end
     
     def is_group_leader_of?(group)
         group.group_leaders.where(user_id: self.id).any?
