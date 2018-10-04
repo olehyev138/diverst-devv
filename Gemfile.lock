@@ -129,6 +129,8 @@ GEM
     capistrano-rails-console (2.2.1)
       capistrano (>= 3.5.0, < 4.0.0)
       sshkit-interactive (~> 0.2.0)
+    capistrano-rake (0.2.0)
+      capistrano (>= 3.0)
     capistrano-rvm (0.1.2)
       capistrano (~> 3.0)
       sshkit (~> 1.2)
@@ -796,6 +798,7 @@ DEPENDENCIES
   capistrano-clockwork
   capistrano-rails
   capistrano-rails-console
+  capistrano-rake
   capistrano-rvm
   capistrano-sidekiq
   capistrano3-puma
