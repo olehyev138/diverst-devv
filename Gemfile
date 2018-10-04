@@ -111,7 +111,8 @@ group :test do
 end
 
 group :development do
-  gem 'capistrano'
+  gem 'capistrano',      require: false
+  gem 'capistrano-rake', require: false
   gem 'capistrano3-puma'
   gem 'capistrano-rails', require: false
   gem 'capistrano-bundler', require: false
