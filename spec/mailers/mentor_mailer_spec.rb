@@ -5,7 +5,7 @@ RSpec.describe MentorMailer, type: :mailer do
   describe '#session_scheduled' do
     let(:mentor) { create :user }
     let(:mentoring_session) { create :mentoring_session }
-    let!(:mail) { described_class.session_scheduled(mentor.id, mentoring_session.id).deliver_now }
+    let!(:mail) { described_class.session_scheduled(mentoring_session.id, mentor.id).deliver_now }
      
     it 'renders the subject' do
       expect(mail.subject).to eq "Mentoring Session Scheduled for #{mentoring_session.start.strftime("%m/%d/%Y %I:%M %p")}"

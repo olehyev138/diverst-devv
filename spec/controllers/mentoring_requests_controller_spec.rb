@@ -13,9 +13,14 @@ RSpec.describe MentoringRequestsController, type: :controller do
                 expect(assigns[:mentoring_request].sender_id).to eq(1)
             end
             
-            it "renders the template" do
-                get :new, :sender_id => 1, :receiver_id => 2
+            it "renders the mentor template" do
+                get :new, :sender_id => 1, :receiver_id => 2, :mentoring_type => "mentor"
                 expect(response).to render_template('user/mentorship/mentors/new')
+            end
+            
+            it "renders the mentee template" do
+                get :new, :sender_id => 1, :receiver_id => 2, :mentoring_type => "mentee"
+                expect(response).to render_template('user/mentorship/mentees/new')
             end
         end
     end

@@ -31,7 +31,9 @@ class MentoringSession < ActiveRecord::Base
     scope :with_ratings,    -> { includes(:mentorship_ratings).where.not(:mentorship_ratings => {:id => nil})}
     
     before_create   :set_room_name
-    after_create    :notify_users_on_create
+
+    after_commit on: [:create] { notify_users_on_create }
+    
     after_update    :notify_users_on_update
     after_destroy   :notify_users_on_destroy
     
@@ -55,9 +57,9 @@ class MentoringSession < ActiveRecord::Base
     end
     
     def notify_users_on_update
-        if self.start_changed? || self.end_changed?
+        if start_changed? || end_changed?
             users.each do |user|
-                MentorMailer.session_updated(user.id).deliver_later
+                MentorMailer.session_updated(user.id, id).deliver_later
             end
         end
     end

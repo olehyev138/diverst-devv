@@ -6,7 +6,7 @@ class UsersController < ApplicationController
 
   def index
     authorize User
-    @users = policy_scope(User).where(search_params).limit(25)
+    @users = policy_scope(User).where(search_params).limit(params[:limit] || 25)
 
     respond_to do |format|
       format.html
