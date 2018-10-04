@@ -476,7 +476,9 @@ Rails.application.routes.draw do
     member do
       get 'start'
       get 'join'
+      get 'export_ics'
     end
+    
   end
   resources :mentorship_ratings
   

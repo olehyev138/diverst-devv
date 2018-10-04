@@ -1,0 +1,5 @@
+<p>Hello <%= @user.name %>!</p>
+
+<p>A mentoring session scheduled for <%= @start %> has been cancelled. Please update your calendar. Click the link below to schedule another session</p>
+
+<p><%= link_to "Schedule another Session", new_mentoring_session_url(saml_for_enterprise: @user.enterprise.id) %></p>

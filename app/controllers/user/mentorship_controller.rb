@@ -1,7 +1,7 @@
 class User::MentorshipController < ApplicationController
-    before_action :authenticate_user!
-    before_action :set_user
-    
+    before_action   :authenticate_user!
+    before_action   :set_user
+
     layout 'user'
 
     def index
@@ -21,8 +21,12 @@ class User::MentorshipController < ApplicationController
         @user.assign_attributes(user_params)
         if @user.save
             flash[:notice] = "Your user was updated"
-            # we redirect to mentors so the user can find a mentor
-            redirect_to action: :mentors
+            # we redirect to mentors so the user can find a mentor only if mentor and mentee are true
+            if @user.mentor? || @user.mentee?
+                redirect_to action: :mentors
+            else
+                redirect_to action: :edit
+            end
         else
             flash[:alert] = "Your user was not updated. Please fix the errors"
             redirect_to :back
@@ -38,8 +42,8 @@ class User::MentorshipController < ApplicationController
     end
     
     def requests
-        @mentorship_requests  =  @user.mentorship_requests
-        @mentorship_proposals =  @user.mentorship_proposals
+        @mentorship_proposals  =  @user.mentorship_proposals
+        @mentorship_requests =  @user.mentorship_requests
     end
     
     def sessions
