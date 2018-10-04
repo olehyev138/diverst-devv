@@ -9,7 +9,7 @@ RSpec.describe DefaultMentorGroupMemberUpdateJob, type: :job do
             user = create(:user, :enterprise => enterprise)
             group = create(:group, :enterprise => enterprise, :default_mentor_group => true)
         
-            subject.perform(user.id)
+            subject.perform(user.id, false, false)
             
             expect(group.members.count).to eq(0)
         end
@@ -21,7 +21,7 @@ RSpec.describe DefaultMentorGroupMemberUpdateJob, type: :job do
             user = create(:user, :enterprise => enterprise, :mentee => true)
             group = create(:group, :enterprise => enterprise, :default_mentor_group => true)
     
-            subject.perform(user.id)
+            subject.perform(user.id, true, false)
             
             expect(group.members.count).to eq(1)
         end
