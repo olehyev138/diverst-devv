@@ -5,6 +5,9 @@
       <div class="card">
         <div class="card__section card__section--border">
             <%= link_to "Edit", edit_mentoring_session_path(@mentoring_session)  %>
+            <%= link_to "Delete", mentoring_session_path(@mentoring_session), method: :delete, class: "error", data: { confirm: "Are you sure?"}  %>
+            <%= link_to "Add to Google Calendar", GoogleCalendar.build_mentor_link(@mentoring_session), target: :_blank %>
+            <%= link_to "Add to calendar", export_ics_mentoring_session_path(@mentoring_session) %>
         </div>
         <div class="card__section card__section--border">
             <label><strong>Starts</strong></label>

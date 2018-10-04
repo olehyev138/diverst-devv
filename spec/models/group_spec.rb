@@ -734,4 +734,33 @@ RSpec.describe Group, :type => :model do
             expect{Group.find(child.id)}.to raise_error(ActiveRecord::RecordNotFound)
         end
     end
+    
+    describe '#default_mentor_group' do
+        it "ensures there aren't duplicate default_mentor_groups for enterprises" do
+            enterprise_1 = create(:enterprise)
+            group_1 = create(:group, :enterprise => enterprise_1)
+            group_2 = create(:group, :enterprise => enterprise_1)
+            
+            enterprise_2 = create(:enterprise)
+            group_3 = create(:group, :enterprise => enterprise_2)
+            group_4 = create(:group, :enterprise => enterprise_2)
+            
+            group_1.default_mentor_group = true
+            group_1.save!
+            
+            expect(group_1.valid?).to be true
+            
+            group_2.default_mentor_group = true
+            expect(group_2.valid?).to be false
+            expect(group_2.errors.full_messages.first).to eq ("Default mentor group has already been taken")
+            
+            group_3.default_mentor_group = true
+            group_3.save!
+            
+            expect(group_3.valid?).to be true
+            
+            group_4.default_mentor_group = true
+            expect(group_4.valid?).to be false
+        end
+    end
 end
