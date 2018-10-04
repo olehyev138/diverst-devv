@@ -1,4 +1,6 @@
 class ExpenseCategory < ActiveRecord::Base
+    include PublicActivity::Common
+
     belongs_to :enterprise
     has_many :expenses, dependent: :destroy, foreign_key: :category_id
 
