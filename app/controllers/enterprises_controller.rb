@@ -12,7 +12,7 @@ class EnterprisesController < ApplicationController
 
   def update
     authorize @enterprise
-    
+
     if @enterprise.update_attributes(enterprise_params)
       flash[:notice] = "Your enterprise was updated"
       redirect_to :back
@@ -70,12 +70,13 @@ class EnterprisesController < ApplicationController
     set_theme
 
     if @enterprise.update_attributes(theme_attributes: enterprise_params[:theme])
-      
+
       @enterprise.theme.compile
-      
+
       flash[:notice] = "Enterprise branding was updated"
+      track_activity(@enterprise, :update_branding)
       redirect_to action: :edit_branding
-      
+
     else
       flash[:alert] = "Enterprise branding was not updated. Please fix the errors"
       render :edit_branding
