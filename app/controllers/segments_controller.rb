@@ -27,6 +27,7 @@ class SegmentsController < ApplicationController
 
         if @segment.save
             flash[:notice] = "Your #{c_t(:segment)} was created"
+            track_activity(@segment, :create)
             redirect_to action: :index
         else
             flash[:alert] = "Your #{c_t(:segment)} was not created. Please fix the errors"
@@ -69,6 +70,7 @@ class SegmentsController < ApplicationController
         authorize @segment
         if @segment.update(segment_params)
             flash[:notice] = "Your #{c_t(:segment)} was updated"
+            track_activity(@segment, :update)
             redirect_to @segment
         else
             flash[:alert] = "Your #{c_t(:segment)} was not updated. Please fix the errors"
@@ -78,6 +80,7 @@ class SegmentsController < ApplicationController
 
     def destroy
         authorize @segment
+        track_activity(@segment, :destroy)
         @segment.destroy
         redirect_to action: :index
     end
