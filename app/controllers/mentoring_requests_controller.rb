@@ -5,14 +5,19 @@ class MentoringRequestsController < ApplicationController
 
   def new
     @mentoring_request = MentoringRequest.new(:sender_id => params[:sender_id], :receiver_id => params[:receiver_id], :mentoring_type => params[:mentoring_type])
-    render 'user/mentorship/mentors/new'
+    
+    if params[:mentoring_type] === "mentor"
+      render 'user/mentorship/mentors/new'
+    else
+      render 'user/mentorship/mentees/new'
+    end
   end
 
   def create
     @mentoring_request = current_user.enterprise.mentoring_requests.new(mentoring_request_params)
     @mentoring_request.status = "pending"
     if @mentoring_request.save
-      flash[:alert] = "A request has been sent to #{@mentoring_request.receiver.email}"
+      flash[:notice] = "A request has been sent to #{@mentoring_request.receiver.email}"
       redirect_to requests_user_mentorship_index_path
     else
       flash[:alert] = @mentoring_request.errors.full_messages.first

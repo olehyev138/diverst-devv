@@ -92,6 +92,7 @@ class User < ActiveRecord::Base
 
     before_save :assign_policy_group, if: Proc.new { |user| user[:policy_group_id].nil? }
     after_create :assign_firebase_token
+    
     after_update :add_to_default_mentor_group
     
     after_commit on: [:create] { update_elasticsearch_index(self, self.enterprise, 'index') }
@@ -110,9 +111,12 @@ class User < ActiveRecord::Base
     
     accepts_nested_attributes_for :availabilities, :allow_destroy => true
     
+    def gerlin
+    end
+    
     def add_to_default_mentor_group
         if mentor_changed? || mentee_changed?
-            DefaultMentorGroupMemberUpdateJob.perform_later(id)
+            DefaultMentorGroupMemberUpdateJob.perform_later(id, mentor, mentee)
         end
     end
     

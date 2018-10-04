@@ -14,7 +14,7 @@ class MentorMailer < ApplicationMailer
         mail(to: @receiver.email, subject: "New Mentoring Request")
     end
     
-    def session_scheduled(user_id, mentoring_session_id)
+    def session_scheduled(mentoring_session_id, user_id)
         @mentoring_session = MentoringSession.find_by_id(mentoring_session_id)
         return if @mentoring_session.nil?
         

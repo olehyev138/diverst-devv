@@ -138,4 +138,32 @@ RSpec.describe UserGroup do
       expect(user_group.string_for_field(select_field)).to eq("Female")
     end
   end
+  
+  describe "#update_mentor_fields" do
+    it "updates mentor fields to true" do
+      user = create(:user)
+      group = create(:group, :default_mentor_group => true)
+      create(:user_group, :group => group, :user => user)
+      user.reload
+      
+      expect(user.mentor?).to be(true)
+      expect(user.mentee?).to be(true)
+    end
+    
+    it "updates mentor fields to true and then back to false" do
+      user = create(:user)
+      group = create(:group, :default_mentor_group => true)
+      user_group = create(:user_group, :group => group, :user => user)
+      user.reload
+      
+      expect(user.mentor?).to be(true)
+      expect(user.mentee?).to be(true)
+      
+      user_group.destroy
+      user.reload
+      
+      expect(user.mentor?).to be(false)
+      expect(user.mentee?).to be(false)
+    end
+  end
 end
