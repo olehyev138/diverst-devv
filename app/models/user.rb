@@ -39,8 +39,8 @@ class User < ActiveRecord::Base
 	has_many :mentoring_types, :through => :mentorship_types
 
     # mentorship_requests
-    has_many :mentorship_requests,  :foreign_key => "sender_id",     :class_name => "MentoringRequest"
-    has_many :mentorship_proposals, :foreign_key => "receiver_id",   :class_name => "MentoringRequest"
+    has_many :mentorship_proposals, :foreign_key => "sender_id",     :class_name => "MentoringRequest"
+    has_many :mentorship_requests,  :foreign_key => "receiver_id",   :class_name => "MentoringRequest"
 
     has_many :devices, dependent: :destroy
     has_many :users_segments, dependent: :destroy
