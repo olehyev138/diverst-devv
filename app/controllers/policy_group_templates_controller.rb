@@ -18,6 +18,7 @@ class PolicyGroupTemplatesController < ApplicationController
 
     if @policy_group_template.update(policy_group_template_params)
       flash[:notice] = "Your policy group template was updated"
+      track_activity(@policy_group_template, :update)
       redirect_to action: :index
     else
       flash[:alert] = "Your policy group template was not updated. Please fix the errors"
