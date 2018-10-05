@@ -1,8 +1,8 @@
 <div class="block block-section <%= "flippable" if event.picture.present? %>">
     <div class="front">
       <%= image_tag event.picture.expiring_url(3600), width: '100%' if event.picture.present? %>
+    <p><%= link_to truncate(event.title, length: 50), group_event_path(event.group, event) if event.picture.present? %></p>  
     </div>
-    <p><%= link_to event.title, group_event_path(event.group, event) if event.picture.present? %></p>  
     <div class="back">
       <div class="flex-row flex-row--middle">
         <div class="flex-row__cell flex-row__cell--grow">
