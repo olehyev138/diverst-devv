@@ -181,7 +181,6 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
         end
     end
 
-
     describe 'POST#create' do
         context "when unsuccessful" do
             login_user_from_let
@@ -260,6 +259,17 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
                     group.reload
                     expect{post :create, group_id: group.id, user: {user_id: add.id}}
                     .to change(group.members, :count).by(1)
+                end
+            end
+            
+            context "when group is default mentor group" do
+                it "redirects to mentor profile" do
+                    # set group as default mentor group
+                    group.default_mentor_group = true
+                    group.save!
+                    
+                    post :create, group_id: group.id, user: {user_id: add.id}
+                    expect(response).to redirect_to edit_user_mentorship_path(id: user.id)
                 end
             end
         end
