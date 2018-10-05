@@ -52,9 +52,11 @@ class Groups::GroupMembersController < ApplicationController
 
     if @group_member.save
       flash[:notice] = "You are now a member"
-
+      
+      if @group.default_mentor_group?
+        redirect_to edit_user_mentorship_url(:id => current_user.id)
       # If group has survey questions - redirect user to answer them
-      if @group.survey_fields.present?
+      elsif @group.survey_fields.present?
         respond_to do |format|
           format.html { redirect_to survey_group_questions_path(@group) }
           format.js
