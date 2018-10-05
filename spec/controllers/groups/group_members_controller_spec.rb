@@ -6,7 +6,6 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
     let(:group) { create(:group, enterprise: user.enterprise) }
     let!(:user_group) {create(:user_group, group_id: group.id, user_id: user.id)}
 
-
     describe 'GET#index' do
         context 'with user logged in' do
             let!(:user_group1) {create(:user_group, group_id: group.id, user_id: add.id)}
@@ -50,7 +49,6 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
         end
     end
 
-
     describe 'GET#pending' do
         context 'when user is logged in' do
             let!(:user1) { create(:user) }
@@ -79,7 +77,6 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'POST#accept_pending' do
         describe "with logged in user" do
@@ -123,7 +120,6 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
         end
     end
 
-
     describe 'GET#new' do
         context 'when user is logged in' do
             login_user_from_let
@@ -143,7 +139,6 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'DELETE#destroy' do
         describe 'when user is logged in' do
@@ -186,7 +181,6 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'POST#create' do
         context "when unsuccessful" do
@@ -268,6 +262,17 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
                     .to change(group.members, :count).by(1)
                 end
             end
+            
+            context "when group is default mentor group" do
+                it "redirects to mentor profile" do
+                    # set group as default mentor group
+                    group.default_mentor_group = true
+                    group.save!
+                    
+                    post :create, group_id: group.id, user: {user_id: add.id}
+                    expect(response).to redirect_to edit_user_mentorship_path(id: user.id)
+                end
+            end
         end
 
         context 'when user is not logged in' do
@@ -275,7 +280,6 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'POST#add_members' do
         context 'when user is logged in' do
@@ -299,7 +303,6 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             it_behaves_like 'redirect user to users/sign_in path'
         end
     end
-
 
     describe 'DELETE#remove_member' do
         context 'when user is logged in' do
