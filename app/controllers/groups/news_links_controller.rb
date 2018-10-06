@@ -14,6 +14,7 @@ class Groups::NewsLinksController < ApplicationController
 
     def new
         @news_link = @group.news_links.new
+        @news_link.build_news_feed_link(:news_feed_id => @group.news_feed.id)
     end
 
     def edit; end
@@ -21,6 +22,7 @@ class Groups::NewsLinksController < ApplicationController
     def comments
         @comments = @news_link.comments.includes(:author)
         @new_comment = NewsLinkComment.new
+        @news_link.increment_view(current_user)
     end
 
     def create_comment
@@ -40,8 +42,9 @@ class Groups::NewsLinksController < ApplicationController
     def create
         @news_link = @group.news_links.new(news_link_params)
         @news_link.author = current_user
-
+        
         if @news_link.save
+            track_activity(@news_link, :create)
             user_rewarder("news_post").add_points(@news_link)
             flash_reward "Your news was created. Now you have #{current_user.credits} points"
             redirect_to group_posts_path(@group)
@@ -53,6 +56,7 @@ class Groups::NewsLinksController < ApplicationController
 
     def update
         if @news_link.update(news_link_params)
+            track_activity(@news_link, :update)
             flash[:notice] = "Your news was updated"
             redirect_to group_posts_path(@group)
         else
@@ -63,6 +67,7 @@ class Groups::NewsLinksController < ApplicationController
 
     def destroy
         user_rewarder("news_post").remove_points(@news_link)
+        track_activity(@news_link, :destroy)
         @news_link.destroy
         flash[:notice] = "Your news was removed. Now you have #{current_user.credits} points"
         redirect_to group_posts_path(@group)
@@ -78,8 +83,9 @@ class Groups::NewsLinksController < ApplicationController
                    description: page.lede
                }
     end
-    
+
     def news_link_photos
+        @resize = true
         @photos = @news_link.photos
     end
 
@@ -102,7 +108,7 @@ class Groups::NewsLinksController < ApplicationController
                 :description,
                 :picture,
                 :photos_attributes => [:file, :_destroy, :id],
-                :segment_ids => []
+                :news_feed_link_attributes => [:approved, :news_feed_id, :link, :shared_news_feed_ids => [], :segment_ids => []],
             )
     end
 

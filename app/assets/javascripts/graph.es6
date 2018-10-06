@@ -46,7 +46,8 @@ class Graph {
         text: ''
       },
       xAxis: {
-        type: 'category'
+        type: 'category',
+        categories: this.data.highcharts.categories
       },
       yAxis: {
         min: 0,

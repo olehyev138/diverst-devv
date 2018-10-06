@@ -1,17 +1,19 @@
 require 'rails_helper'
 
 RSpec.describe Budget, type: :model do
-    
+
     describe 'when validating' do
-        let(:budget) { FactoryGirl.build_stubbed(:budget) }
+        let(:budget) { FactoryGirl.build(:budget) }
         let(:approved_budget) { FactoryGirl.build :approved_budget }
 
-        it { expect(budget).to validate_presence_of(:subject) }
-        it { expect(budget).to belong_to(:subject) }
+        it { expect(budget).to belong_to(:group) }
+        it { expect(budget).to belong_to(:event) }
         it { expect(budget).to belong_to(:approver).class_name("User").with_foreign_key("approver_id") }
         it { expect(budget).to belong_to(:requester).class_name("User").with_foreign_key("requester_id") }
         it { expect(budget).to have_many(:checklists) }
         it { expect(budget).to have_many(:budget_items) }
+
+        it { expect(budget).to accept_nested_attributes_for(:budget_items).allow_destroy(true) }
     end
 
     describe 'amounts' do
@@ -86,8 +88,8 @@ RSpec.describe Budget, type: :model do
     describe 'self.' do
         describe 'pre_approved_events' do
             let(:group) { FactoryGirl.create :group }
-            let!(:budget) { FactoryGirl.create :budget, subject: group }
-            let!(:approved_budget) { FactoryGirl.create :approved_budget, subject: group }
+            let!(:budget) { FactoryGirl.create :budget, group: group }
+            let!(:approved_budget) { FactoryGirl.create :approved_budget, group: group }
 
             subject { described_class.pre_approved_events(group) }
 
@@ -106,25 +108,52 @@ RSpec.describe Budget, type: :model do
         end
 
         describe 'pre_approved_events_for_select' do
-            xit 'implement me'
+            let!(:group) { create(:group) }
+            let!(:related_budgets) { create_list(:budget, 3, group: group, is_approved: true) }
+            let!(:approved_budget) { FactoryGirl.create :approved_budget, group: group }
+
+            subject { described_class }
+
+            it 'expect 12 budget_items' do
+                expect(subject.pre_approved_events(group).count).to eq 12
+            end
+
+            it 'select_items contain Leftover item' do 
+                select_items = subject.pre_approved_events_for_select(group)
+                expect(select_items).to include [group.title_with_leftover_amount, -1]
+            end
         end
     end
 
     describe "status_title" do
         let(:budget) { FactoryGirl.build_stubbed(:budget) }
-        
+
         it "returns Pending" do
             expect(budget.status_title).to eq("Pending")
         end
-        
+
         it "returns Approved" do
             budget.is_approved = true
             expect(budget.status_title).to eq("Approved")
         end
-        
+
         it "returns Declined" do
             budget.is_approved = false
             expect(budget.status_title).to eq("Declined")
+        end
+    end
+    
+    describe "#destroy_callbacks" do
+        it "removes the child objects" do
+            budget = create(:budget)
+            checklist = create(:checklist, :budget => budget)
+            budget_item = create(:budget_item, :budget => budget)
+            
+            budget.destroy
+            
+            expect{Budget.find(budget.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Checklist.find(checklist.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{BudgetItem.find(budget_item.id)}.to raise_error(ActiveRecord::RecordNotFound)
         end
     end
 end

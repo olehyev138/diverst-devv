@@ -25,7 +25,7 @@
         <%= cf.min %>
       </span>
       <span class="flex-row__cell flex-row__cell--grow" >
-        <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { type: 'range', name: "custom-fields[#{cf.id}]", value: resource.info[cf], min: cf.min, max: cf.max }, label: false %>
+        <%= f.input cf.title.downcase.to_sym, label: cf.title, as: :fake, input_html: { type: 'range', name: "custom-fields[#{cf.id}]", value: resource.info[cf], min: cf.min, max: cf.max } %>
       </span>
       <span class="max_value flex-row__cell">
         <%= cf.max %>

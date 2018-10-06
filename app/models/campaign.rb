@@ -5,16 +5,16 @@ class Campaign < ActiveRecord::Base
 
     belongs_to :enterprise
     belongs_to :owner, class_name: "User"
-    has_many :questions
-    has_many :campaigns_groups
+    has_many :questions, dependent: :destroy
+    has_many :campaigns_groups, dependent: :destroy
     has_many :groups, through: :campaigns_groups
-    has_many :campaigns_segments
+    has_many :campaigns_segments, dependent: :destroy
     has_many :segments, through: :campaigns_segments
-    has_many :invitations, class_name: 'CampaignInvitation'
+    has_many :invitations, class_name: 'CampaignInvitation', dependent: :destroy
     has_many :users, through: :invitations
     has_many :answers, through: :questions
     has_many :answer_comments, through: :questions
-    has_many :campaigns_managers
+    has_many :campaigns_managers, dependent: :destroy
     has_many :managers, through: :campaigns_managers, source: :user
 
     accepts_nested_attributes_for :questions, reject_if: :all_blank, allow_destroy: true
@@ -74,6 +74,9 @@ class Campaign < ActiveRecord::Base
       target.uniq{|u| u.id}
     end
 
+    def link
+        "<a saml_for_enterprise=\"#{enterprise_id}\" href=\"#{Rails.application.routes.url_helpers.user_user_campaign_questions_url(self)}\" target=\"_blank\">Join Now</a>"
+    end
 
     def send_invitation_emails
       if published?

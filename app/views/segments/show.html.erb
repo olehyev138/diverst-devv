@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="flex-row__cell">
-      <%= link_to "Export targeted members", export_csv_segment_path(@segment, group_id: @group&.id), class: "btn btn--secondary" %>
+      <%= link_to "Export targeted members", export_csv_segment_path(@segment, group_id: @group&.id), class: "btn btn--secondary hidden-xs" if current_user.admin? %>
     </div>
   </div>
 </div>
@@ -26,32 +26,7 @@
     <% end %>
   </ul>
 
-  <div class="card">
-    <div class="card__section">
-      <% if @members.any? %>
-        <table class="table--has-border">
-          <thead>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Options</th>
-          </thead>
-          <tbody>
-            <% @members.each do |user| %>
-              <tr>
-                <td><%= user.name %></td>
-                <td><%= user.email %></td>
-                <td>
-                  <%= link_to "Details", user_path(user) %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      <% else %>
-        <p>No user match search criteria.</p>
-      <% end %>
-    </div>
-  </div>
+  <%= render 'members_table', source: segment_path(@segment, format: :json) %>
 </div>
 
 <div class="content__header">

@@ -5,6 +5,12 @@ RSpec.describe Api::V1::GroupsController, type: :controller do
     let(:user){ create(:user, enterprise: enterprise, password: "password", first_name: "MICHAEL") }
     let(:group){ create(:group, enterprise: enterprise) }
     
+    before {
+        user.policy_group.groups_index = true
+        user.policy_group.groups_manage = true
+        user.policy_group.save!
+    }
+    
     context "without authentication" do
         describe "GET#index" do
             it "gets the groups" do

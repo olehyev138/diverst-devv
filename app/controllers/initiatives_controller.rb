@@ -45,7 +45,7 @@ class InitiativesController < ApplicationController
 
   def update
     authorize @initiative
-    if @initiative.update(initiative_params.except!(:budget_item_id))
+    if @initiative.update(initiative_params)
       flash[:notice] = "Your event was updated"
       track_activity(@initiative, :update)
       redirect_to [@group, :initiatives]
@@ -58,6 +58,10 @@ class InitiativesController < ApplicationController
   def finish_expenses
     authorize @initiative, :update?
 
+    # skip before_save :allocate_budget_funds because
+    # finish_expenses primary responsibility is to close off
+    # expenses and not to allocate_budget_funds
+    @initiative.skip_allocate_budget_funds = true
     @initiative.finish_expenses!
     redirect_to action: :index
   end
@@ -82,7 +86,7 @@ class InitiativesController < ApplicationController
   def attendees
     authorize @initiative, :update?
 
-    send_data User.to_csv(users: @initiative.attendees, fields: current_user.enterprise.fields),
+    send_data User.basic_info_to_csv(users: @initiative.attendees),
       filename: "attendees.csv"
   end
 

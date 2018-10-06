@@ -6,4 +6,12 @@ class UserDecorator < Draper::Decorator
       'Inactive'
     end
   end
+  
+  def mentoring_status(boolean)
+    if boolean
+      "Yes"
+    else
+      "No"
+    end
+  end
 end

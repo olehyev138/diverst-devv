@@ -31,10 +31,11 @@
 
     <div class="card">
       <div class="card__section card__section--border">
-        <p>You may notify <strong>approval manager</strong> for them to review and accept your budget request faster.</p>
+        <p>You may notify an <strong>approval manager</strong> for them to review and accept your budget request faster.</p>
       </div>
       <div class="card__section" >
-        <%= f.input :approver_id, as: :select, collection: PolicyGroup.users_that_able_to_accept_budgets(current_user.enterprise), label: false %>
+        <br />
+          <%= f.input :approver_id, as: :select, input_html: { class: "select2-field"} %>
       </div>
     </div>
 
@@ -42,3 +43,41 @@
     </div>
   <% end %>
 </div>
+<script>
+$(document).on('ready page:load', function(){
+    $('.select2-field').select2({
+    ajax: {
+      url: "<%= users_path(policy_groups: {:budget_approval => 1}, :limit => 10, format: :json) %>",
+      theme: 'bootstrap',
+      allowClear: true,
+      type: "GET",
+      dataType: "json",
+      minimumInputLength: 3,
+      multiple:true,
+      delay: 1000,
+      data: function (params) {
+        var query = {
+          search: {
+            value: params.term
+          }
+        }
+  
+        // Query parameters will be ?search=[term]&type=public
+        return query;
+      },
+      processResults: function (data) {
+        var int = 1;
+        
+        // Tranforms the top-level key of the response object from 'items' to 'results'
+        return {
+          results: $.map(data.data, function(item){
+            return {id: item[0], text: item[1] + " " + item[2] + " - " + item[3] } } )
+        };
+      },
+      templateSelection: function(item) {
+        return item[0]
+      }
+    }
+  });
+});
+</script>

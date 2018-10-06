@@ -1,12 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe SegmentsController, type: :controller do
-    include ApplicationHelper
 
-    let(:enterprise) { create(:enterprise, cdo_name: "test") }
+    let(:enterprise) { create(:enterprise) }
     let(:user) { create(:user, enterprise: enterprise) }
     let!(:segment) { create(:segment, enterprise: enterprise) }
-
 
     describe "GET#index" do
         context 'when user is logged in' do
@@ -28,7 +26,6 @@ RSpec.describe SegmentsController, type: :controller do
         end
     end
 
-
     describe "GET#new" do
         context 'when user is logged in' do
             login_user_from_let
@@ -48,7 +45,6 @@ RSpec.describe SegmentsController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "POST#create" do
         describe 'when user is logged in' do
@@ -93,7 +89,6 @@ RSpec.describe SegmentsController, type: :controller do
         end
     end
 
-
     describe "GET#show" do
         describe 'when user is logged in' do
             let!(:groups) { create_list(:group, 2, enterprise: enterprise) }
@@ -133,6 +128,10 @@ RSpec.describe SegmentsController, type: :controller do
                 it 'return 2 sub_segments of segment' do
                     expect(assigns[:segments]).to eq segment.sub_segments
                 end
+
+                it 'return members ids in numerical order' do
+                    expect(assigns[:members].map(&:id).each_cons(2).all? { |a, b| a <= b }).to eq true
+                end
             end
 
             context 'when group is not present' do
@@ -149,7 +148,6 @@ RSpec.describe SegmentsController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "GET#edit" do
         context 'when user is logged in' do
@@ -170,7 +168,6 @@ RSpec.describe SegmentsController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "PATCH#update" do
         describe 'when user is logged in' do
@@ -212,7 +209,6 @@ RSpec.describe SegmentsController, type: :controller do
         end
     end
 
-
     describe "DELETE#destroy" do
         context 'when user is logged in' do
             login_user_from_let
@@ -232,7 +228,6 @@ RSpec.describe SegmentsController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "GET#export_csv" do
         context 'when user is logged in' do

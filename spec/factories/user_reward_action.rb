@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :user_reward_action do
     association :user
     association :reward_action
-    association :entity, factory: :initiative_user
+    association :initiative, factory: :initiative
     operation "add"
     points 0
   end

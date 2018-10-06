@@ -14,15 +14,25 @@ class Groups::EventsController < ApplicationController
       @past_events = @group.initiatives.past + @group.participating_initiatives.past
       @ongoing_events = @group.initiatives.ongoing + @group.participating_initiatives.ongoing
     else
-      @upcoming_events = []
-      @past_events = []
-      @ongoing_events = []
+      @upcoming_events = @group.initiatives.upcoming + @group.participating_initiatives.upcoming
+      @past_events = @group.initiatives.past + @group.participating_initiatives.past
+      @ongoing_events = @group.initiatives.ongoing + @group.participating_initiatives.ongoing
     end
   end
 
   def calendar_data
     @events = @group.initiatives
     .ransack(
+        initiative_segments_segment_id_in: params[:q]&.dig(:initiative_segments_segment_id_in)
+    )
+    .result
+    
+    @events += @group.participating_initiatives.upcoming.ransack(
+        initiative_segments_segment_id_in: params[:q]&.dig(:initiative_segments_segment_id_in)
+    )
+    .result
+    
+    @events += @group.participating_initiatives.ongoing    .ransack(
         initiative_segments_segment_id_in: params[:q]&.dig(:initiative_segments_segment_id_in)
     )
     .result
@@ -41,7 +51,9 @@ class Groups::EventsController < ApplicationController
   def show
     authorize @event
 
-    @comment = @event.comments.where(user: current_user).first || InitiativeComment.new(initiative: @event)
+    @all_comments = @event.comments
+    @approved_comments = @event.comments.approved
+    @comment = InitiativeComment.new(initiative: @event)
   end
 
   def destroy
@@ -61,6 +73,7 @@ class Groups::EventsController < ApplicationController
       e.dtstart     = Icalendar::Values::DateTime.new @event.start, 'tzid' => current_user.default_time_zone
       e.dtend       = Icalendar::Values::DateTime.new @event.end, 'tzid' => current_user.default_time_zone
       e.summary     = @event.title
+      e.location    = @event.location
       e.description = description
       e.ip_class    = "PRIVATE"
     end

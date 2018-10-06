@@ -1,11 +1,16 @@
 class SocialLink < ActiveRecord::Base
+    include PublicActivity::Common
+
     self.table_name = 'social_network_posts'
 
-    has_one :news_feed_link, :as => :link, :dependent => :destroy
+    has_one :news_feed_link, dependent: :destroy
 
-    has_many :social_link_segments
+    has_many :social_link_segments, dependent: :destroy
     has_many :segments, through: :social_link_segments, :before_remove => :remove_segment_association
+    has_many :user_reward_actions, dependent: :destroy
 
+    accepts_nested_attributes_for :news_feed_link, :allow_destroy => true    
+    
     validate :correct_url?
 
     validates :author_id,       presence: true
@@ -21,7 +26,7 @@ class SocialLink < ActiveRecord::Base
       joins("LEFT JOIN social_link_segments ON social_link_segments.social_link_id = social_network_posts.id")
       .where(gm_condtions.join(" OR "))
     }
-    
+
     scope :unapproved, -> {joins(:news_feed_link).where(:news_feed_links => {:approved => false})}
 
     def url_safe

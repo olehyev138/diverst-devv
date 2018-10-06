@@ -1,13 +1,13 @@
 class Budget < ActiveRecord::Base
-  belongs_to :subject, polymorphic: true
+  
+  belongs_to :event
+  belongs_to :group
   belongs_to :approver, class_name: "User", foreign_key: "approver_id"
   belongs_to :requester, class_name: "User", foreign_key: "requester_id"
 
-  has_many :checklists, as: :subject
-  has_many :budget_items
+  has_many :checklists, dependent: :destroy
+  has_many :budget_items, dependent: :destroy
   accepts_nested_attributes_for :budget_items, reject_if: :all_blank, allow_destroy: true
-
-  validates :subject, presence: true
 
   scope :approved, -> { where(is_approved: true) }
   scope :not_approved, -> { where(is_approved: false )}
@@ -37,21 +37,31 @@ class Budget < ActiveRecord::Base
     end
   end
 
-  def self.pre_approved_events(group)
-    related_budgets = self.where(subject_id: group.id)
-                          .where(subject_type: group.class.to_s)
+  def self.pre_approved_events(group, user=nil)
+    related_budgets = self.where(group_id: group.id)
                           .approved
                           .includes(:budget_items)
 
     budget_items = related_budgets.map { |b| b.budget_items }
 
-    budget_items.flatten.select { |bi| bi.is_done == false }
+    flattened_items = budget_items.flatten.select { |bi| bi.is_done == false }
+
+    if user.present?
+      flattened_items = flattened_items.select do |bi|
+        if bi.is_private?
+          bi.budget.requester == user
+        else
+          true
+        end
+      end
+    end
+
+    flattened_items
   end
 
-  #bTODO test this method
-  def self.pre_approved_events_for_select(group)
+  def self.pre_approved_events_for_select(group, user=nil)
 
-    budget_items = self.pre_approved_events(group)
+    budget_items = self.pre_approved_events(group, user)
 
     select_items = budget_items.map do |bi|
       [ bi.title_with_amount , bi.id ]

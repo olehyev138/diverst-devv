@@ -2,37 +2,37 @@ require 'rails_helper'
 
 RSpec.describe BudgetItem, type: :model do
   describe 'factory' do
-    let(:budget_item) { FactoryGirl.build(:budget_item) }
+    let(:budget_item) { FactoryGirl.build_stubbed(:budget_item) }
 
     it 'is valid' do
       expect(budget_item).to be_valid
     end
-    
+
     it 'requires a title' do
       budget_item.title = nil
       expect(budget_item).to_not be_valid
       expect(budget_item.errors.full_messages.first).to eq("Title can't be blank")
     end
-    
+
     it 'requires a title' do
       budget_item.title = "o"
       expect(budget_item).to_not be_valid
       expect(budget_item.errors.full_messages.first).to eq("Title is too short (minimum is 2 characters)")
     end
-    
+
     it 'requires estimated_amount to be a number' do
       budget_item.estimated_amount = "o"
       expect(budget_item).to_not be_valid
-      expect(budget_item.errors.full_messages.first).to eq("Estimated amount is not a number")
+      expect(budget_item.errors.full_messages.first).to eq("Estimated amount number of digits must not exceed 6")
     end
-    
+
     it 'requires available_amount to be less_than_or_equal_to estimated_amount' do
       budget_item.estimated_amount = 1
       budget_item.available_amount = 2
       expect(budget_item).to_not be_valid
       expect(budget_item.errors.full_messages.first).to eq("Available amount must be less than or equal to 1.0")
     end
-    
+
     describe 'when validating' do
       it { expect(budget_item).to belong_to(:budget) }
       it { expect(budget_item).to have_many(:initiatives) }

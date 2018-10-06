@@ -18,11 +18,12 @@ Rails.application.routes.draw do
   get 'users/invitation', to: 'users/invitations#index'
 
   get 'omniauth/:provider/callback', to: 'omni_auth#callback'
-  
+
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
       resources :users
       resources :groups
+      resources :join_me
       resources :enterprises, :only => [:update] do
         member do
           get "events"
@@ -48,7 +49,8 @@ Rails.application.routes.draw do
       post 'test_notif'
     end
   end
-
+  
+  resources :user_roles
   resources :users do
     member do
       get 'group_surveys'
@@ -98,7 +100,7 @@ Rails.application.routes.draw do
       patch 'delete_attachment'
       get 'calendar'
     end
-    
+
     scope module: :enterprises do
       resources :folders do
         member do
@@ -119,11 +121,26 @@ Rails.application.routes.draw do
 
   get 'integrations', to: 'integrations#index'
 
+  resources :group_category_types, only: [:edit, :update, :destroy] do
+    member do
+      get 'add_category'
+      post 'update_with_new_category'
+    end
+  end
+
+  resources :group_categories do
+    collection do
+      get 'view_all'
+    end
+  end
+  post 'group_categories/update_all_sub_groups', to: 'group_categories#update_all_sub_groups', as: :update_all_sub_groups
+
   resources :groups do
     resources :budgets, only: [:index, :show, :new, :create, :destroy] do
       post 'approve'
       post 'decline'
       collection do
+        get 'export_csv'
         get 'edit_annual_budget'
         post 'update_annual_budget'
         post 'reset_annual_budget'
@@ -136,12 +153,19 @@ Rails.application.routes.draw do
         collection do
           get 'pending'
           post 'add_members'
+          post 'join_all_sub_groups'
+          delete 'leave_all_sub_groups'
+          get 'view_sub_groups'
+          get 'export_group_members_list_csv'
         end
         member do
           post 'accept_pending'
           delete 'remove_member'
+          post 'join_sub_group'
+          delete 'leave_sub_group'
         end
       end
+
       resources :group_messages, path: 'messages' do
         post 'create_comment'
         resources :group_message_comment
@@ -164,7 +188,12 @@ Rails.application.routes.draw do
           get 'segment_graph'
         end
 
-        resources :comments, only: [:create]
+        resources :comments, only: [:create, :destroy], shallow: true do
+          member do
+            patch 'approve'
+            patch 'disapprove'
+          end
+        end
 
         collection do
           get 'calendar_view'
@@ -190,9 +219,11 @@ Rails.application.routes.draw do
         collection do
           get 'pending'
           post 'approve'
+          patch 'pin'
+          patch 'unpin'
         end
       end
-      
+
       resources :folders do
         member do
           post 'authenticate'
@@ -201,7 +232,7 @@ Rails.application.routes.draw do
           resources :resources
         end
       end
-      
+
       resources :resources
       resources :fields do
         member do
@@ -243,6 +274,7 @@ Rails.application.routes.draw do
 
     member do
       get 'settings'
+      get 'layouts'
 
       get 'export_csv'
       get 'import_csv'
@@ -256,6 +288,7 @@ Rails.application.routes.draw do
     collection do
       get 'plan_overview'
       get 'close_budgets'
+      get 'close_budgets_export_csv'
       get 'calendar'
       get 'calendar_data'
     end
@@ -288,7 +321,7 @@ Rails.application.routes.draw do
       resources :graphs, only: [:new, :create, :edit]
     end
   end
-  
+
   resources :graphs do
     member do
       get "data"
@@ -379,7 +412,15 @@ Rails.application.routes.draw do
       end
 
       resources :resources
-
+      resources :mentorship do
+        collection do
+          get "mentors"
+          get "mentees"
+          get "requests"
+          get "sessions"
+          get "ratings"
+        end
+      end
       resources :user_campaigns, shallow: true do
         resources :questions, shallow: true do
           resources :user_answers, shallow: true do
@@ -427,7 +468,20 @@ Rails.application.routes.draw do
       end
     end
   end
-
+  
+  resources :mentorings
+  resources :mentoring_interests
+  resources :mentoring_requests
+  resources :mentoring_sessions do
+    member do
+      get 'start'
+      get 'join'
+      get 'export_ics'
+    end
+    
+  end
+  resources :mentorship_ratings
+  
   resources :metrics_dashboards do
     get 'shared_dashboard'
 
@@ -444,20 +498,32 @@ Rails.application.routes.draw do
     get 'segment_population'
     get 'events_created'
     get 'messages_sent'
+    get 'mentorship'
+    get 'mentoring_sessions'
+    get 'mentoring_interests'
+    get 'top_groups_by_views'
+    get 'top_folders_by_views'
+    get 'top_resources_by_views'
+    get 'top_news_by_views'
   end
 
   namespace :website do
     resources :leads
   end
+  
+  resources :shared_news_feed_links
 
-  resources :policy_groups do
-    member do
-      post 'add_users'
-    end
-  end
+  resources :policy_group_templates
   resources :emails
   resources :custom_texts, only: [:edit, :update]
-  
+
+  resources :likes, only: [:create, :unlike]
+  match '/likes/unlike' => 'likes#unlike', :via => :delete
+
+  scope :views, controller: 'views' do
+    post 'track'
+  end
+
   match "*a", :to => "application#routing_error", :via => [:get, :post]
 
   root to: 'metrics_dashboards#index'

@@ -12,7 +12,7 @@
 
   <header class="primary-header">
     <%= link_to user_root_path, class: "primary-header__back" do %>
-      Back to your dashboard
+      <span>Back <span class="hidden-sm hidden-xs"> to your dashboard</span></span>
     <% end %>
     <h2 class="primary-header__title"><%= @group.name %></h2>
   </header>
@@ -44,18 +44,23 @@
           <li>
             <%= active_link_to "Events", group_events_path(@group) %>
           </li>
+          <% if policy(@group).view_latest_news? %>
             <li>
-              <%= active_link_to "News Feed (#{@group.news_feed_links.includes(:link).not_approved.count})", group_posts_path(@group) %>
+              <%= active_link_to "News Feed (#{NewsFeed.all_links_without_segments(@group.news_feed.id).count})", group_posts_path(@group) %>
             </li>
+          <% end %>
           <li>
             <%= active_link_to "Resources", group_folders_path(@group) %>
           </li>
-          <% if policy(@group).update? %>
+          <% if policy(@group).leaders? %>
             <li>
               <%= active_link_to "Leaders", group_leaders_path(@group) %>
             </li>
             <li>
-              <%= active_link_to "Insights", group_questions_path(@group) %> 
+              <%= active_link_to "Insights", group_questions_path(@group) %>
+            </li>
+            <li>
+              <%= active_link_to "Layouts", layouts_group_path(@group) %>
             </li>
             <li>
               <%= active_link_to "Settings", settings_group_path(@group) %>
@@ -74,11 +79,11 @@
       <% end %>
       <%= active_link_to "Events", group_events_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <%= active_link_to "Resources", group_folders_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-      <%= active_link_to "News Feed", group_posts_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if !policy(@group).update?%>
+      <%= active_link_to "News Feed (#{NewsFeed.all_links_without_segments(@group.news_feed.id).count})", group_posts_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(@group).view_latest_news? %>
       <% if policy(@group).update? %>
-          <%= active_link_to "News Feed (#{@group.news_feed_links.includes(:link).not_approved.count})", group_posts_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
           <%= active_link_to "Leaders", group_leaders_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-          <%= active_link_to "Insights", group_questions_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %> 
+          <%= active_link_to "Insights", group_questions_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+          <%= active_link_to "Layouts", layouts_group_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
           <%= active_link_to "Settings", settings_group_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <% end %>
     </div>

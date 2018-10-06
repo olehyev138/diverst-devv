@@ -1,7 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe MetricsDashboard, :type => :model do
-    subject { create(:metrics_dashboard) }
+    subject { build(:metrics_dashboard) }
+
+    describe 'test associations' do
+      it{ expect(subject).to belong_to(:enterprise).inverse_of(:metrics_dashboards) }
+      it{ expect(subject).to belong_to(:owner).class_name('User') }
+      it{ expect(subject).to have_many(:graphs) }
+      it{ expect(subject).to have_many(:metrics_dashboards_segments) }
+      it{ expect(subject).to have_many(:segments).through(:metrics_dashboards_segments) }
+      it{ expect(subject).to have_many(:groups_metrics_dashboards) }
+      it{ expect(subject).to have_many(:groups).through(:groups_metrics_dashboards) }
+    end
 
     describe 'validations' do
         it{ expect(subject).to validate_presence_of(:name).with_message("Metrics Dashboard name is required") }
@@ -35,7 +45,7 @@ RSpec.describe MetricsDashboard, :type => :model do
         it 'returns all users if no segments or groups are specified' do
             expect(subject.target.all).to eq subject.enterprise.users.all
         end
-        
+
         it 'calls target' do
             expect(subject.graphs_population.all).to eq subject.enterprise.users.all
         end
@@ -45,8 +55,17 @@ RSpec.describe MetricsDashboard, :type => :model do
       let!(:metrics_dashboard) { create :metrics_dashboard }
 
       context 'with no shareable_token' do
+        it 'has nil token' do
+          expect(metrics_dashboard.shareable_token).to be(nil)
+        end
+
         it 'creates new shareable token' do
-          expect(metrics_dashboard.shareable_token).to be_a String
+          expect(metrics_dashboard.update_shareable_token).to be(true)
+        end
+
+        it 'returns false' do
+          metrics_dashboard.groups.destroy_all
+          expect(metrics_dashboard.update_shareable_token).to be(false)
         end
       end
 
@@ -59,6 +78,22 @@ RSpec.describe MetricsDashboard, :type => :model do
 
           expect(metrics_dashboard.shareable_token).to eq token
         end
+      end
+    end
+
+    describe "#destroy_callbacks" do
+      it "removes the child objects" do
+        metrics_dashboard = create(:metrics_dashboard)
+        graph = create(:graph, :metrics_dashboard => metrics_dashboard)
+        segment = create(:metrics_dashboards_segment, :metrics_dashboard => metrics_dashboard)
+        group = create(:groups_metrics_dashboard, :metrics_dashboard => metrics_dashboard)
+
+        metrics_dashboard.destroy
+
+        expect{MetricsDashboard.find(metrics_dashboard.id)}.to raise_error(ActiveRecord::RecordNotFound)
+        expect{Graph.find(graph.id)}.to raise_error(ActiveRecord::RecordNotFound)
+        expect{MetricsDashboardsSegment.find(segment.id)}.to raise_error(ActiveRecord::RecordNotFound)
+        expect{GroupsMetricsDashboard.find(group.id)}.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
 end

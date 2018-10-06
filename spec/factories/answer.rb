@@ -5,12 +5,6 @@ FactoryGirl.define do
     association :author, factory: :user
     chosen false
 
-    trait :upvoted_2_times do
-      after(:create) do |answer, evaluator|
-        evaluator.votes create_list(:answer_upvote, 2, answer: answer)
-      end
-    end
-
     factory :answer_filled do
       transient do
         comment_count 2

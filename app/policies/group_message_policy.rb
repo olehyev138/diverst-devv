@@ -9,6 +9,8 @@ class GroupMessagePolicy < ApplicationPolicy
 
   def update?
     return true if is_owner?
+
+    @policy_group.group_messages_manage
   end
 
   def destroy?

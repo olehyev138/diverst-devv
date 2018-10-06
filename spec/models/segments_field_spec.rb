@@ -7,10 +7,10 @@ RSpec.describe SegmentsField, type: :model do
 
     let!(:enterprise) { create(:enterprise) }
 
-    let!(:group) { create(:group, enterprise: enterprise) }
+    let!(:group) { build(:group, enterprise: enterprise) }
 
-    let!(:segment_one) { create(:segment, enterprise: enterprise) }
-    let!(:segment_two) { create(:segment, enterprise: enterprise) }
+    let!(:segment_one) { build(:segment, enterprise: enterprise) }
+    let!(:segment_two) { build(:segment, enterprise: enterprise) }
 
     let!(:user_one) { create(:user, enterprise: enterprise, groups: [group],
       segments: [segment_one], created_at: Date.yesterday) }

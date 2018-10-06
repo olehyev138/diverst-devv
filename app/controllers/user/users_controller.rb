@@ -26,6 +26,9 @@ class User::UsersController < ApplicationController
       render :edit
     end
   end
+  
+  def mentorship
+  end
 
   protected
 
@@ -40,7 +43,10 @@ class User::UsersController < ApplicationController
       :first_name,
       :last_name,
       :biography,
-      :time_zone
+      :time_zone,
+      :mentor,
+      :mentee,
+      mentoring_interest_ids: []
     )
   end
 end

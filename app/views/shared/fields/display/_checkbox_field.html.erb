@@ -7,9 +7,9 @@
     <span class="error"><%= field_errors(resource, cf) %></span>
     <div class="field__input-wrapper">
       <span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
-      <select class="field__input field__input--right-add-on select2" name="custom-fields[<%= cf.id %>][]" multiple="multiple">
+      <select class="field__input field__input--right-add-on select2" name="custom-fields[<%= cf.id %>][]" multiple="multiple" id="<%= cf.title.downcase %>_<%= cf.id %>">
         <% cf.options.each do |option| %>
-          <option value="<%= option %>"<%= " selected=selected" if resource.info[cf] && resource.info[cf].include?(option) %>><%= option %></option>
+          <option value="<%= option %>"<%= selected="selected" if resource.info[cf] && resource.info[cf].include?(option) %>><%= option %></option>
         <% end %>
       </select>
     </div>
@@ -17,7 +17,7 @@
 <% else # Checkboxes %>
   <div class="field">
     <label class="field__label">
-      <abbr title="required" class="<%= required_class(cf) %>">*</abbr>
+      <abbr title="required" class="<%= required_class(cf) %>" id="<%= cf.title.downcase %>_<%= cf.id %>">*</abbr>
       <%= cf.title %>
     </label>
     <span class="error"><%= field_errors(resource, cf) %></span>

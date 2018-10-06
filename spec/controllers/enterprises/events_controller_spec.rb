@@ -15,7 +15,7 @@ RSpec.describe Enterprises::EventsController, type: :controller do
       expect(assigns(:events)).to eq [initiative]
     end
 
-    it 'returns correct calendar data in json' do 
+    it 'returns correct calendar data in json' do
       get :public_calendar_data, enterprise_id: enterprise.id, format: :json
       json_response = JSON.parse(response.body, symbolize_names: true)
 
