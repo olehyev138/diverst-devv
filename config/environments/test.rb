@@ -57,4 +57,7 @@ Rails.application.configure do
 
   # Disable on-disk logging to accelerate tests
   config.logger = ActiveSupport::Logger.new(nil)
+  
+  # remove deprecation warnings when tests run
+  ActiveSupport::Deprecation.silenced = true
 end

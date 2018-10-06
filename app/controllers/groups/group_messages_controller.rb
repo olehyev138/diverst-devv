@@ -15,10 +15,13 @@ class Groups::GroupMessagesController < ApplicationController
         @comments = @message.comments.includes(:author)
 
         @new_comment = GroupMessageComment.new
+
+        @message.increment_view(current_user)
     end
 
     def new
         @message = @group.messages.new
+        @message.build_news_feed_link(:news_feed_id => @group.news_feed.id)
     end
 
     def edit
@@ -30,6 +33,7 @@ class Groups::GroupMessagesController < ApplicationController
         @message.owner = current_user
 
         if @message.save
+            track_activity(@message, :create)
             user_rewarder("message_post").add_points(@message)
             flash_reward "Your message was created. Now you have #{current_user.credits} points"
             redirect_to group_posts_path(@group)
@@ -42,6 +46,7 @@ class Groups::GroupMessagesController < ApplicationController
     def update
         authorize @message, :update?
         if @message.update(message_params)
+            track_activity(@message, :update)
             redirect_to group_posts_path(@group)
         else
             flash[:alert] = "Your message was not updated. Please fix the errors"
@@ -51,6 +56,7 @@ class Groups::GroupMessagesController < ApplicationController
 
     def destroy
         user_rewarder("message_post").remove_points(@message)
+        track_activity(@message, :destroy)
         @message.destroy
         flash[:notice] = "Your message was removed. Now you have #{current_user.credits} points"
 
@@ -89,6 +95,7 @@ class Groups::GroupMessagesController < ApplicationController
             .permit(
                 :subject,
                 :content,
+                :news_feed_link_attributes => [:approved, :news_feed_id, :link, :shared_news_feed_ids => []],
                 segment_ids: []
             )
     end

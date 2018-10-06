@@ -1,0 +1,9 @@
+  <% if @group.description.present? %>
+    <div class="content__header mtmedium">
+      <p style="flex: 1 1 0;"><%= allow_newlines @group.description %></p>
+      <div class="flex-row flex-row--middle">
+        <div class="flex-row__cell">
+        </div>
+      </div>
+    </div>
+  <% end %>

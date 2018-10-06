@@ -1,16 +1,16 @@
 class Api::V1::EnterprisesController < Api::V1::ApiController
-    
+
     def update
         # update the enterprise
         enterprise = find_and_authorize(params, :update?)
-        
+
         if enterprise.update_attributes(enterprise_params)
             return render :json => enterprise
         else
             return render :status => 422, :json => {:message => enterprise.errors.full_messages.first}
         end
     end
-    
+
     def events
         # update the enterprise
         enterprise = find_and_authorize(params, :show?)
@@ -18,7 +18,7 @@ class Api::V1::EnterprisesController < Api::V1::ApiController
     end
 
     private
-    
+
     def find_and_authorize(params, action)
         # get the enterprise
         enterprise = Enterprise.find(params[:id])
@@ -27,7 +27,7 @@ class Api::V1::EnterprisesController < Api::V1::ApiController
         # return the enterprise
         return enterprise
     end
-    
+
     def enterprise_params
         params
             .require(:enterprise)
@@ -42,10 +42,7 @@ class Api::V1::EnterprisesController < Api::V1::ApiController
                 :saml_last_name_mapping,
                 :yammer_import,
                 :cdo_message,
-                :cdo_message_email,
                 :privacy_statement,
-                :cdo_name,
-                :cdo_title,
                 :cdo_picture,
                 :banner,
                 :home_message,

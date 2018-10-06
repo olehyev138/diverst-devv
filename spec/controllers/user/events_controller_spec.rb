@@ -88,7 +88,6 @@ RSpec.describe User::EventsController, type: :controller do
         end
     end
 
-
     describe 'GET #calendar' do
         describe "when user is logged in" do 
             let!(:enterprise) { create(:enterprise) }
@@ -97,14 +96,18 @@ RSpec.describe User::EventsController, type: :controller do
             let!(:segment) { create(:segment, enterprise: enterprise) }
             login_user_from_let
 
-            before { get :calendar }
+            before { 
+                # create the sub groups to ensure only parent groups are shown
+                group.children.create!([{enterprise: enterprise, name: "test1"}, {enterprise: enterprise, name: "test2"}])
+                get :calendar 
+            }
 
             it "returns current user's enterprise" do
                 expect(assigns[:current_user].enterprise).to eq user.enterprise
             end
 
             it "returns enterprise groups" do 
-                expect(assigns[:current_user].enterprise.groups).to eq [group]
+                expect(assigns[:groups].count).to eq 1
             end
 
             it "returns enterprise segments" do 
@@ -126,7 +129,6 @@ RSpec.describe User::EventsController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'GET #onboarding_calendar_data' do
         describe "if user is present" do 

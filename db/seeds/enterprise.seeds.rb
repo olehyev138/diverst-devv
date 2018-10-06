@@ -1,6 +1,5 @@
 enterprise = Enterprise.create(
   name: "enterprise#{Enterprise.count + 1}",
-  cdo_name: "enterprise#{Enterprise.count + 1}",
   sp_entity_id: ( (0...8).map { (65 + rand(26)).chr }.join ), # Generate random string
   idp_entity_id: 'https://app.onelogin.com/saml/metadata/468755',
   idp_sso_target_url: 'https://v7.onelogin.com/trust/saml2/http-post/sso/468755',
@@ -41,7 +40,7 @@ SelectField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  container: enterprise,
+  enterprise: enterprise,
   options_text: "Male
 Female"
 )
@@ -54,7 +53,7 @@ DateField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  container: enterprise
+  enterprise: enterprise
 )
 
 SelectField.create(
@@ -65,7 +64,7 @@ SelectField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  container: enterprise,
+  enterprise: enterprise,
   options_text: "Yes
 No"
 )
@@ -78,7 +77,7 @@ SelectField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  container: enterprise,
+  enterprise: enterprise,
   options_text: "Afghanistan
 Albania
 Algeria
@@ -353,7 +352,7 @@ SelectField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  container: enterprise,
+  enterprise: enterprise,
   options_text: "Atheism
 Christianity
 Islam
@@ -373,7 +372,7 @@ CheckboxField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  container: enterprise,
+  enterprise: enterprise,
   alternative_layout: true,
   options_text: "English
 Mandarin
@@ -410,7 +409,7 @@ SelectField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  container: enterprise,
+  enterprise: enterprise,
   options_text: "Caucasian
 Hispanic
 Latino
@@ -431,7 +430,7 @@ SelectField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  container: enterprise,
+  enterprise: enterprise,
   options_text: "Single
 In a relationship
 Married
@@ -446,7 +445,7 @@ SelectField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  container: enterprise,
+  enterprise: enterprise,
   options_text: "Yes
 No"
 )
@@ -460,7 +459,7 @@ CheckboxField.create(
   match_polarity: true,
   match_weight: 0.2,
   alternative_layout: true,
-  container: enterprise,
+  enterprise: enterprise,
   options_text: "3D printing
 Amateur radio
 Acting
@@ -749,7 +748,7 @@ TextField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  container: enterprise
+  enterprise: enterprise
 )
 
 SelectField.create(
@@ -760,7 +759,7 @@ SelectField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  container: enterprise,
+  enterprise: enterprise,
   options_text: "High School
 Bachelor's degree
 Master's degree
@@ -775,7 +774,7 @@ CheckboxField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  container: enterprise,
+  enterprise: enterprise,
   options_text: "Microsoft Certified Partner
 Google Partner
 Apple Genius"
@@ -791,7 +790,7 @@ NumericField.create(
   match_weight: 0.2,
   min: 0,
   max: 100,
-  container: enterprise
+  enterprise: enterprise
 )
 
 CheckboxField.create(
@@ -802,7 +801,7 @@ CheckboxField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  container: enterprise,
+  enterprise: enterprise,
   alternative_layout: true,
   options_text: "Afghanistan,
 Albania
@@ -1078,7 +1077,7 @@ SelectField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  container: enterprise,
+  enterprise: enterprise,
   options_text: "Yes
 No"
 )
@@ -1091,7 +1090,7 @@ SelectField.create(
   match_exclude: false,
   match_polarity: true,
   match_weight: 0.2,
-  container: enterprise,
+  enterprise: enterprise,
   options_text: "NA
 EU
 CN
@@ -1108,5 +1107,5 @@ NumericField.create(
   match_weight: 0.2,
   min: 0,
   max: 40,
-  container: enterprise
+  enterprise: enterprise
 )

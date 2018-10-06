@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe GroupsController, type: :controller do
-  include ApplicationHelper
 
-  let(:enterprise){ create(:enterprise, cdo_name: "test") }
+  let(:enterprise){ create(:enterprise) }
   let(:user){ create(:user, enterprise: enterprise, email: "test@gmail.com") }
   let(:group){ create(:group, enterprise: enterprise) }
+  let(:different_group) { create(:group, enterprise: create(:enterprise)) }
 
   describe 'GET #index' do
     context 'with logged user' do
@@ -19,6 +19,15 @@ RSpec.describe GroupsController, type: :controller do
       it 'correctly sets groups' do
         get :index
         expect(group.enterprise).to eq enterprise
+      end
+
+      context "display groups belonging to current user enterprise" do
+        before { group; different_group }
+
+        it 'returns 1 group' do 
+          get :index
+          expect(assigns[:groups].count).to eq 1
+        end
       end
 
       context 'where groups have children' do
@@ -47,32 +56,53 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #close_budgets' do
     context 'with logged user' do
       login_user_from_let
 
-      it 'render close_budgets template' do
-        get :close_budgets, :id => group.id
-        expect(response).to render_template :close_budgets
+      context "with correct permissions" do
+        it 'render close_budgets template' do
+          get :close_budgets, :id => group.id
+          expect(response).to render_template :close_budgets
+        end
+
+        context 'where groups have children' do
+          let!(:group1) { create(:group, enterprise: enterprise) }
+          let!(:groups) { create_list(:group, 2, enterprise: enterprise) }
+          before do
+            group
+            groups.each { |group| group.children << group }
+          end
+
+          it 'total number of groups should be 4' do
+            get :close_budgets, :id => group.id
+            expect(Group.all.count).to eq 4
+          end
+
+          it 'return 2 groups with children' do
+            get :close_budgets, :id => group.id
+            expect(assigns[:groups].count).to eq 2
+          end
+        end
+
+        context "display groups belonging to current user enterprise" do
+          before { group; different_group }
+
+          it 'returns 1 group' do 
+            get :close_budgets, :id => group.id
+            expect(assigns[:groups].count).to eq 1
+          end
+        end        
       end
 
-      context 'where groups have children' do
-        let!(:group1) { create(:group, enterprise: enterprise) }
-        let!(:groups) { create_list(:group, 2, enterprise: enterprise) }
-        before do
-          group
-          groups.each { |group| group.children << group }
-        end
+      context "with incorrect permissions" do
+        it 'render close_budgets template' do
+          policy_group = user.policy_group
+          policy_group.annual_budget_manage = false
+          policy_group.save!
 
-        it 'total number of groups should be 4' do
           get :close_budgets, :id => group.id
-          expect(Group.all.count).to eq 4
-        end
-
-        it 'return 2 groups with children' do
-          get :close_budgets, :id => group.id
-          expect(assigns[:groups].count).to eq 2
+          expect(response).to_not render_template :close_budgets
         end
       end
     end
@@ -83,6 +113,25 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
+  describe "GET#close_budgets_export_csv" do
+    context 'when user is logged in' do
+      login_user_from_let
+      before { get :close_budgets_export_csv }
+
+      it "return data in csv format" do
+        expect(response.content_type).to eq 'text/csv'
+      end
+
+      it "filename should be 'global_budgets.csv'" do
+        expect(response.headers["Content-Disposition"]).to include 'global_budgets.csv'
+      end
+    end
+
+    context 'when user is not logged in' do
+      before { get :close_budgets_export_csv }
+      it_behaves_like "redirect user to users/sign_in path"
+    end
+  end
 
   describe 'GET#plan_overview' do
     let!(:user) { create :user }
@@ -101,7 +150,16 @@ RSpec.describe GroupsController, type: :controller do
 
       it 'shows groups from correct enterprise' do
         expect(assigns(:groups)).to include group
-        expect(assigns(:groups)).to_not include foreign_group
+        #expect(assigns(:groups)).to_not include foreign_group
+      end
+
+      context "display groups belonging to current user enterprise" do
+        before { group; different_group }
+
+        it 'returns 1 group' do 
+          get :plan_overview
+          expect(assigns[:groups].count).to eq 1
+        end
       end
     end
 
@@ -111,13 +169,14 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #calendar' do
     context 'with logged user' do
       login_user_from_let
 
       before do
         create_list(:group, 2, enterprise: enterprise)
+        # create the sub groups to ensure only parent groups are shown
+        group.children.create!([{enterprise: enterprise, name: "test1"}, {enterprise: enterprise, name: "test2"}])
         create_list(:segment, 3, enterprise: enterprise)
         get :calendar
       end
@@ -126,7 +185,7 @@ RSpec.describe GroupsController, type: :controller do
       end
 
       it 'returns 2 groups belonging to enterprise' do
-        expect(assigns[:groups].count).to eq 2
+        expect(assigns[:groups].count).to eq 3
       end
 
       it 'returns 3 segments belonging to enterprise' do
@@ -143,7 +202,6 @@ RSpec.describe GroupsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'GET #calendar_data' do
     def get_calendar_data(initiative_participating_groups_id_in, initiative_segments_segement_id_in, params={})
@@ -165,24 +223,24 @@ RSpec.describe GroupsController, type: :controller do
         login_user_from_let
 
         it 'returns enterprise via iframe_calendar_token' do
-          get_calendar_data(initiative_group.id, initiative_segment.id, params={token: 'uniquetoken1234'}) 
+          get_calendar_data(initiative_group.id, initiative_segment.id, params={token: 'uniquetoken1234'})
           expect(Enterprise.find_by_iframe_calendar_token(controller.params[:token])).to eq enterprise
         end
       end
 
-      context 'when params[:token] is absent' do 
+      context 'when params[:token] is absent' do
         let!(:enterprise) { create :enterprise, iframe_calendar_token: 'uniquetoken1234' }
         let!(:enterprise1) { create :enterprise }
         let!(:user) { create :user, enterprise: enterprise1 }
         login_user_from_let
 
-        it 'returns enterprise of current_user' do 
+        it 'returns enterprise of current_user' do
           get_calendar_data(initiative_group.id, initiative_segment.id)
           expect(assigns[:current_user]&.enterprise).to eq enterprise1
         end
       end
 
-      context 'renders' do 
+      context 'renders' do
         let!(:enterprise) { create :enterprise, iframe_calendar_token: 'uniquetoken1234' }
         let!(:user) { create :user, enterprise: enterprise }
         login_user_from_let
@@ -211,7 +269,6 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #new' do
     context 'with logged user' do
       login_user_from_let
@@ -222,7 +279,7 @@ RSpec.describe GroupsController, type: :controller do
         expect(response).to render_template :new
       end
 
-      it "returns a new group object that belongs to current_user's enterprise" do 
+      it "returns a new group object that belongs to current_user's enterprise" do
         expect(assigns[:group].enterprise).to eq assigns[:current_user].enterprise
         expect(assigns[:group]).to be_a_new(Group)
       end
@@ -233,7 +290,6 @@ RSpec.describe GroupsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'GET #show' do
     context 'with logged user' do
@@ -290,8 +346,7 @@ RSpec.describe GroupsController, type: :controller do
     end
 
     context 'with logged regular user group member' do
-      let(:policy_group){ create(:policy_group, :global_settings_manage => true, :groups_manage => false)}
-      let(:user){ create(:user, :enterprise => enterprise, :policy_group => policy_group) }
+      let(:user){ create(:user, :enterprise => enterprise) }
       let!(:user_group){ create(:user_group, :group => group, :user => user, :accepted_member => true)}
 
       login_user_from_let
@@ -304,19 +359,19 @@ RSpec.describe GroupsController, type: :controller do
 
       context 'when group has erg_leader_permissions' do
         let!(:group_leader) { create(:group_leader, user: user, group: group) }
-        let!(:news_feed) { create(:news_feed, group: group) }
+        let!(:news_feed) { group.news_feed }
         let!(:news_link1) { create(:news_link, :group => group)}
         let!(:news_link2) { create(:news_link, :group => group)}
         let!(:news_link3) { create(:news_link, :group => group)}
         let!(:news_link4) { create(:news_link, :group => group)}
         let!(:news_link5) { create(:news_link, :group => group)}
         let!(:news_link6) { create(:news_link, :group => group)}
-        let!(:news_feed_link1) { create(:news_feed_link, link: news_link1, news_feed: news_feed, approved: true, created_at: Time.now - 5.hours, updated_at: Time.now - 5.hours) }
-        let!(:news_feed_link2) { create(:news_feed_link, link: news_link2, news_feed: news_feed, approved: true, created_at: Time.now - 4.hours, updated_at: Time.now - 4.hours) }
-        let!(:news_feed_link3) { create(:news_feed_link, link: news_link3, news_feed: news_feed, approved: true, created_at: Time.now - 3.hours, updated_at: Time.now - 3.hours) }
-        let!(:news_feed_link4) { create(:news_feed_link, link: news_link4, news_feed: news_feed, approved: true, created_at: Time.now - 2.hours, updated_at: Time.now - 2.hours) }
-        let!(:news_feed_link5) { create(:news_feed_link, link: news_link5, news_feed: news_feed, approved: true, created_at: Time.now - 1.hours, updated_at: Time.now - 1.hours) }
-        let!(:news_feed_link6) { create(:news_feed_link, link: news_link6, news_feed: news_feed, approved: true, created_at: Time.now, updated_at: Time.now) }
+        let!(:news_feed_link1) { create(:news_feed_link, news_link: news_link1, news_feed: news_feed, approved: true, created_at: Time.now - 5.hours, updated_at: Time.now - 5.hours) }
+        let!(:news_feed_link2) { create(:news_feed_link, news_link: news_link2, news_feed: news_feed, approved: true, created_at: Time.now - 4.hours, updated_at: Time.now - 4.hours) }
+        let!(:news_feed_link3) { create(:news_feed_link, news_link: news_link3, news_feed: news_feed, approved: true, created_at: Time.now - 3.hours, updated_at: Time.now - 3.hours) }
+        let!(:news_feed_link4) { create(:news_feed_link, news_link: news_link4, news_feed: news_feed, approved: true, created_at: Time.now - 2.hours, updated_at: Time.now - 2.hours) }
+        let!(:news_feed_link5) { create(:news_feed_link, news_link: news_link5, news_feed: news_feed, approved: true, created_at: Time.now - 1.hours, updated_at: Time.now - 1.hours) }
+        let!(:news_feed_link6) { create(:news_feed_link, news_link: news_link6, news_feed: news_feed, approved: true, created_at: Time.now, updated_at: Time.now) }
 
         login_user_from_let
         before { get :show, :id => group.id }
@@ -330,7 +385,7 @@ RSpec.describe GroupsController, type: :controller do
           let!(:segment) { create(:segment, enterprise: user.enterprise, owner: user) }
           let!(:users_segment) { create(:users_segment, user: user, segment: segment) }
           let!(:news_link_segment) { create(:news_link_segment, segment: segment, news_link: news_link1) }
-          let!(:news_feed_link_segment) { create(:news_feed_link_segment, segment: segment, news_feed_link: news_feed_link1, link_segment: news_link_segment) }
+          let!(:news_feed_link_segment) { create(:news_feed_link_segment, segment: segment, news_feed_link: news_feed_link1, news_link_segment: news_link_segment) }
           let!(:other_user) { create(:user) }
           let!(:other_group) { create(:group, enterprise: other_user.enterprise, owner: other_user) }
 
@@ -358,8 +413,7 @@ RSpec.describe GroupsController, type: :controller do
     end
 
     context 'with logged regular user non-group member' do
-      let(:policy_group){ create(:policy_group, :global_settings_manage => true, :groups_manage => false)}
-      let(:user){ create(:user, :enterprise => enterprise, :policy_group => policy_group) }
+      let(:user){ create(:user, :enterprise => enterprise) }
 
       login_user_from_let
 
@@ -375,7 +429,6 @@ RSpec.describe GroupsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'POST #create' do
     def post_create(params={a: 1})
@@ -445,8 +498,8 @@ RSpec.describe GroupsController, type: :controller do
             .to_not change(Group, :count)
         end
 
-        it 'flashes an alert message' do 
-          post_create 
+        it 'flashes an alert message' do
+          post_create
           expect(flash[:alert]).to eq "Your #{c_t(:erg)} was not created. Please fix the errors"
         end
 
@@ -470,17 +523,16 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #edit' do
     context 'with logged user' do
       login_user_from_let
       before { get :edit, :id => group.id }
 
-      it 'render edit template' do 
-        expect(response).to render_template :edit 
+      it 'render edit template' do
+        expect(response).to render_template :edit
       end
 
-      it 'assigns a valid group object' do 
+      it 'assigns a valid group object' do
         expect(assigns[:group]).to be_valid
       end
     end
@@ -490,7 +542,6 @@ RSpec.describe GroupsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'PATCH #update' do
     def patch_update( group_id = -1, params = {})
@@ -547,7 +598,21 @@ RSpec.describe GroupsController, type: :controller do
         it 'redirects to correct page' do
           patch_update(group.id, group_attrs)
 
-          expect(response).to redirect_to default_referrer
+          expect(response).to redirect_to [:edit, group]
+        end
+
+        it 'redirects to group homepage after updating group in group settings' do 
+          request.env['HTTP_REFERER'] = settings_group_url(group)
+          patch_update(group.id, group_attrs)
+
+          expect(response).to redirect_to group
+        end
+
+        it 'stay on group outcomes url after updating plan structure' do 
+          request.env['HTTP_REFERER'] = group_outcomes_url(group)
+          patch_update(group.id, group_attrs)
+
+          expect(response).to redirect_to group_outcomes_url(group)
         end
       end
 
@@ -561,7 +626,7 @@ RSpec.describe GroupsController, type: :controller do
           expect(updated_group.description).to eq group.description
         end
 
-        it 'flashes an alert message' do 
+        it 'flashes an alert message' do
           expect(flash[:alert]).to eq "Your #{c_t(:erg)} was not updated. Please fix the errors"
         end
 
@@ -571,12 +636,35 @@ RSpec.describe GroupsController, type: :controller do
       end
     end
 
+    describe 'with label of different category type' do
+      login_user_from_let
+      let!(:group_category_type) { create(:group_category_type, name: "category type 1", enterprise_id: user.enterprise.id) }
+      let!(:group_category_type2) { create(:group_category_type, name: "category type 2", enterprise_id: user.enterprise.id) }
+      let!(:group_category1) { create(:group_category, name: "category 1", enterprise_id: user.enterprise.id, group_category_type_id: group_category_type.id) }
+      let!(:group_category2) { create(:group_category, name: "category 2", enterprise_id: user.enterprise.id, group_category_type_id: group_category_type2.id) }
+      let!(:parent) { create(:group, enterprise: user.enterprise, parent_id: nil, group_category_type_id: group_category_type.id, group_category_id: nil) }
+      let!(:group1) { create(:group, enterprise: user.enterprise, parent: parent, group_category_id: group_category1.id,
+        group_category_type_id: parent.group_category_type_id) }
+
+      before do
+        request.env["HTTP_REFERER"] = "http://test.host/groups/#{group1.id}"
+        patch_update(group1.id, { group_category_id: group_category2.id })
+      end
+
+      it "contains error message'wrong label for category type 1'" do
+        expect(assigns[:group].errors.full_messages).to include "Group category wrong label for category type 1"
+      end
+
+      it 'renders edit template' do
+        expect(response).to render_template :edit
+      end
+    end
+
     describe 'without logged in user' do
       before { patch_update(group.id) }
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'GET #settings' do
     let(:user) { create :user }
@@ -591,11 +679,11 @@ RSpec.describe GroupsController, type: :controller do
 
       before { get_settings(group.id) }
 
-      it 'assigns a valid group object' do 
+      it 'assigns a valid group object' do
         expect(assigns[:group]).to be_valid
       end
 
-      it 'renders setting template' do 
+      it 'renders setting template' do
         expect(response).to render_template :settings
       end
     end
@@ -605,7 +693,6 @@ RSpec.describe GroupsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'DELETE #destroy' do
     def delete_destroy(group_id = -1)
@@ -620,13 +707,13 @@ RSpec.describe GroupsController, type: :controller do
       login_user_from_let
 
       context 'with correct params' do
-        it 'deletes initiative' do
+        it 'deletes group' do
           expect{
             delete_destroy(group.id)
           }.to change(Group, :count).by(-1)
         end
 
-        it 'flashes a notice message' do 
+        it 'flashes a notice message' do
           delete_destroy(group.id)
           expect(flash[:notice]).to eq "Your #{c_t(:erg)} was deleted"
         end
@@ -662,7 +749,7 @@ RSpec.describe GroupsController, type: :controller do
       context 'when not saving' do
         before {allow_any_instance_of(Group).to receive(:destroy).and_return(false)}
 
-        it 'flashes an alert message' do 
+        it 'flashes an alert message' do
           delete_destroy(group.id)
           expect(flash[:alert]).to eq "Your #{c_t(:erg)} was not deleted. Please fix the errors"
         end
@@ -680,7 +767,6 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #metrics' do
     context 'with logged user' do
       let!(:updates) { create_list(:group_update, 3, owner: user, group: group) }
@@ -691,11 +777,11 @@ RSpec.describe GroupsController, type: :controller do
         expect(response).to render_template :metrics
       end
 
-      it 'assigns a valid group object' do 
+      it 'assigns a valid group object' do
         expect(assigns[:group]).to be_valid
       end
 
-      it 'return 3 updates belonging to group object' do 
+      it 'return 3 updates belonging to group object' do
         expect(assigns[:updates].count).to eq 3
       end
     end
@@ -706,17 +792,16 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #import_csv' do
     context 'with logged user' do
       login_user_from_let
       before { get :import_csv, :id => group.id }
 
-      it 'render import_csv template' do 
+      it 'render import_csv template' do
         expect(response).to render_template :import_csv
       end
 
-      it 'assigns a valid group object' do 
+      it 'assigns a valid group object' do
         expect(assigns[:group]).to be_valid
       end
     end
@@ -727,11 +812,9 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #sample_csv' do
     let(:user){ create(:user, enterprise: enterprise) }
     let!(:user_group){ create(:user_group, user: user, group: group) }
-
 
     context 'with logged user' do
       login_user_from_let
@@ -741,7 +824,7 @@ RSpec.describe GroupsController, type: :controller do
         expect(response.content_type).to eq 'text/csv'
       end
 
-      it "csv filename is 'erg_import_example.csv" do 
+      it "csv filename is 'erg_import_example.csv" do
         expect(response.headers["Content-Disposition"]).to include 'erg_import_example.csv'
       end
     end
@@ -752,14 +835,13 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #parse_csv' do
     let!(:file) { fixture_file_upload('files/test.csv', 'text/csv') }
 
     context 'with logged user and no file' do
       login_user_from_let
 
-      before { 
+      before {
         request.env["HTTP_REFERER"] = "back"
         get :parse_csv, :id => group.id
       }
@@ -767,7 +849,7 @@ RSpec.describe GroupsController, type: :controller do
       it 'redirects back' do
         expect(response).to redirect_to "back"
       end
-      
+
       it "flashes an alert message" do
         expect(flash[:alert]).to eq "CSV file is required"
       end
@@ -781,7 +863,7 @@ RSpec.describe GroupsController, type: :controller do
         expect(response).to render_template :parse_csv
       end
 
-      it 'assigns a valid group object' do 
+      it 'assigns a valid group object' do
         expect(assigns[:group]).to be_valid
       end
     end
@@ -792,7 +874,6 @@ RSpec.describe GroupsController, type: :controller do
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
-
 
   describe 'GET #export_csv' do
     context 'with logged user' do
@@ -818,8 +899,7 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
-  describe 'GET #edit_fields' do  
+  describe 'GET #edit_fields' do
     context 'with logged user' do
       login_user_from_let
       before { get :edit_fields, :id => group.id }
@@ -839,7 +919,6 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-
   describe 'GET #delete_attachment' do
 
     def get_delete_attachment
@@ -851,7 +930,7 @@ RSpec.describe GroupsController, type: :controller do
       login_user_from_let
       before { get_delete_attachment }
 
-      it 'flashes a notice message' do 
+      it 'flashes a notice message' do
         expect(flash[:notice]).to eq "Group attachment was removed"
       end
 

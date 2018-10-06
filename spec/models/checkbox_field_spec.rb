@@ -7,18 +7,18 @@ RSpec.describe CheckboxField, type: :model do
 
     let!(:enterprise) { create(:enterprise) }
 
-    let!(:group) { create(:group, enterprise: enterprise) }
+    let!(:group) { build(:group, enterprise: enterprise) }
 
-    let!(:segment_one) { create(:segment, enterprise: enterprise) }
-    let!(:segment_two) { create(:segment, enterprise: enterprise) }
+    let!(:segment_one) { build(:segment, enterprise: enterprise) }
+    let!(:segment_two) { build(:segment, enterprise: enterprise) }
 
-    let!(:user_one) { create(:user, enterprise: enterprise, groups: [group],
+    let!(:user_one) { build(:user, enterprise: enterprise, groups: [group],
       segments: [segment_one], created_at: Date.yesterday) }
-    let!(:user_two) { create(:user, enterprise: enterprise, groups: [group],
+    let!(:user_two) { build(:user, enterprise: enterprise, groups: [group],
       segments: [segment_two], created_at: Date.yesterday) }
-    let!(:user_three) { create(:user, enterprise: enterprise,
+    let!(:user_three) { build(:user, enterprise: enterprise,
       segments: [segment_one, segment_two], created_at: Date.today) }
-    let!(:user_four) { create(:user, enterprise: enterprise, groups: [group],
+    let!(:user_four) { build(:user, enterprise: enterprise, groups: [group],
       segments: [segment_one, segment_two], created_at: Date.today) }
 
     before(:each) do
@@ -144,7 +144,7 @@ RSpec.describe CheckboxField, type: :model do
   describe "#popularity_for_no_option" do
     it "returns 1" do
       enterprise = create(:enterprise)
-      checkbox_field = CheckboxField.new(:type => "CheckboxField", :title => "Spoken languages", :options_text => "English\nMandarin\nSpanish\nHindi\nArabic\nRussian\nPortuguese", :container => enterprise)
+      checkbox_field = CheckboxField.new(:type => "CheckboxField", :title => "Spoken languages", :options_text => "English\nMandarin\nSpanish\nHindi\nArabic\nRussian\nPortuguese", :enterprise => enterprise)
       checkbox_field.save!
       user = create(:user)
       popularity = checkbox_field.popularity_for_no_option([user])
@@ -153,7 +153,7 @@ RSpec.describe CheckboxField, type: :model do
     
     it "returns 0.5" do
       enterprise = create(:enterprise)
-      checkbox_field = CheckboxField.new(:type => "CheckboxField", :title => "Spoken languages", :options_text => "English\nMandarin\nSpanish\nHindi\nArabic\nRussian\nPortuguese", :container => enterprise)
+      checkbox_field = CheckboxField.new(:type => "CheckboxField", :title => "Spoken languages", :options_text => "English\nMandarin\nSpanish\nHindi\nArabic\nRussian\nPortuguese", :enterprise => enterprise)
       checkbox_field.save!
       user_1 = create(:user)
       user_2 = create(:user, :data => "{\"#{checkbox_field.id}\":\"Mandarin\"}")
@@ -165,7 +165,7 @@ RSpec.describe CheckboxField, type: :model do
   describe "#popularity_for_value" do
     it "returns 1" do
       enterprise = create(:enterprise)
-      checkbox_field = CheckboxField.new(:type => "CheckboxField", :title => "Spoken languages", :options_text => "English\nMandarin\nSpanish\nHindi\nArabic\nRussian\nPortuguese", :container => enterprise)
+      checkbox_field = CheckboxField.new(:type => "CheckboxField", :title => "Spoken languages", :options_text => "English\nMandarin\nSpanish\nHindi\nArabic\nRussian\nPortuguese", :enterprise => enterprise)
       checkbox_field.save!
       user = create(:user, :data => "{\"#{checkbox_field.id}\":[\"English\"]}")
       popularity = checkbox_field.popularity_for_value("English", [user])
@@ -174,7 +174,7 @@ RSpec.describe CheckboxField, type: :model do
     
     it "returns 0.5" do
       enterprise = create(:enterprise)
-      checkbox_field = CheckboxField.new(:type => "CheckboxField", :title => "Spoken languages", :options_text => "English\nMandarin\nSpanish\nHindi\nArabic\nRussian\nPortuguese", :container => enterprise)
+      checkbox_field = CheckboxField.new(:type => "CheckboxField", :title => "Spoken languages", :options_text => "English\nMandarin\nSpanish\nHindi\nArabic\nRussian\nPortuguese", :enterprise => enterprise)
       checkbox_field.save!
       user_1 = create(:user, :data => "{\"#{checkbox_field.id}\":\"English\"}")
       user_2 = create(:user, :data => "{\"#{checkbox_field.id}\":\"Spanish\"}")
@@ -186,7 +186,7 @@ RSpec.describe CheckboxField, type: :model do
   describe "#user_popularity" do
     it "returns 0.1" do
       enterprise = create(:enterprise)
-      checkbox_field = CheckboxField.new(:type => "CheckboxField", :title => "Spoken languages", :options_text => "English\nMandarin\nSpanish\nHindi\nArabic\nRussian\nPortuguese", :container => enterprise)
+      checkbox_field = CheckboxField.new(:type => "CheckboxField", :title => "Spoken languages", :options_text => "English\nMandarin\nSpanish\nHindi\nArabic\nRussian\nPortuguese", :enterprise => enterprise)
       checkbox_field.save!
       user_1 = create(:user, :data => "{\"#{checkbox_field.id}\":[\"English\"]}", :enterprise => enterprise)
       create_list(:user, 9, :data => "{\"#{checkbox_field.id}\":[\"Spanish\"]}", :enterprise => enterprise)
@@ -198,7 +198,7 @@ RSpec.describe CheckboxField, type: :model do
   describe "#match_score_between" do
     it "returns 0.5" do
       enterprise = create(:enterprise)
-      checkbox_field = CheckboxField.new(:type => "CheckboxField", :title => "Spoken languages", :options_text => "English\nMandarin\nSpanish\nHindi\nArabic\nRussian\nPortuguese", :container => enterprise)
+      checkbox_field = CheckboxField.new(:type => "CheckboxField", :title => "Spoken languages", :options_text => "English\nMandarin\nSpanish\nHindi\nArabic\nRussian\nPortuguese", :enterprise => enterprise)
       checkbox_field.save!
       user_1 = create(:user, :data => "{\"#{checkbox_field.id}\":[\"English\"]}", :enterprise => enterprise)
       user_2 = create(:user, :data => "{\"#{checkbox_field.id}\":[\"Mandarin\"]}", :enterprise => enterprise)

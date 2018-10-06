@@ -12,7 +12,7 @@ RSpec.describe "User::UserAnswersController", type: :controller do
     before {setup}
 
     describe 'PUT#vote' do
-        let(:answer){ create(:answer, question: create(:question, campaign: create(:campaign, users: [user]))) }
+        let!(:answer){ create(:answer, question: create(:question, campaign: create(:campaign, users: [user]))) }
         let!(:reward_action){ create(:reward_action, enterprise: user.enterprise, key: "campaign_vote", points: 70) }
 
         describe "when user is logged in" do

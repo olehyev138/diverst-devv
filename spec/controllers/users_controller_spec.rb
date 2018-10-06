@@ -1,11 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe UsersController, type: :controller do
-    let(:enterprise) { create(:enterprise, cdo_name: "test") }
+    let(:enterprise) { create(:enterprise) }
     let(:user) { create(:user, enterprise: enterprise) }
-    let(:policy_group) { create(:policy_group, enterprise: enterprise, default_for_enterprise: true)}
-
-    before{ policy_group.save }
 
     describe "GET#index" do
         context 'when user is logged in' do
@@ -170,9 +167,11 @@ RSpec.describe UsersController, type: :controller do
             login_user_from_let
 
             context "for a successful update" do
+                let(:new_user_role) {create(:user_role, :enterprise => user.enterprise, :role_name => "Test", :priority => 10, :role_type => "user")}
+
                 before do
                     request.env["HTTP_REFERER"] = "back"
-                    patch :update, :id => user.id, :user => {:first_name => "updated"}
+                    patch :update, :id => user.id, :user => {:first_name => "updated", :user_role_id => new_user_role.id}
                 end
 
                 it "redirects to user" do
@@ -182,6 +181,7 @@ RSpec.describe UsersController, type: :controller do
                 it "updates the user" do
                     user.reload
                     expect(user.first_name).to eq("updated")
+                    expect(user.user_role_id).to eq(new_user_role.id)
                 end
 
                 it "flashes a notice message" do
@@ -307,14 +307,26 @@ RSpec.describe UsersController, type: :controller do
     end
 
     describe "GET#parse_csv" do
-        let!(:file) { fixture_file_upload('files/test.csv', 'text/csv') }
+        let!(:file) { fixture_file_upload('files/diverst_csv_import.csv', 'text/csv') }
 
         context 'when user is logged in' do
             login_user_from_let
-            before { get :parse_csv, :file => file }
 
-            it "renders parse_csv template" do
-                expect(response).to render_template :parse_csv
+            describe 'response' do
+                before { get :parse_csv, :file => file }
+                it "renders parse_csv template" do
+                    expect(response).to render_template :parse_csv
+                end
+            end
+
+            it 'creates new CsvFile' do
+                expect{ get :parse_csv, :file => file }
+                    .to change(CsvFile, :count)
+                    .by(1)
+            end
+
+            context 'with incorrect file' do
+                it 'does not create CSVFile'
             end
         end
 

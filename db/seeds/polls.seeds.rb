@@ -17,7 +17,7 @@ after :segments do
     match_exclude: true,
     match_polarity: true,
     match_weight: 0.2,
-    container: enterprise,
+    enterprise: enterprise,
     options_text: "Yes
 No"
   )
@@ -31,7 +31,7 @@ No"
     match_exclude: true,
     match_polarity: true,
     match_weight: 0.2,
-    container: enterprise,
+    enterprise: enterprise,
     options_text: "I wouldn't pay more
 $1 - $5
 $5 - $10
@@ -47,7 +47,7 @@ $10 - $15"
     match_exclude: true,
     match_polarity: true,
     match_weight: 0.2,
-    container: enterprise,
+    enterprise: enterprise,
     alternative_layout: true, # Select2
     options_text: "Taco
 Nacho
@@ -66,7 +66,7 @@ Hot Dog"
     match_exclude: true,
     match_polarity: true,
     match_weight: 0.2,
-    container: enterprise,
+    enterprise: enterprise,
     alternative_layout: true # Multiline
   )
 

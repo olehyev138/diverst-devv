@@ -1,7 +1,7 @@
 # Calculates the members of a segment and cache them in the segment's "members" association
 
 class CacheSegmentMembersJob < ActiveJob::Base
-  queue_as :default
+  queue_as :low
 
   def perform(segment)
     users = segment.enterprise.users.all

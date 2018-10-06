@@ -1,8 +1,16 @@
 class UserGroupNotificationJob < ActiveJob::Base
-  queue_as :default
+  queue_as :mailers
 
-  def perform(notifications_frequency)
-    User.includes(user_groups: :group).find_in_batches(batch_size: 200) do |users|
+  def perform(args)
+    # check if parameters exist and are valid
+    raise BadRequestException.new "Params missing" if args.nil? || args.empty? || args.class != Hash
+    raise BadRequestException.new "Notifications Frequency missing" if args[:notifications_frequency].nil?
+    raise BadRequestException.new "Enterprise ID missing" if args[:enterprise_id].nil?
+    
+    notifications_frequency = args[:notifications_frequency]
+    enterprise_id = args[:enterprise_id]
+    
+    User.where(:enterprise_id => enterprise_id).includes(user_groups: :group).find_in_batches(batch_size: 200) do |users|
       users.each do |user|
         groups = []
         user.user_groups.accepted_users.active.notifications_status(notifications_frequency).each do |user_group|
@@ -45,14 +53,14 @@ class UserGroupNotificationJob < ActiveJob::Base
 
   def get_frequency_range(frequency)
     case frequency
-    when "hourly" then 1.hour.ago..Time.now
-    when "weekly" then Date.yesterday.beginning_of_week..Date.yesterday.end_of_week
-    else Date.yesterday.beginning_of_day..Date.yesterday.end_of_day
+    when "hourly" then 1.hour.ago.in_time_zone("UTC")..Time.now.in_time_zone("UTC")
+    when "weekly" then Date.yesterday.beginning_of_week.in_time_zone("UTC")..Date.yesterday.end_of_week.in_time_zone("UTC")
+    else Date.yesterday.beginning_of_day.in_time_zone("UTC")..Date.yesterday.end_of_day.in_time_zone("UTC")
     end
   end
 
   def user_segment_ids(user)
-    user.segments.pluck(:id)
+    user.segments.ids
   end
 
   def get_events_count(user, group, frequency_range)
@@ -62,21 +70,32 @@ class UserGroupNotificationJob < ActiveJob::Base
   end
 
   def get_messages_count(user, group, frequency_range)
-    GroupMessage.where(group: group, updated_at: frequency_range)
-    .of_segments(user_segment_ids(user))
-    .count
+    segment_ids = user_segment_ids(user)
+    news_feed_link_ids = NewsFeed.all_links(group.news_feed.id, segment_ids).ids
+    return GroupMessage.joins(:news_feed_link)
+          .where(:news_feed_links => {:id => news_feed_link_ids}, :updated_at => frequency_range)
+          .of_segments(user_segment_ids(user))
+          .count
   end
 
   def get_news_count(user, group, frequency_range)
-    NewsLink.where(group: group, updated_at: frequency_range)
-    .of_segments(user_segment_ids(user))
-    .count
+    segment_ids = user_segment_ids(user)
+    
+    news_feed_link_ids = NewsFeed.all_links(group.news_feed.id, segment_ids).ids
+    
+    return NewsLink.joins(:news_feed_link)
+          .where(:news_feed_links => {:id => news_feed_link_ids}, :updated_at => frequency_range)
+          .count
   end
   
   def get_social_count(user, group, frequency_range)
-    SocialLink.where(group: group, updated_at: frequency_range)
-    .of_segments(user_segment_ids(user))
-    .count
+    segment_ids = user_segment_ids(user)
+    
+    news_feed_link_ids = NewsFeed.all_links(group.news_feed.id, segment_ids).ids
+    
+    return SocialLink.joins(:news_feed_link)
+          .where(:news_feed_links => {:id => news_feed_link_ids}, :updated_at => frequency_range)
+          .count
   end
   
   def get_participating_events_count(user, group, frequency_range)

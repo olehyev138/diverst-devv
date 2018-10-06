@@ -36,6 +36,11 @@
 //= require hamburger_menu
 //= require embedly-jquery
 //= require ckeditor/init
+//= require twilio-video
+//= require codemirror/lib/codemirror
+//= require firepad/dist/firepad.min
+//= require firebase/firebase
+//= require bootstrap-timepicker
 //= require_tree .
 
 var Utility = (function() {

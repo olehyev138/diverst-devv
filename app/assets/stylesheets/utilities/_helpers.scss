@@ -131,3 +131,21 @@
 .fright {
   float: right;
 }
+
+.btn-padding {
+  padding: 16px 20px;
+}
+
+.border-accent {
+  border: 1px solid $primary-color;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.padding-bottom-0 {
+  padding-bottom: 0 !important;
+}
+
+.padding-top-0 {
+  padding-top: 0 !important;
+}

@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe Event, :type => :model do
-    
+
     describe 'when validating' do
         let(:event) { FactoryGirl.build_stubbed(:event) }
 
         it { expect(event).to belong_to(:group) }
         it { expect(event).to belong_to(:owner)}
-        
+
         it { expect(event).to have_many(:events_segments) }
         it { expect(event).to have_many(:segments).through(:events_segments) }
         it { expect(event).to have_many(:event_attendances) }
@@ -17,7 +17,7 @@ RSpec.describe Event, :type => :model do
         it { expect(event).to have_many(:comments) }
         it { expect(event).to have_many(:fields) }
     end
-    
+
     describe '#time_string' do
         context 'when the event occurs on a single day' do
             it 'prints a well formatted time' do
@@ -68,12 +68,34 @@ RSpec.describe Event, :type => :model do
             end
         end
     end
-    
+
     describe "start/end" do
         it "validates end" do
             event = build(:event, :end => Date.tomorrow)
             expect(event.valid?).to eq(false)
             expect(event.errors.full_messages.first).to eq("End must be after start")
+        end
+    end
+    
+    describe "#destroy_callbacks" do
+        it "removes the child objects" do
+            event = create(:event)
+            budget = create(:budget, :event => event)
+            events_segment = create(:events_segment, :event => event)
+            event_attendance = create(:event_attendance, :event => event)
+            event_invitee = create(:event_invitee, :event => event)
+            event_comment = create(:event_comment, :event => event)
+            field = create(:field, :event => event)
+            
+            event.destroy!
+            
+            expect{Event.find(event.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Budget.find(budget.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{EventsSegment.find(events_segment.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{EventAttendance.find(event_attendance.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{EventInvitee.find(event_invitee.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{EventComment.find(event_comment.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Field.find(field.id)}.to raise_error(ActiveRecord::RecordNotFound)
         end
     end
 end

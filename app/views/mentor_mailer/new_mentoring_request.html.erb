@@ -1,0 +1,13 @@
+<p>Hello <%= @receiver.name %>!</p>
+
+<% if @mentoring_request.mentoring_type === "mentor" %>
+
+    <p><%= @sender.name %> would like you to become his/her mentor. You can accept/decline the request through the link below.</p>
+
+<% else %>
+
+    <p><%= @sender.name %> would like to become your mentor! You can accept/decline the request through the link below.</p>
+
+<% end %>
+
+<p><%= link_to "Accept/Decline", requests_user_mentorship_index_url(saml_for_enterprise: @receiver.enterprise.id) %></p>

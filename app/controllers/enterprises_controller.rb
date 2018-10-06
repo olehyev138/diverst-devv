@@ -12,7 +12,7 @@ class EnterprisesController < ApplicationController
 
   def update
     authorize @enterprise
-
+    
     if @enterprise.update_attributes(enterprise_params)
       flash[:notice] = "Your enterprise was updated"
       redirect_to :back
@@ -51,12 +51,12 @@ class EnterprisesController < ApplicationController
 
   def edit_branding
     authorize @enterprise
-
+    @emails = @enterprise.emails
     set_theme
   end
-  
+
   def edit_pending_comments
-    authorize @enterprise
+    authorize @enterprise, :manage_posts?
   end
 
   # missing template
@@ -70,8 +70,12 @@ class EnterprisesController < ApplicationController
     set_theme
 
     if @enterprise.update_attributes(theme_attributes: enterprise_params[:theme])
+      
+      @enterprise.theme.compile
+      
       flash[:notice] = "Enterprise branding was updated"
       redirect_to action: :edit_branding
+      
     else
       flash[:alert] = "Enterprise branding was not updated. Please fix the errors"
       render :edit_branding
@@ -146,19 +150,21 @@ class EnterprisesController < ApplicationController
         :saml_last_name_mapping,
         :yammer_import,
         :cdo_message,
-        :cdo_message_email,
         :privacy_statement,
-        :cdo_name,
-        :cdo_title,
         :cdo_picture,
-        :sponsor_media,
         :onboarding_sponsor_media,
-        :disable_sponsor_message,
         :company_video_url,
         :banner,
         :home_message,
         :xml_sso_config,
         :time_zone,
+        :user_group_mailer_notification_text,
+        :campaign_mailer_notification_text,
+        :approve_budget_request_mailer_notification_text,
+        :poll_mailer_notification_text,
+        :budget_approved_mailer_notification_text,
+        :budget_declined_mailer_notification_text,
+        :group_leader_post_mailer_notification_text,
         theme: [
           :id,
           :primary_color,
@@ -194,6 +200,15 @@ class EnterprisesController < ApplicationController
           :id,
           :yammer_field_name,
           :diverst_field_id,
+          :_destroy
+        ],
+        sponsors_attributes: [
+          :id,
+          :sponsor_name,
+          :sponsor_title,
+          :sponsor_message,
+          :sponsor_media,
+          :disable_sponsor_message,
           :_destroy
         ]
       )

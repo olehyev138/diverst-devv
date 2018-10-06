@@ -53,9 +53,11 @@ RSpec.describe IndexElasticsearchJob, type: :job do
 
   context 'when trying to do an unknown action' do
     it "should raise an argument error" do
-      expect {
-        IndexElasticsearchJob.perform_now(model_name: 'User', operation: 'unknown', index: index_name, record_id: user.id)
-      }.to raise_error(ArgumentError)
+      allow(Rollbar).to receive(:error)
+      
+      IndexElasticsearchJob.perform_now(model_name: 'User', operation: 'unknown', index: index_name, record_id: user.id)
+      
+      expect(Rollbar).to have_received(:error)
     end
   end
 end

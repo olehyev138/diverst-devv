@@ -1,5 +1,5 @@
 <div class="content__main">
-  <%= simple_form_for @poll do |f| %>
+  <%= simple_form_for @poll, html: { class: "disable-enter-submit" } do |f| %>
 
     <div class="card">
       <div class="card__section card__section--border">
@@ -64,6 +64,6 @@
     </div>
 
     <%= button_tag "Save and publish", value: "published", name: "poll[status]", class: "btn btn--primary" %>
-    <%= button_tag "Save as draft", value: "draft", name: "poll[status]", class: "btn btn--secondary" %>
+    <%= button_tag "Save as draft", value: "draft", name: "poll[status]", class: "btn btn--secondary" if f.object.can_be_saved_as_draft? %>
   <% end %>
 </div>

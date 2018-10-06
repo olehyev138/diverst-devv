@@ -3,6 +3,18 @@ require 'rails_helper'
 RSpec.describe Theme, type: :model do
   let(:theme) {build :theme }
 
+  describe 'test association and validations' do
+    it { expect(theme).to have_one(:enterprise) }
+
+    it { expect(theme).to have_attached_file(:logo) }
+    it { expect(theme).to validate_attachment_content_type(:logo) }
+    it { expect(theme).to validate_presence_of(:primary_color).with_message('should be a valid hex color') }
+      [:primary_color, :secondary_color].each do |color|
+        it { expect(theme).to allow_value('#FFFFFF').for(color) }
+        it { expect(theme).to_not allow_value('red').for(color) }
+      end
+  end
+
   describe 'validation' do
     describe 'color validation' do
       describe 'primary color' do

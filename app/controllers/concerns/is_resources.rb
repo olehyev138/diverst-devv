@@ -10,6 +10,7 @@ module IsResources
     end
 
     def index
+        increment_views
         @resources = @container.resources
         render '/index'
     end
@@ -34,10 +35,15 @@ module IsResources
     end
 
     def show
-        send_file @resource.file.path,
-                  filename: @resource.file_file_name,
-                  type: @resource.file_content_type,
-                  disposition: 'attachment'
+        if @resource.file.nil? || @resource.file.path.nil?
+            flash[:alert] = "File/File Path does not exist"
+            redirect_to(request.referrer || default_path)
+        else
+            send_file @resource.file.path,
+                      filename: @resource.file_file_name,
+                      type: @resource.file_content_type,
+                      disposition: 'attachment'
+        end
     end
 
     def update
@@ -63,12 +69,24 @@ module IsResources
                 :title,
                 :file,
                 :resource_type,
-                :container_id,
+                :folder_id,
                 :url
             )
     end
 
     def set_resource
         @resource = @container.resources.find(params[:id]) if @container
+    end
+    
+    def increment_views
+        if @container.class.name === "Folder"
+            view = View.find_or_create_by({
+                :folder_id => @container.id,
+                :user_id => current_user.id,
+                :enterprise_id => current_user.enterprise_id
+            })
+            view.view_count += 1
+            view.save!
+        end
     end
 end

@@ -3,12 +3,12 @@ class Poll < ActiveRecord::Base
 
     enum status: [:published, :draft]
 
-    has_many :fields, as: :container
-    has_many :responses, class_name: 'PollResponse', inverse_of: :poll
-    has_many :graphs, as: :collection
-    has_many :polls_segments
+    has_many :fields, dependent: :destroy
+    has_many :responses, class_name: 'PollResponse', inverse_of: :poll, dependent: :destroy
+    has_many :graphs, dependent: :destroy
+    has_many :polls_segments, dependent: :destroy
     has_many :segments, inverse_of: :polls, through: :polls_segments
-    has_many :groups_polls
+    has_many :groups_polls, dependent: :destroy
     has_many :groups, inverse_of: :polls, through: :groups_polls
 
     belongs_to :enterprise, inverse_of: :polls
@@ -16,6 +16,8 @@ class Poll < ActiveRecord::Base
     belongs_to :initiative
 
     after_create :create_default_graphs
+
+    after_save :schedule_users_notification
 
     accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
 
@@ -30,6 +32,10 @@ class Poll < ActiveRecord::Base
     validate :validate_initiative_enterprise
     validate :validate_segments_enterprise
     validate :validate_associated_objects
+
+    def can_be_saved_as_draft?
+      self.new_record? || self.draft?
+    end
 
     # Returns the list of users who have answered the poll
     def graphs_population
@@ -118,5 +124,9 @@ class Poll < ActiveRecord::Base
         if (!groups.empty? || !segments.empty?) && !initiative.nil?
             errors.add(:associated_objects, "invalid configuration of poll")
         end
+    end
+
+    def schedule_users_notification
+      PollUsersNotifierJob.perform_later(self.id)
     end
 end

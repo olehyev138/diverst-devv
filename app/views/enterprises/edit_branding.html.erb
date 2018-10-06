@@ -1,5 +1,9 @@
 <div class="content__header">
-  <h1>Branding</h1>
+  <h1>Branding /<%= link_to emails_path do %>
+     <button class="btn btn--primary">
+       Emails
+     </button></h1>
+   <% end %>
 </div>
 
 <div class="content__main">
@@ -17,6 +21,7 @@
               <%= t.input :secondary_color, id: 'secondary_color', input_html: { class: 'jscolor' }, label: 'Charts color' %>
             </div>
           </div>
+          <%= f.hidden_field :id %>
           <%= t.input :logo, as: :attachment_preview %>
 
           <%= t.input :logo_redirect_url %>
@@ -74,18 +79,21 @@
   <div class="card">
     <div class="card__section">
       <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_branding') do |f| %>
-      <%= f.input :cdo_name, label: "Sponsor name", placeholder: "Jane Doe" %>
-      <%= f.input :cdo_title, label: "Sponsor title", placeholder: "VP Diversity & Inclusion" %>
-      <%= f.input :cdo_message_email, label: "Home page sponsor message" %>
-      <%= f.hidden_field :disable_sponsor_message, value: false %>
-      <%= f.input :disable_sponsor_message,
-      label: "disable sponsor message?",
-      input_html: { autofocus: true } %>
+
+      <%= f.simple_fields_for :sponsors do |s| %>
+        <%= render 'sponsor_fields', f: s %>
+      <% end %>
+
+
+      <div class="enterprise_sponsor_link">
+        <%= link_to_add_association "Add a sponsor", f, :sponsors %>
+      </div>
+      <br>
+
       <%= f.input :cdo_message, label: "Onboarding sponsor message" %>
-      <%= f.input :sponsor_media, label: "Upload a sponsor image or video" %>
       <%= f.input :onboarding_sponsor_media, label: "Upload onboarding video" %>
 
-        <%= f.input :privacy_statement %>
+        <%= f.input :privacy_statement, label: "#{c_t(:privacy_statement)}" %>
 
         <%= f.button :submit, "Save sponsor info" %>
       <% end %>

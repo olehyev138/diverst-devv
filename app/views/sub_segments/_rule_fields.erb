@@ -13,10 +13,6 @@
       <!-- operatorField !-->
       <%= f.input :operator, input_html: { 'data-operator-id' => f.object.operator }, collection: [], label: false %>
     </div>
-    <div class="flex-row__cell value-text" style="display: none;">
-      <!-- valueField !-->
-      <%= f.input :values, input_html: { 'data-selected-values' => f.object.values }, label: false, value: "" %>
-    </div>
     <div class="flex-row__cell flex-row__cell--grow value-select" style="display: none;">
       <!-- valueField !-->
       <%= f.input :values, input_html: { class: "field__input", 'data-selected-values' => f.object.values, multiple: "multiple" }, label: false, collection: [], value: "", include_hidden: false %>

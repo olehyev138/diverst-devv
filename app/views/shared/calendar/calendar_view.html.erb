@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card__section card__section--border calendar-filters">
         <div class="row">
-          <div class="col sm-5">
+          <div class="col xs-5">
             <%= f.input :initiative_participating_groups_group_id_in,
                   as: :select,
                   collection: @groups,
@@ -12,7 +12,7 @@
                   required: false
             %>
           </div>
-          <div class="col sm-5">
+          <div class="col xs-5">
             <%= f.input :initiative_segments_segment_id_in,
                   as: :select,
                   collection: @segments,
@@ -21,7 +21,7 @@
                   required: false
             %>
           </div>
-          <div class="col sm-1" style="padding-top: 15px;">
+          <div class="col xs-2" style="padding-top: 15px;">
             <%= f.button :submit, value: "Filter" %>
           </div>
         </div>

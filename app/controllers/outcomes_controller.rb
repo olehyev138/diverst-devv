@@ -9,7 +9,7 @@ class OutcomesController < ApplicationController
   def index
     authorize Outcome
   end
-  
+
   # MISSING TEMPLATE
   def new
     authorize Outcome
@@ -19,7 +19,7 @@ class OutcomesController < ApplicationController
   def create
     authorize Outcome
     @outcome = Outcome.new(outcome_params)
-    
+
     # don't think this belongs here
     #@outcome.enterprise = current_user.enterprise
     #@outcome.estimated_funding *= 100
@@ -60,7 +60,7 @@ class OutcomesController < ApplicationController
   def set_group
     if current_user
       @group = current_user.enterprise.groups.includes(outcomes: :pillars).find(params[:group_id])
-    else 
+    else
       user_not_authorized
     end
   end
