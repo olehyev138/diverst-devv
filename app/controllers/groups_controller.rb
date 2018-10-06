@@ -1,7 +1,7 @@
 class GroupsController < ApplicationController
     before_action :authenticate_user!, except: [:calendar_data]
     before_action :set_group, except: [:index, :new, :create, :plan_overview,
-                                       :calendar, :calendar_data, :close_budgets]
+                                       :calendar, :calendar_data, :close_budgets, :close_budgets_export_csv]
 
     skip_before_action :verify_authenticity_token, only: [:create, :calendar_data]
     after_action :verify_authorized, except: [:calendar_data]
@@ -12,24 +12,42 @@ class GroupsController < ApplicationController
 
     def index
         authorize Group
-        @groups = current_user.enterprise.groups.includes(:children).where(:parent_id => nil)
+        @groups = GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_manage).resolve.includes(:children).all_parents
     end
 
     def plan_overview
         authorize Group
-        @groups = current_user.enterprise.groups.includes(:initiatives)
+        @groups = GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_budgets_index).resolve
     end
 
     def close_budgets
         authorize Group
-        @groups = current_user.enterprise.groups.includes(:children).where(:parent_id => nil)
+        @groups = GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_budgets_index).resolve.includes(:children).all_parents
+    end
+
+    def close_budgets_export_csv
+      authorize Group, :close_budgets?
+      user_not_authorized if not current_user.policy_group.annual_budget_manage?
+
+      result =
+        CSV.generate do |csv|
+          csv << ['Group name', 'Annual budget', 'Leftover money', 'Approved budget']
+           current_user.enterprise.groups.includes(:children).all_parents.each do |group|
+             csv << [group.name, group.annual_budget.presence || "Not set", group.leftover_money, group.approved_budget]
+             
+             group.children.each do |child|
+               csv << [child.name, child.annual_budget.presence || "Not set", child.leftover_money, child.approved_budget]
+             end
+          end
+        end
+      send_data result, filename: 'global_budgets.csv'
     end
 
     # calendar for all of the groups
     def calendar
-        authorize Group, :index?
+        authorize Group
         enterprise = current_user.enterprise
-        @groups = enterprise.groups.where(:parent_id => nil)
+        @groups = enterprise.groups.all_parents
         @segments = enterprise.segments
         @q_form_submit_path = calendar_groups_path
         @q = Initiative.ransack(params[:q])
@@ -78,41 +96,31 @@ class GroupsController < ApplicationController
     def new
         authorize Group
         @group = current_user.enterprise.groups.new
+        @categories = current_user.enterprise.group_categories
     end
 
     def show
         authorize @group
+        @group_sponsors = @group.sponsors
 
         if policy(@group).erg_leader_permissions?
             base_show
 
-            @posts = @group.news_feed_links
-                            .includes(:link)
-                            .approved
-                            .order(created_at: :desc)
-                            .limit(5)
+            @posts = without_segments
         else
             if @group.active_members.include? current_user
                 base_show
-
-                @posts = @group.news_feed_links
-                            .includes(:link)
-                            .approved
-                            .joins(joins)
-                            .where(where, current_user.segments.pluck(:id))
-                            .order(created_at: :desc)
-                            .limit(5)
-
+                @posts = with_segments
             else
-                @upcoming_events = []
+                @upcoming_events = @group.initiatives.upcoming.limit(3) + @group.participating_initiatives.upcoming.limit(3)
                 @user_groups = []
                 @messages = []
                 @user_group = []
-                @leaders = []
+                @leaders = @group.group_leaders.includes(:user).visible
                 @user_groups = []
                 @top_user_group_participants = []
                 @top_group_participants = []
-                @posts = []
+                @posts = with_segments
             end
         end
     end
@@ -123,32 +131,60 @@ class GroupsController < ApplicationController
         @group = current_user.enterprise.groups.new(group_params)
         @group.owner = current_user
 
+        if group_params[:group_category_id].present?
+          @group.group_category_type_id = GroupCategory.find_by(id: group_params[:group_category_id])&.group_category_type_id
+        else
+            @group.group_category_type_id = nil
+        end
+
         if @group.save
             track_activity(@group, :create)
             flash[:notice] = "Your #{c_t(:erg)} was created"
-            redirect_to action: :index
+            redirect_to groups_url
         else
-            flash[:alert] = "Your #{c_t(:erg)} was not created. Please fix the errors"
+            flash.now[:alert] = "Your #{c_t(:erg)} was not created. Please fix the errors"
+            @categories = current_user.enterprise.group_categories
             render :new
         end
     end
 
     def edit
         authorize @group
+        @categories = current_user.enterprise.group_categories
     end
 
     def update
         authorize @group
 
+        if group_params[:group_category_id].present?
+          @group.group_category_type_id = GroupCategory.find_by(id: params[:group][:group_category_id])&.group_category_type_id
+        end
+
         if @group.update(group_params)
             track_activity(@group, :update)
-
             flash[:notice] = "Your #{c_t(:erg)} was updated"
-            redirect_to :back
+
+            if request.referer == settings_group_url(@group)
+                redirect_to @group
+            elsif request.referer == group_outcomes_url(@group)
+                redirect_to group_outcomes_url(@group)
+            else
+                redirect_to [:edit, @group]
+            end
         else
-            flash[:alert] = "Your #{c_t(:erg)} was not updated. Please fix the errors"
-            render :settings
+            flash.now[:alert] = "Your #{c_t(:erg)} was not updated. Please fix the errors"
+
+            if request.referer == edit_group_url(@group) || request.referer == group_url(@group)
+              @categories = current_user.enterprise.group_categories
+              render :edit
+            else
+              render :settings
+            end
         end
+    end
+
+    def layouts
+        authorize @group, :update?
     end
 
     def settings
@@ -193,7 +229,7 @@ class GroupsController < ApplicationController
 
     def parse_csv
         authorize @group, :edit?
-        
+
         if params[:file].nil?
             flash[:alert] = "CSV file is required"
             redirect_to :back
@@ -258,15 +294,26 @@ class GroupsController < ApplicationController
         @members = @group.active_members.order(created_at: :desc).limit(8)
 
         @top_user_group_participants = @group.user_groups.active.top_participants(10).includes(:user)
-        @top_group_participants = @group.enterprise.groups.top_participants(10)
+        @top_group_participants = @group.enterprise.groups.non_private.top_participants(10)
     end
 
-    def where
-        "news_feed_link_segments.segment_id IS NULL OR news_feed_link_segments.segment_id IN (?)"
+    def without_segments
+        NewsFeedLink.combined_news_links(@group.news_feed.id)
+                            .includes(:news_link, :group_message, :social_link)
+                            .order(is_pinned: :desc, created_at: :desc)
+                            .limit(5)
     end
 
-    def joins
-        "LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id"
+    def with_segments
+        segment_ids = current_user.segments.ids
+        if not segment_ids.empty?
+            NewsFeedLink
+                .combined_news_links_with_segments(@group.news_feed.id, current_user.segments.ids)
+                .order(is_pinned: :desc, created_at: :desc)
+                .limit(5)
+        else
+            return without_segments
+        end
     end
 
     def resolve_layout
@@ -291,8 +338,11 @@ class GroupsController < ApplicationController
             .require(:group)
             .permit(
                 :name,
+                :short_description,
                 :description,
+                :home_message,
                 :logo,
+                :private,
                 :banner,
                 :yammer_create_group,
                 :yammer_sync_users,
@@ -304,14 +354,13 @@ class GroupsController < ApplicationController
                 :upcoming_events_visibility,
                 :calendar_color,
                 :active,
-                :sponsor_name,
                 :contact_email,
-                :sponsor_title,
                 :sponsor_image,
-                :sponsor_media,
-                :sponsor_message,
                 :company_video_url,
+                :layout,
                 :parent_id,
+                :group_category_id,
+                :group_category_type_id,
                 manager_ids: [],
                 child_ids: [],
                 member_ids: [],
@@ -351,6 +400,15 @@ class GroupsController < ApplicationController
                     :max,
                     :options_text,
                     :alternative_layout
+                ],
+                sponsors_attributes: [
+                  :id,
+                  :sponsor_name,
+                  :sponsor_title,
+                  :sponsor_message,
+                  :sponsor_media,
+                  :disable_sponsor_message,
+                  :_destroy
                 ]
             )
     end

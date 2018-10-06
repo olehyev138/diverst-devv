@@ -1,5 +1,5 @@
 class SendPollNotificationJob < ActiveJob::Base
-  queue_as :default
+  queue_as :mailers
 
   def perform
     Poll.joins(:initiative)

@@ -1,5 +1,9 @@
 <div class="content__header">
-  <h1>Email Templates</h1>
+  <h1>Emails/<%= link_to edit_branding_enterprise_path(current_user.enterprise) do %>
+     <button class="btn btn--primary">
+       Branding
+     </button></h1>
+   <% end %>
 </div>
 
 <div class="content__main">
@@ -8,14 +12,12 @@
       <table class="table--has-border" id="emails-table">
         <thead>
           <th>Name</th>
-          <th>Custom template?</th>
           <th>Last update</th>
         </thead>
         <tbody>
           <% @emails.each do |email| %>
             <tr>
               <td><%= link_to email.name, edit_email_path(email) %></td>
-              <td><%= email.use_custom_templates? ? "Yes" : "No" %></td>
               <td><%= time_ago_in_words(email.updated_at) %> ago</td>
             </tr>
           <% end %>

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe FieldsController, type: :controller do
-    let(:enterprise){ create(:enterprise, cdo_name: "test") }
+    let(:enterprise){ create(:enterprise) }
     let(:user){ create(:user, enterprise: enterprise) }
     let(:field){create(:field, type: "NumericField", container_id: enterprise.id, container_type: "Enterprise", elasticsearch_only: false)}
     

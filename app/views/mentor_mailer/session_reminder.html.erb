@@ -1,0 +1,5 @@
+<p>Hello <%= @user.name %>!</p>
+
+<p>This is a reminder that you have a mentoring session scheduled from <%= @mentoring_session.start.strftime("%m/%d/%Y %I:%M %p") %> to <%= @mentoring_session.end.strftime("%m/%d/%Y %I:%M %p") %>.</p>
+
+<p><%= link_to "Session Details", mentoring_session_url(id: @mentoring_session.id, saml_for_enterprise: @user.enterprise.id) %></p>

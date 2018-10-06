@@ -1,7 +1,10 @@
 <div class="content__header">
-  <h1>Members (<%= @total_members %>)</h1>
+  <h1>Members (<%= @members.count %>)</h1>
   <% if policy(@group).manage_members? %>
     <%= link_to "+ Add members", new_group_group_member_path(@group), class: "btn btn--primary" %>
+    <div class="flex-row__cell">
+      <%= link_to "Export Member CSV", export_group_members_list_csv_group_group_members_path(@group), class: 'btn btn--primary' %>
+    </div>
   <% end %>
 </div>
 
@@ -10,7 +13,7 @@
     <div class="card">
       <div class="card__section card__section--border calendar-filters">
         <div class="row">
-          <div class="col sm-5">
+          <div class="col xs-5">
             <%= f.input :users_segments_segment_id_in,
                   as: :select,
                   collection: @segments,
@@ -19,23 +22,21 @@
                   required: false
             %>
           </div>
-          <div class="col sm-5">
-            <div class="col sm-6">
-              <%= f.input :user_groups_created_at_gteq,
-                    as: :date_picker,
-                    label: "Users joined group from",
-                    required: false
-              %>
-            </div>
-            <div class="col sm-6">
-              <%= f.input :user_groups_created_at_lteq,
-                    as: :date_picker,
-                    label: "Users joined group to",
-                    required: false
-              %>
-            </div>
+          <div class="col xs-6">
+            <%= f.input :user_groups_created_at_gteq,
+                  as: :date_picker,
+                  label: "Users joined group from",
+                  required: false
+            %>
           </div>
-          <div class="col sm-1" style="padding-top: 15px;">
+          <div class="col xs-6">
+            <%= f.input :user_groups_created_at_lteq,
+                  as: :date_picker,
+                  label: "Users joined group to",
+                  required: false
+            %>
+          </div>
+          <div class="col xs-2" style="padding-top: 15px;">
             <%= f.button :submit, value: "Filter" %>
           </div>
         </div>

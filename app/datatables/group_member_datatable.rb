@@ -22,12 +22,12 @@ class GroupMemberDatatable < AjaxDatatablesRails::Base
 
   def data
     records.map do |record|
-      show_link = link_to 'Show user', user_path(record)
+      show_link = link_to "#{record.name}", user_path(record)
       destroy_link = generate_destroy_link(record)
       [
-        record.name,
+        show_link,
         record.active ? "Yes" : "No",
-        [show_link, destroy_link].compact.join(" - ")
+        destroy_link
       ]
     end
   end

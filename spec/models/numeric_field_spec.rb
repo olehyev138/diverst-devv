@@ -7,10 +7,10 @@ RSpec.describe NumericField, type: :model do
 
     let!(:enterprise) { create(:enterprise) }
 
-    let!(:group) { create(:group, enterprise: enterprise) }
+    let!(:group) { build(:group, enterprise: enterprise) }
 
-    let!(:segment_one) { create(:segment, enterprise: enterprise) }
-    let!(:segment_two) { create(:segment, enterprise: enterprise) }
+    let!(:segment_one) { build(:segment, enterprise: enterprise) }
+    let!(:segment_two) { build(:segment, enterprise: enterprise) }
 
     let!(:user_one) { create(:user, enterprise: enterprise, groups: [group],
       segments: [segment_one], created_at: Date.yesterday) }
@@ -21,7 +21,7 @@ RSpec.describe NumericField, type: :model do
     let!(:user_four) { create(:user, enterprise: enterprise, groups: [group],
       segments: [segment_one, segment_two], created_at: Date.today) }
 
-    before(:each) do
+    before do
       enterprise.fields = [field_one, field_two]
 
       # Save fields on users
@@ -102,7 +102,7 @@ RSpec.describe NumericField, type: :model do
   describe "#match_score_between" do
     it "returns 0.0" do
       enterprise = create(:enterprise)
-      numeric_field = NumericField.new(:type => "NumericField", :title => "Seniority (in years)", :min => 0, :max => 40, :container => enterprise)
+      numeric_field = NumericField.new(:type => "NumericField", :title => "Seniority (in years)", :min => 0, :max => 40, :enterprise => enterprise)
       numeric_field.save!
       user_1 = create(:user, :data => "{\"#{numeric_field.id}\":2}", :enterprise => enterprise)
       user_2 = create(:user, :data => "{\"#{numeric_field.id}\":2}", :enterprise => enterprise)
@@ -115,7 +115,7 @@ RSpec.describe NumericField, type: :model do
   describe "#validates_rule_for_user" do
     it "returns true" do
       enterprise = create(:enterprise)
-      numeric_field = NumericField.new(:type => "NumericField", :title => "Seniority (in years)", :min => 0, :max => 40, :container => enterprise)
+      numeric_field = NumericField.new(:type => "NumericField", :title => "Seniority (in years)", :min => 0, :max => 40, :enterprise => enterprise)
       numeric_field.save!
       user_1 = create(:user, :data => "{\"#{numeric_field.id}\":21}", :enterprise => enterprise)
       segment = create(:segment, :name => "Seniors", :enterprise => enterprise)
@@ -126,7 +126,7 @@ RSpec.describe NumericField, type: :model do
     
     it "returns false" do
       enterprise = create(:enterprise)
-      numeric_field = NumericField.new(:type => "NumericField", :title => "Seniority (in years)", :min => 0, :max => 40, :container => enterprise)
+      numeric_field = NumericField.new(:type => "NumericField", :title => "Seniority (in years)", :min => 0, :max => 40, :enterprise => enterprise)
       numeric_field.save!
       user_1 = create(:user, :data => "{\"#{numeric_field.id}\":19}", :enterprise => enterprise)
       segment = create(:segment, :name => "Seniors", :enterprise => enterprise)
@@ -137,7 +137,7 @@ RSpec.describe NumericField, type: :model do
     
     it "returns true" do
       enterprise = create(:enterprise)
-      numeric_field = NumericField.new(:type => "NumericField", :title => "Seniority (in years)", :min => 0, :max => 40, :container => enterprise)
+      numeric_field = NumericField.new(:type => "NumericField", :title => "Seniority (in years)", :min => 0, :max => 40, :enterprise => enterprise)
       numeric_field.save!
       user_1 = create(:user, :data => "{\"#{numeric_field.id}\":20}", :enterprise => enterprise)
       segment = create(:segment, :name => "Seniors", :enterprise => enterprise)
@@ -148,7 +148,7 @@ RSpec.describe NumericField, type: :model do
     
     it "returns false" do
       enterprise = create(:enterprise)
-      numeric_field = NumericField.new(:type => "NumericField", :title => "Seniority (in years)", :min => 0, :max => 40, :container => enterprise)
+      numeric_field = NumericField.new(:type => "NumericField", :title => "Seniority (in years)", :min => 0, :max => 40, :enterprise => enterprise)
       numeric_field.save!
       user_1 = create(:user, :data => "{\"#{numeric_field.id}\":19}", :enterprise => enterprise)
       segment = create(:segment, :name => "Seniors", :enterprise => enterprise)
@@ -159,7 +159,7 @@ RSpec.describe NumericField, type: :model do
     
     it "returns true" do
       enterprise = create(:enterprise)
-      numeric_field = NumericField.new(:type => "NumericField", :title => "Seniority (in years)", :min => 0, :max => 40, :container => enterprise)
+      numeric_field = NumericField.new(:type => "NumericField", :title => "Seniority (in years)", :min => 0, :max => 40, :enterprise => enterprise)
       numeric_field.save!
       user_1 = create(:user, :data => "{\"#{numeric_field.id}\":19}", :enterprise => enterprise)
       segment = create(:segment, :name => "Seniors", :enterprise => enterprise)
@@ -170,7 +170,7 @@ RSpec.describe NumericField, type: :model do
     
     it "returns false" do
       enterprise = create(:enterprise)
-      numeric_field = NumericField.new(:type => "NumericField", :title => "Seniority (in years)", :min => 0, :max => 40, :container => enterprise)
+      numeric_field = NumericField.new(:type => "NumericField", :title => "Seniority (in years)", :min => 0, :max => 40, :enterprise => enterprise)
       numeric_field.save!
       user_1 = create(:user, :data => "{\"#{numeric_field.id}\":21}", :enterprise => enterprise)
       segment = create(:segment, :name => "Seniors", :enterprise => enterprise)
@@ -181,7 +181,7 @@ RSpec.describe NumericField, type: :model do
     
     it "returns true" do
       enterprise = create(:enterprise)
-      numeric_field = NumericField.new(:type => "NumericField", :title => "Seniority (in years)", :min => 0, :max => 40, :container => enterprise)
+      numeric_field = NumericField.new(:type => "NumericField", :title => "Seniority (in years)", :min => 0, :max => 40, :enterprise => enterprise)
       numeric_field.save!
       user_1 = create(:user, :data => "{\"#{numeric_field.id}\":19}", :enterprise => enterprise)
       segment = create(:segment, :name => "Seniors", :enterprise => enterprise)
@@ -192,7 +192,7 @@ RSpec.describe NumericField, type: :model do
     
     it "returns false" do
       enterprise = create(:enterprise)
-      numeric_field = NumericField.new(:type => "NumericField", :title => "Seniority (in years)", :min => 0, :max => 40, :container => enterprise)
+      numeric_field = NumericField.new(:type => "NumericField", :title => "Seniority (in years)", :min => 0, :max => 40, :enterprise => enterprise)
       numeric_field.save!
       user_1 = create(:user, :data => "{\"#{numeric_field.id}\":20}", :enterprise => enterprise)
       segment = create(:segment, :name => "Seniors", :enterprise => enterprise)

@@ -1,166 +1,159 @@
-<% if @outcomes.empty? %>
-  <div class="content__header">
-    <div class="flex-row flex-row--middle full-width">
-      <div class="flex-row__cell flex-row__cell--grow">
-        <div class="field__input-wrapper" style="width: 450px;">
-          <span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
-          <select class="field__input field__input--right-add-on" id="js-group-select">
-            <% current_user.manageable_groups.each do |group| %>
-              <option value="<%= group.id %>"<%= " selected disabled" if group == @group %>><%= group.name %></option>
-            <% end %>
-          </select>
-        </div>
-      </div>
-      <div class="flex-row__cell">
-        <%= link_to "New Event", new_group_initiative_path(@group), class: "btn btn--primary" if policy(Initiative).new? %>
-      </div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-8">
+      <span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
+      <select class="field__input field__input--right-add-on" id="js-group-select">
+        <% current_user.manageable_groups.each do |group| %>
+          <option value="<%= group.id %>"<%= " selected disabled" if group == @group %>><%= group.name %></option>
+        <% end %>
+      </select>
+    </div>
+    <div class="col-xs-4">
+      <%= link_to "New Event", new_group_initiative_path(@group), class: "btn btn--primary btn-lg hidden-xs" if policy(Initiative).new? %>
+      <%= link_to "New", new_group_initiative_path(@group), class: "btn btn-primary btn-lg visible-xs" if policy(Initiative).new? %>
     </div>
   </div>
-  <div class="content__main">
-    <div class="card">
-      <div class="card__section">
-        <p>There are no <%= c_t(:outcome).pluralize %> yet. <%= link_to "Create some", group_outcomes_path(@group) %> to track your diversity initiatives.</p>
-      </div>
-    </div>
-  </div>
-<% else %>
-  <div class="content__header">
-    <div class="flex-row flex-row--middle full-width">
-      <div class="flex-row__cell">
-        <div class="field__input-wrapper" style="width: 450px;">
-          <span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
-          <select class="field__input field__input--right-add-on" id="js-group-select">
-            <% current_user.manageable_groups.each do |group| %>
-              <option value="<%= group.id %>"<%= " selected disabled" if group == @group %>><%= group.name %></option>
-            <% end %>
-          </select>
-        </div>
-      </div>
-      <div class="flex-row__cell flex-row__cell--grow">
-      </div>
-      <div class="flex-row__cell">
-        <%= link_to "New Event", new_group_initiative_path(@group), class: "btn btn--primary" if policy(Initiative).new? %>
-      </div>
-    </div>
-  </div>
-  <% @outcomes.each do |outcome| %>
-    <div class="content__header">
-      <div class="flex-row flex-row--middle full-width">
-        <div class="flex-row__cell flex-row__cell--grow">
-          <h1><%= outcome.name %></h1>
-        </div>
-      </div>
-    </div>
-
-    <div class="content__main">
-      <% if outcome.pillars.empty? %>
+  <br>
+  <% if @outcomes.empty? %>
+    <div class="content__main row">
+      <div class="col-xs-12">
         <div class="card">
           <div class="card__section">
-            <p>There are no <%= c_t(:program).pluralize %> in this <%= c_t(:outcome) %> yet. <%= link_to "Create some", group_outcomes_path(@group) %> and start solving problems with your team's diverse opinions.</p>
+            <p>There are no <%= c_t(:outcome).pluralize %> yet. <%= link_to "Create some", group_outcomes_path(@group) %> to track your diversity initiatives.</p>
           </div>
         </div>
-      <% else %>
-        <% outcome.pillars.each do |pillar| %>
-          <div class="card">
-            <div class="card__section card__section--border">
-              <h2 class="no-margin"><%= pillar.name %></h2>
-              <p class="muted"><%= pillar.value_proposition %></p>
-            </div>
-
-            <% if pillar.initiatives.empty? %>
-              <div class="card__section card__section--border">
-                There are no active events in this <%= c_t(:program) %>.
+      </div>
+    </div>
+  <% else %>
+    <% @outcomes.each do |outcome| %>
+      <div class="content__header row">
+        <div class="flex-row flex-row--middle full-width col-xs-12">
+          <div class="flex-row__cell flex-row__cell--grow">
+            <h1><%= outcome.name %></h1>
+          </div>
+        </div>
+      </div>
+      <div class="content__main row">
+        <div class="col-xs-12">
+          <% if outcome.pillars.empty? %>
+            <div class="card">
+              <div class="card__section">
+                <p>There are no <%= c_t(:program).pluralize %> in this <%= c_t(:outcome) %> yet. <%= link_to "Create some", group_outcomes_path(@group) %> and start solving problems with your team's diverse opinions.</p>
               </div>
-            <% else %>
-              <% pillar.initiatives.each do |initiative| %>
+            </div>
+          <% else %>
+            <% outcome.pillars.each do |pillar| %>
+              <div class="card">
                 <div class="card__section card__section--border">
-                  <h3><%= link_to initiative.name, group_event_path(@group, initiative) %></h3>
-                  <div class="card__action">
-                    <%= link_to 'To Do', todo_group_initiative_path(@group, initiative)  %> -
-                    <%= link_to "Resources", group_initiative_resources_path(@group, initiative) %> -
-                    <%= link_to "Budget", group_initiative_expenses_path(@group, initiative) %> -
-                    <%= link_to "Updates", group_initiative_updates_path(@group, initiative) %> -
-                    <%= link_to "KPI", group_initiative_path(@group, initiative) %> |
-                    <%= link_to "Edit", edit_group_initiative_path(@group, initiative) %> -
-                    <%= link_to "Survey", new_poll_path(initiative_id: initiative.id) %> -
-                    <%= link_to "Delete", group_initiative_path(@group, initiative), method: :delete, data: { confirm: "Are you sure?" }, class: "error" %>
+                  <h2 class="no-margin"><%= pillar.name %></h2>
+                  <p class="muted"><%= pillar.value_proposition %></p>
+                </div>
+    
+                <% if pillar.initiatives.empty? %>
+                  <div class="card__section card__section--border">
+                    There are no active events in this <%= c_t(:program) %>.
                   </div>
-
-                  <div class="flex-row flex-row--spaced flex-row--middle">
-                    <div class="flex-row__cell flex-row__cell--spaced flex-row__cell--grow">
-                      <% if last_update = initiative.updates.last %>
-                        <% initiative.fields.each_slice(3) do |field_row| %>
-                          <div class="flex-row flex-row--spacing-bottom">
-                            <% field_row.each do |field| %>
-                              <div class="flex-row__cell flex-row__cell--grow metric">
-                                <span class="metric__title"><%= field.title %></span>
-                                <h4 class="metric__value"><%= last_update.info[field] || "N/A" %></h4>
-                                <div
-                                  class="metric__sparkline graph"
-                                  data-url="<%= time_series_group_initiative_field_path(@group, initiative, field) %>"
-                                  data-title="<%= field.title %>"
-                                  data-spark="true"
-                                  data-time-series="true"
-                                  >
-                                </div>
+                <% else %>
+                  <% pillar.initiatives.each do |initiative| %>
+                    <div class="card__section card__section--border">
+                      <div class="row">
+                        <div class="col-xs-4">
+                          <h3><%= link_to initiative.name, group_event_path(@group, initiative) %></h3>
+                        </div>
+                        <div class="col-xs-8">
+                          <p>
+                            <%= link_to 'To Do', todo_group_initiative_path(@group, initiative)  %> -
+                            <%= link_to "Resources", group_initiative_resources_path(@group, initiative) %> -
+                            <%= link_to "Budget", group_initiative_expenses_path(@group, initiative) %> -
+                            <%= link_to "Updates", group_initiative_updates_path(@group, initiative) %> -
+                            <%= link_to "KPI", group_initiative_path(@group, initiative) %> |
+                            <%= link_to "Edit", edit_group_initiative_path(@group, initiative) %> -
+                            <%= link_to "Survey", new_poll_path(initiative_id: initiative.id) %> -
+                            <%= link_to "Delete", group_initiative_path(@group, initiative), method: :delete, data: { confirm: "Are you sure?" }, class: "error" %>
+                          </p>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                          <% if last_update = initiative.updates.last %>
+                            <% initiative.fields.each_slice(3) do |field_row| %>
+                              <div class="flex-row flex-row--spacing-bottom">
+                                <% field_row.each do |field| %>
+                                  <div class="flex-row__cell flex-row__cell--grow metric">
+                                    <span class="metric__title"><%= field.title %></span>
+                                    <h4 class="metric__value"><%= last_update.info[field] || "N/A" %></h4>
+                                    <div
+                                      class="metric__sparkline graph"
+                                      data-url="<%= time_series_group_initiative_field_path(@group, initiative, field) %>"
+                                      data-title="<%= field.title %>"
+                                      data-spark="true"
+                                      data-time-series="true"
+                                      >
+                                    </div>
+                                  </div>
+                                <% end %>
                               </div>
                             <% end %>
-                          </div>
-                        <% end %>
-                      <% else %>
-                        <p>Publish an update to see data on this event</p>
-                      <% end %>
-                    </div>
-                    <div class="flex-row__cell flex-row__cell--spaced flex-row__cell--grow">
-
-                      <div class="flex-row flex-row--middle flex-row--spaced flex-row--spacing-bottom">
-                        <div class="flex-row__cell flex-row__cell--spaced">
-                          <strong>Expenses</strong>
-                          <br>
-                          <% if initiative.finished_expenses? %>
-                            (closed)
-                            <br>
+                          <% else %>
+                            <p class="text-center">Publish an update to see data on this event</p>
                           <% end %>
-                          <%= number_to_currency initiative.expenses.sum(:amount) %>
                         </div>
-                        <div class="flex-row__cell flex-row__cell--grow flex-row__cell--spaced" style="margin-bottom: 20px;">
-                          <div class="progress-bar">
-                            <div class="progress-bar__fill" style="width: <%= InitiativeDecorator.decorate(initiative).budget_percentage %>%;"></div>
+                        <div class="col-md-6 col-xs-12">
+                          <div class="flex-row__cell flex-row__cell--spaced flex-row__cell--grow">
+                            <div class="flex-row flex-row--middle flex-row--spaced flex-row--spacing-bottom">
+                              <div class="flex-row__cell flex-row__cell--spaced">
+                                <strong>Expenses</strong>
+                                <br>
+                                <% if initiative.finished_expenses? %>
+                                  (closed)
+                                  <br>
+                                <% end %>
+                                <%= number_to_currency initiative.expenses.sum(:amount) %>
+                              </div>
+                              <div class="flex-row__cell flex-row__cell--grow flex-row__cell--spaced" style="margin-bottom: 20px;">
+                                <div class="progress-bar">
+                                  <div class="progress-bar__fill" style="width: <%= InitiativeDecorator.decorate(initiative).budget_percentage %>%;"></div>
+                                </div>
+                              </div>
+                              <div class="flex-row__cell flex-row__cell--spaced">
+                                <strong>Budget</strong><br>
+                                <%= number_to_currency initiative.estimated_funding %>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="flex-row__cell flex-row__cell--spaced flex-row__cell--grow">
+                            <div class="flex-row flex-row--middle flex-row--spaced flex-row--spacing-bottom">
+                              <div class="flex-row__cell flex-row__cell--spaced">
+                                <strong>Start date</strong>
+                                <br>
+                                <%= initiative.initiative_date("start") %>
+                              </div>
+                              <div class="flex-row__cell flex-row__cell--grow flex-row__cell--spaced" style="margin-bottom: 20px;">
+                                <div class="progress-bar">
+                                  <div class="progress-bar__fill" style="width: <%= InitiativeDecorator.decorate(initiative).progress_percentage %>%;"></div>
+                                </div>
+                              </div>
+                              <div class="flex-row__cell flex-row__cell--spaced">
+                                <strong>End date</strong><br>
+                                <%= initiative.initiative_date("end") %>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                        <div class="flex-row__cell flex-row__cell--spaced">
-                          <strong>Budget</strong><br>
-                          <%= number_to_currency initiative.estimated_funding %>
-                        </div>
                       </div>
-
-                      <div class="flex-row flex-row--middle flex-row--spaced">
-                        <div class="flex-row__cell flex-row__cell--spaced">
-                          <strong>Start date</strong><br>
-                          <%= initiative.initiative_date("start") %>
-                        </div>
-                        <div class="flex-row__cell flex-row__cell--grow flex-row__cell--spaced" style="margin-bottom: 20px;">
-                          <div class="progress-bar">
-                            <div class="progress-bar__fill" style="width: <%= InitiativeDecorator.decorate(initiative).progress_percentage %>%;"></div>
-                          </div>
-                        </div>
-                        <div class="flex-row__cell flex-row__cell--spaced">
-                          <strong>End date</strong><br>
-                          <%= initiative.initiative_date("end") %>
-                        </div>
-                      </div>
-
                     </div>
-                  </div>
-                </div>
-              <% end %>
+                  <% end %>
+                <% end %>
+              </div>
             <% end %>
-          </div>
-        <% end %>
-      <% end %>
-    </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
   <% end %>
-<% end %>
+</div>
+
 
 <script>
   $(document).on('page:change', function() {

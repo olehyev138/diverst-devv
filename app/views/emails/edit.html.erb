@@ -1,27 +1,32 @@
-<div class="content__header">
-  <h1><%= @email.name %></h1>
-</div>
-
 <div class="content__main">
   <div class="row">
-
-    <div class="col sm-12 md-8">
+    <div class="col sm-12">
       <div class="card">
         <div class="card__section">
-          <h3>Edit template</h3>
+          <h3>Edit <%= @email.name %></h3>
           <%= simple_form_for @email do |f| %>
-            <%= f.input :use_custom_templates,
-                  label: "Use custom templates",
-                  input_html: { autofocus: true } %>
             <%= f.input :subject %>
-            <%= f.input :custom_html_template, input_html: { style: "min-height: 300px;" }, wrapper_html: { style: "display: #{(f.object.use_custom_templates ? "block" : "none")}" } %>
+            <%= f.input :content, as: :ckeditor %>
             <%= f.button :submit %>
           <% end %>
         </div>
       </div>
     </div>
-
-    <div class="col sm-12 md-4">
+    <div class="col sm-12">
+      <div class="card card--secondary">
+        <div class="card__section card__section--border">
+          <h4>Email Preview</h4>
+          <p class="text-center">Here is a preview of what this email will look like when sent out.</p>
+        </div>
+        <div class="card__section card__section--border">
+          <p><strong>Subject:</strong> <%= raw @email.process_example(@email.subject) %></p>
+        </div>
+        <div class="card__section card__section--border">
+          <p><strong>Email Body:</strong> <%= raw @email.process_example(@email.content) %></p>
+        </div>
+      </div>
+    </div>
+    <div class="col sm-12">
       <div class="card card--secondary">
         <div class="card__section card__section--border">
           <h4>Variables</h4>
@@ -29,22 +34,11 @@
         </div>
         <% @email.variables.each do |variable| %>
           <div class="card__section card__section--border">
-            <h4 class="accent">{{ <%= variable.key %> }}</h4>
-            <p><%= variable.description %></p>
+            <h4 class="accent">%{ <%= variable.enterprise_email_variable.key %> }</h4>
+            <p><%= variable.enterprise_email_variable.description %></p>
           </div>
         <% end %>
       </div>
     </div>
-
   </div>
 </div>
-
-<script>
-  $(document).on('page:change', function() {
-    $(document).off('page:change');
-
-    $('#email_use_custom_templates').change(function() {
-      $('.email_custom_html_template, .email_custom_txt_template').css('display', $(this).is(':checked') ? 'block' : 'none');
-    });
-  });
-</script>

@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe Groups::FoldersController, type: :controller do
-    let(:enterprise){ create(:enterprise, cdo_name: "test") }
+    let(:enterprise){ create(:enterprise, name: "test") }
     let(:user){ create(:user, enterprise: enterprise) }
     let(:group){ create(:group, enterprise: user.enterprise) }
     let(:user_group){ create(:user_group, group: group, user: user) }
-    let!(:folder){ create(:folder, :container => group, :password_protected => true, :password => "password") }
+    let!(:folder){ create(:folder, :group => group, :password_protected => true, :password => "password") }
 
     describe "POST#authenticate" do
         login_user_from_let
@@ -86,9 +86,9 @@ RSpec.describe Groups::FoldersController, type: :controller do
                 expect(assigns[:folder]).to be_valid
             end
 
-            it 'set container as valid group object' do
-                expect(assigns[:container]).to eq group
-                expect(assigns[:container]).to be_valid
+            it 'set valid group object' do
+                expect(assigns[:group]).to eq group
+                expect(assigns[:group]).to be_valid
             end
 
             it "returns success" do
@@ -109,7 +109,7 @@ RSpec.describe Groups::FoldersController, type: :controller do
     describe "GET#new" do
         context 'when user is logged in' do
             login_user_from_let
-            before {get :new, group_id: group.id}
+            before {get :new, group_id: group.id, folder_id: folder.id}
 
             it "render new template" do
                 expect(response).to render_template :new
@@ -118,9 +118,9 @@ RSpec.describe Groups::FoldersController, type: :controller do
             it "assigns new folder" do
                 expect(assigns[:folder]).to be_a_new(Folder)
             end
-
-            it "sets container_type" do
-                expect(assigns[:folder].container_type).to eq("Group")
+            
+            it "assigns a parent_id" do
+                expect(assigns[:folder].parent_id).to eq(folder.id)
             end
         end
 
@@ -159,6 +159,19 @@ RSpec.describe Groups::FoldersController, type: :controller do
                 it "redirect_to index" do
                     post :create, group_id: group.id, folder: { name: "folder" }
                     expect(response).to redirect_to action: :index
+                end
+
+                it "creates the folder" do
+                    expect{post :create, group_id: group.id, folder: { name: "folder" }}
+                    .to change(Folder, :count).by(1)
+                end
+            end
+            
+            context "valid params for nested" do
+
+                it "redirect_to folder's resources" do
+                    post :create, group_id: group.id, folder: { name: "folder", parent_id: folder.id }
+                    expect(response).to redirect_to [group, folder, :resources]
                 end
 
                 it "creates the folder" do

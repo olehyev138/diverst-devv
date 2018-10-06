@@ -19,6 +19,9 @@
       <%= f.input :estimated_date, as: :date_picker %>
     </div>
     <div class="flex-row__cell">
+      <%= f.input :is_private, label: 'Private' %>
+    </div>
+    <div class="flex-row__cell">
       <%= link_to_remove_association "X", f, class: "error" %>
     </div>
   </div>

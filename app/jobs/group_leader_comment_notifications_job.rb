@@ -1,5 +1,5 @@
 class GroupLeaderCommentNotificationsJob < ActiveJob::Base
-  queue_as :default
+  queue_as :mailers
 
   def perform(group)
     # get the pending comments count

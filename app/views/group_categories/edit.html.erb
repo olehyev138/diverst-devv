@@ -1,0 +1,13 @@
+<div class="content__main">
+	<h1>Change name of category</h1>
+
+	<%= simple_form_for @category, url: group_category_url(@category), method: :patch do |f| %>
+	<div class="card">
+		<div class="card__section">
+			<label>Category Name</label>
+			<%= f.input :name %>
+			<%= f.button :submit, 'Update' %>
+		</div>
+	</div>
+	<% end %>
+</div>

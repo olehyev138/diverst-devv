@@ -1,6 +1,13 @@
 <div class="content__header">
   <h1><%= @group.name%> budgets</h1>
-  <%= link_to "New Budget Request", new_group_budget_path(@group), class: "btn btn--primary" if policy(@group).request_budget? %>
+  <div class="flex-row">
+    <div class="flex-row__cell">
+      <%= link_to "Export CSV", export_csv_group_budgets_path, class: "btn btn--secondary hidden-xs", role: "button", 'aria-label': "Export CSV"  if policy(@group).request_budget? %>
+    </div>
+    <div class="flex-row__cell">
+      <%= link_to "New Budget Request", new_group_budget_path(@group), class: "btn btn--primary" if policy(@group).request_budget? %>
+    </div>
+  </div>
 </div>
 
 <div class="content__main">

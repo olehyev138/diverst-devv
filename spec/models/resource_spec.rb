@@ -2,6 +2,19 @@ require 'rails_helper'
 
 RSpec.describe Resource, :type => :model do
 
+  describe 'test associations' do
+    let(:resource) { build_stubbed(:resource) }
+
+    it { expect(resource).to belong_to(:enterprise) }
+    it { expect(resource).to belong_to(:folder) }
+    it { expect(resource).to belong_to(:group) }
+    it { expect(resource).to belong_to(:initiative) }
+    it { expect(resource).to belong_to(:owner).class_name('User') }
+    it { expect(resource).to have_many(:tags).dependent(:destroy) }
+    it { expect(resource).to accept_nested_attributes_for(:tags) }
+    it { expect(resource).to validate_length_of(:url)}
+  end
+
   describe 'when validating' do
     let(:resource){ build_stubbed(:resource) }
 
@@ -10,13 +23,22 @@ RSpec.describe Resource, :type => :model do
 
     #do we want to validate presence of file in resource model? if so then i will uncomment this code
     # it{ expect(resource).to validate_attachment_presence(:file)}
+  end
 
-    it{ expect(resource).to have_many(:tags)}
+  describe 'test callbacks' do
+      let(:resource) { build_stubbed(:resource) }
+
+    context 'before_validation' do
+      it '#smart_add_url_protocol is called before validation' do
+        expect(resource).to receive(:smart_add_url_protocol)
+        resource.valid?
+      end
+    end
   end
 
   describe '#extension' do
     it "returns the file's lowercase extension without the dot" do
-      resource = build(:resource)
+      resource = build_stubbed(:resource)
       expect(resource.file_extension).to eq 'csv'
     end
   end
@@ -67,7 +89,7 @@ RSpec.describe Resource, :type => :model do
 
     it "deletes tags" do
       resource = create(:resource)
-      create_list(:tag, 5, :taggable => resource)
+      create_list(:tag, 5, :resource => resource)
 
       resource.tag_tokens = []
 
@@ -75,18 +97,40 @@ RSpec.describe Resource, :type => :model do
       expect(resource.tags.count).to eq(0)
     end
   end
-  
+
   describe "#file_extension" do
     it "returns '' " do
-      resource = create(:resource, :file_file_name => nil, :file => nil)
+      resource = build(:resource, :file_file_name => nil, :file => nil)
       expect(resource.file_extension).to eq("")
     end
   end
-  
+
   describe "#expiration_time" do
     it "returns the expiration_time " do
       resource = create(:resource)
       expect(resource.expiration_time).to eq(Resource::EXPIRATION_TIME)
+    end
+  end
+  
+  describe "#destroy_callbacks" do
+    it "removes the child objects" do
+      resource = create(:resource)
+      tag = create(:tag, :resource => resource)
+
+      resource.destroy
+
+      expect{Resource.find(resource.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{Tag.find(tag.id)}.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+  
+  describe '#total_views' do
+    it "returns 10" do
+        resource = create(:resource)
+        create(:view, :resource => resource, :view_count => 4)
+        create(:view, :resource => resource, :view_count => 6)
+        
+        expect(resource.total_views).to eq(10)
     end
   end
 end

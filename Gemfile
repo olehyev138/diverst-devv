@@ -10,7 +10,7 @@ gem 'jquery-rails', '~> 4.1', '>= 4.1.1'
 gem 'turbolinks', '~> 2.5', '>= 2.5.3'
 gem 'sdoc', '~> 0.4.0', group: :doc # bundle exec rake doc:rails generates the API under doc/api.
 
-gem 'nokogiri', '>= 1.7.2' # need to specify this explicitly, old version has exploit
+gem 'nokogiri', '~> 1.8.2' # need to specify this explicitly, old version has exploit
 
 gem 'puma', '~> 3.1' # Better web server than WEBRick
 gem 'figaro', '~> 1.1', '>= 1.1.1' # Inject ENV from application.yml
@@ -18,7 +18,7 @@ gem 'devise', '~> 3.5', '>= 3.5.6' # Authentication
 gem 'devise_invitable', '~> 1.5', '>= 1.5.5' # Invite system (admins invite normal users)
 gem 'simple_form', '~> 3.2', '>= 3.2.1' # Better forms
 gem 'cocoon', '~> 1.2', '>= 1.2.8' # Nested forms (deals with the JS for you)
-gem 'ruby-saml', '>= 1.3.0'
+gem 'ruby-saml', '>= 1.7.0'
 gem 'sidekiq', '< 5' # Background jobs
 gem 'devise-async', '~> 0.10.1' # Performs many devise tasks in the background using Sidekiq
 gem 'sinatra', '~> 1.4', '>= 1.4.7', require: nil # Required for sidekiq's dashboard
@@ -62,7 +62,7 @@ gem 'icalendar', '~> 2.3' # For exporting events to your calendar
 gem 'simple_form_fancy_uploads', git: "https://github.com/TeamDiverst/simple_form_fancy_uploads.git", branch: "paperclip_version"
 gem 'ransack', '~> 1.8', '>= 1.8.2' # For search forms
 gem 'ckeditor', '~> 4.2', '>= 4.2.3'
-
+gem 'twilio-ruby', '~> 5.10.0'
 gem 'mailgun_rails', '~> 0.8.0'
 gem 'enumerize', '~> 2.0'
 gem 'jbuilder', '~> 2.6'
@@ -71,12 +71,14 @@ gem 'public_activity', '~> 1.5'
 
 gem 'rollbar', '~> 2.14.1'
 
-gem 'ruby-oembed', '~> 0.12.0'
+gem 'ruby-oembed', '~> 0.12', git: 'https://github.com/TeamDiverst/ruby-oembed.git'
 
 gem 'julia_builder', '~> 0.2.0'
 gem 'date_validator', '~> 0.9.0'
 gem "thor", "0.19.1"# Expected string default value for '--decorator'; got true (boolean) - setting version removes this message
 gem 'sanitize_email', '~> 1.2.2'
+
+gem "rack-timeout"
 
 group :development, :test do
   gem 'spring', '~> 1.6.2' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
@@ -109,7 +111,8 @@ group :test do
 end
 
 group :development do
-  gem 'capistrano'
+  gem 'capistrano',      require: false
+  gem 'capistrano-rake', require: false
   gem 'capistrano3-puma'
   gem 'capistrano-rails', require: false
   gem 'capistrano-bundler', require: false
@@ -136,5 +139,8 @@ end
 group :staging, :production do
   gem 'syslogger', '~> 1.6.0' # Log to syslog, which is then sent to Loggly
   gem 'lograge', '~> 0.3'
-  gem 'newrelic_rpm'
+  gem 'newrelic_rpm', '~> 4.5.0'
+  gem 'influxdb-rails', git: 'https://github.com/Kukunin/influxdb-rails.git',
+                        branch: 'tags_middleware' # Rails metrics to InfluxDB
+  gem 'sidekiq-influxdb' # Sidekiq metrics to InfluxDB
 end

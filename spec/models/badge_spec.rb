@@ -15,23 +15,23 @@ RSpec.describe Badge, type: :model do
         allowing('image/png', 'image/gif').rejecting('text/plain', 'text/xml')
     }
     it { expect(badge).to belong_to(:enterprise) }
-    
+
     it 'is valid' do
       expect(badge).to be_valid
     end
-    
+
     it 'requires a label' do
       badge.label = nil
       expect(badge).to_not be_valid
       expect(badge.errors.full_messages.first).to eq("Label can't be blank")
     end
-    
+
     it 'requires a points' do
       badge.points = nil
       expect(badge).to_not be_valid
       expect(badge.errors.full_messages.first).to eq("Points is not a number")
     end
-    
+
     it 'requires an Enterprise' do
       badge.enterprise = nil
       expect(badge).to_not be_valid

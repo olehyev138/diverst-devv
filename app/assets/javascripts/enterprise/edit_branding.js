@@ -1,6 +1,6 @@
 $(document).on('ready page:load', function() {
   jscolor.installByClassName("jscolor");
-  
+
   var $primaryColorInput = $('#enterprise_theme_primary_color');
   var $secondaryColorInput = $('#enterprise_theme_secondary_color');
   var $useSecondaryColor = $('#enterprise_theme_use_secondary_color');

@@ -1,4 +1,4 @@
 class MetricsDashboardsSegment < ActiveRecord::Base
   belongs_to :segment
-  belongs_to :metric_dashboard
+  belongs_to :metrics_dashboard
 end

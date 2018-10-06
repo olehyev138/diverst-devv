@@ -1,10 +1,13 @@
-<div class="content__header">
-  <h1>Home</h1>
-</div>
-
 <div class="content__main">
   <div class="row">
     <div class="col sm-12">
+    <% if @enterprise.banner.present? %>
+      <div class="row enterprise-banner">
+        <div class="col sm-12">
+          <%= image_tag @enterprise.banner.expiring_url(3600), style: 'width: 100%; max-width: 100%;' %>
+        </div>
+      </div>
+    <% end %>
     <% if @enterprise.home_message.present? %>
       <div class="content__header mtmedium">
         <p style="flex: 1 1 0;"><%= allow_newlines @enterprise.home_message %></p>
@@ -14,13 +17,6 @@
         </div>
       </div>
     <% end %>
-      <% if @enterprise.banner.present? %>
-        <div class="row enterprise-banner">
-          <div class="col sm-12">
-            <%= image_tag @enterprise.banner.expiring_url(3600), style: 'width: 100%; max-width: 100%;' %>
-          </div>
-        </div>
-      <% end %>
     </div>
   </div>
 
@@ -31,7 +27,7 @@
           <div class="card">
             <div class="card__section">
 
-              <h4>Your Events</h4>
+              <h4>Events You've Joined</h4>
               <%= link_to calendar_user_events_path, class: "  card__action" do %>
                 <%= inline_svg('icons/calendar.svg', class: "icon card__icon") %>Events Calendar
               <% end %>
@@ -67,34 +63,21 @@
                 <% end %>
               <% end %>
             </div>
+            <script>
+              //force facebook embed to have correct width
+              $(document).ready(function(){
+                var width = <%= SocialMedia::Importer::MEDIA_MAX_WIDTH %>
+
+                $('iframe[src*=facebook]').width(width)
+              });
+            </script>
           </div>
         </div>
       </div>
     </div>
 
     <div class="col col--stacked sm-12 md-3">
-    <% show_sponsor_card?(@enterprise, "cdo_name") do %>
-     <div class="card card--secondary">
-      <div class="card__section">
-        <% if @enterprise.sponsor_media.present? %>
-          <% show_sponsor_image?(@enterprise, "sponsor_media_content_type") do %>
-          <%= image_tag(@enterprise.sponsor_media.expiring_url(3600), style: 'max-width: 100px; max-height:90px; border-radius: 80px;') %>
-          <% end %>
-        <% else %>
-          <%= image_tag("missing_user.png", size: "70x70") %>
-        <% end %>  
-
-        <% show_sponsor_video?(@enterprise, "sponsor_media_content_type") do %>
-          <%= video_tag(@enterprise.sponsor_media.expiring_url(36000), controls: true, size: "200x200") %>
-        <% end %>
-      <p style="font-style: italic;"><%= @enterprise.cdo_name %><br>
-      <%= @enterprise.cdo_title %></p>
-      <% if policy(@enterprise).sponsor_message_visibility? %>
-        <p style="font-style: italic;"><%= truncate(@enterprise.cdo_message_email, length: 200) %></p>
-      <% end %>  
-      </div> 
-    </div>
-    <% end %>
+    <%= render partial: 'shared/carousel/enterprise_sponsor_card', locals: { enterprise_sponsors: @enterprise_sponsors } %>
 
     <% if current_user.enterprise.enable_rewards? %>
         <div class="card card--secondary">
@@ -109,7 +92,7 @@
           <div class="card__section">
             <h4>Top <%= c_t(:erg).pluralize %> this week</h4>
             <ol>
-              <% current_user.enterprise.groups.top_participants(10).each do |group| %>
+              <% current_user.enterprise.groups.non_private.top_participants(10).each do |group| %>
                 <li><%= group_performance_label(group) %></li>
               <% end %>
             </ol>
@@ -123,7 +106,7 @@
 
   <div class="row">
      <div class="col sm-12 md-9">
-        <%= link_to 'Privacy Statement', user_privacy_statement_path %>
+        <%= link_to "#{c_t(:privacy_statement)}", user_privacy_statement_path %>
      </div>
   </div>
 </div>

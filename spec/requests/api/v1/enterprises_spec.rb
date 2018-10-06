@@ -7,7 +7,7 @@ RSpec.describe "Enterprise", :type => :request do
     let(:headers) {{"HTTP_AUTHORIZATION" => basic_authentication}}
     
     it "updates a enterprise" do
-        patch "/api/v1/enterprises/#{enterprise.id}", :enterprise => {:cdo_name => "updated"}, headers: headers
+        patch "/api/v1/enterprises/#{enterprise.id}", :enterprise => {:name => "updated"}, headers: headers
         expect(response).to have_http_status(:ok)
     end
 

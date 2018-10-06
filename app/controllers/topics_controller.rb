@@ -2,7 +2,7 @@ class TopicsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_topic, only: [:edit, :update, :destroy, :show]
 
-  layout 'handshake' 
+  layout 'handshake'
   #NOTE: this layout does not exist in views/layout. This controller does not have a corresponding spec file
 
   def index

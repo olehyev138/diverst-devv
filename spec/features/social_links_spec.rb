@@ -15,7 +15,7 @@ RSpec.feature 'Social Links' do
   let(:group) { create(:group, enterprise: user.enterprise) }
 
   before do
-    login_as(user, scope: :user)
+    login_as(user, scope: :user, :run_callbacks => false)
   end
 
   scenario 'posting Youtube' do

@@ -1,7 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe Users::InvitationsController, type: :controller do
-    let(:user){ create(:user) }
+    let(:enterprise) { create(:enterprise) }
+    let(:user){ create(:user, enterprise: enterprise) }
+    let(:custom_text) { create(:custom_text, enterprise: enterprise) }
 
     before :each do
         @request.env["devise.mapping"] = Devise.mappings[:user]
@@ -18,10 +20,9 @@ RSpec.describe Users::InvitationsController, type: :controller do
 
     describe "GET#edit" do
         it "returns success" do
-            invited = create(:user)
-            invited.invite!
+            user.invite!
 
-            get :edit, invitation_token: invited.raw_invitation_token
+            get :edit, invitation_token: user.raw_invitation_token
             expect(response).to be_success
         end
     end

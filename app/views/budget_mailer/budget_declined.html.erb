@@ -1,4 +1,1 @@
-Hello, <%= @budget.requester.try(:name) %>,
-<br>
-Your budget request for the <%= @budget.subject.try(:name) %> has been denied by <%= @budget.approver.try(:name) %>. Please contact <%= @budget.approver.try(:name) %> to find out why it was declined.
-<br><br>
+<%= raw @mailer_text %>

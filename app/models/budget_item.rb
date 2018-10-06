@@ -4,7 +4,7 @@ class BudgetItem < ActiveRecord::Base
   has_many :initiatives
 
   validates :title, presence: true, length: { minimum: 2 }
-  validates :estimated_amount, numericality: true
+  validates :estimated_amount, numericality: { less_than_or_equal_to: 999999, message: "number of digits must not exceed 6" }
   validates :available_amount, numericality: { less_than_or_equal_to: :estimated_amount},
     allow_nil: true, unless: -> { estimated_amount.blank? }
 
