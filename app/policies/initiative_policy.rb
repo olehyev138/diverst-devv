@@ -7,6 +7,7 @@ class InitiativePolicy < ApplicationPolicy
     return true if @user.erg_leader?
     return true if @policy_group.initiatives_manage?
     return true if !(@record.group_ids && @user.groups.pluck(:id)).empty?
+    return true if basic_user?
   end
 
   def create?
@@ -61,6 +62,14 @@ class InitiativePolicy < ApplicationPolicy
 
   def add_calendar_visibility?
     join_leave_button_visibility?
+  end
+
+  def basic_user?
+    @user.user_role.default? && user_role_with_lowest_priority?
+  end
+
+  def user_role_with_lowest_priority?
+    @user.user_role.priority == @user.enterprise.user_roles.pluck(:priority).max
   end
 
   class Scope < Scope
