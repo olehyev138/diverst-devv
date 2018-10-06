@@ -88,94 +88,18 @@ class GenericGraphsController < ApplicationController
     end
 
     def events_created
-        data = current_user.enterprise.groups.all_parents.map do |g|
-            {
-                y: g.initiatives.joins(:owner)
-                    .where('initiatives.created_at > ? AND users.active = ?', 1.month.ago, true).count,
-                name: g.name,
-                drilldown: g.name
-            }
-        end
-        
-        drilldowns = current_user.enterprise.groups.includes(:children).all_parents.map { |g|
-            {
-                name: g.name,
-                id: g.name,
-                data: g.children.map {|child| [child.name, child.initiatives.joins(:owner)
-                    .where('initiatives.created_at > ? AND users.active = ?', 1.month.ago, true).count]}
-            }
-        }
-        
-        categories = current_user.enterprise.groups.all_parents.map{ |g| g.name }
-
-        respond_to do |format|
-            format.json{
-                render json: {
-                           type: 'bar',
-                           highcharts: {
-                               series: [{
-                                   title: 'Events created',
-                                   data: data
-                               }],
-                               drilldowns: drilldowns,
-                               #categories: categories,
-                               xAxisTitle: "#{c_t(:erg)}",
-                               yAxisTitle: 'Nb of events'
-                           },
-                           hasAggregation: false
-                       }
-            }
-            format.csv {
-                strategy = Reports::GraphStatsGeneric.new(title: "Number of events created #{c_t(:erg)}", categories: categories, data: data)
-                report = Reports::Generator.new(strategy)
-                send_data report.to_csv, filename: "graph_events_created.csv"
-            }
+        if ENV["DOMAIN"] === "dm.diverst.com"
+            demo_events_created
+        else
+            non_demo_events_created
         end
     end
 
     def messages_sent
-        data = current_user.enterprise.groups.all_parents.map do |g|
-            {
-                y: g.messages.joins(:owner)
-                    .where('group_messages.created_at > ? AND users.active = ?', 1.month.ago, true).count,
-                name: g.name,
-                drilldown: g.name
-            }
-        end
-        
-        drilldowns = current_user.enterprise.groups.includes(:children).all_parents.map { |g|
-            {
-                name: g.name,
-                id: g.name,
-                data: g.children.map {|child| [child.name, child.messages.joins(:owner)
-                    .where('group_messages.created_at > ? AND users.active = ?', 1.month.ago, true).count]}
-            }
-        }
-        
-        categories = current_user.enterprise.groups.all_parents.map{ |g| g.name }
-
-        respond_to do |format|
-            format.json {
-                render json: {
-                           type: 'bar',
-                           highcharts: {
-                               series: [{
-                                   title: 'Messages sent',
-                                   data: data
-                               }],
-                               drilldowns: drilldowns,
-                               #categories: categories,
-                               xAxisTitle: 'ERG',
-                               yAxisTitle: 'Nb of messages'
-                           },
-                           hasAggregation: false
-                       }
-            }
-            format.csv {
-                strategy = Reports::GraphStatsGeneric.new(title: "Number of messages sent #{c_t(:erg)}", categories: categories, data: data)
-                report = Reports::Generator.new(strategy)
-                send_data report.to_csv, filename: "graph_messages_sent.csv"
-            }
+        if ENV["DOMAIN"] === "dm.diverst.com"
+            demo_messages_sent
+        else
+            non_demo_messages_sent
         end
     end
     
@@ -459,6 +383,167 @@ class GenericGraphsController < ApplicationController
                 report = Reports::Generator.new(strategy)
                 send_data report.to_csv, filename: "views_per_news_link.csv"
             }
+        end
+    end
+    
+    # FOR NON DEMO PURPOSES
+    
+    def non_demo_events_created
+        data = current_user.enterprise.groups.all_parents.map do |g|
+            {
+                y: g.initiatives.joins(:owner)
+                    .where('initiatives.created_at > ? AND users.active = ?', 1.month.ago, true).count,
+                name: g.name,
+                drilldown: g.name
+            }
+        end
+        
+        drilldowns = current_user.enterprise.groups.includes(:children).all_parents.map { |g|
+            {
+                name: g.name,
+                id: g.name,
+                data: g.children.map {|child| [child.name, child.initiatives.joins(:owner)
+                    .where('initiatives.created_at > ? AND users.active = ?', 1.month.ago, true).count]}
+            }
+        }
+        
+        categories = current_user.enterprise.groups.all_parents.map{ |g| g.name }
+
+        respond_to do |format|
+            format.json{
+                render json: {
+                           type: 'bar',
+                           highcharts: {
+                               series: [{
+                                   title: 'Events created',
+                                   data: data
+                               }],
+                               drilldowns: drilldowns,
+                               #categories: categories,
+                               xAxisTitle: "#{c_t(:erg)}",
+                               yAxisTitle: 'Nb of events'
+                           },
+                           hasAggregation: false
+                       }
+            }
+            format.csv {
+                strategy = Reports::GraphStatsGeneric.new(title: "Number of events created #{c_t(:erg)}", categories: categories, data: data)
+                report = Reports::Generator.new(strategy)
+                send_data report.to_csv, filename: "graph_events_created.csv"
+            }
+        end
+    end
+    
+    def non_demo_messages_sent
+        data = current_user.enterprise.groups.all_parents.map do |g|
+            {
+                y: g.messages.joins(:owner)
+                    .where('group_messages.created_at > ? AND users.active = ?', 1.month.ago, true).count,
+                name: g.name,
+                drilldown: g.name
+            }
+        end
+        
+        drilldowns = current_user.enterprise.groups.includes(:children).all_parents.map { |g|
+            {
+                name: g.name,
+                id: g.name,
+                data: g.children.map {|child| [child.name, child.messages.joins(:owner)
+                    .where('group_messages.created_at > ? AND users.active = ?', 1.month.ago, true).count]}
+            }
+        }
+        
+        categories = current_user.enterprise.groups.all_parents.map{ |g| g.name }
+
+        respond_to do |format|
+            format.json {
+                render json: {
+                           type: 'bar',
+                           highcharts: {
+                               series: [{
+                                   title: 'Messages sent',
+                                   data: data
+                               }],
+                               drilldowns: drilldowns,
+                               #categories: categories,
+                               xAxisTitle: 'ERG',
+                               yAxisTitle: 'Nb of messages'
+                           },
+                           hasAggregation: false
+                       }
+            }
+            format.csv {
+                strategy = Reports::GraphStatsGeneric.new(title: "Number of messages sent #{c_t(:erg)}", categories: categories, data: data)
+                report = Reports::Generator.new(strategy)
+                send_data report.to_csv, filename: "graph_messages_sent.csv"
+            }
+        end
+    end
+    
+    # FOR DEMO PURPOSES
+    
+    def demo_events_created
+        data = current_user.enterprise.groups.map { |g| g.initiatives.where('initiatives.created_at > ?', 1.month.ago).count }
+        categories = current_user.enterprise.groups.map(&:name)
+    
+    
+        values = [2,3,4,1,6,8,5,8,3,4,1,5]
+        i = 0
+        data = current_user.enterprise.groups.map { |g| g.initiatives.where('initiatives.created_at > ?', 1.month.ago).count + values[i+=1] }
+    
+        respond_to do |format|
+          format.json{
+            render json: {
+              type: 'bar',
+              highcharts: {
+                series: [{
+                  title: 'Events created',
+                  data: data
+                }],
+                categories: categories,
+                xAxisTitle: 'ERG',
+                yAxisTitle: 'Nb of events'
+              },
+              hasAggregation: false
+            }
+          }
+          format.csv {
+            strategy = Reports::GraphStatsGeneric.new(title: 'Number of events created ERG', categories: categories, data: data)
+            report = Reports::Generator.new(strategy)
+            send_data report.to_csv, filename: "graph_events_created.csv"
+          }
+        end
+    end
+  
+    def demo_messages_sent
+        data = current_user.enterprise.groups.map { |g| g.messages.where('created_at > ?', 1.month.ago).count }
+        categories = current_user.enterprise.groups.map(&:name)
+    
+        values = [3,2,5,1,7,10,9,5,11,4,1,5]
+        i = 0
+        data = current_user.enterprise.groups.map { |g| g.messages.where('created_at > ?', 1.month.ago).count + values[i+=1] }
+    
+        respond_to do |format|
+          format.json {
+            render json: {
+              type: 'bar',
+              highcharts: {
+                series: [{
+                  title: 'Messages sent',
+                  data: data
+                }],
+                categories: categories,
+                xAxisTitle: 'ERG',
+                yAxisTitle: 'Nb of messages'
+              },
+              hasAggregation: false
+            }
+          }
+          format.csv {
+            strategy = Reports::GraphStatsGeneric.new(title: 'Number of messages sent ERG', categories: categories, data: data)
+            report = Reports::Generator.new(strategy)
+            send_data report.to_csv, filename: "graph_messages_sent.csv"
+          }
         end
     end
 end
