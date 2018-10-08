@@ -102,7 +102,7 @@ class GenericGraphsController < ApplicationController
             non_demo_messages_sent
         end
     end
-    
+
     def mentorship
         data = current_user.enterprise.groups.all_parents.map { |g|
             {
@@ -143,7 +143,7 @@ class GenericGraphsController < ApplicationController
             }
         end
     end
-    
+
     def mentoring_sessions
 
         data = current_user.enterprise.groups.all_parents.map { |g|
@@ -187,7 +187,7 @@ class GenericGraphsController < ApplicationController
             }
         end
     end
-    
+
     def mentoring_interests
         data = current_user.enterprise.mentoring_interests.includes(:users).map { |mi|
             {
@@ -230,7 +230,7 @@ class GenericGraphsController < ApplicationController
                 drilldown: g.name
             }
         end
-        
+
         drilldowns = current_user.enterprise.groups.includes(:children).all_parents.map { |g|
             {
                 name: g.name,
@@ -238,7 +238,7 @@ class GenericGraphsController < ApplicationController
                 data: g.children.map {|child| [child.name, child.total_views]}
             }
         }
-        
+
         categories = current_user.enterprise.groups.all_parents.map{ |g| g.name }
 
         respond_to do |format|
@@ -265,18 +265,18 @@ class GenericGraphsController < ApplicationController
             }
         end
     end
-    
+
     def top_folders_by_views
         group_ids = current_user.enterprise.groups.ids
         folders = Folder.where(:group_id => group_ids).only_parents
         data = folders.map do |f|
             {
                 y: f.total_views,
-                name: f.name,
+                name: f.group.name + ': ' + f.name,
                 drilldown: f.name
             }
         end
-        
+
         drilldowns = folders.map { |f|
             {
                 name: f.name,
@@ -284,7 +284,7 @@ class GenericGraphsController < ApplicationController
                 data: f.children.map {|child| [child.name, child.total_views]}
             }
         }
-        
+
         categories = folders.map{ |f| f.name }
 
         respond_to do |format|
@@ -311,7 +311,7 @@ class GenericGraphsController < ApplicationController
             }
         end
     end
-    
+
     def top_resources_by_views
         group_ids = current_user.enterprise.groups.ids
         folder_ids = Folder.where(:group_id => group_ids).ids
@@ -322,7 +322,7 @@ class GenericGraphsController < ApplicationController
                 name: resource.title
             }
         end
-        
+
         categories = resources.map{ |r| r.title }
 
         respond_to do |format|
@@ -348,18 +348,18 @@ class GenericGraphsController < ApplicationController
             }
         end
     end
-    
+
     def top_news_by_views
         news_feed_link_ids = NewsFeedLink.where(:news_feed_id => NewsFeed.where(:group_id => current_user.enterprise.groups.ids).ids).ids
         news_links = NewsLink.select("news_links.title, SUM(views.view_count) view_count").joins(:news_feed_link, :news_feed_link => :views).where(:news_feed_links => {:id => news_feed_link_ids}).order("view_count DESC")
-        
+
         data = news_links.map do |news_link|
             {
                 y: news_link.view_count,
                 name: news_link.title
             }
         end
-        
+
         categories = news_links.map{ |r| r.title }
 
         respond_to do |format|
@@ -385,9 +385,9 @@ class GenericGraphsController < ApplicationController
             }
         end
     end
-    
+
     # FOR NON DEMO PURPOSES
-    
+
     def non_demo_events_created
         data = current_user.enterprise.groups.all_parents.map do |g|
             {
@@ -397,7 +397,7 @@ class GenericGraphsController < ApplicationController
                 drilldown: g.name
             }
         end
-        
+
         drilldowns = current_user.enterprise.groups.includes(:children).all_parents.map { |g|
             {
                 name: g.name,
@@ -406,7 +406,7 @@ class GenericGraphsController < ApplicationController
                     .where('initiatives.created_at > ? AND users.active = ?', 1.month.ago, true).count]}
             }
         }
-        
+
         categories = current_user.enterprise.groups.all_parents.map{ |g| g.name }
 
         respond_to do |format|
@@ -433,7 +433,7 @@ class GenericGraphsController < ApplicationController
             }
         end
     end
-    
+
     def non_demo_messages_sent
         data = current_user.enterprise.groups.all_parents.map do |g|
             {
@@ -443,7 +443,7 @@ class GenericGraphsController < ApplicationController
                 drilldown: g.name
             }
         end
-        
+
         drilldowns = current_user.enterprise.groups.includes(:children).all_parents.map { |g|
             {
                 name: g.name,
@@ -452,7 +452,7 @@ class GenericGraphsController < ApplicationController
                     .where('group_messages.created_at > ? AND users.active = ?', 1.month.ago, true).count]}
             }
         }
-        
+
         categories = current_user.enterprise.groups.all_parents.map{ |g| g.name }
 
         respond_to do |format|
@@ -479,18 +479,18 @@ class GenericGraphsController < ApplicationController
             }
         end
     end
-    
+
     # FOR DEMO PURPOSES
-    
+
     def demo_events_created
         data = current_user.enterprise.groups.map { |g| g.initiatives.where('initiatives.created_at > ?', 1.month.ago).count }
         categories = current_user.enterprise.groups.map(&:name)
-    
-    
+
+
         values = [2,3,4,1,6,8,5,8,3,4,1,5]
         i = 0
         data = current_user.enterprise.groups.map { |g| g.initiatives.where('initiatives.created_at > ?', 1.month.ago).count + values[i+=1] }
-    
+
         respond_to do |format|
           format.json{
             render json: {
@@ -514,15 +514,15 @@ class GenericGraphsController < ApplicationController
           }
         end
     end
-  
+
     def demo_messages_sent
         data = current_user.enterprise.groups.map { |g| g.messages.where('created_at > ?', 1.month.ago).count }
         categories = current_user.enterprise.groups.map(&:name)
-    
+
         values = [3,2,5,1,7,10,9,5,11,4,1,5]
         i = 0
         data = current_user.enterprise.groups.map { |g| g.messages.where('created_at > ?', 1.month.ago).count + values[i+=1] }
-    
+
         respond_to do |format|
           format.json {
             render json: {
