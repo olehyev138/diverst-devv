@@ -49,6 +49,27 @@ RSpec.describe CustomTextsController, type: :controller do
         it "flashes a notice message" do
           expect(flash[:notice]).to eq "Your texts were updated"
         end
+
+        describe 'public activity' do
+          enable_public_activity
+
+          it 'creates public activity record' do
+            expect{patch :update, id: custom_text, custom_text: { erg: "ERG 2", parent: "National" }}
+            .to change(PublicActivity::Activity, :count).by(1)
+          end
+
+          describe 'activity record' do
+            let(:model) { custom_text }
+            let(:owner) { user }
+            let(:key) { 'custom_text.update' }
+
+            before {
+              patch :update, id: custom_text, custom_text: { erg: "ERG 2", parent: "National" }
+            }
+
+            include_examples'correct public activity'
+          end
+        end
       end
 
       # this context fails because CustomText model has no validation
