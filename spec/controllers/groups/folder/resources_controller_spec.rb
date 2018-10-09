@@ -30,7 +30,7 @@ RSpec.describe Groups::Folder::ResourcesController, type: :controller do
             it "returns resources that belong to container" do
                 expect(assigns[:resources].where(folder_id: assigns[:container].id)).to eq [resource]
             end
-            
+
             it "increments the folder's total_views" do
                 expect(folder.total_views).to eq(1)
             end
@@ -103,6 +103,27 @@ RSpec.describe Groups::Folder::ResourcesController, type: :controller do
                     expect{post :create, group_id: group.id, folder_id: folder.id, resource: {title: "resource", file: file}}
                     .to change(Resource, :count).by(1)
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    expect{post :create, group_id: group.id, folder_id: folder.id, resource: {title: "resource", file: file}}
+                    .to change(PublicActivity::Activity, :count).by(1)
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { Resource.last }
+                    let(:owner) { user }
+                    let(:key) { 'resource.create' }
+
+                    before {
+                      post :create, group_id: group.id, folder_id: folder.id, resource: {title: "resource", file: file}
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
 
             context "invalid params" do
@@ -163,6 +184,27 @@ RSpec.describe Groups::Folder::ResourcesController, type: :controller do
                     resource.reload
                     expect(resource.title).to eq("updated")
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    expect{patch :update, folder_id: folder.id, id: resource.id, group_id: group.id, resource: {title: "updated", file: file}}
+                    .to change(PublicActivity::Activity, :count).by(1)
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { Resource.last }
+                    let(:owner) { user }
+                    let(:key) { 'resource.update' }
+
+                    before {
+                      patch :update, folder_id: folder.id, id: resource.id, group_id: group.id, resource: {title: "updated", file: file}
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
 
             context "invalid params" do
@@ -200,6 +242,27 @@ RSpec.describe Groups::Folder::ResourcesController, type: :controller do
 
                 expect{delete :destroy, :id => resource.id, group_id: group.id, folder_id: folder.id}
                 .to change(Resource, :count).by(-1)
+            end
+
+            describe 'public activity' do
+              enable_public_activity
+
+              it 'creates public activity record' do
+                expect{delete :destroy, :id => resource.id, group_id: group.id, folder_id: folder.id}
+                .to change(PublicActivity::Activity, :count).by(1)
+              end
+
+              describe 'activity record' do
+                let(:model) { Resource.last }
+                let(:owner) { user }
+                let(:key) { 'resource.destroy' }
+
+                before {
+                  delete :destroy, :id => resource.id, group_id: group.id, folder_id: folder.id
+                }
+  
+                include_examples'correct public activity'
+              end
             end
         end
 
