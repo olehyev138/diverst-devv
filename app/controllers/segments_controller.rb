@@ -7,8 +7,7 @@ class SegmentsController < ApplicationController
 
     def index
         authorize Segment
-        @segments = policy_scope(Segment).includes(:parent_segment).where(:segmentations => {:id => nil})
-        @segments = @segments.uniq
+        @segments = policy_scope(Segment).includes(:parent_segment).where(:segmentations => {:id => nil}).distinct
 
         respond_to do |format|
             format.html
@@ -38,26 +37,14 @@ class SegmentsController < ApplicationController
         authorize @segment
 
         @groups = current_user.enterprise.groups
-
-        @group = @groups.find_by_id(params[:group_id])
+        
         @segments = @segment.sub_segments.includes(:members)
 
-        if @group.present?
-            @members = segment_members_of_group(@segment, @group).uniq
-            uniq_ids = @members.map(&:id)
-            uniq_members_of_segment = User.where(id: uniq_ids)
-            respond_to do |format|
-                format.html
-                format.json { render json: SegmentMemberDatatable.new(view_context, uniq_members_of_segment) }
-            end
-        else
-            @members = @segment.members.uniq
-            uniq_ids = @members.map(&:id)
-            uniq_members_of_segment = User.where(id: uniq_ids)
-            respond_to do |format|
-                format.html
-                format.json { render json: SegmentMemberDatatable.new(view_context, uniq_members_of_segment) }
-            end
+        members
+        
+        respond_to do |format|
+            format.html
+            format.json { render json: SegmentMemberDatatable.new(view_context, @members) }
         end
     end
 
@@ -84,24 +71,22 @@ class SegmentsController < ApplicationController
 
     def export_csv
         authorize @segment, :show?
+        
+        members
 
-        if group = current_user.enterprise.groups.find_by_id(params[:group_id])
-            users_ids = segment_members_of_group(@segment, group).map { |user| user.id }
-
-            users = User.where(id: users_ids)
-        else
-            users = @segment.members
-        end
-
-        users_csv = User.to_csv users: users, fields: @segment.enterprise.fields
+        users_csv = User.to_csv users: @members, fields: @segment.enterprise.fields
         send_data users_csv, filename: "#{@segment.name}.csv"
     end
-
+    
     protected
 
-    def segment_members_of_group(segment, group)
-        segment.members.includes(:groups).select do |user|
-            user.groups.include? group
+    def members
+        if !params[:group_id].blank?
+            @group = current_user.enterprise.groups.find_by_id(params[:group_id])
+            @members = policy_scope(User).joins(:segments, :groups).where(:segments => {:id => @segment.id}, :groups => {:id => params[:group_id]}).limit(params[:limit] || 25).distinct
+            
+        else
+            @members = policy_scope(User).joins(:segments).where(:segments => {:id => @segment.id}).limit(params[:limit] || 25).distinct
         end
     end
 

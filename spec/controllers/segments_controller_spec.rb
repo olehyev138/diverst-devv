@@ -92,16 +92,15 @@ RSpec.describe SegmentsController, type: :controller do
     describe "GET#show" do
         describe 'when user is logged in' do
             let!(:groups) { create_list(:group, 2, enterprise: enterprise) }
-            let!(:user1) { create(:user) }
-            let!(:user2) { create(:user) }
-            let!(:user3) { create(:user) }
+            let!(:user1) { create(:user, :enterprise => enterprise) }
+            let!(:user2) { create(:user, :enterprise => enterprise) }
+            let!(:user3) { create(:user, :enterprise => enterprise) }
             let!(:users_segment1) { create(:users_segment, segment: segment, user: user1) }
             let!(:users_segment2) { create(:users_segment, segment: segment, user: user2) }
             let!(:users_segment3) { create(:users_segment, segment: segment, user: user3) }
             let!(:user_group1) { create(:user_group, group: groups.last, user: user1) }
             let!(:user_group2) { create(:user_group, group: groups.last, user: user2) }
             login_user_from_let
-
 
             context 'when group is present' do
                 before do
