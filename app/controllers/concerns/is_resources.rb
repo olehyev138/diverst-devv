@@ -26,7 +26,7 @@ module IsResources
 
     def create
         @resource = @container.resources.new(resource_params)
-        @resource.group = @resource.folder.group
+
         if @resource.save
             track_activity(@resource, :create)
             @resource.tag_tokens = params[:resource][:tag_ids]
