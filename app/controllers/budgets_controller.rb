@@ -48,12 +48,12 @@ class BudgetsController < ApplicationController
   def decline
     authorize @budget, :decline?
 
-    if @budget.update(budget_params)
-      BudgetManager.new(@budget).decline(current_user)
-      redirect_to action: :index
-    else
-      redirect_to :back
-    end
+    @budget.decline_reason = params[:decline_reason]
+    @budget.save
+
+    BudgetManager.new(@budget).decline(current_user)
+
+    redirect_to action: :index
   end
 
   def destroy
@@ -65,6 +65,19 @@ class BudgetsController < ApplicationController
       flash[:alert] = "Your budget was not deleted. Please fix the errors"
       redirect_to :back
     end
+  end
+
+  def export_csv
+    authorize @group, :request_budget?
+
+    result =
+      CSV.generate do |csv|
+        csv << ['Requested amount', 'Available amount', 'Status', 'Requested at', '# of events', 'Description']
+         @group.budgets.order(created_at: :desc).each do |budget|
+          csv << [budget.requested_amount, budget.available_amount, budget.status_title, budget.created_at, budget.budget_items.count, budget.description]
+        end
+      end
+    send_data result, filename: @group.file_safe_name.downcase + '_budgets.csv'
   end
 
   def edit_annual_budget
@@ -87,9 +100,9 @@ class BudgetsController < ApplicationController
 
   def carry_over_annual_budget
     authorize @group.enterprise, :update?
-    
+
     leftover = @group.leftover_money + @group.annual_budget
-    
+
     if @group.update({:annual_budget => leftover, :leftover_money => 0})
       @group.budgets.update_all(:is_approved => false)
       track_activity(@group, :annual_budget_update)
@@ -115,11 +128,11 @@ class BudgetsController < ApplicationController
   end
 
   private
-  
+
   def set_group
     if current_user
       @group = current_user.enterprise.groups.find(params[:group_id])
-    else 
+    else
       user_not_authorized
     end
   end

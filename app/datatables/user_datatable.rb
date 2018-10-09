@@ -22,6 +22,7 @@ class UserDatatable < AjaxDatatablesRails::Base
   def data
     records.map do |record|
       [
+        record.id,
         html_escape(record.first_name),
         html_escape(record.last_name),
         html_escape(record.email),

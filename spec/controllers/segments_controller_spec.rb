@@ -1,12 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe SegmentsController, type: :controller do
-    include ApplicationHelper
 
     let(:enterprise) { create(:enterprise) }
     let(:user) { create(:user, enterprise: enterprise) }
     let!(:segment) { create(:segment, enterprise: enterprise) }
-
 
     describe "GET#index" do
         context 'when user is logged in' do
@@ -28,7 +26,6 @@ RSpec.describe SegmentsController, type: :controller do
         end
     end
 
-
     describe "GET#new" do
         context 'when user is logged in' do
             login_user_from_let
@@ -48,7 +45,6 @@ RSpec.describe SegmentsController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "POST#create" do
         describe 'when user is logged in' do
@@ -92,7 +88,6 @@ RSpec.describe SegmentsController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "GET#show" do
         describe 'when user is logged in' do
@@ -154,7 +149,6 @@ RSpec.describe SegmentsController, type: :controller do
         end
     end
 
-
     describe "GET#edit" do
         context 'when user is logged in' do
             login_user_from_let
@@ -174,7 +168,6 @@ RSpec.describe SegmentsController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "PATCH#update" do
         describe 'when user is logged in' do
@@ -216,7 +209,6 @@ RSpec.describe SegmentsController, type: :controller do
         end
     end
 
-
     describe "DELETE#destroy" do
         context 'when user is logged in' do
             login_user_from_let
@@ -236,7 +228,6 @@ RSpec.describe SegmentsController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe "GET#export_csv" do
         context 'when user is logged in' do

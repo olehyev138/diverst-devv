@@ -69,20 +69,12 @@ RSpec.feature 'News Feed Management' do
 				expect(page).not_to have_content 'An Old Group Message'
 			end
 
-			scenario 'when adding comments to existing Group Message with approval' do
-				visit group_posts_path(group)
-
-				expect(page).to have_content existing_group_message.subject
-
-				click_link 'Comments(0)', match: :first
-
-				within('h1') do
-					expect(page).to have_content existing_group_message.subject
-				end
+			scenario 'when adding comments to existing Group Message with approval', js: true do	
+				visit group_group_message_path(group, existing_group_message)
 
 				fill_in 'group_message_comment[content]', with: 'first comment'
 
-				click_on 'Post a comment'
+				click_button 'Post a comment'
 
 				expect(page).to have_content 'first comment'
 
@@ -103,9 +95,10 @@ RSpec.feature 'News Feed Management' do
 					visit group_posts_path(group)
 
 					expect(page).to have_content existing_group_message.subject
-					expect(page).to have_link 'Comments(1)'
 
-					click_link 'Comments(1)', match: :first
+					within('.commentsLink') do
+						click_link 'Comments(1)', href: group_group_message_path(group, existing_group_message)
+					end
 
 					within('.content__header h1') do
 						expect(page).to have_content existing_group_message.subject
@@ -145,86 +138,82 @@ RSpec.feature 'News Feed Management' do
 		end
 
 		context 'News Items' do
-			let!(:image) { File.new('spec/fixtures/files/verizon_logo.png') }
-			let!(:existing_news_item) { create(:news_link, title: 'An Old Group News Item',
-				description: 'Brief description of News Item', group_id: group.id, picture: image, author_id: user.id) }
-
-			before { visit group_posts_path(group) }
-
 			scenario 'when creating news items with url', js: true do
-				expect(page).to have_link '+ Create News'
+				visit group_posts_path(group)
 
 				click_on '+ Create News'
 
-				expect(page).to have_content 'Add news'
-
 				fill_in 'news_link[url]', with: 'https://www.viz.com/naruto'
 				fill_in 'news_link[title]', with: 'Latest News'
-				fill_in_ckeditor 'news_link_description', :with => 'Naruto is the Seventh Hokage!!!'
+				#fill_in 'news_link[description]', with: 'this is the latest news'
+
+				fill_in_ckeditor 'news_link_description', :with => 'this is the latest news'
 
 				click_on 'Add a photo'
 				attach_file('File', 'spec/fixtures/files/verizon_logo.png')
 
 				click_on 'Create News link'
-
 				expect(page).to have_content 'Latest News'
-				news_link = NewsLink.find_by(title: 'Latest News')
-				expect(page).to have_link news_link.url
+				expect(page).to have_content 'https://www.viz.com/naruto'
 			end
 
-			scenario 'when updating news item with url', js: true do
-				visit edit_group_news_link_path(group, existing_news_item)
+			context 'for an existing news link' do
+				let!(:image) { File.new('spec/fixtures/files/verizon_logo.png') }
+				let!(:existing_news_item) { create(:news_link, title: 'An Old Group News Item',
+					description: 'Brief description of News Item', group_id: group.id, picture: image, author_id: user.id) }
+				
+				scenario 'when updating news item with url' do
+					visit edit_group_news_link_path(group, existing_news_item)
 
-				expect(page).to have_content 'Edit a news item'
+					expect(page).to have_content 'Edit a news item'
 
-				#expect(page).to have_field('news_link_description', with: existing_news_item.description)
-				fill_in_ckeditor 'news_link_description', :with => 'Naruto is the Seventh Hokage and is married to Hinata.'
+					#expect(page).to have_field('news_link_description', with: existing_news_item.description)
+					fill_in 'news_link_description', :with => 'Naruto is the Seventh Hokage and is married to Hinata.'
 
-				click_on 'Add a photo'
-				attach_file('File', 'spec/fixtures/files/verizon_logo.png')
-
-				click_on 'Update News link'
-
-				expect(page).to have_no_content 'Naruto is the Seventh Hokage!!!'
-				expect(page).to have_content 'Naruto is the Seventh Hokage and is married to Hinata.'
-			end
-
-			scenario 'when deleting news item with url', js: true do
-				expect(page).to have_content 'An Old Group News Item'
-				expect(page).to have_link 'Delete'
-
-				page.accept_confirm(with: 'Are you sure?') do
-					click_on 'Delete'
+					click_on 'Update News link'
+					expect(page).to have_no_content 'Naruto is the Seventh Hokage!!!'
+					expect(page).to have_content 'Naruto is the Seventh Hokage and is married to Hinata.'
 				end
 
-				expect(page).to have_no_content 'An Old Group News Item'
-			end
+				scenario 'when deleting news item with url', js: true do
+					visit group_posts_path(group)
+					expect(page).to have_content 'An Old Group News Item'
 
-			scenario 'when adding comments to news link' do
-				expect(page).to have_content existing_news_item.title
-				expect(page).to have_link 'Comments(0)', href:  comments_group_news_link_path(group, existing_news_item)
+					page.accept_confirm(with: 'Are you sure?') do
+						click_link 'Delete', href: group_news_link_path(group, existing_news_item)
+					end
 
-				within('.flex-row__cell--grow') do
-					click_link 'Comments(0)', href:  comments_group_news_link_path(group, existing_news_item)
+					expect(page).to have_no_content 'An Old Group News Item'
 				end
 
-				within('.content__header h1') do
-					expect(page).to have_content 'News Discussion'
+				scenario 'when adding comments to news link' do
+					visit group_posts_path(group)
+
+					expect(page).to have_content existing_news_item.title
+					expect(page).to have_link 'Comments(0)', href:  comments_group_news_link_path(group, existing_news_item)
+
+					within('.flex-row__cell--grow') do
+						click_link 'Comments(0)', href:  comments_group_news_link_path(group, existing_news_item)
+					end
+
+					within('.content__header h1') do
+						expect(page).to have_content 'News Discussion'
+					end
+
+					fill_in 'news_link_comment[content]', with: 'this news item is outdated!!!'
+
+					click_on 'Post a comment'
+
+					expect(page).to have_content 'this news item is outdated!!!'
+
+					click_on 'Approve'
+
+					expect(page).to have_content 'Your comment was updated'
+
+					visit group_posts_path(group)
+
+					expect(page).to have_link 'Comments(1)'
 				end
-
-				fill_in 'news_link_comment[content]', with: 'this news item is outdated!!!'
-
-				click_on 'Post a comment'
-
-				expect(page).to have_content 'this news item is outdated!!!'
-
-				click_on 'Approve'
-
-				expect(page).to have_content 'Your comment was updated'
-
-				visit group_posts_path(group)
-
-				expect(page).to have_link 'Comments(1)'
 			end
 
 			context 'for existing comments for existing News Link' do
@@ -284,12 +273,14 @@ RSpec.feature 'News Feed Management' do
 			let!(:existing_group_message) { create(:group_message, subject: 'An Old Group Message', group_id: group.id,
 				owner_id: user.id) }
 
-			scenario 'when adding comments to existing Group Message without approval' do
+			scenario 'when adding comments to existing Group Message without approval', js: true do
 				visit group_posts_path(group)
 
 				expect(page).to have_content existing_group_message.subject
 
-				click_link 'Comments(0)', match: :first
+				within('.commentsLink') do
+					click_link 'Comments(0)', href: group_group_message_path(group, existing_group_message)
+				end
 
 				within('h1') do
 					expect(page).to have_content existing_group_message.subject

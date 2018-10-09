@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe GroupLeaderPostNotificationMailer, type: :mailer do
   
   let!(:leader){ create(:user) }
-  let!(:group){ create(:group, :pending_users => "enabled") }
+  let!(:group){ create(:group, :enterprise => leader.enterprise, :pending_users => "enabled") }
   let!(:user_group) {create(:user_group, :group => group, :user => leader, :accepted_member => true)} 
   let!(:group_leader){ create(:group_leader, :group => group, :user => leader) }
   let!(:custom_text) { create(:custom_text, :erg => "BRG", :enterprise => leader.enterprise)}

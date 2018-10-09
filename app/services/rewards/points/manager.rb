@@ -23,31 +23,28 @@ class Rewards::Points::Manager
 
   private
   def add_points_to_user(entity)
-    UserRewardAction.create(
+    entity.user_reward_actions.create(
       user: @user,
       reward_action: @reward_action,
       points: @reward_action.points.to_i,
-      operation: "add",
-      entity: entity
+      operation: "add"
     )
   end
 
   def remove_points_from_user(entity)
-    last_user_reward_action_of_same_entity = UserRewardAction.where(
+    last_user_reward_action_of_same_entity = entity.user_reward_actions.where(
       user: @user,
       reward_action: @reward_action,
       operation: UserRewardAction.operations[:add],
-      entity: entity
     ).order(created_at: :desc).first
 
     points = last_user_reward_action_of_same_entity.try(:points)
 
-    UserRewardAction.create(
+    entity.user_reward_actions.create(
       user: @user,
       reward_action: @reward_action,
       points: points.to_i,
-      operation: "del",
-      entity: entity
+      operation: "del"
     )
   end
 

@@ -12,7 +12,7 @@ class CampaignMailer < ApplicationMailer
 
     set_defaults(@user.enterprise, method_name)
 
-    mail(to: @user.email, subject: @subject)
+    mail(from: @from_address, to: @user.email, subject: @subject)
 
     inv.email_sent = true
     inv.save!

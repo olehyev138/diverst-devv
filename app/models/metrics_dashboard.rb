@@ -3,10 +3,10 @@ class MetricsDashboard < ActiveRecord::Base
 
   belongs_to :enterprise, inverse_of: :metrics_dashboards
   belongs_to :owner, class_name: "User"
-  has_many :graphs, as: :collection
-  has_many :metrics_dashboards_segments
+  has_many :graphs, dependent: :destroy
+  has_many :metrics_dashboards_segments, dependent: :destroy
   has_many :segments, through: :metrics_dashboards_segments
-  has_many :groups_metrics_dashboards
+  has_many :groups_metrics_dashboards, dependent: :destroy
   has_many :groups, through: :groups_metrics_dashboards
 
   validates_presence_of :name, :message => "Metrics Dashboard name is required"

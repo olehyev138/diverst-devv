@@ -18,7 +18,15 @@ class MentoringRequest < ActiveRecord::Base
     after_create :notify_receiver
     
     def notify_receiver
-        MentorMailer.new_mentoring_request(self).deliver_later
+        MentorMailer.new_mentoring_request(id).deliver_later
+    end
+    
+    def notify_declined_request
+        MentorMailer.notify_declined_request(receiver_id, sender_id).deliver_later
+    end
+    
+    def notify_accepted_request
+        MentorMailer.notify_accepted_request(receiver_id, sender_id).deliver_later
     end
 
 end

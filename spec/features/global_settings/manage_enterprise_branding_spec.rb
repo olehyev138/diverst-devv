@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.feature 'Manage Enterprise Branding' do
-	let!(:enterprise) { create(:enterprise) }
-	let!(:admin_user) { create(:user, enterprise_id: enterprise.id, policy_group: create(:policy_group,
-		enterprise_id: enterprise.id)) }
-	let!(:group) { create(:group, enterprise_id: enterprise.id) }
+	include ActiveJob::TestHelper
+	
+	let!(:admin_user) { create(:user) }
+	let!(:group) { create(:group, enterprise: admin_user.enterprise) }
 
 	before do
 		login_as(admin_user, scope: :user)
@@ -12,7 +12,7 @@ RSpec.feature 'Manage Enterprise Branding' do
 
 	context 'Branding management' do
 		let(:enterprise) { create(:enterprise, theme: create(:theme, primary_color: '#7b77c9')) }
-		before { visit edit_branding_enterprise_path(enterprise) }
+		before { visit edit_branding_enterprise_path(admin_user.enterprise) }
 
 		context 'Customize branding' do
 			scenario 'by editing default colors', js: true do
@@ -21,38 +21,39 @@ RSpec.feature 'Manage Enterprise Branding' do
 				expect(style).to have_default_primary_color #the hex color equivalent is #7b77c9
 
 				fill_in 'enterprise[theme][primary_color]', with: '#FFEE7F'
-
-				click_on 'Save branding'
-
-				style = computed_style '.btn--primary', 'background'
-				expect(style).not_to eq have_default_primary_color
-				expect(style).to have_custom_color("rgb(255, 238, 127)") #the hex color equivalent is #FFEE7F
+				
+				perform_enqueued_jobs do
+					click_on 'Save branding'
+	
+					style = computed_style '.btn--primary', 'background'
+					expect(style).not_to eq have_default_primary_color
+					expect(style).to have_custom_color("rgb(255, 238, 127)") #the hex color equivalent is #FFEE7F
+				end
 			end
 		end
 
 		scenario 'restore default branding', js: true do
 			fill_in 'enterprise[theme][primary_color]', with: '#FFEE7F'
-
-			click_on 'Save branding'
-
-			style = computed_style '.btn--primary', 'background'
-			expect(style).not_to have_default_primary_color
-
-			click_on 'Restore to default'
-
-			style = computed_style '.btn--primary', 'background'
-			expect(style).to have_default_primary_color
+			perform_enqueued_jobs do
+				click_on 'Save branding'
+	
+				style = computed_style '.btn--primary', 'background'
+				expect(style).not_to have_default_primary_color
+	
+				click_on 'Restore to default'
+	
+				style = computed_style '.btn--primary', 'background'
+				expect(style).to have_default_primary_color
+			end
 		end
 
-		scenario 'upload image as custom logo' do
-			expect(page).to have_default_logo
-
-			attach_file('enterprise[theme][logo]', 'spec/fixtures/files/verizon_logo.png')
-
-			click_on 'Save branding'
-
-			expect(page).to have_no_default_logo
-			expect(page).to have_custom_logo("verizon_logo")
+		scenario 'upload image as custom logo', js: true do
+			perform_enqueued_jobs do
+				attach_file('enterprise[theme][logo]', 'spec/fixtures/files/verizon_logo.png')
+				click_on 'Save branding'
+	
+				expect(page).to have_custom_logo("verizon_logo")
+			end
 		end
 	end
 
@@ -61,7 +62,7 @@ RSpec.feature 'Manage Enterprise Branding' do
 			visit user_root_path
 			expect(page).to have_no_banner
 
-			visit edit_branding_enterprise_path(enterprise)
+			visit edit_branding_enterprise_path(admin_user.enterprise)
 
 			attach_file('enterprise[banner]', 'spec/fixtures/files/verizon_logo.png')
 			fill_in 'enterprise[home_message]', with: 'Welcome to Verizon! Join any group to view recent and future events'
@@ -79,7 +80,7 @@ RSpec.feature 'Manage Enterprise Branding' do
 			event = create(:initiative, start: Time.now, end: Time.now + 1.days, owner_group_id: group.id,
 			 owner: admin_user, pillar: create(:pillar, outcome: create(:outcome, name: 'First Outcome', group_id: group.id)))
 
-			visit edit_branding_enterprise_path(enterprise)
+			visit edit_branding_enterprise_path(admin_user.enterprise)
 
 			select '(GMT-06:00) Central America', from: 'enterprise[time_zone]'
 
@@ -87,12 +88,12 @@ RSpec.feature 'Manage Enterprise Branding' do
 
 			visit group_event_path(group, event)
 
-			expect(page).to display_timezone 'Central America'
+			expect(page).to display_timezone 'UTC'
 		end
 	end
 
 	context 'Customize Program Sponsor Details' do
-		before { visit edit_branding_enterprise_path(enterprise) }
+		before { visit edit_branding_enterprise_path(admin_user.enterprise) }
 
 		scenario 'by creating multiple enterprise sponsors', js: true do
 			expect(page).to have_link 'Add a sponsor'

@@ -4,7 +4,7 @@ RSpec.describe GroupDecorator do
 
     let(:user) {create(:user)}
     let(:group){ create(:group, enterprise: user.enterprise) }
-    let!(:budget){ create(:budget, subject: group, is_approved: true) }
+    let!(:budget){ create(:budget, group: group, is_approved: true) }
 
     describe "#spendings_percentage" do
         it "returns 0" do

@@ -1,12 +1,16 @@
 class GroupMessage < ActiveRecord::Base
-    has_many :group_messages_segments
-    has_many :segments, through: :group_messages_segments, :before_remove => :remove_segment_association
-    has_many :comments, class_name: 'GroupMessageComment', foreign_key: :message_id
+    include PublicActivity::Common
+    
+    has_many :group_messages_segments, dependent: :destroy
 
+    has_many :segments, through: :group_messages_segments, :before_remove => :remove_segment_association
+    has_many :comments, class_name: 'GroupMessageComment', foreign_key: :message_id, dependent: :destroy
+    has_many :user_reward_actions
+    
     belongs_to :owner, class_name: 'User'
     belongs_to :group
 
-    has_one :news_feed_link, :as => :link, :dependent => :destroy
+    has_one :news_feed_link, :dependent => :destroy
     after_create :approve_link
     
     accepts_nested_attributes_for :news_feed_link, :allow_destroy => true

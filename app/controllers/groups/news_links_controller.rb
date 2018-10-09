@@ -44,6 +44,7 @@ class Groups::NewsLinksController < ApplicationController
         @news_link.author = current_user
         
         if @news_link.save
+            track_activity(@news_link, :create)
             user_rewarder("news_post").add_points(@news_link)
             flash_reward "Your news was created. Now you have #{current_user.credits} points"
             redirect_to group_posts_path(@group)
@@ -55,6 +56,7 @@ class Groups::NewsLinksController < ApplicationController
 
     def update
         if @news_link.update(news_link_params)
+            track_activity(@news_link, :update)
             flash[:notice] = "Your news was updated"
             redirect_to group_posts_path(@group)
         else
@@ -65,6 +67,7 @@ class Groups::NewsLinksController < ApplicationController
 
     def destroy
         user_rewarder("news_post").remove_points(@news_link)
+        track_activity(@news_link, :destroy)
         @news_link.destroy
         flash[:notice] = "Your news was removed. Now you have #{current_user.credits} points"
         redirect_to group_posts_path(@group)
@@ -82,6 +85,7 @@ class Groups::NewsLinksController < ApplicationController
     end
 
     def news_link_photos
+        @resize = true
         @photos = @news_link.photos
     end
 
@@ -104,8 +108,7 @@ class Groups::NewsLinksController < ApplicationController
                 :description,
                 :picture,
                 :photos_attributes => [:file, :_destroy, :id],
-                :news_feed_link_attributes => [:approved, :news_feed_id, :link, :shared_news_feed_ids => []],
-                :segment_ids => []
+                :news_feed_link_attributes => [:approved, :news_feed_id, :link, :shared_news_feed_ids => [], :segment_ids => []],
             )
     end
 

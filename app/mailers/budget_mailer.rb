@@ -2,18 +2,18 @@ class BudgetMailer < ApplicationMailer
   def approve_request(budget, receiver)
     @user = receiver
     @budget = budget
-    @group = budget.subject
+    @group = budget.group
     @enterprise = @user.enterprise
     @custom_text = @enterprise.custom_text rescue CustomText.new
     
     set_defaults(@enterprise, method_name)
 
-    mail(to: @user.email, subject: @subject)
+    mail(from: @from_address, to: @user.email, subject: @subject)
   end
 
   def budget_approved(budget)
     @budget = budget
-    @group = budget.subject
+    @group = budget.group
     @user = budget.requester
     @enterprise = @user.enterprise
     @custom_text = @enterprise.custom_text rescue CustomText.new
@@ -25,7 +25,7 @@ class BudgetMailer < ApplicationMailer
 
   def budget_declined(budget)
     @budget = budget
-    @group = budget.subject
+    @group = budget.group
     @enterprise = @group.enterprise
     @user = budget.requester
     @custom_text = @enterprise.custom_text rescue CustomText.new

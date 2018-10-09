@@ -6,7 +6,8 @@ class UsersController < ApplicationController
 
   def index
     authorize User
-    @users = policy_scope(User).where(search_params).limit(25)
+    
+    @users = policy_scope(User).joins(:policy_group).where(search_params).limit(params[:limit] || 25)
 
     respond_to do |format|
       format.html
@@ -95,8 +96,21 @@ class UsersController < ApplicationController
 
   def parse_csv
     authorize User, :new?
-    @importer = Importers::Users.new(params[:file].tempfile, current_user)
-    @importer.import
+
+    file = CsvFile.new( import_file: params[:file].tempfile, user: current_user)
+
+    @message = ''
+    @success = false
+    @email = ENV['CSV_UPLOAD_REPORT_EMAIL']
+
+    if file.save
+      @success = true
+      @message = '@success'
+    else
+      @success = false
+      @message = 'error'
+      @errors = file.errors.full_messages
+    end
   end
 
   def export_csv
@@ -134,7 +148,7 @@ class UsersController < ApplicationController
   def resolve_layout
     case action_name
     when 'show'
-      if current_user.policy_group.admin_pages_view
+      if global_settings_path
         'global_settings'
       else
         'user'
@@ -158,11 +172,61 @@ class UsersController < ApplicationController
       :last_name,
       :biography,
       :active,
-      :policy_group_id
+      :time_zone,
+      :user_role_id,
+      :custom_policy_group,
+      policy_group_attributes: [
+        :id,
+        :admin_pages_view,
+        :campaigns_index,
+        :campaigns_create,
+        :campaigns_manage,
+        :events_index,
+        :events_create,
+        :events_manage,
+        :polls_index,
+        :polls_create,
+        :polls_manage,
+        :group_messages_index,
+        :group_messages_create,
+        :group_messages_manage,
+        :groups_index,
+        :groups_create,
+        :groups_manage,
+        :groups_members_manage,
+        :groups_members_index,
+        :metrics_dashboards_index,
+        :metrics_dashboards_create,
+        :news_links_index,
+        :news_links_create,
+        :news_links_manage,
+        :enterprise_resources_index,
+        :enterprise_resources_create,
+        :enterprise_resources_manage,
+        :segments_index,
+        :segments_create,
+        :segments_manage,
+        :users_index,
+        :users_manage,
+        :initiatives_index,
+        :initiatives_create,
+        :initiatives_manage,
+        :budget_approval,
+        :logs_view,
+        :groups_budgets_index,
+        :groups_budgets_request,
+        :annual_budget_manage,
+        :sso_manage,
+        :permissions_manage,
+        :group_leader_manage,
+        :diversity_manage,
+        :manage_posts,
+        :branding_manage
+      ]
     )
   end
 
   def search_params
-    params.permit(:active, :mentor, :mentee)
+    params.permit(:active, :mentor, :mentee, policy_groups: [:budget_approval])
   end
 end

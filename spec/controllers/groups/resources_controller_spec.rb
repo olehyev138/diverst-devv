@@ -3,18 +3,18 @@ require 'rails_helper'
 RSpec.describe Groups::ResourcesController, type: :controller do
     let(:enterprise){ create(:enterprise) }
     let(:user){ create(:user, enterprise: enterprise) }
-    let!(:admin_resource){ create(:resource, title: "title", container: enterprise, file: fixture_file_upload('files/test.csv', 'text/csv'), resource_type: "admin") }
-    let!(:national_resource){ create(:resource, title: "title", container: enterprise, file: fixture_file_upload('files/test.csv', 'text/csv'), resource_type: "national") }
+    let!(:admin_resource){ create(:resource, title: "title", enterprise: enterprise, file: fixture_file_upload('files/test.csv', 'text/csv'), resource_type: "admin") }
+    let!(:national_resource){ create(:resource, title: "title", enterprise: enterprise, file: fixture_file_upload('files/test.csv', 'text/csv'), resource_type: "national") }
     let(:group){ create(:group, enterprise: user.enterprise) }
     let(:user_group){ create(:user_group, group: group, user: user) }
-    
+
     describe "GET#index" do
         describe 'with user logged in' do
             login_user_from_let
 
             context 'if erg_leader_permissions applies to group object' do
                 let!(:group_leader) { create(:group_leader, user: user, group: group) }
-                let!(:group_resource) { create(:resource, title: "title", container: group, file: fixture_file_upload('files/test.csv', 'text/csv')) }
+                let!(:group_resource) { create(:resource, title: "title", group: group, file: fixture_file_upload('files/test.csv', 'text/csv')) }
                 before {get :index, group_id: group.id}
 
                 it "assigns the group_resources" do
@@ -76,7 +76,7 @@ RSpec.describe Groups::ResourcesController, type: :controller do
     describe "GET#edit" do
         describe 'with user logged in' do 
             login_user_from_let
-            let!(:group_resource) { create(:resource, title: "title", container: group, file: fixture_file_upload('files/test.csv', 'text/csv')) }
+            let!(:group_resource) { create(:resource, title: "title", group: group, file: fixture_file_upload('files/test.csv', 'text/csv')) }
             before { get :edit, :id => group_resource.id, group_id: group.id }
 
             it 'assigns a valid resource object' do
@@ -89,7 +89,7 @@ RSpec.describe Groups::ResourcesController, type: :controller do
         end
 
         describe "with a user not logged in" do
-            let!(:group_resource) { create(:resource, title: "title", container: group, file: fixture_file_upload('files/test.csv', 'text/csv')) }
+            let!(:group_resource) { create(:resource, title: "title", group: group, file: fixture_file_upload('files/test.csv', 'text/csv')) }
             before { get :edit, :id => group_resource.id, group_id: group.id }
             it_behaves_like "redirect user to users/sign_in path"
         end
@@ -136,7 +136,7 @@ RSpec.describe Groups::ResourcesController, type: :controller do
         describe 'with user logged in' do
             context "with file" do
                 login_user_from_let
-                let!(:group_resource) { create(:resource, title: "title", container: group, file: fixture_file_upload('files/test.csv', 'text/csv')) }
+                let!(:group_resource) { create(:resource, title: "title", group: group, file: fixture_file_upload('files/test.csv', 'text/csv')) }
                 before { get :show, :id => group_resource.id, group_id: group.id }
     
                 it 'returns a valid resource object' do 
@@ -154,7 +154,7 @@ RSpec.describe Groups::ResourcesController, type: :controller do
             
             context "without file" do
                 login_user_from_let
-                let!(:group_resource) { create(:resource, title: "title", container: group, file: nil) }
+                let!(:group_resource) { create(:resource, title: "title", group: group, file: nil) }
                 before { get :show, :id => group_resource.id, group_id: group.id }
     
                 it 'does something' do 
@@ -164,7 +164,7 @@ RSpec.describe Groups::ResourcesController, type: :controller do
         end
 
         describe 'with user not logged in' do
-            let!(:group_resource) { create(:resource, title: "title", container: group, file: fixture_file_upload('files/test.csv', 'text/csv')) }
+            let!(:group_resource) { create(:resource, title: "title", group: group, file: fixture_file_upload('files/test.csv', 'text/csv')) }
             before { get :show, :id => group_resource.id, group_id: group.id  }
             it_behaves_like "redirect user to users/sign_in path"
         end
@@ -175,7 +175,7 @@ RSpec.describe Groups::ResourcesController, type: :controller do
 
         describe 'with logged in user' do
             login_user_from_let
-            let!(:group_resource) { create(:resource, title: "title", container: group, file: fixture_file_upload('files/test.csv', 'text/csv')) }
+            let!(:group_resource) { create(:resource, title: "title", group: group, file: fixture_file_upload('files/test.csv', 'text/csv')) }
 
             context "valid params" do
                 before do
@@ -207,14 +207,14 @@ RSpec.describe Groups::ResourcesController, type: :controller do
         end
 
         describe 'with user not logged in' do
-            let!(:group_resource) { create(:resource, title: "title", container: group, file: fixture_file_upload('files/test.csv', 'text/csv')) }
+            let!(:group_resource) { create(:resource, title: "title", group: group, file: fixture_file_upload('files/test.csv', 'text/csv')) }
             before { patch :update, group_id: group.id, id: group_resource.id, resource: {title: "updated", file: file} }
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
     describe "DELETE#destroy" do
-        let!(:group_resource) { create(:resource, title: "title", container: group, file: fixture_file_upload('files/test.csv', 'text/csv')) }
+        let!(:group_resource) { create(:resource, title: "title", group: group, file: fixture_file_upload('files/test.csv', 'text/csv')) }
 
         context 'with logged in user' do
             login_user_from_let

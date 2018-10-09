@@ -8,7 +8,6 @@ class Theme < ActiveRecord::Base
   validates :secondary_color, format: { with: %r{\A#(?:[0-9a-fA-F]{3}){1,2}\z}, allow_blank: true, message: 'should be a valid hex color' }
 
   before_validation :append_hash_to_colors
-  after_save :compile, if: :changed?
 
   def branding_color
     primary_color
@@ -48,8 +47,11 @@ class Theme < ActiveRecord::Base
   end
 
   def compile
-    theme_compiler = ThemeCompiler.new(self)
-    theme_compiler.compute
+    enterprise_id = enterprise.id
+    enterprise.theme_id = nil
+    enterprise.save!
+    
+    ThemeCompilerJob.perform_later(id, enterprise_id)
   end
 
   private

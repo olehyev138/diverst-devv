@@ -3,7 +3,7 @@
       <div class="card">
       <div class="card__section">
         <div class="media-object<%= " media-object--selected" if current_user.groups.include? group %>">
-          <%= link_to group_path(group) do %>
+          <%= link_to group_path(group), 'data-trackable-id': group.id, 'data-trackable-type': "group", class: "trackable-views", "data-trackable-enterprise-id": current_user.enterprise_id, "data-trackable-user-id": current_user.id do %>
             <div class="flex-row">
               <div class="flex-row__cell">
                 <%= image_tag group.logo.expiring_url(3600, :thumb) %>
@@ -28,11 +28,11 @@
           </div>
           <% end %>
         </div>
-            
+
             <% group.children.each do |sub_group| %>
             <div class="children_<%= group.id %>" style="display:none; position: relative; top: 10px;">
               <div class="media-object<%= " media-object--selected" if sub_group.members.include? current_user %>" style="margin-bottom: 10px;">
-                <%= link_to group_path(sub_group) do %>
+                <%= link_to group_path(sub_group), 'data-trackable-id': sub_group.id, 'data-trackable-type': "group", class: "trackable-views", "data-trackable-enterprise-id": current_user.enterprise_id, "data-trackable-user-id": current_user.id do %>
                   <div class="flex-row">
                     <div class="flex-row__cell">
                       <%= image_tag sub_group.logo.expiring_url(3600, :thumb) %>

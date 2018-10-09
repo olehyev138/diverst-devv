@@ -15,7 +15,7 @@
                 <tr>
                     <td><%= mentee.name %></td>
                     <td><%= mentee.email %></td>
-                    <td><%= link_to('Schedule Session', new_mentoring_session_path ) %></td>
+                    <td><%= link_to('Schedule Session', new_mentoring_session_path(:user_id => mentee.id)) %></td>
                 </tr>
               <% end %>
           </tbody>
@@ -37,6 +37,7 @@
               <thead>
                 <th>Name</th>
                 <th>Email</th>
+                <th>Mentoring Interests</th>
                 <th>Request</th>
               </thead>
               <tbody></tbody>

@@ -7,17 +7,17 @@ class Groups::UpdatesController < ApplicationController
   layout 'plan'
 
   def index
-    authorize @group, :show?
+    authorize @group, :update?
     @updates = @group.updates
   end
 
   def new
-    authorize @group, :show?
+    authorize Group
     @update = @group.updates.new
   end
 
   def create
-    authorize @group, :show?
+    authorize Group
     @update = @group.updates.new(update_params.merge({ owner_id: current_user.id }))
     @update.info.merge(fields: @group.fields, form_data: params['custom-fields'])
 
@@ -31,15 +31,15 @@ class Groups::UpdatesController < ApplicationController
   end
 
   def show
-    authorize @group, :show?
+    authorize @group
   end
 
   def edit
-    authorize @group, :show?
+    authorize Group
   end
 
   def update
-    authorize @group, :show?
+    authorize Group
     @update.info.merge(fields: @group.fields, form_data: params['custom-fields'])
 
     if @update.update(update_params)
@@ -52,7 +52,7 @@ class Groups::UpdatesController < ApplicationController
   end
 
   def destroy
-    authorize @group, :show?
+    authorize Group
     @update.destroy
     redirect_to action: :index
   end

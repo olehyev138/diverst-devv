@@ -1,20 +1,27 @@
 class Resource < ActiveRecord::Base
     EXPIRATION_TIME = 6.months.to_i
 
-    belongs_to :container, polymorphic: true
+    # associations
+    belongs_to :enterprise
+    belongs_to :folder
+    belongs_to :initiative
+    belongs_to :group
     belongs_to :owner, class_name: "User"
     belongs_to :mentoring_session
     
-    has_many :tags, :as => :taggable, :dependent => :destroy
+    has_many :tags, dependent: :destroy
+    has_many :views, dependent: :destroy
+    
     accepts_nested_attributes_for :tags
 
     has_attached_file :file, s3_permissions: "private"
     validates_with AttachmentPresenceValidator, attributes: :file, :if => Proc.new { |r| r.url.blank? }
     do_not_validate_attachment_file_type :file
 
-    validates_presence_of :title
-    validates_presence_of :url, :if => Proc.new { |r| r.file.nil? && r.url.blank? }
-
+    validates_presence_of   :title
+    validates_presence_of   :url, :if => Proc.new { |r| r.file.nil? && r.url.blank? }
+    validates_length_of     :url, maximum: 255
+    
     before_validation :smart_add_url_protocol
 
     attr_reader :tag_tokens
@@ -35,7 +42,18 @@ class Resource < ActiveRecord::Base
     def expiration_time
         EXPIRATION_TIME
     end
-
+    
+    def container
+        return enterprise if enterprise.present?
+        return folder if folder.present?
+        return initiative if initiative.present?
+        return group if group.present?
+        return mentoring_session if mentoring_session.present?
+    end
+    
+    def total_views
+        views.sum(:view_count)
+    end
 
     protected
 

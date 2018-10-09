@@ -6,12 +6,10 @@ RSpec.describe Graph, type: :model do
         let(:graph) { FactoryGirl.build_stubbed(:graph) }
 
         it{ expect(graph).to validate_presence_of(:field) }
-        it{ expect(graph).to validate_presence_of(:collection) }
-
+        
         it { expect(graph).to belong_to(:field) }
-        it { expect(graph).to belong_to(:collection) }
-        it { expect(graph).to belong_to(:aggregation).class_name('Field') }
-
-        it { expect(graph).to delegate_method(:title).to(:field) }
+        it { expect(graph).to belong_to(:metrics_dashboard) }
+        it { expect(graph).to belong_to(:poll) }
+        it { expect(graph).to belong_to(:aggregation) }
     end
 end

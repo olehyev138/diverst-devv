@@ -1,6 +1,6 @@
 <div class="content__header">
   <h1>Folders</h1>
-  <%= link_to "+ Add folder", polymorphic_path(@container_path + [:folder], action: "new"), class: "btn btn--primary" if policy(Folder).new? %>
+  <%= link_to "+ Add folder", polymorphic_path(@container_path + [:folder], action: "new"), class: "btn btn--primary" if policy(Folder).create? %>
 </div>
 <div class="container-fluid">
   <% if @folders.empty? %>

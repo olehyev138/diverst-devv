@@ -1,30 +1,30 @@
 <div class="content__header">
-  <h1>Import users via CSV</h1>
+  <h1>Import users through CSV</h1>
 </div>
 
 <div class="content__main">
   <div class="card">
     <div class="card__section">
-      <h3>Successful imports</h3>
-      <p>
-        <%= pluralize(@importer.successful_rows.count, 'users') %> out of the submitted <%= @importer.table.count %> have been successfully imported.
-
-        <% if current_user.enterprise.has_enabled_onboarding_email %>
-          Each new user will soon receive an invitation email asking them to complete their profile<% if !current_user.enterprise.has_enabled_saml? %> and choose a password<% end %>.
-        <% else %>
-          Due to enterprise settings, new users will not receive invitation emails.
-        <% end %>
-
-      </p>
-
-      <h3>Unsuccessful imports</h3>
-      <p>
+      <% if @success %>
+        <h3>Successful</h3>
+        <p>
+          File is being processed.
+          <% if @email.present? %>
+            <b><%= "#{@email}" %></b> will receive an email once upload is done.
+          <% else %>
+            <b>Contact Diverst tech support to set up your report email</b>
+          <% end %>
+        </p>
+      <% else %>
+        <h3>Unsuccessful</h3>
+        There was an error trying to process file provided:
+        <br>
         <ul>
-          <% @importer.failed_rows.each do |failed_row| %>
-            <li><strong>Row #<%= failed_row[:row_index] %>: </strong><%= failed_row[:error] %></li>
+          <% @errors.each do |e| %>
+            <li><%= e %></li>
           <% end %>
         </ul>
-      </p>
+      <% end %>
     </div>
   </div>
 </div>

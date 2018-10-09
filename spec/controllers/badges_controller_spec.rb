@@ -2,8 +2,6 @@ require 'rails_helper'
 
 RSpec.describe BadgesController, type: :controller do
 
-  include ApplicationHelper
-
   let(:enterprise){ create(:enterprise) }
   let(:user){ create(:user, enterprise: enterprise) }
 

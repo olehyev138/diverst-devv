@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe Expense, type: :model do
-
+RSpec.describe ExpenseCategory, type: :model do
+    
     describe 'validations' do
         let(:expense_category) { FactoryGirl.build_stubbed(:expense_category) }
 
@@ -14,5 +14,17 @@ RSpec.describe Expense, type: :model do
 
         it { expect(expense_category).to have_attached_file(:icon) }
         it { expect(expense_category).to validate_attachment_content_type(:icon).allowing('image/png', 'image/gif').rejecting('text/plain', 'text/xml') }
+    end
+    
+    describe "#destroy_callbacks" do
+        it "removes the child objects" do
+            expense_category = create(:expense_category)
+            expense = create(:expense, :category => expense_category)
+            
+            expense_category.destroy!
+            
+            expect{ExpenseCategory.find(expense_category.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect{Expense.find(expense.id)}.to raise_error(ActiveRecord::RecordNotFound)
+        end
     end
 end

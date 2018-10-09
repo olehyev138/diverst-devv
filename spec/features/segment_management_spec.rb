@@ -6,8 +6,8 @@ RSpec.feature 'Segment management' do
   let!(:segment) { create(:segment_with_rules, enterprise: user.enterprise) }
 
   before do
-    login_as(user, scope: :user)
-    user.enterprise.fields << create(:enterprise_field, container: user.enterprise)
+    login_as(user, scope: :user, :run_callbacks => false)
+    user.enterprise.fields << create(:enterprise_field, enterprise: user.enterprise)
   end
 
   scenario 'user creates a new segment', :js do
@@ -26,16 +26,16 @@ RSpec.feature 'Segment management' do
     expect(page).to have_content segment[:name]
   end
 
-  scenario 'user deletes a segment' do
+  scenario 'user deletes a segment', js: true do
     visit segments_path
 
-    click_on "Delete"
+    click_link "Delete", href: segment_path(segment)
 
     expect(page).not_to have_content segment.name
   end
 
   context 'user is viewing a segment\'s details' do
-    let!(:users) { create_list(:user, 3, enterprise_id: user.enterprise.id) }
+    let!(:users) { create_list(:user, 3, enterprise: user.enterprise) }
     before do
       segment.members << users
       visit segment_path(segment)

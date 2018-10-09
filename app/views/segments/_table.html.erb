@@ -5,7 +5,6 @@
         <table class="table--has-border" id="segments-table">
           <thead>
             <th>Name</th>
-            <th># of members</th>
             <th># of rules</th>
             <th>Date created</th>
             <th>Options</th>
@@ -14,7 +13,6 @@
             <% @segments.each do |segment| %>
               <tr>
                 <td><%= link_to segment.name, segment_path(segment), class: "accent" %></td>
-                <td><%= segment.members.uniq.count %></td>
                 <td><%= segment.rules.count %></td>
                 <td><%= segment.created_at.to_s :reversed_slashes %></td>
                 <td><%= link_to "Edit", edit_segment_path(segment) if policy(segment).edit? %> - <%= link_to "Delete", segment_path(segment), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(segment).destroy? %></td>

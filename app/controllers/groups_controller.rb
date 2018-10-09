@@ -1,7 +1,7 @@
 class GroupsController < ApplicationController
     before_action :authenticate_user!, except: [:calendar_data]
     before_action :set_group, except: [:index, :new, :create, :plan_overview,
-                                       :calendar, :calendar_data, :close_budgets]
+                                       :calendar, :calendar_data, :close_budgets, :close_budgets_export_csv]
 
     skip_before_action :verify_authenticity_token, only: [:create, :calendar_data]
     after_action :verify_authorized, except: [:calendar_data]
@@ -12,23 +12,40 @@ class GroupsController < ApplicationController
 
     def index
         authorize Group
-        @groups = current_user.enterprise.groups.includes(:children).all_parents
+        @groups = GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_manage).resolve.includes(:children).all_parents
     end
 
     def plan_overview
         authorize Group
-        @groups = current_user.enterprise.groups.includes(:initiatives)
+        @groups = GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_budgets_index).resolve
     end
 
     def close_budgets
         authorize Group
-        user_not_authorized if not current_user.policy_group.annual_budget_manage?
-        @groups = current_user.enterprise.groups.includes(:children).all_parents
+        @groups = GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_budgets_index).resolve.includes(:children).all_parents
+    end
+
+    def close_budgets_export_csv
+      authorize Group, :close_budgets?
+      user_not_authorized if not current_user.policy_group.annual_budget_manage?
+
+      result =
+        CSV.generate do |csv|
+          csv << ['Group name', 'Annual budget', 'Leftover money', 'Approved budget']
+           current_user.enterprise.groups.includes(:children).all_parents.each do |group|
+             csv << [group.name, group.annual_budget.presence || "Not set", group.leftover_money, group.approved_budget]
+             
+             group.children.each do |child|
+               csv << [child.name, child.annual_budget.presence || "Not set", child.leftover_money, child.approved_budget]
+             end
+          end
+        end
+      send_data result, filename: 'global_budgets.csv'
     end
 
     # calendar for all of the groups
     def calendar
-        authorize Group, :index?
+        authorize Group
         enterprise = current_user.enterprise
         @groups = enterprise.groups.all_parents
         @segments = enterprise.segments
@@ -146,7 +163,14 @@ class GroupsController < ApplicationController
         if @group.update(group_params)
             track_activity(@group, :update)
             flash[:notice] = "Your #{c_t(:erg)} was updated"
-            redirect_to [:edit, @group]
+
+            if request.referer == settings_group_url(@group)
+                redirect_to @group
+            elsif request.referer == group_outcomes_url(@group)
+                redirect_to group_outcomes_url(@group)
+            else
+                redirect_to [:edit, @group]
+            end
         else
             flash.now[:alert] = "Your #{c_t(:erg)} was not updated. Please fix the errors"
 
@@ -275,7 +299,7 @@ class GroupsController < ApplicationController
 
     def without_segments
         NewsFeedLink.combined_news_links(@group.news_feed.id)
-                            .includes(:link)
+                            .includes(:news_link, :group_message, :social_link)
                             .order(is_pinned: :desc, created_at: :desc)
                             .limit(5)
     end
@@ -330,6 +354,8 @@ class GroupsController < ApplicationController
                 :upcoming_events_visibility,
                 :calendar_color,
                 :active,
+                :contact_email,
+                :sponsor_image,
                 :company_video_url,
                 :layout,
                 :parent_id,

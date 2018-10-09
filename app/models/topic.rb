@@ -1,7 +1,7 @@
 class Topic < ActiveRecord::Base
   belongs_to :enterprise
   belongs_to :admin # <== i thought there was no entity called admin??
-  has_many :feedbacks, class_name: 'TopicFeedback'
+  has_many :feedbacks, class_name: 'TopicFeedback', dependent: :destroy
 
   # Returns a list of topics for which nor e1 nor e2 have given feedback for already.
   def self.unanswered_for_both(e1, e2)

@@ -1,14 +1,19 @@
 require 'rails_helper'
 
 RSpec.describe EnterprisePolicy, :type => :policy do
-
-    let(:policy_group){ create(:policy_group, :global_settings_manage => true)}
-    let(:enterprise) {create(:enterprise, :policy_groups => [policy_group])}
+    
+    let(:enterprise) {create(:enterprise)}
     let(:user){ create(:user, :enterprise => enterprise) }
-    let(:policy_group_2){ create(:policy_group, :global_settings_manage => false)}
-    let(:no_access) { create(:user, :policy_group => policy_group_2) }
-
+    let(:no_access) { create(:user) }
+    
     subject { described_class }
+    
+    before {
+        no_access.policy_group.sso_manage = false
+        no_access.policy_group.branding_manage = false
+        no_access.policy_group.manage_posts = false
+        no_access.policy_group.save!
+    }
 
     permissions :edit_auth?, :edit_fields?, :edit_mobile_fields?, :update_branding?, :edit_branding?, :restore_default_branding?, :edit_pending_comments? do
         it "allows access" do

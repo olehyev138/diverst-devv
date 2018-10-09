@@ -1,14 +1,15 @@
 class Initiative < ActiveRecord::Base
   include PublicActivity::Common
 
-  attr_accessor :associated_budget_id
+  attr_accessor :associated_budget_id, :skip_allocate_budget_funds
 
   belongs_to :pillar
   belongs_to :owner, class_name: "User"
   has_many :updates, class_name: "InitiativeUpdate", dependent: :destroy
-  has_many :fields, as: :container, dependent: :destroy
+  has_many :fields, dependent: :delete_all
   has_many :expenses, dependent: :destroy, class_name: "InitiativeExpense"
-
+  has_many :user_reward_actions
+  
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
 
   validates :end, date: {after: :start, message: 'must be after start'}, on: [:create, :update]
@@ -21,24 +22,24 @@ class Initiative < ActiveRecord::Base
   belongs_to :budget_item
   has_one :budget, through: :budget_item
 
-  has_many :checklists, as: :subject
-  has_many :resources, as: :container
+  has_many :checklists, dependent: :destroy
+  has_many :resources, dependent: :destroy
 
-  has_many :checklist_items, as: :container
+  has_many :checklist_items, dependent: :destroy
   accepts_nested_attributes_for :checklist_items, reject_if: :all_blank, allow_destroy: true
 
   belongs_to :owner_group, class_name: 'Group'
 
-  has_many :initiative_segments
+  has_many :initiative_segments, dependent: :destroy
   has_many :segments, through: :initiative_segments
-  has_many :initiative_participating_groups
+  has_many :initiative_participating_groups, dependent: :destroy
   has_many :participating_groups, through: :initiative_participating_groups, source: :group, class_name: 'Group'
 
-  has_many :initiative_invitees
+  has_many :initiative_invitees, dependent: :destroy
   has_many :invitees, through: :initiative_invitees, source: :user
-  has_many :comments, class_name: 'InitiativeComment'
+  has_many :comments, class_name: 'InitiativeComment', dependent: :destroy
 
-  has_many :initiative_users
+  has_many :initiative_users, dependent: :destroy
   has_many :attendees, through: :initiative_users, source: :user
 
   has_one :outcome, through: :pillar
@@ -54,7 +55,8 @@ class Initiative < ActiveRecord::Base
       .where(initiative_conditions.join(" OR "))
   }
 
-  before_create :allocate_budget_funds
+  # we don't want to run this callback when finish_expenses! is triggered in initiatives_controller.rb, finish_expense action
+  before_save { allocate_budget_funds unless skip_allocate_budget_funds }
 
   has_attached_file :picture, styles: { medium: '1000x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: "private"
   validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
@@ -78,9 +80,10 @@ class Initiative < ActiveRecord::Base
 
     d = self[:description]
 
-    d.gsub! '<p>', ''
-    d.gsub! '</p>', ''
-    d.gsub! '&nbsp;', ''
+    # Remove the trunc because we're allowing HTML and then sanitizing
+    #d.gsub! '<p>', ''
+    #d.gsub! '</p>', ''
+    #d.gsub! '&nbsp;', ''
 
     d
   end
@@ -176,7 +179,7 @@ class Initiative < ActiveRecord::Base
   def funded_by_leftover?
     self.budget_item_id == BudgetItem::LEFTOVER_BUDGET_ITEM_ID
   end
-  
+
   def group_ids
     participating_groups.pluck(:id) + [group.id]
   end
@@ -194,7 +197,8 @@ class Initiative < ActiveRecord::Base
     return true if estimated_funding == 0
 
     if budget.present?
-      if budget.subject != group
+
+      if budget.group_id != group.id
         # make sure noone is trying to put incorrect budget value
         errors.add(:budget, 'You are providing wrong budget')
         return false
@@ -222,15 +226,22 @@ class Initiative < ActiveRecord::Base
   end
 
   def allocate_budget_funds
+    self.estimated_funding = 0.0 if self.estimated_funding.nil?
+
     if budget_item.present?
       # If user tries to allocate all the money from the budget
       # mark this budget item as used up
-      if self.estimated_funding >= budget_item.available_amount
+      if self.finished_expenses?
+        errors.add(:budget_item_id, "sorry, can't choose another budget item")
+        return false
+      end
+
+      if (self.estimated_funding == 0.0 || self.estimated_funding >= budget_item.available_amount) 
         self.estimated_funding = budget_item.available_amount
         budget_item.available_amount = 0
-        budget_item.is_done = true
+        budget_item.is_done = true 
       else
-        #otherwise just substruct
+        #otherwise just subtract
         budget_item.available_amount -= self.estimated_funding
       end
 

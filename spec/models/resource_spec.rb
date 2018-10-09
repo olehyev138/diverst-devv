@@ -5,10 +5,14 @@ RSpec.describe Resource, :type => :model do
   describe 'test associations' do
     let(:resource) { build_stubbed(:resource) }
 
-    it { expect(resource).to belong_to(:container) }
+    it { expect(resource).to belong_to(:enterprise) }
+    it { expect(resource).to belong_to(:folder) }
+    it { expect(resource).to belong_to(:group) }
+    it { expect(resource).to belong_to(:initiative) }
     it { expect(resource).to belong_to(:owner).class_name('User') }
     it { expect(resource).to have_many(:tags).dependent(:destroy) }
     it { expect(resource).to accept_nested_attributes_for(:tags) }
+    it { expect(resource).to validate_length_of(:url)}
   end
 
   describe 'when validating' do
@@ -85,7 +89,7 @@ RSpec.describe Resource, :type => :model do
 
     it "deletes tags" do
       resource = create(:resource)
-      create_list(:tag, 5, :taggable => resource)
+      create_list(:tag, 5, :resource => resource)
 
       resource.tag_tokens = []
 
@@ -105,6 +109,28 @@ RSpec.describe Resource, :type => :model do
     it "returns the expiration_time " do
       resource = create(:resource)
       expect(resource.expiration_time).to eq(Resource::EXPIRATION_TIME)
+    end
+  end
+  
+  describe "#destroy_callbacks" do
+    it "removes the child objects" do
+      resource = create(:resource)
+      tag = create(:tag, :resource => resource)
+
+      resource.destroy
+
+      expect{Resource.find(resource.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      expect{Tag.find(tag.id)}.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+  
+  describe '#total_views' do
+    it "returns 10" do
+        resource = create(:resource)
+        create(:view, :resource => resource, :view_count => 4)
+        create(:view, :resource => resource, :view_count => 6)
+        
+        expect(resource.total_views).to eq(10)
     end
   end
 end

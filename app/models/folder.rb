@@ -3,19 +3,21 @@ class Folder < ActiveRecord::Base
   has_secure_password(validations: false)
 
   # associations
-  belongs_to  :container, polymorphic: true
-  has_many    :resources, as: :container
-  has_many    :folder_shares
-  has_many    :groups, through: :folder_shares, source: "container", source_type: 'Group'
-
-  has_many    :children, class_name: "Folder", foreign_key: :parent_id
+  belongs_to  :enterprise
+  belongs_to  :group
   belongs_to  :parent,   class_name: "Folder", foreign_key: :parent_id
+  
+  has_many    :views, dependent: :destroy
+  has_many    :children, class_name: "Folder", foreign_key: :parent_id
+  has_many    :resources, :dependent => :destroy
+  has_many    :folder_shares, :dependent => :destroy
+  has_many    :groups, through: :folder_shares, source: "group"
+  has_many    :children, class_name: "Folder", foreign_key: :parent_id, :dependent => :destroy
 
   # validations
   validates :name, presence: true
-  validates :container, presence: true
-  validates :container, presence: true
-  validates_uniqueness_of :name, scope: [:container]
+  validates_uniqueness_of :name, scope: [:enterprise_id], if: 'enterprise_id.present?'
+  validates_uniqueness_of :name, scope: [:group_id], if: 'group_id.present?'
   validates :password, :presence => true, :if => Proc.new { |folder| folder.password_protected? and !folder.password_digest}
   validates :password, :length => { :minimum => 6 }, :if => Proc.new { |folder| folder.password_protected? and folder.password.present?}
   
@@ -31,6 +33,10 @@ class Folder < ActiveRecord::Base
 
   def valid_password?(user_password)
     return authenticate(user_password)
+  end
+  
+  def total_views
+    views.sum(:view_count)
   end
 
 end

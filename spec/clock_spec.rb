@@ -13,7 +13,7 @@ RSpec.describe Clockwork, :type => :clock do
     expect(Clockwork::Test.block_for(job).call).to eq Segment.update_all_members 
   end
   
-  it "runs the job SyncYammerUsersJob" do
+  xit "runs the job SyncYammerUsersJob" do
     job = "Sync Yammer users with Diverst users"
     perform = SyncYammerUsersJob.perform_later
     
@@ -24,7 +24,7 @@ RSpec.describe Clockwork, :type => :clock do
     expect(Clockwork::Test.block_for(job).call).to eq perform
   end
   
-  it "runs the job SyncYammerGroupJob" do
+  xit "runs the job SyncYammerGroupJob" do
     job = "Sync Yammer members"
     perform = SyncYammerGroupJob.perform_later
     
@@ -33,17 +33,6 @@ RSpec.describe Clockwork, :type => :clock do
     expect(Clockwork::Test.ran_job?(job)).to be_truthy
     expect(Clockwork::Test.times_run(job)).to eq 1
     expect(Clockwork::Test.block_for(job).call).to eq Group.all.each { |group| SyncYammerGroupJob.perform_later(group) }
-  end
-  
-  it "runs the job SaveUserDataSamplesJob" do
-    job = "Save employee data samples"
-    perform = SaveUserDataSamplesJob.perform_later
-    
-    allow(SaveUserDataSamplesJob).to receive(:perform_later).and_return(perform)
-    
-    expect(Clockwork::Test.ran_job?(job)).to be_truthy
-    expect(Clockwork::Test.times_run(job)).to eq 1
-    expect(Clockwork::Test.block_for(job).call).to eq perform
   end
   
   it "runs the job GroupLeaderMemberNotificationsJob" do

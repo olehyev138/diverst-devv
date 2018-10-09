@@ -5,7 +5,7 @@ RSpec.describe TextField, type: :model do
   describe "#validates_rule_for_user" do
     it "returns true" do
       enterprise = create(:enterprise)
-      text_field = TextField.new(:type => "TextField", :title => "Current Title", :container => enterprise)
+      text_field = TextField.new(:type => "TextField", :title => "Current Title", :enterprise => enterprise)
       text_field.save!
       user_1 = create(:user, :data => "{\"#{text_field.id}\": \"Customer Service Representative\"}", :enterprise => enterprise)
       segment = create(:segment, :name => "Customer Service Reps", :enterprise => enterprise)
@@ -17,7 +17,7 @@ RSpec.describe TextField, type: :model do
 
     it "returns false" do
       enterprise = create(:enterprise)
-      text_field = TextField.new(:type => "TextField", :title => "Current Title", :container => enterprise)
+      text_field = TextField.new(:type => "TextField", :title => "Current Title", :enterprise => enterprise)
       text_field.save!
       user_1 = create(:user, :data => "{\"#{text_field.id}\": \"Customer Service Representative\"}", :enterprise => enterprise)
       segment = create(:segment, :name => "Engineers", :enterprise => enterprise)
@@ -29,7 +29,7 @@ RSpec.describe TextField, type: :model do
 
     it "returns true" do
       enterprise = create(:enterprise)
-      text_field = TextField.new(:type => "TextField", :title => "Current Title", :container => enterprise)
+      text_field = TextField.new(:type => "TextField", :title => "Current Title", :enterprise => enterprise)
       text_field.save!
       user_1 = create(:user, :data => "{\"#{text_field.id}\": \"Customer Service Representative\"}", :enterprise => enterprise)
       segment = create(:segment, :name => "Engineers", :enterprise => enterprise)

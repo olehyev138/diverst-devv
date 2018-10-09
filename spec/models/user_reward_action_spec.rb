@@ -11,7 +11,17 @@ RSpec.describe UserRewardAction do
     it { expect(user_reward_action).to validate_numericality_of(:points).only_integer }
     it { expect(user_reward_action).to belong_to(:user) }
     it { expect(user_reward_action).to belong_to(:reward_action) }
-    it { expect(user_reward_action).to belong_to(:entity) }
+    it { expect(user_reward_action).to belong_to(:initiative) }
+    it { expect(user_reward_action).to belong_to(:initiative_comment) }
+    it { expect(user_reward_action).to belong_to(:group_message) }
+    it { expect(user_reward_action).to belong_to(:group_message_comment) }
+    it { expect(user_reward_action).to belong_to(:news_link) }
+    it { expect(user_reward_action).to belong_to(:news_link_comment) }
+    it { expect(user_reward_action).to belong_to(:social_link) }
+    it { expect(user_reward_action).to belong_to(:answer_comment) }
+    it { expect(user_reward_action).to belong_to(:answer_upvote) }
+    it { expect(user_reward_action).to belong_to(:answer) }
+    it { expect(user_reward_action).to belong_to(:poll_response) }
     it { expect(user_reward_action).to define_enum_for(:operation).with([:add, :del]) }
   end
 end

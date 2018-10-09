@@ -1,5 +1,5 @@
 <div class="card__section card__section--border">
-  <%= link_to group_event_path(event.pillar.outcome.group, event), class: "block block-section" do %>
+  <div class="block block-section">
     <div class="flex-row flex-row--middle">
       <% if event.picture.exists? %>
         <div class="flex-row__cell">
@@ -7,16 +7,16 @@
         </div>
       <% end %>
       <div class="flex-row__cell flex-row__cell--grow">
-        <span class="highlight"><%= event.name %></span><br>
+        <span class="highlight"><%= link_to event.name, group_event_path(event.pillar.outcome.group, event) %></span><br>
         <% if event.group != @group %>
           <strong><small>Hosted By: <%= event.group.name %></small></strong><br>
         <% end %>
-        <small><%= event.description&.html_safe %></small><br>
+        <small style="padding-left: 12px;"><%= sanitize event.description %></small><br>
         <small class="muted"><%= event.start.to_s :slashes %></small>
       </div>
       <div class="flex-row__cell">
         <span class="icon icon--chevron-right"></span>
       </div>
     </div>
-  <% end %>
+  </div>
 </div>

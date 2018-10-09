@@ -1,0 +1,37 @@
+<div class="card">
+  <div class="card__section">
+    <table
+      class="table--has-border" id="user-roles-table">
+      <thead>
+        <th>Role Name</th>
+        <th>Role Type</th>
+        <th>Default</th>
+        <th>Priority</th>
+        <th>Policy Group Template</th>
+        <th></th>
+      </thead>
+      <tbody>
+          <% current_user.enterprise.user_roles.includes(:policy_group_template).each do |role| %>
+            <tr>
+                <td><%= link_to role.role_name, edit_user_role_path(role) %></td>
+                <td><%= role.role_type.titleize %></td>
+                <td><%= UserRoleDecorator.decorate(role).default_role %></td>
+                <td><%= role.priority %></td>
+                <td><%= link_to role.policy_group_template.name, edit_policy_group_template_path(role.policy_group_template) %></td>
+                <td><%= link_to "Delete", user_role_path(role), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(role).destroy? && !role.default? %></td>
+            </tr>
+          <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  $(document).on('page:change', function() {
+    $(document).off('page:change');
+
+    $('#user-roles-table').dataTable(Utility.mergeWithDTDefaults({
+        order: [[3, "asc"]]
+    }));
+  });
+</script>
