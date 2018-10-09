@@ -4,7 +4,7 @@
       <% if @mentorship_requests.count > 0 %>
         <table class="table--has-border">
           <thead>
-            <th>Mentee</th>
+            <th>User</th>
             <th>Status</th>
             <th>Notes</th>
             <th>Approve/Decline</th>
@@ -12,7 +12,7 @@
           <tbody>
             <% @mentorship_requests.each do |mentorship_request| %>
               <tr>
-                <td><%= mentorship_request.receiver.first_name %> <%= mentorship_request.receiver.last_name %></td>
+                <td><%= mentorship_request.sender.first_name %> <%= mentorship_request.sender.last_name %></td>
                 <td><%= mentorship_request.status %></td>
                 <td><%= mentorship_request.notes %></td>
                 <td>
@@ -34,14 +34,14 @@
       
         <table class="table--has-border">
           <thead>
-            <th>Mentor</th>
+            <th>User</th>
             <th>Status</th>
             <th>Cancel</th>
           </thead>
           <tbody>
             <% @mentorship_proposals.each do |mentorship_proposal| %>
               <tr>
-                <td><%= mentorship_proposal.sender.first_name %> <%= mentorship_proposal.sender.last_name %></td>
+                <td><%= mentorship_proposal.receiver.first_name %> <%= mentorship_proposal.receiver.last_name %></td>
                 <td><%= mentorship_proposal.status %></td>
                 <td>
                   <%= link_to "Cancel", mentoring_request_path(mentorship_proposal), method: :delete, class: "error" %>

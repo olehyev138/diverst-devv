@@ -210,7 +210,7 @@ RSpec.feature 'Group Membership Management' do
 
 	context 'when pending users is disabled by group' do
 		pending_membership_message = '* Please wait for group administrators to process your membership request.
-		Take a survey below in order to speed up approval process.'
+		Take our survey below.'
 		let!(:group) { create(:group, name: 'Group ONE', enterprise: enterprise, pending_users: 'disabled') }
 		let!(:sub_group) { create(:group, enterprise: enterprise, name: "Sub Group ONE", parent_id: group.id) }
 

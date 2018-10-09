@@ -635,6 +635,7 @@ ActiveRecord::Schema.define(version: 20181001154000) do
     t.text     "short_description",          limit: 65535
     t.string   "layout",                     limit: 191
     t.text     "home_message",               limit: 65535
+    t.boolean  "default_mentor_group",                                             default: false
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
@@ -781,13 +782,14 @@ ActiveRecord::Schema.define(version: 20181001154000) do
   end
 
   create_table "mentoring_requests", force: :cascade do |t|
-    t.integer  "enterprise_id", limit: 4
-    t.string   "status",        limit: 191,   default: "pending", null: false
-    t.text     "notes",         limit: 65535
-    t.integer  "sender_id",     limit: 4,                         null: false
-    t.integer  "receiver_id",   limit: 4,                         null: false
+    t.integer  "enterprise_id",  limit: 4
+    t.string   "status",         limit: 191,   default: "pending", null: false
+    t.text     "notes",          limit: 65535
+    t.integer  "sender_id",      limit: 4,                         null: false
+    t.integer  "receiver_id",    limit: 4,                         null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "mentoring_type", limit: 191,   default: "mentor",  null: false
   end
 
   create_table "mentoring_session_topics", force: :cascade do |t|

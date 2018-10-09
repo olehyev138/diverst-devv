@@ -12,12 +12,47 @@
 
   <div class="site-wrap site-wrap--medium">
     <div class="content__header">
-      <img class="logo logo--large" src="<%= logo_url(resource.enterprise) %>">
-    </div>
 
+      <% if ENV["DOMAIN"] === "dm.diverst.com" %>
+        <img class="logo logo--large click" src="<%= logo_url(resource.enterprise) %>">
+      <% else %>
+        <img class="logo logo--large" src="<%= logo_url(resource.enterprise) %>">
+      <% end %>
+    </div>
     <div class="content__main">
-      <div class="card">
-        <div class="card__section">
+      
+      <% if ENV["DOMAIN"] === "dm.diverst.com" %>
+        <div class="card">
+          <div class="card__section">
+            <div class="row">
+              
+              <div class="col-xs-12 text-center visible">
+                <%= video_tag(resource.enterprise.onboarding_sponsor_media.expiring_url(36000), controls: true, size: "400x400") %>
+              </div>   
+              
+              <div class="col-xs-6 invisible" style="display:none;">
+                <%= image_tag resource.enterprise.cdo_picture.expiring_url(3600), class: "block", style: "width: 100%; background-size: cover; background-position: bottom center;" %>
+              </div>
+              
+              <div class="col-xs-6 invisible" style="display:none;">
+                <h3>            
+                  <% if resource.enterprise.sponsors.any? %>
+                    <%= resource.enterprise.sponsors.first.sponsor_name %>, <%= resource.enterprise.sponsors.first.sponsor_title %>
+                  <% end %>
+                </h3>
+  
+                <% if resource.enterprise.cdo_message.present? %>
+                  <p> <%= simple_format resource.enterprise.cdo_message %> </p>
+                <% else %>
+                  <p>Hi! This is <%= resource.enterprise.cdo_name %>. We know that diverse teams produce better results, but our diversity mission is important for another reason: we want everyone to be fairly represented and have the same opportunities.  Our new diversity platform provides just that – a place where you can collaborate on interesting problems and develop new insights together. Join us by selecting the <%= c_t(:erg).pluralize %> that best represent your interests.</p>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% else %>
+        <div class="card">
+          <div class="card__section">
 
           <div class="row">
             <div class="col sm-6 md-3 lg-5">
@@ -57,7 +92,8 @@
           </div>
 
         </div>
-      </div>
+        </div>
+      <% end %>
 
       <div class="card">
         <div class="card__section">
@@ -288,6 +324,19 @@
         $('div.children_' + id).hide();
         $(this).siblings('a.nested_show').show();
         $(this).hide();
+      }); //endof click
+
+      $('img.click').click(function(e){
+        var visible = $(".visible");
+        var invisible = $(".invisible");
+        visible.hide();
+        invisible.show();
+        
+        visible.addClass("invisible")
+        visible.removeClass("visible");
+        
+        invisible.addClass("visible")
+        invisible.removeClass("invisible");
       }); //endof click
 
     </script>
