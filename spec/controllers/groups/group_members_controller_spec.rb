@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Groups::GroupMembersController, type: :controller do
+    include ActiveJob::TestHelper
+    
     let(:user) { create :user }
     let(:add) { create :user, enterprise: user.enterprise }
     let(:group) { create(:group, enterprise: user.enterprise) }
@@ -98,8 +100,10 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
                 enable_public_activity
 
                 it 'creates public activity record' do
-                    expect{ post :accept_pending, group_id: group.id, id: user.id
-                     }.to change(PublicActivity::Activity, :count).by(1)
+                    perform_enqueued_jobs do
+                        expect{ post :accept_pending, group_id: group.id, id: user.id
+                         }.to change(PublicActivity::Activity, :count).by(1)
+                    end
                 end
 
                 describe 'activity record' do
@@ -108,8 +112,10 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
                     let(:key) { 'user.accept_pending' }
 
                     before {
-                      post :accept_pending, group_id: group.id, id: user.id
-                  }
+                        perform_enqueued_jobs do
+                            post :accept_pending, group_id: group.id, id: user.id
+                        end
+                    }
                   include_examples'correct public activity'
                 end
             end

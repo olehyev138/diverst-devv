@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe GroupsController, type: :controller do
-
+  include ActiveJob::TestHelper
+  
   let(:enterprise){ create(:enterprise) }
   let(:user){ create(:user, enterprise: enterprise, email: "test@gmail.com") }
   let(:group){ create(:group, enterprise: enterprise) }
@@ -473,9 +474,11 @@ RSpec.describe GroupsController, type: :controller do
           enable_public_activity
 
           it 'creates public activity record' do
-            expect{
-              post_create(group_attrs)
-            }.to change(PublicActivity::Activity, :count).by(1)
+            perform_enqueued_jobs do
+              expect{
+                post_create(group_attrs)
+              }.to change(PublicActivity::Activity, :count).by(1)
+            end
           end
 
           describe 'activity record' do
@@ -484,7 +487,9 @@ RSpec.describe GroupsController, type: :controller do
             let(:key) { 'group.create' }
 
             before {
-              post_create(group_attrs)
+              perform_enqueued_jobs do
+                post_create(group_attrs)
+              end
             }
 
             include_examples'correct public activity'
@@ -572,9 +577,11 @@ RSpec.describe GroupsController, type: :controller do
           enable_public_activity
 
           it 'creates public activity record' do
-            expect{
-              patch_update(group.id, group_attrs)
-            }.to change(PublicActivity::Activity, :count).by(1)
+            perform_enqueued_jobs do
+              expect{
+                patch_update(group.id, group_attrs)
+              }.to change(PublicActivity::Activity, :count).by(1)
+            end
           end
 
           describe 'activity record' do
@@ -583,7 +590,9 @@ RSpec.describe GroupsController, type: :controller do
             let(:key) { 'group.update' }
 
             before {
-              patch_update(group.id, group_attrs)
+              perform_enqueued_jobs do
+                patch_update(group.id, group_attrs)
+              end
             }
 
             include_examples'correct public activity'
@@ -727,9 +736,11 @@ RSpec.describe GroupsController, type: :controller do
             enable_public_activity
 
             it 'creates public activity record' do
-              expect{
-                delete_destroy(group.id)
-              }.to change(PublicActivity::Activity, :count).by(1)
+              perform_enqueued_jobs do
+                expect{
+                  delete_destroy(group.id)
+                }.to change(PublicActivity::Activity, :count).by(1)
+              end
             end
 
             describe 'activity record' do
@@ -738,7 +749,9 @@ RSpec.describe GroupsController, type: :controller do
               let(:key) { 'group.destroy' }
 
               before {
-                delete_destroy(group.id)
+                perform_enqueued_jobs do
+                  delete_destroy(group.id)
+                end
               }
 
               include_examples'correct public activity'
