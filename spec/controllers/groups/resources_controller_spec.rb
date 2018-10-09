@@ -25,7 +25,7 @@ RSpec.describe Groups::ResourcesController, type: :controller do
                     expect(assigns[:national_resources]).to eq([national_resource])
                 end
 
-                it 'renders index template' do 
+                it 'renders index template' do
                     expect(response).to render_template :index
                 end
             end
@@ -41,7 +41,7 @@ RSpec.describe Groups::ResourcesController, type: :controller do
                     expect(assigns[:national_resources]).to eq([national_resource])
                 end
 
-                 it 'renders index template' do 
+                 it 'renders index template' do
                     expect(response).to render_template :index
                 end
             end
@@ -74,7 +74,7 @@ RSpec.describe Groups::ResourcesController, type: :controller do
     end
 
     describe "GET#edit" do
-        describe 'with user logged in' do 
+        describe 'with user logged in' do
             login_user_from_let
             let!(:group_resource) { create(:resource, title: "title", group: group, file: fixture_file_upload('files/test.csv', 'text/csv')) }
             before { get :edit, :id => group_resource.id, group_id: group.id }
@@ -110,6 +110,27 @@ RSpec.describe Groups::ResourcesController, type: :controller do
                     expect{post :create, group_id: group.id, resource: {title: "resource", file: file}}
                     .to change(Resource, :count).by(1)
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    expect{post :create, group_id: group.id, resource: {title: "resource", file: file}}
+                    .to change(PublicActivity::Activity, :count).by(1)
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { Resource.last }
+                    let(:owner) { user }
+                    let(:key) { 'resource.create' }
+
+                    before {
+                      post :create, group_id: group.id, resource: {title: "resource", file: file}
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
 
             context "invalid params" do
@@ -138,26 +159,26 @@ RSpec.describe Groups::ResourcesController, type: :controller do
                 login_user_from_let
                 let!(:group_resource) { create(:resource, title: "title", group: group, file: fixture_file_upload('files/test.csv', 'text/csv')) }
                 before { get :show, :id => group_resource.id, group_id: group.id }
-    
-                it 'returns a valid resource object' do 
+
+                it 'returns a valid resource object' do
                     expect(assigns[:resource]).to be_valid
                 end
-    
+
                 it "filename should be test.csv" do
                     expect(response.headers["Content-Disposition"]).to include "test.csv"
                 end
-    
-                it 'returns format in csv' do 
+
+                it 'returns format in csv' do
                     expect(response.content_type).to eq 'text/csv'
                 end
             end
-            
+
             context "without file" do
                 login_user_from_let
                 let!(:group_resource) { create(:resource, title: "title", group: group, file: nil) }
                 before { get :show, :id => group_resource.id, group_id: group.id }
-    
-                it 'does something' do 
+
+                it 'does something' do
                     expect(flash[:alert]).to eq "File/File Path does not exist"
                 end
             end
@@ -189,6 +210,27 @@ RSpec.describe Groups::ResourcesController, type: :controller do
                 it "updates the resouce" do
                     group_resource.reload
                     expect(group_resource.title).to eq("updated")
+                end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    expect{patch :update, group_id: group.id, id: group_resource.id, resource: {title: "updated", file: file}}
+                    .to change(PublicActivity::Activity, :count).by(1)
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { Resource.last }
+                    let(:owner) { user }
+                    let(:key) { 'resource.update' }
+
+                    before {
+                      patch :update, group_id: group.id, id: group_resource.id, resource: {title: "updated", file: file}
+                    }
+
+                    include_examples'correct public activity'
+                  end
                 end
             end
 
@@ -227,9 +269,30 @@ RSpec.describe Groups::ResourcesController, type: :controller do
             it "deletes the resource" do
                 expect{delete :destroy, :id => group_resource.id, group_id: group.id}.to change(Resource.where(:id => group_resource.id), :count).by(-1)
             end
+
+            describe 'public activity' do
+              enable_public_activity
+
+              it 'creates public activity record' do
+                expect{delete :destroy, :id => group_resource.id, group_id: group.id}
+                .to change(PublicActivity::Activity, :count).by(1)
+              end
+
+              describe 'activity record' do
+                let(:model) { Resource.last }
+                let(:owner) { user }
+                let(:key) { 'resource.destroy' }
+
+                before {
+                  delete :destroy, :id => group_resource.id, group_id: group.id
+                }
+
+                include_examples'correct public activity'
+              end
+            end
         end
 
-        context 'with user not logged in' do 
+        context 'with user not logged in' do
             before { delete :destroy, :id => group_resource.id, group_id: group.id }
             it_behaves_like "redirect user to users/sign_in path"
         end
