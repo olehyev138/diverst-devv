@@ -73,6 +73,27 @@ RSpec.describe ExpenseCategoriesController, type: :controller do
                     post :create, expense_category: valid_expense_category_attributes
                     expect(flash[:notice]).to eq "Your expense category was created"
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    expect{post :create, expense_category: valid_expense_category_attributes}
+                    .to change(PublicActivity::Activity, :count).by(1)
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { ExpenseCategory.last }
+                    let(:owner) { user }
+                    let(:key) { 'expense_category.create' }
+
+                    before {
+                      post :create, expense_category: valid_expense_category_attributes
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
 
             context "with incorrect params" do
@@ -138,6 +159,27 @@ RSpec.describe ExpenseCategoriesController, type: :controller do
                 it "flashes notice message" do
                     expect(flash[:notice]).to eq "Your expense category was updated"
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    expect{patch :update, id: expense_category.id, expense_category: { name: "updated" }}
+                    .to change(PublicActivity::Activity, :count).by(1)
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { expense_category }
+                    let(:owner) { user }
+                    let(:key) { 'expense_category.update' }
+
+                    before {
+                      patch :update, id: expense_category.id, expense_category: { name: "updated" }
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
 
             context "with invalid parameters" do
@@ -172,6 +214,27 @@ RSpec.describe ExpenseCategoriesController, type: :controller do
             it "destroy the expense_category" do
                 expense_category
                 expect{ delete :destroy, id: expense_category.id }.to change(ExpenseCategory, :count).by(-1)
+            end
+
+            describe 'public activity' do
+              enable_public_activity
+
+              it 'creates public activity record' do
+                expect{delete :destroy, id: expense_category.id}
+                .to change(PublicActivity::Activity, :count).by(1)
+              end
+
+              describe 'activity record' do
+                let(:model) { expense_category }
+                let(:owner) { user }
+                let(:key) { 'expense_category.destroy' }
+
+                before {
+                  delete :destroy, id: expense_category.id
+                }
+
+                include_examples'correct public activity'
+              end
             end
         end
 

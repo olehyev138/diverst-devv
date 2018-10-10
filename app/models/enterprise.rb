@@ -1,5 +1,6 @@
 class Enterprise < ActiveRecord::Base
     include ContainsResources
+    include PublicActivity::Common
 
     has_many :users, inverse_of: :enterprise, dependent: :destroy
     has_many :graph_fields, class_name: 'Field', dependent: :destroy
@@ -33,7 +34,7 @@ class Enterprise < ActiveRecord::Base
     has_many :expenses, dependent: :destroy
     has_many :expense_categories, dependent: :destroy
     has_many :clockwork_database_events, dependent: :destroy
-    
+
     has_many :biases, through: :users, class_name: "Bias"
     has_many :departments
 
@@ -73,7 +74,7 @@ class Enterprise < ActiveRecord::Base
 
     has_attached_file :xml_sso_config
     validates_attachment_content_type :xml_sso_config, content_type: 'text/xml'
-    
+
     # re-add to allow migration file to run
     has_attached_file :sponsor_media, s3_permissions: :private
     do_not_validate_attachment_file_type :sponsor_media

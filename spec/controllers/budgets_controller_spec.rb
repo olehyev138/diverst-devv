@@ -126,6 +126,27 @@ RSpec.describe BudgetsController, type: :controller do
           post :create, group_id: group.id, budget: budget_params
           expect(flash[:notice]).to eq "Your budget was created"
         end
+
+        describe 'public activity' do
+          enable_public_activity
+
+          it 'creates public activity record' do
+            expect{post :create, group_id: group.id, budget: budget_params}
+            .to change(PublicActivity::Activity, :count).by(1)
+          end
+
+          describe 'activity record' do
+            let(:model) { Budget.last }
+            let(:owner) { user }
+            let(:key) { 'budget.create' }
+
+            before {
+              post :create, group_id: group.id, budget: budget_params
+            }
+
+            include_examples'correct public activity'
+          end
+        end
       end
 
       context 'with invalid params' do
@@ -152,25 +173,50 @@ RSpec.describe BudgetsController, type: :controller do
     context 'with logged user' do
       login_user_from_let
 
-      before do
+      let(:approve) do
         post :approve, group_id: budget.group.id, budget_id: budget.id, budget: { comments: "here is a comment" }
         budget.reload
       end
 
       it "returns a valid group object" do
+        approve
         expect(assigns[:budget]).to be_valid
       end
 
       it 'redirects to index' do
+        approve
         expect(response).to redirect_to action: :index
       end
 
       it "budget is approved" do
+        approve
         expect(budget.is_approved).to eq true
       end
 
       it "saves the comment" do
+        approve
         expect(budget.comments).to eq "here is a comment"
+      end
+
+      describe 'public activity' do
+        enable_public_activity
+
+        it 'creates public activity record' do
+          expect{approve}
+          .to change(PublicActivity::Activity, :count).by(1)
+        end
+
+        describe 'activity record' do
+          let(:model) { budget }
+          let(:owner) { user }
+          let(:key) { 'budget.approve' }
+
+          before {
+            approve
+          }
+
+          include_examples'correct public activity'
+        end
       end
     end
 
@@ -183,22 +229,45 @@ RSpec.describe BudgetsController, type: :controller do
   describe 'POST#decline' do
     context 'with logged user' do
       login_user_from_let
-
-      before do
+      let(:decline) do
         post :decline, group_id: budget.group.id, budget_id: budget.id
         budget.reload
       end
 
       it "returns a valid group object" do
+        decline
         expect(assigns[:budget]).to be_valid
       end
 
       it 'redirects to index' do
+        decline
         expect(response).to redirect_to action: :index
       end
 
       it "budget is declined" do
+        decline
         expect(budget.is_approved).to eq false
+      end
+
+      describe 'public activity' do
+        enable_public_activity
+
+        it 'creates public activity record' do
+          expect{decline}
+          .to change(PublicActivity::Activity, :count).by(1)
+        end
+
+        describe 'activity record' do
+          let(:model) { budget }
+          let(:owner) { user }
+          let(:key) { 'budget.decline' }
+
+          before {
+            decline
+          }
+
+          include_examples'correct public activity'
+        end
       end
     end
 
@@ -228,6 +297,27 @@ RSpec.describe BudgetsController, type: :controller do
           it 'redirects to index action' do
             delete :destroy, group_id: budget.group.id, id: budget.id
             expect(response).to redirect_to action: :index
+          end
+
+          describe 'public activity' do
+            enable_public_activity
+
+            it 'creates public activity record' do
+              expect{delete :destroy, group_id: budget.group.id, id: budget.id}
+              .to change(PublicActivity::Activity, :count).by(1)
+            end
+
+            describe 'activity record' do
+              let(:model) { budget }
+              let(:owner) { user }
+              let(:key) { 'budget.destroy' }
+
+              before {
+                delete :destroy, group_id: budget.group.id, id: budget.id
+              }
+
+              include_examples'correct public activity'
+            end
           end
         end
 

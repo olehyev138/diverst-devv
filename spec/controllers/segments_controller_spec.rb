@@ -66,6 +66,27 @@ RSpec.describe SegmentsController, type: :controller do
                     post :create, :segment => segment_attributes
                     expect(flash[:notice]).to eq "Your #{c_t(:segment)} was created"
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    expect{post :create, :segment => segment_attributes}
+                    .to change(PublicActivity::Activity, :count).by(1)
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { Segment.last }
+                    let(:owner) { user }
+                    let(:key) { 'segment.create' }
+
+                    before {
+                      post :create, :segment => segment_attributes
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
 
             context "unsuccessful create" do
@@ -188,6 +209,27 @@ RSpec.describe SegmentsController, type: :controller do
                 it "flashes a notice message" do
                     expect(flash[:notice]).to eq "Your #{c_t(:segment)} was updated"
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    expect{patch :update, :id => segment.id, :segment => {:name => "updated"}}
+                    .to change(PublicActivity::Activity, :count).by(1)
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { Segment.last }
+                    let(:owner) { user }
+                    let(:key) { 'segment.update' }
+
+                    before {
+                      patch :update, :id => segment.id, :segment => {:name => "updated"}
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
 
             context "unsuccessfully" do
@@ -220,6 +262,27 @@ RSpec.describe SegmentsController, type: :controller do
             it "redirect to action index" do
                 delete :destroy, :id => segment.id
                 expect(response).to redirect_to action: :index
+            end
+
+            describe 'public activity' do
+              enable_public_activity
+
+              it 'creates public activity record' do
+                expect{delete :destroy, :id => segment.id}
+                .to change(PublicActivity::Activity, :count).by(1)
+              end
+
+              describe 'activity record' do
+                let(:model) { Segment.last }
+                let(:owner) { user }
+                let(:key) { 'segment.destroy' }
+
+                before {
+                  delete :destroy, :id => segment.id
+                }
+
+                include_examples'correct public activity'
+              end
             end
         end
 

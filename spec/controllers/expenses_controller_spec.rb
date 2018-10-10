@@ -74,6 +74,27 @@ RSpec.describe ExpensesController, type: :controller do
                     post :create, expense: valid_expense_attributes
                     expect(flash[:notice]).to eq "Your expense was created"
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    expect{post :create, expense: valid_expense_attributes}
+                    .to change(PublicActivity::Activity, :count).by(1)
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { Expense.last }
+                    let(:owner) { user }
+                    let(:key) { 'expense.create' }
+
+                    before {
+                      post :create, expense: valid_expense_attributes
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
 
             context "with invalid params" do
@@ -140,6 +161,27 @@ RSpec.describe ExpensesController, type: :controller do
                 it "flashes a notice message" do
                     expect(flash[:notice]).to eq "Your expense was updated"
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    expect{patch :update, id: expense.id, expense: attributes_for(:expense, name: "updated")}
+                    .to change(PublicActivity::Activity, :count).by(1)
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { expense }
+                    let(:owner) { user }
+                    let(:key) { 'expense.update' }
+
+                    before {
+                      patch :update, id: expense.id, expense: attributes_for(:expense, name: "updated")
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
 
             context "with invalid parameters" do
@@ -179,6 +221,27 @@ RSpec.describe ExpensesController, type: :controller do
             it "destroys expense" do
                 expense
                 expect{ delete :destroy, id: expense.id }.to change(Expense, :count).by(-1)
+            end
+
+            describe 'public activity' do
+              enable_public_activity
+
+              it 'creates public activity record' do
+                expect{delete :destroy, id: expense.id}
+                .to change(PublicActivity::Activity, :count).by(1)
+              end
+
+              describe 'activity record' do
+                let(:model) { expense }
+                let(:owner) { user }
+                let(:key) { 'expense.destroy' }
+
+                before {
+                  delete :destroy, id: expense.id
+                }
+
+                include_examples'correct public activity'
+              end
             end
         end
 

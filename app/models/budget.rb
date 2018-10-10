@@ -1,5 +1,6 @@
 class Budget < ActiveRecord::Base
-  
+  include PublicActivity::Common
+
   belongs_to :event
   belongs_to :group
   belongs_to :approver, class_name: "User", foreign_key: "approver_id"

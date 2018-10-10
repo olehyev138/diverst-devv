@@ -27,7 +27,7 @@ RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
             it 'sets container path' do
                 expect(assigns[:container_path]).to eq [enterprise, folder]
             end
-            
+
             it "increments the folder's total_views" do
                 expect(folder.total_views).to eq(1)
             end
@@ -108,6 +108,27 @@ RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
                     expect{post :create, enterprise_id: enterprise.id, folder_id: folder.id, resource: {title: "resource", file: file}}
                     .to change(Resource, :count).by(1)
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    expect{post :create, enterprise_id: enterprise.id, folder_id: folder.id, resource: {title: "resource", file: file}}
+                    .to change(PublicActivity::Activity, :count).by(1)
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { Resource.last }
+                    let(:owner) { user }
+                    let(:key) { 'resource.create' }
+
+                    before {
+                      post :create, enterprise_id: enterprise.id, folder_id: folder.id, resource: {title: "resource", file: file}
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
 
             context "invalid params" do
@@ -172,6 +193,27 @@ RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
                     resource.reload
                     expect(resource.title).to eq("updated")
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    expect{patch :update, folder_id: folder.id, id: resource.id, enterprise_id: enterprise.id, resource: {title: "updated", file: file}}
+                    .to change(PublicActivity::Activity, :count).by(1)
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { resource }
+                    let(:owner) { user }
+                    let(:key) { 'resource.update' }
+
+                    before {
+                      patch :update, folder_id: folder.id, id: resource.id, enterprise_id: enterprise.id, resource: {title: "updated", file: file}
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
 
             context "invalid params" do
@@ -206,6 +248,27 @@ RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
             it "deletes the resource" do
                 expect{delete :destroy, :id => resource.id, enterprise_id: enterprise.id, folder_id: folder.id}
                 .to change(Resource, :count).by(-1)
+            end
+
+            describe 'public activity' do
+              enable_public_activity
+
+              it 'creates public activity record' do
+                expect{delete :destroy, :id => resource.id, enterprise_id: enterprise.id, folder_id: folder.id}
+                .to change(PublicActivity::Activity, :count).by(1)
+              end
+
+              describe 'activity record' do
+                let(:model) { resource }
+                let(:owner) { user }
+                let(:key) { 'resource.destroy' }
+
+                before {
+                  delete :destroy, :id => resource.id, enterprise_id: enterprise.id, folder_id: folder.id
+                }
+
+                include_examples'correct public activity'
+              end
             end
         end
 
