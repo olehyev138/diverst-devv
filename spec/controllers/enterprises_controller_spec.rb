@@ -51,6 +51,27 @@ RSpec.describe EnterprisesController, type: :controller do
                 it "flashes notice a message" do
                     expect(flash[:notice]).to eq "Your enterprise was updated"
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    expect{patch :update, id: enterprise.id, enterprise: attributes}
+                    .to change(PublicActivity::Activity, :count).by(1)
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { enterprise }
+                    let(:owner) { user }
+                    let(:key) { 'enterprise.update' }
+
+                    before {
+                      patch :update, id: enterprise.id, enterprise: attributes
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
 
             context "with invalid parameters", skip: "render params['source'] causes ActionView::MissingTemplate" do
