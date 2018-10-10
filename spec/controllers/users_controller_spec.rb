@@ -349,6 +349,10 @@ RSpec.describe UsersController, type: :controller do
                 expect(response).to redirect_to "back"
             end
             
+            it "flashes" do
+                expect(flash[:notice]).to eq "Please check your email in a couple minutes"
+            end
+            
             it "calls job" do
                 expect(UsersDownloadJob).to have_received(:perform_later)
             end

@@ -115,8 +115,8 @@ class UsersController < ApplicationController
 
   def export_csv
     authorize User, :index?
-    flash[:notice] = "Please check your email"
     UsersDownloadJob.perform_later(current_user.id)
+    flash[:notice] = "Please check your email in a couple minutes"
     redirect_to :back
   end
 
