@@ -71,11 +71,9 @@ class SegmentsController < ApplicationController
 
     def export_csv
         authorize @segment, :show?
-        
-        members
-
-        users_csv = User.to_csv users: @members, fields: @segment.enterprise.fields
-        send_data users_csv, filename: "#{@segment.name}.csv"
+        SegmentMembersDownloadJob.perform_later(current_user.id, @segment.id, params[:group_id])
+        flash[:notice] = "Please check your email in a couple minutes"
+        redirect_to :back
     end
     
     protected
