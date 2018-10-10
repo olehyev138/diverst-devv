@@ -261,9 +261,9 @@ class GroupsController < ApplicationController
 
     def export_csv
         authorize @group, :show?
-
-        users_csv = User.to_csv users: @group.members, fields: @group.enterprise.fields
-        send_data users_csv, filename: "#{@group.file_safe_name}_users.csv"
+        GroupMemberDownloadJob.perform_later(current_user.id, @group.id)
+        flash[:notice] = "Please check your email in a couple minutes"
+        redirect_to :back
     end
 
     def edit_fields

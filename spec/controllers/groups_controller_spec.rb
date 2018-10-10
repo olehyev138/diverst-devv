@@ -891,18 +891,22 @@ RSpec.describe GroupsController, type: :controller do
   describe 'GET #export_csv' do
     context 'with logged user' do
       login_user_from_let
-      before { get :export_csv, :id => group.id }
+      before { 
+          allow(GroupMemberDownloadJob).to receive(:perform_later)
+          request.env["HTTP_REFERER"] = "back"
+          get :export_csv, :id => group.id
+      }
 
-      it 'assigns a valid group object' do
-        expect(assigns[:group]).to be_valid
+      it "redirects to user" do
+          expect(response).to redirect_to "back"
       end
-
-      it 'returns data in csv format' do
-        expect(response.content_type).to eq "text/csv"
+      
+      it "flashes" do
+          expect(flash[:notice]).to eq "Please check your email in a couple minutes"
       end
-
-      it 'returns csv file name' do
-        expect(response.headers["Content-Disposition"]).to include "#{assigns[:group].file_safe_name}_users.csv"
+      
+      it "calls job" do
+          expect(GroupMemberDownloadJob).to have_received(:perform_later)
       end
     end
 

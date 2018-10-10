@@ -423,21 +423,24 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             let!(:active_members) { create_list(:user, 5, enterprise_id: user.enterprise.id, user_role_id: user.user_role_id, active: true) }
             let!(:inactive_members) { create_list(:user, 5, enterprise_id: user.enterprise.id, user_role_id: user.user_role_id, active: false) }
             login_user_from_let
+            
             before do
+                allow(GroupMemberListDownloadJob).to receive(:perform_later)
+                request.env["HTTP_REFERER"] = "back"
                 group.members << active_members
                 get :export_group_members_list_csv, group_id: group.id 
             end
 
-            it "return data in csv format" do
-                expect(response.content_type).to eq 'text/csv'
+            it "redirects to user" do
+                expect(response).to redirect_to "back"
             end
-
-            it "filename should be '[group.name]_membership_list.csv'" do
-                expect(response.headers["Content-Disposition"]).to include "#{group.file_safe_name}_membership_list.csv"
+            
+            it "flashes" do
+                expect(flash[:notice]).to eq "Please check your email in a couple minutes"
             end
-
-            it 'should include total number of active members which should be 5' do 
-                expect(response.body).to include , "total, ,5"
+            
+            it "calls job" do
+                expect(GroupMemberListDownloadJob).to have_received(:perform_later)
             end
         end
     end
