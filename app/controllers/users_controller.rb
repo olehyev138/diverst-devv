@@ -115,7 +115,9 @@ class UsersController < ApplicationController
 
   def export_csv
     authorize User, :index?
-    send_data current_user.enterprise.users_csv(nil), filename: 'diverst_users.csv'
+    flash[:notice] = "Please check your email"
+    UsersDownloadJob.perform_later(current_user.id)
+    redirect_to :back
   end
 
   def date_histogram

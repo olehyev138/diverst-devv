@@ -339,14 +339,18 @@ RSpec.describe UsersController, type: :controller do
     describe "GET#export_csv" do
         context 'when user is logged in' do
             login_user_from_let
-            before { get :export_csv }
+            before { 
+                allow(UsersDownloadJob).to receive(:perform_later)
+                request.env["HTTP_REFERER"] = "back"
+                get :export_csv 
+            }
 
-            it "return data in csv format" do
-                expect(response.content_type).to eq 'text/csv'
+            it "redirects to user" do
+                expect(response).to redirect_to "back"
             end
-
-            it "filename should be 'diverst_users.csv'" do 
-                expect(response.headers["Content-Disposition"]).to include 'diverst_users.csv'
+            
+            it "calls job" do
+                expect(UsersDownloadJob).to have_received(:perform_later)
             end
         end
 

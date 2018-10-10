@@ -119,9 +119,6 @@ class User < ActiveRecord::Base
     
     accepts_nested_attributes_for :availabilities, :allow_destroy => true
     
-    def gerlin
-    end
-    
     def add_to_default_mentor_group
         if mentor_changed? || mentee_changed?
             DefaultMentorGroupMemberUpdateJob.perform_later(id, mentor, mentee)
