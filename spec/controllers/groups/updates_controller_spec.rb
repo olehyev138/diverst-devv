@@ -4,7 +4,7 @@ RSpec.describe Groups::UpdatesController, type: :controller do
     let(:user){ create(:user) }
     let(:group){ create(:group, enterprise: user.enterprise) }
     let(:group_update) {create(:group_update, group: group)}
-    
+
     describe 'GET#index' do
         describe 'when user is logged in' do
             login_user_from_let
@@ -18,7 +18,7 @@ RSpec.describe Groups::UpdatesController, type: :controller do
                 expect(assigns[:updates]).to eq [group_update]
             end
 
-            it 'render index template' do 
+            it 'render index template' do
                 expect(response).to render_template :index
             end
         end
@@ -28,7 +28,7 @@ RSpec.describe Groups::UpdatesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-    
+
     describe 'GET#new' do
         describe 'when user is logged in' do
             login_user_from_let
@@ -48,7 +48,7 @@ RSpec.describe Groups::UpdatesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-    
+
     describe 'GET#show' do
         describe 'when user is logged in' do
             login_user_from_let
@@ -118,6 +118,27 @@ RSpec.describe Groups::UpdatesController, type: :controller do
                     post :create, group_id: group.id, group_update: group_update
                     expect(response).to redirect_to action: :index
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    expect{post :create, group_id: group.id, group_update: group_update}
+                    .to change(PublicActivity::Activity, :count).by(1)
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { GroupUpdate.last }
+                    let(:owner) { user }
+                    let(:key) { 'group_update.create' }
+
+                    before {
+                      post :create, group_id: group.id, group_update: group_update
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
 
             context "with invalid params" do
@@ -144,18 +165,41 @@ RSpec.describe Groups::UpdatesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-    
+
     describe 'DELETE#destroy' do
-        describe 'when user is logged in' do 
+        describe 'when user is logged in' do
             login_user_from_let
-            before {delete :destroy, group_id: group.id, id: group_update.id}
+            let(:destroy){delete :destroy, group_id: group.id, id: group_update.id}
 
             it "redirects" do
+                destroy
                 expect(response).to redirect_to action: :index
             end
 
             it "deletes the group update" do
+                destroy
                 expect(GroupUpdate.where(:id => group_update.id).count).to eq(0)
+            end
+
+            describe 'public activity' do
+              enable_public_activity
+
+              it 'creates public activity record' do
+                expect{destroy}
+                .to change(PublicActivity::Activity, :count).by(1)
+              end
+
+              describe 'activity record' do
+                let(:model) { group_update }
+                let(:owner) { user }
+                let(:key) { 'group_update.destroy' }
+
+                before {
+                  destroy
+                }
+
+                include_examples'correct public activity'
+              end
             end
         end
 
@@ -188,6 +232,27 @@ RSpec.describe Groups::UpdatesController, type: :controller do
                 it "redirects to index action" do
                     expect(response).to redirect_to action: :index
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    expect{patch :update, group_id: group.id, id: group_update.id, group_update: { created_at: "2017-01-01" }}
+                    .to change(PublicActivity::Activity, :count).by(1)
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { group_update }
+                    let(:owner) { user }
+                    let(:key) { 'group_update.update' }
+
+                    before {
+                      patch :update, group_id: group.id, id: group_update.id, group_update: { created_at: "2017-01-01" }
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
 
             context "with invalid params" do
@@ -199,7 +264,7 @@ RSpec.describe Groups::UpdatesController, type: :controller do
                     expect(group_update.created_at.strftime("%Y-%m-%d")).to eq "2017-01-02"
                 end
 
-                it 'flashes an alert message' do 
+                it 'flashes an alert message' do
                     expect(flash[:alert]).to eq "Your group update was not updated. Please fix the errors"
                 end
 
