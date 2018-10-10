@@ -220,7 +220,7 @@ class User < ActiveRecord::Base
     end
     
     def admin?
-        return user_role.role_type === "admin"
+        return user_role.role_type.downcase === "admin"
     end
 
     def has_answered_group_surveys?
