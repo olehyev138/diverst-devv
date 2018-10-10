@@ -377,8 +377,16 @@ class Group < ActiveRecord::Base
 
   def ensure_label_consistency_between_parent_and_sub_groups
     unless group_category.nil?
-      if children.any? { |sub_group| sub_group.group_category_type&.name != group_category_type.name unless sub_group.group_category_type.nil? }
+      if if_any_sub_group_category_type_not_equal_to_parent_category_type?
         errors.add(:group_category_id, "chosen label inconsistent with labels of sub groups")
+      end
+    end
+  end
+
+  def if_any_sub_group_category_type_not_equal_to_parent_category_type?
+    children.any? do |sub_group|
+      unless sub_group.group_category_type.nil?
+        sub_group.group_category_type&.name != group_category_type.name
       end
     end
   end
