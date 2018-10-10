@@ -143,6 +143,9 @@ class GroupPolicy < ApplicationPolicy
         when 'leaders_only'
             #Only users with ability to manipulate members(admins) can see upcoming events
             return manage_members?
+        when 'non_member'
+            # non members of a group who have access to view events
+            is_a_guest? && @policy_group.initiatives_index?
         else
             return false
         end

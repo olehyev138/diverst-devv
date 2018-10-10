@@ -36,7 +36,8 @@ class Group < ActiveRecord::Base
   enumerize :upcoming_events_visibility, default: :leaders_only, in:[
                                     :public,
                                     :group,
-                                    :leaders_only
+                                    :leaders_only,
+                                    :non_member
                                   ]
 
   belongs_to :enterprise

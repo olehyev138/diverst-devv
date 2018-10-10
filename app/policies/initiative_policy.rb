@@ -4,7 +4,7 @@ class InitiativePolicy < ApplicationPolicy
   end
 
   def show?
-    @policy_group.initiatives_index?
+    index?
   end
 
   def create?
