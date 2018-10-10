@@ -65,11 +65,11 @@ class InitiativePolicy < ApplicationPolicy
   end
 
   def basic_user?
-    @user.user_role.default? && user_role_with_lowest_priority?
+    @user.user_role.default? && user_role_with_lowest_priority? ? true : false
   end
 
   def user_role_with_lowest_priority?
-    @user.user_role.priority == @user.enterprise.user_roles.pluck(:priority).max
+    @user.user_role.priority == @user.enterprise.user_roles.pluck(:priority).max ? true : false
   end
 
   class Scope < Scope
