@@ -194,7 +194,7 @@ RSpec.describe Groups::Folder::ResourcesController, type: :controller do
                   end
 
                   describe 'activity record' do
-                    let(:model) { Resource.last }
+                    let(:model) { resource }
                     let(:owner) { user }
                     let(:key) { 'resource.update' }
 
@@ -253,14 +253,14 @@ RSpec.describe Groups::Folder::ResourcesController, type: :controller do
               end
 
               describe 'activity record' do
-                let(:model) { Resource.last }
+                let(:model) { resource }
                 let(:owner) { user }
                 let(:key) { 'resource.destroy' }
 
                 before {
                   delete :destroy, :id => resource.id, group_id: group.id, folder_id: folder.id
                 }
-  
+
                 include_examples'correct public activity'
               end
             end
