@@ -4,10 +4,7 @@ class InitiativePolicy < ApplicationPolicy
   end
 
   def show?
-    return true if @user.erg_leader?
-    return true if @policy_group.initiatives_manage?
-    return true if !(@record.group_ids && @user.groups.pluck(:id)).empty?
-    return true if basic_user?
+    @policy_group.initiatives_index?
   end
 
   def create?
