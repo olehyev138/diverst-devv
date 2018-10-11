@@ -220,4 +220,28 @@ RSpec.describe Enterprise, type: :model do
             expect{GroupCategoryType.find(group_category_type.id)}.to raise_error(ActiveRecord::RecordNotFound)
         end
     end
+    
+    describe "#resources_count" do
+        it "gives the correct resource count for the enterprise" do
+            enterprise = create(:enterprise)
+            expect(enterprise.resources_count).to eq (0)
+            
+            folder_1 = create(:folder, :enterprise => enterprise)
+            folder_2 = create(:folder, :enterprise => enterprise)
+            
+            group_1 = create(:group, :enterprise => enterprise)
+            group_2 = create(:group, :enterprise => enterprise)
+            
+            folder_3 = create(:folder, :group => group_1)
+            folder_4 = create(:folder, :group => group_2)
+            
+            create_list(:resource, 5, :folder => folder_1)
+            create_list(:resource, 5, :folder => folder_2)
+            create_list(:resource, 5, :folder => folder_3)
+            create_list(:resource, 5, :folder => folder_4)
+            
+            enterprise.reload
+            expect(enterprise.resources_count).to eq (20)
+        end
+    end
 end

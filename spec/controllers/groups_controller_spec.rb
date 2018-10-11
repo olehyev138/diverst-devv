@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe GroupsController, type: :controller do
-
+  include ActiveJob::TestHelper
+  
   let(:enterprise){ create(:enterprise) }
   let(:user){ create(:user, enterprise: enterprise, email: "test@gmail.com") }
   let(:group){ create(:group, enterprise: enterprise) }
@@ -473,9 +474,11 @@ RSpec.describe GroupsController, type: :controller do
           enable_public_activity
 
           it 'creates public activity record' do
-            expect{
-              post_create(group_attrs)
-            }.to change(PublicActivity::Activity, :count).by(1)
+            perform_enqueued_jobs do
+              expect{
+                post_create(group_attrs)
+              }.to change(PublicActivity::Activity, :count).by(1)
+            end
           end
 
           describe 'activity record' do
@@ -484,7 +487,9 @@ RSpec.describe GroupsController, type: :controller do
             let(:key) { 'group.create' }
 
             before {
-              post_create(group_attrs)
+              perform_enqueued_jobs do
+                post_create(group_attrs)
+              end
             }
 
             include_examples'correct public activity'
@@ -572,9 +577,11 @@ RSpec.describe GroupsController, type: :controller do
           enable_public_activity
 
           it 'creates public activity record' do
-            expect{
-              patch_update(group.id, group_attrs)
-            }.to change(PublicActivity::Activity, :count).by(1)
+            perform_enqueued_jobs do
+              expect{
+                patch_update(group.id, group_attrs)
+              }.to change(PublicActivity::Activity, :count).by(1)
+            end
           end
 
           describe 'activity record' do
@@ -583,7 +590,9 @@ RSpec.describe GroupsController, type: :controller do
             let(:key) { 'group.update' }
 
             before {
-              patch_update(group.id, group_attrs)
+              perform_enqueued_jobs do
+                patch_update(group.id, group_attrs)
+              end
             }
 
             include_examples'correct public activity'
@@ -727,9 +736,11 @@ RSpec.describe GroupsController, type: :controller do
             enable_public_activity
 
             it 'creates public activity record' do
-              expect{
-                delete_destroy(group.id)
-              }.to change(PublicActivity::Activity, :count).by(1)
+              perform_enqueued_jobs do
+                expect{
+                  delete_destroy(group.id)
+                }.to change(PublicActivity::Activity, :count).by(1)
+              end
             end
 
             describe 'activity record' do
@@ -738,7 +749,9 @@ RSpec.describe GroupsController, type: :controller do
               let(:key) { 'group.destroy' }
 
               before {
-                delete_destroy(group.id)
+                perform_enqueued_jobs do
+                  delete_destroy(group.id)
+                end
               }
 
               include_examples'correct public activity'
@@ -836,7 +849,7 @@ RSpec.describe GroupsController, type: :controller do
   end
 
   describe 'GET #parse_csv' do
-    let!(:file) { fixture_file_upload('files/test.csv', 'text/csv') }
+    let!(:file) { fixture_file_upload('files/members.csv', 'text/csv') }
 
     context 'with logged user and no file' do
       login_user_from_let
@@ -857,14 +870,23 @@ RSpec.describe GroupsController, type: :controller do
 
     context 'with logged user' do
       login_user_from_let
-      before { get :parse_csv, :id => group.id, :file => file }
+      before { 
+        perform_enqueued_jobs do
+          allow(GroupMemberImportCSVJob).to receive(:perform_later)
+          get :parse_csv, :id => group.id, :file => file 
+        end
+      }
 
       it 'render parse_csv template' do
         expect(response).to render_template :parse_csv
       end
 
-      it 'assigns a valid group object' do
-        expect(assigns[:group]).to be_valid
+      it 'creates a CsvFile' do
+        expect(CsvFile.all.count).to eq(1)
+      end
+      
+      it "calls the correct job" do
+        expect(GroupMemberImportCSVJob).to have_received(:perform_later)
       end
     end
 
@@ -878,18 +900,22 @@ RSpec.describe GroupsController, type: :controller do
   describe 'GET #export_csv' do
     context 'with logged user' do
       login_user_from_let
-      before { get :export_csv, :id => group.id }
+      before { 
+          allow(GroupMemberDownloadJob).to receive(:perform_later)
+          request.env["HTTP_REFERER"] = "back"
+          get :export_csv, :id => group.id
+      }
 
-      it 'assigns a valid group object' do
-        expect(assigns[:group]).to be_valid
+      it "redirects to user" do
+          expect(response).to redirect_to "back"
       end
-
-      it 'returns data in csv format' do
-        expect(response.content_type).to eq "text/csv"
+      
+      it "flashes" do
+          expect(flash[:notice]).to eq "Please check your email in a couple minutes"
       end
-
-      it 'returns csv file name' do
-        expect(response.headers["Content-Disposition"]).to include "#{assigns[:group].file_safe_name}_users.csv"
+      
+      it "calls job" do
+          expect(GroupMemberDownloadJob).to have_received(:perform_later)
       end
     end
 

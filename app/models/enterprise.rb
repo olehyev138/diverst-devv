@@ -193,32 +193,16 @@ class Enterprise < ActiveRecord::Base
       enterprise_resources_count + groups_resources_count
     end
 
-    protected
-
     def enterprise_resources_count
-      enterprise_folders = Folder.where(enterprise_id: id)
-      count = 0
-
-      enterprise_folders.each do |f|
-        count += f.resources.count
-      end
-
-      count
+        Resource.where(:folder_id => enterprise.folder_ids).count
     end
 
     def groups_resources_count
-      group_ids = self.groups.map{ |g| g.id }
-
-      enterprise_folders = Folder.where(group_id: group_ids)
-      count = 0
-
-      enterprise_folders.each do |f|
-        count += f.resources.count
-      end
-
-      count
+        group_folder_ids = Folder.where(:group_id => enterprise.group_ids).pluck(:id)
+        Resource.where(:folder_id => group_folder_ids).count
     end
 
+    protected
 
     def smart_add_url_protocol
         return nil if company_video_url.blank?

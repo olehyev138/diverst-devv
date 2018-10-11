@@ -142,10 +142,7 @@ class ApplicationController < ActionController::Base
     end
 
     def track_activity(model, activity_name, params={})
-        model.create_activity activity_name,
-                              owner: current_user,
-                              recipient: current_user.enterprise,
-                              params: params
+        ActivityJob.perform_later(model.class.name, model.id, activity_name.to_s, current_user.id, params)
     end
 
     def not_found!
