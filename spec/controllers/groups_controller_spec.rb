@@ -849,7 +849,7 @@ RSpec.describe GroupsController, type: :controller do
   end
 
   describe 'GET #parse_csv' do
-    let!(:file) { fixture_file_upload('files/test.csv', 'text/csv') }
+    let!(:file) { fixture_file_upload('files/members.csv', 'text/csv') }
 
     context 'with logged user and no file' do
       login_user_from_let
@@ -870,14 +870,23 @@ RSpec.describe GroupsController, type: :controller do
 
     context 'with logged user' do
       login_user_from_let
-      before { get :parse_csv, :id => group.id, :file => file }
+      before { 
+        perform_enqueued_jobs do
+          allow(GroupMemberImportCSVJob).to receive(:perform_later)
+          get :parse_csv, :id => group.id, :file => file 
+        end
+      }
 
       it 'render parse_csv template' do
         expect(response).to render_template :parse_csv
       end
 
-      it 'assigns a valid group object' do
-        expect(assigns[:group]).to be_valid
+      it 'creates a CsvFile' do
+        expect(CsvFile.all.count).to eq(1)
+      end
+      
+      it "calls the correct job" do
+        expect(GroupMemberImportCSVJob).to have_received(:perform_later)
       end
     end
 

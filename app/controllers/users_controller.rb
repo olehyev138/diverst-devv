@@ -96,6 +96,12 @@ class UsersController < ApplicationController
 
   def parse_csv
     authorize User, :new?
+    
+    if params[:file].nil?
+      flash[:alert] = "CSV file is required"
+      redirect_to :back
+      return
+    end
 
     file = CsvFile.new( import_file: params[:file].tempfile, user: current_user)
 
