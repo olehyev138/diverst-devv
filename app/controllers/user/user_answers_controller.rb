@@ -30,6 +30,7 @@ class User::UserAnswersController < ApplicationController
 
         if @answer.save
             user_rewarder("campaign_answer").add_points(@answer)
+            track_activity(@answer, :create)
             flash_reward "Your answer was created. Now you have #{current_user.credits} points"
         else
             flash[:alert] = "Your answer was not created. Please fix the errors"
