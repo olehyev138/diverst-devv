@@ -164,9 +164,9 @@ class Groups::GroupMembersController < ApplicationController
 
   def export_group_members_list_csv
     authorize @group, :manage_members?
-
-    membership_list_csv = @group.membership_list_csv
-    send_data membership_list_csv, filename: "#{@group.file_safe_name}_membership_list.csv"
+    GroupMemberListDownloadJob.perform_later(current_user.id, @group.id)
+    flash[:notice] = "Please check your email in a couple minutes"
+    redirect_to :back
   end
 
 

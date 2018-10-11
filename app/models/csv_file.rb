@@ -2,6 +2,7 @@ class CsvFile < ActiveRecord::Base
   self.table_name = 'csvfiles'
 
   belongs_to :user
+  belongs_to :group
 
   has_attached_file :import_file, s3_permissions: "private"
   do_not_validate_attachment_file_type :import_file
@@ -19,6 +20,10 @@ class CsvFile < ActiveRecord::Base
   protected
 
   def schedule_users_import
-    ImportCSVJob.perform_later(self.id)
+    if group_id
+      GroupMemberImportCSVJob.perform_later(self.id)
+    else
+      ImportCSVJob.perform_later(self.id)
+    end
   end
 end
