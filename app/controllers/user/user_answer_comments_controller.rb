@@ -11,6 +11,7 @@ class User::UserAnswerCommentsController < ApplicationController
         @comment.author = current_user
         if @comment.save
             user_rewarder("campaign_comment").add_points(@comment)
+            track_activity(@comment, :create)
             flash_reward "Your comment was created. Now you have #{current_user.credits} points"
         else
             flash[:alert] = "Your comment was not created. Please fix the errors"

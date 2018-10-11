@@ -87,6 +87,27 @@ RSpec.describe "User::UserAnswersController", type: :controller do
                     post :create, question_id: question.id, answer: { content: "Here's some content for you" }
                     expect(response).to redirect_to [:user, question ]
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    expect{post :create, question_id: question.id, answer: { content: "Here's some content for you" }}
+                    .to change(PublicActivity::Activity, :count).by(1)
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { Answer.last }
+                    let(:owner) { user }
+                    let(:key) { 'answer.create' }
+
+                    before {
+                      post :create, question_id: question.id, answer: { content: "Here's some content for you" }
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
 
             context "failed answer creation" do
