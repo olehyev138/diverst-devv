@@ -106,6 +106,27 @@ RSpec.describe QuestionsController, type: :controller do
                     post :create, campaign_id: campaign.id, question: {title: "Title", description: "description"}
                     expect(flash[:notice]).to eq "Your question was created"
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    expect{post :create, campaign_id: campaign.id, question: {title: "Title", description: "description"}}
+                    .to change(PublicActivity::Activity, :count).by(1)
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { Question.last }
+                    let(:owner) { user }
+                    let(:key) { 'question.create' }
+
+                    before {
+                      post :create, campaign_id: campaign.id, question: {title: "Title", description: "description"}
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
 
             context "when unsuccessful" do
@@ -201,6 +222,27 @@ RSpec.describe QuestionsController, type: :controller do
                 it "flashes a notice message" do
                     expect(flash[:notice]).to eq 'Your question was updated'
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    expect{patch :update, id: question.id, question: {title: "updated"}}
+                    .to change(PublicActivity::Activity, :count).by(1)
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { question }
+                    let(:owner) { user }
+                    let(:key) { 'question.update' }
+
+                    before {
+                      patch :update, id: question.id, question: {title: "updated"}
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
             context "when unsuccessful" do
                 before { patch :update, id: question.id, question: {title: nil} }
@@ -242,6 +284,27 @@ RSpec.describe QuestionsController, type: :controller do
                 question
                 expect{delete :destroy, id: question.id}
                 .to change(Question, :count).by(-1)
+            end
+
+            describe 'public activity' do
+              enable_public_activity
+
+              it 'creates public activity record' do
+                expect{delete :destroy, id: question.id}
+                .to change(PublicActivity::Activity, :count).by(1)
+              end
+
+              describe 'activity record' do
+                let(:model) { question }
+                let(:owner) { user }
+                let(:key) { 'question.destroy' }
+
+                before {
+                  delete :destroy, id: question.id
+                }
+
+                include_examples'correct public activity'
+              end
             end
         end
 

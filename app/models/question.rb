@@ -1,4 +1,6 @@
 class Question < ActiveRecord::Base
+    include PublicActivity::Common
+
     belongs_to :campaign
     has_many :answers, inverse_of: :question, dependent: :destroy
     has_many :answer_comments, through: :answers, source: :comments

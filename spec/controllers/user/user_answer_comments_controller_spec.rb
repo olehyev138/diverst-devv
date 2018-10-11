@@ -42,6 +42,27 @@ RSpec.describe "User::UserAnswerCommentsController", type: :controller do
           post :create, user_answer_id: answer.id, answer_comment: { content: "blah" }
           expect(response).to redirect_to [:user, answer.question]
         end
+
+        describe 'public activity' do
+          enable_public_activity
+
+          it 'creates public activity record' do
+            expect{post :create, user_answer_id: answer.id, answer_comment: { content: "blah" }}
+            .to change(PublicActivity::Activity, :count).by(1)
+          end
+
+          describe 'activity record' do
+            let(:model) { AnswerComment.last }
+            let(:owner) { user }
+            let(:key) { 'answer_comment.create' }
+
+            before {
+              post :create, user_answer_id: answer.id, answer_comment: { content: "blah" }
+            }
+
+            include_examples'correct public activity'
+          end
+        end
       end
 
       context "comment create failed" do
