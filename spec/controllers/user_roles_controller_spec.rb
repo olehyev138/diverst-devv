@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe UserRolesController, type: :controller do
+    include ActiveJob::TestHelper
+
     let!(:enterprise){ create(:enterprise) }
     let!(:user){ create(:user, enterprise: enterprise) }
     let!(:user_role){ create(:user_role, enterprise: enterprise) }
@@ -48,8 +50,10 @@ RSpec.describe UserRolesController, type: :controller do
                   enable_public_activity
 
                   it 'creates public activity record' do
-                    expect{patch :create, user_role: {role_name: "test2", role_type: "group", priority: 4}}
-                    .to change(PublicActivity::Activity, :count).by(1)
+                    perform_enqueued_jobs do
+                      expect{patch :create, user_role: {role_name: "test2", role_type: "group", priority: 4}}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
                   end
 
                   describe 'activity record' do
@@ -58,7 +62,9 @@ RSpec.describe UserRolesController, type: :controller do
                     let(:key) { 'user_role.create' }
 
                     before {
-                      patch :create, user_role: {role_name: "test2", role_type: "group", priority: 4}
+                      perform_enqueued_jobs do
+                        patch :create, user_role: {role_name: "test2", role_type: "group", priority: 4}
+                      end
                     }
 
                     include_examples'correct public activity'
@@ -136,8 +142,10 @@ RSpec.describe UserRolesController, type: :controller do
                   enable_public_activity
 
                   it 'creates public activity record' do
-                    expect{patch :update, id: user_role.id, user_role: {role_name: "TeSt"}}
-                    .to change(PublicActivity::Activity, :count).by(1)
+                    perform_enqueued_jobs do
+                      expect{patch :update, id: user_role.id, user_role: {role_name: "TeSt"}}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
                   end
 
                   describe 'activity record' do
@@ -146,7 +154,9 @@ RSpec.describe UserRolesController, type: :controller do
                     let(:key) { 'user_role.update' }
 
                     before {
-                      patch :update, id: user_role.id, user_role: {role_name: "TeSt"}
+                      perform_enqueued_jobs do
+                        patch :update, id: user_role.id, user_role: {role_name: "TeSt"}
+                      end
                     }
 
                     include_examples'correct public activity'
@@ -202,8 +212,10 @@ RSpec.describe UserRolesController, type: :controller do
                   enable_public_activity
 
                   it 'creates public activity record' do
-                    expect{destroy}
-                    .to change(PublicActivity::Activity, :count).by(1)
+                    perform_enqueued_jobs do
+                      expect{destroy}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
                   end
 
                   describe 'activity record' do
@@ -212,7 +224,9 @@ RSpec.describe UserRolesController, type: :controller do
                     let(:key) { 'user_role.destroy' }
 
                     before {
-                      delete :destroy, id: user_role.id
+                      perform_enqueued_jobs do
+                        delete :destroy, id: user_role.id
+                      end
                     }
 
                     include_examples'correct public activity'
