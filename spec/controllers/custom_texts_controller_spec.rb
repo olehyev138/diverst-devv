@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe CustomTextsController, type: :controller do
+  include ActiveJob::TestHelper
+
   let(:user){ create(:user, enterprise: enterprise) }
   let(:enterprise){ create(:enterprise) }
 
@@ -54,8 +56,10 @@ RSpec.describe CustomTextsController, type: :controller do
           enable_public_activity
 
           it 'creates public activity record' do
-            expect{patch :update, id: custom_text, custom_text: { erg: "ERG 2", parent: "National" }}
-            .to change(PublicActivity::Activity, :count).by(1)
+            perform_enqueued_jobs do
+              expect{patch :update, id: custom_text, custom_text: { erg: "ERG 2", parent: "National" }}
+              .to change(PublicActivity::Activity, :count).by(1)
+            end
           end
 
           describe 'activity record' do
@@ -64,7 +68,9 @@ RSpec.describe CustomTextsController, type: :controller do
             let(:key) { 'custom_text.update' }
 
             before {
-              patch :update, id: custom_text, custom_text: { erg: "ERG 2", parent: "National" }
+              perform_enqueued_jobs do
+                patch :update, id: custom_text, custom_text: { erg: "ERG 2", parent: "National" }
+              end
             }
 
             include_examples'correct public activity'

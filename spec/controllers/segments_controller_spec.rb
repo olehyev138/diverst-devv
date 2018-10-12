@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe SegmentsController, type: :controller do
+    include ActiveJob::TestHelper
 
     let(:enterprise) { create(:enterprise) }
     let(:user) { create(:user, enterprise: enterprise) }
@@ -71,8 +72,10 @@ RSpec.describe SegmentsController, type: :controller do
                   enable_public_activity
 
                   it 'creates public activity record' do
-                    expect{post :create, :segment => segment_attributes}
-                    .to change(PublicActivity::Activity, :count).by(1)
+                    perform_enqueued_jobs do
+                      expect{post :create, :segment => segment_attributes}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
                   end
 
                   describe 'activity record' do
@@ -81,7 +84,9 @@ RSpec.describe SegmentsController, type: :controller do
                     let(:key) { 'segment.create' }
 
                     before {
-                      post :create, :segment => segment_attributes
+                      perform_enqueued_jobs do
+                        post :create, :segment => segment_attributes
+                      end
                     }
 
                     include_examples'correct public activity'
@@ -213,8 +218,10 @@ RSpec.describe SegmentsController, type: :controller do
                   enable_public_activity
 
                   it 'creates public activity record' do
-                    expect{patch :update, :id => segment.id, :segment => {:name => "updated"}}
-                    .to change(PublicActivity::Activity, :count).by(1)
+                    perform_enqueued_jobs do
+                      expect{patch :update, :id => segment.id, :segment => {:name => "updated"}}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
                   end
 
                   describe 'activity record' do
@@ -223,7 +230,9 @@ RSpec.describe SegmentsController, type: :controller do
                     let(:key) { 'segment.update' }
 
                     before {
-                      patch :update, :id => segment.id, :segment => {:name => "updated"}
+                      perform_enqueued_jobs do
+                        patch :update, :id => segment.id, :segment => {:name => "updated"}
+                      end
                     }
 
                     include_examples'correct public activity'
@@ -267,17 +276,21 @@ RSpec.describe SegmentsController, type: :controller do
               enable_public_activity
 
               it 'creates public activity record' do
-                expect{delete :destroy, :id => segment.id}
-                .to change(PublicActivity::Activity, :count).by(1)
+                perform_enqueued_jobs do
+                  expect{delete :destroy, :id => segment.id}
+                  .to change(PublicActivity::Activity, :count).by(1)
+                end
               end
 
               describe 'activity record' do
-                let(:model) { Segment.last }
+                let(:model) { segment }
                 let(:owner) { user }
                 let(:key) { 'segment.destroy' }
 
                 before {
-                  delete :destroy, :id => segment.id
+                  perform_enqueued_jobs do
+                    delete :destroy, :id => segment.id
+                  end
                 }
 
                 include_examples'correct public activity'
@@ -294,8 +307,8 @@ RSpec.describe SegmentsController, type: :controller do
     describe "GET#export_csv" do
         context 'when user is logged in' do
             login_user_from_let
-            
-            before { 
+
+            before {
               allow(SegmentMembersDownloadJob).to receive(:perform_later)
               request.env["HTTP_REFERER"] = "back"
               get :export_csv, :id => segment.id
@@ -304,11 +317,11 @@ RSpec.describe SegmentsController, type: :controller do
             it "redirects to user" do
               expect(response).to redirect_to "back"
             end
-            
+
             it "flashes" do
               expect(flash[:notice]).to eq "Please check your email in a couple minutes"
             end
-            
+
             it "calls job" do
               expect(SegmentMembersDownloadJob).to have_received(:perform_later)
             end

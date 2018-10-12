@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe ExpensesController, type: :controller do
+    include ActiveJob::TestHelper
+
     let(:enterprise) { create(:enterprise) }
     let(:user) { create(:user, enterprise: enterprise) }
     let(:category) {create(:expense_category)}
@@ -79,8 +81,10 @@ RSpec.describe ExpensesController, type: :controller do
                   enable_public_activity
 
                   it 'creates public activity record' do
-                    expect{post :create, expense: valid_expense_attributes}
-                    .to change(PublicActivity::Activity, :count).by(1)
+                    perform_enqueued_jobs do
+                      expect{post :create, expense: valid_expense_attributes}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
                   end
 
                   describe 'activity record' do
@@ -89,7 +93,9 @@ RSpec.describe ExpensesController, type: :controller do
                     let(:key) { 'expense.create' }
 
                     before {
-                      post :create, expense: valid_expense_attributes
+                      perform_enqueued_jobs do
+                        post :create, expense: valid_expense_attributes
+                      end
                     }
 
                     include_examples'correct public activity'
@@ -166,8 +172,10 @@ RSpec.describe ExpensesController, type: :controller do
                   enable_public_activity
 
                   it 'creates public activity record' do
-                    expect{patch :update, id: expense.id, expense: attributes_for(:expense, name: "updated")}
-                    .to change(PublicActivity::Activity, :count).by(1)
+                    perform_enqueued_jobs do
+                      expect{patch :update, id: expense.id, expense: attributes_for(:expense, name: "updated")}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
                   end
 
                   describe 'activity record' do
@@ -176,7 +184,9 @@ RSpec.describe ExpensesController, type: :controller do
                     let(:key) { 'expense.update' }
 
                     before {
-                      patch :update, id: expense.id, expense: attributes_for(:expense, name: "updated")
+                      perform_enqueued_jobs do
+                        patch :update, id: expense.id, expense: attributes_for(:expense, name: "updated")
+                      end
                     }
 
                     include_examples'correct public activity'
@@ -227,8 +237,10 @@ RSpec.describe ExpensesController, type: :controller do
               enable_public_activity
 
               it 'creates public activity record' do
-                expect{delete :destroy, id: expense.id}
-                .to change(PublicActivity::Activity, :count).by(1)
+                perform_enqueued_jobs do
+                  expect{delete :destroy, id: expense.id}
+                  .to change(PublicActivity::Activity, :count).by(1)
+                end
               end
 
               describe 'activity record' do
@@ -237,7 +249,9 @@ RSpec.describe ExpensesController, type: :controller do
                 let(:key) { 'expense.destroy' }
 
                 before {
-                  delete :destroy, id: expense.id
+                  perform_enqueued_jobs do
+                    delete :destroy, id: expense.id
+                  end
                 }
 
                 include_examples'correct public activity'

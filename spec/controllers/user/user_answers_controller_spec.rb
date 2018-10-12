@@ -2,6 +2,8 @@ require 'rails_helper'
 require 'spec_helper'
 
 RSpec.describe "User::UserAnswersController", type: :controller do
+    include ActiveJob::TestHelper
+
     let(:enterprise) { create(:enterprise, enable_rewards: true) }
     let(:user) { create :user, enterprise: enterprise }
 
@@ -92,8 +94,10 @@ RSpec.describe "User::UserAnswersController", type: :controller do
                   enable_public_activity
 
                   it 'creates public activity record' do
-                    expect{post :create, question_id: question.id, answer: { content: "Here's some content for you" }}
-                    .to change(PublicActivity::Activity, :count).by(1)
+                    perform_enqueued_jobs do
+                      expect{post :create, question_id: question.id, answer: { content: "Here's some content for you" }}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
                   end
 
                   describe 'activity record' do
@@ -102,7 +106,9 @@ RSpec.describe "User::UserAnswersController", type: :controller do
                     let(:key) { 'answer.create' }
 
                     before {
-                      post :create, question_id: question.id, answer: { content: "Here's some content for you" }
+                      perform_enqueued_jobs do
+                        post :create, question_id: question.id, answer: { content: "Here's some content for you" }
+                      end
                     }
 
                     include_examples'correct public activity'

@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Groups::UpdatesController, type: :controller do
+    include ActiveJob::TestHelper
+
     let(:user){ create(:user) }
     let(:group){ create(:group, enterprise: user.enterprise) }
     let(:group_update) {create(:group_update, group: group)}
@@ -123,8 +125,10 @@ RSpec.describe Groups::UpdatesController, type: :controller do
                   enable_public_activity
 
                   it 'creates public activity record' do
-                    expect{post :create, group_id: group.id, group_update: group_update}
-                    .to change(PublicActivity::Activity, :count).by(1)
+                    perform_enqueued_jobs do
+                      expect{post :create, group_id: group.id, group_update: group_update}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
                   end
 
                   describe 'activity record' do
@@ -133,7 +137,9 @@ RSpec.describe Groups::UpdatesController, type: :controller do
                     let(:key) { 'group_update.create' }
 
                     before {
-                      post :create, group_id: group.id, group_update: group_update
+                      perform_enqueued_jobs do
+                        post :create, group_id: group.id, group_update: group_update
+                      end
                     }
 
                     include_examples'correct public activity'
@@ -185,8 +191,10 @@ RSpec.describe Groups::UpdatesController, type: :controller do
               enable_public_activity
 
               it 'creates public activity record' do
-                expect{destroy}
-                .to change(PublicActivity::Activity, :count).by(1)
+                perform_enqueued_jobs do
+                  expect{destroy}
+                  .to change(PublicActivity::Activity, :count).by(1)
+                end
               end
 
               describe 'activity record' do
@@ -195,7 +203,9 @@ RSpec.describe Groups::UpdatesController, type: :controller do
                 let(:key) { 'group_update.destroy' }
 
                 before {
-                  destroy
+                  perform_enqueued_jobs do
+                    destroy
+                  end
                 }
 
                 include_examples'correct public activity'
@@ -237,8 +247,10 @@ RSpec.describe Groups::UpdatesController, type: :controller do
                   enable_public_activity
 
                   it 'creates public activity record' do
-                    expect{patch :update, group_id: group.id, id: group_update.id, group_update: { created_at: "2017-01-01" }}
-                    .to change(PublicActivity::Activity, :count).by(1)
+                    perform_enqueued_jobs do
+                      expect{patch :update, group_id: group.id, id: group_update.id, group_update: { created_at: "2017-01-01" }}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
                   end
 
                   describe 'activity record' do
@@ -247,7 +259,9 @@ RSpec.describe Groups::UpdatesController, type: :controller do
                     let(:key) { 'group_update.update' }
 
                     before {
-                      patch :update, group_id: group.id, id: group_update.id, group_update: { created_at: "2017-01-01" }
+                      perform_enqueued_jobs do
+                        patch :update, group_id: group.id, id: group_update.id, group_update: { created_at: "2017-01-01" }
+                      end
                     }
 
                     include_examples'correct public activity'
