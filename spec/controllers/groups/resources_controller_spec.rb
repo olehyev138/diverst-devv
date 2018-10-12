@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Groups::ResourcesController, type: :controller do
+    include ActiveJob::TestHelper
+
     let(:enterprise){ create(:enterprise) }
     let(:user){ create(:user, enterprise: enterprise) }
     let!(:admin_resource){ create(:resource, title: "title", enterprise: enterprise, file: fixture_file_upload('files/test.csv', 'text/csv'), resource_type: "admin") }
@@ -115,8 +117,10 @@ RSpec.describe Groups::ResourcesController, type: :controller do
                   enable_public_activity
 
                   it 'creates public activity record' do
-                    expect{post :create, group_id: group.id, resource: {title: "resource", file: file}}
-                    .to change(PublicActivity::Activity, :count).by(1)
+                    perform_enqueued_jobs do
+                      expect{post :create, group_id: group.id, resource: {title: "resource", file: file}}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
                   end
 
                   describe 'activity record' do
@@ -125,7 +129,9 @@ RSpec.describe Groups::ResourcesController, type: :controller do
                     let(:key) { 'resource.create' }
 
                     before {
-                      post :create, group_id: group.id, resource: {title: "resource", file: file}
+                      perform_enqueued_jobs do
+                        post :create, group_id: group.id, resource: {title: "resource", file: file}
+                      end
                     }
 
                     include_examples'correct public activity'
@@ -216,8 +222,10 @@ RSpec.describe Groups::ResourcesController, type: :controller do
                   enable_public_activity
 
                   it 'creates public activity record' do
-                    expect{patch :update, group_id: group.id, id: group_resource.id, resource: {title: "updated", file: file}}
-                    .to change(PublicActivity::Activity, :count).by(1)
+                    perform_enqueued_jobs do
+                      expect{patch :update, group_id: group.id, id: group_resource.id, resource: {title: "updated", file: file}}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
                   end
 
                   describe 'activity record' do
@@ -226,7 +234,9 @@ RSpec.describe Groups::ResourcesController, type: :controller do
                     let(:key) { 'resource.update' }
 
                     before {
-                      patch :update, group_id: group.id, id: group_resource.id, resource: {title: "updated", file: file}
+                      perform_enqueued_jobs do
+                        patch :update, group_id: group.id, id: group_resource.id, resource: {title: "updated", file: file}
+                      end
                     }
 
                     include_examples'correct public activity'
@@ -274,8 +284,10 @@ RSpec.describe Groups::ResourcesController, type: :controller do
               enable_public_activity
 
               it 'creates public activity record' do
-                expect{delete :destroy, :id => group_resource.id, group_id: group.id}
-                .to change(PublicActivity::Activity, :count).by(1)
+                perform_enqueued_jobs do
+                  expect{delete :destroy, :id => group_resource.id, group_id: group.id}
+                  .to change(PublicActivity::Activity, :count).by(1)
+                end
               end
 
               describe 'activity record' do
@@ -284,7 +296,9 @@ RSpec.describe Groups::ResourcesController, type: :controller do
                 let(:key) { 'resource.destroy' }
 
                 before {
-                  delete :destroy, :id => group_resource.id, group_id: group.id
+                  perform_enqueued_jobs do
+                    delete :destroy, :id => group_resource.id, group_id: group.id
+                  end
                 }
 
                 include_examples'correct public activity'
