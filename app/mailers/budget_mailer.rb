@@ -3,9 +3,9 @@ class BudgetMailer < ApplicationMailer
     @user = receiver
     @budget = budget
     @group = budget.group
-    @enterprise = @user.enterprise
+    @enterprise = @group.enterprise
     @custom_text = @enterprise.custom_text rescue CustomText.new
-    
+
     set_defaults(@enterprise, method_name)
 
     mail(from: @from_address, to: @user.email, subject: @subject)
@@ -15,26 +15,26 @@ class BudgetMailer < ApplicationMailer
     @budget = budget
     @group = budget.group
     @user = budget.requester
-    @enterprise = @user.enterprise
+    @enterprise = @group.enterprise
     @custom_text = @enterprise.custom_text rescue CustomText.new
-    
+
     set_defaults(@enterprise, method_name)
-    
+
     mail(to: @user.email, subject: @subject)
   end
 
   def budget_declined(budget)
     @budget = budget
     @group = budget.group
-    @enterprise = @group.enterprise
     @user = budget.requester
+    @enterprise = @group.enterprise
     @custom_text = @enterprise.custom_text rescue CustomText.new
-    
+
     set_defaults(@enterprise, method_name)
-    
+
     mail(to: @user.email, subject: @subject)
   end
-  
+
   def variables
     {
       :user => @user,
@@ -45,7 +45,7 @@ class BudgetMailer < ApplicationMailer
       :click_here => "<a saml_for_enterprise=\"#{@enterprise.id}\" href=\"#{url}\" target=\"_blank\">Click here</a>",
     }
   end
-  
+
   def url
     group_budget_url(@group, @budget)
   end
