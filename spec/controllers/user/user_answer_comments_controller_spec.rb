@@ -2,6 +2,8 @@ require 'rails_helper'
 require 'spec_helper'
 
 RSpec.describe "User::UserAnswerCommentsController", type: :controller do
+  include ActiveJob::TestHelper
+
   let(:enterprise) { create(:enterprise, enable_rewards: true) }
   let(:user) { create :user, enterprise: enterprise }
 
@@ -47,8 +49,10 @@ RSpec.describe "User::UserAnswerCommentsController", type: :controller do
           enable_public_activity
 
           it 'creates public activity record' do
-            expect{post :create, user_answer_id: answer.id, answer_comment: { content: "blah" }}
-            .to change(PublicActivity::Activity, :count).by(1)
+            perform_enqueued_jobs do
+              expect{post :create, user_answer_id: answer.id, answer_comment: { content: "blah" }}
+              .to change(PublicActivity::Activity, :count).by(1)
+            end
           end
 
           describe 'activity record' do
@@ -57,7 +61,9 @@ RSpec.describe "User::UserAnswerCommentsController", type: :controller do
             let(:key) { 'answer_comment.create' }
 
             before {
-              post :create, user_answer_id: answer.id, answer_comment: { content: "blah" }
+              perform_enqueued_jobs do
+                post :create, user_answer_id: answer.id, answer_comment: { content: "blah" }
+              end
             }
 
             include_examples'correct public activity'
