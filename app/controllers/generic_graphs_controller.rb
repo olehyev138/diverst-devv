@@ -267,12 +267,11 @@ class GenericGraphsController < ApplicationController
     end
 
     def top_folders_by_views
-        group_ids = current_user.enterprise.groups.ids
-        folders = Folder.where(:group_id => group_ids).only_parents
+        folders = Folder.all
         data = folders.map do |f|
             {
                 y: f.total_views,
-                name: f.group.name + ': ' + f.name,
+                name: !f.group.nil? ? f.group.name + ': ' + f.name : 'Shared folder: ' + f.name,
                 drilldown: f.name
             }
         end
