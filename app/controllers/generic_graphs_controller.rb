@@ -223,165 +223,34 @@ class GenericGraphsController < ApplicationController
     end
 
     def top_groups_by_views
-        data = current_user.enterprise.groups.all_parents.map do |g|
-            {
-                y: g.total_views,
-                name: g.name,
-                drilldown: g.name
-            }
-        end
-
-        drilldowns = current_user.enterprise.groups.includes(:children).all_parents.map { |g|
-            {
-                name: g.name,
-                id: g.name,
-                data: g.children.map {|child| [child.name, child.total_views]}
-            }
-        }
-
-        categories = current_user.enterprise.groups.all_parents.map{ |g| g.name }
-
-        respond_to do |format|
-            format.json {
-                render json: {
-                           type: 'bar',
-                           highcharts: {
-                               series: [{
-                                   title: "# of views per #{c_t(:erg)}",
-                                   data: data
-                               }],
-                               drilldowns: drilldowns,
-                               #categories: categories,
-                               xAxisTitle: "#{c_t(:erg)}",
-                               yAxisTitle: "# of views per #{c_t(:erg)}"
-                           },
-                           hasAggregation: false
-                       }
-            }
-            format.csv {
-                strategy = Reports::GraphStatsGeneric.new(title: "Number of view per #{c_t(:erg)}", categories: categories, data: data)
-                report = Reports::Generator.new(strategy)
-                send_data report.to_csv, filename: "views_per_#{c_t(:erg)}.csv"
-            }
+        if ENV["DOMAIN"] === "dm.diverst.com"
+            demo_top_groups_by_views
+        else
+            non_demo_top_groups_by_views
         end
     end
 
     def top_folders_by_views
-        folders = Folder.all
-        data = folders.map do |f|
-            {
-                y: f.total_views,
-                name: !f.group.nil? ? f.group.name + ': ' + f.name : 'Shared folder: ' + f.name,
-                drilldown: f.name
-            }
-        end
-
-        drilldowns = folders.map { |f|
-            {
-                name: f.name,
-                id: f.name,
-                data: f.children.map {|child| [child.name, child.total_views]}
-            }
-        }
-
-        categories = folders.map{ |f| f.name }
-
-        respond_to do |format|
-            format.json {
-                render json: {
-                           type: 'bar',
-                           highcharts: {
-                               series: [{
-                                   title: "# of views per folder",
-                                   data: data
-                               }],
-                               drilldowns: drilldowns,
-                               #categories: categories,
-                               xAxisTitle: "Folder",
-                               yAxisTitle: "# of views per folder"
-                           },
-                           hasAggregation: false
-                       }
-            }
-            format.csv {
-                strategy = Reports::GraphStatsGeneric.new(title: "Number of view per folder", categories: categories, data: data)
-                report = Reports::Generator.new(strategy)
-                send_data report.to_csv, filename: "views_per_folder.csv"
-            }
+        if ENV["DOMAIN"] === "dm.diverst.com"
+            demo_top_folders_by_views
+        else
+            non_demo_top_folders_by_views
         end
     end
 
     def top_resources_by_views
-        group_ids = current_user.enterprise.groups.ids
-        folder_ids = Folder.where(:group_id => group_ids).ids
-        resources = Resource.where(:folder_id => folder_ids)
-        data = resources.map do |resource|
-            {
-                y: resource.total_views,
-                name: resource.title
-            }
-        end
-
-        categories = resources.map{ |r| r.title }
-
-        respond_to do |format|
-            format.json {
-                render json: {
-                           type: 'bar',
-                           highcharts: {
-                               series: [{
-                                   title: "# of views per resource",
-                                   data: data
-                               }],
-                               #categories: categories,
-                               xAxisTitle: "Resource",
-                               yAxisTitle: "# of views per resource"
-                           },
-                           hasAggregation: false
-                       }
-            }
-            format.csv {
-                strategy = Reports::GraphStatsGeneric.new(title: "Number of view per resource", categories: categories, data: data)
-                report = Reports::Generator.new(strategy)
-                send_data report.to_csv, filename: "views_per_resource.csv"
-            }
+        if ENV["DOMAIN"] === "dm.diverst.com"
+            demo_top_resources_by_views
+        else
+            non_demo_top_resources_by_views
         end
     end
 
     def top_news_by_views
-        news_feed_link_ids = NewsFeedLink.where(:news_feed_id => NewsFeed.where(:group_id => current_user.enterprise.groups.ids).ids).ids
-        news_links = NewsLink.select("news_links.title, SUM(views.view_count) view_count").joins(:news_feed_link, :news_feed_link => :views).where(:news_feed_links => {:id => news_feed_link_ids}).order("view_count DESC")
-
-        data = news_links.map do |news_link|
-            {
-                y: news_link.view_count,
-                name: news_link.title
-            }
-        end
-
-        categories = news_links.map{ |r| r.title }
-
-        respond_to do |format|
-            format.json {
-                render json: {
-                           type: 'bar',
-                           highcharts: {
-                               series: [{
-                                   title: "# of views per news link",
-                                   data: data
-                               }],
-                               #categories: categories,
-                               xAxisTitle: "Resource",
-                               yAxisTitle: "# of views per news link"
-                           },
-                           hasAggregation: false
-                       }
-            }
-            format.csv {
-                strategy = Reports::GraphStatsGeneric.new(title: "Number of view per news link", categories: categories, data: data)
-                report = Reports::Generator.new(strategy)
-                send_data report.to_csv, filename: "views_per_news_link.csv"
-            }
+        if ENV["DOMAIN"] === "dm.diverst.com"
+            demo_top_news_by_views
+        else
+            non_demo_top_news_by_views
         end
     end
 
@@ -479,12 +348,173 @@ class GenericGraphsController < ApplicationController
         end
     end
 
+    def non_demo_top_groups_by_views
+        data = current_user.enterprise.groups.all_parents.map do |g|
+            {
+                y: g.total_views,
+                name: g.name,
+                drilldown: g.name
+            }
+        end
+
+        drilldowns = current_user.enterprise.groups.includes(:children).all_parents.map { |g|
+            {
+                name: g.name,
+                id: g.name,
+                data: g.children.map {|child| [child.name, child.total_views]}
+            }
+        }
+
+        categories = current_user.enterprise.groups.all_parents.map{ |g| g.name }
+
+        respond_to do |format|
+            format.json {
+                render json: {
+                           type: 'bar',
+                           highcharts: {
+                               series: [{
+                                   title: "# of views per #{c_t(:erg)}",
+                                   data: data
+                               }],
+                               drilldowns: drilldowns,
+                               #categories: categories,
+                               xAxisTitle: "#{c_t(:erg)}",
+                               yAxisTitle: "# of views per #{c_t(:erg)}"
+                           },
+                           hasAggregation: false
+                       }
+            }
+            format.csv {
+                strategy = Reports::GraphStatsGeneric.new(title: "Number of view per #{c_t(:erg)}", categories: categories, data: data)
+                report = Reports::Generator.new(strategy)
+                send_data report.to_csv, filename: "views_per_#{c_t(:erg)}.csv"
+            }
+        end
+    end
+
+    def non_demo_top_folders_by_views
+        folders = Folder.all
+        data = folders.map do |f|
+          {
+            y: f.total_views,
+            name: !f.group.nil? ? f.group.name + ': ' + f.name : 'Shared folder: ' + f.name,
+            drilldown: f.name
+          }
+        end
+
+        drilldowns = folders.map { |f|
+            {
+                name: f.name,
+                id: f.name,
+                data: f.children.map {|child| [child.name, child.total_views]}
+            }
+        }
+
+        categories = folders.map{ |f| f.name }
+
+        respond_to do |format|
+            format.json {
+                render json: {
+                           type: 'bar',
+                           highcharts: {
+                               series: [{
+                                   title: "# of views per folder",
+                                   data: data
+                               }],
+                               drilldowns: drilldowns,
+                               #categories: categories,
+                               xAxisTitle: "Folder",
+                               yAxisTitle: "# of views per folder"
+                           },
+                           hasAggregation: false
+                       }
+            }
+            format.csv {
+                strategy = Reports::GraphStatsGeneric.new(title: "Number of view per folder", categories: categories, data: data)
+                report = Reports::Generator.new(strategy)
+                send_data report.to_csv, filename: "views_per_folder.csv"
+            }
+        end
+    end
+
+    def non_demo_top_resources_by_views
+        group_ids = current_user.enterprise.groups.ids
+        folder_ids = Folder.where(:group_id => group_ids).ids
+        resources = Resource.where(:folder_id => folder_ids)
+        data = resources.map do |resource|
+            {
+                y: resource.total_views,
+                name: resource.title
+            }
+        end
+
+        categories = resources.map{ |r| r.title }
+
+        respond_to do |format|
+            format.json {
+                render json: {
+                           type: 'bar',
+                           highcharts: {
+                               series: [{
+                                   title: "# of views per resource",
+                                   data: data
+                               }],
+                               #categories: categories,
+                               xAxisTitle: "Resource",
+                               yAxisTitle: "# of views per resource"
+                           },
+                           hasAggregation: false
+                       }
+            }
+            format.csv {
+                strategy = Reports::GraphStatsGeneric.new(title: "Number of view per resource", categories: categories, data: data)
+                report = Reports::Generator.new(strategy)
+                send_data report.to_csv, filename: "views_per_resource.csv"
+            }
+        end
+    end
+
+    def non_demo_top_news_by_views
+        news_feed_link_ids = NewsFeedLink.where(:news_feed_id => NewsFeed.where(:group_id => current_user.enterprise.groups.ids).ids).ids
+        news_links = NewsLink.select("news_links.title, SUM(views.view_count) view_count").joins(:news_feed_link, :news_feed_link => :views).where(:news_feed_links => {:id => news_feed_link_ids}).order("view_count DESC")
+
+        data = news_links.map do |news_link|
+            {
+                y: news_link.view_count,
+                name: news_link.title
+            }
+        end
+
+        categories = news_links.map{ |r| r.title }
+
+        respond_to do |format|
+            format.json {
+                render json: {
+                           type: 'bar',
+                           highcharts: {
+                               series: [{
+                                   title: "# of views per news link",
+                                   data: data
+                               }],
+                               #categories: categories,
+                               xAxisTitle: "Resource",
+                               yAxisTitle: "# of views per news link"
+                           },
+                           hasAggregation: false
+                       }
+            }
+            format.csv {
+                strategy = Reports::GraphStatsGeneric.new(title: "Number of view per news link", categories: categories, data: data)
+                report = Reports::Generator.new(strategy)
+                send_data report.to_csv, filename: "views_per_news_link.csv"
+            }
+        end
+    end
+
     # FOR DEMO PURPOSES
 
     def demo_events_created
-        data = current_user.enterprise.groups.map { |g| g.initiatives.where('initiatives.created_at > ?', 1.month.ago).count }
         categories = current_user.enterprise.groups.map(&:name)
-
 
         values = [2,3,4,1,6,8,5,8,3,4,1,5]
         i = 0
@@ -515,7 +545,6 @@ class GenericGraphsController < ApplicationController
     end
 
     def demo_messages_sent
-        data = current_user.enterprise.groups.map { |g| g.messages.where('created_at > ?', 1.month.ago).count }
         categories = current_user.enterprise.groups.map(&:name)
 
         values = [3,2,5,1,7,10,9,5,11,4,1,5]
@@ -543,6 +572,164 @@ class GenericGraphsController < ApplicationController
             report = Reports::Generator.new(strategy)
             send_data report.to_csv, filename: "graph_messages_sent.csv"
           }
+        end
+    end
+
+    def demo_top_groups_by_views
+        values = [8,1,2,1,7,5,9,5,11,7,6,2]
+        i = 0
+        data = current_user.enterprise.groups.all_parents.map do |g|
+            {
+                y: values[i+=1],
+                name: g.name
+            }
+        end
+
+        categories = current_user.enterprise.groups.all_parents.map{ |g| g.name }
+
+        respond_to do |format|
+            format.json {
+                render json: {
+                           type: 'bar',
+                           highcharts: {
+                               series: [{
+                                   title: "# of views per #{c_t(:erg)}",
+                                   data: data
+                               }],
+                               #categories: categories,
+                               xAxisTitle: "#{c_t(:erg)}",
+                               yAxisTitle: "# of views per #{c_t(:erg)}"
+                           },
+                           hasAggregation: false
+                       }
+            }
+            format.csv {
+                strategy = Reports::GraphStatsGeneric.new(title: "Number of view per #{c_t(:erg)}", categories: categories, data: data)
+                report = Reports::Generator.new(strategy)
+                send_data report.to_csv, filename: "views_per_#{c_t(:erg)}.csv"
+            }
+        end
+    end
+
+    def demo_top_folders_by_views
+        group_ids = current_user.enterprise.groups.ids
+        folders = Folder.where(:group_id => group_ids).only_parents
+
+        values = [5,2,5,1,7,1,4,5,11,4,3,8]
+        i = 0
+
+        data = folders.map do |f|
+            {
+                y: values[i+=1],
+                name: f.name,
+                drilldown: f.name
+            }
+        end
+
+        categories = folders.map{ |f| f.name }
+
+        respond_to do |format|
+            format.json {
+                render json: {
+                           type: 'bar',
+                           highcharts: {
+                               series: [{
+                                   title: "# of views per folder",
+                                   data: data
+                               }],
+                               #categories: categories,
+                               xAxisTitle: "Folder",
+                               yAxisTitle: "# of views per folder"
+                           },
+                           hasAggregation: false
+                       }
+            }
+            format.csv {
+                strategy = Reports::GraphStatsGeneric.new(title: "Number of view per folder", categories: categories, data: data)
+                report = Reports::Generator.new(strategy)
+                send_data report.to_csv, filename: "views_per_folder.csv"
+            }
+        end
+    end
+
+    def demo_top_resources_by_views
+        group_ids = current_user.enterprise.groups.ids
+        folder_ids = Folder.where(:group_id => group_ids).ids
+        resources = Resource.where(:folder_id => folder_ids)
+
+        values = [4,2,5,4,7,4,9,5,11,4,1,5]
+        i = 0
+
+        data = resources.map do |resource|
+            {
+                y: values[i+=1],
+                name: resource.title
+            }
+        end
+
+        categories = resources.map{ |r| r.title }
+
+        respond_to do |format|
+            format.json {
+                render json: {
+                           type: 'bar',
+                           highcharts: {
+                               series: [{
+                                   title: "# of views per resource",
+                                   data: data
+                               }],
+                               #categories: categories,
+                               xAxisTitle: "Resource",
+                               yAxisTitle: "# of views per resource"
+                           },
+                           hasAggregation: false
+                       }
+            }
+            format.csv {
+                strategy = Reports::GraphStatsGeneric.new(title: "Number of view per resource", categories: categories, data: data)
+                report = Reports::Generator.new(strategy)
+                send_data report.to_csv, filename: "views_per_resource.csv"
+            }
+        end
+    end
+
+    def demo_top_news_by_views
+        news_feed_link_ids = NewsFeedLink.where(:news_feed_id => NewsFeed.where(:group_id => current_user.enterprise.groups.ids).ids).ids
+        news_links = NewsLink.select("news_links.title, SUM(views.view_count) view_count").joins(:news_feed_link, :news_feed_link => :views).where(:news_feed_links => {:id => news_feed_link_ids}).order("view_count DESC")
+
+        values = [9,2,5,1,11,10,9,5,11,4,1,8]
+        i = 0
+
+        data = news_links.map do |news_link|
+            {
+                y: values[i+=1],
+                name: news_link.title
+            }
+        end
+
+        categories = news_links.map{ |r| r.title }
+
+        respond_to do |format|
+            format.json {
+                render json: {
+                           type: 'bar',
+                           highcharts: {
+                               series: [{
+                                   title: "# of views per news link",
+                                   data: data
+                               }],
+                               #categories: categories,
+                               xAxisTitle: "Resource",
+                               yAxisTitle: "# of views per news link"
+                           },
+                           hasAggregation: false
+                       }
+            }
+            format.csv {
+                strategy = Reports::GraphStatsGeneric.new(title: "Number of view per news link", categories: categories, data: data)
+                report = Reports::Generator.new(strategy)
+                send_data report.to_csv, filename: "views_per_news_link.csv"
+            }
         end
     end
 end
