@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe PolicyGroupTemplatesController, type: :controller do
+    include ActiveJob::TestHelper
+
     let!(:enterprise){ create(:enterprise) }
     let!(:user){ create(:user, enterprise: enterprise) }
 
@@ -70,8 +72,10 @@ RSpec.describe PolicyGroupTemplatesController, type: :controller do
                   enable_public_activity
 
                   it 'creates public activity record' do
-                    expect{patch :update, id: policy_group_template.id, policy_group_template: {campaigns_index: false}}
-                    .to change(PublicActivity::Activity, :count).by(1)
+                    perform_enqueued_jobs do
+                      expect{patch :update, id: policy_group_template.id, policy_group_template: {campaigns_index: false}}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
                   end
 
                   describe 'activity record' do
@@ -80,7 +84,9 @@ RSpec.describe PolicyGroupTemplatesController, type: :controller do
                     let(:key) { 'policy_group_template.update' }
 
                     before {
-                      patch :update, id: policy_group_template.id, policy_group_template: {campaigns_index: false}
+                      perform_enqueued_jobs do
+                        patch :update, id: policy_group_template.id, policy_group_template: {campaigns_index: false}
+                      end
                     }
 
                     include_examples'correct public activity'
