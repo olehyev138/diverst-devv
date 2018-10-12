@@ -48,6 +48,10 @@ class GroupPolicy < ApplicationPolicy
         create?
     end
 
+    def sort?
+        index?
+    end
+
     # move these to separate policies
     def view_all?
         create?

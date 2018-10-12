@@ -1,7 +1,7 @@
 class GroupsController < ApplicationController
     before_action :authenticate_user!, except: [:calendar_data]
     before_action :set_group, except: [:index, :new, :create, :plan_overview,
-                                       :calendar, :calendar_data, :close_budgets, :close_budgets_export_csv]
+                                       :calendar, :calendar_data, :close_budgets, :close_budgets_export_csv, :sort]
 
     skip_before_action :verify_authenticity_token, only: [:create, :calendar_data]
     after_action :verify_authorized, except: [:calendar_data]
@@ -12,7 +12,8 @@ class GroupsController < ApplicationController
 
     def index
         authorize Group
-        @groups = GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_manage).resolve.includes(:children).all_parents
+        @groups = GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_manage)
+        .resolve.includes(:children).order(:position).all_parents
     end
 
     def plan_overview
@@ -276,6 +277,14 @@ class GroupsController < ApplicationController
         end
     end
 
+    def sort
+        authorize Group
+        params[:group].each_with_index do |id, index|
+            current_user.enterprise.groups.find(id).update(position: index+1)
+        end
+        render nothing: true
+    end
+
     protected
 
     def base_show
@@ -354,6 +363,7 @@ class GroupsController < ApplicationController
                 :parent_id,
                 :group_category_id,
                 :group_category_type_id,
+                :position,
                 manager_ids: [],
                 child_ids: [],
                 member_ids: [],
