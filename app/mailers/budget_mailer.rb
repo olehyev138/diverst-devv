@@ -7,7 +7,7 @@ class BudgetMailer < ApplicationMailer
     @custom_text = @enterprise.custom_text rescue CustomText.new
 
     set_defaults(@enterprise, method_name)
-
+    
     mail(from: @from_address, to: @user.email, subject: @subject)
   end
 

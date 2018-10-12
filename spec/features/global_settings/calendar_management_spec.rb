@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.feature 'Calendar Management' do
 	let!(:enterprise) { create(:enterprise, time_zone: "UTC") }
-	let!(:admin_user) { create(:user, enterprise_id: enterprise.id, policy_group: create(:policy_group, enterprise: enterprise)) }
+	let!(:admin_user) { create(:user, enterprise: enterprise) }
 	let!(:group) { create(:group, enterprise: enterprise, parent_id: nil) }
 	let!(:sub_group) { create(:group, enterprise: enterprise, parent_id: group.id) }
 

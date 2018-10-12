@@ -282,7 +282,7 @@ RSpec.describe SegmentsController, type: :controller do
                 end
               end
 
-              describe 'activity record' do
+              xdescribe 'activity record' do
                 let(:model) { segment }
                 let(:owner) { user }
                 let(:key) { 'segment.destroy' }
