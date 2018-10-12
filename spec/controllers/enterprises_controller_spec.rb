@@ -56,8 +56,10 @@ RSpec.describe EnterprisesController, type: :controller do
                   enable_public_activity
 
                   it 'creates public activity record' do
-                    expect{patch :update, id: enterprise.id, enterprise: attributes}
-                    .to change(PublicActivity::Activity, :count).by(1)
+                    perform_enqueued_jobs do
+                      expect{patch :update, id: enterprise.id, enterprise: attributes}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
                   end
 
                   describe 'activity record' do
@@ -66,7 +68,9 @@ RSpec.describe EnterprisesController, type: :controller do
                     let(:key) { 'enterprise.update' }
 
                     before {
-                      patch :update, id: enterprise.id, enterprise: attributes
+                      perform_enqueued_jobs do
+                        patch :update, id: enterprise.id, enterprise: attributes
+                      end
                     }
 
                     include_examples'correct public activity'
@@ -325,8 +329,10 @@ RSpec.describe EnterprisesController, type: :controller do
                   enable_public_activity
 
                   it 'creates public activity record' do
-                    expect{patch :update_branding, id: enterprise.id, enterprise: attributes_for(:enterprise, theme: { primary_color: "#ff0000" })}
-                    .to change(PublicActivity::Activity, :count).by(1)
+                    perform_enqueued_jobs do
+                      expect{patch :update_branding, id: enterprise.id, enterprise: attributes_for(:enterprise, theme: { primary_color: "#ff0000" })}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
                   end
 
                   describe 'activity record' do
