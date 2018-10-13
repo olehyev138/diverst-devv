@@ -20,6 +20,7 @@ class ExpensesController < ApplicationController
         @expense = current_user.enterprise.expenses.new(expense_params)
         if @expense.save
             flash[:notice] = "Your expense was created"
+            track_activity(@expense, :create)
             redirect_to action: :index
         else
             flash[:alert] = "Your expense was not created. Please fix the errors"
@@ -35,6 +36,7 @@ class ExpensesController < ApplicationController
         authorize @expense
         if @expense.update(expense_params)
             flash[:notice] = "Your expense was updated"
+            track_activity(@expense, :update)
             redirect_to action: :index
         else
             flash[:alert] = "Your expense was not updated. Please fix the errors"
@@ -44,6 +46,7 @@ class ExpensesController < ApplicationController
 
     def destroy
         authorize @expense
+        track_activity(@expense, :destroy)
         @expense.destroy
         redirect_to action: :index
     end

@@ -51,4 +51,16 @@
     </div>
     <% end %>
   <% end %>
+  <div class="card__section card__section--border">
+    <label><h2>Groups Notifications Settings</h2></label>
+    <br>
+    <label><strong>Frequency of Notifications</strong></label>
+    <p><%= @user.groups_notifications_frequency.capitalize %></p>
+  </div>
+  <% if @user.groups_notifications_frequency == "weekly" %>
+  <div class="card__section card__section--border">
+    <label><strong>Day of Notifications</strong></label>
+    <p><%= @user.groups_notifications_date.capitalize %></p>
+  </div>
+  <% end %>
 </div>

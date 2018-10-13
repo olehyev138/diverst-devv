@@ -10,6 +10,9 @@ class User < ActiveRecord::Base
 
     @@fb_token_generator = Firebase::FirebaseTokenGenerator.new(ENV['FIREBASE_SECRET'].to_s)
 
+    enum groups_notifications_frequency: [:hourly, :daily, :weekly, :disabled]
+    enum groups_notifications_date: [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]
+
     scope :active,              -> { where(active: true).distinct }
     scope :enterprise_mentors,  -> ( user_ids = []) { where(mentor: true).where.not(:id => user_ids) }
     scope :enterprise_mentees,  -> ( user_ids = []) { where(mentee: true).where.not(:id => user_ids) }
@@ -119,9 +122,6 @@ class User < ActiveRecord::Base
     
     accepts_nested_attributes_for :availabilities, :allow_destroy => true
     
-    def gerlin
-    end
-    
     def add_to_default_mentor_group
         if mentor_changed? || mentee_changed?
             DefaultMentorGroupMemberUpdateJob.perform_later(id, mentor, mentee)
@@ -223,7 +223,7 @@ class User < ActiveRecord::Base
     end
     
     def admin?
-        return user_role.role_type === "admin"
+        return user_role.role_type.downcase === "admin"
     end
 
     def has_answered_group_surveys?

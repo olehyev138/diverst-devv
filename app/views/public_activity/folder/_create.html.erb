@@ -1,0 +1,10 @@
+<div class="card__section">
+  <%= render 'public_activity/shared/owner', activity: activity %>
+  created folder
+  <% if activity.trackable %>
+    <%= link_to activity.trackable.name, group_folder_resources_path(:folder_id => activity.trackable.id, :group_id => activity.trackable.group.id) %>
+  <% else %>
+    which has since been removed
+  <% end %>
+  (<%= activity.created_at.to_s :datetime %>)
+</div>

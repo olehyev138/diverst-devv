@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe SegmentsController, type: :controller do
+    include ActiveJob::TestHelper
 
     let(:enterprise) { create(:enterprise) }
     let(:user) { create(:user, enterprise: enterprise) }
@@ -66,6 +67,31 @@ RSpec.describe SegmentsController, type: :controller do
                     post :create, :segment => segment_attributes
                     expect(flash[:notice]).to eq "Your #{c_t(:segment)} was created"
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{post :create, :segment => segment_attributes}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { Segment.last }
+                    let(:owner) { user }
+                    let(:key) { 'segment.create' }
+
+                    before {
+                      perform_enqueued_jobs do
+                        post :create, :segment => segment_attributes
+                      end
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
 
             context "unsuccessful create" do
@@ -92,16 +118,15 @@ RSpec.describe SegmentsController, type: :controller do
     describe "GET#show" do
         describe 'when user is logged in' do
             let!(:groups) { create_list(:group, 2, enterprise: enterprise) }
-            let!(:user1) { create(:user) }
-            let!(:user2) { create(:user) }
-            let!(:user3) { create(:user) }
+            let!(:user1) { create(:user, :enterprise => enterprise) }
+            let!(:user2) { create(:user, :enterprise => enterprise) }
+            let!(:user3) { create(:user, :enterprise => enterprise) }
             let!(:users_segment1) { create(:users_segment, segment: segment, user: user1) }
             let!(:users_segment2) { create(:users_segment, segment: segment, user: user2) }
             let!(:users_segment3) { create(:users_segment, segment: segment, user: user3) }
             let!(:user_group1) { create(:user_group, group: groups.last, user: user1) }
             let!(:user_group2) { create(:user_group, group: groups.last, user: user2) }
             login_user_from_let
-
 
             context 'when group is present' do
                 before do
@@ -188,6 +213,31 @@ RSpec.describe SegmentsController, type: :controller do
                 it "flashes a notice message" do
                     expect(flash[:notice]).to eq "Your #{c_t(:segment)} was updated"
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{patch :update, :id => segment.id, :segment => {:name => "updated"}}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { Segment.last }
+                    let(:owner) { user }
+                    let(:key) { 'segment.update' }
+
+                    before {
+                      perform_enqueued_jobs do
+                        patch :update, :id => segment.id, :segment => {:name => "updated"}
+                      end
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
 
             context "unsuccessfully" do
@@ -221,6 +271,31 @@ RSpec.describe SegmentsController, type: :controller do
                 delete :destroy, :id => segment.id
                 expect(response).to redirect_to action: :index
             end
+
+            describe 'public activity' do
+              enable_public_activity
+
+              it 'creates public activity record' do
+                perform_enqueued_jobs do
+                  expect{delete :destroy, :id => segment.id}
+                  .to change(PublicActivity::Activity, :count).by(1)
+                end
+              end
+
+              xdescribe 'activity record' do
+                let(:model) { segment }
+                let(:owner) { user }
+                let(:key) { 'segment.destroy' }
+
+                before {
+                  perform_enqueued_jobs do
+                    delete :destroy, :id => segment.id
+                  end
+                }
+
+                include_examples'correct public activity'
+              end
+            end
         end
 
         context 'when user is not logged in' do
@@ -233,59 +308,22 @@ RSpec.describe SegmentsController, type: :controller do
         context 'when user is logged in' do
             login_user_from_let
 
-            it 'sets a valid segment object' do
-                get :export_csv, :id => segment.id, format: :csv
-                expect(assigns[:segment]).to be_valid
+            before {
+              allow(SegmentMembersDownloadJob).to receive(:perform_later)
+              request.env["HTTP_REFERER"] = "back"
+              get :export_csv, :id => segment.id
+            }
+
+            it "redirects to user" do
+              expect(response).to redirect_to "back"
             end
 
-            it "returns data in csv format" do
-                get :export_csv, :id => segment.id, format: :csv
-                expect(response.content_type).to eq "text/csv"
+            it "flashes" do
+              expect(flash[:notice]).to eq "Please check your email in a couple minutes"
             end
 
-            context "when group_id is present in params" do
-                let!(:group) { create(:group, :enterprise => enterprise) }
-                let!(:user1) { create(:user) }
-                let!(:user2) { create(:user) }
-                let!(:user3) { create(:user) }
-                let!(:users_segment1) { create(:users_segment, segment: segment, user: user1) }
-                let!(:users_segment2) { create(:users_segment, segment: segment, user: user2) }
-                let!(:users_segment3) { create(:users_segment, segment: segment, user: user3) }
-                let!(:user_group1) { create(:user_group, group: group, user: user1) }
-                let!(:user_group2) { create(:user_group, group: group, user: user2) }
-
-
-                before { get :export_csv, :id => segment.id, format: :csv, :group_id => group.id }
-
-                it 'find by id group object passed as group_id in params' do
-                    expect(assigns[:current_user].enterprise.groups.find_by_id(controller.params[:group_id])).to eq group
-                end
-
-                it 'returns users' do
-                    users_ids = segment_members_of_group(segment, group) #helper method in ApplicationHelper
-                    users = User.where(id: [users_ids])
-                    expect(users.count).to eq 2
-                end
-
-                it 'returns filename of segment in csv format' do
-                    expect(response.headers["Content-Disposition"]).to include "#{assigns[:segment].name}.csv"
-                end
-            end
-
-            context 'when group_id is not present in params' do
-                let!(:user1) { create(:user) }
-                let!(:user2) { create(:user) }
-                let!(:user3) { create(:user) }
-                let!(:users_segment1) { create(:users_segment, segment: segment, user: user1) }
-                let!(:users_segment2) { create(:users_segment, segment: segment, user: user2) }
-                let!(:users_segment3) { create(:users_segment, segment: segment, user: user3) }
-
-                before { get :export_csv, :id => segment.id, format: :csv }
-
-                it 'members of segment' do
-                    users = assigns[:segment].members
-                    expect(users.count).to eq 3
-                end
+            it "calls job" do
+              expect(SegmentMembersDownloadJob).to have_received(:perform_later)
             end
         end
 

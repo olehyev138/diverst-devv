@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Enterprises::ResourcesController, type: :controller do
+    include ActiveJob::TestHelper
+
     let(:enterprise){ create(:enterprise) }
     let(:user){ create(:user, enterprise: enterprise) }
     let!(:admin_resource){ create(:resource, title: "title", enterprise: enterprise, file: fixture_file_upload('files/test.csv', 'text/csv'), resource_type: "admin") }
@@ -90,6 +92,31 @@ RSpec.describe Enterprises::ResourcesController, type: :controller do
                     expect{post :create, enterprise_id: enterprise.id, resource: {title: "resource", file: file}}
                     .to change(Resource, :count).by(1)
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{post :create, enterprise_id: enterprise.id, resource: {title: "resource", file: file}}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { Resource.last }
+                    let(:owner) { user }
+                    let(:key) { 'resource.create' }
+
+                    before {
+                      perform_enqueued_jobs do
+                        post :create, enterprise_id: enterprise.id, resource: {title: "resource", file: file}
+                      end
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
 
             context "invalid params" do
@@ -150,6 +177,31 @@ RSpec.describe Enterprises::ResourcesController, type: :controller do
                     admin_resource.reload
                     expect(admin_resource.title).to eq("updated")
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{patch :update, enterprise_id: enterprise.id, id: admin_resource.id, resource: {title: "updated", file: file}}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { admin_resource }
+                    let(:owner) { user }
+                    let(:key) { 'resource.update' }
+
+                    before {
+                      perform_enqueued_jobs do
+                        patch :update, enterprise_id: enterprise.id, id: admin_resource.id, resource: {title: "updated", file: file}
+                      end
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
 
             context "invalid params" do
@@ -186,6 +238,31 @@ RSpec.describe Enterprises::ResourcesController, type: :controller do
             it "deletes the resources" do
                 expect{delete :destroy, :id => admin_resource.id, enterprise_id: enterprise.id}
                 .to change(Resource.where(:id => admin_resource.id), :count).by(-1)
+            end
+
+            describe 'public activity' do
+              enable_public_activity
+
+              it 'creates public activity record' do
+                perform_enqueued_jobs do
+                  expect{delete :destroy, :id => admin_resource.id, enterprise_id: enterprise.id}
+                  .to change(PublicActivity::Activity, :count).by(1)
+                end
+              end
+
+              describe 'activity record' do
+                let(:model) { admin_resource }
+                let(:owner) { user }
+                let(:key) { 'resource.destroy' }
+
+                before {
+                  perform_enqueued_jobs do
+                    delete :destroy, :id => admin_resource.id, enterprise_id: enterprise.id
+                  end
+                }
+
+                include_examples'correct public activity'
+              end
             end
         end
 

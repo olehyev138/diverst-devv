@@ -2,6 +2,8 @@ require 'rails_helper'
 require 'spec_helper'
 
 RSpec.describe "User::UserAnswerCommentsController", type: :controller do
+  include ActiveJob::TestHelper
+
   let(:enterprise) { create(:enterprise, enable_rewards: true) }
   let(:user) { create :user, enterprise: enterprise }
 
@@ -41,6 +43,31 @@ RSpec.describe "User::UserAnswerCommentsController", type: :controller do
         it "redirects to question" do
           post :create, user_answer_id: answer.id, answer_comment: { content: "blah" }
           expect(response).to redirect_to [:user, answer.question]
+        end
+
+        describe 'public activity' do
+          enable_public_activity
+
+          it 'creates public activity record' do
+            perform_enqueued_jobs do
+              expect{post :create, user_answer_id: answer.id, answer_comment: { content: "blah" }}
+              .to change(PublicActivity::Activity, :count).by(1)
+            end
+          end
+
+          describe 'activity record' do
+            let(:model) { AnswerComment.last }
+            let(:owner) { user }
+            let(:key) { 'answer_comment.create' }
+
+            before {
+              perform_enqueued_jobs do
+                post :create, user_answer_id: answer.id, answer_comment: { content: "blah" }
+              end
+            }
+
+            include_examples'correct public activity'
+          end
         end
       end
 
