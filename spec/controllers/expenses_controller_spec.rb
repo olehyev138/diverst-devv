@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe ExpensesController, type: :controller do
+    include ActiveJob::TestHelper
+
     let(:enterprise) { create(:enterprise) }
     let(:user) { create(:user, enterprise: enterprise) }
     let(:category) {create(:expense_category)}
@@ -74,6 +76,31 @@ RSpec.describe ExpensesController, type: :controller do
                     post :create, expense: valid_expense_attributes
                     expect(flash[:notice]).to eq "Your expense was created"
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{post :create, expense: valid_expense_attributes}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { Expense.last }
+                    let(:owner) { user }
+                    let(:key) { 'expense.create' }
+
+                    before {
+                      perform_enqueued_jobs do
+                        post :create, expense: valid_expense_attributes
+                      end
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
 
             context "with invalid params" do
@@ -140,6 +167,31 @@ RSpec.describe ExpensesController, type: :controller do
                 it "flashes a notice message" do
                     expect(flash[:notice]).to eq "Your expense was updated"
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{patch :update, id: expense.id, expense: attributes_for(:expense, name: "updated")}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { expense }
+                    let(:owner) { user }
+                    let(:key) { 'expense.update' }
+
+                    before {
+                      perform_enqueued_jobs do
+                        patch :update, id: expense.id, expense: attributes_for(:expense, name: "updated")
+                      end
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
 
             context "with invalid parameters" do
@@ -179,6 +231,31 @@ RSpec.describe ExpensesController, type: :controller do
             it "destroys expense" do
                 expense
                 expect{ delete :destroy, id: expense.id }.to change(Expense, :count).by(-1)
+            end
+
+            describe 'public activity' do
+              enable_public_activity
+
+              it 'creates public activity record' do
+                perform_enqueued_jobs do
+                  expect{delete :destroy, id: expense.id}
+                  .to change(PublicActivity::Activity, :count).by(1)
+                end
+              end
+
+              describe 'activity record' do
+                let(:model) { expense }
+                let(:owner) { user }
+                let(:key) { 'expense.destroy' }
+
+                before {
+                  perform_enqueued_jobs do
+                    delete :destroy, id: expense.id
+                  end
+                }
+
+                include_examples'correct public activity'
+              end
             end
         end
 

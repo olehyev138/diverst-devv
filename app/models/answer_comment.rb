@@ -1,4 +1,6 @@
 class AnswerComment < ActiveRecord::Base
+  include PublicActivity::Common
+
   belongs_to :author, class_name: 'User', inverse_of: :answers
   belongs_to :answer, inverse_of: :comments
 

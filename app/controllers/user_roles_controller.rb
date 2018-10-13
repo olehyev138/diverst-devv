@@ -9,7 +9,7 @@ class UserRolesController < ApplicationController
     @user_role = current_user.enterprise.user_roles.new
     @user_role.role_name = ""
   end
-  
+
   def edit
     authorize UserRole
   end
@@ -21,6 +21,7 @@ class UserRolesController < ApplicationController
 
     if @user_role.save
       flash[:notice] = "Your user role was created"
+      track_activity(@user_role, :create)
       redirect_to users_url
     else
       flash[:alert] = "Your user role was not created. Please fix the errors"
@@ -33,15 +34,17 @@ class UserRolesController < ApplicationController
 
     if @user_role.update(user_role_params)
       flash[:notice] = "Your user role was updated"
+      track_activity(@user_role, :update)
       redirect_to users_url
     else
       flash[:alert] = "Your user role was not updated. Please fix the errors"
       render :edit
     end
   end
-  
+
   def destroy
     authorize @user_role
+    track_activity(@user_role, :destroy)
     if not @user_role.destroy
       flash[:alert] = @user_role.errors.full_messages.first
     end

@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe UsersController, type: :controller do
+    include ActiveJob::TestHelper
+    
     let(:enterprise) { create(:enterprise) }
     let(:user) { create(:user, enterprise: enterprise) }
 
@@ -313,20 +315,39 @@ RSpec.describe UsersController, type: :controller do
             login_user_from_let
 
             describe 'response' do
-                before { get :parse_csv, :file => file }
+                before {
+                    perform_enqueued_jobs do
+                      allow(ImportCSVJob).to receive(:perform_later)
+                      get :parse_csv, :file => file 
+                    end
+                }
+                
                 it "renders parse_csv template" do
                     expect(response).to render_template :parse_csv
                 end
-            end
-
-            it 'creates new CsvFile' do
-                expect{ get :parse_csv, :file => file }
-                    .to change(CsvFile, :count)
-                    .by(1)
+                
+                it 'creates new CsvFile' do
+                    expect(CsvFile.all.count).to eq(1)
+                end
+                
+                it "calls the correct job" do
+                    expect(ImportCSVJob).to have_received(:perform_later)
+                end
             end
 
             context 'with incorrect file' do
-                it 'does not create CSVFile'
+                  before {
+                    request.env["HTTP_REFERER"] = "back"
+                    get :parse_csv
+                  }
+            
+                  it 'redirects back' do
+                    expect(response).to redirect_to "back"
+                  end
+            
+                  it "flashes an alert message" do
+                    expect(flash[:alert]).to eq "CSV file is required"
+                  end
             end
         end
 
@@ -339,14 +360,22 @@ RSpec.describe UsersController, type: :controller do
     describe "GET#export_csv" do
         context 'when user is logged in' do
             login_user_from_let
-            before { get :export_csv }
+            before { 
+                allow(UsersDownloadJob).to receive(:perform_later)
+                request.env["HTTP_REFERER"] = "back"
+                get :export_csv 
+            }
 
-            it "return data in csv format" do
-                expect(response.content_type).to eq 'text/csv'
+            it "redirects to user" do
+                expect(response).to redirect_to "back"
             end
-
-            it "filename should be 'diverst_users.csv'" do 
-                expect(response.headers["Content-Disposition"]).to include 'diverst_users.csv'
+            
+            it "flashes" do
+                expect(flash[:notice]).to eq "Please check your email in a couple minutes"
+            end
+            
+            it "calls job" do
+                expect(UsersDownloadJob).to have_received(:perform_later)
             end
         end
 

@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe MetricsDashboardsController, type: :controller do
+  include ActiveJob::TestHelper
+  
   let(:enterprise) { create :enterprise }
   let (:user) { create :user, :enterprise => enterprise }
   let(:metrics_dashboard) { create :metrics_dashboard, :enterprise => enterprise, owner: user }
@@ -119,9 +121,11 @@ RSpec.describe MetricsDashboardsController, type: :controller do
           enable_public_activity
 
           it 'creates public activity record' do
-            expect{
-              post_create(md_params)
-            }.to change(PublicActivity::Activity, :count).by(1)
+            perform_enqueued_jobs do
+              expect{
+                post_create(md_params)
+              }.to change(PublicActivity::Activity, :count).by(1)
+            end
           end
 
           describe 'activity record' do
@@ -130,7 +134,9 @@ RSpec.describe MetricsDashboardsController, type: :controller do
             let(:key) { 'metrics_dashboard.create' }
 
             before {
-              post_create(md_params)
+              perform_enqueued_jobs do
+                post_create(md_params)
+              end
             }
 
             include_examples'correct public activity'
@@ -272,7 +278,9 @@ RSpec.describe MetricsDashboardsController, type: :controller do
 
           it 'creates public activity record' do
             expect{
-              patch_update(metrics_dashboard.id, new_md_params)
+              perform_enqueued_jobs do
+                patch_update(metrics_dashboard.id, new_md_params)
+              end
             }.to change(PublicActivity::Activity, :count).by(1)
           end
 
@@ -282,7 +290,9 @@ RSpec.describe MetricsDashboardsController, type: :controller do
             let(:key) { 'metrics_dashboard.update' }
 
             before {
-              patch_update(metrics_dashboard.id, new_md_params)
+              perform_enqueued_jobs do
+                patch_update(metrics_dashboard.id, new_md_params)
+              end
             }
 
             include_examples'correct public activity'
@@ -350,7 +360,9 @@ RSpec.describe MetricsDashboardsController, type: :controller do
 
             it 'creates public activity record' do
               expect{
-                delete_destroy(metrics_dashboard.id)
+                perform_enqueued_jobs do
+                  delete_destroy(metrics_dashboard.id)
+                end
               }.to change(PublicActivity::Activity, :count).by(1)
             end
 
@@ -360,7 +372,9 @@ RSpec.describe MetricsDashboardsController, type: :controller do
               let(:key) { 'metrics_dashboard.destroy' }
 
               before {
-                delete_destroy(metrics_dashboard.id)
+                perform_enqueued_jobs do
+                  delete_destroy(metrics_dashboard.id)
+                end
               }
 
               include_examples'correct public activity'

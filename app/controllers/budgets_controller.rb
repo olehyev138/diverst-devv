@@ -28,6 +28,7 @@ class BudgetsController < ApplicationController
 
     if @group.save
       flash[:notice] = "Your budget was created"
+      track_activity(@budget, :create)
       redirect_to action: :index
     else
       flash[:alert] = "Your budget was not created. Please fix the errors"
@@ -39,6 +40,7 @@ class BudgetsController < ApplicationController
     authorize @budget, :approve?
     if @budget.update(budget_params)
       BudgetManager.new(@budget).approve(current_user)
+      track_activity(@budget, :approve)
       redirect_to action: :index
     else
       redirect_to :back
@@ -52,12 +54,14 @@ class BudgetsController < ApplicationController
     @budget.save
 
     BudgetManager.new(@budget).decline(current_user)
+    track_activity(@budget, :decline)
 
     redirect_to action: :index
   end
 
   def destroy
     authorize @group, :submit_budget?
+    track_activity(@budget, :destroy)
     if @budget.destroy
       flash[:notice] = "Your budget was deleted"
       redirect_to action: :index

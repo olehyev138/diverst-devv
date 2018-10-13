@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Users::SessionsController, type: :controller do
+  include ActiveJob::TestHelper
+  
   let(:enterprise) { create(:enterprise, :has_enabled_saml => true)}
   let(:user){ create(:user, :password => 'password', :enterprise => enterprise) }
 
@@ -38,12 +40,14 @@ RSpec.describe Users::SessionsController, type: :controller do
     end
 
     it 'signs user in' do
-      expect_any_instance_of(User).to receive(:create_activity)
-      enterprise.has_enabled_saml = false
-      enterprise.save!
-
-      post :create, user: { email: user.email, password: 'password' }
-      expect(flash[:notice]).to eq 'Signed in successfully.'
+      perform_enqueued_jobs do
+        expect_any_instance_of(User).to receive(:create_activity)
+        enterprise.has_enabled_saml = false
+        enterprise.save!
+  
+        post :create, user: { email: user.email, password: 'password' }
+        expect(flash[:notice]).to eq 'Signed in successfully.'
+      end
     end
   end
 end

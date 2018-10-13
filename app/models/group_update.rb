@@ -1,4 +1,5 @@
 class GroupUpdate < ActiveRecord::Base
+  include PublicActivity::Common
   include ContainsFields
 
   belongs_to :owner, class_name: "User"

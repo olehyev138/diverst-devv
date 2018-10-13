@@ -20,7 +20,11 @@ class CacheSegmentMembersJob < ActiveJob::Base
 
     members_to_add.each do |member|
       segment.members << member
-      member.__elasticsearch__.update_document # Update user in Elasticsearch to reflect their new segment
+      begin
+        member.__elasticsearch__.update_document # Update user in Elasticsearch to reflect their new segment
+      rescue
+        next
+      end
     end
   end
 end

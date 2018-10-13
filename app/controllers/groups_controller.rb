@@ -47,7 +47,7 @@ class GroupsController < ApplicationController
     def calendar
         authorize Group
         enterprise = current_user.enterprise
-        @groups = enterprise.groups.all_parents
+        @groups = enterprise.groups
         @segments = enterprise.segments
         @q_form_submit_path = calendar_groups_path
         @q = Initiative.ransack(params[:q])
@@ -236,34 +236,27 @@ class GroupsController < ApplicationController
             return
         end
 
-        @table = CSV.table params[:file].tempfile
-        @failed_rows = []
-        @successful_rows = []
-
-        @table.each_with_index do |row, row_index|
-            email = row[0]
-            user = User.where(email: email).first
-            if user
-                @group.members << user unless @group.members.include? user
-
-                @successful_rows << row
-            else
-                @failed_rows << {
-                    row: row,
-                    row_index: row_index + 1,
-                    error: 'There is no user with this email address in the database'
-                }
-            end
+        file = CsvFile.new( import_file: params[:file].tempfile, user: current_user, :group_id => @group.id)
+    
+        @message = ''
+        @success = false
+        @email = ENV['CSV_UPLOAD_REPORT_EMAIL']
+    
+        if file.save
+          @success = true
+          @message = '@success'
+        else
+          @success = false
+          @message = 'error'
+          @errors = file.errors.full_messages
         end
-
-        @group.save
     end
 
     def export_csv
         authorize @group, :show?
-
-        users_csv = User.to_csv users: @group.members, fields: @group.enterprise.fields
-        send_data users_csv, filename: "#{@group.file_safe_name}_users.csv"
+        GroupMemberDownloadJob.perform_later(current_user.id, @group.id)
+        flash[:notice] = "Please check your email in a couple minutes"
+        redirect_to :back
     end
 
     def edit_fields
