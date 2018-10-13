@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
+    include ActiveJob::TestHelper
+
     let(:user){ create(:user) }
     let(:campaign){ create(:campaign, enterprise: user.enterprise) }
     let(:question){ create(:question, campaign: campaign) }
@@ -111,8 +113,10 @@ RSpec.describe QuestionsController, type: :controller do
                   enable_public_activity
 
                   it 'creates public activity record' do
-                    expect{post :create, campaign_id: campaign.id, question: {title: "Title", description: "description"}}
-                    .to change(PublicActivity::Activity, :count).by(1)
+                    perform_enqueued_jobs do
+                      expect{post :create, campaign_id: campaign.id, question: {title: "Title", description: "description"}}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
                   end
 
                   describe 'activity record' do
@@ -121,7 +125,9 @@ RSpec.describe QuestionsController, type: :controller do
                     let(:key) { 'question.create' }
 
                     before {
-                      post :create, campaign_id: campaign.id, question: {title: "Title", description: "description"}
+                      perform_enqueued_jobs do
+                        post :create, campaign_id: campaign.id, question: {title: "Title", description: "description"}
+                      end
                     }
 
                     include_examples'correct public activity'
@@ -227,8 +233,10 @@ RSpec.describe QuestionsController, type: :controller do
                   enable_public_activity
 
                   it 'creates public activity record' do
-                    expect{patch :update, id: question.id, question: {title: "updated"}}
-                    .to change(PublicActivity::Activity, :count).by(1)
+                    perform_enqueued_jobs do
+                      expect{patch :update, id: question.id, question: {title: "updated"}}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
                   end
 
                   describe 'activity record' do
@@ -237,7 +245,9 @@ RSpec.describe QuestionsController, type: :controller do
                     let(:key) { 'question.update' }
 
                     before {
-                      patch :update, id: question.id, question: {title: "updated"}
+                      perform_enqueued_jobs do
+                        patch :update, id: question.id, question: {title: "updated"}
+                      end
                     }
 
                     include_examples'correct public activity'
@@ -290,8 +300,10 @@ RSpec.describe QuestionsController, type: :controller do
               enable_public_activity
 
               it 'creates public activity record' do
-                expect{delete :destroy, id: question.id}
-                .to change(PublicActivity::Activity, :count).by(1)
+                perform_enqueued_jobs do
+                  expect{delete :destroy, id: question.id}
+                  .to change(PublicActivity::Activity, :count).by(1)
+                end
               end
 
               describe 'activity record' do
@@ -300,7 +312,9 @@ RSpec.describe QuestionsController, type: :controller do
                 let(:key) { 'question.destroy' }
 
                 before {
-                  delete :destroy, id: question.id
+                  perform_enqueued_jobs do
+                    delete :destroy, id: question.id
+                  end
                 }
 
                 include_examples'correct public activity'

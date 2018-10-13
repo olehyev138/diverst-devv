@@ -48,7 +48,7 @@ class GroupsController < ApplicationController
     def calendar
         authorize Group
         enterprise = current_user.enterprise
-        @groups = enterprise.groups.all_parents
+        @groups = enterprise.groups
         @segments = enterprise.segments
         @q_form_submit_path = calendar_groups_path
         @q = Initiative.ransack(params[:q])

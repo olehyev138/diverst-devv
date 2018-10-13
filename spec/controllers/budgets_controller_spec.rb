@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe BudgetsController, type: :controller do
   include ActiveJob::TestHelper
-  
+
   let!(:user) { FactoryGirl.create(:user) }
   let!(:group) { FactoryGirl.create(:group, enterprise: user.enterprise, :annual_budget => 100000) }
   let!(:budget) { FactoryGirl.create(:approved_budget, group: group) }
@@ -133,8 +133,10 @@ RSpec.describe BudgetsController, type: :controller do
           enable_public_activity
 
           it 'creates public activity record' do
-            expect{post :create, group_id: group.id, budget: budget_params}
-            .to change(PublicActivity::Activity, :count).by(1)
+            perform_enqueued_jobs do
+              expect{post :create, group_id: group.id, budget: budget_params}
+              .to change(PublicActivity::Activity, :count).by(1)
+            end
           end
 
           describe 'activity record' do
@@ -143,7 +145,9 @@ RSpec.describe BudgetsController, type: :controller do
             let(:key) { 'budget.create' }
 
             before {
-              post :create, group_id: group.id, budget: budget_params
+              perform_enqueued_jobs do
+                post :create, group_id: group.id, budget: budget_params
+              end
             }
 
             include_examples'correct public activity'
@@ -204,8 +208,10 @@ RSpec.describe BudgetsController, type: :controller do
         enable_public_activity
 
         it 'creates public activity record' do
-          expect{approve}
-          .to change(PublicActivity::Activity, :count).by(1)
+          perform_enqueued_jobs do
+            expect{approve}
+            .to change(PublicActivity::Activity, :count).by(1)
+          end
         end
 
         describe 'activity record' do
@@ -214,7 +220,9 @@ RSpec.describe BudgetsController, type: :controller do
           let(:key) { 'budget.approve' }
 
           before {
-            approve
+            perform_enqueued_jobs do
+              approve
+            end
           }
 
           include_examples'correct public activity'
@@ -255,8 +263,10 @@ RSpec.describe BudgetsController, type: :controller do
         enable_public_activity
 
         it 'creates public activity record' do
-          expect{decline}
-          .to change(PublicActivity::Activity, :count).by(1)
+          perform_enqueued_jobs do
+            expect{decline}
+            .to change(PublicActivity::Activity, :count).by(1)
+          end
         end
 
         describe 'activity record' do
@@ -265,7 +275,9 @@ RSpec.describe BudgetsController, type: :controller do
           let(:key) { 'budget.decline' }
 
           before {
-            decline
+            perform_enqueued_jobs do
+              decline
+            end
           }
 
           include_examples'correct public activity'
@@ -305,8 +317,10 @@ RSpec.describe BudgetsController, type: :controller do
             enable_public_activity
 
             it 'creates public activity record' do
-              expect{delete :destroy, group_id: budget.group.id, id: budget.id}
-              .to change(PublicActivity::Activity, :count).by(1)
+              perform_enqueued_jobs do
+                expect{delete :destroy, group_id: budget.group.id, id: budget.id}
+                .to change(PublicActivity::Activity, :count).by(1)
+              end
             end
 
             describe 'activity record' do
@@ -315,7 +329,9 @@ RSpec.describe BudgetsController, type: :controller do
               let(:key) { 'budget.destroy' }
 
               before {
-                delete :destroy, group_id: budget.group.id, id: budget.id
+                perform_enqueued_jobs do
+                  delete :destroy, group_id: budget.group.id, id: budget.id
+                end
               }
 
               include_examples'correct public activity'
@@ -404,9 +420,8 @@ RSpec.describe BudgetsController, type: :controller do
 
             it 'creates public activity record' do
               perform_enqueued_jobs do
-                expect{
-                  put :reset_annual_budget, group_id: budget.group.id, id: budget.id
-                  }.to change(PublicActivity::Activity, :count).by(1)
+                expect{put :reset_annual_budget, group_id: budget.group.id, id: budget.id}
+                .to change(PublicActivity::Activity, :count).by(1)
               end
             end
 
@@ -476,9 +491,8 @@ RSpec.describe BudgetsController, type: :controller do
 
             it 'creates public activity record' do
               perform_enqueued_jobs do
-                expect{
-                  put :carry_over_annual_budget, group_id: budget.group.id, id: budget.id
-                  }.to change(PublicActivity::Activity, :count).by(1)
+                expect{put :carry_over_annual_budget, group_id: budget.group.id, id: budget.id}
+                .to change(PublicActivity::Activity, :count).by(1)
               end
             end
 
