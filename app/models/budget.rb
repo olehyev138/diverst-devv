@@ -91,10 +91,10 @@ class Budget < ActiveRecord::Base
   end
 
   def send_approval_notification
-    BudgetMailer.budget_approved(self).deliver_later
+    BudgetMailer.budget_approved(self).deliver_later if self.requester
   end
 
   def send_denial_notification
-    BudgetMailer.budget_declined(self).deliver_later
+    BudgetMailer.budget_declined(self).deliver_later if self.requester
   end
 end
