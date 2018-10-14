@@ -72,8 +72,8 @@ RSpec.feature 'User Management' do
 				set_custom_text_fields
 				visit edit_fields_enterprise_path(enterprise)
 			end
-
-			scenario 'revoke invitation', js: true, :skip => true do
+			
+			scenario 'revoke invitation', js: true do
 				visit users_path
 
 				click_on 'Add a user'
@@ -89,7 +89,7 @@ RSpec.feature 'User Management' do
 				expect(page).to have_no_content 'derek@diverst.com'
 			end
 
-			scenario 're-send invitation', js: true, :skip => true do
+			scenario 're-send invitation', js: true do
 				visit users_path
 
 				click_on 'Add a user'
