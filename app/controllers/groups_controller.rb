@@ -157,7 +157,7 @@ class GroupsController < ApplicationController
         authorize @group
 
         if group_params[:group_category_id].present?
-          @group.group_category_type_id = GroupCategory.find_by(id: params[:group][:group_category_id])&.group_category_type_id
+          @group.group_category_type_id = GroupCategory.find_by(id: group_params[:group_category_id])&.group_category_type_id
         end
 
         if @group.update(group_params)
