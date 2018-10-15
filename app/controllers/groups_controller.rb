@@ -47,7 +47,7 @@ class GroupsController < ApplicationController
     def calendar
         authorize Group
         enterprise = current_user.enterprise
-        @groups = enterprise.groups.all_parents
+        @groups = enterprise.groups
         @segments = enterprise.segments
         @q_form_submit_path = calendar_groups_path
         @q = Initiative.ransack(params[:q])
@@ -157,7 +157,7 @@ class GroupsController < ApplicationController
         authorize @group
 
         if group_params[:group_category_id].present?
-          @group.group_category_type_id = GroupCategory.find_by(id: params[:group][:group_category_id])&.group_category_type_id
+          @group.group_category_type_id = GroupCategory.find_by(id: group_params[:group_category_id])&.group_category_type_id
         end
 
         if @group.update(group_params)

@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
+    include ActiveJob::TestHelper
+
     let(:enterprise){ create(:enterprise) }
     let(:user){ create(:user, enterprise: enterprise) }
     let!(:folder){ create(:folder, :enterprise => enterprise) }
@@ -113,8 +115,10 @@ RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
                   enable_public_activity
 
                   it 'creates public activity record' do
-                    expect{post :create, enterprise_id: enterprise.id, folder_id: folder.id, resource: {title: "resource", file: file}}
-                    .to change(PublicActivity::Activity, :count).by(1)
+                    perform_enqueued_jobs do
+                      expect{post :create, enterprise_id: enterprise.id, folder_id: folder.id, resource: {title: "resource", file: file}}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
                   end
 
                   describe 'activity record' do
@@ -123,7 +127,9 @@ RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
                     let(:key) { 'resource.create' }
 
                     before {
-                      post :create, enterprise_id: enterprise.id, folder_id: folder.id, resource: {title: "resource", file: file}
+                      perform_enqueued_jobs do
+                        post :create, enterprise_id: enterprise.id, folder_id: folder.id, resource: {title: "resource", file: file}
+                      end
                     }
 
                     include_examples'correct public activity'
@@ -198,8 +204,10 @@ RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
                   enable_public_activity
 
                   it 'creates public activity record' do
-                    expect{patch :update, folder_id: folder.id, id: resource.id, enterprise_id: enterprise.id, resource: {title: "updated", file: file}}
-                    .to change(PublicActivity::Activity, :count).by(1)
+                    perform_enqueued_jobs do
+                      expect{patch :update, folder_id: folder.id, id: resource.id, enterprise_id: enterprise.id, resource: {title: "updated", file: file}}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
                   end
 
                   describe 'activity record' do
@@ -208,7 +216,9 @@ RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
                     let(:key) { 'resource.update' }
 
                     before {
-                      patch :update, folder_id: folder.id, id: resource.id, enterprise_id: enterprise.id, resource: {title: "updated", file: file}
+                      perform_enqueued_jobs do
+                        patch :update, folder_id: folder.id, id: resource.id, enterprise_id: enterprise.id, resource: {title: "updated", file: file}
+                      end
                     }
 
                     include_examples'correct public activity'
@@ -254,8 +264,10 @@ RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
               enable_public_activity
 
               it 'creates public activity record' do
-                expect{delete :destroy, :id => resource.id, enterprise_id: enterprise.id, folder_id: folder.id}
-                .to change(PublicActivity::Activity, :count).by(1)
+                perform_enqueued_jobs do
+                  expect{delete :destroy, :id => resource.id, enterprise_id: enterprise.id, folder_id: folder.id}
+                  .to change(PublicActivity::Activity, :count).by(1)
+                end
               end
 
               describe 'activity record' do
@@ -264,7 +276,9 @@ RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
                 let(:key) { 'resource.destroy' }
 
                 before {
-                  delete :destroy, :id => resource.id, enterprise_id: enterprise.id, folder_id: folder.id
+                  perform_enqueued_jobs do
+                    delete :destroy, :id => resource.id, enterprise_id: enterprise.id, folder_id: folder.id
+                  end
                 }
 
                 include_examples'correct public activity'
