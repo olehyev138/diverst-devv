@@ -53,7 +53,7 @@
 .block-section {
   cursor: pointer;
   padding: $spacing-medium 0;
-  border-bottom: 1px solid $diverst-border;
+  border-bottom: 1px;
 
   &:only-child {
     padding: 0;
