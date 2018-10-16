@@ -41,10 +41,6 @@ RSpec.describe GenericGraphsController, type: :controller do
                         expect(json_response[:highcharts][:series][0][:data][0][:name]).to eq group.name
                     end
 
-                    it 'returns correct information on categories', skip: "corresponding code has been commented out" do
-                        expect(json_response[:highcharts][:categories]).to eq [group.name]
-                    end
-
                     it 'return xAxisTitle to be ERG' do
                         expect(json_response[:highcharts][:xAxisTitle]).to eq 'ERG'
                     end
@@ -169,10 +165,6 @@ RSpec.describe GenericGraphsController, type: :controller do
 
                     it 'returns name of group' do
                         expect(json_response[:highcharts][:series][0][:data][0][:name]).to eq group.name
-                    end
-
-                    it 'returns correct information on categories', skip: "corresponding code has been commented out" do
-                        expect(json_response[:highcharts][:categories]).to eq [group.name]
                     end
 
                     it 'return xAxisTitle to be ERG' do
