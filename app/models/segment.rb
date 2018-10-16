@@ -31,14 +31,19 @@ class Segment < ActiveRecord::Base
     has_many :initiatives, through: :initiative_segments
 
     validates_presence_of :name
-
-    accepts_nested_attributes_for :rules, reject_if: :all_blank, allow_destroy: true
-
+    
     after_commit :update_indexes
 
     before_destroy :remove_parent_segment
 
     validates_presence_of :enterprise
+
+    accepts_nested_attributes_for :rules, reject_if: :segment_rule_values_is_nil, allow_destroy: true
+
+
+    def segment_rule_values_is_nil(attributes)
+        attributes['values'].nil? 
+    end
 
     def general_rules_followed_by?(user)
         case active_users_filter
