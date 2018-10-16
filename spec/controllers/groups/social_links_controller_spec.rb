@@ -1,10 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe Groups::SocialLinksController, type: :controller do
+    include ActiveJob::TestHelper
+    
     let(:enterprise) { create(:enterprise, enable_rewards: true) }
     let(:user) { create :user, enterprise: enterprise }
     let(:group) { create(:group, enterprise: user.enterprise) }
-
 
     describe 'GET#index' do
         before do
@@ -31,7 +32,6 @@ RSpec.describe Groups::SocialLinksController, type: :controller do
         end
     end
 
-
     describe 'GET #new' do
         def get_new(group_id)
             get :new, group_id: group_id
@@ -56,7 +56,6 @@ RSpec.describe Groups::SocialLinksController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'POST#create' do
         describe 'with logged in user' do
@@ -92,9 +91,11 @@ RSpec.describe Groups::SocialLinksController, type: :controller do
                     enable_public_activity
 
                     it 'creates public activity record' do
-                        expect{
-                        post :create, group_id: group.id, social_link: attributes_for(:social_link, :url => "https://twitter.com/realDonaldTrump/status/912848241535971331")
-                        }.to change(PublicActivity::Activity, :count).by(1)
+                        perform_enqueued_jobs do
+                            expect{
+                            post :create, group_id: group.id, social_link: attributes_for(:social_link, :url => "https://twitter.com/realDonaldTrump/status/912848241535971331")
+                            }.to change(PublicActivity::Activity, :count).by(1)
+                        end
                     end
 
                     describe 'activity record' do
@@ -103,7 +104,9 @@ RSpec.describe Groups::SocialLinksController, type: :controller do
                         let(:key) { 'social_link.create' }
 
                         before {
-                            post :create, group_id: group.id, social_link: attributes_for(:social_link, :url => "https://twitter.com/realDonaldTrump/status/912848241535971331")
+                            perform_enqueued_jobs do
+                                post :create, group_id: group.id, social_link: attributes_for(:social_link, :url => "https://twitter.com/realDonaldTrump/status/912848241535971331")
+                            end
                         }
 
                         include_examples'correct public activity'
@@ -138,7 +141,6 @@ RSpec.describe Groups::SocialLinksController, type: :controller do
         end
     end
 
-
     describe 'DELETE#destroy' do
         describe 'with user logged in' do
             login_user_from_let
@@ -162,9 +164,11 @@ RSpec.describe Groups::SocialLinksController, type: :controller do
                     enable_public_activity
 
                     it 'creates public activity record' do
-                        expect{
-                        delete :destroy, group_id: group.id, id: social_link.id
-                        }.to change(PublicActivity::Activity, :count).by(1)
+                        perform_enqueued_jobs do
+                            expect{
+                            delete :destroy, group_id: group.id, id: social_link.id
+                            }.to change(PublicActivity::Activity, :count).by(1)
+                        end
                     end
 
                     describe 'activity record' do
@@ -173,7 +177,9 @@ RSpec.describe Groups::SocialLinksController, type: :controller do
                         let(:key) { 'social_link.destroy' }
 
                         before {
-                            delete :destroy, group_id: group.id, id: social_link.id
+                            perform_enqueued_jobs do
+                                delete :destroy, group_id: group.id, id: social_link.id
+                            end
                         }
 
                         include_examples'correct public activity'

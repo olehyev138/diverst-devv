@@ -1,25 +1,27 @@
 <div class="content__header">
-  <h1>Add users to a group via CSV</h1>
+  <h1>Import users through CSV</h1>
 </div>
 
 <div class="content__main">
   <div class="card">
     <div class="card__section">
-      
-      <% if @successful_rows %>
-        <h3>Successful Rows</h3>
-        <ul>
-          <% @successful_rows.each do |row| %>
-            <li><%= row %></li>
+      <% if @success %>
+        <h3>Successful</h3>
+        <p>
+          File is being processed.
+          <% if @email.present? %>
+            <b><%= "#{@email}" %></b> will receive an email once upload is done.
+          <% else %>
+            <b>Contact Diverst tech support to set up your report email</b>
           <% end %>
-        </ul>
-      <% end %>
-      
-      <% if @failed_rows %>
-        <h3>Unsuccessful Rows</h3>
+        </p>
+      <% else %>
+        <h3>Unsuccessful</h3>
+        There was an error trying to process file provided:
+        <br>
         <ul>
-          <% @failed_rows.each do |row| %>
-            <li><%= row[:error] %> - <%= row[:row] %></li>
+          <% @errors.each do |e| %>
+            <li><%= e %></li>
           <% end %>
         </ul>
       <% end %>
