@@ -1,8 +1,14 @@
 <div class="card__section">
   <%= render 'public_activity/shared/owner', activity: activity %>
-  created folder
-  <% if activity.trackable %>
-    <%= link_to activity.trackable.name, group_folder_resources_path(:folder_id => activity.trackable.id, :group_id => activity.trackable.group.id) %>
+  created
+  <% if resource = activity.trackable %>
+    <% if resource.enterprise %>
+      enterprise folder
+      <%= link_to resource.name, enterprise_folders_path(enterprise_id: resource.enterprise.id) %>
+    <% else %>
+      group folder
+      <%= link_to resource.name, group_folders_path(group_id: resource.group.id) %>
+    <% end %>
   <% else %>
     which has since been removed
   <% end %>
