@@ -103,7 +103,7 @@ module ApplicationHelper
     return integrations_path if current_user.policy_group.sso_manage?
     return rewards_path if current_user.policy_group.diversity_manage?
     return logs_path if current_user.policy_group.logs_view?
-    return edit_pending_comments_enterprise_path(current_user.enterprise) if current_user.policy_group.manage_posts?
+    return edit_posts_enterprise_path(current_user.enterprise) if current_user.policy_group.manage_posts?
     nil
   end
 
@@ -124,7 +124,7 @@ module ApplicationHelper
 
   def c_t(type)
     @custom_text ||= current_user.enterprise.custom_text rescue CustomText.new
-  
+
     @custom_text.send("#{ type }_text")
   end
 
