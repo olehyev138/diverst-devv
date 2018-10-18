@@ -37,7 +37,7 @@ class BudgetsController < ApplicationController
   end
 
   def approve
-    authorize [@group], :update?, :policy_class => GroupBudgetPolicy
+    authorize [@group], :approve?, :policy_class => GroupBudgetPolicy
     if @budget.update(budget_params)
       BudgetManager.new(@budget).approve(current_user)
       track_activity(@budget, :approve)
@@ -48,7 +48,7 @@ class BudgetsController < ApplicationController
   end
 
   def decline
-    authorize [@group], :update?, :policy_class => GroupBudgetPolicy
+    authorize [@group], :approve?, :policy_class => GroupBudgetPolicy
 
     @budget.decline_reason = params[:decline_reason]
     @budget.save
@@ -72,7 +72,7 @@ class BudgetsController < ApplicationController
   end
 
   def export_csv
-    authorize @group, :request_budget?
+    authorize [@group], :index?, :policy_class => GroupBudgetPolicy
 
     result =
       CSV.generate do |csv|

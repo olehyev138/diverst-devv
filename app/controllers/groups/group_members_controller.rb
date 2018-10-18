@@ -154,7 +154,7 @@ class Groups::GroupMembersController < ApplicationController
   end
 
   def leave_sub_group
-    authorize current_user, :join_or_leave_groups?
+    authorize [@group], :destroy?, :policy_class => GroupMemberPolicy
     @group.user_groups.find_by(user_id: current_user.id).destroy
     respond_to do |format|
       format.html { redirect_to :back }
@@ -163,7 +163,7 @@ class Groups::GroupMembersController < ApplicationController
   end
 
   def export_group_members_list_csv
-    authorize @group, :manage_members?
+    authorize [@group], :update?, :policy_class => GroupMemberPolicy
     GroupMemberListDownloadJob.perform_later(current_user.id, @group.id)
     flash[:notice] = "Please check your email in a couple minutes"
     redirect_to :back

@@ -19,8 +19,7 @@ class GroupsController < ApplicationController
     end
     
     def close_budgets_export_csv
-      authorize Group, :close_budgets?
-      user_not_authorized if not current_user.policy_group.annual_budget_manage?
+      authorize Group, :manage_all_group_budgets?
 
       result =
         CSV.generate do |csv|

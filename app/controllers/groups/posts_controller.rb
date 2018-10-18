@@ -8,7 +8,7 @@ class Groups::PostsController < ApplicationController
 
     def index
         if policy(@group).manage?
-                @count = NewsFeed.all_links_without_segments(@group.news_feed.id)
+                @count = NewsFeed.all_links_without_segments(@group.news_feed.id).count
 
                 @posts = NewsFeed.all_links_without_segments(@group.news_feed.id)
                                 .order(is_pinned: :desc, created_at: :desc)

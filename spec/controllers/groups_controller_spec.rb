@@ -153,15 +153,6 @@ RSpec.describe GroupsController, type: :controller do
       it 'shows groups from correct enterprise' do
         expect(assigns(:group)).to eq group
       end
-
-      context "display groups belonging to current user enterprise" do
-        before { group; different_group }
-
-        it 'returns 1 group' do 
-          get :plan_overview
-          expect(assigns[:groups].count).to eq 1
-        end
-      end
     end
 
     context 'without logged user' do
