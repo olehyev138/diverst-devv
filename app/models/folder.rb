@@ -32,5 +32,4 @@ class Folder < ActiveRecord::Base
   def valid_password?(user_password)
     return authenticate(user_password)
   end
-
 end

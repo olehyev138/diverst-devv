@@ -5,6 +5,7 @@ class User::NewsLinksController < ApplicationController
   layout 'user'
 
   def index
+    authorize NewsLink
     @count = posts.count
     @posts = posts.limit(@limit)
   end

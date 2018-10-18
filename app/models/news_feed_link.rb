@@ -28,7 +28,7 @@ class NewsFeedLink < ActiveRecord::Base
     # group leader
     def approve_link
       return if link.nil?
-      if GroupPolicy.new(link.author, link.group).erg_leader_permissions?
+      if GroupPostsPolicy.new(link.author, [link.group]).update?
           self.approved = true
           self.save!
       end

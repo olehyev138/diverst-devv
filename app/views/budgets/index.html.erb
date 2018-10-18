@@ -1,6 +1,6 @@
 <div class="content__header">
   <h1><%= @group.name%> budgets</h1>
-  <%= link_to "New Budget Request", new_group_budget_path(@group), class: "btn btn--primary" if policy(@group).request_budget? %>
+  <%= link_to "New Budget Request", new_group_budget_path(@group), class: "btn btn--primary" if GroupBudgetPolicy.new(current_user, [@group]).create? %>
 </div>
 
 <div class="content__main">

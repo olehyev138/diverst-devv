@@ -4,7 +4,7 @@ class OutcomesController < ApplicationController
   before_action :set_outcome, only: [:edit, :update, :destroy, :show]
   after_action :verify_authorized
 
-  layout 'plan'
+  layout 'erg'
 
   def index
     authorize Outcome

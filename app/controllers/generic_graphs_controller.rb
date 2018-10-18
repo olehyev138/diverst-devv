@@ -1,8 +1,9 @@
 class GenericGraphsController < ApplicationController
     include ActionView::Helpers::JavaScriptHelper
 
-    before_action :authenticate_user!
-
+    before_action   :authenticate_user!
+    before_action   :authorize_dashboards
+    
     def group_population
         data = current_user.enterprise.groups.all_parents.map { |g|
             {
@@ -296,5 +297,9 @@ class GenericGraphsController < ApplicationController
                 send_data report.to_csv, filename: "mentoring_interests.csv"
             }
         end
+    end
+    
+    def authorize_dashboards
+        authorize MetricsDashboard, :index?
     end
 end

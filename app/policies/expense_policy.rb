@@ -1,17 +1,21 @@
-class ExpensePolicy < ApplicationPolicy
-  def index?
-    @policy_group.campaigns_manage?
-  end
-
-  def create?
-    @policy_group.campaigns_manage?
-  end
-
-  def update?
-    return true if @policy_group.campaigns_manage?
-  end
-
-  def destroy?
-    return true if @policy_group.campaigns_manage?
-  end
+class ExpensePolicy < CampaignPolicy
+    
+    def update?
+        return false unless collaborate_module_enabled?
+        manage?
+    end
+  
+    class Scope < Scope
+        def index?
+            ExpensePolicy.new(user, nil).index?
+        end
+    
+        def resolve
+            if index?
+                scope.where(:enterprise_id => user.enterprise_id)
+            else
+                []
+            end
+        end
+    end
 end

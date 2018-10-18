@@ -7,7 +7,7 @@ class Groups::PostsController < ApplicationController
     layout 'erg'
 
     def index
-        if policy(@group).erg_leader_permissions?
+        if policy(@group).manage?
                 @count = base_query
                                 .includes(:news_link, :group_message, :social_link)
                                 .order(created_at: :desc)

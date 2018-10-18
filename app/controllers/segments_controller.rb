@@ -1,7 +1,7 @@
 class SegmentsController < ApplicationController
-    before_action :set_segment, only: [:edit, :update, :destroy, :show, :export_csv]
-    skip_before_action :verify_authenticity_token, only: [:create]
+    before_action :authenticate_user!
     after_action :verify_authorized
+    before_action :set_segment, only: [:edit, :show, :export_csv, :update, :destroy]
 
     layout 'erg_manager'
 
@@ -84,7 +84,7 @@ class SegmentsController < ApplicationController
 
     def export_csv
         authorize @segment, :show?
-
+        
         if group = current_user.enterprise.groups.find_by_id(params[:group_id])
             users_ids = segment_members_of_group(@segment, group).map { |user| user.id }
 
@@ -106,7 +106,7 @@ class SegmentsController < ApplicationController
     end
 
     def set_segment
-        current_user ? @segment = current_user.enterprise.segments.find(params[:id]) : user_not_authorized
+        @segment = current_user.enterprise.segments.find(params[:id])
     end
 
     def segment_params

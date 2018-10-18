@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe CampaignsController, type: :controller do
-    let(:enterprise){ create(:enterprise) }
+    let(:enterprise){ create(:enterprise, :collaborate_module_enabled => true) }
     let(:user){ create(:user, enterprise: enterprise) }
     let!(:campaign){ create(:campaign, enterprise: enterprise) }
 

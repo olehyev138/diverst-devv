@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
     let(:enterprise){ create(:enterprise) }
     let(:user){ create(:user, enterprise: enterprise) }
-    let!(:folder){ create(:folder, :enterprise => enterprise) }
+    let!(:folder){ create(:folder, :enterprise => enterprise, :group => nil) }
     let!(:resource){ create(:resource, title: "title", folder: folder, file: fixture_file_upload('files/test.csv', 'text/csv')) }
 
     describe "GET#index" do

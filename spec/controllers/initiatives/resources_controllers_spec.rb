@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Initiatives::ResourcesController, type: :controller do
+RSpec.describe Initiatives::ResourcesController, type: :controller, :skip => "THIS CODE IS NOT EVEN USED" do
     let(:enterprise){ create(:enterprise) }
     let(:initiative){ build(:initiative) }
     let(:pillar){ create(:pillar, initiatives: [initiative]) }
@@ -192,7 +192,7 @@ RSpec.describe Initiatives::ResourcesController, type: :controller do
         end
     end
     
-    describe "DELET#destroy" do
+    describe "DELETE#destroy" do
         let(:resource){ create(:resource, initiative: initiative) }
 
         context "with logged user" do

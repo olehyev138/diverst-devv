@@ -1,12 +1,16 @@
 <div class="content__header">
   <h1>Users</h1>
   <div class="flex-row flex-row--middle">
-    <div class="flex-row__cell">
-      <%= link_to "Export CSV", export_csv_users_path, class: "btn btn--secondary hidden-xs", role: "button", 'aria-label': "Export CSV" %>
-    </div>
-    <div class="flex-row__cell">
-      <%= link_to "Import CSV", import_csv_users_path, class: "btn btn--secondary hidden-xs", role: "button", 'aria-label': "Import CSV" %>
-    </div>
+    <% if policy(User).create? %>
+      <div class="flex-row__cell">
+        <%= link_to "Export CSV", export_csv_users_path, class: "btn btn--secondary hidden-xs", role: "button", 'aria-label': "Export CSV" %>
+      </div>
+    <% end %>
+     <% if policy(User).create? %>
+      <div class="flex-row__cell">
+        <%= link_to "Import CSV", import_csv_users_path, class: "btn btn--secondary hidden-xs", role: "button", 'aria-label': "Import CSV" %>
+      </div>
+    <% end %>
     <% if policy(User).create? %>
       <div class="flex-row__cell">
         <%= link_to "Add a user", new_user_invitation_path, class: "btn btn--primary" %>

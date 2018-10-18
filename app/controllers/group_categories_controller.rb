@@ -6,20 +6,20 @@ class GroupCategoriesController < ApplicationController
   layout :resolve_layout
 
   def index
-    authorize Group
+    authorize Group, :manage_all_groups?
 
     @parent = Group.find(params[:parent_id].to_i)
     @categories = current_user.enterprise.group_categories
   end
 
   def new
-  	authorize Group
+  	authorize Group, :manage_all_groups?
     @parent = Group.find(params[:parent_id].to_i) if !params[:parent_id].to_i.zero?
     @group_category_type = current_user.enterprise.group_category_types.new
   end
 
   def create
-    authorize Group
+    authorize Group, :manage_all_groups?
 
     @group_category_type = current_user.enterprise.group_category_types.new(category_type_params)
     @parent = Group.find(params[:group_category_type][:parent_id].to_i) if !params[:group_category_type][:parent_id].to_i.zero?
@@ -39,12 +39,12 @@ class GroupCategoriesController < ApplicationController
   end
 
   def edit
-    authorize Group
+    authorize Group, :manage_all_groups?
   end
 
 
   def update
-    authorize Group
+    authorize Group, :manage_all_groups?
 
     if @category.update(category_params)
       flash[:notice] = "Update category name"
@@ -56,7 +56,7 @@ class GroupCategoriesController < ApplicationController
   end
 
   def destroy
-    authorize Group
+    authorize Group, :manage_all_groups?
 
     @category.destroy
     flash[:notice] = "Category successfully removed."
@@ -64,7 +64,7 @@ class GroupCategoriesController < ApplicationController
   end
 
   def update_all_sub_groups
-    authorize Group
+    authorize Group, :manage_all_groups?
 
     if all_incoming_labels_are_none?
       categorize_sub_groups
@@ -83,7 +83,7 @@ class GroupCategoriesController < ApplicationController
   end
 
   def view_all
-    authorize Group
+    authorize Group, :manage_all_groups?
     @categories = current_user.enterprise.group_categories
     @category_types = current_user.enterprise.group_category_types
   end

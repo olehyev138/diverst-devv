@@ -1,26 +1,30 @@
 class InitiativePolicy < ApplicationPolicy
+  
   def index?
+    return true if create?
     @policy_group.initiatives_index?
   end
 
   def show?
-    return true if @user.erg_leader?
-    return true if @policy_group.initiatives_manage?
-    return true if !(@record.group_ids && @user.groups.pluck(:id)).empty?
+    index?
   end
 
   def create?
+    return true if @policy_group.initiatives_manage?
     @policy_group.initiatives_create?
+  end
+  
+  def manage?
+    @policy_group.initiatives_manage?
   end
 
   def update?
-    return true if @policy_group.initiatives_manage?
+    return true if manage?
     @record.owner == @user
   end
 
   def destroy?
-    return true if @policy_group.initiatives_manage?
-    @record.owner == @user
+    update?
   end
 
   def show_calendar?
@@ -57,7 +61,6 @@ class InitiativePolicy < ApplicationPolicy
     @past_events = @record.group.initiatives.past
     ((@past_events.include? @record) || user_is_guest_and_event_is_upcoming? || user_is_guest_and_event_is_onging?) ? false : true
   end
-
 
   def add_calendar_visibility?
     join_leave_button_visibility?

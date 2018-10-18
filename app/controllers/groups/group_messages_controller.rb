@@ -25,7 +25,7 @@ class Groups::GroupMessagesController < ApplicationController
     end
 
     def edit
-        authorize @message, :update?
+        authorize [@group, @message], :update?, :policy_class => GroupMessagePolicy
     end
 
     def create
@@ -43,7 +43,7 @@ class Groups::GroupMessagesController < ApplicationController
     end
 
     def update
-        authorize @message, :update?
+        authorize [@group, @message], :update?, :policy_class => GroupMessagePolicy
         if @message.update(message_params)
             redirect_to group_posts_path(@group)
         else

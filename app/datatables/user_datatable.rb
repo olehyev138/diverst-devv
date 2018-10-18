@@ -7,6 +7,7 @@ class UserDatatable < AjaxDatatablesRails::Base
   def initialize(view_context, users)
     super(view_context)
     @users = users
+    @user = view_context.current_user
   end
 
   def sortable_columns
@@ -21,13 +22,22 @@ class UserDatatable < AjaxDatatablesRails::Base
 
   def data
     records.map do |record|
-      [
-        html_escape(record.first_name),
-        html_escape(record.last_name),
-        html_escape(record.email),
-        "#{link_to('Details', user_path(record))} - \
-        #{link_to('Remove', user_path(record), class: 'error', data: { confirm: "Are you sure?" }, method: :delete)}"
-      ]
+      if UserPolicy.new(@user, record).update?
+        [
+          html_escape(record.first_name),
+          html_escape(record.last_name),
+          html_escape(record.email),
+          "#{link_to('Details', user_path(record))} - \
+          #{link_to('Remove', user_path(record), class: 'error', data: { confirm: "Are you sure?" }, method: :delete)}"
+        ]
+      else
+        [
+          html_escape(record.first_name),
+          html_escape(record.last_name),
+          html_escape(record.email),
+          "#{link_to('Details', user_path(record))}"
+        ]
+      end
     end
   end
 

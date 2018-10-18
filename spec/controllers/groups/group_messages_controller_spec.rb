@@ -5,7 +5,6 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
     let(:group){ create(:group, enterprise: user.enterprise) }
     let(:group_message){ create(:group_message, group: group, subject: "Test", owner: user, created_at: Time.now) }
 
-
     describe 'GET#index' do
         context 'when user is logged in' do
             login_user_from_let
@@ -30,7 +29,6 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'GET#show' do
         context 'when user is logged in' do
@@ -57,7 +55,6 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
         end
     end
 
-
     describe 'GET#new' do
         context 'when user is logged in' do
             login_user_from_let
@@ -79,7 +76,6 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
         end
     end
 
-
     describe 'GET#edit' do
         context 'when users is logged in' do
             login_user_from_let
@@ -99,7 +95,6 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'POST#create' do
         describe 'when user is logged in' do
@@ -162,7 +157,6 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
         end
     end
 
-
     describe 'PATCH#update' do
         describe 'when user is logged in' do
             login_user_from_let
@@ -222,7 +216,6 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
         end
     end
 
-
     describe 'DELETE#destroy' do
         let!(:group_message){ create(:group_message, group: group) }
         let!(:reward_action){ create(:reward_action, enterprise: user.enterprise, key: "message_post", points: 90) }
@@ -265,7 +258,6 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'POST#create_comment' do
         describe 'when user is logged in' do

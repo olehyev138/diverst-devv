@@ -9,9 +9,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails', '~> 4.1', '>= 4.1.1'
 gem 'turbolinks', '~> 2.5', '>= 2.5.3'
 gem 'sdoc', '~> 0.4.0', group: :doc # bundle exec rake doc:rails generates the API under doc/api.
-
 gem 'nokogiri', '~> 1.8.2' # need to specify this explicitly, old version has exploit
-
 gem 'puma', '~> 3.1' # Better web server than WEBRick
 gem 'figaro', '~> 1.1', '>= 1.1.1' # Inject ENV from application.yml
 gem 'devise', '~> 3.5', '>= 3.5.6' # Authentication
@@ -55,8 +53,8 @@ gem 'omniauth-linkedin-oauth2', '~> 0.1.5' # OAuth for LinkedIn
 gem 'omniauth-oauth2', '1.3.1' # Temporary fix to address: https://github.com/decioferreira/omniauth-linkedin-oauth2/issues/28
 gem 'activerecord-import', '~> 0.12.0' # Adds a faster way to INSERT multiple rows in the DB
 gem 'inline_svg', '~> 0.6.2' # Extract SVG files' content into the HTML
-gem 'pundit', '~> 1.1' # Authorization
-gem 'draper', '~> 2.1' # Decorators for views
+gem 'pundit', "~> 2.0.0"# Authorization
+gem 'draper', '~> 2.1'# Decorators for views
 gem 'daemons', '~> 1.2', '>= 1.2.3' # For capistrano-clockwork
 gem 'icalendar', '~> 2.3' # For exporting events to your calendar
 gem 'simple_form_fancy_uploads', git: "https://github.com/TeamDiverst/simple_form_fancy_uploads.git", branch: "paperclip_version"
@@ -66,13 +64,9 @@ gem 'twilio-ruby', '~> 5.10.0'
 gem 'mailgun_rails', '~> 0.8.0'
 gem 'enumerize', '~> 2.0'
 gem 'jbuilder', '~> 2.6'
-
 gem 'public_activity', '~> 1.5'
-
 gem 'rollbar', '~> 2.14.1'
-
 gem 'ruby-oembed', '~> 0.12', git: 'https://github.com/TeamDiverst/ruby-oembed.git'
-
 gem 'julia_builder', '~> 0.2.0'
 gem 'date_validator', '~> 0.9.0'
 gem "thor", "0.19.1"# Expected string default value for '--decorator'; got true (boolean) - setting version removes this message
@@ -96,7 +90,7 @@ group :development, :test do
   gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
   gem 'timecop', '~> 0.8.1'
   gem 'byebug' # Debugger
-  gem 'pundit-matchers', '~> 1.3.1'
+  gem 'pundit-matchers', "~> 1.6.0"
 end
 
 group :test do

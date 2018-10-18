@@ -13,12 +13,7 @@ module AdminViewHelper
   end
 
   def active_plan_link?
-    return true if controller_name == 'groups' &&
-      ['edit_fields', 'plan_overview', 'metrics', 'budgets', 'request_budget', 'view_budget', 'close_budgets'].include?(action_name)
-
-    return true if params[:controller] == 'initiatives/resources'
-
-    ['initiatives', 'outcomes', 'updates'].include? controller_name
+    return true if controller_name == 'groups' && ['close_budgets'].include?(action_name)
   end
 
   def active_global_settings_link?

@@ -36,6 +36,10 @@ class ApplicationPolicy
   def destroy?
     scope.where(:id => record.id).exists?
   end
+  
+  def manage_all?
+    @policy_group.manage_all?
+  end
 
   def scope
     Pundit.policy_scope!(user, record.class)

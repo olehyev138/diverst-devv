@@ -8,6 +8,7 @@ class GroupMemberDatatable < AjaxDatatablesRails::Base
     super(view_context)
     @group = group
     @members = members
+    @user = view_context.current_user
   end
 
   def sortable_columns
@@ -33,7 +34,7 @@ class GroupMemberDatatable < AjaxDatatablesRails::Base
   end
 
   def generate_destroy_link(record)
-    if policy(@group).manage_members?
+    if GroupMemberPolicy.new(@user, [@group, record]).destroy?
       link_to 'Remove From Group', remove_member_group_group_member_path(@group, record),
         method: :delete, class: "error", data: { confirm: "Are you sure?" }
     else

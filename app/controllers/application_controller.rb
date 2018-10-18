@@ -10,7 +10,9 @@ class ApplicationController < ActionController::Base
     # For APIs, you may want to use :null_session instead.
     protect_from_forgery with: :exception
 
-    rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+    rescue_from Pundit::NotAuthorizedError do |e|
+        user_not_authorized
+    end
 
     rescue_from ActionController::UnknownFormat do |e|
         render :status => 400, :json => {error: e.message}
@@ -19,55 +21,77 @@ class ApplicationController < ActionController::Base
     rescue_from ActionView::MissingTemplate do |e|
         flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
         flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
-        redirect_to(request.referrer || default_path)
+        redirect_on_error
     end
     
     rescue_from ActionView::Template::Error do |e|
         flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
         flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
-        redirect_to(request.referrer || default_path)
+        redirect_on_error
+    end
+    
+    rescue_from Pundit::AuthorizationNotPerformedError do |e|
+        flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
+        flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
+        redirect_on_error
     end
     
     rescue_from ActionController::BadRequest do |e|
         flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
         flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
-        redirect_to(request.referrer || default_path)
+        redirect_on_error
     end
     
     rescue_from ActiveRecord::RecordInvalid do |e|
         flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
         flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
-        redirect_to(request.referrer || default_path)
+        redirect_on_error
     end
     
     rescue_from BadRequestException do |e|
         flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
         flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
-        redirect_to(request.referrer || default_path)
+        redirect_on_error
+    end
+    
+    rescue_from Pundit::NotDefinedError  do |e|
+        flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
+        flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
+        redirect_on_error
     end
 
     rescue_from ActionController::RoutingError do |e|
         flash[:alert] = e.message
-        redirect_to(request.referrer || default_path)
+        redirect_on_error
     end
 
     rescue_from ActiveRecord::RecordNotFound do |e|
         flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
         flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
-        redirect_to(request.referrer || default_path)
+        redirect_on_error
     end
 
     rescue_from ActiveRecord::StatementInvalid do |e|
         flash[:alert] = e.message
-        redirect_to(request.referrer || default_path)
+        redirect_on_error
     end
 
     rescue_from ActionController::ParameterMissing do |e|
         flash[:alert] = e.message
-        redirect_to(request.referrer || default_path)
+        redirect_on_error
     end
 
     around_action :user_time_zone, if: :current_user
+    
+    def redirect_on_error
+        if user_signed_in?
+            redirect_to(request.referrer || default_path)
+            return
+        else
+            unauth_user_redirect_destination
+            return
+        end
+    end
 
     def c_t(type)
         @custom_text ||= current_user.enterprise.custom_text rescue CustomText.new
@@ -175,6 +199,6 @@ class ApplicationController < ActionController::Base
             end
         end
 
-        new_user_session_path
+        return new_user_session_path
     end
 end
