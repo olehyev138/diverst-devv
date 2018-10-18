@@ -14,10 +14,12 @@ class Groups::AttendancesController < ApplicationController
 
   def create
     return head(204) if @attendance
-    @event.initiative_users.create(user: current_user)
-    user_rewarder("attend_event").add_points(@event)
-    flash_reward "Now you have #{ current_user.credits } points"
-    render "partials/flash_messages.js"
+    unless @event.full?
+      @event.initiative_users.create(user: current_user)
+      user_rewarder("attend_event").add_points(@event)
+      flash_reward "Now you have #{ current_user.credits } points"
+      render "partials/flash_messages.js"
+    end
   end
 
   def destroy

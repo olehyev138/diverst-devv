@@ -28,6 +28,7 @@ class BudgetsController < ApplicationController
 
     if @group.save
       flash[:notice] = "Your budget was created"
+      track_activity(@budget, :create)
       redirect_to action: :index
     else
       flash[:alert] = "Your budget was not created. Please fix the errors"
@@ -39,6 +40,7 @@ class BudgetsController < ApplicationController
     authorize [@group], :update?, :policy_class => GroupBudgetPolicy
     if @budget.update(budget_params)
       BudgetManager.new(@budget).approve(current_user)
+      track_activity(@budget, :approve)
       redirect_to action: :index
     else
       redirect_to :back
@@ -52,6 +54,7 @@ class BudgetsController < ApplicationController
     @budget.save
 
     BudgetManager.new(@budget).decline(current_user)
+    track_activity(@budget, :decline)
 
     redirect_to action: :index
   end
@@ -59,12 +62,26 @@ class BudgetsController < ApplicationController
   def destroy
     authorize [@group], :destroy?, :policy_class => GroupBudgetPolicy
     if @budget.destroy
+      track_activity(@budget, :destroy)
       flash[:notice] = "Your budget was deleted"
       redirect_to action: :index
     else
       flash[:alert] = "Your budget was not deleted. Please fix the errors"
       redirect_to :back
     end
+  end
+
+  def export_csv
+    authorize @group, :request_budget?
+
+    result =
+      CSV.generate do |csv|
+        csv << ['Requested amount', 'Available amount', 'Status', 'Requested at', '# of events', 'Description']
+         @group.budgets.order(created_at: :desc).each do |budget|
+          csv << [budget.requested_amount, budget.available_amount, budget.status_title, budget.created_at, budget.budget_items.count, budget.description]
+        end
+      end
+    send_data result, filename: @group.file_safe_name.downcase + '_budgets.csv'
   end
 
   def edit_annual_budget

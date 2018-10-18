@@ -42,7 +42,6 @@ class Groups::GroupMembersController < ApplicationController
   def destroy
     authorize [@group, @member], :destroy?, :policy_class => GroupMemberPolicy
     @group.user_groups.find_by(user_id: @member.id).destroy
-    options_to_leave_sub_groups_or_parent_group_service
     redirect_to group_path(@group)
   end
 
@@ -53,9 +52,11 @@ class Groups::GroupMembersController < ApplicationController
 
     if @group_member.save
       flash[:notice] = "You are now a member"
-
+      
+      if @group.default_mentor_group?
+        redirect_to edit_user_mentorship_url(:id => current_user.id)
       # If group has survey questions - redirect user to answer them
-      if @group.survey_fields.present?
+      elsif @group.survey_fields.present?
         respond_to do |format|
           format.html { redirect_to survey_group_questions_path(@group) }
           format.js
@@ -68,10 +69,10 @@ class Groups::GroupMembersController < ApplicationController
       end
     else
       flash[:notice] = "The member was not created. Please fix the errors"
-        respond_to do |format|
-          format.html { render :new }
-          format.js
-        end
+      respond_to do |format|
+        format.html { render :new }
+        format.js
+      end
     end
   end
 
@@ -150,14 +151,22 @@ class Groups::GroupMembersController < ApplicationController
       end
     end
 
-    def leave_sub_group
-      authorize current_user, :join_or_leave_groups?
-      @group.user_groups.find_by(user_id: current_user.id).destroy
-      respond_to do |format|
-        format.html { redirect_to :back }
-        format.js
-      end
+  end
+
+  def leave_sub_group
+    authorize current_user, :join_or_leave_groups?
+    @group.user_groups.find_by(user_id: current_user.id).destroy
+    respond_to do |format|
+      format.html { redirect_to :back }
+      format.js
     end
+  end
+
+  def export_group_members_list_csv
+    authorize @group, :manage_members?
+    GroupMemberListDownloadJob.perform_later(current_user.id, @group.id)
+    flash[:notice] = "Please check your email in a couple minutes"
+    redirect_to :back
   end
 
   protected
@@ -173,13 +182,13 @@ class Groups::GroupMembersController < ApplicationController
   def group_member_params
     params.require(:user).permit(
       :user_id
-    )
+      )
   end
 
   def add_members_params
     params.require(:group).permit(
       member_ids: []
-    )
+      )
   end
 
   private

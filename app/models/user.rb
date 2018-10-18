@@ -10,6 +10,9 @@ class User < ActiveRecord::Base
 
     @@fb_token_generator = Firebase::FirebaseTokenGenerator.new(ENV['FIREBASE_SECRET'].to_s)
 
+    enum groups_notifications_frequency: [:hourly, :daily, :weekly, :disabled]
+    enum groups_notifications_date: [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]
+
     scope :active,              -> { where(active: true).distinct }
     scope :enterprise_mentors,  -> ( user_ids = []) { where(mentor: true).where.not(:id => user_ids) }
     scope :enterprise_mentees,  -> ( user_ids = []) { where(mentee: true).where.not(:id => user_ids) }
@@ -39,8 +42,8 @@ class User < ActiveRecord::Base
 	has_many :mentoring_types, :through => :mentorship_types
 
     # mentorship_requests
-    has_many :mentorship_requests,  :foreign_key => "sender_id",     :class_name => "MentoringRequest"
-    has_many :mentorship_proposals, :foreign_key => "receiver_id",   :class_name => "MentoringRequest"
+    has_many :mentorship_proposals, :foreign_key => "sender_id",     :class_name => "MentoringRequest"
+    has_many :mentorship_requests,  :foreign_key => "receiver_id",   :class_name => "MentoringRequest"
 
     has_many :devices, dependent: :destroy
     has_many :users_segments, dependent: :destroy
@@ -69,7 +72,6 @@ class User < ActiveRecord::Base
     has_many :event_invitees, dependent: :destroy
     has_many :invited_events, through: :event_invitees, source: :event
     has_many :managed_groups, foreign_key: :manager_id, class_name: 'Group'
-    has_many :samples, dependent: :destroy
     has_many :biases, class_name: "Bias"
     has_many :group_leaders, :dependent => :destroy
     has_many :leading_groups, through: :group_leaders, source: :group
@@ -94,12 +96,14 @@ class User < ActiveRecord::Base
     before_validation :generate_password_if_saml
     before_validation :set_provider
     before_validation :set_uid
+    before_destroy :check_lifespan_of_user
 
     after_create :assign_firebase_token
     after_create :set_default_policy_group
-    
     after_save  :set_default_policy_group, if: :user_role_id_changed?
     accepts_nested_attributes_for :policy_group
+    
+    after_update :add_to_default_mentor_group
     
     after_commit on: [:create] { update_elasticsearch_index(self, self.enterprise, 'index') }
     after_commit on: [:update] { update_elasticsearch_index(self, self.enterprise, 'update') }
@@ -116,6 +120,12 @@ class User < ActiveRecord::Base
     scope :mentees, -> {where(mentee: true)}
     
     accepts_nested_attributes_for :availabilities, :allow_destroy => true
+    
+    def add_to_default_mentor_group
+        if mentor_changed? || mentee_changed?
+            DefaultMentorGroupMemberUpdateJob.perform_later(id, mentor, mentee)
+        end
+    end
     
     def is_group_leader_of?(group)
         group.group_leaders.where(user_id: self.id).any?
@@ -385,6 +395,19 @@ class User < ActiveRecord::Base
         end
     end
 
+    # Export a CSV with the specified users
+    def self.basic_info_to_csv(users:, nb_rows: nil)
+      CSV.generate do |csv|
+        csv << ['First name', 'Last name', 'Email']
+
+        users.order(created_at: :desc).limit(nb_rows).each do |user|
+            user_columns = [user.first_name, user.last_name, user.email]
+
+            csv << user_columns
+        end
+      end
+    end
+
     def group_member?(group_id)
         user_group = user_groups.where(group_id: group_id).first
         user_group.present?
@@ -469,6 +492,11 @@ class User < ActiveRecord::Base
     end
 
     private
+
+    def check_lifespan_of_user
+        # deletes users 13 days or younger
+        DateTime.now.days_ago(14) < self.created_at
+    end
 
     def validate_presence_fields
         enterprise.try(:fields).to_a.each do |field|

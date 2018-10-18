@@ -6,6 +6,21 @@ RSpec.describe UserGroup do
 
     it { expect(user_group).to belong_to(:user) }
     it { expect(user_group).to belong_to(:group) }
+    
+    it "validates 1 user per group" do
+      group_member = create(:user)
+      group = create(:group)
+      group_member_1 = create(:user_group, :user => group_member, :group => group)
+      group_member_2 = build(:user_group, :user => group_member, :group => group)
+      
+      expect(group_member.valid?).to be(true)
+      expect(group.valid?).to be(true)
+      expect(group_member_1.valid?).to be(true)
+      
+      # ensure the user cannot be added as a member to the same group twice
+      expect(group_member_2.valid?).to be(false)
+      expect(group_member_2.errors.full_messages.first).to eq("User is already a member of this group")
+    end
   end
 
   describe "when scoping" do
@@ -162,6 +177,34 @@ RSpec.describe UserGroup do
         expect(basic_user.user_role.role_name).to eq("user")
         expect(GroupLeader.where(:user_id => basic_user.id).count).to eq(0)
       end
+    end
+  end
+  
+  describe "#update_mentor_fields" do
+    it "updates mentor fields to true" do
+      user = create(:user)
+      group = create(:group, :default_mentor_group => true)
+      create(:user_group, :group => group, :user => user)
+      user.reload
+      
+      expect(user.mentor?).to be(true)
+      expect(user.mentee?).to be(true)
+    end
+    
+    it "updates mentor fields to true and then back to false" do
+      user = create(:user)
+      group = create(:group, :default_mentor_group => true)
+      user_group = create(:user_group, :group => group, :user => user)
+      user.reload
+      
+      expect(user.mentor?).to be(true)
+      expect(user.mentee?).to be(true)
+      
+      user_group.destroy
+      user.reload
+      
+      expect(user.mentor?).to be(false)
+      expect(user.mentee?).to be(false)
     end
   end
 end

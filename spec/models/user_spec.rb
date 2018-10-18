@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe User do
+  include ActiveJob::TestHelper
+  
   describe "when validating" do
     let(:user) { build(:user) }
 
@@ -46,7 +48,6 @@ RSpec.describe User do
         it { expect(user).to have_many(:event_invitees) }
         it { expect(user).to have_many(:invited_events).through(:event_invitees).source(:event) }
         it { expect(user).to have_many(:managed_groups).with_foreign_key(:manager_id).class_name('Group') }
-        it { expect(user).to have_many(:samples) }
         it { expect(user).to have_many(:biases).class_name('Bias') }
         it { expect(user).to have_many(:group_leaders) }
         it { expect(user).to have_many(:leading_groups).through(:group_leaders).source(:group) }
@@ -107,6 +108,21 @@ RSpec.describe User do
             new_user.run_callbacks :create
             expect(new_user.firebase_token.present?).to eq true
           end
+        end
+      end
+    end
+
+    describe 'before_destroy_callbacks' do
+      context '#check_lifespan_of_user' do
+        let!(:user1) { create :user }
+        let!(:user2) { create :user, created_at: 20.days.ago, updated_at: 20.days.ago }
+        
+        it 'deletes user younger than 14 days' do
+          expect{ user1.destroy }.to change(User, :count).by(-1)
+        end
+
+        it 'does not deletes user older than 14 days' do
+          expect{ user2.destroy }.to change(User, :count).by(0)
         end
       end
     end
@@ -513,11 +529,11 @@ RSpec.describe User do
       expect(mentorship_request.sender.id).to eq(mentee.id)
       expect(mentorship_request.receiver.id).to eq(mentor.id)
       
-      expect(mentee.mentorship_requests.count).to eq(1)
-      expect(mentee.mentorship_proposals.count).to eq(0)
+      expect(mentee.mentorship_requests.count).to eq(0)
+      expect(mentee.mentorship_proposals.count).to eq(1)
       
-      expect(mentor.mentorship_requests.count).to eq(0)
-      expect(mentor.mentorship_proposals.count).to eq(1)
+      expect(mentor.mentorship_requests.count).to eq(1)
+      expect(mentor.mentorship_proposals.count).to eq(0)
       
       # schedule a session
       mentoring_session = create(:mentoring_session, :mentorship_sessions_attributes => [{:user_id => mentor.id, :role => "presenter"}, {:user_id => mentee.id, :role => "attendee" }])
@@ -539,6 +555,40 @@ RSpec.describe User do
       
       expect(mentor_rating.rating).to eq(7)
       expect(mentee_rating.rating).to eq(7)
+    end
+  end
+  
+  describe "#add_to_default_mentor_group" do
+    it "adds the user to the default_mentor_group then removes the user" do
+      perform_enqueued_jobs do
+        enterprise = create(:enterprise)
+        user = create(:user, :enterprise => enterprise)
+        group = create(:group, :enterprise => enterprise, :default_mentor_group => true)
+
+        expect(user.mentor).to be(false)
+        expect(user.mentee).to be(false)
+        expect(group.members.count).to eq(0)
+        
+        user.mentee = true
+        user.save!
+        
+        expect(group.members.count).to eq(1)
+        
+        user.mentor = true
+        user.save!
+        
+        expect(group.members.count).to eq(1)
+        
+        user.mentee = false
+        user.save!
+        
+        expect(group.members.count).to eq(1)
+        
+        user.mentor = false
+        user.save!
+        
+        expect(group.members.count).to eq(0)
+      end
     end
   end
 end

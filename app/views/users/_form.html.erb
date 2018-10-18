@@ -25,6 +25,47 @@
     <%= render "shared/fields/display/custom_field", cf: cf, f: f, resource: @user %>
   <% end %>
 <% end %>
+<% if f.object.user_groups.any? %>
+<h2>Groups Notifications Settings</h2>
+<div id='user_group_notifications'>
+  <%= f.input :groups_notifications_frequency,
+          collection: UserGroup.notifications_frequencies.keys.map{ |f| [t("user_group.#{ f }"), f] },
+          label: "Frequency of notifications",
+          include_blank: false, 
+          input_html: { class: 'groups_notifications_frequency' }
+
+        %>
+        <div class='notifications_date'>
+          <%= f.input :groups_notifications_date,
+            collection: UserGroup.notifications_dates.keys.map{ |f| [t("user_group.#{ f }"), f] },
+            label: "Day of notifications",
+            include_blank: false, 
+            input_html: { class: 'groups_notifications_date' }
+          %>
+        </div>  
+  </div>
+  <br>
+<% end %>
+
+<script>
+  $(document).on('ready page:load', function() {
+  var notifications_frequency = $(".groups_notifications_frequency").val();
+  if(notifications_frequency === "weekly"){
+    $('.notifications_date').show();
+  }else{
+    $('.notifications_date').hide();
+  }
+
+  $('#user_group_notifications').bind('change', function() {
+    var notifications_frequency = $(".groups_notifications_frequency").val();
+    if(notifications_frequency === "weekly"){
+      $('.notifications_date').show();
+    }else{
+      $('.notifications_date').hide();
+    }
+  });
+});
+</script>
 
 <% if f.object.custom_policy_group? %>
   <%= f.simple_fields_for :policy_group, @user.policy_group do |p| %>

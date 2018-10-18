@@ -12,4 +12,5 @@ RSpec.describe GroupLeader, type: :model do
     it{ expect(group_leader).to belong_to(:user) }
     it{ expect(group_leader).to belong_to(:group) }
   end
+
 end

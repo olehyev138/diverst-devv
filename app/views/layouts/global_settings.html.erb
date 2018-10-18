@@ -44,9 +44,9 @@
           <%= active_link_to "Manage #{c_t(:erg)}", manage_erg_root_path %>
         </li>
       <% end %>
-      <% if current_user.enterprise.plan_module_enabled && manage_erg_budgets_path %>
-        <% if default_group = policy_scope(Group).all_parents.first %>
-          <li><%= active_link_to "Plan", plan_overview_groups_path %></li>
+      <% if current_user.enterprise.plan_module_enabled %>
+        <% if current_user.policy_group.groups_budgets_manage? && current_user.policy_group.groups_manage? %>
+          <%= active_link_to "Budgeting", close_budgets_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
         <% end %>
       <% end %>
       <% if policy(Campaign).create? %>

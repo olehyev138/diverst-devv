@@ -22,6 +22,7 @@ class Groups::SocialLinksController < ApplicationController
         @social_link.author = current_user
 
         if @social_link.save
+            track_activity(@social_link, :create)
             user_rewarder("social_media_posts").add_points(@social_link)
             flash_reward "Your social_link was created. Now you have #{ current_user.credits } points"
             redirect_to group_posts_path(@group)
@@ -32,6 +33,7 @@ class Groups::SocialLinksController < ApplicationController
     end
 
     def destroy
+        track_activity(@social_link, :destroy)
         @social_link.destroy
         flash[:notice] = "Your social link was removed."
         redirect_to group_posts_path(@group)
@@ -52,7 +54,7 @@ class Groups::SocialLinksController < ApplicationController
             .require(:social_link)
             .permit(
                 :url,
-                segment_ids: []
+                :news_feed_link_attributes => [:id, :approved, :news_feed_id, :link, :shared_news_feed_ids => [], :segment_ids => []],
             )
     end
 end

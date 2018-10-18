@@ -1,5 +1,6 @@
 class Enterprise < ActiveRecord::Base
     include ContainsResources
+    include PublicActivity::Common
 
     has_many :users, inverse_of: :enterprise, dependent: :destroy
     has_many :graph_fields, class_name: 'Field', dependent: :destroy
@@ -33,7 +34,7 @@ class Enterprise < ActiveRecord::Base
     has_many :expenses, dependent: :destroy
     has_many :expense_categories, dependent: :destroy
     has_many :clockwork_database_events, dependent: :destroy
-    
+
     has_many :biases, through: :users, class_name: "Bias"
     has_many :departments
 
@@ -50,7 +51,6 @@ class Enterprise < ActiveRecord::Base
     has_many :badges, dependent: :destroy
     has_many :group_categories, dependent: :destroy
     has_many :group_category_types, dependent: :destroy
-    has_many :sponsors, as: :sponsorable, dependent: :destroy
 
     has_one :custom_text, dependent: :destroy
 
@@ -74,7 +74,7 @@ class Enterprise < ActiveRecord::Base
 
     has_attached_file :xml_sso_config
     validates_attachment_content_type :xml_sso_config, content_type: 'text/xml'
-    
+
     # re-add to allow migration file to run
     has_attached_file :sponsor_media, s3_permissions: :private
     do_not_validate_attachment_file_type :sponsor_media
@@ -193,32 +193,16 @@ class Enterprise < ActiveRecord::Base
       enterprise_resources_count + groups_resources_count
     end
 
-    protected
-
     def enterprise_resources_count
-      enterprise_folders = Folder.where(enterprise_id: id)
-      count = 0
-
-      enterprise_folders.each do |f|
-        count += f.resources.count
-      end
-
-      count
+        Resource.where(:folder_id => enterprise.folder_ids).count
     end
 
     def groups_resources_count
-      group_ids = self.groups.map{ |g| g.id }
-
-      enterprise_folders = Folder.where(group_id: group_ids)
-      count = 0
-
-      enterprise_folders.each do |f|
-        count += f.resources.count
-      end
-
-      count
+        group_folder_ids = Folder.where(:group_id => enterprise.group_ids).pluck(:id)
+        Resource.where(:folder_id => group_folder_ids).count
     end
 
+    protected
 
     def smart_add_url_protocol
         return nil if company_video_url.blank?

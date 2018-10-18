@@ -1,7 +1,10 @@
 class PolicyGroupTemplateUpdateJob < ActiveJob::Base
     queue_as :default
 
-    def perform(template)
+    def perform(id)
+        template = PolicyGroupTemplate.find_by_id(id)
+        return if id.nil?
+        
         enterprise = template.enterprise
         user_role = template.user_role
         enterprise.users.where(:user_role_id => user_role.id).find_each do |user|

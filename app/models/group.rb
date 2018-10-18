@@ -47,7 +47,7 @@ class Group < ActiveRecord::Base
 
   delegate :news_feed_links,        :to => :news_feed
   delegate :shared_news_feed_links, :to => :news_feed
-  
+
   has_many :user_groups, dependent: :destroy
   has_many :members, through: :user_groups, class_name: 'User', source: :user, after_remove: :update_elasticsearch_member
   has_many :groups_polls, dependent: :destroy
@@ -83,7 +83,8 @@ class Group < ActiveRecord::Base
   has_many :pillars, through: :outcomes
   has_many :initiatives, through: :pillars
   has_many :updates, class_name: "GroupUpdate", dependent: :destroy
-
+  has_many :views, dependent: :destroy
+  
   has_many :fields, -> { where field_type: "regular"},
            dependent: :delete_all
   has_many :survey_fields, -> { where field_type: "group_survey"},
@@ -95,11 +96,10 @@ class Group < ActiveRecord::Base
   has_many :sponsors, as: :sponsorable, dependent: :destroy
 
   has_many :children, class_name: "Group", foreign_key: :parent_id, dependent: :destroy
-  has_many :sponsors, as: :sponsorable, dependent: :destroy
   belongs_to :parent, class_name: "Group", foreign_key: :parent_id
   belongs_to :group_category
   belongs_to :group_category_type
-  
+
   # re-add to allow migration file to run
   has_attached_file :sponsor_media, s3_permissions: :private
   do_not_validate_attachment_file_type :sponsor_media
@@ -112,7 +112,10 @@ class Group < ActiveRecord::Base
 
   validates :name, presence: true
   validates_format_of :contact_email, with: Devise.email_regexp, allow_blank: true
-
+  
+  # only allow one default_mentor_group per enterprise
+  validates_uniqueness_of :default_mentor_group, scope: [:enterprise_id], conditions: -> { where(default_mentor_group: true) }
+  
   validate :valid_yammer_group_link?
 
   validate :ensure_one_level_nesting
@@ -122,7 +125,7 @@ class Group < ActiveRecord::Base
   after_commit :update_all_elasticsearch_members
   before_validation :smart_add_url_protocol
   after_create :create_news_feed
-  
+
   attr_accessor :skip_label_consistency_check
   validate :perform_check_for_consistency_in_category, on: [:create, :update], unless: :skip_label_consistency_check
   validate :ensure_label_consistency_between_parent_and_sub_groups, on: [:create, :update]
@@ -134,13 +137,13 @@ class Group < ActiveRecord::Base
   # parents/children
   scope :all_parents,     -> {where(:parent_id => nil)}
   scope :all_children,    -> {where.not(:parent_id => nil)}
-  
+
   accepts_nested_attributes_for :outcomes, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
-  
+
   def layout_values
     {
     'layout_0' => 'Default layout',
@@ -155,6 +158,10 @@ class Group < ActiveRecord::Base
 
   def is_sub_group?
     parent.present?
+  end
+  
+  def total_views
+    views.sum(:view_count)
   end
 
   def is_standard_group?
@@ -227,7 +234,7 @@ class Group < ActiveRecord::Base
   end
 
   def file_safe_name
-    name.gsub!(/[^0-9A-Za-z.\-]/, '_')
+    name.gsub(/[^0-9A-Za-z.\-]/, '_')
   end
 
   def possible_participating_groups
@@ -299,6 +306,23 @@ class Group < ActiveRecord::Base
     end
   end
 
+  def membership_list_csv
+    total_nb_of_members = active_members.count
+    CSV.generate do |csv|
+      csv << ["first_name", "last_name", "email_address"]
+
+      active_members.each do |member|
+        membership_list_row = [ member.first_name,
+                                member.last_name, 
+                                member.email
+                              ]                        
+        csv << membership_list_row
+      end
+
+      csv << ["total", nil, "#{total_nb_of_members}"]
+    end
+  end
+
   def title_with_leftover_amount
     "Create event from #{name} leftover ($#{leftover_money})"
   end
@@ -309,6 +333,16 @@ class Group < ActiveRecord::Base
 
   def pending_posts_count
     news_links.unapproved.count + messages.unapproved.count + social_links.unapproved.count
+  end
+  
+  # This method only exists because it's used in a callback
+  def update_elasticsearch_member(member)
+    member.__elasticsearch__.update_document
+  end
+
+  # Update members in elastic_search
+  def update_all_elasticsearch_members
+    GroupUpdateJob.perform_later(id)
   end
 
   protected
@@ -321,7 +355,6 @@ class Group < ActiveRecord::Base
   def have_protocol?
     company_video_url[%r{\Ahttp:\/\/}] || company_video_url[%r{\Ahttps:\/\/}]
   end
-
 
   private
 
@@ -344,8 +377,16 @@ class Group < ActiveRecord::Base
 
   def ensure_label_consistency_between_parent_and_sub_groups
     unless group_category.nil?
-      if children.any? { |sub_group| sub_group.group_category_type.name != group_category_type.name }
+      if if_any_sub_group_category_type_not_equal_to_parent_category_type?
         errors.add(:group_category_id, "chosen label inconsistent with labels of sub groups")
+      end
+    end
+  end
+
+  def if_any_sub_group_category_type_not_equal_to_parent_category_type?
+    children.any? do |sub_group|
+      unless sub_group.group_category_type.nil?
+        sub_group.group_category_type&.name != group_category_type.name
       end
     end
   end
@@ -386,22 +427,10 @@ class Group < ActiveRecord::Base
       !enterprise.yammer_token.nil?
   end
 
-  # This method only exists because it's used in a callback
-  def update_elasticsearch_member(member)
-    member.__elasticsearch__.update_document
-  end
-
-  # Update members in elastic_search
-  def update_all_elasticsearch_members
-    members.includes(:poll_responses).each do |member|
-      update_elasticsearch_member(member)
-    end
-  end
-
   def self.avg_members_per_group(enterprise:)
     group_sizes = UserGroup.where(group: enterprise.groups).group(:group).count.values
     return nil if group_sizes.length == 0
     group_sizes.sum / group_sizes.length
   end
-  
+
 end

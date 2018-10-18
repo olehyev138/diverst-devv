@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Group, :type => :model do
-
+    include ActiveJob::TestHelper
+    
     describe 'validations' do
         let(:group) { FactoryGirl.build_stubbed(:group) }
 
@@ -626,15 +627,16 @@ RSpec.describe Group, :type => :model do
 
     describe "#update_all_elasticsearch_members" do
         it "updates the users in elasticsearch" do
-            group = build(:group)
-            user = build(:user)
+            group = create(:group)
+            user = create(:user)
             create(:user_group, :group => group, :user => user)
-            allow(group).to receive(:update_elasticsearch_member).and_call_original
-
-            group.name = "testing elasticsearch"
-            group.save!
-
-            expect(group).to have_received(:update_elasticsearch_member)
+            
+            perform_enqueued_jobs do
+                expect_any_instance_of(GroupUpdateJob).to receive(:perform)
+                
+                group.name = "testing elasticsearch"
+                group.save!
+            end
         end
     end
 
@@ -669,6 +671,16 @@ RSpec.describe Group, :type => :model do
             expect(enterprise.groups.count).to eq(8)
             expect(enterprise.groups.is_private.count).to eq(5)
             expect(enterprise.groups.non_private.count).to eq(3)
+        end
+    end
+    
+    describe '#total_views' do
+        it "returns 10" do
+            group = create(:group)
+            create(:view, :group => group, :view_count => 4)
+            create(:view, :group => group, :view_count => 6)
+            
+            expect(group.total_views).to eq(10)
         end
     end
     
@@ -720,6 +732,35 @@ RSpec.describe Group, :type => :model do
             expect{Field.find(survey_field.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{GroupLeader.find(group_leader.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{Group.find(child.id)}.to raise_error(ActiveRecord::RecordNotFound)
+        end
+    end
+    
+    describe '#default_mentor_group' do
+        it "ensures there aren't duplicate default_mentor_groups for enterprises" do
+            enterprise_1 = create(:enterprise)
+            group_1 = create(:group, :enterprise => enterprise_1)
+            group_2 = create(:group, :enterprise => enterprise_1)
+            
+            enterprise_2 = create(:enterprise)
+            group_3 = create(:group, :enterprise => enterprise_2)
+            group_4 = create(:group, :enterprise => enterprise_2)
+            
+            group_1.default_mentor_group = true
+            group_1.save!
+            
+            expect(group_1.valid?).to be true
+            
+            group_2.default_mentor_group = true
+            expect(group_2.valid?).to be false
+            expect(group_2.errors.full_messages.first).to eq ("Default mentor group has already been taken")
+            
+            group_3.default_mentor_group = true
+            group_3.save!
+            
+            expect(group_3.valid?).to be true
+            
+            group_4.default_mentor_group = true
+            expect(group_4.valid?).to be false
         end
     end
 end

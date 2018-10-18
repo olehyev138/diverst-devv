@@ -72,6 +72,8 @@ gem 'date_validator', '~> 0.9.0'
 gem "thor", "0.19.1"# Expected string default value for '--decorator'; got true (boolean) - setting version removes this message
 gem 'sanitize_email', '~> 1.2.2'
 
+gem "rack-timeout"
+
 group :development, :test do
   gem 'spring', '~> 1.6.2' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'guard-livereload', '~> 2.4', require: false
@@ -103,7 +105,8 @@ group :test do
 end
 
 group :development do
-  gem 'capistrano'
+  gem 'capistrano',      require: false
+  gem 'capistrano-rake', require: false
   gem 'capistrano3-puma'
   gem 'capistrano-rails', require: false
   gem 'capistrano-bundler', require: false
@@ -131,4 +134,7 @@ group :staging, :production do
   gem 'syslogger', '~> 1.6.0' # Log to syslog, which is then sent to Loggly
   gem 'lograge', '~> 0.3'
   gem 'newrelic_rpm', '~> 4.5.0'
+  gem 'influxdb-rails', git: 'https://github.com/Kukunin/influxdb-rails.git',
+                        branch: 'tags_middleware' # Rails metrics to InfluxDB
+  gem 'sidekiq-influxdb' # Sidekiq metrics to InfluxDB
 end

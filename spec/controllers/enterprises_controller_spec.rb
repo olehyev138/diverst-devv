@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe EnterprisesController, type: :controller do
+    include ActiveJob::TestHelper
+
     let(:enterprise){ create(:enterprise) }
     let(:user){ create(:user, enterprise: enterprise) }
     let(:group){ create(:group, enterprise: enterprise) }
@@ -48,6 +50,31 @@ RSpec.describe EnterprisesController, type: :controller do
 
                 it "flashes notice a message" do
                     expect(flash[:notice]).to eq "Your enterprise was updated"
+                end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{patch :update, id: enterprise.id, enterprise: attributes}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { enterprise }
+                    let(:owner) { user }
+                    let(:key) { 'enterprise.update' }
+
+                    before {
+                      perform_enqueued_jobs do
+                        patch :update, id: enterprise.id, enterprise: attributes
+                      end
+                    }
+
+                    include_examples'correct public activity'
+                  end
                 end
             end
 
@@ -275,7 +302,11 @@ RSpec.describe EnterprisesController, type: :controller do
             login_user_from_let
 
             context "with valid attributes" do
-                before { patch :update_branding, id: enterprise.id, enterprise: attributes_for(:enterprise, theme: { primary_color: "#ff0000" }) }
+                before {
+                    perform_enqueued_jobs do
+                        patch :update_branding, id: enterprise.id, enterprise: attributes_for(:enterprise, theme: { primary_color: "#ff0000" })
+                    end
+                }
 
                 it "returns a valid theme object from set_theme" do
                     expect(assigns[:theme]).to be_a_new(Theme)
@@ -292,6 +323,31 @@ RSpec.describe EnterprisesController, type: :controller do
                 it "update was successful" do
                     enterprise.reload
                     expect(enterprise.theme.primary_color).to eq "#ff0000"
+                end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{patch :update_branding, id: enterprise.id, enterprise: attributes_for(:enterprise, theme: { primary_color: "#ff0000" })}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { enterprise }
+                    let(:owner) { user }
+                    let(:key) { 'enterprise.update_branding' }
+
+                    before {
+                      perform_enqueued_jobs do
+                        patch :update_branding, id: enterprise.id, enterprise: attributes_for(:enterprise, theme: { primary_color: "#ff0000" })
+                      end
+                    }
+
+                    include_examples'correct public activity'
+                  end
                 end
             end
 

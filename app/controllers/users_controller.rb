@@ -6,7 +6,8 @@ class UsersController < ApplicationController
 
   def index
     authorize User
-    @users = policy_scope(User).where(search_params).limit(25)
+    
+    @users = policy_scope(User).joins(:policy_group).where(search_params).limit(params[:limit] || 25)
 
     respond_to do |format|
       format.html
@@ -95,6 +96,12 @@ class UsersController < ApplicationController
 
   def parse_csv
     authorize User, :new?
+    
+    if params[:file].nil?
+      flash[:alert] = "CSV file is required"
+      redirect_to :back
+      return
+    end
 
     file = CsvFile.new( import_file: params[:file].tempfile, user: current_user)
 
@@ -114,7 +121,9 @@ class UsersController < ApplicationController
 
   def export_csv
     authorize User, :index?
-    send_data current_user.enterprise.users_csv(nil), filename: 'diverst_users.csv'
+    UsersDownloadJob.perform_later(current_user.id)
+    flash[:notice] = "Please check your email in a couple minutes"
+    redirect_to :back
   end
 
   def date_histogram
@@ -241,6 +250,6 @@ class UsersController < ApplicationController
   end
 
   def search_params
-    params.permit(:active, :mentor, :mentee)
+    params.permit(:active, :mentor, :mentee, policy_groups: [:budget_approval])
   end
 end

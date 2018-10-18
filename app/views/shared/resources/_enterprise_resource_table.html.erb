@@ -17,13 +17,13 @@
                 <td class="icon-column">
                   <a href="<%= resource.file.expiring_url(resource.expiration_time) %>" class="icon icon--bg icon--large" style="background-image: url(<%= thumbnail_for_resource(resource) %>)"></a>
                 </td>
-                <td><%= link_to resource.title, resource.file.expiring_url(resource.expiration_time), target: '_blank' %></td>
+                <td><%= link_to resource.title, resource.file.expiring_url(resource.expiration_time), target: '_blank', 'data-trackable-id': resource.id, 'data-trackable-type': "resource", class: "trackable-views", "data-trackable-enterprise-id": current_user.enterprise_id, "data-trackable-user-id": current_user.id %></td>
                 <td>N/A</td>
               <% else %>
                 <td class="icon-column">
                   <a href="<%= resource.file.expiring_url(resource.expiration_time) %>" class="icon icon--bg icon--large" style="background-image: url(<%= thumbnail_for_resource(resource) %>)"></a>
                 </td>
-                <td><%= link_to resource.title, resource.url, target: '_blank' %></td>
+                <td><%= link_to resource.title, resource.url, target: '_blank', 'data-trackable-id': resource.id, 'data-trackable-type': "resource", class: "trackable-views", "data-trackable-enterprise-id": current_user.enterprise_id, "data-trackable-user-id": current_user.id %></td>
                 <td><%= link_to 'Link', resource.url, target: '_blank' %></td>
               <% end %>
               <td class="hidden-xs"><%= resource.created_at.to_s :reversed_slashes %></td>

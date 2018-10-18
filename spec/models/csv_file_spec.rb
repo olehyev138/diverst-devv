@@ -10,13 +10,27 @@ RSpec.describe CsvFile, type: :model do
   end
 
   describe 'after creating' do
-    let(:file) { build(:csv_file)}
-    before do
-      allow(ImportCSVJob).to receive(:perform_later).and_return(true)
+    context "without group_id" do
+      let(:file) { build(:csv_file)}
+      before do
+        allow(ImportCSVJob).to receive(:perform_later).and_return(true)
+      end
+      it 'calls ImportCSVJob' do
+        file.save
+        expect(ImportCSVJob).to have_received(:perform_later).with(file.id).once
+      end
     end
-    it 'calls ImportCSVJob' do
-      file.save
-      expect(ImportCSVJob).to have_received(:perform_later).with(file.id).once
+    
+    context "with group_id" do
+      let(:group) {create(:group)}
+      let(:file) { build(:csv_file, :group_id => group.id)}
+      before do
+        allow(GroupMemberImportCSVJob).to receive(:perform_later).and_return(true)
+      end
+      it 'calls GroupMemberImportCSVJob' do
+        file.save
+        expect(GroupMemberImportCSVJob).to have_received(:perform_later).with(file.id).once
+      end
     end
   end
 end

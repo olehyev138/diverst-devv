@@ -2,6 +2,7 @@ FactoryGirl.define do
   factory :enterprise do
     name { Faker::Company.name }
     created_at { Date.today }
+    time_zone "UTC"
     theme nil
     
     after(:create) do |enterprise|

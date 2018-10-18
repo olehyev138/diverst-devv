@@ -140,6 +140,7 @@ Rails.application.routes.draw do
       post 'approve'
       post 'decline'
       collection do
+        get 'export_csv'
         get 'edit_annual_budget'
         post 'update_annual_budget'
         post 'reset_annual_budget'
@@ -155,6 +156,7 @@ Rails.application.routes.draw do
           post 'join_all_sub_groups'
           delete 'leave_all_sub_groups'
           get 'view_sub_groups'
+          get 'export_group_members_list_csv'
         end
         member do
           post 'accept_pending'
@@ -286,6 +288,7 @@ Rails.application.routes.draw do
     collection do
       get 'plan_overview'
       get 'close_budgets'
+      get 'close_budgets_export_csv'
       get 'calendar'
       get 'calendar_data'
     end
@@ -477,7 +480,9 @@ Rails.application.routes.draw do
     member do
       get 'start'
       get 'join'
+      get 'export_ics'
     end
+    
   end
   resources :mentorship_ratings
   
@@ -500,11 +505,17 @@ Rails.application.routes.draw do
     get 'mentorship'
     get 'mentoring_sessions'
     get 'mentoring_interests'
+    get 'top_groups_by_views'
+    get 'top_folders_by_views'
+    get 'top_resources_by_views'
+    get 'top_news_by_views'
   end
 
   namespace :website do
     resources :leads
   end
+  
+  resources :shared_news_feed_links
 
   resources :policy_group_templates
   resources :emails

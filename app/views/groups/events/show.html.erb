@@ -13,10 +13,11 @@
     <div class="flex-row__cell hidden-sm hidden-xs">
       <%= link_to "Export attendees", attendees_group_initiative_path(@group, @event, format: :csv), class: "btn btn--primary hidden-xs" if policy(@event).edit? %>
     </div>
-
+    <% if !@event.full? || current_user.initiatives.include?(@event) %>
     <div class="flex-row__cell">
-       <a href="#" class="btn btn--primary js-join-event" data-joined="<%= current_user.initiatives.include? @event %>"><%= current_user.initiatives.include?(@event) ? "Leave event" : "Join event" %></a>
+      <a href="#" class="btn btn--primary js-join-event" data-joined="<%= current_user.initiatives.include? @event %>"><%= current_user.initiatives.include?(@event) ? "Leave event" : "Join event" %></a>
     </div>
+    <% end %>
   </div>
   <div class="container-fluid visible-xs">
     <div class="row">
@@ -45,14 +46,14 @@
             <%= "(#{current_user.default_time_zone} timezone)"%>
           </p>
           <h4>Description</h4>
-          <p><%= @event.description&.html_safe %></p>
+          <p><%= sanitize @event.description %></p>
           <h4>Location</h4>
           <p><%= @event.location %></p>
           <h4>Co-hosted/Participating Groups</h4>
           <p><%= @event.participating_groups.map(&:name).join(", ") %></p>
         </div>
         <div class="col-sm-4 col-xs-12">
-          <h4>Attendees (<%= @event.attendees.count %>)</h4>
+          <h4>Attendees (<%= @event.attendees.count %><% if @event.max_attendees? %>/<%= @event.max_attendees %><% end %>)<% if @event.full? %> <b>Full</b><% end %></h4>
           <p>
             <% @event.attendees.limit(10).each do |attendee| %>
               <%= attendee.name_with_status %><br>

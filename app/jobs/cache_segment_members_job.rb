@@ -1,7 +1,7 @@
 # Calculates the members of a segment and cache them in the segment's "members" association
 
 class CacheSegmentMembersJob < ActiveJob::Base
-  queue_as :default
+  queue_as :low
 
   def perform(segment)
     users = segment.enterprise.users.all
@@ -20,7 +20,11 @@ class CacheSegmentMembersJob < ActiveJob::Base
 
     members_to_add.each do |member|
       segment.members << member
-      member.__elasticsearch__.update_document # Update user in Elasticsearch to reflect their new segment
+      begin
+        member.__elasticsearch__.update_document # Update user in Elasticsearch to reflect their new segment
+      rescue
+        next
+      end
     end
   end
 end

@@ -1,6 +1,6 @@
 class GroupsController < ApplicationController
     before_action :authenticate_user!, except: [:calendar_data]
-    before_action :set_group, except: [:index, :new, :create, :calendar, :calendar_data, :close_budgets]
+    before_action :set_group, except: [:index, :new, :create, :calendar, :calendar_data, :close_budgets, :close_budgets_export_csv]
     skip_before_action :verify_authenticity_token, only: [:create, :calendar_data]
     after_action :verify_authorized, except: [:calendar_data]
 
@@ -17,15 +17,31 @@ class GroupsController < ApplicationController
         authorize Group, :manage_all_group_budgets?
         @groups = policy_scope(Group).includes(:children).all_parents
     end
+    
+    def close_budgets_export_csv
+      authorize Group, :close_budgets?
+      user_not_authorized if not current_user.policy_group.annual_budget_manage?
+
+      result =
+        CSV.generate do |csv|
+          csv << ['Group name', 'Annual budget', 'Leftover money', 'Approved budget']
+           current_user.enterprise.groups.includes(:children).all_parents.each do |group|
+             csv << [group.name, group.annual_budget.presence || "Not set", group.leftover_money, group.approved_budget]
+             
+             group.children.each do |child|
+               csv << [child.name, child.annual_budget.presence || "Not set", child.leftover_money, child.approved_budget]
+             end
+          end
+        end
+      send_data result, filename: 'global_budgets.csv'
+    end
 
     # calendar for all of the groups
     def calendar
         authorize Group
         enterprise = current_user.enterprise
-        @groups = enterprise.groups.all_parents
-        
-        @segments = policy_scope(Segment)
-        
+        @groups = enterprise.groups
+        @segments = enterprise.segments
         @q_form_submit_path = calendar_groups_path
         @q = Initiative.ransack(params[:q])
 
@@ -134,13 +150,20 @@ class GroupsController < ApplicationController
         authorize @group
 
         if group_params[:group_category_id].present?
-          @group.group_category_type_id = GroupCategory.find_by(id: params[:group][:group_category_id])&.group_category_type_id
+          @group.group_category_type_id = GroupCategory.find_by(id: group_params[:group_category_id])&.group_category_type_id
         end
 
         if @group.update(group_params)
             track_activity(@group, :update)
             flash[:notice] = "Your #{c_t(:erg)} was updated"
-            redirect_to [:edit, @group]
+
+            if request.referer == settings_group_url(@group)
+                redirect_to @group
+            elsif request.referer == group_outcomes_url(@group)
+                redirect_to group_outcomes_url(@group)
+            else
+                redirect_to [:edit, @group]
+            end
         else
             flash.now[:alert] = "Your #{c_t(:erg)} was not updated. Please fix the errors"
 
@@ -210,34 +233,27 @@ class GroupsController < ApplicationController
             return
         end
 
-        @table = CSV.table params[:file].tempfile
-        @failed_rows = []
-        @successful_rows = []
-
-        @table.each_with_index do |row, row_index|
-            email = row[0]
-            user = User.where(email: email).first
-            if user
-                @group.members << user unless @group.members.include? user
-
-                @successful_rows << row
-            else
-                @failed_rows << {
-                    row: row,
-                    row_index: row_index + 1,
-                    error: 'There is no user with this email address in the database'
-                }
-            end
+        file = CsvFile.new( import_file: params[:file].tempfile, user: current_user, :group_id => @group.id)
+    
+        @message = ''
+        @success = false
+        @email = ENV['CSV_UPLOAD_REPORT_EMAIL']
+    
+        if file.save
+          @success = true
+          @message = '@success'
+        else
+          @success = false
+          @message = 'error'
+          @errors = file.errors.full_messages
         end
-
-        @group.save
     end
 
     def export_csv
         authorize @group, :show?
-
-        users_csv = User.to_csv users: @group.members, fields: @group.enterprise.fields
-        send_data users_csv, filename: "#{@group.file_safe_name}_users.csv"
+        GroupMemberDownloadJob.perform_later(current_user.id, @group.id)
+        flash[:notice] = "Please check your email in a couple minutes"
+        redirect_to :back
     end
 
     def edit_fields

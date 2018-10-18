@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Groups::NewsLinksController, type: :controller do
+    include ActiveJob::TestHelper
+    
     let(:user) { create :user }
     let(:group){ create(:group, enterprise: user.enterprise) }
 
@@ -41,7 +43,6 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
         end
     end
 
-
     describe 'GET #new' do
         def get_new(group_id)
             get :new, group_id: group_id
@@ -67,7 +68,6 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'GET #comments' do
         let!(:news_link) { create(:news_link, group: group) }
@@ -166,8 +166,7 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
-
+    
     describe 'POST#create' do
         let!(:reward_action){ create(:reward_action, enterprise: user.enterprise, key: "news_post", points: 30) }
         before { user.enterprise.update(enable_rewards: true) }
@@ -200,6 +199,32 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
                     post :create, group_id: group.id, news_link: attributes_for(:news_link)
                     expect(response).to redirect_to group_posts_path(group)
                 end
+
+                describe 'public activity' do
+                    enable_public_activity
+
+                    it 'creates public activity record' do
+                        perform_enqueued_jobs do
+                            expect{
+                            post :create, group_id: group.id, news_link: attributes_for(:news_link)
+                            }.to change(PublicActivity::Activity, :count).by(1)
+                        end
+                    end
+
+                    describe 'activity record' do
+                        let(:model) { NewsLink.last }
+                        let(:owner) { user }
+                        let(:key) { 'news_link.create' }
+
+                        before {
+                            perform_enqueued_jobs do
+                                post :create, group_id: group.id, news_link: attributes_for(:news_link)
+                            end
+                        }
+
+                        include_examples'correct public activity'
+                    end
+                end
             end
 
             context 'with invalid attributes' do
@@ -229,7 +254,6 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
         end
     end
 
-
     describe 'PATCH#update' do
         let!(:news_link){ create(:news_link, group: group) }
 
@@ -250,6 +274,32 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
                 it "updates the link" do
                     news_link.reload
                     expect(news_link.title).to eq("updated")
+                end
+
+                describe 'public activity' do
+                    enable_public_activity
+
+                    it 'creates public activity record' do
+                        perform_enqueued_jobs do
+                            expect{
+                            patch :update, group_id: group.id, id: news_link.id, news_link: {title: "updated"}
+                            }.to change(PublicActivity::Activity, :count).by(1)
+                        end
+                    end
+
+                    describe 'activity record' do
+                        let(:model) { NewsLink.last }
+                        let(:owner) { user }
+                        let(:key) { 'news_link.update' }
+
+                        before {
+                            perform_enqueued_jobs do
+                                patch :update, group_id: group.id, id: news_link.id, news_link: {title: "updated"}
+                            end
+                        }
+
+                        include_examples'correct public activity'
+                    end
                 end
             end
 
@@ -272,7 +322,6 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'DELETE#destroy' do
         let!(:news_link){ create(:news_link, group: group) }
@@ -305,6 +354,32 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
             it 'redirects to group_posts_path' do
                 delete :destroy, group_id: group.id, id: news_link.id
                 expect(response).to redirect_to group_posts_path(group)
+            end
+
+            describe 'public activity' do
+                enable_public_activity
+
+                it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                        expect{
+                          delete :destroy, group_id: group.id, id: news_link.id
+                        }.to change(PublicActivity::Activity, :count).by(1)
+                    end
+                end
+
+                describe 'activity record' do
+                    let(:model) { NewsLink.last }
+                    let(:owner) { user }
+                    let(:key) { 'news_link.destroy' }
+
+                    before {
+                        perform_enqueued_jobs do
+                            delete :destroy, group_id: group.id, id: news_link.id
+                        end
+                    }
+
+                    include_examples'correct public activity'
+                end
             end
         end
 
