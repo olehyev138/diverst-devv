@@ -43,7 +43,8 @@ class User::SocialLinksController < ApplicationController
     params
       .require(:social_link)
       .permit(
-        :url
+        :url,
+        segment_ids: []
       )
   end
 
