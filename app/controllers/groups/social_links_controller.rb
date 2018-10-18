@@ -54,7 +54,7 @@ class Groups::SocialLinksController < ApplicationController
             .require(:social_link)
             .permit(
                 :url,
-                segment_ids: []
+                :news_feed_link_attributes => [:id, :approved, :news_feed_id, :link, :shared_news_feed_ids => [], :segment_ids => []],
             )
     end
 end

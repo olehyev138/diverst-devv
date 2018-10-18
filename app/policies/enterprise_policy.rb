@@ -15,11 +15,11 @@ class EnterprisePolicy < ApplicationPolicy
   def edit_mobile_fields?
     @policy_group.branding_manage?
   end
-  
+
   def manage_posts?
     @policy_group.manage_posts?
   end
-  
+
   def diversity_manage?
     @policy_group.diversity_manage?
   end
@@ -34,7 +34,7 @@ class EnterprisePolicy < ApplicationPolicy
     update_branding?
   end
 
-  def edit_pending_comments?
+  def edit_posts?
     @policy_group.manage_posts?
   end
 
