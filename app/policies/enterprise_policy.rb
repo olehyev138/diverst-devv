@@ -19,12 +19,12 @@ class EnterprisePolicy < ApplicationPolicy
     return true if manage_all?
     @policy_group.branding_manage?
   end
-  
+
   def manage_posts?
     return true if manage_all?
     @policy_group.manage_posts?
   end
-  
+
   def diversity_manage?
     return true if manage_all?
     @policy_group.diversity_manage?

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181011002011) do
+ActiveRecord::Schema.define(version: 20181015134320) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -387,6 +387,7 @@ ActiveRecord::Schema.define(version: 20181011002011) do
     t.boolean  "disable_likes",                                       default: false
     t.string   "default_from_email_address",            limit: 191
     t.string   "default_from_email_display_name",       limit: 191
+    t.boolean  "enable_social_media",                                 default: false
   end
 
   create_table "event_attendances", force: :cascade do |t|

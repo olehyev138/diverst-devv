@@ -46,12 +46,12 @@ class User::SocialLinksController < ApplicationController
     params
       .require(:social_link)
       .permit(
-        :url
+        :url,
+        segment_ids: []
       )
   end
 
   def set_social_link
     @social_link = current_user.social_links.find(params[:id])
   end
-
 end

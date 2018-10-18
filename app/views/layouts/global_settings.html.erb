@@ -37,7 +37,7 @@
         <%= active_link_to "Logs", logs_path, class: "secondary-header__tab" if current_user.policy_group.logs_view? %>
       </li>
       <li>
-        <%= active_link_to "Pending Comments", edit_pending_comments_enterprise_path(current_user.enterprise) if current_user.policy_group.manage_posts? %>
+        <%= active_link_to "Posts", edit_posts_enterprise_path(current_user.enterprise) if current_user.policy_group.manage_posts? %>
       </li>
       <% if manage_erg_root_path %>
         <li>
