@@ -47,7 +47,17 @@ class GroupsController < ApplicationController
     def calendar
         authorize Group
         enterprise = current_user.enterprise
-        @groups = enterprise.groups
+        @groups = []
+        enterprise.groups.each do |group|
+            if group.is_parent_group?
+                @groups << group 
+                group.children.each do |sub_group|
+                    @groups << sub_group
+                end
+            elsif group.is_standard_group?                
+                @groups << group 
+            end
+        end
         @segments = enterprise.segments
         @q_form_submit_path = calendar_groups_path
         @q = Initiative.ransack(params[:q])
