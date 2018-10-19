@@ -476,7 +476,11 @@ class GenericGraphsController < ApplicationController
 
     def non_demo_top_news_by_views
         news_feed_link_ids = NewsFeedLink.where(:news_feed_id => NewsFeed.where(:group_id => current_user.enterprise.groups.ids).ids).ids
-        news_links = NewsLink.select("news_links.title, SUM(views.view_count) view_count").joins(:news_feed_link, :news_feed_link => :views).where(:news_feed_links => {:id => news_feed_link_ids}).order("view_count DESC")
+        news_links = NewsLink
+          .select('news_links.title, views.view_count')
+          .joins(:news_feed_link, 'LEFT JOIN views on news_feed_links.id = views.news_feed_link_id')
+          .where(:news_feed_links => {:id => news_feed_link_ids})
+          .order('view_count DESC')
 
         data = news_links.map do |news_link|
             {
