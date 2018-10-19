@@ -25,7 +25,7 @@ class Groups::GroupMessagesController < ApplicationController
     end
 
     def edit
-        authorize @message, :update?
+        authorize [@group, @message], :update?, :policy_class => GroupMessagePolicy
     end
 
     def create
@@ -44,7 +44,7 @@ class Groups::GroupMessagesController < ApplicationController
     end
 
     def update
-        authorize @message, :update?
+        authorize [@group, @message], :update?, :policy_class => GroupMessagePolicy
         if @message.update(message_params)
             track_activity(@message, :update)
             redirect_to group_posts_path(@group)
@@ -95,7 +95,7 @@ class Groups::GroupMessagesController < ApplicationController
             .permit(
                 :subject,
                 :content,
-                :news_feed_link_attributes => [:approved, :news_feed_id, :link, :shared_news_feed_ids => []],
+                :news_feed_link_attributes => [:id, :approved, :news_feed_id, :link, :shared_news_feed_ids => []],
                 segment_ids: []
             )
     end

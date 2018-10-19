@@ -49,7 +49,7 @@ Rails.application.routes.draw do
       post 'test_notif'
     end
   end
-  
+
   resources :user_roles
   resources :users do
     member do
@@ -91,7 +91,7 @@ Rails.application.routes.draw do
       get 'edit_fields'
       get 'edit_mobile_fields'
       get 'edit_branding'
-      get 'edit_pending_comments'
+      get 'edit_posts'
       get 'edit_algo'
       get 'theme'
       patch 'update_branding'
@@ -275,7 +275,7 @@ Rails.application.routes.draw do
     member do
       get 'settings'
       get 'layouts'
-
+      get 'plan_overview'
       get 'export_csv'
       get 'import_csv'
       get 'sample_csv'
@@ -335,7 +335,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :rewards, except: [:show]
+  resources :rewards, except: [:show] do
+    collection do
+      put "enable"
+    end
+  end
   resources :badges, except: [:index, :show]
 
   resources :reward_actions, only: [] do
@@ -468,7 +472,7 @@ Rails.application.routes.draw do
       end
     end
   end
-  
+
   resources :mentorings
   resources :mentoring_interests
   resources :mentoring_requests
@@ -478,10 +482,10 @@ Rails.application.routes.draw do
       get 'join'
       get 'export_ics'
     end
-    
+
   end
   resources :mentorship_ratings
-  
+
   resources :metrics_dashboards do
     get 'shared_dashboard'
 
@@ -510,7 +514,7 @@ Rails.application.routes.draw do
   namespace :website do
     resources :leads
   end
-  
+
   resources :shared_news_feed_links
 
   resources :policy_group_templates

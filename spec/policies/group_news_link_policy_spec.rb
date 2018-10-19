@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe NewsLinkPolicy, :type => :policy do
+RSpec.describe GroupNewsLinkPolicy, :type => :policy do
     
     let(:enterprise) {create(:enterprise)}
     let(:user){ create(:user, :enterprise => enterprise) }
@@ -11,6 +11,7 @@ RSpec.describe NewsLinkPolicy, :type => :policy do
     subject { described_class }
     
     before {
+        no_access.policy_group.manage_all = false
         no_access.policy_group.news_links_index = false
         no_access.policy_group.news_links_create = false
         no_access.policy_group.news_links_manage = false
@@ -20,11 +21,11 @@ RSpec.describe NewsLinkPolicy, :type => :policy do
     permissions :index?, :create?, :update?, :destroy? do
                   
         it "allows access" do
-            expect(subject).to permit(user, news_link)
+            expect(subject).to permit(user, [news_link.group, news_link])
         end
 
         it "doesn't allow access" do
-            expect(subject).to_not permit(no_access, news_link)
+            expect(subject).to_not permit(no_access, [news_link.group, news_link])
         end
     end
 end
