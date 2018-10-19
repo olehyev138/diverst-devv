@@ -46,7 +46,7 @@
           </li>
         <% end %>
       <% end %>
-      <% if policy(Campaign).index? %>
+      <% if policy(Campaign).create? %>
         <li class="nav__item">
           <%= active_link_to campaigns_path, class: "nav__link", class_active: "nav__link--is-selected", active: active_engage_link? do %>
             <%= inline_svg('icons/collaborate.svg', class: "icon nav__icon") %>
@@ -54,7 +54,7 @@
           <% end %>
         </li>
       <% end %>
-      <% if policy(Poll).index? %>
+      <% if policy(Poll).create? %>
         <li class="nav__item">
           <%= active_link_to polls_path, class: "nav__link", class_active: "nav__link--is-selected" do %>
             <%= inline_svg('icons/scope.svg', class: "icon nav__icon") %>
@@ -70,7 +70,7 @@
           <% end %>
         </li>
       <% end %>
-      <% if current_user.enterprise.mentorship_module_enabled %>
+      <% if current_user.enterprise.mentorship_module_enabled && policy(MentoringInterest).index? %>
         <li class="nav__item">
           <%= active_link_to mentoring_interests_path, class: "nav__link", class_active: "nav__link--is-selected" do %>
             <%= inline_svg('icons/harmonize.svg', class: "icon nav__icon") %>

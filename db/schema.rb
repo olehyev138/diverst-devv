@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181015134320) do
+ActiveRecord::Schema.define(version: 20181018185428) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -556,6 +556,28 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.boolean  "groups_budgets_index",                               default: false, null: false
     t.boolean  "initiatives_manage",                                 default: false, null: false
     t.boolean  "groups_manage",                                      default: false, null: false
+    t.boolean  "initiatives_create",                                 default: false
+    t.boolean  "groups_budgets_request",                             default: false
+    t.boolean  "group_messages_manage",                              default: false
+    t.boolean  "group_messages_index",                               default: false
+    t.boolean  "group_messages_create",                              default: false
+    t.boolean  "news_links_index",                                   default: false
+    t.boolean  "news_links_create",                                  default: false
+    t.boolean  "news_links_manage",                                  default: false
+    t.boolean  "social_links_index",                                 default: false
+    t.boolean  "social_links_create",                                default: false
+    t.boolean  "social_links_manage",                                default: false
+    t.boolean  "group_leader_index",                                 default: false
+    t.boolean  "group_leader_manage",                                default: false
+    t.boolean  "groups_members_index",                               default: false
+    t.boolean  "groups_members_manage",                              default: false
+    t.boolean  "groups_insights_manage",                             default: false
+    t.boolean  "groups_layouts_manage",                              default: false
+    t.boolean  "group_settings_manage",                              default: false
+    t.boolean  "group_resources_index",                              default: false
+    t.boolean  "group_resources_create",                             default: false
+    t.boolean  "group_resources_manage",                             default: false
+    t.boolean  "group_posts_index",                                  default: false
   end
 
   create_table "group_message_comments", force: :cascade do |t|
@@ -1021,7 +1043,6 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.boolean  "initiatives_create",                      default: false
     t.boolean  "initiatives_manage",                      default: false
     t.boolean  "logs_view",                               default: false
-    t.boolean  "annual_budget_manage",                    default: false
     t.boolean  "branding_manage",                         default: false
     t.boolean  "sso_manage",                              default: false
     t.boolean  "permissions_manage",                      default: false
@@ -1032,6 +1053,21 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.datetime "created_at",                                              null: false
     t.datetime "updated_at",                                              null: false
     t.boolean  "budget_approval",                         default: false
+    t.boolean  "manage_all",                              default: false
+    t.boolean  "enterprise_manage",                       default: false
+    t.boolean  "groups_budgets_manage",                   default: false
+    t.boolean  "group_leader_index",                      default: false
+    t.boolean  "groups_insights_manage",                  default: false
+    t.boolean  "groups_layouts_manage",                   default: false
+    t.boolean  "group_resources_index",                   default: false
+    t.boolean  "group_resources_create",                  default: false
+    t.boolean  "group_resources_manage",                  default: false
+    t.boolean  "social_links_index",                      default: false
+    t.boolean  "social_links_create",                     default: false
+    t.boolean  "social_links_manage",                     default: false
+    t.boolean  "group_settings_manage",                   default: false
+    t.boolean  "group_posts_index",                       default: false
+    t.boolean  "mentorship_manage",                       default: false
   end
 
   create_table "policy_groups", force: :cascade do |t|
@@ -1074,7 +1110,6 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.boolean  "initiatives_manage",                    default: false
     t.boolean  "budget_approval",                       default: false
     t.boolean  "logs_view",                             default: false
-    t.boolean  "annual_budget_manage",                  default: false
     t.boolean  "sso_manage",                            default: false
     t.boolean  "permissions_manage",                    default: false
     t.boolean  "diversity_manage",                      default: false
@@ -1083,6 +1118,21 @@ ActiveRecord::Schema.define(version: 20181015134320) do
     t.boolean  "global_calendar",                       default: false
     t.boolean  "branding_manage",                       default: false
     t.integer  "user_id",                     limit: 4
+    t.boolean  "manage_all",                            default: false
+    t.boolean  "enterprise_manage",                     default: false
+    t.boolean  "groups_budgets_manage",                 default: false
+    t.boolean  "group_leader_index",                    default: false
+    t.boolean  "groups_insights_manage",                default: false
+    t.boolean  "groups_layouts_manage",                 default: false
+    t.boolean  "group_resources_index",                 default: false
+    t.boolean  "group_resources_create",                default: false
+    t.boolean  "group_resources_manage",                default: false
+    t.boolean  "social_links_index",                    default: false
+    t.boolean  "social_links_create",                   default: false
+    t.boolean  "social_links_manage",                   default: false
+    t.boolean  "group_settings_manage",                 default: false
+    t.boolean  "group_posts_index",                     default: false
+    t.boolean  "mentorship_manage",                     default: false
   end
 
   add_index "policy_groups", ["user_id"], name: "index_policy_groups_on_user_id", using: :btree

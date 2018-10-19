@@ -7,7 +7,7 @@ class Groups::QuestionsController < ApplicationController
   layout 'erg'
 
   def index
-    authorize @group, :update?
+    authorize @group, :insights?
 
     @answers_count = @group.user_groups.with_answered_survey.count
   end

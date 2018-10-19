@@ -1,13 +1,13 @@
 <div class="content__header">
   <h1>Admin Resources</h1>
-  <%= link_to "+ Add resource", polymorphic_path(@container_path + [:resource], action: "new", resource_type: "admin"), class: "btn btn--primary" if policy(Resource).new? %>
+  <%= link_to "+ Add resource", polymorphic_path(@container_path + [:resource], action: "new", resource_type: "admin"), class: "btn btn--primary" if EnterpriseFolderPolicy.new(current_user, nil).new? %>
 </div>
 
 <%= render 'table', resources: @admin_resources, name: "admin" %>
 
 <div class="content__header">
   <h1>National Resources</h1>
-  <%= link_to "+ Add resource", polymorphic_path(@container_path + [:resource], action: "new", resource_type: "national"), class: "btn btn--primary" if policy(Resource).new? %>
+  <%= link_to "+ Add resource", polymorphic_path(@container_path + [:resource], action: "new", resource_type: "national"), class: "btn btn--primary" if EnterpriseFolderPolicy.new(current_user, nil).new? %>
 </div>
 
 <%= render 'table', resources: @national_resources, name: "national"%>
