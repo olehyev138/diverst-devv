@@ -24,6 +24,7 @@ class UserDatatable < AjaxDatatablesRails::Base
     records.map do |record|
       if UserPolicy.new(@user, record).update?
         [
+          record.id,
           html_escape(record.first_name),
           html_escape(record.last_name),
           html_escape(record.email),
@@ -32,6 +33,7 @@ class UserDatatable < AjaxDatatablesRails::Base
         ]
       else
         [
+          record.id,
           html_escape(record.first_name),
           html_escape(record.last_name),
           html_escape(record.email),
