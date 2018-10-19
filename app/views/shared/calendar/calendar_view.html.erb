@@ -33,12 +33,21 @@
     <strong> Legend </strong>
     <br/>
     <% @groups.each do |group| %>
-      <span class="" style="color: <%= to_color group.calendar_color %>;">
-        <%= group.name %>
-        <% unless group == @groups.last %>
-          -
-        <% end %>
-      </span>
+      <% if group.is_parent_group? %>
+        <span class="" style="color: <%= to_color group.calendar_color %>;">
+          <%= group.name %>
+          <% unless group == @groups.last %>
+            -
+          <% end %>
+        </span>
+      <% elsif group.is_standard_group? %>
+        <span class="" style="color: <%= to_color group.calendar_color %>;">
+          <%= group.name %>
+          <% unless group == @groups.last %>
+            -
+          <% end %>
+        </span>
+      <% end %>
     <% end %>
   </div>
 </div>

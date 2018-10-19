@@ -7,12 +7,12 @@ class GroupCategoryTypesController < ApplicationController
 
 
   def edit
-    authorize Group
+    authorize Group, :manage_all_groups?
   end
 
 
   def update
-    authorize Group
+    authorize Group, :manage_all_groups?
     if @category_type.update(category_type_params)
       flash[:notice] = "Update category type name"
       redirect_to view_all_group_categories_url
@@ -23,7 +23,7 @@ class GroupCategoryTypesController < ApplicationController
   end
 
   def destroy
-    authorize Group
+    authorize Group, :manage_all_groups?
 
     @category_type.destroy
     flash[:notice] = "Successfully deleted categories"
@@ -31,11 +31,11 @@ class GroupCategoryTypesController < ApplicationController
   end
 
   def add_category
-    authorize Group
+    authorize Group, :manage_all_groups?
   end
 
   def update_with_new_category
-    authorize Group
+    authorize Group, :manage_all_groups?
 
     if @category_type.update(category_type_params)
       flash[:notice] = "You successfully added categories to #{@category_type.name}"

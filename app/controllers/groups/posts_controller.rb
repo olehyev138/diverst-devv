@@ -7,10 +7,8 @@ class Groups::PostsController < ApplicationController
     layout 'erg'
 
     def index
-        authorize @group, :view_latest_news?
-        if policy(@group).erg_leader_permissions?
-                @count = NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise)
-                                .count
+        if policy(@group).manage?
+                @count = NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise).count
 
                 @posts = NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise)
                                 .order(is_pinned: :desc, created_at: :desc)

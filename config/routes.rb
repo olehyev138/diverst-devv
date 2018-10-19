@@ -278,7 +278,7 @@ Rails.application.routes.draw do
     member do
       get 'settings'
       get 'layouts'
-
+      get 'plan_overview'
       get 'export_csv'
       get 'import_csv'
       get 'sample_csv'
@@ -338,7 +338,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :rewards, except: [:show]
+  resources :rewards, except: [:show] do
+    collection do
+      put "enable"
+    end
+  end
   resources :badges, except: [:index, :show]
 
   resources :reward_actions, only: [] do

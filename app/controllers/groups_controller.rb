@@ -22,13 +22,12 @@ class GroupsController < ApplicationController
     end
 
     def close_budgets
-        authorize Group
-        @groups = GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_budgets_index).resolve.includes(:children).all_parents
+        authorize Group, :manage_all_group_budgets?
+        @groups = policy_scope(Group).includes(:children).all_parents
     end
-
+    
     def close_budgets_export_csv
-      authorize Group, :close_budgets?
-      user_not_authorized if not current_user.policy_group.annual_budget_manage?
+      authorize Group, :manage_all_group_budgets?
 
       result =
         CSV.generate do |csv|
@@ -48,7 +47,17 @@ class GroupsController < ApplicationController
     def calendar
         authorize Group
         enterprise = current_user.enterprise
-        @groups = enterprise.groups
+        @groups = []
+        enterprise.groups.each do |group|
+            if group.is_parent_group?
+                @groups << group 
+                group.children.each do |sub_group|
+                    @groups << sub_group
+                end
+            elsif group.is_standard_group?                
+                @groups << group 
+            end
+        end
         @segments = enterprise.segments
         @q_form_submit_path = calendar_groups_path
         @q = Initiative.ransack(params[:q])
@@ -104,7 +113,7 @@ class GroupsController < ApplicationController
         authorize @group
         @group_sponsors = @group.sponsors
 
-        if policy(@group).erg_leader_permissions?
+        if policy(@group).manage?
             base_show
 
             @posts = without_segments
@@ -185,11 +194,15 @@ class GroupsController < ApplicationController
     end
 
     def layouts
-        authorize @group, :update?
+        authorize @group
     end
 
     def settings
-        authorize @group, :update?
+        authorize @group, :manage?
+    end
+    
+    def plan_overview
+        authorize @group, :manage?
     end
 
     def destroy
@@ -206,7 +219,7 @@ class GroupsController < ApplicationController
     end
 
     def metrics
-        authorize @group
+        authorize @group, :manage?
         @updates = @group.updates
     end
 
@@ -320,11 +333,9 @@ class GroupsController < ApplicationController
 
     def resolve_layout
         case action_name
-        when 'show'
+        when 'show', 'layouts', 'settings', 'plan_overview', 'metrics', 'edit_fields'
             'erg'
-        when 'metrics'
-            'plan'
-        when 'edit_fields', 'plan_overview', 'close_budgets'
+        when 'close_budgets'
             'plan'
         else
             'erg_manager'
@@ -332,7 +343,7 @@ class GroupsController < ApplicationController
     end
 
     def set_group
-       current_user ? @group = current_user.enterprise.groups.find(params[:id]) : user_not_authorized
+       @group = current_user.enterprise.groups.find(params[:id])
     end
 
     def group_params

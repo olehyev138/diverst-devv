@@ -1,25 +1,13 @@
-class GroupMessagePolicy < ApplicationPolicy
-  def index?
-    @policy_group.group_messages_index?
-  end
-
-  def create?
-    @policy_group.group_messages_create?
-  end
-
-  def update?
-    return true if is_owner?
-
-    @policy_group.group_messages_manage
-  end
-
-  def destroy?
-    return true if is_owner?
-
-    @policy_group.group_messages_manage
-  end
-
-  def is_owner?
-    @record.owner == @user
-  end
+class GroupMessagePolicy < GroupBasePolicy
+    def base_index_permission
+      "group_messages_index"
+    end
+    
+    def base_create_permission
+      "group_messages_create"
+    end
+    
+    def base_manage_permission
+      "group_messages_manage"
+    end
 end
