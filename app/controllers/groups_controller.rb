@@ -2,7 +2,6 @@ class GroupsController < ApplicationController
     before_action :authenticate_user!, except: [:calendar_data]
     before_action :set_group, except: [:index, :new, :create, :plan_overview,
                                        :calendar, :calendar_data, :close_budgets, :close_budgets_export_csv, :sort]
-
     skip_before_action :verify_authenticity_token, only: [:create, :calendar_data]
     after_action :verify_authorized, except: [:calendar_data]
 

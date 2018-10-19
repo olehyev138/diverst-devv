@@ -140,8 +140,6 @@ RSpec.describe GroupsController, type: :controller do
     let!(:group) { create(:group, enterprise: user.enterprise) }
 
     context 'with logged user' do
-      let!(:foreign_group) { FactoryGirl.create :group }
-
       login_user_from_let
 
       before { get :plan_overview, :id => group.id }
