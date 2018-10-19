@@ -8,8 +8,8 @@ class NewsFeed < ActiveRecord::Base
 
     validates :group_id, presence: true
 
-    def self.all_links(news_feed_id, segments)
-        links = all_links_without_segments(news_feed_id)
+    def self.all_links(news_feed_id, segments, enterprise)
+        links = all_links_without_segments(news_feed_id, enterprise)
         unless segments.nil? || segments.empty?
             return links.joins("LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id").where("news_feed_link_segments.segment_id IS NULL OR news_feed_link_segments.segment_id IN (#{ segments.join(",") })")
         else
@@ -17,7 +17,11 @@ class NewsFeed < ActiveRecord::Base
         end
     end
 
-    def self.all_links_without_segments(news_feed_id)
+    def self.all_links_without_segments(news_feed_id, enterprise)
+      if enterprise.enable_social_media?
         return NewsFeedLink.combined_news_links(news_feed_id)
+      else
+        return NewsFeedLink.combined_news_links(news_feed_id).where("news_feed_links.social_link_id IS NULL")
+      end
     end
 end

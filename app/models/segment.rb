@@ -1,5 +1,6 @@
 class Segment < ActiveRecord::Base
     extend Enumerize
+    include PublicActivity::Common
 
     enumerize :active_users_filter, default: :both_active_and_inactive, in: [
                                         :both_active_and_inactive,

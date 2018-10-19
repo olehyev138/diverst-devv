@@ -13,6 +13,7 @@ class CustomTextsController < ApplicationController
     authorize current_user.enterprise
     if @custom_text.update(custom_texts_params)
       flash[:notice] = "Your texts were updated"
+      track_activity(@custom_text, :update)
     else
       flash[:alert] = "Your texts were not updated. Please fix the errors"
     end

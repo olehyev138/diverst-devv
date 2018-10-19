@@ -23,6 +23,7 @@ class Groups::UpdatesController < ApplicationController
 
     if @update.save
       flash[:notice] = "Your group update was created"
+      track_activity(@update, :create)
       redirect_to action: :index
     else
       flash[:alert] = "Your group update was not created. Please fix the errors"
@@ -44,6 +45,7 @@ class Groups::UpdatesController < ApplicationController
 
     if @update.update(update_params)
       flash[:notice] = "Your group update was updated"
+      track_activity(@update, :update)
       redirect_to action: :index
     else
       flash[:alert] = "Your group update was not updated. Please fix the errors"
@@ -53,6 +55,7 @@ class Groups::UpdatesController < ApplicationController
 
   def destroy
     authorize Group
+    track_activity(@update, :destroy)
     @update.destroy
     redirect_to action: :index
   end

@@ -10,6 +10,7 @@ class User::UsersController < ApplicationController
 
   def edit
     authorize @user
+    @user_groups = @user.user_groups.where(accepted_member: true)
   end
 
   def update
@@ -19,6 +20,7 @@ class User::UsersController < ApplicationController
     @user.info.merge(fields: @user.enterprise.fields, form_data: params['custom-fields'])
 
     if @user.save
+      update_groups_notifications
       flash[:notice] = "Your user was updated"
       redirect_to user_user_path(@user)
     else
@@ -44,9 +46,18 @@ class User::UsersController < ApplicationController
       :last_name,
       :biography,
       :time_zone,
+      :groups_notifications_frequency,
+      :groups_notifications_date,
       :mentor,
       :mentee,
       mentoring_interest_ids: []
     )
+  end
+
+  def update_groups_notifications
+    @user.user_groups.where(accepted_member: true).each do |user_group| 
+      user_group.update notifications_frequency: User.groups_notifications_frequencies[params[:user][:groups_notifications_frequency]],
+                        notifications_date: User.groups_notifications_dates[params[:user][:groups_notifications_date]]
+    end
   end
 end

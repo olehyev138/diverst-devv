@@ -2,6 +2,8 @@ require 'rails_helper'
 require 'spec_helper'
 
 RSpec.describe "User::UserAnswersController", type: :controller do
+    include ActiveJob::TestHelper
+
     let(:enterprise) { create(:enterprise, enable_rewards: true) }
     let(:user) { create :user, enterprise: enterprise }
 
@@ -86,6 +88,31 @@ RSpec.describe "User::UserAnswersController", type: :controller do
                 it "redirects to campaign question" do
                     post :create, question_id: question.id, answer: { content: "Here's some content for you" }
                     expect(response).to redirect_to [:user, question ]
+                end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{post :create, question_id: question.id, answer: { content: "Here's some content for you" }}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { Answer.last }
+                    let(:owner) { user }
+                    let(:key) { 'answer.create' }
+
+                    before {
+                      perform_enqueued_jobs do
+                        post :create, question_id: question.id, answer: { content: "Here's some content for you" }
+                      end
+                    }
+
+                    include_examples'correct public activity'
+                  end
                 end
             end
 
