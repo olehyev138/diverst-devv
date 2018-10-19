@@ -6,17 +6,16 @@ class Groups::LeadersController < ApplicationController
   layout 'erg'
 
   def index
-    authorize @group, :leaders?
-
+    authorize [@group], :index?, :policy_class => GroupLeaderPolicy
     @group_leaders = @group.group_leaders
   end
 
   def new
-    authorize @group, :leaders?
+    authorize [@group], :new?, :policy_class => GroupLeaderPolicy
   end
 
   def create
-    authorize @group, :leaders?
+    authorize [@group], :create?, :policy_class => GroupLeaderPolicy
     if @group.update(group_params)
       flash[:notice] = "Leaders were updated"
       redirect_to action: :index

@@ -1,13 +1,5 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-xs-8">
-      <span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
-      <select class="field__input field__input--right-add-on" id="js-group-select">
-        <% current_user.manageable_groups.each do |group| %>
-          <option value="<%= group.id %>"<%= " selected disabled" if group == @group %>><%= group.name %></option>
-        <% end %>
-      </select>
-    </div>
     <div class="col-xs-4">
       <%= link_to "New Event", new_group_initiative_path(@group), class: "btn btn--primary btn-lg hidden-xs" if policy(Initiative).new? %>
       <%= link_to "New", new_group_initiative_path(@group), class: "btn btn-primary btn-lg visible-xs" if policy(Initiative).new? %>
@@ -153,17 +145,6 @@
     <% end %>
   <% end %>
 </div>
-
-
-<script>
-  $(document).on('page:change', function() {
-    $(document).off('page:change');
-
-    $('#js-group-select').change(function() {
-      location = "/groups/" + $(this).find(":selected").val() + '/initiatives';
-    });
-  });
-</script>
 
 <style>
   .highcharts-tooltip > span {

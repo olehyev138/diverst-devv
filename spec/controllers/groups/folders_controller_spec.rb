@@ -5,7 +5,7 @@ RSpec.describe Groups::FoldersController, type: :controller do
     let(:user){ create(:user, enterprise: enterprise) }
     let(:group){ create(:group, enterprise: user.enterprise) }
     let(:user_group){ create(:user_group, group: group, user: user) }
-    let!(:folder){ create(:folder, :group => group, :password_protected => true, :password => "password") }
+    let!(:folder){ create(:folder, :group => group, :enterprise_id => nil, :password_protected => true, :password => "password") }
 
     describe "POST#authenticate" do
         login_user_from_let
