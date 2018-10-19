@@ -3,6 +3,23 @@ class MetricsDashboardsController < ApplicationController
   after_action :verify_authorized, except: [:shared_dashboard]
   before_action :set_metrics_dashboard, except: [:index, :new, :create, :shared_dashboard]
   layout 'erg_manager'
+  
+  def index
+    authorize MetricsDashboard
+
+    @dashboards = policy_scope(MetricsDashboard).includes(:enterprise, :segments)
+
+    enterprise = current_user.enterprise
+    @general_metrics = {
+      nb_users: enterprise.users.active.count,
+      nb_ergs: enterprise.groups.count,
+      nb_segments: enterprise.segments.count,
+      nb_resources: enterprise.resources_count,
+      nb_polls: enterprise.polls.count,
+      nb_ongoing_campaigns: enterprise.campaigns.ongoing.count,
+      average_nb_members_per_group: Group.avg_members_per_group(enterprise: enterprise)
+    }
+  end
 
   def new
     authorize MetricsDashboard
@@ -22,23 +39,6 @@ class MetricsDashboardsController < ApplicationController
       flash[:alert] = "Your dashboard was not created. Please fix the errors"
       render :new
     end
-  end
-
-  def index
-    authorize MetricsDashboard
-
-    @dashboards = policy_scope(MetricsDashboard).includes(:enterprise, :segments)
-
-    enterprise = current_user.enterprise
-    @general_metrics = {
-      nb_users: enterprise.users.active.count,
-      nb_ergs: enterprise.groups.count,
-      nb_segments: enterprise.segments.count,
-      nb_resources: enterprise.resources_count,
-      nb_polls: enterprise.polls.count,
-      nb_ongoing_campaigns: enterprise.campaigns.ongoing.count,
-      average_nb_members_per_group: Group.avg_members_per_group(enterprise: enterprise)
-    }
   end
 
   def show

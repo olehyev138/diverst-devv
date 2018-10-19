@@ -1,19 +1,28 @@
 class NewsLinkPolicy < ApplicationPolicy
-  def index?
-    @policy_group.news_links_index?
-  end
+    def index?
+        return true if create?
+        @policy_group.news_links_index?
+    end
 
-  def create?
-    @policy_group.news_links_create?
-  end
+    def show?
+        index?
+    end
 
-  def update?
-    return true if @policy_group.news_links_manage?
-    @record.author == @user
-  end
+    def create?
+        return true if @policy_group.news_links_manage?
+        @policy_group.news_links_create?
+    end
+  
+    def manage?
+        @policy_group.news_links_manage?
+    end
 
-  def destroy?
-    return true if @policy_group.news_links_manage?
-    @record.author == @user
-  end
+    def update?
+        return true if manage?
+        @record.author == @user
+    end
+
+    def destroy?
+        update?
+    end
 end

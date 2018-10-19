@@ -185,7 +185,6 @@ class UsersController < ApplicationController
       :custom_policy_group,
       policy_group_attributes: [
         :id,
-        :admin_pages_view,
         :campaigns_index,
         :campaigns_create,
         :campaigns_manage,
@@ -223,13 +222,29 @@ class UsersController < ApplicationController
         :logs_view,
         :groups_budgets_index,
         :groups_budgets_request,
-        :annual_budget_manage,
+        :budget_approval,
+        :group_leader_manage,
         :sso_manage,
         :permissions_manage,
-        :group_leader_manage,
         :diversity_manage,
         :manage_posts,
-        :branding_manage
+        :branding_manage,
+        :global_calendar,
+        :manage_all,
+        :enterprise_manage,
+        :groups_budgets_manage,
+        :group_leader_index,
+        :groups_insights_manage,
+        :groups_layouts_manage,
+        :group_resources_index,
+        :group_resources_create,
+        :group_resources_manage,
+        :social_links_index,
+        :social_links_create,
+        :social_links_manage,
+        :group_settings_manage,
+        :group_posts_index,
+        :mentorship_manage
       ]
     )
   end

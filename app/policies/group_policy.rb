@@ -1,87 +1,49 @@
 class GroupPolicy < ApplicationPolicy
+    
     def index?
+        return true if @policy_group.manage_all?
         @policy_group.groups_index?
     end
     
     def new?
-        manage?
-    end
-    
-    def manage?
-        @policy_group.groups_manage?
+        create?
     end
     
     def show?
         index?
     end
-    
-    def leaders?
-        return true if @policy_group.groups_manage?
-        @policy_group.group_leader_manage?
-    end
-
-    def calendar?
-        index?
-    end
-
-    def plan_overview?
-        @policy_group.groups_budgets_index?
-    end
-    
-    def calendar?
-        @policy_group.global_calendar?
-    end
-
-    def close_budgets?
-        @policy_group.annual_budget_manage?
-    end
-
-    def metrics?
-        update?
-    end
 
     def create?
+        return true if @policy_group.manage_all?
         @policy_group.groups_create?
     end
-
-    def update_all_sub_groups?
-        create?
-    end
-
-    # move these to separate policies
-    def view_all?
-        create?
-    end
-
-    def add_category?
-        create?
-    end
-
-    def update_with_new_category?
-        create?
-    end
-
-    def update?
-        return true if @policy_group.groups_manage?
-        return true if @record.owner == @user
-
-        @record.managers.include?(user)
+    
+    def manage_all_groups?
+        #return true if parent_group_permissions?
+        # super admin
+        return true if @policy_group.manage_all?
+        # groups manager
+        return true if @policy_group.groups_manage? &&  @policy_group.group_settings_manage?
     end
     
-    def is_a_member?
-       (@record.members.include? @user) || is_a_pending_member?
+    def manage_all_group_budgets?
+        #return true if parent_group_permissions?
+        # super admin
+        return true if @policy_group.manage_all?
+        # groups manager
+        return true if @policy_group.groups_manage? &&  @policy_group.groups_budgets_manage?
     end
-
-    def is_active_member?
-        @record.active_members.include? @user
+    
+    def manage?
+        return true if manage_all_groups?
+        # group leader
+        return true if has_group_leader_permissions?("group_settings_manage")
+        # group member
+        return true if is_a_member? &&  @policy_group.group_settings_manage?
     end
-
-    def is_a_guest?
-        !is_a_member?
-    end
-
+    
     def is_a_pending_member?
-        @record.pending_members.include? @user
+        @record.pending_members.include? user
     end
 
     def view_members?
@@ -190,44 +152,72 @@ class GroupPolicy < ApplicationPolicy
 
     def request_budget?
         @policy_group.groups_budgets_request? || erg_leader_permissions?
+    
+    def is_a_member?
+       (@record.members.include? user) || is_a_pending_member?
+    end
+    
+    def is_a_leader?
+       @record.leaders.include? user
+    end
+    
+    def has_group_leader_permissions?(permission)
+        return false if !is_a_leader?
+        return @record.group_leaders.where(:user_id => @user.id).where("#{permission} = true").exists?
     end
 
-    def submit_budget?
-        @policy_group.groups_budgets_request?  || erg_leader_permissions?
-    end
-
-    def approve_budget?
-        @policy_group.budget_approval?
-    end
-
-    def decline_budget?
-        @policy_group.budget_approval?
+    def update?
+        return true if manage?
+        @record.owner == @user
     end
 
     def parent_group_permissions?
         return false if @record.parent.nil?
-        return ::GroupPolicy.new(@user, @record.parent).erg_leader_permissions?
+        return ::GroupPolicy.new(@user, @record.parent).manage?
     end
 
     def destroy?
-        return true if @policy_group.groups_manage?
-        @record.owner == @user
+        update?
+    end
+    
+    def calendar?
+        @policy_group.global_calendar?
+    end
+    
+    def insights?
+        return true if parent_group_permissions?
+        # super admin
+        return true if @policy_group.manage_all?
+        # groups manager
+        return true if @policy_group.groups_manage? &&  @policy_group.groups_insights_manage?
+        # group leader
+        return true if has_group_leader_permissions?("groups_insights_manage")
+        # group member
+        return true if is_a_member? &&  @policy_group.groups_insights_manage?
+    end
+    
+    def layouts?
+        return true if parent_group_permissions?
+        # super admin
+        return true if @policy_group.manage_all?
+        # groups manager
+        return true if @policy_group.groups_manage? &&  @policy_group.groups_layouts_manage?
+        # group leader
+        return true if has_group_leader_permissions?("groups_layouts_manage")
+        # group member
+        return true if is_a_member? &&  @policy_group.groups_layouts_manage?
     end
     
     class Scope < Scope
-        attr_reader :user, :scope, :permission
-
-        def initialize(user, scope, permission)
-          @user  = user
-          @scope = scope
-          @permission = permission
+        def index?
+            GroupPolicy.new(user, nil).index?
         end
     
         def resolve
-            if UserRole.where(:id => user.user_role_id, :role_type => "group").count > 0
-                scope.joins(:group_leaders).where(:group_leaders => {:user_id => user.id, permission.to_sym => true})
+            if index?
+                scope.where(:enterprise_id => user.enterprise_id).all
             else 
-                scope.includes(:parent, :leaders, :owner, :initiatives)
+                []
             end
         end
     end
