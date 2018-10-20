@@ -84,7 +84,7 @@ class Group < ActiveRecord::Base
   has_many :initiatives, through: :pillars
   has_many :updates, class_name: "GroupUpdate", dependent: :destroy
   has_many :views, dependent: :destroy
-  
+
   has_many :fields, -> { where field_type: "regular"},
            dependent: :delete_all
   has_many :survey_fields, -> { where field_type: "group_survey"},
@@ -112,13 +112,15 @@ class Group < ActiveRecord::Base
 
   validates :name, presence: true
   validates_format_of :contact_email, with: Devise.email_regexp, allow_blank: true
-  
+
   # only allow one default_mentor_group per enterprise
   validates_uniqueness_of :default_mentor_group, scope: [:enterprise_id], conditions: -> { where(default_mentor_group: true) }
-  
+
   validate :valid_yammer_group_link?
 
   validate :ensure_one_level_nesting
+  validate :ensure_not_own_parent
+  validate :ensure_not_own_child
 
   before_save :send_invitation_emails, if: :send_invitations?
   before_save :create_yammer_group, if: :should_create_yammer_group?
@@ -159,7 +161,7 @@ class Group < ActiveRecord::Base
   def is_sub_group?
     parent.present?
   end
-  
+
   def total_views
     views.sum(:view_count)
   end
@@ -313,9 +315,9 @@ class Group < ActiveRecord::Base
 
       active_members.each do |member|
         membership_list_row = [ member.first_name,
-                                member.last_name, 
+                                member.last_name,
                                 member.email
-                              ]                        
+                              ]
         csv << membership_list_row
       end
 
@@ -334,7 +336,7 @@ class Group < ActiveRecord::Base
   def pending_posts_count
     news_links.unapproved.count + messages.unapproved.count + social_links.unapproved.count
   end
-  
+
   # This method only exists because it's used in a callback
   def update_elasticsearch_member(member)
     member.__elasticsearch__.update_document
@@ -361,6 +363,18 @@ class Group < ActiveRecord::Base
   def ensure_one_level_nesting
     if parent.present? && children.present?
       errors.add(:parent_id, "Group can't have both parent and children")
+    end
+  end
+
+  def ensure_not_own_parent
+    if parent.present? && parent.id == self.id
+      errors.add(:parent_id, 'Group cant be its own parent')
+    end
+  end
+
+  def ensure_not_own_child
+    if children.present? && children.include?(self)
+      errors.add(:child_ids, 'Group cant be its own child')
     end
   end
 
