@@ -56,7 +56,7 @@ class EnterprisesController < ApplicationController
     set_theme
   end
 
-  def edit_pending_comments
+  def edit_posts
     authorize @enterprise, :manage_posts?
   end
 
@@ -141,6 +141,7 @@ class EnterprisesController < ApplicationController
       .require(:enterprise)
       .permit(
         :enable_pending_comments,
+        :enable_social_media,
         :enable_rewards,
         :has_enabled_saml,
         :has_enabled_onboarding_email,

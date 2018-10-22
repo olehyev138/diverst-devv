@@ -1,21 +1,21 @@
 class MentoringInterestPolicy < ApplicationPolicy
     def index?
-        true
+        @policy_group.mentorship_manage?
     end
     
     def edit?
-        true
+        index?
     end
     
     def create?
-        true
+        index?
     end
     
     def update?
-        true
+        index?
     end
     
     def destroy?
-        true
+        index?
     end
 end
