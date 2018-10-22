@@ -373,7 +373,7 @@ class Group < ActiveRecord::Base
   end
 
   def ensure_not_own_child
-    if children.present? && children.include?(self)
+    if children.include?(self)
       errors.add(:child_ids, 'Group cant be its own child')
     end
   end
@@ -411,7 +411,7 @@ class Group < ActiveRecord::Base
     end
   end
 
-  def filter_by_membership(membership_status)
+    def filter_by_membership(membership_status)
     members.references(:user_groups).where('user_groups.accepted_member=?', membership_status)
   end
 
