@@ -110,7 +110,8 @@ class Group < ActiveRecord::Base
   has_attached_file :banner
   validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: true
+
   validates_format_of :contact_email, with: Devise.email_regexp, allow_blank: true
 
   # only allow one default_mentor_group per enterprise
