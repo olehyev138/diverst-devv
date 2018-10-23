@@ -14,7 +14,7 @@ class Groups::PostsController < ApplicationController
                                 .order(is_pinned: :desc, created_at: :desc)
                                 .limit(@limit)
         else
-            if policy(@group).view_latest_news?
+            if GroupPostsPolicy.new(current_user, [@group]).view_latest_news?
                 segment_ids = nil
                 if @group.active_members.include?(current_user)
                   segment_ids = current_user.segments.ids

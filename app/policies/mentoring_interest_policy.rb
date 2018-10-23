@@ -1,5 +1,6 @@
 class MentoringInterestPolicy < ApplicationPolicy
     def index?
+        return true if manage_all?
         @policy_group.mentorship_manage?
     end
     
