@@ -20,7 +20,7 @@
 
       <div class="card__section card__section--border">
         <%= f.association :parent,
-              collection: @groups,
+              collection: @available_groups,
               input_html: { class: "select2" },
               :include_blank => "None",
               label: "#{c_t(:parent).titleize}-#{ c_t(:erg).titleize}" %>
@@ -33,7 +33,7 @@
       </div>
       <div class="card__section card__section--border">
         <%= f.association :children,
-              collection: @groups,
+              collection: @available_groups,
               input_html: { class: "select2" },
               label: "Sub-#{ c_t(:erg).titleize.pluralize}" %>
       </div>

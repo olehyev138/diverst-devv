@@ -99,6 +99,8 @@ class GroupsController < ApplicationController
         authorize Group
         @group = current_user.enterprise.groups.new
         @categories = current_user.enterprise.group_categories
+        # groups available to be parents or children
+        @available_groups = @group.enterprise.groups.where.not(id: @group.id)
     end
 
     def show
@@ -154,7 +156,7 @@ class GroupsController < ApplicationController
         authorize @group
         @categories = current_user.enterprise.group_categories
         # groups available to be parents or children
-        @groups = @group.enterprise.groups.where.not(id: @group.id)
+        @available_groups = @group.enterprise.groups.where.not(id: @group.id)
     end
 
     def update
