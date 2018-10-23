@@ -10,11 +10,12 @@ class InitiativePolicy < ApplicationPolicy
   end
 
   def create?
-    return true if @policy_group.initiatives_manage?
+    return true if manage?
     @policy_group.initiatives_create?
   end
   
   def manage?
+    return true if manage_all?
     @policy_group.initiatives_manage?
   end
 

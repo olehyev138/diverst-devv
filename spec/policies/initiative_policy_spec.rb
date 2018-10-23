@@ -12,6 +12,13 @@ RSpec.describe InitiativePolicy, :type => :policy do
 
     subject { described_class }
     
+    before {
+        user.policy_group.manage_all = false
+        user.policy_group.save!
+        no_access.policy_group.manage_all = false
+        user.policy_group.save!
+    }
+    
     permissions :index?, :create?, :update?, :destroy? do
                   
         it "allows access" do
@@ -34,6 +41,7 @@ RSpec.describe InitiativePolicy, :type => :policy do
             user_2.policy_group.initiatives_index = false
             user_2.policy_group.initiatives_create = false
             user_2.policy_group.initiatives_manage = false
+            user_2.policy_group.manage_all = false
             user_2.policy_group.save!
             expect(subject).to_not permit(user_2, initiative)
         end
