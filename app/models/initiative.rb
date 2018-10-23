@@ -62,6 +62,7 @@ class Initiative < ActiveRecord::Base
   validates_attachment_content_type :picture, content_type: %r{\Aimage\/.*\Z}
   validates :start, presence: true
   validates :end, presence: true
+  validates :max_attendees, numericality: { greater_than: 0, allow_nil: true }
   validate :check_budget
   validate :segment_enterprise
 
@@ -182,6 +183,11 @@ class Initiative < ActiveRecord::Base
 
   def group_ids
     participating_groups.pluck(:id) + [group.id]
+  end
+
+  def full?
+    return self.attendees.count >= max_attendees if max_attendees?
+    return false
   end
 
   protected

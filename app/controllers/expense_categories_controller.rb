@@ -21,6 +21,7 @@ class ExpenseCategoriesController < ApplicationController
 
     if @expense_category.save
       flash[:notice] = "Your expense category was created"
+      track_activity(@expense_category, :create)
       redirect_to action: :index
     else
       flash[:alert] = "Your expense category was not created. Please fix the errors"
@@ -36,6 +37,7 @@ class ExpenseCategoriesController < ApplicationController
     authorize @expense_category
     if @expense_category.update(expense_params)
       flash[:notice] = "Your expense category was updated"
+      track_activity(@expense_category, :update)
       redirect_to action: :index
     else
       flash[:alert] = "Your expense category was not updated. Please fix the errors"
@@ -45,6 +47,7 @@ class ExpenseCategoriesController < ApplicationController
 
   def destroy
     authorize @expense_category
+    track_activity(@expense_category, :destroy)
     @expense_category.destroy
     redirect_to action: :index
   end
