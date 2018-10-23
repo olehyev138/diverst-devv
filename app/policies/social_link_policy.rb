@@ -1,24 +1,28 @@
 class SocialLinkPolicy < ApplicationPolicy
   
     def index?
+        return true if manage?
         @policy_group.social_links_index?
     end
     
     def create?
+        return true if manage?
         @policy_group.social_links_create?
     end
     
     def manage?
-        return true if @policy_group.social_links_manage?
-        @record.author == @user
+        return true if manage_all?
+        @policy_group.social_links_manage?
     end
     
     def update?
         manage?
+        @record.author == @user
     end
     
     def destroy?
         manage?
+        @record.author == @user
     end
   
     class Scope < Scope 

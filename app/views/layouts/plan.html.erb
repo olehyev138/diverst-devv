@@ -9,7 +9,7 @@
   </button>
   <nav id="navigation" class="jq-dropdown jq-dropdown-tip">
     <ul class="jq-dropdown-menu">
-        <% if current_user.policy_group.groups_budgets_manage? && current_user.policy_group.groups_manage? %>
+        <% if GroupBudgetPolicy.new(current_user, []).manage_all_budgets? %>
               <li>
           <%= active_link_to "Budgeting", close_budgets_groups_path %>
                 </li>
@@ -32,7 +32,7 @@
   </nav>
 </div>
 <div class="menu menu--desktop">
-  <% if current_user.policy_group.groups_budgets_manage? && current_user.policy_group.groups_manage? %>
+  <% if GroupBudgetPolicy.new(current_user, []).manage_all_budgets? %>
     <%= active_link_to "Budgeting", close_budgets_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <% end %>
 </div>

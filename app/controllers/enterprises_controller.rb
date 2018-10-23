@@ -22,6 +22,19 @@ class EnterprisesController < ApplicationController
       redirect_to :back
     end
   end
+  
+  def update_posts
+    authorize @enterprise, :manage_posts?
+
+    if @enterprise.update_attributes(enterprise_params)
+      flash[:notice] = "Your enterprise was updated"
+      track_activity(@enterprise, :update)
+      redirect_to :back
+    else
+      flash[:alert] = "Your enterprise was not updated. Please fix the errors"
+      redirect_to :back
+    end
+  end
 
   def edit_fields
     authorize @enterprise

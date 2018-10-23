@@ -146,8 +146,16 @@ RSpec.describe Groups::CommentsController, type: :controller do
     end
 
     context 'when user is not an erg leader' do
+      
       login_user_from_let
-      before { patch :approve, id: comment.id }
+      before { 
+        
+        user.policy_group.manage_all = false
+        user.policy_group.manage_posts = false
+        user.policy_group.save!
+        
+        patch :approve, id: comment.id 
+      }
 
       it 'flashes an alert message' do
         expect(flash[:alert]).to eq "You are not authorized to perform this action."
@@ -198,7 +206,12 @@ RSpec.describe Groups::CommentsController, type: :controller do
 
     context 'when user is not an erg leader' do
       login_user_from_let
-      before { patch :disapprove, id: comment.id }
+      before { 
+        user.policy_group.manage_all = false
+        user.policy_group.manage_posts = false
+        user.policy_group.save!
+        patch :disapprove, id: comment.id 
+      }
 
       it 'flashes an alert message' do
         expect(flash[:alert]).to eq "You are not authorized to perform this action."
@@ -245,7 +258,12 @@ RSpec.describe Groups::CommentsController, type: :controller do
 
     context 'when user is not an erg leader' do
       login_user_from_let
-      before { delete :destroy, id: comment.id }
+      before { 
+        user.policy_group.manage_all = false
+        user.policy_group.manage_posts = false
+        user.policy_group.save!
+        delete :destroy, id: comment.id 
+      }
 
       it 'flashes an alert message' do
         expect(flash[:alert]).to eq "You are not authorized to perform this action."

@@ -7,8 +7,7 @@ module Indexable
         index: User.es_index_name(enterprise: enterprise),
         record_id: object.id
       )
-    rescue => e
-      puts e.inspect
+    rescue
     end
   end
 

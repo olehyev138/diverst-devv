@@ -14,6 +14,7 @@ class EnterpriseResourcePolicy < ApplicationPolicy
   end
 
   def update?
+    return true if manage_all?
     @policy_group.enterprise_resources_manage?
   end
 
