@@ -3,7 +3,7 @@ class GenericGraphsController < ApplicationController
 
     before_action   :authenticate_user!
     before_action   :authorize_dashboards
-    
+
     def group_population
         data = current_user.enterprise.groups.all_parents.map { |g|
             {
@@ -481,6 +481,7 @@ class GenericGraphsController < ApplicationController
           .select('news_links.title, views.view_count, groups.name')
           .joins(:group, :news_feed_link, 'JOIN views on news_feed_links.id = views.news_feed_link_id')
           .where(:news_feed_links => {:id => news_feed_link_ids})
+          .limit(20)
           .order('view_count DESC')
 
         data = news_links.map do |news_link|
@@ -737,7 +738,7 @@ class GenericGraphsController < ApplicationController
             }
         end
     end
-    
+
     def authorize_dashboards
         authorize MetricsDashboard, :index?
     end
