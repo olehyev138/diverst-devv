@@ -7,7 +7,7 @@ class Groups::ResourcesController < ApplicationController
   layout 'erg'
 
   def index
-    if policy(@group).erg_leader_permissions? or @group.active_members.include? current_user
+    if policy(@group).manage? or @group.active_members.include? current_user
       @group_resources = @container.resources
       @national_resources = @container.enterprise.resources.where(:resource_type => "national")
       render '/index'

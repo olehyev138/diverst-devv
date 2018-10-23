@@ -10,34 +10,37 @@
   <nav id="navigation" class="jq-dropdown jq-dropdown-tip">
     <ul class="jq-dropdown-menu">
       <li>
-        <%= active_link_to "Users", users_path if current_user.policy_group.users_index? %>
+        <%= active_link_to "Users", users_path if policy(User).index? %>
       </li>
       <li>
-        <%= active_link_to "SSO", edit_auth_enterprise_path(current_user.enterprise) if current_user.policy_group.sso_manage? %>
+        <%= active_link_to "SSO", edit_auth_enterprise_path(current_user.enterprise) if policy(current_user.enterprise).sso_manage? %>
       </li>
       <li>
-        <%= active_link_to "Permissions", policy_group_templates_path if current_user.policy_group.permissions_manage? %>
+        <%= active_link_to "Permissions", policy_group_templates_path if policy(current_user.enterprise).manage_permissions? %>
       </li>
       <li>
-        <%= active_link_to "Fields", edit_fields_enterprise_path(current_user.enterprise) if policy(current_user.enterprise).edit_fields? %>
+        <%= active_link_to "Emails", emails_path if policy(current_user.enterprise).manage_branding? %>
       </li>
       <li>
-        <%= active_link_to "Texts", edit_custom_text_path(current_user.enterprise.custom_text) if policy(current_user.enterprise).edit_fields? %>
+        <%= active_link_to "Fields", edit_fields_enterprise_path(current_user.enterprise) if policy(current_user.enterprise).sso_manage? %>
       </li>
       <li>
-        <%= active_link_to "Branding", edit_branding_enterprise_path(current_user.enterprise) if policy(current_user.enterprise).edit_fields? %>
+        <%= active_link_to "Texts", edit_custom_text_path(current_user.enterprise.custom_text) if policy(current_user.enterprise).manage_branding? %>
       </li>
       <li>
-        <%= active_link_to "Integrations", integrations_path, class: "secondary-header__tab" if current_user.policy_group.sso_manage? %>
+        <%= active_link_to "Branding", edit_branding_enterprise_path(current_user.enterprise) if policy(current_user.enterprise).manage_branding? %>
       </li>
       <li>
-        <%= active_link_to c_t(:dci_abbreviation), rewards_path, class: "secondary-header__tab" if current_user.policy_group.diversity_manage? %>
+        <%= active_link_to "Integrations", integrations_path, class: "secondary-header__tab" if policy(current_user.enterprise).sso_manage? %>
       </li>
       <li>
-        <%= active_link_to "Logs", logs_path, class: "secondary-header__tab" if current_user.policy_group.logs_view? %>
+        <%= active_link_to c_t(:dci_abbreviation), rewards_path, class: "secondary-header__tab" if policy(current_user.enterprise).diversity_manage? %>
       </li>
       <li>
-        <%= active_link_to "Posts", edit_posts_enterprise_path(current_user.enterprise) if current_user.policy_group.manage_posts? %>
+        <%= active_link_to "Logs", logs_path, class: "secondary-header__tab" if LogPolicy.new(current_user, nil).index? %>
+      </li>
+      <li>
+        <%= active_link_to "Posts", edit_posts_enterprise_path(current_user.enterprise) if policy(Group).manage_all_groups? && policy(current_user.enterprise).manage_posts? %>
       </li>
       <% if manage_erg_root_path %>
         <li>
@@ -45,14 +48,14 @@
         </li>
       <% end %>
       <% if current_user.enterprise.plan_module_enabled %>
-        <% if default_group = GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_manage).resolve.first %>
-          <li><%= active_link_to "Plan", plan_overview_groups_path %></li>
+        <% if GroupBudgetPolicy.new(current_user, []).manage_all_budgets? %>
+          <%= active_link_to "Budgeting", close_budgets_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
         <% end %>
       <% end %>
-      <% if policy(Campaign).index? %>
+      <% if policy(Campaign).create? %>
         <li><%= active_link_to "Innovate", campaigns_path %></li>
       <% end %>
-      <% if policy(Poll).index? %>
+      <% if policy(Poll).create? %>
         <li><%= active_link_to "Include", polls_path %></li>
       <% end %>
     </ul>
@@ -60,16 +63,67 @@
 </div>
 
 <div class="menu menu--desktop">
-  <%= active_link_to "Users", users_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.users_index? %>
-  <%= active_link_to "SSO", edit_auth_enterprise_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.sso_manage? %>
-  <%= active_link_to "Permissions", policy_group_templates_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.permissions_manage? %>
-  <%= active_link_to "Fields", edit_fields_enterprise_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(current_user.enterprise).edit_fields? %>
-  <%= active_link_to "Texts", edit_custom_text_path(current_user.enterprise.custom_text), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(current_user.enterprise).edit_fields? %>
-  <%= active_link_to "Branding", edit_branding_enterprise_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(current_user.enterprise).edit_fields? %>
-  <%= active_link_to "Integrations", integrations_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.sso_manage? %>
-  <%= active_link_to c_t(:dci_abbreviation), rewards_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.diversity_manage? %>
-  <%= active_link_to "Logs", logs_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.logs_view? %>
-  <%= active_link_to "Posts", edit_posts_enterprise_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.manage_posts? %>
+  <%= active_link_to "Users", users_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(User).index? %>
+  
+  <%= active_link_to 'Settings&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"Settings", "aria-control": "navigation", "data-jq-dropdown": "#settings", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
+  <nav id="settings" class="jq-dropdown jq-dropdown-tip">
+    <ul class="jq-dropdown-menu">
+      <% if policy(current_user.enterprise).sso_manage? %>
+        <li>
+          <%= active_link_to "SSO", edit_auth_enterprise_path(current_user.enterprise) %>
+        </li>
+      <% end %>
+      <% if policy(current_user.enterprise).manage_permissions? %>
+        <li>
+          <%= active_link_to "Permissions", policy_group_templates_path %>
+        </li>
+      <% end %>
+      <% if policy(current_user.enterprise).manage_branding? %>
+        <li>
+          <%= active_link_to "Emails", emails_path %>
+        </li>
+      <% end %>
+      <% if policy(current_user.enterprise).manage_branding? %>
+        <li>
+          <%= active_link_to "Branding", edit_branding_enterprise_path(current_user.enterprise) %>
+        </li>
+      <% end %>
+      <% if policy(current_user.enterprise).sso_manage? %>
+        <li>
+          <%= active_link_to "Integrations", integrations_path %>
+        </li>
+      <% end %>
+      <% if policy(current_user.enterprise).manage_branding? %>
+        <li>
+          <%= active_link_to "Texts", edit_custom_text_path(current_user.enterprise.custom_text) %>
+        </li>
+      <% end %>
+      <% if policy(current_user.enterprise).sso_manage? %>
+        <li>
+          <%= active_link_to "Fields", edit_fields_enterprise_path(current_user.enterprise) %>
+        </li>
+      <% end %>
+    </ul>
+  </nav>
+  
+  <%= active_link_to "Logs", logs_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if LogPolicy.new(current_user, nil).index? %>
+
+  <%= active_link_to 'Diversity&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"Diversity", "aria-control": "navigation", "data-jq-dropdown": "#diversity", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
+  <nav id="diversity" class="jq-dropdown jq-dropdown-tip">
+    <ul class="jq-dropdown-menu">
+      <% if policy(current_user.enterprise).diversity_manage? %>
+        <li>
+          <%= active_link_to c_t(:dci_abbreviation), rewards_path %>
+        </li>
+      <% end %>
+      <% if policy(Group).manage_all_groups? && policy(current_user.enterprise).manage_posts? %>
+        <li>
+          <%= active_link_to "Posts", edit_posts_enterprise_path(current_user.enterprise) %>
+        </li>
+      <% end %>
+    </ul>
+  </nav>
+  
 </div>
 <% end %>
 

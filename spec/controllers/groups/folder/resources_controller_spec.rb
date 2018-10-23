@@ -7,8 +7,8 @@ RSpec.describe Groups::Folder::ResourcesController, type: :controller do
     let!(:user){ create(:user, enterprise: enterprise) }
     let!(:group){ create(:group, enterprise: user.enterprise) }
     let!(:user_group){ create(:user_group, group: group, user: user) }
-    let!(:folder){ create(:folder, :group => group) }
-    let!(:resource){ create(:resource, title: "title", folder: folder, file: fixture_file_upload('files/test.csv', 'text/csv')) }
+    let!(:folder){ create(:folder, :group => group, :enterprise => nil) }
+    let!(:resource){ create(:resource, title: "title", enterprise: nil, folder: folder, file: fixture_file_upload('files/test.csv', 'text/csv')) }
 
     describe "GET#index" do
         context 'when user is logged in' do

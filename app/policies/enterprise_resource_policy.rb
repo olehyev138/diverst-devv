@@ -1,9 +1,11 @@
-class ResourcePolicy < ApplicationPolicy
+class EnterpriseResourcePolicy < ApplicationPolicy
   def index?
+    return true if create?
     @policy_group.enterprise_resources_index?
   end
 
   def create?
+    return true if update?
     @policy_group.enterprise_resources_create?
   end
 
@@ -12,11 +14,8 @@ class ResourcePolicy < ApplicationPolicy
   end
 
   def update?
-    return true if @policy_group.enterprise_resources_manage?
-
-    container_policy = Pundit.policy(@user, @record.container)
-
-    container_policy.update?
+    return true if manage_all?
+    @policy_group.enterprise_resources_manage?
   end
 
   def destroy?

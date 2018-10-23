@@ -1,5 +1,5 @@
 class SponsorPolicy < ApplicationPolicy
-  def sponsor_message_visibility?
+    def sponsor_message_visibility?
         case @record.disable_sponsor_message
         when true #i.e  when disable_sponsor_message is true return false for this policy
             return false
