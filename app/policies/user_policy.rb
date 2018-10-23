@@ -5,6 +5,11 @@ class UserPolicy < ApplicationPolicy
   end
 
   def create?
+    manage?
+  end
+  
+  def manage?
+    return true if manage_all?
     @policy_group.users_manage?
   end
 
