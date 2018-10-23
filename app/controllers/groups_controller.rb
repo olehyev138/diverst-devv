@@ -153,8 +153,8 @@ class GroupsController < ApplicationController
     def edit
         authorize @group
         @categories = current_user.enterprise.group_categories
-        # groups available to be parents or children, remove current group from list
-        @groups = (@group.enterprise.groups).delete(@group)
+        # groups available to be parents or children
+        @groups = @group.enterprise.groups.where.not(id: @group.id)
     end
 
     def update
