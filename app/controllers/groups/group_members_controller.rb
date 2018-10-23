@@ -7,7 +7,7 @@ class Groups::GroupMembersController < ApplicationController
   layout 'erg'
 
   def index
-    authorize @group, :view_members?
+    authorize [@group], :view_members?, :policy_class => GroupMemberPolicy
     @q = User.ransack(params[:q])
     @total_members = @group.active_members.count
     @members = @group.active_members.ransack(params[:q]).result.uniq
@@ -19,13 +19,13 @@ class Groups::GroupMembersController < ApplicationController
   end
 
   def pending
-    authorize @group, :manage_members?
+    authorize [@group], :update?, :policy_class => GroupMemberPolicy
 
     @pending_members = @group.pending_members.page(params[:page])
   end
 
   def accept_pending
-    authorize @group, :manage_members?
+    authorize [@group], :update?, :policy_class => GroupMemberPolicy
 
     @group.accept_user_to_group(@member)
     track_activity(@member, :accept_pending, params = { group: @group})
@@ -35,18 +35,18 @@ class Groups::GroupMembersController < ApplicationController
 
   def new
     #TODO only show enterprise users not currently in group
-    authorize @group, :manage_members?
+    authorize [@group], :create?, :policy_class => GroupMemberPolicy
   end
 
   # Removes a member from the group
   def destroy
-    authorize @member, :join_or_leave_groups?
+    authorize [@group, @member], :destroy?, :policy_class => GroupMemberPolicy
     @group.user_groups.find_by(user_id: @member.id).destroy
     redirect_to group_path(@group)
   end
 
   def create
-    authorize current_user, :join_or_leave_groups?
+    authorize [@group, current_user], :create?, :policy_class => GroupMemberPolicy
     @group_member = @group.user_groups.new(group_member_params)
     @group_member.accepted_member = @group.pending_users.disabled?
 
@@ -77,7 +77,7 @@ class Groups::GroupMembersController < ApplicationController
   end
 
   def add_members
-    authorize @group, :manage_members?
+    authorize [@group], :create?, :policy_class => GroupMemberPolicy
 
     add_members_params[:member_ids].each do |user_id|
       user = User.find_by_id(user_id)
@@ -93,14 +93,14 @@ class Groups::GroupMembersController < ApplicationController
   end
 
   def remove_member
-    authorize @group, :manage_members?
+    authorize [@group, @member], :destroy?, :policy_class => GroupMemberPolicy
 
     @group.members.destroy(@member)
     redirect_to action: :index
   end
 
   def join_all_sub_groups
-    authorize current_user, :join_or_leave_groups?
+    authorize [@group], :index?, :policy_class => GroupMemberPolicy
 
     @group.children.pluck(:id).each do |sub_group_id|
       unless UserGroup.where(user_id: current_user.id, group_id: sub_group_id).any?
@@ -118,7 +118,7 @@ class Groups::GroupMembersController < ApplicationController
   end
 
   def view_sub_groups
-    authorize current_user, :join_or_leave_groups?
+    authorize [@group], :index?, :policy_class => GroupMemberPolicy
     @sub_groups = @group.children
 
     respond_to do |format|
@@ -128,7 +128,7 @@ class Groups::GroupMembersController < ApplicationController
   end
 
   def join_sub_group
-    authorize current_user, :join_or_leave_groups?
+    authorize [@group], :destroy?, :policy_class => GroupMemberPolicy
     if @group.user_groups.where(user_id: current_user.id).any?
       respond_to do |format|
         format.html { redirect_to :back }
@@ -154,7 +154,7 @@ class Groups::GroupMembersController < ApplicationController
   end
 
   def leave_sub_group
-    authorize current_user, :join_or_leave_groups?
+    authorize [@group], :destroy?, :policy_class => GroupMemberPolicy
     @group.user_groups.find_by(user_id: current_user.id).destroy
     respond_to do |format|
       format.html { redirect_to :back }
@@ -163,12 +163,11 @@ class Groups::GroupMembersController < ApplicationController
   end
 
   def export_group_members_list_csv
-    authorize @group, :manage_members?
+    authorize [@group], :update?, :policy_class => GroupMemberPolicy
     GroupMemberListDownloadJob.perform_later(current_user.id, @group.id)
     flash[:notice] = "Please check your email in a couple minutes"
     redirect_to :back
   end
-
 
   protected
 
@@ -191,7 +190,6 @@ class Groups::GroupMembersController < ApplicationController
       member_ids: []
       )
   end
-
 
   private
 

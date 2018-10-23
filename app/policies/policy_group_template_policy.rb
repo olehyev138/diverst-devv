@@ -1,21 +1,22 @@
 class PolicyGroupTemplatePolicy < ApplicationPolicy
   def index?
+    return true if manage_all?
     @policy_group.permissions_manage?
   end
 
   def new?
-    @policy_group.permissions_manage?
+    index?
   end
 
   def create?
-    @policy_group.permissions_manage?
+    index?
   end
 
   def update?
-    @policy_group.permissions_manage?
+    index?
   end
 
   def destroy?
-    @policy_group.permissions_manage?
+    index?
   end
 end

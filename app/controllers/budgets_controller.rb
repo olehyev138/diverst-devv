@@ -3,31 +3,32 @@ class BudgetsController < ApplicationController
   before_action :set_group
   before_action :set_budget, only: [:show, :approve, :decline, :destroy]
 
-  layout 'budgets'
+  layout 'erg'
 
   def index
-    authorize @group, :budgets?
+    authorize [@group], :index?, :policy_class => GroupBudgetPolicy
     @budgets = @group.budgets.order("id DESC")
   end
 
   def show
-    authorize @group, :view_budget?
+    authorize [@group], :show?, :policy_class => GroupBudgetPolicy
   end
 
   def new
-    authorize @group, :request_budget?
+    authorize [@group], :create?, :policy_class => GroupBudgetPolicy
 
     @budget = Budget.new
   end
 
   def create
-    authorize @group, :submit_budget?
+    authorize [@group], :create?, :policy_class => GroupBudgetPolicy
 
     @budget = Budget.new(budget_params.merge({ requester_id: current_user.id }))
     @group.budgets << @budget
 
     if @group.save
       flash[:notice] = "Your budget was created"
+      track_activity(@budget, :create)
       redirect_to action: :index
     else
       flash[:alert] = "Your budget was not created. Please fix the errors"
@@ -36,9 +37,10 @@ class BudgetsController < ApplicationController
   end
 
   def approve
-    authorize @budget, :approve?
+    authorize [@group], :approve?, :policy_class => GroupBudgetPolicy
     if @budget.update(budget_params)
       BudgetManager.new(@budget).approve(current_user)
+      track_activity(@budget, :approve)
       redirect_to action: :index
     else
       redirect_to :back
@@ -46,19 +48,21 @@ class BudgetsController < ApplicationController
   end
 
   def decline
-    authorize @budget, :decline?
+    authorize [@group], :approve?, :policy_class => GroupBudgetPolicy
 
     @budget.decline_reason = params[:decline_reason]
     @budget.save
 
     BudgetManager.new(@budget).decline(current_user)
+    track_activity(@budget, :decline)
 
     redirect_to action: :index
   end
 
   def destroy
-    authorize @group, :submit_budget?
+    authorize [@group], :destroy?, :policy_class => GroupBudgetPolicy
     if @budget.destroy
+      track_activity(@budget, :destroy)
       flash[:notice] = "Your budget was deleted"
       redirect_to action: :index
     else
@@ -68,7 +72,7 @@ class BudgetsController < ApplicationController
   end
 
   def export_csv
-    authorize @group, :request_budget?
+    authorize [@group], :index?, :policy_class => GroupBudgetPolicy
 
     result =
       CSV.generate do |csv|
@@ -81,11 +85,11 @@ class BudgetsController < ApplicationController
   end
 
   def edit_annual_budget
-    authorize @group.enterprise, :update?
+    authorize [@group], :update?, :policy_class => GroupBudgetPolicy
   end
 
   def reset_annual_budget
-    authorize @group.enterprise, :update?
+    authorize [@group], :update?, :policy_class => GroupBudgetPolicy
 
     if @group.update({:annual_budget => 0, :leftover_money => 0})
       @group.budgets.update_all(:is_approved => false)
@@ -99,7 +103,7 @@ class BudgetsController < ApplicationController
   end
 
   def carry_over_annual_budget
-    authorize @group.enterprise, :update?
+    authorize [@group], :update?, :policy_class => GroupBudgetPolicy
 
     leftover = @group.leftover_money + @group.annual_budget
 
@@ -115,7 +119,7 @@ class BudgetsController < ApplicationController
   end
 
   def update_annual_budget
-    authorize @group.enterprise, :update?
+    authorize [@group], :update?, :policy_class => GroupBudgetPolicy
 
     if @group.update(annual_budget_params)
       track_activity(@group, :annual_budget_update)
@@ -130,11 +134,7 @@ class BudgetsController < ApplicationController
   private
 
   def set_group
-    if current_user
-      @group = current_user.enterprise.groups.find(params[:group_id])
-    else
-      user_not_authorized
-    end
+    @group = current_user.enterprise.groups.find(params[:group_id])
   end
 
   def set_budget

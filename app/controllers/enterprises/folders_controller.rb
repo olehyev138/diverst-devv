@@ -15,7 +15,7 @@ class Enterprises::FoldersController < ApplicationController
     @container_path = [@enterprise]
   end
   
-  def authorize_action
-    authorize ::Folder
+  def authorize_action(action, object)
+    authorize :enterprise_folder, action.to_sym
   end
 end

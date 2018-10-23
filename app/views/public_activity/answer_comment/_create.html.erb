@@ -1,0 +1,13 @@
+<div class="card__section">
+  <%= render 'public_activity/shared/owner', activity: activity %>
+  created comment on answer
+  <% if activity.trackable %>
+    <% if activity.trackable.answer.question %>
+       for question
+      <%= link_to activity.trackable.answer.question.title, question_path(activity.trackable.answer.question) %>
+    <% end %>
+  <% else %>
+    which has since been removed
+  <% end %>
+  (<%= activity.created_at.to_s :datetime %>)
+</div>

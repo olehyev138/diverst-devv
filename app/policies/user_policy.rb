@@ -1,34 +1,54 @@
 class UserPolicy < ApplicationPolicy
   def index?
+    return true if create?
     @policy_group.users_index?
   end
 
   def create?
+    manage?
+  end
+  
+  def manage?
+    return true if manage_all?
     @policy_group.users_manage?
   end
 
   def update?
-    return true if @record == @user
-    @policy_group.users_manage?
+    return true if create?
+    @record === @user
   end
 
   def destroy?
-    @policy_group.users_manage?
+    update?
   end
 
   def resend_invitation?
-    @policy_group.users_manage?
+    create?
   end
 
   def access_hidden_info?
     return true if @record == @user
 
-    @policy_group.users_manage?
+    create?
   end
 
   def join_or_leave_groups?
     return true if @record == @user
     return true if GroupPolicy.new(@record, @user).manage_members?
     false
+  end
+  
+  class Scope < Scope 
+    def index?
+      UserPolicy.new(user, nil).index?
+    end
+    
+    def resolve
+      if index?
+        scope.where(enterprise_id: user.enterprise_id)
+      else
+        []
+      end
+    end
   end
 end

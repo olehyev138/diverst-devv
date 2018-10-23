@@ -1,8 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe UserRolesController, type: :controller do
+    include ActiveJob::TestHelper
+
     let!(:enterprise){ create(:enterprise) }
     let!(:user){ create(:user, enterprise: enterprise) }
+    let!(:user_role){ create(:user_role, enterprise: enterprise) }
 
     describe "GET#new" do
         context 'when user is logged in' do
@@ -41,6 +44,31 @@ RSpec.describe UserRolesController, type: :controller do
 
                 it "creates the user_role" do
                     expect(enterprise.user_roles.last.role_name).to eq("test")
+                end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{patch :create, user_role: {role_name: "test2", role_type: "group", priority: 4}}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { UserRole.last }
+                    let(:owner) { user }
+                    let(:key) { 'user_role.create' }
+
+                    before {
+                      perform_enqueued_jobs do
+                        patch :create, user_role: {role_name: "test2", role_type: "group", priority: 4}
+                      end
+                    }
+
+                    include_examples'correct public activity'
+                  end
                 end
             end
 
@@ -109,6 +137,31 @@ RSpec.describe UserRolesController, type: :controller do
                     user_role.reload
                     expect(user_role.role_name).to eq("TeSt")
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{patch :update, id: user_role.id, user_role: {role_name: "TeSt"}}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { user_role }
+                    let(:owner) { user }
+                    let(:key) { 'user_role.update' }
+
+                    before {
+                      perform_enqueued_jobs do
+                        patch :update, id: user_role.id, user_role: {role_name: "TeSt"}
+                      end
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
 
             context "invalid params" do
@@ -139,21 +192,45 @@ RSpec.describe UserRolesController, type: :controller do
     describe "DELETE#destroy" do
         describe 'when user is logged in' do
             login_user_from_let
-            let(:user_role) {enterprise.user_roles.first}
             before {
                 request.env["HTTP_REFERER"] = "back"
             }
             context "valid params" do
-                before do
-                    delete :destroy, id: user_role.id
-                end
+                let(:destroy) {delete :destroy, id: user_role.id}
 
                 it "redirect_to back" do
-                    expect(response).to redirect_to "back"
+                  destroy
+                  expect(response).to redirect_to "back"
                 end
 
                 it "deletes the user_role" do
-                    expect{UserRole.find(user_role.id)}.to raise_error(ActiveRecord::RecordNotFound)
+                  destroy
+                  expect{UserRole.find(user_role.id)}.to raise_error(ActiveRecord::RecordNotFound)
+                end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{destroy}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { user_role }
+                    let(:owner) { user }
+                    let(:key) { 'user_role.destroy' }
+
+                    before {
+                      perform_enqueued_jobs do
+                        delete :destroy, id: user_role.id
+                      end
+                    }
+
+                    include_examples'correct public activity'
+                  end
                 end
             end
 

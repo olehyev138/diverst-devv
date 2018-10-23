@@ -66,6 +66,23 @@ RSpec.describe Groups::AttendancesController, type: :controller do
                 end
             end
 
+            context 'if event is full' do
+              let(:user2) { create(:user) }
+              let(:outcome2) { create(:outcome, group: group) }
+              let(:pillar2) { create(:pillar, outcome: outcome2) }
+              let(:initiative2) { create(:initiative, owner_group_id: group.id, pillar: pillar2, max_attendees: 1) }
+
+              before do
+                post :create, group_id: group.id, event_id: initiative2.id, user_id: user.id
+
+                post :create, group_id: group.id, event_id: initiative2.id, user_id: user2.id
+              end
+
+              it 'doesnt let users join' do
+                expect(initiative2.attendees.count).to eq 1
+              end
+            end
+
             it 'creates an attendee' do
                 expect{post :create, group_id: group.id, event_id: initiative.id}
                 .to change(InitiativeUser, :count).by(1)
@@ -115,12 +132,12 @@ RSpec.describe Groups::AttendancesController, type: :controller do
                 expect(user.points).to eq 0
             end
 
-            it 'deletes attendance' do 
+            it 'deletes attendance' do
                 expect{delete :destroy, group_id: group.id, event_id: initiative.id}
                 .to change(InitiativeUser, :count).by(-1)
             end
 
-            it 'returns response status as 204' do 
+            it 'returns response status as 204' do
                 delete :destroy, group_id: group.id, event_id: initiative.id
                 expect(response.status).to eq 204
             end

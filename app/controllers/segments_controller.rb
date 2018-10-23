@@ -1,7 +1,7 @@
 class SegmentsController < ApplicationController
-    before_action :set_segment, only: [:edit, :update, :destroy, :show, :export_csv]
-    skip_before_action :verify_authenticity_token, only: [:create]
+    before_action :authenticate_user!
     after_action :verify_authorized
+    before_action :set_segment, only: [:edit, :show, :export_csv, :update, :destroy]
 
     layout 'erg_manager'
 
@@ -26,6 +26,7 @@ class SegmentsController < ApplicationController
 
         if @segment.save
             flash[:notice] = "Your #{c_t(:segment)} was created"
+            track_activity(@segment, :create)
             redirect_to action: :index
         else
             flash[:alert] = "Your #{c_t(:segment)} was not created. Please fix the errors"
@@ -56,6 +57,7 @@ class SegmentsController < ApplicationController
         authorize @segment
         if @segment.update(segment_params)
             flash[:notice] = "Your #{c_t(:segment)} was updated"
+            track_activity(@segment, :update)
             redirect_to @segment
         else
             flash[:alert] = "Your #{c_t(:segment)} was not updated. Please fix the errors"
@@ -65,6 +67,7 @@ class SegmentsController < ApplicationController
 
     def destroy
         authorize @segment
+        track_activity(@segment, :destroy)
         @segment.destroy
         redirect_to action: :index
     end
@@ -89,7 +92,7 @@ class SegmentsController < ApplicationController
     end
 
     def set_segment
-        current_user ? @segment = current_user.enterprise.segments.find(params[:id]) : user_not_authorized
+        @segment = current_user.enterprise.segments.find(params[:id])
     end
 
     def segment_params

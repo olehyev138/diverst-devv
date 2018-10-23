@@ -1,11 +1,14 @@
 module Indexable
   def update_elasticsearch_index(object, enterprise, action)
-    IndexElasticsearchJob.perform_later(
-      model_name: 'User',
-      operation: action,
-      index: User.es_index_name(enterprise: enterprise),
-      record_id: object.id
-    )
+    begin
+      IndexElasticsearchJob.perform_later(
+        model_name: 'User',
+        operation: action,
+        index: User.es_index_name(enterprise: enterprise),
+        record_id: object.id
+      )
+    rescue
+    end
   end
 
   def update_elasticsearch_all_indexes(enterprise)
