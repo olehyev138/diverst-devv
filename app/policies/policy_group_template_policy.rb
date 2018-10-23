@@ -1,5 +1,6 @@
 class PolicyGroupTemplatePolicy < ApplicationPolicy
   def index?
+    return true if manage_all?
     @policy_group.permissions_manage?
   end
 

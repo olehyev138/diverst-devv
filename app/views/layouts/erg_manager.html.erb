@@ -22,10 +22,10 @@
           <%= active_link_to "Resources", enterprise_folders_path(current_user.enterprise) if EnterpriseFolderPolicy.new(current_user).index? %>
         </li>
         <li>
-          <%= active_link_to "Calendar", calendar_groups_path if current_user.policy_group.global_calendar? %>
+          <%= active_link_to "Calendar", calendar_groups_path if policy(Group).calendar? %>
         </li>
         <% if current_user.enterprise.plan_module_enabled %>
-          <% if current_user.policy_group.groups_budgets_manage? && current_user.policy_group.groups_manage? %>
+          <% if GroupBudgetPolicy.new(current_user, []).manage_all_budgets? %>
             <li><%= active_link_to "Budgeting", close_budgets_groups_path %>
             </li>
           <% end %>
@@ -48,7 +48,7 @@
     <%= active_link_to c_t(:erg).pluralize, groups_path, :active => :exact, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Group).manage_all_groups? %>
     <%= active_link_to c_t(:segment).pluralize, segments_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Segment).index? %>
     <%= active_link_to "Resources", enterprise_folders_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if EnterpriseFolderPolicy.new(current_user).index? %>
-    <%= active_link_to "Calendar", calendar_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.global_calendar? %>
+    <%= active_link_to "Calendar", calendar_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Group).calendar? %>
   </div>
 <% end %>
 

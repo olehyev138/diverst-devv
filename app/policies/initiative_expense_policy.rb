@@ -1,20 +1,22 @@
 class InitiativeExpensePolicy < ApplicationPolicy
   def index?
+    return true if create?
     @policy_group.initiatives_index?
   end
 
   def create?
+    return true if manage_all?
     @policy_group.initiatives_manage?
   end
 
   def update?
+    return true if manage_all?
     return true if @policy_group.initiatives_manage?
     @record.owner == @user
   end
 
   def destroy?
-    return true if @policy_group.initiatives_manage?
-    @record.owner == @user
+    update?
   end
 
   class Scope < Scope
