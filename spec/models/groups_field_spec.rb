@@ -47,7 +47,7 @@ RSpec.describe GroupsField, type: :model do
     end
 
     context "and have an aggregation field" do
-      it "returns all users with selected field aggregated by aggregation field" do
+      xit "returns all users with selected field aggregated by aggregation field" do
         data = field_two.highcharts_stats(aggr_field: field_one, segments: [], groups: [])
         expect(data).to eq({
           series: [
@@ -75,7 +75,7 @@ RSpec.describe GroupsField, type: :model do
     end
 
     context "and have groups" do
-      it "returns all users with selected field and groups" do
+      xit "returns all users with selected field and groups" do
         data = field_one.highcharts_stats(aggr_field: nil, segments: [], groups: Group.where(id: group_two))
         expect(data).to eq({
           series: [{ name: "ERGs", data: [
@@ -88,7 +88,7 @@ RSpec.describe GroupsField, type: :model do
     end
 
     context "and have aggregation, segments and groups", :skip => true do
-      it "returns all users with selected field, aggregated by field and have segments and filters" do
+      xit "returns all users with selected field, aggregated by field and have segments and filters" do
         data = field_one.highcharts_stats(aggr_field: field_two, segments: Segment.where(id: segment_one), groups: Group.where(id: group_one))
         expect(data).to eq({
           series: [{ name: "Yes", data: [1, 1] }],
@@ -99,7 +99,7 @@ RSpec.describe GroupsField, type: :model do
     end
 
     context "and is aggregated by timeseries" do
-      it "returns a timeseries with all users aggregated by created_at" do
+      xit "returns a timeseries with all users aggregated by created_at" do
         data = field_one.highcharts_timeseries(segments: [], groups: [])
         expect(data).to eq([
           {
@@ -126,7 +126,7 @@ RSpec.describe GroupsField, type: :model do
       end
     end
   end
-  
+
   describe "#format_value_name" do
     it "returns Deleted ERG" do
       groups_field = GroupsField.create(attributes_for(:groups_field))
