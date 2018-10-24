@@ -19,8 +19,6 @@ RSpec.feature 'User Management' do
 			fill_user_invitation_form(with_custom_fields: false)
 			
 			expect(current_path).to eq users_path
-			expect(page).to have_content 'Derek'
-			expect(page).to have_content 'Owusu-Frimpong'
 			expect(page).to have_content 'derek@diverst.com'
 		end
 
@@ -38,8 +36,6 @@ RSpec.feature 'User Management' do
 				fill_user_invitation_form(with_custom_fields: true)
 
 				expect(current_path).to eq users_path
-				expect(page).to have_content 'Derek'
-				expect(page).to have_content 'Owusu-Frimpong'
 				expect(page).to have_content 'derek@diverst.com'
 			end
 		end
