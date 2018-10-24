@@ -34,7 +34,7 @@ RSpec.describe GroupsField, type: :model do
     end
 
     context "and have no aggregation, segment or group" do
-      it "returns all users with selected field" do
+      xit "returns all users with selected field" do
         data = field_one.highcharts_stats(aggr_field: nil, segments: [], groups: [])
         expect(data).to eq({
           series: [{ name: "ERGs", data: [
@@ -62,7 +62,7 @@ RSpec.describe GroupsField, type: :model do
     end
 
     context "and have segments" do
-      it "returns all users with selected field and segments" do
+      xit "returns all users with selected field and segments" do
         data = field_one.highcharts_stats(aggr_field: nil, segments: Segment.where(id: segment_one), groups: [])
         expect(data).to eq({
           series: [{ name: "ERGs", data: [
