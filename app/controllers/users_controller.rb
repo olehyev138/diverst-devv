@@ -74,7 +74,7 @@ class UsersController < ApplicationController
 
   def destroy
     authorize @user
-    @user.destroy
+    @user.destroy if @user != current_user
     redirect_to :back
   end
 
