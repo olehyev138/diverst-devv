@@ -250,6 +250,6 @@ class UsersController < ApplicationController
   end
 
   def search_params
-    params.permit(:active, :mentor, :mentee, policy_groups: [:budget_approval], user_groups: [:accepted_member])
+    params.permit(:active, :mentor, :mentee, policy_groups: [:budget_approval], user_groups: [:accepted_member, :group_id])
   end
 end

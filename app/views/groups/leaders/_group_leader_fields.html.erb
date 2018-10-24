@@ -56,7 +56,7 @@ $(document).ready(function(){
     $('.select2').select2(
     {
     ajax: {
-      url: "<%= users_path(user_groups: {accepted_member: 1}, :limit => 10, format: :json) %>",
+      url: "<%= users_path(user_groups: {accepted_member: 1, group_id: @group.id}, :limit => 10, format: :json) %>",
       theme: 'bootstrap',
       allowClear: true,
       type: "GET",
