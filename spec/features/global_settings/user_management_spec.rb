@@ -8,7 +8,7 @@ RSpec.feature 'User Management' do
 	before do
 		enterprise.fields.destroy_all
 		
-		login_as(guest_user, scope: :user)
+		login_as(admin_user, scope: :user)
 		visit users_path
 	end
 
@@ -55,12 +55,16 @@ RSpec.feature 'User Management' do
 			expect(page).to have_field('user[email]', with: 'new@email.com')
 		end
 
-		scenario 'remove user from enterprise', js: true do
+		scenario 'remove user when user is not current_user from enterprise', js: true do
 			page.accept_confirm(with: 'Are you sure?') do
 				click_link 'Remove', href: user_path(guest_user)
 			end
 
 			expect(page).to have_no_content guest_user.first_name
+		end
+
+		scenario 'do not allow user to be deleted if current_user' do 
+			expect(page).to have_no_link 'Remove'
 		end
 
 		context 'for an existing user' do
