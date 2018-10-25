@@ -1,6 +1,7 @@
 class InitiativeCommentPolicy < ApplicationPolicy
   def erg_leader?
-    @user.erg_leader? && @record.present?
+    return true if manage_all?
+    @policy_group.manage_posts?
   end
 
   def approve?
@@ -12,6 +13,6 @@ class InitiativeCommentPolicy < ApplicationPolicy
   end
 
   def destroy?
-  	erg_leader?
+    erg_leader?
   end
 end

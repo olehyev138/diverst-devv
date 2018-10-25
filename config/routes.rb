@@ -95,6 +95,7 @@ Rails.application.routes.draw do
       get 'edit_algo'
       get 'theme'
       patch 'update_branding'
+      patch 'update_posts'
       patch 'restore_default_branding'
       get 'bias'
       patch 'delete_attachment'

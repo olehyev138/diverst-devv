@@ -46,17 +46,17 @@
           </li>
           <% if current_user.enterprise.collaborate_module_enabled %>
             <li>
-              <%= active_link_to "Innovate", user_user_campaigns_path if current_user.policy_group.campaigns_index? %>
+              <%= active_link_to "Innovate", user_user_campaigns_path if policy(Campaign).index? %>
             </li>
           <% end %>
           <li>
-            <%= active_link_to "News", user_news_links_path if current_user.policy_group.news_links_index? %>
+            <%= active_link_to "News", user_news_links_path if policy(NewsLink).index? %>
           </li>
           <li>
-            <%= active_link_to "Events", user_events_path if current_user.policy_group.initiatives_index? %>
+            <%= active_link_to "Events", user_events_path if policy(Initiative).index? %>
           </li>
           <li>
-            <%= active_link_to "#{c_t(:erg).titleize.pluralize}", user_groups_path if current_user.policy_group.groups_index? %>
+            <%= active_link_to "#{c_t(:erg).titleize.pluralize}", user_groups_path if policy(Group).index? %>
           </li>
           <% if current_user.enterprise.mentorship_module_enabled %>
             <li>
@@ -83,11 +83,11 @@
     <div class="menu menu--desktop">
       <%= active_link_to "Home", user_root_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
       <% if current_user.enterprise.collaborate_module_enabled %>
-        <%= active_link_to "Innovate", user_user_campaigns_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.campaigns_index? %>
+        <%= active_link_to "Innovate", user_user_campaigns_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Campaign).index? %>
       <% end %>
-      <%= active_link_to "News", user_news_links_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.news_links_index? %>
-      <%= active_link_to "Events", user_events_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.initiatives_index? %>
-      <%= active_link_to "#{c_t(:erg).titleize.pluralize}", user_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if current_user.policy_group.groups_index? %>
+      <%= active_link_to "News", user_news_links_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(NewsLink).index? %>
+      <%= active_link_to "Events", user_events_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Initiative).index? %>
+      <%= active_link_to "#{c_t(:erg).titleize.pluralize}", user_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Group).index? %>
       <% if current_user.enterprise.mentorship_module_enabled %>  
         <%= active_link_to "Mentorship", edit_user_mentorship_path(:id => current_user.id), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <% end %>

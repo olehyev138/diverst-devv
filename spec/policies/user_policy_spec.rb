@@ -9,6 +9,14 @@ RSpec.describe UserPolicy, :type => :policy do
     let(:policy_scope) { UserPolicy::Scope.new(user, User).resolve }
     
     subject { described_class }
+    
+    before {
+        no_access.policy_group.manage_all = false
+        no_access.policy_group.save!
+        
+        user.policy_group.manage_all = false
+        user.policy_group.save!
+    }
 
     permissions ".scope" do
         it "shows only users belonging to enterprise" do
