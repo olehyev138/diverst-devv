@@ -15,6 +15,7 @@ class GroupPolicy < ApplicationPolicy
 
     def create?
         return true if manage_all?
+        return true if @policy_group.groups_manage?
         @policy_group.groups_create?
     end
     
@@ -74,7 +75,7 @@ class GroupPolicy < ApplicationPolicy
     end
     
     def calendar?
-        return true if manage?
+        return true if manage_all_groups?
         @policy_group.global_calendar?
     end
     
