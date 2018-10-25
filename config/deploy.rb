@@ -30,7 +30,7 @@ set :sidekiq_log, '/dev/null'
 set :sidekiq_processes, 1
 
 set :clockwork_file, "clock.rb"
-
+set :assets_roles, [:app]
 set :rollbar_token, ENV["ROLLBAR_ACCESS_TOKEN"]
 set :rollbar_env, ENV["ROLLBAR_ENV"]
 set :rollbar_role, Proc.new { :app }
