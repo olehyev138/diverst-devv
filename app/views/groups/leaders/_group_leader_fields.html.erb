@@ -11,8 +11,7 @@
   <div class="custom-user-select">
     <%= f.association :user,
           as: :select,
-          input_html: { class: "select2", autofocus: true },
-          selected: [],
+          input_html: { class: "select2-field", autofocus: true },
           label: false
     %>
   </div>
@@ -52,8 +51,12 @@
 
 
 <script>
+<% if f.object.new_record? %>
 $(document).ready(function(){
-    $('.select2').select2(
+<% else %>
+$(document).on('ready page:load', function(){
+<% end %>
+    $('.select2-field').select2(
     {
     ajax: {
       url: "<%= users_path(user_groups: {accepted_member: 1, group_id: @group.id}, :limit => 10, format: :json) %>",
