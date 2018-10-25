@@ -19,7 +19,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def destroy?
-    update?
+    update? && user_not_current_user?
   end
 
   def resend_invitation?
@@ -36,6 +36,10 @@ class UserPolicy < ApplicationPolicy
     return true if @record == @user
     return true if GroupPolicy.new(@record, @user).manage_members?
     false
+  end
+
+  def user_not_current_user?
+    @user != @record ? true : false
   end
   
   class Scope < Scope 
