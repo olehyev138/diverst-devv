@@ -24,7 +24,8 @@ class UserPolicy < ApplicationPolicy
   end
 
   def destroy?
-    update? && user_not_current_user?
+    return false if @user === @record
+    update?
   end
 
   def resend_invitation?
