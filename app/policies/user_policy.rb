@@ -24,6 +24,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def destroy?
+    return false if @user === @record
     update?
   end
 
@@ -41,6 +42,10 @@ class UserPolicy < ApplicationPolicy
     return true if @record == @user
     return true if GroupPolicy.new(@record, @user).manage_members?
     false
+  end
+
+  def user_not_current_user?
+    @user != @record ? true : false
   end
   
   class Scope < Scope 

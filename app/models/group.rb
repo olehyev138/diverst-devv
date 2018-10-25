@@ -120,6 +120,8 @@ class Group < ActiveRecord::Base
   validate :valid_yammer_group_link?
 
   validate :ensure_one_level_nesting
+  validate :ensure_not_own_parent
+  validate :ensure_not_own_child
 
   before_save :send_invitation_emails, if: :send_invitations?
   before_save :create_yammer_group, if: :should_create_yammer_group?
@@ -365,6 +367,18 @@ class Group < ActiveRecord::Base
     end
   end
 
+  def ensure_not_own_parent
+    if parent.present? && parent.id == self.id
+      errors.add(:parent_id, 'Group cant be its own parent')
+    end
+  end
+
+  def ensure_not_own_child
+    if children.exists?(self)
+      errors.add(:child_ids, 'Group cant be its own child')
+    end
+  end
+
   def perform_check_for_consistency_in_category
     if self.parent.present?
       group_category_type = self.group_category.group_category_type if self.group_category
@@ -398,7 +412,7 @@ class Group < ActiveRecord::Base
     end
   end
 
-  def filter_by_membership(membership_status)
+    def filter_by_membership(membership_status)
     members.references(:user_groups).where('user_groups.accepted_member=?', membership_status)
   end
 
