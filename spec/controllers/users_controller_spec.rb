@@ -11,35 +11,57 @@ RSpec.describe UsersController, type: :controller do
             login_user_from_let
 
             it "returns an html response" do
-                get :index, :id => user.id
+                get :index
                 expect(response.content_type).to eq "text/html"
             end
 
             it 'renders index template' do
-                get :index, :id => user.id
+                get :index
                 expect(response).to render_template :index
             end
 
             it "returns a json response" do
-                get :index, :id => user.id , format: :json
+                get :index, format: :json
                 expect(response.content_type).to eq "application/json"
             end
 
             it "returns 2 UserDatatable objects in json" do
                 create(:user, enterprise: enterprise)
-                get :index, :id => user.id, format: :json
+                get :index, format: :json
                 json_response = JSON.parse(response.body, symbolize_names: true)
                 expect(json_response[:recordsTotal]).to eq 2
             end
 
             it "returns users" do
-                get :index, :id => user.id
+                get :index
                 expect(assigns[:users]).to eq [user]
+            end
+
+            describe 'return correct users based on group membership params; :accepted_member and :group_id' do 
+                let!(:group) { create(:group, enterprise: enterprise) }
+                let!(:other_group) { create(:group, enterprise: enterprise) }
+                let!(:group_membership) { create(:user_group, user_id: user.id, group_id: group.id, accepted_member: true) }
+                let!(:other_user) { create(:user, enterprise: enterprise) }
+                let!(:other_group_membership) { create(:user_group, user_id: other_user.id, group_id: other_group.id, accepted_member: true) }
+                let!(:search_params)  { { accepted_member: true, group_id: group.id } }
+
+                
+                it 'returns 1 UserDatatable object in json' do
+                    get :index, user_groups: search_params, format: :json
+
+                    json_response = JSON.parse(response.body, symbolize_names: true)
+                    expect(json_response[:recordsTotal]).to eq 1
+                end
+
+                it 'returns only users that are members of group' do 
+                    get :index, user_groups: search_params
+                    expect(assigns[:users]).to eq [user]
+                end
             end
         end
 
         context 'when user is not logged in' do
-            before { get :index, :id => user.id }
+            before { get :index }
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
@@ -214,6 +236,7 @@ RSpec.describe UsersController, type: :controller do
     end
 
     describe "delete#destroy" do
+        let!(:new_user) { create(:user, enterprise: enterprise) }
         context 'when user is logged in' do
             login_user_from_let
             before do
@@ -225,8 +248,13 @@ RSpec.describe UsersController, type: :controller do
                 expect(response).to redirect_to "back"
             end
 
-            it "deletes the user" do
+            it "does not delete the user when user and current user are the same" do
                 expect{delete :destroy, :id => user.id}
+                .to change(User, :count).by(0)
+            end
+
+            it 'deletes user' do
+                expect{delete :destroy, :id => new_user.id}
                 .to change(User, :count).by(-1)
             end
         end

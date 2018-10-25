@@ -32,7 +32,7 @@ RSpec.feature 'Manage Enterprise Branding' do
 			end
 		end
 
-		scenario 'restore default branding', skip: true, js: true do
+		scenario 'restore default branding', js: true, :skip => "FAILS CONSISTENTLY" do
 			fill_in 'enterprise[theme][primary_color]', with: '#FFEE7F'
 			perform_enqueued_jobs do
 				click_on 'Save branding'
