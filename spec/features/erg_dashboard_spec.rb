@@ -59,7 +59,7 @@ RSpec.feature 'An ERG dashboard' do
       expect(page).to have_content sub_group.name
     end
 
-    scenario 'list only 5 sub-ergs and drop down for more for uncategorized sub-ergs', js: true do
+    scenario 'list only 5 sub-ergs and drop down for more for uncategorized sub-ergs', skip: true, js: true do
       sub_groups = create_list(:group, 7, parent_id: group.id)
 
       visit group_path(group)
