@@ -85,9 +85,10 @@ RSpec.feature 'Group Leader Management' do
 			end
 
 			scenario 'remove one group leader from list of group leaders', js: true do
+				# save_and_open_screenshot
 				within all('.nested-fields')[1] do
 					select_field = page.find('.custom-user-select select')[:id]
-					expect(page).to have_select(select_field, selected: other_user.name)
+					expect(page).to have_select(select_field, selected: user.name)
 					click_link 'Remove'
 				end
 
