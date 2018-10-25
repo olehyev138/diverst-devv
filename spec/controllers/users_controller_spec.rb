@@ -214,6 +214,7 @@ RSpec.describe UsersController, type: :controller do
     end
 
     describe "delete#destroy" do
+        let!(:new_user) { create(:user, enterprise: enterprise) }
         context 'when user is logged in' do
             login_user_from_let
             before do
@@ -225,8 +226,13 @@ RSpec.describe UsersController, type: :controller do
                 expect(response).to redirect_to "back"
             end
 
-            it "deletes the user" do
+            it "does not delete the user when user and current user are the same" do
                 expect{delete :destroy, :id => user.id}
+                .to change(User, :count).by(0)
+            end
+
+            it 'deletes user' do
+                expect{delete :destroy, :id => new_user.id}
                 .to change(User, :count).by(-1)
             end
         end
