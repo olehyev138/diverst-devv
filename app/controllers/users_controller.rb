@@ -8,7 +8,7 @@ class UsersController < ApplicationController
     authorize User
     
     @users = policy_scope(User).includes(:policy_group, :user_groups).where(search_params).limit(params[:limit] || 25)
-
+    
     respond_to do |format|
       format.html
       format.json { render json: UserDatatable.new(view_context, @users) }
