@@ -3,6 +3,11 @@ class UserPolicy < ApplicationPolicy
     return true if create?
     @policy_group.users_index?
   end
+  
+  def show?
+    return true if index?
+    @record === @user
+  end
 
   def create?
     manage?
