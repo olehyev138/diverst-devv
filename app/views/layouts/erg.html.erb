@@ -46,7 +46,7 @@
               <%= active_link_to "Events", group_events_path(@group) %>
             </li>
           <% end %>
-          <% if GroupPostsPolicy.new(current_user, [@group]).index? %>
+          <% if GroupPostsPolicy.new(current_user, [@group]).view_latest_news? %>
             <li>
               <%= active_link_to "News Feed (#{NewsFeedLink.combined_news_links(@group.news_feed.id).count})", group_posts_path(@group) %>
             </li>
@@ -105,7 +105,7 @@
       
       <%= active_link_to "Events", group_events_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if GroupEventsPolicy.new(current_user, [@group]).view_upcoming_events? %>
       <%= active_link_to "Resources", group_folders_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if GroupFolderPolicy.new(current_user, [@group]).index? %>
-      <%= active_link_to "News Feed", group_posts_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if GroupPostsPolicy.new(current_user, [@group]).index? %>
+      <%= active_link_to "News Feed", group_posts_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if GroupPostsPolicy.new(current_user, [@group]).view_latest_news? %>
       
       <%= active_link_to 'Manage&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"Manage", "aria-control": "navigation", "data-jq-dropdown": "#manage", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
       <nav id="manage" class="jq-dropdown jq-dropdown-tip">

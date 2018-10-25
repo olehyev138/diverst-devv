@@ -18,7 +18,7 @@ class GroupsController < ApplicationController
         authorize Group, :manage_all_group_budgets?
         @groups = policy_scope(Group).includes(:children).all_parents
     end
-    
+
     def close_budgets_export_csv
       authorize Group, :manage_all_group_budgets?
 
@@ -27,7 +27,7 @@ class GroupsController < ApplicationController
           csv << ['Group name', 'Annual budget', 'Leftover money', 'Approved budget']
            current_user.enterprise.groups.includes(:children).all_parents.each do |group|
              csv << [group.name, group.annual_budget.presence || "Not set", group.leftover_money, group.approved_budget]
-             
+
              group.children.each do |child|
                csv << [child.name, child.annual_budget.presence || "Not set", child.leftover_money, child.approved_budget]
              end
@@ -43,12 +43,12 @@ class GroupsController < ApplicationController
         @groups = []
         enterprise.groups.each do |group|
             if group.is_parent_group?
-                @groups << group 
+                @groups << group
                 group.children.each do |sub_group|
                     @groups << sub_group
                 end
-            elsif group.is_standard_group?                
-                @groups << group 
+            elsif group.is_standard_group?
+                @groups << group
             end
         end
         @segments = enterprise.segments
@@ -100,6 +100,8 @@ class GroupsController < ApplicationController
         authorize Group
         @group = current_user.enterprise.groups.new
         @categories = current_user.enterprise.group_categories
+        # groups available to be parents or children
+        @available_groups = @group.enterprise.groups.where.not(id: @group.id)
     end
 
     def show
@@ -154,6 +156,8 @@ class GroupsController < ApplicationController
     def edit
         authorize @group
         @categories = current_user.enterprise.group_categories
+        # groups available to be parents or children
+        @available_groups = @group.enterprise.groups.where.not(id: @group.id)
     end
 
     def update
@@ -193,7 +197,7 @@ class GroupsController < ApplicationController
     def settings
         authorize @group, :manage?
     end
-    
+
     def plan_overview
         authorize @group, :manage?
     end
@@ -244,11 +248,11 @@ class GroupsController < ApplicationController
         end
 
         file = CsvFile.new( import_file: params[:file].tempfile, user: current_user, :group_id => @group.id)
-    
+
         @message = ''
         @success = false
         @email = ENV['CSV_UPLOAD_REPORT_EMAIL']
-    
+
         if file.save
           @success = true
           @message = '@success'
