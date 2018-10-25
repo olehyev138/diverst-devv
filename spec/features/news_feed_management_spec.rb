@@ -145,7 +145,7 @@ RSpec.feature 'News Feed Management' do
 
 				fill_in 'news_link[url]', with: 'https://www.viz.com/naruto'
 				fill_in 'news_link[title]', with: 'Latest News'
-				#fill_in 'news_link[description]', with: 'this is the latest news'
+				fill_in 'news_link[description]', with: 'this is the latest news'
 
 				fill_in_ckeditor 'news_link_description', :with => 'this is the latest news'
 
@@ -153,7 +153,7 @@ RSpec.feature 'News Feed Management' do
 				attach_file('File', 'spec/fixtures/files/verizon_logo.png')
 
 				click_on 'Create News link'
-				#expect(page).to have_content 'Latest News'
+				expect(page).to have_content 'Latest News'
 				expect(page).to have_content 'https://www.viz.com/naruto'
 			end
 

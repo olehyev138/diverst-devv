@@ -113,6 +113,45 @@ RSpec.describe UserPolicy, :type => :policy do
             end
         end
     end
+
+    describe "destroy?" do
+        let!(:user) {create(:user)}
+        let!(:other_user) {create(:user)}
+        
+        permissions :destroy? do
+            it "doesn't allow access when users_manage is false" do
+                user.policy_group.users_index = false
+                user.policy_group.users_manage = false
+                user.policy_group.save!
+            
+                expect(subject).to_not permit(user)
+            end
+            
+            it "doesn't allow access when users_manage is false but users_index is true" do
+                user.policy_group.users_index = true
+                user.policy_group.users_manage = false
+                user.policy_group.save!
+            
+                expect(subject).to_not permit(user)
+            end
+            
+            it "allows access when users_manage is true but users_index is false" do
+                user.policy_group.users_index = false
+                user.policy_group.users_manage = true
+                user.policy_group.save!
+            
+                expect(subject).to permit(user)
+            end
+
+            it 'allows access user to be deleted if not current user' do 
+                user.policy_group.users_index = false
+                user.policy_group.users_manage = true
+                user.policy_group.save!
+            
+                expect(subject).to permit(user, other_user)
+            end
+        end
+    end
     
     describe "resend_invitation?" do
         let!(:user) {create(:user)}
