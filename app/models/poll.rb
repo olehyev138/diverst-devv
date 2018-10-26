@@ -115,7 +115,7 @@ class Poll < ActiveRecord::Base
     end
 
     def validate_initiative_enterprise
-        if !initiative.nil? && !enterprise.initiatives.pluck(:id).include?(initiative_id)
+        if !initiative.nil? && !enterprise.initiatives.where(:id => initiative_id).exists?
             errors.add(:initiative, "is invalid")
         end
     end
