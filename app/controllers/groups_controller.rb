@@ -308,14 +308,18 @@ class GroupsController < ApplicationController
     end
 
     def with_segments
-        segment_ids = current_user.segments.ids
-        if not segment_ids.empty?
-            NewsFeedLink
-                .combined_news_links_with_segments(@group.news_feed.id, current_user.segments.ids)
-                .order(is_pinned: :desc, created_at: :desc)
-                .limit(5)
+        if GroupPostsPolicy.new(current_user, [@group]).view_latest_news?
+            segment_ids = current_user.segments.ids
+            if not segment_ids.empty?
+                NewsFeedLink
+                    .combined_news_links_with_segments(@group.news_feed.id, current_user.segments.ids)
+                    .order(is_pinned: :desc, created_at: :desc)
+                    .limit(5)
+            else
+                return without_segments
+            end
         else
-            return without_segments
+            []
         end
     end
 

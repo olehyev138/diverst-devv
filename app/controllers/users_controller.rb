@@ -161,7 +161,7 @@ class UsersController < ApplicationController
       else
         'user'
       end
-    when 'edit_profile'
+    when 'edit_profile', 'group_surveys'
       'user'
     else
       'global_settings'
