@@ -5,8 +5,6 @@ RSpec.describe GroupPolicy, :type => :policy do
     let(:user){ create(:user) }
     let(:no_access) { create(:user) }
     let(:group){ create(:group, :owner => user, :enterprise_id => user.enterprise_id)}
-    let(:group_2){ create(:group, :enterprise_id => user.enterprise_id)}
-    let(:group_leader){ create(:group_leader, :user => user, :group => group, :position => "Supreme Leader")}
     let(:policy_scope) { GroupPolicy::Scope.new(user, Group).resolve }
     
     subject { described_class }
@@ -41,6 +39,64 @@ RSpec.describe GroupPolicy, :type => :policy do
             it "doesn't allow access" do
                 expect(subject).to_not permit(no_access, group)
             end
+        end
+    end
+    
+    permissions :is_a_leader? do
+              
+        it "doesnt allow access" do
+            expect(subject).to_not permit(user, group)
+        end
+        
+        it "allows access" do
+            create(:group_leader, :user => user, :group => group)
+            expect(subject).to permit(user, group)
+        end
+    end
+    
+    permissions :is_a_member? do
+              
+        it "doesnt allow access" do
+            expect(subject).to_not permit(user, group)
+        end
+        
+        it "allows access" do
+            create(:user_group, :user => user, :group => group)
+            expect(subject).to permit(user, group)
+        end
+    end
+    
+    permissions :is_a_pending_member? do
+              
+        it "doesnt allow access when user isnt a member at all" do
+            expect(subject).to_not permit(user, group)
+        end
+        
+        it "doesn't allow access when user is a member but has been accepted" do
+            create(:user_group, :user => user, :group => group, :accepted_member => true)
+            expect(subject).to_not permit(user, group)
+        end
+        
+        it "allows access" do
+            create(:user_group, :user => user, :group => group, :accepted_member => false)
+            expect(subject).to permit(user, group)
+        end
+    end
+    
+    permissions :is_an_accepted_member? do
+              
+        it "doesnt allow access when user isnt a member at all" do
+            expect(subject).to_not permit(user, group)
+        end
+        
+        it "doesn't allow access when user is a member but has not been accepted" do
+            create(:user_group, :user => user, :group => group, :accepted_member => false)
+            expect(subject).to_not permit(user, group)
+        end
+        
+        it "allows access" do
+            create(:user_group, :user => user, :group => group, :accepted_member => true)
+            expect(subject).to permit(user, group)
         end
     end
 end

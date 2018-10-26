@@ -13,10 +13,10 @@ class GroupPostsPolicy < GroupBasePolicy
     end
     
     def view_latest_news?
-        #Ablility to view latest news depends on settings level
+        # Ability to view latest news depends on settings level
         case group.latest_news_visibility
         when 'public'
-            #Everyone can see latest news
+            # Everyone can see latest news
             user.policy_group.group_posts_index?
         when 'group'
             index?

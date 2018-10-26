@@ -163,6 +163,9 @@ class Group < ActiveRecord::Base
   def is_sub_group?
     parent.present?
   end
+  
+  def is_active_member?
+  end
 
   def total_views
     views.sum(:view_count)

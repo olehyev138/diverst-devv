@@ -16,7 +16,7 @@ class Groups::PostsController < ApplicationController
         else
             if GroupPostsPolicy.new(current_user, [@group]).view_latest_news?
                 segment_ids = nil
-                if @group.active_members.include?(current_user)
+                if policy(@group).is_an_accepted_member?
                   segment_ids = current_user.segments.ids
                 end
                 @count = NewsFeed.all_links(@group.news_feed.id, segment_ids, @group.enterprise).count
