@@ -10,4 +10,14 @@ class GroupNewsLinkPolicy < GroupBasePolicy
     def base_manage_permission
       "news_links_manage"
     end
+    
+    def index?
+      case group.latest_news_visibility
+      when 'public'
+          # Everyone can see latest news
+          user.policy_group.group_posts_index?
+      else
+        super
+      end
+    end
 end
