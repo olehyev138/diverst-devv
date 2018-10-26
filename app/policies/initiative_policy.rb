@@ -36,12 +36,12 @@ class InitiativePolicy < ApplicationPolicy
 
   def is_a_pending_member?
     @group = @record.group
-    @group.pending_members.include? @user
+    UserGroup.where(:accepted_member => false, :user_id => @user.id, :group_id => @group.id).exists?
   end
 
   def is_a_member?
     @group = @record.group
-    @group.members.include? @user
+    UserGroup.where(:user_id => @user.id, :group_id => @group.id).exists?
   end
 
   def is_a_guest?

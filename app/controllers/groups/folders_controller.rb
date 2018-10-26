@@ -6,7 +6,7 @@ class Groups::FoldersController < ApplicationController
   layout 'erg'
 
   def index
-    if policy(@group).manage? or @group.active_members.include? current_user
+    if policy(@group).manage? || policy(@group).is_an_accepted_member?
       super
     else
       @folders = []

@@ -9,7 +9,7 @@ class GroupBasePolicy < Struct.new(:user, :context)
     end
     
     def is_a_member?
-       (group.members.include? user) || is_a_pending_member?
+        UserGroup.where(:user_id => user.id, :group_id => group.id).exists?
     end
     
     def is_a_manager?(permission)
@@ -25,11 +25,11 @@ class GroupBasePolicy < Struct.new(:user, :context)
     end
     
     def is_a_leader?
-       group.leaders.include? user
+       GroupLeader.where(:user_id => user.id, :group_id => group.id).exists?
     end
 
     def is_active_member?
-        group.active_members.include? user
+        UserGroup.where(:accepted_member => true, :user_id => user.id, :group_id => @record.id).exists?
     end
 
     def is_a_guest?
@@ -37,7 +37,7 @@ class GroupBasePolicy < Struct.new(:user, :context)
     end
 
     def is_a_pending_member?
-        group.pending_members.include? user
+        UserGroup.where(:accepted_member => false, :user_id => user.id, :group_id => @record.id).exists?
     end
     
     def has_group_leader_permissions?(permission)

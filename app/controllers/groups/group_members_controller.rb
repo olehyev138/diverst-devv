@@ -84,7 +84,7 @@ class Groups::GroupMembersController < ApplicationController
 
       # Only add association if user exists and belongs to the same enterprise
       next if (!user) || (user.enterprise != @group.enterprise)
-      next if @group.members.include? user
+      next if policy(@group).is_a_member?
 
       @group.members << user
     end

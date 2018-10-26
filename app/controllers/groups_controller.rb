@@ -112,7 +112,7 @@ class GroupsController < ApplicationController
 
             @posts = without_segments
         else
-            if @group.active_members.include? current_user
+            if policy(@group).is_an_accepted_member?
                 base_show
                 @posts = with_segments
             else

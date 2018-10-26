@@ -164,7 +164,7 @@ module ApplicationHelper
   #for RSpec test of protected method in segment_controller.rb
   def segment_members_of_group(segment, group)
     segment.members.includes(:groups).select do |user|
-      user.groups.include? group
+      UserGroup.where(:user_id => user.id, :group_id => group.id).exists?
     end
   end
 

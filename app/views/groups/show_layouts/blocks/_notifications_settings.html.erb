@@ -1,4 +1,4 @@
-<% if @group.active_members.include? current_user %>
+<% if policy(@group).is_an_accepted_member? %>
   <div class="card card--secondary">
     <div class="card__section">
       <%= simple_form_for @user_group, method: :post, html: {id: "user_group" } do |f| %>
