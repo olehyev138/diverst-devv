@@ -291,7 +291,6 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             login_user_from_let
             let(:user_group2) {create(:user_group, group_id: group.id, user_id: add.id)}
 
-
             it "redirects to index action" do
                 post :add_members, group_id: group.id, group: {member_ids: [add.id]}
                 expect(response).to redirect_to action: 'index'
