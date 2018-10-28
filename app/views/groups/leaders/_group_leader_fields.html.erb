@@ -11,7 +11,7 @@
   <div class="custom-user-select">
     <%= f.association :user,
           as: :select,
-          input_html: { class: "select2", autofocus: true },
+          input_html: { class: "select2-field", autofocus: true },
           label: false
     %>
   </div>
@@ -89,10 +89,10 @@
 });
     };
 
-    init_select2(".select2")
+    init_select2(".select2-field")
 
     $("form").on("cocoon:after-insert", function(_, row){
-      field = $(row).find(".select2")
+      field = $(row).find(".select2-field")
       init_select2(field);
     });
   });
