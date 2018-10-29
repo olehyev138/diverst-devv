@@ -72,15 +72,19 @@ class GroupPolicy < ApplicationPolicy
     end
     
     def is_a_pending_member?
-        @record.pending_members.include? user
+        UserGroup.where(:accepted_member => false, :user_id => user.id, :group_id => @record.id).exists?
+    end
+    
+    def is_an_accepted_member?
+        UserGroup.where(:accepted_member => true, :user_id => user.id, :group_id => @record.id).exists?
     end
     
     def is_a_member?
-       (@record.members.include? user) || is_a_pending_member?
+       UserGroup.where(:user_id => user.id, :group_id => @record.id).exists?
     end
     
     def is_a_leader?
-       @record.leaders.include? user
+       GroupLeader.where(:user_id => user.id, :group_id => @record.id).exists?
     end
     
     def has_group_leader_permissions?(permission)

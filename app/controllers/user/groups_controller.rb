@@ -9,7 +9,7 @@ class User::GroupsController < ApplicationController
 
     def join
         @group = current_user.enterprise.groups.find(params[:id])
-        return if @group.members.include? current_user
+        return if policy(@group).is_a_member?
         @group.members << current_user
         @group.save
     end

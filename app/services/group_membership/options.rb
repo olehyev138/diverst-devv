@@ -22,7 +22,7 @@ class GroupMembership::Options
 
 	def leave_parent_group
 		if @group.parent.present?
-			if @group.parent.members.include? @user
+			if @group.parent.members.where(:id => @user.id).exists?
 				UserGroup.find_by(user_id: @user.id, group_id: @group.parent.id).destroy
 			end
 		end
