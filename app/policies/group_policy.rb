@@ -1,14 +1,14 @@
 class GroupPolicy < ApplicationPolicy
-    
+
     def index?
         return true if create?
         @policy_group.groups_index?
     end
-    
+
     def new?
         create?
     end
-    
+
     def show?
         index?
     end
@@ -18,7 +18,7 @@ class GroupPolicy < ApplicationPolicy
         return true if @policy_group.groups_manage?
         @policy_group.groups_create?
     end
-    
+
     def manage_all_groups?
         #return true if parent_group_permissions?
         # super admin
@@ -26,7 +26,7 @@ class GroupPolicy < ApplicationPolicy
         # groups manager
         return true if @policy_group.groups_manage? &&  @policy_group.group_settings_manage?
     end
-    
+
     def manage_all_group_budgets?
         #return true if parent_group_permissions?
         # super admin
@@ -34,7 +34,7 @@ class GroupPolicy < ApplicationPolicy
         # groups manager
         return true if @policy_group.groups_manage? &&  @policy_group.groups_budgets_manage?
     end
-    
+
     def manage?
         return true if manage_all_groups?
         # group leader
@@ -42,23 +42,23 @@ class GroupPolicy < ApplicationPolicy
         # group member
         return true if is_a_member? &&  @policy_group.group_settings_manage?
     end
-    
+
     def is_a_pending_member?
         UserGroup.where(:accepted_member => false, :user_id => user.id, :group_id => @record.id).exists?
     end
-    
+
     def is_an_accepted_member?
         UserGroup.where(:accepted_member => true, :user_id => user.id, :group_id => @record.id).exists?
     end
-    
+
     def is_a_member?
        UserGroup.where(:user_id => user.id, :group_id => @record.id).exists?
     end
-    
+
     def is_a_leader?
        GroupLeader.where(:user_id => user.id, :group_id => @record.id).exists?
     end
-    
+
     def has_group_leader_permissions?(permission)
         return false if !is_a_leader?
         return @record.group_leaders.where(:user_id => @user.id).where("#{permission} = true").exists?
@@ -77,12 +77,12 @@ class GroupPolicy < ApplicationPolicy
     def destroy?
         update?
     end
-    
+
     def calendar?
         return true if manage_all_groups?
         @policy_group.global_calendar?
     end
-    
+
     def insights?
         return true if parent_group_permissions?
         # super admin
@@ -94,7 +94,7 @@ class GroupPolicy < ApplicationPolicy
         # group member
         return true if is_a_member? &&  @policy_group.groups_insights_manage?
     end
-    
+
     def layouts?
         return true if parent_group_permissions?
         # super admin
@@ -106,16 +106,16 @@ class GroupPolicy < ApplicationPolicy
         # group member
         return true if is_a_member? &&  @policy_group.groups_layouts_manage?
     end
-    
+
     class Scope < Scope
         def index?
             GroupPolicy.new(user, nil).index?
         end
-    
+
         def resolve
             if index?
                 scope.where(:enterprise_id => user.enterprise_id).all
-            else 
+            else
                 []
             end
         end
