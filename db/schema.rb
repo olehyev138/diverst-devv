@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181020213814) do
+ActiveRecord::Schema.define(version: 20181029195823) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -590,12 +590,13 @@ ActiveRecord::Schema.define(version: 20181020213814) do
   end
 
   create_table "group_messages", force: :cascade do |t|
-    t.integer  "group_id",   limit: 4
-    t.string   "subject",    limit: 191
-    t.text     "content",    limit: 65535
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
-    t.integer  "owner_id",   limit: 4
+    t.integer  "group_id",    limit: 4
+    t.string   "subject",     limit: 191
+    t.text     "content",     limit: 65535
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.integer  "owner_id",    limit: 4
+    t.datetime "archived_at"
   end
 
   create_table "group_messages_segments", force: :cascade do |t|
@@ -986,6 +987,7 @@ ActiveRecord::Schema.define(version: 20181020213814) do
     t.integer  "picture_file_size",    limit: 4
     t.datetime "picture_updated_at"
     t.integer  "author_id",            limit: 4
+    t.datetime "archived_at"
   end
 
   create_table "outcomes", force: :cascade do |t|
@@ -1197,6 +1199,7 @@ ActiveRecord::Schema.define(version: 20181020213814) do
     t.integer  "folder_id",            limit: 4
     t.integer  "group_id",             limit: 4
     t.integer  "initiative_id",        limit: 4
+    t.datetime "archived_at"
   end
 
   create_table "reward_actions", force: :cascade do |t|
