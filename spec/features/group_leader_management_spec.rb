@@ -85,7 +85,6 @@ RSpec.feature 'Group Leader Management' do
 			end
 
 			scenario 'remove one group leader from list of group leaders', js: true do
-				# save_and_open_screenshot
 				within all('.nested-fields')[1] do
 					select_field = page.find('.custom-user-select select')[:id]
 					expect(page).to have_select(select_field, selected: user.name)
@@ -102,6 +101,7 @@ RSpec.feature 'Group Leader Management' do
 
 			scenario 'edit one of multiple group leaders', js: true do
 				within all('.nested-fields')[1] do
+					select other_user.name, from: page.find('.custom-user-select select')[:id]
 					fill_in page.find('.custom-position-field')[:id], with: 'Lead Software Engineer'
 				end
 
