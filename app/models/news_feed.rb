@@ -19,9 +19,9 @@ class NewsFeed < ActiveRecord::Base
 
     def self.all_links_without_segments(news_feed_id, enterprise)
       if enterprise.enable_social_media?
-        return NewsFeedLink.combined_news_links(news_feed_id)
+        return NewsFeedLink.combined_news_links(news_feed_id).where(archived_at: nil)
       else
-        return NewsFeedLink.combined_news_links(news_feed_id).where("news_feed_links.social_link_id IS NULL")
+        return NewsFeedLink.combined_news_links(news_feed_id).where("news_feed_links.social_link_id IS NULL").where(archived_at: nil)
       end
     end
 end
