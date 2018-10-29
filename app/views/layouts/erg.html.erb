@@ -47,9 +47,15 @@
             </li>
           <% end %>
           <% if GroupPostsPolicy.new(current_user, [@group]).view_latest_news? %>
-            <li>
-              <%= active_link_to "News Feed (#{NewsFeedLink.combined_news_links(@group.news_feed.id).count})", group_posts_path(@group) %>
-            </li>
+            <% if policy(@group).manage? || current_user.segment_ids.empty? %>
+              <li>
+                <%= active_link_to "News Feed (#{NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise).count})", group_posts_path(@group) %>
+              </li>
+            <% else %>
+              <li>
+                <%= active_link_to "News Feed (#{NewsFeed.all_links(@group.news_feed.id, current_user.segment_ids, @group.enterprise).count})", group_posts_path(@group) %>
+              </li>
+            <% end %>
           <% end %>
           
           <% if GroupFolderPolicy.new(current_user, [@group]).index? %>
