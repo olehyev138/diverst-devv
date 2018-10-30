@@ -169,6 +169,7 @@ Rails.application.routes.draw do
 
       resources :group_messages, path: 'messages' do
         post 'create_comment'
+        member { patch 'archive' }
         resources :group_message_comment
       end
       resources :leaders, only: [:index, :new, :create]
@@ -213,6 +214,7 @@ Rails.application.routes.draw do
           get   'comments'
           get   'news_link_photos'
           post  'create_comment'
+          patch 'archive'
         end
         resources :news_link_comment
       end

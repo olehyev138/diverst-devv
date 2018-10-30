@@ -1,4 +1,7 @@
 <div class="card__section card__section--border">
+  <%= link_to archive_group_group_message_path(message.group, message), method: :patch do %>
+    <%= inline_svg('icons/archive_box', size: '25px*25px') %>
+  <% end %>
   <div class="row">
     <div class="col-xs-2">
       <% if message.owner.present? %>

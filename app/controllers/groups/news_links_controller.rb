@@ -4,7 +4,7 @@ class Groups::NewsLinksController < ApplicationController
     before_action :authenticate_user!
 
     before_action :set_group, except: [:url_info]
-    before_action :set_news_link, only: [:comments, :create_comment, :edit, :update, :destroy, :news_link_photos]
+    before_action :set_news_link, only: [:comments, :create_comment, :edit, :update, :destroy, :news_link_photos, :archive]
 
     layout 'erg'
 
@@ -88,6 +88,11 @@ class Groups::NewsLinksController < ApplicationController
     def news_link_photos
         @resize = true
         @photos = @news_link.photos
+    end
+
+    def archive
+        @news_link.news_feed_link.update archived_at: DateTime.now
+        redirect_to :back
     end
 
     protected

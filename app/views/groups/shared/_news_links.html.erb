@@ -2,6 +2,9 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-xs-2 pull-left">
+       <%= link_to archive_group_news_link_path(news_link.group, news_link), method: :patch do %>
+         <%= inline_svg('icons/archive_box', size: '25px*25px') %>
+       <% end %>
         <% if !news_link.news_feed_link.is_pinned? %>
           <%= link_to "Pin", pin_group_posts_path(:group_id => news_link.group.id, :link_id => news_link.news_feed_link.id), method: :patch if GroupPostsPolicy.new(current_user, [@group]).update? %>
         <% else %>
