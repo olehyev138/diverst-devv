@@ -310,7 +310,7 @@ class GroupsController < ApplicationController
     end
 
     def without_segments
-        NewsFeedLink.combined_news_links(@group.news_feed.id)
+        NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise)
                             .includes(:news_link, :group_message, :social_link)
                             .order(is_pinned: :desc, created_at: :desc)
                             .limit(5)
@@ -320,8 +320,7 @@ class GroupsController < ApplicationController
         if GroupPostsPolicy.new(current_user, [@group]).view_latest_news?
             segment_ids = current_user.segments.ids
             if not segment_ids.empty?
-                NewsFeedLink
-                    .combined_news_links_with_segments(@group.news_feed.id, current_user.segments.ids)
+                NewsFeed.all_links(@group.news_feed.id, segment_ids, @group.enterprise)
                     .order(is_pinned: :desc, created_at: :desc)
                     .limit(5)
             else
