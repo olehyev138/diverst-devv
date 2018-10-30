@@ -120,6 +120,13 @@ class ApplicationController < ActionController::Base
         end
     end
 
+    def archive_expired_news
+      expiry_date = DateTime.now.months_ago(6)
+      if NewsFeedLink.where("created_at < ?", expiry_date).any?
+        NewsFeedLink.where("created_at < ?", expiry_date).update_all(archived_at: DateTime.now)
+      end
+    end
+
     protected
 
     def set_persist_login_param

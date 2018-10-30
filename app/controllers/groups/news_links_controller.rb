@@ -23,6 +23,7 @@ class Groups::NewsLinksController < ApplicationController
         @comments = @news_link.comments.includes(:author)
         @new_comment = NewsLinkComment.new
         @news_link.increment_view(current_user)
+        archive_expired_news
     end
 
     def create_comment

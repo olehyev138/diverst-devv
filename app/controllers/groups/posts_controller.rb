@@ -13,6 +13,7 @@ class Groups::PostsController < ApplicationController
                 @posts = NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise)
                                 .order(is_pinned: :desc, created_at: :desc)
                                 .limit(@limit)
+                archive_expired_news
         else
             if GroupPostsPolicy.new(current_user, [@group]).view_latest_news?
                 segment_ids = nil
@@ -24,6 +25,7 @@ class Groups::PostsController < ApplicationController
                 @posts = NewsFeed.all_links(@group.news_feed.id, segment_ids, @group.enterprise)
                             .order(is_pinned: :desc, created_at: :desc)
                             .limit(@limit)
+                archive_expired_news
             else
                 @count = 0
                 @posts = []
