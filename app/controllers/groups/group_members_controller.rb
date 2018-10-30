@@ -86,8 +86,7 @@ class Groups::GroupMembersController < ApplicationController
       next if (!user) || (user.enterprise != @group.enterprise)
       next if UserGroup.where(:user_id => user_id, :group_id => @group.id).exists?
 
-      @group.members << user
-      UserGroup.find_by(group_id: @group.id, user_id: user.id)&.update(accepted_member: true) if @group.pending_users.disabled?
+      UserGroup.create(group_id: @group.id, user_id: user.id, accepted_member: @group.pending_users.disabled?)
     end
 
     redirect_to action: 'index'
