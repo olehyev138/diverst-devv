@@ -357,11 +357,9 @@ RSpec.describe Group, :type => :model do
             user = create(:user)
             group = create(:group, :enterprise => user.enterprise, :owner => user)
 
-            2.times do
-                create(:group_leader, :group => group, :user => user)
-            end
+            create(:group_leader, :group => group, :user => user)
 
-            expect(group.managers.length).to eq(3)
+            expect(group.managers.length).to eq(2)
         end
     end
 
