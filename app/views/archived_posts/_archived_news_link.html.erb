@@ -52,13 +52,13 @@
             <span class="muted">Posted by <%=  news_link.author.name_with_status %></span>
           <% end %>
           <br>
-          <%= link_to "Comments(#{news_link.comments_count})", comments_group_news_link_path(news_link.group,news_link) %>
+          <%= "Comments(#{news_link.comments_count})" %>
       </div>
     </div>
     <div class="row">
       <div class="col-xs-8">
         <span class="hidden-xs pull-right">
-          <%= link_to "Delete", group_news_link_path(news_link.group, news_link), method: :delete, class: "btn btn--danger", data: { confirm: "Are you sure?" } if GroupNewsLinkPolicy.new(current_user, [@group]).destroy? %>
+          <%= link_to "Delete", archived_post_path(news_link.news_feed_link.id), method: :delete, class: "btn btn--danger", data: { confirm: "Are you sure?" } %>
         </span>
       </div>
     </div>

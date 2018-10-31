@@ -1,5 +1,6 @@
 <div class="content__header">
   <h1>Archived News & Messages</h1>
+  <% unless @posts.empty? %>
   <div class="flex-row flex-row--middle">
     <div class="flex-row__cell">
       <%= link_to "Restore All", '#', class: 'btn btn--primary' %>	
@@ -8,13 +9,14 @@
 	  <%= link_to "Delete All", '#', class: 'btn btn--primary' %>
     </div>
   </div>
+  <% end %>
 </div>
 <br>
 <div class="content__main">
   <div class="card">
     <% if @posts.empty? %>
       <div class="card__section">
-        <p>No posts have been published yet.</p>
+        <p>No Archived Posts.</p>
       </div>
     <% else %>
       <% @posts.each do |news| %>

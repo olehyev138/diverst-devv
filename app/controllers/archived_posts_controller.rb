@@ -1,6 +1,6 @@
 class ArchivedPostsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_post, only: [:show, :restore, :destroy]
+  before_action :set_post, only: [:restore, :destroy]
 
   layout 'erg_manager'
 
@@ -8,10 +8,9 @@ class ArchivedPostsController < ApplicationController
   	@posts = NewsFeed.archived_posts.order(created_at: :desc)
   end
 
-  def show
-  end
-
   def destroy
+    @post.destroy
+    redirect_to :back
   end
 
   def delete_all
