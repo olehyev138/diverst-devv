@@ -76,6 +76,17 @@ Rails.application.routes.draw do
   get 'integrations/calendar/:token', to: 'integrations#calendar', as: 'integrations_calendar'
 
   resources :enterprises do
+    resources :archived_posts, only: [:index, :show, :destroy] do 
+      collection do 
+        post 'delete_all'
+        post 'restore_all'
+      end
+
+      member do 
+        patch 'restore'
+      end
+    end
+    
     resources :saml do
       collection do
         get :sso

@@ -22,6 +22,9 @@
           <%= active_link_to "Resources", enterprise_folders_path(current_user.enterprise) if EnterpriseFolderPolicy.new(current_user).index? %>
         </li>
         <li>
+          <%= active_link_to "Archived News & Resources", "#" if policy(NewsLink).index? %>
+        </li>
+        <li>
           <%= active_link_to "Calendar", calendar_groups_path if policy(Group).calendar? %>
         </li>
         <% if current_user.enterprise.plan_module_enabled %>
@@ -48,6 +51,7 @@
     <%= active_link_to c_t(:erg).pluralize, groups_path, :active => :exact, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Group).manage_all_groups? %>
     <%= active_link_to c_t(:segment).pluralize, segments_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Segment).index? %>
     <%= active_link_to "Resources", enterprise_folders_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if EnterpriseFolderPolicy.new(current_user).index? %>
+    <%= link_to "Archived News & Resources", "#", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(NewsLink).index? %>
     <%= active_link_to "Calendar", calendar_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Group).calendar? %>
   </div>
 <% end %>
