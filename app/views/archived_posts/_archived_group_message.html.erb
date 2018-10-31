@@ -36,7 +36,6 @@
   <div class="row">
     <div class="col-xs-8">
       <div class="hidden-xs pull-right">
-        <%= link_to "Restore", '#', class: "btn btn--secondary" if GroupMessagePolicy.new(current_user, [@group]).edit? %>
         <%= link_to "Delete", group_group_message_path(message.group, message), method: :delete, class: "btn btn--danger", data: { confirm: "Are you sure?" } if GroupMessagePolicy.new(current_user, [@group]).destroy? %>
       </div>
     </div>

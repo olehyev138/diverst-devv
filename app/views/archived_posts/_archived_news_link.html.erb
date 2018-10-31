@@ -60,7 +60,6 @@
     <div class="row">
       <div class="col-xs-8">
         <span class="hidden-xs pull-right">
-          <%= link_to "Restore", "#", class: "btn btn--secondary" if GroupNewsLinkPolicy.new(current_user, [@group]).edit? %>
           <%= link_to "Delete", group_news_link_path(news_link.group, news_link), method: :delete, class: "btn btn--danger", data: { confirm: "Are you sure?" } if GroupNewsLinkPolicy.new(current_user, [@group]).destroy? %>
         </span>
       </div>
