@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Enterprises::ArchivedPostsController, type: :controller do
+RSpec.describe ArchivedPostsController, type: :controller do
 
   describe "GET #index" do
     it "returns http success" do

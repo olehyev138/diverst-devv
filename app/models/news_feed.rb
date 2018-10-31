@@ -24,4 +24,8 @@ class NewsFeed < ActiveRecord::Base
         return NewsFeedLink.combined_news_links(news_feed_id).where("news_feed_links.social_link_id IS NULL").where(archived_at: nil)
       end
     end
+
+    def self.archived_posts
+      NewsFeedLink.where.not(archived_at: nil) 
+    end
 end

@@ -1,0 +1,17 @@
+<div class="content__main">
+  <div class="card">
+    <% if @posts.empty? %>
+      <div class="card__section">
+        <p>No posts have been published yet.</p>
+      </div>
+    <% else %>
+      <% @posts.each do |news| %>
+        <% if news.news_link && policy(NewsLink).index? %>
+          <%= render "archived_news_link", news_link: NewsLink.find(news.link.id) %>
+        <% elsif news.group_message && policy(NewsLink).index? %>
+          <%= render "archived_group_message", message: GroupMessage.find(news.link.id) %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
