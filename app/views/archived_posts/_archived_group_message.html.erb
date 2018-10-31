@@ -22,10 +22,8 @@
             <% end %>
             <div class="row">
               <div class="col commentsLink">
-                <%= link_to "Comments(#{message.comments_count})", group_group_message_path(message.group, message) %>
-              </div>
-              <div class="col">
-                <%= render partial: "groups/shared/like_feature", locals: {news_feed_link: message.news_feed_link } %>
+                <%= "Comments(#{message.comments_count})" %>
+                <%= render "like_feature", news_feed_link: message.news_feed_link %>
               </div>
             </div>
           </p>
