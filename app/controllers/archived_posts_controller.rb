@@ -1,6 +1,6 @@
 class ArchivedPostsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_enterprise
+  before_action :set_post, only: [:show, :restore, :destroy]
 
   layout 'erg_manager'
 
@@ -11,6 +11,9 @@ class ArchivedPostsController < ApplicationController
   def show
   end
 
+  def destroy
+  end
+
   def delete_all
   end
 
@@ -18,12 +21,14 @@ class ArchivedPostsController < ApplicationController
   end
 
   def restore
+    @post.update archived_at: nil
+    redirect_to :back
   end
 
 
-  protected
+  private
 
-  def set_enterprise
-  	@enterprise = Enterprise.find(params[:enterprise_id])
+  def set_post
+    @post = NewsFeedLink.find(params[:id])
   end
 end
