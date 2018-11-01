@@ -23,12 +23,20 @@ class ArchivedPostsController < ApplicationController
   def restore_all
     @posts = NewsFeed.archived_posts(current_user.enterprise)
     @posts.update_all(archived_at: nil)
-    redirect_to :back, notice: 'all archived posts restored'
+    
+    respond_to do |format|
+      format.html { redirect_to :back, notice: 'all archived posts restored' }
+      format.js
+    end
   end
 
   def restore
-    @post.update archived_at: nil
-    redirect_to :back
+    @post.update(archived_at: nil)
+    
+    respond_to do |format|
+      format.html { redirect_to :back }
+      format.js
+    end
   end
 
 
