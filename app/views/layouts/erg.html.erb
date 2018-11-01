@@ -117,9 +117,12 @@
       <%= active_link_to "Resources", group_folders_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if GroupFolderPolicy.new(current_user, [@group]).index? %>
       <%= active_link_to "News Feed", group_posts_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if GroupPostsPolicy.new(current_user, [@group]).view_latest_news? %>
       
-      <%= active_link_to 'Manage&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"Manage", "aria-control": "navigation", "data-jq-dropdown": "#manage", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
+      <% if show_manage_link?(@group) %>
+        <%= active_link_to 'Manage&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"Manage", "aria-control": "navigation", "data-jq-dropdown": "#manage", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
+      <% end %>
+      
       <nav id="manage" class="jq-dropdown jq-dropdown-tip">
-        <ul class="jq-dropdown-menu">
+          <ul class="jq-dropdown-menu">
           <% if GroupLeaderPolicy.new(current_user, [@group]).index? %>
             <li>
             <%= active_link_to "Leaders", group_leaders_path(@group) %>
@@ -144,7 +147,7 @@
           </li>
           <% end %>
         </ul>
-      </nav>
+        </nav>
       
       <% if current_user.enterprise.plan_module_enabled %>
         <%= active_link_to 'Plan&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"Plan", "aria-control": "navigation", "data-jq-dropdown": "#plan", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>

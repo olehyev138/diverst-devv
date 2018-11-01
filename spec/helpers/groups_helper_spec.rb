@@ -1,7 +1,7 @@
 require 'rails_helper'
 require_relative '../../app/helpers/groups_helper.rb'
 
-RSpec.describe "an example group" do
+RSpec.describe "GroupsHelper" do
     let(:user) { create(:user) }
     let(:group) { create(:group, :enterprise_id => user.enterprise_id) }
     
