@@ -30,4 +30,10 @@ module AdminViewHelper
     return true if policy(current_user.enterprise).manage_branding?
     false
   end
+  
+  def show_diversity_link?
+    return true if policy(current_user.enterprise).diversity_manage?
+    return true if policy(Group).manage_all_groups? && policy(current_user.enterprise).manage_posts?
+    false
+  end
 end

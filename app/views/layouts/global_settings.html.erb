@@ -112,9 +112,10 @@
   
   
   <%= active_link_to "Logs", logs_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if LogPolicy.new(current_user, nil).index? %>
-
-  <%= active_link_to 'Diversity&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"Diversity", "aria-control": "navigation", "data-jq-dropdown": "#diversity", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
-  <nav id="diversity" class="jq-dropdown jq-dropdown-tip">
+  
+  <% if show_diversity_link? %>
+    <%= active_link_to 'Diversity&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"Diversity", "aria-control": "navigation", "data-jq-dropdown": "#diversity", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
+    <nav id="diversity" class="jq-dropdown jq-dropdown-tip">
     <ul class="jq-dropdown-menu">
       <% if policy(current_user.enterprise).diversity_manage? %>
         <li>
@@ -128,6 +129,7 @@
       <% end %>
     </ul>
   </nav>
+  <% end %>
   
 </div>
 <% end %>
