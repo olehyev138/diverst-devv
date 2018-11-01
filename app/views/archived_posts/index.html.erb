@@ -3,10 +3,10 @@
   <% unless @posts.empty? %>
   <div class="flex-row flex-row--middle">
     <div class="flex-row__cell">
-      <%= link_to "Restore All", '#', class: 'btn btn--primary' %>	
+      <%= link_to "Restore All", restore_all_archived_posts_path, method: :post, data: { confirm: "Are you sure?" }, class: 'btn btn--primary' %>
     </div>	
     <div class="flex-row__cell">
-	  <%= link_to "Delete All", '#', class: 'btn btn--primary' %>
+	  <%= link_to "Delete All", delete_all_archived_posts_path, method: :post, data: { confirm: "Are you sure?" }, class: 'btn btn--primary' %>
     </div>
   </div>
   <% end %>

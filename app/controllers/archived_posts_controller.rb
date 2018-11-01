@@ -14,9 +14,15 @@ class ArchivedPostsController < ApplicationController
   end
 
   def delete_all
+    @posts = NewsFeed.archived_posts
+    @posts.delete_all
+    redirect_to :back, notice: 'all archived posts deleted'
   end
 
   def restore_all
+    @posts = NewsFeed.archived_posts
+    @posts.update_all(archived_at: nil)
+    redirect_to :back, notice: 'all archived posts restored'
   end
 
   def restore
