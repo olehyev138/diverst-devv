@@ -92,7 +92,11 @@
     </div>
     <div class="menu menu--desktop">
       <%= active_link_to "Home", group_path(@group), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
-      <%= active_link_to 'Members&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"Members", "aria-control": "navigation", "data-jq-dropdown": "#members", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
+      
+      <% if show_members_link?(@group) %>
+        <%= active_link_to 'Members&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"Members", "aria-control": "navigation", "data-jq-dropdown": "#members", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
+      <% end %>
+      
       <nav id="members" class="jq-dropdown jq-dropdown-tip">
         <ul class="jq-dropdown-menu">
           <% if GroupMemberPolicy.new(current_user, [@group]).view_members? %>

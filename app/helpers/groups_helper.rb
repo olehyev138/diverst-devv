@@ -10,4 +10,8 @@ module GroupsHelper
 
     label
   end
+  
+  def show_members_link?(group)
+    GroupMemberPolicy.new(current_user, [group]).view_members? || group.pending_users.enabled? && GroupMemberPolicy.new(current_user, [group]).update?
+  end
 end
