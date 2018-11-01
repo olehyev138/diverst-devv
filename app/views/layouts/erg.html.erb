@@ -153,7 +153,7 @@
             <% end %>
             <% if GroupEventsPolicy.new(current_user, [@group]).index? %>
               <li>
-                <%= active_link_to "Events", group_initiatives_path(@group)  %>
+                <%= active_link_to "Event Management", group_initiatives_path(@group)  %>
               </li>
             <% end %>
             <% if policy(@group).manage? %>
