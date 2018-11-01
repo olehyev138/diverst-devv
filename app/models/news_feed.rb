@@ -25,7 +25,12 @@ class NewsFeed < ActiveRecord::Base
       end
     end
 
-    def self.archived_posts
-      NewsFeedLink.where.not(archived_at: nil) 
+    def self.archived_posts(enterprise)
+      groups = enterprise.groups
+      news_feed_link_ids = []
+      groups.each do |group|
+        news_feed_link_ids +=  group.news_feed.news_feed_links.where.not(archived_at: nil).ids
+      end
+      NewsFeedLink.where(id: news_feed_link_ids)
     end
 end

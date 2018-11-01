@@ -5,7 +5,8 @@ class ArchivedPostsController < ApplicationController
   layout 'erg_manager'
 
   def index
-  	@posts = NewsFeed.archived_posts.order(created_at: :desc)
+    # get all news feed for current enterprise
+  	@posts = NewsFeed.archived_posts(current_user.enterprise).order(created_at: :desc)
   end
 
   def destroy
@@ -14,13 +15,13 @@ class ArchivedPostsController < ApplicationController
   end
 
   def delete_all
-    @posts = NewsFeed.archived_posts
+    @posts = NewsFeed.archived_posts(current_user.enterprise)
     @posts.delete_all
     redirect_to :back, notice: 'all archived posts deleted'
   end
 
   def restore_all
-    @posts = NewsFeed.archived_posts
+    @posts = NewsFeed.archived_posts(current_user.enterprise)
     @posts.update_all(archived_at: nil)
     redirect_to :back, notice: 'all archived posts restored'
   end
