@@ -24,4 +24,11 @@ module GroupsHelper
     return true if policy(@group).manage?
     return false
   end
+  
+  def show_plan_link?(group)
+    return true if GroupEventsPolicy.new(current_user, [@group]).index?
+    return true if GroupBudgetPolicy.new(current_user, [@group]).update?
+    return true if policy(@group).manage?
+    return false
+  end
 end
