@@ -14,8 +14,9 @@ class GroupNewsLinkPolicy < GroupBasePolicy
     def index?
       case group.latest_news_visibility
       when 'public'
-          # Everyone can see latest news
-          user.policy_group.group_posts_index?
+        return true if user.policy_group.manage_posts?
+        # Everyone can see latest news
+        user.policy_group.group_posts_index?
       else
         super
       end
