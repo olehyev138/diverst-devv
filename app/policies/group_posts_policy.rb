@@ -16,6 +16,7 @@ class GroupPostsPolicy < GroupBasePolicy
         # Ability to view latest news depends on settings level
         case group.latest_news_visibility
         when 'public'
+            return true if user.policy_group.manage_posts?
             # Everyone can see latest news
             user.policy_group.group_posts_index?
         when 'group'
