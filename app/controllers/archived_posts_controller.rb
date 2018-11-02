@@ -11,13 +11,21 @@ class ArchivedPostsController < ApplicationController
 
   def destroy
     @post.destroy
-    redirect_to :back
+
+    respond_to do |format|
+      format.html { redirect_to :back }
+      format.js
+    end
   end
 
   def delete_all
     @posts = NewsFeed.archived_posts(current_user.enterprise)
     @posts.delete_all
-    redirect_to :back, notice: 'all archived posts deleted'
+
+    respond_to do |format|
+      format.html { redirect_to :back, notice: 'all archived posts deleted' }
+      format.js
+    end
   end
 
   def restore_all

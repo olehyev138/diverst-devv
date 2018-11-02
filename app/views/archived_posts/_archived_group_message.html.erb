@@ -34,7 +34,7 @@
   <div class="row">
     <div class="col-xs-8">
       <div class="hidden-xs pull-right">
-        <%= link_to "Delete", archived_post_path(message.news_feed_link.id), method: :delete, class: "btn btn--danger", data: { confirm: "Are you sure?" } %>
+        <%= link_to "Delete", archived_post_path(message.news_feed_link.id), method: :delete, remote: true, class: "btn btn--danger", data: { confirm: "Are you sure?" } %>
       </div>
     </div>
   </div>
