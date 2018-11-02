@@ -92,7 +92,11 @@ class Groups::NewsLinksController < ApplicationController
 
     def archive
         @news_link.news_feed_link.update archived_at: DateTime.now
-        redirect_to :back
+
+        respond_to do |format|
+           format.html { redirect_to :back }
+           format.js
+        end
     end
 
     protected

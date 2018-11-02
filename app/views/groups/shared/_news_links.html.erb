@@ -1,8 +1,8 @@
-<div class="card__section card__section--border">
+<div class="card__section card__section--border" id="restored_news_<%= news_link.id %>">
   <div class="container-fluid">
     <div class="row">
       <div class="col-xs-2 pull-left">
-       <%= link_to archive_group_news_link_path(news_link.group, news_link), method: :patch do %>
+       <%= link_to archive_group_news_link_path(news_link.group, news_link), remote: true, method: :patch do %>
          Archive
        <% end %>
         <% if !news_link.news_feed_link.is_pinned? %>
