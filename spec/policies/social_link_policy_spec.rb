@@ -37,4 +37,5 @@ RSpec.describe SocialLinkPolicy, :type => :policy do
     end
   end
 
+  ## todo: test scope ##
 end

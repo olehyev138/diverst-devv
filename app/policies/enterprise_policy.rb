@@ -1,5 +1,5 @@
 class EnterprisePolicy < ApplicationPolicy
-  
+
   def update?
     return true if manage_all?
     @policy_group.enterprise_manage?
@@ -24,17 +24,17 @@ class EnterprisePolicy < ApplicationPolicy
     return true if manage_all?
     @policy_group.manage_posts?
   end
-  
+
   def manage_branding?
     return true if manage_all?
     @policy_group.branding_manage?
   end
-  
+
   def manage_permissions?
     return true if manage_all?
     @policy_group.permissions_manage?
   end
-  
+
   def sso_manage?
     return true if manage_all?
     @policy_group.sso_manage?

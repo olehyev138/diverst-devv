@@ -3,7 +3,7 @@ class UserPolicy < ApplicationPolicy
     return true if create?
     @policy_group.users_index?
   end
-  
+
   def show?
     return true if index?
     @record === @user
@@ -12,7 +12,7 @@ class UserPolicy < ApplicationPolicy
   def create?
     manage?
   end
-  
+
   def manage?
     return true if manage_all?
     @policy_group.users_manage?
@@ -47,12 +47,12 @@ class UserPolicy < ApplicationPolicy
   def user_not_current_user?
     @user != @record ? true : false
   end
-  
-  class Scope < Scope 
+
+  class Scope < Scope
     def index?
       UserPolicy.new(user, nil).index?
     end
-    
+
     def resolve
       if index?
         scope.where(enterprise_id: user.enterprise_id)

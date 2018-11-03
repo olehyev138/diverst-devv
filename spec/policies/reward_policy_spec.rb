@@ -10,12 +10,14 @@ RSpec.describe RewardPolicy, :type => :policy do
 
   before {
     user.policy_group.manage_all = false
+    user.policy_group.save!
 
     no_access.policy_group.manage_all = false
     no_access.policy_group.diversity_manage = false
+    no_access.policy_group.save!
   }
 
-  permissions :manage? do
+  permissions :index?, :new?, :create?, :update?, :destroy?, :manage? do
     it 'allows access to user with correct permissions' do
       expect(subject).to permit(user, reward)
     end

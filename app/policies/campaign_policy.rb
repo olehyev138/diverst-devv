@@ -1,11 +1,11 @@
 class CampaignPolicy < ApplicationPolicy
-  
+
   def index?
     return false unless collaborate_module_enabled?
     return true if create?
     @policy_group.campaigns_index?
   end
-  
+
   def new?
     create?
   end
@@ -15,7 +15,7 @@ class CampaignPolicy < ApplicationPolicy
     return true if manage?
     @policy_group.campaigns_create?
   end
-  
+
   def manage?
     return true if manage_all?
     @policy_group.campaigns_manage?
@@ -30,13 +30,13 @@ class CampaignPolicy < ApplicationPolicy
   def destroy?
     update?
   end
-  
+
   class Scope < Scope
-    
+
     def index?
       CampaignPolicy.new(user, nil).index?
     end
-    
+
     def resolve
       if index?
         scope.where(:enterprise_id => user.enterprise_id)
@@ -51,6 +51,4 @@ class CampaignPolicy < ApplicationPolicy
   def collaborate_module_enabled?
     return @user.enterprise.collaborate_module_enabled
   end
-  
-  
 end

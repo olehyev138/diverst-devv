@@ -1,28 +1,28 @@
 class RewardPolicy < ApplicationPolicy
-  
+
   def index?
-      manage?
+    manage?
   end
-  
+
   def new?
-      manage?
+    manage?
   end
 
   def create?
-      manage?
+    manage?
   end
-  
+
   def manage?
     return true if manage_all?
     @policy_group.diversity_manage?
   end
 
   def update?
-      manage?
+    manage?
   end
 
   def destroy?
-      manage?
+    manage?
   end
 
 end
