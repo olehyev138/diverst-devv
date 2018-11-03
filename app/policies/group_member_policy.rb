@@ -31,7 +31,7 @@ class GroupMemberPolicy < GroupBasePolicy
   end
 
   def create?
-    return true if record === user
+    return true if record == user
     super
   end
 
