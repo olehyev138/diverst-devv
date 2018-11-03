@@ -103,7 +103,7 @@ class GroupBasePolicy < Struct.new(:user, :context)
     
 
     def archive?
-      manage_group_resource(base_manage_permission)
+      update?
     end
 
     def restore?

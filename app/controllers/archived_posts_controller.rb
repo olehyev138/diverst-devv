@@ -29,6 +29,7 @@ class ArchivedPostsController < ApplicationController
   end
 
   def restore_all
+    authorize [@posts], :restore_all?, :policy_class => GroupMessagePolicy
     @posts = NewsFeed.archived_posts(current_user.enterprise)
     @posts.update_all(archived_at: nil)
     
@@ -40,6 +41,7 @@ class ArchivedPostsController < ApplicationController
 
   def restore
     @post.update(archived_at: nil)
+    authorize [@post.group, @post.news_link || @post.group_message], :restore?, :policy_class => GroupMessagePolicy 
 
     respond_to do |format|
       format.html { redirect_to :back }
