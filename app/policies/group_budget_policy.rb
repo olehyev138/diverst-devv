@@ -10,7 +10,7 @@ class GroupBudgetPolicy < GroupBasePolicy
 
   def approve?
     return true if update?
-    @policy_group.budget_approval?
+    user.policy_group.budget_approval?
   end
 
   def manage_all_budgets?
