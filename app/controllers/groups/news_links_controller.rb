@@ -91,6 +91,8 @@ class Groups::NewsLinksController < ApplicationController
     end
 
     def archive
+        authorize [@group, @news_link], :archive?, :policy_class => GroupNewsLinkPolicy
+
         @news_link.news_feed_link.update archived_at: DateTime.now
 
         respond_to do |format|

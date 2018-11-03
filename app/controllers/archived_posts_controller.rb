@@ -40,7 +40,7 @@ class ArchivedPostsController < ApplicationController
 
   def restore
     @post.update(archived_at: nil)
-    
+
     respond_to do |format|
       format.html { redirect_to :back }
       format.js
