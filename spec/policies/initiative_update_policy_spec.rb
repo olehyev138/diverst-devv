@@ -2,9 +2,16 @@ require 'rails_helper'
 
 RSpec.describe InitiativeUpdatePolicy, :type => :policy do
 
-  let(:user){ create(:user) }
+  let(:enterprise) {create(:enterprise)}
+  let(:user){ create(:user, enterprise: enterprise) }
   let(:no_access) { create(:user) }
-  let(:initiative_update){ create(:initiative_update, owner: user) }
+
+  let(:group) { create :group, enterprise: user.enterprise }
+  let(:outcome) {create :outcome, group_id: group.id}
+  let(:pillar) { create :pillar, outcome_id: outcome.id}
+  let(:initiative) { create :initiative, pillar: pillar, owner_group: group, owner: user}
+  let(:initiative_update){ create(:initiative_update, initiative: initiative, owner: user) }
+  let(:policy_scope) { InitiativeUpdatePolicy::Scope.new(user, InitiativeUpdate).resolve }
 
   subject { described_class }
 
@@ -36,6 +43,12 @@ RSpec.describe InitiativeUpdatePolicy, :type => :policy do
     end
   end
 
-  ## TODO Test Scope ##
+  permissions ".scope" do
+    before { initiative_update }
+
+    it "shows only initiative_updates with outcomes belonging to users group" do
+      expect(policy_scope).to eq [initiative_update]
+    end
+  end
 
 end

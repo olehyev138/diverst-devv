@@ -5,6 +5,8 @@ RSpec.describe SocialLinkPolicy, :type => :policy do
   let(:user){ create(:user) }
   let(:no_access) { create(:user) }
   let(:social_link){ create(:social_link, author: user) }
+  let(:noshow_social_link) { create(:social_link, author: no_access) }
+  let(:policy_scope) { SocialLinkPolicy::Scope.new(user, SocialLink).resolve }
 
   subject { described_class }
 
@@ -37,5 +39,13 @@ RSpec.describe SocialLinkPolicy, :type => :policy do
     end
   end
 
-  ## todo: test scope ##
+  permissions '.scope' do
+
+    before { social_link } # trigger lazy let
+
+    it 'only shows social_links belonging to user' do
+      expect(policy_scope).to include(social_link)
+      expect(policy_scope).to_not include(noshow_social_link)
+    end
+  end
 end

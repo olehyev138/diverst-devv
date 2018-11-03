@@ -9,6 +9,7 @@ RSpec.describe InitiativePolicy, :type => :policy do
   let(:outcome) {create :outcome, group_id: group.id}
   let(:pillar) { create :pillar, outcome_id: outcome.id}
   let(:initiative) { create :initiative, pillar: pillar, owner_group: group, owner: user}
+  let(:policy_scope) { InitiativePolicy::Scope.new(user, Initiative).resolve }
 
   subject { described_class }
 
@@ -21,6 +22,8 @@ RSpec.describe InitiativePolicy, :type => :policy do
     no_access.policy_group.initiatives_index = false
     no_access.policy_group.initiatives_create = false
     no_access.policy_group.save!
+
+    initiative.group.enterprise_id = user.enterprise.id
   }
 
   permissions :index?, :show?, :create?, :manage?, :update?, :destroy? do
@@ -210,6 +213,9 @@ RSpec.describe InitiativePolicy, :type => :policy do
     end
   end
 
-
-  ## todo: test scope ##
+  permissions ".scope" do
+    it "shows only initiatives belonging to enterprise" do
+      expect(policy_scope).to eq [initiative]
+    end
+  end
 end
