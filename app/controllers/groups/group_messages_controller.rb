@@ -81,7 +81,7 @@ class Groups::GroupMessagesController < ApplicationController
 
     def archive
         authorize [@group, @message], :archive?, :policy_class => GroupMessagePolicy
-        @message.news_feed_link.update archived_at: DateTime.now
+        @message.news_feed_link.update(archived_at: DateTime.now)
         
         respond_to do |format|
             format.html { redirect_to :back }

@@ -22,7 +22,7 @@
           <%= active_link_to "Resources", enterprise_folders_path(current_user.enterprise) if EnterpriseFolderPolicy.new(current_user).index? %>
         </li>
         <li>
-          <%= active_link_to "Archived Posts", archived_posts_path if policy(NewsLink).index? %>
+          <%= active_link_to "Archived Posts", archived_posts_path %>
         </li>
         <li>
           <%= active_link_to "Calendar", calendar_groups_path if policy(Group).calendar? %>
@@ -56,7 +56,7 @@
   <nav id="archive" class="jq-dropdown jq-dropdown-tip">
     <ul class="jq-dropdown-menu">
       <li>
-        <%= active_link_to "Archived Posts", archived_posts_path, class: "secondary-header__tab" if policy(NewsLink).index? %>     
+        <%= active_link_to "Archived Posts", archived_posts_path, class: "secondary-header__tab" %>     
       </li>
     </ul>
   </nav>
