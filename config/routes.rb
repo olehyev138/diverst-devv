@@ -124,7 +124,9 @@ Rails.application.routes.draw do
           end
         end
       end
-      resources :resources 
+      resources :resources do
+        collection { get 'archived' }
+      end
       resources :events, only: [] do
         collection do
           get 'public_calendar_data'

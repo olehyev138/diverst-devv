@@ -3,7 +3,7 @@ module IsResources
 
     included do
         before_action :set_container
-        before_action :set_resource, except: [:index, :new, :create]
+        before_action :set_resource, except: [:index, :new, :create, :archived]
         before_action :set_container_path
 
         prepend_view_path 'app/views/shared/resources'
@@ -73,6 +73,14 @@ module IsResources
            format.js
         end
     end
+
+    def archived
+        @folders = @container.folders
+        @resources = []
+        @folders.each { |folder| @resources += folder.resources }
+        @resources
+    end
+
 
     protected
 

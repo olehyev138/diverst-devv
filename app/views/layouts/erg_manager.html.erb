@@ -58,6 +58,9 @@
       <li>
         <%= active_link_to "Archived Posts", archived_posts_path, class: "secondary-header__tab" %>     
       </li>
+      <li>
+        <%= active_link_to "Archived Resources", archived_enterprise_resources_path(current_user.enterprise), class: "secondary-header__tab" %>
+      </li>
     </ul>
   </nav>
     <%= active_link_to "Calendar", calendar_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Group).calendar? %>
