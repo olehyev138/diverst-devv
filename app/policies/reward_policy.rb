@@ -14,6 +14,7 @@ class RewardPolicy < ApplicationPolicy
   
   def manage?
     return true if manage_all?
+    return true if basic_group_leader_permission?("diversity_manage")
     @policy_group.diversity_manage?
   end
 

@@ -1,11 +1,12 @@
 class GroupBasePolicy < Struct.new(:user, :context)
     
-    attr_accessor :user, :group, :record
+    attr_accessor :user, :group, :record, :group_leader_role_ids
     
     def initialize(user, context)
         self.user = user
         self.group = context.first
         self.record = context.second
+        self.group_leader_role_ids = user.group_leaders.pluck(:user_role_id)
     end
     
     def is_a_member?
@@ -38,6 +39,10 @@ class GroupBasePolicy < Struct.new(:user, :context)
 
     def is_a_pending_member?
         UserGroup.where(:accepted_member => false, :user_id => user.id, :group_id => @record.id).exists?
+    end
+    
+    def basic_group_leader_permission?(permission)
+        PolicyGroupTemplate.where(:user_role_id => group_leader_role_ids).where("#{permission} = true").exists?
     end
     
     def has_group_leader_permissions?(permission)
