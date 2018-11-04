@@ -61,7 +61,7 @@ module IsResources
     def destroy
         track_activity(@resource, :destroy)
         @resource.destroy
-        redirect_to :back
+        redirect_to action: :index
     end
 
     def archive
