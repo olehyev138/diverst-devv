@@ -119,10 +119,12 @@ Rails.application.routes.draw do
           post 'authenticate'
         end
         scope module: :folder do
-          resources :resources
+          resources :resources do 
+            member { patch 'archive' }
+          end
         end
       end
-      resources :resources
+      resources :resources 
       resources :events, only: [] do
         collection do
           get 'public_calendar_data'
@@ -247,7 +249,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :resources
+      resources :resources 
       resources :fields do
         member do
           get 'time_series'

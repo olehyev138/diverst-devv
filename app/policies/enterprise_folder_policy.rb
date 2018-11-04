@@ -32,4 +32,8 @@ class EnterpriseFolderPolicy < Struct.new(:user, :folder)
   def destroy?
     update?
   end
+
+  def archive?
+    edit?
+  end
 end

@@ -11,7 +11,7 @@ module IsResources
 
     def index
         increment_views
-        @resources = @container.resources
+        @resources = @container.resources.where(archived_at: nil).all #move .where query into Resource model as default scope
         render '/index'
     end
 
@@ -64,6 +64,16 @@ module IsResources
         redirect_to action: :index
     end
 
+    def archive
+        @resources = @container.resources.where(archived_at: nil).all
+        @resource.update(archived_at: DateTime.now)
+
+        respond_to do |format|
+           format.html { redirect_to action: :index }
+           format.js
+        end
+    end
+
     protected
 
     def resource_params
@@ -74,7 +84,8 @@ module IsResources
                 :file,
                 :resource_type,
                 :folder_id,
-                :url
+                :url,
+                :archived_at
             )
     end
 
