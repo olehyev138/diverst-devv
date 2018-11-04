@@ -120,7 +120,10 @@ Rails.application.routes.draw do
         end
         scope module: :folder do
           resources :resources do 
-            member { patch 'archive' }
+            member do 
+              patch 'archive'
+              patch 'restore'
+            end
           end
         end
       end

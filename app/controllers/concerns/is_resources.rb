@@ -61,7 +61,7 @@ module IsResources
     def destroy
         track_activity(@resource, :destroy)
         @resource.destroy
-        redirect_to action: :index
+        redirect_to :back
     end
 
     def archive
@@ -74,11 +74,19 @@ module IsResources
         end
     end
 
+    def restore
+        @resources = @container.resources.where.not(archived_at: nil).all
+        @resource.update(archived_at: nil)
+
+        respond_to do |format|
+          format.html { redirect_to :back }
+          format.js
+        end
+    end
+
     def archived
-        @folders = @container.folders
-        @resources = []
-        @folders.each { |folder| @resources += folder.resources }
-        @resources
+        folder_ids = @container.folder_ids
+        @resources = Resource.where(folder_id: folder_ids).where.not(archived_at: nil).all
     end
 
 
