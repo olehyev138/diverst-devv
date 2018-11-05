@@ -12,7 +12,7 @@ class NewsLinkPolicy < ApplicationPolicy
         return true if manage?
         @policy_group.news_links_create?
     end
-  
+
     def manage?
         return true if manage_all?
         @policy_group.news_links_manage?

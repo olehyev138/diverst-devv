@@ -1,12 +1,12 @@
 require 'rails_helper'
 
-RSpec.describe GroupNewsLinkPolicy, :type => :policy do
+RSpec.describe GroupSocialLinkPolicy, :type => :policy do
 
   let(:enterprise) {create(:enterprise)}
   let(:user){ create(:user, :enterprise => enterprise) }
+  let(:group){ create(:group, :enterprise => enterprise) }
   let(:no_access) { create(:user) }
-  let(:group) { create :group, enterprise: user.enterprise }
-  let(:news_link) { create(:news_link, group: group) }
+  let(:social_link){ create(:social_link, :enterprise => enterprise) }
 
   subject { described_class }
 
@@ -15,15 +15,14 @@ RSpec.describe GroupNewsLinkPolicy, :type => :policy do
     user.policy_group.save!
 
     no_access.policy_group.manage_all = false
-    no_access.policy_group.news_links_index = false
-    no_access.policy_group.news_links_create = false
-    no_access.policy_group.news_links_manage = false
+    no_access.policy_group.social_links_index = false
+    no_access.policy_group.social_links_create = false
+    no_access.policy_group.social_links_manage = false
     no_access.policy_group.group_posts_index = false
     no_access.policy_group.save!
   }
 
   permissions :index? do
-
     it 'allows access when visibility is public and user has index permissions' do
       group.latest_news_visibility = 'public'
 
@@ -34,18 +33,6 @@ RSpec.describe GroupNewsLinkPolicy, :type => :policy do
       group.latest_news_visibility = 'public'
 
       expect(subject).to_not permit(no_access, [group, nil])
-    end
-  end
-
-  permissions :index?, :create?, :update?, :destroy? do
-
-
-    it "allows access" do
-      expect(subject).to permit(user, [news_link.group, news_link])
-    end
-
-    it "doesn't allow access" do
-      expect(subject).to_not permit(no_access, [news_link.group, news_link])
     end
   end
 end

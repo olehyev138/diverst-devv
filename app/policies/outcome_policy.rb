@@ -8,7 +8,7 @@ class OutcomePolicy < ApplicationPolicy
     return true if manage?
     @policy_group.initiatives_create?
   end
-  
+
   def manage?
     return true if manage_all?
     @policy_group.initiatives_manage?
@@ -16,11 +16,11 @@ class OutcomePolicy < ApplicationPolicy
 
   def update?
     return true if manage?
-    @record.owner == @user
+    @record.group.owner == @user
   end
 
   def destroy?
     return true if manage?
-    @record.owner == @user
+    @record.group.owner == @user
   end
 end
