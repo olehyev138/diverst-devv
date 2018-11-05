@@ -72,59 +72,59 @@ class GroupPolicy < ApplicationPolicy
     end
 
     def update?
-        return true if manage?
-        @record.owner == @user
+      return true if manage?
+      @record.owner == @user
     end
-
+  
     def parent_group_permissions?
-        return false if @record.parent.nil?
-        return ::GroupPolicy.new(@user, @record.parent).manage?
+      return false if @record.parent.nil?
+      return ::GroupPolicy.new(@user, @record.parent).manage?
+    end
+  
+    def destroy?
+      update?
+    end
+  
+    def calendar?
+      return true if manage_all_groups?
+      @policy_group.global_calendar?
+    end
+  
+    def insights?
+      return true if parent_group_permissions?
+      # super admin
+      return true if @policy_group.manage_all?
+      # groups manager
+      return true if @policy_group.groups_manage? &&  @policy_group.groups_insights_manage?
+      # group leader
+      return true if has_group_leader_permissions?("groups_insights_manage")
+      # group member
+      return true if is_a_member? &&  @policy_group.groups_insights_manage?
+    end
+  
+    def layouts?
+      return true if parent_group_permissions?
+      # super admin
+      return true if @policy_group.manage_all?
+      # groups manager
+      return true if @policy_group.groups_manage? &&  @policy_group.groups_layouts_manage?
+      # group leader
+      return true if has_group_leader_permissions?("groups_layouts_manage")
+      # group member
+      return true if is_a_member? &&  @policy_group.groups_layouts_manage?
     end
 
-    def destroy?
-        update?
-    end
-    
-    def calendar?
-        return true if manage_all_groups?
-        @policy_group.global_calendar?
-    end
-    
-    def insights?
-        return true if parent_group_permissions?
-        # super admin
-        return true if @policy_group.manage_all?
-        # groups manager
-        return true if @policy_group.groups_manage? &&  @policy_group.groups_insights_manage?
-        # group leader
-        return true if has_group_leader_permissions?("groups_insights_manage")
-        # group member
-        return true if is_a_member? &&  @policy_group.groups_insights_manage?
-    end
-    
-    def layouts?
-        return true if parent_group_permissions?
-        # super admin
-        return true if @policy_group.manage_all?
-        # groups manager
-        return true if @policy_group.groups_manage? &&  @policy_group.groups_layouts_manage?
-        # group leader
-        return true if has_group_leader_permissions?("groups_layouts_manage")
-        # group member
-        return true if is_a_member? &&  @policy_group.groups_layouts_manage?
-    end
-    
     class Scope < Scope
-        def index?
-            GroupPolicy.new(user, nil).index?
+      def index?
+        GroupPolicy.new(user, nil).index?
+      end
+  
+      def resolve
+        if index?
+          scope.where(:enterprise_id => user.enterprise_id).all
+        else
+          []
         end
-    
-        def resolve
-            if index?
-                scope.where(:enterprise_id => user.enterprise_id).all
-            else 
-                []
-            end
-        end
+      end
     end
 end

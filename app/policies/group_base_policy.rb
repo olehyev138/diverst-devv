@@ -42,7 +42,7 @@ class GroupBasePolicy < Struct.new(:user, :context)
     end
     
     def basic_group_leader_permission?(permission)
-        PolicyGroupTemplate.where(:user_role_id => group_leader_role_ids).where("#{permission} = true").exists?
+        PolicyGroupTemplate.where(:user_role_id => group_leader_role_ids, :enterprise_id => user.enterprise_id).where("#{permission} = true").exists?
     end
     
     def has_group_leader_permissions?(permission)
@@ -62,6 +62,7 @@ class GroupBasePolicy < Struct.new(:user, :context)
         return true if is_a_leader? &&  user.policy_group[permission]
         # group member
         return true if is_a_member? &&  user.policy_group[permission]
+        false
     end
     
     def manage_group_resource(permission)
@@ -73,6 +74,7 @@ class GroupBasePolicy < Struct.new(:user, :context)
         return true if has_group_leader_permissions?(permission)
         # group member
         return true if is_a_member? &&  user.policy_group[permission]
+        false
     end
     
     def index?

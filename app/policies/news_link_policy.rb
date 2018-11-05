@@ -14,7 +14,7 @@ class NewsLinkPolicy < ApplicationPolicy
         return true if basic_group_leader_permission?("news_links_create")
         @policy_group.news_links_create?
     end
-  
+
     def manage?
         return true if manage_all?
         return true if basic_group_leader_permission?("news_links_manage")

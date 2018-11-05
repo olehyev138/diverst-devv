@@ -1,5 +1,5 @@
 class GroupMemberPolicy < GroupBasePolicy
-    
+
     def base_index_permission
       "groups_members_index"
     end

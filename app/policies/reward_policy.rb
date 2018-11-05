@@ -1,17 +1,17 @@
 class RewardPolicy < ApplicationPolicy
-  
+
   def index?
-      manage?
+    manage?
   end
-  
+
   def new?
-      manage?
+    manage?
   end
 
   def create?
-      manage?
+    manage?
   end
-  
+
   def manage?
     return true if manage_all?
     return true if basic_group_leader_permission?("diversity_manage")
@@ -19,11 +19,11 @@ class RewardPolicy < ApplicationPolicy
   end
 
   def update?
-      manage?
+    manage?
   end
 
   def destroy?
-      manage?
+    manage?
   end
 
 end

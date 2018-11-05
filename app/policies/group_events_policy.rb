@@ -37,6 +37,6 @@ class GroupEventsPolicy < GroupBasePolicy
     end
 
     def view_upcoming_and_ongoing_events?
-        view_upcoming_events?
+      view_upcoming_events?
     end
 end

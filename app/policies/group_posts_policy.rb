@@ -1,9 +1,9 @@
 class GroupPostsPolicy < GroupBasePolicy
-    
+
     def base_index_permission
       "group_posts_index"
     end
-    
+  
     def base_create_permission
       "manage_posts"
     end

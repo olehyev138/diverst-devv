@@ -13,11 +13,11 @@ class EnterpriseFolderPolicy < Struct.new(:user, :folder)
     #return true if basic_group_leader_permission?("enterprise_resources_index")
     user.policy_group.enterprise_resources_index?
   end
-  
+
   def show?
     index?
   end
-  
+
   def new?
     create?
   end

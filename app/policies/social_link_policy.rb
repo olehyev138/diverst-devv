@@ -1,5 +1,4 @@
 class SocialLinkPolicy < ApplicationPolicy
-  
     def index?
         return true if manage?
         return true if basic_group_leader_permission?("social_links_index")

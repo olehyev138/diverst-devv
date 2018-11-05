@@ -1,4 +1,5 @@
 class GroupNewsLinkPolicy < GroupBasePolicy
+
     def base_index_permission
       "news_links_index"
     end
