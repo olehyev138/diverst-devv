@@ -2,6 +2,7 @@ class InitiativePolicy < ApplicationPolicy
 
   def index?
     return true if create?
+    return true if basic_group_leader_permission?("initiatives_index")
     @policy_group.initiatives_index?
   end
 
@@ -11,11 +12,13 @@ class InitiativePolicy < ApplicationPolicy
 
   def create?
     return true if manage?
+    return true if basic_group_leader_permission?("initiatives_create")
     @policy_group.initiatives_create?
   end
 
   def manage?
     return true if manage_all?
+    return true if basic_group_leader_permission?("initiatives_manage")
     @policy_group.initiatives_manage?
   end
 
