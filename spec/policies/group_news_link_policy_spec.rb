@@ -19,6 +19,7 @@ RSpec.describe GroupNewsLinkPolicy, :type => :policy do
     no_access.policy_group.news_links_create = false
     no_access.policy_group.news_links_manage = false
     no_access.policy_group.group_posts_index = false
+    no_access.policy_group.manage_posts = false
     no_access.policy_group.save!
   }
 

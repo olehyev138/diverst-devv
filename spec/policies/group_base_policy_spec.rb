@@ -165,14 +165,14 @@ RSpec.describe GroupBasePolicy, :type => :policy do
 
       create(:user_group, :user => user, :group => group, :accepted_member => true)
 
-      expect(subject.new(user, [group, group])
+      expect(subject.new(user, [group, nil])
         .manage_group_resource('groups_create')).to be(true)
     end
 
     it 'doesnt allow access if you are group manager but permission isnt true' do
       user.policy_group.groups_create = false
 
-      expect(subject.new(user, [group, group])
+      expect(subject.new(user, [group, nil])
         .manage_group_resource('groups_create')).to be(false)
     end
 
@@ -182,7 +182,7 @@ RSpec.describe GroupBasePolicy, :type => :policy do
 
       create(:user_group, :user => user, :group => group, :accepted_member => true)
 
-      expect(subject.new(user, [group, group])
+      expect(subject.new(user, [group, nil])
         .manage_group_resource('groups_create')).to be(false)
     end
 
