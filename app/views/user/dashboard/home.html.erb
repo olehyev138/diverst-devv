@@ -28,8 +28,10 @@
             <div class="card__section">
 
               <h4>Events You've Joined</h4>
-              <%= link_to calendar_user_events_path, class: "  card__action" if InitiativePolicy.new(current_user, nil).index? do %>
-                <%= inline_svg('icons/calendar.svg', class: "icon card__icon") %>Events Calendar
+              <% if InitiativePolicy.new(current_user, nil).index? %>
+                <%= link_to calendar_user_events_path, class: "card__action" do %>
+                  <%= inline_svg('icons/calendar.svg', class: "icon card__icon") %>Events Calendar
+                <% end %>
               <% end %>
 
               <% if @upcoming_events.empty? || !InitiativePolicy.new(current_user, nil).index? %>
