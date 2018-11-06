@@ -90,6 +90,12 @@ class InitiativesController < ApplicationController
       filename: "attendees.csv"
   end
 
+  def export_csv
+    authorize Initiative, :index?
+    data =  Initiative.to_csv(initiatives: @group.initiatives)
+    send_data data, filename: 'initiatives.csv'
+  end
+
   protected
 
   def set_group
