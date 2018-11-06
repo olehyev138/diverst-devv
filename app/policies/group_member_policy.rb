@@ -1,5 +1,5 @@
 class GroupMemberPolicy < GroupBasePolicy
-    
+
     def base_index_permission
       "groups_members_index"
     end
@@ -18,6 +18,10 @@ class GroupMemberPolicy < GroupBasePolicy
         # Ability to view members depends on settings level
         case group.members_visibility
         when 'global'
+            return true if user.policy_group.groups_members_manage?
+            return true if basic_group_leader_permission?("groups_members_manage")
+            return true if basic_group_leader_permission?("groups_members_index")
+        
             # Everyone can see users
             user.policy_group.groups_members_index?
         when 'group'
