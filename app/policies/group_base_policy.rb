@@ -109,8 +109,11 @@ class GroupBasePolicy < Struct.new(:user, :context)
     end    
 
     def archive?
-      return true if user.policy_group.permissions_manage? || user.policy_group.group_resources_manage?
-      false
+      update?
+    end
+
+    def restore? 
+        archive?
     end
 
     def base_index_permission

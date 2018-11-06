@@ -90,7 +90,7 @@ module IsResources
     end
 
     def archived
-        folder_ids = @container.folder_ids
+        folder_ids = @container.folder_ids + Folder.where(group_id: @container.group_ids).ids
         @resources = Resource.where(folder_id: folder_ids).where.not(archived_at: nil).all
     end
 

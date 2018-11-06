@@ -9,6 +9,11 @@ class Groups::Folder::ResourcesController < ApplicationController
     super
   end
 
+  def restore
+    puts "*" * 100
+    super
+  end
+
   protected
 
   def set_group

@@ -29,8 +29,13 @@
               <td class="hidden-xs"><%= resource.created_at.to_s :reversed_slashes %></td>
               <td class="hidden-xs"><%= resource.tags.map(&:name).join(", ") %></td>
               <td>
-                <%= link_to "Delete", enterprise_folder_resource_path(current_user.enterprise, resource.folder, resource), method: :delete, remote: true, class: "error", data: { confirm: "Are you sure?" } if EnterpriseFolderPolicy.new(current_user, nil).destroy? %> -
-                <%= link_to "Restore", restore_enterprise_folder_resource_path(current_user.enterprise, resource.folder, resource), method: :patch, remote: true if EnterpriseFolderPolicy.new(current_user, nil).archive? %>
+                <% if resource.folder.enterprise.present? %>
+                  <%= link_to "Delete", enterprise_folder_resource_path(current_user.enterprise, resource.folder, resource), method: :delete, remote: true, class: "error", data: { confirm: "Are you sure?" } if EnterpriseFolderPolicy.new(current_user, nil).destroy? %> -
+                  <%= link_to "Restore", restore_enterprise_folder_resource_path(current_user.enterprise, resource.folder, resource), method: :patch, remote: true if EnterpriseFolderPolicy.new(current_user, nil).archive? %>
+                <% elsif resource.folder.present? %>
+                  <%= link_to "Delete", enterprise_folder_resource_path(resource.folder.group, resource.folder, resource), method: :delete, remote: true, class: "error", data: { confirm: "Are you sure?" } if GroupFolderPolicy.new(current_user, []).destroy? %> -
+                  <%= link_to "Restore", restore_group_folder_resource_path(resource.folder.group, resource.folder, resource), method: :patch, remote: true if GroupFolderPolicy.new(current_user, []).destroy? %>
+                <% end %>
                </td>
             </tr>
           <% end %>
