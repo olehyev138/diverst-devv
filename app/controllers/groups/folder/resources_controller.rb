@@ -10,7 +10,6 @@ class Groups::Folder::ResourcesController < ApplicationController
   end
 
   def restore
-    puts "*" * 100
     super
   end
 
