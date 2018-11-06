@@ -28,11 +28,11 @@
             <div class="card__section">
 
               <h4>Events You've Joined</h4>
-              <%= link_to calendar_user_events_path, class: "  card__action" do %>
+              <%= link_to calendar_user_events_path, class: "  card__action" if InitiativePolicy.new(current_user, nil).index? do %>
                 <%= inline_svg('icons/calendar.svg', class: "icon card__icon") %>Events Calendar
               <% end %>
 
-              <% if @upcoming_events.empty? %>
+              <% if @upcoming_events.empty? || !InitiativePolicy.new(current_user, nil).index? %>
                 <div class="mtlarge text-center">
                   You have not joined any events yet.
                 </div>
@@ -51,9 +51,9 @@
             <div class="card__section">
 
               <h4>Latest News</h4>
-              <%= link_to "View all", user_news_links_path, class: "card__action" unless @posts.count < 1 %>
+              <%= link_to "View all", user_news_links_path, class: "card__action" unless @posts.count < 1 || !NewsLinkPolicy.new(current_user, nil).index? %>
 
-              <% if @posts.empty? %>
+              <% if @posts.empty? || !NewsLinkPolicy.new(current_user, nil).index? %>
                 <div class="mtlarge text-center">
                   No posts have been published yet.
                 </div>
