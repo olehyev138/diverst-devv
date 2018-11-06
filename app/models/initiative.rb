@@ -9,7 +9,7 @@ class Initiative < ActiveRecord::Base
   has_many :fields, dependent: :delete_all
   has_many :expenses, dependent: :destroy, class_name: "InitiativeExpense"
   has_many :user_reward_actions
-  
+
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
 
   validates :end, date: {after: :start, message: 'must be after start'}, on: [:create, :update]
@@ -141,6 +141,24 @@ class Initiative < ActiveRecord::Base
     end
   end
 
+  def self.to_csv(initiatives:)
+    # initiative column titles
+    CSV.generate do |csv|
+      csv << ['Pillar', 'Program', 'Event Name', 'Start Date', 'End Date', 'Expenses',
+        'Budget', 'KPI Metrics', 'KPI Last Update']
+
+      initiatives.order(:start).each do |initiative|
+        # initiative column values
+        csv << [
+          initiative.pillar.name, initiative.pillar.outcome.name,
+          initiative.start, initiative.end,
+          initiative.expenses.sum(:amount), initiative.actual_funding, # TODO: confirm this is correct
+          'KPI', 'KPI' # TODO
+        ]
+      end
+    end
+  end
+
   # ENDOF port from Event
 
 
@@ -242,10 +260,10 @@ class Initiative < ActiveRecord::Base
         return false
       end
 
-      if (self.estimated_funding == 0.0 || self.estimated_funding >= budget_item.available_amount) 
+      if (self.estimated_funding == 0.0 || self.estimated_funding >= budget_item.available_amount)
         self.estimated_funding = budget_item.available_amount
         budget_item.available_amount = 0
-        budget_item.is_done = true 
+        budget_item.is_done = true
       else
         #otherwise just subtract
         budget_item.available_amount -= self.estimated_funding
