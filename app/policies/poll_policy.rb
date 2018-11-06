@@ -38,7 +38,7 @@ class PollPolicy < ApplicationPolicy
       if index?
         scope.where(enterprise_id: user.enterprise_id).order(created_at: :desc)
       else
-        []
+        scope.none
       end
     end
   end

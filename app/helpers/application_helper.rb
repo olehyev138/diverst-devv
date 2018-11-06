@@ -78,15 +78,15 @@ module ApplicationHelper
   end
 
   def manage_erg_budgets_path
-    return close_budgets_groups_path if current_user.policy_group.groups_budgets_manage? && current_user.policy_group.groups_manage?
+    return close_budgets_groups_path if policy(Group).manage_all_group_budgets?
     false
   end
 
   def manage_erg_root_path
     return metrics_dashboards_path if policy(MetricsDashboard).index?
-    return groups_path if policy(Group).manage_all_groups?
+    return groups_path if policy(Group).create?
     return segments_path if policy(Segment).index?
-    return calendar_groups_path if current_user.policy_group.global_calendar?
+    return calendar_groups_path if policy(Group).calendar?
     return enterprise_folders_path(current_user.enterprise) if EnterpriseFolderPolicy.new(current_user).index?
     false
   end
@@ -98,15 +98,15 @@ module ApplicationHelper
 
   def global_settings_path
     return users_path if policy(User).create?
-    return edit_auth_enterprise_path(current_user.enterprise) if current_user.policy_group.sso_manage?
-    return policy_group_templates_path if current_user.policy_group.permissions_manage?
+    return edit_auth_enterprise_path(current_user.enterprise) if policy(Enterprise).sso_manage?
+    return policy_group_templates_path if policy(Enterprise).manage_permissions?
     return edit_fields_enterprise_path(current_user.enterprise) if policy(current_user.enterprise).edit_fields?
     return edit_custom_text_path(current_user.enterprise.custom_text) if policy(current_user.enterprise).edit_fields?
     return edit_branding_enterprise_path(current_user.enterprise) if policy(current_user.enterprise).edit_fields?
-    return integrations_path if current_user.policy_group.sso_manage?
-    return rewards_path if current_user.policy_group.diversity_manage?
-    return logs_path if current_user.policy_group.logs_view?
-    return edit_posts_enterprise_path(current_user.enterprise) if policy(Group).manage_all_groups? && current_user.policy_group.manage_posts?
+    return integrations_path if policy(Enterprise).sso_manage?
+    return rewards_path if policy(Enterprise).diversity_manage?
+    return logs_path if LogPolicy.new(current_user, nil).index?
+    return edit_posts_enterprise_path(current_user.enterprise) if policy(Group).manage_all_groups? && policy(Enterprise).manage_posts?
     false
   end
 
