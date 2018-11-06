@@ -3,7 +3,7 @@ module IsResources
 
     included do
         before_action :set_container
-        before_action :set_resource, except: [:index, :new, :create, :archived]
+        before_action :set_resource, except: [:index, :new, :create, :archived, :restore_all, :delete_all]
         before_action :set_container_path
 
         prepend_view_path 'app/views/shared/resources'
@@ -92,6 +92,28 @@ module IsResources
     def archived
         folder_ids = @container.folder_ids + Folder.where(group_id: @container.group_ids).ids
         @resources = Resource.where(folder_id: folder_ids).where.not(archived_at: nil).all
+    end
+
+    def restore_all
+        folder_ids = @container.folder_ids + Folder.where(group_id: @container.group_ids).ids
+        @resources = Resource.where(folder_id: folder_ids).where.not(archived_at: nil).all
+        @resources.update_all(archived_at: nil)
+
+        respond_to do |format|
+            format.html { redirect_to :back }
+            format.js
+        end
+    end
+
+    def delete_all
+        folder_ids = @container.folder_ids + Folder.where(group_id: @container.group_ids).ids
+        @resources = Resource.where(folder_id: folder_ids).where.not(archived_at: nil).all
+        @resources.delete_all
+
+        respond_to do |format|
+            format.html { redirect_to :back }
+            format.js
+        end
     end
 
 

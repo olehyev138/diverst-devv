@@ -22,6 +22,14 @@ class Enterprises::ResourcesController < ApplicationController
     super
   end
 
+  def restore_all
+    super
+  end
+
+  def delete_all
+    super
+  end
+
   protected
 
   def set_container

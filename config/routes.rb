@@ -128,7 +128,11 @@ Rails.application.routes.draw do
         end
       end
       resources :resources do
-        collection { get 'archived' }
+        collection do
+          get 'archived'
+          post 'restore_all'
+          post 'delete_all'
+        end
       end
       resources :events, only: [] do
         collection do
