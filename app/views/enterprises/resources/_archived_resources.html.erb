@@ -29,7 +29,7 @@
               <td class="hidden-xs"><%= resource.created_at.to_s :reversed_slashes %></td>
               <td class="hidden-xs"><%= resource.tags.map(&:name).join(", ") %></td>
               <td>
-                <%= link_to "Delete", enterprise_folder_resource_path(current_user.enterprise, resource.folder, resource), method: :delete, class: "error", data: { confirm: "Are you sure?" } if EnterpriseFolderPolicy.new(current_user, nil).destroy? %> -
+                <%= link_to "Delete", enterprise_folder_resource_path(current_user.enterprise, resource.folder, resource), method: :delete, remote: true, class: "error", data: { confirm: "Are you sure?" } if EnterpriseFolderPolicy.new(current_user, nil).destroy? %> -
                 <%= link_to "Restore", restore_enterprise_folder_resource_path(current_user.enterprise, resource.folder, resource), method: :patch, remote: true if EnterpriseFolderPolicy.new(current_user, nil).archive? %>
                </td>
             </tr>
