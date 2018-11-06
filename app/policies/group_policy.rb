@@ -87,6 +87,7 @@ class GroupPolicy < ApplicationPolicy
   
     def calendar?
       return true if manage_all_groups?
+      return true if basic_group_leader_permission?("global_calendar")
       @policy_group.global_calendar?
     end
   
