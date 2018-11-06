@@ -5,6 +5,10 @@ class Groups::Folder::ResourcesController < ApplicationController
 
   layout 'erg'
 
+  def archive
+    super
+  end
+
   protected
 
   def set_group

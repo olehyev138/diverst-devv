@@ -250,7 +250,12 @@ Rails.application.routes.draw do
           post 'authenticate'
         end
         scope module: :folder do
-          resources :resources
+          resources :resources do 
+            member do 
+              patch 'archive'
+              patch 'restore'
+            end
+          end
         end
       end
 
