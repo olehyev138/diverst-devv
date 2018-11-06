@@ -425,7 +425,7 @@ class User < ActiveRecord::Base
         CSV.generate do |csv|
             csv << ['First name', 'Last name', 'Email', 'Biography', 'Active'].concat(fields.map(&:title))
 
-            users.order(:active, created_at: :desc).limit(nb_rows).each do |user|
+            users.order(active: :desc, created_at: :desc).limit(nb_rows).each do |user|
                 user_columns = [user.first_name, user.last_name, user.email, user.biography, user.active]
 
                 fields.each do |field|

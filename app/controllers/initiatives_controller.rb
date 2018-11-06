@@ -92,7 +92,7 @@ class InitiativesController < ApplicationController
 
   def export_csv
     authorize Initiative, :index?
-    data =  Initiative.to_csv(initiatives: @group.initiatives)
+    data =  Initiative.to_csv(initiatives: @group.initiatives, enterprise: current_user.enterprise)
     send_data data, filename: 'initiatives.csv'
   end
 
