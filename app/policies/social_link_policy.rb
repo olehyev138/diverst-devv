@@ -1,17 +1,19 @@
 class SocialLinkPolicy < ApplicationPolicy
-  
     def index?
         return true if manage?
+        return true if basic_group_leader_permission?("social_links_index")
         @policy_group.social_links_index?
     end
     
     def create?
         return true if manage?
+        return true if basic_group_leader_permission?("social_links_create")
         @policy_group.social_links_create?
     end
     
     def manage?
         return true if manage_all?
+        return true if basic_group_leader_permission?("social_links_manage")
         @policy_group.social_links_manage?
     end
     

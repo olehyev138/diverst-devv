@@ -1,9 +1,10 @@
 class UserPolicy < ApplicationPolicy
   def index?
     return true if create?
+    return true if basic_group_leader_permission?("users_index")
     @policy_group.users_index?
   end
-  
+
   def show?
     return true if index?
     @record === @user
@@ -12,9 +13,10 @@ class UserPolicy < ApplicationPolicy
   def create?
     manage?
   end
-  
+
   def manage?
     return true if manage_all?
+    return true if basic_group_leader_permission?("users_manage")
     @policy_group.users_manage?
   end
 
@@ -47,12 +49,12 @@ class UserPolicy < ApplicationPolicy
   def user_not_current_user?
     @user != @record ? true : false
   end
-  
-  class Scope < Scope 
+
+  class Scope < Scope
     def index?
       UserPolicy.new(user, nil).index?
     end
-    
+
     def resolve
       if index?
         scope.where(enterprise_id: user.enterprise_id)
