@@ -357,11 +357,9 @@ RSpec.describe Group, :type => :model do
             user = create(:user)
             group = create(:group, :enterprise => user.enterprise, :owner => user)
 
-            2.times do
-                create(:group_leader, :group => group, :user => user)
-            end
+            create(:group_leader, :group => group, :user => user)
 
-            expect(group.managers.length).to eq(3)
+            expect(group.managers.length).to eq(2)
         end
     end
 
@@ -599,29 +597,6 @@ RSpec.describe Group, :type => :model do
             expect(group.yammer_group_created).to be(true)
             expect(group.yammer_id).to eq(1)
             expect(SyncYammerGroupJob).to have_received(:perform_later)
-        end
-    end
-
-    describe "#send_invitation_emails" do
-        it "calls GroupMailer" do
-            allow(GroupMailer).to receive(:delay).and_return(GroupMailer)
-            allow(GroupMailer).to receive(:invitation)
-
-            group = build(:group)
-            segment = build(:segment)
-            create(:invitation_segments_group, :group => group, :invitation_segment => segment)
-
-            # make sure group has invitation_segments
-            group.reload
-            expect(group.invitation_segments.count).to eq(1)
-
-            # change the value
-            group.send_invitations = true
-            group.save!
-
-            expect(GroupMailer).to have_received(:invitation)
-            expect(group.send_invitations).to be(false)
-            expect(group.invitation_segments.count).to eq(0)
         end
     end
 

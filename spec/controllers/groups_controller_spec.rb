@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe GroupsController, type: :controller do
   include ActiveJob::TestHelper
-  
+
   let(:enterprise){ create(:enterprise) }
   let(:user){ create(:user, enterprise: enterprise, email: "test@gmail.com") }
   let(:group){ create(:group, enterprise: enterprise) }
@@ -25,18 +25,18 @@ RSpec.describe GroupsController, type: :controller do
       context "display groups belonging to current user enterprise" do
         before { group; different_group }
 
-        it 'returns 1 group' do 
+        it 'returns 1 group' do
           get :index
           expect(assigns[:groups].count).to eq 1
         end
       end
 
       context 'where groups have children' do
-        let!(:group1) { create(:group, enterprise: enterprise) }
-        let!(:groups) { create_list(:group, 2, enterprise: enterprise) }
+        let!(:parent_groups) { create_list(:group, 2, enterprise: enterprise) }
+        let!(:child_group) { create(:group, enterprise: enterprise) }
         before do
           group
-          groups.each { |group| group.children << group }
+          parent_groups.each { |parent| parent.children << child_group }
         end
 
         it 'total number of groups should be 4' do
@@ -44,9 +44,9 @@ RSpec.describe GroupsController, type: :controller do
           expect(Group.all.count).to eq 4
         end
 
-        it 'return 2 groups with children' do
+        it 'returns 3 groups' do
           get :index
-          expect(assigns[:groups].count).to eq 2
+          expect(assigns[:groups].count).to eq 3
         end
       end
     end
@@ -68,11 +68,11 @@ RSpec.describe GroupsController, type: :controller do
         end
 
         context 'where groups have children' do
-          let!(:group1) { create(:group, enterprise: enterprise) }
-          let!(:groups) { create_list(:group, 2, enterprise: enterprise) }
+          let!(:parent_groups) { create_list(:group, 2, enterprise: enterprise) }
+          let!(:child_group) { create(:group, enterprise: enterprise) }
           before do
             group
-            groups.each { |group| group.children << group }
+            parent_groups.each { |parent| parent.children << child_group }
           end
 
           it 'total number of groups should be 4' do
@@ -80,20 +80,20 @@ RSpec.describe GroupsController, type: :controller do
             expect(Group.all.count).to eq 4
           end
 
-          it 'return 2 groups with children' do
+          it 'return 3 groups' do
             get :close_budgets, :id => group.id
-            expect(assigns[:groups].count).to eq 2
+            expect(assigns[:groups].count).to eq 3
           end
         end
 
         context "display groups belonging to current user enterprise" do
           before { group; different_group }
 
-          it 'returns 1 group' do 
+          it 'returns 1 group' do
             get :close_budgets, :id => group.id
             expect(assigns[:groups].count).to eq 1
           end
-        end        
+        end
       end
 
       context "with incorrect permissions" do
@@ -603,14 +603,14 @@ RSpec.describe GroupsController, type: :controller do
           expect(response).to redirect_to [:edit, group]
         end
 
-        it 'redirects to group homepage after updating group in group settings' do 
+        it 'redirects to group homepage after updating group in group settings' do
           request.env['HTTP_REFERER'] = settings_group_url(group)
           patch_update(group.id, group_attrs)
 
           expect(response).to redirect_to group
         end
 
-        it 'stay on group outcomes url after updating plan structure' do 
+        it 'stay on group outcomes url after updating plan structure' do
           request.env['HTTP_REFERER'] = group_outcomes_url(group)
           patch_update(group.id, group_attrs)
 
@@ -863,10 +863,10 @@ RSpec.describe GroupsController, type: :controller do
 
     context 'with logged user' do
       login_user_from_let
-      before { 
+      before {
         perform_enqueued_jobs do
           allow(GroupMemberImportCSVJob).to receive(:perform_later)
-          get :parse_csv, :id => group.id, :file => file 
+          get :parse_csv, :id => group.id, :file => file
         end
       }
 
@@ -877,7 +877,7 @@ RSpec.describe GroupsController, type: :controller do
       it 'creates a CsvFile' do
         expect(CsvFile.all.count).to eq(1)
       end
-      
+
       it "calls the correct job" do
         expect(GroupMemberImportCSVJob).to have_received(:perform_later)
       end
@@ -893,7 +893,7 @@ RSpec.describe GroupsController, type: :controller do
   describe 'GET #export_csv' do
     context 'with logged user' do
       login_user_from_let
-      before { 
+      before {
           allow(GroupMemberDownloadJob).to receive(:perform_later)
           request.env["HTTP_REFERER"] = "back"
           get :export_csv, :id => group.id
@@ -902,11 +902,11 @@ RSpec.describe GroupsController, type: :controller do
       it "redirects to user" do
           expect(response).to redirect_to "back"
       end
-      
+
       it "flashes" do
           expect(flash[:notice]).to eq "Please check your email in a couple minutes"
       end
-      
+
       it "calls job" do
           expect(GroupMemberDownloadJob).to have_received(:perform_later)
       end

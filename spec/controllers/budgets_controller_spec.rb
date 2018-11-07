@@ -316,14 +316,14 @@ RSpec.describe BudgetsController, type: :controller do
           describe 'public activity' do
             enable_public_activity
 
-            it 'creates public activity record', :skip => "NEED TO REVISIT ASAP" do
+            it 'creates public activity record' do
               perform_enqueued_jobs do
                 expect{delete :destroy, group_id: budget.group.id, id: budget.id}
                 .to change(PublicActivity::Activity, :count).by(1)
               end
             end
 
-            describe 'activity record', :skip => "NEED TO REVISIT ASAP" do
+            describe 'activity record' do
               let(:model) { budget }
               let(:owner) { user }
               let(:key) { 'budget.destroy' }

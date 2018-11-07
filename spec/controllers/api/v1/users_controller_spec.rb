@@ -100,8 +100,9 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         end
         
         describe "DELETE#destroy" do
+            let!(:another_user) { create(:user, enterprise: enterprise) }
             it "deletes the user" do
-                delete :destroy, :id => user.id
+                delete :destroy, :id => another_user.id
                 expect(response).to be_success
                 expect(response.status).to be(204)
             end
