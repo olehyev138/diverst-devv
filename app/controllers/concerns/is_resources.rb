@@ -4,6 +4,7 @@ module IsResources
     included do
         before_action :set_container
         before_action :set_resource, except: [:index, :new, :create, :archived, :restore_all, :delete_all]
+        before_action :fetch_all_resources, only: [:restore, :restore_all, :destroy, :delete_all, :archived]
         before_action :set_container_path
 
         prepend_view_path 'app/views/shared/resources'
@@ -59,7 +60,6 @@ module IsResources
     end
 
     def destroy
-        @resources = @container.resources.where.not(archived_at: nil).all
         track_activity(@resource, :destroy)
         @resource.destroy
        
@@ -80,7 +80,6 @@ module IsResources
     end
 
     def restore
-        @resources = @container.resources.where.not(archived_at: nil).all
         @resource.update(archived_at: nil)
 
         respond_to do |format|
@@ -90,13 +89,9 @@ module IsResources
     end
 
     def archived
-        folder_ids = @container.folder_ids + Folder.where(group_id: @container.group_ids).ids
-        @resources = Resource.where(folder_id: folder_ids).where.not(archived_at: nil).all
     end
 
     def restore_all
-        folder_ids = @container.folder_ids + Folder.where(group_id: @container.group_ids).ids
-        @resources = Resource.where(folder_id: folder_ids).where.not(archived_at: nil).all
         @resources.update_all(archived_at: nil)
 
         respond_to do |format|
@@ -106,8 +101,6 @@ module IsResources
     end
 
     def delete_all
-        folder_ids = @container.folder_ids + Folder.where(group_id: @container.group_ids).ids
-        @resources = Resource.where(folder_id: folder_ids).where.not(archived_at: nil).all
         @resources.delete_all
 
         respond_to do |format|
@@ -134,6 +127,11 @@ module IsResources
 
     def set_resource
         @resource = @container.resources.find(params[:id]) if @container
+    end
+
+    def fetch_all_resources
+        folder_ids = Folder.where(group_id: current_user.enterprise.group_ids).ids + current_user.enterprise.folder_ids
+        @resources = Resource.where(folder_id: folder_ids).where.not(archived_at: nil).all
     end
 
     def increment_views
