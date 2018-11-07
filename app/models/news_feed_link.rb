@@ -72,8 +72,9 @@ class NewsFeedLink < ActiveRecord::Base
 
     def archive_expired_news
       expiry_date = DateTime.now.months_ago(6)
-      if NewsFeedLink.where("created_at < ?", expiry_date).any?
-        NewsFeedLink.where("created_at < ?", expiry_date).update_all(archived_at: DateTime.now)
+      news = NewsFeedLink.where("created_at < ?", expiry_date)
+      if news.any?
+        news.update_all(archived_at: DateTime.now)
       end
     end
 end
