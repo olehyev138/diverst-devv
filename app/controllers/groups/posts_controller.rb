@@ -9,7 +9,6 @@ class Groups::PostsController < ApplicationController
     def index
         if policy(@group).manage?
             without_segments
-            archive_expired_news
         else
             if GroupPostsPolicy.new(current_user, [@group]).view_latest_news?
                 segment_ids = current_user.segment_ids
@@ -22,12 +21,12 @@ class Groups::PostsController < ApplicationController
                 @posts = NewsFeed.all_links(@group.news_feed.id, segment_ids, @group.enterprise)
                             .order(is_pinned: :desc, created_at: :desc)
                             .limit(@limit)
-                archive_expired_news
             else
                 @count = 0
                 @posts = []
             end
         end
+        archive_expired_news
     end
 
     def pending

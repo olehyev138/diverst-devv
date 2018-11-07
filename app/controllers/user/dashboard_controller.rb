@@ -9,6 +9,7 @@ class User::DashboardController < ApplicationController
     @posts = posts
     @messages = current_user.messages.includes(:group, :owner).limit(3)
     @enterprise_sponsors = @enterprise.sponsors
+    archive_expired_news
   end
 
   def rewards

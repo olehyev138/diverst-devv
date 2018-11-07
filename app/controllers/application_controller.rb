@@ -122,10 +122,11 @@ class ApplicationController < ActionController::Base
 
     def archive_expired_news
       expiry_date = DateTime.now.months_ago(6)
-      if NewsFeedLink.where("created_at < ?", expiry_date).any?
-        NewsFeedLink.where("created_at < ?", expiry_date).update_all(archived_at: DateTime.now)
-      end
+      news = NewsFeedLink.where("created_at < ?", expiry_date).where(archived_at: nil)
+
+      news.update_all(archived_at: DateTime.now) if news.any?
     end
+
 
     protected
 
