@@ -9,6 +9,10 @@ class Enterprises::Folder::ResourcesController < ApplicationController
     super
   end
 
+  def archive
+    super
+  end
+
   protected
   
   def set_enterprise
