@@ -82,13 +82,13 @@
           </li>
           <% end %>
           
-          <% if policy(@group).manage? %>
+          <% if policy(@group).settings? %>
             <li>
             <%= active_link_to "Settings", settings_group_path(@group) %>
           </li>
           <% end %>
           
-          <% if policy(@group).manage? %>
+          <% if GroupBudgetPolicy.new(current_user, [@group]).index? %>
             <li>
               <%= active_link_to "Overview", plan_overview_group_path(@group) %>
             </li>
@@ -178,7 +178,7 @@
           </li>
           <% end %>
           
-          <% if policy(@group).manage? %>
+          <% if policy(@group).settings? %>
             <li>
             <%= active_link_to "Settings", settings_group_path(@group) %>
           </li>
@@ -192,7 +192,7 @@
         <nav id="plan" class="jq-dropdown jq-dropdown-tip">
           <ul class="jq-dropdown-menu">
             
-            <% if policy(@group).manage? %>
+            <% if GroupBudgetPolicy.new(current_user, [@group]).index? %>
               <li>
                 <%= active_link_to "Overview", plan_overview_group_path(@group) %>
               </li>

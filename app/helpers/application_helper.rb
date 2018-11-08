@@ -101,8 +101,9 @@ module ApplicationHelper
     return edit_auth_enterprise_path(current_user.enterprise) if policy(Enterprise).sso_manage?
     return policy_group_templates_path if policy(Enterprise).manage_permissions?
     return edit_fields_enterprise_path(current_user.enterprise) if policy(current_user.enterprise).edit_fields?
-    return edit_custom_text_path(current_user.enterprise.custom_text) if policy(current_user.enterprise).edit_fields?
-    return edit_branding_enterprise_path(current_user.enterprise) if policy(current_user.enterprise).edit_fields?
+    return edit_branding_enterprise_path(current_user.enterprise) if policy(current_user.enterprise).manage_branding?
+    return edit_custom_text_path(current_user.enterprise) if policy(current_user.enterprise).manage_branding?
+    return emails_path(current_user.enterprise) if policy(current_user.enterprise).manage_branding?
     return integrations_path if policy(Enterprise).sso_manage?
     return rewards_path if policy(Enterprise).diversity_manage?
     return logs_path if LogPolicy.new(current_user, nil).index?

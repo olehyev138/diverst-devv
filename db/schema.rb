@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181020213814) do
+ActiveRecord::Schema.define(version: 20181107043436) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -578,6 +578,9 @@ ActiveRecord::Schema.define(version: 20181020213814) do
     t.boolean  "group_resources_create",                             default: false
     t.boolean  "group_resources_manage",                             default: false
     t.boolean  "group_posts_index",                                  default: false
+    t.boolean  "budget_approval",                                    default: false
+    t.boolean  "groups_budgets_manage",                              default: false
+    t.boolean  "manage_posts",                                       default: false
   end
 
   create_table "group_message_comments", force: :cascade do |t|
@@ -661,8 +664,6 @@ ActiveRecord::Schema.define(version: 20181020213814) do
     t.text     "home_message",               limit: 65535
     t.boolean  "default_mentor_group",                                             default: false
   end
-
-  add_index "groups", ["name"], name: "index_groups_on_name", unique: true, using: :btree
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
     t.integer "group_id",             limit: 4

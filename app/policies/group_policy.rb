@@ -112,6 +112,18 @@ class GroupPolicy < ApplicationPolicy
       # group member
       return true if is_a_member? &&  @policy_group.groups_layouts_manage?
     end
+    
+    def settings?
+      return true if parent_group_permissions?
+      # super admin
+      return true if @policy_group.manage_all?
+      # groups manager
+      return true if @policy_group.groups_manage? &&  @policy_group.group_settings_manage?
+      # group leader
+      return true if has_group_leader_permissions?("group_settings_manage")
+      # group member
+      return true if is_a_member? &&  @policy_group.group_settings_manage?
+    end
 
     class Scope < Scope
       def index?

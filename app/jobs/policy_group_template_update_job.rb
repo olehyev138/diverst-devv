@@ -16,6 +16,8 @@ class PolicyGroupTemplateUpdateJob < ActiveJob::Base
             # budgets
             leader.groups_budgets_index = template.groups_budgets_index
             leader.groups_budgets_request = template.groups_budgets_request
+            leader.budget_approval = template.budget_approval
+            leader.groups_budgets_manage = template.groups_budgets_manage
             
             # events
             leader.initiatives_manage = template.initiatives_manage
@@ -61,6 +63,9 @@ class PolicyGroupTemplateUpdateJob < ActiveJob::Base
             leader.group_resources_index = template.group_resources_index
             leader.group_resources_create = template.group_resources_create
             
+            # posts
+            leader.group_posts_index = template.group_posts_index
+            leader.manage_posts = template.manage_posts
             
             leader.save!(:validate => false)
         end

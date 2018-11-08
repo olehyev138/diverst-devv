@@ -114,13 +114,13 @@
         </div>
       </div>
       <div class="row">
-        <% if policy(@budget).approve? %>
+        <% if GroupBudgetPolicy.new(current_user, [@group, @budget]).approve? %>
           <div class="col">
             <%= f.button :submit, 'Approve Budget' %>
           </div>
           <% #bTODO check if vulnerabilities %>
         <% end %>
-        <% if policy(@budget).decline? %>
+        <% if GroupBudgetPolicy.new(current_user, [@group, @budget]).decline? %>
           <div class="col btn-padding" id="decline_wrapper">
             <button type="button" class="accent" id="decline_button" onclick='declineClicked()'>Decline Budget</button>
           </div>
