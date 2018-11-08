@@ -436,10 +436,5 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
                 end
             end
         end
-
-        describe 'without logged user' do
-            before { patch :update, group_id: group.id, id: news_link.id, news_link: {title: "updated"}}
-            it_behaves_like "redirect user to users/sign_in path"
-        end
     end
 end
