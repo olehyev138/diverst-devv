@@ -161,7 +161,10 @@ class GroupsController < ApplicationController
 
     def update
         authorize @group
-
+        update_group
+    end
+    
+    def update_group
         if group_params[:group_category_id].present?
           @group.group_category_type_id = GroupCategory.find_by(id: group_params[:group_category_id])&.group_category_type_id
         end
@@ -174,6 +177,10 @@ class GroupsController < ApplicationController
                 redirect_to @group
             elsif request.referer == group_outcomes_url(@group)
                 redirect_to group_outcomes_url(@group)
+            elsif request.referer == group_questions_url(@group)
+                redirect_to group_questions_url(@group)
+            elsif request.referer == layouts_group_url(@group)
+                redirect_to layouts_group_url(@group)
             else
                 redirect_to [:edit, @group]
             end
@@ -188,17 +195,32 @@ class GroupsController < ApplicationController
             end
         end
     end
+    
+    def update_questions
+        authorize @group, :insights?
+        update_group
+    end
+    
+    def update_layouts
+        authorize @group, :layouts?
+        update_group
+    end
+    
+    def update_settings
+        authorize @group, :settings?
+        update_group
+    end
 
     def layouts
         authorize @group
     end
 
     def settings
-        authorize @group, :manage?
+        authorize @group
     end
 
     def plan_overview
-        authorize @group, :manage?
+        authorize [@group], :index?, :policy_class => GroupBudgetPolicy
     end
 
     def destroy

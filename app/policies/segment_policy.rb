@@ -35,7 +35,7 @@ class SegmentPolicy < ApplicationPolicy
       if index?
         scope.where(:enterprise_id => user.enterprise_id)
       else
-        []
+        scope.none
       end
     end
   end

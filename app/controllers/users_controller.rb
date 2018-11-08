@@ -7,7 +7,7 @@ class UsersController < ApplicationController
   def index
     authorize User
     
-    @users = policy_scope(User).includes(:policy_group, :user_groups).where(search_params).limit(params[:limit] || 25)
+    @users = policy_scope(User).includes(:policy_group, :user_groups, :group_leaders).where(search_params).limit(params[:limit] || 25)
 
     respond_to do |format|
       format.html
@@ -250,6 +250,6 @@ class UsersController < ApplicationController
   end
 
   def search_params
-    params.permit(:active, :mentor, :mentee, policy_groups: [:budget_approval], user_groups: [:accepted_member, :group_id])
+    params.permit(:active, :mentor, :mentee, policy_groups: [:budget_approval], user_groups: [:accepted_member, :group_id], group_leaders: [:budget_approval])
   end
 end

@@ -44,7 +44,7 @@ class MetricsDashboardPolicy < ApplicationPolicy
       if index?
         scope.where(owner_id: user.id, :enterprise_id => user.enterprise_id).order(created_at: :desc)
       else
-        []
+        scope.none
       end
     end
   end

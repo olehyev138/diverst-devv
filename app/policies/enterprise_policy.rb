@@ -14,14 +14,14 @@ class EnterprisePolicy < ApplicationPolicy
 
   def edit_fields?
     return true if manage_all?
-    return true if basic_group_leader_permission?("branding_manage")
-    @policy_group.branding_manage?
+    return true if basic_group_leader_permission?("sso_manage")
+    @policy_group.sso_manage?
   end
 
   def edit_mobile_fields?
     return true if manage_all?
-    return true if basic_group_leader_permission?("branding_manage")
-    @policy_group.branding_manage?
+    return true if basic_group_leader_permission?("sso_manage")
+    @policy_group.sso_manage?
   end
 
   def manage_posts?

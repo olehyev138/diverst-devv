@@ -36,7 +36,7 @@ class SocialLinkPolicy < ApplicationPolicy
             if index?
                 scope.where(author_id: user.id)
             else
-                []
+                scope.none
             end
         end
     end
