@@ -415,4 +415,31 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
+    describe 'PATCH#archive' do 
+        let!(:news_link){ create(:news_link, group: group) }
+
+        describe 'when user is logged in' do
+            before { request.env["HTTP_REFERER"] = 'back' }
+
+            login_user_from_let
+
+            context 'with valid attributes' do
+                before { patch :archive, group_id: group.id, id: news_link.id }
+
+                it 'redirects to same page' do
+                    expect(response).to redirect_to 'back'
+                end
+
+                it 'archives news_link' do  
+                    expect(assigns[:news_link].news_feed_link.archived_at).to_not be_nil
+                end
+            end
+        end
+
+        describe 'without logged user' do
+            before { patch :update, group_id: group.id, id: news_link.id, news_link: {title: "updated"}}
+            it_behaves_like "redirect user to users/sign_in path"
+        end
+    end
 end
