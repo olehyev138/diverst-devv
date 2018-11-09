@@ -30,6 +30,7 @@ class GroupLeader < ActiveRecord::Base
     self.groups_budgets_manage = template.groups_budgets_manage
     
     # events
+    self.initiatives_index = template.initiatives_index
     self.initiatives_manage = template.initiatives_manage
     self.initiatives_create = template.initiatives_create
 

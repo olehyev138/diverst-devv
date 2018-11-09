@@ -581,6 +581,7 @@ ActiveRecord::Schema.define(version: 20181107043436) do
     t.boolean  "budget_approval",                                    default: false
     t.boolean  "groups_budgets_manage",                              default: false
     t.boolean  "manage_posts",                                       default: false
+    t.boolean  "initiatives_index",                                  default: false
   end
 
   create_table "group_message_comments", force: :cascade do |t|
