@@ -42,7 +42,7 @@ class Groups::SocialLinksController < ApplicationController
     protected
 
     def set_group
-        current_user ? @group = current_user.enterprise.groups.find(params[:group_id]) : user_not_authorized
+        @group = current_user.enterprise.groups.find(params[:group_id])
     end
 
     def set_social_link

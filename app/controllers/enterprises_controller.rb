@@ -161,7 +161,7 @@ class EnterprisesController < ApplicationController
   end
 
   def set_enterprise
-    current_user ? @enterprise = current_user.enterprise : user_not_authorized
+    @enterprise = current_user.enterprise
   end
 
   def set_theme
