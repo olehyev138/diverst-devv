@@ -433,12 +433,6 @@ class Group < ActiveRecord::Base
     end
   end
 
-  def send_invitation_emails
-    GroupMailer.delay.invitation(self, invitation_segments)
-    self.send_invitations = false
-    invitation_segments.clear
-  end
-
   def should_create_yammer_group?
     yammer_create_group? &&
       !yammer_group_created &&
