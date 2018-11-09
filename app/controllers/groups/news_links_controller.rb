@@ -5,12 +5,12 @@ class Groups::NewsLinksController < ApplicationController
 
     before_action :set_group, except: [:url_info]
     before_action :set_news_link, only: [:comments, :create_comment, :edit, :update, :destroy, :news_link_photos, :archive]
-    before_action :archive_expired_news, only: [:index, :comments]
 
     layout 'erg'
 
     def index
         @news_links = @group.news_links.includes(:author).order(created_at: :desc)
+        archive_expired_news
     end
 
     def new
@@ -24,6 +24,7 @@ class Groups::NewsLinksController < ApplicationController
         @comments = @news_link.comments.includes(:author)
         @new_comment = NewsLinkComment.new
         @news_link.increment_view(current_user)
+        archive_expired_news
     end
 
     def create_comment
@@ -102,13 +103,6 @@ class Groups::NewsLinksController < ApplicationController
     end
 
     protected
-
-    def archive_expired_news
-       expiry_date = DateTime.now.months_ago(6)
-       news = NewsFeedLink.where("created_at < ?", expiry_date).where(archived_at: nil)
-
-       news.update_all(archived_at: DateTime.now) if news.any?
-    end
 
     def set_group
         current_user ? @group = current_user.enterprise.groups.find(params[:group_id]) : user_not_authorized

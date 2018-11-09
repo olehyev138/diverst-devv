@@ -7,9 +7,11 @@ class ArchivedPostsController < ApplicationController
   def index
     # get all news feed for current enterprise
   	@posts = NewsFeed.archived_posts(current_user.enterprise).order(created_at: :desc)
+    authorize [@posts], :index?, :policy_class => ArchivedPostsPolicy
   end
 
   def destroy
+    authorize [@post], :destroy?, :policy_class => ArchivedPostsPolicy
     @post.destroy
 
     respond_to do |format|
@@ -20,6 +22,7 @@ class ArchivedPostsController < ApplicationController
 
   def delete_all
     @posts = NewsFeed.archived_posts(current_user.enterprise)
+    authorize [@posts], :delete_all?, :policy_class => ArchivedPostsPolicy
     @posts.delete_all
 
     respond_to do |format|
@@ -29,8 +32,8 @@ class ArchivedPostsController < ApplicationController
   end
 
   def restore_all
-    authorize [@posts], :restore_all?, :policy_class => ArchivedPostsPolicy
     @posts = NewsFeed.archived_posts(current_user.enterprise)
+    authorize [@posts], :restore_all?, :policy_class => ArchivedPostsPolicy
     @posts.update_all(archived_at: nil)
     
     respond_to do |format|

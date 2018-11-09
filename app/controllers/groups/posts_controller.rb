@@ -3,7 +3,6 @@ class Groups::PostsController < ApplicationController
     before_action :set_group
     before_action :set_page,    :only => [:index, :pending]
     before_action :set_link,    :only => [:approve, :pin, :unpin]
-    before_action :archive_expired_news, :only => [:index]
 
     layout 'erg'
 
@@ -27,6 +26,7 @@ class Groups::PostsController < ApplicationController
                 @posts = []
             end
         end
+        archive_expired_news
     end
 
     def pending
@@ -62,13 +62,6 @@ class Groups::PostsController < ApplicationController
     end
 
     protected
-
-    def archive_expired_news
-        expiry_date = DateTime.now.months_ago(6)
-        news = NewsFeedLink.where("created_at < ?", expiry_date).where(archived_at: nil)
-
-        news.update_all(archived_at: DateTime.now) if news.any?
-    end
     
     def without_segments
         @count = NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise).count
