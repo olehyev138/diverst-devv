@@ -10,7 +10,7 @@ class EnterpriseFolderPolicy < Struct.new(:user, :folder)
     
   def index?
     return true if create?
-    #return true if basic_group_leader_permission?("enterprise_resources_index")
+    return true if basic_group_leader_permission?("enterprise_resources_index")
     user.policy_group.enterprise_resources_index?
   end
 
@@ -24,7 +24,7 @@ class EnterpriseFolderPolicy < Struct.new(:user, :folder)
 
   def create?
     return true if update?
-    #return true if basic_group_leader_permission?("enterprise_resources_create")
+    return true if basic_group_leader_permission?("enterprise_resources_create")
     user.policy_group.enterprise_resources_create?
   end
 
@@ -34,7 +34,7 @@ class EnterpriseFolderPolicy < Struct.new(:user, :folder)
 
   def update?
     return true if user.policy_group.manage_all?
-    #return true if basic_group_leader_permission?("enterprise_resources_manage")
+    return true if basic_group_leader_permission?("enterprise_resources_manage")
     user.policy_group.enterprise_resources_manage?
   end
 

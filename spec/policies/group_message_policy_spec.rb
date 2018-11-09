@@ -4,9 +4,10 @@ RSpec.describe GroupMessagePolicy, :type => :policy do
 
   let(:enterprise) {create(:enterprise)}
   let(:user){ create(:user, :enterprise => enterprise) }
+  let(:second_user){ create(:user, :enterprise => enterprise) }
   let(:group){ create(:group, :enterprise => enterprise) }
   let(:no_access) { create(:user) }
-  let!(:group_message){ create(:group_message, :group => group, :owner => user)}
+  let!(:group_message){ create(:group_message, :group => group, :owner => second_user)}
 
   subject { described_class }
 
@@ -49,31 +50,31 @@ RSpec.describe GroupMessagePolicy, :type => :policy do
 
       permissions :edit? do
         it "allows access" do
-          expect(subject).to permit(user, [group])
+          expect(subject).to permit(user, [group, group_message])
         end
 
         it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
+          expect(subject).to_not permit(no_access, [group, group_message])
         end
       end
 
       permissions :update? do
         it "allows access" do
-          expect(subject).to permit(user, [group])
+          expect(subject).to permit(user, [group, group_message])
         end
 
         it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
+          expect(subject).to_not permit(no_access, [group, group_message])
         end
       end
 
       permissions :destroy? do
         it "allows access" do
-          expect(subject).to permit(user, [group])
+          expect(subject).to permit(user, [group, group_message])
         end
 
         it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
+          expect(subject).to_not permit(no_access, [group, group_message])
         end
       end
     end
@@ -108,31 +109,31 @@ RSpec.describe GroupMessagePolicy, :type => :policy do
 
       permissions :edit? do
         it "allows access" do
-          expect(subject).to permit(user, [group])
+          expect(subject).to permit(user, [group, group_message])
         end
 
         it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
+          expect(subject).to_not permit(no_access, [group, group_message])
         end
       end
 
       permissions :update? do
         it "allows access" do
-          expect(subject).to permit(user, [group])
+          expect(subject).to permit(user, [group, group_message])
         end
 
         it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
+          expect(subject).to_not permit(no_access, [group, group_message])
         end
       end
 
       permissions :destroy? do
         it "allows access" do
-          expect(subject).to permit(user, [group])
+          expect(subject).to permit(user, [group, group_message])
         end
 
         it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
+          expect(subject).to_not permit(no_access, [group, group_message])
         end
       end
     end
@@ -166,31 +167,31 @@ RSpec.describe GroupMessagePolicy, :type => :policy do
 
       permissions :edit? do
         it "allows access" do
-          expect(subject).to permit(user, [group])
+          expect(subject).to permit(user, [group, group_message])
         end
 
         it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
+          expect(subject).to_not permit(no_access, [group, group_message])
         end
       end
 
       permissions :update? do
         it "allows access" do
-          expect(subject).to permit(user, [group])
+          expect(subject).to permit(user, [group, group_message])
         end
 
         it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
+          expect(subject).to_not permit(no_access, [group, group_message])
         end
       end
 
       permissions :destroy? do
         it "allows access" do
-          expect(subject).to permit(user, [group])
+          expect(subject).to permit(user, [group, group_message])
         end
 
         it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
+          expect(subject).to_not permit(no_access, [group, group_message])
         end
       end
     end
@@ -223,31 +224,31 @@ RSpec.describe GroupMessagePolicy, :type => :policy do
 
       permissions :edit? do
         it "doesn't allow access" do
-          expect(subject).to_not permit(user, [group])
+          expect(subject).to_not permit(user, [group, group_message])
         end
 
         it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
+          expect(subject).to_not permit(no_access, [group, group_message])
         end
       end
 
       permissions :update? do
         it "doesn't allow access" do
-          expect(subject).to_not permit(user, [group])
+          expect(subject).to_not permit(user, [group, group_message])
         end
 
         it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
+          expect(subject).to_not permit(no_access, [group, group_message])
         end
       end
 
       permissions :destroy? do
         it "doesn't allow access" do
-          expect(subject).to_not permit(user, [group])
+          expect(subject).to_not permit(user, [group, group_message])
         end
 
         it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, [group])
+          expect(subject).to_not permit(no_access, [group, group_message])
         end
       end
     end
@@ -288,31 +289,31 @@ RSpec.describe GroupMessagePolicy, :type => :policy do
 
     permissions :edit? do
       it "allows access" do
-        expect(subject).to permit(user, [group])
+        expect(subject).to permit(user, [group, group_message])
       end
 
       it "doesn't allow access" do
-        expect(subject).to_not permit(no_access, [group])
+        expect(subject).to_not permit(no_access, [group, group_message])
       end
     end
 
     permissions :update? do
       it "allows access" do
-        expect(subject).to permit(user, [group])
+        expect(subject).to permit(user, [group, group_message])
       end
 
       it "doesn't allow access" do
-        expect(subject).to_not permit(no_access, [group])
+        expect(subject).to_not permit(no_access, [group, group_message])
       end
     end
 
     permissions :destroy? do
       it "allows access" do
-        expect(subject).to permit(user, [group])
+        expect(subject).to permit(user, [group, group_message])
       end
 
       it "doesn't allow access" do
-        expect(subject).to_not permit(no_access, [group])
+        expect(subject).to_not permit(no_access, [group, group_message])
       end
     end
   end

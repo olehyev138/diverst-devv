@@ -15,7 +15,8 @@ class GroupBasePolicy < Struct.new(:user, :context)
     
     def is_a_manager?(permission)
         return true if is_admin_manager?(permission)
-        is_a_leader? &&  user.policy_group[permission]
+        return true if is_a_leader? &&  user.policy_group[permission]
+        has_group_leader_permissions?(permission)
     end
     
     def is_admin_manager?(permission)
