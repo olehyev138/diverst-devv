@@ -338,7 +338,7 @@ class Group < ActiveRecord::Base
   # This method only exists because it's used in a callback
   # Update specific member in elasticsearch
   def update_elasticsearch_member(member)
-    GroupMemberUpdateJob.perform_later(member)
+    GroupMemberUpdateJob.perform_later(member.id)
   end
 
   # Update members in elastic_search
