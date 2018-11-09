@@ -26,7 +26,9 @@ class GroupLeader < ActiveRecord::Base
     # budgets
     self.groups_budgets_index = template.groups_budgets_index
     self.groups_budgets_request = template.groups_budgets_request
-
+    self.budget_approval = template.budget_approval
+    self.groups_budgets_manage = template.groups_budgets_manage
+    
     # events
     self.initiatives_manage = template.initiatives_manage
     self.initiatives_create = template.initiatives_create
@@ -70,5 +72,9 @@ class GroupLeader < ActiveRecord::Base
     self.group_resources_manage = template.group_resources_manage
     self.group_resources_index = template.group_resources_index
     self.group_resources_create = template.group_resources_create
+    
+    # posts
+    self.group_posts_index = template.group_posts_index
+    self.manage_posts = template.manage_posts
   end
 end

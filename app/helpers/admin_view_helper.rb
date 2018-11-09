@@ -1,4 +1,5 @@
 module AdminViewHelper
+  
   def active_manage_erg_link?
     return true if controller_name == 'groups' &&
       ['calendar', 'index', 'import_csv', 'edit', 'new'].include?(action_name)
@@ -36,4 +37,5 @@ module AdminViewHelper
     return true if policy(Group).manage_all_groups? && policy(current_user.enterprise).manage_posts?
     false
   end
+  
 end

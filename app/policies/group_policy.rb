@@ -53,8 +53,8 @@ class GroupPolicy < ApplicationPolicy
     def manage_all_groups?
         #return true if parent_group_permissions?
         # super admin
-        return true if @policy_group.manage_all?
-        return true if basic_group_leader_permission?("groups_manage") && basic_group_leader_permission("group_settings_manage")
+        return true if manage_all?
+        return true if basic_group_leader_permission?("groups_manage") && basic_group_leader_permission?("group_settings_manage")
         
         # groups manager
         return true if @policy_group.groups_manage? &&  @policy_group.group_settings_manage?
@@ -63,19 +63,17 @@ class GroupPolicy < ApplicationPolicy
     def manage_all_group_budgets?
         #return true if parent_group_permissions?
         # super admin
-        return true if @policy_group.manage_all?
-        return true if basic_group_leader_permission?("groups_manage") && basic_group_leader_permission("groups_budgets_manage")
+        return true if manage_all?
+        return true if basic_group_leader_permission?("groups_manage") && basic_group_leader_permission?("groups_budgets_manage")
         
         # groups manager
         return true if @policy_group.groups_manage? &&  @policy_group.groups_budgets_manage?
     end
     
     def manage?
-        return true if manage_all_groups?
-        # group leader
-        return true if has_group_leader_permissions?("group_settings_manage")
-        # group member
-        return true if is_a_member? &&  @policy_group.group_settings_manage?
+      return true if manage_all?
+      return true if basic_group_leader_permission?("groups_manage")
+      @policy_group.groups_manage?
     end
     
     def is_a_pending_member?
@@ -114,7 +112,8 @@ class GroupPolicy < ApplicationPolicy
     end
   
     def calendar?
-      return true if manage_all_groups?
+      return true if manage_all?
+      return true if basic_group_leader_permission?("global_calendar")
       @policy_group.global_calendar?
     end
   
@@ -141,6 +140,18 @@ class GroupPolicy < ApplicationPolicy
       # group member
       return true if is_a_member? &&  @policy_group.groups_layouts_manage?
     end
+    
+    def settings?
+      return true if parent_group_permissions?
+      # super admin
+      return true if @policy_group.manage_all?
+      # groups manager
+      return true if @policy_group.groups_manage? &&  @policy_group.group_settings_manage?
+      # group leader
+      return true if has_group_leader_permissions?("group_settings_manage")
+      # group member
+      return true if is_a_member? &&  @policy_group.group_settings_manage?
+    end
 
     class Scope < Scope
       def index?
@@ -151,7 +162,7 @@ class GroupPolicy < ApplicationPolicy
         if index?
           scope.where(:enterprise_id => user.enterprise_id).all
         else
-          []
+          scope.none
         end
       end
     end

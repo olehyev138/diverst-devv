@@ -23,12 +23,10 @@ class GroupMemberDatatable < AjaxDatatablesRails::Base
 
   def data
     records.map do |record|
-      show_link = link_to "#{record.name}", user_path(record)
-      destroy_link = generate_destroy_link(record)
       [
-        show_link,
+        generate_view_link(record),
         record.active ? "Yes" : "No",
-        destroy_link
+        generate_destroy_link(record)
       ]
     end
   end
@@ -39,6 +37,14 @@ class GroupMemberDatatable < AjaxDatatablesRails::Base
         method: :delete, class: "error", data: { confirm: "Are you sure?" }
     else
       nil
+    end
+  end
+  
+  def generate_view_link(record)
+    if GroupMemberPolicy.new(@user, [@group, record]).update?
+      link_to "#{record.name}", user_path(record)
+    else
+      "#{record.name}"
     end
   end
 
