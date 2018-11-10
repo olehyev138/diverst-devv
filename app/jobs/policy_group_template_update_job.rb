@@ -20,6 +20,7 @@ class PolicyGroupTemplateUpdateJob < ActiveJob::Base
             leader.groups_budgets_manage = template.groups_budgets_manage
             
             # events
+            leader.initiatives_index = template.initiatives_index
             leader.initiatives_manage = template.initiatives_manage
             leader.initiatives_create = template.initiatives_create
             
