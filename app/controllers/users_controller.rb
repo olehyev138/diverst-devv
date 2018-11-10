@@ -169,7 +169,7 @@ class UsersController < ApplicationController
   end
 
   def set_user
-    current_user ? @user = current_user.enterprise.users.find(params[:id]) : user_not_authorized
+    @user = current_user.enterprise.users.find(params[:id])
   end
 
   def user_params
