@@ -38,7 +38,7 @@ class TopicFeedbacksController < ApplicationController
   protected
 
   def set_topic
-    current_user ? @topic = current_user.enterprise.topics.find(params[:topic_id]) : user_not_authorized
+    @topic = current_user.enterprise.topics.find(params[:topic_id])
   end
 
   def set_feedback

@@ -33,7 +33,7 @@ class Enterprises::ResourcesController < ApplicationController
   protected
 
   def set_container
-    current_user ? @container = current_user.enterprise : user_not_authorized
+    @container = current_user.enterprise
   end
 
   def set_container_path

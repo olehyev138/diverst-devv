@@ -75,7 +75,7 @@ class DevicesController < ApplicationController
   protected
 
   def set_device
-    current_user ? @device = current_user.devices.find(params[:id]) : user_not_authorized
+    @device = current_user.devices.find(params[:id])
   end
 
   def device_params
