@@ -11,11 +11,13 @@
         <%= f.input :max_attendees %>
         <%= f.input :picture, as: :attachment_preview %>
       </div>
+
       <div class="card__section card__section--border">
-        <%= f.association :attendees,
-              collection: @group.enterprise.users,
-              input_html: { class: "select2" },
-              label: "Choose the <strong>external members</strong> you want to invite".html_safe %>
+        <%= f.association :managers,
+            as: :select,
+            input_html: { class: "select2-field" },
+            selected: [],
+            label: "Choose the <strong>external members</strong> you want to invite".html_safe %>
       </div>
     </div>
 
@@ -44,3 +46,11 @@
     <%= f.button :submit %>
   </div>
 <% end %>
+
+<script>
+ $(document).on('ready page:load', function(){
+   $('.select2-field').select2({
+     async_select(users_path(limit: 10, format: json))
+   })
+ }
+</script>
