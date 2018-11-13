@@ -47,7 +47,7 @@
 $(document).on('ready page:load', function(){
     $('.select2-field').select2({
     ajax: {
-      url: "<%= users_path(policy_groups: {:budget_approval => 1}, :limit => 10, format: :json) %>",
+      url: "<%= users_path(group_leaders: {:group_id => @group.id, :budget_approval => 1}, :limit => 10, format: :json) %>",
       theme: 'bootstrap',
       allowClear: true,
       type: "GET",

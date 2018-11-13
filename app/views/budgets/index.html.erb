@@ -38,7 +38,7 @@
                 <td><%= budget.budget_items.count %></td>
                 <td><%= budget.description %></td>
                 <th><%= link_to 'Details', group_budget_path(@group, budget) %></th>
-                <th><%= link_to "Delete", group_budget_path(@group, budget), method: :delete, class: 'error', data: { confirm: "Are you sure?" } %></th>
+                <th><%= link_to "Delete", group_budget_path(@group, budget), method: :delete, class: 'error', data: { confirm: "Are you sure?" } if GroupBudgetPolicy.new(current_user, [@group]).destroy? %></th>
               </tr>
             <% end %>
           </tbody>

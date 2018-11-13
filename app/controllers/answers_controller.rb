@@ -20,12 +20,8 @@ class AnswersController < ApplicationController
   protected
 
   def set_answer
-    if current_user
-      @answer = current_user.enterprise.answers.find(params[:id])
-      @question = @answer.question
-    else
-      user_not_authorized
-    end
+    @answer = current_user.enterprise.answers.find(params[:id])
+    @question = @answer.question
   end
 
   def answer_params

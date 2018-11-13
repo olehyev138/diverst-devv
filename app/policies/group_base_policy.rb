@@ -1,11 +1,12 @@
 class GroupBasePolicy < Struct.new(:user, :context)
     
-    attr_accessor :user, :group, :record
+    attr_accessor :user, :group, :record, :group_leader_role_ids
     
     def initialize(user, context)
         self.user = user
         self.group = context.first
         self.record = context.second
+        self.group_leader_role_ids = user.group_leaders.pluck(:user_role_id)
     end
     
     def is_a_member?
@@ -14,7 +15,8 @@ class GroupBasePolicy < Struct.new(:user, :context)
     
     def is_a_manager?(permission)
         return true if is_admin_manager?(permission)
-        is_a_leader? &&  user.policy_group[permission]
+        return true if is_a_leader? &&  user.policy_group[permission]
+        has_group_leader_permissions?(permission)
     end
     
     def is_admin_manager?(permission)
@@ -40,6 +42,10 @@ class GroupBasePolicy < Struct.new(:user, :context)
         UserGroup.where(:accepted_member => false, :user_id => user.id, :group_id => @record.id).exists?
     end
     
+    def basic_group_leader_permission?(permission)
+        PolicyGroupTemplate.where(:user_role_id => group_leader_role_ids, :enterprise_id => user.enterprise_id).where("#{permission} = true").exists?
+    end
+    
     def has_group_leader_permissions?(permission)
         return false if !is_a_leader?
         return false if !GroupLeader.attribute_names.include?(permission)
@@ -57,6 +63,7 @@ class GroupBasePolicy < Struct.new(:user, :context)
         return true if is_a_leader? &&  user.policy_group[permission]
         # group member
         return true if is_a_member? &&  user.policy_group[permission]
+        false
     end
     
     def manage_group_resource(permission)
@@ -68,6 +75,7 @@ class GroupBasePolicy < Struct.new(:user, :context)
         return true if has_group_leader_permissions?(permission)
         # group member
         return true if is_a_member? &&  user.policy_group[permission]
+        false
     end
     
     def index?

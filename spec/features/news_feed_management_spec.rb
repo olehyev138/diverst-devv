@@ -138,7 +138,7 @@ RSpec.feature 'News Feed Management' do
 		end
 
 		context 'News Items' do
-			scenario 'when creating news items with url', js: true, :skip => "FAILS CONSISTENTLY" do
+			scenario 'when creating news items with url', :skip => "FAILS CONSISTENTLY" do
 				visit group_posts_path(group)
 
 				click_on '+ Create News'
