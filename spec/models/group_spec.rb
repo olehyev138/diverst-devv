@@ -738,4 +738,25 @@ RSpec.describe Group, :type => :model do
             expect(group_4.valid?).to be false
         end
     end
+    
+    describe "#name" do
+        it "validates group cannot have duplicate names per enterprise" do
+            enterprise = create(:enterprise)
+            enterprise_2 = create(:enterprise)
+            group = create(:group, :enterprise => enterprise)
+            group_2 = build(:group, :name => group.name, :enterprise => enterprise)
+            group_3 = create(:group, :name => group.name, :enterprise => enterprise_2)
+            
+            # validate that the first group is valid
+            expect(group.valid?).to be(true)
+            
+            # validate that the second group is not valid since a group cannot have 
+            # the same name as another group in the same enterprise
+            expect(group_2.valid?).to_not be(true)
+            
+            # validate that the third group is valid since a group can have the same
+            # as another group in another enterprise
+            expect(group_3.valid?).to be(true)
+        end
+    end
 end
