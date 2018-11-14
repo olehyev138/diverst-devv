@@ -1,5 +1,5 @@
 function async_select(url) {
-    $('.select2-field').select2({
+    return {
         ajax: {
             url: url,
             theme: 'bootstrap',
@@ -26,5 +26,5 @@ function async_select(url) {
                 return item[0]
             }
         }
-    });
+    }
 }
