@@ -5,7 +5,7 @@ after :users do
 
   nb_groups.times do |i|
     g = enterprise.groups.create(
-      name: Faker::Commerce.color.capitalize,
+      name: Faker::Lorem.word.capitalize,
       description: Faker::Lorem.sentence
     )
 

@@ -25,7 +25,7 @@ class Groups::GroupMessagesController < ApplicationController
     end
 
     def edit
-        authorize @message, :update?
+        authorize [@group, @message], :update?, :policy_class => GroupMessagePolicy
     end
 
     def create
@@ -44,7 +44,7 @@ class Groups::GroupMessagesController < ApplicationController
     end
 
     def update
-        authorize @message, :update?
+        authorize [@group, @message], :update?, :policy_class => GroupMessagePolicy
         if @message.update(message_params)
             track_activity(@message, :update)
             redirect_to group_posts_path(@group)
@@ -82,7 +82,7 @@ class Groups::GroupMessagesController < ApplicationController
     protected
 
     def set_group
-        current_user ? @group = current_user.enterprise.groups.find(params[:group_id]) : user_not_authorized
+        @group = current_user.enterprise.groups.find(params[:group_id])
     end
 
     def set_message

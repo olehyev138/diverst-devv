@@ -4,7 +4,7 @@
 		<div class="card__section">
 			<%= c_t(:sub_erg).pluralize %>(<%= @group.children.count %>)
 
-			<% if policy(@group).erg_leader_permissions? %>
+			<% if policy(@group).manage? %>
 			<div class="dropdown">
 				<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
 				<div class="dropdown-content">

@@ -85,9 +85,9 @@ RSpec.feature 'Group Leader Management' do
 			end
 
 			scenario 'remove one group leader from list of group leaders', js: true do
-				within all('.nested-fields')[1] do
+				within all('.nested-fields')[0] do
 					select_field = page.find('.custom-user-select select')[:id]
-					expect(page).to have_select(select_field, selected: other_user.name)
+					expect(page).to have_select(select_field, selected: user.name)
 					click_link 'Remove'
 				end
 
@@ -95,12 +95,13 @@ RSpec.feature 'Group Leader Management' do
 
 				visit group_leaders_path(group)
 
-				expect(page).to have_no_content 'Yehuda Katz'
-				expect(page).to have_content user.name
+				expect(page).to have_no_content 'Aaron Patterson'
+				expect(page).to have_content other_user.name
 			end
 
 			scenario 'edit one of multiple group leaders', js: true do
 				within all('.nested-fields')[1] do
+					select other_user.name, from: page.find('.custom-user-select select')[:id]
 					fill_in page.find('.custom-position-field')[:id], with: 'Lead Software Engineer'
 				end
 

@@ -4,7 +4,7 @@ class OutcomesController < ApplicationController
   before_action :set_outcome, only: [:edit, :update, :destroy, :show]
   after_action :verify_authorized
 
-  layout 'plan'
+  layout 'erg'
 
   def index
     authorize Outcome
@@ -58,11 +58,7 @@ class OutcomesController < ApplicationController
   protected
 
   def set_group
-    if current_user
-      @group = current_user.enterprise.groups.includes(outcomes: :pillars).find(params[:group_id])
-    else
-      user_not_authorized
-    end
+    @group = current_user.enterprise.groups.includes(outcomes: :pillars).find(params[:group_id])
   end
 
   def set_outcome

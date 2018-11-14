@@ -55,4 +55,16 @@
     </div>
   <% end %>
 
+  <div class="card">
+    <div class="card__section card__section--border" >
+      <h2>Group Membership</h2>
+      <h4>Member of the following <%= c_t(:erg) %>(s)</h4>
+      <% @user.groups.each do |group| %>
+        <%= group.name %>
+        <% unless group == @user.groups.last %>
+          ,
+        <% end %>
+      <% end %>
+    </div>
+  </div>
 </div>
