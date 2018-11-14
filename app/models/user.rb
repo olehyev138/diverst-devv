@@ -23,7 +23,7 @@ class User < ActiveRecord::Base
     belongs_to  :enterprise
     belongs_to  :user_role
     has_one :policy_group, :dependent => :destroy, inverse_of: :user
-    
+
     # mentorship
     has_many :mentorships,       class_name: "Mentoring", foreign_key: "mentor_id"
     has_many :mentees, through: :mentorships, class_name: 'User', source: :mentee
@@ -31,11 +31,11 @@ class User < ActiveRecord::Base
 	has_many :mentors, through: :menteeships, class_name: 'User', source: :mentor
 	has_many :availabilities,   :class_name => "MentorshipAvailability"
     has_many :mentorship_ratings
-        
+
     # many to many
     has_many :mentorship_interests
     has_many :mentoring_interests, :through => :mentorship_interests
-    
+
     has_many :mentorship_sessions
     has_many :mentoring_sessions, :through => :mentorship_sessions
 
@@ -103,9 +103,9 @@ class User < ActiveRecord::Base
     after_create :set_default_policy_group
     after_save  :set_default_policy_group, if: :user_role_id_changed?
     accepts_nested_attributes_for :policy_group
-    
+
     after_update :add_to_default_mentor_group
-    
+
     after_commit on: [:create] { update_elasticsearch_index(self, self.enterprise, 'index') }
     after_commit on: [:update] { update_elasticsearch_index(self, self.enterprise, 'update') }
     after_commit on: [:destroy] { update_elasticsearch_index(self, self.enterprise, 'delete') }
@@ -119,15 +119,15 @@ class User < ActiveRecord::Base
     scope :active, -> {where(active: true)}
     scope :mentors, -> {where(mentor: true)}
     scope :mentees, -> {where(mentee: true)}
-    
+
     accepts_nested_attributes_for :availabilities, :allow_destroy => true
-    
+
     def add_to_default_mentor_group
         if mentor_changed? || mentee_changed?
             DefaultMentorGroupMemberUpdateJob.perform_later(id, mentor, mentee)
         end
     end
-    
+
     def is_group_leader_of?(group)
         group.group_leaders.where(user_id: self.id).any?
     end
@@ -143,7 +143,7 @@ class User < ActiveRecord::Base
     def name
         "#{first_name} #{last_name}"
     end
-    
+
     def user_role_presence
         if user_role_id.nil?
             self.user_role_id = enterprise.default_user_role
@@ -170,7 +170,7 @@ class User < ActiveRecord::Base
     def badges
         Badge.where("points <= ?", points).order(points: :asc)
     end
-    
+
     def set_default_policy_group
         template = enterprise.policy_group_templates.joins(:user_role).where(:user_roles => {:id => user_role_id}).first
         attributes = template.create_new_policy
