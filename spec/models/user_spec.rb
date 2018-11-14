@@ -9,14 +9,6 @@ RSpec.describe User do
     it { expect(user).to define_enum_for(:groups_notifications_frequency).with([:hourly, :daily, :weekly, :disabled]) }
     it { expect(user).to define_enum_for(:groups_notifications_date).with([:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]) }
 
-    context "notifications_status" do
-      let!(:user) { create(:user, groups_notifications_frequency: User.groups_notifications_frequencies[:hourly]) }
-
-      it "returns user with specific notifications_frequency" do
-        expect(User.notifications_status("hourly")).to eq [user]
-      end
-    end
-
     describe "#notifications_date" do
       it "returns sunday" do
         user = create(:user, :groups_notifications_date => 0)
