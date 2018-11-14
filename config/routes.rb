@@ -94,6 +94,10 @@ Rails.application.routes.draw do
       get 'edit_posts'
       get 'edit_algo'
       get 'theme'
+      patch 'update_auth'
+      patch 'update_fields'
+      patch 'update_mapping'  
+      patch 'update_branding_info'
       patch 'update_branding'
       patch 'update_posts'
       patch 'restore_default_branding'
@@ -262,7 +266,6 @@ Rails.application.routes.draw do
             get 'time_series'
           end
         end
-
         resources :resources
       end
 
@@ -270,6 +273,10 @@ Rails.application.routes.draw do
         get 'todo'
         post 'finish_expenses'
         get 'attendees'
+      end
+
+      collection do
+        get 'export_csv'
       end
     end
 
@@ -284,6 +291,9 @@ Rails.application.routes.draw do
       get 'metrics'
       get 'edit_fields'
       patch 'delete_attachment'
+      patch 'update_questions'
+      patch 'update_layouts'
+      patch 'update_settings'
     end
 
     collection do

@@ -7,7 +7,7 @@ class GroupLeader < ActiveRecord::Base
   validates_presence_of :group
   validates_presence_of :user
   validates_presence_of :user_role
-  validates :user_id, uniqueness: { message: 'already exists as a group leader' }
+  validates :user_id, uniqueness: { message: 'already exists as a group leader', scope: :group_id }
   
   scope :visible,   ->{ where(visible: true) }
   scope :role_ids,  ->{ distinct.pluck(:user_role_id) }
@@ -26,8 +26,11 @@ class GroupLeader < ActiveRecord::Base
     # budgets
     self.groups_budgets_index = template.groups_budgets_index
     self.groups_budgets_request = template.groups_budgets_request
-
+    self.budget_approval = template.budget_approval
+    self.groups_budgets_manage = template.groups_budgets_manage
+    
     # events
+    self.initiatives_index = template.initiatives_index
     self.initiatives_manage = template.initiatives_manage
     self.initiatives_create = template.initiatives_create
 
@@ -70,5 +73,9 @@ class GroupLeader < ActiveRecord::Base
     self.group_resources_manage = template.group_resources_manage
     self.group_resources_index = template.group_resources_index
     self.group_resources_create = template.group_resources_create
+    
+    # posts
+    self.group_posts_index = template.group_posts_index
+    self.manage_posts = template.manage_posts
   end
 end

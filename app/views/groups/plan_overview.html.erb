@@ -10,7 +10,7 @@
       <h3 style="margin-left: 10px; margin-botton: -10px;">
         <%= c_t(:erg) %> Budget |
         <%= link_to "View Budget Requests", group_budgets_path(@group) %> |
-        <%= link_to "Create Budget Request", new_group_budget_path(@group) %>
+        <%= link_to "Create Budget Request", new_group_budget_path(@group) if GroupBudgetPolicy.new(current_user, [@group]).create? %>
       </h3>
 
       <div class="flex-row flex-row--middle flex-row--spacing-bottom">

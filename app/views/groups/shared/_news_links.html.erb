@@ -3,9 +3,9 @@
     <div class="row">
       <div class="col-xs-2 pull-left">
         <% if !news_link.news_feed_link.is_pinned? %>
-          <%= link_to "Pin", pin_group_posts_path(:group_id => news_link.group.id, :link_id => news_link.news_feed_link.id), method: :patch if GroupPostsPolicy.new(current_user, [@group]).update? %>
+          <%= link_to "Pin", pin_group_posts_path(:group_id => news_link.group_id, :link_id => news_link.news_feed_link.id), method: :patch if GroupPostsPolicy.new(current_user, [news_link.group]).update? %>
         <% else %>
-          <%= link_to "Unpin", unpin_group_posts_path(:group_id => news_link.group.id, :link_id => news_link.news_feed_link.id), method: :patch if GroupPostsPolicy.new(current_user, [@group]).update? %>
+          <%= link_to "Unpin", unpin_group_posts_path(:group_id => news_link.group_id, :link_id => news_link.news_feed_link.id), method: :patch if GroupPostsPolicy.new(current_user, [news_link.group]).update? %>
         <% end %>
       </div>
       <div class="col-xs-2">
@@ -62,19 +62,19 @@
     <div class="row">
       <div class="col-xs-8">
         <span class="hidden-xs pull-right">
-          <%= link_to "Approve", approve_group_posts_path(:group_id => news_link.group.id, :link_id => news_link.news_feed_link.id), method: :post, class: "btn btn--primary" if GroupPostsPolicy.new(current_user, [@group]).update? and !news_link.news_feed_link.approved? %>
-          <%= link_to "Edit", edit_group_news_link_path(news_link.group, news_link), class: "btn btn--secondary" if GroupNewsLinkPolicy.new(current_user, [@group]).edit? %>
-          <%= link_to "Delete", group_news_link_path(news_link.group, news_link), method: :delete, class: "btn btn--danger", data: { confirm: "Are you sure?" } if GroupNewsLinkPolicy.new(current_user, [@group]).destroy? %>
-          <% if @group && news_link.news_feed_link.shared_news_feeds.ids.include?(@group.id && (GroupPostsPolicy.new(current_user, [@group]).update?) || policy(news_link).edit?) %>
-            <%= link_to "Unshare", shared_news_feed_link_path(news_link.news_feed_link.shared_news_feed_links.where(:news_feed_id => @group.news_feed.id).first), method: :delete, class: "btn btn--danger" %>
+          <%= link_to "Approve", approve_group_posts_path(:group_id => news_link.group_id, :link_id => news_link.news_feed_link.id), method: :post, class: "btn btn--primary" if GroupPostsPolicy.new(current_user, [news_link.group]).update? and !news_link.news_feed_link.approved? %>
+          <%= link_to "Edit", edit_group_news_link_path(news_link.group, news_link), class: "btn btn--secondary" if GroupNewsLinkPolicy.new(current_user, [news_link.group, news_link]).edit? %>
+          <%= link_to "Delete", group_news_link_path(news_link.group, news_link), method: :delete, class: "btn btn--danger", data: { confirm: "Are you sure?" } if GroupNewsLinkPolicy.new(current_user, [news_link.group, news_link]).destroy? %>
+          <% if news_link.group && news_link.news_feed_link.shared_news_feeds.ids.include?(news_link.group_id && (GroupPostsPolicy.new(current_user, [news_link.group]).update?) || policy(news_link).edit?) %>
+            <%= link_to "Unshare", shared_news_feed_link_path(news_link.news_feed_link.shared_news_feed_links.where(:news_feed_id => news_link.group.news_feed.id).first), method: :delete, class: "btn btn--danger" %>
           <% end %>
         </span>
         <div class="btn-group visible-xs pull-right">
-            <%= link_to "Approve", approve_group_posts_path(:group_id => news_link.group.id, :link_id => news_link.news_feed_link.id), method: :post, class: "btn btn-primary" if GroupPostsPolicy.new(current_user, [@group]).update? and !news_link.news_feed_link.approved? %>
-            <%= link_to "Edit", edit_group_news_link_path(news_link.group, news_link), class: "btn btn-secondary" if GroupNewsLinkPolicy.new(current_user, [@group]).edit? %>
-            <%= link_to "Delete", group_news_link_path(news_link.group, news_link), method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure?" } if GroupNewsLinkPolicy.new(current_user, [@group]).destroy? %>
-            <% if @group && news_link.news_feed_link.shared_news_feeds.ids.include?(@group.id && (GroupPostsPolicy.new(current_user, [@group]).update?) || policy(news_link).edit?) %>
-              <%= link_to "Unshare", shared_news_feed_link_path(news_link.news_feed_link.shared_news_feed_links.where(:news_feed_id => @group.news_feed.id).first), method: :delete, class: "btn btn--danger" %>
+            <%= link_to "Approve", approve_group_posts_path(:group_id => news_link.group_id, :link_id => news_link.news_feed_link.id), method: :post, class: "btn btn-primary" if GroupPostsPolicy.new(current_user, [news_link.group]).update? and !news_link.news_feed_link.approved? %>
+            <%= link_to "Edit", edit_group_news_link_path(news_link.group, news_link), class: "btn btn-secondary" if GroupNewsLinkPolicy.new(current_user, [news_link.group, news_link]).edit? %>
+            <%= link_to "Delete", group_news_link_path(news_link.group, news_link), method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure?" } if GroupNewsLinkPolicy.new(current_user, [news_link.group, news_link]).destroy? %>
+            <% if news_link.group && news_link.news_feed_link.shared_news_feeds.ids.include?(news_link.group_id && (GroupPostsPolicy.new(current_user, [news_link.group]).update?) || policy(news_link).edit?) %>
+              <%= link_to "Unshare", shared_news_feed_link_path(news_link.news_feed_link.shared_news_feed_links.where(:news_feed_id => news_link.group.news_feed.id).first), method: :delete, class: "btn btn--danger" %>
             <% end %>
         </div>
       </div>

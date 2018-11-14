@@ -10,7 +10,7 @@
     </div>
   </div>
 
-  <%= simple_form_for @group do |f| %>
+  <%= simple_form_for @group, :url => update_questions_group_path(@group)  do |f| %>
     <div class="card">
       <div id="fields">
         <%= f.simple_fields_for :survey_fields do |field| %>
