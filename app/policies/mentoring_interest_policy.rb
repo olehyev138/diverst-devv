@@ -1,21 +1,23 @@
 class MentoringInterestPolicy < ApplicationPolicy
     def index?
-        true
+        return true if manage_all?
+        return true if basic_group_leader_permission?("mentorship_manage")
+        @policy_group.mentorship_manage?
     end
     
     def edit?
-        true
+        index?
     end
     
     def create?
-        true
+        index?
     end
     
     def update?
-        true
+        index?
     end
     
     def destroy?
-        true
+        index?
     end
 end

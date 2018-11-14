@@ -5,10 +5,12 @@ class MentoringInterestsController < ApplicationController
   layout 'mentorship'
 
   def index
-      @topics = current_user.enterprise.mentoring_interests
+    authorize MentoringInterest
+    @topics = current_user.enterprise.mentoring_interests
   end
 
   def new
+    authorize MentoringInterest
     @topic = current_user.enterprise.mentoring_interests.new
   end
 
@@ -42,16 +44,13 @@ class MentoringInterestsController < ApplicationController
   end
 
   def destroy
+    authorize MentoringInterest
     @topic.destroy
     redirect_to :back
   end
 
   def set_topic
-    if current_user
-      @topic = current_user.enterprise.mentoring_interests.find(params[:id])
-    else
-      user_not_authorized
-    end
+    @topic = current_user.enterprise.mentoring_interests.find(params[:id])
   end
 
   def topic_params

@@ -263,7 +263,7 @@ RSpec.describe Initiative, type: :model do
       create(:initiative_update, :initiative => initiative)
 
       data = initiative.highcharts_history(field: field)
-      expect(data.empty?).to be(false)
+      expect(data.empty?).to be(false) #this example says "returns data" and yet we expect data to be empty???
     end
   end
 

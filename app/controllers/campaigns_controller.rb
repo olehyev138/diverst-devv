@@ -1,7 +1,6 @@
 class CampaignsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_campaign, only: [:edit, :update, :destroy, :show,
-    :contributions_per_erg, :top_performers]
+  before_action :set_campaign, only: [:edit, :update, :destroy, :show, :contributions_per_erg, :top_performers]
   after_action :verify_authorized
 
   layout :resolve_layout
@@ -111,11 +110,7 @@ class CampaignsController < ApplicationController
   protected
 
   def set_campaign
-    if current_user
-      @campaign = current_user.enterprise.campaigns.find(params[:id])
-    else
-      user_not_authorized
-    end
+    @campaign = current_user.enterprise.campaigns.find(params[:id])
   end
 
   def campaign_params

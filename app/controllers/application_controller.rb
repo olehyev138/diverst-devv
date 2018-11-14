@@ -10,7 +10,9 @@ class ApplicationController < ActionController::Base
     # For APIs, you may want to use :null_session instead.
     protect_from_forgery with: :exception
 
-    rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+    rescue_from Pundit::NotAuthorizedError do |e|
+        user_not_authorized
+    end
 
     rescue_from ActionController::UnknownFormat do |e|
         Rails.logger.warn('UnknownFormat: ' + e.message)
@@ -21,22 +23,28 @@ class ApplicationController < ActionController::Base
         flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
         flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
         Rails.logger.warn('MissingTemplate: ' + e.message)
-        redirect_to(request.referrer || default_path)
+        redirect_on_error
     end
     
     rescue_from ActionView::Template::Error do |e|
         flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
         flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
+        redirect_on_error
+    end
+    
+    rescue_from Pundit::AuthorizationNotPerformedError do |e|
+        flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
+        flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
         Rails.logger.warn('Template::Error: ' + e.message)
         Rollbar.error(e)
-        redirect_to(request.referrer || default_path)
+        redirect_on_error
     end
     
     rescue_from ActionController::BadRequest do |e|
         flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
         flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
         Rails.logger.warn('BadRequest: ' + e.message)
-        redirect_to(request.referrer || default_path)
+        redirect_on_error
     end
     
     rescue_from ActiveRecord::RecordInvalid do |e|
@@ -44,76 +52,59 @@ class ApplicationController < ActionController::Base
         flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
         Rails.logger.warn('RecordInvalid: ' + e.message)
         Rollbar.error(e)
-        redirect_to(request.referrer || default_path)
+        redirect_on_error
     end
     
     rescue_from BadRequestException do |e|
         flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
         flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
         Rails.logger.warn('BadRequestException: ' + e.message)
-        redirect_to(request.referrer || default_path)
+        redirect_on_error
+    end
+    
+    rescue_from Pundit::NotDefinedError  do |e|
+        flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
+        flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
+        redirect_on_error
     end
 
     rescue_from ActionController::RoutingError do |e|
         flash[:alert] = e.message
         Rails.logger.warn('RoutingError: ' + e.message)
-        redirect_to(request.referrer || default_path)
+        redirect_on_error
     end
 
     rescue_from ActiveRecord::RecordNotFound do |e|
         flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
         flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
         Rails.logger.warn('RecordNotFound: ' + e.message)
-        redirect_to(request.referrer || default_path)
+        redirect_on_error
     end
 
     rescue_from ActiveRecord::StatementInvalid do |e|
         flash[:alert] = e.message
         Rails.logger.warn('StatementInvalid: ' + e.message)
         Rollbar.error(e)
-        redirect_to(request.referrer || default_path)
-    end
-    
-    rescue_from ActiveRecord::ConnectionTimeoutError do |e|
-        flash[:alert] = e.message
-        Rails.logger.warn('ActiveRecord::ConnectionTimeoutError: ' + e.message)
-        Rollbar.error(e)
-        redirect_to(request.referrer || default_path)
-    end
-    
-    rescue_from Rack::Timeout::RequestTimeoutException do |e|
-        flash[:alert] = e.message
-        Rails.logger.warn('Rack::Timeout::RequestTimeoutException: ' + e.message)
-        Rollbar.error(e)
-        redirect_to(request.referrer || default_path)
-    end
-
-    rescue_from Rack::Timeout::RequestExpiryError do |e|
-        flash[:alert] = e.message
-        Rails.logger.warn('Rack::Timeout::RequestExpiryError: ' + e.message)
-        Rollbar.error(e)
-        redirect_to(request.referrer || default_path)
-    end
-
-    rescue_from Rack::Timeout::RequestTimeoutError do |e|
-        flash[:alert] = e.message
-        Rails.logger.warn('Rack::Timeout::RequestTimeoutError: ' + e.message)
-        Rollbar.error(e)
-        redirect_to(request.referrer || default_path)
+        redirect_on_error
     end
 
     rescue_from ActionController::ParameterMissing do |e|
         flash[:alert] = e.message
         Rails.logger.warn('ParameterMissing: ' + e.message)
-        redirect_to(request.referrer || default_path)
-    end
-    
-    rescue_from ActionController::InvalidAuthenticityToken do |e|
-        flash[:alert] = e.message
-        redirect_to(request.referrer || default_path)
+        redirect_on_error
     end
 
     around_action :user_time_zone, if: :current_user
+    
+    def redirect_on_error
+        if user_signed_in?
+            redirect_to(request.referrer || default_path)
+            return
+        else
+            unauth_user_redirect_destination
+            return
+        end
+    end
 
     def c_t(type)
         @custom_text ||= current_user.enterprise.custom_text rescue CustomText.new
@@ -128,6 +119,14 @@ class ApplicationController < ActionController::Base
             render :status => :forbidden, :json => {:message => "Invalid Route"}
         end
     end
+
+    def archive_expired_news
+      expiry_date = DateTime.now.months_ago(6)
+      news = NewsFeedLink.where("created_at < ?", expiry_date).where(archived_at: nil)
+
+      news.update_all(archived_at: DateTime.now) if news.any?
+    end
+
 
     protected
 
@@ -218,6 +217,6 @@ class ApplicationController < ActionController::Base
             end
         end
 
-        new_user_session_path
+        return new_user_session_path
     end
 end

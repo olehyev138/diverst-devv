@@ -1,7 +1,8 @@
 class GenericGraphsController < ApplicationController
     include ActionView::Helpers::JavaScriptHelper
 
-    before_action :authenticate_user!
+    before_action   :authenticate_user!
+    before_action   :authorize_dashboards
 
     def group_population
         data = current_user.enterprise.groups.all_parents.map { |g|
@@ -476,12 +477,17 @@ class GenericGraphsController < ApplicationController
 
     def non_demo_top_news_by_views
         news_feed_link_ids = NewsFeedLink.where(:news_feed_id => NewsFeed.where(:group_id => current_user.enterprise.groups.ids).ids).ids
-        news_links = NewsLink.select("news_links.title, SUM(views.view_count) view_count").joins(:news_feed_link, :news_feed_link => :views).where(:news_feed_links => {:id => news_feed_link_ids}).order("view_count DESC")
+        news_links = NewsLink
+          .select('DISTINCT news_links.title, views.view_count, groups.name')
+          .joins(:group, :news_feed_link, 'JOIN views on news_feed_links.id = views.news_feed_link_id')
+          .where(:news_feed_links => {:id => news_feed_link_ids})
+          .limit(20)
+          .order('view_count DESC')
 
         data = news_links.map do |news_link|
             {
                 y: news_link.view_count,
-                name: news_link.title
+                name: news_link.name + ': ' + news_link.title
             }
         end
 
@@ -731,5 +737,9 @@ class GenericGraphsController < ApplicationController
                 send_data report.to_csv, filename: "views_per_news_link.csv"
             }
         end
+    end
+
+    def authorize_dashboards
+        authorize MetricsDashboard, :index?
     end
 end

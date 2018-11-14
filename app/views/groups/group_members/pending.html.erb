@@ -21,7 +21,7 @@
                   <div class="flex-row__cell">
                     <%= link_to "Show #{ c_t(:member_preference) }", group_surveys_user_path(member), class: "btn btn--secondary" %>
                   </div>
-                  <% if policy(@group).manage_members? %>
+                  <% if GroupMemberPolicy.new(current_user, [@group]).update? %>
                     <div class="flex-row__cell">
                       <%= link_to 'Accept Member', accept_pending_group_group_member_path(@group, member), method: :post , class: "btn btn--primary" %>
                     </div>
@@ -35,7 +35,7 @@
                     <div class="col-xs-12 text-center">
                       <div class="btn-group">
                         <%= link_to "Show", group_surveys_user_path(member), class: "btn btn-secondary btn-sm" %>
-                        <% if policy(@group).manage_members? %>
+                        <% if GroupMemberPolicy.new(current_user, [@group]).update? %>
                           <%= link_to 'Accept', accept_pending_group_group_member_path(@group, member), method: :post , class: "btn btn-primary btn-sm" %>
                           <%= link_to 'Remove', remove_member_group_group_member_path(@group, member), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-tertiary btn-sm" %>
                         <% end %>

@@ -4,15 +4,17 @@ RSpec.feature 'Financial Management' do
 	let!(:enterprise) { create(:enterprise) }
 	let!(:admin_user) { create(:user, enterprise: enterprise)}
 	let!(:icon) { File.new('spec/fixtures/files/trophy_image.jpg') }
-	let!(:competition_category) { create(:expense_category, enterprise_id: enterprise.id, name: 'hackathon',
-		icon: icon) }
+	let!(:competition_category) { create(:expense_category, enterprise_id: enterprise.id, name: 'hackathon', icon: icon) }
 
 	before do
+		admin_user.policy_group.manage_all = true
+		admin_user.policy_group.save!
 		login_as(admin_user, scope: :user)
 	end
 
 	context 'create' do
 		before do
+
 			visit expenses_path
 
 			click_on 'New Item'

@@ -1,8 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe "User", :type => :request do
-    let(:enterprise){create(:enterprise)}
-    let(:user) { create(:user, :password => "password") }
+    let!(:enterprise){create(:enterprise)}
+    let(:user) { create(:user, enterprise: enterprise, :password => "password") }
+    let(:another_user) { create(:user, enterprise: enterprise, :password => "password") }
     let(:basic_authentication){ActionController::HttpAuthentication::Basic.encode_credentials(user.email, "password")}
     let(:headers) {{"HTTP_AUTHORIZATION" => basic_authentication}}
 
@@ -28,7 +29,7 @@ RSpec.describe "User", :type => :request do
     end
 
     it "deletes a user" do
-        delete "/api/v1/users/#{user.id}", headers: headers
+        delete "/api/v1/users/#{another_user.id}", headers: headers
         expect(response).to have_http_status(:no_content)
     end
 end
