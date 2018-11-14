@@ -1,11 +1,15 @@
 class MentoringSessionsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_mentoring_session, only: [:show, :edit, :update, :destroy, :start, :join]
+  before_action :set_mentoring_session, only: [:show, :edit, :update, :destroy, :start, :join, :export_ics]
 
   layout "user", :except => [:start, :join]
 
   def new
     @mentoring_session = current_user.mentoring_sessions.new
+    @mentoring_session.format = "Video"
+    @mentoring_session.mentorship_sessions.new(:user_id => current_user.id)
+    @mentoring_session.mentorship_sessions.new(:user_id => params[:user_id])
+    
     render 'user/mentorship/sessions/new'
   end
 
@@ -41,13 +45,17 @@ class MentoringSessionsController < ApplicationController
 
   def destroy
     @mentoring_session.destroy
-    redirect_to :back
+    redirect_to sessions_user_mentorship_index_path
   end
 
   def start
     # check if user can start the session
     require 'twilio-ruby'
-
+    
+    raise BadRequestException.new "TWILIO_ACCOUNT_SID Required" if ENV["TWILIO_ACCOUNT_SID"].blank?
+    raise BadRequestException.new "TWILIO_API_KEY Required" if ENV["TWILIO_API_KEY"].blank?
+    raise BadRequestException.new "TWILIO_SECRET Required" if ENV["TWILIO_SECRET"].blank?
+    
     account_sid = ENV["TWILIO_ACCOUNT_SID"]
     api_key_sid = ENV["TWILIO_API_KEY"]
     api_key_secret = ENV["TWILIO_SECRET"]
@@ -98,6 +106,26 @@ class MentoringSessionsController < ApplicationController
     # Serialize the token as a JWT
     @token = token.to_jwt
     render 'user/mentorship/sessions/start'
+  end
+  
+  def export_ics
+    cal = Icalendar::Calendar.new
+    cal.timezone do |t|
+      t.tzid = current_user.default_time_zone
+    end
+
+    description = @mentoring_session.notes
+
+    cal.event do |e|
+      e.dtstart     = Icalendar::Values::DateTime.new @mentoring_session.start, 'tzid' => current_user.default_time_zone
+      e.dtend       = Icalendar::Values::DateTime.new @mentoring_session.end, 'tzid' => current_user.default_time_zone
+      e.summary     = "Mentoring Session"
+      #e.location    = @event.location
+      e.description = description
+      e.ip_class    = "PRIVATE"
+    end
+
+    send_data cal.to_ical, filename: "mentoring_session.ics", disposition: 'attachment'
   end
 
   private

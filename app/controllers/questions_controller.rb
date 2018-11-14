@@ -30,6 +30,7 @@ class QuestionsController < ApplicationController
 
     if @question.save
       flash[:notice] = "Your question was created"
+      track_activity(@question, :create)
       redirect_to action: :index
     else
       flash[:alert] = "Your question was not created. Please fix the errors"
@@ -53,6 +54,7 @@ class QuestionsController < ApplicationController
 
     if @question.update(question_params)
       flash[:notice] = "Your question was updated"
+      track_activity(@question, :update)
       redirect_to @question
     else
       flash[:alert] = "Your question was not updated. Please fix the errors"
@@ -62,6 +64,7 @@ class QuestionsController < ApplicationController
 
   def destroy
     authorize @question.campaign
+    track_activity(@question, :destroy)
     @question.destroy
     redirect_to :back
   end
@@ -69,7 +72,7 @@ class QuestionsController < ApplicationController
   protected
 
   def set_campaign
-    current_user ? @campaign = current_user.enterprise.campaigns.find(params[:campaign_id]) : user_not_authorized
+    @campaign = current_user.enterprise.campaigns.find(params[:campaign_id])
   end
 
   def set_question

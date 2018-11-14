@@ -42,7 +42,7 @@ class Groups::SocialLinksController < ApplicationController
     protected
 
     def set_group
-        current_user ? @group = current_user.enterprise.groups.find(params[:group_id]) : user_not_authorized
+        @group = current_user.enterprise.groups.find(params[:group_id])
     end
 
     def set_social_link
@@ -54,7 +54,7 @@ class Groups::SocialLinksController < ApplicationController
             .require(:social_link)
             .permit(
                 :url,
-                segment_ids: []
+                :news_feed_link_attributes => [:id, :approved, :news_feed_id, :link, :shared_news_feed_ids => [], :segment_ids => []],
             )
     end
 end

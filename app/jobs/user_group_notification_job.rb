@@ -6,29 +6,13 @@ class UserGroupNotificationJob < ActiveJob::Base
     raise BadRequestException.new "Params missing" if args.nil? || args.empty? || args.class != Hash
     raise BadRequestException.new "Notifications Frequency missing" if args[:notifications_frequency].nil?
     raise BadRequestException.new "Enterprise ID missing" if args[:enterprise_id].nil?
-    
+
     notifications_frequency = args[:notifications_frequency]
     enterprise_id = args[:enterprise_id]
-    
-    User.where(:enterprise_id => enterprise_id).notifications_status(notifications_frequency).includes(user_groups: :group).find_in_batches(batch_size: 200) do |users|
+
+    User.where(:enterprise_id => enterprise_id).includes(user_groups: :group).find_in_batches(batch_size: 200) do |users|
       users.each do |user|
         groups = []
-        # user.user_groups.accepted_users.active.each do |user_group|
-        #   # check if notifications_frequency is weekly and check current date is equal to
-        #   # selected user_group
-        #   next unless can_send_email?(notifications_frequency, user_group)
-        #   group = user_group.group
-        #   frequency_range = get_frequency_range(user_group.notifications_frequency)
-        #   groups << {
-        #     group: user_group.group,
-        #     events_count: get_events_count(user, group, frequency_range),
-        #     messages_count: get_messages_count(user, group, frequency_range),
-        #     news_count: get_news_count(user, group, frequency_range),
-        #     social_links_count: get_social_count(user, group, frequency_range),
-        #     participating_events_count: get_participating_events_count(user, group, frequency_range)
-        #   }
-        # end
-
         next unless can_send_email?(notifications_frequency, user)
         frequency_range = get_frequency_range(user.groups_notifications_frequency)
         user.groups.each do |group|
@@ -85,7 +69,7 @@ class UserGroupNotificationJob < ActiveJob::Base
 
   def get_messages_count(user, group, frequency_range)
     segment_ids = user_segment_ids(user)
-    news_feed_link_ids = NewsFeed.all_links(group.news_feed.id, segment_ids).ids
+    news_feed_link_ids = NewsFeed.all_links(group.news_feed.id, segment_ids, group.enterprise).ids
     return GroupMessage.joins(:news_feed_link)
           .where(:news_feed_links => {:id => news_feed_link_ids}, :updated_at => frequency_range)
           .of_segments(user_segment_ids(user))
@@ -94,24 +78,24 @@ class UserGroupNotificationJob < ActiveJob::Base
 
   def get_news_count(user, group, frequency_range)
     segment_ids = user_segment_ids(user)
-    
-    news_feed_link_ids = NewsFeed.all_links(group.news_feed.id, segment_ids).ids
-    
+
+    news_feed_link_ids = NewsFeed.all_links(group.news_feed.id, segment_ids, group.enterprise).ids
+
     return NewsLink.joins(:news_feed_link)
           .where(:news_feed_links => {:id => news_feed_link_ids}, :updated_at => frequency_range)
           .count
   end
-  
+
   def get_social_count(user, group, frequency_range)
     segment_ids = user_segment_ids(user)
-    
-    news_feed_link_ids = NewsFeed.all_links(group.news_feed.id, segment_ids).ids
-    
+
+    news_feed_link_ids = NewsFeed.all_links(group.news_feed.id, segment_ids, group.enterprise).ids
+
     return SocialLink.joins(:news_feed_link)
           .where(:news_feed_links => {:id => news_feed_link_ids}, :updated_at => frequency_range)
           .count
   end
-  
+
   def get_participating_events_count(user, group, frequency_range)
     Initiative.joins(:initiative_participating_groups).where(updated_at: frequency_range).where(initiative_participating_groups: {group: group})
     .of_segments(user_segment_ids(user))
@@ -119,10 +103,10 @@ class UserGroupNotificationJob < ActiveJob::Base
   end
 
   def have_updates?(groups)
-    groups.any?{ |g| 
+    groups.any?{ |g|
       g[:events_count] > 0 ||
-      g[:messages_count] > 0 || 
-      g[:news_count] > 0 || 
+      g[:messages_count] > 0 ||
+      g[:news_count] > 0 ||
       g[:social_links_count] > 0 ||
       g[:participating_events_count] > 0
     }

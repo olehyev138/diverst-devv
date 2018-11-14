@@ -1,10 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe Groups::GroupMessagesController, type: :controller do
+    include ActiveJob::TestHelper
+    
     let(:user) { create :user }
     let(:group){ create(:group, enterprise: user.enterprise) }
     let(:group_message){ create(:group_message, group: group, subject: "Test", owner: user, created_at: Time.now) }
-
 
     describe 'GET#index' do
         context 'when user is logged in' do
@@ -31,7 +32,6 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
         end
     end
 
-
     describe 'GET#show' do
         context 'when user is logged in' do
             login_user_from_let
@@ -57,7 +57,6 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
         end
     end
 
-
     describe 'GET#new' do
         context 'when user is logged in' do
             login_user_from_let
@@ -79,7 +78,6 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
         end
     end
 
-
     describe 'GET#edit' do
         context 'when users is logged in' do
             login_user_from_let
@@ -99,7 +97,6 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'POST#create' do
         describe 'when user is logged in' do
@@ -138,9 +135,11 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
                   enable_public_activity
 
                   it 'creates public activity record' do
-                    expect{
-                      post :create, group_id: group.id, group_message: attributes_for(:group_message)
-                    }.to change(PublicActivity::Activity, :count).by(1)
+                        perform_enqueued_jobs do
+                            expect{
+                              post :create, group_id: group.id, group_message: attributes_for(:group_message)
+                            }.to change(PublicActivity::Activity, :count).by(1)
+                        end
                   end
 
                   describe 'activity record' do
@@ -149,7 +148,9 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
                     let(:key) { 'group_message.create' }
 
                     before {
-                      post :create, group_id: group.id, group_message: attributes_for(:group_message)
+                        perform_enqueued_jobs do
+                            post :create, group_id: group.id, group_message: attributes_for(:group_message)
+                        end
                     }
 
                     include_examples'correct public activity'
@@ -184,20 +185,20 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
         end
     end
 
-
     describe 'PATCH#update' do
         describe 'when user is logged in' do
             login_user_from_let
 
             context "when user is not the owner of message" do
-                let!(:group_message){ create(:group_message, group: group, subject: "Test") }
+                let!(:group_message){ create(:group_message, group: group, subject: "Test",
+                 owner: create(:user, enterprise: user.enterprise, user_role_id: UserRole.last.id, 
+                    policy_group: create(:guest_user, group_messages_manage: false))) }
 
                 before do
                     patch :update, group_id: group.id, id: group_message.id, group_message: { subject: 'Test2' }
                 end
 
-                it "does not update the message", skip: "test fails" do
-                    group_message.reload
+                it "does not update the message" do
                     expect(group_message.subject).to eq 'Test'
                 end
             end
@@ -241,9 +242,11 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
                 enable_public_activity
 
                 it 'creates public activity record' do
-                    expect{
-                      patch :update, group_id: group.id, id: group_message.id, group_message: { subject: 'Test2' }
-                    }.to change(PublicActivity::Activity, :count).by(1)
+                    perform_enqueued_jobs do
+                        expect{
+                          patch :update, group_id: group.id, id: group_message.id, group_message: { subject: 'Test2' }
+                        }.to change(PublicActivity::Activity, :count).by(1)
+                    end
                 end
 
                 describe 'activity record' do
@@ -252,7 +255,9 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
                     let(:key) { 'group_message.update' }
 
                     before {
-                        patch :update, group_id: group.id, id: group_message.id, group_message: { subject: 'Test2' }
+                        perform_enqueued_jobs do
+                            patch :update, group_id: group.id, id: group_message.id, group_message: { subject: 'Test2' }
+                        end
                     }
 
                     include_examples'correct public activity'
@@ -265,7 +270,6 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'DELETE#destroy' do
         let!(:group_message){ create(:group_message, group: group) }
@@ -307,9 +311,11 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
                 enable_public_activity
 
                 it 'creates public activity record' do
-                    expect{
-                      delete :destroy, group_id: group.id, id: group_message.id
-                    }.to change(PublicActivity::Activity, :count).by(1)
+                    perform_enqueued_jobs do
+                        expect{
+                          delete :destroy, group_id: group.id, id: group_message.id
+                        }.to change(PublicActivity::Activity, :count).by(1)
+                    end
                 end
 
                 describe 'activity record' do
@@ -318,7 +324,9 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
                     let(:key) { 'group_message.destroy' }
 
                     before {
-                        delete :destroy, group_id: group.id, id: group_message.id
+                        perform_enqueued_jobs do
+                            delete :destroy, group_id: group.id, id: group_message.id
+                        end
                     }
 
                     include_examples'correct public activity'
@@ -331,7 +339,6 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'POST#create_comment' do
         describe 'when user is logged in' do

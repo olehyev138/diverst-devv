@@ -92,7 +92,7 @@ class Groups::NewsLinksController < ApplicationController
     protected
 
     def set_group
-        current_user ? @group = current_user.enterprise.groups.find(params[:group_id]) : user_not_authorized
+        @group = current_user.enterprise.groups.find(params[:group_id])
     end
 
     def set_news_link
@@ -108,7 +108,7 @@ class Groups::NewsLinksController < ApplicationController
                 :description,
                 :picture,
                 :photos_attributes => [:file, :_destroy, :id],
-                :news_feed_link_attributes => [:approved, :news_feed_id, :link, :shared_news_feed_ids => [], :segment_ids => []],
+                :news_feed_link_attributes => [:id, :approved, :news_feed_id, :link, :shared_news_feed_ids => [], :segment_ids => []],
             )
     end
 

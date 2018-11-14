@@ -19,34 +19,35 @@ module Folders
     end
 
     def index
-        authorize_action
+        authorize_action("index?", nil)
         @folders = @container.folders.only_parents + @container.shared_folders.only_parents
         @folders.sort_by!{ |f| f.name.downcase }
         render '/index'
     end
 
     def show
-        authorize_action
+        authorize_action("show?", nil)
         render "/show"
     end
 
     def new
-        authorize_action
+        authorize_action("new?", nil)
         @folder = @container.folders.new
-        @folder.parent_id = params[:folder_id] 
+        @folder.parent_id = params[:folder_id]
         @folder.password
         render '/new'
     end
 
     def edit
-        authorize_action
+        authorize_action("show?", nil)
         render '/edit'
     end
 
     def create
-        authorize_action
+        authorize_action("create?", nil)
         @folder = @container.folders.new(folder_params)
         if @folder.save
+            track_activity(@folder, :create)
             if @folder.parent_id
                 if @folder.parent.group
                     redirect_to [@folder.parent.group, @folder.parent, :resources]
@@ -62,8 +63,9 @@ module Folders
     end
 
     def update
-        authorize_action
+        authorize_action("update?", nil)
         if @folder.update(folder_params)
+            track_activity(@folder, :update)
             redirect_to action: :index
         else
             render '/edit'
@@ -71,7 +73,8 @@ module Folders
     end
 
     def destroy
-        authorize_action
+        authorize_action("destroy?", nil)
+        track_activity(@folder, :destroy)
         @folder.destroy
         redirect_to action: :index
     end
@@ -94,6 +97,6 @@ module Folders
         @folder = @container.folders.find_by_id(params[:id]) || @container.shared_folders.find_by_id(params[:id])
     end
     
-    def authorize_action
+    def authorize_action(action, object)
     end
 end

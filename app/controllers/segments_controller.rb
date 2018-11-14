@@ -1,14 +1,13 @@
 class SegmentsController < ApplicationController
-    before_action :set_segment, only: [:edit, :update, :destroy, :show, :export_csv]
-    skip_before_action :verify_authenticity_token, only: [:create]
+    before_action :authenticate_user!
     after_action :verify_authorized
+    before_action :set_segment, only: [:edit, :show, :export_csv, :update, :destroy]
 
     layout 'erg_manager'
 
     def index
         authorize Segment
-        @segments = policy_scope(Segment).includes(:parent_segment).where(:segmentations => {:id => nil})
-        @segments = @segments.uniq
+        @segments = policy_scope(Segment).includes(:parent_segment).where(:segmentations => {:id => nil}).distinct
 
         respond_to do |format|
             format.html
@@ -27,6 +26,7 @@ class SegmentsController < ApplicationController
 
         if @segment.save
             flash[:notice] = "Your #{c_t(:segment)} was created"
+            track_activity(@segment, :create)
             redirect_to action: :index
         else
             flash[:alert] = "Your #{c_t(:segment)} was not created. Please fix the errors"
@@ -38,26 +38,14 @@ class SegmentsController < ApplicationController
         authorize @segment
 
         @groups = current_user.enterprise.groups
-
-        @group = @groups.find_by_id(params[:group_id])
+        
         @segments = @segment.sub_segments.includes(:members)
 
-        if @group.present?
-            @members = segment_members_of_group(@segment, @group).uniq
-            uniq_ids = @members.map(&:id)
-            uniq_members_of_segment = User.where(id: uniq_ids)
-            respond_to do |format|
-                format.html
-                format.json { render json: SegmentMemberDatatable.new(view_context, uniq_members_of_segment) }
-            end
-        else
-            @members = @segment.members.uniq
-            uniq_ids = @members.map(&:id)
-            uniq_members_of_segment = User.where(id: uniq_ids)
-            respond_to do |format|
-                format.html
-                format.json { render json: SegmentMemberDatatable.new(view_context, uniq_members_of_segment) }
-            end
+        members
+        
+        respond_to do |format|
+            format.html
+            format.json { render json: SegmentMemberDatatable.new(view_context, @members) }
         end
     end
 
@@ -69,6 +57,7 @@ class SegmentsController < ApplicationController
         authorize @segment
         if @segment.update(segment_params)
             flash[:notice] = "Your #{c_t(:segment)} was updated"
+            track_activity(@segment, :update)
             redirect_to @segment
         else
             flash[:alert] = "Your #{c_t(:segment)} was not updated. Please fix the errors"
@@ -78,35 +67,32 @@ class SegmentsController < ApplicationController
 
     def destroy
         authorize @segment
+        track_activity(@segment, :destroy)
         @segment.destroy
         redirect_to action: :index
     end
 
     def export_csv
         authorize @segment, :show?
-
-        if group = current_user.enterprise.groups.find_by_id(params[:group_id])
-            users_ids = segment_members_of_group(@segment, group).map { |user| user.id }
-
-            users = User.where(id: users_ids)
-        else
-            users = @segment.members
-        end
-
-        users_csv = User.to_csv users: users, fields: @segment.enterprise.fields
-        send_data users_csv, filename: "#{@segment.name}.csv"
+        SegmentMembersDownloadJob.perform_later(current_user.id, @segment.id, params[:group_id])
+        flash[:notice] = "Please check your email in a couple minutes"
+        redirect_to :back
     end
-
+    
     protected
 
-    def segment_members_of_group(segment, group)
-        segment.members.includes(:groups).select do |user|
-            user.groups.include? group
+    def members
+        if !params[:group_id].blank?
+            @group = current_user.enterprise.groups.find_by_id(params[:group_id])
+            @members = policy_scope(User).joins(:segments, :groups).where(:segments => {:id => @segment.id}, :groups => {:id => params[:group_id]}).limit(params[:limit] || 25).distinct
+            
+        else
+            @members = policy_scope(User).joins(:segments).where(:segments => {:id => @segment.id}).limit(params[:limit] || 25).distinct
         end
     end
 
     def set_segment
-        current_user ? @segment = current_user.enterprise.segments.find(params[:id]) : user_not_authorized
+        @segment = current_user.enterprise.segments.find(params[:id])
     end
 
     def segment_params

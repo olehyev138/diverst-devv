@@ -357,11 +357,9 @@ RSpec.describe Group, :type => :model do
             user = create(:user)
             group = create(:group, :enterprise => user.enterprise, :owner => user)
 
-            2.times do
-                create(:group_leader, :group => group, :user => user)
-            end
+            create(:group_leader, :group => group, :user => user)
 
-            expect(group.managers.length).to eq(3)
+            expect(group.managers.length).to eq(2)
         end
     end
 
@@ -602,29 +600,6 @@ RSpec.describe Group, :type => :model do
         end
     end
 
-    describe "#send_invitation_emails" do
-        it "calls GroupMailer" do
-            allow(GroupMailer).to receive(:delay).and_return(GroupMailer)
-            allow(GroupMailer).to receive(:invitation)
-
-            group = build(:group)
-            segment = build(:segment)
-            create(:invitation_segments_group, :group => group, :invitation_segment => segment)
-
-            # make sure group has invitation_segments
-            group.reload
-            expect(group.invitation_segments.count).to eq(1)
-
-            # change the value
-            group.send_invitations = true
-            group.save!
-
-            expect(GroupMailer).to have_received(:invitation)
-            expect(group.send_invitations).to be(false)
-            expect(group.invitation_segments.count).to eq(0)
-        end
-    end
-
     describe "#update_all_elasticsearch_members" do
         it "updates the users in elasticsearch" do
             group = create(:group)
@@ -732,6 +707,56 @@ RSpec.describe Group, :type => :model do
             expect{Field.find(survey_field.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{GroupLeader.find(group_leader.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{Group.find(child.id)}.to raise_error(ActiveRecord::RecordNotFound)
+        end
+    end
+    
+    describe '#default_mentor_group' do
+        it "ensures there aren't duplicate default_mentor_groups for enterprises" do
+            enterprise_1 = create(:enterprise)
+            group_1 = create(:group, :enterprise => enterprise_1)
+            group_2 = create(:group, :enterprise => enterprise_1)
+            
+            enterprise_2 = create(:enterprise)
+            group_3 = create(:group, :enterprise => enterprise_2)
+            group_4 = create(:group, :enterprise => enterprise_2)
+            
+            group_1.default_mentor_group = true
+            group_1.save!
+            
+            expect(group_1.valid?).to be true
+            
+            group_2.default_mentor_group = true
+            expect(group_2.valid?).to be false
+            expect(group_2.errors.full_messages.first).to eq ("Default mentor group has already been taken")
+            
+            group_3.default_mentor_group = true
+            group_3.save!
+            
+            expect(group_3.valid?).to be true
+            
+            group_4.default_mentor_group = true
+            expect(group_4.valid?).to be false
+        end
+    end
+    
+    describe "#name" do
+        it "validates group cannot have duplicate names per enterprise" do
+            enterprise = create(:enterprise)
+            enterprise_2 = create(:enterprise)
+            group = create(:group, :enterprise => enterprise)
+            group_2 = build(:group, :name => group.name, :enterprise => enterprise)
+            group_3 = create(:group, :name => group.name, :enterprise => enterprise_2)
+            
+            # validate that the first group is valid
+            expect(group.valid?).to be(true)
+            
+            # validate that the second group is not valid since a group cannot have 
+            # the same name as another group in the same enterprise
+            expect(group_2.valid?).to_not be(true)
+            
+            # validate that the third group is valid since a group can have the same
+            # as another group in another enterprise
+            expect(group_3.valid?).to be(true)
         end
     end
 end

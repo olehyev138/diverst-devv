@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe EnterprisesController, type: :controller do
     include ActiveJob::TestHelper
-    
+
     let(:enterprise){ create(:enterprise) }
     let(:user){ create(:user, enterprise: enterprise) }
     let(:group){ create(:group, enterprise: enterprise) }
@@ -51,6 +51,31 @@ RSpec.describe EnterprisesController, type: :controller do
                 it "flashes notice a message" do
                     expect(flash[:notice]).to eq "Your enterprise was updated"
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{patch :update, id: enterprise.id, enterprise: attributes}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { enterprise }
+                    let(:owner) { user }
+                    let(:key) { 'enterprise.update' }
+
+                    before {
+                      perform_enqueued_jobs do
+                        patch :update, id: enterprise.id, enterprise: attributes
+                      end
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
 
             context "with invalid parameters", skip: "render params['source'] causes ActionView::MissingTemplate" do
@@ -73,6 +98,78 @@ RSpec.describe EnterprisesController, type: :controller do
 
         describe "without a logged in user" do
            before { patch :update, id: enterprise.id, enterprise: attributes_for(:enterprise, home_message: "updated") }
+            it_behaves_like "redirect user to users/sign_in path"
+        end
+    end
+    
+    describe "PATCH#update_posts" do
+        describe "with logged in user" do
+            before { request.env["HTTP_REFERER"] = "back" }
+            login_user_from_let
+
+            context "with valid parameters" do
+                attributes = FactoryGirl.attributes_for(:enterprise, home_message: "updated")
+                before { patch :update_posts, id: enterprise.id, enterprise: attributes }
+
+                it "updates the enterprise" do
+                    enterprise.reload
+                    expect(assigns[:enterprise].home_message).to eq "updated"
+                end
+
+                it "redirects to action index" do
+                    expect(response).to redirect_to "back"
+                end
+
+                it "flashes notice a message" do
+                    expect(flash[:notice]).to eq "Your enterprise was updated"
+                end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{patch :update_posts, id: enterprise.id, enterprise: attributes}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { enterprise }
+                    let(:owner) { user }
+                    let(:key) { 'enterprise.update' }
+
+                    before {
+                      perform_enqueued_jobs do
+                        patch :update_posts, id: enterprise.id, enterprise: attributes
+                      end
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
+            end
+
+            context "with invalid parameters", skip: "render params['source'] causes ActionView::MissingTemplate" do
+                before { patch :update_posts, id: enterprise.id, enterprise: { home_message: "" } }
+
+                it "does not update the enterprise" do
+                    enterprise.reload
+                    expect(enterprise.home_message).to eq "test"
+                end
+
+                it "renders action edit" do
+                    expect(response.status).to eq(302)
+                end
+
+                it "flashes an alert message" do
+                    expect(flash[:alert]).to eq "Your enterprise was not updated. Please fix the errors"
+                end
+            end
+        end
+
+        describe "without a logged in user" do
+           before { patch :update_posts, id: enterprise.id, enterprise: attributes_for(:enterprise, home_message: "updated") }
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
@@ -282,7 +379,7 @@ RSpec.describe EnterprisesController, type: :controller do
                         patch :update_branding, id: enterprise.id, enterprise: attributes_for(:enterprise, theme: { primary_color: "#ff0000" })
                     end
                 }
-                
+
                 it "returns a valid theme object from set_theme" do
                     expect(assigns[:theme]).to be_a_new(Theme)
                 end
@@ -298,6 +395,31 @@ RSpec.describe EnterprisesController, type: :controller do
                 it "update was successful" do
                     enterprise.reload
                     expect(enterprise.theme.primary_color).to eq "#ff0000"
+                end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{patch :update_branding, id: enterprise.id, enterprise: attributes_for(:enterprise, theme: { primary_color: "#ff0000" })}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { enterprise }
+                    let(:owner) { user }
+                    let(:key) { 'enterprise.update_branding' }
+
+                    before {
+                      perform_enqueued_jobs do
+                        patch :update_branding, id: enterprise.id, enterprise: attributes_for(:enterprise, theme: { primary_color: "#ff0000" })
+                      end
+                    }
+
+                    include_examples'correct public activity'
+                  end
                 end
             end
 

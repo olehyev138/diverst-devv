@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe User::ResourcesController, type: :controller do
+RSpec.describe User::ResourcesController, type: :controller, :skip => "THIS CODE IS NOT EVEN USED" do
     let!(:enterprise) { create(:enterprise) }
     let!(:user) { create(:user, enterprise: enterprise) }
     let!(:resource) { create(:resource, enterprise: enterprise, file: fixture_file_upload('files/test.csv', 'text/csv')) }

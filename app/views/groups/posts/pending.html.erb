@@ -13,11 +13,11 @@
       </div>
     <% else %>
       <% @posts.each do |news| %>
-        <% if news.news_link %>
+        <% if news.news_link && GroupNewsLinkPolicy.new(current_user, [@group]).index? %>
           <%= render partial: "groups/shared/news_links", locals: {news_link: news.link } %>
-        <% elsif news.group_message %>
+        <% elsif news.group_message && GroupMessagePolicy.new(current_user, [@group]).index?%>
           <%= render partial: "groups/shared/messages", locals: {message: news.link } %>
-        <% elsif news.social_link %>
+        <% elsif news.social_link  && GroupSocialLinkPolicy.new(current_user, [@group]).index? && ENV['ENABLE_SOCIAL_MEDIA'] %>
             <div class="flex-row__cell link-group">
 
               <% if news.link.url.include?("facebook") %>
@@ -28,8 +28,8 @@
                   <%= raw news.link.embed_code %>
               <% end %>
               
-              <%= link_to 'Delete', group_social_link_path(@group, news.link.id),method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(news.link).destroy? %>
-              <%= link_to "Approve", approve_group_posts_path(:group_id => @group.id, :link_id => news.id), method: :post if policy(@group).erg_leader_permissions? and !news.approved? %>
+              <%= link_to 'Delete', group_social_link_path(@group, news.link.id),method: :delete, class: "error", data: { confirm: "Are you sure?" } if GroupSocialLinkPolicy.new(current_user, [@group, news.link]).destroy? %>
+              <%= link_to "Approve", approve_group_posts_path(:group_id => @group.id, :link_id => news.id), method: :post if GroupPostsPolicy.new(current_user, [@group]).update? and !news.approved? %>
             </div>
         <% end %>
       <% end %>

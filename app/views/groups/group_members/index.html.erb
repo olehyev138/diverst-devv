@@ -1,6 +1,6 @@
 <div class="content__header">
   <h1>Members (<%= @members.count %>)</h1>
-  <% if policy(@group).manage_members? %>
+  <% if GroupMemberPolicy.new(current_user, [@group]).update? %>
     <%= link_to "+ Add members", new_group_group_member_path(@group), class: "btn btn--primary" %>
     <div class="flex-row__cell">
       <%= link_to "Export Member CSV", export_group_members_list_csv_group_group_members_path(@group), class: 'btn btn--primary' %>

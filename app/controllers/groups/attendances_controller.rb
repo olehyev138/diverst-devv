@@ -14,10 +14,12 @@ class Groups::AttendancesController < ApplicationController
 
   def create
     return head(204) if @attendance
-    @event.initiative_users.create(user: current_user)
-    user_rewarder("attend_event").add_points(@event)
-    flash_reward "Now you have #{ current_user.credits } points"
-    render "partials/flash_messages.js"
+    unless @event.full?
+      @event.initiative_users.create(user: current_user)
+      user_rewarder("attend_event").add_points(@event)
+      flash_reward "Now you have #{ current_user.credits } points"
+      render "partials/flash_messages.js"
+    end
   end
 
   def destroy
@@ -68,7 +70,7 @@ class Groups::AttendancesController < ApplicationController
   protected
 
   def set_group
-    current_user ? @group = current_user.enterprise.groups.find(params[:group_id]) : user_not_authorized
+    @group = current_user.enterprise.groups.find(params[:group_id])
   end
 
   def set_event

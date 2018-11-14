@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Groups::GroupMembersController, type: :controller do
+    include ActiveJob::TestHelper
+    
     let(:user) { create :user }
     let(:add) { create :user, enterprise: user.enterprise }
     let(:group) { create(:group, enterprise: user.enterprise) }
@@ -98,8 +100,10 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
                 enable_public_activity
 
                 it 'creates public activity record' do
-                    expect{ post :accept_pending, group_id: group.id, id: user.id
-                     }.to change(PublicActivity::Activity, :count).by(1)
+                    perform_enqueued_jobs do
+                        expect{ post :accept_pending, group_id: group.id, id: user.id
+                         }.to change(PublicActivity::Activity, :count).by(1)
+                    end
                 end
 
                 describe 'activity record' do
@@ -108,8 +112,10 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
                     let(:key) { 'user.accept_pending' }
 
                     before {
-                      post :accept_pending, group_id: group.id, id: user.id
-                  }
+                        perform_enqueued_jobs do
+                            post :accept_pending, group_id: group.id, id: user.id
+                        end
+                    }
                   include_examples'correct public activity'
                 end
             end
@@ -180,7 +186,6 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
-
 
     describe 'POST#create' do
         context "when unsuccessful" do
@@ -262,6 +267,17 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
                     .to change(group.members, :count).by(1)
                 end
             end
+            
+            context "when group is default mentor group" do
+                it "redirects to mentor profile" do
+                    # set group as default mentor group
+                    group.default_mentor_group = true
+                    group.save!
+                    
+                    post :create, group_id: group.id, user: {user_id: add.id}
+                    expect(response).to redirect_to edit_user_mentorship_path(id: user.id)
+                end
+            end
         end
 
         context 'when user is not logged in' do
@@ -275,16 +291,20 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             login_user_from_let
             let(:user_group2) {create(:user_group, group_id: group.id, user_id: add.id)}
 
-
             it "redirects to index action" do
                 post :add_members, group_id: group.id, group: {member_ids: [add.id]}
                 expect(response).to redirect_to action: 'index'
             end
 
-            it "creates the users" do
+            it "adds the users" do
                 expect{post :add_members, group_id: group.id, group: {member_ids: [add.id]}}
                 .to change(group.members, :count).by(1)
             end
+
+            it 'sets accepted_member attribute to true when user is added to a group with pending_users disabled' do 
+                post :add_members, group_id: group.id, group: { member_ids: [add.id] }
+                expect(add.user_groups.last.accepted_member).to eq true
+            end 
         end
 
         context 'when user is not logged in' do
@@ -407,21 +427,24 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             let!(:active_members) { create_list(:user, 5, enterprise_id: user.enterprise.id, user_role_id: user.user_role_id, active: true) }
             let!(:inactive_members) { create_list(:user, 5, enterprise_id: user.enterprise.id, user_role_id: user.user_role_id, active: false) }
             login_user_from_let
+            
             before do
+                allow(GroupMemberListDownloadJob).to receive(:perform_later)
+                request.env["HTTP_REFERER"] = "back"
                 group.members << active_members
                 get :export_group_members_list_csv, group_id: group.id 
             end
 
-            it "return data in csv format" do
-                expect(response.content_type).to eq 'text/csv'
+            it "redirects to user" do
+                expect(response).to redirect_to "back"
             end
-
-            it "filename should be '[group.name]_membership_list.csv'" do
-                expect(response.headers["Content-Disposition"]).to include "#{group.file_safe_name}_membership_list.csv"
+            
+            it "flashes" do
+                expect(flash[:notice]).to eq "Please check your email in a couple minutes"
             end
-
-            it 'should include total number of active members which should be 5' do 
-                expect(response.body).to include , "total, ,5"
+            
+            it "calls job" do
+                expect(GroupMemberListDownloadJob).to have_received(:perform_later)
             end
         end
     end

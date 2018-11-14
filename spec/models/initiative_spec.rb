@@ -40,6 +40,7 @@ RSpec.describe Initiative, type: :model do
 
     it { expect(initiative).to validate_presence_of(:start) }
     it { expect(initiative).to validate_presence_of(:end) }
+    it { expect(initiative).to validate_numericality_of(:max_attendees).is_greater_than(0).allow_nil }
     it { expect(initiative).to have_many(:resources) }
     it { expect(initiative).to have_many(:segments).through(:initiative_segments) }
     it { expect(initiative).to have_one(:outcome).through(:pillar) }
@@ -262,7 +263,7 @@ RSpec.describe Initiative, type: :model do
       create(:initiative_update, :initiative => initiative)
 
       data = initiative.highcharts_history(field: field)
-      expect(data.empty?).to be(false)
+      expect(data.empty?).to be(false) #this example says "returns data" and yet we expect data to be empty???
     end
   end
 
@@ -275,7 +276,7 @@ RSpec.describe Initiative, type: :model do
       expect(data.empty?).to be(false)
     end
   end
-  
+
   describe "#destroy_callbacks" do
     it "removes the child objects" do
       initiative = create(:initiative)
@@ -290,9 +291,9 @@ RSpec.describe Initiative, type: :model do
       initiative_invitee = create(:initiative_invitee, :initiative => initiative)
       initiative_comment = create(:initiative_comment, :initiative => initiative)
       initiative_user = create(:initiative_user, :initiative => initiative)
-      
+
       initiative.destroy!
-      
+
       expect{Initiative.find(initiative.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{InitiativeUpdate.find(initiative_update.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{Field.find(field.id)}.to raise_error(ActiveRecord::RecordNotFound)

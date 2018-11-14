@@ -70,10 +70,6 @@ class GroupMessage < ActiveRecord::Base
         owner.first_name + owner.last_name
     end
 
-    def send_emails
-        GroupMailer.group_message(self).deliver_later
-    end
-
     # call back to delete news link segment associations
     def remove_segment_association(segment)
         group_messages_segment = self.group_messages_segments.where(:segment_id => segment.id).first

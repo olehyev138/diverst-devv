@@ -1,4 +1,6 @@
 class CustomText < ActiveRecord::Base
+  include PublicActivity::Common
+
   belongs_to :enterprise
 
   def self.keys

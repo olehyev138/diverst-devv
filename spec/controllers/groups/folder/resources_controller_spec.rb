@@ -1,12 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe Groups::Folder::ResourcesController, type: :controller do
+    include ActiveJob::TestHelper
+
     let!(:enterprise){ create(:enterprise) }
     let!(:user){ create(:user, enterprise: enterprise) }
     let!(:group){ create(:group, enterprise: user.enterprise) }
     let!(:user_group){ create(:user_group, group: group, user: user) }
-    let!(:folder){ create(:folder, :group => group) }
-    let!(:resource){ create(:resource, title: "title", folder: folder, file: fixture_file_upload('files/test.csv', 'text/csv')) }
+    let!(:folder){ create(:folder, :group => group, :enterprise => nil) }
+    let!(:resource){ create(:resource, title: "title", enterprise: nil, folder: folder, file: fixture_file_upload('files/test.csv', 'text/csv')) }
 
     describe "GET#index" do
         context 'when user is logged in' do
@@ -30,7 +32,7 @@ RSpec.describe Groups::Folder::ResourcesController, type: :controller do
             it "returns resources that belong to container" do
                 expect(assigns[:resources].where(folder_id: assigns[:container].id)).to eq [resource]
             end
-            
+
             it "increments the folder's total_views" do
                 expect(folder.total_views).to eq(1)
             end
@@ -103,6 +105,31 @@ RSpec.describe Groups::Folder::ResourcesController, type: :controller do
                     expect{post :create, group_id: group.id, folder_id: folder.id, resource: {title: "resource", file: file}}
                     .to change(Resource, :count).by(1)
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{post :create, group_id: group.id, folder_id: folder.id, resource: {title: "resource", file: file}}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { Resource.last }
+                    let(:owner) { user }
+                    let(:key) { 'resource.create' }
+
+                    before {
+                      perform_enqueued_jobs do
+                        post :create, group_id: group.id, folder_id: folder.id, resource: {title: "resource", file: file}
+                      end
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
 
             context "invalid params" do
@@ -163,6 +190,31 @@ RSpec.describe Groups::Folder::ResourcesController, type: :controller do
                     resource.reload
                     expect(resource.title).to eq("updated")
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{patch :update, folder_id: folder.id, id: resource.id, group_id: group.id, resource: {title: "updated", file: file}}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { resource }
+                    let(:owner) { user }
+                    let(:key) { 'resource.update' }
+
+                    before {
+                      perform_enqueued_jobs do
+                        patch :update, folder_id: folder.id, id: resource.id, group_id: group.id, resource: {title: "updated", file: file}
+                      end
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
 
             context "invalid params" do
@@ -200,6 +252,31 @@ RSpec.describe Groups::Folder::ResourcesController, type: :controller do
 
                 expect{delete :destroy, :id => resource.id, group_id: group.id, folder_id: folder.id}
                 .to change(Resource, :count).by(-1)
+            end
+
+            describe 'public activity' do
+              enable_public_activity
+
+              it 'creates public activity record' do
+                perform_enqueued_jobs do
+                  expect{delete :destroy, :id => resource.id, group_id: group.id, folder_id: folder.id}
+                  .to change(PublicActivity::Activity, :count).by(1)
+                end
+              end
+
+              describe 'activity record' do
+                let(:model) { resource }
+                let(:owner) { user }
+                let(:key) { 'resource.destroy' }
+
+                before {
+                  perform_enqueued_jobs do
+                    delete :destroy, :id => resource.id, group_id: group.id, folder_id: folder.id
+                  end
+                }
+
+                include_examples'correct public activity'
+              end
             end
         end
 
