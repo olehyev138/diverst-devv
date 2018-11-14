@@ -6,11 +6,11 @@ class CustomTextsController < ApplicationController
   layout 'global_settings'
 
   def edit
-    authorize current_user.enterprise
+    authorize current_user.enterprise, :manage_branding?
   end
 
   def update
-    authorize current_user.enterprise
+    authorize current_user.enterprise, :manage_branding?
     if @custom_text.update(custom_texts_params)
       flash[:notice] = "Your texts were updated"
       track_activity(@custom_text, :update)

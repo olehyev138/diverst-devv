@@ -7,7 +7,7 @@ class Groups::QuestionsController < ApplicationController
   layout 'erg'
 
   def index
-    authorize @group, :update?
+    authorize @group, :insights?
 
     @answers_count = @group.user_groups.with_answered_survey.count
   end
@@ -43,7 +43,7 @@ class Groups::QuestionsController < ApplicationController
   protected
 
   def set_group
-   current_user ? @group = current_user.enterprise.groups.find(params[:group_id]) : user_not_authorized
+    @group = current_user.enterprise.groups.find(params[:group_id])
   end
 
   def set_user_group

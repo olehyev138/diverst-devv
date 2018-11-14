@@ -12,6 +12,11 @@ class EnterprisesController < ApplicationController
 
   def update
     authorize @enterprise
+    update_enterprise
+  end
+  
+  def update_posts
+    authorize @enterprise, :manage_posts?
 
     if @enterprise.update_attributes(enterprise_params)
       flash[:notice] = "Your enterprise was updated"
@@ -25,6 +30,27 @@ class EnterprisesController < ApplicationController
 
   def edit_fields
     authorize @enterprise
+  end
+  
+  def update_enterprise
+    if @enterprise.update_attributes(enterprise_params)
+      flash[:notice] = "Your enterprise was updated"
+      track_activity(@enterprise, :update)
+      redirect_to :back
+    else
+      flash[:alert] = "Your enterprise was not updated. Please fix the errors"
+      redirect_to :back
+    end
+  end
+  
+  def update_mapping
+    authorize @enterprise, :edit_fields?
+    update_enterprise
+  end
+  
+  def update_fields
+    authorize @enterprise, :edit_fields?
+    update_enterprise
   end
 
   def edit_budgeting
@@ -48,6 +74,11 @@ class EnterprisesController < ApplicationController
 
   def edit_auth
     authorize @enterprise
+  end
+  
+  def update_auth
+    authorize @enterprise, :edit_auth?
+    update_enterprise
   end
 
   def edit_branding
@@ -82,6 +113,11 @@ class EnterprisesController < ApplicationController
       flash[:alert] = "Enterprise branding was not updated. Please fix the errors"
       render :edit_branding
     end
+  end
+  
+  def update_branding_info
+    authorize @enterprise, :manage_branding?
+    update_enterprise
   end
 
   def delete_attachment
@@ -125,7 +161,7 @@ class EnterprisesController < ApplicationController
   end
 
   def set_enterprise
-    current_user ? @enterprise = current_user.enterprise : user_not_authorized
+    @enterprise = current_user.enterprise
   end
 
   def set_theme

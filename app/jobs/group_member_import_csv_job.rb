@@ -17,7 +17,7 @@ class GroupMemberImportCSVJob < ActiveJob::Base
         email = row[0]
         user = User.where(email: email).first
         if user
-            group.members << user unless group.members.include? user
+            group.members << user unless UserGroup.where(:user_id => user.id, :group_id => group.id).exists?
 
             successful_rows << row
         else

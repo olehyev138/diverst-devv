@@ -94,7 +94,12 @@ Rails.application.routes.draw do
       get 'edit_posts'
       get 'edit_algo'
       get 'theme'
+      patch 'update_auth'
+      patch 'update_fields'
+      patch 'update_mapping'  
+      patch 'update_branding_info'
       patch 'update_branding'
+      patch 'update_posts'
       patch 'restore_default_branding'
       get 'bias'
       patch 'delete_attachment'
@@ -261,7 +266,6 @@ Rails.application.routes.draw do
             get 'time_series'
           end
         end
-
         resources :resources
       end
 
@@ -270,12 +274,16 @@ Rails.application.routes.draw do
         post 'finish_expenses'
         get 'attendees'
       end
+
+      collection do
+        get 'export_csv'
+      end
     end
 
     member do
       get 'settings'
       get 'layouts'
-
+      get 'plan_overview'
       get 'export_csv'
       get 'import_csv'
       get 'sample_csv'
@@ -283,6 +291,9 @@ Rails.application.routes.draw do
       get 'metrics'
       get 'edit_fields'
       patch 'delete_attachment'
+      patch 'update_questions'
+      patch 'update_layouts'
+      patch 'update_settings'
     end
 
     collection do
@@ -335,7 +346,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :rewards, except: [:show]
+  resources :rewards, except: [:show] do
+    collection do
+      put "enable"
+    end
+  end
   resources :badges, except: [:index, :show]
 
   resources :reward_actions, only: [] do

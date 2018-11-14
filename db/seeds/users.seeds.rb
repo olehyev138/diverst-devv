@@ -52,7 +52,9 @@ after :enterprise do
   )
 
   enterprise.users.find_each do |user|
-
+    
+    user.policy_group.update_all_permissions(true)
+    
     user.info[title_field] = Faker::Name.title
     user.info[birth_field] = Faker::Date.between(60.years.ago, 18.years.ago)
 
