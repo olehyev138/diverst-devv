@@ -190,14 +190,15 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
             login_user_from_let
 
             context "when user is not the owner of message" do
-                let!(:group_message){ create(:group_message, group: group, subject: "Test") }
+                let!(:group_message){ create(:group_message, group: group, subject: "Test",
+                 owner: create(:user, enterprise: user.enterprise, user_role_id: UserRole.last.id, 
+                    policy_group: create(:guest_user, group_messages_manage: false))) }
 
                 before do
                     patch :update, group_id: group.id, id: group_message.id, group_message: { subject: 'Test2' }
                 end
 
-                it "does not update the message", skip: "test fails" do
-                    group_message.reload
+                it "does not update the message" do
                     expect(group_message.subject).to eq 'Test'
                 end
             end

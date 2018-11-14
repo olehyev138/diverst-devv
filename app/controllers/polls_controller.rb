@@ -71,7 +71,7 @@ class PollsController < ApplicationController
   protected
 
   def set_poll
-    current_user ? @poll = current_user.enterprise.polls.find(params[:id]) : user_not_authorized
+    @poll = current_user.enterprise.polls.find(params[:id])
   end
 
   def poll_params

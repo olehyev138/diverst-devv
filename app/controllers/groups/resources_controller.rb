@@ -7,7 +7,7 @@ class Groups::ResourcesController < ApplicationController
   layout 'erg'
 
   def index
-    if policy(@group).erg_leader_permissions? or @group.active_members.include? current_user
+    if policy(@group).manage? || policy(@group).is_an_accepted_member?
       @group_resources = @container.resources
       @national_resources = @container.enterprise.resources.where(:resource_type => "national")
       render '/index'
@@ -21,7 +21,7 @@ class Groups::ResourcesController < ApplicationController
   protected
 
   def set_container
-    current_user ? @group = @container = current_user.enterprise.groups.find(params[:group_id]) : user_not_authorized
+    @group = @container = current_user.enterprise.groups.find(params[:group_id])
   end
 
   def set_container_path

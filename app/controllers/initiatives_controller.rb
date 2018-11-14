@@ -5,7 +5,7 @@ class InitiativesController < ApplicationController
   before_action :set_segments, only: [:new, :create, :edit, :update]
   after_action :verify_authorized
 
-  layout 'plan'
+  layout 'erg'
 
   def index
     authorize Initiative
@@ -99,7 +99,7 @@ class InitiativesController < ApplicationController
   protected
 
   def set_group
-    current_user ? @group = current_user.enterprise.groups.find(params[:group_id]) : user_not_authorized
+    @group = current_user.enterprise.groups.find(params[:group_id])
   end
 
   def set_initiative
@@ -107,7 +107,7 @@ class InitiativesController < ApplicationController
   end
 
   def set_segments
-    current_user ? @segments = current_user.enterprise.segments : user_not_authorized
+    @segments = current_user.enterprise.segments
   end
 
   def initiative_params

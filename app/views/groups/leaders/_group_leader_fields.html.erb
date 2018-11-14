@@ -10,9 +10,8 @@
   </label>
   <div class="custom-user-select">
     <%= f.association :user,
-          collection: @group.members,
-          include_blank: true,
-          input_html: { class: "select2", autofocus: true },
+          as: :select,
+          input_html: { class: "select2-field", autofocus: true },
           label: false
     %>
   </div>
@@ -49,3 +48,4 @@
     <%= f.input :default_group_contact, label: "set email as contact of group" %>
   </div>
 </div>
+

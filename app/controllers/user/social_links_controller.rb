@@ -1,19 +1,22 @@
 class User::SocialLinksController < ApplicationController
+  
   before_action :authenticate_user!
-
   before_action :set_social_link, only: [:destroy]
 
   layout 'user'
 
   def index
-    @posts = current_user.social_links.order(created_at: :desc)
+    authorize SocialLink
+    @posts = policy_scope(SocialLink).order(created_at: :desc)
   end
 
   def new
+    authorize SocialLink
     @social_link = current_user.social_links.new
   end
 
   def create
+    authorize SocialLink
     @social_link = current_user.social_links.new(social_links_params)
 
     if @social_link.save
@@ -49,6 +52,6 @@ class User::SocialLinksController < ApplicationController
   end
 
   def set_social_link
-    current_user ? @social_link = current_user.social_links.find(params[:id]) : user_not_authorized
+    @social_link = current_user.social_links.find(params[:id])
   end
 end
