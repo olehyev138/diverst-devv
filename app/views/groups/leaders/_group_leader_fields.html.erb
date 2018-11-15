@@ -11,7 +11,8 @@
   <div class="custom-user-select">
     <%= f.association :user,
           as: :select,
-          collection: [],
+          selected: f.object.user,
+          collection: [f.object.user],
           input_html: { class: "select2-field", autofocus: true },
           label: false
     %>
