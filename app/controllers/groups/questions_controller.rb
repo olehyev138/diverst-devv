@@ -35,9 +35,10 @@ class Groups::QuestionsController < ApplicationController
   end
 
   def export_csv
-    respond_to do |format|
-      format.csv { send_data @group.survey_answers_csv,  filename: csv_file_name }
-    end
+    authorize @group, :insights?
+    GroupQuestionsDownloadJob.perform_later(current_user.id, @group.id)
+    flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+    redirect_to :back
   end
 
   protected
