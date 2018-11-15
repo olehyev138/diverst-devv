@@ -2,13 +2,13 @@ require 'rails_helper'
 
 RSpec.describe Groups::GroupMembersController, type: :controller do
     include ActiveJob::TestHelper
-    
+
     let(:user) { create :user }
     let(:add) { create :user, enterprise: user.enterprise }
     let(:group) { create(:group, enterprise: user.enterprise) }
     let!(:user_group) {create(:user_group, group_id: group.id, user_id: user.id)}
     let!(:group_role) {user.enterprise.user_roles.group_type.first}
-    
+
     describe 'GET#index' do
         context 'with user logged in' do
             let!(:user_group1) {create(:user_group, group_id: group.id, user_id: add.id)}
@@ -267,13 +267,13 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
                     .to change(group.members, :count).by(1)
                 end
             end
-            
+
             context "when group is default mentor group" do
                 it "redirects to mentor profile" do
                     # set group as default mentor group
                     group.default_mentor_group = true
                     group.save!
-                    
+
                     post :create, group_id: group.id, user: {user_id: add.id}
                     expect(response).to redirect_to edit_user_mentorship_path(id: user.id)
                 end
@@ -313,8 +313,8 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
         context 'when user is logged in' do
             let!(:group_leader) { create(:group_leader, user_id: user.id, group_id: group.id, :user_role_id => group_role.id) }
             login_user_from_let
-            before { 
-                user_group.save 
+            before {
+                user_group.save
                 delete :remove_member, group_id: group.id, id: user.id
             }
 
@@ -325,7 +325,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             it "removes the user" do
                 expect(UserGroup.where(:user_id => user.id, :group_id => group.id).count).to eq(0)
             end
-            
+
             it "deletes the leader" do
                 expect{GroupLeader.find(group_leader.id)}.to raise_error(ActiveRecord::RecordNotFound)
             end
@@ -397,7 +397,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
 
                 context 'when survey fields for group is present' do
                     before { create(:field, type: 'TextField', field_type: 'group_survey', group_id: group.id) }
-                  
+
                     it 'redirect to survey_group_questions_path' do
                         post :join_all_sub_groups, group_id: group.id
                         expect(response).to redirect_to survey_group_questions_path(group)
@@ -423,22 +423,22 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
             let!(:active_members) { create_list(:user, 5, enterprise_id: user.enterprise.id, user_role_id: user.user_role_id, active: true) }
             let!(:inactive_members) { create_list(:user, 5, enterprise_id: user.enterprise.id, user_role_id: user.user_role_id, active: false) }
             login_user_from_let
-            
+
             before do
                 allow(GroupMemberListDownloadJob).to receive(:perform_later)
                 request.env["HTTP_REFERER"] = "back"
                 group.members << active_members
-                get :export_group_members_list_csv, group_id: group.id 
+                get :export_group_members_list_csv, group_id: group.id
             end
 
             it "redirects to user" do
                 expect(response).to redirect_to "back"
             end
-            
+
             it "flashes" do
-                expect(flash[:notice]).to eq "Please check your email in a couple minutes"
+                expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
             end
-            
+
             it "calls job" do
                 expect(GroupMemberListDownloadJob).to have_received(:perform_later)
             end
