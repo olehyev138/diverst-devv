@@ -22,7 +22,11 @@ module Folders
         authorize_action("index?", nil)
         @folders = @container.folders.only_parents + @container.shared_folders.only_parents
         @folders.sort_by!{ |f| f.name.downcase }
-        render '/index'
+
+        respond_to do |format|
+          format.html { render '/index' }
+          format.json { render json: @folders }
+        end
     end
 
     def show
@@ -96,7 +100,7 @@ module Folders
     def set_folder
         @folder = @container.folders.find_by_id(params[:id]) || @container.shared_folders.find_by_id(params[:id])
     end
-    
+
     def authorize_action(action, object)
     end
 end
