@@ -17,22 +17,12 @@ class GroupsController < ApplicationController
         authorize Group, :manage_all_group_budgets?
         @groups = policy_scope(Group).includes(:children).all_parents
     end
-    
+
     def close_budgets_export_csv
       authorize Group, :manage_all_group_budgets?
-
-      result =
-        CSV.generate do |csv|
-          csv << ['Group name', 'Annual budget', 'Leftover money', 'Approved budget']
-           current_user.enterprise.groups.includes(:children).all_parents.each do |group|
-             csv << [group.name, group.annual_budget.presence || "Not set", group.leftover_money, group.approved_budget]
-             
-             group.children.each do |child|
-               csv << [child.name, child.annual_budget.presence || "Not set", child.leftover_money, child.approved_budget]
-             end
-          end
-        end
-      send_data result, filename: 'global_budgets.csv'
+      GroupsCloseBudgetsDownloadJob.perform_later(current_user.id, current_user.enterprise.id)
+      flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+      redirect_to :back
     end
 
     # calendar for all of the groups
@@ -42,12 +32,12 @@ class GroupsController < ApplicationController
         @groups = []
         enterprise.groups.each do |group|
             if group.is_parent_group?
-                @groups << group 
+                @groups << group
                 group.children.each do |sub_group|
                     @groups << sub_group
                 end
-            elsif group.is_standard_group?                
-                @groups << group 
+            elsif group.is_standard_group?
+                @groups << group
             end
         end
         @segments = enterprise.segments
@@ -192,7 +182,7 @@ class GroupsController < ApplicationController
     def settings
         authorize @group, :manage?
     end
-    
+
     def plan_overview
         authorize @group, :manage?
     end
@@ -243,11 +233,11 @@ class GroupsController < ApplicationController
         end
 
         file = CsvFile.new( import_file: params[:file].tempfile, user: current_user, :group_id => @group.id)
-    
+
         @message = ''
         @success = false
         @email = ENV['CSV_UPLOAD_REPORT_EMAIL']
-    
+
         if file.save
           @success = true
           @message = '@success'
@@ -261,7 +251,7 @@ class GroupsController < ApplicationController
     def export_csv
         authorize @group, :show?
         GroupMemberDownloadJob.perform_later(current_user.id, @group.id)
-        flash[:notice] = "Please check your email in a couple minutes"
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
     end
 

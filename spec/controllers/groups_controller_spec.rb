@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe GroupsController, type: :controller do
   include ActiveJob::TestHelper
-  
+
   let(:enterprise){ create(:enterprise) }
   let(:user){ create(:user, enterprise: enterprise, email: "test@gmail.com") }
   let(:group){ create(:group, enterprise: enterprise) }
@@ -25,7 +25,7 @@ RSpec.describe GroupsController, type: :controller do
       context "display groups belonging to current user enterprise" do
         before { group; different_group }
 
-        it 'returns 1 group' do 
+        it 'returns 1 group' do
           get :index
           expect(assigns[:groups].count).to eq 1
         end
@@ -89,11 +89,11 @@ RSpec.describe GroupsController, type: :controller do
         context "display groups belonging to current user enterprise" do
           before { group; different_group }
 
-          it 'returns 1 group' do 
+          it 'returns 1 group' do
             get :close_budgets, :id => group.id
             expect(assigns[:groups].count).to eq 1
           end
-        end        
+        end
       end
 
       context "with incorrect permissions" do
@@ -118,14 +118,22 @@ RSpec.describe GroupsController, type: :controller do
   describe "GET#close_budgets_export_csv" do
     context 'when user is logged in' do
       login_user_from_let
-      before { get :close_budgets_export_csv }
+      before {
+          allow(GroupsCloseBudgetsDownloadJob).to receive(:perform_later)
+          request.env['HTTP_REFERER'] = "back"
+          get :close_budgets_export_csv
+      }
 
-      it "return data in csv format" do
-        expect(response.content_type).to eq 'text/csv'
+      it "returns to previous page" do
+          expect(response).to redirect_to "back"
       end
 
-      it "filename should be 'global_budgets.csv'" do
-        expect(response.headers["Content-Disposition"]).to include 'global_budgets.csv'
+      it "flashes" do
+          expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
+      end
+
+      it "calls job" do
+          expect(GroupsCloseBudgetsDownloadJob).to have_received(:perform_later)
       end
     end
 
@@ -603,14 +611,14 @@ RSpec.describe GroupsController, type: :controller do
           expect(response).to redirect_to [:edit, group]
         end
 
-        it 'redirects to group homepage after updating group in group settings' do 
+        it 'redirects to group homepage after updating group in group settings' do
           request.env['HTTP_REFERER'] = settings_group_url(group)
           patch_update(group.id, group_attrs)
 
           expect(response).to redirect_to group
         end
 
-        it 'stay on group outcomes url after updating plan structure' do 
+        it 'stay on group outcomes url after updating plan structure' do
           request.env['HTTP_REFERER'] = group_outcomes_url(group)
           patch_update(group.id, group_attrs)
 
@@ -863,10 +871,10 @@ RSpec.describe GroupsController, type: :controller do
 
     context 'with logged user' do
       login_user_from_let
-      before { 
+      before {
         perform_enqueued_jobs do
           allow(GroupMemberImportCSVJob).to receive(:perform_later)
-          get :parse_csv, :id => group.id, :file => file 
+          get :parse_csv, :id => group.id, :file => file
         end
       }
 
@@ -877,7 +885,7 @@ RSpec.describe GroupsController, type: :controller do
       it 'creates a CsvFile' do
         expect(CsvFile.all.count).to eq(1)
       end
-      
+
       it "calls the correct job" do
         expect(GroupMemberImportCSVJob).to have_received(:perform_later)
       end
@@ -893,7 +901,7 @@ RSpec.describe GroupsController, type: :controller do
   describe 'GET #export_csv' do
     context 'with logged user' do
       login_user_from_let
-      before { 
+      before {
           allow(GroupMemberDownloadJob).to receive(:perform_later)
           request.env["HTTP_REFERER"] = "back"
           get :export_csv, :id => group.id
@@ -902,11 +910,11 @@ RSpec.describe GroupsController, type: :controller do
       it "redirects to user" do
           expect(response).to redirect_to "back"
       end
-      
+
       it "flashes" do
-          expect(flash[:notice]).to eq "Please check your email in a couple minutes"
+          expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
       end
-      
+
       it "calls job" do
           expect(GroupMemberDownloadJob).to have_received(:perform_later)
       end

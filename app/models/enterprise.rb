@@ -154,6 +154,19 @@ class Enterprise < ActiveRecord::Base
         User.to_csv(users: users, fields: fields, nb_rows: nb_rows)
     end
 
+    def close_budgets_csv
+      CSV.generate do |csv|
+        csv << ['Group name', 'Annual budget', 'Leftover money', 'Approved budget']
+         self.groups.includes(:children).all_parents.each do |group|
+           csv << [group.name, group.annual_budget.presence || "Not set", group.leftover_money, group.approved_budget]
+
+           group.children.each do |child|
+             csv << [child.name, child.annual_budget.presence || "Not set", child.leftover_money, child.approved_budget]
+           end
+        end
+      end
+    end
+
     # Run an elasticsearch query on the enterprise's users
     def search_users(search_hash)
         Elasticsearch::Model.client.search(
