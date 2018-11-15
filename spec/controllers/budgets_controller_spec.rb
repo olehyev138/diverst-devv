@@ -84,14 +84,22 @@ RSpec.describe BudgetsController, type: :controller do
   describe "GET#export_csv" do
     context 'when user is logged in' do
       login_user_from_let
-      before { get :export_csv, :group_id => group.id }
+      before {
+          allow(GroupBudgetsDownloadJob).to receive(:perform_later)
+          request.env['HTTP_REFERER'] = "back"
+          get :export_csv, :group_id => group.id
+      }
 
-      it "return data in csv format" do
-        expect(response.content_type).to eq 'text/csv'
+      it "returns to previous page" do
+          expect(response).to redirect_to "back"
       end
 
-      it "filename should be group file safe name lowercase + '_budgets.csv'" do
-        expect(response.headers["Content-Disposition"]).to include (group.file_safe_name.downcase + '_budgets.csv')
+      it "flashes" do
+          expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
+      end
+
+      it "calls job" do
+          expect(GroupBudgetsDownloadJob).to have_received(:perform_later)
       end
     end
 

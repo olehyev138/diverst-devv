@@ -324,6 +324,15 @@ class Group < ActiveRecord::Base
     end
   end
 
+  def budgets_csv
+    CSV.generate do |csv|
+      csv << ['Requested amount', 'Available amount', 'Status', 'Requested at', '# of events', 'Description']
+       self.budgets.order(created_at: :desc).each do |budget|
+        csv << [budget.requested_amount, budget.available_amount, budget.status_title, budget.created_at, budget.budget_items.count, budget.description]
+      end
+    end
+  end
+
   def title_with_leftover_amount
     "Create event from #{name} leftover ($#{leftover_money})"
   end
