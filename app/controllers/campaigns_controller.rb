@@ -66,23 +66,17 @@ class CampaignsController < ApplicationController
   def contributions_per_erg
     authorize @campaign, :show?
 
-    data = @campaign.contributions_per_erg
     respond_to do |format|
       format.json {
         render json: {
-          highcharts: data,
+          highcharts: @campaign.contributions_per_erg,
           type: 'pie'
         }
       }
       format.csv {
-        flatten_data = data[:series].map{ |d| d[:data] }.flatten
-        strategy = Reports::GraphStatsGeneric.new(
-          title: "Contributions per #{ c_t(:erg) }",
-          categories: flatten_data.map{ |d| d[:name] }.uniq,
-          data: flatten_data.map{ |d| d[:y] }
-        )
-        report = Reports::Generator.new(strategy)
-        send_data report.to_csv, filename: "contributions_per_erg.csv"
+        CampaignContributionsDownloadJob.perform_later(current_user.id, @campaign.id, c_t(:erg))
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
       }
     end
   end
@@ -90,19 +84,17 @@ class CampaignsController < ApplicationController
   def top_performers
     authorize @campaign, :show?
 
-    data = @campaign.top_performers
     respond_to do |format|
       format.json {
         render json: {
-          highcharts: data,
+          highcharts: @campaign.top_performers,
           type: 'bar'
         }
       }
       format.csv {
-        strategy = Reports::GraphStatsGeneric.new(title: 'Top performers',
-          categories: data[:categories], data: data[:series].map{ |d| d[:data] }.flatten)
-        report = Reports::Generator.new(strategy)
-        send_data report.to_csv, filename: "top_performers.csv"
+        CampaignTopPerformersDownloadJob.perform_later(current_user.id, @campaign.id)
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
       }
     end
   end
