@@ -1,7 +1,6 @@
 const async_select_objects = {
     USERS: 'users',
     FOLDERS: 'folders',
-    RESOURCES: 'resources'
 };
 
 function async_select(url, object, options: {}) {
@@ -60,7 +59,4 @@ function process_folder_results(data, options) {
     data.results = data.results.filter(item => item.id != options.current_folder_id);
 
     return data;
-}
-
-function process_resource_results(data) {
 }

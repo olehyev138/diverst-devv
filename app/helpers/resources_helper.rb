@@ -52,16 +52,10 @@ module ResourcesHelper
   end
 
   def get_folders_url(folder, limit = nil, format = nil)
-    if is_group_folder?(folder)
+    if folder.group
       group_folders_path(limit: limit, json: format)
     else
       enterprise_folders_path(limit: limit, format: format)
     end
-  end
-
-  private
-
-  def is_group_folder?(folder)
-    folder.group
   end
 end
