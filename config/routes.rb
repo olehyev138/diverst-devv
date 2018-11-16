@@ -295,7 +295,6 @@ Rails.application.routes.draw do
             get 'time_series'
           end
         end
-
         resources :resources
       end
 
@@ -303,6 +302,10 @@ Rails.application.routes.draw do
         get 'todo'
         post 'finish_expenses'
         get 'attendees'
+      end
+
+      collection do
+        get 'export_csv'
       end
     end
 
