@@ -536,6 +536,11 @@ class Enterprise < ActiveRecord::Base
       report.to_csv
     end
 
+    def logs_csv
+      logs = PublicActivity::Activity.includes(:owner, :trackable).where(recipient: self).order(created_at: :desc)
+      LogCsv.build(logs)
+    end
+
     protected
 
     def smart_add_url_protocol
