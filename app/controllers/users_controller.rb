@@ -129,24 +129,21 @@ class UsersController < ApplicationController
   def date_histogram
     authorize User, :index?
 
-    g = DateHistogramGraph.new(
-      index: User.es_index_name(enterprise: current_user.enterprise),
-      field: 'created_at',
-      interval: 'month'
-    )
-    data = g.query_elasticsearch
-
     respond_to do |format|
       format.json {
+        g = DateHistogramGraph.new(
+          index: User.es_index_name(enterprise: current_user.enterprise),
+          field: 'created_at',
+          interval: 'month'
+        )
+        data = g.query_elasticsearch
+
         render json: data
       }
       format.csv {
-        strategy = Reports::GraphTimeseriesGeneric.new(
-          title: 'Number of employees',
-          data: data["aggregations"]["my_date_histogram"]["buckets"].collect{ |data| [data["key"], data["doc_count"]] }
-        )
-        report = Reports::Generator.new(strategy)
-        send_data report.to_csv, filename: "employees.csv"
+        UsersDateHistogramDownloadJob.perform_later(current_user.id, current_user.enterprise.id)
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
       }
     end
   end

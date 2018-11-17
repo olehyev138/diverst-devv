@@ -387,14 +387,31 @@ RSpec.describe UsersController, type: :controller do
 
     describe "GET#date_histogram", skip: "inconsistent test results" do
         context 'user is logged in' do
-            it "returns response in csv format" do
-                get :date_histogram, :format => :csv
-                expect(response.content_type).to eq "text/csv"
+            context "csv" do
+              before {
+                  allow(UsersDateHistogramDownloadJob).to receive(:perform_later)
+                  request.env["HTTP_REFERER"] = "back"
+                  get :date_histogram, :format => :csv
+              }
+
+              it "redirects to user" do
+                  expect(response).to redirect_to "back"
+              end
+
+              it "flashes" do
+                  expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
+              end
+
+              it "calls job" do
+                  expect(UsersDateHistogramDownloadJob).to have_received(:perform_later)
+              end
             end
 
-            it "returns response in json format" do
-                get :date_histogram, :format => :json
-                expect(response.content_type).to eq "application/json"
+            context "json" do
+              it "returns response in json format" do
+                  get :date_histogram, :format => :json
+                  expect(response.content_type).to eq "application/json"
+              end
             end
         end
     end

@@ -519,6 +519,23 @@ class Enterprise < ActiveRecord::Base
       report.to_csv
     end
 
+    def users_date_histogram_csv
+      g = DateHistogramGraph.new(
+        index: User.es_index_name(enterprise: self),
+        field: 'created_at',
+        interval: 'month'
+      )
+      data = g.query_elasticsearch
+
+      strategy = Reports::GraphTimeseriesGeneric.new(
+        title: 'Number of employees',
+        data: data["aggregations"]["my_date_histogram"]["buckets"].collect{ |data| [data["key"], data["doc_count"]] }
+      )
+      report = Reports::Generator.new(strategy)
+
+      report.to_csv
+    end
+
     protected
 
     def smart_add_url_protocol
