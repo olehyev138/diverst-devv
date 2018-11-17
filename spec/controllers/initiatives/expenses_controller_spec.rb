@@ -113,19 +113,34 @@ RSpec.describe Initiatives::ExpensesController, type: :controller do
         context 'with user logged in' do
             login_user_from_let
 
-            it "gets the time_series in json format" do
+            context "json" do
+              before {
                 get :time_series, group_id: group.id, initiative_id: initiative.id, format: :json
-                expect(response.content_type).to eq 'application/json'
+              }
+
+              it "gets the time_series in json format" do
+                  expect(response.content_type).to eq 'application/json'
+              end
             end
 
-            it "gets the time_series in csv format" do
-                get :time_series, group_id: group.id, initiative_id: initiative.id, format: :csv
-                expect(response.content_type).to eq 'text/csv'
-            end
+            context "csv" do
+              before {
+                  allow(InitiativeExpensesTimeSeriesDownloadJob).to receive(:perform_later)
+                  request.env['HTTP_REFERER'] = "back"
+                  get :time_series, group_id: group.id, initiative_id: initiative.id, format: :csv
+              }
 
-            it "returns csv filename as 'expenses.csv'" do 
-                get :time_series, group_id: group.id, initiative_id: initiative.id, format: :csv
-                expect(response.headers["Content-Disposition"]).to include "filename=\"expenses.csv\""
+              it "returns to previous page" do
+                  expect(response).to redirect_to "back"
+              end
+
+              it "flashes" do
+                  expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
+              end
+
+              it "calls job" do
+                  expect(InitiativeExpensesTimeSeriesDownloadJob).to have_received(:perform_later)
+              end
             end
         end
 

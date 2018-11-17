@@ -9,7 +9,7 @@ class Initiative < ActiveRecord::Base
   has_many :fields, dependent: :delete_all
   has_many :expenses, dependent: :destroy, class_name: "InitiativeExpense"
   has_many :user_reward_actions
-  
+
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
 
   validates :end, date: {after: :start, message: 'must be after start'}, on: [:create, :update]
@@ -190,6 +190,18 @@ class Initiative < ActiveRecord::Base
     return false
   end
 
+  def expenses_time_series_csv(time_from = nil, time_to = nil)
+    data = self.expenses_highcharts_history(
+      from: time_from ? Time.at(time_from.to_i / 1000) : 1.year.ago,
+      to: time_to ? Time.at(time_to.to_i / 1000) : Time.current
+    )
+
+    strategy = Reports::GraphTimeseriesGeneric.new(title: 'Expenses over time', data: data)
+    report = Reports::Generator.new(strategy)
+
+    report.to_csv
+  end
+
   protected
 
   def update_owner_group
@@ -242,10 +254,10 @@ class Initiative < ActiveRecord::Base
         return false
       end
 
-      if (self.estimated_funding == 0.0 || self.estimated_funding >= budget_item.available_amount) 
+      if (self.estimated_funding == 0.0 || self.estimated_funding >= budget_item.available_amount)
         self.estimated_funding = budget_item.available_amount
         budget_item.available_amount = 0
-        budget_item.is_done = true 
+        budget_item.is_done = true
       else
         #otherwise just subtract
         budget_item.available_amount -= self.estimated_funding
