@@ -333,6 +333,23 @@ class Group < ActiveRecord::Base
     end
   end
 
+  def field_time_series_csv(field_id)
+    from = Time.at(params[:from] / 1000) rescue nil
+    to = Time.at(params[:to] / 1000) rescue nil
+    data = self.highcharts_history(
+      field: Field.find(field_id),
+      from: from || 1.year.ago,
+      to: to || Time.current + 1.day
+    )
+
+    strategy = Reports::GraphTimeseriesGeneric.new(
+      data: data
+    )
+    report = Reports::Generator.new(strategy)
+
+    report.to_csv
+  end
+
   def title_with_leftover_amount
     "Create event from #{name} leftover ($#{leftover_money})"
   end
