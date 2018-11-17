@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe PollsController, type: :controller do
     include ActiveJob::TestHelper
-    
+
     let(:user) { create(:user) }
     let!(:poll) { create(:poll, status: 0, enterprise: user.enterprise, groups: []) }
     let!(:graph1) { create(:graph, aggregation: create(:field)) }
@@ -117,7 +117,7 @@ RSpec.describe PollsController, type: :controller do
         context "with logged user" do
             login_user_from_let
 
-            before do 
+            before do
                 poll.graphs << graph1
                 poll.graphs << graph2
                 get :show, id: poll.id
@@ -265,18 +265,22 @@ RSpec.describe PollsController, type: :controller do
     describe "GET#export_csv" do
         context "with logged user" do
             login_user_from_let
-            before { get :export_csv, id: poll.id }
-          
-            it "gets response in csv format" do
-                expect(response.content_type).to eq 'text/csv'
+            before {
+                allow(PollDownloadJob).to receive(:perform_later)
+                request.env['HTTP_REFERER'] = "back"
+                get :export_csv, id: poll.id
+            }
+
+            it "returns to previous page" do
+                expect(response).to redirect_to "back"
             end
 
-            it 'response includes poll_title as part of csv filename' do 
-                expect(response.headers["Content-Disposition"]).to include "#{poll.title}_responses.csv"
+            it "flashes" do
+                expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
             end
 
-            it 'returns file in csv format' do
-                expect(response.content_type).to eq 'text/csv'
+            it "calls job" do
+                expect(PollDownloadJob).to have_received(:perform_later)
             end
         end
 

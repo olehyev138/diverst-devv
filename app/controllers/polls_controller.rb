@@ -65,7 +65,9 @@ class PollsController < ApplicationController
 
   def export_csv
     authorize @poll, :show?
-    send_data @poll.responses_csv, filename: "#{@poll.title}_responses.csv"
+    PollDownloadJob.perform_later(current_user.id, @poll.id)
+    flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+    redirect_to :back
   end
 
   protected
