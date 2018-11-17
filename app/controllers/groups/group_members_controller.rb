@@ -84,9 +84,9 @@ class Groups::GroupMembersController < ApplicationController
 
       # Only add association if user exists and belongs to the same enterprise
       next if (!user) || (user.enterprise != @group.enterprise)
-      next if @group.members.include? user
+      next if UserGroup.where(:user_id => user_id, :group_id => @group.id).exists?
 
-      @group.members << user
+      UserGroup.create(group_id: @group.id, user_id: user.id, accepted_member: @group.pending_users.disabled?)
     end
 
     redirect_to action: 'index'
@@ -172,7 +172,7 @@ class Groups::GroupMembersController < ApplicationController
   protected
 
   def set_group
-    current_user ? @group = current_user.enterprise.groups.find(params[:group_id]) : user_not_authorized
+    @group = current_user.enterprise.groups.find(params[:group_id])
   end
 
   def set_member

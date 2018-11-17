@@ -146,7 +146,7 @@ RSpec.describe SegmentsController, type: :controller do
                     expect(assigns[:members].count).to eq 2
                 end
 
-                it 'return groups that belong to user.enterprise' do
+                xit 'return groups that belong to user.enterprise' do
                     expect(assigns[:groups]).to eq groups
                 end
 

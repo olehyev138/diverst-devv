@@ -89,6 +89,8 @@ class GroupsController < ApplicationController
         authorize Group
         @group = current_user.enterprise.groups.new
         @categories = current_user.enterprise.group_categories
+        # groups available to be parents or children
+        @available_groups = @group.enterprise.groups.where.not(id: @group.id)
     end
 
     def show
@@ -100,7 +102,7 @@ class GroupsController < ApplicationController
 
             @posts = without_segments
         else
-            if @group.active_members.include? current_user
+            if policy(@group).is_an_accepted_member?
                 base_show
                 @posts = with_segments
             else
@@ -143,11 +145,16 @@ class GroupsController < ApplicationController
     def edit
         authorize @group
         @categories = current_user.enterprise.group_categories
+        # groups available to be parents or children
+        @available_groups = @group.enterprise.groups.where.not(id: @group.id)
     end
 
     def update
         authorize @group
+        update_group
+    end
 
+    def update_group
         if group_params[:group_category_id].present?
           @group.group_category_type_id = GroupCategory.find_by(id: group_params[:group_category_id])&.group_category_type_id
         end
@@ -160,6 +167,10 @@ class GroupsController < ApplicationController
                 redirect_to @group
             elsif request.referer == group_outcomes_url(@group)
                 redirect_to group_outcomes_url(@group)
+            elsif request.referer == group_questions_url(@group)
+                redirect_to group_questions_url(@group)
+            elsif request.referer == layouts_group_url(@group)
+                redirect_to layouts_group_url(@group)
             else
                 redirect_to [:edit, @group]
             end
@@ -175,16 +186,31 @@ class GroupsController < ApplicationController
         end
     end
 
+    def update_questions
+        authorize @group, :insights?
+        update_group
+    end
+
+    def update_layouts
+        authorize @group, :layouts?
+        update_group
+    end
+
+    def update_settings
+        authorize @group, :settings?
+        update_group
+    end
+
     def layouts
         authorize @group
     end
 
     def settings
-        authorize @group, :manage?
+        authorize @group
     end
 
     def plan_overview
-        authorize @group, :manage?
+        authorize [@group], :index?, :policy_class => GroupBudgetPolicy
     end
 
     def destroy
@@ -287,21 +313,24 @@ class GroupsController < ApplicationController
     end
 
     def without_segments
-        NewsFeedLink.combined_news_links(@group.news_feed.id)
+        NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise)
                             .includes(:news_link, :group_message, :social_link)
                             .order(is_pinned: :desc, created_at: :desc)
                             .limit(5)
     end
 
     def with_segments
-        segment_ids = current_user.segments.ids
-        if not segment_ids.empty?
-            NewsFeedLink
-                .combined_news_links_with_segments(@group.news_feed.id, current_user.segments.ids)
-                .order(is_pinned: :desc, created_at: :desc)
-                .limit(5)
+        if GroupPostsPolicy.new(current_user, [@group]).view_latest_news?
+            segment_ids = current_user.segments.ids
+            if not segment_ids.empty?
+                NewsFeed.all_links(@group.news_feed.id, segment_ids, @group.enterprise)
+                    .order(is_pinned: :desc, created_at: :desc)
+                    .limit(5)
+            else
+                return without_segments
+            end
         else
-            return without_segments
+            []
         end
     end
 

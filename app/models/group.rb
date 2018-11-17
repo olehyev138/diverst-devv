@@ -5,39 +5,39 @@ class Group < ActiveRecord::Base
   extend Enumerize
 
   enumerize :layout, default: :layout_0, in: [
-                              :layout_0,
-                              :layout_1,
-                              :layout_2
-                            ]
+    :layout_0,
+    :layout_1,
+    :layout_2
+  ]
 
   enumerize :pending_users, default: :disabled,  in: [
-                              :disabled,
-                              :enabled
-                            ]
+    :disabled,
+    :enabled
+  ]
 
   enumerize :members_visibility, default: :managers_only, in:[
-                                   :global,
-                                   :group,
-                                   :managers_only
-                                 ]
+    :global,
+    :group,
+    :managers_only
+  ]
 
   enumerize :messages_visibility, default: :managers_only, in:[
-                                    :global,
-                                    :group,
-                                    :managers_only
-                                  ]
+    :global,
+    :group,
+    :managers_only
+  ]
 
   enumerize :latest_news_visibility, default: :leaders_only, in:[
-                                    :public,
-                                    :group,
-                                    :leaders_only
-                                  ]
+    :public,
+    :group,
+    :leaders_only
+  ]
 
   enumerize :upcoming_events_visibility, default: :leaders_only, in:[
-                                    :public,
-                                    :group,
-                                    :leaders_only
-                                  ]
+    :public,
+    :group,
+    :leaders_only
+  ]
 
   belongs_to :enterprise
   belongs_to :lead_manager, class_name: "User"
@@ -86,10 +86,10 @@ class Group < ActiveRecord::Base
   has_many :views, dependent: :destroy
 
   has_many :fields, -> { where field_type: "regular"},
-           dependent: :delete_all
+    dependent: :delete_all
   has_many :survey_fields, -> { where field_type: "group_survey"},
-           class_name: 'Field',
-           dependent: :delete_all
+    class_name: 'Field',
+    dependent: :delete_all
 
   has_many :group_leaders, dependent: :destroy
   has_many :leaders, through: :group_leaders, source: :user
@@ -110,7 +110,7 @@ class Group < ActiveRecord::Base
   has_attached_file :banner
   validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
 
-  validates :name, presence: true, uniqueness: true
+  validates :name, presence: true, uniqueness: {scope: :enterprise_id }
 
   validates_format_of :contact_email, with: Devise.email_regexp, allow_blank: true
 
@@ -120,6 +120,8 @@ class Group < ActiveRecord::Base
   validate :valid_yammer_group_link?
 
   validate :ensure_one_level_nesting
+  validate :ensure_not_own_parent
+  validate :ensure_not_own_child
 
   before_save :send_invitation_emails, if: :send_invitations?
   before_save :create_yammer_group, if: :should_create_yammer_group?
@@ -147,9 +149,9 @@ class Group < ActiveRecord::Base
 
   def layout_values
     {
-    'layout_0' => 'Default layout',
-    'layout_1' => 'Layout without leader boards for Most Active Members',
-    'layout_2' => "Layout with #{c_t(:sub_erg).pluralize} on top of group leaders"
+      'layout_0' => 'Default layout',
+      'layout_1' => 'Layout without leader boards for Most Active Members',
+      'layout_2' => "Layout with #{c_t(:sub_erg).pluralize} on top of group leaders"
     }
   end
 
@@ -266,14 +268,14 @@ class Group < ActiveRecord::Base
 
   def highcharts_history(field:, from: 1.year.ago, to: Time.current)
     self.updates
-        .where('created_at >= ?', from)
-        .where('created_at <= ?', to)
-        .order(created_at: :asc)
-        .map do |update|
+      .where('created_at >= ?', from)
+      .where('created_at <= ?', to)
+      .order(created_at: :asc)
+      .map do |update|
       [
-              update.created_at.to_i * 1000, # We multiply by 1000 to get milliseconds for highcharts
-              update.info[field]
-            ]
+        update.created_at.to_i * 1000, # We multiply by 1000 to get milliseconds for highcharts
+        update.info[field]
+      ]
     end
   end
 
@@ -363,8 +365,9 @@ class Group < ActiveRecord::Base
   end
 
   # This method only exists because it's used in a callback
+  # Update specific member in elasticsearch
   def update_elasticsearch_member(member)
-    member.__elasticsearch__.update_document
+    GroupMemberUpdateJob.perform_later(member.id)
   end
 
   # Update members in elastic_search
@@ -388,6 +391,18 @@ class Group < ActiveRecord::Base
   def ensure_one_level_nesting
     if parent.present? && children.present?
       errors.add(:parent_id, "Group can't have both parent and children")
+    end
+  end
+
+  def ensure_not_own_parent
+    if parent.present? && parent.id == self.id
+      errors.add(:parent_id, 'Group cant be its own parent')
+    end
+  end
+
+  def ensure_not_own_child
+    if children.exists?(self)
+      errors.add(:child_ids, 'Group cant be its own child')
     end
   end
 
@@ -424,7 +439,7 @@ class Group < ActiveRecord::Base
     end
   end
 
-  def filter_by_membership(membership_status)
+    def filter_by_membership(membership_status)
     members.references(:user_groups).where('user_groups.accepted_member=?', membership_status)
   end
 
@@ -440,12 +455,6 @@ class Group < ActiveRecord::Base
       update(yammer_group_created: true, yammer_id: group['id'])
       SyncYammerGroupJob.perform_later(self)
     end
-  end
-
-  def send_invitation_emails
-    GroupMailer.delay.invitation(self, invitation_segments)
-    self.send_invitations = false
-    invitation_segments.clear
   end
 
   def should_create_yammer_group?

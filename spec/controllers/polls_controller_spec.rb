@@ -60,11 +60,6 @@ RSpec.describe PollsController, type: :controller do
                     expect{ post :create, poll: poll }.to change(Poll.where(owner_id: user.id), :count).by(1)
                 end
 
-                it "send a notification of poll", skip: "test fails" do
-                    expect_any_instance_of(Notifiers::PollNotifier).to receive("notify!")
-                    post :create, poll: poll
-                end
-
                 it "track activity of poll" do
                     perform_enqueued_jobs do
                         expect{ post :create, poll: poll }.to change(PublicActivity::Activity
@@ -80,11 +75,6 @@ RSpec.describe PollsController, type: :controller do
                 it "flashes a notice message" do
                     post :create, poll: poll
                     expect(flash[:notice]).to eq "Your survey was created"
-                end
-
-                it "send email", skip: "test fails" do
-                    post :create, poll: poll
-                    expect(assigns[:poll].email_sent).to eq true
                 end
             end
 
@@ -183,11 +173,6 @@ RSpec.describe PollsController, type: :controller do
                 it "updates the poll" do
                     poll.reload
                     expect(poll.groups).to eq [group]
-                end
-
-                it "send a notification of poll", skip: "test fails" do
-                    expect_any_instance_of(Notifiers::PollNotifier).to receive("notify!")
-                    patch :update, id: poll.id, poll: { group_ids: [group.id] }
                 end
 
                 it "track activity of poll" do

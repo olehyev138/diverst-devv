@@ -29,7 +29,7 @@ class UserDatatable < AjaxDatatablesRails::Base
           html_escape(record.last_name),
           html_escape(record.email),
           "#{link_to('Details', user_path(record))} - \
-          #{link_to('Remove', user_path(record), class: 'error', data: { confirm: "Are you sure?" }, method: :delete)}"
+          #{link_to('Remove', user_path(record), class: 'error', data: { confirm: "Are you sure?" }, method: :delete) if record != @user}"
         ]
       else
         [

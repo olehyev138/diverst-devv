@@ -141,6 +141,40 @@ class Initiative < ActiveRecord::Base
     end
   end
 
+  def self.to_csv(initiatives:, enterprise: nil)
+    # initiative column titles
+    CSV.generate do |csv|
+      # These names dont correspond to the UI. Pillar = Outcome, Initiative/Program = Pillar, Event = Initiative
+      csv << [
+        enterprise.custom_text.send('erg_text'),
+        enterprise.custom_text.send('outcome_text'),
+        enterprise.custom_text.send('program_text'),
+        'Initiative', 'Event Name', 'Start Date', 'End Date',
+        'Expenses', 'Budget', 'Metrics 1', 'Metrics 2'
+      ]
+
+      initiatives.order(:start).each do |initiative|
+        # initiative column values
+        columns = [
+          initiative.group.name,
+          initiative.pillar.outcome.name,
+          initiative.pillar.name,
+          initiative.name,
+          initiative.initiative_date('start'), initiative.initiative_date('end'),
+          ActionController::Base.helpers.number_to_currency(initiative.expenses.sum(:amount)),
+          ActionController::Base.helpers.number_to_currency(initiative.estimated_funding)
+        ]
+
+        # Add first two metric titles
+        fields = initiative.fields
+        columns << (fields.first.nil? ? nil : fields.first.title)
+        columns << (fields.second.nil? ? nil : fields.first.title)
+
+        csv << columns
+      end
+    end
+  end
+
   # ENDOF port from Event
 
 

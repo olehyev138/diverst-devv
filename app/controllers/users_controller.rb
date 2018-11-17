@@ -7,7 +7,7 @@ class UsersController < ApplicationController
   def index
     authorize User
 
-    @users = policy_scope(User).joins(:policy_group).where(search_params).limit(params[:limit] || 25)
+    @users = policy_scope(User).includes(:policy_group, :user_groups, :group_leaders).where(search_params).limit(params[:limit] || 25)
 
     respond_to do |format|
       format.html
@@ -158,7 +158,7 @@ class UsersController < ApplicationController
       else
         'user'
       end
-    when 'edit_profile'
+    when 'edit_profile', 'group_surveys'
       'user'
     else
       'global_settings'
@@ -166,7 +166,7 @@ class UsersController < ApplicationController
   end
 
   def set_user
-    current_user ? @user = current_user.enterprise.users.find(params[:id]) : user_not_authorized
+    @user = current_user.enterprise.users.find(params[:id])
   end
 
   def user_params
@@ -247,6 +247,6 @@ class UsersController < ApplicationController
   end
 
   def search_params
-    params.permit(:active, :mentor, :mentee, policy_groups: [:budget_approval])
+    params.permit(:active, :mentor, :mentee, policy_groups: [:budget_approval], user_groups: [:accepted_member, :group_id], group_leaders: [:budget_approval])
   end
 end

@@ -32,11 +32,11 @@ RSpec.describe GroupsController, type: :controller do
       end
 
       context 'where groups have children' do
-        let!(:group1) { create(:group, enterprise: enterprise) }
-        let!(:groups) { create_list(:group, 2, enterprise: enterprise) }
+        let!(:parent_groups) { create_list(:group, 2, enterprise: enterprise) }
+        let!(:child_group) { create(:group, enterprise: enterprise) }
         before do
           group
-          groups.each { |group| group.children << group }
+          parent_groups.each { |parent| parent.children << child_group }
         end
 
         it 'total number of groups should be 4' do
@@ -44,9 +44,9 @@ RSpec.describe GroupsController, type: :controller do
           expect(Group.all.count).to eq 4
         end
 
-        it 'return 2 groups with children' do
+        it 'returns 3 groups' do
           get :index
-          expect(assigns[:groups].count).to eq 2
+          expect(assigns[:groups].count).to eq 3
         end
       end
     end
@@ -68,11 +68,11 @@ RSpec.describe GroupsController, type: :controller do
         end
 
         context 'where groups have children' do
-          let!(:group1) { create(:group, enterprise: enterprise) }
-          let!(:groups) { create_list(:group, 2, enterprise: enterprise) }
+          let!(:parent_groups) { create_list(:group, 2, enterprise: enterprise) }
+          let!(:child_group) { create(:group, enterprise: enterprise) }
           before do
             group
-            groups.each { |group| group.children << group }
+            parent_groups.each { |parent| parent.children << child_group }
           end
 
           it 'total number of groups should be 4' do
@@ -80,9 +80,9 @@ RSpec.describe GroupsController, type: :controller do
             expect(Group.all.count).to eq 4
           end
 
-          it 'return 2 groups with children' do
+          it 'return 3 groups' do
             get :close_budgets, :id => group.id
-            expect(assigns[:groups].count).to eq 2
+            expect(assigns[:groups].count).to eq 3
           end
         end
 

@@ -1,4 +1,5 @@
 module AdminViewHelper
+  
   def active_manage_erg_link?
     return true if controller_name == 'groups' &&
       ['calendar', 'index', 'import_csv', 'edit', 'new'].include?(action_name)
@@ -23,4 +24,18 @@ module AdminViewHelper
 
     ['users', 'integrations', 'policy_group_templates', 'emails', 'notifications', 'rewards', 'logs'].include? controller_name
   end
+  
+  def show_settings_link?
+    return true if policy(current_user.enterprise).sso_manage?
+    return true if policy(current_user.enterprise).manage_permissions?
+    return true if policy(current_user.enterprise).manage_branding?
+    false
+  end
+  
+  def show_diversity_link?
+    return true if policy(current_user.enterprise).diversity_manage?
+    return true if policy(Group).manage_all_groups? && policy(current_user.enterprise).manage_posts?
+    false
+  end
+  
 end

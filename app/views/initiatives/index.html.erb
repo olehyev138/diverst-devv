@@ -3,6 +3,7 @@
     <div class="col-xs-4">
       <%= link_to "New Event", new_group_initiative_path(@group), class: "btn btn--primary btn-lg hidden-xs" if policy(Initiative).new? %>
       <%= link_to "New", new_group_initiative_path(@group), class: "btn btn-primary btn-lg visible-xs" if policy(Initiative).new? %>
+      <%= link_to "Export CSV", export_csv_group_initiatives_path, class: "btn btn--primary" %>
     </div>
   </div>
   <br>
@@ -40,7 +41,7 @@
                   <h2 class="no-margin"><%= pillar.name %></h2>
                   <p class="muted"><%= pillar.value_proposition %></p>
                 </div>
-    
+
                 <% if pillar.initiatives.empty? %>
                   <div class="card__section card__section--border">
                     There are no active events in this <%= c_t(:program) %>.
@@ -61,7 +62,7 @@
                             <%= link_to "KPI", group_initiative_path(@group, initiative) %> |
                             <%= link_to "Edit", edit_group_initiative_path(@group, initiative) %> -
                             <%= link_to "Survey", new_poll_path(initiative_id: initiative.id) %> -
-                            <%= link_to "Delete", group_initiative_path(@group, initiative), method: :delete, data: { confirm: "Are you sure?" }, class: "error" %>
+                            <%= link_to "Delete", group_initiative_path(@group, initiative), method: :delete, data: { confirm: "Are you sure?" }, class: "error" if GroupEventsPolicy.new(current_user, [@group]).destroy? %>
                           </p>
                         </div>
                       </div>
