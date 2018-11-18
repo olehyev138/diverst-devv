@@ -21,7 +21,7 @@ class Groups::ResourcesController < ApplicationController
   protected
 
   def set_container
-    current_user ? @group = @container = current_user.enterprise.groups.find(params[:group_id]) : user_not_authorized
+    @group = @container = current_user.enterprise.groups.find(params[:group_id])
   end
 
   def set_container_path

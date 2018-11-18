@@ -50,11 +50,7 @@ class MentoringInterestsController < ApplicationController
   end
 
   def set_topic
-    if current_user
-      @topic = current_user.enterprise.mentoring_interests.find(params[:id])
-    else
-      user_not_authorized
-    end
+    @topic = current_user.enterprise.mentoring_interests.find(params[:id])
   end
 
   def topic_params

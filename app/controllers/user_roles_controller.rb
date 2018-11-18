@@ -54,11 +54,7 @@ class UserRolesController < ApplicationController
   protected
 
   def set_user_role
-    if current_user
-      @user_role = current_user.enterprise.user_roles.find(params[:id])
-    else
-      user_not_authorized
-    end
+    @user_role = current_user.enterprise.user_roles.find(params[:id])
   end
 
   def user_role_params
