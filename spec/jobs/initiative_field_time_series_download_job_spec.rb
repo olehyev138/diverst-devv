@@ -12,7 +12,7 @@ RSpec.describe InitiativeFieldTimeSeriesDownloadJob, type: :job do
 
     describe "#perform" do
         it "creates a downloadable csv file" do
-            expect{ subject.perform(user.id, group.id, field.id) }
+            expect{ subject.perform(user.id, initiative.id, field.id) }
               .to change(CsvFile, :count).by(1)
         end
     end

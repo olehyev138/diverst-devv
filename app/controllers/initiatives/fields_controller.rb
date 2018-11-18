@@ -28,7 +28,7 @@ class Initiatives::FieldsController < ApplicationController
         }
       }
       format.csv {
-        InitiativeFieldTimeSeriesDownloadJob.perform_later(current_user.id, @group.id, @field.id, params[:from], params[:to])
+        InitiativeFieldTimeSeriesDownloadJob.perform_later(current_user.id, @initiative.id, @field.id, params[:from], params[:to])
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }
