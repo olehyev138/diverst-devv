@@ -7,7 +7,7 @@
     <li>Questionnaire button will only show if a survey is created via <strong>Insights</strong> </li>
   </ul>
 
-  <%= simple_form_for @group do |f| %>
+  <%= simple_form_for @group, :url => update_layouts_group_path(@group) do |f| %>
     <div class="card">
       <div class="card__section card__section--border">
         <%= f.input :layout, as: :hidden %>

@@ -368,7 +368,6 @@ RSpec.describe BudgetsController, type: :controller do
 
     before {
       user.policy_group.groups_manage = true
-      user.policy_group.annual_budget_manage = true
       user.policy_group.save!
     }
 

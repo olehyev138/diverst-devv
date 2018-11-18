@@ -55,11 +55,7 @@ class ExpenseCategoriesController < ApplicationController
   protected
 
   def set_expense_category
-    if current_user
-      @expense_category = current_user.enterprise.expense_categories.find(params[:id])
-    else
-      user_not_authorized
-    end
+    @expense_category = current_user.enterprise.expense_categories.find(params[:id])
   end
 
   def expense_params
