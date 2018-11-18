@@ -94,7 +94,7 @@
             </li>
           <% end %>
           
-          <% if GroupEventsPolicy.new(current_user, [@group]).index? %>
+          <% if GroupEventsPolicy.new(current_user, [@group]).update? %>
             <li>
               <%= active_link_to "Event Management", group_initiatives_path(@group)  %>
             </li>
@@ -198,7 +198,7 @@
               </li>
             <% end %>
             
-            <% if GroupEventsPolicy.new(current_user, [@group]).index? %>
+            <% if GroupEventsPolicy.new(current_user, [@group]).update? %>
               <li>
                 <%= active_link_to "Event Management", group_initiatives_path(@group)  %>
               </li>
