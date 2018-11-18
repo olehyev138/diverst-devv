@@ -666,8 +666,6 @@ ActiveRecord::Schema.define(version: 20181107043436) do
     t.boolean  "default_mentor_group",                                             default: false
   end
 
-  add_index "groups", ["name"], name: "index_groups_on_name", unique: true, using: :btree
-
   create_table "groups_metrics_dashboards", force: :cascade do |t|
     t.integer "group_id",             limit: 4
     t.integer "metrics_dashboard_id", limit: 4
