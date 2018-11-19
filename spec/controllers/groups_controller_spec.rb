@@ -148,8 +148,6 @@ RSpec.describe GroupsController, type: :controller do
     let!(:group) { create(:group, enterprise: user.enterprise) }
 
     context 'with logged user' do
-      let!(:foreign_group) { FactoryGirl.create :group }
-
       login_user_from_let
 
       before { get :plan_overview, :id => group.id }
@@ -988,5 +986,31 @@ RSpec.describe GroupsController, type: :controller do
       before { get_delete_attachment }
       it_behaves_like "redirect user to users/sign_in path"
     end
+  end
+
+  describe 'POST#sort' do
+    context 'with logged in user' do 
+      let!(:group1) { create(:group, enterprise: enterprise) }
+      let!(:group2) { create(:group, enterprise: enterprise) }
+      let!(:group3) { create(:group, enterprise: enterprise) }
+
+      login_user_from_let
+
+      before do 
+        group_ids = enterprise.groups.pluck(:id).map(&:to_s)
+        params = { "group" => group_ids }
+        post :sort, params
+      end
+
+      it 'render nothing' do 
+        expect(response).to render_template(nil)
+      end  
+
+      it 'apply sorting by assigning an integer to position attribute for each group' do 
+        expect(group1.reload.position).to_not be_nil
+        expect(group2.reload.position).to_not be_nil
+        expect(group3.reload.position).to_not be_nil
+      end
+    end 
   end
 end

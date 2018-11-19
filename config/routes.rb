@@ -141,6 +141,9 @@ Rails.application.routes.draw do
   post 'group_categories/update_all_sub_groups', to: 'group_categories#update_all_sub_groups', as: :update_all_sub_groups
 
   resources :groups do
+    collection do
+      post :sort 
+    end
     resources :budgets, only: [:index, :show, :new, :create, :destroy] do
       post 'approve'
       post 'decline'
