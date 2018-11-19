@@ -53,16 +53,22 @@
           <p><%= @event.participating_groups.map(&:name).join(", ") %></p>
         </div>
         <div class="col-sm-4 col-xs-12">
-          <h4>Attendees (<%= @event.attendees.count %><% if @event.max_attendees? %>/<%= @event.max_attendees %><% end %>)<% if @event.full? %> <b>Full</b><% end %></h4>
+          <h4>Attendees (<span id="attendees_count"><%= @event.attendees.count %><% if @event.max_attendees? %>/<%= @event.max_attendees %><% end %></span>)<% if @event.full? %> <b>Full</b><% end %></h4>
           <p>
             <% @event.attendees.limit(10).each do |attendee| %>
               <%= attendee.name_with_status %><br>
             <% end %>
             <%= link_to "View #{@event.attendees.count - 10} more...", group_event_attendance_path(@group, @event) if @event.attendees.count > 10 %>
           </p>
-          <%= link_to "Add to Google Calendar", GoogleCalendar.build_link(@event), target: :_blank, class: "hidden-xs" %>
-          <br>
-          <%= link_to "Add to calendar", export_ics_group_event_path(@group, @event), class: "hidden-xs" %>
+          <% if current_user.initiatives.where(:id => @event.id).exists? %>
+            <%= link_to "Add to Google Calendar", GoogleCalendar.build_link(@event), target: :_blank, class: "hidden-xs member", id: 'calendar_link1' %>
+            <br>
+            <%= link_to "Add to calendar", export_ics_group_event_path(@group, @event), class: "hidden-xs member", id: 'calendar_link2' %>
+          <% else %>
+            <%= link_to "Add to Google Calendar", '#', data: {confirm: "Please join this event before adding it to you calendar."}, class: "hidden-xs non_member", id: 'calendar_link1' %>
+            <br>
+            <%= link_to "Add to calendar", '#', data: {confirm: "Please join this event before adding it to you calendar."}, class: "hidden-xs non_member", id: 'calendar_link2' %>
+          <% end %>
         </div>
       </div>
     </div>
@@ -103,11 +109,21 @@
       $.ajax({ url: '<%= group_event_attendance_path(@group, @event) %>', type: 'DELETE' });
       $(this).data('joined', false)
       $(this).text('Join event')
+      $('#calendar_link1').attr({"href" : "#",
+       "data-confirm" : "Please join this event before adding it to you calendar."}).removeAttr("target");
+      $('#calendar_link2').attr({"href" : "#", "data-confirm" : "Please join this event before adding it to you calendar."});
+      var attendees_count = parseInt(document.getElementById('attendees_count').innerHTML); 
+      document.getElementById('attendees_count').innerHTML = attendees_count - 1;
     }
     else {
       $.ajax({ url: '<%= group_event_attendance_path(@group, @event) %>', type: 'POST' });
       $(this).data('joined', true)
       $(this).text('Leave event')
+      $('#calendar_link1').attr({"href" : "<%= GoogleCalendar.build_link(@event) %>",
+                                  "target" : "_blank"}).removeAttr("data-confirm");
+      $('#calendar_link2').attr({"href" : "<%= export_ics_group_event_path(@group, @event) %>"}).removeAttr("data-confirm");
+      var attendees_count = parseInt(document.getElementById('attendees_count').innerHTML); 
+      document.getElementById('attendees_count').innerHTML = attendees_count + 1;
     }
   });
 </script>

@@ -1,3 +1,5 @@
+const DEFAULT_MAX = 10
+
 class Graph {
   constructor(dataUrl, $element) {
     this.dataUrl = dataUrl;
@@ -47,7 +49,10 @@ class Graph {
       },
       xAxis: {
         type: 'category',
-        categories: this.data.highcharts.categories
+        categories: this.data.highcharts.categories,
+        min: 0,
+        max: this.data.highcharts.limit || DEFAULT_MAX,
+        scrollbar: { enabled: this.data.highcharts.scrollbar || true },
       },
       yAxis: {
         min: 0,
