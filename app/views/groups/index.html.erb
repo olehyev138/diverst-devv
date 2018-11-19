@@ -4,11 +4,14 @@
 </div>
 
 <div class="content__main">
-  <div class="card">
+  <div class="card" id="groups" data-url="<%= sort_groups_path %>">
     <% @groups.each do |group| %>
-      <div class="card__section card__section--border">
+      <div class="card__section card__section--border" id="group_<%= group.id %>">
+        <label class="field__label" id="handle" style="float: left; margin-top: 10px;">  
+          <%= label = "#{ inline_svg('icons/move.svg', class: 'icon') }".html_safe %>
+        </label>
         <div class="flex-row flex-row--middle">
-          <div class="flex-row__cell">
+          <div class="flex-row__cell" id="handle">
             <%= link_to group_path(group) do %><%= image_tag group.logo.expiring_url(3600, :thumb), class: "avatar" %><% end %>
           </div>
           <div class="flex-row__cell flex-row__cell--grow"><%= link_to "#{group.name}", group_path(group), class: "accent" %> - <%= pluralize group.active_members.count, "member" %></div>
@@ -61,6 +64,23 @@
 </div>
 
 <script>
+  $(document).on('ready page:load', function(){
+    $('#groups').sortable(
+    {
+      handle: '#handle',
+      cursor: 'move',
+      axis: 'y',
+      update: function() {
+         $.ajax({
+          type: "POST",
+          url: $(this).data('url'),
+          data: $(this).sortable('serialize')
+         });
+      }
+    }
+    );
+  });
+
   $('a.nested_show').click(function(e){
     var id = $(this).attr('id');
     $('div.children_' + id).show();
