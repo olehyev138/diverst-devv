@@ -21,6 +21,34 @@ class GroupPolicy < ApplicationPolicy
         return true if basic_group_leader_permission?("groups_create")
         @policy_group.groups_create?
     end
+
+    def update_all_sub_groups?
+        create?
+    end
+
+    def sort?
+        index?
+    end
+
+    # move these to separate policies
+    def view_all?
+        create?
+    end
+
+    def add_category?
+        create?
+    end
+
+    def update_with_new_category?
+        create?
+    end
+
+    def update?
+        return true if @policy_group.groups_manage?
+        return true if @record.owner == @user
+
+        @record.managers.include?(user)
+    end
     
     def manage_all_groups?
         #return true if parent_group_permissions?
