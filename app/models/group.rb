@@ -5,33 +5,33 @@ class Group < ActiveRecord::Base
   extend Enumerize
 
   enumerize :layout, default: :layout_0, in: [
-                              :layout_0,
-                              :layout_1,
-                              :layout_2
-                            ]
+    :layout_0,
+    :layout_1,
+    :layout_2
+  ]
 
   enumerize :pending_users, default: :disabled,  in: [
-                              :disabled,
-                              :enabled
-                            ]
+    :disabled,
+    :enabled
+  ]
 
   enumerize :members_visibility, default: :managers_only, in:[
-                                   :global,
-                                   :group,
-                                   :managers_only
-                                 ]
+    :global,
+    :group,
+    :managers_only
+  ]
 
   enumerize :messages_visibility, default: :managers_only, in:[
-                                    :global,
-                                    :group,
-                                    :managers_only
-                                  ]
+    :global,
+    :group,
+    :managers_only
+  ]
 
   enumerize :latest_news_visibility, default: :leaders_only, in:[
-                                    :public,
-                                    :group,
-                                    :leaders_only
-                                  ]
+    :public,
+    :group,
+    :leaders_only
+  ]
 
   enumerize :upcoming_events_visibility, default: :leaders_only, in:[
                                     :public,
@@ -87,10 +87,10 @@ class Group < ActiveRecord::Base
   has_many :views, dependent: :destroy
 
   has_many :fields, -> { where field_type: "regular"},
-           dependent: :delete_all
+    dependent: :delete_all
   has_many :survey_fields, -> { where field_type: "group_survey"},
-           class_name: 'Field',
-           dependent: :delete_all
+    class_name: 'Field',
+    dependent: :delete_all
 
   has_many :group_leaders, dependent: :destroy
   has_many :leaders, through: :group_leaders, source: :user
@@ -111,7 +111,7 @@ class Group < ActiveRecord::Base
   has_attached_file :banner
   validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
 
-  validates :name, presence: true, uniqueness: true
+  validates :name, presence: true, uniqueness: {scope: :enterprise_id }
 
   validates_format_of :contact_email, with: Devise.email_regexp, allow_blank: true
 
@@ -150,9 +150,9 @@ class Group < ActiveRecord::Base
 
   def layout_values
     {
-    'layout_0' => 'Default layout',
-    'layout_1' => 'Layout without leader boards for Most Active Members',
-    'layout_2' => "Layout with #{c_t(:sub_erg).pluralize} on top of group leaders"
+      'layout_0' => 'Default layout',
+      'layout_1' => 'Layout without leader boards for Most Active Members',
+      'layout_2' => "Layout with #{c_t(:sub_erg).pluralize} on top of group leaders"
     }
   end
 
@@ -162,9 +162,6 @@ class Group < ActiveRecord::Base
 
   def is_sub_group?
     parent.present?
-  end
-  
-  def is_active_member?
   end
 
   def total_views
@@ -272,14 +269,14 @@ class Group < ActiveRecord::Base
 
   def highcharts_history(field:, from: 1.year.ago, to: Time.current)
     self.updates
-        .where('created_at >= ?', from)
-        .where('created_at <= ?', to)
-        .order(created_at: :asc)
-        .map do |update|
+      .where('created_at >= ?', from)
+      .where('created_at <= ?', to)
+      .order(created_at: :asc)
+      .map do |update|
       [
-              update.created_at.to_i * 1000, # We multiply by 1000 to get milliseconds for highcharts
-              update.info[field]
-            ]
+        update.created_at.to_i * 1000, # We multiply by 1000 to get milliseconds for highcharts
+        update.info[field]
+      ]
     end
   end
 
@@ -343,8 +340,9 @@ class Group < ActiveRecord::Base
   end
 
   # This method only exists because it's used in a callback
+  # Update specific member in elasticsearch
   def update_elasticsearch_member(member)
-    member.__elasticsearch__.update_document
+    GroupMemberUpdateJob.perform_later(member.id)
   end
 
   # Update members in elastic_search

@@ -141,6 +141,9 @@ Rails.application.routes.draw do
   post 'group_categories/update_all_sub_groups', to: 'group_categories#update_all_sub_groups', as: :update_all_sub_groups
 
   resources :groups do
+    collection do
+      post :sort 
+    end
     resources :budgets, only: [:index, :show, :new, :create, :destroy] do
       post 'approve'
       post 'decline'
@@ -266,7 +269,6 @@ Rails.application.routes.draw do
             get 'time_series'
           end
         end
-
         resources :resources
       end
 
@@ -274,6 +276,10 @@ Rails.application.routes.draw do
         get 'todo'
         post 'finish_expenses'
         get 'attendees'
+      end
+
+      collection do
+        get 'export_csv'
       end
     end
 
