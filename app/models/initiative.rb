@@ -149,7 +149,7 @@ class Initiative < ActiveRecord::Base
         enterprise.custom_text.send('erg_text'),
         enterprise.custom_text.send('outcome_text'),
         enterprise.custom_text.send('program_text'),
-        'Initiative', 'Event Name', 'Start Date', 'End Date',
+        'Event Name', 'Start Date', 'End Date',
         'Expenses', 'Budget', 'Metrics 1', 'Metrics 2'
       ]
 
