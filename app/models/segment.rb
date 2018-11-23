@@ -22,8 +22,6 @@ class Segment < ActiveRecord::Base
     has_many :members, class_name: 'User', through: :users_segments, source: :user, dependent: :destroy
     has_many :polls_segments, dependent: :destroy
     has_many :polls, through: :polls_segments
-    has_many :events_segments, dependent: :destroy
-    has_many :events, through: :events_segments
     has_many :group_messages_segments, dependent: :destroy
     has_many :group_messages, through: :group_messages_segments
     has_many :invitation_segments_groups, dependent: :destroy
