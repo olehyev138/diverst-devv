@@ -62,14 +62,6 @@
           <% end %>
         </li>
       <% end %>
-      <% if current_user.enterprise.bias_module_enabled %>
-        <li class="nav__item">
-          <%= active_link_to biases_path, class: "nav__link", class_active: "nav__link--is-selected" do %>
-            <%= inline_svg('icons/meet.svg', class: "icon nav__icon") %>
-            <span class="nav__text">Bias</span>
-          <% end %>
-        </li>
-      <% end %>
       <% if current_user.enterprise.mentorship_module_enabled && policy(MentoringInterest).index? %>
         <li class="nav__item">
           <%= active_link_to mentoring_interests_path, class: "nav__link", class_active: "nav__link--is-selected" do %>
