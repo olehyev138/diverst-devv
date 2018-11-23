@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181107043436) do
+ActiveRecord::Schema.define(version: 20181123141047) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -82,55 +82,6 @@ ActiveRecord::Schema.define(version: 20181107043436) do
   end
 
   add_index "badges", ["enterprise_id"], name: "index_badges_on_enterprise_id", using: :btree
-
-  create_table "biases", force: :cascade do |t|
-    t.integer  "user_id",                  limit: 4
-    t.text     "from_data",                limit: 65535
-    t.text     "to_data",                  limit: 65535
-    t.boolean  "anonymous",                              default: true
-    t.integer  "severity",                 limit: 4
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.text     "description",              limit: 65535
-    t.boolean  "spoken_words",                           default: false
-    t.boolean  "marginalized_in_meetings",               default: false
-    t.boolean  "called_name",                            default: false
-    t.boolean  "contributions_ignored",                  default: false
-    t.boolean  "in_documents",                           default: false
-    t.boolean  "unfairly_criticized",                    default: false
-    t.boolean  "sexual_harassment",                      default: false
-    t.boolean  "inequality",                             default: false
-  end
-
-  create_table "biases_from_cities", force: :cascade do |t|
-    t.integer "bias_id", limit: 4
-    t.integer "city_id", limit: 4
-  end
-
-  create_table "biases_from_departments", force: :cascade do |t|
-    t.integer "bias_id",       limit: 4
-    t.integer "department_id", limit: 4
-  end
-
-  create_table "biases_from_groups", force: :cascade do |t|
-    t.integer "group_id", limit: 4
-    t.integer "bias_id",  limit: 4
-  end
-
-  create_table "biases_to_cities", force: :cascade do |t|
-    t.integer "bias_id", limit: 4
-    t.integer "city_id", limit: 4
-  end
-
-  create_table "biases_to_departments", force: :cascade do |t|
-    t.integer "bias_id",       limit: 4
-    t.integer "department_id", limit: 4
-  end
-
-  create_table "biases_to_groups", force: :cascade do |t|
-    t.integer "group_id", limit: 4
-    t.integer "bias_id",  limit: 4
-  end
 
   create_table "budget_items", force: :cascade do |t|
     t.integer  "budget_id",        limit: 4
