@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181107043436) do
+ActiveRecord::Schema.define(version: 20181123101444) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -388,51 +388,6 @@ ActiveRecord::Schema.define(version: 20181107043436) do
     t.string   "default_from_email_address",            limit: 191
     t.string   "default_from_email_display_name",       limit: 191
     t.boolean  "enable_social_media",                                 default: false
-  end
-
-  create_table "event_attendances", force: :cascade do |t|
-    t.integer  "event_id",   limit: 4
-    t.integer  "user_id",    limit: 4
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
-  end
-
-  create_table "event_comments", force: :cascade do |t|
-    t.integer "event_id", limit: 4
-    t.integer "user_id",  limit: 4
-    t.text    "content",  limit: 65535
-  end
-
-  create_table "event_fields", force: :cascade do |t|
-    t.integer "field_id", limit: 4
-    t.integer "event_id", limit: 4
-  end
-
-  create_table "event_invitees", force: :cascade do |t|
-    t.integer "event_id", limit: 4
-    t.integer "user_id",  limit: 4
-  end
-
-  create_table "events", force: :cascade do |t|
-    t.string   "title",                limit: 191
-    t.text     "description",          limit: 65535
-    t.datetime "start"
-    t.datetime "end"
-    t.string   "location",             limit: 191
-    t.integer  "max_attendees",        limit: 4
-    t.integer  "group_id",             limit: 4
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
-    t.string   "picture_file_name",    limit: 191
-    t.string   "picture_content_type", limit: 191
-    t.integer  "picture_file_size",    limit: 4
-    t.datetime "picture_updated_at"
-    t.integer  "owner_id",             limit: 4
-  end
-
-  create_table "events_segments", force: :cascade do |t|
-    t.integer "event_id",   limit: 4
-    t.integer "segment_id", limit: 4
   end
 
   create_table "expense_categories", force: :cascade do |t|
