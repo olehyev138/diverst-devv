@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181123141047) do
+ActiveRecord::Schema.define(version: 20181123174958) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -312,7 +312,6 @@ ActiveRecord::Schema.define(version: 20181123141047) do
     t.text     "cdo_message",                           limit: 65535
     t.boolean  "collaborate_module_enabled",                          default: true,  null: false
     t.boolean  "scope_module_enabled",                                default: true,  null: false
-    t.boolean  "bias_module_enabled",                                 default: false, null: false
     t.boolean  "plan_module_enabled",                                 default: true,  null: false
     t.string   "banner_file_name",                      limit: 191
     t.string   "banner_content_type",                   limit: 191
