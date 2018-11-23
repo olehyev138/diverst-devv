@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181123101444) do
+ActiveRecord::Schema.define(version: 20181123103301) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -151,7 +151,6 @@ ActiveRecord::Schema.define(version: 20181123101444) do
     t.datetime "updated_at",                   null: false
     t.integer  "approver_id",    limit: 4
     t.integer  "requester_id",   limit: 4
-    t.integer  "event_id",       limit: 4
     t.integer  "group_id",       limit: 4
     t.text     "comments",       limit: 65535
     t.string   "decline_reason", limit: 191
@@ -429,7 +428,6 @@ ActiveRecord::Schema.define(version: 20181123101444) do
     t.boolean  "required",                         default: false
     t.string   "field_type",         limit: 191
     t.integer  "enterprise_id",      limit: 4
-    t.integer  "event_id",           limit: 4
     t.integer  "group_id",           limit: 4
     t.integer  "poll_id",            limit: 4
     t.integer  "initiative_id",      limit: 4
