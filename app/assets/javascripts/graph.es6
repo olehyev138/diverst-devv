@@ -33,6 +33,8 @@ class Graph {
         this.renderPieChart()
     else if (this.data.type === "pie")
       this.renderPieChart()
+    else if (this.data.type == 'time_based')
+      this.renderTimeBasedChart()
   }
 
   renderBarChart() {
@@ -128,6 +130,23 @@ class Graph {
         enabled: false
       },
       colors: [this.chartsColor, '#F15E57', '#FE6D4B', '#9FD661', '#40D0AD', '#48C0EB', '#5A9AEF', '#EE85C1']
+    });
+  }
+
+  renderTimeBasedChart() {
+    Highcharts.stockChart(this.$element[0], {
+      title: {
+          text: 'Growth of groups'
+      },
+      rangeSelector: {
+          floating: true,
+          y: -65,
+          verticalAlign: 'bottom'
+      },
+      navigator: {
+          margin: 60
+      },
+      series: this.data.highcharts.series
     });
   }
 }

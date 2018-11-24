@@ -497,6 +497,29 @@ class GenericGraphsController < ApplicationController
         end
     end
 
+    def growth_of_groups
+      series = []
+
+      Group.all.each do |group|
+        series << {
+          name: group.name,
+          data: (group.user_groups.group(:created_at).count)
+            .map { |datetime, count| [datetime.to_time.to_i, count] }
+          }
+      end
+
+      respond_to do |format|
+        format.json {
+          render json: {
+            type: 'time_based',
+            highcharts: {
+              series: series
+            }
+          }
+        }
+      end
+    end
+
     # FOR DEMO PURPOSES
 
     def demo_events_created
