@@ -501,10 +501,12 @@ class GenericGraphsController < ApplicationController
       series = []
 
       Group.all.each do |group|
+        total = 0
         series << {
           name: group.name,
-          data: (group.user_groups.group(:created_at).count)
-            .map { |datetime, count| [datetime.to_time.to_i, count] }
+          data:
+          (group.user_groups.order(:created_at).group(:created_at).count)
+            .map { |datetime, count| [datetime.to_time.to_i, (total += count)] }
           }
       end
 
