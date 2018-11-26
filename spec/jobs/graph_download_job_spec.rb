@@ -14,6 +14,9 @@ RSpec.describe GraphDownloadJob, type: :job do
     let(:poll_graph) { create(:graph, poll: poll, field: field2) }
 
     describe "#perform" do
+        before { User.__elasticsearch__.create_index!(index: User.es_index_name(enterprise: enterprise)) }
+        after { User.__elasticsearch__.delete_index!(index: User.es_index_name(enterprise: enterprise)) }
+
         context "poll graph" do
           it "creates a downloadable csv file" do
               expect{ subject.perform(user.id, poll_graph.id) }
