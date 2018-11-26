@@ -4,6 +4,7 @@
       <% if @segments.any? %>
         <table class="table--has-border" id="segments-table">
           <thead>
+            <th>ID</th>
             <th>Name</th>
             <th># of rules</th>
             <th>Date created</th>
@@ -12,6 +13,7 @@
           <tbody>
             <% @segments.each do |segment| %>
               <tr>
+                <td><%= segment.id %></td>
                 <td><%= link_to segment.name, segment_path(segment), class: "accent" %></td>
                 <td><%= segment.rules.count %></td>
                 <td><%= segment.created_at.to_s :reversed_slashes %></td>
