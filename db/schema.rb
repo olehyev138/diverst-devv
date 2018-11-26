@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181123103301) do
+ActiveRecord::Schema.define(version: 20181126133407) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -970,9 +970,6 @@ ActiveRecord::Schema.define(version: 20181123103301) do
     t.boolean  "polls_index",                             default: false
     t.boolean  "polls_create",                            default: false
     t.boolean  "polls_manage",                            default: false
-    t.boolean  "events_index",                            default: false
-    t.boolean  "events_create",                           default: false
-    t.boolean  "events_manage",                           default: false
     t.boolean  "group_messages_index",                    default: false
     t.boolean  "group_messages_create",                   default: false
     t.boolean  "group_messages_manage",                   default: false
@@ -1034,9 +1031,6 @@ ActiveRecord::Schema.define(version: 20181123103301) do
     t.boolean  "polls_index",                           default: false
     t.boolean  "polls_create",                          default: false
     t.boolean  "polls_manage",                          default: false
-    t.boolean  "events_index",                          default: false
-    t.boolean  "events_create",                         default: false
-    t.boolean  "events_manage",                         default: false
     t.boolean  "group_messages_index",                  default: false
     t.boolean  "group_messages_create",                 default: false
     t.boolean  "group_messages_manage",                 default: false
