@@ -12,6 +12,11 @@ class GroupsController < ApplicationController
         authorize Group
         @groups = GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_manage)
         .resolve.includes(:children).order(:position).all_parents
+
+        respond_to do |format|
+          format.html
+          format.json { render json: GroupDatatable.new(view_context, @groups) }
+        end
     end
 
     def close_budgets

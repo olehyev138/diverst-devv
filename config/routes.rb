@@ -363,6 +363,7 @@ Rails.application.routes.draw do
   end
 
   resources :segments do
+    collection { get 'enterprise_segments' }
     resources :sub_segments
     member do
       get 'export_csv'
