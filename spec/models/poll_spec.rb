@@ -146,6 +146,19 @@ RSpec.describe Poll, type: :model do
                 poll.run_callbacks(:create)
             end
         end
+
+        context 'before_destroy' do 
+            it 'run before_destroy callback successfully' do 
+                expect(poll).to receive(:remove_associated_fields)
+                poll.run_callbacks(:destroy)
+            end
+
+            it 'deletes associated fields if any' do
+                poll.save 
+                create(:field, poll_id: poll.id)
+                expect{poll.reload.destroy}.to change(Field.where(poll_id: poll.id), :count).by(-1)
+            end
+        end
     end
 
     describe "enumerates" do
