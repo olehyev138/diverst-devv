@@ -10,27 +10,40 @@ RSpec.describe Groups::FieldsController, type: :controller do
         context 'when user is logged in' do
             login_user_from_let
 
-
-            it 'returns correct data in json' do
+            context "json format" do
+              before {
                 get :time_series, group_id: group.id, id: field.id, format: :json
-                json_response = JSON.parse(response.body, symbolize_names: true)
+              }
 
-                expect(json_response[:highcharts][0][:name]).to eq field.title
+              it 'returns correct data' do
+                  json_response = JSON.parse(response.body, symbolize_names: true)
+
+                  expect(json_response[:highcharts][0][:name]).to eq field.title
+              end
+
+              it "gets the charts in json format" do
+                  expect(response.content_type).to eq 'application/json'
+              end
             end
 
-            it "gets the charts in json format" do
-                get :time_series, group_id: group.id, id: field.id, format: :json
-                expect(response.content_type).to eq 'application/json' 
-            end
+            context "csv format" do
+              before {
+                  allow(GroupFieldTimeSeriesDownloadJob).to receive(:perform_later)
+                  request.env['HTTP_REFERER'] = "back"
+                  get :time_series, group_id: group.id, id: field.id, format: :csv
+              }
 
-            it "gets the charts in csv format" do
-                get :time_series, group_id: group.id, id: field.id, format: :csv
-                expect(response.content_type).to eq 'text/csv'
-            end
+              it "returns to previous page" do
+                  expect(response).to redirect_to "back"
+              end
 
-            it 'returns file name in csv format' do 
-                get :time_series, group_id: group.id, id: field.id, format: :csv
-                expect(response.headers["Content-Disposition"]).to include "metrics#{field.id}.csv"
+              it "flashes" do
+                  expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
+              end
+
+              it "calls job" do
+                  expect(GroupFieldTimeSeriesDownloadJob).to have_received(:perform_later)
+              end
             end
         end
 

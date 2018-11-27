@@ -33,12 +33,13 @@ class Initiatives::ExpensesController < ApplicationController
   def time_series
     authorize InitiativeExpense, :index?
 
-    data = @initiative.expenses_highcharts_history(
-      from: params[:from] ? Time.at(params[:from].to_i / 1000) : 1.year.ago,
-      to: params[:to] ? Time.at(params[:to].to_i / 1000) : Time.current
-    )
     respond_to do |format|
       format.json {
+        data = @initiative.expenses_highcharts_history(
+          from: params[:from] ? Time.at(params[:from].to_i / 1000) : 1.year.ago,
+          to: params[:to] ? Time.at(params[:to].to_i / 1000) : Time.current
+        )
+
         render json: {
           highcharts: [{
             name: "Expenses",
@@ -47,9 +48,9 @@ class Initiatives::ExpensesController < ApplicationController
         }
       }
       format.csv {
-        strategy = Reports::GraphTimeseriesGeneric.new(title: 'Expenses over time', data: data)
-        report = Reports::Generator.new(strategy)
-        send_data report.to_csv, filename: "expenses.csv"
+        InitiativeExpensesTimeSeriesDownloadJob.perform_later(current_user.id, @initiative.id, params[:from], params[:to])
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
       }
     end
   end
