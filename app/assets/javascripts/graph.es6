@@ -9,7 +9,7 @@ class Graph {
     this.brandingColor = BRANDING_COLOR || $('.primary-header').css('background-color') || '#7B77C9'
     this.chartsColor = CHARTS_COLOR || this.brandingColor
 
-    this.updateData(this.dataUrl);
+    this.updateData();
   }
 
   updateData() {
@@ -135,13 +135,10 @@ class Graph {
 
   renderTimeBasedChart() {
     Highcharts.stockChart(this.$element[0], {
-      title: {
-          text: 'Growth of groups'
-      },
       rangeSelector: {
           floating: true,
           y: -65,
-          verticalAlign: 'bottom'
+          verticalAlign: 'bottom',
       },
       navigator: {
           margin: 60

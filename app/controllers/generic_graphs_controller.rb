@@ -503,7 +503,7 @@ class GenericGraphsController < ApplicationController
       Group.all.each do |group|
         total = 0
 
-        # query es, filter by current group id and aggregate on created_at
+        # query es, filter by current group id, order by created_at and aggregate on created_at
         buckets = UserGroup.__elasticsearch__.search({
           size: 0,
           aggs: {
