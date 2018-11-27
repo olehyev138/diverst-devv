@@ -41,9 +41,11 @@
 
       <div class="card__section card__section--border">
         <%= f.association :managers,
-              collection: @campaign.enterprise.users,
-              input_html: { class: "select2" },
-              label: "Assign <strong>managers</strong> to the group. They will be allowed access to administrative features related to this group only.".html_safe %>
+            as: :select,
+            input_html: { class: "select2-field", autofocus: true },
+            selected: [],
+            label: "Assign <strong>managers</strong> to the group. They will be allowed access to administrative features related to this group only.".html_safe
+        %>
       </div>
 
       <div class="card__section card__section--border">
@@ -80,3 +82,10 @@
     <%= button_tag "Save as draft", value: "draft", name: "campaign[status]", class: "btn btn--secondary" %>
   <% end %>
 </div>
+
+<script>
+ $(document).on('ready page:load', function() {
+   $('.select2-field').select2(
+     async_select('<%= users_path(limit: 10, format: :json) %>'));
+ });
+</script>
