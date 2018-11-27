@@ -8,7 +8,6 @@ class Enterprise < ActiveRecord::Base
     has_many :topics, inverse_of: :enterprise, dependent: :destroy
     has_many :segments, inverse_of: :enterprise, dependent: :destroy
     has_many :groups, inverse_of: :enterprise, dependent: :destroy
-    has_many :events, through: :groups
     has_many :initiatives, through: :groups
     has_many :folders, dependent: :destroy
     has_many :folder_shares, dependent: :destroy

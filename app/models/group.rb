@@ -53,7 +53,6 @@ class Group < ActiveRecord::Base
   has_many :groups_polls, dependent: :destroy
   has_many :polls, through: :groups_polls
   has_many :poll_responses, through: :polls, source: :responses
-  has_many :events, dependent: :destroy
 
   has_many :own_initiatives, class_name: 'Initiative', foreign_key: 'owner_group_id', dependent: :destroy
   has_many :initiative_participating_groups
