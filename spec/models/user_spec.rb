@@ -71,16 +71,11 @@ RSpec.describe User do
         it { expect(user).to have_many(:own_news_links).class_name('NewsLink').with_foreign_key(:author_id) }
         it { expect(user).to have_many(:messages).through(:groups) }
         it { expect(user).to have_many(:message_comments).class_name('GroupMessageComment').with_foreign_key(:author_id) }
-        it { expect(user).to have_many(:events).through(:groups) }
         it { expect(user).to have_many(:social_links).with_foreign_key(:author_id).dependent(:destroy) }
         it { expect(user).to have_many(:initiative_users) }
         it { expect(user).to have_many(:initiatives).through(:initiative_users).source(:initiative) }
         it { expect(user).to have_many(:initiative_invitees) }
         it { expect(user).to have_many(:invited_initiatives).through(:initiative_invitees).source(:initiative) }
-        it { expect(user).to have_many(:event_attendances) }
-        it { expect(user).to have_many(:attending_events).through(:event_attendances).source(:event) }
-        it { expect(user).to have_many(:event_invitees) }
-        it { expect(user).to have_many(:invited_events).through(:event_invitees).source(:event) }
         it { expect(user).to have_many(:managed_groups).with_foreign_key(:manager_id).class_name('Group') }
         it { expect(user).to have_many(:biases).class_name('Bias') }
         it { expect(user).to have_many(:group_leaders) }
@@ -497,9 +492,7 @@ RSpec.describe User do
       group_message_comment = create(:group_message_comment, :author_id => user.id)
       social_link = create(:social_link, :author_id => user.id)
       initiative_user = create(:initiative_user, :user => user)
-      event_invitee = create(:event_invitee, :user => user)
       initiative_invitee = create(:initiative_invitee, :user => user)
-      event_attendance = create(:event_attendance, :user => user)
       #sample = create(:sample, :user => user)
       group_leader = create(:group_leader, :user => user)
       user_reward_action = create(:user_reward_action, :user => user)
@@ -525,9 +518,7 @@ RSpec.describe User do
       expect{GroupMessageComment.find(group_message_comment.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{SocialLink.find(social_link.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{InitiativeUser.find(initiative_user.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      expect{EventInvitee.find(event_invitee.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{InitiativeInvitee.find(initiative_invitee.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      expect{EventAttendance.find(event_attendance.id)}.to raise_error(ActiveRecord::RecordNotFound)
       #expect{Sample.find(sample.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{GroupLeader.find(group_leader.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{UserRewardAction.find(user_reward_action.id)}.to raise_error(ActiveRecord::RecordNotFound)
