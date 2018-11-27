@@ -500,7 +500,7 @@ class GenericGraphsController < ApplicationController
     def growth_of_groups
       series = []
 
-      Group.all.each do |group|
+      current_user.enterprise.groups.each do |group|
         total = 0
 
         # query es, filter by current group id, order by created_at and aggregate on created_at
@@ -512,6 +512,7 @@ class GenericGraphsController < ApplicationController
               aggs: {
                 group_growth_agg: {
                   terms: {
+                    size: 1000,
                     field: :created_at,
                     order: { _term: :asc }
                   }
