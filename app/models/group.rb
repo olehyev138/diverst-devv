@@ -325,6 +325,32 @@ class Group < ActiveRecord::Base
     end
   end
 
+  def budgets_csv
+    CSV.generate do |csv|
+      csv << ['Requested amount', 'Available amount', 'Status', 'Requested at', '# of events', 'Description']
+       self.budgets.order(created_at: :desc).each do |budget|
+        csv << [budget.requested_amount, budget.available_amount, budget.status_title, budget.created_at, budget.budget_items.count, budget.description]
+      end
+    end
+  end
+
+  def field_time_series_csv(field_id)
+    from = Time.at(params[:from] / 1000) rescue nil
+    to = Time.at(params[:to] / 1000) rescue nil
+    data = self.highcharts_history(
+      field: Field.find(field_id),
+      from: from || 1.year.ago,
+      to: to || Time.current + 1.day
+    )
+
+    strategy = Reports::GraphTimeseriesGeneric.new(
+      data: data
+    )
+    report = Reports::Generator.new(strategy)
+
+    report.to_csv
+  end
+
   def title_with_leftover_amount
     "Create event from #{name} leftover ($#{leftover_money})"
   end

@@ -59,7 +59,7 @@ RSpec.describe GraphsController, type: :controller do
         describe "with logged in user" do
             login_user_from_let
 
-            describe 'when metrics_dashboard_id is available in params' do 
+            describe 'when metrics_dashboard_id is available in params' do
                 context "with valid field id" do
                     it "redirect to @collection" do
                         post :create, :metrics_dashboard_id => metrics_dashboard.id, :graph => {field_id: field1.id}
@@ -90,7 +90,7 @@ RSpec.describe GraphsController, type: :controller do
                 end
             end
 
-            describe 'when poll_id is available in params' do 
+            describe 'when poll_id is available in params' do
                 context "with valid field id" do
                     it "redirect to @collection" do
                         post :create, :poll_id => poll.id, :graph => {field_id: field1.id}
@@ -122,8 +122,8 @@ RSpec.describe GraphsController, type: :controller do
             end
         end
 
-       
-    
+
+
         describe "without a logged in user" do
             before { post :create, :metrics_dashboard_id => metrics_dashboard.id, :graph => { field_id: field1.id } }
             it_behaves_like "redirect user to users/sign_in path"
@@ -213,7 +213,7 @@ RSpec.describe GraphsController, type: :controller do
                 get :data, :id => metrics_graph.id, format: :json
                 expect(response.content_type).to eq "application/json"
             end
-            
+
             it "returns json format when time_series is true" do
                 get :data, :id => metrics_graph2.id, format: :json
                 expect(response.content_type).to eq "application/json"
@@ -244,24 +244,44 @@ RSpec.describe GraphsController, type: :controller do
         describe "with logged in user" do
             login_user_from_let
 
-            it "returns response in csv format for metrics_graph" do
-                get :export_csv, :id => metrics_graph.id
-                expect(response.content_type).to eq "text/csv"
+            context "metrics graph" do
+              before {
+                  allow(GraphDownloadJob).to receive(:perform_later)
+                  request.env['HTTP_REFERER'] = "back"
+                  get :export_csv, :id => metrics_graph.id
+              }
+
+              it "returns to previous page" do
+                  expect(response).to redirect_to "back"
+              end
+
+              it "flashes" do
+                  expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
+              end
+
+              it "calls job" do
+                  expect(GraphDownloadJob).to have_received(:perform_later)
+              end
             end
 
-            it "returns response in csv format for poll_graph" do
-                get :export_csv, :id => poll_graph.id
-                expect(response.content_type).to eq "text/csv"
-            end
+            context "poll graph" do
+              before {
+                  allow(GraphDownloadJob).to receive(:perform_later)
+                  request.env['HTTP_REFERER'] = "back"
+                  get :export_csv, :id => poll_graph.id
+              }
 
-            it "returns success" do
-                get :export_csv, :id => poll_graph.id
-                expect(response).to be_success
-            end
+              it "returns to previous page" do
+                  expect(response).to redirect_to "back"
+              end
 
-            it "returns success" do
-                get :export_csv, :id => metrics_graph.id
-                expect(response).to be_success
+              it "flashes" do
+                  expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
+              end
+
+              it "calls job" do
+                  expect(GraphDownloadJob).to have_received(:perform_later)
+              end
             end
         end
 

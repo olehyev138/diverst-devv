@@ -212,14 +212,19 @@ ActiveRecord::Schema.define(version: 20181126133407) do
   add_index "clockwork_database_events", ["frequency_period_id"], name: "index_clockwork_database_events_on_frequency_period_id", using: :btree
 
   create_table "csvfiles", force: :cascade do |t|
-    t.string   "import_file_file_name",    limit: 191
-    t.string   "import_file_content_type", limit: 191
-    t.integer  "import_file_file_size",    limit: 4
+    t.string   "import_file_file_name",      limit: 191
+    t.string   "import_file_content_type",   limit: 191
+    t.integer  "import_file_file_size",      limit: 4
     t.datetime "import_file_updated_at"
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
-    t.integer  "user_id",                  limit: 4,   null: false
-    t.integer  "group_id",                 limit: 4
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+    t.integer  "user_id",                    limit: 4,   null: false
+    t.integer  "group_id",                   limit: 4
+    t.string   "download_file_file_name",    limit: 191
+    t.string   "download_file_content_type", limit: 191
+    t.integer  "download_file_file_size",    limit: 4
+    t.datetime "download_file_updated_at"
+    t.string   "download_file_name",         limit: 191
   end
 
   create_table "custom_texts", force: :cascade do |t|
