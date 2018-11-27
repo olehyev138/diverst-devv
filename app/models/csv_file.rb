@@ -5,9 +5,13 @@ class CsvFile < ActiveRecord::Base
   belongs_to :group
 
   has_attached_file :import_file, s3_permissions: "private"
+  has_attached_file :download_file, s3_permissions: "private"
   do_not_validate_attachment_file_type :import_file
+  do_not_validate_attachment_file_type :download_file
 
   after_commit :schedule_users_import, on: :create
+
+  scope :download_files, -> { where("download_file_file_name <> ''") }
 
   def path_for_csv
     if File.exists?(self.import_file.path)
@@ -20,6 +24,8 @@ class CsvFile < ActiveRecord::Base
   protected
 
   def schedule_users_import
+    return if self.download_file?
+
     if group_id
       GroupMemberImportCSVJob.perform_later(self.id)
     else

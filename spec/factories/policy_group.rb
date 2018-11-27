@@ -8,10 +8,6 @@ FactoryGirl.define do
     polls_create true
     polls_manage true
 
-    events_index true
-    events_create true
-    events_manage true
-
     group_messages_index true
     group_messages_create true
     group_messages_manage true
@@ -84,10 +80,6 @@ FactoryGirl.define do
       polls_index false
       polls_create false
       polls_manage false
-  
-      events_index false
-      events_create false
-      events_manage false
   
       group_messages_index false
       group_messages_create false
@@ -165,10 +157,6 @@ FactoryGirl.define do
     polls_index false
     polls_create false
     polls_manage false
-
-    events_index false
-    events_create false
-    events_manage false
 
     group_messages_index false
     group_messages_create false

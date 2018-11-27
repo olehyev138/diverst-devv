@@ -430,6 +430,12 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :downloads, only: [:index] do
+        collection do
+          get 'download'
+        end
+      end
+
       resources :resources
       resources :mentorship do
         collection do

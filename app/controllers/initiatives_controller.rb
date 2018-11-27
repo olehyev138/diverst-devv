@@ -92,8 +92,9 @@ class InitiativesController < ApplicationController
 
   def export_csv
     authorize Initiative, :index?
-    data =  Initiative.to_csv(initiatives: @group.initiatives, enterprise: current_user.enterprise)
-    send_data data, filename: 'initiatives.csv'
+    InitiativesDownloadJob.perform_later(current_user.id, @group.id)
+    flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+    redirect_to :back
   end
 
   protected

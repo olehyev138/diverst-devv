@@ -26,19 +26,9 @@ class GroupsController < ApplicationController
 
     def close_budgets_export_csv
       authorize Group, :manage_all_group_budgets?
-
-      result =
-        CSV.generate do |csv|
-          csv << ['Group name', 'Annual budget', 'Leftover money', 'Approved budget']
-           current_user.enterprise.groups.includes(:children).all_parents.each do |group|
-             csv << [group.name, group.annual_budget.presence || "Not set", group.leftover_money, group.approved_budget]
-
-             group.children.each do |child|
-               csv << [child.name, child.annual_budget.presence || "Not set", child.leftover_money, child.approved_budget]
-             end
-          end
-        end
-      send_data result, filename: 'global_budgets.csv'
+      GroupsCloseBudgetsDownloadJob.perform_later(current_user.id, current_user.enterprise.id)
+      flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+      redirect_to :back
     end
 
     # calendar for all of the groups
@@ -169,7 +159,7 @@ class GroupsController < ApplicationController
         authorize @group
         update_group
     end
-    
+
     def update_group
         if group_params[:group_category_id].present?
           @group.group_category_type_id = GroupCategory.find_by(id: group_params[:group_category_id])&.group_category_type_id
@@ -201,17 +191,17 @@ class GroupsController < ApplicationController
             end
         end
     end
-    
+
     def update_questions
         authorize @group, :insights?
         update_group
     end
-    
+
     def update_layouts
         authorize @group, :layouts?
         update_group
     end
-    
+
     def update_settings
         authorize @group, :settings?
         update_group
@@ -293,7 +283,7 @@ class GroupsController < ApplicationController
     def export_csv
         authorize @group, :show?
         GroupMemberDownloadJob.perform_later(current_user.id, @group.id)
-        flash[:notice] = "Please check your email in a couple minutes"
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
     end
 

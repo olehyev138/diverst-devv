@@ -54,25 +54,22 @@ RSpec.describe LogsController, type: :controller do
       end
 
       context 'csv output' do
-        before { get :index, :format => :csv }
+        before {
+            allow(LogsDownloadJob).to receive(:perform_later)
+            request.env['HTTP_REFERER'] = "back"
+            get :index, :format => :csv
+        }
 
-        it 'renders a csv file' do
-          content_type = response.headers["Content-Type"]
-          expect(content_type).to eq "text/csv"
+        it "returns to previous page" do
+            expect(response).to redirect_to "back"
         end
 
-        it 'renders correct number of rows in csv file' do
-          body = response.body.split("\n")
-
-          # One row plus header
-          expect(body.count).to eq 2
+        it "flashes" do
+            expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
         end
 
-        it 'creates csv file with correct name' do
-          filename_header = response.headers["Content-Disposition"]
-
-          expect(filename_header).to include enterprise1.name
-          expect(filename_header).to include Date.today.to_s
+        it "calls job" do
+            expect(LogsDownloadJob).to have_received(:perform_later)
         end
       end
     end

@@ -11,7 +11,6 @@ RSpec.describe Enterprise, type: :model do
         it { expect(enterprise).to have_many(:topics).inverse_of(:enterprise) }
         it { expect(enterprise).to have_many(:segments).inverse_of(:enterprise) }
         it { expect(enterprise).to have_many(:groups).inverse_of(:enterprise) }
-        it { expect(enterprise).to have_many(:events).through(:groups) }
         it { expect(enterprise).to have_many(:initiatives).through(:groups) }
         it { expect(enterprise).to have_many(:folders) }
         it { expect(enterprise).to have_many(:folder_shares) }
