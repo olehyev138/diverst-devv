@@ -497,6 +497,51 @@ class GenericGraphsController < ApplicationController
         end
     end
 
+    def growth_of_groups
+      series = []
+
+      current_user.enterprise.groups.each do |group|
+        total = 0
+
+        # query es, filter by current group id, order by created_at and aggregate on created_at
+        buckets = UserGroup.__elasticsearch__.search({
+          size: 0,
+          aggs: {
+            group_growth_agg: {
+              filter: { term: { group_id: group.id } },
+              aggs: {
+                group_growth_agg: {
+                  terms: {
+                    size: 1000,
+                    field: :created_at,
+                    order: { _term: :asc }
+                  }
+                }
+              }
+            }
+          }
+        }).aggregations.group_growth_agg.group_growth_agg.buckets
+
+        # format es query response
+        # get running total by adding each buckets doc count to a total
+        series << {
+          name: group.name,
+          data: buckets.map { |bucket| [ bucket[:key], (total += bucket[:doc_count]) ] }
+        }
+      end
+
+      respond_to do |format|
+        format.json {
+          render json: {
+            type: 'time_based',
+            highcharts: {
+              series: series
+            }
+          }
+        }
+      end
+    end
+
     # FOR DEMO PURPOSES
 
     def demo_events_created

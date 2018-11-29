@@ -83,55 +83,6 @@ ActiveRecord::Schema.define(version: 20181126133407) do
 
   add_index "badges", ["enterprise_id"], name: "index_badges_on_enterprise_id", using: :btree
 
-  create_table "biases", force: :cascade do |t|
-    t.integer  "user_id",                  limit: 4
-    t.text     "from_data",                limit: 65535
-    t.text     "to_data",                  limit: 65535
-    t.boolean  "anonymous",                              default: true
-    t.integer  "severity",                 limit: 4
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.text     "description",              limit: 65535
-    t.boolean  "spoken_words",                           default: false
-    t.boolean  "marginalized_in_meetings",               default: false
-    t.boolean  "called_name",                            default: false
-    t.boolean  "contributions_ignored",                  default: false
-    t.boolean  "in_documents",                           default: false
-    t.boolean  "unfairly_criticized",                    default: false
-    t.boolean  "sexual_harassment",                      default: false
-    t.boolean  "inequality",                             default: false
-  end
-
-  create_table "biases_from_cities", force: :cascade do |t|
-    t.integer "bias_id", limit: 4
-    t.integer "city_id", limit: 4
-  end
-
-  create_table "biases_from_departments", force: :cascade do |t|
-    t.integer "bias_id",       limit: 4
-    t.integer "department_id", limit: 4
-  end
-
-  create_table "biases_from_groups", force: :cascade do |t|
-    t.integer "group_id", limit: 4
-    t.integer "bias_id",  limit: 4
-  end
-
-  create_table "biases_to_cities", force: :cascade do |t|
-    t.integer "bias_id", limit: 4
-    t.integer "city_id", limit: 4
-  end
-
-  create_table "biases_to_departments", force: :cascade do |t|
-    t.integer "bias_id",       limit: 4
-    t.integer "department_id", limit: 4
-  end
-
-  create_table "biases_to_groups", force: :cascade do |t|
-    t.integer "group_id", limit: 4
-    t.integer "bias_id",  limit: 4
-  end
-
   create_table "budget_items", force: :cascade do |t|
     t.integer  "budget_id",        limit: 4
     t.string   "title",            limit: 191
@@ -365,7 +316,6 @@ ActiveRecord::Schema.define(version: 20181126133407) do
     t.text     "cdo_message",                           limit: 65535
     t.boolean  "collaborate_module_enabled",                          default: true,  null: false
     t.boolean  "scope_module_enabled",                                default: true,  null: false
-    t.boolean  "bias_module_enabled",                                 default: false, null: false
     t.boolean  "plan_module_enabled",                                 default: true,  null: false
     t.string   "banner_file_name",                      limit: 191
     t.string   "banner_content_type",                   limit: 191
