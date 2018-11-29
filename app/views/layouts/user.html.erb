@@ -68,11 +68,6 @@
               <%= active_link_to "#{ c_t(:dci_abbreviation) } Points", user_rewards_path %>
             </li>
           <% end %>
-          <% if current_user.enterprise.bias_module_enabled %>
-            <li>
-              <%= active_link_to "Bias", new_bias_path %>
-            </li>
-          <% end %>
           <li>
             <%= active_link_to "Downloads", user_downloads_path %>
           </li>
@@ -96,9 +91,6 @@
       <% end %>
       <% if current_user.enterprise.enable_rewards? %>
         <%= active_link_to "#{ c_t(:dci_abbreviation) } Points", user_rewards_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-      <% end %>
-      <% if current_user.enterprise.bias_module_enabled %>
-        <%= active_link_to "Bias", new_bias_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <% end %>
       <%= active_link_to "Downloads", user_downloads_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
       <%= link_to "Log out", destroy_user_session_path, method: :delete, class: "secondary-header__tab" %>

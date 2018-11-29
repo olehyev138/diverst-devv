@@ -68,8 +68,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :biases
-
   resources :logs, only: [:index]
 
   get 'integrations', to: 'integrations#index'
