@@ -34,7 +34,7 @@ RSpec.describe Polls::GraphsController, type: :controller do
 
             context "with valid params" do 
                 it "creates a graph object" do
-                    expect{ post :create, poll_id: poll.id, graph: { field_id: field.id } }.to change(Graph, :count).by(1)
+                    expect{ post :create, poll_id: poll.id, graph: { field_id: field.id } }.to change(Graph, :count).by(2)
                 end
 
                 it "flashes a notice message" do 
@@ -50,7 +50,7 @@ RSpec.describe Polls::GraphsController, type: :controller do
 
             context "with invalid params" do
                 it "valid graph object not created" do 
-                    expect{ post :create, poll_id: poll.id, graph: { field_id: nil } }.to change(Graph, :count).by(0)
+                    expect{ post :create, poll_id: poll.id, graph: { field_id: nil } }.to change(Graph, :count).by(1)
                 end
 
                 it "flashes an alert message" do  

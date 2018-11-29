@@ -68,7 +68,7 @@ RSpec.describe GraphsController, type: :controller do
 
                     it 'creates new graph' do
                         expect{
-                            post :create, :metrics_dashboard_id => metrics_dashboard.id, :graph => { field_id: field1.id } }.to change(Graph, :count).by(1)
+                            post :create, :metrics_dashboard_id => metrics_dashboard.id, :graph => { field_id: field1.id } }.to change(Graph, :count).by(2)
                     end
 
                     it "flashes a notice message" do
@@ -99,7 +99,7 @@ RSpec.describe GraphsController, type: :controller do
 
                     it 'creates new graph' do
                         expect{
-                        post :create, :poll_id => poll.id, :graph => {field_id: field1.id} }.to change(Graph, :count).by(1)
+                        post :create, :poll_id => poll.id, :graph => {field_id: field1.id} }.to change(Graph, :count).by(2)
                     end
 
                     it "flashes a notice message" do

@@ -400,7 +400,7 @@ RSpec.describe User do
         user
       end
 
-      let!(:poll) { create(:poll, fields: [create(:field)]) }
+      let!(:poll) { create(:poll) }
 
       let!(:poll_response) do
         poll_response = build(:poll_response, user: user, poll: poll)
@@ -415,7 +415,7 @@ RSpec.describe User do
       it 'return data of user to be indexed by elasticsearch' do
         data = {
           "#{ user.enterprise.fields.first.id }" => "No",
-          poll.fields.first.id => "Yes",
+          poll.fields.first.id => ["Yes"],
           groups: [user_group.group_id],
           segments: [user_segment.segment_id]
         }
