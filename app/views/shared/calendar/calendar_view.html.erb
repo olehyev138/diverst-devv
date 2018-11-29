@@ -7,7 +7,7 @@
             <%= f.input :initiative_participating_groups_group_id_in,
                   as: :select,
                   collection: @groups,
-                  input_html: { class: "select2", multiple: true, autofocus: true },
+                  input_html: { class: "select2-field-groups", multiple: true, autofocus: true },
                   label: "Filter by #{ c_t(:erg) }",
                   required: false
             %>
@@ -56,4 +56,4 @@
 
 <div id="calendar" data-calendar-data-url="<%= calendar_data_groups_path(token: params[:token], q: params[:q]) %>"></div>
 
-<%= render partial: 'shared/select2_ajax_search.js.erb' %>
+<%= render partial: 'shared/select2_ajax_search.js.erb' %> 

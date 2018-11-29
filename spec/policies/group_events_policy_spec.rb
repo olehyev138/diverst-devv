@@ -6,7 +6,6 @@ RSpec.describe GroupEventsPolicy, :type => :policy do
   let(:user){ create(:user, :enterprise => enterprise) }
   let(:group){ create(:group, :enterprise => enterprise) }
   let(:no_access) { create(:user) }
-  let(:event){ create(:event, :enterprise => enterprise)}
 
   subject { described_class }
 

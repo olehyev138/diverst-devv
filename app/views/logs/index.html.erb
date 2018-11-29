@@ -16,7 +16,7 @@
             <%= f.input :trackable_id_in,
                   as: :select,
                   collection: @groups,
-                  input_html: { class: "select2", multiple: true },
+                  input_html: { class: "select2-field-groups", multiple: true },
                   label: "Filter by group",
                   required: false
             %>
@@ -50,3 +50,5 @@
     <%= paginate @activities_page %>
   </div>
 </div>
+
+<%= render partial: 'shared/select2_ajax_search.js.erb' %> 

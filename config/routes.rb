@@ -68,8 +68,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :biases
-
   resources :logs, only: [:index]
 
   get 'integrations', to: 'integrations#index'
@@ -96,7 +94,7 @@ Rails.application.routes.draw do
       get 'theme'
       patch 'update_auth'
       patch 'update_fields'
-      patch 'update_mapping'  
+      patch 'update_mapping'
       patch 'update_branding_info'
       patch 'update_branding'
       patch 'update_posts'
@@ -142,7 +140,7 @@ Rails.application.routes.draw do
 
   resources :groups do
     collection do
-      post :sort 
+      post :sort
     end
     resources :budgets, only: [:index, :show, :new, :create, :destroy] do
       post 'approve'
@@ -430,6 +428,12 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :downloads, only: [:index] do
+        collection do
+          get 'download'
+        end
+      end
+
       resources :resources
       resources :mentorship do
         collection do
@@ -524,6 +528,7 @@ Rails.application.routes.draw do
     get 'top_folders_by_views'
     get 'top_resources_by_views'
     get 'top_news_by_views'
+    get 'growth_of_groups'
   end
 
   namespace :website do

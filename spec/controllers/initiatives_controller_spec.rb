@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe InitiativesController, type: :controller do
   include ActiveJob::TestHelper
-  
+
   let(:user) { create :user }
   let!(:group) { create :group, enterprise: user.enterprise }
   let(:outcome) {create :outcome, group_id: group.id}
@@ -151,6 +151,33 @@ RSpec.describe InitiativesController, type: :controller do
     end
   end
 
+  describe "GET#export_csv" do
+    context "with logged in user" do
+      login_user_from_let
+      before {
+          allow(InitiativesDownloadJob).to receive(:perform_later)
+          request.env['HTTP_REFERER'] = "back"
+          get :export_csv, :group_id => group.id
+      }
+
+      it "returns to previous page" do
+          expect(response).to redirect_to "back"
+      end
+
+      it "flashes" do
+          expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
+      end
+
+      it "calls job" do
+          expect(InitiativesDownloadJob).to have_received(:perform_later)
+      end
+    end
+
+    context "without a logged in user" do
+      before { get :export_csv, :group_id => group.id }
+      it_behaves_like "redirect user to users/sign_in path"
+    end
+  end
 
   describe "GET#attendees" do
     let!(:group) { create :group, :with_outcomes, enterprise: user.enterprise }
