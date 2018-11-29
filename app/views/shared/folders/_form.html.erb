@@ -17,7 +17,7 @@
                 input_html: {value: f.object.password} %>
               
       <% if @folder.enterprise %>
-          <%= f.association :groups, collection: current_user.enterprise.groups, label: "Share this folder with your #{c_t(:erg).pluralize}", input_html: { class: "select2" } %>
+          <%= f.association :groups, collection: current_user.enterprise.groups, label: "Share this folder with your #{c_t(:erg).pluralize}", input_html: { class: "select2-field-groups" } %>
       <% end %>
 
       <%= f.button :submit %>
@@ -26,6 +26,8 @@
   <% end %>
 
 </div>
+
+<%= render partial: 'shared/select2_ajax_search.js.erb' %> 
 
 <script>
 

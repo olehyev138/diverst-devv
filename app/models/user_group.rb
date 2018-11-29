@@ -1,11 +1,13 @@
 class UserGroup < ActiveRecord::Base
   include ContainsFields
   include Indexable
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
 
   # associations
   belongs_to :user
   belongs_to :group
-  
+
   # validations
   validates_uniqueness_of :user, scope: [:group], :message => "is already a member of this group"
 
@@ -18,14 +20,22 @@ class UserGroup < ActiveRecord::Base
   after_commit on: [:create] { update_elasticsearch_index(user, user.enterprise, 'update') }
   after_commit on: [:destroy] { update_elasticsearch_index(user, user.enterprise, 'update') }
   before_destroy :remove_leader_role
-  
+
   after_create { update_mentor_fields(true) }
   after_destroy { update_mentor_fields(false) }
-  
+
+  settings do
+    mappings dynamic: false do
+      indexes :user_id, type: :integer
+      indexes :group_id, type: :integer
+      indexes :created_at, type: :date
+    end
+  end
+
   def string_for_field(field)
     field.string_value info[field]
   end
-  
+
   def update_mentor_fields(boolean)
     if group.default_mentor_group
       user.mentee = boolean

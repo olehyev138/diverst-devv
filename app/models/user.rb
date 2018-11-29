@@ -68,7 +68,6 @@ class User < ActiveRecord::Base
     has_many :initiative_invitees, dependent: :destroy
     has_many :invited_initiatives, through: :initiative_invitees, source: :initiative
     has_many :managed_groups, foreign_key: :manager_id, class_name: 'Group'
-    has_many :biases, class_name: "Bias"
     has_many :group_leaders, :dependent => :destroy
     has_many :leading_groups, through: :group_leaders, source: :group
     has_many :user_reward_actions, dependent: :destroy
