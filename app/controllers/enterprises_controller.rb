@@ -58,10 +58,6 @@ class EnterprisesController < ApplicationController
     @groups = @enterprise.groups
   end
 
-  def bias
-    authorize @enterprise, :update?
-  end
-
   # not sure if this is supposed to be here
   def edit_cdo
     authorize @enterprise, :update?
@@ -153,8 +149,6 @@ class EnterprisesController < ApplicationController
     case action_name
     when 'edit_algo', 'edit_mobile_fields'
       'handshake'
-    when 'bias'
-      'bias'
     else
       'global_settings'
     end
