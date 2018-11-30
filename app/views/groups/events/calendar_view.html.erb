@@ -15,7 +15,7 @@
             <%= f.input :initiative_segments_segment_id_in,
                   as: :select,
                   collection: @segments,
-                  input_html: { class: "select2", multiple: true },
+                  input_html: { class: "select2-field-segments", multiple: true },
                   label: "Filter by #{ c_t(:segment) }",
                   required: false
             %>
@@ -29,3 +29,5 @@
   <% end %>
 
 <div id="calendar" data-calendar-data-url="<%= calendar_data_group_events_path(@group, q: params[:q]) %>"></div>
+
+<%= render partial: 'shared/select2_ajax_search.js.erb' %>

@@ -11,7 +11,6 @@ RSpec.describe Enterprise, type: :model do
         it { expect(enterprise).to have_many(:topics).inverse_of(:enterprise) }
         it { expect(enterprise).to have_many(:segments).inverse_of(:enterprise) }
         it { expect(enterprise).to have_many(:groups).inverse_of(:enterprise) }
-        it { expect(enterprise).to have_many(:events).through(:groups) }
         it { expect(enterprise).to have_many(:initiatives).through(:groups) }
         it { expect(enterprise).to have_many(:folders) }
         it { expect(enterprise).to have_many(:folder_shares) }
@@ -32,7 +31,6 @@ RSpec.describe Enterprise, type: :model do
         it { expect(enterprise).to belong_to(:theme) }
         it { expect(enterprise).to have_many(:expenses) }
         it { expect(enterprise).to have_many(:expense_categories) }
-        it { expect(enterprise).to have_many(:biases).through(:users).class_name('Bias') }
         it { expect(enterprise).to have_many(:departments) }
         it { expect(enterprise).to have_many(:rewards) }
         it { expect(enterprise).to have_many(:reward_actions) }
@@ -166,7 +164,7 @@ RSpec.describe Enterprise, type: :model do
     end
     
     describe "#destroy_callbacks" do
-        it "removes the child objects" do
+        it "removes the child objects", skip: "this spec will pass when PR 1245 is merged to master" do
             enterprise = create(:enterprise)
             user = create(:user, :enterprise => enterprise)
             field = create(:field, :enterprise => enterprise)

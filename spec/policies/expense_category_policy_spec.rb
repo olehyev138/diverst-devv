@@ -5,7 +5,7 @@ RSpec.describe ExpenseCategoryPolicy, :type => :policy do
   let(:enterprise) {create(:enterprise)}
   let(:user){ create(:user, :enterprise => enterprise) }
   let(:no_access) { create(:user) }
-  let(:event){ create(:event)}
+  let(:expense_category) { create(:expense_category) }
 
   subject { described_class }
 
@@ -26,11 +26,11 @@ RSpec.describe ExpenseCategoryPolicy, :type => :policy do
     permissions :index? do
       context "when subject campaigns_index is true for user and false for no_access" do
         it "allows access" do
-          expect(subject).to permit(user, event)
+          expect(subject).to permit(user, expense_category)
         end
 
         it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, event)
+          expect(subject).to_not permit(no_access, expense_category)
         end
       end
 
@@ -40,11 +40,11 @@ RSpec.describe ExpenseCategoryPolicy, :type => :policy do
           user.policy_group.campaigns_index = false
           user.policy_group.save!
 
-          expect(subject).to permit(user, event)
+          expect(subject).to permit(user, expense_category)
         end
 
         it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, event)
+          expect(subject).to_not permit(no_access, expense_category)
         end
       end
     end
@@ -52,11 +52,11 @@ RSpec.describe ExpenseCategoryPolicy, :type => :policy do
     permissions :new? do
       context "when subject campaigns_create is true for user and false for no_access" do
         it "allows access" do
-          expect(subject).to permit(user, event)
+          expect(subject).to permit(user, expense_category)
         end
 
         it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, event)
+          expect(subject).to_not permit(no_access, expense_category)
         end
       end
 
@@ -66,11 +66,11 @@ RSpec.describe ExpenseCategoryPolicy, :type => :policy do
           user.policy_group.campaigns_create = false
           user.policy_group.save!
 
-          expect(subject).to permit(user, event)
+          expect(subject).to permit(user, expense_category)
         end
 
         it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, event)
+          expect(subject).to_not permit(no_access, expense_category)
         end
       end
     end
@@ -78,11 +78,11 @@ RSpec.describe ExpenseCategoryPolicy, :type => :policy do
     permissions :create? do
       context "when subject campaigns_create is true for user and false for no_access" do
         it "allows access" do
-          expect(subject).to permit(user, event)
+          expect(subject).to permit(user, expense_category)
         end
 
         it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, event)
+          expect(subject).to_not permit(no_access, expense_category)
         end
       end
 
@@ -92,11 +92,11 @@ RSpec.describe ExpenseCategoryPolicy, :type => :policy do
           user.policy_group.campaigns_create = false
           user.policy_group.save!
 
-          expect(subject).to permit(user, event)
+          expect(subject).to permit(user, expense_category)
         end
 
         it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, event)
+          expect(subject).to_not permit(no_access, expense_category)
         end
       end
     end
@@ -104,11 +104,11 @@ RSpec.describe ExpenseCategoryPolicy, :type => :policy do
     permissions :update? do
       context "when subject campaigns_manage is true for user and false for no_access" do
         it "allows access" do
-          expect(subject).to permit(user, event)
+          expect(subject).to permit(user, expense_category)
         end
 
         it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, event)
+          expect(subject).to_not permit(no_access, expense_category)
         end
       end
     end
@@ -116,11 +116,11 @@ RSpec.describe ExpenseCategoryPolicy, :type => :policy do
     permissions :destroy? do
       context "when subject campaigns_manage is true for user and false for no_access" do
         it "allows access" do
-          expect(subject).to permit(user, event)
+          expect(subject).to permit(user, expense_category)
         end
 
         it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, event)
+          expect(subject).to_not permit(no_access, expense_category)
         end
       end
     end
@@ -139,11 +139,11 @@ RSpec.describe ExpenseCategoryPolicy, :type => :policy do
     permissions :index? do
       context "when subject campaigns_index is true for user and false for no_access" do
         it "allows access" do
-          expect(subject).to permit(user, event)
+          expect(subject).to permit(user, expense_category)
         end
 
         it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, event)
+          expect(subject).to_not permit(no_access, expense_category)
         end
       end
 
@@ -153,11 +153,11 @@ RSpec.describe ExpenseCategoryPolicy, :type => :policy do
           user.policy_group.campaigns_index = false
           user.policy_group.save!
 
-          expect(subject).to permit(user, event)
+          expect(subject).to permit(user, expense_category)
         end
 
         it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, event)
+          expect(subject).to_not permit(no_access, expense_category)
         end
       end
     end
@@ -165,11 +165,11 @@ RSpec.describe ExpenseCategoryPolicy, :type => :policy do
     permissions :new? do
       context "when subject campaigns_create is true for user and false for no_access" do
         it "allows access" do
-          expect(subject).to permit(user, event)
+          expect(subject).to permit(user, expense_category)
         end
 
         it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, event)
+          expect(subject).to_not permit(no_access, expense_category)
         end
       end
 
@@ -179,11 +179,11 @@ RSpec.describe ExpenseCategoryPolicy, :type => :policy do
           user.policy_group.campaigns_create = false
           user.policy_group.save!
 
-          expect(subject).to permit(user, event)
+          expect(subject).to permit(user, expense_category)
         end
 
         it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, event)
+          expect(subject).to_not permit(no_access, expense_category)
         end
       end
     end
@@ -191,11 +191,11 @@ RSpec.describe ExpenseCategoryPolicy, :type => :policy do
     permissions :create? do
       context "when subject campaigns_create is true for user and false for no_access" do
         it "allows access" do
-          expect(subject).to permit(user, event)
+          expect(subject).to permit(user, expense_category)
         end
 
         it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, event)
+          expect(subject).to_not permit(no_access, expense_category)
         end
       end
 
@@ -205,11 +205,11 @@ RSpec.describe ExpenseCategoryPolicy, :type => :policy do
           user.policy_group.campaigns_create = false
           user.policy_group.save!
 
-          expect(subject).to permit(user, event)
+          expect(subject).to permit(user, expense_category)
         end
 
         it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, event)
+          expect(subject).to_not permit(no_access, expense_category)
         end
       end
     end
@@ -217,11 +217,11 @@ RSpec.describe ExpenseCategoryPolicy, :type => :policy do
     permissions :update? do
       context "when subject campaigns_manage is true for user and false for no_access" do
         it "allows access" do
-          expect(subject).to permit(user, event)
+          expect(subject).to permit(user, expense_category)
         end
 
         it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, event)
+          expect(subject).to_not permit(no_access, expense_category)
         end
       end
     end
@@ -229,11 +229,11 @@ RSpec.describe ExpenseCategoryPolicy, :type => :policy do
     permissions :destroy? do
       context "when subject campaigns_manage is true for user and false for no_access" do
         it "allows access" do
-          expect(subject).to permit(user, event)
+          expect(subject).to permit(user, expense_category)
         end
 
         it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, event)
+          expect(subject).to_not permit(no_access, expense_category)
         end
       end
     end

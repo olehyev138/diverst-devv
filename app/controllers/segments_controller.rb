@@ -15,6 +15,15 @@ class SegmentsController < ApplicationController
         end
     end
 
+    def enterprise_segments
+         authorize Segment
+        @segments = policy_scope(Segment).includes(:parent_segment).where(:segmentations => {:id => nil}).distinct
+         respond_to do |format|
+            format.html
+            format.json { render json: EnterpriseSegmentDatatable.new(view_context, @segments) }
+        end
+    end
+
     def new
         authorize Segment
         @segment = current_user.enterprise.segments.new
@@ -38,11 +47,11 @@ class SegmentsController < ApplicationController
         authorize @segment
 
         @groups = current_user.enterprise.groups
-        
+
         @segments = @segment.sub_segments.includes(:members)
 
         members
-        
+
         respond_to do |format|
             format.html
             format.json { render json: SegmentMemberDatatable.new(view_context, @members) }
@@ -75,17 +84,17 @@ class SegmentsController < ApplicationController
     def export_csv
         authorize @segment, :show?
         SegmentMembersDownloadJob.perform_later(current_user.id, @segment.id, params[:group_id])
-        flash[:notice] = "Please check your email in a couple minutes"
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
     end
-    
+
     protected
 
     def members
         if !params[:group_id].blank?
             @group = current_user.enterprise.groups.find_by_id(params[:group_id])
             @members = policy_scope(User).joins(:segments, :groups).where(:segments => {:id => @segment.id}, :groups => {:id => params[:group_id]}).limit(params[:limit] || 25).distinct
-            
+
         else
             @members = policy_scope(User).joins(:segments).where(:segments => {:id => @segment.id}).limit(params[:limit] || 25).distinct
         end

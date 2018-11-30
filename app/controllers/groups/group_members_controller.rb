@@ -52,7 +52,7 @@ class Groups::GroupMembersController < ApplicationController
 
     if @group_member.save
       flash[:notice] = "You are now a member"
-      
+
       if @group.default_mentor_group?
         redirect_to edit_user_mentorship_url(:id => current_user.id)
       # If group has survey questions - redirect user to answer them
@@ -165,7 +165,7 @@ class Groups::GroupMembersController < ApplicationController
   def export_group_members_list_csv
     authorize [@group], :update?, :policy_class => GroupMemberPolicy
     GroupMemberListDownloadJob.perform_later(current_user.id, @group.id)
-    flash[:notice] = "Please check your email in a couple minutes"
+    flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
     redirect_to :back
   end
 
