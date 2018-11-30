@@ -35,6 +35,7 @@ class Poll < ActiveRecord::Base
     validate :validate_initiative_enterprise
     validate :validate_segments_enterprise
     validate :validate_associated_objects
+    validate :at_least_one_field
 
     def can_be_saved_as_draft?
       self.new_record? || self.draft?
@@ -133,6 +134,9 @@ class Poll < ActiveRecord::Base
       PollUsersNotifierJob.perform_later(self.id)
     end
 
+    def at_least_one_field
+        errors[:base] << "Survey is invalid without any field" unless fields.any?
+    end
     
     private
 

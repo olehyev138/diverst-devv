@@ -25,7 +25,7 @@ class PollsController < ApplicationController
       flash[:notice] = "Your survey was created"
       redirect_to action: :index
     else
-      flash[:alert] = "Your survey was not created. Please fix the errors"
+      flash[:alert] = "#{@poll.errors.full_messages.first}"
       render :new
     end
   end

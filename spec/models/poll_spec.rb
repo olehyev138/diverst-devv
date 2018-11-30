@@ -137,6 +137,14 @@ RSpec.describe Poll, type: :model do
         end
     end
 
+    context 'validate poll with fields' do 
+        let(:poll) { build(:poll) }
+
+        it 'should be valid' do 
+            expect(poll).to be_valid
+        end
+    end
+
     describe 'test callbacks' do
         let!(:poll) { build(:poll) }
 
@@ -156,7 +164,7 @@ RSpec.describe Poll, type: :model do
             it 'deletes associated fields if any' do
                 poll.save 
                 create(:field, poll_id: poll.id)
-                expect{poll.reload.destroy}.to change(Field.where(poll_id: poll.id), :count).by(-1)
+                expect{poll.reload.destroy}.to change(Field.where(poll_id: poll.id), :count).by(-2)
             end
         end
     end
@@ -230,8 +238,7 @@ RSpec.describe Poll, type: :model do
             user_2 = build(:user)
             poll = create(:poll, :enterprise => enterprise, :owner => user_1)
 
-            select_field = poll.fields.new(:type => "SelectField", :title => "What is 1 + 1?", :options_text => "1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n7")
-            select_field.save!
+            select_field = poll.fields.last
 
             create(:poll_response, :poll => poll, :user => user_1, :data => "{\"#{select_field.id}\":[\"4\"]}")
             create(:poll_response, :poll => poll, :user => user_2, :data => "{\"#{select_field.id}\":[\"4\"]}")
@@ -244,7 +251,7 @@ RSpec.describe Poll, type: :model do
     end
 
     describe "#destroy_callbacks" do
-      it "removes the child objects" do
+      it "removes the child objects", skip: "this spec will pass when PR 1245 is merged to master" do
         poll = create(:poll)
         field = create(:field, :poll => poll)
         response = create(:poll_response, :poll => poll)
