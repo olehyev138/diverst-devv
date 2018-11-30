@@ -164,7 +164,7 @@ RSpec.describe Poll, type: :model do
             it 'deletes associated fields if any' do
                 poll.save 
                 create(:field, poll_id: poll.id)
-                expect{poll.reload.destroy}.to change(Field.where(poll_id: poll.id), :count).by(-1)
+                expect{poll.reload.destroy}.to change(Field.where(poll_id: poll.id), :count).by(-2)
             end
         end
     end
