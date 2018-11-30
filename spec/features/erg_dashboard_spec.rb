@@ -9,6 +9,9 @@ RSpec.feature 'An ERG dashboard' do
   end
 
   scenario 'shows the upcoming events' do
+    group.upcoming_events_visibility = 'public'
+    group.save!
+
     initiative = create :initiative, owner_group: group, start: 2.days.from_now
     group.outcomes.first.pillars.first.initiatives << initiative
     group.members << user
