@@ -29,7 +29,7 @@
       <div class="card__section card__section--border">
         <%= f.association :segments,
               collection: @campaign.enterprise.segments,
-              input_html: { class: "select2" },
+              input_html: { class: "select2-field-segments" },
               label: "Choose the <strong>#{ c_t(:segment).pluralize }</strong> you want to target within these #{ c_t(:erg) .pluralize }".html_safe %>
       </div>
 
@@ -82,7 +82,6 @@
     <%= button_tag "Save as draft", value: "draft", name: "campaign[status]", class: "btn btn--secondary" %>
   <% end %>
 </div>
-
 
 <%= render partial: 'shared/select2_ajax_search.js.erb' %> 
 
