@@ -179,6 +179,8 @@ class UsersController < ApplicationController
       :active,
       :time_zone,
       :user_role_id,
+      :groups_notifications_frequency,
+      :groups_notifications_date,
       :custom_policy_group,
       policy_group_attributes: [
         :id,
