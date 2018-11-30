@@ -284,7 +284,7 @@ RSpec.describe User do
 
     context 'when user is a leader of an erg' do
       before  do
-        group.members << user
+        create(:user_group, :user => user, :group => group, :accepted_member => true)
         group.group_leaders << GroupLeader.new(group: group, user: user, position_name: 'blah', user_role: user.enterprise.user_roles.where(:role_name => "group_leader").first)
       end
 
@@ -433,7 +433,7 @@ RSpec.describe User do
         user
       end
 
-      let!(:poll) { create(:poll, fields: [create(:field)]) }
+      let!(:poll) { create(:poll) }
 
       let!(:poll_response) do
         poll_response = build(:poll_response, user: user, poll: poll)
@@ -448,7 +448,7 @@ RSpec.describe User do
       it 'return data of user to be indexed by elasticsearch' do
         data = {
           "#{ user.enterprise.fields.first.id }" => "No",
-          poll.fields.first.id => "Yes",
+          poll.fields.first.id => ["Yes"],
           groups: [user_group.group_id],
           segments: [user_segment.segment_id]
         }
@@ -480,7 +480,7 @@ RSpec.describe User do
       user = create(:user)
       device = create(:device, :user => user)
       users_segment = create(:users_segment, :user => user)
-      user_group = create(:user_group, :user => user)
+      user_group = create(:user_group, :user => user, :accepted_member => true)
       topic_feedback = create(:topic_feedback, :user => user)
       #poll_response = create(:poll_response, :user => user)
       answer = create(:answer, :author => user)
@@ -493,7 +493,7 @@ RSpec.describe User do
       initiative_user = create(:initiative_user, :user => user)
       initiative_invitee = create(:initiative_invitee, :user => user)
       #sample = create(:sample, :user => user)
-      group_leader = create(:group_leader, :user => user)
+      group_leader = create(:group_leader, :user => user, group: user_group.group)
       user_reward_action = create(:user_reward_action, :user => user)
       #reward = create(:reward, :responsible_id => user.id)
       

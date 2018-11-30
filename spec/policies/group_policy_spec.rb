@@ -50,6 +50,7 @@ RSpec.describe GroupPolicy, :type => :policy do
     end
 
     it "allows access" do
+      create(:user_group, :user => user, :group => group, :accepted_member => true)
       create(:group_leader, :user => user, :group => group)
       expect(subject).to permit(user, group)
     end
