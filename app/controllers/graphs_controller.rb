@@ -48,9 +48,9 @@ class GraphsController < ApplicationController
   end
 
   def export_csv
-    strategy = @graph.time_series ? Reports::GraphTimeseries.new(@graph) : Reports::GraphStats.new(@graph)
-    report = Reports::Generator.new(strategy)
-    send_data report.to_csv, filename: "graph_#{ @graph.id }.csv"
+    GraphDownloadJob.perform_later(current_user.id, @graph.id)
+    flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+    redirect_to :back
   end
 
   def group_population

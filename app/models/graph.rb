@@ -12,7 +12,7 @@ class Graph < ActiveRecord::Base
     def data
         segments = collection.segments || field.container.enterprise.segments.all
         groups = collection.groups
-        
+
         graph_data =
             if time_series
                 field.highcharts_timeseries(segments: segments, groups: groups)
@@ -27,7 +27,7 @@ class Graph < ActiveRecord::Base
             title: title
         }
     end
-    
+
     def collection
         return metrics_dashboard if metrics_dashboard.present?
         return poll
@@ -35,5 +35,12 @@ class Graph < ActiveRecord::Base
 
     def has_aggregation?
         !aggregation.nil?
+    end
+
+    def graph_csv
+      strategy = self.time_series ? Reports::GraphTimeseries.new(self) : Reports::GraphStats.new(self)
+      report = Reports::Generator.new(strategy)
+
+      report.to_csv
     end
 end

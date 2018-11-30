@@ -149,7 +149,7 @@ class Initiative < ActiveRecord::Base
         enterprise.custom_text.send('erg_text'),
         enterprise.custom_text.send('outcome_text'),
         enterprise.custom_text.send('program_text'),
-        'Initiative', 'Event Name', 'Start Date', 'End Date',
+        'Event Name', 'Start Date', 'End Date',
         'Expenses', 'Budget', 'Metrics 1', 'Metrics 2'
       ]
 
@@ -222,6 +222,34 @@ class Initiative < ActiveRecord::Base
   def full?
     return self.attendees.count >= max_attendees if max_attendees?
     return false
+  end
+
+  def expenses_time_series_csv(time_from = nil, time_to = nil)
+    data = self.expenses_highcharts_history(
+      from: time_from ? Time.at(time_from.to_i / 1000) : 1.year.ago,
+      to: time_to ? Time.at(time_to.to_i / 1000) : Time.current
+    )
+
+    strategy = Reports::GraphTimeseriesGeneric.new(title: 'Expenses over time', data: data)
+    report = Reports::Generator.new(strategy)
+
+    report.to_csv
+  end
+
+  def field_time_series_csv(field_id, time_from = nil, time_to = nil)
+    field = Field.find(field_id)
+    from = Time.at(time_from / 1000) rescue nil
+    to = Time.at(time_to / 1000) rescue nil
+    data = self.highcharts_history(
+      field: field,
+      from: from || 1.year.ago,
+      to: to || Time.current + 1.day
+    )
+
+    strategy = Reports::GraphTimeseriesGeneric.new(data: data)
+    report = Reports::Generator.new(strategy)
+
+    report.to_csv
   end
 
   protected

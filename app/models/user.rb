@@ -18,6 +18,7 @@ class User < ActiveRecord::Base
     scope :enterprise_mentees,  -> ( user_ids = []) { where(mentee: true).where.not(:id => user_ids) }
     scope :mentors_and_mentees, -> { where("mentor = true OR mentee = true").distinct }
     scope :inactive,            -> { where(active: false).distinct }
+    
 
     belongs_to  :enterprise
     belongs_to  :user_role
@@ -61,18 +62,12 @@ class User < ActiveRecord::Base
     has_many :own_news_links, class_name: 'NewsLink', foreign_key: :author_id, dependent: :destroy
     has_many :messages, through: :groups
     has_many :message_comments, class_name: 'GroupMessageComment', foreign_key: :author_id, dependent: :destroy
-    has_many :events, through: :groups
     has_many :social_links, foreign_key: :author_id, dependent: :destroy
     has_many :initiative_users, dependent: :destroy
     has_many :initiatives, through: :initiative_users, source: :initiative
     has_many :initiative_invitees, dependent: :destroy
     has_many :invited_initiatives, through: :initiative_invitees, source: :initiative
-    has_many :event_attendances, dependent: :destroy
-    has_many :attending_events, through: :event_attendances, source: :event
-    has_many :event_invitees, dependent: :destroy
-    has_many :invited_events, through: :event_invitees, source: :event
     has_many :managed_groups, foreign_key: :manager_id, class_name: 'Group'
-    has_many :biases, class_name: "Bias"
     has_many :group_leaders, :dependent => :destroy
     has_many :leading_groups, through: :group_leaders, source: :group
     has_many :user_reward_actions, dependent: :destroy

@@ -1,18 +1,23 @@
 <% if GroupEventsPolicy.new(current_user, [@group]).view_upcoming_events? %>
   <%= link_to "View all", group_events_path(@group), class: "card__action" %>
-  <% if !@upcoming_events.empty? %>
-    <div class="mtlarge text-center">
-      <% if !policy(@group).is_a_member? || !policy(Group).manage_all_groups? %>
-        You have not joined any events yet.
-      <% else %>
+  <% if @group.upcoming_events_visibility == 'public' ||
+    (@group.upcoming_events_visibility == 'group' && current_user.is_member_of?(@group)) ||
+    (@group.upcoming_events_visibility == 'leaders_only' && current_user.is_group_leader_of?(@group))
+  %>
+    <% if !@upcoming_events.empty? %>
+      <div class="mtlarge text-center">
         <% @upcoming_events.each do |event| %>
           <%= render "shared/flippable/event", event: event %>
         <% end %>
-      <% end %>
-    </div>
+      </div>
+    <% else %>
+      <div class="mtlarge text-center">
+        No upcoming events yet.
+      </div>
+    <% end %>
   <% else %>
     <div class="mtlarge text-center">
-      You are not a member of <%= @group.name %>.
+      You do not have permissions to view events in <%= @group.name %>.
     </div>
   <% end %>
 <% end %>

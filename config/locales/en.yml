@@ -26,7 +26,7 @@ en:
     password: "Password"
     remember_me: "Remember Me"
     forgot_password: "Forgot Your Password?"
-  user_group:
+  user:
     hourly: Hourly
     real_time: Real Time
     daily: Daily

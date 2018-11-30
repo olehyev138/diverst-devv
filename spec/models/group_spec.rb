@@ -23,7 +23,6 @@ RSpec.describe Group, :type => :model do
         it{ expect(group).to have_many(:polls).through(:groups_polls) }
         it{ expect(group).to have_many(:leaders).through(:group_leaders) }
         it{ expect(group).to have_many(:poll_responses).through(:polls).source(:responses) }
-        it { expect(group).to have_many(:events) }
 
         it { expect(group).to have_many(:own_initiatives).class_name('Initiative').with_foreign_key('owner_group_id') }
         it { expect(group).to have_many(:initiative_participating_groups) }
@@ -665,7 +664,6 @@ RSpec.describe Group, :type => :model do
             news_feed = create(:news_feed, :group => group)
             user_group = create(:user_group, :group => group)
             groups_poll = create(:groups_poll, :group => group)
-            event = create(:event, :group => group)
             initiative = create(:initiative, :owner_group_id => group.id)
             budget = create(:budget, :group => group)
             group_message = create(:group_message, :group => group)
@@ -690,7 +688,6 @@ RSpec.describe Group, :type => :model do
             expect{NewsFeed.find(news_feed.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{UserGroup.find(user_group.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{GroupsPoll.find(groups_poll.id)}.to raise_error(ActiveRecord::RecordNotFound)
-            expect{Event.find(event.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{Initiative.find(initiative.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{Budget.find(budget.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{GroupMessage.find(group_message.id)}.to raise_error(ActiveRecord::RecordNotFound)
