@@ -5,7 +5,13 @@ class CsvFile < ActiveRecord::Base
   belongs_to :group
 
   has_attached_file :import_file, s3_permissions: "private"
-  has_attached_file :download_file, s3_permissions: "private"
+  has_attached_file :download_file, s3_permissions: "private",
+    s3_headers: lambda { |attachment|
+        {
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment",
+        }
+    }
   do_not_validate_attachment_file_type :import_file
   do_not_validate_attachment_file_type :download_file
 
