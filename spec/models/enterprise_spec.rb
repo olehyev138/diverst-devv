@@ -31,7 +31,6 @@ RSpec.describe Enterprise, type: :model do
         it { expect(enterprise).to belong_to(:theme) }
         it { expect(enterprise).to have_many(:expenses) }
         it { expect(enterprise).to have_many(:expense_categories) }
-        it { expect(enterprise).to have_many(:biases).through(:users).class_name('Bias') }
         it { expect(enterprise).to have_many(:departments) }
         it { expect(enterprise).to have_many(:rewards) }
         it { expect(enterprise).to have_many(:reward_actions) }

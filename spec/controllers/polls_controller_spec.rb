@@ -93,7 +93,7 @@ RSpec.describe PollsController, type: :controller do
 
                 it "flashes an alert message" do
                     post :create, poll: poll_attributes
-                    expect(flash[:alert]).to eq "Your survey was not created. Please fix the errors"
+                    expect(flash[:alert]).to eq "#{assigns[:poll].errors.full_messages.first}"
                 end
             end
         end

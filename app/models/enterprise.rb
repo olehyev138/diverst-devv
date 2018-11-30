@@ -34,7 +34,6 @@ class Enterprise < ActiveRecord::Base
     has_many :expense_categories, dependent: :destroy
     has_many :clockwork_database_events, dependent: :destroy
 
-    has_many :biases, through: :users, class_name: "Bias"
     has_many :departments
 
     # mentorship
