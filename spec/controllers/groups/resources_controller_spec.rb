@@ -8,7 +8,7 @@ RSpec.describe Groups::ResourcesController, type: :controller do
     let!(:admin_resource){ create(:resource, title: "title", enterprise: enterprise, file: fixture_file_upload('files/test.csv', 'text/csv'), resource_type: "admin") }
     let!(:national_resource){ create(:resource, title: "title", enterprise: enterprise, file: fixture_file_upload('files/test.csv', 'text/csv'), resource_type: "national") }
     let(:group){ create(:group, enterprise: user.enterprise) }
-    let(:user_group){ create(:user_group, group: group, user: user) }
+    let!(:user_group){ create(:user_group, group: group, user: user, accepted_member: true) }
 
     describe "GET#index" do
         describe 'with user logged in' do
