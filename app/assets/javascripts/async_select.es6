@@ -29,11 +29,7 @@ function async_select(url, object, options: {}) {
                     case async_select_objects.FOLDERS:
                         return process_folder_results(data, options)
                         break;
-                    case async_select_objects.RESOURCES:
-                        break;
                 }
-
-
             },
             templateSelection: function(item) {
                 return item[0]
