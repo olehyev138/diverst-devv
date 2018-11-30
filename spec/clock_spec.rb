@@ -65,6 +65,6 @@ RSpec.describe Clockwork, :type => :clock do
 
     expect(Clockwork::Test.ran_job?(job)).to be_truthy
     expect(Clockwork::Test.times_run(job)).to eq 1
-    expect(Clockwork::Test.block_for(job).call).to eq Group.find_each { |group| GroupLeaderPostNotificationsJob.perform_later(group) }
+    expect(Clockwork::Test.block_for(job).call).to eq Group.find_each { |group| GroupLeaderPostNotificationsJob.perform_later(group.id) }
   end
 end
