@@ -7,13 +7,17 @@ RSpec.describe Groups::LeadersController, type: :controller do
     end
 
     context 'with logged in user' do
-      let(:user) { create :user }
+      let(:enterprise) { create :enterprise }
+      let(:user) { create :user, enterprise: enterprise }
+      let(:user1) { create :user, enterprise: enterprise }
+      let(:user2) { create :user, enterprise: enterprise } 
       login_user_from_let
 
       context 'with correct group' do
         let!(:group) { create(:group, enterprise: user.enterprise) }
-        let!(:group_leader) { create :group_leader, group: group, user: create(:user, enterprise: user.enterprise) }
-        let!(:other_leader) { create :group_leader, user: create(:user, enterprise: user.enterprise) }
+        let!(:group_membership) { create(:user_group, group: group, user: user1, accepted_member: true) }
+        let!(:group_leader) { create :group_leader, group: group, user: user1 }
+        let!(:other_group_membership) { create :user_group, user: user2, group: create(:group, enterprise: enterprise) }
 
         before { get_index(group.to_param) }
 
@@ -24,8 +28,8 @@ RSpec.describe Groups::LeadersController, type: :controller do
         it 'assigns correct leaders' do
           leaders = assigns(:group_leaders).map { |gl| gl.user }
 
-          expect(leaders).to include(group_leader.user)
-          expect(leaders).to_not include(other_leader.user)
+          expect(leaders).to include(user1)
+          expect(leaders).to_not include(user2)
         end
       end
     end
@@ -76,13 +80,16 @@ RSpec.describe Groups::LeadersController, type: :controller do
     end
 
     context 'with logged in user' do
-      let(:user) { create :user }
+      let(:enterprise) { create :enterprise }
+      let(:user) { create :user, enterprise: enterprise }
       login_user_from_let
 
-      let!(:group) { create :group, enterprise: user.enterprise }
+      let!(:group) { create :group, enterprise: enterprise }
 
-      let(:leader_user) { create :user, enterprise: user.enterprise }
-      let(:leader_attrs) { attributes_for :group_leader, user_id: leader_user.id, group: group, user_role_id: leader_user.enterprise.user_roles.where(:role_name => "group_leader").first }
+      let!(:leader_user) { create :user, enterprise: enterprise }
+      let!(:group_membership) { create(:user_group, user: leader_user, group: group, accepted_member: true) }
+      let!(:leader_attrs) { attributes_for :group_leader, user_id: leader_user.id, group_id: group.id, 
+      position_name: "Admin", user_role_id: leader_user.enterprise.user_roles.where(:role_name => "group_leader").first.id }
 
       context 'with correct params' do
         it 'updates group leaders of a group' do

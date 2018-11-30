@@ -13,6 +13,8 @@ class GroupLeader < ActiveRecord::Base
   scope :role_ids,  ->{ distinct.pluck(:user_role_id) }
 
   after_validation  :set_admin_permissions
+  validate :validate_group_membership_of_group_leader
+
 
   # we want to make sure the group_leader can access certain
   # resources in the admin view
@@ -77,5 +79,11 @@ class GroupLeader < ActiveRecord::Base
     # posts
     self.group_posts_index = template.group_posts_index
     self.manage_posts = template.manage_posts
+  end
+
+  private
+
+  def validate_group_membership_of_group_leader
+    errors.add(:user, "Selected user is not a member of this group") unless UserGroup.find_by user: self.user, group: self.group, accepted_member: true
   end
 end

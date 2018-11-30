@@ -26,6 +26,7 @@ RSpec.describe Groups::PostsController, type: :controller do
             end
 
             context 'policy(@group).erg_leader_permissions? returns true' do
+                let!(:group_membership) { create(:user_group, :user => user, :group => group, :accepted_member => true) }
                 let!(:group_leader) { create(:group_leader, user: user, group: group, visible: true, pending_member_notifications_enabled: false) }
 
                 it 'return count 3' do
