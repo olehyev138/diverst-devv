@@ -452,7 +452,7 @@ class Group < ActiveRecord::Base
 
     unless group['id'].nil?
       update(yammer_group_created: true, yammer_id: group['id'])
-      SyncYammerGroupJob.perform_later(self)
+      SyncYammerGroupJob.perform_later(self.id)
     end
   end
 
