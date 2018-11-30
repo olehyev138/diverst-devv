@@ -18,6 +18,7 @@ class User < ActiveRecord::Base
     scope :enterprise_mentees,  -> ( user_ids = []) { where(mentee: true).where.not(:id => user_ids) }
     scope :mentors_and_mentees, -> { where("mentor = true OR mentee = true").distinct }
     scope :inactive,            -> { where(active: false).distinct }
+    
 
     belongs_to  :enterprise
     belongs_to  :user_role
