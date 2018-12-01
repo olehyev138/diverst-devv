@@ -1,7 +1,10 @@
 class GroupLeaderPostNotificationsJob < ActiveJob::Base
   queue_as :mailers
 
-  def perform(group)
+  def perform(group_id)
+    group = Group.find_by_id(group_id)
+    return if group.nil?
+
     # get the pending posts count
     count = group.pending_posts_count
     # check if group has pending posts
