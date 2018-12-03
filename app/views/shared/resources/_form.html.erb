@@ -11,8 +11,7 @@
         include_blank: true,
         as: :select,
         input_html: { class: 'select2-field', autofocus: true, data: { id: @resource.folder.id } },
-        selected: [],
-        label: 'Move to another folder'
+        label: 'Move to another Folder'
         %>
 
         <%= f.input :file, as: :attachment_preview, label: "Upload the <strong>file</strong> you want to share".html_safe %>

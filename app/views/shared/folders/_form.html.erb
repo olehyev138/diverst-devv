@@ -11,7 +11,6 @@
             include_blank: true,
             as: :select,
             input_html: { class: 'select2-field', autofocus: true, data: { id: @folder.id } },
-            selected: [],
             label: 'Move to Folder'
         %>
 
@@ -35,7 +34,7 @@
 
 </div>
 
-<%= render partial: 'shared/select2_ajax_search.js.erb' %> 
+<%= render partial: 'shared/select2_ajax_search.js.erb' %>
 
 <script>
  $(document).on('ready page:load', function() {
