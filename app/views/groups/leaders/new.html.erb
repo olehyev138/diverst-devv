@@ -4,11 +4,12 @@
 
 <div class="content__main">
   <%= simple_form_for @group, url: group_leaders_path, method: :post do |f| %>
-    <div class="card" id="sortable">
-      <%= f.simple_fields_for :group_leaders do |g| %>
-        <%= render "group_leader_fields", f: g %>
-      <% end %>
-
+    <div class="card">
+      <div id="sortable">
+        <%= f.simple_fields_for :group_leaders do |g| %>
+          <%= render "group_leader_fields", f: g %>
+        <% end %>
+      </div>
       <div class="card__section card__section--border">
         <%= link_to_add_association "Add a leader", f, :group_leaders %>
       </div>
@@ -43,7 +44,7 @@
     },
     processResults: function (data) {
       var int = 1;
-      
+
       // Tranforms the top-level key of the response object from 'items' to 'results'
       return {
         results: $.map(data.data, function(item){
