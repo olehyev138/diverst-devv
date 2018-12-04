@@ -23,7 +23,6 @@ RSpec.describe Group, :type => :model do
         it{ expect(group).to have_many(:polls).through(:groups_polls) }
         it{ expect(group).to have_many(:leaders).through(:group_leaders) }
         it{ expect(group).to have_many(:poll_responses).through(:polls).source(:responses) }
-        it { expect(group).to have_many(:events) }
 
         it { expect(group).to have_many(:own_initiatives).class_name('Initiative').with_foreign_key('owner_group_id') }
         it { expect(group).to have_many(:initiative_participating_groups) }
@@ -356,7 +355,7 @@ RSpec.describe Group, :type => :model do
         it "returns an array with owner and leaders" do
             user = create(:user)
             group = create(:group, :enterprise => user.enterprise, :owner => user)
-
+            create(:user_group, :user => user, :group => group, :accepted_member => true)
             create(:group_leader, :group => group, :user => user)
 
             expect(group.managers.length).to eq(2)
@@ -619,6 +618,7 @@ RSpec.describe Group, :type => :model do
         it 'updates contact email if group leader is default_group_contact' do
             user = create(:user)
             group = create(:group, :enterprise => user.enterprise)
+            create(:user_group, :user => user, :group => group, :accepted_member => true)
 
             group_leader = create(:group_leader, :group => group, :user => user, :default_group_contact => true)
             group_leader = group.group_leaders.find_by(default_group_contact: true)&.user
@@ -630,6 +630,7 @@ RSpec.describe Group, :type => :model do
         it 'sets contact email to nil if group leader is not set.' do
             user = create(:user)
             group = create(:group, :enterprise => user.enterprise)
+            create(:user_group, :user => user, :group => group, :accepted_member => true)
 
             create(:group_leader, :group => group, :user => user, :default_group_contact => false)
             
@@ -665,7 +666,6 @@ RSpec.describe Group, :type => :model do
             news_feed = create(:news_feed, :group => group)
             user_group = create(:user_group, :group => group)
             groups_poll = create(:groups_poll, :group => group)
-            event = create(:event, :group => group)
             initiative = create(:initiative, :owner_group_id => group.id)
             budget = create(:budget, :group => group)
             group_message = create(:group_message, :group => group)
@@ -681,6 +681,7 @@ RSpec.describe Group, :type => :model do
             field = create(:field, :group => group, :field_type => "regular")
             survey_field = create(:field, :group => group, :field_type => "group_survey")
             user = create(:user, :enterprise => group.enterprise)
+            create(:user_group, :user => user, :group => group, :accepted_member => true)
             group_leader = create(:group_leader, :group => group, :user => user)
             child = create(:group, :parent => group)
             
@@ -690,7 +691,6 @@ RSpec.describe Group, :type => :model do
             expect{NewsFeed.find(news_feed.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{UserGroup.find(user_group.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{GroupsPoll.find(groups_poll.id)}.to raise_error(ActiveRecord::RecordNotFound)
-            expect{Event.find(event.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{Initiative.find(initiative.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{Budget.find(budget.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{GroupMessage.find(group_message.id)}.to raise_error(ActiveRecord::RecordNotFound)

@@ -11,10 +11,28 @@ RSpec.describe Groups::PostsController, type: :controller do
     let!(:news_link1) { create(:news_link, :group => group2)}
     let!(:news_link2) { create(:news_link, :group => group2)}
     let!(:news_link3) { create(:news_link, :group => group2)}
-    
+    let!(:news_link4) { create(:news_link, :group => group2)}
+
     let!(:news_feed_link1) { create(:news_feed_link, news_link: news_link1, news_feed: news_feed, approved: true, created_at: Time.now - 5.hours) }
     let!(:news_feed_link2) { create(:news_feed_link, news_link: news_link2, news_feed: news_feed, approved: true, created_at: Time.now - 2.hours) }
     let!(:news_feed_link3) { create(:news_feed_link, news_link: news_link3, news_feed: news_feed, approved: true, created_at: Time.now) }
+
+
+    describe 'Automatically archives expired posts when' do
+        let!(:news_feed_link4) { create(:news_feed_link, news_link: news_link4, news_feed: news_feed, approved: true,
+        created_at: DateTime.now.months_ago(9), updated_at: DateTime.now.months_ago(9)) }
+
+        login_user_from_let
+
+        context 'request is sent to index action' do
+            before { get :index, group_id: group2.id }
+
+            it 'group message should be archived via news_feed_link' do 
+                expect(NewsFeedLink.last.archived_at).to_not be_nil
+            end
+        end
+
+    end
 
     describe 'GET #index' do
         describe 'with user logged in' do
@@ -26,6 +44,7 @@ RSpec.describe Groups::PostsController, type: :controller do
             end
 
             context 'policy(@group).erg_leader_permissions? returns true' do
+                let!(:group_membership) { create(:user_group, :user => user, :group => group, :accepted_member => true) }
                 let!(:group_leader) { create(:group_leader, user: user, group: group, visible: true, pending_member_notifications_enabled: false) }
 
                 it 'return count 3' do

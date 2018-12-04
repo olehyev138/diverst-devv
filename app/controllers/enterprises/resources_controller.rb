@@ -18,6 +18,18 @@ class Enterprises::ResourcesController < ApplicationController
     render '/new'
   end
 
+  def archived
+    super
+  end
+
+  def restore_all
+    super
+  end
+
+  def delete_all
+    super
+  end
+
   protected
 
   def set_container

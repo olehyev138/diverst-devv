@@ -100,7 +100,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="col sm-12 md-6">
       <div class="card">
         <div class="card__section">
@@ -112,7 +112,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="col sm-12 md-6">
       <div class="card">
         <div class="card__section">
@@ -124,7 +124,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="col sm-12 md-6">
       <div class="card">
         <div class="card__section">
@@ -136,7 +136,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="col sm-12 md-6">
       <div class="card">
         <div class="card__section">
@@ -148,7 +148,7 @@
         </div>
       </div>
     </div>
-    
+
     <% if current_user.enterprise.mentorship_module_enabled %>
       <div class="col sm-12 md-6">
         <div class="card">
@@ -161,7 +161,7 @@
           </div>
         </div>
       </div>
-    
+
       <div class="col sm-12 md-6">
       <div class="card">
         <div class="card__section">
@@ -173,7 +173,7 @@
         </div>
       </div>
     </div>
-    
+
       <div class="col sm-12 md-6">
       <div class="card">
         <div class="card__section">
@@ -186,7 +186,19 @@
       </div>
     </div>
     <% end %>
-
+  </div>
+  <div class="row row--equal-height">
+    <div class="col sm-12 md-6">
+      <div class="card">
+        <div class="card__section">
+          <h4>Growth of groups over time</h4>
+          <div class="card__action">
+            <a href="#" class="hidden-xs" onclick="growth_graph_onclick()">Export CSV</a>
+          </div>
+          <div class="graph" data-url="<%= growth_of_groups_generic_graphs_path %>"></div>
+        </div>
+      </div>
+    </div>
   </div>
 
 </div>
@@ -231,3 +243,14 @@
     </div>
   </div>
 </div>
+
+<script>
+ function growth_graph_onclick() {
+   var from_date = $('input.highcharts-range-selector:eq(0)').val();
+   var to_date = $('input.highcharts-range-selector:eq(1)').val();
+
+   window.location.href =
+     '<%= growth_of_groups_generic_graphs_path(format: :csv) %>' +
+     '?from_date=' + from_date + '&to_date=' + to_date;
+ }
+</script>

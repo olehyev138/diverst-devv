@@ -1,0 +1,42 @@
+<script>
+  $(document).on('ready page:load', function(){
+    function init_select2(selector, url){
+      $(selector).select2({
+        ajax: {
+          url: url,
+          theme: 'bootstrap',
+          allowClear: true,
+          type: "GET",
+          dataType: "json",
+          minimumInputLength: 3,
+          multiple:true,
+          delay: 1000,
+          data: function (params) {
+            var query = {
+              search: {
+                value: params.term
+              }
+            }
+      // Query parameters will be ?search=[term]&type=public
+      return query;
+    },
+    processResults: function (data) {
+      var int = 1;
+      
+      // Tranforms the top-level key of the response object from 'items' to 'results'
+      return {
+        results: $.map(data.data, function(item){
+          return {id: item[0], text: item[1] } } )
+      };
+    },
+    templateSelection: function(item) {
+      return item[0]
+    }
+  }
+});
+    };
+
+    init_select2(".select2-field-segments", "<%= enterprise_segments_segments_path(:limit => 10, format: :json) %>")   
+    init_select2(".select2-field-groups", "<%= groups_path(:limit => 10, format: :json) %>") 
+  });
+</script>

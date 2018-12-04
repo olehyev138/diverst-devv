@@ -37,7 +37,7 @@ RSpec.describe UsersController, type: :controller do
                 expect(assigns[:users]).to eq [user]
             end
 
-            describe 'return correct users based on group membership params; :accepted_member and :group_id' do 
+            describe 'return correct users based on group membership params; :accepted_member and :group_id' do
                 let!(:group) { create(:group, enterprise: enterprise) }
                 let!(:other_group) { create(:group, enterprise: enterprise) }
                 let!(:group_membership) { create(:user_group, user_id: user.id, group_id: group.id, accepted_member: true) }
@@ -45,7 +45,7 @@ RSpec.describe UsersController, type: :controller do
                 let!(:other_group_membership) { create(:user_group, user_id: other_user.id, group_id: other_group.id, accepted_member: true) }
                 let!(:search_params)  { { accepted_member: true, group_id: group.id } }
 
-                
+
                 it 'returns 1 UserDatatable object in json' do
                     get :index, user_groups: search_params, format: :json
 
@@ -53,7 +53,7 @@ RSpec.describe UsersController, type: :controller do
                     expect(json_response[:recordsTotal]).to eq 1
                 end
 
-                it 'returns only users that are members of group' do 
+                it 'returns only users that are members of group' do
                     get :index, user_groups: search_params
                     expect(assigns[:users]).to eq [user]
                 end
@@ -399,7 +399,7 @@ RSpec.describe UsersController, type: :controller do
             end
 
             it "flashes" do
-                expect(flash[:notice]).to eq "Please check your email in a couple minutes"
+                expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
             end
 
             it "calls job" do
@@ -415,14 +415,31 @@ RSpec.describe UsersController, type: :controller do
 
     describe "GET#date_histogram", skip: "inconsistent test results" do
         context 'user is logged in' do
-            it "returns response in csv format" do
-                get :date_histogram, :format => :csv
-                expect(response.content_type).to eq "text/csv"
+            context "csv" do
+              before {
+                  allow(UsersDateHistogramDownloadJob).to receive(:perform_later)
+                  request.env["HTTP_REFERER"] = "back"
+                  get :date_histogram, :format => :csv
+              }
+
+              it "redirects to user" do
+                  expect(response).to redirect_to "back"
+              end
+
+              it "flashes" do
+                  expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
+              end
+
+              it "calls job" do
+                  expect(UsersDateHistogramDownloadJob).to have_received(:perform_later)
+              end
             end
 
-            it "returns response in json format" do
-                get :date_histogram, :format => :json
-                expect(response.content_type).to eq "application/json"
+            context "json" do
+              it "returns response in json format" do
+                  get :date_histogram, :format => :json
+                  expect(response.content_type).to eq "application/json"
+              end
             end
         end
     end

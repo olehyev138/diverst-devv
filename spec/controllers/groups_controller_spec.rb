@@ -118,14 +118,22 @@ RSpec.describe GroupsController, type: :controller do
   describe "GET#close_budgets_export_csv" do
     context 'when user is logged in' do
       login_user_from_let
-      before { get :close_budgets_export_csv }
+      before {
+          allow(GroupsCloseBudgetsDownloadJob).to receive(:perform_later)
+          request.env['HTTP_REFERER'] = "back"
+          get :close_budgets_export_csv
+      }
 
-      it "return data in csv format" do
-        expect(response.content_type).to eq 'text/csv'
+      it "returns to previous page" do
+          expect(response).to redirect_to "back"
       end
 
-      it "filename should be 'global_budgets.csv'" do
-        expect(response.headers["Content-Disposition"]).to include 'global_budgets.csv'
+      it "flashes" do
+          expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
+      end
+
+      it "calls job" do
+          expect(GroupsCloseBudgetsDownloadJob).to have_received(:perform_later)
       end
     end
 
@@ -902,7 +910,7 @@ RSpec.describe GroupsController, type: :controller do
       end
 
       it "flashes" do
-          expect(flash[:notice]).to eq "Please check your email in a couple minutes"
+          expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
       end
 
       it "calls job" do

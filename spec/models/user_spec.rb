@@ -6,6 +6,40 @@ RSpec.describe User do
   describe "when validating" do
     let(:user) { build(:user) }
 
+    it { expect(user).to define_enum_for(:groups_notifications_frequency).with([:hourly, :daily, :weekly, :disabled]) }
+    it { expect(user).to define_enum_for(:groups_notifications_date).with([:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]) }
+
+    describe "#notifications_date" do
+      it "returns sunday" do
+        user = create(:user, :groups_notifications_date => 0)
+        expect(user.groups_notifications_date).to eq("sunday")
+      end
+      it "returns default monday" do
+        user = create(:user, :groups_notifications_date => 1)
+        expect(user.groups_notifications_date).to eq("monday")
+      end
+      it "returns tuesday" do
+        user = create(:user, :groups_notifications_date => 2)
+        expect(user.groups_notifications_date).to eq("tuesday")
+      end
+      it "returns wednesday" do
+        user = create(:user, :groups_notifications_date => 3)
+        expect(user.groups_notifications_date).to eq("wednesday")
+      end
+      it "returns thursday" do
+        user = create(:user, :groups_notifications_date => 4)
+        expect(user.groups_notifications_date).to eq("thursday")
+      end
+      it "returns default friday" do
+        user = create(:user)
+        expect(user.groups_notifications_date).to eq("friday")
+      end
+      it "returns saturday" do
+        user = create(:user, :groups_notifications_date => 6)
+        expect(user.groups_notifications_date).to eq("saturday")
+      end
+    end
+
     context 'test validations' do
       it { expect(user).to validate_presence_of(:first_name) }
       it { expect(user).to validate_presence_of(:last_name) }
@@ -37,18 +71,12 @@ RSpec.describe User do
         it { expect(user).to have_many(:own_news_links).class_name('NewsLink').with_foreign_key(:author_id) }
         it { expect(user).to have_many(:messages).through(:groups) }
         it { expect(user).to have_many(:message_comments).class_name('GroupMessageComment').with_foreign_key(:author_id) }
-        it { expect(user).to have_many(:events).through(:groups) }
         it { expect(user).to have_many(:social_links).with_foreign_key(:author_id).dependent(:destroy) }
         it { expect(user).to have_many(:initiative_users) }
         it { expect(user).to have_many(:initiatives).through(:initiative_users).source(:initiative) }
         it { expect(user).to have_many(:initiative_invitees) }
         it { expect(user).to have_many(:invited_initiatives).through(:initiative_invitees).source(:initiative) }
-        it { expect(user).to have_many(:event_attendances) }
-        it { expect(user).to have_many(:attending_events).through(:event_attendances).source(:event) }
-        it { expect(user).to have_many(:event_invitees) }
-        it { expect(user).to have_many(:invited_events).through(:event_invitees).source(:event) }
         it { expect(user).to have_many(:managed_groups).with_foreign_key(:manager_id).class_name('Group') }
-        it { expect(user).to have_many(:biases).class_name('Bias') }
         it { expect(user).to have_many(:group_leaders) }
         it { expect(user).to have_many(:leading_groups).through(:group_leaders).source(:group) }
         it { expect(user).to have_many(:user_reward_actions) }
@@ -256,7 +284,7 @@ RSpec.describe User do
 
     context 'when user is a leader of an erg' do
       before  do
-        group.members << user
+        create(:user_group, :user => user, :group => group, :accepted_member => true)
         group.group_leaders << GroupLeader.new(group: group, user: user, position_name: 'blah', user_role: user.enterprise.user_roles.where(:role_name => "group_leader").first)
       end
 
@@ -405,7 +433,7 @@ RSpec.describe User do
         user
       end
 
-      let!(:poll) { create(:poll, fields: [create(:field)]) }
+      let!(:poll) { create(:poll) }
 
       let!(:poll_response) do
         poll_response = build(:poll_response, user: user, poll: poll)
@@ -420,7 +448,7 @@ RSpec.describe User do
       it 'return data of user to be indexed by elasticsearch' do
         data = {
           "#{ user.enterprise.fields.first.id }" => "No",
-          poll.fields.first.id => "Yes",
+          poll.fields.first.id => ["Yes"],
           groups: [user_group.group_id],
           segments: [user_segment.segment_id]
         }
@@ -452,7 +480,7 @@ RSpec.describe User do
       user = create(:user)
       device = create(:device, :user => user)
       users_segment = create(:users_segment, :user => user)
-      user_group = create(:user_group, :user => user)
+      user_group = create(:user_group, :user => user, :accepted_member => true)
       topic_feedback = create(:topic_feedback, :user => user)
       #poll_response = create(:poll_response, :user => user)
       answer = create(:answer, :author => user)
@@ -463,11 +491,9 @@ RSpec.describe User do
       group_message_comment = create(:group_message_comment, :author_id => user.id)
       social_link = create(:social_link, :author_id => user.id)
       initiative_user = create(:initiative_user, :user => user)
-      event_invitee = create(:event_invitee, :user => user)
       initiative_invitee = create(:initiative_invitee, :user => user)
-      event_attendance = create(:event_attendance, :user => user)
       #sample = create(:sample, :user => user)
-      group_leader = create(:group_leader, :user => user)
+      group_leader = create(:group_leader, :user => user, group: user_group.group)
       user_reward_action = create(:user_reward_action, :user => user)
       #reward = create(:reward, :responsible_id => user.id)
       
@@ -491,9 +517,7 @@ RSpec.describe User do
       expect{GroupMessageComment.find(group_message_comment.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{SocialLink.find(social_link.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{InitiativeUser.find(initiative_user.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      expect{EventInvitee.find(event_invitee.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{InitiativeInvitee.find(initiative_invitee.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      expect{EventAttendance.find(event_attendance.id)}.to raise_error(ActiveRecord::RecordNotFound)
       #expect{Sample.find(sample.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{GroupLeader.find(group_leader.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{UserRewardAction.find(user_reward_action.id)}.to raise_error(ActiveRecord::RecordNotFound)
