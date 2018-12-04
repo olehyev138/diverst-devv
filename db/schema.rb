@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181126133407) do
+ActiveRecord::Schema.define(version: 20181130162607) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -228,19 +228,19 @@ ActiveRecord::Schema.define(version: 20181126133407) do
   end
 
   create_table "custom_texts", force: :cascade do |t|
-    t.text    "erg",               limit: 65535
+    t.string  "erg",               limit: 191, default: "Group"
     t.integer "enterprise_id",     limit: 4
-    t.text    "program",           limit: 65535
-    t.text    "structure",         limit: 65535
-    t.text    "outcome",           limit: 65535
-    t.text    "badge",             limit: 65535
-    t.text    "segment",           limit: 65535
-    t.text    "dci_full_title",    limit: 65535
-    t.text    "dci_abbreviation",  limit: 65535
-    t.text    "member_preference", limit: 65535
-    t.text    "parent",            limit: 65535
-    t.text    "sub_erg",           limit: 65535
-    t.text    "privacy_statement", limit: 65535
+    t.string  "program",           limit: 191, default: "Goal"
+    t.string  "structure",         limit: 191, default: "Structure"
+    t.string  "outcome",           limit: 191, default: "Focus Areas"
+    t.string  "badge",             limit: 191, default: "Badge"
+    t.string  "segment",           limit: 191, default: "Segment"
+    t.string  "dci_full_title",    limit: 191, default: "Engagement"
+    t.string  "dci_abbreviation",  limit: 191, default: "Engagement"
+    t.string  "member_preference", limit: 191, default: "Member Survey"
+    t.string  "parent",            limit: 191, default: "Parent"
+    t.string  "sub_erg",           limit: 191, default: "Sub-Group"
+    t.string  "privacy_statement", limit: 191, default: "Privacy Statement"
   end
 
   add_index "custom_texts", ["enterprise_id"], name: "index_custom_texts_on_enterprise_id", using: :btree

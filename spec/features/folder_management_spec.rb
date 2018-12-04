@@ -88,7 +88,7 @@ RSpec.feature 'Folder management' do
 		end
 
 		scenario 'by changing folder name' do
-			
+
 			within find('.container-fluid') do
 				click_on 'Edit Folder'
 			end
@@ -133,7 +133,7 @@ RSpec.feature 'Folder management' do
 			click_on '+ Add folder'
 
 			expect(current_url).to eq new_enterprise_folder_url(user.enterprise, folder_id: folder_without_pp.id)
-			expect(page).to have_select('folder[parent_id]', selected: folder_without_pp.name)
+			expect(page).to have_select('folder[parent_id]')
 
 			fill_in 'folder[name]', with: 'Sub Folder 1'
 

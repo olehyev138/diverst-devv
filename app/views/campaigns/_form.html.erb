@@ -88,6 +88,9 @@
 <script>
  $(document).on('ready page:load', function() {
    $('.select2-field').select2(
-     async_select('<%= users_path(limit: 10, format: :json) %>'));
+     async_select(
+       '<%= users_path(limit: 10, format: :json) %>',
+       async_select_objects.USERS
+     ));
  });
 </script>

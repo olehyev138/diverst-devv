@@ -13,7 +13,7 @@ RSpec.feature 'CustomText Management' do
 		scenario 'Erg' do
 			visit edit_custom_text_path(enterprise)
 
-			expect(page).to have_content 'Manage ERG'
+			expect(page).to have_content 'Group'
 
 			fill_in 'custom_text[erg]', with: 'Clan'
 
@@ -25,7 +25,7 @@ RSpec.feature 'CustomText Management' do
 		scenario 'Program' do
 			visit group_outcomes_path(group)
 
-			expect(page).to have_content 'Add Program'
+			expect(page).to have_content 'Goal'
 
 			visit edit_custom_text_path(enterprise)
 
@@ -35,8 +35,8 @@ RSpec.feature 'CustomText Management' do
 
 			visit group_outcomes_path(group)
 
-			expect(page).to have_no_content 'Add Program'
-			expect(page).to have_content 'Add Event'
+			expect(page).to have_no_content 'Goal'
+			expect(page).to have_content 'Event'
 		end
 
 		scenario 'Structure' do
@@ -59,7 +59,7 @@ RSpec.feature 'CustomText Management' do
 		scenario 'Outcome' do
 			visit group_outcomes_path(group)
 
-			expect(page).to have_content 'Outcome'
+			expect(page).to have_content 'Focus Areas'
 
 			visit edit_custom_text_path(enterprise)
 
@@ -69,7 +69,7 @@ RSpec.feature 'CustomText Management' do
 
 			visit group_outcomes_path(group)
 
-			expect(page).to have_no_content 'Outcome'
+			expect(page).to have_no_content 'Focus Areas'
 			expect(page).to have_content 'Program Result'
 		end
 
@@ -93,7 +93,7 @@ RSpec.feature 'CustomText Management' do
 		scenario 'Segment' do
 			visit segments_path
 
-			expect(page).to have_content 'Segments'
+			expect(page).to have_content 'Segment'
 
 			visit edit_custom_text_path(enterprise)
 
@@ -103,14 +103,14 @@ RSpec.feature 'CustomText Management' do
 
 			visit segments_path
 
-			expect(page).to have_no_content 'Segments'
+			expect(page).to have_no_content 'Segment'
 			expect(page).to have_content 'Sectors'
 		end
 
 		scenario 'Dci full title and abbreviation' do
 			visit user_rewards_path
 
-			expect(page).to have_content 'Diversity Culture Index (DCI)'
+			expect(page).to have_content 'Engagement'
 
 			visit edit_custom_text_path(enterprise)
 
@@ -121,7 +121,7 @@ RSpec.feature 'CustomText Management' do
 
 			visit user_rewards_path
 
-			expect(page).to have_no_content 'Diversity Culture Index (DCI)'
+			expect(page).to have_no_content 'Engagement'
 			expect(page).to have_content 'Alpha and Beta (A&B)'
 		end
 
@@ -131,7 +131,7 @@ RSpec.feature 'CustomText Management' do
 
 			visit pending_group_group_members_path(group)
 
-			expect(page).to have_content 'Show Member Preference'
+			expect(page).to have_content 'Member Survey'
 
 			visit edit_custom_text_path(enterprise)
 
@@ -141,14 +141,14 @@ RSpec.feature 'CustomText Management' do
 
 			visit pending_group_group_members_path(group)
 
-			expect(page).to have_no_content 'Show Member Preference'
+			expect(page).to have_no_content 'Member Survey'
 			expect(page).to have_content 'Show Member Predisposition'
 		end
 
 		scenario 'Parent' do
 			visit edit_group_path(group)
 
-			expect(page).to have_content 'Parent-Erg'
+			expect(page).to have_content 'Parent-Group'
 
 			visit edit_custom_text_path(enterprise)
 
@@ -158,8 +158,25 @@ RSpec.feature 'CustomText Management' do
 
 			visit edit_group_path(group)
 
-			expect(page).to have_no_content 'Parent-Erg'
-			expect(page).to have_content 'Head-Erg'
+			expect(page).to have_no_content 'Parent'
+			expect(page).to have_content 'Head'
+		end
+
+		scenario 'Sub-Group' do 
+			visit edit_group_path(group)
+
+			expect(page).to have_content 'Sub-Groups'
+
+			visit edit_custom_text_path(enterprise)
+
+			fill_in 'custom_text[sub_erg]', with: 'Sub erg'
+
+			click_on 'Update Custom text'
+
+			visit edit_group_path(group)
+
+			expect(page).to have_content 'Sub-Groups'
+			expect(page).to have_no_content 'Sub erg'
 		end
 	end
 end
