@@ -9,6 +9,7 @@ class User::DashboardController < ApplicationController
     @posts = posts
     @messages = current_user.messages.includes(:group, :owner).limit(3)
     @enterprise_sponsors = @enterprise.sponsors
+    archive_expired_news
   end
 
   def rewards
@@ -36,7 +37,7 @@ class User::DashboardController < ApplicationController
       .includes(:group_message, :news_link, :social_link)
       .where("news_feed_links.news_feed_id IN (?) OR shared_news_feed_links.news_feed_id IN (?)", news_feed_ids, news_feed_ids)
       .where(:approved => true)
-      .where(where, current_user.segments.pluck(:id))
+      .where(where, current_user.segments.pluck(:id)).where(archived_at: nil)
       .order(created_at: :desc)
       .distinct
       .limit(5) #just to not fetch everything, we'll filter it later

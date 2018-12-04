@@ -851,6 +851,7 @@ ActiveRecord::Schema.define(version: 20181130162607) do
     t.integer  "group_message_id", limit: 4
     t.integer  "social_link_id",   limit: 4
     t.boolean  "is_pinned",                  default: false
+    t.datetime "archived_at"
   end
 
   create_table "news_feeds", force: :cascade do |t|
@@ -1102,6 +1103,7 @@ ActiveRecord::Schema.define(version: 20181130162607) do
     t.integer  "folder_id",            limit: 4
     t.integer  "group_id",             limit: 4
     t.integer  "initiative_id",        limit: 4
+    t.datetime "archived_at"
   end
 
   create_table "reward_actions", force: :cascade do |t|
