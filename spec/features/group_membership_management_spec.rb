@@ -320,11 +320,11 @@ RSpec.feature 'Group Membership Management' do
 	    		click_on '+ Add members'
 
 	    		expect(page).to have_content "Add Members to #{group.name}"
-
-	    		select guest_user.name, from: 'group[member_ids][]'
+	    		
+				first('.select2-container', minimum: 1).click
+				find('li.select2-results__option[role="treeitem"]', text: "#{guest_user.first_name} #{guest_user.last_name} - #{guest_user.email}").click
 
 	    		click_on 'Update Group'
-
 
 	    		expect(page).to have_current_path group_group_members_path(group)
 	    		within('.content__header h1') do

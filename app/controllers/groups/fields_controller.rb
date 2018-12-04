@@ -8,16 +8,17 @@ class Groups::FieldsController < ApplicationController
 
   def time_series
     authorize @group, :show?
-    from = Time.at(params[:from] / 1000) rescue nil
-    to = Time.at(params[:to] / 1000) rescue nil
-    data = @group.highcharts_history(
-      field: @field,
-      from: from || 1.year.ago,
-      to: to || Time.current + 1.day
-    )
 
     respond_to do |format|
       format.json {
+        from = Time.at(params[:from] / 1000) rescue nil
+        to = Time.at(params[:to] / 1000) rescue nil
+        data = @group.highcharts_history(
+          field: @field,
+          from: from || 1.year.ago,
+          to: to || Time.current + 1.day
+        )
+
         render json: {
           highcharts: [{
             name: @field.title,
@@ -26,11 +27,9 @@ class Groups::FieldsController < ApplicationController
         }
       }
       format.csv {
-        strategy = Reports::GraphTimeseriesGeneric.new(
-          data: data
-        )
-        report = Reports::Generator.new(strategy)
-        send_data report.to_csv, filename: "metrics#{ @field.id }.csv"
+        GroupFieldTimeSeriesDownloadJob.perform_later(current_user.id, @group.id, @field.id)
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
       }
     end
   end

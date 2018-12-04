@@ -4,12 +4,13 @@ class Groups::NewsLinksController < ApplicationController
     before_action :authenticate_user!
 
     before_action :set_group, except: [:url_info]
-    before_action :set_news_link, only: [:comments, :create_comment, :edit, :update, :destroy, :news_link_photos]
+    before_action :set_news_link, only: [:comments, :create_comment, :edit, :update, :destroy, :news_link_photos, :archive]
 
     layout 'erg'
 
     def index
         @news_links = @group.news_links.includes(:author).order(created_at: :desc)
+        archive_expired_news
     end
 
     def new
@@ -23,6 +24,7 @@ class Groups::NewsLinksController < ApplicationController
         @comments = @news_link.comments.includes(:author)
         @new_comment = NewsLinkComment.new
         @news_link.increment_view(current_user)
+        archive_expired_news
     end
 
     def create_comment
@@ -87,6 +89,17 @@ class Groups::NewsLinksController < ApplicationController
     def news_link_photos
         @resize = true
         @photos = @news_link.photos
+    end
+
+    def archive
+        authorize [@group, @news_link], :archive?, :policy_class => GroupNewsLinkPolicy
+
+        @news_link.news_feed_link.update(archived_at: DateTime.now)
+
+        respond_to do |format|
+           format.html { redirect_to :back }
+           format.js
+        end
     end
 
     protected

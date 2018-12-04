@@ -8,6 +8,7 @@ class User::NewsLinksController < ApplicationController
     authorize NewsLink
     @count = posts.count
     @posts = posts.limit(@limit)
+    archive_expired_news
   end
 
   private
@@ -21,7 +22,7 @@ class User::NewsLinksController < ApplicationController
       .joins(:news_feed).joins(joins)
       .includes(:group_message, :news_link, :social_link)
       .where("news_feed_links.news_feed_id IN (?) OR shared_news_feed_links.news_feed_id IN (?)", news_feed_ids, news_feed_ids)
-      .where(:approved => true)
+      .where(:approved => true, :archived_at => nil)
       .where(where, current_user.segments.pluck(:id))
       .order(created_at: :desc)
       .distinct

@@ -133,4 +133,28 @@ class Campaign < ActiveRecord::Base
         return 0 if questions.count == 0
         (questions.solved.count.to_f / questions.count * 100).round
     end
+
+    def contributions_per_erg_csv(erg_text)
+      data = self.contributions_per_erg
+
+      flatten_data = data[:series].map{ |d| d[:data] }.flatten
+      strategy = Reports::GraphStatsGeneric.new(
+        title: "Contributions per #{ erg_text }",
+        categories: flatten_data.map{ |d| d[:name] }.uniq,
+        data: flatten_data.map{ |d| d[:y] }
+      )
+      report = Reports::Generator.new(strategy)
+
+      report.to_csv
+    end
+
+    def top_performers_csv
+      data = self.top_performers
+
+      strategy = Reports::GraphStatsGeneric.new(title: 'Top performers',
+        categories: data[:categories], data: data[:series].map{ |d| d[:data] }.flatten)
+      report = Reports::Generator.new(strategy)
+
+      report.to_csv
+    end
 end

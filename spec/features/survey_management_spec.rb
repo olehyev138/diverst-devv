@@ -9,17 +9,6 @@ RSpec.feature 'Survey Management' do
 		login_as(admin_user, scope: :user)
 	end
 
-	scenario 'create survey', js: true do
-		visit new_poll_path
-
-		fill_in 'poll[title]', with: 'First Group Survey'
-		fill_in 'poll[description]', with: 'Everyone is welcome to fill out this particular survey'
-		select group.name, from: 'Choose the ERGs you want to target'
-
-		click_on 'Save and publish'
-
-		expect(page).to have_content 'First Group Survey'
-	end
 
 	context 'when creating a survey' do
 		before do
@@ -27,7 +16,7 @@ RSpec.feature 'Survey Management' do
 
 			fill_in 'poll[title]', with: 'First Group Survey'
 			fill_in 'poll[description]', with: 'Everyone is welcome to fill out this particular survey'
-			select group.name, from: 'Choose the ERGs you want to target'
+			select group.name, from: 'Choose the Groups you want to target'
 		end
 
 		scenario 'add custom text field', js: true do
