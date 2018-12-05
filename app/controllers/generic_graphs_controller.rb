@@ -461,17 +461,12 @@ class GenericGraphsController < ApplicationController
         respond_to do |format|
             format.json {
               news_feed_link_ids = NewsFeedLink.where(:news_feed_id => NewsFeed.where(:group_id => current_user.enterprise.groups.ids).ids).ids
-              news_links = NewsLink
-                .select('DISTINCT news_links.title, views.view_count, groups.name')
-                .joins(:group, :news_feed_link, 'JOIN views on news_feed_links.id = views.news_feed_link_id')
-                .where(:news_feed_links => {:id => news_feed_link_ids})
-                .limit(20)
-                .order('view_count DESC')
+              views = View.joins(:news_feed_link => :news_link).where(:news_feed_link_id => news_feed_link_ids).group("news_links.title").order("sum_view_count DESC").limit(20).sum(:view_count).to_a
 
-              data = news_links.map do |news_link|
+              data = views.map do |view|
                   {
-                      y: news_link.view_count,
-                      name: news_link.name + ': ' + news_link.title
+                      y: view.second,
+                      name: view.first
                   }
               end
 
