@@ -48,22 +48,6 @@
         </div>
       </div>
     </div>
-    <div class="row visible-xs">
-      <div class="col-xs-12">
-        <p>
-          <%= raw news_link.description %>
-          <% if news_link.url.present? %>
-            <p>
-              <%= link_to nil, news_link.url, target: '_blank', 'data-trackable-id': news_link.news_feed_link.id, 'data-trackable-type': "news_feed_link", class: "trackable-views" %>
-            </p>
-          <% end %>
-          <% if news_link.author.present? %>
-            <span class="muted">Posted by <%=  news_link.author.name_with_status %></span>
-          <% end %>
-          <br>
-          <%= link_to "Comments(#{news_link.comments_count})", comments_group_news_link_path(news_link.group,news_link) %>
-      </div>
-    </div>
     <div class="row">
       <div class="col-xs-8">
         <span class="hidden-xs pull-right">
