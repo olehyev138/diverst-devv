@@ -173,12 +173,6 @@ ActiveRecord::Schema.define(version: 20181207153756) do
     t.integer  "initiative_id", limit: 4
   end
 
-  create_table "cities", force: :cascade do |t|
-    t.string   "name",       limit: 191
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-  end
-
   create_table "ckeditor_assets", force: :cascade do |t|
     t.string   "data_file_name",    limit: 191
     t.string   "data_content_type", limit: 191
