@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181206232459) do
+ActiveRecord::Schema.define(version: 20181207092445) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -171,12 +171,6 @@ ActiveRecord::Schema.define(version: 20181206232459) do
     t.datetime "updated_at",                null: false
     t.integer  "budget_id",     limit: 4
     t.integer  "initiative_id", limit: 4
-  end
-
-  create_table "cities", force: :cascade do |t|
-    t.string   "name",       limit: 191
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
   end
 
   create_table "ckeditor_assets", force: :cascade do |t|
