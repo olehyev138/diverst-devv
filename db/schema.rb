@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181207141041) do
+ActiveRecord::Schema.define(version: 20181207153756) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -672,22 +672,6 @@ ActiveRecord::Schema.define(version: 20181207141041) do
   add_index "likes", ["user_id", "answer_id", "enterprise_id"], name: "index_likes_on_user_id_and_answer_id_and_enterprise_id", unique: true, using: :btree
   add_index "likes", ["user_id", "news_feed_link_id", "enterprise_id"], name: "index_likes_on_user_id_and_news_feed_link_id_and_enterprise_id", unique: true, using: :btree
   add_index "likes", ["user_id"], name: "index_likes_on_user_id", using: :btree
-
-  create_table "matches", force: :cascade do |t|
-    t.integer  "user1_id",            limit: 4
-    t.integer  "user2_id",            limit: 4
-    t.integer  "user1_status",        limit: 4,  default: 0
-    t.integer  "user2_status",        limit: 4,  default: 0
-    t.float    "score",               limit: 24
-    t.time     "score_calculated_at"
-    t.datetime "created_at",                                     null: false
-    t.datetime "updated_at",                                     null: false
-    t.boolean  "archived",                       default: false
-    t.integer  "topic_id",            limit: 4
-    t.integer  "user1_rating",        limit: 4
-    t.integer  "user2_rating",        limit: 4
-    t.datetime "both_accepted_at"
-  end
 
   create_table "mentoring_interests", force: :cascade do |t|
     t.integer  "enterprise_id", limit: 4
