@@ -68,27 +68,6 @@ RSpec.describe Enterprise, type: :model do
         end
     end
 
-    describe "#update_matches" do
-        it "calls GenerateEnterpriseMatchesJob" do
-            enterprise = build_stubbed(:enterprise)
-            allow(GenerateEnterpriseMatchesJob).to receive(:perform_later)
-
-            enterprise.update_matches
-            expect(GenerateEnterpriseMatchesJob).to have_received(:perform_later)
-        end
-    end
-
-    describe "#update_match_scores" do
-        it "calls CalculateMatchScoreJob" do
-            enterprise = create(:enterprise)
-            create_list(:user, 2, :enterprise => enterprise)
-            allow(CalculateMatchScoreJob).to receive(:perform_later)
-
-            enterprise.update_match_scores
-            expect(CalculateMatchScoreJob).to have_received(:perform_later).at_least(:once)
-        end
-    end
-
     describe "#custom_text" do
         context "when enterprise does not have a custom_text" do
             let!(:enterprise){ build(:enterprise, custom_text: nil) }
