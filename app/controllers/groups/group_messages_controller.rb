@@ -80,7 +80,7 @@ class Groups::GroupMessagesController < ApplicationController
     end
 
     def archive
-        authorize [@group, @message], :archive?, :policy_class => GroupMessagePolicy
+        authorize current_user.enterprise, :manage_posts?, :policy_class => EnterprisePolicy
         @message.news_feed_link.update(archived_at: DateTime.now)
         
         respond_to do |format|

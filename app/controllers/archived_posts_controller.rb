@@ -7,11 +7,11 @@ class ArchivedPostsController < ApplicationController
   def index
     # get all news feed for current enterprise
   	@posts = NewsFeed.archived_posts(current_user.enterprise).order(created_at: :desc)
-    authorize [@posts], :index?, :policy_class => ArchivedPostsPolicy
+    authorize current_user.enterprise, :manage_posts?, :policy_class => EnterprisePolicy
   end
 
   def destroy
-    authorize [@post], :destroy?, :policy_class => ArchivedPostsPolicy
+    authorize current_user.enterprise, :manage_posts?, :policy_class => EnterprisePolicy
     @post.destroy
 
     respond_to do |format|
@@ -22,7 +22,7 @@ class ArchivedPostsController < ApplicationController
 
   def delete_all
     @posts = NewsFeed.archived_posts(current_user.enterprise)
-    authorize [@posts], :delete_all?, :policy_class => ArchivedPostsPolicy
+    authorize current_user.enterprise, :manage_posts?, :policy_class => EnterprisePolicy
     @posts.delete_all
 
     respond_to do |format|
@@ -33,7 +33,7 @@ class ArchivedPostsController < ApplicationController
 
   def restore_all
     @posts = NewsFeed.archived_posts(current_user.enterprise)
-    authorize [@posts], :restore_all?, :policy_class => ArchivedPostsPolicy
+    authorize current_user.enterprise, :manage_posts?, :policy_class => EnterprisePolicy
     @posts.update_all(archived_at: nil)
     
     respond_to do |format|
@@ -44,7 +44,7 @@ class ArchivedPostsController < ApplicationController
 
   def restore
     @post.update(archived_at: nil)
-    authorize [@post.group, @post.news_link || @post.group_message], :restore?, :policy_class => ArchivedPostsPolicy 
+    authorize current_user.enterprise, :manage_posts?, :policy_class => EnterprisePolicy
 
     respond_to do |format|
       format.html { redirect_to :back }

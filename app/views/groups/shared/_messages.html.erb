@@ -1,5 +1,5 @@
 <div class="card__section card__section--border" id="restored_message_<%= message.id %>">
-  <% if GroupMessagePolicy.new(current_user, [message.group]).archive? %>
+  <% if  EnterprisePolicy.new(current_user, current_user.enterprise).manage_posts? %>
     <%= link_to archive_group_group_message_path(message.group, message), method: :patch, remote: true do %>
       Archive
     <% end %>
