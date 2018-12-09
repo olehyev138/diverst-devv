@@ -22,6 +22,9 @@
           <%= active_link_to "Resources", enterprise_folders_path(current_user.enterprise) if EnterpriseFolderPolicy.new(current_user).index? %>
         </li>
         <li>
+          <%= active_link_to "Archived Posts", archived_posts_path %>
+        </li>
+        <li>
           <%= active_link_to "Calendar", calendar_groups_path if policy(Group).calendar? %>
         </li>
         <% if current_user.enterprise.plan_module_enabled %>
@@ -48,6 +51,18 @@
     <%= active_link_to c_t(:erg).pluralize, groups_path, :active => :exact, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Group).create? %>
     <%= active_link_to c_t(:segment).pluralize, segments_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Segment).index? %>
     <%= active_link_to "Resources", enterprise_folders_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if EnterpriseFolderPolicy.new(current_user).index? %>
+
+    <%= active_link_to 'Archive&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"Archive", "aria-control": "navigation", "data-jq-dropdown": "#archive", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
+    <nav id="archive" class="jq-dropdown jq-dropdown-tip">
+      <ul class="jq-dropdown-menu">
+        <li>
+          <%= active_link_to "Archived Posts", archived_posts_path, class: "secondary-header__tab" %>     
+        </li>
+        <li>
+          <%= active_link_to "Archived Resources", archived_enterprise_resources_path(current_user.enterprise), class: "secondary-header__tab" %>
+        </li>
+      </ul>
+    </nav>
     <%= active_link_to "Calendar", calendar_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if policy(Group).calendar? %>
   </div>
 <% end %>

@@ -173,12 +173,6 @@ ActiveRecord::Schema.define(version: 20181209212951) do
     t.integer  "initiative_id", limit: 4
   end
 
-  create_table "cities", force: :cascade do |t|
-    t.string   "name",       limit: 191
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-  end
-
   create_table "ckeditor_assets", force: :cascade do |t|
     t.string   "data_file_name",    limit: 191
     t.string   "data_content_type", limit: 191
@@ -244,13 +238,6 @@ ActiveRecord::Schema.define(version: 20181209212951) do
   end
 
   add_index "custom_texts", ["enterprise_id"], name: "index_custom_texts_on_enterprise_id", using: :btree
-
-  create_table "departments", force: :cascade do |t|
-    t.integer  "enterprise_id", limit: 4,   null: false
-    t.string   "name",          limit: 191
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-  end
 
   create_table "devices", force: :cascade do |t|
     t.string   "token",      limit: 191
@@ -852,6 +839,7 @@ ActiveRecord::Schema.define(version: 20181209212951) do
     t.integer  "group_message_id", limit: 4
     t.integer  "social_link_id",   limit: 4
     t.boolean  "is_pinned",                  default: false
+    t.datetime "archived_at"
   end
 
   create_table "news_feeds", force: :cascade do |t|
@@ -1103,6 +1091,7 @@ ActiveRecord::Schema.define(version: 20181209212951) do
     t.integer  "folder_id",            limit: 4
     t.integer  "group_id",             limit: 4
     t.integer  "initiative_id",        limit: 4
+    t.datetime "archived_at"
   end
 
   create_table "reward_actions", force: :cascade do |t|

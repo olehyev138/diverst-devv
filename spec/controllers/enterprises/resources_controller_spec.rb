@@ -271,4 +271,58 @@ RSpec.describe Enterprises::ResourcesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
+    describe 'GET#archived' do 
+        context 'when user is logged' do
+            let!(:archived_resource) { create(:resource, folder: create(:folder, enterprise: enterprise), enterprise: enterprise, archived_at: DateTime.now) }
+            login_user_from_let
+            before { get :archived, enterprise_id: enterprise.id }
+
+            it "render archived template" do
+                expect(response).to render_template :archived
+            end
+
+            it 'returns one archived resource' do 
+                expect(assigns[:resources].count).to eq 1
+            end
+        end
+    end
+
+    describe 'POST#restore_all' do 
+        let!(:archived_resources) { create_list(:resource, 2, enterprise: enterprise, folder: create(:folder, enterprise: enterprise),
+                archived_at: DateTime.now) }
+        
+        context 'when user restores all resources' do
+            login_user_from_let
+            before { request.env['HTTP_REFERER'] = 'back' }
+
+            it 'redirects back' do 
+                post :restore_all, enterprise_id: enterprise.id
+                expect(response).to redirect_to 'back'
+            end
+
+            it 'restore all archived resources' do 
+                expect{post :restore_all, enterprise_id: enterprise.id}.to change(Resource.where.not(archived_at: nil), :count).by(-2)
+            end
+        end
+    end
+
+    describe 'POST#delete_all' do  
+        let!(:archived_resources) { create_list(:resource, 2, enterprise: enterprise, folder: create(:folder, enterprise: enterprise),
+                archived_at: DateTime.now) }
+        
+        context 'when user deletes all resources' do 
+            login_user_from_let
+            before { request.env['HTTP_REFERER'] = 'back' }
+
+            it 'redirects back' do
+                post :delete_all, enterprise_id: enterprise.id 
+                expect(response).to redirect_to 'back'
+            end
+
+            it 'deletes all archived resources' do
+                expect{post :delete_all, enterprise_id: enterprise.id}.to change(Resource.where.not(archived_at: nil), :count).by(-2)
+            end
+        end
+    end
 end
