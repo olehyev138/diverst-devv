@@ -11,7 +11,7 @@
         <% end %>
       </div>
       <div class="card__section card__section--border">
-        <%= link_to_add_association "Add a leader", f, :group_leaders %>
+        <%= link_to_add_association "Add a leader", f, :group_leaders, class: 'add_leader' %>
       </div>
     </div>
 
@@ -21,6 +21,10 @@
 
 <script>
   $(document).on('ready page:load', function(){
+    $(".add_leader").
+      data("association-insertion-method", 'append').
+      data("association-insertion-node", '#sortable-list');
+
     function init_select2(selector){
       $(selector).select2({
         ajax: {
