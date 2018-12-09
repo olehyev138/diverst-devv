@@ -5,7 +5,7 @@
 <div class="content__main">
   <%= simple_form_for @group, url: group_leaders_path, method: :post do |f| %>
     <div class="card">
-      <div id="sortable">
+      <div id="sortable-list">
         <%= f.simple_fields_for :group_leaders do |g| %>
           <%= render "group_leader_fields", f: g %>
         <% end %>
