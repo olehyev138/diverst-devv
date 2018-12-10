@@ -82,9 +82,10 @@ RSpec.describe User::MentorshipController, type: :controller do
         describe "if user is present" do
             login_user_from_let
 
-            it "sets the mentorship_requests and mentorship_proposals" do
+            it "sets the mentorship_requests, menteeship_requests, and mentorship_proposals" do
                 get :requests
                 expect(assigns[:mentorship_requests]).to eq([])
+                expect(assigns[:menteeship_requests]).to eq([])
                 expect(assigns[:mentorship_proposals]).to eq([])
             end
         end
