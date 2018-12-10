@@ -34,11 +34,11 @@ class User::MentorshipController < ApplicationController
     end
     
     def mentors
-        @mentors = @user.mentors
+        @mentorings = @user.menteeships
     end
     
     def mentees
-        @mentees = @user.mentees
+        @mentorings = @user.mentorships
     end
     
     def requests
