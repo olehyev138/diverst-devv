@@ -12,7 +12,9 @@
           <tbody>
             <% @mentorship_requests.each do |mentorship_request| %>
               <tr>
-                <td><%= mentorship_request.sender.first_name %> <%= mentorship_request.sender.last_name %></td>
+                <td>
+                  <%= active_link_to (mentorship_request.sender.first_name + " " + mentorship_request.sender.last_name), user_mentorship_path(:id => mentorship_request.sender.id) %>
+                </td>
                 <td><%= mentorship_request.status %></td>
                 <td><%= mentorship_request.notes %></td>
                 <td>
@@ -31,7 +33,7 @@
   <div class="card">
     <div class="card__section">
       <% if @mentorship_proposals.count > 0 %>
-      
+
         <table class="table--has-border">
           <thead>
             <th>User</th>
@@ -41,7 +43,9 @@
           <tbody>
             <% @mentorship_proposals.each do |mentorship_proposal| %>
               <tr>
-                <td><%= mentorship_proposal.receiver.first_name %> <%= mentorship_proposal.receiver.last_name %></td>
+                <td>
+                  <%= active_link_to (mentorship_proposal.receiver.first_name + " " + mentorship_proposal.receiver.last_name), user_mentorship_path(:id => mentorship_proposal.receiver.id) %>
+                </td>
                 <td><%= mentorship_proposal.status %></td>
                 <td>
                   <%= link_to "Cancel", mentoring_request_path(mentorship_proposal), method: :delete, class: "error" %>
@@ -50,8 +54,8 @@
             <% end %>
           </tbody>
         </table>
-      
-      
+
+
       <% else %>
         <h4 class="text-center">You currently don't have pending mentorship proposals</h4>
       <% end %>
