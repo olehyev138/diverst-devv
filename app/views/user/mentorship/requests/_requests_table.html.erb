@@ -1,6 +1,7 @@
 <table class="table--has-border">
   <thead>
     <th>User</th>
+    <th>Sent</th>
     <th>Status</th>
     <th>Notes</th>
     <th>Approve/Decline</th>
@@ -11,6 +12,7 @@
         <td>
           <%= active_link_to (request.sender.first_name + " " + request.sender.last_name), user_mentorship_path(:id => request.sender.id) %>
         </td>
+        <td><%= request.created_at.to_formatted_s(:short) %></td>
         <td><%= request.status %></td>
         <td><%= request.notes %></td>
         <td>
