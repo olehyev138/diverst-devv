@@ -90,7 +90,7 @@ class Group < ActiveRecord::Base
     class_name: 'Field',
     dependent: :delete_all
 
-  has_many :group_leaders, dependent: :destroy
+  has_many :group_leaders, -> { order(position: :asc) }, dependent: :destroy
   has_many :leaders, through: :group_leaders, source: :user
   has_many :sponsors, as: :sponsorable, dependent: :destroy
 
