@@ -31,7 +31,7 @@
               <td>
                 <%= link_to "Edit", polymorphic_path(@container_path + [resource], action: "edit") if EnterpriseFolderPolicy.new(current_user, nil).edit? %> -
                 <%= link_to "Delete", @container_path + [resource], method: :delete, class: "error", data: { confirm: "Are you sure?" } if EnterpriseFolderPolicy.new(current_user, nil).destroy? %> -
-                <%= link_to "Archive", polymorphic_path(@container_path + [resource], action: :archive), method: :patch, remote: true if EnterpriseFolderPolicy.new(current_user, nil).archive? %>
+                <%= link_to "Archive", polymorphic_path(@container_path + [resource], action: :archive), method: :patch, class: 'highlight', remote: true if EnterpriseFolderPolicy.new(current_user, nil).archive? %>
                </td>
             </tr>
           <% end %>
