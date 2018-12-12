@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-xs-2 pull-left">
-        <% if GroupNewsLinkPolicy.new(current_user, [news_link.group]).archive? %>
+        <% if GroupNewsLinkPolicy.new(current_user, [news_link.group]).archive? && news_link.news_feed_link.approved?%>
           <%= link_to archive_group_news_link_path(news_link.group, news_link), remote: true, method: :patch do %>
             Archive
           <% end %>
