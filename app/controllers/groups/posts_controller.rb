@@ -31,9 +31,9 @@ class Groups::PostsController < ApplicationController
 
     def pending
         if @group.enterprise.enable_social_media?
-          @posts = @group.news_feed_links.includes(:news_link, :group_message, :social_link).not_approved.order(created_at: :desc)
+          @posts = @group.news_feed_links.includes(:news_link, :group_message, :social_link).not_approved.where(archived_at: nil).order(created_at: :desc)
         else
-          @posts = @group.news_feed_links.includes(:news_link, :group_message).not_approved.order(created_at: :desc)
+          @posts = @group.news_feed_links.includes(:news_link, :group_message).not_approved.where(archived_at: nil).order(created_at: :desc)
         end
     end
 
