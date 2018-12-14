@@ -42,7 +42,8 @@ class User::MentorshipController < ApplicationController
     end
     
     def requests
-        @mentorship_proposals  =  @user.mentorship_proposals
+        @mentorship_proposals  =  @user.mentorship_proposals.mentor_requests
+        @menteeship_proposals = @user.mentorship_proposals.mentee_requests
 
         @mentorship_requests =  @user.mentorship_requests.mentor_requests
         @menteeship_requests = @user.mentorship_requests.mentee_requests

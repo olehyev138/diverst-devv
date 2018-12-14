@@ -21,35 +21,24 @@
     <% end %>
   </div>
   <div class="card">
-    <div class="card__section">
+    <% if @mentorship_proposals.count + @menteeship_proposals.count > 0 %>
       <% if @mentorship_proposals.count > 0 %>
-        <table class="table--has-border">
-          <thead>
-            <th>User</th>
-            <th>Sent</th>
-            <th>Status</th>
-            <th>Cancel</th>
-          </thead>
-          <tbody>
-            <% @mentorship_proposals.each do |mentorship_proposal| %>
-              <tr>
-                <td>
-                  <%= active_link_to (mentorship_proposal.receiver.first_name + " " + mentorship_proposal.receiver.last_name), user_mentorship_path(:id => mentorship_proposal.receiver.id) %>
-                </td>
-                <td><%= mentorship_proposal.created_at.to_formatted_s(:short) %></td>
-                <td><%= mentorship_proposal.status %></td>
-                <td>
-                  <%= link_to "Cancel", mentoring_request_path(mentorship_proposal), method: :delete, class: "error" %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-
-
-      <% else %>
-        <h4 class="text-center">You currently don't have pending mentorship proposals</h4>
+        <div class="card__section card__section--border">
+          <h3>You have requested for the following users to be your mentor:</h3>
+          <%= render "user/mentorship/requests/proposals_table", proposals: @mentorship_proposals %>
+        </div>
       <% end %>
-    </div>
+
+      <% if @menteeship_proposals.count > 0 %>
+        <div class="card__section card__section--border">
+          <h3>You have requested to be a mentor for the following users:</h3>
+          <%= render "user/mentorship/requests/proposals_table", proposals: @menteeship_proposals %>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="card__section">
+        <h4 class="text-center">You currently don't have pending mentorship proposals</h4>
+      </div>
+    <% end %>
   </div>
 </div>
