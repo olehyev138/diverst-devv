@@ -56,13 +56,13 @@ class Segment < ActiveRecord::Base
     end
 
     def update_indexes
-        CacheSegmentMembersJob.perform_later self
+        CacheSegmentMembersJob.perform_later self.id
         RebuildElasticsearchIndexJob.perform_later(model_name: 'User', enterprise: enterprise)
     end
 
     def self.update_all_members
         Segment.all.find_each do |segment|
-            CacheSegmentMembersJob.perform_later segment
+            CacheSegmentMembersJob.perform_later segment.id
         end
     end
 

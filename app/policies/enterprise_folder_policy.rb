@@ -41,6 +41,10 @@ class EnterpriseFolderPolicy < Struct.new(:user, :folder)
   def destroy?
     update?
   end
+
+  def archive?
+    update?
+  end
   
   def basic_group_leader_permission?(permission)
     PolicyGroupTemplate.where(:user_role_id => group_leader_role_ids).where("#{permission} = true").exists?

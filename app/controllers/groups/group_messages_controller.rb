@@ -3,7 +3,7 @@ class Groups::GroupMessagesController < ApplicationController
 
     before_action :authenticate_user!
     before_action :set_group
-    before_action :set_message, only: [:show, :destroy, :edit, :update]
+    before_action :set_message, only: [:show, :destroy, :edit, :update, :archive]
 
     layout 'erg'
 
@@ -77,6 +77,16 @@ class Groups::GroupMessagesController < ApplicationController
         end
 
         redirect_to group_group_message_path(@group, @message)
+    end
+
+    def archive
+        authorize [@group, @message], :archive?, :policy_class => GroupMessagePolicy
+        @message.news_feed_link.update(archived_at: DateTime.now)
+        
+        respond_to do |format|
+            format.html { redirect_to :back }
+            format.js
+        end
     end
 
     protected

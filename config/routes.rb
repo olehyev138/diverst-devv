@@ -73,6 +73,17 @@ Rails.application.routes.draw do
   get 'integrations', to: 'integrations#index'
   get 'integrations/calendar/:token', to: 'integrations#calendar', as: 'integrations_calendar'
 
+  resources :archived_posts, only: [:index, :destroy] do
+    collection do
+      post 'delete_all'
+      post 'restore_all'
+    end
+
+    member do
+      patch 'restore'
+    end
+  end
+
   resources :enterprises do
     resources :saml do
       collection do
@@ -110,10 +121,21 @@ Rails.application.routes.draw do
           post 'authenticate'
         end
         scope module: :folder do
-          resources :resources
+          resources :resources do
+            member do
+              patch 'archive'
+              patch 'restore'
+            end
+          end
         end
       end
-      resources :resources
+      resources :resources do
+        collection do
+          get 'archived'
+          post 'restore_all'
+          post 'delete_all'
+        end
+      end
       resources :events, only: [] do
         collection do
           get 'public_calendar_data'
@@ -174,6 +196,7 @@ Rails.application.routes.draw do
 
       resources :group_messages, path: 'messages' do
         post 'create_comment'
+        member { patch 'archive' }
         resources :group_message_comment
       end
       resources :leaders, only: [:index, :new, :create]
@@ -218,6 +241,7 @@ Rails.application.routes.draw do
           get   'comments'
           get   'news_link_photos'
           post  'create_comment'
+          patch 'archive'
         end
         resources :news_link_comment
       end
@@ -235,7 +259,12 @@ Rails.application.routes.draw do
           post 'authenticate'
         end
         scope module: :folder do
-          resources :resources
+          resources :resources do
+            member do
+              patch 'archive'
+              patch 'restore'
+            end
+          end
         end
       end
 
@@ -529,6 +558,7 @@ Rails.application.routes.draw do
     get 'top_resources_by_views'
     get 'top_news_by_views'
     get 'growth_of_groups'
+    get 'growth_of_resources'
   end
 
   namespace :website do
