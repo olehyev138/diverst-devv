@@ -32,25 +32,9 @@ RSpec.describe UserGroup do
       let(:second){ create(:user_group, total_weekly_points: 20) }
 
       it { expect(UserGroup.top_participants(3)).to eq [first, second, third] }
-      it { expect(user_group).to define_enum_for(:notifications_frequency).with([:hourly, :daily, :weekly, :disabled]) }
-      it { expect(user_group).to define_enum_for(:notifications_date).with([:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]) }
-    end
-
-    context "notifications_status" do
-      let!(:hourly){ create(:user_group, notifications_frequency: UserGroup.notifications_frequencies[:hourly]) }
-      let!(:disabled){ create(:user_group, notifications_frequency: UserGroup.notifications_frequencies[:disabled]) }
-      let!(:daily){ create(:user_group, notifications_frequency: UserGroup.notifications_frequencies[:daily]) }
-
-      it "returns user_group with specific notifications_frequency" do
-        expect(UserGroup.notifications_status("hourly")).to eq [hourly]
-      end
     end
 
     describe ".accepted_users" do
-      let!(:hourly){ create(:user_group, notifications_frequency: UserGroup.notifications_frequencies[:hourly]) }
-      let!(:disabled){ create(:user_group, notifications_frequency: UserGroup.notifications_frequencies[:disabled]) }
-      let!(:daily){ create(:user_group, notifications_frequency: UserGroup.notifications_frequencies[:daily]) }
-
       let(:enterprise) { create :enterprise }
       let(:user1) { create :user, enterprise: enterprise }
       let(:user2) { create :user, enterprise: enterprise }
@@ -76,10 +60,6 @@ RSpec.describe UserGroup do
           expect(group.user_groups.accepted_users).to include user_group1
           expect(group.user_groups.accepted_users).to include user_group2
         end
-      end
-
-      it "returns user_group with specific notifications_frequency" do
-        expect(UserGroup.notifications_status("hourly")).to eq [hourly]
       end
     end
   end
@@ -111,37 +91,6 @@ RSpec.describe UserGroup do
         )
         user_group.destroy
       end
-    end
-  end
-
-  describe "#notifications_date" do
-    it "returns sunday" do
-      user_group = create(:user_group, :notifications_date => 0)
-      expect(user_group.notifications_date).to eq("sunday")
-    end
-    it "returns default monday" do
-      user_group = create(:user_group, :notifications_date => 1)
-      expect(user_group.notifications_date).to eq("monday")
-    end
-    it "returns tuesday" do
-      user_group = create(:user_group, :notifications_date => 2)
-      expect(user_group.notifications_date).to eq("tuesday")
-    end
-    it "returns wednesday" do
-      user_group = create(:user_group, :notifications_date => 3)
-      expect(user_group.notifications_date).to eq("wednesday")
-    end
-    it "returns thursday" do
-      user_group = create(:user_group, :notifications_date => 4)
-      expect(user_group.notifications_date).to eq("thursday")
-    end
-    it "returns default friday" do
-      user_group = create(:user_group)
-      expect(user_group.notifications_date).to eq("friday")
-    end
-    it "returns saturday" do
-      user_group = create(:user_group, :notifications_date => 6)
-      expect(user_group.notifications_date).to eq("saturday")
     end
   end
 

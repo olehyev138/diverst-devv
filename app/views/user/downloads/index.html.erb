@@ -1,0 +1,30 @@
+<div class="content__header">
+  <h1>Secure Downloads</h1>
+  <h3 class="muted">Downloads expire after 2 hours</h3>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <% if @downloads.empty? %>
+      <div class="card__section">
+        <p>You have no CSV downloads available.</p>
+      </div>
+    <% else %>
+      <% @downloads.each do |download| %>
+        <div class="card__section card__section--border">
+          <div class="flex-row flex-row--middle">
+            <div class="flex-row__cell">
+              <%= download.download_file_name %>
+            </div>
+            <div class="flex-row__cell flex-row__cell--grow">
+              <span class="muted">Created <%= download.created_at.to_s :datetime %></span>
+            </div>
+            <div class="flex-row__cell link-group">
+              <%= link_to "Download", download_user_downloads_path(download_id: download.id), class: 'btn btn--primary' %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

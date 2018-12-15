@@ -68,8 +68,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :biases
-
   resources :logs, only: [:index]
 
   get 'integrations', to: 'integrations#index'
@@ -96,7 +94,7 @@ Rails.application.routes.draw do
       get 'theme'
       patch 'update_auth'
       patch 'update_fields'
-      patch 'update_mapping'  
+      patch 'update_mapping'
       patch 'update_branding_info'
       patch 'update_branding'
       patch 'update_posts'
@@ -141,6 +139,9 @@ Rails.application.routes.draw do
   post 'group_categories/update_all_sub_groups', to: 'group_categories#update_all_sub_groups', as: :update_all_sub_groups
 
   resources :groups do
+    collection do
+      post :sort
+    end
     resources :budgets, only: [:index, :show, :new, :create, :destroy] do
       post 'approve'
       post 'decline'
@@ -360,6 +361,7 @@ Rails.application.routes.draw do
   end
 
   resources :segments do
+    collection { get 'enterprise_segments' }
     resources :sub_segments
     member do
       get 'export_csv'
@@ -423,6 +425,12 @@ Rails.application.routes.draw do
         collection do
           get 'calendar'
           get 'onboarding_calendar_data'
+        end
+      end
+
+      resources :downloads, only: [:index] do
+        collection do
+          get 'download'
         end
       end
 
@@ -520,6 +528,7 @@ Rails.application.routes.draw do
     get 'top_folders_by_views'
     get 'top_resources_by_views'
     get 'top_news_by_views'
+    get 'growth_of_groups'
   end
 
   namespace :website do

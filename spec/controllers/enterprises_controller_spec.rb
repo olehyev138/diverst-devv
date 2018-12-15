@@ -224,29 +224,6 @@ RSpec.describe EnterprisesController, type: :controller do
         end
     end
 
-    # CAN'T FIGURE OUT HOW TO PASS TEST
-
-    describe "GET#bias" do
-        describe "with logged in user" do
-            login_user_from_let
-
-            context "with valid id",
-                skip: "test fails because current_user.enterpise.groups.sample.name throws an error
-                in bias.html.erb"  do
-                before { get :bias, id: enterprise.id }
-
-                it "returns success" do
-                    expect(response).to be_success
-                end
-            end
-        end
-
-        describe "without a logged in user" do
-            before { get :bias, id: enterprise.id }
-            it_behaves_like "redirect user to users/sign_in path"
-        end
-    end
-
     # CONTROLLER IS MISSING A TEMPLATE
 
     describe "GET#edit_cdo", skip: "tests fails because no route matches action: 'edit_cdo" do

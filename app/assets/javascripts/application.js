@@ -13,11 +13,13 @@
 //= require jquery
 //= require bootstrap
 //= require jquery_ujs
+//= require jquery-ui
+//= require jquery-ui/widget 
 //= require dataTables/jquery.dataTables
 //= require turbolinks
 //= require cocoon
 //= require select2
-//= require highcharts
+//= require highcharts/highstock
 //= require highcharts/highcharts-more
 //= require highcharts/modules/data
 //= require highcharts/modules/drilldown

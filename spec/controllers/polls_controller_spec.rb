@@ -2,13 +2,14 @@ require 'rails_helper'
 
 RSpec.describe PollsController, type: :controller do
     include ActiveJob::TestHelper
-    
+
     let(:user) { create(:user) }
-    let!(:poll) { create(:poll, status: 0, enterprise: user.enterprise, groups: []) }
-    let!(:graph1) { create(:graph, aggregation: create(:field)) }
-    let!(:graph2) { create(:graph, aggregation: create(:field)) }
+    let!(:poll) { build(:poll, status: 0, enterprise: user.enterprise, groups: []) }
+
 
     describe "GET#index" do
+        before { poll.save }
+        
         context "with logged user" do
             login_user_from_let
             before { get :index }
@@ -53,72 +54,74 @@ RSpec.describe PollsController, type: :controller do
             login_user_from_let
 
             context "with valid params" do
-                let(:poll){ attributes_for(:poll) }
+                let(:poll_attributes){ attributes_for(:poll, fields_attributes: [attributes_for(:field)]) }
                 enable_public_activity
 
                 it "creates a new poll" do
-                    expect{ post :create, poll: poll }.to change(Poll.where(owner_id: user.id), :count).by(1)
+                    expect{ post :create, poll: poll_attributes }.to change(Poll.where(owner_id: user.id), :count).by(1)
                 end
 
                 it "track activity of poll" do
                     perform_enqueued_jobs do
-                        expect{ post :create, poll: poll }.to change(PublicActivity::Activity
+                        expect{ post :create, poll: poll_attributes }.to change(PublicActivity::Activity
                         .where(owner_id: user.id, recipient_id: user.enterprise.id, trackable_type: "Poll", key: "poll.create"), :count).by(1)
                     end
                 end
 
                 it "redirects to index action" do
-                    post :create, poll: poll
+                    post :create, poll: poll_attributes
                     expect(response).to redirect_to action: :index
                 end
 
                 it "flashes a notice message" do
-                    post :create, poll: poll
+                    post :create, poll: poll_attributes
                     expect(flash[:notice]).to eq "Your survey was created"
                 end
             end
 
             context "with invalid params" do
-                let(:poll){ attributes_for(:poll, status: nil) }
+                let(:poll_attributes){ attributes_for(:poll, status: nil, fields_attributes: [attributes_for(:field)]) }
 
                 it "does not create a new poll" do
-                    expect{ post :create, poll: poll }.to change(Poll, :count).by(0)
+                    expect{ post :create, poll: poll_attributes }.to change(Poll, :count).by(0)
                 end
 
                 it "renders the new action" do
-                    post :create, poll: poll
+                    post :create, poll: poll_attributes
                     expect(response).to render_template :new
                 end
 
                 it "flashes an alert message" do
-                    post :create, poll: poll
-                    expect(flash[:alert]).to eq "Your survey was not created. Please fix the errors"
+                    post :create, poll: poll_attributes
+                    expect(flash[:alert]).to eq "#{assigns[:poll].errors.full_messages.first}"
                 end
             end
         end
 
         describe "without a logged in user" do
-            before { post :create, poll: poll }
+            before { post :create, poll: poll_attributes }
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
 
     describe "GET#show" do
+        before { poll.save }
+
         context "with logged user" do
             login_user_from_let
 
-            before do 
-                poll.graphs << graph1
-                poll.graphs << graph2
-                get :show, id: poll.id
-            end
+            let!(:graph1) { create(:graph, poll_id: poll.id, aggregation: create(:field, poll_id: poll.id)) }
+            let!(:graph2) { create(:graph, poll_id: poll.id, aggregation: create(:field, poll_id: poll.id)) }
+
+            before { get :show, id: poll.id }
+
 
             it "sets a valid poll object" do
                 expect(assigns[:poll]).to be_valid
             end
 
             it "display graphs of a particular poll" do
-                expect(assigns[:graphs]).to eq [graph1, graph2]
+                expect(assigns[:graphs].last(2)).to eq [graph1, graph2]
             end
 
 
@@ -140,6 +143,8 @@ RSpec.describe PollsController, type: :controller do
     end
 
     describe "GET#edit" do
+        before { poll.save }
+
         context "with logged user" do
             login_user_from_let
             before { get :edit, id: poll.id }
@@ -160,7 +165,8 @@ RSpec.describe PollsController, type: :controller do
     end
 
     describe "PATCH#update" do
-        let(:poll){ create(:poll, status: 0, enterprise: user.enterprise, groups: []) }
+        before { poll.save }
+
         let(:group){ create(:group, enterprise: user.enterprise) }
         enable_public_activity
 
@@ -220,7 +226,9 @@ RSpec.describe PollsController, type: :controller do
         end
     end
 
-    describe "DELETE#destroy" do
+    describe "DELETE#destroy", skip: "this spec will pass when PR 1245 is merged to master" do
+        before { poll.save }
+
         context "with logged user" do
             login_user_from_let
             enable_public_activity
@@ -248,20 +256,26 @@ RSpec.describe PollsController, type: :controller do
     end
 
     describe "GET#export_csv" do
+        before { poll.save }
+
         context "with logged user" do
             login_user_from_let
-            before { get :export_csv, id: poll.id }
-          
-            it "gets response in csv format" do
-                expect(response.content_type).to eq 'text/csv'
+            before {
+                allow(PollDownloadJob).to receive(:perform_later)
+                request.env['HTTP_REFERER'] = "back"
+                get :export_csv, id: poll.id
+            }
+
+            it "returns to previous page" do
+                expect(response).to redirect_to "back"
             end
 
-            it 'response includes poll_title as part of csv filename' do 
-                expect(response.headers["Content-Disposition"]).to include "#{poll.title}_responses.csv"
+            it "flashes" do
+                expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
             end
 
-            it 'returns file in csv format' do
-                expect(response.content_type).to eq 'text/csv'
+            it "calls job" do
+                expect(PollDownloadJob).to have_received(:perform_later)
             end
         end
 
