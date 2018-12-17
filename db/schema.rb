@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181207092445) do
+ActiveRecord::Schema.define(version: 20181209212951) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -477,6 +477,7 @@ ActiveRecord::Schema.define(version: 20181207092445) do
     t.boolean  "groups_budgets_manage",                              default: false
     t.boolean  "manage_posts",                                       default: false
     t.boolean  "initiatives_index",                                  default: false
+    t.integer  "position",                               limit: 4
   end
 
   create_table "group_message_comments", force: :cascade do |t|
