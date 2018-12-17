@@ -33,6 +33,7 @@ class Group < ActiveRecord::Base
     :leaders_only
   ]
 
+  # :public and :non_member have their values defined in locales/en.yml
   enumerize :upcoming_events_visibility, default: :leaders_only, in:[
                                     :public,
                                     :group,
