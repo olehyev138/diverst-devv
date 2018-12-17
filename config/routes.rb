@@ -73,17 +73,17 @@ Rails.application.routes.draw do
   get 'integrations', to: 'integrations#index'
   get 'integrations/calendar/:token', to: 'integrations#calendar', as: 'integrations_calendar'
 
-  resources :archived_posts, only: [:index, :destroy] do 
-    collection do 
+  resources :archived_posts, only: [:index, :destroy] do
+    collection do
       post 'delete_all'
       post 'restore_all'
     end
 
-    member do 
+    member do
       patch 'restore'
     end
   end
-  
+
   resources :enterprises do
     resources :saml do
       collection do
@@ -121,8 +121,8 @@ Rails.application.routes.draw do
           post 'authenticate'
         end
         scope module: :folder do
-          resources :resources do 
-            member do 
+          resources :resources do
+            member do
               patch 'archive'
               patch 'restore'
             end
@@ -259,8 +259,8 @@ Rails.application.routes.draw do
           post 'authenticate'
         end
         scope module: :folder do
-          resources :resources do 
-            member do 
+          resources :resources do
+            member do
               patch 'archive'
               patch 'restore'
             end
@@ -268,7 +268,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :resources 
+      resources :resources
       resources :fields do
         member do
           get 'time_series'
@@ -558,6 +558,7 @@ Rails.application.routes.draw do
     get 'top_resources_by_views'
     get 'top_news_by_views'
     get 'growth_of_groups'
+    get 'growth_of_resources'
   end
 
   namespace :website do

@@ -34,8 +34,6 @@ class Enterprise < ActiveRecord::Base
     has_many :expense_categories, dependent: :destroy
     has_many :clockwork_database_events, dependent: :destroy
 
-    has_many :departments
-
     # mentorship
     has_many :mentoring_interests, dependent: :destroy
     has_many :mentoring_requests, dependent: :destroy

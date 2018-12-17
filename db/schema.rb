@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181130162607) do
+ActiveRecord::Schema.define(version: 20181209212951) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -173,12 +173,6 @@ ActiveRecord::Schema.define(version: 20181130162607) do
     t.integer  "initiative_id", limit: 4
   end
 
-  create_table "cities", force: :cascade do |t|
-    t.string   "name",       limit: 191
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-  end
-
   create_table "ckeditor_assets", force: :cascade do |t|
     t.string   "data_file_name",    limit: 191
     t.string   "data_content_type", limit: 191
@@ -244,13 +238,6 @@ ActiveRecord::Schema.define(version: 20181130162607) do
   end
 
   add_index "custom_texts", ["enterprise_id"], name: "index_custom_texts_on_enterprise_id", using: :btree
-
-  create_table "departments", force: :cascade do |t|
-    t.integer  "enterprise_id", limit: 4,   null: false
-    t.string   "name",          limit: 191
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-  end
 
   create_table "devices", force: :cascade do |t|
     t.string   "token",      limit: 191
@@ -490,6 +477,7 @@ ActiveRecord::Schema.define(version: 20181130162607) do
     t.boolean  "groups_budgets_manage",                              default: false
     t.boolean  "manage_posts",                                       default: false
     t.boolean  "initiatives_index",                                  default: false
+    t.integer  "position",                               limit: 4
   end
 
   create_table "group_message_comments", force: :cascade do |t|
