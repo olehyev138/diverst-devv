@@ -109,14 +109,6 @@ class GroupBasePolicy < Struct.new(:user, :context)
         update?
     end    
 
-    def archive?
-      update?
-    end
-
-    def restore? 
-        archive?
-    end
-
     def base_index_permission
     end
     
