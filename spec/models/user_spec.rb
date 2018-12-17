@@ -55,7 +55,6 @@ RSpec.describe User do
       end
 
       context 'has_many associations' do
-        it { expect(user).to have_many(:devices) }
         it { expect(user).to have_many(:users_segments) }
         it { expect(user).to have_many(:segments).through(:users_segments) }
         it { expect(user).to have_many(:groups).through(:user_groups) }
@@ -478,7 +477,6 @@ RSpec.describe User do
   describe "#destroy_callbacks" do
     it "removes the child objects" do
       user = create(:user)
-      device = create(:device, :user => user)
       users_segment = create(:users_segment, :user => user)
       user_group = create(:user_group, :user => user, :accepted_member => true)
       topic_feedback = create(:topic_feedback, :user => user)
@@ -502,7 +500,6 @@ RSpec.describe User do
       user.destroy
 
       expect{User.find(user.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      expect{Device.find(device.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{PolicyGroup.find(policy_group.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{UsersSegment.find(users_segment.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{UserGroup.find(user_group.id)}.to raise_error(ActiveRecord::RecordNotFound)
