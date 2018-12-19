@@ -187,4 +187,26 @@ RSpec.describe Groups::SocialLinksController, type: :controller do
                 end
         end
     end
+
+    describe 'PATCH#archive' do 
+        let!(:social_link){ create(:social_link, group: group) }
+
+        describe 'when user is logged in' do
+            before { request.env["HTTP_REFERER"] = 'back' }
+
+            login_user_from_let
+
+            context 'with valid attributes' do
+                before { patch :archive, group_id: group.id, id: social_link.id }
+
+                it 'redirects to same page' do
+                    expect(response).to redirect_to 'back'
+                end
+
+                it 'archives social_link' do  
+                    expect(assigns[:social_link].news_feed_link.archived_at).to_not be_nil
+                end
+            end
+        end
+    end            
 end
