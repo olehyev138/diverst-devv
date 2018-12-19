@@ -161,30 +161,30 @@ RSpec.describe Groups::SocialLinksController, type: :controller do
             end
 
             describe 'public activity' do
-                    enable_public_activity
+                enable_public_activity
 
-                    it 'creates public activity record' do
-                        perform_enqueued_jobs do
-                            expect{
+                it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                        expect{
                             delete :destroy, group_id: group.id, id: social_link.id
-                            }.to change(PublicActivity::Activity, :count).by(1)
-                        end
-                    end
-
-                    describe 'activity record' do
-                        let(:model) { SocialLink.last }
-                        let(:owner) { user }
-                        let(:key) { 'social_link.destroy' }
-
-                        before {
-                            perform_enqueued_jobs do
-                                delete :destroy, group_id: group.id, id: social_link.id
-                            end
-                        }
-
-                        include_examples'correct public activity'
+                        }.to change(PublicActivity::Activity, :count).by(1)
                     end
                 end
+
+                describe 'activity record' do
+                    let(:model) { SocialLink.last }
+                    let(:owner) { user }
+                    let(:key) { 'social_link.destroy' }
+
+                    before {
+                        perform_enqueued_jobs do
+                            delete :destroy, group_id: group.id, id: social_link.id
+                        end
+                    }
+
+                    include_examples'correct public activity'
+                end
+            end
         end
     end
 
@@ -205,6 +205,32 @@ RSpec.describe Groups::SocialLinksController, type: :controller do
 
                 it 'archives social_link' do  
                     expect(assigns[:social_link].news_feed_link.archived_at).to_not be_nil
+                end
+
+                describe 'public activity' do
+                    enable_public_activity
+
+                    it 'creates public activity record' do
+                        perform_enqueued_jobs do
+                            expect{
+                                delete :archive, group_id: group.id, id: social_link.id
+                            }.to change(PublicActivity::Activity, :count).by(1)
+                        end
+                    end
+
+                    describe 'activity record' do
+                        let(:model) { SocialLink.last }
+                        let(:owner) { user }
+                        let(:key) { 'social_link.archive' }
+
+                        before {
+                            perform_enqueued_jobs do
+                                delete :archive, group_id: group.id, id: social_link.id
+                            end
+                        }
+
+                        include_examples'correct public activity'
+                    end
                 end
             end
         end
