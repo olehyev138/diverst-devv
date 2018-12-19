@@ -231,10 +231,10 @@ class Enterprise < ActiveRecord::Base
       CSV.generate do |csv|
         # column titles
         csv << [
-          self.custom_text.send('erg_text') + 'Name',
-          'From Date',
-          'To Date',
-          'Total',
+          self.custom_text.send('erg_text'),
+          'From: ' + from_date.strftime('%F %T'),
+          'To: ' + to_date.strftime('%F %T'),
+          'Difference',
           '% Change'
         ]
 
@@ -248,13 +248,15 @@ class Enterprise < ActiveRecord::Base
             .count.to_f
 
           change_percentage = 0
-          if from_date_total == 0
+          if from_date_total == 0 and to_date_total > 0
             change_percentage = 100
-          elsif to_date_total == 0
+          elsif to_date_total == 0 and from_date_total > 0
             change_percentage = -100
+          elsif from_date_total == 0 and to_date_total == 0
+            change_percentage = 0
           else
             change_percentage =
-              (((to_date_total - from_date_total) / from_date_total) * 100).round(2)
+              (((to_date_total - from_date_total) / from_date_total)).round(2)
           end
 
           if change_percentage.positive?
@@ -262,9 +264,8 @@ class Enterprise < ActiveRecord::Base
           end
 
           csv << [
-            group.name,
-            from_date.strftime('%F %T'), to_date.strftime('%F %T'),
-            to_date_total, change_percentage
+            group.name, from_date_total, to_date_total,
+            (to_date_total - from_date_total), change_percentage
           ]
         end
       end
