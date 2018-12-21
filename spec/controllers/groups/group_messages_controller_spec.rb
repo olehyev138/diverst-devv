@@ -415,6 +415,32 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
                 it 'archives news_link' do  
                     expect(assigns[:message].news_feed_link.archived_at).to_not be_nil
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                        perform_enqueued_jobs do
+                            expect{
+                              patch :archive, group_id: group.id, id: group_message.id
+                            }.to change(PublicActivity::Activity, :count).by(1)
+                        end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { GroupMessage.last }
+                    let(:owner) { user }
+                    let(:key) { 'group_message.archive' }
+
+                    before {
+                        perform_enqueued_jobs do
+                            patch :archive, group_id: group.id, id: group_message.id
+                        end
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
         end
     end

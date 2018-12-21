@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe ArchivedPostsController, type: :controller do
+  include ActiveJob::TestHelper
 
   let!(:user) { create(:user) }
   let!(:group) { create(:group, enterprise: user.enterprise) }
@@ -96,24 +97,145 @@ RSpec.describe ArchivedPostsController, type: :controller do
     end
   end
 
-  describe 'PATCH#restore' do 
-    before do
-      request.env['HTTP_REFERER'] = 'back'
-      create_list(:news_link, 2, group: group)
-      create_list(:group_message, 2, group: group)
-      NewsFeedLink.all.update_all(archived_at: DateTime.now.months_ago(2))
-    end
-
-    context 'with logged in user' do
-      login_user_from_let
-
-      it 'restore archived post' do
-        expect{patch :restore, id: NewsFeedLink.last.id}.to change(NewsFeedLink.where.not(archived_at: nil), :count).by(-1)
+  describe 'PATCH#restore' do
+    context 'restore social link' do 
+      before do
+        request.env['HTTP_REFERER'] = 'back'
+        create_list(:social_link, 2, group: group)
+        NewsFeedLink.all.update_all(archived_at: DateTime.now.months_ago(2))
       end
 
-      it 'redirects back' do 
-        patch :restore, id: NewsFeedLink.last.id 
-        expect(response).to redirect_to 'back'
+      context 'with logged in user' do
+        login_user_from_let
+
+        it 'restore archived post' do
+          expect{patch :restore, id: NewsFeedLink.last.id}.to change(NewsFeedLink.where.not(archived_at: nil), :count).by(-1)
+        end
+
+        it 'redirects back' do 
+          patch :restore, id: NewsFeedLink.last.id 
+          expect(response).to redirect_to 'back'
+        end
+
+        describe 'public activity' do
+          enable_public_activity
+
+          it 'creates public activity record' do
+            perform_enqueued_jobs do
+              expect{
+                patch :restore, id: NewsFeedLink.last.id
+              }.to change(PublicActivity::Activity, :count).by(1)
+            end
+          end
+
+          describe 'activity record' do
+            let(:model) { SocialLink.last }
+            let(:owner) { user }
+            let(:key) { 'social_link.restore' }
+
+            before {
+              perform_enqueued_jobs do
+                patch :restore, id: NewsFeedLink.last.id
+              end
+            }
+
+            include_examples'correct public activity'
+          end
+        end
+      end
+    end 
+
+    context 'restore news link' do 
+      before do
+        request.env['HTTP_REFERER'] = 'back'
+        create_list(:news_link, 2, group: group)
+        NewsFeedLink.all.update_all(archived_at: DateTime.now.months_ago(2))
+      end
+
+      context 'with logged in user' do
+        login_user_from_let
+
+        it 'restore archived post' do
+          expect{patch :restore, id: NewsFeedLink.last.id}.to change(NewsFeedLink.where.not(archived_at: nil), :count).by(-1)
+        end
+
+        it 'redirects back' do 
+          patch :restore, id: NewsFeedLink.last.id 
+          expect(response).to redirect_to 'back'
+        end
+
+        describe 'public activity' do
+          enable_public_activity
+
+          it 'creates public activity record' do
+            perform_enqueued_jobs do
+              expect{
+                patch :restore, id: NewsFeedLink.last.id
+              }.to change(PublicActivity::Activity, :count).by(1)
+            end
+          end
+
+          describe 'activity record' do
+            let(:model) { NewsLink.last }
+            let(:owner) { user }
+            let(:key) { 'news_link.restore' }
+
+            before {
+              perform_enqueued_jobs do
+                patch :restore, id: NewsFeedLink.last.id
+              end
+            }
+
+            include_examples'correct public activity'
+          end
+        end
+      end
+    end 
+
+    context 'restore group message' do
+      before do
+        request.env['HTTP_REFERER'] = 'back'
+        create_list(:group_message, 2, group: group)
+        NewsFeedLink.all.update_all(archived_at: DateTime.now.months_ago(2))
+      end
+
+      context 'with logged in user' do
+        login_user_from_let
+
+        it 'restore archived post' do
+          expect{patch :restore, id: NewsFeedLink.last.id}.to change(NewsFeedLink.where.not(archived_at: nil), :count).by(-1)
+        end
+
+        it 'redirects back' do 
+          patch :restore, id: NewsFeedLink.last.id 
+          expect(response).to redirect_to 'back'
+        end
+
+        describe 'public activity' do
+          enable_public_activity
+
+          it 'creates public activity record' do
+            perform_enqueued_jobs do
+              expect{
+                patch :restore, id: NewsFeedLink.last.id
+              }.to change(PublicActivity::Activity, :count).by(1)
+            end
+          end
+
+          describe 'activity record' do
+            let(:model) { GroupMessage.last }
+            let(:owner) { user }
+            let(:key) { 'group_message.restore' }
+
+            before {
+              perform_enqueued_jobs do
+                patch :restore, id: NewsFeedLink.last.id
+              end
+            }
+
+            include_examples'correct public activity'
+          end
+        end
       end
     end
   end

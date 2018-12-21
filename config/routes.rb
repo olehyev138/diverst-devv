@@ -200,7 +200,9 @@ Rails.application.routes.draw do
         resources :group_message_comment
       end
       resources :leaders, only: [:index, :new, :create]
-      resources :social_links
+      resources :social_links do 
+        member { patch 'archive' }
+      end
       resources :questions, only: [:index] do
         collection do
           get 'survey'

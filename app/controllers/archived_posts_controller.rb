@@ -44,6 +44,7 @@ class ArchivedPostsController < ApplicationController
 
   def restore
     @post.update(archived_at: nil)
+    track_activity(@post.group_message || @post.news_link || @post.social_link, :restore)
     authorize current_user.enterprise, :manage_posts?, :policy_class => EnterprisePolicy
 
     respond_to do |format|
