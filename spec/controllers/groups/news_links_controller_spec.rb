@@ -7,32 +7,6 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
     let(:group){ create(:group, enterprise: user.enterprise) }
 
 
-    describe 'Automatically archives expired news links when' do 
-        let!(:expired_news_link) { create(:news_link, group: group, created_at: DateTime.now.months_ago(14), 
-            updated_at: DateTime.now.months_ago(14)) }
-
-        before { expired_news_link.news_feed_link.update(created_at: expired_news_link.created_at, 
-            updated_at: expired_news_link.updated_at) }
-
-        login_user_from_let
-
-        context 'request is sent to index action' do 
-            before { get :index, group_id: group.id }
-
-            it 'news_link should be archived via news_feed_link' do
-                expect(assigns[:news_links].first.news_feed_link.archived_at).to_not be_nil
-            end
-        end
-
-        context 'request is sent to comments action' do 
-            before { get :comments, group_id: group.id, id: expired_news_link.id }
-
-            it 'news_link should be archived via news_feed_link' do 
-                expect(assigns[:news_link].news_feed_link.archived_at).to_not be_nil
-            end
-        end
-    end
-
     describe 'GET #index' do
         def get_index(group_id)
             get :index, group_id: group_id

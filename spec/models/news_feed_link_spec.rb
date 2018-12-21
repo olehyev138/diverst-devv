@@ -28,31 +28,6 @@ RSpec.describe NewsFeedLink, type: :model do
     end
   end
 
-  describe 'archive expired news after_commit on: [:create, :update, :destroy]' do
-    let!(:group) { create(:group, enterprise: create(:enterprise)) }
-    let!(:news_link1) { create(:news_link, created_at: DateTime.now.months_ago(9),
-      updated_at: DateTime.now.months_ago(9), group: group) }
-    let!(:news_link2) { create(:news_link, group: group) }
-    let!(:news_link3) { build(:news_link, group: group) }
-
-    before { NewsFeedLink.find_by(news_link: news_link1).update(created_at: DateTime.now.months_ago(9)) }
-
-    it 'on destroy' do
-      news_link2.run_callbacks :destroy
-      expect(NewsFeedLink.find_by(news_link: news_link1).archived_at).to_not be_nil
-    end
-
-    it 'on update' do 
-      news_link2.run_callbacks :update
-      expect(NewsFeedLink.find_by(news_link: news_link1).archived_at).to_not be_nil
-    end
-
-    it 'on create' do 
-      news_link3.run_callbacks :create
-      expect(NewsFeedLink.find_by(news_link: news_link1).archived_at).to_not be_nil
-    end
-  end
-
   describe '#approve_link' do
     it 'approves the link' do
       # ensure the job is performed and that

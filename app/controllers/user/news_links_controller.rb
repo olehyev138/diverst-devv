@@ -8,7 +8,6 @@ class User::NewsLinksController < ApplicationController
     authorize NewsLink
     @count = posts.count
     @posts = posts.limit(@limit)
-    archive_expired_news
   end
 
   private
