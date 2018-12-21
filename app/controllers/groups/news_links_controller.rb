@@ -95,6 +95,7 @@ class Groups::NewsLinksController < ApplicationController
         authorize current_user.enterprise, :manage_posts?, :policy_class => EnterprisePolicy
 
         @news_link.news_feed_link.update(archived_at: DateTime.now)
+        track_activity(@news_link, :archive)
 
         respond_to do |format|
            format.html { redirect_to :back }

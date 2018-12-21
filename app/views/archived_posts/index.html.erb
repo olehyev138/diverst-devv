@@ -26,6 +26,8 @@
           <%= render "archived_news_link", news_link: NewsLink.find(news.link.id) %>
         <% elsif news.group_message && policy(NewsLink).index? %>
           <%= render "archived_group_message", message: GroupMessage.find(news.link.id) %>
+        <% elsif news.social_link && policy(NewsLink).index? %>
+            <%= render "archived_social_link", social_link: SocialLink.find(news.link.id) %>
         <% end %>
       <% end %>
     <% end %>
