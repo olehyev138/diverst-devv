@@ -46,7 +46,7 @@ RSpec.describe GroupsController, type: :controller do
 
         it 'returns 3 groups' do
           get :index
-          expect(assigns[:groups].count).to eq 3
+          expect(assigns[:groups].count).to eq 4
         end
       end
     end
