@@ -10,7 +10,6 @@ class Groups::NewsLinksController < ApplicationController
 
     def index
         @news_links = @group.news_links.includes(:author).order(created_at: :desc)
-        archive_expired_news
     end
 
     def new
@@ -24,7 +23,6 @@ class Groups::NewsLinksController < ApplicationController
         @comments = @news_link.comments.includes(:author)
         @new_comment = NewsLinkComment.new
         @news_link.increment_view(current_user)
-        archive_expired_news
     end
 
     def create_comment

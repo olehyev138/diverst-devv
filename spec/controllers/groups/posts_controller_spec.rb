@@ -18,21 +18,6 @@ RSpec.describe Groups::PostsController, type: :controller do
     let!(:news_feed_link3) { create(:news_feed_link, news_link: news_link3, news_feed: news_feed, approved: true, created_at: Time.now) }
 
 
-    describe 'Automatically archives expired posts when' do
-        let!(:news_feed_link4) { create(:news_feed_link, news_link: news_link4, news_feed: news_feed, approved: true,
-        created_at: DateTime.now.months_ago(9), updated_at: DateTime.now.months_ago(9)) }
-
-        login_user_from_let
-
-        context 'request is sent to index action' do
-            before { get :index, group_id: group2.id }
-
-            it 'group message should be archived via news_feed_link' do 
-                expect(NewsFeedLink.last.archived_at).to_not be_nil
-            end
-        end
-
-    end
 
     describe 'GET #index' do
         describe 'with user logged in' do

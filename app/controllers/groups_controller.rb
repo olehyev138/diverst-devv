@@ -123,7 +123,6 @@ class GroupsController < ApplicationController
                 @posts = with_segments
             end
         end
-        archive_expired_news
     end
 
     def create

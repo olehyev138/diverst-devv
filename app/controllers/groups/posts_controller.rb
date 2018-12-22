@@ -26,7 +26,6 @@ class Groups::PostsController < ApplicationController
                 @posts = []
             end
         end
-        archive_expired_news
     end
 
     def pending

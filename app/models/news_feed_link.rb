@@ -22,7 +22,6 @@ class NewsFeedLink < ActiveRecord::Base
     
     validates :news_feed_id,    presence: true
 
-    after_commit :archive_expired_news, on: [:create, :update, :destroy]
     after_create :approve_link
 
     # checks if link can automatically be approved
@@ -67,12 +66,10 @@ class NewsFeedLink < ActiveRecord::Base
       end
     end
 
-    
-    private
-
-    def archive_expired_news
+    def self.archive_expired_news
       expiry_date = DateTime.now.months_ago(6)
-      news = NewsFeedLink.where("created_at < ?", expiry_date)
+      news = NewsFeedLink.where("created_at < ?", expiry_date).where(archived_at: nil)
+
       news.update_all(archived_at: DateTime.now) if news.any?
-    end
+    end    
 end
