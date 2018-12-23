@@ -7,7 +7,7 @@ class EnterprisesController < ApplicationController
   layout :resolve_layout
 
   def edit
-    authorize @enterprise, :update?
+    authorize @enterprise, :enterprise_manage?
   end
 
   def update
@@ -191,13 +191,14 @@ class EnterprisesController < ApplicationController
         :home_message,
         :xml_sso_config,
         :time_zone,
-        :user_group_mailer_notification_text,
-        :campaign_mailer_notification_text,
-        :approve_budget_request_mailer_notification_text,
-        :poll_mailer_notification_text,
-        :budget_approved_mailer_notification_text,
-        :budget_declined_mailer_notification_text,
-        :group_leader_post_mailer_notification_text,
+        :mentorship_module_enabled,
+        :disable_likes,
+        :collaborate_module_enabled,
+        :default_from_email_address,
+        :default_from_email_display_name,
+        :plan_module_enabled,
+        :name,
+        :scope_module_enabled,
         theme: [
           :id,
           :primary_color,

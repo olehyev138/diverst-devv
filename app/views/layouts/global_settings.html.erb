@@ -16,6 +16,9 @@
         <%= active_link_to "SSO", edit_auth_enterprise_path(current_user.enterprise) if policy(current_user.enterprise).sso_manage? %>
       </li>
       <li>
+        <%= active_link_to "Configuration", edit_enterprise_path(current_user.enterprise) if policy(current_user.enterprise).enterprise_manage? %>
+      </li>
+      <li>
         <%= active_link_to "Permissions", policy_group_templates_path if policy(current_user.enterprise).manage_permissions? %>
       </li>
       <li>
@@ -70,6 +73,11 @@
     
     <nav id="settings" class="jq-dropdown jq-dropdown-tip">
       <ul class="jq-dropdown-menu">
+        <% if policy(current_user.enterprise).enterprise_manage? %>
+          <li>
+            <%= active_link_to "Configuration", edit_enterprise_path(current_user.enterprise) %>
+          </li>
+        <% end %>
         <% if policy(current_user.enterprise).sso_manage? %>
           <li>
             <%= active_link_to "SSO", edit_auth_enterprise_path(current_user.enterprise) %>

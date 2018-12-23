@@ -5,7 +5,43 @@
       <div class="card">
         <div class="card__section">
           <%= simple_form_for @enterprise do |f| %>
-            <%= f.input :time_zone %>
+            <%= f.input :name %>
+            </br>
+            
+            <%= f.input :time_zone, :hint => "Set the default time zone for all users in the company" %>
+            </br>
+            
+            <%= f.hidden_field :mentorship_module_enabled, value: 0 %>
+            <%= f.input :mentorship_module_enabled %>
+            </br>
+            
+            <%= f.hidden_field :disable_likes, value: 0 %>
+            <%= f.input :disable_likes, :hint => "Users will not be able to 'like' news posts, group messages, etc when disabled" %>
+            </br>
+            
+            <%= f.hidden_field :enable_pending_comments, value: 0 %>
+            <%= f.input :enable_pending_comments %>
+            </br>
+            
+            <%= f.hidden_field :collaborate_module_enabled, value: 0 %>
+            <%= f.input :collaborate_module_enabled %>
+            
+            <%= f.hidden_field :scope_module_enabled, value: 0 %>
+            <%= f.input :scope_module_enabled %>
+            
+            <%= f.input :default_from_email_address, :hint => "This is the default email address that will show up in emails to users" %>
+            
+            <%= f.input :default_from_email_display_name, :hint => "This is the default name that will show up in emails to users" %>
+            
+            <%= f.hidden_field :enable_rewards, value: 0 %>
+            <%= f.input :enable_rewards %>
+            
+            <%= f.hidden_field :enable_social_media, value: 0 %>
+            <%= f.input :enable_social_media %>
+            
+            <%= f.hidden_field :plan_module_enabled, value: 0 %>
+            <%= f.input :plan_module_enabled %>
+            
             <%= f.button :submit %>
           <% end %>
         </div>
