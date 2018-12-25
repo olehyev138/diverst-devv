@@ -19,6 +19,9 @@
         <%= active_link_to "Configuration", edit_enterprise_path(current_user.enterprise) if policy(current_user.enterprise).enterprise_manage? %>
       </li>
       <li>
+        <%= active_link_to "Email Events", clockwork_database_events_path if policy(current_user.enterprise).enterprise_manage? %>
+      </li>
+      <li>
         <%= active_link_to "Permissions", policy_group_templates_path if policy(current_user.enterprise).manage_permissions? %>
       </li>
       <li>
@@ -76,6 +79,11 @@
         <% if policy(current_user.enterprise).enterprise_manage? %>
           <li>
             <%= active_link_to "Configuration", edit_enterprise_path(current_user.enterprise) %>
+          </li>
+        <% end %>
+        <% if policy(current_user.enterprise).enterprise_manage? %>
+          <li>
+            <%= active_link_to "Email Events", clockwork_database_events_path %>
           </li>
         <% end %>
         <% if policy(current_user.enterprise).sso_manage? %>
