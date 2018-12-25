@@ -56,6 +56,7 @@ RSpec.describe GroupBasePolicy, :type => :policy do
     end
 
     it "allows access when user is a leader" do
+      create(:user_group, :user => user, :group => group, :accepted_member => true)
       create(:group_leader, :user => user, :group => group)
       expect(subject).to permit(user, [group, nil])
     end
@@ -103,6 +104,7 @@ RSpec.describe GroupBasePolicy, :type => :policy do
     end
 
     it 'doesnt allow access when user is leader but permission doesnt exist' do
+      create(:user_group, :user => user, :group => group, :accepted_member => true)
       create(:group_leader, user: user, group: group)
 
       expect(subject.new(user, [group, nil])
@@ -110,6 +112,7 @@ RSpec.describe GroupBasePolicy, :type => :policy do
     end
 
     it 'doesnt allow access when user is leader but permission is false' do
+      create(:user_group, :user => user, :group => group, :accepted_member => true)
       create(:group_leader, user: user, group: group)
 
       expect(subject.new(user, [group, nil])
@@ -123,6 +126,7 @@ RSpec.describe GroupBasePolicy, :type => :policy do
       user_role.policy_group_template.groups_budgets_index = true
       user_role.policy_group_template.save!
 
+      create(:user_group, :user => user, :group => group, :accepted_member => true)
       create(:group_leader, user: user, group: group,
         groups_budgets_index: true, user_role: user_role)
 
@@ -152,6 +156,7 @@ RSpec.describe GroupBasePolicy, :type => :policy do
       user_role.policy_group_template.groups_budgets_index = true
       user_role.policy_group_template.save!
 
+      create(:user_group, :user => user, :group => group, :accepted_member => true)
       create(:group_leader, user: user, group: group,
         groups_budgets_index: true, user_role: user_role)
 

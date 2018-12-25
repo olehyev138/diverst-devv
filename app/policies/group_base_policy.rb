@@ -107,8 +107,8 @@ class GroupBasePolicy < Struct.new(:user, :context)
     
     def destroy?
         update?
-    end
-    
+    end    
+
     def base_index_permission
     end
     

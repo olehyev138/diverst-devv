@@ -1,0 +1,15 @@
+$("#restored_message_<%= @message.id %>").fadeOut(500, function(){
+	$(this).remove();
+	var posts_count = parseInt(document.getElementById('posts_count').innerHTML);
+	document.getElementById('posts_count').innerHTML = posts_count - 1;
+	displayEmptyPosts();
+});
+
+
+function displayEmptyPosts(){
+	var posts_count = parseInt(document.getElementById('posts_count').innerHTML);
+	if (posts_count == 0){		
+		$('.content__main').append('<div class="card"><div class="card__section"><p>No posts have been published yet.</p></div> </div>');
+	}
+}
+

@@ -1,4 +1,9 @@
-<div class="card__section card__section--border">
+<div class="card__section card__section--border" id="restored_message_<%= message.id %>">
+  <% if EnterprisePolicy.new(current_user, current_user.enterprise).manage_posts? && message.news_feed_link.approved? %>
+    <%= link_to archive_group_group_message_path(message.group, message), method: :patch, remote: true do %>
+      Archive
+    <% end %>
+  <% end %>
   <div class="row">
     <div class="col-xs-2">
       <% if message.owner.present? %>

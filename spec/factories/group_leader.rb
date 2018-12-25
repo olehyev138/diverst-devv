@@ -7,5 +7,9 @@ FactoryGirl.define do
     trait :default_group_contact do 
     	default_group_contact false
     end
+
+    after(:build) do |group_leader|
+    	UserGroup.create( :user => group_leader.user, :group => group_leader.group, :accepted_member => true)
+    end
   end
 end
