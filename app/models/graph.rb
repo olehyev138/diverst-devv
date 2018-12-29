@@ -1,4 +1,4 @@
-class Graph < ActiveRecord::Base
+class Graph < BaseClass
 
     belongs_to :poll
     belongs_to :metrics_dashboard

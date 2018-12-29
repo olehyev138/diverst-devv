@@ -1,4 +1,4 @@
-class ClockworkDatabaseEvent < ActiveRecord::Base
+class ClockworkDatabaseEvent < BaseClass
 
     # associations
     belongs_to :frequency_period

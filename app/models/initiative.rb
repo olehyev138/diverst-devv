@@ -1,4 +1,4 @@
-class Initiative < ActiveRecord::Base
+class Initiative < BaseClass
   include PublicActivity::Common
 
   attr_accessor :associated_budget_id, :skip_allocate_budget_funds

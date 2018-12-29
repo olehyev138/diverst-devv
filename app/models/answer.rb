@@ -1,4 +1,4 @@
-class Answer < ActiveRecord::Base
+class Answer < BaseClass
     include PublicActivity::Common
 
     belongs_to :question, inverse_of: :answers

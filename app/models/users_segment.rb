@@ -1,4 +1,4 @@
-class UsersSegment < ActiveRecord::Base
+class UsersSegment < BaseClass
   belongs_to :user
   belongs_to :segment
   

@@ -1,4 +1,4 @@
-class Group < ActiveRecord::Base
+class Group < BaseClass
   include PublicActivity::Common
   include CustomTextHelpers
 

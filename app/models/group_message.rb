@@ -1,4 +1,4 @@
-class GroupMessage < ActiveRecord::Base
+class GroupMessage < BaseClass
     include PublicActivity::Common
     
     has_many :group_messages_segments, dependent: :destroy

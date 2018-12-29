@@ -1,4 +1,4 @@
-class Outcome < ActiveRecord::Base
+class Outcome < BaseClass
     belongs_to :group
     has_many :pillars, dependent: :destroy
 

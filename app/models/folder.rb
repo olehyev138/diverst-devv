@@ -1,8 +1,6 @@
-class Folder < ActiveRecord::Base
+class Folder < BaseClass
   include PublicActivity::Common
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
-
+  
   has_secure_password(validations: false)
 
   # associations

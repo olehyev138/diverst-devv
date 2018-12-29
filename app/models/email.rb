@@ -1,4 +1,4 @@
-class Email < ActiveRecord::Base
+class Email < BaseClass
   # associations
   belongs_to :enterprise
   

@@ -1,4 +1,4 @@
-class NewsFeedLink < ActiveRecord::Base
+class NewsFeedLink < BaseClass
     belongs_to :news_feed
     belongs_to :group_message
     belongs_to :news_link

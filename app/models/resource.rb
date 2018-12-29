@@ -1,8 +1,6 @@
-class Resource < ActiveRecord::Base
+class Resource < BaseClass
     include PublicActivity::Common
-    include Elasticsearch::Model
-    include Elasticsearch::Model::Callbacks
-
+    
     EXPIRATION_TIME = 6.months.to_i
 
     # associations

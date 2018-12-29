@@ -1,4 +1,4 @@
-class MentoringInterest < ActiveRecord::Base
+class MentoringInterest < BaseClass
     # associations
     has_many :mentorship_interests
     has_many :users, :through => :mentorship_interests

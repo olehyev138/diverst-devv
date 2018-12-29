@@ -1,4 +1,4 @@
-class Badge < ActiveRecord::Base
+class Badge < BaseClass
   belongs_to :enterprise
 
   validates :label, presence: true

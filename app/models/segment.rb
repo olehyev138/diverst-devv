@@ -1,4 +1,4 @@
-class Segment < ActiveRecord::Base
+class Segment < BaseClass
     extend Enumerize
     include PublicActivity::Common
 
@@ -57,7 +57,6 @@ class Segment < ActiveRecord::Base
 
     def update_indexes
         CacheSegmentMembersJob.perform_later self.id
-        RebuildElasticsearchIndexJob.perform_later(model_name: 'User', enterprise: enterprise)
     end
 
     def self.update_all_members

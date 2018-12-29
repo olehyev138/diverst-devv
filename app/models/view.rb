@@ -1,4 +1,4 @@
-class View < ActiveRecord::Base
+class View < BaseClass
   belongs_to :news_feed_link
   belongs_to :group
   belongs_to :user

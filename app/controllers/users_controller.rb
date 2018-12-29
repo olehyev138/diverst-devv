@@ -132,7 +132,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.json {
         g = DateHistogramGraph.new(
-          index: User.es_index_name(enterprise: current_user.enterprise),
+          #index: User.es_index_name(enterprise: current_user.enterprise),
           field: 'created_at',
           interval: 'month'
         )
