@@ -1,4 +1,4 @@
-after :groups do
+after 'development:groups' do
   puts "Adding users to group"
 
   enterprise = Enterprise.last

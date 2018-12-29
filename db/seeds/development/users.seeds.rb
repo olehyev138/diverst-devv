@@ -1,4 +1,4 @@
-after :enterprise do
+after 'development:enterprise' do
   puts "Importing users"
   
   enterprise = Enterprise.last

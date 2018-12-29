@@ -1,4 +1,4 @@
-after :users do
+after 'development:users' do
   enterprise = Enterprise.last
   nb_groups = ENV["NB_GROUPS"] || 10
   groups_to_create = []

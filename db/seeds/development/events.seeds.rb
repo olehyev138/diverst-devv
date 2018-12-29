@@ -1,4 +1,4 @@
-after :enterprise do
+after 'development:enterprise' do
     Enterprise.update_all(:time_zone => "Eastern Time (US & Canada)")
     
     enterprise = Enterprise.last

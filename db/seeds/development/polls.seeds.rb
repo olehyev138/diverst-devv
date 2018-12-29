@@ -1,4 +1,4 @@
-after :segments do
+after 'development:segments' do
   enterprise = Enterprise.last
 
   p = enterprise.polls.new(

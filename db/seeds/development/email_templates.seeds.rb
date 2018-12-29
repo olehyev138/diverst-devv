@@ -1,4 +1,4 @@
-after :enterprise do
+after 'development:enterprise' do
   enterprise = Enterprise.last
 
   # create the default emails with subject line and content

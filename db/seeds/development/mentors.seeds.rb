@@ -1,4 +1,4 @@
-after :enterprise do
+after 'development:enterprise' do
     enterprise = Enterprise.last
     
     enterprise.mentoring_types.create!([
