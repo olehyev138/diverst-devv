@@ -25,10 +25,15 @@ after 'development:enterprise' do
             end
             
             admin = enterprise.users.where(user_role_id: 1).first #find first admin in enterprise
-            user = enterprise.users.where(user_role_id: 7).first
+            users = enterprise.users.where(user_role_id: 7).limit(5)
             FactoryGirl.create_list(:mentoring_session, rand(5..10), enterprise_id: enterprise.id, creator_id: admin.id )
 
-            FactoryGirl.create(:mentoring_request, enterprise_id: enterprise.id, sender_id: user.id, receiver_id: admin.id )
+            users.each do |user|
+                FactoryGirl.create(:mentoring_request, enterprise_id: enterprise.id, sender_id: user.id, receiver_id: admin.id )
+            end
+
+            mentees = enterprise.users.where(user_role_id: 7).sample(10).map { |user| user.update(mentee: true, mentor: false); user }
+            mentors = enterprise.users.where(user_role_id: 1).map { |user| user.update(mentor: true, mentee: false); user }
         end
     end
 end
