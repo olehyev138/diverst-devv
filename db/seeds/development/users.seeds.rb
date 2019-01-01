@@ -38,7 +38,7 @@ after 'development:enterprise' do
     )
 
     if enterprise.name == "Diverst Inc"
-      FactoryGirl.create_list(:user, rand(250..500), 
+      FactoryGirl.create_list(:user, rand(501), 
         enterprise: enterprise, 
         password: 'password', 
         password_confirmation: 'password', 
