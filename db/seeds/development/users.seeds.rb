@@ -38,7 +38,7 @@ after 'development:enterprise' do
     )
 
     if enterprise.name == "Diverst Inc"
-      FactoryGirl.create_list(:user, rand(501), 
+      FactoryGirl.create_list(:user, rand(250..500), 
         enterprise: enterprise, 
         password: 'password', 
         password_confirmation: 'password', 
@@ -73,7 +73,7 @@ after 'development:enterprise' do
 
     enterprise.users.find_each do |user|
       
-      user.policy_group.update_all_permissions(true) if user.user_role.priority == 0 
+      user.policy_group.update_all_permissions(true) if user.user_role.role_name == "Admin" 
 
       user.info[title_field] = Faker::Name.title
       user.info[birth_field] = Faker::Date.between(60.years.ago, 18.years.ago)

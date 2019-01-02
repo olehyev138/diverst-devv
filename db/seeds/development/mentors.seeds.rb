@@ -26,7 +26,7 @@ after 'development:enterprise' do
             
             admin = enterprise.users.where(user_role_id: 1).first #find first admin in enterprise
             users = enterprise.users.where(user_role_id: 7).limit(5)
-            FactoryGirl.create_list(:mentoring_session, rand(11), enterprise_id: enterprise.id, creator_id: admin.id )
+            FactoryGirl.create_list(:mentoring_session, rand(5..10), enterprise_id: enterprise.id, creator_id: admin.id )
 
             users.each do |user|
                 FactoryGirl.create(:mentoring_request, enterprise_id: enterprise.id, sender_id: user.id, receiver_id: admin.id )

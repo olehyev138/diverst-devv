@@ -11,7 +11,7 @@ after 'development:groups' do
       groups_to_join = group_ids.sample([1, 1, 1, 1, 2, 2, 3].sample) # Join 1, 2 or 3 groups. More likely to join less
 
       groups_to_join.each do |g_id|
-        user_groups << UserGroup.new(user_id: user_id, group_id: g_id)
+        user_groups << UserGroup.new(user_id: user_id, group_id: g_id, accepted_member: true)
       end
     end
 
