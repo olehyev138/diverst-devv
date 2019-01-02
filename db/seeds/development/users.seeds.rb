@@ -51,7 +51,7 @@ after 'development:enterprise' do
           enterprise: enterprise,
           password: 'password',
           password_confirmation: 'password',
-          user_role_id: 1,
+          user_role_id: enterprise.user_roles.find_by_role_name("Admin").id,
           invitation_accepted_at: Faker::Time.between(3.days.ago, Time.current)
           )
       end
@@ -63,7 +63,7 @@ after 'development:enterprise' do
           first_name: 'Tech',
           last_name: 'Admin',
           password: 'password',
-          user_role_id: user_roles.last.id,
+          user_role_id: enterprise.user_roles.find_by_role_name("Admin").id,
           password_confirmation: 'password',
           invitation_accepted_at: Faker::Time.between(3.days.ago, Time.current)
         }
@@ -73,8 +73,8 @@ after 'development:enterprise' do
 
     enterprise.users.find_each do |user|
       
-      user.policy_group.update_all_permissions(true)
-      
+      user.policy_group.update_all_permissions(true) if user.user_role.priority == 0 
+
       user.info[title_field] = Faker::Name.title
       user.info[birth_field] = Faker::Date.between(60.years.ago, 18.years.ago)
 
