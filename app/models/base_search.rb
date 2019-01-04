@@ -1,15 +1,16 @@
 module BaseSearch
-
   # BaseSearch jobs, purpose:
   #   - takes a custom dsl, transaltes & builds es queries
   #   - runs es queries, pulls out response data and returns
 
   # Todo:
+  #   - add ability for sub aggs
+  #   - document custom dsl
   #   - build objects to represent custom dsl to simplify and
   #     increase readability of queries to BaseSearch
-  #   - Add ability to deal with ranges (dates, integer)
-  #   - Add ability to deal with exclusions (ex. Users who are in Group A, B but not in C)
-  #   - Build default queries
+  #   - add ability to deal with ranges (dates, integer)
+  #   - add ability to deal with exclusions (ex. Users who are in Group A, B but not in C)
+  #   - build default queries
 
 
   def self.included(klass)
@@ -17,7 +18,6 @@ module BaseSearch
   end
 
   module ClassMethods
-
     def search(params)
       #if params[:format] && params[:format] === "csv" - check if
       #if params[:dummy] - check if we would return dummy data

@@ -1,18 +1,19 @@
 module BaseGraph
 
   # BaseGraph jobs, purpose:
-  #   - Acts as a interface/front for BaseSearch
-  #   - Parses & formats data returned by BaseSearch for use by frontend
+  #   - acts as a interface/front for BaseSearch
+  #   - parses & formats data returned by BaseSearch for use by frontend
 
   # Todo:
-  #  - Implement parsing classes for use by frontend frameworks (NVD3/D3)
+  #  - add ability for sub aggs
+  #  - implement parsing classes for use by frontend frameworks (NVD3/D3)
 
   def self.included(klass)
     klass.extend ClassMethods
+    klass.extend Nvd3Formatter
   end
 
   module ClassMethods
-
     def graph(params)
       # ex. params = {
       #   :graph = {
@@ -21,14 +22,23 @@ module BaseGraph
       #   }
       #   :search => {}
       # }
-      buckets = self.search(params)
+
+      # Get data and format it for use by frontend frameworks
+      return nvd3_format(
+        params.dig(:graph, :title) || "Basic Graph",
+        self.search(params))
+    end
+  end
+
+  module Nvd3Formatter
+    def nvd3_format(title, response)
       return {
-        key: params.dig(:graph, :title) || "Basic Graph",
-        values: parse_buckets(buckets)
+        key: title,
+        values: parse_es_response(response)
       }
     end
 
-    def parse_buckets(buckets)
+    def parse_es_response(buckets)
       buckets.map {|bucket|
         {
           label: bucket["key"],
@@ -36,6 +46,5 @@ module BaseGraph
         }
       }
     end
-
   end
 end
