@@ -3,7 +3,7 @@
 </div>
 
 <div class="content__main">
-  <% if (policy(@budget).approve? || policy(@budget).decline?) && @budget.is_approved.nil? %>
+  <% if (GroupBudgetPolicy.new(current_user, [@group, @budget]).approve? || GroupBudgetPolicy.new(current_user, [@group, @budget]).decline?) && @budget.is_approved.nil? %>
   <div class="card">
     <div class="card__section card__section--border">
       Manage Budget Request
@@ -80,7 +80,7 @@
           <% end %>
         </div>
       </div>
-      <% if policy(@budget).approve? && policy(@budget).decline? %>
+      <% if GroupBudgetPolicy.new(current_user, [@group, @budget]).approve? && GroupBudgetPolicy.new(current_user, [@group, @budget]).decline? %>
         <div class="card">
           <div class="card__section">
             <%= f.input :comments %>
