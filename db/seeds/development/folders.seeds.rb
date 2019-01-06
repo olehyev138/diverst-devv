@@ -1,20 +1,22 @@
-after 'development:groups' do 
+after 'development:groups' do
+	puts 'creating folders for groups...'
 	Enterprise.all.each do |enterprise|
-		FactoryGirl.create_list :folder, 5, enterprise_id: enterprise.id, group_id: nil
+		5.times { Folder.create(name: Faker::RickAndMorty.location, enterprise_id: enterprise.id, group_id: nil) }
 
 		enterprise.groups.each do |group|
-			FactoryGirl.create_list :folder, 5, group_id: group.id, enterprise_id: nil
+			5.times { Folder.create(name: Faker::RickAndMorty.location, group_id: group.id, enterprise_id: nil) }
 		end
 
 		#create nested folders
-		FactoryGirl.create :folder, 
-		enterprise_id: enterprise.id, 
-		parent_id: enterprise.folders.first.id, 
-		group_id: nil
+		Folder.create(name: Faker::RickAndMorty.location,
+			enterprise_id: enterprise.id, 
+			parent_id: enterprise.folders.first.id, 
+			group_id: nil)
 
-		FactoryGirl.create :folder, 
-		enterprise_id: nil, 
-		group_id: enterprise.groups.first.id, 
-		parent_id: enterprise.groups.first.folders.first.id 
+		Folder.create(name: Faker::RickAndMorty.location,
+			enterprise_id: nil, 
+			group_id: enterprise.groups.first.id, 
+			parent_id: enterprise.groups.first.folders.first.id )
 	end
+	puts 'creating folders for groups[DONE]'
 end

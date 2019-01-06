@@ -5,8 +5,7 @@ after 'development:folders' do
 	Enterprise.all.each do |enterprise|
 		enterprise.folders.each do|folder|
 			title = urls.keys[rand(3)]
-			FactoryGirl.create(:resource,
-			                   folder_id: folder.id, 
+			Resource.create(folder_id: folder.id, 
 			                   enterprise_id: enterprise.id, 
 			                   title: title, 
 			                   url: urls[title])
@@ -15,12 +14,11 @@ after 'development:folders' do
 		enterprise.groups.each do |group|
 			group.folders.each do |folder|
 				title = urls.keys[rand(3)]
-				FactoryGirl.create(:resource, 
-									folder_id: folder.id, 
-									enterprise_id: nil, 
-									group_id: group.id, 
-									title: title, 
-									url: urls[title])
+				Resource.create(folder_id: folder.id, 
+								enterprise_id: nil, 
+								group_id: group.id, 
+								title: title, 
+								url: urls[title])
 			end
 		end
 	end
