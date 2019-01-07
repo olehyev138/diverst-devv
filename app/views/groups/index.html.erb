@@ -5,7 +5,7 @@
 
 <div class="content__main">
   <div class="card" id="groups" data-url="<%= sort_groups_path %>">
-    <% @groups.each do |group| %>
+    <% @groups.all_parents.each do |group| %>
       <div class="card__section card__section--border" id="group_<%= group.id %>">
         <label class="field__label" id="handle" style="float: left; margin-top: 10px;">  
           <%= label = "#{ inline_svg('icons/move.svg', class: 'icon') }".html_safe %>

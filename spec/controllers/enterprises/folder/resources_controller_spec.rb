@@ -291,4 +291,46 @@ RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+
+    describe 'PATCH#archive' do
+        describe 'when user is logged in' do
+            login_user_from_let
+
+            context "valid params" do
+                before { patch :archive, enterprise_id: enterprise.id, folder_id: resource.folder.id, id: resource.id }
+
+                it "redirect_to index" do
+                    expect(response).to redirect_to action: :index
+                end
+
+                it "archives the resource" do
+                    expect(assigns[:resource].archived_at).to_not be_nil
+                end
+            end
+        end
+    end
+
+    describe 'PATCH#restore' do
+        describe 'when user is logged in' do 
+            before do 
+                request.env['HTTP_REFERER'] = 'back'
+                resource.update(archived_at: DateTime.now) 
+            end
+
+            login_user_from_let
+
+            context 'valid params' do 
+                before { patch :restore, enterprise_id: enterprise.id, folder_id: resource.folder.id, id: resource.id }
+
+                it 'redirects back' do 
+                    expect(response).to redirect_to 'back'
+                end
+
+                it 'restores archived resource' do 
+                    resource.reload
+                    expect(resource.archived_at).to be_nil
+                end
+            end
+        end
+    end
 end

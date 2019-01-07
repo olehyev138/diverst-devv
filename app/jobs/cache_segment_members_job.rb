@@ -3,7 +3,10 @@
 class CacheSegmentMembersJob < ActiveJob::Base
   queue_as :low
 
-  def perform(segment)
+  def perform(segment_id)
+    segment = Segment.find_by_id(segment_id)
+    return if segment.nil?
+
     users = segment.enterprise.users.all
     old_members = segment.members.all
 

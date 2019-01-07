@@ -143,6 +143,16 @@ class Graph {
       navigator: {
           margin: 60
       },
+      plotOptions: {
+        series: {
+          marker: {
+            enabled: true,
+            radius: 3,
+            symbol: 'circle'
+          },
+          shadow: true
+        }
+      },
       series: this.data.highcharts.series
     });
   }

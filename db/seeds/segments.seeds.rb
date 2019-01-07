@@ -12,4 +12,4 @@ s.rules.new(
 
 s.save
 
-CacheSegmentMembersJob.perform_now s
+CacheSegmentMembersJob.perform_now s.id

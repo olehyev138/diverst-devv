@@ -44,6 +44,7 @@ RSpec.describe PolicyGroupTemplate, type: :model do
                 enterprise = create(:enterprise)
                 group = create(:group, :enterprise => enterprise)
                 user = create(:user, :enterprise => enterprise)
+                create(:user_group, :user => user, :group => group, :accepted_member => true)
                 group_leader = create(:group_leader, :group => group, :user => user, :user_role => enterprise.user_roles.where(:role_name => "group_leader").first)
     
                 expect(group_leader.initiatives_manage).to eq(false)
