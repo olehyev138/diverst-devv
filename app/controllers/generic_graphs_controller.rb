@@ -8,10 +8,12 @@ class GenericGraphsController < ApplicationController
     respond_to do |format|
       format.json {
         # Demo query for getting group population data
-        json = UserGroup.graph({
-          graph: { type: 'bar', title: 'Group Population'},
-          search: {  aggregations: [{ name: 'group_id', type: 'integer' }]}
-        })
+        query = UserGroup.get_query
+          .graph(type: 'bar', title: 'Group Population')
+          .aggregate(field: 'group_id', type: 'integer')
+          .build
+
+        json = UserGroup.graph(query)
 
         render json: json
       }

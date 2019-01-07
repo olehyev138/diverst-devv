@@ -17,7 +17,42 @@ module BaseSearch
     klass.extend ClassMethods
   end
 
+  class Query
+    # Class to represent and build custom dsl
+    # Todo:
+    #  - implement rest of methods
+    #  - implement default options, default queries
+
+    def initialize
+      @query = { graph: {}, search: {} }
+    end
+
+    def graph(options={})
+      @query[:graph] = options
+      self
+    end
+
+    def query(options={})
+    end
+
+    def filter(options={})
+    end
+
+    def aggregate(options={})
+      (@query[:search][:aggregations] ||= []) << options
+      self
+    end
+
+    def build
+      @query
+    end
+  end
+
   module ClassMethods
+    def get_query
+      Query.new
+    end
+
     def search(params)
       #if params[:format] && params[:format] === "csv" - check if
       #if params[:dummy] - check if we would return dummy data
@@ -95,7 +130,7 @@ module BaseSearch
           {
             aggregations: {
               terms: {
-                field: field[:name]
+                field: field[:field]
               }
             }
           }
