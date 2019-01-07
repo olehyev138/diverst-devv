@@ -7,15 +7,11 @@ class GenericGraphsController < ApplicationController
   def group_population
     respond_to do |format|
       format.json {
-        # Demo query for getting group population data
+        # Demo of using Query class to build an elasticsearch query
         query = UserGroup.get_query
-          .graph(type: 'bar', title: 'Group Population')
-          .aggregate(field: 'group_id', type: 'integer')
+          .aggregate(type='terms', field='group_id')
+          .aggregate(type='filter', field='owner_id')
           .build
-
-        json = UserGroup.graph(query)
-
-        render json: json
       }
       format.csv {
       }

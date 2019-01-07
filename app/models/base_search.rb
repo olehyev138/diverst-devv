@@ -18,28 +18,59 @@ module BaseSearch
   end
 
   class Query
-    # Class to represent and build custom dsl
-    # Todo:
-    #  - implement rest of methods
-    #  - implement default options, default queries
+    # builds an elasticsearch query through the builder pattern
+    # todo:
+    #  - improve all methods
+    #  - figure out how to support drilldowns
+    #  - add defaults (size)
+    #  - add support for basic options, ie size
 
     def initialize
-      @query = { graph: {}, search: {} }
+      @query = {}
     end
 
-    def graph(options={})
-      @query[:graph] = options
+    def query(field=nil, value=nil)
+      # todo:
+      #  - add support for match, should, must queries
+
+      clause = {
+        field => value
+      }
+
+      @query[:query] ||= {}
+      (@query[:query][:match] ||= {}).merge! clause
+
       self
     end
 
-    def query(options={})
+    def filter(field=nil, value=nil)
+      # todo:
+      #  - add some sophistication, different filter types and such
+
+      clause = {
+        field => value
+      }
+
+      @query[:filter] ||= {}
+      (@query[:term][:match] ||= {}).merge! clause
+
+      self
     end
 
-    def filter(options={})
-    end
 
-    def aggregate(options={})
-      (@query[:search][:aggregations] ||= []) << options
+    def aggregate(type=nil, field=nil)
+      # todo:
+      #  - support nested aggregations
+
+      agg_name = 'agg_' + field  # so merge wont replace
+      agg = {
+       agg_name => {
+          type => { field: field }
+        }
+      }
+
+      (@query[:aggs] ||= {}).merge! agg
+
       self
     end
 
@@ -58,6 +89,7 @@ module BaseSearch
       #if params[:dummy] - check if we would return dummy data
       #if params[:drilldowns] - check if we need to query for children data
       hash = build(params)
+
       return run(hash, params)
     end
 
