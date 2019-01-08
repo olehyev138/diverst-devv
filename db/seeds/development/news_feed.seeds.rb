@@ -33,6 +33,15 @@ after 'development:join_groups' do
 									social_link_id: social_link.id,
 									is_pinned: false,
 									news_feed_id: news_feed.id)
+
+				3.times do
+					NewsLinkComment.create(content: Faker::Lorem.paragraph, 
+						author_id: group.user_groups.sample.user.id,
+						news_link_id: news_link.id)
+					GroupMessageComment.create(content: Faker::Lorem.paragraph,
+						author_id: group.user_groups.sample.user.id,
+						message_id: group_message.id)
+				end
 			end
 		end
 	end
