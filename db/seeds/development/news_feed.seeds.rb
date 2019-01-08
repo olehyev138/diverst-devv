@@ -19,7 +19,7 @@ after 'development:join_groups' do
 											group_id: group.id,
 											author_id: author.id,
 											url: "https://www.youtube.com/watch?v=3FMWcLZy3jU")
-				NewsFeedLink.create(approved: true,
+				news_feed_link = NewsFeedLink.create(approved: true,
 									news_link_id: news_link.id,
 									is_pinned: false,
 									news_feed_id: news_feed.id)
@@ -34,6 +34,7 @@ after 'development:join_groups' do
 									is_pinned: false,
 									news_feed_id: news_feed.id)
 
+				#comments for news feed
 				3.times do
 					NewsLinkComment.create(content: Faker::Lorem.paragraph, 
 						author_id: group.user_groups.sample.user.id,
@@ -41,6 +42,15 @@ after 'development:join_groups' do
 					GroupMessageComment.create(content: Faker::Lorem.paragraph,
 						author_id: group.user_groups.sample.user.id,
 						message_id: group_message.id)
+				end
+
+				#likes for news feed
+				rand(3..7).times do
+					user = group.user_groups.sample.user
+					news_link.news_feed_link.likes.create(user_id: user.id, 
+												          enterprise_id: enterprise.id) unless Like.where(user_id: user.id, news_feed_link_id: news_link.news_feed_link.id).exists?
+					group_message.news_feed_link.likes.create(user_id: user.id,
+															  enterprise_id: enterprise.id) unless Like.where(user_id: user.id, news_feed_link_id: group_message.news_feed_link.id).exists?
 				end
 			end
 		end
