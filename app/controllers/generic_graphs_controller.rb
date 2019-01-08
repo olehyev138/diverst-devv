@@ -8,10 +8,14 @@ class GenericGraphsController < ApplicationController
     respond_to do |format|
       format.json {
         # Demo of using Query class to build an elasticsearch query
+
         query = UserGroup.get_query
-          .aggregate(type='terms', field='group_id')
-          .aggregate(type='filter', field='owner_id')
-          .build
+          .aggregate(type='filter', field='owner_id') { |q|
+            q.aggregate(type='terms', field='groups_id') { |w|
+              }.build
+          }.build
+
+        UserGroup.run(query)
       }
       format.csv {
       }
