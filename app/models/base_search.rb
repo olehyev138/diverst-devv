@@ -28,10 +28,8 @@ module BaseSearch
       @aggs = {aggs: {}}
     end
 
-    def aggregate(type=nil, field=nil)
-      # create a name for this new aggregate
-      agg_name = 'agg_' + field
-
+    def aggregate(type=nil, field=nil, agg_name='agg')
+      # agg_name can all be 'agg' as long as aggs arnt adjacent, ie duplciate keys
       agg = {
         agg_name => {
           type => { field: field }
@@ -66,28 +64,25 @@ module BaseSearch
       Query.new
     end
 
-    def run(query)
+    def search(query)
       begin
         response = self.__elasticsearch__.search query
 
         if query[:aggs].blank?
           return response.results.response.records.to_a
         else
-          return response.aggregations
+          if response.aggregations.agg.blank?
+            # user named aggregation something else
+            return response.aggregations
+          else
+              return response.aggregations.agg.buckets
+          end
         end
       rescue => e
         raise BadRequestException.new e.message
       end
     end
 
-    #def search(params)
-    #  #if params[:format] && params[:format] === "csv" - check if
-    #  #if params[:dummy] - check if we would return dummy data
-    #  #if params[:drilldowns] - check if we need to query for children data
-    #  hash = build(params)
-
-    #  return run(hash, params)
-    #end
 
     #def build(params)
     #  # probably need some way to build a default query in case an error happens in syntax or incorrect

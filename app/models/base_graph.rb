@@ -14,19 +14,11 @@ module BaseGraph
   end
 
   module ClassMethods
-    def graph(params)
-      # ex. params = {
-      #   :graph = {
-      #       type: "bar",
-      #       title: "Group Population"
-      #   }
-      #   :search => {}
-      # }
-
+    def graph(query, type='bar', title='Basic Graph')
       # Get data and format it for use by frontend frameworks
-      return nvd3_format(
-        params.dig(:graph, :title) || "Basic Graph",
-        self.search(params))
+      response = self.search query
+
+      return nvd3_format(title, response)
     end
   end
 
@@ -38,8 +30,8 @@ module BaseGraph
       }
     end
 
-    def parse_es_response(buckets)
-      buckets.map {|bucket|
+    def parse_es_response(response)
+      response.map {|bucket|
         {
           label: bucket["key"],
           value: bucket["doc_count"]
