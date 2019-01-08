@@ -38,8 +38,8 @@ gem 'aws-sdk', '< 2.0'# The official AWS SDK
 gem 'kaminari', '~> 0.16.3' # Pagination
 gem 'jquery-datatables-rails', '~> 3.3' # Datatables
 gem 'ajax-datatables-rails', '~> 0.3.1' # Adds AJAX routes for datatables queries
-gem 'elasticsearch-model', '~> 0.1'
-gem 'elasticsearch-rails', '~> 0.1'
+gem 'elasticsearch-model', '~> 6.0.0'
+gem 'elasticsearch-rails', '~> 6.0.0'
 gem 'sprockets', '>= 3.0.0'
 gem 'sprockets-es6', '~> 0.9.0'
 gem 'awesome_print', '~> 1.6', '>= 1.6.1' # Better pp
@@ -99,7 +99,7 @@ group :test do
   gem 'rspec_junit_formatter', '~> 0.2.3'
   gem 'simplecov', '~> 0.13.0'
   gem 'test_after_commit', '~> 1.1'
-  gem 'elasticsearch-extensions', '~> 0.0.26'
+  gem 'elasticsearch-extensions', '~> 0.0.30'
   gem 'clockwork-test', '~> 0.2.0'
   gem 'webmock', '~> 3.1.1'
   gem 'rspec-retry'
