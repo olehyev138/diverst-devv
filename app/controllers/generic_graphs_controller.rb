@@ -13,9 +13,9 @@ class GenericGraphsController < ApplicationController
           .aggregate(type='terms', field='group_id')
           .build
 
-        r = UserGroup.graph(query)
-      }
-      format.csv {
+        data = UserGroup.graph(query)
+
+        render json: data
       }
     end
   end

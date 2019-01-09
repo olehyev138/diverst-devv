@@ -48,7 +48,9 @@
           <div class="card__action">
             <%= link_to "Export CSV", group_population_generic_graphs_path(format: :csv), class: "hidden-xs" %>
           </div>
-          <div class="graph" data-url="<%= group_population_generic_graphs_path %>"></div>
+          <div class="graph" data-url="<%= group_population_generic_graphs_path %>">
+            <svg></svg>
+          </div>
         </div>
       </div>
     </div>

@@ -14,18 +14,19 @@ module BaseGraph
   end
 
   module ClassMethods
-    def graph(query, type='bar', title='Basic Graph')
+    def graph(query, type='nvd3', title='Basic Graph')
       # Get data and format it for use by frontend frameworks
       response = self.search query
 
-      return nvd3_format(title, response)
+      return nvd3_format(title, type, response)
     end
   end
 
   module Nvd3Formatter
-    def nvd3_format(title, response)
+    def nvd3_format(title, type, response)
       return {
         key: title,
+        type: type,
         values: parse_es_response(response)
       }
     end

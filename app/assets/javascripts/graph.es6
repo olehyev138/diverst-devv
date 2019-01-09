@@ -1,159 +1,72 @@
-const DEFAULT_MAX = 10
+/* global $ */
+
+const DEFAULT_MAX = 10;
 
 class Graph {
-  constructor(dataUrl, $element) {
-    this.dataUrl = dataUrl;
-    this.$element = $element;
-    this.data = {};
+    constructor(dataUrl, $element) {
+        this.dataUrl = dataUrl;
+        this.$element = $element;
+        this.data = {};
 
-    this.brandingColor = BRANDING_COLOR || $('.primary-header').css('background-color') || '#7B77C9'
-    this.chartsColor = CHARTS_COLOR || this.brandingColor
+        this.brandingColor = BRANDING_COLOR || $('.primary-header').css('background-color') || '#7B77C9';
+        this.chartsColor = CHARTS_COLOR || this.brandingColor;
 
-    this.updateData();
-  }
+        this.updateData();
+    }
 
-  updateData() {
-    $.get(this.dataUrl, (data) => {
-      this.onDataUpdate(data);
-    });
-  }
+    updateData() {
+        $.get(this.dataUrl, (data) => {
+            this.onDataUpdate(data);
+        });
+    }
 
-  onDataUpdate(data) {
-    this.data = data;
-    this.attachToElement();
-  }
+    onDataUpdate(data) {
+        this.data = data;
+        this.attachToElement();
+    }
 
-  attachToElement() {
-    if (this.data.type === "NumericField" || this.data.type === "DateField" || this.data.type === "bar")
-      this.renderBarChart()
-    else if (this.data.type === "CheckboxField" || this.data.type === "SelectField" || this.data.type === "GroupsField"  || this.data.type === "SegmentsField")
-      if (this.data.hasAggregation)
-        this.renderBarChart()
-      else
-        this.renderPieChart()
-    else if (this.data.type === "pie")
-      this.renderPieChart()
-    else if (this.data.type == 'time_based')
-      this.renderTimeBasedChart()
-  }
+    attachToElement() {
+       if (this.data.type == 'nvd3')  // DEBUG - tmp so we only run our test action
+            this.renderBarChart();
+    }
 
-  renderBarChart() {
-    this.$element.highcharts({
-      chart: {
-        type: 'column',
-        inverted: true,
-        style: {
-          fontFamily: 'Helvetica Neue, sans-serif'
-        }
-      },
-      title: {
-        text: ''
-      },
-      xAxis: {
-        type: 'category',
-        categories: this.data.highcharts.categories,
-        min: 0,
-        max: this.data.highcharts.limit || DEFAULT_MAX,
-        scrollbar: { enabled: this.data.highcharts.scrollbar || true },
-      },
-      yAxis: {
-        min: 0,
-        title: {
-          text: this.data.highcharts.yAxisTitle || 'Nb of users'
-        },
-        allowDecimals: false
-      },
-      plotOptions: {
-        series: {
-          stacking: 'normal',
-          borderWidth: 0
-        }
-      },
-      tooltip: {
-        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-          '<td style="padding:0"><b>{point.y}</b></td></tr>',
-        footerFormat: '</table>',
-        shared: true,
-        useHTML: true
-      },
-      series: this.data.highcharts.series,
-      credits: {
-        enabled: false
-      },
-      colors: [this.chartsColor, '#F15E57', '#FE6D4B', '#9FD661', '#40D0AD', '#48C0EB', '#5A9AEF', '#EE85C1'],
-      drilldown: {
-        series: this.data.highcharts.drilldowns,
-        activeAxisLabelStyle: {
-          textDecoration: 'none'
-        },
-        activeDataLabelStyle: {
-          color: 'white'
-        }
-      }
-    });
-  }
+    renderBarChart() {
+        /* Todo:
+         *   - add abstractions for most of this so we can resuse code
+         */
 
-  renderPieChart() {
-    this.$element.highcharts({
-      chart: {
-        type: 'pie',
-        style: {
-          fontFamily: 'Helvetica Neue, sans-serif'
-        }
-      },
-      plotOptions: {
-        pie: {
-          dataLabels: {
-            enabled: true,
-            format: "{point.name}",
-            style: {
-              width:'70px',
-              textOverflow: 'ellipsis',
-              overflow: 'hidden'
-            }
-          }
-        }
-      },
-      title: {
-        text: ''
-      },
-      series: this.data.highcharts.series,
-      tooltip: {
-        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-        pointFormat: '<tr><td style="padding:0"><b>{point.y}</b></td></tr>',
-        footerFormat: '</table>',
-        shared: true,
-        useHTML: true
-      },
-      credits: {
-        enabled: false
-      },
-      colors: [this.chartsColor, '#F15E57', '#FE6D4B', '#9FD661', '#40D0AD', '#48C0EB', '#5A9AEF', '#EE85C1']
-    });
-  }
+        var series = [this.data];
+        var svg = this.$element[0].children[0];
+        var chart = null;
 
-  renderTimeBasedChart() {
-    Highcharts.stockChart(this.$element[0], {
-      rangeSelector: {
-          floating: true,
-          y: -65,
-          verticalAlign: 'bottom',
-      },
-      navigator: {
-          margin: 60
-      },
-      plotOptions: {
-        series: {
-          marker: {
-            enabled: true,
-            radius: 3,
-            symbol: 'circle'
-          },
-          shadow: true
-        }
-      },
-      series: this.data.highcharts.series
-    });
-  }
+        nv.addGraph(function() {
+            chart = nv.models
+                .multiBarChart()
+                .x(function (d) { return d.label; }) // set the json key for x value
+                .y(function (d) { return d.value; }) // set the json key for y value
+                .showControls(false)
+                .stacked(false);
+
+            chart.yAxis
+                .axisLabel('Group member count')
+                .tickFormat(d3.format('d'));
+
+            d3.select(svg)
+                .datum(series)
+                .transition().duration(500)
+                .call(chart);
+
+            nv.utils.windowResize(chart.update);
+
+            chart.multibar.dispatch.on('elementClick', function(e) {
+                if ('children' in e.data && e.data.children.length != 0)
+                    d3.select(svg)
+                    .datum([e.data.children])
+                    .transition().duration(500)
+                    .call(chart);
+            });
+
+            return chart;
+        });
+    }
 }
