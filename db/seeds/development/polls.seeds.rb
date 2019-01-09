@@ -6,7 +6,10 @@ after 'development:segments' do
         title: 'New Latino attraction at Disney World',
         description: "We’re planning on building a new attraction at Disney World before the beginning of summer. Since this park receives a significant amount of hispanic visitors each year, we want to make sure it doesn’t clash with their culture and is appealing to them.",
         groups: [enterprise.groups.first],
-        segments: [enterprise.segments.first]
+        segments: [enterprise.segments.first],
+        status: 0,
+        owner: enterprise.users.sample, 
+        nb_invitations: 10
       )
 
       p.fields.new(
