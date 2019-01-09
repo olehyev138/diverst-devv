@@ -693,6 +693,17 @@ ActiveRecord::Schema.define(version: 20190109190913) do
     t.string   "mentoring_type", limit: 191,   default: "mentor",  null: false
   end
 
+  create_table "mentoring_session_comments", force: :cascade do |t|
+    t.text     "content",              limit: 65535
+    t.integer  "user_id",              limit: 4
+    t.integer  "mentoring_session_id", limit: 4
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
+
+  add_index "mentoring_session_comments", ["mentoring_session_id"], name: "index_mentoring_session_comments_on_mentoring_session_id", using: :btree
+  add_index "mentoring_session_comments", ["user_id"], name: "index_mentoring_session_comments_on_user_id", using: :btree
+
   create_table "mentoring_session_requests", force: :cascade do |t|
     t.integer  "mentoring_session_id", limit: 4,                       null: false
     t.integer  "user_id",              limit: 4,                       null: false
@@ -1386,6 +1397,8 @@ ActiveRecord::Schema.define(version: 20190109190913) do
   add_foreign_key "likes", "enterprises"
   add_foreign_key "likes", "news_feed_links"
   add_foreign_key "likes", "users"
+  add_foreign_key "mentoring_session_comments", "mentoring_sessions"
+  add_foreign_key "mentoring_session_comments", "users"
   add_foreign_key "mentoring_session_requests", "mentoring_sessions"
   add_foreign_key "mentoring_session_requests", "users"
   add_foreign_key "mentorship_availabilities", "users"
