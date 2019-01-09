@@ -129,6 +129,7 @@ group :development do
   gem 'letter_opener_web', '~> 1.3', '>= 1.3.1'
   gem 'rufo'
   gem 'bundler-audit'
+  gem 'tty-spinner'
 end
 
 group :staging, :production do
