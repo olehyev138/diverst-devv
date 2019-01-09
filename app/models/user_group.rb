@@ -24,7 +24,26 @@ class UserGroup < BaseClass
       indexes :user_id, type: :integer
       indexes :group_id, type: :integer
       indexes :created_at, type: :date
+      indexes :group  do
+        indexes :parent_id, type: :integer
+        indexes :name, type: :keyword
+        indexes :parent do
+          indexes :name, type: :keyword
+        end
+      end
     end
+  end
+
+  def as_indexed_json(options = {})
+    self.as_json(
+      options.merge(
+        only: [:user_id, :group_id, :created_at],
+        include: { group: {
+          only: [:parent_id, :name],
+          include: { parent: { only: [:name] } }
+        }}
+      )
+    )
   end
 
   def string_for_field(field)

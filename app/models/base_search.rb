@@ -28,13 +28,17 @@ module BaseSearch
       @aggs = {aggs: {}}
     end
 
-    def aggregate(type=nil, field=nil, agg_name='agg')
+    def aggregate(type=nil, field=nil, value=nil, agg_name='agg')
       # agg_name can all be 'agg' as long as aggs arnt adjacent, ie duplciate keys
-      agg = {
-        agg_name => {
-          type => { field: field }
-        }
-      }
+
+      # TODO: fix
+      if type == 'filter'
+        type = { filter: { term: { field => value } } }
+      else
+        type = { type => { field: field } }
+      end
+
+      agg = { agg_name => type }
 
       if block_given?
         # if a block is given, nest the returned aggregations inside our current aggregation
@@ -75,7 +79,13 @@ module BaseSearch
             # user named aggregation something else
             return response.aggregations
           else
+            # return nested agg if exists, kind of hacky
+            # TODO: fix this to support any number of nested aggs
+            if response.aggregations.agg.agg.blank?
               return response.aggregations.agg.buckets
+            else
+              return response.aggregations.agg.agg.buckets
+            end
           end
         end
       rescue => e

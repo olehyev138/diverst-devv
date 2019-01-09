@@ -9,13 +9,19 @@ class GenericGraphsController < ApplicationController
       format.json {
         # Demo of using Query class to build an elasticsearch query
 
+#        query = UserGroup.get_query
+#          .aggregate(type='terms', field='group_id')
+        #          .build
+
         query = UserGroup.get_query
-          .aggregate(type='terms', field='group_id')
-          .build
+          .aggregate(type='missing', field='group.parent_id') { |q|
+            q.aggregate(type='terms', field='group.name').build
+        }.build
 
-        data = UserGroup.graph(query)
+        # TEMP
+        UserGroup.drilldown(query, 'group.parent.name')
 
-        render json: data
+        render json: {}
       }
     end
   end
