@@ -781,35 +781,35 @@ PLATFORMS
 DEPENDENCIES
   active_link_to (~> 1.0, >= 1.0.3)
   active_model_serializers (~> 0.9.6)
-  active_record_query_trace
+  active_record_query_trace (~> 1.5.4)
   activerecord-import (~> 0.12.0)
   ajax-datatables-rails (~> 0.3.1)
   autoprefixer-rails (~> 6.3, >= 6.3.3.1)
   awesome_print (~> 1.6, >= 1.6.1)
   aws-sdk (< 2.0)
-  better_errors
-  binding_of_caller
+  better_errors (~> 2.3.0)
+  binding_of_caller (~> 0.7.2)
   bower-rails (~> 0.10.0)
-  bullet
-  bundler-audit
-  byebug
-  capistrano
-  capistrano-bower
-  capistrano-bundler
-  capistrano-clockwork
-  capistrano-rails
-  capistrano-rails-console
-  capistrano-rake
-  capistrano-rvm
-  capistrano-sidekiq
-  capistrano3-puma
-  capybara
+  bullet (~> 5.6.1)
+  bundler-audit (~> 0.6.0)
+  byebug (~> 9.1.0)
+  capistrano (~> 3.9.1)
+  capistrano-bower (~> 1.1.0)
+  capistrano-bundler (~> 1.3.0)
+  capistrano-clockwork (~> 1.0.1)
+  capistrano-rails (~> 1.3.0)
+  capistrano-rails-console (~> 2.2.1)
+  capistrano-rake (~> 0.2.0)
+  capistrano-rvm (~> 0.1.2)
+  capistrano-sidekiq (~> 0.20.0)
+  capistrano3-puma (~> 3.1.1)
+  capybara (~> 2.15.1)
   ckeditor (~> 4.2, >= 4.2.3)
   clockwork (~> 1.2)
   clockwork-test (~> 0.2.0)
   cocoon (~> 1.2, >= 1.2.8)
   daemons (~> 1.2, >= 1.2.3)
-  database_cleaner
+  database_cleaner (~> 1.6.1)
   date_validator (~> 0.9.0)
   devise (~> 3.5, >= 3.5.6)
   devise-async (~> 0.10.1)
@@ -820,7 +820,7 @@ DEPENDENCIES
   elasticsearch-model (~> 0.1)
   elasticsearch-rails (~> 0.1)
   enumerize (~> 2.0)
-  factory_girl_rails
+  factory_girl_rails (~> 4.8.0)
   faker (~> 1.6, >= 1.6.3)
   figaro (~> 1.1, >= 1.1.1)
   firebase (~> 0.2.6)
@@ -836,15 +836,15 @@ DEPENDENCIES
   jbuilder (~> 2.6)
   jquery-datatables-rails (~> 3.3)
   jquery-rails (~> 4.1, >= 4.1.1)
-  jquery-ui-rails
+  jquery-ui-rails (~> 6.0.1)
   julia_builder (~> 0.2.0)
   kaminari (~> 0.16.3)
-  letter_opener
+  letter_opener (~> 1.4.1)
   letter_opener_web (~> 1.3, >= 1.3.1)
   liquid (~> 3.0, >= 3.0.6)
   lograge (~> 0.3)
   mailgun_rails (~> 0.8.0)
-  meta_request
+  meta_request (~> 0.4.3)
   mysql2 (~> 0.4.3)
   newrelic_rpm (~> 4.5.0)
   nokogiri (~> 1.8.2)
@@ -852,40 +852,40 @@ DEPENDENCIES
   omniauth-linkedin-oauth2 (~> 0.1.5)
   omniauth-oauth2 (= 1.3.1)
   paperclip (~> 4.3)
-  parallel_tests
+  parallel_tests (~> 2.16.0)
   pismo (~> 0.7.4)
-  poltergeist
-  pry-rails
-  pry-theme
+  poltergeist (~> 1.16.0)
+  pry-rails (~> 0.3.6)
+  pry-theme (~> 1.2.0)
   public_activity (~> 1.5)
   puma (~> 3.1)
   pundit (~> 2.0.0)
   pundit-matchers (~> 1.6.0)
-  quiet_assets
-  rack-livereload
-  rack-timeout
+  quiet_assets (~> 1.1.0)
+  rack-livereload (~> 0.3.16)
+  rack-timeout (~> 0.4.2)
   rails (~> 4.2.7.1)
   ransack (~> 1.8, >= 1.8.2)
-  rb-readline
+  rb-readline (~> 0.5.5)
   rollbar (~> 2.14.1)
   rspec-rails (~> 3.0)
   rspec_junit_formatter (~> 0.2.3)
   ruby-oembed (~> 0.12)!
   ruby-saml (>= 1.7.0)
-  rufo
+  rufo (~> 0.1.0)
   sanitize_email (~> 1.2.2)
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   seedbank (~> 0.3.0)
   shoulda-matchers (~> 3.1, >= 3.1.1)
   sidekiq (< 5)
-  sidekiq-influxdb
+  sidekiq-influxdb (~> 1.1.0)
   simple_form (~> 3.2, >= 3.2.1)
   simple_form_fancy_uploads!
   simplecov (~> 0.13.0)
   sinatra (~> 1.4, >= 1.4.7)
   spring (~> 1.6.2)
-  spring-commands-rspec
+  spring-commands-rspec (~> 1.0.4)
   sprockets (>= 3.0.0)
   sprockets-es6 (~> 0.9.0)
   syslogger (~> 1.6.0)
