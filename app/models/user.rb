@@ -18,7 +18,7 @@ class User < ActiveRecord::Base
     scope :enterprise_mentees,  -> ( user_ids = []) { where(mentee: true).where.not(:id => user_ids) }
     scope :mentors_and_mentees, -> { where("mentor = true OR mentee = true").distinct }
     scope :inactive,            -> { where(active: false).distinct }
-    
+
 
     belongs_to  :enterprise
     belongs_to  :user_role
@@ -39,8 +39,10 @@ class User < ActiveRecord::Base
     has_many :mentorship_sessions
     has_many :mentoring_sessions, :through => :mentorship_sessions
 
-	has_many :mentorship_types
-	has_many :mentoring_types, :through => :mentorship_types
+  	has_many :mentorship_types
+  	has_many :mentoring_types, :through => :mentorship_types
+
+    has_many :mentoring_session_requests
 
     # mentorship_requests
     has_many :mentorship_proposals, :foreign_key => "sender_id",     :class_name => "MentoringRequest"
@@ -142,7 +144,7 @@ class User < ActiveRecord::Base
             self.user_role_id = enterprise.default_user_role
         end
     end
-    
+
     def group_leader_role
         # make sure a user's role cannot be set to group_leader
         if enterprise.user_roles.where(:id => user_role_id, :role_type => "group").count > 0 && !erg_leader?
@@ -175,7 +177,7 @@ class User < ActiveRecord::Base
             policy_group.update_attributes(attributes)
         end
     end
-    
+
     def is_admin?
         enterprise.user_roles.where(:id => user_role_id).where("LOWER(role_type) = 'admin'").count > 0
     end
@@ -318,7 +320,7 @@ class User < ActiveRecord::Base
 
         part_of_segment
     end
-   
+
 
     # Generate a Firebase token for the user and update the user with it
     def assign_firebase_token
