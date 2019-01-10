@@ -4,7 +4,7 @@ after 'development:join_groups' do
 		Enterprise.all.each do |enterprise|
 			if enterprise.name == "Diverst Inc"
 				enterprise.groups.each do |group|
-					requester = group.user_groups.first.user if group.user_groups.any?
+					requester = group.user_groups.where(accepted_member: true).first.user if group.user_groups.any?
 
 					if requester 
 						budget = Budget.create(requester_id: requester.id, 

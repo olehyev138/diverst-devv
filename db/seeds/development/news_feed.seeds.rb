@@ -5,7 +5,7 @@ after 'development:join_groups' do
 			enterprise.groups.each do |group|
 				if enterprise.name == "Diverst Inc"
 					rand(5..10).times do 
-						author = owner = group.user_groups.sample.user
+						author = owner = group.user_groups.where(accepted_member: true).sample.user
 						news_feed = NewsFeed.create(group_id: group.id)
 
 						group_message = GroupMessage.create(group_id: group.id,
@@ -39,16 +39,16 @@ after 'development:join_groups' do
 						#comments for news feed
 						3.times do
 							NewsLinkComment.create(content: Faker::Lorem.paragraph, 
-								author_id: group.user_groups.sample.user.id,
+								author_id: group.user_groups.where(accepted_member: true).sample.user.id,
 								news_link_id: news_link.id)
 							GroupMessageComment.create(content: Faker::Lorem.paragraph,
-								author_id: group.user_groups.sample.user.id,
+								author_id: group.user_groups.where(accepted_member: true).sample.user.id,
 								message_id: group_message.id)
 						end
 
 						#likes and views for news feed
 						rand(5..10).times do
-							user = group.user_groups.sample.user
+							user = group.user_groups.where(accepted_member: true).sample.user
 							news_link.news_feed_link.likes.create(user_id: user.id, 
 														          enterprise_id: enterprise.id) unless Like.where(user_id: user.id, news_feed_link_id: news_link.news_feed_link.id).exists?
 							group_message.news_feed_link.likes.create(user_id: user.id,
