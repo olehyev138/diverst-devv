@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190109190913) do
+ActiveRecord::Schema.define(version: 20190110181453) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -704,17 +704,6 @@ ActiveRecord::Schema.define(version: 20190109190913) do
   add_index "mentoring_session_comments", ["mentoring_session_id"], name: "index_mentoring_session_comments_on_mentoring_session_id", using: :btree
   add_index "mentoring_session_comments", ["user_id"], name: "index_mentoring_session_comments_on_user_id", using: :btree
 
-  create_table "mentoring_session_requests", force: :cascade do |t|
-    t.integer  "mentoring_session_id", limit: 4,                       null: false
-    t.integer  "user_id",              limit: 4,                       null: false
-    t.string   "status",               limit: 191, default: "pending", null: false
-    t.datetime "created_at",                                           null: false
-    t.datetime "updated_at",                                           null: false
-  end
-
-  add_index "mentoring_session_requests", ["mentoring_session_id"], name: "index_mentoring_session_requests_on_mentoring_session_id", using: :btree
-  add_index "mentoring_session_requests", ["user_id"], name: "index_mentoring_session_requests_on_user_id", using: :btree
-
   create_table "mentoring_session_topics", force: :cascade do |t|
     t.integer  "mentoring_interest_id", limit: 4, null: false
     t.integer  "mentoring_session_id",  limit: 4, null: false
@@ -781,12 +770,12 @@ ActiveRecord::Schema.define(version: 20190109190913) do
   end
 
   create_table "mentorship_sessions", force: :cascade do |t|
-    t.integer  "user_id",              limit: 4,                  null: false
-    t.string   "role",                 limit: 191,                null: false
-    t.integer  "mentoring_session_id", limit: 4,                  null: false
-    t.boolean  "attending",                        default: true
+    t.integer  "user_id",              limit: 4,                       null: false
+    t.string   "role",                 limit: 191,                     null: false
+    t.integer  "mentoring_session_id", limit: 4,                       null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "status",               limit: 191, default: "pending", null: false
   end
 
   create_table "mentorship_types", force: :cascade do |t|
@@ -1399,8 +1388,6 @@ ActiveRecord::Schema.define(version: 20190109190913) do
   add_foreign_key "likes", "users"
   add_foreign_key "mentoring_session_comments", "mentoring_sessions"
   add_foreign_key "mentoring_session_comments", "users"
-  add_foreign_key "mentoring_session_requests", "mentoring_sessions"
-  add_foreign_key "mentoring_session_requests", "users"
   add_foreign_key "mentorship_availabilities", "users"
   add_foreign_key "polls", "initiatives"
   add_foreign_key "reward_actions", "enterprises"

@@ -1,4 +1,4 @@
-class MentoringSessionRequestPolicy < ApplicationPolicy
+class MentorshipSessionPolicy < ApplicationPolicy
     def accept?
       true
     end

@@ -11,7 +11,6 @@ class MentoringSession < ActiveRecord::Base
     has_many :mentorship_sessions
     has_many :users, :through => :mentorship_sessions
     has_many :mentorship_ratings, :dependent => :destroy
-    has_many :mentoring_session_requests, :dependent => :destroy
 
     has_many :mentoring_session_comments, :dependent => :destroy
     alias_attribute :comments, :mentoring_session_comments

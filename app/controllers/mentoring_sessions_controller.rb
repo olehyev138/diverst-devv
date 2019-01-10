@@ -36,10 +36,6 @@ class MentoringSessionsController < ApplicationController
     @mentoring_session.creator_id = current_user.id
 
     if @mentoring_session.save
-      @mentoring_session.users.each do |user|
-        next if user.id == @mentoring_session.creator_id
-        MentoringSessionRequest.create!(mentoring_session: @mentoring_session, user: user)
-      end
       redirect_to sessions_user_mentorship_index_path
     else
       flash[:alert] = "Your session was not scheduled"
@@ -181,7 +177,6 @@ class MentoringSessionsController < ApplicationController
         :id,
         :user_id,
         :role,
-        :attending,
         :_destroy
       ]
     )
