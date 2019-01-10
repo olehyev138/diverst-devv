@@ -32,7 +32,7 @@ class Graph {
 
     renderBarChart() {
         /* Todo:
-         *   - add abstractions for most of this so we can resuse code
+         *   - add abstractions for most of this so we can reuse code
          */
 
         var series = [this.data];
@@ -67,6 +67,13 @@ class Graph {
             });
 
             return chart;
+        });
+
+        d3.select('#back').on('click', function(){
+            d3.select(svg)
+                .datum(series)
+                .transition().duration(500)
+                .call(chart);
         });
     }
 }
