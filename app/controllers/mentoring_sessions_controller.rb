@@ -22,6 +22,10 @@ class MentoringSessionsController < ApplicationController
   def show
     authorize @mentoring_session
 
+    @comments = @mentoring_session.comments.includes(:user)
+
+    @new_comment = MentoringSessionComment.new
+
     render 'user/mentorship/sessions/show'
   end
 
@@ -55,6 +59,22 @@ class MentoringSessionsController < ApplicationController
     authorize @mentoring_session
     @mentoring_session.destroy
     redirect_to sessions_user_mentorship_index_path
+  end
+
+  def create_comment
+      @mentoring_session = current_user.mentoring_sessions.find(params[:mentoring_session_id])
+      authorize @mentoring_session
+
+      @comment = @mentoring_session.comments.new(mentoring_session_comments_params)
+      @comment.user = current_user
+
+      if @comment.save
+          flash[:notice] = "Your comment was created."
+      else
+          flash[:alert] = "Comment not saved. Please fix the errors."
+      end
+
+      redirect_to :back
   end
 
   def start
@@ -164,6 +184,12 @@ class MentoringSessionsController < ApplicationController
         :attending,
         :_destroy
       ]
+    )
+  end
+
+  def mentoring_session_comments_params
+    params.require(:mentoring_session_comment).permit(
+      :content
     )
   end
 

@@ -13,6 +13,9 @@ class MentoringSession < ActiveRecord::Base
     has_many :mentorship_ratings, :dependent => :destroy
     has_many :mentoring_session_requests, :dependent => :destroy
 
+    has_many :mentoring_session_comments, :dependent => :destroy
+    alias_attribute :comments, :mentoring_session_comments
+
     accepts_nested_attributes_for :mentorship_sessions, reject_if: :all_blank, allow_destroy: true
     accepts_nested_attributes_for :resources,           reject_if: :all_blank, allow_destroy: true
 

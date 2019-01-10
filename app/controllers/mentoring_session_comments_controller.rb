@@ -1,29 +1,47 @@
 class MentoringSessionCommentsController < ApplicationController
     before_action :authenticate_user!
-    before_action :set_mentoring_session
+    before_action :set_mentoring_session, :set_comment
 
-    def create
-        @comment = @mentoring_session.comments.new(comment_params)
-        @comment.user = current_user
-        if @comment.save
-            flash[:notice] = "Your comment was created."
-        else
-            flash[:alert] = "Your comment was not created. Please fix the errors"
-        end
+    layout 'user'
 
-        redirect_to :back
+    def edit
+      render 'user/mentorship/session_comments/edit'
+    end
+
+    def update
+      authorize @comment
+
+      if @comment.update(comment_params)
+        flash[:notice] = "Your comment was updated"
+        redirect_to mentoring_session_path(@mentoring_session)
+      else
+        flash[:alert] = "Your comment was not updated. Please fix the errors"
+        render :edit
+      end
+    end
+
+    def destroy
+      authorize @comment
+
+      @comment.destroy
+      redirect_to mentoring_session_path(@mentoring_session)
     end
 
     protected
 
     def set_mentoring_session
-        @mentoring_session = MentoringSession.find(params[:mentoring_session_id])
+      @mentoring_session = current_user.mentoring_sessions.find(params[:mentoring_session_id])
+    end
+
+    def set_comment
+      @comment = @mentoring_session.comments.find(params[:id])
     end
 
     def comment_params
-        params
-            .require(:mentoring_session_comment)
-            .permit(
-                :content
-            )
+      params
+          .require(:mentoring_session_comment)
+          .permit(
+              :content
+          )
     end
+end

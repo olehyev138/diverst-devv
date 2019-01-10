@@ -1,11 +1,9 @@
 class MentoringSessionPolicy < ApplicationPolicy
     def show?
-      # The user has access if they haven't declined or if they are the creator
-      return true if creator?
-      ! @record.mentoring_session_requests.find_by(user_id: @user.id).declined?
+      true
     end
 
-    def edit?
+    def update?
       creator?
     end
 
@@ -21,12 +19,16 @@ class MentoringSessionPolicy < ApplicationPolicy
       accepted_user?
     end
 
-    def creator?
-      @user.id == @record.creator_id
+    def create_comment?
+      show?
     end
 
     def accepted_user?
       return true if creator?
-      @record.users.find(current_user).accepted?
+      @record.mentorship_sessions.find_by(user_id: @user.id).accepted?
+    end
+
+    def creator?
+      @user.id == @record.creator_id
     end
 end
