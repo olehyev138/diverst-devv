@@ -8,15 +8,14 @@ class GenericGraphsController < ApplicationController
     respond_to do |format|
       format.json {
         # Demo of using Query class to build an elasticsearch query
-
         query = UserGroup.get_query
-          .aggregate(type='missing', field='group.parent_id') { |q|
-            q.aggregate(type='terms', field='group.name').build
+          .agg(type: 'missing', field: 'group.parent_id') { |q|
+            q.agg(type: 'terms', field: 'group.name').build
         }.build
 
         results = UserGroup
           .get_graph(query)
-          .drilldown_graph('group.parent.name')
+          .drilldown_graph(parent_field: 'group.parent.name')
           .build
 
         render json: results
@@ -27,36 +26,37 @@ class GenericGraphsController < ApplicationController
   def segment_population
     respond_to do |format|
       format.json {
-        segments = current_user.enterprise.segments.includes(:parent).where(:segmentations => {:parent_id => nil})
-        data = segments.map { |s|
-          {
-            y: s.members.active.count,
-            name: s.name,
-            drilldown: s.name
-          }
-        }
-        drilldowns = segments.includes(:sub_segments).map { |s|
-          {
-            name: s.name,
-            id: s.name,
-            data: s.sub_segments.map {|sub| [sub.name, sub.members.active.count]}
-          }
-        }
+#        segments = current_user.enterprise.segments.includes(:parent).where(:segmentations => {:parent_id => nil})
+#        data = segments.map { |s|
+#          {
+#            y: s.members.active.count,
+#            name: s.name,
+#            drilldown: s.name
+#          }
+#        }
+#        drilldowns = segments.includes(:sub_segments).map { |s|
+#          {
+#            name: s.name,
+#            id: s.name,
+#            data: s.sub_segments.map {|sub| [sub.name, sub.members.active.count]}
+#          }
+#        }
+#
+#        render json: {
+#          type: 'bar',
+#          highcharts: {
+#            series: [{
+#              name: 'Number of users',
+#              data: data
+#            }],
+#            drilldowns: drilldowns,
+#            #categories: categories, <- for some reason this is causing drilldowns to not appear
+#            xAxisTitle: c_t(:segment)
+#          },
+#          hasAggregation: false
+#        }
 
 
-        render json: {
-          type: 'bar',
-          highcharts: {
-            series: [{
-              name: 'Number of users',
-              data: data
-            }],
-            drilldowns: drilldowns,
-            #categories: categories, <- for some reason this is causing drilldowns to not appear
-            xAxisTitle: c_t(:segment)
-          },
-          hasAggregation: false
-        }
       }
       format.csv {
         GenericGraphsSegmentPopulationDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))

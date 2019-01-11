@@ -30,7 +30,7 @@ class Segment < BaseClass
     has_many :initiatives, through: :initiative_segments
 
     validates_presence_of :name
-    
+
     after_commit :update_indexes
 
     before_destroy :remove_parent_segment
@@ -41,7 +41,7 @@ class Segment < BaseClass
 
 
     def segment_rule_values_is_nil(attributes)
-        attributes['values'].nil? 
+        attributes['values'].nil?
     end
 
     def general_rules_followed_by?(user)

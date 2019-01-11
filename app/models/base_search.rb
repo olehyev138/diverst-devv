@@ -28,17 +28,27 @@ module BaseSearch
       @aggs = {aggs: {}}
     end
 
-    def aggregate(type=nil, field=nil, value=nil, agg_name='agg')
-      # agg_name can all be 'agg' as long as aggs arnt adjacent, ie duplciate keys
+    def filter_agg(field:, value:, agg_name: 'agg')
+      agg = { agg_name => { filter: { term: { field => value } } } }
 
-      # TODO: fix
-      if type == 'filter'
-        type = { filter: { term: { field => value } } }
-      else
-        type = { type => { field: field } }
+      if block_given?
+        agg[agg_name].merge!({ aggs:
+          (yield Query.new)[:aggs]
+        })
       end
 
-      agg = { agg_name => type }
+      @aggs[:aggs].merge! agg
+
+      self
+    end
+
+    def date_range_agg
+    end
+
+    def agg(type:, field:, agg_name: 'agg')
+      # agg_name can all be 'agg' as long as aggs arnt adjacent, ie duplciate keys
+
+      agg = { agg_name => { type => { field: field } } }
 
       if block_given?
         # if a block is given, nest the returned aggregations inside our current aggregation
@@ -50,7 +60,6 @@ module BaseSearch
 
       @aggs[:aggs].merge! agg
 
-      # return the Query instance so users can continue building up the query object
       self
     end
 

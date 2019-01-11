@@ -8,13 +8,13 @@ module BaseGraph
   end
 
   module ClassMethods
-    def get_graph(title='Basic Graph', type='nvd3', query)
-      GraphDataBuilder.new(title, type, query, self)
+    def get_graph(query)
+      GraphDataBuilder.new(query, self)
     end
   end
 
   class GraphDataBuilder
-    def initialize(title='Basic Graph', type='nvd3', query, instance)
+    def initialize(query, instance, title: 'Basic Graph', type: 'nvd3')
       @title = title
       @type = type
 
@@ -30,16 +30,17 @@ module BaseGraph
       self
     end
 
-    def drilldown_graph(parent_field)
+    def drilldown_graph(parent_field:)
       # parent_field    - field to use to filter parents on
 
       # cycle parents
       @results.each do |parent|
         # build a query to get all child documents of current parent
         # filter documents on current parent name, then aggregate on child name
+
         children_query = @instance.get_query
-          .aggregate(type='filter', field=parent_field, value=parent[:key]) { |q|
-            q.aggregate(type='terms', field='group.name').build
+          .filter_agg(field: parent_field, value: parent[:key]) { |q|
+            q.agg(type: 'terms', field: 'group.name').build
         }.build
 
         children = @instance.search(children_query)
@@ -71,7 +72,7 @@ module BaseGraph
 
       if children
         parent[:children] = {
-          key: bucket[:key] + '_subgroups',
+          key: (bucket[:key] + '_subgroups').downcase,
           values: format_bucket_list(children)
         }
       end
