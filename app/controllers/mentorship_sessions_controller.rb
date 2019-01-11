@@ -20,7 +20,7 @@ class MentorshipSessionsController < ApplicationController
     @mentorship_session.save
 
     flash[:notice] = "Session invitation declined"
-    redirect_to sessions_user_mentorship_index_path
+    redirect_to :back
   end
 
   private

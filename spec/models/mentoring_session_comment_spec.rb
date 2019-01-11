@@ -1,5 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe MentoringSessionComment, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'validations' do
+      let(:mentoring_session_comment) { FactoryGirl.build_stubbed(:mentoring_session_comment) }
+
+      it{ expect(mentoring_session_comment).to validate_presence_of(:user) }
+      it{ expect(mentoring_session_comment).to validate_presence_of(:mentoring_session) }
+      it{ expect(mentoring_session_comment).to validate_presence_of(:content) }
+
+      it { expect(mentoring_session_comment).to belong_to(:user) }
+      it { expect(mentoring_session_comment).to belong_to(:mentoring_session) }
+  end
 end

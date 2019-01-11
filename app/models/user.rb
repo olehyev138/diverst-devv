@@ -42,8 +42,6 @@ class User < ActiveRecord::Base
   	has_many :mentorship_types
   	has_many :mentoring_types, :through => :mentorship_types
 
-    has_many :mentoring_session_requests
-
     # mentorship_requests
     has_many :mentorship_proposals, :foreign_key => "sender_id",     :class_name => "MentoringRequest"
     has_many :mentorship_requests,  :foreign_key => "receiver_id",   :class_name => "MentoringRequest"

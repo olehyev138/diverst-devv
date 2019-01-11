@@ -65,9 +65,9 @@ class MentoringSessionsController < ApplicationController
       @comment.user = current_user
 
       if @comment.save
-          flash[:notice] = "Your comment was created."
+          flash[:notice] = "Your comment was created"
       else
-          flash[:alert] = "Comment not saved. Please fix the errors."
+          flash[:alert] = "Comment not saved. Please fix the errors"
       end
 
       redirect_to :back
