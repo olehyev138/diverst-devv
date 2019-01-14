@@ -3,12 +3,16 @@ class MentoringSessionPolicy < ApplicationPolicy
       true
     end
 
+    def edit?
+      update?
+    end
+
     def update?
       creator?
     end
 
     def destroy?
-      edit?
+      update?
     end
 
     def join?

@@ -24,7 +24,7 @@ RSpec.describe MentoringSessionsController, type: :controller do
         describe "if user is present" do
             login_user_from_let
             it "renders the template" do
-                mentoring_session = create(:mentoring_session)
+                mentoring_session = create(:mentoring_session, creator: user)
                 mentoring_session.mentorship_sessions.create(:user => user, :mentoring_session => mentoring_session, :role => "presenter")
 
                 get :edit, :id => mentoring_session.id
@@ -61,7 +61,7 @@ RSpec.describe MentoringSessionsController, type: :controller do
             describe "if user is present" do
                 login_user_from_let
                 it "renders the template" do
-                    mentoring_session = create(:mentoring_session)
+                    mentoring_session = create(:mentoring_session, creator: user)
                     mentoring_session.mentorship_sessions.create(:user => user, :mentoring_session => mentoring_session, :role => "presenter")
 
                     get :start, :id => mentoring_session.id
@@ -74,7 +74,7 @@ RSpec.describe MentoringSessionsController, type: :controller do
             describe "if user is present" do
                 login_user_from_let
                 it "renders the template" do
-                    mentoring_session = create(:mentoring_session)
+                    mentoring_session = create(:mentoring_session, creator: user)
                     mentoring_session.mentorship_sessions.create(:user => user, :mentoring_session => mentoring_session, :role => "presenter")
 
                     get :join, :id => mentoring_session.id
@@ -191,7 +191,7 @@ RSpec.describe MentoringSessionsController, type: :controller do
             }
 
             it "destroys the request" do
-                mentoring_session = create(:mentoring_session)
+                mentoring_session = create(:mentoring_session, creator: user)
                 mentoring_session.mentorship_sessions.create(:user => user, :mentoring_session => mentoring_session, :role => "presenter", :status => "pending")
 
                 delete :destroy, :id => mentoring_session.id
