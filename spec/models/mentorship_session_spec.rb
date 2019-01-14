@@ -11,7 +11,7 @@ RSpec.describe MentorshipSession, :type => :model do
       it { expect(mentorship_session).to belong_to(:user) }
       it { expect(mentorship_session).to belong_to(:mentoring_session) }
 
-      it { expect(mentorship_session).to validate_uniqueness_of(:user_id).scoped_to(:mentoring_session) }
+      it { expect(mentorship_session).to validate_uniqueness_of(:user_id).scoped_to(:mentoring_session_id) }
     end
 
     describe 'methods' do

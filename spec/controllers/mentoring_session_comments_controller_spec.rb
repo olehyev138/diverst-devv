@@ -3,10 +3,10 @@ require 'rails_helper'
 RSpec.describe MentoringSessionCommentsController, type: :controller do
   let(:user) { create(:user) }
   let(:mentee){ create(:user) }
-  let(:mentoring_session){ create(:mentoring_session, creator: user, start: Date.today, end: Date.tomorrow + 1.day, status: "scheduled", format: "Video") }
-  let(:mentorship_session){ mentoring_session.mentorship_sessions.create(:user => user, :mentoring_session => mentoring_session, :role => "presenter") }
-  let(:mentorship_session2){ mentoring_session.mentorship_sessions.create(:user => mentee, :mentoring_session => mentoring_session, :role => "presenter", :status => "accepted") }
-  let(:mentoring_session_comment){ create(:mentoring_session_comment, mentoring_session: mentoring_session, user: user) }
+  let!(:mentoring_session){ create(:mentoring_session, creator: user, start: Date.today, end: Date.tomorrow + 1.day, status: "scheduled", format: "Video") }
+  let!(:mentorship_session){ mentoring_session.mentorship_sessions.create(:user => user, :mentoring_session => mentoring_session, :role => "presenter") }
+  let!(:mentorship_session2){ mentoring_session.mentorship_sessions.create(:user => mentee, :mentoring_session => mentoring_session, :role => "presenter", :status => "accepted") }
+  let!(:mentoring_session_comment){ create(:mentoring_session_comment, mentoring_session: mentoring_session, user: user) }
 
 
   describe 'GET#edit' do
@@ -15,12 +15,12 @@ RSpec.describe MentoringSessionCommentsController, type: :controller do
       before { get :edit, mentoring_session_id: mentoring_session.id, id: mentoring_session_comment.id }
 
       it "renders edit template" do
-        expect(response).to render_template :edit
+        expect(response).to render_template 'user/mentorship/session_comments/edit'
       end
 
       it 'returns comment belonging to mentoring_session' do
-        expect(assigns[:mentoring_session_comment]).to eq mentoring_session_comment
-        expect(assigns[:mentoring_session_comment].mentoring_session).to eq mentoring_session
+        expect(assigns[:comment]).to eq mentoring_session_comment
+        expect(assigns[:comment].mentoring_session).to eq mentoring_session
       end
     end
 
@@ -64,7 +64,7 @@ RSpec.describe MentoringSessionCommentsController, type: :controller do
       end
 
       it 'renders edit template' do
-        expect(response).to render_template :edit
+        expect(response).to render_template 'user/mentorship/session_comments/edit'
       end
     end
 

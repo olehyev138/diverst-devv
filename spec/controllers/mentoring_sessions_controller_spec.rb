@@ -125,9 +125,9 @@ RSpec.describe MentoringSessionsController, type: :controller do
           before {
             request.env["HTTP_REFERER"] = "back"
           }
-
-          let!(:mentoring_session){ create(:mentoring_session, creator: user) }
           login_user_from_let
+
+          let!(:mentoring_session) {create(:mentoring_session, creator: user, :mentorship_sessions_attributes => [{:user_id => user.id, :role => "presenter"}])}
 
           context 'with valid attributes' do
 
@@ -153,7 +153,7 @@ RSpec.describe MentoringSessionsController, type: :controller do
 
               it 'flashes an alert message' do
                   post :create_comment, mentoring_session_id: mentoring_session.id, mentoring_session_comment: invalid_attributes
-                  expect(flash[:alert]).to eq "Comment not saved. Please fix errors"
+                  expect(flash[:alert]).to eq "Comment not saved. Please fix the errors"
               end
 
               it 'redirect to group_group_message_path' do

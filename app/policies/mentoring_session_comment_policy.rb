@@ -3,6 +3,10 @@ class MentoringSessionCommentPolicy < ApplicationPolicy
       creator?
     end
 
+    def edit?
+      update?
+    end
+
     def destroy?
       creator?
     end

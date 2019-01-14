@@ -8,7 +8,7 @@ class MentorshipSession < ActiveRecord::Base
     validates :role,                presence: true
     validates :mentoring_session,   presence: true, :on => :update
 
-    validates_uniqueness_of :user_id, scope: [:mentoring_session]
+    validates_uniqueness_of :user_id, scope: [:mentoring_session_id]
 
     def creator?
       self.mentoring_session.creator_id == self.user_id

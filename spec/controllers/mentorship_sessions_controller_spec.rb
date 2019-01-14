@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe MentorshipSessionsController, type: :controller do
-  let(:user) { create(:user) }
-  let(:mentee){ create(:user) }
-  let(:mentoring_session){ create(:mentoring_session, creator: user, start: Date.today, end: Date.tomorrow + 1.day, status: "scheduled", format: "Video") }
-  let(:mentorship_session){ mentoring_session.mentorship_sessions.create(:user => user, :mentoring_session => mentoring_session, :role => "presenter") }
-  let(:mentorship_session2){ mentoring_session.mentorship_sessions.create(:user => mentee, :mentoring_session => mentoring_session, :role => "viewer", :status => "pending") }
+  let(:user){ create(:user) }
+  let(:creator) { create(:user) }
+  let(:mentoring_session){ create(:mentoring_session, creator: creator, start: Date.today, end: Date.tomorrow + 1.day, status: "scheduled", format: "Video") }
+  let!(:mentorship_session){ mentoring_session.mentorship_sessions.create(:user => creator, :mentoring_session => mentoring_session, :role => "presenter") }
+  let!(:mentorship_session2){ mentoring_session.mentorship_sessions.create(:user => user, :mentoring_session => mentoring_session, :role => "viewer") }
 
   describe 'GET#accept' do
     context 'when user is logged in' do

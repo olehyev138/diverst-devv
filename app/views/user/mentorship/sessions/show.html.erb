@@ -16,7 +16,7 @@
         </div>
         <div class="card__section card__section--border">
             <label><strong>Starts</strong></label>
-            <p><%= @mentoring_session.start.strftime("%m/%d/%Y %H:%M") %></p>
+            <p><%= @mentoring_session.start.in_time_zone(current_user.time_zone).strftime("%m/%d/%Y %H:%M") %></p>
             <% # check if the start time of the session is within 5 minutes and that they can start it %>
             <% if @mentoring_session.can_start(current_user.id) && MentoringSessionPolicy.new(current_user, @mentoring_session).start? %>
               <%= link_to "START SESSION", start_mentoring_session_path(@mentoring_session), target: "_blank", class: "btn btn--primary", role: "button", 'aria-label': "Start" %>
@@ -29,7 +29,7 @@
          </div>
         <div class="card__section card__section--border">
             <label><strong>Ends</strong></label>
-            <p><%= @mentoring_session.end.strftime("%m/%d/%Y %H:%M") %></p>
+            <p><%= @mentoring_session.end.in_time_zone(current_user.time_zone).strftime("%m/%d/%Y %H:%M") %></p>
          </div>
         <div class="card__section card__section--border">
             <label><strong>Attending</strong></label>

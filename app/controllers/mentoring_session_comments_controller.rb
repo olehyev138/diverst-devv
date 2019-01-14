@@ -5,6 +5,8 @@ class MentoringSessionCommentsController < ApplicationController
     layout 'user'
 
     def edit
+      authorize @comment
+
       render 'user/mentorship/session_comments/edit'
     end
 
@@ -16,7 +18,7 @@ class MentoringSessionCommentsController < ApplicationController
         redirect_to mentoring_session_path(@mentoring_session)
       else
         flash[:alert] = "Your comment was not updated. Please fix the errors"
-        render :edit
+        render 'user/mentorship/session_comments/edit'
       end
     end
 
