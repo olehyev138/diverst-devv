@@ -540,8 +540,8 @@ Rails.application.routes.draw do
     resources :mentoring_session_comments, only: [:edit, :update, :destroy]
     resources :mentorship_sessions, only: [:accept, :decline] do
       member do
-        get 'accept'
-        get 'decline'
+        post 'accept'
+        post 'decline'
       end
     end
   end

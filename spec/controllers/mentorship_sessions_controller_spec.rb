@@ -7,15 +7,15 @@ RSpec.describe MentorshipSessionsController, type: :controller do
   let!(:mentorship_session){ mentoring_session.mentorship_sessions.create(:user => creator, :mentoring_session => mentoring_session, :role => "presenter") }
   let!(:mentorship_session2){ mentoring_session.mentorship_sessions.create(:user => user, :mentoring_session => mentoring_session, :role => "viewer") }
 
-  describe 'GET#accept' do
+  describe 'POST#accept' do
+    login_user_from_let
+
+    before {
+      request.env["HTTP_REFERER"] = "back"
+      get :accept, mentoring_session_id: mentoring_session.id, id: mentorship_session2.id
+    }
+
     context 'when user is logged in' do
-      login_user_from_let
-
-      before {
-        request.env["HTTP_REFERER"] = "back"
-        get :accept, mentoring_session_id: mentoring_session.id, id: mentorship_session2.id
-      }
-
       it 'sets the status to accepted' do
         expect(mentorship_session2.accepted?).to eq true
       end
@@ -30,12 +30,11 @@ RSpec.describe MentorshipSessionsController, type: :controller do
     end
 
     context 'without logged user' do
-      before { get :accept, mentoring_session_id: mentoring_session.id, id: mentorship_session2.id }
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
 
-  describe 'GET#decline' do
+  describe 'POST#decline' do
 
   end
 end
