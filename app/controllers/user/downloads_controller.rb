@@ -9,7 +9,7 @@ class User::DownloadsController < ApplicationController
   end
 
   def download
-    redirect_to @csv_file.download_file.expiring_url(5.minutes)
+    redirect_to @csv_file.download_file.expiring_url(30)
   end
 
   protected
