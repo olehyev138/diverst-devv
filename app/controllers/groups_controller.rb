@@ -271,6 +271,7 @@ class GroupsController < ApplicationController
         @email = ENV['CSV_UPLOAD_REPORT_EMAIL']
 
         if file.save
+          track_activity(@group, :import_csv)
           @success = true
           @message = '@success'
         else
