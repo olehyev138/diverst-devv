@@ -432,6 +432,33 @@ RSpec.describe UsersController, type: :controller do
             it "calls job" do
                 expect(UsersDownloadJob).to have_received(:perform_later)
             end
+
+            describe 'public activity' do
+              enable_public_activity
+
+              it 'creates public activity record' do
+                perform_enqueued_jobs do
+                  allow(UsersDownloadJob).to receive(:perform_later)
+                  expect{ get :export_csv }
+                  .to change(PublicActivity::Activity, :count).by(1)
+                end
+              end
+
+              describe 'activity record' do
+                let(:model) { User.last }
+                let(:owner) { user }
+                let(:key) { 'user.export_csv' }
+
+                before {
+                  perform_enqueued_jobs do
+                    allow(UsersDownloadJob).to receive(:perform_later)
+                    get :export_csv
+                  end
+                }
+
+                include_examples'correct public activity'
+              end
+            end
         end
 
         context 'when user is not logged in' do
