@@ -361,6 +361,33 @@ RSpec.describe UsersController, type: :controller do
                 it "calls the correct job" do
                     expect(ImportCSVJob).to have_received(:perform_later)
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      allow(ImportCSVJob).to receive(:perform_later)
+                      expect{ get :parse_csv, :file => file }
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { User.last }
+                    let(:owner) { user }
+                    let(:key) { 'user.import_csv' }
+
+                    before {
+                      perform_enqueued_jobs do
+                        allow(ImportCSVJob).to receive(:perform_later)
+                        get :parse_csv, :file => file
+                      end
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
 
             context 'with incorrect file' do
