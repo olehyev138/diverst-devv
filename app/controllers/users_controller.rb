@@ -110,6 +110,7 @@ class UsersController < ApplicationController
     @email = ENV['CSV_UPLOAD_REPORT_EMAIL']
 
     if file.save
+      track_activity(current_user, :import_csv)
       @success = true
       @message = '@success'
     else
