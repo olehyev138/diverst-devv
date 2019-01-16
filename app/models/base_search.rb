@@ -42,7 +42,33 @@ module BaseSearch
       self
     end
 
-    def date_range_agg
+    def date_range_agg(field:, range:, agg_name: 'agg')
+      agg = { agg_name =>
+        { date_range: { field: field, ranges: [ range ] }}}
+
+      if block_given?
+        agg[agg_name].merge!({ aggs:
+          (yield Query.new)[:aggs]
+        })
+      end
+
+      @aggs[:aggs].merge! agg
+
+      self
+    end
+
+    def top_hits_agg(size: 100, agg_name: 'agg')
+      agg = { agg_name => { top_hits: { size: size } } }
+
+      if block_given?
+        agg[agg_name].merge!({ aggs:
+          (yield Query.new)[:aggs]
+        })
+      end
+
+      @aggs[:aggs].merge! agg
+
+      self
     end
 
     def agg(type:, field:, agg_name: 'agg')
@@ -79,7 +105,7 @@ module BaseSearch
 
     def search(query)
       begin
-        response = self.__elasticsearch__.search query
+        response = (self.__elasticsearch__.search query).response
 
         if query[:aggs].blank?
           return response.results.response.records.to_a

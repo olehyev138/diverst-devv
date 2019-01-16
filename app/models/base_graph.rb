@@ -24,8 +24,8 @@ module BaseGraph
 
     end
 
-    def graph(buckets)
-      @formatter.add_bucket_list(buckets)
+    def graph
+      @formatter.add_bucket_list(@results)
 
       self
     end
