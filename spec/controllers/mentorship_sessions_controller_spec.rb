@@ -18,6 +18,7 @@ RSpec.describe MentorshipSessionsController, type: :controller do
 
     context 'when user is logged in' do
       it 'sets the status to accepted' do
+        mentorship_session2.reload
         expect(mentorship_session2.accepted?).to eq true
       end
 
@@ -45,6 +46,7 @@ RSpec.describe MentorshipSessionsController, type: :controller do
 
     context 'when user is logged in' do
       it 'sets the status to declined' do
+        mentorship_session2.reload
         expect(mentorship_session2.declined?).to eq true
       end
 
