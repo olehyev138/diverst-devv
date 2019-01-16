@@ -26,7 +26,7 @@ class MentorMailer < ApplicationMailer
         @mentorship_session = @mentoring_session.mentorship_sessions.find_by(user_id: @user.id)
 
 
-        mail(to: @user.email, subject: "Mentoring Session Scheduled for #{@mentoring_session.start.in_time_zone(@user.time_zone).strftime("%m/%d/%Y %I:%M %p")}")
+        mail(to: @user.email, subject: "Mentoring Session Scheduled for #{@mentoring_session.start.in_time_zone(@user.default_time_zone).strftime("%m/%d/%Y %I:%M %p")}")
     end
 
     def session_updated(user_id, mentoring_session_id)
@@ -36,7 +36,7 @@ class MentorMailer < ApplicationMailer
         @user = User.find_by_id(user_id)
         return if @user.nil?
 
-        mail(to: @user.email, subject: "Mentoring Session Scheduled for #{@mentoring_session.start.in_time_zone(@user.time_zone).strftime("%m/%d/%Y %I:%M %p")} has been updated")
+        mail(to: @user.email, subject: "Mentoring Session Scheduled for #{@mentoring_session.start.in_time_zone(@user.default_time_zone).strftime("%m/%d/%Y %I:%M %p")} has been updated")
     end
 
     def session_canceled(start, user_id)
@@ -76,6 +76,6 @@ class MentorMailer < ApplicationMailer
         @user = User.find_by_id(user_id)
         return if @user.nil?
 
-        mail(to: @user.email, subject: "Reminder: Mentoring Session Scheduled for #{@mentoring_session.start.in_time_zone(@user.time_zone).strftime("%m/%d/%Y %I:%M %p")}")
+        mail(to: @user.email, subject: "Reminder: Mentoring Session Scheduled for #{@mentoring_session.start.in_time_zone(@user.default_time_zone).strftime("%m/%d/%Y %I:%M %p")}")
     end
 end

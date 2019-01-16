@@ -5,9 +5,9 @@
       <div class="card">
         <div class="card__section card__section--border">
             <% user_session = @mentoring_session.mentorship_sessions.find_by(user_id: current_user.id) %>
-            <% if user_session.present? && user_session.pending? && !user_session.creator? %>
-              <%= link_to "Accept", accept_mentoring_session_mentorship_session_path(@mentoring_session.id, user_session.id), class: "btn btn--primary" if MentorshipSessionPolicy.new(current_user, user_session).accept? %>
-              <%= link_to "Decline", decline_mentoring_session_mentorship_session_path(@mentoring_session.id, user_session.id), data: { confirm: 'Are you sure?' }, class: "btn btn--danger" if MentorshipSessionPolicy.new(current_user, user_session).decline? %>
+            <% if user_session.present? %>
+              <%= link_to "Accept", accept_mentoring_session_mentorship_session_path(@mentoring_session.id, user_session.id), method: :post, class: "btn btn--primary" if MentorshipSessionPolicy.new(current_user, user_session).accept? %>
+              <%= link_to "Decline", decline_mentoring_session_mentorship_session_path(@mentoring_session.id, user_session.id), method: :post, data: { confirm: 'Are you sure?' }, class: "btn btn--danger" if MentorshipSessionPolicy.new(current_user, user_session).decline? %>
             <% end %>
             <%= link_to "Edit", edit_mentoring_session_path(@mentoring_session) if MentoringSessionPolicy.new(current_user, @mentoring_session).update? %>&nbsp;/
             <%= link_to "Add to Google Calendar", GoogleCalendar.build_mentor_link(@mentoring_session), target: :_blank %>&nbsp;/
@@ -16,7 +16,7 @@
         </div>
         <div class="card__section card__section--border">
             <label><strong>Starts</strong></label>
-            <p><%= @mentoring_session.start.in_time_zone(current_user.time_zone).strftime("%m/%d/%Y %H:%M") %></p>
+            <p><%= @mentoring_session.start.strftime("%m/%d/%Y %H:%M") %></p>
             <% # check if the start time of the session is within 5 minutes and that they can start it %>
             <% if @mentoring_session.can_start(current_user.id) && MentoringSessionPolicy.new(current_user, @mentoring_session).start? %>
               <%= link_to "START SESSION", start_mentoring_session_path(@mentoring_session), target: "_blank", class: "btn btn--primary", role: "button", 'aria-label': "Start" %>
@@ -29,7 +29,7 @@
          </div>
         <div class="card__section card__section--border">
             <label><strong>Ends</strong></label>
-            <p><%= @mentoring_session.end.in_time_zone(current_user.time_zone).strftime("%m/%d/%Y %H:%M") %></p>
+            <p><%= @mentoring_session.end.strftime("%m/%d/%Y %H:%M") %></p>
          </div>
         <div class="card__section card__section--border">
             <label><strong>Attending</strong></label>

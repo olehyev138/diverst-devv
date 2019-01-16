@@ -69,7 +69,7 @@ class MentoringSession < ActiveRecord::Base
 
     def notify_users_on_destroy
         users.each do |user|
-            MentorMailer.session_canceled(start.in_time_zone(user.time_zone).strftime("%m/%d/%Y %I:%M %p"), user.id).deliver_later
+            MentorMailer.session_canceled(start.in_time_zone(user.default_time_zone).strftime("%m/%d/%Y %I:%M %p"), user.id).deliver_later
         end
         mentorship_sessions.destroy_all
     end

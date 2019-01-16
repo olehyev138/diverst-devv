@@ -9,7 +9,7 @@ RSpec.describe MentorMailer, type: :mailer do
     let!(:mail) { described_class.session_scheduled(mentoring_session.id, mentor.id).deliver_now }
 
     it 'renders the subject' do
-      expect(mail.subject).to eq "Mentoring Session Scheduled for #{mentoring_session.start.in_time_zone(mentor.time_zone).strftime("%m/%d/%Y %I:%M %p")}"
+      expect(mail.subject).to eq "Mentoring Session Scheduled for #{mentoring_session.start.in_time_zone(mentor.default_time_zone).strftime("%m/%d/%Y %I:%M %p")}"
     end
 
     it 'renders the receiver email' do
@@ -23,7 +23,7 @@ RSpec.describe MentorMailer, type: :mailer do
     let!(:mail) { described_class.session_updated(mentor.id, mentoring_session.id).deliver_now }
 
     it 'renders the subject' do
-      expect(mail.subject).to eq "Mentoring Session Scheduled for #{mentoring_session.start.in_time_zone(mentor.time_zone).strftime("%m/%d/%Y %I:%M %p")} has been updated"
+      expect(mail.subject).to eq "Mentoring Session Scheduled for #{mentoring_session.start.in_time_zone(mentor.default_time_zone).strftime("%m/%d/%Y %I:%M %p")} has been updated"
     end
 
     it 'renders the receiver email' do
@@ -34,10 +34,10 @@ RSpec.describe MentorMailer, type: :mailer do
   describe '#session_canceled' do
     let(:mentor) { create :user }
     let(:mentoring_session) { create :mentoring_session }
-    let!(:mail) { described_class.session_canceled(mentoring_session.start.in_time_zone(mentor.time_zone).strftime("%m/%d/%Y %I:%M %p"), mentor.id).deliver_now }
+    let!(:mail) { described_class.session_canceled(mentoring_session.start.in_time_zone(mentor.default_time_zone).strftime("%m/%d/%Y %I:%M %p"), mentor.id).deliver_now }
 
     it 'renders the subject' do
-      expect(mail.subject).to eq "Mentoring Session Scheduled for #{mentoring_session.start.in_time_zone(mentor.time_zone).strftime("%m/%d/%Y %I:%M %p")} has been canceled"
+      expect(mail.subject).to eq "Mentoring Session Scheduled for #{mentoring_session.start.in_time_zone(mentor.default_time_zone).strftime("%m/%d/%Y %I:%M %p")} has been canceled"
     end
 
     it 'renders the receiver email' do
@@ -92,7 +92,7 @@ RSpec.describe MentorMailer, type: :mailer do
     let!(:mail) { described_class.session_reminder(mentor.id, mentoring_session.id).deliver_now }
 
     it 'renders the subject' do
-      expect(mail.subject).to eq "Reminder: Mentoring Session Scheduled for #{mentoring_session.start.in_time_zone(mentor.time_zone).strftime("%m/%d/%Y %I:%M %p")}"
+      expect(mail.subject).to eq "Reminder: Mentoring Session Scheduled for #{mentoring_session.start.in_time_zone(mentor.default_time_zone).strftime("%m/%d/%Y %I:%M %p")}"
     end
 
     it 'renders the receiver email' do
