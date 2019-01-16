@@ -148,6 +148,29 @@ class Group < BaseClass
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
 
+  settings do
+    mappings dynamic: false do
+      indexes :id, type: :integer
+      indexes :parent_id, type: :integer
+      indexes :name, type: :keyword
+      indexes :initiatives do
+        indexes :id, type: :integer
+        indexes :created_at, type: :date
+      end
+    end
+  end
+
+  def as_indexed_json(options = {})
+    self.as_json(
+      options.merge(
+        only: [:id, :parent_id, :name],
+        include: { initiatives: {
+          only: [:id, :name, :created_at]
+        }}
+      )
+    )
+  end
+
   def layout_values
     {
       'layout_0' => 'Default layout',
