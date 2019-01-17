@@ -73,6 +73,7 @@ module IsResources
     def archive
         @resources = @container.resources.where(archived_at: nil).all
         @resource.update(archived_at: DateTime.now)
+        track_activity(@resource, :archive)
 
         respond_to do |format|
            format.html { redirect_to action: :index }
