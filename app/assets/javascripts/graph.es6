@@ -32,7 +32,7 @@ class Graph {
 
     renderBarChart() {
         /* Todo:
-         *   - add abstractions for most of this so we can reuse code
+         *   - add abstractions for most of this to remove complexity and so we can reuse code
          */
 
         var series = [this.data];
@@ -69,7 +69,9 @@ class Graph {
             return chart;
         });
 
-        d3.select('#back').on('click', function(){
+        // TODO: get this working properly
+        d3.selectAll('.drillout_button').on('click', function(){
+            console.log('hello');
             d3.select(svg)
                 .datum(series)
                 .transition().duration(500)

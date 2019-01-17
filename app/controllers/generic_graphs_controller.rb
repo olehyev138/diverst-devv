@@ -8,17 +8,58 @@ class GenericGraphsController < ApplicationController
     respond_to do |format|
       format.json {
         # Demo of using Query class to build an elasticsearch query
+
+        terms_query = UserGroup
+          .get_query.agg(type: 'terms', field: 'group.name').build
         query = UserGroup.get_query
-          .agg(type: 'missing', field: 'group.parent_id') { |q|
-            q.agg(type: 'terms', field: 'group.name').build
-        }.build
+          .agg(type: 'missing', field: 'group.parent_id') { |_| terms_query }.build
 
         results = UserGroup
           .get_graph(query)
-          .drilldown_graph(parent_field: 'group.parent.name')
+          .drilldown_graph(query: terms_query, parent_field: 'group.parent.name')
           .build
 
         render json: results
+      }
+    end
+  end
+
+  def non_demo_events_created
+    respond_to do |format|
+      format.json{
+        # TODO: shorten this, simplify, really only like this for sake of getting things working
+
+        events_query = Group.get_query
+          .date_range_agg(field: 'initiatives.created_at', range: { from: 'now-5d/d'}) { |q|
+            q.top_hits_agg.build
+          }.build
+
+        query = Group.get_query
+          .agg(type: 'missing', field: 'parent_id') { |_| events_query }.build
+
+        format_block = -> (bucket) {
+          bucket = bucket[:_source] # why oh why elasticsearch :(
+          {
+            label: bucket[:name],
+            value: bucket[:initiatives].count,
+            children: []
+          }
+        }
+
+        parent_key_block = -> (parent) { parent[:_source][:id] }
+
+        results = Group
+          .get_graph(query, hits: true, format_block: format_block)
+          .drilldown_graph(query: events_query, parent_field: 'parent_id', parent_key_block: parent_key_block)
+          .build
+
+        render json: results
+
+      }
+      format.csv {
+        GenericGraphsEventsCreatedDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), demo: false)
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
       }
     end
   end
@@ -229,50 +270,6 @@ class GenericGraphsController < ApplicationController
   end
 
   # FOR NON DEMO PURPOSES
-
-  def non_demo_events_created
-    respond_to do |format|
-      format.json{
-        data = current_user.enterprise.groups.all_parents.map do |g|
-          {
-            y: g.initiatives.joins(:owner)
-              .where('initiatives.created_at > ? AND users.active = ?', 1.month.ago, true).count,
-            name: g.name,
-            drilldown: g.name
-          }
-        end
-
-        drilldowns = current_user.enterprise.groups.includes(:children).all_parents.map { |g|
-          {
-            name: g.name,
-            id: g.name,
-            data: g.children.map {|child| [child.name, child.initiatives.joins(:owner)
-                .where('initiatives.created_at > ? AND users.active = ?', 1.month.ago, true).count]}
-          }
-        }
-
-        render json: {
-          type: 'bar',
-          highcharts: {
-            series: [{
-              title: 'Events created',
-              data: data
-            }],
-            drilldowns: drilldowns,
-            #categories: categories,
-            xAxisTitle: "#{c_t(:erg)}",
-            yAxisTitle: 'Nb of events'
-          },
-          hasAggregation: false
-        }
-      }
-      format.csv {
-        GenericGraphsEventsCreatedDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), demo: false)
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
-        redirect_to :back
-      }
-    end
-  end
 
   def non_demo_messages_sent
     respond_to do |format|
