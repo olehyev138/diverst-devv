@@ -30,18 +30,16 @@ module BaseGraph
       self
     end
 
-    def drilldown_graph(parent_field:)
+    def drilldown_graph(query:, parent_field:)
       # parent_field    - field to use to filter parents on
 
       # cycle parents
       @results.each do |parent|
         # build a query to get all child documents of current parent
-        # filter documents on current parent name, then aggregate on child name
+        # filter documents on current parent name
 
         children_query = @instance.get_query
-          .filter_agg(field: parent_field, value: parent[:key]) { |q|
-            q.agg(type: 'terms', field: 'group.name').build
-        }.build
+          .filter_agg(field: parent_field, value: parent[:key]) { |_| query }.build
 
         children = @instance.search(children_query)
 
