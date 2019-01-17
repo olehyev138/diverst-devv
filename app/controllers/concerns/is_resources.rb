@@ -83,6 +83,7 @@ module IsResources
 
     def restore
         @resource.update(archived_at: nil)
+        track_activity(@resource, :restore)
 
         respond_to do |format|
           format.html { redirect_to :back }
