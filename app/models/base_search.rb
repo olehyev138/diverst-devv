@@ -107,27 +107,24 @@ module BaseSearch
       begin
         response = (self.__elasticsearch__.search query).response
 
-        if query[:aggs].blank?
-          return response.results.response.records.to_a
+        if response.aggregations
+          (get_deepest_agg response.aggregations.agg).buckets
         else
-          if response.aggregations.agg.blank?
-            # user named aggregation something else
-            return response.aggregations
-          else
-            # return nested agg if exists, kind of hacky
-            # TODO: fix this to support any number of nested aggs
-            if response.aggregations.agg.agg.blank?
-              return response.aggregations.agg.buckets
-            else
-              return response.aggregations.agg.agg.buckets
-            end
-          end
+          return response
         end
       rescue => e
         raise BadRequestException.new e.message
       end
     end
 
+    def get_deepest_agg(agg)
+      # recursive function to get deepest agg in elasticsearch response
+      if agg.agg.blank?
+        agg
+      else
+        get_deepest_agg agg.agg
+      end
+    end
 
     #def build(params)
     #  # probably need some way to build a default query in case an error happens in syntax or incorrect
