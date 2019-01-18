@@ -45,9 +45,6 @@
       <li>
         <%= active_link_to "Logs", logs_path, class: "secondary-header__tab" if LogPolicy.new(current_user, nil).index? %>
       </li>
-      <li>
-        <%= active_link_to "Posts", edit_posts_enterprise_path(current_user.enterprise) if policy(Group).manage_all_groups? && policy(current_user.enterprise).manage_posts? %>
-      </li>
       <% if manage_erg_root_path %>
         <li>
           <%= active_link_to "Manage #{c_t(:erg)}", manage_erg_root_path %>
@@ -136,11 +133,6 @@
       <% if policy(current_user.enterprise).diversity_manage? %>
         <li>
           <%= active_link_to c_t(:dci_abbreviation), rewards_path %>
-        </li>
-      <% end %>
-      <% if policy(Group).manage_all_groups? && policy(current_user.enterprise).manage_posts? %>
-        <li>
-          <%= active_link_to "Posts", edit_posts_enterprise_path(current_user.enterprise) %>
         </li>
       <% end %>
     </ul>

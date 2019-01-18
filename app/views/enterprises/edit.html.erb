@@ -29,9 +29,21 @@
             <%= f.hidden_field :scope_module_enabled, value: 0 %>
             <%= f.input :scope_module_enabled %>
             
+            
+            <%= f.hidden_field :has_enabled_onboarding_email, value: 0 %>
+            <%= f.input :has_enabled_onboarding_email, label: "Enable onboarding emails?" %>
+            
+            <%= f.hidden_field :disable_emails, value: 0 %>
+            <%= f.input :disable_emails, label: "Disable all emails?", :hint => "Prevent emails from going off the system" %>
+            
             <%= f.input :default_from_email_address, :hint => "This is the default email address that will show up in emails to users" %>
             
             <%= f.input :default_from_email_display_name, :hint => "This is the default name that will show up in emails to users" %>
+            
+            <%= f.hidden_field :redirect_all_emails, value: 0 %>
+            <%= f.input :redirect_all_emails %>
+            
+            <%= f.input :redirect_email_contact, :hint => "This is the email address that all emails will be redirected to" %>
             
             <%= f.hidden_field :enable_rewards, value: 0 %>
             <%= f.input :enable_rewards %>

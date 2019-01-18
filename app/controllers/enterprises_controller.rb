@@ -83,10 +83,6 @@ class EnterprisesController < ApplicationController
     set_theme
   end
 
-  def edit_posts
-    authorize @enterprise, :manage_posts?
-  end
-
   # missing template
   def edit_algo
     authorize @enterprise, :edit?
@@ -196,6 +192,9 @@ class EnterprisesController < ApplicationController
         :collaborate_module_enabled,
         :default_from_email_address,
         :default_from_email_display_name,
+        :redirect_all_emails,
+        :redirect_email_contact,
+        :disable_emails,
         :plan_module_enabled,
         :name,
         :scope_module_enabled,

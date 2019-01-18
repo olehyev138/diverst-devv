@@ -8,12 +8,18 @@
       <table class="table--has-border" id="clockwork_database_events-table">
         <thead>
           <th>Name</th>
+          <th>Day</th>
+          <th>Time</th>
+          <th>Disabled</th>
           <th>Last update</th>
         </thead>
         <tbody>
           <% @clockwork_database_events.each do |clockwork_database_event| %>
             <tr>
               <td><%= link_to clockwork_database_event.name, edit_clockwork_database_event_path(clockwork_database_event) %></td>
+              <td><%= clockwork_database_event.day %></td>
+              <td><%= clockwork_database_event.at %></td>
+              <td><%= clockwork_database_event.disabled? ? "Yes" : "No" %></td>
               <td><%= time_ago_in_words(clockwork_database_event.updated_at) %> ago</td>
             </tr>
           <% end %>
