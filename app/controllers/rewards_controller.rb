@@ -51,15 +51,16 @@ class RewardsController < ApplicationController
     flash[:notice] = "Your prize was deleted"
     redirect_to action: :index
   end
-  
+
   def enable
     authorize Reward, :manage?
     @enterprise.update_attributes(:enable_rewards => params[:enterprise][:enable_rewards])
+    track_activity(@enterprise, :update_rewards)
     redirect_to :back
   end
 
   private
-  
+
   def set_enterprise
     @enterprise = current_user.enterprise
   end
