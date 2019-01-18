@@ -20,6 +20,27 @@ class GenericGraphsController < ApplicationController
     end
   end
 
+  def segment_population
+    respond_to do |format|
+      format.json {
+        query = UsersSegment
+          .get_query.agg(type: 'terms', field: 'segment.name').build
+
+        results = UsersSegment
+          .get_graph(query, UsersSegment.get_nvd3_formatter)
+          .drilldown_graph(parent_field: 'segment.parent.name')
+          .build
+
+        render json: results
+      }
+      format.csv {
+        GenericGraphsSegmentPopulationDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
+      }
+    end
+  end
+
   def non_demo_events_created
     respond_to do |format|
       format.json{
@@ -48,49 +69,6 @@ class GenericGraphsController < ApplicationController
       }
       format.csv {
         GenericGraphsEventsCreatedDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), demo: false)
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
-        redirect_to :back
-      }
-    end
-  end
-
-  def segment_population
-    respond_to do |format|
-      format.json {
-#        segments = current_user.enterprise.segments.includes(:parent).where(:segmentations => {:parent_id => nil})
-#        data = segments.map { |s|
-#          {
-#            y: s.members.active.count,
-#            name: s.name,
-#            drilldown: s.name
-#          }
-#        }
-#        drilldowns = segments.includes(:sub_segments).map { |s|
-#          {
-#            name: s.name,
-#            id: s.name,
-#            data: s.sub_segments.map {|sub| [sub.name, sub.members.active.count]}
-#          }
-#        }
-#
-#        render json: {
-#          type: 'bar',
-#          highcharts: {
-#            series: [{
-#              name: 'Number of users',
-#              data: data
-#            }],
-#            drilldowns: drilldowns,
-#            #categories: categories, <- for some reason this is causing drilldowns to not appear
-#            xAxisTitle: c_t(:segment)
-#          },
-#          hasAggregation: false
-#        }
-
-
-      }
-      format.csv {
-        GenericGraphsSegmentPopulationDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }

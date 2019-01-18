@@ -63,7 +63,10 @@
           <div class="card__action">
             <%= link_to "Export CSV", segment_population_generic_graphs_path(format: :csv), class: "hidden-xs" %>
           </div>
-          <div class="graph" data-url="<%= segment_population_generic_graphs_path %>"></div>
+          <div class="graph" data-url="<%= segment_population_generic_graphs_path %>">
+            <svg></svg>
+          </div>
+          <input type="button" class="drillout_button" value="Back"></input>
         </div>
       </div>
     </div>
