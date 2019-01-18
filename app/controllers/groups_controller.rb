@@ -285,6 +285,7 @@ class GroupsController < ApplicationController
     def export_csv
         authorize @group, :show?
         GroupMemberDownloadJob.perform_later(current_user.id, @group.id)
+        track_activity(@group, :export_members)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
     end
