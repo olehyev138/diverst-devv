@@ -60,7 +60,7 @@ sudo systemctl enable mysql
 ### Set up
 
 1. Clone your forked repository:  
-`git clone https://github.com/<GITHUB_USERNAME>/bias_detect`  
+`git clone https://github.com/<your-username>/diverst-development.git`  
 2. It is likely that you'll want to be on the `development` branch:  
 `git checkout development`  
 3. Install all of the gems used by the project:  
