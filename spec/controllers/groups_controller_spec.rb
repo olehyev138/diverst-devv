@@ -135,6 +135,30 @@ RSpec.describe GroupsController, type: :controller do
       it "calls job" do
           expect(GroupsCloseBudgetsDownloadJob).to have_received(:perform_later)
       end
+
+      describe 'public activity' do
+        enable_public_activity
+
+        it 'creates public activity record' do
+          perform_enqueued_jobs do
+            expect{ get :close_budgets_export_csv }.to change(PublicActivity::Activity, :count).by(1)
+          end
+        end
+
+        describe 'activity record' do
+          let(:model) { Enterprise.last }
+          let(:owner) { user }
+          let(:key) { 'enterprise.export_close_budgets' }
+
+          before {
+            perform_enqueued_jobs do
+              get :close_budgets_export_csv
+            end
+          }
+
+          include_examples'correct public activity'
+        end
+      end
     end
 
     context 'when user is not logged in' do

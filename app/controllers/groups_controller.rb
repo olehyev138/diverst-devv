@@ -27,6 +27,7 @@ class GroupsController < ApplicationController
     def close_budgets_export_csv
       authorize Group, :manage_all_group_budgets?
       GroupsCloseBudgetsDownloadJob.perform_later(current_user.id, current_user.enterprise.id)
+      track_activity(current_user.enterprise, :export_close_budgets)
       flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
       redirect_to :back
     end
