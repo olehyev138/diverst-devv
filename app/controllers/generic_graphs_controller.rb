@@ -45,7 +45,7 @@ class GenericGraphsController < ApplicationController
     respond_to do |format|
       format.json{
         query = Group.get_query
-          .date_range_agg(field: 'initiatives.created_at', range: { from: 'now-5d/d'}) { |q|
+          .date_range_agg(field: 'initiatives.created_at', range: { from: 'now-30d/d'}) { |q|
             q.top_hits_agg.build
           }.build
 
@@ -69,6 +69,40 @@ class GenericGraphsController < ApplicationController
       }
       format.csv {
         GenericGraphsEventsCreatedDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), demo: false)
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
+      }
+    end
+  end
+
+  def non_demo_messages_sent
+    respond_to do |format|
+      format.json {
+        query = Group.get_query
+          .date_range_agg(field: 'messages.created_at', range: { from: 'now-30d/d'}) { |q|
+            q.top_hits_agg.build
+        }.build
+
+        element_formatter = -> (element) {
+          element = element[:_source]
+          {
+            label: element[:name],
+            value: element[:messages].count,
+            children: []
+          }
+        }
+
+        key_formatter = -> (element) { element[:_source][:id] }
+
+        results = Group
+          .get_graph(query, Group.get_nvd3_hits_formatter(element_formatter, key_formatter))
+          .drilldown_graph(parent_field: 'parent_id')
+          .build
+
+        render json: results
+      }
+      format.csv {
+        GenericGraphsMessagesSentDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), demo: false)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }
@@ -238,50 +272,6 @@ class GenericGraphsController < ApplicationController
   end
 
   # FOR NON DEMO PURPOSES
-
-  def non_demo_messages_sent
-    respond_to do |format|
-      format.json {
-        data = current_user.enterprise.groups.all_parents.map do |g|
-          {
-            y: g.messages.joins(:owner)
-              .where('group_messages.created_at > ? AND users.active = ?', 1.month.ago, true).count,
-            name: g.name,
-            drilldown: g.name
-          }
-        end
-
-        drilldowns = current_user.enterprise.groups.includes(:children).all_parents.map { |g|
-          {
-            name: g.name,
-            id: g.name,
-            data: g.children.map {|child| [child.name, child.messages.joins(:owner)
-                .where('group_messages.created_at > ? AND users.active = ?', 1.month.ago, true).count]}
-          }
-        }
-
-        render json: {
-          type: 'bar',
-          highcharts: {
-            series: [{
-              title: 'Messages sent',
-              data: data
-            }],
-            drilldowns: drilldowns,
-            #categories: categories,
-            xAxisTitle: 'ERG',
-            yAxisTitle: 'Nb of messages'
-          },
-          hasAggregation: false
-        }
-      }
-      format.csv {
-        GenericGraphsMessagesSentDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), demo: false)
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
-        redirect_to :back
-      }
-    end
-  end
 
   def non_demo_top_groups_by_views
     respond_to do |format|

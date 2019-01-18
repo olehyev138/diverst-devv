@@ -157,6 +157,10 @@ class Group < BaseClass
         indexes :id, type: :integer
         indexes :created_at, type: :date
       end
+      indexes :messages do
+        indexes :id, type: :integer
+        indexes :created_at, type: :date
+      end
     end
   end
 
@@ -165,7 +169,9 @@ class Group < BaseClass
       options.merge(
         only: [:id, :parent_id, :name],
         include: { initiatives: {
-          only: [:id, :name, :created_at]
+          only: [:id, :created_at]
+        }, messages: {
+          only: [:id, :created_at]
         }}
       )
     )
