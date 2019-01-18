@@ -102,6 +102,7 @@ group :test do
   gem 'elasticsearch-extensions', '~> 0.0.26'
   gem 'clockwork-test', '~> 0.2.0'
   gem 'webmock', '~> 3.1.1'
+  gem 'rspec-retry'
 end
 
 group :development do
@@ -126,6 +127,7 @@ group :development do
   # gem 'stackprof'
   gem 'letter_opener', '~> 1.4.1'
   gem 'letter_opener_web', '~> 1.3', '>= 1.3.1'
+  gem 'tty-spinner'
   gem 'rufo', '~> 0.1.0'
   gem 'bundler-audit', '~> 0.6.0'
 end
