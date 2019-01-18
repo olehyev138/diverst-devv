@@ -48,7 +48,6 @@ class Graph {
                 .stacked(false);
 
             chart.yAxis
-                .axisLabel('Group member count')
                 .tickFormat(d3.format('d'));
 
             d3.select(svg)
@@ -71,7 +70,6 @@ class Graph {
 
         // TODO: get this working properly
         d3.selectAll('.drillout_button').on('click', function(){
-            console.log('hello');
             d3.select(svg)
                 .datum(series)
                 .transition().duration(500)

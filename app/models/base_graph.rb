@@ -12,61 +12,52 @@ module BaseGraph
   end
 
   module ClassMethods
-    def get_graph(query, title: 'Basic Graph', type: 'nvd3', hits: false, format_block: nil)
-      GraphBuilder.new(query, self, title: title, type: type,
-        hits: hits, format_block: format_block)
+    def get_graph(query, formatter)
+      GraphBuilder.new(query, self, formatter)
+    end
+
+    def get_nvd3_formatter
+      Nvd3Formatter.new
+    end
+
+    def get_nvd3_hits_formatter(element_formatter, key_formatter)
+      Nvd3HitsFormatter.new(element_formatter, key_formatter)
     end
   end
 
   class GraphBuilder
-    # TODO: deal with this hits and custom block stuff, super gross and hacky right now
-
-    def initialize(query, instance, title: 'Basic Graph', type: 'nvd3', hits: false, format_block: nil)
-      @title = title
-      @type = type
-
+    def initialize(query, instance, formatter)
       @instance = instance
-      @formatter = Nvd3Formatter.new(title, type, format_block: format_block)
-
-      @hits = hits
-
-      # TODO: put this somewhere more appropiate
-      @results = @instance.search(query)
-      if hits
-        @results = @results[0].agg.hits.hits
-      end
+      @formatter = formatter
+      @query = query
     end
 
     def graph
-      @formatter.add_bucket_list(@results)
+      results = @instance.search(query)
+      @formatter.add_element_list(results)
 
       self
     end
 
-    def drilldown_graph(query:, parent_field:, parent_key_block: nil)
-      # parent_field    - field to use to filter parents on
+    def drilldown_graph(parent_field:)
+      # parent_field - field to filter parents on
 
-      # cycle parents
-      @results.each do |parent|
+      # Define an initial 'missing aggregation to get parents'
+      parents_query = UserGroup.get_query
+        .agg(type: 'missing', field: parent_field) { |_| @query }.build
+
+      parents = @instance.search(parents_query)
+
+      parents.each do |parent|
+        parent_key = @formatter.get_element_key(parent)
+
         # build a query to get all child documents of current parent
-        # filter documents on current parent name
-
-        if parent_key_block
-          parent_key = parent_key_block.call parent
-        else
-          parent_key = parent[:key]
-        end
-
         children_query = @instance.get_query
-          .filter_agg(field: parent_field, value: parent_key) { |_| query }.build
+          .filter_agg(field: parent_field, value: parent_key) { |_| @query }.build
 
         children = @instance.search(children_query)
 
-        if @hits
-          children = children[0].agg.hits.hits
-        end
-
-        @formatter.add_bucket(parent, children: children, parent_key: parent_key)
+        @formatter.add_element(parent, children: children, element_key: parent_key)
       end
 
       self
@@ -78,48 +69,33 @@ module BaseGraph
   end
 
   class Nvd3Formatter
-    # Handles all formatting elasticsearch responses for the Nvd3 library
-    # TODO:
-    #  - handle hits, custom formatting block more elegantly
-    #  - should define some kind of 'formatter interface' then make one for buckets
-    #    and one for hits
-
-    def initialize(title, type, format_block: nil)
+    def initialize
       @data = {
-        key: title,
-        type: type,
+        title: 'Default Graph',
+        type: 'nvd3',
         values: []
       }
-
-      @format_block = format_block
     end
 
-    def add_bucket(bucket, children: nil, parent_key: nil)
-      parent = format_bucket(bucket)
+    def add_element(element, children: nil, element_key: nil)
+      element = format_element(element)
 
-      if children
-        parent[:children] = {
-          key: (parent_key.to_s + '_subgroups').downcase,
-          values: format_bucket_list(children)
+      if !children.blank?
+        element[:children] = {
+          key: element_key,
+          values: format_elements(children)
         }
       end
 
-        @data[:values] << parent
+      @data[:values] << element
     end
 
-    def add_bucket_list(buckets)
-      @data[:values] << format_bucket_list(buckets)
+    def add_elements(elements)
+      @data[:values] << format_elements(elements)
     end
 
-    def add_hits(bucket)
-      # Formats a response where bottom agg is a 'top_hits' aggregation
-      # ES returns a very different format. A list of 'hits' inside a single bucket
-      # A single hit contains an entire document. So have user define a block to format a hit
-
-      hits = bucket[0].agg.hits.hits
-      hits.each do |hit|
-        @data[:values] << (yield hit)
-      end
+    def get_element_key(element)
+      element[:key]
     end
 
     def format
@@ -128,22 +104,45 @@ module BaseGraph
 
     private
 
-    def format_bucket_list(buckets)
-      buckets.map { |bucket|
-        format_bucket bucket
+    def format_elements(elements)
+      elements.map { |element|
+        format_element element
       }
     end
 
-    def format_bucket(bucket)
-      if @format_block
-        @format_block.call bucket
-      else
+    def format_element(element)
       {
-        label: bucket[:key],
-        value: bucket[:doc_count],
+        label: element[:key],
+        value: element[:doc_count],
         children: []
       }
-      end
+    end
+  end
+
+  class Nvd3HitsFormatter < Nvd3Formatter
+    def initialize(element_formatter, key_formatter)
+      @element_formatter = element_formatter
+      @key_formatter = key_formatter
+
+      @data = {
+        title: 'Default Graph',
+        type: 'nvd3',
+        values: []
+      }
+    end
+
+    def get_element_key(element)
+      @key_formatter.call element
+    end
+
+    def format
+      @data
+    end
+
+    private
+
+    def format_element(element)
+      @element_formatter.call element
     end
   end
 end

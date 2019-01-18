@@ -7,16 +7,12 @@ class GenericGraphsController < ApplicationController
   def group_population
     respond_to do |format|
       format.json {
-        # Demo of using Query class to build an elasticsearch query
-
-        terms_query = UserGroup
+        query = UserGroup
           .get_query.agg(type: 'terms', field: 'group.name').build
-        query = UserGroup.get_query
-          .agg(type: 'missing', field: 'group.parent_id') { |_| terms_query }.build
 
         results = UserGroup
-          .get_graph(query)
-          .drilldown_graph(query: terms_query, parent_field: 'group.parent.name')
+          .get_graph(query, UserGroup.get_nvd3_formatter)
+          .drilldown_graph(parent_field: 'group.parent.name')
           .build
 
         render json: results
@@ -27,34 +23,28 @@ class GenericGraphsController < ApplicationController
   def non_demo_events_created
     respond_to do |format|
       format.json{
-        # TODO: shorten this, simplify, really only like this for sake of getting things working
-
-        events_query = Group.get_query
+        query = Group.get_query
           .date_range_agg(field: 'initiatives.created_at', range: { from: 'now-5d/d'}) { |q|
             q.top_hits_agg.build
           }.build
 
-        query = Group.get_query
-          .agg(type: 'missing', field: 'parent_id') { |_| events_query }.build
-
-        format_block = -> (bucket) {
-          bucket = bucket[:_source] # why oh why elasticsearch :(
+        element_formatter = -> (element) {
+          element = element[:_source]
           {
-            label: bucket[:name],
-            value: bucket[:initiatives].count,
+            label: element[:name],
+            value: element[:initiatives].count,
             children: []
           }
         }
 
-        parent_key_block = -> (parent) { parent[:_source][:id] }
+        key_formatter = -> (element) { element[:_source][:id] }
 
         results = Group
-          .get_graph(query, hits: true, format_block: format_block)
-          .drilldown_graph(query: events_query, parent_field: 'parent_id', parent_key_block: parent_key_block)
+          .get_graph(query, Group.get_nvd3_hits_formatter(element_formatter, key_formatter))
+          .drilldown_graph(parent_field: 'parent_id')
           .build
 
         render json: results
-
       }
       format.csv {
         GenericGraphsEventsCreatedDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), demo: false)
