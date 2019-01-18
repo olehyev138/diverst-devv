@@ -22,6 +22,7 @@ class RewardsController < ApplicationController
     @reward = @enterprise.rewards.new(reward_params)
     if @reward.save
       flash[:notice] = "Your prize was created"
+      track_activity(@reward, :create)
       redirect_to action: :index
     else
       flash[:alert] = "Your prize was not created. Please fix the errors"
