@@ -300,6 +300,32 @@ RSpec.describe Groups::Folder::ResourcesController, type: :controller do
                 it "archives the resource" do
                     expect(assigns[:resource].archived_at).to_not be_nil
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                        perform_enqueued_jobs do
+                            expect{
+                              patch :archive, group_id: group.id, folder_id: resource.folder.id, id: resource.id
+                            }.to change(PublicActivity::Activity, :count).by(1)
+                        end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { Resource.last }
+                    let(:owner) { user }
+                    let(:key) { 'resource.archive' }
+
+                    before {
+                        perform_enqueued_jobs do
+                            patch :archive, group_id: group.id, folder_id: resource.folder.id, id: resource.id
+                        end
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
         end
     end
@@ -323,6 +349,32 @@ RSpec.describe Groups::Folder::ResourcesController, type: :controller do
                 it 'restores archived resource' do 
                     resource.reload
                     expect(resource.archived_at).to be_nil
+                end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                        perform_enqueued_jobs do
+                            expect{
+                              patch :restore, group_id: group.id, folder_id: resource.folder.id, id: resource.id
+                            }.to change(PublicActivity::Activity, :count).by(1)
+                        end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { Resource.last }
+                    let(:owner) { user }
+                    let(:key) { 'resource.restore' }
+
+                    before {
+                        perform_enqueued_jobs do
+                            patch :restore, group_id: group.id, folder_id: resource.folder.id, id: resource.id
+                        end
+                    }
+
+                    include_examples'correct public activity'
+                  end
                 end
             end
         end
