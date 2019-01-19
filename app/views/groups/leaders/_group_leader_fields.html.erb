@@ -5,6 +5,7 @@
   </div>
 
   <label class="field__label">
+    <%= f.hidden_field :position, class: "position-field" %>
     <%= label = "#{ inline_svg('icons/move.svg', class: 'icon') }".html_safe %>
     <%= f.label :user, label: 'Select user', required: true %>
   </label>
