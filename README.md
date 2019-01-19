@@ -33,8 +33,8 @@ curl -sSL https://get.rvm.io | sudo bash -s stable
 2. Relogin to your system/terminal.  
 3. Install Ruby 2.5.0 and use it by default:  
 ```
-rvm install 2.5.0
-rvm use 2.5.0 --default
+rvm install 2.3.0
+rvm use 2.3.0 --default
 ```
 4. Verify it:  
 `ruby -v`
