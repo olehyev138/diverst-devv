@@ -1,6 +1,6 @@
-# Diverst
+![alt text](https://github.com/TeamDiverst/diverst-development/blob/development/app/assets/images/diverst-logo-purple.svg)
 
-Diverst(https://diverst.com/) is a software company offering a diversity & inclusion (D&I) platform that helps organizations increase traction for and obtain ROI from their diversity initiatives.
+[Diverst](https://diverst.com/) is a software company offering a diversity & inclusion (D&I) platform that helps organizations increase traction for and obtain ROI from their diversity initiatives.
 
 
 ## Setting up your development environment
@@ -31,7 +31,7 @@ gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB8
 curl -sSL https://get.rvm.io | sudo bash -s stable
 ```
 2. Relogin to your system/terminal.  
-3. Install Ruby 2.5.0 and use it by default:  
+3. Install Ruby 2.3.0 and use it by default:  
 ```
 rvm install 2.3.0
 rvm use 2.3.0 --default
