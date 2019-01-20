@@ -1,4 +1,6 @@
-![](https://github.com/TeamDiverst/diverst-development/blob/development/app/assets/images/diverst-logo-purple.svg)
+<a href="https://www.diverst.com">
+  <img src="https://github.com/TeamDiverst/diverst-development/blob/development/app/assets/images/diverst-logo-purple.svg" height=100 width="250" />
+</a>
 
 [Diverst](https://diverst.com/) is a software company offering a diversity & inclusion (D&I) platform that helps organizations increase traction for and obtain ROI from their diversity initiatives.
 
