@@ -67,9 +67,10 @@ sudo systemctl enable mysql
 `git checkout development`  
 3. Install all of the gems used by the project:  
 `bundle install`
-4. Create and initialize the database:  
+4. Create and initialize the database with seed data and run:  
 `rake db:setup`  
-Note: *You may have to change the username and password in `config/database.yml` to your local MySQL information.*
+Note: *You may have to change the username and password in `config/database.yml` to your local MySQL information. Also note 
+that the seed data generated on initialization is defined in db/seeds/development*
 5. Run DB Migration:  
 `bin/rails db:migrate RAILS_ENV=development`
 6. Install Bower:  
@@ -82,5 +83,9 @@ Note: *You may have to change the username and password in `config/database.yml`
 ### Testing
 In order to run all of the RSpec tests, run the command: `bundle exec rspec`  
 For more information on RSpec testing, [click here](https://github.com/rspec/rspec-rails).
+
+### Seed Data
+To view the rake tasks to run certain seed data, type `rake -T`.
+Run `rake db:seed:development` to initialize development database with seed data defined in files found in db/seeds/development. 
 
 
