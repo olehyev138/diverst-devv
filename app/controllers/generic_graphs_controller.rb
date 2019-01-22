@@ -61,7 +61,7 @@ class GenericGraphsController < ApplicationController
         key_formatter = -> (element) { element[:_source][:id] }
 
         results = Group
-          .get_graph(query, Group.get_nvd3_hits_formatter(element_formatter, key_formatter))
+          .get_graph(query, Group.get_nvd3_custom_formatter(element_formatter, key_formatter))
           .drilldown_graph(parent_field: 'parent_id')
           .build
 
@@ -95,7 +95,7 @@ class GenericGraphsController < ApplicationController
         key_formatter = -> (element) { element[:_source][:id] }
 
         results = Group
-          .get_graph(query, Group.get_nvd3_hits_formatter(element_formatter, key_formatter))
+          .get_graph(query, Group.get_nvd3_custom_formatter(element_formatter, key_formatter))
           .drilldown_graph(parent_field: 'parent_id')
           .build
 

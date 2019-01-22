@@ -20,8 +20,8 @@ module BaseGraph
       Nvd3Formatter.new
     end
 
-    def get_nvd3_hits_formatter(element_formatter, key_formatter)
-      Nvd3HitsFormatter.new(element_formatter, key_formatter)
+    def get_nvd3_custom_formatter(element_formatter, key_formatter)
+      Nvd3CustomFormatter.new(element_formatter, key_formatter)
     end
   end
 
@@ -119,7 +119,7 @@ module BaseGraph
     end
   end
 
-  class Nvd3HitsFormatter < Nvd3Formatter
+  class Nvd3CustomFormatter < Nvd3Formatter
     def initialize(element_formatter, key_formatter)
       @element_formatter = element_formatter
       @key_formatter = key_formatter
@@ -132,7 +132,11 @@ module BaseGraph
     end
 
     def get_element_key(element)
-      @key_formatter.call element
+      if !@key_formatter.blank?
+        @key_formatter.call element
+      else
+        super
+      end
     end
 
     def format
@@ -142,7 +146,11 @@ module BaseGraph
     private
 
     def format_element(element)
-      @element_formatter.call element
+      if !@element_formatter.blank?
+        @element_formatter.call element
+      else
+        super
+      end
     end
   end
 end
