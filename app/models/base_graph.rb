@@ -42,8 +42,8 @@ module BaseGraph
     def drilldown_graph(parent_field:)
       # parent_field - field to filter parents on
 
-      # Define an initial 'missing aggregation to get parents'
-      parents_query = UserGroup.get_query
+      # Define an initial 'missing aggregation' to get parents
+      parents_query = @instance.get_query
         .agg(type: 'missing', field: parent_field) { |_| @query }.build
 
       parents = @instance.search(parents_query)
