@@ -75,7 +75,7 @@ after 'development:enterprise' do
         
         user.policy_group.update_all_permissions(true) if user.user_role.role_name == "Admin" 
 
-        user.info[title_field] = Faker::Name.title
+        user.info[title_field] = Faker::Job.title
         user.info[birth_field] = Faker::Date.between(60.years.ago, 18.years.ago)
 
         # Have a chance to pick a random disability
