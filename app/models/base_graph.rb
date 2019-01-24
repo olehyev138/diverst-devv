@@ -32,13 +32,6 @@ module BaseGraph
       @query = query
     end
 
-    def graph
-      results = @instance.search(query)
-      @formatter.add_element_list(results)
-
-      self
-    end
-
     def drilldown_graph(parent_field:)
       # parent_field - field to filter parents on
 
@@ -73,8 +66,11 @@ module BaseGraph
       @data = {
         title: 'Default Graph',
         type: 'nvd3',
-        values: []
+        series: []
       }
+
+      @current_series = 0
+      @data[:series] << { key: "series#@current_series", values: [] }
     end
 
     def add_element(element, children: nil, element_key: nil)
@@ -87,15 +83,20 @@ module BaseGraph
         }
       end
 
-      @data[:values] << element
+      @data[:series][@current_series][:values] << element
     end
 
     def add_elements(elements)
-      @data[:values] << format_elements(elements)
+      @data[@current_series][:values] = format_elements(elements)
     end
 
     def get_element_key(element)
       element[:key]
+    end
+
+    def add_series
+      @current_series += 1
+      @data[:series] << { key: "series#@current_series", values: [] }
     end
 
     def format
@@ -124,11 +125,7 @@ module BaseGraph
       @element_formatter = element_formatter
       @key_formatter = key_formatter
 
-      @data = {
-        title: 'Default Graph',
-        type: 'nvd3',
-        values: []
-      }
+      super()
     end
 
     def get_element_key(element)

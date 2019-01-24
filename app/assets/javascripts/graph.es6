@@ -35,15 +35,17 @@ class Graph {
          *   - add abstractions for most of this to remove complexity and so we can reuse code
          */
 
-        var series = [this.data];
+        var series = this.data.series;
         var svg = this.$element[0].children[0];
         var chart = null;
+
+        console.log(this.data);
 
         nv.addGraph(function() {
             chart = nv.models
                 .multiBarChart()
-                .x(function (d) { return d.label; }) // set the json key for x value
-                .y(function (d) { return d.value; }) // set the json key for y value
+                .x(function (d) { return d.label; }) // set the json keys for x & y values
+                .y(function (d) { return d.value; })
                 .showControls(false)
                 .stacked(false);
 
@@ -75,5 +77,8 @@ class Graph {
                 .transition().duration(500)
                 .call(chart);
         });
+    }
+
+    renderLineChart() {
     }
 }
