@@ -20,8 +20,8 @@ module BaseGraph
       Nvd3Formatter.new
     end
 
-    def get_nvd3_custom_formatter(element_formatter, key_formatter)
-      Nvd3CustomFormatter.new(element_formatter, key_formatter)
+    def get_nvd3_custom_formatter(element_formatter: nil, key_formatter: nil)
+      Nvd3CustomFormatter.new(element_formatter: element_formatter, key_formatter: key_formatter)
     end
   end
 
@@ -62,6 +62,10 @@ module BaseGraph
   end
 
   class Nvd3Formatter
+    # TODO:
+    #  - element key should not be optional
+    #  - allow for custom title, type, series names
+
     def initialize
       @data = {
         title: 'Default Graph',
@@ -121,16 +125,29 @@ module BaseGraph
   end
 
   class Nvd3CustomFormatter < Nvd3Formatter
-    def initialize(element_formatter, key_formatter)
+    def initialize(element_formatter: nil, key_formatter: nil)
       @element_formatter = element_formatter
       @key_formatter = key_formatter
 
       super()
     end
 
-    def get_element_key(element)
+    def add_element(element, *args, children: nil, element_key: nil)
+      element = format_element(element, *args)
+
+      if !children.blank?
+        element[:children] = {
+          key: element_key,
+          values: format_elements(children, *args)
+        }
+      end
+
+      @data[:series][@current_series][:values] << element
+    end
+
+    def get_element_key(element, *args)
       if !@key_formatter.blank?
-        @key_formatter.call element
+        @key_formatter.call element, *args
       else
         super
       end
@@ -142,9 +159,15 @@ module BaseGraph
 
     private
 
-    def format_element(element)
+    def format_elements(elements, *args)
+      elements.map { |element|
+        format_element element, *args
+      }
+    end
+
+    def format_element(element, *args)
       if !@element_formatter.blank?
-        @element_formatter.call element
+        @element_formatter.call element, *args
       else
         super
       end
