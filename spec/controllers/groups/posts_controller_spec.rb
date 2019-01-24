@@ -7,7 +7,7 @@ RSpec.describe Groups::PostsController, type: :controller do
     let!(:group) { create(:group, enterprise: user.enterprise, owner: user) }
     let!(:group2) { create(:group, enterprise: user.enterprise, owner: user) }
     let!(:news_feed) { group.news_feed }
-    
+
     let!(:news_link1) { create(:news_link, :group => group2)}
     let!(:news_link2) { create(:news_link, :group => group2)}
     let!(:news_link3) { create(:news_link, :group => group2)}
@@ -143,20 +143,6 @@ RSpec.describe Groups::PostsController, type: :controller do
                 expect{patch :approve, group_id: group.id, link_id: news_link1.news_feed_link.id}
                 .to change(PublicActivity::Activity, :count).by(1)
               end
-            end
-
-            describe 'activity record' do
-              let(:model) { NewsFeedLink.last }
-              let(:owner) { user }
-              let(:key) { 'news_feed_link.approve' }
-
-              before {
-                perform_enqueued_jobs do
-                  patch :approve, group_id: group.id, link_id: news_link1.news_feed_link.id
-                end
-              }
-
-              include_examples'correct public activity'
             end
           end
         end

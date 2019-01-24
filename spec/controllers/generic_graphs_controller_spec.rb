@@ -80,20 +80,6 @@ RSpec.describe GenericGraphsController, type: :controller do
                       expect{ get :group_population, format: :csv }.to change(PublicActivity::Activity, :count).by(1)
                     end
                   end
-
-                  describe 'activity record' do
-                    let(:model) { Enterprise.last }
-                    let(:owner) { user }
-                    let(:key) { 'enterprise.export_generic_graphs_group_population' }
-
-                    before {
-                      perform_enqueued_jobs do
-                        get :group_population, format: :csv
-                      end
-                    }
-
-                    include_examples'correct public activity'
-                  end
                 end
             end
         end
@@ -163,20 +149,6 @@ RSpec.describe GenericGraphsController, type: :controller do
                     perform_enqueued_jobs do
                       expect{ get :segment_population, format: :csv }.to change(PublicActivity::Activity, :count).by(1)
                     end
-                  end
-
-                  describe 'activity record' do
-                    let(:model) { Enterprise.last }
-                    let(:owner) { user }
-                    let(:key) { 'enterprise.export_generic_graphs_segment_population' }
-
-                    before {
-                      perform_enqueued_jobs do
-                        get :segment_population, format: :csv
-                      end
-                    }
-
-                    include_examples'correct public activity'
                   end
                 end
             end
@@ -266,20 +238,6 @@ RSpec.describe GenericGraphsController, type: :controller do
                       expect{ get :events_created, format: :csv }.to change(PublicActivity::Activity, :count).by(1)
                     end
                   end
-
-                  describe 'activity record' do
-                    let(:model) { Enterprise.last }
-                    let(:owner) { user }
-                    let(:key) { 'enterprise.export_generic_graphs_events_created' }
-
-                    before {
-                      perform_enqueued_jobs do
-                        get :events_created, format: :csv
-                      end
-                    }
-
-                    include_examples'correct public activity'
-                  end
                 end
             end
         end
@@ -367,20 +325,6 @@ RSpec.describe GenericGraphsController, type: :controller do
                     perform_enqueued_jobs do
                       expect{ get :messages_sent, format: :csv }.to change(PublicActivity::Activity, :count).by(1)
                     end
-                  end
-
-                  describe 'activity record' do
-                    let(:model) { Enterprise.last }
-                    let(:owner) { user }
-                    let(:key) { 'enterprise.export_generic_graphs_messages_sent' }
-
-                    before {
-                      perform_enqueued_jobs do
-                        get :messages_sent, format: :csv
-                      end
-                    }
-
-                    include_examples'correct public activity'
                   end
                 end
             end
@@ -470,20 +414,6 @@ RSpec.describe GenericGraphsController, type: :controller do
                       expect{ get :mentorship, format: :csv }.to change(PublicActivity::Activity, :count).by(1)
                     end
                   end
-
-                  describe 'activity record' do
-                    let(:model) { Enterprise.last }
-                    let(:owner) { user }
-                    let(:key) { 'enterprise.export_generic_graphs_mentorship' }
-
-                    before {
-                      perform_enqueued_jobs do
-                        get :mentorship, format: :csv
-                      end
-                    }
-
-                    include_examples'correct public activity'
-                  end
                 end
             end
         end
@@ -572,20 +502,6 @@ RSpec.describe GenericGraphsController, type: :controller do
                       expect{ get :mentoring_sessions, format: :csv }.to change(PublicActivity::Activity, :count).by(1)
                     end
                   end
-
-                  describe 'activity record' do
-                    let(:model) { Enterprise.last }
-                    let(:owner) { user }
-                    let(:key) { 'enterprise.export_generic_graphs_mentoring_sessions' }
-
-                    before {
-                      perform_enqueued_jobs do
-                        get :mentoring_sessions, format: :csv
-                      end
-                    }
-
-                    include_examples'correct public activity'
-                  end
                 end
             end
         end
@@ -666,20 +582,6 @@ RSpec.describe GenericGraphsController, type: :controller do
                       expect{ get :mentoring_interests, format: :csv }.to change(PublicActivity::Activity, :count).by(1)
                     end
                   end
-
-                  describe 'activity record' do
-                    let(:model) { Enterprise.last }
-                    let(:owner) { user }
-                    let(:key) { 'enterprise.export_generic_graphs_mentoring_interests' }
-
-                    before {
-                      perform_enqueued_jobs do
-                        get :mentoring_interests, format: :csv
-                      end
-                    }
-
-                    include_examples'correct public activity'
-                  end
                 end
             end
         end
@@ -756,20 +658,6 @@ RSpec.describe GenericGraphsController, type: :controller do
                       expect{ get :top_groups_by_views, format: :csv }.to change(PublicActivity::Activity, :count).by(1)
                     end
                   end
-
-                  describe 'activity record' do
-                    let(:model) { Enterprise.last }
-                    let(:owner) { user }
-                    let(:key) { 'enterprise.export_generic_graphs_top_groups_by_views' }
-
-                    before {
-                      perform_enqueued_jobs do
-                        get :top_groups_by_views, format: :csv
-                      end
-                    }
-
-                    include_examples'correct public activity'
-                  end
                 end
             end
         end
@@ -841,20 +729,6 @@ RSpec.describe GenericGraphsController, type: :controller do
                     perform_enqueued_jobs do
                       expect{ get :top_folders_by_views, format: :csv }.to change(PublicActivity::Activity, :count).by(1)
                     end
-                  end
-
-                  describe 'activity record' do
-                    let(:model) { Enterprise.last }
-                    let(:owner) { user }
-                    let(:key) { 'enterprise.export_generic_graphs_top_folders_by_views' }
-
-                    before {
-                      perform_enqueued_jobs do
-                        get :top_folders_by_views, format: :csv
-                      end
-                    }
-
-                    include_examples'correct public activity'
                   end
                 end
             end
@@ -928,20 +802,6 @@ RSpec.describe GenericGraphsController, type: :controller do
                       expect{ get :top_resources_by_views, format: :csv }.to change(PublicActivity::Activity, :count).by(1)
                     end
                   end
-
-                  describe 'activity record' do
-                    let(:model) { Enterprise.last }
-                    let(:owner) { user }
-                    let(:key) { 'enterprise.export_generic_graphs_top_resources_by_views' }
-
-                    before {
-                      perform_enqueued_jobs do
-                        get :top_resources_by_views, format: :csv
-                      end
-                    }
-
-                    include_examples'correct public activity'
-                  end
                 end
             end
         end
@@ -1013,20 +873,6 @@ RSpec.describe GenericGraphsController, type: :controller do
                     perform_enqueued_jobs do
                       expect{ get :top_news_by_views, format: :csv }.to change(PublicActivity::Activity, :count).by(1)
                     end
-                  end
-
-                  describe 'activity record' do
-                    let(:model) { Enterprise.last }
-                    let(:owner) { user }
-                    let(:key) { 'enterprise.export_generic_graphs_top_news_by_views' }
-
-                    before {
-                      perform_enqueued_jobs do
-                        get :top_news_by_views, format: :csv
-                      end
-                    }
-
-                    include_examples'correct public activity'
                   end
                 end
             end

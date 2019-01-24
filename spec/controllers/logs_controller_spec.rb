@@ -84,18 +84,6 @@ RSpec.describe LogsController, type: :controller do
               .to change(PublicActivity::Activity, :count).by(1)
             end
           end
-
-          describe 'activity record' do
-            let(:model) { Enterprise.last }
-            let(:owner) { user }
-            let(:key) { 'enterprise.export_logs' }
-
-            before {
-              get :index, :format => :csv
-            }
-
-            include_examples'correct public activity'
-          end
         end
       end
     end
