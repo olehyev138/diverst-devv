@@ -66,10 +66,15 @@ module BaseGraph
     #  - element key should not be optional
     #  - allow for custom title, type, series names
 
+    attr_accessor :title
+    attr_accessor :type
+
     def initialize
+      # defaults
+      @title = 'Default Graph'
+      @type = 'bar'
+
       @data = {
-        title: 'Default Graph',
-        type: 'nvd3',
         series: []
       }
 
@@ -104,6 +109,8 @@ module BaseGraph
     end
 
     def format
+      @data[:title] = @title
+      @data[:type] = @type
       @data
     end
 
@@ -151,10 +158,6 @@ module BaseGraph
       else
         super
       end
-    end
-
-    def format
-      @data
     end
 
     private
