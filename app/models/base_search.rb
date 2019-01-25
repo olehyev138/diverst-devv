@@ -5,10 +5,7 @@ module BaseSearch
   #   - pulls out response data and returns
 
   # Todo:
-  #   - document Query object
-  #   - add ability to deal with ranges (dates, integer)
-  #   - add ability to deal with exclusions (ex. Users who are in Group A, B but not in C)
-  #   - build default queries
+  #   - documentation
 
 
   def self.included(klass)
@@ -20,6 +17,7 @@ module BaseSearch
     # todo:
     #  - support non aggregate queries
     #  - add support for basic options, ie size
+    #  - remove agg function repetition
 
     DEFAULT_SIZE = 0
 
@@ -71,10 +69,15 @@ module BaseSearch
       self
     end
 
-    def agg(type:, field:, agg_name: 'agg')
+    def agg(type:, field:, agg_name: 'agg', order_clause: nil)
       # agg_name can all be 'agg' as long as aggs arnt adjacent, ie duplciate keys
 
       agg = { agg_name => { type => { field: field } } }
+
+      # temporary ugly order clause code - TODO: fix
+      if !order_clause.blank?
+        agg[agg_name][type].merge! order_clause
+      end
 
       if block_given?
         # if a block is given, nest the returned aggregations inside our current aggregation

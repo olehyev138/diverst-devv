@@ -10,8 +10,10 @@ class GenericGraphsController < ApplicationController
         query = UserGroup
           .get_query.agg(type: 'terms', field: 'group.name').build
 
+        formatter = UserGroup.get_nvd3_formatter
+
         results = UserGroup
-          .get_graph(query, UserGroup.get_nvd3_formatter)
+          .get_graph(query, formatter)
           .drilldown_graph(parent_field: 'group.parent.name')
           .build
 
@@ -51,17 +53,13 @@ class GenericGraphsController < ApplicationController
 
         element_formatter = -> (element) {
           element = element[:_source]
-          {
-            label: element[:name],
-            value: element[:initiatives].count,
-            children: []
-          }
+          { label: element[:name], value: element[:initiatives].count, children: [] }
         }
 
         key_formatter = -> (element) { element[:_source][:id] }
 
         results = Group
-          .get_graph(query, Group.get_nvd3_custom_formatter(element_formatter, key_formatter))
+          .get_graph(query, Group.get_nvd3_custom_formatter(element_formatter: element_formatter, key_formatter: key_formatter))
           .drilldown_graph(parent_field: 'parent_id')
           .build
 
@@ -85,17 +83,13 @@ class GenericGraphsController < ApplicationController
 
         element_formatter = -> (element) {
           element = element[:_source]
-          {
-            label: element[:name],
-            value: element[:messages].count,
-            children: []
-          }
+          { label: element[:name], value: element[:messages].count, children: [] }
         }
 
         key_formatter = -> (element) { element[:_source][:id] }
 
         results = Group
-          .get_graph(query, Group.get_nvd3_custom_formatter(element_formatter, key_formatter))
+          .get_graph(query, Group.get_nvd3_custom_formatter(element_formatter: element_formatter, key_formatter: key_formatter))
           .drilldown_graph(parent_field: 'parent_id')
           .build
 
@@ -105,6 +99,88 @@ class GenericGraphsController < ApplicationController
         GenericGraphsMessagesSentDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), demo: false)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
+      }
+    end
+  end
+
+  def growth_of_groups
+    respond_to do |format|
+      format.json {
+        # TODO: possibly put this into GraphBuilder, call it a 'accumulating graph' or something
+
+        element_formatter = -> (e, *args) {
+          { label: e[:key], value: args[0] } # args[0] -> total so far
+        }
+
+        order_clause = { order: { _key: :asc } }
+        formatter = UserGroup.get_nvd3_custom_formatter(element_formatter: element_formatter)
+        formatter.title = 'Growth of Groups'
+        formatter.type = 'line'
+
+        current_user.enterprise.groups.each do |group|
+          query = UserGroup.get_query
+            .filter_agg(field: 'group_id', value: group.id) { |q|
+              q.agg(type: 'terms', field: 'created_at', order_clause: order_clause).build
+          }.build
+
+          total = 0
+          elements = UserGroup.search query
+
+          elements.each { |element|
+            # keep a running total
+            # pulling out value here instead of the formatter is not ideal
+            total += element[:doc_count]
+            formatter.add_element element, total
+          }
+
+          # each group is a new series/line on our line graph
+          formatter.add_series
+        end
+
+        render json: formatter.format
+
+      }
+      format.csv {
+        GenericGraphsGroupGrowthDownloadJob
+          .perform_later(current_user.id, current_user.enterprise.id,
+          params[:from_date], params[:to_date])
+
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
+      }
+    end
+  end
+
+  def growth_of_resources
+    respond_to do |format|
+      format.json {
+        element_formatter = -> (e, *args) {
+          { label: e[:key], value: args[0] } # args[0] -> total so far
+        }
+
+        order_clause = { order: { _key: :asc } }
+        formatter = UserGroup.get_nvd3_custom_formatter(element_formatter: element_formatter)
+        formatter.title = 'Growth of Resources'
+        formatter.type = 'line'
+
+        current_user.enterprise.groups.each do |group|
+          query = Resource.get_query
+            .filter_agg(field: 'folder.group_id', value: group.id) { |q|
+            q.agg(type: 'terms', field: 'created_at', order_clause: order_clause).build
+          }.build
+
+          total = 0
+          elements = Resource.search query
+
+          elements.each { |element|
+            total += element[:doc_count]
+            formatter.add_element element, total
+          }
+
+          formatter.add_series
+        end
+
+        render json: formatter.format
       }
     end
   end
@@ -424,105 +500,6 @@ class GenericGraphsController < ApplicationController
         GenericGraphsTopNewsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, demo: false)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
-      }
-    end
-  end
-
-  def growth_of_groups
-    respond_to do |format|
-      format.json {
-        series = []
-
-        current_user.enterprise.groups.each do |group|
-          total = 0
-
-          # query es, filter by current group id, order by created_at and aggregate on created_at
-          buckets = UserGroup.__elasticsearch__.search({
-            size: 0,
-            aggs: {
-              group_growth_agg: {
-                filter: { term: { group_id: group.id } },
-                aggs: {
-                  group_growth_agg: {
-                    terms: {
-                      size: 1000,
-                      field: :created_at,
-                      order: { _term: :asc }
-                    }
-                  }
-                }
-              }
-            }
-          }).aggregations.group_growth_agg.group_growth_agg.buckets
-
-          # format es query response
-          # get running total by adding each buckets doc count to a total
-          series << {
-            name: group.name,
-            data: buckets.map { |bucket| [ bucket[:key], (total += bucket[:doc_count]) ] }
-          }
-        end
-
-        render json: {
-          type: 'time_based',
-          highcharts: {
-            series: series
-          }
-        }
-      }
-      format.csv {
-        GenericGraphsGroupGrowthDownloadJob
-          .perform_later(current_user.id, current_user.enterprise.id,
-          params[:from_date], params[:to_date])
-
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
-        redirect_to :back
-      }
-    end
-  end
-
-  def growth_of_resources
-    respond_to do |format|
-      format.json {
-        series = []
-        current_user.enterprise.groups.each do |group|
-          total = 0
-
-          # query es, filter by current group id, order by created_at and aggregate on created_at
-          buckets = Resource.__elasticsearch__.search({
-            size: 0,
-            aggs: {
-              group_growth_agg: {
-                filter: {
-                  term: { 'folder.group_id': group.id }
-                },
-                aggs: {
-                  group_growth_agg: {
-                    terms: {
-                      size: 1000,
-                      field: :created_at,
-                      order: { _term: :asc }
-                    }
-                  }
-                }
-              }
-            }
-          }).aggregations.group_growth_agg.group_growth_agg.buckets
-
-          # format es query response
-          # get running total by adding each buckets doc count to a total
-          series << {
-            name: group.name,
-            data: buckets.map { |bucket| [ bucket[:key], (total += bucket[:doc_count]) ] }
-          }
-        end
-
-        render json: {
-          type: 'time_based',
-          highcharts: {
-            series: series
-          }
-        }
       }
     end
   end

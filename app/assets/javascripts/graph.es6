@@ -26,8 +26,14 @@ class Graph {
     }
 
     attachToElement() {
-       if (this.data.type == 'nvd3')  // DEBUG - tmp so we only run our test action
-            this.renderBarChart();
+        switch (this.data.type) {
+            case 'bar':
+                this.renderBarChart();
+                break;
+            case 'line':
+                this.renderLineChart();
+                break;
+        }
     }
 
     renderBarChart() {
@@ -38,8 +44,6 @@ class Graph {
         var series = this.data.series;
         var svg = this.$element[0].children[0];
         var chart = null;
-
-        console.log(this.data);
 
         nv.addGraph(function() {
             chart = nv.models
@@ -80,5 +84,33 @@ class Graph {
     }
 
     renderLineChart() {
+        /* Todo:
+         *   - add abstractions for most of this to remove complexity and so we can reuse code
+         */
+
+        var series = this.data.series;
+        var svg = this.$element[0].children[0];
+        var chart = null;
+
+        console.log('henlo');
+
+        nv.addGraph(function() {
+            chart = nv.models
+                .lineChart()
+                .x(function (d) { return d.label; }) // set the json keys for x & y values
+                .y(function (d) { return d.value; });
+
+            chart.yAxis
+                .tickFormat(d3.format('d'));
+
+            d3.select(svg)
+                .datum(series)
+                .transition().duration(500)
+                .call(chart);
+
+            nv.utils.windowResize(chart.update);
+
+            return chart;
+        });
     }
 }
