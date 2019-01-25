@@ -7,9 +7,7 @@ class GenericGraphsController < ApplicationController
   def group_population
     respond_to do |format|
       format.json {
-        query = UserGroup
-          .get_query.agg(type: 'terms', field: 'group.name').build
-
+        query = UserGroup.get_query.terms_agg(field: 'group.name')
         formatter = UserGroup.get_nvd3_formatter
 
         results = UserGroup
@@ -25,8 +23,7 @@ class GenericGraphsController < ApplicationController
   def segment_population
     respond_to do |format|
       format.json {
-        query = UsersSegment
-          .get_query.agg(type: 'terms', field: 'segment.name').build
+        query = UsersSegment.get_query.terms_agg(field: 'segment.name')
 
         results = UsersSegment
           .get_graph(query, UsersSegment.get_nvd3_formatter)
@@ -48,8 +45,8 @@ class GenericGraphsController < ApplicationController
       format.json{
         query = Group.get_query
           .date_range_agg(field: 'initiatives.created_at', range: { from: 'now-30d/d'}) { |q|
-            q.top_hits_agg.build
-          }.build
+            q.top_hits_agg
+        }
 
         element_formatter = -> (element) {
           element = element[:_source]
@@ -78,8 +75,8 @@ class GenericGraphsController < ApplicationController
       format.json {
         query = Group.get_query
           .date_range_agg(field: 'messages.created_at', range: { from: 'now-30d/d'}) { |q|
-            q.top_hits_agg.build
-        }.build
+            q.top_hits_agg
+        }
 
         element_formatter = -> (element) {
           element = element[:_source]
@@ -112,7 +109,6 @@ class GenericGraphsController < ApplicationController
           { label: e[:key], value: args[0] } # args[0] -> total so far
         }
 
-        order_clause = { order: { _key: :asc } }
         formatter = UserGroup.get_nvd3_custom_formatter(element_formatter: element_formatter)
         formatter.title = 'Growth of Groups'
         formatter.type = 'line'
@@ -120,7 +116,7 @@ class GenericGraphsController < ApplicationController
         current_user.enterprise.groups.each do |group|
           query = UserGroup.get_query
             .filter_agg(field: 'group_id', value: group.id) { |q|
-              q.agg(type: 'terms', field: 'created_at', order_clause: order_clause).build
+              q.terms_agg(field: 'created_at', order_field: '_key', order_dir: 'asc')
           }.build
 
           total = 0
@@ -138,7 +134,6 @@ class GenericGraphsController < ApplicationController
         end
 
         render json: formatter.format
-
       }
       format.csv {
         GenericGraphsGroupGrowthDownloadJob
@@ -158,7 +153,6 @@ class GenericGraphsController < ApplicationController
           { label: e[:key], value: args[0] } # args[0] -> total so far
         }
 
-        order_clause = { order: { _key: :asc } }
         formatter = UserGroup.get_nvd3_custom_formatter(element_formatter: element_formatter)
         formatter.title = 'Growth of Resources'
         formatter.type = 'line'
@@ -166,7 +160,7 @@ class GenericGraphsController < ApplicationController
         current_user.enterprise.groups.each do |group|
           query = Resource.get_query
             .filter_agg(field: 'folder.group_id', value: group.id) { |q|
-            q.agg(type: 'terms', field: 'created_at', order_clause: order_clause).build
+              q.terms_agg(field: 'created_at', order_field: '_key', order_dir: 'asc')
           }.build
 
           total = 0

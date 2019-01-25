@@ -14,10 +14,6 @@ module BaseSearch
 
   class Query
     # builds an elasticsearch query through the builder pattern
-    # todo:
-    #  - support non aggregate queries
-    #  - add support for basic options, ie size
-    #  - remove agg function repetition
 
     DEFAULT_SIZE = 0
 
@@ -26,70 +22,30 @@ module BaseSearch
       @aggs = {aggs: {}}
     end
 
-    def filter_agg(field:, value:, agg_name: 'agg')
-      agg = { agg_name => { filter: { term: { field => value } } } }
-
-      if block_given?
-        agg[agg_name].merge!({ aggs:
-          (yield Query.new)[:aggs]
-        })
-      end
-
-      @aggs[:aggs].merge! agg
-
-      self
+    def filter_agg(field:, value:, &block)
+      agg = { agg: { filter: { term: { field => value } } } }
+      base_agg(agg, block)
     end
 
-    def date_range_agg(field:, range:, agg_name: 'agg')
-      agg = { agg_name =>
-        { date_range: { field: field, ranges: [ range ] }}}
-
-      if block_given?
-        agg[agg_name].merge!({ aggs:
-          (yield Query.new)[:aggs]
-        })
-      end
-
-      @aggs[:aggs].merge! agg
-
-      self
+    def date_range_agg(field:, range:, &block)
+      agg = { agg: { date_range: { field: field, ranges: [ range ] }}}
+      base_agg(agg, block)
     end
 
-    def top_hits_agg(size: 100, agg_name: 'agg')
-      agg = { agg_name => { top_hits: { size: size } } }
-
-      if block_given?
-        agg[agg_name].merge!({ aggs:
-          (yield Query.new)[:aggs]
-        })
-      end
-
-      @aggs[:aggs].merge! agg
-
-      self
+    def top_hits_agg(size: 100, &block)
+      agg = { agg: { top_hits: { size: size } } }
+      base_agg(agg, block)
     end
 
-    def agg(type:, field:, agg_name: 'agg', order_clause: nil)
-      # agg_name can all be 'agg' as long as aggs arnt adjacent, ie duplciate keys
+    def terms_agg(field:, order_field: '_count', order_dir: 'desc', &block)
+      agg = { agg: { terms: { field: field, order: { order_field => order_dir } } } }
+      base_agg(agg, block)
+    end
 
-      agg = { agg_name => { type => { field: field } } }
-
-      # temporary ugly order clause code - TODO: fix
-      if !order_clause.blank?
-        agg[agg_name][type].merge! order_clause
-      end
-
-      if block_given?
-        # if a block is given, nest the returned aggregations inside our current aggregation
-        # yield returns a built es query hash, we pull out the agg section and merge it.
-        agg[agg_name].merge!({ aggs:
-          (yield Query.new)[:aggs]
-        })
-      end
-
-      @aggs[:aggs].merge! agg
-
-      self
+    def agg(type:, field:, &block)
+      # generic agg function, most aggs follow this form, just type needs specification
+      agg = { agg: { type => { field: field } } }
+      base_agg(agg, block)
     end
 
     def build
@@ -98,6 +54,21 @@ module BaseSearch
       end
 
       @query
+    end
+
+    private
+
+    def base_agg(agg, block)
+      if block
+        # if a block is given, nest the returned aggregations inside our current aggregation
+        # yield returns a built es query hash, we pull out the agg section and merge it.
+        agg[:agg].merge!({ aggs:
+          (block.call Query.new).build[:aggs]
+        })
+      end
+
+      @aggs[:aggs].merge! agg
+      self
     end
   end
 
