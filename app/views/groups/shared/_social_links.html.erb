@@ -1,6 +1,11 @@
-<div class="card__section card__section--border">
+<div class="card__section card__section--border" id="restored_social_link_<%= social_link.id %>">
   <div class="row">
     <div class="col-xs-12">
+      <% if EnterprisePolicy.new(current_user, current_user.enterprise).manage_posts? && social_link.news_feed_link.approved? %>
+        <%= link_to archive_group_social_link_path(social_link.group, social_link), method: :patch, remote: true do %>
+          Archive
+        <% end %>
+      <% end %>
       <div class="flex-row flex-row--middle">
         <div class="flex-row__cell flex-row__cell--grow">
           <% if social_link.url.include?("facebook") %>

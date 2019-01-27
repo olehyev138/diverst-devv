@@ -50,4 +50,12 @@ module ResourcesHelper
       'other.png'
     end
   end
+
+  def get_folders_url(folder, limit = nil, format = nil)
+    if folder.group
+      group_folders_path(limit: limit, json: format)
+    else
+      enterprise_folders_path(limit: limit, format: format)
+    end
+  end
 end
