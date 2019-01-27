@@ -11,11 +11,13 @@ class ApplicationController < ActionController::Base
     protect_from_forgery with: :exception
 
     rescue_from Pundit::NotAuthorizedError do |e|
+        Rollbar.error(e)
         user_not_authorized
     end
 
     rescue_from ActionController::UnknownFormat do |e|
         Rails.logger.warn('UnknownFormat: ' + e.message)
+        Rollbar.error(e)
         render :status => 400, :json => {error: e.message}
     end
     
@@ -23,12 +25,14 @@ class ApplicationController < ActionController::Base
         flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
         flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
         Rails.logger.warn('MissingTemplate: ' + e.message)
+        Rollbar.error(e)
         redirect_on_error
     end
     
     rescue_from ActionView::Template::Error do |e|
         flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
         flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
+        Rollbar.error(e)
         redirect_on_error
     end
     
@@ -44,6 +48,7 @@ class ApplicationController < ActionController::Base
         flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
         flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
         Rails.logger.warn('BadRequest: ' + e.message)
+        Rollbar.error(e)
         redirect_on_error
     end
     
@@ -59,18 +64,21 @@ class ApplicationController < ActionController::Base
         flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
         flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
         Rails.logger.warn('BadRequestException: ' + e.message)
+        Rollbar.error(e)
         redirect_on_error
     end
     
     rescue_from Pundit::NotDefinedError  do |e|
         flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
         flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
+        Rollbar.error(e)
         redirect_on_error
     end
 
     rescue_from ActionController::RoutingError do |e|
         flash[:alert] = e.message
         Rails.logger.warn('RoutingError: ' + e.message)
+        Rollbar.error(e)
         redirect_on_error
     end
 
@@ -78,6 +86,7 @@ class ApplicationController < ActionController::Base
         flash[:alert] = "Sorry, the resource you are looking for does not exist." if Rails.env.production?
         flash[:alert] = e.message if (Rails.env.development? || Rails.env.test?)
         Rails.logger.warn('RecordNotFound: ' + e.message)
+        Rollbar.error(e)
         redirect_on_error
     end
 
@@ -91,6 +100,7 @@ class ApplicationController < ActionController::Base
     rescue_from ActionController::ParameterMissing do |e|
         flash[:alert] = e.message
         Rails.logger.warn('ParameterMissing: ' + e.message)
+        Rollbar.error(e)
         redirect_on_error
     end
 
