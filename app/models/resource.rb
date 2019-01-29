@@ -74,7 +74,7 @@ class Resource < BaseClass
     end
 
     def total_views
-        views.sum(:view_count)
+        views.count
     end
 
     protected

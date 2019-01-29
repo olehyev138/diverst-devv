@@ -653,8 +653,7 @@ RSpec.describe Group, :type => :model do
     describe '#total_views' do
         it "returns 10" do
             group = create(:group)
-            create(:view, :group => group, :view_count => 4)
-            create(:view, :group => group, :view_count => 6)
+            create_list(:view, 10, :group => group)
             
             expect(group.total_views).to eq(10)
         end
