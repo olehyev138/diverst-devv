@@ -461,12 +461,12 @@ class GenericGraphsController < ApplicationController
         respond_to do |format|
             format.json {
               news_feed_link_ids = NewsFeedLink.where(:news_feed_id => NewsFeed.where(:group_id => current_user.enterprise.groups.ids).ids).ids
-              views = View.joins(:news_feed_link => :news_link).where(:news_feed_link_id => news_feed_link_ids).group("news_links.title").order("sum_view_count DESC").limit(20).sum(:view_count).to_a
-
+              views = View.select("DISTINCT news_links.title, COUNT(news_feed_link_id) view_count, groups.name AS name").joins(:news_feed_link => [:news_link => :group]).where(:news_feed_link_id => news_feed_link_ids).group(:news_feed_link_id).order("view_count DESC").limit(20)
+              
               data = views.map do |view|
                   {
-                      y: view.second,
-                      name: view.first
+                      y: view.view_count,
+                      name: "#{view.name} - #{view.title}"
                   }
               end
 
@@ -771,7 +771,7 @@ class GenericGraphsController < ApplicationController
         respond_to do |format|
             format.json {
               news_feed_link_ids = NewsFeedLink.where(:news_feed_id => NewsFeed.where(:group_id => current_user.enterprise.groups.ids).ids).ids
-              news_links = NewsLink.select("news_links.title, SUM(views.view_count) view_count").joins(:news_feed_link, :news_feed_link => :views).where(:news_feed_links => {:id => news_feed_link_ids}).order("view_count DESC")
+              news_links = NewsLink.select("news_links.title, COUNT(views.id) view_count").joins(:news_feed_link, :news_feed_link => :views).where(:news_feed_links => {:id => news_feed_link_ids}).order("view_count DESC")
 
               values = [9,2,5,1,11,10,9,5,11,4,1,8]
               i = 0
