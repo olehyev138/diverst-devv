@@ -6,7 +6,6 @@ after 'development:join_groups' do
 				if enterprise.name == "Diverst Inc"
 					rand(5..10).times do 
 						author = owner = group.user_groups.where(accepted_member: true).sample.user
-						news_feed = NewsFeed.create(group_id: group.id)
 
 						group_message = GroupMessage.create(group_id: group.id,
 						                    subject: Faker::Lorem.sentence, 
@@ -14,17 +13,17 @@ after 'development:join_groups' do
 						                    owner_id: owner.id)
 						NewsFeedLink.create(approved: true,
 											group_message_id: group_message.id,
-											is_pinned: false, news_feed_id: news_feed.id)
+											is_pinned: false, news_feed_id: group.news_feed.id)
 
 						news_link = NewsLink.create(title: "China Behavior Rating System V/S Sweden Microchip implants | Must watch technology",
 													description: Faker::Lorem.paragraph,
 													group_id: group.id,
 													author_id: author.id,
 													url: "https://www.youtube.com/watch?v=3FMWcLZy3jU")
-						news_feed_link = NewsFeedLink.create(approved: true,
+						NewsFeedLink.create(approved: true,
 											news_link_id: news_link.id,
 											is_pinned: false,
-											news_feed_id: news_feed.id)
+											news_feed_id: group.news_feed.id)
 
 						social_link = SocialLink.create(group_id: group.id,
 														author_id: author.id,
@@ -34,7 +33,7 @@ after 'development:join_groups' do
 						NewsFeedLink.create(approved: true,
 											social_link_id: social_link.id,
 											is_pinned: false,
-											news_feed_id: news_feed.id)
+											news_feed_id: group.news_feed.id)
 
 						#comments for news feed
 						3.times do
@@ -49,22 +48,23 @@ after 'development:join_groups' do
 						#likes and views for news feed
 						rand(5..10).times do
 							user = group.user_groups.where(accepted_member: true).sample.user
-							news_link.news_feed_link.likes.create(user_id: user.id, 
-														          enterprise_id: enterprise.id) unless Like.where(user_id: user.id, news_feed_link_id: news_link.news_feed_link.id).exists?
-							group_message.news_feed_link.likes.create(user_id: user.id,
-																	  enterprise_id: enterprise.id) unless Like.where(user_id: user.id, news_feed_link_id: group_message.news_feed_link.id).exists?
-							social_link.news_feed_link.likes.create(user_id: user.id,
-																	enterprise_id: enterprise.id) unless Like.where(user_id: user.id, news_feed_link_id: social_link.news_feed_link.id).exists?
+							news_link.news_feed_link.likes
+							.create(user_id: user.id, enterprise_id: enterprise.id) unless Like.where(user_id: user.id, news_feed_link_id: news_link.news_feed_link.id).exists?
 							
-							news_link.news_feed_link.views.create(user_id: user.id,
-																  enterprise_id: enterprise.id,
-																  group_id: group.id) unless View.where(user_id: user.id, news_feed_link_id: news_link.news_feed_link.id).exists?
-							group_message.news_feed_link.views.create(user_id: user.id,
-																  enterprise_id: enterprise.id,
-																  group_id: group.id) unless View.where(user_id: user.id, news_feed_link_id: group_message.news_feed_link.id).exists?
-							social_link.news_feed_link.views.create(user_id: user.id,
-																  enterprise_id: enterprise.id,
-																  group_id: group.id) unless View.where(user_id: user.id, news_feed_link_id: social_link.news_feed_link.id).exists?
+							group_message.news_feed_link.likes
+							.create(user_id: user.id, enterprise_id: enterprise.id) unless Like.where(user_id: user.id, news_feed_link_id: group_message.news_feed_link.id).exists?
+							
+							social_link.news_feed_link.likes
+							.create(user_id: user.id, enterprise_id: enterprise.id) unless Like.where(user_id: user.id, news_feed_link_id: social_link.news_feed_link.id).exists?
+							
+							news_link.news_feed_link.views
+							.create(user_id: user.id, enterprise_id: enterprise.id, group_id: group.id) unless View.where(user_id: user.id, news_feed_link_id: news_link.news_feed_link.id).exists?
+							
+							group_message.news_feed_link.views
+							.create(user_id: user.id, enterprise_id: enterprise.id, group_id: group.id) unless View.where(user_id: user.id, news_feed_link_id: group_message.news_feed_link.id).exists?
+							
+							social_link.news_feed_link.views
+							.create(user_id: user.id, enterprise_id: enterprise.id, group_id: group.id) unless View.where(user_id: user.id, news_feed_link_id: social_link.news_feed_link.id).exists?
 						end
 					end
 				end
