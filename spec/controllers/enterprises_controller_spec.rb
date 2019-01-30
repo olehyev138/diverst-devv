@@ -325,9 +325,7 @@ RSpec.describe EnterprisesController, type: :controller do
         end
     end
 
-    # CONTROLLER IS MISSING A TEMPLATE
-
-    describe "GET#edit_algo", skip: "test fails because of Missing template layouts/handshake..." do
+    describe "GET#edit_algo" do
         describe "with logged in user" do
             login_user_from_let
 
