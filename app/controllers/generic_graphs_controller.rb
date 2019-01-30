@@ -36,9 +36,9 @@ class GenericGraphsController < ApplicationController
                        }
             }
             format.csv {
-                GenericGraphsGroupPopulationDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))
-                flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
-                redirect_to :back
+              GenericGraphsGroupPopulationDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))
+              flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+              redirect_to :back
             }
         end
     end
@@ -461,17 +461,12 @@ class GenericGraphsController < ApplicationController
         respond_to do |format|
             format.json {
               news_feed_link_ids = NewsFeedLink.where(:news_feed_id => NewsFeed.where(:group_id => current_user.enterprise.groups.ids).ids).ids
-              news_links = NewsLink
-                .select('DISTINCT news_links.title, views.view_count, groups.name')
-                .joins(:group, :news_feed_link, 'JOIN views on news_feed_links.id = views.news_feed_link_id')
-                .where(:news_feed_links => {:id => news_feed_link_ids})
-                .limit(20)
-                .order('view_count DESC')
+              views = View.joins(:news_feed_link => :news_link).where(:news_feed_link_id => news_feed_link_ids).group("news_links.title").order("sum_view_count DESC").limit(20).sum(:view_count).to_a
 
-              data = news_links.map do |news_link|
+              data = views.map do |view|
                   {
-                      y: news_link.view_count,
-                      name: news_link.name + ': ' + news_link.title
+                      y: view.second,
+                      name: view.first
                   }
               end
 
@@ -498,40 +493,94 @@ class GenericGraphsController < ApplicationController
     end
 
     def growth_of_groups
-      series = []
+      respond_to do |format|
+        format.json {
+          series = []
 
-      current_user.enterprise.groups.each do |group|
-        total = 0
+          current_user.enterprise.groups.each do |group|
+            total = 0
 
-        # query es, filter by current group id, order by created_at and aggregate on created_at
-        buckets = UserGroup.__elasticsearch__.search({
-          size: 0,
-          aggs: {
-            group_growth_agg: {
-              filter: { term: { group_id: group.id } },
+            # query es, filter by current group id, order by created_at and aggregate on created_at
+            buckets = UserGroup.__elasticsearch__.search({
+              size: 0,
               aggs: {
                 group_growth_agg: {
-                  terms: {
-                    size: 1000,
-                    field: :created_at,
-                    order: { _term: :asc }
+                  filter: { term: { group_id: group.id } },
+                  aggs: {
+                    group_growth_agg: {
+                      terms: {
+                        size: 1000,
+                        field: :created_at,
+                        order: { _term: :asc }
+                      }
+                    }
                   }
                 }
               }
+            }).aggregations.group_growth_agg.group_growth_agg.buckets
+
+            # format es query response
+            # get running total by adding each buckets doc count to a total
+            series << {
+              name: group.name,
+              data: buckets.map { |bucket| [ bucket[:key], (total += bucket[:doc_count]) ] }
+            }
+          end
+
+          render json: {
+            type: 'time_based',
+            highcharts: {
+              series: series
             }
           }
-        }).aggregations.group_growth_agg.group_growth_agg.buckets
+        }
+        format.csv {
+          GenericGraphsGroupGrowthDownloadJob
+            .perform_later(current_user.id, current_user.enterprise.id,
+                           params[:from_date], params[:to_date])
 
-        # format es query response
-        # get running total by adding each buckets doc count to a total
-        series << {
-          name: group.name,
-          data: buckets.map { |bucket| [ bucket[:key], (total += bucket[:doc_count]) ] }
+          flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+          redirect_to :back
         }
       end
+    end
 
+    def growth_of_resources
       respond_to do |format|
         format.json {
+          series = []
+          current_user.enterprise.groups.each do |group|
+            total = 0
+
+            # query es, filter by current group id, order by created_at and aggregate on created_at
+            buckets = Resource.__elasticsearch__.search({
+              size: 0,
+              aggs: {
+                group_growth_agg: {
+                  filter: {
+                    term: { 'folder.group_id': group.id }
+                  },
+                  aggs: {
+                    group_growth_agg: {
+                      terms: {
+                        size: 1000,
+                        field: :created_at,
+                        order: { _term: :asc }
+                      }
+                    }
+                  }
+                }
+              }
+            }).aggregations.group_growth_agg.group_growth_agg.buckets
+
+            # format es query response
+            # get running total by adding each buckets doc count to a total
+            series << {
+              name: group.name,
+              data: buckets.map { |bucket| [ bucket[:key], (total += bucket[:doc_count]) ] }
+            }
+          end
+
           render json: {
             type: 'time_based',
             highcharts: {
@@ -758,5 +807,14 @@ class GenericGraphsController < ApplicationController
 
     def authorize_dashboards
         authorize MetricsDashboard, :index?
+    end
+
+    private
+
+    def graph_params
+      params.permit(
+        :from_date,
+        :to_date
+      )
     end
 end

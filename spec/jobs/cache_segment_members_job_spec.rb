@@ -15,8 +15,8 @@ RSpec.describe CacheSegmentMembersJob, type: :job do
     expect(segment.members.count).to eq(1)
     
     worker = CacheSegmentMembersJob.new
-    worker.perform(segment)
-    
+    worker.perform(segment.id)
+
     expect(segment.members.count).to eq(0)
   end
   
@@ -34,8 +34,8 @@ RSpec.describe CacheSegmentMembersJob, type: :job do
     expect(segment.members.count).to eq(0)
     
     worker = CacheSegmentMembersJob.new
-    worker.perform(segment)
-    
+    worker.perform(segment.id)
+
     expect(segment.members.count).to eq(1)
   end
 end

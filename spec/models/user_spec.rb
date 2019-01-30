@@ -55,7 +55,6 @@ RSpec.describe User do
       end
 
       context 'has_many associations' do
-        it { expect(user).to have_many(:devices) }
         it { expect(user).to have_many(:users_segments) }
         it { expect(user).to have_many(:segments).through(:users_segments) }
         it { expect(user).to have_many(:groups).through(:user_groups) }
@@ -284,7 +283,7 @@ RSpec.describe User do
 
     context 'when user is a leader of an erg' do
       before  do
-        group.members << user
+        create(:user_group, :user => user, :group => group, :accepted_member => true)
         group.group_leaders << GroupLeader.new(group: group, user: user, position_name: 'blah', user_role: user.enterprise.user_roles.where(:role_name => "group_leader").first)
       end
 
@@ -478,9 +477,8 @@ RSpec.describe User do
   describe "#destroy_callbacks" do
     it "removes the child objects" do
       user = create(:user)
-      device = create(:device, :user => user)
       users_segment = create(:users_segment, :user => user)
-      user_group = create(:user_group, :user => user)
+      user_group = create(:user_group, :user => user, :accepted_member => true)
       topic_feedback = create(:topic_feedback, :user => user)
       #poll_response = create(:poll_response, :user => user)
       answer = create(:answer, :author => user)
@@ -493,7 +491,7 @@ RSpec.describe User do
       initiative_user = create(:initiative_user, :user => user)
       initiative_invitee = create(:initiative_invitee, :user => user)
       #sample = create(:sample, :user => user)
-      group_leader = create(:group_leader, :user => user)
+      group_leader = create(:group_leader, :user => user, group: user_group.group)
       user_reward_action = create(:user_reward_action, :user => user)
       #reward = create(:reward, :responsible_id => user.id)
       
@@ -502,7 +500,6 @@ RSpec.describe User do
       user.destroy
 
       expect{User.find(user.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      expect{Device.find(device.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{PolicyGroup.find(policy_group.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{UsersSegment.find(users_segment.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{UserGroup.find(user_group.id)}.to raise_error(ActiveRecord::RecordNotFound)

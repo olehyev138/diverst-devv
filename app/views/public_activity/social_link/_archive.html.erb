@@ -1,0 +1,10 @@
+<div class="card__section">
+  <%= render 'public_activity/shared/owner', activity: activity %>
+  archived a social link
+  <% if activity.trackable %>
+    <%= activity.trackable.url %>
+  <% else %>
+    which has since been removed
+  <% end %>
+  (<%= activity.created_at.to_s :datetime %>)
+</div>
