@@ -34,8 +34,6 @@ class Enterprise < ActiveRecord::Base
     has_many :expense_categories, dependent: :destroy
     has_many :clockwork_database_events, dependent: :destroy
 
-    has_many :departments
-
     # mentorship
     has_many :mentoring_interests, dependent: :destroy
     has_many :mentoring_requests, dependent: :destroy
@@ -227,6 +225,50 @@ class Enterprise < ActiveRecord::Base
       report = Reports::Generator.new(strategy)
 
       report.to_csv
+    end
+
+    def generic_graphs_group_growth_csv(from_date, to_date)
+      CSV.generate do |csv|
+        # column titles
+        csv << [
+          self.custom_text.send('erg_text'),
+          'From: ' + from_date.strftime('%F %T'),
+          'To: ' + to_date.strftime('%F %T'),
+          'Difference',
+          '% Change'
+        ]
+
+        self.groups.each do |group|
+          from_date_total = group.user_groups
+            .where('created_at <= ?', from_date)
+            .count.to_f
+
+          to_date_total = group.user_groups
+            .where('created_at <= ?', to_date)
+            .count.to_f
+
+          change_percentage = 0
+          if from_date_total == 0 and to_date_total > 0
+            change_percentage = 100
+          elsif to_date_total == 0 and from_date_total > 0
+            change_percentage = -100
+          elsif from_date_total == 0 and to_date_total == 0
+            change_percentage = 0
+          else
+            change_percentage =
+              (((to_date_total - from_date_total) / from_date_total)).round(2)
+          end
+
+          if change_percentage.positive?
+            change_percentage = '+' + (change_percentage.to_s)
+          end
+
+          csv << [
+            group.name, from_date_total, to_date_total,
+            (to_date_total - from_date_total), change_percentage
+          ]
+        end
+      end
     end
 
     def generic_graphs_segment_population_csv(erg_text)

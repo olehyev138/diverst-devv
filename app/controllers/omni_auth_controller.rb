@@ -13,7 +13,7 @@ class OmniAuthController < ApplicationController
 
     # Set the user's avatar
     picture_url = @oauth['info']['image']
-    SaveUserAvatarFromUrlJob.perform_later(current_user, picture_url)
+    SaveUserAvatarFromUrlJob.perform_later(current_user.id, picture_url)
 
     redirect_to user_user_path(current_user)
   end

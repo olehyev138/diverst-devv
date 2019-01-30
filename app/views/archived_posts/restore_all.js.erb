@@ -1,0 +1,16 @@
+$(".card").fadeOut(500, function() {
+	$(this).remove();
+	decreasePostsCount();
+
+	$("#archive_buttons").hide();
+	displayForEmptyArchive();	
+});
+
+function decreasePostsCount() {
+	document.getElementById('archived_posts_count').innerHTML = 0;
+}
+
+function displayForEmptyArchive() {
+	$('.content__main').append('<div class="card"><div class="card__section"><p>No Archived Posts.</p></div> </div>');
+}
+

@@ -15,10 +15,13 @@
 
       <div class="card__section card__section--border">
         <%= f.association :responsible,
-              include_blank: true,
-              input_html: { class: "select2" },
-              label: "Who is <strong>responsible</strong> for checking this prize request?".html_safe %>
+            as: :select,
+            include_blank: true,
+            input_html: { class: "select2-field" },
+            label: "Who is <strong>responsible</strong> for checking this prize request?".html_safe
+        %>
       </div>
+
 
       <div class="card__section card__section--border">
         <%= f.input :picture,
@@ -34,3 +37,12 @@
     <%= f.button :submit, "Save prize" %>
   <% end %>
 </div>
+<script>
+ $(document).on('ready page:load', function() {
+   $('.select2-field').select2(
+     async_select(
+       '<%= users_path(limit: 10, format: :json) %>',
+       async_select_objects.USERS)
+   );
+ });
+</script>

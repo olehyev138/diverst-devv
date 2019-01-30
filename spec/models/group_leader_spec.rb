@@ -36,6 +36,15 @@ RSpec.describe GroupLeader, type: :model do
       group_leader_3 = create(:group_leader, :user => user, :group => group_2)
       expect(group_leader_3.valid?).to be(true)
     end
+
+    it 'validates that user selected as group leader is a member of group' do
+      user = create(:user)
+      group = create(:group, :enterprise => user.enterprise)
+      create(:user_group, :user => user, :group => group, :accepted_member => true)
+      group_leader = build(:group_leader, :user => user, :group => group)
+
+      expect(group_leader.valid?).to be(true)
+    end
   end
 
 end
