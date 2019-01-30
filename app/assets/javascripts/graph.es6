@@ -56,6 +56,8 @@ class Graph {
             chart.yAxis
                 .tickFormat(d3.format('d'));
 
+            chart.reduceXTicks(false);
+
             d3.select(svg)
                 .datum(series)
                 .transition().duration(500)
@@ -91,8 +93,6 @@ class Graph {
         var series = this.data.series;
         var svg = this.$element[0].children[0];
         var chart = null;
-
-        console.log('henlo');
 
         nv.addGraph(function() {
             chart = nv.models
