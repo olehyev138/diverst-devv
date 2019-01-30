@@ -90,11 +90,6 @@ module ApplicationHelper
     return enterprise_folders_path(current_user.enterprise) if EnterpriseFolderPolicy.new(current_user).index?
     false
   end
-  
-  def mentoring_path
-    return mentoring_interests_path if policy(MentoringInterest).index?
-    false
-  end
 
   def global_settings_path
     return users_path if policy(User).create?

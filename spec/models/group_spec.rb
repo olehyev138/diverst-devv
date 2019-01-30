@@ -355,7 +355,7 @@ RSpec.describe Group, :type => :model do
         it "returns an array with owner and leaders" do
             user = create(:user)
             group = create(:group, :enterprise => user.enterprise, :owner => user)
-
+            create(:user_group, :user => user, :group => group, :accepted_member => true)
             create(:group_leader, :group => group, :user => user)
 
             expect(group.managers.length).to eq(2)
@@ -618,6 +618,7 @@ RSpec.describe Group, :type => :model do
         it 'updates contact email if group leader is default_group_contact' do
             user = create(:user)
             group = create(:group, :enterprise => user.enterprise)
+            create(:user_group, :user => user, :group => group, :accepted_member => true)
 
             group_leader = create(:group_leader, :group => group, :user => user, :default_group_contact => true)
             group_leader = group.group_leaders.find_by(default_group_contact: true)&.user
@@ -629,6 +630,7 @@ RSpec.describe Group, :type => :model do
         it 'sets contact email to nil if group leader is not set.' do
             user = create(:user)
             group = create(:group, :enterprise => user.enterprise)
+            create(:user_group, :user => user, :group => group, :accepted_member => true)
 
             create(:group_leader, :group => group, :user => user, :default_group_contact => false)
             
@@ -679,6 +681,7 @@ RSpec.describe Group, :type => :model do
             field = create(:field, :group => group, :field_type => "regular")
             survey_field = create(:field, :group => group, :field_type => "group_survey")
             user = create(:user, :enterprise => group.enterprise)
+            create(:user_group, :user => user, :group => group, :accepted_member => true)
             group_leader = create(:group_leader, :group => group, :user => user)
             child = create(:group, :parent => group)
             

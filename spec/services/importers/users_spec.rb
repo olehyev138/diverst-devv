@@ -26,7 +26,7 @@ RSpec.describe Importers::Users do
     it "assign invalid users to @failed_rows with their errors" do
       importer.import
       expect(importer.failed_rows.first[:error])
-        .to eq "Email can't be blank, Email is not an email, First name can't be blank, Last name can't be blank"
+        .to eq "Email can't be blank, First name can't be blank, Last name can't be blank"
     end
 
     it "@successful_rows should be empty" do

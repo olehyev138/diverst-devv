@@ -11,7 +11,7 @@ class GroupsController < ApplicationController
     def index
         authorize Group
         @groups = GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_manage)
-        .resolve.includes(:children).order(:position).all_parents
+        .resolve.includes(:children).order(:position)
 
         respond_to do |format|
           format.html

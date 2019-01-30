@@ -6,6 +6,7 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
     let(:user) { create :user }
     let(:group){ create(:group, enterprise: user.enterprise) }
 
+
     describe 'GET #index' do
         def get_index(group_id)
             get :index, group_id: group_id
@@ -386,6 +387,54 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
         context 'when users is not logged in' do
             before { delete :destroy, group_id: group.id, id: news_link.id }
             it_behaves_like "redirect user to users/sign_in path"
+        end
+    end
+
+    describe 'PATCH#archive' do 
+        let!(:news_link){ create(:news_link, group: group) }
+
+        describe 'when user is logged in' do
+            before { request.env["HTTP_REFERER"] = 'back' }
+
+            login_user_from_let
+
+            context 'with valid attributes' do
+                before { patch :archive, group_id: group.id, id: news_link.id }
+
+                it 'redirects to same page' do
+                    expect(response).to redirect_to 'back'
+                end
+
+                it 'archives news_link' do  
+                    expect(assigns[:news_link].news_feed_link.archived_at).to_not be_nil
+                end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                        perform_enqueued_jobs do
+                            expect{
+                              patch :archive, group_id: group.id, id: news_link.id
+                            }.to change(PublicActivity::Activity, :count).by(1)
+                        end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { NewsLink.last }
+                    let(:owner) { user }
+                    let(:key) { 'news_link.archive' }
+
+                    before {
+                        perform_enqueued_jobs do
+                            patch :archive, group_id: group.id, id: news_link.id
+                        end
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
+            end
         end
     end
 end

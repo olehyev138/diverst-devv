@@ -161,12 +161,59 @@ RSpec.describe Groups::SocialLinksController, type: :controller do
             end
 
             describe 'public activity' do
+                enable_public_activity
+
+                it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                        expect{
+                            delete :destroy, group_id: group.id, id: social_link.id
+                        }.to change(PublicActivity::Activity, :count).by(1)
+                    end
+                end
+
+                describe 'activity record' do
+                    let(:model) { SocialLink.last }
+                    let(:owner) { user }
+                    let(:key) { 'social_link.destroy' }
+
+                    before {
+                        perform_enqueued_jobs do
+                            delete :destroy, group_id: group.id, id: social_link.id
+                        end
+                    }
+
+                    include_examples'correct public activity'
+                end
+            end
+        end
+    end
+
+    describe 'PATCH#archive' do 
+        let!(:social_link){ create(:social_link, group: group) }
+
+        describe 'when user is logged in' do
+            before { request.env["HTTP_REFERER"] = 'back' }
+
+            login_user_from_let
+
+            context 'with valid attributes' do
+                before { patch :archive, group_id: group.id, id: social_link.id }
+
+                it 'redirects to same page' do
+                    expect(response).to redirect_to 'back'
+                end
+
+                it 'archives social_link' do  
+                    expect(assigns[:social_link].news_feed_link.archived_at).to_not be_nil
+                end
+
+                describe 'public activity' do
                     enable_public_activity
 
                     it 'creates public activity record' do
                         perform_enqueued_jobs do
                             expect{
-                            delete :destroy, group_id: group.id, id: social_link.id
+                                delete :archive, group_id: group.id, id: social_link.id
                             }.to change(PublicActivity::Activity, :count).by(1)
                         end
                     end
@@ -174,17 +221,18 @@ RSpec.describe Groups::SocialLinksController, type: :controller do
                     describe 'activity record' do
                         let(:model) { SocialLink.last }
                         let(:owner) { user }
-                        let(:key) { 'social_link.destroy' }
+                        let(:key) { 'social_link.archive' }
 
                         before {
                             perform_enqueued_jobs do
-                                delete :destroy, group_id: group.id, id: social_link.id
+                                delete :archive, group_id: group.id, id: social_link.id
                             end
                         }
 
                         include_examples'correct public activity'
                     end
                 end
+            end
         end
-    end
+    end            
 end

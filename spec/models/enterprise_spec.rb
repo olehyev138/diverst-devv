@@ -31,7 +31,6 @@ RSpec.describe Enterprise, type: :model do
         it { expect(enterprise).to belong_to(:theme) }
         it { expect(enterprise).to have_many(:expenses) }
         it { expect(enterprise).to have_many(:expense_categories) }
-        it { expect(enterprise).to have_many(:departments) }
         it { expect(enterprise).to have_many(:rewards) }
         it { expect(enterprise).to have_many(:reward_actions) }
         it { expect(enterprise).to have_many(:badges) }
@@ -66,27 +65,6 @@ RSpec.describe Enterprise, type: :model do
         it "saves the url" do
             enterprise = build_stubbed(:enterprise, :company_video_url => "https://www.youtube.com/watch?v=Y2VF8tmLFHw")
             expect(enterprise.company_video_url).to_not be(nil)
-        end
-    end
-
-    describe "#update_matches" do
-        it "calls GenerateEnterpriseMatchesJob" do
-            enterprise = build_stubbed(:enterprise)
-            allow(GenerateEnterpriseMatchesJob).to receive(:perform_later)
-
-            enterprise.update_matches
-            expect(GenerateEnterpriseMatchesJob).to have_received(:perform_later)
-        end
-    end
-
-    describe "#update_match_scores" do
-        it "calls CalculateMatchScoreJob" do
-            enterprise = create(:enterprise)
-            create_list(:user, 2, :enterprise => enterprise)
-            allow(CalculateMatchScoreJob).to receive(:perform_later)
-
-            enterprise.update_match_scores
-            expect(CalculateMatchScoreJob).to have_received(:perform_later).at_least(:once)
         end
     end
 
