@@ -88,7 +88,7 @@ class EnterprisesController < ApplicationController
   end
   
   def edit_algo
-    authorize @enterprise, :edit?
+    authorize @enterprise, :update?
   end
 
   def update_branding
