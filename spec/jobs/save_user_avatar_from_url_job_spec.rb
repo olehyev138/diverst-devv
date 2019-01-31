@@ -5,7 +5,7 @@ RSpec.describe SaveUserAvatarFromUrlJob, type: :job do
   let!(:user){ create(:user) }
 
   it "saves the url" do
-    subject.perform(user, Faker::Avatar.image)
+    subject.perform(user.id, Faker::Avatar.image)
 
     user.reload
 
@@ -13,7 +13,7 @@ RSpec.describe SaveUserAvatarFromUrlJob, type: :job do
   end
 
   it "is rescued when url is bad" do
-    subject.perform(user, 'superbadurl')
+    subject.perform(user.id, 'superbadurl')
 
     user.reload
 

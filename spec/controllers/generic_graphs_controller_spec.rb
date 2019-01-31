@@ -41,8 +41,8 @@ RSpec.describe GenericGraphsController, type: :controller do
                         expect(json_response[:highcharts][:series][0][:data][0][:name]).to eq group.name
                     end
 
-                    it 'return xAxisTitle to be ERG' do
-                        expect(json_response[:highcharts][:xAxisTitle]).to eq 'ERG'
+                    it 'return xAxisTitle to be Group' do
+                        expect(json_response[:highcharts][:xAxisTitle]).to eq 'Group'
                     end
 
                     it 'has no aggregation' do
@@ -175,8 +175,8 @@ RSpec.describe GenericGraphsController, type: :controller do
                         expect(json_response[:highcharts][:series][0][:data][0][:name]).to eq group.name
                     end
 
-                    it 'return xAxisTitle to be ERG' do
-                        expect(json_response[:highcharts][:xAxisTitle]).to eq 'ERG'
+                    it 'return xAxisTitle to be Group' do
+                        expect(json_response[:highcharts][:xAxisTitle]).to eq 'Group'
                     end
 
                     it "return yAxisTitle to be 'Nb of events'" do
@@ -331,8 +331,8 @@ RSpec.describe GenericGraphsController, type: :controller do
                         expect(json_response[:highcharts][:series][0][:data][0][:name]).to eq group.name
                     end
 
-                    it 'return xAxisTitle to be ERG' do
-                        expect(json_response[:highcharts][:xAxisTitle]).to eq 'ERG'
+                    it 'return xAxisTitle to be Group' do
+                        expect(json_response[:highcharts][:xAxisTitle]).to eq 'Group'
                     end
 
                     it "return yAxisTitle to be 'Nb of events'" do
@@ -409,8 +409,8 @@ RSpec.describe GenericGraphsController, type: :controller do
                         expect(json_response[:highcharts][:series][0][:data][0][:name]).to eq group.name
                     end
 
-                    it 'return xAxisTitle to be ERG' do
-                        expect(json_response[:highcharts][:xAxisTitle]).to eq 'ERG'
+                    it 'return xAxisTitle to be Group' do
+                        expect(json_response[:highcharts][:xAxisTitle]).to eq 'Group'
                     end
 
                     it "return yAxisTitle to be 'Nb of events'" do
@@ -479,8 +479,8 @@ RSpec.describe GenericGraphsController, type: :controller do
                         expect(json_response[:highcharts][:series][0][:title]).to eq 'Number of mentoring sessions'
                     end
 
-                    it 'return xAxisTitle to be ERG' do
-                        expect(json_response[:highcharts][:xAxisTitle]).to eq 'ERG'
+                    it 'return xAxisTitle to be Group' do
+                        expect(json_response[:highcharts][:xAxisTitle]).to eq 'Group'
                     end
 
                     it "return yAxisTitle to be 'Nb of events'" do
@@ -546,15 +546,15 @@ RSpec.describe GenericGraphsController, type: :controller do
                     let!(:json_response) { JSON.parse(response.body, symbolize_names: true) }
 
                     it 'returns correct title' do
-                        expect(json_response[:highcharts][:series][0][:title]).to eq "# of views per ERG"
+                        expect(json_response[:highcharts][:series][0][:title]).to eq "# of views per Group"
                     end
 
-                    it 'return xAxisTitle to be ERG' do
-                        expect(json_response[:highcharts][:xAxisTitle]).to eq 'ERG'
+                    it 'return xAxisTitle to be Group' do
+                        expect(json_response[:highcharts][:xAxisTitle]).to eq 'Group'
                     end
 
                     it "return yAxisTitle to be 'Nb of views'" do
-                        expect(json_response[:highcharts][:yAxisTitle]).to eq "# of views per ERG"
+                        expect(json_response[:highcharts][:yAxisTitle]).to eq "# of views per Group"
                     end
                 end
             end

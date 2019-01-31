@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181209212951) do
+ActiveRecord::Schema.define(version: 20181223094951) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -173,12 +173,6 @@ ActiveRecord::Schema.define(version: 20181209212951) do
     t.integer  "initiative_id", limit: 4
   end
 
-  create_table "cities", force: :cascade do |t|
-    t.string   "name",       limit: 191
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-  end
-
   create_table "ckeditor_assets", force: :cascade do |t|
     t.string   "data_file_name",    limit: 191
     t.string   "data_content_type", limit: 191
@@ -228,37 +222,22 @@ ActiveRecord::Schema.define(version: 20181209212951) do
   end
 
   create_table "custom_texts", force: :cascade do |t|
-    t.text    "erg",               limit: 65535
+    t.string  "erg",               limit: 191, default: "Group"
     t.integer "enterprise_id",     limit: 4
-    t.text    "program",           limit: 65535
-    t.text    "structure",         limit: 65535
-    t.text    "outcome",           limit: 65535
-    t.text    "badge",             limit: 65535
-    t.text    "segment",           limit: 65535
-    t.text    "dci_full_title",    limit: 65535
-    t.text    "dci_abbreviation",  limit: 65535
-    t.text    "member_preference", limit: 65535
-    t.text    "parent",            limit: 65535
-    t.text    "sub_erg",           limit: 65535
-    t.text    "privacy_statement", limit: 65535
+    t.string  "program",           limit: 191, default: "Goal"
+    t.string  "structure",         limit: 191, default: "Structure"
+    t.string  "outcome",           limit: 191, default: "Focus Areas"
+    t.string  "badge",             limit: 191, default: "Badge"
+    t.string  "segment",           limit: 191, default: "Segment"
+    t.string  "dci_full_title",    limit: 191, default: "Engagement"
+    t.string  "dci_abbreviation",  limit: 191, default: "Engagement"
+    t.string  "member_preference", limit: 191, default: "Member Survey"
+    t.string  "parent",            limit: 191, default: "Parent"
+    t.string  "sub_erg",           limit: 191, default: "Sub-Group"
+    t.string  "privacy_statement", limit: 191, default: "Privacy Statement"
   end
 
   add_index "custom_texts", ["enterprise_id"], name: "index_custom_texts_on_enterprise_id", using: :btree
-
-  create_table "departments", force: :cascade do |t|
-    t.integer  "enterprise_id", limit: 4,   null: false
-    t.string   "name",          limit: 191
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-  end
-
-  create_table "devices", force: :cascade do |t|
-    t.string   "token",      limit: 191
-    t.integer  "user_id",    limit: 4
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-    t.string   "platform",   limit: 191
-  end
 
   create_table "email_variables", force: :cascade do |t|
     t.integer  "email_id",                     limit: 4
@@ -689,22 +668,6 @@ ActiveRecord::Schema.define(version: 20181209212951) do
   add_index "likes", ["user_id", "news_feed_link_id", "enterprise_id"], name: "index_likes_on_user_id_and_news_feed_link_id_and_enterprise_id", unique: true, using: :btree
   add_index "likes", ["user_id"], name: "index_likes_on_user_id", using: :btree
 
-  create_table "matches", force: :cascade do |t|
-    t.integer  "user1_id",            limit: 4
-    t.integer  "user2_id",            limit: 4
-    t.integer  "user1_status",        limit: 4,  default: 0
-    t.integer  "user2_status",        limit: 4,  default: 0
-    t.float    "score",               limit: 24
-    t.time     "score_calculated_at"
-    t.datetime "created_at",                                     null: false
-    t.datetime "updated_at",                                     null: false
-    t.boolean  "archived",                       default: false
-    t.integer  "topic_id",            limit: 4
-    t.integer  "user1_rating",        limit: 4
-    t.integer  "user2_rating",        limit: 4
-    t.datetime "both_accepted_at"
-  end
-
   create_table "mentoring_interests", force: :cascade do |t|
     t.integer  "enterprise_id", limit: 4
     t.string   "name",          limit: 191, null: false
@@ -852,6 +815,7 @@ ActiveRecord::Schema.define(version: 20181209212951) do
     t.integer  "group_message_id", limit: 4
     t.integer  "social_link_id",   limit: 4
     t.boolean  "is_pinned",                  default: false
+    t.datetime "archived_at"
   end
 
   create_table "news_feeds", force: :cascade do |t|
@@ -1103,6 +1067,7 @@ ActiveRecord::Schema.define(version: 20181209212951) do
     t.integer  "folder_id",            limit: 4
     t.integer  "group_id",             limit: 4
     t.integer  "initiative_id",        limit: 4
+    t.datetime "archived_at"
   end
 
   create_table "reward_actions", force: :cascade do |t|
