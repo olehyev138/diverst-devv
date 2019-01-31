@@ -24,7 +24,7 @@ RSpec.feature 'DCI Management' do
 			expect(page).to have_field('Attend event', with: 30)
 			expect(page).to have_field('News comment', with: 15)
 		end
-
+		
 		scenario 'Badges' do
 			visit rewards_path
 
@@ -73,7 +73,7 @@ RSpec.feature 'DCI Management' do
 			description: 'This is indeed the ultimate prize', responsible_id: admin_user.id) }
 
 		before { visit rewards_path }
-
+		
 		scenario 'Edit Badge' do
 			click_link 'Edit', href: edit_badge_path(badge)
 
@@ -100,7 +100,6 @@ RSpec.feature 'DCI Management' do
 
 		scenario 'Edit Prize', js: true do
 			click_link 'Edit', href: edit_reward_path(prize)
-
 
 			expect(page).to have_current_path edit_reward_path(prize)
 			expect(page).to have_field('reward[label]', with: 'Ultimate Prize')

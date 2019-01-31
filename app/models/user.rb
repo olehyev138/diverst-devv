@@ -46,7 +46,6 @@ class User < ActiveRecord::Base
     has_many :mentorship_proposals, :foreign_key => "sender_id",     :class_name => "MentoringRequest"
     has_many :mentorship_requests,  :foreign_key => "receiver_id",   :class_name => "MentoringRequest"
 
-    has_many :devices, dependent: :destroy
     has_many :users_segments, dependent: :destroy
     has_many :segments, through: :users_segments
     has_many :user_groups, dependent: :destroy
@@ -319,13 +318,7 @@ class User < ActiveRecord::Base
 
         part_of_segment
     end
-
-    # Sends a push notification to all of the user's devices
-    def notify(message, data)
-        devices.each do |device|
-            device.notify(message, data)
-        end
-    end
+   
 
     # Generate a Firebase token for the user and update the user with it
     def assign_firebase_token

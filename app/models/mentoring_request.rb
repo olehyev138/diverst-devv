@@ -16,7 +16,10 @@ class MentoringRequest < ActiveRecord::Base
     validates_uniqueness_of :sender, scope: [:receiver], :message => "There's already a pending request"
     
     after_create :notify_receiver
-    
+
+    scope :mentor_requests, -> { where(:mentoring_type => 'mentor') }
+    scope :mentee_requests, -> { where(:mentoring_type => 'mentee') }
+
     def notify_receiver
         MentorMailer.new_mentoring_request(id).deliver_later
     end

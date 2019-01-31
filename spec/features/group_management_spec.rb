@@ -113,7 +113,7 @@ RSpec.feature 'Group management' do
 
       click_on 'Delete'
 
-      expect(page).to have_content 'Your ERG was deleted'
+      expect(page).to have_content 'Your Group was deleted'
       expect(page).to have_no_content 'Parent Group'
       expect(page).to have_no_content 'Sub Group ONE'
       expect(page).to have_no_content 'Sub Group TWO'
@@ -177,13 +177,13 @@ RSpec.feature 'Group management' do
         expect(current_path).to eq edit_group_path(sub_group1)
 
         expect(page).to have_field('Name', with: sub_group1.name)
-        expect(page).to have_select('Parent-Erg', selected: parent_group.name)
+        expect(page).to have_select('Parent', selected: parent_group.name)
         expect(page).to have_select('Group category', selected: nil) #NOTE: here, nil stands in for 'None'
 
         select 'Red', from: 'Group category'
         click_on 'Update Group'
 
-        expect(page).to have_content 'Your ERG was updated'
+        expect(page).to have_content 'Your Group was updated'
         expect(page).to have_select('Group category', selected: 'Red')
       end
 
@@ -204,13 +204,13 @@ RSpec.feature 'Group management' do
         expect(current_path).to eq edit_group_path(sub_group1)
 
         expect(page).to have_field('Name', with: sub_group1.name)
-        expect(page).to have_select('Parent-Erg', selected: parent_group.name)
+        expect(page).to have_select('Parent', selected: parent_group.name)
         expect(page).to have_select('Group category', selected: 'Blue')
 
         select 'Eastern Province', from: 'Group category'
         click_on 'Update Group'
 
-        expect(page).to have_content 'Your ERG was not updated. Please fix the errors'
+        expect(page).to have_content 'Your Group was not updated. Please fix the errors'
         expect(page).to have_content 'wrong label for Color Codes'
       end
     end
