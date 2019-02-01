@@ -71,6 +71,7 @@ class User::MentorshipController < ApplicationController
             :mentor,
             :mentee,
             :mentorship_description,
+            :time_zone,
             mentoring_interest_ids: [],
             mentoring_type_ids: [],
             :availabilities_attributes => [:day, :start, :end, :_destroy, :id]
