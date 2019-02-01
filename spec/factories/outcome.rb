@@ -1,7 +1,6 @@
 FactoryGirl.define do
   factory :outcome do
     name { Faker::Commerce.product_name }
-    group
 
     after(:create) do |outcome|
       create_list(:pillar, 3, outcome: outcome)
