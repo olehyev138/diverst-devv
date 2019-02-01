@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.feature 'Initiative management' do
 
   let(:user) { create(:user) }
-  let!(:group) { create :group, :with_outcomes, enterprise: user.enterprise }
+  let!(:group) { create :group, enterprise: user.enterprise }
 
   let!(:initiative_params) {
     {
