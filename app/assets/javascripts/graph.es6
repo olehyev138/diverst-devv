@@ -39,6 +39,7 @@ class Graph {
     renderBarChart() {
         /* Todo:
          *   - add abstractions for most of this to remove complexity and so we can reuse code
+         *   - axis labels
          */
 
         var series = this.data.series;
@@ -46,21 +47,26 @@ class Graph {
         var chart = null;
 
         nv.addGraph(function() {
-            chart = nv.models
-                .multiBarChart()
+            chart = nv.models.multiBarChart()
+                .barColor(d3.scale.category20().range())
+                .duration(300)
+                .rotateLabels(45)
+                .groupSpacing(0.3)
                 .x(function (d) { return d.label; }) // set the json keys for x & y values
                 .y(function (d) { return d.value; })
                 .showControls(false)
                 .stacked(false);
 
+            chart.xAxis.showMaxMin(false);
+
             chart.yAxis
                 .tickFormat(d3.format('d'));
 
-            chart.reduceXTicks(false);
+            chart.reduceXTicks(false)
+                 .staggerLabels(true);
 
             d3.select(svg)
                 .datum(series)
-                .transition().duration(500)
                 .call(chart);
 
             nv.utils.windowResize(chart.update);
@@ -95,8 +101,9 @@ class Graph {
         var chart = null;
 
         nv.addGraph(function() {
-            chart = nv.models
-                .lineChart()
+            chart = nv.models.lineChart()
+                .duration(300)
+                .useInteractiveGuideline(true)
                 .x(function (d) { return d.label; }) // set the json keys for x & y values
                 .y(function (d) { return d.value; });
 
