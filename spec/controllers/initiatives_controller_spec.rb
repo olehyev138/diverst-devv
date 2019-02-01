@@ -213,7 +213,7 @@ RSpec.describe InitiativesController, type: :controller do
 
     describe 'POST #create' do
       def post_create(group_id = -1, params = {})
-        post :create, group_id: group_id, initiative: params
+        post :create, group_id: group_id, initiative: params.merge({:pillar_id => group.pillars.first.id})
       end
 
       context 'with logged in user' do
