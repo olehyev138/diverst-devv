@@ -35,7 +35,7 @@ module BaseGraph
     def drilldown_graph(parent_field:)
       # parent_field - field to filter parents on
 
-      # Define an initial 'missing aggregation' to get parents
+      # Define an initial 'missing aggregation' to get parents, ie filter where parent_field is nil
       parents_query = @instance.get_query
         .agg(type: 'missing', field: parent_field) { |_| @query }.build
 
@@ -96,7 +96,7 @@ module BaseGraph
     end
 
     def add_elements(elements)
-      @data[@current_series][:values] = format_elements(elements)
+      @data[:series][@current_series][:values] = format_elements(elements)
     end
 
     def get_element_key(element)

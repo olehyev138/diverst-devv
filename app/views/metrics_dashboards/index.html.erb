@@ -120,7 +120,10 @@
           <div class="card__action">
             <%= link_to "Export CSV", top_groups_by_views_generic_graphs_path(format: :csv), class: "hidden-xs" %>
           </div>
-          <div class="graph" data-url="<%= top_groups_by_views_generic_graphs_path %>"></div>
+          <div class="graph" data-url="<%= top_groups_by_views_generic_graphs_path %>">
+            <svg></svg>
+          </div>
+          <input type="button" class="drillout_button" value="Back"></input>
         </div>
       </div>
     </div>
@@ -132,7 +135,10 @@
           <div class="card__action">
             <%= link_to "Export CSV", top_folders_by_views_generic_graphs_path(format: :csv), class: "hidden-xs" %>
           </div>
-          <div class="graph" data-url="<%= top_folders_by_views_generic_graphs_path %>"></div>
+          <div class="graph" data-url="<%= top_folders_by_views_generic_graphs_path %>">
+            <svg></svg>
+          </div>
+          <input type="button" class="drillout_button" value="Back"></input>
         </div>
       </div>
     </div>
@@ -144,7 +150,10 @@
           <div class="card__action">
             <%= link_to "Export CSV", top_resources_by_views_generic_graphs_path(format: :csv), class: "hidden-xs" %>
           </div>
-          <div class="graph" data-url="<%= top_resources_by_views_generic_graphs_path %>"></div>
+          <div class="graph" data-url="<%= top_resources_by_views_generic_graphs_path %>">
+            <svg></svg>
+          </div>
+          <input type="button" class="drillout_button" value="Back"></input>
         </div>
       </div>
     </div>

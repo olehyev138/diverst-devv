@@ -100,6 +100,65 @@ class GenericGraphsController < ApplicationController
     end
   end
 
+  def non_demo_top_groups_by_views
+    respond_to do |format|
+      format.json {
+        query = View.get_query.terms_agg(field: 'group.name')
+        formatter = View.get_nvd3_formatter
+
+        results = View
+          .get_graph(query, formatter)
+          .drilldown_graph(parent_field: 'group.parent.name')
+          .build
+
+        render json: results
+      }
+      format.csv {
+        GenericGraphsTopGroupsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), demo: false)
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
+      }
+    end
+  end
+
+  def non_demo_top_folders_by_views
+    respond_to do |format|
+      format.json {
+        query = View.get_query.terms_agg(field: 'folder.name').build
+        formatter = View.get_nvd3_formatter
+
+        formatter.add_elements(View.search query)
+        results = formatter.format
+
+        render json: results
+      }
+      format.csv {
+        GenericGraphsTopFoldersByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, demo: false)
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
+      }
+    end
+  end
+
+  def non_demo_top_resources_by_views
+    respond_to do |format|
+      format.json {
+        query = View.get_query.terms_agg(field: 'resource.title').build
+        formatter = View.get_nvd3_formatter
+
+        formatter.add_elements(View.search query)
+        results = formatter.format
+
+        render json: results
+      }
+      format.csv {
+        GenericGraphsTopResourcesByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, demo: false)
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
+      }
+    end
+  end
+
   def growth_of_groups
     respond_to do |format|
       format.json {
@@ -333,171 +392,15 @@ class GenericGraphsController < ApplicationController
     end
   end
 
-<<<<<<< HEAD
   def top_news_by_views
     if ENV["DOMAIN"] === "dm.diverst.com"
       demo_top_news_by_views
     else
       non_demo_top_news_by_views
-=======
-    def non_demo_top_news_by_views
-        respond_to do |format|
-            format.json {
-              news_feed_link_ids = NewsFeedLink.where(:news_feed_id => NewsFeed.where(:group_id => current_user.enterprise.groups.ids).ids).ids
-              views = View.select("DISTINCT news_links.title, COUNT(news_feed_link_id) view_count, groups.name AS name").joins(:news_feed_link => [:news_link => :group]).where(:news_feed_link_id => news_feed_link_ids).group(:news_feed_link_id).order("view_count DESC").limit(20)
-              
-              data = views.map do |view|
-                  {
-                      y: view.view_count,
-                      name: "#{view.name} - #{view.title}"
-                  }
-              end
-
-              render json: {
-                         type: 'bar',
-                         highcharts: {
-                             series: [{
-                                 title: "# of views per news link",
-                                 data: data
-                             }],
-                             #categories: categories,
-                             xAxisTitle: "Resource",
-                             yAxisTitle: "# of views per news link"
-                         },
-                         hasAggregation: false
-                     }
-            }
-            format.csv {
-              GenericGraphsTopNewsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, demo: false)
-              flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
-              redirect_to :back
-            }
-        end
->>>>>>> Views - refactor logic for tracking views for an object
     end
   end
 
   # FOR NON DEMO PURPOSES
-
-  def non_demo_top_groups_by_views
-    respond_to do |format|
-      format.json {
-        data = current_user.enterprise.groups.all_parents.map do |g|
-          {
-            y: g.total_views,
-            name: g.name,
-            drilldown: g.name
-          }
-        end
-
-        drilldowns = current_user.enterprise.groups.includes(:children).all_parents.map { |g|
-          {
-            name: g.name,
-            id: g.name,
-            data: g.children.map {|child| [child.name, child.total_views]}
-          }
-        }
-
-        render json: {
-          type: 'bar',
-          highcharts: {
-            series: [{
-              title: "# of views per #{c_t(:erg)}",
-              data: data
-            }],
-            drilldowns: drilldowns,
-            #categories: categories,
-            xAxisTitle: "#{c_t(:erg)}",
-            yAxisTitle: "# of views per #{c_t(:erg)}"
-          },
-          hasAggregation: false
-        }
-      }
-      format.csv {
-        GenericGraphsTopGroupsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), demo: false)
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
-        redirect_to :back
-      }
-    end
-  end
-
-  def non_demo_top_folders_by_views
-    respond_to do |format|
-      format.json {
-        folders = Folder.all
-        data = folders.map do |f|
-          {
-            y: f.total_views,
-            name: !f.group.nil? ? f.group.name + ': ' + f.name : 'Shared folder: ' + f.name,
-            drilldown: f.name
-          }
-        end
-
-        drilldowns = folders.map { |f|
-          {
-            name: f.name,
-            id: f.name,
-            data: f.children.map {|child| [child.name, child.total_views]}
-          }
-        }
-
-        render json: {
-          type: 'bar',
-          highcharts: {
-            series: [{
-              title: "# of views per folder",
-              data: data
-            }],
-            drilldowns: drilldowns,
-            #categories: categories,
-            xAxisTitle: "Folder",
-            yAxisTitle: "# of views per folder"
-          },
-          hasAggregation: false
-        }
-      }
-      format.csv {
-        GenericGraphsTopFoldersByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, demo: false)
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
-        redirect_to :back
-      }
-    end
-  end
-
-  def non_demo_top_resources_by_views
-    respond_to do |format|
-      format.json {
-        group_ids = current_user.enterprise.groups.ids
-        folder_ids = Folder.where(:group_id => group_ids).ids
-        resources = Resource.where(:folder_id => folder_ids)
-        data = resources.map do |resource|
-          {
-            y: resource.total_views,
-            name: resource.title
-          }
-        end
-
-        render json: {
-          type: 'bar',
-          highcharts: {
-            series: [{
-              title: "# of views per resource",
-              data: data
-            }],
-            #categories: categories,
-            xAxisTitle: "Resource",
-            yAxisTitle: "# of views per resource"
-          },
-          hasAggregation: false
-        }
-      }
-      format.csv {
-        GenericGraphsTopResourcesByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, demo: false)
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
-        redirect_to :back
-      }
-    end
-  end
 
   def non_demo_top_news_by_views
     respond_to do |format|
@@ -716,16 +619,29 @@ class GenericGraphsController < ApplicationController
         news_feed_link_ids = NewsFeedLink.where(:news_feed_id => NewsFeed.where(:group_id => current_user.enterprise.groups.ids).ids).ids
         news_links = NewsLink.select("news_links.title, SUM(views.view_count) view_count").joins(:news_feed_link, :news_feed_link => :views).where(:news_feed_links => {:id => news_feed_link_ids}).order("view_count DESC")
 
-<<<<<<< HEAD
-        values = [9,2,5,1,11,10,9,5,11,4,1,8]
-        i = 0
+        render json: {
+          type: 'bar',
+          highcharts: {
+            series: [{
+              title: "# of views per news link",
+              data: data
+            }],
+            #categories: categories,
+            xAxisTitle: "Resource",
+            yAxisTitle: "# of views per news link"
+          },
+          hasAggregation: false
+        }
 
-        data = news_links.map do |news_link|
-          {
-            y: values[i+=1],
-            name: news_link.title
-          }
-=======
+      }
+      format.csv {
+        GenericGraphsTopNewsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, demo: true)
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
+      }
+    end
+  end
+
     def demo_top_news_by_views
         respond_to do |format|
             format.json {
@@ -761,30 +677,8 @@ class GenericGraphsController < ApplicationController
               flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
               redirect_to :back
             }
->>>>>>> Views - refactor logic for tracking views for an object
         end
-
-        render json: {
-          type: 'bar',
-          highcharts: {
-            series: [{
-              title: "# of views per news link",
-              data: data
-            }],
-            #categories: categories,
-            xAxisTitle: "Resource",
-            yAxisTitle: "# of views per news link"
-          },
-          hasAggregation: false
-        }
-      }
-      format.csv {
-        GenericGraphsTopNewsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, demo: true)
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
-        redirect_to :back
-      }
     end
-  end
 
   def authorize_dashboards
     authorize MetricsDashboard, :index?
