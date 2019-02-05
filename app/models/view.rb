@@ -21,6 +21,11 @@ class View < BaseClass
       indexes :resource do
         indexes :title, type: :keyword
       end
+      indexes :news_feed_link do
+        indexes :news_link do
+          indexes :title, type: :keyword
+        end
+      end
     end
   end
 
@@ -35,8 +40,9 @@ class View < BaseClass
           only: [:name],
         }, resource: {
           only: [:title],
+        }, news_feed_link: {
+          include: { news_link: { only: [:title] }}
         }}
-      )
-    )
+      ))
   end
 end

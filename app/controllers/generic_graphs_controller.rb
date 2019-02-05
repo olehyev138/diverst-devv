@@ -159,6 +159,25 @@ class GenericGraphsController < ApplicationController
     end
   end
 
+  def non_demo_top_news_by_views
+    respond_to do |format|
+      format.json {
+        query = View.get_query.terms_agg(field: 'news_feed_link.news_link.title').build
+        formatter = View.get_nvd3_formatter
+
+        formatter.add_elements(View.search query)
+        results = formatter.format
+
+        render json: results
+      }
+      format.csv {
+        GenericGraphsTopNewsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, demo: false)
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
+      }
+    end
+  end
+
   def growth_of_groups
     respond_to do |format|
       format.json {
@@ -401,41 +420,6 @@ class GenericGraphsController < ApplicationController
   end
 
   # FOR NON DEMO PURPOSES
-
-  def non_demo_top_news_by_views
-    respond_to do |format|
-      format.json {
-        news_feed_link_ids = NewsFeedLink.where(:news_feed_id => NewsFeed.where(:group_id => current_user.enterprise.groups.ids).ids).ids
-        views = View.joins(:news_feed_link => :news_link).where(:news_feed_link_id => news_feed_link_ids).group("news_links.title").order("sum_view_count DESC").limit(20).sum(:view_count).to_a
-
-        data = views.map do |view|
-          {
-            y: view.second,
-            name: view.first
-          }
-        end
-
-        render json: {
-          type: 'bar',
-          highcharts: {
-            series: [{
-              title: "# of views per news link",
-              data: data
-            }],
-            #categories: categories,
-            xAxisTitle: "Resource",
-            yAxisTitle: "# of views per news link"
-          },
-          hasAggregation: false
-        }
-      }
-      format.csv {
-        GenericGraphsTopNewsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, demo: false)
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
-        redirect_to :back
-      }
-    end
-  end
 
   # FOR DEMO PURPOSES
 
