@@ -79,7 +79,7 @@
     </div>
 
     <div class="col col--stacked sm-12 md-3">
-    <%= render partial: 'shared/carousel/enterprise_sponsor_card', locals: { enterprise_sponsors: @enterprise_sponsors } %>
+    <%= render partial: 'shared/carousel/sponsor_card', locals: { sponsors: @enterprise_sponsors } %>
 
     <% if current_user.enterprise.enable_rewards? %>
         <div class="card card--secondary">

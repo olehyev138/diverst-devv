@@ -24,10 +24,9 @@
           <hr>
           <h3><%= @campaign.progression %>% solved</h3>
         </div>
-        <% @sponsors = Sponsor.all %>
         <% if @sponsors.any? %>
           <div class="flex-row__cell flex-row__cell--spaced flex-2">
-            <%= render partial: 'groups/show_layouts/blocks/sponsor', locals: { sponsors: @sponsors.count > 3 ? @sponsors.last(3) : @sponsors } %> <%# Temporary for prototype %>
+            <%= render partial: 'shared/carousel/sponsor_card', locals: { sponsors: @sponsors } %>
           </div>
         <% end %>
       </div>
