@@ -103,7 +103,7 @@ RSpec.feature 'Manage Enterprise Branding' do
 			fill_in 'Sponsor name', with: 'Bill Gates'
 			fill_in 'Sponsor title', with: 'CEO of Microsoft'
 			attach_file('Upload sponsor image or video', 'spec/fixtures/files/sponsor_image.jpg')
-			fill_in 'Home page sponsor message', with: 'Hi and welcome'
+			fill_in 'Sponsor message', with: 'Hi and welcome'
 
 			click_on 'Add a sponsor'
 
@@ -111,7 +111,7 @@ RSpec.feature 'Manage Enterprise Branding' do
 				fill_in 'Sponsor name', with: 'Mark Zuckerberg'
 			  fill_in 'Sponsor title', with: 'Founder & CEO of Facebook'
 			  attach_file('Upload sponsor image or video', 'spec/fixtures/files/sponsor_image.jpg')
-			  fill_in 'Home page sponsor message', with: 'Hi and welcome'
+			  fill_in 'Sponsor message', with: 'Hi and welcome'
 			end
 
 			click_on 'Add a sponsor'
@@ -120,7 +120,7 @@ RSpec.feature 'Manage Enterprise Branding' do
 				fill_in 'Sponsor name', with: 'Elizabeth Holmes'
 			  fill_in 'Sponsor title', with: 'Founder & CEO of Theranos'
 			  attach_file('Upload sponsor image or video', 'spec/fixtures/files/sponsor_image.jpg')
-			  fill_in 'Home page sponsor message', with: 'Hi and welcome'
+			  fill_in 'Sponsor message', with: 'Hi and welcome'
 			end
 
 			click_on 'Add a sponsor'
@@ -129,7 +129,7 @@ RSpec.feature 'Manage Enterprise Branding' do
 				fill_in 'Sponsor name', with: 'Elon Musk'
 			  fill_in 'Sponsor title', with: 'Founder & CEO of Telsa'
 			  attach_file('Upload sponsor image or video', 'spec/fixtures/files/sponsor_image.jpg')
-			  fill_in 'Home page sponsor message', with: 'Hi and welcome'
+			  fill_in 'Sponsor message', with: 'Hi and welcome'
 			end
 
 			click_on 'Save sponsor info'
