@@ -25,6 +25,7 @@ class UserGroup < BaseClass
       indexes :group_id, type: :integer
       indexes :created_at, type: :date
       indexes :group  do
+        indexes :enterprise_id, type: :integer
         indexes :parent_id, type: :integer
         indexes :name, type: :keyword
         indexes :parent do
@@ -39,7 +40,7 @@ class UserGroup < BaseClass
       options.merge(
         only: [:user_id, :group_id, :created_at],
         include: { group: {
-          only: [:parent_id, :name],
+          only: [:enterprise_id, :parent_id, :name],
           include: { parent: { only: [:name] } }
         }}
       )

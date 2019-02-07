@@ -1,73 +1,76 @@
 module BaseGraph
   # BaseGraph jobs, purpose:
-  #   - acts as a interface/front for BaseSearch
   #   - parses & formats data returned by BaseSearch for use by frontend
-
-  # TODO:
-  #   - Restructure formatting stuff to support bucket & top hits aggregations more elegantly
-  #       - right now its quite hacked together
 
   def self.included(klass)
     klass.extend ClassMethods
   end
 
   module ClassMethods
-    def get_graph(query, formatter)
-      GraphBuilder.new(query, self, formatter)
-    end
-
-    def get_nvd3_formatter
-      Nvd3Formatter.new
-    end
-
-    def get_nvd3_custom_formatter(element_formatter: nil, key_formatter: nil)
-      Nvd3CustomFormatter.new(element_formatter: element_formatter, key_formatter: key_formatter)
+    def get_graph
+      GraphBuilder.new(self)
     end
   end
 
   class GraphBuilder
-    def initialize(query, instance, formatter)
+    attr_accessor :enterprise_filter, :query, :formatter
+
+    def initialize(instance)
       @instance = instance
-      @formatter = formatter
-      @query = query
+
+      @query = @instance.get_query
+      @formatter = get_formatter # default
     end
+
+    def search
+      @instance.search @query, @enterprise_filter
+    end
+
+    def build
+      @formatter.format
+    end
+
+    def get_formatter
+      Nvd3Formatter.new
+    end
+
+    def get_custom_formatter
+      CustomNvd3Formatter.new
+    end
+
+    # Helpers
 
     def drilldown_graph(parent_field:)
       # parent_field - field to filter parents on
 
       # Define an initial 'missing aggregation' to get parents, ie filter where parent_field is nil
       parents_query = @instance.get_query
-        .agg(type: 'missing', field: parent_field) { |_| @query }.build
+        .agg(type: 'missing', field: parent_field) { |_| @query }
 
-      parents = @instance.search(parents_query)
+      parents = @instance.search(parents_query, @enterprise_filter)
 
       parents.each do |parent|
         parent_key = @formatter.get_element_key(parent)
 
         # build a query to get all child documents of current parent
         children_query = @instance.get_query
-          .filter_agg(field: parent_field, value: parent_key) { |_| @query }.build
+          .filter_agg(field: parent_field, value: parent_key) { |_| @query }
 
-        children = @instance.search(children_query)
+        children = @instance.search(children_query, @enterprise_filter)
 
         @formatter.add_element(parent, children: children, element_key: parent_key)
       end
 
       self
     end
-
-    def build
-      @formatter.format
-    end
   end
 
   class Nvd3Formatter
     # TODO:
     #  - element key should not be optional
-    #  - allow for custom title, type, series names
+    #  - allow for custom series name
 
-    attr_accessor :title
-    attr_accessor :type
+    attr_accessor :title, :type
 
     def initialize
       # defaults
@@ -131,13 +134,8 @@ module BaseGraph
     end
   end
 
-  class Nvd3CustomFormatter < Nvd3Formatter
-    def initialize(element_formatter: nil, key_formatter: nil)
-      @element_formatter = element_formatter
-      @key_formatter = key_formatter
-
-      super()
-    end
+  class CustomNvd3Formatter < Nvd3Formatter
+    attr_accessor :element_formatter, :key_formatter
 
     def add_element(element, *args, children: nil, element_key: nil)
       element = format_element(element, *args)

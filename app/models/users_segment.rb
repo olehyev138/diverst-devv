@@ -8,6 +8,7 @@ class UsersSegment < BaseClass
   settings do
     mappings dynamic: false do
       indexes :segment  do
+        indexes :enterprise_id, type: :integer
         indexes :name, type: :keyword
         indexes :parent do
           indexes :name, type: :keyword
@@ -20,11 +21,10 @@ class UsersSegment < BaseClass
     self.as_json(
       options.merge(
         include: { segment: {
-          only: [:name],
+          only: [:enterprise_id, :name],
           include: { parent: { only: [:name] } }
         }}
       )
     )
   end
-
 end

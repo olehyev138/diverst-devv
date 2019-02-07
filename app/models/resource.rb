@@ -1,6 +1,6 @@
 class Resource < BaseClass
     include PublicActivity::Common
-    
+
     EXPIRATION_TIME = 6.months.to_i
 
     # associations
@@ -35,6 +35,9 @@ class Resource < BaseClass
         indexes :created_at, type: :date
         indexes :folder do
           indexes :group_id, type: :integer
+          indexes :group do
+            indexes :enterprise_id, type: :integer
+          end
         end
       end
     end
@@ -42,8 +45,11 @@ class Resource < BaseClass
     def as_indexed_json(options = {})
       self.as_json(
         options.merge(
-          only: [:id, :owner_id, :created_at],
-          include: { folder: { only: [:id, :group_id] } }
+          only: [:owner_id, :created_at],
+          include: { folder: {
+            only: [:id, :group_id],
+            include: { group: { only: [:enterprise_id]  } }
+          }}
         )
       )
     end

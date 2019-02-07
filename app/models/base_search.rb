@@ -4,10 +4,6 @@ module BaseSearch
   #   - builds & runs es queries
   #   - pulls out response data and returns
 
-  # Todo:
-  #   - documentation
-
-
   def self.included(klass)
     klass.extend ClassMethods
   end
@@ -77,7 +73,10 @@ module BaseSearch
       Query.new
     end
 
-    def search(query)
+    def search(query, enterprise_filter)
+      # wrap all queries in a filter on enterprise_id
+      query = self.get_query.filter_agg(field: enterprise_filter.keys[0],
+                                        value: enterprise_filter.values[0]) { |_| query }.build
       begin
         response = (self.__elasticsearch__.search query).response
 

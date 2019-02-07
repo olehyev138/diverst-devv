@@ -151,6 +151,7 @@ class Group < BaseClass
   settings do
     mappings dynamic: false do
       indexes :id, type: :integer
+      indexes :enterprise_id, type: :integer
       indexes :parent_id, type: :integer
       indexes :name, type: :keyword
       indexes :initiatives do
@@ -167,7 +168,7 @@ class Group < BaseClass
   def as_indexed_json(options = {})
     self.as_json(
       options.merge(
-        only: [:id, :parent_id, :name],
+        only: [:id, :enterprise_id, :parent_id, :name],
         include: { initiatives: {
           only: [:id, :created_at]
         }, messages: {

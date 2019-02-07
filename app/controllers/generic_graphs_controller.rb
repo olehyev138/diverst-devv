@@ -7,15 +7,12 @@ class GenericGraphsController < ApplicationController
   def group_population
     respond_to do |format|
       format.json {
-        query = UserGroup.get_query.terms_agg(field: 'group.name')
-        formatter = UserGroup.get_nvd3_formatter
+        graph = UserGroup.get_graph
+        graph.enterprise_filter = { 'group.enterprise_id' => current_user.enterprise_id }
+        graph.query  = graph.query.terms_agg(field: 'group.name')
+        graph.drilldown_graph(parent_field: 'group.parent.name')
 
-        results = UserGroup
-          .get_graph(query, formatter)
-          .drilldown_graph(parent_field: 'group.parent.name')
-          .build
-
-        render json: results
+        render json: graph.build
       }
     end
   end
@@ -23,14 +20,12 @@ class GenericGraphsController < ApplicationController
   def segment_population
     respond_to do |format|
       format.json {
-        query = UsersSegment.get_query.terms_agg(field: 'segment.name')
+        graph = UsersSegment.get_graph
+        graph.enterprise_filter = { 'segment.enterprise_id' => current_user.enterprise_id }
+        graph.query = graph.query.terms_agg(field: 'segment.name')
+        graph.drilldown_graph(parent_field: 'segment.parent.name')
 
-        results = UsersSegment
-          .get_graph(query, UsersSegment.get_nvd3_formatter)
-          .drilldown_graph(parent_field: 'segment.parent.name')
-          .build
-
-        render json: results
+        render json: graph.build
       }
       format.csv {
         GenericGraphsSegmentPopulationDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))
@@ -43,24 +38,22 @@ class GenericGraphsController < ApplicationController
   def non_demo_events_created
     respond_to do |format|
       format.json{
-        query = Group.get_query
+        graph = Group.get_graph
+        graph.enterprise_filter = { 'enterprise_id' => current_user.enterprise_id }
+        graph.query = graph.query
           .date_range_agg(field: 'initiatives.created_at', range: { from: 'now-30d/d'}) { |q|
             q.top_hits_agg
         }
 
-        element_formatter = -> (element) {
+        graph.formatter = graph.get_custom_formatter
+        graph.formatter.element_formatter = -> (element) {
           element = element[:_source]
           { label: element[:name], value: element[:initiatives].count, children: [] }
         }
+        graph.formatter.key_formatter = -> (element) { element[:_source][:id] }
 
-        key_formatter = -> (element) { element[:_source][:id] }
-
-        results = Group
-          .get_graph(query, Group.get_nvd3_custom_formatter(element_formatter: element_formatter, key_formatter: key_formatter))
-          .drilldown_graph(parent_field: 'parent_id')
-          .build
-
-        render json: results
+        graph.drilldown_graph(parent_field: 'parent_id')
+        render json: graph.build
       }
       format.csv {
         GenericGraphsEventsCreatedDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), demo: false)
@@ -73,24 +66,23 @@ class GenericGraphsController < ApplicationController
   def non_demo_messages_sent
     respond_to do |format|
       format.json {
-        query = Group.get_query
+        graph = Group.get_graph
+        graph.enterprise_filter = { 'enterprise_id' => current_user.enterprise_id }
+        graph.query = graph.query
           .date_range_agg(field: 'messages.created_at', range: { from: 'now-30d/d'}) { |q|
-            q.top_hits_agg
+          q.top_hits_agg
         }
 
-        element_formatter = -> (element) {
+        graph.formatter = graph.get_custom_formatter
+        graph.formatter.element_formatter = -> (element) {
           element = element[:_source]
           { label: element[:name], value: element[:messages].count, children: [] }
         }
+        graph.formatter.key_formatter = -> (element) { element[:_source][:id] }
 
-        key_formatter = -> (element) { element[:_source][:id] }
+        graph.drilldown_graph(parent_field: 'parent_id')
 
-        results = Group
-          .get_graph(query, Group.get_nvd3_custom_formatter(element_formatter: element_formatter, key_formatter: key_formatter))
-          .drilldown_graph(parent_field: 'parent_id')
-          .build
-
-        render json: results
+        render json: graph.build
       }
       format.csv {
         GenericGraphsMessagesSentDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), demo: false)
@@ -103,15 +95,12 @@ class GenericGraphsController < ApplicationController
   def non_demo_top_groups_by_views
     respond_to do |format|
       format.json {
-        query = View.get_query.terms_agg(field: 'group.name')
-        formatter = View.get_nvd3_formatter
+        graph = View.get_graph
+        graph.enterprise_filter = { 'enterprise_id' => current_user.enterprise_id }
+        graph.query = graph.query.terms_agg(field: 'group.name')
+        graph.drilldown_graph(parent_field: 'group.parent.name')
 
-        results = View
-          .get_graph(query, formatter)
-          .drilldown_graph(parent_field: 'group.parent.name')
-          .build
-
-        render json: results
+        render json: graph.build
       }
       format.csv {
         GenericGraphsTopGroupsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), demo: false)
@@ -124,11 +113,12 @@ class GenericGraphsController < ApplicationController
   def non_demo_top_folders_by_views
     respond_to do |format|
       format.json {
-        query = View.get_query.terms_agg(field: 'folder.name').build
-        formatter = View.get_nvd3_formatter
+        graph = View.get_graph
+        graph.enterprise_filter = { 'enterprise_id' => current_user.enterprise_id }
+        graph.query = graph.query.terms_agg(field: 'folder.name')
+        graph.formatter.add_elements(graph.search)
 
-        formatter.add_elements(View.search query)
-        results = formatter.format
+        results = graph.build
 
         render json: results
       }
@@ -143,11 +133,14 @@ class GenericGraphsController < ApplicationController
   def non_demo_top_resources_by_views
     respond_to do |format|
       format.json {
-        query = View.get_query.terms_agg(field: 'resource.title').build
-        formatter = View.get_nvd3_formatter
+        # TODO resource views not working?
 
-        formatter.add_elements(View.search query)
-        results = formatter.format
+        graph = View.get_graph
+        graph.enterprise_filter = { 'enterprise_id' => current_user.enterprise_id }
+        graph.query = graph.query.terms_agg(field: 'resource.title')
+        graph.formatter.add_elements(graph.search)
+
+        results = graph.build
 
         render json: results
       }
@@ -162,11 +155,12 @@ class GenericGraphsController < ApplicationController
   def non_demo_top_news_by_views
     respond_to do |format|
       format.json {
-        query = View.get_query.terms_agg(field: 'news_feed_link.news_link.title').build
-        formatter = View.get_nvd3_formatter
+        graph = View.get_graph
+        graph.enterprise_filter = { 'enterprise_id' => current_user.enterprise_id }
+        graph.query = graph.query.terms_agg(field: 'news_feed_link.news_link.title')
+        graph.formatter.add_elements(graph.search)
 
-        formatter.add_elements(View.search query)
-        results = formatter.format
+        results = graph.build
 
         render json: results
       }
@@ -180,38 +174,36 @@ class GenericGraphsController < ApplicationController
 
   def growth_of_groups
     respond_to do |format|
-      format.json {
-        # TODO: possibly put this into GraphBuilder, call it a 'accumulating graph' or something
+      # TODO: confirm were not including enterprise resources/folders
 
-        element_formatter = -> (e, *args) {
-          { label: e[:key], value: args[0] } # args[0] -> total so far
+      format.json {
+        graph = UserGroup.get_graph
+        graph.enterprise_filter = { 'group.enterprise_id' => current_user.enterprise_id }
+        graph.formatter = graph.get_custom_formatter
+        graph.formatter.title = 'Growth of Groups'
+        graph.formatter.type = 'line'
+        graph.formatter.element_formatter = -> (e, *args) {
+          { label: e[:key_as_string], value: args[0] } # args[0] -> total so far
         }
 
-        formatter = UserGroup.get_nvd3_custom_formatter(element_formatter: element_formatter)
-        formatter.title = 'Growth of Groups'
-        formatter.type = 'line'
-
         current_user.enterprise.groups.each do |group|
-          query = UserGroup.get_query
+          graph.query = graph.query
             .filter_agg(field: 'group_id', value: group.id) { |q|
-              q.terms_agg(field: 'created_at', order_field: '_key', order_dir: 'asc')
-          }.build
+              q.terms_agg(field: 'created_at', order_field: '_term', order_dir: 'asc')
+          }
 
           total = 0
-          elements = UserGroup.search query
-
+          elements = graph.search
           elements.each { |element|
             # keep a running total
-            # pulling out value here instead of the formatter is not ideal
-            total += element[:doc_count]
-            formatter.add_element element, total
+            graph.formatter.add_element(element, (total += element[:doc_count]))
           }
 
           # each group is a new series/line on our line graph
-          formatter.add_series
+          graph.formatter.add_series
         end
 
-        render json: formatter.format
+        render json: graph.build
       }
       format.csv {
         GenericGraphsGroupGrowthDownloadJob
@@ -225,34 +217,35 @@ class GenericGraphsController < ApplicationController
   end
 
   def growth_of_resources
+    # TODO: confirm were not including enterprise resources/folders
+
     respond_to do |format|
       format.json {
-        element_formatter = -> (e, *args) {
-          { label: e[:key], value: args[0] } # args[0] -> total so far
+        graph = Resource.get_graph
+        graph.enterprise_filter = { 'folder.group.enterprise_id' => current_user.enterprise_id }
+        graph.formatter = graph.get_custom_formatter
+        graph.formatter.title = 'Growth of Resources'
+        graph.formatter.type = 'line'
+        graph.formatter.element_formatter = -> (e, *args) {
+          { label: e[:key_as_string], value: args[0] } # args[0] -> total so far
         }
 
-        formatter = UserGroup.get_nvd3_custom_formatter(element_formatter: element_formatter)
-        formatter.title = 'Growth of Resources'
-        formatter.type = 'line'
-
         current_user.enterprise.groups.each do |group|
-          query = Resource.get_query
+          graph.query = graph.query
             .filter_agg(field: 'folder.group_id', value: group.id) { |q|
-              q.terms_agg(field: 'created_at', order_field: '_key', order_dir: 'asc')
-          }.build
-
-          total = 0
-          elements = Resource.search query
-
-          elements.each { |element|
-            total += element[:doc_count]
-            formatter.add_element element, total
+              q.terms_agg(field: 'created_at', order_field: '_term', order_dir: 'asc')
           }
 
-          formatter.add_series
+          total = 0
+          elements = graph.search
+          elements.each { |element|
+            graph.formatter.add_element(element, (total += element[:doc_count]))
+          }
+
+          graph.formatter.add_series
         end
 
-        render json: formatter.format
+        render json: graph.build
       }
     end
   end
