@@ -29,7 +29,6 @@ function updateNextToggle(item, toggleClassName, check)
 {
   // Must be changed if structure is changed drastically
   var toggle = $(item).closest('.field.boolean').parent().children('.field.boolean').find('.' + toggleClassName).first();
-  console.log(toggle);
 
   if (check)
     $(toggle).prop('checked', true);
