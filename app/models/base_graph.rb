@@ -40,13 +40,14 @@ module BaseGraph
   #    to define a enterprise_filter & Query object
   #
   class GraphBuilder
-    attr_accessor :enterprise_filter, :query, :formatter
+    attr_accessor :enterprise_filter, :query, :formatter, :hits
 
     def initialize(instance)
       @instance = instance
 
       @query = @instance.get_query
       @formatter = get_formatter
+      @hits = false
     end
 
     # Query elasticsearch with the current query object and enterprise filter
@@ -54,7 +55,7 @@ module BaseGraph
     #  - returns results, because specific logic may be needed to be performed on them
     #  - results are then added back into graph formatter manually
     def search
-      @instance.search @query, @enterprise_filter
+      @instance.search @query, @enterprise_filter, hits: @hits
     end
 
     # Runs the formatter and returns results
@@ -83,7 +84,7 @@ module BaseGraph
       parents_query = @instance.get_query
         .agg(type: 'missing', field: parent_field) { |_| @query }
 
-      parents = @instance.search(parents_query, @enterprise_filter)
+      parents = @instance.search(parents_query, @enterprise_filter, hits: @hits)
 
       # For each parent, run current set query on all children
       parents.each do |parent|
@@ -95,7 +96,7 @@ module BaseGraph
         children_query = @instance.get_query
           .filter_agg(field: parent_field, value: parent_key) { |_| @query }
 
-        children = @instance.search(children_query, @enterprise_filter)
+        children = @instance.search(children_query, @enterprise_filter, hits: @hits)
 
         # Add current parent with all its children
         @formatter.add_element(parent, children: children, element_key: parent_key)
