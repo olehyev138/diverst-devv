@@ -63,6 +63,10 @@ module BaseGraph
       @formatter.format
     end
 
+    def get_formatter
+      Nvd3Formatter.new
+    end
+
     def get_custom_formatter
       CustomNvd3Formatter.new
     end
