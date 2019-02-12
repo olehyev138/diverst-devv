@@ -74,7 +74,8 @@
     <div class="col sm-12 md-6">
       <div class="card">
         <div class="card__section">
-          <h4>Events created in the last 30 days</h4>
+            <h4>Events created in the last </h4>
+            <input class="graph-input" type="text" value="30"></input>
           <div class="card__action">
             <%= link_to "Export CSV", events_created_generic_graphs_path(format: :csv), class: "hidden-xs" %>
           </div>

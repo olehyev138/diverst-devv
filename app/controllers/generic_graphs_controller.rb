@@ -36,13 +36,17 @@ class GenericGraphsController < ApplicationController
   end
 
   def non_demo_events_created
+    # set days to input if passed, otherwise default to 30
+    days = ((params[:input] =~ /\A-?\d+\Z/) ? params[:input] : '30')
+
     respond_to do |format|
       format.json{
+
         graph = Group.get_graph
         graph.enterprise_filter = { 'enterprise_id' => current_user.enterprise_id }
         graph.hits = true
         graph.query = graph.query
-          .date_range_agg(field: 'initiatives.created_at', range: { from: 'now-30d/d'}) { |q|
+          .date_range_agg(field: 'initiatives.created_at', range: { from: "now-#{days}d/d"}) { |q|
             q.top_hits_agg
         }
 
@@ -227,7 +231,9 @@ class GenericGraphsController < ApplicationController
         graph.formatter.title = 'Growth of Groups'
         graph.formatter.type = 'line'
         graph.formatter.element_formatter = -> (e, *args) {
-          { label: e[:key_as_string], value: args[0] } # args[0] -> total so far
+          { label: Date.parse(e[:key_as_string]).strftime('%Y-%m-%d'),
+            value: args[0] , # args[0] -> total so far
+            key: 'series0' }
         }
 
         current_user.enterprise.groups.each do |group|
@@ -709,8 +715,7 @@ class GenericGraphsController < ApplicationController
 
   def graph_params
     params.permit(
-      :from_date,
-      :to_date
+      :input
     )
   end
 end
