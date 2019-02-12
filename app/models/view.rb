@@ -6,6 +6,8 @@ class View < BaseClass
   belongs_to :resource
   belongs_to :folder
 
+  # Welcome to mappig hell:)
+
   settings do
     mappings dynamic: false do
       indexes :enterprise_id, type: :integer
@@ -17,14 +19,26 @@ class View < BaseClass
         end
       end
       indexes :folder do
+        indexes :id, type: :integer
         indexes :name, type: :keyword
+        indexes :group do
+          indexes :name, type: :keyword
+        end
       end
       indexes :resource do
+        indexes :id, type: :integer
         indexes :title, type: :keyword
+        indexes :group do
+          indexes :name, type: :keyword
+        end
       end
       indexes :news_feed_link do
         indexes :news_link do
+          indexes :id, type: :integer
           indexes :title, type: :keyword
+          indexes :group do
+            indexes :name, type: :keyword
+          end
         end
       end
     end
@@ -38,12 +52,14 @@ class View < BaseClass
           only: [:name, :parent_id],
           include: { parent: { only: [:name] } }
         }, folder: {
-          only: [:name],
+          only: [:id, :name],
+          include: { group: { only: [:name] } }
         }, resource: {
-          only: [:title],
+          only: [:id, :title],
+          include: { group: { only: [:name] } }
         }, news_feed_link: {
-          include: { news_link: { only: [:title] }}
-        }}
+          include: { news_link: { only: [:id, :title] },
+            group: { only: [:name] } } } }
       ))
   end
 end

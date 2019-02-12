@@ -115,7 +115,22 @@ class GenericGraphsController < ApplicationController
       format.json {
         graph = View.get_graph
         graph.enterprise_filter = { 'enterprise_id' => current_user.enterprise_id }
-        graph.query = graph.query.terms_agg(field: 'folder.name')
+
+        graph.query = graph.query.terms_agg(field: 'folder.id') { |q| q.top_hits_agg }
+
+        graph.formatter = graph.get_custom_formatter
+        graph.formatter.element_formatter = -> (e) {
+          e_folder =  e.agg.hits.hits[0][:_source][:folder]
+          group_name = e_folder[:group].present? ? e_folder[:group][:name] : 'Shared'
+
+          { label: group_name + ': ' + e_folder[:name],
+            value: e[:doc_count]
+          }
+        }
+        graph.formatter.key_formatter = -> (e) {
+          e.agg.hits.hits[0][:_source][:folder][:id]
+        }
+
         graph.formatter.add_elements(graph.search)
 
         results = graph.build
@@ -133,11 +148,23 @@ class GenericGraphsController < ApplicationController
   def non_demo_top_resources_by_views
     respond_to do |format|
       format.json {
-        # TODO resource views not working?
-
         graph = View.get_graph
         graph.enterprise_filter = { 'enterprise_id' => current_user.enterprise_id }
-        graph.query = graph.query.terms_agg(field: 'resource.title')
+        graph.query = graph.query.terms_agg(field: 'resource.id') { |q| q.top_hits_agg }
+
+        graph.formatter = graph.get_custom_formatter
+        graph.formatter.element_formatter = -> (e) {
+          e_resource =  e.agg.hits.hits[0][:_source][:resource]
+          group_name = e_resource[:group].present? ? e_resource[:group][:name] : 'Shared'
+
+          { label: group_name + ': ' + e_resource[:title],
+            value: e[:doc_count]
+          }
+        }
+        graph.formatter.key_formatter = -> (e) {
+          e.agg.hits.hits[0][:_source][:resource][:id]
+        }
+
         graph.formatter.add_elements(graph.search)
 
         results = graph.build
@@ -157,12 +184,26 @@ class GenericGraphsController < ApplicationController
       format.json {
         graph = View.get_graph
         graph.enterprise_filter = { 'enterprise_id' => current_user.enterprise_id }
-        graph.query = graph.query.terms_agg(field: 'news_feed_link.news_link.title')
+        graph.query = graph.query.terms_agg(field: 'news_feed_link.news_link.id') { |q| q.top_hits_agg }
+
+        graph.formatter = graph.get_custom_formatter
+        graph.formatter.element_formatter = -> (e) {
+          # Look at the View mapping to get a handle on this.
+          # Essentially we need to aggregate by id, but display '<group>: <title>', this is what causes this mess
+          e_news_feed_link =  e.agg.hits.hits[0][:_source][:news_feed_link]
+          group_name = e_news_feed_link[:group].present? ? e_news_feed_link[:group][:name] : 'Shared'
+
+          { label: group_name + ': ' + e_news_feed_link[:news_link][:title],
+            value: e[:doc_count]
+          }
+        }
+        graph.formatter.key_formatter = -> (e) {
+          e.agg.hits.hits[0][:_source][:news_feed_link][:news_link][:id]
+        }
+
         graph.formatter.add_elements(graph.search)
 
-        results = graph.build
-
-        render json: results
+        render json: graph.build
       }
       format.csv {
         GenericGraphsTopNewsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, demo: false)
