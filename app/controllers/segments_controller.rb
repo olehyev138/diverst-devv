@@ -15,6 +15,16 @@ class SegmentsController < ApplicationController
         end
     end
 
+    def get_all_segments
+      authorize Segment, :index?
+
+      @segments = policy_scope(Segment).includes(:parent_segment).where(:segmentations => {:id => nil}).distinct
+
+      respond_to do |format|
+        format.json { render json: @segments.map { |s| {id: s.id, text: s.name} }.as_json }
+      end
+    end
+
     def enterprise_segments
          authorize Segment
         @segments = policy_scope(Segment).includes(:parent_segment).where(:segmentations => {:id => nil}).distinct
