@@ -11,11 +11,13 @@
       <table class="table--has-border" id="policy-groups-templates-table">
         <thead>
           <th>Name</th>
+          <th></th>
         </thead>
         <tbody>
           <% @topics.each do |topic| %>
             <tr>
               <td><%= link_to topic.name, edit_mentoring_interest_path(topic) %></td>
+              <td><td><%= link_to "Delete", mentoring_interest_path(topic), method: :delete, class: "error", data: { confirm: "Are you sure?" } %></td></td>
             </tr>
           <% end %>
         </tbody>

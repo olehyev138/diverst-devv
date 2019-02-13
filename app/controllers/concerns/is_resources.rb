@@ -147,13 +147,11 @@ module IsResources
 
     def increment_views
         if @container.class.name === "Folder"
-            view = View.find_or_create_by({
+            View.create!({
                 :folder_id => @container.id,
                 :user_id => current_user.id,
                 :enterprise_id => current_user.enterprise_id
             })
-            view.view_count += 1
-            view.save!
         end
     end
 end
