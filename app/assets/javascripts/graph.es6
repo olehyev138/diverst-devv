@@ -3,7 +3,7 @@
 const DEFAULT_MAX = 10;
 
 class Graph {
-    constructor(dataUrl, $element) {
+    constructor(dataUrl, $element, $graph_input) {
         this.dataUrl = dataUrl;
         this.$element = $element;
         this.data = {};
@@ -11,11 +11,20 @@ class Graph {
         this.brandingColor = BRANDING_COLOR || $('.primary-header').css('background-color') || '#7B77C9';
         this.chartsColor = CHARTS_COLOR || this.brandingColor;
 
+        // set callback for a graph input if it exists
+        var self = this;
+        if ($($graph_input).length)
+            $($graph_input).keypress(function(e) {
+                if (e.which == 13) {
+                    self.updateData($graph_input.val());
+                }
+            });
+
         this.updateData();
     }
 
-    updateData() {
-        $.get(this.dataUrl, (data) => {
+    updateData(input='') {
+        $.get(this.dataUrl, { input: input }, (data) => {
             this.onDataUpdate(data);
         });
     }
@@ -45,6 +54,8 @@ class Graph {
         var series = this.data.series;
         var svg = this.$element[0].children[0];
         var chart = null;
+
+        console.log(series);
 
         nv.addGraph(function() {
             chart = nv.models.multiBarChart()
@@ -96,13 +107,17 @@ class Graph {
          *   - add abstractions for most of this to remove complexity and so we can reuse code
          */
 
-        var series = this.data.series;
         var svg = this.$element[0].children[0];
         var chart = null;
 
+        var series = this.data.series;
+
+        var series_m = [series[0]];
+
+        console.log(series_m);
+
         nv.addGraph(function() {
-            chart = nv.models.lineChart()
-                .duration(300)
+            chart = nv.models.lineWithFocusChart()
                 .useInteractiveGuideline(true)
                 .x(function (d) { return d.label; }) // set the json keys for x & y values
                 .y(function (d) { return d.value; });
@@ -111,7 +126,7 @@ class Graph {
                 .tickFormat(d3.format('d'));
 
             d3.select(svg)
-                .datum(series)
+                .datum(series_m)
                 .transition().duration(500)
                 .call(chart);
 

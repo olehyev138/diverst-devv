@@ -109,7 +109,7 @@ module BaseSearch
     # Runs an elasticsearch query
     # @query - the Query object in which to query elasticsearch with
     # @enterprise_filter - the enterprise field/value pair hash in which to filter on
-    def search(query, enterprise_filter)
+    def search(query, enterprise_filter, hits: false)
       # wrap query in a enterprise_id filter
       query = self.get_query.filter_agg(field: enterprise_filter.keys[0],
                                         value: enterprise_filter.values[0]) { |_| query }.build
@@ -121,8 +121,7 @@ module BaseSearch
           response = (get_deepest_agg response.aggregations.agg).buckets
 
           # check for hits
-          # if a top_hits aggregation was used, data will be within first element at agg.hits.hits
-          if response.count == 1 && response[0].agg
+          if hits
             response[0].agg.hits.hits
           else
             response
