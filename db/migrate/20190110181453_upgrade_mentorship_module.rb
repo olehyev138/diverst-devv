@@ -1,4 +1,4 @@
-class CreateMentoringSessionComments < ActiveRecord::Migration
+class UpgradeMentorshipModule < ActiveRecord::Migration
   def change
     create_table :mentoring_session_comments do |t|
       t.text :content
@@ -7,5 +7,8 @@ class CreateMentoringSessionComments < ActiveRecord::Migration
 
       t.timestamps null: false
     end
+
+    remove_column :mentorship_sessions, :attending, :boolean
+    add_column :mentorship_sessions, :status, :string, :null => false, :default => "pending"
   end
 end
