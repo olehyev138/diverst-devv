@@ -163,6 +163,7 @@ Rails.application.routes.draw do
   resources :groups do
     collection do
       post :sort
+      get 'get_all_groups'
     end
     resources :budgets, only: [:index, :show, :new, :create, :destroy] do
       post 'approve'
