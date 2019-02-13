@@ -97,8 +97,7 @@ RSpec.describe Folder, type: :model do
     describe '#total_views' do
         it "returns 10" do
             folder = create(:folder)
-            create(:view, :folder => folder, :view_count => 4)
-            create(:view, :folder => folder, :view_count => 6)
+            create_list(:view, 10, :folder => folder)
             
             expect(folder.total_views).to eq(10)
         end

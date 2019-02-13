@@ -44,13 +44,11 @@ class NewsFeedLink < ActiveRecord::Base
     # View Count methods
     def increment_view(user)
       view = views.find_or_create_by(user_id: user.id, enterprise_id: user.enterprise_id)
-
-      view.view_count += 1
       view.save
     end
 
     def total_views
-      views.sum(:view_count)
+      views.count
     end
 
     def unique_views
@@ -60,8 +58,6 @@ class NewsFeedLink < ActiveRecord::Base
     def create_view_if_none(user)
       unless views.find_by(user_id: user.id)
         view = views.create(user_id: user.id, enterprise_id: user.enterprise_id)
-
-        view.view_count = 1
         view.save
       end
     end
