@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.feature 'An ERG dashboard' do
   let(:user) { create(:user) }
-  let(:group) { create(:group_with_users, :with_outcomes, users_count: 5, enterprise: user.enterprise) }
+  let(:group) { create(:group_with_users, users_count: 5, enterprise: user.enterprise) }
 
   before do
     login_as(user, scope: :user, :run_callbacks => false)
