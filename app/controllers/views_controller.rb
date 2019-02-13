@@ -1,10 +1,7 @@
 class ViewsController < ApplicationController
   
   def track
-    view = View.find_or_create_by(view_params)
-    view.view_count += 1
-    view.save!
-
+    View.create!(view_params)
     render nothing: true
   end
   
