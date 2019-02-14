@@ -27,6 +27,7 @@ class GroupsController < ApplicationController
     def close_budgets_export_csv
       authorize Group, :manage_all_group_budgets?
       GroupsCloseBudgetsDownloadJob.perform_later(current_user.id, current_user.enterprise.id)
+      track_activity(current_user.enterprise, :export_close_budgets)
       flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
       redirect_to :back
     end
@@ -271,6 +272,7 @@ class GroupsController < ApplicationController
         @email = ENV['CSV_UPLOAD_REPORT_EMAIL']
 
         if file.save
+          track_activity(@group, :import_csv)
           @success = true
           @message = '@success'
         else
@@ -283,6 +285,7 @@ class GroupsController < ApplicationController
     def export_csv
         authorize @group, :show?
         GroupMemberDownloadJob.perform_later(current_user.id, @group.id)
+        track_activity(@group, :export_members)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
     end

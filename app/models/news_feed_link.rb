@@ -1,4 +1,6 @@
 class NewsFeedLink < ActiveRecord::Base
+    include PublicActivity::Common
+
     belongs_to :news_feed
     belongs_to :group_message
     belongs_to :news_link

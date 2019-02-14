@@ -7,7 +7,7 @@ RSpec.describe Groups::PostsController, type: :controller do
     let!(:group) { create(:group, enterprise: user.enterprise, owner: user) }
     let!(:group2) { create(:group, enterprise: user.enterprise, owner: user) }
     let!(:news_feed) { group.news_feed }
-    
+
     let!(:news_link1) { create(:news_link, :group => group2)}
     let!(:news_link2) { create(:news_link, :group => group2)}
     let!(:news_link3) { create(:news_link, :group => group2)}
@@ -120,19 +120,30 @@ RSpec.describe Groups::PostsController, type: :controller do
 
     describe 'PATCH #approve' do
         context 'when user is logged in' do
-            login_user_from_let
+          login_user_from_let
 
-            before do
+          before do
             # ensure the job is performed and that
             # we don't receive any errors
             perform_enqueued_jobs do
                 request.env["HTTP_REFERER"] = "back"
                 patch :approve, group_id: group.id, link_id: news_link1.news_feed_link.id
             end
-        end
+          end
 
           it 'redirect to back' do
               expect(response).to redirect_to "back"
+          end
+
+          describe 'public activity' do
+            enable_public_activity
+
+            it 'creates public activity record' do
+              perform_enqueued_jobs do
+                expect{patch :approve, group_id: group.id, link_id: news_link1.news_feed_link.id}
+                .to change(PublicActivity::Activity, :count).by(1)
+              end
+            end
           end
         end
 
