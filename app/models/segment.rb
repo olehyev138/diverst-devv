@@ -30,8 +30,9 @@ class Segment < ActiveRecord::Base
     has_many :initiatives, through: :initiative_segments
 
     validates_presence_of :name
-    
+
     after_commit :update_indexes
+    after_commit :cache_segment_members, on: [:create, :update]
 
     before_destroy :remove_parent_segment
 
@@ -55,8 +56,11 @@ class Segment < ActiveRecord::Base
         end
     end
 
-    def update_indexes
+    def cache_segment_members
         CacheSegmentMembersJob.perform_later self.id
+    end
+
+    def update_indexes
         RebuildElasticsearchIndexJob.perform_later(model_name: 'User', enterprise: enterprise)
     end
 

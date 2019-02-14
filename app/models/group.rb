@@ -165,7 +165,7 @@ class Group < ActiveRecord::Base
   end
 
   def total_views
-    views.sum(:view_count)
+    views.count
   end
 
   def is_standard_group?
