@@ -1,3 +1,11 @@
+// Structure:
+// Select All button must have class 'select2-select-all' and have the data attributes:
+//    select-id: The ID of the select2 field
+//    select-all-path: A path to a controller method that returns all select options in a hash formatted to JSON (Ex. [{"id":#,"text":"..."},{...}])
+//
+// Clear All button must have class 'select2-clear-all' and have the data attributes:
+//    select-id: The ID of the select2 field
+
 $(document).on('ready page:load', function() {
   $('.select2-select-all').click( function() {
     selectAll("#" + $(this).data("select-id"), $(this).data("select-all-path"));
