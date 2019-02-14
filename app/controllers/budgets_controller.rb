@@ -60,7 +60,7 @@ class BudgetsController < ApplicationController
   end
 
   def destroy
-    authorize [@group], :destroy?, :policy_class => GroupBudgetPolicy  
+    authorize [@group], :destroy?, :policy_class => GroupBudgetPolicy
     track_activity(@budget, :destroy)
     if @budget.destroy
       flash[:notice] = "Your budget was deleted"
@@ -74,6 +74,7 @@ class BudgetsController < ApplicationController
   def export_csv
     authorize [@group], :index?, :policy_class => GroupBudgetPolicy
     GroupBudgetsDownloadJob.perform_later(current_user.id, @group.id)
+    track_activity(@group, :export_budgets)
     flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
     redirect_to :back
   end

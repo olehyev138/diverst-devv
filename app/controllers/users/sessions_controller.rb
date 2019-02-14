@@ -32,6 +32,6 @@ class Users::SessionsController < Devise::SessionsController
   private
 
   def after_login
-    track_activity(current_user, :login) if current_user.present?
+    track_activity(current_user, :login, { ip: current_user.current_sign_in_ip }) if current_user.present?
   end
 end
