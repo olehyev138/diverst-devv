@@ -41,7 +41,6 @@ class GenericGraphsController < ApplicationController
 
     respond_to do |format|
       format.json{
-
         graph = Group.get_graph
         graph.enterprise_filter = { 'enterprise_id' => current_user.enterprise_id }
         graph.hits = true
@@ -69,13 +68,19 @@ class GenericGraphsController < ApplicationController
   end
 
   def non_demo_messages_sent
+    # set days to input if passed, otherwise default to 30
+    days = ((params[:input] =~ /\A-?\d+\Z/) ? params[:input] : '30')
+    puts '---------------------------'
+    puts days
+    puts '---------------------------'
+
     respond_to do |format|
       format.json {
         graph = Group.get_graph
         graph.enterprise_filter = { 'enterprise_id' => current_user.enterprise_id }
         graph.hits = true
         graph.query = graph.query
-          .date_range_agg(field: 'messages.created_at', range: { from: 'now-30d/d'}) { |q|
+          .date_range_agg(field: 'messages.created_at', range: { from: "now-#{days}d/d"}) { |q|
           q.top_hits_agg
         }
 
@@ -100,11 +105,23 @@ class GenericGraphsController < ApplicationController
   end
 
   def non_demo_top_groups_by_views
+    # set days to input if passed, otherwise default to 30
+    days = ((params[:input] =~ /\A-?\d+\Z/) ? params[:input] : '30')
+
     respond_to do |format|
       format.json {
         graph = View.get_graph
         graph.enterprise_filter = { 'enterprise_id' => current_user.enterprise_id }
-        graph.query = graph.query.terms_agg(field: 'group.name')
+
+        graph.query = graph.query.terms_agg(field: 'group.name') { |q|
+          q.date_range_agg(field: 'created_at', range: { from: "now-#{days}d/d"})
+        }
+
+        graph.formatter = graph.get_custom_formatter
+        graph.formatter.element_formatter = -> (e) {
+          { label: e[:key], value: e.agg.buckets[0][:doc_count] }
+        }
+
         graph.drilldown_graph(parent_field: 'group.parent.name')
 
         render json: graph.build
@@ -118,29 +135,37 @@ class GenericGraphsController < ApplicationController
   end
 
   def non_demo_top_folders_by_views
+    # set days to input if passed, otherwise default to 30
+    days = ((params[:input] =~ /\A-?\d+\Z/) ? params[:input] : '30')
+
     respond_to do |format|
       format.json {
         graph = View.get_graph
         graph.enterprise_filter = { 'enterprise_id' => current_user.enterprise_id }
 
-        graph.query = graph.query.terms_agg(field: 'folder.id') { |q| q.top_hits_agg }
+        graph.query = graph.query.terms_agg(field: 'folder.id') { |q|
+          q.date_range_agg(field: 'created_at', range: { from: "now-#{days}d/d"}) { |qq|
+            qq.top_hits_agg
+          }
+        }
 
         graph.formatter = graph.get_custom_formatter
         graph.formatter.element_formatter = -> (e) {
-          e_folder =  e.agg.hits.hits[0][:_source][:folder]
+          e_folder =  e.agg.buckets[0].agg.hits.hits[0][:_source][:folder]
           group_name = e_folder[:group].present? ? e_folder[:group][:name] : 'Shared'
 
           { label: group_name + ': ' + e_folder[:name],
-            value: e[:doc_count]
+            value: e.agg.buckets[0][:doc_count]
           }
         }
         graph.formatter.key_formatter = -> (e) {
-          e.agg.hits.hits[0][:_source][:folder][:id]
+          e.agg.buckets[0].agg.hits.hits[0][:_source][:folder][:id]
         }
 
         graph.formatter.add_elements(graph.search)
 
         results = graph.build
+
 
         render json: results
       }
@@ -153,23 +178,35 @@ class GenericGraphsController < ApplicationController
   end
 
   def non_demo_top_resources_by_views
+    # set days to input if passed, otherwise default to 30
+    days = ((params[:input] =~ /\A-?\d+\Z/) ? params[:input] : '30')
+
     respond_to do |format|
       format.json {
         graph = View.get_graph
         graph.enterprise_filter = { 'enterprise_id' => current_user.enterprise_id }
-        graph.query = graph.query.terms_agg(field: 'resource.id') { |q| q.top_hits_agg }
+
+#        graph.query = graph.query.terms_agg(field: 'folder.id') { |q|
+#          q.date_range_agg(field: 'created_at', range: { from: "now-#{days}d/d"}) { |qq| qq.top_hits_agg }
+#        }
+
+        graph.query = graph.query.terms_agg(field: 'resource.id') { |q|
+          q.date_range_agg(field: 'created_at', range: { from: "now-#{days}d/d"}) { |qq|
+            qq.top_hits_agg
+          }
+        }
 
         graph.formatter = graph.get_custom_formatter
         graph.formatter.element_formatter = -> (e) {
-          e_resource =  e.agg.hits.hits[0][:_source][:resource]
+          e_resource =  e.agg.buckets[0].agg.hits.hits[0][:_source][:resource]
           group_name = e_resource[:group].present? ? e_resource[:group][:name] : 'Shared'
 
           { label: group_name + ': ' + e_resource[:title],
-            value: e[:doc_count]
+            value: e.agg.buckets[0][:doc_count]
           }
         }
         graph.formatter.key_formatter = -> (e) {
-          e.agg.hits.hits[0][:_source][:resource][:id]
+          e.agg.buckets[0].agg.hits.hits[0][:_source][:resource][:id]
         }
 
         graph.formatter.add_elements(graph.search)
@@ -187,25 +224,33 @@ class GenericGraphsController < ApplicationController
   end
 
   def non_demo_top_news_by_views
+    # set days to input if passed, otherwise default to 30
+    days = ((params[:input] =~ /\A-?\d+\Z/) ? params[:input] : '30')
+
     respond_to do |format|
       format.json {
         graph = View.get_graph
         graph.enterprise_filter = { 'enterprise_id' => current_user.enterprise_id }
-        graph.query = graph.query.terms_agg(field: 'news_feed_link.news_link.id') { |q| q.top_hits_agg }
+
+        graph.query = graph.query.terms_agg(field: 'news_feed_link.news_link.id') { |q|
+          q.date_range_agg(field: 'created_at', range: { from: "now-#{days}d/d"}) { |qq|
+            qq.top_hits_agg
+          }
+        }
 
         graph.formatter = graph.get_custom_formatter
         graph.formatter.element_formatter = -> (e) {
           # Look at the View mapping to get a handle on this.
           # Essentially we need to aggregate by id, but display '<group>: <title>', this is what causes this mess
-          e_news_feed_link =  e.agg.hits.hits[0][:_source][:news_feed_link]
+          e_news_feed_link =  e.agg.buckets[0].agg.hits.hits[0][:_source][:news_feed_link]
           group_name = e_news_feed_link[:group].present? ? e_news_feed_link[:group][:name] : 'Shared'
 
           { label: group_name + ': ' + e_news_feed_link[:news_link][:title],
-            value: e[:doc_count]
+            value: e.agg.buckets[0][:doc_count]
           }
         }
         graph.formatter.key_formatter = -> (e) {
-          e.agg.hits.hits[0][:_source][:news_feed_link][:news_link][:id]
+          e.agg.buckets[0].agg.hits.hits[0][:_source][:news_feed_link][:news_link][:id]
         }
 
         graph.formatter.add_elements(graph.search)
@@ -275,7 +320,7 @@ class GenericGraphsController < ApplicationController
         graph.enterprise_filter = { 'folder.group.enterprise_id' => current_user.enterprise_id }
         graph.formatter = graph.get_custom_formatter
         graph.formatter.title = 'Growth of Resources'
-        graph.formatter.type = 'line'
+        graph.formatter.type = 'DEBUGNULLEDOUT'
         graph.formatter.element_formatter = -> (e, *args) {
           { label: e[:key_as_string], value: args[0] } # args[0] -> total so far
         }
