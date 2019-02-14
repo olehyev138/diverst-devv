@@ -41,22 +41,19 @@ class GenericGraphsController < ApplicationController
 
     respond_to do |format|
       format.json{
-        graph = Group.get_graph
-        graph.enterprise_filter = { 'enterprise_id' => current_user.enterprise_id }
-        graph.hits = true
-        graph.query = graph.query
-          .date_range_agg(field: 'initiatives.created_at', range: { from: "now-#{days}d/d"}) { |q|
-            q.top_hits_agg
+        graph = Initiative.get_graph
+        graph.enterprise_filter = { 'pillar.outcome.group.enterprise_id' => current_user.enterprise_id }
+
+        graph.query = graph.query.terms_agg(field: 'pillar.outcome.group.name') { |q|
+          q.date_range_agg(field: 'created_at', range: { from: "now-#{days}d/d"})
         }
 
         graph.formatter = graph.get_custom_formatter
-        graph.formatter.element_formatter = -> (element) {
-          element = element[:_source]
-          { label: element[:name], value: element[:initiatives].count, children: [] }
+        graph.formatter.element_formatter = -> (e) {
+          { label: e[:key], value: e.agg.buckets[0][:doc_count] }
         }
-        graph.formatter.key_formatter = -> (element) { element[:_source][:id] }
 
-        graph.drilldown_graph(parent_field: 'parent_id')
+        graph.drilldown_graph(parent_field: 'pillar.outcome.group.parent.name')
         render json: graph.build
       }
       format.csv {
@@ -70,29 +67,22 @@ class GenericGraphsController < ApplicationController
   def non_demo_messages_sent
     # set days to input if passed, otherwise default to 30
     days = ((params[:input] =~ /\A-?\d+\Z/) ? params[:input] : '30')
-    puts '---------------------------'
-    puts days
-    puts '---------------------------'
 
     respond_to do |format|
       format.json {
-        graph = Group.get_graph
-        graph.enterprise_filter = { 'enterprise_id' => current_user.enterprise_id }
-        graph.hits = true
-        graph.query = graph.query
-          .date_range_agg(field: 'messages.created_at', range: { from: "now-#{days}d/d"}) { |q|
-          q.top_hits_agg
+        graph = GroupMessage.get_graph
+        graph.enterprise_filter = { 'group.enterprise_id' => current_user.enterprise_id }
+
+        graph.query = graph.query.terms_agg(field: 'group.name') { |q|
+          q.date_range_agg(field: 'created_at', range: { from: "now-#{days}d/d"})
         }
 
         graph.formatter = graph.get_custom_formatter
-        graph.formatter.element_formatter = -> (element) {
-          element = element[:_source]
-          { label: element[:name], value: element[:messages].count, children: [] }
+        graph.formatter.element_formatter = -> (e) {
+          { label: e[:key], value: e.agg.buckets[0][:doc_count] }
         }
-        graph.formatter.key_formatter = -> (element) {
-          element[:_source][:id] }
 
-        graph.drilldown_graph(parent_field: 'parent_id')
+        graph.drilldown_graph(parent_field: 'group.parent.name')
 
         render json: graph.build
       }
