@@ -91,6 +91,7 @@
       <div class="card">
         <div class="card__section">
           <h4>Messages sent in the last 30 days</h4>
+          <input class="graph-input" type="text" value="30"></input>
           <div class="card__action">
             <%= link_to "Export CSV", messages_sent_generic_graphs_path(format: :csv), class: "hidden-xs" %>
           </div>
@@ -118,6 +119,7 @@
       <div class="card">
         <div class="card__section">
           <h4># of views per <%= c_t(:erg) %></h4>
+          <input class="graph-input" type="text" value="30"></input>
           <div class="card__action">
             <%= link_to "Export CSV", top_groups_by_views_generic_graphs_path(format: :csv), class: "hidden-xs" %>
           </div>
@@ -133,6 +135,7 @@
       <div class="card">
         <div class="card__section">
           <h4># of views per Folder</h4>
+          <input class="graph-input" type="text" value="30"></input>
           <div class="card__action">
             <%= link_to "Export CSV", top_folders_by_views_generic_graphs_path(format: :csv), class: "hidden-xs" %>
           </div>
@@ -147,6 +150,7 @@
       <div class="card">
         <div class="card__section">
           <h4># of views per Resource</h4>
+          <input class="graph-input" type="text" value="30"></input>
           <div class="card__action">
             <%= link_to "Export CSV", top_resources_by_views_generic_graphs_path(format: :csv), class: "hidden-xs" %>
           </div>
@@ -161,6 +165,7 @@
       <div class="card">
         <div class="card__section">
           <h4>Top News Links by # of views</h4>
+          <input class="graph-input" type="text" value="30"></input>
           <div class="card__action">
             <%= link_to "Export CSV", top_news_by_views_generic_graphs_path(format: :csv), class: "hidden-xs" %>
           </div>
