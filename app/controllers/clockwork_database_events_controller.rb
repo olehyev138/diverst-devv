@@ -5,14 +5,17 @@ class ClockworkDatabaseEventsController < ApplicationController
   layout 'global_settings'
 
   def index
+    authorize current_user.enterprise, :enterprise_manage?
     @enterprise = current_user.enterprise
     @clockwork_database_events = @enterprise.clockwork_database_events
   end
 
   def edit
+    authorize current_user.enterprise, :enterprise_manage?
   end
 
   def update
+    authorize current_user.enterprise, :enterprise_manage?
     if @clockwork_database_event.update(clockwork_database_event_params)
       flash[:notice] = "Your email event was updated"
       track_activity(@clockwork_database_event, :update)
