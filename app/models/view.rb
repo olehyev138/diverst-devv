@@ -11,6 +11,7 @@ class View < BaseClass
   settings do
     mappings dynamic: false do
       indexes :enterprise_id, type: :integer
+      indexes :created_at, type: :date
       indexes :group do
         indexes :name, type: :keyword
         indexes :parent_id, type: :integer
@@ -47,7 +48,7 @@ class View < BaseClass
   def as_indexed_json(options = {})
     self.as_json(
       options.merge(
-        only: [:enterprise_id, :title],
+        only: [:enterprise_id, :title, :created_at],
         include: { group: {
           only: [:name, :parent_id],
           include: { parent: { only: [:name] } }
