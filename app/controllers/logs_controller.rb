@@ -20,6 +20,7 @@ class LogsController < ApplicationController
       #For CSV logs, we send ALL the activities
       format.csv {
         LogsDownloadJob.perform_later(current_user.id, current_user.enterprise.id)
+        track_activity(@enterprise, :export_logs)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }

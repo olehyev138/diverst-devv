@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190109161050) do
+ActiveRecord::Schema.define(version: 20190128204226) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -1351,12 +1351,11 @@ ActiveRecord::Schema.define(version: 20190109161050) do
   add_index "users_segments", ["user_id"], name: "index_users_segments_on_user_id", using: :btree
 
   create_table "views", force: :cascade do |t|
-    t.integer  "user_id",           limit: 4,             null: false
+    t.integer  "user_id",           limit: 4, null: false
     t.integer  "news_feed_link_id", limit: 4
     t.integer  "enterprise_id",     limit: 4
-    t.integer  "view_count",        limit: 4, default: 0, null: false
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.integer  "group_id",          limit: 4
     t.integer  "folder_id",         limit: 4
     t.integer  "resource_id",       limit: 4

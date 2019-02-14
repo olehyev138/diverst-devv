@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe EmailsController, type: :controller do
+    include ActiveJob::TestHelper
+
     let(:enterprise) { create(:enterprise) }
     let(:user) { create(:user, enterprise: enterprise) }
 
@@ -49,6 +51,31 @@ RSpec.describe EmailsController, type: :controller do
 
                 it "flashes a notice message" do
                     expect(flash[:notice]).to eq "Your email was updated"
+                end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{patch :update, id: email.id, email: { subject: "updated" }}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { Email.last }
+                    let(:owner) { user }
+                    let(:key) { 'email.update' }
+
+                    before {
+                      perform_enqueued_jobs do
+                        patch :update, id: email.id, email: { subject: "updated" }
+                      end
+                    }
+
+                    include_examples'correct public activity'
+                  end
                 end
             end
 

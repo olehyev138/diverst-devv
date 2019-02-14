@@ -73,6 +73,7 @@ module IsResources
     def archive
         @resources = @container.resources.where(archived_at: nil).all
         @resource.update(archived_at: DateTime.now)
+        track_activity(@resource, :archive)
 
         respond_to do |format|
            format.html { redirect_to action: :index }
@@ -82,6 +83,7 @@ module IsResources
 
     def restore
         @resource.update(archived_at: nil)
+        track_activity(@resource, :restore)
 
         respond_to do |format|
           format.html { redirect_to :back }
@@ -145,13 +147,11 @@ module IsResources
 
     def increment_views
         if @container.class.name === "Folder"
-            view = View.find_or_create_by({
+            View.create!({
                 :folder_id => @container.id,
                 :user_id => current_user.id,
                 :enterprise_id => current_user.enterprise_id
             })
-            view.view_count += 1
-            view.save!
         end
     end
 end

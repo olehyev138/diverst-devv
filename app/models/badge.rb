@@ -1,4 +1,6 @@
 class Badge < ActiveRecord::Base
+  include PublicActivity::Common
+
   belongs_to :enterprise
 
   validates :label, presence: true

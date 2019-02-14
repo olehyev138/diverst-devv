@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe LogsController, type: :controller do
+  include ActiveJob::TestHelper
+
   describe 'GET #index' do
     def get_index
       get :index
@@ -70,6 +72,18 @@ RSpec.describe LogsController, type: :controller do
 
         it "calls job" do
             expect(LogsDownloadJob).to have_received(:perform_later)
+        end
+
+        describe 'public activity' do
+          enable_public_activity
+
+          it 'creates public activity record' do
+            perform_enqueued_jobs do
+              allow(LogsDownloadJob).to receive(:perform_later)
+              expect{ get :index, :format => :csv  }
+              .to change(PublicActivity::Activity, :count).by(1)
+            end
+          end
         end
       end
     end

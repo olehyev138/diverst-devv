@@ -301,10 +301,10 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
                 .to change(group.members, :count).by(1)
             end
 
-            it 'sets accepted_member attribute to true when user is added to a group with pending_users disabled' do 
+            it 'sets accepted_member attribute to true when user is added to a group with pending_users disabled' do
                 post :add_members, group_id: group.id, group: { member_ids: [add.id] }
                 expect(add.user_groups.last.accepted_member).to eq true
-            end 
+            end
         end
 
         context 'when user is not logged in' do
@@ -445,6 +445,30 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
 
             it "calls job" do
                 expect(GroupMemberListDownloadJob).to have_received(:perform_later)
+            end
+
+            describe 'public activity' do
+              enable_public_activity
+
+              it 'creates public activity record' do
+                perform_enqueued_jobs do
+                  expect{ get :export_group_members_list_csv, group_id: group.id }.to change(PublicActivity::Activity, :count).by(1)
+                end
+              end
+
+              describe 'activity record' do
+                let(:model) { Group.last }
+                let(:owner) { user }
+                let(:key) { 'group.export_member_list' }
+
+                before {
+                  perform_enqueued_jobs do
+                    get :export_group_members_list_csv, group_id: group.id
+                  end
+                }
+
+                include_examples'correct public activity'
+              end
             end
         end
     end

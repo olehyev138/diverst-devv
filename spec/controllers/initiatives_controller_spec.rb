@@ -4,7 +4,7 @@ RSpec.describe InitiativesController, type: :controller do
   include ActiveJob::TestHelper
 
   let(:user) { create :user }
-  let!(:group) { create :group, enterprise: user.enterprise }
+  let!(:group) { create :group, :without_outcomes, enterprise: user.enterprise }
   let(:outcome) {create :outcome, group_id: group.id}
   let(:pillar) { create :pillar, outcome_id: outcome.id}
   let(:initiative) { create :initiative, pillar: pillar, owner_group: group}
@@ -114,7 +114,7 @@ RSpec.describe InitiativesController, type: :controller do
 
   describe 'GET #edit' do
     before { pillar }
-    let!(:group) { create :group, :with_outcomes, enterprise: user.enterprise }
+    let!(:group) { create :group, enterprise: user.enterprise }
     let!(:initiative) { create :initiative, owner_group: group, pillar: pillar }
 
     #TODO this is bad. We need to associate group with initiatives directly
@@ -171,6 +171,30 @@ RSpec.describe InitiativesController, type: :controller do
       it "calls job" do
           expect(InitiativesDownloadJob).to have_received(:perform_later)
       end
+
+      describe 'public activity' do
+        enable_public_activity
+
+        it 'creates public activity record' do
+          perform_enqueued_jobs do
+            expect{ get :export_csv, :group_id => group.id }.to change(PublicActivity::Activity, :count).by(1)
+          end
+        end
+
+        describe 'activity record' do
+          let(:model) { Group.last }
+          let(:owner) { user }
+          let(:key) { 'group.export_initiatives' }
+
+          before {
+            perform_enqueued_jobs do
+              get :export_csv, :group_id => group.id
+            end
+          }
+
+          include_examples'correct public activity'
+        end
+      end
     end
 
     context "without a logged in user" do
@@ -180,7 +204,7 @@ RSpec.describe InitiativesController, type: :controller do
   end
 
   describe "GET#attendees" do
-    let!(:group) { create :group, :with_outcomes, enterprise: user.enterprise }
+    let!(:group) { create :group, enterprise: user.enterprise }
     let!(:initiative) { create :initiative, owner_group: group }
     let!(:attendee) { create(:user) }
 
@@ -208,12 +232,12 @@ RSpec.describe InitiativesController, type: :controller do
 
 
   describe 'non-GET' do
-    let!(:group) { create :group, :with_outcomes, enterprise: user.enterprise }
+    let!(:group) { create :group, enterprise: user.enterprise }
     let!(:initiative) { build :initiative, owner_group: group }
 
     describe 'POST #create' do
       def post_create(group_id = -1, params = {})
-        post :create, group_id: group_id, initiative: params
+        post :create, group_id: group_id, initiative: params.merge({:pillar_id => group.pillars.first.id})
       end
 
       context 'with logged in user' do

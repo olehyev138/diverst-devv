@@ -1,0 +1,8 @@
+<div class="card__section">
+  <%= render 'public_activity/shared/owner', activity: activity %>
+  updated email
+  <% if activity.trackable %>
+    <%= link_to activity.trackable.name, edit_email_path(activity.trackable) %>
+  <% end %>
+  (<%= activity.created_at.to_s :datetime %>)
+</div>
