@@ -65,6 +65,7 @@ class Initiative < ActiveRecord::Base
   validates :max_attendees, numericality: { greater_than: 0, allow_nil: true }
   validate :check_budget
   validate :segment_enterprise
+  validates_presence_of :pillar
 
   def initiative_date(date_type)
     return "" unless ["start", "end"].include?(date_type)

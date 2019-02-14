@@ -37,6 +37,7 @@ class GenericGraphsController < ApplicationController
             }
             format.csv {
               GenericGraphsGroupPopulationDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))
+              track_activity(current_user.enterprise, :export_generic_graphs_group_population)
               flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
               redirect_to :back
             }
@@ -79,6 +80,7 @@ class GenericGraphsController < ApplicationController
             }
             format.csv {
               GenericGraphsSegmentPopulationDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))
+              track_activity(current_user.enterprise, :export_generic_graphs_segment_population)
               flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
               redirect_to :back
             }
@@ -135,6 +137,7 @@ class GenericGraphsController < ApplicationController
             }
             format.csv {
               GenericGraphsMentorshipDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))
+              track_activity(current_user.enterprise, :export_generic_graphs_mentorship)
               flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
               redirect_to :back
             }
@@ -176,6 +179,7 @@ class GenericGraphsController < ApplicationController
             }
             format.csv {
               GenericGraphsMentoringSessionsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))
+              track_activity(current_user.enterprise, :export_generic_graphs_mentoring_sessions)
               flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
               redirect_to :back
             }
@@ -209,6 +213,7 @@ class GenericGraphsController < ApplicationController
             }
             format.csv {
               GenericGraphsMentoringInterestsDownloadJob.perform_later(current_user.id, current_user.enterprise.id)
+              track_activity(current_user.enterprise, :export_generic_graphs_mentoring_interests)
               flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
               redirect_to :back
             }
@@ -287,6 +292,7 @@ class GenericGraphsController < ApplicationController
             }
             format.csv {
               GenericGraphsEventsCreatedDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), demo: false)
+              track_activity(current_user.enterprise, :export_generic_graphs_events_created)
               flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
               redirect_to :back
             }
@@ -331,6 +337,7 @@ class GenericGraphsController < ApplicationController
             }
             format.csv {
               GenericGraphsMessagesSentDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), demo: false)
+              track_activity(current_user.enterprise, :export_generic_graphs_messages_sent)
               flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
               redirect_to :back
             }
@@ -373,6 +380,7 @@ class GenericGraphsController < ApplicationController
             }
             format.csv {
               GenericGraphsTopGroupsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), demo: false)
+              track_activity(current_user.enterprise, :export_generic_graphs_top_groups_by_views)
               flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
               redirect_to :back
             }
@@ -416,6 +424,7 @@ class GenericGraphsController < ApplicationController
             }
             format.csv {
               GenericGraphsTopFoldersByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, demo: false)
+              track_activity(current_user.enterprise, :export_generic_graphs_top_folders_by_views)
               flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
               redirect_to :back
             }
@@ -451,6 +460,7 @@ class GenericGraphsController < ApplicationController
             }
             format.csv {
               GenericGraphsTopResourcesByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, demo: false)
+              track_activity(current_user.enterprise, :export_generic_graphs_top_resources_by_views)
               flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
               redirect_to :back
             }
@@ -461,12 +471,12 @@ class GenericGraphsController < ApplicationController
         respond_to do |format|
             format.json {
               news_feed_link_ids = NewsFeedLink.where(:news_feed_id => NewsFeed.where(:group_id => current_user.enterprise.groups.ids).ids).ids
-              views = View.joins(:news_feed_link => :news_link).where(:news_feed_link_id => news_feed_link_ids).group("news_links.title").order("sum_view_count DESC").limit(20).sum(:view_count).to_a
-
+              views = View.select("DISTINCT news_links.title, COUNT(news_feed_link_id) view_count, groups.name AS name").joins(:news_feed_link => [:news_link => :group]).where(:news_feed_link_id => news_feed_link_ids).group(:news_feed_link_id).order("view_count DESC").limit(20)
+              
               data = views.map do |view|
                   {
-                      y: view.second,
-                      name: view.first
+                      y: view.view_count,
+                      name: "#{view.name} - #{view.title}"
                   }
               end
 
@@ -486,6 +496,7 @@ class GenericGraphsController < ApplicationController
             }
             format.csv {
               GenericGraphsTopNewsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, demo: false)
+              track_activity(current_user.enterprise, :export_generic_graphs_top_news_by_views)
               flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
               redirect_to :back
             }
@@ -538,7 +549,7 @@ class GenericGraphsController < ApplicationController
           GenericGraphsGroupGrowthDownloadJob
             .perform_later(current_user.id, current_user.enterprise.id,
                            params[:from_date], params[:to_date])
-
+          track_activity(current_user.enterprise, :export_generic_graphs_group_growth)
           flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
           redirect_to :back
         }
@@ -771,7 +782,7 @@ class GenericGraphsController < ApplicationController
         respond_to do |format|
             format.json {
               news_feed_link_ids = NewsFeedLink.where(:news_feed_id => NewsFeed.where(:group_id => current_user.enterprise.groups.ids).ids).ids
-              news_links = NewsLink.select("news_links.title, SUM(views.view_count) view_count").joins(:news_feed_link, :news_feed_link => :views).where(:news_feed_links => {:id => news_feed_link_ids}).order("view_count DESC")
+              news_links = NewsLink.select("news_links.title, COUNT(views.id) view_count").joins(:news_feed_link, :news_feed_link => :views).where(:news_feed_links => {:id => news_feed_link_ids}).order("view_count DESC")
 
               values = [9,2,5,1,11,10,9,5,11,4,1,8]
               i = 0

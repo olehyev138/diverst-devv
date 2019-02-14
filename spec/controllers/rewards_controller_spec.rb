@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe RewardsController, type: :controller do
+    include ActiveJob::TestHelper
+
     let!(:enterprise) { create(:enterprise) }
     let!(:user) { create(:user, enterprise: enterprise) }
     let!(:reward) { create(:reward, enterprise: enterprise, points: 10) }
@@ -78,6 +80,32 @@ RSpec.describe RewardsController, type: :controller do
                 it "redirects to action index" do
                     post :create, reward: attributes_for(:reward).merge(responsible_id: user.id)
                     expect(response).to redirect_to(action: :index)
+                end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{
+                        post :create, reward: attributes_for(:reward).merge(responsible_id: user.id)
+                      }.to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { Reward.last }
+                    let(:owner) { user }
+                    let(:key) { 'reward.create' }
+
+                    before {
+                      perform_enqueued_jobs do
+                        post :create, reward: attributes_for(:reward).merge(responsible_id: user.id)
+                      end
+                    }
+
+                    include_examples'correct public activity'
+                  end
                 end
             end
 
