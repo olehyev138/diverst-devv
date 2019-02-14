@@ -37,6 +37,7 @@ class Groups::QuestionsController < ApplicationController
   def export_csv
     authorize @group, :insights?
     GroupQuestionsDownloadJob.perform_later(current_user.id, @group.id)
+    track_activity(@group, :export_questions)
     flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
     redirect_to :back
   end

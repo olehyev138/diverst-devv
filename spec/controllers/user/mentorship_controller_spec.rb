@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe User::MentorshipController, type: :controller do
+    include ActiveJob::TestHelper
+
     let(:user) { create :user }
 
     describe 'GET #index' do
@@ -35,6 +37,32 @@ RSpec.describe User::MentorshipController, type: :controller do
 
                 it "flashes a notice message" do
                     expect(flash[:notice]).to eq "Your user was updated"
+                end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{
+                        patch :update, :id => user.id, :user => {:mentor => true}
+                      }.to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { User.last }
+                    let(:owner) { user }
+                    let(:key) { 'user.update_mentorship_profile' }
+
+                    before {
+                      perform_enqueued_jobs do
+                        patch :update, :id => user.id, :user => {:mentor => true}
+                      end
+                    }
+
+                    include_examples'correct public activity'
+                  end
                 end
             end
 

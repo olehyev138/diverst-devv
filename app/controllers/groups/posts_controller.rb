@@ -38,7 +38,9 @@ class Groups::PostsController < ApplicationController
 
     def approve
         @link.approved = true
-        if not @link.save
+        if @link.save
+          track_activity(@link, :approve)
+        else
             flash[:alert] = "Link not approved"
         end
         redirect_to :back

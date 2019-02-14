@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Users::InvitationsController, type: :controller do
+    include ActiveJob::TestHelper
+
     let(:enterprise) { create(:enterprise) }
     let(:user){ create(:user, enterprise: enterprise) }
     let(:custom_text) { create(:custom_text, enterprise: enterprise) }
@@ -43,6 +45,43 @@ RSpec.describe Users::InvitationsController, type: :controller do
         it "renders new template" do
             post :create
             expect(response).to render_template :new
+        end
+
+        context "with valid params" do
+          params = {
+              "user" => {
+                  "email" => "johnsmith@diverst.com",
+                  "first_name" => "John",
+                  "last_name" => "Smith",
+                  "user_role_id" => "1"
+              },
+              "commit"=>"Send an invitation"
+          }
+
+          describe 'public activity' do
+            enable_public_activity
+
+            it 'creates public activity record' do
+              perform_enqueued_jobs do
+                expect{post :create, params}
+                .to change(PublicActivity::Activity, :count).by(1)
+              end
+            end
+
+            describe 'activity record' do
+              let(:model) { User.last }
+              let(:owner) { user }
+              let(:key) { 'user.create' }
+
+              before {
+                perform_enqueued_jobs do
+                  post :create, params
+                end
+              }
+
+              include_examples'correct public activity'
+            end
+          end
         end
     end
 end

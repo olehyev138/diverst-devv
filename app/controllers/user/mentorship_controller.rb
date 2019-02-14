@@ -20,6 +20,7 @@ class User::MentorshipController < ApplicationController
         
         @user.assign_attributes(user_params)
         if @user.save
+            track_activity(@user, :update_mentorship_profile)
             flash[:notice] = "Your user was updated"
             # we redirect to mentors so the user can find a mentor only if mentor and mentee are true
             if @user.mentor? || @user.mentee?

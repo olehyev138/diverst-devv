@@ -18,8 +18,10 @@ RSpec.describe Campaign, type: :model do
         it { expect(campaign).to have_many(:answer_comments).through(:questions) }
         it { expect(campaign).to have_many(:campaigns_managers) }
         it { expect(campaign).to have_many(:managers).through(:campaigns_managers).source(:user) }
+        it { expect(campaign).to have_many(:sponsors) }
 
         it { expect(campaign).to accept_nested_attributes_for(:questions).allow_destroy(true) }
+        it { expect(campaign).to accept_nested_attributes_for(:sponsors).allow_destroy(true) }
 
         it{ expect(campaign).to validate_presence_of(:title) }
         it{ expect(campaign).to validate_presence_of(:description) }
@@ -171,7 +173,7 @@ RSpec.describe Campaign, type: :model do
             expect(campaign.errors.full_messages.first).to eq("End must be after start")
         end
     end
-    
+
     describe "#destroy_callbacks" do
         it "removes the child objects" do
             campaign = create(:campaign)
@@ -180,9 +182,9 @@ RSpec.describe Campaign, type: :model do
             campaign_invitation = create(:campaign_invitation, :campaign => campaign)
             campaigns_segment = create(:campaigns_segment, :campaign => campaign)
             campaigns_manager = create(:campaigns_manager, :campaign => campaign)
-            
+
             campaign.destroy
-            
+
             expect{Campaign.find(campaign.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{Question.find(question.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{CampaignsGroup.find(campaigns_group.id)}.to raise_error(ActiveRecord::RecordNotFound)
