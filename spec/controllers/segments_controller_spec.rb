@@ -6,6 +6,7 @@ RSpec.describe SegmentsController, type: :controller do
     let(:enterprise) { create(:enterprise) }
     let(:user) { create(:user, enterprise: enterprise) }
     let!(:segment) { create(:segment, enterprise: enterprise) }
+    let!(:other_segment) { create(:segment, enterprise: create(:enterprise))}
 
     describe "GET#index" do
         context 'when user is logged in' do
@@ -25,6 +26,35 @@ RSpec.describe SegmentsController, type: :controller do
             before { get :index }
             it_behaves_like "redirect user to users/sign_in path"
         end
+    end
+
+    describe 'GET #get_all_segments' do
+      context 'with logged user' do
+        let!(:segment2) { create(:segment, enterprise: enterprise) }
+        login_user_from_let
+
+        before { get :get_all_segments, format: :json }
+
+        it 'returns all segments' do
+          expect(assigns[:segments]).to match_array([segment, segment2])
+        end
+
+        it 'returns in the proper json format' do
+          parsed_body = JSON.parse(response.body)
+
+          expect(response).to have_http_status(:ok)
+          expect(response.content_type).to eq('application/json')
+          expect(parsed_body[0]["id"]).to eq(segment.id)
+          expect(parsed_body[0]["text"]).to eq(segment.name)
+          expect(parsed_body[1]["id"]).to eq(segment2.id)
+          expect(parsed_body[1]["text"]).to eq(segment2.name)
+        end
+      end
+
+      context 'without logged user' do
+        before { get :get_all_segments, format: :json }
+        it_behaves_like "redirect user to users/sign_in path"
+      end
     end
 
     describe "GET#new" do

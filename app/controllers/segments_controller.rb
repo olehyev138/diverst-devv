@@ -2,12 +2,12 @@ class SegmentsController < ApplicationController
     before_action :authenticate_user!
     after_action :verify_authorized
     before_action :set_segment, only: [:edit, :show, :export_csv, :update, :destroy]
+    before_action :set_segments, only: [:index, :get_all_segments]
 
     layout 'erg_manager'
 
     def index
         authorize Segment
-        @segments = policy_scope(Segment).includes(:parent_segment).where(:segmentations => {:id => nil}).distinct
 
         respond_to do |format|
             format.html
@@ -17,8 +17,6 @@ class SegmentsController < ApplicationController
 
     def get_all_segments
       authorize Segment, :index?
-
-      @segments = policy_scope(Segment).includes(:parent_segment).where(:segmentations => {:id => nil}).distinct
 
       respond_to do |format|
         format.json { render json: @segments.map { |s| {id: s.id, text: s.name} }.as_json }
@@ -112,6 +110,10 @@ class SegmentsController < ApplicationController
 
     def set_segment
         @segment = current_user.enterprise.segments.find(params[:id])
+    end
+
+    def set_segments
+      @segments = policy_scope(Segment).includes(:parent_segment).where(:segmentations => {:id => nil}).distinct
     end
 
     def segment_params

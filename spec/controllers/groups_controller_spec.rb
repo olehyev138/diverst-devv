@@ -5,7 +5,7 @@ RSpec.describe GroupsController, type: :controller do
 
   let(:enterprise){ create(:enterprise) }
   let(:user){ create(:user, enterprise: enterprise, email: "test@gmail.com") }
-  let(:group){ create(:group, enterprise: enterprise) }
+  let!(:group){ create(:group, enterprise: enterprise) }
   let(:different_group) { create(:group, enterprise: create(:enterprise)) }
 
   describe 'GET #index' do
@@ -53,6 +53,36 @@ RSpec.describe GroupsController, type: :controller do
 
     context 'without logged user' do
       before { get :index }
+      it_behaves_like "redirect user to users/sign_in path"
+    end
+  end
+
+  describe 'GET #get_all_groups' do
+    context 'with logged user' do
+      let!(:group2){ create(:group, enterprise: enterprise) }
+
+      login_user_from_let
+
+      before { get :get_all_groups, format: :json }
+
+      it 'returns all groups' do
+        expect(assigns[:groups]).to match_array([group, group2])
+      end
+
+      it 'returns in the proper json format' do
+        parsed_body = JSON.parse(response.body)
+
+        expect(response).to have_http_status(:ok)
+        expect(response.content_type).to eq('application/json')
+        expect(parsed_body[0]["id"]).to eq(group.id)
+        expect(parsed_body[0]["text"]).to eq(group.name)
+        expect(parsed_body[1]["id"]).to eq(group2.id)
+        expect(parsed_body[1]["text"]).to eq(group2.name)
+      end
+    end
+
+    context 'without logged user' do
+      before { get :get_all_groups, format: :json }
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
@@ -989,28 +1019,28 @@ RSpec.describe GroupsController, type: :controller do
   end
 
   describe 'POST#sort' do
-    context 'with logged in user' do 
+    context 'with logged in user' do
       let!(:group1) { create(:group, enterprise: enterprise) }
       let!(:group2) { create(:group, enterprise: enterprise) }
       let!(:group3) { create(:group, enterprise: enterprise) }
 
       login_user_from_let
 
-      before do 
+      before do
         group_ids = enterprise.groups.pluck(:id).map(&:to_s)
         params = { "group" => group_ids }
         post :sort, params
       end
 
-      it 'render nothing' do 
+      it 'render nothing' do
         expect(response).to render_template(nil)
-      end  
+      end
 
-      it 'apply sorting by assigning an integer to position attribute for each group' do 
+      it 'apply sorting by assigning an integer to position attribute for each group' do
         expect(group1.reload.position).to_not be_nil
         expect(group2.reload.position).to_not be_nil
         expect(group3.reload.position).to_not be_nil
       end
-    end 
+    end
   end
 end

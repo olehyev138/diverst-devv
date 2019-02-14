@@ -1,6 +1,7 @@
 class GroupsController < ApplicationController
     before_action :authenticate_user!, except: [:calendar_data]
     before_action :set_group, except: [:index, :new, :create, :calendar, :calendar_data, :close_budgets, :close_budgets_export_csv, :sort, :get_all_groups]
+    before_action :set_groups, only: [:index, :get_all_groups]
     skip_before_action :verify_authenticity_token, only: [:create, :calendar_data]
     after_action :verify_authorized, except: [:calendar_data]
 
@@ -11,9 +12,6 @@ class GroupsController < ApplicationController
     def index
         authorize Group
 
-        @groups = GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_manage)
-        .resolve.includes(:children).order(:position)
-
         respond_to do |format|
           format.html
           format.json { render json: GroupDatatable.new(view_context, @groups) }
@@ -22,9 +20,6 @@ class GroupsController < ApplicationController
 
     def get_all_groups
       authorize Group, :index?
-
-      @groups = GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_manage)
-      .resolve.includes(:children).order(:position)
 
       respond_to do |format|
         format.json { render json: @groups.map { |g| {id: g.id, text: g.name} }.as_json }
@@ -373,6 +368,11 @@ class GroupsController < ApplicationController
 
     def set_group
        @group = current_user.enterprise.groups.find(params[:id])
+    end
+
+    def set_groups
+      @groups = GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_manage)
+      .resolve.includes(:children).order(:position)
     end
 
     def group_params
