@@ -28,7 +28,7 @@
     function init_select2(selector){
       $(selector).select2({
         ajax: {
-          url: "<%= users_path(user_groups: {accepted_member: 1, group_id: @group.id}, :limit => 10, format: :json) %>",
+          url: "<%= users_path(active: 1, user_groups: {accepted_member: 1, group_id: @group.id}, :limit => 10, format: :json) %>",
           theme: 'bootstrap',
           allowClear: true,
           type: "GET",
