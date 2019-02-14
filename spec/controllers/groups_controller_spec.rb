@@ -135,6 +135,30 @@ RSpec.describe GroupsController, type: :controller do
       it "calls job" do
           expect(GroupsCloseBudgetsDownloadJob).to have_received(:perform_later)
       end
+
+      describe 'public activity' do
+        enable_public_activity
+
+        it 'creates public activity record' do
+          perform_enqueued_jobs do
+            expect{ get :close_budgets_export_csv }.to change(PublicActivity::Activity, :count).by(1)
+          end
+        end
+
+        describe 'activity record' do
+          let(:model) { Enterprise.last }
+          let(:owner) { user }
+          let(:key) { 'enterprise.export_close_budgets' }
+
+          before {
+            perform_enqueued_jobs do
+              get :close_budgets_export_csv
+            end
+          }
+
+          include_examples'correct public activity'
+        end
+      end
     end
 
     context 'when user is not logged in' do
@@ -887,6 +911,33 @@ RSpec.describe GroupsController, type: :controller do
       it "calls the correct job" do
         expect(GroupMemberImportCSVJob).to have_received(:perform_later)
       end
+
+      describe 'public activity' do
+        enable_public_activity
+
+        it 'creates public activity record' do
+          perform_enqueued_jobs do
+            allow(GroupMemberImportCSVJob).to receive(:perform_later)
+            expect{ get :parse_csv, :id => group.id, :file => file }
+            .to change(PublicActivity::Activity, :count).by(1)
+          end
+        end
+
+        describe 'activity record' do
+          let(:model) { Group.last }
+          let(:owner) { user }
+          let(:key) { 'group.import_csv' }
+
+          before {
+            perform_enqueued_jobs do
+              allow(GroupMemberImportCSVJob).to receive(:perform_later)
+              get :parse_csv, :id => group.id, :file => file
+            end
+          }
+
+          include_examples'correct public activity'
+        end
+      end
     end
 
 
@@ -915,6 +966,30 @@ RSpec.describe GroupsController, type: :controller do
 
       it "calls job" do
           expect(GroupMemberDownloadJob).to have_received(:perform_later)
+      end
+
+      describe 'public activity' do
+        enable_public_activity
+
+        it 'creates public activity record' do
+          perform_enqueued_jobs do
+            expect{ get :export_csv, :id => group.id }.to change(PublicActivity::Activity, :count).by(1)
+          end
+        end
+
+        describe 'activity record' do
+          let(:model) { Group.last }
+          let(:owner) { user }
+          let(:key) { 'group.export_members' }
+
+          before {
+            perform_enqueued_jobs do
+              get :export_csv, :id => group.id
+            end
+          }
+
+          include_examples'correct public activity'
+        end
       end
     end
 
@@ -989,28 +1064,28 @@ RSpec.describe GroupsController, type: :controller do
   end
 
   describe 'POST#sort' do
-    context 'with logged in user' do 
+    context 'with logged in user' do
       let!(:group1) { create(:group, enterprise: enterprise) }
       let!(:group2) { create(:group, enterprise: enterprise) }
       let!(:group3) { create(:group, enterprise: enterprise) }
 
       login_user_from_let
 
-      before do 
+      before do
         group_ids = enterprise.groups.pluck(:id).map(&:to_s)
         params = { "group" => group_ids }
         post :sort, params
       end
 
-      it 'render nothing' do 
+      it 'render nothing' do
         expect(response).to render_template(nil)
-      end  
+      end
 
-      it 'apply sorting by assigning an integer to position attribute for each group' do 
+      it 'apply sorting by assigning an integer to position attribute for each group' do
         expect(group1.reload.position).to_not be_nil
         expect(group2.reload.position).to_not be_nil
         expect(group3.reload.position).to_not be_nil
       end
-    end 
+    end
   end
 end
