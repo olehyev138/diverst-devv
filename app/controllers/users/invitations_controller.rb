@@ -28,6 +28,7 @@ class Users::InvitationsController < Devise::InvitationsController
       invitable.info.merge(fields: invitable.enterprise.fields, form_data: params['custom-fields'])
       invitable.auth_source = 'manual'
       invitable.save
+      track_activity(invitable, :create) # user create action
     end
   end
 

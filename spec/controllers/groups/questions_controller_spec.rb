@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Groups::QuestionsController, type: :controller do
+    include ActiveJob::TestHelper
+
     let(:user) { create :user }
     let(:group){ create(:group, enterprise: user.enterprise) }
 
@@ -126,6 +128,30 @@ RSpec.describe Groups::QuestionsController, type: :controller do
 
             it "calls job" do
                 expect(GroupQuestionsDownloadJob).to have_received(:perform_later)
+            end
+
+            describe 'public activity' do
+              enable_public_activity
+
+              it 'creates public activity record' do
+                perform_enqueued_jobs do
+                  expect{ get :export_csv, group_id: group.id, format: :csv }.to change(PublicActivity::Activity, :count).by(1)
+                end
+              end
+
+              describe 'activity record' do
+                let(:model) { Group.last }
+                let(:owner) { user }
+                let(:key) { 'group.export_questions' }
+
+                before {
+                  perform_enqueued_jobs do
+                    get :export_csv, group_id: group.id, format: :csv
+                  end
+                }
+
+                include_examples'correct public activity'
+              end
             end
         end
 

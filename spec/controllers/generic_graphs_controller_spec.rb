@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe GenericGraphsController, type: :controller do
+    include ActiveJob::TestHelper
+
     let(:enterprise) { create(:enterprise) }
     let(:user) { create(:user, enterprise: enterprise, active: true) }
     let!(:field) { create(:field, type: "NumericField", enterprise: enterprise, elasticsearch_only: false) }
@@ -69,6 +71,16 @@ RSpec.describe GenericGraphsController, type: :controller do
                 it "calls job" do
                     expect(GenericGraphsGroupPopulationDownloadJob).to have_received(:perform_later)
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{ get :group_population, format: :csv }.to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+                end
             end
         end
 
@@ -128,6 +140,16 @@ RSpec.describe GenericGraphsController, type: :controller do
 
                 it "calls job" do
                     expect(GenericGraphsSegmentPopulationDownloadJob).to have_received(:perform_later)
+                end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{ get :segment_population, format: :csv }.to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
                 end
             end
         end
@@ -207,6 +229,16 @@ RSpec.describe GenericGraphsController, type: :controller do
                 it "calls job" do
                     expect(GenericGraphsEventsCreatedDownloadJob).to have_received(:perform_later)
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{ get :events_created, format: :csv }.to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+                end
             end
         end
 
@@ -284,6 +316,16 @@ RSpec.describe GenericGraphsController, type: :controller do
 
                 it "calls job" do
                     expect(GenericGraphsMessagesSentDownloadJob).to have_received(:perform_later)
+                end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{ get :messages_sent, format: :csv }.to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
                 end
             end
         end
@@ -363,6 +405,16 @@ RSpec.describe GenericGraphsController, type: :controller do
                 it "calls job" do
                     expect(GenericGraphsMentorshipDownloadJob).to have_received(:perform_later)
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{ get :mentorship, format: :csv }.to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+                end
             end
         end
 
@@ -441,6 +493,16 @@ RSpec.describe GenericGraphsController, type: :controller do
                 it "calls job" do
                     expect(GenericGraphsMentoringSessionsDownloadJob).to have_received(:perform_later)
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{ get :mentoring_sessions, format: :csv }.to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+                end
             end
         end
 
@@ -511,6 +573,16 @@ RSpec.describe GenericGraphsController, type: :controller do
                 it "calls job" do
                     expect(GenericGraphsMentoringInterestsDownloadJob).to have_received(:perform_later)
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{ get :mentoring_interests, format: :csv }.to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+                end
             end
         end
 
@@ -577,6 +649,16 @@ RSpec.describe GenericGraphsController, type: :controller do
                 it "calls job" do
                     expect(GenericGraphsTopGroupsByViewsDownloadJob).to have_received(:perform_later)
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{ get :top_groups_by_views, format: :csv }.to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+                end
             end
         end
 
@@ -638,6 +720,16 @@ RSpec.describe GenericGraphsController, type: :controller do
 
                 it "calls job" do
                     expect(GenericGraphsTopFoldersByViewsDownloadJob).to have_received(:perform_later)
+                end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{ get :top_folders_by_views, format: :csv }.to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
                 end
             end
         end
@@ -701,6 +793,16 @@ RSpec.describe GenericGraphsController, type: :controller do
                 it "calls job" do
                     expect(GenericGraphsTopResourcesByViewsDownloadJob).to have_received(:perform_later)
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{ get :top_resources_by_views, format: :csv }.to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+                end
             end
         end
 
@@ -762,6 +864,16 @@ RSpec.describe GenericGraphsController, type: :controller do
 
                 it "calls job" do
                     expect(GenericGraphsTopNewsByViewsDownloadJob).to have_received(:perform_later)
+                end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{ get :top_news_by_views, format: :csv }.to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
                 end
             end
         end
