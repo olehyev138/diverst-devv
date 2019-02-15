@@ -221,4 +221,28 @@ RSpec.describe Enterprise, type: :model do
             expect(enterprise.resources_count).to eq (20)
         end
     end
+    
+    describe "#redirect_email_contact" do
+        it "does not save bad email" do
+            enterprise = build(:enterprise, :redirect_email_contact => "fkakaodsd")
+            enterprise.save
+            
+            expect(enterprise.errors.full_messages.count).to eq(1)
+            expect(enterprise.errors.full_messages.first).to eq("Redirect email contact is invalid")
+        end
+        
+        it "does save email" do
+            enterprise = build(:enterprise, :redirect_email_contact => "test@gmail.com")
+            enterprise.save
+            
+            expect(enterprise.errors.full_messages.count).to eq(0)
+        end
+        
+        it "allows blank email" do
+            enterprise = build(:enterprise, :redirect_email_contact => "")
+            enterprise.save
+            
+            expect(enterprise.errors.full_messages.count).to eq(0)
+        end
+    end
 end

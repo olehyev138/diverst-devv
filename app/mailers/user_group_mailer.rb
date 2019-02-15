@@ -3,10 +3,12 @@ class UserGroupMailer < ApplicationMailer
     @user = user
     @groups = groups
     @custom_text = user.enterprise.custom_text rescue CustomText.new
+    @email = @user.email
+    return if @user.enterprise.disable_emails?
     
     set_defaults(user.enterprise, method_name)
 
-    mail(from: @from_address, to: @user.email, subject: @subject)
+    mail(from: @from_address, to: @email, subject: @subject)
   end
 
   def variables

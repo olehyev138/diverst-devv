@@ -4,6 +4,8 @@ class CampaignMailer < ApplicationMailer
     @user = @invitation.user
     @campaign = @invitation.campaign
     @enterprise = @user.enterprise
+    return if @enterprise.disable_emails?
+    @email = @user.email
     
     @group_names = 'us'
     if inv.campaign.groups.any?
@@ -12,7 +14,7 @@ class CampaignMailer < ApplicationMailer
 
     set_defaults(@user.enterprise, method_name)
 
-    mail(from: @from_address, to: @user.email, subject: @subject)
+    mail(from: @from_address, to: @email, subject: @subject)
 
     inv.email_sent = true
     inv.save!

@@ -4,11 +4,13 @@ class BudgetMailer < ApplicationMailer
     @budget = budget
     @group = budget.group
     @enterprise = @group.enterprise
+    return if @enterprise.disable_emails?
     @custom_text = @enterprise.custom_text rescue CustomText.new
-
+    @email = @user.email
+    
     set_defaults(@enterprise, method_name)
     
-    mail(from: @from_address, to: @user.email, subject: @subject)
+    mail(from: @from_address, to: @email, subject: @subject)
   end
 
   def budget_approved(budget)
@@ -16,11 +18,13 @@ class BudgetMailer < ApplicationMailer
     @group = budget.group
     @user = budget.requester
     @enterprise = @group.enterprise
+    return if @enterprise.disable_emails?
     @custom_text = @enterprise.custom_text rescue CustomText.new
-
+    @email = @user.email
+    
     set_defaults(@enterprise, method_name)
 
-    mail(to: @user.email, subject: @subject)
+    mail(to: @email, subject: @subject)
   end
 
   def budget_declined(budget)
@@ -28,11 +32,13 @@ class BudgetMailer < ApplicationMailer
     @group = budget.group
     @user = budget.requester
     @enterprise = @group.enterprise
+    return if @enterprise.disable_emails?
     @custom_text = @enterprise.custom_text rescue CustomText.new
-
+    @email = @user.email
+    
     set_defaults(@enterprise, method_name)
 
-    mail(to: @user.email, subject: @subject)
+    mail(to: @email, subject: @subject)
   end
 
   def variables

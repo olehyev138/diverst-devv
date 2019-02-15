@@ -1,5 +1,6 @@
 class ClockworkDatabaseEvent < ActiveRecord::Base
-
+    include PublicActivity::Common
+    
     # associations
     belongs_to :frequency_period
     belongs_to :enterprise
@@ -48,8 +49,8 @@ class ClockworkDatabaseEvent < ActiveRecord::Base
     # checks if the event should execute
     def if?
         return false if disabled?
-        return false if day && Time.now.in_time_zone(tz).strftime("%A").downcase != day
-        return false if at && Time.now.in_time_zone(tz).strftime('%H:%M') != at
+        return false if !day.blank? && Time.now.in_time_zone(tz).strftime("%A").downcase != day
+        return false if !at.blank? && Time.now.in_time_zone(tz).strftime('%H:%M') != at
         return true
     end
 
