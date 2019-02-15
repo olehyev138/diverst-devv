@@ -77,6 +77,8 @@ class Enterprise < BaseClass
 
     has_attached_file :onboarding_sponsor_media, s3_permissions: :private
     do_not_validate_attachment_file_type :onboarding_sponsor_media
+    
+    validates_format_of   :redirect_email_contact, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: true
 
     def custom_text
         super || create_custom_text

@@ -16,8 +16,10 @@ class Campaign < BaseClass
     has_many :answer_comments, through: :questions
     has_many :campaigns_managers, dependent: :destroy
     has_many :managers, through: :campaigns_managers, source: :user
+    has_many :sponsors, as: :sponsorable, dependent: :destroy
 
     accepts_nested_attributes_for :questions, reject_if: :all_blank, allow_destroy: true
+    accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
 
     has_attached_file :image, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: "private"
     validates_attachment_content_type :image, content_type: %r{\Aimage\/.*\Z}

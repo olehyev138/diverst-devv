@@ -1,4 +1,6 @@
-class Email < BaseClass
+class Email < ActiveRecord::Base
+  include PublicActivity::Common
+
   # associations
   belongs_to :enterprise
   

@@ -65,6 +65,7 @@ class Initiative < BaseClass
   validates :max_attendees, numericality: { greater_than: 0, allow_nil: true }
   validate :check_budget
   validate :segment_enterprise
+  validates_presence_of :pillar
 
   settings do
     mappings dynamic: false do

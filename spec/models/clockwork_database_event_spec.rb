@@ -34,6 +34,11 @@ RSpec.describe ClockworkDatabaseEvent, type: :model do
             clockwork_database_event = create(:clockwork_database_event, :disabled => false)
             expect(clockwork_database_event.if?).to eq(true)
         end
+        
+        it "returns true when disabled is false but at and day are empty strings" do
+            clockwork_database_event = create(:clockwork_database_event, :disabled => false, :day => "", :at => "")
+            expect(clockwork_database_event.if?).to eq(true)
+        end
 
         it "returns false when day is monday but current day is saturday" do
             allow(Time).to receive(:now).and_return Time.new(2018,7,14)

@@ -22,12 +22,12 @@
         <p>NOTE: Sponsor details are optional. However, if you wish to fill in this part, at least the sponsor name must be entered.</p>
 
         <%= f.simple_fields_for :sponsors do |s| %>
-          <%= render 'sponsor_fields', f: s %>
+          <%= render 'shared/sponsors/sponsor_fields', f: s %>
         <% end %>
 
         
         <div class="group_sponsor_link">
-          <%= link_to_add_association "Add a sponsor", f, :sponsors %>
+          <%= link_to_add_association "Add a sponsor", f, :sponsors, partial: 'shared/sponsors/sponsor_fields' %>
         </div>
         <br>
         

@@ -40,6 +40,7 @@ RSpec.describe Initiative, type: :model do
 
     it { expect(initiative).to validate_presence_of(:start) }
     it { expect(initiative).to validate_presence_of(:end) }
+    it { expect(initiative).to validate_presence_of(:pillar) }
     it { expect(initiative).to validate_numericality_of(:max_attendees).is_greater_than(0).allow_nil }
     it { expect(initiative).to have_many(:resources) }
     it { expect(initiative).to have_many(:segments).through(:initiative_segments) }
@@ -133,7 +134,7 @@ RSpec.describe Initiative, type: :model do
   end
 
   describe 'budgeting' do
-    let(:group) { build(:group) }
+    let(:group) { create(:group) }
 
     context 'without funds' do
       let(:initiative) { build(:initiative, owner_group: group, estimated_funding: 0) }

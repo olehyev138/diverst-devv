@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Group, :type => :model do
     include ActiveJob::TestHelper
-    
+
     describe 'validations' do
         let(:group) { FactoryGirl.build_stubbed(:group) }
 
@@ -53,6 +53,7 @@ RSpec.describe Group, :type => :model do
         it { expect(group).to have_many(:survey_fields).class_name('Field').dependent(:delete_all) }
         it { expect(group).to have_many(:group_leaders) }
         it { expect(group).to have_many(:leaders).through(:group_leaders).source(:user) }
+        it { expect(group).to have_many(:sponsors) }
         it { expect(group).to have_many(:children).class_name('Group').with_foreign_key(:parent_id) }
         it { expect(group).to belong_to(:parent).class_name('Group').with_foreign_key(:parent_id) }
 
@@ -68,7 +69,7 @@ RSpec.describe Group, :type => :model do
           it { expect(group).to validate_attachment_content_type(attribute).allowing('image/png', 'image/gif').rejecting('text/plain', 'text/xml') }
         end
 
-        [:outcomes, :fields, :survey_fields, :group_leaders].each do |attribute|
+        [:outcomes, :fields, :survey_fields, :group_leaders, :sponsors].each do |attribute|
            it { expect(group).to accept_nested_attributes_for(attribute).allow_destroy(true) }
         end
 
@@ -604,10 +605,10 @@ RSpec.describe Group, :type => :model do
             group = create(:group)
             user = create(:user)
             create(:user_group, :group => group, :user => user)
-            
+
             perform_enqueued_jobs do
                 expect_any_instance_of(GroupUpdateJob).to receive(:perform)
-                
+
                 group.name = "testing elasticsearch"
                 group.save!
             end
@@ -633,7 +634,7 @@ RSpec.describe Group, :type => :model do
             create(:user_group, :user => user, :group => group, :accepted_member => true)
 
             create(:group_leader, :group => group, :user => user, :default_group_contact => false)
-            
+
             expect(group.contact_email).to eq nil
         end
     end
@@ -649,16 +650,16 @@ RSpec.describe Group, :type => :model do
             expect(enterprise.groups.non_private.count).to eq(3)
         end
     end
-    
+
     describe '#total_views' do
         it "returns 10" do
             group = create(:group)
             create_list(:view, 10, :group => group)
-            
+
             expect(group.total_views).to eq(10)
         end
     end
-    
+
     describe "#destroy_callbacks" do
         it "removes the child objects" do
             group = create(:group)
@@ -683,9 +684,9 @@ RSpec.describe Group, :type => :model do
             create(:user_group, :user => user, :group => group, :accepted_member => true)
             group_leader = create(:group_leader, :group => group, :user => user)
             child = create(:group, :parent => group)
-            
+
             group.destroy!
-            
+
             expect{Group.find(group.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{NewsFeed.find(news_feed.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{UserGroup.find(user_group.id)}.to raise_error(ActiveRecord::RecordNotFound)
@@ -708,36 +709,36 @@ RSpec.describe Group, :type => :model do
             expect{Group.find(child.id)}.to raise_error(ActiveRecord::RecordNotFound)
         end
     end
-    
+
     describe '#default_mentor_group' do
         it "ensures there aren't duplicate default_mentor_groups for enterprises" do
             enterprise_1 = create(:enterprise)
             group_1 = create(:group, :enterprise => enterprise_1)
             group_2 = create(:group, :enterprise => enterprise_1)
-            
+
             enterprise_2 = create(:enterprise)
             group_3 = create(:group, :enterprise => enterprise_2)
             group_4 = create(:group, :enterprise => enterprise_2)
-            
+
             group_1.default_mentor_group = true
             group_1.save!
-            
+
             expect(group_1.valid?).to be true
-            
+
             group_2.default_mentor_group = true
             expect(group_2.valid?).to be false
             expect(group_2.errors.full_messages.first).to eq ("Default mentor group has already been taken")
-            
+
             group_3.default_mentor_group = true
             group_3.save!
-            
+
             expect(group_3.valid?).to be true
-            
+
             group_4.default_mentor_group = true
             expect(group_4.valid?).to be false
         end
     end
-    
+
     describe "#name" do
         it "validates group cannot have duplicate names per enterprise" do
             enterprise = create(:enterprise)
@@ -745,14 +746,14 @@ RSpec.describe Group, :type => :model do
             group = create(:group, :enterprise => enterprise)
             group_2 = build(:group, :name => group.name, :enterprise => enterprise)
             group_3 = create(:group, :name => group.name, :enterprise => enterprise_2)
-            
+
             # validate that the first group is valid
             expect(group.valid?).to be(true)
-            
-            # validate that the second group is not valid since a group cannot have 
+
+            # validate that the second group is not valid since a group cannot have
             # the same name as another group in the same enterprise
             expect(group_2.valid?).to_not be(true)
-            
+
             # validate that the third group is valid since a group can have the same
             # as another group in another enterprise
             expect(group_3.valid?).to be(true)

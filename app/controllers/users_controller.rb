@@ -110,6 +110,7 @@ class UsersController < ApplicationController
     @email = ENV['CSV_UPLOAD_REPORT_EMAIL']
 
     if file.save
+      track_activity(current_user, :import_csv)
       @success = true
       @message = '@success'
     else
@@ -122,6 +123,7 @@ class UsersController < ApplicationController
   def export_csv
     authorize User, :index?
     UsersDownloadJob.perform_later(current_user.id)
+    track_activity(current_user, :export_csv)
     flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
     redirect_to :back
   end
