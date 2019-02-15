@@ -36,7 +36,6 @@ class GenericGraphsController < ApplicationController
   end
 
   def non_demo_events_created
-    # TODO: deal with defaults/blank input
     date_range = parse_date_range(params[:input])
 
     respond_to do |format|
@@ -66,7 +65,7 @@ class GenericGraphsController < ApplicationController
 
   def non_demo_messages_sent
     # set days to input if passed, otherwise default to 30
-    days = ((params[:input] =~ /\A-?\d+\Z/) ? params[:input] : '30')
+    date_range = parse_date_range(params[:input])
 
     respond_to do |format|
       format.json {
@@ -74,7 +73,7 @@ class GenericGraphsController < ApplicationController
         graph.enterprise_filter = { 'group.enterprise_id' => current_user.enterprise_id }
 
         graph.query = graph.query.terms_agg(field: 'group.name') { |q|
-          q.date_range_agg(field: 'created_at', range: { from: "now-#{days}d/d"})
+          q.date_range_agg(field: 'created_at', range: date_range)
         }
 
         graph.formatter = graph.get_custom_formatter
@@ -96,7 +95,7 @@ class GenericGraphsController < ApplicationController
 
   def non_demo_top_groups_by_views
     # set days to input if passed, otherwise default to 30
-    days = ((params[:input] =~ /\A-?\d+\Z/) ? params[:input] : '30')
+    date_range = parse_date_range(params[:input])
 
     respond_to do |format|
       format.json {
@@ -104,7 +103,7 @@ class GenericGraphsController < ApplicationController
         graph.enterprise_filter = { 'enterprise_id' => current_user.enterprise_id }
 
         graph.query = graph.query.terms_agg(field: 'group.name') { |q|
-          q.date_range_agg(field: 'created_at', range: { from: "now-#{days}d/d"})
+          q.date_range_agg(field: 'created_at', range: date_range)
         }
 
         graph.formatter = graph.get_custom_formatter
@@ -125,8 +124,7 @@ class GenericGraphsController < ApplicationController
   end
 
   def non_demo_top_folders_by_views
-    # set days to input if passed, otherwise default to 30
-    days = ((params[:input] =~ /\A-?\d+\Z/) ? params[:input] : '30')
+    date_range = parse_date_range(params[:input])
 
     respond_to do |format|
       format.json {
@@ -134,7 +132,7 @@ class GenericGraphsController < ApplicationController
         graph.enterprise_filter = { 'enterprise_id' => current_user.enterprise_id }
 
         graph.query = graph.query.terms_agg(field: 'folder.id') { |q|
-          q.date_range_agg(field: 'created_at', range: { from: "now-#{days}d/d"}) { |qq|
+          q.date_range_agg(field: 'created_at', range: date_range) { |qq|
             qq.top_hits_agg
           }
         }
@@ -168,20 +166,15 @@ class GenericGraphsController < ApplicationController
   end
 
   def non_demo_top_resources_by_views
-    # set days to input if passed, otherwise default to 30
-    days = ((params[:input] =~ /\A-?\d+\Z/) ? params[:input] : '30')
+    date_range = parse_date_range(params[:input])
 
     respond_to do |format|
       format.json {
         graph = View.get_graph
         graph.enterprise_filter = { 'enterprise_id' => current_user.enterprise_id }
 
-#        graph.query = graph.query.terms_agg(field: 'folder.id') { |q|
-#          q.date_range_agg(field: 'created_at', range: { from: "now-#{days}d/d"}) { |qq| qq.top_hits_agg }
-#        }
-
         graph.query = graph.query.terms_agg(field: 'resource.id') { |q|
-          q.date_range_agg(field: 'created_at', range: { from: "now-#{days}d/d"}) { |qq|
+          q.date_range_agg(field: 'created_at', range: date_range) { |qq|
             qq.top_hits_agg
           }
         }
@@ -214,8 +207,7 @@ class GenericGraphsController < ApplicationController
   end
 
   def non_demo_top_news_by_views
-    # set days to input if passed, otherwise default to 30
-    days = ((params[:input] =~ /\A-?\d+\Z/) ? params[:input] : '30')
+    date_range = parse_date_range(params[:input])
 
     respond_to do |format|
       format.json {
@@ -223,7 +215,7 @@ class GenericGraphsController < ApplicationController
         graph.enterprise_filter = { 'enterprise_id' => current_user.enterprise_id }
 
         graph.query = graph.query.terms_agg(field: 'news_feed_link.news_link.id') { |q|
-          q.date_range_agg(field: 'created_at', range: { from: "now-#{days}d/d"}) { |qq|
+          q.date_range_agg(field: 'created_at', range: date_range) { |qq|
             qq.top_hits_agg
           }
         }
@@ -257,8 +249,6 @@ class GenericGraphsController < ApplicationController
 
   def growth_of_groups
     respond_to do |format|
-      # TODO: confirm were not including enterprise resources/folders
-
       format.json {
         graph = UserGroup.get_graph
         graph.enterprise_filter = { 'group.enterprise_id' => current_user.enterprise_id }
@@ -266,7 +256,7 @@ class GenericGraphsController < ApplicationController
         graph.formatter.title = 'Growth of Groups'
         graph.formatter.type = 'line'
         graph.formatter.element_formatter = -> (e, *args) {
-          { label: Date.parse(e[:key_as_string]).strftime('%Y-%m-%d'),
+          { label: e[:key],
             value: args[0] , # args[0] -> total so far
             key: 'series0' }
         }
@@ -748,18 +738,16 @@ class GenericGraphsController < ApplicationController
 
   private
 
-  def parse_date_range(date_range)
+  def parse_date_range(date_range, default_date_range: '1m')
     # Parse a date range from a frontend range_controller for a es date range aggregation
-    # TODO: sophisticate this somewhat
-    # TODO: change default
 
-    return {from: 'now-30d/d'} unless date_range.present?
+    date_range_string = (date_range.present? ?
+      date_range[:date_range] : default_date_range).downcase
 
-    dr = date_range[:date_range]
-    es_date_range = case dr.downcase
-                    when '1m'     then { from: 'now-1m/m' }
-                    when '3m'     then { from: 'now-3m/m' }
-                    when '6m'     then { from: 'now-3m/m' }
+    es_date_range = case date_range_string
+                    when '1m'     then { from: 'now-1M/M' }
+                    when '3m'     then { from: 'now-3M/M' }
+                    when '6m'     then { from: 'now-3M/M' }
                     when 'ytd'    then { from: Time.now.beginning_of_year.strftime('%Y-%m-%d') }
                     when '1y'     then { from: 'now-1y/y' }
                     when 'all'    then { from: 'now-200y/y' }

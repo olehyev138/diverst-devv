@@ -12,18 +12,17 @@ class Graph {
         this.chartsColor = CHARTS_COLOR || this.brandingColor;
 
         var self = this;
-        if ($($graph_input).length) {
-            if ($graph_input.attr('id') == 'range-selector') {
-                var rangeSelector = new RangeSelector($graph_input[0], function (input) {
-                    self.updateData(input);
-                });
-            }
+        if ($($graph_input).length && ($graph_input.attr('id') == 'range-selector')) {
+            // if theres a range selector, instantiate it and set callback
+            var rangeSelector = new RangeSelector($graph_input[0], function (input) {
+                self.updateData(input);
+            });
         }
 
         this.updateData();
     }
 
-    updateData(input='') {
+    updateData(input={}) {
         $.get(this.dataUrl, { input: input }, (data) => {
             this.onDataUpdate(data);
         });
@@ -106,13 +105,8 @@ class Graph {
          */
 
         var svg = this.$element[0].children[0];
-        var chart = null;
-
         var series = this.data.series;
-
-        var series_m = [series[0]];
-
-        console.log(series_m);
+        var chart = null;
 
         nv.addGraph(function() {
             chart = nv.models.lineWithFocusChart()
@@ -120,11 +114,19 @@ class Graph {
                 .x(function (d) { return d.label; }) // set the json keys for x & y values
                 .y(function (d) { return d.value; });
 
+            chart.xAxis.tickFormat(function(d) {
+                return d3.time.format('%x')(new Date(d));
+            });
+
+            chart.x2Axis.tickFormat(function(d) {
+                return d3.time.format('%x')(new Date(d));
+            });
+
             chart.yAxis
                 .tickFormat(d3.format('d'));
 
             d3.select(svg)
-                .datum(series_m)
+                .datum(series)
                 .transition().duration(500)
                 .call(chart);
 
