@@ -321,6 +321,9 @@ ActiveRecord::Schema.define(version: 20190128204226) do
     t.string   "default_from_email_address",            limit: 191
     t.string   "default_from_email_display_name",       limit: 191
     t.boolean  "enable_social_media",                                 default: false
+    t.boolean  "redirect_all_emails",                                 default: false
+    t.string   "redirect_email_contact",                limit: 191
+    t.boolean  "disable_emails",                                      default: false
   end
 
   create_table "expense_categories", force: :cascade do |t|
