@@ -36,8 +36,8 @@ class GenericGraphsController < ApplicationController
   end
 
   def non_demo_events_created
-    # set days to input if passed, otherwise default to 30
-    days = ((params[:input] =~ /\A-?\d+\Z/) ? params[:input] : '30')
+    # TODO: deal with defaults/blank input
+    date_range = parse_date_range(params[:input])
 
     respond_to do |format|
       format.json{
@@ -45,7 +45,7 @@ class GenericGraphsController < ApplicationController
         graph.enterprise_filter = { 'pillar.outcome.group.enterprise_id' => current_user.enterprise_id }
 
         graph.query = graph.query.terms_agg(field: 'pillar.outcome.group.name') { |q|
-          q.date_range_agg(field: 'created_at', range: { from: "now-#{days}d/d"})
+          q.date_range_agg(field: 'created_at', range: date_range)
         }
 
         graph.formatter = graph.get_custom_formatter
@@ -747,6 +747,26 @@ class GenericGraphsController < ApplicationController
   end
 
   private
+
+  def parse_date_range(date_range)
+    # Parse a date range from a frontend range_controller for a es date range aggregation
+    # TODO: sophisticate this somewhat
+    # TODO: change default
+
+    return {from: 'now-30d/d'} unless date_range.present?
+
+    dr = date_range[:date_range]
+    es_date_range = case dr.downcase
+                    when '1m'     then { from: 'now-1m/m' }
+                    when '3m'     then { from: 'now-3m/m' }
+                    when '6m'     then { from: 'now-3m/m' }
+                    when 'ytd'    then { from: Time.now.beginning_of_year.strftime('%Y-%m-%d') }
+                    when '1y'     then { from: 'now-1y/y' }
+                    when 'all'    then { from: 'now-200y/y' }
+                    end
+
+    es_date_range
+  end
 
   def graph_params
     params.permit(

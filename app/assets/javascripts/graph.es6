@@ -11,14 +11,14 @@ class Graph {
         this.brandingColor = BRANDING_COLOR || $('.primary-header').css('background-color') || '#7B77C9';
         this.chartsColor = CHARTS_COLOR || this.brandingColor;
 
-        // set callback for a graph input if it exists
         var self = this;
-        if ($($graph_input).length)
-            $($graph_input).keypress(function(e) {
-                if (e.which == 13) {
-                    self.updateData($graph_input.val());
-                }
-            });
+        if ($($graph_input).length) {
+            if ($graph_input.attr('id') == 'range-selector') {
+                var rangeSelector = new RangeSelector($graph_input[0], function (input) {
+                    self.updateData(input);
+                });
+            }
+        }
 
         this.updateData();
     }
@@ -54,8 +54,6 @@ class Graph {
         var series = this.data.series;
         var svg = this.$element[0].children[0];
         var chart = null;
-
-        console.log(series);
 
         nv.addGraph(function() {
             chart = nv.models.multiBarChart()

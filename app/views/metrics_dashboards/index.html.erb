@@ -74,8 +74,8 @@
     <div class="col sm-12 md-6">
       <div class="card">
         <div class="card__section">
-            <h4>Events created in the last </h4>
-            <input class="graph-input" type="text" value="30"></input>
+          <h4>Events created in the last </h4>
+          <%= render 'components/range_selector' %>
           <div class="card__action">
             <%= link_to "Export CSV", events_created_generic_graphs_path(format: :csv), class: "hidden-xs" %>
           </div>
@@ -287,14 +287,3 @@
     </div>
   </div>
 </div>
-
-<script>
- function growth_graph_onclick() {
-   var from_date = $('input.highcharts-range-selector:eq(0)').val();
-   var to_date = $('input.highcharts-range-selector:eq(1)').val();
-
-   window.location.href =
-     '<%= growth_of_groups_generic_graphs_path(format: :csv) %>' +
-     '?from_date=' + from_date + '&to_date=' + to_date;
- }
-</script>

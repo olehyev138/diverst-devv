@@ -1,10 +1,8 @@
-/* global $ */
-
 $(document).on('ready page:load', function() {
     var graphs = [];
 
     $('.graph').each(function() {
-        // search upwards for a graph input, pass to graph instance
+        // search for a graph_input and pass to Graph
         var $graph_input = $(this).siblings('.graph-input');
         var graph = new Graph($(this).data('url'), $(this), $graph_input);
 
