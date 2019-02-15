@@ -19,10 +19,16 @@
       <div class="card__section card__section--border">
         <%= f.input :name, label: "<strong>Name</strong> your dashboard".html_safe %>
       </div>
+
+      <div class="card__section card__section--border">
+        <%= f.association :shared_users,
+              label: 'Share with other <strong>Users</strong>'.html_safe,
+              input_html: { class: "select2-field-users", multiple: true } %>
+      </div>
     </div>
 
     <%= f.button :submit %>
   <% end %>
 </div>
 
-<%= render partial: 'shared/select2_ajax_search.js.erb' %> 
+<%= render partial: 'shared/select2_ajax_search.js.erb' %>

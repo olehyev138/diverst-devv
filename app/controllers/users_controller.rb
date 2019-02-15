@@ -9,6 +9,10 @@ class UsersController < ApplicationController
 
     @users = policy_scope(User).includes(:policy_group, :user_groups, :group_leaders).where(search_params).limit(params[:limit] || 25)
 
+    if extra_params[:not_current_user]
+      @users = @users.where.not(id: current_user.id)
+    end
+
     respond_to do |format|
       format.html
       format.json { render json: UserDatatable.new(view_context, @users) }
@@ -252,5 +256,9 @@ class UsersController < ApplicationController
 
   def search_params
     params.permit(:active, :mentor, :mentee, policy_groups: [:budget_approval], user_groups: [:accepted_member, :group_id], group_leaders: [:budget_approval])
+  end
+
+  def extra_params
+    params.permit(:not_current_user)
   end
 end

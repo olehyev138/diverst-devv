@@ -2,8 +2,10 @@ class MetricsDashboardsController < ApplicationController
   before_action :authenticate_user!, except: [:shared_dashboard]
   after_action :verify_authorized, except: [:shared_dashboard]
   before_action :set_metrics_dashboard, except: [:index, :new, :create, :shared_dashboard]
+  after_action :add_shared_dashboards, only: [:create, :update]
+  after_action :remove_shared_dashboards, only: [:update]
   layout 'erg_manager'
-  
+
   def index
     authorize MetricsDashboard
 
@@ -28,7 +30,7 @@ class MetricsDashboardsController < ApplicationController
 
   def create
     authorize MetricsDashboard
-    @metrics_dashboard = current_user.enterprise.metrics_dashboards.new(metrics_dashboard_params)
+    @metrics_dashboard = current_user.enterprise.metrics_dashboards.new(metrics_dashboard_params.except(:shared_user_ids))
     @metrics_dashboard.owner = current_user
 
     if @metrics_dashboard.save
@@ -69,7 +71,7 @@ class MetricsDashboardsController < ApplicationController
   def update
     authorize @metrics_dashboard
 
-    if @metrics_dashboard.update(metrics_dashboard_params)
+    if @metrics_dashboard.update(metrics_dashboard_params.except(:shared_user_ids))
       track_activity(@metrics_dashboard, :update)
       flash[:notice] = "Your dashboard was updated"
       redirect_to action: :index
@@ -80,11 +82,18 @@ class MetricsDashboardsController < ApplicationController
   end
 
   def destroy
-    authorize @metrics_dashboard
+    unless @metrics_dashboard.is_user_shared?(current_user)
+      authorize @metrics_dashboard
 
-    track_activity(@metrics_dashboard, :destroy)
-    @metrics_dashboard.destroy
-    redirect_to action: :index
+      track_activity(@metrics_dashboard, :destroy)
+      @metrics_dashboard.destroy
+      redirect_to action: :index
+    else
+      authorize @metrics_dashboard, :index?
+
+      @metrics_dashboard.shared_metrics_dashboards.destroy(SharedMetricsDashboard.find_by(user_id: current_user.id))
+      redirect_to action: :index
+    end
   end
 
   # no route for this action
@@ -93,6 +102,26 @@ class MetricsDashboardsController < ApplicationController
   end
 
   protected
+
+  def add_shared_dashboards
+    metrics_dashboard_params[:shared_user_ids].each do |user_id|
+      user = User.find_by_id(user_id)
+
+      # Only add association if user exists and belongs to the same enterprise
+      next if (!user) || (user.enterprise != @metrics_dashboard.enterprise)
+      next if SharedMetricsDashboard.where(:user_id => user_id, :metrics_dashboard_id => @metrics_dashboard.id).exists?
+
+      SharedMetricsDashboard.create!(metrics_dashboard_id: @metrics_dashboard.id, user_id: user.id)
+    end
+  end
+
+  def remove_shared_dashboards
+    @metrics_dashboard.shared_metrics_dashboards.each do |shared_dashboard|
+      if metrics_dashboard_params[:shared_user_ids].exclude?(shared_dashboard.user_id)
+        @metrics_dashboard.shared_metrics_dashboards.destroy(shared_dashboard)
+      end
+    end
+  end
 
   def set_metrics_dashboard
     @metrics_dashboard = current_user.enterprise.metrics_dashboards.find(params[:id])
@@ -104,7 +133,8 @@ class MetricsDashboardsController < ApplicationController
       .permit(
         :name,
         segment_ids: [],
-        group_ids: []
+        group_ids: [],
+        shared_user_ids: []
       )
   end
 end
