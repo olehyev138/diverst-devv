@@ -8,7 +8,7 @@ class MetricsDashboard < ActiveRecord::Base
   has_many :segments, through: :metrics_dashboards_segments
   has_many :groups_metrics_dashboards, dependent: :destroy
   has_many :groups, through: :groups_metrics_dashboards
-  has_many :shared_metrics_dashboards, dependent: :destroy
+  has_many :shared_metrics_dashboards, dependent: :destroy, validate: false
   has_many :shared_users, through: :shared_metrics_dashboards, source: :user
 
   validates_presence_of :name, :message => "Metrics Dashboard name is required"
