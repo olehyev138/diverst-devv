@@ -738,11 +738,12 @@ class GenericGraphsController < ApplicationController
 
   private
 
-  def parse_date_range(date_range, default_date_range: '1m')
+  def parse_date_range(date_range)
     # Parse a date range from a frontend range_controller for a es date range aggregation
 
-    date_range_string = (date_range.present? ?
-      date_range[:date_range] : default_date_range).downcase
+    default_date_range = 'all'
+
+    date_range_string = (date_range.present? ? date_range[:date_range] : default_date_range)
 
     es_date_range = case date_range_string
                     when '1m'     then { from: 'now-1M/M' }
