@@ -12,6 +12,8 @@ class GroupsController < ApplicationController
     def index
         authorize Group
 
+        @groups = @groups.includes(:children)
+
         respond_to do |format|
           format.html
           format.json { render json: GroupDatatable.new(view_context, @groups) }
@@ -375,7 +377,7 @@ class GroupsController < ApplicationController
 
     def set_groups
       @groups = GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_manage)
-      .resolve.includes(:children).order(:position)
+      .resolve.order(:position)
     end
 
     def group_params
