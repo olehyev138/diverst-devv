@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190128204226) do
+ActiveRecord::Schema.define(version: 20190214193529) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -762,12 +762,12 @@ ActiveRecord::Schema.define(version: 20190128204226) do
   end
 
   create_table "mentorship_sessions", force: :cascade do |t|
-    t.integer  "user_id",              limit: 4,                  null: false
-    t.string   "role",                 limit: 191,                null: false
-    t.integer  "mentoring_session_id", limit: 4,                  null: false
-    t.boolean  "attending",                        default: true
+    t.integer  "user_id",              limit: 4,   null: false
+    t.string   "role",                 limit: 191, null: false
+    t.integer  "mentoring_session_id", limit: 4,   null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "attending"
   end
 
   create_table "mentorship_types", force: :cascade do |t|
@@ -1138,6 +1138,14 @@ ActiveRecord::Schema.define(version: 20190128204226) do
     t.string   "active_users_filter", limit: 191
   end
 
+  create_table "shared_metrics_dashboards", force: :cascade do |t|
+    t.integer "user_id",              limit: 4
+    t.integer "metrics_dashboard_id", limit: 4
+  end
+
+  add_index "shared_metrics_dashboards", ["metrics_dashboard_id"], name: "index_shared_metrics_dashboards_on_metrics_dashboard_id", using: :btree
+  add_index "shared_metrics_dashboards", ["user_id"], name: "index_shared_metrics_dashboards_on_user_id", using: :btree
+
   create_table "shared_news_feed_links", force: :cascade do |t|
     t.integer  "news_feed_link_id", limit: 4, null: false
     t.integer  "news_feed_id",      limit: 4, null: false
@@ -1383,6 +1391,8 @@ ActiveRecord::Schema.define(version: 20190128204226) do
   add_foreign_key "rewards", "enterprises"
   add_foreign_key "rewards", "users", column: "responsible_id"
   add_foreign_key "segmentations", "segments", column: "child_id"
+  add_foreign_key "shared_metrics_dashboards", "metrics_dashboards"
+  add_foreign_key "shared_metrics_dashboards", "users"
   add_foreign_key "user_reward_actions", "reward_actions"
   add_foreign_key "user_reward_actions", "users"
   add_foreign_key "user_rewards", "rewards"
