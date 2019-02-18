@@ -20,6 +20,9 @@ module Clockwork
 
     # reload the events from the database every day
     sync_database_events model: ClockworkDatabaseEvent, every: 30.second do |model_instance|
+        # reloads the model so that the disabled attribute is taken into consideration when determining if
+        # the event should run
+        model_instance.reload
         model_instance.run
     end
 
