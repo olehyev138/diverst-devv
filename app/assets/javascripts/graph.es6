@@ -45,14 +45,21 @@ class Graph {
     }
 
     renderBarChart() {
-        var series = this.data.series;
+        var data = this.data;
+        var series = data.series;
+        var graph_id = $(this.$element).attr('id');
+        var select_string = '#' + graph_id  + ' svg';
+
+        var $drillout_button = $(this.$element).siblings('.drillout_button');
+
         var svg = this.$element[0].children[0];
         var chart = null;
+
 
         nv.addGraph(function() {
             chart = nv.models.multiBarChart()
                 .barColor(d3.scale.category20().range())
-                .duration(300)
+                .duration(160)
                 .rotateLabels(45)
                 .groupSpacing(0.3)
                 .x(function (d) { return d.label; }) // set the json keys for x & y values
@@ -60,37 +67,46 @@ class Graph {
                 .showControls(false)
                 .stacked(false);
 
-            chart.xAxis.showMaxMin(false);
+            chart.xAxis
+                .showMaxMin(false)
+                .axisLabel(data.x_axis)
+                .axisLabelDistance(10);
 
             chart.yAxis
-                .tickFormat(d3.format('d'));
+                .tickFormat(d3.format('d'))
+                .axisLabel(data.y_axis)
+                .axisLabelDistance(10);
 
             chart.reduceXTicks(false)
                  .staggerLabels(true);
 
-            d3.select(svg)
+            d3.select(select_string)
                 .datum(series)
                 .call(chart);
 
             nv.utils.windowResize(chart.update);
 
             chart.multibar.dispatch.on('elementClick', function(e) {
-                if ('children' in e.data && e.data.children.length != 0)
-                    d3.select(svg)
+                if ('children' in e.data && e.data.children.length != 0) {
+                    d3.select(select_string)
                     .datum([e.data.children])
                     .transition().duration(500)
                     .call(chart);
+
+                    $($drillout_button).toggle();
+                }
             });
 
             return chart;
         });
 
-        // TODO: get this working properly
-        d3.selectAll('.drillout_button').on('click', function(){
-            d3.select(svg)
+        $($drillout_button).click(function(){
+            d3.select(select_string)
                 .datum(series)
                 .transition().duration(500)
                 .call(chart);
+
+            $($drillout_button).toggle();
         });
     }
 

@@ -129,10 +129,12 @@ module BaseGraph
   #    - A children hash is a hash with key identifying parent and a list of data points
   #        - Children data points may not have children of there own. This limits the Nvd3 structure to ONE sublevel of datapoints
   class Nvd3Formatter
-    attr_accessor :title, :type
+    attr_accessor :title, :x_axis, :y_axis, :type
 
     def initialize
       @title = 'Default Graph'
+      @x_axis = ''
+      @y_axis = ''
       @type = 'bar'
 
       @data = {
@@ -190,6 +192,8 @@ module BaseGraph
     def format
       # Set these properties here so user can change them beforehand
       @data[:title] = @title
+      @data[:x_axis] = @x_axis
+      @data[:y_axis] = @y_axis
       @data[:type] = @type
 
       # clean data

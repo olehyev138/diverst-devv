@@ -10,7 +10,10 @@ class GenericGraphsController < ApplicationController
         graph = UserGroup.get_graph
         graph.enterprise_filter = { 'group.enterprise_id' => current_user.enterprise_id }
         graph.query  = graph.query.terms_agg(field: 'group.name')
+
         graph.formatter.title = 'Group Population'
+        graph.formatter.y_axis = '# Users'
+        graph.formatter.x_axis = 'Groups'
 
         graph.drilldown_graph(parent_field: 'group.parent.name')
 
@@ -306,17 +309,15 @@ class GenericGraphsController < ApplicationController
   end
 
   def growth_of_resources
-    # TODO: confirm were not including enterprise resources/folders
-
     respond_to do |format|
       format.json {
         graph = Resource.get_graph
         graph.enterprise_filter = { 'folder.group.enterprise_id' => current_user.enterprise_id }
         graph.formatter = graph.get_custom_formatter
         graph.formatter.title = 'Growth of Resources'
-        graph.formatter.type = 'DEBUGNULLEDOUT'
+        graph.formatter.type = 'line'
         graph.formatter.element_formatter = -> (e, *args) {
-          { label: e[:key_as_string], value: args[0] } # args[0] -> total so far
+          { label: e[:key], value: args[0] } # args[0] -> total so far
         }
 
         current_user.enterprise.groups.each do |group|
@@ -325,13 +326,13 @@ class GenericGraphsController < ApplicationController
               q.terms_agg(field: 'created_at', order_field: '_term', order_dir: 'asc')
           }
 
+          graph.formatter.add_series(series_name: group.name)
           total = 0
           elements = graph.search
+
           elements.each { |element|
             graph.formatter.add_element(element, (total += element[:doc_count]))
           }
-
-          graph.formatter.add_series
         end
 
         render json: graph.build
