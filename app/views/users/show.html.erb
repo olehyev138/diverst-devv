@@ -256,6 +256,99 @@
           <div class="card__section card__section--border">
             <h2><%= template.user_role.role_name %> Permissions for <%=(@user.groups.joins(:group_leaders).where(:group_leaders => {:user_role_id => template.user_role_id}).pluck(:name).uniq.join(", ")) %></h2>
           </div>
+
+          <div class="card__section card__section--border">
+            <h3>Enterprise</h3>
+            <div class="row row--spacing-bottom">
+              <div class="col md-3">
+                <h4>Logs</h4>
+                <%= f.input :logs_view, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: template.logs_view } %>
+              </div>
+
+              <div class="col md-3">
+                <h4>Permissions</h4>
+                <%= f.input :permissions_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage", input_html: { checked: template.permissions_manage } %>
+              </div>
+
+              <div class="col md-3">
+                <h4>SSO</h4>
+                <%= f.input :sso_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage", input_html: { checked: template.sso_manage } %>
+              </div>
+
+              <div class="col md-3">
+                <h4>Global Calendar</h4>
+                <%= f.input :global_calendar, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: template.global_calendar } %>
+              </div>
+            </div>
+            <div class="row row--spacing-bottom">
+              <div class="col md-3">
+                <h4>Enterprise resources</h4>
+                <%= f.input :enterprise_resources_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: template.enterprise_resources_index } %>
+                <%= f.input :enterprise_resources_create, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Create", input_html: { checked: template.enterprise_resources_create } %>
+                <%= f.input :enterprise_resources_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage all", input_html: { checked: template.enterprise_resources_manage } %>
+              </div>
+
+              <div class="col md-3">
+                <h4>Diversity and Culture Index</h4>
+                <%= f.input :diversity_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage", input_html: { checked: template.diversity_manage } %>
+              </div>
+
+              <div class="col md-3">
+                <h4>Branding</h4>
+                <%= f.input :branding_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage", input_html: { checked: template.branding_manage } %>
+              </div>
+
+              <div class="col md-3">
+                <h4>Metrics dashboards</h4>
+                <%= f.input :metrics_dashboards_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: template.metrics_dashboards_index } %>
+                <%= f.input :metrics_dashboards_create, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Create", input_html: { checked: template.metrics_dashboards_create } %>
+              </div>
+            </div>
+            <div class="row row--spacing-bottom">
+              <div class="col md-3">
+                <h4>Users</h4>
+                <%= f.input :users_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: template.users_index } %>
+                <%= f.input :users_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage", input_html: { checked: template.users_manage } %>
+              </div>
+              <div class="col md-3">
+                <h4><%= c_t(:segment).pluralize %></h4>
+                <%= f.input :segments_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: template.segments_index } %>
+                <%= f.input :segments_create, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Create", input_html: { checked: template.segments_create } %>
+                <%= f.input :segments_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage all", input_html: { checked: template.segments_manage } %>
+              </div>
+              <div class="col md-3">
+                <h4>Mentorship</h4>
+                <%= f.input :mentorship_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage", input_html: { checked: template.mentorship_manage } %>
+              </div>
+            </div>
+          </div>
+
+          <div class="card__section card__section--border">
+            <h3>General</h3>
+            <div class="row row--spacing-bottom">
+              <div class="col md-3">
+                <h4>Campaigns</h4>
+                <%= f.input :campaigns_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: template.campaigns_index } %>
+                <%= f.input :campaigns_create, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Create", input_html: { checked: template.campaigns_create } %>
+                <%= f.input :campaigns_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage all", input_html: { checked: template.campaigns_manage } %>
+              </div>
+
+              <div class="col md-3">
+                <h4>Surveys</h4>
+                <%= f.input :polls_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: template.polls_index } %>
+                <%= f.input :polls_create, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Create", input_html: { checked: template.polls_create } %>
+                <%= f.input :polls_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage all", input_html: { checked: template.polls_manage } %>
+              </div>
+
+              <div class="col md-3">
+                <h4><%= c_t(:erg).pluralize %></h4>
+                <%= f.input :groups_index, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "View", input_html: { checked: template.groups_index } %>
+                <%= f.input :groups_create, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Create", input_html: { checked: template.groups_create } %>
+                <%= f.input :groups_manage, as: :boolean, required: false, disabled: true, wrapper: :boolean_checkbox, label: "Manage all", input_html: { checked: template.groups_manage } %>
+              </div>
+            </div>
+          </div>
+
           <div class="card__section card__section--border">
             <h3><%= c_t(:erg) %> management</h3>
             <div class="row row--spacing-bottom">
