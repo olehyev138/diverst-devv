@@ -7,11 +7,13 @@ class MetricsDashboardPolicy < ApplicationPolicy
   end
 
   def show?
-    index?
+    return true if manage_all?
+    return true if @record.owner_id === @user.id
+    @record.is_user_shared?(@user)
   end
 
   def edit?
-    index?
+    update?
   end
 
   def new?
@@ -31,7 +33,8 @@ class MetricsDashboardPolicy < ApplicationPolicy
 
   def destroy?
     return true if manage_all?
-    @record.owner_id === @user.id
+    return true if @record.owner_id === @user.id
+    @record.is_user_shared?(@user)
   end
 
   class Scope < Scope
@@ -42,7 +45,7 @@ class MetricsDashboardPolicy < ApplicationPolicy
 
     def resolve
       if index?
-        scope.where(owner_id: user.id, :enterprise_id => user.enterprise_id).order(created_at: :desc)
+        scope.with_shared_dashboards(user.id).order(created_at: :desc)
       else
         scope.none
       end

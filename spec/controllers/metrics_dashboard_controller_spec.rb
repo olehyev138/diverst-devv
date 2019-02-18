@@ -2,9 +2,10 @@ require 'rails_helper'
 
 RSpec.describe MetricsDashboardsController, type: :controller do
   include ActiveJob::TestHelper
-  
+
   let(:enterprise) { create :enterprise }
-  let (:user) { create :user, :enterprise => enterprise }
+  let!(:user) { create :user, :enterprise => enterprise }
+  let!(:user2) { create :user, enterprise: enterprise }
   let(:metrics_dashboard) { create :metrics_dashboard, :enterprise => enterprise, owner: user }
 
   describe 'GET #new' do
@@ -53,7 +54,7 @@ RSpec.describe MetricsDashboardsController, type: :controller do
 
       it 'returns correct data for general_metrics' do
         expect(assigns[:general_metrics])
-        .to eq ({:nb_users=>1, :nb_ergs=>2, :nb_segments=>3, :nb_resources=>4, :nb_polls=>2, :nb_ongoing_campaigns=>0, :average_nb_members_per_group=>nil})
+        .to eq ({:nb_users=>2, :nb_ergs=>2, :nb_segments=>3, :nb_resources=>4, :nb_polls=>2, :nb_ongoing_campaigns=>0, :average_nb_members_per_group=>nil})
       end
 
       it "return metrics" do
@@ -81,8 +82,7 @@ RSpec.describe MetricsDashboardsController, type: :controller do
     end
 
     describe 'with logged in user' do
-      let(:user) { create :user }
-      let(:md_params) { attributes_for :metrics_dashboard, enterprise: user.enterprise, group_ids: [create(:group).id] }
+      let(:md_params) { attributes_for :metrics_dashboard, enterprise: user.enterprise, group_ids: [create(:group).id], shared_user_ids: [user2.id] }
 
       login_user_from_let
 
@@ -115,6 +115,16 @@ RSpec.describe MetricsDashboardsController, type: :controller do
         it 'redirects to correct action' do
           post_create(md_params)
           expect(response).to redirect_to new_metrics_dashboard_graph_path(MetricsDashboard.last)
+        end
+
+        it 'creates shared dashboard' do
+          post_create(md_params)
+
+          new_md = MetricsDashboard.last
+          new_sd = SharedMetricsDashboard.last
+
+          expect(new_sd.metrics_dashboard_id).to eq new_md.id
+          expect(new_sd.user_id).to eq user2.id
         end
 
         describe 'public activity' do
@@ -257,13 +267,13 @@ RSpec.describe MetricsDashboardsController, type: :controller do
     end
 
     let(:user) { create :user }
-    let!(:metrics_dashboard) { create :metrics_dashboard, enterprise: user.enterprise, owner: user }
+    let!(:metrics_dashboard) { create :metrics_dashboard, enterprise: user.enterprise, owner: user, shared_user_ids: [user2.id] }
 
     context 'with logged in user' do
       login_user_from_let
 
       context 'with correct params' do
-        let(:new_md_params) { attributes_for :metrics_dashboard }
+        let(:new_md_params) { attributes_for :metrics_dashboard, owner: user, shared_user_ids: [] }
 
         it 'updates fields' do
           patch_update(metrics_dashboard.id, new_md_params)
@@ -271,6 +281,13 @@ RSpec.describe MetricsDashboardsController, type: :controller do
 
           expect(updated_md.name).to eq new_md_params[:name]
           expect(updated_md.enterprise).to eq user.enterprise
+        end
+
+        it 'updates shared dashboards' do
+          patch_update(metrics_dashboard.id, new_md_params)
+
+          expect(SharedMetricsDashboard.find_by(metrics_dashboard_id: metrics_dashboard.id)).to eq nil
+          expect(SharedMetricsDashboard.find_by(user_id: user2.id)).to eq nil
         end
 
         describe 'public activity' do
@@ -344,7 +361,7 @@ RSpec.describe MetricsDashboardsController, type: :controller do
       login_user_from_let
 
       context 'with correct params' do
-        it 'deletes initiative' do
+        it 'deletes metrics dashboard' do
           expect{
             delete_destroy(metrics_dashboard.id)
           }.to change(MetricsDashboard, :count).by(-1)
@@ -380,6 +397,25 @@ RSpec.describe MetricsDashboardsController, type: :controller do
               include_examples'correct public activity'
             end
           end
+      end
+    end
+
+    context 'with shared dashboard user' do
+      let(:owner_user) { create :user }
+      let!(:user) { create :user, enterprise: owner_user.enterprise }
+      let!(:metrics_dashboard) { create :metrics_dashboard, enterprise: owner_user.enterprise, owner: owner_user, shared_user_ids: [user.id] }
+      login_user_from_let
+
+      it 'doesnt destroy main dashboard' do
+        expect {
+          delete_destroy(metrics_dashboard.id)
+        }.to_not change(MetricsDashboard, :count)
+      end
+
+      it 'only destroys shared dashboard' do
+        expect {
+          delete_destroy(metrics_dashboard.id)
+        }.to change(SharedMetricsDashboard, :count).by(-1)
       end
     end
 
