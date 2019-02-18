@@ -45,11 +45,6 @@ class Graph {
     }
 
     renderBarChart() {
-        /* Todo:
-         *   - add abstractions for most of this to remove complexity and so we can reuse code
-         *   - axis labels
-         */
-
         var series = this.data.series;
         var svg = this.$element[0].children[0];
         var chart = null;
@@ -100,10 +95,6 @@ class Graph {
     }
 
     renderLineChart() {
-        /* Todo:
-         *   - add abstractions for most of this to remove complexity and so we can reuse code
-         */
-
         var svg = this.$element[0].children[0];
         var series = this.data.series;
         var chart = null;

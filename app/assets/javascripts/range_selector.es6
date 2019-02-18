@@ -18,8 +18,8 @@ class RangeSelector {
             $(this).on('keypress', { self: self, input: this }, self.inputHandler);
         });
 
-        // disable all 'all' buttons because 'all' is the default date range
-        this.update_button($("button[value='all']"));
+        // disable 'all' button because 'all' is the default date range
+        this.update_button($("button[value='all']", this.$element));
     }
 
     buttonHandler(e) {

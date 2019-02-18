@@ -10,6 +10,8 @@ class GenericGraphsController < ApplicationController
         graph = UserGroup.get_graph
         graph.enterprise_filter = { 'group.enterprise_id' => current_user.enterprise_id }
         graph.query  = graph.query.terms_agg(field: 'group.name')
+        graph.formatter.title = 'Group Population'
+
         graph.drilldown_graph(parent_field: 'group.parent.name')
 
         render json: graph.build
@@ -23,6 +25,8 @@ class GenericGraphsController < ApplicationController
         graph = UsersSegment.get_graph
         graph.enterprise_filter = { 'segment.enterprise_id' => current_user.enterprise_id }
         graph.query = graph.query.terms_agg(field: 'segment.name')
+        graph.formatter.title = 'Segment Population'
+
         graph.drilldown_graph(parent_field: 'segment.parent.name')
 
         render json: graph.build
@@ -48,6 +52,7 @@ class GenericGraphsController < ApplicationController
         }
 
         graph.formatter = graph.get_custom_formatter
+        graph.formatter.title = 'Events Created'
         graph.formatter.element_formatter = -> (e) {
           { label: e[:key], value: e.agg.buckets[0][:doc_count] }
         }
@@ -77,6 +82,7 @@ class GenericGraphsController < ApplicationController
         }
 
         graph.formatter = graph.get_custom_formatter
+        graph.formatter.title = 'Messages Sent'
         graph.formatter.element_formatter = -> (e) {
           { label: e[:key], value: e.agg.buckets[0][:doc_count] }
         }
@@ -107,6 +113,7 @@ class GenericGraphsController < ApplicationController
         }
 
         graph.formatter = graph.get_custom_formatter
+        graph.formatter.title = '# Views per Group'
         graph.formatter.element_formatter = -> (e) {
           { label: e[:key], value: e.agg.buckets[0][:doc_count] }
         }
@@ -138,12 +145,15 @@ class GenericGraphsController < ApplicationController
         }
 
         graph.formatter = graph.get_custom_formatter
+        graph.formatter.title = '# Views per Folder'
         graph.formatter.element_formatter = -> (e) {
+          doc_count = e.agg.buckets[0][:doc_count]
+          return { label: '', value: 0 } if doc_count == 0
           e_folder =  e.agg.buckets[0].agg.hits.hits[0][:_source][:folder]
           group_name = e_folder[:group].present? ? e_folder[:group][:name] : 'Shared'
 
           { label: group_name + ': ' + e_folder[:name],
-            value: e.agg.buckets[0][:doc_count]
+            value: doc_count
           }
         }
         graph.formatter.key_formatter = -> (e) {
@@ -152,10 +162,7 @@ class GenericGraphsController < ApplicationController
 
         graph.formatter.add_elements(graph.search)
 
-        results = graph.build
-
-
-        render json: results
+        render json: graph.build
       }
       format.csv {
         GenericGraphsTopFoldersByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, demo: false)
@@ -180,7 +187,10 @@ class GenericGraphsController < ApplicationController
         }
 
         graph.formatter = graph.get_custom_formatter
+        graph.formatter.title = '# Views per Resource'
         graph.formatter.element_formatter = -> (e) {
+          doc_count = e.agg.buckets[0][:doc_count]
+          return { label: '', value: 0 } if doc_count == 0
           e_resource =  e.agg.buckets[0].agg.hits.hits[0][:_source][:resource]
           group_name = e_resource[:group].present? ? e_resource[:group][:name] : 'Shared'
 
@@ -221,9 +231,12 @@ class GenericGraphsController < ApplicationController
         }
 
         graph.formatter = graph.get_custom_formatter
+        graph.formatter.title = '# Views per News Link'
         graph.formatter.element_formatter = -> (e) {
           # Look at the View mapping to get a handle on this.
           # Essentially we need to aggregate by id, but display '<group>: <title>', this is what causes this mess
+          doc_count = e.agg.buckets[0][:doc_count]
+          return { label: '', value: 0 } if doc_count == 0
           e_news_feed_link =  e.agg.buckets[0].agg.hits.hits[0][:_source][:news_feed_link]
           group_name = e_news_feed_link[:group].present? ? e_news_feed_link[:group][:name] : 'Shared'
 
@@ -255,6 +268,7 @@ class GenericGraphsController < ApplicationController
         graph.formatter = graph.get_custom_formatter
         graph.formatter.title = 'Growth of Groups'
         graph.formatter.type = 'line'
+
         graph.formatter.element_formatter = -> (e, *args) {
           { label: e[:key],
             value: args[0] , # args[0] -> total so far
@@ -267,15 +281,15 @@ class GenericGraphsController < ApplicationController
               q.terms_agg(field: 'created_at', order_field: '_term', order_dir: 'asc')
           }
 
+          # each group is a new series/line on our line graph
+          graph.formatter.add_series(series_name: group.name)
           total = 0
           elements = graph.search
+
           elements.each { |element|
             # keep a running total
             graph.formatter.add_element(element, (total += element[:doc_count]))
           }
-
-          # each group is a new series/line on our line graph
-          graph.formatter.add_series
         end
 
         render json: graph.build

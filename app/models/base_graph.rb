@@ -139,10 +139,7 @@ module BaseGraph
         series: []
       }
 
-      # Counter of current series. A series being a single list of data points
-      # Initialize with first series
-      @current_series = 0
-      @data[:series] << { key: "series#@current_series", values: [] }
+      @series_index = -1
     end
 
     # Parse, format & add a single element to current series
@@ -153,21 +150,25 @@ module BaseGraph
     def add_element(element, children: nil, element_key: nil)
       element = format_element(element)
 
-      if !children.blank?
+      # add children to element if passed
+      if children.present?
         element[:children] = {
           key: element_key,
           values: format_elements(children)
         }
       end
 
-      @data[:series][@current_series][:values] << element
+      # create a series for element if necessary & add element to current series
+      add_series if @data[:series].blank?
+      @data[:series][@series_index][:values] << element
     end
 
     # Parse, format & add a list of elements to current series
     # @elements - the list of elements to add
     #  - in the form of a list of elasticsearch aggregations elements: [{ key: <key>, doc_count: <n> }, ...n]
     def add_elements(elements)
-      @data[:series][@current_series][:values] = format_elements(elements)
+      add_series if @data[:series].blank?
+      @data[:series][@series_index][:values] = format_elements(elements)
     end
 
     # Parse and return key of element
@@ -177,10 +178,12 @@ module BaseGraph
     end
 
     # Add a new series
-    # All elements added will be now added to this new series
-    def add_series
-      @current_series += 1
-      @data[:series] << { key: "series#@current_series", values: [] }
+    # @series_name - optional, default is title
+    # All elements added after will be added to this new series
+    def add_series(series_name: @title)
+      @series_index += 1
+
+      @data[:series] << { key: series_name, values: [] }
     end
 
     # Returns the dataset formatted to Nvd3, ready to be passed to frontend
@@ -188,6 +191,13 @@ module BaseGraph
       # Set these properties here so user can change them beforehand
       @data[:title] = @title
       @data[:type] = @type
+
+      # clean data
+      # TODO: review this
+      @data[:series].each_with_index do |series, i|
+        @data[:series][i][:values] = series[:values].select { |e| e[:value] != 0 }
+      end
+
       @data
     end
 
@@ -241,7 +251,8 @@ module BaseGraph
         }
       end
 
-      @data[:series][@current_series][:values] << element
+      add_series if @data[:series].blank?
+      @data[:series][@series_index][:values] << element
     end
 
     def get_element_key(element, *args)

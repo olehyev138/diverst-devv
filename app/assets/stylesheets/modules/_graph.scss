@@ -3,3 +3,7 @@
   height: 350px;
   overflow: auto;
 }
+
+.nvd3 rect[height="1"] {
+    display: none !important;
+}
