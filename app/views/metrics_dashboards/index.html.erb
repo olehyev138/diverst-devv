@@ -92,7 +92,6 @@
         <div class="card__section">
           <h4>Messages sent</h4>
           <%= render 'components/range_selector' %>
-          <input class="graph-input" type="text" value="30"></input>
           <div class="card__action">
             <%= link_to "Export CSV", messages_sent_generic_graphs_path(format: :csv), class: "hidden-xs" %>
           </div>
@@ -108,10 +107,13 @@
       <div class="card">
         <div class="card__section">
           <h4># of employees over time</h4>
+          <%= render 'components/range_selector' %>
           <div class="card__action">
-            <%= link_to "Export CSV", date_histogram_users_path(format: :csv), class: "hidden-xs" %>
+            <%= link_to "Export CSV", growth_of_employees_generic_graphs_path(format: :csv), class: "hidden-xs" %>
           </div>
-          <div class="graph" data-url="<%= date_histogram_users_path %>" data-date-histogram="true"></div>
+          <div id="growth_employees" class="graph" data-url="<%= growth_of_employees_generic_graphs_path %>">
+            <svg></svg>
+          </div>
         </div>
       </div>
     </div>

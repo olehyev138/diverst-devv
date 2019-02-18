@@ -166,6 +166,7 @@ class GenericGraphsController < ApplicationController
         graph.formatter.add_elements(graph.search)
 
         render json: graph.build
+
       }
       format.csv {
         GenericGraphsTopFoldersByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, demo: false)
@@ -259,6 +260,39 @@ class GenericGraphsController < ApplicationController
         GenericGraphsTopNewsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, demo: false)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
+      }
+    end
+  end
+
+  def growth_of_employees
+    date_range = parse_date_range(params[:input])
+
+    respond_to do |format|
+      format.json {
+        graph = User.get_graph
+        graph.enterprise_filter = { 'enterprise_id' => current_user.enterprise_id }
+
+        graph.formatter = graph.get_custom_formatter
+        graph.formatter.title = '# of Employees Over Time'
+        graph.formatter.type = 'line'
+
+        graph.formatter.element_formatter = -> (e, *args) {
+          { label: e[:key], value: args[0] }
+        }
+
+        graph.query = graph.query.date_range_agg(field: 'created_at', range: date_range) { |q|
+          q.terms_agg(field: 'created_at', order_field: '_term', order_dir: 'asc')
+        }
+
+        graph.formatter.add_series
+        total = 0
+        elements = graph.search
+
+        elements[0].agg.buckets.each { |element|
+          graph.formatter.add_element(element, (total += element[:doc_count]))
+        }
+
+        render json: graph.build
       }
     end
   end

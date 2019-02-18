@@ -5,7 +5,7 @@ class User < BaseClass
     include PublicActivity::Common
     include DeviseTokenAuth::Concerns::User
     include ContainsFields
-    
+
     @@fb_token_generator = Firebase::FirebaseTokenGenerator.new(ENV['FIREBASE_SECRET'].to_s)
 
     enum groups_notifications_frequency: [:hourly, :daily, :weekly, :disabled]
@@ -16,7 +16,7 @@ class User < BaseClass
     scope :enterprise_mentees,  -> ( user_ids = []) { where(mentee: true).where.not(:id => user_ids) }
     scope :mentors_and_mentees, -> { where("mentor = true OR mentee = true").distinct }
     scope :inactive,            -> { where(active: false).distinct }
-    
+
 
     belongs_to  :enterprise
     belongs_to  :user_role
@@ -136,7 +136,7 @@ class User < BaseClass
             self.user_role_id = enterprise.default_user_role
         end
     end
-    
+
     def group_leader_role
         # make sure a user's role cannot be set to group_leader
         if enterprise.user_roles.where(:id => user_role_id, :role_type => "group").count > 0 && !erg_leader?
@@ -169,7 +169,7 @@ class User < BaseClass
             policy_group.update_attributes(attributes)
         end
     end
-    
+
     def is_admin?
         enterprise.user_roles.where(:id => user_role_id).where("LOWER(role_type) = 'admin'").count > 0
     end
@@ -312,7 +312,7 @@ class User < BaseClass
 
         part_of_segment
     end
-   
+
 
     # Generate a Firebase token for the user and update the user with it
     def assign_firebase_token
@@ -425,7 +425,7 @@ class User < BaseClass
     def set_uid
         self.uid = generate_uid if self.uid.blank?
     end
-    
+
     # Returns a hash of all the user's fields combined with all their poll fields
     def combined_info
         polls_hash = poll_responses.map(&:info).reduce({}) { |a, e| a.merge(e) } # Get a hash of all the combined poll response answers for this user
@@ -434,65 +434,64 @@ class User < BaseClass
         # We use info_hash instead of just info because Hash#merge accesses uses [], which is overriden in FieldData
         info_hash.merge(polls_hash)
     end
-    
+
     settings do
       mappings  dynamic_templates: [
-            {
-                string_template: {
-                    type: 'string',
-                    mapping: {
-                        fields: {
-                            raw: {
-                                type: 'string',
-                                index: 'not_analyzed'
-                            }
-                        }
-                    },
-                    match_mapping_type: 'string',
-                    match: '*'
+        {
+          string_template: {
+            mapping: {
+              fields: {
+                raw: {
+                  type: 'string',
+                  index: 'not_analyzed'
                 }
-            }
-        ]  do
+              }
+            },
+            match_mapping_type: 'string',
+            match: '*'
+          }
+        }
+      ]  do
         indexes :id,                    type: :integer
-        indexes :first_name,            type: :string
-        indexes :last_name,             type: :string
-        indexes :email,                 type: :string
+        indexes :first_name,            type: :text
+        indexes :last_name,             type: :text
+        indexes :email,                 type: :text
         indexes :sign_in_count,         type: :integer
         indexes :enterprise_id,         type: :integer
-        
+
         indexes :current_sign_in_at,    type: :date
         indexes :last_sign_in_at,       type: :date
         indexes :current_sign_in_ip,    type: :date
         indexes :last_sign_in_ip,       type: :date
-        
+
         indexes :invitation_created_at,     type: :date
         indexes :invitation_sent_at,        type: :date
         indexes :invitation_accepted_at,    type: :date
         indexes :invited_by_id,             type: :integer
-        
+
         indexes :active,                type: :boolean
         indexes :points,                type: :integer
         indexes :total_weekly_points,   type: :integer
         indexes :credits,               type: :integer
-        
+
         indexes :failed_attempts,       type: :integer
-        
+
         indexes :custom_policy_group,   type: :boolean
         indexes :mentor,                type: :boolean
         indexes :mentee,                type: :boolean
-        
+
         indexes :groups_notifications_frequency,    type: :integer
         indexes :groups_notifications_date,         type: :integer
-        
-        indexes :time_zone,     type: :string
+
+        indexes :time_zone,     type: :text
         indexes :created_at,    type: :date
         indexes :updated_at,    type: :date
-        
+
         indexes :enterprise do
             indexes :id,                type: :integer
-            indexes :name,              type: :string
-            indexes :time_zone,         type: :string
-            
+            indexes :name,              type: :text
+            indexes :time_zone,         type: :text
+
             indexes :has_enabled_saml,              type: :boolean
             indexes :collaborate_module_enabled,    type: :boolean
             indexes :scope_module_enabled,          type: :boolean
@@ -502,11 +501,11 @@ class User < BaseClass
             indexes :mentorship_module_enabled,     type: :boolean
             indexes :disable_likes,                 type: :boolean
             indexes :enable_social_media,           type: :boolean
-            
+
             indexes :created_at,        type: :date
             indexes :updated_at,        type: :date
         end
-        
+
         # enterprise
         # user role
         # groups
