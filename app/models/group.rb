@@ -5,38 +5,40 @@ class Group < ActiveRecord::Base
   extend Enumerize
 
   enumerize :layout, default: :layout_0, in: [
-                              :layout_0,
-                              :layout_1,
-                              :layout_2
-                            ]
+    :layout_0,
+    :layout_1,
+    :layout_2
+  ]
 
   enumerize :pending_users, default: :disabled,  in: [
-                              :disabled,
-                              :enabled
-                            ]
+    :disabled,
+    :enabled
+  ]
 
   enumerize :members_visibility, default: :managers_only, in:[
-                                   :global,
-                                   :group,
-                                   :managers_only
-                                 ]
+    :global,
+    :group,
+    :managers_only
+  ]
 
   enumerize :messages_visibility, default: :managers_only, in:[
-                                    :global,
-                                    :group,
-                                    :managers_only
-                                  ]
+    :global,
+    :group,
+    :managers_only
+  ]
 
   enumerize :latest_news_visibility, default: :leaders_only, in:[
-                                    :public,
-                                    :group,
-                                    :leaders_only
-                                  ]
+    :public,
+    :group,
+    :leaders_only
+  ]
 
+  # :public and :non_member have their values defined in locales/en.yml
   enumerize :upcoming_events_visibility, default: :leaders_only, in:[
                                     :public,
                                     :group,
-                                    :leaders_only
+                                    :leaders_only,
+                                    :non_member
                                   ]
 
   belongs_to :enterprise
@@ -53,7 +55,6 @@ class Group < ActiveRecord::Base
   has_many :groups_polls, dependent: :destroy
   has_many :polls, through: :groups_polls
   has_many :poll_responses, through: :polls, source: :responses
-  has_many :events, dependent: :destroy
 
   has_many :own_initiatives, class_name: 'Initiative', foreign_key: 'owner_group_id', dependent: :destroy
   has_many :initiative_participating_groups
@@ -84,14 +85,14 @@ class Group < ActiveRecord::Base
   has_many :initiatives, through: :pillars
   has_many :updates, class_name: "GroupUpdate", dependent: :destroy
   has_many :views, dependent: :destroy
-  
-  has_many :fields, -> { where field_type: "regular"},
-           dependent: :delete_all
-  has_many :survey_fields, -> { where field_type: "group_survey"},
-           class_name: 'Field',
-           dependent: :delete_all
 
-  has_many :group_leaders, dependent: :destroy
+  has_many :fields, -> { where field_type: "regular"},
+    dependent: :delete_all
+  has_many :survey_fields, -> { where field_type: "group_survey"},
+    class_name: 'Field',
+    dependent: :delete_all
+
+  has_many :group_leaders, -> { order(position: :asc) }, dependent: :destroy
   has_many :leaders, through: :group_leaders, source: :user
   has_many :sponsors, as: :sponsorable, dependent: :destroy
 
@@ -110,15 +111,18 @@ class Group < ActiveRecord::Base
   has_attached_file :banner
   validates_attachment_content_type :banner, content_type: /\Aimage\/.*\Z/
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: {scope: :enterprise_id }
+
   validates_format_of :contact_email, with: Devise.email_regexp, allow_blank: true
-  
+
   # only allow one default_mentor_group per enterprise
   validates_uniqueness_of :default_mentor_group, scope: [:enterprise_id], conditions: -> { where(default_mentor_group: true) }
-  
+
   validate :valid_yammer_group_link?
 
   validate :ensure_one_level_nesting
+  validate :ensure_not_own_parent
+  validate :ensure_not_own_child
 
   before_save :send_invitation_emails, if: :send_invitations?
   before_save :create_yammer_group, if: :should_create_yammer_group?
@@ -146,9 +150,9 @@ class Group < ActiveRecord::Base
 
   def layout_values
     {
-    'layout_0' => 'Default layout',
-    'layout_1' => 'Layout without leader boards for Most Active Members',
-    'layout_2' => "Layout with #{c_t(:sub_erg).pluralize} on top of group leaders"
+      'layout_0' => 'Default layout',
+      'layout_1' => 'Layout without leader boards for Most Active Members',
+      'layout_2' => "Layout with #{c_t(:sub_erg).pluralize} on top of group leaders"
     }
   end
 
@@ -159,7 +163,7 @@ class Group < ActiveRecord::Base
   def is_sub_group?
     parent.present?
   end
-  
+
   def total_views
     views.sum(:view_count)
   end
@@ -265,14 +269,14 @@ class Group < ActiveRecord::Base
 
   def highcharts_history(field:, from: 1.year.ago, to: Time.current)
     self.updates
-        .where('created_at >= ?', from)
-        .where('created_at <= ?', to)
-        .order(created_at: :asc)
-        .map do |update|
+      .where('created_at >= ?', from)
+      .where('created_at <= ?', to)
+      .order(created_at: :asc)
+      .map do |update|
       [
-              update.created_at.to_i * 1000, # We multiply by 1000 to get milliseconds for highcharts
-              update.info[field]
-            ]
+        update.created_at.to_i * 1000, # We multiply by 1000 to get milliseconds for highcharts
+        update.info[field]
+      ]
     end
   end
 
@@ -313,14 +317,40 @@ class Group < ActiveRecord::Base
 
       active_members.each do |member|
         membership_list_row = [ member.first_name,
-                                member.last_name, 
+                                member.last_name,
                                 member.email
-                              ]                        
+                              ]
         csv << membership_list_row
       end
 
       csv << ["total", nil, "#{total_nb_of_members}"]
     end
+  end
+
+  def budgets_csv
+    CSV.generate do |csv|
+      csv << ['Requested amount', 'Available amount', 'Status', 'Requested at', '# of events', 'Description']
+       self.budgets.order(created_at: :desc).each do |budget|
+        csv << [budget.requested_amount, budget.available_amount, budget.status_title, budget.created_at, budget.budget_items.count, budget.description]
+      end
+    end
+  end
+
+  def field_time_series_csv(field_id)
+    from = Time.at(params[:from] / 1000) rescue nil
+    to = Time.at(params[:to] / 1000) rescue nil
+    data = self.highcharts_history(
+      field: Field.find(field_id),
+      from: from || 1.year.ago,
+      to: to || Time.current + 1.day
+    )
+
+    strategy = Reports::GraphTimeseriesGeneric.new(
+      data: data
+    )
+    report = Reports::Generator.new(strategy)
+
+    report.to_csv
   end
 
   def title_with_leftover_amount
@@ -334,10 +364,11 @@ class Group < ActiveRecord::Base
   def pending_posts_count
     news_links.unapproved.count + messages.unapproved.count + social_links.unapproved.count
   end
-  
+
   # This method only exists because it's used in a callback
+  # Update specific member in elasticsearch
   def update_elasticsearch_member(member)
-    member.__elasticsearch__.update_document
+    GroupMemberUpdateJob.perform_later(member.id)
   end
 
   # Update members in elastic_search
@@ -361,6 +392,18 @@ class Group < ActiveRecord::Base
   def ensure_one_level_nesting
     if parent.present? && children.present?
       errors.add(:parent_id, "Group can't have both parent and children")
+    end
+  end
+
+  def ensure_not_own_parent
+    if parent.present? && parent.id == self.id
+      errors.add(:parent_id, 'Group cant be its own parent')
+    end
+  end
+
+  def ensure_not_own_child
+    if children.exists?(self)
+      errors.add(:child_ids, 'Group cant be its own child')
     end
   end
 
@@ -397,7 +440,7 @@ class Group < ActiveRecord::Base
     end
   end
 
-  def filter_by_membership(membership_status)
+    def filter_by_membership(membership_status)
     members.references(:user_groups).where('user_groups.accepted_member=?', membership_status)
   end
 
@@ -411,14 +454,8 @@ class Group < ActiveRecord::Base
 
     unless group['id'].nil?
       update(yammer_group_created: true, yammer_id: group['id'])
-      SyncYammerGroupJob.perform_later(self)
+      SyncYammerGroupJob.perform_later(self.id)
     end
-  end
-
-  def send_invitation_emails
-    GroupMailer.delay.invitation(self, invitation_segments)
-    self.send_invitations = false
-    invitation_segments.clear
   end
 
   def should_create_yammer_group?

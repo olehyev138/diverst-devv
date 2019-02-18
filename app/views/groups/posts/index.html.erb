@@ -2,7 +2,7 @@
     <div class="container-fluid visible-xs">
     <div class="row">
       <div class="col-xs-12">
-        <% if policy(@group).erg_leader_permissions? %>
+        <% if GroupPostsPolicy.new(current_user, [@group]).update? %>
           <h2 class="text-center">
             <span>
               Posts
@@ -10,7 +10,7 @@
               /
                <%= link_to pending_group_posts_path(@group) do %>
                <button class="btn btn-sm btn-primary">
-                 Pending (<%= @group.news_feed_links.includes(:link).not_approved.count %>)
+                 Pending (<%= @group.news_feed_links.includes(:link).not_approved.where(archived_at: nil).count %>)
                </button>
              <% end %>
             </span>
@@ -22,10 +22,10 @@
     <div class="row">
       <div class="col-xs-12 text-center">
         <div class="btn-group">
-          <%= link_to "+ News", new_group_news_link_path, class: "btn btn-sm btn-primary" if policy(NewsLink).new? %>
-          <%= link_to "+ MSG", new_group_group_message_path, class: "btn btn-sm btn-primary" if policy(GroupMessage).new? %>
+          <%= link_to "+ News", new_group_news_link_path, class: "btn btn-sm btn-primary" if GroupNewsLinkPolicy.new(current_user, [@group]).new? %>
+          <%= link_to "+ MSG", new_group_group_message_path, class: "btn btn-sm btn-primary" if GroupMessagePolicy.new(current_user, [@group]).new? %>
           <% if @group.enterprise.enable_social_media? %>
-            <%= link_to "+ Social", new_group_social_link_path, class: "btn btn-sm btn-primary" if policy(SocialLink).new? %>
+            <%= link_to "+ Social", new_group_social_link_path, class: "btn btn-sm btn-primary" if GroupSocialLinkPolicy.new(current_user, [@group]).new? %>
           <% end %>
         </div>
       </div>
@@ -34,8 +34,8 @@
 
 </div>
 <div class="content__header hidden-xs">
-   <% if policy(@group).erg_leader_permissions? %>
-   <h1>Posts(<%= @count %>)/
+   <% if GroupPostsPolicy.new(current_user, [@group]).update? %>
+   <h1>Posts (<span id="posts_count"><%= @count %></span>)/
      <%= link_to pending_group_posts_path(@group) do %>
      <button class="btn btn--primary">
        <% if @group.enterprise.enable_social_media? %>
@@ -49,14 +49,14 @@
    <% end %>
   <div class="flex-row flex-row--middle">
     <div class="flex-row__cell">
-      <%= link_to "+ Create News", new_group_news_link_path, class: "btn btn--primary" if policy(NewsLink).new? %>
+      <%= link_to "+ Create News", new_group_news_link_path, class: "btn btn--primary" if GroupNewsLinkPolicy.new(current_user, [@group]).new? %>
     </div>
     <div class="flex-row__cell">
-      <%= link_to "+ Create Message", new_group_group_message_path, class: "btn btn--primary" if policy(GroupMessage).new? %>
+      <%= link_to "+ Create Message", new_group_group_message_path, class: "btn btn--primary"  if GroupMessagePolicy.new(current_user, [@group]).new? %>
     </div>
     <div class="flex-row__cell">
       <% if @group.enterprise.enable_social_media? %>
-        <%= link_to "+ Create Social Link", new_group_social_link_path, class: "btn btn--primary" if policy(SocialLink).new? %>
+        <%= link_to "+ Create Social Link", new_group_social_link_path, class: "btn btn--primary" if GroupSocialLinkPolicy.new(current_user, [@group]).new? %>
       <% end %>
     </div>
   </div>
@@ -65,16 +65,16 @@
 <div class="content__main">
   <div class="card">
     <% if @posts.empty? %>
-      <div class="card__section">
+      <div class="card__section" id="empty_posts">
         <p>No posts have been published yet.</p>
       </div>
     <% else %>
       <% @posts.each do |news| %>
-        <% if news.news_link %>
+        <% if news.news_link && GroupNewsLinkPolicy.new(current_user, [@group]).index? %>
           <%= render partial: "groups/shared/news_links", locals: {news_link: NewsLink.includes(:group, :author).find(news.link.id) } %>
-        <% elsif news.group_message %>
+        <% elsif news.group_message && GroupMessagePolicy.new(current_user, [@group]).index? %>
           <%= render partial: "groups/shared/messages", locals: {message: GroupMessage.includes(:owner, :group).find(news.link.id) } %>
-        <% elsif news.social_link %>
+        <% elsif news.social_link && GroupSocialLinkPolicy.new(current_user, [@group]).index? %>
           <% if @group.enterprise.enable_social_media? %>
             <%= render partial: "groups/shared/social_links", locals: {social_link: SocialLink.includes(:group).find(news.link.id) } %>
           <% end %>

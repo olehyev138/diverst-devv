@@ -146,7 +146,7 @@ RSpec.describe SegmentsController, type: :controller do
                     expect(assigns[:members].count).to eq 2
                 end
 
-                it 'return groups that belong to user.enterprise' do
+                xit 'return groups that belong to user.enterprise' do
                     expect(assigns[:groups]).to eq groups
                 end
 
@@ -319,7 +319,7 @@ RSpec.describe SegmentsController, type: :controller do
             end
 
             it "flashes" do
-              expect(flash[:notice]).to eq "Please check your email in a couple minutes"
+              expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
             end
 
             it "calls job" do

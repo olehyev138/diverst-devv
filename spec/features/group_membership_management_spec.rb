@@ -4,7 +4,7 @@ RSpec.feature 'Group Membership Management' do
 	let!(:enterprise) { create(:enterprise, name: 'The Enterprise') }
 	let!(:guest_user) { create(:user, enterprise: enterprise)}
 	let!(:admin_user) { create(:user, enterprise: enterprise, first_name: 'Yehuda', last_name: 'Katz') }
-	
+
 	before { login_as(guest_user, scope: :user) }
 
 
@@ -87,7 +87,7 @@ RSpec.feature 'Group Membership Management' do
 		end
 
 		context 'when a user' do
-			let!(:parent_group) { create(:group, name: 'Group ONE', enterprise: enterprise, parent_id: nil) }
+			let!(:parent_group) { create(:group, name: 'Group STANDARD', enterprise: enterprise, parent_id: nil) }
 
 			scenario 'joins a standard group(group with no parent or child)' do
 				visit group_path(parent_group)
@@ -97,19 +97,6 @@ RSpec.feature 'Group Membership Management' do
 				expect(page).not_to have_button "Leave this #{c_t(:erg)}"
 			end
 		end
-
-		context 'when a user' do
-			let!(:parent_group) { create(:group, name: 'Group ONE', enterprise: enterprise, parent_id: nil) }
-
-			scenario 'joins a standard group(group with no parent or child)' do
-				visit group_path(parent_group)
-
-				click_button "Join this #{c_t(:erg)}"
-
-				expect(page).not_to have_button "Leave this #{c_t(:erg)}"
-			end
-		end
-
 
 		context 'when user joins a group' do
 			before do
@@ -211,8 +198,8 @@ RSpec.feature 'Group Membership Management' do
 	context 'when pending users is disabled by group' do
 		pending_membership_message = '* Please wait for group administrators to process your membership request.
 		Take a survey below in order to speed up approval process.'
-		let!(:group) { create(:group, name: 'Group ONE', enterprise: enterprise, pending_users: 'disabled') }
-		let!(:sub_group) { create(:group, enterprise: enterprise, name: "Sub Group ONE", parent_id: group.id) }
+		let!(:group) { create(:group, name: 'Group 1', enterprise: enterprise, pending_users: 'disabled') }
+		let!(:sub_group) { create(:group, enterprise: enterprise, name: "Sub Group 1", parent_id: group.id) }
 
 
 		scenario 'when a user joins a parent group with children', js: true do
@@ -333,11 +320,11 @@ RSpec.feature 'Group Membership Management' do
 	    		click_on '+ Add members'
 
 	    		expect(page).to have_content "Add Members to #{group.name}"
-
-	    		select guest_user.name, from: 'group[member_ids][]'
+	    		
+				first('.select2-container', minimum: 1).click
+				find('li.select2-results__option[role="treeitem"]', text: "#{guest_user.first_name} #{guest_user.last_name} - #{guest_user.email}").click
 
 	    		click_on 'Update Group'
-
 
 	    		expect(page).to have_current_path group_group_members_path(group)
 	    		within('.content__header h1') do

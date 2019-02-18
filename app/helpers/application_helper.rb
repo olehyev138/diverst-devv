@@ -71,40 +71,39 @@ module ApplicationHelper
   def root_admin_path
     return manage_erg_root_path if manage_erg_root_path
     return manage_erg_budgets_path if manage_erg_budgets_path
-    return campaigns_path if policy(Campaign).index?
-    return polls_path if policy(Poll).index?
+    return campaigns_path if policy(Campaign).create?
+    return polls_path if policy(Poll).create?
+    return mentoring_path if policy(MentoringInterest).index?
     return global_settings_path
   end
 
   def manage_erg_budgets_path
-    return plan_overview_groups_path if current_user.policy_group.groups_budgets_index?
-    return group_initiatives_path(@group || GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :initiatives_manage).resolve.first) if policy(Initiative).index?
-    return metrics_group_path(@group || GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_manage).first) if current_user.policy_group.groups_manage?
-    return close_budgets_groups_path if current_user.policy_group.annual_budget_manage?
-    nil
+    return close_budgets_groups_path if policy(Group).manage_all_group_budgets?
+    false
   end
 
   def manage_erg_root_path
     return metrics_dashboards_path if policy(MetricsDashboard).index?
-    return groups_path if policy(Group).index?
+    return groups_path if policy(Group).create?
     return segments_path if policy(Segment).index?
-    return calendar_groups_path if current_user.policy_group.global_calendar?
-    return enterprise_folders_path(current_user.enterprise) if policy(Resource).index?
-    nil
+    return calendar_groups_path if policy(Group).calendar?
+    return enterprise_folders_path(current_user.enterprise) if EnterpriseFolderPolicy.new(current_user).index?
+    false
   end
 
   def global_settings_path
-    return users_path if policy(User).index?
-    return edit_auth_enterprise_path(current_user.enterprise) if current_user.policy_group.sso_manage?
-    return policy_group_templates_path if current_user.policy_group.permissions_manage?
+    return users_path if policy(User).create?
+    return edit_auth_enterprise_path(current_user.enterprise) if policy(Enterprise).sso_manage?
+    return policy_group_templates_path if policy(Enterprise).manage_permissions?
     return edit_fields_enterprise_path(current_user.enterprise) if policy(current_user.enterprise).edit_fields?
-    return edit_custom_text_path(current_user.enterprise.custom_text) if policy(current_user.enterprise).edit_fields?
-    return edit_branding_enterprise_path(current_user.enterprise) if policy(current_user.enterprise).edit_fields?
-    return integrations_path if current_user.policy_group.sso_manage?
-    return rewards_path if current_user.policy_group.diversity_manage?
-    return logs_path if current_user.policy_group.logs_view?
-    return edit_posts_enterprise_path(current_user.enterprise) if current_user.policy_group.manage_posts?
-    nil
+    return edit_branding_enterprise_path(current_user.enterprise) if policy(current_user.enterprise).manage_branding?
+    return edit_custom_text_path(current_user.enterprise) if policy(current_user.enterprise).manage_branding?
+    return emails_path(current_user.enterprise) if policy(current_user.enterprise).manage_branding?
+    return integrations_path if policy(Enterprise).sso_manage?
+    return rewards_path if policy(Enterprise).diversity_manage?
+    return logs_path if LogPolicy.new(current_user, nil).index?
+    return edit_posts_enterprise_path(current_user.enterprise) if policy(Group).manage_all_groups? && policy(Enterprise).manage_posts?
+    false
   end
 
   def default_path
@@ -161,7 +160,7 @@ module ApplicationHelper
   #for RSpec test of protected method in segment_controller.rb
   def segment_members_of_group(segment, group)
     segment.members.includes(:groups).select do |user|
-      user.groups.include? group
+      UserGroup.where(:user_id => user.id, :group_id => group.id).exists?
     end
   end
 

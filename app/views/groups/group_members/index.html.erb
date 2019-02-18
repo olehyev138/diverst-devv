@@ -1,9 +1,11 @@
 <div class="content__header">
   <h1>Members (<%= @members.count %>)</h1>
-  <% if policy(@group).manage_members? %>
-    <%= link_to "+ Add members", new_group_group_member_path(@group), class: "btn btn--primary" %>
+  <% if GroupMemberPolicy.new(current_user, [@group]).update? %>
+    <%= link_to "+ Add members", new_group_group_member_path(@group), class: "btn btn--primary hidden-xs" %>
+    <%= link_to "+ Add members", new_group_group_member_path(@group), class: "btn btn-primary visible-xs" %>
     <div class="flex-row__cell">
-      <%= link_to "Export Member CSV", export_group_members_list_csv_group_group_members_path(@group), class: 'btn btn--primary' %>
+      <%= link_to "Export Member CSV", export_group_members_list_csv_group_group_members_path(@group), class: 'btn btn--primary hidden-xs' %>
+      <%= link_to "Export Member CSV", export_group_members_list_csv_group_group_members_path(@group), class: 'btn btn-primary visible-xs' %>
     </div>
   <% end %>
 </div>
@@ -17,7 +19,7 @@
             <%= f.input :users_segments_segment_id_in,
                   as: :select,
                   collection: @segments,
-                  input_html: { class: "select2", multiple: true },
+                  input_html: { class: "select2-field-segments", multiple: true },
                   label: "Filter by #{ c_t(:segment) }",
                   required: false
             %>
@@ -72,3 +74,5 @@
     <% end %>
   </div>
 </div>
+
+<%= render partial: 'shared/select2_ajax_search.js.erb' %>

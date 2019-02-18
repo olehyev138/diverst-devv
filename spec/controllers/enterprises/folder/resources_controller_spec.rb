@@ -5,7 +5,7 @@ RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
 
     let(:enterprise){ create(:enterprise) }
     let(:user){ create(:user, enterprise: enterprise) }
-    let!(:folder){ create(:folder, :enterprise => enterprise) }
+    let!(:folder){ create(:folder, :enterprise => enterprise, :group => nil) }
     let!(:resource){ create(:resource, title: "title", folder: folder, file: fixture_file_upload('files/test.csv', 'text/csv')) }
 
     describe "GET#index" do
@@ -289,6 +289,100 @@ RSpec.describe Enterprises::Folder::ResourcesController, type: :controller do
         context 'when user is not logged in' do
             before { delete :destroy, :id => resource.id, enterprise_id: enterprise.id, folder_id: folder.id }
             it_behaves_like "redirect user to users/sign_in path"
+        end
+    end
+
+    describe 'PATCH#archive' do
+        describe 'when user is logged in' do
+            login_user_from_let
+
+            context "valid params" do
+                before { patch :archive, enterprise_id: enterprise.id, folder_id: resource.folder.id, id: resource.id }
+
+                it "redirect_to index" do
+                    expect(response).to redirect_to action: :index
+                end
+
+                it "archives the resource" do
+                    expect(assigns[:resource].archived_at).to_not be_nil
+                end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                        perform_enqueued_jobs do
+                            expect{
+                              patch :archive, enterprise_id: enterprise.id, folder_id: resource.folder.id, id: resource.id
+                            }.to change(PublicActivity::Activity, :count).by(1)
+                        end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { Resource.last }
+                    let(:owner) { user }
+                    let(:key) { 'resource.archive' }
+
+                    before {
+                        perform_enqueued_jobs do
+                            patch :archive, enterprise_id: enterprise.id, folder_id: resource.folder.id, id: resource.id
+                        end
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
+            end
+        end
+    end
+
+    describe 'PATCH#restore' do
+        describe 'when user is logged in' do 
+            before do 
+                request.env['HTTP_REFERER'] = 'back'
+                resource.update(archived_at: DateTime.now) 
+            end
+
+            login_user_from_let
+
+            context 'valid params' do 
+                before { patch :restore, enterprise_id: enterprise.id, folder_id: resource.folder.id, id: resource.id }
+
+                it 'redirects back' do 
+                    expect(response).to redirect_to 'back'
+                end
+
+                it 'restores archived resource' do 
+                    resource.reload
+                    expect(resource.archived_at).to be_nil
+                end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                        perform_enqueued_jobs do
+                            expect{
+                              patch :restore, enterprise_id: enterprise.id, folder_id: resource.folder.id, id: resource.id
+                            }.to change(PublicActivity::Activity, :count).by(1)
+                        end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { Resource.last }
+                    let(:owner) { user }
+                    let(:key) { 'resource.restore' }
+
+                    before {
+                        perform_enqueued_jobs do
+                            patch :restore, enterprise_id: enterprise.id, folder_id: resource.folder.id, id: resource.id
+                        end
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
+            end
         end
     end
 end

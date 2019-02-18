@@ -101,6 +101,78 @@ RSpec.describe EnterprisesController, type: :controller do
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
+    
+    describe "PATCH#update_posts" do
+        describe "with logged in user" do
+            before { request.env["HTTP_REFERER"] = "back" }
+            login_user_from_let
+
+            context "with valid parameters" do
+                attributes = FactoryGirl.attributes_for(:enterprise, home_message: "updated")
+                before { patch :update_posts, id: enterprise.id, enterprise: attributes }
+
+                it "updates the enterprise" do
+                    enterprise.reload
+                    expect(assigns[:enterprise].home_message).to eq "updated"
+                end
+
+                it "redirects to action index" do
+                    expect(response).to redirect_to "back"
+                end
+
+                it "flashes notice a message" do
+                    expect(flash[:notice]).to eq "Your enterprise was updated"
+                end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{patch :update_posts, id: enterprise.id, enterprise: attributes}
+                      .to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { enterprise }
+                    let(:owner) { user }
+                    let(:key) { 'enterprise.update' }
+
+                    before {
+                      perform_enqueued_jobs do
+                        patch :update_posts, id: enterprise.id, enterprise: attributes
+                      end
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
+            end
+
+            context "with invalid parameters", skip: "render params['source'] causes ActionView::MissingTemplate" do
+                before { patch :update_posts, id: enterprise.id, enterprise: { home_message: "" } }
+
+                it "does not update the enterprise" do
+                    enterprise.reload
+                    expect(enterprise.home_message).to eq "test"
+                end
+
+                it "renders action edit" do
+                    expect(response.status).to eq(302)
+                end
+
+                it "flashes an alert message" do
+                    expect(flash[:alert]).to eq "Your enterprise was not updated. Please fix the errors"
+                end
+            end
+        end
+
+        describe "without a logged in user" do
+           before { patch :update_posts, id: enterprise.id, enterprise: attributes_for(:enterprise, home_message: "updated") }
+            it_behaves_like "redirect user to users/sign_in path"
+        end
+    end
 
     describe "GET#edit_fields" do
         describe "with logged in user" do
@@ -148,29 +220,6 @@ RSpec.describe EnterprisesController, type: :controller do
 
         describe "without a logged in user" do
             before { get :edit_budgeting, id: enterprise.id }
-            it_behaves_like "redirect user to users/sign_in path"
-        end
-    end
-
-    # CAN'T FIGURE OUT HOW TO PASS TEST
-
-    describe "GET#bias" do
-        describe "with logged in user" do
-            login_user_from_let
-
-            context "with valid id",
-                skip: "test fails because current_user.enterpise.groups.sample.name throws an error
-                in bias.html.erb"  do
-                before { get :bias, id: enterprise.id }
-
-                it "returns success" do
-                    expect(response).to be_success
-                end
-            end
-        end
-
-        describe "without a logged in user" do
-            before { get :bias, id: enterprise.id }
             it_behaves_like "redirect user to users/sign_in path"
         end
     end
@@ -276,9 +325,7 @@ RSpec.describe EnterprisesController, type: :controller do
         end
     end
 
-    # CONTROLLER IS MISSING A TEMPLATE
-
-    describe "GET#edit_algo", skip: "test fails because of Missing template layouts/handshake..." do
+    describe "GET#edit_algo" do
         describe "with logged in user" do
             login_user_from_let
 

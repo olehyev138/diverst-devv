@@ -22,14 +22,14 @@
       <div class="card__section card__section--border">
         <%= f.association :groups,
               collection: @campaign.enterprise.groups,
-              input_html: { class: "select2" },
+              input_html: { class: "select2-field-groups" },
               label: "Choose the <strong>#{ c_t(:erg).pluralize }</strong> you want to target".html_safe %>
       </div>
 
       <div class="card__section card__section--border">
         <%= f.association :segments,
               collection: @campaign.enterprise.segments,
-              input_html: { class: "select2" },
+              input_html: { class: "select2-field-segments" },
               label: "Choose the <strong>#{ c_t(:segment).pluralize }</strong> you want to target within these #{ c_t(:erg) .pluralize }".html_safe %>
       </div>
 
@@ -41,9 +41,11 @@
 
       <div class="card__section card__section--border">
         <%= f.association :managers,
-              collection: @campaign.enterprise.users,
-              input_html: { class: "select2" },
-              label: "Assign <strong>managers</strong> to the group. They will be allowed access to administrative features related to this group only.".html_safe %>
+            as: :select,
+            input_html: { class: "select2-field", autofocus: true },
+            selected: [],
+            label: "Assign <strong>managers</strong> to the group. They will be allowed access to administrative features related to this group only.".html_safe
+        %>
       </div>
 
       <div class="card__section card__section--border">
@@ -80,3 +82,15 @@
     <%= button_tag "Save as draft", value: "draft", name: "campaign[status]", class: "btn btn--secondary" %>
   <% end %>
 </div>
+
+<%= render partial: 'shared/select2_ajax_search.js.erb' %> 
+
+<script>
+ $(document).on('ready page:load', function() {
+   $('.select2-field').select2(
+     async_select(
+       '<%= users_path(limit: 10, format: :json) %>',
+       async_select_objects.USERS
+     ));
+ });
+</script>

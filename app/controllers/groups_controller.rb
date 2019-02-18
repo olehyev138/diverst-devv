@@ -1,8 +1,6 @@
 class GroupsController < ApplicationController
     before_action :authenticate_user!, except: [:calendar_data]
-    before_action :set_group, except: [:index, :new, :create, :plan_overview,
-                                       :calendar, :calendar_data, :close_budgets, :close_budgets_export_csv]
-
+    before_action :set_group, except: [:index, :new, :create, :calendar, :calendar_data, :close_budgets, :close_budgets_export_csv, :sort]
     skip_before_action :verify_authenticity_token, only: [:create, :calendar_data]
     after_action :verify_authorized, except: [:calendar_data]
 
@@ -12,35 +10,25 @@ class GroupsController < ApplicationController
 
     def index
         authorize Group
-        @groups = GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_manage).resolve.includes(:children).all_parents
-    end
+        @groups = GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_manage)
+        .resolve.includes(:children).order(:position)
 
-    def plan_overview
-        authorize Group
-        @groups = GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_budgets_index).resolve
+        respond_to do |format|
+          format.html
+          format.json { render json: GroupDatatable.new(view_context, @groups) }
+        end
     end
 
     def close_budgets
-        authorize Group
-        @groups = GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_budgets_index).resolve.includes(:children).all_parents
+        authorize Group, :manage_all_group_budgets?
+        @groups = policy_scope(Group).includes(:children).all_parents
     end
 
     def close_budgets_export_csv
-      authorize Group, :close_budgets?
-      user_not_authorized if not current_user.policy_group.annual_budget_manage?
-
-      result =
-        CSV.generate do |csv|
-          csv << ['Group name', 'Annual budget', 'Leftover money', 'Approved budget']
-           current_user.enterprise.groups.includes(:children).all_parents.each do |group|
-             csv << [group.name, group.annual_budget.presence || "Not set", group.leftover_money, group.approved_budget]
-             
-             group.children.each do |child|
-               csv << [child.name, child.annual_budget.presence || "Not set", child.leftover_money, child.approved_budget]
-             end
-          end
-        end
-      send_data result, filename: 'global_budgets.csv'
+      authorize Group, :manage_all_group_budgets?
+      GroupsCloseBudgetsDownloadJob.perform_later(current_user.id, current_user.enterprise.id)
+      flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+      redirect_to :back
     end
 
     # calendar for all of the groups
@@ -50,12 +38,12 @@ class GroupsController < ApplicationController
         @groups = []
         enterprise.groups.each do |group|
             if group.is_parent_group?
-                @groups << group 
+                @groups << group
                 group.children.each do |sub_group|
                     @groups << sub_group
                 end
-            elsif group.is_standard_group?                
-                @groups << group 
+            elsif group.is_standard_group?
+                @groups << group
             end
         end
         @segments = enterprise.segments
@@ -107,18 +95,20 @@ class GroupsController < ApplicationController
         authorize Group
         @group = current_user.enterprise.groups.new
         @categories = current_user.enterprise.group_categories
+        # groups available to be parents or children
+        @available_groups = @group.enterprise.groups.where.not(id: @group.id)
     end
 
     def show
         authorize @group
         @group_sponsors = @group.sponsors
 
-        if policy(@group).erg_leader_permissions?
+        if policy(@group).manage?
             base_show
 
             @posts = without_segments
         else
-            if @group.active_members.include? current_user
+            if policy(@group).is_an_accepted_member?
                 base_show
                 @posts = with_segments
             else
@@ -161,11 +151,16 @@ class GroupsController < ApplicationController
     def edit
         authorize @group
         @categories = current_user.enterprise.group_categories
+        # groups available to be parents or children
+        @available_groups = @group.enterprise.groups.where.not(id: @group.id)
     end
 
     def update
         authorize @group
+        update_group
+    end
 
+    def update_group
         if group_params[:group_category_id].present?
           @group.group_category_type_id = GroupCategory.find_by(id: group_params[:group_category_id])&.group_category_type_id
         end
@@ -178,6 +173,10 @@ class GroupsController < ApplicationController
                 redirect_to @group
             elsif request.referer == group_outcomes_url(@group)
                 redirect_to group_outcomes_url(@group)
+            elsif request.referer == group_questions_url(@group)
+                redirect_to group_questions_url(@group)
+            elsif request.referer == layouts_group_url(@group)
+                redirect_to layouts_group_url(@group)
             else
                 redirect_to [:edit, @group]
             end
@@ -193,12 +192,31 @@ class GroupsController < ApplicationController
         end
     end
 
+    def update_questions
+        authorize @group, :insights?
+        update_group
+    end
+
+    def update_layouts
+        authorize @group, :layouts?
+        update_group
+    end
+
+    def update_settings
+        authorize @group, :settings?
+        update_group
+    end
+
     def layouts
-        authorize @group, :update?
+        authorize @group
     end
 
     def settings
-        authorize @group, :update?
+        authorize @group
+    end
+
+    def plan_overview
+        authorize [@group], :index?, :policy_class => GroupBudgetPolicy
     end
 
     def destroy
@@ -215,7 +233,7 @@ class GroupsController < ApplicationController
     end
 
     def metrics
-        authorize @group
+        authorize @group, :manage?
         @updates = @group.updates
     end
 
@@ -247,11 +265,11 @@ class GroupsController < ApplicationController
         end
 
         file = CsvFile.new( import_file: params[:file].tempfile, user: current_user, :group_id => @group.id)
-    
+
         @message = ''
         @success = false
         @email = ENV['CSV_UPLOAD_REPORT_EMAIL']
-    
+
         if file.save
           @success = true
           @message = '@success'
@@ -265,7 +283,7 @@ class GroupsController < ApplicationController
     def export_csv
         authorize @group, :show?
         GroupMemberDownloadJob.perform_later(current_user.id, @group.id)
-        flash[:notice] = "Please check your email in a couple minutes"
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
     end
 
@@ -286,6 +304,14 @@ class GroupsController < ApplicationController
         end
     end
 
+    def sort
+        authorize Group
+        params[:group].each_with_index do |id, index|
+            current_user.enterprise.groups.find(id).update(position: index+1)
+        end
+        render nothing: true
+    end
+
     protected
 
     def base_show
@@ -301,31 +327,32 @@ class GroupsController < ApplicationController
     end
 
     def without_segments
-        NewsFeedLink.combined_news_links(@group.news_feed.id)
+        NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise)
                             .includes(:news_link, :group_message, :social_link)
                             .order(is_pinned: :desc, created_at: :desc)
                             .limit(5)
     end
 
     def with_segments
-        segment_ids = current_user.segments.ids
-        if not segment_ids.empty?
-            NewsFeedLink
-                .combined_news_links_with_segments(@group.news_feed.id, current_user.segments.ids)
-                .order(is_pinned: :desc, created_at: :desc)
-                .limit(5)
+        if GroupPostsPolicy.new(current_user, [@group]).view_latest_news?
+            segment_ids = current_user.segments.ids
+            if not segment_ids.empty?
+                NewsFeed.all_links(@group.news_feed.id, segment_ids, @group.enterprise)
+                    .order(is_pinned: :desc, created_at: :desc)
+                    .limit(5)
+            else
+                return without_segments
+            end
         else
-            return without_segments
+            []
         end
     end
 
     def resolve_layout
         case action_name
-        when 'show'
+        when 'show', 'layouts', 'settings', 'plan_overview', 'metrics', 'edit_fields'
             'erg'
-        when 'metrics'
-            'plan'
-        when 'edit_fields', 'plan_overview', 'close_budgets'
+        when 'close_budgets'
             'plan'
         else
             'erg_manager'
@@ -333,7 +360,7 @@ class GroupsController < ApplicationController
     end
 
     def set_group
-       current_user ? @group = current_user.enterprise.groups.find(params[:id]) : user_not_authorized
+       @group = current_user.enterprise.groups.find(params[:id])
     end
 
     def group_params
@@ -364,6 +391,7 @@ class GroupsController < ApplicationController
                 :parent_id,
                 :group_category_id,
                 :group_category_type_id,
+                :position,
                 manager_ids: [],
                 child_ids: [],
                 member_ids: [],

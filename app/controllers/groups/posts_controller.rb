@@ -7,19 +7,14 @@ class Groups::PostsController < ApplicationController
     layout 'erg'
 
     def index
-        authorize @group, :view_latest_news?
-        if policy(@group).erg_leader_permissions?
-                @count = NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise)
-                                .count
-
-                @posts = NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise)
-                                .order(is_pinned: :desc, created_at: :desc)
-                                .limit(@limit)
+        if policy(@group).manage?
+            without_segments
         else
-            if policy(@group).view_latest_news?
-                segment_ids = nil
-                if @group.active_members.include?(current_user)
-                  segment_ids = current_user.segments.ids
+            if GroupPostsPolicy.new(current_user, [@group]).view_latest_news?
+                segment_ids = current_user.segment_ids
+                
+                if segment_ids.empty?
+                  return without_segments
                 end
                 @count = NewsFeed.all_links(@group.news_feed.id, segment_ids, @group.enterprise).count
 
@@ -35,9 +30,9 @@ class Groups::PostsController < ApplicationController
 
     def pending
         if @group.enterprise.enable_social_media?
-          @posts = @group.news_feed_links.includes(:news_link, :group_message, :social_link).not_approved.order(created_at: :desc)
+          @posts = @group.news_feed_links.includes(:news_link, :group_message, :social_link).not_approved.where(archived_at: nil).order(created_at: :desc)
         else
-          @posts = @group.news_feed_links.includes(:news_link, :group_message).not_approved.order(created_at: :desc)
+          @posts = @group.news_feed_links.includes(:news_link, :group_message).not_approved.where(archived_at: nil).order(created_at: :desc)
         end
     end
 
@@ -66,6 +61,16 @@ class Groups::PostsController < ApplicationController
     end
 
     protected
+    
+    def without_segments
+        @count = NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise).count
+        @posts = NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise)
+                        .order(is_pinned: :desc, created_at: :desc)
+                        .limit(@limit)
+    end
+    
+    def with_segments
+    end
 
     def set_group
         @group = current_user.enterprise.groups.find(params[:group_id])

@@ -22,8 +22,6 @@ class Segment < ActiveRecord::Base
     has_many :members, class_name: 'User', through: :users_segments, source: :user, dependent: :destroy
     has_many :polls_segments, dependent: :destroy
     has_many :polls, through: :polls_segments
-    has_many :events_segments, dependent: :destroy
-    has_many :events, through: :events_segments
     has_many :group_messages_segments, dependent: :destroy
     has_many :group_messages, through: :group_messages_segments
     has_many :invitation_segments_groups, dependent: :destroy
@@ -58,13 +56,13 @@ class Segment < ActiveRecord::Base
     end
 
     def update_indexes
-        CacheSegmentMembersJob.perform_later self
+        CacheSegmentMembersJob.perform_later self.id
         RebuildElasticsearchIndexJob.perform_later(model_name: 'User', enterprise: enterprise)
     end
 
     def self.update_all_members
         Segment.all.find_each do |segment|
-            CacheSegmentMembersJob.perform_later segment
+            CacheSegmentMembersJob.perform_later segment.id
         end
     end
 

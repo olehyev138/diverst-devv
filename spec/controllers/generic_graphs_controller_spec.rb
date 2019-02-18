@@ -41,12 +41,8 @@ RSpec.describe GenericGraphsController, type: :controller do
                         expect(json_response[:highcharts][:series][0][:data][0][:name]).to eq group.name
                     end
 
-                    it 'returns correct information on categories', skip: "corresponding code has been commented out" do
-                        expect(json_response[:highcharts][:categories]).to eq [group.name]
-                    end
-
-                    it 'return xAxisTitle to be ERG' do
-                        expect(json_response[:highcharts][:xAxisTitle]).to eq 'ERG'
+                    it 'return xAxisTitle to be Group' do
+                        expect(json_response[:highcharts][:xAxisTitle]).to eq 'Group'
                     end
 
                     it 'has no aggregation' do
@@ -56,18 +52,22 @@ RSpec.describe GenericGraphsController, type: :controller do
             end
 
             context "when format is csv" do
-                before { get :group_population, format: :csv }
+                before {
+                    allow(GenericGraphsGroupPopulationDownloadJob).to receive(:perform_later)
+                    request.env['HTTP_REFERER'] = "back"
+                    get :group_population, format: :csv
+                }
 
-                it "returns csv format" do
-                    expect(response.content_type).to eq "text/csv"
+                it "returns to previous page" do
+                    expect(response).to redirect_to "back"
                 end
 
-                it "returns success" do
-                    expect(response).to be_success
+                it "flashes" do
+                    expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
                 end
 
-                it "return csv filename as 'graph_group_population.csv" do
-                    expect(response.headers["Content-Disposition"]).to include 'graph_group_population.csv'
+                it "calls job" do
+                    expect(GenericGraphsGroupPopulationDownloadJob).to have_received(:perform_later)
                 end
             end
         end
@@ -112,18 +112,22 @@ RSpec.describe GenericGraphsController, type: :controller do
             end
 
             context "when format is csv" do
-                before {get :segment_population, format: :csv}
+                before {
+                    allow(GenericGraphsSegmentPopulationDownloadJob).to receive(:perform_later)
+                    request.env['HTTP_REFERER'] = "back"
+                    get :segment_population, format: :csv
+                }
 
-                it "returns csv format" do
-                    expect(response.content_type).to eq "text/csv"
+                it "returns to previous page" do
+                    expect(response).to redirect_to "back"
                 end
 
-                it "returns success" do
-                    expect(response).to be_success
+                it "flashes" do
+                    expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
                 end
 
-                it "returns csv filename to be 'graph_segment_population.csv'" do
-                    expect(response.headers["Content-Disposition"]).to include 'graph_segment_population.csv'
+                it "calls job" do
+                    expect(GenericGraphsSegmentPopulationDownloadJob).to have_received(:perform_later)
                 end
             end
         end
@@ -171,12 +175,8 @@ RSpec.describe GenericGraphsController, type: :controller do
                         expect(json_response[:highcharts][:series][0][:data][0][:name]).to eq group.name
                     end
 
-                    it 'returns correct information on categories', skip: "corresponding code has been commented out" do
-                        expect(json_response[:highcharts][:categories]).to eq [group.name]
-                    end
-
-                    it 'return xAxisTitle to be ERG' do
-                        expect(json_response[:highcharts][:xAxisTitle]).to eq 'ERG'
+                    it 'return xAxisTitle to be Group' do
+                        expect(json_response[:highcharts][:xAxisTitle]).to eq 'Group'
                     end
 
                     it "return yAxisTitle to be 'Nb of events'" do
@@ -190,19 +190,22 @@ RSpec.describe GenericGraphsController, type: :controller do
             end
 
             context "when format is csv" do
-                before { get :events_created, format: :csv }
+                before {
+                    allow(GenericGraphsEventsCreatedDownloadJob).to receive(:perform_later)
+                    request.env['HTTP_REFERER'] = "back"
+                    get :events_created, format: :csv
+                }
 
-                it "returns csv format" do
-                    expect(response.content_type).to eq "text/csv"
+                it "returns to previous page" do
+                    expect(response).to redirect_to "back"
                 end
 
-
-                it "returns success" do
-                    expect(response).to be_success
+                it "flashes" do
+                    expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
                 end
 
-                it "returns csv filename to be 'graph_events_created.csv'" do
-                    expect(response.headers["Content-Disposition"]).to include 'graph_events_created.csv'
+                it "calls job" do
+                    expect(GenericGraphsEventsCreatedDownloadJob).to have_received(:perform_later)
                 end
             end
         end
@@ -250,10 +253,6 @@ RSpec.describe GenericGraphsController, type: :controller do
                         expect(json_response[:highcharts][:series][0][:data][0][:name]).to eq group.name
                     end
 
-                    it 'returns correct information on categories', skip: "corresponding code has been commented out" do
-                        expect(json_response[:highcharts][:categories]).to eq [group.name]
-                    end
-
                     it 'return xAxisTitle to be ERG' do
                         expect(json_response[:highcharts][:xAxisTitle]).to eq 'ERG'
                     end
@@ -269,18 +268,22 @@ RSpec.describe GenericGraphsController, type: :controller do
             end
 
             context "when format is csv" do
-                before { get :messages_sent, format: :csv }
+                before {
+                    allow(GenericGraphsMessagesSentDownloadJob).to receive(:perform_later)
+                    request.env['HTTP_REFERER'] = "back"
+                    get :messages_sent, format: :csv
+                }
 
-                it "returns csv format" do
-                    expect(response.content_type).to eq "text/csv"
+                it "returns to previous page" do
+                    expect(response).to redirect_to "back"
                 end
 
-                it "returns success" do
-                    expect(response).to be_success
+                it "flashes" do
+                    expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
                 end
 
-                it "returns csv filename to be 'graph_messages_sent.csv'" do
-                    expect(response.headers["Content-Disposition"]).to include 'graph_messages_sent.csv'
+                it "calls job" do
+                    expect(GenericGraphsMessagesSentDownloadJob).to have_received(:perform_later)
                 end
             end
         end
@@ -297,7 +300,7 @@ RSpec.describe GenericGraphsController, type: :controller do
             end
         end
     end
-    
+
     describe "GET#mentorship" do
         describe "with logged in user" do
             login_user_from_let
@@ -328,8 +331,8 @@ RSpec.describe GenericGraphsController, type: :controller do
                         expect(json_response[:highcharts][:series][0][:data][0][:name]).to eq group.name
                     end
 
-                    it 'return xAxisTitle to be ERG' do
-                        expect(json_response[:highcharts][:xAxisTitle]).to eq 'ERG'
+                    it 'return xAxisTitle to be Group' do
+                        expect(json_response[:highcharts][:xAxisTitle]).to eq 'Group'
                     end
 
                     it "return yAxisTitle to be 'Nb of events'" do
@@ -343,18 +346,22 @@ RSpec.describe GenericGraphsController, type: :controller do
             end
 
             context "when format is csv" do
-                before { get :mentorship, format: :csv }
+                before {
+                    allow(GenericGraphsMentorshipDownloadJob).to receive(:perform_later)
+                    request.env['HTTP_REFERER'] = "back"
+                    get :mentorship, format: :csv
+                }
 
-                it "returns csv format" do
-                    expect(response.content_type).to eq "text/csv"
+                it "returns to previous page" do
+                    expect(response).to redirect_to "back"
                 end
 
-                it "returns success" do
-                    expect(response).to be_success
+                it "flashes" do
+                    expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
                 end
 
-                it "returns csv filename to be 'graph_group_mentorship.csv'" do
-                    expect(response.headers["Content-Disposition"]).to include 'graph_group_mentorship.csv'
+                it "calls job" do
+                    expect(GenericGraphsMentorshipDownloadJob).to have_received(:perform_later)
                 end
             end
         end
@@ -371,7 +378,7 @@ RSpec.describe GenericGraphsController, type: :controller do
             end
         end
     end
-    
+
     describe "GET#mentoring_sessions" do
         describe "with logged in user" do
             login_user_from_let
@@ -402,8 +409,8 @@ RSpec.describe GenericGraphsController, type: :controller do
                         expect(json_response[:highcharts][:series][0][:data][0][:name]).to eq group.name
                     end
 
-                    it 'return xAxisTitle to be ERG' do
-                        expect(json_response[:highcharts][:xAxisTitle]).to eq 'ERG'
+                    it 'return xAxisTitle to be Group' do
+                        expect(json_response[:highcharts][:xAxisTitle]).to eq 'Group'
                     end
 
                     it "return yAxisTitle to be 'Nb of events'" do
@@ -417,18 +424,22 @@ RSpec.describe GenericGraphsController, type: :controller do
             end
 
             context "when format is csv" do
-                before { get :mentoring_sessions, format: :csv }
+                before {
+                    allow(GenericGraphsMentoringSessionsDownloadJob).to receive(:perform_later)
+                    request.env['HTTP_REFERER'] = "back"
+                    get :mentoring_sessions, format: :csv
+                }
 
-                it "returns csv format" do
-                    expect(response.content_type).to eq "text/csv"
+                it "returns to previous page" do
+                    expect(response).to redirect_to "back"
                 end
 
-                it "returns success" do
-                    expect(response).to be_success
+                it "flashes" do
+                    expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
                 end
 
-                it "returns csv filename to be 'graph_group_mentoring_sessions.csv'" do
-                    expect(response.headers["Content-Disposition"]).to include 'graph_group_mentoring_sessions.csv'
+                it "calls job" do
+                    expect(GenericGraphsMentoringSessionsDownloadJob).to have_received(:perform_later)
                 end
             end
         end
@@ -445,7 +456,7 @@ RSpec.describe GenericGraphsController, type: :controller do
             end
         end
     end
-    
+
     describe "GET#mentoring_interests" do
         describe "with logged in user" do
             login_user_from_let
@@ -468,8 +479,8 @@ RSpec.describe GenericGraphsController, type: :controller do
                         expect(json_response[:highcharts][:series][0][:title]).to eq 'Number of mentoring sessions'
                     end
 
-                    it 'return xAxisTitle to be ERG' do
-                        expect(json_response[:highcharts][:xAxisTitle]).to eq 'ERG'
+                    it 'return xAxisTitle to be Group' do
+                        expect(json_response[:highcharts][:xAxisTitle]).to eq 'Group'
                     end
 
                     it "return yAxisTitle to be 'Nb of events'" do
@@ -483,18 +494,22 @@ RSpec.describe GenericGraphsController, type: :controller do
             end
 
             context "when format is csv" do
-                before { get :mentoring_interests, format: :csv }
+                before {
+                    allow(GenericGraphsMentoringInterestsDownloadJob).to receive(:perform_later)
+                    request.env['HTTP_REFERER'] = "back"
+                    get :mentoring_interests, format: :csv
+                }
 
-                it "returns csv format" do
-                    expect(response.content_type).to eq "text/csv"
+                it "returns to previous page" do
+                    expect(response).to redirect_to "back"
                 end
 
-                it "returns success" do
-                    expect(response).to be_success
+                it "flashes" do
+                    expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
                 end
 
-                it "returns csv filename to be 'mentoring_interests.csv'" do
-                    expect(response.headers["Content-Disposition"]).to include 'mentoring_interests.csv'
+                it "calls job" do
+                    expect(GenericGraphsMentoringInterestsDownloadJob).to have_received(:perform_later)
                 end
             end
         end
@@ -511,7 +526,7 @@ RSpec.describe GenericGraphsController, type: :controller do
             end
         end
     end
-    
+
     describe "GET#top_groups_by_views" do
         describe "with logged in user" do
             login_user_from_let
@@ -531,32 +546,36 @@ RSpec.describe GenericGraphsController, type: :controller do
                     let!(:json_response) { JSON.parse(response.body, symbolize_names: true) }
 
                     it 'returns correct title' do
-                        expect(json_response[:highcharts][:series][0][:title]).to eq "# of views per ERG"
+                        expect(json_response[:highcharts][:series][0][:title]).to eq "# of views per Group"
                     end
 
-                    it 'return xAxisTitle to be ERG' do
-                        expect(json_response[:highcharts][:xAxisTitle]).to eq 'ERG'
+                    it 'return xAxisTitle to be Group' do
+                        expect(json_response[:highcharts][:xAxisTitle]).to eq 'Group'
                     end
 
                     it "return yAxisTitle to be 'Nb of views'" do
-                        expect(json_response[:highcharts][:yAxisTitle]).to eq "# of views per ERG"
+                        expect(json_response[:highcharts][:yAxisTitle]).to eq "# of views per Group"
                     end
                 end
             end
 
             context "when format is csv" do
-                before { get :top_groups_by_views, format: :csv }
+                before {
+                    allow(GenericGraphsTopGroupsByViewsDownloadJob).to receive(:perform_later)
+                    request.env['HTTP_REFERER'] = "back"
+                    get :top_groups_by_views, format: :csv
+                }
 
-                it "returns csv format" do
-                    expect(response.content_type).to eq "text/csv"
+                it "returns to previous page" do
+                    expect(response).to redirect_to "back"
                 end
 
-                it "returns success" do
-                    expect(response).to be_success
+                it "flashes" do
+                    expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
                 end
 
-                it "returns csv filename to be 'views_per_ERG.csv'" do
-                    expect(response.headers["Content-Disposition"]).to include 'views_per_ERG.csv'
+                it "calls job" do
+                    expect(GenericGraphsTopGroupsByViewsDownloadJob).to have_received(:perform_later)
                 end
             end
         end
@@ -573,7 +592,7 @@ RSpec.describe GenericGraphsController, type: :controller do
             end
         end
     end
-    
+
     describe "GET#top_folders_by_views" do
         describe "with logged in user" do
             login_user_from_let
@@ -603,18 +622,22 @@ RSpec.describe GenericGraphsController, type: :controller do
             end
 
             context "when format is csv" do
-                before { get :top_folders_by_views, format: :csv }
+                before {
+                    allow(GenericGraphsTopFoldersByViewsDownloadJob).to receive(:perform_later)
+                    request.env['HTTP_REFERER'] = "back"
+                    get :top_folders_by_views, format: :csv
+                }
 
-                it "returns csv format" do
-                    expect(response.content_type).to eq "text/csv"
+                it "returns to previous page" do
+                    expect(response).to redirect_to "back"
                 end
 
-                it "returns success" do
-                    expect(response).to be_success
+                it "flashes" do
+                    expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
                 end
 
-                it "returns csv filename to be 'views_per_folder.csv'" do
-                    expect(response.headers["Content-Disposition"]).to include 'views_per_folder.csv'
+                it "calls job" do
+                    expect(GenericGraphsTopFoldersByViewsDownloadJob).to have_received(:perform_later)
                 end
             end
         end
@@ -631,7 +654,7 @@ RSpec.describe GenericGraphsController, type: :controller do
             end
         end
     end
-    
+
     describe "GET#top_resources_by_views" do
         describe "with logged in user" do
             login_user_from_let
@@ -661,18 +684,22 @@ RSpec.describe GenericGraphsController, type: :controller do
             end
 
             context "when format is csv" do
-                before { get :top_resources_by_views, format: :csv }
+                before {
+                    allow(GenericGraphsTopResourcesByViewsDownloadJob).to receive(:perform_later)
+                    request.env['HTTP_REFERER'] = "back"
+                    get :top_resources_by_views, format: :csv
+                }
 
-                it "returns csv format" do
-                    expect(response.content_type).to eq "text/csv"
+                it "returns to previous page" do
+                    expect(response).to redirect_to "back"
                 end
 
-                it "returns success" do
-                    expect(response).to be_success
+                it "flashes" do
+                    expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
                 end
 
-                it "returns csv filename to be 'views_per_resource.csv'" do
-                    expect(response.headers["Content-Disposition"]).to include 'views_per_resource.csv'
+                it "calls job" do
+                    expect(GenericGraphsTopResourcesByViewsDownloadJob).to have_received(:perform_later)
                 end
             end
         end
@@ -689,7 +716,7 @@ RSpec.describe GenericGraphsController, type: :controller do
             end
         end
     end
-    
+
     describe "GET#top_news_by_views" do
         describe "with logged in user" do
             login_user_from_let
@@ -719,18 +746,22 @@ RSpec.describe GenericGraphsController, type: :controller do
             end
 
             context "when format is csv" do
-                before { get :top_news_by_views, format: :csv }
+                before {
+                    allow(GenericGraphsTopNewsByViewsDownloadJob).to receive(:perform_later)
+                    request.env['HTTP_REFERER'] = "back"
+                    get :top_news_by_views, format: :csv
+                }
 
-                it "returns csv format" do
-                    expect(response.content_type).to eq "text/csv"
+                it "returns to previous page" do
+                    expect(response).to redirect_to "back"
                 end
 
-                it "returns success" do
-                    expect(response).to be_success
+                it "flashes" do
+                    expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
                 end
 
-                it "returns csv filename to be 'views_per_news_link.csv'" do
-                    expect(response.headers["Content-Disposition"]).to include 'views_per_news_link.csv'
+                it "calls job" do
+                    expect(GenericGraphsTopNewsByViewsDownloadJob).to have_received(:perform_later)
                 end
             end
         end

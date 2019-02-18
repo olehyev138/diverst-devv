@@ -4,6 +4,7 @@ class User::EventsController < ApplicationController
   layout 'user'
 
   def index
+    authorize Initiative
     @upcoming_events = current_user.initiatives.upcoming + current_user.invited_initiatives.upcoming
     @past_events =  current_user.initiatives.past + current_user.invited_initiatives.past
     @ongoing_events = current_user.initiatives.ongoing + current_user.invited_initiatives.ongoing

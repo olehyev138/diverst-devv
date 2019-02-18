@@ -8,10 +8,6 @@ FactoryGirl.define do
     polls_create true
     polls_manage true
 
-    events_index true
-    events_create true
-    events_manage true
-
     group_messages_index true
     group_messages_create true
     group_messages_manage true
@@ -19,6 +15,7 @@ FactoryGirl.define do
     groups_index true
     groups_create true
     groups_manage true
+    
     groups_members_index true
     groups_members_manage true
 
@@ -51,13 +48,29 @@ FactoryGirl.define do
     groups_budgets_request true
     groups_budgets_index true
 
-    annual_budget_manage true
     branding_manage true
     diversity_manage true
     sso_manage true
     manage_posts true
     global_calendar true
     permissions_manage true
+    enterprise_manage true
+    manage_all true
+    
+    group_resources_index true
+    group_resources_create true
+    group_resources_manage true
+
+    groups_budgets_manage true
+    group_leader_index true
+    groups_insights_manage true
+    groups_layouts_manage true
+    social_links_index true
+    social_links_create true
+    social_links_manage true
+    group_settings_manage true
+    group_posts_index true
+    mentorship_manage true
     
     trait :no_permissions do
       campaigns_index false
@@ -67,10 +80,6 @@ FactoryGirl.define do
       polls_index false
       polls_create false
       polls_manage false
-  
-      events_index false
-      events_create false
-      events_manage false
   
       group_messages_index false
       group_messages_create false
@@ -111,14 +120,32 @@ FactoryGirl.define do
       groups_budgets_request false
       groups_budgets_index false
       
-      annual_budget_manage false
       branding_manage false
       diversity_manage false
       sso_manage false
       manage_posts false
       global_calendar false
       permissions_manage false
+      
+      enterprise_manage false
+      manage_all false
+      
+      group_resources_index false
+      group_resources_create false
+      group_resources_manage false
+  
+      groups_budgets_manage false
+      group_leader_index false
+      groups_insights_manage false
+      groups_layouts_manage false
+      social_links_index false
+      social_links_create false
+      social_links_manage false
+      group_settings_manage false
+      group_posts_index false
+      mentorship_manage false
     end
+  
   end
 
   factory :guest_user, parent: :policy_group do
@@ -130,10 +157,6 @@ FactoryGirl.define do
     polls_index false
     polls_create false
     polls_manage false
-
-    events_index false
-    events_create false
-    events_manage false
 
     group_messages_index false
     group_messages_create false
@@ -174,6 +197,5 @@ FactoryGirl.define do
     groups_budgets_request false
     groups_budgets_index false
 
-    annual_budget_manage false
   end
 end

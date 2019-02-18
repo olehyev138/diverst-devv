@@ -1,6 +1,11 @@
-<div class="card__section card__section--border">
+<div class="card__section card__section--border" id="restored_social_link_<%= social_link.id %>">
   <div class="row">
     <div class="col-xs-12">
+      <% if EnterprisePolicy.new(current_user, current_user.enterprise).manage_posts? && social_link.news_feed_link.approved? %>
+        <%= link_to archive_group_social_link_path(social_link.group, social_link), method: :patch, remote: true do %>
+          Archive
+        <% end %>
+      <% end %>
       <div class="flex-row flex-row--middle">
         <div class="flex-row__cell flex-row__cell--grow">
           <% if social_link.url.include?("facebook") %>
@@ -18,12 +23,12 @@
   <div class="row">
     <div class="col-xs-8">
       <span class="hidden-xs pull-right">
-        <%= link_to "Approve", approve_group_posts_path(:group_id => social_link.group.id, :link_id => social_link.news_feed_link.id), method: :post, class: "btn btn--primary" if policy(social_link.group).erg_leader_permissions? and !social_link.news_feed_link.approved? %>
-        <%= link_to 'Delete', group_social_link_path(social_link.group, social_link.id),method: :delete, class: "btn btn--danger", data: { confirm: "Are you sure?" } if policy(social_link).destroy? %>
+        <%= link_to "Approve", approve_group_posts_path(:group_id => social_link.group_id, :link_id => social_link.news_feed_link.id), method: :post, class: "btn btn--primary" if GroupPostsPolicy.new(current_user, [social_link.group]).update? && !social_link.news_feed_link.approved? %>
+        <%= link_to 'Delete', group_social_link_path(social_link.group, social_link.id),method: :delete, class: "btn btn--danger", data: { confirm: "Are you sure?" } if GroupSocialLinkPolicy.new(current_user, [social_link.group, social_link]).destroy? %>
       </span>
       <div class="btn-group visible-xs pull-right">
-        <%= link_to "Approve", approve_group_posts_path(:group_id => social_link.group.id, :link_id => social_link.news_feed_link.id), method: :post, class: "btn btn-primary" if policy(social_link.group).erg_leader_permissions? and !social_link.news_feed_link.approved? %>
-        <%= link_to 'Delete', group_social_link_path(social_link.group, social_link.id),method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure?" } if policy(social_link).destroy? %>
+        <%= link_to "Approve", approve_group_posts_path(:group_id => social_link.group_id, :link_id => social_link.news_feed_link.id), method: :post, class: "btn btn-primary" if GroupPostsPolicy.new(current_user, [social_link.group]).update? && !social_link.news_feed_link.approved? %>
+        <%= link_to 'Delete', group_social_link_path(social_link.group, social_link.id),method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure?" } if GroupSocialLinkPolicy.new(current_user, [social_link.group, social_link]).destroy? %>
       </div>
     </div>
   </div>

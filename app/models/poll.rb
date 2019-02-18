@@ -3,6 +3,7 @@ class Poll < ActiveRecord::Base
 
     enum status: [:published, :draft]
 
+
     has_many :fields, dependent: :destroy
     has_many :responses, class_name: 'PollResponse', inverse_of: :poll, dependent: :destroy
     has_many :graphs, dependent: :destroy
@@ -19,6 +20,8 @@ class Poll < ActiveRecord::Base
 
     after_save :schedule_users_notification
 
+    before_destroy :remove_associated_fields, prepend: true
+
     accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
 
     validates :title,       presence: true
@@ -32,6 +35,7 @@ class Poll < ActiveRecord::Base
     validate :validate_initiative_enterprise
     validate :validate_segments_enterprise
     validate :validate_associated_objects
+    validate :at_least_one_field
 
     def can_be_saved_as_draft?
       self.new_record? || self.draft?
@@ -115,7 +119,7 @@ class Poll < ActiveRecord::Base
     end
 
     def validate_initiative_enterprise
-        if !initiative.nil? && !enterprise.initiatives.pluck(:id).include?(initiative_id)
+        if !initiative.nil? && !enterprise.initiatives.where(:id => initiative_id).exists?
             errors.add(:initiative, "is invalid")
         end
     end
@@ -128,5 +132,15 @@ class Poll < ActiveRecord::Base
 
     def schedule_users_notification
       PollUsersNotifierJob.perform_later(self.id)
+    end
+
+    def at_least_one_field
+        errors[:base] << "Survey is invalid without any field" unless fields.any?
+    end
+    
+    private
+
+    def remove_associated_fields
+        fields.delete_all if fields.any?
     end
 end

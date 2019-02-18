@@ -7,7 +7,7 @@ class Groups::QuestionsController < ApplicationController
   layout 'erg'
 
   def index
-    authorize @group, :update?
+    authorize @group, :insights?
 
     @answers_count = @group.user_groups.with_answered_survey.count
   end
@@ -35,15 +35,16 @@ class Groups::QuestionsController < ApplicationController
   end
 
   def export_csv
-    respond_to do |format|
-      format.csv { send_data @group.survey_answers_csv,  filename: csv_file_name }
-    end
+    authorize @group, :insights?
+    GroupQuestionsDownloadJob.perform_later(current_user.id, @group.id)
+    flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+    redirect_to :back
   end
 
   protected
 
   def set_group
-   current_user ? @group = current_user.enterprise.groups.find(params[:group_id]) : user_not_authorized
+    @group = current_user.enterprise.groups.find(params[:group_id])
   end
 
   def set_user_group
