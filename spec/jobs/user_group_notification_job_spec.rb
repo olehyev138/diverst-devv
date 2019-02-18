@@ -243,10 +243,10 @@ RSpec.describe UserGroupNotificationJob, type: :job do
 
       let!(:second_user) {create(:user, :enterprise => user.enterprise, groups_notifications_frequency: User.groups_notifications_frequencies[:disabled])}
       let!(:third_group) {create(:group, :enterprise => second_user.enterprise)}
-      
+
       let!(:user_group){ create(:user_group, user: user, group: group) }
       let!(:second_user_group){ create(:user_group, user: second_user, group: second_group) }
-      
+
 
       let!(:group_message){ create(:group_message, group: third_group, updated_at: yesterday, owner: user, :news_feed_link_attributes => {:news_feed_id => third_group.news_feed.id}) }
       let!(:another_group_message){ create(:group_message, group: third_group, updated_at: today, owner: user, :news_feed_link_attributes => {:news_feed_id => third_group.news_feed.id}) }
@@ -279,7 +279,7 @@ RSpec.describe UserGroupNotificationJob, type: :job do
   end
 
   context "with weekly frequency" do
-    let!(:user){ create(:user, groups_notifications_frequency: User.groups_notifications_frequencies[:weekly]) }
+    let!(:user){ create(:user, groups_notifications_frequency: User.groups_notifications_frequencies[:weekly], groups_notifications_date: User.groups_notifications_dates[:monday]) }
 
     context "and there is no messages or news" do
       it "does no send an email of notification to user" do
@@ -295,7 +295,7 @@ RSpec.describe UserGroupNotificationJob, type: :job do
         allow(Date).to receive(:today).and_return(Date.today.monday)
       }
 
-      let(:week_ago) { 6.days.ago }
+      let(:week_ago) { (7.days + 1.second).ago }
       let(:today) { Date.today }
 
       let!(:user_group){ create(:user_group, user: user, group: group) }
@@ -312,7 +312,7 @@ RSpec.describe UserGroupNotificationJob, type: :job do
       let!(:social_link){ create(:social_link, group: group, updated_at: week_ago, author: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
       let!(:another_social_link){ create(:social_link, group: group, updated_at: today, author: user, :news_feed_link_attributes => {:news_feed_id => group.news_feed.id}) }
 
-      it "sends an email of notification to user", skip: "inconsistent test result on Circle CI" do
+      it "sends an email of notification to user" do
         mailer = double("mailer")
         expect(UserGroupMailer).to receive(:notification)
           .with(user, [{ group: group, events_count: 1, messages_count: 1, news_count: 1, social_links_count: 1, participating_events_count: 1 }]){ mailer }
@@ -320,7 +320,7 @@ RSpec.describe UserGroupNotificationJob, type: :job do
         subject.perform({:notifications_frequency => "weekly", :enterprise_id => user.enterprise_id})
       end
 
-      it "sends an email of notification to user when user is in segment and items are not in segments", skip: "inconsistent test result on Circle CI" do
+      it "sends an email of notification to user when user is in segment and items are not in segments" do
         segment = create(:segment, :groups => [group, second_group])
         create(:users_segment, :user => user, :segment => segment)
 
@@ -333,7 +333,7 @@ RSpec.describe UserGroupNotificationJob, type: :job do
         end
       end
 
-      it "sends an email of notification to user when user is in segment and items are in segment", skip: "inconsistent test result on Circle CI" do
+      it "sends an email of notification to user when user is in segment and items are in segment" do
         segment = create(:segment, :groups => [group, second_group])
         create(:users_segment, :user => user, :segment => segment)
 
@@ -350,7 +350,7 @@ RSpec.describe UserGroupNotificationJob, type: :job do
         end
       end
 
-      it "send an email of notification only for events to user when user is not in segment and items are in segment", skip: "inconsistent test result on Circle CI" do
+      it "send an email of notification only for events to user when user is not in segment and items are in segment" do
         segment = create(:segment, :groups => [group, second_group])
 
         create(:news_link_segment, :news_link => news_link, :segment => segment)
@@ -390,12 +390,12 @@ RSpec.describe UserGroupNotificationJob, type: :job do
       end
     end
 
-    context "and there is new messages or news and notifications_date is Sunday" do
+    context "and there is new messages or news and date is Sunday" do
       before {
-        allow(Date).to receive(:today).and_return(Date.today.monday)
+        allow(Date).to receive(:today).and_return(Date.today.sunday)
       }
 
-      let(:week_ago) { 6.days.ago }
+      let(:week_ago) { (7.days + 1.second).ago }
       let(:today) { Date.today }
 
       let!(:user_group){ create(:user_group, user: user, group: group) }

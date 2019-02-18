@@ -36,10 +36,11 @@ RSpec.describe Enterprise, type: :model do
         it { expect(enterprise).to have_many(:badges) }
         it { expect(enterprise).to have_many(:group_categories) }
         it { expect(enterprise).to have_many(:group_category_types) }
+        it { expect(enterprise).to have_many(:sponsors) }
 
         it{ expect(enterprise).to have_one(:custom_text) }
 
-        [:fields, :mobile_fields, :yammer_field_mappings, :theme, :reward_actions].each do |attribute|
+        [:fields, :mobile_fields, :yammer_field_mappings, :theme, :reward_actions, :sponsors].each do |attribute|
             it { expect(enterprise).to accept_nested_attributes_for(attribute).allow_destroy(true) }
         end
 
@@ -55,7 +56,7 @@ RSpec.describe Enterprise, type: :model do
     describe 'testing callbacks' do
         let!(:new_enterprise) { build(:enterprise) }
 
-        it 'triggers #create_elasticsearch_only_fields on before_create' do 
+        it 'triggers #create_elasticsearch_only_fields on before_create' do
             expect(new_enterprise).to receive(:create_elasticsearch_only_fields)
             new_enterprise.save
         end
@@ -140,7 +141,7 @@ RSpec.describe Enterprise, type: :model do
             expect(mapped_fields).to_not have_key 'department'
         end
     end
-    
+
     describe "#destroy_callbacks" do
         it "removes the child objects", skip: "this spec will pass when PR 1245 is merged to master" do
             enterprise = create(:enterprise)
@@ -167,9 +168,9 @@ RSpec.describe Enterprise, type: :model do
             badge = create(:badge, :enterprise => enterprise)
             group_category = create(:group_category, :enterprise => enterprise)
             group_category_type = create(:group_category_type, :enterprise => enterprise)
-            
+
             enterprise.destroy!
-            
+
             expect{Enterprise.find(enterprise.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{User.find(user.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{Field.find(field.id)}.to raise_error(ActiveRecord::RecordNotFound)
@@ -196,28 +197,52 @@ RSpec.describe Enterprise, type: :model do
             expect{GroupCategoryType.find(group_category_type.id)}.to raise_error(ActiveRecord::RecordNotFound)
         end
     end
-    
+
     describe "#resources_count" do
         it "gives the correct resource count for the enterprise" do
             enterprise = create(:enterprise)
             expect(enterprise.resources_count).to eq (0)
-            
+
             folder_1 = create(:folder, :enterprise => enterprise)
             folder_2 = create(:folder, :enterprise => enterprise)
-            
+
             group_1 = create(:group, :enterprise => enterprise)
             group_2 = create(:group, :enterprise => enterprise)
-            
+
             folder_3 = create(:folder, :group => group_1)
             folder_4 = create(:folder, :group => group_2)
-            
+
             create_list(:resource, 5, :folder => folder_1)
             create_list(:resource, 5, :folder => folder_2)
             create_list(:resource, 5, :folder => folder_3)
             create_list(:resource, 5, :folder => folder_4)
-            
+
             enterprise.reload
             expect(enterprise.resources_count).to eq (20)
+        end
+    end
+    
+    describe "#redirect_email_contact" do
+        it "does not save bad email" do
+            enterprise = build(:enterprise, :redirect_email_contact => "fkakaodsd")
+            enterprise.save
+            
+            expect(enterprise.errors.full_messages.count).to eq(1)
+            expect(enterprise.errors.full_messages.first).to eq("Redirect email contact is invalid")
+        end
+        
+        it "does save email" do
+            enterprise = build(:enterprise, :redirect_email_contact => "test@gmail.com")
+            enterprise.save
+            
+            expect(enterprise.errors.full_messages.count).to eq(0)
+        end
+        
+        it "allows blank email" do
+            enterprise = build(:enterprise, :redirect_email_contact => "")
+            enterprise.save
+            
+            expect(enterprise.errors.full_messages.count).to eq(0)
         end
     end
 end

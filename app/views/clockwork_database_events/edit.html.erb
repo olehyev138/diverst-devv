@@ -1,0 +1,34 @@
+<div class="content__main">
+  <div class="row">
+    <div class="col sm-12">
+      <div class="card">
+        <div class="card__section">
+          <h3>Edit</h3>
+          <%= simple_form_for @clockwork_database_event do |f| %>
+            <%= f.input :name %>
+
+            <%= f.hidden_field :disabled, value: 0 %>
+            <%= f.input :disabled, :hint => "The event will not run when this is toggled on" %>
+            
+            <%= f.input :day, :hint => "Pick a day when this event should run", :collection => Date::DAYNAMES.map(&:downcase), :disabled => true %>
+            <%= f.input :at, :label => "Run at", :hint => "Select a time when this event should run", input_html: { class: "at" } %>
+            
+            <%= f.input :tz, :label => "Time Zone", :collection => ActiveSupport::TimeZone.all, :label_method => lambda { |zone| "#{zone.to_s}" }, :value_method => :name, :include_blank => false %>
+            
+            <%= f.button :submit %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+    $(".at").timepicker({showMeridian:false});
+      
+    var at = "<%= @clockwork_database_event.at %>";
+    
+    if(!at){
+      $(".at").val("");
+    }
+    
+</script>

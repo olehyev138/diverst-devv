@@ -143,6 +143,8 @@ Rails.application.routes.draw do
       end
     end
   end
+  
+  resources :clockwork_database_events
 
   get 'integrations', to: 'integrations#index'
 
