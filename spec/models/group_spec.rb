@@ -23,7 +23,6 @@ RSpec.describe Group, :type => :model do
         it{ expect(group).to have_many(:polls).through(:groups_polls) }
         it{ expect(group).to have_many(:leaders).through(:group_leaders) }
         it{ expect(group).to have_many(:poll_responses).through(:polls).source(:responses) }
-        it { expect(group).to have_many(:events) }
 
         it { expect(group).to have_many(:own_initiatives).class_name('Initiative').with_foreign_key('owner_group_id') }
         it { expect(group).to have_many(:initiative_participating_groups) }
@@ -356,12 +355,10 @@ RSpec.describe Group, :type => :model do
         it "returns an array with owner and leaders" do
             user = create(:user)
             group = create(:group, :enterprise => user.enterprise, :owner => user)
+            create(:user_group, :user => user, :group => group, :accepted_member => true)
+            create(:group_leader, :group => group, :user => user)
 
-            2.times do
-                create(:group_leader, :group => group, :user => user)
-            end
-
-            expect(group.managers.length).to eq(3)
+            expect(group.managers.length).to eq(2)
         end
     end
 
@@ -602,29 +599,6 @@ RSpec.describe Group, :type => :model do
         end
     end
 
-    describe "#send_invitation_emails" do
-        it "calls GroupMailer" do
-            allow(GroupMailer).to receive(:delay).and_return(GroupMailer)
-            allow(GroupMailer).to receive(:invitation)
-
-            group = build(:group)
-            segment = build(:segment)
-            create(:invitation_segments_group, :group => group, :invitation_segment => segment)
-
-            # make sure group has invitation_segments
-            group.reload
-            expect(group.invitation_segments.count).to eq(1)
-
-            # change the value
-            group.send_invitations = true
-            group.save!
-
-            expect(GroupMailer).to have_received(:invitation)
-            expect(group.send_invitations).to be(false)
-            expect(group.invitation_segments.count).to eq(0)
-        end
-    end
-
     describe "#update_all_elasticsearch_members" do
         it "updates the users in elasticsearch" do
             group = create(:group)
@@ -644,6 +618,7 @@ RSpec.describe Group, :type => :model do
         it 'updates contact email if group leader is default_group_contact' do
             user = create(:user)
             group = create(:group, :enterprise => user.enterprise)
+            create(:user_group, :user => user, :group => group, :accepted_member => true)
 
             group_leader = create(:group_leader, :group => group, :user => user, :default_group_contact => true)
             group_leader = group.group_leaders.find_by(default_group_contact: true)&.user
@@ -655,6 +630,7 @@ RSpec.describe Group, :type => :model do
         it 'sets contact email to nil if group leader is not set.' do
             user = create(:user)
             group = create(:group, :enterprise => user.enterprise)
+            create(:user_group, :user => user, :group => group, :accepted_member => true)
 
             create(:group_leader, :group => group, :user => user, :default_group_contact => false)
             
@@ -690,7 +666,6 @@ RSpec.describe Group, :type => :model do
             news_feed = create(:news_feed, :group => group)
             user_group = create(:user_group, :group => group)
             groups_poll = create(:groups_poll, :group => group)
-            event = create(:event, :group => group)
             initiative = create(:initiative, :owner_group_id => group.id)
             budget = create(:budget, :group => group)
             group_message = create(:group_message, :group => group)
@@ -706,6 +681,7 @@ RSpec.describe Group, :type => :model do
             field = create(:field, :group => group, :field_type => "regular")
             survey_field = create(:field, :group => group, :field_type => "group_survey")
             user = create(:user, :enterprise => group.enterprise)
+            create(:user_group, :user => user, :group => group, :accepted_member => true)
             group_leader = create(:group_leader, :group => group, :user => user)
             child = create(:group, :parent => group)
             
@@ -715,7 +691,6 @@ RSpec.describe Group, :type => :model do
             expect{NewsFeed.find(news_feed.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{UserGroup.find(user_group.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{GroupsPoll.find(groups_poll.id)}.to raise_error(ActiveRecord::RecordNotFound)
-            expect{Event.find(event.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{Initiative.find(initiative.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{Budget.find(budget.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{GroupMessage.find(group_message.id)}.to raise_error(ActiveRecord::RecordNotFound)
@@ -761,6 +736,27 @@ RSpec.describe Group, :type => :model do
             
             group_4.default_mentor_group = true
             expect(group_4.valid?).to be false
+        end
+    end
+    
+    describe "#name" do
+        it "validates group cannot have duplicate names per enterprise" do
+            enterprise = create(:enterprise)
+            enterprise_2 = create(:enterprise)
+            group = create(:group, :enterprise => enterprise)
+            group_2 = build(:group, :name => group.name, :enterprise => enterprise)
+            group_3 = create(:group, :name => group.name, :enterprise => enterprise_2)
+            
+            # validate that the first group is valid
+            expect(group.valid?).to be(true)
+            
+            # validate that the second group is not valid since a group cannot have 
+            # the same name as another group in the same enterprise
+            expect(group_2.valid?).to_not be(true)
+            
+            # validate that the third group is valid since a group can have the same
+            # as another group in another enterprise
+            expect(group_3.valid?).to be(true)
         end
     end
 end

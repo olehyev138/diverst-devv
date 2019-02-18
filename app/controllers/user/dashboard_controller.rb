@@ -23,7 +23,7 @@ class User::DashboardController < ApplicationController
   private
 
   def set_enterprise
-    current_user ? @enterprise = current_user.enterprise : user_not_authorized
+    @enterprise = current_user.enterprise
   end
 
   def posts
@@ -36,7 +36,7 @@ class User::DashboardController < ApplicationController
       .includes(:group_message, :news_link, :social_link)
       .where("news_feed_links.news_feed_id IN (?) OR shared_news_feed_links.news_feed_id IN (?)", news_feed_ids, news_feed_ids)
       .where(:approved => true)
-      .where(where, current_user.segments.pluck(:id))
+      .where(where, current_user.segments.pluck(:id)).where(archived_at: nil)
       .order(created_at: :desc)
       .distinct
       .limit(5) #just to not fetch everything, we'll filter it later

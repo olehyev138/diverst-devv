@@ -1,7 +1,7 @@
 <div class="content__main">
   <div class="content__header">
     <h1>Actions</h1>
-    <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise) do |f| %>
+    <%= simple_form_for @enterprise, :url => enable_rewards_path(@enterprise), method: :put do |f| %>
       <%= f.hidden_field :enable_rewards, value: 0 %>
       <%= f.input :enable_rewards, id: 'enable_rewards', label: 'Enable Rewards' %>
       <%= f.button :submit, "Save" %>

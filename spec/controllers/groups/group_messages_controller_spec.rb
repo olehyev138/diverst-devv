@@ -190,14 +190,15 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
             login_user_from_let
 
             context "when user is not the owner of message" do
-                let!(:group_message){ create(:group_message, group: group, subject: "Test") }
+                let!(:group_message){ create(:group_message, group: group, subject: "Test",
+                 owner: create(:user, enterprise: user.enterprise, user_role_id: UserRole.last.id, 
+                    policy_group: create(:guest_user, group_messages_manage: false))) }
 
                 before do
                     patch :update, group_id: group.id, id: group_message.id, group_message: { subject: 'Test2' }
                 end
 
-                it "does not update the message", skip: "test fails" do
-                    group_message.reload
+                it "does not update the message" do
                     expect(group_message.subject).to eq 'Test'
                 end
             end
@@ -393,6 +394,54 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
         describe 'when user is not logged in' do
             before { post :create_comment, group_id: group.id, group_message_id: group_message.id, group_message_comment: attributes_for(:group_message) }
             it_behaves_like "redirect user to users/sign_in path"
+        end
+    end
+
+    describe 'PATCH#archive' do 
+        let!(:group_message){ create(:group_message, group: group) }
+
+        describe 'when user is logged in' do
+            before { request.env["HTTP_REFERER"] = 'back' }
+
+            login_user_from_let
+
+            context 'with valid attributes' do
+                before { patch :archive, group_id: group.id, id: group_message.id }
+
+                it 'redirects to same page' do
+                    expect(response).to redirect_to 'back'
+                end
+
+                it 'archives news_link' do  
+                    expect(assigns[:message].news_feed_link.archived_at).to_not be_nil
+                end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                        perform_enqueued_jobs do
+                            expect{
+                              patch :archive, group_id: group.id, id: group_message.id
+                            }.to change(PublicActivity::Activity, :count).by(1)
+                        end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { GroupMessage.last }
+                    let(:owner) { user }
+                    let(:key) { 'group_message.archive' }
+
+                    before {
+                        perform_enqueued_jobs do
+                            patch :archive, group_id: group.id, id: group_message.id
+                        end
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
+            end
         end
     end
 end

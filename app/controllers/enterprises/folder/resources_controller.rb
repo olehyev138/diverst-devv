@@ -5,6 +5,14 @@ class Enterprises::Folder::ResourcesController < ApplicationController
 
   layout 'erg_manager'
 
+  def restore
+    super
+  end
+
+  def archive
+    super
+  end
+
   protected
   
   def set_enterprise

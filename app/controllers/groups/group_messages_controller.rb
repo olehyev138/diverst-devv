@@ -3,7 +3,7 @@ class Groups::GroupMessagesController < ApplicationController
 
     before_action :authenticate_user!
     before_action :set_group
-    before_action :set_message, only: [:show, :destroy, :edit, :update]
+    before_action :set_message, only: [:show, :destroy, :edit, :update, :archive]
 
     layout 'erg'
 
@@ -25,7 +25,7 @@ class Groups::GroupMessagesController < ApplicationController
     end
 
     def edit
-        authorize @message, :update?
+        authorize [@group, @message], :update?, :policy_class => GroupMessagePolicy
     end
 
     def create
@@ -44,7 +44,7 @@ class Groups::GroupMessagesController < ApplicationController
     end
 
     def update
-        authorize @message, :update?
+        authorize [@group, @message], :update?, :policy_class => GroupMessagePolicy
         if @message.update(message_params)
             track_activity(@message, :update)
             redirect_to group_posts_path(@group)
@@ -79,10 +79,21 @@ class Groups::GroupMessagesController < ApplicationController
         redirect_to group_group_message_path(@group, @message)
     end
 
+    def archive
+        authorize current_user.enterprise, :manage_posts?, :policy_class => EnterprisePolicy
+        @message.news_feed_link.update(archived_at: DateTime.now)
+        track_activity(@message, :archive)
+        
+        respond_to do |format|
+            format.html { redirect_to :back }
+            format.js
+        end
+    end
+
     protected
 
     def set_group
-        current_user ? @group = current_user.enterprise.groups.find(params[:group_id]) : user_not_authorized
+        @group = current_user.enterprise.groups.find(params[:group_id])
     end
 
     def set_message

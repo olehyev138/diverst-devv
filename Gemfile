@@ -9,9 +9,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails', '~> 4.1', '>= 4.1.1'
 gem 'turbolinks', '~> 2.5', '>= 2.5.3'
 gem 'sdoc', '~> 0.4.0', group: :doc # bundle exec rake doc:rails generates the API under doc/api.
-
 gem 'nokogiri', '~> 1.8.2' # need to specify this explicitly, old version has exploit
-
 gem 'puma', '~> 3.1' # Better web server than WEBRick
 gem 'figaro', '~> 1.1', '>= 1.1.1' # Inject ENV from application.yml
 gem 'devise', '~> 3.5', '>= 3.5.6' # Authentication
@@ -55,8 +53,8 @@ gem 'omniauth-linkedin-oauth2', '~> 0.1.5' # OAuth for LinkedIn
 gem 'omniauth-oauth2', '1.3.1' # Temporary fix to address: https://github.com/decioferreira/omniauth-linkedin-oauth2/issues/28
 gem 'activerecord-import', '~> 0.12.0' # Adds a faster way to INSERT multiple rows in the DB
 gem 'inline_svg', '~> 0.6.2' # Extract SVG files' content into the HTML
-gem 'pundit', '~> 1.1' # Authorization
-gem 'draper', '~> 2.1' # Decorators for views
+gem 'pundit', "~> 2.0.0"# Authorization
+gem 'draper', '~> 2.1'# Decorators for views
 gem 'daemons', '~> 1.2', '>= 1.2.3' # For capistrano-clockwork
 gem 'icalendar', '~> 2.3' # For exporting events to your calendar
 gem 'simple_form_fancy_uploads', git: "https://github.com/TeamDiverst/simple_form_fancy_uploads.git", branch: "paperclip_version"
@@ -66,39 +64,35 @@ gem 'twilio-ruby', '~> 5.10.0'
 gem 'mailgun_rails', '~> 0.8.0'
 gem 'enumerize', '~> 2.0'
 gem 'jbuilder', '~> 2.6'
-
 gem 'public_activity', '~> 1.5'
-
 gem 'rollbar', '~> 2.14.1'
-
 gem 'ruby-oembed', '~> 0.12', git: 'https://github.com/TeamDiverst/ruby-oembed.git'
-
 gem 'julia_builder', '~> 0.2.0'
 gem 'date_validator', '~> 0.9.0'
 gem "thor", "0.19.1"# Expected string default value for '--decorator'; got true (boolean) - setting version removes this message
 gem 'sanitize_email', '~> 1.2.2'
-
-gem "rack-timeout"
+gem "rack-timeout", '~> 0.4.2'
+gem 'jquery-ui-rails', '~> 6.0.1'
 
 group :development, :test do
   gem 'spring', '~> 1.6.2' # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'guard-livereload', '~> 2.4', require: false
-  gem 'rb-readline'
-  gem 'rack-livereload'
+  gem 'rb-readline', '~> 0.5.5'
+  gem 'rack-livereload', '~> 0.3.16'
   # The 3 gems above are for livereloading your code
-  gem 'quiet_assets' # Silences asset logs
-  gem 'active_record_query_trace' # View which line is making each SQL query in the logs
+  gem 'quiet_assets', '~> 1.1.0' # Silences asset logs
+  gem 'active_record_query_trace', '~> 1.5.4' # View which line is making each SQL query in the logs
   gem 'rspec-rails', '~> 3.0' # Testing framework
-  gem 'factory_girl_rails' # Create mock objects for testing
-  gem 'capybara' # Helpers for feature specs
-  gem 'poltergeist' # Allows support for JS in feature specs
-  gem 'database_cleaner' # Necessary to clean the DB between tests
-  gem 'pry-rails' # Better Rails console
-  gem 'pry-theme' # Themes for pry
+  gem 'factory_girl_rails', '~> 4.8.0' # Create mock objects for testing
+  gem 'capybara', '~> 2.15.1' # Helpers for feature specs
+  gem 'poltergeist', '~> 1.16.0' # Allows support for JS in feature specs
+  gem 'database_cleaner', '~> 1.6.1' # Necessary to clean the DB between tests
+  gem 'pry-rails', '~> 0.3.6' # Better Rails console
+  gem 'pry-theme', '~> 1.2.0' # Themes for pry
   gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
   gem 'timecop', '~> 0.8.1'
-  gem 'byebug' # Debugger
-  gem 'pundit-matchers', '~> 1.3.1'
+  gem 'byebug', '~> 9.1.0' # Debugger
+  gem 'pundit-matchers', "~> 1.6.0"
 end
 
 group :test do
@@ -108,32 +102,34 @@ group :test do
   gem 'elasticsearch-extensions', '~> 0.0.26'
   gem 'clockwork-test', '~> 0.2.0'
   gem 'webmock', '~> 3.1.1'
+  gem 'rspec-retry'
 end
 
 group :development do
-  gem 'capistrano',      require: false
-  gem 'capistrano-rake', require: false
-  gem 'capistrano3-puma'
-  gem 'capistrano-rails', require: false
-  gem 'capistrano-bundler', require: false
-  gem 'capistrano-rvm'
-  gem 'capistrano-bower'
-  gem 'capistrano-rails-console'
-  gem 'capistrano-sidekiq'
-  gem 'capistrano-clockwork'
-  gem 'spring-commands-rspec'
-  gem 'better_errors' # Different error page
-  gem 'binding_of_caller'
-  gem 'bullet' # Detects N+1 queries
-  gem 'parallel_tests'
-  gem 'meta_request' # Necessary for rails_panel Chrome extension
+  gem 'capistrano', '~> 3.9.1',      require: false
+  gem 'capistrano-rake', '~> 0.2.0', require: false
+  gem 'capistrano3-puma', '~> 3.1.1'
+  gem 'capistrano-rails', '~> 1.3.0', require: false
+  gem 'capistrano-bundler', '~> 1.3.0', require: false
+  gem 'capistrano-rvm', '~> 0.1.2'
+  gem 'capistrano-bower', '~> 1.1.0'
+  gem 'capistrano-rails-console', '~> 2.2.1'
+  gem 'capistrano-sidekiq', '~> 0.20.0'
+  gem 'capistrano-clockwork', '~> 1.0.1'
+  gem 'spring-commands-rspec', '~> 1.0.4'
+  gem 'better_errors', '~> 2.3.0' # Different error page
+  gem 'binding_of_caller', '~> 0.7.2'
+  gem 'bullet', '~> 5.6.1' # Detects N+1 queries
+  gem 'parallel_tests', '~> 2.16.0'
+  gem 'meta_request', '~> 0.4.3' # Necessary for rails_panel Chrome extension
   # gem 'flamegraph'
   # gem 'rack-mini-profiler'
   # gem 'stackprof'
-  gem 'letter_opener'
+  gem 'letter_opener', '~> 1.4.1'
   gem 'letter_opener_web', '~> 1.3', '>= 1.3.1'
-  gem 'rufo'
-  gem 'bundler-audit'
+  gem 'tty-spinner'
+  gem 'rufo', '~> 0.1.0'
+  gem 'bundler-audit', '~> 0.6.0'
 end
 
 group :staging, :production do
@@ -142,5 +138,5 @@ group :staging, :production do
   gem 'newrelic_rpm', '~> 4.5.0'
   gem 'influxdb-rails', git: 'https://github.com/Kukunin/influxdb-rails.git',
                         branch: 'tags_middleware' # Rails metrics to InfluxDB
-  gem 'sidekiq-influxdb' # Sidekiq metrics to InfluxDB
+  gem 'sidekiq-influxdb', '~> 1.1.0' # Sidekiq metrics to InfluxDB
 end

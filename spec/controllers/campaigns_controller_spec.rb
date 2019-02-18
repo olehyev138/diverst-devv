@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe CampaignsController, type: :controller do
-    let(:enterprise){ create(:enterprise) }
+    let(:enterprise){ create(:enterprise, :collaborate_module_enabled => true) }
     let(:user){ create(:user, enterprise: enterprise) }
     let!(:campaign){ create(:campaign, enterprise: enterprise) }
 
@@ -238,10 +238,24 @@ RSpec.describe CampaignsController, type: :controller do
                 expect(response.content_type).to eq "application/json"
             end
 
-            it "gets the contributions_per_erg with csv" do
-                get :contributions_per_erg, id: campaign.id, format: :csv
+            context "csv" do
+              before {
+                  allow(CampaignContributionsDownloadJob).to receive(:perform_later)
+                  request.env['HTTP_REFERER'] = "back"
+                  get :contributions_per_erg, id: campaign.id, format: :csv
+              }
 
-                expect(response.content_type).to eq "text/csv"
+              it "returns to previous page" do
+                  expect(response).to redirect_to "back"
+              end
+
+              it "flashes" do
+                  expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
+              end
+
+              it "calls job" do
+                  expect(CampaignContributionsDownloadJob).to have_received(:perform_later)
+              end
             end
 
             it "doesn't get the contributions_per_erg" do
@@ -266,9 +280,24 @@ RSpec.describe CampaignsController, type: :controller do
                 expect(response.content_type).to eq "application/json"
             end
 
-            it "gets the top_performers with csv" do
-                get :top_performers, id: campaign.id, format: :csv
-                expect(response.content_type).to eq "text/csv"
+            context "csv" do
+              before {
+                  allow(CampaignTopPerformersDownloadJob).to receive(:perform_later)
+                  request.env['HTTP_REFERER'] = "back"
+                  get :top_performers, id: campaign.id, format: :csv
+              }
+
+              it "returns to previous page" do
+                  expect(response).to redirect_to "back"
+              end
+
+              it "flashes" do
+                  expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
+              end
+
+              it "calls job" do
+                  expect(CampaignTopPerformersDownloadJob).to have_received(:perform_later)
+              end
             end
 
             it "doesn't get the top_performers" do

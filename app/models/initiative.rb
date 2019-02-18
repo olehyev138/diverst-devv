@@ -9,7 +9,7 @@ class Initiative < ActiveRecord::Base
   has_many :fields, dependent: :delete_all
   has_many :expenses, dependent: :destroy, class_name: "InitiativeExpense"
   has_many :user_reward_actions
-  
+
   accepts_nested_attributes_for :fields, reject_if: :all_blank, allow_destroy: true
 
   validates :end, date: {after: :start, message: 'must be after start'}, on: [:create, :update]
@@ -141,6 +141,40 @@ class Initiative < ActiveRecord::Base
     end
   end
 
+  def self.to_csv(initiatives:, enterprise: nil)
+    # initiative column titles
+    CSV.generate do |csv|
+      # These names dont correspond to the UI. Pillar = Outcome, Initiative/Program = Pillar, Event = Initiative
+      csv << [
+        enterprise.custom_text.send('erg_text'),
+        enterprise.custom_text.send('outcome_text'),
+        enterprise.custom_text.send('program_text'),
+        'Event Name', 'Start Date', 'End Date',
+        'Expenses', 'Budget', 'Metrics 1', 'Metrics 2'
+      ]
+
+      initiatives.order(:start).each do |initiative|
+        # initiative column values
+        columns = [
+          initiative.group.name,
+          initiative.pillar.outcome.name,
+          initiative.pillar.name,
+          initiative.name,
+          initiative.initiative_date('start'), initiative.initiative_date('end'),
+          ActionController::Base.helpers.number_to_currency(initiative.expenses.sum(:amount)),
+          ActionController::Base.helpers.number_to_currency(initiative.estimated_funding)
+        ]
+
+        # Add first two metric titles
+        fields = initiative.fields
+        columns << (fields.first.nil? ? nil : fields.first.title)
+        columns << (fields.second.nil? ? nil : fields.first.title)
+
+        csv << columns
+      end
+    end
+  end
+
   # ENDOF port from Event
 
 
@@ -188,6 +222,34 @@ class Initiative < ActiveRecord::Base
   def full?
     return self.attendees.count >= max_attendees if max_attendees?
     return false
+  end
+
+  def expenses_time_series_csv(time_from = nil, time_to = nil)
+    data = self.expenses_highcharts_history(
+      from: time_from ? Time.at(time_from.to_i / 1000) : 1.year.ago,
+      to: time_to ? Time.at(time_to.to_i / 1000) : Time.current
+    )
+
+    strategy = Reports::GraphTimeseriesGeneric.new(title: 'Expenses over time', data: data)
+    report = Reports::Generator.new(strategy)
+
+    report.to_csv
+  end
+
+  def field_time_series_csv(field_id, time_from = nil, time_to = nil)
+    field = Field.find(field_id)
+    from = Time.at(time_from / 1000) rescue nil
+    to = Time.at(time_to / 1000) rescue nil
+    data = self.highcharts_history(
+      field: field,
+      from: from || 1.year.ago,
+      to: to || Time.current + 1.day
+    )
+
+    strategy = Reports::GraphTimeseriesGeneric.new(data: data)
+    report = Reports::Generator.new(strategy)
+
+    report.to_csv
   end
 
   protected
@@ -242,10 +304,10 @@ class Initiative < ActiveRecord::Base
         return false
       end
 
-      if (self.estimated_funding == 0.0 || self.estimated_funding >= budget_item.available_amount) 
+      if (self.estimated_funding == 0.0 || self.estimated_funding >= budget_item.available_amount)
         self.estimated_funding = budget_item.available_amount
         budget_item.available_amount = 0
-        budget_item.is_done = true 
+        budget_item.is_done = true
       else
         #otherwise just subtract
         budget_item.available_amount -= self.estimated_funding

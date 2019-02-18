@@ -36,6 +36,32 @@ RSpec.describe Resource, :type => :model do
     end
   end
 
+  describe 'archive expired resources after_commit on [:create, :update, :destroy]' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:group) { create(:group, enterprise: enterprise) }
+    let!(:folder) { create(:folder, enterprise: enterprise) }
+    let!(:expired_resource) { create(:resource, title: "resource 1", folder: folder, created_at: DateTime.now.months_ago(9),
+     updated_at: DateTime.now.months_ago(9),
+    group: group) }
+    let!(:new_resource) { create(:resource, title: "resource 2", folder: folder, group: group) }
+
+    it 'on update' do
+      new_resource.run_callbacks :update
+      expect(expired_resource.reload.archived_at).to_not be_nil
+    end
+
+    it 'on destroy' do 
+      new_resource.run_callbacks :destroy 
+      expect(expired_resource.reload.archived_at).to_not be_nil
+    end
+
+    it 'on create' do 
+      fresh_resource = build(:resource, folder: folder, group: group)
+      fresh_resource.run_callbacks :create 
+      expect(expired_resource.reload.archived_at).to_not be_nil
+    end
+  end
+
   describe '#extension' do
     it "returns the file's lowercase extension without the dot" do
       resource = build_stubbed(:resource)

@@ -108,11 +108,6 @@ RSpec.describe GroupMessage, type: :model do
 
     describe '#send_emails' do
         let(:group_message) { create :group_message }
-
-        it 'calls GroupMailer' do
-            expect(GroupMailer).to receive(:group_message).and_call_original
-            group_message.send_emails
-        end
     end
     
     describe "#destroy_callbacks" do

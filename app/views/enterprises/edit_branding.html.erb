@@ -1,9 +1,5 @@
 <div class="content__header">
-  <h1>Branding /<%= link_to emails_path do %>
-     <button class="btn btn--primary">
-       Emails
-     </button></h1>
-   <% end %>
+  <h1>Branding</h1>
 </div>
 
 <div class="content__main">
@@ -41,7 +37,7 @@
 <div class="content__main">
   <div class="card">
     <div class="card__section">
-      <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_branding') do |f| %>
+      <%= simple_form_for @enterprise, :url => update_branding_info_enterprise_path(@enterprise, source: 'edit_branding') do |f| %>
         <%= f.label :banner, label: "User Home banner", input_html: { class: "field__label" } %>
         <% if @enterprise.banner? %>
           <div class="flex-row__cell fright">
@@ -62,7 +58,7 @@
 <div class="content__main">
   <div class="card">
     <div class="card__section">
-      <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_branding') do |f| %>
+      <%= simple_form_for @enterprise, :url => update_branding_info_enterprise_path(@enterprise, source: 'edit_branding') do |f| %>
         <%= f.input :time_zone %>
 
         <%= f.button :submit, "Save timezone" %>
@@ -78,7 +74,7 @@
 <div class="content__main">
   <div class="card">
     <div class="card__section">
-      <%= simple_form_for @enterprise, :url => enterprise_path(@enterprise, source: 'edit_branding') do |f| %>
+      <%= simple_form_for @enterprise, :url => update_branding_info_enterprise_path(@enterprise, source: 'edit_branding') do |f| %>
 
       <%= f.simple_fields_for :sponsors do |s| %>
         <%= render 'sponsor_fields', f: s %>
@@ -93,7 +89,7 @@
       <%= f.input :cdo_message, label: "Onboarding sponsor message" %>
       <%= f.input :onboarding_sponsor_media, label: "Upload onboarding video" %>
 
-        <%= f.input :privacy_statement, label: "#{c_t(:privacy_statement)}" %>
+        <%= f.input :privacy_statement, as: :ckeditor, label: "#{c_t(:privacy_statement)}" %>
 
         <%= f.button :submit, "Save sponsor info" %>
       <% end %>

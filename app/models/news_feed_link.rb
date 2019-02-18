@@ -29,7 +29,7 @@ class NewsFeedLink < ActiveRecord::Base
     # group leader
     def approve_link
       return if link.nil?
-      if GroupPolicy.new(link.author, link.group).erg_leader_permissions?
+      if GroupPostsPolicy.new(link.author, [link.group]).update?
           self.approved = true
           self.save!
       end
@@ -65,4 +65,11 @@ class NewsFeedLink < ActiveRecord::Base
         view.save
       end
     end
+
+    def self.archive_expired_news
+      expiry_date = DateTime.now.months_ago(6)
+      news = NewsFeedLink.where("created_at < ?", expiry_date).where(archived_at: nil)
+
+      news.update_all(archived_at: DateTime.now) if news.any?
+    end    
 end

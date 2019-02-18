@@ -13,19 +13,38 @@ RSpec.describe Initiatives::FieldsController, type: :controller do
         describe 'with logged in user' do
             login_user_from_let
 
-            it "gets the time_series" do
+            context "json" do
+              before {
                 get :time_series, group_id: group.id, initiative_id: initiative.id, id: field.id, format: :json
-                expect(response).to be_success
+              }
+
+              it "gets the time_series" do
+                  expect(response).to be_success
+              end
+
+              it "return response in json format" do
+                  expect(response.content_type).to eq 'application/json'
+              end
             end
 
-            it "return response in json format" do
-                get :time_series, group_id: group.id, initiative_id: initiative.id, id: field.id, format: :json
-                expect(response.content_type).to eq 'application/json'
-            end
+            context "csv" do
+              before {
+                  allow(InitiativeFieldTimeSeriesDownloadJob).to receive(:perform_later)
+                  request.env['HTTP_REFERER'] = "back"
+                  get :time_series, group_id: group.id, initiative_id: initiative.id, id: field.id, format: :csv
+              }
 
-            it 'return response in csv format' do 
-                get :time_series, group_id: group.id, initiative_id: initiative.id, id: field.id, format: :csv 
-                expect(response.content_type).to eq 'text/csv'
+              it "returns to previous page" do
+                  expect(response).to redirect_to "back"
+              end
+
+              it "flashes" do
+                  expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
+              end
+
+              it "calls job" do
+                  expect(InitiativeFieldTimeSeriesDownloadJob).to have_received(:perform_later)
+              end
             end
         end
 

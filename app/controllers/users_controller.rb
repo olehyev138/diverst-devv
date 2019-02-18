@@ -6,8 +6,8 @@ class UsersController < ApplicationController
 
   def index
     authorize User
-    
-    @users = policy_scope(User).joins(:policy_group).where(search_params).limit(params[:limit] || 25)
+
+    @users = policy_scope(User).includes(:policy_group, :user_groups, :group_leaders).where(search_params).limit(params[:limit] || 25)
 
     respond_to do |format|
       format.html
@@ -45,10 +45,11 @@ class UsersController < ApplicationController
   end
 
   def group_surveys
-    manageable_group_ids = current_user.manageable_groups.map{ |mg| mg.id}
+    manageable_groups = current_user.groups.select {|group| 
+      GroupMemberPolicy.new(current_user, [group]).update?
+    }
 
-    @user_groups = @user.user_groups.where(group_id: manageable_group_ids)
-                                    .where.not(data: nil)
+    @user_groups = @user.user_groups.where(group: manageable_groups).where.not(data: nil)
   end
 
   #For admins. Dedicated to editing any user's info
@@ -96,7 +97,7 @@ class UsersController < ApplicationController
 
   def parse_csv
     authorize User, :new?
-    
+
     if params[:file].nil?
       flash[:alert] = "CSV file is required"
       redirect_to :back
@@ -122,31 +123,28 @@ class UsersController < ApplicationController
   def export_csv
     authorize User, :index?
     UsersDownloadJob.perform_later(current_user.id)
-    flash[:notice] = "Please check your email in a couple minutes"
+    flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
     redirect_to :back
   end
 
   def date_histogram
     authorize User, :index?
 
-    g = DateHistogramGraph.new(
-      index: User.es_index_name(enterprise: current_user.enterprise),
-      field: 'created_at',
-      interval: 'month'
-    )
-    data = g.query_elasticsearch
-
     respond_to do |format|
       format.json {
+        g = DateHistogramGraph.new(
+          index: User.es_index_name(enterprise: current_user.enterprise),
+          field: 'created_at',
+          interval: 'month'
+        )
+        data = g.query_elasticsearch
+
         render json: data
       }
       format.csv {
-        strategy = Reports::GraphTimeseriesGeneric.new(
-          title: 'Number of employees',
-          data: data["aggregations"]["my_date_histogram"]["buckets"].collect{ |data| [data["key"], data["doc_count"]] }
-        )
-        report = Reports::Generator.new(strategy)
-        send_data report.to_csv, filename: "employees.csv"
+        UsersDateHistogramDownloadJob.perform_later(current_user.id, current_user.enterprise.id)
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
       }
     end
   end
@@ -161,7 +159,7 @@ class UsersController < ApplicationController
       else
         'user'
       end
-    when 'edit_profile'
+    when 'edit_profile', 'group_surveys'
       'user'
     else
       'global_settings'
@@ -169,7 +167,7 @@ class UsersController < ApplicationController
   end
 
   def set_user
-    current_user ? @user = current_user.enterprise.users.find(params[:id]) : user_not_authorized
+    @user = current_user.enterprise.users.find(params[:id])
   end
 
   def user_params
@@ -182,10 +180,11 @@ class UsersController < ApplicationController
       :active,
       :time_zone,
       :user_role_id,
+      :groups_notifications_frequency,
+      :groups_notifications_date,
       :custom_policy_group,
       policy_group_attributes: [
         :id,
-        :admin_pages_view,
         :campaigns_index,
         :campaigns_create,
         :campaigns_manage,
@@ -223,18 +222,34 @@ class UsersController < ApplicationController
         :logs_view,
         :groups_budgets_index,
         :groups_budgets_request,
-        :annual_budget_manage,
+        :budget_approval,
+        :group_leader_manage,
         :sso_manage,
         :permissions_manage,
-        :group_leader_manage,
         :diversity_manage,
         :manage_posts,
-        :branding_manage
+        :branding_manage,
+        :global_calendar,
+        :manage_all,
+        :enterprise_manage,
+        :groups_budgets_manage,
+        :group_leader_index,
+        :groups_insights_manage,
+        :groups_layouts_manage,
+        :group_resources_index,
+        :group_resources_create,
+        :group_resources_manage,
+        :social_links_index,
+        :social_links_create,
+        :social_links_manage,
+        :group_settings_manage,
+        :group_posts_index,
+        :mentorship_manage
       ]
     )
   end
 
   def search_params
-    params.permit(:active, :mentor, :mentee, policy_groups: [:budget_approval])
+    params.permit(:active, :mentor, :mentee, policy_groups: [:budget_approval], user_groups: [:accepted_member, :group_id], group_leaders: [:budget_approval])
   end
 end

@@ -18,11 +18,12 @@ class User < ActiveRecord::Base
     scope :enterprise_mentees,  -> ( user_ids = []) { where(mentee: true).where.not(:id => user_ids) }
     scope :mentors_and_mentees, -> { where("mentor = true OR mentee = true").distinct }
     scope :inactive,            -> { where(active: false).distinct }
+    
 
-    belongs_to  :enterprise, inverse_of: :users
+    belongs_to  :enterprise
     belongs_to  :user_role
     has_one :policy_group, :dependent => :destroy, inverse_of: :user
-    
+
     # mentorship
     has_many :mentorships,       class_name: "Mentoring", foreign_key: "mentor_id"
     has_many :mentees, through: :mentorships, class_name: 'User', source: :mentee
@@ -30,11 +31,11 @@ class User < ActiveRecord::Base
 	has_many :mentors, through: :menteeships, class_name: 'User', source: :mentor
 	has_many :availabilities,   :class_name => "MentorshipAvailability"
     has_many :mentorship_ratings
-        
+
     # many to many
     has_many :mentorship_interests
     has_many :mentoring_interests, :through => :mentorship_interests
-    
+
     has_many :mentorship_sessions
     has_many :mentoring_sessions, :through => :mentorship_sessions
 
@@ -45,7 +46,6 @@ class User < ActiveRecord::Base
     has_many :mentorship_proposals, :foreign_key => "sender_id",     :class_name => "MentoringRequest"
     has_many :mentorship_requests,  :foreign_key => "receiver_id",   :class_name => "MentoringRequest"
 
-    has_many :devices, dependent: :destroy
     has_many :users_segments, dependent: :destroy
     has_many :segments, through: :users_segments
     has_many :user_groups, dependent: :destroy
@@ -61,18 +61,12 @@ class User < ActiveRecord::Base
     has_many :own_news_links, class_name: 'NewsLink', foreign_key: :author_id, dependent: :destroy
     has_many :messages, through: :groups
     has_many :message_comments, class_name: 'GroupMessageComment', foreign_key: :author_id, dependent: :destroy
-    has_many :events, through: :groups
     has_many :social_links, foreign_key: :author_id, dependent: :destroy
     has_many :initiative_users, dependent: :destroy
     has_many :initiatives, through: :initiative_users, source: :initiative
     has_many :initiative_invitees, dependent: :destroy
     has_many :invited_initiatives, through: :initiative_invitees, source: :initiative
-    has_many :event_attendances, dependent: :destroy
-    has_many :attending_events, through: :event_attendances, source: :event
-    has_many :event_invitees, dependent: :destroy
-    has_many :invited_events, through: :event_invitees, source: :event
     has_many :managed_groups, foreign_key: :manager_id, class_name: 'Group'
-    has_many :biases, class_name: "Bias"
     has_many :group_leaders, :dependent => :destroy
     has_many :leading_groups, through: :group_leaders, source: :group
     has_many :user_reward_actions, dependent: :destroy
@@ -98,14 +92,13 @@ class User < ActiveRecord::Base
     before_validation :set_uid
     before_destroy :check_lifespan_of_user
 
-    after_validation    :set_group_role
     after_create :assign_firebase_token
     after_create :set_default_policy_group
     after_save  :set_default_policy_group, if: :user_role_id_changed?
     accepts_nested_attributes_for :policy_group
-    
+
     after_update :add_to_default_mentor_group
-    
+
     after_commit on: [:create] { update_elasticsearch_index(self, self.enterprise, 'index') }
     after_commit on: [:update] { update_elasticsearch_index(self, self.enterprise, 'update') }
     after_commit on: [:destroy] { update_elasticsearch_index(self, self.enterprise, 'delete') }
@@ -119,15 +112,15 @@ class User < ActiveRecord::Base
     scope :active, -> {where(active: true)}
     scope :mentors, -> {where(mentor: true)}
     scope :mentees, -> {where(mentee: true)}
-    
+
     accepts_nested_attributes_for :availabilities, :allow_destroy => true
-    
+
     def add_to_default_mentor_group
         if mentor_changed? || mentee_changed?
             DefaultMentorGroupMemberUpdateJob.perform_later(id, mentor, mentee)
         end
     end
-    
+
     def is_group_leader_of?(group)
         group.group_leaders.where(user_id: self.id).any?
     end
@@ -143,61 +136,22 @@ class User < ActiveRecord::Base
     def name
         "#{first_name} #{last_name}"
     end
-    
+
     def user_role_presence
         if user_role_id.nil?
             self.user_role_id = enterprise.default_user_role
         end
     end
     
-    def set_group_role
-        # check if user is group leader and ensure role is correct
-        if erg_leader? and enterprise.user_roles.where(:id => user_role_id, :role_type => "group").count > 0
-            # get all the distinct group_leader roles
-            group_leader_role_ids = GroupLeader.joins(:group => :enterprise).where(:groups => {:enterprise_id => enterprise.id}, :user_id => id).distinct.pluck(:user_role_id)
-            # set the user role to the role with the highest priority
-            self.user_role_id = enterprise.user_roles.where(:id => group_leader_role_ids).order(:priority).first.id
-        end
-    end
-    
     def group_leader_role
-        # make sure a user's role cannot be set to group_leader without being a group_leader first
+        # make sure a user's role cannot be set to group_leader
         if enterprise.user_roles.where(:id => user_role_id, :role_type => "group").count > 0 && !erg_leader?
-            errors.add(:user_role_id, 'User is not a group leader')
-        
-        # make sure a user's role is never changed from one group leader type to another
-        elsif enterprise.user_roles.where(:id => user_role_id_was, :role_type => "group").count > 0 &&
-                enterprise.user_roles.where(:id => user_role_id, :role_type => "group").count > 0 && 
-                user_role_id_was != user_role_id
-            errors.add(:user_role_id, 'Cannot change group_leader roles manually')
-         
-        # ensure user cannot go from non_group role to a group role that they don't have   
-        elsif enterprise.user_roles.where(:id => user_role_id, :role_type => "group").count > 0 &&
-                GroupLeader.joins(:group => :enterprise).where(:groups => {:enterprise_id => enterprise_id}, :user_role_id => user_role_id, :user_id => id).count < 1
-            errors.add(:user_role_id, 'User does not have that role in any group')
-            
-        # make sure if a user is a group leader that the role is never set to a non_group_leader role with
-        # lower priority ex: admin with group_leader role cannot be switched to a basic user but a group_leader 
-        # can have their role switch to a super admin
-        elsif enterprise.user_roles.where(:id => user_role_id_was, :role_type => "group").count > 0 && 
-                enterprise.user_roles.where(:id => user_role_id, :role_type => "user").count > 0 &&
-                enterprise.user_roles.where(:id => user_role_id).where("priority > ?", enterprise.user_roles.where(:id => user_role_id_was).first.priority).count > 0
-            errors.add(:user_role_id, 'Cannot change from group role to role with lower priority')
-            
-        # make sure if a user is a group leader that the role is never set to a non_group_leader role with
-        # lower priority ex: group_leader role cannot be switched to a basic user but a group_leader can have their
-        # role switch to a super admin - UserRole.where(:role_name => role_was).first.priority
-        elsif enterprise.user_roles.where(:id => user_role_id_was).where.not(:role_type => "group").count > 0 && 
-                enterprise.user_roles.where(:id => user_role_id).where.not(:role_type => "group").count > 0 && 
-                GroupLeader.joins(:group => :enterprise).where(:groups => {:enterprise_id => enterprise_id}, :user_id => id).count > 0 &&
-                enterprise.user_roles.where(:id => user_role_id).where("priority > ?", enterprise.user_roles.where(:id => group_leaders.role_ids).order("priority DESC").first.priority).count > 0
-            errors.add(:user_role_id, 'Cannot change from role to role with lower priority while user is still a group leader')
+            errors.add(:user_role_id, 'Cannot set user role to a group role')
         end
     end
 
     def default_time_zone
         return time_zone if time_zone.present?
-
         enterprise.default_time_zone
     end
 
@@ -209,7 +163,7 @@ class User < ActiveRecord::Base
     def badges
         Badge.where("points <= ?", points).order(points: :asc)
     end
-    
+
     def set_default_policy_group
         template = enterprise.policy_group_templates.joins(:user_role).where(:user_roles => {:id => user_role_id}).first
         attributes = template.create_new_policy
@@ -222,8 +176,8 @@ class User < ActiveRecord::Base
         end
     end
     
-    def admin?
-        return user_role.role_type.downcase === "admin"
+    def is_admin?
+        enterprise.user_roles.where(:id => user_role_id).where("LOWER(role_type) = 'admin'").count > 0
     end
 
     def has_answered_group_surveys?
@@ -252,10 +206,8 @@ class User < ActiveRecord::Base
     end
 
     def manageable_groups
-        manageable_groups = enterprise.groups.select do |group|
-            policy = Pundit.policy(self, group)
-
-            policy.erg_leader_permissions?
+        enterprise.groups.select do |group|
+            Pundit.policy(self, group).manage?
         end
     end
 
@@ -366,13 +318,7 @@ class User < ActiveRecord::Base
 
         part_of_segment
     end
-
-    # Sends a push notification to all of the user's devices
-    def notify(message, data)
-        devices.each do |device|
-            device.notify(message, data)
-        end
-    end
+   
 
     # Generate a Firebase token for the user and update the user with it
     def assign_firebase_token
@@ -423,10 +369,10 @@ class User < ActiveRecord::Base
     # Export a CSV with the specified users
     def self.to_csv(users:, fields:, nb_rows: nil)
         CSV.generate do |csv|
-            csv << ['First name', 'Last name', 'Email', 'Biography', 'Active'].concat(fields.map(&:title))
+            csv << ['First name', 'Last name', 'Email', 'Biography', 'Active', 'Group Membership'].concat(fields.map(&:title))
 
             users.order(created_at: :desc).limit(nb_rows).each do |user|
-                user_columns = [user.first_name, user.last_name, user.email, user.biography, user.active]
+                user_columns = [user.first_name, user.last_name, user.email, user.biography, user.active, user.groups.map(&:name).join(",")]
 
                 fields.each do |field|
                     user_columns << field.csv_value(user.info[field])

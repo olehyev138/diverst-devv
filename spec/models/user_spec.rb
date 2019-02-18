@@ -6,6 +6,40 @@ RSpec.describe User do
   describe "when validating" do
     let(:user) { build(:user) }
 
+    it { expect(user).to define_enum_for(:groups_notifications_frequency).with([:hourly, :daily, :weekly, :disabled]) }
+    it { expect(user).to define_enum_for(:groups_notifications_date).with([:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]) }
+
+    describe "#notifications_date" do
+      it "returns sunday" do
+        user = create(:user, :groups_notifications_date => 0)
+        expect(user.groups_notifications_date).to eq("sunday")
+      end
+      it "returns default monday" do
+        user = create(:user, :groups_notifications_date => 1)
+        expect(user.groups_notifications_date).to eq("monday")
+      end
+      it "returns tuesday" do
+        user = create(:user, :groups_notifications_date => 2)
+        expect(user.groups_notifications_date).to eq("tuesday")
+      end
+      it "returns wednesday" do
+        user = create(:user, :groups_notifications_date => 3)
+        expect(user.groups_notifications_date).to eq("wednesday")
+      end
+      it "returns thursday" do
+        user = create(:user, :groups_notifications_date => 4)
+        expect(user.groups_notifications_date).to eq("thursday")
+      end
+      it "returns default friday" do
+        user = create(:user)
+        expect(user.groups_notifications_date).to eq("friday")
+      end
+      it "returns saturday" do
+        user = create(:user, :groups_notifications_date => 6)
+        expect(user.groups_notifications_date).to eq("saturday")
+      end
+    end
+
     context 'test validations' do
       it { expect(user).to validate_presence_of(:first_name) }
       it { expect(user).to validate_presence_of(:last_name) }
@@ -21,7 +55,6 @@ RSpec.describe User do
       end
 
       context 'has_many associations' do
-        it { expect(user).to have_many(:devices) }
         it { expect(user).to have_many(:users_segments) }
         it { expect(user).to have_many(:segments).through(:users_segments) }
         it { expect(user).to have_many(:groups).through(:user_groups) }
@@ -37,18 +70,12 @@ RSpec.describe User do
         it { expect(user).to have_many(:own_news_links).class_name('NewsLink').with_foreign_key(:author_id) }
         it { expect(user).to have_many(:messages).through(:groups) }
         it { expect(user).to have_many(:message_comments).class_name('GroupMessageComment').with_foreign_key(:author_id) }
-        it { expect(user).to have_many(:events).through(:groups) }
         it { expect(user).to have_many(:social_links).with_foreign_key(:author_id).dependent(:destroy) }
         it { expect(user).to have_many(:initiative_users) }
         it { expect(user).to have_many(:initiatives).through(:initiative_users).source(:initiative) }
         it { expect(user).to have_many(:initiative_invitees) }
         it { expect(user).to have_many(:invited_initiatives).through(:initiative_invitees).source(:initiative) }
-        it { expect(user).to have_many(:event_attendances) }
-        it { expect(user).to have_many(:attending_events).through(:event_attendances).source(:event) }
-        it { expect(user).to have_many(:event_invitees) }
-        it { expect(user).to have_many(:invited_events).through(:event_invitees).source(:event) }
         it { expect(user).to have_many(:managed_groups).with_foreign_key(:manager_id).class_name('Group') }
-        it { expect(user).to have_many(:biases).class_name('Bias') }
         it { expect(user).to have_many(:group_leaders) }
         it { expect(user).to have_many(:leading_groups).through(:group_leaders).source(:group) }
         it { expect(user).to have_many(:user_reward_actions) }
@@ -256,7 +283,7 @@ RSpec.describe User do
 
     context 'when user is a leader of an erg' do
       before  do
-        group.members << user
+        create(:user_group, :user => user, :group => group, :accepted_member => true)
         group.group_leaders << GroupLeader.new(group: group, user: user, position_name: 'blah', user_role: user.enterprise.user_roles.where(:role_name => "group_leader").first)
       end
 
@@ -405,7 +432,7 @@ RSpec.describe User do
         user
       end
 
-      let!(:poll) { create(:poll, fields: [create(:field)]) }
+      let!(:poll) { create(:poll) }
 
       let!(:poll_response) do
         poll_response = build(:poll_response, user: user, poll: poll)
@@ -420,45 +447,12 @@ RSpec.describe User do
       it 'return data of user to be indexed by elasticsearch' do
         data = {
           "#{ user.enterprise.fields.first.id }" => "No",
-          poll.fields.first.id => "Yes",
+          poll.fields.first.id => ["Yes"],
           groups: [user_group.group_id],
           segments: [user_segment.segment_id]
         }
 
         expect(user.as_indexed_json['combined_info']).to eq(data)
-      end
-    end
-  end
-  
-  describe "#set_group_role" do
-    context "when user is an existing group_leader but current role is admin and user tries to set role to role with lower priority" do
-      it "sets the users role to the group_leader_role with higher priority" do
-        enterprise = create(:enterprise)
-        group_leader_user = create(:user, :enterprise => enterprise, :user_role => enterprise.user_roles.where(:role_type => "user").first)
-        create(:user_role, :enterprise => group_leader_user.enterprise, :role_name => "group_treasurer", :role_type => "group", :priority => 2)
-        group_1 = create(:group, :enterprise => group_leader_user.enterprise)
-        group_2 = create(:group, :enterprise => group_leader_user.enterprise)
-        
-        create(:user_group, :group => group_1, :user => group_leader_user)
-        create(:user_group, :group => group_2, :user => group_leader_user)
-        create(:group_leader, :group => group_1, :user_role => enterprise.user_roles.where(:role_name => "group_leader").first, :user => group_leader_user)
-        create(:group_leader, :group => group_2, :user_role => enterprise.user_roles.where(:role_name => "group_treasurer").first, :user => group_leader_user)
-        
-        expect(group_leader_user.user_role.role_name).to eq("group_leader")
-        
-        # we give the user admin permissions
-        group_leader_user.user_role_id = enterprise.user_roles.where(:role_type => "admin").first.id
-        group_leader_user.save!
-        
-        # verify the role
-        expect(group_leader_user.user_role.role_name).to eq("admin")
-        
-        # we set the user role to a group role wit lower priority
-        group_leader_user.user_role_id = enterprise.user_roles.where(:role_name => "group_treasurer").first.id
-        group_leader_user.save!
-        
-        # verify that the user's role is set to the role with higher priority
-        expect(group_leader_user.user_role.role_name).to eq("group_leader")
       end
     end
   end
@@ -469,104 +463,22 @@ RSpec.describe User do
       user.user_role = user.enterprise.user_roles.where(:role_name => "group_leader").first
       user.save
       
-      expect(user.errors.full_messages.first).to eq("User role User is not a group leader")
-    end
-    
-    it "raises a Cannot change group_leader roles manually error" do
-      enterprise = create(:enterprise)
-      user = create(:user, :enterprise => enterprise, :user_role => enterprise.user_roles.where(:role_type => "user").first)
-      create(:user_role, :enterprise => user.enterprise, :role_name => "group_treasurer", :role_type => "group", :priority => 2)
-      
-      group_1 = create(:group, :enterprise => user.enterprise)
-      create(:user_group, :group => group_1, :user => user)
-      create(:group_leader, :group => group_1, :user => user, :user_role => enterprise.user_roles.where(:role_name => "group_leader").first)
-      
-      group_2 = create(:group, :enterprise => user.enterprise)
-      create(:user_group, :group => group_2, :user => user)
-      create(:group_leader, :group => group_2, :user => user, :user_role => enterprise.user_roles.where(:role_name => "group_treasurer").first)
-      
-      user.user_role = enterprise.user_roles.where(:role_name => "group_treasurer").first
-      user.save
-      
-      expect(user.errors.full_messages.first).to eq("User role Cannot change group_leader roles manually")
-    end
-    
-    it "raises a Cannot change group_leader roles manually error" do
-      enterprise = create(:enterprise)
-      user = create(:user, :enterprise => enterprise, :user_role => enterprise.user_roles.where(:role_type => "user").first)
-      create(:user_role, :enterprise => enterprise, :role_name => "group_treasurer", :role_type => "group", :priority => 2)
-      
-      group_1 = create(:group, :enterprise => user.enterprise)
-      create(:user_group, :group => group_1, :user => user)
-      create(:group_leader, :group => group_1, :user => user, :user_role => enterprise.user_roles.where(:role_name => "group_leader").first)
-      
-      group_2 = create(:group, :enterprise => user.enterprise)
-      create(:user_group, :group => group_2, :user => user)
-      create(:group_leader, :group => group_2, :user => user, :user_role => enterprise.user_roles.where(:role_name => "group_treasurer").first)
-      
-      user.user_role = enterprise.user_roles.where(:role_name => "group_treasurer").first
-      user.save
-      
-      expect(user.errors.full_messages.first).to eq("User role Cannot change group_leader roles manually")
-    end
-    
-    it "raises an User does not have that role in any group error" do
-      user = create(:user)
-      create(:user_role, :enterprise => user.enterprise, :role_name => "group_treasurer", :role_type => "group", :priority => 2)
-      
-      group_1 = create(:group, :enterprise => user.enterprise)
-      create(:user_group, :group => group_1, :user => user)
-      create(:group_leader, :group => group_1, :user => user, :user_role => user.enterprise.user_roles.where(:role_name => "group_leader").first)
-      
-      user.user_role = user.enterprise.user_roles.where(:role_name => "group_treasurer").first
-      user.save
-      
-      expect(user.errors.full_messages.first).to eq("User role User does not have that role in any group")
-    end
-    
-    it "raises a Cannot change from group role to role with lower priority error" do
-      enterprise = create(:enterprise)
-      user = create(:user, :enterprise => enterprise, :user_role => enterprise.user_roles.where(:role_type => "user").first)
-      
-      group_1 = create(:group, :enterprise => enterprise)
-      create(:user_group, :group => group_1, :user => user)
-      create(:group_leader, :group => group_1, :user => user, :user_role => enterprise.user_roles.where(:role_name => "group_leader").first)
-      
-      expect(user.user_role.role_name).to eq("group_leader")
-      
-      user.user_role = enterprise.user_roles.where(:role_name => "user").first
-      user.save
-      
-      expect(user.errors.full_messages.first).to eq("User role Cannot change from group role to role with lower priority")
-    end
-    
-    it "raises a Cannot change from group role to role with lower priority error" do
-      user = create(:user)
-      
-      group_1 = create(:group, :enterprise => user.enterprise)
-      create(:user_group, :group => group_1, :user => user)
-      create(:group_leader, :group => group_1, :user => user, :user_role => user.enterprise.user_roles.where(:role_name => "group_leader").first)
-      
-      user.user_role = user.enterprise.user_roles.where(:role_name => "user").first
-      user.save
-      
-      expect(user.errors.full_messages.first).to eq("User role Cannot change from role to role with lower priority while user is still a group leader")
+      expect(user.errors.full_messages.first).to eq("User role Cannot set user role to a group role")
     end
   end
   
-  describe "#admin?" do
+  describe "#is_admin?" do
     it "returns true" do
       user = create(:user)
-      expect(user.admin?).to be(true)
+      expect(user.is_admin?).to be(true)
     end
   end
   
   describe "#destroy_callbacks" do
     it "removes the child objects" do
       user = create(:user)
-      device = create(:device, :user => user)
       users_segment = create(:users_segment, :user => user)
-      user_group = create(:user_group, :user => user)
+      user_group = create(:user_group, :user => user, :accepted_member => true)
       topic_feedback = create(:topic_feedback, :user => user)
       #poll_response = create(:poll_response, :user => user)
       answer = create(:answer, :author => user)
@@ -577,11 +489,9 @@ RSpec.describe User do
       group_message_comment = create(:group_message_comment, :author_id => user.id)
       social_link = create(:social_link, :author_id => user.id)
       initiative_user = create(:initiative_user, :user => user)
-      event_invitee = create(:event_invitee, :user => user)
       initiative_invitee = create(:initiative_invitee, :user => user)
-      event_attendance = create(:event_attendance, :user => user)
       #sample = create(:sample, :user => user)
-      group_leader = create(:group_leader, :user => user)
+      group_leader = create(:group_leader, :user => user, group: user_group.group)
       user_reward_action = create(:user_reward_action, :user => user)
       #reward = create(:reward, :responsible_id => user.id)
       
@@ -590,7 +500,6 @@ RSpec.describe User do
       user.destroy
 
       expect{User.find(user.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      expect{Device.find(device.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{PolicyGroup.find(policy_group.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{UsersSegment.find(users_segment.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{UserGroup.find(user_group.id)}.to raise_error(ActiveRecord::RecordNotFound)
@@ -605,9 +514,7 @@ RSpec.describe User do
       expect{GroupMessageComment.find(group_message_comment.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{SocialLink.find(social_link.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{InitiativeUser.find(initiative_user.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      expect{EventInvitee.find(event_invitee.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{InitiativeInvitee.find(initiative_invitee.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      expect{EventAttendance.find(event_attendance.id)}.to raise_error(ActiveRecord::RecordNotFound)
       #expect{Sample.find(sample.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{GroupLeader.find(group_leader.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{UserRewardAction.find(user_reward_action.id)}.to raise_error(ActiveRecord::RecordNotFound)

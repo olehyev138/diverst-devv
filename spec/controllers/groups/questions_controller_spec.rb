@@ -110,10 +110,22 @@ RSpec.describe Groups::QuestionsController, type: :controller do
     describe 'GET#export_csv' do
         describe 'user logged in' do
             login_user_from_let
-            before { get :export_csv, group_id: group.id, format: :csv }
+            before {
+                allow(GroupQuestionsDownloadJob).to receive(:perform_later)
+                request.env['HTTP_REFERER'] = "back"
+                get :export_csv, group_id: group.id, format: :csv
+            }
 
-            it 'returns format in csv' do
-                expect(response.content_type).to eq 'text/csv'
+            it "returns to previous page" do
+                expect(response).to redirect_to "back"
+            end
+
+            it "flashes" do
+                expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
+            end
+
+            it "calls job" do
+                expect(GroupQuestionsDownloadJob).to have_received(:perform_later)
             end
         end
 

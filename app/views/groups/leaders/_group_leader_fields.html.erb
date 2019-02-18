@@ -5,14 +5,16 @@
   </div>
 
   <label class="field__label">
+    <%= f.hidden_field :position, class: "position-field" %>
     <%= label = "#{ inline_svg('icons/move.svg', class: 'icon') }".html_safe %>
     <%= f.label :user, label: 'Select user', required: true %>
   </label>
   <div class="custom-user-select">
     <%= f.association :user,
-          collection: @group.members,
-          include_blank: true,
-          input_html: { class: "select2", autofocus: true },
+          as: :select,
+          selected: f.object.user,
+          collection: [f.object.user],
+          input_html: { class: "select2-field", autofocus: true },
           label: false
     %>
   </div>
@@ -49,3 +51,4 @@
     <%= f.input :default_group_contact, label: "set email as contact of group" %>
   </div>
 </div>
+

@@ -1,5 +1,7 @@
 class Resource < ActiveRecord::Base
     include PublicActivity::Common
+    include Elasticsearch::Model
+    include Elasticsearch::Model::Callbacks
 
     EXPIRATION_TIME = 6.months.to_i
 
@@ -25,8 +27,28 @@ class Resource < ActiveRecord::Base
     validates_length_of     :url, maximum: 255
 
     before_validation :smart_add_url_protocol
+    after_commit :archive_expired_resources, on: [:create, :update, :destroy]
 
     attr_reader :tag_tokens
+
+    settings do
+      mappings dynamic: false do
+        indexes :owner_id, type: :integer
+        indexes :created_at, type: :date
+        indexes :folder do
+          indexes :group_id, type: :integer
+        end
+      end
+    end
+
+    def as_indexed_json(options = {})
+      self.as_json(
+        options.merge(
+          only: [:id, :owner_id, :created_at],
+          include: { folder: { only: [:id, :group_id] } }
+        )
+      )
+    end
 
     def tag_tokens=(tokens)
         return if tokens.nil?
@@ -58,6 +80,12 @@ class Resource < ActiveRecord::Base
     end
 
     protected
+
+    def archive_expired_resources
+        expiry_date = DateTime.now.months_ago(6)
+        resources = Resource.where("created_at < ?", expiry_date)
+        resources.update_all(archived_at: DateTime.now) if resources.any?
+    end
 
     def smart_add_url_protocol
         return nil if url.blank?
