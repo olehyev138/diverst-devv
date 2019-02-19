@@ -1,4 +1,4 @@
-class Segment < ActiveRecord::Base
+class Segment < BaseClass
     extend Enumerize
     include PublicActivity::Common
 
@@ -42,7 +42,7 @@ class Segment < ActiveRecord::Base
 
 
     def segment_rule_values_is_nil(attributes)
-        attributes['values'].nil? 
+        attributes['values'].nil?
     end
 
     def general_rules_followed_by?(user)

@@ -1,5 +1,4 @@
-class Field < ActiveRecord::Base
-  include Indexable
+class Field < BaseClass
 
   belongs_to :enterprise
   belongs_to :group

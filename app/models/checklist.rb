@@ -1,4 +1,4 @@
-class Checklist < ActiveRecord::Base
+class Checklist < BaseClass
   belongs_to :budget
   belongs_to :initiative
   belongs_to :author, class_name: 'User'

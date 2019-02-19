@@ -1,8 +1,5 @@
-class UserGroup < ActiveRecord::Base
+class UserGroup < BaseClass
   include ContainsFields
-  include Indexable
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
 
   # associations
   belongs_to :user
@@ -17,8 +14,6 @@ class UserGroup < ActiveRecord::Base
   scope :accepted_users, -> { active.joins(:group).where("groups.pending_users = 'disabled' OR (groups.pending_users = 'enabled' AND accepted_member=true)") }
   scope :with_answered_survey, -> { where.not(data: nil) }
 
-  after_commit on: [:create] { update_elasticsearch_index(user, user.enterprise, 'update') }
-  after_commit on: [:destroy] { update_elasticsearch_index(user, user.enterprise, 'update') }
   before_destroy :remove_leader_role
 
   after_create { update_mentor_fields(true) }
@@ -29,7 +24,27 @@ class UserGroup < ActiveRecord::Base
       indexes :user_id, type: :integer
       indexes :group_id, type: :integer
       indexes :created_at, type: :date
+      indexes :group  do
+        indexes :enterprise_id, type: :integer
+        indexes :parent_id, type: :integer
+        indexes :name, type: :keyword
+        indexes :parent do
+          indexes :name, type: :keyword
+        end
+      end
     end
+  end
+
+  def as_indexed_json(options = {})
+    self.as_json(
+      options.merge(
+        only: [:user_id, :group_id, :created_at],
+        include: { group: {
+          only: [:enterprise_id, :parent_id, :name],
+          include: { parent: { only: [:name] } }
+        }}
+      )
+    )
   end
 
   def string_for_field(field)

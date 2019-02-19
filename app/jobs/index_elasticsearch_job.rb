@@ -4,8 +4,9 @@ class IndexElasticsearchJob < ActiveJob::Base
   Logger = Sidekiq.logger.level == Logger::DEBUG ? Sidekiq.logger : nil
   Client = Elasticsearch::Client.new host: ENV['ELASTICSEARCH_URL'], logger: Logger
 
-  def perform(model_name:, operation:, record_id:, index:)
+  def perform(model_name:, operation:, record_id:)
     logger.debug [operation, "ID: #{record_id}"]
+    return if Rails.env.test?
     model = model_name.constantize
     
     begin
@@ -13,13 +14,13 @@ class IndexElasticsearchJob < ActiveJob::Base
         when 'index'
           record = model.find_by_id(record_id)
           return if record.nil?
-          record.__elasticsearch__.index_document(index: index)
+          record.__elasticsearch__.index_document
         when 'update'
           record = model.find_by_id(record_id)
           return if record.nil?
-          record.__elasticsearch__.update_document(index: index)
+          record.__elasticsearch__.update_document
         when 'delete'
-          Client.delete index: index, id: record_id, type: model_name.downcase
+          Client.delete index: model.index_name, id: record_id, type: model.__elasticsearch.__document_type, ignore: 404
         else raise ArgumentError, "Unknown operation '#{operation}'"
       end
     rescue => e

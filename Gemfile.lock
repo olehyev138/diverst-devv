@@ -221,11 +221,11 @@ GEM
     elasticsearch-extensions (0.0.30)
       ansi
       elasticsearch
-    elasticsearch-model (0.1.9)
+    elasticsearch-model (6.0.0)
       activesupport (> 3)
-      elasticsearch (> 0.4)
+      elasticsearch (> 1)
       hashie
-    elasticsearch-rails (0.1.9)
+    elasticsearch-rails (6.0.0)
     elasticsearch-transport (6.1.0)
       faraday
       multi_json
@@ -840,9 +840,9 @@ DEPENDENCIES
   devise_invitable (~> 1.5, >= 1.5.5)
   devise_token_auth (~> 0.1.37)
   draper (~> 2.1)
-  elasticsearch-extensions (~> 0.0.26)
-  elasticsearch-model (~> 0.1)
-  elasticsearch-rails (~> 0.1)
+  elasticsearch-extensions (~> 0.0.30)
+  elasticsearch-model (~> 6.0.0)
+  elasticsearch-rails (~> 6.0.0)
   enumerize (~> 2.0)
   factory_girl_rails (~> 4.8.0)
   faker (~> 1.6, >= 1.6.3)

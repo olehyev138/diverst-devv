@@ -1,4 +1,4 @@
-class InitiativeComment < ActiveRecord::Base
+class InitiativeComment < BaseClass
   belongs_to :user
   belongs_to :initiative
   

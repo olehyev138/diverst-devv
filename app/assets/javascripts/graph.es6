@@ -1,159 +1,145 @@
-const DEFAULT_MAX = 10
+/* global $ */
+
+const DEFAULT_MAX = 10;
 
 class Graph {
-  constructor(dataUrl, $element) {
-    this.dataUrl = dataUrl;
-    this.$element = $element;
-    this.data = {};
+    constructor(dataUrl, $element, $graph_input) {
+        this.dataUrl = dataUrl;
+        this.$element = $element;
+        this.data = {};
 
-    this.brandingColor = BRANDING_COLOR || $('.primary-header').css('background-color') || '#7B77C9'
-    this.chartsColor = CHARTS_COLOR || this.brandingColor
+        this.brandingColor = BRANDING_COLOR || $('.primary-header').css('background-color') || '#7B77C9';
+        this.chartsColor = CHARTS_COLOR || this.brandingColor;
 
-    this.updateData();
-  }
-
-  updateData() {
-    $.get(this.dataUrl, (data) => {
-      this.onDataUpdate(data);
-    });
-  }
-
-  onDataUpdate(data) {
-    this.data = data;
-    this.attachToElement();
-  }
-
-  attachToElement() {
-    if (this.data.type === "NumericField" || this.data.type === "DateField" || this.data.type === "bar")
-      this.renderBarChart()
-    else if (this.data.type === "CheckboxField" || this.data.type === "SelectField" || this.data.type === "GroupsField"  || this.data.type === "SegmentsField")
-      if (this.data.hasAggregation)
-        this.renderBarChart()
-      else
-        this.renderPieChart()
-    else if (this.data.type === "pie")
-      this.renderPieChart()
-    else if (this.data.type == 'time_based')
-      this.renderTimeBasedChart()
-  }
-
-  renderBarChart() {
-    this.$element.highcharts({
-      chart: {
-        type: 'column',
-        inverted: true,
-        style: {
-          fontFamily: 'Helvetica Neue, sans-serif'
+        var self = this;
+        if ($($graph_input).length && ($graph_input.attr('id') == 'range-selector')) {
+            // if theres a range selector, instantiate it and set callback
+            var rangeSelector = new RangeSelector($graph_input[0], function (input) {
+                self.updateData(input);
+            });
         }
-      },
-      title: {
-        text: ''
-      },
-      xAxis: {
-        type: 'category',
-        categories: this.data.highcharts.categories,
-        min: 0,
-        max: this.data.highcharts.limit || DEFAULT_MAX,
-        scrollbar: { enabled: this.data.highcharts.scrollbar || true },
-      },
-      yAxis: {
-        min: 0,
-        title: {
-          text: this.data.highcharts.yAxisTitle || 'Nb of users'
-        },
-        allowDecimals: false
-      },
-      plotOptions: {
-        series: {
-          stacking: 'normal',
-          borderWidth: 0
-        }
-      },
-      tooltip: {
-        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-          '<td style="padding:0"><b>{point.y}</b></td></tr>',
-        footerFormat: '</table>',
-        shared: true,
-        useHTML: true
-      },
-      series: this.data.highcharts.series,
-      credits: {
-        enabled: false
-      },
-      colors: [this.chartsColor, '#F15E57', '#FE6D4B', '#9FD661', '#40D0AD', '#48C0EB', '#5A9AEF', '#EE85C1'],
-      drilldown: {
-        series: this.data.highcharts.drilldowns,
-        activeAxisLabelStyle: {
-          textDecoration: 'none'
-        },
-        activeDataLabelStyle: {
-          color: 'white'
-        }
-      }
-    });
-  }
 
-  renderPieChart() {
-    this.$element.highcharts({
-      chart: {
-        type: 'pie',
-        style: {
-          fontFamily: 'Helvetica Neue, sans-serif'
-        }
-      },
-      plotOptions: {
-        pie: {
-          dataLabels: {
-            enabled: true,
-            format: "{point.name}",
-            style: {
-              width:'70px',
-              textOverflow: 'ellipsis',
-              overflow: 'hidden'
-            }
-          }
-        }
-      },
-      title: {
-        text: ''
-      },
-      series: this.data.highcharts.series,
-      tooltip: {
-        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-        pointFormat: '<tr><td style="padding:0"><b>{point.y}</b></td></tr>',
-        footerFormat: '</table>',
-        shared: true,
-        useHTML: true
-      },
-      credits: {
-        enabled: false
-      },
-      colors: [this.chartsColor, '#F15E57', '#FE6D4B', '#9FD661', '#40D0AD', '#48C0EB', '#5A9AEF', '#EE85C1']
-    });
-  }
+        this.updateData();
+    }
 
-  renderTimeBasedChart() {
-    Highcharts.stockChart(this.$element[0], {
-      rangeSelector: {
-          floating: true,
-          y: -65,
-          verticalAlign: 'bottom',
-      },
-      navigator: {
-          margin: 60
-      },
-      plotOptions: {
-        series: {
-          marker: {
-            enabled: true,
-            radius: 3,
-            symbol: 'circle'
-          },
-          shadow: true
+    updateData(input={}) {
+        $.get(this.dataUrl, { input: input }, (data) => {
+            this.onDataUpdate(data);
+        });
+    }
+
+    onDataUpdate(data) {
+        this.data = data;
+        this.attachToElement();
+    }
+
+    attachToElement() {
+        switch (this.data.type) {
+            case 'bar':
+                this.renderBarChart();
+                break;
+            case 'line':
+                this.renderLineChart();
+                break;
         }
-      },
-      series: this.data.highcharts.series
-    });
-  }
+    }
+
+    renderBarChart() {
+        var data = this.data;
+        var series = data.series;
+        var graph_id = $(this.$element).attr('id');
+        var select_string = '#' + graph_id  + ' svg';
+
+        var $drillout_button = $(this.$element).siblings('.drillout_button');
+
+        var svg = this.$element[0].children[0];
+        var chart = null;
+
+
+        nv.addGraph(function() {
+            chart = nv.models.multiBarChart()
+                .barColor(d3.scale.category20().range())
+                .duration(160)
+                .rotateLabels(45)
+                .groupSpacing(0.3)
+                .x(function (d) { return d.label; }) // set the json keys for x & y values
+                .y(function (d) { return d.value; })
+                .showControls(false)
+                .stacked(false);
+
+            chart.xAxis
+                .showMaxMin(false)
+                .axisLabel(data.x_axis)
+                .axisLabelDistance(10);
+
+            chart.yAxis
+                .tickFormat(d3.format('d'))
+                .axisLabel(data.y_axis)
+                .axisLabelDistance(10);
+
+            chart.reduceXTicks(false)
+                 .staggerLabels(true);
+
+            d3.select(select_string)
+                .datum(series)
+                .call(chart);
+
+            nv.utils.windowResize(chart.update);
+
+            chart.multibar.dispatch.on('elementClick', function(e) {
+                if ('children' in e.data && e.data.children.length != 0) {
+                    d3.select(select_string)
+                    .datum([e.data.children])
+                    .transition().duration(500)
+                    .call(chart);
+
+                    $($drillout_button).toggle();
+                }
+            });
+
+            return chart;
+        });
+
+        $($drillout_button).click(function(){
+            d3.select(select_string)
+                .datum(series)
+                .transition().duration(500)
+                .call(chart);
+
+            $($drillout_button).toggle();
+        });
+    }
+
+    renderLineChart() {
+        var svg = this.$element[0].children[0];
+        var series = this.data.series;
+        var chart = null;
+
+        nv.addGraph(function() {
+            chart = nv.models.lineWithFocusChart()
+                .useInteractiveGuideline(true)
+                .x(function (d) { return d.label; }) // set the json keys for x & y values
+                .y(function (d) { return d.value; });
+
+            chart.xAxis.tickFormat(function(d) {
+                return d3.time.format('%x')(new Date(d));
+            });
+
+            chart.x2Axis.tickFormat(function(d) {
+                return d3.time.format('%x')(new Date(d));
+            });
+
+            chart.yAxis
+                .tickFormat(d3.format('d'));
+
+            d3.select(svg)
+                .datum(series)
+                .transition().duration(500)
+                .call(chart);
+
+            nv.utils.windowResize(chart.update);
+
+            return chart;
+        });
+    }
 }

@@ -1,4 +1,4 @@
-class GroupUpdate < ActiveRecord::Base
+class GroupUpdate < BaseClass
   include PublicActivity::Common
   include ContainsFields
 

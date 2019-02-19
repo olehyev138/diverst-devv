@@ -14,7 +14,7 @@
 //= require bootstrap
 //= require jquery_ujs
 //= require jquery-ui
-//= require jquery-ui/widget 
+//= require jquery-ui/widget
 //= require dataTables/jquery.dataTables
 //= require turbolinks
 //= require cocoon
@@ -43,6 +43,8 @@
 //= require firepad/dist/firepad.min
 //= require firebase/firebase
 //= require bootstrap-timepicker
+//= require d3/d3.min
+//= require nvd3/build/nv.d3.min
 //= require_tree .
 
 var Utility = (function() {
