@@ -7,7 +7,8 @@ RSpec.describe InitiativesController, type: :controller do
   let!(:group) { create :group, :without_outcomes, enterprise: user.enterprise }
   let(:outcome) {create :outcome, group_id: group.id}
   let(:pillar) { create :pillar, outcome_id: outcome.id}
-  let(:initiative) { create :initiative, pillar: pillar, owner_group: group}
+  let!(:initiative) { create :initiative, pillar: pillar, owner_group: group, start: Date.today, end: Date.tomorrow }
+  let!(:initiative2) { create :initiative, pillar: pillar, owner_group: group, start: 2.years.ago, end: 2.years.ago + 1.day }
 
   describe 'GET #index' do
     def get_index(group_id = -1)
@@ -24,6 +25,14 @@ RSpec.describe InitiativesController, type: :controller do
 
       it "display group outcomes" do
         expect(assigns[:outcomes]).to eq [outcome]
+      end
+
+      it 'displays filtered initiatives' do
+        initiatives = []
+        outcomes = assigns[:outcomes]
+        outcomes.each { |o| o.pillars.each { |p| p.initiatives.each { |i| initiatives << i } } }
+
+        expect(initiatives).to eq [initiative]
       end
     end
 

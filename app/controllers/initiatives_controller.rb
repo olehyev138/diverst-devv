@@ -9,7 +9,8 @@ class InitiativesController < ApplicationController
 
   def index
     authorize Initiative
-    @outcomes = @group.outcomes.includes(pillars: { initiatives: :fields })
+
+    apply_filter
   end
 
   def new
@@ -92,13 +93,28 @@ class InitiativesController < ApplicationController
 
   def export_csv
     authorize Initiative, :index?
-    InitiativesDownloadJob.perform_later(current_user.id, @group.id)
+
+    apply_filter
+    InitiativesDownloadJob.perform_later(current_user.id, @group.id, @outcomes.collect{ |o| o.pillars.collect { |p| p.initiatives.map { |i| i.id } } }.flatten)
     track_activity(@group, :export_initiatives)
     flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
     redirect_to :back
   end
 
   protected
+
+  def apply_filter
+    if params[:initiative].present?
+      @initiative = Initiative.new(initiative_params)
+    else
+      @initiative = Initiative.new
+      @initiative.from = params[:from] || 1.year.ago.strftime("%Y-%m-%d")
+      @initiative.to = params[:to] || Date.today.strftime("%Y-%m-%d")
+    end
+
+    @outcomes = @group.outcomes.includes(pillars: { initiatives: :fields })
+    @outcomes = @outcomes.where("initiatives.start >= ? AND initiatives.start <= ?", @initiative.from, @initiative.to).references(:initiatives)
+  end
 
   def set_group
     @group = current_user.enterprise.groups.find(params[:group_id])
@@ -126,6 +142,8 @@ class InitiativesController < ApplicationController
         :picture,
         :budget_item_id,
         :estimated_funding,
+        :from, # For filtering
+        :to, # For filtering
         participating_group_ids: [],
         segment_ids: [],
         fields_attributes: [
@@ -146,7 +164,7 @@ class InitiativesController < ApplicationController
           :title,
           :is_done,
           :_destroy
-        ]
+        ],
       )
   end
 end
