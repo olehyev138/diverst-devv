@@ -2,44 +2,47 @@ class RangeSelector {
     constructor($element, callback) {
         // $element is the actual jquery object representing this instance of a range selector
         // callback is the callback function to call when something in the range selector happens
-        this.$element = $element;
         this.callback = callback;
+        this.$element = $element;
 
-        // set the event handlers for all range selector buttons and text inputs
-        // store this in self, so that we can use access instance inside closures and event handlers
+        // store text input elements
+        this.$from_input = $('.from_input', this.$element);
+        this.$to_input = $('.to_input', this.$element);
 
+        // store instance in self, so that we can use access instance inside closures and event handlers
         var self = this;
 
-        $('button', this.$element).each(function() {
-            $(this).on('click', { self: self, button: this }, self.buttonHandler);
+        // add event handler for all range buttons
+        $('.btn-secondary', this.$element).each(function() {
+            $(this).on('click', { self: self, button: this }, self.rangeButtonHandler);
         });
 
-        $('input', this.$element).each(function() {
-            $(this).on('keypress', { self: self, input: this }, self.inputHandler);
-        });
+        // add handler for refresh button - this button is for 'specific' date ranges
+        $('.btn-primary', this.$element).on('click', { self: self, button: this }, self.refreshButtonHandler);
 
         // disable 'all' button because 'all' is the default date range
         this.update_button($("button[value='all']", this.$element));
     }
 
-    buttonHandler(e) {
+    rangeButtonHandler(e) {
         var self = e.data.self;
         var button = e.data.button;
         var callback = self.callback;
 
-        callback({date_range: button.value});
+        callback({from_date: button.value});
 
         self.update_button(button);
     }
 
-    inputHandler(e) {
-        if (e.which == 13) {
-            var self = e.data.self;
-            var input = e.data.input;
-            var callback = self.callback;
+    refreshButtonHandler(e) {
+        var self = e.data.self;
+        var callback = self.callback;
 
-            callback({date_range: input.value});
-        }
+        var from_date = $(self.$from_input).val();
+        var to_date = $(self.$to_input).val();
+
+        if ((new Date(from_date).getTime()) < (new Date(to_date).getTime()))
+            callback({ from_date: from_date, to_date: to_date });
     }
 
     update_button(button) {

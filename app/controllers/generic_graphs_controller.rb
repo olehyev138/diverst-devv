@@ -789,21 +789,28 @@ class GenericGraphsController < ApplicationController
 
   def parse_date_range(date_range)
     # Parse a date range from a frontend range_controller for a es date range aggregation
+    # Date range is {} or looks like { from: <>, to: <> }, with to being optional
 
-    default_date_range = 'all'
+    default_from_date = 'now-200y/y'
+    default_to_date = DateTime.tomorrow.strftime('%F')
 
-    date_range_string = (date_range.present? ? date_range[:date_range] : default_date_range)
+    return { from: default_from_date, to: default_to_date } if date_range.blank?
 
-    es_date_range = case date_range_string
-                    when '1m'     then { from: 'now-1M/M' }
-                    when '3m'     then { from: 'now-3M/M' }
-                    when '6m'     then { from: 'now-3M/M' }
-                    when 'ytd'    then { from: Time.now.beginning_of_year.strftime('%Y-%m-%d') }
-                    when '1y'     then { from: 'now-1y/y' }
-                    when 'all'    then { from: 'now-200y/y' }
-                    end
+    from_date = date_range[:from_date].presence || default_from_date
+    to_date = DateTime.parse((date_range[:to_date].presence || default_to_date)).strftime('%F')
 
-    es_date_range
+    from_date = case from_date
+                when '1m'     then 'now-1M/M'
+                when '3m'     then 'now-3M/M'
+                when '6m'     then 'now-3M/M'
+                when 'ytd'    then Time.now.beginning_of_year.strftime('%F')
+                when '1y'     then 'now-1y/y'
+                when 'all'    then 'now-200y/y'
+                else
+                  DateTime.parse(from_date).strftime('%F')
+                end
+
+    { from: from_date, to: to_date }
   end
 
   def graph_params
