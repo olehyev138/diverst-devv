@@ -191,7 +191,7 @@ RSpec.describe InitiativesController, type: :controller do
         end
 
         describe 'activity record' do
-          let(:model) { Group.last }
+          let(:model) { group }
           let(:owner) { user }
           let(:key) { 'group.export_initiatives' }
 
@@ -395,7 +395,7 @@ RSpec.describe InitiativesController, type: :controller do
             end
 
             describe 'activity record' do
-              let(:model) { Initiative.last }
+              let(:model) { initiative }
               let(:owner) { user }
               let(:key) { 'initiative.update' }
 
@@ -480,7 +480,7 @@ RSpec.describe InitiativesController, type: :controller do
             end
 
             describe 'activity record' do
-              let(:model) { Initiative.last }
+              let(:model) { initiative }
               let(:owner) { user }
               let(:key) { 'initiative.destroy' }
 
