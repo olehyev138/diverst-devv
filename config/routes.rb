@@ -165,6 +165,7 @@ Rails.application.routes.draw do
   resources :groups do
     collection do
       post :sort
+      get 'get_all_groups'
     end
     resources :budgets, only: [:index, :show, :new, :create, :destroy] do
       post 'approve'
@@ -394,7 +395,10 @@ Rails.application.routes.draw do
   end
 
   resources :segments do
-    collection { get 'enterprise_segments' }
+    collection do
+      get 'enterprise_segments'
+      get 'get_all_segments'
+    end
     resources :sub_segments
     member do
       get 'export_csv'

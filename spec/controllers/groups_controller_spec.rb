@@ -5,8 +5,8 @@ RSpec.describe GroupsController, type: :controller do
 
   let(:enterprise){ create(:enterprise) }
   let(:user){ create(:user, enterprise: enterprise, email: "test@gmail.com") }
-  let(:group){ create(:group, enterprise: enterprise) }
-  let(:different_group) { create(:group, enterprise: create(:enterprise)) }
+  let!(:group){ create(:group, enterprise: enterprise, position: 0) }
+  let!(:different_group) { create(:group, enterprise: create(:enterprise)) }
 
   describe 'GET #index' do
     context 'with logged user' do
@@ -41,10 +41,10 @@ RSpec.describe GroupsController, type: :controller do
 
         it 'total number of groups should be 4' do
           get :index
-          expect(Group.all.count).to eq 4
+          expect(Group.by_enterprise(enterprise.id).count).to eq 4
         end
 
-        it 'returns 3 groups' do
+        it 'returns 4 groups' do
           get :index
           expect(assigns[:groups].count).to eq 4
         end
@@ -53,6 +53,37 @@ RSpec.describe GroupsController, type: :controller do
 
     context 'without logged user' do
       before { get :index }
+      it_behaves_like "redirect user to users/sign_in path"
+    end
+  end
+
+  describe 'GET #get_all_groups' do
+    context 'with logged user' do
+      let!(:group2){ create(:group, enterprise: enterprise, position: 1) }
+
+      login_user_from_let
+
+      before { get :get_all_groups, format: :json }
+
+      it 'returns all groups' do
+        expect(assigns[:groups]).to match_array([group, group2])
+      end
+
+      it 'returns in the proper json format' do
+        parsed_body = JSON.parse(response.body)
+
+        expect(response).to have_http_status(:ok)
+        expect(response.content_type).to eq('application/json')
+        byebug
+        expect(parsed_body.find { |i| i["id"] == group.id }).not_to eq(nil)
+        expect(parsed_body.find { |i| i["text"] == group.name }).not_to eq(nil)
+        expect(parsed_body.find { |i| i["id"] == group2.id }).not_to eq(nil)
+        expect(parsed_body.find { |i| i["text"] == group2.name }).not_to eq(nil)
+      end
+    end
+
+    context 'without logged user' do
+      before { get :get_all_groups, format: :json }
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
@@ -77,7 +108,7 @@ RSpec.describe GroupsController, type: :controller do
 
           it 'total number of groups should be 4' do
             get :close_budgets, :id => group.id
-            expect(Group.all.count).to eq 4
+            expect(Group.by_enterprise(enterprise.id).count).to eq 4
           end
 
           it 'return 3 groups' do
@@ -146,7 +177,7 @@ RSpec.describe GroupsController, type: :controller do
         end
 
         describe 'activity record' do
-          let(:model) { Enterprise.last }
+          let(:model) { enterprise }
           let(:owner) { user }
           let(:key) { 'enterprise.export_close_budgets' }
 
@@ -608,7 +639,7 @@ RSpec.describe GroupsController, type: :controller do
           end
 
           describe 'activity record' do
-            let(:model) { Group.last }
+            let(:model) { group }
             let(:owner) { user }
             let(:key) { 'group.update' }
 
@@ -767,7 +798,7 @@ RSpec.describe GroupsController, type: :controller do
             end
 
             describe 'activity record' do
-              let(:model) { Group.last }
+              let(:model) { group }
               let(:owner) { user }
               let(:key) { 'group.destroy' }
 
@@ -924,7 +955,7 @@ RSpec.describe GroupsController, type: :controller do
         end
 
         describe 'activity record' do
-          let(:model) { Group.last }
+          let(:model) { group }
           let(:owner) { user }
           let(:key) { 'group.import_csv' }
 
@@ -978,7 +1009,7 @@ RSpec.describe GroupsController, type: :controller do
         end
 
         describe 'activity record' do
-          let(:model) { Group.last }
+          let(:model) { group }
           let(:owner) { user }
           let(:key) { 'group.export_members' }
 
