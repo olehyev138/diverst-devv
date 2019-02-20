@@ -203,7 +203,7 @@ Rails.application.routes.draw do
         resources :group_message_comment
       end
       resources :leaders, only: [:index, :new, :create]
-      resources :social_links do 
+      resources :social_links do
         member { patch 'archive' }
       end
       resources :questions, only: [:index] do
@@ -540,6 +540,18 @@ Rails.application.routes.draw do
     end
 
   end
+
+  resources :mentoring_sessions do
+    post 'create_comment'
+    resources :mentoring_session_comments, only: [:edit, :update, :destroy]
+    resources :mentorship_sessions, only: [:accept, :decline] do
+      member do
+        post 'accept'
+        post 'decline'
+      end
+    end
+  end
+
   resources :mentorship_ratings
 
   resources :metrics_dashboards do

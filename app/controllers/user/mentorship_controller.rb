@@ -6,18 +6,18 @@ class User::MentorshipController < ApplicationController
 
     def index
     end
-    
+
     # allow user to edit mentorship
     def edit
     end
-    
+
     # allow users to view profiles for other users
     def show
     end
-    
+
     def update
         authorize @user
-        
+
         @user.assign_attributes(user_params)
         if @user.save
             track_activity(@user, :update_mentorship_profile)
@@ -33,15 +33,15 @@ class User::MentorshipController < ApplicationController
             redirect_to :back
         end
     end
-    
+
     def mentors
         @mentorings = @user.menteeships
     end
-    
+
     def mentees
         @mentorings = @user.mentorships
     end
-    
+
     def requests
         @mentorship_proposals  =  @user.mentorship_proposals.mentor_requests
         @menteeship_proposals = @user.mentorship_proposals.mentee_requests
@@ -49,27 +49,30 @@ class User::MentorshipController < ApplicationController
         @mentorship_requests =  @user.mentorship_requests.mentor_requests
         @menteeship_requests = @user.mentorship_requests.mentee_requests
     end
-    
+
     def sessions
-        @sessions = @user.mentoring_sessions.upcoming
+        @sessions = @user.mentoring_sessions.upcoming.select do |session|
+          MentoringSessionPolicy.new(current_user, session).show?
+        end
     end
-    
+
     def ratings
         @sessions = @user.mentoring_sessions.past.no_ratings
         @ratings = @user.mentorship_ratings
     end
-    
+
     protected
-    
+
     def set_user
         @user = User.find_by_id(params[:id]) || current_user
     end
-    
+
     def user_params
         params.require(:user).permit(
             :mentor,
             :mentee,
             :mentorship_description,
+            :time_zone,
             mentoring_interest_ids: [],
             mentoring_type_ids: [],
             :availabilities_attributes => [:day, :start, :end, :_destroy, :id]
