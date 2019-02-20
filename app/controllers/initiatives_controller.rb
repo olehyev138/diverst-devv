@@ -10,7 +10,9 @@ class InitiativesController < ApplicationController
   def index
     authorize Initiative
 
-    apply_filter
+    @outcomes = @group.outcomes.includes(pillars: { initiatives: :fields })
+
+    set_filter
   end
 
   def new
@@ -94,8 +96,14 @@ class InitiativesController < ApplicationController
   def export_csv
     authorize Initiative, :index?
 
-    apply_filter
-    InitiativesDownloadJob.perform_later(current_user.id, @group.id, @outcomes.collect{ |o| o.pillars.collect { |p| p.initiatives.map { |i| i.id } } }.flatten)
+    @outcomes = @group.outcomes.includes(pillars: { initiatives: :fields })
+
+    set_filter
+
+    # Gets and filters the initiatives from outcomes on date
+    initiative_ids = Outcome.get_initiatives(@outcomes).select { |i| i.start >= @filter_from && i.start <= @filter_to }.map { |i| i.id }
+
+    InitiativesDownloadJob.perform_later(current_user.id, @group.id, initiative_ids)
     track_activity(@group, :export_initiatives)
     flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
     redirect_to :back
@@ -103,17 +111,16 @@ class InitiativesController < ApplicationController
 
   protected
 
-  def apply_filter
+  def set_filter
     if params[:initiative].present?
       @initiative = Initiative.new(initiative_params)
     else
       @initiative = Initiative.new
       @initiative.from = params[:from] || 1.year.ago.strftime("%Y-%m-%d")
-      @initiative.to = params[:to] || Date.today.strftime("%Y-%m-%d")
+      @initiative.to = params[:to] || 1.month.from_now.strftime("%Y-%m-%d")
     end
-
-    @outcomes = @group.outcomes.includes(pillars: { initiatives: :fields })
-    @outcomes = @outcomes.where("initiatives.start >= ? AND initiatives.start <= ?", @initiative.from, @initiative.to).references(:initiatives)
+    @filter_from = @initiative.from
+    @filter_to = @initiative.to
   end
 
   def set_group

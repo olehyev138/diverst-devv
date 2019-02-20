@@ -45,7 +45,7 @@
         <div class="col-xs-12">
           <div class="card">
             <div class="card__section">
-              <p>There are no <%= c_t(:outcome).pluralize %> yet in this filter. <%= link_to "Create some", group_outcomes_path(@group) %> to track your diversity initiatives.</p>
+              <p>There are no <%= c_t(:outcome).pluralize %> yet. <%= link_to "Create some", group_outcomes_path(@group) %> to track your diversity initiatives.</p>
             </div>
           </div>
         </div>
@@ -74,13 +74,14 @@
                     <h2 class="no-margin"><%= pillar.name %></h2>
                     <p class="muted"><%= pillar.value_proposition %></p>
                   </div>
-
-                  <% if pillar.initiatives.empty? %>
+                  <% initiatives = pillar.initiatives.starts_between(@filter_from, @filter_to) %>
+                  <% if initiatives.empty? %>
                     <div class="card__section card__section--border">
-                      There are no active events in this <%= c_t(:program) %>.
+                      There are no active events in this <%= c_t(:program)  %> with this filter.
                     </div>
                   <% else %>
-                    <% pillar.initiatives.each do |initiative| %>
+                    <% initiatives.each do |initiative| %>
+                      <%# next if initiative.start < @initiative.from || initiative.start > @initiative.to %>
                       <div class="card__section card__section--border">
                         <div class="row">
                           <div class="col-xs-4">

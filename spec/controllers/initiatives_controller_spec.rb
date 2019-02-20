@@ -28,11 +28,9 @@ RSpec.describe InitiativesController, type: :controller do
       end
 
       it 'displays filtered initiatives' do
-        initiatives = []
         outcomes = assigns[:outcomes]
-        outcomes.each { |o| o.pillars.each { |p| p.initiatives.each { |i| initiatives << i } } }
 
-        expect(initiatives).to eq [initiative]
+        expect(Outcome.get_initiatives(outcomes)).to eq [initiative]
       end
     end
 
