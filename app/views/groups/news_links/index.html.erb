@@ -1,6 +1,6 @@
 <div class="content__header">
   <h1>News</h1>
-  <%= link_to "+ Create news", new_group_news_link_path, class: "btn btn--primary" if policy(NewsLink).new? %>
+  <%= link_to "+ Create news", new_group_news_link_path, class: "btn btn--primary" if NewsLinkPolicy.new(current_user, NewsLink).new? %>
 </div>
 
 <div class="content__main">

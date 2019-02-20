@@ -7,7 +7,7 @@ class Groups::PostsController < ApplicationController
     layout 'erg'
 
     def index
-        if policy(@group).manage?
+        if GroupPolicy.new(current_user, @group).manage?
             without_segments
         else
             if GroupPostsPolicy.new(current_user, [@group]).view_latest_news?

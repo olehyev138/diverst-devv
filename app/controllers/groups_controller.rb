@@ -104,12 +104,12 @@ class GroupsController < ApplicationController
         authorize @group
         @group_sponsors = @group.sponsors
 
-        if policy(@group).manage?
+        if GroupPolicy.new(current_user, @group).manage?
             base_show
 
             @posts = without_segments
         else
-            if policy(@group).is_an_accepted_member?
+            if GroupPolicy.new(current_user, @group).is_an_accepted_member?
                 base_show
                 @posts = with_segments
             else
