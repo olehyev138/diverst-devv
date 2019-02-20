@@ -134,6 +134,7 @@ class Group < ActiveRecord::Base
   validate :perform_check_for_consistency_in_category, on: [:create, :update], unless: :skip_label_consistency_check
   validate :ensure_label_consistency_between_parent_and_sub_groups, on: [:create, :update]
 
+  scope :by_enterprise, -> (e) { where(enterprise_id: e) }
   scope :top_participants,  -> (n) { order(total_weekly_points: :desc).limit(n) }
   # Active Record already has a defined a class method with the name private so we use is_private.
   scope :is_private,        -> {where(:private => true)}
