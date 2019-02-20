@@ -255,7 +255,7 @@ RSpec.describe SegmentsController, type: :controller do
                   end
 
                   describe 'activity record' do
-                    let(:model) { Segment.last }
+                    let(:model) { segment }
                     let(:owner) { user }
                     let(:key) { 'segment.update' }
 
