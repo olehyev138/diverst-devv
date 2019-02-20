@@ -696,6 +696,17 @@ ActiveRecord::Schema.define(version: 20190214193529) do
     t.string   "mentoring_type", limit: 191,   default: "mentor",  null: false
   end
 
+  create_table "mentoring_session_comments", force: :cascade do |t|
+    t.text     "content",              limit: 65535
+    t.integer  "user_id",              limit: 4
+    t.integer  "mentoring_session_id", limit: 4
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
+
+  add_index "mentoring_session_comments", ["mentoring_session_id"], name: "index_mentoring_session_comments_on_mentoring_session_id", using: :btree
+  add_index "mentoring_session_comments", ["user_id"], name: "index_mentoring_session_comments_on_user_id", using: :btree
+
   create_table "mentoring_session_topics", force: :cascade do |t|
     t.integer  "mentoring_interest_id", limit: 4, null: false
     t.integer  "mentoring_session_id",  limit: 4, null: false
@@ -762,12 +773,12 @@ ActiveRecord::Schema.define(version: 20190214193529) do
   end
 
   create_table "mentorship_sessions", force: :cascade do |t|
-    t.integer  "user_id",              limit: 4,                  null: false
-    t.string   "role",                 limit: 191,                null: false
-    t.integer  "mentoring_session_id", limit: 4,                  null: false
-    t.boolean  "attending",                        default: true
+    t.integer  "user_id",              limit: 4,                       null: false
+    t.string   "role",                 limit: 191,                     null: false
+    t.integer  "mentoring_session_id", limit: 4,                       null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "status",               limit: 191, default: "pending", null: false
   end
 
   create_table "mentorship_types", force: :cascade do |t|
@@ -1386,6 +1397,8 @@ ActiveRecord::Schema.define(version: 20190214193529) do
   add_foreign_key "likes", "enterprises"
   add_foreign_key "likes", "news_feed_links"
   add_foreign_key "likes", "users"
+  add_foreign_key "mentoring_session_comments", "mentoring_sessions"
+  add_foreign_key "mentoring_session_comments", "users"
   add_foreign_key "mentorship_availabilities", "users"
   add_foreign_key "polls", "initiatives"
   add_foreign_key "reward_actions", "enterprises"
