@@ -37,8 +37,8 @@ class User < BaseClass
     has_many :mentorship_sessions
     has_many :mentoring_sessions, :through => :mentorship_sessions
 
-	has_many :mentorship_types
-	has_many :mentoring_types, :through => :mentorship_types
+  	has_many :mentorship_types
+  	has_many :mentoring_types, :through => :mentorship_types
 
     # mentorship_requests
     has_many :mentorship_proposals, :foreign_key => "sender_id",     :class_name => "MentoringRequest"
@@ -72,6 +72,8 @@ class User < BaseClass
     has_many :rewards, foreign_key: :responsible_id, :dependent => :destroy
     has_many :likes, dependent: :destroy
     has_many :csv_files
+    has_many :metrics_dashboards, foreign_key: :owner_id
+    has_many :shared_metrics_dashboards
 
     has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: "private"
     validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/

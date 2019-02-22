@@ -281,7 +281,13 @@
                 <td><%= dashboard.graphs.count %></td>
                 <td><%= dashboard.target.count %></td>
                 <td><%= dashboard.created_at.to_s :dateonly %></td>
-                <td><%= link_to "Edit", edit_metrics_dashboard_path(dashboard) %> - <%= link_to "Delete", metrics_dashboard_path(dashboard), method: :delete, class: "error", data: { confirm: "Are you sure?" } %></td>
+                <td>
+                  <%= link_to "Edit", edit_metrics_dashboard_path(dashboard) if policy(dashboard).update? %>
+                  <% if policy(dashboard).update? && policy(dashboard).destroy? %>
+                     -
+                  <% end %>
+                  <%= link_to "Delete", metrics_dashboard_path(dashboard), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(dashboard).destroy? %>
+                </td>
               </tr>
             <% end %>
           </tbody>

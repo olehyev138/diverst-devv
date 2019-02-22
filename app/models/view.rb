@@ -1,4 +1,6 @@
-class View < BaseClass
+class View < ActiveRecord::Base
+  include PublicActivity::Common
+  
   belongs_to :news_feed_link
   belongs_to :group
   belongs_to :user
