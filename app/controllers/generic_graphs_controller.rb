@@ -8,13 +8,13 @@ class GenericGraphsController < ApplicationController
     respond_to do |format|
       format.json {
         graph = UserGroup.get_graph
-        graph.enterprise_filter = { 'group.enterprise_id' => current_user.enterprise_id }
-        graph.query  = graph.query.terms_agg(field: 'group.name')
+        graph.set_enterprise_filter(field: 'group.enterprise_id', value: current_user.enterprise_id)
 
+        graph.formatter.y_label = '# Users'
+        graph.formatter.x_label = 'Groups'
         graph.formatter.title = 'Group Population'
-        graph.formatter.y_axis = '# Users'
-        graph.formatter.x_axis = 'Groups'
 
+        graph.query  = graph.query.terms_agg(field: 'group.name')
         graph.drilldown_graph(parent_field: 'group.parent.name')
 
         render json: graph.build
@@ -26,10 +26,13 @@ class GenericGraphsController < ApplicationController
     respond_to do |format|
       format.json {
         graph = UsersSegment.get_graph
-        graph.enterprise_filter = { 'segment.enterprise_id' => current_user.enterprise_id }
-        graph.query = graph.query.terms_agg(field: 'segment.name')
+        graph.set_enterprise_filter(field: 'segment.enterprise_id', value: current_user.enterprise_id)
+
+        graph.formatter.y_label = '# Users'
+        graph.formatter.x_label = 'Segments'
         graph.formatter.title = 'Segment Population'
 
+        graph.query = graph.query.terms_agg(field: 'segment.name')
         graph.drilldown_graph(parent_field: 'segment.parent.name')
 
         render json: graph.build
@@ -48,16 +51,13 @@ class GenericGraphsController < ApplicationController
     respond_to do |format|
       format.json{
         graph = Initiative.get_graph
-        graph.enterprise_filter = { 'pillar.outcome.group.enterprise_id' => current_user.enterprise_id }
+        graph.set_enterprise_filter(field: 'pillar.outcome.group.enterprise_id', value: enterprise_id)
+
+        graph.formatter.title = 'Events Created'
+        graph.formatter.y_parser.parse_chain = graph.formatter.y_parser.date_range
 
         graph.query = graph.query.terms_agg(field: 'pillar.outcome.group.name') { |q|
           q.date_range_agg(field: 'created_at', range: date_range)
-        }
-
-        graph.formatter = graph.get_custom_formatter
-        graph.formatter.title = 'Events Created'
-        graph.formatter.element_formatter = -> (e) {
-          { label: e[:key], value: e.agg.buckets[0][:doc_count] }
         }
 
         graph.drilldown_graph(parent_field: 'pillar.outcome.group.parent.name')
@@ -72,23 +72,19 @@ class GenericGraphsController < ApplicationController
   end
 
   def non_demo_messages_sent
-    # set days to input if passed, otherwise default to 30
     date_range = parse_date_range(params[:input])
 
     respond_to do |format|
       format.json {
         graph = GroupMessage.get_graph
-        graph.enterprise_filter = { 'group.enterprise_id' => current_user.enterprise_id }
+        graph.set_enterprise_filter(field: 'group.enterprise_id', value: enterprise_id)
 
         graph.query = graph.query.terms_agg(field: 'group.name') { |q|
           q.date_range_agg(field: 'created_at', range: date_range)
         }
 
-        graph.formatter = graph.get_custom_formatter
         graph.formatter.title = 'Messages Sent'
-        graph.formatter.element_formatter = -> (e) {
-          { label: e[:key], value: e.agg.buckets[0][:doc_count] }
-        }
+        graph.formatter.y_parser.parse_chain = graph.formatter.y_parser.date_range
 
         graph.drilldown_graph(parent_field: 'group.parent.name')
 
@@ -109,17 +105,14 @@ class GenericGraphsController < ApplicationController
     respond_to do |format|
       format.json {
         graph = View.get_graph
-        graph.enterprise_filter = { 'enterprise_id' => current_user.enterprise_id }
+        graph.set_enterprise_filter(value: enterprise_id)
 
         graph.query = graph.query.terms_agg(field: 'group.name') { |q|
           q.date_range_agg(field: 'created_at', range: date_range)
         }
 
-        graph.formatter = graph.get_custom_formatter
         graph.formatter.title = '# Views per Group'
-        graph.formatter.element_formatter = -> (e) {
-          { label: e[:key], value: e.agg.buckets[0][:doc_count] }
-        }
+        graph.formatter.y_parser.parse_chain = graph.formatter.y_parser.date_range
 
         graph.drilldown_graph(parent_field: 'group.parent.name')
 
@@ -139,7 +132,7 @@ class GenericGraphsController < ApplicationController
     respond_to do |format|
       format.json {
         graph = View.get_graph
-        graph.enterprise_filter = { 'enterprise_id' => current_user.enterprise_id }
+        graph.set_enterprise_filter(value: current_user.enterprise_id)
 
         graph.query = graph.query.terms_agg(field: 'folder.id') { |q|
           q.date_range_agg(field: 'created_at', range: date_range) { |qq|
@@ -147,21 +140,19 @@ class GenericGraphsController < ApplicationController
           }
         }
 
-        graph.formatter = graph.get_custom_formatter
         graph.formatter.title = '# Views per Folder'
-        graph.formatter.element_formatter = -> (e) {
-          doc_count = e.agg.buckets[0][:doc_count]
-          return { label: '', value: 0 } if doc_count == 0
-          e_folder =  e.agg.buckets[0].agg.hits.hits[0][:_source][:folder]
-          group_name = e_folder[:group].present? ? e_folder[:group][:name] : 'Shared'
+        x_parser = graph.formatter.x_parser
+        y_parser = graph.formatter.y_parser
 
-          { label: group_name + ': ' + e_folder[:name],
-            value: doc_count
-          }
+        x_parser.parse_chain = x_parser.date_range { |p| p.top_hits }
+        x_parser.extractor = -> (e, _) {
+          return if e.blank? || e == 0
+          group = e.dig(:folder, :group, :name) || 'Shared'
+          group + ' ' + e[:folder][:name]
         }
-        graph.formatter.key_formatter = -> (e) {
-          e.agg.buckets[0].agg.hits.hits[0][:_source][:folder][:id]
-        }
+
+        y_parser.key = :doc_count
+        y_parser.parse_chain = y_parser.date_range
 
         graph.formatter.add_elements(graph.search)
 
@@ -182,7 +173,7 @@ class GenericGraphsController < ApplicationController
     respond_to do |format|
       format.json {
         graph = View.get_graph
-        graph.enterprise_filter = { 'enterprise_id' => current_user.enterprise_id }
+        graph.set_enterprise_filter(value: current_user.enterprise_id)
 
         graph.query = graph.query.terms_agg(field: 'resource.id') { |q|
           q.date_range_agg(field: 'created_at', range: date_range) { |qq|
@@ -190,21 +181,20 @@ class GenericGraphsController < ApplicationController
           }
         }
 
-        graph.formatter = graph.get_custom_formatter
         graph.formatter.title = '# Views per Resource'
-        graph.formatter.element_formatter = -> (e) {
-          doc_count = e.agg.buckets[0][:doc_count]
-          return { label: '', value: 0 } if doc_count == 0
-          e_resource =  e.agg.buckets[0].agg.hits.hits[0][:_source][:resource]
-          group_name = e_resource[:group].present? ? e_resource[:group][:name] : 'Shared'
 
-          { label: group_name + ': ' + e_resource[:title],
-            value: e.agg.buckets[0][:doc_count]
-          }
+        x_parser = graph.formatter.x_parser
+        y_parser = graph.formatter.y_parser
+
+        x_parser.parse_chain = x_parser.date_range { |p| p.top_hits }
+        x_parser.extractor = -> (e, _) {
+          return if e.blank? || e == 0
+          group = e.dig(:resource, :group, :name) || 'Shared'
+          group + ' ' + e[:resource][:title]
         }
-        graph.formatter.key_formatter = -> (e) {
-          e.agg.buckets[0].agg.hits.hits[0][:_source][:resource][:id]
-        }
+
+        y_parser.key = :doc_count
+        y_parser.parse_chain = y_parser.date_range
 
         graph.formatter.add_elements(graph.search)
 
@@ -226,7 +216,7 @@ class GenericGraphsController < ApplicationController
     respond_to do |format|
       format.json {
         graph = View.get_graph
-        graph.enterprise_filter = { 'enterprise_id' => current_user.enterprise_id }
+        graph.set_enterprise_filter(value: enterprise_id)
 
         graph.query = graph.query.terms_agg(field: 'news_feed_link.news_link.id') { |q|
           q.date_range_agg(field: 'created_at', range: date_range) { |qq|
@@ -234,25 +224,22 @@ class GenericGraphsController < ApplicationController
           }
         }
 
-        graph.formatter = graph.get_custom_formatter
         graph.formatter.title = '# Views per News Link'
-        graph.formatter.element_formatter = -> (e) {
-          # Look at the View mapping to get a handle on this.
-          # Essentially we need to aggregate by id, but display '<group>: <title>', this is what causes this mess
-          doc_count = e.agg.buckets[0][:doc_count]
-          return { label: '', value: 0 } if doc_count == 0
-          e_news_feed_link =  e.agg.buckets[0].agg.hits.hits[0][:_source][:news_feed_link]
-          group_name = e_news_feed_link[:group].present? ? e_news_feed_link[:group][:name] : 'Shared'
+        x_parser = graph.formatter.x_parser
+        y_parser = graph.formatter.y_parser
 
-          { label: group_name + ': ' + e_news_feed_link[:news_link][:title],
-            value: e.agg.buckets[0][:doc_count]
-          }
-        }
-        graph.formatter.key_formatter = -> (e) {
-          e.agg.buckets[0].agg.hits.hits[0][:_source][:news_feed_link][:news_link][:id]
+        x_parser.parse_chain = x_parser.date_range { |p| p.top_hits }
+        x_parser.extractor = -> (e, _) {
+          return if e.blank? || e == 0
+          group = e.dig(:news_feed_link, :group, :name) || 'Shared'
+          group + ' ' + e[:news_feed_link][:news_link][:title]
         }
 
-        graph.formatter.add_elements(graph.search)
+        y_parser.key = :doc_count
+        y_parser.parse_chain = y_parser.date_range
+
+        elements = graph.formatter.list_parser.parse_list(graph.search)
+        graph.formatter.add_elements(elements)
 
         render json: graph.build
       }
@@ -270,26 +257,36 @@ class GenericGraphsController < ApplicationController
     respond_to do |format|
       format.json {
         graph = User.get_graph
-        graph.enterprise_filter = { 'enterprise_id' => current_user.enterprise_id }
+        graph.set_enterprise_filter(value: enterprise_id)
 
-        graph.formatter = graph.get_custom_formatter
-        graph.formatter.title = '# of Employees Over Time'
+        # build query
+        graph.query = graph.query.terms_agg(field: 'created_at', order_field: '_term', order_dir: 'asc') { |q|
+          q.date_range_agg(field: 'created_at', range: date_range)
+        }
+
+        # setup formatter & parsers
         graph.formatter.type = 'line'
+        graph.formatter.title = 'Growth of employees'
 
-        graph.formatter.element_formatter = -> (e, *args) {
-          { label: e[:key], value: args[0] }
+        y_parser = graph.formatter.y_parser
+        y_parser.parse_chain = y_parser.date_range
+        y_parser.extractor = -> (_, args) {
+          args[:total]
         }
 
-        graph.query = graph.query.date_range_agg(field: 'created_at', range: date_range) { |q|
-          q.terms_agg(field: 'created_at', order_field: '_term', order_dir: 'asc')
-        }
+        # run query
+        elements = graph.formatter.list_parser.parse_list(graph.search)
 
-        graph.formatter.add_series
+        # build graph
         total = 0
-        elements = graph.search
+        graph.formatter.add_series
+        gen_parser = graph.formatter.general_parser
+        gen_parser.parse_chain = gen_parser.date_range
+        gen_parser.key = :doc_count
 
-        elements[0].agg.buckets.each { |element|
-          graph.formatter.add_element(element, (total += element[:doc_count]))
+        elements.each { |e|
+          total += gen_parser.parse(e)
+          graph.formatter.add_element(e, total: total)
         }
 
         render json: graph.build
@@ -301,31 +298,32 @@ class GenericGraphsController < ApplicationController
     respond_to do |format|
       format.json {
         graph = UserGroup.get_graph
-        graph.enterprise_filter = { 'group.enterprise_id' => current_user.enterprise_id }
-        graph.formatter = graph.get_custom_formatter
-        graph.formatter.title = 'Growth of Groups'
-        graph.formatter.type = 'line'
+        graph.set_enterprise_filter(field: 'group.enterprise_id', value: enterprise_id)
 
-        graph.formatter.element_formatter = -> (e, *args) {
-          { label: e[:key],
-            value: args[0] , # args[0] -> total so far
-            key: 'series0' }
+        graph.formatter.type = 'line'
+        graph.formatter.title = 'Growth of Groups'
+        graph.formatter.y_parser.extractor = -> (_, args) {
+          args[:total]
         }
+
+        gen_parser = graph.formatter.general_parser
+        gen_parser.key = :doc_count
 
         current_user.enterprise.groups.each do |group|
           graph.query = graph.query
             .filter_agg(field: 'group_id', value: group.id) { |q|
-              q.terms_agg(field: 'created_at', order_field: '_term', order_dir: 'asc')
+            q.terms_agg(field: 'created_at', order_field: '_term', order_dir: 'asc')
           }
 
-          # each group is a new series/line on our line graph
-          graph.formatter.add_series(series_name: group.name)
-          total = 0
-          elements = graph.search
+          elements = graph.formatter.list_parser.parse_list(graph.search)
 
-          elements.each { |element|
-            # keep a running total
-            graph.formatter.add_element(element, (total += element[:doc_count]))
+          # each group is a new series/line on our line graph
+          total = 0
+          graph.formatter.add_series(series_name: group.name)
+
+          elements.each { |e|
+            total += gen_parser.parse(e)
+            graph.formatter.add_element(e, total: total)
           }
         end
 
@@ -346,12 +344,15 @@ class GenericGraphsController < ApplicationController
     respond_to do |format|
       format.json {
         graph = Resource.get_graph
-        graph.enterprise_filter = { 'folder.group.enterprise_id' => current_user.enterprise_id }
-        graph.formatter = graph.get_custom_formatter
-        graph.formatter.title = 'Growth of Resources'
+        graph.set_enterprise_filter(field: 'folder.group.enterprise_id', value: current_user.enterprise_id)
+
         graph.formatter.type = 'line'
-        graph.formatter.element_formatter = -> (e, *args) {
-          { label: e[:key], value: args[0] } # args[0] -> total so far
+        graph.formatter.title = 'Growth of Resources'
+
+        gen_parser = graph.formatter.general_parser
+        gen_parser.key = :doc_count
+        graph.formatter.y_parser.extractor = -> (_, args) {
+          args[:total]
         }
 
         current_user.enterprise.groups.each do |group|
@@ -360,12 +361,14 @@ class GenericGraphsController < ApplicationController
               q.terms_agg(field: 'created_at', order_field: '_term', order_dir: 'asc')
           }
 
-          graph.formatter.add_series(series_name: group.name)
-          total = 0
-          elements = graph.search
+          elements = graph.formatter.list_parser.parse_list(graph.search)
 
-          elements.each { |element|
-            graph.formatter.add_element(element, (total += element[:doc_count]))
+          total = 0
+          graph.formatter.add_series(series_name: group.name)
+
+          elements.each { |e|
+            total += gen_parser.parse(e)
+            graph.formatter.add_element(e, total: total)
           }
         end
 
@@ -811,6 +814,10 @@ class GenericGraphsController < ApplicationController
                 end
 
     { from: from_date, to: to_date }
+  end
+
+  def enterprise_id
+    current_user.enterprise_id
   end
 
   def graph_params

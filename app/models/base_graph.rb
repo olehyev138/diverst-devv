@@ -40,14 +40,19 @@ module BaseGraph
   #    to define a enterprise_filter & Query object
   #
   class GraphBuilder
-    attr_accessor :enterprise_filter, :query, :formatter, :hits
+    attr_accessor :query, :formatter, :hits
+    attr_reader :enterprise_filter
 
     def initialize(instance)
       @instance = instance
 
       @query = @instance.get_query
-      @formatter = get_formatter
+      @formatter = Nvd3Formatter.new
       @hits = false
+    end
+
+    def set_enterprise_filter(field: 'enterprise_id', value:)
+      @enterprise_filter = { field: field, value: value  }
     end
 
     # Query elasticsearch with the current query object and enterprise filter
@@ -64,14 +69,6 @@ module BaseGraph
       @formatter.format
     end
 
-    def get_formatter
-      Nvd3Formatter.new
-    end
-
-    def get_custom_formatter
-      CustomNvd3Formatter.new
-    end
-
     # Helpers
     #  - Helpers are methods for building common 'types' of graphs
     #  - Generally a helper should take care of all searching and formatting
@@ -84,7 +81,8 @@ module BaseGraph
       parents_query = @instance.get_query
         .agg(type: 'missing', field: parent_field) { |_| @query }
 
-      parents = @instance.search(parents_query, @enterprise_filter, hits: @hits)
+      parents = @formatter.list_parser
+        .parse_list(@instance.search(parents_query, @enterprise_filter, hits: @hits))
 
       # For each parent, run current set query on all children
       parents.each do |parent|
@@ -106,6 +104,8 @@ module BaseGraph
     end
   end
 
+  # Define formatting interface here - TODO
+
   # Formats & Parses elasticsearch responses to a Nvd3 Format
   # General Nvd3 data structure:
   #  { title: <title>, type: <type>, series: [{
@@ -113,9 +113,9 @@ module BaseGraph
   #      key: <series_name>,
   #      values: [{
   #        # data point 01
-  #        label: <label>
-  #        value: <value>
-  #        children: { key: <parent_label>, values: [ {label: <label>, value: <value>}, ...] }},
+  #        x: <label>
+  #        y: <value>
+  #        children: { key: <parent_label>, values: [ {x: <label>, y: <value>}, ...] }},
   #        ...
   #      },
   #      ...
@@ -129,19 +129,23 @@ module BaseGraph
   #    - A children hash is a hash with key identifying parent and a list of data points
   #        - Children data points may not have children of there own. This limits the Nvd3 structure to ONE sublevel of datapoints
   class Nvd3Formatter
-    attr_accessor :title, :x_axis, :y_axis, :type
+    attr_accessor :title, :x_label, :y_label, :type,
+                  :x_parser, :y_parser, :list_parser, :key_parser, :general_parser
 
     def initialize
+      @x_parser = ElasticsearchParser.new(key: ElasticsearchParser::ELASTICSEARCH_KEY)
+      @y_parser = ElasticsearchParser.new(key: ElasticsearchParser::ELASTICSEARCH_DOC_COUNT)
+      @list_parser = ElasticsearchParser.new
+      @key_parser = @x_parser
+      @general_parser = ElasticsearchParser.new
+
       @title = 'Default Graph'
-      @x_axis = ''
-      @y_axis = ''
       @type = 'bar'
 
+      @series_index = -1
       @data = {
         series: []
       }
-
-      @series_index = -1
     end
 
     # Parse, format & add a single element to current series
@@ -149,14 +153,14 @@ module BaseGraph
     #  - in the form of a single elasticsearch aggregation element: { key: <key>, doc_count: <n> }
     # @children - optional, a list of children elements
     # @element_key - the key to identify a parent element, gives a name to children series
-    def add_element(element, children: nil, element_key: nil)
-      element = format_element(element)
+    def add_element(element, element_key: nil, children: nil, **args)
+      element = format_element(element, args)
 
       # add children to element if passed
       if children.present?
         element[:children] = {
-          key: element_key,
-          values: format_elements(children)
+          key: element_key || get_element_key(element),
+          values: format_elements(children, args)
         }
       end
 
@@ -168,15 +172,17 @@ module BaseGraph
     # Parse, format & add a list of elements to current series
     # @elements - the list of elements to add
     #  - in the form of a list of elasticsearch aggregations elements: [{ key: <key>, doc_count: <n> }, ...n]
-    def add_elements(elements)
+    def add_elements(elements, **args)
       add_series if @data[:series].blank?
-      @data[:series][@series_index][:values] = format_elements(elements)
+      @data[:series][@series_index][:values] = format_elements(elements, args)
     end
 
     # Parse and return key of element
+    # Key is the thing that uniquely identifes the item
+    # Usually this is the same as the x value, but not always
     # @element - the element to parse
     def get_element_key(element)
-      element[:key]
+      @key_parser.parse(element)
     end
 
     # Add a new series
@@ -184,7 +190,6 @@ module BaseGraph
     # All elements added after will be added to this new series
     def add_series(series_name: @title)
       @series_index += 1
-
       @data[:series] << { key: series_name, values: [] }
     end
 
@@ -192,14 +197,13 @@ module BaseGraph
     def format
       # Set these properties here so user can change them beforehand
       @data[:title] = @title
-      @data[:x_axis] = @x_axis
-      @data[:y_axis] = @y_axis
+      @data[:x_label] = @x_label
+      @data[:y_label] = @y_label
       @data[:type] = @type
 
-      # clean data
-      # TODO: review this
+      # clean up data
       @data[:series].each_with_index do |series, i|
-        @data[:series][i][:values] = series[:values].select { |e| e[:value] != 0 }
+        @data[:series][i][:values] = series[:values].select { |e| e[:x] != 0 && e[:y] != 0 }
       end
 
       @data
@@ -207,80 +211,84 @@ module BaseGraph
 
     private
 
-    def format_elements(elements)
+    def format_elements(elements, **args)
       elements.map { |element|
-        format_element element
+        format_element(element, args)
       }
     end
 
-    def format_element(element)
-      # Maps a single elasticsearch element to a nvd3 element
-      # Elasticsearch element looks like: { key: <key>, doc_count: <doc_count> }
-
+    def format_element(element, **args)
       {
-        label: element[:key],
-        value: element[:doc_count],
+        x: @x_parser.parse(element, args),
+        y: @y_parser.parse(element, args),
         children: {}
       }
     end
   end
 
-  # Subclass of Nvd3Formatter
-  # Allows for custom element and key formatting through passed in lambdas
-  # Depending on the query, elasticsearch does not always return a standard elasticsearch element
-  # For these cases the CustomNvd3Formatter is provided, the methods which parse elasticsearch
-  # and map to a nvd3 format, are passed in as lambdas, defined by the user
-  #
-  # Defines element_formatter and key_formatter instance variables that can be set by the user,
-  # if left undefined behavior will default to super. It is possible to set one without setting other
-  #
-  # element_formatter maps a single elasticsearch element to a nvd3 one
-  #  - definition is expected to have at least one argument to take elasticsearch element
-  #  - can take extra arguments, simply pass them as normal to add_element
-  # key_formatter pulls out the key/identifier of a single elasticsearch element
-  #  - definition is expected to have at least one argument to take elasticsearch element
-  #  - can take extra arguments, simply pass them as normal to add_element
-  #
-  class CustomNvd3Formatter < Nvd3Formatter
-    attr_accessor :element_formatter, :key_formatter
+  # Parse a elasticsearch response
+  # Pulls a single value out of an elasticsearch response
+  # Theoretically could replace with another parser if we switched backends
+  class ElasticsearchParser
+    ELASTICSEARCH_KEY = :key
+    ELASTICSEARCH_DOC_COUNT = :doc_count
 
-    # Reimplement add_element slightly to allow the custom lambdas to take extra arguments
-    def add_element(element, *args, children: nil, element_key: nil)
-      element = format_element(element, *args)
+    attr_accessor :parse_chain, :key, :extractor
 
-      if !children.blank?
-        element[:children] = {
-          key: element_key,
-          values: format_elements(children, *args)
-        }
-      end
-
-      add_series if @data[:series].blank?
-      @data[:series][@series_index][:values] << element
+    def initialize(key: :key)
+      @key = key
+      @parse_chain = -> (e) { e }
     end
 
-    def get_element_key(element, *args)
-      if !@key_formatter.blank?
-        @key_formatter.call element, *args
-      else
-        super
-      end
-    end
+    # Bucket parsers
+    # Returns a single elasticsearch bucket
 
-    private
+    def date_range(&block)
+      inner = yield self if block_given?
 
-    def format_elements(elements, *args)
-      elements.map { |element|
-        format_element element, *args
+      -> (e) {
+        e = e.agg.buckets[0] || 0
+        (inner) ? inner.call(e) : e
       }
     end
 
-    def format_element(element, *args)
-      if !@element_formatter.blank?
-        @element_formatter.call element, *args
+    # Parse a top hits aggregation
+    # Must be run last, can not nest anything inside except custom parser
+    def top_hits
+      -> (e) {
+        e.agg.hits.hits.dig(0, '_source') || 0
+      }
+    end
+
+    # List parsers
+    # Returns a list of elasticsearch buckets
+
+    def date_range_list
+      inner = yield self if block_given?
+
+      -> (e) {
+        e = e.agg.buckets
+        (inner) ? inner.call(e) : e
+      }
+    end
+
+    def top_hits_list
+      -> (e) {
+        e.agg.hits.hits
+      }
+    end
+
+    # Run the parser on an elasticsearch response
+    def parse(element, **args)
+      if @extractor.present?
+        @extractor.call(@parse_chain.call(element), args)
       else
-        super
+        @parse_chain.call(element)[@key]
       end
+    end
+
+    def parse_list(element)
+      @parse_chain.call(element)
     end
   end
 end

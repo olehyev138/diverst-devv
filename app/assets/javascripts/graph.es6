@@ -62,8 +62,8 @@ class Graph {
                 .duration(160)
                 .rotateLabels(45)
                 .groupSpacing(0.3)
-                .x(function (d) { return d.label; }) // set the json keys for x & y values
-                .y(function (d) { return d.value; })
+                .x(function (d) { return d.x; }) // set the json keys for x & y values
+                .y(function (d) { return d.y; })
                 .showControls(false)
                 .stacked(false);
 
@@ -118,8 +118,8 @@ class Graph {
         nv.addGraph(function() {
             chart = nv.models.lineWithFocusChart()
                 .useInteractiveGuideline(true)
-                .x(function (d) { return d.label; }) // set the json keys for x & y values
-                .y(function (d) { return d.value; });
+                .x(function (d) { return d.x; }) // set the json keys for x & y values
+                .y(function (d) { return d.y; });
 
             chart.xAxis.tickFormat(function(d) {
                 return d3.time.format('%x')(new Date(d));
