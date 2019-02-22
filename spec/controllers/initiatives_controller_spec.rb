@@ -26,12 +26,6 @@ RSpec.describe InitiativesController, type: :controller do
       it "display group outcomes" do
         expect(assigns[:outcomes]).to eq [outcome]
       end
-
-      it 'displays filtered initiatives' do
-        outcomes = assigns[:outcomes]
-
-        expect(Outcome.get_initiatives(outcomes)).to eq [initiative]
-      end
     end
 
     context 'without logged user' do
