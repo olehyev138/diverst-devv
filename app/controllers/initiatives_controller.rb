@@ -112,13 +112,16 @@ class InitiativesController < ApplicationController
   protected
 
   def set_filter
+    @initiative = Initiative.new
+
     if params[:initiative].present?
-      @initiative = Initiative.new(initiative_params)
+      @initiative.from = Date.parse(initiative_params[:from]).beginning_of_day
+      @initiative.to = Date.parse(initiative_params[:to]).end_of_day
     else
-      @initiative = Initiative.new
-      @initiative.from = params[:from] || 1.year.ago.strftime("%Y-%m-%d")
-      @initiative.to = params[:to] || 1.month.from_now.strftime("%Y-%m-%d")
+      @initiative.from = 1.year.ago.beginning_of_day
+      @initiative.to = 1.month.from_now.end_of_day
     end
+
     @filter_from = @initiative.from
     @filter_to = @initiative.to
   end
