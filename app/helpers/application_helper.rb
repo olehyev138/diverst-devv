@@ -164,6 +164,11 @@ module ApplicationHelper
     end
   end
 
+  def resource_policy(resource)
+    return EnterpriseResourcePolicy.new(current_user, resource) if resource.container.is_a?(Enterprise)
+    return GroupResourcePolicy.new(current_user, resource) if resource.container.is_a?(Folder)
+  end
+
   private
 
   def default_enterprise_for_styling
