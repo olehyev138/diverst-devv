@@ -59,7 +59,7 @@ module BaseGraph
     #  - returns results, because specific logic may be needed to be performed on them
     #  - results are then added back into graph formatter manually
     def search
-      @instance.search @query, @enterprise_filter, hits: @hits
+      @instance.search @query, @enterprise_filter
     end
 
     # Runs the formatter and returns results
@@ -93,7 +93,7 @@ module BaseGraph
         children_query = @instance.get_query
           .filter_agg(field: parent_field, value: parent_key) { |_| @query }
 
-        children = @instance.search(children_query, @enterprise_filter, hits: @hits)
+        children = @instance.search(children_query, @enterprise_filter)
 
         # Add current parent with all its children
         @formatter.add_element(parent, children: children, element_key: parent_key)
@@ -239,14 +239,11 @@ module BaseGraph
       @parse_chain = -> (e) { e }
     end
 
-    # Bucket parsers
-    # Returns a single elasticsearch bucket
-
     def date_range(&block)
       inner = yield self if block_given?
 
       -> (e) {
-        e = e.agg.buckets[0] || 0
+        e = e.try(:agg).try(:buckets).try(:dig, 0) || 0
         (inner) ? inner.call(e) : e
       }
     end
@@ -255,25 +252,7 @@ module BaseGraph
     # Must be run last, can not nest anything inside except custom parser
     def top_hits
       -> (e) {
-        e.agg.hits.hits.dig(0, '_source') || 0
-      }
-    end
-
-    # List parsers
-    # Returns a list of elasticsearch buckets
-
-    def date_range_list
-      inner = yield self if block_given?
-
-      -> (e) {
-        e = e.agg.buckets
-        (inner) ? inner.call(e) : e
-      }
-    end
-
-    def top_hits_list
-      -> (e) {
-        e.agg.hits.hits
+        e.try(:agg).try(:hits).try(:hits).try(:dig, 0, '_source') || 0
       }
     end
 

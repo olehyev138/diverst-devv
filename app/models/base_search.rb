@@ -111,7 +111,7 @@ module BaseSearch
     # Runs an elasticsearch query
     # @query - the Query object in which to query elasticsearch with
     # @enterprise_filter - the enterprise field/value pair hash in which to filter on
-    def search(query, enterprise_filter, hits: false)
+    def search(query, enterprise_filter)
       # wrap query in a enterprise_id filter
       query = self.get_query.filter_agg(field: enterprise_filter[:field],
                                         value: enterprise_filter[:value]) { |_| query }.build
