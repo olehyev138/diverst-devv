@@ -3,17 +3,18 @@ module BaseSearch
     klass.extend ClassMethods
   end
 
-  # Represents and builds a elasticsearch aggregation query
+  # Represents and builds an elasticsearch aggregation query
   # Essentially a list of methods that take parameters and builds
   # a hash out of them, reperesenting various elasicsearch aggregation types
   #
   # Supports nesting to any degree through blocks.
-  #   - Block is passed a new Query instance.
-  #   - Block is expected to return an instance of Query, presumambly with
+  #   - Block is passed a new ElasticsearchQuery instance.
+  #   - Block is expected to return an instance of ElasticsearchQuery, presumambly with
   #     one or more aggregations defined
-  #   - A query passed as the block as another, is nested within
+  #   - A query returned from a block, is nested within the outer query
   #   - Ex: filter_agg(...) { |q| q.terms_agg(...) }
-  #         This will nested a terms agg within a filter agg
+  #          - q is a new instance of ElasticsearchQuery
+  #          - This will nested a terms agg within a filter agg
   #   - Consult elasticsearch documentation for more information
   #     on elasticsearch aggregations
   #
@@ -22,12 +23,12 @@ module BaseSearch
   #     so it would cause a duplicate key error
   #  - Only builds aggregation queries
   #
-  class Query
+  class ElasticsearchQuery
     DEFAULT_SIZE = 0
 
     def initialize
       @query = {size: DEFAULT_SIZE}
-      @aggs = {aggs: {}}
+      @root_aggs = {aggs: {}}
     end
 
     # Creates a filter aggregation
@@ -43,6 +44,7 @@ module BaseSearch
     # Creates a date range aggregation
     # @field - field to fit within range
     # @range - an elasticsearch range hash, consult elasticsearch documentation for more information
+    # limitations - only supports a single range
     def date_range_agg(field:, range:, &block)
       agg = { agg: { date_range: { field: field, ranges: [ range ] }}}
       base_agg(agg, block)
@@ -75,8 +77,8 @@ module BaseSearch
     end
 
     def build
-      if !@aggs[:aggs].blank?
-        @query.merge! @aggs
+      if !@root_aggs[:aggs].blank?
+        @query.merge! @root_aggs
       end
 
       @query
@@ -91,19 +93,19 @@ module BaseSearch
         #   - build the returned Query object, pull out the aggs hash
         #   - nest the pulled out aggs hash within our current aggregation hash
         agg[:agg].merge!({ aggs:
-          (block.call Query.new).build[:aggs]
+          (block.call ElasticsearchQuery.new).build[:aggs]
         })
       end
 
-      @aggs[:aggs].merge! agg
+      @root_aggs[:aggs].merge! agg
       self
     end
   end
 
   module ClassMethods
-    # Returns a Query instance
+    # Returns a ElasticsearchQuery instance
     def get_query
-      Query.new
+      ElasticsearchQuery.new
     end
 
     # Runs an elasticsearch query
@@ -118,14 +120,7 @@ module BaseSearch
 
         if response.aggregations
           # get list of buckets at deepest level of aggregation
-          response = (get_deepest_agg response.aggregations.agg).buckets
-
-          # check for hits
-          if hits
-            response[0].agg.hits.hits
-          else
-            response
-          end
+          (get_deepest_agg response.aggregations.agg).buckets
         else
           return response
         end

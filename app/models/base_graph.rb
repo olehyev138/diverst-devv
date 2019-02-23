@@ -19,11 +19,11 @@ module BaseGraph
   #      - An enterprise filter is a key/value pair where key is the field in the
   #        elasticsearch mapping in which the enterprise_id is stored, and value is
   #        current enterprise id. This is so we can filter for objects only in the current enterprise.
-  # 2. Setting the Query object.
-  #     - As defined in BaseSearch, Query represents an elasticsearch query. An initial instance is accesed
+  # 2. Setting the ElasticsearchQuery object.
+  #     - As defined in BaseSearch, ElasticsearchQuery represents an elasticsearch query. An initial instance is accesed
   #       through the query instance variable. Ie: graph.query = graph.query.terms_agg(...)
   # 3. Searching
-  #     - Simply, querying elasticsearch with the current set Query object. This returns a raw unformatted
+  #     - Simply, querying elasticsearch with the current set ElasticsearchQuery object. This returns a raw unformatted
   #       list of elasticsearch elements, or in elasticsearch jargon, 'buckets'
   # 4. Applying logic on elasticsearch results and formatting
   #     - Finally, according to specific needs, logic can be performed on raw results and then formatted for passing
@@ -37,10 +37,10 @@ module BaseGraph
   #  - Often, the logic being applied in step 4, is common and needed more then once. Helper methods are defined
   #    to reuse this logic,
   #    so as to avoid redundency. These helpers do the searching and formatting. So that all that is needed is
-  #    to define a enterprise_filter & Query object
+  #    to define a enterprise_filter & ElasticsearchQuery object
   #
   class GraphBuilder
-    attr_accessor :query, :formatter, :hits
+    attr_accessor :query, :formatter
     attr_reader :enterprise_filter
 
     def initialize(instance)
@@ -48,7 +48,6 @@ module BaseGraph
 
       @query = @instance.get_query
       @formatter = Nvd3Formatter.new
-      @hits = false
     end
 
     def set_enterprise_filter(field: 'enterprise_id', value:)
@@ -82,7 +81,7 @@ module BaseGraph
         .agg(type: 'missing', field: parent_field) { |_| @query }
 
       parents = @formatter.list_parser
-        .parse_list(@instance.search(parents_query, @enterprise_filter, hits: @hits))
+        .parse_list(@instance.search(parents_query, @enterprise_filter))
 
       # For each parent, run current set query on all children
       parents.each do |parent|
