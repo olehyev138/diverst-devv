@@ -23,7 +23,7 @@
             <%= active_link_to "Budgeting", close_budgets_groups_path %>
           <% end %>
         <% end %>
-        <% if policy(Campaign).index? %>
+        <% if CampaignPolicy.new(current_user, Campaign).index? %>
           <li><%= active_link_to "Innovate", campaigns_path %></li>
         <% end %>
         <% if global_settings_path %>

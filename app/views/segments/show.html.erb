@@ -31,7 +31,7 @@
 
 <div class="content__header">
   <h1>Sub-<%= c_t(:segment).pluralize %></h1>
-  <%= link_to "+ New Sub-#{ c_t(:segment)}", new_segment_sub_segment_path(@segment), class: "btn btn--primary" if policy(Segment).new? %>
+  <%= link_to "+ New Sub-#{ c_t(:segment)}", new_segment_sub_segment_path(@segment), class: "btn btn--primary" if SegmentPolicy.new(current_user, Segment).new? %>
 </div>
 
 <%= render "table" %>
