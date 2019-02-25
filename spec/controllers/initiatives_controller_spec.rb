@@ -7,7 +7,8 @@ RSpec.describe InitiativesController, type: :controller do
   let!(:group) { create :group, :without_outcomes, enterprise: user.enterprise }
   let(:outcome) {create :outcome, group_id: group.id}
   let(:pillar) { create :pillar, outcome_id: outcome.id}
-  let(:initiative) { create :initiative, pillar: pillar, owner_group: group}
+  let!(:initiative) { create :initiative, pillar: pillar, owner_group: group, start: Date.yesterday, end: Date.tomorrow }
+  let!(:initiative2) { create :initiative, pillar: pillar, owner_group: group, start: 2.years.ago, end: 2.years.ago + 1.week }
 
   describe 'GET #index' do
     def get_index(group_id = -1)
@@ -182,7 +183,7 @@ RSpec.describe InitiativesController, type: :controller do
         end
 
         describe 'activity record' do
-          let(:model) { Group.last }
+          let(:model) { group }
           let(:owner) { user }
           let(:key) { 'group.export_initiatives' }
 
@@ -386,7 +387,7 @@ RSpec.describe InitiativesController, type: :controller do
             end
 
             describe 'activity record' do
-              let(:model) { Initiative.last }
+              let(:model) { initiative }
               let(:owner) { user }
               let(:key) { 'initiative.update' }
 
@@ -471,7 +472,7 @@ RSpec.describe InitiativesController, type: :controller do
             end
 
             describe 'activity record' do
-              let(:model) { Initiative.last }
+              let(:model) { initiative }
               let(:owner) { user }
               let(:key) { 'initiative.destroy' }
 
