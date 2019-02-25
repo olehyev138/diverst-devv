@@ -12,7 +12,7 @@ RSpec.describe InitiativesDownloadJob, type: :job do
 
     describe "#perform" do
         it "creates a downloadable csv file" do
-            expect{ subject.perform(user.id, group.id) }
+            expect{ subject.perform(user.id, group.id, outcome.pillars.collect { |p| p.initiatives.map { |i| i.id } }.flatten) }
               .to change(CsvFile, :count).by(1)
         end
     end

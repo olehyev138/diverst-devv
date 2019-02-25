@@ -1,7 +1,7 @@
 class Initiative < ActiveRecord::Base
   include PublicActivity::Common
 
-  attr_accessor :associated_budget_id, :skip_allocate_budget_funds
+  attr_accessor :associated_budget_id, :skip_allocate_budget_funds, :from, :to
 
   belongs_to :pillar
   belongs_to :owner, class_name: "User"
@@ -44,6 +44,7 @@ class Initiative < ActiveRecord::Base
 
   has_one :outcome, through: :pillar
 
+  scope :starts_between, ->(from, to) { where('start >= ? AND start <= ?', from, to) }
   scope :past, -> { where('end < ?', Time.current).order(start: :desc) }
   scope :upcoming, -> { where('start > ?', Time.current).order(start: :asc) }
   scope :ongoing, -> { where('start <= ?', Time.current).where('end >= ?', Time.current).order(start: :desc) }

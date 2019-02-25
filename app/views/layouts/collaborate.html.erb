@@ -10,17 +10,17 @@
   <nav id="navigation" class="jq-dropdown jq-dropdown-tip">
     <ul class="jq-dropdown-menu">
       <li>
-        <%= active_link_to "Campaigns", campaigns_path if policy(Campaign).manage? %>
+        <%= active_link_to "Campaigns", campaigns_path if CampaignPolicy.new(current_user, Campaign).manage? %>
       </li>
       <li>
-        <%= active_link_to "Financials", expenses_path if policy(Campaign).manage? %>
+        <%= active_link_to "Financials", expenses_path if CampaignPolicy.new(current_user, Campaign).manage? %>
       </li>
       <% if manage_erg_root_path %>
         <li>
           <%= active_link_to "Manage #{c_t(:erg)}", manage_erg_root_path %>
         </li>
       <% end %>
-      <% if policy(Poll).manage? %>
+      <% if PollPolicy.new(current_user, Poll).manage? %>
         <li><%= active_link_to "Include", polls_path %></li>
       <% end %>
       <% if global_settings_path %>
