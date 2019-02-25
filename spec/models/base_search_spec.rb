@@ -11,6 +11,16 @@ RSpec.describe BaseSearch do
     end
 
     # TODO: test search
+
+#    describe 'search' do
+#      let(:dummy_group) { Group.new { include BaseSearch } }
+#
+#      it 'wraps query with an enterprise filter agg' do
+#        byebug
+#        query = nil
+#        allow_any_instance_of(Group).to receive_message_chain(:__elasticsearch__, :search) { |q| query = q }
+#      end
+#    end
   end
 
   describe 'ElasticsearchQuery' do
@@ -27,12 +37,31 @@ RSpec.describe BaseSearch do
         expect(built_query).to have_key(:size)
       end
 
+      it 'returns hash with a default size field' do
+        expect(built_query[:size]).to eq 0
+      end
+
       it 'returns hash with a root agg' do
         expect(built_query).to have_key(:aggs)
       end
 
       it 'returns a query with a valid aggregation' do
         expect(built_query[:aggs][:agg]).to have_key(:top_hits)
+      end
+
+      it 'creates a empty query when no aggregations specified' do
+        empty_query = dummy_class.get_query.build
+
+        expect(empty_query).to_not have_key(:aggs)
+      end
+    end
+
+    describe 'base_agg' do
+      it 'passes a new instance of ElasticsearchQuery to block' do
+        passed_query = nil
+        query.top_hits_agg { |q| (passed_query = q).top_hits_agg }
+
+        expect(passed_query).to_not eq query
       end
     end
 
@@ -78,10 +107,15 @@ RSpec.describe BaseSearch do
     end
 
     describe 'top hits agg' do
+      let(:default_top_hits_agg) { query.top_hits_agg.build[:aggs][:agg] }
       let(:top_hits_agg) { query.top_hits_agg(size: 95).build[:aggs][:agg] }
 
       it 'returns a valid top hits agg with specified size' do
         expect(top_hits_agg[:top_hits][:size]).to eq 95
+      end
+
+      it 'returns a valid top hits agg with correct default size' do
+        expect(default_top_hits_agg[:top_hits][:size]).to eq 100
       end
 
       it "validly nests an aggregation" do
@@ -93,6 +127,10 @@ RSpec.describe BaseSearch do
     end
 
     describe 'terms agg' do
+      let(:default_terms_agg) { query
+          .terms_agg(field: 'dummy_field')
+          .build[:aggs][:agg] }
+
       let(:terms_agg) { query
           .terms_agg(field: 'dummy_field', order_field: '_key', order_dir: 'asc')
           .build[:aggs][:agg] }
@@ -107,6 +145,14 @@ RSpec.describe BaseSearch do
 
       it 'returns a valid terms agg with specified order dir' do
         expect(terms_agg[:terms][:order]['_key']).to eq 'asc'
+      end
+
+      it 'returns a valid terms agg with default order field' do
+        expect(default_terms_agg[:terms][:order]).to have_key '_count'
+      end
+
+      it 'returns a valid terms agg with default order dir' do
+        expect(default_terms_agg[:terms][:order]['_count']).to eq 'desc'
       end
 
       it "validly nests an aggregation" do
