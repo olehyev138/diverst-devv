@@ -12,6 +12,7 @@ class ArchivedPostsController < ApplicationController
 
   def destroy
     authorize current_user.enterprise, :manage_posts?, :policy_class => EnterprisePolicy
+    track_activity(@post.group_message || @post.news_link || @post.social_link, :destroy)
     @post.destroy
 
     respond_to do |format|
