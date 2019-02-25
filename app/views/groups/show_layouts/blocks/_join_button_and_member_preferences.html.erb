@@ -1,5 +1,5 @@
-<% if policy(@group).is_a_member? %>
-  <% if policy(@group).is_a_pending_member? && @group.pending_users.enabled? %>
+<% if GroupPolicy.new(current_user, @group).is_a_member? %>
+  <% if GroupPolicy.new(current_user, @group).is_a_pending_member? && @group.pending_users.enabled? %>
     <p class="pending-message">
       * Please wait for group administrators to process your membership request.
     </p>
@@ -16,7 +16,7 @@
   <% end %>
 <% end %>
 
-<% if !policy(@group).is_a_member? %>
+<% if !GroupPolicy.new(current_user, @group).is_a_member? %>
   <% if @group.active? %>
     <% if @group.is_parent_group? %>
       <%= simple_form_for :user, url: group_group_members_path(@group), method: :post, remote: true do |f| %>
@@ -24,18 +24,18 @@
         <%= f.submit "Join this #{ c_t(:parent) }", class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
       <% end %>
     <% elsif @group.is_sub_group? %>
-      <% if !policy(@group).is_a_member? %>
+      <% if !GroupPolicy.new(current_user, @group).is_a_member? %>
         <%= simple_form_for :user, url: group_group_members_path(@group), method: :post, remote: true do |f| %>
           <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
           <%= f.submit "Join this #{ c_t(:sub_erg) }", class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
         <% end %>
-      <% elsif !policy(@group).is_a_member? %>
+      <% elsif !GroupPolicy.new(current_user, @group).is_a_member? %>
         <%= simple_form_for :user, url: group_group_members_path(@group), method: :post do |f| %>
           <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
           <%= f.submit "Join this #{ c_t(:sub_erg) }", class: "btn btn--primary", style: 'margin-bottom: 20px;' %>
         <% end %>
       <% end %>
-    <% elsif @group.is_sub_group? && policy(@group).is_a_member? %>
+    <% elsif @group.is_sub_group? && GroupPolicy.new(current_user, @group).is_a_member? %>
       <%= simple_form_for :user, url: group_group_members_path(@group), method: :post do |f| %>
           <%= f.input :user_id, as: :hidden, input_html: { value: current_user.id } %>
           <%= f.submit "Join this #{ c_t(:sub_erg) }", class: "btn btn--primary", style: 'margin-bottom: 20px;' %>

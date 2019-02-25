@@ -8,7 +8,7 @@ class Groups::EventsController < ApplicationController
   layout 'erg'
 
   def index
-    if policy(@group).is_an_accepted_member? || policy(@group).manage?
+    if GroupPolicy.new(current_user, @group).is_an_accepted_member? || GroupPolicy.new(current_user, @group).manage?
       #TODO Those events are never used!
       @upcoming_events = @group.initiatives.upcoming + @group.participating_initiatives.upcoming
       @past_events = @group.initiatives.past + @group.participating_initiatives.past
