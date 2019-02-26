@@ -129,7 +129,7 @@ class Group < ActiveRecord::Base
   after_commit :update_all_elasticsearch_members
   before_validation :smart_add_url_protocol
   after_create :create_news_feed
-  after_save :accept_pending_members, if: :pending_members_enabled?
+  after_save :accept_pending_members, unless: :pending_members_enabled?
 
   attr_accessor :skip_label_consistency_check
   validate :perform_check_for_consistency_in_category, on: [:create, :update], unless: :skip_label_consistency_check
