@@ -36,14 +36,38 @@ RSpec.describe "User::GroupsController", type: :controller do
 
     describe 'GET #join' do
         describe "when user is logged in" do
-            login_user_from_let
-            before do
-                params = { id: group.id }
-                get :join, params
+            context "when group has pending_users enabled" do
+                login_user_from_let
+                before do
+                    @enabled_group = create(:group, enterprise: user.enterprise, pending_users: "enabled")
+                    params = { id: @enabled_group.id }
+                    get :join, params
+                end
+    
+                it "join group" do
+                    expect(assigns[:group].members).to eq [user]
+                end
+                
+                it "accepts member" do
+                    expect(UserGroup.where(:group_id => @enabled_group.id, :user_id => user.id, :accepted_member => false).exists?).to be (true)
+                end
             end
-
-            it "join group" do
-                expect(assigns[:group].members).to eq [user]
+            
+            context "when group has pending_users disabled" do
+                login_user_from_let
+                before do
+                    @disabled_group = create(:group, enterprise: user.enterprise, pending_users: "disabled")
+                    params = { id: @disabled_group.id }
+                    get :join, params
+                end
+    
+                it "join group" do
+                    expect(assigns[:group].members).to eq [user]
+                end
+                
+                it "accepts member" do
+                    expect(UserGroup.where(:group_id => @disabled_group.id, :user_id => user.id, :accepted_member => true).exists?).to be (true)
+                end
             end
         end
 

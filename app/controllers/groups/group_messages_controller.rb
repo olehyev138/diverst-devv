@@ -55,8 +55,8 @@ class Groups::GroupMessagesController < ApplicationController
     end
 
     def destroy
-        user_rewarder("message_post").remove_points(@message)
         track_activity(@message, :destroy)
+        user_rewarder("message_post").remove_points(@message)
         @message.destroy
         flash[:notice] = "Your message was removed. Now you have #{current_user.credits} points"
 
