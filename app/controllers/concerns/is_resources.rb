@@ -104,7 +104,7 @@ module IsResources
     end
 
     def delete_all
-        @resources.delete_all
+        @resources.destroy_all
 
         respond_to do |format|
             format.html { redirect_to :back }
