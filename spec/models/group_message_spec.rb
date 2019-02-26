@@ -17,7 +17,7 @@ RSpec.describe GroupMessage, type: :model do
         it { expect(group_message).to have_many(:comments).class_name('GroupMessageComment').with_foreign_key(:message_id) }
         it { expect(group_message).to have_many(:group_messages_segments) }
         it { expect(group_message).to have_many(:segments).through(:group_messages_segments) }
-        it { expect(group_message).to have_one(:news_feed_link).dependent(:destroy)}
+        it { expect(group_message).to have_one(:news_feed_link)}
     end
 
     describe 'test before_create callback' do

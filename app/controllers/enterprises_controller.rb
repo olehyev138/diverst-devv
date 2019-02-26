@@ -85,7 +85,7 @@ class EnterprisesController < ApplicationController
 
   # missing template
   def edit_algo
-    authorize @enterprise, :edit?
+    authorize @enterprise, :update?
   end
 
   def update_branding
@@ -143,6 +143,8 @@ class EnterprisesController < ApplicationController
 
   def resolve_layout
     case action_name
+    when "edit_algo"
+      "mentorship"
     when 'edit_algo', 'edit_mobile_fields'
       'handshake'
     else
