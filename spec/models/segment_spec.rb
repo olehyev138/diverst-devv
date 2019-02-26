@@ -30,6 +30,17 @@ RSpec.describe Segment, type: :model do
         it{ expect(segment).to accept_nested_attributes_for(:rules).allow_destroy(true) }
     end
 
+    describe 'test validation' do 
+        let!(:enterprise) { create(:enterprise) }
+        let!(:segment) { create(:segment, name: 'Females', enterprise: enterprise) }
+        it{ expect(segment).to validate_uniqueness_of(:name).scoped_to(:enterprise_id) }
+
+        context 'raise error' do 
+            it 'when segment with the same name is created' do 
+                expect{ create(:segment, name: 'Females', enterprise: enterprise) }.to raise_error ActiveRecord::RecordInvalid
+            end
+        end
+    end
     describe 'test callbacks' do
         let!(:segment) { create(:segment) }
 
