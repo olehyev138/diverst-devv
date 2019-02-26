@@ -1,6 +1,10 @@
 <script>
+  var defaultResultsMapping = function(item) {
+      return { id: item[0], text: item[1] };
+  };
+
   $(document).on('ready page:load', function(){
-    function init_select2(selector, url){
+    function init_select2(selector, url, resultsMapping = defaultResultsMapping){
       $(selector).select2({
         ajax: {
           url: url,
@@ -17,26 +21,26 @@
                 value: params.term
               }
             }
-      // Query parameters will be ?search=[term]&type=public
-      return query;
-    },
-    processResults: function (data) {
-      var int = 1;
-      
-      // Tranforms the top-level key of the response object from 'items' to 'results'
-      return {
-        results: $.map(data.data, function(item){
-          return {id: item[0], text: item[1] } } )
-      };
-    },
-    templateSelection: function(item) {
-      return item[0]
-    }
-  }
-});
+            // Query parameters will be ?search=[term]&type=public
+            return query;
+          },
+          processResults: function (data) {
+            // Tranforms the top-level key of the response object from 'items' to 'results'
+            return {
+              results: $.map(data.data, function(item) { return resultsMapping(item); })
+            };
+          },
+          templateSelection: function(item) {
+            return item[0]
+          }
+        }
+      });
     };
 
-    init_select2(".select2-field-segments", "<%= enterprise_segments_segments_path(:limit => 10, format: :json) %>")   
-    init_select2(".select2-field-groups", "<%= groups_path(:limit => 10, format: :json) %>") 
+    init_select2(".select2-field-segments", "<%= enterprise_segments_segments_path(:limit => 10, format: :json) %>");
+    init_select2(".select2-field-groups", "<%= groups_path(:limit => 10, format: :json) %>");
+    init_select2(".select2-field-users", "<%= users_path(not_current_user: true, :limit => 10, format: :json) %>", function(item) {
+        return { id: item[0], text: item[1] + " " + item[2] + " - " + item[3] };
+    });
   });
 </script>

@@ -36,12 +36,31 @@ RSpec.describe EnterprisesController, type: :controller do
             login_user_from_let
 
             context "with valid parameters" do
-                attributes = FactoryGirl.attributes_for(:enterprise, home_message: "updated")
+                attributes = FactoryGirl.attributes_for(:enterprise, 
+                                                        home_message: "updated",
+                                                        time_zone: "Eastern Time (US & Canada)",
+                                                        disable_likes: true,
+                                                        default_from_email_address: "tech@diverst.com",
+                                                        default_from_email_display_name: "DIVERST",
+                                                        enable_social_media: true,
+                                                        plan_module_enabled: true,
+                                                        mentorship_module_enabled: true,
+                                                        enable_rewards: true,
+                                                        enable_pending_comments: true)
                 before { patch :update, id: enterprise.id, enterprise: attributes }
 
                 it "updates the enterprise" do
                     enterprise.reload
                     expect(assigns[:enterprise].home_message).to eq "updated"
+                    expect(assigns[:enterprise].time_zone).to eq "Eastern Time (US & Canada)"
+                    expect(assigns[:enterprise].disable_likes).to be true
+                    expect(assigns[:enterprise].default_from_email_address).to eq "tech@diverst.com"
+                    expect(assigns[:enterprise].default_from_email_display_name).to eq "DIVERST"
+                    expect(assigns[:enterprise].enable_social_media).to be true
+                    expect(assigns[:enterprise].plan_module_enabled).to be true
+                    expect(assigns[:enterprise].mentorship_module_enabled).to be true
+                    expect(assigns[:enterprise].enable_pending_comments).to be true
+                    expect(assigns[:enterprise].enable_rewards).to be true
                 end
 
                 it "redirects to action index" do

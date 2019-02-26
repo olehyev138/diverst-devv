@@ -9,6 +9,7 @@ class SegmentDatatable < AjaxDatatablesRails::Base
   def initialize(view_context, segments)
     super(view_context)
     @segments = segments
+    @user = view_context.current_user
   end
 
   def sortable_columns
@@ -24,13 +25,13 @@ class SegmentDatatable < AjaxDatatablesRails::Base
   private
 
   def generate_edit_link(record)
-    if policy(record).edit?
+    if SegmentPolicy.new(@user, record).edit?
       link_to "Edit", edit_segment_path(record)
     end
   end
 
   def generate_destroy_link(record)
-    if policy(record).destroy?
+    if SegmentPolicy.new(@user, record).destroy?
       link_to "Delete", segment_path(record), method: :delete, 
       class: "error", data: { confirm: "Are you sure?" }
     end

@@ -10,7 +10,7 @@ class GroupMessage < ActiveRecord::Base
     belongs_to :owner, class_name: 'User'
     belongs_to :group
 
-    has_one :news_feed_link, :dependent => :destroy
+    has_one :news_feed_link
     after_create :approve_link
     
     accepts_nested_attributes_for :news_feed_link, :allow_destroy => true

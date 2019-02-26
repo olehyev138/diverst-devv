@@ -77,6 +77,8 @@ class Enterprise < ActiveRecord::Base
 
     has_attached_file :onboarding_sponsor_media, s3_permissions: :private
     do_not_validate_attachment_file_type :onboarding_sponsor_media
+    
+    validates_format_of   :redirect_email_contact, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: true
 
     def custom_text
         super || create_custom_text
@@ -431,7 +433,7 @@ class Enterprise < ActiveRecord::Base
     def generic_graphs_non_demo_top_news_by_views_csv
       news_feed_link_ids = NewsFeedLink.where(:news_feed_id => NewsFeed.where(:group_id => current_user.enterprise.groups.ids).ids).ids
       news_links = NewsLink
-        .select('DISTINCT news_links.title, views.view_count, groups.name')
+        .select('DISTINCT news_links.title, SUM(views.id) view_count, groups.name')
         .joins(:group, :news_feed_link, 'JOIN views on news_feed_links.id = views.news_feed_link_id')
         .where(:news_feed_links => {:id => news_feed_link_ids})
         .limit(20)
@@ -544,7 +546,7 @@ class Enterprise < ActiveRecord::Base
 
     def generic_graphs_demo_top_news_by_views_csv
       news_feed_link_ids = NewsFeedLink.where(:news_feed_id => NewsFeed.where(:group_id => self.groups.ids).ids).ids
-      news_links = NewsLink.select("news_links.title, SUM(views.view_count) view_count").joins(:news_feed_link, :news_feed_link => :views).where(:news_feed_links => {:id => news_feed_link_ids}).order("view_count DESC")
+      news_links = NewsLink.select("news_links.title, SUM(views.id) view_count").joins(:news_feed_link, :news_feed_link => :views).where(:news_feed_links => {:id => news_feed_link_ids}).order("view_count DESC")
 
       values = [9,2,5,1,11,10,9,5,11,4,1,8]
       i = 0

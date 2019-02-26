@@ -44,4 +44,47 @@ RSpec.describe UserGroupMailer, type: :mailer do
       expect(mail.body.encoded).to_not include("news")
     end
   end
+  
+  context "when enterprise wants to redirect emails and redirect_email_contact is set" do
+    describe '#notification' do
+      let(:enterprise) {create(:enterprise, :redirect_all_emails => true, :redirect_email_contact => "test@gmail.com")}
+      let!(:user){ create(:user, :enterprise => enterprise) }
+      let!(:groups){ [{ group: create(:group), events_count: 2, messages_count: 2, news_count: 0 }] }
+    
+      let!(:mail) { described_class.notification(user, groups).deliver_now }
+  
+      it 'renders the redirect_email_contact' do
+        expect(mail.to).to eq([enterprise.redirect_email_contact])
+      end
+    end
+  end
+  
+  context "when enterprise wants to redirect emails but redirect_email_contact is to blank" do
+    describe '#notification' do
+      let(:enterprise) {create(:enterprise, :redirect_all_emails => true, :redirect_email_contact => "")}
+      let(:fallback_email) {ENV["REDIRECT_ALL_EMAILS_TO"] || "sanetiming@gmail.com"}
+      let!(:user){ create(:user, :enterprise => enterprise) }
+      let!(:groups){ [{ group: create(:group), events_count: 2, messages_count: 2, news_count: 0 }] }
+
+      let!(:mail) { described_class.notification(user, groups).deliver_now }
+  
+      it 'renders the fallback_email' do
+        expect(mail.to).to eq([fallback_email])
+      end
+    end
+  end
+  
+  context "when enterprise wants to stop all emails" do
+    describe '#notification' do
+      let(:enterprise) {create(:enterprise, :disable_emails => true)}
+      let!(:user){ create(:user, :enterprise => enterprise) }
+      let!(:groups){ [{ group: create(:group), events_count: 2, messages_count: 2, news_count: 0 }] }
+
+      let!(:mail) { described_class.notification(user, groups).deliver_now }
+  
+      it 'renders null mail object' do
+        expect(mail).to be(nil)
+      end
+    end
+  end
 end

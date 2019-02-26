@@ -3,6 +3,7 @@ class EnterprisePolicy < ApplicationPolicy
   def update?
     return true if manage_all?
     return true if basic_group_leader_permission?("enterprise_manage")
+    return true if enterprise_manage?
     @policy_group.enterprise_manage?
   end
 
@@ -70,6 +71,10 @@ class EnterprisePolicy < ApplicationPolicy
     return true if manage_all?
     return true if basic_group_leader_permission?("manage_posts")
     @policy_group.manage_posts?
+  end
+  
+  def enterprise_manage?
+    @policy_group.enterprise_manage?
   end
 
   def restore_default_branding?

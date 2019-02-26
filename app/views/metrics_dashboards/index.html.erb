@@ -218,7 +218,7 @@
 
 <div class="content__header">
   <h1>Specific metrics dashboards</h1>
-  <%= link_to "New dashboard", new_metrics_dashboard_path, class: "btn btn--primary" if policy(MetricsDashboard).new? %>
+  <%= link_to "New dashboard", new_metrics_dashboard_path, class: "btn btn--primary" if MetricsDashboardPolicy.new(current_user, MetricsDashboard).new? %>
 </div>
 
 <div class="content__main">
@@ -226,7 +226,7 @@
     <div class="card__section">
       <% if @dashboards.empty? %>
         <p>There are no dashboards yet.
-          <% if policy(MetricsDashboard).new? %>
+          <% if MetricsDashboardPolicy.new(current_user, MetricsDashboard).new? %>
             <span><%= link_to "Create one", new_metrics_dashboard_path %> to start getting valuable insight on your team's diversity.
             </span>
           <% end %>
@@ -247,7 +247,13 @@
                 <td><%= dashboard.graphs.count %></td>
                 <td><%= dashboard.target.count %></td>
                 <td><%= dashboard.created_at.to_s :dateonly %></td>
-                <td><%= link_to "Edit", edit_metrics_dashboard_path(dashboard) %> - <%= link_to "Delete", metrics_dashboard_path(dashboard), method: :delete, class: "error", data: { confirm: "Are you sure?" } %></td>
+                <td>
+                  <%= link_to "Edit", edit_metrics_dashboard_path(dashboard) if MetricsDashboardPolicy.new(current_user, dashboard).update? %>
+                  <% if MetricsDashboardPolicy.new(current_user, dashboard).update? && MetricsDashboardPolicy.new(current_user, dashboard).destroy? %>
+                     -
+                  <% end %>
+                  <%= link_to "Delete", metrics_dashboard_path(dashboard), method: :delete, class: "error", data: { confirm: "Are you sure?" } if MetricsDashboardPolicy.new(current_user, dashboard).destroy? %>
+                </td>
               </tr>
             <% end %>
           </tbody>

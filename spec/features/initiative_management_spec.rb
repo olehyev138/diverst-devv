@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.feature 'Initiative management' do
 
   let(:user) { create(:user) }
-  let!(:group) { create :group, :with_outcomes, enterprise: user.enterprise }
+  let!(:group) { create :group, enterprise: user.enterprise }
 
   let!(:initiative_params) {
     {
@@ -11,7 +11,7 @@ RSpec.feature 'Initiative management' do
       description:  Faker::Lorem.sentence,
       location: Faker::Address.city,
       estimated_funding: 1000,
-      start: Faker::Time.between(DateTime.now, 2.days.from_now),
+      start: Faker::Time.between(2.days.ago, DateTime.yesterday),
       end: Faker::Time.between(3.days.from_now, 5.days.from_now),
       max_attendees: Faker::Number.between(1, 100),
       picture_path: test_png_image_path

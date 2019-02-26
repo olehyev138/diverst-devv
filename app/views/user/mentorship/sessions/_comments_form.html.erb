@@ -1,0 +1,9 @@
+<div class="card">
+  <div class="card__section">
+    <%= simple_form_for @new_comment, url: mentoring_session_create_comment_path(@mentoring_session), method: 'post' do |f| %>
+      <%= f.input :content, label: "Leave a comment:" %>
+
+      <%= f.button :submit, value: "Post a comment", style: "margin-top: 30px;" %>
+    <% end %>
+  </div>
+</div>
