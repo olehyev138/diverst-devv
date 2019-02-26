@@ -475,7 +475,7 @@ RSpec.describe Group, :type => :model do
         enterprise = create(:enterprise)
         user_1 = create(:user, enterprise: enterprise)
         user_2 = create(:user, enterprise: enterprise)
-        group = create(:group, enterprise: enterprise)
+        group = create(:group, enterprise: enterprise, pending_users: "enabled")
         create(:user_group, :user => user_1, :group => group, accepted_member: false)
         create(:user_group, :user => user_2, :group => group, accepted_member: false)
 

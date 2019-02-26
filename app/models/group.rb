@@ -129,7 +129,7 @@ class Group < ActiveRecord::Base
   after_commit :update_all_elasticsearch_members
   before_validation :smart_add_url_protocol
   after_create :create_news_feed
-  after_save :accept_pending_members, unless: :pending_members_enabled?
+  after_update :accept_pending_members, unless: :pending_members_enabled?
 
   attr_accessor :skip_label_consistency_check
   validate :perform_check_for_consistency_in_category, on: [:create, :update], unless: :skip_label_consistency_check
@@ -239,7 +239,7 @@ class Group < ActiveRecord::Base
     end
   end
 
-  # Necessary for the `if` in the `after_save :accept_pending_members` callback
+  # Necessary for the `unless` in the `after_save :accept_pending_members` callback
   def pending_members_enabled?
     pending_users.enabled?
   end
@@ -385,8 +385,7 @@ class Group < ActiveRecord::Base
 
   def accept_pending_members
     self.user_groups.each do |user_group|
-      user_group.accepted_member = true
-      user_group.save
+      user_group.update(accepted_member: true)
     end
   end
 
