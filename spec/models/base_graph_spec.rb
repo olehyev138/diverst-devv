@@ -3,6 +3,141 @@ require 'rails_helper'
 RSpec.describe BaseGraph do
   let(:dummy_class) { Class.new { include BaseGraph } }
 
+  describe 'GraphBuilder' do
+  end
+
+  describe 'Nvd3Formatter' do
+    let(:formatter) { BaseGraph::Nvd3Formatter.new }
+
+    describe 'initialize' do
+      describe 'parsers' do
+        describe 'x_parser' do
+          it 'is an instance of ElasticsearchParser' do
+            expect(formatter.x_parser.class).to eq BaseGraph::ElasticsearchParser
+          end
+
+          it 'has a key :key' do
+            expect(formatter.x_parser.key).to eq :key
+          end
+        end
+
+        describe 'y_parser' do
+          it 'is an instance of ElasticsearchParser' do
+            expect(formatter.y_parser.class).to eq BaseGraph::ElasticsearchParser
+          end
+
+          it 'has a key :doc_count' do
+            expect(formatter.y_parser.key).to eq :doc_count
+          end
+        end
+
+        describe 'list_parser' do
+          it 'is an instance of ElasticsearchParser' do
+            expect(formatter.list_parser.class).to eq BaseGraph::ElasticsearchParser
+          end
+
+        end
+
+        describe 'key_parser' do
+          it 'is an instance of ElasticsearchParser' do
+            expect(formatter.key_parser.class).to eq BaseGraph::ElasticsearchParser
+          end
+
+        end
+
+        describe 'general_parser' do
+          it 'is an instance of ElasticsearchParser' do
+            expect(formatter.general_parser.class).to eq BaseGraph::ElasticsearchParser
+          end
+        end
+      end
+
+      it 'has a default title of "Default Graph"' do
+        expect(formatter.title).to eq 'Default Graph'
+      end
+
+      it 'has a default type of "bar"' do
+        expect(formatter.type).to eq 'bar'
+      end
+    end
+
+    describe 'format' do
+      it 'returns a hash' do
+        expect(formatter.format.class).to eq Hash
+      end
+
+      it 'allows title to be set' do
+        formatter.title = 'Dummy Graph'
+
+        expect(formatter.format[:title]).to eq 'Dummy Graph'
+      end
+
+      it 'allows type to be set' do
+        formatter.type = 'line'
+
+        expect(formatter.format[:type]).to eq 'line'
+      end
+
+      it 'allows x_label to be set' do
+        formatter.x_label = 'dummy_x'
+
+        expect(formatter.format[:x_label]).to eq 'dummy_x'
+      end
+
+      it 'allows y_label to be set' do
+        formatter.y_label = 'dummy_y'
+
+        expect(formatter.format[:y_label]).to eq 'dummy_y'
+      end
+
+      it 'removes 0 values' do
+        formatter.add_elements([{key: 0, doc_count: 0 }])
+
+        expect(formatter.format[:series][0][:values].length).to eq 0
+      end
+    end
+
+    describe 'add_series' do
+      it 'uses set title as default name for series' do
+        formatter.title = 'Dummy Title'
+        formatter.add_series
+
+        expect(formatter.format[:series][0][:key]).to eq 'Dummy Title'
+      end
+
+      it 'uses series_name argument as series name' do
+        formatter.add_series(series_name: 'series_name')
+
+        expect(formatter.format[:series][0][:key]).to eq 'series_name'
+      end
+
+      it 'adds multiple series' do
+        formatter.add_series(series_name: 'series01')
+        formatter.add_series(series_name: 'series02')
+
+        expect(formatter.format[:series][1][:key]).to eq 'series02'
+      end
+
+      it 'uses valid series structure' do
+        formatter.add_series(series_name: 'series01')
+        formatter.add_series(series_name: 'series01')
+
+        expect(formatter.format[:series][1][:values].class).to eq Array
+      end
+    end
+
+    describe 'add_element' do
+      let(:default_element) { { key: 'element01', doc_count: 9  } }
+
+      it 'adds a default element' do
+        formatter.add_element(default_element)
+
+        expect(formatter.format[:series][0][:values][0][:x]).to eq 'element01'
+        expect(formatter.format[:series][0][:values][0][:y]).to eq 9
+      end
+    end
+  end
+
   describe 'ElasticsearchParser' do
     let(:parser) { BaseGraph::ElasticsearchParser.new }
 
@@ -59,11 +194,5 @@ RSpec.describe BaseGraph do
         end
       end
     end
-  end
-
-  describe 'Nvd3Formatter' do
-  end
-
-  describe 'GraphBuilder' do
   end
 end
