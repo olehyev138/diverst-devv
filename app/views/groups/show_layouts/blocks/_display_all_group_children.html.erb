@@ -4,7 +4,7 @@
 	    <div class="card__section">
 		<%= c_t(:sub_erg).pluralize %>(<%= @group.children.count %>)
 
-		<% if policy(@group).manage? %>
+		<% if GroupPolicy.new(current_user, @group).manage? %>
 		<div class="dropdown">
 			<span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
 			<div class="dropdown-content">

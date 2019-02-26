@@ -1,7 +1,7 @@
 <div class="content__header">
   <h1>Mentoring Topics</h1>
       <div class="col-xs-6 text-right">
-      <%= link_to "New Topic", new_mentoring_interest_path, class: "btn btn--primary pull-right" if policy(MentoringInterest).new? %>
+      <%= link_to "New Topic", new_mentoring_interest_path, class: "btn btn--primary pull-right" if MentoringInterestPolicy.new(current_user, MentoringInterest).new? %>
     </div>
 </div>
 
