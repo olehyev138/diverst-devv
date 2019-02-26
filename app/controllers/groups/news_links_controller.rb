@@ -66,8 +66,8 @@ class Groups::NewsLinksController < ApplicationController
     end
 
     def destroy
-        user_rewarder("news_post").remove_points(@news_link)
         track_activity(@news_link, :destroy)
+        user_rewarder("news_post").remove_points(@news_link)
         @news_link.destroy
         flash[:notice] = "Your news was removed. Now you have #{current_user.credits} points"
         redirect_to group_posts_path(@group)

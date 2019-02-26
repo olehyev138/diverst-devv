@@ -41,6 +41,32 @@ RSpec.describe ArchivedPostsController, type: :controller do
         expect{delete :destroy, id: news_link.news_feed_link.id}.to change(NewsFeedLink, :count).by(-1)
       end
 
+      describe 'public activity' do
+          enable_public_activity
+
+          it 'creates public activity record' do
+            perform_enqueued_jobs do
+              expect{
+                delete :destroy, id: news_link.news_feed_link.id
+              }.to change(PublicActivity::Activity, :count).by(1)
+            end
+          end
+
+          describe 'activity record' do
+            let(:model) { NewsLink.last }
+            let(:owner) { user }
+            let(:key) { 'news_link.destroy' }
+
+            before {
+              perform_enqueued_jobs do
+                delete :destroy, id: news_link.news_feed_link.id
+              end
+            }
+
+            include_examples'correct public activity'
+          end
+        end
+
       it 'redirect back' do 
         delete :destroy, id: news_link.news_feed_link.id
         expect(response).to redirect_to 'back'
