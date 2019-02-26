@@ -129,6 +129,7 @@ class Group < ActiveRecord::Base
   after_commit :update_all_elasticsearch_members
   before_validation :smart_add_url_protocol
   after_create :create_news_feed
+  after_save :accept_pending_members, if: :pending_members_enabled?
 
   attr_accessor :skip_label_consistency_check
   validate :perform_check_for_consistency_in_category, on: [:create, :update], unless: :skip_label_consistency_check
@@ -236,6 +237,11 @@ class Group < ActiveRecord::Base
     else
       members.none
     end
+  end
+
+  # Necessary for the `if` in the `after_save :accept_pending_members` callback
+  def pending_members_enabled?
+    pending_users.enabled?
   end
 
   def file_safe_name
@@ -375,6 +381,13 @@ class Group < ActiveRecord::Base
   # Update members in elastic_search
   def update_all_elasticsearch_members
     GroupUpdateJob.perform_later(id)
+  end
+
+  def accept_pending_members
+    self.user_groups.each do |user_group|
+      user_group.accepted_member = true
+      user_group.save
+    end
   end
 
   protected
