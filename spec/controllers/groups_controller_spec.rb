@@ -74,7 +74,6 @@ RSpec.describe GroupsController, type: :controller do
 
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to eq('application/json')
-        byebug
         expect(parsed_body.find { |i| i["id"] == group.id }).not_to eq(nil)
         expect(parsed_body.find { |i| i["text"] == group.name }).not_to eq(nil)
         expect(parsed_body.find { |i| i["id"] == group2.id }).not_to eq(nil)

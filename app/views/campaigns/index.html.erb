@@ -1,6 +1,6 @@
 <div class="content__header">
   <h1>Innovate Campaigns</h1>
-  <%= link_to "New campaign", new_campaign_path, class: "btn btn--primary" if policy(Campaign).new? %>
+  <%= link_to "New campaign", new_campaign_path, class: "btn btn--primary" if CampaignPolicy.new(current_user, Campaign).new? %>
 </div>
 
 <div class="content__main">
@@ -32,8 +32,8 @@
                   <% if campaign.published? %>
                     <%= link_to "Link", user_user_campaign_questions_path(campaign), target: '_blank'  %> -
                   <% end %>
-                  <%= link_to "Edit", edit_campaign_path(campaign) if policy(campaign).edit? %> -
-                  <%= link_to "Delete", campaign_path(campaign), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(campaign).destroy? %>
+                  <%= link_to "Edit", edit_campaign_path(campaign) if CampaignPolicy.new(current_user, campaign).edit? %> -
+                  <%= link_to "Delete", campaign_path(campaign), method: :delete, class: "error", data: { confirm: "Are you sure?" } if CampaignPolicy.new(current_user, campaign).destroy? %>
                 </td>
               </tr>
             <% end %>

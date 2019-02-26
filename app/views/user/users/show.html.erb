@@ -39,7 +39,7 @@
     <label><strong>Time zone</strong></label>
     <p><%= @user.default_time_zone %></p>
   </div>
-  <% if policy(@user).access_hidden_info? %>
+  <% if UserPolicy.new(current_user, @user).access_hidden_info? %>
   <div class="card__section card__section--border">
     <label><h2>Hidden info</h2></label>
     <label><h4>Only D&I Management can see hidden fields</h4></label>
