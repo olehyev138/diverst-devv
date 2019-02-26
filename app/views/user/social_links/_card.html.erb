@@ -1,4 +1,4 @@
 <div>
-  <%= link_to 'Delete', user_social_link_path(post.id),method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(post).destroy? %>
+  <%= link_to 'Delete', user_social_link_path(post.id),method: :delete, class: "error", data: { confirm: "Are you sure?" } if SocialLinkPolicy.new(current_user, post).destroy? %>
   <%= raw post.embed_code %>
 </div>

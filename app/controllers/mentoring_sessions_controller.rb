@@ -9,15 +9,23 @@ class MentoringSessionsController < ApplicationController
     @mentoring_session.format = "Video"
     @mentoring_session.mentorship_sessions.new(:user_id => current_user.id)
     @mentoring_session.mentorship_sessions.new(:user_id => params[:user_id])
-    
+
     render 'user/mentorship/sessions/new'
   end
 
   def edit
+    authorize @mentoring_session
+
     render 'user/mentorship/sessions/edit'
   end
 
   def show
+    authorize @mentoring_session
+
+    @comments = @mentoring_session.comments.includes(:user)
+
+    @new_comment = MentoringSessionComment.new
+
     render 'user/mentorship/sessions/show'
   end
 
@@ -44,18 +52,37 @@ class MentoringSessionsController < ApplicationController
   end
 
   def destroy
+    authorize @mentoring_session
     @mentoring_session.destroy
     redirect_to sessions_user_mentorship_index_path
   end
 
+  def create_comment
+      @mentoring_session = current_user.mentoring_sessions.find(params[:mentoring_session_id])
+      authorize @mentoring_session
+
+      @comment = @mentoring_session.comments.new(mentoring_session_comments_params)
+      @comment.user = current_user
+
+      if @comment.save
+          flash[:notice] = "Your comment was created"
+      else
+          flash[:alert] = "Comment not saved. Please fix the errors"
+      end
+
+      redirect_to :back
+  end
+
   def start
+    authorize @mentoring_session
+
     # check if user can start the session
     require 'twilio-ruby'
-    
+
     raise BadRequestException.new "TWILIO_ACCOUNT_SID Required" if ENV["TWILIO_ACCOUNT_SID"].blank?
     raise BadRequestException.new "TWILIO_API_KEY Required" if ENV["TWILIO_API_KEY"].blank?
     raise BadRequestException.new "TWILIO_SECRET Required" if ENV["TWILIO_SECRET"].blank?
-    
+
     account_sid = ENV["TWILIO_ACCOUNT_SID"]
     api_key_sid = ENV["TWILIO_API_KEY"]
     api_key_secret = ENV["TWILIO_SECRET"]
@@ -83,6 +110,8 @@ class MentoringSessionsController < ApplicationController
   end
 
   def join
+    authorize @mentoring_session
+
     # check if user has access to the session
     require 'twilio-ruby'
 
@@ -107,7 +136,7 @@ class MentoringSessionsController < ApplicationController
     @token = token.to_jwt
     render 'user/mentorship/sessions/start'
   end
-  
+
   def export_ics
     cal = Icalendar::Calendar.new
     cal.timezone do |t|
@@ -148,9 +177,14 @@ class MentoringSessionsController < ApplicationController
         :id,
         :user_id,
         :role,
-        :attending,
         :_destroy
       ]
+    )
+  end
+
+  def mentoring_session_comments_params
+    params.require(:mentoring_session_comment).permit(
+      :content
     )
   end
 

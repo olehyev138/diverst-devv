@@ -3,7 +3,7 @@ class Groups::GroupMessagesController < ApplicationController
 
     before_action :authenticate_user!
     before_action :set_group
-    before_action :set_message, only: [:show, :destroy, :edit, :update]
+    before_action :set_message, only: [:show, :destroy, :edit, :update, :archive]
 
     layout 'erg'
 
@@ -55,8 +55,8 @@ class Groups::GroupMessagesController < ApplicationController
     end
 
     def destroy
-        user_rewarder("message_post").remove_points(@message)
         track_activity(@message, :destroy)
+        user_rewarder("message_post").remove_points(@message)
         @message.destroy
         flash[:notice] = "Your message was removed. Now you have #{current_user.credits} points"
 
@@ -77,6 +77,17 @@ class Groups::GroupMessagesController < ApplicationController
         end
 
         redirect_to group_group_message_path(@group, @message)
+    end
+
+    def archive
+        authorize current_user.enterprise, :manage_posts?, :policy_class => EnterprisePolicy
+        @message.news_feed_link.update(archived_at: DateTime.now)
+        track_activity(@message, :archive)
+        
+        respond_to do |format|
+            format.html { redirect_to :back }
+            format.js
+        end
     end
 
     protected

@@ -1,8 +1,10 @@
 class NewsFeedLink < ActiveRecord::Base
+    include PublicActivity::Common
+
     belongs_to :news_feed
-    belongs_to :group_message
-    belongs_to :news_link
-    belongs_to :social_link
+    belongs_to :group_message, dependent: :destroy
+    belongs_to :news_link, dependent: :destroy
+    belongs_to :social_link, dependent: :destroy
 
     has_many :news_feed_link_segments, dependent: :destroy
     has_many :segments, through: :news_feed_link_segments
@@ -44,13 +46,11 @@ class NewsFeedLink < ActiveRecord::Base
     # View Count methods
     def increment_view(user)
       view = views.find_or_create_by(user_id: user.id, enterprise_id: user.enterprise_id)
-
-      view.view_count += 1
       view.save
     end
 
     def total_views
-      views.sum(:view_count)
+      views.count
     end
 
     def unique_views
@@ -60,9 +60,14 @@ class NewsFeedLink < ActiveRecord::Base
     def create_view_if_none(user)
       unless views.find_by(user_id: user.id)
         view = views.create(user_id: user.id, enterprise_id: user.enterprise_id)
-
-        view.view_count = 1
         view.save
       end
     end
+
+    def self.archive_expired_news
+      expiry_date = DateTime.now.months_ago(6)
+      news = NewsFeedLink.where("created_at < ?", expiry_date).where(archived_at: nil)
+
+      news.update_all(archived_at: DateTime.now) if news.any?
+    end    
 end

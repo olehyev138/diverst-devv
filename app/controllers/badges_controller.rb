@@ -15,6 +15,7 @@ class BadgesController < ApplicationController
     authorize @enterprise, :update?
     @badge = @enterprise.badges.new(badge_params)
     if @badge.save
+      track_activity(@badge, :create)
       flash[:notice] = "Your #{ c_t(:badge) } was created"
       redirect_to rewards_path
     else

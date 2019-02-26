@@ -3,7 +3,7 @@ class SocialLink < ActiveRecord::Base
 
     self.table_name = 'social_network_posts'
 
-    has_one :news_feed_link, dependent: :destroy
+    has_one :news_feed_link
 
     has_many :social_link_segments, dependent: :destroy
     has_many :segments, through: :social_link_segments, :before_remove => :remove_segment_association

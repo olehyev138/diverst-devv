@@ -18,7 +18,7 @@ class User < ActiveRecord::Base
     scope :enterprise_mentees,  -> ( user_ids = []) { where(mentee: true).where.not(:id => user_ids) }
     scope :mentors_and_mentees, -> { where("mentor = true OR mentee = true").distinct }
     scope :inactive,            -> { where(active: false).distinct }
-    
+
 
     belongs_to  :enterprise
     belongs_to  :user_role
@@ -39,14 +39,13 @@ class User < ActiveRecord::Base
     has_many :mentorship_sessions
     has_many :mentoring_sessions, :through => :mentorship_sessions
 
-	has_many :mentorship_types
-	has_many :mentoring_types, :through => :mentorship_types
+  	has_many :mentorship_types
+  	has_many :mentoring_types, :through => :mentorship_types
 
     # mentorship_requests
     has_many :mentorship_proposals, :foreign_key => "sender_id",     :class_name => "MentoringRequest"
     has_many :mentorship_requests,  :foreign_key => "receiver_id",   :class_name => "MentoringRequest"
 
-    has_many :devices, dependent: :destroy
     has_many :users_segments, dependent: :destroy
     has_many :segments, through: :users_segments
     has_many :user_groups, dependent: :destroy
@@ -75,6 +74,8 @@ class User < ActiveRecord::Base
     has_many :rewards, foreign_key: :responsible_id, :dependent => :destroy
     has_many :likes, dependent: :destroy
     has_many :csv_files
+    has_many :metrics_dashboards, foreign_key: :owner_id
+    has_many :shared_metrics_dashboards
 
     has_attached_file :avatar, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing_user.png'), s3_permissions: "private"
     validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
@@ -143,7 +144,7 @@ class User < ActiveRecord::Base
             self.user_role_id = enterprise.default_user_role
         end
     end
-    
+
     def group_leader_role
         # make sure a user's role cannot be set to group_leader
         if enterprise.user_roles.where(:id => user_role_id, :role_type => "group").count > 0 && !erg_leader?
@@ -176,7 +177,7 @@ class User < ActiveRecord::Base
             policy_group.update_attributes(attributes)
         end
     end
-    
+
     def is_admin?
         enterprise.user_roles.where(:id => user_role_id).where("LOWER(role_type) = 'admin'").count > 0
     end
@@ -320,12 +321,6 @@ class User < ActiveRecord::Base
         part_of_segment
     end
 
-    # Sends a push notification to all of the user's devices
-    def notify(message, data)
-        devices.each do |device|
-            device.notify(message, data)
-        end
-    end
 
     # Generate a Firebase token for the user and update the user with it
     def assign_firebase_token

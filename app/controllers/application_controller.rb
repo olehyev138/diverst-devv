@@ -103,6 +103,12 @@ class ApplicationController < ActionController::Base
         Rollbar.error(e)
         redirect_on_error
     end
+    
+    rescue_from ActionController::InvalidAuthenticityToken do |e|
+        flash[:alert] = e.message
+        Rollbar.warn(e)
+        redirect_on_error
+    end
 
     around_action :user_time_zone, if: :current_user
     
@@ -128,13 +134,6 @@ class ApplicationController < ActionController::Base
         else
             render :status => :forbidden, :json => {:message => "Invalid Route"}
         end
-    end
-
-    def archive_expired_news
-      expiry_date = DateTime.now.months_ago(6)
-      news = NewsFeedLink.where("created_at < ?", expiry_date).where(archived_at: nil)
-
-      news.update_all(archived_at: DateTime.now) if news.any?
     end
 
 

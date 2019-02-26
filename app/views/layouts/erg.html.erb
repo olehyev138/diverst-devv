@@ -47,7 +47,7 @@
             </li>
           <% end %>
           <% if GroupPostsPolicy.new(current_user, [@group]).view_latest_news? %>
-            <% if policy(@group).manage? || current_user.segment_ids.empty? %>
+            <% if GroupPolicy.new(current_user, @group).manage? || current_user.segment_ids.empty? %>
               <li>
                 <%= active_link_to "News Feed (#{NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise).count})", group_posts_path(@group) %>
               </li>
@@ -70,19 +70,19 @@
           </li>
           <% end %>
           
-          <% if policy(@group).insights? %>
+          <% if GroupPolicy.new(current_user, @group).insights? %>
             <li>
             <%= active_link_to "Insights", group_questions_path(@group) %>
           </li>
           <% end %>
           
-          <% if policy(@group).layouts? %>
+          <% if GroupPolicy.new(current_user, @group).layouts? %>
             <li>
             <%= active_link_to "Layouts", layouts_group_path(@group) %>
           </li>
           <% end %>
           
-          <% if policy(@group).settings? %>
+          <% if GroupPolicy.new(current_user, @group).settings? %>
             <li>
             <%= active_link_to "Settings", settings_group_path(@group) %>
           </li>
@@ -100,19 +100,19 @@
             </li>
           <% end %>
           
-          <% if policy(@group).manage? %>
+          <% if GroupPolicy.new(current_user, @group).manage? %>
             <li>
               <%= active_link_to "KPI", metrics_group_path(@group) %>
             </li>
           <% end %>
           
-          <% if policy(@group).manage? %>
+          <% if GroupPolicy.new(current_user, @group).manage? %>
             <li>
               <%= active_link_to c_t(:structure), group_outcomes_path(@group) %>
             </li>
           <% end %>
           
-          <% if policy(@group).manage? %>
+          <% if GroupPolicy.new(current_user, @group).manage? %>
             <li>
               <%= active_link_to "Updates", group_updates_path(@group) %>
             </li>
@@ -166,19 +166,19 @@
           </li>
           <% end %>
           
-          <% if policy(@group).insights? %>
+          <% if GroupPolicy.new(current_user, @group).insights? %>
             <li>
             <%= active_link_to "Insights", group_questions_path(@group) %>
           </li>
           <% end %>
           
-          <% if policy(@group).layouts? %>
+          <% if GroupPolicy.new(current_user, @group).layouts? %>
             <li>
             <%= active_link_to "Layouts", layouts_group_path(@group) %>
           </li>
           <% end %>
           
-          <% if policy(@group).settings? %>
+          <% if GroupPolicy.new(current_user, @group).settings? %>
             <li>
             <%= active_link_to "Settings", settings_group_path(@group) %>
           </li>
@@ -204,19 +204,19 @@
               </li>
             <% end %>
             
-            <% if policy(@group).manage? %>
+            <% if GroupPolicy.new(current_user, @group).manage? %>
               <li>
                 <%= active_link_to "KPI", metrics_group_path(@group) %>
               </li>
             <% end %>
             
-            <% if policy(@group).manage? %>
+            <% if GroupPolicy.new(current_user, @group).manage? %>
               <li>
                 <%= active_link_to c_t(:structure), group_outcomes_path(@group) %>
               </li>
             <% end %>
             
-            <% if policy(@group).manage? %>
+            <% if GroupPolicy.new(current_user, @group).manage? %>
               <li>
                 <%= active_link_to "Updates", group_updates_path(@group) %>
               </li>

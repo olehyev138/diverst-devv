@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe User do
   include ActiveJob::TestHelper
-  
+
   describe "when validating" do
     let(:user) { build(:user) }
 
@@ -55,7 +55,6 @@ RSpec.describe User do
       end
 
       context 'has_many associations' do
-        it { expect(user).to have_many(:devices) }
         it { expect(user).to have_many(:users_segments) }
         it { expect(user).to have_many(:segments).through(:users_segments) }
         it { expect(user).to have_many(:groups).through(:user_groups) }
@@ -81,6 +80,8 @@ RSpec.describe User do
         it { expect(user).to have_many(:leading_groups).through(:group_leaders).source(:group) }
         it { expect(user).to have_many(:user_reward_actions) }
         it { expect(user).to have_many(:reward_actions).through(:user_reward_actions) }
+        it { expect(user).to have_many(:metrics_dashboards).with_foreign_key(:owner_id) }
+        it { expect(user).to have_many(:shared_metrics_dashboards) }
       end
 
       context 'validate paperclip' do
@@ -144,7 +145,7 @@ RSpec.describe User do
       context '#check_lifespan_of_user' do
         let!(:user1) { create :user }
         let!(:user2) { create :user, created_at: 20.days.ago, updated_at: 20.days.ago }
-        
+
         it 'deletes user younger than 14 days' do
           expect{ user1.destroy }.to change(User, :count).by(-1)
         end
@@ -284,7 +285,7 @@ RSpec.describe User do
 
     context 'when user is a leader of an erg' do
       before  do
-        group.members << user
+        create(:user_group, :user => user, :group => group, :accepted_member => true)
         group.group_leaders << GroupLeader.new(group: group, user: user, position_name: 'blah', user_role: user.enterprise.user_roles.where(:role_name => "group_leader").first)
       end
 
@@ -457,30 +458,29 @@ RSpec.describe User do
       end
     end
   end
-  
+
   describe "#group_leader_role" do
     it "raises an User is not a group leader error" do
       user = create(:user)
       user.user_role = user.enterprise.user_roles.where(:role_name => "group_leader").first
       user.save
-      
+
       expect(user.errors.full_messages.first).to eq("User role Cannot set user role to a group role")
     end
   end
-  
+
   describe "#is_admin?" do
     it "returns true" do
       user = create(:user)
       expect(user.is_admin?).to be(true)
     end
   end
-  
+
   describe "#destroy_callbacks" do
     it "removes the child objects" do
       user = create(:user)
-      device = create(:device, :user => user)
       users_segment = create(:users_segment, :user => user)
-      user_group = create(:user_group, :user => user)
+      user_group = create(:user_group, :user => user, :accepted_member => true)
       topic_feedback = create(:topic_feedback, :user => user)
       #poll_response = create(:poll_response, :user => user)
       answer = create(:answer, :author => user)
@@ -493,16 +493,15 @@ RSpec.describe User do
       initiative_user = create(:initiative_user, :user => user)
       initiative_invitee = create(:initiative_invitee, :user => user)
       #sample = create(:sample, :user => user)
-      group_leader = create(:group_leader, :user => user)
+      group_leader = create(:group_leader, :user => user, group: user_group.group)
       user_reward_action = create(:user_reward_action, :user => user)
       #reward = create(:reward, :responsible_id => user.id)
-      
+
       policy_group = user.policy_group
-      
+
       user.destroy
 
       expect{User.find(user.id)}.to raise_error(ActiveRecord::RecordNotFound)
-      expect{Device.find(device.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{PolicyGroup.find(policy_group.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{UsersSegment.find(users_segment.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{UserGroup.find(user_group.id)}.to raise_error(ActiveRecord::RecordNotFound)
@@ -524,12 +523,12 @@ RSpec.describe User do
       #expect{Reward.find(reward.id)}.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
-  
+
   describe "mentorship" do
     it "goes through whole workflow" do
       # create a user interested in being mentored
       mentee = create(:user, :mentee => true)
-      
+
       # the mentorship doesn't have any mentors/mentees/availability/
       # mentorship_types/mentoring_interests
       expect(mentee.mentors.count).to eq(0)
@@ -537,51 +536,51 @@ RSpec.describe User do
       expect(mentee.availabilities.count).to eq(0)
       expect(mentee.mentorship_types.count).to eq(0)
       expect(mentee.mentoring_interests.count).to eq(0)
-      
+
       # the mentorship doesn't have any pending sessions/requests/ratings
       expect(mentee.mentorship_requests.count).to eq(0)
       expect(mentee.mentorship_proposals.count).to eq(0)
       expect(mentee.mentoring_sessions.count).to eq(0)
       expect(mentee.mentorship_ratings.count).to eq(0)
-      
+
       # sending a request for mentorship to a mentor
       mentor = create(:user, :mentor => true)
       mentorship_request = create(:mentoring_request, :sender => mentee, :receiver => mentor)
-      
+
       # check the request
       expect(mentorship_request.valid?).to be(true)
       expect(mentorship_request.sender.id).to eq(mentee.id)
       expect(mentorship_request.receiver.id).to eq(mentor.id)
-      
+
       expect(mentee.mentorship_requests.count).to eq(0)
       expect(mentee.mentorship_proposals.count).to eq(1)
-      
+
       expect(mentor.mentorship_requests.count).to eq(1)
       expect(mentor.mentorship_proposals.count).to eq(0)
-      
+
       # schedule a session
       mentoring_session = create(:mentoring_session, :mentorship_sessions_attributes => [{:user_id => mentor.id, :role => "presenter"}, {:user_id => mentee.id, :role => "attendee" }])
-      
+
       # check the session
       expect(mentoring_session.valid?).to be(true)
       expect(mentoring_session.status).to eq("scheduled")
       expect(mentoring_session.users.count).to eq(2)
-      
+
       # leave some ratings
       mentor_rating = build(:mentorship_rating, :user => mentor, :mentoring_session => mentoring_session)
       mentee_rating = build(:mentorship_rating, :user => mentee, :mentoring_session => mentoring_session)
-      
+
       mentor_rating.comments = "This is the best mentor ever"
       mentee_rating.comments = "Mentee was a great listener"
-      
+
       mentor_rating.save!
       mentee_rating.save!
-      
+
       expect(mentor_rating.rating).to eq(7)
       expect(mentee_rating.rating).to eq(7)
     end
   end
-  
+
   describe "#add_to_default_mentor_group" do
     it "adds the user to the default_mentor_group then removes the user" do
       perform_enqueued_jobs do
@@ -592,25 +591,25 @@ RSpec.describe User do
         expect(user.mentor).to be(false)
         expect(user.mentee).to be(false)
         expect(group.members.count).to eq(0)
-        
+
         user.mentee = true
         user.save!
-        
+
         expect(group.members.count).to eq(1)
-        
+
         user.mentor = true
         user.save!
-        
+
         expect(group.members.count).to eq(1)
-        
+
         user.mentee = false
         user.save!
-        
+
         expect(group.members.count).to eq(1)
-        
+
         user.mentor = false
         user.save!
-        
+
         expect(group.members.count).to eq(0)
       end
     end

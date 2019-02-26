@@ -11,6 +11,8 @@ RSpec.describe MetricsDashboard, :type => :model do
       it{ expect(subject).to have_many(:segments).through(:metrics_dashboards_segments) }
       it{ expect(subject).to have_many(:groups_metrics_dashboards) }
       it{ expect(subject).to have_many(:groups).through(:groups_metrics_dashboards) }
+      it{ expect(subject).to have_many(:shared_metrics_dashboards) }
+      it{ expect(subject).to have_many(:shared_users).through(:shared_metrics_dashboards).source(:user) }
     end
 
     describe 'validations' do
@@ -78,6 +80,16 @@ RSpec.describe MetricsDashboard, :type => :model do
 
           expect(metrics_dashboard.shareable_token).to eq token
         end
+      end
+    end
+
+    describe '#is_user_shared?' do
+      let!(:user) { create(:user) }
+      let!(:user2) { create(:user, enterprise: user.enterprise) }
+      let!(:metrics_dashboard) { create(:metrics_dashboard, owner: user, enterprise: user.enterprise, shared_user_ids: [user2.id]) }
+
+      it 'checks if a user is shared' do
+        expect(metrics_dashboard.is_user_shared?(user2)).to eq true
       end
     end
 

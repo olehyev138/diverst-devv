@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe BadgesController, type: :controller do
+  include ActiveJob::TestHelper
 
   let(:enterprise){ create(:enterprise) }
   let(:user){ create(:user, enterprise: enterprise) }
@@ -44,6 +45,31 @@ RSpec.describe BadgesController, type: :controller do
         it "render a notice flash message" do
           post :create, badge: attributes_for(:badge_params)
           expect(flash[:notice]).to eq "Your #{c_t(:badge)} was created"
+        end
+
+        describe 'public activity' do
+          enable_public_activity
+
+          it 'creates public activity record' do
+            perform_enqueued_jobs do
+              expect{post :create, badge: attributes_for(:badge_params)}
+              .to change(PublicActivity::Activity, :count).by(1)
+            end
+          end
+
+          describe 'activity record' do
+            let(:model) { Badge.last }
+            let(:owner) { user }
+            let(:key) { 'badge.create' }
+
+            before {
+              perform_enqueued_jobs do
+                post :create, badge: attributes_for(:badge_params)
+              end
+            }
+
+            include_examples'correct public activity'
+          end
         end
       end
 
@@ -129,7 +155,7 @@ RSpec.describe BadgesController, type: :controller do
       end
 
       context "with invalid parameters" do
-        before do 
+        before do
           allow_any_instance_of(Badge).to receive(:update).and_return(false)
           patch :update, id: badge.id, badge: attributes_for(:badge, points: "")
         end

@@ -4,11 +4,12 @@ RSpec.feature 'Group Leader Management' do
 	let!(:enterprise) { create(:enterprise, name: 'The Enterprise') }
 	let!(:user) { create(:user, enterprise: enterprise, first_name: 'Aaron', last_name: 'Patterson') }
 	let!(:other_user) { create(:user, enterprise: enterprise, first_name: 'Yehuda', last_name: 'Katz') }
+	let!(:inactive_user) { create(:user, enterprise: enterprise, first_name: 'John', last_name: 'Smith', active: false) }
 	let!(:group) { create(:group, name: 'Group ONE', enterprise: enterprise) }
 	
 	before do
 		login_as(user, scope: :user)
-		[user, other_user].each do |user|
+		[user, other_user, inactive_user].each do |user|
 	    	create(:user_group, user_id: user.id, group_id: group.id, accepted_member: 1)
 		end
 	end
@@ -28,6 +29,14 @@ RSpec.feature 'Group Leader Management' do
 				expect(page).to have_content 'Add Leaders to Group ONE'
 			end
 			expect(page).to have_link 'Add a leader'
+		end
+
+		scenario 'ensure only active users are listed', js: true do
+			click_on 'Add a leader'
+
+			first('.select2-container', minimum: 1).click
+
+			expect { find('li.select2-results__option[role="treeitem"]', text: "John Smith - #{inactive_user.email}") }.to raise_error(Capybara::ElementNotFound)
 		end
 
 		scenario 'add a group leader', js: true do

@@ -33,11 +33,13 @@ class Group < ActiveRecord::Base
     :leaders_only
   ]
 
+  # :public and :non_member have their values defined in locales/en.yml
   enumerize :upcoming_events_visibility, default: :leaders_only, in:[
-    :public,
-    :group,
-    :leaders_only
-  ]
+                                    :public,
+                                    :group,
+                                    :leaders_only,
+                                    :non_member
+                                  ]
 
   belongs_to :enterprise
   belongs_to :lead_manager, class_name: "User"
@@ -132,6 +134,7 @@ class Group < ActiveRecord::Base
   validate :perform_check_for_consistency_in_category, on: [:create, :update], unless: :skip_label_consistency_check
   validate :ensure_label_consistency_between_parent_and_sub_groups, on: [:create, :update]
 
+  scope :by_enterprise, -> (e) { where(enterprise_id: e) }
   scope :top_participants,  -> (n) { order(total_weekly_points: :desc).limit(n) }
   # Active Record already has a defined a class method with the name private so we use is_private.
   scope :is_private,        -> {where(:private => true)}
@@ -163,7 +166,7 @@ class Group < ActiveRecord::Base
   end
 
   def total_views
-    views.sum(:view_count)
+    views.count
   end
 
   def is_standard_group?
@@ -452,7 +455,7 @@ class Group < ActiveRecord::Base
 
     unless group['id'].nil?
       update(yammer_group_created: true, yammer_id: group['id'])
-      SyncYammerGroupJob.perform_later(self)
+      SyncYammerGroupJob.perform_later(self.id)
     end
   end
 

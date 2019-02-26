@@ -30,14 +30,11 @@
           <% if @container.enterprise %>
             <%= link_to "Edit Folder", polymorphic_path(@container_path, action: "edit"), class: "btn btn-primary" if EnterpriseFolderPolicy.new(current_user, @container).edit? %>
             <%= link_to "+ Folder", polymorphic_path([@container.enterprise] + [:folder], folder_id: @container.id, action: "new"), class: "btn btn-primary" if EnterpriseFolderPolicy.new(current_user, @container).create? && @container.class.name === "Folder" %>
+            <%= link_to "+ Resource", polymorphic_path(@container_path + [:resource], action: "new"), class: "btn btn--primary" if EnterpriseFolderPolicy.new(current_user, nil).new? %>
           <% elsif @container.group %>
             <%= link_to "Edit Folder", polymorphic_path(@container_path, action: "edit"), class: "btn btn-primary" if GroupFolderPolicy.new(current_user, [@container.group, @container]).edit? %>
             <%= link_to "+ Folder", polymorphic_path([@container.group] + [:folder], folder_id: @container.id, action: "new"), class: "btn btn-primary" if GroupFolderPolicy.new(current_user, [@container.group]).create? && @container.class.name === "Folder" %>
-          <% end %>
-          <% if @container.enterprise %>
-            <%= link_to "+ Resource", polymorphic_path(@container_path + [:resource], action: "new"), class: "btn btn--primary" if EnterpriseFolderPolicy.new(current_user, nil).new? %>
-          <% elsif @container.group %>
-            <%= link_to "+ Resource", polymorphic_path(@container_path + [:resource], action: "new"), class: "btn btn--primary" if GroupFolderPolicy.new(current_user, [@container.group]).new? %>
+            <%= link_to "+ Resource", polymorphic_path(@container_path + [:resource], action: "new"), class: "btn btn-primary" if GroupFolderPolicy.new(current_user, [@container.group]).new? %>
           <% end %>
         </div>
       </div>

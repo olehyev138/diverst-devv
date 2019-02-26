@@ -5,12 +5,6 @@ class UserSerializer < ActiveModel::Serializer
         fields = object.enterprise.mobile_fields.map(&:field)
         fields_hash = []
 
-        if scope.is_a? Match
-            fields_hash << {
-                title: 'Topic of conversation',
-                value: scope.topic.statement
-            }
-        end
 
         fields.each do |field|
             fields_hash << {

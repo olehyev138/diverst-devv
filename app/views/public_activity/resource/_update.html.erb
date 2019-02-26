@@ -2,19 +2,7 @@
   <%= render 'public_activity/shared/owner', activity: activity %>
   updated resource
   <% if activity.trackable %>
-
-    <% resource = activity.trackable %>
-    <% if resource.container.class.name == "Initiative" %>
-      event resource
-      <%= link_to resource.title, group_initiative_resources_path(group_id: resource.container.group.id, initiative_id: resource.container.id)%>
-    <% elsif resource.container.enterprise %>
-      enterprise resource
-      <%= link_to resource.title, enterprise_folder_resources_path(enterprise_id: resource.container.enterprise.id, folder_id: resource.folder_id) %>
-    <% else %>
-      group resource
-      <%= link_to resource.title, group_folder_resources_path(group_id: resource.container.group.id, folder_id: resource.folder_id) %>
-    <% end %>
-  
+    <%= link_to activity.trackable.title, group_resource_path(:id => activity.trackable.id, :group_id => activity.trackable.group.id) %>
   <% else %>
     which has since been removed
   <% end %>

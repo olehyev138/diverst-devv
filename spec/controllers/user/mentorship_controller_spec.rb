@@ -1,10 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe User::MentorshipController, type: :controller do
+    include ActiveJob::TestHelper
+
     let(:user) { create :user }
 
     describe 'GET #index' do
-        describe "if user is present" do 
+        describe "if user is present" do
             login_user_from_let
 
             it "render profile page" do
@@ -13,7 +15,7 @@ RSpec.describe User::MentorshipController, type: :controller do
             end
         end
     end
-    
+
     describe "PATCH#update" do
         describe 'when user is logged in' do
             login_user_from_let
@@ -36,13 +38,39 @@ RSpec.describe User::MentorshipController, type: :controller do
                 it "flashes a notice message" do
                     expect(flash[:notice]).to eq "Your user was updated"
                 end
+
+                describe 'public activity' do
+                  enable_public_activity
+
+                  it 'creates public activity record' do
+                    perform_enqueued_jobs do
+                      expect{
+                        patch :update, :id => user.id, :user => {:mentor => true}
+                      }.to change(PublicActivity::Activity, :count).by(1)
+                    end
+                  end
+
+                  describe 'activity record' do
+                    let(:model) { User.last }
+                    let(:owner) { user }
+                    let(:key) { 'user.update_mentorship_profile' }
+
+                    before {
+                      perform_enqueued_jobs do
+                        patch :update, :id => user.id, :user => {:mentor => true}
+                      end
+                    }
+
+                    include_examples'correct public activity'
+                  end
+                end
             end
 
             context "for an unsuccessful update" do
-                before { 
+                before {
                     request.env["HTTP_REFERER"] = "back"
                     allow_any_instance_of(User).to receive(:save).and_return(false)
-                    patch :update, :id => user.id, :user => { :mentor => false } 
+                    patch :update, :id => user.id, :user => { :mentor => false }
                 }
 
                 it "flashes an alert message" do
@@ -55,43 +83,45 @@ RSpec.describe User::MentorshipController, type: :controller do
             end
         end
     end
-    
+
     describe 'GET #mentors' do
-        describe "if user is present" do 
+        describe "if user is present" do
             login_user_from_let
 
             it "sets the mentors" do
                 get :mentors
-                expect(assigns[:mentors]).to eq([])
+                expect(assigns[:mentorings]).to eq([])
             end
         end
     end
-    
+
     describe 'GET #mentees' do
-        describe "if user is present" do 
+        describe "if user is present" do
             login_user_from_let
 
             it "sets the mentees" do
                 get :mentees
-                expect(assigns[:mentees]).to eq([])
+                expect(assigns[:mentorings]).to eq([])
             end
         end
     end
-    
+
     describe 'GET #requests' do
-        describe "if user is present" do 
+        describe "if user is present" do
             login_user_from_let
 
-            it "sets the mentorship_requests and mentorship_proposals" do
+            it "sets the mentorship_requests, menteeship_requests, mentorship_proposals, and menteeship proposals" do
                 get :requests
                 expect(assigns[:mentorship_requests]).to eq([])
+                expect(assigns[:menteeship_requests]).to eq([])
                 expect(assigns[:mentorship_proposals]).to eq([])
+                expect(assigns[:menteeship_proposals]).to eq([])
             end
         end
     end
-    
+
     describe 'GET #sessions' do
-        describe "if user is present" do 
+        describe "if user is present" do
             login_user_from_let
 
             it "sets the sessions" do
@@ -100,9 +130,9 @@ RSpec.describe User::MentorshipController, type: :controller do
             end
         end
     end
-    
+
     describe 'GET #ratings' do
-        describe "if user is present" do 
+        describe "if user is present" do
             login_user_from_let
 
             it "sets the ratings" do

@@ -34,8 +34,6 @@ class Enterprise < ActiveRecord::Base
     has_many :expense_categories, dependent: :destroy
     has_many :clockwork_database_events, dependent: :destroy
 
-    has_many :departments
-
     # mentorship
     has_many :mentoring_interests, dependent: :destroy
     has_many :mentoring_requests, dependent: :destroy
@@ -79,6 +77,8 @@ class Enterprise < ActiveRecord::Base
 
     has_attached_file :onboarding_sponsor_media, s3_permissions: :private
     do_not_validate_attachment_file_type :onboarding_sponsor_media
+    
+    validates_format_of   :redirect_email_contact, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: true
 
     def custom_text
         super || create_custom_text
@@ -227,6 +227,50 @@ class Enterprise < ActiveRecord::Base
       report = Reports::Generator.new(strategy)
 
       report.to_csv
+    end
+
+    def generic_graphs_group_growth_csv(from_date, to_date)
+      CSV.generate do |csv|
+        # column titles
+        csv << [
+          self.custom_text.send('erg_text'),
+          'From: ' + from_date.strftime('%F %T'),
+          'To: ' + to_date.strftime('%F %T'),
+          'Difference',
+          '% Change'
+        ]
+
+        self.groups.each do |group|
+          from_date_total = group.user_groups
+            .where('created_at <= ?', from_date)
+            .count.to_f
+
+          to_date_total = group.user_groups
+            .where('created_at <= ?', to_date)
+            .count.to_f
+
+          change_percentage = 0
+          if from_date_total == 0 and to_date_total > 0
+            change_percentage = 100
+          elsif to_date_total == 0 and from_date_total > 0
+            change_percentage = -100
+          elsif from_date_total == 0 and to_date_total == 0
+            change_percentage = 0
+          else
+            change_percentage =
+              (((to_date_total - from_date_total) / from_date_total)).round(2)
+          end
+
+          if change_percentage.positive?
+            change_percentage = '+' + (change_percentage.to_s)
+          end
+
+          csv << [
+            group.name, from_date_total, to_date_total,
+            (to_date_total - from_date_total), change_percentage
+          ]
+        end
+      end
     end
 
     def generic_graphs_segment_population_csv(erg_text)
@@ -389,7 +433,7 @@ class Enterprise < ActiveRecord::Base
     def generic_graphs_non_demo_top_news_by_views_csv
       news_feed_link_ids = NewsFeedLink.where(:news_feed_id => NewsFeed.where(:group_id => current_user.enterprise.groups.ids).ids).ids
       news_links = NewsLink
-        .select('DISTINCT news_links.title, views.view_count, groups.name')
+        .select('DISTINCT news_links.title, SUM(views.id) view_count, groups.name')
         .joins(:group, :news_feed_link, 'JOIN views on news_feed_links.id = views.news_feed_link_id')
         .where(:news_feed_links => {:id => news_feed_link_ids})
         .limit(20)
@@ -502,7 +546,7 @@ class Enterprise < ActiveRecord::Base
 
     def generic_graphs_demo_top_news_by_views_csv
       news_feed_link_ids = NewsFeedLink.where(:news_feed_id => NewsFeed.where(:group_id => self.groups.ids).ids).ids
-      news_links = NewsLink.select("news_links.title, SUM(views.view_count) view_count").joins(:news_feed_link, :news_feed_link => :views).where(:news_feed_links => {:id => news_feed_link_ids}).order("view_count DESC")
+      news_links = NewsLink.select("news_links.title, SUM(views.id) view_count").joins(:news_feed_link, :news_feed_link => :views).where(:news_feed_links => {:id => news_feed_link_ids}).order("view_count DESC")
 
       values = [9,2,5,1,11,10,9,5,11,4,1,8]
       i = 0

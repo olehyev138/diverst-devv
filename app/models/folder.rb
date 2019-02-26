@@ -1,5 +1,7 @@
 class Folder < ActiveRecord::Base
   include PublicActivity::Common
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
 
   has_secure_password(validations: false)
 
@@ -37,7 +39,7 @@ class Folder < ActiveRecord::Base
   end
 
   def total_views
-    views.sum(:view_count)
+    views.count
   end
 
 end

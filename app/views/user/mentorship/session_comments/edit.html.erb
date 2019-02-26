@@ -1,0 +1,13 @@
+<div class="content__header">
+  <h1>Edit Comment</h1>
+</div>
+
+<div class="card">
+  <div class="card__section">
+    <%= simple_form_for @comment, url: mentoring_session_mentoring_session_comment_path(@mentoring_session, @comment), method: :put do |f| %>
+      <%= f.input :content, label: "Edit comment:" %>
+
+      <%= f.button :submit, value: "Save your comment", style: "margin-top: 30px;" %>
+    <% end %>
+  </div>
+</div>

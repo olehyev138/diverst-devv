@@ -16,8 +16,8 @@ SimpleForm.setup do |config|
     # and required attributes
     b.use :html5
 
-    b.use :hint,  wrap_with: { tag: :span, class: :hint }
     b.use :label, class: :field__label
+    b.use :hint,  wrap_with: { tag: :span, class: :hint }
     b.use :error, wrap_with: { tag: :span, class: :error }
 
     b.wrapper tag: 'div', class: 'field__input-wrapper' do |ba|
@@ -100,7 +100,6 @@ SimpleForm.setup do |config|
   config.wrappers :boolean_toggle, class: :field, hint_class: :field_with_hint, error_class: :field_with_errors do |b|
     b.use :html5
 
-    b.use :hint,  wrap_with: { tag: :span, class: :hint }
     b.use :error, wrap_with: { tag: :span, class: :error }
 
     b.wrapper tag: 'label', class: 'control' do |ba|
@@ -108,6 +107,8 @@ SimpleForm.setup do |config|
       ba.wrapper tag: 'span', class: 'control__indicator control__indicator--toggle' do end
       ba.use :label, class: 'control__label'
     end
+    
+    b.use :hint,  wrap_with: { tag: :span, class: :hint }
   end
 
   config.wrappers :boolean_checkbox, class: :field, hint_class: :field_with_hint, error_class: :field_with_errors do |b|

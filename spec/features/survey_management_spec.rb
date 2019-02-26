@@ -16,7 +16,7 @@ RSpec.feature 'Survey Management' do
 
 			fill_in 'poll[title]', with: 'First Group Survey'
 			fill_in 'poll[description]', with: 'Everyone is welcome to fill out this particular survey'
-			select group.name, from: 'Choose the ERGs you want to target'
+			select group.name, from: 'Choose the Groups you want to target'
 		end
 
 		scenario 'add custom text field', js: true do

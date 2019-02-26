@@ -8,9 +8,20 @@ class MetricsDashboard < ActiveRecord::Base
   has_many :segments, through: :metrics_dashboards_segments
   has_many :groups_metrics_dashboards, dependent: :destroy
   has_many :groups, through: :groups_metrics_dashboards
+  has_many :shared_metrics_dashboards, dependent: :destroy, validate: false
+  has_many :shared_users, through: :shared_metrics_dashboards, source: :user
 
   validates_presence_of :name, :message => "Metrics Dashboard name is required"
   validates_presence_of :groups, :message => "Please select a group"
+
+  scope :with_shared_dashboards, -> (user_id) {
+    joins('LEFT JOIN shared_metrics_dashboards ON metrics_dashboards.id = shared_metrics_dashboards.metrics_dashboard_id')
+    .where('shared_metrics_dashboards.user_id = ? OR metrics_dashboards.owner_id = ?', user_id, user_id).uniq
+  }
+
+  def is_user_shared?(user)
+    shared_users.include?(user)
+  end
 
   def update_shareable_token
     if shareable_token.nil?

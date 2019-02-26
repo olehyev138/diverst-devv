@@ -9,6 +9,10 @@ class UsersController < ApplicationController
 
     @users = policy_scope(User).includes(:policy_group, :user_groups, :group_leaders).where(search_params).limit(params[:limit] || 25)
 
+    if extra_params[:not_current_user]
+      @users = @users.where.not(id: current_user.id)
+    end
+
     respond_to do |format|
       format.html
       format.json { render json: UserDatatable.new(view_context, @users) }
@@ -45,10 +49,11 @@ class UsersController < ApplicationController
   end
 
   def group_surveys
-    manageable_group_ids = current_user.manageable_groups.map{ |mg| mg.id}
+    manageable_groups = current_user.groups.select {|group| 
+      GroupMemberPolicy.new(current_user, [group]).update?
+    }
 
-    @user_groups = @user.user_groups.where(group_id: manageable_group_ids)
-                                    .where.not(data: nil)
+    @user_groups = @user.user_groups.where(group: manageable_groups).where.not(data: nil)
   end
 
   #For admins. Dedicated to editing any user's info
@@ -110,6 +115,7 @@ class UsersController < ApplicationController
     @email = ENV['CSV_UPLOAD_REPORT_EMAIL']
 
     if file.save
+      track_activity(current_user, :import_csv)
       @success = true
       @message = '@success'
     else
@@ -122,6 +128,7 @@ class UsersController < ApplicationController
   def export_csv
     authorize User, :index?
     UsersDownloadJob.perform_later(current_user.id)
+    track_activity(current_user, :export_csv)
     flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
     redirect_to :back
   end
@@ -250,5 +257,9 @@ class UsersController < ApplicationController
 
   def search_params
     params.permit(:active, :mentor, :mentee, policy_groups: [:budget_approval], user_groups: [:accepted_member, :group_id], group_leaders: [:budget_approval])
+  end
+
+  def extra_params
+    params.permit(:not_current_user)
   end
 end

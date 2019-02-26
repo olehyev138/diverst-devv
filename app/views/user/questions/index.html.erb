@@ -5,10 +5,10 @@
     </div>
     <div class="card__section card__section--border">
       <div class="flex-row flex-row--spaced flex-row--middle">
-        <div class="flex-row__cell flex-row__cell--spaced flex-5">
+        <div class="flex-row__cell flex-row__cell--spaced flex-4">
           <p class="emphasis"><%= @campaign.description %></p>
         </div>
-        <div class="flex-row__cell flex-row__cell--spaced flex-3">
+        <div class="flex-row__cell flex-row__cell--spaced flex-2">
           <div class="flex-row flex-row--middle">
             <div class="flex-row__cell">
               <h3 class="inline-block">Participating <%= c_t(:erg) %></h3>
@@ -24,6 +24,11 @@
           <hr>
           <h3><%= @campaign.progression %>% solved</h3>
         </div>
+        <% if @sponsors.any? %>
+          <div class="flex-row__cell flex-row__cell--spaced flex-2">
+            <%= render partial: 'shared/carousel/sponsor_card', locals: { sponsors: @sponsors } %>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>

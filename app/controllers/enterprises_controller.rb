@@ -7,7 +7,7 @@ class EnterprisesController < ApplicationController
   layout :resolve_layout
 
   def edit
-    authorize @enterprise, :update?
+    authorize @enterprise, :enterprise_manage?
   end
 
   def update
@@ -83,13 +83,9 @@ class EnterprisesController < ApplicationController
     set_theme
   end
 
-  def edit_posts
-    authorize @enterprise, :manage_posts?
-  end
-
   # missing template
   def edit_algo
-    authorize @enterprise, :edit?
+    authorize @enterprise, :update?
   end
 
   def update_branding
@@ -147,6 +143,8 @@ class EnterprisesController < ApplicationController
 
   def resolve_layout
     case action_name
+    when "edit_algo"
+      "mentorship"
     when 'edit_algo', 'edit_mobile_fields'
       'handshake'
     else
@@ -191,13 +189,17 @@ class EnterprisesController < ApplicationController
         :home_message,
         :xml_sso_config,
         :time_zone,
-        :user_group_mailer_notification_text,
-        :campaign_mailer_notification_text,
-        :approve_budget_request_mailer_notification_text,
-        :poll_mailer_notification_text,
-        :budget_approved_mailer_notification_text,
-        :budget_declined_mailer_notification_text,
-        :group_leader_post_mailer_notification_text,
+        :mentorship_module_enabled,
+        :disable_likes,
+        :collaborate_module_enabled,
+        :default_from_email_address,
+        :default_from_email_display_name,
+        :redirect_all_emails,
+        :redirect_email_contact,
+        :disable_emails,
+        :plan_module_enabled,
+        :name,
+        :scope_module_enabled,
         theme: [
           :id,
           :primary_color,

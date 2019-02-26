@@ -73,6 +73,17 @@ Rails.application.routes.draw do
   get 'integrations', to: 'integrations#index'
   get 'integrations/calendar/:token', to: 'integrations#calendar', as: 'integrations_calendar'
 
+  resources :archived_posts, only: [:index, :destroy] do
+    collection do
+      post 'delete_all'
+      post 'restore_all'
+    end
+
+    member do
+      patch 'restore'
+    end
+  end
+
   resources :enterprises do
     resources :saml do
       collection do
@@ -110,10 +121,21 @@ Rails.application.routes.draw do
           post 'authenticate'
         end
         scope module: :folder do
-          resources :resources
+          resources :resources do
+            member do
+              patch 'archive'
+              patch 'restore'
+            end
+          end
         end
       end
-      resources :resources
+      resources :resources do
+        collection do
+          get 'archived'
+          post 'restore_all'
+          post 'delete_all'
+        end
+      end
       resources :events, only: [] do
         collection do
           get 'public_calendar_data'
@@ -121,6 +143,8 @@ Rails.application.routes.draw do
       end
     end
   end
+  
+  resources :clockwork_database_events
 
   get 'integrations', to: 'integrations#index'
 
@@ -141,6 +165,7 @@ Rails.application.routes.draw do
   resources :groups do
     collection do
       post :sort
+      get 'get_all_groups'
     end
     resources :budgets, only: [:index, :show, :new, :create, :destroy] do
       post 'approve'
@@ -174,10 +199,13 @@ Rails.application.routes.draw do
 
       resources :group_messages, path: 'messages' do
         post 'create_comment'
+        member { patch 'archive' }
         resources :group_message_comment
       end
       resources :leaders, only: [:index, :new, :create]
-      resources :social_links
+      resources :social_links do
+        member { patch 'archive' }
+      end
       resources :questions, only: [:index] do
         collection do
           get 'survey'
@@ -218,6 +246,7 @@ Rails.application.routes.draw do
           get   'comments'
           get   'news_link_photos'
           post  'create_comment'
+          patch 'archive'
         end
         resources :news_link_comment
       end
@@ -235,7 +264,12 @@ Rails.application.routes.draw do
           post 'authenticate'
         end
         scope module: :folder do
-          resources :resources
+          resources :resources do
+            member do
+              patch 'archive'
+              patch 'restore'
+            end
+          end
         end
       end
 
@@ -361,7 +395,10 @@ Rails.application.routes.draw do
   end
 
   resources :segments do
-    collection { get 'enterprise_segments' }
+    collection do
+      get 'enterprise_segments'
+      get 'get_all_segments'
+    end
     resources :sub_segments
     member do
       get 'export_csv'
@@ -503,6 +540,18 @@ Rails.application.routes.draw do
     end
 
   end
+
+  resources :mentoring_sessions do
+    post 'create_comment'
+    resources :mentoring_session_comments, only: [:edit, :update, :destroy]
+    resources :mentorship_sessions, only: [:accept, :decline] do
+      member do
+        post 'accept'
+        post 'decline'
+      end
+    end
+  end
+
   resources :mentorship_ratings
 
   resources :metrics_dashboards do
@@ -529,6 +578,7 @@ Rails.application.routes.draw do
     get 'top_resources_by_views'
     get 'top_news_by_views'
     get 'growth_of_groups'
+    get 'growth_of_resources'
   end
 
   namespace :website do

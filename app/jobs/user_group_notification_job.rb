@@ -10,7 +10,7 @@ class UserGroupNotificationJob < ActiveJob::Base
     notifications_frequency = args[:notifications_frequency]
     enterprise_id = args[:enterprise_id]
 
-    User.where(:enterprise_id => enterprise_id, :groups_notifications_frequency => User.groups_notifications_frequencies[notifications_frequency.to_sym]).find_in_batches(batch_size: 200) do |users|
+    User.where(:enterprise_id => enterprise_id).includes(user_groups: :group).find_in_batches(batch_size: 200) do |users|
       users.each do |user|
         groups = []
         next unless can_send_email?(notifications_frequency, user)
@@ -52,7 +52,7 @@ class UserGroupNotificationJob < ActiveJob::Base
   def get_frequency_range(frequency)
     case frequency
     when "hourly" then 1.hour.ago.in_time_zone("UTC")..Time.now.in_time_zone("UTC")
-    when "weekly" then Date.yesterday.beginning_of_week.in_time_zone("UTC")..Date.yesterday.end_of_week.in_time_zone("UTC")
+    when "weekly" then 7.days.ago.in_time_zone("UTC")..Time.now.in_time_zone("UTC")
     else Date.yesterday.beginning_of_day.in_time_zone("UTC")..Date.yesterday.end_of_day.in_time_zone("UTC")
     end
   end

@@ -4,7 +4,7 @@ class Groups::NewsLinksController < ApplicationController
     before_action :authenticate_user!
 
     before_action :set_group, except: [:url_info]
-    before_action :set_news_link, only: [:comments, :create_comment, :edit, :update, :destroy, :news_link_photos]
+    before_action :set_news_link, only: [:comments, :create_comment, :edit, :update, :destroy, :news_link_photos, :archive]
 
     layout 'erg'
 
@@ -66,8 +66,8 @@ class Groups::NewsLinksController < ApplicationController
     end
 
     def destroy
-        user_rewarder("news_post").remove_points(@news_link)
         track_activity(@news_link, :destroy)
+        user_rewarder("news_post").remove_points(@news_link)
         @news_link.destroy
         flash[:notice] = "Your news was removed. Now you have #{current_user.credits} points"
         redirect_to group_posts_path(@group)
@@ -87,6 +87,18 @@ class Groups::NewsLinksController < ApplicationController
     def news_link_photos
         @resize = true
         @photos = @news_link.photos
+    end
+
+    def archive
+        authorize current_user.enterprise, :manage_posts?, :policy_class => EnterprisePolicy
+
+        @news_link.news_feed_link.update(archived_at: DateTime.now)
+        track_activity(@news_link, :archive)
+
+        respond_to do |format|
+           format.html { redirect_to :back }
+           format.js
+        end
     end
 
     protected
