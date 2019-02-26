@@ -19,7 +19,8 @@
   <div class="card">
     <div class="card__section card__section--border">
       <label><strong>Name</strong></label>
-      <p><%= @user.name %></p>
+      <p><%= @user.name %><%= linkedin_logo_for_connected_users(@user) %>
+      </p>
     </div>
     <div class="card__section card__section--border">
       <label><strong>Status</strong></label>
