@@ -3,8 +3,8 @@ require 'rails_helper'
 migration_file_name = Dir[Rails.root.join('db/migrate/20190227050001_removed_all_orphaned_posts.rb')].first
 require migration_file_name
 
-RSpec.describe RemoveOrphanedPosts, :type => :migration do
-    let(:migration) { RemoveOrphanedPosts.new }
+RSpec.describe RemovedAllOrphanedPosts, :type => :migration do
+    let(:migration) { RemovedAllOrphanedPosts.new }
     let!(:news_links) { create_list(:news_link, 2) }
     let!(:social_links) { create_list(:social_link, 2) }
     let!(:group_messages) { create_list(:group_message, 2) }
