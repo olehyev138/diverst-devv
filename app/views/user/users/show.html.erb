@@ -5,7 +5,7 @@
 
   <div class="flex-row__cell">
     <h1 style="margin-bottom: 5px;">
-      <%= @user.name %>
+      <%= @user.name %><%= linkedin_logo_for_connected_users(@user) %>
       <% @user.badges.each do |badge| %>
         <%= image_tag badge.image.expiring_url(3600), class: "icon icon--bg icon--large" %>
       <% end %>
