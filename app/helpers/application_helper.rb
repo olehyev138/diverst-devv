@@ -1,4 +1,8 @@
 module ApplicationHelper
+  def linkedin_logo_for_connected_users(user)
+    inline_svg('icons/linkedin', size: '17px*17px')  if user.linkedin_profile_url.present?
+  end
+
   def current_user_has_no_comments?(comments)
     comment = comments.find_by(user_id: current_user.id)
     yield if comment.nil?
