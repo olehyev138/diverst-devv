@@ -2,7 +2,6 @@ class Enterprises::ResourcesController < ApplicationController
   include IsResources
 
   before_action :set_resource_type, only: [:new]
-  before_action :authenticate_user!
   before_filter :prepend_view_paths, :only => [:index]
 
   layout 'erg_manager'
