@@ -1,8 +1,6 @@
 class Groups::FoldersController < ApplicationController
   include Folders
 
-  before_action :authenticate_user!
-
   layout 'erg'
 
   def index
