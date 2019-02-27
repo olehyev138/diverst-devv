@@ -14,8 +14,8 @@ class User < ActiveRecord::Base
     enum groups_notifications_date: [:sunday, :monday, :tuesday, :wednesday, :thursday, :friday, :saturday]
 
     scope :active,              -> { where(active: true).distinct }
-    scope :enterprise_mentors,  -> ( user_ids = []) { where(mentor: true).where.not(:id => user_ids) }
-    scope :enterprise_mentees,  -> ( user_ids = []) { where(mentee: true).where.not(:id => user_ids) }
+    scope :enterprise_mentors,  -> ( user_ids = []) { where(mentor: true).where.not(:id => user_ids).where.not(accepting_mentor_requests: false) }
+    scope :enterprise_mentees,  -> ( user_ids = []) { where(mentee: true).where.not(:id => user_ids).where.not(accepting_mentee_requests: false) }
     scope :mentors_and_mentees, -> { where("mentor = true OR mentee = true").distinct }
     scope :inactive,            -> { where(active: false).distinct }
 
