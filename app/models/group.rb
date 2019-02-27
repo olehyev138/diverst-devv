@@ -384,9 +384,7 @@ class Group < ActiveRecord::Base
   end
 
   def accept_pending_members
-    self.user_groups.each do |user_group|
-      user_group.update(accepted_member: true)
-    end
+    self.user_groups.update_all(accepted_member: true)
   end
 
   protected
