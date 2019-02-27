@@ -1,8 +1,6 @@
 class Groups::Folder::ResourcesController < ApplicationController
   include IsResources
 
-  before_action :authenticate_user!
-
   layout 'erg'
 
   def archive
