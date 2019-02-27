@@ -2,6 +2,7 @@ module IsResources
     extend ActiveSupport::Concern
 
     included do
+        before_action :authenticate_user!
         before_action :set_container
         before_action :set_resource, except: [:index, :new, :create, :archived, :restore_all, :delete_all]
         before_action :fetch_all_resources, only: [:restore, :restore_all, :destroy, :delete_all, :archived]
