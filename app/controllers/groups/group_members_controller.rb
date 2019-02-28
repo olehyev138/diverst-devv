@@ -100,7 +100,7 @@ class Groups::GroupMembersController < ApplicationController
   end
 
   def join_all_sub_groups
-    authorize [@group], :index?, :policy_class => GroupMemberPolicy
+    authorize [@group, current_user], :create?, :policy_class => GroupMemberPolicy
 
     @group.children.pluck(:id).each do |sub_group_id|
       unless UserGroup.where(user_id: current_user.id, group_id: sub_group_id).any?
@@ -128,7 +128,7 @@ class Groups::GroupMembersController < ApplicationController
   end
 
   def join_sub_group
-    authorize [@group], :destroy?, :policy_class => GroupMemberPolicy
+    authorize [@group, current_user], :create?, :policy_class => GroupMemberPolicy
     if @group.user_groups.where(user_id: current_user.id).any?
       respond_to do |format|
         format.html { redirect_to :back }

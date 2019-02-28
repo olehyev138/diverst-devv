@@ -20,6 +20,8 @@ $(document).on('ready page:load', function() {
       
       if(type === "news_feed_link"){
         params.news_feed_link_id = id
+      }else if (type === "folder"){
+        params.folder_id = id
       }else if (type === "group"){
         params.group_id = id
       }else if (type === "resource"){
