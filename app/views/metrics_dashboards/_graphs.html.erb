@@ -9,8 +9,8 @@
             <%= link_to "Remove", graph_path(graph.id), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(@metrics_dashboard).update? %>
           </div>
           <h4 class="no-margin"><%= graph.title %></h4>
-          <%= render 'components/range_selector' %>
           <% if !graph.aggregation.nil? %><small><%= aggregation_text(graph) %></small><% end %>
+          <%= render 'components/range_selector' %>
           <div id="graph_<%= graph.id %>" class="graph" data-method="GET" data-url="<%= data_metrics_dashboard_graph_path(@metrics_dashboard, graph) %>">
             <svg></svg>
           </div>

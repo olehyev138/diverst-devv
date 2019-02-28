@@ -58,9 +58,6 @@ class Graph {
         var svg = this.$element[0].children[0];
         var chart = null;
 
-
-        console.log(data);
-
         nv.addGraph(function() {
             chart = nv.models.multiBarChart()
                 .barColor(d3.scale.category20().range())
@@ -125,10 +122,6 @@ class Graph {
 
         var svg = this.$element[0].children[0];
         var chart = null;
-
-        console.log('hey friend');
-        console.log(data);
-        console.log(svg);
 
         nv.addGraph(function() {
             chart = nv.models.multiBarChart()

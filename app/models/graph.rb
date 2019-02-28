@@ -22,12 +22,12 @@ class Graph < BaseClass
 
     graph = User.get_graph
 
-    # TODO:  get enterprise value
-    graph.set_enterprise_filter(field: 'enterprise_id', value: 1)
+    graph.set_enterprise_filter(field: 'enterprise_id', value: collection.enterprise.id)
     graph.formatter.type = 'custom'
 
     date_range = parse_date_range(input)
 
+    # build query with or without sub aggregation
     if aggregation.present?
       graph.query = graph.query.terms_agg(field: field.elasticsearch_field) { |q|
         q.terms_agg(field: aggregation.elasticsearch_field) { |qq|
@@ -42,6 +42,7 @@ class Graph < BaseClass
 
     elements =  graph.formatter.list_parser.parse_list(graph.search)
 
+    # awkward/hacky parsing that will be fixed
     elements.each do |element|
       if element.agg.buckets[0].agg.present?
         key = element[:key]
