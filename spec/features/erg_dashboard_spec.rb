@@ -93,7 +93,7 @@ RSpec.feature 'An ERG dashboard' do
       click_on 'Create new message'
       fill_in 'group_message_subject', with: message_subject
       fill_in 'group_message_content', with: message_content
-      page.first('#group_message_segment_ids option').select_option # Select a segment
+      page.first('.select2-field-segments option').select_option # Select a segment
       submit_form
 
       expect(page).to have_content message_subject
