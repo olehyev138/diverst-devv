@@ -466,6 +466,7 @@ class User < BaseClass
         indexes :email,                 type: :keyword
         indexes :sign_in_count,         type: :integer
         indexes :enterprise_id,         type: :integer
+        indexes :created_at,            type: :date
 
         indexes :current_sign_in_at,    type: :date
         indexes :last_sign_in_at,       type: :date
@@ -525,7 +526,8 @@ class User < BaseClass
     def as_indexed_json(options = {})
       self.as_json(
           {
-            only: [:id, :first_name, :last_name, :email, :sign_in_count, :enterprise_id, :mentor, :mentee, :created_at, :updated_at, :time_zone],
+            only: [:id, :first_name, :last_name, :email, :sign_in_count, :enterprise_id,
+                   :created_at, :mentor, :mentee, :created_at, :updated_at, :time_zone],
             methods: [:combined_info],
             include: [:enterprise]
           }

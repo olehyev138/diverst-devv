@@ -43,7 +43,7 @@ class Graph < BaseClass
     elements =  graph.formatter.list_parser.parse_list(graph.search)
 
     elements.each do |element|
-      if element.agg.present?
+      if element.agg.buckets[0].agg.present?
         key = element[:key]
         series_index = -1
 
@@ -51,10 +51,11 @@ class Graph < BaseClass
           series_name = sub_element[:key]
           series_index += 1
 
-          graph.formatter.add_element({ key: key, doc_count: sub_element[:doc_count] },
+          graph.formatter.add_element({ key: key, doc_count: sub_element.agg.buckets[0][:doc_count] },
             series_index: series_index, series_name: series_name)
         end
       else
+        graph.formatter.y_parser.parse_chain = graph.formatter.y_parser.date_range
         graph.formatter.add_element(element)
       end
     end
