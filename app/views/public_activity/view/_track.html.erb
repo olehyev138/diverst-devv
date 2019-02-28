@@ -27,17 +27,7 @@
       <% end %>   
     <% end %>      
   <% else %>
-    viewed
-    <% if activity.parameters[:group_id] %>
-      a group
-    <% elsif activity.parameters[:folder_id] %>
-      a folder
-    <% elsif activity.parameters[:news_link_id] %>
-      a news link
-    <% elsif activity.parameters[:resource_id] %>
-      a resource   
-    <% end %>
-    which has since been removed
+    viewed an item which has since been removed
   <% end %>
   (<%= activity.created_at.to_s :datetime %>)
 </div>
