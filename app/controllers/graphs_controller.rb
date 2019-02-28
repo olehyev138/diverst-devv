@@ -57,7 +57,7 @@ class GraphsController < ApplicationController
   end
 
   def data
-    render json: @graph.data
+    render json: @graph.data(params[:input])
   end
 
   def export_csv
@@ -96,7 +96,8 @@ class GraphsController < ApplicationController
         :aggregation_id,
         :time_series,
         :range_from,
-        :range_to
+        :range_to,
+        :input
       )
   end
 end

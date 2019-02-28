@@ -152,7 +152,7 @@ module BaseGraph
     #  - in the form of a single elasticsearch aggregation element: { key: <key>, doc_count: <n> }
     # @children - optional, a list of children elements
     # @element_key - the key to identify a parent element, gives a name to children series
-    def add_element(element, element_key: nil, children: nil, series_index: @series_index, **args)
+    def add_element(element, element_key: nil, children: nil, series_index: @series_index, series_name: @title, **args)
       element = format_element(element, args)
 
       # add children to element if passed
@@ -164,7 +164,7 @@ module BaseGraph
       end
 
       # create a series for element if necessary & add element to current series
-      add_series if @data.dig(:series, series_index).blank?
+      add_series(series_name: series_name) if @data.dig(:series, series_index).blank?
       @data[:series][series_index][:values] << element
     end
 
