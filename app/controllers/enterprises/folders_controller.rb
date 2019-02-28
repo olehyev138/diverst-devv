@@ -1,8 +1,6 @@
 class Enterprises::FoldersController < ApplicationController
   include Folders
 
-  before_action :authenticate_user!
-  
   layout 'erg_manager'
   
   protected

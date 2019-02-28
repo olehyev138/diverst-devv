@@ -2,6 +2,7 @@ module IsResources
     extend ActiveSupport::Concern
 
     included do
+        before_action :authenticate_user!
         before_action :set_container
         before_action :set_resource, except: [:index, :new, :create, :archived, :restore_all, :delete_all]
         before_action :fetch_all_resources, only: [:restore, :restore_all, :destroy, :delete_all, :archived]
@@ -104,7 +105,7 @@ module IsResources
     end
 
     def delete_all
-        @resources.delete_all
+        @resources.destroy_all
 
         respond_to do |format|
             format.html { redirect_to :back }

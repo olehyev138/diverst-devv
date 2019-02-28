@@ -2,6 +2,7 @@ module Folders
     extend ActiveSupport::Concern
 
     included do
+        before_action :authenticate_user!
         before_action :set_container
         before_action :set_folder, except: [:index, :new, :create]
         before_action :set_container_path
