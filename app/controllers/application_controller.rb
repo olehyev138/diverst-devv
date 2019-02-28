@@ -109,6 +109,12 @@ class ApplicationController < ActionController::Base
         Rollbar.warn(e)
         redirect_on_error
     end
+    
+    rescue_from NoMethodError do |e|
+        flash[:alert] = e.message
+        Rollbar.warn(e)
+        redirect_on_error
+    end
 
     around_action :user_time_zone, if: :current_user
     
