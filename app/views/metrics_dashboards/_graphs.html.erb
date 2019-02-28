@@ -10,11 +10,8 @@
           </div>
           <h4 class="no-margin"><%= graph.title %></h4>
           <% if !graph.aggregation.nil? %><small><%= aggregation_text(graph) %></small><% end %>
-          <div
-            class="graph"
-            data-method="GET"
-            data-url="<%= data_metrics_dashboard_graph_path(@metrics_dashboard, graph) %>"
-            data-time-series="<%= graph.time_series %>">
+          <div class="graph" data-method="GET" data-url="<%= data_metrics_dashboard_graph_path(@metrics_dashboard, graph) %>">
+            <svg></svg>
           </div>
         </div>
       </div>

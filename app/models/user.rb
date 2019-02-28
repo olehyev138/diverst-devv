@@ -432,32 +432,38 @@ class User < BaseClass
     def combined_info
         polls_hash = poll_responses.map(&:info).reduce({}) { |a, e| a.merge(e) } # Get a hash of all the combined poll response answers for this user
 
+        groups_hash = { groups: groups.map(&:name) }
+        segments_hash = { segments: segments.map(&:name) }
+
         # Merge all the hashes to the main info hash
         # We use info_hash instead of just info because Hash#merge accesses uses [], which is overriden in FieldData
-        info_hash.merge(polls_hash)
+        #info_hash.merge(polls_hash)
+        info_hash.merge(polls_hash).merge(groups_hash).merge(segments_hash)
     end
 
     settings do
+#      mappings dynamic: false do
       mappings  dynamic_templates: [
         {
           string_template: {
-            mapping: {
-              fields: {
-                raw: {
-                  type: 'string',
-                  index: 'not_analyzed'
-                }
-              }
-            },
             match_mapping_type: 'string',
-            match: '*'
+            match: '*',
+            mapping: {
+              type: 'keyword',
+#              fields: {
+#                raw: {
+#                  type: 'keyword',
+#                  index: 'not_analyzed'
+#                }
+#              }
+            }
           }
         }
       ]  do
         indexes :id,                    type: :integer
-        indexes :first_name,            type: :text
-        indexes :last_name,             type: :text
-        indexes :email,                 type: :text
+        indexes :first_name,            type: :keyword
+        indexes :last_name,             type: :keyword
+        indexes :email,                 type: :keyword
         indexes :sign_in_count,         type: :integer
         indexes :enterprise_id,         type: :integer
 
@@ -485,14 +491,14 @@ class User < BaseClass
         indexes :groups_notifications_frequency,    type: :integer
         indexes :groups_notifications_date,         type: :integer
 
-        indexes :time_zone,     type: :text
+        indexes :time_zone,     type: :keyword
         indexes :created_at,    type: :date
         indexes :updated_at,    type: :date
 
         indexes :enterprise do
             indexes :id,                type: :integer
-            indexes :name,              type: :text
-            indexes :time_zone,         type: :text
+            indexes :name,              type: :keyword
+            indexes :time_zone,         type: :keyword
 
             indexes :has_enabled_saml,              type: :boolean
             indexes :collaborate_module_enabled,    type: :boolean

@@ -152,7 +152,7 @@ module BaseGraph
     #  - in the form of a single elasticsearch aggregation element: { key: <key>, doc_count: <n> }
     # @children - optional, a list of children elements
     # @element_key - the key to identify a parent element, gives a name to children series
-    def add_element(element, element_key: nil, children: nil, **args)
+    def add_element(element, element_key: nil, children: nil, series_index: @series_index, **args)
       element = format_element(element, args)
 
       # add children to element if passed
@@ -164,16 +164,16 @@ module BaseGraph
       end
 
       # create a series for element if necessary & add element to current series
-      add_series if @data[:series].blank?
-      @data[:series][@series_index][:values] << element
+      add_series if @data.dig(:series, series_index).blank?
+      @data[:series][series_index][:values] << element
     end
 
     # Parse, format & add a list of elements to current series
     # @elements - the list of elements to add
     #  - in the form of a list of elasticsearch aggregations elements: [{ key: <key>, doc_count: <n> }, ...n]
-    def add_elements(elements, **args)
-      add_series if @data[:series].blank?
-      @data[:series][@series_index][:values] = format_elements(elements, args)
+    def add_elements(elements, series_index: @series_index, **args)
+      add_series if @data.dig([:series][series_index]).blank?
+      @data[:series][series_index][:values] = format_elements(elements, args)
     end
 
     # Parse and return key of element
@@ -227,7 +227,6 @@ module BaseGraph
 
   # Parse a elasticsearch response
   # Pulls a single value out of an elasticsearch response
-  # Theoretically could replace with another parser if we switched backends
   class ElasticsearchParser
     ELASTICSEARCH_KEY = :key
     ELASTICSEARCH_DOC_COUNT = :doc_count
