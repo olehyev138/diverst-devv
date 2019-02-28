@@ -14,7 +14,7 @@
       <%= link_to resource.title, group_folder_resources_path(group_id: resource.container.group.id, folder_id: resource.folder_id) %>
     <% end %>
   <% else %>
-    which has since been removed
+    a resource which has since been removed
   <% end %>
   (<%= activity.created_at.to_s :datetime %>)
 </div>
