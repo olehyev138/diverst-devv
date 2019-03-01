@@ -35,8 +35,7 @@ RSpec.describe EnterprisesController, type: :controller do
             before { request.env["HTTP_REFERER"] = "back" }
             login_user_from_let
 
-            context "with valid parameters" do
-                attributes = FactoryBot.attributes_for(:enterprise, 
+            let!(:attributes) { attributes_for(:enterprise, 
                                                         home_message: "updated",
                                                         time_zone: "Eastern Time (US & Canada)",
                                                         disable_likes: true,
@@ -46,7 +45,8 @@ RSpec.describe EnterprisesController, type: :controller do
                                                         plan_module_enabled: true,
                                                         mentorship_module_enabled: true,
                                                         enable_rewards: true,
-                                                        enable_pending_comments: true)
+                                                        enable_pending_comments: true) }
+            context "with valid parameters" do
                 before { patch :update, id: enterprise.id, enterprise: attributes }
 
                 it "updates the enterprise" do
@@ -125,9 +125,9 @@ RSpec.describe EnterprisesController, type: :controller do
         describe "with logged in user" do
             before { request.env["HTTP_REFERER"] = "back" }
             login_user_from_let
-
+            let!(:attributes) { attributes_for(:enterprise, home_message: "updated") }
+            
             context "with valid parameters" do
-                attributes = FactoryBot.attributes_for(:enterprise, home_message: "updated")
                 before { patch :update_posts, id: enterprise.id, enterprise: attributes }
 
                 it "updates the enterprise" do

@@ -116,8 +116,8 @@ RSpec.describe CampaignsController, type: :controller do
                 end
 
                 it "returns campaign question in desc order by created_at" do
-                    question1 = FactoryBot.create :question, campaign: campaign
-                    question2 = FactoryBot.create :question, campaign: campaign
+                    question1 = create :question, campaign: campaign
+                    question2 = create :question, campaign: campaign
 
                     expect(assigns[:questions]).to eq [question1, question2]
                 end
