@@ -5,10 +5,6 @@ RSpec.describe 'GroupsHelper' do
     let(:user) { create(:user) }
     let(:group) { create(:group, :enterprise_id => user.enterprise_id) }
     let!(:current_user) { user }
-    
-    RSpec.configure do |c|
-        c.include GroupsHelper
-    end
 
     describe '#group_performance_label' do
         it "returns the correct label" do
