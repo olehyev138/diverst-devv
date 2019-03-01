@@ -74,6 +74,7 @@ class EnterprisePolicy < ApplicationPolicy
   end
   
   def enterprise_manage?
+    return true if manage_all?
     @policy_group.enterprise_manage?
   end
 
