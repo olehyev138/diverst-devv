@@ -28,17 +28,21 @@ class Graph < BaseClass
     date_range = parse_date_range(input)
 
     # build query with or without sub aggregation
+    query = graph.get_new_query
     if aggregation.present?
-      graph.query = graph.query.terms_agg(field: field.elasticsearch_field) { |q|
+      query = query.terms_agg(field: field.elasticsearch_field) { |q|
         q.terms_agg(field: aggregation.elasticsearch_field) { |qq|
           qq.date_range_agg(field: 'created_at', range: date_range)
         }
       }
     else
-      graph.query = graph.query.terms_agg(field: field.elasticsearch_field) { |q|
+      query = query.terms_agg(field: field.elasticsearch_field) { |q|
         q.date_range_agg(field: 'created_at', range: date_range)
       }
     end
+
+    graph.query = graph.get_new_query.bool_filter_agg(field: 'combined_info.groups',
+      value: groups, multi: true, negate: true) { |_| query }
 
     elements =  graph.formatter.list_parser.parse_list(graph.search)
 

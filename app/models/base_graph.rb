@@ -68,6 +68,10 @@ module BaseGraph
       @formatter.format
     end
 
+    def get_new_query
+      @instance.get_query
+    end
+
     # Helpers
     #  - Helpers are methods for building common 'types' of graphs
     #  - Generally a helper should take care of all searching and formatting
@@ -186,7 +190,7 @@ module BaseGraph
       end
 
       # create a series for element if necessary & add element to current series
-      add_series(series_name: series_name) if @data.dig(:series, series_index).blank?
+      add_series if @data.dig(:series, series_index).blank?
       @data[:series][series_index][:values] << element
     end
 

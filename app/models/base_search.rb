@@ -41,6 +41,16 @@ module BaseSearch
       base_agg(agg, block)
     end
 
+    def bool_filter_agg(field:, value:, multi: false, negate: false, &block)
+      must_key = negate ? 'must_not' : 'must'
+      terms_key = multi ? 'terms' : 'term'
+
+      agg = { agg: { filter: { bool: {
+        must_key => { terms_key => { field => value } } } } } }
+
+      base_agg(agg, block)
+    end
+
     # Creates a date range aggregation
     # @field - field to fit within range
     # @range - an elasticsearch range hash, consult elasticsearch documentation for more information
