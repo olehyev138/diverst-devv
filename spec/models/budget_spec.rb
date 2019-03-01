@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe Budget, type: :model do
 
     describe 'when validating' do
-        let(:budget) { FactoryGirl.build(:budget) }
-        let(:approved_budget) { FactoryGirl.build :approved_budget }
+        let(:budget) { build(:budget) }
+        let(:approved_budget) { build :approved_budget }
 
         it { expect(budget).to belong_to(:group) }
         it { expect(budget).to belong_to(:approver).class_name("User").with_foreign_key("approver_id") }
@@ -16,7 +16,7 @@ RSpec.describe Budget, type: :model do
     end
 
     describe 'amounts' do
-        let!(:budget) { FactoryGirl.create :approved_budget }
+        let!(:budget) { create :approved_budget }
         let(:requested_amount) { budget.budget_items.sum(:estimated_amount) }
 
         before { budget.budget_items.first.update(is_done: true) }
@@ -39,7 +39,7 @@ RSpec.describe Budget, type: :model do
             end
 
             context 'with not approved budget' do
-                let!(:budget) { FactoryGirl.create :budget }
+                let!(:budget) { create :budget }
 
                 it 'always return 0' do
                     expect(budget.available_amount).to eq 0
@@ -86,9 +86,9 @@ RSpec.describe Budget, type: :model do
 
     describe 'self.' do
         describe 'pre_approved_events' do
-            let(:group) { FactoryGirl.create :group }
-            let!(:budget) { FactoryGirl.create :budget, group: group }
-            let!(:approved_budget) { FactoryGirl.create :approved_budget, group: group }
+            let(:group) { create :group }
+            let!(:budget) { create :budget, group: group }
+            let!(:approved_budget) { create :approved_budget, group: group }
 
             subject { described_class.pre_approved_events(group) }
 
@@ -109,7 +109,7 @@ RSpec.describe Budget, type: :model do
         describe 'pre_approved_events_for_select' do
             let!(:group) { create(:group) }
             let!(:related_budgets) { create_list(:budget, 3, group: group, is_approved: true) }
-            let!(:approved_budget) { FactoryGirl.create :approved_budget, group: group }
+            let!(:approved_budget) { create :approved_budget, group: group }
 
             subject { described_class }
 
@@ -125,7 +125,7 @@ RSpec.describe Budget, type: :model do
     end
 
     describe "status_title" do
-        let(:budget) { FactoryGirl.build_stubbed(:budget) }
+        let(:budget) { build_stubbed(:budget) }
 
         it "returns Pending" do
             expect(budget.status_title).to eq("Pending")

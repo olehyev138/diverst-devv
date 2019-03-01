@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :user, aliases: [:owner] do
     email { generate(:email_address) }
     first_name { Faker::Name.first_name }

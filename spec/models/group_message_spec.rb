@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe GroupMessage, type: :model do
 
     describe 'validations' do
-        let(:group_message) { FactoryGirl.build_stubbed(:group_message) }
+        let(:group_message) { build_stubbed(:group_message) }
 
         [:group_id, :subject, :content, :owner_id].each do |attribute|
             it { expect(group_message).to validate_presence_of(attribute) }

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mentoring_request do
     status { ["accepted", "pending", "rejected"].sample }
     notes { Faker::Lorem.sentence }

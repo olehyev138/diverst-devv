@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe MentoringSessionComment, type: :model do
   describe 'validations' do
-      let(:mentoring_session_comment) { FactoryGirl.build_stubbed(:mentoring_session_comment) }
+      let(:mentoring_session_comment) { build_stubbed(:mentoring_session_comment) }
 
       it{ expect(mentoring_session_comment).to validate_presence_of(:user) }
       it{ expect(mentoring_session_comment).to validate_presence_of(:mentoring_session) }

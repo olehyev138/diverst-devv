@@ -36,7 +36,7 @@ RSpec.describe EnterprisesController, type: :controller do
             login_user_from_let
 
             context "with valid parameters" do
-                attributes = FactoryGirl.attributes_for(:enterprise, 
+                attributes = FactoryBot.attributes_for(:enterprise, 
                                                         home_message: "updated",
                                                         time_zone: "Eastern Time (US & Canada)",
                                                         disable_likes: true,
@@ -127,7 +127,7 @@ RSpec.describe EnterprisesController, type: :controller do
             login_user_from_let
 
             context "with valid parameters" do
-                attributes = FactoryGirl.attributes_for(:enterprise, home_message: "updated")
+                attributes = FactoryBot.attributes_for(:enterprise, home_message: "updated")
                 before { patch :update_posts, id: enterprise.id, enterprise: attributes }
 
                 it "updates the enterprise" do
