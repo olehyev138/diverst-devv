@@ -1,30 +1,30 @@
 <!-- Range selector -->
 <div id="range-selector" class="graph-input">
   <div class="container-fluid">
-    <div class="row">
-      <div class="col-xs-12">
+    <div class="flex-row flex-row--wrap">
+      <div class="flex-row__cell">
         <div class="btn-group" role="group" aria-label="Range Selector Buttons">
-          <button class="btn btn-secondary btn-sm" value="1m">1m</button>
-          <button class="btn btn-secondary btn-sm" value="3m">3m</button>
-          <button class="btn btn-secondary btn-sm" value="6m">6m</button>
-          <button class="btn btn-secondary btn-sm" value="ytd">YTD</button>
-          <button class="btn btn-secondary btn-sm" value="1y">1y</button>
-          <button class="btn btn-secondary btn-sm" value="all">All</button>
+          <button class="range-btn btn btn--tertiary btn-sm" value="1m">1m</button>
+          <button class="range-btn btn btn--tertiary btn-sm" value="3m">3m</button>
+          <button class="range-btn btn btn--tertiary btn-sm" value="6m">6m</button>
+          <button class="range-btn btn btn--tertiary btn-sm" value="ytd">YTD</button>
+          <button class="range-btn btn btn--tertiary btn-sm" value="1y">1y</button>
+          <button class="range-btn btn btn--tertiary btn-sm" value="all">All</button>
         </div>
       </div>
-    </div>
-    <div class="row" style="margin-top: 15px;">
-      <div class="col-xs-6">
-        <div class="input-group">
-          <input readonly type="text" class="form-control from_input date_time_picker date_time_picker_input" placeholder="From Date">
+      <div class="flex-row__cell flex-row" style="padding: 0;">
+        <div class="flex-row__cell">
+          <div class="input-group">
+            <input readonly type="text" style="border-radius: 4px;" class="form-control from_input date_time_picker date_time_picker_input" placeholder="From Date">
+          </div>
         </div>
-      </div>
-      <div class="col-xs-6">
-        <div class="input-group">
-          <input readonly type="text" class="form-control to_input date_time_picker date_time_picker_input" placeholder="To Date">
-          <span class="input-group-btn">
-            <button class="btn btn-primary" type="button" value="Refresh">Refresh</button>
-          </span>
+        <div class="flex-row__cell">
+          <div class="input-group">
+            <input readonly type="text" class="form-control to_input date_time_picker date_time_picker_input" placeholder="To Date">
+            <span class="input-group-btn">
+              <button class="filter-btn btn btn-primary" type="button"><img class="svg refreshIcon" width="18px" height="18px" src="<%= image_path('icons/refresh.svg') %>" /></button>
+            </span>
+          </div>
         </div>
       </div>
     </div>

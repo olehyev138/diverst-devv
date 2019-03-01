@@ -13,12 +13,12 @@ class RangeSelector {
         var self = this;
 
         // add event handler for all range buttons
-        $('.btn-secondary', this.$element).each(function() {
+        $('.range-btn', this.$element).each(function() {
             $(this).on('click', { self: self, button: this }, self.rangeButtonHandler);
         });
 
         // add handler for refresh button - this button is for 'specific' date ranges
-        $('.btn-primary', this.$element).on('click', { self: self, button: this }, self.refreshButtonHandler);
+        $('.filter-btn', this.$element).on('click', { self: self, button: this }, self.refreshButtonHandler);
 
         // disable 'all' button because 'all' is the default date range
         this.update_button($("button[value='all']", this.$element));
