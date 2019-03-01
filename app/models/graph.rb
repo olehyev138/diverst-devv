@@ -18,7 +18,7 @@ class Graph < BaseClass
     #  - filter on dashboard groups
 
     segments = collection.segments || field.container.enterprise.segments.all
-    groups = collection.groups
+    groups = collection.enterprise.groups.pluck(:name) - collection.groups.map(&:name)
 
     graph = User.get_graph
 
@@ -42,23 +42,11 @@ class Graph < BaseClass
 
     elements =  graph.formatter.list_parser.parse_list(graph.search)
 
-    # awkward/hacky parsing that will be fixed
-    elements.each do |element|
-      if element.agg.buckets[0].agg.present?
-        key = element[:key]
-        series_index = -1
-
-        element.agg.buckets.each do |sub_element|
-          series_name = sub_element[:key]
-          series_index += 1
-
-          graph.formatter.add_element({ key: key, doc_count: sub_element.agg.buckets[0][:doc_count] },
-            series_index: series_index, series_name: series_name)
-        end
-      else
-        graph.formatter.y_parser.parse_chain = graph.formatter.y_parser.date_range
-        graph.formatter.add_element(element)
-      end
+    if aggregation.present?
+      graph.stacked_nested_terms(elements)
+    else
+      graph.formatter.y_parser.parse_chain = graph.formatter.y_parser.date_range
+      graph.formatter.add_elements(elements)
     end
 
     return graph.build

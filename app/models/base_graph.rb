@@ -101,9 +101,31 @@ module BaseGraph
 
       self
     end
+
+    def stacked_nested_terms(elements)
+      formatter.list_parser.parse_chain = formatter.list_parser.nested_terms_list
+      formatter.y_parser.parse_chain = formatter.y_parser.date_range
+
+      elements.each do |element|
+        series_index = -1
+        key = formatter.general_parser.parse(element)
+
+        formatter.list_parser.parse_list(element).each do |sub_element|
+          series_index += 1
+          series_name = formatter.general_parser.parse(sub_element)
+
+          formatter.add_series(series_name: series_name)
+          formatter.x_parser.extractor = -> (_, args) { args[:key] }
+          formatter.add_element(sub_element, series_index: series_index, key: key)
+        end
+      end
+
+      self
+    end
   end
 
   # Define formatting interface here - TODO
+
 
   # Formats & Parses elasticsearch responses to a Nvd3 Format
   # General Nvd3 data structure:
@@ -152,7 +174,7 @@ module BaseGraph
     #  - in the form of a single elasticsearch aggregation element: { key: <key>, doc_count: <n> }
     # @children - optional, a list of children elements
     # @element_key - the key to identify a parent element, gives a name to children series
-    def add_element(element, element_key: nil, children: nil, series_index: @series_index, series_name: @title, **args)
+    def add_element(element, element_key: nil, children: nil, series_index: @series_index, **args)
       element = format_element(element, args)
 
       # add children to element if passed
@@ -188,6 +210,8 @@ module BaseGraph
     # @series_name - optional, default is title
     # All elements added after will be added to this new series
     def add_series(series_name: @title)
+      return if @data[:series].any? { |h| h[:key] == series_name }
+
       @series_index += 1
       @data[:series] << { key: series_name, values: [] }
     end
@@ -254,6 +278,19 @@ module BaseGraph
         e.try(:agg).try(:hits).try(:hits).try(:dig, 0, '_source') || 0
       }
     end
+
+
+    # list parsers
+
+    def nested_terms_list(&block)
+      inner = yield self if block_given?
+
+      -> (e) {
+        e = e.try(:agg).try(:buckets) || []
+        (inner) ? inner.call(e) : e
+      }
+    end
+
 
     # Run the parser on an elasticsearch response
     def parse(element, **args)
