@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :group_leader do
     user {create(:user)}
     group { create(:group, :enterprise => user.enterprise)}

@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe MentorshipRating, :type => :model do
 
     describe 'validations' do
-        let(:mentorship_rating) { FactoryGirl.build_stubbed(:mentorship_rating) }
+        let(:mentorship_rating) { build_stubbed(:mentorship_rating) }
 
         it{ expect(mentorship_rating).to validate_presence_of(:user) }
         it{ expect(mentorship_rating).to validate_presence_of(:mentoring_session) }

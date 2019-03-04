@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe ExpenseCategory, type: :model do
     
     describe 'validations' do
-        let(:expense_category) { FactoryGirl.build_stubbed(:expense_category) }
+        let(:expense_category) { build_stubbed(:expense_category) }
 
         it{ expect(expense_category).to validate_presence_of(:name) }
         it{ expect(expense_category).to validate_presence_of(:enterprise) }

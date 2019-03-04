@@ -1,6 +1,6 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :budget_item do
-    budget { FactoryGirl.create(:approved_budget) }
+    budget { FactoryBot.create(:approved_budget) }
 
     title { Faker::Lorem.sentence }
     estimated_amount { rand(100..1000) }

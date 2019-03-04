@@ -4,10 +4,10 @@ RSpec.describe IntegrationsController, type: :controller do
     let(:enterprise) {create :enterprise, iframe_calendar_token: "token"}
     let(:user) { create :user }
     let!(:groups) do
-    	2.times { FactoryGirl.create :group, enterprise: enterprise }
+    	2.times { create(:group, enterprise: enterprise) }
     end
     let!(:segments) do
-    	3.times { FactoryGirl.create :segment, enterprise: enterprise }
+    	3.times { create(:segment, enterprise: enterprise) }
     end
 
     describe 'GET #calendar' do
