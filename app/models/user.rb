@@ -435,7 +435,7 @@ class User < BaseClass
         # Merge all the hashes to the main info hash
         # We use info_hash instead of just info because Hash#merge accesses uses [], which is overriden in FieldData
         #info_hash.merge(polls_hash)
-        info_hash.merge(polls_hash).merge(groups_hash).merge(segments_hash)
+        info_hash.merge(polls_hash)
     end
 
     settings do
