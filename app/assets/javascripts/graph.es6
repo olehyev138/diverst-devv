@@ -117,9 +117,11 @@ class Graph {
           // Resize the chart accordingly
           setChartHeight(chart, select_string, items);
 
-          // Moves the bottom axis to the top so that the user can see the ticks without scrolling down
-          d3.selectAll(select_string + " .nv-y > .nv-axis > g text," + select_string + " .nv-y > .nv-axis > g path," + select_string + " .nv-y > .nv-axis > .nv-axisMaxMin .nv-axisMaxMin")
-            .attr("transform", "translate(0,-" + ( getTransformTranslateY(select_string + " .nv-y") + AXIS_PADDING ) + ")");
+          if (items && items > 0) {
+            // Moves the bottom axis to the top so that the user can see the ticks without scrolling down
+            d3.selectAll(select_string + " .nv-y > .nv-axis > g text," + select_string + " .nv-y > .nv-axis > g path," + select_string + " .nv-y > .nv-axis > .nv-axisMaxMin .nv-axisMaxMin")
+              .attr("transform", "translate(0,-" + ( getTransformTranslateY(select_string + " .nv-y") + AXIS_PADDING ) + ")");
+          }
         });
 
         $($drillout_button).click(function(){
