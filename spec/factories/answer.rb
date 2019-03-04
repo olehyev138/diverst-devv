@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :answer do
     content { Faker::Lorem.paragraph(2) }
     question

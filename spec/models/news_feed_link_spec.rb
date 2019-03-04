@@ -4,7 +4,7 @@ RSpec.describe NewsFeedLink, type: :model do
   include ActiveJob::TestHelper
 
   describe 'validations' do
-    let(:news_feed_link) { FactoryGirl.build_stubbed(:news_feed_link) }
+    let(:news_feed_link) { build_stubbed(:news_feed_link) }
 
     it{ expect(news_feed_link).to validate_presence_of(:news_feed_id) }
 

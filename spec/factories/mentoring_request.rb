@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mentoring_request do
     status { "pending" }
     notes { Faker::Lorem.sentence }

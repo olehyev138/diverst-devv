@@ -15,15 +15,17 @@
     <div class="card">
       <div class="card__section card__section--border calendar-filters">
         <div class="row">
-          <div class="col xs-5">
-            <%= f.input :users_segments_segment_id_in,
-                  as: :select,
-                  collection: @segments,
-                  input_html: { class: "select2-field-segments", multiple: true },
-                  label: "Filter by #{ c_t(:segment) }",
-                  required: false
-            %>
-          </div>
+          <% if SegmentPolicy.new(current_user, nil).index? %>
+            <div class="col xs-5">
+              <%= f.input :users_segments_segment_id_in,
+                    as: :select,
+                    collection: @segments,
+                    input_html: { class: "select2-field-segments", multiple: true },
+                    label: "Filter by #{ c_t(:segment) }",
+                    required: false
+              %>
+            </div>
+          <% end %>
           <div class="col xs-6">
             <%= f.input :user_groups_created_at_gteq,
                   as: :date_picker,
