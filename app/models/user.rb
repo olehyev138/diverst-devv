@@ -432,9 +432,6 @@ class User < BaseClass
     def combined_info
         polls_hash = poll_responses.map(&:info).reduce({}) { |a, e| a.merge(e) } # Get a hash of all the combined poll response answers for this user
 
-        groups_hash = { groups: groups.map(&:name) }
-        segments_hash = { segments: segments.map(&:name) }
-
         # Merge all the hashes to the main info hash
         # We use info_hash instead of just info because Hash#merge accesses uses [], which is overriden in FieldData
         #info_hash.merge(polls_hash)
@@ -496,6 +493,18 @@ class User < BaseClass
         indexes :created_at,    type: :date
         indexes :updated_at,    type: :date
 
+        indexes :user_groups, type: :nested do
+          indexes :group do
+            indexes :name, type: :keyword
+          end
+        end
+
+        indexes :users_segments, type: :nested do
+          indexes :segment do
+            indexes :name, type: :keyword
+          end
+        end
+
         indexes :enterprise do
             indexes :id,                type: :integer
             indexes :name,              type: :keyword
@@ -529,7 +538,7 @@ class User < BaseClass
             only: [:id, :first_name, :last_name, :email, :sign_in_count, :enterprise_id,
                    :created_at, :mentor, :mentee, :created_at, :updated_at, :time_zone],
             methods: [:combined_info],
-            include: [:enterprise]
+            include: [:enterprise, user_groups: { only: [], include: { group: { only: [:name] } } }]
           }
       )
     end

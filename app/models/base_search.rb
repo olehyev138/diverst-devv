@@ -67,6 +67,16 @@ module BaseSearch
       base_agg(agg, block)
     end
 
+    def nested_agg(path:, &block)
+      agg = { agg: { nested: { path: path } } }
+      base_agg(agg, block)
+    end
+
+    def reverse_nested_agg(&block)
+      agg = { agg: { reverse_nested: {} } }
+      base_agg(agg, block)
+    end
+
     # Creates a terms aggregation
     # @field - field to aggregate on
     # @order_field - optional, default: _count, field to order on

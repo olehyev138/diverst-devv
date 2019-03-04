@@ -120,7 +120,7 @@ RSpec.describe BaseGraph do
 
       it 'uses valid series structure' do
         formatter.add_series(series_name: 'series01')
-        formatter.add_series(series_name: 'series01')
+        formatter.add_series(series_name: 'series02')
 
         expect(formatter.format[:series][1][:values].class).to eq Array
       end

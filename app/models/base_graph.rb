@@ -106,17 +106,32 @@ module BaseGraph
       self
     end
 
-    def stacked_nested_terms(elements)
-      formatter.list_parser.parse_chain = formatter.list_parser.nested_terms_list
-      formatter.y_parser.parse_chain = formatter.y_parser.date_range
+    def stacked_nested_terms(elements, field)
+      # very temporary
+      top_parser = BaseGraph::ElasticsearchParser.new
+      nested_parser = BaseGraph::ElasticsearchParser.new
+
+      if field.class == GroupsField || field.class == SegmentsField
+        # default top_parser
+        # default nested_parser
+        formatter.list_parser.parse_chain = formatter.list_parser.agg { |p| p.nested_terms_list }
+        formatter.y_parser.parse_chain = formatter.y_parser.date_range
+      else
+        # default top_parser
+        # default nested parser
+        formatter.list_parser.parse_chain = formatter.list_parser.nested_terms_list
+        formatter.y_parser.parse_chain = formatter.y_parser.date_range
+      end
 
       elements.each do |element|
         series_index = -1
-        key = formatter.general_parser.parse(element)
+
+        key = top_parser.parse(element)
 
         formatter.list_parser.parse_list(element).each do |sub_element|
           series_index += 1
-          series_name = formatter.general_parser.parse(sub_element)
+
+          series_name = nested_parser.parse(sub_element)
 
           formatter.add_series(series_name: series_name)
           formatter.x_parser.extractor = -> (_, args) { args[:key] }
@@ -155,7 +170,8 @@ module BaseGraph
   #        - Children data points may not have children of there own. This limits the Nvd3 structure to ONE sublevel of datapoints
   class Nvd3Formatter
     attr_accessor :title, :x_label, :y_label, :type,
-                  :x_parser, :y_parser, :list_parser, :key_parser, :general_parser
+      :x_parser, :y_parser, :list_parser, :key_parser, :general_parser,
+      :filter_zeros
 
     def initialize
       @x_parser = ElasticsearchParser.new(key: ElasticsearchParser::ELASTICSEARCH_KEY)
@@ -163,6 +179,8 @@ module BaseGraph
       @list_parser = ElasticsearchParser.new
       @key_parser = @x_parser
       @general_parser = ElasticsearchParser.new
+
+      @filter_zeros = true
 
       @title = 'Default Graph'
       @type = 'bar'
@@ -228,9 +246,10 @@ module BaseGraph
       @data[:y_label] = @y_label
       @data[:type] = @type
 
-      # clean up data
-      @data[:series].each_with_index do |series, i|
-        @data[:series][i][:values] = series[:values].select { |e| e[:x] != 0 && e[:y] != 0 }
+      if filter_zeros
+        @data[:series].each_with_index do |series, i|
+          @data[:series][i][:values] = series[:values].select { |e| e[:x] != 0 && e[:y] != 0 }
+        end
       end
 
       @data
@@ -275,6 +294,16 @@ module BaseGraph
       }
     end
 
+    def agg(&block)
+      inner = yield self if block_given?
+
+      -> (e) {
+        e = e.try(:agg) || 0
+        (inner) ? inner.call(e) : e
+      }
+    end
+
+
     # Parse a top hits aggregation
     # Must be run last, can not nest anything inside except custom parser
     def top_hits
@@ -294,7 +323,6 @@ module BaseGraph
         (inner) ? inner.call(e) : e
       }
     end
-
 
     # Run the parser on an elasticsearch response
     def parse(element, **args)
