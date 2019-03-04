@@ -130,7 +130,7 @@ RSpec.describe ResourcesHelper do
 	xdescribe '#get_folders_url' do 
 		it 'returns url for group folders if folder.group is true' do
 			folder = create(:folder, group: create(:group), enterprise: nil)
-			# expect(get_folders_url(folder, limit: 10, format: :json)).to eq  group_folders_path(limit: 10, format: :json)
+			# 
 		end
 	end
 end
