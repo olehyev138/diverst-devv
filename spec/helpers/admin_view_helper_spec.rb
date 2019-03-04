@@ -1,5 +1,4 @@
 require 'rails_helper'
-require_relative '../../app/helpers/admin_view_helper.rb'
 
 RSpec.describe AdminViewHelper do 
 	describe '#active_manage_erg_link' do 
