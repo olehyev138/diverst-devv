@@ -49,6 +49,7 @@ class Graph {
     }
 
     renderBarChart() {
+        var graphObject = this;
         var data = this.data;
         var series = data.series;
         var select_string = buildSelectString(this);
@@ -110,6 +111,10 @@ class Graph {
                 }
             });
 
+            chart.legend.dispatch.on('legendClick', function(d,i) {
+              graphObject.renderBarChart();
+            });
+
             return chart;
         },
         // After chart generated callback
@@ -119,8 +124,7 @@ class Graph {
 
           if (items && items > 0) {
             // Moves the bottom axis to the top so that the user can see the ticks without scrolling down
-            d3.selectAll(select_string + " .nv-y > .nv-axis > g text," + select_string + " .nv-y > .nv-axis > g path," + select_string + " .nv-y > .nv-axis > .nv-axisMaxMin .nv-axisMaxMin")
-              .attr("transform", "translate(0,-" + ( getTransformTranslateY(select_string + " .nv-y") + AXIS_PADDING ) + ")");
+            moveBottomAxisToTop(select_string);
           }
         });
 
@@ -170,6 +174,12 @@ class Graph {
             return chart;
         });
     }
+}
+
+// Moves the bottom axis to the top so that the user can see the ticks without scrolling down
+function moveBottomAxisToTop(selectString) {
+  d3.selectAll(selectString + " .nv-y > .nv-axis > g text," + selectString + " .nv-y > .nv-axis > g path," + selectString + " .nv-y > .nv-axis > .nv-axisMaxMin .nv-axisMaxMin")
+    .attr("transform", "translate(0,-" + ( getTransformTranslateY(selectString + " .nv-y") + AXIS_PADDING ) + ")");
 }
 
 // Builds the string to use as a selector from the chart object
