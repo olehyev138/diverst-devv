@@ -99,13 +99,18 @@ class Graph {
             nv.utils.windowResize(chart.update);
 
             chart.multibar.dispatch.on('elementClick', function(e) {
-                if ('children' in e.data && e.data.children.length != 0) {
+                if (!$.isEmptyObject(e.data.children) && e.data.children.length != 0) {
                     items = getUniqueXValuesFromSeries(e.data.children).length;
 
                     d3.select(select_string)
                       .datum([e.data.children])
                       .transition().duration(500)
                       .call(chart);
+
+                    setChartHeight(chart, select_string, items);
+
+                    if (items && items > 0)
+                      moveBottomAxisToTop(select_string);
 
                     $($drillout_button).toggle();
                 }
@@ -136,6 +141,11 @@ class Graph {
                 .datum(series)
                 .transition().duration(500)
                 .call(chart);
+
+            setChartHeight(chart, select_string, items);
+
+            if (items && items > 0)
+              moveBottomAxisToTop(select_string);
 
             $($drillout_button).toggle();
         });
@@ -204,16 +214,17 @@ function getTransformTranslateY(elementSelector) {
 }
 
 // Gets the unique X values from a series object
-function getUniqueXValuesFromSeries(series, prev) {
+function getUniqueXValuesFromSeries(series, prev = []) {
   $.each(series.values, function(valuesIndex, valuesItem) {
     if (!prev.includes(valuesItem.x))
       prev.push(valuesItem.x);
   });
+
+  return prev;
 }
 
 // Gets the unique X values from an array of series
-function getUniqueXValuesFromSeriesArr(seriesArr) {
-  var prev = [];
+function getUniqueXValuesFromSeriesArr(seriesArr, prev = []) {
   $.each(seriesArr, function(seriesIndex, seriesItem) {
     getUniqueXValuesFromSeries(seriesItem, prev);
   });
