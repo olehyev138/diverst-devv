@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :email do
     name 'Awesome Email'
     subject { Faker::Lorem.sentence }

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
     factory :topic_feedback do
         content { Faker::Lorem.paragraph }
         topic

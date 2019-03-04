@@ -45,6 +45,21 @@ RSpec.describe MentorMailer, type: :mailer do
     end
   end
 
+  describe '#session_declined' do
+    let(:creator) { create :user }
+    let(:mentee) { create :user, enterprise: creator.enterprise }
+    let(:mentoring_session) { create :mentoring_session }
+    let!(:mail) { described_class.session_declined(creator.id, mentoring_session.id, mentee.id).deliver_now }
+
+    it 'renders the subject' do
+      expect(mail.subject).to eq "#{mentee.name} has declined your Mentoring Session"
+    end
+
+    it 'renders the receiver email' do
+      expect(mail.to).to eq([creator.email])
+    end
+  end
+
   describe '#notify_declined_request' do
     let(:mentoring_request) { create :mentoring_request }
     let!(:mail) { described_class.notify_declined_request(mentoring_request.receiver.id, mentoring_request.sender.id).deliver_now }

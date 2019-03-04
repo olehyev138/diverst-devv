@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mentorship_rating do
     rating 7
     association :user,          factory: :user

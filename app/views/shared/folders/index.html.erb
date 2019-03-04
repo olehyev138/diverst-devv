@@ -32,8 +32,8 @@
             <%= link_to "Delete", @container_path + [folder], method: :delete, class: "error", data: { confirm: "Are you sure?" } if EnterpriseFolderPolicy.new(current_user, folder).destroy? %>
           <% end %>
         </h4>
-        <%= link_to inline_svg('icons/folder.svg', size: '100px*100px'), polymorphic_path(@container_path + [folder] + [:resources]) if !folder.password_protected %>
-        <%= link_to inline_svg('icons/folder.svg', size: '100px*100px'), @container_path + [folder], method: :get, remote: true if folder.password_protected %>
+        <%= link_to inline_svg('icons/folder.svg', size: '100px*100px'), polymorphic_path(@container_path + [folder] + [:resources]), 'data-trackable-id': folder.id, 'data-trackable-type': "folder", class: "trackable-views", "data-trackable-enterprise-id": current_user.enterprise_id, "data-trackable-user-id": current_user.id if !folder.password_protected %>
+        <%= link_to inline_svg('icons/folder.svg', size: '100px*100px'), @container_path + [folder], method: :get, remote: true, 'data-trackable-id': folder.id, 'data-trackable-type': "folder", class: "trackable-views", "data-trackable-enterprise-id": current_user.enterprise_id, "data-trackable-user-id": current_user.id if folder.password_protected %>
       </div>
     
     <% end %>
