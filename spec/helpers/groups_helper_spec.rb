@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'GroupsHelper' do
+RSpec.describe GroupsHelper do
     let(:user) { create(:user) }
     let(:group) { create(:group, :enterprise_id => user.enterprise_id) }
     let!(:current_user) { user }

@@ -64,8 +64,6 @@ RSpec.configure do |config|
   config.include ReferrerHelpers, :type => :controller
   config.include CsvHelpers
   config.include ModelHelpers
-  config.include GroupsHelper
-  config.include AdminViewHelper
   config.include FeatureSpecRefactors::FormHelpers
   config.include FeatureSpecRefactors::CustomHelpers
   config.include FeatureSpecRefactors::CustomMatchers
