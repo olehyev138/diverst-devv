@@ -78,7 +78,7 @@ class Graph {
                 .tickFormat(function(d) {
                   if (d.length > MAX_LABEL_LENGTH)
                     return d.substring(0, MAX_LABEL_LENGTH - 3) + "...";
-                  return d;1
+                  return d;
                 })
                 .showMaxMin(false)
                 .axisLabel(data.x_axis)
