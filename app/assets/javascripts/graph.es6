@@ -76,7 +76,7 @@ class Graph {
         nv.addGraph(function() {
             chart = nv.models.multiBarHorizontalChart()
                 .height(HEIGHT_PER_ITEM * items)
-                .margin({"left": 80, "right": 20})
+                .margin({"left": 82, "right": 20})
                 .barColor(d3.scale.category20().range())
                 .duration(160)
                 .groupSpacing(BAR_GROUP_SPACING)
