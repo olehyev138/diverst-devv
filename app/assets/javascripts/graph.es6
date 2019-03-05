@@ -40,10 +40,14 @@ class Graph {
     attachToElement() {
         switch (this.data.type) {
             case 'bar':
+                this.stacked = false;
+                this.showControls = false;
                 this.renderBarChart();
                 break;
             case 'custom':
-                this.renderCustomChart();
+                this.stacked = true;
+                this.showControls = true;
+                this.renderBarChart();
                 break;
             case 'line':
                 this.renderLineChart();
@@ -53,6 +57,8 @@ class Graph {
 
     renderBarChart() {
         var graphObject = this;
+        var stacked = this.stacked;
+        var showControls = this.showControls;
         var data = this.data;
         var series = data.series;
         var select_string = buildSelectString(this);
@@ -73,8 +79,8 @@ class Graph {
                 .groupSpacing(BAR_GROUP_SPACING)
                 .x(function (d) { return d.x; }) // set the json keys for x & y values
                 .y(function (d) { return d.y; })
-                .showControls(false)
-                .stacked(false);
+                .showControls(showControls)
+                .stacked(stacked);
 
             chart.legend.margin({"bottom": 20});
 
@@ -119,7 +125,8 @@ class Graph {
                 }
             });
 
-            chart.legend.dispatch.on('legendClick', function(d,i) {
+            chart.dispatch.on('stateChange', function(newState) {
+              graphObject.stacked = newState.stacked;
               graphObject.renderBarChart();
             });
 
@@ -127,13 +134,10 @@ class Graph {
         },
         // After chart generated callback
         function(chart) {
-          // Resize the chart accordingly
           setChartHeight(chart, select_string, items);
 
-          if (items && items > 0) {
-            // Moves the bottom axis to the top so that the user can see the ticks without scrolling down
+          if (items && items > 0)
             moveBottomAxisToTop(select_string);
-          }
         });
 
         $($drillout_button).click(function(){
@@ -149,71 +153,6 @@ class Graph {
 
             if (items && items > 0)
               moveBottomAxisToTop(select_string);
-
-            $($drillout_button).toggle();
-        });
-    }
-
-    renderCustomChart() {
-        var data = this.data;
-        var series = data.series;
-        var graph_id = $(this.$element).attr('id');
-        var select_string = '#' + graph_id  + ' svg';
-
-        var $drillout_button = $(this.$element).siblings('.drillout_button');
-
-        var svg = this.$element[0].children[0];
-        var chart = null;
-
-        nv.addGraph(function() {
-            chart = nv.models.multiBarChart()
-                .barColor(d3.scale.category20().range())
-                .duration(160)
-                .rotateLabels(45)
-                .groupSpacing(0.3)
-                .x(function (d) { return d.x; }) // set the json keys for x & y values
-                .y(function (d) { return d.y; })
-                .showControls(true)
-                .stacked(true);
-
-            chart.xAxis
-                .showMaxMin(false)
-                .axisLabel(data.x_axis)
-                .axisLabelDistance(10);
-
-            chart.yAxis
-                .tickFormat(d3.format('d'))
-                .axisLabel(data.y_axis)
-                .axisLabelDistance(10);
-
-            chart.reduceXTicks(false)
-                 .staggerLabels(true);
-
-            d3.select(select_string)
-                .datum(series)
-                .call(chart);
-
-            nv.utils.windowResize(chart.update);
-
-            chart.multibar.dispatch.on('elementClick', function(e) {
-                if ('children' in e.data && e.data.children.length != 0) {
-                    d3.select(select_string)
-                    .datum([e.data.children])
-                    .transition().duration(500)
-                    .call(chart);
-
-                    $($drillout_button).toggle();
-                }
-            });
-
-            return chart;
-        });
-
-        $($drillout_button).click(function(){
-            d3.select(select_string)
-                .datum(series)
-                .transition().duration(500)
-                .call(chart);
 
             $($drillout_button).toggle();
         });
