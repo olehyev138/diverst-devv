@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :sponsor do
     sponsor_name "MyString"
     sponsor_title "MyString"

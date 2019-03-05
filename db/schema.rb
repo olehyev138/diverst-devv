@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190214193529) do
+ActiveRecord::Schema.define(version: 20190227174707) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -1352,6 +1352,8 @@ ActiveRecord::Schema.define(version: 20190214193529) do
     t.text     "mentorship_description",         limit: 65535
     t.integer  "groups_notifications_frequency", limit: 4,     default: 2
     t.integer  "groups_notifications_date",      limit: 4,     default: 5
+    t.boolean  "accepting_mentor_requests",                    default: true
+    t.boolean  "accepting_mentee_requests",                    default: true
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree
@@ -1378,7 +1380,6 @@ ActiveRecord::Schema.define(version: 20190214193529) do
     t.integer  "group_id",          limit: 4
     t.integer  "folder_id",         limit: 4
     t.integer  "resource_id",       limit: 4
-    t.integer  "view_count",        limit: 4
   end
 
   create_table "yammer_field_mappings", force: :cascade do |t|

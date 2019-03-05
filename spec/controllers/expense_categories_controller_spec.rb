@@ -58,7 +58,7 @@ RSpec.describe ExpenseCategoriesController, type: :controller do
             login_user_from_let
 
             context 'with correct params' do
-                let(:valid_expense_category_attributes) { FactoryGirl.attributes_for(:expense_category) }
+                let(:valid_expense_category_attributes) { attributes_for(:expense_category) }
 
                 it 'redirects to correct action' do
                     post :create, expense_category: valid_expense_category_attributes
@@ -103,7 +103,7 @@ RSpec.describe ExpenseCategoriesController, type: :controller do
             end
 
             context "with incorrect params" do
-                let(:invalid_expense_category_attributes) { FactoryGirl.attributes_for(:expense_category, name: nil) }
+                let(:invalid_expense_category_attributes) { attributes_for(:expense_category, name: nil) }
                 before { post :create, expense_category: invalid_expense_category_attributes }
 
                 it "renders new template" do
@@ -117,7 +117,7 @@ RSpec.describe ExpenseCategoriesController, type: :controller do
         end
 
         describe "without a logged in user" do
-            let(:valid_expense_category_attributes) { FactoryGirl.attributes_for(:expense_category) }
+            let(:valid_expense_category_attributes) { attributes_for(:expense_category) }
             before { post :create, expense_category: valid_expense_category_attributes }
             it_behaves_like "redirect user to users/sign_in path"
         end

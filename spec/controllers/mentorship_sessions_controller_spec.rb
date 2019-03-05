@@ -39,10 +39,10 @@ RSpec.describe MentorshipSessionsController, type: :controller do
   describe 'POST#decline' do
     login_user_from_let
 
-    before {
+    before do |example|
       request.env["HTTP_REFERER"] = "back"
-      post :decline, mentoring_session_id: mentoring_session.id, id: mentorship_session2.id
-    }
+      post :decline, mentoring_session_id: mentoring_session.id, id: mentorship_session2.id unless example.metadata[:skip_post]
+    end
 
     context 'when user is logged in' do
       it 'sets the status to declined' do
@@ -56,6 +56,14 @@ RSpec.describe MentorshipSessionsController, type: :controller do
 
       it 'redirects to previous page' do
         expect(response).to redirect_to "back"
+      end
+
+      it 'sends an email notification', :skip_post do
+        mail = double(:mail)
+        expect(MentorMailer).to receive(:session_declined).with(creator.id, mentoring_session.id, user.id).and_return(mail)
+        expect(mail).to receive(:deliver_later)
+
+        post :decline, mentoring_session_id: mentoring_session.id, id: mentorship_session2.id
       end
     end
 

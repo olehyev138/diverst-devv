@@ -35,7 +35,7 @@ RSpec.describe PollFieldsController, type: :controller do
             end
 
             it "returns response of a particular poll" do
-                2.times { FactoryGirl.create :poll_response, poll: poll }
+                2.times { create(:poll_response, poll: poll) }
                 expect(assigns[:responses].count).to eq 2
             end
         end
