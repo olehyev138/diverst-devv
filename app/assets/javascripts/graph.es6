@@ -3,7 +3,7 @@
 const MAX_LABEL_LENGTH = 13;
 const BAR_GROUP_SPACING = 0.3;
 const CHART_PADDING = 36;
-const AXIS_PADDING = 8;
+const AXIS_PADDING = 15;
 const HEIGHT_PER_ITEM = 50;
 
 class Graph {
@@ -62,6 +62,7 @@ class Graph {
         var graphObject = this;
         var stacked = this.stacked;
         var showControls = this.showControls;
+
         var data = this.data;
         var series = data.series;
         var select_string = buildSelectString(this);
@@ -85,7 +86,7 @@ class Graph {
                 .showControls(showControls)
                 .stacked(stacked);
 
-            chart.legend.margin({"bottom": 20});
+            chart.legend.margin({"bottom": 25});
 
             chart.xAxis
                 .tickFormat(function(d) {
