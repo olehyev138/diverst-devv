@@ -22,6 +22,15 @@
   outline: 0;
 }
 
+#range-selector .filter-btn {
+  border-color: $primary-color;
+}
+
+#range-selector .filter-btn:active,
+#range-selector .filter-btn:focus {
+  background-color: darken($primary-color, 5%);
+}
+
 #range-selector .range-btn:not(:last-child):not(:first-child) {
   border-left: 1px solid #777777;
   border-right: 1px solid #777777;
