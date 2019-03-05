@@ -137,6 +137,9 @@ jobs:
       - image: circleci/build-image:ubuntu-14.04-XXL-upstart-1189-5614f37
         command: /sbin/init
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "7a:55:cb:5c:8e:f2:a4:cc:a8:d0:23:6b:ec:96:dd:70"
       - checkout
       # Log the current branch
       - run:
