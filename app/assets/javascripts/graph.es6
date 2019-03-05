@@ -28,6 +28,9 @@ class Graph {
 
     updateData(input={}) {
         $.get(this.dataUrl, { input: input }, (data) => {
+            // If the data is invalid, don't try to render the graph
+            if ($.isEmptyObject(data) || !data.hasOwnProperty("series") || !data.hasOwnProperty("title"))
+              return;
             this.onDataUpdate(data);
         });
     }
@@ -73,7 +76,7 @@ class Graph {
         nv.addGraph(function() {
             chart = nv.models.multiBarHorizontalChart()
                 .height(HEIGHT_PER_ITEM * items)
-                .margin({"left": 80, "right": 20})
+                .margin({"left": 82, "right": 20})
                 .barColor(d3.scale.category20().range())
                 .duration(160)
                 .groupSpacing(BAR_GROUP_SPACING)
