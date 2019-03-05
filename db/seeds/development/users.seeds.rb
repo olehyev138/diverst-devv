@@ -113,7 +113,7 @@ after 'development:enterprise' do
 
         user.save
       end
-    RebuildElasticsearchIndexJob.perform_now(model_name: 'User', enterprise: enterprise)
+    RebuildElasticsearchIndexJob.perform_now('User')
     end
   end
 end

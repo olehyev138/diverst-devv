@@ -1,4 +1,4 @@
-class RebuildElasticsearchIndexJob < ActiveJob::Base
+class RebuildElasticsearchJob < ActiveJob::Base
     queue_as :default
   
     def perform

@@ -61,7 +61,7 @@ class Segment < BaseClass
     end
 
     def update_indexes
-        RebuildElasticsearchIndexJob.perform_later(model_name: 'User', enterprise: enterprise)
+        RebuildElasticsearchIndexJob.perform_later('User')
     end
 
     def self.update_all_members
