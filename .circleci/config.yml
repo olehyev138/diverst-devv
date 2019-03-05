@@ -150,24 +150,24 @@ jobs:
           # This branch if available
           - v1-dep-{{ .Branch }}-
           # Default branch if not
-          - v1-dep-staging-
+          - v1-dep-development-
           # Any branch if there are none on the default branch - this should be unnecessary if you have your default branch configured correctly
           - v1-dep-
       # This is based on your 1.0 configuration file or project settings
       - run: gem install bundler
       - run: bundle install
       - run:
-          name: Deploy to AWS if tests pass and branch is Staging
-          command: bundle exec cap staging deploy
+          name: Deploy to AWS if tests pass and branch is Development
+          command: bundle exec cap development deploy
 
 workflows:
   version: 2
   build-deploy:
     jobs:
       - build
-      #- deploy:
-          #requires:
-            #- build
-          #filters:
-            #branches:
-              #only: staging
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: development
