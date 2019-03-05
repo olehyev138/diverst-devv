@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :budget do
     description { Faker::Lorem.sentence }
     association :group, factory: :group

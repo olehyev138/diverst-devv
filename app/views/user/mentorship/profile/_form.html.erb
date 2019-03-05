@@ -24,6 +24,20 @@
             </div>
           </div>
           <div class="row row--spacing-bottom">
+            <div class="col md-6">
+              <p class="field__hint">Accept requests to be a mentor?</p>
+              <%= f.hidden_field :accepting_mentor_requests, value: 0 %>
+              <%= f.input :accepting_mentor_requests, label: false %>
+            </div>
+
+            <div class="col md-6">
+              <p class="field__hint">Accept requests to be a mentee?</p>
+              <%= f.hidden_field :accepting_mentee_requests, value: 0 %>
+              <%= f.input :accepting_mentee_requests, label: false %>
+            </div>
+          </div>
+          <br>
+          <div class="row row--spacing-bottom">
             <div class="col-xs-12">
               <p class="field__hint">Your default time_zone:</p>
               <%= f.input :time_zone %>

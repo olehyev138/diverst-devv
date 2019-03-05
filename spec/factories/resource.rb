@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :resource do
     title { Faker::Lorem.sentence(3) }
     file_file_name { 'test.csv' }

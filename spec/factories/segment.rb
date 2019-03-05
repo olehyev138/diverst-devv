@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :segment do
     name { Faker::Lorem.sentence(3) }
     enterprise

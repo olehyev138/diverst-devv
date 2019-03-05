@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Expense, type: :model do
 
     describe 'validations' do
-        let(:expense) { FactoryGirl.build_stubbed(:expense) }
+        let(:expense) { build_stubbed(:expense) }
 
         it{ expect(expense).to validate_presence_of(:name) }
         it{ expect(expense).to validate_presence_of(:enterprise) }

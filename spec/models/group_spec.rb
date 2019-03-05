@@ -4,7 +4,7 @@ RSpec.describe Group, :type => :model do
     include ActiveJob::TestHelper
 
     describe 'validations' do
-        let(:group) { FactoryGirl.build_stubbed(:group) }
+        let(:group) { build_stubbed(:group) }
 
         it{ expect(group).to validate_presence_of(:name) }
 
@@ -162,7 +162,7 @@ RSpec.describe Group, :type => :model do
     end
 
     describe '#yammer_group_id' do
-      let(:group) { FactoryGirl.build_stubbed(:group) }
+      let(:group) { build_stubbed(:group) }
 
       subject { group.yammer_group_id }
 

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :enterprise do
     name { Faker::Company.name }
     created_at { Date.today }

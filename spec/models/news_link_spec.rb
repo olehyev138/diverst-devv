@@ -27,8 +27,8 @@ RSpec.describe NewsLink, type: :model do
         .rejecting('text/xml', 'text/plain') }
 
     it 'validates url length' do
-      expect(FactoryGirl.build(:news_link, url: 'www.goodurl.com')).to be_valid
-      expect(FactoryGirl.build(:news_link, url: "badurl" * 300 )).to_not be_valid
+      expect(build(:news_link, url: 'www.goodurl.com')).to be_valid
+      expect(build(:news_link, url: "badurl" * 300 )).to_not be_valid
     end
   end
 

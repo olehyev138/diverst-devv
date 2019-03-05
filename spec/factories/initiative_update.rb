@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
     factory :initiative_update do
     	association :owner, factory: :user
     	association :initiative
