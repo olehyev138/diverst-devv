@@ -28,6 +28,9 @@ class Graph {
 
     updateData(input={}) {
         $.get(this.dataUrl, { input: input }, (data) => {
+            // If the data is invalid, don't try to render the graph
+            if ($.isEmptyObject(data) || !data.hasOwnProperty("series") || !data.hasOwnProperty("title"))
+              return;
             this.onDataUpdate(data);
         });
     }
