@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
     factory :expense do
         association :enterprise
         association :category, factory: :expense_category

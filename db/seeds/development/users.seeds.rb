@@ -38,7 +38,7 @@ after 'development:enterprise' do
       )
 
       if enterprise.name == "Diverst Inc"
-          FactoryGirl.create_list(:user, rand(250..500), 
+          FactoryBot.create_list(:user, rand(250..500), 
             enterprise: enterprise, 
             password: 'password', 
             password_confirmation: 'password', 
@@ -46,7 +46,7 @@ after 'development:enterprise' do
             invitation_accepted_at: Faker::Time.between(3.days.ago, Time.current))
           
           rand(2..5).times do |i|
-            FactoryGirl.create(:user,
+            FactoryBot.create(:user,
               email: "admin#{i}@diverst.com",
               enterprise: enterprise,
               password: 'password',

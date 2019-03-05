@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Checklist, type: :model do
     describe 'validations' do
-        let(:checklist) { FactoryGirl.build_stubbed(:checklist) }
+        let(:checklist) { build_stubbed(:checklist) }
 
         it { expect(checklist).to belong_to(:budget) }
         it { expect(checklist).to belong_to(:initiative) }

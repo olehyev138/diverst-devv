@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe GroupMessagesSegment, type: :model do
 
     describe 'validations' do
-        let(:group_messages_segment) { FactoryGirl.build_stubbed(:group_messages_segment) }
+        let(:group_messages_segment) { build_stubbed(:group_messages_segment) }
 
         it{ expect(group_messages_segment).to validate_presence_of(:group_message_id).on(:save) }
         it{ expect(group_messages_segment).to validate_presence_of(:segment_id).on(:save) }

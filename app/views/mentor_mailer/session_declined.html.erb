@@ -1,0 +1,3 @@
+<p>Hello <%= @user.name %>!</p>
+
+<p><%= @declined_user.name %> has declined your mentoring session scheduled from <%= @mentoring_session.start.in_time_zone(@user.default_time_zone).strftime("%m/%d/%Y %I:%M %p") %> to <%= @mentoring_session.end.in_time_zone(@user.default_time_zone).strftime("%m/%d/%Y %I:%M %p") %>.</p>

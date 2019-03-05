@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :outcome do
     name { Faker::Commerce.product_name }
 
