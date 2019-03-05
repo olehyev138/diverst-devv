@@ -157,8 +157,11 @@ jobs:
       - run: gem install bundler
       - run: bundle install
       - run:
+          name: Check if we can deploy to testing
+          command: bundle exec cap testing deploy:check
+      - run:
           name: Deploy to AWS if tests pass and branch is Development
-          command: bundle exec cap development deploy
+          command: bundle exec cap testing deploy
 
 workflows:
   version: 2
