@@ -5,10 +5,6 @@ class BaseClass < ActiveRecord::Base
   include ::BaseElasticsearch
   include ::BaseGraph
 
-  def update_elasticsearch_index(action)
-    IndexElasticsearchJob.perform_later(self.class.name, id, action)
-  end
-
   def self.inherited(child)
     super
     child.instance_eval do

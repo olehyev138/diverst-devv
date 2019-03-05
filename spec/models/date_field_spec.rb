@@ -32,7 +32,7 @@ RSpec.describe DateField, type: :model do
       user_four.info.merge(fields: [field_one, field_two], form_data: { field_one.id => (Date.today + 15.days).to_s, field_two.id => (Date.today + 30.days).to_s })
       [user_one, user_two, user_three, user_four].each(&:save!)
 
-      RebuildElasticsearchIndexJob.perform_now(model_name: 'User', enterprise: enterprise)
+      RebuildElasticsearchIndexJob.perform_now('User')
       User.__elasticsearch__.refresh_index!(index: User.es_index_name(enterprise: enterprise))
     end
 

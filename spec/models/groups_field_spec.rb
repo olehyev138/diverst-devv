@@ -29,7 +29,7 @@ RSpec.describe GroupsField, type: :model do
       user_one.info.merge(fields: [field_two], form_data: { field_two.id => "Yes" })
       user_one.save!
 
-      RebuildElasticsearchIndexJob.perform_now(model_name: 'User', enterprise: enterprise)
+      RebuildElasticsearchIndexJob.perform_now('User')
       User.__elasticsearch__.refresh_index!(index: User.es_index_name(enterprise: enterprise))
     end
 
