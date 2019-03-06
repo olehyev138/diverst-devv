@@ -12,7 +12,7 @@ RSpec.describe AnswerComment, type: :model do
   end
 
   describe ".unapproved" do
-    fit "returns the answer_comments that have not been approved" do
+    it "returns the answer_comments that have not been approved" do
       create_list(:answer_comment, 2, :approved => false)
       expect(AnswerComment.unapproved.count).to eq(2)
     end
