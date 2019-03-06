@@ -32,6 +32,10 @@ class UserGroup < BaseClass
           indexes :name, type: :keyword
         end
       end
+      indexes :user do
+        indexes :mentor, type: :boolean
+        indexes :mentee, type: :boolean
+      end
     end
   end
 
@@ -41,8 +45,8 @@ class UserGroup < BaseClass
         only: [:user_id, :group_id, :created_at],
         include: { group: {
           only: [:enterprise_id, :parent_id, :name],
-          include: { parent: { only: [:name] } }
-        }}
+          include: { parent: { only: [:name] } },
+        }, user: { only: [:mentor, :mentee] }}
       )
     )
   end
