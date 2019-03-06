@@ -49,13 +49,12 @@ module BaseSearch
     def add_filter_clause(field:, value:, bool_op: :must, multi: false)
       return if not (agg = @root_aggs.dig(:aggs, :agg, :filter, :bool))
 
-      clause = agg.dig(bool_op) || { bool_op => {} }
+      clause = agg.dig(bool_op) || []
 
       terms_key = multi ? 'terms' : 'term'
-      clause[bool_op].merge!({ terms_key => { field => value } })
+      clause << { terms_key => { field => value } }
 
-      @root_aggs[:aggs][:agg][:filter][:bool].merge!(clause)
-
+      @root_aggs[:aggs][:agg][:filter][:bool][bool_op] = clause
       self
     end
 

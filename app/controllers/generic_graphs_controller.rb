@@ -396,42 +396,24 @@ class GenericGraphsController < ApplicationController
   def mentorship
     respond_to do |format|
       format.json {
-        data = current_user.enterprise.groups.all_parents.map { |g|
-          {
-            y: g.members.active.mentors_and_mentees.count,
-            name: g.name,
-            drilldown: g.name
-          }
-        }
-        drilldowns = current_user.enterprise.groups.includes(:children).all_parents.map { |g|
-          {
-            name: g.name,
-            id: g.name,
-            data: g.children.map {|child| [child.name, child.members.active.mentors_and_mentees.active.count]}
-          }
-        }
+        graph = UserGroup.get_graph
+        graph.set_enterprise_filter(field: 'group.enterprise_id', value: current_user.enterprise_id)
 
-        render json: {
-          type: 'bar',
-          highcharts: {
-            series: [{
-              title: 'Number of mentors/mentees',
-              data: data
-            }],
-            drilldowns: drilldowns,
-            #categories: categories, <- for some reason this is causing drilldowns to not appear
-            xAxisTitle: "#{c_t(:erg)}"
-          },
-          hasAggregation: false
-        }
-      }
-      format.csv {
-        GenericGraphsMentorshipDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
-        redirect_to :back
+        graph.formatter.y_label = '# Mentors & Mentees'
+        graph.formatter.x_label = 'Groups'
+        graph.formatter.title = 'Mentors & Mentees per Group'
+
+        graph.query = graph.query.bool_filter_agg { |qq| qq.terms_agg(field: 'group.name') }
+        graph.query.add_filter_clause(field: 'user.mentor', value: true, bool_op: :should)
+        graph.query.add_filter_clause(field: 'user.mentee', value: true, bool_op: :should)
+
+        graph.drilldown_graph(parent_field: 'group.parent.name')
+
+        render json: graph.build
       }
     end
   end
+
 
   def mentoring_sessions
     respond_to do |format|
