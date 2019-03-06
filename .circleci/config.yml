@@ -159,7 +159,8 @@ jobs:
       # This is based on your 1.0 configuration file or project settings
       - run: gem install bundler
       - run: bundle install
-      - run: eval `ssh-agent` && ssh-add ~/.ssh/id_rsa*
+      - run: eval "$(ssh-agent -s)"
+      - run: ssh-add -K ~/.ssh/id_rsa
       - run:
           name: Check if we can deploy to testing
           command: bundle exec cap testing deploy:check
@@ -177,4 +178,4 @@ workflows:
             - build
           filters:
             branches:
-              only: development
+              only: circleci
