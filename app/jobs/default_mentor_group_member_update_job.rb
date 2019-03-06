@@ -19,7 +19,7 @@ class DefaultMentorGroupMemberUpdateJob < ActiveJob::Base
             user_group = UserGroup.where(:group_id => group.id, :user_id => user.id).first
             
             if user_group.nil?
-                UserGroup.create(:group_id => group.id, :user_id => user.id)
+                UserGroup.create!(:group_id => group.id, :user_id => user_id, :accepted_member => group.pending_users.disabled?)
             end
         end
     end
