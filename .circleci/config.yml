@@ -160,7 +160,7 @@ jobs:
       - run: gem install bundler
       - run: bundle install
       - run: eval `ssh-agent -s`
-      - run: ssh-add -K ~/.ssh/id_rsa
+      - run: ssh-add
       - run:
           name: Check if we can deploy to testing
           command: bundle exec cap testing deploy:check
