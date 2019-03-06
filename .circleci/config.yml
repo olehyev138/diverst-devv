@@ -161,7 +161,7 @@ jobs:
       - run: bundle install
       - run:
           name: Deploy to AWS if tests pass and branch is Development
-          command: eval `ssh-agent` && ssh-add ~/.ssh/id_rsa && bundle exec cap testing deploy
+          command: eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_rsa* && cap testing deploy
 
 workflows:
   version: 2
