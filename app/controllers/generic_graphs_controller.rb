@@ -417,6 +417,11 @@ class GenericGraphsController < ApplicationController
 
         render json: graph.build
       }
+      format.csv {
+        GenericGraphsMentorshipDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
+      }
     end
   end
 
@@ -444,6 +449,11 @@ class GenericGraphsController < ApplicationController
 
         render json: graph.build
       }
+      format.csv {
+        GenericGraphsMentoringSessionsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
+      }
     end
   end
 
@@ -461,6 +471,11 @@ class GenericGraphsController < ApplicationController
         graph.formatter.add_elements(graph.search)
 
         render json: graph.build
+      }
+      format.csv {
+        GenericGraphsMentoringInterestsDownloadJob.perform_later(current_user.id, current_user.enterprise.id)
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
       }
     end
   end
