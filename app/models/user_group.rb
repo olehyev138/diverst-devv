@@ -33,6 +33,7 @@ class UserGroup < BaseClass
         end
       end
       indexes :user do
+        indexes :active, type: :boolean
         indexes :mentor, type: :boolean
         indexes :mentee, type: :boolean
       end
@@ -46,7 +47,7 @@ class UserGroup < BaseClass
         include: { group: {
           only: [:enterprise_id, :parent_id, :name],
           include: { parent: { only: [:name] } },
-        }, user: { only: [:mentor, :mentee] }}
+        }, user: { only: [:mentor, :mentee, :active] }}
       )
     )
   end
