@@ -19,6 +19,11 @@ class GenericGraphsController < ApplicationController
 
         render json: graph.build
       }
+      format.csv {
+        GenericGraphsGroupPopulationDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
+      }
     end
   end
 
