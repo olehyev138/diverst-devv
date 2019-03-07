@@ -122,13 +122,12 @@ module ApplicationHelper
   end
 
   def show_sponsor?(object)
-    ["sponsor_name"].each do |m|
+    m = 'sponsor_name'
       if object.respond_to? m.to_sym
         if object.public_send(m.to_sym).present?
           yield
         end
       end
-    end
   end
 
   def show_sponsor_media?(object, m)
