@@ -64,9 +64,9 @@ class Graph < BaseClass
     # define aggregation query
     if aggregation.present?
       if field.class == GroupsField
-        query.terms_agg(field: 'user_groups.group.name') { |q|
+        query.terms_agg(field: 'user_groups.group.name', min_doc_count: 0) { |q|
           q.reverse_nested_agg { |qq|
-            qq.terms_agg(field: aggregation.elasticsearch_field) { |qqq|
+            qq.terms_agg(field: aggregation.elasticsearch_field, min_doc_count: 0) { |qqq|
               qqq.date_range_agg(field: 'created_at', range: date_range)
             }
           }
@@ -81,8 +81,8 @@ class Graph < BaseClass
         }
       else
         query = query.reverse_nested_agg { |q|
-          q.terms_agg(field: field.elasticsearch_field) { |qq|
-            qq.terms_agg(field: aggregation.elasticsearch_field) { |qqq|
+          q.terms_agg(field: field.elasticsearch_field, min_doc_count: 0) { |qq|
+            qq.terms_agg(field: aggregation.elasticsearch_field, min_doc_count: 0) { |qqq|
               qqq.date_range_agg(field: 'created_at', range: date_range)
             }
           }
@@ -90,13 +90,13 @@ class Graph < BaseClass
       end
     else
       if field.class == GroupsField
-        query.terms_agg(field: 'user_groups.group.name') { |q|
+        query.terms_agg(field: 'user_groups.group.name', min_doc_count: 0) { |q|
           q.reverse_nested_agg { |qq|
             qq.date_range_agg(field: 'created_at', range: date_range)
           }
         }
       elsif field.class == SegmentsField
-        query.terms_agg(field: 'users_segments.segment.name') { |q|
+        query.terms_agg(field: 'users_segments.segment.name', min_doc_count: 0) { |q|
           q.reverse_nested_agg { |qq|
             qq.date_range_agg(field: 'created_at', range: date_range)
           }
@@ -116,7 +116,9 @@ class Graph < BaseClass
 
   def groups_segments_filter_query(graph, query, groups, segments)
     graph.get_new_query.nested_agg(path: 'user_groups') { |q|
-      q.bool_filter_agg(field: 'user_groups.group.name', value: groups, multi: true, negate: true) { |_| query }
+      q.bool_filter_agg { |_| query }
+      q.add_filter_clause(field: 'user_groups.group.name', value: groups,
+        bool_op: :must_not, multi: true)
     }
   end
 
