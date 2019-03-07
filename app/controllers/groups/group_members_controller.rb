@@ -1,8 +1,8 @@
 class Groups::GroupMembersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
-  before_action :set_member, only: [:edit, :update, :destroy,:accept_pending, :remove_member]
-  before_action :set_user, only: [:show]
+  before_action :set_member, only: [:destroy,:accept_pending, :remove_member]
+  before_action :set_user, only: [:show, :edit, :update]
   after_action :verify_authorized
 
   layout 'erg'
@@ -80,6 +80,27 @@ class Groups::GroupMembersController < ApplicationController
   def show
     authorize [@group, @user], :update?, :policy_class => GroupMemberPolicy    
   end
+
+  def edit
+    authorize [@group, @user], :update?, :policy_class => GroupMemberPolicy
+    @is_admin_view = true
+  end
+
+  def update
+    authorize [@group, @user], :update?, :policy_class => GroupMemberPolicy
+
+    @user.assign_attributes(user_params)
+    @user.info.merge(fields: @user.enterprise.fields, form_data: params['custom-fields'])
+
+    if @user.save
+      flash[:notice] = "Your user was updated"
+      redirect_to :back
+    else
+      flash[:alert] = "Your user was not updated. Please fix the errors"
+      render :edit
+    end
+  end
+
 
   def add_members
     authorize [@group], :create?, :policy_class => GroupMemberPolicy
@@ -199,6 +220,85 @@ class Groups::GroupMembersController < ApplicationController
     params.require(:group).permit(
       member_ids: []
       )
+  end
+
+  def user_params
+    params.require(:user).permit(
+      :avatar,
+      :email,
+      :first_name,
+      :last_name,
+      :biography,
+      :active,
+      :time_zone,
+      :user_role_id,
+      :groups_notifications_frequency,
+      :groups_notifications_date,
+      :custom_policy_group,
+      policy_group_attributes: [
+        :id,
+        :campaigns_index,
+        :campaigns_create,
+        :campaigns_manage,
+        :events_index,
+        :events_create,
+        :events_manage,
+        :polls_index,
+        :polls_create,
+        :polls_manage,
+        :group_messages_index,
+        :group_messages_create,
+        :group_messages_manage,
+        :groups_index,
+        :groups_create,
+        :groups_manage,
+        :groups_members_manage,
+        :groups_members_index,
+        :metrics_dashboards_index,
+        :metrics_dashboards_create,
+        :news_links_index,
+        :news_links_create,
+        :news_links_manage,
+        :enterprise_resources_index,
+        :enterprise_resources_create,
+        :enterprise_resources_manage,
+        :segments_index,
+        :segments_create,
+        :segments_manage,
+        :users_index,
+        :users_manage,
+        :initiatives_index,
+        :initiatives_create,
+        :initiatives_manage,
+        :budget_approval,
+        :logs_view,
+        :groups_budgets_index,
+        :groups_budgets_request,
+        :budget_approval,
+        :group_leader_manage,
+        :sso_manage,
+        :permissions_manage,
+        :diversity_manage,
+        :manage_posts,
+        :branding_manage,
+        :global_calendar,
+        :manage_all,
+        :enterprise_manage,
+        :groups_budgets_manage,
+        :group_leader_index,
+        :groups_insights_manage,
+        :groups_layouts_manage,
+        :group_resources_index,
+        :group_resources_create,
+        :group_resources_manage,
+        :social_links_index,
+        :social_links_create,
+        :social_links_manage,
+        :group_settings_manage,
+        :group_posts_index,
+        :mentorship_manage
+      ]
+    )
   end
 
   private

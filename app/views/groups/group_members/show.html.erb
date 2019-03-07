@@ -1,9 +1,9 @@
 <div class="content__header">
-  <h1>User details</h1>
+  <h1>Group Member details</h1>
   <div class="flex-row flex-row--middle">
     <% if UserPolicy.new(current_user, @user).update? %>
       <div class="flex-row__cell">
-        <%= link_to "Edit User", edit_user_path(@user), class: "btn btn--primary" %>
+        <%= link_to "Edit User", edit_group_group_member_path(@group, @user), class: "btn btn--primary" %>
       </div>
     <% end %>
     <% if  @user.has_answered_group_surveys? %>
