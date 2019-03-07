@@ -19,6 +19,11 @@ class GenericGraphsController < ApplicationController
 
         render json: graph.build
       }
+      format.csv {
+        GenericGraphsGroupPopulationDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
+      }
     end
   end
 
@@ -358,7 +363,7 @@ class GenericGraphsController < ApplicationController
         current_user.enterprise.groups.each do |group|
           graph.query = graph.query
             .filter_agg(field: 'folder.group_id', value: group.id) { |q|
-              q.terms_agg(field: 'created_at', order_field: '_term', order_dir: 'asc')
+            q.terms_agg(field: 'created_at', order_field: '_term', order_dir: 'asc')
           }
 
           elements = graph.formatter.list_parser.parse_list(graph.search)
@@ -396,34 +401,21 @@ class GenericGraphsController < ApplicationController
   def mentorship
     respond_to do |format|
       format.json {
-        data = current_user.enterprise.groups.all_parents.map { |g|
-          {
-            y: g.members.active.mentors_and_mentees.count,
-            name: g.name,
-            drilldown: g.name
-          }
-        }
-        drilldowns = current_user.enterprise.groups.includes(:children).all_parents.map { |g|
-          {
-            name: g.name,
-            id: g.name,
-            data: g.children.map {|child| [child.name, child.members.active.mentors_and_mentees.active.count]}
-          }
-        }
+        graph = UserGroup.get_graph
+        graph.set_enterprise_filter(field: 'group.enterprise_id', value: current_user.enterprise_id)
 
-        render json: {
-          type: 'bar',
-          highcharts: {
-            series: [{
-              title: 'Number of mentors/mentees',
-              data: data
-            }],
-            drilldowns: drilldowns,
-            #categories: categories, <- for some reason this is causing drilldowns to not appear
-            xAxisTitle: "#{c_t(:erg)}"
-          },
-          hasAggregation: false
-        }
+        graph.formatter.y_label = '# of Mentors or Mentees'
+        graph.formatter.x_label = 'Groups'
+        graph.formatter.title = 'Users interested in Mentorship'
+
+        graph.query = graph.query.bool_filter_agg { |qq| qq.terms_agg(field: 'group.name') }
+        graph.query.add_filter_clause(field: 'user.active', value: true, bool_op: :must)
+        graph.query.add_filter_clause(field: 'user.mentor', value: true, bool_op: :should)
+        graph.query.add_filter_clause(field: 'user.mentee', value: true, bool_op: :should)
+
+        graph.drilldown_graph(parent_field: 'group.parent.name')
+
+        render json: graph.build
       }
       format.csv {
         GenericGraphsMentorshipDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))
@@ -434,37 +426,28 @@ class GenericGraphsController < ApplicationController
   end
 
   def mentoring_sessions
+    date_range = parse_date_range(params[:input])
+
     respond_to do |format|
       format.json {
-        data = current_user.enterprise.groups.all_parents.map { |g|
-          {
-            y: g.members.active.mentors_and_mentees.joins(:mentoring_sessions).where("mentoring_sessions.created_at > ? ", 1.month.ago).count,
-            name: g.name,
-            drilldown: g.name
+        graph = MentoringSession.get_graph
+        graph.set_enterprise_filter(field: 'creator.enterprise_id', value: current_user.enterprise_id)
+
+        graph.formatter.y_label = 'Creator'
+        graph.formatter.x_label = '# of Mentoring Sessions'
+        graph.formatter.title = 'Mentoring Sessions'
+
+        graph.query = graph.query.bool_filter_agg { |qq| qq.terms_agg(field: 'creator.last_name') { |qqq|
+            qqq.date_range_agg(field: 'created_at', range: date_range)
           }
         }
 
-        drilldowns = current_user.enterprise.groups.includes(:children).all_parents.map { |g|
-          {
-            name: g.name,
-            id: g.name,
-            data: g.children.map {|child| [child.name, child.members.active.mentors_and_mentees.joins(:mentoring_sessions).where("mentoring_sessions.created_at > ?", 1.month.ago).count]}
-          }
-        }
+        graph.query.add_filter_clause(field: 'creator.active', value: true, bool_op: :must)
+        graph.formatter.y_parser.parse_chain = graph.formatter.y_parser.date_range
 
-        render json: {
-          type: 'bar',
-          highcharts: {
-            series: [{
-              title: 'Number of mentoring sessions',
-              data: data
-            }],
-            drilldowns: drilldowns,
-            #categories: categories, <- for some reason this is causing drilldowns to not appear
-            xAxisTitle: "#{c_t(:erg)}"
-          },
-          hasAggregation: false
-        }
+        graph.formatter.add_elements(graph.search)
+
+        render json: graph.build
       }
       format.csv {
         GenericGraphsMentoringSessionsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))
@@ -477,27 +460,17 @@ class GenericGraphsController < ApplicationController
   def mentoring_interests
     respond_to do |format|
       format.json {
-        data = current_user.enterprise.mentoring_interests.includes(:users).map { |mi|
-          {
-            y: mi.users.count,
-            name: mi.name,
-            drilldown: nil
-          }
-        }
+        graph = MentorshipInterest.get_graph
+        graph.set_enterprise_filter(field: 'user.enterprise_id', value: current_user.enterprise_id)
 
-        render json: {
-          type: 'bar',
-          highcharts: {
-            series: [{
-              title: 'Number of mentoring sessions',
-              data: data
-            }],
-            drilldowns: [],
-            #categories: categories, <- for some reason this is causing drilldowns to not appear
-            xAxisTitle: "#{c_t(:erg)}"
-          },
-          hasAggregation: false
-        }
+        graph.formatter.y_label = 'Mentoring Interests'
+        graph.formatter.x_label = '# Users'
+        graph.formatter.title = 'Mentoring Interests'
+
+        graph.query  = graph.query.terms_agg(field: 'mentoring_interest.name')
+        graph.formatter.add_elements(graph.search)
+
+        render json: graph.build
       }
       format.csv {
         GenericGraphsMentoringInterestsDownloadJob.perform_later(current_user.id, current_user.enterprise.id)
@@ -746,43 +719,43 @@ class GenericGraphsController < ApplicationController
     end
   end
 
-    def demo_top_news_by_views
-        respond_to do |format|
-            format.json {
-              news_feed_link_ids = NewsFeedLink.where(:news_feed_id => NewsFeed.where(:group_id => current_user.enterprise.groups.ids).ids).ids
-              news_links = NewsLink.select("news_links.title, COUNT(views.id) view_count").joins(:news_feed_link, :news_feed_link => :views).where(:news_feed_links => {:id => news_feed_link_ids}).order("view_count DESC")
+  def demo_top_news_by_views
+    respond_to do |format|
+      format.json {
+        news_feed_link_ids = NewsFeedLink.where(:news_feed_id => NewsFeed.where(:group_id => current_user.enterprise.groups.ids).ids).ids
+        news_links = NewsLink.select("news_links.title, COUNT(views.id) view_count").joins(:news_feed_link, :news_feed_link => :views).where(:news_feed_links => {:id => news_feed_link_ids}).order("view_count DESC")
 
-              values = [9,2,5,1,11,10,9,5,11,4,1,8]
-              i = 0
+        values = [9,2,5,1,11,10,9,5,11,4,1,8]
+        i = 0
 
-              data = news_links.map do |news_link|
-                  {
-                      y: values[i+=1],
-                      name: news_link.title
-                  }
-              end
-
-              render json: {
-                         type: 'bar',
-                         highcharts: {
-                             series: [{
-                                 title: "# of views per news link",
-                                 data: data
-                             }],
-                             #categories: categories,
-                             xAxisTitle: "Resource",
-                             yAxisTitle: "# of views per news link"
-                         },
-                         hasAggregation: false
-                     }
-            }
-            format.csv {
-              GenericGraphsTopNewsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, demo: true)
-              flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
-              redirect_to :back
-            }
+        data = news_links.map do |news_link|
+          {
+            y: values[i+=1],
+            name: news_link.title
+          }
         end
+
+        render json: {
+          type: 'bar',
+          highcharts: {
+            series: [{
+              title: "# of views per news link",
+              data: data
+            }],
+            #categories: categories,
+            xAxisTitle: "Resource",
+            yAxisTitle: "# of views per news link"
+          },
+          hasAggregation: false
+        }
+      }
+      format.csv {
+        GenericGraphsTopNewsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, demo: true)
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
+      }
     end
+  end
 
   def authorize_dashboards
     authorize MetricsDashboard, :index?

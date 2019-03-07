@@ -41,14 +41,21 @@ module BaseSearch
       base_agg(agg, block)
     end
 
-    def bool_filter_agg(field:, value:, multi: false, negate: false, &block)
-      must_key = negate ? 'must_not' : 'must'
-      terms_key = multi ? 'terms' : 'term'
-
-      agg = { agg: { filter: { bool: {
-        must_key => { terms_key => { field => value } } } } } }
-
+    def bool_filter_agg(&block)
+      agg = {agg: { filter: { bool: {}}}}
       base_agg(agg, block)
+    end
+
+    def add_filter_clause(field:, value:, bool_op: :must, multi: false)
+      return if not (agg = @root_aggs.dig(:aggs, :agg, :filter, :bool))
+
+      clause = agg.dig(bool_op) || []
+
+      terms_key = multi ? 'terms' : 'term'
+      clause << { terms_key => { field => value } }
+
+      @root_aggs[:aggs][:agg][:filter][:bool][bool_op] = clause
+      self
     end
 
     # Creates a date range aggregation
@@ -81,8 +88,8 @@ module BaseSearch
     # @field - field to aggregate on
     # @order_field - optional, default: _count, field to order on
     # @order_dir - order direction, deffault: desc, dirction in which to order
-    def terms_agg(field:, size: 100, order_field: '_count', order_dir: 'desc', &block)
-      agg = { agg: { terms: { field: field, size: size, order: { order_field => order_dir } } } }
+    def terms_agg(field:, size: 100, order_field: '_count', order_dir: 'desc', min_doc_count: 1, &block)
+      agg = { agg: { terms: { field: field, size: size, min_doc_count: min_doc_count, order: { order_field => order_dir } } } }
       base_agg(agg, block)
     end
 

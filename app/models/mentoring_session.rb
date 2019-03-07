@@ -40,6 +40,28 @@ class MentoringSession < BaseClass
     after_update    :notify_users_on_update
     after_destroy   :notify_users_on_destroy
 
+    settings do
+      mappings dynamic: false do
+        indexes :created_at, type: :date
+        indexes :creator do
+          indexes :enterprise_id
+          indexes :active, type: :boolean
+          indexes :first_name, type: :keyword, copy_to: :full_name
+          indexes :last_name, type: :keyword, copy_to: :full_name
+          indexes :full_name, type: :keyword
+        end
+      end
+    end
+
+    def as_indexed_json(options = {})
+      self.as_json(
+        options.merge(
+          only: [:created_at],
+          include: { creator: { only: [:enterprise_id, :active, :first_name, :last_name, :name] } },
+        )
+      )
+    end
+
     def old_session?
         return self.end < Date.today
     end
