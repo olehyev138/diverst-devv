@@ -119,9 +119,12 @@ module BaseSearch
         #   - call it, passing a new Query object
         #   - build the returned Query object, pull out the aggs hash
         #   - nest the pulled out aggs hash within our current aggregation hash
-        agg[:agg].merge!({ aggs:
-          (block.call ElasticsearchQuery.new).build[:aggs]
-        })
+        response = (block.call ElasticsearchQuery.new)
+        if response.present?
+          agg[:agg].merge!({ aggs:
+            response.build[:aggs]
+          })
+        end
       end
 
       @root_aggs[:aggs].merge! agg
@@ -142,6 +145,7 @@ module BaseSearch
       # wrap query in a enterprise_id filter
       query = self.get_query.filter_agg(field: enterprise_filter[:field],
                                         value: enterprise_filter[:value]) { |_| query }.build
+
       begin
         response = (self.__elasticsearch__.search query).response
 

@@ -6,13 +6,28 @@ class UsersSegment < BaseClass
   validates_uniqueness_of :user, scope: [:segment], :message => "is already a member of this segment"
 
   settings do
-    mappings dynamic: false do
+    # dynamic template for combined_info fields, maps them to keyword
+    mappings  dynamic_templates: [
+      {
+        string_template: {
+          match_mapping_type: 'string',
+          match: '*',
+          mapping: {
+            type: 'keyword',
+          }
+        }
+      }
+    ]  do
       indexes :segment  do
         indexes :enterprise_id, type: :integer
         indexes :name, type: :keyword
         indexes :parent do
           indexes :name, type: :keyword
         end
+      end
+      indexes :user do
+        indexes :enterprise_id, type: :integer
+        indexes :created_at, type: :date
       end
     end
   end
@@ -23,8 +38,13 @@ class UsersSegment < BaseClass
         include: { segment: {
           only: [:enterprise_id, :name],
           include: { parent: { only: [:name] } }
-        }}
+        }, user: { only: [:created_at, :enterprise_id] }},
+        methods: [:user_combined_info]
       )
     )
+  end
+
+  def user_combined_info
+    user.combined_info
   end
 end
