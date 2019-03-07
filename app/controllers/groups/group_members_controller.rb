@@ -2,6 +2,7 @@ class Groups::GroupMembersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
   before_action :set_member, only: [:edit, :update, :destroy,:accept_pending, :remove_member]
+  before_action :set_user, only: [:show]
   after_action :verify_authorized
 
   layout 'erg'
@@ -74,6 +75,10 @@ class Groups::GroupMembersController < ApplicationController
         format.js
       end
     end
+  end
+
+  def show
+    authorize [@group, @user], :update?, :policy_class => GroupMemberPolicy    
   end
 
   def add_members
@@ -178,6 +183,10 @@ class Groups::GroupMembersController < ApplicationController
 
   def set_member
     @member = @group.members.find(params[:id])
+  end
+
+  def set_user 
+    @user = User.find(params[:id])
   end
 
   def group_member_params

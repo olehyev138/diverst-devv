@@ -3,6 +3,7 @@ class GroupMemberDatatable < AjaxDatatablesRails::Base
   def_delegator :@view, :user_path
   def_delegator :@view, :policy
   def_delegator :@view, :remove_member_group_group_member_path
+  def_delegator :@view, :group_group_member_path
 
   def initialize(view_context, group, members)
     super(view_context)
@@ -42,7 +43,7 @@ class GroupMemberDatatable < AjaxDatatablesRails::Base
   
   def generate_view_link(record)
     if GroupMemberPolicy.new(@user, [@group, record]).update?
-      link_to "#{record.name}", user_path(record)
+      link_to "#{record.name}", group_group_member_path(@group, record)
     else
       "#{record.name}"
     end

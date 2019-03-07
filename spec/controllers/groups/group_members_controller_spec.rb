@@ -286,6 +286,25 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
         end
     end
 
+    describe 'GET#show' do 
+        context 'when users is logged in' do 
+            login_user_from_let
+            before { get :show, group_id: group.id, id: user.id }
+
+            it 'renders show template' do 
+                expect(response).to render_template :show
+            end
+
+            it 'displays a user which is a group member' do 
+                expect(assigns[:user]).to eq user_group.user
+            end
+
+            it 'displays a valid group_member' do 
+                expect(assigns[:user]).to be_valid
+            end
+        end
+    end
+
     describe 'POST#add_members' do
         context 'when user is logged in' do
             login_user_from_let
