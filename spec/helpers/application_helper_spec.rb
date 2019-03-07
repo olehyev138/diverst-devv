@@ -184,57 +184,57 @@ RSpec.describe ApplicationHelper do
 		end
 
 		context 'returns global_settings_path' do 
-			it 'returns users_path' do 
+			it 'returns users_path when UserPolicy is true for .create?' do 
 				current_user.policy_group.update(users_manage: true)
 				expect(root_admin_path).to eq users_path
 			end
 
-			it 'returns edit_auth_enterprise_path' do  
+			it 'returns edit_auth_enterprise_path when EnterprisePolicy is true for .sso_manage?' do  
 				current_user.policy_group.update(sso_manage: true)
 				expect(root_admin_path).to eq edit_auth_enterprise_path(current_user.enterprise)
 			end
 
-			it 'returns policy_group_templates_path' do 
+			it 'returns policy_group_templates_path when EnterprisePolicy is true for .manage_permissions?' do 
 				current_user.policy_group.update(permissions_manage: true)
 				expect(root_admin_path).to eq policy_group_templates_path
 			end
 
-			it 'returns edit_fields_enterprise_path', skip: 'this fails due to precedence' do 
+			it 'returns edit_fields_enterprise_path when EnterprisePolicy is true for .edit_fields?', skip: 'this fails due to precedence' do 
 				current_user.policy_group.update(sso_manage: true)
 				expect(root_admin_path).to eq edit_fields_enterprise_path(current_user.enterprise)
 			end
 
-			it 'returns edit_branding_enterprise_path' do 
+			it 'returns edit_branding_enterprise_path when EnterprisePolicy is true for .manage_branding?' do 
 				current_user.policy_group.update(branding_manage: true)
 				expect(root_admin_path).to eq edit_branding_enterprise_path(current_user.enterprise)
 			end
 
-			it 'returns edit_custom_text_path', skip: 'fails due to precedence' do 
+			it 'returns edit_custom_text_path when EnterprisePolicy is true for .manage_branding?', skip: 'fails due to precedence' do 
 				current_user.policy_group.update(branding_manage: true)
 				expect(root_admin_path).to eq edit_custom_text_path(current_user.enterprise)
 			end
 
-			it 'returns emails_path', skip: 'fails due to precedence' do 
+			it 'returns emails_path when EnterprisePolicy is true for .manage_branding?', skip: 'fails due to precedence' do 
 				current_user.policy_group.update(branding_manage: true)
 				expect(root_admin_path).to eq emails_path(current_user.enterprise)
 			end
 
-			it 'returns integration_path', skip: 'fails due to precedence' do 
+			it 'returns integration_path when EnterprisePolicy is true for .sso_manage?', skip: 'fails due to precedence' do 
 				current_user.policy_group.update(sso_manage: true)
 				expect(root_admin_path).to eq integrations_path
 			end
 
-			it 'returns rewards_path' do 
+			it 'returns rewards_path when EnterprisePolicy is true for .diversity_manage?' do 
 				current_user.policy_group.update(diversity_manage: true)
 				expect(root_admin_path).to eq rewards_path
 			end
 
-			it 'returns logs_path' do 
+			it 'returns logs_path when LogPolicy is true for .index?' do 
 				current_user.policy_group.update(logs_view: true)
 				expect(root_admin_path).to eq logs_path
 			end
 
-			it 'returns edit_posts_enterprise_path', skip: 'fails due to precedence' do 
+			it 'returns edit_posts_enterprise_path when EnterprisePolicy is true for .sso_manage?', skip: 'fails due to precedence' do 
 				current_user.policy_group.update(manage_posts: true, groups_manage: true, group_settings_manage: true)
 				expect(root_admin_path).to eq edit_posts_enterprise_path(current_user.enterprise)
 			end
