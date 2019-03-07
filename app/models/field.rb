@@ -7,7 +7,7 @@ class Field < BaseClass
   
   has_many :yammer_field_mappings, foreign_key: :diverst_field_id, dependent: :delete_all
 
-  #after_commit on: [:update, :destroy] { update_elasticsearch_all_indexes(self.enterprise) }
+  after_commit on: [:update, :destroy] { update_elasticsearch_all_indexes }
 
   validates :title, presence: true
   validates :title, uniqueness: { scope: :enterprise_id },
