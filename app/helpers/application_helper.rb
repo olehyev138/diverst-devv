@@ -67,7 +67,7 @@ module ApplicationHelper
     return manage_erg_budgets_path if manage_erg_budgets_path
     return campaigns_path if CampaignPolicy.new(current_user, Campaign).create?
     return polls_path if PollPolicy.new(current_user, Poll).create?
-    return mentoring_path if MentoringInterestPolicy.new(current_user, MentoringInterest).index?
+    return mentoring_interests_path if MentoringInterestPolicy.new(current_user, MentoringInterest).index?
     return global_settings_path
   end
 
