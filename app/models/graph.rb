@@ -48,37 +48,8 @@ class Graph < BaseClass
     graph.formatter.filter_zeros = false        # filtering 0 values breaks stacked bar graphs
 
 
-    # Build query
-    # If aggregation field is present we use an additional nested terms query
-    # Lastly we filter on date for the User model.
-    query = graph.get_new_query
-    if aggregation.present?
-      query.terms_agg(field: field.elasticsearch_field, min_doc_count: 0) { |q|
-        q.terms_agg(field: aggregation.elasticsearch_field, min_doc_count: 0) { |qq|
-          qq.date_range_agg(field: 'user.created_at', range: date_range)
-        }
-      }
-    else
-      query.terms_agg(field: field.elasticsearch_field, min_doc_count: 1) { |q|
-        q.date_range_agg(field: 'user.created_at', range: date_range)
-      }
-    end
-
-    # wrap query in filter on groups & segments that we do *not* want included
-    graph.query = graph.get_new_query.bool_filter_agg { |_| query }
-    graph.query.add_filter_clause(field: 'group.name', value: groups, bool_op: :must_not, multi: true)
-    graph.query.add_filter_clause(field: 'segment.name', value: segments, bool_op: :must_not, multi: true)
-
-
-    # Parse response
-    # Nvd3 requires an irregular data format for nested term aggregations, use a helper to format it
-    elements =  graph.formatter.list_parser.parse_list(graph.search)
-    if aggregation.present?
-      graph.stacked_nested_terms(elements)
-    else
-      graph.formatter.y_parser.parse_chain = graph.formatter.y_parser.date_range
-      graph.formatter.add_elements(elements)
-    end
+    build_query(graph, date_range, groups, segments)
+    parse_query(graph)
 
     return graph.build
   end
@@ -100,6 +71,44 @@ class Graph < BaseClass
   end
 
   private
+
+  def build_query(graph, date_range, groups, segments)
+    # Build query
+    # If aggregation field is present we use an additional nested terms query
+    # Lastly we filter on date for the User model.
+    query = graph.get_new_query
+
+    if aggregation.present?
+      query.terms_agg(field: field.elasticsearch_field, min_doc_count: 0) { |q|
+        q.terms_agg(field: aggregation.elasticsearch_field, min_doc_count: 0) { |qq|
+          qq.date_range_agg(field: 'user.created_at', range: date_range)
+        }
+      }
+    else
+      query.terms_agg(field: field.elasticsearch_field, min_doc_count: 1) { |q|
+        q.date_range_agg(field: 'user.created_at', range: date_range)
+      }
+    end
+
+    # wrap query in filter on groups & segments that we do *not* want included
+    graph.query = graph.get_new_query.bool_filter_agg { |_| query }
+    graph.query.add_filter_clause(field: 'group.name', value: groups, bool_op: :must_not, multi: true)
+    graph.query.add_filter_clause(field: 'segment.name', value: segments, bool_op: :must_not, multi: true)
+  end
+
+  def parse_query(graph)
+    # Parse response
+    # Nvd3 requires an irregular data format for nested term aggregations, use a helper to format it
+    elements =  graph.formatter.list_parser.parse_list(graph.search)
+    if aggregation.present?
+      graph.stacked_nested_terms(elements)
+    else
+      graph.formatter.y_parser.parse_chain = graph.formatter.y_parser.date_range
+      graph.formatter.add_elements(elements)
+    end
+
+    graph
+  end
 
   def parse_date_range(date_range)
     # Parse a date range from a frontend range_controller for a es date range aggregation
