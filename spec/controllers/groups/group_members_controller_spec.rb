@@ -286,6 +286,95 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
         end
     end
 
+    describe 'GET#show' do 
+        context 'when users is logged in' do 
+            login_user_from_let
+            before { get :show, group_id: group.id, id: user.id }
+
+            it 'renders show template' do 
+                expect(response).to render_template :show
+            end
+
+            it 'displays a user which is a group member' do 
+                expect(assigns[:user]).to eq user_group.user
+            end
+
+            it 'displays a valid group_member' do 
+                expect(assigns[:user]).to be_valid
+            end
+        end
+    end
+
+     describe "GET#edit" do
+        context 'when user is logged in' do
+            login_user_from_let
+
+            it "render template" do
+                get :edit, :group_id => group.id, :id => user.id
+                expect(response).to render_template :edit
+            end
+
+            it "returns a valid user object" do
+                get :edit, :group_id => group.id, :id => user.id
+                expect(assigns[:user]).to be_valid
+            end
+        end
+
+        context 'when user is not logged in' do
+            before { get :edit, :group_id => group.id, :id => user.id }
+            it_behaves_like "redirect user to users/sign_in path"
+        end
+    end
+
+    describe "PATCH#update" do
+        describe 'when user is logged in' do
+            login_user_from_let
+
+            context "for a successful update" do
+                let(:new_user_role) {create(:user_role, :enterprise => user.enterprise, :role_name => "Test", :priority => 10, :role_type => "user")}
+
+                before do
+                    request.env["HTTP_REFERER"] = "back"
+                    patch :update, :group_id => group.id, :id => user.id, :user => {:first_name => "updated", :user_role_id => new_user_role.id}
+                end
+
+                it "redirects to user" do
+                    expect(response).to redirect_to "back"
+                end
+
+                it "updates the user" do
+                    user.reload
+                    expect(user.first_name).to eq("updated")
+                    expect(user.user_role_id).to eq(new_user_role.id)
+                end
+
+                it "flashes a notice message" do
+                    expect(flash[:notice]).to eq "Your user was updated"
+                end
+            end
+
+            context "for an unsuccessful update" do
+                before { patch :update, :group_id => group.id, :id => user.id, :user => { :email => "bademail" } }
+
+                it "flashes an alert message" do
+                    expect(flash[:alert]).to eq "Your user was not updated. Please fix the errors"
+                end
+
+                it "render edit template" do
+                    expect(response).to render_template :edit
+                end
+            end
+        end
+
+        describe 'when user is not logged in' do
+            before do
+                request.env["HTTP_REFERER"] = "back"
+                patch :update, :group_id => group.id, :id => user.id, :user => {:first_name => "updated"}
+            end
+            it_behaves_like "redirect user to users/sign_in path"
+        end
+    end
+
     describe 'POST#add_members' do
         context 'when user is logged in' do
             login_user_from_let

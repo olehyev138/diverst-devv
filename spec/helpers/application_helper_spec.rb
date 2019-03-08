@@ -265,8 +265,8 @@ RSpec.describe ApplicationHelper do
 			it 'yields a block when object responds to sponsor_name' do 
 			group_sponsor = create(:sponsor, sponsor_name: 'Bill Gates', sponsor_media: File.open('spec/fixtures/video_file/sponsor_video.mp4'))	
 			expect(show_sponsor?(group_sponsor) { 'hello world' }).to eq 'hello world'
-			end
 		end
+
 
 		describe '#show_sponsor_video?' do 
 			it 'yields a block when sponsor_media is present' do 
