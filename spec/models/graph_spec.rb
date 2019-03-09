@@ -13,21 +13,83 @@ RSpec.describe Graph, type: :model do
         it { expect(graph).to belong_to(:aggregation) }
     end
 
-    describe 'data' do
+    describe 'build_query' do
+      let(:graph_model) { FactoryGirl.build_stubbed(:graph) }
+      let(:graph_builder) { double(BaseGraph::GraphBuilder) }
+
+      let(:date_range) { { from: 'now-200y/y', to: 'now-2d/d' } }
+
+      before {
+        allow(graph_builder).to receive(:get_new_query) { BaseSearch::ElasticsearchQuery.new }
+        allow(graph_builder).to receive(:query=) { |q| q }
+
+        graph_model.field = CheckboxField.new(id: 5)
+      }
+
+      describe 'top level bool filter' do
+        it 'has a top level bool filter' do
+          query = graph_model.send(:build_query, graph_builder, date_range, [], []).build
+
+          expect(query.dig(:aggs, :agg, :filter)).to have_key(:bool)
+        end
+
+        it 'to have valid groups must_not clause' do
+          query = graph_model.send(:build_query, graph_builder, date_range, ['group01'], []).build
+          clause = query.dig(:aggs, :agg, :filter, :bool, :must_not, 0, 'terms')
+
+          expect(clause).to have_key('group.name')
+          expect(clause['group.name'][0]).to eq 'group01'
+        end
+
+        it 'to have valid segments must_not clause' do
+          query = graph_model.send(:build_query, graph_builder, date_range, [], ['segment01']).build
+          clause = query.dig(:aggs, :agg, :filter, :bool, :must_not, 1, 'terms')
+
+          expect(clause).to have_key('segment.name')
+          expect(clause['segment.name'][0]).to eq 'segment01'
+        end
+      end
+
+      describe 'single terms query' do
+        let(:query) { graph_model.send(:build_query, graph_builder, date_range, [], []).build }
+
+        it 'has a valid terms agg with correct field' do
+          terms = query.dig(:aggs, :agg, :aggs, :agg, :terms)
+
+          expect(terms[:field]).to eq graph_model.field.elasticsearch_field
+        end
+
+        it 'has a valid terms agg with correct min_doc_count' do
+          terms = query.dig(:aggs, :agg, :aggs, :agg, :terms)
+
+          expect(terms[:min_doc_count]).to eq 1
+        end
+
+        it 'has a valid bottom level date range agg with correct field' do
+          date_range = query.dig(:aggs, :agg, :aggs, :agg, :aggs, :agg, :date_range)
+
+          expect(date_range[:field]).to eq 'user.created_at'
+        end
+
+        it 'has a valid bottom level date range agg with correct range' do
+          date_range = query.dig(:aggs, :agg, :aggs, :agg, :aggs, :agg, :date_range)
+
+          expect(date_range[:ranges][0][:from]).to eq 'now-200y/y'
+        end
+      end
+
+      describe 'nested terms query' do
+      end
+    end
+
+    describe 'get_custom_class' do
       let(:graph) { FactoryGirl.build_stubbed(:graph) }
+      let(:custom_class) { graph.send(:get_custom_class) }
 
-      it 'builds query correctly with single aggregation on field' do
+      it 'custom class instance to be returned' do
+        expect(custom_class).to_not eq nil
       end
 
-      it 'builds query correctly with nested aggregation on fields' do
-      end
-
-      it 'builds query correctly with single aggregation on association' do
-
-      end
-
-      it 'builds query correctly with nested aggregation on association and field' do
-
-      end
+      #it 'expect it to define #__elasticsearch__ and #search and pass correct arguments to elasticsearch'
     end
 end

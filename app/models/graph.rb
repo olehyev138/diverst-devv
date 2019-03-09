@@ -10,29 +10,10 @@ class Graph < BaseClass
   validates :field,       presence: true
 
   def data(input)
-    # Currently this is somewhat hacked together
-    # This will all be written properly once custom graphs are rewritten
-
     # TODO:
     #  - export csv
 
-    # Define a 'Custom Class' to use for searching
-    # Bit of a hacky work around, but still light years better then the previous version
-    # We search *both* UserGroup and UsersSegment indices.
-    #  - we do this so that we can filter by group & segment
-    #  - we must use these bridge classes as opposed to User because User does not have a
-    #    singular relationship with a group/segment
-    custom_class = Class.new do
-      include BaseGraph
-      include BaseSearch
-      def self.__elasticsearch__
-        Class.new do
-          def self.search(query)
-            Elasticsearch::Model.search(query, [UserGroup, UsersSegment])
-          end
-        end
-      end
-    end
+    custom_class = get_custom_class
 
     # dashboard groups & segments to scope by
     # we get all groups & segments that we do *not* want and then filter them out
@@ -91,15 +72,18 @@ class Graph < BaseClass
     end
 
     # wrap query in filter on groups & segments that we do *not* want included
-    graph.query = graph.get_new_query.bool_filter_agg { |_| query }
-    graph.query.add_filter_clause(field: 'group.name', value: groups, bool_op: :must_not, multi: true)
-    graph.query.add_filter_clause(field: 'segment.name', value: segments, bool_op: :must_not, multi: true)
+    query = graph.get_new_query.bool_filter_agg { |_| query }
+    query.add_filter_clause(field: 'group.name', value: groups, bool_op: :must_not, multi: true)
+    query.add_filter_clause(field: 'segment.name', value: segments, bool_op: :must_not, multi: true)
+
+    graph.query = query
   end
 
   def parse_query(graph)
     # Parse response
     # Nvd3 requires an irregular data format for nested term aggregations, use a helper to format it
     elements =  graph.formatter.list_parser.parse_list(graph.search)
+
     if aggregation.present?
       graph.stacked_nested_terms(elements)
     else
@@ -108,6 +92,26 @@ class Graph < BaseClass
     end
 
     graph
+  end
+
+  def get_custom_class
+    # Define a 'Custom Class' to use for searching
+    # Bit of a hacky work around, but still light years better then the previous version
+    # We search *both* UserGroup and UsersSegment indices.
+    #  - we do this so that we can filter by group & segment
+    #  - we must use these bridge classes as opposed to User because User does not have a
+    #    singular relationship with a group/segment
+    Class.new do
+      include BaseGraph
+      include BaseSearch
+      def self.__elasticsearch__
+        Class.new do
+          def self.search(query)
+            Elasticsearch::Model.search(query, [UserGroup, UsersSegment])
+          end
+        end
+      end
+    end
   end
 
   def parse_date_range(date_range)
