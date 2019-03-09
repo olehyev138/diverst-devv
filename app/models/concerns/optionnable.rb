@@ -292,7 +292,7 @@ module Optionnable
   end
 
   def elasticsearch_field
-    "combined_info.#{id}"
+    "user_combined_info.#{id}"
   end
 
   def elasticsearch_sample_field

@@ -4,7 +4,7 @@ class GroupsField < Field
   include Optionnable
 
   def elasticsearch_field
-    'combined_info.groups'
+    'group.name'
   end
 
   def format_value_name(value)

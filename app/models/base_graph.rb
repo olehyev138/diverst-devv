@@ -106,32 +106,17 @@ module BaseGraph
       self
     end
 
-    def stacked_nested_terms(elements, field)
-      # very temporary
-      top_parser = BaseGraph::ElasticsearchParser.new
-      nested_parser = BaseGraph::ElasticsearchParser.new
-
-      if field.class == GroupsField || field.class == SegmentsField
-        # default top_parser
-        # default nested_parser
-        formatter.list_parser.parse_chain = formatter.list_parser.agg { |p| p.nested_terms_list }
-        formatter.y_parser.parse_chain = formatter.y_parser.date_range
-      else
-        # default top_parser
-        # default nested parser
-        formatter.list_parser.parse_chain = formatter.list_parser.nested_terms_list
-        formatter.y_parser.parse_chain = formatter.y_parser.date_range
-      end
+    def stacked_nested_terms(elements)
+      formatter.list_parser.parse_chain = formatter.list_parser.nested_terms_list
+      formatter.y_parser.parse_chain = formatter.y_parser.date_range
 
       elements.each do |element|
         series_index = -1
-
-        key = top_parser.parse(element)
+        key = formatter.general_parser.parse(element)
 
         formatter.list_parser.parse_list(element).each do |sub_element|
           series_index += 1
-
-          series_name = nested_parser.parse(sub_element)
+          series_name = formatter.general_parser.parse(sub_element)
 
           formatter.add_series(series_name: series_name)
           formatter.x_parser.extractor = -> (_, args) { args[:key] }

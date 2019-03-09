@@ -20,7 +20,18 @@ class UserGroup < BaseClass
   after_destroy { update_mentor_fields(false) }
 
   settings do
-    mappings dynamic: false do
+    # dynamic template for combined_info fields, maps them to keyword
+    mappings  dynamic_templates: [
+      {
+        string_template: {
+          match_mapping_type: 'string',
+          match: '*',
+          mapping: {
+            type: 'keyword',
+          }
+        }
+      }
+    ]  do
       indexes :user_id, type: :integer
       indexes :group_id, type: :integer
       indexes :created_at, type: :date
@@ -33,6 +44,8 @@ class UserGroup < BaseClass
         end
       end
       indexes :user do
+        indexes :enterprise_id, type: :integer
+        indexes :created_at, type: :date
         indexes :active, type: :boolean
         indexes :mentor, type: :boolean
         indexes :mentee, type: :boolean
@@ -47,9 +60,14 @@ class UserGroup < BaseClass
         include: { group: {
           only: [:enterprise_id, :parent_id, :name],
           include: { parent: { only: [:name] } },
-        }, user: { only: [:mentor, :mentee, :active] }}
+        }, user: { only: [:enterprise_id, :created_at, :mentor, :mentee, :active] }},
+        methods: [:user_combined_info]
       )
     )
+  end
+
+  def user_combined_info
+    user.combined_info
   end
 
   def string_for_field(field)

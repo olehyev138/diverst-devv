@@ -10,26 +10,26 @@ class Graph < BaseClass
   validates :field,       presence: true
 
   def data(input)
-    # Currently this is somewhat hacked together
-    # This will all be written properly once custom graphs are rewritten
-
     # TODO:
     #  - export csv
-    #  - filter on segments
 
-    # dashboard segments & graphs to scope by
+    custom_class = get_custom_class
+
+    # dashboard groups & segments to scope by
+    # we get all groups & segments that we do *not* want and then filter them out
     groups = collection.enterprise.groups.pluck(:name) - collection.groups.map(&:name)
     segments = collection.enterprise.segments.pluck(:name) - collection.segments.map(&:name)
 
     # date range to filter values on
     date_range = parse_date_range(input)
 
-    graph = User.get_graph
-    graph.set_enterprise_filter(field: 'enterprise_id', value: collection.enterprise.id)
+    graph = custom_class.get_graph
+    graph.set_enterprise_filter(field: 'user.enterprise_id', value: collection.enterprise.id)
     graph.formatter.type = 'custom'
     graph.formatter.filter_zeros = false        # filtering 0 values breaks stacked bar graphs
 
-    graph.query = build_query(graph, groups, segments, date_range)
+
+    build_query(graph, date_range, groups, segments)
     parse_query(graph)
 
     return graph.build
@@ -53,90 +53,64 @@ class Graph < BaseClass
 
   private
 
-  def build_query(graph, groups, segments, date_range)
-    # build query with/without sub terms agg, filtered by date range
-
+  def build_query(graph, date_range, groups, segments)
+    # Build query
+    # If aggregation field is present we use an additional nested terms query
+    # Lastly we filter on date for the User model.
     query = graph.get_new_query
 
-    # Will be removed once we write custom graph tool
-    # No way around it
-
-    # define aggregation query
     if aggregation.present?
-      if field.class == GroupsField
-        query.terms_agg(field: 'user_groups.group.name', min_doc_count: 0) { |q|
-          q.reverse_nested_agg { |qq|
-            qq.terms_agg(field: aggregation.elasticsearch_field, min_doc_count: 0) { |qqq|
-              qqq.date_range_agg(field: 'created_at', range: date_range)
-            }
-          }
+      query.terms_agg(field: field.elasticsearch_field, min_doc_count: 0) { |q|
+        q.terms_agg(field: aggregation.elasticsearch_field, min_doc_count: 0) { |qq|
+          qq.date_range_agg(field: 'user.created_at', range: date_range)
         }
-      elsif field.class == SegmentsField
-        query.terms_agg(field: 'users_segments.segment.name') { |q|
-          q.reverse_nested_agg { |qq|
-            qq.terms_agg(field: aggregation.elasticsearch_field) { |qqq|
-              qqq.date_range_agg(field: 'created_at', range: date_range)
-            }
-          }
-        }
-      else
-        query = query.reverse_nested_agg { |q|
-          q.terms_agg(field: field.elasticsearch_field, min_doc_count: 0) { |qq|
-            qq.terms_agg(field: aggregation.elasticsearch_field, min_doc_count: 0) { |qqq|
-              qqq.date_range_agg(field: 'created_at', range: date_range)
-            }
-          }
-        }
-      end
+      }
     else
-      if field.class == GroupsField
-        query.terms_agg(field: 'user_groups.group.name', min_doc_count: 0) { |q|
-          q.reverse_nested_agg { |qq|
-            qq.date_range_agg(field: 'created_at', range: date_range)
-          }
-        }
-      elsif field.class == SegmentsField
-        query.terms_agg(field: 'users_segments.segment.name', min_doc_count: 0) { |q|
-          q.reverse_nested_agg { |qq|
-            qq.date_range_agg(field: 'created_at', range: date_range)
-          }
-        }
-      else
-        query = query.reverse_nested_agg { |q|
-          q.terms_agg(field: field.elasticsearch_field) { |qq|
-              qq.date_range_agg(field: 'created_at', range: date_range)
-            }
-          }
-      end
+      query.terms_agg(field: field.elasticsearch_field, min_doc_count: 1) { |q|
+        q.date_range_agg(field: 'user.created_at', range: date_range)
+      }
     end
 
-    # wrap in filter query & return
-    groups_segments_filter_query(graph, query,  groups, segments)
-  end
+    # wrap query in filter on groups & segments that we do *not* want included
+    query = graph.get_new_query.bool_filter_agg { |_| query }
+    query.add_filter_clause(field: 'group.name', value: groups, bool_op: :must_not, multi: true)
+    query.add_filter_clause(field: 'segment.name', value: segments, bool_op: :must_not, multi: true)
 
-  def groups_segments_filter_query(graph, query, groups, segments)
-    graph.get_new_query.nested_agg(path: 'user_groups') { |q|
-      q.bool_filter_agg { |_| query }
-      q.add_filter_clause(field: 'user_groups.group.name', value: groups,
-        bool_op: :must_not, multi: true)
-    }
+    graph.query = query
   end
 
   def parse_query(graph)
+    # Parse response
+    # Nvd3 requires an irregular data format for nested term aggregations, use a helper to format it
     elements =  graph.formatter.list_parser.parse_list(graph.search)
 
     if aggregation.present?
-      graph.stacked_nested_terms(elements, field)
+      graph.stacked_nested_terms(elements)
     else
-      y_parser = graph.formatter.y_parser
-
-      if field.class == GroupsField || field.class == SegmentsField
-        graph.formatter.y_parser.parse_chain =  y_parser.agg { |p| p.date_range }
-      else
-        graph.formatter.y_parser.parse_chain = y_parser.date_range
-      end
-
+      graph.formatter.y_parser.parse_chain = graph.formatter.y_parser.date_range
       graph.formatter.add_elements(elements)
+    end
+
+    graph
+  end
+
+  def get_custom_class
+    # Define a 'Custom Class' to use for searching
+    # Bit of a hacky work around, but still light years better then the previous version
+    # We search *both* UserGroup and UsersSegment indices.
+    #  - we do this so that we can filter by group & segment
+    #  - we must use these bridge classes as opposed to User because User does not have a
+    #    singular relationship with a group/segment
+    Class.new do
+      include BaseGraph
+      include BaseSearch
+      def self.__elasticsearch__
+        Class.new do
+          def self.search(query)
+            Elasticsearch::Model.search(query, [UserGroup, UsersSegment])
+          end
+        end
+      end
     end
   end
 
