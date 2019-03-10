@@ -151,11 +151,6 @@ RSpec.describe ApplicationHelper do
 		end
 
 		context 'returns manage_erg_budgets_path' do 
-			it 'GroupPolicy returns true for .manage_all_groups_budgets?', skip: 'this returns groups_path as it is higher in precedence' do 
-				current_user.policy_group.update(groups_budgets_manage: true, groups_manage: true)
-				expect(root_admin_path).to eq manage_erg_budgets_path
-			end
-
 			it 'returns false for no policy set' do 
 				expect(root_admin_path).to eq false
 			end
@@ -177,9 +172,9 @@ RSpec.describe ApplicationHelper do
 
 		context 'returns mentoring_path' do
 			#NOTE do we want to return mentoring_path or mentorings_path?
-			it 'when MentoringInterestPolicy returns true for .index?', skip: 'mentoring_path requires an [:id]' do 
+			it 'when MentoringInterestPolicy returns true for .index?' do 
 				current_user.policy_group.update(mentorship_manage: true)
-				expect(root_admin_path).to eq mentorings_path
+				expect(root_admin_path).to eq mentoring_interests_path
 			end
 		end
 
@@ -199,29 +194,10 @@ RSpec.describe ApplicationHelper do
 				expect(root_admin_path).to eq policy_group_templates_path
 			end
 
-			it 'returns edit_fields_enterprise_path when EnterprisePolicy is true for .edit_fields?', skip: 'this fails due to precedence' do 
-				current_user.policy_group.update(sso_manage: true)
-				expect(root_admin_path).to eq edit_fields_enterprise_path(current_user.enterprise)
-			end
 
 			it 'returns edit_branding_enterprise_path when EnterprisePolicy is true for .manage_branding?' do 
 				current_user.policy_group.update(branding_manage: true)
 				expect(root_admin_path).to eq edit_branding_enterprise_path(current_user.enterprise)
-			end
-
-			it 'returns edit_custom_text_path when EnterprisePolicy is true for .manage_branding?', skip: 'fails due to precedence' do 
-				current_user.policy_group.update(branding_manage: true)
-				expect(root_admin_path).to eq edit_custom_text_path(current_user.enterprise)
-			end
-
-			it 'returns emails_path when EnterprisePolicy is true for .manage_branding?', skip: 'fails due to precedence' do 
-				current_user.policy_group.update(branding_manage: true)
-				expect(root_admin_path).to eq emails_path(current_user.enterprise)
-			end
-
-			it 'returns integration_path when EnterprisePolicy is true for .sso_manage?', skip: 'fails due to precedence' do 
-				current_user.policy_group.update(sso_manage: true)
-				expect(root_admin_path).to eq integrations_path
 			end
 
 			it 'returns rewards_path when EnterprisePolicy is true for .diversity_manage?' do 
@@ -232,11 +208,6 @@ RSpec.describe ApplicationHelper do
 			it 'returns logs_path when LogPolicy is true for .index?' do 
 				current_user.policy_group.update(logs_view: true)
 				expect(root_admin_path).to eq logs_path
-			end
-
-			it 'returns edit_posts_enterprise_path when EnterprisePolicy is true for .sso_manage?', skip: 'fails due to precedence' do 
-				current_user.policy_group.update(manage_posts: true, groups_manage: true, group_settings_manage: true)
-				expect(root_admin_path).to eq edit_posts_enterprise_path(current_user.enterprise)
 			end
 
 			it 'returns user_path if no policy is set' do 
@@ -261,8 +232,13 @@ RSpec.describe ApplicationHelper do
 			end
 		end
 
-		xdescribe '#show_sponsor?' do 
+		describe '#show_sponsor?' do 
+			it 'yields a block when object responds to sponsor_name' do 
+				group_sponsor = create(:sponsor, sponsor_name: 'Bill Gates', sponsor_media: File.open('spec/fixtures/video_file/sponsor_video.mp4'))	
+				expect(show_sponsor?(group_sponsor) { 'hello world' }).to eq 'hello world'
+			end
 		end
+
 
 		describe '#show_sponsor_video?' do 
 			it 'yields a block when sponsor_media is present' do 
