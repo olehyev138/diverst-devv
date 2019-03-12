@@ -1,13 +1,13 @@
 class Reports::GraphStats
-  def initialize(graph, elements)
+  def initialize(graph, elements, unset_series)
     # TODO:
     #  - move this to a formatter class, use framework for parsing es
-    #  - filter out unselected series
 
     @header = [graph.field.title]
     if graph.aggregation.present?
       elements[0].agg.buckets.each do |ee|
-          @header << ee[:key]
+        next if unset_series.include? ee[:key]
+        @header << ee[:key]
       end
     end
 
@@ -15,7 +15,6 @@ class Reports::GraphStats
     @body = []
 
     if graph.aggregation.present?
-      # x & y0, y1, yn, y_total
       elements.each do |e|
         row = []
         buckets = e.agg.buckets
@@ -27,7 +26,9 @@ class Reports::GraphStats
         # sub elements
         buckets.each do |ee|
           doc_count = ee.agg.buckets[0][:doc_count]
-          if doc_count != 0
+          key = ee[:key]
+
+          if doc_count != 0 && unset_series.exclude?(key)
             row << doc_count
           end
         end

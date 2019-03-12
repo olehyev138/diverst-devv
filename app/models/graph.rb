@@ -49,11 +49,13 @@ class Graph < BaseClass
     !aggregation.nil?
   end
 
-  def graph_csv
-    build_query(parse_date_range('')) # DEBUG
+  def graph_csv(date_range_str, unset_series)
+    build_query(parse_date_range(date_range_str)) # DEBUG
 
-    strategy = Reports::GraphStats.new(self, @graph_builder.search)
+    strategy = Reports::GraphStats.new(self, @graph_builder.search, unset_series)
     report = Reports::Generator.new(strategy)
+
+    byebug
 
     report.to_csv
   end

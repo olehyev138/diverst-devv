@@ -5,7 +5,7 @@
         <div class="card__section">
           <div class="card__action">
             <%= link_to "Edit", [:edit, @metrics_dashboard, graph] if policy(@metrics_dashboard).update? %> -
-            <%= link_to "Export CSV", [:export_csv, @metrics_dashboard, graph], class: "hidden-xs" %> -
+              <a href="#" class="hidden-xs" onclick="csv_export_onclick(<%=graph.id%>, '<%=export_csv_metrics_dashboard_graph_url(@metrics_dashboard.id, graph.id)%>')">Export CSV</a>
             <%= link_to "Remove", graph_path(graph.id), method: :delete, class: "error", data: { confirm: "Are you sure?" } if policy(@metrics_dashboard).update? %>
           </div>
           <h4 class="no-margin"><%= graph.title %></h4>
@@ -19,3 +19,18 @@
     </div>
   <% end %>
 </div>
+
+<script>
+ function csv_export_onclick(id, url) {
+     unset_series = []
+
+     $('#graph_' + id + ' .nv-legendWrap').find('.nv-series').each(function() {
+         selected_series_bool = $(this).find('circle').css('fill-opacity');
+         series_name = $(this).find('text').text();
+         if (selected_series_bool == 0)
+             unset_series.push(series_name);
+     });
+
+     $.get(url, { unset_series: unset_series });
+ }
+</script>

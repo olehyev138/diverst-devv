@@ -62,9 +62,13 @@ class GraphsController < ApplicationController
   def export_csv
     #GraphDownloadJob.perform_later(current_user.id, @graph.id)
 
+    unset_series = params.dig(:unset_series) || []
+    date_range = params[:input]
+
     # DEBUG #
-    @graph.graph_csv
+    @graph.graph_csv(date_range, unset_series)
     # DEBUG #
+
 
     flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
     redirect_to :back
@@ -98,7 +102,8 @@ class GraphsController < ApplicationController
       .permit(
         :field_id,
         :aggregation_id,
-        :input
+        :input,
+        :unset_series
       )
   end
 end
