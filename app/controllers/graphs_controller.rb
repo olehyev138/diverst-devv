@@ -9,7 +9,6 @@ class GraphsController < ApplicationController
     authorize @collection, :update?
 
     @graph = @collection.graphs.new
-    @graph.range_from = 1.year.ago
   end
 
   def edit
@@ -99,9 +98,6 @@ class GraphsController < ApplicationController
       .permit(
         :field_id,
         :aggregation_id,
-        :time_series,
-        :range_from,
-        :range_to,
         :input
       )
   end

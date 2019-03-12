@@ -9,28 +9,35 @@ class Graph < BaseClass
 
   validates :field,       presence: true
 
-  def data(input)
-    # TODO:
-    #  - export csv
+  after_initialize :set_graph_builder
+  after_initialize :set_groups_segments
 
+  def set_graph_builder
+    if @graph_builder.blank?
+      @graph_builder = get_custom_class.get_graph
+      @graph_builder.set_enterprise_filter(field: 'user.enterprise_id', value: collection.enterprise.id)
+      @graph_builder.formatter.type = 'custom'
+      @graph_builder.formatter.filter_zeros = false        # filtering 0 values breaks stacked bar graphs
+    end
+  end
+
+  def set_groups_segments
     # dashboard groups & segments to scope by
     # we get all groups & segments that we do *not* want and then filter them out
-    groups = collection.enterprise.groups.pluck(:name) - collection.groups.map(&:name)
-    segments = collection.enterprise.segments.pluck(:name) - collection.segments.map(&:name)
+    if @groups.blank? || @segments.blank?
+      @groups = collection.enterprise.groups.pluck(:name) - collection.groups.map(&:name)
+      @segments = collection.enterprise.segments.pluck(:name) - collection.segments.map(&:name)
+    end
+  end
 
+  def data(date_range_str)
     # date range to filter values on
-    date_range = parse_date_range(input)
+    date_range = parse_date_range(date_range_str)
 
-    graph = get_custom_class.get_graph
-    graph.set_enterprise_filter(field: 'user.enterprise_id', value: collection.enterprise.id)
-    graph.formatter.type = 'custom'
-    graph.formatter.filter_zeros = false        # filtering 0 values breaks stacked bar graphs
+    build_query(date_range)
+    parse_query
 
-
-    build_query(graph, date_range, groups, segments)
-    parse_query(graph)
-
-    return graph.build
+    return @graph_builder.build
   end
 
   def collection
@@ -62,10 +69,10 @@ class Graph < BaseClass
 
   private
 
-  def build_query(graph, date_range, groups, segments)
+  def build_query(date_range)
     # If aggregation field is present we use an additional nested terms query
     # Lastly we filter on date for the User model.
-    query = graph.get_new_query
+    query = @graph_builder.get_new_query
 
     if aggregation.present?
       query.terms_agg(field: field.elasticsearch_field, min_doc_count: 0) { |q|
@@ -80,26 +87,26 @@ class Graph < BaseClass
     end
 
     # wrap query in filter on groups & segments that we do *not* want included
-    query = graph.get_new_query.bool_filter_agg { |_| query }
-    query.add_filter_clause(field: 'group.name', value: groups, bool_op: :must_not, multi: true)
-    query.add_filter_clause(field: 'segment.name', value: segments, bool_op: :must_not, multi: true)
+    query = @graph_builder.get_new_query.bool_filter_agg { |_| query }
+    query.add_filter_clause(field: 'group.name', value: @groups, bool_op: :must_not, multi: true)
+    query.add_filter_clause(field: 'segment.name', value: @segments, bool_op: :must_not, multi: true)
 
-    graph.query = query
+    @graph_builder.query = query
   end
 
-  def parse_query(graph)
+  def parse_query
     # Parse response
-    elements =  graph.formatter.list_parser.parse_list(graph.search)
+    elements =  @graph_builder.formatter.list_parser.parse_list(@graph_builder.search)
 
     if aggregation.present?
       # Nvd3 requires an irregular data format for nested term aggregations, use a helper to format it
-      graph.stacked_nested_terms(elements)
+      @graph_builder.stacked_nested_terms(elements)
     else
-      graph.formatter.y_parser.parse_chain = graph.formatter.y_parser.date_range
-      graph.formatter.add_elements(elements)
+      @graph_builder.formatter.y_parser.parse_chain = @graph_builder.formatter.y_parser.date_range
+      @graph_builder.formatter.add_elements(elements)
     end
 
-    graph
+    @graph_builder
   end
 
   def get_custom_class
