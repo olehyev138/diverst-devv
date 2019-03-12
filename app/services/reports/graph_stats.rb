@@ -1,17 +1,22 @@
 class Reports::GraphStats
-  def initialize(graph, elements, unset_series)
+  def initialize(graph, elements, date_range, unset_series)
     # TODO:
     #  - move this to a formatter class, use framework for parsing es
 
-    @header = [graph.field.title]
+    @header = []
+    @header << [graph.title]
+    @header << ['From' + date_range[:from], 'To:' + date_range[:to]]
+
+    header_row = [graph.field.title]
     if graph.aggregation.present?
       elements[0].agg.buckets.each do |ee|
         next if unset_series.include? ee[:key]
-        @header << ee[:key]
+        header_row << ee[:key]
       end
     end
 
-    @header << 'Y'
+    header_row << 'Y'
+    @header << header_row
     @body = []
 
     if graph.aggregation.present?

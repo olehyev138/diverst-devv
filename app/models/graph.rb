@@ -50,9 +50,10 @@ class Graph < BaseClass
   end
 
   def graph_csv(date_range_str, unset_series)
-    build_query(parse_date_range(date_range_str)) # DEBUG
+    date_range = parse_date_range(date_range_str)
+    build_query(date_range)
 
-    strategy = Reports::GraphStats.new(self, @graph_builder.search, unset_series)
+    strategy = Reports::GraphStats.new(self, @graph_builder.search, date_range, unset_series)
     report = Reports::Generator.new(strategy)
 
     byebug
