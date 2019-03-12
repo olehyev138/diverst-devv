@@ -1,51 +1,28 @@
 class Reports::GraphStats
-  def initialize(graph, graph_builder)
-    # Functional raw version of csv export
-
-    # TODO:
-    #  - move this to a formatter class, use frmaework for parsing es
-    #  - filter out zero values
-    #  - filter out unselected series
-
-    elements =  graph_builder.formatter.list_parser.parse_list(graph_builder.search)
-
-    # columns are - x label, y0 .. yn lables, total
-    @header = [graph.field.title]
-    if graph.aggregation.present?
-      elements[0].agg.buckets.each do |ee|
-          @header << ee[:key]
-      end
-    end
-
-    @header << 'Y'
-    @body = []
-
-    if graph.aggregation.present?
-      # x & y0, y1, yn, y_total
-      elements.each do |e|
-        row = []
-        row << e[:key]
-
-        # sub elements
-        e.agg.buckets.each do |ee|
-          row << ee.agg.buckets[0][:doc_count]
-        end
-
-        @body << row
-      end
-    else
-      elements.each do |e|
-        # x & y
-        @body << [e[:key], e.agg.buckets[0][:doc_count]]
-      end
-    end
+  def initialize(graph)
+    @graph = graph
+    @graph_content = @graph.field.highcharts_stats(
+                      aggr_field: @graph.aggregation,
+                      segments: @graph.collection.segments,
+                      groups: @graph.collection.groups
+                     )
   end
 
   def get_header
-    @header
+    header = @graph_content[:series].map{ |s| s[:name] }
+    header.unshift(@graph_content[:xAxisTitle]) if @graph.has_aggregation?
+    header
   end
 
   def get_body
-    @body
+    body = []
+    if @graph.has_aggregation? || @graph.field.numeric?
+      @graph_content[:categories].each_with_index do |category, i|
+        body[i] = [category] + @graph_content[:series].map{ |s| s[:data][i] }
+      end
+    else
+      body = @graph_content[:series].map{ |s| s[:data] }.flatten.map(&:values)
+    end
+    body
   end
 end

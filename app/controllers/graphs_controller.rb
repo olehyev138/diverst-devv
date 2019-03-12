@@ -61,12 +61,7 @@ class GraphsController < ApplicationController
   end
 
   def export_csv
-    #GraphDownloadJob.perform_later(current_user.id, @graph.id)
-
-    # DEBUG #
-    @graph.graph_csv
-    # DEBUG #
-
+    GraphDownloadJob.perform_later(current_user.id, @graph.id)
     flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
     redirect_to :back
   end
