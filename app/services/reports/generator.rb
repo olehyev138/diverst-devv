@@ -6,7 +6,7 @@ class Reports::Generator
   def to_csv
     CSV.generate do |csv|
       csv << @strategy_generator.get_header
-      @strategy_generator.get_body.map{ |data| csv << data }
+      @strategy_generator.get_body.map{ |row| csv << row }
     end
   end
 end
