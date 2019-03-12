@@ -20,7 +20,7 @@ class IndexElasticsearchJob < ActiveJob::Base
           return if record.nil?
           record.__elasticsearch__.update_document
         when 'delete'
-          Client.delete index: model.index_name, id: record_id, type: model.__elasticsearch.__document_type, ignore: 404
+          Client.delete index: model.index_name, id: record_id, type: model.__elasticsearch__.document_type, ignore: 404
         else raise ArgumentError, "Unknown operation '#{operation}'"
       end
     rescue => e
