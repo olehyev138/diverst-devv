@@ -13,8 +13,6 @@ class Graph < BaseClass
     # TODO:
     #  - export csv
 
-    custom_class = get_custom_class
-
     # dashboard groups & segments to scope by
     # we get all groups & segments that we do *not* want and then filter them out
     groups = collection.enterprise.groups.pluck(:name) - collection.groups.map(&:name)
@@ -23,7 +21,7 @@ class Graph < BaseClass
     # date range to filter values on
     date_range = parse_date_range(input)
 
-    graph = custom_class.get_graph
+    graph = get_custom_class.get_graph
     graph.set_enterprise_filter(field: 'user.enterprise_id', value: collection.enterprise.id)
     graph.formatter.type = 'custom'
     graph.formatter.filter_zeros = false        # filtering 0 values breaks stacked bar graphs
@@ -45,7 +43,18 @@ class Graph < BaseClass
   end
 
   def graph_csv
-    strategy = self.time_series ? Reports::GraphTimeseries.new(self) : Reports::GraphStats.new(self)
+    groups = collection.enterprise.groups.pluck(:name) - collection.groups.map(&:name)
+    segments = collection.enterprise.segments.pluck(:name) - collection.segments.map(&:name)
+    date_range = parse_date_range('') # DEBUG
+
+    graph = get_custom_class.get_graph
+    graph.set_enterprise_filter(field: 'user.enterprise_id', value: collection.enterprise.id)
+    graph.formatter.type = 'custom'
+    graph.formatter.filter_zeros = false
+
+    build_query(graph, date_range, groups, segments)
+
+    strategy = Reports::GraphStats.new(self, graph)
     report = Reports::Generator.new(strategy)
 
     report.to_csv
@@ -54,7 +63,6 @@ class Graph < BaseClass
   private
 
   def build_query(graph, date_range, groups, segments)
-    # Build query
     # If aggregation field is present we use an additional nested terms query
     # Lastly we filter on date for the User model.
     query = graph.get_new_query
@@ -81,10 +89,10 @@ class Graph < BaseClass
 
   def parse_query(graph)
     # Parse response
-    # Nvd3 requires an irregular data format for nested term aggregations, use a helper to format it
     elements =  graph.formatter.list_parser.parse_list(graph.search)
 
     if aggregation.present?
+      # Nvd3 requires an irregular data format for nested term aggregations, use a helper to format it
       graph.stacked_nested_terms(elements)
     else
       graph.formatter.y_parser.parse_chain = graph.formatter.y_parser.date_range
