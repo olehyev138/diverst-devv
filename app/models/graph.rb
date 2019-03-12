@@ -50,18 +50,9 @@ class Graph < BaseClass
   end
 
   def graph_csv
-    groups = collection.enterprise.groups.pluck(:name) - collection.groups.map(&:name)
-    segments = collection.enterprise.segments.pluck(:name) - collection.segments.map(&:name)
-    date_range = parse_date_range('') # DEBUG
+    build_query(parse_date_range('')) # DEBUG
 
-    graph = get_custom_class.get_graph
-    graph.set_enterprise_filter(field: 'user.enterprise_id', value: collection.enterprise.id)
-    graph.formatter.type = 'custom'
-    graph.formatter.filter_zeros = false
-
-    build_query(graph, date_range, groups, segments)
-
-    strategy = Reports::GraphStats.new(self, graph)
+    strategy = Reports::GraphStats.new(self, @graph_builder.search)
     report = Reports::Generator.new(strategy)
 
     report.to_csv

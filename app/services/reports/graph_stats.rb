@@ -1,15 +1,9 @@
 class Reports::GraphStats
-  def initialize(graph, graph_builder)
-    # Functional raw version of csv export
-
+  def initialize(graph, elements)
     # TODO:
-    #  - move this to a formatter class, use frmaework for parsing es
-    #  - filter out zero values
+    #  - move this to a formatter class, use framework for parsing es
     #  - filter out unselected series
 
-    elements =  graph_builder.formatter.list_parser.parse_list(graph_builder.search)
-
-    # columns are - x label, y0 .. yn lables, total
     @header = [graph.field.title]
     if graph.aggregation.present?
       elements[0].agg.buckets.each do |ee|
@@ -24,19 +18,31 @@ class Reports::GraphStats
       # x & y0, y1, yn, y_total
       elements.each do |e|
         row = []
-        row << e[:key]
+        buckets = e.agg.buckets
 
-        # sub elements
-        e.agg.buckets.each do |ee|
-          row << ee.agg.buckets[0][:doc_count]
+        if buckets.count > 0
+          row << e[:key]
         end
 
-        @body << row
+        # sub elements
+        buckets.each do |ee|
+          doc_count = ee.agg.buckets[0][:doc_count]
+          if doc_count != 0
+            row << doc_count
+          end
+        end
+
+        if buckets.count > 0
+          @body << row
+        end
       end
     else
       elements.each do |e|
         # x & y
-        @body << [e[:key], e.agg.buckets[0][:doc_count]]
+        doc_count = e.agg.buckets[0][:doc_count]
+        if doc_count != 0
+          @body << [e[:key], doc_count]
+        end
       end
     end
   end
