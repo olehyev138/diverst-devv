@@ -109,7 +109,12 @@ class Graph {
                 .datum(series)
                 .call(chart);
 
-            nv.utils.windowResize(chart.update);
+            nv.utils.windowResize(function() {
+              setChartHeight(chart, select_string, items);
+
+              if (items && items > 0)
+                moveBottomAxisToTop(select_string);
+            });
 
             chart.multibar.dispatch.on('elementClick', function(e) {
                 if (!$.isEmptyObject(e.data.children) && e.data.children.length != 0) {
