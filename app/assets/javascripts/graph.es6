@@ -14,6 +14,8 @@ class Graph {
 
         this.brandingColor = BRANDING_COLOR || '#7B77C9';
         this.chartsColor = CHARTS_COLOR || this.brandingColor;
+        this.colors = d3.scale.category20().range();
+        this.colors[0] = this.chartsColor;
 
         var self = this;
         if ($($graph_input).length && ($graph_input.attr('id') == 'range-selector')) {
@@ -79,8 +81,8 @@ class Graph {
         nv.addGraph(function() {
             chart = nv.models.multiBarHorizontalChart()
                 .height(height)
-                .margin({"left": 82, "right": 20})
-                .color([graphObject.chartsColor])
+                .margin({"left": 84, "right": 20})
+                .color(graphObject.colors)
                 .duration(160)
                 .groupSpacing(BAR_GROUP_SPACING)
                 .x(function (d) { return d.x; }) // set the json keys for x & y values
@@ -174,7 +176,7 @@ class Graph {
 
         nv.addGraph(function() {
             chart = nv.models.lineWithFocusChart()
-                .color([graphObject.chartsColor])
+                .color(graphObject.colors)
                 .margin({"right": 50})
                 .useInteractiveGuideline(true)
                 .x(function (d) { return d.x; }) // set the json keys for x & y values
