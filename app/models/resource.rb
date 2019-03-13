@@ -27,7 +27,6 @@ class Resource < ActiveRecord::Base
     validates_length_of     :url, maximum: 255
 
     before_validation :smart_add_url_protocol
-    after_commit :archive_expired_resources, on: [:create, :update, :destroy]
 
     attr_reader :tag_tokens
 
