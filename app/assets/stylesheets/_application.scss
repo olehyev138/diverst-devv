@@ -11,7 +11,8 @@
 "jquery-dropdown/jquery.dropdown.min",
 "bootstrap/dist/css/bootstrap.min",
 "firepad/dist/firepad",
-"codemirror/lib/codemirror";
+"codemirror/lib/codemirror",
+"nvd3/build/nv.d3.min";
 
 // Partials
 
@@ -60,7 +61,8 @@
 "modules/_metric",
 "modules/_badge",
 "modules/_menu",
-"modules/_dropdown";
+"modules/_dropdown",
+"modules/_range-selector";
 
 // Layout
 

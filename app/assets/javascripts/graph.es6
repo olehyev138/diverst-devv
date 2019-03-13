@@ -12,7 +12,7 @@ class Graph {
         this.$element = $element;
         this.data = {};
 
-        this.brandingColor = BRANDING_COLOR || $('.primary-header').css('background-color') || '#7B77C9';
+        this.brandingColor = BRANDING_COLOR || '#7B77C9';
         this.chartsColor = CHARTS_COLOR || this.brandingColor;
 
         var self = this;
@@ -74,11 +74,15 @@ class Graph {
 
         var items = getUniqueXValuesFromSeriesArr(series).length;
 
+        var height = HEIGHT_PER_ITEM * items;
+        if (height < 350)
+          height = 350;
+
         nv.addGraph(function() {
             chart = nv.models.multiBarHorizontalChart()
-                .height(HEIGHT_PER_ITEM * items)
+                .height(height)
                 .margin({"left": 82, "right": 20})
-                .barColor(d3.scale.category20().range())
+                .barColor([graphObject.chartsColor])
                 .duration(160)
                 .groupSpacing(BAR_GROUP_SPACING)
                 .x(function (d) { return d.x; }) // set the json keys for x & y values
@@ -94,16 +98,11 @@ class Graph {
                     return d.substring(0, MAX_LABEL_LENGTH - 3) + "...";
                   return d;
                 })
-                .showMaxMin(false)
-                .axisLabel(data.x_axis)
-                .axisLabelDistance(10);
+                .showMaxMin(false);
 
             chart.tooltip.headerFormatter(function(d) { return d; });
 
-            chart.yAxis
-                .tickFormat(d3.format('d'))
-                .axisLabel(data.y_axis)
-                .axisLabelDistance(10);
+            chart.yAxis.tickFormat(d3.format('d'));
 
             d3.select(select_string)
                 .datum(series)
@@ -143,7 +142,8 @@ class Graph {
         },
         // After chart generated callback
         function(chart) {
-          setChartHeight(chart, select_string, items);
+          $(select_string).css("height", height);
+          chart.update();
 
           if (items && items > 0)
             moveBottomAxisToTop(select_string);
