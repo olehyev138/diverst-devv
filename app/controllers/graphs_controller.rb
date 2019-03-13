@@ -60,15 +60,10 @@ class GraphsController < ApplicationController
   end
 
   def export_csv
-    #GraphDownloadJob.perform_later(current_user.id, @graph.id)
-
     unset_series = params.dig(:unset_series) || []
     date_range = params[:input]
 
-    # DEBUG #
-    @graph.graph_csv(date_range, unset_series)
-    # DEBUG #
-
+    GraphDownloadJob.perform_later(current_user.id, @graph.id, date_range, unset_series)
 
     flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
     redirect_to :back

@@ -33,7 +33,6 @@ class Graph < BaseClass
   def data(date_range_str)
     # date range to filter values on
     date_range = parse_date_range(date_range_str)
-
     build_query(date_range)
     parse_query
 
@@ -55,8 +54,6 @@ class Graph < BaseClass
 
     strategy = Reports::GraphStats.new(self, @graph_builder.search, date_range, unset_series)
     report = Reports::Generator.new(strategy)
-
-    byebug
 
     report.to_csv
   end

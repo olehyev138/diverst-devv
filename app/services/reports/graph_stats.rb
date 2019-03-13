@@ -1,63 +1,72 @@
 class Reports::GraphStats
   def initialize(graph, elements, date_range, unset_series)
-    # TODO:
-    #  - move this to a formatter class, use framework for parsing es
+    @agg_list_parser = BaseGraph::ElasticsearchParser.new
+    @agg_list_parser.parse_chain = @agg_list_parser.nested_terms_list
 
-    @header = []
-    @header << [graph.title]
-    @header << ['From' + date_range[:from], 'To:' + date_range[:to]]
+    @x_parser = BaseGraph::ElasticsearchParser.new
 
-    header_row = [graph.field.title]
-    if graph.aggregation.present?
-      elements[0].agg.buckets.each do |ee|
-        next if unset_series.include? ee[:key]
+    @y_parser = BaseGraph::ElasticsearchParser.new(key: :doc_count)
+    @y_parser.parse_chain = @y_parser.date_range
+
+    @graph = graph
+    @elements = elements
+    @date_range = date_range
+    @unset_series = unset_series
+  end
+
+  def get_header
+    header = []
+    header << [@graph.title]
+    header << ['From' + @date_range[:from], 'To:' + @date_range[:to]]
+
+    # If aggregation, add each aggregation field value as a column
+    header_row = [@graph.field.title]
+    if @graph.aggregation.present?
+      @agg_list_parser.parse_list(@elements[0]).each do |ee|
+        next if @unset_series.include? ee[:key] # skip series/aggregation values that are unset in UI
         header_row << ee[:key]
       end
     end
 
     header_row << 'Y'
-    @header << header_row
-    @body = []
+    header << header_row
 
-    if graph.aggregation.present?
-      elements.each do |e|
+    header
+  end
+
+  def get_body
+    body = []
+
+    if @graph.aggregation.present?
+      @elements.each do |e|
         row = []
-        buckets = e.agg.buckets
+        buckets = @agg_list_parser.parse_list(e)
+        next if buckets.count <= 0
 
-        if buckets.count > 0
-          row << e[:key]
-        end
+        row << e[:key]
 
         # sub elements
         buckets.each do |ee|
-          doc_count = ee.agg.buckets[0][:doc_count]
-          key = ee[:key]
+          key = @x_parser.parse(ee)
+          doc_count = @y_parser.parse(ee)
 
-          if doc_count != 0 && unset_series.exclude?(key)
+          if doc_count != 0 && @unset_series.exclude?(key)
             row << doc_count
           end
         end
 
-        if buckets.count > 0
-          @body << row
-        end
+        body << row
       end
     else
-      elements.each do |e|
-        # x & y
-        doc_count = e.agg.buckets[0][:doc_count]
-        if doc_count != 0
-          @body << [e[:key], doc_count]
-        end
+      @elements.each do |e|
+        key = @x_parser.parse(e)
+        doc_count = @y_parser.parse(e)
+
+        next if doc_count == 0
+        body << [key, doc_count]
       end
     end
-  end
 
-  def get_header
-    @header
-  end
-
-  def get_body
-    @body
+    body
   end
 end
