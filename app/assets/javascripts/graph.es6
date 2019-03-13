@@ -74,9 +74,7 @@ class Graph {
 
         var items = getUniqueXValuesFromSeriesArr(series).length;
 
-        var height = HEIGHT_PER_ITEM * items;
-        if (height < 350)
-          height = 350;
+        var height = getHeight(items);
 
         nv.addGraph(function() {
             chart = nv.models.multiBarHorizontalChart()
@@ -215,13 +213,19 @@ function buildSelectString(chart) {
 
 // Modifies chart height to be dynamic based on the number of items
 function setChartHeight(chart, selectString, itemCount) {
-  var height = HEIGHT_PER_ITEM * itemCount;
-  if (height < 350)
-    height = 350;
+  var height = getHeight(itemCount);
 
   chart.height(height);
   $(selectString).css("height", height);
   chart.update();
+}
+
+function getHeight(itemCount) {
+  var h = HEIGHT_PER_ITEM * itemCount;
+  if (h < 350)
+     h = 350
+
+  return h;
 }
 
 // Gets the `transform: translate` Y value for a selector
