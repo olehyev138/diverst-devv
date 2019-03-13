@@ -4,10 +4,8 @@ class Field < BaseClass
   belongs_to :group
   belongs_to :poll
   belongs_to :initiative
-  
-  has_many :yammer_field_mappings, foreign_key: :diverst_field_id, dependent: :delete_all
 
-  after_commit on: [:update, :destroy] { update_elasticsearch_all_indexes }
+  has_many :yammer_field_mappings, foreign_key: :diverst_field_id, dependent: :delete_all
 
   validates :title, presence: true
   validates :title, uniqueness: { scope: :enterprise_id },
