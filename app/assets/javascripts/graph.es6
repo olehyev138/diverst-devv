@@ -80,7 +80,7 @@ class Graph {
             chart = nv.models.multiBarHorizontalChart()
                 .height(height)
                 .margin({"left": 82, "right": 20})
-                .barColor([graphObject.chartsColor])
+                .color([graphObject.chartsColor])
                 .duration(160)
                 .groupSpacing(BAR_GROUP_SPACING)
                 .x(function (d) { return d.x; }) // set the json keys for x & y values
@@ -166,12 +166,15 @@ class Graph {
     }
 
     renderLineChart() {
+        var graphObject = this;
+
         var svg = this.$element[0].children[0];
         var series = this.data.series;
         var chart = null;
 
         nv.addGraph(function() {
             chart = nv.models.lineWithFocusChart()
+                .color([graphObject.chartsColor])
                 .margin({"right": 50})
                 .useInteractiveGuideline(true)
                 .x(function (d) { return d.x; }) // set the json keys for x & y values
