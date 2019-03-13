@@ -2,7 +2,8 @@ config = {
   host: ENV["ELASTICSEARCH_URL"] || "localhost:9200",
   transport_options: {
     request: { timeout: 5 }
-  }
+  },
+  logger: Logger.new("#{Rails.root}/log/elasticsearch.log")
 }
 
 if File.exist?('config/elasticsearch.yml')

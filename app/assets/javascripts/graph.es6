@@ -12,8 +12,10 @@ class Graph {
         this.$element = $element;
         this.data = {};
 
-        this.brandingColor = BRANDING_COLOR || $('.primary-header').css('background-color') || '#7B77C9';
+        this.brandingColor = BRANDING_COLOR || '#7B77C9';
         this.chartsColor = CHARTS_COLOR || this.brandingColor;
+        this.colors = d3.scale.category20().range();
+        this.colors[0] = this.chartsColor;
 
         var self = this;
         if ($($graph_input).length && ($graph_input.attr('id') == 'range-selector')) {
@@ -74,11 +76,13 @@ class Graph {
 
         var items = getUniqueXValuesFromSeriesArr(series).length;
 
+        var height = getHeight(items);
+
         nv.addGraph(function() {
             chart = nv.models.multiBarHorizontalChart()
-                .height(HEIGHT_PER_ITEM * items)
-                .margin({"left": 82, "right": 20})
-                .barColor(d3.scale.category20().range())
+                .height(height)
+                .margin({"left": 84, "right": 20})
+                .color(graphObject.colors)
                 .duration(160)
                 .groupSpacing(BAR_GROUP_SPACING)
                 .x(function (d) { return d.x; }) // set the json keys for x & y values
@@ -94,22 +98,22 @@ class Graph {
                     return d.substring(0, MAX_LABEL_LENGTH - 3) + "...";
                   return d;
                 })
-                .showMaxMin(false)
-                .axisLabel(data.x_axis)
-                .axisLabelDistance(10);
+                .showMaxMin(false);
 
             chart.tooltip.headerFormatter(function(d) { return d; });
 
-            chart.yAxis
-                .tickFormat(d3.format('d'))
-                .axisLabel(data.y_axis)
-                .axisLabelDistance(10);
+            chart.yAxis.tickFormat(d3.format('d'));
 
             d3.select(select_string)
                 .datum(series)
                 .call(chart);
 
-            nv.utils.windowResize(chart.update);
+            nv.utils.windowResize(function() {
+              setChartHeight(chart, select_string, items);
+
+              if (items && items > 0)
+                moveBottomAxisToTop(select_string);
+            });
 
             chart.multibar.dispatch.on('elementClick', function(e) {
                 if (!$.isEmptyObject(e.data.children) && e.data.children.length != 0) {
@@ -138,7 +142,8 @@ class Graph {
         },
         // After chart generated callback
         function(chart) {
-          setChartHeight(chart, select_string, items);
+          $(select_string).css("height", height);
+          chart.update();
 
           if (items && items > 0)
             moveBottomAxisToTop(select_string);
@@ -163,12 +168,15 @@ class Graph {
     }
 
     renderLineChart() {
+        var graphObject = this;
+
         var svg = this.$element[0].children[0];
         var series = this.data.series;
         var chart = null;
 
         nv.addGraph(function() {
             chart = nv.models.lineWithFocusChart()
+                .color(graphObject.colors)
                 .margin({"right": 50})
                 .useInteractiveGuideline(true)
                 .x(function (d) { return d.x; }) // set the json keys for x & y values
@@ -210,13 +218,19 @@ function buildSelectString(chart) {
 
 // Modifies chart height to be dynamic based on the number of items
 function setChartHeight(chart, selectString, itemCount) {
-  var height = HEIGHT_PER_ITEM * itemCount;
-  if (height < 350)
-    height = 350;
+  var height = getHeight(itemCount);
 
   chart.height(height);
   $(selectString).css("height", height);
   chart.update();
+}
+
+function getHeight(itemCount) {
+  var h = HEIGHT_PER_ITEM * itemCount;
+  if (h < 350)
+     h = 350
+
+  return h;
 }
 
 // Gets the `transform: translate` Y value for a selector

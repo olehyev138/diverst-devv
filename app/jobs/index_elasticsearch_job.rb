@@ -19,8 +19,18 @@ class IndexElasticsearchJob < ActiveJob::Base
           record = model.find_by_id(record_id)
           return if record.nil?
           record.__elasticsearch__.update_document
+
+          # Updates child association indexes
+          child_associations = record._reflections.map { |a, b| b.name if b.macro == :has_many && !b.options.key(:through) }.compact
+          child_associations.each do |association|
+            association_data = record.send(association)
+            association_data.find_each do |item|
+              break unless item.class.included_modules.include?(Elasticsearch::Model)
+              item.__elasticsearch__.update_document
+            end
+          end
         when 'delete'
-          Client.delete index: model.index_name, id: record_id, type: model.__elasticsearch.__document_type, ignore: 404
+          Client.delete index: model.index_name, id: record_id, type: model.__elasticsearch__.document_type, ignore: 404
         else raise ArgumentError, "Unknown operation '#{operation}'"
       end
     rescue => e
