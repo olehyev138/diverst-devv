@@ -60,8 +60,8 @@ class GraphsController < ApplicationController
   end
 
   def export_csv
-    unset_series = params.dig(:unset_series) || []
     date_range = params[:input]
+    unset_series = params.dig(:unset_series) || []
 
     GraphDownloadJob.perform_later(current_user.id, @graph.id, date_range, unset_series)
 
