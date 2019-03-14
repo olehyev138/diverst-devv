@@ -133,9 +133,20 @@ class Graph {
                 }
             });
 
+            chart.legend.dispatch.on('legendClick', function(item, index) {
+              graphObject.legendClicked = true;
+            });
+
+            chart.legend.dispatch.on('legendDblclick', function(item, index) {
+              graphObject.legendClicked = true;
+            });
+
             chart.dispatch.on('stateChange', function(newState) {
-              graphObject.stacked = newState.stacked;
+              if (graphObject.legendClicked !== true || graphObject.stacked !== true)
+                graphObject.stacked = newState.stacked;
+
               graphObject.renderBarChart();
+              graphObject.legendClicked = false;
             });
 
             return chart;
