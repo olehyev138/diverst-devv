@@ -45,16 +45,16 @@ class Graph {
 
         $(self.$element).find('.nv-legendWrap .nv-series').each(function() {
             var selected_series_bool = $(this).find('circle').css('fill-opacity');
+
+            // have to do this to find series names that might be cut off
             var series_name = $(this).find('title:first').text();
+            if (series_name === "")
+                series_name = $(this).find('text').text();
+
             if (selected_series_bool == 0)
                 unset_series.push(series_name);
         });
 
-        console.log(url);
-        console.log(unset_series);
-
-        // using ajax with async: false is the easiest way to send data
-        //$.ajax({method: 'POST', url: url, async: false, data: { unset_series: unset_series }});
         $.get(url, { unset_series: unset_series });
     }
 
