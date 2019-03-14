@@ -10,9 +10,7 @@ class GenericGraphsController < ApplicationController
         graph = UserGroup.get_graph
         graph.set_enterprise_filter(field: 'group.enterprise_id', value: current_user.enterprise_id)
 
-        graph.formatter.y_label = '# Users'
-        graph.formatter.x_label = 'Groups'
-        graph.formatter.title = 'Group Population'
+        graph.formatter.title = "#{c_t(:erg).capitalize} Population"
 
         graph.query  = graph.query.terms_agg(field: 'group.name')
         graph.drilldown_graph(parent_field: 'group.parent.name')
@@ -33,9 +31,7 @@ class GenericGraphsController < ApplicationController
         graph = UsersSegment.get_graph
         graph.set_enterprise_filter(field: 'segment.enterprise_id', value: current_user.enterprise_id)
 
-        graph.formatter.y_label = '# Users'
-        graph.formatter.x_label = 'Segments'
-        graph.formatter.title = 'Segment Population'
+        graph.formatter.title = "#{c_t(:segment).capitalize} Population"
 
         graph.query = graph.query.terms_agg(field: 'segment.name')
         graph.drilldown_graph(parent_field: 'segment.parent.name')
@@ -116,7 +112,7 @@ class GenericGraphsController < ApplicationController
           q.date_range_agg(field: 'created_at', range: date_range)
         }
 
-        graph.formatter.title = '# Views per Group'
+        graph.formatter.title = "# Views per #{c_t(:erg).capitalize}"
         graph.formatter.y_parser.parse_chain = graph.formatter.y_parser.date_range
 
         graph.drilldown_graph(parent_field: 'group.parent.name')
@@ -306,7 +302,7 @@ class GenericGraphsController < ApplicationController
         graph.set_enterprise_filter(field: 'group.enterprise_id', value: enterprise_id)
 
         graph.formatter.type = 'line'
-        graph.formatter.title = 'Growth of Groups'
+        graph.formatter.title = "Growth of #{c_t(:erg).pluralize.capitalize}"
         graph.formatter.y_parser.extractor = -> (_, args) {
           args[:total]
         }
@@ -404,8 +400,6 @@ class GenericGraphsController < ApplicationController
         graph = UserGroup.get_graph
         graph.set_enterprise_filter(field: 'group.enterprise_id', value: current_user.enterprise_id)
 
-        graph.formatter.y_label = '# of Mentors or Mentees'
-        graph.formatter.x_label = 'Groups'
         graph.formatter.title = 'Users interested in Mentorship'
 
         graph.query = graph.query.bool_filter_agg { |qq| qq.terms_agg(field: 'group.name') }
@@ -433,8 +427,6 @@ class GenericGraphsController < ApplicationController
         graph = MentoringSession.get_graph
         graph.set_enterprise_filter(field: 'creator.enterprise_id', value: current_user.enterprise_id)
 
-        graph.formatter.y_label = 'Creator'
-        graph.formatter.x_label = '# of Mentoring Sessions'
         graph.formatter.title = 'Mentoring Sessions'
 
         graph.query = graph.query.bool_filter_agg { |qq| qq.terms_agg(field: 'creator.last_name') { |qqq|
@@ -463,8 +455,6 @@ class GenericGraphsController < ApplicationController
         graph = MentorshipInterest.get_graph
         graph.set_enterprise_filter(field: 'user.enterprise_id', value: current_user.enterprise_id)
 
-        graph.formatter.y_label = 'Mentoring Interests'
-        graph.formatter.x_label = '# Users'
         graph.formatter.title = 'Mentoring Interests'
 
         graph.query  = graph.query.terms_agg(field: 'mentoring_interest.name')

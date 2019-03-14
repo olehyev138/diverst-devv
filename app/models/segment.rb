@@ -31,7 +31,6 @@ class Segment < BaseClass
 
     validates_presence_of :name
 
-    after_commit :update_elasticsearch_all_indexes
     after_commit :cache_segment_members, on: [:create, :update]
 
     before_destroy :remove_parent_segment

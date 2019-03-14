@@ -44,7 +44,8 @@
   padding: 0 $spacing-small;
 
   &--grow {
-    flex: 1;
+    flex-basis: auto;
+    flex-grow: 1;
   }
 
   &--ellipsis {
