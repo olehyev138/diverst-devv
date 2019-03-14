@@ -135,7 +135,7 @@ class Graph < BaseClass
     from_date = case from_date
                 when '1m'     then 'now-1M/M'
                 when '3m'     then 'now-3M/M'
-                when '6m'     then 'now-3M/M'
+                when '6m'     then 'now-6M/M'
                 when 'ytd'    then Time.now.beginning_of_year.strftime('%F')
                 when '1y'     then 'now-1y/y'
                 when 'all'    then 'now-200y/y'

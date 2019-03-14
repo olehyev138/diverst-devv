@@ -55,7 +55,7 @@ class Graph {
                 unset_series.push(series_name);
         });
 
-        $.get(url, { unset_series: unset_series });
+        $.get(url, { input: self.rangeSelector.date_range, unset_series: unset_series });
     }
 
     updateData(input={}) {

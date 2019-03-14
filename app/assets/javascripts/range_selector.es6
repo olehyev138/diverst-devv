@@ -5,6 +5,8 @@ class RangeSelector {
         this.callback = callback;
         this.$element = $element;
 
+        this.date_range = '';
+
         // store text input elements
         this.$from_input = $('.from_input', this.$element);
         this.$to_input = $('.to_input', this.$element);
@@ -29,8 +31,9 @@ class RangeSelector {
         var button = e.data.button;
         var callback = self.callback;
 
-        callback({from_date: button.value});
+        self.date_range = { from_date: button.value };
 
+        callback(self.date_range);
         self.update_button(button);
     }
 
@@ -41,8 +44,10 @@ class RangeSelector {
         var from_date = $(self.$from_input).val();
         var to_date = $(self.$to_input).val();
 
-        if ((new Date(from_date).getTime()) < (new Date(to_date).getTime()))
-            callback({ from_date: from_date, to_date: to_date });
+        if ((new Date(from_date).getTime()) < (new Date(to_date).getTime())) {
+            self.date_range = { from_date: from_date, to_date: to_date };
+            callback(self.date_range);
+        }
     }
 
     update_button(button) {
