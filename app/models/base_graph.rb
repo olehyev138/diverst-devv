@@ -111,16 +111,14 @@ module BaseGraph
       formatter.y_parser.parse_chain = formatter.y_parser.date_range
 
       elements.each do |element|
-        series_index = -1
         key = formatter.general_parser.parse(element)
 
         formatter.list_parser.parse_list(element).each do |sub_element|
-          series_index += 1
           series_name = formatter.general_parser.parse(sub_element)
 
           formatter.add_series(series_name: series_name)
           formatter.x_parser.extractor = -> (_, args) { args[:key] }
-          formatter.add_element(sub_element, series_index: series_index, key: key)
+          formatter.add_element(sub_element, series_key: series_name, key: key)
         end
       end
 
@@ -181,7 +179,7 @@ module BaseGraph
     #  - in the form of a single elasticsearch aggregation element: { key: <key>, doc_count: <n> }
     # @children - optional, a list of children elements
     # @element_key - the key to identify a parent element, gives a name to children series
-    def add_element(element, element_key: nil, children: nil, series_index: @series_index, **args)
+    def add_element(element, element_key: nil, children: nil, series_key: nil, **args)
       element = format_element(element, args)
 
       # add children to element if passed
@@ -193,8 +191,9 @@ module BaseGraph
       end
 
       # create a series for element if necessary & add element to current series
-      add_series if @data.dig(:series, series_index).blank?
-      @data[:series][series_index][:values] << element
+      add_series if @data.dig(:series, @series_index).blank?
+      series = series_key.present? ? @data[:series].find { |s| s.dig(:key) == series_key } : @data[:series][@series_index]
+      series[:values] << element
     end
 
     # Parse, format & add a list of elements to current series

@@ -9,7 +9,6 @@ class GraphsController < ApplicationController
     authorize @collection, :update?
 
     @graph = @collection.graphs.new
-    @graph.range_from = 1.year.ago
   end
 
   def edit
@@ -61,7 +60,11 @@ class GraphsController < ApplicationController
   end
 
   def export_csv
-    GraphDownloadJob.perform_later(current_user.id, @graph.id)
+    date_range = params[:input]
+    unset_series = params.dig(:unset_series) || []
+
+    GraphDownloadJob.perform_later(current_user.id, @graph.id, date_range, unset_series)
+
     flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
     redirect_to :back
   end
@@ -94,10 +97,8 @@ class GraphsController < ApplicationController
       .permit(
         :field_id,
         :aggregation_id,
-        :time_series,
-        :range_from,
-        :range_to,
-        :input
+        :input,
+        :unset_series
       )
   end
 end

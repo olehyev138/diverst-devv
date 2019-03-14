@@ -7,9 +7,9 @@ const AXIS_PADDING = 15;
 const HEIGHT_PER_ITEM = 50;
 
 class Graph {
-    constructor(dataUrl, $element, $graph_input) {
-        this.dataUrl = dataUrl;
+    constructor($element) {
         this.$element = $element;
+        this.dataUrl = this.$element.data('url');
         this.data = {};
 
         this.brandingColor = BRANDING_COLOR || '#7B77C9';
@@ -18,14 +18,44 @@ class Graph {
         this.colors[0] = this.chartsColor;
 
         var self = this;
+
+        // Set up range selector
+        var $graph_input = $(this.$element).siblings('.graph-input');
         if ($($graph_input).length && ($graph_input.attr('id') == 'range-selector')) {
             // if theres a range selector, instantiate it and set callback
-            var rangeSelector = new RangeSelector($graph_input[0], function (input) {
+            self.rangeSelector = new RangeSelector($graph_input[0], function (input) {
                 self.updateData(input);
             });
         }
 
+        // Setup csv export link
+        var $csv_link = $(this.$element).siblings('.card__action').children('.csv-export-link');
+        if ($($csv_link).length)
+            $($csv_link).on('click', { self: self, csv_link: $csv_link }, this.csvExportLinkHandler);
+
         this.updateData();
+    }
+
+    csvExportLinkHandler(e) {
+        var self = e.data.self;
+        var $csv_link = e.data.csv_link;
+        var url = $csv_link.data('url');
+
+        var unset_series = [];
+
+        $(self.$element).find('.nv-legendWrap .nv-series').each(function() {
+            var selected_series_bool = $(this).find('circle').css('fill-opacity');
+
+            // have to do this to find series names that might be cut off
+            var series_name = $(this).find('title:first').text();
+            if (series_name === "")
+                series_name = $(this).find('text').text();
+
+            if (selected_series_bool == 0)
+                unset_series.push(series_name);
+        });
+
+        $.get(url, { input: self.rangeSelector.date_range, unset_series: unset_series });
     }
 
     updateData(input={}) {
