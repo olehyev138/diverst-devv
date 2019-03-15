@@ -15,14 +15,9 @@ RSpec.describe Graph, type: :model do
 
     describe 'build_query' do
       let!(:graph_model) { FactoryGirl.create(:graph_with_metrics_dashboard) }
-      let(:graph_builder) { double(BaseGraph::GraphBuilder) }
-
       let(:date_range) { { from: 'now-200y/y', to: 'now-2d/d' } }
 
       before {
-        allow(graph_builder).to receive(:get_new_query) { BaseSearch::ElasticsearchQuery.new }
-        allow(graph_builder).to receive(:query=) { |q| q }
-
         graph_model.field = CheckboxField.new(id: 5)
       }
 
@@ -83,6 +78,35 @@ RSpec.describe Graph, type: :model do
       end
 
       describe 'nested terms query' do
+        let(:query) { graph_model.send(:build_query, date_range).build }
+
+        before {
+          graph_model.aggregation = SelectField.new(id: 6)
+        }
+
+        it 'has a valid top level terms agg with correct field' do
+          terms = query.dig(:aggs, :agg, :aggs, :agg, :terms)
+
+          expect(terms[:field]).to eq graph_model.field.elasticsearch_field
+        end
+
+        it 'has a valid nested terms agg with correct field' do
+          terms = query.dig(:aggs, :agg, :aggs, :agg, :aggs, :agg, :terms)
+
+          expect(terms[:field]).to eq graph_model.aggregation.elasticsearch_field
+        end
+
+        it 'has a valid bottom level date range agg with correct field' do
+          date_range = query.dig(:aggs, :agg, :aggs, :agg, :aggs, :agg, :aggs, :agg, :date_range)
+
+          expect(date_range[:field]).to eq 'user.created_at'
+        end
+
+        it 'has a valid bottom level date range agg with correct range' do
+          date_range = query.dig(:aggs, :agg, :aggs, :agg, :aggs, :agg, :aggs, :agg, :date_range)
+
+          expect(date_range[:ranges][0][:from]).to eq 'now-200y/y'
+        end
       end
     end
 
@@ -94,6 +118,6 @@ RSpec.describe Graph, type: :model do
         expect(custom_class).to_not eq nil
       end
 
-      #it 'expect it to define #__elasticsearch__ and #search and pass correct arguments to elasticsearch'
+      #it 'defines #__elasticsearch__ and #search and pass correct arguments to elasticsearch'
     end
 end
