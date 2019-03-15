@@ -30,7 +30,10 @@ module Diverst
 
     config.autoload_paths << Rails.root.join('app/models/csv_export')
 
-    config.assets.paths   << Rails.root.join('bower_components') # Yarn assets
+    # Yarn assets
+    config.assets.paths   << Rails.root.join('node_modules')
+    config.assets.paths   << Rails.root.join('node_modules', '@bower_components')
+
     config.assets.paths   << Rails.root.join('tmp', 'themes') # Custom themes
 
     config.active_job.queue_adapter = :sidekiq
