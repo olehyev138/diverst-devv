@@ -540,7 +540,7 @@ class User < BaseClass
             methods: [:combined_info],
             include: [:enterprise, user_groups: { only: [], include: { group: { only: [:name] } } }]
           }
-      )
+      ).merge({ "created_at" => self.created_at.beginning_of_hour })
     end
 
     private
