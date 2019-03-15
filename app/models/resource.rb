@@ -51,7 +51,7 @@ class Resource < BaseClass
             include: { group: { only: [:enterprise_id]  } }
           }}
         )
-      )
+      ).merge({ "created_at" => self.created_at.beginning_of_hour })
     end
 
     def tag_tokens=(tokens)
