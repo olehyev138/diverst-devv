@@ -109,15 +109,33 @@ RSpec.describe GroupMessage, type: :model do
     describe '#send_emails' do
         let(:group_message) { create :group_message }
     end
-    
+
+    describe 'elasticsearch methods' do
+      context '#as_indexed_json' do
+        let!(:object) { create(:group_message) }
+
+        it 'serializes the correct fields with the correct data' do
+          hash = {
+            'created_at' => object.created_at.beginning_of_hour,
+            'group' => {
+              'enterprise_id' => object.group.enterprise_id,
+              'name' => object.group.name,
+              'parent_id' => object.group.parent_id
+            }
+          }
+          expect(object.as_indexed_json).to eq(hash)
+        end
+      end
+    end
+
     describe "#destroy_callbacks" do
         it "removes the child objects" do
             group_message = create(:group_message)
             group_messages_segment = create(:group_messages_segment, :group_message => group_message)
             group_message_comment = create(:group_message_comment, :message => group_message)
-            
+
             group_message.destroy!
-            
+
             expect{GroupMessage.find(group_message.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{GroupMessagesSegment.find(group_messages_segment.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{GroupMessageComment.find(group_message_comment.id)}.to raise_error(ActiveRecord::RecordNotFound)
