@@ -1,28 +1,72 @@
 class Reports::GraphStats
-  def initialize(graph)
+  def initialize(graph, elements, date_range, unset_series)
+    @agg_list_parser = BaseGraph::ElasticsearchParser.new
+    @agg_list_parser.parse_chain = @agg_list_parser.nested_terms_list
+
+    @x_parser = BaseGraph::ElasticsearchParser.new
+
+    @y_parser = BaseGraph::ElasticsearchParser.new(key: :doc_count)
+    @y_parser.parse_chain = @y_parser.date_range
+
     @graph = graph
-    @graph_content = @graph.field.highcharts_stats(
-                      aggr_field: @graph.aggregation,
-                      segments: @graph.collection.segments,
-                      groups: @graph.collection.groups
-                     )
+    @elements = elements
+    @date_range = date_range
+    @unset_series = unset_series
   end
 
   def get_header
-    header = @graph_content[:series].map{ |s| s[:name] }
-    header.unshift(@graph_content[:xAxisTitle]) if @graph.has_aggregation?
+    header = []
+    header << [@graph.title]
+    header << ['From' + @date_range[:from], 'To:' + @date_range[:to]]
+
+    # If aggregation, add each aggregation field value as a column
+    header_row = [@graph.field.title]
+    if @graph.aggregation.present?
+      sub_elements = @agg_list_parser.parse_list(@elements[0]).sort_by { |ee| ee[:key] }
+      sub_elements.each do |ee|
+        next if @unset_series.include? ee[:key] # skip series/aggregation values that are unset in UI
+        header_row << ee[:key]
+      end
+    end
+
+    header_row << 'Y'
+    header << header_row
+
     header
   end
 
   def get_body
     body = []
-    if @graph.has_aggregation? || @graph.field.numeric?
-      @graph_content[:categories].each_with_index do |category, i|
-        body[i] = [category] + @graph_content[:series].map{ |s| s[:data][i] }
+
+    if @graph.aggregation.present?
+      @elements.each do |e|
+        row = []
+        buckets = @agg_list_parser.parse_list(e).sort_by { |ee| ee[:key] }
+        next if buckets.count == 0
+
+        row << @x_parser.parse(e)
+
+        # sub elements
+        buckets.each do |ee|
+          key = @x_parser.parse(ee)
+          doc_count = @y_parser.parse(ee)
+
+          next if doc_count == 0 || @unset_series.include?(key)
+          row << doc_count
+        end
+
+        body << row
       end
     else
-      body = @graph_content[:series].map{ |s| s[:data] }.flatten.map(&:values)
+      @elements.each do |e|
+        key = @x_parser.parse(e)
+        doc_count = @y_parser.parse(e)
+
+        next if doc_count == 0
+        body << [key, doc_count]
+      end
     end
+
     body
   end
 end
