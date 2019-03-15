@@ -59,7 +59,7 @@ class MentoringSession < BaseClass
           only: [:created_at],
           include: { creator: { only: [:enterprise_id, :active, :first_name, :last_name, :name] } },
         )
-      )
+      ).merge({ "created_at" => self.created_at.beginning_of_hour })
     end
 
     def old_session?
