@@ -16,6 +16,7 @@ class Graph < BaseClass
     if @graph_builder.blank?
       @graph_builder = get_custom_class.get_graph
       @graph_builder.set_enterprise_filter(field: 'user.enterprise_id', value: collection.enterprise.id)
+
       @graph_builder.formatter.type = 'custom'
       @graph_builder.formatter.filter_zeros = false        # filtering 0 values breaks stacked bar graphs
     end

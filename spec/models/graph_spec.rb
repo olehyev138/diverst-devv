@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Graph, type: :model do
 
     describe 'validations' do
-        let(:graph) { FactoryGirl.build_stubbed(:graph) }
+        let(:graph) { FactoryGirl.build_stubbed(:graph_with_metrics_dashboard) }
 
         it{ expect(graph).to validate_presence_of(:field) }
 
@@ -14,7 +14,7 @@ RSpec.describe Graph, type: :model do
     end
 
     describe 'build_query' do
-      let(:graph_model) { FactoryGirl.build_stubbed(:graph) }
+      let!(:graph_model) { FactoryGirl.create(:graph_with_metrics_dashboard) }
       let(:graph_builder) { double(BaseGraph::GraphBuilder) }
 
       let(:date_range) { { from: 'now-200y/y', to: 'now-2d/d' } }
@@ -28,13 +28,15 @@ RSpec.describe Graph, type: :model do
 
       describe 'top level bool filter' do
         it 'has a top level bool filter' do
-          query = graph_model.send(:build_query, graph_builder, date_range, [], []).build
+          query = graph_model.send(:build_query, date_range).build
 
           expect(query.dig(:aggs, :agg, :filter)).to have_key(:bool)
         end
 
         it 'to have valid groups must_not clause' do
-          query = graph_model.send(:build_query, graph_builder, date_range, ['group01'], []).build
+          graph_model.instance_variable_set(:@groups, ['group01'])
+
+          query = graph_model.send(:build_query, date_range).build
           clause = query.dig(:aggs, :agg, :filter, :bool, :must_not, 0, 'terms')
 
           expect(clause).to have_key('group.name')
@@ -42,7 +44,9 @@ RSpec.describe Graph, type: :model do
         end
 
         it 'to have valid segments must_not clause' do
-          query = graph_model.send(:build_query, graph_builder, date_range, [], ['segment01']).build
+          graph_model.instance_variable_set(:@segments, ['segment01'])
+
+          query = graph_model.send(:build_query, date_range).build
           clause = query.dig(:aggs, :agg, :filter, :bool, :must_not, 1, 'terms')
 
           expect(clause).to have_key('segment.name')
@@ -51,7 +55,7 @@ RSpec.describe Graph, type: :model do
       end
 
       describe 'single terms query' do
-        let(:query) { graph_model.send(:build_query, graph_builder, date_range, [], []).build }
+        let(:query) { graph_model.send(:build_query, date_range).build }
 
         it 'has a valid terms agg with correct field' do
           terms = query.dig(:aggs, :agg, :aggs, :agg, :terms)
@@ -83,7 +87,7 @@ RSpec.describe Graph, type: :model do
     end
 
     describe 'get_custom_class' do
-      let(:graph) { FactoryGirl.build_stubbed(:graph) }
+      let(:graph) { FactoryGirl.build_stubbed(:graph_with_metrics_dashboard) }
       let(:custom_class) { graph.send(:get_custom_class) }
 
       it 'custom class instance to be returned' do
