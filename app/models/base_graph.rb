@@ -179,20 +179,22 @@ module BaseGraph
     #  - in the form of a single elasticsearch aggregation element: { key: <key>, doc_count: <n> }
     # @children - optional, a list of children elements
     # @element_key - the key to identify a parent element, gives a name to children series
-    def add_element(element, element_key: nil, children: nil, series_key: nil, **args)
-      element = format_element(element, args)
+    def add_element(es_element, element_key: nil, children: nil, series_key: nil, **args)
+      element = format_element(es_element, args)
 
       # add children to element if passed
       if children.present?
         element[:children] = {
-          key: element_key || get_element_key(element),
+          key: element_key || get_element_key(es_element),
           values: format_elements(children, args)
         }
       end
 
       # create a series for element if necessary & add element to current series
+      # if series is specified, find it and pull it out, otherwise get series using current index
       add_series if @data.dig(:series, @series_index).blank?
-      series = series_key.present? ? @data[:series].find { |s| s.dig(:key) == series_key } : @data[:series][@series_index]
+      series = series_key.present? ? @data[:series].find { |s| s.dig(:key) == series_key }
+                                   : @data[:series][@series_index]
       series[:values] << element
     end
 
