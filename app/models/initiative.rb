@@ -95,7 +95,7 @@ class Initiative < BaseClass
           include: { parent: { only: [:name] } }
         } }, only: [] }, }, only: [] } }
       )
-    )
+    ).merge({ "created_at" => self.created_at.beginning_of_hour })
   end
 
   def initiative_date(date_type)
