@@ -5,7 +5,7 @@ RSpec.describe EnterpriseResourcePolicy, :type => :policy do
   let(:user){ create(:user) }
   let(:no_access) { create(:user) }
 
-  subject { described_class }
+  subject { EnterpriseResourcePolicy.new(user, nil) }
 
   before {
     user.policy_group.manage_all = false
@@ -18,30 +18,29 @@ RSpec.describe EnterpriseResourcePolicy, :type => :policy do
     no_access.policy_group.save!
   }
 
-  permissions :index?, :create?, :update?, :destroy? do
-    it 'allows access to user with correct permissions' do
-      expect(subject).to permit(user, nil)
+  describe 'for users with access' do 
+    context 'allow access for all actions' do 
+      it { is_expected.to permit_actions([:index, :create, :update, :destroy]) }
     end
 
-    it 'denies access to user with incorrect permissions' do
-      expect(subject).to_not permit(no_access, nil)
+    context 'allow access for index and create actions' do 
+      before { user.policy_group.update enterprise_resources_manage: false }
+      it { is_expected.to permit_actions([:index, :create]) }
+    end
+
+    context 'allows access to user with index permissions' do 
+      before do  
+        user.policy_group.enterprise_resources_manage = false
+        user.policy_group.enterprise_resources_create = false
+      end
+
+      it { is_expected.to permit_action :index }
     end
   end
 
-  permissions :index?, :create? do
-    it 'allows access to user with create permissions' do
-      user.policy_group.enterprise_resources_manage = false
+  describe 'for users with no access' do 
+    let!(:user) { no_access }
 
-      expect(subject).to permit(user, nil)
-    end
-  end
-
-  permissions :index? do
-    it 'allows access to user with index permissions' do
-      user.policy_group.enterprise_resources_manage = false
-      user.policy_group.enterprise_resources_create = false
-
-      expect(subject).to permit(user, nil)
-    end
+    it { is_expected.to forbid_actions([:index, :create, :update, :destroy]) }
   end
 end
