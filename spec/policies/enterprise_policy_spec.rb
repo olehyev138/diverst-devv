@@ -6,7 +6,7 @@ RSpec.describe EnterprisePolicy, :type => :policy do
   let(:user){ create(:user, :enterprise => enterprise) }
   let(:no_access) { create(:user) }
 
-  subject { described_class }
+  subject { EnterprisePolicy.new(user, enterprise) }
 
   before {
     no_access.policy_group.manage_all = false
@@ -21,225 +21,54 @@ RSpec.describe EnterprisePolicy, :type => :policy do
     user.policy_group.save!
   }
 
-  context "when manage_all is false" do
-    it "ensure manage_all is false" do
-      expect(user.policy_group.manage_all).to be(false)
-    end
+  describe 'for users with access' do 
+    context 'when manage_all is false' do 
+      before { user.policy_group.update manage_all: false }
 
-    permissions :update? do
-      it "allows access" do
-        expect(subject).to permit(user, enterprise)
+      it 'ensure manage_all is false' do 
+        expect(user.policy_group.manage_all).to be(false)
       end
 
-      it "doesn't allow access" do
-        expect(subject).to_not permit(no_access, enterprise)
-      end
-    end
-
-    permissions :edit_auth? do
-      it "allows access" do
-        expect(subject).to permit(user, enterprise)
+      context 'allows access to actions' do 
+        it { is_expected.to permit_actions([:update, :edit_auth, :edit_fields, :edit_mobile_fields, 
+           :manage_posts, :diversity_manage, :update_branding, 
+           :edit_pending_comments, :restore_default_branding]) 
+            }
       end
 
-      it "doesn't allow access" do
-        expect(subject).to_not permit(no_access, enterprise)
-      end
-    end
+      context 'when manage_all is true' do 
+        before {
+          user.policy_group.manage_all = true
+          user.policy_group.enterprise_manage = false
+          user.policy_group.sso_manage = false
+          user.policy_group.diversity_manage = false
+          user.policy_group.branding_manage = false
+          user.policy_group.manage_posts = false
+          user.policy_group.save!
+        }
 
-    permissions :edit_fields? do
-      it "allows access" do
-        expect(subject).to permit(user, enterprise)
-      end
+        it "ensure manage_all is true" do
+          expect(user.policy_group.manage_all).to be(true)
+        end
 
-      it "doesn't allow access" do
-        expect(subject).to_not permit(no_access, enterprise)
-      end
-    end
-
-    permissions :edit_mobile_fields? do
-      it "allows access" do
-        expect(subject).to permit(user, enterprise)
-      end
-
-      it "doesn't allow access" do
-        expect(subject).to_not permit(no_access, enterprise)
-      end
-    end
-
-    permissions :manage_posts? do
-      it "allows access" do
-        expect(subject).to permit(user, enterprise)
-      end
-
-      it "doesn't allow access" do
-        expect(subject).to_not permit(no_access, enterprise)
-      end
-    end
-
-    permissions :diversity_manage? do
-      it "allows access" do
-        expect(subject).to permit(user, enterprise)
-      end
-
-      it "doesn't allow access" do
-        expect(subject).to_not permit(no_access, enterprise)
-      end
-    end
-
-    permissions :update_branding? do
-      it "allows access" do
-        expect(subject).to permit(user, enterprise)
-      end
-
-      it "doesn't allow access" do
-        expect(subject).to_not permit(no_access, enterprise)
-      end
-    end
-
-    permissions :edit_branding? do
-      it "allows access" do
-        expect(subject).to permit(user, enterprise)
-      end
-
-      it "doesn't allow access" do
-        expect(subject).to_not permit(no_access, enterprise)
-      end
-    end
-
-    permissions :edit_pending_comments? do
-      it "allows access" do
-        expect(subject).to permit(user, enterprise)
-      end
-
-      it "doesn't allow access" do
-        expect(subject).to_not permit(no_access, enterprise)
-      end
-    end
-
-    permissions :restore_default_branding? do
-      it "allows access" do
-        expect(subject).to permit(user, enterprise)
-      end
-
-      it "doesn't allow access" do
-        expect(subject).to_not permit(no_access, enterprise)
+        context 'allows access to actions' do 
+          it { is_expected.to permit_actions([:update, :edit_auth, :edit_fields, :edit_mobile_fields, 
+             :manage_posts, :diversity_manage, :update_branding, 
+             :edit_pending_comments, :restore_default_branding]) 
+             }
+        end
       end
     end
   end
 
-  context "when manage_all is true" do
-    before {
-      user.policy_group.manage_all = true
-      user.policy_group.enterprise_manage = false
-      user.policy_group.sso_manage = false
-      user.policy_group.diversity_manage = false
-      user.policy_group.branding_manage = false
-      user.policy_group.manage_posts = false
-      user.policy_group.save!
-    }
+  describe 'users with no access' do 
+    let!(:user) { no_access }
 
-    it "ensure manage_all is true" do
-      expect(user.policy_group.manage_all).to be(true)
-    end
-
-    permissions :update? do
-      it "allows access" do
-        expect(subject).to permit(user, enterprise)
-      end
-
-      it "doesn't allow access" do
-        expect(subject).to_not permit(no_access, enterprise)
-      end
-    end
-
-    permissions :edit_auth? do
-      it "allows access" do
-        expect(subject).to permit(user, enterprise)
-      end
-
-      it "doesn't allow access" do
-        expect(subject).to_not permit(no_access, enterprise)
-      end
-    end
-
-    permissions :edit_fields? do
-      it "allows access" do
-        expect(subject).to permit(user, enterprise)
-      end
-
-      it "doesn't allow access" do
-        expect(subject).to_not permit(no_access, enterprise)
-      end
-    end
-
-    permissions :edit_mobile_fields? do
-      it "allows access" do
-        expect(subject).to permit(user, enterprise)
-      end
-
-      it "doesn't allow access" do
-        expect(subject).to_not permit(no_access, enterprise)
-      end
-    end
-
-    permissions :manage_posts? do
-      it "allows access" do
-        expect(subject).to permit(user, enterprise)
-      end
-
-      it "doesn't allow access" do
-        expect(subject).to_not permit(no_access, enterprise)
-      end
-    end
-
-    permissions :diversity_manage? do
-      it "allows access" do
-        expect(subject).to permit(user, enterprise)
-      end
-
-      it "doesn't allow access" do
-        expect(subject).to_not permit(no_access, enterprise)
-      end
-    end
-
-    permissions :update_branding? do
-      it "allows access" do
-        expect(subject).to permit(user, enterprise)
-      end
-
-      it "doesn't allow access" do
-        expect(subject).to_not permit(no_access, enterprise)
-      end
-    end
-
-    permissions :edit_branding? do
-      it "allows access" do
-        expect(subject).to permit(user, enterprise)
-      end
-
-      it "doesn't allow access" do
-        expect(subject).to_not permit(no_access, enterprise)
-      end
-    end
-
-    permissions :edit_pending_comments? do
-      it "allows access" do
-        expect(subject).to permit(user, enterprise)
-      end
-
-      it "doesn't allow access" do
-        expect(subject).to_not permit(no_access, enterprise)
-      end
-    end
-
-    permissions :restore_default_branding? do
-      it "allows access" do
-        expect(subject).to permit(user, enterprise)
-      end
-
-      it "doesn't allow access" do
-        expect(subject).to_not permit(no_access, enterprise)
-      end
+    context 'allows access to actions' do 
+      it { is_expected.to forbid_actions([:update, :edit_auth, :edit_fields, :edit_mobile_fields, 
+         :manage_posts, :diversity_manage, :update_branding, 
+         :edit_pending_comments, :restore_default_branding]) 
+          }
     end
   end
 end
