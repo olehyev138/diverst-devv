@@ -46,7 +46,6 @@ RSpec.describe ExpenseCategoryPolicy, :type => :policy do
     context'when manage_all is true' do
       before {
         user.policy_group.manage_all = true
-        user.policy_group.campaigns_manage = false
         user.policy_group.save!
       }
 
@@ -55,6 +54,7 @@ RSpec.describe ExpenseCategoryPolicy, :type => :policy do
       end
 
       context 'when subject campaigns_index is false but campaigns_manage is true for user' do 
+        before { user.policy_group.update campaigns_index: false }
         it { is_expected.to permit_action :index }
       end
 
