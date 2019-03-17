@@ -80,6 +80,7 @@
     <% if @question.solved_at.nil? %>
       <%= simple_form_for [:user, @question, :user, @answer] do |f| %>
         <%= f.input :content, label: "<h3>Write an answer</h3>".html_safe, placeholder: "Type an answer here..." %>
+        <%= f.association :contributing_group, collection: (@question.campaign.groups & current_user.groups).map { |g| [ g.name, g.id ] } %>
         <%= f.button :submit, value: "Submit" %>
       <% end %>
     <% else %>
