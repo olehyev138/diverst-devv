@@ -8,7 +8,7 @@ RSpec.describe GroupNewsLinkPolicy, :type => :policy do
   let(:group) { create :group, enterprise: user.enterprise }
   let(:news_link) { create(:news_link, group: group) }
 
-  subject { described_class }
+  subject { GroupNewsLinkPolicy.new(user, [group, news_link]) }
 
   before {
     user.policy_group.manage_all = false
@@ -23,30 +23,28 @@ RSpec.describe GroupNewsLinkPolicy, :type => :policy do
     no_access.policy_group.save!
   }
 
-  permissions :index? do
-
-    it 'allows access when visibility is public and user has index permissions' do
-      group.latest_news_visibility = 'public'
-
-      expect(subject).to permit(user, [group, nil])
+  describe 'for users with access' do 
+    context 'allows access when visibility is public and user has index permissions' do 
+      let!(:news_link) { nil }
+      before { group.latest_news_visibility = 'public' }
+      it { is_expected.to  permit_action :index }
     end
 
-    it 'denies access when visibility is public and user doesnt have index permissions' do
-      group.latest_news_visibility = 'public'
-
-      expect(subject).to_not permit(no_access, [group, nil])
+    context 'allows access to index, create, update, destroy' do 
+      it { is_expected.to permit_actions([:index, :create, :update, :destroy]) }
     end
   end
 
-  permissions :index?, :create?, :update?, :destroy? do
+  describe 'for users with no access' do
+    let!(:user) { no_access }
 
-
-    it "allows access" do
-      expect(subject).to permit(user, [news_link.group, news_link])
+    context 'does not allow access when visibility is public and user does not have index permissions' do 
+      before { group.latest_news_visibility = 'public' }
+      it { is_expected.to forbid_action :index }
     end
 
-    it "doesn't allow access" do
-      expect(subject).to_not permit(no_access, [news_link.group, news_link])
+    context 'does not allow access to index, create, update, destroy' do 
+      it { is_expected.to forbid_actions([:index, :create, :update, :destroy]) }
     end
   end
 end
