@@ -6,7 +6,7 @@ RSpec.describe UserRolePolicy, :type => :policy do
   let(:no_access) { create(:user) }
   let(:user_role){ create(:user_role) }
 
-  subject { described_class }
+  subject { UserRolePolicy.new(user, user_role) }
 
   before {
     user.policy_group.manage_all = false
@@ -18,13 +18,13 @@ RSpec.describe UserRolePolicy, :type => :policy do
     no_access.policy_group.save!
   }
 
-  permissions :index?, :create?, :update?, :destroy? do
-    it 'allows access to user with correct permissions' do
-      expect(subject).to permit(user, user_role)
-    end
+  describe 'for user with access' do 
+    it { is_expected.to  permit_actions([:index, :create, :update, :destroy]) }
+  end
 
-    it 'denies access to user with incorrect permissions' do
-      expect(subject).to_not permit(no_access, user_role)
-    end
+  describe 'for user with no access' do 
+    let!(:user) { no_access }
+
+    it { is_expected.to forbid_actions([:index, :create, :update, :destroy]) }
   end
 end
