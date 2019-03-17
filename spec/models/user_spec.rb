@@ -417,8 +417,7 @@ RSpec.describe User do
 
   describe 'elasticsearch methods' do
     it '.es_index_name' do
-      enterprise = build_stubbed(:enterprise)
-      expect(User.es_index_name(enterprise: enterprise)).to eq "#{ enterprise.id }_users"
+      expect(User.index_name).to eq "users"
     end
 
     context '#as_indexed_json' do
@@ -450,11 +449,15 @@ RSpec.describe User do
         data = {
           "#{ user.enterprise.fields.first.id }" => "No",
           poll.fields.first.id => ["Yes"],
-          groups: [user_group.group_id],
-          segments: [user_segment.segment_id]
         }
 
-        expect(user.as_indexed_json['combined_info']).to eq(data)
+        expect(user.as_indexed_json['combined_info']).to eq(data.merge(user.info_hash))
+      end
+
+      it 'rounds the created_at date to hour' do
+        object = create(:user)
+
+        expect(object.as_indexed_json['created_at']).to eq(object.created_at.beginning_of_hour)
       end
     end
   end

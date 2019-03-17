@@ -64,6 +64,12 @@ class UserGroup < BaseClass
         methods: [:user_combined_info]
       )
     )
+    .deep_merge({
+      'created_at' => self.created_at.beginning_of_hour,
+      'user' => {
+        'created_at' => self.user.created_at.beginning_of_hour,
+      }
+    })
   end
 
   def user_combined_info

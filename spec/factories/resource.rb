@@ -5,6 +5,7 @@ FactoryGirl.define do
     file_content_type { 'application/pdf' }
     file_file_size { 1024 }
     url { Faker::Internet.url('example.com') }
+    folder
 
     factory :resource_with_file do
       file = File.new(Rails.root + 'spec/fixtures/files/verizon_logo.png')

@@ -61,7 +61,7 @@ class GroupMessage < BaseClass
           include: { parent: { only: [:name] } }
         }}
       )
-    )
+    ).merge({ "created_at" => self.created_at.beginning_of_hour })
   end
 
   def approve_link

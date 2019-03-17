@@ -38,10 +38,11 @@ class UsersSegment < BaseClass
         include: { segment: {
           only: [:enterprise_id, :name],
           include: { parent: { only: [:name] } }
-        }, user: { only: [:created_at, :enterprise_id] }},
+        }, user: { only: [:created_at, :enterprise_id] } },
         methods: [:user_combined_info]
       )
     )
+    .deep_merge({ "user" => { 'created_at' => user.created_at.beginning_of_hour } })
   end
 
   def user_combined_info
