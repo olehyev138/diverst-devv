@@ -33,4 +33,24 @@ class Answer < BaseClass
             (e.quantity || 0) * (e.expense.signed_price || 0)
         }.sum
     end
+
+    settings do
+      mappings dynamic: false do
+        indexes :upvote_count, type: :integer
+        indexes :author do
+          indexes :enterprise_id, type: :integer
+          indexes :id, type: :integer
+        end
+      end
+    end
+
+    def as_indexed_json(options = {})
+      self.as_json(
+        options.merge(
+          only: [:upvote_count],
+          include: { author: { only: [:enterprise_id, :id] } },
+          methods: [:total_votes]
+        )
+      )
+    end
 end

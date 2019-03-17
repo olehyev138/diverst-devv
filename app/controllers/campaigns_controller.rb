@@ -86,10 +86,7 @@ class CampaignsController < ApplicationController
 
     respond_to do |format|
       format.json {
-        render json: {
-          highcharts: @campaign.top_performers,
-          type: 'bar'
-        }
+        render json: @campaign.top_performers
       }
       format.csv {
         CampaignTopPerformersDownloadJob.perform_later(current_user.id, @campaign.id)
@@ -117,6 +114,7 @@ class CampaignsController < ApplicationController
         :image,
         :banner,
         :status,
+        :input,
         group_ids: [],
         segment_ids: [],
         manager_ids: [],

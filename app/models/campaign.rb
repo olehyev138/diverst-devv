@@ -105,29 +105,19 @@ class Campaign < BaseClass
     end
 
     def top_performers
-        top_answers_count_hash = answers.group(:author).order('count_all').count
+      # Total votes for all answers per user
 
-        top_answers_hash = top_answers_count_hash.map do |user, _|
-            [
-                user,
-                answers.where(author: user).map { |a| a.votes.count }.sum
-            ]
-        end.to_h
+      graph = Answer.get_graph
+      graph.set_enterprise_filter(field: 'author.enterprise_id', value: enterprise.id )
+      graph.formatter.title = 'Total votes per user'
 
-        top_comments_hash = answer_comments.group('answer_comments.author_id').order('count_all').count.map { |k, v| [User.find(k), v] }.to_h
-        top_combined_hash = top_answers_hash.merge(top_comments_hash) { |_k, a_value, b_value| a_value + b_value }.sort_by { |_k, v| v }.reverse!.to_h
+      graph.query = graph.query.terms_agg(field: 'author.id') { |q| q.sum_agg(field: 'upvote_count') }
+      graph.formatter.y_parser.parse_chain = graph.formatter.y_parser.sum
+      graph.formatter.y_parser.extractor = -> (e, _) { e.round }
+      graph.formatter.x_parser.extractor = -> (e, _) { User.find(e[:key]).name }
 
-        series = [{
-            name: 'Score',
-            data: top_combined_hash.values[0..14]
-        }]
-
-        {
-            series: series,
-            categories: top_combined_hash.keys.map(&:name)[0..14],
-            xAxisTitle: 'Employee',
-            yAxisTitle: 'Score'
-        }
+      graph.formatter.add_elements(graph.search)
+      graph.build
     end
 
     # Returns the % of questions that have been closed

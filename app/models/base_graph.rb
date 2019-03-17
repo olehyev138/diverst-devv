@@ -289,6 +289,14 @@ module BaseGraph
       }
     end
 
+    def sum(&block)
+      inner = yield self if block_given?
+
+      -> (e) {
+        e = e.try(:agg).dig(:value) || 0
+        (inner) ? inner.call(e) : e
+      }
+    end
 
     # Parse a top hits aggregation
     # Must be run last, can not nest anything inside except custom parser
@@ -297,7 +305,6 @@ module BaseGraph
         e.try(:agg).try(:hits).try(:hits).try(:dig, 0, '_source') || 0
       }
     end
-
 
     # list parsers
 
