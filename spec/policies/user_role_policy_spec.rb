@@ -19,7 +19,23 @@ RSpec.describe UserRolePolicy, :type => :policy do
   }
 
   describe 'for user with access' do 
-    it { is_expected.to  permit_actions([:index, :create, :update, :destroy]) }
+    context 'when manage_all is false' do 
+      it 'ensure manage_all is false' do 
+        expect(user.policy_group.manage_all).to be(false)
+      end
+
+      context 'when users_index and users_manage are false' do 
+        before { user.policy_group.update users_index: false, users_manage: false }
+        it { is_expected.to forbid_action :index }
+      end
+
+      it { is_expected.to permit_actions([:index, :create, :update, :destroy]) }
+    end
+
+    context 'when manage_all is true' do 
+      before { user.policy_group.update manage_all: true }
+      it { is_expected.to permit_actions([:index, :create, :update, :destroy]) }
+    end
   end
 
   describe 'for user with no access' do 
