@@ -111,7 +111,10 @@ class Campaign < BaseClass
       graph.set_enterprise_filter(field: 'author.enterprise_id', value: enterprise.id )
       graph.formatter.title = 'Total votes per user'
 
-      graph.query = graph.query.terms_agg(field: 'author.id') { |q| q.sum_agg(field: 'upvote_count') }
+      graph.query = graph.query.filter_agg(field: 'question.campaign_id', value: self.id) { |q|
+        q.terms_agg(field: 'author.id') { |qq| qq.sum_agg(field: 'upvote_count') }
+      }
+
       graph.formatter.y_parser.parse_chain = graph.formatter.y_parser.sum
       graph.formatter.y_parser.extractor = -> (e, _) { e.round }
       graph.formatter.x_parser.extractor = -> (e, _) { User.find(e[:key]).name }

@@ -41,6 +41,9 @@ class Answer < BaseClass
           indexes :enterprise_id, type: :integer
           indexes :id, type: :integer
         end
+        indexes :question do
+          indexes :campaign_id
+        end
       end
     end
 
@@ -48,7 +51,8 @@ class Answer < BaseClass
       self.as_json(
         options.merge(
           only: [:upvote_count],
-          include: { author: { only: [:enterprise_id, :id] } },
+          include: { author: { only: [:enterprise_id, :id] },
+            question: { only: [:campaign_id] }},
           methods: [:total_votes]
         )
       )
