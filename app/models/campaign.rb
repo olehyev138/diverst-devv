@@ -92,6 +92,7 @@ class Campaign < BaseClass
       graph = Answer.get_graph
       graph.set_enterprise_filter(field: 'author.enterprise_id', value: enterprise.id )
       graph.formatter.title = 'Contributions per erg'
+      graph.formatter.type = 'pie'
 
       graph.query = graph.query.filter_agg(field: 'question.campaign_id', value: self.id) { |q|
         q.terms_agg(field: 'contributing_group.name')
