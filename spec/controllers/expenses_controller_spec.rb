@@ -59,7 +59,7 @@ RSpec.describe ExpensesController, type: :controller do
             login_user_from_let
 
             context 'with correct params' do
-                let(:valid_expense_attributes) { FactoryGirl.attributes_for(:expense, :category_id => category.id )}
+                let(:valid_expense_attributes) { attributes_for(:expense, :category_id => category.id )}
 
                 it 'redirects to correct action' do
                     post :create, expense: valid_expense_attributes
@@ -104,7 +104,7 @@ RSpec.describe ExpensesController, type: :controller do
             end
 
             context "with invalid params" do
-                let(:invalid_expense_attributes) { FactoryGirl.attributes_for(:expense, name: nil) }
+                let(:invalid_expense_attributes) { attributes_for(:expense, name: nil) }
 
                 before { post :create, expense: invalid_expense_attributes }
 
@@ -119,7 +119,7 @@ RSpec.describe ExpensesController, type: :controller do
         end
 
         describe "without a logged in user" do
-            let(:valid_expense_attributes) { FactoryGirl.attributes_for(:expense, :category_id => category.id )}
+            let(:valid_expense_attributes) { attributes_for(:expense, :category_id => category.id )}
             before { post :create, expense: valid_expense_attributes }
             it_behaves_like "redirect user to users/sign_in path"
         end

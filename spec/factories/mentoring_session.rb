@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mentoring_session do |f|
     f.creator {create(:user)}
     f.start { Faker::Time.between(Date.today, 1.month.from_now) }

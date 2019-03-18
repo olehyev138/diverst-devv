@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :polls_segment do
   	poll
   	segment

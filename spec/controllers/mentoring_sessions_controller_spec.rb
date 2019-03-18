@@ -148,7 +148,7 @@ RSpec.describe MentoringSessionsController, type: :controller do
           end
 
           context 'with invalid attributes' do
-              invalid_attributes = FactoryGirl.attributes_for(:mentoring_session_comment)
+              invalid_attributes = FactoryBot.attributes_for(:mentoring_session_comment)
               let!(:invalid_attributes) { invalid_attributes[:content] = nil }
 
               it 'flashes an alert message' do

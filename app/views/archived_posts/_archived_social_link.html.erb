@@ -1,4 +1,4 @@
-<div class="card__section card__section--border" id="archived_social_link_<%= social_link.id %>">
+<div class="card__section card__section--border" id="archived_social_link_<%= social_link.news_feed_link.id %>">
   <div class="row">
     <div class="col-xs-12">
       <% if EnterprisePolicy.new(current_user, current_user.enterprise).manage_posts? %>  

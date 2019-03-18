@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :policy_group do
     campaigns_index true
     campaigns_create true

@@ -4,7 +4,7 @@ RSpec.describe Group, :type => :model do
     include ActiveJob::TestHelper
 
     describe 'validations' do
-        let(:group) { FactoryGirl.build_stubbed(:group) }
+        let(:group) { build_stubbed(:group) }
 
         it{ expect(group).to validate_presence_of(:name) }
 
@@ -162,7 +162,7 @@ RSpec.describe Group, :type => :model do
     end
 
     describe '#yammer_group_id' do
-      let(:group) { FactoryGirl.build_stubbed(:group) }
+      let(:group) { build_stubbed(:group) }
 
       subject { group.yammer_group_id }
 
@@ -468,6 +468,39 @@ RSpec.describe Group, :type => :model do
             average = Group.avg_members_per_group(:enterprise => enterprise)
             expect(average).to eq(2)
         end
+    end
+
+    describe '#accept_pending_members' do
+      it 'accepts pending members' do
+        enterprise = create(:enterprise)
+        user_1 = create(:user, enterprise: enterprise)
+        user_2 = create(:user, enterprise: enterprise)
+        group = create(:group, enterprise: enterprise, pending_users: "enabled")
+        create(:user_group, :user => user_1, :group => group, accepted_member: false)
+        create(:user_group, :user => user_2, :group => group, accepted_member: false)
+
+        group.accept_pending_members
+
+        expect(group.user_groups.pluck(:accepted_member)).to all(be true)
+      end
+    end
+
+    describe '#pending_members_enabled?' do
+      context 'with pending members enabled' do
+        let(:group) { create(:group, pending_users: "enabled") }
+
+        it 'returns true' do
+          expect(group.pending_members_enabled?).to eq(true)
+        end
+      end
+
+      context 'with pending members disabled' do
+        let(:group) { create(:group, pending_users: "disabled") }
+
+        it 'returns false' do
+          expect(group.pending_members_enabled?).to eq(false)
+        end
+      end
     end
 
     describe '#file_safe_name' do

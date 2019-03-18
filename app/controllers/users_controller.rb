@@ -49,10 +49,11 @@ class UsersController < ApplicationController
   end
 
   def group_surveys
-    manageable_group_ids = current_user.manageable_groups.map{ |mg| mg.id}
+    manageable_groups = current_user.groups.select {|group| 
+      GroupMemberPolicy.new(current_user, [group]).update?
+    }
 
-    @user_groups = @user.user_groups.where(group_id: manageable_group_ids)
-                                    .where.not(data: nil)
+    @user_groups = @user.user_groups.where(group: manageable_groups).where.not(data: nil)
   end
 
   #For admins. Dedicated to editing any user's info

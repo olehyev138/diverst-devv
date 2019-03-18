@@ -7,20 +7,19 @@ class Groups::PostsController < ApplicationController
     layout 'erg'
 
     def index
-        if policy(@group).manage?
+        if GroupPolicy.new(current_user, @group).manage?
             without_segments
         else
             if GroupPostsPolicy.new(current_user, [@group]).view_latest_news?
                 segment_ids = current_user.segment_ids
-                
+
                 if segment_ids.empty?
                   return without_segments
                 end
-                @count = NewsFeed.all_links(@group.news_feed.id, segment_ids, @group.enterprise).count
-
                 @posts = NewsFeed.all_links(@group.news_feed.id, segment_ids, @group.enterprise)
-                            .order(is_pinned: :desc, created_at: :desc)
-                            .limit(@limit)
+                @count = @posts.count
+                @posts = @posts.order(is_pinned: :desc, created_at: :desc)
+                               .limit(@limit)
             else
                 @count = 0
                 @posts = []
@@ -63,14 +62,14 @@ class Groups::PostsController < ApplicationController
     end
 
     protected
-    
+
     def without_segments
-        @count = NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise).count
         @posts = NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise)
-                        .order(is_pinned: :desc, created_at: :desc)
-                        .limit(@limit)
+        @count = @posts.count
+        @posts = @posts.order(is_pinned: :desc, created_at: :desc)
+                       .limit(@limit)
     end
-    
+
     def with_segments
     end
 

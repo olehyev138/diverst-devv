@@ -12,9 +12,9 @@ class SegmentMembersDownloadJob < ActiveJob::Base
         return if segment.nil?
 
         if group_id.blank?
-            members = enterprise.users.joins(:segments, :groups).where(:segments => {:id => segment.id}, :groups => {:id => group_id}).distinct
-        else
             members = enterprise.users.joins(:segments).where(:segments => {:id => segment.id}).distinct
+        else
+            members = enterprise.users.joins(:segments, :groups).where(:segments => {:id => segment.id}, :groups => {:id => group_id}).distinct
         end
 
         csv = User.to_csv users: members, fields: segment.enterprise.fields

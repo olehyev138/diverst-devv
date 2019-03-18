@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe View, type: :model do
-  let(:view) { FactoryGirl.create :view }
+  let(:view) { create :view }
 
   describe 'factory' do
     it 'is valid' do

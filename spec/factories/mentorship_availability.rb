@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :mentorship_availability do |f|
       f.association :user, factory: :user
       f.day {"Monday"}

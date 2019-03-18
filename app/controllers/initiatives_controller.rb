@@ -9,7 +9,10 @@ class InitiativesController < ApplicationController
 
   def index
     authorize Initiative
-    @outcomes = @group.outcomes.includes(pillars: { initiatives: :fields })
+
+    @outcomes = @group.outcomes.includes(:pillars)
+
+    set_filter
   end
 
   def new
@@ -92,13 +95,36 @@ class InitiativesController < ApplicationController
 
   def export_csv
     authorize Initiative, :index?
-    InitiativesDownloadJob.perform_later(current_user.id, @group.id)
+
+    @outcomes = @group.outcomes.includes(pillars: { initiatives: :fields })
+
+    set_filter
+
+    # Gets and filters the initiatives from outcomes on date
+    initiative_ids = Outcome.get_initiatives(@outcomes).select { |i| i.start >= @filter_from && i.start <= @filter_to }.map { |i| i.id }
+
+    InitiativesDownloadJob.perform_later(current_user.id, @group.id, initiative_ids)
     track_activity(@group, :export_initiatives)
     flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
     redirect_to :back
   end
 
   protected
+
+  def set_filter
+    @initiative = Initiative.new
+
+    if params[:initiative].present?
+      @initiative.from = Date.parse(initiative_params[:from]).beginning_of_day
+      @initiative.to = Date.parse(initiative_params[:to]).end_of_day
+    else
+      @initiative.from = 1.year.ago.beginning_of_day
+      @initiative.to = 1.month.from_now.end_of_day
+    end
+
+    @filter_from = @initiative.from
+    @filter_to = @initiative.to
+  end
 
   def set_group
     @group = current_user.enterprise.groups.find(params[:group_id])
@@ -126,6 +152,8 @@ class InitiativesController < ApplicationController
         :picture,
         :budget_item_id,
         :estimated_funding,
+        :from, # For filtering
+        :to, # For filtering
         participating_group_ids: [],
         segment_ids: [],
         fields_attributes: [
@@ -146,7 +174,7 @@ class InitiativesController < ApplicationController
           :title,
           :is_done,
           :_destroy
-        ]
+        ],
       )
   end
 end

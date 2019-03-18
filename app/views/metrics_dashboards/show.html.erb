@@ -13,10 +13,10 @@
       </div>
     </div>
     <div class="flex-row__cell">
-      <%= link_to "New Dashboard", new_metrics_dashboard_path, class: "btn btn--secondary" if policy(@metrics_dashboard).create? %>
+      <%= link_to "New Dashboard", new_metrics_dashboard_path, class: "btn btn--secondary" if MetricsDashboardPolicy.new(current_user, @metrics_dashboard).create? %>
     </div>
     <div class="flex-row__cell">
-      <%= link_to "New Graph", new_metrics_dashboard_graph_path(@metrics_dashboard), class: "btn btn--primary" if policy(@metrics_dashboard).update? %>
+      <%= link_to "New Graph", new_metrics_dashboard_graph_path(@metrics_dashboard), class: "btn btn--primary" if MetricsDashboardPolicy.new(current_user, @metrics_dashboard).update? %>
     </div>
     <% if @metrics_dashboard.shareable_token %>
       <div class="flex-row__cell">

@@ -55,8 +55,8 @@ class Groups::GroupMessagesController < ApplicationController
     end
 
     def destroy
-        user_rewarder("message_post").remove_points(@message)
         track_activity(@message, :destroy)
+        user_rewarder("message_post").remove_points(@message)
         @message.destroy
         flash[:notice] = "Your message was removed. Now you have #{current_user.credits} points"
 
@@ -106,8 +106,7 @@ class Groups::GroupMessagesController < ApplicationController
             .permit(
                 :subject,
                 :content,
-                :news_feed_link_attributes => [:id, :approved, :news_feed_id, :link, :shared_news_feed_ids => []],
-                segment_ids: []
+                :news_feed_link_attributes => [:id, :approved, :news_feed_id, :link, :shared_news_feed_ids => [], :segment_ids => []],
             )
     end
 

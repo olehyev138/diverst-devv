@@ -43,11 +43,11 @@ class User::MentorshipController < ApplicationController
     end
 
     def requests
-        @mentorship_proposals  =  @user.mentorship_proposals.mentor_requests
+        @mentorship_proposals = @user.mentorship_proposals.mentor_requests
         @menteeship_proposals = @user.mentorship_proposals.mentee_requests
 
-        @mentorship_requests =  @user.mentorship_requests.mentor_requests
-        @menteeship_requests = @user.mentorship_requests.mentee_requests
+        @mentorship_requests = @user.accepting_mentor_requests ? @user.mentorship_requests.mentor_requests : []
+        @menteeship_requests = @user.accepting_mentee_requests ? @user.mentorship_requests.mentee_requests : []
     end
 
     def sessions
@@ -73,6 +73,8 @@ class User::MentorshipController < ApplicationController
             :mentee,
             :mentorship_description,
             :time_zone,
+            :accepting_mentor_requests,
+            :accepting_mentee_requests,
             mentoring_interest_ids: [],
             mentoring_type_ids: [],
             :availabilities_attributes => [:day, :start, :end, :_destroy, :id]

@@ -30,6 +30,7 @@ class Segment < BaseClass
     has_many :initiatives, through: :initiative_segments
 
     validates_presence_of :name
+    validates :name, uniqueness: { scope: :enterprise_id }
 
     after_commit :cache_segment_members, on: [:create, :update]
 

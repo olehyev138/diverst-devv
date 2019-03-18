@@ -1355,6 +1355,8 @@ ActiveRecord::Schema.define(version: 20190317183618) do
     t.text     "mentorship_description",         limit: 65535
     t.integer  "groups_notifications_frequency", limit: 4,     default: 2
     t.integer  "groups_notifications_date",      limit: 4,     default: 5
+    t.boolean  "accepting_mentor_requests",                    default: true
+    t.boolean  "accepting_mentee_requests",                    default: true
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree

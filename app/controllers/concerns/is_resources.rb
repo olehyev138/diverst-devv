@@ -2,10 +2,10 @@ module IsResources
     extend ActiveSupport::Concern
 
     included do
+        before_action :authenticate_user!
         before_action :set_container
         before_action :set_resource, except: [:index, :new, :create, :archived, :restore_all, :delete_all]
         before_action :fetch_all_resources, only: [:restore, :restore_all, :destroy, :delete_all, :archived]
-        before_action :archive_expired_resources, only: [:index, :show]
         before_action :set_container_path
 
         prepend_view_path 'app/views/shared/resources'
@@ -104,7 +104,7 @@ module IsResources
     end
 
     def delete_all
-        @resources.delete_all
+        @resources.destroy_all
 
         respond_to do |format|
             format.html { redirect_to :back }
@@ -135,14 +135,6 @@ module IsResources
     def fetch_all_resources
         folder_ids = Folder.where(group_id: current_user.enterprise.group_ids).ids + current_user.enterprise.folder_ids
         @resources = Resource.where(folder_id: folder_ids).where.not(archived_at: nil).all
-    end
-
-    def archive_expired_resources
-        expiry_date = DateTime.now.months_ago(6)
-        folder_ids = Folder.where(group_id: current_user.enterprise.group_ids).ids + current_user.enterprise.folder_ids
-        resources = Resource.where("created_at < ?", expiry_date).where(folder_id: folder_ids, archived_at: nil)
-
-        resources.update_all(archived_at: nil) if resources.any?
     end
 
     def increment_views

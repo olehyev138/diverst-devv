@@ -19,6 +19,8 @@ class MentorshipSessionsController < ApplicationController
     @mentorship_session.decline
     @mentorship_session.save
 
+    MentorMailer.session_declined(@mentoring_session.creator.id, @mentoring_session.id, current_user.id).deliver_later
+
     flash[:notice] = "Session invitation declined"
     redirect_to :back
   end

@@ -19,10 +19,10 @@ module GroupsHelper
   
   def show_manage_link?(group)
     return true if GroupLeaderPolicy.new(current_user, [group]).index?
-    return true if policy(group).insights?
-    return true if policy(group).layouts?
-    return true if policy(group).manage?
-    return true if policy(group).settings?
+    return true if GroupPolicy.new(current_user, group).insights?
+    return true if GroupPolicy.new(current_user, group).layouts?
+    return true if GroupPolicy.new(current_user, group).manage?
+    return true if GroupPolicy.new(current_user, group).settings?
     false
   end
   
@@ -30,7 +30,7 @@ module GroupsHelper
     return true if GroupBudgetPolicy.new(current_user, [group]).index?
     return true if GroupEventsPolicy.new(current_user, [group]).update?
     return true if GroupBudgetPolicy.new(current_user, [group]).update?
-    return true if policy(group).manage?
+    return true if GroupPolicy.new(current_user, group).manage?
     false
   end
 end

@@ -2,9 +2,9 @@ class NewsFeedLink < ActiveRecord::Base
     include PublicActivity::Common
 
     belongs_to :news_feed
-    belongs_to :group_message
-    belongs_to :news_link
-    belongs_to :social_link
+    belongs_to :group_message, dependent: :destroy
+    belongs_to :news_link, dependent: :destroy
+    belongs_to :social_link, dependent: :destroy
 
     has_many :news_feed_link_segments, dependent: :destroy
     has_many :segments, through: :news_feed_link_segments
@@ -63,11 +63,4 @@ class NewsFeedLink < ActiveRecord::Base
         view.save
       end
     end
-
-    def self.archive_expired_news
-      expiry_date = DateTime.now.months_ago(6)
-      news = NewsFeedLink.where("created_at < ?", expiry_date).where(archived_at: nil)
-
-      news.update_all(archived_at: DateTime.now) if news.any?
-    end    
 end
