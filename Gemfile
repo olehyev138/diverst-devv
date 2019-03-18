@@ -29,7 +29,6 @@ gem 'firebase_token_generator', '~> 2.0' # Generate auth tokens
 gem 'firebase', '~> 0.2.6' # Used for realtime messaging in mobile app
 gem 'houston', '~> 2.2', '>= 2.2.3' # Apple push notifications
 gem 'gcm', '~> 0.1.1' # Android push notifications
-gem 'bower-rails', '~> 0.10.0' # Bower integration with Rails
 gem 'clockwork', '~> 1.2' # Schedule recurring jobs
 gem 'pismo', '~> 0.7.4' # Extracts metadata from an URL
 gem 'active_link_to', '~> 1.0', '>= 1.0.3' # Automatically add an active class to current nav link
