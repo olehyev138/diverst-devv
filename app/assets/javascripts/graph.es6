@@ -55,7 +55,16 @@ class Graph {
                 unset_series.push(series_name);
         });
 
-        $.get(url, { input: self.rangeSelector.date_range, unset_series: unset_series });
+        var date_range = {};
+        if (self.rangeSelector) {
+          console.log(self.rangeSelector.date_range);
+          date_range = self.rangeSelector.date_range;
+        } else if (self.date_range) {
+          console.log(self.date_range);
+          date_range = self.date_range;
+        }
+
+        $.get(url, { input: date_range, unset_series: unset_series });
     }
 
     updateData(input={}) {
@@ -271,6 +280,10 @@ class Graph {
 
             nv.utils.windowResize(chart.update);
 
+            chart.focus.dispatch.on("brush", function(extent) {
+                graphObject.date_range = { from_date: moment(extent.extent[0]).format(), to_date: moment(extent.extent[1]).format() };
+            });
+
             return chart;
         });
     }
@@ -299,7 +312,7 @@ function setChartHeight(chart, selectString, itemCount) {
 function getHeight(itemCount) {
   var h = HEIGHT_PER_ITEM * itemCount;
   if (h < 350)
-     h = 350
+     h = 350;
 
   return h;
 }

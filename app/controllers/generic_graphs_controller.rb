@@ -333,7 +333,7 @@ class GenericGraphsController < ApplicationController
       format.csv {
         GenericGraphsGroupGrowthDownloadJob
           .perform_later(current_user.id, current_user.enterprise.id,
-          params[:from_date], params[:to_date])
+          params[:input][:from_date], params[:input][:to_date])
 
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back

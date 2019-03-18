@@ -231,7 +231,7 @@
         <div class="card__section">
           <h4>Growth of groups over time</h4>
           <div class="card__action">
-            <a href="#" class="hidden-xs" onclick="growth_graph_onclick()">Export CSV</a>
+            <a href="#" class="csv-export-link hidden-xs" data-url="<%= growth_of_groups_generic_graphs_path(format: :csv) %>">Export CSV</a>
           </div>
           <div id="growth_groups_graph" class="graph" data-url="<%= growth_of_groups_generic_graphs_path %>">
             <svg></svg>
