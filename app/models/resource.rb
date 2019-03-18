@@ -25,7 +25,6 @@ class Resource < BaseClass
     validates_length_of     :url, maximum: 255
 
     before_validation :smart_add_url_protocol
-    after_commit :archive_expired_resources, on: [:create, :update, :destroy]
 
     attr_reader :tag_tokens
 
@@ -84,12 +83,6 @@ class Resource < BaseClass
     end
 
     protected
-
-    def archive_expired_resources
-        expiry_date = DateTime.now.months_ago(6)
-        resources = Resource.where("created_at < ?", expiry_date)
-        resources.update_all(archived_at: DateTime.now) if resources.any?
-    end
 
     def smart_add_url_protocol
         return nil if url.blank?

@@ -4,14 +4,14 @@ RSpec.describe NewsFeedLink, type: :model do
   include ActiveJob::TestHelper
 
   describe 'validations' do
-    let(:news_feed_link) { FactoryGirl.build_stubbed(:news_feed_link) }
+    let(:news_feed_link) { build_stubbed(:news_feed_link) }
 
     it{ expect(news_feed_link).to validate_presence_of(:news_feed_id) }
 
     it { expect(news_feed_link).to belong_to(:news_feed) }
-    it { expect(news_feed_link).to belong_to(:news_link) }
-    it { expect(news_feed_link).to belong_to(:group_message) }
-    it { expect(news_feed_link).to belong_to(:social_link) }
+    it { expect(news_feed_link).to belong_to(:news_link).dependent(:destroy) }
+    it { expect(news_feed_link).to belong_to(:group_message).dependent(:destroy) }
+    it { expect(news_feed_link).to belong_to(:social_link).dependent(:destroy) }
 
     it { expect(news_feed_link).to have_many(:news_feed_link_segments) }
     it { expect(news_feed_link).to delegate_method(:group).to(:news_feed) }
@@ -69,6 +69,14 @@ RSpec.describe NewsFeedLink, type: :model do
 
       expect{NewsFeedLink.find(news_feed_link.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{NewsFeedLinkSegment.find(segment.id)}.to raise_error(ActiveRecord::RecordNotFound)
+    end
+    
+    it 'removes associated parent object' do 
+      news_feed_link = create(:news_feed_link, social_link_id: create(:social_link).id)
+
+      news_feed_link.destroy
+
+      expect{SocialLink.find(news_feed_link.social_link_id)}.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 

@@ -31,7 +31,7 @@ RSpec.describe TopicFeedbacksController, type: :controller do
             login_user_from_let
 
             context "create succesfully" do
-                let!(:topic_feedback_attributes) { FactoryGirl.attributes_for(:topic_feedback) }
+                let!(:topic_feedback_attributes) { attributes_for(:topic_feedback) }
 
                 it "redirects to thank you action" do
                     post :create, :topic_id => topic.id, :topic_feedback => topic_feedback_attributes
@@ -50,7 +50,7 @@ RSpec.describe TopicFeedbacksController, type: :controller do
             end
 
             context "create unsuccesfully" do
-                let!(:topic_feedback_attributes) { FactoryGirl.attributes_for(:topic_feedback) }
+                let!(:topic_feedback_attributes) { attributes_for(:topic_feedback) }
 
                 it "redirects back" do
                     request.env["HTTP_REFERER"] = "back"
@@ -62,7 +62,7 @@ RSpec.describe TopicFeedbacksController, type: :controller do
         end
 
         describe "when user is not logged in" do
-            let!(:topic_feedback_attributes) { FactoryGirl.attributes_for(:topic_feedback) }
+            let!(:topic_feedback_attributes) { attributes_for(:topic_feedback) }
             before { post :create, :topic_id => topic.id, :topic_feedback => topic_feedback_attributes }
             it_behaves_like "redirect user to users/sign_in path"
         end

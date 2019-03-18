@@ -84,6 +84,9 @@ class Graph {
                 this.showControls = true;
                 this.renderBarChart();
                 break;
+            case 'pie':
+              this.renderPieChart();
+              break;
             case 'line':
                 this.renderLineChart();
                 break;
@@ -205,6 +208,33 @@ class Graph {
               moveBottomAxisToTop(select_string);
 
             $($drillout_button).toggle();
+        });
+    }
+
+    renderPieChart() {
+        var graphObject = this;
+
+        var svg = this.$element[0].children[0];
+        var series = this.data.series[0]['values'];
+        var chart = null;
+
+        console.log(series);
+
+        nv.addGraph(function() {
+            chart = nv.models.pieChart()
+                .color(graphObject.colors)
+                .margin({"right": 50})
+                .x(function (d) { return d.x; }) // set the json keys for x & y values
+                .y(function (d) { return d.y; });
+
+            d3.select(svg)
+                .datum(series)
+                .transition().duration(500)
+                .call(chart);
+
+            nv.utils.windowResize(chart.update);
+
+            return chart;
         });
     }
 

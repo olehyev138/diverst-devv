@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe BudgetsController, type: :controller do
   include ActiveJob::TestHelper
 
-  let!(:user) { FactoryGirl.create(:user) }
-  let!(:group) { FactoryGirl.create(:group, enterprise: user.enterprise, :annual_budget => 100000) }
-  let!(:budget) { FactoryGirl.create(:approved_budget, group: group) }
+  let!(:user) { create(:user) }
+  let!(:group) { create(:group, enterprise: user.enterprise, :annual_budget => 100000) }
+  let!(:budget) { create(:approved_budget, group: group) }
 
   describe 'GET#index' do
     context 'with logged user' do
@@ -54,8 +54,8 @@ RSpec.describe BudgetsController, type: :controller do
   end
 
   describe 'GET#new' do
-    let!(:user) { FactoryGirl.create(:user) }
-    let!(:group) { FactoryGirl.create(:group, enterprise: user.enterprise) }
+    let!(:user) { create(:user) }
+    let!(:group) { create(:group, enterprise: user.enterprise) }
 
     context 'with logged user' do
       login_user_from_let
@@ -138,7 +138,7 @@ RSpec.describe BudgetsController, type: :controller do
       login_user_from_let
 
       context 'with correct params' do
-        let(:budget_params) { FactoryGirl.attributes_for(:budget) }
+        let(:budget_params) { attributes_for(:budget) }
 
         it "returns a valid group object" do
           post :create, group_id: group.id, budget: budget_params

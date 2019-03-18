@@ -20,7 +20,7 @@ RSpec.describe EmailsController, type: :controller do
           end
 
           it "returns emails belonging to enterprise" do
-              2.times { FactoryGirl.create(:email, enterprise: enterprise) }
+              2.times { create(:email, enterprise: enterprise) }
               expect(assigns[:enterprise].emails.count).to eq 2
           end
         end

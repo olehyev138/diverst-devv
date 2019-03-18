@@ -1,7 +1,7 @@
 <div class="content__header">
   <h1>User details</h1>
   <div class="flex-row flex-row--middle">
-    <% if policy(@user).update? %>
+    <% if UserPolicy.new(current_user, @user).update? %>
       <div class="flex-row__cell">
         <%= link_to "Edit User", edit_user_path(@user), class: "btn btn--primary" %>
       </div>
@@ -19,7 +19,8 @@
   <div class="card">
     <div class="card__section card__section--border">
       <label><strong>Name</strong></label>
-      <p><%= @user.name %></p>
+      <p><%= @user.name %><%= linkedin_logo_for_connected_users(@user) %>
+      </p>
     </div>
     <div class="card__section card__section--border">
       <label><strong>Status</strong></label>
@@ -39,7 +40,7 @@
     </div>
   </div>
 
-  <% if policy(@user).access_hidden_info? %>
+  <% if UserPolicy.new(current_user, @user).access_hidden_info? %>
     <div class="card">
       <div class="card__section card__section--border">
         <h2>Hidden info</h2>
@@ -67,7 +68,7 @@
     </div>
   </div>
 
-  <% if policy(@user).manage? %>
+  <% if UserPolicy.new(current_user, @user).manage? %>
     <% policy_group = @user.policy_group %>
 
     <%= simple_form_for :policy_group_template, url: policy_group_template_path do |f| %>

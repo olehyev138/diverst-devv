@@ -124,16 +124,67 @@ RSpec.describe BaseGraph do
 
         expect(formatter.format[:series][1][:values].class).to eq Array
       end
+
+      it 'doesnt add a duplicate series' do
+        formatter.add_series(series_name: 'series01')
+        formatter.add_series(series_name: 'series01')
+
+        expect(formatter.format[:series].count).to eq 1
+      end
     end
 
     describe 'add_element' do
-      let(:default_element) { { key: 'element01', doc_count: 9  } }
+      let(:default_es_element) { { key: 'element01', doc_count: 9  } }
+      let(:children) { [ { key: 'child01', doc_count: 3 }, { key: 'child02', doc_count: 7 } ] }
 
-      it 'adds a default element' do
-        formatter.add_element(default_element)
+      it 'adds a default elasticsearch element' do
+        formatter.add_element(default_es_element)
 
         expect(formatter.format[:series][0][:values][0][:x]).to eq 'element01'
         expect(formatter.format[:series][0][:values][0][:y]).to eq 9
+      end
+
+      it 'adds a default series using title when none exist' do
+        formatter.title = 'dummy title'
+        formatter.add_element(default_es_element)
+
+        expect(formatter.format[:series][0][:key]).to eq 'dummy title'
+      end
+
+      it 'adds a element to specified series' do
+        formatter.add_series(series_name: 'series01')
+        formatter.add_series(series_name: 'series02')
+        formatter.add_element(default_es_element, series_key: 'series01')
+
+        expect(formatter.format[:series][0][:values][0][:x]).to eq 'element01'
+        expect(formatter.format[:series][1][:values]).to eq []
+      end
+
+      it 'adds a element to most recently added series when none specified' do
+        formatter.add_series(series_name: 'series01')
+        formatter.add_series(series_name: 'series02')
+        formatter.add_element(default_es_element)
+
+        expect(formatter.format[:series][1][:values][0][:x]).to eq 'element01'
+        expect(formatter.format[:series][0][:values]).to eq []
+      end
+
+      it 'adds a element with children' do
+        formatter.add_element(default_es_element, children: children)
+
+        expect(formatter.format[:series][0][:values][0][:children][:values].count).to eq 2
+      end
+
+      it 'uses default key for children series when none specified' do
+        formatter.add_element(default_es_element, children: children)
+
+        expect(formatter.format[:series][0][:values][0][:children][:key]).to eq 'element01'
+      end
+
+      it 'uses specified key for children series' do
+        formatter.add_element(default_es_element, element_key: 'dummy key', children: children)
+
+        expect(formatter.format[:series][0][:values][0][:children][:key]).to eq 'dummy key'
       end
     end
   end

@@ -192,7 +192,7 @@ RSpec.feature 'News Feed Management' do
 					expect(page).to have_content existing_news_item.title
 					expect(page).to have_link 'Comments(0)', href:  comments_group_news_link_path(group, existing_news_item)
 
-					within('.flex-row__cell--grow') do
+					within('.commentsLink') do
 						click_link 'Comments(0)', href:  comments_group_news_link_path(group, existing_news_item)
 					end
 
@@ -229,7 +229,7 @@ RSpec.feature 'News Feed Management' do
 					expect(page).to have_content existing_news_item.title
 					expect(page).to have_link 'Comments(1)', href:  comments_group_news_link_path(group, existing_news_item)
 
-					within('.flex-row__cell--grow') do
+					within('.commentsLink') do
 						click_link 'Comments(1)', href:  comments_group_news_link_path(group, existing_news_item)
 					end
 
@@ -309,7 +309,7 @@ RSpec.feature 'News Feed Management' do
 				expect(page).to have_content existing_news_item.title
 				expect(page).to have_link 'Comments(0)', href: comments_group_news_link_path(group, existing_news_item)
 
-				within('.flex-row__cell--grow') do
+				within('.commentsLink') do
 					click_link 'Comments(0)', href: comments_group_news_link_path(group, existing_news_item)
 				end
 

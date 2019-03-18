@@ -51,7 +51,7 @@ RSpec.describe CampaignsController, type: :controller do
     describe 'POST#create' do
         context 'with logged user' do
             login_user_from_let
-            let(:campaign_params) { FactoryGirl.attributes_for(:campaign) }
+            let(:campaign_params) { attributes_for(:campaign) }
             before { campaign_params.merge!({group_ids: [create(:group).id]})}
 
 
@@ -92,7 +92,7 @@ RSpec.describe CampaignsController, type: :controller do
         end
 
         context "without logged user" do
-            let(:campaign_params) { FactoryGirl.attributes_for(:campaign) }
+            let(:campaign_params) { FactoryBot.attributes_for(:campaign) }
             before { post :create, campaign: campaign_params }
             it_behaves_like "redirect user to users/sign_in path"
         end
@@ -116,8 +116,8 @@ RSpec.describe CampaignsController, type: :controller do
                 end
 
                 it "returns campaign question in desc order by created_at" do
-                    question1 = FactoryGirl.create :question, campaign: campaign
-                    question2 = FactoryGirl.create :question, campaign: campaign
+                    question1 = create :question, campaign: campaign
+                    question2 = create :question, campaign: campaign
 
                     expect(assigns[:questions]).to eq [question1, question2]
                 end

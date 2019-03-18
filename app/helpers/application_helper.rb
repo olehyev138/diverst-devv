@@ -1,12 +1,6 @@
 module ApplicationHelper
-  def current_user_has_no_comments?(comments)
-    comment = comments.find_by(user_id: current_user.id)
-    yield if comment.nil?
-  end
-
-  def current_user_has_pending_comments?(comments)
-    comment = comments.find_by(user_id: current_user.id, approved: false)
-    yield if comment && !current_user.erg_leader?
+  def linkedin_logo_for_connected_users(user)
+    inline_svg('icons/linkedin', size: '17px*17px')  if user.linkedin_profile_url.present?
   end
 
   def back_to_diverst_path
@@ -71,38 +65,38 @@ module ApplicationHelper
   def root_admin_path
     return manage_erg_root_path if manage_erg_root_path
     return manage_erg_budgets_path if manage_erg_budgets_path
-    return campaigns_path if policy(Campaign).create?
-    return polls_path if policy(Poll).create?
-    return mentoring_path if policy(MentoringInterest).index?
+    return campaigns_path if CampaignPolicy.new(current_user, Campaign).create?
+    return polls_path if PollPolicy.new(current_user, Poll).create?
+    return mentoring_interests_path if MentoringInterestPolicy.new(current_user, MentoringInterest).index?
     return global_settings_path
   end
 
   def manage_erg_budgets_path
-    return close_budgets_groups_path if policy(Group).manage_all_group_budgets?
+    return close_budgets_groups_path if GroupPolicy.new(current_user, Group).manage_all_group_budgets?
     false
   end
 
   def manage_erg_root_path
-    return metrics_dashboards_path if policy(MetricsDashboard).index?
-    return groups_path if policy(Group).create?
-    return segments_path if policy(Segment).index?
-    return calendar_groups_path if policy(Group).calendar?
+    return metrics_dashboards_path if MetricsDashboardPolicy.new(current_user, MetricsDashboard).index?
+    return groups_path if GroupPolicy.new(current_user, Group).create?
+    return segments_path if SegmentPolicy.new(current_user, Segment).index?
+    return calendar_groups_path if GroupPolicy.new(current_user, Group).calendar?
     return enterprise_folders_path(current_user.enterprise) if EnterpriseFolderPolicy.new(current_user).index?
     false
   end
 
   def global_settings_path
-    return users_path if policy(User).create?
-    return edit_auth_enterprise_path(current_user.enterprise) if policy(Enterprise).sso_manage?
-    return policy_group_templates_path if policy(Enterprise).manage_permissions?
-    return edit_fields_enterprise_path(current_user.enterprise) if policy(current_user.enterprise).edit_fields?
-    return edit_branding_enterprise_path(current_user.enterprise) if policy(current_user.enterprise).manage_branding?
-    return edit_custom_text_path(current_user.enterprise) if policy(current_user.enterprise).manage_branding?
-    return emails_path(current_user.enterprise) if policy(current_user.enterprise).manage_branding?
-    return integrations_path if policy(Enterprise).sso_manage?
-    return rewards_path if policy(Enterprise).diversity_manage?
+    return users_path if UserPolicy.new(current_user, User).create?
+    return edit_auth_enterprise_path(current_user.enterprise) if EnterprisePolicy.new(current_user, Enterprise).sso_manage?
+    return policy_group_templates_path if EnterprisePolicy.new(current_user, Enterprise).manage_permissions?
+    return edit_fields_enterprise_path(current_user.enterprise) if EnterprisePolicy.new(current_user ,current_user.enterprise).edit_fields?
+    return edit_branding_enterprise_path(current_user.enterprise) if EnterprisePolicy.new(current_user, current_user.enterprise).manage_branding?
+    return edit_custom_text_path(current_user.enterprise) if EnterprisePolicy.new(current_user, current_user.enterprise).manage_branding?
+    return emails_path(current_user.enterprise) if EnterprisePolicy.new(current_user, current_user.enterprise).manage_branding?
+    return integrations_path if EnterprisePolicy.new(current_user, Enterprise).sso_manage?
+    return rewards_path if EnterprisePolicy.new(current_user, Enterprise).diversity_manage?
     return logs_path if LogPolicy.new(current_user, nil).index?
-    return edit_posts_enterprise_path(current_user.enterprise) if policy(Group).manage_all_groups? && policy(Enterprise).manage_posts?
+    return edit_posts_enterprise_path(current_user.enterprise) if GroupPolicy.new(current_user, Group).manage_all_groups? && EnterprisePolicy.new(current_user, Enterprise).manage_posts?
     false
   end
 
@@ -128,21 +122,12 @@ module ApplicationHelper
   end
 
   def show_sponsor?(object)
-    if object.is_a?(Enterprise)
-      return
-    end
-
-    if object.is_a?(Group)
-      return
-    end
-
-    ["sponsor_name"].each do |m|
+    m = 'sponsor_name'
       if object.respond_to? m.to_sym
         if object.public_send(m.to_sym).present?
           yield
         end
       end
-    end
   end
 
   def show_sponsor_media?(object, m)
@@ -162,6 +147,11 @@ module ApplicationHelper
     segment.members.includes(:groups).select do |user|
       UserGroup.where(:user_id => user.id, :group_id => group.id).exists?
     end
+  end
+
+  def resource_policy(resource)
+    return EnterpriseResourcePolicy.new(current_user, resource) if resource.container.is_a?(Enterprise)
+    return GroupResourcePolicy.new(current_user, [resource]) if resource.container.is_a?(Folder)
   end
 
   private

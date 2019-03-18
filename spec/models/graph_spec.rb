@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Graph, type: :model do
 
     describe 'validations' do
-        let(:graph) { FactoryGirl.build_stubbed(:graph_with_metrics_dashboard) }
+        let(:graph) { FactoryBot.build_stubbed(:graph_with_metrics_dashboard) }
 
         it{ expect(graph).to validate_presence_of(:field) }
 
@@ -14,7 +14,7 @@ RSpec.describe Graph, type: :model do
     end
 
     describe 'build_query' do
-      let!(:graph_model) { FactoryGirl.create(:graph_with_metrics_dashboard) }
+      let!(:graph_model) { FactoryBot.create(:graph_with_metrics_dashboard) }
       let(:date_range) { { from: 'now-200y/y', to: 'now-2d/d' } }
 
       before {
@@ -111,7 +111,7 @@ RSpec.describe Graph, type: :model do
     end
 
     describe 'get_custom_class' do
-      let(:graph) { FactoryGirl.build_stubbed(:graph_with_metrics_dashboard) }
+      let(:graph) { FactoryBot.build_stubbed(:graph_with_metrics_dashboard) }
       let(:custom_class) { graph.send(:get_custom_class) }
 
       it 'custom class instance to be returned' do

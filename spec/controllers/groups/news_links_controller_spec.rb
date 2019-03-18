@@ -142,7 +142,7 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
             end
 
             context 'with invalid attributes' do
-                invalid_attributes = FactoryGirl.attributes_for(:news_link_comment)
+                invalid_attributes = FactoryBot.attributes_for(:news_link_comment)
                 let!(:invalid_attributes) { invalid_attributes[:content] = nil }
 
                 it 'does not create a comment' do
@@ -229,7 +229,7 @@ RSpec.describe Groups::NewsLinksController, type: :controller do
             end
 
             context 'with invalid attributes' do
-                invalid_link_attributes = FactoryGirl.attributes_for(:news_link)
+                invalid_link_attributes = FactoryBot.attributes_for(:news_link)
                 let!(:invalid_link_attributes) { invalid_link_attributes[:title] = nil }
 
                 it 'does not create a news link object' do

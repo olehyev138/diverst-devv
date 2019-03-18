@@ -12,6 +12,7 @@ class ArchivedPostsController < ApplicationController
 
   def destroy
     authorize current_user.enterprise, :manage_posts?, :policy_class => EnterprisePolicy
+    track_activity(@post.group_message || @post.news_link || @post.social_link, :destroy)
     @post.destroy
 
     respond_to do |format|
@@ -23,7 +24,7 @@ class ArchivedPostsController < ApplicationController
   def delete_all
     @posts = NewsFeed.archived_posts(current_user.enterprise)
     authorize current_user.enterprise, :manage_posts?, :policy_class => EnterprisePolicy
-    @posts.delete_all
+    @posts.destroy_all
 
     respond_to do |format|
       format.html { redirect_to :back, notice: 'all archived posts deleted' }

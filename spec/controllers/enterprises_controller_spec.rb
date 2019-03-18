@@ -35,8 +35,7 @@ RSpec.describe EnterprisesController, type: :controller do
             before { request.env["HTTP_REFERER"] = "back" }
             login_user_from_let
 
-            context "with valid parameters" do
-                attributes = FactoryGirl.attributes_for(:enterprise, 
+            let!(:attributes) { attributes_for(:enterprise, 
                                                         home_message: "updated",
                                                         time_zone: "Eastern Time (US & Canada)",
                                                         disable_likes: true,
@@ -46,7 +45,8 @@ RSpec.describe EnterprisesController, type: :controller do
                                                         plan_module_enabled: true,
                                                         mentorship_module_enabled: true,
                                                         enable_rewards: true,
-                                                        enable_pending_comments: true)
+                                                        enable_pending_comments: true) }
+            context "with valid parameters" do
                 before { patch :update, id: enterprise.id, enterprise: attributes }
 
                 it "updates the enterprise" do
@@ -125,9 +125,9 @@ RSpec.describe EnterprisesController, type: :controller do
         describe "with logged in user" do
             before { request.env["HTTP_REFERER"] = "back" }
             login_user_from_let
-
+            let!(:attributes) { attributes_for(:enterprise, home_message: "updated") }
+            
             context "with valid parameters" do
-                attributes = FactoryGirl.attributes_for(:enterprise, home_message: "updated")
                 before { patch :update_posts, id: enterprise.id, enterprise: attributes }
 
                 it "updates the enterprise" do
@@ -344,9 +344,7 @@ RSpec.describe EnterprisesController, type: :controller do
         end
     end
 
-    # CONTROLLER IS MISSING A TEMPLATE
-
-    describe "GET#edit_algo", skip: "test fails because of Missing template layouts/handshake..." do
+    describe "GET#edit_algo" do
         describe "with logged in user" do
             login_user_from_let
 

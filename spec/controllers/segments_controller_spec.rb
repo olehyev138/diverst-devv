@@ -82,7 +82,7 @@ RSpec.describe SegmentsController, type: :controller do
             login_user_from_let
 
             context "successfully create" do
-                let!(:segment_attributes) { FactoryGirl.attributes_for(:segment) }
+                let!(:segment_attributes) { attributes_for(:segment) }
 
                 it "redirects" do
                     post :create, :segment => segment_attributes
@@ -139,7 +139,7 @@ RSpec.describe SegmentsController, type: :controller do
         end
 
         describe 'when user is not logged in' do
-            let!(:segment_attributes) { FactoryGirl.attributes_for(:segment) }
+            let!(:segment_attributes) { attributes_for(:segment) }
             before { post :create, :segment => segment_attributes }
             it_behaves_like "redirect user to users/sign_in path"
         end

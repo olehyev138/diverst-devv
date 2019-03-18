@@ -1,12 +1,10 @@
 class Groups::FoldersController < ApplicationController
   include Folders
 
-  before_action :authenticate_user!
-
   layout 'erg'
 
   def index
-    if policy(@group).manage? || policy(@group).is_an_accepted_member?
+    if GroupPolicy.new(current_user, @group).manage? || GroupPolicy.new(current_user, @group).is_an_accepted_member?
       super
     else
       @folders = []

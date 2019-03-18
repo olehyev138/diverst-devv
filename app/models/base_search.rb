@@ -84,6 +84,11 @@ module BaseSearch
       base_agg(agg, block)
     end
 
+    def sum_agg(field:, &block)
+      agg = { agg: { sum: { field: field } }}
+      base_agg(agg, block)
+    end
+
     # Creates a terms aggregation
     # @field - field to aggregate on
     # @order_field - optional, default: _count, field to order on

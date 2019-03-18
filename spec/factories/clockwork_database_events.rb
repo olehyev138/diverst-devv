@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :clockwork_database_event do
     name {"Send Daily Notification of news to user_groups"}
     frequency_quantity {1}

@@ -40,7 +40,7 @@
 
                 <p style="font-style: italic;"><%= sponsor.sponsor_name %><br>
                 <%= sponsor.sponsor_title.present? ? sponsor.sponsor_title : nil %></p>
-                  <% if policy(sponsor).sponsor_message_visibility? %>
+                  <% if SponsorPolicy.new(current_user, sponsor).sponsor_message_visibility? %>
                     <p style="font-style: italic; padding-top: 10px; padding-left: 10px;"><%= truncate(sponsor.sponsor_message, length: 200) %></p>
                   <% end %>
               <% end %>

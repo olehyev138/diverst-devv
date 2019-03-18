@@ -159,7 +159,7 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
             end
 
             context 'with invalid attributes' do
-                invalid_attributes = FactoryGirl.attributes_for(:group_message)
+                invalid_attributes = FactoryBot.attributes_for(:group_message)
                 let!(:invalid_attributes) { invalid_attributes[:content] = nil }
 
                 it 'does not create and save message object' do
@@ -222,7 +222,7 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
                 end
 
                 context 'with invalid attributues' do
-                    invalid_attributes = FactoryGirl.attributes_for(:group_message)
+                    invalid_attributes = FactoryBot.attributes_for(:group_message)
                     let!(:invalid_attributes) { invalid_attributes[:content] = nil }
 
                     before { patch :update, group_id: group.id, id: group_message.id, group_message: invalid_attributes }
@@ -376,7 +376,7 @@ RSpec.describe Groups::GroupMessagesController, type: :controller do
             end
 
             context 'with invalid attributes' do
-                invalid_attributes = FactoryGirl.attributes_for(:group_message_comment)
+                invalid_attributes = FactoryBot.attributes_for(:group_message_comment)
                 let!(:invalid_attributes) { invalid_attributes[:content] = nil }
 
                 it 'flashes an alert message' do
