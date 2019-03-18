@@ -68,10 +68,7 @@ class CampaignsController < ApplicationController
 
     respond_to do |format|
       format.json {
-        render json: {
-          highcharts: @campaign.contributions_per_erg,
-          type: 'pie'
-        }
+        render json: @campaign.contributions_per_erg
       }
       format.csv {
         CampaignContributionsDownloadJob.perform_later(current_user.id, @campaign.id, c_t(:erg))

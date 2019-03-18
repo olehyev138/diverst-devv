@@ -40,6 +40,9 @@ class Answer < BaseClass
     settings do
       mappings dynamic: false do
         indexes :upvote_count, type: :integer
+        indexes :contributing_group do
+          indexes :name, type: :keyword
+        end
         indexes :author do
           indexes :enterprise_id, type: :integer
           indexes :id, type: :integer
@@ -55,7 +58,8 @@ class Answer < BaseClass
         options.merge(
           only: [:upvote_count],
           include: { author: { only: [:enterprise_id, :id] },
-            question: { only: [:campaign_id] }},
+            question: { only: [:campaign_id] },
+            contributing_group: { only: [:name] }},
           methods: [:total_votes]
         )
       )

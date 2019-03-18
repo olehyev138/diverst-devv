@@ -89,19 +89,16 @@ class Campaign < BaseClass
     end
 
     def contributions_per_erg
-        series = [{
-            name: '# of contributions',
-            data: groups.map do |group|
-                {
-                    name: group.name,
-                    y: answers.where(author_id: group.members.ids).count + answer_comments.where(author_id: group.members.ids).count
-                }
-            end
-        }]
+      graph = Answer.get_graph
+      graph.set_enterprise_filter(field: 'author.enterprise_id', value: enterprise.id )
+      graph.formatter.title = 'Contributions per erg'
 
-        {
-            series: series
-        }
+      graph.query = graph.query.filter_agg(field: 'question.campaign_id', value: self.id) { |q|
+        q.terms_agg(field: 'contributing_group.name')
+      }
+
+      graph.formatter.add_elements(graph.search)
+      graph.build
     end
 
     def top_performers
