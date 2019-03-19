@@ -3,16 +3,6 @@ module ApplicationHelper
     inline_svg('icons/linkedin', size: '17px*17px')  if user.linkedin_profile_url.present?
   end
 
-  def current_user_has_no_comments?(comments)
-    comment = comments.find_by(user_id: current_user.id)
-    yield if comment.nil?
-  end
-
-  def current_user_has_pending_comments?(comments)
-    comment = comments.find_by(user_id: current_user.id, approved: false)
-    yield if comment && !current_user.erg_leader?
-  end
-
   def back_to_diverst_path
     groups_path # TODO
   end
@@ -77,7 +67,7 @@ module ApplicationHelper
     return manage_erg_budgets_path if manage_erg_budgets_path
     return campaigns_path if CampaignPolicy.new(current_user, Campaign).create?
     return polls_path if PollPolicy.new(current_user, Poll).create?
-    return mentoring_path if MentoringInterestPolicy.new(current_user, MentoringInterest).index?
+    return mentoring_interests_path if MentoringInterestPolicy.new(current_user, MentoringInterest).index?
     return global_settings_path
   end
 
@@ -132,21 +122,12 @@ module ApplicationHelper
   end
 
   def show_sponsor?(object)
-    if object.is_a?(Enterprise)
-      return
-    end
-
-    if object.is_a?(Group)
-      return
-    end
-
-    ["sponsor_name"].each do |m|
+    m = 'sponsor_name'
       if object.respond_to? m.to_sym
         if object.public_send(m.to_sym).present?
           yield
         end
       end
-    end
   end
 
   def show_sponsor_media?(object, m)
@@ -170,7 +151,7 @@ module ApplicationHelper
 
   def resource_policy(resource)
     return EnterpriseResourcePolicy.new(current_user, resource) if resource.container.is_a?(Enterprise)
-    return GroupResourcePolicy.new(current_user, resource) if resource.container.is_a?(Folder)
+    return GroupResourcePolicy.new(current_user, [resource]) if resource.container.is_a?(Folder)
   end
 
   private
