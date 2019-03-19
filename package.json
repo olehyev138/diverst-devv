@@ -15,7 +15,6 @@
     "@bower_components/highcharts": "highcharts/highcharts-dist#5.0.2",
     "@bower_components/jquery": "jquery/jquery-dist#2.0.3",
     "@bower_components/jquery-dropdown": "claviska/jquery-dropdown#2.0.3",
-    "@bower_components/jscolor": "git://github.com/EastDesire/jscolor.git#2.0.4",
     "@bower_components/jsdom": "tmpvar/jsdom#^12.2.0",
     "@bower_components/moment": "moment/moment#2.15.2",
     "@bower_components/nvd3": "novus/nvd3#1.8.6",
@@ -24,7 +23,8 @@
     "@bower_components/select2": "git://github.com/select2/select2.git#4.0.2-rc.1",
     "@bower_components/tooltipster": "iamceege/tooltipster#4.1.8",
     "@bower_components/twilio-video": "twilio/twilio-video.js#1.9.0",
-    "@bower_components/urijs": "medialize/URI.js#1.18.2"
+    "@bower_components/urijs": "medialize/URI.js#1.18.2",
+    "jscolor": "^0.3.0"
   },
   "engines": {
     "yarn": ">= 1.0.0"
