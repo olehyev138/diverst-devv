@@ -53,9 +53,9 @@ module ResourcesHelper
 
   def get_folders_url(folder, limit = nil, format = nil)
     if folder.group
-      group_folders_path(limit: limit, json: format)
+      group_folders_path(folder.group, limit: limit, format: :json)
     else
-      enterprise_folders_path(limit: limit, format: format)
+      enterprise_folders_path(folder.enterprise, limit: limit, format: format)
     end
   end
 end
