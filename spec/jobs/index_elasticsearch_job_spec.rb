@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe IndexElasticsearchJob, type: :job do
+RSpec.describe IndexElasticsearchJob, type: :job, skip: true do
   let!(:user) { create(:user) }
   let!(:index_name) { User.es_index_name(enterprise: user.enterprise) }
 
@@ -54,9 +54,9 @@ RSpec.describe IndexElasticsearchJob, type: :job do
   context 'when trying to do an unknown action' do
     it "should raise an argument error" do
       allow(Rollbar).to receive(:error)
-      
+
       IndexElasticsearchJob.perform_now(model_name: 'User', operation: 'unknown', index: index_name, record_id: user.id)
-      
+
       expect(Rollbar).to have_received(:error)
     end
   end
