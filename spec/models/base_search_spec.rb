@@ -84,6 +84,85 @@ RSpec.describe BaseSearch do
       end
     end
 
+    describe 'bool filter agg' do
+      let(:bool_agg) { query.bool_filter_agg.build[:aggs][:agg] }
+
+      it 'returns a valid empty bool filter agg' do
+        expect(bool_agg).to have_key :filter
+      end
+
+      it "validly nests an aggregation" do
+        nested_bool_agg = query
+          .bool_filter_agg { |q| q.top_hits_agg }.build[:aggs][:agg]
+
+        expect(nested_bool_agg[:aggs]).to have_key :agg
+      end
+
+      describe 'add filter clause' do
+        before(:each) {
+          @default_filter_agg = BaseSearch::ElasticsearchQuery.new
+            .bool_filter_agg
+            .add_filter_clause(field: 'dummy_field', value: 'dummy_value')
+            .build[:aggs][:agg][:filter][:bool]
+
+          @negative_filter_agg = BaseSearch::ElasticsearchQuery.new
+            .bool_filter_agg
+            .add_filter_clause(field: 'dummy_field', value: 'dummy_value', bool_op: :must_not)
+            .build[:aggs][:agg][:filter][:bool]
+
+          @multi_filter_agg = BaseSearch::ElasticsearchQuery.new
+            .bool_filter_agg
+            .add_filter_clause(field: 'dummy_field', value: ['dv01', 'dv02'], multi: true)
+            .build[:aggs][:agg][:filter][:bool]
+        }
+
+        it 'returns if no bool query has been added to query object' do
+          no_bool_query = BaseSearch::ElasticsearchQuery.new
+          expect(no_bool_query.add_filter_clause(field: 'f', value: 'v')).to eq nil
+        end
+
+        it 'returns a valid default filter clause with specified field' do
+          expect(@default_filter_agg[:must][0]['term']).to have_key 'dummy_field'
+        end
+
+        it 'returns a valid default filter clause with specified value' do
+          expect(@default_filter_agg[:must][0]['term']['dummy_field']).to eq 'dummy_value'
+        end
+
+        it 'returns a valid filter clause using specified bool op' do
+          expect(@negative_filter_agg[:must_not][0]['term']).to have_key 'dummy_field'
+        end
+
+        it 'returns a valid filter clause using multiple values' do
+          expect(@multi_filter_agg[:must][0]['terms']['dummy_field'][1]).to eq 'dv02'
+        end
+
+        it 'adds multiple clauses of same bool type' do
+          agg = BaseSearch::ElasticsearchQuery.new
+            .bool_filter_agg
+            .add_filter_clause(field: 'dummy_field01', value: 'dummy_value01')
+            .add_filter_clause(field: 'dummy_field02', value: 'dummy_value02')
+            .build[:aggs][:agg][:filter][:bool]
+
+          expect(agg[:must].count).to eq 2
+        end
+
+        it 'adds multiple clauses of different bool type' do
+          agg = BaseSearch::ElasticsearchQuery.new
+            .bool_filter_agg
+            .add_filter_clause(field: 'dummy_field01', value: 'dummy_value01', bool_op: :must_not)
+            .add_filter_clause(field: 'dummy_field02', value: 'dummy_value02', bool_op: :should)
+            .build[:aggs][:agg][:filter][:bool]
+
+          expect(agg[:must_not].count).to eq 1
+          expect(agg[:should].count).to eq 1
+        end
+      end
+    end
+
+    describe 'sum agg' do
+    end
+
     describe 'date range agg' do
       let (:date_range) { { from: 'now-1y/y', to: 'now-3d/d' } }
       let(:date_range_agg) { query
