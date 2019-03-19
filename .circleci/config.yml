@@ -58,6 +58,7 @@ jobs:
     - run: nvm use 8.15.1
     - run: if [ -z "${NODE_ENV:-}" ]; then export NODE_ENV=test; fi
     - run: export PATH="~/TeamDiverst/diverst-development/node_modules/.bin:$PATH"
+    - run: which node
     - run: node --version
     - run: npm --version
     - run: npm install -g yarn
