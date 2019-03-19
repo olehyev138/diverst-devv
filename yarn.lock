@@ -2,147 +2,10 @@
 # yarn lockfile v1
 
 
-"@bower_components/Sortable@RubaXa/Sortable#1.4.2":
-  version "1.4.2"
-  resolved "https://codeload.github.com/RubaXa/Sortable/tar.gz/51337f72792525e438680695e223b327b1648e0a"
-
-"@bower_components/bootstrap-timepicker@jdewit/bootstrap-timepicker#0.5.2":
-  version "0.5.2"
-  resolved "https://codeload.github.com/jdewit/bootstrap-timepicker/tar.gz/c31df7a9170e7e63617890a9ed282eeaf6bc2cb1"
-
-"@bower_components/bootstrap@twbs/bootstrap#3.3.7":
-  version "3.3.7"
-  resolved "https://codeload.github.com/twbs/bootstrap/tar.gz/0b9c4a4007c44201dce9a6cc1a38407005c26c86"
-
-"@bower_components/codemirror@components/codemirror#5.37.0":
-  version "5.37.0"
-  resolved "https://codeload.github.com/components/codemirror/tar.gz/ca0b10af7b61a35369f011244e3905bf97e241ab"
-
-"@bower_components/d3@mbostock-bower/d3-bower#3.5.4":
-  version "0.0.0"
-  resolved "https://codeload.github.com/mbostock-bower/d3-bower/tar.gz/b197ef7009f8980365efc4a0fad85f2716dae251"
-
-"@bower_components/datatables@DataTables/DataTables#1.10.12":
-  version "1.10.12"
-  resolved "https://codeload.github.com/DataTables/DataTables/tar.gz/3a432c5db3546b2ef0c192f2ae367811cb5edb9b"
-  dependencies:
-    jquery ">=1.7"
-
-"@bower_components/embedly-jquery@embedly/embedly-jquery#3.1.2":
-  version "0.0.0-ignored"
-  resolved "https://codeload.github.com/embedly/embedly-jquery/tar.gz/04aae4d8e0dbf24c1cf2f91148b0fbc3363aaceb"
-
-"@bower_components/firebase@firebase/firebase-bower#5.7.0":
-  version "0.0.0"
-  resolved "https://codeload.github.com/firebase/firebase-bower/tar.gz/9d322b8787aa4409a28f352d14d02ca06eec4916"
-
-"@bower_components/firepad@firebase/firepad#1.5.3":
-  version "1.5.3"
-  resolved "https://codeload.github.com/firebase/firepad/tar.gz/1aa8cc08e4c08def5adae4ddf00cb491e07a3d8c"
-  dependencies:
-    firebase "^5.5.5"
-    jsdom "^12.2.0"
-
-"@bower_components/flip@nnattawat/flip#1.1.2":
-  version "1.1.2"
-  resolved "https://codeload.github.com/nnattawat/flip/tar.gz/d765488a718e5df7f07a14ce1ac0778be9cba007"
-
-"@bower_components/fullcalendar@fullcalendar/fullcalendar#3.0.1":
-  version "3.0.1"
-  resolved "https://codeload.github.com/fullcalendar/fullcalendar/tar.gz/8aa93919d8227140f98bba543cd97ee9975426f7"
-  dependencies:
-    jquery ">=2.0.0"
-    moment ">=2.9.0"
-
-"@bower_components/hamburgers@osahan/CSS-Hamburgers#1.0.2":
-  version "1.0.1"
-  resolved "https://codeload.github.com/osahan/CSS-Hamburgers/tar.gz/ef249d8ee0ab58ce1a68f93ab70a3621619228dc"
-
-"@bower_components/highcharts@highcharts/highcharts-dist#5.0.2":
-  version "5.0.2"
-  resolved "https://codeload.github.com/highcharts/highcharts-dist/tar.gz/f129ee6420cb2f717d4db83da8a9245da0cb23c7"
-
-"@bower_components/jquery-dropdown@claviska/jquery-dropdown#2.0.3":
+"@claviska/jquery-dropdown@2.0.3":
   version "2.0.3"
-  resolved "https://codeload.github.com/claviska/jquery-dropdown/tar.gz/e0816724889d1c54a2e211e2d7a79fbd14ff1d0b"
-
-"@bower_components/jquery@jquery/jquery-dist#2.0.3":
-  version "2.0.3"
-  resolved "https://codeload.github.com/jquery/jquery-dist/tar.gz/f852e631ba85af7da4ad7594785e122504e7b233"
-
-"@bower_components/jsdom@tmpvar/jsdom#^12.2.0":
-  version "12.2.0"
-  resolved "https://codeload.github.com/tmpvar/jsdom/tar.gz/751c29ecb3ce61bff8dfab0d05df1509c53be5d3"
-  dependencies:
-    abab "^2.0.0"
-    acorn "^6.0.2"
-    acorn-globals "^4.3.0"
-    array-equal "^1.0.0"
-    cssom "^0.3.4"
-    cssstyle "^1.1.1"
-    data-urls "^1.0.1"
-    domexception "^1.0.1"
-    escodegen "^1.11.0"
-    html-encoding-sniffer "^1.0.2"
-    nwsapi "^2.0.9"
-    parse5 "5.1.0"
-    pn "^1.1.0"
-    request "^2.88.0"
-    request-promise-native "^1.0.5"
-    saxes "^3.1.3"
-    symbol-tree "^3.2.2"
-    tough-cookie "^2.4.3"
-    w3c-hr-time "^1.0.1"
-    webidl-conversions "^4.0.2"
-    whatwg-encoding "^1.0.5"
-    whatwg-mimetype "^2.2.0"
-    whatwg-url "^7.0.0"
-    ws "^6.1.0"
-    xml-name-validator "^3.0.0"
-
-"@bower_components/moment@moment/moment#2.15.2":
-  version "2.15.2"
-  resolved "https://codeload.github.com/moment/moment/tar.gz/dc1e659b34365c98896e73e2e858f9efa4b3d5dc"
-
-"@bower_components/nvd3@novus/nvd3#1.8.6":
-  version "1.8.6"
-  resolved "https://codeload.github.com/novus/nvd3/tar.gz/d273ea52d91b482d044f8cef1e921256f2bfddcd"
-
-"@bower_components/pikaday-time@owenmead/Pikaday#1.5.1":
-  version "1.5.1"
-  resolved "https://codeload.github.com/owenmead/Pikaday/tar.gz/1f6b20ed7e07bf686e69319ef515770bca071657"
-  optionalDependencies:
-    moment "2.x"
-
-"@bower_components/rangeslider.js@andreruffert/rangeslider.js#2.2.1":
-  version "2.2.1"
-  resolved "https://codeload.github.com/andreruffert/rangeslider.js/tar.gz/e56430ae1aff55e95280fcabaa8de73fd85de1ae"
-  dependencies:
-    jquery ">=1.9.0"
-
-"@bower_components/select2@git://github.com/select2/select2.git#4.0.2-rc.1":
-  version "4.0.2-rc.1"
-  resolved "git://github.com/select2/select2.git#eae6fcc2bdab549de250a4b0255c482a77018470"
-  dependencies:
-    almond "~0.3.1"
-    jquery-mousewheel "~3.1.13"
-
-"@bower_components/tooltipster@iamceege/tooltipster#4.1.8":
-  version "4.1.8"
-  resolved "https://codeload.github.com/iamceege/tooltipster/tar.gz/5b03262c587d7a2c204bee9c13cd61cf25781244"
-
-"@bower_components/twilio-video@twilio/twilio-video.js#1.9.0":
-  version "1.9.0"
-  resolved "https://codeload.github.com/twilio/twilio-video.js/tar.gz/9fcd006dc40f77a403f0a8dae13746a28ad83ad1"
-  dependencies:
-    "@twilio/sip.js" "^0.7.7"
-    "@twilio/webrtc" "^2.0.0"
-    ws "^3.3.1"
-    xmlhttprequest "^1.8.0"
-
-"@bower_components/urijs@medialize/URI.js#1.18.2":
-  version "1.18.2"
-  resolved "https://codeload.github.com/medialize/URI.js/tar.gz/b77c167bc201575956ad409333ff032e504b8044"
+  resolved "https://registry.yarnpkg.com/@claviska/jquery-dropdown/-/jquery-dropdown-2.0.3.tgz#42b0e9322a644116451c7bfe803226a059843207"
+  integrity sha1-QrDpMipkQRZFHHv+gDImoFmEMgc=
 
 "@firebase/app-types@0.3.6":
   version "0.3.6"
@@ -405,6 +268,16 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
+bootstrap-timepicker@0.5.2:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/bootstrap-timepicker/-/bootstrap-timepicker-0.5.2.tgz#10ed9f2a2f0b8ccaefcde0fcf6a0738b919a3835"
+  integrity sha1-EO2fKi8LjMrvzeD89qBzi5GaODU=
+
+bootstrap@3.3.7:
+  version "3.3.7"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-3.3.7.tgz#5a389394549f23330875a3b150656574f8a9eb71"
+  integrity sha1-WjiTlFSfIzMIdaOxUGVldPip63E=
+
 brace-expansion@^1.1.7:
   version "1.1.11"
   resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-1.1.11.tgz#3c7fcbf529d87226f3d2f52b966ff5271eb441dd"
@@ -454,6 +327,11 @@ code-point-at@^1.0.0:
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
   integrity sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
 
+codemirror@5.44.0:
+  version "5.44.0"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.44.0.tgz#80dc2a231eeb7aab25ec2405cdca37e693ccf9cc"
+  integrity sha512-3l42syTNakCdCQuYeZJXTyxina6Y9i4V0ighSJXNCQtRbaCN76smKKLu1ZHPHQon3rnzC7l4i/0r4gp809K1wg==
+
 colour@~0.7.1:
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/colour/-/colour-0.7.1.tgz#9cb169917ec5d12c0736d3e8685746df1cadf778"
@@ -498,6 +376,11 @@ cssstyle@^1.1.1:
   dependencies:
     cssom "0.3.x"
 
+d3@3.5.4:
+  version "3.5.4"
+  resolved "https://registry.yarnpkg.com/d3/-/d3-3.5.4.tgz#3ae8ec0c2c02b6cb84b2d1441bb732e5830b66ed"
+  integrity sha1-OujsDCwCtsuEstFEG7cy5YMLZu0=
+
 dashdash@^1.12.0:
   version "1.14.1"
   resolved "https://registry.yarnpkg.com/dashdash/-/dashdash-1.14.1.tgz#853cfa0f7cbe2fed5de20326b8dd581035f6e2f0"
@@ -513,6 +396,13 @@ data-urls@^1.0.1:
     abab "^2.0.0"
     whatwg-mimetype "^2.2.0"
     whatwg-url "^7.0.0"
+
+datatables.net@1.10.19:
+  version "1.10.19"
+  resolved "https://registry.yarnpkg.com/datatables.net/-/datatables.net-1.10.19.tgz#97a1ed41c85e62d61040603481b59790a172dd1f"
+  integrity sha512-+ljXcI6Pj3PTGy5pesp3E5Dr3x3AV45EZe0o1r0gKENN2gafBKXodVnk2ypKwl2tTmivjxbkiqoWnipTefyBTA==
+  dependencies:
+    jquery ">=1.7"
 
 debug@^2.1.2:
   version "2.6.9"
@@ -642,7 +532,7 @@ faye-websocket@0.11.1:
   dependencies:
     websocket-driver ">=0.5.1"
 
-firebase@^5.5.5:
+firebase@5.9.0, firebase@^5.5.5:
   version "5.9.0"
   resolved "https://registry.yarnpkg.com/firebase/-/firebase-5.9.0.tgz#3c4947adf3d694c7dd67dfce8ef4a17c5a3a5a6f"
   integrity sha512-9iGXemLoEeoN1WqV8GRlYCfshfcAB0GDO2l1ZwPVuGxpwSZohXEbec63/qJhnTCf50QIpO8NP1ICZwhC/4wU4A==
@@ -655,6 +545,18 @@ firebase@^5.5.5:
     "@firebase/messaging" "0.3.14"
     "@firebase/polyfill" "0.3.8"
     "@firebase/storage" "0.2.11"
+
+firepad@1.5.3:
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/firepad/-/firepad-1.5.3.tgz#de2c813eeb96eac07139ce42f617c6133ec687ab"
+  integrity sha512-5P4mNU3SKl0/pbmgbpMSAWxfUQUDUe9DVkGBTwyXB9p/szm93qxT9qrFetNahdK1+Mc0o35PXt8QLYpraRJTMQ==
+  dependencies:
+    firebase "^5.5.5"
+    jsdom "^12.2.0"
+
+flip@nnattawat/flip:
+  version "1.1.2"
+  resolved "https://codeload.github.com/nnattawat/flip/tar.gz/cbfef47f6248b42ff5b860cc2cad888d4e0c1b9a"
 
 forever-agent@~0.6.1:
   version "0.6.1"
@@ -681,6 +583,14 @@ fs.realpath@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/fs.realpath/-/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
   integrity sha1-FQStJSMVjKpA20onh8sBQRmU6k8=
+
+fullcalendar@3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/fullcalendar/-/fullcalendar-3.0.1.tgz#61494ccde98d3921529cf7b808aaf49d3ef32cf7"
+  integrity sha1-YUlMzemNOSFSnPe4CKr0nT7zLPc=
+  dependencies:
+    jquery ">=2.0.0"
+    moment ">=2.9.0"
 
 gauge@~2.7.3:
   version "2.7.4"
@@ -725,6 +635,11 @@ grpc@1.19.0:
     nan "^2.0.0"
     node-pre-gyp "^0.12.0"
     protobufjs "^5.0.3"
+
+hamburgers@1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/hamburgers/-/hamburgers-1.1.3.tgz#eb583ede269d3a774aa5f613442b17ea13952b84"
+  integrity sha512-qpfnJwZq6ATAGJEriwuyfVNgT++GG+o+3bBfPYF7F3WY452cYKbaYGUuqwhp+3kHLI6CL4VIBfj8bfbp90Lp1A==
 
 har-schema@^2.0.0:
   version "2.0.0"
@@ -842,12 +757,16 @@ isstream@~0.1.2:
   resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
   integrity sha1-R+Y/evVa+m+S4VAOaQ64uFKcCZo=
 
+"jquery-embedly@https://github.com/embedly/embedly-jquery":
+  version "3.1.2"
+  resolved "https://github.com/embedly/embedly-jquery#3bcd7b0c09a8df9934b49f84f06e6c057aa6e71c"
+
 jquery-mousewheel@~3.1.13:
   version "3.1.13"
   resolved "https://registry.yarnpkg.com/jquery-mousewheel/-/jquery-mousewheel-3.1.13.tgz#06f0335f16e353a695e7206bf50503cb523a6ee5"
   integrity sha1-BvAzXxbjU6aV5yBr9QUDy1I6buU=
 
-jquery@>=1.7, jquery@>=1.9.0, jquery@>=2.0.0:
+jquery@3.3.1, jquery@>=1.7, jquery@>=1.9.0, jquery@>=2.0.0:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
   integrity sha512-Ubldcmxp5np52/ENotGxlLe6aGMvmF4R8S6tZjsP6Knsaxd/xp3Zrh50cG93lR6nPXyUFwzN3ZSOQI0wRJNdGg==
@@ -857,12 +776,11 @@ jsbn@~0.1.0:
   resolved "https://registry.yarnpkg.com/jsbn/-/jsbn-0.1.1.tgz#a5e654c2e5a2deb5f201d96cefbca80c0ef2f513"
   integrity sha1-peZUwuWi3rXyAdls77yoDA7y9RM=
 
-jscolor@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/jscolor/-/jscolor-0.3.0.tgz#69da99a66cdf9c338ea17ec0afe0a8da20a7e201"
-  integrity sha512-b+lnArwwIknmcAvswfL9vDeaQP/TDNWafaWD8zl6itpBUnO3PgQTjkl0zVvkoI116+au+njPFVlhWpywE7mA8Q==
+"jscolor@https://github.com/EastDesire/jscolor":
+  version "2.0.4"
+  resolved "https://github.com/EastDesire/jscolor#0fb8b8e33569b0edcb5bafbae124f5d440146897"
 
-jsdom@^12.2.0:
+jsdom@12.2.0, jsdom@^12.2.0:
   version "12.2.0"
   resolved "https://registry.yarnpkg.com/jsdom/-/jsdom-12.2.0.tgz#7cf3f5b5eafd47f8f09ca52315d367ff6e95de23"
   integrity sha512-QPOggIJ8fquWPLaYYMoh+zqUmdphDtu1ju0QGTitZT1Yd8I5qenPpXM1etzUegu3MjVp8XPzgZxdn8Yj7e40ig==
@@ -1009,6 +927,11 @@ mkdirp@^0.5.0, mkdirp@^0.5.1:
   dependencies:
     minimist "0.0.8"
 
+moment@2.15.2:
+  version "2.15.2"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.15.2.tgz#1bfdedf6a6e345f322fe956d5df5bd08a8ce84dc"
+  integrity sha1-G/3t9qbjRfMi/pVtXfW9CKjOhNw=
+
 moment@2.x, moment@>=2.9.0:
   version "2.24.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
@@ -1093,6 +1016,11 @@ number-is-nan@^1.0.0:
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
   integrity sha1-CXtgK1NCKlIsGvuHkDGDNpQaAR0=
 
+nvd3@1.8.6:
+  version "1.8.6"
+  resolved "https://registry.yarnpkg.com/nvd3/-/nvd3-1.8.6.tgz#2d3eba74bf33363b5101ebf1d093c59a53ae73c4"
+  integrity sha1-LT66dL8zNjtRAevx0JPFmlOuc8Q=
+
 nwsapi@^2.0.9:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/nwsapi/-/nwsapi-2.1.1.tgz#08d6d75e69fd791bdea31507ffafe8c843b67e9c"
@@ -1172,6 +1100,13 @@ performance-now@^2.1.0:
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
   integrity sha1-Ywn04OX6kT7BxpMHrjZLSzd8nns=
 
+pikaday@1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/pikaday/-/pikaday-1.5.1.tgz#0a48549bc1a14ea1d08c44074d761bc2f2bfcfd3"
+  integrity sha1-CkhUm8GhTqHQjEQHTXYbwvK/z9M=
+  optionalDependencies:
+    moment "2.x"
+
 pn@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/pn/-/pn-1.1.0.tgz#e2f4cef0e219f463c179ab37463e4e1ecdccbafb"
@@ -1221,6 +1156,13 @@ qs@~6.5.2:
   version "6.5.2"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
   integrity sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==
+
+rangeslider.js@2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/rangeslider.js/-/rangeslider.js-2.2.1.tgz#a76c193d0fe58ee882c99e2549fd0f59fd30529f"
+  integrity sha1-p2wZPQ/ljuiCyZ4lSf0PWf0wUp8=
+  dependencies:
+    jquery ">=1.9.0"
 
 rc@^1.2.7:
   version "1.2.8"
@@ -1316,6 +1258,14 @@ saxes@^3.1.3:
   dependencies:
     xmlchars "^1.3.1"
 
+select2@4.0.2-rc.1:
+  version "4.0.2-rc.1"
+  resolved "https://registry.yarnpkg.com/select2/-/select2-4.0.2-rc.1.tgz#391a5515f420495fa8a04429530b1102af99a46d"
+  integrity sha1-ORpVFfQgSV+ooEQpUwsRAq+ZpG0=
+  dependencies:
+    almond "~0.3.1"
+    jquery-mousewheel "~3.1.13"
+
 semver@^5.3.0:
   version "5.6.0"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.6.0.tgz#7e74256fbaa49c75aa7c7a205cc22799cac80004"
@@ -1330,6 +1280,11 @@ signal-exit@^3.0.0:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
   integrity sha1-tf3AjxKH6hF4Yo5BXiUTK3NkbG0=
+
+sortablejs@1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.4.2.tgz#10df66054e1d1dcb538d7eaedaeaf692232c8d0d"
+  integrity sha1-EN9mBU4dHctTjX6u2ur2kiMsjQ0=
 
 source-map@~0.6.1:
   version "0.6.1"
@@ -1417,6 +1372,11 @@ tar@^4:
     safe-buffer "^5.1.2"
     yallist "^3.0.2"
 
+tooltipster@4.1.8:
+  version "4.1.8"
+  resolved "https://registry.yarnpkg.com/tooltipster/-/tooltipster-4.1.8.tgz#be1eceedf95241ee23df788f70cb855da15f397a"
+  integrity sha1-vh7O7flSQe4j33iPcMuFXaFfOXo=
+
 tough-cookie@^2.3.3, tough-cookie@^2.4.3:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/tough-cookie/-/tough-cookie-2.5.0.tgz#cd9fb2a0aa1d5a12b473bd9fb96fa3dcff65ade2"
@@ -1457,6 +1417,16 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
   integrity sha1-WuaBd/GS1EViadEIr6k/+HQ/T2Q=
 
+twilio-video@1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/twilio-video/-/twilio-video-1.9.0.tgz#2669e10a3d7bee86849863a31048cb29def1bbf0"
+  integrity sha512-LoiCmje72rKzTIRIppcwNIOG4xGWdtLF7zP8n2FDl9SUzum2PbI1lBPrhFnG0Rhzl6QAUTv+MwWTa8+OGkIFdQ==
+  dependencies:
+    "@twilio/sip.js" "^0.7.7"
+    "@twilio/webrtc" "^2.0.0"
+    ws "^3.3.1"
+    xmlhttprequest "^1.8.0"
+
 type-check@~0.3.2:
   version "0.3.2"
   resolved "https://registry.yarnpkg.com/type-check/-/type-check-0.3.2.tgz#5884cab512cf1d355e3fb784f30804b2b520db72"
@@ -1475,6 +1445,11 @@ uri-js@^4.2.2:
   integrity sha512-KY9Frmirql91X2Qgjry0Wd4Y+YTdrdZheS8TFwvkbLWf/G5KNJDCh6pKL5OZctEW4+0Baa5idK2ZQuELRwPznQ==
   dependencies:
     punycode "^2.1.0"
+
+urijs@1.18.2:
+  version "1.18.2"
+  resolved "https://registry.yarnpkg.com/urijs/-/urijs-1.18.2.tgz#c2791fa9fb52f4603caf36032d9666432a1dda33"
+  integrity sha1-wnkfqftS9GA8rzYDLZZmQyod2jM=
 
 util-deprecate@~1.0.1:
   version "1.0.2"
