@@ -65,7 +65,7 @@ class GenericGraphsController < ApplicationController
         render json: graph.build
       }
       format.csv {
-        GenericGraphsEventsCreatedDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), demo: false)
+        GenericGraphsEventsCreatedDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), false)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }
@@ -92,7 +92,7 @@ class GenericGraphsController < ApplicationController
         render json: graph.build
       }
       format.csv {
-        GenericGraphsMessagesSentDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), demo: false)
+        GenericGraphsMessagesSentDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), false)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }
@@ -120,7 +120,7 @@ class GenericGraphsController < ApplicationController
         render json: graph.build
       }
       format.csv {
-        GenericGraphsTopGroupsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), demo: false)
+        GenericGraphsTopGroupsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), false)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }
@@ -161,7 +161,7 @@ class GenericGraphsController < ApplicationController
 
       }
       format.csv {
-        GenericGraphsTopFoldersByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, demo: false)
+        GenericGraphsTopFoldersByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, false)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }
@@ -204,7 +204,7 @@ class GenericGraphsController < ApplicationController
         render json: results
       }
       format.csv {
-        GenericGraphsTopResourcesByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, demo: false)
+        GenericGraphsTopResourcesByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, false)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }
@@ -245,7 +245,7 @@ class GenericGraphsController < ApplicationController
         render json: graph.build
       }
       format.csv {
-        GenericGraphsTopNewsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, demo: false)
+        GenericGraphsTopNewsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, false)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }
@@ -530,7 +530,7 @@ class GenericGraphsController < ApplicationController
         }
       }
       format.csv {
-        GenericGraphsEventsCreatedDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), demo: true)
+        GenericGraphsEventsCreatedDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), true)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }
@@ -561,7 +561,7 @@ class GenericGraphsController < ApplicationController
         }
       }
       format.csv {
-        GenericGraphsEventsCreatedDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), demo: true)
+        GenericGraphsEventsCreatedDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), true)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }
@@ -595,7 +595,7 @@ class GenericGraphsController < ApplicationController
         }
       }
       format.csv {
-        GenericGraphsTopGroupsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), demo: true)
+        GenericGraphsTopGroupsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), true)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }
@@ -634,7 +634,7 @@ class GenericGraphsController < ApplicationController
         }
       }
       format.csv {
-        GenericGraphsTopFoldersByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, demo: true)
+        GenericGraphsTopFoldersByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, true)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }
@@ -673,7 +673,7 @@ class GenericGraphsController < ApplicationController
         }
       }
       format.csv {
-        GenericGraphsTopResourcesByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, demo: true)
+        GenericGraphsTopResourcesByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, true)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }
@@ -702,7 +702,7 @@ class GenericGraphsController < ApplicationController
 
       }
       format.csv {
-        GenericGraphsTopNewsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, demo: true)
+        GenericGraphsTopNewsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, true)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }
@@ -740,7 +740,7 @@ class GenericGraphsController < ApplicationController
         }
       }
       format.csv {
-        GenericGraphsTopNewsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, demo: true)
+        GenericGraphsTopNewsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, true)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }
