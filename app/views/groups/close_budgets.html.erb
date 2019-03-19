@@ -47,7 +47,7 @@
               <td>
                 <%= link_to 'Edit', edit_annual_budget_group_budgets_path(group) %> -
                 <%= link_to "Carry Over", carry_over_annual_budget_group_budgets_path(group), method: 'post'%> -
-                <%= link_to "Reset Budget", reset_annual_budget_group_budgets_path(group), method: 'post' %>
+                <%= link_to "Reset Budget", reset_annual_budget_group_budgets_path(group), method: 'post', data: { confirm: "Before you reset this annual budget please make sure you have exported budget info for #{group.name}. Once you reset, all budget-related info will be permanently deleted!"  } %>
               </td>
             </tr>
 
@@ -63,7 +63,7 @@
                 <td>
                   <%= link_to 'Edit', edit_annual_budget_group_budgets_path(child) %> -
                   <%= link_to "Carry Over", carry_over_annual_budget_group_budgets_path(child), method: 'post' %> -
-                  <%= link_to "Reset Budget", reset_annual_budget_group_budgets_path(child), method: 'post' %>
+                  <%= link_to "Reset Budget", reset_annual_budget_group_budgets_path(child), method: 'post', data: { confirm: "Before you reset this annual budget please make sure you have exported budget info for #{child.name}. Once you reset, all budget-related info will be permanently deleted!"  } %>
                 </td>
               </tr>
             <% end %>
