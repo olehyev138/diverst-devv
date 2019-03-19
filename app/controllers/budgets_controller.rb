@@ -86,8 +86,7 @@ class BudgetsController < ApplicationController
   def reset_annual_budget
     authorize [@group], :update?, :policy_class => GroupBudgetPolicy
 
-    if @group.update({:annual_budget => 0, :leftover_money => 0})
-      @group.budgets.update_all(:is_approved => false)
+    if AnnualBudgetManager.new(@group).reset
       track_activity(@group, :annual_budget_update)
       flash[:notice] = "Your budget was updated"
       redirect_to :back
