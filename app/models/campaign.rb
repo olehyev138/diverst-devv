@@ -128,7 +128,19 @@ class Campaign < BaseClass
     end
 
     def contributions_per_erg_csv(erg_text)
-      data = self.contributions_per_erg
+      series = [{
+        name: '# of contributions',
+        data: groups.map do |group|
+          {
+            name: group.name,
+            y: answers.where(author_id: group.members.ids).count + answer_comments.where(author_id: group.members.ids).count
+          }
+        end
+      }]
+
+      data = {
+        series: series
+      }
 
       flatten_data = data[:series].map{ |d| d[:data] }.flatten
       strategy = Reports::GraphStatsGeneric.new(
@@ -142,7 +154,29 @@ class Campaign < BaseClass
     end
 
     def top_performers_csv
-      data = self.top_performers
+      top_answers_count_hash = answers.group(:author).order('count_all').count
+
+      top_answers_hash = top_answers_count_hash.map do |user, _|
+        [
+          user,
+          answers.where(author: user).map { |a| a.votes.count }.sum
+        ]
+      end.to_h
+
+      top_comments_hash = answer_comments.group('answer_comments.author_id').order('count_all').count.map { |k, v| [User.find(k), v] }.to_h
+      top_combined_hash = top_answers_hash.merge(top_comments_hash) { |_k, a_value, b_value| a_value + b_value }.sort_by { |_k, v| v }.reverse!.to_h
+
+      series = [{
+        name: 'Score',
+        data: top_combined_hash.values[0..14]
+      }]
+
+      data = {
+        series: series,
+        categories: top_combined_hash.keys.map(&:name)[0..14],
+        xAxisTitle: 'Employee',
+        yAxisTitle: 'Score'
+      }
 
       strategy = Reports::GraphStatsGeneric.new(title: 'Top performers',
         categories: data[:categories], data: data[:series].map{ |d| d[:data] }.flatten)
