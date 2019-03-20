@@ -21,6 +21,10 @@ RSpec.describe GenericGraphsController, type: :controller do
         before {
           get :group_population, format: :json
 
+          g = 'UserGroup'
+          g = g.constantize
+          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
+          g.__elasticsearch__.create_index!
         }
 
         it "returns json format" do
@@ -89,7 +93,14 @@ RSpec.describe GenericGraphsController, type: :controller do
       login_user_from_let
 
       context "when format is json" do
-        before { get :segment_population, format: :json }
+        before {
+          get :segment_population, format: :json
+
+          g = 'UsersSegment'
+          g = g.constantize
+          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
+          g.__elasticsearch__.create_index!
+        }
 
         it "returns json format" do
           expect(response.content_type).to eq "application/json"
@@ -157,7 +168,14 @@ RSpec.describe GenericGraphsController, type: :controller do
       login_user_from_let
 
       context "when format is json" do
-        before { get :events_created, format: :json }
+        before {
+          get :events_created, format: :json
+
+          g = 'Initiative'
+          g = g.constantize
+          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
+          g.__elasticsearch__.create_index!
+        }
 
         it "returns json format" do
           expect(response.content_type).to eq "application/json"
@@ -225,7 +243,14 @@ RSpec.describe GenericGraphsController, type: :controller do
       login_user_from_let
 
       context "when format is json" do
-        before { get :messages_sent, format: :json }
+        before {
+          get :messages_sent, format: :json
+
+          g = 'GroupMessage'
+          g = g.constantize
+          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
+          g.__elasticsearch__.create_index!
+        }
 
         it "returns json format" do
           expect(response.content_type).to eq "application/json"
@@ -293,7 +318,14 @@ RSpec.describe GenericGraphsController, type: :controller do
       login_user_from_let
 
       context "when format is json" do
-        before { get :mentorship, format: :json }
+        before {
+          get :mentorship, format: :json
+
+          g = 'UserGroup'
+          g = g.constantize
+          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
+          g.__elasticsearch__.create_index!
+        }
 
         it "returns json format" do
           expect(response.content_type).to eq "application/json"
@@ -361,7 +393,14 @@ RSpec.describe GenericGraphsController, type: :controller do
       login_user_from_let
 
       context "when format is json" do
-        before { get :mentoring_sessions, format: :json }
+        before {
+          get :mentoring_sessions, format: :json
+
+          g = 'MentoringSession'
+          g = g.constantize
+          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
+          g.__elasticsearch__.create_index!
+        }
 
         it "returns json format" do
           expect(response.content_type).to eq "application/json"
@@ -429,7 +468,14 @@ RSpec.describe GenericGraphsController, type: :controller do
       login_user_from_let
 
       context "when format is json" do
-        before { get :mentoring_interests, format: :json }
+        before {
+          get :mentoring_interests, format: :json
+
+          g = 'MentoringInterest'
+          g = g.constantize
+          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
+          g.__elasticsearch__.create_index!
+        }
 
         it "returns json format" do
           expect(response.content_type).to eq "application/json"
@@ -497,7 +543,14 @@ RSpec.describe GenericGraphsController, type: :controller do
       login_user_from_let
 
       context "when format is json" do
-        before { get :top_groups_by_views, format: :json }
+        before {
+          get :top_groups_by_views, format: :json
+
+          g = 'View'
+          g = g.constantize
+          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
+          g.__elasticsearch__.create_index!
+        }
 
         it "returns json format" do
           expect(response.content_type).to eq "application/json"
@@ -565,7 +618,14 @@ RSpec.describe GenericGraphsController, type: :controller do
       login_user_from_let
 
       context "when format is json" do
-        before { get :top_folders_by_views, format: :json }
+        before {
+          get :top_folders_by_views, format: :json
+
+          g = 'View'
+          g = g.constantize
+          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
+          g.__elasticsearch__.create_index!
+        }
 
         it "returns json format" do
           expect(response.content_type).to eq "application/json"
@@ -633,7 +693,14 @@ RSpec.describe GenericGraphsController, type: :controller do
       login_user_from_let
 
       context "when format is json" do
-        before { get :top_resources_by_views, format: :json }
+        before {
+          get :top_resources_by_views, format: :json
+
+          g = 'View'
+          g = g.constantize
+          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
+          g.__elasticsearch__.create_index!
+        }
 
         it "returns json format" do
           expect(response.content_type).to eq "application/json"
@@ -701,7 +768,14 @@ RSpec.describe GenericGraphsController, type: :controller do
       login_user_from_let
 
       context "when format is json" do
-        before { get :top_news_by_views, format: :json }
+        before {
+          get :top_news_by_views, format: :json
+
+          g = 'View'
+          g = g.constantize
+          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
+          g.__elasticsearch__.create_index!
+        }
 
         it "returns json format" do
           expect(response.content_type).to eq "application/json"
