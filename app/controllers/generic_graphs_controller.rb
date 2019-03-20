@@ -19,6 +19,7 @@ class GenericGraphsController < ApplicationController
       }
       format.csv {
         GenericGraphsGroupPopulationDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))
+        track_activity(current_user.enterprise, :export_generic_graphs_group_population)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }
@@ -40,6 +41,7 @@ class GenericGraphsController < ApplicationController
       }
       format.csv {
         GenericGraphsSegmentPopulationDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))
+        track_activity(current_user.enterprise, :export_generic_graphs_segment_population)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }
@@ -66,6 +68,7 @@ class GenericGraphsController < ApplicationController
       }
       format.csv {
         GenericGraphsEventsCreatedDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), false)
+        track_activity(current_user.enterprise, :export_generic_graphs_events_created)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }
@@ -93,6 +96,7 @@ class GenericGraphsController < ApplicationController
       }
       format.csv {
         GenericGraphsMessagesSentDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), false)
+        track_activity(current_user.enterprise, :export_generic_graphs_messages_sent)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }
@@ -121,6 +125,7 @@ class GenericGraphsController < ApplicationController
       }
       format.csv {
         GenericGraphsTopGroupsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), false)
+        track_activity(current_user.enterprise, :export_generic_graphs_top_groups_by_views)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }
@@ -162,6 +167,7 @@ class GenericGraphsController < ApplicationController
       }
       format.csv {
         GenericGraphsTopFoldersByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, false)
+        track_activity(current_user.enterprise, :export_generic_graphs_top_folders_by_views)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }
@@ -205,6 +211,7 @@ class GenericGraphsController < ApplicationController
       }
       format.csv {
         GenericGraphsTopResourcesByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, false)
+        track_activity(current_user.enterprise, :export_generic_graphs_top_resources_by_views)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }
@@ -246,6 +253,7 @@ class GenericGraphsController < ApplicationController
       }
       format.csv {
         GenericGraphsTopNewsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, false)
+        track_activity(current_user.enterprise, :export_generic_graphs_top_news_by_views)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }
@@ -334,7 +342,7 @@ class GenericGraphsController < ApplicationController
         GenericGraphsGroupGrowthDownloadJob
           .perform_later(current_user.id, current_user.enterprise.id,
           params[:input][:from_date], params[:input][:to_date])
-
+        track_activity(current_user.enterprise, :export_generic_graphs_group_growth)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }
@@ -378,22 +386,6 @@ class GenericGraphsController < ApplicationController
     end
   end
 
-  def events_created
-    if ENV["DOMAIN"] === "dm.diverst.com"
-      demo_events_created
-    else
-      non_demo_events_created
-    end
-  end
-
-  def messages_sent
-    if ENV["DOMAIN"] === "dm.diverst.com"
-      demo_messages_sent
-    else
-      non_demo_messages_sent
-    end
-  end
-
   def mentorship
     respond_to do |format|
       format.json {
@@ -413,6 +405,7 @@ class GenericGraphsController < ApplicationController
       }
       format.csv {
         GenericGraphsMentorshipDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))
+        track_activity(current_user.enterprise, :export_generic_graphs_mentorship)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }
@@ -443,6 +436,7 @@ class GenericGraphsController < ApplicationController
       }
       format.csv {
         GenericGraphsMentoringSessionsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))
+        track_activity(current_user.enterprise, :export_generic_graphs_mentoring_sessions)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }
@@ -464,9 +458,26 @@ class GenericGraphsController < ApplicationController
       }
       format.csv {
         GenericGraphsMentoringInterestsDownloadJob.perform_later(current_user.id, current_user.enterprise.id)
+        track_activity(current_user.enterprise, :export_generic_graphs_mentoring_interests)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }
+    end
+  end
+
+  def events_created
+    if ENV["DOMAIN"] === "dm.diverst.com"
+      demo_events_created
+    else
+      non_demo_events_created
+    end
+  end
+
+  def messages_sent
+    if ENV["DOMAIN"] === "dm.diverst.com"
+      demo_messages_sent
+    else
+      non_demo_messages_sent
     end
   end
 
@@ -501,8 +512,6 @@ class GenericGraphsController < ApplicationController
       non_demo_top_news_by_views
     end
   end
-
-  # FOR NON DEMO PURPOSES
 
   # FOR DEMO PURPOSES
 
