@@ -23,7 +23,8 @@
     "sortablejs": "1.4.2",
     "tooltipster": "4.1.8",
     "twilio-video": "1.9.0",
-    "urijs": "1.18.2"
+    "urijs": "1.18.2",
+    "yarn": "^1.13.0"
   },
   "engines": {
     "yarn": ">= 1.0.0"

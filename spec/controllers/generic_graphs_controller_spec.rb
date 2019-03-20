@@ -18,7 +18,10 @@ RSpec.describe GenericGraphsController, type: :controller do
       login_user_from_let
 
       context "when format is json" do
-        before { get :group_population, format: :json }
+        before {
+          get :group_population, format: :json
+
+        }
 
         it "returns json format" do
           expect(response.content_type).to eq "application/json"

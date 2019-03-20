@@ -24,6 +24,11 @@ jobs:
       - image: docker.elastic.co/elasticsearch/elasticsearch:6.2.2
         environment:
         - xpack.security.enabled: false
+        - network.host: 127.0.0.1
+        - transport.host: localhost
+        - http.port: 9200
+        - cluster.name: elasticsearch
+        - discovery.type: single-node
     steps:
     # Machine Setup
     #   If you break your build into multiple jobs with workflows, you will probably want to do the parts of this that are relevant in each
@@ -39,10 +44,6 @@ jobs:
         command: 'echo ''America/New_York'' | sudo tee -a /etc/timezone; sudo dpkg-reconfigure
           -f noninteractive tzdata; sudo service mysql restart; sudo service postgresql
           restart; '
-    - run:
-        working_directory: ~/TeamDiverst/diverst-development
-        command: 'sudo service elasticsearch status || sudo service elasticsearch
-          start; '
     # Dependencies
     #   This would typically go in either a build or a build-and-test job when using workflows
     # Restore the dependency cache
