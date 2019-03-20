@@ -309,4 +309,13 @@ RSpec.describe Initiative, type: :model do
       expect{InitiativeUser.find(initiative_user.id)}.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
+
+  describe '#unfinished_expenses?' do 
+    let!(:initiative) { create(:initiative, start: DateTime.now.days_ago(3), end: DateTime.now.days_ago(1), 
+                                finished_expenses: false) }
+
+    it 'returns true for #unfinished_expenses?' do 
+      expect(initiative.unfinished_expenses?).to eq true
+    end
+  end
 end
