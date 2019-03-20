@@ -23,7 +23,7 @@ RSpec.describe GenericGraphsController, type: :controller do
 
           g = 'UserGroup'
           g = g.constantize
-          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
+          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?
           g.__elasticsearch__.create_index!
         }
 
@@ -98,7 +98,7 @@ RSpec.describe GenericGraphsController, type: :controller do
 
           g = 'UsersSegment'
           g = g.constantize
-          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
+          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?
           g.__elasticsearch__.create_index!
         }
 
@@ -173,7 +173,7 @@ RSpec.describe GenericGraphsController, type: :controller do
 
           g = 'Initiative'
           g = g.constantize
-          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
+          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?
           g.__elasticsearch__.create_index!
         }
 
@@ -248,7 +248,7 @@ RSpec.describe GenericGraphsController, type: :controller do
 
           g = 'GroupMessage'
           g = g.constantize
-          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
+          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?
           g.__elasticsearch__.create_index!
         }
 
@@ -323,7 +323,7 @@ RSpec.describe GenericGraphsController, type: :controller do
 
           g = 'UserGroup'
           g = g.constantize
-          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
+          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?
           g.__elasticsearch__.create_index!
         }
 
@@ -398,7 +398,7 @@ RSpec.describe GenericGraphsController, type: :controller do
 
           g = 'MentoringSession'
           g = g.constantize
-          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
+          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?
           g.__elasticsearch__.create_index!
         }
 
@@ -471,9 +471,9 @@ RSpec.describe GenericGraphsController, type: :controller do
         before {
           get :mentoring_interests, format: :json
 
-          g = 'MentoringInterest'
+          g = 'MentorshipInterest'
           g = g.constantize
-          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
+          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?
           g.__elasticsearch__.create_index!
         }
 
@@ -548,7 +548,7 @@ RSpec.describe GenericGraphsController, type: :controller do
 
           g = 'View'
           g = g.constantize
-          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
+          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?
           g.__elasticsearch__.create_index!
         }
 
@@ -623,7 +623,7 @@ RSpec.describe GenericGraphsController, type: :controller do
 
           g = 'View'
           g = g.constantize
-          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
+          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?
           g.__elasticsearch__.create_index!
         }
 
@@ -698,7 +698,7 @@ RSpec.describe GenericGraphsController, type: :controller do
 
           g = 'View'
           g = g.constantize
-          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
+          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?
           g.__elasticsearch__.create_index!
         }
 
@@ -773,7 +773,7 @@ RSpec.describe GenericGraphsController, type: :controller do
 
           g = 'View'
           g = g.constantize
-          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
+          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?
           g.__elasticsearch__.create_index!
         }
 

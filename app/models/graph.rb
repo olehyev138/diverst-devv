@@ -13,7 +13,7 @@ class Graph < BaseClass
   after_initialize :set_groups_segments
 
   def set_graph_builder
-    if @graph_builder.blank?
+    if @graph_builder.blank? && collection.present?
       @graph_builder = get_custom_class.get_graph
       @graph_builder.set_enterprise_filter(field: 'user.enterprise_id', value: collection.enterprise.id)
 
@@ -25,7 +25,7 @@ class Graph < BaseClass
   def set_groups_segments
     # dashboard groups & segments to scope by
     # we get all groups & segments that we do *not* want and then filter them out
-    if @groups.blank? || @segments.blank?
+    if (@groups.blank? || @segments.blank?) && collection.present?
       @groups = collection.enterprise.groups.pluck(:name) - collection.groups.map(&:name)
       @segments = collection.enterprise.segments.pluck(:name) - collection.segments.map(&:name)
     end
