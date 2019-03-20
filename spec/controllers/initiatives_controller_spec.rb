@@ -173,6 +173,23 @@ RSpec.describe InitiativesController, type: :controller do
           expect(InitiativesDownloadJob).to have_received(:perform_later)
       end
 
+      context 'when you have unfinished expenses' do 
+        let!(:initiative_with_unclosed_expenses) { create(:initiative, start: DateTime.now.days_ago(3), end: DateTime.now.days_ago(1), 
+                                finished_expenses: false, owner_group: group) }
+        before do 
+          request.env['HTTP_REFERER'] = 'back'
+          get :export_csv, :group_id => group.id
+        end 
+
+        it 'produces a flash notice' do 
+          expect(flash[:notice]).to eq 'Please close expenses of past initiatives'
+        end
+
+        it 'redirects back' do  
+          expect(response).to redirect_to 'back'
+        end
+      end
+
       describe 'public activity' do
         enable_public_activity
 
