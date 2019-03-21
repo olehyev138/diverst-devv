@@ -39,6 +39,11 @@ set :nvm_type, :user # or :system, depends on your nvm setup
 set :nvm_node, 'v8.15.1'
 set :nvm_map_bins, %w{node npm yarn}
 
+set :slackistrano, {
+  channel: "#deployment",
+  webhook: "https://hooks.slack.com/services/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"
+}
+
 namespace :deploy do
   
   # Add this in config/deploy.rb

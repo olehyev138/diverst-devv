@@ -94,6 +94,7 @@ group :development, :test do
   gem 'pundit-matchers', "~> 1.6.0"
   gem 'capistrano-yarn'
   gem 'capistrano-nvm'
+  gem 'slackistrano'
 end
 
 group :test do
