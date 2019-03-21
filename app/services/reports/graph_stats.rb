@@ -1,5 +1,5 @@
 class Reports::GraphStats
-  def initialize(graph, elements, date_range, unset_series)
+  def initialize(graph, elements, date_range, date_range_str, unset_series)
     @agg_list_parser = BaseGraph::ElasticsearchParser.new
     @agg_list_parser.parse_chain = @agg_list_parser.nested_terms_list
 
@@ -11,13 +11,14 @@ class Reports::GraphStats
     @graph = graph
     @elements = elements
     @date_range = date_range
+    @ui_date_range = ui_parse_date_range(date_range_str)
     @unset_series = unset_series
   end
 
   def get_header
     header = []
     header << [@graph.title]
-    header << ['From' + @date_range[:from], 'To:' + @date_range[:to]]
+    header << ['From' + @ui_date_range[:from], 'To:' + @ui_date_range[:to]]
 
     # If aggregation, add each aggregation field value as a column
     header_row = [@graph.field.title]
@@ -29,7 +30,6 @@ class Reports::GraphStats
       end
     end
 
-    header_row << 'Y'
     header << header_row
 
     header
@@ -68,5 +68,31 @@ class Reports::GraphStats
     end
 
     body
+  end
+
+  def ui_parse_date_range(date_range)
+    # Parse a date range from a frontend range_controller for a es date range aggregation
+    # Date range is {} or looks like { from: <>, to: <> }, with to being optional
+
+    default_from_date = 'All'
+    default_to_date = DateTime.tomorrow.strftime('%F')
+
+    return { from: default_from_date, to: default_to_date } if date_range.blank?
+
+    from_date = date_range[:from_date].presence || default_from_date
+    to_date = DateTime.parse((date_range[:to_date].presence || default_to_date)).strftime('%F')
+
+    from_date = case from_date
+                when '1m'     then 1.month.ago.strftime('%F')
+                when '3m'     then 3.months.ago.strftime('%F')
+                when '6m'     then 6.months.ago.strftime('%F')
+                when 'ytd'    then Time.now.beginning_of_year.strftime('%F')
+                when '1y'     then 1.year.ago.strftime('%F')
+                when 'all'    then 'All'
+                else
+                  DateTime.parse(from_date).strftime('%F')
+                end
+
+    { from: from_date, to: to_date }
   end
 end

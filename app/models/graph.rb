@@ -53,7 +53,8 @@ class Graph < BaseClass
     date_range = parse_date_range(date_range_str)
     build_query(date_range)
 
-    strategy = Reports::GraphStats.new(self, @graph_builder.search, date_range, unset_series)
+    strategy = Reports::GraphStats.new(self, @graph_builder.search, date_range,
+      date_range_str, unset_series)
     report = Reports::Generator.new(strategy)
 
     report.to_csv
