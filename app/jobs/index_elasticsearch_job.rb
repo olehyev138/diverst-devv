@@ -6,7 +6,6 @@ class IndexElasticsearchJob < ActiveJob::Base
 
   def perform(model_name:, operation:, record_id:)
     logger.debug [operation, "ID: #{record_id}"]
-    return if Rails.env.test?
     model = model_name.constantize
     
     begin

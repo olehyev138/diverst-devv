@@ -112,6 +112,13 @@ RSpec.describe Campaign, type: :model do
     end
 
     context '#contributions_per_erg' do
+      before {
+        g = 'Answer'
+        g = g.constantize
+        g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
+        g.__elasticsearch__.create_index!
+      }
+
       it 'return correct data' do
         expect(campaign.contributions_per_erg[:series][0][:key])
           .to eq 'Contributions per erg'
@@ -119,6 +126,12 @@ RSpec.describe Campaign, type: :model do
     end
 
     context '#top_performers' do
+      before {
+        g = 'Answer'
+        g = g.constantize
+        g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
+        g.__elasticsearch__.create_index!
+      }
       it 'return correct data' do
         expect(campaign.top_performers[:series][0][:key])
           .to eq 'Total votes per user'

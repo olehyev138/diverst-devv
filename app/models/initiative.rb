@@ -154,6 +154,10 @@ class Initiative < BaseClass
     self.update(finished_expenses: true)
   end
 
+  def unfinished_expenses?
+    (self.end < Time.current) && !finished_expenses?
+  end
+
   def current_expences_sum
     expenses.sum(:amount) || 0
   end
