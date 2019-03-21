@@ -3,14 +3,15 @@ require 'rails_helper'
 RSpec.describe IndexElasticsearchJob, type: :job do
   include ActiveJob::TestHelper
   let!(:index_name) { User.index_name }
+
+  before(:each) do
+    RefactorElasticsearchJob.perform_now
+  end
+
   let!(:user) do
     perform_enqueued_jobs do
       create(:user)
     end
-  end
-
-  before(:each) do
-    RefactorElasticsearchJob.perform_now
   end
 
   context 'when indexing user' do
