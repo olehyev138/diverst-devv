@@ -42,6 +42,7 @@ class Reports::GraphStats
       @elements.each do |e|
         row = []
         buckets = @agg_list_parser.parse_list(e).sort_by { |ee| ee[:key] }
+
         next if buckets.count == 0
 
         row << @x_parser.parse(e)
@@ -51,7 +52,7 @@ class Reports::GraphStats
           key = @x_parser.parse(ee)
           doc_count = @y_parser.parse(ee)
 
-          next if doc_count == 0 || @unset_series.include?(key)
+          next if @unset_series.include?(key)
           row << doc_count
         end
 
