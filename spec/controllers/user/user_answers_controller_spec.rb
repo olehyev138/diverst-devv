@@ -96,7 +96,7 @@ RSpec.describe "User::UserAnswersController", type: :controller do
 
           it 'creates public activity record' do
             perform_enqueued_jobs do
-              expect{post :create, question_id: question.id, answer: { content: "Here's some content for you" }}
+              expect{post :create, question_id: question.id, answer: { contributing_group_id: group.id, content: "Here's some content for you" }}
                 .to change(PublicActivity::Activity, :count).by(1)
             end
           end
@@ -108,7 +108,7 @@ RSpec.describe "User::UserAnswersController", type: :controller do
 
             before {
               perform_enqueued_jobs do
-                post :create, question_id: question.id, answer: { content: "Here's some content for you" }
+                post :create, question_id: question.id, answer: { contributing_group_id: group.id, content: "Here's some content for you" }
               end
             }
 
