@@ -92,6 +92,8 @@ group :development, :test do
   gem 'timecop', '~> 0.8.1'
   gem 'byebug', '~> 9.1.0' # Debugger
   gem 'pundit-matchers', "~> 1.6.0"
+  gem 'capistrano-yarn'
+  gem 'capistrano-nvm'
 end
 
 group :test do

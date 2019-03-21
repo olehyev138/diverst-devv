@@ -35,6 +35,10 @@ set :rollbar_token, ENV["ROLLBAR_ACCESS_TOKEN"]
 set :rollbar_env, ENV["ROLLBAR_ENV"]
 set :rollbar_role, Proc.new { :app }
 
+set :nvm_type, :user # or :system, depends on your nvm setup
+set :nvm_node, 'v8.15.1'
+set :nvm_map_bins, %w{node npm yarn}
+
 namespace :deploy do
   
   # Add this in config/deploy.rb
