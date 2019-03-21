@@ -161,7 +161,7 @@ Rails.application.routes.draw do
     end
   end
   post 'group_categories/update_all_sub_groups', to: 'group_categories#update_all_sub_groups', as: :update_all_sub_groups
-
+  patch '/groups/:id/auto_archive_switch', to: 'groups#auto_archive_switch', as: :auto_archive_switch
   resources :groups do
     collection do
       post :sort

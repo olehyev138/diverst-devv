@@ -324,6 +324,12 @@ class GroupsController < ApplicationController
         render nothing: true
     end
 
+    def auto_archive_switch
+        authorize @group, :layouts?
+        @group.archive_switch
+        render nothing: true
+    end
+
     protected
 
     def base_show
@@ -409,6 +415,11 @@ class GroupsController < ApplicationController
                 :group_category_id,
                 :group_category_type_id,
                 :position,
+                :auto_archive,
+                :expiry_age_for_news,
+                :expiry_age_for_resources,
+                :expiry_age_for_events,
+                :unit_of_expiry_age,
                 manager_ids: [],
                 child_ids: [],
                 member_ids: [],

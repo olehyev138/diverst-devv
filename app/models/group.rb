@@ -40,6 +40,11 @@ class Group < ActiveRecord::Base
                                     :leaders_only,
                                     :non_member
                                   ]
+  enumerize :unit_of_expiry_age, default: :months, in: [
+    :weeks,
+    :months,
+    :years
+  ]
 
   belongs_to :enterprise
   belongs_to :lead_manager, class_name: "User"
@@ -149,6 +154,14 @@ class Group < ActiveRecord::Base
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
+
+  def archive_switch
+    if auto_archive?
+      update(auto_archive: false)
+    else
+      update(auto_archive: true)
+    end
+  end
 
   def layout_values
     {
