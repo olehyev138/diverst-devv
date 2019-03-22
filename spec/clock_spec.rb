@@ -67,4 +67,20 @@ RSpec.describe Clockwork, :type => :clock do
     expect(Clockwork::Test.times_run(job)).to eq 1
     expect(Clockwork::Test.block_for(job).call).to eq Group.find_each { |group| GroupLeaderPostNotificationsJob.perform_later(group.id) }
   end
+
+  it 'archive expired news' do 
+    job = 'Archive expired news'
+
+    expect(Clockwork::Test.ran_job?(job)).to be_truthy
+    expect(Clockwork::Test.times_run(job)).to eq 1
+    expect(Clockwork::Test.block_for(job).call).to eq Group.find_each { |group| NewsFeedLink.archive_expired_news(group) }
+  end
+
+  it 'archive expired resources' do 
+    job = 'Archive expired resources'
+
+    expect(Clockwork::Test.ran_job?(job)).to be_truthy
+    expect(Clockwork::Test.times_run(job)).to eq 1
+    expect(Clockwork::Test.block_for(job).call).to eq Group.find_each { |group| Resource.archive_expired_resources(group) }
+  end
 end

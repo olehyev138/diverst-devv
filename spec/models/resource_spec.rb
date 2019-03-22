@@ -132,4 +132,19 @@ RSpec.describe Resource, :type => :model do
         expect(resource.total_views).to eq(10)
     end
   end
+
+  describe '.archive_expired_resources' do 
+    let!(:group) { create(:group) }
+    let!(:resources) { create_list(:resource, 3, group: group) }
+    let!(:expired_resources) { create_list(:resource, 2, group: group, created_at: Time.now.weeks_ago(1), updated_at: Time.now.weeks_ago(1)) }
+
+    it 'archives nothing if auto_archive is off' do 
+      expect{ Resource.archive_expired_resources(group) }.to change(Resource.where.not(archived_at: nil), :count).by(0)
+    end
+
+    it 'archives expired resources when auto_archive is on' do 
+      group.update(unit_of_expiry_age: 'weeks', expiry_age_for_news: 1, auto_archive: true)
+      expect{ Resource.archive_expired_resources(group) }.to change(Resource.where.not(archived_at: nil), :count).by(2)
+    end
+  end
 end

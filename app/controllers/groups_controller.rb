@@ -325,7 +325,7 @@ class GroupsController < ApplicationController
     end
 
     def auto_archive_switch
-        authorize @group, :layouts?
+        authorize @group, :settings?
         @group.archive_switch
         render nothing: true
     end
