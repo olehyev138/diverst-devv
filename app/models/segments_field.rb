@@ -4,7 +4,7 @@ class SegmentsField < Field
   include Optionnable
 
   def elasticsearch_field
-    'combined_info.segments'
+    'segment.name'
   end
 
   def format_value_name(value)

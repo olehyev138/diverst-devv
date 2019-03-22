@@ -1,4 +1,4 @@
-class SharedMetricsDashboard < ActiveRecord::Base
+class SharedMetricsDashboard < BaseClass
   belongs_to :user
   belongs_to :metrics_dashboard
 

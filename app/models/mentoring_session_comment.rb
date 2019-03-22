@@ -1,4 +1,4 @@
-class MentoringSessionComment < ActiveRecord::Base
+class MentoringSessionComment < BaseClass
   belongs_to :user
   belongs_to :mentoring_session
 

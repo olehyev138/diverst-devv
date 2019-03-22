@@ -1,4 +1,4 @@
-class Enterprise < ActiveRecord::Base
+class Enterprise < BaseClass
     include ContainsResources
     include PublicActivity::Common
 
@@ -168,7 +168,7 @@ class Enterprise < ActiveRecord::Base
     # Run an elasticsearch query on the enterprise's users
     def search_users(search_hash)
         Elasticsearch::Model.client.search(
-            index: User.es_index_name(enterprise: self),
+            index: "users",
             body: search_hash,
             search_type: 'count'
         )
@@ -568,7 +568,7 @@ class Enterprise < ActiveRecord::Base
 
     def users_date_histogram_csv
       g = DateHistogramGraph.new(
-        index: User.es_index_name(enterprise: self),
+        #index: User.es_index_name(enterprise: self),
         field: 'created_at',
         interval: 'month'
       )

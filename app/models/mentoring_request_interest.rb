@@ -1,4 +1,4 @@
-class MentoringRequestInterest< ActiveRecord::Base
+class MentoringRequestInterest< BaseClass
     # associations
     belongs_to  :mentoring_request
     belongs_to  :mentoring_interest

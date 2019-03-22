@@ -1,4 +1,4 @@
-class Pillar < ActiveRecord::Base
+class Pillar < BaseClass
   belongs_to :outcome
   has_many :initiatives, dependent: :destroy
 

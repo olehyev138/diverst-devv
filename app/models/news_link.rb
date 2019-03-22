@@ -1,4 +1,4 @@
-class NewsLink < ActiveRecord::Base
+class NewsLink < BaseClass
   include PublicActivity::Common
 
   belongs_to :group

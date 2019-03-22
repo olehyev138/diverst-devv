@@ -2,16 +2,17 @@
 
 @import
 "select2/dist/css/select2",
-"pikaday-time/scss/pikaday",
+"pikaday/scss/pikaday",
 "tooltipster/dist/css/tooltipster.core.min",
 "tooltipster/dist/css/tooltipster.bundle.min",
 "tooltipster/dist/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-borderless.min",
 "fullcalendar/dist/fullcalendar",
-"hamburgers/dist/css-hamburgers.min",
-"jquery-dropdown/jquery.dropdown.min",
+"hamburgers/dist/hamburgers.min",
+"@claviska/jquery-dropdown/jquery.dropdown.min",
 "bootstrap/dist/css/bootstrap.min",
 "firepad/dist/firepad",
-"codemirror/lib/codemirror";
+"codemirror/lib/codemirror",
+"nvd3/build/nv.d3.min";
 
 // Partials
 
@@ -60,7 +61,8 @@
 "modules/_metric",
 "modules/_badge",
 "modules/_menu",
-"modules/_dropdown";
+"modules/_dropdown",
+"modules/_range-selector";
 
 // Layout
 

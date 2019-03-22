@@ -1,4 +1,4 @@
-class InitiativeUpdate < ActiveRecord::Base
+class InitiativeUpdate < BaseClass
   include ContainsFields
 
   belongs_to :owner, class_name: "User"

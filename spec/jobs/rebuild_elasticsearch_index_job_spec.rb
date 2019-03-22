@@ -16,7 +16,7 @@ RSpec.describe RebuildElasticsearchIndexJob, type: :job, :skip => true do
       Elasticsearch::Model.client.search(index: index_name).dig("hits", "hits").collect{ |r| r.dig("_source", "first_name") }
     ).to eq [user_one.first_name]
 
-    RebuildElasticsearchIndexJob.perform_now(model_name: 'User', enterprise: enterprise)
+    RebuildElasticsearchIndexJob.perform_now('User')
     User.__elasticsearch__.refresh_index!(index: index_name)
 
     expect(

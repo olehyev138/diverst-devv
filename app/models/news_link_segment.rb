@@ -1,4 +1,4 @@
-class NewsLinkSegment < ActiveRecord::Base
+class NewsLinkSegment < BaseClass
     belongs_to :news_link
     belongs_to :segment
 
