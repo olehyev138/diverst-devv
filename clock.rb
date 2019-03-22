@@ -39,6 +39,9 @@ module Clockwork
     every(1.day, 'Send daily notifications of pending comments to group leaders', at: '00:00'){ Group.find_each { |group| GroupLeaderCommentNotificationsJob.perform_later(group.id) } }
     every(1.day, 'Send daily notifications of pending posts to group leaders', at: '00:00'){ Group.find_each { |group| GroupLeaderPostNotificationsJob.perform_later(group.id) } }
     every(1.day, 'Send daily reminders for upcoming mentoring sessions', at: '00:00'){ MentoringSessionSchedulerJob.perform_later }
+    every(1.day, 'Archive expired news', at: '00:00') { Group.find_each { |group| NewsFeedLink.archive_expired_news(group) } }
+    every(1.day, 'Archive expired resources', at: '00:00') { Group.find_each {|group| Resource.archive_expired_resources(group) } }
+    # every(1.day, 'Archive expired events', at: '00:00') { Group.find_each { |group|  Initiative.archive_expired_events(group) } }
 
     every(30.minutes, 'Delete expired files'){ ClearExpiredFilesJob.perform_later }
 

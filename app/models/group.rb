@@ -135,6 +135,7 @@ class Group < ActiveRecord::Base
   before_validation :smart_add_url_protocol
   after_create :create_news_feed
   after_update :accept_pending_members, unless: :pending_members_enabled?
+  after_update :resolve_auto_archive_state, if: :no_expiry_age_set_and_auto_archive_true?
 
   attr_accessor :skip_label_consistency_check
   validate :perform_check_for_consistency_in_category, on: [:create, :update], unless: :skip_label_consistency_check
@@ -154,6 +155,14 @@ class Group < ActiveRecord::Base
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
+
+  def resolve_auto_archive_state
+    update(auto_archive: false)
+  end
+
+  def no_expiry_age_set_and_auto_archive_true?
+    return true if auto_archive? && (expiry_age_for_news == 0) && (expiry_age_for_events == 0) && (expiry_age_for_resources == 0)
+  end
 
   def archive_switch
     if auto_archive?

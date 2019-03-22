@@ -63,4 +63,12 @@ class NewsFeedLink < ActiveRecord::Base
         view.save
       end
     end
+
+    def self.archive_expired_news(group)
+      return unless group.auto_archive?
+      expiry_date = DateTime.now.send("#{group.unit_of_expiry_age}_ago", group.expiry_age_for_news)
+      news = group.news_feed_links.where("created_at < ?", expiry_date).where(archived_at: nil)
+
+      news.update_all(archived_at: DateTime.now) if news.any?
+    end
 end

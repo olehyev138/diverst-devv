@@ -78,6 +78,14 @@ class Resource < ActiveRecord::Base
         views.count
     end
 
+    def self.archive_expired_resources(group)
+        return unless group.auto_archive?
+        expiry_date = DateTime.now.send("#{group.unit_of_expiry_age}_ago", group.expiry_age_for_news)
+        resources = group.resources.where("created_at < ?", expiry_date).where(archived_at: nil)
+
+        resources.update_all(archived_at: DateTime.now) if resources.any?
+    end
+
     protected
 
     def smart_add_url_protocol
