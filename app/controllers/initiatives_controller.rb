@@ -1,7 +1,7 @@
 class InitiativesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
-  before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo, :finish_expenses, :attendees]
+  before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo, :finish_expenses, :attendees, :archive, :restore]
   before_action :set_segments, only: [:new, :create, :edit, :update]
   after_action :verify_authorized
 
@@ -114,6 +114,32 @@ class InitiativesController < ApplicationController
     end
   end
 
+  def archive
+    authorize @initiative, :update?
+
+    @initiatives = @group.initiatives.where(archived_at: nil).all
+    @initiative.update(archived_at: DateTime.now)
+    track_activity(@initiative, :archive)
+
+    respond_to do |format|
+      format.html { redirect_to :back }
+      format.js
+    end
+  end
+
+  def restore
+    authorize @initiative, :update?
+
+    @initiative.update(archived_at: nil)
+    track_activity(@initiative, :restore)
+
+    respond_to do |format|
+      format.html { redirect_to :back }
+      format.js
+    end
+  end
+
+
   protected
 
   def set_filter
@@ -157,6 +183,7 @@ class InitiativesController < ApplicationController
         :picture,
         :budget_item_id,
         :estimated_funding,
+        :archived_at,
         :from, # For filtering
         :to, # For filtering
         participating_group_ids: [],

@@ -333,4 +333,8 @@ class Initiative < ActiveRecord::Base
       self.estimated_funding = 0
     end
   end
+
+  def self.archived_initiatives(enterprise)
+    enterprise.initiatives.where.not(archived_at: nil)
+  end
 end
