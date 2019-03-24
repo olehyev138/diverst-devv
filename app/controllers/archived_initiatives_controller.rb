@@ -19,12 +19,21 @@ class ArchivedInitiativesController < ApplicationController
 	end
 
 	def restore
-	end
+	    authorize @initiative, :update?
 
+	    @initiatives =  current_user.enterprise.initiatives.where.not(archived_at: nil)
+	    @initiative.update(archived_at: nil)
+	    track_activity(@initiative, :restore)
+
+	    respond_to do |format|
+	      format.html { redirect_to :back }
+	      format.js
+	    end
+  	end
 
 	private 
 
-	def set_iniativie
+	def set_initiative
 		@initiative = Initiative.find(params[:id])
 	end
 end

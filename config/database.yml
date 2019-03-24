@@ -5,7 +5,6 @@ default: &default
   encoding: utf8mb4
   collation: utf8mb4_bin
   timeout: 15000
-  password: password
 
 
 development:

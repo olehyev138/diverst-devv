@@ -127,18 +127,6 @@ class InitiativesController < ApplicationController
     end
   end
 
-  def restore
-    authorize @initiative, :update?
-
-    @initiative.update(archived_at: nil)
-    track_activity(@initiative, :restore)
-
-    respond_to do |format|
-      format.html { redirect_to :back }
-      format.js
-    end
-  end
-
 
   protected
 
