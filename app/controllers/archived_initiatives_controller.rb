@@ -13,6 +13,14 @@ class ArchivedInitiativesController < ApplicationController
 	end
 
 	def delete_all
+		authorize current_user.enterprise, :manage_posts?, :policy_class => EnterprisePolicy
+	    @initiatives = Initiative.archived_initiatives(current_user.enterprise).order(created_at: :desc)
+	    @initiatives.destroy_all
+
+	    respond_to do |format|
+	    	format.html { redirect_to :back, notice: 'all archived events deleted' }
+	    	format.js
+	    end
 	end
 
 	def restore_all
@@ -27,7 +35,7 @@ class ArchivedInitiativesController < ApplicationController
 	end
 
 	def restore
-	    authorize @initiative, :update?
+	    authorize current_user.enterprise, :manage_posts?, :policy_class => EnterprisePolicy
 
 	    @initiative.update(archived_at: nil)
 	    track_activity(@initiative, :restore)
