@@ -10,6 +10,15 @@ class ArchivedInitiativesController < ApplicationController
 	end
 
 	def destroy
+		authorize current_user.enterprise, :manage_posts?, :policy_class => EnterprisePolicy
+
+	    @initiative.destroy
+	    track_activity(@initiative, :restore)
+
+	    respond_to do |format|
+	      format.html { redirect_to :back }
+	      format.js
+	    end
 	end
 
 	def delete_all

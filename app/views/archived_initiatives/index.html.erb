@@ -37,7 +37,7 @@
             Edit -
             Survey -
             <%= link_to 'Restore', restore_archived_initiative_path(initiative), remote: true, method: :patch %> -
-            <%= link_to "Delete", archived_initiative_path(initiative), method: :delete, data: { confirm: "Are you sure?" }, class: "error" if GroupEventsPolicy.new(current_user, [initiative.owner_group]).destroy? %>
+            <%= link_to "Delete", archived_initiative_path(initiative), remote: true, method: :delete, data: { confirm: "Are you sure?" }, class: "error" if GroupEventsPolicy.new(current_user, [initiative.owner_group]).destroy? %>
           </p>
         </div>
       </div>
