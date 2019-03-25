@@ -323,7 +323,6 @@ class GenericGraphsController < ApplicationController
             .filter_agg(field: 'group_id', value: group.id) { |q|
             q.terms_agg(field: 'created_at', order_field: '_term', order_dir: 'asc')
           }
-
           elements = graph.formatter.list_parser.parse_list(graph.search)
 
           # each group is a new series/line on our line graph
@@ -335,13 +334,13 @@ class GenericGraphsController < ApplicationController
             graph.formatter.add_element(e, total: total)
           }
         end
-
+        
         render json: graph.build
       }
       format.csv {
         GenericGraphsGroupGrowthDownloadJob
           .perform_later(current_user.id, current_user.enterprise.id,
-          params[:input][:from_date], params[:input][:to_date])
+          params.dig(:input, :from_date), params.dig(:input, :to_date))
         track_activity(current_user.enterprise, :export_generic_graphs_group_growth)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
