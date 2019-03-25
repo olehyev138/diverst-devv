@@ -72,12 +72,47 @@ module BaseGraph
       @instance.get_query
     end
 
+    def get_new_parser
+      NewElasticsearchParser.new
+    end
+
+    def get_new_formatter
+      Nvd3Formatter.new
+    end
+
     # Helpers
     #  - Helpers are methods for building common 'types' of graphs
     #  - Generally a helper should take care of all searching and formatting
 
     # Builds a 'drilldown' graph.
     # @parent_field - field in mapping to filter parents on
+    def new_drilldown_graph(parent_field:)
+      # Define a 'missing aggregation' query to get parents, ie filter where parent_field is nil to get all parents
+      # Wrap around current set query
+      parents_query = @instance.get_query
+        .agg(type: 'missing', field: parent_field) { |_| @query }
+
+      parents = @formatter.parser
+        .get_elements(@instance.search(parents_query, @enterprise_filter))
+
+      # For each parent, run current set query on all children
+      parents.each do |parent|
+        # Get key that identifies current parent in mapping
+        parent_key = @formatter.get_element_key(parent)
+
+        # Define a filter query to get only children of current parent
+        # Wrap around current set query
+        children_query = @instance.get_query
+          .filter_agg(field: parent_field, value: parent_key) { |_| @query }
+
+        children = @formatter.parser
+          .get_elements(@instance.search(children_query, @enterprise_filter))
+
+        # Add current parent with all its children
+        @formatter.add_element(parent, children: children, element_key: parent_key)
+      end
+    end
+
     def drilldown_graph(parent_field:)
       # Define a 'missing aggregation' query to get parents, ie filter where parent_field is nil to get all parents
       # Wrap around current set query
@@ -125,9 +160,6 @@ module BaseGraph
       self
     end
   end
-
-  # Define formatting interface here - TODO
-
 
   # Formats & Parses elasticsearch responses to a Nvd3 Format
   # General Nvd3 data structure:
@@ -255,6 +287,176 @@ module BaseGraph
         y: @y_parser.parse(element, args),
         children: {}
       }
+    end
+  end
+
+  class NewNvd3Formatter
+    attr_accessor :title, :x_label, :y_label, :type, :filter_zeros, :parser
+
+    def initialize
+      @filter_zeros = true
+
+      @title = 'Default Graph'
+      @type = 'bar'
+
+      @series_index = -1
+      @data = {
+        series: []
+      }
+    end
+
+    # Parse, format & add a single element to current series
+    # @element - the element to add
+    #  - in the form of a single elasticsearch aggregation element: { key: <key>, doc_count: <n> }
+    # @children - optional, a list of children elements
+    # @element_key - the key to identify a parent element, gives a name to children series
+    def add_element(es_element, element_key: nil, children: nil, series_key: nil, **args)
+      element = format_element(es_element, args)
+
+      # add children to element if passed
+      if children.present?
+        element[:children] = {
+          key: element_key || get_element_key(es_element),
+          values: format_elements(children, args)
+        }
+      end
+
+      # create a series for element if necessary & add element to current series
+      # if series is specified, find it and pull it out, otherwise get series using current index
+      add_series if @data.dig(:series, @series_index).blank?
+      series = series_key.present? ? @data[:series].find { |s| s.dig(:key) == series_key }
+                                   : @data[:series][@series_index]
+      series[:values] << element
+    end
+
+    # Parse, format & add a list of elements to current series
+    # @elements - the list of elements to add
+    #  - in the form of a list of elasticsearch aggregations elements: [{ key: <key>, doc_count: <n> }, ...n]
+    def add_elements(elements, series_index: @series_index, **args)
+      add_series if @data.dig([:series][series_index]).blank?
+      @data[:series][series_index][:values] = format_elements(elements, args)
+    end
+
+    # Parse and return key of element
+    # Key is the thing that uniquely identifes the item
+    # Usually this is the same as the x value, but not always
+    # @element - the element to parse
+    def get_element_key(element, key: 'x')
+      @parser.parse(element)[key]
+    end
+
+    # Add a new series
+    # @series_name - optional, default is title
+    # All elements added after will be added to this new series
+    def add_series(series_name: @title)
+      return if @data[:series].any? { |h| h[:key] == series_name }
+
+      @series_index += 1
+      @data[:series] << { key: series_name, values: [] }
+    end
+
+    # Returns the dataset formatted to Nvd3, ready to be passed to frontend
+    def format
+      # Set these properties here so user can change them beforehand
+      @data[:title] = @title
+      @data[:x_label] = @x_label
+      @data[:y_label] = @y_label
+      @data[:type] = @type
+
+      if filter_zeros
+        @data[:series].each_with_index do |series, i|
+          @data[:series][i][:values] = series[:values].select { |e| e[:x] != 0 && e[:y] != 0 }
+        end
+      end
+
+      @data
+    end
+
+    private
+
+    def format_elements(elements, **args)
+      elements.map { |element|
+        format_element(element, args)
+      }
+    end
+
+    def format_element(element, **args)
+      values = @parser.parse(element, args)
+      values[:children] = {}
+      values
+    end
+  end
+
+  # Parse a elasticsearch response
+  class NewElasticsearchParser
+    attr_accessor :extractors
+
+    def initialize(key: :key)
+      @extractors = {
+        'x' => -> (e) { e[:key] },
+        'y' => -> (e) { e[:doc_count] }
+      }
+
+      @values = {}
+    end
+
+    def date_range(key: nil, &block)
+      inner = yield self if block_given?
+
+      -> (e) {
+        e = e.try(:agg).try(:buckets).try(:dig, 0) || 0
+        (inner) ? inner.call(e) : e[key]
+      }
+    end
+
+    def agg(key: nil, &block)
+      inner = yield self if block_given?
+
+      -> (e) {
+        e = e.try(:agg) || 0
+        (inner) ? inner.call(e) : e[key]
+      }
+    end
+
+    def sum(key, &block)
+      inner = yield self if block_given?
+
+      -> (e) {
+        e = e.try(:agg).dig(:value) || 0
+        (inner) ? inner.call(e) : e[key]
+      }
+    end
+
+    # Parse a top hits aggregation
+    # Must be run last, can not nest anything inside except custom parser
+    def top_hits
+      -> (e) {
+        e.try(:agg).try(:hits).try(:hits).try(:dig, 0, '_source') || 0
+      }
+    end
+
+    def nested_terms_list(&block)
+      inner = yield self if block_given?
+
+      -> (e) {
+        e = e.try(:agg).try(:buckets) || []
+        (inner) ? inner.call(e) : e
+      }
+    end
+
+    # parse a es response to return a list of elements
+    def get_elements(response, extractor: nil)
+      return response unless extractor.present?
+      extractor.call(response)
+    end
+
+    # Run the parser on an elasticsearch element
+    def parse(element, key: nil, custom_parser: nil, **args)
+      @extractors.each do |label, extractor|
+        @values[label] = extractor.call(element)
+      end
+
+      @values
     end
   end
 

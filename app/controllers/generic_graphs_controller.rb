@@ -4,6 +4,28 @@ class GenericGraphsController < ApplicationController
   before_action   :authenticate_user!
   before_action   :authorize_dashboards
 
+#  def group_population
+#    respond_to do |format|
+#      format.json {
+#        graph = UserGroup.get_graph
+#        graph.set_enterprise_filter(field: 'group.enterprise_id', value: current_user.enterprise_id)
+#
+#        graph.formatter.title = "#{c_t(:erg).capitalize} Population"
+#
+#        graph.query  = graph.query.terms_agg(field: 'group.name')
+#        graph.drilldown_graph(parent_field: 'group.parent.name')
+#
+#        render json: graph.build
+#      }
+#      format.csv {
+#        GenericGraphsGroupPopulationDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))
+#        track_activity(current_user.enterprise, :export_generic_graphs_group_population)
+#        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+#        redirect_to :back
+#      }
+#    end
+#  end
+
   def group_population
     respond_to do |format|
       format.json {
@@ -13,7 +35,16 @@ class GenericGraphsController < ApplicationController
         graph.formatter.title = "#{c_t(:erg).capitalize} Population"
 
         graph.query  = graph.query.terms_agg(field: 'group.name')
-        graph.drilldown_graph(parent_field: 'group.parent.name')
+
+        graph.formatter = BaseGraph::NewNvd3Formatter.new
+        graph.formatter.parser = graph.get_new_parser
+
+
+        graph.new_drilldown_graph(parent_field: 'group.parent.name')
+        byebug
+
+
+
 
         render json: graph.build
       }
