@@ -318,4 +318,15 @@ RSpec.describe Initiative, type: :model do
       expect(initiative.unfinished_expenses?).to eq true
     end
   end
+
+  describe '.archived_initiatives' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:group) { create(:group, enterprise: enterprise) }
+    let!(:initiative) { create(:initiative, owner_group: group) }
+    let!(:archived_initiatives) { create_list(:initiative, 2, archived_at: DateTime.now, owner_group: group) }
+    
+    it 'returns archived_initiatives' do 
+      expect(Initiative.archived_initiatives(enterprise)).to eq archived_initiatives
+    end
+  end
 end
