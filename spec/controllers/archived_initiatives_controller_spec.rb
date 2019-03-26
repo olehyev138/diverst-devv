@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe ArchivedInitiativesController, type: :controller do
+	include ActiveJob::TestHelper
+
 	let!(:enterprise) { create(:enterprise) }
 	let!(:user) { create(:user, enterprise: enterprise) }
 	let!(:group) { create(:group, enterprise: enterprise) }
@@ -29,7 +31,33 @@ RSpec.describe ArchivedInitiativesController, type: :controller do
 			before { request.env['HTTP_REFERER'] = 'back' }
 
 			it 'deletes archived initiative' do 
-				expect{ delete :destroy, id: archived_initiatives.first.id }.to change(Initiative, :count).by(-1)
+				expect{ delete :destroy, id: archived_initiatives.last.id }.to change(Initiative, :count).by(-1)
+			end
+
+			describe 'public activity' do
+				enable_public_activity
+
+				it 'creates public activity record' do
+					perform_enqueued_jobs do
+						expect{
+							delete :destroy, id: archived_initiatives.last.id
+						}.to change(PublicActivity::Activity, :count).by(1)
+					end
+				end
+
+				describe 'activity record' do
+					let(:model) { Initiative.last }
+					let(:owner) { user }
+					let(:key) { 'initiative.destroy' }
+
+					before {
+						perform_enqueued_jobs do
+							delete :destroy, id: archived_initiatives.last.id
+						end
+					}
+
+					include_examples'correct public activity'
+				end
 			end
 		end
 	end
@@ -66,6 +94,32 @@ RSpec.describe ArchivedInitiativesController, type: :controller do
 
 			it 'restores an archived initiative' do 
 				expect{ patch :restore, id: archived_initiatives.first.id }.to change(Initiative.archived_initiatives(enterprise), :count).by(-1)
+			end
+
+			describe 'public activity' do
+				enable_public_activity
+
+				it 'creates public activity record' do
+					perform_enqueued_jobs do
+						expect{
+							delete :restore, id: archived_initiatives.last.id
+						}.to change(PublicActivity::Activity, :count).by(1)
+					end
+				end
+
+				describe 'activity record' do
+					let(:model) { Initiative.last }
+					let(:owner) { user }
+					let(:key) { 'initiative.restore' }
+
+					before {
+						perform_enqueued_jobs do
+							delete :restore, id: archived_initiatives.last.id
+						end
+					}
+
+					include_examples'correct public activity'
+				end
 			end
 		end
 	end

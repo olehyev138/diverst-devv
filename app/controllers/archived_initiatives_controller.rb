@@ -12,8 +12,8 @@ class ArchivedInitiativesController < ApplicationController
 	def destroy
 		authorize current_user.enterprise, :manage_posts?, :policy_class => EnterprisePolicy
 
+	    track_activity(@initiative, :destroy)
 	    @initiative.destroy
-	    track_activity(@initiative, :restore)
 
 	    respond_to do |format|
 	      format.html { redirect_to :back }
