@@ -3,6 +3,9 @@ class GenericGraphsController < ApplicationController
 
   before_action   :authenticate_user!
   before_action   :authorize_dashboards
+  before_action   :get_date_range, only: [:events_created,
+                                          :growth_of_groups
+                                         ]
 
   def group_population
     respond_to do |format|
@@ -67,7 +70,14 @@ class GenericGraphsController < ApplicationController
         render json: graph.build
       }
       format.csv {
-        GenericGraphsEventsCreatedDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), false)
+        GenericGraphsEventsCreatedDownloadJob.perform_later(
+          current_user.id,
+          current_user.enterprise.id,
+          c_t(:erg),
+          false,
+          @from_date,
+          @to_date
+        )
         track_activity(current_user.enterprise, :export_generic_graphs_events_created)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
@@ -340,7 +350,7 @@ class GenericGraphsController < ApplicationController
       format.csv {
         GenericGraphsGroupGrowthDownloadJob
           .perform_later(current_user.id, current_user.enterprise.id,
-          params.dig(:input, :from_date), params.dig(:input, :to_date))
+          @from_date, @to_date)
         track_activity(current_user.enterprise, :export_generic_graphs_group_growth)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
@@ -760,6 +770,16 @@ class GenericGraphsController < ApplicationController
   end
 
   private
+
+  def get_date_range
+    begin
+      @from_date = params.dig(:input, :from_date)
+      @to_date = params.dig(:input, :to_date)
+    rescue
+      @from_date = nil
+      @to_date = nil
+    end
+  end
 
   def parse_date_range(date_range)
     # Parse a date range from a frontend range_controller for a es date range aggregation

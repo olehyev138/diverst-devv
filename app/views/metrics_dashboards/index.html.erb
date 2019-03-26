@@ -77,7 +77,7 @@
           <h4>Events created</h4>
           <%= render 'components/range_selector' %>
           <div class="card__action">
-            <%= link_to "Export CSV", events_created_generic_graphs_path(format: :csv), class: "hidden-xs" %>
+            <a href="#" class="csv-export-link hidden-xs" data-url="<%= events_created_generic_graphs_path(format: :csv) %>">Export CSV</a>
           </div>
           <div id="events_created_graph" class="graph" data-url="<%= events_created_generic_graphs_path %>">
             <svg></svg>

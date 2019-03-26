@@ -357,11 +357,18 @@ class Enterprise < BaseClass
       report.to_csv
     end
 
-    def generic_graphs_non_demo_events_created_csv(erg_text)
+    def generic_graphs_non_demo_events_created_csv(erg_text, from_date, to_date)
+      from_date = from_date.to_datetime if from_date.present?
+      to_date = to_date.to_datetime if to_date.present?
+
       data = self.groups.all_parents.map do |g|
+          events = g.initiatives.joins(:owner)
+                .where('users.active = ?', true)
+          events = events.where('initiatives.created_at >= ? AND initiatives.created_at <= ?', from_date, to_date) if from_date.present? && to_date.present?
+          events = events.count
+
           {
-              y: g.initiatives.joins(:owner)
-                  .where('initiatives.created_at > ? AND users.active = ?', 1.month.ago, true).count,
+              y: events,
               name: g.name,
               drilldown: g.name
           }
