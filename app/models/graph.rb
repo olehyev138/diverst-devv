@@ -89,18 +89,39 @@ class Graph < BaseClass
 
   def parse_query
     # Parse response
-    elements =  @graph_builder.formatter.list_parser.parse_list(@graph_builder.search)
+    @graph_builder.formatter = BaseGraph::NewNvd3Formatter.new
+    @graph_builder.formatter.type = 'custom'
+    @graph_builder.formatter.parser = @graph_builder.get_new_parser
+    parser = @graph_builder.formatter.parser
+
+    elements = parser.get_elements(@graph_builder.search)
 
     if aggregation.present?
       # Nvd3 requires an irregular data format for nested term aggregations, use a helper to format it
-      @graph_builder.stacked_nested_terms(elements)
+      @graph_builder.new_stacked_nested_terms(elements)
     else
-      @graph_builder.formatter.y_parser.parse_chain = @graph_builder.formatter.y_parser.date_range
+      #@graph_builder.formatter.y_parser.parse_chain = @graph_builder.formatter.y_parser.date_range
+      parser.extractors[:y] = parser.date_range(key: :doc_count)
       @graph_builder.formatter.add_elements(elements)
     end
 
     @graph_builder
   end
+
+ # def parse_query
+ #   # Parse response
+ #   elements =  @graph_builder.formatter.list_parser.parse_list(@graph_builder.search)
+
+ #   if aggregation.present?
+ #     # Nvd3 requires an irregular data format for nested term aggregations, use a helper to format it
+ #     @graph_builder.stacked_nested_terms(elements)
+ #   else
+ #     @graph_builder.formatter.y_parser.parse_chain = @graph_builder.formatter.y_parser.date_range
+ #     @graph_builder.formatter.add_elements(elements)
+ #   end
+
+ #   @graph_builder
+ # end
 
   def get_custom_class
     # Define a 'Custom Class' to use for searching

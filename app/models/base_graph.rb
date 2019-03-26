@@ -113,6 +113,37 @@ module BaseGraph
       end
     end
 
+    def new_stacked_nested_terms(elements)
+      # Reformats an es nested terms response to a nvd3 stacked/grouped bar chart
+      # ES has all child buckets logically nested inside parent bucket
+      # Nvd3 represents each child element/'stack' as a seperate *series*
+      #  ex: Ergs aggregated on certifications would have each certification name as
+      #      a seperate series. Ie all elements for cert-01 would be in the cert-01 series
+      #      Each elements key in a series is set to the parents element name.
+      #      This ties elements to a parent and sets the y axis label
+      #  structure: [ { series: 'cert-01', values: [ { key: 'group-01', value: 5 } ] },
+      #               { series: 'cert-02', values: [ { key: 'group-01', values: 9} ] } ]
+
+      parser = formatter.parser
+      custom_parser = get_new_parser
+      child_element_extractor = parser.nested_terms_list
+
+
+      elements.each do |element|
+        parent_name = custom_parser.parse(element)[:x]
+
+        parser.get_elements(element, extractor: child_element_extractor).each do |child_element|
+          child_name = custom_parser.parse(child_element)[:x]
+
+          formatter.add_series(series_name: child_name)
+          parser.extractors[:x] = -> (_, args) { args[:parent_name] }
+          formatter.add_element(child_element, series_key: child_name, parent_name: parent_name)
+        end
+      end
+
+      self
+    end
+
     def drilldown_graph(parent_field:)
       # Define a 'missing aggregation' query to get parents, ie filter where parent_field is nil to get all parents
       # Wrap around current set query
@@ -453,9 +484,9 @@ module BaseGraph
     end
 
     # parse a es response to return a list of elements
-    def get_elements(response, extractor: nil)
+    def get_elements(response, extractor: nil, **args)
       return response unless extractor.present?
-      extractor.call(response)
+      extractor.call(response, args)
     end
 
     # Run the parser on an elasticsearch element
