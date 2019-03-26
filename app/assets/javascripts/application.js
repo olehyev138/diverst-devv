@@ -22,8 +22,8 @@
 //= require rangeslider.js/dist/rangeslider
 //= require sortablejs/Sortable.min
 //= require moment/min/moment.min
-//= require pikaday
-//= require pikaday/plugins/pikaday.jquery
+//= require pikaday-time
+//= require pikaday-time/plugins/pikaday.jquery
 //= require fullcalendar/dist/fullcalendar.min
 //= require tooltipster
 //= require urijs/src/URI.min
