@@ -337,4 +337,12 @@ class Initiative < ActiveRecord::Base
   def self.archived_initiatives(enterprise)
     enterprise.initiatives.where.not(archived_at: nil)
   end
+
+  def self.archive_expired_events(group)
+    return unless group.auto_archive?
+    expiry_date = DateTime.now.send("#{group.unit_of_expiry_age}_ago", group.expiry_age_for_events)
+    initiatives = group.resources.where("created_at < ?", expiry_date).where(archived_at: nil)
+
+    initiatives.update_all(archived_at: DateTime.now) if initiatives.any?
+  end
 end
