@@ -341,7 +341,7 @@ module BaseGraph
     # Key is the thing that uniquely identifes the item
     # Usually this is the same as the x value, but not always
     # @element - the element to parse
-    def get_element_key(element, key: 'x')
+    def get_element_key(element, key: :x)
       @parser.parse(element)[key]
     end
 
@@ -393,54 +393,62 @@ module BaseGraph
 
     def initialize(key: :key)
       @extractors = {
-        'x' => -> (e) { e[:key] },
-        'y' => -> (e) { e[:doc_count] }
+        x: -> (e, _) { e[:key] },
+        y: -> (e, _) { e[:doc_count] }
       }
-
-      @values = {}
     end
 
     def date_range(key: nil, &block)
       inner = yield self if block_given?
 
-      -> (e) {
+      -> (e, args) {
         e = e.try(:agg).try(:buckets).try(:dig, 0) || 0
-        (inner) ? inner.call(e) : e[key]
+        (inner) ? inner.call(e, args) : e[key]
       }
     end
 
     def agg(key: nil, &block)
       inner = yield self if block_given?
 
-      -> (e) {
+      -> (e, args) {
         e = e.try(:agg) || 0
-        (inner) ? inner.call(e) : e[key]
+        (inner) ? inner.call(e, args) : e[key]
       }
     end
 
-    def sum(key, &block)
+    def sum(key: nil, &block)
       inner = yield self if block_given?
 
-      -> (e) {
+      -> (e, args) {
         e = e.try(:agg).dig(:value) || 0
-        (inner) ? inner.call(e) : e[key]
+        (inner) ? inner.call(e, args) : e[key]
       }
     end
 
-    # Parse a top hits aggregation
-    # Must be run last, can not nest anything inside except custom parser
-    def top_hits
-      -> (e) {
-        e.try(:agg).try(:hits).try(:hits).try(:dig, 0, '_source') || 0
+    def top_hits(key: nil, &block)
+      inner = yield self if block_given?
+
+      -> (e, args) {
+        e = e.try(:agg).try(:hits).try(:hits).try(:dig, 0, '_source') || 0
+        (inner) ? inner.call(e, args) : e[key]
+      }
+    end
+
+    def custom(custom_extractor, &block)
+      inner = yield self if block_given?
+
+      -> (e, args) {
+        e = custom_extractor.call(e, args)
+        (inner) ? inner.call(e) : e
       }
     end
 
     def nested_terms_list(&block)
       inner = yield self if block_given?
 
-      -> (e) {
+      -> (e, args) {
         e = e.try(:agg).try(:buckets) || []
-        (inner) ? inner.call(e) : e
+        (inner) ? inner.call(e, args) : e
       }
     end
 
@@ -452,11 +460,13 @@ module BaseGraph
 
     # Run the parser on an elasticsearch element
     def parse(element, key: nil, custom_parser: nil, **args)
+      values = {}
+
       @extractors.each do |label, extractor|
-        @values[label] = extractor.call(element)
+        values[label] = extractor.call(element, args)
       end
 
-      @values
+      values
     end
   end
 

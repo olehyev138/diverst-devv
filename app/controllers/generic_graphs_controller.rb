@@ -39,12 +39,7 @@ class GenericGraphsController < ApplicationController
         graph.formatter = BaseGraph::NewNvd3Formatter.new
         graph.formatter.parser = graph.get_new_parser
 
-
         graph.new_drilldown_graph(parent_field: 'group.parent.name')
-        byebug
-
-
-
 
         render json: graph.build
       }
@@ -177,24 +172,22 @@ class GenericGraphsController < ApplicationController
           }
         }
 
+        graph.formatter = BaseGraph::NewNvd3Formatter.new
+        graph.formatter.parser = graph.get_new_parser
         graph.formatter.title = '# Views per Folder'
-        x_parser = graph.formatter.x_parser
-        y_parser = graph.formatter.y_parser
 
-        x_parser.parse_chain = x_parser.date_range { |p| p.top_hits }
-        x_parser.extractor = -> (e, _) {
-          return if e.blank? || e == 0
-          group = e.dig(:folder, :group, :name) || 'Shared'
-          group + ' ' + e[:folder][:name]
-        }
-
-        y_parser.key = :doc_count
-        y_parser.parse_chain = y_parser.date_range
+        parser = graph.formatter.parser
+        extractors = parser.extractors
+        extractors[:y] = parser.date_range(key: :doc_count)
+        extractors[:x] = parser.date_range { |p| p.top_hits { |pp| pp.custom( -> (e, _) {
+              return if e.blank? || e == 0
+              group = e.dig(:folder, :group, :name) || 'Shared'
+              group + ' ' + e[:folder][:name]
+        }) } }
 
         graph.formatter.add_elements(graph.search)
 
         render json: graph.build
-
       }
       format.csv {
         GenericGraphsTopFoldersByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, false)
@@ -204,6 +197,49 @@ class GenericGraphsController < ApplicationController
       }
     end
   end
+
+  #def non_demo_top_folders_by_views
+  #  date_range = parse_date_range(params[:input])
+
+  #  respond_to do |format|
+  #    format.json {
+  #      graph = View.get_graph
+  #      graph.set_enterprise_filter(value: current_user.enterprise_id)
+
+  #      graph.query = graph.query.terms_agg(field: 'folder.id') { |q|
+  #        q.date_range_agg(field: 'created_at', range: date_range) { |qq|
+  #          qq.top_hits_agg
+  #        }
+  #      }
+
+
+  #      graph.formatter.title = '# Views per Folder'
+  #      x_parser = graph.formatter.x_parser
+  #      y_parser = graph.formatter.y_parser
+
+  #      x_parser.parse_chain = x_parser.date_range { |p| p.top_hits }
+  #      x_parser.extractor = -> (e, _) {
+  #        return if e.blank? || e == 0
+  #        group = e.dig(:folder, :group, :name) || 'Shared'
+  #        group + ' ' + e[:folder][:name]
+  #      }
+
+  #      y_parser.key = :doc_count
+  #      y_parser.parse_chain = y_parser.date_range
+
+  #      graph.formatter.add_elements(graph.search)
+
+  #      render json: graph.build
+
+  #    }
+  #    format.csv {
+  #      GenericGraphsTopFoldersByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, false)
+  #      track_activity(current_user.enterprise, :export_generic_graphs_top_folders_by_views)
+  #      flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+  #      redirect_to :back
+  #    }
+  #  end
+  #end
 
   def non_demo_top_resources_by_views
     date_range = parse_date_range(params[:input])
