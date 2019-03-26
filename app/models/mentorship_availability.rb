@@ -1,4 +1,4 @@
-class MentorshipAvailability < ActiveRecord::Base
+class MentorshipAvailability < BaseClass
     # associations
     belongs_to :user
     

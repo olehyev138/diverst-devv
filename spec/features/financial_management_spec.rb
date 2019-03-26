@@ -111,5 +111,17 @@ RSpec.feature 'Financial Management' do
 				expect(page).to have_no_content 'Sales Festival'
 			end
 		end
+
+		context 'reset' do 
+			let!(:group) { create(:group, enterprise: enterprise) }
+			before { visit close_budgets_groups_path }
+
+			scenario 'annual budget', js: true do 
+				page.accept_confirm(with: "Before you reset this annual budget please make sure you 
+					have exported budget info for #{group.name}. Once you reset, all budget-related info will be permanently deleted") do
+					click_link 'Reset Budget', href:  reset_annual_budget_group_budgets_path(group)
+				end
+			end
+		end
 	end
 end

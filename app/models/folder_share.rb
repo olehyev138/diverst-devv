@@ -1,4 +1,4 @@
-class FolderShare < ActiveRecord::Base
+class FolderShare < BaseClass
 
   # associations
   belongs_to  :group

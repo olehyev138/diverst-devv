@@ -1,4 +1,4 @@
-class Sponsor < ActiveRecord::Base
+class Sponsor < BaseClass
   belongs_to :sponsorable, polymorphic: true
 
   has_attached_file :sponsor_media, s3_permissions: :private

@@ -1,4 +1,4 @@
-class Group < ActiveRecord::Base
+class Group < BaseClass
   include PublicActivity::Common
   include CustomTextHelpers
 
@@ -51,7 +51,7 @@ class Group < ActiveRecord::Base
   delegate :shared_news_feed_links, :to => :news_feed
 
   has_many :user_groups, dependent: :destroy
-  has_many :members, through: :user_groups, class_name: 'User', source: :user, after_remove: :update_elasticsearch_member
+  has_many :members, through: :user_groups, class_name: 'User', source: :user
   has_many :groups_polls, dependent: :destroy
   has_many :polls, through: :groups_polls
   has_many :poll_responses, through: :polls, source: :responses
@@ -126,7 +126,6 @@ class Group < ActiveRecord::Base
 
   before_save :send_invitation_emails, if: :send_invitations?
   before_save :create_yammer_group, if: :should_create_yammer_group?
-  after_commit :update_all_elasticsearch_members
   before_validation :smart_add_url_protocol
   after_create :create_news_feed
   after_update :accept_pending_members, unless: :pending_members_enabled?
@@ -372,17 +371,6 @@ class Group < ActiveRecord::Base
     news_links.unapproved.count + messages.unapproved.count + social_links.unapproved.count
   end
 
-  # This method only exists because it's used in a callback
-  # Update specific member in elasticsearch
-  def update_elasticsearch_member(member)
-    GroupMemberUpdateJob.perform_later(member.id)
-  end
-
-  # Update members in elastic_search
-  def update_all_elasticsearch_members
-    GroupUpdateJob.perform_later(id)
-  end
-
   def accept_pending_members
     self.user_groups.update_all(accepted_member: true)
   end
@@ -451,7 +439,7 @@ class Group < ActiveRecord::Base
     end
   end
 
-    def filter_by_membership(membership_status)
+  def filter_by_membership(membership_status)
     members.references(:user_groups).where('user_groups.accepted_member=?', membership_status)
   end
 
