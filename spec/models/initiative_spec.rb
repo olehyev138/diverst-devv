@@ -329,4 +329,19 @@ RSpec.describe Initiative, type: :model do
       expect(Initiative.archived_initiatives(enterprise)).to eq archived_initiatives
     end
   end
+
+  describe '.archive_expired_events' do 
+    let!(:group) { create(:group) }
+    let!(:initiative) { create(:initiative, owner_group: group) }
+    let!(:expired_initiatives) { create_list(:initiative, 2, start: DateTime.now.weeks_ago(4), end: DateTime.now.weeks_ago(3), owner_group: group) }
+
+    it 'does not archive any event when group auto archive is off' do 
+      expect{ Initiative.archive_expired_events(group) }.to change(Initiative.where.not(archived_at: nil), :count).by(0)
+    end
+
+    it 'archives expired events' do 
+      group.update auto_archive: true, expiry_age_for_events: 2, unit_of_expiry_age: 'weeks'
+      expect{ Initiative.archive_expired_events(group) }.to change(Initiative.where.not(archived_at: nil), :count).by(2)
+    end
+  end
 end
