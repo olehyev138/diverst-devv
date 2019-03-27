@@ -46,9 +46,9 @@ class Initiative < ActiveRecord::Base
 
   scope :starts_between, ->(from, to) { where('start >= ? AND start <= ?', from, to) }
   scope :past, -> { where('end < ?', Time.current).order(start: :desc) }
-  scope :upcoming, -> { where('start > ?', Time.current).order(start: :asc) }
-  scope :ongoing, -> { where('start <= ?', Time.current).where('end >= ?', Time.current).order(start: :desc) }
-  scope :recent, -> { where(created_at: 60.days.ago..Date.tomorrow) }
+  scope :upcoming, -> { where('start > ? AND archived_at IS NULL', Time.current).order(start: :asc) }
+  scope :ongoing, -> { where('start <= ? AND archived_at IS NULL', Time.current).where('end >= ?', Time.current).order(start: :desc) }
+  scope :recent, -> { where(created_at: 60.days.ago..Date.tomorrow, archived_at: nil) }
   scope :of_segments, ->(segment_ids) {
     initiative_conditions = ["initiative_segments.segment_id IS NULL"]
     initiative_conditions << "initiative_segments.segment_id IN (#{ segment_ids.join(",") })" unless segment_ids.empty?
