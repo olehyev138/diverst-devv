@@ -121,6 +121,8 @@ Rails.application.routes.draw do
       patch 'delete_attachment'
       get 'calendar'
       get 'auto_archive_settings'
+      patch 'auto_archive_switch'
+      patch 'update_auto_archive_settings'
     end
 
     scope module: :enterprises do

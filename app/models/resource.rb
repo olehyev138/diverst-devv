@@ -79,11 +79,22 @@ class Resource < ActiveRecord::Base
     end
 
     def self.archive_expired_resources(group)
-        return unless group.auto_archive?
-        expiry_date = DateTime.now.send("#{group.unit_of_expiry_age}_ago", group.expiry_age_for_news)
-        resources = group.resources.where("created_at < ?", expiry_date).where(archived_at: nil)
+        enterprise = group.enterprise
+        return unless group.auto_archive? || enterprise.auto_archive?
 
-        resources.update_all(archived_at: DateTime.now) if resources.any?
+        if group.auto_archive?
+            expiry_date = DateTime.now.send("#{group.unit_of_expiry_age}_ago", group.expiry_age_for_resources)
+            group_resources = Resource.joins(:folder).where.not(folders: {group_id: nil}).where(folders: {enterprise_id: nil}).where("resources.created_at < ?", expiry_date).where(archived_at: nil)
+
+            group_resources.update_all(archived_at: DateTime.now) if group_resources.any?
+        end
+
+        if enterprise.auto_archive?
+            expiry_date = DateTime.now.send("#{enterprise.unit_of_expiry_age}_ago", enterprise.expiry_age_for_resources)
+            enterprise_resources = Resource.joins(:folder).where(folders: {group_id: nil}).where.not(folders: {enterprise_id: nil}).where("resources.created_at < ?", expiry_date).where(archived_at: nil)
+            
+            enterprise_resources.update_all(archived_at: DateTime.now) if enterprise_resources.any?
+        end
     end
 
     protected
