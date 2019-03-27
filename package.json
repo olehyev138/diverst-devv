@@ -1,11 +1,32 @@
 {
-  "name": "diverst",
-  "version": "1.0.0",
   "dependencies": {
-    "bower": "~1.4"
+    "@claviska/jquery-dropdown": "2.0.3",
+    "bootstrap": "3.3.7",
+    "bootstrap-timepicker": "0.5.2",
+    "codemirror": "5.44.0",
+    "d3": "3.5.4",
+    "datatables.net": "1.10.19",
+    "firebase": "5.9.0",
+    "firepad": "1.5.3",
+    "flip": "nnattawat/flip",
+    "fullcalendar": "3.0.1",
+    "hamburgers": "1.1.3",
+    "jquery": "3.3.1",
+    "jquery-embedly": "https://github.com/embedly/embedly-jquery",
+    "jscolor": "https://github.com/EastDesire/jscolor",
+    "jsdom": "12.2.0",
+    "moment": "2.15.2",
+    "nvd3": "1.8.6",
+    "pikaday-time": "https://github.com/owenmead/Pikaday#1.5.1",
+    "rangeslider.js": "2.2.1",
+    "select2": "4.0.2-rc.1",
+    "sortablejs": "1.4.2",
+    "tooltipster": "4.1.8",
+    "twilio-video": "1.9.0",
+    "urijs": "1.18.2",
+    "yarn": "^1.13.0"
   },
-  "engine": {
-    "node": "0.12.x",
-    "npm": "2.13.x"
+  "engines": {
+    "yarn": ">= 1.0.0"
   }
 }

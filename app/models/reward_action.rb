@@ -1,4 +1,4 @@
-class RewardAction < ActiveRecord::Base
+class RewardAction < BaseClass
   belongs_to :enterprise
 
   validates :label, presence: true

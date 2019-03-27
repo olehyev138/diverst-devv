@@ -1,4 +1,4 @@
-class GroupLeader < ActiveRecord::Base
+class GroupLeader < BaseClass
   belongs_to :group
   belongs_to :user
   belongs_to :user_role

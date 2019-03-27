@@ -446,6 +446,67 @@ RSpec.describe BudgetsController, type: :controller do
             expect(assigns[:group].budgets).to all(have_attributes(:is_approved => false))
           end
 
+          context 'when there is a budget request and expenses are made' do 
+            let!(:initiative) { create(:initiative, owner_group: group) }
+            let!(:initiative_expenses) { create_list(:initiative_expense, 2, initiative: initiative) }
+
+            it 'deletes all initiative expenses' do 
+              expect(initiative.expenses.count).not_to eq 0
+              request.env["HTTP_REFERER"] = "back"
+              put :reset_annual_budget, group_id: budget.group.id, id: budget.id
+
+              expect(initiative.expenses.count).to eq 0
+            end
+            
+            it 'delete all budgets for group' do 
+              request.env["HTTP_REFERER"] = "back"
+              put :reset_annual_budget, group_id: budget.group.id, id: budget.id
+             
+              expect(assigns[:group].budgets).to be_empty            
+            end
+
+            it 'sets annual_budget and leftover_money to 0' do 
+              expect(group.annual_budget).to eq 100000
+              expect(group.leftover_money).to eq 0
+
+              request.env["HTTP_REFERER"] = "back"
+              put :reset_annual_budget, group_id: budget.group.id, id: budget.id
+
+              expect(assigns[:group].annual_budget).to eq 0
+            end
+
+            it 'sets estimated_funding and actual_funding to 0' do 
+              request.env["HTTP_REFERER"] = "back"
+              put :reset_annual_budget, group_id: budget.group.id, id: budget.id
+              initiative.reload
+
+              expect(initiative.estimated_funding).to eq 0
+              expect(initiative.actual_funding).to eq 0
+            end
+          end
+
+          context 'when you have unfinished expenses' do 
+            let!(:initiative_with_unclosed_expenses) { create(:initiative, start: DateTime.now.days_ago(3), end: DateTime.now.days_ago(1), 
+                                finished_expenses: false, owner_group: budget.group) }
+            before do 
+              request.env['HTTP_REFERER'] = 'back'
+              put :reset_annual_budget, group_id: budget.group.id, id: budget.id
+            end
+
+            it 'does not reset annual budget' do 
+              expect(group.annual_budget).not_to eq 0
+            end
+
+            it 'produces flash message' do 
+              expect(flash[:notice]).to eq "Please close expenses of past initiatives belonging to #{budget.group.name}"
+            end
+
+            it 'redirects to back' do 
+              expect(response).to redirect_to 'back'
+            end
+          end
+
+
           describe 'public activity' do
             enable_public_activity
 

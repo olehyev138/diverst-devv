@@ -1,4 +1,4 @@
-class GroupCategory < ActiveRecord::Base
+class GroupCategory < BaseClass
   #NOTE: on user-interface, this entity is references as label
   has_many :groups, dependent: :nullify
   belongs_to :group_category_type

@@ -8,6 +8,7 @@ RSpec.describe Answer, type: :model do
         describe 'test associations and validations' do
             it { expect(answer).to belong_to(:question).inverse_of(:answers) }
             it { expect(answer).to belong_to(:author).class_name('User').inverse_of(:answers) }
+            it { expect(answer).to belong_to(:contributing_group).class_name('Group') }
             it { expect(answer).to have_many(:votes).class_name('AnswerUpvote') }
             it { expect(answer).to have_many(:voters).through(:votes).class_name('User').source(:user) }
             it { expect(answer).to have_many(:comments).class_name('AnswerComment') }
@@ -17,7 +18,8 @@ RSpec.describe Answer, type: :model do
             it { expect(answer).to have_attached_file(:supporting_document) }
             it { expect(answer).to validate_presence_of(:question) }
             it { expect(answer).to validate_presence_of(:author) }
-            it { expect(answer).to validate_presence_of(:content)}
+            it { expect(answer).to validate_presence_of(:content) }
+            it { expect(answer).to validate_presence_of(:contributing_group) }
         end
     end
 
@@ -47,16 +49,16 @@ RSpec.describe Answer, type: :model do
             expect(answer.supporting_document_extension).to eq("")
         end
     end
-    
+
     describe "#destroy_callbacks" do
         it "removes the child objects" do
             answer = create(:answer)
             answer_upvote = create(:answer_upvote, :answer => answer)
             answer_comment = create(:answer_comment, :answer => answer)
             answer_expense = create(:answer_expense, :answer => answer)
-            
+
             answer.destroy
-            
+
             expect{Answer.find(answer.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{AnswerUpvote.find(answer_upvote.id)}.to raise_error(ActiveRecord::RecordNotFound)
             expect{AnswerComment.find(answer_comment.id)}.to raise_error(ActiveRecord::RecordNotFound)

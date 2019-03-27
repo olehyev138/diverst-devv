@@ -1,4 +1,4 @@
-class NewsLinkPhoto < ActiveRecord::Base
+class NewsLinkPhoto < BaseClass
   belongs_to :news_link
 
   validates :news_link, presence: true, :on => :update

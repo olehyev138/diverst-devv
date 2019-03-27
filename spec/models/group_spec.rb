@@ -247,17 +247,6 @@ RSpec.describe Group, :type => :model do
         end
     end
 
-    describe 'when describing callbacks' do
-        let!(:group){ create(:group) }
-
-        it "should reindex users on elasticsearch after destroy" do
-            TestAfterCommit.with_commits(true) do
-                expect(group).to receive(:update_all_elasticsearch_members)
-                group.destroy
-            end
-        end
-    end
-
     describe '#survey_answers_csv' do
         it "returns a csv file" do
             group = create(:group)
@@ -640,7 +629,7 @@ RSpec.describe Group, :type => :model do
             create(:user_group, :group => group, :user => user)
 
             perform_enqueued_jobs do
-                expect_any_instance_of(GroupUpdateJob).to receive(:perform)
+                expect_any_instance_of(IndexElasticsearchJob).to receive(:perform)
 
                 group.name = "testing elasticsearch"
                 group.save!

@@ -1,4 +1,4 @@
-class NewsLinkComment < ActiveRecord::Base
+class NewsLinkComment < BaseClass
   belongs_to :author, class_name: 'User'
   belongs_to :news_link
 

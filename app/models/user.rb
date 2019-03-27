@@ -1,12 +1,10 @@
-class User < ActiveRecord::Base
+class User < BaseClass
     devise :database_authenticatable, :invitable, :lockable,
            :recoverable, :rememberable, :trackable, :validatable, :async, :timeoutable
 
     include PublicActivity::Common
     include DeviseTokenAuth::Concerns::User
-    include Elasticsearch::Model
     include ContainsFields
-    include Indexable
 
     @@fb_token_generator = Firebase::FirebaseTokenGenerator.new(ENV['FIREBASE_SECRET'].to_s)
 
@@ -100,10 +98,6 @@ class User < ActiveRecord::Base
     accepts_nested_attributes_for :policy_group
 
     after_update :add_to_default_mentor_group
-
-    after_commit on: [:create] { update_elasticsearch_index(self, self.enterprise, 'index') }
-    after_commit on: [:update] { update_elasticsearch_index(self, self.enterprise, 'update') }
-    after_commit on: [:destroy] { update_elasticsearch_index(self, self.enterprise, 'delete') }
 
     scope :for_segments, -> (segments) { joins(:segments).where('segments.id' => segments.map(&:id)).distinct if segments.any? }
     scope :for_groups, -> (groups) { joins(:groups).where('groups.id' => groups.map(&:id)).distinct if groups.any? }
@@ -426,59 +420,127 @@ class User < ActiveRecord::Base
         super && active?
     end
 
-    # Elasticsearch methods
-
-    # Returns the index name to be used in Elasticsearch to store this enterprise's users
-    def self.es_index_name(enterprise:)
-        "#{enterprise.id}_users"
-    end
-
-    # Add the combined info from both the user's fields and his/her poll answers to ES
-    def as_indexed_json(*)
-        as_json(except: [:data], methods: [:combined_info])
-    end
-
-    # Returns a hash of all the user's fields combined with all their poll fields
-    def combined_info
-        polls_hash = poll_responses.map(&:info).reduce({}) { |a, e| a.merge(e) } # Get a hash of all the combined poll response answers for this user
-        groups_hash = { groups: groups.ids }
-        segments_hash = { segments: segments.ids }
-
-        # Merge all the hashes to the main info hash
-        # We use info_hash instead of just info because Hash#merge accesses uses [], which is overriden in FieldData
-        info_hash.merge(polls_hash).merge(groups_hash).merge(segments_hash)
-    end
-
-    # Custom ES mapping that creates an unanalyzed version of all string fields for exact-match term queries
-    def self.custom_mapping
-        {
-            user: {
-                dynamic_templates: [{
-                    string_template: {
-                        type: 'string',
-                        mapping: {
-                            fields: {
-                                raw: {
-                                    type: 'string',
-                                    index: 'not_analyzed'
-                                }
-                            }
-                        },
-                        match_mapping_type: 'string',
-                        match: '*'
-                    }
-                }],
-                properties: {}
-            }
-        }
-    end
-
     def set_provider
         self.provider = "email" if uid.nil?
     end
 
     def set_uid
         self.uid = generate_uid if self.uid.blank?
+    end
+
+    # Returns a hash of all the user's fields combined with all their poll fields
+    def combined_info
+        polls_hash = poll_responses.map(&:info).reduce({}) { |a, e| a.merge(e) } # Get a hash of all the combined poll response answers for this user
+
+        # Merge all the hashes to the main info hash
+        # We use info_hash instead of just info because Hash#merge accesses uses [], which is overriden in FieldData
+        #info_hash.merge(polls_hash)
+        info_hash.merge(polls_hash)
+    end
+
+    settings do
+#      mappings dynamic: false do
+      mappings  dynamic_templates: [
+        {
+          string_template: {
+            match_mapping_type: 'string',
+            match: '*',
+            mapping: {
+              type: 'keyword',
+#              fields: {
+#                raw: {
+#                  type: 'keyword',
+#                  index: 'not_analyzed'
+#                }
+#              }
+            }
+          }
+        }
+      ]  do
+        indexes :id,                    type: :integer
+        indexes :first_name,            type: :keyword
+        indexes :last_name,             type: :keyword
+        indexes :email,                 type: :keyword
+        indexes :sign_in_count,         type: :integer
+        indexes :enterprise_id,         type: :integer
+        indexes :created_at,            type: :date
+
+        indexes :current_sign_in_at,    type: :date
+        indexes :last_sign_in_at,       type: :date
+        indexes :current_sign_in_ip,    type: :date
+        indexes :last_sign_in_ip,       type: :date
+
+        indexes :invitation_created_at,     type: :date
+        indexes :invitation_sent_at,        type: :date
+        indexes :invitation_accepted_at,    type: :date
+        indexes :invited_by_id,             type: :integer
+
+        indexes :active,                type: :boolean
+        indexes :points,                type: :integer
+        indexes :total_weekly_points,   type: :integer
+        indexes :credits,               type: :integer
+
+        indexes :failed_attempts,       type: :integer
+
+        indexes :custom_policy_group,   type: :boolean
+        indexes :mentor,                type: :boolean
+        indexes :mentee,                type: :boolean
+
+        indexes :groups_notifications_frequency,    type: :integer
+        indexes :groups_notifications_date,         type: :integer
+
+        indexes :time_zone,     type: :keyword
+        indexes :created_at,    type: :date
+        indexes :updated_at,    type: :date
+
+        indexes :user_groups, type: :nested do
+          indexes :group do
+            indexes :name, type: :keyword
+          end
+        end
+
+        indexes :users_segments, type: :nested do
+          indexes :segment do
+            indexes :name, type: :keyword
+          end
+        end
+
+        indexes :enterprise do
+            indexes :id,                type: :integer
+            indexes :name,              type: :keyword
+            indexes :time_zone,         type: :keyword
+
+            indexes :has_enabled_saml,              type: :boolean
+            indexes :collaborate_module_enabled,    type: :boolean
+            indexes :scope_module_enabled,          type: :boolean
+            indexes :plan_module_enabled,           type: :boolean
+            indexes :enable_rewards,                type: :boolean
+            indexes :enable_pending_comments,       type: :boolean
+            indexes :mentorship_module_enabled,     type: :boolean
+            indexes :disable_likes,                 type: :boolean
+            indexes :enable_social_media,           type: :boolean
+
+            indexes :created_at,        type: :date
+            indexes :updated_at,        type: :date
+        end
+
+        # enterprise
+        # user role
+        # groups
+        # segments
+        # group leaders
+      end
+    end
+
+    def as_indexed_json(options = {})
+      self.as_json(
+          {
+            only: [:id, :first_name, :last_name, :email, :sign_in_count, :enterprise_id,
+                   :created_at, :mentor, :mentee, :created_at, :updated_at, :time_zone],
+            methods: [:combined_info],
+            include: [:enterprise, user_groups: { only: [], include: { group: { only: [:name] } } }]
+          }
+      ).merge({ "created_at" => self.created_at.beginning_of_hour })
     end
 
     private

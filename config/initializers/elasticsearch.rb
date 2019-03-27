@@ -5,6 +5,10 @@ config = {
   }
 }
 
+if File.exist?('log/elasticsearch.log')
+  config.merge!(logger: Logger.new("#{Rails.root}/log/elasticsearch.log"))
+end
+
 if File.exist?('config/elasticsearch.yml')
   config.merge!(YAML.load_file('config/elasticsearch.yml').symbolize_keys)
 end
