@@ -231,23 +231,40 @@ class Enterprise < BaseClass
 
     def generic_graphs_group_growth_csv(from_date, to_date)
       CSV.generate do |csv|
+        from_date_text = ''
+        to_date_text = ''
+
+        if from_date.present?
+          from_date = from_date.to_datetime
+          from_date_text = from_date.strftime('%F %T')
+        else
+          from_date_text = 'All'
+        end
+
+        if to_date.present?
+          to_date = to_date.to_datetime + 1.hour
+          to_date_text = to_date.strftime('%F %T')
+        else
+          to_date_text = 'All'
+        end
+
         # column titles
         csv << [
           self.custom_text.send('erg_text'),
-          'From: ' + from_date.strftime('%F %T'),
-          'To: ' + to_date.strftime('%F %T'),
+          'From: ' + from_date_text,
+          'To: ' + to_date_text,
           'Difference',
           '% Change'
         ]
 
         self.groups.each do |group|
           from_date_total = group.user_groups
-            .where('created_at <= ?', from_date)
-            .count.to_f
+          from_date_total = from_date_total.where('created_at <= ?', from_date) if from_date.present?
+          from_date_total = from_date_total.count.to_f
 
           to_date_total = group.user_groups
-            .where('created_at <= ?', to_date)
-            .count.to_f
+          to_date_total = to_date_total.where('created_at <= ?', to_date) if to_date.present?
+          to_date_total = to_date_total.count.to_f
 
           change_percentage = 0
           if from_date_total == 0 and to_date_total > 0
