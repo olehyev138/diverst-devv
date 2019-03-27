@@ -1,4 +1,4 @@
-class Question < ActiveRecord::Base
+class Question < BaseClass
     include PublicActivity::Common
 
     belongs_to :campaign

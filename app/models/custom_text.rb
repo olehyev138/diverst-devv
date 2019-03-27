@@ -1,4 +1,4 @@
-class CustomText < ActiveRecord::Base
+class CustomText < BaseClass
   include PublicActivity::Common
 
   belongs_to :enterprise

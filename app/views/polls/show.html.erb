@@ -57,9 +57,11 @@
               <h4 class="no-margin"><%= truncate(graph.title, length: 30) %></h4>
               <% if !graph.aggregation.nil? %><small><%= aggregation_text(graph) %></small><% end %>
               <div
+                id="graph_<%= graph.id %>"
                 class="graph"
                 data-url="<%= data_graph_path(graph) %>"
                 data-time-series="<%= graph.time_series %>">
+                <svg></svg>
               </div>
             </div>
           </div>

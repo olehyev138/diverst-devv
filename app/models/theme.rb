@@ -1,4 +1,4 @@
-class Theme < ActiveRecord::Base
+class Theme < BaseClass
   has_one :enterprise
 
   has_attached_file :logo, styles: { medium: '300x300>', thumb: '100x100>' }, default_url: ActionController::Base.helpers.image_path('/assets/missing.png'), s3_permissions: "private"

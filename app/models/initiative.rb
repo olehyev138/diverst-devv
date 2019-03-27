@@ -1,4 +1,4 @@
-class Initiative < ActiveRecord::Base
+class Initiative < BaseClass
   include PublicActivity::Common
 
   attr_accessor :associated_budget_id, :skip_allocate_budget_funds, :from, :to
@@ -68,6 +68,37 @@ class Initiative < ActiveRecord::Base
   validate :segment_enterprise
   validates_presence_of :pillar
 
+  settings do
+    mappings dynamic: false do
+      indexes :name, type: :keyword
+      indexes :created_at, type: :date
+      indexes :pillar do
+        indexes :outcome do
+          indexes :group do
+            indexes :enterprise_id, type: :integer
+            indexes :parent_id, type: :integer
+            indexes :name, type: :keyword
+            indexes :parent do
+              indexes :name, type: :keyword
+            end
+          end
+        end
+      end
+    end
+  end
+
+  def as_indexed_json(options = {})
+    self.as_json(
+      options.merge(
+        only: [:name, :created_at],
+        include: { pillar: { include: { outcome: { include: { group: {
+          only: [:enterprise_id, :parent_id, :name],
+          include: { parent: { only: [:name] } }
+        } }, only: [] }, }, only: [] } }
+      )
+    ).merge({ "created_at" => self.created_at.beginning_of_hour })
+  end
+
   def initiative_date(date_type)
     return "" unless ["start", "end"].include?(date_type)
     self.send(date_type).blank? ? "" : self.send(date_type).to_s(:reversed_slashes)
@@ -121,6 +152,10 @@ class Initiative < ActiveRecord::Base
     group.leftover_money += leftover
     group.save
     self.update(finished_expenses: true)
+  end
+
+  def unfinished_expenses?
+    (self.end < Time.current) && !finished_expenses?
   end
 
   def current_expences_sum

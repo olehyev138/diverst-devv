@@ -1,4 +1,4 @@
-class Segment < ActiveRecord::Base
+class Segment < BaseClass
     extend Enumerize
     include PublicActivity::Common
 
@@ -32,7 +32,6 @@ class Segment < ActiveRecord::Base
     validates_presence_of :name
     validates :name, uniqueness: { scope: :enterprise_id }
 
-    after_commit :update_indexes
     after_commit :cache_segment_members, on: [:create, :update]
 
     before_destroy :remove_parent_segment
@@ -43,7 +42,7 @@ class Segment < ActiveRecord::Base
 
 
     def segment_rule_values_is_nil(attributes)
-        attributes['values'].nil? 
+        attributes['values'].nil?
     end
 
     def general_rules_followed_by?(user)
@@ -59,10 +58,6 @@ class Segment < ActiveRecord::Base
 
     def cache_segment_members
         CacheSegmentMembersJob.perform_later self.id
-    end
-
-    def update_indexes
-        RebuildElasticsearchIndexJob.perform_later(model_name: 'User', enterprise: enterprise)
     end
 
     def self.update_all_members

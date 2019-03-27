@@ -1,5 +1,5 @@
 <div class="content__header">
-  <h1>General</h1>
+  <h1><%= @metrics_dashboard.name %></h1>
   <div class="flex-row flex-row--middle">
     <p class="no-margin flex-row__cell"><%= @metrics_dashboard.target.count %> users (<%= @metrics_dashboard.percentage_of_total %>% of total)</p>
     <div class="flex-row__cell">
@@ -27,6 +27,23 @@
 </div>
 
 <div class="content__main">
+  <div class="flex-row">
+    <div class="flex-row__cell flex-row__cell--grow">
+      <div class="card">
+        <div class="card__section">
+          <strong><%= c_t(:erg).pluralize.capitalize %> included:</strong> <%= @metrics_dashboard.groups.pluck(:name).join(", ") %> <%= "None" if @metrics_dashboard.groups.empty? %>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row__cell flex-row__cell--grow">
+      <div class="card">
+        <div class="card__section">
+          <strong><%= c_t(:segment).pluralize.capitalize %> included:</strong> <%= @metrics_dashboard.segments.pluck(:name).join(", ") %> <%= "None" if @metrics_dashboard.segments.empty? %>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <%= render 'graphs' %>
 </div>
 

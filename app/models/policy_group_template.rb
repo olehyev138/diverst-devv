@@ -1,4 +1,4 @@
-class PolicyGroupTemplate < ActiveRecord::Base
+class PolicyGroupTemplate < BaseClass
     include PublicActivity::Common
 
     # associations
