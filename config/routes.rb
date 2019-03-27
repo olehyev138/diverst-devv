@@ -120,6 +120,7 @@ Rails.application.routes.draw do
       get 'bias'
       patch 'delete_attachment'
       get 'calendar'
+      get 'auto_archive_settings'
     end
 
     scope module: :enterprises do
