@@ -11,19 +11,19 @@
 - [Rails](http://rubyonrails.org/)
 - [NodeJS and NPM](https://nodejs.org/en/)
 - [MySQL](https://www.mysql.com/)
-- [Bower](https://bower.io/) (Installed after)
+- [Yarn](https://yarnpkg.com/en/)
 
 ---
 
 ### Installing Prerequisites
 *Note*: This guide was created on a newly installed VM of Ubuntu Desktop 16.04.3 LTS.  
-  
+
 Update your package lists:  
 `sudo apt-get update`  
 
 If necessary, upgrade your packages:  
 `sudo apt-get upgrade`
-  
+
 **Ruby (using RVM)**
 1. Install RVM:  
 ```
@@ -67,23 +67,21 @@ sudo systemctl enable mysql
 `bundle install`
 4. Create and initialize the database with seed data and run:  
 `rake db:setup`  
-Note: *You may have to change the username and password in `config/database.yml` to your local MySQL information. Also note 
+Note: *You may have to change the username and password in `config/database.yml` to your local MySQL information. Also note
 that the seed data generated on initialization is defined in db/seeds/development*
 5. Run DB Migration:  
 `bin/rails db:migrate RAILS_ENV=development`
-6. Install Bower:  
-`sudo npm install -g bower`
-7. Get the Bower packages:  
-`rake bower:install`
+6. Install Yarn:  
+`sudo npm install -g yarn`
+7. Get the Yarn packages:  
+`yarn`
 
 **That's it! Start the server using: `bin/rails server`**  
-  
+
 ### Testing
 In order to run all of the RSpec tests, run the command: `bundle exec rspec`  
 For more information on RSpec testing, [click here](https://github.com/rspec/rspec-rails).
 
 ### Seed Data
 To view the rake tasks to run certain seed data, type `rake -T`.
-Run `rake db:seed:development` to initialize development database with seed data defined in files found in db/seeds/development. 
-
-
+Run `rake db:seed:development` to initialize development database with seed data defined in files found in db/seeds/development.

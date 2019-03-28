@@ -3,6 +3,7 @@ FactoryBot.define do
     content { Faker::Lorem.paragraph(2) }
     question
     association :author, factory: :user
+    association :contributing_group, factory: :group
     chosen false
 
     factory :answer_filled do

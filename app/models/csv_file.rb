@@ -1,4 +1,4 @@
-class CsvFile < ActiveRecord::Base
+class CsvFile < BaseClass
   self.table_name = 'csvfiles'
 
   belongs_to :user

@@ -1,4 +1,4 @@
-class SegmentRule < ActiveRecord::Base
+class SegmentRule < BaseClass
   belongs_to :segment
   belongs_to :field
 

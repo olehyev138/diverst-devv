@@ -126,7 +126,7 @@ module Optionnable
     end
 
     search_hash['query'] = {filtered: { filter: { bool: {should: terms }} } }
-    
+
     # Execute the elasticsearch query
     Elasticsearch::Model.client.search(
       index: index,
@@ -137,7 +137,7 @@ module Optionnable
 
   # Get highcharts-usable stats from the field by querying elasticsearch and formatting its response
   def highcharts_stats(aggr_field: nil, segments: [], groups: [])
-    
+
     data = elastic_stats(aggr_field: aggr_field, segments: segments, groups: groups)
 
     if aggr_field # If there is an aggregation
@@ -152,7 +152,7 @@ module Optionnable
           end
         end
       }.flatten.uniq
-      
+
       if aggr_field.type === "GroupsField" and groups.length > 0
         groups.ids.each do |id|
           if not options.include?(id)
@@ -292,7 +292,7 @@ module Optionnable
   end
 
   def elasticsearch_field
-    "combined_info.#{id}.raw"
+    "user_combined_info.#{id}"
   end
 
   def elasticsearch_sample_field

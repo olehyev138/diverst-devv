@@ -153,7 +153,7 @@ Rails.application.routes.draw do
       end
     end
   end
-  
+
   resources :clockwork_database_events
 
   get 'integrations', to: 'integrations#index'
@@ -593,6 +593,7 @@ Rails.application.routes.draw do
     get 'top_folders_by_views'
     get 'top_resources_by_views'
     get 'top_news_by_views'
+    get 'growth_of_employees'
     get 'growth_of_groups'
     get 'growth_of_resources'
   end

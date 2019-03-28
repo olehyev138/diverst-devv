@@ -1,4 +1,4 @@
-class Segmentation < ActiveRecord::Base
+class Segmentation < BaseClass
     
     # defines the relationship between two segments
     # a segment can be the parent of a segment and also

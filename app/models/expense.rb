@@ -1,4 +1,4 @@
-class Expense < ActiveRecord::Base
+class Expense < BaseClass
     include PublicActivity::Common
 
     belongs_to :enterprise

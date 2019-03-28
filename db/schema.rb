@@ -67,7 +67,10 @@ ActiveRecord::Schema.define(version: 20190327002041) do
     t.string   "supporting_document_content_type", limit: 191
     t.integer  "supporting_document_file_size",    limit: 4
     t.datetime "supporting_document_updated_at"
+    t.integer  "contributing_group_id",            limit: 4
   end
+
+  add_index "answers", ["contributing_group_id"], name: "index_answers_on_contributing_group_id", using: :btree
 
   create_table "badges", force: :cascade do |t|
     t.integer  "enterprise_id",      limit: 4,   null: false

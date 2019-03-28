@@ -8,7 +8,7 @@ class GenericGraphsGroupGrowthDownloadJob < ActiveJob::Base
     enterprise = Enterprise.find_by_id(enterprise_id)
     return if enterprise.nil?
 
-    csv = enterprise.generic_graphs_group_growth_csv(from_date.to_datetime, to_date.to_datetime)
+    csv = enterprise.generic_graphs_group_growth_csv(from_date, to_date)
     file = CsvFile.new(user_id: user.id, download_file_name: "graph_group_growth")
 
     file.download_file = StringIO.new(csv)

@@ -1,4 +1,4 @@
-class UserReward < ActiveRecord::Base
+class UserReward < BaseClass
   belongs_to :user
   belongs_to :reward
 
