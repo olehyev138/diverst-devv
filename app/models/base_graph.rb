@@ -268,6 +268,29 @@ module BaseGraph
   end
 
   # Parse an elasticsearch response
+  # - ElasticsearchParser works in the same fashion as ElasticsearchQuery
+  # - Contains a list of small methods which return lambdas that parse a
+  #   specific aggregation type. Not all aggregations change the response format,
+  #   so these are not included
+  # - These lambdas can be nested to any level to match a nested aggregation query
+  # - Ex: If you ran a date range with a sum nested inside, you would call the
+  #   date_range method and then nest sum inside
+  #     - like so: parser.date_range { |p| p.sum(key: :doc_count) }
+  #   - We call these lambdas extractors. An extractor when run, extracts or parses
+  #     one value from the elasticsearch response.
+  # - ElasticsearchParser has public hash called 'extractors' to store a list of these
+  #   lambdas. The key for each lambda is the name or label you want to call the value it extracts
+  # - The workflow is something like this:
+  #  -  1) You build up the extractors hash to any degree
+  #         ex: parser.extractors[:x] = parser.date_range { |p| p.sum(key: :doc_count) }
+  #  -  2) You run parse, passing a single elasticsearch element,
+  #        parse runs through the extractors hash building a 'values' hash,
+  #        each key,value pair is the key of the extractor and the return value of the extractor
+  #        ex: a extractos hash like: { x: <lambda_x>  } maps to: { x: <lambda_x_return_value> }
+  #
+  #  ElasticsearchParser also has a method: 'get_elements'
+  #  'get_elements' takes a type of extractor that returns a list of elements, which can then
+  #  be iterated over, each being passed to 'parse'
   class ElasticsearchParser
     attr_accessor :extractors
 
@@ -339,7 +362,7 @@ module BaseGraph
     end
 
     # Run the parser on an elasticsearch element
-    def parse(element, key: nil, custom_parser: nil, **args)
+    def parse(element, **args)
       values = {}
 
       @extractors.each do |label, extractor|
