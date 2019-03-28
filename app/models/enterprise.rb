@@ -364,11 +364,11 @@ class Enterprise < BaseClass
       data = self.groups.all_parents.map do |g|
           events = g.initiatives.joins(:owner)
                 .where('users.active = ?', true)
-          events = events.where('initiatives.created_at >= ? AND initiatives.created_at <= ?', from_date, to_date) if from_date.present? && to_date.present?
-          events = events.count
+          events = events.where('initiatives.created_at >= ?', from_date) if from_date.present?
+          events = events.where('initiatives.created_at <= ?', to_date) if to_date.present?
 
           {
-              y: events,
+              y: events.count,
               name: g.name,
               drilldown: g.name
           }
@@ -382,14 +382,21 @@ class Enterprise < BaseClass
       report.to_csv
     end
 
-    def generic_graphs_non_demo_messages_sent_csv(erg_text)
-      data = self.groups.all_parents.map do |g|
-          {
-              y: g.messages.joins(:owner)
-                  .where('group_messages.created_at > ? AND users.active = ?', 1.month.ago, true).count,
-              name: g.name,
-              drilldown: g.name
-          }
+    def generic_graphs_non_demo_messages_sent_csv(erg_text, from_date, to_date)
+      from_date = from_date.to_datetime if from_date.present?
+      to_date = to_date.to_datetime if to_date.present?
+
+      data = groups.all_parents.map do |g|
+        messages = g.messages.joins(:owner)
+                    .where('users.active = ?', true)
+        messages = messages.where('group_messages.created_at >= ?', from_date) if from_date.present?
+        messages = messages.where('group_messages.created_at <= ?', to_date) if to_date.present?
+
+        {
+          y: messages.count,
+          name: g.name,
+          drilldown: g.name
+        }
       end
 
       categories = self.groups.all_parents.map{ |g| g.name }

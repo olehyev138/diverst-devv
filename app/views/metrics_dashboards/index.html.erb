@@ -93,7 +93,7 @@
           <h4>Messages sent</h4>
           <%= render 'components/range_selector' %>
           <div class="card__action">
-            <%= link_to "Export CSV", messages_sent_generic_graphs_path(format: :csv), class: "hidden-xs" %>
+            <a href="#" class="csv-export-link hidden-xs" data-url="<%= messages_sent_generic_graphs_path(format: :csv) %>">Export CSV</a>
           </div>
           <div id="messages_sent_graph" class="graph" data-url="<%= messages_sent_generic_graphs_path %>">
             <svg></svg>
