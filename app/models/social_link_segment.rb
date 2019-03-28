@@ -1,4 +1,4 @@
-class SocialLinkSegment < ActiveRecord::Base
+class SocialLinkSegment < BaseClass
     belongs_to :social_link
     belongs_to :segment
     

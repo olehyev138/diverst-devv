@@ -1,4 +1,4 @@
-class PolicyGroup < ActiveRecord::Base
+class PolicyGroup < BaseClass
     # associations
     belongs_to :user, inverse_of: :policy_group
 

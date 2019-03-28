@@ -1,7 +1,5 @@
-class Resource < ActiveRecord::Base
+class Resource < BaseClass
     include PublicActivity::Common
-    include Elasticsearch::Model
-    include Elasticsearch::Model::Callbacks
 
     EXPIRATION_TIME = 6.months.to_i
 
@@ -36,6 +34,9 @@ class Resource < ActiveRecord::Base
         indexes :created_at, type: :date
         indexes :folder do
           indexes :group_id, type: :integer
+          indexes :group do
+            indexes :enterprise_id, type: :integer
+          end
         end
       end
     end
@@ -43,10 +44,13 @@ class Resource < ActiveRecord::Base
     def as_indexed_json(options = {})
       self.as_json(
         options.merge(
-          only: [:id, :owner_id, :created_at],
-          include: { folder: { only: [:id, :group_id] } }
+          only: [:owner_id, :created_at],
+          include: { folder: {
+            only: [:id, :group_id],
+            include: { group: { only: [:enterprise_id]  } }
+          }}
         )
-      )
+      ).merge({ "created_at" => self.created_at.beginning_of_hour })
     end
 
     def tag_tokens=(tokens)

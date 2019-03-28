@@ -54,18 +54,22 @@
           <div class="card__action">
             <%= link_to "Export CSV", contributions_per_erg_campaign_path(@campaign, format: :csv), class: "hidden-xs" %>
           </div>
-          <div class="graph" data-url="<%= contributions_per_erg_campaign_path(@campaign) %>"></div>
+          <div id="contributions_group" class="graph" data-url="<%= contributions_per_erg_campaign_path(@campaign) %>">
+            <svg></svg>
+          </div>
         </div>
       </div>
     </div>
     <div class="col sm-12 md-6">
       <div class="card">
         <div class="card__section">
-          <h3>Top performers</h3>
+          <h3>Total votes per user</h3>
           <div class="card__action">
             <%= link_to "Export CSV", top_performers_campaign_path(@campaign, format: :csv), class: "hidden-xs" %>
           </div>
-          <div class="graph" data-url="<%= top_performers_campaign_path(@campaign) %>"></div>
+          <div id="top_performers" class="graph" data-url="<%= top_performers_campaign_path(@campaign) %>">
+            <svg></svg>
+          </div>
         </div>
       </div>
     </div>

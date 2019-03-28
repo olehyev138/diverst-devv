@@ -48,7 +48,10 @@
           <div class="card__action">
             <%= link_to "Export CSV", group_population_generic_graphs_path(format: :csv), class: "hidden-xs" %>
           </div>
-          <div class="graph" data-url="<%= group_population_generic_graphs_path %>"></div>
+          <div id="group_population_graph" class="graph" data-url="<%= group_population_generic_graphs_path %>">
+            <svg></svg>
+          </div>
+          <input type="button" hidden class="drillout_button" value="Back"></input>
         </div>
       </div>
     </div>
@@ -60,7 +63,10 @@
           <div class="card__action">
             <%= link_to "Export CSV", segment_population_generic_graphs_path(format: :csv), class: "hidden-xs" %>
           </div>
-          <div class="graph" data-url="<%= segment_population_generic_graphs_path %>"></div>
+          <div id="segment_population_graph" class="graph" data-url="<%= segment_population_generic_graphs_path %>">
+            <svg></svg>
+          </div>
+          <input type="button" hidden class="drillout_button" value="Back"></input>
         </div>
       </div>
     </div>
@@ -68,11 +74,15 @@
     <div class="col sm-12 md-6">
       <div class="card">
         <div class="card__section">
-          <h4>Events created in the last 30 days</h4>
+          <h4>Events created</h4>
+          <%= render 'components/range_selector' %>
           <div class="card__action">
             <%= link_to "Export CSV", events_created_generic_graphs_path(format: :csv), class: "hidden-xs" %>
           </div>
-          <div class="graph" data-url="<%= events_created_generic_graphs_path %>"></div>
+          <div id="events_created_graph" class="graph" data-url="<%= events_created_generic_graphs_path %>">
+            <svg></svg>
+          </div>
+          <input type="button" hidden  class="drillout_button" value="Back"></input>
         </div>
       </div>
     </div>
@@ -80,11 +90,15 @@
     <div class="col sm-12 md-6">
       <div class="card">
         <div class="card__section">
-          <h4>Messages sent in the last 30 days</h4>
+          <h4>Messages sent</h4>
+          <%= render 'components/range_selector' %>
           <div class="card__action">
             <%= link_to "Export CSV", messages_sent_generic_graphs_path(format: :csv), class: "hidden-xs" %>
           </div>
-          <div class="graph" data-url="<%= messages_sent_generic_graphs_path %>"></div>
+          <div id="messages_sent_graph" class="graph" data-url="<%= messages_sent_generic_graphs_path %>">
+            <svg></svg>
+          </div>
+          <input type="button" hidden class="drillout_button" value="Back"></input>
         </div>
       </div>
     </div>
@@ -93,10 +107,13 @@
       <div class="card">
         <div class="card__section">
           <h4># of employees over time</h4>
+          <%= render 'components/range_selector' %>
           <div class="card__action">
-            <%= link_to "Export CSV", date_histogram_users_path(format: :csv), class: "hidden-xs" %>
+            <%= link_to "Export CSV", growth_of_employees_generic_graphs_path(format: :csv), class: "hidden-xs" %>
           </div>
-          <div class="graph" data-url="<%= date_histogram_users_path %>" data-date-histogram="true"></div>
+          <div id="growth_employees" class="graph" data-url="<%= growth_of_employees_generic_graphs_path %>">
+            <svg></svg>
+          </div>
         </div>
       </div>
     </div>
@@ -105,10 +122,14 @@
       <div class="card">
         <div class="card__section">
           <h4># of views per <%= c_t(:erg) %></h4>
+          <%= render 'components/range_selector' %>
           <div class="card__action">
             <%= link_to "Export CSV", top_groups_by_views_generic_graphs_path(format: :csv), class: "hidden-xs" %>
           </div>
-          <div class="graph" data-url="<%= top_groups_by_views_generic_graphs_path %>"></div>
+          <div id="top_groups_graph" class="graph" data-url="<%= top_groups_by_views_generic_graphs_path %>">
+            <svg></svg>
+          </div>
+          <input type="button" hidden  class="drillout_button" value="Back"></input>
         </div>
       </div>
     </div>
@@ -117,10 +138,13 @@
       <div class="card">
         <div class="card__section">
           <h4># of views per Folder</h4>
+          <%= render 'components/range_selector' %>
           <div class="card__action">
             <%= link_to "Export CSV", top_folders_by_views_generic_graphs_path(format: :csv), class: "hidden-xs" %>
           </div>
-          <div class="graph" data-url="<%= top_folders_by_views_generic_graphs_path %>"></div>
+          <div id="top_folders_graph" class="graph" data-url="<%= top_folders_by_views_generic_graphs_path %>">
+            <svg></svg>
+          </div>
         </div>
       </div>
     </div>
@@ -129,10 +153,13 @@
       <div class="card">
         <div class="card__section">
           <h4># of views per Resource</h4>
+          <%= render 'components/range_selector' %>
           <div class="card__action">
             <%= link_to "Export CSV", top_resources_by_views_generic_graphs_path(format: :csv), class: "hidden-xs" %>
           </div>
-          <div class="graph" data-url="<%= top_resources_by_views_generic_graphs_path %>"></div>
+          <div id="top_resources_graph" class="graph" data-url="<%= top_resources_by_views_generic_graphs_path %>">
+            <svg></svg>
+          </div>
         </div>
       </div>
     </div>
@@ -141,10 +168,13 @@
       <div class="card">
         <div class="card__section">
           <h4>Top News Links by # of views</h4>
+          <%= render 'components/range_selector' %>
           <div class="card__action">
             <%= link_to "Export CSV", top_news_by_views_generic_graphs_path(format: :csv), class: "hidden-xs" %>
           </div>
-          <div class="graph" data-url="<%= top_news_by_views_generic_graphs_path %>"></div>
+          <div id="top_news_graph" class="graph" data-url="<%= top_news_by_views_generic_graphs_path %>">
+            <svg></svg>
+          </div>
         </div>
       </div>
     </div>
@@ -157,7 +187,10 @@
             <div class="card__action">
               <%= link_to "Export CSV", mentorship_generic_graphs_path(format: :csv) %>
             </div>
-            <div class="graph" data-url="<%= mentorship_generic_graphs_path %>"></div>
+            <div id="mentorship_population" class="graph" data-url="<%= mentorship_generic_graphs_path %>">
+              <svg></svg>
+            </div>
+            <input type="button" hidden  class="drillout_button" value="Back"></input>
           </div>
         </div>
       </div>
@@ -165,11 +198,14 @@
       <div class="col sm-12 md-6">
       <div class="card">
         <div class="card__section">
-          <h4>Mentoring Sessions created in the last 30 days</h4>
+          <h4>Mentoring Sessions created</h4>
+          <%= render 'components/range_selector' %>
           <div class="card__action">
             <%= link_to "Export CSV", mentoring_sessions_generic_graphs_path(format: :csv) %>
           </div>
-          <div class="graph" data-url="<%= mentoring_sessions_generic_graphs_path %>"></div>
+          <div id="mentorship_sessions" class="graph" data-url="<%= mentoring_sessions_generic_graphs_path %>">
+            <svg></svg>
+          </div>
         </div>
       </div>
     </div>
@@ -181,7 +217,9 @@
           <div class="card__action">
             <%= link_to "Export CSV", mentoring_interests_generic_graphs_path(format: :csv) %>
           </div>
-          <div class="graph" data-url="<%= mentoring_interests_generic_graphs_path %>"></div>
+          <div id="mentoring-interests" class="graph" data-url="<%= mentoring_interests_generic_graphs_path %>">
+            <svg></svg>
+          </div>
         </div>
       </div>
     </div>
@@ -193,9 +231,11 @@
         <div class="card__section">
           <h4>Growth of groups over time</h4>
           <div class="card__action">
-            <a href="#" class="hidden-xs" onclick="growth_graph_onclick()">Export CSV</a>
+            <a href="#" class="csv-export-link hidden-xs" data-url="<%= growth_of_groups_generic_graphs_path(format: :csv) %>">Export CSV</a>
           </div>
-          <div class="graph" data-url="<%= growth_of_groups_generic_graphs_path %>"></div>
+          <div id="growth_groups_graph" class="graph" data-url="<%= growth_of_groups_generic_graphs_path %>">
+            <svg></svg>
+          </div>
         </div>
       </div>
     </div>
@@ -208,7 +248,9 @@
           <div class="card__action">
             <a href="#" class="hidden-xs" onclick="#">Export CSV</a>
           </div>
-          <div class="graph" data-url="<%= growth_of_resources_generic_graphs_path %>"></div>
+          <div id="growth_resources_graph" class="graph" data-url="<%= growth_of_resources_generic_graphs_path %>">
+            <svg></svg>
+          </div>
         </div>
       </div>
     </div>
@@ -262,14 +304,3 @@
     </div>
   </div>
 </div>
-
-<script>
- function growth_graph_onclick() {
-   var from_date = $('input.highcharts-range-selector:eq(0)').val();
-   var to_date = $('input.highcharts-range-selector:eq(1)').val();
-
-   window.location.href =
-     '<%= growth_of_groups_generic_graphs_path(format: :csv) %>' +
-     '?from_date=' + from_date + '&to_date=' + to_date;
- }
-</script>

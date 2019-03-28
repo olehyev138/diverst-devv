@@ -96,7 +96,7 @@ RSpec.describe MetricsDashboard, :type => :model do
     describe "#destroy_callbacks" do
       it "removes the child objects" do
         metrics_dashboard = create(:metrics_dashboard)
-        graph = create(:graph, :metrics_dashboard => metrics_dashboard)
+        graph = create(:graph_with_metrics_dashboard, :metrics_dashboard => metrics_dashboard)
         segment = create(:metrics_dashboards_segment, :metrics_dashboard => metrics_dashboard)
         group = create(:groups_metrics_dashboard, :metrics_dashboard => metrics_dashboard)
 
