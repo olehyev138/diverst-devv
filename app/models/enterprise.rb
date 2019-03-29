@@ -407,10 +407,17 @@ class Enterprise < BaseClass
       report.to_csv
     end
 
-    def generic_graphs_non_demo_top_groups_by_views_csv(erg_text)
+    def generic_graphs_non_demo_top_groups_by_views_csv(erg_text, from_date, to_date)
+      from_date = from_date.to_datetime if from_date.present?
+      to_date = to_date.to_datetime if to_date.present?
+
       data = self.groups.all_parents.map do |g|
+          views = g.views
+          views = views.where('views.created_at >= ?', from_date) if from_date.present?
+          views = views.where('views.created_at <= ?', to_date) if to_date.present?
+
           {
-              y: g.total_views,
+              y: views.count,
               name: g.name,
               drilldown: g.name
           }
