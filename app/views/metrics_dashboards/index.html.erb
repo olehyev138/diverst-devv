@@ -170,7 +170,7 @@
           <h4>Top News Links by # of views</h4>
           <%= render 'components/range_selector' %>
           <div class="card__action">
-            <%= link_to "Export CSV", top_news_by_views_generic_graphs_path(format: :csv), class: "hidden-xs" %>
+            <a href="#" class="csv-export-link hidden-xs" data-url="<%= top_news_by_views_generic_graphs_path(format: :csv) %>">Export CSV</a>
           </div>
           <div id="top_news_graph" class="graph" data-url="<%= top_news_by_views_generic_graphs_path %>">
             <svg></svg>

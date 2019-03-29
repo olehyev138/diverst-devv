@@ -482,18 +482,22 @@ class Enterprise < BaseClass
       report.to_csv
     end
 
-    def generic_graphs_non_demo_top_news_by_views_csv
-      news_feed_link_ids = NewsFeedLink.where(:news_feed_id => NewsFeed.where(:group_id => current_user.enterprise.groups.ids).ids).ids
+    def generic_graphs_non_demo_top_news_by_views_csv(from_date, to_date)
+      from_date = from_date.to_datetime if from_date.present?
+      to_date = to_date.to_datetime if to_date.present?
+
+      news_feed_link_ids = NewsFeedLink.where(:news_feed_id => NewsFeed.where(:group_id => groups.ids).ids).ids
       news_links = NewsLink
-        .select('DISTINCT news_links.title, SUM(views.id) view_count, groups.name')
+        .select('DISTINCT news_links.title, groups.name')
         .joins(:group, :news_feed_link, 'JOIN views on news_feed_links.id = views.news_feed_link_id')
         .where(:news_feed_links => {:id => news_feed_link_ids})
-        .limit(20)
-        .order('view_count DESC')
+
+      news_links = news_links.where('views.created_at >= ?', from_date) if from_date.present?
+      news_links = news_links.where('views.created_at <= ?', to_date) if to_date.present?
 
       data = news_links.map do |news_link|
           {
-              y: news_link.view_count,
+              y: news_link.total_views,
               name: news_link.name + ': ' + news_link.title
           }
       end
