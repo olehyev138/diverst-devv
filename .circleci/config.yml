@@ -29,6 +29,10 @@ jobs:
         - http.port: 9200
         - cluster.name: elasticsearch
         - discovery.type: single-node
+        - ES_JAVA_OPTS: "-Xms1024m -Xmx1024m"
+        - JAVA_OPTS: "-Xms1024m -Xmx1024m"
+        - _JAVA_OPTIONS: "-Xms1024m -Xmx1024m"
+        - JAVA_TOOL_OPTIONS: "-Xms1024m -Xmx1024m"
     steps:
     # Machine Setup
     #   If you break your build into multiple jobs with workflows, you will probably want to do the parts of this that are relevant in each
