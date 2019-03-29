@@ -324,10 +324,17 @@ class Enterprise < BaseClass
       report.to_csv
     end
 
-    def generic_graphs_mentoring_sessions_csv(erg_text)
+    def generic_graphs_mentoring_sessions_csv(erg_text, from_date, to_date)
+      from_date = from_date.to_datetime if from_date.present?
+      to_date = to_date.to_datetime if to_date.present?
+
       data = self.groups.all_parents.map { |g|
+          mentoring_sessions = g.members.active.mentors_and_mentees.joins(:mentoring_sessions)
+          mentoring_sessions = mentoring_sessions.where('mentoring_sessions.created_at >= ?', from_date) if from_date.present?
+          mentoring_sessions = mentoring_sessions.where('mentoring_sessions.created_at <= ?', to_date) if to_date.present?
+
           {
-              y: g.members.active.mentors_and_mentees.joins(:mentoring_sessions).where("mentoring_sessions.created_at > ? ", 1.month.ago).count,
+              y: mentoring_sessions.count,
               name: g.name,
               drilldown: g.name
           }
