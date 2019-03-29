@@ -7,7 +7,8 @@ class GenericGraphsController < ApplicationController
                                           :messages_sent,
                                           :growth_of_groups,
                                           :top_groups_by_views,
-                                          :top_folders_by_views
+                                          :top_folders_by_views,
+                                          :top_resources_by_views
                                          ]
 
   def group_population
@@ -242,7 +243,13 @@ class GenericGraphsController < ApplicationController
         render json: results
       }
       format.csv {
-        GenericGraphsTopResourcesByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, false)
+        GenericGraphsTopResourcesByViewsDownloadJob.perform_later(
+          current_user.id,
+          current_user.enterprise.id,
+          false,
+          @from_date,
+          @to_date
+        )
         track_activity(current_user.enterprise, :export_generic_graphs_top_resources_by_views)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back

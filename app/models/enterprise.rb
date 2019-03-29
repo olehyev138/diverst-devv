@@ -456,13 +456,20 @@ class Enterprise < BaseClass
       report.to_csv
     end
 
-    def generic_graphs_non_demo_top_resources_by_views_csv
+    def generic_graphs_non_demo_top_resources_by_views_csv(from_date, to_date)
+      from_date = from_date.to_datetime if from_date.present?
+      to_date = to_date.to_datetime if to_date.present?
+
       group_ids = self.groups.ids
       folder_ids = Folder.where(:group_id => group_ids).ids
       resources = Resource.where(:folder_id => folder_ids)
       data = resources.map do |resource|
+          views = resource.views
+          views = views.where('views.created_at >= ?', from_date) if from_date.present?
+          views = views.where('views.created_at <= ?', to_date) if to_date.present?
+
           {
-              y: resource.total_views,
+              y: views.count,
               name: resource.title
           }
       end
