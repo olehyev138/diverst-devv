@@ -431,11 +431,18 @@ class Enterprise < BaseClass
       report.to_csv
     end
 
-    def generic_graphs_non_demo_top_folders_by_views_csv
+    def generic_graphs_non_demo_top_folders_by_views_csv(from_date, to_date)
+      from_date = from_date.to_datetime if from_date.present?
+      to_date = to_date.to_datetime if to_date.present?
+
       folders = Folder.all
       data = folders.map do |f|
+        views = f.views
+        views = views.where('views.created_at >= ?', from_date) if from_date.present?
+        views = views.where('views.created_at <= ?', to_date) if to_date.present?
+
         {
-          y: f.total_views,
+          y: views.count,
           name: !f.group.nil? ? f.group.name + ': ' + f.name : 'Shared folder: ' + f.name,
           drilldown: f.name
         }
