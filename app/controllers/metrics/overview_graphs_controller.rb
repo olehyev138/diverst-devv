@@ -1,4 +1,4 @@
-class Metrics::GenericGraphsController < ApplicationController
+class Metrics::OverviewGraphsController < ApplicationController
   layout 'metrics'
 
   def index

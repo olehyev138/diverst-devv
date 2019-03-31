@@ -556,7 +556,7 @@ Rails.application.routes.draw do
 
 
   namespace :metrics do
-    resources :general, controller: :generic_graphs, only: [:index]
+    resources :overview, controller: :overview_graphs, only: [:index]
     resources :groups, controller: :group_graphs, only: [:index]
   end
 
