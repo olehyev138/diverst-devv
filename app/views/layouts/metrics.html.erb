@@ -1,0 +1,27 @@
+<% content_for :secondary_nav do %>
+<div class="menu menu--mobile">
+  <button
+    class="m-hamburger"
+    aria-label="Menu"
+    aria-controls="navigation"
+    data-jq-dropdown="#navigation">
+    <span>Menu</span>
+  </button>
+  <nav id="navigation" class="jq-dropdown jq-dropdown-tip">
+    <ul class="jq-dropdown-menu">
+      <li><%= active_link_to "General", metrics_general_index_path %></li>
+    </ul>
+  </nav>
+</div>
+<div class="menu menu--desktop">
+  <%= active_link_to "General", metrics_general_index_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to 'Users', manage_erg_root_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to c_t(:erg).pluralize, metrics_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to c_t(:segment).pluralize, campaigns_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to 'Mentorship', groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to 'Innovation', generic_graphs_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to 'Polls', polls_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to 'Custom', campaigns_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+</div>
+<% end %>
+<%= render template: "layouts/dashboard" %>

@@ -554,6 +554,12 @@ Rails.application.routes.draw do
 
   resources :mentorship_ratings
 
+
+  namespace :metrics do
+    resources :general, controller: :generic_graphs, only: [:index]
+    resources :groups, controller: :group_graphs, only: [:index]
+  end
+
   resources :metrics_dashboards do
     get 'shared_dashboard'
 

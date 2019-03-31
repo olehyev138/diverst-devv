@@ -1,0 +1,113 @@
+<div class="content__header">
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <h1>At a glance</h1>
+      <div class="flex-row">
+        <div class="flex-row__cell">
+          <big>Users</big><br>
+          <strong><%= @general_metrics[:nb_users] %></strong>
+        </div>
+        <div class="flex-row__cell">
+          <big><%= c_t(:erg).pluralize %></big><br>
+          <strong><%= @general_metrics[:nb_ergs] %></strong>
+        </div>
+        <div class="flex-row__cell">
+          <big><%= c_t(:segment).pluralize %></big><br>
+          <strong><%= @general_metrics[:nb_segments] %></strong>
+        </div>
+        <div class="flex-row__cell">
+          <big>Resources</big><br>
+          <strong><%= @general_metrics[:nb_resources] %></strong>
+        </div>
+        <div class="flex-row__cell">
+          <big>Surveys</big><br>
+          <strong><%= @general_metrics[:nb_polls] %></strong>
+        </div>
+        <div class="flex-row__cell">
+          <big>Ongoing campaigns</big><br>
+          <strong><%= @general_metrics[:nb_ongoing_campaigns] %></strong>
+        </div>
+        <div class="flex-row__cell">
+          <big>Average # of members per <%= c_t(:erg) %></big><br>
+          <strong><%= @general_metrics[:average_nb_members_per_group] %></strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__section">
+      <div class="card-title" style="margin-bottom: 10px;"><h1>Users</h1></div>
+      <div class="media-object">
+        <div class="flex-row flex-row--middle">
+          <div class="flex-row__cell flex-row__cell--grow">
+            <div class="col md-5"><p><b>Total active users:</b></p></div>
+            <div class="col md-7"><p><b><%= @general_metrics[:nb_users] %></b></p></div>
+          </div>
+        </div>
+        <div class="flex-row flex-row--middle">
+          <div class="flex-row__cell flex-row__cell--grow">
+            <div class="col md-5"><p><b>User growth percentage over last 3 months:</b></p></div>
+            <div class="col md-7"><p><b>76%</b></p></div>
+          </div>
+        </div>
+        <div class="flex-row flex-row--middle">
+          <div class="flex-row__cell flex-row__cell--grow">
+            <div class="col md-5"><p><b>New <%= c_t(:erg).downcase %> memberships over last 6 months:</b></p></div>
+            <div class="col md-7"><p><b>132</b></p></div>
+          </div>
+        </div>
+      </div>
+      <div class="media-object">
+        <div class="flex-row flex-row--middle">
+          <div class="flex-row__cell flex-row__cell--grow">
+            <h4>User Growth</h4>
+            <%= render 'components/range_selector' %>
+            <div class="card__action">
+              <%= link_to "Export CSV", growth_of_employees_generic_graphs_path(format: :csv), class: "hidden-xs" %>
+            </div>
+            <div id="growth_employees" class="graph" data-url="<%= growth_of_employees_generic_graphs_path %>">
+              <svg></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__section">
+      <div class="card-title" style="margin-bottom: 10px;"><h1><%= c_t(:erg).capitalize.pluralize%></h1></div>
+      <div class="media-object">
+        <div class="flex-row flex-row--middle">
+          <div class="flex-row__cell flex-row__cell--grow">
+            <div class="col md-5"><p><b>Total groups:</b></p></div>
+            <div class="col md-7"><p><b><%= @general_metrics[:nb_ergs] %></b></p></div>
+          </div>
+        </div>
+        <div class="flex-row flex-row--middle">
+          <div class="flex-row__cell flex-row__cell--grow">
+            <div class="col md-5"><p><b>Average number of members per <%= c_t(:erg).downcase %>:</b></p></div>
+            <div class="col md-7"><p><b><%= @general_metrics[:average_nb_members_per_group] %></b></p></div>
+          </div>
+        </div>
+      </div>
+      <div class="media-object">
+        <div class="flex-row flex-row--middle">
+          <div class="flex-row__cell flex-row__cell--grow">
+            <h4><%= c_t(:erg).capitalize %> Growth</h4>
+            <div class="card__action">
+              <a href="#" class="csv-export-link hidden-xs" data-url="<%= growth_of_groups_generic_graphs_path(format: :csv) %>">Export CSV</a>
+            </div>
+            <div id="growth_groups_graph" class="graph" data-url="<%= growth_of_groups_generic_graphs_path %>">
+              <svg></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
