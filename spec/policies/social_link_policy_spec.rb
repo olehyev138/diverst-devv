@@ -8,7 +8,7 @@ RSpec.describe SocialLinkPolicy, :type => :policy do
   let(:noshow_social_link) { create(:social_link, author: no_access) }
   let(:policy_scope) { SocialLinkPolicy::Scope.new(user, SocialLink).resolve }
 
-  subject { described_class }
+  subject { SocialLinkPolicy.new(user, social_link) }
 
   before {
     user.policy_group.manage_all = false
@@ -21,22 +21,22 @@ RSpec.describe SocialLinkPolicy, :type => :policy do
     no_access.policy_group.save!
   }
 
-  permissions :index?, :create?, :manage?, :update? do
-    it 'allows access to user with correct permissions' do
-      expect(subject).to permit(user, social_link)
+
+  describe 'for users with access' do 
+    context 'with correct permissions' do 
+      it { is_expected.to permit_actions([:index, :create, :update]) }
     end
 
-    it 'denies access to user with incorrect permissions' do
-      expect(subject).to_not permit(no_access, social_link)
+    context 'who are non managers' do 
+      before { user.policy_group.update social_links_manage: false }
+      it { is_expected.to permit_actions([:index, :create, :update]) }
     end
   end
 
-  permissions :index?, :create?, :update? do
-    it 'allows access to non managers' do
-      user.policy_group.social_links_manage = false
-
-      expect(subject).to permit(user, social_link)
-    end
+  describe 'for users with no access' do 
+    let!(:user) { no_access }
+    let!(:social_link) { create(:social_link, author: create(:user)) }
+    it { is_expected.to forbid_actions([:index, :create, :update, :destroy]) }
   end
 
   permissions '.scope' do
