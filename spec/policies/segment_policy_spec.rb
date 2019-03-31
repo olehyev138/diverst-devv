@@ -10,7 +10,7 @@ RSpec.describe SegmentPolicy, :type => :policy do
   let(:segments){ create_list(:segment, 10, enterprise: enterprise2) }
   let(:policy_scope) { SegmentPolicy::Scope.new(user, Segment).resolve }
 
-  subject { described_class }
+  subject { SegmentPolicy.new(user, segment) }
 
   before {
     user.policy_group.manage_all = false
@@ -29,31 +29,25 @@ RSpec.describe SegmentPolicy, :type => :policy do
     end
   end
 
-  permissions :index?, :create?, :manage?, :update?, :destroy? do
-    it "allows access to user with correct permissions" do
-      expect(subject).to permit(user, segment)
+  describe 'for users with access' do 
+    context 'with correct permissions' do 
+      it { is_expected.to permit_actions([:index, :create, :update, :destroy, :enterprise_segments]) }
     end
 
-    it "doesn't allow access to user without correct permissions" do
-
-      expect(subject).to_not permit(no_access, segment)
+    context 'who are non managers' do 
+      before { user.policy_group.update segments_manage: false }
+      it { is_expected.to permit_actions([:index, :create, :enterprise_segments]) }
     end
+
+    context 'when manage_all is true' do 
+      before { user.policy_group.update segments_index: false, segments_manage: false, segments_create: false, manage_all: true }
+      it { is_expected.to permit_actions([:index, :create, :update, :destroy, :enterprise_segments]) }
+    end
+
   end
 
-  permissions :index?, :create? do
-    it "allows access to non managers" do
-      user.policy_group.segments_manage = false
-
-      expect(subject).to permit(user, segment)
-    end
-  end
-
-  permissions :index? do
-    it "allows access to users with index permissions" do
-      user.policy_group.segments_manage = false
-      user.policy_group.segments_create = false
-
-      expect(subject).to permit(user, segment)
-    end
+  describe 'for users with no access' do 
+    let!(:user) { no_access }
+    it { is_expected.to forbid_actions([:index, :create, :update, :destroy, :enterprise_segments]) }
   end
 end
