@@ -6,7 +6,7 @@ RSpec.describe RewardPolicy, :type => :policy do
   let(:no_access) { create(:user) }
   let(:reward){ create(:reward) }
 
-  subject { described_class }
+  subject { RewardPolicy.new(user, reward) }
 
   before {
     user.policy_group.manage_all = false
@@ -17,14 +17,12 @@ RSpec.describe RewardPolicy, :type => :policy do
     no_access.policy_group.save!
   }
 
-  permissions :index?, :new?, :create?, :update?, :destroy?, :manage? do
-    it 'allows access to user with correct permissions' do
-      expect(subject).to permit(user, reward)
-    end
-
-    it 'denies access to user with incorrect permissions' do
-      expect(subject).to_not permit(no_access, reward)
-    end
+  describe 'for users with access' do 
+    it { is_expected.to permit_actions([:index, :new, :create, :update, :destroy]) }
   end
 
+  describe 'for users with no access' do 
+    let!(:user) { no_access }
+    it { is_expected.to forbid_actions([:index, :new, :create, :update, :destroy]) }
+  end
 end
