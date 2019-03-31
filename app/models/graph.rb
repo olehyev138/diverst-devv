@@ -1,5 +1,9 @@
 class Graph < BaseClass
 
+  include Metrics::OverviewMetrics
+  include Metrics::GroupMetrics
+  include Metrics::UserMetrics
+
   belongs_to :poll
   belongs_to :metrics_dashboard
   belongs_to :field
@@ -11,6 +15,8 @@ class Graph < BaseClass
 
   after_initialize :set_graph_builder
   after_initialize :set_groups_segments
+
+  attr_accessor :enterprise_id
 
   def set_graph_builder
     if @graph_builder.blank? && collection.present?
