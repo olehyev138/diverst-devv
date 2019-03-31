@@ -36,32 +36,6 @@ RSpec.describe Resource, :type => :model do
     end
   end
 
-  describe 'archive expired resources after_commit on [:create, :update, :destroy]' do
-    let!(:enterprise) { create(:enterprise) }
-    let!(:group) { create(:group, enterprise: enterprise) }
-    let!(:folder) { create(:folder, enterprise: enterprise) }
-    let!(:expired_resource) { create(:resource, title: "resource 1", folder: folder, created_at: DateTime.now.months_ago(9),
-     updated_at: DateTime.now.months_ago(9),
-    group: group) }
-    let!(:new_resource) { create(:resource, title: "resource 2", folder: folder, group: group) }
-
-    it 'on update' do
-      new_resource.run_callbacks :update
-      expect(expired_resource.reload.archived_at).to_not be_nil
-    end
-
-    it 'on destroy' do 
-      new_resource.run_callbacks :destroy 
-      expect(expired_resource.reload.archived_at).to_not be_nil
-    end
-
-    it 'on create' do 
-      fresh_resource = build(:resource, folder: folder, group: group)
-      fresh_resource.run_callbacks :create 
-      expect(expired_resource.reload.archived_at).to_not be_nil
-    end
-  end
-
   describe '#extension' do
     it "returns the file's lowercase extension without the dot" do
       resource = build_stubbed(:resource)
@@ -137,7 +111,28 @@ RSpec.describe Resource, :type => :model do
       expect(resource.expiration_time).to eq(Resource::EXPIRATION_TIME)
     end
   end
-  
+
+  describe 'elasticsearch methods' do
+    context '#as_indexed_json' do
+      let!(:object) { create(:resource) }
+
+      it 'serializes the correct fields with the correct data' do
+        hash = {
+          'created_at' => object.created_at.beginning_of_hour,
+          'owner_id' => object.owner_id,
+          'folder' => {
+            'id' => object.folder_id,
+            'group_id' => object.folder.group_id,
+            'group' => {
+              'enterprise_id' => object.folder.group.enterprise_id
+            }
+          }
+        }
+        expect(object.as_indexed_json).to eq(hash)
+      end
+    end
+  end
+
   describe "#destroy_callbacks" do
     it "removes the child objects" do
       resource = create(:resource)
@@ -149,12 +144,12 @@ RSpec.describe Resource, :type => :model do
       expect{Tag.find(tag.id)}.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
-  
+
   describe '#total_views' do
     it "returns 10" do
         resource = create(:resource)
         create_list(:view, 10, :resource => resource)
-        
+
         expect(resource.total_views).to eq(10)
     end
   end

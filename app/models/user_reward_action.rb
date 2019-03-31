@@ -1,4 +1,4 @@
-class UserRewardAction < ActiveRecord::Base
+class UserRewardAction < BaseClass
   enum operation: [:add, :del]
 
   belongs_to :user

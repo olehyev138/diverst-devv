@@ -51,7 +51,7 @@ RSpec.describe Field do
   describe 'when describing callbacks' do
     let!(:field){ create(:field, enterprise: create(:enterprise)) }
 
-    it "should reindex users on elasticsearch after update" do
+    it "should reindex users on elasticsearch after update", skip: true do
       TestAfterCommit.with_commits(true) do
         expect(RebuildElasticsearchIndexJob).to receive(:perform_later).with(
           model_name: 'User',
@@ -61,7 +61,7 @@ RSpec.describe Field do
       end
     end
 
-    it "should reindex users on elasticsearch after destroy" do
+    it "should reindex users on elasticsearch after destroy", skip: true do
       TestAfterCommit.with_commits(true) do
         expect(RebuildElasticsearchIndexJob).to receive(:perform_later).with(
           model_name: 'User',
@@ -78,14 +78,14 @@ RSpec.describe Field do
       expect(field.string_value("test")).to eq("test")
     end
   end
-  
+
   describe "#destroy_callbacks" do
     it "removes the child objects" do
       field = create(:field)
       yammer_field_mapping = create(:yammer_field_mapping, :diverst_field => field)
-      
+
       field.destroy!
-      
+
       expect{Field.find(field.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{YammerFieldMapping.find(yammer_field_mapping.id)}.to raise_error(ActiveRecord::RecordNotFound)
     end

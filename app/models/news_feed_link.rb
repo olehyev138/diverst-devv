@@ -1,4 +1,4 @@
-class NewsFeedLink < ActiveRecord::Base
+class NewsFeedLink < BaseClass
     include PublicActivity::Common
 
     belongs_to :news_feed
@@ -13,7 +13,7 @@ class NewsFeedLink < ActiveRecord::Base
 
     has_many :likes, dependent: :destroy
     has_many :views, dependent: :destroy
-    
+
     delegate :group,    :to => :news_feed
     delegate :segment,  :to => :news_feed_link_segment, :allow_nil => true
 
@@ -21,7 +21,7 @@ class NewsFeedLink < ActiveRecord::Base
     scope :not_approved,    -> { where(approved: false).order(created_at: :desc) }
     scope :combined_news_links, -> (news_feed_id){joins("LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id").where("shared_news_feed_links.news_feed_id = #{news_feed_id} OR news_feed_links.news_feed_id = #{news_feed_id} AND news_feed_links.approved = 1").distinct}
     scope :combined_news_links_with_segments, -> (news_feed_id, segment_ids){includes(:social_link, :news_link, :group_message).joins("LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id WHERE shared_news_feed_links.news_feed_id = #{news_feed_id} OR news_feed_links.news_feed_id = #{news_feed_id} AND approved = 1 OR news_feed_link_segments.segment_id IS NULL OR news_feed_link_segments.segment_id IN (#{ segment_ids.join(",") })").distinct}
-    
+
     validates :news_feed_id,    presence: true
 
     after_create :approve_link
@@ -42,7 +42,7 @@ class NewsFeedLink < ActiveRecord::Base
         return news_link if news_link
         return social_link if social_link
     end
-    
+
     # View Count methods
     def increment_view(user)
       view = views.find_or_create_by(user_id: user.id, enterprise_id: user.enterprise_id)
@@ -63,11 +63,4 @@ class NewsFeedLink < ActiveRecord::Base
         view.save
       end
     end
-
-    def self.archive_expired_news
-      expiry_date = DateTime.now.months_ago(6)
-      news = NewsFeedLink.where("created_at < ?", expiry_date).where(archived_at: nil)
-
-      news.update_all(archived_at: DateTime.now) if news.any?
-    end    
 end

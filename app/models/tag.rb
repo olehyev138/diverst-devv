@@ -1,4 +1,4 @@
-class Tag < ActiveRecord::Base
+class Tag < BaseClass
 
   belongs_to :resource
   

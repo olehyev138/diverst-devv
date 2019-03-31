@@ -1,4 +1,4 @@
-class SocialLink < ActiveRecord::Base
+class SocialLink < BaseClass
     include PublicActivity::Common
 
     self.table_name = 'social_network_posts'

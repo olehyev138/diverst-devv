@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Groups::GroupMessagesController, type: :controller do
     include ActiveJob::TestHelper
-    
+
     let(:user) { create :user }
     let(:group){ create(:group, enterprise: user.enterprise) }
     let(:group_message){ create(:group_message, group: group, subject: "Test", owner: user, created_at: Time.now) }

@@ -1,4 +1,4 @@
-class InitiativeExpense < ActiveRecord::Base
+class InitiativeExpense < BaseClass
   belongs_to :initiative
   belongs_to :owner, class_name: "User"
 

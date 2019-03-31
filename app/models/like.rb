@@ -1,4 +1,4 @@
-class Like < ActiveRecord::Base
+class Like < BaseClass
   belongs_to :enterprise
   belongs_to :user
 

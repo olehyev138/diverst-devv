@@ -22,7 +22,7 @@ class CacheSegmentMembersJob < ActiveJob::Base
     end
 
     members_to_add.each do |member|
-      segment.members << member
+      segment.members << member if !segment.members.where(:id => member.id).exists?
       begin
         member.__elasticsearch__.update_document # Update user in Elasticsearch to reflect their new segment
       rescue

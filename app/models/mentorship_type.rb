@@ -1,4 +1,4 @@
-class MentorshipType < ActiveRecord::Base
+class MentorshipType < BaseClass
     # associations
     belongs_to  :user
     belongs_to  :mentoring_type

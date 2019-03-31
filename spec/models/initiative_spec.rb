@@ -278,6 +278,29 @@ RSpec.describe Initiative, type: :model do
     end
   end
 
+  describe 'elasticsearch methods' do
+    context '#as_indexed_json' do
+      let!(:object) { create(:initiative) }
+
+      it 'serializes the correct fields with the correct data' do
+        hash = {
+          'name' => object.name,
+          'created_at' => object.created_at.beginning_of_hour,
+          'pillar' => {
+            'outcome' => {
+              'group' => {
+                'enterprise_id' => object.pillar.outcome.group.enterprise_id,
+                'name' => object.pillar.outcome.group.name,
+                'parent_id' => object.pillar.outcome.group.parent_id
+              }
+            }
+          }
+        }
+        expect(object.as_indexed_json).to eq(hash)
+      end
+    end
+  end
+
   describe "#destroy_callbacks" do
     it "removes the child objects" do
       initiative = create(:initiative)
@@ -307,6 +330,15 @@ RSpec.describe Initiative, type: :model do
       expect{InitiativeInvitee.find(initiative_invitee.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{InitiativeComment.find(initiative_comment.id)}.to raise_error(ActiveRecord::RecordNotFound)
       expect{InitiativeUser.find(initiative_user.id)}.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
+  describe '#unfinished_expenses?' do 
+    let!(:initiative) { create(:initiative, start: DateTime.now.days_ago(3), end: DateTime.now.days_ago(1), 
+                                finished_expenses: false) }
+
+    it 'returns true for #unfinished_expenses?' do 
+      expect(initiative.unfinished_expenses?).to eq true
     end
   end
 end
