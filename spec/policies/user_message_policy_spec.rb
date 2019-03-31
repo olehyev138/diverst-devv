@@ -6,7 +6,7 @@ RSpec.describe UserMessagePolicy, :type => :policy do
   let(:no_access) { create(:user) }
   let(:group_message){ create(:group_message, author: user) }
 
-  subject { described_class }
+  subject { UserMessagePolicy.new(user, group_message) }
 
   before {
     user.policy_group.manage_all = false
@@ -19,22 +19,26 @@ RSpec.describe UserMessagePolicy, :type => :policy do
     no_access.policy_group.save!
   }
 
-  permissions :index?, :create?, :manage?, :update? do
-    it 'allows access to user with correct permissions' do
-      expect(subject).to permit(user, group_message)
+  describe 'for users with access' do 
+    context 'with correct permissions for managers' do 
+      it { is_expected.to permit_actions([:index, :create, :show, :update, :destroy]) }
     end
 
-    it 'denies access to user with incorrect permissions' do
-      expect(subject).to_not permit(no_access, group_message)
+    context 'when group_messages_index is false' do 
+      before { user.policy_group.update group_messages_index: false }
+      it { is_expected.to permit_actions([:index, :show]) }
     end
-  end
 
-  permissions :index?, :create?, :update? do
-    it 'allows access to non managers' do
-      user.policy_group.group_messages_manage = false
-
-      expect(subject).to permit(user, group_message)
+    context 'allow access to non-managers with certain permissions' do 
+      before { user.policy_group.update group_messages_manage: false }
+      it { is_expected.to permit_actions([:index, :create, :update]) }
     end
   end
 
+  describe 'for users with no access' do 
+    let!(:user) { no_access }
+    let!(:group_message) { create(:group_message, author: create(:user)) }
+
+    it { is_expected.to forbid_actions([:index, :create, :show, :update, :destroy]) }
+  end
 end

@@ -6,7 +6,6 @@ RSpec.describe UserPolicy, :type => :policy do
   let(:user){ create(:user, :enterprise => enterprise) }
   let(:policy_scope) { UserPolicy::Scope.new(user, User).resolve }
 
-  # subject { described_class }
   subject { UserPolicy.new(user, other_user) }
 
   before {
