@@ -32,7 +32,7 @@ RSpec.describe UserPolicy, :type => :policy do
     context 'when users_index is  false but users_manage is true' do 
       before { user.policy_group.update(users_index: false, users_manage: true, manage_all: false) }
 
-      it { is_expected.to permit_actions([:update, :destroy]) }
+      it { is_expected.to permit_actions([:update, :destroy, :create, :resend_invitation]) }
     end
 
     context 'when users_index, users_manage, manage_all are false but record is the same as current user' do 
@@ -52,6 +52,6 @@ RSpec.describe UserPolicy, :type => :policy do
     end
 
     let!(:other_user) { create(:user, enterprise: enterprise) }
-    it { is_expected.to forbid_actions([:index, :new, :create, :update, :destroy]) } 
+    it { is_expected.to forbid_actions([:index, :new, :create, :update, :destroy, :resend_invitation]) } 
   end
 end
