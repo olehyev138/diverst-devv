@@ -4,16 +4,12 @@ RSpec.describe UserPolicy, :type => :policy do
 
   let(:enterprise) {create(:enterprise)}
   let(:user){ create(:user, :enterprise => enterprise) }
-  let(:enterprise_2) {create(:enterprise)}
-  let(:no_access) { create(:user, :enterprise => enterprise_2) }
   let(:policy_scope) { UserPolicy::Scope.new(user, User).resolve }
 
-  subject { described_class }
+  # subject { described_class }
+  subject { UserPolicy.new(user, other_user) }
 
   before {
-    no_access.policy_group.manage_all = false
-    no_access.policy_group.save!
-
     user.policy_group.manage_all = false
     user.policy_group.save!
   }
@@ -24,142 +20,38 @@ RSpec.describe UserPolicy, :type => :policy do
     end
   end
 
-  permissions :index? do
-    it "allows access when users_index is true" do
-      user.policy_group.users_index = true
-      user.policy_group.users_manage = false
-      user.policy_group.save!
+  describe 'for users with access' do 
+    let!(:other_user) { create(:user, enterprise: enterprise) }
+    
+    context 'when users_index is true but users_manage is false' do
+      before { user.policy_group.update(users_index: true, users_manage: false, manage_all: false) }
 
-      expect(subject).to permit(user)
+      it { is_expected.to permit_actions([:index, :show]) }
     end
 
-    it "allows access when users_manage is true but users_index is false" do
-      user.policy_group.users_index = false
-      user.policy_group.users_manage = true
-      user.policy_group.save!
+    context 'when users_index is  false but users_manage is true' do 
+      before { user.policy_group.update(users_index: false, users_manage: true, manage_all: false) }
 
-      expect(subject).to permit(user)
+      it { is_expected.to permit_actions([:update, :destroy]) }
     end
 
-    it "doesn't allow access when users_index/manage is false" do
-      user.policy_group.users_index = false
-      user.policy_group.users_manage = false
-      user.policy_group.save!
+    context 'when users_index, users_manage, manage_all are false but record is the same as current user' do 
+      before do
+        user.policy_group.update(users_index: false, users_manage: false, manage_all: false) 
+      end
 
-      expect(subject).to_not permit(user)
-    end
-  end
+      let!(:other_user) { user }
 
-  permissions :create? do
-    it "doesn't allow access when users_manage is false" do
-      user.policy_group.users_index = false
-      user.policy_group.users_manage = false
-      user.policy_group.save!
-
-      expect(subject).to_not permit(user)
-    end
-
-    it "doesn't allow access when users_manage is false but users_index is true" do
-      user.policy_group.users_index = true
-      user.policy_group.users_manage = false
-      user.policy_group.save!
-
-      expect(subject).to_not permit(user)
-    end
-
-    it "allows access when users_manage is true but users_index is false" do
-      user.policy_group.users_index = false
-      user.policy_group.users_manage = true
-      user.policy_group.save!
-
-      expect(subject).to permit(user)
+      it { is_expected.to permit_action(:update) }
     end
   end
 
-  permissions :update? do
-    it "doesn't allow access when users_manage is false" do
-      user.policy_group.users_index = false
-      user.policy_group.users_manage = false
-      user.policy_group.save!
-
-      expect(subject).to_not permit(user)
+  describe 'for users with no access' do 
+    before do 
+      user.policy_group = create(:policy_group, :no_permissions)
     end
 
-    it "doesn't allow access when users_manage is false but users_index is true" do
-      user.policy_group.users_index = true
-      user.policy_group.users_manage = false
-      user.policy_group.save!
-
-      expect(subject).to_not permit(user)
-    end
-
-    it "allows access when users_manage is true but users_index is false" do
-      user.policy_group.users_index = false
-      user.policy_group.users_manage = true
-      user.policy_group.save!
-
-      expect(subject).to permit(user)
-    end
-  end
-
-  permissions :destroy? do
-    it "doesn't allow access when users_manage is false" do
-      user.policy_group.users_index = false
-      user.policy_group.users_manage = false
-      user.policy_group.save!
-
-      expect(subject).to_not permit(user)
-    end
-
-    it "doesn't allow access when users_manage is false but users_index is true" do
-      user.policy_group.users_index = true
-      user.policy_group.users_manage = false
-      user.policy_group.save!
-
-      expect(subject).to_not permit(user)
-    end
-
-    it "allows access when users_manage is true but users_index is false" do
-      user.policy_group.users_index = false
-      user.policy_group.users_manage = true
-      user.policy_group.save!
-
-      expect(subject).to permit(user)
-    end
-
-    it 'allows access user to be deleted if not current user' do
-      other_user = create(:user)
-      user.policy_group.users_index = false
-      user.policy_group.users_manage = true
-      user.policy_group.save!
-
-      expect(subject).to permit(user, other_user)
-    end
-  end
-
-  permissions :resend_invitation? do
-    it "doesn't allow access when users_manage is false" do
-      user.policy_group.users_index = false
-      user.policy_group.users_manage = false
-      user.policy_group.save!
-
-      expect(subject).to_not permit(user)
-    end
-
-    it "doesn't allow access when users_manage is false but users_index is true" do
-      user.policy_group.users_index = true
-      user.policy_group.users_manage = false
-      user.policy_group.save!
-
-      expect(subject).to_not permit(user)
-    end
-
-    it "allows access when users_manage is true but users_index is false" do
-      user.policy_group.users_index = false
-      user.policy_group.users_manage = true
-      user.policy_group.save!
-
-      expect(subject).to permit(user)
-    end
+    let!(:other_user) { create(:user, enterprise: enterprise) }
+    it { is_expected.to forbid_actions([:index, :new, :create, :update, :destroy]) } 
   end
 end
