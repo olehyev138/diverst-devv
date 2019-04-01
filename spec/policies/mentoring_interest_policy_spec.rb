@@ -5,7 +5,7 @@ RSpec.describe MentoringInterestPolicy, :type => :policy do
   let(:no_access) { create(:user) }
   let(:mentoring_interest){ create(:mentoring_interest) }
 
-  subject { described_class }
+  subject { MentoringInterestPolicy.new(user, mentoring_interest) }
 
   before {
     user.policy_group.manage_all = false
@@ -16,13 +16,12 @@ RSpec.describe MentoringInterestPolicy, :type => :policy do
     no_access.policy_group.save!
   }
 
-  permissions :index? do
-    it 'allows access to user with correct permissions' do
-      expect(subject).to permit(user, mentoring_interest)
-    end
+  describe 'for users with access' do 
+    it { is_expected.to permit_actions([:index, :edit, :create, :update, :destroy]) }
+  end  
 
-    it 'denies access to user with incorrect permissions' do
-      expect(subject).to_not permit(no_access, mentoring_interest)
-    end
+  describe 'for users with no access' do  
+    let!(:user) { no_access }
+    it { is_expected.to forbid_actions([:index, :edit, :create, :update, :destroy]) }
   end
 end
