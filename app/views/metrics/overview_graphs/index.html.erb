@@ -1,6 +1,3 @@
-<div class="content__header">
-</div>
-
 <div class="content__main">
   <div class="card">
     <div class="card__section">
@@ -40,7 +37,10 @@
 
   <div class="card">
     <div class="card__section">
-      <div class="card-title" style="margin-bottom: 10px;"><h1>Users</h1></div>
+      <div class="card-title" style="margin-bottom: 10px;">
+        <h1 style="display: inline-block;">Users</h1>
+        <span style="margin-left: 950px;"><%= link_to('See more...', metrics_users_path) %></span>
+      </div>
       <div class="media-object">
         <div class="flex-row flex-row--middle">
           <div class="flex-row__cell flex-row__cell--grow">
@@ -80,7 +80,8 @@
 
   <div class="card">
     <div class="card__section">
-      <div class="card-title" style="margin-bottom: 10px;"><h1><%= c_t(:erg).capitalize.pluralize%></h1></div>
+      <h1 style="display: inline-block;"><%= c_t(:erg).capitalize.pluralize%></h1>
+      <span style="margin-left: 950px;"><%= link_to('See more...', metrics_users_path) %></span>
       <div class="media-object">
         <div class="flex-row flex-row--middle">
           <div class="flex-row__cell flex-row__cell--grow">

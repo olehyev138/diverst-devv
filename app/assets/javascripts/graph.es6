@@ -228,14 +228,15 @@ class Graph {
         var series = this.data.series[0]['values'];
         var chart = null;
 
-        console.log(series);
-
         nv.addGraph(function() {
             chart = nv.models.pieChart()
                 .color(graphObject.colors)
                 .margin({"right": 50})
                 .x(function (d) { return d.x; }) // set the json keys for x & y values
-                .y(function (d) { return d.y; });
+                .y(function (d) { return d.y; })
+                .labelsOutside(true)
+                .labelThreshold(.07)
+                .showLabels(true);
 
             d3.select(svg)
                 .datum(series)

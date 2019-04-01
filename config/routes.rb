@@ -564,6 +564,11 @@ Rails.application.routes.draw do
     resource :groups, controller: :group_graphs, only: [:index] do
       get 'index'
     end
+
+    resource :users, controller: :user_graphs, only: [:index] do
+      get 'index'
+      get 'users_per_group'
+    end
   end
 
   resources :metrics_dashboards do

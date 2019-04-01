@@ -23,9 +23,6 @@ class Metrics::OverviewGraphsController < ApplicationController
 
   def user_growth
     respond_to do |format|
-      format.html {
-        head :ok
-      }
       format.json {
         render json: @graph.user_growth(params[:input])
       }

@@ -3,6 +3,18 @@ module Metrics
     extend ActiveSupport::Concern
     include Util
 
+    def users_per_group()
+      graph = UserGroup.get_graph
+      graph.set_enterprise_filter(field: 'group.enterprise_id', value: enterprise_id)
+      graph.formatter.type = 'pie'
+      graph.formatter.title = "User population per group"
+
+      graph.query = graph.query.terms_agg(field: 'group.name')
+      graph.drilldown_graph(parent_field: 'group.parent.name')
+
+      graph.build
+    end
+
     def user_growth(date_range_str)
       date_range = parse_date_range(date_range_str)
 
