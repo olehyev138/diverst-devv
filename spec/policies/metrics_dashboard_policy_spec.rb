@@ -9,7 +9,7 @@ RSpec.describe MetricsDashboardPolicy, :type => :policy do
   let(:metrics_dashboards){ create_list(:metrics_dashboards, 10, enterprise: enterprise2) }
   let(:policy_scope) { MetricsDashboardPolicy::Scope.new(user, MetricsDashboard).resolve }
 
-  subject { described_class }
+  subject { MetricsDashboardPolicy.new(user, metrics_dashboard) }
 
   before {
     no_access.policy_group.manage_all = false
@@ -27,237 +27,68 @@ RSpec.describe MetricsDashboardPolicy, :type => :policy do
     end
   end
 
-  context "when manage_all is false" do
-    it "ensure manage_all is false" do
-      expect(user.policy_group.manage_all).to be(false)
-    end
-
-    permissions :index? do
-      context "when subject metrics_dashboards_index is true for user and false for no_access" do
-        it "allows access" do
-          expect(subject).to permit(user, metrics_dashboard)
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, metrics_dashboard)
-        end
+  describe 'for users with access' do 
+    describe 'when manage_all is false' do 
+      it { is_expected.to permit_actions([:index, :show, :edit, :new, :create, :update, :destroy]) }
+      
+      context 'when metrics_dashboards_index is true and metrics_dashboards_create is false' do 
+        before { user.policy_group.update metrics_dashboards_index: true, metrics_dashboards_create: false }
+        it { is_expected.to permit_actions([:index, :show, :edit, :update, :destroy]) }
       end
 
-      context "when subject metrics_dashboards_index is false but metrics_dashboards_create is true for user and false for no_access" do
-        it "allows access" do
-
-          user.policy_group.campaigns_index = false
-          user.policy_group.save!
-
-          expect(subject).to permit(user, metrics_dashboard)
+      context 'when metrics_dashboards_index is true and metrics_dashboards_create is false, and current user IS NOT owner' do 
+        before do 
+          metrics_dashboard.owner = create(:user)
+          user.policy_group.update metrics_dashboards_index: true, metrics_dashboards_create: false
         end
 
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, metrics_dashboard)
-        end
-      end
-    end
-
-    permissions :show? do
-      context "when subject metrics_dashboards_create is true for user and false for no_access" do
-        it "allows access" do
-          expect(subject).to permit(user, metrics_dashboard)
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, metrics_dashboard)
-        end
+        it { is_expected.to permit_action(:index) }
       end
 
-      context "when subject metrics_dashboards_create is false but metrics_dashboards_create is true for user and false for no_access" do
-        it "allows access" do
-
-          user.policy_group.metrics_dashboards_create = false
-          user.policy_group.save!
-
-          expect(subject).to permit(user, metrics_dashboard)
+      context 'when metrics_dashboards_index and metrics_dashboards_create are false, and #is_user_shared?(user) returns true but current user IS NOT owner' do 
+        before do 
+          metrics_dashboard.owner = create(:user)
+          create(:shared_metrics_dashboard, user_id: user.id, metrics_dashboard_id: metrics_dashboard.id)
+          user.policy_group.update metrics_dashboards_index: false, metrics_dashboards_create: false
         end
 
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, metrics_dashboard)
+        it { is_expected.to permit_actions([:show, :destroy]) }
+      end
+
+      context 'when metrics_dashboards_index and metrics_dashboards_create are false, and #is_user_shared?(user) returns false but current user IS owner' do
+        before { user.policy_group.update metrics_dashboards_index: false, metrics_dashboards_create: false }
+        it { is_expected.to permit_actions([:show, :update, :edit, :update]) }
+      end
+
+      context 'when metrics_dashboards_create is true and metrics_dashboards_index is false and current user IS NOT owner' do 
+        before do 
+          metrics_dashboard.owner = create(:user)
+          user.policy_group.update metrics_dashboards_create: true, metrics_dashboards_index: false
         end
+
+        it { is_expected.to permit_actions([:index, :new]) }
       end
     end
 
-    permissions :edit? do
-      context "when subject metrics_dashboards_create is true for user and false for no_access" do
-        it "allows access" do
-          expect(subject).to permit(user, metrics_dashboard)
+    describe 'when manage_all is true' do 
+      before { user.policy_group.update manage_all: true }
+      it { is_expected.to permit_actions([:index, :show, :new, :edit, :update, :destroy]) }
+
+      context 'when metrics_dashboards_index is false and metrics_dashboards_create is false and current user IS NOT owner' do 
+        before do 
+          metrics_dashboard.owner = create(:user)
+          user.policy_group.update metrics_dashboards_index: false, metrics_dashboards_create: false
         end
 
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, metrics_dashboard)
-        end
-      end
-
-      context "when subject metrics_dashboards_create is false but metrics_dashboards_create is true for user and false for no_access" do
-        it "allows access" do
-
-          user.policy_group.metrics_dashboards_create = false
-          user.policy_group.save!
-
-          expect(subject).to permit(user, metrics_dashboard)
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, metrics_dashboard)
-        end
+        it { is_expected.to permit_actions([:index, :create, :new, :edit, :update, :destroy]) }
       end
     end
+  end  
 
-    permissions :new? do
-      context "when subject metrics_dashboards_create is true for user and false for no_access" do
-        it "allows access" do
-          expect(subject).to permit(user, metrics_dashboard)
-        end
+  describe 'for users with no access' do 
+    before { metrics_dashboard.owner = create(:user) }
+    let!(:user) { no_access }
 
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, metrics_dashboard)
-        end
-      end
-
-      context "when subject metrics_dashboards_create is false for user and false for no_access" do
-        it "allows access" do
-
-          user.policy_group.metrics_dashboards_create = false
-          user.policy_group.save!
-
-          expect(subject).to_not permit(user, metrics_dashboard)
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, metrics_dashboard)
-        end
-      end
-    end
-
-    permissions :create? do
-      context "when subject metrics_dashboards_create is true for user and false for no_access" do
-        it "allows access" do
-          expect(subject).to permit(user, metrics_dashboard)
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, metrics_dashboard)
-        end
-      end
-
-      context "when subject metrics_dashboards_create is false for user and false for no_access" do
-        it "allows access" do
-
-          user.policy_group.metrics_dashboards_create = false
-          user.policy_group.save!
-
-          expect(subject).to_not permit(user, metrics_dashboard)
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, metrics_dashboard)
-        end
-      end
-    end
-
-    permissions :update? do
-      context "when subject metrics_dashboards_create is true for user and false for no_access" do
-        it "allows access" do
-          expect(subject).to permit(user, metrics_dashboard)
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, metrics_dashboard)
-        end
-      end
-    end
-
-    permissions :destroy? do
-      context "when subject metrics_dashboards_create is true for user and false for no_access" do
-        it "allows access" do
-          expect(subject).to permit(user, metrics_dashboard)
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, metrics_dashboard)
-        end
-      end
-    end
-  end
-
-  context "when manage_all is true" do
-    before {
-      user.policy_group.manage_all = true
-      user.policy_group.metrics_dashboards_index = false
-      user.policy_group.metrics_dashboards_create = false
-      user.policy_group.save!
-      metrics_dashboard.owner_id = nil
-      metrics_dashboard.save!
-    }
-    it "ensure manage_all is true" do
-      expect(user.policy_group.manage_all).to be(true)
-    end
-
-    permissions :index? do
-      context "when subject metrics_dashboards_index is false for user and false for no_access" do
-        it "allows access" do
-          expect(subject).to permit(user, metrics_dashboard)
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, metrics_dashboard)
-        end
-      end
-    end
-
-    permissions :new? do
-      context "when subject metrics_dashboards_create is false for user and false for no_access" do
-        it "allows access" do
-          expect(subject).to permit(user, metrics_dashboard)
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, metrics_dashboard)
-        end
-      end
-    end
-
-    permissions :create? do
-      context "when subject metrics_dashboards_create is true for user and false for no_access" do
-        it "allows access" do
-          expect(subject).to permit(user, metrics_dashboard)
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, metrics_dashboard)
-        end
-      end
-    end
-
-    permissions :update? do
-      context "when subject metrics_dashboards_create is true for user and false for no_access" do
-        it "allows access" do
-          expect(subject).to permit(user, metrics_dashboard)
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, metrics_dashboard)
-        end
-      end
-    end
-
-    permissions :destroy? do
-      context "when subject metrics_dashboards_create is true for user and false for no_access" do
-        it "allows access" do
-          expect(subject).to permit(user, metrics_dashboard)
-        end
-
-        it "doesn't allow access" do
-          expect(subject).to_not permit(no_access, metrics_dashboard)
-        end
-      end
-    end
+    it { is_expected.to forbid_actions([:index, :create, :new, :edit, :update, :destroy]) }
   end
 end
