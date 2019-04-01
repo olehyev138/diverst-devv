@@ -13,7 +13,7 @@ RSpec.describe InitiativeUpdatePolicy, :type => :policy do
   let(:initiative_update){ create(:initiative_update, initiative: initiative, owner: user) }
   let(:policy_scope) { InitiativeUpdatePolicy::Scope.new(user, InitiativeUpdate).resolve }
 
-  subject { described_class }
+  subject { described_class.new(user, initiative_update) }
 
   before {
     user.policy_group.manage_all = false
@@ -25,24 +25,6 @@ RSpec.describe InitiativeUpdatePolicy, :type => :policy do
     no_access.policy_group.save!
   }
 
-  permissions :index?, :create?, :update?, :destroy? do
-    it 'allows access to a user with correct permissions' do
-      expect(subject).to permit(user, initiative_update)
-    end
-
-    it 'denies access to a user without correct permissions' do
-      expect(subject).to_not permit(no_access, initiative_update)
-    end
-  end
-
-  permissions :update?, :destroy? do
-    it 'allows normal users to update & destroy' do
-      user.policy_group.initiatives_manage = false
-
-      expect(subject).to permit(user, initiative_update)
-    end
-  end
-
   permissions ".scope" do
     before { initiative_update }
 
@@ -51,4 +33,53 @@ RSpec.describe InitiativeUpdatePolicy, :type => :policy do
     end
   end
 
+  describe 'for users with access' do 
+    context 'when manage_all is false' do 
+      context 'when ONLY initiatives_index is true and current user IS NOT owner' do 
+        before do 
+          initiative_update.owner = create(:user)
+          user.policy_group.update initiatives_index: true, initiatives_manage: false
+        end
+
+        it { is_expected.to permit_action(:index) }
+      end 
+
+      context 'when ONLY initiatives_manage is true and current user IS NOT owner' do 
+        before do
+          initiative_update.owner = create(:user)
+          user.policy_group.update initiatives_manage: true, initiatives_index: false
+        end
+
+        it { is_expected.to permit_actions([:index, :create, :update, :destroy]) }
+      end
+
+      context 'when initiatives_index and initiatives_manage are false, but current user IS owner' do 
+        before { user.policy_group.update initiatives_manage: false, initiatives_index: false }
+        it { is_expected.to permit_actions([:update, :destroy]) }
+      end
+    end
+
+    context 'when manage_all is true' do 
+      before { user.policy_group.update manage_all: true }
+
+      context 'initiatives_index is true and initiatives_manage is false, but current user IS NOT owner' do 
+        before do
+          initiative_update.owner = create(:user)
+          user.policy_group.update initiatives_index: true, initiatives_manage: false
+        end
+
+        it { is_expected.to permit_action(:index) }
+      end
+
+      context 'when initiatives_index and initiatives_manage are false, but current user IS owner' do 
+        before { user.policy_group.update initiatives_index: false, initiatives_manage: false }
+        it { is_expected.to permit_actions([:update, :destroy]) }
+      end
+    end
+  end
+
+  describe 'for users with no access' do 
+    before { initiative_update.owner = create(:user) }
+    let!(:user) { no_access }
+  end
 end
