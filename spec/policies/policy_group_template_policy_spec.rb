@@ -6,7 +6,7 @@ RSpec.describe PolicyGroupTemplatePolicy, :type => :policy do
   let(:no_access) { create(:user) }
   let(:policy_group_template){ create(:policy_group_template) }
 
-  subject { described_class }
+  subject { PolicyGroupTemplatePolicy.new(user, policy_group_template) }
 
   before {
     user.policy_group.manage_all = false
@@ -17,14 +17,19 @@ RSpec.describe PolicyGroupTemplatePolicy, :type => :policy do
     no_access.policy_group.save!
   }
 
-  permissions :index?, :create?, :update?, :destroy? do
-    it 'allows access to user with correct permissions' do
-      expect(subject).to permit(user, policy_group_template)
+  describe 'for users with access' do 
+    context 'when manage_all is false' do 
+      it { is_expected.to permit_actions([:index, :create, :update, :destroy]) }
     end
 
-    it 'denies access to user with incorrect permissions' do
-      expect(subject).to_not permit(no_access, policy_group_template)
+    context 'when manage_all is true and permissions_manage is false' do 
+      before { user.policy_group.update permissions_manage: false, manage_all: true }
+      it { is_expected.to permit_actions([:index, :create, :update, :destroy]) }
     end
   end
 
+  describe 'for users with no access' do 
+    let!(:user) { no_access }
+    it { is_expected.to forbid_actions([:index, :create, :update, :destroy]) }
+  end
 end
