@@ -37,31 +37,36 @@
 
   <div class="card">
     <div class="card__section">
-      <div class="card-title" style="margin-bottom: 10px;">
-        <h1 style="display: inline-block;">Users</h1>
-        <span style="margin-left: 950px;"><%= link_to('See more...', metrics_users_path) %></span>
+      <div class="card-title flex-row" style="margin-bottom: 10px;">
+        <div class="flex-row__cell flex-row__cell--grow"><h1 style="display: inline-block;">Users</h1></div>
+        <div class="flex-row__cell"><span><%= link_to('See more...', metrics_users_path) %></span></div>
       </div>
-      <div class="media-object">
-        <div class="flex-row flex-row--middle">
-          <div class="flex-row__cell flex-row__cell--grow">
-            <div class="col md-5"><p><b>Total active users:</b></p></div>
-            <div class="col md-7"><p><b><%= @general_metrics[:nb_users] %></b></p></div>
+
+      <div class="row">
+        <div class="col md-4 sm-12">
+          <div class="panel panel--primary text-center">
+            <div class="panel-headline"><p><strong>Total Active Users</strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @general_metrics[:nb_users] %></b></p></div>
           </div>
         </div>
-        <div class="flex-row flex-row--middle">
-          <div class="flex-row__cell flex-row__cell--grow">
-            <div class="col md-5"><p><b>User growth percentage over last 3 months:</b></p></div>
-            <div class="col md-7"><p><b>76%</b></p></div>
+
+        <div class="col md-4 sm-12">
+          <div class="panel panel--primary text-center">
+            <div class="panel-headline"><p><strong>User Growth (3 months)</strong></p></div>
+            <div class="panel-data"><p><b class="accent">76%</b></p></div>
           </div>
         </div>
-        <div class="flex-row flex-row--middle">
-          <div class="flex-row__cell flex-row__cell--grow">
-            <div class="col md-5"><p><b>New <%= c_t(:erg).downcase %> memberships over last 6 months:</b></p></div>
-            <div class="col md-7"><p><b>132</b></p></div>
+
+        <div class="col md-4 sm-12">
+          <div class="panel panel--primary text-center">
+            <div class="panel-headline"><p><strong><%= c_t(:erg).capitalize %> Memberships (6 months)</strong></p></div>
+            <div class="panel-data"><p><b class="accent">132</b></p></div>
           </div>
         </div>
       </div>
-      <div class="media-object">
+      <br>
+
+      <div class="panel">
         <div class="flex-row flex-row--middle">
           <div class="flex-row__cell flex-row__cell--grow">
             <h4>User Growth</h4>
@@ -80,23 +85,29 @@
 
   <div class="card">
     <div class="card__section">
-      <h1 style="display: inline-block;"><%= c_t(:erg).capitalize.pluralize%></h1>
-      <span style="margin-left: 950px;"><%= link_to('See more...', metrics_users_path) %></span>
-      <div class="media-object">
-        <div class="flex-row flex-row--middle">
-          <div class="flex-row__cell flex-row__cell--grow">
-            <div class="col md-5"><p><b>Total groups:</b></p></div>
-            <div class="col md-7"><p><b><%= @general_metrics[:nb_ergs] %></b></p></div>
+      <div class="card-title flex-row" style="margin-bottom: 10px;">
+        <div class="flex-row__cell flex-row__cell--grow"><h1 style="display: inline-block;"><%= c_t(:erg).capitalize.pluralize %></h1></div>
+        <div class="flex-row__cell"><span><%= link_to('See more...', metrics_groups_path) %></span></div>
+      </div>
+
+      <div class="row">
+        <div class="col md-6 sm-12">
+          <div class="panel panel--primary text-center">
+            <div class="panel-headline"><p><strong>Total <%= c_t(:erg).capitalize.pluralize %></strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @general_metrics[:nb_ergs] %></b></p></div>
           </div>
         </div>
-        <div class="flex-row flex-row--middle">
-          <div class="flex-row__cell flex-row__cell--grow">
-            <div class="col md-5"><p><b>Average number of members per <%= c_t(:erg).downcase %>:</b></p></div>
-            <div class="col md-7"><p><b><%= @general_metrics[:average_nb_members_per_group] %></b></p></div>
+
+        <div class="col md-6 sm-12">
+          <div class="panel panel--primary text-center">
+            <div class="panel-headline"><p><strong>Average # of Members</strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @general_metrics[:average_nb_members_per_group] %></b></p></div>
           </div>
         </div>
       </div>
-      <div class="media-object">
+      <br>
+
+      <div class="panel">
         <div class="flex-row flex-row--middle">
           <div class="flex-row__cell flex-row__cell--grow">
             <h4><%= c_t(:erg).capitalize %> Growth</h4>
