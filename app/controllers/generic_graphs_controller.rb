@@ -357,6 +357,8 @@ class GenericGraphsController < ApplicationController
   end
 
   def growth_of_resources
+    date_range = parse_date_range(params[:input])
+
     respond_to do |format|
       format.json {
         graph = Resource.get_graph
@@ -366,15 +368,21 @@ class GenericGraphsController < ApplicationController
         graph.formatter.title = 'Growth of Resources'
 
         gen_parser = graph.formatter.general_parser
+        gen_parser.parse_chain = gen_parser.date_range
         gen_parser.key = :doc_count
-        graph.formatter.y_parser.extractor = -> (_, args) {
+
+        y_parser = graph.formatter.y_parser
+        y_parser.parse_chain = y_parser.date_range
+        y_parser.extractor = -> (_, args) {
           args[:total]
         }
 
         current_user.enterprise.groups.each do |group|
           graph.query = graph.query
             .filter_agg(field: 'folder.group_id', value: group.id) { |q|
-            q.terms_agg(field: 'created_at', order_field: '_term', order_dir: 'asc')
+            q.terms_agg(field: 'created_at', order_field: '_term', order_dir: 'asc') { |qq|
+              qq.date_range_agg(field: 'created_at', range: date_range)
+            }
           }
 
           elements = graph.formatter.list_parser.parse_list(graph.search)
