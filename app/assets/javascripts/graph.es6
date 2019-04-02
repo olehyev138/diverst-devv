@@ -109,7 +109,6 @@ class Graph {
         var showControls = this.showControls;
 
         var data = this.data;
-        console.log(data);
         var series = data.series;
         var select_string = buildSelectString(this);
 
