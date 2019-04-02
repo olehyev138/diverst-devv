@@ -230,6 +230,7 @@
       <div class="card">
         <div class="card__section">
           <h4>Growth of groups over time</h4>
+          <%= render 'components/range_selector' %>
           <div class="card__action">
             <a href="#" class="csv-export-link hidden-xs" data-url="<%= growth_of_groups_generic_graphs_path(format: :csv) %>">Export CSV</a>
           </div>
