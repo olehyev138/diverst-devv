@@ -104,7 +104,7 @@ class MetricsDashboardsController < ApplicationController
   protected
 
   def add_shared_dashboards
-    return unless metrics_dashboard_params[:shared_user_ids]
+    return unless metrics_dashboard_params[:shared_user_ids] && @metrics_dashboard.valid?
 
     metrics_dashboard_params[:shared_user_ids].each do |user_id|
       user = User.find_by_id(user_id)
@@ -118,6 +118,8 @@ class MetricsDashboardsController < ApplicationController
   end
 
   def remove_shared_dashboards
+    return unless @metrics_dashboard.valid?
+
     unless metrics_dashboard_params[:shared_user_ids]
       @metrics_dashboard.shared_metrics_dashboards.destroy_all
       return

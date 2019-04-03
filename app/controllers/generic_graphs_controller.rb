@@ -3,15 +3,30 @@ class GenericGraphsController < ApplicationController
 
   before_action   :authenticate_user!
   before_action   :authorize_dashboards
+  before_action   :get_date_range, only: [:events_created,
+                                          :messages_sent,
+                                          :growth_of_groups,
+                                          :top_groups_by_views,
+                                          :top_folders_by_views,
+                                          :top_resources_by_views,
+                                          :top_news_by_views,
+                                          :mentoring_sessions
+                                         ]
 
   def group_population
+    date_range = parse_date_range(params[:input])
+
     respond_to do |format|
       format.json {
         graph = UserGroup.get_graph
         graph.set_enterprise_filter(field: 'group.enterprise_id', value: current_user.enterprise_id)
         graph.formatter.title = "#{c_t(:erg).capitalize} Population"
 
-        graph.query = graph.query.terms_agg(field: 'group.name')
+        graph.formatter.parser.extractors[:y] = graph.formatter.parser.date_range(key: :doc_count)
+        graph.query = graph.query.terms_agg(field: 'group.name') { |q|
+          q.date_range_agg(field: 'created_at', range: date_range)
+        }
+        
         graph.drilldown_graph(parent_field: 'group.parent.name')
 
         render json: graph.build
@@ -66,7 +81,14 @@ class GenericGraphsController < ApplicationController
         render json: graph.build
       }
       format.csv {
-        GenericGraphsEventsCreatedDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), false)
+        GenericGraphsEventsCreatedDownloadJob.perform_later(
+          current_user.id,
+          current_user.enterprise.id,
+          c_t(:erg),
+          false,
+          @from_date,
+          @to_date
+        )
         track_activity(current_user.enterprise, :export_generic_graphs_events_created)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
@@ -94,7 +116,14 @@ class GenericGraphsController < ApplicationController
         render json: graph.build
       }
       format.csv {
-        GenericGraphsMessagesSentDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), false)
+        GenericGraphsMessagesSentDownloadJob.perform_later(
+          current_user.id,
+          current_user.enterprise.id,
+          c_t(:erg),
+          false,
+          @from_date,
+          @to_date
+        )
         track_activity(current_user.enterprise, :export_generic_graphs_messages_sent)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
@@ -123,7 +152,14 @@ class GenericGraphsController < ApplicationController
         render json: graph.build
       }
       format.csv {
-        GenericGraphsTopGroupsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg), false)
+        GenericGraphsTopGroupsByViewsDownloadJob.perform_later(
+          current_user.id,
+          current_user.enterprise.id,
+          c_t(:erg),
+          false,
+          @from_date,
+          @to_date
+          )
         track_activity(current_user.enterprise, :export_generic_graphs_top_groups_by_views)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
@@ -158,7 +194,12 @@ class GenericGraphsController < ApplicationController
         render json: graph.build
       }
       format.csv {
-        GenericGraphsTopFoldersByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, false)
+        GenericGraphsTopFoldersByViewsDownloadJob.perform_later(
+          current_user.id,
+          current_user.enterprise.id,
+          false,
+          @from_date,
+          @to_date)
         track_activity(current_user.enterprise, :export_generic_graphs_top_folders_by_views)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
@@ -193,7 +234,13 @@ class GenericGraphsController < ApplicationController
         render json: graph.build
       }
       format.csv {
-        GenericGraphsTopResourcesByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, false)
+        GenericGraphsTopResourcesByViewsDownloadJob.perform_later(
+          current_user.id,
+          current_user.enterprise.id,
+          false,
+          @from_date,
+          @to_date
+        )
         track_activity(current_user.enterprise, :export_generic_graphs_top_resources_by_views)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
@@ -229,7 +276,13 @@ class GenericGraphsController < ApplicationController
         render json: graph.build
       }
       format.csv {
-        GenericGraphsTopNewsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, false)
+        GenericGraphsTopNewsByViewsDownloadJob.perform_later(
+          current_user.id,
+          current_user.enterprise.id,
+          false,
+          @from_date,
+          @to_date
+        )
         track_activity(current_user.enterprise, :export_generic_graphs_top_news_by_views)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
@@ -305,7 +358,7 @@ class GenericGraphsController < ApplicationController
       format.csv {
         GenericGraphsGroupGrowthDownloadJob
           .perform_later(current_user.id, current_user.enterprise.id,
-          params.dig(:input, :from_date), params.dig(:input, :to_date))
+          @from_date, @to_date)
         track_activity(current_user.enterprise, :export_generic_graphs_group_growth)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
@@ -395,7 +448,13 @@ class GenericGraphsController < ApplicationController
         render json: graph.build
       }
       format.csv {
-        GenericGraphsMentoringSessionsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))
+        GenericGraphsMentoringSessionsDownloadJob.perform_later(
+          current_user.id,
+          current_user.enterprise.id,
+          c_t(:erg),
+          @from_date,
+          @to_date
+        )
         track_activity(current_user.enterprise, :export_generic_graphs_mentoring_sessions)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
@@ -720,6 +779,16 @@ class GenericGraphsController < ApplicationController
   end
 
   private
+
+  def get_date_range
+    begin
+      @from_date = params.dig(:input, :from_date)
+      @to_date = params.dig(:input, :to_date)
+    rescue
+      @from_date = nil
+      @to_date = nil
+    end
+  end
 
   def parse_date_range(date_range)
     # Parse a date range from a frontend range_controller for a es date range aggregation
