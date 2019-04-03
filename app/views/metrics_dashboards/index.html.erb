@@ -47,7 +47,7 @@
           <h4><%= c_t(:erg) %> population</h4>
           <%= render 'components/range_selector' %>
           <div class="card__action">
-            <%= link_to "Export CSV", group_population_generic_graphs_path(format: :csv), class: "hidden-xs" %>
+            <a href="#" class="csv-export-link hidden-xs" data-url="<%= group_population_generic_graphs_path(format: :csv) %>">Export CSV</a>
           </div>
           <div id="group_population_graph" class="graph" data-url="<%= group_population_generic_graphs_path %>">
             <svg></svg>
