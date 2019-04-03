@@ -88,57 +88,6 @@ RSpec.describe Campaign, type: :model do
     end
   end
 
-  describe 'instance methods #contributions_per_erg and #top_performers' do
-    let!(:enterprise) { create(:enterprise) }
-    let!(:group1) { create(:group, enterprise: enterprise, pending_users: 'enabled') }
-    let!(:group2) { create(:group, enterprise: enterprise, pending_users: 'enabled') }
-    let!(:group1_users) { create_list(:user, 2, enterprise: enterprise, active: true) }
-    let!(:group2_users) { create_list(:user, 3, enterprise: enterprise, active: true) }
-    let!(:campaign) { create(:campaign, enterprise_id: enterprise.id, groups: [group1, group2]) }
-    let!(:question) { create(:question, campaign_id: campaign.id) }
-    let!(:answer1) { create(:answer, author_id: group1_users.first.id, content: 'answer 1', question_id: question.id) }
-    let!(:answer2) { create(:answer, author_id: group1_users.last.id, content: 'answer 2', question_id: question.id) }
-    let!(:answer_comment1) { create(:answer_comment, author_id: group2_users.first.id, content: 'answer comment 1', answer_id: answer1.id) }
-    let!(:answer_comment2) { create(:answer_comment, author_id: group2_users.last.id, content: 'answer comment 2', answer_id: answer1.id) }
-
-    before do
-      group1_users.each do |user|
-        create(:user_group, user: user, group: group1 )
-      end
-
-      group2_users.each do |user|
-        create(:user_group, user: user, group: group2)
-      end
-    end
-
-    context '#contributions_per_erg' do
-      before {
-        g = 'Answer'
-        g = g.constantize
-        g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
-        g.__elasticsearch__.create_index!
-      }
-
-      it 'return correct data' do
-        expect(campaign.contributions_per_erg[:series][0][:key])
-          .to eq 'Contributions per erg'
-      end
-    end
-
-    context '#top_performers' do
-      before {
-        g = 'Answer'
-        g = g.constantize
-        g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
-        g.__elasticsearch__.create_index!
-      }
-      it 'return correct data' do
-        expect(campaign.top_performers[:series][0][:key])
-          .to eq 'Total votes per user'
-      end
-    end
-  end
-
   describe "#progression" do
     it "returns 0" do
       campaign = create :campaign
