@@ -53,8 +53,7 @@ class Graph < BaseClass
     date_range = parse_date_range(date_range_str)
     build_query(date_range)
 
-    strategy = Reports::GraphStats.new(self, @graph_builder.search, date_range,
-      date_range_str, unset_series)
+    strategy = Reports::GraphStats.new(self, @graph_builder.search, date_range_str, unset_series)
     report = Reports::Generator.new(strategy)
 
     report.to_csv
@@ -68,7 +67,7 @@ class Graph < BaseClass
     query = @graph_builder.get_new_query
 
     if aggregation.present?
-      query.terms_agg(field: field.elasticsearch_field, min_doc_count: 0) { |q|
+      query.terms_agg(field: field.elasticsearch_field) { |q|
         q.terms_agg(field: aggregation.elasticsearch_field, min_doc_count: 0) { |qq|
           qq.date_range_agg(field: 'user.created_at', range: date_range)
         }
@@ -89,13 +88,17 @@ class Graph < BaseClass
 
   def parse_query
     # Parse response
-    elements =  @graph_builder.formatter.list_parser.parse_list(@graph_builder.search)
+    @graph_builder.formatter.type = 'custom'
+    parser = @graph_builder.formatter.parser
+
+    elements = parser.get_elements(@graph_builder.search)
 
     if aggregation.present?
       # Nvd3 requires an irregular data format for nested term aggregations, use a helper to format it
       @graph_builder.stacked_nested_terms(elements)
     else
-      @graph_builder.formatter.y_parser.parse_chain = @graph_builder.formatter.y_parser.date_range
+      #@graph_builder.formatter.y_parser.parse_chain = @graph_builder.formatter.y_parser.date_range
+      parser.extractors[:y] = parser.date_range(key: :doc_count)
       @graph_builder.formatter.add_elements(elements)
     end
 
