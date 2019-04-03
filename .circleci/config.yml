@@ -21,14 +21,6 @@ jobs:
     docker:
       - image: circleci/build-image:ubuntu-14.04-XXL-upstart-1189-5614f37
         command: /sbin/init
-      - image: docker.elastic.co/elasticsearch/elasticsearch:6.2.2
-        environment:
-        - xpack.security.enabled: false
-        - network.host: 127.0.0.1
-        - transport.host: localhost
-        - http.port: 9200
-        - cluster.name: elasticsearch
-        - discovery.type: single-node
     steps:
     # Machine Setup
     #   If you break your build into multiple jobs with workflows, you will probably want to do the parts of this that are relevant in each
@@ -106,7 +98,6 @@ jobs:
     #   This would typically be a build job when using workflows, possibly combined with build
     # This is based on your 1.0 configuration file or project settings
     - run: bundle exec rake db:migrate
-    - run: sudo ln -s /etc/elasticsearch/ /usr/share/elasticsearch/config
     - run:
         command: bundle exec rake assets:precompile assets:clean
         environment:

@@ -9,12 +9,10 @@ class GenericGraphsController < ApplicationController
       format.json {
         graph = UserGroup.get_graph
         graph.set_enterprise_filter(field: 'group.enterprise_id', value: current_user.enterprise_id)
-
         graph.formatter.title = "#{c_t(:erg).capitalize} Population"
-
         graph.query  = graph.query.terms_agg(field: 'group.name')
         graph.drilldown_graph(parent_field: 'group.parent.name')
-
+        
         render json: graph.build
       }
       format.csv {
