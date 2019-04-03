@@ -20,14 +20,16 @@ class Graph {
         this.colors = d3.scale.category20().range();
         this.colors[0] = this.chartsColor;
 
+        this.scoped_by_models = [];
+
         var self = this;
 
         // Set up range selector
-        var $graph_input = $(this.$element).siblings('.graph-input');
-        if ($($graph_input).length && ($graph_input.attr('id') == 'range-selector')) {
+        var $graph_date_range = $(this.$element).siblings('.graph-date-range');
+        if ($($graph_date_range).length && ($graph_date_range.attr('id') == 'range-selector')) {
             // if theres a range selector, instantiate it and set callback
-            self.rangeSelector = new RangeSelector($graph_input[0], function (input) {
-                self.updateData(input);
+            self.rangeSelector = new RangeSelector($graph_date_range[0], function (date_range) {
+                self.updateData(date_range);
             });
         }
 
@@ -65,14 +67,17 @@ class Graph {
           date_range = self.date_range;
         }
 
-        $.get(url, { input: date_range, unset_series: unset_series });
+        $.get(url, { date_range: date_range, unset_series: unset_series });
     }
 
-    updateData(input={}) {
-        $.get(this.dataUrl, { input: input }, (data) => {
-            // If the data is invalid, don't try to render the graph
-            if ($.isEmptyObject(data) || !data.hasOwnProperty("series") || !data.hasOwnProperty("title"))
-                return;
+    updateData(date_range={}) {
+        $.get(this.dataUrl,
+              { date_range: date_range, scoped_by_models: this.scoped_by_models },
+              (data) => {
+                  // If the data is invalid, don't try to render the graph
+                  if ($.isEmptyObject(data) || !data.hasOwnProperty("series")
+                                            || !data.hasOwnProperty("title"))
+                      return;
 
             this.onDataUpdate(data);
         }, 'json');

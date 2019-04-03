@@ -21,14 +21,6 @@ class Metrics::OverviewGraphsController < ApplicationController
     }
   end
 
-  def user_growth
-    respond_to do |format|
-      format.json {
-        render json: @graph.user_growth(params[:input])
-      }
-    end
-  end
-
   private
 
   def set_graph
@@ -38,7 +30,8 @@ class Metrics::OverviewGraphsController < ApplicationController
 
   def overview_params
     params.permit(
-      :input
+      :date_range,
+      scoped_by_models: []
     )
   end
 end

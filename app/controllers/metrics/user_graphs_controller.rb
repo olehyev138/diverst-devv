@@ -12,6 +12,14 @@ class Metrics::UserGraphsController < ApplicationController
     end
   end
 
+  def user_growth
+    respond_to do |format|
+      format.json {
+        render json: @graph.user_growth(user_params[:date_range])
+      }
+    end
+  end
+
   private
 
   def set_graph
@@ -19,9 +27,13 @@ class Metrics::UserGraphsController < ApplicationController
     @graph.enterprise_id = current_user.enterprise_id
   end
 
-  def overview_params
+  def user_params
     params.permit(
-      :input
+      date_range: [
+        :from_date,
+        :to_date
+      ],
+      scoped_by_models: []
     )
   end
 end
