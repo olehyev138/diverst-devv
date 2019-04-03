@@ -11,7 +11,6 @@ require 'devise.rb'
 require 'capybara/rails'
 require 'capybara/poltergeist'
 require 'sidekiq/testing'
-require 'elasticsearch/extensions/test/cluster'
 
 require 'support/controller_macros.rb'
 require 'support/referrer_helpers.rb'
@@ -68,6 +67,12 @@ RSpec.configure do |config|
   config.include FeatureSpecRefactors::CustomHelpers
   config.include FeatureSpecRefactors::CustomMatchers
 
+  # Reset PhantomJS after each test - no noticeable performance impact
+  # https://github.com/teampoltergeist/poltergeist/issues/232#issuecomment-219450682
+  config.after :each do |example|
+    page.driver.restart if defined?(page.driver.restart)
+  end
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
@@ -95,7 +100,7 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
-  
+
   # Faker - clear random generator before each test, otherwise it will
   # reach its max and throw an error
   config.before(:each) do
@@ -123,20 +128,10 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 
-  Shoulda::Matchers.configure do |config|
-    config.integrate do |with|
+  Shoulda::Matchers.configure do |confi|
+    confi.integrate do |with|
       with.test_framework :rspec
       with.library :rails
     end
-  end
-
-  config.before :all, elasticsearch: true do
-    unless Elasticsearch::Extensions::Test::Cluster.running?(on: 9201, command: ENV['ELASTICSEARCH_PATH'] || "/usr/share/elasticsearch/bin/elasticsearch")
-      Elasticsearch::Extensions::Test::Cluster.start(port: 9201, nodes: 1, timeout: 60, command: ENV['ELASTICSEARCH_PATH'] || "/usr/share/elasticsearch/bin/elasticsearch")
-    end
-  end
-
-  config.after :each, elasticsearch: true do
-    Elasticsearch::Extensions::Test::Cluster.stop(port: 9201) if Elasticsearch::Extensions::Test::Cluster.running?(on: 9201, command: ENV['ELASTICSEARCH_PATH'] || "/usr/share/elasticsearch/bin/elasticsearch")
   end
 end

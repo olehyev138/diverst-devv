@@ -1,37 +1,36 @@
 class Reports::GraphStats
-  def initialize(graph, elements, date_range, date_range_str, unset_series)
-    @agg_list_parser = BaseGraph::ElasticsearchParser.new
-    @agg_list_parser.parse_chain = @agg_list_parser.nested_terms_list
-
-    @x_parser = BaseGraph::ElasticsearchParser.new
-
-    @y_parser = BaseGraph::ElasticsearchParser.new(key: :doc_count)
-    @y_parser.parse_chain = @y_parser.date_range
+  def initialize(graph, elements, date_range_str, unset_series)
+    @parser = BaseGraph::ElasticsearchParser.new
+    @parser.extractors = {
+      label: -> (e, _) { e[:key] },
+      count: @parser.date_range(key: :doc_count)
+    }
 
     @graph = graph
     @elements = elements
-    @date_range = date_range
-    @ui_date_range = ui_parse_date_range(date_range_str)
+    @date_range = ui_parse_date_range(date_range_str)
     @unset_series = unset_series
   end
 
   def get_header
     header = []
     header << [@graph.title]
-    header << ['From' + @ui_date_range[:from], 'To:' + @ui_date_range[:to]]
+    header << ['From' + @date_range[:from], 'To:' + @date_range[:to]]
 
     # If aggregation, add each aggregation field value as a column
     header_row = [@graph.field.title]
     if @graph.aggregation.present?
-      sub_elements = @agg_list_parser.parse_list(@elements[0]).sort_by { |ee| ee[:key] }
-      sub_elements.each do |ee|
-        next if @unset_series.include? ee[:key] # skip series/aggregation values that are unset in UI
-        header_row << ee[:key]
+      child_elements = get_elements(@elements[0])
+      child_elements.each do |child_element|
+        # skip series/aggregation values that are unset in UI
+        aggregation_field_value = @parser.parse(child_element)[:label]
+
+        next if @unset_series.include? aggregation_field_value
+        header_row << aggregation_field_value
       end
     end
 
     header << header_row
-
     header
   end
 
@@ -39,42 +38,43 @@ class Reports::GraphStats
     body = []
 
     if @graph.aggregation.present?
-      @elements.each do |e|
+      @elements.each do |parent_element|
         row = []
-        buckets = @agg_list_parser.parse_list(e).sort_by { |ee| ee[:key] }
+        child_elements = get_elements(parent_element)
 
-        next if buckets.count == 0
+        next if child_elements.count == 0
 
-        row << @x_parser.parse(e)
+        row << @parser.parse(parent_element)[:label]
+        child_elements.each do |child_element|
+          label, count = @parser.parse(child_element).fetch_values(:label, :count)
 
-        # sub elements
-        buckets.each do |ee|
-          key = @x_parser.parse(ee)
-          doc_count = @y_parser.parse(ee)
-
-          next if @unset_series.include?(key)
-          row << doc_count
+          next if @unset_series.include?(label)
+          row << count
         end
 
         body << row
       end
     else
-      @elements.each do |e|
-        key = @x_parser.parse(e)
-        doc_count = @y_parser.parse(e)
+      @elements.each do |element|
+        label, count = @parser.parse(element).fetch_values(:label, :count)
 
-        next if doc_count == 0
-        body << [key, doc_count]
+        next if count == 0
+        body << [label, count]
       end
     end
 
     body
   end
 
-  def ui_parse_date_range(date_range)
-    # Parse a date range from a frontend range_controller for a es date range aggregation
-    # Date range is {} or looks like { from: <>, to: <> }, with to being optional
+  private
 
+  def get_elements(parent)
+    @parser.get_elements(parent, extractor: @parser.nested_terms_list).sort_by { |child|
+      child[:key]
+    }
+  end
+
+  def ui_parse_date_range(date_range)
     default_from_date = 'All'
     default_to_date = DateTime.tomorrow.strftime('%F')
 

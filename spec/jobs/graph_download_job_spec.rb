@@ -12,21 +12,13 @@ RSpec.describe GraphDownloadJob, type: :job do
   let(:field3) { create(:field, type: "CheckboxField", poll: poll) }
   let(:metrics_graph) { create(:graph_with_metrics_dashboard, metrics_dashboard: metrics_dashboard, field: field1) }
   let(:poll_graph) { create(:graph_with_metrics_dashboard, poll: poll, field: field2) }
+  
+  before {
+    allow_any_instance_of(Graph).to receive(:graph_csv).and_return("")
+  }
 
   describe "#perform" do
     context "poll graph" do
-      before {
-        g = 'UserGroup'
-        g = g.constantize
-        g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
-        g.__elasticsearch__.create_index!
-
-        g = 'UsersSegment'
-        g = g.constantize
-        g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
-        g.__elasticsearch__.create_index!
-      }
-
       it "creates a downloadable csv file" do
         expect{ subject.perform(user.id, poll_graph.id, '', []) }
           .to change(CsvFile, :count).by(1)
@@ -34,18 +26,6 @@ RSpec.describe GraphDownloadJob, type: :job do
     end
 
     context "metrics graph" do
-      before {
-        g = 'UserGroup'
-        g = g.constantize
-        g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
-        g.__elasticsearch__.create_index!
-
-        g = 'UsersSegment'
-        g = g.constantize
-        g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
-        g.__elasticsearch__.create_index!
-      }
-
       it "creates a downloadable csv file" do
         expect{ subject.perform(user.id, metrics_graph.id, '', []) }
           .to change(CsvFile, :count).by(1)

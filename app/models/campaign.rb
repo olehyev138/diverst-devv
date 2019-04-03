@@ -113,9 +113,9 @@ class Campaign < BaseClass
         q.terms_agg(field: 'author.id') { |qq| qq.sum_agg(field: 'upvote_count') }
       }
 
-      graph.formatter.y_parser.parse_chain = graph.formatter.y_parser.sum
-      graph.formatter.y_parser.extractor = -> (e, _) { e.round }
-      graph.formatter.x_parser.extractor = -> (e, _) { User.find(e[:key]).name }
+      parser = graph.formatter.parser
+      parser.extractors[:x] = -> (e, _) { User.find(e[:key]).name }
+      parser.extractors[:y] = parser.sum { |p| p.custom(-> (e, _) { e.round }) }
 
       graph.formatter.add_elements(graph.search)
       graph.build
