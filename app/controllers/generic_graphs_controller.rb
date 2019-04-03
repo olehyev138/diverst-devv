@@ -3,18 +3,19 @@ class GenericGraphsController < ApplicationController
 
   before_action   :authenticate_user!
   before_action   :authorize_dashboards
-  before_action   :get_date_range, only: [:events_created,
-                                          :messages_sent,
-                                          :growth_of_groups,
-                                          :top_groups_by_views,
-                                          :top_folders_by_views,
-                                          :top_resources_by_views,
-                                          :top_news_by_views,
-                                          :mentoring_sessions
-                                         ]
+  before_action   :parse_csv_date_range, only: [:group_population,
+                                                :events_created,
+                                                :messages_sent,
+                                                :growth_of_groups,
+                                                :top_groups_by_views,
+                                                :top_folders_by_views,
+                                                :top_resources_by_views,
+                                                :top_news_by_views,
+                                                :mentoring_sessions
+                                              ]
 
   def group_population
-    date_range = parse_date_range(params[:input])
+    date_range = parse_es_date_range(params[:input])
 
     respond_to do |format|
       format.json {
@@ -32,7 +33,13 @@ class GenericGraphsController < ApplicationController
         render json: graph.build
       }
       format.csv {
-        GenericGraphsGroupPopulationDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))
+        GenericGraphsGroupPopulationDownloadJob.perform_later(
+          current_user.id,
+          current_user.enterprise.id,
+          c_t(:erg),
+          @from_date,
+          @to_date
+        )
         track_activity(current_user.enterprise, :export_generic_graphs_group_population)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
@@ -62,7 +69,7 @@ class GenericGraphsController < ApplicationController
   end
 
   def non_demo_events_created
-    date_range = parse_date_range(params[:input])
+    date_range = parse_es_date_range(params[:input])
 
     respond_to do |format|
       format.json{
@@ -97,7 +104,7 @@ class GenericGraphsController < ApplicationController
   end
 
   def non_demo_messages_sent
-    date_range = parse_date_range(params[:input])
+    date_range = parse_es_date_range(params[:input])
 
     respond_to do |format|
       format.json {
@@ -133,7 +140,7 @@ class GenericGraphsController < ApplicationController
 
   def non_demo_top_groups_by_views
     # set days to input if passed, otherwise default to 30
-    date_range = parse_date_range(params[:input])
+    date_range = parse_es_date_range(params[:input])
 
     respond_to do |format|
       format.json {
@@ -168,7 +175,7 @@ class GenericGraphsController < ApplicationController
   end
 
   def non_demo_top_folders_by_views
-    date_range = parse_date_range(params[:input])
+    date_range = parse_es_date_range(params[:input])
 
     respond_to do |format|
       format.json {
@@ -208,7 +215,7 @@ class GenericGraphsController < ApplicationController
   end
 
   def non_demo_top_resources_by_views
-    date_range = parse_date_range(params[:input])
+    date_range = parse_es_date_range(params[:input])
 
     respond_to do |format|
       format.json {
@@ -249,7 +256,7 @@ class GenericGraphsController < ApplicationController
   end
 
   def non_demo_top_news_by_views
-    date_range = parse_date_range(params[:input])
+    date_range = parse_es_date_range(params[:input])
 
     respond_to do |format|
       format.json {
@@ -291,7 +298,7 @@ class GenericGraphsController < ApplicationController
   end
 
   def growth_of_employees
-    date_range = parse_date_range(params[:input])
+    date_range = parse_es_date_range(params[:input])
 
     respond_to do |format|
       format.json {
@@ -361,9 +368,12 @@ class GenericGraphsController < ApplicationController
         render json: graph.build
       }
       format.csv {
-        GenericGraphsGroupGrowthDownloadJob
-          .perform_later(current_user.id, current_user.enterprise.id,
-          @from_date, @to_date)
+        GenericGraphsGroupGrowthDownloadJob.perform_later(
+          current_user.id,
+          current_user.enterprise.id,
+          @from_date,
+          @to_date
+        )
         track_activity(current_user.enterprise, :export_generic_graphs_group_growth)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
@@ -436,7 +446,7 @@ class GenericGraphsController < ApplicationController
   end
 
   def mentoring_sessions
-    date_range = parse_date_range(params[:input])
+    date_range = parse_es_date_range(params[:input])
 
     respond_to do |format|
       format.json {
@@ -790,17 +800,41 @@ class GenericGraphsController < ApplicationController
 
   private
 
-  def get_date_range
+  def parse_csv_date_range
     begin
       @from_date = params.dig(:input, :from_date)
       @to_date = params.dig(:input, :to_date)
+
+      case @from_date
+      when '1m'
+        @from_date = (DateTime.now - 1.month).to_s
+        @to_date = DateTime.now.to_s
+      when '3m'
+        @from_date = (DateTime.now - 3.months).to_s
+        @to_date = DateTime.now.to_s
+      when '6m'
+        @from_date = (DateTime.now - 6.months).to_s
+        @to_date = DateTime.now.to_s
+      when 'ytd'
+        @from_date = (DateTime.now.beginning_of_year).to_s
+        @to_date = DateTime.now.to_s
+      when '1y'
+        @from_date = (DateTime.now - 1.year).to_s
+        @to_date = DateTime.now.to_s
+      when 'all'
+        @from_date = nil
+        @to_date = nil
+      else
+        @from_date = DateTime.parse(@from_date).to_s
+        @to_date = DateTime.parse(@to_date).to_s
+      end
     rescue
       @from_date = nil
       @to_date = nil
     end
   end
 
-  def parse_date_range(date_range)
+  def parse_es_date_range(date_range)
     # Parse a date range from a frontend range_controller for a es date range aggregation
     # Date range is {} or looks like { from: <>, to: <> }, with to being optional
 
