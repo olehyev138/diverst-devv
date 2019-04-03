@@ -331,6 +331,8 @@ class GenericGraphsController < ApplicationController
   end
 
   def growth_of_groups
+    date_range = parse_date_range(params[:input])
+
     respond_to do |format|
       format.json {
         graph = UserGroup.get_graph
@@ -340,14 +342,17 @@ class GenericGraphsController < ApplicationController
         graph.formatter.title = "Growth of #{c_t(:erg).pluralize.capitalize}"
 
         parser = graph.formatter.parser
-        custom_parser = graph.get_new_parser
         parser.extractors[:y] = -> (_, args) { args[:total] }
+        custom_parser = graph.get_new_parser
+        custom_parser.extractors[:y] = custom_parser.date_range(key: :doc_count)
 
         current_user.enterprise.groups.each do |group|
           graph.query = graph.query
             .filter_agg(field: 'group_id', value: group.id) { |q|
-              q.terms_agg(field: 'created_at', order_field: '_term', order_dir: 'asc')
-          }
+              q.terms_agg(field: 'created_at', order_field: '_term', order_dir: 'asc') { |qq|
+                qq.date_range_agg(field: 'created_at', range: date_range)
+              }
+            }
 
           # each group is a new series/line on our line graph
           total = 0
@@ -377,6 +382,8 @@ class GenericGraphsController < ApplicationController
   end
 
   def growth_of_resources
+    date_range = parse_date_range(params[:input])
+
     respond_to do |format|
       format.json {
         graph = Resource.get_graph
@@ -386,21 +393,24 @@ class GenericGraphsController < ApplicationController
         graph.formatter.title = 'Growth of Resources'
 
         parser = graph.formatter.parser
-        custom_parser = graph.get_new_parser
         parser.extractors[:y] = -> (_, args) { args[:total] }
+        custom_parser = graph.get_new_parser
+        custom_parser.extractors[:y] = custom_parser.date_range(key: :doc_count)
 
         current_user.enterprise.groups.each do |group|
           graph.query = graph.query
             .filter_agg(field: 'folder.group_id', value: group.id) { |q|
-              q.terms_agg(field: 'created_at', order_field: '_term', order_dir: 'asc')
-          }
+              q.terms_agg(field: 'created_at', order_field: '_term', order_dir: 'asc') { |qq|
+                qq.date_range_agg(field: 'created_at', range: date_range)
+              }
+            }
 
           total = 0
           graph.formatter.add_series(series_name: group.name)
           elements = graph.search
 
           elements.each { |e|
-            total += custom_parser.parse(e)[:x]
+            total += custom_parser.parse(e)[:y]
             graph.formatter.add_element(e, total: total)
           }
         end
