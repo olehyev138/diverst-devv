@@ -113,9 +113,24 @@ RSpec.configure do |config|
   end
 
   config.before(:each) do
-    formatter = OpenStruct.new({:title => true, :x_parser => OpenStruct.new({:extractor => true, :date_range => true, :parse_chain => true}), :y_parser => OpenStruct.new({:date_range => true, :parse_chain => true, :key => true}), :add_elements => true, :list_parser => OpenStruct.new({:parse_list => true})})
-    query = OpenStruct.new({:terms_agg => true, :bool_filter_agg => true, :add_filter_clause => true})
-    graph = double("Graph", :search => true, :query => query, :build => true, :set_enterprise_filter => true, :formatter => formatter)
+    formatter = OpenStruct.new({
+      :title => true,
+      :parser => OpenStruct.new({:extractors => true,
+        :date_range => true, :get_elements => true }),
+      :add_elements => true
+    })
+
+    query = OpenStruct.new({
+      :terms_agg => true,
+      :bool_filter_agg => true,
+      :add_filter_clause => true})
+
+    graph = double("Graph",
+      :search => true,
+      :query => query,
+      :build => true,
+      :set_enterprise_filter => true,
+      :formatter => formatter)
 
     allow(UserGroup).to receive(:get_graph).and_return(graph)
     allow(UsersSegment).to receive(:get_graph).and_return(graph)
@@ -141,8 +156,8 @@ RSpec.configure do |config|
 
     allow(graph.formatter).to receive(:title)
     allow(graph.formatter).to receive(:add_elements)
-    allow(graph.formatter.list_parser).to receive(:get_elements)
 
+    allow(graph.formatter.parser).to receive(:get_elements)
     allow(graph.formatter.parser).to receive(:extractors=)
     allow(graph.formatter.parser).to receive(:extractors)
     allow(graph.formatter.parser).to receive(:date_range)
