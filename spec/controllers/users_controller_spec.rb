@@ -4,7 +4,7 @@ RSpec.describe UsersController, type: :controller do
     include ActiveJob::TestHelper
 
     let(:enterprise) { create(:enterprise) }
-    let(:user) { create(:user, enterprise: enterprise) }
+    let!(:user) { create(:user, enterprise: enterprise) }
 
     describe "GET#index" do
         context 'when user is logged in' do
@@ -57,6 +57,31 @@ RSpec.describe UsersController, type: :controller do
                     get :index, user_groups: search_params
                     expect(assigns[:users]).to eq [user]
                 end
+            end
+
+            context 'with extra params' do
+              let!(:user2) { create(:user, enterprise: user.enterprise) }
+              let(:policy_group) { create(:policy_group, :no_permissions) }
+              let!(:user_without_perms) { create(:user, enterprise: user.enterprise) }
+
+              it 'not_current_user' do
+                get :index, not_current_user: true, format: :json
+
+                json_response = response.body
+                expect(json_response).not_to include(user.email)
+                expect(json_response).to include(user2.email)
+                expect(json_response).to include(user_without_perms.email)
+              end
+
+              it 'can_metrics_dashboard_create' do
+                user_without_perms.policy_group = policy_group
+                get :index, can_metrics_dashboard_create: true, format: :json
+
+                json_response = response.body
+                expect(json_response).to include(user.email)
+                expect(json_response).to include(user2.email)
+                expect(json_response).not_to include(user_without_perms.email)
+              end
             end
         end
 

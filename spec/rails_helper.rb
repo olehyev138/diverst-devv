@@ -11,7 +11,6 @@ require 'devise.rb'
 require 'capybara/rails'
 require 'capybara/poltergeist'
 require 'sidekiq/testing'
-require 'elasticsearch/extensions/test/cluster'
 
 require 'support/controller_macros.rb'
 require 'support/referrer_helpers.rb'
@@ -129,20 +128,10 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 
-  Shoulda::Matchers.configure do |config|
-    config.integrate do |with|
+  Shoulda::Matchers.configure do |confi|
+    confi.integrate do |with|
       with.test_framework :rspec
       with.library :rails
     end
-  end
-
-  config.before :all, elasticsearch: true do
-    unless Elasticsearch::Extensions::Test::Cluster.running?(on: 9201, command: ENV['ELASTICSEARCH_PATH'] || "/usr/share/elasticsearch/bin/elasticsearch")
-      Elasticsearch::Extensions::Test::Cluster.start(port: 9201, nodes: 1, timeout: 60, command: ENV['ELASTICSEARCH_PATH'] || "/usr/share/elasticsearch/bin/elasticsearch")
-    end
-  end
-
-  config.after :each, elasticsearch: true do
-    Elasticsearch::Extensions::Test::Cluster.stop(port: 9201) if Elasticsearch::Extensions::Test::Cluster.running?(on: 9201, command: ENV['ELASTICSEARCH_PATH'] || "/usr/share/elasticsearch/bin/elasticsearch")
   end
 end
