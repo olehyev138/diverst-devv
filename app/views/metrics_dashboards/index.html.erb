@@ -78,7 +78,7 @@
           <h4>Events created</h4>
           <%= render 'components/range_selector' %>
           <div class="card__action">
-            <%= link_to "Export CSV", events_created_generic_graphs_path(format: :csv), class: "hidden-xs" %>
+            <a href="#" class="csv-export-link hidden-xs" data-url="<%= events_created_generic_graphs_path(format: :csv) %>">Export CSV</a>
           </div>
           <div id="events_created_graph" class="graph" data-url="<%= events_created_generic_graphs_path %>">
             <svg></svg>
@@ -94,7 +94,7 @@
           <h4>Messages sent</h4>
           <%= render 'components/range_selector' %>
           <div class="card__action">
-            <%= link_to "Export CSV", messages_sent_generic_graphs_path(format: :csv), class: "hidden-xs" %>
+            <a href="#" class="csv-export-link hidden-xs" data-url="<%= messages_sent_generic_graphs_path(format: :csv) %>">Export CSV</a>
           </div>
           <div id="messages_sent_graph" class="graph" data-url="<%= messages_sent_generic_graphs_path %>">
             <svg></svg>
@@ -125,7 +125,7 @@
           <h4># of views per <%= c_t(:erg) %></h4>
           <%= render 'components/range_selector' %>
           <div class="card__action">
-            <%= link_to "Export CSV", top_groups_by_views_generic_graphs_path(format: :csv), class: "hidden-xs" %>
+            <a href="#" class="csv-export-link hidden-xs" data-url="<%= top_groups_by_views_generic_graphs_path(format: :csv) %>">Export CSV</a>
           </div>
           <div id="top_groups_graph" class="graph" data-url="<%= top_groups_by_views_generic_graphs_path %>">
             <svg></svg>
@@ -141,7 +141,7 @@
           <h4># of views per Folder</h4>
           <%= render 'components/range_selector' %>
           <div class="card__action">
-            <%= link_to "Export CSV", top_folders_by_views_generic_graphs_path(format: :csv), class: "hidden-xs" %>
+            <a href="#" class="csv-export-link hidden-xs" data-url="<%= top_folders_by_views_generic_graphs_path(format: :csv) %>">Export CSV</a>
           </div>
           <div id="top_folders_graph" class="graph" data-url="<%= top_folders_by_views_generic_graphs_path %>">
             <svg></svg>
@@ -156,7 +156,7 @@
           <h4># of views per Resource</h4>
           <%= render 'components/range_selector' %>
           <div class="card__action">
-            <%= link_to "Export CSV", top_resources_by_views_generic_graphs_path(format: :csv), class: "hidden-xs" %>
+            <a href="#" class="csv-export-link hidden-xs" data-url="<%= top_resources_by_views_generic_graphs_path(format: :csv) %>">Export CSV</a>
           </div>
           <div id="top_resources_graph" class="graph" data-url="<%= top_resources_by_views_generic_graphs_path %>">
             <svg></svg>
@@ -171,7 +171,7 @@
           <h4>Top News Links by # of views</h4>
           <%= render 'components/range_selector' %>
           <div class="card__action">
-            <%= link_to "Export CSV", top_news_by_views_generic_graphs_path(format: :csv), class: "hidden-xs" %>
+            <a href="#" class="csv-export-link hidden-xs" data-url="<%= top_news_by_views_generic_graphs_path(format: :csv) %>">Export CSV</a>
           </div>
           <div id="top_news_graph" class="graph" data-url="<%= top_news_by_views_generic_graphs_path %>">
             <svg></svg>
@@ -202,7 +202,7 @@
           <h4>Mentoring Sessions created</h4>
           <%= render 'components/range_selector' %>
           <div class="card__action">
-            <%= link_to "Export CSV", mentoring_sessions_generic_graphs_path(format: :csv) %>
+            <a href="#" class="csv-export-link hidden-xs" data-url="<%= mentoring_sessions_generic_graphs_path(format: :csv) %>">Export CSV</a>
           </div>
           <div id="mentorship_sessions" class="graph" data-url="<%= mentoring_sessions_generic_graphs_path %>">
             <svg></svg>
