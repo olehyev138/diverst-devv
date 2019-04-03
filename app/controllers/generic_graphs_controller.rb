@@ -5,12 +5,20 @@ class GenericGraphsController < ApplicationController
   before_action   :authorize_dashboards
 
   def group_population
+    date_range = parse_date_range(params[:input])
+
     respond_to do |format|
       format.json {
         graph = UserGroup.get_graph
         graph.set_enterprise_filter(field: 'group.enterprise_id', value: current_user.enterprise_id)
         graph.formatter.title = "#{c_t(:erg).capitalize} Population"
-        graph.query  = graph.query.terms_agg(field: 'group.name')
+
+        graph.formatter.y_parser.parse_chain = graph.formatter.y_parser.date_range
+
+        graph.query = graph.query.terms_agg(field: 'group.name') { |q|
+          q.date_range_agg(field: 'created_at', range: date_range)
+        }
+        
         graph.drilldown_graph(parent_field: 'group.parent.name')
         
         render json: graph.build
