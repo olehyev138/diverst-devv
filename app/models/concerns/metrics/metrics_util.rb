@@ -1,5 +1,5 @@
 module Metrics
-  module Util
+  module MetricsUtil
     def parse_date_range(date_range)
       # Parse a date range from a frontend range_controller for a es date range aggregation
       # Date range is {} or looks like { from: <>, to: <> }, with to being optional
@@ -24,6 +24,14 @@ module Metrics
                   end
 
       { from: from_date, to: to_date }
+    end
+
+    def add_scoped_model_filter(graph_builder, field, scoped_ids)
+      # Wraps an existing ElasticsearchQuery in a filter that filters on a list of model ids
+      query = graph_builder.get_new_query.bool_filter_agg { |_| graph_builder.query }
+      query.add_filter_clause(field: field, value: scoped_ids, bool_op: :must, multi: true)
+
+      query
     end
 
     def enterprise_id

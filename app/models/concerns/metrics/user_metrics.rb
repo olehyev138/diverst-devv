@@ -1,7 +1,7 @@
 module Metrics
   module UserMetrics
     extend ActiveSupport::Concern
-    include Util
+    include MetricsUtil
 
     def users_per_group()
       graph = UserGroup.get_graph

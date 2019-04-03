@@ -19,7 +19,7 @@ class Metrics::UserGraphsController < ApplicationController
     @graph.enterprise_id = current_user.enterprise_id
   end
 
-  def overview_params
+  def user_params
     params.permit(
       :input
     )
