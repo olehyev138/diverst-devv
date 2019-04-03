@@ -558,12 +558,12 @@ Rails.application.routes.draw do
   namespace :metrics do
     resource :overview, controller: :overview_graphs, only: [:index] do
       get 'index'
-      get 'user_growth'
     end
 
     resource :users, controller: :user_graphs, only: [:index] do
       get 'index'
       get 'users_per_group'
+      get 'user_growth'
     end
 
     resource :groups, controller: :group_graphs, only: [:index] do

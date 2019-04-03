@@ -7,7 +7,7 @@ class Metrics::GroupGraphsController < ApplicationController
   def group_population
     respond_to do |format|
       format.json {
-        render json: @graph.group_population(params[:date_range], group_params[:scoped_by_models])
+        render json: @graph.group_population(group_params[:date_range], group_params[:scoped_by_models])
       }
     end
   end
@@ -21,7 +21,10 @@ class Metrics::GroupGraphsController < ApplicationController
 
   def group_params
     params.permit(
-      :date_range,
+      date_range: [
+        :from_date,
+        :to_date
+      ],
       scoped_by_models: []
     )
   end

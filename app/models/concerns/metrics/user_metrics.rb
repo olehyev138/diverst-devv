@@ -4,7 +4,7 @@ module Metrics
     include MetricsUtil
 
     def users_per_group()
-      graph = UserGroup.get_graph
+      graph = UserGroup.get_graph_builder
       graph.set_enterprise_filter(field: 'group.enterprise_id', value: enterprise_id)
       graph.formatter.type = 'pie'
       graph.formatter.title = "User population per group"
@@ -18,7 +18,7 @@ module Metrics
     def user_growth(date_range_str)
       date_range = parse_date_range(date_range_str)
 
-      graph = User.get_graph
+      graph = User.get_graph_builder
       graph.set_enterprise_filter(value: enterprise_id)
       graph.formatter.type = 'line'
       graph.formatter.title = 'Growth of employees'

@@ -19,7 +19,7 @@ function update_graph_scopes() {
 
         for (const graph of graphs) {
             graph.scoped_by_models = scoped_by_models;
-            graph.updateData();
+            graph.updateData(graph.rangeSelector.date_range);
         }
 
     });
