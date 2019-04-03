@@ -67,7 +67,7 @@ class Graph < BaseClass
     query = @graph_builder.get_new_query
 
     if aggregation.present?
-      query.terms_agg(field: field.elasticsearch_field, min_doc_count: 0) { |q|
+      query.terms_agg(field: field.elasticsearch_field) { |q|
         q.terms_agg(field: aggregation.elasticsearch_field, min_doc_count: 0) { |qq|
           qq.date_range_agg(field: 'user.created_at', range: date_range)
         }
