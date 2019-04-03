@@ -39,7 +39,7 @@ RSpec.configure do |config|
 
   # show retry status in spec process
   config.verbose_retry = true
-  
+
   # show exception that triggers a retry if verbose_retry is set to true
   config.display_try_failure_messages = true
 
@@ -111,12 +111,27 @@ RSpec.configure do |config|
       require file
     end
   end
-  
+
   config.before(:each) do
-    formatter = OpenStruct.new({:title => true, :x_parser => OpenStruct.new({:extractor => true, :date_range => true, :parse_chain => true}), :y_parser => OpenStruct.new({:date_range => true, :parse_chain => true, :key => true}), :add_elements => true, :list_parser => OpenStruct.new({:parse_list => true})})
-    query = OpenStruct.new({:terms_agg => true, :bool_filter_agg => true, :add_filter_clause => true})
-    graph = double("Graph", :search => true, :query => query, :build => true, :set_enterprise_filter => true, :formatter => formatter)
-    
+    formatter = OpenStruct.new({
+      :title => true,
+      :parser => OpenStruct.new({:extractors => true,
+        :date_range => true, :get_elements => true }),
+      :add_elements => true
+    })
+
+    query = OpenStruct.new({
+      :terms_agg => true,
+      :bool_filter_agg => true,
+      :add_filter_clause => true})
+
+    graph = double("Graph",
+      :search => true,
+      :query => query,
+      :build => true,
+      :set_enterprise_filter => true,
+      :formatter => formatter)
+
     allow(UserGroup).to receive(:get_graph).and_return(graph)
     allow(UsersSegment).to receive(:get_graph).and_return(graph)
     allow(Initiative).to receive(:get_graph).and_return(graph)
@@ -126,28 +141,25 @@ RSpec.configure do |config|
     allow(MentoringSession).to receive(:get_graph).and_return(graph)
     allow(MentorshipInterest).to receive(:get_graph).and_return(graph)
     allow(Answer).to receive(:get_graph).and_return(graph)
-    
+
     allow(graph).to receive(:set_enterprise_filter)
     allow(graph).to receive(:query=)
     allow(graph).to receive(:query).and_return(query)
-    
+
     allow(graph).to receive(:drilldown_graph)
     allow(graph).to receive(:search)
     allow(graph).to receive(:build).and_return({:title => "#{c_t(:erg).capitalize} Population"})
-    
+
     allow(query).to receive(:terms_agg)
     allow(query).to receive(:add_filter_clause)
     allow(query).to receive(:bool_filter_agg)
-    
+
     allow(graph.formatter).to receive(:title)
     allow(graph.formatter).to receive(:add_elements)
-    allow(graph.formatter.list_parser).to receive(:parse_list)
-    
-    allow(graph.formatter.y_parser).to receive(:parse_chain=)
-    allow(graph.formatter.y_parser).to receive(:key=)
-    
-    allow(graph.formatter.x_parser).to receive(:parse_chain=)
-    allow(graph.formatter.x_parser).to receive(:date_range)
-    allow(graph.formatter.x_parser).to receive(:extractor)
+
+    allow(graph.formatter.parser).to receive(:get_elements)
+    allow(graph.formatter.parser).to receive(:extractors=)
+    allow(graph.formatter.parser).to receive(:extractors)
+    allow(graph.formatter.parser).to receive(:date_range)
   end
 end
