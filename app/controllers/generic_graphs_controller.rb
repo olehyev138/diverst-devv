@@ -13,14 +13,13 @@ class GenericGraphsController < ApplicationController
         graph.set_enterprise_filter(field: 'group.enterprise_id', value: current_user.enterprise_id)
         graph.formatter.title = "#{c_t(:erg).capitalize} Population"
 
-        graph.formatter.y_parser.parse_chain = graph.formatter.y_parser.date_range
-
+        graph.formatter.parser.extractors[:y] = graph.formatter.parser.date_range(key: :doc_count)
         graph.query = graph.query.terms_agg(field: 'group.name') { |q|
           q.date_range_agg(field: 'created_at', range: date_range)
         }
         
         graph.drilldown_graph(parent_field: 'group.parent.name')
-        
+
         render json: graph.build
       }
       format.csv {
@@ -37,7 +36,6 @@ class GenericGraphsController < ApplicationController
       format.json {
         graph = UsersSegment.get_graph
         graph.set_enterprise_filter(field: 'segment.enterprise_id', value: current_user.enterprise_id)
-
         graph.formatter.title = "#{c_t(:segment).capitalize} Population"
 
         graph.query = graph.query.terms_agg(field: 'segment.name')
@@ -61,15 +59,16 @@ class GenericGraphsController < ApplicationController
       format.json{
         graph = Initiative.get_graph
         graph.set_enterprise_filter(field: 'pillar.outcome.group.enterprise_id', value: enterprise_id)
-
         graph.formatter.title = 'Events Created'
-        graph.formatter.y_parser.parse_chain = graph.formatter.y_parser.date_range
 
         graph.query = graph.query.terms_agg(field: 'pillar.outcome.group.name') { |q|
           q.date_range_agg(field: 'created_at', range: date_range)
         }
 
+        parser = graph.formatter.parser
+        parser.extractors[:y] = parser.date_range(key: :doc_count)
         graph.drilldown_graph(parent_field: 'pillar.outcome.group.parent.name')
+
         render json: graph.build
       }
       format.csv {
@@ -88,14 +87,14 @@ class GenericGraphsController < ApplicationController
       format.json {
         graph = GroupMessage.get_graph
         graph.set_enterprise_filter(field: 'group.enterprise_id', value: enterprise_id)
+        graph.formatter.title = 'Messages Sent'
 
         graph.query = graph.query.terms_agg(field: 'group.name') { |q|
           q.date_range_agg(field: 'created_at', range: date_range)
         }
 
-        graph.formatter.title = 'Messages Sent'
-        graph.formatter.y_parser.parse_chain = graph.formatter.y_parser.date_range
-
+        parser = graph.formatter.parser
+        parser.extractors[:y] = parser.date_range(key: :doc_count)
         graph.drilldown_graph(parent_field: 'group.parent.name')
 
         render json: graph.build
@@ -117,14 +116,14 @@ class GenericGraphsController < ApplicationController
       format.json {
         graph = View.get_graph
         graph.set_enterprise_filter(value: enterprise_id)
+        graph.formatter.title = "# Views per #{c_t(:erg).capitalize}"
 
         graph.query = graph.query.terms_agg(field: 'group.name') { |q|
           q.date_range_agg(field: 'created_at', range: date_range)
         }
 
-        graph.formatter.title = "# Views per #{c_t(:erg).capitalize}"
-        graph.formatter.y_parser.parse_chain = graph.formatter.y_parser.date_range
-
+        parser = graph.formatter.parser
+        parser.extractors[:y] = parser.date_range(key: :doc_count)
         graph.drilldown_graph(parent_field: 'group.parent.name')
 
         render json: graph.build
@@ -145,6 +144,7 @@ class GenericGraphsController < ApplicationController
       format.json {
         graph = View.get_graph
         graph.set_enterprise_filter(value: current_user.enterprise_id)
+        graph.formatter.title = '# Views per Folder'
 
         graph.query = graph.query.terms_agg(field: 'folder.id') { |q|
           q.date_range_agg(field: 'created_at', range: date_range) { |qq|
@@ -152,24 +152,16 @@ class GenericGraphsController < ApplicationController
           }
         }
 
-        graph.formatter.title = '# Views per Folder'
-        x_parser = graph.formatter.x_parser
-        y_parser = graph.formatter.y_parser
-
-        x_parser.parse_chain = x_parser.date_range { |p| p.top_hits }
-        x_parser.extractor = -> (e, _) {
-          return if e.blank? || e == 0
-          group = e.dig(:folder, :group, :name) || 'Shared'
-          group + ' ' + e[:folder][:name]
-        }
-
-        y_parser.key = :doc_count
-        y_parser.parse_chain = y_parser.date_range
+        parser = graph.formatter.parser
+        parser.extractors[:y] = parser.date_range(key: :doc_count)
+        parser.extractors[:x] = parser.date_range { |p| p.top_hits { |pp| pp.custom( -> (e, _) {
+              return if e.blank? || e == 0
+              (e.dig(:folder, :group, :name) || 'Shared') + ' ' + e.dig(:folder, :name)
+        }) } }
 
         graph.formatter.add_elements(graph.search)
 
         render json: graph.build
-
       }
       format.csv {
         GenericGraphsTopFoldersByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, false)
@@ -187,6 +179,7 @@ class GenericGraphsController < ApplicationController
       format.json {
         graph = View.get_graph
         graph.set_enterprise_filter(value: current_user.enterprise_id)
+        graph.formatter.title = '# Views per Resource'
 
         graph.query = graph.query.terms_agg(field: 'resource.id') { |q|
           q.date_range_agg(field: 'created_at', range: date_range) { |qq|
@@ -194,26 +187,16 @@ class GenericGraphsController < ApplicationController
           }
         }
 
-        graph.formatter.title = '# Views per Resource'
-
-        x_parser = graph.formatter.x_parser
-        y_parser = graph.formatter.y_parser
-
-        x_parser.parse_chain = x_parser.date_range { |p| p.top_hits }
-        x_parser.extractor = -> (e, _) {
-          return if e.blank? || e == 0
-          group = e.dig(:resource, :group, :name) || 'Shared'
-          group + ' ' + e[:resource][:title]
-        }
-
-        y_parser.key = :doc_count
-        y_parser.parse_chain = y_parser.date_range
+        parser = graph.formatter.parser
+        parser.extractors[:y] = parser.date_range(key: :doc_count)
+        parser.extractors[:x] = parser.date_range { |p| p.top_hits { |pp| pp.custom( -> (e, _) {
+              return if e.blank? || e == 0
+              (e.dig(:resource, :group, :name) || 'Shared') + ' ' + e.dig(:resource, :title)
+         } ) } }
 
         graph.formatter.add_elements(graph.search)
 
-        results = graph.build
-
-        render json: results
+        render json: graph.build
       }
       format.csv {
         GenericGraphsTopResourcesByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, false)
@@ -231,6 +214,7 @@ class GenericGraphsController < ApplicationController
       format.json {
         graph = View.get_graph
         graph.set_enterprise_filter(value: enterprise_id)
+        graph.formatter.title = '# Views per News Link'
 
         graph.query = graph.query.terms_agg(field: 'news_feed_link.news_link.id') { |q|
           q.date_range_agg(field: 'created_at', range: date_range) { |qq|
@@ -238,22 +222,15 @@ class GenericGraphsController < ApplicationController
           }
         }
 
-        graph.formatter.title = '# Views per News Link'
-        x_parser = graph.formatter.x_parser
-        y_parser = graph.formatter.y_parser
+        parser = graph.formatter.parser
+        parser.extractors[:y] = parser.date_range(key: :doc_count)
+        parser.extractors[:x] = parser.date_range { |p| p.top_hits { |pp| pp.custom( -> (e, _) {
+              return if e.blank? || e == 0
+              (e.dig(:news_feed_link, :group, :name) || 'Shared') +
+                ' ' + e.dig(:news_feed_link, :news_link, :title)
+            } ) } }
 
-        x_parser.parse_chain = x_parser.date_range { |p| p.top_hits }
-        x_parser.extractor = -> (e, _) {
-          return if e.blank? || e == 0
-          group = e.dig(:news_feed_link, :group, :name) || 'Shared'
-          group + ' ' + e[:news_feed_link][:news_link][:title]
-        }
-
-        y_parser.key = :doc_count
-        y_parser.parse_chain = y_parser.date_range
-
-        elements = graph.formatter.list_parser.parse_list(graph.search)
-        graph.formatter.add_elements(elements)
+        graph.formatter.add_elements(graph.search)
 
         render json: graph.build
       }
@@ -273,34 +250,24 @@ class GenericGraphsController < ApplicationController
       format.json {
         graph = User.get_graph
         graph.set_enterprise_filter(value: enterprise_id)
+        graph.formatter.type = 'line'
+        graph.formatter.title = 'Growth of employees'
 
-        # build query
         graph.query = graph.query.terms_agg(field: 'created_at', order_field: '_term', order_dir: 'asc') { |q|
           q.date_range_agg(field: 'created_at', range: date_range)
         }
 
-        # setup formatter & parsers
-        graph.formatter.type = 'line'
-        graph.formatter.title = 'Growth of employees'
+        parser = graph.formatter.parser
+        custom_parser = graph.get_new_parser
+        parser.extractors[:y] = -> (_, args) { args[:total] }
+        custom_parser.extractors[:count] = custom_parser.date_range(key: :doc_count)
 
-        y_parser = graph.formatter.y_parser
-        y_parser.parse_chain = y_parser.date_range
-        y_parser.extractor = -> (_, args) {
-          args[:total]
-        }
-
-        # run query
-        elements = graph.formatter.list_parser.parse_list(graph.search)
-
-        # build graph
         total = 0
+        elements = graph.search
         graph.formatter.add_series
-        gen_parser = graph.formatter.general_parser
-        gen_parser.parse_chain = gen_parser.date_range
-        gen_parser.key = :doc_count
 
         elements.each { |e|
-          total += gen_parser.parse(e)
+          total += custom_parser.parse(e)[:count]
           graph.formatter.add_element(e, total: total)
         }
 
@@ -317,30 +284,28 @@ class GenericGraphsController < ApplicationController
 
         graph.formatter.type = 'line'
         graph.formatter.title = "Growth of #{c_t(:erg).pluralize.capitalize}"
-        graph.formatter.y_parser.extractor = -> (_, args) {
-          args[:total]
-        }
 
-        gen_parser = graph.formatter.general_parser
-        gen_parser.key = :doc_count
+        parser = graph.formatter.parser
+        custom_parser = graph.get_new_parser
+        parser.extractors[:y] = -> (_, args) { args[:total] }
 
         current_user.enterprise.groups.each do |group|
           graph.query = graph.query
             .filter_agg(field: 'group_id', value: group.id) { |q|
-            q.terms_agg(field: 'created_at', order_field: '_term', order_dir: 'asc')
+              q.terms_agg(field: 'created_at', order_field: '_term', order_dir: 'asc')
           }
-          elements = graph.formatter.list_parser.parse_list(graph.search)
 
           # each group is a new series/line on our line graph
           total = 0
           graph.formatter.add_series(series_name: group.name)
+          elements = graph.search
 
           elements.each { |e|
-            total += gen_parser.parse(e)
+            total += custom_parser.parse(e)[:y]
             graph.formatter.add_element(e, total: total)
           }
         end
-        
+
         render json: graph.build
       }
       format.csv {
@@ -363,25 +328,22 @@ class GenericGraphsController < ApplicationController
         graph.formatter.type = 'line'
         graph.formatter.title = 'Growth of Resources'
 
-        gen_parser = graph.formatter.general_parser
-        gen_parser.key = :doc_count
-        graph.formatter.y_parser.extractor = -> (_, args) {
-          args[:total]
-        }
+        parser = graph.formatter.parser
+        custom_parser = graph.get_new_parser
+        parser.extractors[:y] = -> (_, args) { args[:total] }
 
         current_user.enterprise.groups.each do |group|
           graph.query = graph.query
             .filter_agg(field: 'folder.group_id', value: group.id) { |q|
-            q.terms_agg(field: 'created_at', order_field: '_term', order_dir: 'asc')
+              q.terms_agg(field: 'created_at', order_field: '_term', order_dir: 'asc')
           }
-
-          elements = graph.formatter.list_parser.parse_list(graph.search)
 
           total = 0
           graph.formatter.add_series(series_name: group.name)
+          elements = graph.search
 
           elements.each { |e|
-            total += gen_parser.parse(e)
+            total += custom_parser.parse(e)[:x]
             graph.formatter.add_element(e, total: total)
           }
         end
@@ -396,7 +358,6 @@ class GenericGraphsController < ApplicationController
       format.json {
         graph = UserGroup.get_graph
         graph.set_enterprise_filter(field: 'group.enterprise_id', value: current_user.enterprise_id)
-
         graph.formatter.title = 'Users interested in Mentorship'
 
         graph.query = graph.query.bool_filter_agg { |qq| qq.terms_agg(field: 'group.name') }
@@ -424,7 +385,6 @@ class GenericGraphsController < ApplicationController
       format.json {
         graph = MentoringSession.get_graph
         graph.set_enterprise_filter(field: 'creator.enterprise_id', value: current_user.enterprise_id)
-
         graph.formatter.title = 'Mentoring Sessions'
 
         graph.query = graph.query.bool_filter_agg { |qq| qq.terms_agg(field: 'creator.last_name') { |qqq|
@@ -433,7 +393,8 @@ class GenericGraphsController < ApplicationController
         }
 
         graph.query.add_filter_clause(field: 'creator.active', value: true, bool_op: :must)
-        graph.formatter.y_parser.parse_chain = graph.formatter.y_parser.date_range
+        parser = graph.formatter.parser
+        parser.extractors[:y] = parser.date_range(key: :doc_count)
 
         graph.formatter.add_elements(graph.search)
 
@@ -453,7 +414,6 @@ class GenericGraphsController < ApplicationController
       format.json {
         graph = MentorshipInterest.get_graph
         graph.set_enterprise_filter(field: 'user.enterprise_id', value: current_user.enterprise_id)
-
         graph.formatter.title = 'Mentoring Interests'
 
         graph.query  = graph.query.terms_agg(field: 'mentoring_interest.name')
@@ -780,12 +740,12 @@ class GenericGraphsController < ApplicationController
     to_date = DateTime.parse((date_range[:to_date].presence || default_to_date)).strftime('%F')
 
     from_date = case from_date
-                when '1m'     then 'now-1M/M'
-                when '3m'     then 'now-3M/M'
-                when '6m'     then 'now-6M/M'
+                when '1m'     then 'now-1M'
+                when '3m'     then 'now-3M'
+                when '6m'     then 'now-6M'
                 when 'ytd'    then Time.now.beginning_of_year.strftime('%F')
-                when '1y'     then 'now-1y/y'
-                when 'all'    then 'now-200y/y'
+                when '1y'     then 'now-1y'
+                when 'all'    then 'now-200y'
                 else
                   DateTime.parse(from_date).strftime('%F')
                 end
