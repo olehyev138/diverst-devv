@@ -213,10 +213,17 @@ class Enterprise < BaseClass
         Resource.where(:folder_id => group_folder_ids).count
     end
 
-    def generic_graphs_group_population_csv(erg_text)
+    def generic_graphs_group_population_csv(erg_text, from_date, to_date)
+      from_date = from_date.to_datetime if from_date.present?
+      to_date = to_date.to_datetime if to_date.present?
+
       data = self.groups.all_parents.map { |g|
+          members = g.members.active
+          members = members.where('user_groups.created_at >= ?', from_date) if from_date.present?
+          members = members.where('user_groups.created_at <= ?', to_date) if to_date.present?
+
           {
-              y: g.members.active.count,
+              y: members.count,
               name: g.name,
               drilldown: g.name
           }
