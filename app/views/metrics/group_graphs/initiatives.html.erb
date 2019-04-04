@@ -13,12 +13,12 @@
     <div class="card__section">
       <div class="flex-row flex-row--middle">
         <div class="flex-row__cell flex-row__cell--grow">
-          <h4>Group Population</h4>
+          <h4>Initiatives per <%= c_t(:erg) %></h4>
           <%= render 'components/range_selector' %>
           <div class="card__action">
             <%= link_to "Export CSV", growth_of_employees_generic_graphs_path(format: :csv), class: "hidden-xs" %>
           </div>
-          <div id="users_per_group" class="graph" data-url="<%= group_population_metrics_groups_path %>">
+          <div id="initiatives_per_group" class="graph" data-url="<%= initiatives_per_group_metrics_groups_path %>">
             <svg></svg>
           </div>
           <input type="button" hidden class="drillout_button" value="Back"></input>

@@ -28,11 +28,22 @@ module Metrics
 
     def add_scoped_model_filter(graph_builder, field, scoped_ids)
       # Wraps an existing ElasticsearchQuery in a filter that filters on a list of model ids
+      return graph_builder.query if scoped_ids.blank?
+
       query = graph_builder.get_new_query.bool_filter_agg { |_| graph_builder.query }
       query.add_filter_clause(field: field, value: scoped_ids, bool_op: :must, multi: true)
 
       query
     end
+
+    def c_t(key)
+      enterprise.custom_text.send(key)
+    end
+
+    def enterprise
+      Enterprise.find(self.enterprise_id)
+    end
+
 
     def enterprise_id
       self.enterprise_id

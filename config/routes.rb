@@ -571,7 +571,16 @@ Rails.application.routes.draw do
       get 'initiatives'
       get 'social_media'
       get 'resources'
+
       get 'group_population'
+      get 'initiatives_per_group'
+      get 'messages_per_group'
+      get 'views_per_group'
+      get 'views_per_folder'
+      get 'views_per_resource'
+      get 'views_per_news_link'
+      get 'growth_of_groups'
+      get 'growth_of_resources'
     end
   end
 
