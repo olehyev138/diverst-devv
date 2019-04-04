@@ -1,0 +1,31 @@
+<div class="content__header">
+  <h1>Initiatives</h1>
+
+  <select multiple id="select2-field-groups" class="select2-field-groups" style="width: 500px;"></select>
+  <a href="#" class="select2-select-all" data-select-id="select2-field-groups" data-select-all-path="<%= get_all_groups_groups_path %>">Select All</a> |
+  <a href="#" class="select2-clear-all" data-select-id="select2-field-groups">Clear Selection</a>
+
+  <input type="button" class="model-scoper btn btn-primary" value="Update">
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <div class="flex-row flex-row--middle">
+        <div class="flex-row__cell flex-row__cell--grow">
+          <h4>Group Population</h4>
+          <%= render 'components/range_selector' %>
+          <div class="card__action">
+            <%= link_to "Export CSV", growth_of_employees_generic_graphs_path(format: :csv), class: "hidden-xs" %>
+          </div>
+          <div id="users_per_group" class="graph" data-url="<%= group_population_metrics_groups_path %>">
+            <svg></svg>
+          </div>
+          <input type="button" hidden class="drillout_button" value="Back"></input>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= render partial: 'shared/select2_ajax_search.js.erb' %>

@@ -4,6 +4,40 @@ class Metrics::GroupGraphsController < ApplicationController
 
   layout 'metrics'
 
+  # Views
+
+  # - Overview
+  #   - population
+  #   - views per group
+  #   - links to sub dashboards
+  # - Initiatives
+  #   - initiatives created per erg
+  #   - upcoming, ongoing initiatives
+  # - Social Media
+  #   - # messages per group
+  #   - # news links per group
+  #   - # views per news link
+  #   - table of messages
+  #   - table of news links
+  # - Resources
+  #    - Views per folder
+  #    - Views per resource
+  #    - tables, other stats
+
+  def overview
+  end
+
+  def initiatives
+  end
+
+  def social_media
+  end
+
+  def resources
+  end
+
+  # Metrics
+
   def group_population
     respond_to do |format|
       format.json {

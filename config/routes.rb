@@ -567,7 +567,10 @@ Rails.application.routes.draw do
     end
 
     resource :groups, controller: :group_graphs, only: [:index] do
-      get 'index'
+      get 'overview'
+      get 'initiatives'
+      get 'social_media'
+      get 'resources'
       get 'group_population'
     end
   end

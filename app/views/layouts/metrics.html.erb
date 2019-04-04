@@ -16,7 +16,25 @@
 <div class="menu menu--desktop">
   <%= active_link_to "Overview", metrics_overview_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <%= active_link_to 'Users', metrics_users_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-  <%= active_link_to c_t(:erg).pluralize, metrics_groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+
+  <%= active_link_to "#{c_t(:erg).pluralize}&nbsp;<span class='caret'></span>".html_safe, "", "aria-label": c_t(:erg), "aria_control": "navigation", "data-jq-dropdown": "#group_dashboards", class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <nav id="group_dashboards" class="jq-dropdown jq-dropdown-tip">
+    <ul class="jq-dropdown-menu">
+      <li>
+        <%= active_link_to "Overview", overview_metrics_groups_path, class: "secondary-header__tab" %>
+      </li>
+      <li>
+        <%= active_link_to "Initiatives", initiatives_metrics_groups_path, class: "secondary-header__tab" %>
+      </li>
+      <li>
+        <%= active_link_to "Social Media", social_media_metrics_groups_path, class: "secondary-header__tab" %>
+      </li>
+      <li>
+        <%= active_link_to "Resources", resources_metrics_groups_path, class: "secondary-header__tab" %>
+      </li>
+    </ul>
+  </nav>
+
   <%= active_link_to c_t(:segment).pluralize, campaigns_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <%= active_link_to 'Mentorship', groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <%= active_link_to 'Innovation', generic_graphs_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
