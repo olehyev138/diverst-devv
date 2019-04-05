@@ -1,0 +1,40 @@
+.group-selector .groups-content .parent,
+.group-selector .groups-content .child {
+    cursor: pointer;
+    padding: 8px 12px;
+}
+
+.group-selector .groups-content {
+    padding: 0 15px;
+}
+
+.group-selector .groups-content .group-logo-container {
+    padding: 0 !important;
+}
+
+.group-selector .groups-content .col {
+    padding-top: 0;
+    padding-bottom: 0;
+    display: flex;
+    height: 48px;
+    align-items: center;
+}
+
+.group-selector .groups-content .col:not(.pull-right) {
+
+}
+
+.group-selector .groups-content .child-indicator {
+    margin: 11px 0;
+    height: 2px;
+    width: 20px;
+    background-color: #999999;
+}
+
+.group-selector .groups-content .expand-group-btn {
+    line-height: 1.1;
+    padding: 0 6px;
+    font-size: 1.7em;
+    font-weight: 800;
+    min-width: 30px;
+}

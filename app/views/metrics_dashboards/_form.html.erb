@@ -1,6 +1,19 @@
 <div class="content__main">
   <%= simple_form_for @metrics_dashboard do |f| %>
 
+    <%= render partial: 'components/group_selector', locals: { id: "multiGroupSelectModal", multiselect: true } %>
+    <%= render partial: 'components/group_selector', locals: { id: "singleGroupSelectModal", multiselect: false } %>
+
+    <button type="button" class="btn btn--primary" data-toggle="modal" data-target="#multiGroupSelectModal">
+      Choose Groups (Multi)
+    </button>
+
+    <button type="button" class="btn btn--primary" data-toggle="modal" data-target="#singleGroupSelectModal">
+      Choose Groups (Single)
+    </button>
+    <br>
+    <br>
+
     <div class="card">
       <div class="card__section card__section--border">
         <%= f.association :groups,

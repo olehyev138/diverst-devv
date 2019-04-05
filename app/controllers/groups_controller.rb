@@ -1,6 +1,6 @@
 class GroupsController < ApplicationController
     before_action :authenticate_user!, except: [:calendar_data]
-    before_action :set_group, except: [:index, :new, :create, :calendar, :calendar_data, :close_budgets, :close_budgets_export_csv, :sort, :get_all_groups]
+    before_action :set_group, except: [:index, :new, :create, :calendar, :calendar_data, :close_budgets, :close_budgets_export_csv, :sort, :get_all_groups, :get_paginated_groups]
     before_action :set_groups, only: [:index, :get_all_groups]
     skip_before_action :verify_authenticity_token, only: [:create, :calendar_data]
     after_action :verify_authorized, except: [:calendar_data]
@@ -17,6 +17,32 @@ class GroupsController < ApplicationController
         respond_to do |format|
           format.html
           format.json { render json: GroupDatatable.new(view_context, @groups) }
+        end
+    end
+
+    def get_paginated_groups
+        authorize Group, :index?
+
+        respond_to do |format|
+            format.json {
+                groups = current_user.enterprise.groups.all_parents
+                  .order(:position)
+                  .page(search_params[:page])
+                  .per(search_params[:limit])
+
+                groups_json = groups.to_json(
+                  only: [:id, :name, :description, :parent_id, :position],
+                  include: {
+                    children: {
+                      only: [:id, :name, :description, :parent_id, :position],
+                      methods: :logo_expiring_thumb
+                    }
+                  },
+                  methods: :logo_expiring_thumb
+                )
+
+                render json: { total_pages: groups.total_pages, groups: JSON.parse(groups_json) }.to_json
+            }
         end
     end
 
@@ -378,6 +404,10 @@ class GroupsController < ApplicationController
     def set_groups
       @groups = GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_manage)
       .resolve.order(:position)
+    end
+
+    def search_params
+        params.permit(:page, :limit)
     end
 
     def group_params
