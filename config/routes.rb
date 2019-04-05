@@ -582,15 +582,15 @@ Rails.application.routes.draw do
       get 'growth_of_groups'
       get 'growth_of_resources'
     end
-  end
 
-  resources :metrics_dashboards do
-    get 'shared_dashboard'
+    resources :metrics_dashboards do
+      get 'shared_dashboard'
 
-    resources :graphs do
-      member do
-        get 'data'
-        get 'export_csv'
+      resources :graphs do
+        member do
+          get 'data'
+          get 'export_csv'
+        end
       end
     end
   end

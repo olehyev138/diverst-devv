@@ -20,7 +20,7 @@ class Graph < BaseClass
 
   def set_graph_builder
     if @graph_builder.blank? && collection.present?
-      @graph_builder = get_custom_class.get_graph
+      @graph_builder = get_custom_class.get_graph_builder
       @graph_builder.set_enterprise_filter(field: 'user.enterprise_id', value: collection.enterprise.id)
 
       @graph_builder.formatter.type = 'custom'

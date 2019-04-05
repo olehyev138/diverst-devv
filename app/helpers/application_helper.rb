@@ -77,7 +77,7 @@ module ApplicationHelper
   end
 
   def manage_erg_root_path
-    return metrics_dashboards_path if MetricsDashboardPolicy.new(current_user, MetricsDashboard).index?
+    return metrics_overview_path if MetricsDashboardPolicy.new(current_user, MetricsDashboard).index?
     return groups_path if GroupPolicy.new(current_user, Group).create?
     return segments_path if SegmentPolicy.new(current_user, Segment).index?
     return calendar_groups_path if GroupPolicy.new(current_user, Group).calendar?
