@@ -583,6 +583,15 @@ Rails.application.routes.draw do
       get 'growth_of_resources'
     end
 
+    resource :segments, controller: :segment_graphs do
+      get 'index'
+      get 'segment_population'
+    end
+
+    resource :mentorship, controller: :mentorship_graphs do
+      get 'index'
+    end
+
     resources :metrics_dashboards do
       get 'shared_dashboard'
 

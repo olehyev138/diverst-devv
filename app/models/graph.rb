@@ -3,6 +3,8 @@ class Graph < BaseClass
   include Metrics::OverviewMetrics
   include Metrics::GroupMetrics
   include Metrics::UserMetrics
+  include Metrics::SegmentMetrics
+  #include Metrics::MentorshipMetrics
 
   belongs_to :poll
   belongs_to :metrics_dashboard
