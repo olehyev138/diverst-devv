@@ -4,6 +4,12 @@ class Metrics::SegmentGraphsController < ApplicationController
 
   layout 'metrics'
 
+  def index
+    @data = {
+      segment_count: current_user.enterprise.segments.count
+    }
+  end
+
   def segment_population
     respond_to do |format|
       format.json {
@@ -17,15 +23,5 @@ class Metrics::SegmentGraphsController < ApplicationController
   def set_graph
     @graph = Graph.new
     @graph.enterprise_id = current_user.enterprise_id
-  end
-
-  def segment_params
-    params.permit(
-      date_range: [
-        :from_date,
-        :to_date
-      ],
-      scoped_by_models: []
-    )
   end
 end

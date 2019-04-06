@@ -4,6 +4,36 @@ class Metrics::MentorshipGraphsController < ApplicationController
 
   layout 'metrics'
 
+  def index
+    @data = {
+      past_mentoring_sessions: 12 # TODO
+    }
+  end
+
+  def user_mentorship_interest_per_group
+    respond_to do |format|
+      format.json {
+        render json: @graph.user_mentorship_interest_per_group
+      }
+    end
+  end
+
+  def mentoring_sessions_per_creator
+    respond_to do |format|
+      format.json {
+        render json: @graph.mentoring_sessions_per_creator(mentorship_params[:date_range])
+      }
+    end
+  end
+
+  def mentoring_interests
+    respond_to do |format|
+      format.json {
+        render json: @graph.mentoring_interests
+      }
+    end
+  end
+
 
   private
 

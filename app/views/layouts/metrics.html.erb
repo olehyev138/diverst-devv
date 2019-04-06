@@ -38,7 +38,7 @@
   </nav>
 
   <%= active_link_to c_t(:segment).pluralize, metrics_segments_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
-  <%= active_link_to 'Mentorship', groups_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to 'Mentorship', metrics_mentorship_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <%= active_link_to 'Innovation', generic_graphs_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <%= active_link_to 'Polls', polls_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <%= active_link_to 'Custom', metrics_metrics_dashboards_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
