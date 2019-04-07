@@ -4,18 +4,16 @@
     <%= render partial: 'components/group_selector', locals: { id: "multiGroupSelectModal", multiselect: true } %>
     <%= render partial: 'components/group_selector', locals: { id: "singleGroupSelectModal", multiselect: false } %>
 
-    <button type="button" class="btn btn--primary" data-toggle="modal" data-target="#multiGroupSelectModal">
-      Choose Groups (Multi)
-    </button>
-
-    <button type="button" class="btn btn--primary" data-toggle="modal" data-target="#singleGroupSelectModal">
-      Choose Groups (Single)
-    </button>
-    <br>
-    <br>
-
     <div class="card">
       <div class="card__section card__section--border">
+        <button type="button" class="btn btn--primary btn--small" data-toggle="modal" data-target="#multiGroupSelectModal">
+          Choose Groups (Multi)
+        </button>
+
+        <button type="button" class="btn btn--primary btn--small" data-toggle="modal" data-target="#singleGroupSelectModal">
+          Choose Groups (Single)
+        </button>
+
         <%= f.association :groups,
               label: "Choose what <strong>#{ c_t(:erg).pluralize }</strong> should be included in this dashboard".html_safe,
               input_html: { class: "select2-field-groups", id: "select2-field-groups", autofocus: true } %>
@@ -47,3 +45,9 @@
 </div>
 
 <%= render partial: 'shared/select2_ajax_search.js.erb' %>
+
+<script>
+    $(".group-selector").on('saveGroups', function(e, selectedGroupIDs) {
+      console.log(selectedGroupIDs);
+    });
+</script>

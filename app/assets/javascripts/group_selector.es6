@@ -11,11 +11,36 @@ const CLASSES = {
     GROUP_CONTAINER_PREFIX: 'group_container_',
     GROUP_PREFIX: 'group_',
     EXPAND_BUTTON: 'expand-group-btn',
-    SAVE_BUTTON: 'save-groups-btn'
+    SELECT_ALL_BUTTON: 'select-all-btn',
+    CLEAR_BUTTON: 'clear-btn',
+    SAVE_BUTTON: 'save-groups-btn',
+    PAGINATION_ROW: 'pagination-row',
+    HELPER_ROW: 'helper-row',
+    TOTAL_PAGES_TEXT: 'total-pages-text',
+    CURRENT_PAGE_TEXT: 'current-page-text',
+    PAGINATION_TEXT: 'pagination-text',
+    PAGINATION_BUTTON: 'pagination-button',
+    NEXT_PAGE_BUTTON: 'next-page-btn',
+    PREVIOUS_PAGE_BUTTON: 'previous-page-btn',
+    FIRST_PAGE_BUTTON: 'first-page-btn',
+    LAST_PAGE_BUTTON: 'last-page-btn'
 }
-const TITLE = {
-    MULTISELECT: 'Choose group(s)',
-    SINGLESELECT: 'Choose group'
+
+const EXPAND_BUTTON_TEXT = {
+    EXPAND: "+",
+    COLLAPSE: "⎯"
+}
+
+const PAGINATION_TEXT = {
+    PREVIOUS: "&lsaquo;",
+    NEXT: "&rsaquo;",
+    FIRST: "&laquo;",
+    LAST: "&raquo;"
+}
+
+const DEFAULT_GROUP_TEXT = {
+    SINGULAR: "group",
+    PLURALIZED: "groups"
 }
 
 class GroupSelector {
@@ -24,38 +49,61 @@ class GroupSelector {
         this.$element = $element;
         // multiselect is a boolean that defines whether multiple groups can be selected
         this.multiselect = this.$element.data('multiselect');
-
         // dataUrl is the URL that the group selector fetches from
         this.dataUrl = this.$element.data('url');
+        // allDataUrl is the URL that the group selector 'Select All' fetches from
+        this.allDataUrl = this.$element.data('all-url');
         // groupsElement is the jQuery object where group data will be inserted
         this.groupsElement = $("." + CLASSES.CONTENT, this.$element);
-        // store the data on the object so we can use it when expanding, etc.
+
+
+        // Store the data on the object so we can use it when expanding, etc.
         this.data = {};
-        // stores the currently selected groups
+        // Stores the currently selected groups
         this.selectedGroupIds = [];
 
+
+        // Pagination variables
         this.currentPage = STARTING_PAGE;
         this.totalPages = this.currentPage;
-
-        this.buildModalHtml();
 
         // Store instance in self, so that we can use access instance inside closures and event handlers
         let self = this;
 
-        // Add event listeners
-        $("." + CLASSES.SAVE_BUTTON, this.$element).each(function() {
-            $(this).on('click', null, { self: self, button: this }, self.saveHandler);
-        });
+        // Add title html
+        $("." + CLASSES.HEADER, this.$element).html(this.buildTitleHtml());
+
+        // Add pagination html
+        $(".modal-footer > .row." + CLASSES.PAGINATION_ROW, this.$element).html(this.buildPaginationHtml());
+
+        // Add selector helper html
+        $(".modal-footer > .row." + CLASSES.HELPER_ROW, this.$element).append(this.buildHelperHtml());
+
+        // Add initial event listeners
+        $("." + CLASSES.SAVE_BUTTON, this.$element).click({ self: self }, self.saveHandler);
+        $("." + CLASSES.SELECT_ALL_BUTTON, this.$element).click({ self: self }, self.selectAllHandler);
+        $("." + CLASSES.CLEAR_BUTTON, this.$element).click({ self: self }, self.clearHandler);
+        $("." + CLASSES.PREVIOUS_PAGE_BUTTON, this.$element).click({ self: self }, self.previousPageHandler);
+        $("." + CLASSES.NEXT_PAGE_BUTTON, this.$element).click({ self: self }, self.nextPageHandler);
+        $("." + CLASSES.FIRST_PAGE_BUTTON, this.$element).click({ self: self }, self.firstPageHandler);
+        $("." + CLASSES.LAST_PAGE_BUTTON, this.$element).click({ self: self }, self.lastPageHandler);
 
         this.updateData();
     }
 
-    updateData(page = STARTING_PAGE, limit = LIMIT) {
+    updateData() {
         let self = this;
 
-        $.get(this.dataUrl, { page: page, limit: limit }, (data) => {
+        $.get(this.dataUrl, { page: this.currentPage, limit: LIMIT }, (data) => {
             console.log(data);
-            self.totalPages = data.total_pages;
+
+            // Get the custom group text
+            self.groupText = data.group_text;
+            self.groupTextPluralized = data.group_text_pluralized;
+
+            self.totalPages = data.total_pages; // Get the total page count
+
+            // Update the group data
             self.data = data.groups;
             self.onDataUpdate();
         });
@@ -65,182 +113,191 @@ class GroupSelector {
         let self = this;
         let data = this.data;
 
-        // Ugly html building
+        this.groupsElement.html(''); // Clear the list of groups
 
-        self.groupsElement.html('');
-
+        // The groups list is not defined or empty
         if (data == undefined || data.length == 0) {
-            self.groupsElement.append(`
-                <div class="card__section"><h4>There are no groups.</h4></div>
-            `);
+            self.groupsElement.append('<div class="card__section"><h4>There are no groups.</h4></div>');
             return;
         }
 
-        $.each(data, function(index, group) {
-            var expandButtonHtml = "";
-            var groupLogoHtml = "";
+        // For each group, add it and it's children to the HTML
+        $.each(data, function(i, group) {
+            var html = self.buildGroupHtml(group, i == data.length - 1);
 
-            if (group.children.length > 0) {
+            $.each(group.children, function (j, child) {
+                html += self.buildGroupHtml(child);
+            });
+
+            self.groupsElement.append(html);
+        });
+
+        // Post data calls
+        this.checkSelectedGroups();
+        this.addPostDataEventListeners();
+        this.updatePaginationButtons();
+
+        // Set the total pages count
+        $("." + CLASSES.TOTAL_PAGES_TEXT, this.$element).text(self.totalPages);
+    }
+
+    // ************* HTML Builders *************
+
+    buildGroupHtml(group, lastParentGroup = false) {
+        var containerClass = CLASSES.CHILD_GROUP;
+        var childIndicatorHtml = "";
+        var groupLogoHtml = "";
+        var expandButtonHtml = "";
+        var booleanHtml = "";
+
+        // The group is a parent
+        if (!$.isNumeric(group.parent_id)) {
+            // Don't put a border on the last parent
+            if (lastParentGroup)
+                containerClass = CLASSES.PARENT_GROUP;
+            else
+                containerClass = CLASSES.PARENT_GROUP + " card__section--border";
+
+            // The group is a parent with children
+            if (group.children != undefined && group.children.length > 0) {
+                // Add the expand/collapse button
                 expandButtonHtml = `
                     <div class="col pull-right">
                         <input type="button" value="+" class="${CLASSES.EXPAND_BUTTON} btn btn--tertiary btn--small" data-group-id="${group.id}" />
                     </div>
                 `;
             }
-
-            if (group.logo_expiring_thumb) {
-                groupLogoHtml = `
-                    <div class="col group-logo-container">
-                        <img src="${group.logo_expiring_thumb}" alt="${group.name} Logo" width="48px" height="48px">
-                    </div>
-                `;
-            }
-
-            var html = `
-                <div class="${CLASSES.PARENT_GROUP} card__section card__section--border ${CLASSES.GROUP_CONTAINER_PREFIX}${group.id}" data-group-id="${group.id}">
-                    <div class="row">
-                        ${groupLogoHtml}
-                        <div class="col">
-                            <label class="control">
-                                <input value="0" type="hidden" class="${CLASSES.GROUP_PREFIX}${group.id}" name="${CLASSES.GROUP_PREFIX}${group.id}">
-                                <input type="checkbox" class="control__input boolean optional ${CLASSES.GROUP_PREFIX}${group.id}" name="${CLASSES.GROUP_PREFIX}${group.id}">
-                                <span class="control__indicator control__indicator--checkbox"></span>
-                            </label>
-                        </div>
-                        <div class="col">
-                            ${group.name}
-                        </div>
-                        ${expandButtonHtml}
-                    </div>
-                </div>
-            `;
-
-            $.each(group.children, function (cIndex, child) {
-                if (child.logo_file_name && false) {
-                    groupLogoHtml = `
-                        <div class="col">
-                            <img src="${child.logo_file_name}" alt="${child.name} Logo">
-                        </div>
-                    `;
-                }
-                else {
-                    groupLogoHtml = "";
-                }
-
-                html += `
-                    <div class="${CLASSES.COLLAPSE_CONTAINER} collapse card__section--border">
-                        <div class="${CLASSES.CHILD_GROUP} card__section group_container_${child.id}">
-                            <div class="row">
-                                <div class="col">
-                                    <hr class="child-indicator">
-                                </div>
-                                ${groupLogoHtml}
-                                <div class="col">
-                                    <label class="control">
-                                        <input value="0" type="hidden" class="${CLASSES.GROUP_PREFIX}${child.id}" name="${CLASSES.GROUP_PREFIX}${child.id}">
-                                        <input type="checkbox" class="control__input boolean optional ${CLASSES.GROUP_PREFIX}${child.id}" name="${CLASSES.GROUP_PREFIX}${child.id}">
-                                        <span class="control__indicator control__indicator--checkbox"></span>
-                                    </label>
-                                </div>
-                                <div class="col">
-                                    ${child.name}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-
-            self.groupsElement.append(html);
-        });
-
-        self.addEventListeners();
-    }
-
-    buildModalHtml() {
-        let self = this;
-
-        // Build & add modal title
-        var title = "";
-        if (this.multiselect === true)
-            title = TITLE.MULTISELECT;
-        else if (this.multiselect === false)
-            title = TITLE.SINGLESELECT;
+        }
         else {
-            this.multiselect = MULTISELECT_DEFAULT;
-            title = MULTISELECT_DEFAULT ? TITLE.MULTISELECT : TITLE.SINGLESELECT;
-        }
-
-        $("." + CLASSES.HEADER, self.$element).append(`
-            <h4 class="modal-title">${title}</h4>
-        `);
-
-        // Build & add helper elements (if necessary)
-        var helperHtml = "";
-
-        if (self.multiselect === true) {
-            helperHtml += `
+            childIndicatorHtml = `
                 <div class="col">
-                    <button type="button" class="btn btn--tertiary btn--small">Select All</button>
-                </div>
-                <div class="col">
-                    <button type="button" class="btn btn--tertiary btn--small">Clear</button>
+                    <hr class="child-indicator">
                 </div>
             `;
         }
 
-        $(".modal-footer > .row", self.$element).append(helperHtml);
+        // The group has a logo
+        if (group.logo_expiring_thumb) {
+            // Add the group logo
+            groupLogoHtml = `
+                <div class="col group-logo-container">
+                    <img src="${group.logo_expiring_thumb}" alt="${group.name} Logo" width="48px" height="48px">
+                </div>
+            `;
+        }
+        else {
+            groupLogoHtml = `
+                <div class="col group-logo-container" style="width: 48px;"></div>
+            `;
+        }
+
+        if (this.multiselect === true) {
+            booleanHtml = `
+                <input value="0" type="hidden" class="${CLASSES.GROUP_PREFIX}${group.id}" name="${CLASSES.GROUP_PREFIX}${group.id}">
+                <input type="checkbox" class="control__input boolean optional ${CLASSES.GROUP_PREFIX}${group.id}" name="${CLASSES.GROUP_PREFIX}${group.id}" data-group-id="${group.id}">
+                <span class="control__indicator control__indicator--checkbox"></span>
+            `;
+        }
+        else {
+            booleanHtml = `
+                <input type="radio" class="${CLASSES.GROUP_PREFIX}${group.id}" name="groups" value="${CLASSES.GROUP_PREFIX}${group.id}" data-group-id="${group.id}">
+                <span class="control__indicator control__indicator--radio"></span>
+            `;
+        }
+
+        let groupHtml = `
+            <div class="${containerClass} card__section ${CLASSES.GROUP_CONTAINER_PREFIX}${group.id}" data-group-id="${group.id}">
+                <div class="row">
+                    ${childIndicatorHtml}
+                    ${groupLogoHtml}
+                    <div class="col">
+                        <label class="control">
+                            ${booleanHtml}
+                        </label>
+                    </div>
+                    <div class="col">
+                        ${group.name}
+                    </div>
+                    ${expandButtonHtml}
+                </div>
+            </div>
+        `;
+
+        // The group is a parent
+        if ($.isNumeric(group.parent_id)) {
+            // Return collapsed HTML
+            return `
+                <div class="${CLASSES.COLLAPSE_CONTAINER} collapse card__section--border">
+                    ${groupHtml}
+                </div>
+            `;
+        }
+        else
+            return groupHtml; // Return normal HTML
     }
 
-    addEventListeners() {
-        let self = this;
+    buildTitleHtml() {
+        var title = "";
+        var subText = "";
+        var closeButton = '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
 
-        // Add event listener for the expand buttons
-        $("." + CLASSES.EXPAND_BUTTON, this.$element).each(function() {
-            $(this).on('click', null, { self: self, button: this }, self.expandGroupHandler);
+        var groupText = this.groupText;
+        var groupTextPluralized = this.groupTextPluralized;
 
-            // Enable expand/collapse button when expand/collapse is complete
-            var button = this;
-            $(button).closest("." + CLASSES.PARENT_GROUP).siblings("." + CLASSES.COLLAPSE_CONTAINER).on('shown.bs.collapse', function () {
-                $(button).removeAttr("disabled");
-            });
+        if (!groupText) {
+            groupText = DEFAULT_GROUP_TEXT.SINGULAR;
+            groupTextPluralized = DEFAULT_GROUP_TEXT.PLURALIZED;
+        }
 
-            $(button).closest("." + CLASSES.PARENT_GROUP).siblings("." + CLASSES.COLLAPSE_CONTAINER).on('hidden.bs.collapse', function () {
-                $(button).removeAttr("disabled");
-            });
-        });
+        if ((this.multiselect == null))
+            this.multiselect = MULTISELECT_DEFAULT;
 
-        // Enable the group checkbox if the row is clicked
-        $("." + CLASSES.PARENT_GROUP + ", ." + CLASSES.CHILD_GROUP, this.$element).click(function (e) {
-            let checkbox = $(this).find(".boolean");
-            if ($(e.target).hasClass(CLASSES.EXPAND_BUTTON))
-                return;
-            checkbox.prop("checked", !checkbox.prop("checked"));
-        });
+        if (this.multiselect == true) {
+            title = groupTextPluralized;
+            subText = "<small>Double click to select all sub-" + groupTextPluralized + "</small>";
+        }
+        else
+            title = groupText;
 
-        // Enable parent and all child group checkboxes if the row is double clicked
-        $("." + CLASSES.PARENT_GROUP, this.$element).dblclick(function() {
-            let parentCheckbox = $(this).find(".boolean");
-            parentCheckbox.prop("checked", !parentCheckbox.prop("checked"));
+        return closeButton + '<h4 class="modal-title">Choose ' + title + '</h4>' + subText;
+    }
 
-            let children = self.getGroupChildren(this);
-            $.each(children, function(index, child) {
-              let element = self.getElementFromGroupId(child.id);
-              element.prop("checked", !element.prop("checked"));
-            });
+    buildPaginationHtml() {
+        var html = `
+            <div class="col">
+                <button type="button" class="btn btn--tertiary btn--extra--small ${CLASSES.PAGINATION_BUTTON} ${CLASSES.FIRST_PAGE_BUTTON}">${PAGINATION_TEXT.FIRST}</button>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn--tertiary btn--extra--small ${CLASSES.PAGINATION_BUTTON} ${CLASSES.PREVIOUS_PAGE_BUTTON}">${PAGINATION_TEXT.PREVIOUS}</button>
+            </div>
+            <div class="col">
+                <div class="${CLASSES.PAGINATION_TEXT}">
+                    <span class="${CLASSES.CURRENT_PAGE_TEXT}">${STARTING_PAGE}</span>/<span class="${CLASSES.TOTAL_PAGES_TEXT}">${STARTING_PAGE}</span>
+                </div>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn--tertiary btn--extra--small ${CLASSES.PAGINATION_BUTTON} ${CLASSES.NEXT_PAGE_BUTTON}">${PAGINATION_TEXT.NEXT}</button>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn--tertiary btn--extra--small ${CLASSES.PAGINATION_BUTTON} ${CLASSES.LAST_PAGE_BUTTON}">${PAGINATION_TEXT.LAST}</button>
+            </div>
+        `;
 
-            let expandButton = $(this).find("." + CLASSES.EXPAND_BUTTON);
-            if (expandButton.val() === "+" && parentCheckbox.prop("checked"))
-              expandButton.click();
-        });
+        return html;
+    }
 
-        $("." + CLASSES.PARENT_GROUP + " .boolean, ." + CLASSES.CHILD_GROUP + " .boolean", this.$element).change(function () {
-            if ($(this).prop("checked"))
-                self.selectedGroupIds.push($(this).closest("." + CLASSES.PARENT_GROUP + ", ." + CLASSES.CHILD_GROUP).data("group-id"));
-            else
-                self.selectedGroupIds.filter(id => id !== $(this).closest("." + CLASSES.PARENT_GROUP + ", ." + CLASSES.CHILD_GROUP).data("group-id"));
-            console.log(self.selectedGroupIds);
-        });
+    buildHelperHtml() {
+        if (this.multiselect != true)
+            return "";
+
+        return `
+            <div class="col">
+                <button type="button" class="btn btn--tertiary btn--small ${CLASSES.SELECT_ALL_BUTTON}">Select All</button>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn--tertiary btn--small ${CLASSES.CLEAR_BUTTON}">Clear</button>
+            </div>
+        `;
     }
 
     // ************* Handlers *************
@@ -257,59 +314,257 @@ class GroupSelector {
         $.each(children, function(index, child) {
             self.toggleCollapse($("." + CLASSES.GROUP_CONTAINER_PREFIX + child.id, self.groupsElement).closest("." + CLASSES.COLLAPSE_CONTAINER));
         });
+
+        var lastParentElement = $("." + CLASSES.PARENT_GROUP + ":last-of-type", this.groupsElement);
+        lastParentElement.hasClass("card__section--border") ? lastParentElement.removeClass("card__section--border") : lastParentElement.addClass("card__section--border");
         
-        if ($(button).val() == "+")
-            $(button).val("-");
-        else
-            $(button).val("+");
+        // Toggle the expand/collapse button text
+        $(button).val() == EXPAND_BUTTON_TEXT.EXPAND ? $(button).val(EXPAND_BUTTON_TEXT.COLLAPSE) : $(button).val(EXPAND_BUTTON_TEXT.EXPAND);
+
+        // Toggle the expand/collapse button classes
+        $(button).hasClass("expanded") ? $(button).removeClass("expanded") : $(button).addClass("expanded");
     }
 
     selectAllHandler(e) {
         let self = e.data.self;
-        let button = e.data.button;
+
+        if (!self.allDataUrl)
+            return;
+
+        $.get(self.allDataUrl, (data) => {
+            $.each(data, function(index, group) {
+                self.addToSelectedGroups(group.id);
+            });
+
+            self.checkSelectedGroups();
+        });
+
+        console.log(self.selectedGroupIds);
     }
 
-    clearAllHandler(e) {
+    clearHandler(e) {
         let self = e.data.self;
-        let button = e.data.button;
+
+        self.selectedGroupIds = [];
+
+        $(".boolean", self.groupsElement).each(function() {
+            $(this).prop("checked", false);
+        });
+
+        console.log(self.selectedGroupIds);
     }
 
     saveHandler(e) {
         let self = e.data.self;
-        let button = e.data.button;
 
         self.$element.modal('hide');
-        self.$element.trigger("saveGroups");
+        self.$element.trigger("saveGroups", [self.selectedGroupIds]);
     }
+
+    previousPageHandler(e) {
+        let self = e.data.self;
+
+        if (self.currentPage > STARTING_PAGE) {
+            self.currentPage--;
+            self.updateCurrentPageText();
+            self.updatePaginationButtons();
+            self.updateData();
+        }
+    }
+
+    nextPageHandler(e) {
+        let self = e.data.self;
+
+        if (self.currentPage < self.totalPages) {
+            self.currentPage++;
+            self.updateCurrentPageText();
+            self.updatePaginationButtons();
+            self.updateData();
+        }
+    }
+
+    firstPageHandler(e) {
+        let self = e.data.self;
+
+        if (self.currentPage != STARTING_PAGE) {
+            self.currentPage = STARTING_PAGE;
+            self.updateCurrentPageText();
+            self.updatePaginationButtons();
+            self.updateData();
+        }
+    }
+    
+    lastPageHandler(e) {
+        let self = e.data.self;
+
+        if (self.currentPage != self.totalPages) {
+            self.currentPage = self.totalPages;
+            self.updateCurrentPageText();
+            self.updatePaginationButtons();
+            self.updateData();
+        }
+    }
+
 
     // ************* Helpers *************
 
-    // element is an element that contains a data field 'group-id'
-    // adds an element to the selected groups array
-    addSelectedGroup(element) {
 
+    // Adds the event listeners for elements created on data pull
+    addPostDataEventListeners() {
+        let self = this;
+
+        // Add event listener for the expand buttons
+        $("." + CLASSES.EXPAND_BUTTON, this.groupsElement).each(function() {
+            $(this).on('click', { self: self, button: this }, self.expandGroupHandler);
+
+            // Enable expand/collapse button when expand/collapse is complete
+            var button = this;
+            $(button).closest("." + CLASSES.PARENT_GROUP).siblings("." + CLASSES.COLLAPSE_CONTAINER).on('shown.bs.collapse', function () {
+                $(button).removeAttr("disabled");
+            });
+
+            $(button).closest("." + CLASSES.PARENT_GROUP).siblings("." + CLASSES.COLLAPSE_CONTAINER).on('hidden.bs.collapse', function () {
+                $(button).removeAttr("disabled");
+            });
+        });
+
+        // Enable the group checkbox if the row is clicked
+        $("." + CLASSES.PARENT_GROUP + ", ." + CLASSES.CHILD_GROUP, this.groupsElement).click(function (e) {
+            let checkbox = $(this).find(".boolean");
+            if ($(e.target).hasClass(CLASSES.EXPAND_BUTTON) || $(e.target).hasClass('boolean') || $(e.target).hasClass('control__indicator--checkbox'))
+                return;
+
+            checkbox.prop("checked", !checkbox.prop("checked"));
+
+            if (checkbox.prop("checked"))
+                self.addElementAsSelectedGroup(checkbox);
+            else
+                self.removeElementAsSelectedGroup(checkbox);
+        });
+
+        // Add or remove selected group if checkbox is checked
+        $(".boolean", this.groupsElement).click(function () {
+            if ($(this).prop("checked"))
+                self.addElementAsSelectedGroup(this);
+            else
+                self.removeElementAsSelectedGroup(this);
+        });
+
+        // Enable parent and all child group checkboxes if the row is double clicked
+        $("." + CLASSES.PARENT_GROUP, this.groupsElement).dblclick(function(e) {
+            if ($(e.target).hasClass(CLASSES.EXPAND_BUTTON) || $(e.target).hasClass('boolean') || $(e.target).hasClass('control__indicator--checkbox'))
+                return;
+
+            let parentCheckbox = $(this).find(".boolean");
+            parentCheckbox.prop("checked", !parentCheckbox.prop("checked"));
+
+            if (parentCheckbox.prop("checked"))
+                self.addElementAsSelectedGroup(parentCheckbox);
+            else
+                self.removeElementAsSelectedGroup(parentCheckbox);
+
+            let children = self.getGroupChildren(this);
+            $.each(children, function(index, child) {
+                let childCheckbox = self.getElementFromGroupId(child.id);
+                childCheckbox.prop("checked", parentCheckbox.prop("checked"));
+
+                if (childCheckbox.prop("checked"))
+                    self.addElementAsSelectedGroup(childCheckbox);
+                else
+                    self.removeElementAsSelectedGroup(childCheckbox);
+            });
+
+            let expandButton = $(this).find("." + CLASSES.EXPAND_BUTTON);
+            if (expandButton.val() === EXPAND_BUTTON_TEXT.EXPAND && parentCheckbox.prop("checked"))
+                expandButton.click();
+        });
+    }
+
+    // Checks all boxes who's group is in the selected groups array
+    checkSelectedGroups() {
+        let self = this;
+
+        $(".boolean", this.groupsElement).each(function() {
+            if ($.inArray($(this).data("group-id"), self.selectedGroupIds) != -1) {
+                $(this).prop("checked", true);
+            }
+        });
+    }
+
+    // Updates the "current page" text
+    updateCurrentPageText() {
+        let self = this;
+    
+        $("." + CLASSES.CURRENT_PAGE_TEXT).text(self.currentPage);
+    }
+
+    updatePaginationButtons() {
+        if (this.currentPage <= STARTING_PAGE) {
+            $("." + CLASSES.PREVIOUS_PAGE_BUTTON, this.$element).attr("disabled", true);
+            $("." + CLASSES.FIRST_PAGE_BUTTON, this.$element).attr("disabled", true);
+        }
+        else {
+            $("." + CLASSES.PREVIOUS_PAGE_BUTTON, this.$element).attr("disabled", false);
+            $("." + CLASSES.FIRST_PAGE_BUTTON, this.$element).attr("disabled", false);
+        }
+
+        if (this.currentPage >= this.totalPages) {
+            $("." + CLASSES.NEXT_PAGE_BUTTON, this.$element).attr("disabled", true);
+            $("." + CLASSES.LAST_PAGE_BUTTON, this.$element).attr("disabled", true);
+        }
+        else {
+            $("." + CLASSES.NEXT_PAGE_BUTTON, this.$element).attr("disabled", false);
+            $("." + CLASSES.LAST_PAGE_BUTTON, this.$element).attr("disabled", false);
+        }
     }
 
     // element is an element that contains a data field 'group-id'
-    // removes an element from the selected groups array
-    removeSelectedGroup(element) {
+    // Gets the group ID from the HTML element and adds it to the selected groups array
+    addElementAsSelectedGroup(element) {
+        this.addToSelectedGroups($(element).data("group-id"));
+    }
 
+    // element is an element that contains a data field 'group-id'
+    // Gets the group ID from the HTML element and removes it from the selected groups array
+    removeElementAsSelectedGroup(element) {
+        this.removeFromSelectedGroups($(element).data("group-id"));
+    }
+
+    // groupId is the ID of the group to add
+    // Adds a group ID to the array of selected group IDs
+    addToSelectedGroups(groupId) {
+        if (!$.isNumeric(groupId))
+            return;
+
+        this.selectedGroupIds.push(groupId);
+        console.log(this.selectedGroupIds);
+    }
+
+    // groupId is the ID of the group to remove
+    // Removes a group ID from the array of selected group IDs
+    removeFromSelectedGroups(groupId) {
+        var idx = $.inArray(groupId, this.selectedGroupIds);
+        if (idx == -1)
+            return;
+
+        this.selectedGroupIds.splice(idx, 1);
+        console.log(this.selectedGroupIds);
     }
 
     // jqObject is a jQuery object
-    // toggles the collapse of the object
+    // Toggles the collapse of the object
     toggleCollapse(jqObject) {
         jqObject.collapse('toggle');
     }
 
     // group_id is the ID of a group
-    // returns the element relating to the group ID
+    // Returns the element relating to the group ID
     getElementFromGroupId(group_id) {
-      return $("." + CLASSES.GROUP_PREFIX + group_id, this.$element);
+      return $(".boolean." + CLASSES.GROUP_PREFIX + group_id, this.groupsElement);
     }
 
     // element is a DOM element that has 'group-id'
-    // returns an array of child elements
+    // Returns an array of child elements
     getGroupChildren(element) {
       let self = this;
 

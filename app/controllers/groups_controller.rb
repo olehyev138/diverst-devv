@@ -26,22 +26,28 @@ class GroupsController < ApplicationController
         respond_to do |format|
             format.json {
                 groups = current_user.enterprise.groups.all_parents
-                  .order(:position)
-                  .page(search_params[:page])
-                  .per(search_params[:limit])
+                    .includes(:children)
+                    .order(:position)
+                    .page(search_params[:page])
+                    .per(search_params[:limit])
 
-                groups_json = groups.to_json(
-                  only: [:id, :name, :description, :parent_id, :position],
+                groups_json = groups.as_json(
+                  only: [:id, :name, :parent_id, :position],
                   include: {
                     children: {
-                      only: [:id, :name, :description, :parent_id, :position],
+                      only: [:id, :name, :parent_id, :position],
                       methods: :logo_expiring_thumb
                     }
                   },
                   methods: :logo_expiring_thumb
                 )
 
-                render json: { total_pages: groups.total_pages, groups: JSON.parse(groups_json) }.to_json
+                render json: {
+                    total_pages: groups.total_pages,
+                    group_text: c_t(:erg).downcase,
+                    group_text_pluralized: c_t(:erg).pluralize.downcase,
+                    groups: groups_json
+                }
             }
         end
     end

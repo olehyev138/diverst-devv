@@ -1,3 +1,28 @@
+.group-selector .pagination-row {
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+.group-selector .helper-row {
+    padding-top: 10px;
+}
+
+.group-selector .pagination-row .col {
+    float: none;
+    display: inline-block;
+}
+
+.group-selector .pagination-row .col .pagination-text {
+    font-weight: bold;
+}
+
+.group-selector .pagination-row .col .pagination-button {
+    font-weight: 500;
+    font-size: 1.7em;
+    padding: 0 8px;
+    line-height: 1.2;
+}
+
 .group-selector .groups-content .parent,
 .group-selector .groups-content .child {
     cursor: pointer;
@@ -20,10 +45,6 @@
     align-items: center;
 }
 
-.group-selector .groups-content .col:not(.pull-right) {
-
-}
-
 .group-selector .groups-content .child-indicator {
     margin: 11px 0;
     height: 2px;
@@ -35,6 +56,10 @@
     line-height: 1.1;
     padding: 0 6px;
     font-size: 1.7em;
-    font-weight: 800;
+    font-weight: 500;
     min-width: 30px;
+}
+
+.group-selector .groups-content .expand-group-btn.expanded {
+    line-height: 1.1;
 }
