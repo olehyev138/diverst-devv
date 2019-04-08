@@ -1,10 +1,11 @@
 const STARTING_PAGE = 1;
-const LIMIT = 8;
+const LIMIT = 10;
 const MULTISELECT_DEFAULT = false;
 
 const CLASSES = {
     CONTENT: 'groups-content',
     HEADER: 'modal-header',
+    FOOTER: 'modal-footer',
     PARENT_GROUP: 'parent',
     CHILD_GROUP: 'child',
     COLLAPSE_CONTAINER: 'collapse-container',
@@ -23,12 +24,17 @@ const CLASSES = {
     NEXT_PAGE_BUTTON: 'next-page-btn',
     PREVIOUS_PAGE_BUTTON: 'previous-page-btn',
     FIRST_PAGE_BUTTON: 'first-page-btn',
-    LAST_PAGE_BUTTON: 'last-page-btn'
+    LAST_PAGE_BUTTON: 'last-page-btn',
+    TITLE_CONTAINER: 'title-container',
+    SEARCH_CONTAINER: 'search-container',
+    SEARCH_INPUT: 'search-input',
+    SEARCH_BUTTON: 'search-btn',
+    CLEAR_SEARCH_BUTTON: 'clear-search-btn'
 }
 
 const EXPAND_BUTTON_TEXT = {
     EXPAND: "+",
-    COLLAPSE: "⎯"
+    COLLAPSE: "&ndash;"
 }
 
 const PAGINATION_TEXT = {
@@ -43,6 +49,10 @@ const DEFAULT_GROUP_TEXT = {
     PLURALIZED: "groups"
 }
 
+// Reads from 2..3 data attributes on the group selector element itself
+// 'data-multiselect' is a REQUIRED boolean value that switches the group selector between multi select or single select
+// 'data-url' is a REQUIRED string that represents the URL to pull group data from
+// 'data-all-url' is an OPTIONAL string that represents the URL to pull
 class GroupSelector {
     constructor($element) {
         // $element is the actual jQuery object representing this instance of a group selector
@@ -63,21 +73,22 @@ class GroupSelector {
         this.selectedGroups = [];
 
 
-        // Pagination variables
+        // Pagination & search variables
         this.currentPage = STARTING_PAGE;
         this.totalPages = this.currentPage;
+        this.searchTerm = "";
 
         // Store instance in self, so that we can use access instance inside closures and event handlers
         let self = this;
 
         // Add title html
-        $("." + CLASSES.HEADER, this.$element).html(this.buildTitleHtml());
+        $("." + CLASSES.TITLE_CONTAINER, this.$element).html(this.buildTitleHtml());
 
         // Add pagination html
-        $(".modal-footer > .row." + CLASSES.PAGINATION_ROW, this.$element).html(this.buildPaginationHtml());
+        $("." + CLASSES.FOOTER + " > .row." + CLASSES.PAGINATION_ROW, this.$element).html(this.buildPaginationHtml());
 
         // Add selector helper html
-        $(".modal-footer > .row." + CLASSES.HELPER_ROW, this.$element).append(this.buildHelperHtml());
+        $("." + CLASSES.FOOTER + " > .row." + CLASSES.HELPER_ROW, this.$element).append(this.buildHelperHtml());
 
         // Add initial event listeners
         $("." + CLASSES.SAVE_BUTTON, this.$element).click({ self: self }, self.saveHandler);
@@ -87,6 +98,15 @@ class GroupSelector {
         $("." + CLASSES.NEXT_PAGE_BUTTON, this.$element).click({ self: self }, self.nextPageHandler);
         $("." + CLASSES.FIRST_PAGE_BUTTON, this.$element).click({ self: self }, self.firstPageHandler);
         $("." + CLASSES.LAST_PAGE_BUTTON, this.$element).click({ self: self }, self.lastPageHandler);
+        $("." + CLASSES.SEARCH_BUTTON, this.$element).click({ self: self }, self.searchHandler);
+        $("." + CLASSES.CLEAR_SEARCH_BUTTON, this.$element).click({ self: self }, self.clearSearchHandler);
+
+        $("." + CLASSES.SEARCH_INPUT, this.$element).keypress({ self: self }, function(e) {
+            if (e.keyCode === 10 || e.keyCode === 13) {
+              e.preventDefault();
+              self.searchHandler(e);
+            }
+        });
 
         this.updateData();
     }
@@ -94,7 +114,7 @@ class GroupSelector {
     updateData() {
         let self = this;
 
-        $.get(this.dataUrl, { page: this.currentPage, limit: LIMIT }, (data) => {
+        $.get(this.dataUrl, { page: this.currentPage, limit: LIMIT, term: this.searchTerm }, (data) => {
             console.log(data);
 
             // Get the custom group text
@@ -117,7 +137,7 @@ class GroupSelector {
 
         // The groups list is not defined or empty
         if (data == undefined || data.length == 0) {
-            self.groupsElement.append('<div class="card__section"><h4>There are no groups.</h4></div>');
+            self.groupsElement.append('<div class="card__section"><h4>No results.</h4></div>');
             return;
         }
 
@@ -163,7 +183,7 @@ class GroupSelector {
                 // Add the expand/collapse button
                 expandButtonHtml = `
                     <div class="col pull-right">
-                        <input type="button" value="+" class="${CLASSES.EXPAND_BUTTON} btn btn--tertiary btn--small" data-group-id="${group.id}" />
+                        <button type="button" class="${CLASSES.EXPAND_BUTTON} btn btn--tertiary btn--small" data-group-id="${group.id}">${EXPAND_BUTTON_TEXT.EXPAND}</button>
                     </div>
                 `;
             }
@@ -200,7 +220,7 @@ class GroupSelector {
         }
         else {
             booleanHtml = `
-                <input type="radio" class="${CLASSES.GROUP_PREFIX}${group.id}" name="groups" value="${CLASSES.GROUP_PREFIX}${group.id}" data-group-id="${group.id}" data-group-name="${group.name}">
+                <input type="radio" class="control__input radio ${CLASSES.GROUP_PREFIX}${group.id}" name="groups" value="${group.id}" data-group-id="${group.id}" data-group-name="${group.name}">
                 <span class="control__indicator control__indicator--radio"></span>
             `;
         }
@@ -287,17 +307,23 @@ class GroupSelector {
     }
 
     buildHelperHtml() {
-        if (this.multiselect != true)
-            return "";
+        var helperHtml = "";
 
-        return `
+        if (this.allDataUrl && this.multiselect) {
+          helperHtml += `
             <div class="col">
                 <button type="button" class="btn btn--tertiary btn--small ${CLASSES.SELECT_ALL_BUTTON}">Select All</button>
             </div>
+          `;
+        }
+
+        helperHtml += `
             <div class="col">
                 <button type="button" class="btn btn--tertiary btn--small ${CLASSES.CLEAR_BUTTON}">Clear</button>
             </div>
         `;
+
+        return helperHtml;
     }
 
     // ************* Handlers *************
@@ -319,7 +345,7 @@ class GroupSelector {
         lastParentElement.hasClass("card__section--border") ? lastParentElement.removeClass("card__section--border") : lastParentElement.addClass("card__section--border");
         
         // Toggle the expand/collapse button text
-        $(button).val() == EXPAND_BUTTON_TEXT.EXPAND ? $(button).val(EXPAND_BUTTON_TEXT.COLLAPSE) : $(button).val(EXPAND_BUTTON_TEXT.EXPAND);
+        $(button).html() == EXPAND_BUTTON_TEXT.EXPAND ? $(button).html(EXPAND_BUTTON_TEXT.COLLAPSE) : $(button).html(EXPAND_BUTTON_TEXT.EXPAND);
 
         // Toggle the expand/collapse button classes
         $(button).hasClass("expanded") ? $(button).removeClass("expanded") : $(button).addClass("expanded");
@@ -333,7 +359,7 @@ class GroupSelector {
 
         self.selectedGroups = [];
 
-        $.get(self.allDataUrl, (data) => {
+        $.get(self.allDataUrl, { term: self.searchTerm }, (data) => {
             $.each(data, function(index, group) {
                 self.addToSelectedGroups(group.id, group.text);
             });
@@ -349,7 +375,7 @@ class GroupSelector {
 
         self.selectedGroups = [];
 
-        $(".boolean", self.groupsElement).each(function() {
+        $(".boolean, .radio", self.groupsElement).each(function() {
             $(this).prop("checked", false);
         });
 
@@ -407,6 +433,21 @@ class GroupSelector {
         }
     }
 
+    searchHandler(e) {
+      let self = e.data.self;
+
+      self.searchTerm = $("." + CLASSES.SEARCH_INPUT, this.$element).val();
+      self.updateData();
+    }
+
+    clearSearchHandler(e) {
+      let self = e.data.self;
+
+      self.searchTerm = "";
+      $("." + CLASSES.SEARCH_INPUT).val("");
+      self.updateData();
+    }
+
 
     // ************* Helpers *************
 
@@ -430,10 +471,29 @@ class GroupSelector {
             });
         });
 
+        // *************** Single select Event Listeners ***************
+
+        // Enable the group radio button if the row is clicked
+        $("." + CLASSES.PARENT_GROUP + ", ." + CLASSES.CHILD_GROUP, this.groupsElement).click(function (e) {
+          let radio = $(this).find(".radio");
+          if (!radio.length || $(e.target).hasClass(CLASSES.EXPAND_BUTTON) || $(e.target).hasClass('radio') || $(e.target).hasClass('control__indicator--radio'))
+            return;
+
+          radio.prop("checked", true);
+          self.setElementAsSelectedGroup(radio);
+        });
+
+        // Add or remove selected group if checkbox is checked
+        $(".radio", this.groupsElement).click(function () {
+          self.setElementAsSelectedGroup(this);
+        });
+
+        // *************** Multiselect Event Listeners ***************
+
         // Enable the group checkbox if the row is clicked
         $("." + CLASSES.PARENT_GROUP + ", ." + CLASSES.CHILD_GROUP, this.groupsElement).click(function (e) {
             let checkbox = $(this).find(".boolean");
-            if ($(e.target).hasClass(CLASSES.EXPAND_BUTTON) || $(e.target).hasClass('boolean') || $(e.target).hasClass('control__indicator--checkbox'))
+            if (!checkbox.length ||  $(e.target).hasClass(CLASSES.EXPAND_BUTTON) || $(e.target).hasClass('boolean') || $(e.target).hasClass('control__indicator--checkbox'))
                 return;
 
             checkbox.prop("checked", !checkbox.prop("checked"));
@@ -458,6 +518,10 @@ class GroupSelector {
                 return;
 
             let parentCheckbox = $(this).find(".boolean");
+
+            if (!parentCheckbox.length)
+              return;
+
             parentCheckbox.prop("checked", !parentCheckbox.prop("checked"));
 
             if (parentCheckbox.prop("checked"))
@@ -477,7 +541,7 @@ class GroupSelector {
             });
 
             let expandButton = $(this).find("." + CLASSES.EXPAND_BUTTON);
-            if (expandButton.val() === EXPAND_BUTTON_TEXT.EXPAND && parentCheckbox.prop("checked"))
+            if (expandButton.html() === EXPAND_BUTTON_TEXT.EXPAND && parentCheckbox.prop("checked"))
                 expandButton.click();
         });
     }
@@ -486,7 +550,7 @@ class GroupSelector {
     checkSelectedGroups() {
         let self = this;
 
-        $(".boolean", this.groupsElement).each(function() {
+        $(".boolean, .radio", this.groupsElement).each(function() {
             if (self.selectedGroups.some(group => group.id === $(this).data("group-id"))) {
                 $(this).prop("checked", true);
             }
@@ -518,6 +582,13 @@ class GroupSelector {
             $("." + CLASSES.NEXT_PAGE_BUTTON, this.$element).attr("disabled", false);
             $("." + CLASSES.LAST_PAGE_BUTTON, this.$element).attr("disabled", false);
         }
+    }
+
+    // element is an element that contains a data field 'group-id'
+    // Gets the group ID from the HTML element and sets it as the only selected group
+    setElementAsSelectedGroup(element) {
+      this.selectedGroups = [];
+      this.addElementAsSelectedGroup(element);
     }
 
     // element is an element that contains a data field 'group-id'

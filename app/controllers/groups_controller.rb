@@ -26,10 +26,20 @@ class GroupsController < ApplicationController
         respond_to do |format|
             format.json {
                 groups = current_user.enterprise.groups.all_parents
-                    .includes(:children)
                     .order(:position)
-                    .page(search_params[:page])
-                    .per(search_params[:limit])
+                    .joins("LEFT JOIN groups as children ON groups.id = children.parent_id")
+                    .uniq
+                    .where("groups.name like ? OR children.name like ?", "%#{search_params[:term]}%", "%#{search_params[:term]}%")
+                    .limit(search_params[:limit])
+
+                total_group_count = 0
+                groups.each { |g| total_group_count += 1 + g.children.count }
+
+                if total_group_count > search_params[:limit].to_i
+                  groups = groups.page(search_params[:page]).per(search_params[:limit].to_i - (total_group_count - search_params[:limit].to_i))
+                else
+                  groups = groups.page(search_params[:page]).per(search_params[:limit])
+                end
 
                 groups_hash = groups.as_json(
                   only: [:id, :name, :parent_id, :position],
@@ -56,7 +66,12 @@ class GroupsController < ApplicationController
       authorize Group, :index?
 
       respond_to do |format|
-        format.json { render json: @groups.map { |g| {id: g.id, text: g.name} }.as_json }
+        format.json {
+          render json: @groups
+                         .where("name like ?", "%#{search_params[:term]}%")
+                         .map { |g| { id: g.id, text: g.name } }
+                         .as_json
+        }
       end
     end
 
@@ -413,7 +428,7 @@ class GroupsController < ApplicationController
     end
 
     def search_params
-        params.permit(:page, :limit)
+        params.permit(:page, :limit, :term)
     end
 
     def group_params

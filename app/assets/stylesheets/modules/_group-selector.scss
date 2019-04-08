@@ -1,3 +1,29 @@
+.group-selector .search-container {
+  padding: 12px;
+}
+
+.group-selector .search-container .search-input {
+  padding: 0.4em;
+  font-size: 14px;
+}
+
+.group-selector .search-container .row {
+
+}
+
+.group-selector .search-container .col {
+  float: none;
+  display: inline-block;
+}
+
+.group-selector .search-container .search-btn {
+  padding: 0.5em 10px;
+}
+
+.group-selector .search-container .clear-search-btn {
+  font-size: 1em;
+}
+
 .group-selector .pagination-row {
     padding-bottom: 10px;
     text-align: center;
@@ -23,14 +49,18 @@
     line-height: 1.2;
 }
 
+.group-selector .modal-body {
+  padding: 0;
+}
+
+.group-selector .groups-content {
+  padding: 0 15px;
+}
+
 .group-selector .groups-content .parent,
 .group-selector .groups-content .child {
     cursor: pointer;
     padding: 8px 12px;
-}
-
-.group-selector .groups-content {
-    padding: 0 15px;
 }
 
 .group-selector .groups-content .group-logo-container {
