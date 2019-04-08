@@ -1,6 +1,5 @@
 class Metrics::SegmentGraphsController < ApplicationController
-  before_action :authenticate_user! # TODO: check this works
-  before_action :set_graph, except: [:index] # TODO: fix
+  include Metrics
 
   layout 'metrics'
 
@@ -15,13 +14,12 @@ class Metrics::SegmentGraphsController < ApplicationController
       format.json {
         render json: @graph.segment_population
       }
+      format.csv {
+        GenericGraphsSegmentPopulationDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))
+        track_activity(current_user.enterprise, :export_generic_graphs_segment_population)
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
+      }
     end
-  end
-
-  private
-
-  def set_graph
-    @graph = Graph.new
-    @graph.enterprise_id = current_user.enterprise_id
   end
 end

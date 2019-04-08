@@ -1,6 +1,5 @@
 class Metrics::GroupGraphsController < ApplicationController
-  before_action :authenticate_user! # TODO: check this works
-  before_action :set_graph, except: [:index]
+  include Metrics
 
   layout 'metrics'
 
@@ -22,7 +21,19 @@ class Metrics::GroupGraphsController < ApplicationController
   def group_population
     respond_to do |format|
       format.json {
-        render json: @graph.group_population(group_params[:date_range], group_params[:scoped_by_models])
+        render json: @graph.group_population(metrics_params[:date_range], metrics_params[:scoped_by_models])
+      }
+      format.csv {
+        GenericGraphsGroupPopulationDownloadJob.perform_later(
+          current_user.id,
+          current_user.enterprise.id,
+          c_t(:erg),
+          @from_date,
+          @to_date
+        )
+        track_activity(current_user.enterprise, :export_generic_graphs_group_population)
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
       }
     end
   end
@@ -30,7 +41,20 @@ class Metrics::GroupGraphsController < ApplicationController
   def views_per_group
     respond_to do |format|
       format.json {
-        render json: @graph.views_per_group(group_params[:date_range], group_params[:scoped_by_models])
+        render json: @graph.views_per_group(metrics_params[:date_range], metrics_params[:scoped_by_models])
+      }
+      format.csv {
+        GenericGraphsTopGroupsByViewsDownloadJob.perform_later(
+          current_user.id,
+          current_user.enterprise.id,
+          c_t(:erg),
+          false,
+          @from_date,
+          @to_date
+        )
+        track_activity(current_user.enterprise, :export_generic_graphs_top_groups_by_views)
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
       }
     end
   end
@@ -38,7 +62,18 @@ class Metrics::GroupGraphsController < ApplicationController
   def growth_of_groups
     respond_to do |format|
       format.json {
-        render json: @graph.growth_of_groups(group_params[:date_range], group_params[:scoped_by_models])
+        render json: @graph.growth_of_groups(metrics_params[:date_range], metrics_params[:scoped_by_models])
+      }
+      format.csv {
+        GenericGraphsGroupGrowthDownloadJob.perform_later(
+          current_user.id,
+          current_user.enterprise.id,
+          @from_date,
+          @to_date
+        )
+        track_activity(current_user.enterprise, :export_generic_graphs_group_growth)
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
       }
     end
   end
@@ -48,7 +83,7 @@ class Metrics::GroupGraphsController < ApplicationController
   def initiatives_per_group
     respond_to do |format|
       format.json {
-        render json: @graph.initiatives_per_group(group_params[:date_range], group_params[:scoped_by_models])
+        render json: @graph.initiatives_per_group(metrics_params[:date_range], metrics_params[:scoped_by_models])
       }
     end
   end
@@ -58,7 +93,7 @@ class Metrics::GroupGraphsController < ApplicationController
   def messages_per_group
     respond_to do |format|
       format.json {
-        render json: @graph.messages_per_group(group_params[:date_range], group_params[:scoped_by_models])
+        render json: @graph.messages_per_group(metrics_params[:date_range], metrics_params[:scoped_by_models])
       }
     end
   end
@@ -66,7 +101,7 @@ class Metrics::GroupGraphsController < ApplicationController
   def views_per_news_link
     respond_to do |format|
       format.json {
-        render json: @graph.views_per_news_link(group_params[:date_range], group_params[:scoped_by_models])
+        render json: @graph.views_per_news_link(metrics_params[:date_range], metrics_params[:scoped_by_models])
       }
     end
   end
@@ -76,7 +111,7 @@ class Metrics::GroupGraphsController < ApplicationController
   def views_per_folder
     respond_to do |format|
       format.json {
-        render json: @graph.views_per_folder(group_params[:date_range], group_params[:scoped_by_models])
+        render json: @graph.views_per_folder(metrics_params[:date_range], metrics_params[:scoped_by_models])
       }
     end
   end
@@ -84,7 +119,7 @@ class Metrics::GroupGraphsController < ApplicationController
   def views_per_resource
     respond_to do |format|
       format.json {
-        render json: @graph.views_per_resource(group_params[:date_range], group_params[:scoped_by_models])
+        render json: @graph.views_per_resource(metrics_params[:date_range], metrics_params[:scoped_by_models])
       }
     end
   end
@@ -92,25 +127,8 @@ class Metrics::GroupGraphsController < ApplicationController
   def growth_of_resources
     respond_to do |format|
       format.json {
-        render json: @graph.growth_of_resources(group_params[:date_range], group_params[:scoped_by_models])
+        render json: @graph.growth_of_resources(metrics_params[:date_range], metrics_params[:scoped_by_models])
       }
     end
-  end
-
-  private
-
-  def set_graph
-    @graph = Graph.new
-    @graph.enterprise_id = current_user.enterprise_id
-  end
-
-  def group_params
-    params.permit(
-      date_range: [
-        :from_date,
-        :to_date
-      ],
-      scoped_by_models: []
-    )
   end
 end

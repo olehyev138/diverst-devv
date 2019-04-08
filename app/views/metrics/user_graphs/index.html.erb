@@ -27,7 +27,7 @@
           <h4>User Population per <%= c_t(:erg) %></h4>
           <%= render 'components/range_selector' %>
           <div class="card__action">
-            <%= link_to "Export CSV", growth_of_employees_generic_graphs_path(format: :csv), class: "hidden-xs" %>
+            <a href="#" class="csv-export-link hidden-xs" data-url="<%= users_per_group_metrics_users_path(format: :csv) %>">Export CSV</a>
           </div>
           <div id="users_per_group" class="graph" data-url="<%= users_per_group_metrics_users_path %>">
             <svg></svg>
@@ -42,9 +42,6 @@
         <div class="flex-row__cell flex-row__cell--grow">
           <h4>User Growth</h4>
           <%= render 'components/range_selector' %>
-          <div class="card__action">
-            <%= link_to "Export CSV", growth_of_employees_generic_graphs_path(format: :csv), class: "hidden-xs" %>
-          </div>
           <div id="user_growth" class="graph" data-url="<%= user_growth_metrics_users_path %>">
             <svg></svg>
           </div>

@@ -18,7 +18,7 @@
         <div class="flex-row__cell flex-row__cell--grow">
           <h4>User mentorship interest per <%= c_t(:erg) %></h4>
           <div class="card__action">
-            <%= link_to "Export CSV", growth_of_employees_generic_graphs_path(format: :csv), class: "hidden-xs" %>
+            <%= link_to "Export CSV", user_mentorship_interest_per_group_metrics_mentorship_path(format: :csv) %>
           </div>
           <div id="user_mentorship_interest" class="graph" data-url="<%= user_mentorship_interest_per_group_metrics_mentorship_path %>">
             <svg></svg>
@@ -34,7 +34,7 @@
           <h4>Mentoring Sessions per creator</h4>
           <%= render 'components/range_selector' %>
           <div class="card__action">
-            <%= link_to "Export CSV", growth_of_employees_generic_graphs_path(format: :csv), class: "hidden-xs" %>
+            <a href="#" class="csv-export-link hidden-xs" data-url="<%= mentoring_sessions_per_creator_metrics_mentorship_path %>">Export CSV</a>
           </div>
           <div id="mentoring_sessions_per_creator" class="graph" data-url="<%= mentoring_sessions_per_creator_metrics_mentorship_path %>">
             <svg></svg>
@@ -47,10 +47,9 @@
     <div class="card__section">
       <div class="flex-row flex-row--middle">
         <div class="flex-row__cell flex-row__cell--grow">
-          <h4>Mentoring Sessions per creator</h4>
-          <%= render 'components/range_selector' %>
+          <h4>Mentoring Interests</h4>
           <div class="card__action">
-            <%= link_to "Export CSV", growth_of_employees_generic_graphs_path(format: :csv), class: "hidden-xs" %>
+            <%= link_to "Export CSV", mentoring_interests_metrics_mentorship_path(format: :csv), class: "hidden-xs" %>
           </div>
           <div id="mentoring_interests" class="graph" data-url="<%= mentoring_interests_metrics_mentorship_path %>">
             <svg></svg>

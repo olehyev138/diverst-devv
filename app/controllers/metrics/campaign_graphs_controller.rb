@@ -1,6 +1,5 @@
 class Metrics::CampaignGraphsController < ApplicationController
-  before_action :authenticate_user! # TODO: check this works
-  before_action :set_graph, except: [:index] # TODO: fix
+  include Metrics
   before_action :set_campaign
 
   layout 'metrics'
@@ -39,20 +38,8 @@ class Metrics::CampaignGraphsController < ApplicationController
   end
 
   private
-
-  def set_graph
-    @graph = Graph.new
-    @graph.enterprise_id = current_user.enterprise_id
-  end
-
   def set_campaign
-    passed_campaign_id = campaign_params[:scoped_by_models[0]]
+    passed_campaign_id = metrics_params[:scoped_by_models[0]]
     @campaign = passed_campaign_id.present? ? Campaign.find(passed_campaign_id) : Campaign.first
-  end
-
-  def campaign_params
-    params.permit(
-      scoped_by_models: []
-    )
   end
 end

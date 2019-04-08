@@ -595,6 +595,12 @@ Rails.application.routes.draw do
       get 'mentoring_interests'
     end
 
+    resource :campaigns, controller: :campaign_graphs do
+      get 'index'
+      get 'contributions_per_erg'
+      get 'total_votes_per_user'
+    end
+
     resources :metrics_dashboards do
       get 'shared_dashboard'
 

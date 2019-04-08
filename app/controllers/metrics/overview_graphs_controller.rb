@@ -1,6 +1,5 @@
 class Metrics::OverviewGraphsController < ApplicationController
-  before_action :authenticate_user! # TODO: check this works
-  before_action :set_graph, except: [:index] # TODO: fix
+  include Metrics
 
   layout 'metrics'
 
@@ -19,19 +18,5 @@ class Metrics::OverviewGraphsController < ApplicationController
       nb_ongoing_campaigns: enterprise.campaigns.ongoing.count,
       average_nb_members_per_group: Group.avg_members_per_group(enterprise: enterprise)
     }
-  end
-
-  private
-
-  def set_graph
-    @graph = Graph.new
-    @graph.enterprise_id = current_user.enterprise_id
-  end
-
-  def overview_params
-    params.permit(
-      :date_range,
-      scoped_by_models: []
-    )
   end
 end

@@ -1,12 +1,11 @@
 class Metrics::MentorshipGraphsController < ApplicationController
-  before_action :authenticate_user! # TODO: check this works
-  before_action :set_graph, except: [:index] # TODO: fix
+  include Metrics
 
   layout 'metrics'
 
   def index
     @data = {
-      past_mentoring_sessions: 12 # TODO
+      past_mentoring_sessions: '<todo>'
     }
   end
 
@@ -15,13 +14,32 @@ class Metrics::MentorshipGraphsController < ApplicationController
       format.json {
         render json: @graph.user_mentorship_interest_per_group
       }
+      format.csv {
+        GenericGraphsMentorshipDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))
+        track_activity(current_user.enterprise, :export_generic_graphs_mentorship)
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
+      }
     end
   end
 
   def mentoring_sessions_per_creator
+    byebug
     respond_to do |format|
       format.json {
-        render json: @graph.mentoring_sessions_per_creator(mentorship_params[:date_range])
+        render json: @graph.mentoring_sessions_per_creator(metrics_params[:date_range])
+      }
+      format.csv {
+        GenericGraphsMentoringSessionsDownloadJob.perform_later(
+          current_user.id,
+          current_user.enterprise.id,
+          c_t(:erg),
+          @from_date,
+          @to_date
+        )
+        track_activity(current_user.enterprise, :export_generic_graphs_mentoring_sessions)
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
       }
     end
   end
@@ -31,24 +49,12 @@ class Metrics::MentorshipGraphsController < ApplicationController
       format.json {
         render json: @graph.mentoring_interests
       }
+      format.csv {
+        GenericGraphsMentoringInterestsDownloadJob.perform_later(current_user.id, current_user.enterprise.id)
+        track_activity(current_user.enterprise, :export_generic_graphs_mentoring_interests)
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
+      }
     end
-  end
-
-
-  private
-
-  def set_graph
-    @graph = Graph.new
-    @graph.enterprise_id = current_user.enterprise_id
-  end
-
-  def mentorship_params
-    params.permit(
-      date_range: [
-        :from_date,
-        :to_date
-      ],
-      scoped_by_models: []
-    )
   end
 end

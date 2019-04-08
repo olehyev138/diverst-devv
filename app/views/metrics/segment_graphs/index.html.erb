@@ -17,13 +17,13 @@
       <div class="flex-row flex-row--middle">
         <div class="flex-row__cell flex-row__cell--grow">
           <h4><%= c_t(:segment).capitalize %> Population</h4>
-          <%= render 'components/range_selector' %>
           <div class="card__action">
-            <%= link_to "Export CSV", growth_of_employees_generic_graphs_path(format: :csv), class: "hidden-xs" %>
+            <%= link_to "Export CSV", segment_population_metrics_segments_path(format: :csv), class: "hidden-xs" %>
           </div>
           <div id="users_per_group" class="graph" data-url="<%= segment_population_metrics_segments_path %>">
             <svg></svg>
           </div>
+          <input type="button" hidden class="drillout_button" value="Back"></input>
         </div>
       </div>
     </div>
