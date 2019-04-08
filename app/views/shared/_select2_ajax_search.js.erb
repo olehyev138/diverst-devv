@@ -37,6 +37,8 @@
       });
     };
 
+
+    init_select2(".select2-field-campaigns", "<%= campaigns_path(format: :json) %>");
     init_select2(".select2-field-segments", "<%= enterprise_segments_segments_path(:limit => 10, format: :json) %>");
     init_select2(".select2-field-groups", "<%= groups_path(:limit => 10, format: :json) %>");
     init_select2(".select2-field-users", "<%= users_path(not_current_user: true, can_metrics_dashboard_create: true, :limit => 10, format: :json) %>", function(item) {

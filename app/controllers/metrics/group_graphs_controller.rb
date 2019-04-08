@@ -4,26 +4,6 @@ class Metrics::GroupGraphsController < ApplicationController
 
   layout 'metrics'
 
-  # Views
-
-  # - Overview
-  #   - population
-  #   - views per group
-  #   - links to sub dashboards
-  # - Initiatives
-  #   - initiatives created per erg
-  #   - upcoming, ongoing initiatives
-  # - Social Media
-  #   - # messages per group
-  #   - # views per news link
-  #   - table of messages
-  #   - table of news links
-  # - Resources
-  #    - Views per folder
-  #    - Views per resource
-  #    - Resources over time
-  #    - tables, other stats
-
   def overview
   end
 

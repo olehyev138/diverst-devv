@@ -44,7 +44,6 @@ module Metrics
       Enterprise.find(self.enterprise_id)
     end
 
-
     def enterprise_id
       self.enterprise_id
     end

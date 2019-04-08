@@ -5,6 +5,7 @@ class Graph < BaseClass
   include Metrics::UserMetrics
   include Metrics::SegmentMetrics
   include Metrics::MentorshipMetrics
+  include Metrics::CampaignMetrics
 
   belongs_to :poll
   belongs_to :metrics_dashboard
