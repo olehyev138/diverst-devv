@@ -182,7 +182,7 @@ RSpec.describe InitiativesController, type: :controller do
         end 
 
         it 'produces a flash notice' do 
-          expect(flash[:notice]).to eq 'Please close expenses of past initiatives'
+          expect(flash[:notice]).to eq 'Please close expenses of past events'
         end
 
         it 'redirects back' do  
