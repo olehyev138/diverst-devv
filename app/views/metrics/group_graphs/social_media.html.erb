@@ -16,7 +16,7 @@
           <h4>Messages per <%= c_t(:erg) %></h4>
           <%= render 'components/range_selector' %>
           <div class="card__action">
-            <%= link_to "Export CSV", messages_per_group_metrics_groups_path(format: :csv), class: "hidden-xs" %>
+            <a href="#" class="csv-export-link hidden-xs" data-url="<%= messages_per_group_metrics_groups_path(format: :csv) %>">Export CSV</a>
           </div>
           <div id="messages_per_group" class="graph" data-url="<%= messages_per_group_metrics_groups_path %>">
             <svg></svg>
@@ -34,7 +34,7 @@
           <h4>Views per News Link</h4>
           <%= render 'components/range_selector' %>
           <div class="card__action">
-            <%= link_to "Export CSV", views_per_news_link_metrics_groups_path(format: :csv), class: "hidden-xs" %>
+            <a href="#" class="csv-export-link hidden-xs" data-url="<%= views_per_news_link_metrics_groups_path(format: :csv) %>">Export CSV</a>
           </div>
           <div id="views_per_news_link" class="graph" data-url="<%= views_per_news_link_metrics_groups_path %>">
             <svg></svg>

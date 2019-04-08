@@ -85,6 +85,19 @@ class Metrics::GroupGraphsController < ApplicationController
       format.json {
         render json: @graph.initiatives_per_group(metrics_params[:date_range], metrics_params[:scoped_by_models])
       }
+      format.csv {
+        GenericGraphsEventsCreatedDownloadJob.perform_later(
+          current_user.id,
+          current_user.enterprise.id,
+          c_t(:erg),
+          false,
+          @from_date,
+          @to_date
+        )
+        track_activity(current_user.enterprise, :export_generic_graphs_events_created)
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
+      }
     end
   end
 
@@ -95,6 +108,19 @@ class Metrics::GroupGraphsController < ApplicationController
       format.json {
         render json: @graph.messages_per_group(metrics_params[:date_range], metrics_params[:scoped_by_models])
       }
+      format.csv {
+        GenericGraphsMessagesSentDownloadJob.perform_later(
+          current_user.id,
+          current_user.enterprise.id,
+          c_t(:erg),
+          false,
+          @from_date,
+          @to_date
+        )
+        track_activity(current_user.enterprise, :export_generic_graphs_messages_sent)
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
+      }
     end
   end
 
@@ -102,6 +128,18 @@ class Metrics::GroupGraphsController < ApplicationController
     respond_to do |format|
       format.json {
         render json: @graph.views_per_news_link(metrics_params[:date_range], metrics_params[:scoped_by_models])
+      }
+      format.csv {
+        GenericGraphsTopNewsByViewsDownloadJob.perform_later(
+          current_user.id,
+          current_user.enterprise.id,
+          false,
+          @from_date,
+          @to_date
+        )
+        track_activity(current_user.enterprise, :export_generic_graphs_top_news_by_views)
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
       }
     end
   end
@@ -113,6 +151,17 @@ class Metrics::GroupGraphsController < ApplicationController
       format.json {
         render json: @graph.views_per_folder(metrics_params[:date_range], metrics_params[:scoped_by_models])
       }
+      format.csv {
+        GenericGraphsTopFoldersByViewsDownloadJob.perform_later(
+          current_user.id,
+          current_user.enterprise.id,
+          false,
+          @from_date,
+          @to_date)
+        track_activity(current_user.enterprise, :export_generic_graphs_top_folders_by_views)
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
+      }
     end
   end
 
@@ -120,6 +169,18 @@ class Metrics::GroupGraphsController < ApplicationController
     respond_to do |format|
       format.json {
         render json: @graph.views_per_resource(metrics_params[:date_range], metrics_params[:scoped_by_models])
+      }
+      format.csv {
+        GenericGraphsTopResourcesByViewsDownloadJob.perform_later(
+          current_user.id,
+          current_user.enterprise.id,
+          false,
+          @from_date,
+          @to_date
+        )
+        track_activity(current_user.enterprise, :export_generic_graphs_top_resources_by_views)
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
       }
     end
   end

@@ -6,13 +6,13 @@ module Metrics
     before_action :set_graph
     before_action :parse_csv_date_range, only: [:group_population,
                                                 :users_per_group,
-                                                :events_created,
-                                                :messages_sent,
+                                                :initiatives_per_group,
+                                                :messages_per_group,
                                                 :growth_of_groups,
-                                                :top_groups_by_views,
-                                                :top_folders_by_views,
-                                                :top_resources_by_views,
-                                                :top_news_by_views,
+                                                :views_per_group,
+                                                :views_per_folder,
+                                                :views_per_resource,
+                                                :views_per_news_link,
                                                 :mentoring_sessions_per_creator
     ]
   end
