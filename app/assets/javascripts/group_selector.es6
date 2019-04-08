@@ -60,7 +60,7 @@ class GroupSelector {
         // Store the data on the object so we can use it when expanding, etc.
         this.data = {};
         // Stores the currently selected groups
-        this.selectedGroupIds = [];
+        this.selectedGroups = [];
 
 
         // Pagination variables
@@ -194,19 +194,19 @@ class GroupSelector {
         if (this.multiselect === true) {
             booleanHtml = `
                 <input value="0" type="hidden" class="${CLASSES.GROUP_PREFIX}${group.id}" name="${CLASSES.GROUP_PREFIX}${group.id}">
-                <input type="checkbox" class="control__input boolean optional ${CLASSES.GROUP_PREFIX}${group.id}" name="${CLASSES.GROUP_PREFIX}${group.id}" data-group-id="${group.id}">
+                <input type="checkbox" class="control__input boolean optional ${CLASSES.GROUP_PREFIX}${group.id}" name="${CLASSES.GROUP_PREFIX}${group.id}" data-group-id="${group.id}" data-group-name="${group.name}">
                 <span class="control__indicator control__indicator--checkbox"></span>
             `;
         }
         else {
             booleanHtml = `
-                <input type="radio" class="${CLASSES.GROUP_PREFIX}${group.id}" name="groups" value="${CLASSES.GROUP_PREFIX}${group.id}" data-group-id="${group.id}">
+                <input type="radio" class="${CLASSES.GROUP_PREFIX}${group.id}" name="groups" value="${CLASSES.GROUP_PREFIX}${group.id}" data-group-id="${group.id}" data-group-name="${group.name}">
                 <span class="control__indicator control__indicator--radio"></span>
             `;
         }
 
         let groupHtml = `
-            <div class="${containerClass} card__section ${CLASSES.GROUP_CONTAINER_PREFIX}${group.id}" data-group-id="${group.id}">
+            <div class="${containerClass} card__section ${CLASSES.GROUP_CONTAINER_PREFIX}${group.id}" data-group-id="${group.id}" data-group-name="${group.name}">
                 <div class="row">
                     ${childIndicatorHtml}
                     ${groupLogoHtml}
@@ -331,34 +331,36 @@ class GroupSelector {
         if (!self.allDataUrl)
             return;
 
+        self.selectedGroups = [];
+
         $.get(self.allDataUrl, (data) => {
             $.each(data, function(index, group) {
-                self.addToSelectedGroups(group.id);
+                self.addToSelectedGroups(group.id, group.text);
             });
 
             self.checkSelectedGroups();
         });
 
-        console.log(self.selectedGroupIds);
+        console.log(self.selectedGroups);
     }
 
     clearHandler(e) {
         let self = e.data.self;
 
-        self.selectedGroupIds = [];
+        self.selectedGroups = [];
 
         $(".boolean", self.groupsElement).each(function() {
             $(this).prop("checked", false);
         });
 
-        console.log(self.selectedGroupIds);
+        console.log(self.selectedGroups);
     }
 
     saveHandler(e) {
         let self = e.data.self;
 
         self.$element.modal('hide');
-        self.$element.trigger("saveGroups", [self.selectedGroupIds]);
+        self.$element.trigger("saveGroups", [self.selectedGroups]);
     }
 
     previousPageHandler(e) {
@@ -485,7 +487,7 @@ class GroupSelector {
         let self = this;
 
         $(".boolean", this.groupsElement).each(function() {
-            if ($.inArray($(this).data("group-id"), self.selectedGroupIds) != -1) {
+            if (self.selectedGroups.some(group => group.id === $(this).data("group-id"))) {
                 $(this).prop("checked", true);
             }
         });
@@ -521,7 +523,7 @@ class GroupSelector {
     // element is an element that contains a data field 'group-id'
     // Gets the group ID from the HTML element and adds it to the selected groups array
     addElementAsSelectedGroup(element) {
-        this.addToSelectedGroups($(element).data("group-id"));
+        this.addToSelectedGroups($(element).data("group-id"), $(element).data("group-name"));
     }
 
     // element is an element that contains a data field 'group-id'
@@ -532,23 +534,23 @@ class GroupSelector {
 
     // groupId is the ID of the group to add
     // Adds a group ID to the array of selected group IDs
-    addToSelectedGroups(groupId) {
+    addToSelectedGroups(groupId, groupName) {
         if (!$.isNumeric(groupId))
             return;
 
-        this.selectedGroupIds.push(groupId);
-        console.log(this.selectedGroupIds);
+        this.selectedGroups.push({ id: groupId, text: groupName });
+        console.log(this.selectedGroups);
     }
 
     // groupId is the ID of the group to remove
     // Removes a group ID from the array of selected group IDs
     removeFromSelectedGroups(groupId) {
-        var idx = $.inArray(groupId, this.selectedGroupIds);
+        var idx = this.selectedGroups.findIndex(group => group.id === groupId)
         if (idx == -1)
             return;
 
-        this.selectedGroupIds.splice(idx, 1);
-        console.log(this.selectedGroupIds);
+        this.selectedGroups.splice(idx, 1);
+        console.log(this.selectedGroups);
     }
 
     // jqObject is a jQuery object

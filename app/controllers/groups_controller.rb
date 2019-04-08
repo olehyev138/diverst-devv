@@ -31,7 +31,7 @@ class GroupsController < ApplicationController
                     .page(search_params[:page])
                     .per(search_params[:limit])
 
-                groups_json = groups.as_json(
+                groups_hash = groups.as_json(
                   only: [:id, :name, :parent_id, :position],
                   include: {
                     children: {
@@ -46,7 +46,7 @@ class GroupsController < ApplicationController
                     total_pages: groups.total_pages,
                     group_text: c_t(:erg).downcase,
                     group_text_pluralized: c_t(:erg).pluralize.downcase,
-                    groups: groups_json
+                    groups: groups_hash
                 }
             }
         end
