@@ -29,7 +29,8 @@ class Metrics::GroupGraphsController < ApplicationController
           current_user.enterprise.id,
           c_t(:erg),
           @from_date,
-          @to_date
+          @to_date,
+          metrics_params[:scoped_by_models]
         )
         track_activity(current_user.enterprise, :export_generic_graphs_group_population)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
@@ -50,7 +51,8 @@ class Metrics::GroupGraphsController < ApplicationController
           c_t(:erg),
           false,
           @from_date,
-          @to_date
+          @to_date,
+          metrics_params[:scoped_by_models]
         )
         track_activity(current_user.enterprise, :export_generic_graphs_top_groups_by_views)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
@@ -69,7 +71,8 @@ class Metrics::GroupGraphsController < ApplicationController
           current_user.id,
           current_user.enterprise.id,
           @from_date,
-          @to_date
+          @to_date,
+          metrics_params[:scoped_by_models]
         )
         track_activity(current_user.enterprise, :export_generic_graphs_group_growth)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
@@ -92,7 +95,8 @@ class Metrics::GroupGraphsController < ApplicationController
           c_t(:erg),
           false,
           @from_date,
-          @to_date
+          @to_date,
+          metrics_params[:scoped_by_models]
         )
         track_activity(current_user.enterprise, :export_generic_graphs_events_created)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
@@ -115,7 +119,8 @@ class Metrics::GroupGraphsController < ApplicationController
           c_t(:erg),
           false,
           @from_date,
-          @to_date
+          @to_date,
+          metrics_params[:scoped_by_models]
         )
         track_activity(current_user.enterprise, :export_generic_graphs_messages_sent)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
@@ -135,7 +140,8 @@ class Metrics::GroupGraphsController < ApplicationController
           current_user.enterprise.id,
           false,
           @from_date,
-          @to_date
+          @to_date,
+          metrics_params[:scoped_by_models]
         )
         track_activity(current_user.enterprise, :export_generic_graphs_top_news_by_views)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
@@ -157,7 +163,9 @@ class Metrics::GroupGraphsController < ApplicationController
           current_user.enterprise.id,
           false,
           @from_date,
-          @to_date)
+          @to_date,
+          metrics_params[:scoped_by_models]
+        )
         track_activity(current_user.enterprise, :export_generic_graphs_top_folders_by_views)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
@@ -176,7 +184,8 @@ class Metrics::GroupGraphsController < ApplicationController
           current_user.enterprise.id,
           false,
           @from_date,
-          @to_date
+          @to_date,
+          metrics_params[:scoped_by_models]
         )
         track_activity(current_user.enterprise, :export_generic_graphs_top_resources_by_views)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"

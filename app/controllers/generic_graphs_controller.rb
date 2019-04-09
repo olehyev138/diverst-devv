@@ -749,7 +749,7 @@ class GenericGraphsController < ApplicationController
 
       }
       format.csv {
-        GenericGraphsTopNewsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, true)
+        GenericGraphsTopNewsByViewsDownloadJob.perform_later(current_user.id, current_user.enterprise.id, true, nil, nil)
         flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
         redirect_to :back
       }

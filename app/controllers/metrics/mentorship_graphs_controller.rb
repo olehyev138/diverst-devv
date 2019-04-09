@@ -24,7 +24,6 @@ class Metrics::MentorshipGraphsController < ApplicationController
   end
 
   def mentoring_sessions_per_creator
-    byebug
     respond_to do |format|
       format.json {
         render json: @graph.mentoring_sessions_per_creator(metrics_params[:date_range])

@@ -93,7 +93,7 @@ module BaseSearch
     # @field - field to aggregate on
     # @order_field - optional, default: _count, field to order on
     # @order_dir - order direction, deffault: desc, dirction in which to order
-    def terms_agg(field:, size: 100, order_field: '_count', order_dir: 'desc', min_doc_count: 1, &block)
+    def terms_agg(field:, size: 2147483647, order_field: '_count', order_dir: 'desc', min_doc_count: 1, &block)
       agg = { agg: { terms: { field: field, size: size, min_doc_count: min_doc_count, order: { order_field => order_dir } } } }
       base_agg(agg, block)
     end
