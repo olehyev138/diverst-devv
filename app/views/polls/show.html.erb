@@ -59,7 +59,7 @@
               <div
                 id="graph_<%= graph.id %>"
                 class="graph"
-                data-url="<%= data_graph_path(graph) %>"
+                data-url="<%= data_metrics_metrics_dashboard_graph_path(@poll, graph) %>"
                 data-time-series="<%= graph.time_series %>">
                 <svg></svg>
               </div>

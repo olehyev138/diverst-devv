@@ -3,7 +3,19 @@ module Metrics
     extend ActiveSupport::Concern
     include MetricsUtil
 
-    def users_per_group()
+    def user_change_percentage
+      # Growth of user population over last year
+
+      from_date = 6.months.ago
+      to_date = Time.now
+
+      from_date_total = enterprise.users.where('created_at <= ?', from_date).count.to_f
+      to_date_total = enterprise.users.where('created_at <= ?', to_date).count.to_f
+
+      get_change_percetange(from_date_total, to_date_total)
+    end
+
+    def users_per_group
       graph = UserGroup.get_graph_builder
       graph.set_enterprise_filter(field: 'group.enterprise_id', value: enterprise_id)
       graph.formatter.type = 'pie'

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe GraphsController, type: :controller do
+RSpec.describe Metrics::GraphsController, type: :controller do
   let(:enterprise) { create(:enterprise) }
   let(:user) { create(:user, enterprise: enterprise) }
   let(:metrics_dashboard) { create(:metrics_dashboard, enterprise_id: enterprise.id) }
@@ -9,7 +9,6 @@ RSpec.describe GraphsController, type: :controller do
   let(:field2) { create(:field, type: "NumericField", poll: poll) }
   let(:field3) { create(:field, type: "CheckboxField", poll: poll) }
   let(:metrics_graph) { create(:graph_with_metrics_dashboard, metrics_dashboard: metrics_dashboard, field: field1) }
-  let(:poll_graph) { create(:graph_with_metrics_dashboard, poll: poll, field: field2) }
 
   describe "GET#new" do
     describe "with logged in user" do
@@ -20,22 +19,6 @@ RSpec.describe GraphsController, type: :controller do
 
         it 'sets metrics_dashboard object to be metrics_dashboard' do
           expect(assigns[:graph].metrics_dashboard_id).to eq metrics_dashboard.id
-        end
-
-        it "returns a new graph object" do
-          expect(assigns[:graph]).to be_a_new(Graph)
-        end
-
-        it "render template" do
-          expect(response).to render_template :new
-        end
-      end
-
-      context 'when poll_id is available in params' do
-        before { get :new, poll_id: poll.id }
-
-        it 'sets poll object to be poll' do
-          expect(assigns[:graph].poll_id).to eq poll.id
         end
 
         it "returns a new graph object" do
@@ -62,7 +45,7 @@ RSpec.describe GraphsController, type: :controller do
         context "with valid field id" do
           it "redirect to @collection" do
             post :create, :metrics_dashboard_id => metrics_dashboard.id, :graph => {field_id: field1.id}
-            expect(response).to redirect_to metrics_dashboard
+            expect(response).to redirect_to metrics_metrics_dashboard_path(metrics_dashboard)
           end
 
           it 'creates new graph' do
@@ -78,37 +61,6 @@ RSpec.describe GraphsController, type: :controller do
 
         context "with field id as nil" do
           before { post :create, :metrics_dashboard_id => metrics_dashboard.id, :graph => { field_id: nil } }
-
-          it "flashes an alert message" do
-            expect(flash[:alert]).to eq "Your graph was not created. Please fix the errors"
-          end
-
-          it "render a new template" do
-            expect(response).to render_template :new
-          end
-        end
-      end
-
-      describe 'when poll_id is available in params' do
-        context "with valid field id" do
-          it "redirect to @collection" do
-            post :create, :poll_id => poll.id, :graph => {field_id: field1.id}
-            expect(response).to redirect_to poll
-          end
-
-          it 'creates new graph' do
-            expect{
-              post :create, :poll_id => poll.id, :graph => {field_id: field1.id} }.to change(Graph, :count).by(2)
-          end
-
-          it "flashes a notice message" do
-            post :create, :poll_id => poll.id, :graph => {field_id: field1.id}
-            expect(flash[:notice]).to eq "Your graph was created"
-          end
-        end
-
-        context "with field id as nil" do
-          before { post :create, :poll_id => poll.id, :graph => {field_id: nil} }
 
           it "flashes an alert message" do
             expect(flash[:alert]).to eq "Your graph was not created. Please fix the errors"
@@ -137,7 +89,7 @@ RSpec.describe GraphsController, type: :controller do
         before { patch :update, :metrics_dashboard_id => metrics_dashboard.id, :id => metrics_graph.id, :graph => { field_id: field1.id } }
 
         it "redirects to metrics_dashboard" do
-          expect(response).to redirect_to metrics_dashboard
+          expect(response).to redirect_to metrics_metrics_dashboard_path(metrics_dashboard)
         end
 
         it 'updates the graph' do
@@ -207,23 +159,13 @@ RSpec.describe GraphsController, type: :controller do
       }
 
       it "returns json format" do
-        get :data, :id => metrics_graph.id, format: :json
+        get :data, :metrics_dashboard_id => metrics_dashboard.id, :id => metrics_graph.id, format: :json
         expect(response.content_type).to eq "application/json"
       end
 
       it "returns metrics graph data" do
-        get :data, :id => metrics_graph.id, format: :json
+        get :data, :metrics_dashboard_id => metrics_dashboard.id, :id => metrics_graph.id, format: :json
         expect(assigns[:graph]).to eq metrics_graph
-      end
-
-      it "returns json format" do
-        get :data, :id => poll_graph.id, format: :json
-        expect(response.content_type).to eq "application/json"
-      end
-
-      it "returns poll graph data" do
-        get :data, :id => poll_graph.id, format: :json
-        expect(assigns[:graph]).to eq poll_graph
       end
     end
   end
@@ -237,27 +179,7 @@ RSpec.describe GraphsController, type: :controller do
           allow(GraphDownloadJob).to receive(:perform_later)
           request.env['HTTP_REFERER'] = "back"
 
-          get :export_csv, :id => metrics_graph.id
-        }
-
-        it "returns to previous page" do
-          expect(response).to redirect_to "back"
-        end
-
-        it "flashes" do
-          expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
-        end
-
-        it "calls job" do
-          expect(GraphDownloadJob).to have_received(:perform_later)
-        end
-      end
-
-      context "poll graph" do
-        before {
-          allow(GraphDownloadJob).to receive(:perform_later)
-          request.env['HTTP_REFERER'] = "back"
-          get :export_csv, :id => poll_graph.id
+          get :export_csv, :metrics_dashboard_id => metrics_dashboard.id, :id => metrics_graph.id
         }
 
         it "returns to previous page" do

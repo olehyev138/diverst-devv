@@ -18,5 +18,17 @@ class Metrics::OverviewGraphsController < ApplicationController
       nb_ongoing_campaigns: enterprise.campaigns.ongoing.count,
       average_nb_members_per_group: Group.avg_members_per_group(enterprise: enterprise)
     }
+
+    @user_metrics = {
+      user_change: @graph.user_change_percentage
+    }
+
+    @innovation_metrics = {
+      total_campaigns: current_user.enterprise.campaigns.where('created_at <= ?', 1.month.ago).count
+    }
+
+    @poll_metrics = {
+      total_polls: current_user.enterprise.polls.where('created_at <= ?', 1.month.ago).count
+    }
   end
 end

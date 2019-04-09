@@ -649,5 +649,5 @@ Rails.application.routes.draw do
 
   match "*a", :to => "application#routing_error", :via => [:get, :post]
 
-  root to: 'metrics_dashboards#index'
+  root to: 'metrics/overview_graphs#index'
 end
