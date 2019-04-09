@@ -49,10 +49,13 @@ const DEFAULT_GROUP_TEXT = {
     PLURALIZED: "groups"
 }
 
+// ----- Group Selector -----
 // Reads from 2..3 data attributes on the group selector element itself
 // 'data-multiselect' is a REQUIRED boolean value that switches the group selector between multi select or single select
 // 'data-url' is a REQUIRED string that represents the URL to pull group data from
 // 'data-all-url' is an OPTIONAL string that represents the URL to pull
+// 
+// Bind directly on the 'group-selector' element to the event 'saveGroups', which is called when the Save button is clicked, to retrieve the list of selected groups
 class GroupSelector {
     constructor($element) {
         // $element is the actual jQuery object representing this instance of a group selector
@@ -90,7 +93,7 @@ class GroupSelector {
         // Add selector helper html
         $("." + CLASSES.FOOTER + " > .row." + CLASSES.HELPER_ROW, this.$element).append(this.buildHelperHtml());
 
-        // Add initial event listeners
+        // Add initial click event listeners
         $("." + CLASSES.SAVE_BUTTON, this.$element).click({ self: self }, self.saveHandler);
         $("." + CLASSES.SELECT_ALL_BUTTON, this.$element).click({ self: self }, self.selectAllHandler);
         $("." + CLASSES.CLEAR_BUTTON, this.$element).click({ self: self }, self.clearHandler);
@@ -101,6 +104,7 @@ class GroupSelector {
         $("." + CLASSES.SEARCH_BUTTON, this.$element).click({ self: self }, self.searchHandler);
         $("." + CLASSES.CLEAR_SEARCH_BUTTON, this.$element).click({ self: self }, self.clearSearchHandler);
 
+        // Search input on 'Enter' event listener
         $("." + CLASSES.SEARCH_INPUT, this.$element).keypress({ self: self }, function(e) {
             if (e.keyCode === 10 || e.keyCode === 13) {
               e.preventDefault();
@@ -108,6 +112,7 @@ class GroupSelector {
             }
         });
 
+        // Current page input on 'Enter' event listener
         $("." + CLASSES.CURRENT_PAGE_INPUT, this.$element).keypress({ self: self }, function(e) {
             if (e.keyCode === 10 || e.keyCode === 13) {
               e.preventDefault();
@@ -148,12 +153,25 @@ class GroupSelector {
             return;
         }
 
-        // For each group, add it and it's children to the HTML
+        // Check if the parents or children have any logos, if so add the logo or the space for the logo
+        var parentHasLogo = false;
+        var childHasLogo = false;
         $.each(data, function(i, group) {
-            var html = self.buildGroupHtml(group, i == data.length - 1);
+            if (group.logo_expiring_thumb)
+                parentHasLogo = true;
 
             $.each(group.children, function (j, child) {
-                html += self.buildGroupHtml(child);
+                if (child.logo_expiring_thumb)
+                    childHasLogo = true;
+            });
+        });
+
+        // For each group, add it and it's children to the HTML
+        $.each(data, function(i, group) {
+            var html = self.buildGroupHtml(group, parentHasLogo, i == data.length - 1);
+
+            $.each(group.children, function (j, child) {
+                html += self.buildGroupHtml(child, childHasLogo);
             });
 
             self.groupsElement.append(html);
@@ -170,7 +188,7 @@ class GroupSelector {
 
     // ************* HTML Builders *************
 
-    buildGroupHtml(group, lastParentGroup = false) {
+    buildGroupHtml(group, renderLogo = true, lastParentGroup = false) {
         var containerClass = CLASSES.CHILD_GROUP;
         var childIndicatorHtml = "";
         var groupLogoHtml = "";
@@ -203,19 +221,21 @@ class GroupSelector {
             `;
         }
 
-        // The group has a logo
-        if (group.logo_expiring_thumb) {
-            // Add the group logo
-            groupLogoHtml = `
-                <div class="col group-logo-container">
-                    <img src="${group.logo_expiring_thumb}" alt="${group.name} Logo" width="48px" height="48px">
-                </div>
-            `;
-        }
-        else {
-            groupLogoHtml = `
-                <div class="col group-logo-container" style="width: 48px;"></div>
-            `;
+        if (renderLogo) {
+            // The group has a logo
+            if (group.logo_expiring_thumb) {
+                // Add the group logo
+                groupLogoHtml = `
+                    <div class="col group-logo-container">
+                        <img src="${group.logo_expiring_thumb}" alt="${group.name} Logo" width="48px" height="48px">
+                    </div>
+                `;
+            }
+            else {
+                groupLogoHtml = `
+                    <div class="col group-logo-container" style="width: 48px;"></div>
+                `;
+            }
         }
 
         if (this.multiselect === true) {
