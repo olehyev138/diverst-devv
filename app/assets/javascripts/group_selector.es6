@@ -18,7 +18,7 @@ const CLASSES = {
     PAGINATION_ROW: 'pagination-row',
     HELPER_ROW: 'helper-row',
     TOTAL_PAGES_TEXT: 'total-pages-text',
-    CURRENT_PAGE_TEXT: 'current-page-text',
+    CURRENT_PAGE_INPUT: 'current-page-input',
     PAGINATION_TEXT: 'pagination-text',
     PAGINATION_BUTTON: 'pagination-button',
     NEXT_PAGE_BUTTON: 'next-page-btn',
@@ -105,6 +105,13 @@ class GroupSelector {
             if (e.keyCode === 10 || e.keyCode === 13) {
               e.preventDefault();
               self.searchHandler(e);
+            }
+        });
+
+        $("." + CLASSES.CURRENT_PAGE_INPUT, this.$element).keypress({ self: self }, function(e) {
+            if (e.keyCode === 10 || e.keyCode === 13) {
+              e.preventDefault();
+              self.currentPageHandler(e);
             }
         });
 
@@ -292,7 +299,7 @@ class GroupSelector {
             </div>
             <div class="col">
                 <div class="${CLASSES.PAGINATION_TEXT}">
-                    <span class="${CLASSES.CURRENT_PAGE_TEXT}">${STARTING_PAGE}</span>/<span class="${CLASSES.TOTAL_PAGES_TEXT}">${STARTING_PAGE}</span>
+                    <input type="text" class="field__input ${CLASSES.CURRENT_PAGE_INPUT}" value="${this.currentPage}"> / <span class="${CLASSES.TOTAL_PAGES_TEXT}">${STARTING_PAGE}</span>
                 </div>
             </div>
             <div class="col">
@@ -433,6 +440,17 @@ class GroupSelector {
         }
     }
 
+    currentPageHandler(e) {
+        let self = e.data.self;
+        let newPage = $("." + CLASSES.CURRENT_PAGE_INPUT, this.$element).val();
+
+        if ($.isNumeric(newPage) && newPage >= STARTING_PAGE && newPage <= self.totalPages) {
+            self.currentPage = newPage;
+            self.updatePaginationButtons();
+            self.updateData();
+        }
+    }
+
     searchHandler(e) {
       let self = e.data.self;
 
@@ -557,13 +575,6 @@ class GroupSelector {
         });
     }
 
-    // Updates the "current page" text
-    updateCurrentPageText() {
-        let self = this;
-    
-        $("." + CLASSES.CURRENT_PAGE_TEXT).text(self.currentPage);
-    }
-
     updatePaginationButtons() {
         if (this.currentPage <= STARTING_PAGE) {
             $("." + CLASSES.PREVIOUS_PAGE_BUTTON, this.$element).attr("disabled", true);
@@ -582,6 +593,13 @@ class GroupSelector {
             $("." + CLASSES.NEXT_PAGE_BUTTON, this.$element).attr("disabled", false);
             $("." + CLASSES.LAST_PAGE_BUTTON, this.$element).attr("disabled", false);
         }
+    }
+
+    // Updates the "current page" text
+    updateCurrentPageText() {
+        let self = this;
+    
+        $("." + CLASSES.CURRENT_PAGE_INPUT).val(self.currentPage);
     }
 
     // element is an element that contains a data field 'group-id'

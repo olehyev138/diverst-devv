@@ -7,13 +7,10 @@
   font-size: 14px;
 }
 
-.group-selector .search-container .row {
-
-}
-
-.group-selector .search-container .col {
-  float: none;
-  display: inline-block;
+.group-selector .pagination-row .current-page-input {
+  padding: 0.4em 1px 0.4em 2px;
+  font-size: 14px;
+  width: 30px;
 }
 
 .group-selector .search-container .search-btn {
