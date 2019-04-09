@@ -36,6 +36,26 @@ module Metrics
       query
     end
 
+    def get_change_percetange(from_date_total, to_date_total)
+      if from_date_total == 0 and to_date_total > 0
+        change_percentage = 100
+      elsif to_date_total == 0 and from_date_total > 0
+        change_percentage = -100
+      elsif from_date_total == 0 and to_date_total == 0
+        change_percentage = 0
+      else
+        change_percentage =
+          (((to_date_total - from_date_total) / from_date_total)).round(2)
+      end
+
+      if change_percentage.positive?
+        ('+' + (change_percentage.to_s)) + '%'
+      else
+        change_percentage.to_s + '%'
+      end
+
+    end
+
     def c_t(key)
       enterprise.custom_text.send(key)
     end
