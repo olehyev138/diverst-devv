@@ -36,9 +36,15 @@ class GroupsController < ApplicationController
                 groups.each { |g| total_group_count += 1 + g.children.count }
 
                 if total_group_count > search_params[:limit].to_i
-                  groups = groups.page(search_params[:page]).per(search_params[:limit].to_i - (total_group_count - search_params[:limit].to_i))
+                  groups = groups
+                           .page(search_params[:page])
+                           .per(search_params[:limit].to_i - (total_group_count - search_params[:limit].to_i))
+                           .includes(:children)
                 else
-                  groups = groups.page(search_params[:page]).per(search_params[:limit])
+                  groups = groups
+                           .page(search_params[:page])
+                           .per(search_params[:limit])
+                           .includes(:children)
                 end
 
                 groups_hash = groups.as_json(

@@ -449,12 +449,14 @@ class GroupSelector {
             self.updatePaginationButtons();
             self.updateData();
         }
+        else
+            self.updateCurrentPageText();
     }
 
     searchHandler(e) {
       let self = e.data.self;
 
-      self.searchTerm = $("." + CLASSES.SEARCH_INPUT, this.$element).val();
+      self.searchTerm = $("." + CLASSES.SEARCH_INPUT, self.$element).val();
       self.updateData();
     }
 
