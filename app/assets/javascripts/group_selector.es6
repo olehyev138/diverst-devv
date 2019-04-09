@@ -84,9 +84,6 @@ class GroupSelector {
         // Store instance in self, so that we can use access instance inside closures and event handlers
         let self = this;
 
-        // Add title html
-        $("." + CLASSES.TITLE_CONTAINER, this.$element).html(this.buildTitleHtml());
-
         // Add pagination html
         $("." + CLASSES.FOOTER + " > .row." + CLASSES.PAGINATION_ROW, this.$element).html(this.buildPaginationHtml());
 
@@ -153,17 +150,11 @@ class GroupSelector {
             return;
         }
 
-        // Check if the parents or children have any logos, if so add the logo or the space for the logo
+        // Check if the parents have any logos, if so add the logo or the space for the logo
         var parentHasLogo = false;
-        var childHasLogo = false;
         $.each(data, function(i, group) {
             if (group.logo_expiring_thumb)
                 parentHasLogo = true;
-
-            $.each(group.children, function (j, child) {
-                if (child.logo_expiring_thumb)
-                    childHasLogo = true;
-            });
         });
 
         // For each group, add it and it's children to the HTML
@@ -171,16 +162,21 @@ class GroupSelector {
             var html = self.buildGroupHtml(group, parentHasLogo, i == data.length - 1);
 
             $.each(group.children, function (j, child) {
-                html += self.buildGroupHtml(child, childHasLogo);
+                html += self.buildGroupHtml(child);
             });
 
             self.groupsElement.append(html);
+
+            $("." + CLASSES.GROUP_CONTAINER_PREFIX + group.id, self.groupsElement).find("." + CLASSES.EXPAND_BUTTON).click();
         });
 
         // Post data calls
         this.checkSelectedGroups();
         this.addPostDataEventListeners();
         this.updatePaginationButtons();
+
+        // Add title html
+        $("." + CLASSES.TITLE_CONTAINER, this.$element).html(this.buildTitleHtml());
 
         // Set the total pages count
         $("." + CLASSES.TOTAL_PAGES_TEXT, this.$element).text(self.totalPages);
@@ -270,13 +266,13 @@ class GroupSelector {
             </div>
         `;
 
-        // The group is a parent
+        // The group is a child
         if ($.isNumeric(group.parent_id)) {
             // Return collapsed HTML
             return `
-                <div class="${CLASSES.COLLAPSE_CONTAINER} collapse card__section--border">
-                    ${groupHtml}
-                </div>
+                  <div class="${CLASSES.COLLAPSE_CONTAINER} collapse card__section--border">
+                      ${groupHtml}
+                  </div>
             `;
         }
         else
@@ -301,7 +297,7 @@ class GroupSelector {
 
         if (this.multiselect == true) {
             title = groupTextPluralized;
-            subText = "<small>Double click to select all sub-" + groupTextPluralized + "</small>";
+            subText = "<small>Double click to select all sub-" + groupTextPluralized.toLowerCase() + "</small>";
         }
         else
             title = groupText;
@@ -476,7 +472,7 @@ class GroupSelector {
     searchHandler(e) {
       let self = e.data.self;
 
-      self.searchTerm = $("." + CLASSES.SEARCH_INPUT, self.$element).val();
+      self.searchTerm = $("." + CLASSES.SEARCH_INPUT, self.$element).val().toLowerCase();
       self.updateData();
     }
 

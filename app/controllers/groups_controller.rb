@@ -60,8 +60,8 @@ class GroupsController < ApplicationController
 
                 render json: {
                     total_pages: groups.total_pages,
-                    group_text: c_t(:erg).downcase,
-                    group_text_pluralized: c_t(:erg).pluralize.downcase,
+                    group_text: c_t(:erg),
+                    group_text_pluralized: c_t(:erg).pluralize,
                     groups: groups_hash
                 }
             }
