@@ -17,13 +17,14 @@ function load_graphs() {
 }
 
 function update_graph_scopes() {
-    $('.model-scoper').click(function() {
-        var scoped_by_models = $('#select2-field-groups').val();
+    $(".group-selector").on('saveGroups', function(e, selectedGroups) {
+      let ids = $.map(selectedGroups, function(group, key) {
+        return group.id;
+      });
 
-        for (var graph of graphs) {
-            graph.scoped_by_models = scoped_by_models;
-            graph.updateData(graph.rangeSelector.date_range);
-        }
-
+      for (var graph of graphs) {
+        graph.scoped_by_models = ids;
+        graph.updateData(graph.rangeSelector.date_range);
+      }
     });
 }

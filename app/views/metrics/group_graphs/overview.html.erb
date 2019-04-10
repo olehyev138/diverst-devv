@@ -1,14 +1,32 @@
+<%= render partial: 'components/group_selector', locals: { id: "group-scope-selector", multiselect: true } %>
+
 <div class="content__header">
   <h1>Overview</h1>
-
-  <select multiple id="select2-field-groups" class="select2-field-groups" style="width: 500px;"></select>
-  <a href="#" class="select2-select-all" data-select-id="select2-field-groups" data-select-all-path="<%= get_all_groups_groups_path %>">Select All</a> |
-  <a href="#" class="select2-clear-all" data-select-id="select2-field-groups">Clear Selection</a>
-
-  <input type="button" class="model-scoper btn btn-primary" value="Update">
+  <button type="button" class="btn btn--secondary btn--small" data-toggle="modal" data-target="#group-scope-selector">Filter Groups</button>
 </div>
 
 <div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <div class="row">
+        <div class="col md-6 sm-12">
+          <div class="panel panel--primary text-center">
+            <div class="panel-headline"><p><strong>Total <%= c_t(:erg).capitalize.pluralize %></strong></p></div>
+            <div class="panel-data"><p><b class="accent"></b></p></div>
+          </div>
+        </div>
+
+        <div class="col md-6 sm-12">
+          <div class="panel panel--primary text-center">
+            <div class="panel-headline"><p><strong>Average # of Members</strong></p></div>
+            <div class="panel-data"><p><b class="accent"></b></p></div>
+          </div>
+        </div>
+      </div>
+      <br>
+    </div>
+  </div>
+
   <div class="card">
     <div class="card__section">
       <div class="flex-row flex-row--middle">
@@ -65,3 +83,12 @@
 </div>
 
 <%= render partial: 'shared/select2_ajax_search.js.erb' %>
+
+<script>
+  $("#group-scope-selector").on('saveGroups', function(e, selectedGroups) {
+    let groupTexts = $.map(selectedGroups, function(group, key) {
+        return "<span class='group-selected-text'>" + group.text + "</span>";
+    });
+    $("#group-list").html(groupTexts.join(" "));
+  });
+</script>

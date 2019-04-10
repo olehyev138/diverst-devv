@@ -148,6 +148,7 @@ class Graph {
                 .showMaxMin(false);
 
             chart.tooltip.headerFormatter(function(d) { return d; });
+            chart.tooltip.hideDelay(0);
 
             chart.yAxis.tickFormat(d3.format('d'));
 
@@ -241,6 +242,8 @@ class Graph {
                 .labelThreshold(.07)
                 .showLabels(true);
 
+            chart.tooltip.hideDelay(0);
+
             d3.select(svg)
                 .datum(series)
                 .transition().duration(500)
@@ -275,6 +278,8 @@ class Graph {
             chart.x2Axis.tickFormat(function(d) {
                 return d3.time.format('%x')(new Date(d));
             });
+
+            chart.tooltip.hideDelay(0);
 
             chart.yAxis
                 .tickFormat(d3.format('d'));
