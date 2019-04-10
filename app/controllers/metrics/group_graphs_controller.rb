@@ -4,6 +4,10 @@ class Metrics::GroupGraphsController < ApplicationController
   layout 'metrics'
 
   def overview
+    @group_metrics = {
+      total_groups: current_user.enterprise.groups.count,
+      avg_nb_members_per_group: Group.avg_members_per_group(enterprise: current_user.enterprise)
+    }
   end
 
   def initiatives

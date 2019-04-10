@@ -9,20 +9,41 @@ module Metrics
       from_date = 6.months.ago
       to_date = Time.now
 
+      # these comparison operators are not wrong, 1) get total *as of* the from_date
+      #                                           2) get total *as of* the to_date
       from_date_total = enterprise.users.where('created_at <= ?', from_date).count.to_f
       to_date_total = enterprise.users.where('created_at <= ?', to_date).count.to_f
 
-      get_change_percetange(from_date_total, to_date_total)
+      get_change_percentage(from_date_total, to_date_total)
+    end
+
+    def group_memberships
+      from_date = 6.months.ago
+
+      UserGroup.joins(:user)
+               .where('enterprise_id = ? AND user_groups.created_at >= ?', enterprise_id, from_date)
+               .count
     end
 
     def users_per_group
       graph = UserGroup.get_graph_builder
       graph.set_enterprise_filter(field: 'group.enterprise_id', value: enterprise_id)
-      graph.formatter.type = 'pie'
+      graph.formatter.type = 'bar'
       graph.formatter.title = "User population per group"
 
       graph.query = graph.query.terms_agg(field: 'group.name')
       graph.drilldown_graph(parent_field: 'group.parent.name')
+
+      graph.build
+    end
+
+    def users_per_segment
+      graph = UsersSegment.get_graph_builder
+      graph.set_enterprise_filter(field: 'segment.enterprise_id', value: enterprise_id)
+      graph.formatter.title = "#{c_t(:segment).capitalize} Population"
+
+      graph.query = graph.query.terms_agg(field: 'segment.name')
+      graph.drilldown_graph(parent_field: 'segment.parent.name')
 
       graph.build
     end

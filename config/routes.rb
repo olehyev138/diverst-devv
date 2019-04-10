@@ -564,6 +564,7 @@ Rails.application.routes.draw do
     resource :users, controller: :user_graphs, only: [:index] do
       get 'index'
       get 'users_per_group'
+      get 'users_per_segment'
       get 'user_growth'
     end
 

@@ -20,7 +20,8 @@ class Metrics::OverviewGraphsController < ApplicationController
     }
 
     @user_metrics = {
-      user_change: @graph.user_change_percentage
+      user_growth: @graph.user_change_percentage,
+      group_memberships: @graph.group_memberships
     }
 
     @innovation_metrics = {

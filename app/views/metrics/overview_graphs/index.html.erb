@@ -53,14 +53,14 @@
         <div class="col md-4 sm-12">
           <div class="panel panel--primary text-center">
             <div class="panel-headline"><p><strong>User Growth (6 Months)</strong></p></div>
-            <div class="panel-data"><p><b class="accent"><%= @user_metrics[:user_change] %></b></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @user_metrics[:user_growth] %></b></p></div>
           </div>
         </div>
 
         <div class="col md-4 sm-12">
           <div class="panel panel--primary text-center">
             <div class="panel-headline"><p><strong><%= c_t(:erg).capitalize %> Memberships (6 months)</strong></p></div>
-            <div class="panel-data"><p><b class="accent">132</b></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @user_metrics[:group_memberships] %></b></p></div>
           </div>
         </div>
       </div>

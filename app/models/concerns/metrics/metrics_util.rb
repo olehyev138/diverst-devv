@@ -36,7 +36,7 @@ module Metrics
       query
     end
 
-    def get_change_percetange(from_date_total, to_date_total)
+    def get_change_percentage(from_date_total, to_date_total)
       if from_date_total == 0 and to_date_total > 0
         change_percentage = 100
       elsif to_date_total == 0 and from_date_total > 0
