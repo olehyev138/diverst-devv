@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Reports::GraphTimeseries, skip: true do
+RSpec.describe Reports::GraphTimeseries, skip: "Is this used anywhere?" do
   # Not used
 
   include ActiveJob::TestHelper

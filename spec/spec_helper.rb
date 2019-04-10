@@ -39,7 +39,7 @@ RSpec.configure do |config|
 
   # show retry status in spec process
   config.verbose_retry = true
-  
+
   # show exception that triggers a retry if verbose_retry is set to true
   config.display_try_failure_messages = true
 
@@ -110,5 +110,56 @@ RSpec.configure do |config|
     Dir[File.expand_path("app/controllers/user/*.rb")].each do |file|
       require file
     end
+  end
+
+  config.before(:each) do
+    formatter = OpenStruct.new({
+      :title => true,
+      :parser => OpenStruct.new({:extractors => true,
+        :date_range => true, :get_elements => true }),
+      :add_elements => true
+    })
+
+    query = OpenStruct.new({
+      :terms_agg => true,
+      :bool_filter_agg => true,
+      :add_filter_clause => true})
+
+    graph = double("Graph",
+      :search => true,
+      :query => query,
+      :build => true,
+      :set_enterprise_filter => true,
+      :formatter => formatter)
+
+    allow(UserGroup).to receive(:get_graph).and_return(graph)
+    allow(UsersSegment).to receive(:get_graph).and_return(graph)
+    allow(Initiative).to receive(:get_graph).and_return(graph)
+    allow(GroupMessage).to receive(:get_graph).and_return(graph)
+    allow(View).to receive(:get_graph).and_return(graph)
+    allow(Resource).to receive(:get_graph).and_return(graph)
+    allow(MentoringSession).to receive(:get_graph).and_return(graph)
+    allow(MentorshipInterest).to receive(:get_graph).and_return(graph)
+    allow(Answer).to receive(:get_graph).and_return(graph)
+
+    allow(graph).to receive(:set_enterprise_filter)
+    allow(graph).to receive(:query=)
+    allow(graph).to receive(:query).and_return(query)
+
+    allow(graph).to receive(:drilldown_graph)
+    allow(graph).to receive(:search)
+    allow(graph).to receive(:build).and_return({:title => "#{c_t(:erg).capitalize} Population"})
+
+    allow(query).to receive(:terms_agg)
+    allow(query).to receive(:add_filter_clause)
+    allow(query).to receive(:bool_filter_agg)
+
+    allow(graph.formatter).to receive(:title)
+    allow(graph.formatter).to receive(:add_elements)
+
+    allow(graph.formatter.parser).to receive(:get_elements)
+    allow(graph.formatter.parser).to receive(:extractors=)
+    allow(graph.formatter.parser).to receive(:extractors)
+    allow(graph.formatter.parser).to receive(:date_range)
   end
 end

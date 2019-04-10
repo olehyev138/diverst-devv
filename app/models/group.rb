@@ -247,6 +247,11 @@ class Group < BaseClass
     name.gsub(/[^0-9A-Za-z.\-]/, '_')
   end
 
+  def logo_expiring_thumb
+    return nil unless logo.present?
+    logo.expiring_url(30, :thumb)
+  end
+
   def possible_participating_groups
     # return groups list without current group
     group_id = self.id

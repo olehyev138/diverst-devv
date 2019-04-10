@@ -9,14 +9,14 @@ RSpec.describe GenericGraphsEventsCreatedDownloadJob, type: :job do
     describe "#perform" do
       context "demo" do
         it "creates a downloadable csv file" do
-            expect{ subject.perform(user.id, enterprise.id, c_t(:erg), demo: true) }
+            expect{ subject.perform(user.id, enterprise.id, c_t(:erg), true, nil, nil) }
               .to change(CsvFile, :count).by(1)
         end
       end
 
       context "non demo" do
         it "creates a downloadable csv file" do
-            expect{ subject.perform(user.id, enterprise.id, c_t(:erg), demo: false) }
+            expect{ subject.perform(user.id, enterprise.id, c_t(:erg), false, nil, nil) }
               .to change(CsvFile, :count).by(1)
         end
       end
