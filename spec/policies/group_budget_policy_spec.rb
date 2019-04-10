@@ -3,18 +3,16 @@ require 'rails_helper'
 RSpec.describe GroupBudgetPolicy, :type => :policy do
 
   let(:enterprise) {create(:enterprise)}
-  let(:user){ create(:user, :enterprise => enterprise) }
   let(:group){ create(:group, :enterprise => enterprise) }
   let(:no_access) { create(:user) }
-  let(:budget){ create(:budget, :enterprise => enterprise)}
+  let(:budget){ create(:budget, :group_id => group.id)}
+  let!(:user) { no_access }
 
-  subject { described_class }
+  subject { described_class.new(user, [group, budget]) }
 
   before {
-    user.policy_group.manage_all = false
-    user.policy_group.save!
-
     no_access.policy_group.manage_all = false
+    no_access.policy_group.groups_manage = false
     no_access.policy_group.groups_budgets_index = false
     no_access.policy_group.groups_budgets_request = false
     no_access.policy_group.groups_budgets_manage = false
@@ -22,55 +20,83 @@ RSpec.describe GroupBudgetPolicy, :type => :policy do
     no_access.policy_group.save!
   }
 
-  permissions :approve? do
-    it 'should allow user with budget manage permissions' do
-      user.policy_group.groups_budgets_manage = true
+  describe 'for users with access' do
+    context 'when manage_all is false' do 
+      context 'when groups_manage and groups_budgets_manage are true' do 
+        before { user.policy_group.update groups_manage: true, groups_budgets_manage: true }
 
-      expect(subject).to permit(user, [group, nil])
+        it { is_expected.to permit_actions([:approve, :decline]) }
+      end
+
+      context 'user has group leader permissions and groups_budgets_manage is true' do  
+        before do 
+          user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+          user_role.policy_group_template.update groups_budgets_manage: true
+          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+            user_role_id: user_role.id)
+        end
+
+        it { is_expected.to permit_actions([:approve, :decline]) }
+      end
+
+      context 'user is group member and groups_budgets_manage is true' do 
+        before do 
+          create(:user_group, user_id: user.id, group_id: group.id, accepted_member: true)
+          user.policy_group.update groups_budgets_manage: true
+        end
+
+        it { is_expected.to permit_actions([:approve, :decline]) }
+      end
+
+      context 'user has basic group leader permissions and budget_approval is true' do 
+        before do 
+          user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+          user_role.policy_group_template.update budget_approval: true
+          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+            user_role_id: user_role.id)
+        end
+
+        it { is_expected.to permit_actions([:approve, :decline]) }
+      end
+
+      context 'when budget_approval is true' do 
+        before { user.policy_group.update budget_approval: true }
+
+        it { is_expected.to permit_actions([:approve, :decline]) }
+      end
     end
 
-    it 'should allow user with budget approval permissions' do
-      user.policy_group.groups_budgets_manage = false
-      user.policy_group.budget_approval = true
+    context 'when manage_all is true' do 
+      before { user.policy_group.update manage_all: true }
 
-      expect(subject).to permit(user, [group, nil])
-    end
+      context 'when budget_approval, groups_budgets_manage, groups_budgets_request, groups_budgets_index and groups_manage are false' do
+        before { user.policy_group.update budget_approval: false, groups_budgets_index: false, groups_budgets_manage: false,
+                groups_budgets_request: false, groups_manage: false }
 
-    it 'should deny access to user without correct permissions' do
-      expect(subject).to_not permit(no_access, [group, nil])
+        it { is_expected.to permit_actions([:approve, :decline]) }
+      end
     end
   end
 
-  permissions :manage_all_budgets? do
-    it 'allows access to super admin' do
-      user.policy_group.manage_all = true
+  describe 'for users with no access' do 
+    it { is_expected.to forbid_actions([:approve, :decline]) }
+  end
+  
+  describe '#manage_all_budgets' do
+    context 'when manage_all is true' do 
+      before { user.policy_group.update manage_all: true }
 
-      expect(subject).to permit(user, [group, nil])
+      it 'returns true' do 
+        expect(subject.manage_all_budgets?).to eq true
+      end
     end
 
-    it 'allows access to users who can manage budgets and groups' do
-      user.policy_group.groups_budgets_manage = true
-      user.policy_group.groups_manage = true
+    context 'when groups_budgets_manage and groups_manage are true' do 
+      before { user.policy_group.update groups_budgets_manage: true, groups_manage: true }
 
-      expect(subject).to permit(user, [group, nil])
-    end
-
-    it 'denies access to users who cant manage budgets' do
-      user.policy_group.groups_budgets_manage = false
-      user.policy_group.groups_manage = true
-
-      expect(subject).to_not permit(user, [group, nil])
-    end
-
-    it 'denies access to users who cant manage groups' do
-      user.policy_group.groups_budgets_manage = true
-      user.policy_group.groups_manage = false
-
-      expect(subject).to_not permit(user, [group, nil])
-    end
-
-    it 'denies access to users who cant manage budgets or groups' do
-      expect(subject).to_not permit(no_access, [group, nil])
+      it 'returns true' do 
+        expect(subject.manage_all_budgets?).to eq true
+      end
     end
   end
 end
