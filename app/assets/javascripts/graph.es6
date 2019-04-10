@@ -119,6 +119,7 @@ class Graph {
         var select_string = buildSelectString(this);
 
         var $drillout_button = $(this.$element).siblings('.drillout_button');
+        $drillout_button.hide();
 
         var svg = this.$element[0].children[0];
         var chart = null;
@@ -207,7 +208,7 @@ class Graph {
             moveBottomAxisToTop(select_string);
         });
 
-        $($drillout_button).click(function(){
+        $($drillout_button).off("click").click(function(){
             // Get new item count to calculate height
             items = getUniqueXValuesFromSeriesArr(series).length;
 
