@@ -19,7 +19,7 @@
   <% if GroupPolicy.new(current_user, Group).create? %>
     <%= active_link_to "#{c_t(:erg).pluralize}&nbsp;<span class='caret'></span>".html_safe, "",
                        "aria-label": c_t(:erg), "aria_control": "navigation", "data-jq-dropdown": "#group_dashboards",
-                       class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+                       class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['metrics/group_graphs'], []] %>
     <nav id="group_dashboards" class="jq-dropdown jq-dropdown-tip">
       <ul class="jq-dropdown-menu">
         <li>
