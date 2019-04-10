@@ -546,7 +546,7 @@ RSpec.describe Groups::GroupMembersController, type: :controller do
               end
 
               describe 'activity record' do
-                let(:model) { Group.last }
+                let(:model) { group }
                 let(:owner) { user }
                 let(:key) { 'group.export_member_list' }
 
