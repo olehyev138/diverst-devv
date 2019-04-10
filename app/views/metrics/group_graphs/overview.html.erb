@@ -2,10 +2,20 @@
 
 <div class="content__header">
   <h1>Overview</h1>
-  <button type="button" class="btn btn--secondary btn--small" data-toggle="modal" data-target="#group-scope-selector">Filter Groups</button>
+  <button type="button" class="btn btn--primary btn--small" style="margin-right: 8px;" data-toggle="modal" data-target="#group-scope-selector">Filter <%= c_t(:erg).pluralize.capitalize %></button>
+  <button type="button" class="btn btn--secondary btn--small" data-toggle="collapse" data-target="#groups-list-container" aria-expanded="false" aria-controls="groups-list-container">Show Filter</button>
 </div>
 
 <div class="content__main">
+  <div id="groups-list-container" class="collapse">
+    <div class="card">
+      <div class="card__section">
+        <h4><b>Filtered <%= c_t(:erg).pluralize.capitalize %></b></h4>
+        <div class="groups-list"><h4>No filter</h4></div>
+      </div>
+    </div>
+  </div>
+
   <div class="card">
     <div class="card__section">
       <div class="row">
@@ -83,12 +93,3 @@
 </div>
 
 <%= render partial: 'shared/select2_ajax_search.js.erb' %>
-
-<script>
-  $("#group-scope-selector").on('saveGroups', function(e, selectedGroups) {
-    let groupTexts = $.map(selectedGroups, function(group, key) {
-        return "<span class='group-selected-text'>" + group.text + "</span>";
-    });
-    $("#group-list").html(groupTexts.join(" "));
-  });
-</script>

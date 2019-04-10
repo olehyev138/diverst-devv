@@ -22,9 +22,18 @@ function update_graph_scopes() {
         return group.id;
       });
 
-      for (var graph of graphs) {
+      for (let graph of graphs) {
         graph.scoped_by_models = ids;
         graph.updateData(graph.rangeSelector.date_range);
       }
+
+      let groupTexts = $.map(selectedGroups, function(group, key) {
+        return "<span class='group-selected-text'>" + group.text + "</span>";
+      });
+
+      if (selectedGroups.length > 0)
+        $(".groups-list").html(groupTexts.join(" "));
+      else
+        $(".groups-list").html("<h4>No filter</h4>");
     });
 }
