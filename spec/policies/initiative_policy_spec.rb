@@ -3,86 +3,110 @@ require 'rails_helper'
 RSpec.describe InitiativePolicy, :type => :policy do
 
   let(:enterprise) {create(:enterprise)}
-  let(:user){ create(:user, :enterprise => enterprise) }
-  let(:no_access) { create(:user) }
-  let(:group) { create :group, enterprise: user.enterprise }
-  let(:outcome) {create :outcome, group_id: group.id}
-  let(:pillar) { create :pillar, outcome_id: outcome.id}
-  let(:initiative) { create :initiative, pillar: pillar, owner_group: group, owner: user}
+  let(:no_access) { create(:user, :enterprise => enterprise) }
+  let(:user){ no_access }
+  let(:group) { create :group, :enterprise => enterprise }
+  let(:outcome) {create :outcome, :group_id => group.id}
+  let(:pillar) { create :pillar, :outcome_id => outcome.id}
+  let(:initiative) { create :initiative, :pillar => pillar, :owner_group => group, :owner => user}
   let(:policy_scope) { InitiativePolicy::Scope.new(user, Initiative).resolve }
 
   subject { described_class.new(user, initiative) }
 
   before {
-    user.policy_group.manage_all = false
-    user.policy_group.save!
-
     no_access.policy_group.manage_all = false
     no_access.policy_group.initiatives_manage = false
     no_access.policy_group.initiatives_index = false
     no_access.policy_group.initiatives_create = false
     no_access.policy_group.save!
 
-    initiative.group.enterprise_id = user.enterprise.id
+    initiative.group.enterprise_id = enterprise.id
   }
 
   permissions ".scope" do
-    it "shows only initiatives belonging to enterprise" do
-      expect(policy_scope).to eq [initiative]
+    context 'when manage_all is true' do 
+      before { user.policy_group.update manage_all: true }
+    
+      it "shows only initiatives belonging to enterprise" do
+        expect(policy_scope).to eq [initiative]
+      end
     end
   end
   
   describe 'for users with access' do 
     context 'when manage_all is false' do 
-      context 'when initiatives_index is true, initiatives_manage and initiatives_create are false and current user IS NOT owner' do 
-        before do 
-          initiative.owner = create(:user)
-          user.policy_group.update initiatives_create: false, initiatives_manage: false, initiatives_index: true
+      context 'when current user IS NOT owner' do 
+        before { initiative.owner = create(:user) }
+
+        context 'when initiatives_index is true' do 
+          before { user.policy_group.update initiatives_index: true }
+          it { is_expected.to permit_actions([:index, :show]) }
         end
 
-        it { is_expected.to permit_actions([:index, :show]) }
-      end
+        context 'user has basic group leader permission for initiatives_index' do 
+          before do 
+            user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+            user_role.policy_group_template.update initiatives_index: true
+            group = create(:group, enterprise: enterprise)
+            create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+              user_role_id: user_role.id)
+          end
 
-      context 'when initiatives_index and initiatives_manage are false, initiatives_create is true and current user IS NOT owner' do 
-        before do 
-          initiative.owner = create(:user)
-          user.policy_group.update initiatives_create: true, initiatives_index: false, initiatives_manage: false
+          it { is_expected.to permit_actions([:index, :show]) }
         end
 
-        it { is_expected.to permit_actions([:index, :show, :create]) }
-      end
-
-      context 'when initiatives_manage is true, and initiatives_index and initiatives_create are false and current user IS NOT owner' do  
-        before do 
-          initiative.owner = create(:user)
-          user.policy_group.update initiatives_manage: true, initiatives_index: false, initiatives_create: false
+        context 'when initiatives_create is true' do 
+          before { user.policy_group.update initiatives_create: true }
+          it { is_expected.to permit_actions([:index, :show, :create]) }
         end
 
-        it { is_expected.to permit_actions([:index, :show, :create, :update, :destroy]) }
+        context 'user has basic group leader permission for initiatives_create' do 
+          before do 
+            user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+            user_role.policy_group_template.update initiatives_create: true
+            group = create(:group, enterprise: enterprise)
+            create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+              user_role_id: user_role.id)
+          end
+
+          it { is_expected.to permit_actions([:index, :show, :create]) }
+        end
+
+        context 'when initiatives_manage is true' do 
+          before { user.policy_group.update initiatives_manage: true }
+          it { is_expected.to permit_actions([:index, :show, :create, :update, :destroy]) }
+        end
+
+        context 'user has basic group leader permission for initiatives_manage' do 
+          before do 
+            user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+            user_role.policy_group_template.update initiatives_manage: true
+            group = create(:group, enterprise: enterprise)
+            create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+              user_role_id: user_role.id)
+          end
+
+          it { is_expected.to permit_actions([:index, :show, :create, :update, :destroy]) }
+        end
       end
 
-      context 'when initiatives_manage, initiatives_create, initiatives_index are false, and current user IS owner' do 
-        before { user.policy_group.update initiatives_index: false, initiatives_create: false, initiatives_manage: false }
+      context 'when current user IS owner' do 
         it { is_expected.to permit_actions([:update, :destroy]) }
       end
     end
 
     context 'when manage_all is true' do 
-      before { user.policy_group.update manage_all: true }
-      context 'when initiatives_index, initiatives_manage, initiatives_create are false and current user IS NOT owner' do 
-        before do 
-          initiative.owner = create(:user)
-          user.policy_group.update initiatives_manage: false, initiatives_create: false, initiatives_index: false
-        end
-
-        it { is_expected.to permit_actions([:index, :show, :create, :update, :destroy]) }
+      before do 
+        initiative.owner = create(:user)
+        user.policy_group.update manage_all: true
       end
+
+      it { is_expected.to permit_actions([:index, :show, :create, :update, :destroy]) }
     end
   end
 
   describe 'for users with no access' do 
     before { initiative.owner = create(:user) }
-    let!(:user) { no_access }
     it { is_expected.to forbid_actions([:index, :show, :create, :update, :destroy]) }
   end
 
@@ -153,6 +177,38 @@ RSpec.describe InitiativePolicy, :type => :policy do
       it 'returns true if event is upcoming' do 
         initiative.update start: DateTime.now.tomorrow, end: DateTime.now.tomorrow >> 2
         expect(subject.join_leave_button_visibility?).to eq true
+      end
+    end
+
+    describe '#manage?' do 
+      context 'when manage_all is true' do 
+        before { user.policy_group.update manage_all: true }
+
+        it 'returns true' do 
+          expect(subject.manage?).to be(true)
+        end
+      end
+
+      context 'user has basic group leader permission for initiatives_manage' do 
+        before do 
+          user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+          user_role.policy_group_template.update initiatives_manage: true
+          group = create(:group, enterprise: enterprise)
+          create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+            user_role_id: user_role.id)
+        end
+
+        it 'returns true' do 
+          expect(subject.manage?).to be(true)
+        end
+      end
+
+      context 'when initiatives_manage is true' do 
+        before { user.policy_group.update initiatives_manage: true }
+
+        it 'returns true' do 
+          expect(subject.manage?).to be(true)
+        end
       end
     end
   end

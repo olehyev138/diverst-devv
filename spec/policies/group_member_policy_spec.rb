@@ -4,15 +4,13 @@ RSpec.describe GroupMemberPolicy, :type => :policy do
 
   let(:enterprise) {create(:enterprise)}
   let(:group){ create(:group, :enterprise => enterprise) }
-  let(:no_access) { create(:user) }
-  let(:member){ no_access }
+  let(:no_access) { create(:user, :enterprise => enterprise) }
+  let(:member){ create(:user, :enterprise => enterprise) }
+  let(:user) { no_access }
 
   subject { described_class.new(user, [group, member]) }
 
   before {
-    user.policy_group.manage_all = false
-    user.policy_group.save!
-
     no_access.policy_group.manage_all = false
     no_access.policy_group.groups_manage = false
     no_access.policy_group.groups_members_index = false
@@ -21,7 +19,6 @@ RSpec.describe GroupMemberPolicy, :type => :policy do
   }
 
   describe 'for users with access' do 
-    let!(:user) { no_access }
 
     context 'when manage_all is false' do 
       context 'when group.members_visibility is set to global' do 
@@ -163,6 +160,7 @@ RSpec.describe GroupMemberPolicy, :type => :policy do
       end
       
       context 'when current user IS same as record' do 
+        let!(:member) { user }
         it { is_expected.to permit_actions([:create, :destroy]) }  
       end
 
@@ -189,8 +187,6 @@ RSpec.describe GroupMemberPolicy, :type => :policy do
   end
 
   describe 'for users with no access' do 
-    let!(:user) { create(:user) }
-    before { user.policy_group.update groups_members_manage: false, groups_manage: false, groups_members_index: false }
     it { is_expected.to forbid_actions([:create, :destroy]) }
   end
 end

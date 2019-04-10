@@ -3,18 +3,16 @@ require 'rails_helper'
 RSpec.describe GroupSocialLinkPolicy, :type => :policy do
 
   let(:enterprise) {create(:enterprise)}
-  let(:user){ create(:user, :enterprise => enterprise) }
   let(:group){ create(:group, :enterprise => enterprise) }
-  let(:no_access) { create(:user) }
+  let(:no_access) { create(:user, :enterprise => enterprise) }
+  let(:user){ no_access }
   let(:social_link){ create(:social_link, :group => group, :author => user) }
 
   subject { described_class.new(user, [group, social_link]) }
 
   before {
-    user.policy_group.manage_all = false
-    user.policy_group.save!
-
     no_access.policy_group.manage_all = false
+    no_access.policy_group.groups_manage = false
     no_access.policy_group.social_links_index = false
     no_access.policy_group.social_links_create = false
     no_access.policy_group.social_links_manage = false
@@ -32,19 +30,42 @@ RSpec.describe GroupSocialLinkPolicy, :type => :policy do
           before { social_link.author = create(:user) }
 
           context 'when ONLY manage_posts is true' do 
-            before { user.policy_group.update manage_posts: true, social_links_manage: false, social_links_create: false, social_links_index: false }
+            before { user.policy_group.update manage_posts: true }
             it { is_expected.to permit_action(:index) }
           end
 
           context 'when ONLY social_links_index is true' do 
-            before { user.policy_group.update manage_posts: false, social_links_manage: false, social_links_create: false, social_links_index: true }
+            before { user.policy_group.update social_links_index: true }
+            it { is_expected.to permit_action(:index) }
+          end
+
+          context 'user has basic group leader permission for social_links_index' do 
+            before do 
+              user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+              user_role.policy_group_template.update social_links_index: true
+              group = create(:group, enterprise: enterprise)
+              create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                user_role_id: user_role.id)
+            end
+
+            it { is_expected.to permit_action(:index) }
+          end
+
+          context 'user has basic group leader permission for manage_posts' do 
+            before do 
+              user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
+              user_role.policy_group_template.update manage_posts: true
+              group = create(:group, enterprise: enterprise)
+              create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
+                user_role_id: user_role.id)
+            end
+
             it { is_expected.to permit_action(:index) }
           end
         end
 
         context 'when author IS current user' do 
           context 'when manage_posts, social_links_index, social_links_create and social_links_manage are false' do 
-            before { user.policy_group.update manage_posts: false, social_links_manage: false, social_links_create: false, social_links_index: false }
             it { is_expected.to permit_actions([:edit, :update, :destroy]) }
           end
         end
@@ -57,17 +78,17 @@ RSpec.describe GroupSocialLinkPolicy, :type => :policy do
           before { social_link.author = create(:user) }
 
           context 'when ONLY social_links_manage and groups_manage are true' do 
-            before { user.policy_group.update groups_manage: true, manage_posts: false, social_links_index: false, social_links_create: false, social_links_manage: true }
+            before { user.policy_group.update groups_manage: true, social_links_manage: true }
             it { is_expected.to permit_actions([:index, :edit, :update, :destroy]) }
           end
 
           context 'when ONLY social_links_create and groups_manage are true' do 
-            before { user.policy_group.update groups_manage: true, manage_posts: false, social_links_manage: false, social_links_create: true, social_links_index: false }
-            it { is_expected.to permit_actions([:index]) }
+            before { user.policy_group.update groups_manage: true, social_links_create: true }
+            it { is_expected.to permit_action(:index) }
           end
 
           context 'when ONLY social_links_index and groups_manage are true' do 
-            before { user.policy_group.update groups_manage: true, manage_posts: false, social_links_manage: false, social_links_create: false, social_links_index: true }
+            before { user.policy_group.update groups_manage: true, social_links_index: true }
             it { is_expected.to permit_action(:index) }
           end
         end
@@ -78,7 +99,6 @@ RSpec.describe GroupSocialLinkPolicy, :type => :policy do
       before { user.policy_group.update manage_all: true }
 
       context 'when groups_manage, manage_posts, social_links_manage, social_links_create, social_links_index are false' do 
-        before { user.policy_group.update groups_manage: false, manage_posts: false, social_links_manage: false, social_links_create: false, social_links_index: false }
         it { is_expected.to permit_actions([:index, :edit, :update, :destroy]) }
       end
     end
@@ -86,7 +106,6 @@ RSpec.describe GroupSocialLinkPolicy, :type => :policy do
 
   describe 'for users with no access' do 
     before { social_link.author = create(:user) }
-    let!(:user) { no_access }
     it { is_expected.to forbid_actions([:index, :edit, :update, :destroy]) }
   end
 end

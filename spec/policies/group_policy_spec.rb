@@ -2,9 +2,10 @@ require 'rails_helper'
 
 RSpec.describe GroupPolicy, :type => :policy do
 
-  let(:user){ create(:user) }
-  let(:no_access) { create(:user) }
-  let(:group){ create(:group, :owner => user, :enterprise_id => user.enterprise_id)}
+  let(:enterprise) { create(:enterprise) }
+  let(:no_access) { create(:user, :enterprise => enterprise) }
+  let(:user){ no_access }
+  let(:group){ create(:group, :owner => user, :enterprise_id => enterprise.id)}
   let(:policy_scope) { GroupPolicy::Scope.new(user, Group).resolve }
 
   subject { described_class.new(user, group) }
@@ -27,8 +28,12 @@ RSpec.describe GroupPolicy, :type => :policy do
   }
 
   permissions ".scope" do
-    it "shows only groups belonging to enterprise" do
-      expect(policy_scope).to eq [group]
+    context 'when manage_all is true' do 
+      before { user.policy_group.update manage_all: true }
+      
+      it "shows only groups belonging to enterprise" do
+        expect(policy_scope).to eq [group]
+      end
     end
   end
 

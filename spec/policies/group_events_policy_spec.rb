@@ -4,7 +4,7 @@ RSpec.describe GroupEventsPolicy, :type => :policy do
 
   let(:enterprise) {create(:enterprise)}
   let(:group){ create(:group, :enterprise => enterprise) }
-  let(:no_access) { create(:user) }
+  let(:no_access) { create(:user, :enterprise => enterprise) }
   let!(:user) { no_access }
   let(:upcoming_event) { create(:initiative, owner: no_access, owner_group: group,
         start: DateTime.now.tomorrow, end: DateTime.now >> 1) }
