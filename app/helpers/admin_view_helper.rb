@@ -6,7 +6,7 @@ module AdminViewHelper
     return true if controller_name == 'enterprises' && ['resources'].include?(action_name)
     return true if ['groups/resources', 'enterprises/resources'].include? params[:controller]
 
-    ['segments', 'metrics_dashboards'].include? controller_name
+    ['segments'].include? controller_name
   end
 
   def active_engage_link?
