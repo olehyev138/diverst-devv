@@ -9,12 +9,12 @@
   </button>
   <nav id="navigation" class="jq-dropdown jq-dropdown-tip">
     <ul class="jq-dropdown-menu">
-      <li><%= active_link_to "Overview", metrics_overview_path %></li>
+      <li><%= active_link_to "Overview", metrics_overview_index_path %></li>
     </ul>
   </nav>
 </div>
 <div class="menu menu--desktop">
-  <%= active_link_to "Overview", metrics_overview_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to "Overview", metrics_overview_index_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <%= active_link_to 'Users', metrics_users_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <% if GroupPolicy.new(current_user, Group).create? %>
     <%= active_link_to "#{c_t(:erg).pluralize}&nbsp;<span class='caret'></span>".html_safe, "",
@@ -23,7 +23,7 @@
     <nav id="group_dashboards" class="jq-dropdown jq-dropdown-tip">
       <ul class="jq-dropdown-menu">
         <li>
-          <%= active_link_to "Overview", overview_metrics_groups_path, class: "secondary-header__tab" %>
+          <%= active_link_to "Overview", metrics_groups_path, class: "secondary-header__tab" %>
         </li>
         <% if InitiativePolicy.new(current_user, Initiative).create? %>
           <li>
@@ -53,7 +53,7 @@
     <%= active_link_to 'Polls', polls_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <% end %>
   <% if current_user.enterprise.mentorship_module_enabled && MentoringInterestPolicy.new(current_user, MentoringInterest).index? %>
-    <%= active_link_to 'Mentorship', metrics_mentorship_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+    <%= active_link_to 'Mentorship', metrics_mentorships_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <% end %>
   <%= active_link_to 'Custom', metrics_metrics_dashboards_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
 </div>

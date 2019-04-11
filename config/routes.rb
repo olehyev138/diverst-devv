@@ -557,54 +557,58 @@ Rails.application.routes.draw do
 
 
   namespace :metrics do
-    resource :overview, controller: :overview_graphs, only: [:index] do
-      get 'index'
+    resources :overview, controller: :overview_graphs, only: [:index]
+    resources :users, controller: :user_graphs, only: [:index] do
+      collection do
+        get 'users_per_group'
+        get 'users_per_segment'
+        get 'user_growth'
+      end
     end
 
-    resource :users, controller: :user_graphs, only: [:index] do
-      get 'index'
-      get 'users_per_group'
-      get 'users_per_segment'
-      get 'user_growth'
+    resources :groups, controller: :group_graphs, only: [:index] do
+      collection do
+        get 'initiatives'
+        get 'social_media'
+        get 'resources'
+
+        get 'group_population'
+        get 'initiatives_per_group'
+        get 'messages_per_group'
+        get 'views_per_group'
+        get 'views_per_folder'
+        get 'views_per_resource'
+        get 'views_per_news_link'
+        get 'growth_of_groups'
+        get 'growth_of_resources'
+      end
     end
 
-    resource :groups, controller: :group_graphs, only: [:index] do
-      get 'overview'
-      get 'initiatives'
-      get 'social_media'
-      get 'resources'
-
-      get 'group_population'
-      get 'initiatives_per_group'
-      get 'messages_per_group'
-      get 'views_per_group'
-      get 'views_per_folder'
-      get 'views_per_resource'
-      get 'views_per_news_link'
-      get 'growth_of_groups'
-      get 'growth_of_resources'
+    resources :segments, controller: :segment_graphs, only: [:index] do
+      collection do
+        get 'segment_population'
+      end
     end
 
-    resource :segments, controller: :segment_graphs do
-      get 'index'
-      get 'segment_population'
+    resources :mentorships, controller: :mentorship_graphs, only: [:index] do
+      collection do
+        get 'user_mentorship_interest_per_group'
+        get 'mentoring_sessions_per_creator'
+        get 'mentoring_interests'
+      end
     end
 
-    resource :mentorship, controller: :mentorship_graphs do
-      get 'index'
-      get 'user_mentorship_interest_per_group'
-      get 'mentoring_sessions_per_creator'
-      get 'mentoring_interests'
-    end
-
-    resource :campaigns, controller: :campaign_graphs do
-      get 'index'
-      get 'contributions_per_erg'
-      get 'total_votes_per_user'
+    resources :campaigns, controller: :campaign_graphs, only: [:index] do
+      collection do
+        get 'contributions_per_erg'
+        get 'total_votes_per_user'
+      end
     end
 
     resources :metrics_dashboards do
-      get 'shared_dashboard'
+      collection do
+        get 'shared_dashboard'
+      end
 
       resources :graphs do
         member do
