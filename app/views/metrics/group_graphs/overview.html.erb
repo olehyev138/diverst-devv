@@ -20,20 +20,19 @@
     <div class="card__section">
       <div class="row">
         <div class="col md-6 sm-12">
-          <div class="panel panel--primary text-center">
+          <div class="panel panel--primary text-center margin-bottom-0">
             <div class="panel-headline"><p><strong>Total <%= c_t(:erg).capitalize.pluralize %></strong></p></div>
             <div class="panel-data"><p><b class="accent"><%= @group_metrics[:total_groups] %></b></p></div>
           </div>
         </div>
 
         <div class="col md-6 sm-12">
-          <div class="panel panel--primary text-center">
+          <div class="panel panel--primary text-center margin-bottom-0">
             <div class="panel-headline"><p><strong>Average # of Members</strong></p></div>
             <div class="panel-data"><p><b class="accent"><%= @group_metrics[:avg_nb_members_per_group] %></b></p></div>
           </div>
         </div>
       </div>
-      <br>
     </div>
   </div>
 

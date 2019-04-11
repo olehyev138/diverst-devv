@@ -3,11 +3,14 @@
 </div>
 
 <div class="content__main">
-  <div class="flex-row">
-    <div class="flex-row__cell">
-      <div class="card">
-        <div class="card__section">
-          <h1>Total <%= c_t(:segment).capitalize.pluralize %>: <%= @data[:segment_count] %></h1>
+  <div class="card">
+    <div class="card__section">
+      <div class="row">
+        <div class="col sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>Total <%= c_t(:segment).capitalize.pluralize %></strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @data[:segment_count] %></b></p></div>
+          </div>
         </div>
       </div>
     </div>
