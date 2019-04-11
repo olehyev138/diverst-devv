@@ -63,7 +63,7 @@ module ApplicationHelper
   end
 
   def root_admin_path
-    return metrics_overview_index_path if metrics_overview_index_path
+    return metrics_overview_index_path if MetricsDashboardPolicy.new(current_user, MetricsDashboard).index?
     return manage_erg_root_path if manage_erg_root_path
     return manage_erg_budgets_path if manage_erg_budgets_path
     return campaigns_path if CampaignPolicy.new(current_user, Campaign).create?
