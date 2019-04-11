@@ -8,27 +8,26 @@
     <div class="card__section">
       <div class="row">
         <div class="col md-4 sm-12">
-          <div class="panel panel--primary text-center">
+          <div class="panel panel--primary text-center margin-bottom-0">
             <div class="panel-headline"><p><strong>Total Active Users</strong></p></div>
             <div class="panel-data"><p><b class="accent"><%= @user_metrics[:total_active_users] %></b></p></div>
           </div>
         </div>
 
         <div class="col md-4 sm-12">
-          <div class="panel panel--primary text-center">
+          <div class="panel panel--primary text-center margin-bottom-0">
             <div class="panel-headline"><p><strong>User Growth (6 Months)</strong></p></div>
             <div class="panel-data"><p><b class="accent"><%= @user_metrics[:user_growth] %></b></p></div>
           </div>
         </div>
 
         <div class="col md-4 sm-12">
-          <div class="panel panel--primary text-center">
+          <div class="panel panel--primary text-center margin-bottom-0">
             <div class="panel-headline"><p><strong>New <%= c_t(:erg).capitalize %> Memberships (6 months)</strong></p></div>
             <div class="panel-data"><p><b class="accent">1<%= @user_metrics[:group_memberships] %></b></p></div>
           </div>
         </div>
       </div>
-      <br>
     </div>
   </div>
   <div class="card">

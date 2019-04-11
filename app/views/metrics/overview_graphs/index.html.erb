@@ -44,27 +44,26 @@
 
       <div class="row">
         <div class="col md-4 sm-12">
-          <div class="panel panel--primary text-center">
+          <div class="panel panel--primary text-center margin-bottom-0">
             <div class="panel-headline"><p><strong>Total Active Users</strong></p></div>
             <div class="panel-data"><p><b class="accent"><%= @general_metrics[:nb_users] %></b></p></div>
           </div>
         </div>
 
         <div class="col md-4 sm-12">
-          <div class="panel panel--primary text-center">
+          <div class="panel panel--primary text-center margin-bottom-0">
             <div class="panel-headline"><p><strong>User Growth (6 Months)</strong></p></div>
             <div class="panel-data"><p><b class="accent"><%= @user_metrics[:user_growth] %></b></p></div>
           </div>
         </div>
 
         <div class="col md-4 sm-12">
-          <div class="panel panel--primary text-center">
+          <div class="panel panel--primary text-center margin-bottom-0">
             <div class="panel-headline"><p><strong><%= c_t(:erg).capitalize %> Memberships (6 months)</strong></p></div>
             <div class="panel-data"><p><b class="accent"><%= @user_metrics[:group_memberships] %></b></p></div>
           </div>
         </div>
       </div>
-      <br>
     </div>
   </div>
 
@@ -78,20 +77,19 @@
 
         <div class="row">
           <div class="col md-6 sm-12">
-            <div class="panel panel--primary text-center">
+            <div class="panel panel--primary text-center margin-bottom-0">
               <div class="panel-headline"><p><strong>Total <%= c_t(:erg).capitalize.pluralize %></strong></p></div>
               <div class="panel-data"><p><b class="accent"><%= @general_metrics[:nb_ergs] %></b></p></div>
             </div>
           </div>
 
           <div class="col md-6 sm-12">
-            <div class="panel panel--primary text-center">
+            <div class="panel panel--primary text-center margin-bottom-0">
               <div class="panel-headline"><p><strong>Average # of Members</strong></p></div>
               <div class="panel-data"><p><b class="accent"><%= @general_metrics[:average_nb_members_per_group] %></b></p></div>
             </div>
           </div>
         </div>
-        <br>
       </div>
     </div>
   <% end %>
@@ -105,13 +103,12 @@
         </div>
         <div class="row">
           <div class="col md-12 sm-12">
-            <div class="panel panel--primary text-center">
+            <div class="panel panel--primary text-center margin-bottom-0">
               <div class="panel-headline"><p><strong>Total <%= c_t(:segment).capitalize.pluralize %></strong></p></div>
               <div class="panel-data"><p><b class="accent"><%= @general_metrics[:nb_segments] %></b></p></div>
             </div>
           </div>
         </div>
-        <br>
       </div>
     </div>
   <% end %>
@@ -123,14 +120,15 @@
           <div class="flex-row__cell flex-row__cell--grow"><h1 style="display: inline-block;">Innovation</h1></div>
           <div class="flex-row__cell"><span><%= link_to('See more...', overview_metrics_groups_path) %></span></div>
         </div>
-        <div class="col md-12 sm-12">
-          <div class="panel panel--primary text-center">
-            <div class="panel-headline"><p><strong>Total Campaigns (Last Month)</strong></p></div>
-            <div class="panel-data"><p><b class="accent"><%= @innovation_metrics[:total_campaigns] %></b></p></div>
+        <div class="row">
+          <div class="col md-12 sm-12">
+            <div class="panel panel--primary text-center margin-bottom-0">
+              <div class="panel-headline"><p><strong>Total Campaigns (Last Month)</strong></p></div>
+              <div class="panel-data"><p><b class="accent"><%= @innovation_metrics[:total_campaigns] %></b></p></div>
+            </div>
           </div>
         </div>
       </div>
-      <br>
     </div>
   <% end %>
 
@@ -141,14 +139,15 @@
           <div class="flex-row__cell flex-row__cell--grow"><h1 style="display: inline-block;">Polls</h1></div>
           <div class="flex-row__cell"><span><%= link_to('See more...', overview_metrics_groups_path) %></span></div>
         </div>
-        <div class="col md-12 sm-12">
-          <div class="panel panel--primary text-center">
-            <div class="panel-headline"><p><strong>Total Polls (Last Month)</strong></p></div>
-            <div class="panel-data"><p><b class="accent"><%= @poll_metrics[:total_polls] %></b></p></div>
+        <div class="row">
+          <div class="col md-12 sm-12">
+            <div class="panel panel--primary text-center margin-bottom-0">
+              <div class="panel-headline"><p><strong>Total Polls (Last Month)</strong></p></div>
+              <div class="panel-data"><p><b class="accent"><%= @poll_metrics[:total_polls] %></b></p></div>
+            </div>
           </div>
         </div>
       </div>
-      <br>
     </div>
   <% end %>
 
@@ -162,20 +161,19 @@
 
         <div class="row">
           <div class="col md-6 sm-12">
-            <div class="panel panel--primary text-center">
+            <div class="panel panel--primary text-center margin-bottom-0">
               <div class="panel-headline"><p><strong>Total <%= c_t(:erg).capitalize.pluralize %></strong></p></div>
               <div class="panel-data"><p><b class="accent"><%= @general_metrics[:nb_ergs] %></b></p></div>
             </div>
           </div>
 
           <div class="col md-6 sm-12">
-            <div class="panel panel--primary text-center">
+            <div class="panel panel--primary text-center margin-bottom-0">
               <div class="panel-headline"><p><strong>Average # of Members</strong></p></div>
               <div class="panel-data"><p><b class="accent"><%= @general_metrics[:average_nb_members_per_group] %></b></p></div>
             </div>
           </div>
         </div>
-        <br>
       </div>
     </div>
   <% end %>
