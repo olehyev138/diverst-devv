@@ -8,7 +8,8 @@ class Metrics::MentorshipGraphsController < ApplicationController
     MentoringInterestPolicy.new(current_user, MentoringInterest).index?
 
     @data = {
-      past_mentoring_sessions: '<todo>'
+      mentoring_sessions: current_user.enterprise.mentoring_sessions.where('start <= ?', 1.month.ago).count,
+      active_mentorships: Mentoring.active_mentorships(current_user.enterprise).count
     }
   end
 

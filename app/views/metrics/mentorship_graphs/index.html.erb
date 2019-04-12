@@ -3,15 +3,26 @@
 </div>
 
 <div class="content__main">
-  <div class="flex-row">
-    <div class="flex-row__cell">
-      <div class="card">
-        <div class="card__section">
-          <h1>Mentoring sessions in the past month: <%= @data[:past_mentoring_sessions] %></h1>
+  <div class="card">
+    <div class="card__section">
+      <div class="row">
+        <div class="col md-6 sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>Mentorship Sessions (Past Month)</strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @data[:mentoring_sessions] %></b></p></div>
+          </div>
+        </div>
+
+        <div class="col md-6 sm-12">
+          <div class="panel panel--primary text-center margin-bottom-0">
+            <div class="panel-headline"><p><strong>Active Mentorships</strong></p></div>
+            <div class="panel-data"><p><b class="accent"><%= @data[:active_mentorships] %></b></p></div>
+          </div>
         </div>
       </div>
     </div>
   </div>
+
   <div class="card">
     <div class="card__section">
       <div class="flex-row flex-row--middle">

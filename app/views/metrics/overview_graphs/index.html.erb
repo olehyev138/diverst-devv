@@ -154,15 +154,15 @@
         <div class="row">
           <div class="col md-6 sm-12">
             <div class="panel panel--primary text-center margin-bottom-0">
-              <div class="panel-headline"><p><strong>Total <%= c_t(:erg).capitalize.pluralize %></strong></p></div>
-              <div class="panel-data"><p><b class="accent"><%= @general_metrics[:nb_ergs] %></b></p></div>
+              <div class="panel-headline"><p><strong>Mentorship Sessions (Past Month)</strong></p></div>
+              <div class="panel-data"><p><b class="accent"><%= @mentorship_metrics[:mentoring_sessions] %></b></p></div>
             </div>
           </div>
 
           <div class="col md-6 sm-12">
             <div class="panel panel--primary text-center margin-bottom-0">
-              <div class="panel-headline"><p><strong>Average # of Members</strong></p></div>
-              <div class="panel-data"><p><b class="accent"><%= @general_metrics[:average_nb_members_per_group] %></b></p></div>
+              <div class="panel-headline"><p><strong>Active Mentorships</strong></p></div>
+              <div class="panel-data"><p><b class="accent"><%= @mentorship_metrics[:active_mentorships] %></b></p></div>
             </div>
           </div>
         </div>
