@@ -25,11 +25,16 @@ class Metrics::OverviewGraphsController < ApplicationController
     }
 
     @innovation_metrics = {
-      total_campaigns: current_user.enterprise.campaigns.where('created_at <= ?', 1.month.ago).count
+      total_campaigns: enterprise.campaigns.where('created_at <= ?', 1.month.ago).count
     }
 
     @poll_metrics = {
-      total_polls: current_user.enterprise.polls.where('created_at <= ?', 1.month.ago).count
+      total_polls: enterprise.polls.where('created_at <= ?', 1.month.ago).count
+    }
+
+    @mentorship_metrics = {
+      mentoring_sessions: enterprise.mentoring_sessions.where('start <= ?', 1.month.ago).count,
+      active_mentorships: Mentoring.active_mentorships(enterprise).count
     }
   end
 end
