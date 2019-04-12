@@ -4,6 +4,8 @@ class Metrics::GroupGraphsController < ApplicationController
   layout 'metrics'
 
   def index
+    authorize MetricsDashboard
+
     @group_metrics = {
       total_groups: current_user.enterprise.groups.count,
       avg_nb_members_per_group: Group.avg_members_per_group(enterprise: current_user.enterprise)
@@ -23,6 +25,8 @@ class Metrics::GroupGraphsController < ApplicationController
   # Overview
 
   def group_population
+    authorize MetricsDashboard, :index?
+
     respond_to do |format|
       format.json {
         render json: @graph.group_population(metrics_params[:date_range], metrics_params[:scoped_by_models])
@@ -44,6 +48,8 @@ class Metrics::GroupGraphsController < ApplicationController
   end
 
   def views_per_group
+    authorize MetricsDashboard, :index?
+
     respond_to do |format|
       format.json {
         render json: @graph.views_per_group(metrics_params[:date_range], metrics_params[:scoped_by_models])
@@ -66,6 +72,8 @@ class Metrics::GroupGraphsController < ApplicationController
   end
 
   def growth_of_groups
+    authorize MetricsDashboard, :index?
+
     respond_to do |format|
       format.json {
         render json: @graph.growth_of_groups(metrics_params[:date_range], metrics_params[:scoped_by_models])
@@ -88,6 +96,8 @@ class Metrics::GroupGraphsController < ApplicationController
   # Initiatives
 
   def initiatives_per_group
+    authorize MetricsDashboard, :index?
+
     respond_to do |format|
       format.json {
         render json: @graph.initiatives_per_group(metrics_params[:date_range], metrics_params[:scoped_by_models])
@@ -112,6 +122,8 @@ class Metrics::GroupGraphsController < ApplicationController
   # Social Media
 
   def messages_per_group
+    authorize MetricsDashboard, :index?
+
     respond_to do |format|
       format.json {
         render json: @graph.messages_per_group(metrics_params[:date_range], metrics_params[:scoped_by_models])
@@ -134,6 +146,8 @@ class Metrics::GroupGraphsController < ApplicationController
   end
 
   def views_per_news_link
+    authorize MetricsDashboard, :index?
+
     respond_to do |format|
       format.json {
         render json: @graph.views_per_news_link(metrics_params[:date_range], metrics_params[:scoped_by_models])
@@ -157,6 +171,8 @@ class Metrics::GroupGraphsController < ApplicationController
   # Resources
 
   def views_per_folder
+    authorize MetricsDashboard, :index?
+
     respond_to do |format|
       format.json {
         render json: @graph.views_per_folder(metrics_params[:date_range], metrics_params[:scoped_by_models])
@@ -178,6 +194,8 @@ class Metrics::GroupGraphsController < ApplicationController
   end
 
   def views_per_resource
+    authorize MetricsDashboard, :index?
+
     respond_to do |format|
       format.json {
         render json: @graph.views_per_resource(metrics_params[:date_range], metrics_params[:scoped_by_models])
@@ -199,6 +217,8 @@ class Metrics::GroupGraphsController < ApplicationController
   end
 
   def growth_of_resources
+    authorize MetricsDashboard, :index?
+
     respond_to do |format|
       format.json {
         render json: @graph.growth_of_resources(metrics_params[:date_range], metrics_params[:scoped_by_models])

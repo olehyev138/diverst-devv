@@ -4,12 +4,18 @@ class Metrics::MentorshipGraphsController < ApplicationController
   layout 'metrics'
 
   def index
+    authorize MetricsDashboard :index?
+    MentoringInterestPolicy.new(current_user, MentoringInterest).index?
+
     @data = {
       past_mentoring_sessions: '<todo>'
     }
   end
 
   def user_mentorship_interest_per_group
+    authorize MetricsDashboard :index?
+    MentoringInterestPolicy.new(current_user, MentoringInterest).index?
+
     respond_to do |format|
       format.json {
         render json: @graph.user_mentorship_interest_per_group
@@ -24,6 +30,9 @@ class Metrics::MentorshipGraphsController < ApplicationController
   end
 
   def mentoring_sessions_per_creator
+    authorize MetricsDashboard :index?
+    MentoringInterestPolicy.new(current_user, MentoringInterest).index?
+
     respond_to do |format|
       format.json {
         render json: @graph.mentoring_sessions_per_creator(metrics_params[:date_range])
@@ -44,6 +53,9 @@ class Metrics::MentorshipGraphsController < ApplicationController
   end
 
   def mentoring_interests
+    authorize MetricsDashboard :index?
+    MentoringInterestPolicy.new(current_user, MentoringInterest).index?
+
     respond_to do |format|
       format.json {
         render json: @graph.mentoring_interests

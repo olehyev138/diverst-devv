@@ -4,6 +4,8 @@ class Metrics::UserGraphsController < ApplicationController
   layout 'metrics'
 
   def index
+    authorize MetricsDashboard
+
     @user_metrics = {
       total_active_users: current_user.enterprise.users.active.count,
       user_growth: @graph.user_change_percentage,
@@ -12,6 +14,8 @@ class Metrics::UserGraphsController < ApplicationController
   end
 
   def users_per_group
+    authorize MetricsDashboard, :index?
+
     respond_to do |format|
       format.json {
         render json: @graph.users_per_group
@@ -32,6 +36,8 @@ class Metrics::UserGraphsController < ApplicationController
   end
 
   def users_per_segment
+    authorize MetricsDashboard, :index?
+
     respond_to do |format|
       format.json {
         render json: @graph.users_per_segment
@@ -47,6 +53,8 @@ class Metrics::UserGraphsController < ApplicationController
 
 
   def user_growth
+    authorize MetricsDashboard, :index?
+
     respond_to do |format|
       format.json {
         render json: @graph.user_growth(metrics_params[:date_range])

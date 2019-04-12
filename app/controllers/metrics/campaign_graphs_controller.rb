@@ -5,9 +5,11 @@ class Metrics::CampaignGraphsController < ApplicationController
   layout 'metrics'
 
   def index
+    authorize MetricsDashboard
   end
 
   def contributions_per_erg
+    authorize MetricsDashboard, :index?
     authorize @campaign, :show?
 
     respond_to do |format|
@@ -23,6 +25,7 @@ class Metrics::CampaignGraphsController < ApplicationController
   end
 
   def total_votes_per_user
+    authorize MetricsDashboard, :index?
     authorize @campaign, :show?
 
     respond_to do |format|
