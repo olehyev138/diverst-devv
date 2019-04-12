@@ -606,7 +606,7 @@ Rails.application.routes.draw do
     end
 
     resources :metrics_dashboards do
-      collection do
+      member do
         get 'shared_dashboard'
       end
 

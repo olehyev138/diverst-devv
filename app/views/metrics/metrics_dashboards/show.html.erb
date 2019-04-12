@@ -20,7 +20,7 @@
     </div>
     <% if @metrics_dashboard.shareable_token %>
       <div class="flex-row__cell">
-        <%= link_to "Share", metrics_metrics_dashboard_shared_dashboard_path(@metrics_dashboard, token: @metrics_dashboard.shareable_token) %>
+        <%= link_to "Share", shared_dashboard_metrics_metrics_dashboard_path(@metrics_dashboard, token: @metrics_dashboard.shareable_token) %>
       </div>
     <% end %>
   </div>
