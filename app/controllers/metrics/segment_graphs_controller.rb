@@ -4,12 +4,16 @@ class Metrics::SegmentGraphsController < ApplicationController
   layout 'metrics'
 
   def index
+    authorize MetricsDashboard, :index?
+
     @data = {
       segment_count: current_user.enterprise.segments.count
     }
   end
 
   def segment_population
+    authorize MetricsDashboard, :index?
+
     respond_to do |format|
       format.json {
         render json: @graph.segment_population
