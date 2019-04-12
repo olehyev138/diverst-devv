@@ -17,7 +17,7 @@ function load_graphs() {
 }
 
 function update_graph_scopes() {
-    $(".group-selector").on('saveGroups', function(e, selectedGroups) {
+    $(".group-selector.group-selector-graphs").on('saveGroups', function(e, selectedGroups) {
       let ids = $.map(selectedGroups, function(group, key) {
         return group.id;
       });

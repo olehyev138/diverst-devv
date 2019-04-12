@@ -11,6 +11,14 @@ class Metrics::UserGraphsController < ApplicationController
       user_growth: @graph.user_change_percentage,
       group_memberships: @graph.group_memberships
     }
+
+    @users = current_user.enterprise.users
+    @users = @graph.user_groups_intersection(metrics_params[:scoped_by_models]) if metrics_params[:scoped_by_models].present?
+
+    respond_to do |format|
+      format.html
+      format.json { render json: UserDatatable.new(view_context, @users, read_only: true) }
+    end
   end
 
   def users_per_group

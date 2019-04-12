@@ -17,6 +17,21 @@ module Metrics
       get_change_percentage(from_date_total, to_date_total)
     end
 
+    def user_groups_intersection(group_ids)
+      # Find all users that are in _all_ groups passed in group_ids
+      # This is passed to Datatables which _requires_ an ActiveRecord object
+      #   - therefore we cannot use es and we cannot pass an array
+
+      group_ids = group_ids.map(&:to_i)
+      user_ids = []
+
+      enterprise.users.each do |u|
+        user_ids << u.id if (group_ids - u.user_groups.pluck(:group_id)).empty?
+      end
+
+      enterprise.users.where('id in (?)', user_ids)
+    end
+
     def group_memberships
       from_date = 6.months.ago
 

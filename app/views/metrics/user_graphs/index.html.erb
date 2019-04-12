@@ -1,3 +1,4 @@
+<%= render partial: 'components/group_selector', locals: { id: "group-scope-selector", multiselect: true } %>
 
 <div class="content__header">
   <h1>Users</h1>
@@ -78,4 +79,64 @@
       </div>
     </div>
   </div>
+  <div class="card">
+    <div class="card__section">
+      <h2><%= c_t(:erg).capitalize %> membership cross section</h2>
+      <button type="button" class="btn btn--primary btn--small" data-toggle="modal"
+              data-target="#group-scope-selector">Filter <%= c_t(:erg).pluralize.capitalize %></button>
+      <button type="button" class="btn btn--secondary btn--small" data-toggle="collapse" data-target="#groups-list-container"
+              aria-expanded="false" aria-controls="groups-list-container">Show Filter</button>
+
+      <br><br>
+      <div id="groups-list-container" class="collapse">
+        <div class="card__section--border">
+          <h4><b>Filtered <%= c_t(:erg).pluralize.capitalize %></b></h4>
+          <div class="groups-list"><h4>No filter</h4></div><br>
+        </div>
+      </div>
+
+      <table class="table--has-border" data-source="<%= metrics_users_path %>" id="users-table">
+        <thead>
+        <th>ID</th>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Email</th>
+        <th>Details</th>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
+
+<script>
+
+  $(document).on('ready page:load', function() {
+    var scoped_by_models = [];
+
+    var table = $('#users-table').DataTable(Utility.mergeWithDTDefaults({
+      ajax: { data: function(d) { d.scoped_by_models = scoped_by_models } },
+      order: [[3, "asc"]]
+    }));
+
+    $(".group-selector").on('saveGroups', function(e, selectedGroups) {
+      let ids = $.map(selectedGroups, function(group, key) {
+        return group.id;
+      });
+
+      let groupTexts = $.map(selectedGroups, function(group, key) {
+        return "<span class='group-selected-text'>" + group.text + "</span>";
+      });
+
+      if (selectedGroups.length > 0)
+        $(".groups-list").html(groupTexts.join(" "));
+      else
+        $(".groups-list").html("<h4>No filter</h4>");
+
+      scoped_by_models = ids;
+      console.log(scoped_by_models);
+      table.ajax.reload();
+    });
+  });
+</script>
