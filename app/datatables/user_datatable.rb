@@ -19,6 +19,10 @@ class UserDatatable < AjaxDatatablesRails::Base
     @searchable_columns ||= ['User.first_name', 'User.last_name', 'User.email']
   end
 
+  def sort_records(records)
+    records
+  end
+
   private
 
   def data
