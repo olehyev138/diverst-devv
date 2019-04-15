@@ -1,5 +1,5 @@
 const STARTING_PAGE = 1;
-const LIMIT = 10;
+const LIMIT = 8;
 const MULTISELECT_DEFAULT = false;
 
 const CLASSES = {
@@ -544,7 +544,7 @@ class GroupSelector {
 
         // Enable parent and all child group checkboxes if the row is double clicked
         $("." + CLASSES.PARENT_GROUP, this.groupsElement).dblclick(function(e) {
-            if ($(e.target).hasClass(CLASSES.EXPAND_BUTTON) || $(e.target).hasClass('boolean') || $(e.target).hasClass('control__indicator--checkbox'))
+            if ($(e.target).hasClass(CLASSES.EXPAND_BUTTON))
                 return;
 
             let parentCheckbox = $(this).find(".boolean");
