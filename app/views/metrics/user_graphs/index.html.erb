@@ -112,13 +112,17 @@
 
 <script>
 
-  $(document).on('ready page:load', function() {
+  $(document).on('page:change', function() {
+    $(document).off('page:change');
+
     var scoped_by_models = [];
 
     var table = $('#users-table').DataTable(Utility.mergeWithDTDefaults({
       serverSide: true,
       ajax: { data: function(d) { d.scoped_by_models = scoped_by_models } },
-      order: [[3, "asc"]]
+      columnDefs: [
+        { bSortable: false, targets: [3, 4] }
+      ]
     }));
 
     $(".group-selector").on('saveGroups', function(e, selectedGroups) {
@@ -136,7 +140,6 @@
         $(".groups-list").html("<h4>No filter</h4>");
 
       scoped_by_models = ids;
-      console.log(scoped_by_models);
       table.ajax.reload();
     });
   });
