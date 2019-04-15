@@ -21,6 +21,7 @@ RSpec.describe View, type: :model do
       it 'serializes the correct fields with the correct data' do
         hash = {
           'enterprise_id' => object.enterprise_id,
+          'group_id' => object.group_id,
           'created_at' => object.created_at.beginning_of_hour,
           'news_feed_link' => {
             'news_link' => {
@@ -28,6 +29,7 @@ RSpec.describe View, type: :model do
               'title' => object.news_feed_link.news_link.title,
             },
             'group' => {
+              'id' => object.news_feed_link.group.id,
               'name' => object.news_feed_link.group.name
             }
           }

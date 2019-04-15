@@ -571,13 +571,66 @@ Rails.application.routes.draw do
 
   resources :mentorship_ratings
 
-  resources :metrics_dashboards do
-    get 'shared_dashboard'
 
-    resources :graphs do
+  namespace :metrics do
+    resources :overview, controller: :overview_graphs, only: [:index]
+    resources :users, controller: :user_graphs, only: [:index] do
+      collection do
+        get 'users_per_group'
+        get 'users_per_segment'
+        get 'user_growth'
+      end
+    end
+
+    resources :groups, controller: :group_graphs, only: [:index] do
+      collection do
+        get 'initiatives'
+        get 'social_media'
+        get 'resources'
+
+        get 'group_population'
+        get 'initiatives_per_group'
+        get 'messages_per_group'
+        get 'views_per_group'
+        get 'views_per_folder'
+        get 'views_per_resource'
+        get 'views_per_news_link'
+        get 'growth_of_groups'
+        get 'growth_of_resources'
+      end
+    end
+
+    resources :segments, controller: :segment_graphs, only: [:index] do
+      collection do
+        get 'segment_population'
+      end
+    end
+
+    resources :mentorships, controller: :mentorship_graphs, only: [:index] do
+      collection do
+        get 'user_mentorship_interest_per_group'
+        get 'mentoring_sessions_per_creator'
+        get 'mentoring_interests'
+      end
+    end
+
+    resources :campaigns, controller: :campaign_graphs, only: [:index] do
+      collection do
+        get 'contributions_per_erg'
+        get 'total_votes_per_user'
+      end
+    end
+
+    resources :metrics_dashboards do
       member do
-        get 'data'
-        get 'export_csv'
+        get 'shared_dashboard'
+      end
+
+      resources :graphs do
+        member do
+          get 'data'
+          get 'export_csv'
+        end
       end
     end
   end
@@ -618,5 +671,5 @@ Rails.application.routes.draw do
 
   match "*a", :to => "application#routing_error", :via => [:get, :post]
 
-  root to: 'metrics_dashboards#index'
+  root to: 'metrics/overview_graphs#index'
 end

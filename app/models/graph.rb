@@ -1,5 +1,13 @@
 class Graph < BaseClass
 
+  include Metrics::OverviewMetrics
+  include Metrics::GroupMetrics
+  include Metrics::UserMetrics
+  include Metrics::SegmentMetrics
+  include Metrics::MentorshipMetrics
+  include Metrics::CampaignMetrics
+  include Metrics::MetricsUtil
+
   belongs_to :poll
   belongs_to :metrics_dashboard
   belongs_to :field
@@ -12,9 +20,11 @@ class Graph < BaseClass
   after_initialize :set_graph_builder
   after_initialize :set_groups_segments
 
+  attr_accessor :enterprise_id
+
   def set_graph_builder
     if @graph_builder.blank? && collection.present?
-      @graph_builder = get_custom_class.get_graph
+      @graph_builder = get_custom_class.get_graph_builder
       @graph_builder.set_enterprise_filter(field: 'user.enterprise_id', value: collection.enterprise.id)
 
       @graph_builder.formatter.type = 'custom'
@@ -123,31 +133,5 @@ class Graph < BaseClass
         end
       end
     end
-  end
-
-  def parse_date_range(date_range)
-    # Parse a date range from a frontend range_controller for a es date range aggregation
-    # Date range is {} or looks like { from: <>, to: <> }, with to being optional
-
-    default_from_date = 'now-200y/y'
-    default_to_date = DateTime.tomorrow.strftime('%F')
-
-    return { from: default_from_date, to: default_to_date } if date_range.blank?
-
-    from_date = date_range[:from_date].presence || default_from_date
-    to_date = DateTime.parse((date_range[:to_date].presence || default_to_date)).strftime('%F')
-
-    from_date = case from_date
-                when '1m'     then 'now-1M/M'
-                when '3m'     then 'now-3M/M'
-                when '6m'     then 'now-6M/M'
-                when 'ytd'    then Time.now.beginning_of_year.strftime('%F')
-                when '1y'     then 'now-1y/y'
-                when 'all'    then 'now-200y/y'
-                else
-                  DateTime.parse(from_date).strftime('%F')
-                end
-
-    { from: from_date, to: to_date }
   end
 end

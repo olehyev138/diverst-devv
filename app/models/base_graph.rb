@@ -5,7 +5,7 @@ module BaseGraph
 
   module ClassMethods
     # Returns an instance of GraphBuilder
-    def get_graph
+    def get_graph_builder
       GraphBuilder.new(self)
     end
   end

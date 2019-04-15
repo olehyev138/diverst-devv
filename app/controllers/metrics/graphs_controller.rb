@@ -1,4 +1,4 @@
-class GraphsController < ApplicationController
+class Metrics::GraphsController < ApplicationController
   before_action :authenticate_user!, except: [:data, :export_csv] #TODO vulnerability - check current_user or enterprise token to be present
   before_action :set_graph, except: [:index, :new, :create]
   before_action :set_collection, except: [:data, :export_csv]
@@ -22,7 +22,7 @@ class GraphsController < ApplicationController
 
     if @graph.save
       flash[:notice] = "Your graph was created"
-      redirect_to @collection
+      redirect_to [:metrics, @collection]
     else
       flash[:alert] = "Your graph was not created. Please fix the errors"
       render :new
@@ -41,7 +41,7 @@ class GraphsController < ApplicationController
 
     if @graph.update(graph_params)
       flash[:notice] = "Your graph was updated"
-      redirect_to @graph.collection
+      redirect_to [:metrics, @graph.collection]
     else
       flash[:alert] = "Your graph was not updated. Please fix the errors"
       render :edit
@@ -56,11 +56,15 @@ class GraphsController < ApplicationController
   end
 
   def data
-    render json: @graph.data(params[:input])
+    respond_to do |format|
+      format.json {
+        render json: @graph.data(params[:date_range])
+      }
+    end
   end
 
   def export_csv
-    date_range = params[:input]
+    date_range = params[:date_range]
     unset_series = params.dig(:unset_series) || []
 
     GraphDownloadJob.perform_later(current_user.id, @graph.id, date_range, unset_series)
@@ -97,7 +101,7 @@ class GraphsController < ApplicationController
       .permit(
         :field_id,
         :aggregation_id,
-        :input,
+        :date_range,
         :unset_series
       )
   end

@@ -238,11 +238,14 @@ class Enterprise < BaseClass
         Resource.where(:folder_id => group_folder_ids).count
     end
 
-    def generic_graphs_group_population_csv(erg_text, from_date, to_date)
+    def generic_graphs_group_population_csv(erg_text, from_date, to_date, scoped_by_models)
       from_date = from_date.to_datetime if from_date.present?
       to_date = to_date.to_datetime if to_date.present?
 
-      data = self.groups.all_parents.map { |g|
+      groups = self.groups
+      groups = groups.where(id: scoped_by_models) if scoped_by_models.present? && !scoped_by_models.empty?
+
+      data = groups.map { |g|
           members = g.members.active
           members = members.where('user_groups.created_at >= ?', from_date) if from_date.present?
           members = members.where('user_groups.created_at <= ?', to_date) if to_date.present?
@@ -253,7 +256,7 @@ class Enterprise < BaseClass
               drilldown: g.name
           }
       }
-      categories = self.groups.all_parents.map{ |g| g.name }
+      categories = groups.map(&:name)
 
       strategy = Reports::GraphStatsGeneric.new(title: "Number of users #{erg_text}", categories: categories, data: data)
       report = Reports::Generator.new(strategy)
@@ -261,7 +264,7 @@ class Enterprise < BaseClass
       report.to_csv
     end
 
-    def generic_graphs_group_growth_csv(from_date, to_date)
+    def generic_graphs_group_growth_csv(from_date, to_date, scoped_by_models)
       CSV.generate do |csv|
         from_date_text = ''
         to_date_text = ''
@@ -289,7 +292,10 @@ class Enterprise < BaseClass
           '% Change'
         ]
 
-        self.groups.each do |group|
+        groups = self.groups
+        groups = groups.where(id: scoped_by_models) if scoped_by_models.present? && !scoped_by_models.empty?
+
+        groups.each do |group|
           from_date_total = group.user_groups
           from_date_total = from_date_total.where('created_at <= ?', from_date) if from_date.present?
           from_date_total = from_date_total.count.to_f
@@ -396,11 +402,14 @@ class Enterprise < BaseClass
       report.to_csv
     end
 
-    def generic_graphs_non_demo_events_created_csv(erg_text, from_date, to_date)
+    def generic_graphs_non_demo_events_created_csv(erg_text, from_date, to_date, scoped_by_models)
       from_date = from_date.to_datetime if from_date.present?
       to_date = to_date.to_datetime if to_date.present?
 
-      data = self.groups.all_parents.map do |g|
+      groups = self.groups
+      groups = groups.where(id: scoped_by_models) if scoped_by_models.present? && !scoped_by_models.empty?
+
+      data = groups.map do |g|
           events = g.initiatives.joins(:owner)
                 .where('users.active = ?', true)
           events = events.where('initiatives.created_at >= ?', from_date) if from_date.present?
@@ -413,7 +422,7 @@ class Enterprise < BaseClass
           }
       end
 
-      categories = self.groups.all_parents.map{ |g| g.name }
+      categories = groups.map{ |g| g.name }
 
       strategy = Reports::GraphStatsGeneric.new(title: "Number of events created #{erg_text}", categories: categories, data: data)
       report = Reports::Generator.new(strategy)
@@ -421,11 +430,14 @@ class Enterprise < BaseClass
       report.to_csv
     end
 
-    def generic_graphs_non_demo_messages_sent_csv(erg_text, from_date, to_date)
+    def generic_graphs_non_demo_messages_sent_csv(erg_text, from_date, to_date, scoped_by_models)
       from_date = from_date.to_datetime if from_date.present?
       to_date = to_date.to_datetime if to_date.present?
 
-      data = groups.all_parents.map do |g|
+      groups = self.groups
+      groups = groups.where(id: scoped_by_models) if scoped_by_models.present? && !scoped_by_models.empty?
+
+      data = groups.map do |g|
         messages = g.messages.joins(:owner)
                     .where('users.active = ?', true)
         messages = messages.where('group_messages.created_at >= ?', from_date) if from_date.present?
@@ -438,7 +450,7 @@ class Enterprise < BaseClass
         }
       end
 
-      categories = self.groups.all_parents.map{ |g| g.name }
+      categories = groups.map{ |g| g.name }
 
       strategy = Reports::GraphStatsGeneric.new(title: "Number of messages sent #{erg_text}", categories: categories, data: data)
       report = Reports::Generator.new(strategy)
@@ -446,11 +458,14 @@ class Enterprise < BaseClass
       report.to_csv
     end
 
-    def generic_graphs_non_demo_top_groups_by_views_csv(erg_text, from_date, to_date)
+    def generic_graphs_non_demo_top_groups_by_views_csv(erg_text, from_date, to_date, scoped_by_models)
       from_date = from_date.to_datetime if from_date.present?
       to_date = to_date.to_datetime if to_date.present?
 
-      data = self.groups.all_parents.map do |g|
+      groups = self.groups
+      groups = groups.where(id: scoped_by_models) if scoped_by_models.present? && !scoped_by_models.empty?
+
+      data = groups.map do |g|
           views = g.views
           views = views.where('views.created_at >= ?', from_date) if from_date.present?
           views = views.where('views.created_at <= ?', to_date) if to_date.present?
@@ -462,7 +477,7 @@ class Enterprise < BaseClass
           }
       end
 
-      categories = self.groups.all_parents.map{ |g| g.name }
+      categories = groups.map{ |g| g.name }
 
       strategy = Reports::GraphStatsGeneric.new(title: "Number of view per #{erg_text}", categories: categories, data: data)
       report = Reports::Generator.new(strategy)
@@ -470,11 +485,13 @@ class Enterprise < BaseClass
       report.to_csv
     end
 
-    def generic_graphs_non_demo_top_folders_by_views_csv(from_date, to_date)
+    def generic_graphs_non_demo_top_folders_by_views_csv(from_date, to_date, scoped_by_models)
       from_date = from_date.to_datetime if from_date.present?
       to_date = to_date.to_datetime if to_date.present?
 
       folders = Folder.all
+      folders = folders.where(group_id: scoped_by_models) if scoped_by_models.present? && !scoped_by_models.empty?
+
       data = folders.map do |f|
         views = f.views
         views = views.where('views.created_at >= ?', from_date) if from_date.present?
@@ -495,12 +512,14 @@ class Enterprise < BaseClass
       report.to_csv
     end
 
-    def generic_graphs_non_demo_top_resources_by_views_csv(from_date, to_date)
+    def generic_graphs_non_demo_top_resources_by_views_csv(from_date, to_date, scoped_by_models)
       from_date = from_date.to_datetime if from_date.present?
       to_date = to_date.to_datetime if to_date.present?
 
-      group_ids = self.groups.ids
-      folder_ids = Folder.where(:group_id => group_ids).ids
+      groups = self.groups
+      groups = groups.where(id: scoped_by_models) if scoped_by_models.present? && !scoped_by_models.empty?
+
+      folder_ids = Folder.where(:group_id => groups.ids).ids
       resources = Resource.where(:folder_id => folder_ids)
       data = resources.map do |resource|
           views = resource.views
@@ -521,13 +540,16 @@ class Enterprise < BaseClass
       report.to_csv
     end
 
-    def generic_graphs_non_demo_top_news_by_views_csv(from_date, to_date)
+    def generic_graphs_non_demo_top_news_by_views_csv(from_date, to_date, scoped_by_models)
       from_date = from_date.to_datetime if from_date.present?
       to_date = to_date.to_datetime if to_date.present?
 
+      groups = self.groups
+      groups = groups.where(id: scoped_by_models) if scoped_by_models.present? && !scoped_by_models.empty?
+
       news_feed_link_ids = NewsFeedLink.where(:news_feed_id => NewsFeed.where(:group_id => groups.ids).ids).ids
       news_links = NewsLink
-        .select('DISTINCT news_links.title, groups.name')
+        .select('DISTINCT news_links.id, news_links.title, groups.name')
         .joins(:group, :news_feed_link, 'JOIN views on news_feed_links.id = views.news_feed_link_id')
         .where(:news_feed_links => {:id => news_feed_link_ids})
 
