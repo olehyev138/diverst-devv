@@ -10,7 +10,7 @@ RSpec.feature 'user visits the metrics section' do
   scenario 'they can\'t see metrics dashboards created by others' do
     create(:metrics_dashboard, enterprise: user.enterprise, owner: create(:user, enterprise: user.enterprise), name: "Test Dashboard")
 
-    visit metrics_dashboards_path
+    visit metrics_metrics_dashboards_path
 
     expect(page).to have_no_content 'Test Dashboard'
   end
@@ -19,7 +19,7 @@ RSpec.feature 'user visits the metrics section' do
   scenario 'they can edit a metrics dashboard' do
     create(:metrics_dashboard, enterprise: user.enterprise, owner: user, name: "Test Dashboard",  groups: [create(:group, enterprise: user.enterprise)])
 
-    visit metrics_dashboards_path
+    visit metrics_metrics_dashboards_path
     click_on 'Edit'
     fill_in 'metrics_dashboard_name', with: 'Allo'
     submit_form
@@ -33,7 +33,7 @@ RSpec.feature 'user visits the metrics section' do
     user.enterprise = create(:enterprise, fields: [field1, field2])
     dashboard = create(:metrics_dashboard, enterprise: user.enterprise, owner: user, name: "Test Dashboard")
 
-    visit metrics_dashboard_path(dashboard)
+    visit metrics_metrics_dashboard_path(dashboard)
     click_on 'New Graph'
     select 'Field #1', from: 'graph_field_id'
     select 'Field #2', from: 'graph_aggregation_id'
@@ -45,11 +45,11 @@ RSpec.feature 'user visits the metrics section' do
   context 'metrics can be deleted' do
     let!(:test_dashboard) { create(:metrics_dashboard, enterprise: user.enterprise, owner: user, name: "Test Dashboard",  groups: [create(:group, enterprise: user.enterprise)]) }
 
-    before { visit metrics_dashboards_path }
+    before { visit metrics_metrics_dashboards_path }
 
     scenario 'successfully' do
 
-      click_link 'Delete', href: metrics_dashboard_path(test_dashboard)
+      click_link 'Delete', href: metrics_metrics_dashboard_path(test_dashboard)
 
       expect(page).to have_no_content 'Test Dashboard'
     end

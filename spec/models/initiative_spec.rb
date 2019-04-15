@@ -289,6 +289,7 @@ RSpec.describe Initiative, type: :model do
           'pillar' => {
             'outcome' => {
               'group' => {
+                'id' => object.pillar.outcome.group_id,
                 'enterprise_id' => object.pillar.outcome.group.enterprise_id,
                 'name' => object.pillar.outcome.group.name,
                 'parent_id' => object.pillar.outcome.group.parent_id

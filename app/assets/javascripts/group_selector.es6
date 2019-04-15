@@ -1,5 +1,5 @@
 const STARTING_PAGE = 1;
-const LIMIT = 10;
+const LIMIT = 8;
 const MULTISELECT_DEFAULT = false;
 
 const CLASSES = {
@@ -124,8 +124,6 @@ class GroupSelector {
         let self = this;
 
         $.get(this.dataUrl, { page: this.currentPage, limit: LIMIT, term: this.searchTerm }, (data) => {
-            console.log(data);
-
             // Get the custom group text
             self.groupText = data.group_text;
             self.groupTextPluralized = data.group_text_pluralized;
@@ -389,8 +387,6 @@ class GroupSelector {
 
             self.checkSelectedGroups();
         });
-
-        console.log(self.selectedGroups);
     }
 
     clearHandler(e) {
@@ -401,8 +397,6 @@ class GroupSelector {
         $(".boolean, .radio", self.groupsElement).each(function() {
             $(this).prop("checked", false);
         });
-
-        console.log(self.selectedGroups);
     }
 
     saveHandler(e) {
@@ -550,7 +544,7 @@ class GroupSelector {
 
         // Enable parent and all child group checkboxes if the row is double clicked
         $("." + CLASSES.PARENT_GROUP, this.groupsElement).dblclick(function(e) {
-            if ($(e.target).hasClass(CLASSES.EXPAND_BUTTON) || $(e.target).hasClass('boolean') || $(e.target).hasClass('control__indicator--checkbox'))
+            if ($(e.target).hasClass(CLASSES.EXPAND_BUTTON))
                 return;
 
             let parentCheckbox = $(this).find(".boolean");
@@ -646,7 +640,6 @@ class GroupSelector {
             return;
 
         this.selectedGroups.push({ id: groupId, text: groupName });
-        console.log(this.selectedGroups);
     }
 
     // groupId is the ID of the group to remove
@@ -657,7 +650,6 @@ class GroupSelector {
             return;
 
         this.selectedGroups.splice(idx, 1);
-        console.log(this.selectedGroups);
     }
 
     // jqObject is a jQuery object
