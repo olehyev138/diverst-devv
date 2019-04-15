@@ -30,7 +30,7 @@
     <ul class="nav__list nav__list--primary">
       <li class="nav__item">
         <%= active_link_to metrics_overview_index_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['metrics/' + controller_name], []] do %>
-          <span class="nav__icon">< ></span>
+          <%= inline_svg('icons/baseline-bar_chart-24px.svg', class: "icon nav__icon") %>
           <span class="nav__text">Analyze</span>
         <% end %>
       </li>
