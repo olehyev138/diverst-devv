@@ -31,10 +31,10 @@
       </div>
     </div>
   </div>
-  <div class="card">
-    <div class="card__section">
-      <div class="flex-row flex-row--middle">
-        <div class="flex-row__cell flex-row__cell--grow">
+  <div class="row">
+    <div class="col md-6 sm-12">
+      <div class="card">
+        <div class="card__section">
           <h4>User Population per <%= c_t(:erg) %></h4>
           <%= render 'components/range_selector' %>
           <div class="card__action">
@@ -47,11 +47,9 @@
         </div>
       </div>
     </div>
-  </div>
-  <div class="card">
-    <div class="card__section">
-      <div class="flex-row flex-row--middle">
-        <div class="flex-row__cell flex-row__cell--grow">
+    <div class="col md-6 sm-12">
+      <div class="card">
+        <div class="card__section">
           <h4>User Population per <%= c_t(:segment) %></h4>
           <%= render 'components/range_selector' %>
           <div class="card__action">
@@ -64,6 +62,8 @@
         </div>
       </div>
     </div>
+  </div>
+
   </div>
   <div class="card">
     <div class="card__section">

@@ -4,7 +4,6 @@ class Metrics::MentorshipGraphsController < ApplicationController
   layout 'metrics'
 
   def index
-    authorize MetricsDashboard :index?
     MentoringInterestPolicy.new(current_user, MentoringInterest).index?
 
     @data = {
@@ -14,7 +13,6 @@ class Metrics::MentorshipGraphsController < ApplicationController
   end
 
   def user_mentorship_interest_per_group
-    authorize MetricsDashboard :index?
     MentoringInterestPolicy.new(current_user, MentoringInterest).index?
 
     respond_to do |format|
@@ -31,7 +29,6 @@ class Metrics::MentorshipGraphsController < ApplicationController
   end
 
   def mentoring_sessions_per_creator
-    authorize MetricsDashboard :index?
     MentoringInterestPolicy.new(current_user, MentoringInterest).index?
 
     respond_to do |format|
@@ -54,7 +51,6 @@ class Metrics::MentorshipGraphsController < ApplicationController
   end
 
   def mentoring_interests
-    authorize MetricsDashboard :index?
     MentoringInterestPolicy.new(current_user, MentoringInterest).index?
 
     respond_to do |format|
