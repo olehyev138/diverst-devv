@@ -104,7 +104,7 @@ class InitiativesController < ApplicationController
     initiative_ids = Outcome.get_initiatives(@outcomes).select { |i| i.start >= @filter_from && i.start <= @filter_to }.map { |i| i.id }
 
     if Initiative.where(id: initiative_ids).any? {|initiative| initiative.unfinished_expenses? }
-      flash[:notice] = 'Please close expenses of past initiatives'
+      flash[:notice] = 'Please close expenses of past events'
       redirect_to :back
     else
       InitiativesDownloadJob.perform_later(current_user.id, @group.id, initiative_ids)

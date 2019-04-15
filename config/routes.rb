@@ -181,6 +181,7 @@ Rails.application.routes.draw do
     collection do
       post :sort
       get 'get_all_groups'
+      get 'get_paginated_groups'
     end
     resources :budgets, only: [:index, :show, :new, :create, :destroy] do
       post 'approve'

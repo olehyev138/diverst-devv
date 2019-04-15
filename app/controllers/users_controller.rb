@@ -13,6 +13,11 @@ class UsersController < ApplicationController
       @users = @users.where.not(id: current_user.id)
     end
 
+    if extra_params[:can_metrics_dashboard_create]
+      user_ids_with_perms = @users.select { |u| MetricsDashboardPolicy.new(u, nil).create? }.map(&:id)
+      @users = @users.where(id: user_ids_with_perms)
+    end
+
     respond_to do |format|
       format.html
       format.json { render json: UserDatatable.new(view_context, @users) }
@@ -260,6 +265,6 @@ class UsersController < ApplicationController
   end
 
   def extra_params
-    params.permit(:not_current_user)
+    params.permit(:not_current_user, :can_metrics_dashboard_create)
   end
 end
