@@ -95,7 +95,8 @@
         </div>
       </div>
 
-      <table class="table--has-border" data-source="<%= metrics_users_path(format: :json) %>" id="users-table">
+      <% rand_id = rand(0..1000000000) # Use a random ID to prevent reinitialization error. Sometimes that's how it be %>
+      <table class="table--has-border" data-source="<%= metrics_users_path(format: :json) %>" id="users-table-<%= rand_id %>">
         <thead>
         <th>ID</th>
         <th>First name</th>
@@ -117,7 +118,7 @@
 
     var scoped_by_models = [];
 
-    var table = $('#users-table').DataTable(Utility.mergeWithDTDefaults({
+    var table = $('#users-table-<%= rand_id %>').DataTable(Utility.mergeWithDTDefaults({
       serverSide: true,
       ajax: { data: function(d) { d.scoped_by_models = scoped_by_models } },
       columnDefs: [
