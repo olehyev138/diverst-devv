@@ -18,18 +18,15 @@ module Metrics
     end
 
     def user_groups_intersection(group_ids)
-      # Find all users that are in _all_ groups passed in group_ids
-      # This is passed to Datatables which _requires_ an ActiveRecord object
-      #   - therefore we cannot use es and we cannot pass an array
+      # get list of member ids for each group
+      members_per_group = Group.find(group_ids).map { |g| g.members.map(&:id) }
 
-      group_ids = group_ids.map(&:to_i)
-      user_ids = []
+      # run an intersection operation on every member list
+      # ie get all member ids that are common between all groups
+      common_member_ids = members_per_group.reduce { |result, element| result & element }
 
-      enterprise.users.each do |u|
-        user_ids << u.id if (group_ids - u.user_groups.pluck(:group_id)).empty?
-      end
-
-      enterprise.users.where('id in (?)', user_ids)
+      # map member ids back to activerecord objects
+      enterprise.users.where('id in (?)', common_member_ids)
     end
 
     def group_memberships
