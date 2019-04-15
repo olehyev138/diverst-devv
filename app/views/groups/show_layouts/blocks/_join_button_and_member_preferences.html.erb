@@ -6,7 +6,7 @@
   <% end %>
   <% if @group.survey_fields.any? %>
     <% if !current_user.has_answered_group_survey? @group %>
-      Take a survey below in order to speed up approval process.
+      Take our survey.
        <%= link_to c_t(:member_preference), survey_group_questions_path(@group), class: "btn btn--primary" %>
     <% else %>
       You can always
