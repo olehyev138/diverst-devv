@@ -1,4 +1,4 @@
-enterprise1 = Enterprise.create(
+Enterprise.create(
   name: "Diverst Inc",
   sp_entity_id: ( (0...8).map { (65 + rand(26)).chr }.join ), # Generate random string
   idp_entity_id: 'https://app.onelogin.com/saml/metadata/468755',
@@ -30,11 +30,12 @@ A5bYGY36o0HQqna1jAGDM8l3t7uwbpsMwf5O/CVPgcXBqUxJSX2J0g==
 -----END CERTIFICATE-----\n",
   has_enabled_saml: true,
   theme_id: 1,
-  disable_emails: true
+  disable_emails: true,
+  created_at: 2.years.ago
 )
 
-enterprise = Enterprise.create(
-  name: "enterprise#{Enterprise.count + 1}",
+Enterprise.create(
+  name: "BAD ENTERPRISE",
   sp_entity_id: ( (0...8).map { (65 + rand(26)).chr }.join ), # Generate random string
   idp_entity_id: 'https://app.onelogin.com/saml/metadata/468755',
   idp_sso_target_url: 'https://v7.onelogin.com/trust/saml2/http-post/sso/468755',
@@ -65,7 +66,8 @@ A5bYGY36o0HQqna1jAGDM8l3t7uwbpsMwf5O/CVPgcXBqUxJSX2J0g==
 -----END CERTIFICATE-----\n",
   has_enabled_saml: true,
   theme_id: 1,
-  disable_emails: true
+  disable_emails: true,
+  created_at: 2.years.ago
 )
 
 Enterprise.all.each do |enterprise|
