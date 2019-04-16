@@ -90,3 +90,15 @@
 .group-selector .groups-content .expand-group-btn.expanded {
     line-height: 1.1;
 }
+
+.groups-list {
+  line-height: 32px;
+}
+
+.groups-list > span {
+  background-color: #555555;
+  color: white;
+  border-radius: 4px;
+  padding: 4px;
+  white-space: nowrap;
+}

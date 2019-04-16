@@ -95,11 +95,6 @@
   }
 }
 
-.collapsed {
-  height: 0;
-  overflow: hidden;
-}
-
 .mb10 {
   margin-bottom: $spacing-medium;
 }
@@ -148,4 +143,12 @@
 
 .padding-top-0 {
   padding-top: 0 !important;
+}
+
+.margin-bottom-0 {
+  margin-bottom: 0 !important;
+}
+
+.margin-top-0 {
+  margin-top: 0 !important;
 }

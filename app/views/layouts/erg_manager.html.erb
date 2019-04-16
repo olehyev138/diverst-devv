@@ -10,9 +10,6 @@
     <nav id="navigation" class="jq-dropdown jq-dropdown-tip">
       <ul class="jq-dropdown-menu">
         <li>
-          <%= active_link_to "Metrics", metrics_dashboards_path if MetricsDashboardPolicy.new(current_user, MetricsDashboard).index? %>
-        </li>
-        <li>
           <%= active_link_to c_t(:erg).pluralize, groups_path, :active => :exact if GroupPolicy.new(current_user, Group).create? %>
         </li>
         <li>
@@ -50,7 +47,6 @@
   </div>
 
   <div class="menu menu--desktop">
-    <%= active_link_to "Metrics", metrics_dashboards_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['metrics_dashboards'], []] if MetricsDashboardPolicy.new(current_user, MetricsDashboard).index? %>
     <%= active_link_to c_t(:erg).pluralize, groups_path, :active => :exact, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if GroupPolicy.new(current_user, Group).create? %>
     <%= active_link_to c_t(:segment).pluralize, segments_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if SegmentPolicy.new(current_user, Segment).index? %>
     <%= active_link_to "Resources", enterprise_folders_path(current_user.enterprise), class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" if EnterpriseFolderPolicy.new(current_user).index? %>
