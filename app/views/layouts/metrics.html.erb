@@ -27,7 +27,7 @@
         </li>
         <% if InitiativePolicy.new(current_user, Initiative).create? %>
           <li>
-            <%= active_link_to "Initiatives", initiatives_metrics_groups_path, class: "secondary-header__tab" %>
+            <%= active_link_to "Events", initiatives_metrics_groups_path, class: "secondary-header__tab" %>
           </li>
         <% end %>
         <% if NewsLinkPolicy.new(current_user, NewsLink).create? %>
