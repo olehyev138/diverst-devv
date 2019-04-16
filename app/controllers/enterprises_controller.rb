@@ -72,15 +72,6 @@ class EnterprisesController < ApplicationController
     authorize @enterprise
   end
 
-  def auto_archive_settings
-    authorize @enterprise, :auto_archive_settings_manage?
-  end
-
-  def update_auto_archive_settings
-    authorize @enterprise, :auto_archive_settings_manage?
-    update_enterprise
-  end
-
   def auto_archive_switch
     authorize @enterprise, :auto_archive_settings_manage?
     @enterprise.archive_switch 

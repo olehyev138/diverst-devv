@@ -513,45 +513,6 @@ RSpec.describe EnterprisesController, type: :controller do
         end
     end
 
-    describe 'GET#auto_archive_settings' do 
-        context 'when user is logged in' do 
-            login_user_from_let
-            
-            before { get :auto_archive_settings, id: enterprise.id }
-
-            it 'renders auto_archive_settings template' do 
-                expect(response).to render_template :auto_archive_settings
-            end
-
-            it 'renders valid enterprise object' do 
-                expect(assigns[:enterprise]).to be_valid
-            end
-        end
-    end
-
-    describe 'PATCH#update_auto_archive_settings' do 
-        context 'when user is logged in' do 
-            login_user_from_let
-
-            before do
-                request.env['HTTP_REFERER'] = 'back'
-                patch :update_auto_archive_settings, id: enterprise.id, enterprise: attributes_for(:enterprise, auto_archive: true, unit_of_expiry_age: 'months',
-                    expiry_age_for_resources: 2) 
-            end
-
-            it 'updates auto_archive_settings' do 
-                expect(assigns[:enterprise].auto_archive).to eq true 
-                expect(assigns[:enterprise].unit_of_expiry_age).to eq 'months'
-                expect(assigns[:enterprise].expiry_age_for_resources).to eq 2
-            end 
-
-            it 'redirects back' do 
-                expect(response).to redirect_to 'back'
-            end
-
-        end
-    end
-
     describe 'PATCH#auto_archive_switch' do 
         context 'when user is logged in' do 
             login_user_from_let

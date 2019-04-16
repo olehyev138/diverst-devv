@@ -118,11 +118,6 @@
             <%= active_link_to "Fields", edit_fields_enterprise_path(current_user.enterprise) %>
           </li>
         <% end %>
-        <% if EnterprisePolicy.new(current_user, current_user.enterprise).auto_archive_settings_manage? %>
-          <li>
-            <%=  active_link_to 'Auto Archive Settings', auto_archive_settings_enterprise_path(current_user.enterprise) %>
-          </li>
-        <% end %>
       </ul>
     </nav>
     
