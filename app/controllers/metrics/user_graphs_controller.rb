@@ -12,12 +12,22 @@ class Metrics::UserGraphsController < ApplicationController
       group_memberships: @graph.group_memberships
     }
 
+    respond_to do |format|
+      format.html
+    end
+  end
+
+  def user_groups_intersection
     @users = current_user.enterprise.users
     @users = @graph.user_groups_intersection(metrics_params[:scoped_by_models]) if metrics_params[:scoped_by_models].present?
 
     respond_to do |format|
-      format.html
       format.json { render json: UserDatatable.new(view_context, @users, read_only: true) }
+      format.csv {
+        MetricsUserGroupsIntersectionDownloadJob.perform_later(current_user.id, @users.to_a)
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
+      }
     end
   end
 
