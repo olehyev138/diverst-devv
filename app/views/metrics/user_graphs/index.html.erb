@@ -99,8 +99,7 @@
         <a href="#" id="users_intersection_csv", data-url="<%= user_groups_intersection_metrics_users_path(format: :csv) %>">Export CSV</a>
       </div>
 
-      <% rand_id = rand(0..1000000000) # Use a random ID to prevent reinitialization error. Sometimes that's how it be %>
-      <table class="table--has-border" data-source="<%= user_groups_intersection_metrics_users_path(format: :json) %>" id="users-table-<%= rand_id %>">
+      <table class="table--has-border" data-source="<%= user_groups_intersection_metrics_users_path(format: :json) %>" id="users-table">
         <thead>
         <th>ID</th>
         <th>First name</th>
@@ -122,7 +121,7 @@
 
     var scoped_by_models = [];
 
-    var table = $('#users-table-<%= rand_id %>').DataTable(Utility.mergeWithDTDefaults({
+    var table = $('#users-table').DataTable(Utility.mergeWithDTDefaults({
       serverSide: true,
       ajax: { url: "<%= user_groups_intersection_metrics_users_path(format: :json) %>", data: function(d) { d.scoped_by_models = scoped_by_models } },
       columnDefs: [
