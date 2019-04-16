@@ -75,6 +75,7 @@ class Initiative < BaseClass
       indexes :pillar do
         indexes :outcome do
           indexes :group do
+            indexes :id, type: :integer
             indexes :enterprise_id, type: :integer
             indexes :parent_id, type: :integer
             indexes :name, type: :keyword
@@ -92,7 +93,7 @@ class Initiative < BaseClass
       options.merge(
         only: [:name, :created_at],
         include: { pillar: { include: { outcome: { include: { group: {
-          only: [:enterprise_id, :parent_id, :name],
+          only: [:id, :enterprise_id, :parent_id, :name],
           include: { parent: { only: [:name] } }
         } }, only: [] }, }, only: [] } }
       )

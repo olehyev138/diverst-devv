@@ -65,7 +65,8 @@ class InitiativePolicy < ApplicationPolicy
   # todo: fix this logic, write a test for it
   def join_leave_button_visibility?
     @past_events = @record.group.initiatives.past
-    ((@past_events.include? @record) || user_is_guest_and_event_is_upcoming? || user_is_guest_and_event_is_onging?) ? false : true
+    return false if @past_events.include? @record
+    return true if user_is_guest_and_event_is_upcoming? || user_is_guest_and_event_is_ongoing?
   end
 
   def add_calendar_visibility?

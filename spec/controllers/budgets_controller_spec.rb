@@ -498,7 +498,7 @@ RSpec.describe BudgetsController, type: :controller do
             end
 
             it 'produces flash message' do 
-              expect(flash[:notice]).to eq "Please close expenses of past initiatives belonging to #{budget.group.name}"
+              expect(flash[:notice]).to eq "Please close expenses of past events belonging to #{budget.group.name}"
             end
 
             it 'redirects to back' do 

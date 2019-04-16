@@ -1,6 +1,6 @@
 class GroupsController < ApplicationController
     before_action :authenticate_user!, except: [:calendar_data]
-    before_action :set_group, except: [:index, :new, :create, :calendar, :calendar_data, :close_budgets, :close_budgets_export_csv, :sort, :get_all_groups]
+    before_action :set_group, except: [:index, :new, :create, :calendar, :calendar_data, :close_budgets, :close_budgets_export_csv, :sort, :get_all_groups, :get_paginated_groups]
     before_action :set_groups, only: [:index, :get_all_groups]
     skip_before_action :verify_authenticity_token, only: [:create, :calendar_data]
     after_action :verify_authorized, except: [:calendar_data]
@@ -20,11 +20,51 @@ class GroupsController < ApplicationController
         end
     end
 
+    def get_paginated_groups
+        authorize Group, :index?
+
+        respond_to do |format|
+            format.json {
+                groups = current_user.enterprise.groups.all_parents
+                    .order(:position)
+                    .joins("LEFT JOIN groups as children ON groups.id = children.parent_id")
+                    .uniq
+                    .where("groups.name like ? OR children.name like ?", "%#{search_params[:term]}%", "%#{search_params[:term]}%")
+                    .page(search_params[:page])
+                    .per(search_params[:limit])
+                    .includes(:children)
+
+                groups_hash = groups.as_json(
+                  only: [:id, :name, :parent_id, :position],
+                  include: {
+                    children: {
+                      only: [:id, :name, :parent_id, :position],
+                      methods: :logo_expiring_thumb
+                    }
+                  },
+                  methods: :logo_expiring_thumb
+                )
+
+                render json: {
+                    total_pages: groups.total_pages,
+                    group_text: c_t(:erg),
+                    group_text_pluralized: c_t(:erg).pluralize,
+                    groups: groups_hash
+                }
+            }
+        end
+    end
+
     def get_all_groups
       authorize Group, :index?
 
       respond_to do |format|
-        format.json { render json: @groups.map { |g| {id: g.id, text: g.name} }.as_json }
+        format.json {
+          render json: @groups
+                         .where("name like ?", "%#{search_params[:term]}%")
+                         .map { |g| { id: g.id, text: g.name } }
+                         .as_json
+        }
       end
     end
 
@@ -384,6 +424,10 @@ class GroupsController < ApplicationController
     def set_groups
       @groups = GroupPolicy::Scope.new(current_user, current_user.enterprise.groups, :groups_manage)
       .resolve.order(:position)
+    end
+
+    def search_params
+        params.permit(:page, :limit, :term)
     end
 
     def group_params

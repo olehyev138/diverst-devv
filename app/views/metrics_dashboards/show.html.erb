@@ -6,7 +6,7 @@
       <div class="field__input-wrapper" style="width: 250px;">
         <span class="field__add-on field__add-on--right"><span class="icon icon--chevron-down"></span></span>
         <select class="field__input field__input--right-add-on" id="dashboard-select">
-          <% current_user.enterprise.metrics_dashboards.each do |metrics_dashboard| %>
+          <% policy_scope(MetricsDashboard).each do |metrics_dashboard| %>
             <option value="<%= metrics_dashboard.id %>"<%= " selected disabled" if metrics_dashboard == @metrics_dashboard %>><%= metrics_dashboard.name %></option>
           <% end %>
         </select>

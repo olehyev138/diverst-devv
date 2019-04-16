@@ -122,7 +122,7 @@ RSpec.describe ApplicationHelper do
 		context 'returns manage_erg_root_path when' do 
 			it 'MetricsDashboardPolicy returns true for .index?' do
 				current_user.policy_group.update(manage_all: true) 
-				expect(root_admin_path).to eq metrics_dashboards_path
+				expect(root_admin_path).to eq metrics_overview_index_path
 			end
 
 			it 'GroupPolicy returns true for .create?' do 
