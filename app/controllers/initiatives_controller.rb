@@ -89,8 +89,10 @@ class InitiativesController < ApplicationController
   def attendees
     authorize @initiative, :update?
 
-    send_data User.basic_info_to_csv(users: @initiative.attendees),
-      filename: "attendees.csv"
+    EventAttendeeDownloadJob.perform_later(current_user.id, @initiative)
+    track_activity(@initiative, :export_attendees)
+    flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+    redirect_to :back
   end
 
   def export_csv
