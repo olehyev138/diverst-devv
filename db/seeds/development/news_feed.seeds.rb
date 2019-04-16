@@ -1,4 +1,4 @@
-after 'development:join_groups' do 
+after 'development:groups' do
 	spinner = TTY::Spinner.new("[:spinner] Populating news feed with posts...", format: :classic)
     spinner.run('[DONE]') do |spinner|
 		Enterprise.all.each do |enterprise| 
