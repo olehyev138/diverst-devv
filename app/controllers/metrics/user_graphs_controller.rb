@@ -23,6 +23,11 @@ class Metrics::UserGraphsController < ApplicationController
 
     respond_to do |format|
       format.json { render json: UserDatatable.new(view_context, @users, read_only: true) }
+      format.csv {
+        MetricsUserGroupsIntersectionDownloadJob.perform_later(current_user.id, @users.to_a)
+        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        redirect_to :back
+      }
     end
   end
 
