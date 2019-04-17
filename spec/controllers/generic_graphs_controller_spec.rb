@@ -20,11 +20,6 @@ RSpec.describe GenericGraphsController, type: :controller do
       context "when format is json" do
         before {
           get :group_population, format: :json
-
-          g = 'UserGroup'
-          g = g.constantize
-          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?
-          g.__elasticsearch__.create_index!
         }
 
         it "returns json format" do
@@ -33,14 +28,6 @@ RSpec.describe GenericGraphsController, type: :controller do
 
         it "returns success" do
           expect(response).to be_success
-        end
-
-        context 'returns the correct json data' do
-          let!(:json_response) { JSON.parse(response.body, symbolize_names: true) }
-
-          it 'returns correct title' do
-            expect(json_response[:title]).to eq "#{c_t(:erg).capitalize} Population"
-          end
         end
       end
 
@@ -95,11 +82,6 @@ RSpec.describe GenericGraphsController, type: :controller do
       context "when format is json" do
         before {
           get :segment_population, format: :json
-
-          g = 'UsersSegment'
-          g = g.constantize
-          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?
-          g.__elasticsearch__.create_index!
         }
 
         it "returns json format" do
@@ -108,14 +90,6 @@ RSpec.describe GenericGraphsController, type: :controller do
 
         it "returns success" do
           expect(response).to be_success
-        end
-
-        context 'returns the correct json data' do
-          let!(:json_response) { JSON.parse(response.body, symbolize_names: true) }
-
-          it 'returns correct title' do
-            expect(json_response[:title]).to eq "#{c_t(:segment).capitalize} Population"
-          end
         end
       end
 
@@ -170,11 +144,6 @@ RSpec.describe GenericGraphsController, type: :controller do
       context "when format is json" do
         before {
           get :events_created, format: :json
-
-          g = 'Initiative'
-          g = g.constantize
-          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?
-          g.__elasticsearch__.create_index!
         }
 
         it "returns json format" do
@@ -183,14 +152,6 @@ RSpec.describe GenericGraphsController, type: :controller do
 
         it "returns success" do
           expect(response).to be_success
-        end
-
-        context 'returns the correct json data' do
-          let!(:json_response) { JSON.parse(response.body, symbolize_names: true) }
-
-          it 'returns correct title' do
-            expect(json_response[:title]).to eq 'Events Created'
-          end
         end
       end
 
@@ -245,11 +206,6 @@ RSpec.describe GenericGraphsController, type: :controller do
       context "when format is json" do
         before {
           get :messages_sent, format: :json
-
-          g = 'GroupMessage'
-          g = g.constantize
-          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?
-          g.__elasticsearch__.create_index!
         }
 
         it "returns json format" do
@@ -258,14 +214,6 @@ RSpec.describe GenericGraphsController, type: :controller do
 
         it "returns success" do
           expect(response).to be_success
-        end
-
-        context 'returns the correct json data' do
-          let!(:json_response) { JSON.parse(response.body, symbolize_names: true) }
-
-          it 'returns correct title' do
-            expect(json_response[:title]).to eq 'Messages Sent'
-          end
         end
       end
 
@@ -320,11 +268,6 @@ RSpec.describe GenericGraphsController, type: :controller do
       context "when format is json" do
         before {
           get :mentorship, format: :json
-
-          g = 'UserGroup'
-          g = g.constantize
-          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?
-          g.__elasticsearch__.create_index!
         }
 
         it "returns json format" do
@@ -333,14 +276,6 @@ RSpec.describe GenericGraphsController, type: :controller do
 
         it "returns success" do
           expect(response).to be_success
-        end
-
-        context 'returns the correct json data' do
-          let!(:json_response) { JSON.parse(response.body, symbolize_names: true) }
-
-          it 'returns correct title' do
-            expect(json_response[:title]).to eq 'Users interested in Mentorship'
-          end
         end
       end
 
@@ -395,11 +330,6 @@ RSpec.describe GenericGraphsController, type: :controller do
       context "when format is json" do
         before {
           get :mentoring_sessions, format: :json
-
-          g = 'MentoringSession'
-          g = g.constantize
-          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?
-          g.__elasticsearch__.create_index!
         }
 
         it "returns json format" do
@@ -408,14 +338,6 @@ RSpec.describe GenericGraphsController, type: :controller do
 
         it "returns success" do
           expect(response).to be_success
-        end
-
-        context 'returns the correct json data' do
-          let!(:json_response) { JSON.parse(response.body, symbolize_names: true) }
-
-          it 'returns correct title' do
-            expect(json_response[:title]).to eq 'Mentoring Sessions'
-          end
         end
       end
 
@@ -470,11 +392,6 @@ RSpec.describe GenericGraphsController, type: :controller do
       context "when format is json" do
         before {
           get :mentoring_interests, format: :json
-
-          g = 'MentorshipInterest'
-          g = g.constantize
-          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?
-          g.__elasticsearch__.create_index!
         }
 
         it "returns json format" do
@@ -483,14 +400,6 @@ RSpec.describe GenericGraphsController, type: :controller do
 
         it "returns success" do
           expect(response).to be_success
-        end
-
-        context 'returns the correct json data' do
-          let!(:json_response) { JSON.parse(response.body, symbolize_names: true) }
-
-          it 'returns correct title' do
-            expect(json_response[:title]).to eq 'Mentoring Interests'
-          end
         end
       end
 
@@ -545,11 +454,6 @@ RSpec.describe GenericGraphsController, type: :controller do
       context "when format is json" do
         before {
           get :top_groups_by_views, format: :json
-
-          g = 'View'
-          g = g.constantize
-          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?
-          g.__elasticsearch__.create_index!
         }
 
         it "returns json format" do
@@ -558,14 +462,6 @@ RSpec.describe GenericGraphsController, type: :controller do
 
         it "returns success" do
           expect(response).to be_success
-        end
-
-        context 'returns the correct json data' do
-          let!(:json_response) { JSON.parse(response.body, symbolize_names: true) }
-
-          it 'returns correct title' do
-            expect(json_response[:title]).to eq "# Views per #{c_t(:erg).capitalize}"
-          end
         end
       end
 
@@ -620,11 +516,6 @@ RSpec.describe GenericGraphsController, type: :controller do
       context "when format is json" do
         before {
           get :top_folders_by_views, format: :json
-
-          g = 'View'
-          g = g.constantize
-          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?
-          g.__elasticsearch__.create_index!
         }
 
         it "returns json format" do
@@ -633,14 +524,6 @@ RSpec.describe GenericGraphsController, type: :controller do
 
         it "returns success" do
           expect(response).to be_success
-        end
-
-        context 'returns the correct json data' do
-          let!(:json_response) { JSON.parse(response.body, symbolize_names: true) }
-
-          it 'returns correct title' do
-            expect(json_response[:title]).to eq "# Views per Folder"
-          end
         end
       end
 
@@ -695,11 +578,6 @@ RSpec.describe GenericGraphsController, type: :controller do
       context "when format is json" do
         before {
           get :top_resources_by_views, format: :json
-
-          g = 'View'
-          g = g.constantize
-          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?
-          g.__elasticsearch__.create_index!
         }
 
         it "returns json format" do
@@ -708,14 +586,6 @@ RSpec.describe GenericGraphsController, type: :controller do
 
         it "returns success" do
           expect(response).to be_success
-        end
-
-        context 'returns the correct json data' do
-          let!(:json_response) { JSON.parse(response.body, symbolize_names: true) }
-
-          it 'returns correct title' do
-            expect(json_response[:title]).to eq "# Views per Resource"
-          end
         end
       end
 
@@ -770,11 +640,6 @@ RSpec.describe GenericGraphsController, type: :controller do
       context "when format is json" do
         before {
           get :top_news_by_views, format: :json
-
-          g = 'View'
-          g = g.constantize
-          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?
-          g.__elasticsearch__.create_index!
         }
 
         it "returns json format" do
@@ -783,14 +648,6 @@ RSpec.describe GenericGraphsController, type: :controller do
 
         it "returns success" do
           expect(response).to be_success
-        end
-
-        context 'returns the correct json data' do
-          let!(:json_response) { JSON.parse(response.body, symbolize_names: true) }
-
-          it 'returns correct title' do
-            expect(json_response[:title]).to eq "# Views per News Link"
-          end
         end
       end
 
