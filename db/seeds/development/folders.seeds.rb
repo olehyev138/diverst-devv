@@ -8,7 +8,7 @@ after 'development:groups' do
 				5.times { Folder.create(name: Faker::RickAndMorty.location, group_id: group.id, enterprise_id: nil) }
 			end
 
-			#create nested folders
+			# create nested folders
 			Folder.create(name: Faker::RickAndMorty.location,
 				enterprise_id: enterprise.id, 
 				parent_id: enterprise.folders.first.id, 

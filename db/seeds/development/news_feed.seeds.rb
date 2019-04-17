@@ -47,7 +47,7 @@ after 'development:groups' do
 							.create(user_id: user.id, enterprise_id: enterprise.id) unless Like.where(user_id: user.id, news_feed_link_id: social_link.news_feed_link.id).exists?
 							
 							news_link.news_feed_link.views
-							.create(user_id: user.id, enterprise_id: enterprise.id, group_id: group.id) unless View.where(user_id: user.id, news_feed_link_id: news_link.news_feed_link.id).exists?
+                .create(user_id: user.id, enterprise_id: enterprise.id, group_id: group.id) unless View.where(user_id: user.id, news_feed_link_id: news_link.news_feed_link.id).exists?
 							
 							group_message.news_feed_link.views
 							.create(user_id: user.id, enterprise_id: enterprise.id, group_id: group.id) unless View.where(user_id: user.id, news_feed_link_id: group_message.news_feed_link.id).exists?
