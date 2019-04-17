@@ -17,6 +17,7 @@ require 'support/referrer_helpers.rb'
 
 require 'public_activity/testing'
 PublicActivity.enabled = false
+require 'webmock/rspec'
 WebMock.allow_net_connect!
 
 require 'simplecov'
