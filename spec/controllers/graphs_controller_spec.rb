@@ -201,17 +201,9 @@ RSpec.describe GraphsController, type: :controller do
   describe "GET#data" do
     describe "with logged in user" do
       login_user_from_let
-
+      
       before {
-        g = 'UserGroup'
-        g = g.constantize
-        g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
-        g.__elasticsearch__.create_index!
-
-        g = 'UsersSegment'
-        g = g.constantize
-        g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
-        g.__elasticsearch__.create_index!
+        allow_any_instance_of(Graph).to receive(:data).and_return({})
       }
 
       it "returns json format" do
@@ -244,16 +236,6 @@ RSpec.describe GraphsController, type: :controller do
         before {
           allow(GraphDownloadJob).to receive(:perform_later)
           request.env['HTTP_REFERER'] = "back"
-
-          g = 'UserGroup'
-          g = g.constantize
-          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
-          g.__elasticsearch__.create_index!
-
-          g = 'UsersSegment'
-          g = g.constantize
-          g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?;
-          g.__elasticsearch__.create_index!
 
           get :export_csv, :id => metrics_graph.id
         }
