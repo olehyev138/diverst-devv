@@ -52,8 +52,8 @@ after 'development:groups' do
   current_initiatives_range = 1..2
   future_initiatives_range = 1..3
 
-  spinner = TTY::Spinner.new("[:spinner] Populating groups with events...", format: :classic)
-  spinner.run('[DONE]') do |spinner|
+  spinner = TTY::Spinner.new(":spinner Populating groups with events...", format: :spin_2)
+  spinner.run do |spinner|
     Enterprise.all.each do |enterprise|
       enterprise.groups.each do |group|
         no_outcomes = rand(outcomes_range)
@@ -127,5 +127,6 @@ after 'development:groups' do
         }
       end
     end
+    spinner.success("[DONE]")
   end
 end

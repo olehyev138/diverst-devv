@@ -33,8 +33,8 @@ after 'development:users' do
     'Disability Caregivers Network'
   ]
 
-  spinner = TTY::Spinner.new("[:spinner] Populating enterprise with groups...")
-  spinner.run('[DONE]') do |spinner|
+  spinner = TTY::Spinner.new(":spinner Populating enterprise with groups...", format: :spin_2)
+  spinner.run do |spinner|
     Enterprise.all.each do |enterprise|
       # shuffle group_names & take first 10
       group_names.shuffle.slice(0..no_groups).each do |group_name|
@@ -67,5 +67,6 @@ after 'development:users' do
 
       self.populate_group(enterprise, mentor_group)
     end
+    spinner.success("[DONE]")
   end
 end
