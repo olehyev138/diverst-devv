@@ -1,7 +1,7 @@
 class InitiativesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
-  before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo, :finish_expenses, :attendees]
+  before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo, :finish_expenses, :export_attendees_csv]
   before_action :set_segments, only: [:new, :create, :edit, :update]
   after_action :verify_authorized
 
@@ -86,7 +86,7 @@ class InitiativesController < ApplicationController
     authorize @initiative, :update?
   end
 
-  def attendees
+  def export_attendees_csv
     authorize @initiative, :update?
 
     EventAttendeeDownloadJob.perform_later(current_user.id, @initiative)
