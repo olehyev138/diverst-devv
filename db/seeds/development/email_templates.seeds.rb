@@ -1,6 +1,6 @@
 after 'development:enterprise' do
-  spinner = TTY::Spinner.new("[:spinner] Populating enterprise with email templates...", format: :classic)
-  spinner.run('[DONE]') do |spinner|
+  spinner = TTY::Spinner.new(":spinner Populating enterprise with email templates...", format: :spin_2)
+  spinner.run do |spinner|
     Enterprise.all.each do |enterprise|
       # create the default emails with subject line and content
       emails = enterprise.emails.create!(
@@ -112,5 +112,6 @@ after 'development:enterprise' do
         ]
       )
     end
+    spinner.success("[DONE]")
   end
 end
