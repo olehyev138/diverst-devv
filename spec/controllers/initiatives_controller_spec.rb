@@ -182,7 +182,7 @@ RSpec.describe InitiativesController, type: :controller do
         end 
 
         it 'produces a flash notice' do 
-          expect(flash[:notice]).to eq 'Please close expenses of past initiatives'
+          expect(flash[:notice]).to eq 'Please close expenses of past events'
         end
 
         it 'redirects back' do  
@@ -228,17 +228,47 @@ RSpec.describe InitiativesController, type: :controller do
 
     context 'with logged in user' do
       login_user_from_let
-      before { initiative.update(attendees: [attendee]) }
-
-
-      it "render a csv file" do
+      before do 
+        allow(EventAttendeeDownloadJob).to receive(:perform_later)
+        request.env['HTTP_REFERER'] = 'back'  
+        initiative.update(attendees: [attendee])
         get :attendees, group_id: group.id, id: initiative.id
-        expect(response.headers["Content-Type"]).to eq "text/csv"
       end
 
-      it "render a csv with attendees of an initiative" do
-        get :attendees, group_id: group.id, id: initiative.id
-        expect(response.body.split("\n")[1]).to eq "#{ attendee.first_name },#{ attendee.last_name },#{ attendee.email }"
+      it 'returns to previous page' do
+        expect(response).to redirect_to 'back'
+      end
+
+      it "flashes" do
+          expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
+      end
+
+      it 'calls job' do 
+        expect(EventAttendeeDownloadJob).to have_received(:perform_later)
+      end
+
+      describe 'public activity' do
+        enable_public_activity
+
+        it 'creates public activity record' do
+          perform_enqueued_jobs do
+            expect{ get :attendees, group_id: group.id, id: initiative.id }.to change(PublicActivity::Activity, :count).by(1)
+          end
+        end
+
+        describe 'activity record' do
+          let(:model) { initiative }
+          let(:owner) { user }
+          let(:key) { 'initiative.export_attendees' }
+
+          before {
+            perform_enqueued_jobs do
+              get :attendees, group_id: group.id, id: initiative.id
+            end
+          }
+
+          include_examples'correct public activity'
+        end
       end
     end
 

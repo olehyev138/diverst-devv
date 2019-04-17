@@ -40,6 +40,7 @@ class GroupMessage < BaseClass
   settings do
     mappings dynamic: false do
       indexes :created_at, type: :date
+      indexes :group_id, type: :integer
       indexes :group do
         indexes :enterprise_id, type: :integer
         indexes :parent_id, type: :integer
@@ -54,7 +55,7 @@ class GroupMessage < BaseClass
   def as_indexed_json(options = {})
     self.as_json(
       options.merge(
-        only: [:created_at],
+        only: [:created_at, :group_id],
         include: { group: {
           only: [:enterprise_id, :parent_id, :name],
           include: { parent: { only: [:name] } }

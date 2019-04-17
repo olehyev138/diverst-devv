@@ -1,0 +1,46 @@
+<div class="content__header">
+  <h1>Custom metrics dashboards</h1>
+  <%= link_to "New dashboard", new_metrics_metrics_dashboard_path, class: "btn btn--primary" if MetricsDashboardPolicy.new(current_user, MetricsDashboard).new? %>
+</div>
+
+<div class="content__main">
+  <div class="card">
+    <div class="card__section">
+      <% if @dashboards.empty? %>
+        <p>There are no dashboards yet.
+          <% if MetricsDashboardPolicy.new(current_user, MetricsDashboard).new? %>
+            <span><%= link_to "Create one", new_metrics_metrics_dashboard_path %> to start getting valuable insight on your team's diversity.
+            </span>
+          <% end %>
+        </p>
+      <% else %>
+        <table class="table--has-border" id="users-table">
+          <thead>
+            <th>Title</th>
+            <th># of graphs</th>
+            <th># of targeted users</th>
+            <th>Creation date</th>
+            <th>Options</th>
+          </thead>
+          <tbody>
+            <% @dashboards.each do |dashboard| %>
+              <tr>
+                <td><%= link_to dashboard.name, metrics_metrics_dashboard_path(dashboard) %></td>
+                <td><%= dashboard.graphs.count %></td>
+                <td><%= dashboard.target.count %></td>
+                <td><%= dashboard.created_at.to_s :dateonly %></td>
+                <td>
+                  <%= link_to "Edit", edit_metrics_metrics_dashboard_path(dashboard) if MetricsDashboardPolicy.new(current_user, dashboard).update? %>
+                  <% if MetricsDashboardPolicy.new(current_user, dashboard).update? && MetricsDashboardPolicy.new(current_user, dashboard).destroy? %>
+                     -
+                  <% end %>
+                  <%= link_to "Delete", metrics_metrics_dashboard_path(dashboard), method: :delete, class: "error", data: { confirm: "Are you sure?" } if MetricsDashboardPolicy.new(current_user, dashboard).destroy? %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -89,8 +89,10 @@ class InitiativesController < ApplicationController
   def attendees
     authorize @initiative, :update?
 
-    send_data User.basic_info_to_csv(users: @initiative.attendees),
-      filename: "attendees.csv"
+    EventAttendeeDownloadJob.perform_later(current_user.id, @initiative)
+    track_activity(@initiative, :export_attendees)
+    flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+    redirect_to :back
   end
 
   def export_csv
@@ -104,7 +106,7 @@ class InitiativesController < ApplicationController
     initiative_ids = Outcome.get_initiatives(@outcomes).select { |i| i.start >= @filter_from && i.start <= @filter_to }.map { |i| i.id }
 
     if Initiative.where(id: initiative_ids).any? {|initiative| initiative.unfinished_expenses? }
-      flash[:notice] = 'Please close expenses of past initiatives'
+      flash[:notice] = 'Please close expenses of past events'
       redirect_to :back
     else
       InitiativesDownloadJob.perform_later(current_user.id, @group.id, initiative_ids)

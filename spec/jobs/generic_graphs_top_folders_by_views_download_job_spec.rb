@@ -9,14 +9,14 @@ RSpec.describe GenericGraphsTopFoldersByViewsDownloadJob, type: :job do
     describe "#perform" do
       context "demo" do
         it "creates a downloadable csv file" do
-            expect{ subject.perform(user.id, enterprise.id, demo: true) }
+            expect{ subject.perform(user.id, enterprise.id, true, nil, nil) }
               .to change(CsvFile, :count).by(1)
         end
       end
 
       context "non demo" do
         it "creates a downloadable csv file" do
-            expect{ subject.perform(user.id, enterprise.id, demo: false) }
+            expect{ subject.perform(user.id, enterprise.id, false, nil, nil) }
               .to change(CsvFile, :count).by(1)
         end
       end

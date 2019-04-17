@@ -17,3 +17,22 @@
 .metric__sparkline {
   margin-bottom: 3px;
 }
+
+.panel {
+  border: 1px solid #E1E2E3;
+  border-radius: 5px;
+  padding: 15px;
+  position: relative;
+}
+
+.panel--primary {
+  border: 1px solid $primary-color;
+}
+
+.panel-headline strong {
+  font-weight: 550;
+}
+
+.panel-data {
+  font-size: 1.6em;
+}

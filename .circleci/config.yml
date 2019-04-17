@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     working_directory: ~/TeamDiverst/diverst-development
-    parallelism: 1
+    parallelism: 2
     shell: /bin/bash --login
     # CircleCI 2.0 does not support environment variables that refer to each other the same way as 1.0 did.
     # If any of these refer to each other, rewrite them so that they don't or see https://circleci.com/docs/2.0/env-vars/#interpolating-environment-variables-to-set-other-environment-variables .
@@ -105,7 +105,7 @@ jobs:
     # The following line was run implicitly in your 1.0 builds based on what CircleCI inferred about the structure of your project. In 2.0 you need to be explicit about which commands should be run. In some cases you can discard inferred commands if they are not relevant to your project.
     - run: mkdir -p $CIRCLE_TEST_REPORTS/rspec
     - run:
-        command: bundle exec rspec --color --require spec_helper --format RspecJunitFormatter --out $CIRCLE_TEST_REPORTS/rspec/rspec.xml --format progress spec
+        command: bundle exec rspec --color --require spec_helper --format RspecJunitFormatter --out $CIRCLE_TEST_REPORTS/rspec/rspec.xml --format progress -- $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=filesize)
         environment:
           RAILS_ENV: test
           RACK_ENV: test

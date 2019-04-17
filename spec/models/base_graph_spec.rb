@@ -10,46 +10,7 @@ RSpec.describe BaseGraph do
     let(:formatter) { BaseGraph::Nvd3Formatter.new }
 
     describe 'initialize' do
-      describe 'parsers' do
-        describe 'x_parser' do
-          it 'is an instance of ElasticsearchParser' do
-            expect(formatter.x_parser.class).to eq BaseGraph::ElasticsearchParser
-          end
-
-          it 'has a key :key' do
-            expect(formatter.x_parser.key).to eq :key
-          end
-        end
-
-        describe 'y_parser' do
-          it 'is an instance of ElasticsearchParser' do
-            expect(formatter.y_parser.class).to eq BaseGraph::ElasticsearchParser
-          end
-
-          it 'has a key :doc_count' do
-            expect(formatter.y_parser.key).to eq :doc_count
-          end
-        end
-
-        describe 'list_parser' do
-          it 'is an instance of ElasticsearchParser' do
-            expect(formatter.list_parser.class).to eq BaseGraph::ElasticsearchParser
-          end
-
-        end
-
-        describe 'key_parser' do
-          it 'is an instance of ElasticsearchParser' do
-            expect(formatter.key_parser.class).to eq BaseGraph::ElasticsearchParser
-          end
-
-        end
-
-        describe 'general_parser' do
-          it 'is an instance of ElasticsearchParser' do
-            expect(formatter.general_parser.class).to eq BaseGraph::ElasticsearchParser
-          end
-        end
+      describe 'parser' do
       end
 
       it 'has a default title of "Default Graph"' do
@@ -193,55 +154,43 @@ RSpec.describe BaseGraph do
     let(:parser) { BaseGraph::ElasticsearchParser.new }
 
     it 'parses with defaults' do
-      expect(parser.parse({key: :value})).to eq :value
+      expect(parser.parse({key: :value})[:x]).to eq :value
     end
 
-    it 'parses with specified key' do
-      parser.key = :dummy
-
-      expect(parser.parse({dummy: :value})).to eq :value
-    end
-
-    it 'parses with custom extractor, passing it the correct value and custom arguments hash' do
-      parser.extractor = -> (e, args) { args[:dummy]  }
-
-      expect(parser.parse({}, {dummy: :value})).to eq :value
-    end
-
-    describe 'parsers' do
+    describe 'extractors' do
       describe 'date range' do
-        let(:date_range_proc) { parser.date_range }
+        let(:date_range_proc) { parser.date_range(key: :key) }
         let(:element) { double('element') }
 
         it 'parses a date range agg response' do
-          allow(element).to receive_message_chain(:agg, :buckets) { [{}] }
+          allow(element).to receive_message_chain(:agg, :buckets) { [{ key: 'key' }] }
 
-          expect(date_range_proc.call(element)).to eq({})
+          expect(date_range_proc.call(element, {})).to eq('key')
         end
 
         it 'yields to block & runs returned lambda' do
           expect(
-            (parser.date_range() { |_| -> (e) { 'dummy' }  }).call(element)
+            (parser.date_range() { |_| -> (e, _) { 'dummy' }  }).call(element, {})
           ).to eq 'dummy'
         end
 
         it 'returns 0 when element is nil' do
-          expect(date_range_proc.call(element)).to eq 0
+          expect(date_range_proc.call(element, {})).to eq 0
         end
       end
 
       describe 'top hits' do
-        let(:top_hits_proc) { parser.top_hits }
+        let(:top_hits_proc) { parser.top_hits(key: :key) }
         let(:element) { double('element') }
 
         it 'parses a top hits agg response' do
-          allow(element).to receive_message_chain(:agg, :hits, :hits) { [{'_source' => {}}] }
+          allow(element).to receive_message_chain(:agg, :hits, :hits) { [{'_source' => {key: 'key'}}] }
 
-          expect(top_hits_proc.call(element)).to eq({})
+          expect(top_hits_proc.call(element, {})).to eq('key')
         end
 
         it 'returns 0 when element is nil' do
-          expect(top_hits_proc.call(element)).to eq 0
+          expect(top_hits_proc.call(element, {})).to eq 0
         end
       end
     end
