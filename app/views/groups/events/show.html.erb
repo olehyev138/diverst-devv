@@ -11,7 +11,7 @@
       <%= link_to "Edit event", edit_group_initiative_path(@group, @event), class: "btn btn--primary" if InitiativePolicy.new(current_user, @event).edit? %>
     </div>
     <div class="flex-row__cell hidden-sm hidden-xs">
-      <%= link_to "Export attendees", attendees_group_initiative_path(@group, @event, format: :csv), class: "btn btn--primary hidden-xs" if InitiativePolicy.new(current_user, @event).edit? %>
+      <%= link_to "Export attendees", export_attendees_csv_group_initiative_path(@group, @event), class: "btn btn--primary hidden-xs" if InitiativePolicy.new(current_user, @event).edit? %>
     </div>
     <% if !@event.full? || current_user.initiatives.where(:id => @event.id).exists? %>
     <div class="flex-row__cell">

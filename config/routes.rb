@@ -321,7 +321,7 @@ Rails.application.routes.draw do
       member do
         get 'todo'
         post 'finish_expenses'
-        get 'attendees'
+        get 'export_attendees_csv'
       end
 
       collection do
