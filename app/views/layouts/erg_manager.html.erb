@@ -25,6 +25,9 @@
           <%= active_link_to "Archived Resources", archived_enterprise_resources_path(current_user.enterprise) if EnterpriseFolderPolicy.new(current_user).index? %>
         </li>
         <li>
+          <%= active_link_to 'Archived Events', archived_initiatives_path if EnterprisePolicy.new(current_user, current_user.enterprise).manage_posts? %>
+        </li>
+        <li>
           <%= active_link_to "Calendar", calendar_groups_path if GroupPolicy.new(current_user, Group).calendar? %>
         </li>
         <% if current_user.enterprise.plan_module_enabled %>
@@ -59,6 +62,9 @@
         </li>
         <li>
           <%= active_link_to "Archived Resources", archived_enterprise_resources_path(current_user.enterprise), class: "secondary-header__tab" if EnterpriseFolderPolicy.new(current_user).index? %>
+        </li>
+        <li>
+          <%= active_link_to 'Archived Events', archived_initiatives_path, class: 'secondary-header__tab' if EnterprisePolicy.new(current_user, current_user.enterprise).manage_posts? %>
         </li>
       </ul>
     </nav>

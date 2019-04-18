@@ -79,9 +79,16 @@ Rails.application.routes.draw do
       post 'restore_all'
     end
 
-    member do
-      patch 'restore'
+    member { patch 'restore' }
+  end
+
+  resources :archived_initiatives, only: [:index, :destroy] do 
+    collection do 
+      post 'delete_all'
+      post 'restore_all'
     end
+
+    member { patch 'restore' }
   end
 
   resources :enterprises do
@@ -113,6 +120,7 @@ Rails.application.routes.draw do
       get 'bias'
       patch 'delete_attachment'
       get 'calendar'
+      patch 'auto_archive_switch'
     end
 
     scope module: :enterprises do
@@ -160,7 +168,12 @@ Rails.application.routes.draw do
       get 'view_all'
     end
   end
+  
   post 'group_categories/update_all_sub_groups', to: 'group_categories#update_all_sub_groups', as: :update_all_sub_groups
+  patch '/groups/:id/auto_archive_switch', to: 'groups#auto_archive_switch', as: :auto_archive_switch
+  patch '/groups/:group_id/initiatives/:id/archive', to: 'initiatives#archive', as: :archive_group_initiative 
+  patch '/groups/:group_id/initiatives/:id/restore', to: 'initiatives#restore', as: :restore_group_initiative
+
 
   resources :groups do
     collection do
@@ -313,6 +326,7 @@ Rails.application.routes.draw do
 
       collection do
         get 'export_csv'
+        get 'archived'
       end
     end
 

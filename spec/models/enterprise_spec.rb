@@ -244,5 +244,34 @@ RSpec.describe Enterprise, type: :model do
             
             expect(enterprise.errors.full_messages.count).to eq(0)
         end
+
+        describe '#archive_switch' do 
+            let!(:enterprise) { create(:enterprise, expiry_age_for_resources: 1) }
+
+            it 'turn ON auto archive switch' do 
+                enterprise.archive_switch
+                expect(enterprise.auto_archive).to eq true
+            end
+
+            it 'turn OFF auto archive switch' do 
+                enterprise.update auto_archive: true
+                enterprise.archive_switch
+                expect(enterprise.auto_archive).to eq false
+            end
+        end
+
+        describe '#resolve_auto_archive_state callback' do 
+            let!(:enterprise) { create(:enterprise, auto_archive: true) }
+
+            it 'calls resolve_auto_archive_state callback after update' do 
+                enterprise.archive_switch
+                expect(enterprise.auto_archive).to eq false
+            end
+
+            it 'calls resolve_auto_archive_state as after_update callback' do 
+                expect(enterprise).to receive(:resolve_auto_archive_state)
+                enterprise.run_callbacks(:update)
+            end
+        end
     end
 end
