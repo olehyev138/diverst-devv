@@ -103,7 +103,7 @@ after 'development:enterprise' do
         # Generate users
         (0..rand(500..1000)).each do |i|
           gender = rand(2) == 0 ? "Male" : "Female"
-          created_date = Faker::Time.between(2.years.ago, Time.current - 2.days)
+          created_date = Faker::Time.between(enterprise.created_at, Time.current - 2.days)
           password = Faker::String.random(12)
 
           user = FactoryBot.create(:user,
@@ -125,7 +125,7 @@ after 'development:enterprise' do
 
         # Generate bad users
         (0..4).each do |i|
-          created_date = Faker::Time.between(1.year.ago, Time.current - 2.days)
+          created_date = Faker::Time.between(enterprise.created_at, Time.current - 2.days)
           password = Faker::String.random(12)
 
           user = FactoryBot.create(:user,
