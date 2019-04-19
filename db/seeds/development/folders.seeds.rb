@@ -34,7 +34,7 @@ after 'development:groups' do
       rand(enterprise_folders_range).times do
         folder = enterprise.folders.create!(
           name: generate_name(enterprise),
-          created_at: Faker::Time.between(1.year.ago, Time.current - 2.days),
+          created_at: Faker::Time.between(enterprise.created_at + 1.hour, Time.current - 2.days),
           group_id: nil)
 
         generate_views(enterprise, folder, rand(views_range), true)
@@ -47,7 +47,7 @@ after 'development:groups' do
         rand(group_folders_range).times do
           folder = group.folders.create!(
             name: generate_name(enterprise),
-            created_at: Faker::Time.between(1.year.ago, Time.current - 2.days),
+            created_at: Faker::Time.between(group.created_at + 1.hour, Time.current - 2.days),
             enterprise_id: nil)
 
           generate_views(enterprise, folder, rand(views_range), false, group)
@@ -57,7 +57,7 @@ after 'development:groups' do
             folder = group.folders.create!(
               name: generate_name(enterprise),
               parent_id: folder.id,
-              created_at: Faker::Time.between(1.year.ago, Time.current - 2.days),
+              created_at: Faker::Time.between(group.created_at + 1.hour, Time.current - 2.days),
               enterprise_id: nil)
 
             generate_views(enterprise, folder, rand(views_range), false, group)
