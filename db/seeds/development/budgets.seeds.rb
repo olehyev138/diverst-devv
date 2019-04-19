@@ -1,5 +1,5 @@
 after 'development:groups' do
-  spinner = TTY::Spinner.new(":spinner Populating each group with budgets...", format: :spin_2)
+  spinner = TTY::Spinner.new(":spinner Populating groups with budgets...", format: :spin_2)
   spinner.run do |spinner|
     Enterprise.all.each do |enterprise|
       if enterprise.name == "Diverst Inc"
@@ -11,11 +11,15 @@ after 'development:groups' do
                                    group_id: group.id,
                                    is_approved: true,
                                    description: "Budget for #{group.name}'s events")
-            BudgetItem.create(budget_id: budget.id,
-                              title: "First event for #{group.name}",
-                              is_private: false,
-                              estimated_amount: 4500,
-                              available_amount: 4500)
+
+            (0..rand(1..3)).each do |i|
+              amount = rand(1000..5000)
+              BudgetItem.create(budget_id: budget.id,
+                                title: "Event for #{group.name}",
+                                is_private: false,
+                                estimated_amount: amount,
+                                available_amount: amount)
+            end
           end
         end
       end

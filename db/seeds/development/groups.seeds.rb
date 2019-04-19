@@ -1,9 +1,9 @@
 def self.populate_group(enterprise, group)
   enterprise.users.each do |user|
     earliest_date = user.created_at > group.created_at ? user.created_at : group.created_at
-    UserGroup.create(group_id: group.id, user_id: user.id,
-                                   accepted_member: true,
-                                   created_at: Faker::Time.between(earliest_date, Time.current - 2.days)) if rand(100) < 25
+    UserGroup.create!(group_id: group.id, user_id: user.id,
+                      accepted_member: true,
+                      created_at: Faker::Time.between(earliest_date, Time.current - 2.days)) if rand(100) < 25
   end
 end
 
@@ -36,7 +36,7 @@ after 'development:users' do
       group_names.shuffle.slice(0..no_groups).each do |group_name|
         group_name = 'BAD ENTERPRISE ' + group_name if enterprise.name != 'Diverst Inc'
         group = enterprise.groups.create!(name: group_name, description: "",
-                                         created_at: Faker::Time.between(enterprise.created_at, Time.current - 2.days))
+                                          created_at: Faker::Time.between(enterprise.created_at, Time.current - 2.days))
 
         # create subgroups
         (0..rand(0..max_subgroups)).each do |i|
