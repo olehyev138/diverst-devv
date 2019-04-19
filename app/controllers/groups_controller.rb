@@ -29,7 +29,7 @@ class GroupsController < ApplicationController
                     .order(:position)
                     .joins("LEFT JOIN groups as children ON groups.id = children.parent_id")
                     .uniq
-                    .where("groups.name like ? OR children.name like ?", "%#{search_params[:term]}%", "%#{search_params[:term]}%")
+                    .where("LOWER(groups.name) like ? OR LOWER(children.name) like ?", "%#{search_params[:term]}%", "%#{search_params[:term]}%")
                     .page(search_params[:page])
                     .per(search_params[:limit])
                     .includes(:children)
