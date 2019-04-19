@@ -25,13 +25,13 @@ after 'development:groups' do
           user = group.user_groups.where(accepted_member: true).sample.user
 
           group_message = GroupMessage.create!(group_id: group.id,
-                                              subject: Faker::Lorem.sentence,
+                                              subject: (enterprise.name == 'Diverst Inc' ? Faker::Lorem.sentence : 'BAD ENTERPRISE ' + Faker::Lorem.sentence),
                                               content: Faker::Lorem.paragraph,
                                               created_at: Faker::Time.between(1.year.ago, Time.current - 2.days),
                                               owner_id: user.id)
 
           news_link = NewsLink.create!(title: news_link_titles.sample,
-                                      description: Faker::Lorem.paragraph,
+                                      description: (enterprise.name == 'Diverst Inc' ? Faker::Lorem.sentence : 'BAD ENTERPRISE ' + Faker::Lorem.sentence),
                                       group_id: group.id,
                                       author_id: user.id,
                                       created_at: Faker::Time.between(1.year.ago, Time.current - 2.days),
@@ -46,12 +46,12 @@ after 'development:groups' do
 
           # Comments
           rand(no_comments_range).times do
-            NewsLinkComment.create!(content: Faker::Lorem.paragraph,
+            NewsLinkComment.create!(content: (enterprise.name == 'Diverst Inc' ? Faker::Lorem.paragraph : 'BAD ENTERPRISE ' + Faker::Lorem.paragraph),
                                    author_id: group.user_groups.where(accepted_member: true).sample.user.id,
                                    created_at: Faker::Time.between(news_link.created_at + 1.minute, news_link.created_at + 1.month),
                                    news_link_id: news_link.id)
 
-            GroupMessageComment.create!(content: Faker::Lorem.paragraph,
+            GroupMessageComment.create!(content: (enterprise.name == 'Diverst Inc' ? Faker::Lorem.paragraph : 'BAD ENTERPRISE ' + Faker::Lorem.paragraph),
                                        author_id: group.user_groups.where(accepted_member: true).sample.user.id,
                                        created_at: Faker::Time.between(group_message.created_at + 1.minute, group_message.created_at + 1.month),
                                        message_id: group_message.id)
@@ -80,6 +80,8 @@ after 'development:groups' do
 
           # Views
           rand(no_views_range).times do
+            user = group.user_groups.where(accepted_member: true).sample.user
+
             news_link.news_feed_link.views
               .create!(user_id: user.id,
                       enterprise_id: enterprise.id,
