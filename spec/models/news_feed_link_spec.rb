@@ -80,4 +80,18 @@ RSpec.describe NewsFeedLink, type: :model do
     end
   end
 
+  describe '.archive_expired_news' do 
+    let!(:group) { create(:group) }
+    let!(:new_items) { create_list(:news_feed_link, 3, news_feed: group.news_feed) }
+    let!(:expired_news_items) { create_list(:news_feed_link, 2, news_feed: group.news_feed, created_at: Time.now.weeks_ago(1), updated_at: Time.now.weeks_ago(1)) }
+
+    it 'archives nothing if auto_archive is off' do 
+      expect{ NewsFeedLink.archive_expired_news(group) }.to change(NewsFeedLink.where.not(archived_at: nil), :count).by(0)
+    end
+
+    it 'archives expired news items when auto_archive is on' do 
+      group.update(unit_of_expiry_age: 'weeks', expiry_age_for_news: 1, auto_archive: true)
+      expect{ NewsFeedLink.archive_expired_news(group) }.to change(NewsFeedLink.where.not(archived_at: nil), :count).by(2)
+    end
+  end
 end

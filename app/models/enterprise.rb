@@ -2,6 +2,14 @@ class Enterprise < BaseClass
     include ContainsResources
     include PublicActivity::Common
 
+    extend Enumerize
+
+    enumerize :unit_of_expiry_age, default: :months, in: [
+      :weeks,
+      :months,
+      :years
+    ]
+
     has_many :users, inverse_of: :enterprise, dependent: :destroy
     has_many :graph_fields, class_name: 'Field', dependent: :destroy
     has_many :fields, -> { where elasticsearch_only: false }, dependent: :destroy
@@ -59,6 +67,7 @@ class Enterprise < BaseClass
 
     before_create :create_elasticsearch_only_fields
     before_validation :smart_add_url_protocol
+    after_update :resolve_auto_archive_state, if: :no_expiry_age_set_and_auto_archive_true?
 
     validates :idp_sso_target_url, url: { allow_blank: true }
 
@@ -79,6 +88,22 @@ class Enterprise < BaseClass
     do_not_validate_attachment_file_type :onboarding_sponsor_media
     
     validates_format_of   :redirect_email_contact, with: /\A[^@\s]+@[^@\s]+\z/, allow_blank: true
+
+    def resolve_auto_archive_state
+      update(auto_archive: false)
+    end
+
+    def no_expiry_age_set_and_auto_archive_true?
+      return true if auto_archive? && expiry_age_for_resources == 0
+    end
+
+    def archive_switch
+      if auto_archive?
+        update(auto_archive: false)
+      else
+        update(auto_archive: true)
+      end
+    end
 
     def custom_text
         super || create_custom_text
