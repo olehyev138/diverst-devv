@@ -40,7 +40,7 @@ def self.set_fields(primary_fields, other_fields, user, gender: rand(2) == 0 ? "
 end
 
 after 'development:enterprise' do
-  spinner = TTY::Spinner.new(":spinner Importing users...", format: :spin_2)
+  spinner = TTY::Spinner.new(":spinner Populating enterprises with users...", format: :spin_2)
   spinner.run do |spinner|
     Enterprise.all.each do |enterprise|
       primary_fields = {

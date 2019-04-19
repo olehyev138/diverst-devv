@@ -1,5 +1,5 @@
 after 'development:enterprise' do
-  spinner = TTY::Spinner.new(":spinner Populating enterprise with mentors...", format: :spin_2)
+  spinner = TTY::Spinner.new(":spinner Populating enterprises with mentors...", format: :spin_2)
   spinner.run do |spinner|
     Enterprise.all.each do |enterprise|
       enterprise.mentoring_types.create!([

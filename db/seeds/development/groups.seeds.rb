@@ -1,7 +1,5 @@
 def self.populate_group(enterprise, group)
   enterprise.users.each do |user|
-    # calling create fails with 'default_mentor_group not a method' for some unknown reason
-    # using import for user groups is probably better anyway
     earliest_date = user.created_at > group.created_at ? user.created_at : group.created_at
     UserGroup.create(group_id: group.id, user_id: user.id,
                                    accepted_member: true,
@@ -31,7 +29,7 @@ after 'development:users' do
     'Disability Caregivers Network'
   ]
 
-  spinner = TTY::Spinner.new(":spinner Populating enterprise with groups...", format: :spin_2)
+  spinner = TTY::Spinner.new(":spinner Populating enterprises with groups...", format: :spin_2)
   spinner.run do |spinner|
     Enterprise.all.each do |enterprise|
       # shuffle group_names & take first 10
