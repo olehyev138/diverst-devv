@@ -26,7 +26,7 @@ class GroupDatatable < AjaxDatatablesRails::Base
     records.map do |record|
       [ 
         record.id,
-        html_escape(record.name)
+        ActionController::Base.helpers.sanitize(record.name)
       ]
     end
   end
