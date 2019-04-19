@@ -63,13 +63,16 @@ after 'development:groups' do
         no_future_initiatives = rand(future_initiatives_range)
 
         outcome_titles.shuffle.slice(0..no_outcomes).each { |outcome_title|
-          outcome_titles.delete(outcome_title)
+          outcome_titles.delete(outcome_title) # delete titles to prevent duplicates
           outcome_title = 'BAD ENTERPRISE ' + outcome_title if enterprise.name != 'Diverst Inc'
+
           outcome = Outcome.create!(group_id: group.id,
                                     created_at: Faker::Time.between(2.years.ago, Time.current - 2.days),
                                     name: outcome_title)
           pillar_titles.shuffle.slice(0..no_pillars).each { |pillar_title|
+            pillar_titles.delete(pillar_title)
             pillar_title = 'BAD ENTERPRISE ' + pillar_title if enterprise.name != 'Diverst Inc'
+
             pillar = Pillar.create!(outcome_id: outcome.id,
                                     created_at: Faker::Time.between(2.years.ago, Time.current - 2.days),
                                     name: pillar_title)
