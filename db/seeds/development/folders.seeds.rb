@@ -3,6 +3,7 @@ def self.generate_views(enterprise, folder, no_views, is_enterprise_folder, grou
     if is_enterprise_folder
       user = enterprise.users.where(enterprise: enterprise.id).sample
     else
+      next if group.user_groups.empty?
       user = group.user_groups.where(accepted_member: true).sample.user
 
       folder.views.create!(user_id: user.id,
@@ -28,8 +29,6 @@ after 'development:groups' do
   spinner = TTY::Spinner.new(":spinner Populating groups with folders...", format: :spin_2)
   spinner.run do |spinner|
     Enterprise.all.each do |enterprise|
-      next if enterprise.name != 'Diverst Inc' # TODO: fix - 2nd enterprise groups are missing user_groups
-
       # Enterprise folders
       rand(enterprise_folders_range).times do
         folder = enterprise.folders.create!(

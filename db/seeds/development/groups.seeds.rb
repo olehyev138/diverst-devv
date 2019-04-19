@@ -44,7 +44,7 @@ after 'development:users' do
           subgroup_name = subgroup_prefix + ' Chapter ' + (65 + i).chr
           subgroup_name = 'BAD ENTERPRISE ' + subgroup_name if enterprise.name != 'Diverst Inc'
 
-          subgroup = group.children.create!(name: subgroup_name, description: "",
+          subgroup = group.children.create!(name: subgroup_name, description: "", enterprise_id: enterprise.id,
                                             created_at: Faker::Time.between(enterprise.created_at, Time.current - 2.days))
 
           self.populate_group(enterprise, subgroup)

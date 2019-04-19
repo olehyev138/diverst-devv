@@ -18,10 +18,9 @@ after 'development:groups' do
   spinner = TTY::Spinner.new(":spinner Populating news feed with posts...", format: :spin_2)
   spinner.run do |spinner|
     Enterprise.all.each do |enterprise|
-      next if enterprise.name != 'Diverst Inc' # TODO: Fix
-
       enterprise.groups.each do |group|
         rand(news_feed_posts_range).times do
+          next if group.user_groups.empty?
           user = group.user_groups.where(accepted_member: true).sample.user
 
           group_message = GroupMessage.create!(group_id: group.id,
