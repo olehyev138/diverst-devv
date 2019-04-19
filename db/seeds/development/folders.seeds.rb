@@ -15,7 +15,7 @@ def self.generate_views(enterprise, folder, no_views, is_enterprise_folder, grou
 end
 
 def self.generate_name(enterprise)
-  enterprise.name == 'Diverst Inc' ? Faker::Lorem.unique.word.capitalize : 'BAD ENTERPRISE ' + Faker::Lorem.unique.word.capitalize
+  enterprise.name == 'Diverst Inc' ? Faker::Space.unique.moon.capitalize : 'BAD ENTERPRISE ' + Faker::Lorem.unique.word.capitalize
 end
 
 after 'development:groups' do
@@ -42,6 +42,8 @@ after 'development:groups' do
 
       # Group Folders
       enterprise.groups.each do |group|
+        Faker::UniqueGenerator.clear # Clears used values for all generators
+
         rand(group_folders_range).times do
           folder = group.folders.create!(
             name: generate_name(enterprise),
