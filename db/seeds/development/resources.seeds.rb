@@ -1,5 +1,5 @@
 after 'development:folders' do
-  spinner = TTY::Spinner.new(":spinner Populating enterprise with folders...", format: :spin_2)
+  spinner = TTY::Spinner.new(":spinner Populating enterprises with folders...", format: :spin_2)
   spinner.run do |spinner|
     urls = {"future of artificial intelligence" => "https://www.youtube.com/watch?v=-Xn6IDytVGw",
             "bioengineering ethics" => "https://www.youtube.com/watch?v=k2NQ2SFuSN4",

@@ -61,9 +61,9 @@ segments = [
   }
 ]
 
-Enterprise.all.each do |enterprise|
-	spinner = TTY::Spinner.new(":spinner Populating groups with segments...", format: :spin_2)
-  spinner.run do |spinner|
+spinner = TTY::Spinner.new(":spinner Populating groups with segments...", format: :spin_2)
+spinner.run do |spinner|
+  Enterprise.all.each do |enterprise|
     segments.each do |segment|
       s = enterprise.segments.new(
         name: enterprise.name == "Diverst Inc" ? segment[:name] : "BAD ENTERPRISE " + segment[:name],
@@ -77,11 +77,10 @@ Enterprise.all.each do |enterprise|
           values: rule[:values]
         )
       end
-s
-      s.save
 
+      s.save
       CacheSegmentMembersJob.perform_now s.id
     end
-    spinner.success("[DONE]")
   end
+  spinner.success("[DONE]")
 end

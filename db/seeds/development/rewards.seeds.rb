@@ -1,5 +1,5 @@
 after 'development:enterprise' do
-  spinner = TTY::Spinner.new(":spinner Populate enterprise with prizes...", format: :spin_2)
+  spinner = TTY::Spinner.new(":spinner Populating enterprises with prizes...", format: :spin_2)
   spinner.run do |spinner|
     Rewards::Actions::Boilerplate.generate
 

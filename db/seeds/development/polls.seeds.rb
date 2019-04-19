@@ -1,5 +1,5 @@
 after 'development:segments' do
-  spinner = TTY::Spinner.new(":spinner Populating enterprise with polls...", format: :spin_2)
+  spinner = TTY::Spinner.new(":spinner Populating enterprises with polls...", format: :spin_2)
   spinner.run do |spinner|
     Enterprise.all.each do |enterprise|
       p = enterprise.polls.new(

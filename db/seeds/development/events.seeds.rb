@@ -1,5 +1,5 @@
 after 'development:enterprise' do
-  spinner = TTY::Spinner.new(":spinner Creating enterprise events...", format: :spin_2)
+  spinner = TTY::Spinner.new(":spinner Populating enterprises with events...", format: :spin_2)
   spinner.run do |spinner|
     Enterprise.update_all(:time_zone => "Eastern Time (US & Canada)")
 

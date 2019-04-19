@@ -69,7 +69,7 @@ after 'development:groups' do
     }
   ]
 
-  spinner = TTY::Spinner.new(":spinner Populating enterprise with campaigns...", format: :spin_2)
+  spinner = TTY::Spinner.new(":spinner Populating enterprises with campaigns...", format: :spin_2)
   spinner.run do |spinner|
     enterprise = Enterprise.where(name: "Diverst Inc").first
     campaigns_content.each do |campaign_content|
