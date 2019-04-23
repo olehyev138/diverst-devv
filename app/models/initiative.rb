@@ -109,6 +109,18 @@ class Initiative < BaseClass
     owner_group || pillar.outcome.group
   end
 
+  def enterprise
+    group.enterprise
+  end
+
+  def group_id
+    group.id 
+  end
+
+  def enterprise_id
+    enterprise.id
+  end
+
   #need to trunc several special characters here
   def description
     return '' if self[:description].nil?

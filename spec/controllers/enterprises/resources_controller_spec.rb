@@ -302,7 +302,7 @@ RSpec.describe Enterprises::ResourcesController, type: :controller do
             end
 
             it 'restore all archived resources' do 
-                expect{post :restore_all, enterprise_id: enterprise.id}.to change(Resource.where.not(archived_at: nil), :count).by(-2)
+                expect{post :restore_all, enterprise_id: enterprise.id}.to change(Resource.unarchived_resources(archived_resources.map(&:id), []), :count).by(-2)
             end
         end
     end

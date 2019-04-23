@@ -7,12 +7,14 @@
               label: "Start off by giving your resource a representative <strong>title</strong>".html_safe,
               input_html: { autofocus: true } %>
 
-        <%= f.association :folder,
-        include_blank: true,
-        as: :select,
-        input_html: { class: 'select2-field', autofocus: true, data: { id: @resource.folder.id } },
-        label: 'Move to another Folder'
-        %>
+        <% if @resource.folder %>
+          <%= f.association :folder,
+          include_blank: true,
+          as: :select,
+          input_html: { class: 'select2-field', autofocus: true, data: { id: @resource.folder.id } },
+          label: 'Move to another Folder'
+          %>
+        <% end %>  
 
         <%= f.input :file, as: :attachment_preview, label: "Upload the <strong>file</strong> you want to share".html_safe %>
         <%= f.input :url, label: "URL" %>
