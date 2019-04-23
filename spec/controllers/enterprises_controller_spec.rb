@@ -512,4 +512,28 @@ RSpec.describe EnterprisesController, type: :controller do
             expect(response).to render_template(layout: false)
         end
     end
+
+    describe 'PATCH#auto_archive_switch' do 
+        context 'when user is logged in' do 
+            login_user_from_let
+
+            before do
+                enterprise.update(expiry_age_for_resources: 1)
+                xhr :patch, :auto_archive_switch, id: enterprise.id, format: :js 
+            end
+
+            it 'switch auto_archive ON for enterprise' do 
+                expect(assigns[:enterprise].auto_archive).to eq true
+            end
+
+            it 'turns auto_archive OFF for enterprise' do 
+                enterprise.update auto_archive: true
+                expect(assigns[:enterprise].auto_archive).to eq false
+            end
+
+            it 'renders nothing' do 
+                expect(response).to render_template(nil)
+            end
+        end
+    end
 end

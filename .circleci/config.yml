@@ -53,7 +53,7 @@ jobs:
     - run: if [ -z "${NODE_ENV:-}" ]; then export NODE_ENV=test; fi
     - run: export PATH="~/TeamDiverst/diverst-development/node_modules/.bin:$PATH"
     - run: npm install -g yarn
-    - run: nvm install 8 && nvm use 8.15.1 && yarn
+    - run: nvm install 8 && nvm use 8.16.0 && yarn
     - run: echo -e "export RAILS_ENV=test\nexport RACK_ENV=test" >> $BASH_ENV
     - run: sudo rm -rf /etc/apt/sources.list.d/circleci_trusty.list && sudo rm -rf /etc/apt/sources.list.d/github_git-lfs.list  && sudo rm -rf /etc/apt/sources.list.d/neo4j.list && sudo rm -rf /etc/apt/sources.list.d/mysql.list && sudo rm -rf /etc/apt/sources.list.d/basho_riak.list
     - run: gem install bundler

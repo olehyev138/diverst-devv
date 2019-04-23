@@ -32,9 +32,31 @@
         <br>
         
         <%= f.input :yammer_group_link %>
+
+        <h3>Archive Settings</h3>
+        <div id="auto_archive_switch">  
+          <%= f.hidden_field :auto_archive, value: 0 %>
+          <%= f.input :auto_archive, label: 'Auto Archive Switch' %>
+        </div>
+          <div id="auto_archive_settings" style='<%= @group.auto_archive? ? "display: block" : "display: none" %>'>
+            <p>Set your expiry age for news, resources or events</p>
+            <%= f.input :unit_of_expiry_age %>
+            <%= f.input :expiry_age_for_news %>
+            <%= f.input :expiry_age_for_resources %>
+            <%= f.input :expiry_age_for_events %>
+          </div>
       </div>
     </div>
 
     <%= f.button :submit %>
   <% end %>
 </div>
+
+<script>
+  $(document).on('ready page:load', function(){
+    $("#auto_archive_switch").on("change", function(e){
+      $("#auto_archive_settings").toggle();
+      $.ajax({url: '<%= auto_archive_switch_path(@group) %>', type: 'PATCH'});
+    });
+  });
+</script>

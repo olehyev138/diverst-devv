@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190317183618) do
+ActiveRecord::Schema.define(version: 20190327002041) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -327,6 +327,9 @@ ActiveRecord::Schema.define(version: 20190317183618) do
     t.boolean  "redirect_all_emails",                                 default: false
     t.string   "redirect_email_contact",                limit: 191
     t.boolean  "disable_emails",                                      default: false
+    t.integer  "expiry_age_for_resources",              limit: 4,     default: 0
+    t.string   "unit_of_expiry_age",                    limit: 191
+    t.boolean  "auto_archive",                                        default: false
   end
 
   create_table "expense_categories", force: :cascade do |t|
@@ -559,6 +562,11 @@ ActiveRecord::Schema.define(version: 20190317183618) do
     t.text     "home_message",               limit: 65535
     t.boolean  "default_mentor_group",                                             default: false
     t.integer  "position",                   limit: 4
+    t.integer  "expiry_age_for_news",        limit: 4,                             default: 0
+    t.integer  "expiry_age_for_resources",   limit: 4,                             default: 0
+    t.integer  "expiry_age_for_events",      limit: 4,                             default: 0
+    t.string   "unit_of_expiry_age",         limit: 191
+    t.boolean  "auto_archive",                                                     default: false
   end
 
   create_table "groups_metrics_dashboards", force: :cascade do |t|
@@ -651,6 +659,7 @@ ActiveRecord::Schema.define(version: 20190317183618) do
     t.string   "location",             limit: 191
     t.integer  "budget_item_id",       limit: 4
     t.boolean  "finished_expenses",                                          default: false
+    t.datetime "archived_at"
   end
 
   create_table "invitation_segments_groups", force: :cascade do |t|
@@ -959,6 +968,7 @@ ActiveRecord::Schema.define(version: 20190317183618) do
     t.boolean  "group_settings_manage",                   default: false
     t.boolean  "group_posts_index",                       default: false
     t.boolean  "mentorship_manage",                       default: false
+    t.boolean  "auto_archive_manage",                     default: false
   end
 
   create_table "policy_groups", force: :cascade do |t|
@@ -1021,6 +1031,7 @@ ActiveRecord::Schema.define(version: 20190317183618) do
     t.boolean  "group_settings_manage",                 default: false
     t.boolean  "group_posts_index",                     default: false
     t.boolean  "mentorship_manage",                     default: false
+    t.boolean  "auto_archive_manage",                   default: false
   end
 
   add_index "policy_groups", ["user_id"], name: "index_policy_groups_on_user_id", using: :btree
@@ -1383,6 +1394,7 @@ ActiveRecord::Schema.define(version: 20190317183618) do
     t.integer  "group_id",          limit: 4
     t.integer  "folder_id",         limit: 4
     t.integer  "resource_id",       limit: 4
+    t.integer  "view_count",        limit: 4
   end
 
   create_table "yammer_field_mappings", force: :cascade do |t|

@@ -5,7 +5,7 @@ RSpec.describe GroupsController, type: :controller do
 
   let(:enterprise){ create(:enterprise) }
   let(:user){ create(:user, enterprise: enterprise, email: "test@gmail.com") }
-  let!(:group){ create(:group, enterprise: enterprise, position: 0) }
+  let!(:group){ create(:group, enterprise: enterprise, position: 0, auto_archive: false) }
   let!(:different_group) { create(:group, enterprise: create(:enterprise)) }
 
   describe 'GET #index' do
@@ -1115,6 +1115,30 @@ RSpec.describe GroupsController, type: :controller do
         expect(group1.reload.position).to_not be_nil
         expect(group2.reload.position).to_not be_nil
         expect(group3.reload.position).to_not be_nil
+      end
+    end
+  end
+
+  describe 'PATCH#auto_archive_switch' do 
+    context 'with logged in user' do 
+      login_user_from_let
+
+      before { group.update(expiry_age_for_news: 1) }
+
+      it 'turns auto_archive_switch on for group' do 
+        xhr :patch, :auto_archive_switch, id: group.id, format: :js
+        expect(assigns[:group].auto_archive).to eq true
+      end
+
+      it 'turns auto_archive off for group' do 
+        group.update auto_archive: true
+        xhr :patch, :auto_archive_switch, id: group.id, format: :js
+        expect(assigns[:group].auto_archive).to eq false
+      end
+
+      it 'renders nothing' do 
+        xhr :patch, :auto_archive_switch, id: group.id, format: :js
+        expect(response).to render_template(nil)
       end
     end
   end

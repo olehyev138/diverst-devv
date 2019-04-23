@@ -221,7 +221,7 @@ RSpec.describe InitiativesController, type: :controller do
     end
   end
 
-  describe "GET#attendees" do
+  describe "GET#export_attendees_csv" do
     let!(:group) { create :group, enterprise: user.enterprise }
     let!(:initiative) { create :initiative, owner_group: group }
     let!(:attendee) { create(:user) }
@@ -232,7 +232,7 @@ RSpec.describe InitiativesController, type: :controller do
         allow(EventAttendeeDownloadJob).to receive(:perform_later)
         request.env['HTTP_REFERER'] = 'back'  
         initiative.update(attendees: [attendee])
-        get :attendees, group_id: group.id, id: initiative.id
+        get :export_attendees_csv, group_id: group.id, id: initiative.id
       end
 
       it 'returns to previous page' do
@@ -252,7 +252,7 @@ RSpec.describe InitiativesController, type: :controller do
 
         it 'creates public activity record' do
           perform_enqueued_jobs do
-            expect{ get :attendees, group_id: group.id, id: initiative.id }.to change(PublicActivity::Activity, :count).by(1)
+            expect{ get :export_attendees_csv, group_id: group.id, id: initiative.id }.to change(PublicActivity::Activity, :count).by(1)
           end
         end
 
@@ -263,7 +263,7 @@ RSpec.describe InitiativesController, type: :controller do
 
           before {
             perform_enqueued_jobs do
-              get :attendees, group_id: group.id, id: initiative.id
+              get :export_attendees_csv, group_id: group.id, id: initiative.id
             end
           }
 
@@ -273,7 +273,7 @@ RSpec.describe InitiativesController, type: :controller do
     end
 
     context "without a logged in user" do
-      before { get :attendees, group_id: group.id, id: initiative.id }
+      before { get :export_attendees_csv, group_id: group.id, id: initiative.id }
       it_behaves_like "redirect user to users/sign_in path"
     end
   end
