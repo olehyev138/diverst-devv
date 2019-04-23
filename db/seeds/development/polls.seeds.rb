@@ -8,6 +8,7 @@ after 'development:segments' do
         groups: [enterprise.groups.first],
         segments: [enterprise.segments.first],
         status: 0,
+        created_at: Faker::Time.between(enterprise.created + 1.day, 2.days.ago),
         owner: enterprise.users.sample,
         nb_invitations: 10
       )

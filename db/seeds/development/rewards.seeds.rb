@@ -5,6 +5,7 @@ after 'development:enterprise' do
 
     enterprise = Enterprise.find_by_name 'Diverst Inc'
     point_system = [[100, 'Gold Achievement', 'spec/fixtures/files/trophy_image.jpg'], [50, 'Silver Achievement', 'spec/fixtures/files/silver.jpg']]
+
     point_system.each do |p|
       Badge.create(enterprise_id: enterprise.id,
                    points: p[0],
