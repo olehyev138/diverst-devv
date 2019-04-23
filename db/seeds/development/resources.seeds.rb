@@ -4,6 +4,7 @@ def self.generate_views(enterprise, resource, no_views, is_enterprise_resource, 
     if is_enterprise_resource
       user = enterprise.users.where(enterprise: enterprise.id).sample
     else
+      next if group.user_groups.empty?
       user = group.user_groups.where(accepted_member: true).sample.user
 
       resource.views.create!(user_id: user.id,
