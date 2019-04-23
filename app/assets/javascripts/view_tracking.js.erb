@@ -25,7 +25,7 @@ $(document).on('ready page:load', function() {
       
     $.post('/views/track', {view: params},
       function() {
-        unless ( link.attr("data-remote") == "true" ) {
+        if ( link.attr("data-remote") != "true" ) {
           if ( link.attr("target") != "_blank" ) {
             window.location.href = link.attr("href");
           }
