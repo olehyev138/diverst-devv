@@ -32,25 +32,27 @@ after 'development:users' do
   spinner = TTY::Spinner.new(":spinner Populating enterprises with groups...", format: :spin_2)
   spinner.run do |spinner|
     Enterprise.all.each do |enterprise|
-      # shuffle group_names & take first 10
-      group_names.shuffle.slice(0..no_groups).each do |group_name|
-        group_name = 'BAD ENTERPRISE ' + group_name if enterprise.name != 'Diverst Inc'
-        group = enterprise.groups.create!(name: group_name, description: "",
-                                          created_at: Faker::Time.between(enterprise.created_at, Time.current - 2.days))
-
-        # create subgroups
-        (0..rand(0..max_subgroups)).each do |i|
-          subgroup_prefix = group.name.split(' ').reduce('') { |prefix, word| prefix + word[0] }
-          subgroup_name = subgroup_prefix + ' Chapter ' + (65 + i).chr
-          subgroup_name = 'BAD ENTERPRISE ' + subgroup_name if enterprise.name != 'Diverst Inc'
-
-          subgroup = group.children.create!(name: subgroup_name, description: "", enterprise_id: enterprise.id,
+      if enterprise.name != "BAD ENTERPRISE"
+        # shuffle group_names & take first 10
+        group_names.shuffle.slice(0..no_groups).each do |group_name|
+          group_name = 'BAD ENTERPRISE ' + group_name if enterprise.name != 'Diverst Inc'
+          group = enterprise.groups.create!(name: group_name, description: "",
                                             created_at: Faker::Time.between(enterprise.created_at, Time.current - 2.days))
 
-          self.populate_group(enterprise, subgroup)
-        end
+          # create subgroups
+          (0..rand(0..max_subgroups)).each do |i|
+            subgroup_prefix = group.name.split(' ').reduce('') { |prefix, word| prefix + word[0] }
+            subgroup_name = subgroup_prefix + ' Chapter ' + (65 + i).chr
+            subgroup_name = 'BAD ENTERPRISE ' + subgroup_name if enterprise.name != 'Diverst Inc'
 
-        self.populate_group(enterprise, group)
+            subgroup = group.children.create!(name: subgroup_name, description: "", enterprise_id: enterprise.id,
+                                              created_at: Faker::Time.between(enterprise.created_at, Time.current - 2.days))
+
+            self.populate_group(enterprise, subgroup)
+          end
+
+          self.populate_group(enterprise, group)
+        end
       end
 
       # always create mentor network group
