@@ -1,4 +1,4 @@
-after 'development:enterprise' do
+after 'development:users' do
   spinner = TTY::Spinner.new(":spinner Populating enterprises with mentors...", format: :spin_2)
   spinner.run do |spinner|
     Enterprise.all.each do |enterprise|
@@ -21,11 +21,14 @@ after 'development:enterprise' do
                                              ])
 
       days_of_the_week = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+
+
       if enterprise.name == "Diverst Inc"
+        # Create mentorship profiles
         enterprise.users.each do |user|
           if rand(3) < 2 # Have a chance to not make mentorship profile for a user
             days_of_the_week.shuffle!
-            (0..rand(1..3)).each do |i| # Create mentorship availabilities
+            rand(1..3).times do |i| # Create mentorship availabilities
               start_time = Faker::Time.between(Date.today, Date.today, :day)
               end_time = start_time + 2.hours + (rand(0..30)).minutes
               MentorshipAvailability.create!(user_id: user.id, start: start_time.strftime("%-l:%M %p"), end: end_time.strftime("%-l:%M %p"), day: days_of_the_week[i])
@@ -46,11 +49,22 @@ after 'development:enterprise' do
           user.update(mentor: rand(100) > 8 ? true : false, mentee: rand(100) < 15 ? true : false)
         end
 
-        mentors = enterprise.users.mentors
-        mentees = enterprise.users.mentees
+        mentor_enabled_users = enterprise.users.mentors
+        mentee_enabled_users = enterprise.users.mentees
 
+        # Create Mentorings
+        mentor_enabled_users.each do |mentor|
+          mentees_list = mentee_enabled_users.where.not(id: mentor.id).to_a.shuffle
+          rand(0..(mentees_list.count > 8 ? 8 : mentees_list.count)).times do |i|
+            mentee = mentees_list[i]
+            created_at = Faker::Time.between(mentor.created_at > mentee.created_at ? mentor.created_at : mentee.created_at, Date.today - 2.days)
+            Mentoring.create!(mentor_id: mentor.id, mentee_id: mentee.id, created_at: created_at) if rand(5) < 4
+          end
+        end
+
+        mentors = Mentoring.all.map(&:mentor).uniq
         # Create mentoring sessions
-        (0..rand(1..5)).each do |i|
+        rand(2..5).times do |i|
           creator = mentors.sample
           start_date = Faker::Time.between(creator.created_at, Date.today, :day)
           end_date = start_date + 2.hours + (rand(0..30)).minutes
@@ -64,10 +78,9 @@ after 'development:enterprise' do
           # Add a mentor topic to the session
           mentoring_session.mentoring_session_topics.create!(mentoring_interest: enterprise.mentoring_interests.sample)
 
-          mentees.where.not(id: creator.id)
-          mentees_list = mentees.to_a.shuffle
+          mentees = Mentoring.where(mentor_id: creator.id).map(&:mentee).uniq.shuffle
           # Create mentorship sessions
-          (0..rand(2..4)).each do |j|
+          rand((mentees.count > 1 ? 1 : 0)..(mentees.count > 4 ? 4 : mentees.count)).times do |j|
             status = case rand(7)
             when 0..4
               "accepted"
@@ -76,7 +89,7 @@ after 'development:enterprise' do
             else
               "pending"
             end
-            mentoring_session.mentorship_sessions.create!(user: mentees_list[j], status: status, role: "viewer")
+            mentoring_session.mentorship_sessions.create!(user_id: mentees[j].id, status: status, role: "viewer")
           end
         end
       end
