@@ -1,6 +1,6 @@
 /* global $ */
 
-const MAX_LABEL_LENGTH = 13;
+const MAX_LABEL_LENGTH = 12;
 const BAR_GROUP_SPACING = 0.3;
 const CHART_PADDING = 36;
 const AXIS_PADDING = 15;
