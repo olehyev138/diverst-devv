@@ -1,5 +1,4 @@
 $("#archived_enterprise_resource_<%= @resource.id %>").fadeOut(500, function(){
-	console.log('???');
 	$(this).remove();
 	var resource_count = parseInt("<%= @resources.count %>");
 	decreaseResourceCount();
