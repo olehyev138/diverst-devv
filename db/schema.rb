@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190424021610) do
+ActiveRecord::Schema.define(version: 20190424200547) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -1141,7 +1141,6 @@ ActiveRecord::Schema.define(version: 20190424021610) do
     t.datetime "updated_at",           null: false
     t.integer  "operator",   limit: 4, null: false
     t.integer  "field",      limit: 4, null: false
-    t.integer  "limit",      limit: 4, null: false
   end
 
   add_index "segment_order_rules", ["segment_id"], name: "index_segment_order_rules_on_segment_id", using: :btree
@@ -1172,6 +1171,7 @@ ActiveRecord::Schema.define(version: 20190424021610) do
     t.datetime "updated_at",                      null: false
     t.integer  "owner_id",            limit: 4
     t.string   "active_users_filter", limit: 191
+    t.integer  "limit",               limit: 4
   end
 
   create_table "shared_metrics_dashboards", force: :cascade do |t|
@@ -1405,6 +1405,7 @@ ActiveRecord::Schema.define(version: 20190424021610) do
     t.integer  "group_id",          limit: 4
     t.integer  "folder_id",         limit: 4
     t.integer  "resource_id",       limit: 4
+    t.integer  "view_count",        limit: 4
   end
 
   create_table "yammer_field_mappings", force: :cascade do |t|

@@ -22,7 +22,6 @@ class Segment < BaseClass
     has_many :order_rules, class_name: 'SegmentOrderRule', dependent: :destroy
 
     has_many :users_segments, dependent: :destroy
-    has_many :members, class_name: 'User', through: :users_segments, source: :user, dependent: :destroy
     has_many :polls_segments, dependent: :destroy
     has_many :polls, through: :polls_segments
     has_many :group_messages_segments, dependent: :destroy
@@ -32,6 +31,7 @@ class Segment < BaseClass
     has_many :initiative_segments, dependent: :destroy
     has_many :initiatives, through: :initiative_segments
 
+    has_many :members, class_name: 'User', through: :users_segments, source: :user, dependent: :destroy
 
     validates_presence_of :name
     validates :name, uniqueness: { scope: :enterprise_id }
@@ -44,7 +44,11 @@ class Segment < BaseClass
 
     # Rule attributes
     accepts_nested_attributes_for :field_rules, reject_if: :segment_rule_values_is_nil, allow_destroy: true
-    accepts_nested_attributes_for :order_rules, reject_if: :segment_rule_values_is_nil, allow_destroy: true
+    accepts_nested_attributes_for :order_rules, reject_if: :all_blank, allow_destroy: true
+
+    def ordered_members
+      order_rules.reduce(members) { |members, rule| members.order(rule.field_name => rule.operator_name) }
+    end
 
     def rules
       field_rules

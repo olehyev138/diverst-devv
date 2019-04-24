@@ -50,5 +50,12 @@
 
       location = url
     });
+
+    var table = $('#segment-members-table').DataTable(Utility.mergeWithDTDefaults({
+      serverSide: true,
+      ajax: { url: $(this).data('source') },
+      order: []
+    }));
+
   });
 </script>

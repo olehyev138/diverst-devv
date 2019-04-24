@@ -18,12 +18,12 @@
             <%= link_to_add_association "Add a criterion", f, :field_rules, partial: 'field_rule' %>
           </div>
 
-          <%= f.simple_fields_for :order_rules, partial: 'order_rule' do |field| %>
-            <%= render 'order_rule', f: field %>
-          <% end %>
           <div class="link">
             <%= link_to_add_association "Set an order", f, :order_rules, partial: 'order_rule' %>
           </div>
+          <%= f.simple_fields_for :order_rules, partial: 'order_rule' do |field| %>
+            <%= render 'order_rule', f: field %>
+          <% end %>
 
           <%= f.button :submit %>
         </div>

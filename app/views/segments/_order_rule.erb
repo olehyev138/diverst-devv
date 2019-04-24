@@ -5,9 +5,13 @@
         <%= inline_svg('icons/remove.svg', class: "icon") %>
       <% end %>
     </div>
-    <div class="flex-row__cell operator" style="display: none;">
+    <div class="flex-row__cell">
       <!-- operatorField !-->
-      <%= f.input :operator, collection: [ 'A', 'B' ] %>
+      <%= f.input :field, collection: SegmentOrderRule.fields, label: false %>
+    </div>
+    <div class="flex-row__cell">
+      <!-- operatorField !-->
+      <%= f.input :operator, collection: SegmentOrderRule.operators, label: false %>
     </div>
   </div>
 </div>

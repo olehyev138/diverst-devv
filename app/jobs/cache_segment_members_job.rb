@@ -8,8 +8,13 @@ class CacheSegmentMembersJob < ActiveJob::Base
     return if segment.nil?
 
     users = segment.enterprise.users.all
+#    if limit
+#      order_rules.reduce(users) { |users, rule| users.order(rule.field_name => rule.operator_name) }
+#    end
+
     old_members = segment.members.all
 
+    # Apply field rules
     new_members = users.select do |user|
       user.is_part_of_segment?(segment)
     end

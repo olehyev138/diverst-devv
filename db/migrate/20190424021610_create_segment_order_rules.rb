@@ -5,7 +5,6 @@ class CreateSegmentOrderRules < ActiveRecord::Migration
       t.timestamps null: false
       t.integer :operator, null: false
       t.integer :field, null: false
-      t.integer :limit, null: false
     end
   end
 end
