@@ -1,0 +1,13 @@
+<div class="nested-fields space-bottom segment-rule">
+  <div class="flex-row flex-row--baseline">
+    <div class="flex-row__cell">
+      <%= link_to_remove_association f do %>
+        <%= inline_svg('icons/remove.svg', class: "icon") %>
+      <% end %>
+    </div>
+    <div class="flex-row__cell operator" style="display: none;">
+      <!-- operatorField !-->
+      <%= f.input :operator, collection: [ 'A', 'B' ] %>
+    </div>
+  </div>
+</div>

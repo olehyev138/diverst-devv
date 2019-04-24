@@ -44,6 +44,7 @@ class Segment < BaseClass
 
     # Rule attributes
     accepts_nested_attributes_for :field_rules, reject_if: :segment_rule_values_is_nil, allow_destroy: true
+    accepts_nested_attributes_for :order_rules, reject_if: :segment_rule_values_is_nil, allow_destroy: true
 
     def rules
       field_rules
