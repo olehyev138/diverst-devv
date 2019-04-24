@@ -22,8 +22,7 @@ class Metrics::MentorshipGraphsController < ApplicationController
       format.csv {
         GenericGraphsMentorshipDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))
         track_activity(current_user.enterprise, :export_generic_graphs_mentorship)
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
-        redirect_to :back
+        render json: { notice: "Please check your Secure Downloads section in a couple of minutes" }
       }
     end
   end
@@ -44,8 +43,7 @@ class Metrics::MentorshipGraphsController < ApplicationController
           @to_date
         )
         track_activity(current_user.enterprise, :export_generic_graphs_mentoring_sessions)
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
-        redirect_to :back
+        render json: { notice: "Please check your Secure Downloads section in a couple of minutes" }
       }
     end
   end
@@ -60,8 +58,7 @@ class Metrics::MentorshipGraphsController < ApplicationController
       format.csv {
         GenericGraphsMentoringInterestsDownloadJob.perform_later(current_user.id, current_user.enterprise.id)
         track_activity(current_user.enterprise, :export_generic_graphs_mentoring_interests)
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
-        redirect_to :back
+        render json: { notice: "Please check your Secure Downloads section in a couple of minutes" }
       }
     end
   end

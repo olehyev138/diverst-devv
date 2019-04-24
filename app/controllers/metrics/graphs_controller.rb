@@ -69,8 +69,7 @@ class Metrics::GraphsController < ApplicationController
 
     GraphDownloadJob.perform_later(current_user.id, @graph.id, date_range, unset_series)
 
-    flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
-    redirect_to :back
+    render json: { notice: "Please check your Secure Downloads section in a couple of minutes" }
   end
 
   def group_population

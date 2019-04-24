@@ -67,7 +67,9 @@ class Graph {
           date_range = self.date_range;
         }
 
-        $.get(url, { date_range: date_range, unset_series: unset_series, scoped_by_models: self.scoped_by_models });
+        $.get(url, { date_range: date_range, unset_series: unset_series, scoped_by_models: self.scoped_by_models }, function(data) {
+          Utility.displayFlash(data);
+        }, "JSON");
     }
 
     updateData(date_range={}) {
