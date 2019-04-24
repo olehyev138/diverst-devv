@@ -11,11 +11,11 @@
         <p class="field__hint">To be a part of this <%= c_t(:segment) %>, a user must meet <strong>all</strong> the following criteria</p>
         <%= f.input :active_users_filter %>
         <div id="rules">
-          <%= f.simple_fields_for :rules do |field| %>
+          <%= f.simple_fields_for :field_rules, partial: 'rule_fields' do |field| %>
             <%= render 'rule_fields', f: field %>
           <% end %>
           <div class="link">
-            <%= link_to_add_association "Add a criterion", f, :rules %>
+            <%= link_to_add_association "Add a criterion", f, :field_rules, partial: 'rule_fields' %>
           </div>
 
           <%= f.button :submit %>

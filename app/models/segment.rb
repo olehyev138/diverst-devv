@@ -17,7 +17,10 @@ class Segment < BaseClass
     belongs_to :enterprise
     belongs_to :owner, class_name: "User"
 
-    has_many :rules, class_name: 'SegmentRule', dependent: :destroy
+    # Rules
+    has_many :field_rules, class_name: 'SegmentRule', dependent: :destroy
+    has_many :order_rules, class_name: 'SegmentOrderRule', dependent: :destroy
+
     has_many :users_segments, dependent: :destroy
     has_many :members, class_name: 'User', through: :users_segments, source: :user, dependent: :destroy
     has_many :polls_segments, dependent: :destroy
@@ -29,6 +32,7 @@ class Segment < BaseClass
     has_many :initiative_segments, dependent: :destroy
     has_many :initiatives, through: :initiative_segments
 
+
     validates_presence_of :name
     validates :name, uniqueness: { scope: :enterprise_id }
 
@@ -38,8 +42,12 @@ class Segment < BaseClass
 
     validates_presence_of :enterprise
 
-    accepts_nested_attributes_for :rules, reject_if: :segment_rule_values_is_nil, allow_destroy: true
+    # Rule attributes
+    accepts_nested_attributes_for :field_rules, reject_if: :segment_rule_values_is_nil, allow_destroy: true
 
+    def rules
+      field_rules
+    end
 
     def segment_rule_values_is_nil(attributes)
         attributes['values'].nil?
