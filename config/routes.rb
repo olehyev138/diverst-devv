@@ -173,6 +173,8 @@ Rails.application.routes.draw do
   patch '/groups/:id/auto_archive_switch', to: 'groups#auto_archive_switch', as: :auto_archive_switch
   patch '/groups/:group_id/initiatives/:id/archive', to: 'initiatives#archive', as: :archive_group_initiative 
   patch '/groups/:group_id/initiatives/:id/restore', to: 'initiatives#restore', as: :restore_group_initiative
+  patch 'initiatives/:initiative_id/resources/:id/restore', to: 'initiatives/resources#restore', as: :restore_initiative_resource
+  delete 'initiatives/:initiative_id/resources/:id/', to: 'initiatives/resources#destroy', as: :remove_initiative_resource
 
 
   resources :groups do
@@ -315,7 +317,9 @@ Rails.application.routes.draw do
             get 'time_series'
           end
         end
-        resources :resources
+        resources :resources do 
+          member { patch 'archive' }
+        end
       end
 
       member do

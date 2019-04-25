@@ -24,6 +24,8 @@ class Resource < BaseClass
     validates_presence_of   :url, :if => Proc.new { |r| r.file.nil? && r.url.blank? }
     validates_length_of     :url, maximum: 255
 
+    scope :unarchived_resources, ->(folder_ids, initiative_ids) { where("resources.initiative_id IN (?) OR resources.folder_id IN (?)", initiative_ids, folder_ids).where.not(archived_at: nil) }
+
     before_validation :smart_add_url_protocol
 
     attr_reader :tag_tokens

@@ -1,5 +1,5 @@
-spinner = TTY::Spinner.new("[:spinner] Populating enterprise with topics...", format: :classic)
-spinner.run('[DONE]') do |spinner|
+spinner = TTY::Spinner.new(":spinner Populating enterprises with topics...", format: :spin_2)
+spinner.run do |spinner|
 	10.times do |_i|
 	  Enterprise.all.each do |enterprise|		
 	  	enterprise.topics.create(
@@ -7,5 +7,6 @@ spinner.run('[DONE]') do |spinner|
 	    	expiration: 1.month.from_now
 	  	)
 	  end
-	end
+  end
+  spinner.success("[DONE]")
 end
