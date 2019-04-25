@@ -41,7 +41,7 @@
     init_select2(".select2-field-campaigns", "<%= campaigns_path(format: :json) %>");
     init_select2(".select2-field-segments", "<%= enterprise_segments_segments_path(:limit => 10, format: :json) %>");
     init_select2(".select2-field-groups", "<%= groups_path(:limit => 10, format: :json) %>");
-    init_select2(".select2-field-users", "<%= users_path(not_current_user: true, can_metrics_dashboard_create: true, :limit => 10, format: :json) %>", function(item) {
+    init_select2(".select2-field-users", "<%= users_path(active: 1, not_current_user: true, can_metrics_dashboard_create: true, :limit => 10, format: :json) %>", function(item) {
         return { id: item[0], text: item[1] + " " + item[2] + " - " + item[3] };
     });
   });
