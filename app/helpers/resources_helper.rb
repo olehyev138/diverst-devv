@@ -52,6 +52,8 @@ module ResourcesHelper
   end
 
   def get_folders_url(folder, limit = nil, format = nil)
+    return if folder.nil?
+    
     if folder.group
       group_folders_path(folder.group, limit: limit, format: :json)
     else
