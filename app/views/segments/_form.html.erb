@@ -12,18 +12,25 @@
         <%= f.input :active_users_filter %>
         <%= f.input :limit %>
         <div id="rules">
-          <%= f.simple_fields_for :field_rules, partial: 'field_rule' do |field| %>
-            <%= render 'field_rule', f: field %>
-          <% end %>
           <div class="link">
             <%= link_to_add_association "Add a criterion", f, :field_rules, partial: 'field_rule' %>
           </div>
+          <%= f.simple_fields_for :field_rules, partial: 'field_rule' do |field| %>
+            <%= render 'field_rule', f: field %>
+          <% end %>
 
           <div class="link">
             <%= link_to_add_association "Set an order", f, :order_rules, partial: 'order_rule' %>
           </div>
           <%= f.simple_fields_for :order_rules, partial: 'order_rule' do |field| %>
             <%= render 'order_rule', f: field %>
+          <% end %>
+
+          <div class="link">
+            <%= link_to_add_association "Scope on groups", f, :group_rules, partial: 'group_rule' %>
+          </div>
+          <%= f.simple_fields_for :group_rules, partial: 'group_rule' do |field| %>
+            <%= render 'group_rule', f: field %>
           <% end %>
 
           <%= f.button :submit %>

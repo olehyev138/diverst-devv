@@ -20,6 +20,7 @@ class Segment < BaseClass
     # Rules
     has_many :field_rules, class_name: 'SegmentRule', dependent: :destroy
     has_many :order_rules, class_name: 'SegmentOrderRule', dependent: :destroy
+    has_many :group_rules, class_name: 'SegmentGroupScopeRule', dependent: :destroy
 
     has_many :users_segments, dependent: :destroy
     has_many :polls_segments, dependent: :destroy
@@ -45,6 +46,7 @@ class Segment < BaseClass
     # Rule attributes
     accepts_nested_attributes_for :field_rules, reject_if: :segment_rule_values_is_nil, allow_destroy: true
     accepts_nested_attributes_for :order_rules, reject_if: :all_blank, allow_destroy: true
+    accepts_nested_attributes_for :group_rules, reject_if: :all_blank, allow_destroy: true
 
     def ordered_members
       order_rules.reduce(members) { |members, rule| members.order(rule.field_name => rule.operator_name) }

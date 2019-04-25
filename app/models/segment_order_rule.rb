@@ -1,4 +1,4 @@
-class SegmentOrderRule < ActiveRecord::Base
+class SegmentOrderRule < BaseClass
   belongs_to :segment
 
   def self.fields

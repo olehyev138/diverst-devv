@@ -123,6 +123,12 @@ class SegmentsController < ApplicationController
           :field,
           :operator,
           :_destroy,
+        ],
+        group_rules_attributes: [
+          :id,
+          :operator,
+          :_destroy,
+          groups: []
         ]
       )
   end
