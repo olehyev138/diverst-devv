@@ -23,8 +23,8 @@ class CacheSegmentMembersJob < ActiveJob::Base
       user.is_part_of_segment?(segment)
     end
 
-    # Finally apply a limit
-    new_members = new_members.take(segment.limit)
+    # Finally apply a limit if limit is set
+    new_members = new_members.take(segment.limit) if segment.limit.present?
 
     members_to_remove = old_members - new_members
     members_to_add = new_members - old_members

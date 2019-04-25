@@ -1,3 +1,5 @@
+<%= render partial: 'components/group_selector', locals: { id: "group-scope-selector", multiselect: true } %>
+
 <div class="content__main">
   <div class="card">
     <%= simple_form_for @segment do |f| %>
@@ -39,3 +41,22 @@
     <% end %>
   </div>
 </div>
+<script>
+  $(document).on('cocoon:after-insert', function() {
+    $('.select2-groups').select2();
+
+    // TODO:
+    //   - get group scope functioning properly
+    //   - get rid of 'no results found'
+    //   - differentiate between multiple group selectors & selects somehow
+    //   - all selects should choose first element by default
+
+    $(".group-selector").on('saveGroups', function(e, selectedGroups) {
+      $.map(selectedGroups, function(group, key) {
+        console.log(group);
+        $('#select2-groups').append(new Option(group.text, group.key, false, true))
+        $('#select2-groups').trigger('change')
+      });
+    });
+  });
+</script>
