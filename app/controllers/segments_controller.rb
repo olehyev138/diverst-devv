@@ -110,6 +110,7 @@ class SegmentsController < ApplicationController
       .permit(
         :name,
         :active_users_filter,
+        :limit,
         field_rules_attributes: [
           :id,
           :field_id,
