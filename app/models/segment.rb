@@ -72,7 +72,8 @@ class Segment < BaseClass
     end
 
     def cache_segment_members
-        CacheSegmentMembersJob.perform_later self.id
+      print('nah')
+        #CacheSegmentMembersJob.perform_later self.id
     end
 
     def self.update_all_members

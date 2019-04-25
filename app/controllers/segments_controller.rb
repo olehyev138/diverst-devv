@@ -128,7 +128,7 @@ class SegmentsController < ApplicationController
           :id,
           :operator,
           :_destroy,
-          groups: []
+          group_ids: []
         ]
       )
   end
