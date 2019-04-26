@@ -10,13 +10,17 @@ class CacheSegmentMembersJob < ActiveJob::Base
     old_members = segment.members.all
     users = segment.enterprise.users.all
 
+    # TODO: move this to bottom
     # Apply order rules if limit present
     # Order would have no effect on the segment population if limit was not present
     # Note: - not efficient at the moment - should be applied after field rules but field rules returns array
     if segment.limit.present?
       # Apply each order rule to the users list - finally apply a limit
-      segment.order_rules.reduce(users) { |users, rule| users.order(rule.field_name => rule.operator_name) }
+      users = segment.order_rules.reduce(users) { |users, rule| users.order(rule.field_name => rule.operator_name) }
     end
+
+    # Apply group scoping rules
+    users = segment.group_rules.reduce(users) { |users, rule| rule.apply(users) }
 
     # Apply field rules
     new_members = users.select do |user|
