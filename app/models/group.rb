@@ -49,7 +49,6 @@ class Group < BaseClass
   belongs_to :enterprise
   belongs_to :lead_manager, class_name: "User"
   belongs_to :owner, class_name: "User"
-  belongs_to :segment_group_scope_rule
 
   has_one :news_feed, dependent: :destroy
 
