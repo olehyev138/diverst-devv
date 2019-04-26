@@ -22,7 +22,6 @@ class CacheSegmentMembersJob < ActiveJob::Base
       users = segment.order_rules.reduce(users) { |users, rule| users.order(rule.field_name => rule.operator_name) }
     end
 
-
     # Apply group scoping rules
     users = segment.group_rules.reduce(users) { |users, rule| rule.apply(users) }
 
