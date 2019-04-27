@@ -72,8 +72,6 @@
   </div>
 
   <%= render 'members_table', source: segment_path(@segment, format: :json) %>
-  </div>
-
 <% end %>
 
 <div class="content__header">
@@ -87,18 +85,6 @@
   $(document).on('page:change', function() {
     $(document).off('page:change');
 
-
-    $('#js-group-select').change(function() {
-      var url = location.protocol + '//' + location.host + location.pathname;
-      var group_id = $(this).find(":selected").val();
-
-      if(group_id){
-        url+= '?group_id=' + group_id;
-      }
-
-      location = url
-    });
-
     var table = $('#segment-members-table').DataTable(Utility.mergeWithDTDefaults({
       serverSide: true,
       ajax: { url: $(this).data('source') },
@@ -108,8 +94,6 @@
   });
 </script>
 <script>
-  let group_rule_count = 0;
-
   $(document).on('ready page:load', function() {
     $('#add_field_rule').click(function () {
       $('#field-rules-container').show();
@@ -125,31 +109,27 @@
 
 
     $('#field-rules').on('cocoon:after-remove', function(e, removedItem) {
-      removedItem.next('input[type="hidden"]').remove();
-      removedItem.remove();
-      if ($('.field-rule').length <= 0)
+      if ($('#field-rules > div:visible').length <= 0)
         $('#field-rules-container').hide();
     });
 
     $('#order-rules').on('cocoon:after-remove', function(e, removedItem) {
-      removedItem.next('input[type="hidden"]').remove();
-      removedItem.remove();
-      if ($('.order-rule').length <= 0)
+      if ($('#order-rules > div:visible').length <= 0)
         $('#order-rules-container').hide();
+
     });
 
     $('#group-rules').on('cocoon:after-remove', function(e, removedItem) {
-      removedItem.next('input[type=hidden]').remove();
-      removedItem.remove();
-      if ($('.group-rule').length <= 0)
+      if ($('#group-rules > div:visible').length <= 0)
         $('#group-rules-container').hide();
     });
-
 
     $('#group-rules').on('cocoon:after-insert', function() {
       setup_group_rule($('.group-rule').last());
     });
   });
+
+  let group_rule_count = 0;
 
   $(document).on('ready page:change', function() {
     $('.group-rule').each(function (i) {
