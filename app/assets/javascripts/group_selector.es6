@@ -68,7 +68,9 @@ class GroupSelector {
         this.allDataUrl = this.$element.data('all-url');
         // groupsElement is the jQuery object where group data will be inserted
         this.groupsElement = $("." + CLASSES.CONTENT, this.$element);
-
+        // preselectedGroups is an optional array of group IDs to pre-select
+        this.preselectedGroups = this.$element.data('preselected-groups') || null;
+        console.log(this.preselectedGroups);
 
         // Store the data on the object so we can use it when expanding, etc.
         this.data = {};
@@ -117,6 +119,7 @@ class GroupSelector {
             }
         });
 
+        this.preselectGroups();
         this.updateData();
     }
 
@@ -612,6 +615,25 @@ class GroupSelector {
         let self = this;
     
         $("." + CLASSES.CURRENT_PAGE_INPUT).val(self.currentPage);
+    }
+
+    // Selects and triggers a save on preselected groups
+    preselectGroups() {
+      let self = this;
+
+      if (!self.preselectedGroups)
+        return;
+
+      self.selectedGroups = [];
+
+      $.get(self.allDataUrl, (data) => {
+        $.each(data, function(index, group) {
+          if ($.inArray(group.id, self.preselectedGroups) !== -1)
+            self.addToSelectedGroups(group.id, group.text);
+        });
+
+        self.$element.trigger("saveGroups", [self.selectedGroups]);
+      });
     }
 
     // element is an element that contains a data field 'group-id'

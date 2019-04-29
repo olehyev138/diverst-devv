@@ -1,4 +1,11 @@
-<div class="modal group-selector <%= classes if local_assigns[:classes].present? %>" tabindex="-1" role="dialog" id="<%= id if local_assigns[:id].present? %>" data-url="<%= get_paginated_groups_groups_path %>" data-all-url="<%= get_all_groups_groups_path %>" data-multiselect="<%= multiselect %>">
+<div tabindex="-1" role="dialog"
+     class="modal group-selector <%= classes if local_assigns[:classes].present? %>"
+     id="<%= id if local_assigns[:id].present? %>"
+     data-url="<%= get_paginated_groups_groups_path %>"
+     data-all-url="<%= get_all_groups_groups_path %>"
+     data-multiselect="<%= multiselect %>"
+     data-preselected-groups="<%= preselected_groups if local_assigns[:preselected_groups].present? %>"
+>
     <div class="modal-dialog" role="document">
         <div class="modal-content card">
             <div class="modal-header">
