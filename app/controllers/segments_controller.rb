@@ -47,10 +47,10 @@ class SegmentsController < ApplicationController
     if @segment.save
       flash[:notice] = "Your #{c_t(:segment)} was created"
       track_activity(@segment, :create)
-      redirect_to action: :index
+      redirect_to @segment
     else
       flash[:alert] = "Your #{c_t(:segment)} was not created. Please fix the errors"
-      render :edit
+      render :show
     end
   end
 
@@ -67,24 +67,12 @@ class SegmentsController < ApplicationController
   end
 
   def edit
-    #authorize @segment
-
-    #@sub_segments = @segment.sub_segments.includes(:members)
-    #@members = @segment.ordered_members
-
-    #render :show
-
     authorize @segment
 
     @sub_segments = @segment.sub_segments.includes(:members)
     @members = @segment.ordered_members
 
-    # TODO: why does this happen?
-    respond_to do |format|
-      format.html { render :show }
-      format.json {
-        render json: SegmentMemberDatatable.new(view_context, @members) }
-    end
+    render :show
   end
 
   def update
@@ -95,7 +83,7 @@ class SegmentsController < ApplicationController
       redirect_to @segment
     else
       flash[:alert] = "Your #{c_t(:segment)} was not updated. Please fix the errors"
-      render :edit
+      render :show
     end
   end
 
