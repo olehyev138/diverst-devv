@@ -35,6 +35,9 @@ class SegmentsController < ApplicationController
   def new
     authorize Segment
     @segment = current_user.enterprise.segments.new
+    @segment.id = -1
+
+    render :show
   end
 
   def create
@@ -54,8 +57,7 @@ class SegmentsController < ApplicationController
   def show
     authorize @segment
 
-    @groups = current_user.enterprise.groups
-    @segments = @segment.sub_segments.includes(:members)
+    @sub_segments = @segment.sub_segments.includes(:members)
     @members = @segment.ordered_members
 
     respond_to do |format|
@@ -65,7 +67,24 @@ class SegmentsController < ApplicationController
   end
 
   def edit
+    #authorize @segment
+
+    #@sub_segments = @segment.sub_segments.includes(:members)
+    #@members = @segment.ordered_members
+
+    #render :show
+
     authorize @segment
+
+    @sub_segments = @segment.sub_segments.includes(:members)
+    @members = @segment.ordered_members
+
+    # TODO: why does this happen?
+    respond_to do |format|
+      format.html { render :show }
+      format.json {
+        render json: SegmentMemberDatatable.new(view_context, @members) }
+    end
   end
 
   def update

@@ -10,6 +10,9 @@
       <div class="flex-row__cell">
         <%= link_to "export targeted members", export_csv_segment_path(@segment, group_id: @group&.id), class: "btn btn--secondary hidden-xs" if current_user.is_admin? %>
       </div>
+      <div class="flex-row__cell">
+        <h3>Population: <%= @segment.members.count %></h3>
+      </div>
     </div>
   </div>
 
@@ -71,15 +74,21 @@
     </div>
   </div>
 
-  <%= render 'members_table', source: segment_path(@segment, format: :json) %>
+  <%= render 'members_table', source: segment_url(@segment, format: :json) %>
 <% end %>
 
-<div class="content__header">
-  <h1>Sub-<%= c_t(:segment).pluralize %></h1>
-  <%= link_to "+ New Sub-#{ c_t(:segment)}", new_segment_sub_segment_path(@segment), class: "btn btn--primary" if SegmentPolicy.new(current_user, Segment).new? %>
-</div>
+<% if @segment.id > 0 %>
+  <div class="sub_segments">
+    <div class="content__header">
+      <h1>Sub-<%= c_t(:segment).pluralize %></h1>
+      <%= link_to "+ New Sub-#{ c_t(:segment)}", new_segment_sub_segment_path(@segment), class: "btn btn--primary" if SegmentPolicy.new(current_user, Segment).new? %>
+    </div>
 
-<%= render "table" %>
+    <div class="content__main">
+      <%= render "table" %>
+    </div>
+  </div>
+<% end %>
 
 <script>
   $(document).on('page:change', function() {

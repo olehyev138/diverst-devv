@@ -1,6 +1,6 @@
 <div class="card">
   <div class="card__section">
-    <% if @members.any? %>
+    <% if @members&.any? %>
       <table id="segment-members-table" class="table--has-border" data-source="<%= source %>">
         <thead>
         <th>Name</th>
