@@ -3,9 +3,15 @@
 class CacheSegmentMembersJob < ActiveJob::Base
   queue_as :low
 
+  after_perform :set_status
+
+  @segment = nil
+
   def perform(segment_id)
     segment = Segment.find_by_id(segment_id)
     return if segment.nil?
+
+    @segment = segment
 
     old_members = segment.members.all
     users = segment.enterprise.users.all
@@ -51,5 +57,11 @@ class CacheSegmentMembersJob < ActiveJob::Base
         next
       end
     end
+  end
+
+  private
+
+  def set_status
+    @segment&.job_status = true
   end
 end
