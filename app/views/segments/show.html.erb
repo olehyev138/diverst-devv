@@ -118,7 +118,15 @@
   </script>
 <% end %>
 <script>
+  let group_rule_count = 0;
+
   $(document).on('ready page:load', function() {
+    group_rule_count = 0;
+
+    $('.group-rule').each(function (i) {
+      setup_group_rule($(this));
+    });
+
     $('#add_field_rule').click(function () {
       $('#field-rules-container').show();
     });
@@ -153,20 +161,14 @@
     });
   });
 
-  let group_rule_count = 0;
-
-  $(document).on('ready page:change', function() {
-    $('.group-rule').each(function (i) {
-      setup_group_rule($(this));
-    });
-  });
-
   function setup_group_rule($group_rule) {
     // Set id for this new rule
     $($group_rule).attr('id', 'group-rule' + group_rule_count);
 
     // Load group selector
+    var group_ids = <%= @segment.group_rules.map { |r| r.groups.map(&:id) } %>;
     $('body').prepend("<%= escape_javascript render partial: 'components/group_selector', locals: { id: 'group-scope-selector', multiselect: true } %>");
+    $('#group-scope-selector').attr("data-preselected-groups", JSON.stringify(group_ids[group_rule_count]));
     group_selector = new GroupSelector($('#group-scope-selector'));
 
     let group_selector_id = "group-scope-selector" + group_rule_count;
