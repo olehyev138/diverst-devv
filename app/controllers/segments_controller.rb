@@ -101,6 +101,18 @@ class SegmentsController < ApplicationController
     redirect_to :back
   end
 
+  def segment_status
+    @segment = current_user.enterprise.segments.find(params[:id])
+    authorize @segment, :show?
+
+    respond_to do |format|
+      byebug
+      format.json {
+        render json: { status: @segment.job_status }
+      }
+    end
+  end
+
   protected
 
   def set_segment

@@ -48,6 +48,10 @@ class Segment < BaseClass
     accepts_nested_attributes_for :order_rules, reject_if: :all_blank, allow_destroy: true
     accepts_nested_attributes_for :group_rules, reject_if: :all_blank, allow_destroy: true
 
+    # Status
+    attr_accessor :job_status
+    after_initialize { |segment| segment.job_status = false }
+
     def ordered_members
       order_rules.reduce(members) { |members, rule| members.order(rule.field_name => rule.operator_name) }
     end
@@ -72,12 +76,14 @@ class Segment < BaseClass
     end
 
     def cache_segment_members
+      self.job_status = false
       CacheSegmentMembersJob.perform_later self.id
     end
 
     def self.update_all_members
         Segment.all.find_each do |segment|
-            CacheSegmentMembersJob.perform_later segment.id
+          segment.job_status = false
+          CacheSegmentMembersJob.perform_later segment.id
         end
     end
 
