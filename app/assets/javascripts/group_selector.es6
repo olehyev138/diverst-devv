@@ -626,10 +626,9 @@ class GroupSelector {
 
       self.selectedGroups = [];
 
-      $.get(self.allDataUrl, (data) => {
+      $.get(self.allDataUrl, { ids: self.preselectedGroups }, (data) => {
         $.each(data, function(index, group) {
-          if ($.inArray(group.id, self.preselectedGroups) !== -1)
-            self.addToSelectedGroups(group.id, group.text);
+          self.addToSelectedGroups(group.id, group.text);
         });
 
         self.$element.trigger("saveGroups", [self.selectedGroups]);
