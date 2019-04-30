@@ -120,6 +120,27 @@
     });
   </script>
 <% end %>
+<% unless @segment.new_record? %>
+  <script>
+    // get initial status - start poll if false
+    $.get("<%= segment_status_segment_path(@segment) %>", function(data) {
+      console.log(data);
+      if (data.status === 'active') {
+        $('#job_status').show();
+        let interval = setInterval(function () {
+          $.get("<%= segment_status_segment_path(@segment) %>", function (data) {
+            console.log(data);
+            if (data.status === 'inactive') {
+              clearInterval(interval);
+              console.log('donzo');
+              $('#job_status').hide();
+            }
+          });
+        }, 3000);
+      }
+    });
+  </script>
+<% end %>
 <script>
   let group_rule_count = 0;
 
@@ -161,24 +182,6 @@
 
     $('#group-rules').on('cocoon:after-insert', function() {
       setup_group_rule($('.group-rule').last());
-    });
-
-    // get initial status - start poll if false
-    $.get("<%= segment_status_segment_path(@segment) %>", function(data) {
-      console.log(data);
-      if (data.status === 'active') {
-        $('#job_status').show();
-        let interval = setInterval(function () {
-          $.get("<%= segment_status_segment_path(@segment) %>", function (data) {
-            console.log(data);
-            if (data.status === 'inactive') {
-              clearInterval(interval);
-              console.log('donzo');
-              $('#job_status').hide();
-            }
-          });
-        }, 3000);
-      }
     });
   });
 
