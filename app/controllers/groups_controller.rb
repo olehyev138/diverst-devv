@@ -60,8 +60,10 @@ class GroupsController < ApplicationController
 
       respond_to do |format|
         format.json {
+          @groups = @groups
+                      .where("name like ?", "%#{search_params[:term]}%")
+                      .where(id: [search_params[:ids]]) if search_params[:ids].present?
           render json: @groups
-                         .where("name like ?", "%#{search_params[:term]}%")
                          .map { |g| { id: g.id, text: g.name } }
                          .as_json
         }
@@ -427,7 +429,7 @@ class GroupsController < ApplicationController
     end
 
     def search_params
-        params.permit(:page, :limit, :term)
+        params.permit(:page, :limit, :term, ids: [])
     end
 
     def group_params
