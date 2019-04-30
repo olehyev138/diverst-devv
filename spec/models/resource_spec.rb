@@ -153,4 +153,28 @@ RSpec.describe Resource, :type => :model do
         expect(resource.total_views).to eq(10)
     end
   end
+
+  describe '.archive_expired_resources' do 
+    let!(:enterprise) { create(:enterprise) }
+    let!(:group) { create(:group, enterprise: enterprise) }
+    let!(:group_folder) { create(:folder, group_id: group.id, enterprise_id: nil) }
+    let!(:enterprise_folder) { create(:folder, enterprise_id: enterprise.id, group_id: nil) }
+    let!(:group_resources) { create_list(:resource, 2, folder: group_folder, created_at: DateTime.now.weeks_ago(2), updated_at: DateTime.now.weeks_ago(2)) }
+    let!(:enterprise_resources) { create_list(:resource, 4, folder: enterprise_folder, created_at: DateTime.now.weeks_ago(2), updated_at: DateTime.now.weeks_ago(2)) }
+
+
+    it 'archives nothing if #auto_archive is OFF for both enterprise and group' do 
+      expect(Resource.archive_expired_resources(group)).to eq nil
+    end
+
+    it 'archives expired group resources ONLY when group auto_archive is switched ON' do 
+      group.update(auto_archive: true, unit_of_expiry_age: 'weeks', expiry_age_for_resources: 2)
+      expect{ Resource.archive_expired_resources(group) }.to change(Resource.where.not(archived_at: nil), :count).by(2)
+    end
+
+    it 'archives expired enterprise resources ONLY when enterprise auto_archive is switched OFF' do 
+      enterprise.update(auto_archive: true, unit_of_expiry_age: 'weeks', expiry_age_for_resources: 2)
+      expect{ Resource.archive_expired_resources(group) }.to change(Resource.where.not(archived_at: nil), :count).by(4)
+    end
+  end
 end

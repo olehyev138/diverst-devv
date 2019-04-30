@@ -40,6 +40,11 @@ class Group < BaseClass
                                     :leaders_only,
                                     :non_member
                                   ]
+  enumerize :unit_of_expiry_age, default: :months, in: [
+    :weeks,
+    :months,
+    :years
+  ]
 
   belongs_to :enterprise
   belongs_to :lead_manager, class_name: "User"
@@ -129,6 +134,7 @@ class Group < BaseClass
   before_validation :smart_add_url_protocol
   after_create :create_news_feed
   after_update :accept_pending_members, unless: :pending_members_enabled?
+  after_update :resolve_auto_archive_state, if: :no_expiry_age_set_and_auto_archive_true?
 
   attr_accessor :skip_label_consistency_check
   validate :perform_check_for_consistency_in_category, on: [:create, :update], unless: :skip_label_consistency_check
@@ -148,6 +154,22 @@ class Group < BaseClass
   accepts_nested_attributes_for :survey_fields, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_leaders, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :sponsors, reject_if: :all_blank, allow_destroy: true
+
+  def resolve_auto_archive_state
+    update(auto_archive: false)
+  end
+
+  def no_expiry_age_set_and_auto_archive_true?
+    return true if auto_archive? && (expiry_age_for_news == 0) && (expiry_age_for_events == 0) && (expiry_age_for_resources == 0)
+  end
+
+  def archive_switch
+    if auto_archive?
+      update(auto_archive: false)
+    else
+      update(auto_archive: true)
+    end
+  end
 
   def layout_values
     {
@@ -245,6 +267,11 @@ class Group < BaseClass
 
   def file_safe_name
     name.gsub(/[^0-9A-Za-z.\-]/, '_')
+  end
+
+  def logo_expiring_thumb
+    return nil unless logo.present?
+    logo.expiring_url(30, :thumb)
   end
 
   def possible_participating_groups

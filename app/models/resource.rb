@@ -24,6 +24,8 @@ class Resource < BaseClass
     validates_presence_of   :url, :if => Proc.new { |r| r.file.nil? && r.url.blank? }
     validates_length_of     :url, maximum: 255
 
+    scope :unarchived_resources, ->(folder_ids, initiative_ids) { where("resources.initiative_id IN (?) OR resources.folder_id IN (?)", initiative_ids, folder_ids).where.not(archived_at: nil) }
+
     before_validation :smart_add_url_protocol
 
     attr_reader :tag_tokens
@@ -80,6 +82,25 @@ class Resource < BaseClass
 
     def total_views
         views.count
+    end
+
+    def self.archive_expired_resources(group)
+        enterprise = group.enterprise
+        return unless group.auto_archive? || enterprise.auto_archive?
+
+        if group.auto_archive?
+            expiry_date = DateTime.now.send("#{group.unit_of_expiry_age}_ago", group.expiry_age_for_resources)
+            group_resources = Resource.joins(:folder).where.not(folders: {group_id: nil}).where(folders: {enterprise_id: nil}).where("resources.created_at < ?", expiry_date).where(archived_at: nil)
+
+            group_resources.update_all(archived_at: DateTime.now) if group_resources.any?
+        end
+
+        if enterprise.auto_archive?
+            expiry_date = DateTime.now.send("#{enterprise.unit_of_expiry_age}_ago", enterprise.expiry_age_for_resources)
+            enterprise_resources = Resource.joins(:folder).where(folders: {group_id: nil}).where.not(folders: {enterprise_id: nil}).where("resources.created_at < ?", expiry_date).where(archived_at: nil)
+            
+            enterprise_resources.update_all(archived_at: DateTime.now) if enterprise_resources.any?
+        end
     end
 
     protected

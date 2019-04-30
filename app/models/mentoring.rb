@@ -9,4 +9,9 @@ class Mentoring < BaseClass
     
     # only allow one unique mentor per mentee
     validates_uniqueness_of :mentor, scope: [:mentee]
+
+    def self.active_mentorships(enterprise)
+      mentorship_user_ids = enterprise.users.ids
+      where('mentor_id IN (?) OR mentee_id IN (?)', mentorship_user_ids, mentorship_user_ids)
+    end
 end
