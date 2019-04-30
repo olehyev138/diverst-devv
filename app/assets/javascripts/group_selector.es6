@@ -70,7 +70,6 @@ class GroupSelector {
         this.groupsElement = $("." + CLASSES.CONTENT, this.$element);
         // preselectedGroups is an optional array of group IDs to pre-select
         this.preselectedGroups = this.$element.data('preselected-groups') || null;
-        console.log(this.preselectedGroups);
 
         // Store the data on the object so we can use it when expanding, etc.
         this.data = {};
