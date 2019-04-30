@@ -182,7 +182,7 @@ RSpec.describe InitiativesController, type: :controller do
         end 
 
         it 'produces a flash notice' do 
-          expect(flash[:notice]).to eq 'Please close expenses of past initiatives'
+          expect(flash[:notice]).to eq 'Please close expenses of past events'
         end
 
         it 'redirects back' do  
@@ -221,29 +221,59 @@ RSpec.describe InitiativesController, type: :controller do
     end
   end
 
-  describe "GET#attendees" do
+  describe "GET#export_attendees_csv" do
     let!(:group) { create :group, enterprise: user.enterprise }
     let!(:initiative) { create :initiative, owner_group: group }
     let!(:attendee) { create(:user) }
 
     context 'with logged in user' do
       login_user_from_let
-      before { initiative.update(attendees: [attendee]) }
-
-
-      it "render a csv file" do
-        get :attendees, group_id: group.id, id: initiative.id
-        expect(response.headers["Content-Type"]).to eq "text/csv"
+      before do 
+        allow(EventAttendeeDownloadJob).to receive(:perform_later)
+        request.env['HTTP_REFERER'] = 'back'  
+        initiative.update(attendees: [attendee])
+        get :export_attendees_csv, group_id: group.id, id: initiative.id
       end
 
-      it "render a csv with attendees of an initiative" do
-        get :attendees, group_id: group.id, id: initiative.id
-        expect(response.body.split("\n")[1]).to eq "#{ attendee.first_name },#{ attendee.last_name },#{ attendee.email }"
+      it 'returns to previous page' do
+        expect(response).to redirect_to 'back'
+      end
+
+      it "flashes" do
+          expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
+      end
+
+      it 'calls job' do 
+        expect(EventAttendeeDownloadJob).to have_received(:perform_later)
+      end
+
+      describe 'public activity' do
+        enable_public_activity
+
+        it 'creates public activity record' do
+          perform_enqueued_jobs do
+            expect{ get :export_attendees_csv, group_id: group.id, id: initiative.id }.to change(PublicActivity::Activity, :count).by(1)
+          end
+        end
+
+        describe 'activity record' do
+          let(:model) { initiative }
+          let(:owner) { user }
+          let(:key) { 'initiative.export_attendees' }
+
+          before {
+            perform_enqueued_jobs do
+              get :export_attendees_csv, group_id: group.id, id: initiative.id
+            end
+          }
+
+          include_examples'correct public activity'
+        end
       end
     end
 
     context "without a logged in user" do
-      before { get :attendees, group_id: group.id, id: initiative.id }
+      before { get :export_attendees_csv, group_id: group.id, id: initiative.id }
       it_behaves_like "redirect user to users/sign_in path"
     end
   end

@@ -1,7 +1,7 @@
 class InitiativesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group
-  before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo, :finish_expenses, :attendees]
+  before_action :set_initiative, only: [:edit, :update, :destroy, :show, :todo, :finish_expenses, :export_attendees_csv, :archive]
   before_action :set_segments, only: [:new, :create, :edit, :update]
   after_action :verify_authorized
 
@@ -86,11 +86,13 @@ class InitiativesController < ApplicationController
     authorize @initiative, :update?
   end
 
-  def attendees
+  def export_attendees_csv
     authorize @initiative, :update?
 
-    send_data User.basic_info_to_csv(users: @initiative.attendees),
-      filename: "attendees.csv"
+    EventAttendeeDownloadJob.perform_later(current_user.id, @initiative)
+    track_activity(@initiative, :export_attendees)
+    flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+    redirect_to :back
   end
 
   def export_csv
@@ -104,7 +106,7 @@ class InitiativesController < ApplicationController
     initiative_ids = Outcome.get_initiatives(@outcomes).select { |i| i.start >= @filter_from && i.start <= @filter_to }.map { |i| i.id }
 
     if Initiative.where(id: initiative_ids).any? {|initiative| initiative.unfinished_expenses? }
-      flash[:notice] = 'Please close expenses of past initiatives'
+      flash[:notice] = 'Please close expenses of past events'
       redirect_to :back
     else
       InitiativesDownloadJob.perform_later(current_user.id, @group.id, initiative_ids)
@@ -113,6 +115,20 @@ class InitiativesController < ApplicationController
       redirect_to :back
     end
   end
+
+  def archive
+    authorize @initiative, :update?
+
+    @initiatives = @group.initiatives.where(archived_at: nil).all
+    @initiative.update(archived_at: DateTime.now)
+    track_activity(@initiative, :archive)
+
+    respond_to do |format|
+      format.html { redirect_to :back }
+      format.js
+    end
+  end
+
 
   protected
 
@@ -157,6 +173,7 @@ class InitiativesController < ApplicationController
         :picture,
         :budget_item_id,
         :estimated_funding,
+        :archived_at,
         :from, # For filtering
         :to, # For filtering
         participating_group_ids: [],

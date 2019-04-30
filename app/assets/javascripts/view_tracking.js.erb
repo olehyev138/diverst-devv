@@ -4,12 +4,7 @@ $(document).on('ready page:load', function() {
       if ( link.attr("target") != "_blank" ) {
         event.preventDefault();
       }
-      
-      var link = $(this);
-      if ( link.attr("target") != "_blank" ) {
-        event.preventDefault();
-      }
-      
+
       id = link.attr("data-trackable-id");
       type = link.attr("data-trackable-type");
       
@@ -30,8 +25,10 @@ $(document).on('ready page:load', function() {
       
     $.post('/views/track', {view: params},
       function() {
-        if ( link.attr("target") != "_blank" ) {
-          window.location.href = link.attr("href");
+        if ( link.attr("data-remote") != "true" ) {
+          if ( link.attr("target") != "_blank" ) {
+            window.location.href = link.attr("href");
+          }
         }
       });
   });

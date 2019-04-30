@@ -8,7 +8,7 @@ RSpec.describe GenericGraphsMentoringSessionsDownloadJob, type: :job do
             enterprise = create(:enterprise)
             user = create(:user, :enterprise => enterprise)
 
-            expect{ subject.perform(user.id, enterprise.id, c_t(:erg)) }
+            expect{ subject.perform(user.id, enterprise.id, c_t(:erg), nil, nil) }
               .to change(CsvFile, :count).by(1)
         end
     end

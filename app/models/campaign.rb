@@ -88,39 +88,6 @@ class Campaign < BaseClass
       end
     end
 
-    def contributions_per_erg
-      graph = Answer.get_graph
-      graph.set_enterprise_filter(field: 'author.enterprise_id', value: enterprise.id )
-      graph.formatter.title = 'Contributions per erg'
-      graph.formatter.type = 'pie'
-
-      graph.query = graph.query.filter_agg(field: 'question.campaign_id', value: self.id) { |q|
-        q.terms_agg(field: 'contributing_group.name')
-      }
-
-      graph.formatter.add_elements(graph.search)
-      graph.build
-    end
-
-    def top_performers
-      # Total votes for all answers per user
-
-      graph = Answer.get_graph
-      graph.set_enterprise_filter(field: 'author.enterprise_id', value: enterprise.id )
-      graph.formatter.title = 'Total votes per user'
-
-      graph.query = graph.query.filter_agg(field: 'question.campaign_id', value: self.id) { |q|
-        q.terms_agg(field: 'author.id') { |qq| qq.sum_agg(field: 'upvote_count') }
-      }
-
-      graph.formatter.y_parser.parse_chain = graph.formatter.y_parser.sum
-      graph.formatter.y_parser.extractor = -> (e, _) { e.round }
-      graph.formatter.x_parser.extractor = -> (e, _) { User.find(e[:key]).name }
-
-      graph.formatter.add_elements(graph.search)
-      graph.build
-    end
-
     # Returns the % of questions that have been closed
     def progression
         return 0 if questions.count == 0

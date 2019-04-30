@@ -71,6 +71,12 @@ class EnterprisesController < ApplicationController
   def edit_auth
     authorize @enterprise
   end
+
+  def auto_archive_switch
+    authorize @enterprise, :auto_archive_settings_manage?
+    @enterprise.archive_switch 
+    render nothing: true
+  end
   
   def update_auth
     authorize @enterprise, :edit_auth?
@@ -200,6 +206,9 @@ class EnterprisesController < ApplicationController
         :plan_module_enabled,
         :name,
         :scope_module_enabled,
+        :auto_archive,
+        :expiry_age_for_resources,
+        :unit_of_expiry_age,
         theme: [
           :id,
           :primary_color,

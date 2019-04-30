@@ -18,12 +18,12 @@ class SocialLinkPolicy < ApplicationPolicy
     end
     
     def update?
-        manage?
+        return true if manage?
         @record.author == @user
     end
     
     def destroy?
-        manage?
+        return true if manage?
         @record.author == @user
     end
   
