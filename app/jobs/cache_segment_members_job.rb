@@ -62,6 +62,6 @@ class CacheSegmentMembersJob < ActiveJob::Base
   private
 
   def set_status
-    @segment&.job_status = true
+    @segment.update_column(:job_status, 0)
   end
 end

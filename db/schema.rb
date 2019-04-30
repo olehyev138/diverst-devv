@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190426151906) do
+ActiveRecord::Schema.define(version: 20190430153026) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -1186,11 +1186,12 @@ ActiveRecord::Schema.define(version: 20190426151906) do
   create_table "segments", force: :cascade do |t|
     t.integer  "enterprise_id",       limit: 4
     t.string   "name",                limit: 191
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
     t.integer  "owner_id",            limit: 4
     t.string   "active_users_filter", limit: 191
     t.integer  "limit",               limit: 4
+    t.integer  "job_status",          limit: 4,   default: 0, null: false
   end
 
   create_table "shared_metrics_dashboards", force: :cascade do |t|

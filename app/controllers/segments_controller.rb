@@ -106,7 +106,6 @@ class SegmentsController < ApplicationController
     authorize @segment, :show?
 
     respond_to do |format|
-      byebug
       format.json {
         render json: { status: @segment.job_status }
       }
