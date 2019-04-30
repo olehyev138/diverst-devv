@@ -31,6 +31,7 @@
           <div class="col sm-5 pull-right">
             <%= f.input :limit %>
           </div>
+          <% f.association :parent, as: :hidden %>
         </div>
       </div>
       <div class="card__section pad-top">
@@ -88,7 +89,7 @@
   <div class="sub_segments">
     <div class="content__header">
       <h1>Sub-<%= c_t(:segment).pluralize %></h1>
-      <%= link_to "+ New Sub-#{ c_t(:segment)}", new_segment_sub_segment_path(@segment), class: "btn btn--primary" if SegmentPolicy.new(current_user, Segment).new? %>
+      <%= link_to "+ New Sub-#{ c_t(:segment)}", new_segment_path(@segment, parent: @segment.id), class: "btn btn--primary" if SegmentPolicy.new(current_user, Segment).new? %>
     </div>
 
     <div class="content__main">

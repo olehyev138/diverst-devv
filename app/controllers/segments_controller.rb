@@ -37,6 +37,8 @@ class SegmentsController < ApplicationController
     @segment = current_user.enterprise.segments.new
     @segment.id = -1
 
+    @segment.parent = segment_params[:parent] if segment_params[:parent].present?
+
     render :show
   end
 
@@ -129,6 +131,7 @@ class SegmentsController < ApplicationController
         :name,
         :active_users_filter,
         :limit,
+        :parent,
         field_rules_attributes: [
           :id,
           :field_id,
