@@ -146,7 +146,6 @@
 
       // Get initial state
       $.get("<%= segment_status_segment_path(@segment) %>", function(data) {
-        console.log(data.status);
         // Segment member caching job is active
         if (data.status === 'active') {
 
@@ -159,8 +158,6 @@
           // Create polling interval
           let interval = setInterval(function () {
             $.get("<%= segment_status_segment_path(@segment) %>", function (data) {
-              console.log(data.status);
-
               // Segment member caching job is complete
               if (data.status === 'inactive') {
                 // Stop polling
