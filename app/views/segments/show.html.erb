@@ -105,12 +105,11 @@
 <% end %>
 
 <script>
-
-  let membersTable;
-
   <% unless @segment.new_record? %>
     $(document).on('page:change', function() {
       $(document).off('page:change');
+
+      let membersTable;
 
       membersTable = $('#segment-members-table').DataTable({
         deferLoading: -1,
@@ -180,11 +179,9 @@
     });
   <% end %>
 
-  let group_rule_count = 0;
+  var group_rule_count = 0;
 
   $(document).on('ready page:load', function() {
-    group_rule_count = 0;
-
     $('.group-rule').each(function (i) {
       setup_group_rule($(this));
     });
