@@ -79,9 +79,16 @@ Rails.application.routes.draw do
       post 'restore_all'
     end
 
-    member do
-      patch 'restore'
+    member { patch 'restore' }
+  end
+
+  resources :archived_initiatives, only: [:index, :destroy] do 
+    collection do 
+      post 'delete_all'
+      post 'restore_all'
     end
+
+    member { patch 'restore' }
   end
 
   resources :enterprises do
@@ -113,6 +120,7 @@ Rails.application.routes.draw do
       get 'bias'
       patch 'delete_attachment'
       get 'calendar'
+      patch 'auto_archive_switch'
     end
 
     scope module: :enterprises do
@@ -160,12 +168,20 @@ Rails.application.routes.draw do
       get 'view_all'
     end
   end
+  
   post 'group_categories/update_all_sub_groups', to: 'group_categories#update_all_sub_groups', as: :update_all_sub_groups
+  patch '/groups/:id/auto_archive_switch', to: 'groups#auto_archive_switch', as: :auto_archive_switch
+  patch '/groups/:group_id/initiatives/:id/archive', to: 'initiatives#archive', as: :archive_group_initiative 
+  patch '/groups/:group_id/initiatives/:id/restore', to: 'initiatives#restore', as: :restore_group_initiative
+  patch 'initiatives/:initiative_id/resources/:id/restore', to: 'initiatives/resources#restore', as: :restore_initiative_resource
+  delete 'initiatives/:initiative_id/resources/:id/', to: 'initiatives/resources#destroy', as: :remove_initiative_resource
+
 
   resources :groups do
     collection do
       post :sort
       get 'get_all_groups'
+      get 'get_paginated_groups'
     end
     resources :budgets, only: [:index, :show, :new, :create, :destroy] do
       post 'approve'
@@ -301,17 +317,20 @@ Rails.application.routes.draw do
             get 'time_series'
           end
         end
-        resources :resources
+        resources :resources do 
+          member { patch 'archive' }
+        end
       end
 
       member do
         get 'todo'
         post 'finish_expenses'
-        get 'attendees'
+        get 'export_attendees_csv'
       end
 
       collection do
         get 'export_csv'
+        get 'archived'
       end
     end
 
@@ -554,13 +573,67 @@ Rails.application.routes.draw do
 
   resources :mentorship_ratings
 
-  resources :metrics_dashboards do
-    get 'shared_dashboard'
 
-    resources :graphs do
+  namespace :metrics do
+    resources :overview, controller: :overview_graphs, only: [:index]
+    resources :users, controller: :user_graphs, only: [:index] do
+      collection do
+        get 'users_per_group'
+        get 'users_per_segment'
+        get 'user_growth'
+        get 'user_groups_intersection'
+      end
+    end
+
+    resources :groups, controller: :group_graphs, only: [:index] do
+      collection do
+        get 'initiatives'
+        get 'social_media'
+        get 'resources'
+
+        get 'group_population'
+        get 'initiatives_per_group'
+        get 'messages_per_group'
+        get 'views_per_group'
+        get 'views_per_folder'
+        get 'views_per_resource'
+        get 'views_per_news_link'
+        get 'growth_of_groups'
+        get 'growth_of_resources'
+      end
+    end
+
+    resources :segments, controller: :segment_graphs, only: [:index] do
+      collection do
+        get 'segment_population'
+      end
+    end
+
+    resources :mentorships, controller: :mentorship_graphs, only: [:index] do
+      collection do
+        get 'user_mentorship_interest_per_group'
+        get 'mentoring_sessions_per_creator'
+        get 'mentoring_interests'
+      end
+    end
+
+    resources :campaigns, controller: :campaign_graphs, only: [:index] do
+      collection do
+        get 'contributions_per_erg'
+        get 'total_votes_per_user'
+      end
+    end
+
+    resources :metrics_dashboards do
       member do
-        get 'data'
-        get 'export_csv'
+        get 'shared_dashboard'
+      end
+
+      resources :graphs do
+        member do
+          get 'data'
+          get 'export_csv'
+        end
       end
     end
   end
@@ -601,5 +674,5 @@ Rails.application.routes.draw do
 
   match "*a", :to => "application#routing_error", :via => [:get, :post]
 
-  root to: 'metrics_dashboards#index'
+  root to: 'metrics/overview_graphs#index'
 end

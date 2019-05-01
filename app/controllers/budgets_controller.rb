@@ -87,7 +87,7 @@ class BudgetsController < ApplicationController
     authorize [@group], :update?, :policy_class => GroupBudgetPolicy
 
     if @group.initiatives.any? { |initiative| initiative.unfinished_expenses? }
-      flash[:notice] = "Please close expenses of past initiatives belonging to #{@group.name}"
+      flash[:notice] = "Please close expenses of past events belonging to #{@group.name}"
       redirect_to :back 
     else
       if AnnualBudgetManager.new(@group).reset

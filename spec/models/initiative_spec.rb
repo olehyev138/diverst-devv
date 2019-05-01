@@ -289,6 +289,7 @@ RSpec.describe Initiative, type: :model do
           'pillar' => {
             'outcome' => {
               'group' => {
+                'id' => object.pillar.outcome.group_id,
                 'enterprise_id' => object.pillar.outcome.group.enterprise_id,
                 'name' => object.pillar.outcome.group.name,
                 'parent_id' => object.pillar.outcome.group.parent_id
@@ -339,6 +340,32 @@ RSpec.describe Initiative, type: :model do
 
     it 'returns true for #unfinished_expenses?' do 
       expect(initiative.unfinished_expenses?).to eq true
+    end
+  end
+
+  describe '.archived_initiatives' do
+    let!(:enterprise) { create(:enterprise) }
+    let!(:group) { create(:group, enterprise: enterprise) }
+    let!(:initiative) { create(:initiative, owner_group: group) }
+    let!(:archived_initiatives) { create_list(:initiative, 2, archived_at: DateTime.now, owner_group: group) }
+    
+    it 'returns archived_initiatives' do 
+      expect(Initiative.archived_initiatives(enterprise)).to eq archived_initiatives
+    end
+  end
+
+  describe '.archive_expired_events' do 
+    let!(:group) { create(:group) }
+    let!(:initiative) { create(:initiative, owner_group: group) }
+    let!(:expired_initiatives) { create_list(:initiative, 2, start: DateTime.now.weeks_ago(4), end: DateTime.now.weeks_ago(3), owner_group: group) }
+
+    it 'does not archive any event when group auto archive is off' do 
+      expect{ Initiative.archive_expired_events(group) }.to change(Initiative.where.not(archived_at: nil), :count).by(0)
+    end
+
+    it 'archives expired events' do 
+      group.update auto_archive: true, expiry_age_for_events: 2, unit_of_expiry_age: 'weeks'
+      expect{ Initiative.archive_expired_events(group) }.to change(Initiative.where.not(archived_at: nil), :count).by(2)
     end
   end
 end

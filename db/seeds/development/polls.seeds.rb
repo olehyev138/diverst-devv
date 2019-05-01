@@ -1,6 +1,6 @@
 after 'development:segments' do
-  spinner = TTY::Spinner.new("[:spinner] Populating enterprise with polls...", format: :classic)
-  spinner.run('[DONE]') do |spinner|
+  spinner = TTY::Spinner.new(":spinner Populating enterprises with polls...", format: :spin_2)
+  spinner.run do |spinner|
     Enterprise.all.each do |enterprise|
       p = enterprise.polls.new(
         title: 'New Latino attraction at Disney World',
@@ -8,7 +8,8 @@ after 'development:segments' do
         groups: [enterprise.groups.first],
         segments: [enterprise.segments.first],
         status: 0,
-        owner: enterprise.users.sample, 
+        created_at: Faker::Time.between(enterprise.created_at + 1.day, 2.days.ago),
+        owner: enterprise.users.sample,
         nb_invitations: 10
       )
 
@@ -93,5 +94,6 @@ after 'development:segments' do
 
       p.save
     end
+    spinner.success("[DONE]")
   end
 end

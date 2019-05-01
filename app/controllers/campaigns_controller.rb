@@ -8,6 +8,11 @@ class CampaignsController < ApplicationController
   def index
     authorize Campaign
     @campaigns = policy_scope(Campaign)
+
+    respond_to do |format|
+      format.html
+      format.json { render json: { data: @campaigns.limit(10).map { |c| [c.id, c.title ] } } }
+    end
   end
 
   def new
@@ -66,9 +71,12 @@ class CampaignsController < ApplicationController
   def contributions_per_erg
     authorize @campaign, :show?
 
+    graph = Graph.new
+    graph.enterprise_id = current_user.enterprise_id
+
     respond_to do |format|
       format.json {
-        render json: @campaign.contributions_per_erg
+        render json: graph.contributions_per_erg(@campaign)
       }
       format.csv {
         CampaignContributionsDownloadJob.perform_later(current_user.id, @campaign.id, c_t(:erg))
@@ -81,9 +89,12 @@ class CampaignsController < ApplicationController
   def top_performers
     authorize @campaign, :show?
 
+    graph = Graph.new
+    graph.enterprise_id = current_user.enterprise_id
+
     respond_to do |format|
       format.json {
-        render json: @campaign.top_performers
+        render json: graph.top_performers(@campaign)
       }
       format.csv {
         CampaignTopPerformersDownloadJob.perform_later(current_user.id, @campaign.id)
@@ -92,6 +103,7 @@ class CampaignsController < ApplicationController
       }
     end
   end
+
 
   protected
 

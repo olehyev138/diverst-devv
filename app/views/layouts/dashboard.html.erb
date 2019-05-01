@@ -28,11 +28,17 @@
 
   <nav class="nav">
     <ul class="nav__list nav__list--primary">
+      <li class="nav__item">
+        <%= active_link_to metrics_overview_index_path, class: "nav__link", class_active: "nav__link--is-selected", active: [['metrics/' + controller_name], []] do %>
+          <%= inline_svg('icons/baseline-bar_chart-24px.svg', class: "icon nav__icon") %>
+          <span class="nav__text">Analyze</span>
+        <% end %>
+      </li>
       <% if manage_erg_root_path %>
         <li class="nav__item">
           <%= active_link_to manage_erg_root_path, class: "nav__link", class_active: "nav__link--is-selected", active: active_manage_erg_link? do %>
             <%= inline_svg('icons/manage.svg', class: "icon nav__icon") %>
-            <span class="nav__text">Manage <%= c_t(:erg) %></span>
+            <span class="nav__text">Manage</span>
           <% end %>
         </li>
       <% end %>

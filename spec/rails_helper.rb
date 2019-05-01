@@ -17,6 +17,7 @@ require 'support/referrer_helpers.rb'
 
 require 'public_activity/testing'
 PublicActivity.enabled = false
+require 'webmock/rspec'
 WebMock.allow_net_connect!
 
 require 'simplecov'
@@ -67,6 +68,12 @@ RSpec.configure do |config|
   config.include FeatureSpecRefactors::CustomHelpers
   config.include FeatureSpecRefactors::CustomMatchers
 
+  # Reset PhantomJS after each test - no noticeable performance impact
+  # https://github.com/teampoltergeist/poltergeist/issues/232#issuecomment-219450682
+  config.after :each do |example|
+    page.driver.restart if defined?(page.driver.restart)
+  end
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
@@ -94,7 +101,7 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
-  
+
   # Faker - clear random generator before each test, otherwise it will
   # reach its max and throw an error
   config.before(:each) do

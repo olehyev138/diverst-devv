@@ -49,6 +49,12 @@ class EnterprisePolicy < ApplicationPolicy
     @policy_group.sso_manage?
   end
 
+  def auto_archive_settings_manage?
+    return true if manage_all?
+    return true if basic_group_leader_permission?('auto_archive_manage')
+    @policy_group.auto_archive_manage?
+  end
+
   def diversity_manage?
     return true if manage_all?
     return true if basic_group_leader_permission?("diversity_manage")

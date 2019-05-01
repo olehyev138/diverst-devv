@@ -46,9 +46,9 @@ class Initiative < BaseClass
 
   scope :starts_between, ->(from, to) { where('start >= ? AND start <= ?', from, to) }
   scope :past, -> { where('end < ?', Time.current).order(start: :desc) }
-  scope :upcoming, -> { where('start > ?', Time.current).order(start: :asc) }
-  scope :ongoing, -> { where('start <= ?', Time.current).where('end >= ?', Time.current).order(start: :desc) }
-  scope :recent, -> { where(created_at: 60.days.ago..Date.tomorrow) }
+  scope :upcoming, -> { where('start > ? AND archived_at IS NULL', Time.current).order(start: :asc) }
+  scope :ongoing, -> { where('start <= ? AND archived_at IS NULL', Time.current).where('end >= ?', Time.current).order(start: :desc) }
+  scope :recent, -> { where(created_at: 60.days.ago..Date.tomorrow, archived_at: nil) }
   scope :of_segments, ->(segment_ids) {
     initiative_conditions = ["initiative_segments.segment_id IS NULL"]
     initiative_conditions << "initiative_segments.segment_id IN (#{ segment_ids.join(",") })" unless segment_ids.empty?
@@ -75,6 +75,7 @@ class Initiative < BaseClass
       indexes :pillar do
         indexes :outcome do
           indexes :group do
+            indexes :id, type: :integer
             indexes :enterprise_id, type: :integer
             indexes :parent_id, type: :integer
             indexes :name, type: :keyword
@@ -92,7 +93,7 @@ class Initiative < BaseClass
       options.merge(
         only: [:name, :created_at],
         include: { pillar: { include: { outcome: { include: { group: {
-          only: [:enterprise_id, :parent_id, :name],
+          only: [:id, :enterprise_id, :parent_id, :name],
           include: { parent: { only: [:name] } }
         } }, only: [] }, }, only: [] } }
       )
@@ -106,6 +107,18 @@ class Initiative < BaseClass
 
   def group
     owner_group || pillar.outcome.group
+  end
+
+  def enterprise
+    group.enterprise
+  end
+
+  def group_id
+    group.id 
+  end
+
+  def enterprise_id
+    enterprise.id
   end
 
   #need to trunc several special characters here
@@ -363,5 +376,17 @@ class Initiative < BaseClass
       #Else there is no source for money, so set funding to zero
       self.estimated_funding = 0
     end
+  end
+
+  def self.archived_initiatives(enterprise)
+    enterprise.initiatives.where.not(archived_at: nil)
+  end
+
+  def self.archive_expired_events(group)
+    return unless group.auto_archive?
+    expiry_date = DateTime.now.send("#{group.unit_of_expiry_age}_ago", group.expiry_age_for_events)
+    initiatives = group.initiatives.where("end < ?", expiry_date).where(archived_at: nil)
+
+    initiatives.update_all(archived_at: DateTime.now) if initiatives.any?
   end
 end

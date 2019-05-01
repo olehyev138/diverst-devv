@@ -134,7 +134,8 @@ module IsResources
 
     def fetch_all_resources
         folder_ids = Folder.where(group_id: current_user.enterprise.group_ids).ids + current_user.enterprise.folder_ids
-        @resources = Resource.where(folder_id: folder_ids).where.not(archived_at: nil).all
+        initiative_ids = current_user.enterprise.initiative_ids
+        @resources = Resource.unarchived_resources(folder_ids, initiative_ids)
     end
 
     def increment_views
