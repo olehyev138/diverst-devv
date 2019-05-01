@@ -20,7 +20,7 @@ FactoryBot.define do
       end
 
       after(:create) do |segment, evaluator|
-        evaluator.rules create_list(:segment_rule, evaluator.rules_count, segment: segment)
+        evaluator.field_rules create_list(:segment_rule, evaluator.rules_count, segment: segment)
       end
     end
   end

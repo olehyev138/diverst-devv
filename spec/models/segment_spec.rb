@@ -13,7 +13,11 @@ RSpec.describe Segment, type: :model do
     it{ expect(segment).to belong_to(:enterprise) }
     it{ expect(segment).to belong_to(:owner).class_name("User") }
 
-    it{ expect(segment).to have_many(:rules).class_name("SegmentRule") }
+    # Rules
+    it{ expect(segment).to have_many(:field_rules).class_name("SegmentRule") }
+    it{ expect(segment).to have_many(:order_rules).class_name("SegmentOrderRule") }
+    it{ expect(segment).to have_many(:group_rules).class_name("SegmentGroupScopeRule") }
+
     it{ expect(segment).to have_many(:users_segments) }
     it{ expect(segment).to have_many(:members).through(:users_segments).class_name("User").source(:user).dependent(:destroy) }
     it{ expect(segment).to have_many(:polls_segments) }
@@ -27,7 +31,11 @@ RSpec.describe Segment, type: :model do
 
     it{ expect(segment).to validate_presence_of(:name)}
     it{ expect(segment).to validate_presence_of(:enterprise) }
-    it{ expect(segment).to accept_nested_attributes_for(:rules).allow_destroy(true) }
+
+    # Nested rule attributes
+    it{ expect(segment).to accept_nested_attributes_for(:field_rules).allow_destroy(true) }
+    it{ expect(segment).to accept_nested_attributes_for(:order_rules).allow_destroy(true) }
+    it{ expect(segment).to accept_nested_attributes_for(:group_rules).allow_destroy(true) }
   end
 
   describe 'test validation' do

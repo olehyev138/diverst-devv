@@ -60,7 +60,7 @@ class Segment < BaseClass
   end
 
   def rules
-    field_rules
+    field_rules + order_rules + group_rules
   end
 
   def general_rules_followed_by?(user)
