@@ -1,22 +1,14 @@
 <%= simple_form_for @segment do |f| %>
   <div class="content__header">
-    <div class="flex-row flex-row--middle full-width">
-      <div class="flex-row__cell">
-        <h1><%= f.input :name, label: false, placeholder: 'Name', input_html: { style: "height: 50x; font-size: 18px;" }%></h1>
-      </div>
-      <div class="flex-row__cell">
-        <%= f.button :submit, input_html: { id: 'submit-button' } %>
-      </div>
+    <div class="grow"><%= f.input :name, label: false, placeholder: 'Segment Name', input_html: { style: "font-size: 18px; width: auto;" }%></div>
+    <div class="flex-row flex-row--middle">
       <% unless @segment.new_record? %>
         <div class="flex-row__cell">
-          <%= link_to "export targeted members", export_csv_segment_path(@segment, group_id: @group&.id), class: "btn btn--secondary hidden-xs" if current_user.is_admin? %>
+          <%= link_to "Export", export_csv_segment_path(@segment, group_id: @group&.id), class: "btn btn--secondary hidden-xs" if current_user.is_admin? %>
         </div>
       <% end %>
       <div class="flex-row__cell">
-        <h3>Population: <%= @segment.members.count %></h3>
-      </div>
-      <div id="job_status" style="display: none;" class="flex-row__cell">
-        <h3>Loading...</h3>
+        <%= f.button :submit, id: 'submit-button' %>
       </div>
     </div>
   </div>
@@ -24,12 +16,12 @@
   <div class="content__main">
     <div class="card">
       <div class="card__section card__section--border">
-        <div class="row">
+        <div class="row">`
           <div class="col sm-5">
-            <%= f.input :active_users_filter %>
+            <%= f.input :active_users_filter, include_blank: false %>
           </div>
           <div class="col sm-5 pull-right">
-            <%= f.input :limit %>
+            <%= f.input :limit, label: "Limit (Top N Users)" %>
           </div>
         </div>
       </div>
@@ -80,7 +72,22 @@
   </div>
 
   <% unless @segment.new_record? %>
-    <%= render 'members_table', source: segment_url(@segment, format: :json) %>
+    <br>
+    <div class="flex-row__cell">
+      <h3>Segment Users <span id="member-count-wrapper" style="display: none;">(<b><span id="member-count"></span></b>)</span></h3>
+    </div>
+    <br>
+
+    <div class="card">
+      <div class="card__section">
+        <div id="job_status" style="text-align: center; display: none;">
+          <div class="spinner spinner-primary" style="display: inline-block"></div>
+        </div>
+        <div id="segment-members-table-container">
+          <%= render 'members_table', source: segment_url(@segment, format: :json) %>
+        </div>
+      </div>
+    </div>
   <% end %>
 <% end %>
 
@@ -97,30 +104,85 @@
   </div>
 <% end %>
 
-<% unless @segment.new_record? %>
-  <script>
+<script>
+
+  let membersTable;
+
+  <% unless @segment.new_record? %>
     $(document).on('page:change', function() {
       $(document).off('page:change');
 
-      var table = $('#segment-members-table').DataTable({
+      membersTable = $('#segment-members-table').DataTable({
+        deferLoading: -1,
+        autoWidth: false,
         pagingType: "full_numbers",
         dom: "frtpl",
         language: {
           search: "",
-          searchPlaceholder: "Search..."
+          searchPlaceholder: "Search...",
+          emptyTable: "No users match your <%= c_t(:segment) %> rules"
         },
         serverSide: true,
-        ajax: { url: $(this).data('source'), type: 'GET', cache: false },
+        ajax: { url: "", type: 'GET' },
         order: []
       });
 
-      // Datatables refuses to set ajax url without this
-      table.ajax.url("<%= segment_url(@segment, format: :json) %>");
-      table.ajax.reload();
+      membersTable.on('preDraw', function () {
+        let memberCount = membersTable.page.info().recordsTotal;
+
+        // First load without data
+        if (memberCount === -1) {
+          membersTable.ajax.url("<%= segment_url(@segment, format: :json) %>"); // Set AJAX URL
+
+          // Don't set member count when not loading proper data
+          return;
+        }
+
+        $('#member-count').text(memberCount); // Set the member count text
+        $('#member-count-wrapper').show();
+      });
+
+      // ********** Cache segment member job handling **********
+
+      // Get initial state
+      $.get("<%= segment_status_segment_path(@segment) %>", function(data) {
+        console.log(data.status);
+        // Segment member caching job is active
+        if (data.status === 'active') {
+
+          // Hide/Show various elements
+          $('#job_status').show();
+          $('#submit-button').attr("disabled", true);
+          $('#segment-members-table-container').hide();
+          $('#member-count-wrapper').hide();
+
+          // Create polling interval
+          let interval = setInterval(function () {
+            $.get("<%= segment_status_segment_path(@segment) %>", function (data) {
+              console.log(data.status);
+
+              // Segment member caching job is complete
+              if (data.status === 'inactive') {
+                // Stop polling
+                clearInterval(interval);
+
+                // Show/Hide various elements
+                $('#job_status').hide();
+                $('#submit-button').attr("disabled", false);
+                $('#segment-members-table-container').show();
+
+                // Reload the table data
+                membersTable.ajax.reload();
+              }
+            });
+          }, 3000);
+        }
+        else
+          membersTable.ajax.reload();
+      });
     });
-  </script>
-<% end %>
-<script>
+  <% end %>
+
   let group_rule_count = 0;
 
   $(document).on('ready page:load', function() {
@@ -161,24 +223,6 @@
 
     $('#group-rules').on('cocoon:after-insert', function() {
       setup_group_rule($('.group-rule').last());
-    });
-
-    // get initial status - start poll if false
-    $.get("<%= segment_status_segment_path(@segment) %>", function(data) {
-      console.log(data);
-      if (data.status === 'active') {
-        $('#job_status').show();
-        let interval = setInterval(function () {
-          $.get("<%= segment_status_segment_path(@segment) %>", function (data) {
-            console.log(data);
-            if (data.status === 'inactive') {
-              clearInterval(interval);
-              console.log('donzo');
-              $('#job_status').hide();
-            }
-          });
-        }, 3000);
-      }
     });
   });
 

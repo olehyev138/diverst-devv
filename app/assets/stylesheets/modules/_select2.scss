@@ -1,5 +1,9 @@
 // Select2
 
+.select2 {
+  width: 100% !important;
+}
+
 .select2-selection__choice {
   background-color: $diverst-grey !important;
   border: none !important;
@@ -73,4 +77,8 @@ select[readonly].select + .select2-container {
   .select2-selection__clear {
     display: none;
   }
+}
+
+select[readonly].select + .select2-container .select2-selection__choice__remove {
+  display: none !important;
 }
