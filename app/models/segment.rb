@@ -59,7 +59,7 @@ class Segment < BaseClass
   end
 
   def rules
-    field_rules
+    field_rules + order_rules + group_rules
   end
 
   def segment_rule_values_is_nil(attributes)
