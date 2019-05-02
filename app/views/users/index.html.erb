@@ -3,7 +3,15 @@
   <div class="flex-row flex-row--middle">
     <% if UserPolicy.new(current_user, User).create? %>
       <div class="flex-row__cell">
-        <%= link_to "Export CSV", export_csv_users_path, class: "btn btn--secondary hidden-xs", role: "button", 'aria-label': "Export CSV" %>
+        <%= active_link_to 'ExportSettings&nbsp;<span class="caret"></span>'.html_safe, "", "aria-label":"ExportSettings", "aria-control": "navigation", "data-jq-dropdown": "#export_settings", class: "btn btn--secondary hidden-xs", class_active: "secondary-header__tab--is-selected", active: :exclusive %>
+          <nav id="export_settings" class="jq-dropdown jq-dropdown-tip">
+            <ul class="jq-dropdown-menu">
+              <li><%= link_to "Export All Users", export_csv_users_path(export_csv_params: "all_users") %></li>
+              <li><%= link_to 'Export Active Users', export_csv_users_path(export_csv_params: "active_users") %></li>
+              <li><%= link_to 'Export Inactive Users', export_csv_users_path(export_csv_params: "inactive_users") %></li>
+              <li><%= link_to 'Export Only Group Leaders', export_csv_users_path(export_csv_params: "group_leaders") %></li>
+            </ul>
+          </nav>
       </div>
     <% end %>
      <% if UserPolicy.new(current_user, User).create? %>
