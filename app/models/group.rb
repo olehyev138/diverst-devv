@@ -343,12 +343,12 @@ class Group < BaseClass
     end
   end
 
-  def membership_list_csv
-    total_nb_of_members = active_members.count
+  def membership_list_csv(group_members)
+    total_nb_of_members = group_members.count
     CSV.generate do |csv|
       csv << ["first_name", "last_name", "email_address"]
 
-      active_members.each do |member|
+      group_members.each do |member|
         membership_list_row = [ member.first_name,
                                 member.last_name,
                                 member.email
