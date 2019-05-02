@@ -42,14 +42,15 @@ class Segment < BaseClass
   before_save { self.job_status = 1 }
   after_commit :cache_segment_members, on: [:create, :update]
 
-  before_destroy :remove_parent_segment
-
   validates_presence_of :enterprise
 
   # Rule attributes
   accepts_nested_attributes_for :field_rules, reject_if: :segment_rule_values_is_nil, allow_destroy: true
   accepts_nested_attributes_for :order_rules, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_rules, reject_if: :all_blank, allow_destroy: true
+
+  scope :all_parents,     -> {where(:parent_id => nil)}
+  scope :all_children,    -> {where.not(:parent_id => nil)}
 
   def ordered_members
     order_rules.reduce(members) { |members, rule| members.order(rule.field_name => rule.operator_name) }
@@ -72,11 +73,6 @@ class Segment < BaseClass
     else
       return true
     end
-  end
-
-  def remove_parent_segment
-    return if self.parent_segment.nil?
-    self.parent_segment.destroy
   end
 
   def cache_segment_members

@@ -37,13 +37,14 @@ class SegmentsController < ApplicationController
     @segment = current_user.enterprise.segments.new
     @segment.id = -1
 
-    @segment.parent = segment_params[:parent] if segment_params[:parent].present?
+    @segment.parent = Segment.find(params[:parent_id]) if params[:parent_id].present?
 
     render :show
   end
 
   def create
     authorize Segment
+
     @segment = current_user.enterprise.segments.new(segment_params)
 
     if @segment.save
@@ -59,7 +60,7 @@ class SegmentsController < ApplicationController
   def show
     authorize @segment
 
-    @sub_segments = @segment.sub_segments.includes(:members)
+    @sub_segments = @segment.children
     @members = @segment.ordered_members
 
     respond_to do |format|
@@ -71,7 +72,7 @@ class SegmentsController < ApplicationController
   def edit
     authorize @segment
 
-    @sub_segments = @segment.sub_segments.includes(:members)
+    @sub_segments = @segment.children
     @members = @segment.ordered_members
 
     render :show
@@ -121,7 +122,7 @@ class SegmentsController < ApplicationController
   end
 
   def set_segments
-    @segments = policy_scope(Segment).includes(:parent_segment).where(:segmentations => {:id => nil}).distinct
+    @segments = policy_scope(Segment).all_parents
   end
 
   def segment_params
@@ -131,7 +132,7 @@ class SegmentsController < ApplicationController
         :name,
         :active_users_filter,
         :limit,
-        :parent,
+        :parent_id,
         field_rules_attributes: [
           :id,
           :field_id,
