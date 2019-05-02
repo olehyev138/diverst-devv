@@ -13,11 +13,8 @@ class Segment < BaseClass
     active: 1
   }
 
-  has_one :parent_segment, class_name: "Segmentation", foreign_key: :child_id
-  has_one :parent, class_name: 'Segment', through: :parent_segment, source: :parent
-
-  has_many :children, class_name: "Segmentation", foreign_key: :parent_id, dependent: :destroy
-  has_many :sub_segments, class_name: 'Segment', through: :children, source: :child, dependent: :destroy
+  belongs_to :parent, class_name: "Segment", foreign_key: :parent_id
+  has_many :children, class_name: "Segment", foreign_key: :parent_id, dependent: :destroy
 
   belongs_to :enterprise
   belongs_to :owner, class_name: "User"
