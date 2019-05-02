@@ -26,7 +26,7 @@ class GroupDatatable < AjaxDatatablesRails::Base
     records.map do |record|
       [ 
         record.id,
-        ActionController::Base.helpers.sanitize(record.name)
+        ActionController::Base.helpers.sanitize(record.name).gsub('&amp;', '&')
       ]
     end
   end
