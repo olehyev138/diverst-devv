@@ -3,8 +3,7 @@ class Initiatives::ResourcesController < ApplicationController
 
   include IsResources
 
-  layout 'plan'
-
+  layout 'erg'
 
   def destroy
     initiative_ids = current_user.enterprise.initiative_ids
