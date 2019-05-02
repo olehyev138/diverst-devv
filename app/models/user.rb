@@ -111,6 +111,10 @@ class User < BaseClass
 
     accepts_nested_attributes_for :availabilities, :allow_destroy => true
 
+    def last_notified_date
+        last_group_notification_date&.to_date
+    end
+
     def add_to_default_mentor_group
         if mentor_changed? || mentee_changed?
             DefaultMentorGroupMemberUpdateJob.perform_later(id, mentor, mentee)
