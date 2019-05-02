@@ -27,7 +27,7 @@ class UserGroupNotificationJob < ActiveJob::Base
         end
 
         if have_updates?(groups)
-          UserGroupMailer.notification(user, groups).deliver_now
+          UserGroupMailer.notification(user, groups).deliver_now unless user.last_group_notification_date.to_date == DateTime.now.to_date
         end
       end
     end
