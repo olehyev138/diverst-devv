@@ -37,6 +37,7 @@ class Segment < BaseClass
   has_many :members, class_name: 'User', through: :users_segments, source: :user, dependent: :destroy
 
   validates_presence_of :name
+  validates_presence_of :active_users_filter
   validates :name, uniqueness: { scope: :enterprise_id }
 
   before_save { self.job_status = 1 }
@@ -45,7 +46,7 @@ class Segment < BaseClass
   validates_presence_of :enterprise
 
   # Rule attributes
-  accepts_nested_attributes_for :field_rules, reject_if: :segment_rule_values_is_nil, allow_destroy: true
+  accepts_nested_attributes_for :field_rules, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :order_rules, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_rules, reject_if: :all_blank, allow_destroy: true
 
@@ -57,11 +58,7 @@ class Segment < BaseClass
   end
 
   def rules
-    field_rules
-  end
-
-  def segment_rule_values_is_nil(attributes)
-    attributes['values'].nil?
+    field_rules + order_rules + group_rules
   end
 
   def general_rules_followed_by?(user)

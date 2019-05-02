@@ -1,6 +1,9 @@
 class SegmentOrderRule < BaseClass
   belongs_to :segment
 
+  validates_presence_of :field
+  validates_presence_of :operator
+
   def self.fields
     {
       sign_in_count: 0,

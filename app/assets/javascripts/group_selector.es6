@@ -30,24 +30,24 @@ const CLASSES = {
     SEARCH_INPUT: 'search-input',
     SEARCH_BUTTON: 'search-btn',
     CLEAR_SEARCH_BUTTON: 'clear-search-btn'
-}
+};
 
 const EXPAND_BUTTON_TEXT = {
     EXPAND: "+",
     COLLAPSE: "&ndash;"
-}
+};
 
 const PAGINATION_TEXT = {
     PREVIOUS: "&lsaquo;",
     NEXT: "&rsaquo;",
     FIRST: "&laquo;",
     LAST: "&raquo;"
-}
+};
 
 const DEFAULT_GROUP_TEXT = {
     SINGULAR: "group",
     PLURALIZED: "groups"
-}
+};
 
 // ----- Group Selector -----
 // Reads from 2..3 data attributes on the group selector element itself
@@ -70,7 +70,6 @@ class GroupSelector {
         this.groupsElement = $("." + CLASSES.CONTENT, this.$element);
         // preselectedGroups is an optional array of group IDs to pre-select
         this.preselectedGroups = this.$element.data('preselected-groups') || null;
-        console.log(this.preselectedGroups);
 
         // Store the data on the object so we can use it when expanding, etc.
         this.data = {};

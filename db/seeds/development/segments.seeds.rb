@@ -72,7 +72,7 @@ after 'development:enterprise' do
         )
 
         segment[:rules].each do |rule|
-          s.rules.new(
+          s.field_rules.new(
             field: rule[:field].call(enterprise),
             operator: rule[:operator],
             values: rule[:values]

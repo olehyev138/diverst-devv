@@ -3,6 +3,9 @@ class SegmentGroupScopeRule < BaseClass
   has_many :segment_group_scope_rule_groups
   has_many :groups, through: :segment_group_scope_rule_groups
 
+  validates_presence_of :operator
+  validate :has_at_least_one_group
+
   def self.operators
     {
       join: 0,
@@ -27,6 +30,10 @@ class SegmentGroupScopeRule < BaseClass
   end
 
   private
+
+  def has_at_least_one_group
+    !groups.empty?
+  end
 
   def user_groups_intersection(group_ids, users)
     # returns an array
