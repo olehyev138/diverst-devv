@@ -58,6 +58,10 @@ class Segment < BaseClass
   end
 
   def rules
+    field_rules
+  end
+
+  def all_rules
     field_rules + order_rules + group_rules
   end
 

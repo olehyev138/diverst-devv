@@ -145,6 +145,7 @@
       // ********** Cache segment member job handling **********
 
       // Get initial state
+      let interval = null;
       $.get("<%= segment_status_segment_path(@segment) %>", function(data) {
         // Segment member caching job is active
         if (data.status === 'active') {
@@ -156,7 +157,7 @@
           $('#member-count-wrapper').hide();
 
           // Create polling interval
-          let interval = setInterval(function () {
+          interval = setInterval(function () {
             $.get("<%= segment_status_segment_path(@segment) %>", function (data) {
               // Segment member caching job is complete
               if (data.status === 'inactive') {
@@ -177,6 +178,11 @@
         else
           membersTable.ajax.reload();
       });
+
+      // Clear interval on unload
+      $(window).unload(function () {
+        clearInterval(interval);
+      })
     });
   <% end %>
 
