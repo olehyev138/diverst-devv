@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190430153026) do
+ActiveRecord::Schema.define(version: 20190502185618) do
 
   create_table "activities", force: :cascade do |t|
     t.integer  "trackable_id",   limit: 4
@@ -1173,16 +1173,6 @@ ActiveRecord::Schema.define(version: 20190430153026) do
     t.datetime "updated_at",               null: false
   end
 
-  create_table "segmentations", force: :cascade do |t|
-    t.integer  "parent_id",  limit: 4
-    t.integer  "child_id",   limit: 4
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
-  end
-
-  add_index "segmentations", ["child_id"], name: "fk_rails_9a097e6024", using: :btree
-  add_index "segmentations", ["parent_id", "child_id"], name: "index_segmentations_on_parent_id_and_child_id", unique: true, using: :btree
-
   create_table "segments", force: :cascade do |t|
     t.integer  "enterprise_id",       limit: 4
     t.string   "name",                limit: 191
@@ -1192,7 +1182,10 @@ ActiveRecord::Schema.define(version: 20190430153026) do
     t.string   "active_users_filter", limit: 191
     t.integer  "limit",               limit: 4
     t.integer  "job_status",          limit: 4,   default: 0, null: false
+    t.integer  "parent_id",           limit: 4
   end
+
+  add_index "segments", ["parent_id"], name: "index_segments_on_parent_id", using: :btree
 
   create_table "shared_metrics_dashboards", force: :cascade do |t|
     t.integer "user_id",              limit: 4
@@ -1451,7 +1444,6 @@ ActiveRecord::Schema.define(version: 20190430153026) do
   add_foreign_key "reward_actions", "enterprises"
   add_foreign_key "rewards", "enterprises"
   add_foreign_key "rewards", "users", column: "responsible_id"
-  add_foreign_key "segmentations", "segments", column: "child_id"
   add_foreign_key "shared_metrics_dashboards", "metrics_dashboards"
   add_foreign_key "shared_metrics_dashboards", "users"
   add_foreign_key "user_reward_actions", "reward_actions"

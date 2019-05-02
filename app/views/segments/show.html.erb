@@ -23,6 +23,7 @@
           <div class="col sm-5 pull-right">
             <%= f.input :limit, label: ("Limit" + ' <span class="tooltipster" title="Take the top N users. Ex. \'50\' for the top 50 users" style="height: 14px;">' + inline_svg('icons/information.svg', size: "14px") + "</span>").html_safe, label_html: { style: "display: inline-block" } %>
           </div>
+          <%= f.association :parent, as: :hidden %>
         </div>
       </div>
       <div class="card__section pad-top">
@@ -95,7 +96,7 @@
   <div class="sub_segments">
     <div class="content__header">
       <h1>Sub-<%= c_t(:segment).pluralize %></h1>
-      <%= link_to "+ New Sub-#{ c_t(:segment)}", new_segment_sub_segment_path(@segment), class: "btn btn--primary" if SegmentPolicy.new(current_user, Segment).new? %>
+      <%= link_to "+ New Sub-#{ c_t(:segment)}", new_segment_path(@segment, parent_id: @segment.id), class: "btn btn--primary" if SegmentPolicy.new(current_user, Segment).new? %>
     </div>
 
     <div class="content__main">
@@ -144,6 +145,7 @@
       // ********** Cache segment member job handling **********
 
       // Get initial state
+      let interval = null;
       $.get("<%= segment_status_segment_path(@segment) %>", function(data) {
         // Segment member caching job is active
         if (data.status === 'active') {
@@ -155,7 +157,7 @@
           $('#member-count-wrapper').hide();
 
           // Create polling interval
-          let interval = setInterval(function () {
+          interval = setInterval(function () {
             $.get("<%= segment_status_segment_path(@segment) %>", function (data) {
               // Segment member caching job is complete
               if (data.status === 'inactive') {
@@ -176,6 +178,11 @@
         else
           membersTable.ajax.reload();
       });
+
+      // Clear interval on unload
+      $(window).unload(function () {
+        clearInterval(interval);
+      })
     });
   <% end %>
 

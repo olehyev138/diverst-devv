@@ -13,11 +13,8 @@ class Segment < BaseClass
     active: 1
   }
 
-  has_one :parent_segment, class_name: "Segmentation", foreign_key: :child_id
-  has_one :parent, class_name: 'Segment', through: :parent_segment, source: :parent
-
-  has_many :children, class_name: "Segmentation", foreign_key: :parent_id, dependent: :destroy
-  has_many :sub_segments, class_name: 'Segment', through: :children, source: :child, dependent: :destroy
+  belongs_to :parent, class_name: "Segment", foreign_key: :parent_id
+  has_many :children, class_name: "Segment", foreign_key: :parent_id, dependent: :destroy
 
   belongs_to :enterprise
   belongs_to :owner, class_name: "User"
@@ -46,8 +43,6 @@ class Segment < BaseClass
   before_save { self.job_status = 1 }
   after_commit :cache_segment_members, on: [:create, :update]
 
-  before_destroy :remove_parent_segment
-
   validates_presence_of :enterprise
 
   # Rule attributes
@@ -55,11 +50,18 @@ class Segment < BaseClass
   accepts_nested_attributes_for :order_rules, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :group_rules, reject_if: :all_blank, allow_destroy: true
 
+  scope :all_parents,     -> {where(:parent_id => nil)}
+  scope :all_children,    -> {where.not(:parent_id => nil)}
+
   def ordered_members
     order_rules.reduce(members) { |members, rule| members.order(rule.field_name => rule.operator_name) }
   end
 
   def rules
+    field_rules
+  end
+
+  def all_rules
     field_rules + order_rules + group_rules
   end
 
@@ -72,11 +74,6 @@ class Segment < BaseClass
     else
       return true
     end
-  end
-
-  def remove_parent_segment
-    return if self.parent_segment.nil?
-    self.parent_segment.destroy
   end
 
   def cache_segment_members
