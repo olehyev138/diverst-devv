@@ -21,7 +21,7 @@
             <%= f.input :active_users_filter, include_blank: false %>
           </div>
           <div class="col sm-5 pull-right">
-            <%= f.input :limit, label: "Limit (Top N Users)" %>
+            <%= f.input :limit, label: ("Limit" + ' <span class="tooltipster" title="Take the top N users. Ex. \'50\' for the top 50 users" style="height: 14px;">' + inline_svg('icons/information.svg', size: "14px") + "</span>").html_safe, label_html: { style: "display: inline-block" } %>
           </div>
           <%= f.association :parent, as: :hidden %>
         </div>

@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :segment_order_rule do
-    field 1
-    operator 0
+    segment
+    operator SegmentOrderRule.operators[SegmentOrderRule.operators.keys.sample]
+    field SegmentOrderRule.fields[SegmentOrderRule.fields.keys.sample]
   end
 end

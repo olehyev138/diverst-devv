@@ -28,6 +28,7 @@ RSpec.describe Segment, type: :model do
 
     it { expect(segment).to validate_presence_of(:name)}
     it { expect(segment).to validate_presence_of(:enterprise) }
+    it { expect(segment).to validate_presence_of(:active_users_filter) }
 
     # Nested rule attributes
     it { expect(segment).to accept_nested_attributes_for(:field_rules).allow_destroy(true) }
