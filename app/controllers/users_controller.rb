@@ -132,7 +132,8 @@ class UsersController < ApplicationController
 
   def export_csv
     authorize User, :index?
-    UsersDownloadJob.perform_later(current_user.id)
+    export_csv_params = params[:export_csv_params]
+    UsersDownloadJob.perform_later(current_user.id, export_csv_params)
     track_activity(current_user, :export_csv)
     flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
     redirect_to :back
