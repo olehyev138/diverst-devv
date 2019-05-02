@@ -29,7 +29,8 @@ RSpec.describe Segment, type: :model do
     it{ expect(segment).to have_many(:initiative_segments) }
     it{ expect(segment).to have_many(:initiatives).through(:initiative_segments) }
 
-    it{ expect(segment).to validate_presence_of(:name)}
+    it{ expect(segment).to validate_presence_of(:name) }
+    it{ expect(segment).to validate_presence_of(:active_users_filter) }
     it{ expect(segment).to validate_presence_of(:enterprise) }
 
     # Nested rule attributes
@@ -139,14 +140,6 @@ RSpec.describe Segment, type: :model do
       it "returns true" do
         user = create(:user, :active => false)
         segment = create(:segment, :active_users_filter => "only_inactive")
-
-        expect(segment.general_rules_followed_by?(user)).to be(true)
-      end
-    end
-    context "when nil" do
-      it "returns true" do
-        user = create(:user, :active => true)
-        segment = create(:segment, :active_users_filter => nil)
 
         expect(segment.general_rules_followed_by?(user)).to be(true)
       end

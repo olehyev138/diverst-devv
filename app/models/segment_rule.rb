@@ -2,6 +2,7 @@ class SegmentRule < BaseClass
   belongs_to :segment
   belongs_to :field
 
+  validates :field, presence: true
   validates :field_id, presence: true
   #TODO validate that operator is in @@operators
   validates :operator, presence: true

@@ -3,7 +3,14 @@ module Optionnable
 
   included do
     after_initialize :set_options_array
+    before_save :trim_options_whitespace
     attr_accessor :options
+  end
+
+  # Remove all whitespace except for new lines from options text
+  def trim_options_whitespace
+    return if options_text.nil?
+    options_text.delete!(" \t\r")
   end
 
   def serialize_value(value)
