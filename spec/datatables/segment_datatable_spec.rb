@@ -8,7 +8,7 @@ RSpec.describe SegmentDatatable do
   describe '#sortable_columns' do
   	it 'returns the sortable_columns' do 
   		table = SegmentDatatable.new(OpenStruct.new({current_user: user}), segments)
-  		expect(table.sortable_columns).to eq(['Segment.name', 'Segment.rules.count', 'Segment.created_at.to_s'])
+  		expect(table.sortable_columns).to eq(['Segment.name', 'Segment.all_rules.count', 'Segment.created_at.to_s'])
   	end
   end
 

@@ -329,7 +329,7 @@ class Enterprise < BaseClass
     end
 
     def generic_graphs_segment_population_csv(erg_text)
-      segments = self.segments.includes(:parent).where(:segmentations => {:parent_id => nil})
+      segments = self.segments.all_parents
 
       data = segments.map { |s|
           {
