@@ -80,14 +80,14 @@
         <h4><b>Scopes <span class="tooltipster" data-tooltip-content="#group_scopes_tooltip"><%= inline_svg('icons/information.svg', size: "14px") %></span></b></h4>
         <div class="tooltip_templates">
           <div id="group_scopes_tooltip">
-            Scope rules allow you to filter on users who are members of groups.
+            Scope rules allow you to filter on users based on their <%= c_t(:erg) %> memberships.
             <br>
             <br>
             <small>
               Operations:
               <ul>
-                <li><b>Join:</b> Users that are a member of <i>any</i> chosen group(s)</li>
-                <li><b>Intersect:</b> Users that are a member of <i>every</i> chosen group(s)</li>
+                <li><b>Join:</b> Users that are members of <i>any</i> chosen <%= c_t(:erg).pluralize %>.</li>
+                <li><b>Intersect:</b> Users that are members of <i>every</i> chosen <%= c_t(:erg) %>.</li>
               </ul>
             </small>
           </div>
