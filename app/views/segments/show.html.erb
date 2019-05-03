@@ -21,7 +21,14 @@
             <%= f.input :active_users_filter, include_blank: false %>
           </div>
           <div class="col sm-5 pull-right">
-            <%= f.input :limit, label: ("Limit" + ' <span class="tooltipster" title="Take the top N users. Ex. \'50\' for the top 50 users" style="height: 14px;">' + inline_svg('icons/information.svg', size: "14px") + "</span>").html_safe, label_html: { style: "display: inline-block" } %>
+            <%= f.input :limit, label: ("Limit" + ' <span class="tooltipster" data-tooltip-content="#limit_tooltip">' + inline_svg('icons/information.svg', size: "14px") + "</span>").html_safe %>
+            <div class="tooltip_templates">
+              <div id="limit_tooltip">
+                Take the top N users.
+                <br><br>
+                <small>Ex. '50' for the top 50 users.</small>
+              </div>
+            </div>
           </div>
           <%= f.association :parent, as: :hidden %>
         </div>
@@ -54,7 +61,15 @@
         </div>
       </div>
       <div class="card__section" id="order-rules-container" <%= 'style="display: none;"'.html_safe if @segment.order_rules.empty? %>>
-        <h4><b>Order</b></h4>
+        <h4><b>Order <span class="tooltipster" data-tooltip-content="#order_rules_tooltip"><%= inline_svg('icons/information.svg', size: "14px") %></span></b></h4>
+        <div class="tooltip_templates">
+          <div id="order_rules_tooltip">
+            Order rules allow you to sort your user list using user data.
+            <br>
+            <br>
+            <small>Tip: Combine this with 'Limit' to get a fixed top users list based on the order attribute.</small>
+          </div>
+        </div>
         <div id="order-rules">
           <%= f.simple_fields_for :order_rules, partial: 'order_rule' do |field| %>
             <%= render 'order_rule', f: field %>
@@ -62,7 +77,21 @@
         </div>
       </div>
       <div class="card__section" id="group-rules-container" <%= 'style="display: none;"'.html_safe if @segment.group_rules.empty? %>>
-        <h4><b>Scopes</b></h4>
+        <h4><b>Scopes <span class="tooltipster" data-tooltip-content="#group_scopes_tooltip"><%= inline_svg('icons/information.svg', size: "14px") %></span></b></h4>
+        <div class="tooltip_templates">
+          <div id="group_scopes_tooltip">
+            Scope rules allow you to filter on users who are members of groups.
+            <br>
+            <br>
+            <small>
+              Operations:
+              <ul>
+                <li><b>Join:</b> Users that are a member of <i>any</i> chosen group(s)</li>
+                <li><b>Intersect:</b> Users that are a member of <i>every</i> chosen group(s)</li>
+              </ul>
+            </small>
+          </div>
+        </div>
         <div id="group-rules">
           <%= f.simple_fields_for :group_rules, partial: 'group_rule' do |field| %>
             <%= render 'group_rule', f: field %>
