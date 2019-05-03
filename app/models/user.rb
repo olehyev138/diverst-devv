@@ -305,7 +305,7 @@ class User < BaseClass
             return false
         end
 
-        segment.rules.each do |rule|
+        segment.field_rules.each do |rule|
             unless rule.followed_by?(self)
                 part_of_segment = false
                 break
