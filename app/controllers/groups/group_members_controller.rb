@@ -190,7 +190,8 @@ class Groups::GroupMembersController < ApplicationController
 
   def export_group_members_list_csv
     authorize [@group], :update?, :policy_class => GroupMemberPolicy
-    GroupMemberListDownloadJob.perform_later(current_user.id, @group.id)
+    export_csv_params = params[:export_csv_params]
+    GroupMemberListDownloadJob.perform_later(current_user.id, @group.id, export_csv_params)
     track_activity(@group, :export_member_list)
     flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
     redirect_to :back
