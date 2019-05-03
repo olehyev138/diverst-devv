@@ -54,16 +54,18 @@
             <%= f.hidden_field :plan_module_enabled, value: 0 %>
             <%= f.input :plan_module_enabled %>
 
-            <div id="auto_archive_switch">
-                <%= f.hidden_field :auto_archive, value: 0 %>
-                <%= f.input :auto_archive, label: 'Auto Archive Switch' %>
-            </div>
+            <% if EnterprisePolicy.new(current_user, current_user.enterprise).auto_archive_settings_manage? %>
+                <div id="auto_archive_switch">
+                    <%= f.hidden_field :auto_archive, value: 0 %>
+                    <%= f.input :auto_archive, label: 'Auto Archive Switch' %>
+                </div>
 
-            <div id="auto_archive_settings" style='<%= @enterprise.auto_archive? ? "display: block" : "display: none" %>'>
-                <p>Set your expiry age for resources</p>
-                <%= f.input :unit_of_expiry_age %>
-                <%= f.input :expiry_age_for_resources %>
-            </div>
+                <div id="auto_archive_settings" style='<%= @enterprise.auto_archive? ? "display: block" : "display: none" %>'>
+                    <p>Set expiration settings for resources</p>
+                    <%= f.input :unit_of_expiry_age %>
+                    <%= f.input :expiry_age_for_resources %>
+                </div>
+            <% end %>    
             <br>
             
             <%= f.button :submit %>
