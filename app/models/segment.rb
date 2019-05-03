@@ -77,14 +77,76 @@ class Segment < BaseClass
   end
 
   def cache_segment_members
-    self.job_status = 1
     CacheSegmentMembersJob.perform_later self.id
   end
 
   def self.update_all_members
     Segment.all.find_each do |segment|
       segment.job_status = 1
+      segment.save!
       CacheSegmentMembersJob.perform_later segment.id
+    end
+  end
+
+  # Rule methods
+
+  def apply_field_rules(users)
+    users.select { |user| user.is_part_of_segment?(self) }
+  end
+
+  def apply_group_rules(users)
+    self.group_rules.reduce(users) do |users, rule|
+      rule.apply(users)
+    end
+  end
+
+  def apply_order_rules(users)
+    # Apply order rules only if limit present
+    # Order would have no effect on the segment population if limit was not present
+    #   1) Order will not be saved into the database, ie segment.members cannot be serialized with order
+    #   2) Order here to change the dataset which will only happen with a limit
+    #      - ie ordering on sign_in_count and limiting by 50, effects the segments total member population
+
+    return users unless self.limit.present?
+
+    # Ordering requires an ActiveRecord collection, users is passed as an array of User objects
+    users = enterprise.users.where('id in (?)', users.pluck(:id))
+
+    # Apply each order rule to the users list
+    self.order_rules.reduce(users) { |users, rule| users.order(rule.field_name => rule.operator_name) }
+  end
+
+  def update_members
+    old_members = self.members.all
+    new_members = self.enterprise.users.all
+
+    # reduce user dataset by applying:
+    #  - field rules
+    #  - group rules
+    #  - order rules
+    #  - limit
+    new_members = apply_field_rules(new_members)
+    new_members = apply_group_rules(new_members)
+    new_members = apply_order_rules(new_members)
+    new_members = new_members.take(self.limit) if self.limit.present?
+
+    # Compare new dataset to old
+    members_to_remove = old_members - new_members
+    members_to_add = new_members - old_members
+
+    # Delete old members
+    members_to_remove.each do |member|
+      self.members.delete(member)
+    end
+
+    # Finally add new members
+    members_to_add.each do |member|
+      self.members << member if !self.members.where(:id => member.id).exists?
+      begin-9
+        member.__elasticsearch__.update_document # Update user in Elasticsearch to reflect their new segment
+      rescue
+        next
+      end
     end
   end
 end

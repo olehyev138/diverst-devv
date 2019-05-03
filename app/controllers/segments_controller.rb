@@ -25,7 +25,7 @@ class SegmentsController < ApplicationController
 
   def enterprise_segments
     authorize Segment
-    @segments = policy_scope(Segment).includes(:parent_segment).where(:segmentations => {:id => nil}).distinct
+    @segments = policy_scope(Segment).all_parents
     respond_to do |format|
       format.html
       format.json { render json: EnterpriseSegmentDatatable.new(view_context, @segments) }
