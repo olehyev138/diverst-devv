@@ -84,8 +84,8 @@
           tmp * b / 50
         end
         
-- Don't omit the parameter parentheses when defining a lambda with parameters. [link]
-- Omit the parameter parentheses when defining a lambda with no parameters. [link]
+- Don't omit the parameter parentheses when defining a lambda with parameters.
+- Omit the parameter parentheses when defining a lambda with no parameters.
 - Use `_` for unused parameters
 - Prefer a guard clause when you can assert invalid data. A guard clause is a conditional statement at the top of a function that bails out as soon as it can.
 - Prefer keyword arguments over options hash
@@ -109,9 +109,8 @@
 
 # Comments
 
-- Good comments focus on the reader of the code, by helping them understand the code. The reader may not have the same understanding, experience and knowledge as you. As a writer, take this into accou
+- Good comments focus on the reader of the code, by helping them understand the code. The reader may not have the same understanding, experience and knowledge as you. As a writer, take this into account
 - Focus on why your code is the way it is if this is not obvious, not how your code works
-- Focus on why your code is the way it is if this is not obvious, not how your code works.
 - Avoid superfluous comments. If they are about how your code works, should you clarify your code instead?
 - A big problem with comments is that they can get out of sync with the code easily. When refactoring code, refactor the surrounding comments as well.
 - Generally use proper capitalization & punctuation
