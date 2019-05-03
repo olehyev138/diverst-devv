@@ -4,6 +4,7 @@ class Budget < BaseClass
   belongs_to :group
   belongs_to :approver, class_name: 'User', foreign_key: 'approver_id'
   belongs_to :requester, class_name: 'User', foreign_key: 'requester_id'
+  belongs_to :annual_budget
 
   has_many :checklists, dependent: :destroy
   has_many :budget_items, dependent: :destroy

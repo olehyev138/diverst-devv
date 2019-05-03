@@ -109,6 +109,8 @@ class Group < BaseClass
   has_many :sponsors, as: :sponsorable, dependent: :destroy
 
   has_many :children, class_name: 'Group', foreign_key: :parent_id, dependent: :destroy
+  has_many :annual_budgets, dependent: :destroy
+
   belongs_to :parent, class_name: 'Group', foreign_key: :parent_id
   belongs_to :group_category
   belongs_to :group_category_type
