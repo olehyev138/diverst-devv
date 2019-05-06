@@ -136,6 +136,9 @@
 
 <script>
   <% unless @segment.new_record? %>
+
+    var interval = null;
+
     $(document).on('page:change', function() {
       $(document).off('page:change');
 
@@ -174,7 +177,6 @@
       // ********** Cache segment member job handling **********
 
       // Get initial state
-      let interval = null;
       $.get("<%= segment_status_segment_path(@segment) %>", function(data) {
         // Segment member caching job is active
         if (data.status === 'active') {
@@ -208,10 +210,11 @@
           membersTable.ajax.reload();
       });
 
-      // Clear interval on unload
-      $(window).unload(function () {
+    });
+
+    // Clear interval on unload
+    $(document).on("page:before-unload", function() {
         clearInterval(interval);
-      })
     });
   <% end %>
 
