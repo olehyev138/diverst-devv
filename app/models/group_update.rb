@@ -2,7 +2,7 @@ class GroupUpdate < BaseClass
   include PublicActivity::Common
   include ContainsFields
 
-  belongs_to :owner, class_name: "User"
+  belongs_to :owner, class_name: 'User'
   belongs_to :group
 
   validates :created_at, presence: true
@@ -26,11 +26,11 @@ class GroupUpdate < BaseClass
 
   # The next update in chronological order
   def next
-    self.class.where(group: self.group).where("created_at > ?", self.created_at).order(created_at: :asc).first
+    self.class.where(group: self.group).where('created_at > ?', self.created_at).order(created_at: :asc).first
   end
 
   # The previous update in chronological order
   def previous
-    self.class.where(group: self.group).where("created_at < ?", self.created_at).order(created_at: :asc).last
+    self.class.where(group: self.group).where('created_at < ?', self.created_at).order(created_at: :asc).last
   end
 end

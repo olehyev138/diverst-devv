@@ -78,8 +78,8 @@ module NumericOptionnable
       }
     end
 
-    search_hash['query'] = {filtered: { filter: { bool: {should: terms }} } }
-    
+    search_hash['query'] = { filtered: { filter: { bool: { should: terms } } } }
+
     # Execute the elasticsearch query
     enterprise.search_users(search_hash)
   end
@@ -94,7 +94,7 @@ module NumericOptionnable
 
     ranges = data['aggregations']['ranges']['buckets'].map { |range_bucket| range_bucket['key'].gsub(/\.0/, '') }
 
-    return {
+    {
       series: series,
       categories: ranges,
       xAxisTitle: title

@@ -41,7 +41,7 @@ module Metrics
       graph = UserGroup.get_graph_builder
       graph.set_enterprise_filter(field: 'group.enterprise_id', value: enterprise_id)
       graph.formatter.type = 'bar'
-      graph.formatter.title = "User population per group"
+      graph.formatter.title = 'User population per group'
 
       graph.query = graph.query.terms_agg(field: 'group.name')
       graph.drilldown_graph(parent_field: 'group.parent.name')

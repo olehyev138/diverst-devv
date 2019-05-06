@@ -23,7 +23,7 @@ class MentorshipInterest < BaseClass
       options.merge(
         include: {
           user: { only: [:enterprise_id] },
-          mentoring_interest: { only: [:name] }}
+          mentoring_interest: { only: [:name] } }
       )
     )
   end

@@ -27,8 +27,8 @@ module BaseSearch
     DEFAULT_SIZE = 0
 
     def initialize
-      @query = {size: DEFAULT_SIZE}
-      @root_aggs = {aggs: {}}
+      @query = { size: DEFAULT_SIZE }
+      @root_aggs = { aggs: {} }
     end
 
     # Creates a filter aggregation
@@ -42,7 +42,7 @@ module BaseSearch
     end
 
     def bool_filter_agg(&block)
-      agg = {agg: { filter: { bool: {}}}}
+      agg = { agg: { filter: { bool: {} } } }
       base_agg(agg, block)
     end
 
@@ -63,7 +63,7 @@ module BaseSearch
     # @range - an elasticsearch range hash, consult elasticsearch documentation for more information
     # limitations - only supports a single range
     def date_range_agg(field:, range:, &block)
-      agg = { agg: { date_range: { field: field, ranges: [ range ] }}}
+      agg = { agg: { date_range: { field: field, ranges: [ range ] } } }
       base_agg(agg, block)
     end
 
@@ -85,7 +85,7 @@ module BaseSearch
     end
 
     def sum_agg(field:, &block)
-      agg = { agg: { sum: { field: field } }}
+      agg = { agg: { sum: { field: field } } }
       base_agg(agg, block)
     end
 
@@ -126,9 +126,7 @@ module BaseSearch
         #   - nest the pulled out aggs hash within our current aggregation hash
         response = (block.call ElasticsearchQuery.new)
         if response.present?
-          agg[:agg].merge!({ aggs:
-            response.build[:aggs]
-          })
+          agg[:agg][:aggs] = response.build[:aggs]
         end
       end
 

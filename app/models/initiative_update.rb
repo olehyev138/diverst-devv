@@ -1,7 +1,7 @@
 class InitiativeUpdate < BaseClass
   include ContainsFields
 
-  belongs_to :owner, class_name: "User"
+  belongs_to :owner, class_name: 'User'
   belongs_to :initiative
 
   def reported_for_date
@@ -27,11 +27,11 @@ class InitiativeUpdate < BaseClass
 
   # The next update in chronological order
   def next
-    self.class.where(initiative: self.initiative).where("created_at > ?", self.created_at).order(created_at: :asc).first
+    self.class.where(initiative: self.initiative).where('created_at > ?', self.created_at).order(created_at: :asc).first
   end
 
   # The previous update in chronological order
   def previous
-    self.class.where(initiative: self.initiative).where("created_at < ?", self.created_at).order(created_at: :asc).last
+    self.class.where(initiative: self.initiative).where('created_at < ?', self.created_at).order(created_at: :asc).last
   end
 end

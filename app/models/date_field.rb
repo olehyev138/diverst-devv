@@ -55,7 +55,7 @@ class DateField < Field
   def validates_rule_for_user?(rule:, user:)
     rule_date = Date.parse(rule.values_array[0])
     user_date = user.info[rule.field]
-    
+
     case rule.operator
     when SegmentRule.operators[:equals]
       user_date == rule_date
@@ -75,7 +75,7 @@ class DateField < Field
     ranges = []
     nb_buckets.times do |i|
       from = min + i * bucket_size
-      to = i == nb_buckets-1 ? max + 1 : from + bucket_size
+      to = i == nb_buckets - 1 ? max + 1 : from + bucket_size
 
       ranges << { key: "#{ Time.at(from).strftime('%m/%d/%Y') }-#{ Time.at(to).strftime('%m/%d/%Y') }", from: from, to: to }
     end

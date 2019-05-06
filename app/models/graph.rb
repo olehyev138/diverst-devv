@@ -1,5 +1,4 @@
 class Graph < BaseClass
-
   include Metrics::OverviewMetrics
   include Metrics::GroupMetrics
   include Metrics::UserMetrics
@@ -47,12 +46,12 @@ class Graph < BaseClass
     build_query(date_range)
     parse_query
 
-    return @graph_builder.build
+    @graph_builder.build
   end
 
   def collection
     return metrics_dashboard if metrics_dashboard.present?
-    return poll
+    poll
   end
 
   def has_aggregation?
@@ -107,7 +106,7 @@ class Graph < BaseClass
       # Nvd3 requires an irregular data format for nested term aggregations, use a helper to format it
       @graph_builder.stacked_nested_terms(elements)
     else
-      #@graph_builder.formatter.y_parser.parse_chain = @graph_builder.formatter.y_parser.date_range
+      # @graph_builder.formatter.y_parser.parse_chain = @graph_builder.formatter.y_parser.date_range
       parser.extractors[:y] = parser.date_range(key: :doc_count)
       @graph_builder.formatter.add_elements(elements)
     end

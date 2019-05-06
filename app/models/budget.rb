@@ -2,18 +2,18 @@ class Budget < BaseClass
   include PublicActivity::Common
 
   belongs_to :group
-  belongs_to :approver, class_name: "User", foreign_key: "approver_id"
-  belongs_to :requester, class_name: "User", foreign_key: "requester_id"
+  belongs_to :approver, class_name: 'User', foreign_key: 'approver_id'
+  belongs_to :requester, class_name: 'User', foreign_key: 'requester_id'
 
   has_many :checklists, dependent: :destroy
   has_many :budget_items, dependent: :destroy
   accepts_nested_attributes_for :budget_items, reject_if: :all_blank, allow_destroy: true
 
   scope :approved, -> { where(is_approved: true) }
-  scope :not_approved, -> { where(is_approved: false )}
-  scope :pending, -> { where(is_approved: nil )}
+  scope :not_approved, -> { where(is_approved: false) }
+  scope :pending, -> { where(is_approved: nil) }
 
-  #scope :with_available_funds, -> { where('available_amount > 0')}
+  # scope :with_available_funds, -> { where('available_amount > 0')}
 
   after_save :send_email_notification
 
@@ -37,7 +37,7 @@ class Budget < BaseClass
     end
   end
 
-  def self.pre_approved_events(group, user=nil)
+  def self.pre_approved_events(group, user = nil)
     related_budgets = self.where(group_id: group.id)
                           .approved
                           .includes(:budget_items)
@@ -59,12 +59,11 @@ class Budget < BaseClass
     flattened_items
   end
 
-  def self.pre_approved_events_for_select(group, user=nil)
-
+  def self.pre_approved_events_for_select(group, user = nil)
     budget_items = self.pre_approved_events(group, user)
 
     select_items = budget_items.map do |bi|
-      [ bi.title_with_amount , bi.id ]
+      [ bi.title_with_amount, bi.id ]
     end
 
     select_items << [ group.title_with_leftover_amount, BudgetItem::LEFTOVER_BUDGET_ITEM_ID ]

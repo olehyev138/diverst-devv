@@ -41,14 +41,14 @@ class SelectField < Field
 
     # Size score
     size_score = if e1_value == e2_value
-                   1 - e1_popularity
+      1 - e1_popularity
                  else
                    1 - e1_popularity + e2_popularity
     end
 
     # Contrast score
     popularity_total = if e1_value == e2_value
-                         e1_popularity
+      e1_popularity
                        else
                          e1_popularity + e2_popularity
     end
@@ -58,10 +58,10 @@ class SelectField < Field
     # Total score
     (size_score + contrast_score).to_f / 2
   end
-  
+
   def validates_rule_for_user?(rule:, user:)
     return false if user.info[rule.field].nil?
-    
+
     field_value = user.info[rule.field][0]
 
     case rule.operator
@@ -71,5 +71,4 @@ class SelectField < Field
       !rule.values_array.include?(field_value)
     end
   end
-  
 end

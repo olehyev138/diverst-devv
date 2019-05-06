@@ -2,7 +2,7 @@ class Reward < BaseClass
   include PublicActivity::Common
 
   belongs_to :enterprise
-  belongs_to :responsible, class_name: "User", foreign_key: "responsible_id"
+  belongs_to :responsible, class_name: 'User', foreign_key: 'responsible_id'
   has_attached_file :picture,
     styles: { thumb: '120x120>' },
     default_url: ActionController::Base.helpers.image_path('/assets/missing.png')
@@ -16,6 +16,6 @@ class Reward < BaseClass
 
   private
   def responsible_user
-    errors.add(:responsible_id, "Invalid responsible") unless responsible.try(:enterprise) == enterprise
+    errors.add(:responsible_id, 'Invalid responsible') unless responsible.try(:enterprise) == enterprise
   end
 end

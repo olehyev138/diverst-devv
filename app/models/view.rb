@@ -69,6 +69,6 @@ class View < BaseClass
         },
        }
       )
-    ).merge({ "created_at" => self.created_at.beginning_of_hour })
+    ).merge({ 'created_at' => self.created_at.beginning_of_hour })
   end
 end

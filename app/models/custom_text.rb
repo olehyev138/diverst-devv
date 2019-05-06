@@ -4,7 +4,7 @@ class CustomText < BaseClass
   belongs_to :enterprise
 
   def self.keys
-    @keys ||= I18n.t(".")[:custom_text].keys
+    @keys ||= I18n.t('.')[:custom_text].keys
   end
 
   self.keys.each do |field|
