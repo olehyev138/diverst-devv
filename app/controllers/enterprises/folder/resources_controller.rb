@@ -12,7 +12,7 @@ class Enterprises::Folder::ResourcesController < ApplicationController
   end
 
   protected
-  
+
   def set_enterprise
     @enterprise = Enterprise.find(params[:enterprise_id])
   end

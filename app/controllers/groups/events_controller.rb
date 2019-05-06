@@ -9,7 +9,7 @@ class Groups::EventsController < ApplicationController
 
   def index
     if GroupPolicy.new(current_user, @group).is_an_accepted_member? || GroupPolicy.new(current_user, @group).manage?
-      #TODO Those events are never used!
+      # TODO Those events are never used!
       @upcoming_events = @group.initiatives.upcoming + @group.participating_initiatives.upcoming
       @past_events = @group.initiatives.past + @group.participating_initiatives.past
       @ongoing_events = @group.initiatives.ongoing + @group.participating_initiatives.ongoing
@@ -23,17 +23,17 @@ class Groups::EventsController < ApplicationController
   def calendar_data
     @events = @group.initiatives
     .ransack(
-        initiative_segments_segment_id_in: params[:q]&.dig(:initiative_segments_segment_id_in)
+      initiative_segments_segment_id_in: params[:q]&.dig(:initiative_segments_segment_id_in)
     )
     .result
-    
+
     @events += @group.participating_initiatives.upcoming.ransack(
-        initiative_segments_segment_id_in: params[:q]&.dig(:initiative_segments_segment_id_in)
+      initiative_segments_segment_id_in: params[:q]&.dig(:initiative_segments_segment_id_in)
     )
     .result
-    
+
     @events += @group.participating_initiatives.ongoing    .ransack(
-        initiative_segments_segment_id_in: params[:q]&.dig(:initiative_segments_segment_id_in)
+      initiative_segments_segment_id_in: params[:q]&.dig(:initiative_segments_segment_id_in)
     )
     .result
 
@@ -75,7 +75,7 @@ class Groups::EventsController < ApplicationController
       e.summary     = @event.title
       e.location    = @event.location
       e.description = description
-      e.ip_class    = "PRIVATE"
+      e.ip_class    = 'PRIVATE'
     end
 
     send_data cal.to_ical, filename: "#{@event.title.parameterize}.ics", disposition: 'attachment'

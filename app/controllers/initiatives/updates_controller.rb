@@ -20,15 +20,15 @@ class Initiatives::UpdatesController < ApplicationController
   def create
     authorize InitiativeUpdate
 
-    @update = @initiative.updates.new( initiative_update_params)
+    @update = @initiative.updates.new(initiative_update_params)
     @update.info.merge(fields: @initiative.fields, form_data: params['custom-fields'])
     @update.owner = current_user
 
     if @update.save
-      flash[:notice] = "Your initiative update was created"
+      flash[:notice] = 'Your initiative update was created'
       redirect_to action: :index
     else
-      flash[:alert] = "Your initiative update was not created. Please fix the errors"
+      flash[:alert] = 'Your initiative update was not created. Please fix the errors'
       render :new
     end
   end
@@ -46,10 +46,10 @@ class Initiatives::UpdatesController < ApplicationController
     @update.info.merge(fields: @initiative.fields, form_data: params['custom-fields'])
 
     if @update.update(initiative_update_params)
-      flash[:notice] = "Your initiative update was updated"
+      flash[:notice] = 'Your initiative update was updated'
       redirect_to action: :index
     else
-      flash[:alert] = "Your initiative update was not updated. Please fix the errors"
+      flash[:alert] = 'Your initiative update was not updated. Please fix the errors'
       render :edit
     end
   end

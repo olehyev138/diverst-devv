@@ -1,11 +1,10 @@
 class ViewsController < ApplicationController
-  
   def track
     view = View.create!(view_params)
     track_activity(view, :track)
     render nothing: true
   end
-  
+
   def view_params
     params
       .require(:view)

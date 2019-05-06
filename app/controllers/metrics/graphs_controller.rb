@@ -1,5 +1,5 @@
 class Metrics::GraphsController < ApplicationController
-  before_action :authenticate_user!, except: [:data, :export_csv] #TODO vulnerability - check current_user or enterprise token to be present
+  before_action :authenticate_user!, except: [:data, :export_csv] # TODO vulnerability - check current_user or enterprise token to be present
   before_action :set_graph, except: [:index, :new, :create]
   before_action :set_collection, except: [:data, :export_csv]
 
@@ -21,10 +21,10 @@ class Metrics::GraphsController < ApplicationController
     @graph = @collection.graphs.new(graph_params)
 
     if @graph.save
-      flash[:notice] = "Your graph was created"
+      flash[:notice] = 'Your graph was created'
       redirect_to [:metrics, @collection]
     else
-      flash[:alert] = "Your graph was not created. Please fix the errors"
+      flash[:alert] = 'Your graph was not created. Please fix the errors'
       render :new
     end
   end
@@ -40,10 +40,10 @@ class Metrics::GraphsController < ApplicationController
     authorize @collection
 
     if @graph.update(graph_params)
-      flash[:notice] = "Your graph was updated"
+      flash[:notice] = 'Your graph was updated'
       redirect_to [:metrics, @graph.collection]
     else
-      flash[:alert] = "Your graph was not updated. Please fix the errors"
+      flash[:alert] = 'Your graph was not updated. Please fix the errors'
       render :edit
     end
   end
@@ -69,7 +69,7 @@ class Metrics::GraphsController < ApplicationController
 
     GraphDownloadJob.perform_later(current_user.id, @graph.id, date_range, unset_series)
 
-    flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+    flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
     redirect_to :back
   end
 

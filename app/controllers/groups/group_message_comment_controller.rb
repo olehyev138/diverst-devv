@@ -1,5 +1,4 @@
 class Groups::GroupMessageCommentController < ApplicationController
-
   before_action :set_group, :set_group_message
 
   layout 'erg'
@@ -12,10 +11,10 @@ class Groups::GroupMessageCommentController < ApplicationController
     @comment = @group_message.comments.find(params[:id])
 
     if @comment.update(comment_params)
-      flash[:notice] = "Your comment was updated"
-      redirect_to group_group_message_url(:id => @group_message, :group_id => @group.id)
+      flash[:notice] = 'Your comment was updated'
+      redirect_to group_group_message_url(id: @group_message, group_id: @group.id)
     else
-      flash[:alert] = "Your comment was not updated. Please fix the errors"
+      flash[:alert] = 'Your comment was not updated. Please fix the errors'
       render :edit
     end
   end
@@ -23,7 +22,7 @@ class Groups::GroupMessageCommentController < ApplicationController
   def destroy
     @comment = @group_message.comments.find(params[:id])
     @comment.destroy
-    redirect_to group_group_message_url(:id => @group_message, :group_id => @group.id)
+    redirect_to group_group_message_url(id: @group_message, group_id: @group.id)
   end
 
   protected
@@ -40,7 +39,7 @@ class Groups::GroupMessageCommentController < ApplicationController
     params
         .require(:group_message_comment)
         .permit(
-            :content,
+          :content,
             :approved
         )
   end

@@ -13,7 +13,7 @@ class GroupCategoriesController < ApplicationController
   end
 
   def new
-  	authorize Group, :manage_all_groups?
+    authorize Group, :manage_all_groups?
     @parent = Group.find(params[:parent_id].to_i) if !params[:parent_id].to_i.zero?
     @group_category_type = current_user.enterprise.group_category_types.new
   end
@@ -33,7 +33,7 @@ class GroupCategoriesController < ApplicationController
         redirect_to view_all_group_categories_url
       end
     else
-      flash.now[:alert] = "Something went wrong. Please check errors."
+      flash.now[:alert] = 'Something went wrong. Please check errors.'
       render :new
     end
   end
@@ -47,10 +47,10 @@ class GroupCategoriesController < ApplicationController
     authorize Group, :manage_all_groups?
 
     if @category.update(category_params)
-      flash[:notice] = "Update category name"
+      flash[:notice] = 'Update category name'
       redirect_to view_all_group_categories_url
     else
-      flash.now[:alert] = "Something went wrong. please fix errors"
+      flash.now[:alert] = 'Something went wrong. please fix errors'
       render 'edit'
     end
   end
@@ -59,7 +59,7 @@ class GroupCategoriesController < ApplicationController
     authorize Group, :manage_all_groups?
 
     @category.destroy
-    flash[:notice] = "Category successfully removed."
+    flash[:notice] = 'Category successfully removed.'
     redirect_to :back
   end
 
@@ -68,15 +68,15 @@ class GroupCategoriesController < ApplicationController
 
     if all_incoming_labels_are_none?
       categorize_sub_groups
-      flash[:notice] = "No labels were submitted"
+      flash[:notice] = 'No labels were submitted'
       redirect_to :back
     else
       if all_labels_are_of_the_same_category_type? || at_least_one_label_is_blank_and_other_labels_of_same_category_type?
         categorize_sub_groups
-        flash[:notice] = "Categorization successful"
+        flash[:notice] = 'Categorization successful'
         redirect_to :back
       else
-        flash[:alert] = "Categorization failed because you submitted labels of different category type"
+        flash[:alert] = 'Categorization failed because you submitted labels of different category type'
         redirect_to :back
       end
     end
@@ -92,13 +92,13 @@ class GroupCategoriesController < ApplicationController
   private
 
   def at_least_one_label_is_blank?
-    params[:children].any? { |child| child[1][:group_category_id] == "" }
+    params[:children].any? { |child| child[1][:group_category_id] == '' }
   end
 
   def other_labels_not_blank_and_same_category_type?
     array_of_non_blank_labels = []
     params[:children].each do |child|
-      next if child[1][:group_category_id] == ""
+      next if child[1][:group_category_id] == ''
       array_of_non_blank_labels << child[1][:group_category_id]
     end
 
@@ -113,9 +113,9 @@ class GroupCategoriesController < ApplicationController
 
   def all_labels_are_of_the_same_category_type?
     params[:children].each do |child|
-      if child[1][:group_category_id] != ""
-          @group_category_id = child[1][:group_category_id].to_i
-           break;
+      if child[1][:group_category_id] != ''
+        @group_category_id = child[1][:group_category_id].to_i
+           break
       end
     end
 
@@ -126,11 +126,11 @@ class GroupCategoriesController < ApplicationController
   end
 
   def categorize_sub_groups
-     # check params to avoid update of Group object with 0 value
+    # check params to avoid update of Group object with 0 value
     params[:children].each do |child|
-        if child[1][:group_category_id] != ""
+        if child[1][:group_category_id] != ''
           @group_category_id = child[1][:group_category_id].to_i
-           break;
+           break
         end
       end
 
@@ -149,20 +149,20 @@ class GroupCategoriesController < ApplicationController
   end
 
   def all_incoming_labels_are_none?
-    params[:children].all? { |child| child[1][:group_category_id] == "" }
+    params[:children].all? { |child| child[1][:group_category_id] == '' }
   end
 
   def resolve_layout
-  	case action_name
-  	when 'show'
-  		'erg'
-  	when 'metrics'
-  		'plan'
-  	when 'edit_fields', 'plan_overview', 'close_budgets'
-  		'plan'
-  	else
-  		'erg_manager'
-  	end
+    case action_name
+    when 'show'
+      'erg'
+    when 'metrics'
+      'plan'
+    when 'edit_fields', 'plan_overview', 'close_budgets'
+      'plan'
+    else
+      'erg_manager'
+    end
   end
 
   def category_type_params

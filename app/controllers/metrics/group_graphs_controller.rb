@@ -41,7 +41,7 @@ class Metrics::GroupGraphsController < ApplicationController
           metrics_params[:scoped_by_models]
         )
         track_activity(current_user.enterprise, :export_generic_graphs_group_population)
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
         redirect_to :back
       }
     end
@@ -65,7 +65,7 @@ class Metrics::GroupGraphsController < ApplicationController
           metrics_params[:scoped_by_models]
         )
         track_activity(current_user.enterprise, :export_generic_graphs_top_groups_by_views)
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
         redirect_to :back
       }
     end
@@ -87,7 +87,7 @@ class Metrics::GroupGraphsController < ApplicationController
           metrics_params[:scoped_by_models]
         )
         track_activity(current_user.enterprise, :export_generic_graphs_group_growth)
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
         redirect_to :back
       }
     end
@@ -113,7 +113,7 @@ class Metrics::GroupGraphsController < ApplicationController
           metrics_params[:scoped_by_models]
         )
         track_activity(current_user.enterprise, :export_generic_graphs_events_created)
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
         redirect_to :back
       }
     end
@@ -139,7 +139,7 @@ class Metrics::GroupGraphsController < ApplicationController
           metrics_params[:scoped_by_models]
         )
         track_activity(current_user.enterprise, :export_generic_graphs_messages_sent)
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
         redirect_to :back
       }
     end
@@ -162,7 +162,7 @@ class Metrics::GroupGraphsController < ApplicationController
           metrics_params[:scoped_by_models]
         )
         track_activity(current_user.enterprise, :export_generic_graphs_top_news_by_views)
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
         redirect_to :back
       }
     end
@@ -187,7 +187,7 @@ class Metrics::GroupGraphsController < ApplicationController
           metrics_params[:scoped_by_models]
         )
         track_activity(current_user.enterprise, :export_generic_graphs_top_folders_by_views)
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
         redirect_to :back
       }
     end
@@ -210,7 +210,7 @@ class Metrics::GroupGraphsController < ApplicationController
           metrics_params[:scoped_by_models]
         )
         track_activity(current_user.enterprise, :export_generic_graphs_top_resources_by_views)
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
         redirect_to :back
       }
     end

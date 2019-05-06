@@ -28,25 +28,25 @@ class User::DashboardController < ApplicationController
 
   def posts
     # get the news_feed_ids
-    news_feed_ids = NewsFeed.where(:group_id => current_user.groups.ids).ids
-    
+    news_feed_ids = NewsFeed.where(group_id: current_user.groups.ids).ids
+
     # get the news_feed_links
     NewsFeedLink
       .joins(:news_feed).joins(joins)
       .includes(:group_message, :news_link, :social_link)
-      .where("news_feed_links.news_feed_id IN (?) OR shared_news_feed_links.news_feed_id IN (?)", news_feed_ids, news_feed_ids)
-      .where(:approved => true)
+      .where('news_feed_links.news_feed_id IN (?) OR shared_news_feed_links.news_feed_id IN (?)', news_feed_ids, news_feed_ids)
+      .where(approved: true)
       .where(where, current_user.segments.pluck(:id)).where(archived_at: nil)
       .order(created_at: :desc)
       .distinct
-      .limit(5) #just to not fetch everything, we'll filter it later
+      .limit(5) # just to not fetch everything, we'll filter it later
   end
-  
+
   def where
-    "news_feed_link_segments.segment_id IS NULL OR news_feed_link_segments.segment_id IN (?)"
+    'news_feed_link_segments.segment_id IS NULL OR news_feed_link_segments.segment_id IN (?)'
   end
-  
+
   def joins
-    "LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id"
+    'LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id'
   end
 end

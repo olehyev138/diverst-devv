@@ -25,16 +25,16 @@ class CampaignsController < ApplicationController
   def create
     authorize Campaign
     @campaign = current_user.enterprise.campaigns.new(campaign_params)
-    #TODO Remove. Hack to make question validation pass
+    # TODO Remove. Hack to make question validation pass
     @campaign.questions.each { |q| q.campaign = @campaign }
     @campaign.owner = current_user
 
     if @campaign.save
       track_activity(@campaign, :create)
-      flash[:notice] = "Your campaign was created"
+      flash[:notice] = 'Your campaign was created'
       redirect_to action: :index
     else
-      flash[:alert] = "Your campaign was not created. Please fix the errors"
+      flash[:alert] = 'Your campaign was not created. Please fix the errors'
       render :new
     end
   end
@@ -52,10 +52,10 @@ class CampaignsController < ApplicationController
     authorize @campaign
     if @campaign.update(campaign_params)
       track_activity(@campaign, :update)
-      flash[:notice] = "Your campaign was updated"
+      flash[:notice] = 'Your campaign was updated'
       redirect_to action: :index
     else
-      flash[:alert] = "Your campaign was not updated. Please fix the errors"
+      flash[:alert] = 'Your campaign was not updated. Please fix the errors'
       render :edit
     end
   end
@@ -80,7 +80,7 @@ class CampaignsController < ApplicationController
       }
       format.csv {
         CampaignContributionsDownloadJob.perform_later(current_user.id, @campaign.id, c_t(:erg))
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
         redirect_to :back
       }
     end
@@ -98,7 +98,7 @@ class CampaignsController < ApplicationController
       }
       format.csv {
         CampaignTopPerformersDownloadJob.perform_later(current_user.id, @campaign.id)
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
         redirect_to :back
       }
     end

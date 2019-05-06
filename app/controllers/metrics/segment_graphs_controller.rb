@@ -21,7 +21,7 @@ class Metrics::SegmentGraphsController < ApplicationController
       format.csv {
         GenericGraphsSegmentPopulationDownloadJob.perform_later(current_user.id, current_user.enterprise.id, c_t(:erg))
         track_activity(current_user.enterprise, :export_generic_graphs_segment_population)
-        flash[:notice] = "Please check your Secure Downloads section in a couple of minutes"
+        flash[:notice] = 'Please check your Secure Downloads section in a couple of minutes'
         redirect_to :back
       }
     end
