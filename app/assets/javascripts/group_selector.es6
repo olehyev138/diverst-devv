@@ -69,7 +69,7 @@ class GroupSelector {
         // groupsElement is the jQuery object where group data will be inserted
         this.groupsElement = $("." + CLASSES.CONTENT, this.$element);
         // preselectedGroups is an optional array of group IDs to pre-select
-        this.preselectedGroups = this.$element.data('preselected-groups') || null;
+        this.preselectedGroups = this.$element.data('preselected-groups') || [];
 
         // Store the data on the object so we can use it when expanding, etc.
         this.data = {};
@@ -620,7 +620,7 @@ class GroupSelector {
     preselectGroups() {
       let self = this;
 
-      if (!self.preselectedGroups)
+      if (!self.preselectedGroups || self.preselectedGroups.length <= 0)
         return;
 
       self.selectedGroups = [];
@@ -629,6 +629,8 @@ class GroupSelector {
         $.each(data, function(index, group) {
           self.addToSelectedGroups(group.id, group.text);
         });
+
+        self.checkSelectedGroups();
 
         self.$element.trigger("saveGroups", [self.selectedGroups]);
       });

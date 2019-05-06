@@ -62,7 +62,7 @@ class GroupsController < ApplicationController
         format.json {
           @groups = @groups
                       .where("name like ?", "%#{search_params[:term]}%")
-                      .where(id: [search_params[:ids]]) if search_params[:ids].present?
+                      .where(id: [search_params[:ids]]) unless search_params[:ids].nil?
           render json: @groups
                          .map { |g| { id: g.id, text: g.name } }
                          .as_json

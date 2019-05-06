@@ -19,10 +19,11 @@ class SegmentGroupScopeRule < BaseClass
 
   def apply(users)
     group_ids = groups.ids
+    user_ids = users.map(&:id)
 
     if operator == 0
       # join
-      users.joins(:groups).where('user_groups.group_id in (?)', group_ids)
+      UserGroup.where(user_id: user_ids, group_id: group_ids).map(&:user).uniq
     else
       # intersect
       user_groups_intersection(group_ids, users)
@@ -32,7 +33,7 @@ class SegmentGroupScopeRule < BaseClass
   private
 
   def has_at_least_one_group
-    !groups.empty?
+    errors.add(:groups, "there must be at least one group chosen") if groups.empty?
   end
 
   def user_groups_intersection(group_ids, users)
