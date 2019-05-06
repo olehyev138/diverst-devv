@@ -94,8 +94,8 @@
           tmp * b / 50
         end
         
-- Don't omit the parameter parentheses when defining a lambda with parameters. [link]
-- Omit the parameter parentheses when defining a lambda with no parameters. [link]
+- Don't omit the parameter parentheses when defining a lambda with parameters.
+- Omit the parameter parentheses when defining a lambda with no parameters.
 - Use `_` for unused parameters
 - Prefer a guard clause when you can assert invalid data. A guard clause is a 
   conditional statement at the top of a function that bails out as soon as it can.
