@@ -61,8 +61,8 @@ class Segment < BaseClass
     field_rules
   end
 
-  def all_rules
-    field_rules + order_rules + group_rules
+  def all_rules_count
+    field_rules.count + order_rules.count + group_rules.count
   end
 
   def general_rules_followed_by?(user)
