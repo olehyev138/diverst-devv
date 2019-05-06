@@ -126,9 +126,9 @@ RSpec.describe Group, :type => :model do
         end
 
         describe '#ensure_one_level_nesting' do
-          let!(:group) { build(:group) }
-          let(:parent_group) { build(:group, enterprise: group.enterprise) }
-          let(:child_group) { build(:group, enterprise: group.enterprise) }
+          let!(:group) { create(:group) }
+          let(:parent_group) { create(:group, enterprise: group.enterprise) }
+          let(:child_group) { create(:group, enterprise: group.enterprise) }
 
           context 'with parent only' do
             before { group.parent = parent_group }
