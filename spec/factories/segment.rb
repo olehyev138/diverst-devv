@@ -3,7 +3,7 @@ FactoryBot.define do
     name { Faker::Lorem.sentence(3) }
     enterprise
     owner
-    active_users_filter Segment.active_users_filter.values.sample
+    active_users_filter { Segment.active_users_filter.find_value(:both_active_and_inactive) }
 
     factory :segment_with_users do
       transient do

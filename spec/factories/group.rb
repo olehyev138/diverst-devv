@@ -4,7 +4,6 @@ FactoryBot.define do
       no_outcomes { false }
     end
 
-    id { Faker::Number.between(1, 10000) }
     name { Faker::Lorem.sentence(3) }
     enterprise
 

@@ -33,7 +33,7 @@ class SegmentGroupScopeRule < BaseClass
   private
 
   def has_at_least_one_group
-    errors.add(:groups, "there must be at least one group chosen") if groups.empty?
+    errors.add(:groups, "there must be at least one group chosen") if segment_group_scope_rule_groups.empty?
   end
 
   def user_groups_intersection(group_ids, users)
