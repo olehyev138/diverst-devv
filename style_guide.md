@@ -1,3 +1,12 @@
+# General
+
+- Be consistent
+  > If you're editing code, take a few minutes to look at the code around you and determine its style. If they use spaces around all their arithmetic operators, you should too. If their comments have little boxes of hash marks around them, make your comments have little boxes of hash marks around them too.
+  > The point of having style guidelines is to have a common vocabulary of coding so people can concentrate on what you're saying rather than on how you're saying it. We present global style rules here so people know the vocabulary, but local style is also important. If code you add to a file looks drastically different from the existing code around it, it throws readers out of their rhythm when they go to read it. Avoid this.
+- Avoid long methods, break up into smaller pieces
+- Avoid long parameter lists
+- Avoid needless metaprogramming
+
 # Formatting
 
 - UTF-8 as source file encoding
@@ -47,8 +56,9 @@
 
 - Use def with parentheses when there are parameters, omit parentheses when the method doesnt accept any parameters
 - Use `&&`/`||` instead `and`/`or`  and `!` instead `not` (Introduces subtle bugs because of precedence issues)
-- Favour `unless` over `if` for negative conditions
-- Do not use paretheses around the condition of a control expression
+- Favour `unless` over `if` for simple negative conditions, use `if` if the statement
+  is complex.
+- Do not use parentheses around the condition of a control expression
 - Do not use unless with else. Rewrite these positive case first.
 - Prefer always using parentheses in method calls with 1 or more arguments
 - Always use parentheses for method calls with multiple arguments
@@ -87,15 +97,30 @@
 - Don't omit the parameter parentheses when defining a lambda with parameters. [link]
 - Omit the parameter parentheses when defining a lambda with no parameters. [link]
 - Use `_` for unused parameters
-- Prefer a guard clause when you can assert invalid data. A guard clause is a conditional statement at the top of a function that bails out as soon as it can.
+- Prefer a guard clause when you can assert invalid data. A guard clause is a 
+  conditional statement at the top of a function that bails out as soon as it can.
+         
+         # bad
+         def foo(a)
+           if a.present?
+             # do some stuff
+           else
+             # return 
+         end
+  
+         # good
+         def foo(a)
+           return unless a.present?
+           
+           # do some stuff
+         end
+  
 - Prefer keyword arguments over options hash
 - Prefer keyword arguments over optional arguments
 - Favor the use of predicate methods to explicit comparisons with ==
 - Use keyword arguments when for boolean parameters
 - Do not use then for multi line if/unless
 - Always put the condition on the same line as the if/unless in a multi-line conditional
-
-
 
 # Naming
 
@@ -109,12 +134,17 @@
 
 # Comments
 
+- Use one space between the leading # character of the comment and the text of the comment
+- Generally use proper capitalization & punctuation
 - Good comments focus on the reader of the code, by helping them understand the code. The reader may not have the same understanding, experience and knowledge as you. As a writer, take this into accou
 - Focus on why your code is the way it is if this is not obvious, not how your code works
-- Focus on why your code is the way it is if this is not obvious, not how your code works.
+- Avoid writing comments to explain bad code. Refactor the code to make it self-explanatory. 
 - Avoid superfluous comments. If they are about how your code works, should you clarify your code instead?
+
+        # bad
+        counter += 1 # Increments counter by one.
+
 - A big problem with comments is that they can get out of sync with the code easily. When refactoring code, refactor the surrounding comments as well.
-- Generally use proper capitalization & punctuation
 - Never leave commented out code
 
 # Classes & Modules
@@ -138,8 +168,23 @@
 
 - When accessing the first or last element from an array, prefer first or last over [0] or [-1].
 - Use the Ruby 1.9 hash literal syntax when your hash keys are symbols.
-- Don’t mix the Ruby 1.9 hash syntax with hash rockets in the same hash literal. When you’ve got keys that are not symbols stick to the hash rockets syntax.
-- Use Hash#key? instead of Hash#has_key? and Hash#value? instead of Hash#has_value?. The longer forms are considered deprecated.
+
+       // bad
+       h = { 
+         :k1 => 'v1',
+         :k2 => 'v2'
+       }
+
+       // good
+       h = { 
+         k1: 'v1',
+         k2: 'v2'
+       }
+
+- Don’t mix the Ruby 1.9 hash syntax with hash rockets in the same hash literal.
+  When you’ve got keys that are not symbols stick to the hash rockets syntax.
+- Use `Hash#key?` instead of `Hash#has_key?` and `Hash#value?` instead of `Hash#has_value?`.
+  The longer forms are considered deprecated.
 - Use Hash#fetch when dealing with hash keys that should be present.
 
         heroes = { batman: 'Bruce Wayne', superman: 'Clark Kent' }
@@ -149,6 +194,7 @@
 
         # good - fetch raises a KeyError making the problem obvious
         heroes.fetch(:supermann) 
+        
 - Introduce default values for hash keys via Hash#fetch as opposed to using custom logic.
 - Closing `]` and `}` must be on the line after the last element when opening brace is on a separate line from the first element.
 
@@ -169,16 +215,66 @@
 - With interpolated expressions, there should be no padded-spacing inside the braces.
 - Always use single quotes whenever there is no string interpolation
 
+# Rspec
 
-# General
+- [rspec style guide](https://github.com/rubocop-hq/rspec-style-guide)
+  This guide pretty much covers everything
 
-- Be consistent
-  > If you're editing code, take a few minutes to look at the code around you and determine its style. If they use spaces around all their arithmetic operators, you should too. If their comments have little boxes of hash marks around them, make your comments have little boxes of hash marks around them too.
-  > The point of having style guidelines is to have a common vocabulary of coding so people can concentrate on what you're saying rather than on how you're saying it. We present global style rules here so people know the vocabulary, but local style is also important. If code you add to a file looks drastically different from the existing code around it, it throws readers out of their rhythm when they go to read it. Avoid this.
-- Avoid long methods, break up into smaller pieces
-- Avoid long parameter lists
-- Avoid needless metaprogramming
+# Javascript
 
-
-
+- Always terminate lines with semicolons
+- Use Java brace style for blocks
+  
+        function foo() {
+          // some code
+          // more code
+        }
+        
+        if (a == b) {
+          // some code
+          // more code
+        }
          
+- For one line blocks, omit braces         
+
+        if (a == b)
+          // do some stuff
+        
+- Prefer using `const` or `let`, avoid `var` for variable declaration. 
+  `var` declares a global variable, we want to avoid polluting the global namespace
+- Use single quotes for strings
+- Use 4 spaces for javascript, dont use tabs
+- Use dot notation for accessing properties
+
+        const h  = {
+            k1: 'v1',
+            k2: 'v2'
+        };
+        
+        // bad
+        h['k1'];
+        
+        // good
+        h.k1;
+        
+- Use bracket notation when accessing properties with a variable
+        
+        const h  = {
+            k1: 'v1',
+            k2: 'v2'
+        };
+        
+        key = 'k1';
+        h[key];
+        
+- Use `/** ... */` for multi line comments
+
+       // bad
+       // multi line comment
+       // another line
+       
+       // good
+       /*
+        *
+        *
+        */
