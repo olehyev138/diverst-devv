@@ -1392,6 +1392,7 @@ ActiveRecord::Schema.define(version: 20190502185618) do
     t.integer  "groups_notifications_date",      limit: 4,     default: 5
     t.boolean  "accepting_mentor_requests",                    default: true
     t.boolean  "accepting_mentee_requests",                    default: true
+    t.datetime "last_group_notification_date"
   end
 
   add_index "users", ["active"], name: "index_users_on_active", using: :btree
@@ -1418,7 +1419,6 @@ ActiveRecord::Schema.define(version: 20190502185618) do
     t.integer  "group_id",          limit: 4
     t.integer  "folder_id",         limit: 4
     t.integer  "resource_id",       limit: 4
-    t.integer  "view_count",        limit: 4
   end
 
   create_table "yammer_field_mappings", force: :cascade do |t|
