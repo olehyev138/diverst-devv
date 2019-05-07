@@ -4,7 +4,7 @@ RSpec.describe BudgetsController, type: :controller do
   include ActiveJob::TestHelper
 
   let!(:user) { create(:user) }
-  let!(:group) { create(:group, enterprise: user.enterprise, :annual_budget => 100000) }
+  let!(:group) { create(:group, enterprise: user.enterprise, annual_budget: 100000) }
   let!(:budget) { create(:approved_budget, group: group) }
 
   describe 'GET#index' do
@@ -14,11 +14,11 @@ RSpec.describe BudgetsController, type: :controller do
       login_user_from_let
       before { get :index, group_id: budget.group.id }
 
-      it "renders index template" do
+      it 'renders index template' do
         expect(response).to render_template(:index)
       end
 
-      it "returns a valid group object" do
+      it 'returns a valid group object' do
         expect(assigns[:group]).to be_valid
       end
 
@@ -27,9 +27,9 @@ RSpec.describe BudgetsController, type: :controller do
       end
     end
 
-    context "without logged user" do
+    context 'without logged user' do
       before { get :index, group_id: budget.group.id }
-      it_behaves_like "redirect user to users/sign_in path"
+      it_behaves_like 'redirect user to users/sign_in path'
     end
   end
 
@@ -38,18 +38,18 @@ RSpec.describe BudgetsController, type: :controller do
       login_user_from_let
       before { get :show, group_id: budget.group.id, id: budget.id }
 
-      it "render show template" do
+      it 'render show template' do
         expect(response).to render_template :show
       end
 
-      it "returns a valid group object" do
+      it 'returns a valid group object' do
         expect(assigns[:group]).to be_valid
       end
     end
 
     context 'without logged user' do
       before { get :show, group_id: budget.group.id, id: budget.id }
-      it_behaves_like "redirect user to users/sign_in path"
+      it_behaves_like 'redirect user to users/sign_in path'
     end
   end
 
@@ -62,44 +62,44 @@ RSpec.describe BudgetsController, type: :controller do
 
       before { get :new, group_id: group.id }
 
-      it "returns a valid group object" do
+      it 'returns a valid group object' do
         expect(assigns[:group]).to be_valid
       end
 
-      it "return a new Budget object" do
+      it 'return a new Budget object' do
         expect(assigns[:budget]).to be_a_new(Budget)
       end
 
-      it "render new template" do
+      it 'render new template' do
         expect(response).to render_template :new
       end
     end
 
     context 'without logged user' do
       before { get :new, group_id: group.id }
-      it_behaves_like "redirect user to users/sign_in path"
+      it_behaves_like 'redirect user to users/sign_in path'
     end
   end
 
-  describe "GET#export_csv" do
+  describe 'GET#export_csv' do
     context 'when user is logged in' do
       login_user_from_let
       before {
-          allow(GroupBudgetsDownloadJob).to receive(:perform_later)
-          request.env['HTTP_REFERER'] = "back"
-          get :export_csv, :group_id => group.id
+        allow(GroupBudgetsDownloadJob).to receive(:perform_later)
+          request.env['HTTP_REFERER'] = 'back'
+          get :export_csv, group_id: group.id
       }
 
-      it "returns to previous page" do
-          expect(response).to redirect_to "back"
+      it 'returns to previous page' do
+        expect(response).to redirect_to 'back'
       end
 
-      it "flashes" do
-          expect(flash[:notice]).to eq "Please check your Secure Downloads section in a couple of minutes"
+      it 'flashes' do
+        expect(flash[:notice]).to eq 'Please check your Secure Downloads section in a couple of minutes'
       end
 
-      it "calls job" do
-          expect(GroupBudgetsDownloadJob).to have_received(:perform_later)
+      it 'calls job' do
+        expect(GroupBudgetsDownloadJob).to have_received(:perform_later)
       end
 
       describe 'public activity' do
@@ -107,7 +107,7 @@ RSpec.describe BudgetsController, type: :controller do
 
         it 'creates public activity record' do
           perform_enqueued_jobs do
-            expect{ get :export_csv, :group_id => group.id }.to change(PublicActivity::Activity, :count).by(1)
+            expect { get :export_csv, group_id: group.id }.to change(PublicActivity::Activity, :count).by(1)
           end
         end
 
@@ -118,18 +118,18 @@ RSpec.describe BudgetsController, type: :controller do
 
           before {
             perform_enqueued_jobs do
-              get :export_csv, :group_id => group.id
+              get :export_csv, group_id: group.id
             end
           }
 
-          include_examples'correct public activity'
+          include_examples 'correct public activity'
         end
       end
     end
 
     context 'when user is not logged in' do
-      before { get :export_csv, :group_id => group.id }
-      it_behaves_like "redirect user to users/sign_in path"
+      before { get :export_csv, group_id: group.id }
+      it_behaves_like 'redirect user to users/sign_in path'
     end
   end
 
@@ -140,7 +140,7 @@ RSpec.describe BudgetsController, type: :controller do
       context 'with correct params' do
         let(:budget_params) { attributes_for(:budget) }
 
-        it "returns a valid group object" do
+        it 'returns a valid group object' do
           post :create, group_id: group.id, budget: budget_params
           expect(assigns[:group]).to be_valid
         end
@@ -151,14 +151,14 @@ RSpec.describe BudgetsController, type: :controller do
         end
 
         it 'creates new budget' do
-          expect{
+          expect {
             post :create, group_id: group.id, budget: budget_params
-          }.to change(Budget,:count).by(1)
+          }.to change(Budget, :count).by(1)
         end
 
-        it "flashes a notice message" do
+        it 'flashes a notice message' do
           post :create, group_id: group.id, budget: budget_params
-          expect(flash[:notice]).to eq "Your budget was created"
+          expect(flash[:notice]).to eq 'Your budget was created'
         end
 
         describe 'public activity' do
@@ -166,7 +166,7 @@ RSpec.describe BudgetsController, type: :controller do
 
           it 'creates public activity record' do
             perform_enqueued_jobs do
-              expect{post :create, group_id: group.id, budget: budget_params}
+              expect { post :create, group_id: group.id, budget: budget_params }
               .to change(PublicActivity::Activity, :count).by(1)
             end
           end
@@ -182,28 +182,28 @@ RSpec.describe BudgetsController, type: :controller do
               end
             }
 
-            include_examples'correct public activity'
+            include_examples 'correct public activity'
           end
         end
       end
 
       context 'with invalid params' do
-        it "flashes a notice message" do
+        it 'flashes a notice message' do
           post :create, group_id: group.id, budget: {}
-          expect(flash[:alert]).to eq "param is missing or the value is empty: budget"
+          expect(flash[:alert]).to eq 'param is missing or the value is empty: budget'
         end
 
-        it "flashes a notice message" do
+        it 'flashes a notice message' do
           allow_any_instance_of(Group).to receive(:save).and_return(false)
-          post :create, group_id: group.id, budget: {group: nil}
-          expect(flash[:alert]).to eq "Your budget was not created. Please fix the errors"
+          post :create, group_id: group.id, budget: { group: nil }
+          expect(flash[:alert]).to eq 'Your budget was not created. Please fix the errors'
         end
       end
     end
 
     context 'without logged user' do
       before { post :create, group_id: group.id, budget: {} }
-      it_behaves_like "redirect user to users/sign_in path"
+      it_behaves_like 'redirect user to users/sign_in path'
     end
   end
 
@@ -212,11 +212,11 @@ RSpec.describe BudgetsController, type: :controller do
       login_user_from_let
 
       let(:approve) do
-        post :approve, group_id: budget.group.id, budget_id: budget.id, budget: { comments: "here is a comment" }
+        post :approve, group_id: budget.group.id, budget_id: budget.id, budget: { comments: 'here is a comment' }
         budget.reload
       end
 
-      it "returns a valid group object" do
+      it 'returns a valid group object' do
         approve
         expect(assigns[:budget]).to be_valid
       end
@@ -226,14 +226,14 @@ RSpec.describe BudgetsController, type: :controller do
         expect(response).to redirect_to action: :index
       end
 
-      it "budget is approved" do
+      it 'budget is approved' do
         approve
         expect(budget.is_approved).to eq true
       end
 
-      it "saves the comment" do
+      it 'saves the comment' do
         approve
-        expect(budget.comments).to eq "here is a comment"
+        expect(budget.comments).to eq 'here is a comment'
       end
 
       describe 'public activity' do
@@ -241,7 +241,7 @@ RSpec.describe BudgetsController, type: :controller do
 
         it 'creates public activity record' do
           perform_enqueued_jobs do
-            expect{approve}
+            expect { approve }
             .to change(PublicActivity::Activity, :count).by(1)
           end
         end
@@ -257,14 +257,14 @@ RSpec.describe BudgetsController, type: :controller do
             end
           }
 
-          include_examples'correct public activity'
+          include_examples 'correct public activity'
         end
       end
     end
 
-    context "without a logged in user" do
-      before { post :approve, group_id: budget.group.id, budget_id: budget.id}
-      it_behaves_like "redirect user to users/sign_in path"
+    context 'without a logged in user' do
+      before { post :approve, group_id: budget.group.id, budget_id: budget.id }
+      it_behaves_like 'redirect user to users/sign_in path'
     end
   end
 
@@ -276,7 +276,7 @@ RSpec.describe BudgetsController, type: :controller do
         budget.reload
       end
 
-      it "returns a valid group object" do
+      it 'returns a valid group object' do
         decline
         expect(assigns[:budget]).to be_valid
       end
@@ -286,7 +286,7 @@ RSpec.describe BudgetsController, type: :controller do
         expect(response).to redirect_to action: :index
       end
 
-      it "budget is declined" do
+      it 'budget is declined' do
         decline
         expect(budget.is_approved).to eq false
       end
@@ -296,7 +296,7 @@ RSpec.describe BudgetsController, type: :controller do
 
         it 'creates public activity record' do
           perform_enqueued_jobs do
-            expect{decline}
+            expect { decline }
             .to change(PublicActivity::Activity, :count).by(1)
           end
         end
@@ -312,27 +312,27 @@ RSpec.describe BudgetsController, type: :controller do
             end
           }
 
-          include_examples'correct public activity'
+          include_examples 'correct public activity'
         end
       end
     end
 
-    context "without a logged in user" do
+    context 'without a logged in user' do
       before do
         post :decline, group_id: budget.group.id, budget_id: budget.id
         BudgetManager.new(budget).decline(user)
       end
 
-      it_behaves_like "redirect user to users/sign_in path"
+      it_behaves_like 'redirect user to users/sign_in path'
     end
   end
 
   describe 'DELETE#destroy' do
     context 'with logged user' do
       login_user_from_let
-        context "with valid destroy" do
+        context 'with valid destroy' do
           it 'removes a budget' do
-            expect{ delete :destroy, group_id: budget.group.id, id: budget.id }.to change(Budget, :count).by(-1)
+            expect { delete :destroy, group_id: budget.group.id, id: budget.id }.to change(Budget, :count).by(-1)
           end
 
           it 'flashes a notice message' do
@@ -350,7 +350,7 @@ RSpec.describe BudgetsController, type: :controller do
 
             it 'creates public activity record' do
               perform_enqueued_jobs do
-                expect{delete :destroy, group_id: budget.group.id, id: budget.id}
+                expect { delete :destroy, group_id: budget.group.id, id: budget.id }
                 .to change(PublicActivity::Activity, :count).by(1)
               end
             end
@@ -366,31 +366,31 @@ RSpec.describe BudgetsController, type: :controller do
                 end
               }
 
-              include_examples'correct public activity'
+              include_examples 'correct public activity'
             end
           end
         end
 
-        context "with invalid destroy" do
+        context 'with invalid destroy' do
           before {
-            request.env["HTTP_REFERER"] = "back"
+            request.env['HTTP_REFERER'] = 'back'
             allow_any_instance_of(Budget).to receive(:destroy).and_return(false)
             delete :destroy, group_id: budget.group.id, id: budget.id
           }
 
           it 'flashes an alert' do
-            expect(flash[:alert]).to eq "Your budget was not deleted. Please fix the errors"
+            expect(flash[:alert]).to eq 'Your budget was not deleted. Please fix the errors'
           end
 
           it 'redirects to index action' do
-            expect(response).to redirect_to "back"
+            expect(response).to redirect_to 'back'
           end
         end
     end
 
-     context "without a logged in user" do
+     context 'without a logged in user' do
         before {  delete :destroy, group_id: budget.group.id, id: budget.id }
-        it_behaves_like "redirect user to users/sign_in path"
+        it_behaves_like 'redirect user to users/sign_in path'
       end
   end
 
@@ -403,7 +403,7 @@ RSpec.describe BudgetsController, type: :controller do
       user.policy_group.save!
     }
 
-    def get_edit_annual_budget(group_id=-1)
+    def get_edit_annual_budget(group_id = -1)
       get :edit_annual_budget, group_id: group_id
     end
 
@@ -416,24 +416,23 @@ RSpec.describe BudgetsController, type: :controller do
         expect(assigns[:group].enterprise).to eq group.enterprise
       end
 
-      it "renders edit_annual_budget template" do
+      it 'renders edit_annual_budget template' do
         expect(response).to render_template :edit_annual_budget
       end
     end
 
     context 'without logged user' do
       before { get_edit_annual_budget }
-      it_behaves_like "redirect user to users/sign_in path"
+      it_behaves_like 'redirect user to users/sign_in path'
     end
   end
 
   describe 'put#reset_annual_budget' do
     context 'with logged user' do
       login_user_from_let
-        context "with valid update"do
-
+        context 'with valid update' do
           before {
-            request.env["HTTP_REFERER"] = "back"
+            request.env['HTTP_REFERER'] = 'back'
             put :reset_annual_budget, group_id: budget.group.id, id: budget.id
           }
 
@@ -443,40 +442,40 @@ RSpec.describe BudgetsController, type: :controller do
           end
 
           it "sets 'is_approved' attribute to false for all budgets belonging to group" do
-            expect(assigns[:group].budgets).to all(have_attributes(:is_approved => false))
+            expect(assigns[:group].budgets).to all(have_attributes(is_approved: false))
           end
 
-          context 'when there is a budget request and expenses are made' do 
+          context 'when there is a budget request and expenses are made' do
             let!(:initiative) { create(:initiative, owner_group: group) }
             let!(:initiative_expenses) { create_list(:initiative_expense, 2, initiative: initiative) }
 
-            it 'deletes all initiative expenses' do 
+            it 'deletes all initiative expenses' do
               expect(initiative.expenses.count).not_to eq 0
-              request.env["HTTP_REFERER"] = "back"
+              request.env['HTTP_REFERER'] = 'back'
               put :reset_annual_budget, group_id: budget.group.id, id: budget.id
 
               expect(initiative.expenses.count).to eq 0
             end
-            
-            it 'delete all budgets for group' do 
-              request.env["HTTP_REFERER"] = "back"
+
+            it 'delete all budgets for group' do
+              request.env['HTTP_REFERER'] = 'back'
               put :reset_annual_budget, group_id: budget.group.id, id: budget.id
-             
-              expect(assigns[:group].budgets).to be_empty            
+
+              expect(assigns[:group].budgets).to be_empty
             end
 
-            it 'sets annual_budget and leftover_money to 0' do 
+            it 'sets annual_budget and leftover_money to 0' do
               expect(group.annual_budget).to eq 100000
               expect(group.leftover_money).to eq 0
 
-              request.env["HTTP_REFERER"] = "back"
+              request.env['HTTP_REFERER'] = 'back'
               put :reset_annual_budget, group_id: budget.group.id, id: budget.id
 
               expect(assigns[:group].annual_budget).to eq 0
             end
 
-            it 'sets estimated_funding and actual_funding to 0' do 
-              request.env["HTTP_REFERER"] = "back"
+            it 'sets estimated_funding and actual_funding to 0' do
+              request.env['HTTP_REFERER'] = 'back'
               put :reset_annual_budget, group_id: budget.group.id, id: budget.id
               initiative.reload
 
@@ -485,23 +484,23 @@ RSpec.describe BudgetsController, type: :controller do
             end
           end
 
-          context 'when you have unfinished expenses' do 
-            let!(:initiative_with_unclosed_expenses) { create(:initiative, start: DateTime.now.days_ago(3), end: DateTime.now.days_ago(1), 
+          context 'when you have unfinished expenses' do
+            let!(:initiative_with_unclosed_expenses) { create(:initiative, start: DateTime.now.days_ago(3), end: DateTime.now.days_ago(1),
                                 finished_expenses: false, owner_group: budget.group) }
-            before do 
+            before do
               request.env['HTTP_REFERER'] = 'back'
               put :reset_annual_budget, group_id: budget.group.id, id: budget.id
             end
 
-            it 'does not reset annual budget' do 
+            it 'does not reset annual budget' do
               expect(group.annual_budget).not_to eq 0
             end
 
-            it 'produces flash message' do 
+            it 'produces flash message' do
               expect(flash[:notice]).to eq "Please close expenses of past events belonging to #{budget.group.name}"
             end
 
-            it 'redirects to back' do 
+            it 'redirects to back' do
               expect(response).to redirect_to 'back'
             end
           end
@@ -512,7 +511,7 @@ RSpec.describe BudgetsController, type: :controller do
 
             it 'creates public activity record' do
               perform_enqueued_jobs do
-                expect{put :reset_annual_budget, group_id: budget.group.id, id: budget.id}
+                expect { put :reset_annual_budget, group_id: budget.group.id, id: budget.id }
                 .to change(PublicActivity::Activity, :count).by(1)
               end
             end
@@ -528,32 +527,32 @@ RSpec.describe BudgetsController, type: :controller do
                 end
               }
 
-              include_examples'correct public activity'
+              include_examples 'correct public activity'
             end
           end
 
           it 'flashes a notice message' do
-            expect(flash[:notice]).to eq "Your budget was updated"
+            expect(flash[:notice]).to eq 'Your budget was updated'
           end
 
           it 'redirects to back' do
-            expect(response).to redirect_to "back"
+            expect(response).to redirect_to 'back'
           end
         end
 
-        context "with invalid update" do
+        context 'with invalid update' do
           before {
             allow_any_instance_of(Group).to receive(:update).and_return(false)
-            request.env["HTTP_REFERER"] = "back"
+            request.env['HTTP_REFERER'] = 'back'
             put :reset_annual_budget, group_id: budget.group.id, id: budget.id
           }
 
           it 'flashes an alert message' do
-            expect(flash[:alert]).to eq "Your budget was not updated. Please fix the errors"
+            expect(flash[:alert]).to eq 'Your budget was not updated. Please fix the errors'
           end
 
           it 'redirects to back' do
-            expect(response).to redirect_to "back"
+            expect(response).to redirect_to 'back'
           end
         end
     end
@@ -562,10 +561,9 @@ RSpec.describe BudgetsController, type: :controller do
   describe 'put#carry_over_annual_budget' do
     context 'with logged user' do
       login_user_from_let
-        context "with valid update"do
-
+        context 'with valid update' do
           before {
-            request.env["HTTP_REFERER"] = "back"
+            request.env['HTTP_REFERER'] = 'back'
             put :carry_over_annual_budget, group_id: budget.group.id, id: budget.id
           }
 
@@ -575,7 +573,7 @@ RSpec.describe BudgetsController, type: :controller do
           end
 
           it "sets 'is_approved' attribute to false for all budgets belonging to group" do
-            expect(assigns[:group].budgets).to all(have_attributes(:is_approved => false))
+            expect(assigns[:group].budgets).to all(have_attributes(is_approved: false))
           end
 
           describe 'public activity' do
@@ -583,7 +581,7 @@ RSpec.describe BudgetsController, type: :controller do
 
             it 'creates public activity record' do
               perform_enqueued_jobs do
-                expect{put :carry_over_annual_budget, group_id: budget.group.id, id: budget.id}
+                expect { put :carry_over_annual_budget, group_id: budget.group.id, id: budget.id }
                 .to change(PublicActivity::Activity, :count).by(1)
               end
             end
@@ -599,32 +597,32 @@ RSpec.describe BudgetsController, type: :controller do
                 end
               }
 
-              include_examples'correct public activity'
+              include_examples 'correct public activity'
             end
           end
 
           it 'flashes a notice message' do
-            expect(flash[:notice]).to eq "Your budget was updated"
+            expect(flash[:notice]).to eq 'Your budget was updated'
           end
 
           it 'redirects to back' do
-            expect(response).to redirect_to "back"
+            expect(response).to redirect_to 'back'
           end
         end
 
-        context "with invalid update" do
+        context 'with invalid update' do
           before {
             allow_any_instance_of(Group).to receive(:update).and_return(false)
-            request.env["HTTP_REFERER"] = "back"
+            request.env['HTTP_REFERER'] = 'back'
             put :carry_over_annual_budget, group_id: budget.group.id, id: budget.id
           }
 
           it 'flashes an alert message' do
-            expect(flash[:alert]).to eq "Your budget was not updated. Please fix the errors"
+            expect(flash[:alert]).to eq 'Your budget was not updated. Please fix the errors'
           end
 
           it 'redirects to back' do
-            expect(response).to redirect_to "back"
+            expect(response).to redirect_to 'back'
           end
         end
     end
@@ -632,7 +630,7 @@ RSpec.describe BudgetsController, type: :controller do
 
   describe 'POST #update_annual_budget' do
     def post_update_annual_budget(group_id = -1, params = {})
-      request.env["HTTP_REFERER"] = "back"
+      request.env['HTTP_REFERER'] = 'back'
       post :update_annual_budget, group_id: group_id, group: params
     end
 
@@ -640,17 +638,17 @@ RSpec.describe BudgetsController, type: :controller do
     let(:group) { create :group, enterprise: user.enterprise, annual_budget: annual_budget }
 
     let(:annual_budget) { rand(1..100) }
-    let(:new_annual_budget) { rand(101..200) } #new range so it does not intersect with old value range
+    let(:new_annual_budget) { rand(101..200) } # new range so it does not intersect with old value range
 
     context 'with logged in user' do
       login_user_from_let
 
       context 'with correct params' do
         before do
-          post_update_annual_budget(group.id, {annual_budget: new_annual_budget})
+          post_update_annual_budget(group.id, { annual_budget: new_annual_budget })
         end
 
-        it "returns a valid enterprise object" do
+        it 'returns a valid enterprise object' do
           expect(assigns[:group].enterprise).to be_valid
         end
 
@@ -659,7 +657,7 @@ RSpec.describe BudgetsController, type: :controller do
         end
 
         it 'redirects to correct path' do
-          expect(response).to redirect_to "back"
+          expect(response).to redirect_to 'back'
         end
 
         describe 'public activity' do
@@ -667,8 +665,8 @@ RSpec.describe BudgetsController, type: :controller do
 
           it 'creates public activity record' do
             perform_enqueued_jobs do
-              expect{
-                post_update_annual_budget(group.id, {annual_budget: new_annual_budget})
+              expect {
+                post_update_annual_budget(group.id, { annual_budget: new_annual_budget })
               }.to change(PublicActivity::Activity, :count).by(1)
             end
           end
@@ -680,11 +678,11 @@ RSpec.describe BudgetsController, type: :controller do
 
             before {
               perform_enqueued_jobs do
-                post_update_annual_budget(group.id, {annual_budget: new_annual_budget})
+                post_update_annual_budget(group.id, { annual_budget: new_annual_budget })
               end
             }
 
-            include_examples'correct public activity'
+            include_examples 'correct public activity'
           end
         end
 
@@ -696,22 +694,22 @@ RSpec.describe BudgetsController, type: :controller do
       context 'with invalid update' do
         before do
           allow_any_instance_of(Group).to receive(:update).and_return(false)
-          post_update_annual_budget(group.id, {annual_budget: new_annual_budget})
+          post_update_annual_budget(group.id, { annual_budget: new_annual_budget })
         end
 
         it 'redirects to correct path' do
-          expect(response).to redirect_to "back"
+          expect(response).to redirect_to 'back'
         end
 
         it 'flashes an alert message' do
-          expect(flash[:alert]).to eq "Your budget was not updated. Please fix the errors"
+          expect(flash[:alert]).to eq 'Your budget was not updated. Please fix the errors'
         end
       end
     end
 
     context 'without logged user' do
-      before { post_update_annual_budget(group.id, {annual_budget: new_annual_budget}) }
-      it_behaves_like "redirect user to users/sign_in path"
+      before { post_update_annual_budget(group.id, { annual_budget: new_annual_budget }) }
+      it_behaves_like 'redirect user to users/sign_in path'
     end
   end
 end

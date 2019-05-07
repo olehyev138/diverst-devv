@@ -12,15 +12,15 @@ RSpec.describe BaseSearch do
 
     # TODO: test search
 
-#    describe 'search' do
-#      let(:dummy_group) { Group.new { include BaseSearch } }
-#
-#      it 'wraps query with an enterprise filter agg' do
-#        byebug
-#        query = nil
-#        allow_any_instance_of(Group).to receive_message_chain(:__elasticsearch__, :search) { |q| query = q }
-#      end
-#    end
+    #    describe 'search' do
+    #      let(:dummy_group) { Group.new { include BaseSearch } }
+    #
+    #      it 'wraps query with an enterprise filter agg' do
+    #        byebug
+    #        query = nil
+    #        allow_any_instance_of(Group).to receive_message_chain(:__elasticsearch__, :search) { |q| query = q }
+    #      end
+    #    end
   end
 
   describe 'ElasticsearchQuery' do
@@ -76,7 +76,7 @@ RSpec.describe BaseSearch do
         expect(filter_agg[:filter][:term]['dummy_field']).to eq 'dummy_value'
       end
 
-      it "validly nests an aggregation" do
+      it 'validly nests an aggregation' do
         nested_filter_agg = query
           .filter_agg(field: 'dummy_field', value: 'dummy_value') { |q| q.top_hits_agg }.build[:aggs][:agg]
 
@@ -91,7 +91,7 @@ RSpec.describe BaseSearch do
         expect(bool_agg).to have_key :filter
       end
 
-      it "validly nests an aggregation" do
+      it 'validly nests an aggregation' do
         nested_bool_agg = query
           .bool_filter_agg { |q| q.top_hits_agg }.build[:aggs][:agg]
 
@@ -177,7 +177,7 @@ RSpec.describe BaseSearch do
         expect(date_range_agg[:date_range][:ranges][0]).to eq date_range
       end
 
-      it "validly nests an aggregation" do
+      it 'validly nests an aggregation' do
         nested_filter_agg = query
           .date_range_agg(field: 'dummy_field', range: date_range) { |q| q.top_hits_agg }.build[:aggs][:agg]
 
@@ -197,7 +197,7 @@ RSpec.describe BaseSearch do
         expect(default_top_hits_agg[:top_hits][:size]).to eq 100
       end
 
-      it "validly nests an aggregation" do
+      it 'validly nests an aggregation' do
         nested_filter_agg = query
           .top_hits_agg { |q| q.top_hits_agg }.build[:aggs][:agg]
 
@@ -234,7 +234,7 @@ RSpec.describe BaseSearch do
         expect(default_terms_agg[:terms][:order]['_count']).to eq 'desc'
       end
 
-      it "validly nests an aggregation" do
+      it 'validly nests an aggregation' do
         nested_filter_agg = query
           .terms_agg(field: 'dummy_field') { |q| q.top_hits_agg }.build[:aggs][:agg]
 
@@ -253,7 +253,7 @@ RSpec.describe BaseSearch do
         expect(agg['missing'][:field]).to eq 'dummy_field'
       end
 
-      it "validly nests an aggregation" do
+      it 'validly nests an aggregation' do
         nested_filter_agg = query
           .agg(type: 'dummy', field: 'dummy_field') { |q| q.top_hits_agg }.build[:aggs][:agg]
 

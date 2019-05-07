@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.feature 'Group management' do
-
   let(:user) { create(:user) }
 
   before do
@@ -28,7 +27,7 @@ RSpec.feature 'Group management' do
       fill_in 'group_short_description', with: group[:short_description]
       fill_in 'group_description', with: group[:description]
 
-      select 'None', from: "group_parent_id"
+      select 'None', from: 'group_parent_id'
 
       click_on 'Create Group'
 
@@ -36,10 +35,10 @@ RSpec.feature 'Group management' do
     end
 
     scenario 'user creates a sub-group', js: true do
-      parent_group = create(:group, name: "Parent Group", enterprise: user.enterprise)
+      parent_group = create(:group, name: 'Parent Group', enterprise: user.enterprise)
 
       sub_group = {
-        name: "first sub-group",
+        name: 'first sub-group',
         description: "Lorem Ipsum is simply dummy text of the printing
         and typesetting industry. Lorem Ipsum has been the industry's
         standard dummy text ever since the 1500s, when an unknown printer
@@ -178,7 +177,7 @@ RSpec.feature 'Group management' do
 
         expect(page).to have_field('Name', with: sub_group1.name)
         expect(page).to have_select('Parent', selected: parent_group.name)
-        expect(page).to have_select('Group category', selected: nil) #NOTE: here, nil stands in for 'None'
+        expect(page).to have_select('Group category', selected: nil) # NOTE: here, nil stands in for 'None'
 
         select 'Red', from: 'Group category'
         click_on 'Update Group'

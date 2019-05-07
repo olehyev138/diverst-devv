@@ -3,6 +3,6 @@ FactoryBot.define do
     rating 7
     association :user,          factory: :user
     association :mentoring_session,   factory: :mentoring_session
-    comments {Faker::Lorem.sentence}
+    comments { Faker::Lorem.sentence }
   end
 end

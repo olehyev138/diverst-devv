@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Theme, type: :model do
-  let(:theme) {build :theme }
+  let(:theme) { build :theme }
 
   describe 'test association and validations' do
     it { expect(theme).to have_one(:enterprise) }

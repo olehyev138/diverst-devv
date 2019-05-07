@@ -1,17 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe Graph, type: :model do
+  describe 'validations' do
+    let(:graph) { FactoryBot.build_stubbed(:graph_with_metrics_dashboard) }
 
-    describe 'validations' do
-        let(:graph) { FactoryBot.build_stubbed(:graph_with_metrics_dashboard) }
+      it { expect(graph).to validate_presence_of(:field) }
 
-        it{ expect(graph).to validate_presence_of(:field) }
-
-        it { expect(graph).to belong_to(:field) }
-        it { expect(graph).to belong_to(:metrics_dashboard) }
-        it { expect(graph).to belong_to(:poll) }
-        it { expect(graph).to belong_to(:aggregation) }
-    end
+      it { expect(graph).to belong_to(:field) }
+      it { expect(graph).to belong_to(:metrics_dashboard) }
+      it { expect(graph).to belong_to(:poll) }
+      it { expect(graph).to belong_to(:aggregation) }
+  end
 
     describe 'build_query' do
       let!(:graph_model) { FactoryBot.create(:graph_with_metrics_dashboard) }
@@ -118,6 +117,6 @@ RSpec.describe Graph, type: :model do
         expect(custom_class).to_not eq nil
       end
 
-      #it 'defines #__elasticsearch__ and #search and pass correct arguments to elasticsearch'
+      # it 'defines #__elasticsearch__ and #search and pass correct arguments to elasticsearch'
     end
 end

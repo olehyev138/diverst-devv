@@ -11,11 +11,11 @@ RSpec.describe NewsLinkPhoto, type: :model do
       .rejecting('text/xml', 'text/plain') }
   end
 
-  describe "#group" do
-    it "returns the group the news_link belongs to" do
+  describe '#group' do
+    it 'returns the group the news_link belongs to' do
       group = create(:group)
-      news_link = build(:news_link, :group => group)
-      news_link_photo = create(:news_link_photo, :news_link => news_link)
+      news_link = build(:news_link, group: group)
+      news_link_photo = create(:news_link_photo, news_link: news_link)
       expect(news_link_photo.group.id).to eq(group.id)
     end
   end

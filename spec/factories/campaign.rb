@@ -5,7 +5,7 @@ FactoryBot.define do
     enterprise
     start Date.today + 1
     self.end Date.today + 7 # We specify self here since end is a reserved keyword
-    groups {[create(:group)]}
+    groups { [create(:group)] }
     factory :campaign_filled do
       transient do
         question_count 2

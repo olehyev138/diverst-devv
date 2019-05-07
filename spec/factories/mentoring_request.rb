@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :mentoring_request do
-    status { "pending" }
+    status { 'pending' }
     notes { Faker::Lorem.sentence }
     association :enterprise,    factory: :enterprise
     association :sender,    factory: :user

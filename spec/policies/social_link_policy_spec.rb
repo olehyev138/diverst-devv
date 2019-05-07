@@ -1,11 +1,10 @@
 require 'rails_helper'
 
-RSpec.describe SocialLinkPolicy, :type => :policy do
-
+RSpec.describe SocialLinkPolicy, type: :policy do
   let(:enterprise) { create(:enterprise) }
   let(:no_access) { create(:user, enterprise: enterprise) }
   let(:user) { no_access }
-  let(:social_link){ create(:social_link, author: user) }
+  let(:social_link) { create(:social_link, author: user) }
   let(:noshow_social_link) { create(:social_link, author: create(:user)) }
   let(:policy_scope) { SocialLinkPolicy::Scope.new(user, SocialLink).resolve }
 
@@ -20,10 +19,10 @@ RSpec.describe SocialLinkPolicy, :type => :policy do
   }
 
 
-  describe 'for users with access' do 
-    context 'when manage_all is false' do 
-      context 'user with basic group leader permission, social_links_index is true and current user IS NOT owner' do 
-        before do 
+  describe 'for users with access' do
+    context 'when manage_all is false' do
+      context 'user with basic group leader permission, social_links_index is true and current user IS NOT owner' do
+        before do
           social_link.author = create(:user)
           user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
           user_role.policy_group_template.update social_links_index: true
@@ -35,8 +34,8 @@ RSpec.describe SocialLinkPolicy, :type => :policy do
         it { is_expected.to permit_action(:index) }
       end
 
-      context 'when social_links_index is true' do 
-        before do 
+      context 'when social_links_index is true' do
+        before do
           social_link.author = create(:user)
           user.policy_group.update social_links_index: true
         end
@@ -44,8 +43,8 @@ RSpec.describe SocialLinkPolicy, :type => :policy do
         it { is_expected.to permit_action(:index) }
       end
 
-      context 'user with basic group leader permission, social_links_create, and current user IS NOT author' do 
-        before do 
+      context 'user with basic group leader permission, social_links_create, and current user IS NOT author' do
+        before do
           social_link.author = create(:user)
           user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
           user_role.policy_group_template.update social_links_create: true
@@ -57,8 +56,8 @@ RSpec.describe SocialLinkPolicy, :type => :policy do
         it { is_expected.to permit_action(:create) }
       end
 
-      context 'when social_links_create is true' do 
-        before do 
+      context 'when social_links_create is true' do
+        before do
           social_link.author = create(:user)
           user.policy_group.update social_links_create: true
         end
@@ -66,27 +65,27 @@ RSpec.describe SocialLinkPolicy, :type => :policy do
         it { is_expected.to permit_action(:create) }
       end
 
-      context 'no social_link permissions, current user IS author' do 
+      context 'no social_link permissions, current user IS author' do
         it { is_expected.to permit_actions([:update, :destroy]) }
       end
 
-      context 'no social_link permissions, current user IS NOT author' do 
+      context 'no social_link permissions, current user IS NOT author' do
         before { social_link.author = create(:user) }
         it { is_expected.to forbid_actions([:index, :create, :update, :destroy]) }
       end
     end
 
-    context 'when manage_all is true' do 
+    context 'when manage_all is true' do
       before { user.policy_group.update manage_all: true }
 
-      context 'social_links_index, social_links_create, and social_links_manage are false, current user IS NOT author' do    
+      context 'social_links_index, social_links_create, and social_links_manage are false, current user IS NOT author' do
         before { social_link.author = create(:user) }
 
         it { is_expected.to permit_actions([:index, :create, :update, :destroy]) }
-      end  
+      end
 
-      context 'user with basic group leader permission, social_links_manage, and current user IS NOT author' do 
-        before do 
+      context 'user with basic group leader permission, social_links_manage, and current user IS NOT author' do
+        before do
           social_link.author = create(:user)
           user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
           user_role.policy_group_template.update social_links_manage: true
@@ -98,8 +97,8 @@ RSpec.describe SocialLinkPolicy, :type => :policy do
         it { is_expected.to permit_actions([:index, :create, :update, :destroy]) }
       end
 
-      context 'when social_links_manage is true' do 
-        before do 
+      context 'when social_links_manage is true' do
+        before do
           social_link.author = create(:user)
           user.policy_group.update social_links_manage: true
         end
@@ -109,16 +108,15 @@ RSpec.describe SocialLinkPolicy, :type => :policy do
     end
   end
 
-  describe 'for users with no access' do 
+  describe 'for users with no access' do
     let(:user) { no_access }
     let(:social_link) { create(:social_link, author: create(:user)) }
     it { is_expected.to forbid_actions([:index, :create, :update, :destroy]) }
-    
   end
 
   permissions '.scope' do
-    context 'when manage all is true' do 
-      before do 
+    context 'when manage all is true' do
+      before do
         user.policy_group.update manage_all: true
         social_link
       end
@@ -129,8 +127,8 @@ RSpec.describe SocialLinkPolicy, :type => :policy do
       end
     end
 
-    context 'when social_links_manage is true' do 
-      before do 
+    context 'when social_links_manage is true' do
+      before do
         user.policy_group.update social_links_manage: true
         social_link
       end

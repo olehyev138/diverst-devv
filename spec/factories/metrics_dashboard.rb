@@ -2,7 +2,7 @@ FactoryBot.define do
   factory :metrics_dashboard do
     enterprise
     name { Faker::Lorem.sentence(3) }
-    groups {[create(:group)]}
+    groups { [create(:group)] }
     factory :metrics_dashboard_with_graphs do
       transient do
         graph_count 2

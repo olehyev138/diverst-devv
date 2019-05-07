@@ -8,9 +8,9 @@ FactoryBot.define do
     invitation_sent_at Time.current
     invitation_accepted_at Time.current
     enterprise
-    provider "email"
-    time_zone "UTC"
-    user_role {enterprise.user_roles.where(:role_type => "admin").first}
+    provider 'email'
+    time_zone 'UTC'
+    user_role { enterprise.user_roles.where(role_type: 'admin').first }
     after(:create) do |user|
       user.policy_group = create(:policy_group)
     end

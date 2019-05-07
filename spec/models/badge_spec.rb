@@ -29,7 +29,7 @@ RSpec.describe Badge, type: :model do
     it 'requires a points' do
       badge.points = nil
       expect(badge).to_not be_valid
-      expect(badge.errors.full_messages.first).to eq("Points is not a number")
+      expect(badge.errors.full_messages.first).to eq('Points is not a number')
     end
 
     it 'requires an Enterprise' do

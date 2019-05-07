@@ -1,16 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe CampaignTopPerformersDownloadJob, type: :job do
-    include ActiveJob::TestHelper
+  include ActiveJob::TestHelper
 
-    describe "#perform" do
-        it "creates a downloadable csv file" do
-            enterprise = create(:enterprise)
-            user = create(:user, :enterprise => enterprise)
-            campaign = create(:campaign, :enterprise => enterprise)
+    describe '#perform' do
+      it 'creates a downloadable csv file' do
+        enterprise = create(:enterprise)
+          user = create(:user, enterprise: enterprise)
+          campaign = create(:campaign, enterprise: enterprise)
 
-            expect{ subject.perform(user.id, campaign.id) }
-              .to change(CsvFile, :count).by(1)
-        end
+          expect { subject.perform(user.id, campaign.id) }
+            .to change(CsvFile, :count).by(1)
+      end
     end
 end

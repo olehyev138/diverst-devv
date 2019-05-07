@@ -1,12 +1,12 @@
 require 'rails_helper'
 
-RSpec.describe MentorshipSession, :type => :model do
-    let(:user) { create(:user) }
+RSpec.describe MentorshipSession, type: :model do
+  let(:user) { create(:user) }
     let(:mentorship_session) { create(:mentorship_session) }
 
     describe 'validations' do
-      it{ expect(mentorship_session).to validate_presence_of(:user) }
-      it{ expect(mentorship_session).to validate_presence_of(:mentoring_session) }
+      it { expect(mentorship_session).to validate_presence_of(:user) }
+      it { expect(mentorship_session).to validate_presence_of(:mentoring_session) }
 
       it { expect(mentorship_session).to belong_to(:user) }
       it { expect(mentorship_session).to belong_to(:mentoring_session) }
@@ -18,17 +18,17 @@ RSpec.describe MentorshipSession, :type => :model do
       context 'setters' do
         it 'sets pending status' do
           mentorship_session.pending
-          expect(mentorship_session.status).to eq "pending"
+          expect(mentorship_session.status).to eq 'pending'
         end
 
         it 'sets accepted status' do
           mentorship_session.accept
-          expect(mentorship_session.status).to eq "accepted"
+          expect(mentorship_session.status).to eq 'accepted'
         end
 
         it 'sets declined status' do
           mentorship_session.decline
-          expect(mentorship_session.status).to eq "declined"
+          expect(mentorship_session.status).to eq 'declined'
         end
       end
 
@@ -40,17 +40,17 @@ RSpec.describe MentorshipSession, :type => :model do
         end
 
         it 'checks pending status' do
-          mentorship_session.status = "pending"
+          mentorship_session.status = 'pending'
           expect(mentorship_session.pending?).to eq true
         end
 
         it 'checks accepted status' do
-          mentorship_session.status = "accepted"
+          mentorship_session.status = 'accepted'
           expect(mentorship_session.accepted?).to eq true
         end
 
         it 'checks declined status' do
-          mentorship_session.status = "declined"
+          mentorship_session.status = 'declined'
           expect(mentorship_session.declined?).to eq true
         end
       end

@@ -1,12 +1,11 @@
 require 'rails_helper'
 
 RSpec.feature 'Segment management' do
-
   let(:user) { create(:user) }
   let!(:segment) { create(:segment_with_rules, enterprise: user.enterprise) }
 
   before do
-    login_as(user, scope: :user, :run_callbacks => false)
+    login_as(user, scope: :user, run_callbacks: false)
     user.enterprise.fields << create(:enterprise_field, enterprise: user.enterprise)
   end
 
@@ -17,7 +16,7 @@ RSpec.feature 'Segment management' do
 
     visit new_segment_path
     fill_in 'segment_name', with: segment[:name]
-    click_on "Add a criterion"
+    click_on 'Add a criterion'
     select user.enterprise.fields.last.title, from: page.find('.custom-field select')[:id]
     select 'equals', from: page.find('.operator select')[:id]
 
@@ -29,7 +28,7 @@ RSpec.feature 'Segment management' do
   scenario 'user deletes a segment', js: true do
     visit segments_path
 
-    click_link "Delete", href: segment_path(segment)
+    click_link 'Delete', href: segment_path(segment)
 
     expect(page).not_to have_content segment.name
   end

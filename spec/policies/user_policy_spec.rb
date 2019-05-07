@@ -1,9 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe UserPolicy, :type => :policy do
-
-  let(:enterprise) {create(:enterprise)}
-  let(:user){ create(:user, :enterprise => enterprise) }
+RSpec.describe UserPolicy, type: :policy do
+  let(:enterprise) { create(:enterprise) }
+  let(:user) { create(:user, enterprise: enterprise) }
   let(:other_user) { create(:user, enterprise: enterprise) }
   let(:policy_scope) { UserPolicy::Scope.new(user, User).resolve }
 
@@ -16,24 +15,24 @@ RSpec.describe UserPolicy, :type => :policy do
     user.policy_group.save!
   }
 
-  permissions ".scope" do
+  permissions '.scope' do
     before { user.policy_group.update users_index: true }
 
-    it "shows only users belonging to enterprise" do
+    it 'shows only users belonging to enterprise' do
       expect(policy_scope).to eq [user]
     end
   end
 
-  describe 'for users with access' do 
-    context 'when manage_all is false' do 
+  describe 'for users with access' do
+    context 'when manage_all is false' do
       context 'when users_index is true but users_manage is false' do
         before { user.policy_group.update(users_index: true) }
 
         it { is_expected.to permit_actions([:index, :show]) }
       end
 
-      context 'user has basic group leader permission and users_index is true' do 
-        before do 
+      context 'user has basic group leader permission and users_index is true' do
+        before do
           user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
           user_role.policy_group_template.update users_index: true
           group = create(:group, enterprise: enterprise)
@@ -44,14 +43,14 @@ RSpec.describe UserPolicy, :type => :policy do
         it { is_expected.to permit_actions([:index, :show]) }
       end
 
-      context 'when users_index is false but users_manage is true' do 
+      context 'when users_index is false but users_manage is true' do
         before { user.policy_group.update(users_manage: true) }
 
         it { is_expected.to permit_actions([:index, :create, :show, :update, :destroy, :resend_invitation]) }
       end
 
-      context 'user has basic group leader permission and users_manage is true' do 
-        before do 
+      context 'user has basic group leader permission and users_manage is true' do
+        before do
           user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
           user_role.policy_group_template.update users_manage: true
           group = create(:group, enterprise: enterprise)
@@ -62,24 +61,24 @@ RSpec.describe UserPolicy, :type => :policy do
         it { is_expected.to permit_actions([:index, :create, :show, :update, :destroy, :resend_invitation]) }
       end
 
-      context 'when users_index, users_manage, manage_all are false but record IS the same as current user' do 
+      context 'when users_index, users_manage, manage_all are false but record IS the same as current user' do
         let(:other_user) { user }
 
         it { is_expected.to permit_action(:update) }
         it { is_expected.to forbid_action(:destroy) }
       end
 
-      context 'when users_index, users_manage, manage_all are false but record IS NOT the same as curret user' do 
+      context 'when users_index, users_manage, manage_all are false but record IS NOT the same as curret user' do
         let(:other_user) { create(:user) }
 
         it { is_expected.to forbid_actions([:index, :show, :create, :update, :destroy, :resend_invitation ]) }
       end
     end
 
-    context 'when manage_all is true' do 
+    context 'when manage_all is true' do
       before { user.policy_group.update manage_all: true }
 
-      context 'when record IS current user' do 
+      context 'when record IS current user' do
         let(:other_user) { user }
         it { is_expected.to permit_actions([:index, :show, :create, :update, :resend_invitation]) }
       end
@@ -90,40 +89,40 @@ RSpec.describe UserPolicy, :type => :policy do
     end
   end
 
-  describe 'for users with no access' do 
+  describe 'for users with no access' do
     before { user.policy_group = create(:policy_group, :no_permissions) }
 
-    it { is_expected.to forbid_actions([:index, :new, :create, :update, :destroy, :resend_invitation]) } 
+    it { is_expected.to forbid_actions([:index, :new, :create, :update, :destroy, :resend_invitation]) }
   end
 
-  describe 'custom policies' do 
-    describe '#access_hidden_info?' do 
-      context 'when current user IS record' do 
+  describe 'custom policies' do
+    describe '#access_hidden_info?' do
+      context 'when current user IS record' do
         let(:other_user) { user }
 
-        it 'returns true' do 
+        it 'returns true' do
           expect(subject.access_hidden_info?).to eq true
         end
       end
 
-      context 'when current user IS NOT record' do 
+      context 'when current user IS NOT record' do
         let(:other_user) { create(:user) }
 
-        it 'returns false' do 
+        it 'returns false' do
           expect(subject.access_hidden_info?).to eq false
         end
       end
 
-      context 'when manage_all is true' do 
+      context 'when manage_all is true' do
         before { user.policy_group.update manage_all: true }
 
-        it 'returns true' do 
+        it 'returns true' do
           expect(subject.access_hidden_info?).to eq true
         end
       end
 
-      context 'user has basic group leader permission' do 
-        before do 
+      context 'user has basic group leader permission' do
+        before do
           user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
           user_role.policy_group_template.update users_manage: true
           group = create(:group, enterprise: enterprise)
@@ -131,60 +130,60 @@ RSpec.describe UserPolicy, :type => :policy do
                   user_role_id: user_role.id)
         end
 
-        it 'returns true' do 
+        it 'returns true' do
           expect(subject.access_hidden_info?).to eq true
-        end        
+        end
       end
 
-      context 'users_manage is true' do 
+      context 'users_manage is true' do
         before { user.policy_group.update users_manage: true }
 
-        it 'returns true' do 
+        it 'returns true' do
           expect(subject.access_hidden_info?).to eq true
         end
       end
     end
 
-    describe '#join_or_leave_groups?' do 
+    describe '#join_or_leave_groups?' do
       context 'when current user IS record' do
         let(:other_user) { user }
 
-        it 'returns true' do 
+        it 'returns true' do
           expect(subject.join_or_leave_groups?).to eq true
         end
       end
 
-      context 'when current user IS NOT record' do 
+      context 'when current user IS NOT record' do
         let(:other_user) { create(:user) }
 
-        it 'returns false' do 
+        it 'returns false' do
           expect(subject.join_or_leave_groups?).to eq true
         end
       end
 
-      context 'when current user IS NOT record and has update permissions for GroupMemberPolicy' do 
+      context 'when current user IS NOT record and has update permissions for GroupMemberPolicy' do
         let(:other_user) { create(:user) }
         before { user.policy_group.update groups_members_manage: false }
 
-        it 'returns false' do 
+        it 'returns false' do
           expect(subject.join_or_leave_groups?).to eq false
         end
       end
     end
 
-    describe '#user_not_current_user?' do 
-      context 'when current user IS NOT record' do 
+    describe '#user_not_current_user?' do
+      context 'when current user IS NOT record' do
         let(:other_user) { create(:user) }
 
-        it 'returns true' do 
+        it 'returns true' do
           expect(subject.user_not_current_user?).to eq true
         end
       end
 
-      context 'when current user IS record' do 
+      context 'when current user IS record' do
         let(:other_user) { user }
 
-        it 'returns false' do 
+        it 'returns false' do
           expect(subject.user_not_current_user?).to eq false
         end
       end
