@@ -14,7 +14,7 @@
   </nav>
 </div>
 <div class="menu menu--desktop">
-  <%= active_link_to "Overview", metrics_overview_index_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
+  <%= active_link_to "Overview", metrics_overview_index_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected", active: [['metrics/overview_graphs'], []] %>
   <%= active_link_to 'Users', metrics_users_path, class: "secondary-header__tab", class_active: "secondary-header__tab--is-selected" %>
   <% if GroupPolicy.new(current_user, Group).create? %>
     <%= active_link_to "#{c_t(:erg).pluralize}&nbsp;<span class='caret'></span>".html_safe, "",
