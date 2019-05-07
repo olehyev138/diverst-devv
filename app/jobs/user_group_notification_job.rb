@@ -10,7 +10,7 @@ class UserGroupNotificationJob < ActiveJob::Base
     notifications_frequency = args[:notifications_frequency]
     enterprise_id = args[:enterprise_id]
 
-    User.where(:enterprise_id => enterprise_id, :groups_notifications_frequency => User.groups_notifications_frequencies[notifications_frequency.to_sym]).find_in_batches(batch_size: 200) do |users|
+    User.joins(:groups).where(:enterprise_id => enterprise_id, :groups_notifications_frequency => User.groups_notifications_frequencies[notifications_frequency.to_sym]).find_in_batches(batch_size: 200) do |users|
       users.each do |user|
         groups = []
         next unless can_send_email?(notifications_frequency, user)
@@ -26,8 +26,8 @@ class UserGroupNotificationJob < ActiveJob::Base
           }
         end
 
-        if have_updates?(groups)
-          UserGroupMailer.notification(user, groups).deliver_now
+        if have_updates?(groups) && notify_user(user)
+          UserGroupMailer.notification(user, groups).deliver_now 
         end
       end
     end
@@ -45,6 +45,10 @@ class UserGroupNotificationJob < ActiveJob::Base
     when "friday" then Date.today.friday?
     when "saturday" then Date.today.saturday?
     end
+  end
+
+  def notify_user(user)
+    return true unless user.last_notified_date == DateTime.now.to_date
   end
 
   private
