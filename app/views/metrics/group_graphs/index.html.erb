@@ -2,7 +2,7 @@
 
 <div class="content__header">
   <h1>Overview</h1>
-  <button type="button" class="btn btn--primary btn--small" style="margin-right: 8px;" data-toggle="modal" data-target="#group-scope-selector">Filter <%= c_t(:erg).pluralize.capitalize %></button>
+  <button type="button" class="btn btn--primary btn--small" style="margin-right: 8px;" data-toggle="modal" data-target="#group-scope-selector">Filter <%= c_t(:erg).pluralize %></button>
   <button type="button" class="btn btn--secondary btn--small" data-toggle="collapse" data-target="#groups-list-container" aria-expanded="false" aria-controls="groups-list-container">Show Filter</button>
 </div>
 
@@ -10,7 +10,7 @@
   <div id="groups-list-container" class="collapse">
     <div class="card">
       <div class="card__section">
-        <h4><b>Filtered <%= c_t(:erg).pluralize.capitalize %></b></h4>
+        <h4><b>Filtered <%= c_t(:erg).pluralize %></b></h4>
         <div class="groups-list"><h4>No filter</h4></div>
       </div>
     </div>
@@ -21,7 +21,7 @@
       <div class="row">
         <div class="col md-6 sm-12">
           <div class="panel panel--primary text-center margin-bottom-0">
-            <div class="panel-headline"><p><strong>Total <%= c_t(:erg).capitalize.pluralize %></strong></p></div>
+            <div class="panel-headline"><p><strong>Total <%= c_t(:erg).pluralize %></strong></p></div>
             <div class="panel-data"><p><b class="accent"><%= @group_metrics[:total_groups] %></b></p></div>
           </div>
         </div>
