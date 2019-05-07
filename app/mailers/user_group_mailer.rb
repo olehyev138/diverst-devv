@@ -9,6 +9,7 @@ class UserGroupMailer < ApplicationMailer
     set_defaults(user.enterprise, method_name)
 
     mail(from: @from_address, to: @email, subject: @subject)
+    @user.update last_group_notification_date: DateTime.now 
   end
 
   def variables
