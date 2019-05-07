@@ -2,20 +2,20 @@ class PollPolicy < ApplicationPolicy
   def index?
     return false unless scope_module_enabled?
     return true if create?
-    return true if basic_group_leader_permission?("polls_index")
+    return true if basic_group_leader_permission?('polls_index')
     @policy_group.polls_index?
   end
 
   def create?
     return false unless scope_module_enabled?
     return true if manage?
-    return true if basic_group_leader_permission?("polls_create")
+    return true if basic_group_leader_permission?('polls_create')
     @policy_group.polls_create?
   end
 
   def manage?
     return true if manage_all?
-    return true if basic_group_leader_permission?("polls_manage")
+    return true if basic_group_leader_permission?('polls_manage')
     @policy_group.polls_manage?
   end
 
@@ -46,6 +46,6 @@ class PollPolicy < ApplicationPolicy
   private
 
   def scope_module_enabled?
-    return @user.enterprise.scope_module_enabled
+    @user.enterprise.scope_module_enabled
   end
 end

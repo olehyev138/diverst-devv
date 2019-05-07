@@ -1,8 +1,7 @@
 class MetricsDashboardPolicy < ApplicationPolicy
-
   def index?
     return true if create?
-    return true if basic_group_leader_permission?("metrics_dashboards_index")
+    return true if basic_group_leader_permission?('metrics_dashboards_index')
     @policy_group.metrics_dashboards_index?
   end
 
@@ -22,7 +21,7 @@ class MetricsDashboardPolicy < ApplicationPolicy
 
   def create?
     return true if manage_all?
-    return true if basic_group_leader_permission?("metrics_dashboards_create")
+    return true if basic_group_leader_permission?('metrics_dashboards_create')
     @policy_group.metrics_dashboards_create?
   end
 
@@ -38,7 +37,6 @@ class MetricsDashboardPolicy < ApplicationPolicy
   end
 
   class Scope < Scope
-
     def index?
       MetricsDashboardPolicy.new(user, nil).index?
     end

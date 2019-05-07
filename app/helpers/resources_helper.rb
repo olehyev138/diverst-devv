@@ -1,6 +1,6 @@
 module ResourcesHelper
   def thumbnail_for_resource(resource)
-    return image_url("icons/filetypes/other.png") if !resource.file.present?
+    return image_url('icons/filetypes/other.png') if !resource.file.present?
 
     return resource.file.expiring_url(3600) if resource.file_content_type.start_with?('image')
     image_url("icons/filetypes/#{thumbnail_for_resource_extension(resource)}")
@@ -18,7 +18,7 @@ module ResourcesHelper
     when %r{ppt}
       'powerpoint.png'
     when %r{zip|rar|7z|tar|bz2}
-      return 'archive.png'
+      'archive.png'
     else
       # Look for MIME types
       return 'video.png' if res.file_content_type.start_with?('video')
@@ -43,7 +43,7 @@ module ResourcesHelper
     when %r{ppt}
       'powerpoint.png'
     when %r{zip|rar|7z|tar|bz2}
-      return 'archive.png'
+      'archive.png'
     else
       # Look for MIME types
       return 'video.png' if res.supporting_document_content_type.start_with?('video')
@@ -53,7 +53,7 @@ module ResourcesHelper
 
   def get_folders_url(folder, limit = nil, format = nil)
     return if folder.nil?
-    
+
     if folder.group
       group_folders_path(folder.group, limit: limit, format: :json)
     else

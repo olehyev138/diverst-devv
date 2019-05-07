@@ -7,9 +7,9 @@ class ImportCSVJob < ActiveJob::Base
 
     @importer = Importers::Users.new(file.path_for_csv, file.user)
     @importer.import
-    
+
     CsvUploadMailer.result(
-            @importer.successful_rows,
+      @importer.successful_rows,
             @importer.failed_rows,
             @importer.table.count
     ).deliver_now

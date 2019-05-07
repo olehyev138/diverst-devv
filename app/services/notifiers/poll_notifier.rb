@@ -30,6 +30,6 @@ class Notifiers::PollNotifier
   end
 
   def filter_by_initiative(users)
-    users.select{ |u| u.initiatives.where(id: @initiative.id).any? }
+    users.select { |u| u.initiatives.where(id: @initiative.id).any? }
   end
 end

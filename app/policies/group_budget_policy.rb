@@ -1,23 +1,22 @@
 class GroupBudgetPolicy < GroupBasePolicy
-
   def base_index_permission
-    "groups_budgets_index"
+    'groups_budgets_index'
   end
 
   def base_create_permission
-    "groups_budgets_request"
+    'groups_budgets_request'
   end
-  
+
   def base_manage_permission
-    "groups_budgets_manage"
+    'groups_budgets_manage'
   end
 
   def approve?
     return true if update?
-    return true if basic_group_leader_permission?("budget_approval")
+    return true if basic_group_leader_permission?('budget_approval')
     user.policy_group.budget_approval?
   end
-  
+
   def decline?
     approve?
   end

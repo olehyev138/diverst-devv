@@ -26,14 +26,14 @@ class SegmentDatatable < AjaxDatatablesRails::Base
 
   def generate_edit_link(record)
     if SegmentPolicy.new(@user, record).edit?
-      link_to "Edit", edit_segment_path(record)
+      link_to 'Edit', edit_segment_path(record)
     end
   end
 
   def generate_destroy_link(record)
     if SegmentPolicy.new(@user, record).destroy?
-      link_to "Delete", segment_path(record), method: :delete, 
-      class: "error", data: { confirm: "Are you sure?" }
+      link_to 'Delete', segment_path(record), method: :delete,
+      class: 'error', data: { confirm: 'Are you sure?' }
     end
   end
 
@@ -44,7 +44,7 @@ class SegmentDatatable < AjaxDatatablesRails::Base
       [
         "#{link_to(ActionController::Base.helpers.sanitize(record.name).gsub('&amp;', '&'), segment_path(record))}",
         html_escape(record.rules.count),
-        html_escape(record.created_at.to_s :reversed_slashes), 
+        html_escape(record.created_at.to_s :reversed_slashes),
         "#{edit_link} - #{destroy_link}"
       ]
     end

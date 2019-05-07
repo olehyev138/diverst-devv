@@ -1,5 +1,4 @@
 class ExpensePolicy < CampaignPolicy
-
   def update?
     return false unless collaborate_module_enabled?
     manage?
@@ -12,7 +11,7 @@ class ExpensePolicy < CampaignPolicy
 
     def resolve
       if index?
-        scope.where(:enterprise_id => user.enterprise_id)
+        scope.where(enterprise_id: user.enterprise_id)
       else
         scope.none
       end

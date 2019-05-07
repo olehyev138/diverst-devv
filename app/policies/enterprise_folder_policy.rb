@@ -1,16 +1,15 @@
 class EnterpriseFolderPolicy < Struct.new(:user, :folder)
-  
   attr_accessor :user, :folder, :group_leader_role_ids
-    
+
   def initialize(user, folder = nil)
-      self.user = user
+    self.user = user
       self.folder = folder
       self.group_leader_role_ids = user.group_leaders.pluck(:user_role_id)
   end
-    
+
   def index?
     return true if create?
-    return true if basic_group_leader_permission?("enterprise_resources_index")
+    return true if basic_group_leader_permission?('enterprise_resources_index')
     user.policy_group.enterprise_resources_index?
   end
 
@@ -24,7 +23,7 @@ class EnterpriseFolderPolicy < Struct.new(:user, :folder)
 
   def create?
     return true if update?
-    return true if basic_group_leader_permission?("enterprise_resources_create")
+    return true if basic_group_leader_permission?('enterprise_resources_create')
     user.policy_group.enterprise_resources_create?
   end
 
@@ -34,15 +33,15 @@ class EnterpriseFolderPolicy < Struct.new(:user, :folder)
 
   def update?
     return true if user.policy_group.manage_all?
-    return true if basic_group_leader_permission?("enterprise_resources_manage")
+    return true if basic_group_leader_permission?('enterprise_resources_manage')
     user.policy_group.enterprise_resources_manage?
   end
 
   def destroy?
     update?
   end
-  
+
   def basic_group_leader_permission?(permission)
-    PolicyGroupTemplate.where(:user_role_id => group_leader_role_ids).where("#{permission} = true").exists?
+    PolicyGroupTemplate.where(user_role_id: group_leader_role_ids).where("#{permission} = true").exists?
   end
 end

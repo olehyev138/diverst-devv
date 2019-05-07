@@ -30,7 +30,7 @@ module ApplicationHelper
   end
 
   def event_color(event)
-    calendar_color = event.try(:group).try(:calendar_color).blank? ? nil : "#" + event.try(:group).try(:calendar_color)
+    calendar_color = event.try(:group).try(:calendar_color).blank? ? nil : '#' + event.try(:group).try(:calendar_color)
 
     result_color = calendar_color || enterprise_primary_color || '#7b77c9'
 
@@ -40,7 +40,7 @@ module ApplicationHelper
   def to_color(color)
     trimmed_color = color.tr('#', '')
 
-    if trimmed_color.to_i(16).to_s(16) == trimmed_color.downcase  #if string is a valid hex number
+    if trimmed_color.to_i(16).to_s(16) == trimmed_color.downcase  # if string is a valid hex number
       '#' + trimmed_color
     else
       trimmed_color
@@ -58,8 +58,8 @@ module ApplicationHelper
   end
 
   def last_sign_in_text(user)
-    return "Never" if user.last_sign_in_at.nil?
-    return "#{time_ago_in_words(user.last_sign_in_at)} ago"
+    return 'Never' if user.last_sign_in_at.nil?
+    "#{time_ago_in_words(user.last_sign_in_at)} ago"
   end
 
   def root_admin_path
@@ -69,7 +69,7 @@ module ApplicationHelper
     return campaigns_path if CampaignPolicy.new(current_user, Campaign).create?
     return polls_path if PollPolicy.new(current_user, Poll).create?
     return mentoring_interests_path if MentoringInterestPolicy.new(current_user, MentoringInterest).index?
-    return global_settings_path
+    global_settings_path
   end
 
   def manage_erg_budgets_path
@@ -89,7 +89,7 @@ module ApplicationHelper
     return users_path if UserPolicy.new(current_user, User).create?
     return edit_auth_enterprise_path(current_user.enterprise) if EnterprisePolicy.new(current_user, Enterprise).sso_manage?
     return policy_group_templates_path if EnterprisePolicy.new(current_user, Enterprise).manage_permissions?
-    return edit_fields_enterprise_path(current_user.enterprise) if EnterprisePolicy.new(current_user ,current_user.enterprise).edit_fields?
+    return edit_fields_enterprise_path(current_user.enterprise) if EnterprisePolicy.new(current_user, current_user.enterprise).edit_fields?
     return edit_branding_enterprise_path(current_user.enterprise) if EnterprisePolicy.new(current_user, current_user.enterprise).manage_branding?
     return edit_custom_text_path(current_user.enterprise) if EnterprisePolicy.new(current_user, current_user.enterprise).manage_branding?
     return emails_path(current_user.enterprise) if EnterprisePolicy.new(current_user, current_user.enterprise).manage_branding?
@@ -102,7 +102,7 @@ module ApplicationHelper
 
   def default_path
     return root_admin_path if root_admin_path
-    return user_root_path
+    user_root_path
   end
 
   def default_enterprise_asset_url
@@ -142,10 +142,10 @@ module ApplicationHelper
     end
   end
 
-  #for RSpec test of protected method in segment_controller.rb
+  # for RSpec test of protected method in segment_controller.rb
   def segment_members_of_group(segment, group)
     segment.members.includes(:groups).select do |user|
-      UserGroup.where(:user_id => user.id, :group_id => group.id).exists?
+      UserGroup.where(user_id: user.id, group_id: group.id).exists?
     end
   end
 
@@ -179,11 +179,11 @@ module ApplicationHelper
   end
 
   def is_post_liked?(news_feed_link_id)
-    Like.find_by(:user => current_user, :enterprise => current_user.enterprise, :news_feed_link => news_feed_link_id).present?
+    Like.find_by(user: current_user, enterprise: current_user.enterprise, news_feed_link: news_feed_link_id).present?
   end
 
   def is_answer_liked?(answer_id)
-    Like.find_by(:user => current_user, :enterprise => current_user.enterprise, :answer => answer_id).present?
+    Like.find_by(user: current_user, enterprise: current_user.enterprise, answer: answer_id).present?
   end
 
   def boolean_to_yes_no(boolean_value)

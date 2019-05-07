@@ -92,7 +92,7 @@ class Reports::GraphStats
                 when 'all'    then 'All'
                 else
                   DateTime.parse(from_date).strftime('%F')
-                end
+    end
 
     { from: from_date, to: to_date }
   end

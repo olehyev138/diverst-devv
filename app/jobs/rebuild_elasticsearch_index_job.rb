@@ -19,7 +19,7 @@ class RebuildElasticsearchIndexJob < ActiveJob::Base
       )
     rescue
     end
-    
+
     begin
       # We don't directly call model.import since activerecord-import overrides that
       model.__elasticsearch__.import

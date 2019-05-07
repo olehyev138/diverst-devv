@@ -27,7 +27,7 @@ class Rewards::Points::Manager
       user: @user,
       reward_action: @reward_action,
       points: @reward_action.points.to_i,
-      operation: "add"
+      operation: 'add'
     )
   end
 
@@ -44,7 +44,7 @@ class Rewards::Points::Manager
       user: @user,
       reward_action: @reward_action,
       points: points.to_i,
-      operation: "del"
+      operation: 'del'
     )
   end
 

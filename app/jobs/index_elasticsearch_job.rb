@@ -5,7 +5,7 @@ class IndexElasticsearchJob < ActiveJob::Base
     return if Rails.env.test?
     logger.debug [operation, "ID: #{record_id}"]
     model = model_name.constantize
-    
+
     begin
       case operation
         when 'index'
@@ -34,11 +34,11 @@ class IndexElasticsearchJob < ActiveJob::Base
       Rollbar.error(e)
     end
   end
-  
+
   def client
     Elasticsearch::Client.new host: ENV['ELASTICSEARCH_URL'], logger: logg
   end
-  
+
   def logg
     Sidekiq.logger.level == Logger::DEBUG ? Sidekiq.logger : nil
   end
