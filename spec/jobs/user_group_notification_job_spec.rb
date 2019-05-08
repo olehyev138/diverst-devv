@@ -8,6 +8,17 @@ RSpec.describe UserGroupNotificationJob, type: :job do
   let!(:group){ create(:group, pending_users: "disabled", enterprise: enterprise) }
   let!(:second_group){ create(:group, pending_users: "disabled") }
 
+  context '#notify_user(user)' do 
+    it 'returns true unless last_group_notification_date is set' do 
+      expect(subject.notify_user(user)).to eq true
+    end
+
+    it 'returns nil when last_group_notification_date is set' do 
+      user.last_group_notification_date = DateTime.now 
+      expect(subject.notify_user(user)).to eq nil
+    end
+  end
+
   context "with hourly frequency" do
     let!(:user){ create(:user, groups_notifications_frequency: User.groups_notifications_frequencies[:hourly]) }
 
