@@ -19,6 +19,8 @@ RSpec.feature 'Custom-field Management' do
 
 			fill_in '* Title', with: 'BIO'
 
+      page.find_field('Allow user to edit').trigger('click')
+
 			click_on 'Save user fields'
 
 			expect(page).to have_content 'BIO'
@@ -36,6 +38,8 @@ RSpec.feature 'Custom-field Management' do
 
 			fill_in '* Title', with: 'Detailed BIO'
 			page.find_field('Allow multiple lines').trigger('click')
+
+      page.find_field('Allow user to edit').trigger('click')
 
 			click_on 'Save user fields'
 
@@ -128,6 +132,8 @@ RSpec.feature 'Custom-field Management' do
 			fill_in '* Title', with: 'Countries'
 			fill_in 'Options (one per line)', with: "Spain\nArgentina\nBrazil\nGermany\nCanada"
 
+      page.find_field('Allow user to edit').trigger('click')
+
 			click_on 'Save user fields'
 
 			expect(page).to have_content 'Countries'
@@ -198,6 +204,8 @@ RSpec.feature 'Custom-field Management' do
 
 				fill_in 'Options (one per line)', with: "Male\nFemale\nOther"
 
+        page.find_field('Allow user to edit').trigger('click')
+
 				click_on 'Save user fields'
 
 				visit edit_user_user_path(admin_user)
@@ -228,6 +236,8 @@ RSpec.feature 'Custom-field Management' do
 
 			fill_in '* Title', with: 'Programming Language'
 			fill_in 'Options (one per line)', with: "Ruby\nElixir\nC++\nJavaScript"
+
+      page.find_field('Allow user to edit').trigger('click')
 
 			click_on 'Save user fields'
 
@@ -282,6 +292,8 @@ RSpec.feature 'Custom-field Management' do
 
 				page.find_field('Use multi-select field').trigger('click')
 
+        page.find_field('Allow user to edit').trigger('click')
+
 				click_on 'Save user fields'
 
 				visit edit_user_user_path(admin_user)
@@ -292,6 +304,10 @@ RSpec.feature 'Custom-field Management' do
 			end
 
 			scenario 'custom checkbox field by hiding it from users profile', js: true do
+        page.find_field('Allow user to edit').trigger('click')
+
+        click_on 'Save user fields'
+
 				visit edit_user_user_path(admin_user)
 
 				expect(page).to have_content 'Programming Language'
