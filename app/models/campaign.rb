@@ -34,8 +34,8 @@ class Campaign < BaseClass
   validates :groups,      presence: { message: 'Please select at least 1 group' }
 
   validates :start,
-      date: { after: Proc.new { Date.today }, message: 'must be after today' },
-      on: [:create, :update]
+            date: { after: Proc.new { Date.today }, message: 'must be after today' },
+            on: [:create, :update]
 
   validates :end, date: { after: :start, message: 'must be after start' }, on: [:create, :update]
 
@@ -91,7 +91,8 @@ class Campaign < BaseClass
   # Returns the % of questions that have been closed
   def progression
     return 0 if questions.count == 0
-      (questions.solved.count.to_f / questions.count * 100).round
+
+    (questions.solved.count.to_f / questions.count * 100).round
   end
 
   def contributions_per_erg_csv(erg_text)
@@ -146,7 +147,7 @@ class Campaign < BaseClass
     }
 
     strategy = Reports::GraphStatsGeneric.new(title: 'Top performers',
-      categories: data[:categories], data: data[:series].map { |d| d[:data] }.flatten)
+                                              categories: data[:categories], data: data[:series].map { |d| d[:data] }.flatten)
     report = Reports::Generator.new(strategy)
 
     report.to_csv

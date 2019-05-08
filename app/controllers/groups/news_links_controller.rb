@@ -14,63 +14,63 @@ class Groups::NewsLinksController < ApplicationController
 
   def new
     @news_link = @group.news_links.new
-      @news_link.build_news_feed_link(news_feed_id: @group.news_feed.id)
+    @news_link.build_news_feed_link(news_feed_id: @group.news_feed.id)
   end
 
   def edit; end
 
   def comments
     @comments = @news_link.comments.includes(:author)
-      @new_comment = NewsLinkComment.new
-      @news_link.increment_view(current_user)
+    @new_comment = NewsLinkComment.new
+    @news_link.increment_view(current_user)
   end
 
   def create_comment
     @comment = @news_link.comments.new(news_link_comment_params)
-      @comment.author = current_user
+    @comment.author = current_user
 
-      if @comment.save
-        user_rewarder('news_comment').add_points(@comment)
-          flash_reward "Your comment was created. Now you have #{current_user.credits} points"
-      else
-        flash[:alert] = 'Your comment was not created. Please fix the errors'
-      end
+    if @comment.save
+      user_rewarder('news_comment').add_points(@comment)
+      flash_reward "Your comment was created. Now you have #{current_user.credits} points"
+    else
+      flash[:alert] = 'Your comment was not created. Please fix the errors'
+    end
 
-      redirect_to action: :comments
+    redirect_to action: :comments
   end
 
   def create
     @news_link = @group.news_links.new(news_link_params)
-      @news_link.author = current_user
+    @news_link.author = current_user
 
-      if @news_link.save
-        track_activity(@news_link, :create)
-          user_rewarder('news_post').add_points(@news_link)
-          flash_reward "Your news was created. Now you have #{current_user.credits} points"
-          redirect_to group_posts_path(@group)
-      else
-        flash[:alert] = 'Your news was not created. Please fix the errors'
-          render :edit
-      end
+    if @news_link.save
+      track_activity(@news_link, :create)
+      user_rewarder('news_post').add_points(@news_link)
+      flash_reward "Your news was created. Now you have #{current_user.credits} points"
+      redirect_to group_posts_path(@group)
+    else
+      flash[:alert] = 'Your news was not created. Please fix the errors'
+      render :edit
+    end
   end
 
   def update
     if @news_link.update(news_link_params)
       track_activity(@news_link, :update)
-        flash[:notice] = 'Your news was updated'
-        redirect_to group_posts_path(@group)
+      flash[:notice] = 'Your news was updated'
+      redirect_to group_posts_path(@group)
     else
       flash[:alert] = 'Your news was not updated. Please fix the errors'
-        render :edit
+      render :edit
     end
   end
 
   def destroy
     track_activity(@news_link, :destroy)
-      user_rewarder('news_post').remove_points(@news_link)
-      @news_link.destroy
-      flash[:notice] = "Your news was removed. Now you have #{current_user.credits} points"
-      redirect_to group_posts_path(@group)
+    user_rewarder('news_post').remove_points(@news_link)
+    @news_link.destroy
+    flash[:notice] = "Your news was removed. Now you have #{current_user.credits} points"
+    redirect_to group_posts_path(@group)
   end
 
   # this is not a route found in config/routes.rb
@@ -78,30 +78,30 @@ class Groups::NewsLinksController < ApplicationController
   def url_info
     page = Pismo::Document.new(params[:url])
 
-      render json: {
-                 title: page.title,
-                 description: page.lede
-             }
+    render json: {
+               title: page.title,
+               description: page.lede
+           }
   end
 
   def news_link_photos
     @resize = true
-      @photos = @news_link.photos
+    @photos = @news_link.photos
   end
 
   def archive
     authorize current_user.enterprise, :manage_posts?, policy_class: EnterprisePolicy
 
-      @news_link.news_feed_link.update(archived_at: DateTime.now)
-      track_activity(@news_link, :archive)
+    @news_link.news_feed_link.update(archived_at: DateTime.now)
+    track_activity(@news_link, :archive)
 
-      respond_to do |format|
-        format.html { redirect_to :back }
-         format.js
-      end
+    respond_to do |format|
+      format.html { redirect_to :back }
+      format.js
+    end
   end
 
-    protected
+  protected
 
   def set_group
     @group = current_user.enterprise.groups.find(params[:group_id])
@@ -116,11 +116,11 @@ class Groups::NewsLinksController < ApplicationController
         .require(:news_link)
         .permit(
           :url,
-            :title,
-            :description,
-            :picture,
-            photos_attributes: [:file, :_destroy, :id],
-            news_feed_link_attributes: [:id, :approved, :news_feed_id, :link, shared_news_feed_ids: [], segment_ids: []],
+          :title,
+          :description,
+          :picture,
+          photos_attributes: [:file, :_destroy, :id],
+          news_feed_link_attributes: [:id, :approved, :news_feed_id, :link, shared_news_feed_ids: [], segment_ids: []],
         )
   end
 

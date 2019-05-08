@@ -181,9 +181,9 @@ RSpec.describe PollsController, type: :controller do
         it 'track activity of poll' do
           perform_enqueued_jobs do
             expect { patch :update, id: poll.id, poll: { group_ids: [group.id] } }.to change(PublicActivity::Activity.where(
-                                                                                               owner_id: user.id, recipient_id: user.enterprise.id, trackable_type:              'Poll', trackable_id: poll.id, key: 'poll.update'
-            ),
-              :count).by(1)
+                                                                                               owner_id: user.id, recipient_id: user.enterprise.id, trackable_type: 'Poll', trackable_id: poll.id, key: 'poll.update'
+                                                                                             ),
+                                                                                             :count).by(1)
           end
         end
 

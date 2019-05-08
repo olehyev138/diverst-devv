@@ -5,6 +5,7 @@ class BudgetMailer < ApplicationMailer
     @group = budget.group
     @enterprise = @group.enterprise
     return if @enterprise.disable_emails?
+
     @custom_text = @enterprise.custom_text rescue CustomText.new
     @email = @user.email
 
@@ -19,6 +20,7 @@ class BudgetMailer < ApplicationMailer
     @user = budget.requester
     @enterprise = @group.enterprise
     return if @enterprise.disable_emails?
+
     @custom_text = @enterprise.custom_text rescue CustomText.new
     @email = @user.email
 
@@ -33,6 +35,7 @@ class BudgetMailer < ApplicationMailer
     @user = budget.requester
     @enterprise = @group.enterprise
     return if @enterprise.disable_emails?
+
     @custom_text = @enterprise.custom_text rescue CustomText.new
     @email = @user.email
 

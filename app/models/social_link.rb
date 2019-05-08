@@ -13,7 +13,7 @@ class SocialLink < BaseClass
 
   validate :correct_url?
 
-  validates :author_id,       presence: true
+  validates :author_id, presence: true
 
   before_create :populate_embed_code, :build_default_link, :add_trailing_slash
 
@@ -36,10 +36,10 @@ class SocialLink < BaseClass
   # call back to delete news link segment associations
   def remove_segment_association(segment)
     social_link_segment = self.social_link_segments.where(segment_id: segment.id).first
-      social_link_segment.news_feed_link_segment.destroy
+    social_link_segment.news_feed_link_segment.destroy
   end
 
-    protected
+  protected
 
   def correct_url?
     unless SocialMedia::Importer.valid_url? url
@@ -55,11 +55,12 @@ class SocialLink < BaseClass
     self.embed_code = SocialMedia::Importer.url_to_embed url
   end
 
-    private
+  private
 
   def build_default_link
     return if group_id.nil?
-      build_news_feed_link(news_feed_id: group.news_feed.id)
-      true
+
+    build_news_feed_link(news_feed_id: group.news_feed.id)
+    true
   end
 end

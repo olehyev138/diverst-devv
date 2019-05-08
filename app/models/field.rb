@@ -8,7 +8,7 @@ class Field < BaseClass
 
   validates :title, presence: true
   validates :title, uniqueness: { scope: :enterprise_id },
-  unless: Proc.new { |object| (object.type == 'SegmentsField' || object.type == 'GroupsField') }, if: :container_type_is_enterprise?
+                    unless: Proc.new { |object| (object.type == 'SegmentsField' || object.type == 'GroupsField') }, if: :container_type_is_enterprise?
 
   def container_type_is_enterprise?
     enterprise_id.present?

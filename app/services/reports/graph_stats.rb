@@ -26,6 +26,7 @@ class Reports::GraphStats
         aggregation_field_value = @parser.parse(child_element)[:label]
 
         next if @unset_series.include? aggregation_field_value
+
         header_row << aggregation_field_value
       end
     end
@@ -49,6 +50,7 @@ class Reports::GraphStats
           label, count = @parser.parse(child_element).fetch_values(:label, :count)
 
           next if @unset_series.include?(label)
+
           row << count
         end
 
@@ -59,6 +61,7 @@ class Reports::GraphStats
         label, count = @parser.parse(element).fetch_values(:label, :count)
 
         next if count == 0
+
         body << [label, count]
       end
     end

@@ -5,7 +5,7 @@ RSpec.describe UsersHelper do
   let!(:user) { create(:user, enterprise: enterprise) }
   let!(:current_user) { user }
 
-    before { enterprise.update(enable_rewards: true) }
+  before { enterprise.update(enable_rewards: true) }
 
   describe '#user_performance_label' do
     it 'returns a label for user performance' do

@@ -44,6 +44,7 @@ class MetricsDashboard < BaseClass
   def percentage_of_total
     return 0 if enterprise.users.count == 0
     return 100 if target.count > enterprise.users.count
+
     (target.count.to_f / enterprise.users.count * 100).round
   end
 

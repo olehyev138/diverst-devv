@@ -3,6 +3,7 @@ class InitiativeUpdateDecorator < Draper::Decorator
   def variance_from_previous(field)
     variance = object.variance_from_previous(field)
     return nil if variance.nil?
+
     sign = variance > 0 ? '+' : '' # The - sign is alreadyadded by to_s when the variance is negative
     variance_string = (variance * 100).round(1).to_s
     span_class = variance > 0 ? 'positive' : 'error'

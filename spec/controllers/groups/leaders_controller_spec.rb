@@ -89,7 +89,8 @@ RSpec.describe Groups::LeadersController, type: :controller do
       let!(:leader_user) { create :user, enterprise: enterprise }
       let!(:group_membership) { create(:user_group, user: leader_user, group: group, accepted_member: true) }
       let!(:leader_attrs) { attributes_for :group_leader, user_id: leader_user.id, group_id: group.id,
-      position_name: 'Admin', user_role_id: leader_user.enterprise.user_roles.where(role_name: 'group_leader').first.id }
+                                                          position_name: 'Admin', user_role_id: leader_user.enterprise.user_roles.where(role_name: 'group_leader').first.id
+      }
 
       context 'with correct params' do
         it 'updates group leaders of a group' do
@@ -100,7 +101,7 @@ RSpec.describe Groups::LeadersController, type: :controller do
 
         it 'flashes a notice message' do
           post_create(group.to_param, leader_attrs)
-           expect(flash[:notice]).to eq 'Leaders were updated'
+          expect(flash[:notice]).to eq 'Leaders were updated'
         end
 
         it 'redirects to correct action' do

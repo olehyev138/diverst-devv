@@ -26,6 +26,7 @@ class Finders::Logs
   end
 
   private
+
   def format_in_clause(array)
     array.collect { |e| "'#{e}'" }.join(', ')
   end

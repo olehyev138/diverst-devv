@@ -26,6 +26,7 @@ class LikesController < ApplicationController
   end
 
   protected
+
   def set_like
     if params[:news_feed_link_id].blank?
       @like = Like.find_by(user: current_user, answer_id: params[:answer_id], enterprise: current_user.enterprise)

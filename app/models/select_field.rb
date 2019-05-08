@@ -3,11 +3,13 @@ class SelectField < Field
 
   def string_value(value)
     return '-' if value.nil? || value.empty?
+
     value[0]
   end
 
   def csv_value(value)
     return '' if value.nil? || value.empty?
+
     value[0]
   end
 
@@ -42,15 +44,15 @@ class SelectField < Field
     # Size score
     size_score = if e1_value == e2_value
       1 - e1_popularity
-                 else
-                   1 - e1_popularity + e2_popularity
+    else
+      1 - e1_popularity + e2_popularity
     end
 
     # Contrast score
     popularity_total = if e1_value == e2_value
       e1_popularity
-                       else
-                         e1_popularity + e2_popularity
+    else
+      e1_popularity + e2_popularity
     end
 
     contrast_score = (e1_popularity - e2_popularity).abs / popularity_total

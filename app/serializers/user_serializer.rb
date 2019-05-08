@@ -3,17 +3,17 @@ class UserSerializer < ActiveModel::Serializer
 
   def fields
     fields = object.enterprise.mobile_fields.map(&:field)
-      fields_hash = []
+    fields_hash = []
 
 
-      fields.each do |field|
-        fields_hash << {
-            title: field.title,
-            value: field.string_value(object.info[field])
-        }
-      end
+    fields.each do |field|
+      fields_hash << {
+          title: field.title,
+          value: field.string_value(object.info[field])
+      }
+    end
 
-      fields_hash
+    fields_hash
   end
 
   def last_name

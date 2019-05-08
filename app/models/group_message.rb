@@ -66,6 +66,7 @@ class GroupMessage < BaseClass
 
   def approve_link
     return if news_feed_link.nil?
+
     news_feed_link.approve_link
   end
 
@@ -86,7 +87,7 @@ class GroupMessage < BaseClass
         .where(
           'groups.id' => group.id,
           'segments.id' => segments.ids
-      )
+        )
     end
   end
 
@@ -106,6 +107,7 @@ class GroupMessage < BaseClass
 
   def build_default_link
     return if news_feed_link.present?
+
     create_news_feed_link(news_feed_id: group.news_feed.id)
   end
 end

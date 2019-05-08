@@ -68,6 +68,7 @@ class Segment < BaseClass
 
   def remove_parent_segment
     return if self.parent_segment.nil?
-      self.parent_segment.destroy
+
+    self.parent_segment.destroy
   end
 end

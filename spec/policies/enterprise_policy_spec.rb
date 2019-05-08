@@ -30,7 +30,7 @@ RSpec.describe EnterprisePolicy, type: :policy do
           user_role.policy_group_template.update enterprise_manage: true
           group = create(:group, enterprise: enterprise)
           create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-            user_role_id: user_role.id)
+                                user_role_id: user_role.id)
         end
 
         it { is_expected.to permit_action(:update) }
@@ -47,7 +47,7 @@ RSpec.describe EnterprisePolicy, type: :policy do
           user_role.policy_group_template.update sso_manage: true
           group = create(:group, enterprise: enterprise)
           create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-            user_role_id: user_role.id)
+                                user_role_id: user_role.id)
         end
 
         it { is_expected.to permit_actions([:edit_auth, :edit_fields, :edit_mobile_fields]) }
@@ -64,7 +64,7 @@ RSpec.describe EnterprisePolicy, type: :policy do
           user_role.policy_group_template.update branding_manage: true
           group = create(:group, enterprise: enterprise)
           create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-            user_role_id: user_role.id)
+                                user_role_id: user_role.id)
         end
 
         it { is_expected.to permit_actions([:edit_branding, :update_branding, :restore_default_branding]) }
@@ -92,7 +92,7 @@ RSpec.describe EnterprisePolicy, type: :policy do
           user_role.policy_group_template.update branding_manage: true
           group = create(:group, enterprise: enterprise)
           create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-            user_role_id: user_role.id)
+                                user_role_id: user_role.id)
         end
 
 
@@ -125,7 +125,7 @@ RSpec.describe EnterprisePolicy, type: :policy do
           user_role.policy_group_template.update manage_posts: true
           group = create(:group, enterprise: enterprise)
           create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-            user_role_id: user_role.id)
+                                user_role_id: user_role.id)
         end
 
 
@@ -158,7 +158,7 @@ RSpec.describe EnterprisePolicy, type: :policy do
           user_role.policy_group_template.update permissions_manage: true
           group = create(:group, enterprise: enterprise)
           create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-            user_role_id: user_role.id)
+                                user_role_id: user_role.id)
         end
 
 
@@ -191,7 +191,7 @@ RSpec.describe EnterprisePolicy, type: :policy do
           user_role.policy_group_template.update sso_manage: true
           group = create(:group, enterprise: enterprise)
           create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-            user_role_id: user_role.id)
+                                user_role_id: user_role.id)
         end
 
 
@@ -224,7 +224,7 @@ RSpec.describe EnterprisePolicy, type: :policy do
           user_role.policy_group_template.update diversity_manage: true
           group = create(:group, enterprise: enterprise)
           create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-            user_role_id: user_role.id)
+                                user_role_id: user_role.id)
         end
 
 
@@ -257,7 +257,7 @@ RSpec.describe EnterprisePolicy, type: :policy do
           user_role.policy_group_template.update manage_posts: true
           group = create(:group, enterprise: enterprise)
           create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-            user_role_id: user_role.id)
+                                user_role_id: user_role.id)
         end
 
 

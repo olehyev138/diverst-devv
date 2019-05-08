@@ -14,6 +14,7 @@ class GroupBudgetPolicy < GroupBasePolicy
   def approve?
     return true if update?
     return true if basic_group_leader_permission?('budget_approval')
+
     user.policy_group.budget_approval?
   end
 
@@ -23,6 +24,7 @@ class GroupBudgetPolicy < GroupBasePolicy
 
   def manage_all_budgets?
     return true if user.policy_group.manage_all?
+
     user.policy_group.groups_budgets_manage? && user.policy_group.groups_manage?
   end
 end

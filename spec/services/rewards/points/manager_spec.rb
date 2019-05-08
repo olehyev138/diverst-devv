@@ -22,7 +22,7 @@ RSpec.describe Rewards::Points::Manager do
       it 'register the points earned by user' do
         expect { manager.add_points(initiative) }.to change(
           UserRewardAction.where(user: user, operation: UserRewardAction.operations[:add],
-            initiative: initiative, reward_action: reward_action, points: reward_action.points), :count
+                                 initiative: initiative, reward_action: reward_action, points: reward_action.points), :count
         ).by(1)
       end
 
@@ -114,7 +114,7 @@ RSpec.describe Rewards::Points::Manager do
       it 'register remove of points from the user' do
         expect { manager.remove_points(initiative) }.to change(
           UserRewardAction.where(user: user, operation: UserRewardAction.operations[:del],
-            initiative: initiative, reward_action: reward_action), :count
+                                 initiative: initiative, reward_action: reward_action), :count
         ).by(1)
       end
 

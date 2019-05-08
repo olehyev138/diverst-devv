@@ -167,7 +167,8 @@ RSpec.describe BaseSearch do
       let (:date_range) { { from: 'now-1y/y', to: 'now-3d/d' } }
       let(:date_range_agg) { query
           .date_range_agg(field: 'dummy_field', range: date_range)
-          .build[:aggs][:agg] }
+          .build[:aggs][:agg]
+      }
 
       it 'returns a valid date range agg with specified field' do
         expect(date_range_agg[:date_range][:field]).to eq 'dummy_field'
@@ -208,11 +209,13 @@ RSpec.describe BaseSearch do
     describe 'terms agg' do
       let(:default_terms_agg) { query
           .terms_agg(field: 'dummy_field')
-          .build[:aggs][:agg] }
+          .build[:aggs][:agg]
+      }
 
       let(:terms_agg) { query
           .terms_agg(field: 'dummy_field', order_field: '_key', order_dir: 'asc')
-          .build[:aggs][:agg] }
+          .build[:aggs][:agg]
+      }
 
       it 'returns a valid terms agg with specified field' do
         expect(terms_agg[:terms][:field]).to eq 'dummy_field'

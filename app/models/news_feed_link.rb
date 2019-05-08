@@ -22,7 +22,7 @@ class NewsFeedLink < BaseClass
   scope :combined_news_links, -> (news_feed_id) { joins('LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id').where("shared_news_feed_links.news_feed_id = #{news_feed_id} OR news_feed_links.news_feed_id = #{news_feed_id} AND news_feed_links.approved = 1").distinct }
   scope :combined_news_links_with_segments, -> (news_feed_id, segment_ids) { includes(:social_link, :news_link, :group_message).joins("LEFT OUTER JOIN news_feed_link_segments ON news_feed_link_segments.news_feed_link_id = news_feed_links.id LEFT OUTER JOIN shared_news_feed_links ON shared_news_feed_links.news_feed_link_id = news_feed_links.id WHERE shared_news_feed_links.news_feed_id = #{news_feed_id} OR news_feed_links.news_feed_id = #{news_feed_id} AND approved = 1 OR news_feed_link_segments.segment_id IS NULL OR news_feed_link_segments.segment_id IN (#{ segment_ids.join(",") })").distinct }
 
-  validates :news_feed_id,    presence: true
+  validates :news_feed_id, presence: true
 
   after_create :approve_link
 
@@ -31,16 +31,17 @@ class NewsFeedLink < BaseClass
   # group leader
   def approve_link
     return if link.nil?
+
     if GroupPostsPolicy.new(link.author, [link.group]).update?
       self.approved = true
-        self.save!
+      self.save!
     end
   end
 
   def link
     return group_message if group_message
-      return news_link if news_link
-      return social_link if social_link
+    return news_link if news_link
+    return social_link if social_link
   end
 
   # View Count methods
@@ -66,6 +67,7 @@ class NewsFeedLink < BaseClass
 
   def self.archive_expired_news(group)
     return unless group.auto_archive?
+
     expiry_date = DateTime.now.send("#{group.unit_of_expiry_age}_ago", group.expiry_age_for_news)
     news = group.news_feed_links.where('created_at < ?', expiry_date).where(archived_at: nil)
 

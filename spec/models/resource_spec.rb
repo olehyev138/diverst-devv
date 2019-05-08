@@ -147,9 +147,9 @@ RSpec.describe Resource, type: :model do
   describe '#total_views' do
     it 'returns 10' do
       resource = create(:resource)
-        create_list(:view, 10, resource: resource)
+      create_list(:view, 10, resource: resource)
 
-        expect(resource.total_views).to eq(10)
+      expect(resource.total_views).to eq(10)
     end
   end
 

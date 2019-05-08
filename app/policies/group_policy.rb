@@ -1,8 +1,9 @@
 class GroupPolicy < ApplicationPolicy
   def index?
     return true if create?
-      return true if basic_group_leader_permission?('groups_index')
-      @policy_group.groups_index?
+    return true if basic_group_leader_permission?('groups_index')
+
+    @policy_group.groups_index?
   end
 
   def new?
@@ -15,10 +16,11 @@ class GroupPolicy < ApplicationPolicy
 
   def create?
     return true if manage_all?
-      return true if @policy_group.groups_manage?
-      return true if basic_group_leader_permission?('groups_manage')
-      return true if basic_group_leader_permission?('groups_create')
-      @policy_group.groups_create?
+    return true if @policy_group.groups_manage?
+    return true if basic_group_leader_permission?('groups_manage')
+    return true if basic_group_leader_permission?('groups_create')
+
+    @policy_group.groups_create?
   end
 
   def update_all_sub_groups?
@@ -44,34 +46,35 @@ class GroupPolicy < ApplicationPolicy
 
   def update?
     return true if @policy_group.groups_manage?
-      return true if @record.owner == @user
+    return true if @record.owner == @user
 
-      @record.managers.include?(user)
+    @record.managers.include?(user)
   end
 
   def manage_all_groups?
     # return true if parent_group_permissions?
     # super admin
     return true if manage_all?
-      return true if basic_group_leader_permission?('groups_manage') && basic_group_leader_permission?('group_settings_manage')
+    return true if basic_group_leader_permission?('groups_manage') && basic_group_leader_permission?('group_settings_manage')
 
-      # groups manager
-      return true if @policy_group.groups_manage? && @policy_group.group_settings_manage?
+    # groups manager
+    return true if @policy_group.groups_manage? && @policy_group.group_settings_manage?
   end
 
   def manage_all_group_budgets?
     # return true if parent_group_permissions?
     # super admin
     return true if manage_all?
-      return true if basic_group_leader_permission?('groups_manage') && basic_group_leader_permission?('groups_budgets_manage')
+    return true if basic_group_leader_permission?('groups_manage') && basic_group_leader_permission?('groups_budgets_manage')
 
-      # groups manager
-      return true if @policy_group.groups_manage? && @policy_group.groups_budgets_manage?
+    # groups manager
+    return true if @policy_group.groups_manage? && @policy_group.groups_budgets_manage?
   end
 
   def manage?
     return true if manage_all?
     return true if basic_group_leader_permission?('groups_manage')
+
     @policy_group.groups_manage?
   end
 
@@ -93,16 +96,19 @@ class GroupPolicy < ApplicationPolicy
 
   def has_group_leader_permissions?(permission)
     return false if !is_a_leader?
-      @record.group_leaders.where(user_id: @user.id).where("#{permission} = true").exists?
+
+    @record.group_leaders.where(user_id: @user.id).where("#{permission} = true").exists?
   end
 
   def update?
     return true if manage?
+
     @record.owner == @user
   end
 
   def parent_group_permissions?
     return false if @record.parent.nil?
+
     ::GroupPolicy.new(@user, @record.parent).manage?
   end
 
@@ -113,6 +119,7 @@ class GroupPolicy < ApplicationPolicy
   def calendar?
     return true if manage_all?
     return true if basic_group_leader_permission?('global_calendar')
+
     @policy_group.global_calendar?
   end
 

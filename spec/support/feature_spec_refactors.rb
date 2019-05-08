@@ -28,7 +28,6 @@ module FeatureSpecRefactors
       date_time.strftime('%Y-%m-%d %H:%m')
     end
 
-
     def set_custom_text_fields
       create(:field, title: 'BIO', enterprise_id: enterprise.id)
     end
@@ -39,7 +38,7 @@ module FeatureSpecRefactors
 
     def set_custom_checkbox_fields
       create(:checkbox_field, title: 'Programming Language', options_text: "Ruby\r\nElixir\r\nC++\r\nJavaScript",
-        enterprise_id: enterprise.id)
+                              enterprise_id: enterprise.id)
     end
 
     def set_custom_numeric_fields
@@ -50,11 +49,10 @@ module FeatureSpecRefactors
       create(:date_field, title: 'Date of Birth', enterprise_id: enterprise.id)
     end
 
-
     def computed_style(selector, prop)
       string = page.evaluate_script(
         "window.getComputedStyle(document.querySelector('#{selector}')).#{prop}"
-        )
+      )
       phrase = string[18..-1]
       string.slice! phrase
       string

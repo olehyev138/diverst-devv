@@ -41,7 +41,7 @@ RSpec.describe GroupMessagePolicy, type: :policy do
               user_role.policy_group_template.update group_messages_index: true
               group = create(:group, enterprise: enterprise)
               create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                user_role_id: user_role.id)
+                                    user_role_id: user_role.id)
             end
 
             it { is_expected.to permit_action(:index) }
@@ -53,7 +53,7 @@ RSpec.describe GroupMessagePolicy, type: :policy do
               user_role.policy_group_template.update manage_posts: true
               group = create(:group, enterprise: enterprise)
               create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                user_role_id: user_role.id)
+                                    user_role_id: user_role.id)
             end
 
             it { is_expected.to permit_action(:index) }
@@ -93,7 +93,7 @@ RSpec.describe GroupMessagePolicy, type: :policy do
               user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
               user_role.policy_group_template.update group_messages_manage: true
               create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                user_role_id: user_role.id)
+                                    user_role_id: user_role.id)
             end
 
             it { is_expected.to permit_actions([:index, :edit, :update, :destroy]) }

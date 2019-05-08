@@ -29,7 +29,7 @@ RSpec.describe ExpensePolicy, type: :policy do
           user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
           user_role.policy_group_template.update campaigns_manage: true
           create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-            user_role_id: user_role.id)
+                                user_role_id: user_role.id)
         end
 
         it { is_expected.to permit_actions([:index, :new, :create, :update, :destroy]) }

@@ -3,11 +3,13 @@ class CheckboxField < Field
 
   def string_value(values)
     return '-' unless values
+
     values.join(', ')
   end
 
   def csv_value(values)
     return '' unless values
+
     values.join(',')
   end
 

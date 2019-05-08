@@ -49,7 +49,7 @@ class Resource < BaseClass
         only: [:owner_id, :created_at],
         include: { folder: {
           only: [:id, :group_id],
-          include: { group: { only: [:enterprise_id]  } }
+          include: { group: { only: [:enterprise_id] } }
         } }
       )
     ).merge({ 'created_at' => self.created_at.beginning_of_hour })
@@ -57,15 +57,15 @@ class Resource < BaseClass
 
   def tag_tokens=(tokens)
     return if tokens.nil?
-      return if tokens === ''
+    return if tokens === ''
 
-      self.tag_ids = Tag.ids_from_tokens(tokens)
+    self.tag_ids = Tag.ids_from_tokens(tokens)
   end
 
   def file_extension
     File.extname(file_file_name)[1..-1].downcase
-rescue
-  ''
+  rescue
+    ''
   end
 
   def expiration_time
@@ -74,10 +74,10 @@ rescue
 
   def container
     return enterprise if enterprise.present?
-      return folder if folder.present?
-      return initiative if initiative.present?
-      return group if group.present?
-      return mentoring_session if mentoring_session.present?
+    return folder if folder.present?
+    return initiative if initiative.present?
+    return group if group.present?
+    return mentoring_session if mentoring_session.present?
   end
 
   def total_views
@@ -86,28 +86,29 @@ rescue
 
   def self.archive_expired_resources(group)
     enterprise = group.enterprise
-      return unless group.auto_archive? || enterprise.auto_archive?
+    return unless group.auto_archive? || enterprise.auto_archive?
 
-      if group.auto_archive?
-        expiry_date = DateTime.now.send("#{group.unit_of_expiry_age}_ago", group.expiry_age_for_resources)
-          group_resources = Resource.joins(:folder).where.not(folders: { group_id: nil }).where(folders: { enterprise_id: nil }).where('resources.created_at < ?', expiry_date).where(archived_at: nil)
+    if group.auto_archive?
+      expiry_date = DateTime.now.send("#{group.unit_of_expiry_age}_ago", group.expiry_age_for_resources)
+      group_resources = Resource.joins(:folder).where.not(folders: { group_id: nil }).where(folders: { enterprise_id: nil }).where('resources.created_at < ?', expiry_date).where(archived_at: nil)
 
-          group_resources.update_all(archived_at: DateTime.now) if group_resources.any?
-      end
+      group_resources.update_all(archived_at: DateTime.now) if group_resources.any?
+    end
 
-      if enterprise.auto_archive?
-        expiry_date = DateTime.now.send("#{enterprise.unit_of_expiry_age}_ago", enterprise.expiry_age_for_resources)
-          enterprise_resources = Resource.joins(:folder).where(folders: { group_id: nil }).where.not(folders: { enterprise_id: nil }).where('resources.created_at < ?', expiry_date).where(archived_at: nil)
+    if enterprise.auto_archive?
+      expiry_date = DateTime.now.send("#{enterprise.unit_of_expiry_age}_ago", enterprise.expiry_age_for_resources)
+      enterprise_resources = Resource.joins(:folder).where(folders: { group_id: nil }).where.not(folders: { enterprise_id: nil }).where('resources.created_at < ?', expiry_date).where(archived_at: nil)
 
-          enterprise_resources.update_all(archived_at: DateTime.now) if enterprise_resources.any?
-      end
+      enterprise_resources.update_all(archived_at: DateTime.now) if enterprise_resources.any?
+    end
   end
 
-    protected
+  protected
 
   def smart_add_url_protocol
     return nil if url.blank?
-      self.url = "http://#{url}" unless have_protocol?
+
+    self.url = "http://#{url}" unless have_protocol?
   end
 
   def have_protocol?

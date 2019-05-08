@@ -54,10 +54,11 @@ RSpec.describe RewardActionsController, type: :controller do
     end
 
     context 'without a logged in user' do
-      before {  patch :update, enterprise: {
+      before { patch :update, enterprise: {
             reward_actions_attributes: { '0' => { 'id' => reward_action.id, 'points' => 20 } }
-          } }
-       it_behaves_like 'redirect user to users/sign_in path'
+          }
+      }
+      it_behaves_like 'redirect user to users/sign_in path'
     end
   end
 end

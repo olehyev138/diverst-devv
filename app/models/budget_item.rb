@@ -6,7 +6,7 @@ class BudgetItem < BaseClass
   validates :title, presence: true, length: { minimum: 2 }
   validates :estimated_amount, numericality: { less_than_or_equal_to: 999999, message: 'number of digits must not exceed 6' }
   validates :available_amount, numericality: { less_than_or_equal_to: :estimated_amount },
-    allow_nil: true, unless: -> { estimated_amount.blank? }
+                               allow_nil: true, unless: -> { estimated_amount.blank? }
 
   scope :available, -> { where(is_done: false) }
   scope :allocated, -> { where(is_done: true) }

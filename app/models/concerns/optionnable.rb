@@ -302,6 +302,7 @@ module Optionnable
 
   def set_options_array
     return self.options = [] if options_text.nil?
+
     self.options = options_text.lines.map(&:chomp)
   end
 end

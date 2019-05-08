@@ -12,47 +12,47 @@ class ArchivedInitiativesController < ApplicationController
   def destroy
     authorize current_user.enterprise, :manage_posts?, policy_class: EnterprisePolicy
 
-      track_activity(@initiative, :destroy)
-      @initiative.destroy
+    track_activity(@initiative, :destroy)
+    @initiative.destroy
 
-      respond_to do |format|
-        format.html { redirect_to :back }
-        format.js
-      end
+    respond_to do |format|
+      format.html { redirect_to :back }
+      format.js
+    end
   end
 
   def delete_all
     authorize current_user.enterprise, :manage_posts?, policy_class: EnterprisePolicy
-      @initiatives = Initiative.archived_initiatives(current_user.enterprise).order(created_at: :desc)
-      @initiatives.destroy_all
+    @initiatives = Initiative.archived_initiatives(current_user.enterprise).order(created_at: :desc)
+    @initiatives.destroy_all
 
-      respond_to do |format|
-        format.html { redirect_to :back, notice: 'all archived events deleted' }
-        format.js
-      end
+    respond_to do |format|
+      format.html { redirect_to :back, notice: 'all archived events deleted' }
+      format.js
+    end
   end
 
   def restore_all
     authorize current_user.enterprise, :manage_posts?, policy_class: EnterprisePolicy
-      @initiatives = Initiative.archived_initiatives(current_user.enterprise).order(created_at: :desc)
-      @initiatives.update_all(archived_at: nil)
+    @initiatives = Initiative.archived_initiatives(current_user.enterprise).order(created_at: :desc)
+    @initiatives.update_all(archived_at: nil)
 
-      respond_to do |format|
-        format.html { redirect_to :back, notice: 'all archived events restored' }
-        format.js
-      end
+    respond_to do |format|
+      format.html { redirect_to :back, notice: 'all archived events restored' }
+      format.js
+    end
   end
 
   def restore
     authorize current_user.enterprise, :manage_posts?, policy_class: EnterprisePolicy
 
-      @initiative.update(archived_at: nil)
-      track_activity(@initiative, :restore)
+    @initiative.update(archived_at: nil)
+    track_activity(@initiative, :restore)
 
-      respond_to do |format|
-        format.html { redirect_to :back }
-        format.js
-      end
+    respond_to do |format|
+      format.html { redirect_to :back }
+      format.js
+    end
     end
 
   private

@@ -127,7 +127,7 @@ RSpec.feature 'CustomText Management' do
 
     scenario 'Member preference' do
       create(:user_group, user: create(:user, enterprise: enterprise), group_id: group.id,
-        accepted_member: false)
+                          accepted_member: false)
 
       visit pending_group_group_members_path(group)
 

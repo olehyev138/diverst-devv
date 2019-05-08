@@ -31,9 +31,9 @@ RSpec.feature 'Group Categorization' do
 
     scenario 'Add a group category to an existing list of group categories' do
       programming_languages = create(:group_category_type, name: 'Programming Languages',
-        enterprise_id: user.enterprise_id)
+                                                           enterprise_id: user.enterprise_id)
       ruby = create(:group_category, group_category_type_id: programming_languages.id,
-        enterprise_id: user.enterprise_id, name: 'Ruby')
+                                     enterprise_id: user.enterprise_id, name: 'Ruby')
 
       visit view_all_group_categories_path
 
@@ -55,12 +55,13 @@ RSpec.feature 'Group Categorization' do
 
   context 'Deleting category types and labels' do
     let!(:web_frameworks) { create(:group_category_type, name: 'Web Frameworks',
-      enterprise_id: user.enterprise_id) }
+                                                         enterprise_id: user.enterprise_id)
+    }
 
     before do
       ['Rails', 'Elixir', 'Django'].each do |web_framework|
         create(:group_category, group_category_type_id: web_frameworks.id,
-          enterprise_id: user.enterprise_id, name: web_framework)
+                                enterprise_id: user.enterprise_id, name: web_framework)
       end
     end
 
@@ -95,7 +96,8 @@ RSpec.feature 'Group Categorization' do
 
   context 'Updating category type and labels' do
     let!(:web_frameworks) { create(:group_category_type, name: 'Web Frameworks',
-      enterprise_id: user.enterprise_id) }
+                                                         enterprise_id: user.enterprise_id)
+    }
 
     scenario 'Update name of category type' do
       visit edit_group_category_type_path(web_frameworks)

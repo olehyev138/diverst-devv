@@ -20,6 +20,7 @@ class RewardActionsController < ApplicationController
   end
 
   private
+
   def set_enterprise
     @enterprise = current_user.enterprise
   end

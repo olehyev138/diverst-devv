@@ -15,6 +15,6 @@ class ViewsController < ApplicationController
         :enterprise_id,
         :folder_id,
         :resource_id
-        )
+      )
   end
 end

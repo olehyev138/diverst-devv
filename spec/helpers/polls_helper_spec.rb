@@ -4,8 +4,8 @@ RSpec.describe PollsHelper do
   let!(:enterprise) { create(:enterprise) }
   let!(:group) { create(:group, enterprise: enterprise) }
   let(:outcome) { create :outcome, group_id: group.id }
-    let(:pillar) { create :pillar, outcome_id: outcome.id }
-    let!(:initiative) { create :initiative, pillar: pillar, owner_group: group }
+  let(:pillar) { create :pillar, outcome_id: outcome.id }
+  let!(:initiative) { create :initiative, pillar: pillar, owner_group: group }
   let!(:poll) { create(:poll, initiative_id: initiative.id, enterprise: enterprise) }
 
   describe '#poll_initiative_visibility_class' do

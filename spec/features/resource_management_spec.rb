@@ -3,9 +3,11 @@ require 'rails_helper'
 RSpec.feature 'Resource management' do
   let!(:user) { create(:user) }
   let!(:folder_with_pp) { create(:folder, enterprise: user.enterprise, name: 'Company Archives',
-    password_protected: true, password: 'pAsSwOrD') }
+                                          password_protected: true, password: 'pAsSwOrD')
+  }
   let!(:folder_without_pp) { create(:folder, enterprise: user.enterprise, name: 'Company Documents',
-    password_protected: false) }
+                                             password_protected: false)
+  }
   let!(:group) { create(:group, name: 'New Group', enterprise_id: user.enterprise_id) }
 
   before { login_as(user, scope: :user) }
@@ -62,10 +64,12 @@ RSpec.feature 'Resource management' do
 
   context 'update and destroy' do
     let!(:verizon_logo) { File.new('spec/fixtures/files/verizon_logo.png') }
-      let!(:resource_with_url) { create(:resource, title: 'Official Website of Naruto Shippuden',
-        folder: folder_with_pp, file: verizon_logo, url: 'https://www.viz.com/naruto') }
-      let!(:resource_without_url) { create(:resource, title: 'Dragon Ball Z', folder: folder_without_pp,
-        file: verizon_logo, url: '') }
+    let!(:resource_with_url) { create(:resource, title: 'Official Website of Naruto Shippuden',
+                                                 folder: folder_with_pp, file: verizon_logo, url: 'https://www.viz.com/naruto')
+    }
+    let!(:resource_without_url) { create(:resource, title: 'Dragon Ball Z', folder: folder_without_pp,
+                                                    file: verizon_logo, url: '')
+    }
 
     context 'update existing resource' do
       scenario 'and move to a different folder' do

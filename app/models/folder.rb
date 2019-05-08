@@ -6,7 +6,7 @@ class Folder < BaseClass
   # associations
   belongs_to  :enterprise
   belongs_to  :group
-  belongs_to  :parent,   class_name: 'Folder', foreign_key: :parent_id
+  belongs_to  :parent, class_name: 'Folder', foreign_key: :parent_id
 
   has_many    :views, dependent: :destroy
   has_many    :children, class_name: 'Folder', foreign_key: :parent_id

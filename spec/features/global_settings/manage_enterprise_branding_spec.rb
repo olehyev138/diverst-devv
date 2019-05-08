@@ -78,7 +78,7 @@ RSpec.feature 'Manage Enterprise Branding' do
 
     scenario 'choose a timezone', js: true do
       event = create(:initiative, start: Time.now, end: Time.now + 1.days, owner_group_id: group.id,
-       owner: admin_user, pillar: create(:pillar, outcome: create(:outcome, name: 'First Outcome', group_id: group.id)))
+                                  owner: admin_user, pillar: create(:pillar, outcome: create(:outcome, name: 'First Outcome', group_id: group.id)))
 
       visit edit_branding_enterprise_path(admin_user.enterprise)
 

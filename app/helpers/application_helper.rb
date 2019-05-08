@@ -1,6 +1,6 @@
 module ApplicationHelper
   def linkedin_logo_for_connected_users(user)
-    inline_svg('icons/linkedin', size: '17px*17px')  if user.linkedin_profile_url.present?
+    inline_svg('icons/linkedin', size: '17px*17px') if user.linkedin_profile_url.present?
   end
 
   def back_to_diverst_path
@@ -40,7 +40,7 @@ module ApplicationHelper
   def to_color(color)
     trimmed_color = color.tr('#', '')
 
-    if trimmed_color.to_i(16).to_s(16) == trimmed_color.downcase  # if string is a valid hex number
+    if trimmed_color.to_i(16).to_s(16) == trimmed_color.downcase # if string is a valid hex number
       '#' + trimmed_color
     else
       trimmed_color
@@ -59,6 +59,7 @@ module ApplicationHelper
 
   def last_sign_in_text(user)
     return 'Never' if user.last_sign_in_at.nil?
+
     "#{time_ago_in_words(user.last_sign_in_at)} ago"
   end
 
@@ -69,11 +70,13 @@ module ApplicationHelper
     return campaigns_path if CampaignPolicy.new(current_user, Campaign).create?
     return polls_path if PollPolicy.new(current_user, Poll).create?
     return mentoring_interests_path if MentoringInterestPolicy.new(current_user, MentoringInterest).index?
+
     global_settings_path
   end
 
   def manage_erg_budgets_path
     return close_budgets_groups_path if GroupPolicy.new(current_user, Group).manage_all_group_budgets?
+
     false
   end
 
@@ -82,6 +85,7 @@ module ApplicationHelper
     return segments_path if SegmentPolicy.new(current_user, Segment).index?
     return calendar_groups_path if GroupPolicy.new(current_user, Group).calendar?
     return enterprise_folders_path(current_user.enterprise) if EnterpriseFolderPolicy.new(current_user).index?
+
     false
   end
 
@@ -97,11 +101,13 @@ module ApplicationHelper
     return rewards_path if EnterprisePolicy.new(current_user, Enterprise).diversity_manage?
     return logs_path if LogPolicy.new(current_user, nil).index?
     return edit_posts_enterprise_path(current_user.enterprise) if GroupPolicy.new(current_user, Group).manage_all_groups? && EnterprisePolicy.new(current_user, Enterprise).manage_posts?
+
     false
   end
 
   def default_path
     return root_admin_path if root_admin_path
+
     user_root_path
   end
 
@@ -123,11 +129,11 @@ module ApplicationHelper
 
   def show_sponsor?(object)
     m = 'sponsor_name'
-      if object.respond_to? m.to_sym
-        if object.public_send(m.to_sym).present?
-          yield
-        end
+    if object.respond_to? m.to_sym
+      if object.public_send(m.to_sym).present?
+        yield
       end
+    end
   end
 
   def show_sponsor_media?(object, m)

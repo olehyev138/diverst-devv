@@ -13,6 +13,7 @@ class Reports::GraphTimeseriesGeneric
   end
 
   private
+
   def to_date(miliseconds)
     DateTime.strptime((miliseconds / 1000).to_s, '%s')
   end

@@ -24,7 +24,7 @@ RSpec.describe GroupCategoryTypesController, type: :controller do
     login_user_from_let
 
     context 'when update is successful' do
-      before { patch :update, id: group_category_type.id, group_category_type: { name: 'updated group category type 2' }  }
+      before { patch :update, id: group_category_type.id, group_category_type: { name: 'updated group category type 2' } }
 
       it 'flashes a notice message' do
         expect(flash[:notice]).to eq 'Update category type name'
@@ -76,14 +76,15 @@ RSpec.describe GroupCategoryTypesController, type: :controller do
     login_user_from_let
 
     context 'with valid params' do
-        it 'updated category type' do
+      it 'updated category type' do
         post :update_with_new_category, id: group_category_type.id, group_category_type: { name: 'updated name', category_names: 'red, yellow, blue, green' }
-         expect(assigns[:category_type].name).to eq 'updated name'
+        expect(assigns[:category_type].name).to eq 'updated name'
       end
 
       it '4 new category objects are associated with category type object' do
         expect { post :update_with_new_category, id: group_category_type.id,
-         group_category_type: { name: 'updated name', category_names: 'red, yellow, blue, green' }}
+                                                 group_category_type: { name: 'updated name', category_names: 'red, yellow, blue, green' }
+        }
          .to change(group_category_type.group_categories, :count).by(4)
       end
 
@@ -96,18 +97,18 @@ RSpec.describe GroupCategoryTypesController, type: :controller do
         post :update_with_new_category, id: group_category_type.id, group_category_type: { name: 'updated name', category_names: 'red, yellow, blue, green' }
         expect(response).to redirect_to view_all_group_categories_url
       end
+    end
+
+    context 'with invalid params' do
+      it 'does not add extra categories' do
+        expect { post :update_with_new_category, id: group_category_type.id, group_category_type: { name: nil, category_names: 'red, yellow, blue, green' } }
+        .to change(group_category_type.group_categories, :count).by(0)
       end
 
-      context 'with invalid params' do
-        it 'does not add extra categories' do
-          expect { post :update_with_new_category, id: group_category_type.id, group_category_type: { name: nil, category_names: 'red, yellow, blue, green' } }
-          .to change(group_category_type.group_categories, :count).by(0)
-        end
-
-        it 'renders add_category template' do
-          post :update_with_new_category, id: group_category_type.id, group_category_type: { name: nil, category_names: 'red, yellow, blue, green' }
-            expect(response).to render_template :add_category
-        end
+      it 'renders add_category template' do
+        post :update_with_new_category, id: group_category_type.id, group_category_type: { name: nil, category_names: 'red, yellow, blue, green' }
+        expect(response).to render_template :add_category
       end
+    end
   end
 end

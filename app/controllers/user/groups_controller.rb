@@ -9,10 +9,10 @@ class User::GroupsController < ApplicationController
 
   def join
     @group = current_user.enterprise.groups.find(params[:id])
-      return if policy(@group).is_a_member?
+    return if policy(@group).is_a_member?
 
-      UserGroup.create!(user_id: current_user.id, group_id: @group.id, accepted_member: @group.pending_users.disabled?)
+    UserGroup.create!(user_id: current_user.id, group_id: @group.id, accepted_member: @group.pending_users.disabled?)
 
-      @group.save
+    @group.save
   end
 end

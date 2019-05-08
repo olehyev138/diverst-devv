@@ -29,7 +29,7 @@ class MentoringSessionCommentsController < ApplicationController
     redirect_to mentoring_session_path(@mentoring_session)
   end
 
-    protected
+  protected
 
   def set_mentoring_session
     @mentoring_session = current_user.mentoring_sessions.find(params[:mentoring_session_id])

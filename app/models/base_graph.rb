@@ -51,7 +51,7 @@ module BaseGraph
     end
 
     def set_enterprise_filter(field: 'enterprise_id', value:)
-      @enterprise_filter = { field: field, value: value  }
+      @enterprise_filter = { field: field, value: value }
     end
 
     # Query elasticsearch with the current query object and enterprise filter
@@ -358,6 +358,7 @@ module BaseGraph
     # parse a es response to return a list of elements
     def get_elements(response, extractor: nil, **args)
       return response unless extractor.present?
+
       extractor.call(response, args)
     end
 

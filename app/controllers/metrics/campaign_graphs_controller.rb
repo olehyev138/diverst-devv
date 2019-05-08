@@ -41,6 +41,7 @@ class Metrics::CampaignGraphsController < ApplicationController
   end
 
   private
+
   def set_campaign
     passed_campaign_id = metrics_params[:scoped_by_models[0]]
     @campaign = passed_campaign_id.present? ? Campaign.find(passed_campaign_id) : Campaign.first

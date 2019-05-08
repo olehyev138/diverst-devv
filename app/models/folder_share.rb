@@ -4,5 +4,5 @@ class FolderShare < BaseClass
   belongs_to  :enterprise
   belongs_to  :folder
 
-  validates :folder,    presence: true
+  validates :folder, presence: true
 end

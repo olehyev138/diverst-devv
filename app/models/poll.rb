@@ -76,28 +76,28 @@ class Poll < BaseClass
     CSV.generate do |csv|
       csv << ['user_id', 'user_email', 'user_name'].concat(fields.map(&:title))
 
-        responses.order(created_at: :desc).each do |response|
-          if response.user.present?
-            user_id = response.user.id
-            user_email = response.user.email
-            user_name = response.user.name
-          else
-            user_id = ''
-            user_email = ''
-            user_name = 'Deleted User'
-          end
-            response_column = [user_id, user_email, user_name]
-
-            fields.each do |field|
-              response_column << field.csv_value(response.info[field])
-            end
-
-            csv << response_column
+      responses.order(created_at: :desc).each do |response|
+        if response.user.present?
+          user_id = response.user.id
+          user_email = response.user.email
+          user_name = response.user.name
+        else
+          user_id = ''
+          user_email = ''
+          user_name = 'Deleted User'
         end
+        response_column = [user_id, user_email, user_name]
+
+        fields.each do |field|
+          response_column << field.csv_value(response.info[field])
+        end
+
+        csv << response_column
+      end
     end
   end
 
-    protected
+  protected
 
   # Creates one graph per field when the poll is created
   def create_default_graphs
@@ -138,7 +138,7 @@ class Poll < BaseClass
     errors[:base] << 'Survey is invalid without any field' unless fields.any?
   end
 
-    private
+  private
 
   def remove_associated_fields
     fields.delete_all if fields.any?

@@ -112,7 +112,7 @@ class Enterprise < BaseClass
   def default_time_zone
     return time_zone if time_zone.present?
 
-      'UTC'
+    'UTC'
   end
 
   def default_user_role
@@ -124,43 +124,43 @@ class Enterprise < BaseClass
       self.update(iframe_calendar_token: SecureRandom.urlsafe_base64)
     end
 
-      self[:iframe_calendar_token]
+    self[:iframe_calendar_token]
   end
 
   def saml_settings
     # if xml config file is present - take settings from it
     if xml_sso_config?
       idp_metadata_parser = OneLogin::RubySaml::IdpMetadataParser.new
-        file_content = Paperclip.io_adapters.for(xml_sso_config).read
-        settings = idp_metadata_parser.parse(file_content)
+      file_content = Paperclip.io_adapters.for(xml_sso_config).read
+      settings = idp_metadata_parser.parse(file_content)
     else # otherwise - initialize empty settings
       settings = OneLogin::RubySaml::Settings.new
-        settings.name_identifier_format = 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress'
+      settings.name_identifier_format = 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress'
     end
 
-      settings.assertion_consumer_service_url = "https://#{ENV['DOMAIN']}/enterprises/#{id}/saml/acs"
+    settings.assertion_consumer_service_url = "https://#{ENV['DOMAIN']}/enterprises/#{id}/saml/acs"
 
-      # override xml file settings with enterprise settings, if they are present
-      settings.issuer = sp_entity_id                    if sp_entity_id.present?
-      settings.idp_entity_id = idp_entity_id            if idp_entity_id.present?
-      settings.idp_sso_target_url = idp_sso_target_url  if idp_sso_target_url.present?
-      settings.idp_slo_target_url = idp_slo_target_url  if idp_slo_target_url.present?
-      settings.idp_cert = idp_cert                      if idp_cert.present?
+    # override xml file settings with enterprise settings, if they are present
+    settings.issuer = sp_entity_id                    if sp_entity_id.present?
+    settings.idp_entity_id = idp_entity_id            if idp_entity_id.present?
+    settings.idp_sso_target_url = idp_sso_target_url  if idp_sso_target_url.present?
+    settings.idp_slo_target_url = idp_slo_target_url  if idp_slo_target_url.present?
+    settings.idp_cert = idp_cert                      if idp_cert.present?
 
-      settings.security[:authn_requests_signed] = false
-      settings.security[:logout_requests_signed] = false
-      settings.security[:logout_responses_signed] = false
-      settings.security[:metadata_signed] = false
-      settings.security[:digest_method] = XMLSecurity::Document::SHA1
-      settings.security[:signature_method] = XMLSecurity::Document::RSA_SHA1
+    settings.security[:authn_requests_signed] = false
+    settings.security[:logout_requests_signed] = false
+    settings.security[:logout_responses_signed] = false
+    settings.security[:metadata_signed] = false
+    settings.security[:digest_method] = XMLSecurity::Document::SHA1
+    settings.security[:signature_method] = XMLSecurity::Document::RSA_SHA1
 
-      settings
+    settings
   end
 
   def match_fields(include_disabled: false)
     matchable_field_types = %w(NumericField SelectField CheckboxField)
-      fields = self.fields.where(type: matchable_field_types)
-      fields.where(match_exclude: false) unless include_disabled
+    fields = self.fields.where(type: matchable_field_types)
+    fields.where(match_exclude: false) unless include_disabled
   end
 
   def update_matches
@@ -175,20 +175,20 @@ class Enterprise < BaseClass
 
   def users_csv(nb_rows, export_csv_params = nil)
     return User.to_csv(users: users, fields: fields, nb_rows: nb_rows) if export_csv_params == 'all_users' || export_csv_params.nil?
-      return User.to_csv(users: users.active, fields: fields, nb_rows: nb_rows) if export_csv_params == 'active_users'
-      return User.to_csv(users: users.inactive, fields: fields, nb_rows: nb_rows) if export_csv_params == 'inactive_users'
-      return User.to_csv(users: users.includes(:user_role).where(user_roles: { role_name: 'Group Leader' }), fields: fields, nb_rows: nb_rows) if export_csv_params == 'group_leaders'
+    return User.to_csv(users: users.active, fields: fields, nb_rows: nb_rows) if export_csv_params == 'active_users'
+    return User.to_csv(users: users.inactive, fields: fields, nb_rows: nb_rows) if export_csv_params == 'inactive_users'
+    return User.to_csv(users: users.includes(:user_role).where(user_roles: { role_name: 'Group Leader' }), fields: fields, nb_rows: nb_rows) if export_csv_params == 'group_leaders'
   end
 
   def close_budgets_csv
     CSV.generate do |csv|
       csv << ['Group name', 'Annual budget', 'Leftover money', 'Approved budget']
-       self.groups.includes(:children).all_parents.each do |group|
+      self.groups.includes(:children).all_parents.each do |group|
         csv << [group.name, group.annual_budget.presence || 'Not set', group.leftover_money, group.approved_budget]
 
-         group.children.each do |child|
-           csv << [child.name, child.annual_budget.presence || 'Not set', child.leftover_money, child.approved_budget]
-         end
+        group.children.each do |child|
+          csv << [child.name, child.annual_budget.presence || 'Not set', child.leftover_money, child.approved_budget]
+        end
       end
     end
   end
@@ -197,8 +197,8 @@ class Enterprise < BaseClass
   def search_users(search_hash)
     Elasticsearch::Model.client.search(
       index: 'users',
-        body: search_hash,
-        search_type: 'count'
+      body: search_hash,
+      search_type: 'count'
     )
   end
 
@@ -210,22 +210,22 @@ class Enterprise < BaseClass
   def sso_fields_to_enterprise_fields(sso_attrs)
     mapped_fields = {}
 
-      fields.each do |field|
-        sso_attrs.each do |sso_f_key, sso_f_value|
-          if sso_f_key == field.saml_attribute
-            if sso_f_value.instance_of? Array
-              string_value = sso_f_value.join(',')
-            else
-              string_value = sso_f_value
-            end
-
-              mapped_fields[field.id] = string_value
-              next
+    fields.each do |field|
+      sso_attrs.each do |sso_f_key, sso_f_value|
+        if sso_f_key == field.saml_attribute
+          if sso_f_value.instance_of? Array
+            string_value = sso_f_value.join(',')
+          else
+            string_value = sso_f_value
           end
+
+          mapped_fields[field.id] = string_value
+          next
         end
       end
+    end
 
-      mapped_fields
+    mapped_fields
   end
 
   def resources_count
@@ -238,7 +238,7 @@ class Enterprise < BaseClass
 
   def groups_resources_count
     group_folder_ids = Folder.where(group_id: enterprise.group_ids).pluck(:id)
-      Resource.where(folder_id: group_folder_ids).count
+    Resource.where(folder_id: group_folder_ids).count
   end
 
   def generic_graphs_group_population_csv(erg_text, from_date, to_date, scoped_by_models)
@@ -250,14 +250,14 @@ class Enterprise < BaseClass
 
     data = groups.map { |g|
       members = g.members.active
-        members = members.where('user_groups.created_at >= ?', from_date) if from_date.present?
-        members = members.where('user_groups.created_at <= ?', to_date) if to_date.present?
+      members = members.where('user_groups.created_at >= ?', from_date) if from_date.present?
+      members = members.where('user_groups.created_at <= ?', to_date) if to_date.present?
 
-        {
-            y: members.count,
-            name: g.name,
-            drilldown: g.name
-        }
+      {
+          y: members.count,
+          name: g.name,
+          drilldown: g.name
+      }
     }
     categories = groups.map(&:name)
 
@@ -371,14 +371,14 @@ class Enterprise < BaseClass
 
     data = self.groups.all_parents.map { |g|
       mentoring_sessions = g.members.active.mentors_and_mentees.joins(:mentoring_sessions)
-        mentoring_sessions = mentoring_sessions.where('mentoring_sessions.created_at >= ?', from_date) if from_date.present?
-        mentoring_sessions = mentoring_sessions.where('mentoring_sessions.created_at <= ?', to_date) if to_date.present?
+      mentoring_sessions = mentoring_sessions.where('mentoring_sessions.created_at >= ?', from_date) if from_date.present?
+      mentoring_sessions = mentoring_sessions.where('mentoring_sessions.created_at <= ?', to_date) if to_date.present?
 
-        {
-            y: mentoring_sessions.count,
-            name: g.name,
-            drilldown: g.name
-        }
+      {
+          y: mentoring_sessions.count,
+          name: g.name,
+          drilldown: g.name
+      }
     }
 
     categories = self.groups.all_parents.map { |g| g.name }
@@ -415,14 +415,14 @@ class Enterprise < BaseClass
     data = groups.map do |g|
       events = g.initiatives.joins(:owner)
             .where('users.active = ?', true)
-        events = events.where('initiatives.created_at >= ?', from_date) if from_date.present?
-        events = events.where('initiatives.created_at <= ?', to_date) if to_date.present?
+      events = events.where('initiatives.created_at >= ?', from_date) if from_date.present?
+      events = events.where('initiatives.created_at <= ?', to_date) if to_date.present?
 
-        {
-            y: events.count,
-            name: g.name,
-            drilldown: g.name
-        }
+      {
+          y: events.count,
+          name: g.name,
+          drilldown: g.name
+      }
     end
 
     categories = groups.map { |g| g.name }
@@ -470,14 +470,14 @@ class Enterprise < BaseClass
 
     data = groups.map do |g|
       views = g.views
-        views = views.where('views.created_at >= ?', from_date) if from_date.present?
-        views = views.where('views.created_at <= ?', to_date) if to_date.present?
+      views = views.where('views.created_at >= ?', from_date) if from_date.present?
+      views = views.where('views.created_at <= ?', to_date) if to_date.present?
 
-        {
-            y: views.count,
-            name: g.name,
-            drilldown: g.name
-        }
+      {
+          y: views.count,
+          name: g.name,
+          drilldown: g.name
+      }
     end
 
     categories = groups.map { |g| g.name }
@@ -526,13 +526,13 @@ class Enterprise < BaseClass
     resources = Resource.where(folder_id: folder_ids)
     data = resources.map do |resource|
       views = resource.views
-        views = views.where('views.created_at >= ?', from_date) if from_date.present?
-        views = views.where('views.created_at <= ?', to_date) if to_date.present?
+      views = views.where('views.created_at >= ?', from_date) if from_date.present?
+      views = views.where('views.created_at <= ?', to_date) if to_date.present?
 
-        {
-            y: views.count,
-            name: resource.title
-        }
+      {
+          y: views.count,
+          name: resource.title
+      }
     end
 
     categories = resources.map { |r| r.title }
@@ -708,21 +708,22 @@ class Enterprise < BaseClass
     LogCsv.build(logs)
   end
 
-    protected
+  protected
 
   def smart_add_url_protocol
     return nil if company_video_url.blank?
-      self.company_video_url = "http://#{company_video_url}" unless have_protocol?
+
+    self.company_video_url = "http://#{company_video_url}" unless have_protocol?
   end
 
   def have_protocol?
     company_video_url[%r{\Ahttp:\/\/}] || company_video_url[%r{\Ahttps:\/\/}]
   end
 
-    private
+  private
 
   def create_elasticsearch_only_fields
     fields << GroupsField.create
-      fields << SegmentsField.create
+    fields << SegmentsField.create
   end
 end

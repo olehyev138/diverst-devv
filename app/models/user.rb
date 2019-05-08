@@ -23,9 +23,9 @@ class User < BaseClass
   has_one :policy_group, dependent: :destroy, inverse_of: :user
 
   # mentorship
-  has_many :mentorships,       class_name: 'Mentoring', foreign_key: 'mentor_id'
+  has_many :mentorships, class_name: 'Mentoring', foreign_key: 'mentor_id'
   has_many :mentees, through: :mentorships, class_name: 'User', source: :mentee
-  has_many :menteeships,       class_name: 'Mentoring', foreign_key: 'mentee_id'
+  has_many :menteeships, class_name: 'Mentoring', foreign_key: 'mentee_id'
   has_many :mentors, through: :menteeships, class_name: 'User', source: :mentor
   has_many :availabilities,   class_name: 'MentorshipAvailability'
   has_many :mentorship_ratings
@@ -152,12 +152,13 @@ class User < BaseClass
 
   def default_time_zone
     return time_zone if time_zone.present?
-      enterprise.default_time_zone
+
+    enterprise.default_time_zone
   end
 
   def name_with_status
     status = !active ? ' (inactive)' : ''
-      name + status
+    name + status
   end
 
   def badges
@@ -166,14 +167,15 @@ class User < BaseClass
 
   def set_default_policy_group
     template = enterprise.policy_group_templates.joins(:user_role).where(user_roles: { id: user_role_id }).first
-      attributes = template.create_new_policy
-      if policy_group.nil?
-        create_policy_group(attributes)
-      else
-        # we don't update custom_policy_groups
-        return if custom_policy_group
-          policy_group.update_attributes(attributes)
-      end
+    attributes = template.create_new_policy
+    if policy_group.nil?
+      create_policy_group(attributes)
+    else
+      # we don't update custom_policy_groups
+      return if custom_policy_group
+
+      policy_group.update_attributes(attributes)
+    end
   end
 
   def is_admin?
@@ -183,21 +185,21 @@ class User < BaseClass
   def has_answered_group_surveys?
     groups_with_answered_surveys = user_groups.where.not(data: nil)
 
-      if groups_with_answered_surveys.count > 0
-        return true
-      else
-        return false
-      end
+    if groups_with_answered_surveys.count > 0
+      return true
+    else
+      return false
+    end
   end
 
   def has_answered_group_survey?(group)
     user_group = user_groups.find_by_group_id(group.id)
 
-      if user_group.present? && user_group.data.present?
-        return true
-      else
-        return false
-      end
+    if user_group.present? && user_group.data.present?
+      return true
+    else
+      return false
+    end
   end
 
   # Return true if user is a leader of at least 1 group
@@ -215,40 +217,40 @@ class User < BaseClass
   def set_info_from_saml(nameid, _attrs, enterprise)
     self.email = nameid
 
-      set_name_from_saml(_attrs, enterprise)
+    set_name_from_saml(_attrs, enterprise)
 
-      saml_user_info = enterprise.sso_fields_to_enterprise_fields(_attrs)
+    saml_user_info = enterprise.sso_fields_to_enterprise_fields(_attrs)
 
-      self.update_info(saml_user_info)
-      save(validate: false)
+    self.update_info(saml_user_info)
+    save(validate: false)
 
-      self
+    self
   end
 
   # when using self.info.erge form_data argument expects _all_ enterprise fields to be present
   def update_info(fields_info = {})
     user_info = {}
 
-      # We need to copy user info to separate hash that has no mixins
-      self.info.each do |i|
-        user_info[i[0]] = i[1]
-      end
+    # We need to copy user info to separate hash that has no mixins
+    self.info.each do |i|
+      user_info[i[0]] = i[1]
+    end
 
-      merged_info = user_info.merge(fields_info)
+    merged_info = user_info.merge(fields_info)
 
-      self.info.merge(fields: self.enterprise.fields, form_data: merged_info)
+    self.info.merge(fields: self.enterprise.fields, form_data: merged_info)
   end
 
   def set_name_from_saml(_attrs, enterprise)
     self.first_name ||= 'Not set'
-      if enterprise.saml_first_name_mapping.present? && _attrs[enterprise.saml_first_name_mapping]
-        self.first_name = _attrs[enterprise.saml_first_name_mapping]
-      end
+    if enterprise.saml_first_name_mapping.present? && _attrs[enterprise.saml_first_name_mapping]
+      self.first_name = _attrs[enterprise.saml_first_name_mapping]
+    end
 
-      self.last_name ||= 'Not set'
-      if enterprise.saml_last_name_mapping.present? && _attrs[enterprise.saml_last_name_mapping]
-        self.last_name = _attrs[enterprise.saml_last_name_mapping]
-      end
+    self.last_name ||= 'Not set'
+    if enterprise.saml_last_name_mapping.present? && _attrs[enterprise.saml_last_name_mapping]
+      self.last_name = _attrs[enterprise.saml_last_name_mapping]
+    end
   end
 
   def string_for_field(field)
@@ -258,22 +260,22 @@ class User < BaseClass
   # Get the match score between the user and `other_user`
   def match_score_with(other_user)
     weight_total = 0
-      total_score = 0
+    total_score = 0
 
-      users = enterprise.users.select([:id, :data]).all
-      enterprise.match_fields.each do |field|
-        field_score = field.match_score_between(self, other_user, users)
-          unless field_score.nil? || field_score.nan?
-            weight_total += field.match_weight
-              total_score += field.match_weight * field_score
-          end
+    users = enterprise.users.select([:id, :data]).all
+    enterprise.match_fields.each do |field|
+      field_score = field.match_score_between(self, other_user, users)
+      unless field_score.nil? || field_score.nan?
+        weight_total += field.match_weight
+        total_score += field.match_weight * field_score
       end
+    end
 
-      begin
-        total_score / weight_total
+    begin
+      total_score / weight_total
     rescue ZeroDivisionError
       0
-      end
+    end
   end
 
   def matches
@@ -305,28 +307,27 @@ class User < BaseClass
   def is_part_of_segment?(segment)
     part_of_segment = true
 
-      if !segment.general_rules_followed_by?(self)
-        return false
-      end
+    if !segment.general_rules_followed_by?(self)
+      return false
+    end
 
-      segment.rules.each do |rule|
-        unless rule.followed_by?(self)
-          part_of_segment = false
-            break
-        end
+    segment.rules.each do |rule|
+      unless rule.followed_by?(self)
+        part_of_segment = false
+        break
       end
+    end
 
-      part_of_segment
+    part_of_segment
   end
-
 
   # Generate a Firebase token for the user and update the user with it
   def assign_firebase_token
     payload = { uid: id.to_s }
-      options = { expires: 1.week.from_now }
-      self.firebase_token = @@fb_token_generator.create_token(payload, options)
-      self.firebase_token_generated_at = Time.current
-      save
+    options = { expires: 1.week.from_now }
+    self.firebase_token = @@fb_token_generator.create_token(payload, options)
+    self.firebase_token_generated_at = Time.current
+    save
   end
 
   # Updates this user's match scores with all other enterprise users
@@ -340,19 +341,19 @@ class User < BaseClass
   def self.from_yammer(yammer_user, enterprise:)
     user = User.new(
       first_name: yammer_user['first_name'],
-        last_name: yammer_user['last_name'],
-        email: yammer_user['contact']['email_addresses'][0]['address'],
-        auth_source: 'yammer',
-        enterprise: enterprise
+      last_name: yammer_user['last_name'],
+      email: yammer_user['contact']['email_addresses'][0]['address'],
+      auth_source: 'yammer',
+      enterprise: enterprise
     )
 
-      # Map Yammer fields with Diverst fields as per the mappings defined in the integration configuration
-      enterprise.yammer_field_mappings.each do |mapping|
-        yammer_value = yammer_user[mapping.yammer_field_name]
-          user.info[mapping.diverst_field] = yammer_value unless yammer_value.nil?
-      end
+    # Map Yammer fields with Diverst fields as per the mappings defined in the integration configuration
+    enterprise.yammer_field_mappings.each do |mapping|
+      yammer_value = yammer_user[mapping.yammer_field_name]
+      user.info[mapping.diverst_field] = yammer_value unless yammer_value.nil?
+    end
 
-      user
+    user
   end
 
   # Is set to false to allow users to login via SAML without a password
@@ -363,7 +364,8 @@ class User < BaseClass
   # Raw hash of user info needed when the FieldData Hash[] overrides are an annoyance
   def info_hash
     return {} if data.nil?
-      JSON.parse data
+
+    JSON.parse data
   end
 
   # Export a CSV with the specified users
@@ -371,15 +373,15 @@ class User < BaseClass
     CSV.generate do |csv|
       csv << ['First name', 'Last name', 'Email', 'Biography', 'Active', 'Group Membership'].concat(fields.map(&:title))
 
-        users.order(created_at: :desc).limit(nb_rows).each do |user|
-          user_columns = [user.first_name, user.last_name, user.email, user.biography, user.active, user.groups.map(&:name).join(',')]
+      users.order(created_at: :desc).limit(nb_rows).each do |user|
+        user_columns = [user.first_name, user.last_name, user.email, user.biography, user.active, user.groups.map(&:name).join(',')]
 
-            fields.each do |field|
-              user_columns << field.csv_value(user.info[field])
-            end
-
-            csv << user_columns
+        fields.each do |field|
+          user_columns << field.csv_value(user.info[field])
         end
+
+        csv << user_columns
+      end
     end
   end
 
@@ -391,28 +393,28 @@ class User < BaseClass
       users.order(created_at: :desc).limit(nb_rows).each do |user|
         user_columns = [user.first_name, user.last_name, user.email]
 
-          csv << user_columns
+        csv << user_columns
       end
     end
   end
 
   def group_member?(group_id)
     user_group = user_groups.where(group_id: group_id).first
-      user_group.present?
+    user_group.present?
   end
 
   def pending_group_member?(group_id)
     return false unless group_member?(group_id)
 
-      group = self.enterprise.groups.find(group_id)
-      group.pending_members.exists? self.id
+    group = self.enterprise.groups.find(group_id)
+    group.pending_members.exists? self.id
   end
 
   def active_group_member?(group_id)
     return false unless group_member?(group_id)
 
-      group = self.enterprise.groups.find(group_id)
-      group.active_members.exists? self.id
+    group = self.enterprise.groups.find(group_id)
+    group.active_members.exists? self.id
   end
 
   # groups where user is an accepted member
@@ -436,10 +438,10 @@ class User < BaseClass
   def combined_info
     polls_hash = poll_responses.map(&:info).reduce({}) { |a, e| a.merge(e) } # Get a hash of all the combined poll response answers for this user
 
-      # Merge all the hashes to the main info hash
-      # We use info_hash instead of just info because Hash#merge accesses uses [], which is overriden in FieldData
-      # info_hash.merge(polls_hash)
-      info_hash.merge(polls_hash)
+    # Merge all the hashes to the main info hash
+    # We use info_hash instead of just info because Hash#merge accesses uses [], which is overriden in FieldData
+    # info_hash.merge(polls_hash)
+    info_hash.merge(polls_hash)
   end
 
   settings do
@@ -460,7 +462,7 @@ class User < BaseClass
           }
         }
       }
-    ]  do
+    ] do
       indexes :id,                    type: :integer
       indexes :first_name,            type: :keyword
       indexes :last_name,             type: :keyword
@@ -510,22 +512,22 @@ class User < BaseClass
       end
 
       indexes :enterprise do
-        indexes :id,                type: :integer
-          indexes :name,              type: :keyword
-          indexes :time_zone,         type: :keyword
+        indexes :id, type: :integer
+        indexes :name,              type: :keyword
+        indexes :time_zone,         type: :keyword
 
-          indexes :has_enabled_saml,              type: :boolean
-          indexes :collaborate_module_enabled,    type: :boolean
-          indexes :scope_module_enabled,          type: :boolean
-          indexes :plan_module_enabled,           type: :boolean
-          indexes :enable_rewards,                type: :boolean
-          indexes :enable_pending_comments,       type: :boolean
-          indexes :mentorship_module_enabled,     type: :boolean
-          indexes :disable_likes,                 type: :boolean
-          indexes :enable_social_media,           type: :boolean
+        indexes :has_enabled_saml,              type: :boolean
+        indexes :collaborate_module_enabled,    type: :boolean
+        indexes :scope_module_enabled,          type: :boolean
+        indexes :plan_module_enabled,           type: :boolean
+        indexes :enable_rewards,                type: :boolean
+        indexes :enable_pending_comments,       type: :boolean
+        indexes :mentorship_module_enabled,     type: :boolean
+        indexes :disable_likes,                 type: :boolean
+        indexes :enable_social_media,           type: :boolean
 
-          indexes :created_at,        type: :date
-          indexes :updated_at,        type: :date
+        indexes :created_at,        type: :date
+        indexes :updated_at,        type: :date
       end
 
       # enterprise
@@ -547,7 +549,7 @@ class User < BaseClass
     ).merge({ 'created_at' => self.created_at.beginning_of_hour })
   end
 
-    private
+  private
 
   def check_lifespan_of_user
     # deletes users 13 days or younger
@@ -558,7 +560,7 @@ class User < BaseClass
     enterprise.try(:fields).to_a.each do |field|
       if field.required && info[field].blank?
         key = field.title.parameterize.underscore.to_sym
-          errors.add(key, "can't be blank")
+        errors.add(key, "can't be blank")
       end
     end
   end
@@ -566,7 +568,7 @@ class User < BaseClass
   def generate_uid
     loop do
       uid = SecureRandom.uuid
-        break uid unless User.where(uid: uid).first
+      break uid unless User.where(uid: uid).first
     end
   end
 

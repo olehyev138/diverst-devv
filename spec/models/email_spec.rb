@@ -9,12 +9,12 @@ RSpec.describe Email do
   describe '#destroy_callbacks' do
     it 'removes the child objects' do
       email = create(:email)
-        email_variable = create(:email_variable, email: email)
+      email_variable = create(:email_variable, email: email)
 
-        email.destroy
+      email.destroy
 
-        expect { Email.find(email.id) }.to raise_error(ActiveRecord::RecordNotFound)
-        expect { EmailVariable.find(email_variable.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { Email.find(email.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { EmailVariable.find(email_variable.id) }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 
@@ -22,9 +22,9 @@ RSpec.describe Email do
     it 'processes the email' do
       # create the email
       email = create(:email,
-                content: "<p>Hello %{user.name},</p>\r\n\r\n<p>A new item has been posted to a Diversity and Inclusion group you are a member of. Select the link(s) below to access Diverst and review the item(s)</p>\r\n",
-                subject: 'You have updates in your %{custom_text.erg_text}'
-              )
+                     content: "<p>Hello %{user.name},</p>\r\n\r\n<p>A new item has been posted to a Diversity and Inclusion group you are a member of. Select the link(s) below to access Diverst and review the item(s)</p>\r\n",
+                     subject: 'You have updates in your %{custom_text.erg_text}'
+                    )
       create(:email_variable, email: email, enterprise_email_variable: create(:enterprise_email_variable, key: 'user.name'), upcase: true, pluralize: true)
       create(:email_variable, email: email, enterprise_email_variable: create(:enterprise_email_variable, key: 'custom_text.erg_text'), pluralize: true)
       expect(email.valid?).to be(true)

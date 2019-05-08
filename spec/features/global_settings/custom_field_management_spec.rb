@@ -261,8 +261,8 @@ RSpec.feature 'Custom-field Management' do
     context 'edit' do
       before do
         set_custom_checkbox_fields
-          visit edit_fields_enterprise_path(enterprise)
-          click_on 'Edit'
+        visit edit_fields_enterprise_path(enterprise)
+        click_on 'Edit'
       end
 
       scenario 'custom checkbox field', js: true do

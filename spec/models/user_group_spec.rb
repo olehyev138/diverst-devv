@@ -81,7 +81,7 @@ RSpec.describe UserGroup do
     end
 
     it 'should reindex user on elasticsearch after destroy' do
-      user_group = create(:user_group, user:  user)
+      user_group = create(:user_group, user: user)
       TestAfterCommit.with_commits(true) do
         expect(IndexElasticsearchJob).to receive(:perform_later).with(
           model_name: 'User',

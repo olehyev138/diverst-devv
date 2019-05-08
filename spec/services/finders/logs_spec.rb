@@ -18,8 +18,8 @@ RSpec.describe Finders::Logs do
 
     it 'return only logs of the groups' do
       finder = Finders::Logs.new(PublicActivity::Activity.all)
-      expect(finder.filter_by_groups([group.id]).logs).
-        to match_array([initiative_log, initiative_group_log, poll_log, group_log])
+      expect(finder.filter_by_groups([group.id]).logs)
+        .to match_array([initiative_log, initiative_group_log, poll_log, group_log])
     end
   end
 end

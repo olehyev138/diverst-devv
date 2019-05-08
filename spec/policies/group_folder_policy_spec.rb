@@ -30,7 +30,7 @@ RSpec.describe GroupFolderPolicy, type: :policy do
           user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
           user_role.policy_group_template.update group_resources_manage: true
           create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-            user_role_id: user_role.id)
+                                user_role_id: user_role.id)
         end
 
         it { is_expected.to permit_actions([:index, :show, :new, :create, :edit, :update, :destroy]) }
@@ -55,7 +55,7 @@ RSpec.describe GroupFolderPolicy, type: :policy do
           user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
           user_role.policy_group_template.update group_resources_create: true
           create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-            user_role_id: user_role.id)
+                                user_role_id: user_role.id)
         end
 
         it { is_expected.to permit_actions([:index, :show, :new, :create]) }
@@ -89,7 +89,7 @@ RSpec.describe GroupFolderPolicy, type: :policy do
           user_role = create(:user_role, enterprise: enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
           user_role.policy_group_template.update group_resources_index: true
           create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-            user_role_id: user_role.id)
+                                user_role_id: user_role.id)
         end
 
         it { is_expected.to permit_actions([:index, :show]) }

@@ -17,8 +17,8 @@ class UsersSegment < BaseClass
           }
         }
       }
-    ]  do
-      indexes :segment  do
+    ] do
+      indexes :segment do
         indexes :enterprise_id, type: :integer
         indexes :name, type: :keyword
         indexes :parent do

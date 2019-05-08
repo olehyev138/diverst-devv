@@ -6,8 +6,8 @@ RSpec.feature 'Initiative management' do
 
   let!(:initiative_params) {
     {
-      name:  Faker::Lorem.sentence,
-      description:  Faker::Lorem.sentence,
+      name: Faker::Lorem.sentence,
+      description: Faker::Lorem.sentence,
       location: Faker::Address.city,
       estimated_funding: 1000,
       start: Faker::Time.between(2.days.ago, DateTime.yesterday),

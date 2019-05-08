@@ -11,8 +11,8 @@ RSpec.describe Badge, type: :model do
     it { expect(badge).to have_attached_file(:image) }
     it { expect(badge).to validate_attachment_presence(:image) }
     it {
-      expect(badge).to validate_attachment_content_type(:image).
-        allowing('image/png', 'image/gif').rejecting('text/plain', 'text/xml')
+      expect(badge).to validate_attachment_content_type(:image)
+        .allowing('image/png', 'image/gif').rejecting('text/plain', 'text/xml')
     }
     it { expect(badge).to belong_to(:enterprise) }
 

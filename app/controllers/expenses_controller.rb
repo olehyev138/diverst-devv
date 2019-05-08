@@ -7,25 +7,25 @@ class ExpensesController < ApplicationController
 
   def index
     authorize Expense
-      @expenses = policy_scope(Expense).includes(:category)
+    @expenses = policy_scope(Expense).includes(:category)
   end
 
   def new
     authorize Expense
-      @expense = current_user.enterprise.expenses.new
+    @expense = current_user.enterprise.expenses.new
   end
 
   def create
     authorize Expense
-      @expense = current_user.enterprise.expenses.new(expense_params)
-      if @expense.save
-        flash[:notice] = 'Your expense was created'
-          track_activity(@expense, :create)
-          redirect_to action: :index
-      else
-        flash[:alert] = 'Your expense was not created. Please fix the errors'
-          render :new
-      end
+    @expense = current_user.enterprise.expenses.new(expense_params)
+    if @expense.save
+      flash[:notice] = 'Your expense was created'
+      track_activity(@expense, :create)
+      redirect_to action: :index
+    else
+      flash[:alert] = 'Your expense was not created. Please fix the errors'
+      render :new
+    end
   end
 
   def edit
@@ -34,24 +34,24 @@ class ExpensesController < ApplicationController
 
   def update
     authorize @expense
-      if @expense.update(expense_params)
-        flash[:notice] = 'Your expense was updated'
-          track_activity(@expense, :update)
-          redirect_to action: :index
-      else
-        flash[:alert] = 'Your expense was not updated. Please fix the errors'
-          render :edit
-      end
+    if @expense.update(expense_params)
+      flash[:notice] = 'Your expense was updated'
+      track_activity(@expense, :update)
+      redirect_to action: :index
+    else
+      flash[:alert] = 'Your expense was not updated. Please fix the errors'
+      render :edit
+    end
   end
 
   def destroy
     authorize @expense
-      track_activity(@expense, :destroy)
-      @expense.destroy
-      redirect_to action: :index
+    track_activity(@expense, :destroy)
+    @expense.destroy
+    redirect_to action: :index
   end
 
-    protected
+  protected
 
   def set_expense
     @expense = current_user.enterprise.expenses.find(params[:id])
@@ -62,9 +62,9 @@ class ExpensesController < ApplicationController
         .require(:expense)
         .permit(
           :name,
-            :price,
-            :category_id,
-            :income
+          :price,
+          :category_id,
+          :income
         )
   end
 end

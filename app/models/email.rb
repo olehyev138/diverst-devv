@@ -21,6 +21,7 @@ class Email < BaseClass
       value = object if keys.second.nil?
       value = object.send(keys.second) if keys.second
       next if value.nil?
+
       hash.merge!({ "#{string}": value })
     end
     hash
@@ -41,6 +42,7 @@ class Email < BaseClass
   def process_variables(email_variables, hash)
     email_variables.each do |variable|
       next if hash[variable.enterprise_email_variable[:key].to_sym].nil?
+
       hash[variable.enterprise_email_variable[:key].to_sym] = variable.format(hash[variable.enterprise_email_variable[:key].to_sym])
     end
     hash
@@ -48,6 +50,7 @@ class Email < BaseClass
 
   def process_example(text)
     return '' if text.nil?
+
     replace = {}
     # get the strings
     strings = text.scan(/{([^}]*)}/).flatten

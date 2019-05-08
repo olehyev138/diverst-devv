@@ -11,13 +11,13 @@ RSpec.describe BadgesController, type: :controller do
       login_user_from_let
       before { post :new }
 
-        it 'returns a new badge object' do
-          expect(assigns[:badge]).to be_a_new(Badge)
-        end
+      it 'returns a new badge object' do
+        expect(assigns[:badge]).to be_a_new(Badge)
+      end
 
-        it 'renders new template' do
-          expect(response).to render_template :new
-        end
+      it 'renders new template' do
+        expect(response).to render_template :new
+      end
     end
 
     describe 'without logged in user' do

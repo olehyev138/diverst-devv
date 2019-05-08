@@ -68,10 +68,10 @@ RSpec.feature 'User Management' do
     end
 
     context 'for an existing user' do
-        before do
-          set_custom_text_fields
-          visit edit_fields_enterprise_path(enterprise)
-        end
+      before do
+        set_custom_text_fields
+        visit edit_fields_enterprise_path(enterprise)
+      end
 
       scenario 'revoke invitation', js: true do
         visit users_path
@@ -104,6 +104,6 @@ RSpec.feature 'User Management' do
 
         expect(page).to have_content 'Invitation Re-Sent!'
       end
-      end
+    end
   end
 end

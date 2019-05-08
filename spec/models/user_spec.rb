@@ -284,7 +284,7 @@ RSpec.describe User do
     subject { user.erg_leader? }
 
     context 'when user is a leader of an erg' do
-      before  do
+      before do
         create(:user_group, user: user, group: group, accepted_member: true)
         group.group_leaders << GroupLeader.new(group: group, user: user, position_name: 'blah', user_role: user.enterprise.user_roles.where(role_name: 'group_leader').first)
       end

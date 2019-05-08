@@ -65,7 +65,7 @@ class View < BaseClass
         }, news_feed_link: {
           only: [],
           include: { news_link: { only: [:id, :title] },
-            group: { only: [:id, :name] } }
+                     group: { only: [:id, :name] } }
         },
        }
       )

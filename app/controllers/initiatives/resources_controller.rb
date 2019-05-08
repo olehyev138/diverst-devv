@@ -19,6 +19,7 @@ class Initiatives::ResourcesController < ApplicationController
   end
 
   protected
+
   def set_group
     @group = current_user.enterprise.groups.find(params[:group_id])
   end

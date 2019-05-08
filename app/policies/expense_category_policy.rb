@@ -2,6 +2,7 @@ class ExpenseCategoryPolicy < ApplicationPolicy
   def index?
     return true if manage_all?
     return true if basic_group_leader_permission?('campaigns_manage')
+
     @policy_group.campaigns_manage?
   end
 

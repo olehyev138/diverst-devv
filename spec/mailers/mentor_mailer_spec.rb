@@ -89,7 +89,7 @@ RSpec.describe MentorMailer, type: :mailer do
     let(:mentor) { create :user }
     let(:mentee) { create :user }
     let(:mentoring_request) { create :mentoring_request, sender: mentee, receiver: mentor }
-     let!(:mail) { described_class.new_mentoring_request(mentoring_request).deliver_now }
+    let!(:mail) { described_class.new_mentoring_request(mentoring_request).deliver_now }
 
     it 'renders the subject' do
       expect(mail.subject).to eq 'New Mentoring Request'

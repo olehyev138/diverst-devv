@@ -14,7 +14,7 @@ class Graph < BaseClass
 
   delegate :title, to: :field
 
-  validates :field,       presence: true
+  validates :field, presence: true
 
   after_initialize :set_graph_builder
   after_initialize :set_groups_segments
@@ -27,7 +27,7 @@ class Graph < BaseClass
       @graph_builder.set_enterprise_filter(field: 'user.enterprise_id', value: collection.enterprise.id)
 
       @graph_builder.formatter.type = 'custom'
-      @graph_builder.formatter.filter_zeros = false        # filtering 0 values breaks stacked bar graphs
+      @graph_builder.formatter.filter_zeros = false # filtering 0 values breaks stacked bar graphs
     end
   end
 
@@ -51,6 +51,7 @@ class Graph < BaseClass
 
   def collection
     return metrics_dashboard if metrics_dashboard.present?
+
     poll
   end
 

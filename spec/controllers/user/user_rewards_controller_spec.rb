@@ -29,7 +29,7 @@ RSpec.describe User::UserRewardsController, type: :controller do
 
     describe 'with a user not logged in' do
       before { post :create, reward_id: reward }
-        it_behaves_like 'redirect user to users/sign_in path'
+      it_behaves_like 'redirect user to users/sign_in path'
     end
   end
 end

@@ -37,7 +37,7 @@ RSpec.describe UserPolicy, type: :policy do
           user_role.policy_group_template.update users_index: true
           group = create(:group, enterprise: enterprise)
           create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                  user_role_id: user_role.id)
+                                user_role_id: user_role.id)
         end
 
         it { is_expected.to permit_actions([:index, :show]) }
@@ -55,7 +55,7 @@ RSpec.describe UserPolicy, type: :policy do
           user_role.policy_group_template.update users_manage: true
           group = create(:group, enterprise: enterprise)
           create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                  user_role_id: user_role.id)
+                                user_role_id: user_role.id)
         end
 
         it { is_expected.to permit_actions([:index, :create, :show, :update, :destroy, :resend_invitation]) }
@@ -127,7 +127,7 @@ RSpec.describe UserPolicy, type: :policy do
           user_role.policy_group_template.update users_manage: true
           group = create(:group, enterprise: enterprise)
           create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                  user_role_id: user_role.id)
+                                user_role_id: user_role.id)
         end
 
         it 'returns true' do

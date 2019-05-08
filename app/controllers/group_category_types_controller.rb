@@ -10,7 +10,6 @@ class GroupCategoryTypesController < ApplicationController
     authorize Group, :manage_all_groups?
   end
 
-
   def update
     authorize Group, :manage_all_groups?
     if @category_type.update(category_type_params)

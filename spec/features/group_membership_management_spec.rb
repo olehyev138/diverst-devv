@@ -134,7 +134,8 @@ RSpec.feature 'Group Membership Management' do
     context 'when admin user filters members by' do
       let!(:inactive_user) { create(:user, enterprise: enterprise, first_name: 'Xavier', last_name: 'Nora', active: false) }
       let!(:ruby_core_segment) { create(:segment, enterprise: enterprise, name: 'Ruby Core Segment',
-        active_users_filter: 'only_inactive') }
+                                                  active_users_filter: 'only_inactive')
+      }
 
       before do
         create(:user_group, user_id: inactive_user.id, group_id: group.id, accepted_member: true)
@@ -265,8 +266,8 @@ RSpec.feature 'Group Membership Management' do
 
     context 'when a user leaves' do
       let!(:sub_group) { create(:group, enterprise: enterprise, name: 'Sub Group ONE', parent_id: group.id) }
-      let!(:group_membership)  { create(:user_group, user_id: guest_user.id, group_id: group.id, accepted_member: true) }
-      let!(:sub_group_membership)  { create(:user_group, user_id: guest_user.id, group_id: sub_group.id, accepted_member: true) }
+      let!(:group_membership) { create(:user_group, user_id: guest_user.id, group_id: group.id, accepted_member: true) }
+      let!(:sub_group_membership) { create(:user_group, user_id: guest_user.id, group_id: sub_group.id, accepted_member: true) }
 
       scenario 'a parent group' do
         visit group_path(group)
@@ -289,11 +290,11 @@ RSpec.feature 'Group Membership Management' do
     end
 
     context 'user joins a group' do
-        before do
-          create(:user_group, user_id: guest_user.id, group_id: group.id, accepted_member: false)
-          logout(:user)
-          login_as(admin_user, scope: :user)
-        end
+      before do
+        create(:user_group, user_id: guest_user.id, group_id: group.id, accepted_member: false)
+        logout(:user)
+        login_as(admin_user, scope: :user)
+      end
 
       scenario 'and admin removes user from group', js: true do
         visit group_group_members_path(group)
@@ -306,32 +307,32 @@ RSpec.feature 'Group Membership Management' do
 
         expect(page).to have_no_content guest_user.name
       end
+    end
+
+    context 'admin adds a user to a group' do
+      before do
+        logout(:user)
+        login_as(admin_user, scope: :user)
       end
 
-      context 'admin adds a user to a group' do
-        before do
-          logout(:user)
-          login_as(admin_user, scope: :user)
-        end
+      scenario 'successfully', js: true do
+        visit group_group_members_path(group)
 
-        scenario 'successfully', js: true do
-          visit group_group_members_path(group)
+        click_on '+ Add members'
 
-          click_on '+ Add members'
-
-          expect(page).to have_content "Add Members to #{group.name}"
+        expect(page).to have_content "Add Members to #{group.name}"
 
         first('.select2-container', minimum: 1).click
         find('li.select2-results__option[role="treeitem"]', text: "#{guest_user.first_name} #{guest_user.last_name} - #{guest_user.email}").click
 
-          click_on 'Update Group'
+        click_on 'Update Group'
 
-          expect(page).to have_current_path group_group_members_path(group)
-          within('.content__header h1') do
-            expect(page).to have_content 'Members (1)'
-          end
-          expect(page).to have_content guest_user.name
+        expect(page).to have_current_path group_group_members_path(group)
+        within('.content__header h1') do
+          expect(page).to have_content 'Members (1)'
         end
+        expect(page).to have_content guest_user.name
       end
+    end
   end
 end

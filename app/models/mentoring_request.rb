@@ -34,7 +34,7 @@ class MentoringRequest < BaseClass
     MentorMailer.notify_accepted_request(receiver_id, sender_id).deliver_later
   end
 
-    protected
+  protected
 
   def receiver_has_requests_enabled
     if self.mentoring_type == 'mentor' && !self.receiver.accepting_mentor_requests

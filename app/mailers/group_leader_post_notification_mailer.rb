@@ -5,6 +5,7 @@ class GroupLeaderPostNotificationMailer < ApplicationMailer
     @count = count
     @enterprise = leader.enterprise
     return if @enterprise.disable_emails?
+
     @custom_text = @enterprise.custom_text rescue CustomText.new
     @email = @user.email
 

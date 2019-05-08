@@ -2,18 +2,21 @@ class SegmentPolicy < ApplicationPolicy
   def index?
     return true if create?
     return true if basic_group_leader_permission?('segments_index')
+
     @policy_group.segments_index?
   end
 
   def create?
     return true if update?
     return true if basic_group_leader_permission?('segments_create')
+
     @policy_group.segments_create?
   end
 
   def manage?
     return true if manage_all?
     return true if basic_group_leader_permission?('segments_manage')
+
     @policy_group.segments_manage?
   end
 

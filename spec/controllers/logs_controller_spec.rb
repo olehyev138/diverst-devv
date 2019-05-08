@@ -58,8 +58,8 @@ RSpec.describe LogsController, type: :controller do
       context 'csv output' do
         before {
           allow(LogsDownloadJob).to receive(:perform_later)
-            request.env['HTTP_REFERER'] = 'back'
-            get :index, format: :csv
+          request.env['HTTP_REFERER'] = 'back'
+          get :index, format: :csv
         }
 
         it 'returns to previous page' do
@@ -80,7 +80,7 @@ RSpec.describe LogsController, type: :controller do
           it 'creates public activity record' do
             perform_enqueued_jobs do
               allow(LogsDownloadJob).to receive(:perform_later)
-              expect { get :index, format: :csv  }
+              expect { get :index, format: :csv }
               .to change(PublicActivity::Activity, :count).by(1)
             end
           end

@@ -39,7 +39,7 @@ class UserRole < BaseClass
 
   def build_default_policy_group_template
     build_policy_group_template(name: "#{role_name} Policy Template", enterprise: enterprise, default: default)
-      true
+    true
   end
 
   def self.role_types
@@ -55,14 +55,14 @@ class UserRole < BaseClass
   def can_destroy?
     if default
       errors[:base] << 'Cannot destroy default user role'
-        return false
+      return false
     elsif role_type === 'group'
       if GroupLeader.joins(group: :enterprise).where(groups: { enterprise_id: enterprise.id }, user_role_id: id).count > 0
         errors[:base] << 'Cannot delete because there are users with this group role.'
-          return false
+        return false
       end
     end
-      true
+    true
   end
 
   def reset_user_roles

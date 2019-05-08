@@ -1,6 +1,6 @@
 class MentoringSession < BaseClass
   # associations
-  belongs_to :creator,    class_name: 'User'
+  belongs_to :creator, class_name: 'User'
   belongs_to :enterprise
 
   has_many :mentoring_ratings
@@ -72,7 +72,8 @@ class MentoringSession < BaseClass
 
   def can_start(user_id)
     return false if access_token.present?
-      mentorship_sessions.where(user_id: user_id, role: 'presenter').count > 0 && Time.now.utc + 5.minutes > start.utc
+
+    mentorship_sessions.where(user_id: user_id, role: 'presenter').count > 0 && Time.now.utc + 5.minutes > start.utc
   end
 
   def notify_users_on_create
@@ -93,6 +94,6 @@ class MentoringSession < BaseClass
     users.each do |user|
       MentorMailer.session_canceled(start.in_time_zone(user.default_time_zone).strftime('%m/%d/%Y %I:%M %p'), user.id).deliver_later
     end
-      mentorship_sessions.destroy_all
+    mentorship_sessions.destroy_all
   end
 end

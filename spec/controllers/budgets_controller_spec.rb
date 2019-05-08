@@ -86,8 +86,8 @@ RSpec.describe BudgetsController, type: :controller do
       login_user_from_let
       before {
         allow(GroupBudgetsDownloadJob).to receive(:perform_later)
-          request.env['HTTP_REFERER'] = 'back'
-          get :export_csv, group_id: group.id
+        request.env['HTTP_REFERER'] = 'back'
+        get :export_csv, group_id: group.id
       }
 
       it 'returns to previous page' do
@@ -330,68 +330,68 @@ RSpec.describe BudgetsController, type: :controller do
   describe 'DELETE#destroy' do
     context 'with logged user' do
       login_user_from_let
-        context 'with valid destroy' do
-          it 'removes a budget' do
-            expect { delete :destroy, group_id: budget.group.id, id: budget.id }.to change(Budget, :count).by(-1)
+      context 'with valid destroy' do
+        it 'removes a budget' do
+          expect { delete :destroy, group_id: budget.group.id, id: budget.id }.to change(Budget, :count).by(-1)
+        end
+
+        it 'flashes a notice message' do
+          delete :destroy, group_id: budget.group.id, id: budget.id
+          expect(flash[:notice]).to eq 'Your budget was deleted'
+        end
+
+        it 'redirects to index action' do
+          delete :destroy, group_id: budget.group.id, id: budget.id
+          expect(response).to redirect_to action: :index
+        end
+
+        describe 'public activity' do
+          enable_public_activity
+
+          it 'creates public activity record' do
+            perform_enqueued_jobs do
+              expect { delete :destroy, group_id: budget.group.id, id: budget.id }
+              .to change(PublicActivity::Activity, :count).by(1)
+            end
           end
 
-          it 'flashes a notice message' do
-            delete :destroy, group_id: budget.group.id, id: budget.id
-            expect(flash[:notice]).to eq 'Your budget was deleted'
-          end
+          describe 'activity record' do
+            let(:model) { budget }
+            let(:owner) { user }
+            let(:key) { 'budget.destroy' }
 
-          it 'redirects to index action' do
-            delete :destroy, group_id: budget.group.id, id: budget.id
-            expect(response).to redirect_to action: :index
-          end
-
-          describe 'public activity' do
-            enable_public_activity
-
-            it 'creates public activity record' do
+            before {
               perform_enqueued_jobs do
-                expect { delete :destroy, group_id: budget.group.id, id: budget.id }
-                .to change(PublicActivity::Activity, :count).by(1)
+                delete :destroy, group_id: budget.group.id, id: budget.id
               end
-            end
+            }
 
-            describe 'activity record' do
-              let(:model) { budget }
-              let(:owner) { user }
-              let(:key) { 'budget.destroy' }
-
-              before {
-                perform_enqueued_jobs do
-                  delete :destroy, group_id: budget.group.id, id: budget.id
-                end
-              }
-
-              include_examples 'correct public activity'
-            end
+            include_examples 'correct public activity'
           end
         end
+      end
 
-        context 'with invalid destroy' do
-          before {
-            request.env['HTTP_REFERER'] = 'back'
-            allow_any_instance_of(Budget).to receive(:destroy).and_return(false)
-            delete :destroy, group_id: budget.group.id, id: budget.id
-          }
+      context 'with invalid destroy' do
+        before {
+          request.env['HTTP_REFERER'] = 'back'
+          allow_any_instance_of(Budget).to receive(:destroy).and_return(false)
+          delete :destroy, group_id: budget.group.id, id: budget.id
+        }
 
-          it 'flashes an alert' do
-            expect(flash[:alert]).to eq 'Your budget was not deleted. Please fix the errors'
-          end
-
-          it 'redirects to index action' do
-            expect(response).to redirect_to 'back'
-          end
+        it 'flashes an alert' do
+          expect(flash[:alert]).to eq 'Your budget was not deleted. Please fix the errors'
         end
+
+        it 'redirects to index action' do
+          expect(response).to redirect_to 'back'
+        end
+      end
     end
 
-     context 'without a logged in user' do
-        before {  delete :destroy, group_id: budget.group.id, id: budget.id }
-        it_behaves_like 'redirect user to users/sign_in path'
-      end
+    context 'without a logged in user' do
+      before { delete :destroy, group_id: budget.group.id, id: budget.id }
+      it_behaves_like 'redirect user to users/sign_in path'
+    end
   end
 
   describe 'GET#edit_annual_budget' do
@@ -430,201 +430,202 @@ RSpec.describe BudgetsController, type: :controller do
   describe 'put#reset_annual_budget' do
     context 'with logged user' do
       login_user_from_let
-        context 'with valid update' do
-          before {
+      context 'with valid update' do
+        before {
+          request.env['HTTP_REFERER'] = 'back'
+          put :reset_annual_budget, group_id: budget.group.id, id: budget.id
+        }
+
+        it 'set annual_budget and leftover_money to zero' do
+          expect(assigns[:group].annual_budget).to eq 0
+          expect(assigns[:group].leftover_money).to eq 0
+        end
+
+        it "sets 'is_approved' attribute to false for all budgets belonging to group" do
+          expect(assigns[:group].budgets).to all(have_attributes(is_approved: false))
+        end
+
+        context 'when there is a budget request and expenses are made' do
+          let!(:initiative) { create(:initiative, owner_group: group) }
+          let!(:initiative_expenses) { create_list(:initiative_expense, 2, initiative: initiative) }
+
+          it 'deletes all initiative expenses' do
+            expect(initiative.expenses.count).not_to eq 0
             request.env['HTTP_REFERER'] = 'back'
             put :reset_annual_budget, group_id: budget.group.id, id: budget.id
-          }
 
-          it 'set annual_budget and leftover_money to zero' do
+            expect(initiative.expenses.count).to eq 0
+          end
+
+          it 'delete all budgets for group' do
+            request.env['HTTP_REFERER'] = 'back'
+            put :reset_annual_budget, group_id: budget.group.id, id: budget.id
+
+            expect(assigns[:group].budgets).to be_empty
+          end
+
+          it 'sets annual_budget and leftover_money to 0' do
+            expect(group.annual_budget).to eq 100000
+            expect(group.leftover_money).to eq 0
+
+            request.env['HTTP_REFERER'] = 'back'
+            put :reset_annual_budget, group_id: budget.group.id, id: budget.id
+
             expect(assigns[:group].annual_budget).to eq 0
-            expect(assigns[:group].leftover_money).to eq 0
           end
 
-          it "sets 'is_approved' attribute to false for all budgets belonging to group" do
-            expect(assigns[:group].budgets).to all(have_attributes(is_approved: false))
-          end
-
-          context 'when there is a budget request and expenses are made' do
-            let!(:initiative) { create(:initiative, owner_group: group) }
-            let!(:initiative_expenses) { create_list(:initiative_expense, 2, initiative: initiative) }
-
-            it 'deletes all initiative expenses' do
-              expect(initiative.expenses.count).not_to eq 0
-              request.env['HTTP_REFERER'] = 'back'
-              put :reset_annual_budget, group_id: budget.group.id, id: budget.id
-
-              expect(initiative.expenses.count).to eq 0
-            end
-
-            it 'delete all budgets for group' do
-              request.env['HTTP_REFERER'] = 'back'
-              put :reset_annual_budget, group_id: budget.group.id, id: budget.id
-
-              expect(assigns[:group].budgets).to be_empty
-            end
-
-            it 'sets annual_budget and leftover_money to 0' do
-              expect(group.annual_budget).to eq 100000
-              expect(group.leftover_money).to eq 0
-
-              request.env['HTTP_REFERER'] = 'back'
-              put :reset_annual_budget, group_id: budget.group.id, id: budget.id
-
-              expect(assigns[:group].annual_budget).to eq 0
-            end
-
-            it 'sets estimated_funding and actual_funding to 0' do
-              request.env['HTTP_REFERER'] = 'back'
-              put :reset_annual_budget, group_id: budget.group.id, id: budget.id
-              initiative.reload
-
-              expect(initiative.estimated_funding).to eq 0
-              expect(initiative.actual_funding).to eq 0
-            end
-          end
-
-          context 'when you have unfinished expenses' do
-            let!(:initiative_with_unclosed_expenses) { create(:initiative, start: DateTime.now.days_ago(3), end: DateTime.now.days_ago(1),
-                                finished_expenses: false, owner_group: budget.group) }
-            before do
-              request.env['HTTP_REFERER'] = 'back'
-              put :reset_annual_budget, group_id: budget.group.id, id: budget.id
-            end
-
-            it 'does not reset annual budget' do
-              expect(group.annual_budget).not_to eq 0
-            end
-
-            it 'produces flash message' do
-              expect(flash[:notice]).to eq "Please close expenses of past events belonging to #{budget.group.name}"
-            end
-
-            it 'redirects to back' do
-              expect(response).to redirect_to 'back'
-            end
-          end
-
-
-          describe 'public activity' do
-            enable_public_activity
-
-            it 'creates public activity record' do
-              perform_enqueued_jobs do
-                expect { put :reset_annual_budget, group_id: budget.group.id, id: budget.id }
-                .to change(PublicActivity::Activity, :count).by(1)
-              end
-            end
-
-            describe 'activity record' do
-              let(:model) { Group.last }
-              let(:owner) { user }
-              let(:key) { 'group.annual_budget_update' }
-
-              before {
-                perform_enqueued_jobs do
-                  put :reset_annual_budget, group_id: budget.group.id, id: budget.id
-                end
-              }
-
-              include_examples 'correct public activity'
-            end
-          end
-
-          it 'flashes a notice message' do
-            expect(flash[:notice]).to eq 'Your budget was updated'
-          end
-
-          it 'redirects to back' do
-            expect(response).to redirect_to 'back'
-          end
-        end
-
-        context 'with invalid update' do
-          before {
-            allow_any_instance_of(Group).to receive(:update).and_return(false)
+          it 'sets estimated_funding and actual_funding to 0' do
             request.env['HTTP_REFERER'] = 'back'
             put :reset_annual_budget, group_id: budget.group.id, id: budget.id
-          }
+            initiative.reload
 
-          it 'flashes an alert message' do
-            expect(flash[:alert]).to eq 'Your budget was not updated. Please fix the errors'
+            expect(initiative.estimated_funding).to eq 0
+            expect(initiative.actual_funding).to eq 0
+          end
+        end
+
+        context 'when you have unfinished expenses' do
+          let!(:initiative_with_unclosed_expenses) { create(:initiative, start: DateTime.now.days_ago(3), end: DateTime.now.days_ago(1),
+                                                                         finished_expenses: false, owner_group: budget.group)
+          }
+          before do
+            request.env['HTTP_REFERER'] = 'back'
+            put :reset_annual_budget, group_id: budget.group.id, id: budget.id
+          end
+
+          it 'does not reset annual budget' do
+            expect(group.annual_budget).not_to eq 0
+          end
+
+          it 'produces flash message' do
+            expect(flash[:notice]).to eq "Please close expenses of past events belonging to #{budget.group.name}"
           end
 
           it 'redirects to back' do
             expect(response).to redirect_to 'back'
           end
         end
+
+
+        describe 'public activity' do
+          enable_public_activity
+
+          it 'creates public activity record' do
+            perform_enqueued_jobs do
+              expect { put :reset_annual_budget, group_id: budget.group.id, id: budget.id }
+              .to change(PublicActivity::Activity, :count).by(1)
+            end
+          end
+
+          describe 'activity record' do
+            let(:model) { Group.last }
+            let(:owner) { user }
+            let(:key) { 'group.annual_budget_update' }
+
+            before {
+              perform_enqueued_jobs do
+                put :reset_annual_budget, group_id: budget.group.id, id: budget.id
+              end
+            }
+
+            include_examples 'correct public activity'
+          end
+        end
+
+        it 'flashes a notice message' do
+          expect(flash[:notice]).to eq 'Your budget was updated'
+        end
+
+        it 'redirects to back' do
+          expect(response).to redirect_to 'back'
+        end
+      end
+
+      context 'with invalid update' do
+        before {
+          allow_any_instance_of(Group).to receive(:update).and_return(false)
+          request.env['HTTP_REFERER'] = 'back'
+          put :reset_annual_budget, group_id: budget.group.id, id: budget.id
+        }
+
+        it 'flashes an alert message' do
+          expect(flash[:alert]).to eq 'Your budget was not updated. Please fix the errors'
+        end
+
+        it 'redirects to back' do
+          expect(response).to redirect_to 'back'
+        end
+      end
     end
   end
 
   describe 'put#carry_over_annual_budget' do
     context 'with logged user' do
       login_user_from_let
-        context 'with valid update' do
-          before {
-            request.env['HTTP_REFERER'] = 'back'
-            put :carry_over_annual_budget, group_id: budget.group.id, id: budget.id
-          }
+      context 'with valid update' do
+        before {
+          request.env['HTTP_REFERER'] = 'back'
+          put :carry_over_annual_budget, group_id: budget.group.id, id: budget.id
+        }
 
-          it 'set leftover_money to and zero annual_budget to 100000' do
-            expect(assigns[:group].annual_budget).to eq 100000
-            expect(assigns[:group].leftover_money).to eq 0
+        it 'set leftover_money to and zero annual_budget to 100000' do
+          expect(assigns[:group].annual_budget).to eq 100000
+          expect(assigns[:group].leftover_money).to eq 0
+        end
+
+        it "sets 'is_approved' attribute to false for all budgets belonging to group" do
+          expect(assigns[:group].budgets).to all(have_attributes(is_approved: false))
+        end
+
+        describe 'public activity' do
+          enable_public_activity
+
+          it 'creates public activity record' do
+            perform_enqueued_jobs do
+              expect { put :carry_over_annual_budget, group_id: budget.group.id, id: budget.id }
+              .to change(PublicActivity::Activity, :count).by(1)
+            end
           end
 
-          it "sets 'is_approved' attribute to false for all budgets belonging to group" do
-            expect(assigns[:group].budgets).to all(have_attributes(is_approved: false))
-          end
+          describe 'activity record' do
+            let(:model) { Group.last }
+            let(:owner) { user }
+            let(:key) { 'group.annual_budget_update' }
 
-          describe 'public activity' do
-            enable_public_activity
-
-            it 'creates public activity record' do
+            before {
               perform_enqueued_jobs do
-                expect { put :carry_over_annual_budget, group_id: budget.group.id, id: budget.id }
-                .to change(PublicActivity::Activity, :count).by(1)
+                put :carry_over_annual_budget, group_id: budget.group.id, id: budget.id
               end
-            end
+            }
 
-            describe 'activity record' do
-              let(:model) { Group.last }
-              let(:owner) { user }
-              let(:key) { 'group.annual_budget_update' }
-
-              before {
-                perform_enqueued_jobs do
-                  put :carry_over_annual_budget, group_id: budget.group.id, id: budget.id
-                end
-              }
-
-              include_examples 'correct public activity'
-            end
-          end
-
-          it 'flashes a notice message' do
-            expect(flash[:notice]).to eq 'Your budget was updated'
-          end
-
-          it 'redirects to back' do
-            expect(response).to redirect_to 'back'
+            include_examples 'correct public activity'
           end
         end
 
-        context 'with invalid update' do
-          before {
-            allow_any_instance_of(Group).to receive(:update).and_return(false)
-            request.env['HTTP_REFERER'] = 'back'
-            put :carry_over_annual_budget, group_id: budget.group.id, id: budget.id
-          }
-
-          it 'flashes an alert message' do
-            expect(flash[:alert]).to eq 'Your budget was not updated. Please fix the errors'
-          end
-
-          it 'redirects to back' do
-            expect(response).to redirect_to 'back'
-          end
+        it 'flashes a notice message' do
+          expect(flash[:notice]).to eq 'Your budget was updated'
         end
+
+        it 'redirects to back' do
+          expect(response).to redirect_to 'back'
+        end
+      end
+
+      context 'with invalid update' do
+        before {
+          allow_any_instance_of(Group).to receive(:update).and_return(false)
+          request.env['HTTP_REFERER'] = 'back'
+          put :carry_over_annual_budget, group_id: budget.group.id, id: budget.id
+        }
+
+        it 'flashes an alert message' do
+          expect(flash[:alert]).to eq 'Your budget was not updated. Please fix the errors'
+        end
+
+        it 'redirects to back' do
+          expect(response).to redirect_to 'back'
+        end
+      end
     end
   end
 

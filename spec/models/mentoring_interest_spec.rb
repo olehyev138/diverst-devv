@@ -4,6 +4,6 @@ RSpec.describe MentoringInterest, type: :model do
   describe 'validations' do
     let(:mentoring_interest) { build_stubbed(:mentoring_interest) }
 
-      it { expect(mentoring_interest).to validate_presence_of(:name) }
+    it { expect(mentoring_interest).to validate_presence_of(:name) }
   end
 end

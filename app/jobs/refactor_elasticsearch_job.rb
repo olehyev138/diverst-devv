@@ -3,17 +3,17 @@ class RefactorElasticsearchJob < ActiveJob::Base
 
   def perform
     ['MentorshipInterest',
-      'GroupMessage',
-      'Resource',
-      'MentoringSession',
-      'View',
-      'Initiative',
-      'Segment',
-      'UsersSegment',
-      'Group',
-      'UserGroup',
-      'User',
-      'Answer'].each { |g|
+     'GroupMessage',
+     'Resource',
+     'MentoringSession',
+     'View',
+     'Initiative',
+     'Segment',
+     'UsersSegment',
+     'Group',
+     'UserGroup',
+     'User',
+     'Answer'].each { |g|
       g = g.constantize
       g.__elasticsearch__.delete_index! if g.__elasticsearch__.index_exists?
       g.__elasticsearch__.create_index!

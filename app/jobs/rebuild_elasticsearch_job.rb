@@ -11,7 +11,7 @@ class RebuildElasticsearchJob < ActiveJob::Base
     end
 
     import
-rescue => e
+  rescue => e
   end
 
   def import
@@ -23,15 +23,15 @@ rescue => e
 
     models.each do |model|
       next if not model.respond_to? :__elasticsearch__
-        next if model.__elasticsearch__.client.indices.exists? index: model.index_name
+      next if model.__elasticsearch__.client.indices.exists? index: model.index_name
 
-        # create the index
-        model.__elasticsearch__.create_index!
+      # create the index
+      model.__elasticsearch__.create_index!
 
-        # import
-        model.import
+      # import
+      model.import
     end
-rescue => e
+  rescue => e
   end
 
   def host

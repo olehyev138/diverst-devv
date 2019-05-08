@@ -2,6 +2,7 @@ class InitiativeCommentPolicy < ApplicationPolicy
   def erg_leader?
     return true if manage_all?
     return true if basic_group_leader_permission?('manage_posts')
+
     @policy_group.manage_posts?
   end
 

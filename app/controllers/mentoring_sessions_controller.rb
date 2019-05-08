@@ -59,18 +59,18 @@ class MentoringSessionsController < ApplicationController
 
   def create_comment
     @mentoring_session = current_user.mentoring_sessions.find(params[:mentoring_session_id])
-      authorize @mentoring_session
+    authorize @mentoring_session
 
-      @comment = @mentoring_session.comments.new(mentoring_session_comments_params)
-      @comment.user = current_user
+    @comment = @mentoring_session.comments.new(mentoring_session_comments_params)
+    @comment.user = current_user
 
-      if @comment.save
-        flash[:notice] = 'Your comment was created'
-      else
-        flash[:alert] = 'Comment not saved. Please fix the errors'
-      end
+    if @comment.save
+      flash[:notice] = 'Your comment was created'
+    else
+      flash[:alert] = 'Comment not saved. Please fix the errors'
+    end
 
-      redirect_to :back
+    redirect_to :back
   end
 
   def start

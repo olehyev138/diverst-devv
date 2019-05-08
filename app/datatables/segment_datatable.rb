@@ -33,7 +33,7 @@ class SegmentDatatable < AjaxDatatablesRails::Base
   def generate_destroy_link(record)
     if SegmentPolicy.new(@user, record).destroy?
       link_to 'Delete', segment_path(record), method: :delete,
-      class: 'error', data: { confirm: 'Are you sure?' }
+                                              class: 'error', data: { confirm: 'Are you sure?' }
     end
   end
 

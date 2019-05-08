@@ -67,7 +67,7 @@ RSpec.describe 'User::UserAnswersController', type: :controller do
 
       context 'successfully create answer' do
         it 'creates answer object' do
-          expect { post :create, question_id: question.id, answer: { contributing_group_id: group.id,  content: "Here's some content for you" } }
+          expect { post :create, question_id: question.id, answer: { contributing_group_id: group.id, content: "Here's some content for you" } }
             .to change(Answer, :count).by(1)
         end
 

@@ -3,6 +3,7 @@ class CampaignPolicy < ApplicationPolicy
     return false unless collaborate_module_enabled?
     return true if create?
     return true if basic_group_leader_permission?('campaigns_index')
+
     @policy_group.campaigns_index?
   end
 
@@ -14,18 +15,21 @@ class CampaignPolicy < ApplicationPolicy
     return false unless collaborate_module_enabled?
     return true if manage?
     return true if basic_group_leader_permission?('campaigns_create')
+
     @policy_group.campaigns_create?
   end
 
   def manage?
     return true if manage_all?
     return true if basic_group_leader_permission?('campaigns_manage')
+
     @policy_group.campaigns_manage?
   end
 
   def update?
     return false unless collaborate_module_enabled?
     return true if manage?
+
     @record.owner == @user
   end
 

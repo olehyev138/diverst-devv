@@ -3,6 +3,7 @@ module ResourcesHelper
     return image_url('icons/filetypes/other.png') if !resource.file.present?
 
     return resource.file.expiring_url(3600) if resource.file_content_type.start_with?('image')
+
     image_url("icons/filetypes/#{thumbnail_for_resource_extension(resource)}")
   end
 
@@ -22,12 +23,14 @@ module ResourcesHelper
     else
       # Look for MIME types
       return 'video.png' if res.file_content_type.start_with?('video')
+
       'other.png'
     end
   end
 
   def thumbnail_for_answer(answer)
     return answer.supporting_document.url if answer.supporting_document_content_type.start_with?('image')
+
     image_url("icons/filetypes/#{thumbnail_for_answer_extension(answer)}")
   end
 
@@ -47,6 +50,7 @@ module ResourcesHelper
     else
       # Look for MIME types
       return 'video.png' if res.supporting_document_content_type.start_with?('video')
+
       'other.png'
     end
   end

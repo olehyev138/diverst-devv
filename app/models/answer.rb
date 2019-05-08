@@ -25,16 +25,17 @@ class Answer < BaseClass
 
   def supporting_document_extension
     File.extname(supporting_document_file_name)[1..-1].downcase
-rescue
-  ''
+  rescue
+    ''
   end
 
   # Base value + total of income items - total of expense items
   def total_value
     return 0 if self.value.nil?
-      self.value + self.expenses.includes(:expense).map { |e|
-        (e.quantity || 0) * (e.expense.signed_price || 0)
-      }.sum
+
+    self.value + self.expenses.includes(:expense).map { |e|
+      (e.quantity || 0) * (e.expense.signed_price || 0)
+    }.sum
   end
 
   settings do
@@ -58,8 +59,8 @@ rescue
       options.merge(
         only: [:upvote_count],
         include: { author: { only: [:enterprise_id, :id] },
-          question: { only: [:campaign_id] },
-          contributing_group: { only: [:name] } },
+                   question: { only: [:campaign_id] },
+                   contributing_group: { only: [:name] } },
         methods: [:total_votes]
       )
     )

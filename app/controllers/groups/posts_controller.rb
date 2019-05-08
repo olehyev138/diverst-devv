@@ -13,16 +13,17 @@ class Groups::PostsController < ApplicationController
       if GroupPostsPolicy.new(current_user, [@group]).view_latest_news?
         segment_ids = current_user.segment_ids
 
-          if segment_ids.empty?
-            return without_segments
-          end
-          @posts = NewsFeed.all_links(@group.news_feed.id, segment_ids, @group.enterprise)
-          @count = @posts.count
-          @posts = @posts.order(is_pinned: :desc, created_at: :desc)
-                         .limit(@limit)
+        if segment_ids.empty?
+          return without_segments
+        end
+
+        @posts = NewsFeed.all_links(@group.news_feed.id, segment_ids, @group.enterprise)
+        @count = @posts.count
+        @posts = @posts.order(is_pinned: :desc, created_at: :desc)
+                       .limit(@limit)
       else
         @count = 0
-          @posts = []
+        @posts = []
       end
     end
   end
@@ -37,12 +38,12 @@ class Groups::PostsController < ApplicationController
 
   def approve
     @link.approved = true
-      if @link.save
-        track_activity(@link, :approve)
-      else
-        flash[:alert] = 'Link not approved'
-      end
-      redirect_to :back
+    if @link.save
+      track_activity(@link, :approve)
+    else
+      flash[:alert] = 'Link not approved'
+    end
+    redirect_to :back
   end
 
   def pin
@@ -61,13 +62,13 @@ class Groups::PostsController < ApplicationController
     redirect_to :back
   end
 
-    protected
+  protected
 
   def without_segments
     @posts = NewsFeed.all_links_without_segments(@group.news_feed.id, @group.enterprise)
-      @count = @posts.count
-      @posts = @posts.order(is_pinned: :desc, created_at: :desc)
-                     .limit(@limit)
+    @count = @posts.count
+    @posts = @posts.order(is_pinned: :desc, created_at: :desc)
+                   .limit(@limit)
   end
 
   def with_segments
@@ -79,8 +80,8 @@ class Groups::PostsController < ApplicationController
 
   def set_page
     @limit = 5
-      @page = params[:page].present? ? params[:page].to_i : 1
-      @limit *= @page
+    @page = params[:page].present? ? params[:page].to_i : 1
+    @limit *= @page
   end
 
   def set_link

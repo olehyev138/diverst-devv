@@ -32,7 +32,7 @@ class Groups::EventsController < ApplicationController
     )
     .result
 
-    @events += @group.participating_initiatives.ongoing    .ransack(
+    @events += @group.participating_initiatives.ongoing .ransack(
       initiative_segments_segment_id_in: params[:q]&.dig(:initiative_segments_segment_id_in)
     )
     .result

@@ -147,6 +147,7 @@ class CampaignsController < ApplicationController
 
   def resolve_layout
     return 'user' if current_user.nil?
+
     'collaborate'
   end
 end

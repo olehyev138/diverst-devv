@@ -21,6 +21,7 @@ class Reports::GraphTimeseries
   end
 
   private
+
   def grouped_dates
     dates_info = {}
     @graph_content.each_with_index do |content, i|

@@ -150,8 +150,8 @@ RSpec.describe GroupsController, type: :controller do
       login_user_from_let
       before {
         allow(GroupsCloseBudgetsDownloadJob).to receive(:perform_later)
-          request.env['HTTP_REFERER'] = 'back'
-          get :close_budgets_export_csv
+        request.env['HTTP_REFERER'] = 'back'
+        get :close_budgets_export_csv
       }
 
       it 'returns to previous page' do
@@ -316,9 +316,9 @@ RSpec.describe GroupsController, type: :controller do
 
       context 'without token code' do
         it 'should raise Pundit::NotAuthorizedError' do
-           get_calendar_data(initiative_group.id, initiative_segment.id)
+          get_calendar_data(initiative_group.id, initiative_segment.id)
           expect(response.status).to eq 200
-         end
+        end
       end
     end
   end
@@ -363,23 +363,23 @@ RSpec.describe GroupsController, type: :controller do
 
         let!(:active_user_user_group) {
           create :user_group,
-            user: active_user,
-            group: group,
-            accepted_member: true
+                 user: active_user,
+                 group: group,
+                 accepted_member: true
         }
 
         let!(:inactive_user_user_group) {
           create :user_group,
-            user: inactive_user,
-            group: group,
-            accepted_member: true
+                 user: inactive_user,
+                 group: group,
+                 accepted_member: true
         }
 
         let!(:pending_user_user_group) {
           create :user_group,
-            user: pending_user,
-            group: group,
-            accepted_member: false
+                 user: pending_user,
+                 group: group,
+                 accepted_member: false
         }
 
 
@@ -705,7 +705,8 @@ RSpec.describe GroupsController, type: :controller do
       let!(:group_category2) { create(:group_category, name: 'category 2', enterprise_id: user.enterprise.id, group_category_type_id: group_category_type2.id) }
       let!(:parent) { create(:group, enterprise: user.enterprise, parent_id: nil, group_category_type_id: group_category_type.id, group_category_id: nil) }
       let!(:group1) { create(:group, enterprise: user.enterprise, parent: parent, group_category_id: group_category1.id,
-        group_category_type_id: parent.group_category_type_id) }
+                                     group_category_type_id: parent.group_category_type_id)
+      }
 
       before do
         request.env['HTTP_REFERER'] = "http://test.host/groups/#{group1.id}"
@@ -784,31 +785,31 @@ RSpec.describe GroupsController, type: :controller do
           expect(response).to redirect_to action: :index
         end
 
-          describe 'public activity' do
-            enable_public_activity
+        describe 'public activity' do
+          enable_public_activity
 
-            it 'creates public activity record' do
-              perform_enqueued_jobs do
-                expect {
-                  delete_destroy(group.id)
-                }.to change(PublicActivity::Activity, :count).by(1)
-              end
-            end
-
-            describe 'activity record' do
-              let(:model) { group }
-              let(:owner) { user }
-              let(:key) { 'group.destroy' }
-
-              before {
-                perform_enqueued_jobs do
-                  delete_destroy(group.id)
-                end
-              }
-
-              include_examples 'correct public activity'
+          it 'creates public activity record' do
+            perform_enqueued_jobs do
+              expect {
+                delete_destroy(group.id)
+              }.to change(PublicActivity::Activity, :count).by(1)
             end
           end
+
+          describe 'activity record' do
+            let(:model) { group }
+            let(:owner) { user }
+            let(:key) { 'group.destroy' }
+
+            before {
+              perform_enqueued_jobs do
+                delete_destroy(group.id)
+              end
+            }
+
+            include_examples 'correct public activity'
+          end
+        end
       end
 
       context 'when not saving' do
@@ -981,8 +982,8 @@ RSpec.describe GroupsController, type: :controller do
       login_user_from_let
       before {
         allow(GroupMemberDownloadJob).to receive(:perform_later)
-          request.env['HTTP_REFERER'] = 'back'
-          get :export_csv, id: group.id
+        request.env['HTTP_REFERER'] = 'back'
+        get :export_csv, id: group.id
       }
 
       it 'redirects to user' do

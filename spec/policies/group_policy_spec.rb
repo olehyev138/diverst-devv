@@ -50,14 +50,16 @@ RSpec.describe GroupPolicy, type: :policy do
         before { user.policy_group.update groups_manage: true }
 
         it { is_expected.to permit_actions([:index, :show, :sort, :new, :create, :update_all_sub_groups, :view_all,
-            :add_category, :update_with_new_category, :update, :destroy]) }
+                                            :add_category, :update_with_new_category, :update, :destroy])
+        }
       end
 
       context 'groups_create is true, groups_manage and groups_index are false' do
         before { user.policy_group.update groups_create: true }
 
         it { is_expected.to permit_actions([:index, :show, :sort, :new, :create, :update_all_sub_groups, :view_all,
-            :add_category, :update_with_new_category, :update, :destroy]) }
+                                            :add_category, :update_with_new_category, :update, :destroy])
+        }
       end
 
       context 'when ONLY global_calendar is true, and current user IS NOT owner' do
@@ -83,7 +85,7 @@ RSpec.describe GroupPolicy, type: :policy do
           user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
           user_role.policy_group_template.update groups_layouts_manage: true
           create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                  user_role_id: user_role.id)
+                                user_role_id: user_role.id)
         end
 
         it { is_expected.to permit_actions([:update, :destroy, :layouts]) }
@@ -95,7 +97,7 @@ RSpec.describe GroupPolicy, type: :policy do
           user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
           user_role.policy_group_template.update groups_layouts_manage: true
           create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                  user_role_id: user_role.id)
+                                user_role_id: user_role.id)
         end
 
         it { is_expected.to permit_action(:layouts) }
@@ -115,7 +117,7 @@ RSpec.describe GroupPolicy, type: :policy do
           user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
           user_role.policy_group_template.update group_settings_manage: true
           create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                  user_role_id: user_role.id)
+                                user_role_id: user_role.id)
         end
 
         it { is_expected.to permit_actions([:update, :destroy, :settings]) }
@@ -127,7 +129,7 @@ RSpec.describe GroupPolicy, type: :policy do
           user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
           user_role.policy_group_template.update group_settings_manage: true
           create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                  user_role_id: user_role.id)
+                                user_role_id: user_role.id)
         end
 
         it { is_expected.to permit_action(:settings) }
@@ -139,7 +141,8 @@ RSpec.describe GroupPolicy, type: :policy do
 
       context 'when groups_manage, groups_create groups_index are false' do
         it { is_expected.to permit_actions([:index, :new, :show, :create, :sort, :view_all, :add_category, :update_with_new_category,
-                                            :update, :destroy, :calendar, :layouts, :settings]) }
+                                            :update, :destroy, :calendar, :layouts, :settings])
+        }
       end
     end
   end
@@ -148,7 +151,8 @@ RSpec.describe GroupPolicy, type: :policy do
     before { group.owner = create(:user) }
     let!(:user) { no_access }
     it { is_expected.to forbid_actions([:index, :show, :sort, :new, :create, :update_all_sub_groups, :view_all,
-            :add_category, :update_with_new_category, :update, :destroy, :settings, :layouts, :calendar]) }
+                                        :add_category, :update_with_new_category, :update, :destroy, :settings, :layouts, :calendar])
+    }
   end
 
   describe 'custom policies' do
@@ -176,7 +180,7 @@ RSpec.describe GroupPolicy, type: :policy do
           user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
           user_role.policy_group_template.update groups_insights_manage: true
           create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                  user_role_id: user_role.id)
+                                user_role_id: user_role.id)
         end
 
         it 'returns true' do
@@ -226,7 +230,7 @@ RSpec.describe GroupPolicy, type: :policy do
           user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
           user_role.policy_group_template.update groups_layouts_manage: true
           create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                  user_role_id: user_role.id)
+                                user_role_id: user_role.id)
         end
 
         it 'returns true' do
@@ -249,7 +253,7 @@ RSpec.describe GroupPolicy, type: :policy do
           user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
           user_role.policy_group_template.update groups_manage: true
           create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                  user_role_id: user_role.id)
+                                user_role_id: user_role.id)
         end
 
         it 'returns true' do
@@ -280,7 +284,7 @@ RSpec.describe GroupPolicy, type: :policy do
           user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
           user_role.policy_group_template.update groups_manage: true, groups_budgets_manage: true
           create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                  user_role_id: user_role.id)
+                                user_role_id: user_role.id)
         end
 
         it 'returns true' do
@@ -311,7 +315,7 @@ RSpec.describe GroupPolicy, type: :policy do
           user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
           user_role.policy_group_template.update groups_manage: true, group_settings_manage: true
           create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                  user_role_id: user_role.id)
+                                user_role_id: user_role.id)
         end
 
         it 'returns true' do

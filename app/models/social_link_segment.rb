@@ -11,6 +11,6 @@ class SocialLinkSegment < BaseClass
 
   def build_default_link_segment
     build_news_feed_link_segment(segment: segment, news_feed_link: social_link.news_feed_link)
-      true
+    true
   end
 end

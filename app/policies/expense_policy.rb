@@ -1,6 +1,7 @@
 class ExpensePolicy < CampaignPolicy
   def update?
     return false unless collaborate_module_enabled?
+
     manage?
   end
 

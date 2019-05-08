@@ -51,10 +51,10 @@ RSpec.describe UserGroupNotificationJob, type: :job do
       it 'sends an email of notification to user' do
         # Timecop.freeze(Time.now + 30.minutes) do
         mailer = double('mailer')
-          expect(UserGroupMailer).to receive(:notification)
-            .with(user, [{ group: group, events_count: 1, messages_count: 1, news_count: 1, social_links_count: 1, participating_events_count: 1 }]) { mailer }
-          expect(mailer).to receive(:deliver_now)
-          subject.perform({ notifications_frequency: 'hourly', enterprise_id: user.enterprise_id })
+        expect(UserGroupMailer).to receive(:notification)
+          .with(user, [{ group: group, events_count: 1, messages_count: 1, news_count: 1, social_links_count: 1, participating_events_count: 1 }]) { mailer }
+        expect(mailer).to receive(:deliver_now)
+        subject.perform({ notifications_frequency: 'hourly', enterprise_id: user.enterprise_id })
         # end
       end
     end

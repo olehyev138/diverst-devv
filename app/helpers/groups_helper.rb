@@ -14,6 +14,7 @@ module GroupsHelper
   def show_members_link?(group)
     return true if GroupMemberPolicy.new(current_user, [group]).view_members?
     return true if group.pending_users.enabled? && GroupMemberPolicy.new(current_user, [group]).update?
+
     false
   end
 
@@ -23,6 +24,7 @@ module GroupsHelper
     return true if GroupPolicy.new(current_user, group).layouts?
     return true if GroupPolicy.new(current_user, group).manage?
     return true if GroupPolicy.new(current_user, group).settings?
+
     false
   end
 
@@ -31,6 +33,7 @@ module GroupsHelper
     return true if GroupEventsPolicy.new(current_user, [group]).update?
     return true if GroupBudgetPolicy.new(current_user, [group]).update?
     return true if GroupPolicy.new(current_user, group).manage?
+
     false
   end
 end

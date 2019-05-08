@@ -29,6 +29,7 @@ class MentoringSessionPolicy < ApplicationPolicy
 
   def accepted_user?
     return true if creator?
+
     @record.mentorship_sessions.find_by(user_id: @user.id).accepted?
   end
 

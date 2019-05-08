@@ -69,7 +69,6 @@ class Metrics::UserGraphsController < ApplicationController
     end
   end
 
-
   def user_growth
     authorize MetricsDashboard, :index?
 

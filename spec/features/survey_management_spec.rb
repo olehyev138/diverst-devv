@@ -64,7 +64,7 @@ RSpec.feature 'Survey Management' do
       visit new_poll_poll_response_path(poll)
 
       expect(page).to have_select(id: "what programming languages are you proficient in?_#{sf_id}",
-        with_options: ['Ruby', 'Java', 'Elixir', 'JavaScript'])
+                                  with_options: ['Ruby', 'Java', 'Elixir', 'JavaScript'])
     end
 
     context 'add' do
@@ -101,7 +101,7 @@ RSpec.feature 'Survey Management' do
 
         expect(page).to have_content 'What country(ies) is/are your preferred destination?'
         expect(page).to have_select(id: "what country(ies) is/are your preferred destination?_#{cf_id}",
-          with_options: ['Spain', 'Argentina', 'Brazil', 'Germany', 'Canada'])
+                                    with_options: ['Spain', 'Argentina', 'Brazil', 'Germany', 'Canada'])
       end
     end
   end

@@ -6,9 +6,11 @@ RSpec.describe GroupEventsPolicy, type: :policy do
   let(:no_access) { create(:user, enterprise: enterprise) }
   let!(:user) { no_access }
   let(:upcoming_event) { create(:initiative, owner: no_access, owner_group: group,
-        start: DateTime.now.tomorrow, end: DateTime.now >> 1) }
+                                             start: DateTime.now.tomorrow, end: DateTime.now >> 1)
+  }
   let(:ongoing_event) { create(:initiative, owner: no_access, owner_group: group,
-        start: DateTime.now.weeks_ago(1), end: DateTime.now >> 1) }
+                                            start: DateTime.now.weeks_ago(1), end: DateTime.now >> 1)
+  }
   let!(:event) { upcoming_event }
 
   subject { described_class.new(user, [group, event]) }
@@ -55,7 +57,7 @@ RSpec.describe GroupEventsPolicy, type: :policy do
             user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
             user_role.policy_group_template.update initiatives_manage: true
             create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                  user_role_id: user_role.id)
+                                  user_role_id: user_role.id)
           end
 
           it 'return true' do
@@ -68,7 +70,7 @@ RSpec.describe GroupEventsPolicy, type: :policy do
             user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
             user_role.policy_group_template.update initiatives_create: true
             create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                  user_role_id: user_role.id)
+                                  user_role_id: user_role.id)
           end
 
           it 'return true' do
@@ -81,7 +83,7 @@ RSpec.describe GroupEventsPolicy, type: :policy do
             user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
             user_role.policy_group_template.update initiatives_index: true
             create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                  user_role_id: user_role.id)
+                                  user_role_id: user_role.id)
           end
 
           it 'return true' do
@@ -106,7 +108,7 @@ RSpec.describe GroupEventsPolicy, type: :policy do
             user_role = create(:user_role, enterprise: user.enterprise, role_type: 'group', role_name: 'Group Leader', priority: 3)
             user_role.policy_group_template.update initiatives_manage: true
             create(:group_leader, group_id: group.id, user_id: user.id, position_name: 'Group Leader',
-                  user_role_id: user_role.id)
+                                  user_role_id: user_role.id)
           end
 
           it 'returns true' do

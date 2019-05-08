@@ -22,6 +22,7 @@ class Rewards::Points::Manager
   end
 
   private
+
   def add_points_to_user(entity)
     entity.user_reward_actions.create(
       user: @user,

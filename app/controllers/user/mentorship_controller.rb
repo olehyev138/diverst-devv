@@ -18,20 +18,20 @@ class User::MentorshipController < ApplicationController
   def update
     authorize @user
 
-      @user.assign_attributes(user_params)
-      if @user.save
-        track_activity(@user, :update_mentorship_profile)
-          flash[:notice] = 'Your user was updated'
-          # we redirect to mentors so the user can find a mentor only if mentor and mentee are true
-          if @user.mentor? || @user.mentee?
-            redirect_to action: :mentors
-          else
-            redirect_to action: :edit
-          end
+    @user.assign_attributes(user_params)
+    if @user.save
+      track_activity(@user, :update_mentorship_profile)
+      flash[:notice] = 'Your user was updated'
+      # we redirect to mentors so the user can find a mentor only if mentor and mentee are true
+      if @user.mentor? || @user.mentee?
+        redirect_to action: :mentors
       else
-        flash[:alert] = 'Your user was not updated. Please fix the errors'
-          redirect_to :back
+        redirect_to action: :edit
       end
+    else
+      flash[:alert] = 'Your user was not updated. Please fix the errors'
+      redirect_to :back
+    end
   end
 
   def mentors
@@ -44,10 +44,10 @@ class User::MentorshipController < ApplicationController
 
   def requests
     @mentorship_proposals = @user.mentorship_proposals.mentor_requests
-      @menteeship_proposals = @user.mentorship_proposals.mentee_requests
+    @menteeship_proposals = @user.mentorship_proposals.mentee_requests
 
-      @mentorship_requests = @user.accepting_mentor_requests ? @user.mentorship_requests.mentor_requests : []
-      @menteeship_requests = @user.accepting_mentee_requests ? @user.mentorship_requests.mentee_requests : []
+    @mentorship_requests = @user.accepting_mentor_requests ? @user.mentorship_requests.mentor_requests : []
+    @menteeship_requests = @user.accepting_mentee_requests ? @user.mentorship_requests.mentee_requests : []
   end
 
   def sessions
@@ -58,10 +58,10 @@ class User::MentorshipController < ApplicationController
 
   def ratings
     @sessions = @user.mentoring_sessions.past.no_ratings
-      @ratings = @user.mentorship_ratings
+    @ratings = @user.mentorship_ratings
   end
 
-    protected
+  protected
 
   def set_user
     @user = User.find_by_id(params[:id]) || current_user
@@ -70,14 +70,14 @@ class User::MentorshipController < ApplicationController
   def user_params
     params.require(:user).permit(
       :mentor,
-        :mentee,
-        :mentorship_description,
-        :time_zone,
-        :accepting_mentor_requests,
-        :accepting_mentee_requests,
-        mentoring_interest_ids: [],
-        mentoring_type_ids: [],
-        availabilities_attributes: [:day, :start, :end, :_destroy, :id]
+      :mentee,
+      :mentorship_description,
+      :time_zone,
+      :accepting_mentor_requests,
+      :accepting_mentee_requests,
+      mentoring_interest_ids: [],
+      mentoring_type_ids: [],
+      availabilities_attributes: [:day, :start, :end, :_destroy, :id]
     )
   end
 end

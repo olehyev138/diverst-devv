@@ -17,7 +17,7 @@ RSpec.feature 'user visits the metrics section' do
 
 
   scenario 'they can edit a metrics dashboard' do
-    create(:metrics_dashboard, enterprise: user.enterprise, owner: user, name: 'Test Dashboard',  groups: [create(:group, enterprise: user.enterprise)])
+    create(:metrics_dashboard, enterprise: user.enterprise, owner: user, name: 'Test Dashboard', groups: [create(:group, enterprise: user.enterprise)])
 
     visit metrics_metrics_dashboards_path
     click_on 'Edit'
@@ -43,7 +43,7 @@ RSpec.feature 'user visits the metrics section' do
   end
 
   context 'metrics can be deleted' do
-    let!(:test_dashboard) { create(:metrics_dashboard, enterprise: user.enterprise, owner: user, name: 'Test Dashboard',  groups: [create(:group, enterprise: user.enterprise)]) }
+    let!(:test_dashboard) { create(:metrics_dashboard, enterprise: user.enterprise, owner: user, name: 'Test Dashboard', groups: [create(:group, enterprise: user.enterprise)]) }
 
     before { visit metrics_metrics_dashboards_path }
 

@@ -12,29 +12,29 @@ RSpec.describe LikesController, type: :controller do
     context 'with logged in user' do
       login_user_from_let
 
-        it 'likes a post' do
-          expect { post :create, news_feed_link_id: news_link.news_feed_link.id }
-            .to change(Like, :count).by(1)
-        end
+      it 'likes a post' do
+        expect { post :create, news_feed_link_id: news_link.news_feed_link.id }
+          .to change(Like, :count).by(1)
+      end
 
-        it 'unlikes a post' do
-          post :create, news_feed_link_id: news_link.news_feed_link.id
+      it 'unlikes a post' do
+        post :create, news_feed_link_id: news_link.news_feed_link.id
 
-          expect { post :unlike, news_feed_link_id: news_link.news_feed_link.id }
-            .to change(Like, :count).by(-1)
-        end
+        expect { post :unlike, news_feed_link_id: news_link.news_feed_link.id }
+          .to change(Like, :count).by(-1)
+      end
 
-        it 'likes an answer' do
-          expect { post :create, answer_id: answer.id }
-            .to change(Like, :count).by(1)
-        end
+      it 'likes an answer' do
+        expect { post :create, answer_id: answer.id }
+          .to change(Like, :count).by(1)
+      end
 
-        it 'unlikes an answer' do
-          post :create, answer_id: answer.id
+      it 'unlikes an answer' do
+        post :create, answer_id: answer.id
 
-          expect { post :unlike, answer_id: answer.id }
-            .to change(Like, :count).by(-1)
-        end
+        expect { post :unlike, answer_id: answer.id }
+          .to change(Like, :count).by(-1)
+      end
     end
 
     context 'with logged out user' do

@@ -3,9 +3,11 @@ require 'rails_helper'
 RSpec.feature 'Folder management' do
   let!(:user) { create(:user) }
   let!(:folder_with_pp) { create(:folder, enterprise: user.enterprise, name: 'Company Archives',
-   password_protected: true, password: 'password_2') }
+                                          password_protected: true, password: 'password_2')
+  }
   let!(:folder_without_pp) { create(:folder, enterprise: user.enterprise, name: 'Company Documents',
-   password_protected: false) }
+                                             password_protected: false)
+  }
   let!(:group) { create(:group, name: 'New Group', enterprise_id: user.enterprise_id) }
 
   before { login_as(user, scope: :user) }

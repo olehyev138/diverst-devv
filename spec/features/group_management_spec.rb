@@ -145,23 +145,30 @@ RSpec.feature 'Group management' do
 
   context 'group categorization' do
     let!(:parent_group) { create(:group, name: 'Parent Group', enterprise_id: user.enterprise_id,
-      group_category_type_id: nil, group_category_id: nil) }
+                                         group_category_type_id: nil, group_category_id: nil)
+    }
     let!(:sub_group1) { create(:group, name: 'Sub Group ONE', parent_id: parent_group.id, enterprise_id: user.enterprise_id,
-      group_category_type_id: nil, group_category_id: nil) }
+                                       group_category_type_id: nil, group_category_id: nil)
+    }
     let!(:sub_group2) { create(:group, name: 'Sub Group TWO', parent_id: parent_group.id, enterprise_id: user.enterprise_id,
-      group_category_type_id: nil, group_category_id: nil) }
+                                       group_category_type_id: nil, group_category_id: nil)
+    }
 
     let!(:color_codes) { create(:group_category_type, name: 'Color Codes', enterprise_id: user.enterprise_id) }
     let!(:red) { create(:group_category, name: 'Red', enterprise_id: user.enterprise_id,
-      group_category_type_id: color_codes.id) }
+                                         group_category_type_id: color_codes.id)
+    }
     let!(:blue) { create(:group_category, name: 'Blue', enterprise_id: user.enterprise_id,
-      group_category_type_id: color_codes.id) }
+                                          group_category_type_id: color_codes.id)
+    }
 
     let!(:regions) { create(:group_category_type, name: 'Regions', enterprise_id: user.enterprise_id) }
     let!(:eastern_province) { create(:group_category, name: 'Eastern Province', enterprise_id: user.enterprise_id,
-      group_category_type_id: regions.id) }
+                                                      group_category_type_id: regions.id)
+    }
     let!(:central_province) { create(:group_category, name: 'Central Province', enterprise_id: user.enterprise_id,
-      group_category_type_id: regions.id) }
+                                                      group_category_type_id: regions.id)
+    }
 
     context 'via edit form' do
       scenario 'categorize sub-erg' do

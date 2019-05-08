@@ -40,7 +40,7 @@ class Groups::GroupMessageCommentController < ApplicationController
         .require(:group_message_comment)
         .permit(
           :content,
-            :approved
+          :approved
         )
   end
 end

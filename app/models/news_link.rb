@@ -61,6 +61,7 @@ class NewsLink < BaseClass
 
   def smart_add_url_protocol
     return nil if url.blank?
+
     self.url = "http://#{url}" unless have_protocol?
   end
 
@@ -70,6 +71,7 @@ class NewsLink < BaseClass
 
   def build_default_link
     return if news_feed_link.present?
+
     create_news_feed_link(news_feed_id: group.news_feed.id)
   end
 end

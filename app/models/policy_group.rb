@@ -12,7 +12,7 @@ class PolicyGroup < BaseClass
     self.class.all_permission_fields.each do |permission|
       self[permission] = boolean
     end
-      self.save!
+    self.save!
   end
 
   def self.all_permission_fields

@@ -114,10 +114,10 @@ RSpec.describe SocialMedia::Importer do
 
     context 'with invalid url' do
       shared_examples 'invalid url' do |url|
-         it 'returns fals' do
-           expect(subject).to eq false
-         end
-       end
+        it 'returns fals' do
+          expect(subject).to eq false
+        end
+      end
 
       context 'with corrupted url' do
         let(:url) { 'https://twitter.com/iamthewrongurl' }

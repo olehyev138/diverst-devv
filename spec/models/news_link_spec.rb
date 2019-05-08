@@ -23,7 +23,8 @@ RSpec.describe NewsLink, type: :model do
     it { expect(news_link).to have_attached_file(:picture) }
     it { expect(news_link).to validate_attachment_content_type(:picture)
         .allowing('image/png', 'image/jpeg', 'image/jpg')
-        .rejecting('text/xml', 'text/plain') }
+        .rejecting('text/xml', 'text/plain')
+    }
 
     it 'validates url length' do
       expect(build(:news_link, url: 'www.goodurl.com')).to be_valid

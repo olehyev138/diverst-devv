@@ -55,25 +55,25 @@ class Api::V1::ApiController < ActionController::Base
     if request.authorization.present?
       # get the auth string and then the username and password
       string = request.authorization
-        return process_headers(string)
+      return process_headers(string)
     elsif request.headers['HTTP_AUTHORIZATION'].present?
       # get the auth string and then the username and password
       string = request.headers['HTTP_AUTHORIZATION']
-        return process_headers(string)
+      return process_headers(string)
     elsif params['headers'].present? && params['headers'].present?
       # get the auth string and then the username and password
       string = params['headers']['HTTP_AUTHORIZATION']
-        return process_headers(string)
+      return process_headers(string)
     end
-      error
+    error
   end
 
   def process_headers(string)
     array = string.split(' ')
 
-      credentials = Base64.decode64(array.second).split(':')
+    credentials = Base64.decode64(array.second).split(':')
 
-      authentication(credentials.first, credentials.second)
+    authentication(credentials.first, credentials.second)
   end
 
   # pass email and password so we can check if the user
@@ -81,16 +81,16 @@ class Api::V1::ApiController < ActionController::Base
 
   def authentication(email, password)
     return error if email.nil?
-      return error if password.nil?
+    return error if password.nil?
 
-      # want to downcase in case email is sent with a character capitalized
-      user = User.find_by_email(email.downcase)
-      return error 'Not Found', 401 if user.nil?
+    # want to downcase in case email is sent with a character capitalized
+    user = User.find_by_email(email.downcase)
+    return error 'Not Found', 401 if user.nil?
 
-      return error 'Unauthorized', 401 if not user.valid_password?(password)
+    return error 'Unauthorized', 401 if not user.valid_password?(password)
 
-      # set the user
-      self.current_user = user
+    # set the user
+    self.current_user = user
   end
 
   def error(e = nil, status = nil)

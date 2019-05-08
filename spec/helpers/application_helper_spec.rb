@@ -68,22 +68,22 @@ RSpec.describe ApplicationHelper do
   describe '#event_color' do
     let!(:group) { create(:group, enterprise: enterprise) }
     let(:outcome) { create :outcome, group_id: group.id }
-      let(:pillar) { create :pillar, outcome_id: outcome.id }
-      let!(:initiative) { create :initiative, pillar: pillar, owner_group: group }
+    let(:pillar) { create :pillar, outcome_id: outcome.id }
+    let!(:initiative) { create :initiative, pillar: pillar, owner_group: group }
 
-      it 'returns calendar_color if present' do
-        expect(event_color(initiative)).to eq '#' + initiative.group.calendar_color
-      end
+    it 'returns calendar_color if present' do
+      expect(event_color(initiative)).to eq '#' + initiative.group.calendar_color
+    end
 
-      it 'returns enterprise_primary_logo' do
-        enterprise.update(theme_id: create(:theme).id)
-        expect(event_color(initiative)).to eq enterprise.theme.primary_color
-      end
+    it 'returns enterprise_primary_logo' do
+      enterprise.update(theme_id: create(:theme).id)
+      expect(event_color(initiative)).to eq enterprise.theme.primary_color
+    end
 
-      it "returns '#7b77c9' when enterprise.theme is nil and calendar_color is nil" do
-        initiative.group.update(calendar_color: '')
-        expect(event_color(initiative)).to eq '#7b77c9'
-      end
+    it "returns '#7b77c9' when enterprise.theme is nil and calendar_color is nil" do
+      initiative.group.update(calendar_color: '')
+      expect(event_color(initiative)).to eq '#7b77c9'
+    end
   end
 
   describe '#to_color' do

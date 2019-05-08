@@ -17,6 +17,7 @@ class GroupNewsLinkPolicy < GroupBasePolicy
       return true if user.policy_group.manage_posts?
       return true if basic_group_leader_permission?('manage_posts')
       return true if basic_group_leader_permission?('news_links_index')
+
       # Everyone can see latest news
       user.policy_group.news_links_index?
     else
@@ -26,16 +27,19 @@ class GroupNewsLinkPolicy < GroupBasePolicy
 
   def edit?
     return true if super
+
     record.author === user
   end
 
   def update?
     return true if super
+
     record.author === user
   end
 
   def destroy?
     return true if super
+
     record.author === user
   end
 end

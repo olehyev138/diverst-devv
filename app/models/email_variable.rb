@@ -8,9 +8,9 @@ class EmailVariable < BaseClass
 
   def format(value)
     value = value.pluralize if pluralize
-      value = value.downcase if downcase
-      value = value.titleize if titleize
-      value = value.upcase if upcase
-      value
+    value = value.downcase if downcase
+    value = value.titleize if titleize
+    value = value.upcase if upcase
+    value
   end
 end

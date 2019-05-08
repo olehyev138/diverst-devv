@@ -11,6 +11,6 @@ class GroupMessagesSegment < BaseClass
 
   def build_default_link_segment
     build_news_feed_link_segment(segment: segment, news_feed_link: group_message.news_feed_link)
-      true
+    true
   end
 end

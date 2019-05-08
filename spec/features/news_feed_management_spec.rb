@@ -19,7 +19,8 @@ RSpec.feature 'News Feed Management' do
 
     context 'Group Messages' do
       let!(:existing_group_message) { create(:group_message, subject: 'An Old Group Message', group_id: group.id,
-        owner_id: user.id) }
+                                                             owner_id: user.id)
+      }
 
       scenario 'when creating group message' do
         visit group_posts_path(group)
@@ -89,7 +90,8 @@ RSpec.feature 'News Feed Management' do
 
       context 'for existing comments for existing Group Message' do
         let!(:existing_group_message_comment) { create(:group_message_comment, content: 'An Old Group Message Comment',
-          author_id: user.id, message_id: existing_group_message.id, approved: true) }
+                                                                               author_id: user.id, message_id: existing_group_message.id, approved: true)
+        }
 
         scenario 'when editing comments to existing Group Message' do
           visit group_posts_path(group)
@@ -160,7 +162,8 @@ RSpec.feature 'News Feed Management' do
       context 'for an existing news link' do
         let!(:image) { File.new('spec/fixtures/files/verizon_logo.png') }
         let!(:existing_news_item) { create(:news_link, title: 'An Old Group News Item',
-          description: 'Brief description of News Item', group_id: group.id, picture: image, author_id: user.id) }
+                                                       description: 'Brief description of News Item', group_id: group.id, picture: image, author_id: user.id)
+        }
 
         scenario 'when updating news item with url' do
           visit edit_group_news_link_path(group, existing_news_item)
@@ -190,10 +193,10 @@ RSpec.feature 'News Feed Management' do
           visit group_posts_path(group)
 
           expect(page).to have_content existing_news_item.title
-          expect(page).to have_link 'Comments(0)', href:  comments_group_news_link_path(group, existing_news_item)
+          expect(page).to have_link 'Comments(0)', href: comments_group_news_link_path(group, existing_news_item)
 
           within('.commentsLink') do
-            click_link 'Comments(0)', href:  comments_group_news_link_path(group, existing_news_item)
+            click_link 'Comments(0)', href: comments_group_news_link_path(group, existing_news_item)
           end
 
           within('.content__header h1') do
@@ -219,18 +222,20 @@ RSpec.feature 'News Feed Management' do
       context 'for existing comments for existing News Link' do
         let!(:image) { File.new('spec/fixtures/files/verizon_logo.png') }
         let!(:existing_news_item) { create(:news_link, title: 'An Old Group News Item',
-          description: 'Brief description of News Item', group_id: group.id, picture: image, author_id: user.id) }
+                                                       description: 'Brief description of News Item', group_id: group.id, picture: image, author_id: user.id)
+        }
         let!(:news_link_comment) { create(:news_link_comment, content: 'An Old News Link Comment', author_id: user.id,
-          news_link_id: existing_news_item.id, approved: true) }
+                                                              news_link_id: existing_news_item.id, approved: true)
+        }
 
         before { visit group_posts_path(group) }
 
         scenario 'when editing comments for news link' do
           expect(page).to have_content existing_news_item.title
-          expect(page).to have_link 'Comments(1)', href:  comments_group_news_link_path(group, existing_news_item)
+          expect(page).to have_link 'Comments(1)', href: comments_group_news_link_path(group, existing_news_item)
 
           within('.commentsLink') do
-            click_link 'Comments(1)', href:  comments_group_news_link_path(group, existing_news_item)
+            click_link 'Comments(1)', href: comments_group_news_link_path(group, existing_news_item)
           end
 
           within('.content__header h1') do
@@ -271,7 +276,8 @@ RSpec.feature 'News Feed Management' do
 
     context 'Group Messages' do
       let!(:existing_group_message) { create(:group_message, subject: 'An Old Group Message', group_id: group.id,
-        owner_id: user.id) }
+                                                             owner_id: user.id)
+      }
 
       scenario 'when adding comments to existing Group Message without approval', js: true do
         visit group_posts_path(group)
@@ -301,7 +307,8 @@ RSpec.feature 'News Feed Management' do
     context 'News Items' do
       let!(:image) { File.new('spec/fixtures/files/verizon_logo.png') }
       let!(:existing_news_item) { create(:news_link, title: 'An Old Group News Item',
-        description: 'Brief description of News Item', group_id: group.id, picture: image, author_id: user.id) }
+                                                     description: 'Brief description of News Item', group_id: group.id, picture: image, author_id: user.id)
+      }
 
       before { visit group_posts_path(group) }
 

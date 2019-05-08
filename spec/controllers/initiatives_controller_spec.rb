@@ -157,8 +157,8 @@ RSpec.describe InitiativesController, type: :controller do
       login_user_from_let
       before {
         allow(InitiativesDownloadJob).to receive(:perform_later)
-          request.env['HTTP_REFERER'] = 'back'
-          get :export_csv, group_id: group.id
+        request.env['HTTP_REFERER'] = 'back'
+        get :export_csv, group_id: group.id
       }
 
       it 'returns to previous page' do
@@ -175,7 +175,8 @@ RSpec.describe InitiativesController, type: :controller do
 
       context 'when you have unfinished expenses' do
         let!(:initiative_with_unclosed_expenses) { create(:initiative, start: DateTime.now.days_ago(3), end: DateTime.now.days_ago(1),
-                                finished_expenses: false, owner_group: group) }
+                                                                       finished_expenses: false, owner_group: group)
+        }
         before do
           request.env['HTTP_REFERER'] = 'back'
           get :export_csv, group_id: group.id

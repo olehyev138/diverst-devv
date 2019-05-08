@@ -70,7 +70,8 @@ RSpec.feature 'DCI Management' do
     let!(:badge) { create(:badge, enterprise_id: enterprise.id, points: 150, label: 'Gold Star', image: image) }
     let!(:picture) { File.new('spec/fixtures/files/trophy_image.jpg') }
     let!(:prize) { create(:reward, enterprise_id: enterprise.id, points: 1000, label: 'Ultimate Prize', picture: picture,
-      description: 'This is indeed the ultimate prize', responsible_id: admin_user.id) }
+                                   description: 'This is indeed the ultimate prize', responsible_id: admin_user.id)
+    }
 
     before { visit rewards_path }
 

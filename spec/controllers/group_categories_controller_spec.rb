@@ -11,7 +11,7 @@ RSpec.describe GroupCategoriesController, type: :controller do
 
   describe 'GET#index' do
     login_user_from_let
-    before { get :index, { parent_id: parent.id, group_id: group.id  } }
+    before { get :index, { parent_id: parent.id, group_id: group.id } }
 
     it 'render index template' do
       expect(response).to render_template :index
@@ -28,15 +28,15 @@ RSpec.describe GroupCategoriesController, type: :controller do
 
   describe 'GET#new' do
     login_user_from_let
-      before { get :new, { group_id: group } }
+    before { get :new, { group_id: group } }
 
-      it 'render new template' do
-        expect(response).to render_template :new
-      end
+    it 'render new template' do
+      expect(response).to render_template :new
+    end
 
-      it 'returns new group_category_type object' do
-        expect(assigns[:group_category_type]).to be_a_new(GroupCategoryType)
-      end
+    it 'returns new group_category_type object' do
+      expect(assigns[:group_category_type]).to be_a_new(GroupCategoryType)
+    end
   end
 
   describe 'POST#create' do
@@ -45,39 +45,41 @@ RSpec.describe GroupCategoriesController, type: :controller do
     context 'if group_category_type object is saved' do
       it 'add 4 extra categories to category type' do
         expect { post :create, group_category_type: { name: 'Color Codes.', enterprise_id: enterprise.id,
-          category_names: 'red, blue, yellow, green' } }
+                                                      category_names: 'red, blue, yellow, green' }
+        }
           .to change(GroupCategory, :count).by(4)
       end
 
       it 'creates a category type' do
         expect { post :create, group_category_type: { name: 'Color Codes.', enterprise_id: enterprise.id,
-          category_names: 'red, blue, yellow, green' }}
+                                                      category_names: 'red, blue, yellow, green' }
+        }
         .to change(GroupCategoryType, :count).by(1)
       end
 
       it 'flashes a notice' do
         post :create, group_category_type: { name: 'Color Codes.', enterprise_id: enterprise.id,
-          category_names: 'red, blue, yellow, green' }
+                                             category_names: 'red, blue, yellow, green' }
         expect(flash[:notice]).to eq "You just created a category named #{GroupCategoryType.last}"
       end
 
       it 'redirects to groups_url' do
         post :create, group_category_type: { name: 'Color Codes.', enterprise_id: enterprise.id,
-          category_names: 'red, blue, yellow, green' }
+                                             category_names: 'red, blue, yellow, green' }
         redirect_to groups_url
       end
     end
 
     context 'if group_category_type object fails to save' do
       it 'flashes an alert message' do
-          post :create, group_category_type: { name: nil }
+        post :create, group_category_type: { name: nil }
         expect(flash[:alert]).to eq 'Something went wrong. Please check errors.'
-        end
+      end
 
-        it 'render new template' do
-          post :create, group_category_type: { name: nil }
-          expect(response).to render_template :new
-        end
+      it 'render new template' do
+        post :create, group_category_type: { name: nil }
+        expect(response).to render_template :new
+      end
     end
   end
 
@@ -98,7 +100,7 @@ RSpec.describe GroupCategoriesController, type: :controller do
     login_user_from_let
 
     context 'when update is successful' do
-      before { patch :update, id: group_category2.id, group_category: { name: 'updated group category2' }  }
+      before { patch :update, id: group_category2.id, group_category: { name: 'updated group category2' } }
 
       it 'flashes a notice message' do
         expect(flash[:notice]).to eq 'Update category name'
@@ -216,7 +218,8 @@ RSpec.describe GroupCategoriesController, type: :controller do
   describe 'GET#view_all' do
     login_user_from_let
     let!(:category_types) { create(:group_category_type, name: 'Provinces',
-     enterprise_id: enterprise.id, category_names: 'Northern, Southern, Eastern, Central, Western') }
+                                                         enterprise_id: enterprise.id, category_names: 'Northern, Southern, Eastern, Central, Western')
+    }
     before { get :view_all }
 
     it 'renders view all page' do

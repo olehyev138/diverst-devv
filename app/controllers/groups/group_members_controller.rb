@@ -101,7 +101,6 @@ class Groups::GroupMembersController < ApplicationController
     end
   end
 
-
   def add_members
     authorize [@group], :create?, policy_class: GroupMemberPolicy
 
@@ -213,13 +212,13 @@ class Groups::GroupMembersController < ApplicationController
   def group_member_params
     params.require(:user).permit(
       :user_id
-      )
+    )
   end
 
   def add_members_params
     params.require(:group).permit(
       member_ids: []
-      )
+    )
   end
 
   def user_params

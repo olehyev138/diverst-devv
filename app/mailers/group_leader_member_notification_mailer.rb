@@ -5,6 +5,7 @@ class GroupLeaderMemberNotificationMailer < ApplicationMailer
     @count = count
     @enterprise = leader.enterprise
     return if @enterprise.disable_emails?
+
     @email = @leader.email
     @custom_text = @enterprise.custom_text rescue CustomText.new
 

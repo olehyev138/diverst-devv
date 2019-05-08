@@ -21,6 +21,7 @@ class GroupUpdate < BaseClass
   # Returns the delta (just like `variance_with`) with the last update for the specified field
   def variance_from_previous(field)
     return nil if !self.previous
+
     self.variance_with(other_update: self.previous, field: field)
   end
 

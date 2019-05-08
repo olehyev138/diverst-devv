@@ -31,11 +31,11 @@ class UserGroup < BaseClass
           }
         }
       }
-    ]  do
+    ] do
       indexes :user_id, type: :integer
       indexes :group_id, type: :integer
       indexes :created_at, type: :date
-      indexes :group  do
+      indexes :group do
         indexes :enterprise_id, type: :integer
         indexes :parent_id, type: :integer
         indexes :name, type: :keyword

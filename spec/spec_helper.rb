@@ -116,7 +116,7 @@ RSpec.configure do |config|
     formatter = OpenStruct.new({
       title: true,
       parser: OpenStruct.new({ extractors: true,
-        date_range: true, get_elements: true }),
+                               date_range: true, get_elements: true }),
       add_elements: true
     })
 
@@ -126,11 +126,11 @@ RSpec.configure do |config|
       add_filter_clause: true })
 
     graph = double('Graph',
-      search: true,
-      query: query,
-      build: true,
-      set_enterprise_filter: true,
-      formatter: formatter)
+                   search: true,
+                   query: query,
+                   build: true,
+                   set_enterprise_filter: true,
+                   formatter: formatter)
 
     allow(UserGroup).to receive(:get_graph_builder).and_return(graph)
     allow(UsersSegment).to receive(:get_graph_builder).and_return(graph)

@@ -37,6 +37,7 @@ class Importers::Users
   end
 
   private
+
   def parse_from_csv_row(row)
     user = update_user(row) || initialize_user(row)
     (0..row.length - 1).each do |i|
@@ -49,6 +50,7 @@ class Importers::Users
   def update_user(row)
     user = User.where(email: row['email']).first
     return nil unless user
+
     user.attributes = user_attributes(row, user)
     user
   end

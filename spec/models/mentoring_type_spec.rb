@@ -4,6 +4,6 @@ RSpec.describe MentoringType, type: :model do
   describe 'validations' do
     let(:mentoring_type) { build_stubbed(:mentoring_type) }
 
-      it { expect(mentoring_type).to validate_presence_of(:name) }
+    it { expect(mentoring_type).to validate_presence_of(:name) }
   end
 end

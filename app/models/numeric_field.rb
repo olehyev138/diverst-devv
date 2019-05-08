@@ -3,6 +3,7 @@ class NumericField < Field
 
   def string_value(value)
     return '-' if value.nil?
+
     value
   end
 

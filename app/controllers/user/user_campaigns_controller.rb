@@ -16,19 +16,19 @@ class User::UserCampaignsController < ApplicationController
   def update
     if @campaign.update(campaign_params)
       flash[:notice] = 'Your campaign was updated'
-        redirect_to @campaign
+      redirect_to @campaign
     else
       flash[:alert] = 'Your campaign was not updated. Please fix the errors'
-        render :edit # NOTE: edit template does not work
+      render :edit # NOTE: edit template does not work
     end
   end
 
   def destroy
     @campaign.destroy
-      redirect_to action: :index
+    redirect_to action: :index
   end
 
-    protected
+  protected
 
   def set_campaign
     @campaign = current_user.enterprise.campaigns.published.find(params[:id])
@@ -39,18 +39,18 @@ class User::UserCampaignsController < ApplicationController
         .require(:campaign)
         .permit(
           :title,
-            :description,
-            :start,
-            :end,
-            :nb_invites,
-            group_ids: [],
-            segment_ids: [],
-            questions_attributes: [
-                :id,
-                :_destroy,
-                :title,
-                :description
-            ]
+          :description,
+          :start,
+          :end,
+          :nb_invites,
+          group_ids: [],
+          segment_ids: [],
+          questions_attributes: [
+              :id,
+              :_destroy,
+              :title,
+              :description
+          ]
         )
   end
 end

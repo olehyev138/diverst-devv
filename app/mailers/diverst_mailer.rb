@@ -43,11 +43,13 @@ class DiverstMailer < Devise::Mailer
 
   def can_email(record)
     return true if record.try(:enterprise).nil?
+
     !record.enterprise.disable_emails?
   end
 
   def set_email(record)
     return if record.try(:enterprise).nil?
+
     enterprise = record.enterprise
 
     if enterprise.redirect_all_emails? && !enterprise.redirect_email_contact.blank?

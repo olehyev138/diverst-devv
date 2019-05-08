@@ -33,8 +33,9 @@ RSpec.describe Campaign, type: :model do
       paperclip_attributes = [:image, :banner]
       paperclip_attributes.each do |paperclip_attribute|
         it { should have_attached_file(paperclip_attribute) }
-        it { should validate_attachment_content_type(paperclip_attribute).allowing('image/png', 'image/gif').
-            rejecting('text/plain', 'text/xml') }
+        it { should validate_attachment_content_type(paperclip_attribute).allowing('image/png', 'image/gif')
+            .rejecting('text/plain', 'text/xml')
+        }
       end
     end
     it 'is valid' do

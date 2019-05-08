@@ -27,16 +27,19 @@ class GroupMessagePolicy < GroupBasePolicy
 
   def edit?
     return true if super
+
     record.author === user
   end
 
   def update?
     return true if super
+
     record.author === user
   end
 
   def destroy?
     return true if super
+
     record.author === user
   end
 end

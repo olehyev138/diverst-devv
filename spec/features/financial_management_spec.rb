@@ -48,10 +48,12 @@ RSpec.feature 'Financial Management' do
 
   context 'edit and delete' do
     let!(:expense) { create(:expense, enterprise_id: enterprise.id, name: 'Trip to HQ', price: 20000,
-    income: false, category: create(:expense_category, enterprise_id: enterprise.id, name: 'trip', icon: icon)) }
+                                      income: false, category: create(:expense_category, enterprise_id: enterprise.id, name: 'trip', icon: icon))
+    }
     let!(:income) { create(:expense, enterprise_id: enterprise.id, name: 'Sales Festival', price: 45000,
-      income: true, category: create(:expense_category, enterprise_id: enterprise.id,
-        name: 'Sales and Marketing', icon: icon)) }
+                                     income: true, category: create(:expense_category, enterprise_id: enterprise.id,
+                                                                                       name: 'Sales and Marketing', icon: icon))
+    }
 
     before do
       visit expenses_path
@@ -118,7 +120,7 @@ RSpec.feature 'Financial Management' do
       scenario 'annual budget', js: true do
         page.accept_confirm(with: "Before you reset this annual budget please make sure you
 					have exported budget info for #{group.name}. Once you reset, all budget-related info will be permanently deleted") do
-          click_link 'Reset Budget', href:  reset_annual_budget_group_budgets_path(group)
+          click_link 'Reset Budget', href: reset_annual_budget_group_budgets_path(group)
         end
       end
     end

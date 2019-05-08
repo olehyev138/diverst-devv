@@ -102,6 +102,7 @@ class Initiative < BaseClass
 
   def initiative_date(date_type)
     return '' unless ['start', 'end'].include?(date_type)
+
     self.send(date_type).blank? ? '' : self.send(date_type).to_s(:reversed_slashes)
   end
 
@@ -154,6 +155,7 @@ class Initiative < BaseClass
   def pending?
     # If there is no budget for event then it needs no money and no approval
     return false if budget.nil?
+
     # Check if budget is approved
     budget.is_approved
   end
@@ -257,6 +259,7 @@ class Initiative < BaseClass
 
     highcharts_expenses.each_with_index do |hc_expense, i|
       next if i == 0
+
       hc_expense[1] += highcharts_expenses[i - 1][1]
     end
   end
@@ -271,6 +274,7 @@ class Initiative < BaseClass
 
   def full?
     return self.attendees.count >= max_attendees if max_attendees?
+
     false
   end
 
@@ -384,6 +388,7 @@ class Initiative < BaseClass
 
   def self.archive_expired_events(group)
     return unless group.auto_archive?
+
     expiry_date = DateTime.now.send("#{group.unit_of_expiry_age}_ago", group.expiry_age_for_events)
     initiatives = group.initiatives.where('end < ?', expiry_date).where(archived_at: nil)
 

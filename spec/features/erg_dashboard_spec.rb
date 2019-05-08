@@ -44,7 +44,7 @@ RSpec.feature 'An ERG dashboard' do
     scenario 'show categorized sub-ergs', js: true do
       group.update(group_category_type_id: category_type.id)
       red_sub_groups = create_list(:group, 2, parent_id: group.id, group_category_type_id: category_type.id,
-       group_category_id: red_label.id, enterprise_id: user.enterprise.id)
+                                              group_category_id: red_label.id, enterprise_id: user.enterprise.id)
 
       visit group_path(group)
       expect(page).to have_content red_label.name

@@ -55,7 +55,7 @@ class User::UserAnswersController < ApplicationController
       .require(:answer)
       .permit(
         :upvoted
-    )
+      )
   end
 
   def answer_params
@@ -64,6 +64,6 @@ class User::UserAnswersController < ApplicationController
       .permit(
         :content,
         :contributing_group_id
-    )
+      )
   end
 end

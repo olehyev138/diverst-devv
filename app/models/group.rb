@@ -10,7 +10,7 @@ class Group < BaseClass
     :layout_2
   ]
 
-  enumerize :pending_users, default: :disabled,  in: [
+  enumerize :pending_users, default: :disabled, in: [
     :disabled,
     :enabled
   ]
@@ -92,10 +92,10 @@ class Group < BaseClass
   has_many :views, dependent: :destroy
 
   has_many :fields, -> { where field_type: 'regular' },
-    dependent: :delete_all
+           dependent: :delete_all
   has_many :survey_fields, -> { where field_type: 'group_survey' },
-    class_name: 'Field',
-    dependent: :delete_all
+           class_name: 'Field',
+           dependent: :delete_all
 
   has_many :group_leaders, -> { order(position: :asc) }, dependent: :destroy
   has_many :leaders, through: :group_leaders, source: :user
@@ -219,6 +219,7 @@ class Group < BaseClass
 
   def yammer_group_id
     return nil if yammer_group_link.nil?
+
     eq_sign_position = yammer_group_link.rindex('=')
     return nil if eq_sign_position.nil?
 
@@ -237,6 +238,7 @@ class Group < BaseClass
 
   def available_budget
     return 0 unless annual_budget
+
     annual_budget - (approved_budget + spent_budget)
   end
 
@@ -271,6 +273,7 @@ class Group < BaseClass
 
   def logo_expiring_thumb
     return nil unless logo.present?
+
     logo.expiring_url(30, :thumb)
   end
 
@@ -363,7 +366,7 @@ class Group < BaseClass
   def budgets_csv
     CSV.generate do |csv|
       csv << ['Requested amount', 'Available amount', 'Status', 'Requested at', '# of events', 'Description']
-       self.budgets.order(created_at: :desc).each do |budget|
+      self.budgets.order(created_at: :desc).each do |budget|
         csv << [budget.requested_amount, budget.available_amount, budget.status_title, budget.created_at, budget.budget_items.count, budget.description]
       end
     end
@@ -406,6 +409,7 @@ class Group < BaseClass
 
   def smart_add_url_protocol
     return nil if company_video_url.blank?
+
     self.company_video_url = "http://#{company_video_url}" unless have_protocol?
   end
 
@@ -493,6 +497,7 @@ class Group < BaseClass
   def self.avg_members_per_group(enterprise:)
     group_sizes = UserGroup.where(group: enterprise.groups).group(:group).count.values
     return nil if group_sizes.length == 0
+
     group_sizes.sum / group_sizes.length
   end
 end

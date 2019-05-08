@@ -32,14 +32,14 @@ class ClockworkDatabaseEvent < ActiveRecord::Base
       begin
         if not job_name.constantize.respond_to? method_name.to_sym
           errors.add(:method_name, 'does not exist')
-            return false
+          return false
         end
-    rescue => e
-      errors.add(:job_name, e.message)
+      rescue => e
+        errors.add(:job_name, e.message)
         return false
       end
     end
-      true
+    true
   end
 
   def frequency
@@ -49,21 +49,24 @@ class ClockworkDatabaseEvent < ActiveRecord::Base
   # checks if the event should execute
   def if?
     return false if disabled?
-      return false if !day.blank? && Time.now.in_time_zone(tz).strftime('%A').downcase != day
-      return false if !at.blank? && Time.now.in_time_zone(tz).strftime('%H:%M') != at
-      true
+    return false if !day.blank? && Time.now.in_time_zone(tz).strftime('%A').downcase != day
+    return false if !at.blank? && Time.now.in_time_zone(tz).strftime('%H:%M') != at
+
+    true
   end
 
   # runs the actual event
   def run
     return unless if?
-      job_name.constantize.send method_name, formatted_arguments
+
+    job_name.constantize.send method_name, formatted_arguments
   end
 
   def formatted_arguments
     return if method_args.nil?
-      args = JSON.parse(method_args)
-      args[:enterprise_id] = enterprise_id
-      args.symbolize_keys
+
+    args = JSON.parse(method_args)
+    args[:enterprise_id] = enterprise_id
+    args.symbolize_keys
   end
 end

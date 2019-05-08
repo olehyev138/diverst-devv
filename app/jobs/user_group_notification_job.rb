@@ -14,6 +14,7 @@ class UserGroupNotificationJob < ActiveJob::Base
       users.each do |user|
         groups = []
         next unless can_send_email?(notifications_frequency, user)
+
         frequency_range = get_frequency_range(user.groups_notifications_frequency)
         user.groups.each do |group|
           groups << {
@@ -36,6 +37,7 @@ class UserGroupNotificationJob < ActiveJob::Base
   # checks if frequency is weekly and
   def can_send_email?(frequency, user)
     return true if frequency != 'weekly'
+
     case user.groups_notifications_date
     when 'sunday' then Date.today.sunday?
     when 'monday' then Date.today.monday?

@@ -9,7 +9,7 @@ default: &default
 
 development:
   <<: *default
-  database: diverst_development
+  database: diverst_development_properseeds
 
 
 # Warning: The database defined as "test" will be erased and

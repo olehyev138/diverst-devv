@@ -5,6 +5,7 @@ class CampaignMailer < ApplicationMailer
     @campaign = @invitation.campaign
     @enterprise = @user.enterprise
     return if @enterprise.disable_emails?
+
     @email = @user.email
 
     @group_names = 'us'

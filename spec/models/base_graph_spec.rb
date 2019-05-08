@@ -95,7 +95,7 @@ RSpec.describe BaseGraph do
     end
 
     describe 'add_element' do
-      let(:default_es_element) { { key: 'element01', doc_count: 9  } }
+      let(:default_es_element) { { key: 'element01', doc_count: 9 } }
       let(:children) { [ { key: 'child01', doc_count: 3 }, { key: 'child02', doc_count: 7 } ] }
 
       it 'adds a default elasticsearch element' do
@@ -170,7 +170,7 @@ RSpec.describe BaseGraph do
 
         it 'yields to block & runs returned lambda' do
           expect(
-            (parser.date_range() { |_| -> (e, _) { 'dummy' }  }).call(element, {})
+            (parser.date_range() { |_| -> (e, _) { 'dummy' } }).call(element, {})
           ).to eq 'dummy'
         end
 

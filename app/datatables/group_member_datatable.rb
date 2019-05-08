@@ -35,7 +35,7 @@ class GroupMemberDatatable < AjaxDatatablesRails::Base
   def generate_destroy_link(record)
     if GroupMemberPolicy.new(@user, [@group, record]).destroy?
       link_to 'Remove From Group', remove_member_group_group_member_path(@group, record),
-        method: :delete, class: 'error', data: { confirm: 'Are you sure?' }
+              method: :delete, class: 'error', data: { confirm: 'Are you sure?' }
     else
       nil
     end
